@@ -1,0 +1,45 @@
+Controls
+	Move captain
+	Move cursor
+	Move Pikmin group
+	Move Pikmin group to cursor
+	Swtich maturity up
+	Switch maturity down
+	Switch Pikmin type left
+	Switch Pikmin type right
+	Pause
+	Whistle
+	Throw
+	Dismiss
+	Switch captain left
+	Switch captain right
+	Spray 1
+	Spray 2
+	Switch spray left
+	Switch spray right
+	Use spray
+	Lie down
+	Zoom in
+	Zoom out
+	Zoom toggle
+
+Pikmin font: * is a --
+
+Sectors
+	INT32 R_PointOnSide(fixed_t x, fixed_t y, node_t *node)
+	{
+		if (!node->dx)
+			return x <= node->x ? node->dy > 0 : node->dy < 0;
+
+		if (!node->dy)
+			return y <= node->y ? node->dx < 0 : node->dx > 0;
+
+		x -= node->x;
+		y -= node->y;
+
+		// Try to quickly decide by looking at sign bits.
+		if ((node->dy ^ node->dx ^ x ^ y) < 0)
+			return (node->dy ^ x) < 0;  // (left is negative)
+		return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);
+	}
+	http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
