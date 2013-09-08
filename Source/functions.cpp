@@ -40,6 +40,74 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 	if(!just_chart) al_draw_circle(cx, cy, 11, al_map_rgb(0, 0, 0), 2);
 }
 
+ALLEGRO_COLOR get_daylight_color(){
+	//ToDo initialize this somewhere else.
+	vector<pair<unsigned char, ALLEGRO_COLOR>> points;
+	/*points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 3,  al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 4,  al_map_rgba(64,  64,  96,  128) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 255, 255, 0  ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 0,   32 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 255, 128, 32 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(128, 32,  0,   48 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(32,  0,   0,   64 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 21, al_map_rgba(0,   0,   32,  96 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 23, al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));*/
+
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 5,  al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 6,  al_map_rgba(64,  64,  96,  128) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 255, 0  ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0, 32 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(0,   0,   32,  96 ) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(0,   0,   32,  192) ));
+	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));
+
+	size_t n_points = points.size();
+	for(size_t p = 0; p < n_points - 1; p++){
+		if(day_minutes >= 60 * points[p].first && day_minutes < 60 * points[p+1].first){
+			return interpolate_color(day_minutes, 60 * points[p].first, 60 * points[p+1].first, points[p].second, points[p+1].second);
+		}
+	}
+
+	return al_map_rgba(255, 0, 0, 128);
+
+	/*if(day_minutes < 60*3 || day_minutes > 60*23){
+		return al_map_rgba(0, 0, 32, 192);
+
+	}else if(day_minutes >= 60*3 && day_minutes < 60*4){
+		return interpolate_color(day_minutes, 60*3, 60*4, al_map_rgba(0, 0, 32, 192), al_map_rgba(
+
+	}else if(day_minutes >= 60*3 && day_minutes < 60*7){
+		return interpolate_color(day_minutes, 60*3, 60*7, al_map_rgba(0, 0, 32, 192), al_map_rgba(255, 128, 255, 24));
+
+	}else if(day_minutes >= 60*7 && day_minutes < 60*8){
+		return interpolate_color(day_minutes, 60*7, 60*8, al_map_rgba(255, 128, 255, 24), al_map_rgba(255, 255, 255, 0));
+
+	}else if(day_minutes >= 60*8 && day_minutes < 60*16){
+		return al_map_rgba(255, 255, 255, 0);
+
+	}else if(day_minutes >= 60*16 && day_minutes < 60*17){
+		return interpolate_color(day_minutes, 60*16, 60*17, al_map_rgba(
+
+	}*/
+}
+
+ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2){
+	float progress = (float) (n - n1) / (float) (n2 - n1);
+	return al_map_rgba_f(
+		c1.r + progress * (c2.r - c1.r),
+		c1.g + progress * (c2.g - c1.g),
+		c1.b + progress * (c2.b - c1.b),
+		c1.a + progress * (c2.a - c1.a)
+		);
+}
+
 void load_game_content(){
 	//ToDo.
 	pikmin_types.push_back(pikmin_type());

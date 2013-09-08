@@ -218,12 +218,14 @@ int main(){
 				for(size_t m=0; m<n_party_members; m++){
 					remove_from_party(current_leader_ptr, current_leader_ptr->party[0]);
 				}
-			}else if(ev.keyboard.keycode == ALLEGRO_KEY_T){
-				//Debug testing.
-
-				leaders[current_leader].health--;
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 				running = false;
+
+			}else if(ev.keyboard.keycode == ALLEGRO_KEY_T){
+				//Debug testing.
+				//ToDo remove.
+				//leaders[current_leader].health--;
+				day_minutes += 60;
 			}
 
 		}else if(ev.type==ALLEGRO_EVENT_KEY_UP){
@@ -341,6 +343,7 @@ int main(){
 
 			//Time.
 			day_minutes += (1.0f / game_fps) * day_minutes_per_irl_sec;
+			if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
 
 			//Particles.
 			size_t n_particles = particles.size();
@@ -399,6 +402,12 @@ int main(){
 					particles[p].x + particles[p].size*0.5,
 					particles[p].y + particles[p].size*0.5,
 					particles[p].color);
+			}
+
+			//Daylight effect.
+			if(daylight_effect){
+				al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+				al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
 			}
 
 			//HUD

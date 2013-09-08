@@ -7,6 +7,7 @@ public:
 	sector();
 
 	float floor;
+	float flying_floor;
 	unsigned short type;
 };
 
