@@ -3,6 +3,23 @@
 
 using namespace std;
 
+ALLEGRO_BITMAP* bmp_background = NULL;
+ALLEGRO_BITMAP* bmp_blue = NULL;
+ALLEGRO_BITMAP* bmp_blue_burrowed = NULL;
+ALLEGRO_BITMAP* bmp_bubble = NULL;
+ALLEGRO_BITMAP* bmp_cursor = NULL;
+ALLEGRO_BITMAP* bmp_day_bubble = NULL;
+ALLEGRO_BITMAP* bmp_health_bubble = NULL;
+ALLEGRO_BITMAP* bmp_louie = NULL;
+ALLEGRO_BITMAP* bmp_mouse_cursor = NULL;
+ALLEGRO_BITMAP* bmp_olimar = NULL;
+ALLEGRO_BITMAP* bmp_red = NULL;
+ALLEGRO_BITMAP* bmp_red_burrowed = NULL;
+ALLEGRO_BITMAP* bmp_shadow = NULL;
+ALLEGRO_BITMAP* bmp_sun = NULL;
+ALLEGRO_BITMAP* bmp_yellow = NULL;
+ALLEGRO_BITMAP* bmp_yellow_burrowed = NULL;
+
 mob*                closest_party_member = NULL;
 size_t              current_leader = 0;
 float               cursor_x = 0;

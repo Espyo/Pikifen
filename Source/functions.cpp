@@ -40,6 +40,35 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 	if(!just_chart) al_draw_circle(cx, cy, 11, al_map_rgb(0, 0, 0), 2);
 }
 
+void draw_shadow(float cx, float cy, float size, float shadow_stretch){
+	if(shadow_stretch <= 0) return;
+
+	int shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
+
+	if(day_minutes < 60*12){
+		//Shadows point to the West.
+		shadow_x = -shadow_w + size / 2;
+	}else{
+		//Shadows point to the East.
+		shadow_x = -(size / 2);
+	}
+	
+	//ToDo shadow graphic dimensions.
+	al_draw_tinted_scaled_bitmap(
+		bmp_shadow,
+		al_map_rgba(255, 255, 255, 255*(1-shadow_stretch)),
+		0,
+		0,
+		64,
+		64,
+		cx + shadow_x,
+		cy - size / 2,
+		shadow_w,
+		size,
+		0
+		);
+}
+
 ALLEGRO_COLOR get_daylight_color(){
 	//ToDo initialize this somewhere else.
 	vector<pair<unsigned char, ALLEGRO_COLOR>> points;

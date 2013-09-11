@@ -36,21 +36,22 @@ int main(){
 	ALLEGRO_EVENT ev;
 
 	//Graphics.
-	ALLEGRO_BITMAP* olimar = al_load_bitmap("Olimar.png");
-	ALLEGRO_BITMAP* louie = al_load_bitmap("Louie.png");
-	ALLEGRO_BITMAP* red = al_load_bitmap("Red.png");
-	ALLEGRO_BITMAP* yellow = al_load_bitmap("Yellow.png");
-	ALLEGRO_BITMAP* blue = al_load_bitmap("Blue.png");
-	ALLEGRO_BITMAP* red_burrowed = al_load_bitmap("Red_burrowed.png");
-	ALLEGRO_BITMAP* yellow_burrowed = al_load_bitmap("Yellow_burrowed.png");
-	ALLEGRO_BITMAP* blue_burrowed = al_load_bitmap("Blue_burrowed.png");
-	ALLEGRO_BITMAP* cursor = al_load_bitmap("Cursor.png");
-	ALLEGRO_BITMAP* mouse_cursor = al_load_bitmap("Mouse_cursor.png");
-	ALLEGRO_BITMAP* background = al_load_bitmap("Background.png");
-	ALLEGRO_BITMAP* bubble = al_load_bitmap("Bubble.png");
-	ALLEGRO_BITMAP* day_bubble = al_load_bitmap("Day_bubble.png");
-	ALLEGRO_BITMAP* health_bubble = al_load_bitmap("Health_bubble.png");
-	ALLEGRO_BITMAP* sun = al_load_bitmap("Sun.png");
+	bmp_olimar = al_load_bitmap("Olimar.png");
+	bmp_louie = al_load_bitmap("Louie.png");
+	bmp_red = al_load_bitmap("Red.png");
+	bmp_yellow = al_load_bitmap("Yellow.png");
+	bmp_blue = al_load_bitmap("Blue.png");
+	bmp_red_burrowed = al_load_bitmap("Red_burrowed.png");
+	bmp_yellow_burrowed = al_load_bitmap("Yellow_burrowed.png");
+	bmp_blue_burrowed = al_load_bitmap("Blue_burrowed.png");
+	bmp_cursor = al_load_bitmap("Cursor.png");
+	bmp_mouse_cursor = al_load_bitmap("Mouse_cursor.png");
+	bmp_background = al_load_bitmap("Background.png");
+	bmp_bubble = al_load_bitmap("Bubble.png");
+	bmp_day_bubble = al_load_bitmap("Day_bubble.png");
+	bmp_health_bubble = al_load_bitmap("Health_bubble.png");
+	bmp_sun = al_load_bitmap("Sun.png");
+	bmp_shadow = al_load_bitmap("Shadow.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F,		/* ASCII */
@@ -361,32 +362,55 @@ int main(){
 
 
 			//Draw.
-			al_draw_bitmap(background, scr_w/2 - 512, scr_h/2 - 512, 0);
-			al_draw_bitmap(background, scr_w/2 - 512, scr_h/2, 0);
-			al_draw_bitmap(background, scr_w/2, scr_h/2 - 512, 0);
-			al_draw_bitmap(background, scr_w/2, scr_h/2, 0);
+			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2 - 512, 0);
+			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2, 0);
+			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2 - 512, 0);
+			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2, 0);
+
+			//Shadows.
+			float shadow_stretch = 0;
+			
+			if(day_minutes < 60*5 || day_minutes > 60*20){
+				shadow_stretch = 1;
+			}else if(day_minutes < 60*12){
+				shadow_stretch = 1-((day_minutes - 60*5) / (60*12 - 60*5));
+			}else{
+				shadow_stretch = (day_minutes - 60*12) / (60*20 - 60*12);
+			}
+
+			n_leaders = leaders.size();
+			for(size_t l = 0; l < n_leaders; l++){
+				draw_shadow(leaders[l].x, leaders[l].y, 32, shadow_stretch);
+				//al_draw_tinted_scaled_bitmap(shadow, al_map_rgba(255, 255, 255, shadow_a), 0, 0, 64, 64, leaders[l].x + shadow_x, leaders[l].y - 16, shadow_w, 32, 0);
+			}
+
+			n_pikmin = pikmin_list.size();
+			for(size_t p = 0; p < n_pikmin; p++){
+				draw_shadow(pikmin_list[p].x, pikmin_list[p].y, 18, shadow_stretch);
+				//al_draw_tinted_scaled_bitmap(shadow, al_map_rgba(255, 255, 255, shadow_a), 0, 0, 64, 64, pikmin_list[p].x + shadow_x, pikmin_list[p].y - 9, shadow_w, 18, 0);
+			}
 			
 			//Cursor.
-			al_draw_rotated_bitmap(mouse_cursor, 24, 24, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
-			al_draw_rotated_bitmap(cursor, 24, 24, cursor_x, cursor_y, leaders[current_leader].angle, 0);
+			al_draw_rotated_bitmap(bmp_mouse_cursor, 24, 24, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
+			al_draw_rotated_bitmap(bmp_cursor, 24, 24, cursor_x, cursor_y, leaders[current_leader].angle, 0);
 
 			//Pikmin.
 			n_pikmin = pikmin_list.size();
 			for(size_t p = 0; p<n_pikmin; p++){
 				ALLEGRO_BITMAP* bm;
 				if(pikmin_list[p].type->name=="R"){
-					if(pikmin_list[p].burrowed) bm=red_burrowed; else bm=red;
+					if(pikmin_list[p].burrowed) bm=bmp_red_burrowed; else bm=bmp_red;
 				}else if(pikmin_list[p].type->name=="Y"){
-					if(pikmin_list[p].burrowed) bm=yellow_burrowed; else bm=yellow;
+					if(pikmin_list[p].burrowed) bm=bmp_yellow_burrowed; else bm=bmp_yellow;
 				}if(pikmin_list[p].type->name=="B"){
-					if(pikmin_list[p].burrowed) bm=blue_burrowed; else bm=blue;
+					if(pikmin_list[p].burrowed) bm=bmp_blue_burrowed; else bm=bmp_blue;
 				}
-				al_draw_rotated_bitmap(bm, 12, 12, pikmin_list[p].x, pikmin_list[p].y, pikmin_list[p].angle, 0);
+				al_draw_rotated_bitmap(bm, 9, 9, pikmin_list[p].x, pikmin_list[p].y, pikmin_list[p].angle, 0); //ToDo actual coordinates
 			}
 
 			//Leaders.
 			for(size_t l=0; l<n_leaders; l++){
-				ALLEGRO_BITMAP* bm = (l==0) ? olimar : louie;
+				ALLEGRO_BITMAP* bm = (l==0) ? bmp_olimar : bmp_louie;
 				al_draw_rotated_bitmap(bm, 16, 16, leaders[l].x, leaders[l].y, leaders[l].angle, 0);
 			}
 
@@ -411,14 +435,13 @@ int main(){
 			}
 
 			//HUD
-			//ToDo remove al_draw_line(0, scr_h - 40 - font_h, scr_w, scr_h - 40 - font_h, al_map_rgb(255, 255, 255), 1);
-
-			ALLEGRO_BITMAP* bm = (current_leader==0) ? olimar : louie;
+			
+			ALLEGRO_BITMAP* bm = (current_leader==0) ? bmp_olimar : bmp_louie;
 			al_draw_bitmap(bm, 20, scr_h - 45, 0);
-			al_draw_scaled_bitmap(bubble, 0, 0, 64, 64, 10, scr_h - 55, 50, 50, 0);
+			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 10, scr_h - 55, 50, 50, 0);
 
 			draw_health(85, scr_h - 30, leaders[current_leader].health, 10, true);
-			al_draw_scaled_bitmap(health_bubble, 0, 0, 64, 64, 85 - HEALTH_CIRCLE_RADIUS * 1.2, scr_h - 30 - HEALTH_CIRCLE_RADIUS * 1.2, HEALTH_CIRCLE_RADIUS * 2.4, HEALTH_CIRCLE_RADIUS * 2.4, 0);
+			al_draw_scaled_bitmap(bmp_health_bubble, 0, 0, 64, 64, 85 - HEALTH_CIRCLE_RADIUS * 1.2, scr_h - 30 - HEALTH_CIRCLE_RADIUS * 1.2, HEALTH_CIRCLE_RADIUS * 2.4, HEALTH_CIRCLE_RADIUS * 2.4, 0);
 
 			al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
 				(to_string((long long) (day_minutes/60)) + ":" + to_string((long long) ((int) (day_minutes)%60))).c_str());
@@ -427,11 +450,11 @@ int main(){
 			unsigned int sun_meter_span = (scr_w - 100) - 20;
 			unsigned short interval = sun_meter_span / n_hours;
 			for(unsigned char h = 0; h<n_hours + 1; h++){
-				al_draw_scaled_bitmap(bubble, 0, 0, 64, 64, 20 + h*interval, 40, 10, 10, 0);
+				al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 20 + h*interval, 40, 10, 10, 0);
 			}
 
 			float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
-			al_draw_scaled_bitmap(sun, 0, 0, 64, 64, 10 + day_passed_ratio * sun_meter_span, 30, 30, 30, 0);
+			al_draw_scaled_bitmap(bmp_sun, 0, 0, 64, 64, 10 + day_passed_ratio * sun_meter_span, 30, 30, 30, 0);
 
 			//Count how many Pikmin only.
 			n_leaders = leaders.size();
@@ -445,15 +468,15 @@ int main(){
 				if(typeid(*closest_party_member) == typeid(pikmin)){
 					pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
 					ALLEGRO_BITMAP* bm;
-					if(pikmin_ptr->type->name=="R") bm=red;
-					else if(pikmin_ptr->type->name=="Y") bm=yellow;
-					if(pikmin_ptr->type->name=="B") bm=blue;
+					if(pikmin_ptr->type->name=="R") bm=bmp_red;
+					else if(pikmin_ptr->type->name=="Y") bm=bmp_yellow;
+					if(pikmin_ptr->type->name=="B") bm=bmp_blue;
 					
 					al_draw_bitmap(bm, 250, scr_h - 20 - font_h, 0);
 				}
 			}
 
-			al_draw_scaled_bitmap(bubble, 0, 0, 64, 64, 240, scr_h - 30 - font_h, 40, 40, 0);
+			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 240, scr_h - 30 - font_h, 40, 40, 0);
 
 			al_draw_text(
 				font, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
@@ -464,7 +487,7 @@ int main(){
 				font, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
 				(to_string((long long) day)).c_str());
 
-			al_draw_scaled_bitmap(day_bubble, 0, 0, 128, 152, scr_w - 80, 10, 60, 70, 0);
+			al_draw_scaled_bitmap(bmp_day_bubble, 0, 0, 128, 152, scr_w - 80, 10, 60, 70, 0);
 			
 			al_flip_display();
 		}

@@ -5,6 +5,7 @@
 #define GRAVITY_ADDER             -0.1f  //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 #define HEALTH_CIRCLE_RADIUS      20     //Radius of the health meter's circle.
 #define LEADER_MOVE_SPEED         100    //Max speed at which a leader can move.
+#define MAX_SHADOW_WIDTH          100    //The shadows can't be any wider than this.
 #define MAX_WHISTLE_RADIUS        80     //The whistle can't go past this radius.
 #define MIN_PIKMIN_GRABBING_RANGE 60     //The leader needs to be at least this close to a Pikmin to grab it.
 #define MIN_PLUCK_RANGE           30     //The leader needs to be at least this close to a burrowed Pikmin to pluck it.

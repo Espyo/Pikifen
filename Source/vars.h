@@ -12,6 +12,23 @@
 
 using namespace std;
 
+extern ALLEGRO_BITMAP* bmp_background;
+extern ALLEGRO_BITMAP* bmp_blue;
+extern ALLEGRO_BITMAP* bmp_blue_burrowed;
+extern ALLEGRO_BITMAP* bmp_bubble;
+extern ALLEGRO_BITMAP* bmp_cursor;
+extern ALLEGRO_BITMAP* bmp_day_bubble;
+extern ALLEGRO_BITMAP* bmp_health_bubble;
+extern ALLEGRO_BITMAP* bmp_louie;
+extern ALLEGRO_BITMAP* bmp_mouse_cursor;
+extern ALLEGRO_BITMAP* bmp_olimar;
+extern ALLEGRO_BITMAP* bmp_red;
+extern ALLEGRO_BITMAP* bmp_red_burrowed;
+extern ALLEGRO_BITMAP* bmp_shadow;
+extern ALLEGRO_BITMAP* bmp_sun;
+extern ALLEGRO_BITMAP* bmp_yellow;
+extern ALLEGRO_BITMAP* bmp_yellow_burrowed;
+
 extern mob*                closest_party_member;
 extern size_t              current_leader;
 extern float               cursor_x;           //Leader's cursor.
