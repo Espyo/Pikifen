@@ -6,4 +6,6 @@ pikmin::pikmin(pikmin_type* type, float x, float y, sector* sec) : mob(x, y, 0, 
 	enemy_attacking = NULL;
 	maturity = 0;
 	burrowed = false;
+
+	main_color = type->color;
 }

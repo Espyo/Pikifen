@@ -11,13 +11,15 @@
 
 void          add_to_party(mob* party_leader, mob* new_member);
 void          angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
+ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a);
 void          coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude);
-void          draw_health(float cx, float cy, unsigned int health, unsigned int max_health, bool just_chart = false);
-void          draw_shadow(float cx, float cy, float size, float shadow_stretch);
+void          draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius = 20, bool just_chart = false);
+void          draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch);
 ALLEGRO_COLOR get_daylight_color();
 ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);
 void          load_game_content();
 void          random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
+void          random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void          random_particle_splash(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void          remove_from_party(mob* party_leader, mob* member_to_remove);
 void          stop_whistling();

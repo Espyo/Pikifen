@@ -44,6 +44,9 @@ int main(){
 	bmp_red_burrowed = al_load_bitmap("Red_burrowed.png");
 	bmp_yellow_burrowed = al_load_bitmap("Yellow_burrowed.png");
 	bmp_blue_burrowed = al_load_bitmap("Blue_burrowed.png");
+	bmp_red_idle = al_load_bitmap("Red_idle.png");
+	bmp_yellow_idle = al_load_bitmap("Yellow_idle.png");
+	bmp_blue_idle = al_load_bitmap("Blue_idle.png");
 	bmp_cursor = al_load_bitmap("Cursor.png");
 	bmp_mouse_cursor = al_load_bitmap("Mouse_cursor.png");
 	bmp_background = al_load_bitmap("Background.png");
@@ -52,6 +55,7 @@ int main(){
 	bmp_health_bubble = al_load_bitmap("Health_bubble.png");
 	bmp_sun = al_load_bitmap("Sun.png");
 	bmp_shadow = al_load_bitmap("Shadow.png");
+	bmp_idle_glow = al_load_bitmap("Idle_glow.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F,		/* ASCII */
@@ -75,8 +79,14 @@ int main(){
 	//Some variables.
 	sector s = sector();
 	leaders.push_back(leader(200, 300, &s));
+	leaders.back().main_color = al_map_rgb(255, 0, 0);
+	leaders.back().health = 10;
 	leaders.push_back(leader(300, 250, &s));
+	leaders.back().main_color = al_map_rgb(0, 0, 255);
+	leaders.back().health = 8;
 	leaders.push_back(leader(350, 200, &s));
+	leaders.back().main_color = al_map_rgb(0, 0, 255);
+	leaders.back().health = 6;
 	pikmin_list.push_back(pikmin(&pikmin_types[0], 30, 30, &s));
 	pikmin_list.push_back(pikmin(&pikmin_types[0], 40, 30, &s));
 	pikmin_list.push_back(pikmin(&pikmin_types[1], 50, 30, &s));
@@ -89,10 +99,27 @@ int main(){
 	pikmin_list.back().burrowed=true;
 	pikmin_list.push_back(pikmin(&pikmin_types[2], 70, 200, &s));
 	pikmin_list.back().burrowed=true;
+	for(unsigned char p=0; p<10; p++){
+		for(unsigned char t=0; t<3; t++){
+			pikmin_list.push_back(pikmin(&pikmin_types[t], 100 + 10*p + 3*t, 30, &s));
+		}
+	}
+
+	//Initializing game things.
+	sprays.clear();
+	size_t n_spray_types = spray_types.size();
+	for(size_t s=0; s<n_spray_types; s++){ sprays.push_back(0); }
 
 	//Main loop.
 	al_start_timer(timer);
 	while(running){
+
+		/*  ************************************************
+		  *** | _ |                                  | _ | ***
+		*****  \_/           EVENT HANDLING           \_/  *****
+		  *** +---+                                  +---+ ***
+		    ************************************************/
+
 		al_wait_for_event(queue, &ev);
 		if(ev.type==ALLEGRO_EVENT_DISPLAY_CLOSE){
 			running=false;
@@ -154,16 +181,21 @@ int main(){
 
 		}else if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_UP){
 			if(ev.mouse.button == 1){
-				if(leaders[current_leader].holding_pikmin){;
+				mob* holding_ptr = leaders[current_leader].holding_pikmin;
+				if(holding_ptr){
 
-					leaders[current_leader].holding_pikmin->x = leaders[current_leader].x;
-					leaders[current_leader].holding_pikmin->y = leaders[current_leader].y;
+					holding_ptr->x = leaders[current_leader].x;
+					holding_ptr->y = leaders[current_leader].y;
+					holding_ptr->z = leaders[current_leader].z;
 
 					float d = dist(leaders[current_leader].x, leaders[current_leader].y, cursor_x, cursor_y);
-					leaders[current_leader].holding_pikmin->speed_x = cos(leaders[current_leader].angle) * d;
-					leaders[current_leader].holding_pikmin->speed_y = sin(leaders[current_leader].angle) * d;
+					holding_ptr->speed_x = cos(leaders[current_leader].angle) * d * THROW_DISTANCE_MULTIPLIER;
+					holding_ptr->speed_y = sin(leaders[current_leader].angle) * d * THROW_DISTANCE_MULTIPLIER;
+					holding_ptr->speed_z = 2;
+
+					holding_ptr->was_thrown = true;
 				
-					remove_from_party(&leaders[current_leader], leaders[current_leader].holding_pikmin);
+					remove_from_party(&leaders[current_leader], holding_ptr);
 					leaders[current_leader].holding_pikmin = NULL;
 				}
 
@@ -239,9 +271,19 @@ int main(){
 
 		}else if(ev.type==ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)){
 			
-			//Logic.
+			/*  ********************************************
+			  ***  .-.                                .-.  ***
+			***** ( L )          MAIN LOGIC          ( L ) *****
+			  ***  `-´                                `-´  ***
+				********************************************/
 
-			//Cursor.
+			
+			/********************
+			*             .-.   *
+			*   Cursor   ( = )> *
+			*             `-´   *
+			*********************/
+
 			leaders[current_leader].angle = atan2(mouse_cursor_y - leaders[current_leader].y, mouse_cursor_x - leaders[current_leader].x);
 			if(dist(leaders[current_leader].x, leaders[current_leader].y, mouse_cursor_x, mouse_cursor_y) > CURSOR_MAX_DIST){
 				//Cursor goes beyond the range limit.
@@ -252,7 +294,13 @@ int main(){
 				cursor_y = mouse_cursor_y;
 			}
 
-			//Whistling.
+			
+			/********************
+			*              ***  *
+			*   Whistle   * O * *
+			*              ***  *
+			*********************/
+
 			if(whistling && whistle_radius < MAX_WHISTLE_RADIUS){
 				whistle_radius += (1.0 / game_fps) * WHISTLE_RADIUS_GROWTH_PS;
 				if(whistle_radius > MAX_WHISTLE_RADIUS){
@@ -268,7 +316,13 @@ int main(){
 				}
 			}
 
-			//Pikmin.
+
+			/********************
+			*             /\  *
+			*   Pikmin   (@:) *
+			*             \/  *
+			*********************/
+
 			size_t n_pikmin = pikmin_list.size();
 			for(size_t p=0; p<n_pikmin; p++){
 				if(whistling){
@@ -290,7 +344,13 @@ int main(){
 
 			}
 
-			//Leaders.
+
+			/********************
+			*              .-.  *
+			*   Leaders   (*:O) *
+			*              `-´  *
+			*********************/
+
 			if(leaders[current_leader].holding_pikmin){
 				leaders[current_leader].holding_pikmin->x = leaders[current_leader].x+8;
 				leaders[current_leader].holding_pikmin->y = leaders[current_leader].y;
@@ -322,7 +382,13 @@ int main(){
 				leaders[l].tick();
 			}
 
-			//Party.
+
+			/******************
+			*            ***  *
+			*   Party   ****# *
+			*            ***  *
+			*******************/
+
 			float closest_distance = 0;
 			size_t n_members = leaders[current_leader].party.size();
 			closest_party_member = NULL;
@@ -342,11 +408,26 @@ int main(){
 				}
 			}
 
-			//Time.
+
+			/*************************
+			*                   .-.  *
+			*   Timer things   ( L ) *
+			*                   `-´  *
+			**************************/
+
 			day_minutes += (1.0f / game_fps) * day_minutes_per_irl_sec;
 			if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
 
-			//Particles.
+			idle_glow_angle+=(1.0 / game_fps) * (IDLE_GLOW_SPIN_SPEED);
+
+
+			/**********************
+			*                 *   *
+			*   Particles   *   * *
+			*                ***  *
+			***********************/
+
+			//Tick all particles.
 			size_t n_particles = particles.size();
 			for(size_t p=0; p<n_particles; ){
 				if(!particles[p].tick()){
@@ -357,17 +438,49 @@ int main(){
 				}
 			}
 
+			//ToDo the particles can't be created once per frame! That's overkill! ...right?
+			for(size_t l = 0; l < n_leaders; l++){
+				if(leaders[l].was_thrown)
+					random_particle_fire(leaders[l].x, leaders[l].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l].main_color, 128));
+			}
+
+			for(size_t p = 0; p < n_pikmin; p++){
+				if(pikmin_list[p].was_thrown)
+					random_particle_fire(pikmin_list[p].x, pikmin_list[p].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p].main_color, 128));
+			}
+			
 
 
 
 
-			//Draw.
+
+			/*  ***************************************
+			  *** |  |                           |  | ***
+			***** |__|          DRAWING          |__| *****
+			  ***  \/                             \/  ***
+				***************************************/
+
+
+			/* Layer 1
+			*************************
+			*                ^^^^^^ *
+			*   Background   ^^^^^^ *
+			*                ^^^^^^ *
+			*************************/
+
 			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2 - 512, 0);
 			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2, 0);
 			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2 - 512, 0);
 			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2, 0);
 
-			//Shadows.
+
+			/* Layer 2
+			************************
+			*                  ##  *
+			*   Mob shadows   #### *
+			*                  ##  *
+			************************/
+
 			float shadow_stretch = 0;
 			
 			if(day_minutes < 60*5 || day_minutes > 60*20){
@@ -380,32 +493,59 @@ int main(){
 
 			n_leaders = leaders.size();
 			for(size_t l = 0; l < n_leaders; l++){
-				draw_shadow(leaders[l].x, leaders[l].y, 32, shadow_stretch);
-				//al_draw_tinted_scaled_bitmap(shadow, al_map_rgba(255, 255, 255, shadow_a), 0, 0, 64, 64, leaders[l].x + shadow_x, leaders[l].y - 16, shadow_w, 32, 0);
+				draw_shadow(leaders[l].x, leaders[l].y, 32, leaders[l].z - leaders[l].sec->floor, shadow_stretch);
 			}
 
 			n_pikmin = pikmin_list.size();
 			for(size_t p = 0; p < n_pikmin; p++){
-				draw_shadow(pikmin_list[p].x, pikmin_list[p].y, 18, shadow_stretch);
-				//al_draw_tinted_scaled_bitmap(shadow, al_map_rgba(255, 255, 255, shadow_a), 0, 0, 64, 64, pikmin_list[p].x + shadow_x, pikmin_list[p].y - 9, shadow_w, 18, 0);
+				draw_shadow(pikmin_list[p].x, pikmin_list[p].y, 18, pikmin_list[p].z - pikmin_list[p].sec->floor, shadow_stretch);
 			}
-			
-			//Cursor.
+
+
+			/* Layer 3
+			*********************
+			*             .-.   *
+			*   Cursor   ( = )> *
+			*             `-´   *
+			*********************/
+
 			al_draw_rotated_bitmap(bmp_mouse_cursor, 24, 24, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
 			al_draw_rotated_bitmap(bmp_cursor, 24, 24, cursor_x, cursor_y, leaders[current_leader].angle, 0);
 
-			//Pikmin.
+			
+			/* Layer 4
+			****************
+			*          \o/ *
+			*   Mobs    Y  *
+			*          / \ *
+			****************/
+
+			//Pikmin
 			n_pikmin = pikmin_list.size();
 			for(size_t p = 0; p<n_pikmin; p++){
 				ALLEGRO_BITMAP* bm;
 				if(pikmin_list[p].type->name=="R"){
-					if(pikmin_list[p].burrowed) bm=bmp_red_burrowed; else bm=bmp_red;
+					if(pikmin_list[p].burrowed) bm=bmp_red_burrowed; else if(!pikmin_list[p].following_party) bm=bmp_red_idle; else bm=bmp_red;
 				}else if(pikmin_list[p].type->name=="Y"){
-					if(pikmin_list[p].burrowed) bm=bmp_yellow_burrowed; else bm=bmp_yellow;
+					if(pikmin_list[p].burrowed) bm=bmp_yellow_burrowed; else if(!pikmin_list[p].following_party) bm=bmp_yellow_idle; else  bm=bmp_yellow;
 				}if(pikmin_list[p].type->name=="B"){
-					if(pikmin_list[p].burrowed) bm=bmp_blue_burrowed; else bm=bmp_blue;
+					if(pikmin_list[p].burrowed) bm=bmp_blue_burrowed; else if(!pikmin_list[p].following_party) bm=bmp_blue_idle; else  bm=bmp_blue;
 				}
 				al_draw_rotated_bitmap(bm, 9, 9, pikmin_list[p].x, pikmin_list[p].y, pikmin_list[p].angle, 0); //ToDo actual coordinates
+
+				if(!pikmin_list[p].following_party){
+					al_draw_tinted_rotated_bitmap(
+						bmp_idle_glow,
+						change_alpha(pikmin_list[p].main_color, 128),
+						9,
+						9,
+						pikmin_list[p].x,
+						pikmin_list[p].y,
+						idle_glow_angle,
+						0
+						);
+					//ToDo actual coordinates.
+				}
 			}
 
 			//Leaders.
@@ -418,6 +558,14 @@ int main(){
 				al_draw_circle(cursor_x, cursor_y, whistle_radius, al_map_rgb(192, 192, 0), 2);
 			}
 
+
+			/* Layer 5
+			***********************
+			*                 *   *
+			*   Particles   *   * *
+			*                ***  *
+			***********************/
+
 			n_particles = particles.size();
 			for(size_t p=0; p<n_particles; p++){
 				al_draw_filled_rectangle(
@@ -425,27 +573,78 @@ int main(){
 					particles[p].y - particles[p].size*0.5,
 					particles[p].x + particles[p].size*0.5,
 					particles[p].y + particles[p].size*0.5,
-					particles[p].color);
+					change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
+					);
 			}
 
-			//Daylight effect.
+
+			/* Layer 6
+			*************************
+			*              --==## *
+			*   Daylight   --==## *
+			*              --==## *
+			*************************/
+
 			if(daylight_effect){
 				al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 				al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
 			}
 
-			//HUD
+
+			/* Layer 7
+			*****************
+			*           (1) *
+			*   HUD         *
+			*         1/2/3 *
+			*****************/
 			
-			ALLEGRO_BITMAP* bm = (current_leader==0) ? bmp_olimar : bmp_louie;
-			al_draw_bitmap(bm, 20, scr_h - 45, 0);
-			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 10, scr_h - 55, 50, 50, 0);
+			//ToDo actual image coordinates (remember the health bubble has a different image than the regular ones)
+			//ToDo actual leader top healths.
+			int leader_img_size = 32;
+			int bubble_img_size = 64;
 
-			draw_health(85, scr_h - 30, leaders[current_leader].health, 10, true);
-			al_draw_scaled_bitmap(bmp_health_bubble, 0, 0, 64, 64, 85 - HEALTH_CIRCLE_RADIUS * 1.2, scr_h - 30 - HEALTH_CIRCLE_RADIUS * 1.2, HEALTH_CIRCLE_RADIUS * 2.4, HEALTH_CIRCLE_RADIUS * 2.4, 0);
+			//Leader health.
+			for(size_t l = 0; l < 3; l++){
+				if(n_leaders < l + 1) continue;
 
+				size_t l_nr = (current_leader+l)%n_leaders;
+				ALLEGRO_BITMAP* bm = (l_nr==0) ? bmp_olimar : bmp_louie;
+
+				int icons_size;
+				if(l == 0) icons_size = 32; else icons_size = 20;
+
+				int y_offset;
+				if(l == 0) y_offset = 0; else if(l == 1) y_offset = 44; else y_offset = 80;
+
+				al_draw_scaled_bitmap(
+					bm, 0, 0, leader_img_size, leader_img_size,
+					32 - icons_size / 2,
+					scr_h - (32 + y_offset + icons_size / 2),
+					icons_size, icons_size, 0
+					);
+				al_draw_scaled_bitmap(bmp_bubble, 0, 0, bubble_img_size, bubble_img_size,
+					32 - (icons_size * 1.6) / 2,
+					scr_h - (32 + y_offset + (icons_size * 1.6) / 2),
+					icons_size * 1.6, icons_size * 1.6, 0
+					);
+
+				draw_health(
+					32 + icons_size * 1.5,
+					scr_h - (32 + y_offset),
+					leaders[l_nr].health, 10,
+					icons_size / 2, true);
+				al_draw_scaled_bitmap(
+					bmp_health_bubble, 0, 0, bubble_img_size, bubble_img_size,
+					(32 + icons_size * 1.5) - (icons_size * 1.2) / 2,
+					scr_h - (32 + y_offset + (icons_size * 1.2) / 2),
+					icons_size * 1.2, icons_size * 1.2, 0);
+			}
+
+			//Day hour.
 			al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
 				(to_string((long long) (day_minutes/60)) + ":" + to_string((long long) ((int) (day_minutes)%60))).c_str());
 
+			//Sun Meter.
 			unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
 			unsigned int sun_meter_span = (scr_w - 100) - 20;
 			unsigned short interval = sun_meter_span / n_hours;
@@ -456,6 +655,7 @@ int main(){
 			float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
 			al_draw_scaled_bitmap(bmp_sun, 0, 0, 64, 64, 10 + day_passed_ratio * sun_meter_span, 30, 30, 30, 0);
 
+			//Pikmin count.
 			//Count how many Pikmin only.
 			n_leaders = leaders.size();
 			size_t pikmin_in_party = leaders[current_leader].party.size();
@@ -464,6 +664,7 @@ int main(){
 				if(leaders[l].following_party == &leaders[current_leader]) pikmin_in_party--;
 			}
 
+			//Closest party member.
 			if(closest_party_member){
 				if(typeid(*closest_party_member) == typeid(pikmin)){
 					pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
@@ -478,16 +679,28 @@ int main(){
 
 			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 240, scr_h - 30 - font_h, 40, 40, 0);
 
+			//Pikmin count numbers.
 			al_draw_text(
 				font, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
 				(to_string((long long) pikmin_in_party) + "/" + to_string((long long) pikmin_list.size()) + "/1234").c_str()
 				);
 
+			//Day number.
 			al_draw_text(
 				font, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
 				(to_string((long long) day)).c_str());
 
 			al_draw_scaled_bitmap(bmp_day_bubble, 0, 0, 128, 152, scr_w - 80, 10, 60, 70, 0);
+
+			//Sprays.
+			//ToDo 1 spray, and more than 2 sprays.
+			if(n_spray_types < 3){
+				al_draw_filled_circle(32, scr_h / 2 - 16, 8, spray_types[0].main_color);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 16 - font_h / 2, 0, to_string((long long) sprays[0]).c_str());
+				al_draw_filled_circle(32, scr_h / 2 + 16, 8, spray_types[1].main_color);
+				al_draw_text(font, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 16 - font_h / 2, 0, to_string((long long) sprays[1]).c_str());
+			}
+
 			
 			al_flip_display();
 		}

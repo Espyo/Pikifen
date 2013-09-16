@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <allegro5\allegro.h>
+
 #include "sector.h"
 
 using namespace std;
@@ -10,6 +12,9 @@ using namespace std;
 class mob{
 public:
 	mob(float x, float y, float z, float max_move_speed, sector* sec);
+
+	//Detail things.
+	ALLEGRO_COLOR main_color;
 
 	//Planned moving.
 	float planned_moving_angle;
@@ -30,9 +35,10 @@ public:
 	float target_x, target_y;  //When movement is automatic, this is the spot the mob is trying to go to.
 	bool go_to_target;         //If true, it'll try to go to the target spot on its own.
 
-	//Others
+	//Party things.
 	mob* following_party;  //The current mob is following this mob's party.
 	vector<mob*> party;
+	bool was_thrown;       //Is the mob airborne because it was thrown?
 	
 	void tick();
 

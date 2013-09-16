@@ -21,12 +21,19 @@ void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y
 	*y_coord = sin(angle) * magnitude;
 }
 
+ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a){
+	ALLEGRO_COLOR c2;
+	c2.r = c.r; c2.g = c.g; c2.b = c.b;
+	c2.a = a / 255.0;
+	return c2;
+}
+
 void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude){
 	*angle = atan2(y_coord, x_coord);
 	*magnitude = dist(0, 0, x_coord, y_coord);
 }
 
-void draw_health(float cx, float cy, unsigned int health, unsigned int max_health, bool just_chart){
+void draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius, bool just_chart){
 	float ratio = (float) health / (float) max_health;
 	ALLEGRO_COLOR c;
 	if(ratio >= 0.5){
@@ -35,12 +42,12 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 		c=al_map_rgb_f(1, (ratio*2), 0);
 	}
 
-	if(!just_chart) al_draw_filled_circle(cx, cy, HEALTH_CIRCLE_RADIUS, al_map_rgba(0, 0, 0, 128));
-	al_draw_filled_pieslice(cx, cy, HEALTH_CIRCLE_RADIUS, -M_PI*0.5, -ratio*M_PI*2, c);
-	if(!just_chart) al_draw_circle(cx, cy, 11, al_map_rgb(0, 0, 0), 2);
+	if(!just_chart) al_draw_filled_circle(cx, cy, radius, al_map_rgba(0, 0, 0, 128));
+	al_draw_filled_pieslice(cx, cy, radius, -M_PI*0.5, -ratio*M_PI*2, c);
+	if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
 }
 
-void draw_shadow(float cx, float cy, float size, float shadow_stretch){
+void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch){
 	if(shadow_stretch <= 0) return;
 
 	int shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
@@ -62,7 +69,7 @@ void draw_shadow(float cx, float cy, float size, float shadow_stretch){
 		64,
 		64,
 		cx + shadow_x,
-		cy - size / 2,
+		(cy - size / 2) + delta_z * SHADOW_Y_MULTIPLIER,
 		shadow_w,
 		size,
 		0
@@ -153,6 +160,9 @@ void load_game_content(){
 	pikmin_types.back().color = al_map_rgb(0, 0, 255);
 	pikmin_types.back().name = "B";
 	pikmin_types.back().max_move_speed = 50;
+
+	spray_types.push_back(spray_type(true, al_map_rgb(255, 0, 0)));
+	spray_types.push_back(spray_type(false, al_map_rgb(128, 0, 255)));
 }
 
 void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color){
@@ -170,6 +180,24 @@ void random_particle_explosion(float center_x, float center_y, unsigned char min
 			speed_x,
 			speed_y,
 			1,
+			0,
+			(random((unsigned) (time_min*100), (unsigned) (time_max*100)))/100.0,
+			(random((unsigned) (size_min*100), (unsigned) (size_max*100)))/100.0,
+			color
+			));
+	}
+}
+
+void random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color){
+	unsigned char n_particles = random(min, max);
+	
+	for(unsigned char p=0; p<n_particles; p++){
+		particles.push_back(particle(
+			center_x,
+			center_y,
+			(6-random(0, 12)),
+			-(random(10, 20)),
+			-1,
 			0,
 			(random((unsigned) (time_min*100), (unsigned) (time_max*100)))/100.0,
 			(random((unsigned) (size_min*100), (unsigned) (size_max*100)))/100.0,

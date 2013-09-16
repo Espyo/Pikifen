@@ -18,6 +18,7 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 	target_y = y;
 
 	following_party = NULL;
+	was_thrown = false;
 }
 
 void mob::tick(){
@@ -30,13 +31,17 @@ void mob::tick(){
 	}*/
 
 	//Movement.
+	bool was_airborne = z > sec->floor;
 	x += delta_t_mult * speed_x;
 	y += delta_t_mult * speed_y;
 	z += delta_t_mult * speed_z;
 	
-	if(z <= sec->floor){
+	if(z <= sec->floor && was_airborne){
 		z = sec->floor;
+		speed_x = 0;
+		speed_y = 0;
 		speed_z = 0;
+		was_thrown = false;
 	}
 
 	//Gravity.

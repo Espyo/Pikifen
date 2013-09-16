@@ -87,6 +87,7 @@
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />
     <ClCompile Include="sector.cpp" />
+    <ClCompile Include="spray_type.cpp" />
     <ClCompile Include="vars.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +106,7 @@
     <ClInclude Include="pikmin.h" />
     <ClInclude Include="pikmin_type.h" />
     <ClInclude Include="sector.h" />
+    <ClInclude Include="spray_type.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="vars.h" />
