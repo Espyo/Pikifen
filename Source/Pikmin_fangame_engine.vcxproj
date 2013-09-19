@@ -79,29 +79,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mob.cpp" />
+    <ClCompile Include="onion.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />
     <ClCompile Include="sector.cpp" />
     <ClCompile Include="spray_type.cpp" />
+    <ClCompile Include="status.cpp" />
+    <ClCompile Include="treasure.cpp" />
     <ClCompile Include="vars.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_state.h" />
     <ClInclude Include="enemy_type.h" />
+    <ClInclude Include="frame.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
     <ClInclude Include="mob.h" />
     <ClInclude Include="object_state.h" />
+    <ClInclude Include="onion.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="pikmin.h" />
     <ClInclude Include="pikmin_type.h" />
@@ -109,6 +116,7 @@
     <ClInclude Include="spray_type.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="status.h" />
+    <ClInclude Include="treasure.h" />
     <ClInclude Include="vars.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -33,6 +33,20 @@ void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* mag
 	*magnitude = dist(0, 0, x_coord, y_coord);
 }
 
+void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color){
+	unsigned int first_y = cy - (font_h * 3) / 2;
+	al_draw_text(font, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
+	al_draw_text(font, color, cx, first_y + font_h * 2, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
+
+	ALLEGRO_TRANSFORM scale, old;
+	al_identity_transform(&scale);
+	al_scale_transform(&scale, 5, 1);
+	al_copy_transform(&old, al_get_current_transform());
+	al_use_transform(&scale);{
+		al_draw_text(font, color, cx / 5, first_y + font_h, ALLEGRO_ALIGN_CENTER, "-");
+	};al_use_transform(&old);
+}
+
 void draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius, bool just_chart){
 	float ratio = (float) health / (float) max_health;
 	ALLEGRO_COLOR c;
@@ -79,19 +93,6 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 ALLEGRO_COLOR get_daylight_color(){
 	//ToDo initialize this somewhere else.
 	vector<pair<unsigned char, ALLEGRO_COLOR>> points;
-	/*points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 3,  al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 4,  al_map_rgba(64,  64,  96,  128) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 255, 255, 0  ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 0,   32 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 255, 128, 32 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(128, 32,  0,   48 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(32,  0,   0,   64 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 21, al_map_rgba(0,   0,   32,  96 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 23, al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));*/
 
 	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
 	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 5,  al_map_rgba(0,   0,   32,  192) ));
@@ -112,26 +113,18 @@ ALLEGRO_COLOR get_daylight_color(){
 	}
 
 	return al_map_rgba(255, 0, 0, 128);
+}
 
-	/*if(day_minutes < 60*3 || day_minutes > 60*23){
-		return al_map_rgba(0, 0, 32, 192);
-
-	}else if(day_minutes >= 60*3 && day_minutes < 60*4){
-		return interpolate_color(day_minutes, 60*3, 60*4, al_map_rgba(0, 0, 32, 192), al_map_rgba(
-
-	}else if(day_minutes >= 60*3 && day_minutes < 60*7){
-		return interpolate_color(day_minutes, 60*3, 60*7, al_map_rgba(0, 0, 32, 192), al_map_rgba(255, 128, 255, 24));
-
-	}else if(day_minutes >= 60*7 && day_minutes < 60*8){
-		return interpolate_color(day_minutes, 60*7, 60*8, al_map_rgba(255, 128, 255, 24), al_map_rgba(255, 255, 255, 0));
-
-	}else if(day_minutes >= 60*8 && day_minutes < 60*16){
-		return al_map_rgba(255, 255, 255, 0);
-
-	}else if(day_minutes >= 60*16 && day_minutes < 60*17){
-		return interpolate_color(day_minutes, 60*16, 60*17, al_map_rgba(
-
-	}*/
+ALLEGRO_TRANSFORM get_world_to_screen_transform(){
+	ALLEGRO_TRANSFORM t;
+	al_identity_transform(&t);
+	al_translate_transform(
+		&t,
+		-leaders[current_leader].x + scr_w / 2 * 1/(zoom_level),
+		-leaders[current_leader].y + scr_h/2 * 1/(zoom_level)
+		);
+	al_scale_transform(&t, zoom_level, zoom_level);
+	return t;
 }
 
 ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2){
@@ -161,8 +154,11 @@ void load_game_content(){
 	pikmin_types.back().name = "B";
 	pikmin_types.back().max_move_speed = 50;
 
-	spray_types.push_back(spray_type(true, al_map_rgb(255, 0, 0)));
-	spray_types.push_back(spray_type(false, al_map_rgb(128, 0, 255)));
+	statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
+	statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
+
+	spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
+	spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
 }
 
 void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color){
@@ -197,8 +193,8 @@ void random_particle_fire(float center_x, float center_y, unsigned char min, uns
 			center_y,
 			(6-random(0, 12)),
 			-(random(10, 20)),
-			-1,
 			0,
+			-1,
 			(random((unsigned) (time_min*100), (unsigned) (time_max*100)))/100.0,
 			(random((unsigned) (size_min*100), (unsigned) (size_max*100)))/100.0,
 			color
@@ -223,6 +219,30 @@ void random_particle_splash(float center_x, float center_y, unsigned char min, u
 	}
 }
 
+void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color){
+	unsigned char n_particles = random(25,30);
+
+	for(unsigned char p=0; p<n_particles; p++){
+		float angle_offset = ((random(0, (unsigned) (M_PI / 2 * 100))) / 100.0) - M_PI / 4;
+		
+		float power = random(30, 90);
+		float speed_x = cos(angle+angle_offset) * power;
+		float speed_y = sin(angle+angle_offset) * power;
+
+		particles.push_back(particle(
+			origin_x,
+			origin_y,
+			speed_x,
+			speed_y,
+			1,
+			0,
+			(random(30, 40)) / 10.0,
+			(random(30, 40)) / 10.0,
+			color
+			));
+	}
+}
+
 void remove_from_party(mob* party_leader, mob* member_to_remove){
 	size_t n_pikmin = party_leader->party.size();
 	for(size_t p=0; p<n_pikmin; p++){
@@ -239,4 +259,17 @@ void stop_whistling(){
 	whistling = false;
 	whistle_radius = 0;
 	whistle_max_hold = 0;
+}
+
+void use_spray(size_t spray_nr){
+	if(sprays[spray_nr]==0) return;
+
+	random_particle_spray(
+		leaders[current_leader].x,
+		leaders[current_leader].y,
+		leaders[current_leader].angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
+		spray_types[spray_nr].main_color
+		);
+
+	sprays[spray_nr]--;
 }

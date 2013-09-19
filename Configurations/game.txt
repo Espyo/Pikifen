@@ -1,0 +1,3 @@
+day_minutes_start = 420
+day_minutes_end = 1140
+day_minutes_per_irl_sec = 2

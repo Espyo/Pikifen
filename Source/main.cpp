@@ -35,6 +35,12 @@ int main(){
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 	ALLEGRO_EVENT ev;
 
+	//Other initial things.
+	al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+	al_set_window_title(display, "Pikmin fangame engine");
+	al_hide_mouse_cursor(display);
+	if(smooth_scaling) al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
+
 	//Graphics.
 	bmp_olimar = al_load_bitmap("Olimar.png");
 	bmp_louie = al_load_bitmap("Louie.png");
@@ -58,27 +64,37 @@ int main(){
 	bmp_idle_glow = al_load_bitmap("Idle_glow.png");
 
 	int font_ranges[] = {
-		0x0020, 0x007F,		/* ASCII */
-		0x00A1, 0x00FF,		/* Latin 1 */
-		0x0100, 0x017F,		/* Extended-A */
-		0x20AC, 0x20AC		/* Euro */
+		0x0020, 0x007F, //ASCII
+		0x00A1, 0x00FF, //Latin 1
+		0x0100, 0x017F, //Extended-A
+		0x20AC, 0x20AC, //Euro
 	};
 
-	ALLEGRO_BITMAP* font_bitmap = al_load_bitmap("Font.png");  //We can't load the font directly because we want to set the ranges.
-	if(font_bitmap) font=al_grab_font_from_bitmap(font_bitmap, 4, font_ranges);
-	al_destroy_bitmap(font_bitmap);
-	font_h = al_get_font_line_height(font);
+	int font_area_name_ranges[] = {
+		0x0020, 0x007F, //ASCII
+	};
 
-	//Configurations.
-	al_set_window_title(display, "Pikmin fangame engine");
-	al_hide_mouse_cursor(display);
+	ALLEGRO_BITMAP* temp_font_bitmap = al_load_bitmap("Font.png");  //We can't load the font directly because we want to set the ranges.
+	if(temp_font_bitmap) font=al_grab_font_from_bitmap(temp_font_bitmap, 4, font_ranges);
+	temp_font_bitmap = al_load_bitmap("Area_name_font.png");
+	if(temp_font_bitmap) font_area_name=al_grab_font_from_bitmap(temp_font_bitmap, 1, font_area_name_ranges);
+	al_destroy_bitmap(temp_font_bitmap);
+	font_h = al_get_font_line_height(font);
 
 	//Game content.
 	load_game_content();
 
+	//Initializing game things.
+	sprays.clear();
+	size_t n_spray_types = spray_types.size();
+	for(size_t s=0; s<n_spray_types; s++){ sprays.push_back(0); }
+	pikmin_in_onions.clear();
+	size_t n_total_onions = pikmin_types.size();
+	for(size_t o=0; o<n_total_onions; o++){ pikmin_in_onions.push_back(0); }
+
 	//Some variables.
 	sector s = sector();
-	leaders.push_back(leader(200, 300, &s));
+	leaders.push_back(leader(0, 0, &s));
 	leaders.back().main_color = al_map_rgb(255, 0, 0);
 	leaders.back().health = 10;
 	leaders.push_back(leader(300, 250, &s));
@@ -87,6 +103,7 @@ int main(){
 	leaders.push_back(leader(350, 200, &s));
 	leaders.back().main_color = al_map_rgb(0, 0, 255);
 	leaders.back().health = 6;
+	treasures.push_back(treasure(300, 100, 0, 40, 10, &s, 30, 50));
 	pikmin_list.push_back(pikmin(&pikmin_types[0], 30, 30, &s));
 	pikmin_list.push_back(pikmin(&pikmin_types[0], 40, 30, &s));
 	pikmin_list.push_back(pikmin(&pikmin_types[1], 50, 30, &s));
@@ -104,11 +121,13 @@ int main(){
 			pikmin_list.push_back(pikmin(&pikmin_types[t], 100 + 10*p + 3*t, 30, &s));
 		}
 	}
-
-	//Initializing game things.
-	sprays.clear();
-	size_t n_spray_types = spray_types.size();
-	for(size_t s=0; s<n_spray_types; s++){ sprays.push_back(0); }
+	onions.push_back(onion(400, 100, &s, &pikmin_types[0]));
+	onions.push_back(onion(400, 200, &s, &pikmin_types[1]));
+	onions.push_back(onion(400, 300, &s, &pikmin_types[2]));
+	sprays[0] = sprays[1] = 10;
+	pikmin_in_onions[0] = 200;
+	pikmin_in_onions[1] = 180;
+	pikmin_in_onions[2] = 160;
 
 	//Main loop.
 	al_start_timer(timer);
@@ -128,10 +147,16 @@ int main(){
 			mouse_cursor_x = ev.mouse.x;
 			mouse_cursor_y = ev.mouse.y;
 
+			if(ev.mouse.dz!=0){
+				//In Pikmin 2, at normal zoom and top view, a leader's height is roughly 6% that of the screen's. Max zoom, 12%. Min zoom, 3%.
+				zoom_level += 0.1 * ev.mouse.dz;
+				if(zoom_level > MAX_ZOOM_LEVEL) zoom_level = MAX_ZOOM_LEVEL;
+				if(zoom_level < MIN_ZOOM_LEVEL) zoom_level = MIN_ZOOM_LEVEL;
+			}
+
 		}else if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
 			if(ev.mouse.button == 1){
-				bool punch = false;
-				bool throw_pikmin = false;
+				bool done = false;
 				
 				//First check if the leader should pluck a Pikmin.
 
@@ -152,31 +177,44 @@ int main(){
 						//Pluck.
 						closest_pikmin->burrowed = false;
 						add_to_party(&leaders[current_leader], closest_pikmin);
-					}else{
-						throw_pikmin = true;
+						done = true;
 					}
-				}else{
-					throw_pikmin = true;
+				}
+
+				//Now check if the leader should open an onion's menu.
+
+				if(!done){
+					//ToDo
+					size_t n_onions = onions.size();
+					for(size_t o=0; o<n_onions; o++){
+						if(dist(leaders[current_leader].x, leaders[current_leader].y, onions[o].x, onions[o].y) < MIN_ONION_CHECK_RANGE){
+							//ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
+							pikmin_in_onions[o]--;
+							pikmin_list.push_back(pikmin(onions[o].type, onions[o].x, onions[o].y, onions[o].sec));
+							add_to_party(&leaders[current_leader], &pikmin_list[pikmin_list.size()-1]);
+							done = true;
+						}
+					}
 				}
 				
 				//Now check if the leader should throw a Pikmin.
 
-				if(throw_pikmin){
+				if(!done){
 					if(closest_party_member){
 						leaders[current_leader].holding_pikmin = closest_party_member;
-					}else{
-						punch = true;
+						done = true;
 					}
 				}
 
 				//Now check if the leader should punch.
 
-				if(punch){
+				if(!done){
 					//ToDo
 				}
 
 			}else if(ev.mouse.button == 2){
 				whistling = true;
+
 			}
 
 		}else if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_UP){
@@ -254,11 +292,29 @@ int main(){
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 				running = false;
 
+			}else if(ev.keyboard.keycode == ALLEGRO_KEY_R){
+				use_spray(0);
+
+			}else if(ev.keyboard.keycode == ALLEGRO_KEY_F){
+				use_spray(1);
+
+			}else if(ev.keyboard.keycode == ALLEGRO_KEY_C){
+				if(zoom_level < 1){
+					zoom_level = MAX_ZOOM_LEVEL;
+				}else if(zoom_level > 1){
+					zoom_level = 1;
+				}else{
+					zoom_level = MIN_ZOOM_LEVEL;
+				}
+
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_T){
 				//Debug testing.
 				//ToDo remove.
 				//leaders[current_leader].health--;
-				day_minutes += 60;
+				//day_minutes += 60;
+				if(whistling) zoom_level-=0.1;
+				else zoom_level+=0.1;
+
 			}
 
 		}else if(ev.type==ALLEGRO_EVENT_KEY_UP){
@@ -276,23 +332,6 @@ int main(){
 			***** ( L )          MAIN LOGIC          ( L ) *****
 			  ***  `-´                                `-´  ***
 				********************************************/
-
-			
-			/********************
-			*             .-.   *
-			*   Cursor   ( = )> *
-			*             `-´   *
-			*********************/
-
-			leaders[current_leader].angle = atan2(mouse_cursor_y - leaders[current_leader].y, mouse_cursor_x - leaders[current_leader].x);
-			if(dist(leaders[current_leader].x, leaders[current_leader].y, mouse_cursor_x, mouse_cursor_y) > CURSOR_MAX_DIST){
-				//Cursor goes beyond the range limit.
-				cursor_x = leaders[current_leader].x + (cos(leaders[current_leader].angle) * CURSOR_MAX_DIST);
-				cursor_y = leaders[current_leader].y + (sin(leaders[current_leader].angle) * CURSOR_MAX_DIST);
-			}else{
-				cursor_x = mouse_cursor_x;
-				cursor_y = mouse_cursor_y;
-			}
 
 			
 			/********************
@@ -323,24 +362,71 @@ int main(){
 			*             \/  *
 			*********************/
 
+			size_t n_treasures = treasures.size();
 			size_t n_pikmin = pikmin_list.size();
 			for(size_t p=0; p<n_pikmin; p++){
+				pikmin* pik_ptr = &pikmin_list[p];
 				if(whistling){
 					if(
-						dist(pikmin_list[p].x, pikmin_list[p].y, cursor_x, cursor_y) <= whistle_radius &&
-						pikmin_list[p].following_party==NULL &&
-						!pikmin_list[p].burrowed){
+						dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius &&
+						pik_ptr->following_party==NULL &&
+						!pik_ptr->burrowed &&
+						!pik_ptr->was_thrown){
+
 							//Pikmin got whistled.
-							add_to_party(&leaders[current_leader], &pikmin_list[p]);
+							add_to_party(&leaders[current_leader], pik_ptr);
+							pik_ptr->enemy_attacking = NULL;
+
+							//ToDo optimize this instead of running through the spot vector.
+							if(pik_ptr->carrying_treasure){
+								for(size_t s=0; s<pik_ptr->carrying_treasure->max_carriers; s++){
+									if(pik_ptr->carrying_treasure->carrier_spots[s] == pik_ptr){
+										pik_ptr->carrying_treasure->carrier_spots[s] = NULL;
+									}
+								}
+							}
+
+							pik_ptr->carrying_treasure = NULL;
+							
 					}
 				}
 
-				if(pikmin_list[p].following_party){
-					pikmin_list[p].target_x = pikmin_list[p].following_party->x + random(0, 30);
-					pikmin_list[p].target_y = pikmin_list[p].following_party->y + random(0, 30);
+				if(pik_ptr->following_party){
+					pik_ptr->target_x = pik_ptr->following_party->x + random(0, 30);
+					pik_ptr->target_y = pik_ptr->following_party->y + random(0, 30);
+				}
+
+				//Finding tasks.
+				if(
+					!pik_ptr->following_party &&
+					!pik_ptr->carrying_treasure &&
+					!pik_ptr->enemy_attacking &&
+					!pik_ptr->burrowed
+					){
+						for(size_t t=0; t<n_treasures; t++){
+							if(dist(pik_ptr->x, pik_ptr->y, treasures[t].x, treasures[t].y)<=pik_ptr->size + treasures[t].size + MIN_PIKMIN_TASK_RANGE){
+								//ToDo don't take the treasure if all spots are taken already.
+								pik_ptr->carrying_treasure = &treasures[t];
+								//ToDo remove this random cycle and replace with something more optimal.
+								bool valid_spot = false;
+								unsigned int spot = 0;
+								while(!valid_spot){
+									spot = random(0, treasures[t].max_carriers - 1);
+									valid_spot = !treasures[t].carrier_spots[spot];
+								}
+								treasures[t].carrier_spots[spot] = pik_ptr;
+
+								float angle = ((M_PI * 2) / treasures[t].max_carriers) * spot;
+								pik_ptr->target_x = treasures[t].x + cos(angle) * (treasures[t].size + pik_ptr->size / 2);
+								pik_ptr->target_y = treasures[t].y + sin(angle) * (treasures[t].size + pik_ptr->size / 2);
+								pik_ptr->go_to_target = true;
+
+								break;
+							}
+						}
 				}
 				
-				pikmin_list[p].tick();
+				pik_ptr->tick();
 
 			}
 
@@ -360,7 +446,10 @@ int main(){
 			for(size_t l=0; l<n_leaders; l++){
 				if(whistling){
 					if(l != current_leader){
-						if(dist(leaders[l].x, leaders[l].y, cursor_x, cursor_y) <= whistle_radius && leaders[l].following_party==NULL){
+						if(
+							dist(leaders[l].x, leaders[l].y, cursor_x, cursor_y) <= whistle_radius &&
+							!leaders[l].following_party &&
+							!leaders[l].was_thrown){
 							//Leader got whistled.
 							add_to_party(&leaders[current_leader], &leaders[l]);
 
@@ -396,6 +485,9 @@ int main(){
 			if(n_members > 0){
 
 				for(size_t m=0; m<n_members; m++){
+					mob* ccc=leaders[current_leader].party[m];
+					float xxx=leaders[current_leader].party[m]->x;
+					float yyy=leaders[current_leader].party[m]->y;
 					float d = dist(leaders[current_leader].x, leaders[current_leader].y, leaders[current_leader].party[m]->x, leaders[current_leader].party[m]->y);
 					if(m==0 || d < closest_distance){
 						closest_distance = d;
@@ -421,6 +513,26 @@ int main(){
 			idle_glow_angle+=(1.0 / game_fps) * (IDLE_GLOW_SPIN_SPEED);
 
 
+			/********************
+			*             .-.   *
+			*   Cursor   ( = )> *
+			*             `-´   *
+			*********************/
+
+			float mcx = mouse_cursor_x, mcy = mouse_cursor_y;
+			ALLEGRO_TRANSFORM screen_to_world_transform = get_world_to_screen_transform();
+			al_invert_transform(&screen_to_world_transform);
+			al_transform_coordinates(&screen_to_world_transform, &mcx, &mcy);
+			cursor_x = mcx;
+			cursor_y = mcy;
+
+			leaders[current_leader].angle = atan2(cursor_y - leaders[current_leader].y, cursor_x - leaders[current_leader].x);
+			if(dist(leaders[current_leader].x, leaders[current_leader].y, cursor_x, cursor_y) > CURSOR_MAX_DIST){
+				//Cursor goes beyond the range limit.
+				cursor_x = leaders[current_leader].x + (cos(leaders[current_leader].angle) * CURSOR_MAX_DIST);
+				cursor_y = leaders[current_leader].y + (sin(leaders[current_leader].angle) * CURSOR_MAX_DIST);
+			}
+
 			/**********************
 			*                 *   *
 			*   Particles   *   * *
@@ -441,16 +553,14 @@ int main(){
 			//ToDo the particles can't be created once per frame! That's overkill! ...right?
 			for(size_t l = 0; l < n_leaders; l++){
 				if(leaders[l].was_thrown)
-					random_particle_fire(leaders[l].x, leaders[l].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l].main_color, 128));
+					random_particle_fire(leaders[l].x, leaders[l].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l].main_color, 192));
 			}
 
 			for(size_t p = 0; p < n_pikmin; p++){
 				if(pikmin_list[p].was_thrown)
-					random_particle_fire(pikmin_list[p].x, pikmin_list[p].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p].main_color, 128));
+					random_particle_fire(pikmin_list[p].x, pikmin_list[p].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p].main_color, 192));
 			}
 			
-
-
 
 
 
@@ -460,6 +570,13 @@ int main(){
 			  ***  \/                             \/  ***
 				***************************************/
 
+			al_clear_to_color(al_map_rgb(0,0,0));
+
+			ALLEGRO_TRANSFORM normal_transform;
+			al_identity_transform(&normal_transform);
+			
+			ALLEGRO_TRANSFORM world_to_screen_transform = get_world_to_screen_transform();
+			al_use_transform(&world_to_screen_transform);
 
 			/* Layer 1
 			*************************
@@ -468,10 +585,10 @@ int main(){
 			*                ^^^^^^ *
 			*************************/
 
-			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2 - 512, 0);
-			al_draw_bitmap(bmp_background, scr_w/2 - 512, scr_h/2, 0);
-			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2 - 512, 0);
-			al_draw_bitmap(bmp_background, scr_w/2, scr_h/2, 0);
+			al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2 - 512, scr_h/2 - 512, 512, 512, 0);
+			al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2 - 512, scr_h/2, 512, 512, 0);
+			al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2 - 512, 512, 512, 0);
+			al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2, 512, 512, 0);
 
 
 			/* Layer 2
@@ -493,12 +610,12 @@ int main(){
 
 			n_leaders = leaders.size();
 			for(size_t l = 0; l < n_leaders; l++){
-				draw_shadow(leaders[l].x, leaders[l].y, 32, leaders[l].z - leaders[l].sec->floor, shadow_stretch);
+				draw_shadow(leaders[l].x, leaders[l].y, 32, leaders[l].z - leaders[l].sec->floors[0].z, shadow_stretch);
 			}
 
 			n_pikmin = pikmin_list.size();
 			for(size_t p = 0; p < n_pikmin; p++){
-				draw_shadow(pikmin_list[p].x, pikmin_list[p].y, 18, pikmin_list[p].z - pikmin_list[p].sec->floor, shadow_stretch);
+				draw_shadow(pikmin_list[p].x, pikmin_list[p].y, 18, pikmin_list[p].z - pikmin_list[p].sec->floors[0].z, shadow_stretch);
 			}
 
 
@@ -509,8 +626,10 @@ int main(){
 			*             `-´   *
 			*********************/
 
-			al_draw_rotated_bitmap(bmp_mouse_cursor, 24, 24, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
-			al_draw_rotated_bitmap(bmp_cursor, 24, 24, cursor_x, cursor_y, leaders[current_leader].angle, 0);
+			al_use_transform(&normal_transform);
+			al_draw_rotated_bitmap(bmp_mouse_cursor, 48, 48, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
+			al_use_transform(&world_to_screen_transform);
+			al_draw_scaled_rotated_bitmap(bmp_cursor, 48, 48, cursor_x, cursor_y, 0.5, 0.5, leaders[current_leader].angle, 0);
 
 			
 			/* Layer 4
@@ -531,16 +650,18 @@ int main(){
 				}if(pikmin_list[p].type->name=="B"){
 					if(pikmin_list[p].burrowed) bm=bmp_blue_burrowed; else if(!pikmin_list[p].following_party) bm=bmp_blue_idle; else  bm=bmp_blue;
 				}
-				al_draw_rotated_bitmap(bm, 9, 9, pikmin_list[p].x, pikmin_list[p].y, pikmin_list[p].angle, 0); //ToDo actual coordinates
+				al_draw_scaled_rotated_bitmap(bm, 18, 18, pikmin_list[p].x, pikmin_list[p].y, 0.5, 0.5, pikmin_list[p].angle, 0); //ToDo actual coordinates
 
 				if(!pikmin_list[p].following_party){
-					al_draw_tinted_rotated_bitmap(
+					al_draw_tinted_scaled_rotated_bitmap(
 						bmp_idle_glow,
 						change_alpha(pikmin_list[p].main_color, 128),
-						9,
-						9,
+						18,
+						18,
 						pikmin_list[p].x,
 						pikmin_list[p].y,
+						0.5,
+						0.5,
 						idle_glow_angle,
 						0
 						);
@@ -551,11 +672,22 @@ int main(){
 			//Leaders.
 			for(size_t l=0; l<n_leaders; l++){
 				ALLEGRO_BITMAP* bm = (l==0) ? bmp_olimar : bmp_louie;
-				al_draw_rotated_bitmap(bm, 16, 16, leaders[l].x, leaders[l].y, leaders[l].angle, 0);
+				al_draw_scaled_rotated_bitmap(bm, 32, 32, leaders[l].x, leaders[l].y, 0.5, 0.5, leaders[l].angle, 0);
 			}
 
 			if(whistle_radius > 0){
 				al_draw_circle(cursor_x, cursor_y, whistle_radius, al_map_rgb(192, 192, 0), 2);
+			}
+
+			//Onions.
+			size_t n_onions = onions.size();
+			for(size_t o=0; o<n_onions; o++){
+				al_draw_filled_circle(onions[o].x, onions[o].y, onions[o].size, change_alpha(onions[o].type->color, 128));
+			}
+
+			//Treasures.
+			for(size_t t=0; t<n_treasures; t++){
+				al_draw_filled_circle(treasures[t].x, treasures[t].y, treasures[t].size, al_map_rgb(128, 255, 255));
 			}
 
 
@@ -566,15 +698,26 @@ int main(){
 			*                ***  *
 			***********************/
 
-			n_particles = particles.size();
-			for(size_t p=0; p<n_particles; p++){
-				al_draw_filled_rectangle(
-					particles[p].x - particles[p].size*0.5,
-					particles[p].y - particles[p].size*0.5,
-					particles[p].x + particles[p].size*0.5,
-					particles[p].y + particles[p].size*0.5,
-					change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
-					);
+			if(particle_quality>0){
+				n_particles = particles.size();
+				for(size_t p=0; p<n_particles; p++){
+					if(particle_quality==1){
+						al_draw_filled_rectangle(
+							particles[p].x - particles[p].size*0.5,
+							particles[p].y - particles[p].size*0.5,
+							particles[p].x + particles[p].size*0.5,
+							particles[p].y + particles[p].size*0.5,
+							change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
+							);
+					}else{
+						al_draw_filled_circle(
+							particles[p].x,
+							particles[p].y,
+							particles[p].size * 0.5,
+							change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
+							);
+					}
+				}
 			}
 
 
@@ -585,8 +728,9 @@ int main(){
 			*              --==## *
 			*************************/
 
+			al_use_transform(&normal_transform);
+
 			if(daylight_effect){
-				al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 				al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
 			}
 
@@ -701,6 +845,19 @@ int main(){
 				al_draw_text(font, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 16 - font_h / 2, 0, to_string((long long) sprays[1]).c_str());
 			}
 
+			//Fractions.
+			for(size_t t=0; t<n_treasures; t++){
+				//ToDo only show if it has at least one carrier.
+				//ToDo fraction color.
+				//ToDo it's not taking Pikmin strength into account.
+				//ToDo can't this be more optimized than running through the vector of carrier spots?
+				size_t n_pikmin_on_treasure = 0;
+				for(size_t p=0; p<treasures[t].max_carriers; p++) if(treasures[t].carrier_spots[p]) n_pikmin_on_treasure++;
+				if(n_pikmin_on_treasure>0)
+					draw_fraction(treasures[t].x, treasures[t].y, n_pikmin_on_treasure, treasures[t].weight, al_map_rgb(128, 128, 128));
+			}
+
+			//ToDo remove me al_draw_text(font_area_name, al_map_rgb(224, 232, 64), scr_w/2, scr_h/2, ALLEGRO_ALIGN_CENTER, "Green Hill Zone");
 			
 			al_flip_display();
 		}

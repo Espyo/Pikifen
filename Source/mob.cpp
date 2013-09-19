@@ -16,6 +16,7 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 	go_to_target = false;
 	target_x = x;
 	target_y = y;
+	size = 1;
 
 	following_party = NULL;
 	was_thrown = false;
@@ -31,13 +32,13 @@ void mob::tick(){
 	}*/
 
 	//Movement.
-	bool was_airborne = z > sec->floor;
+	bool was_airborne = z > sec->floors[0].z;
 	x += delta_t_mult * speed_x;
 	y += delta_t_mult * speed_y;
 	z += delta_t_mult * speed_z;
 	
-	if(z <= sec->floor && was_airborne){
-		z = sec->floor;
+	if(z <= sec->floors[0].z && was_airborne){
+		z = sec->floors[0].z;
 		speed_x = 0;
 		speed_y = 0;
 		speed_z = 0;
@@ -50,7 +51,7 @@ void mob::tick(){
 	}
 
 	//Automated movement.
-	if(go_to_target){
+	if(go_to_target && speed_z == 0){
 		float square_radius = delta_t_mult * max_move_speed * 0.5;
 
 		if(
@@ -61,7 +62,6 @@ void mob::tick(){
 				//Already there. No need to move.
 				speed_x = speed_y = 0;
 		}else{
-			//ToDo stop movement if it's located in a small square around the target.
 			angle = atan2(target_y - y, target_x - x);
 			speed_x = cos(angle) * max_move_speed;
 			speed_y = sin(angle) * max_move_speed;

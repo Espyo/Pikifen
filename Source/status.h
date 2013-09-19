@@ -1,14 +1,20 @@
 #ifndef STATUS_INCLUDED
 #define STATUS_INCLUDED
 
+#include <allegro5\allegro.h>
+#include <allegro5\allegro_image.h>
+
 class status{
+public:
 	float speed_multiplier;
 	float attack_multiplier;
 	float defense_multiplier;
 	float state_speed_multiplier;
 	bool freezes_everything;
 	ALLEGRO_COLOR color;
-	unsigned char affects;		//What kind of objects it affects.
+	unsigned char affects;		//What kind of mobs it affects.
+
+	status(float speed_multiplier, float attack_multiplier, float defense_multiplier, float state_speed_multiplier, bool freezes_everything, ALLEGRO_COLOR color, unsigned char affects);
 };
 
 enum{

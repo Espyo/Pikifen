@@ -39,6 +39,11 @@ public:
 	mob* following_party;  //The current mob is following this mob's party.
 	vector<mob*> party;
 	bool was_thrown;       //Is the mob airborne because it was thrown?
+
+	//Carrying.
+	unsigned int weight;
+	unsigned int max_carriers;
+	vector<mob*> carrier_spots;
 	
 	void tick();
 
