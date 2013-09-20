@@ -57,6 +57,9 @@
     <ClCompile Include="onion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="info_spot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="onion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="info_spot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

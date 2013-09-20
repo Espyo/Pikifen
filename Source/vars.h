@@ -5,6 +5,7 @@
 
 #include <allegro5\allegro_font.h>
 
+#include "info_spot.h"
 #include "leader.h"
 #include "onion.h"
 #include "particle.h"
@@ -20,6 +21,7 @@ extern ALLEGRO_BITMAP* bmp_background;
 extern ALLEGRO_BITMAP* bmp_blue;
 extern ALLEGRO_BITMAP* bmp_blue_burrowed;
 extern ALLEGRO_BITMAP* bmp_blue_idle;
+extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_day_bubble;
@@ -31,13 +33,26 @@ extern ALLEGRO_BITMAP* bmp_olimar;
 extern ALLEGRO_BITMAP* bmp_red;
 extern ALLEGRO_BITMAP* bmp_red_burrowed;
 extern ALLEGRO_BITMAP* bmp_red_idle;
+extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_yellow;
 extern ALLEGRO_BITMAP* bmp_yellow_burrowed;
 extern ALLEGRO_BITMAP* bmp_yellow_idle;
+extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
 extern vector<unsigned int>  berries;
+extern float                 cam_trans_pan_final_x;
+extern float                 cam_trans_pan_final_y;
+extern float                 cam_trans_pan_initi_x;
+extern float                 cam_trans_pan_initi_y;
+extern float                 cam_trans_pan_time_left;
+extern float                 cam_trans_zoom_final_level;
+extern float                 cam_trans_zoom_initi_level;
+extern float                 cam_trans_zoom_time_left;
+extern float                 cam_x;
+extern float                 cam_y;
+extern float                 cam_zoom;
 extern mob*                  closest_party_member;
 extern size_t                current_leader;
 extern float                 cursor_x;           //Leader's cursor.
@@ -54,6 +69,7 @@ extern unsigned short        font_h;
 extern unsigned char         game_fps;
 extern float                 graphic_scale;
 extern float                 idle_glow_angle;
+extern vector<info_spot>     info_spots;
 extern vector<leader>        leaders;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
@@ -73,6 +89,5 @@ extern vector<treasure>      treasures;
 extern float                 whistle_radius;
 extern float                 whistle_max_hold;   //The whistle area is at max size. Hold the whistle for these many seconds.
 extern bool                  whistling;          //Is the whistle currently being blown?
-extern float                 zoom_level;
 
 #endif //ifndef GLOBALS_INCLUDED

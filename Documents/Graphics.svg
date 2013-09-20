@@ -19,6 +19,21 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient4307">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop4309" />
+      <stop
+         id="stop4315"
+         offset="0.85416669"
+         style="stop-color:#ff0000;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient4606">
       <stop
          id="stop4608"
@@ -1949,6 +1964,66 @@
          offset="1"
          id="stop4416-5-9-58" />
     </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4307"
+       id="radialGradient4313"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978723"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4307-1"
+       id="radialGradient4313-7"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978724"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient4307-1">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="0"
+         id="stop4309-1" />
+      <stop
+         id="stop4315-5"
+         offset="0.85416669"
+         style="stop-color:#ffff00;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311-2" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4307-8"
+       id="radialGradient4313-1"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978724"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient4307-8">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0"
+         id="stop4309-9" />
+      <stop
+         id="stop4315-2"
+         offset="0.85416669"
+         style="stop-color:#0000ff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311-7" />
+    </linearGradient>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1957,21 +2032,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="-78.628231"
-     inkscape:cy="457.1152"
+     inkscape:zoom="1"
+     inkscape:cx="253.5"
+     inkscape:cy="483"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:snap-bbox="true"
-     inkscape:window-width="724"
-     inkscape:window-height="453"
-     inkscape:window-x="125"
-     inkscape:window-y="125"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="716"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
      inkscape:bbox-paths="false"
-     inkscape:bbox-nodes="false"
-     inkscape:snap-bbox-edge-midpoints="false"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
      inkscape:snap-bbox-midpoints="false">
     <inkscape:grid
        type="xygrid"
@@ -1980,8 +2055,8 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.8px"
+       spacingy="0.8px" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -3134,5 +3209,419 @@
        sodipodi:ry="0.5"
        d="m 6.5,793.36218 a 0.5,0.5 0 1 1 -1,0 0.5,0.5 0 1 1 1,0 z"
        transform="matrix(2,0,0,1.9999987,-5.9999999,-1243.3611)" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 278.63791,970.85876 0,2.4 61.6,0 0,-2.4 z"
+       id="path4441"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(31.237913,-52.603441)"
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:1;stroke:#800000;stroke-width:1;stroke-opacity:1"
+       id="path4414-4"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 232.25172,947.7953 2.08221,-1.19355 -30.63344,-53.44302 -2.08221,1.19352 z"
+       id="path4441-5"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.565375"
+       inkscape:transform-center-y="-27.155265"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:1;stroke:#800000;stroke-width:1;stroke-opacity:1"
+       id="path4414"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-4.562087,-72.603441)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 233.63791,998.66912 -2.07245,-1.21036 -31.06546,53.19314 2.07246,1.2103 z"
+       id="path4441-1"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.439485"
+       inkscape:transform-center-y="27.230007"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-5.462087,-31.903442)"
+       sodipodi:type="arc"
+       style="fill:#ff0000;fill-opacity:1;stroke:#800000;stroke-width:1;stroke-opacity:1"
+       id="path4414-5"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313);fill-opacity:1;stroke:#800000;stroke-width:0.95744675000000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3526"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,349.79797,-113.91947)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 249.56464,969.74809 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 246.37723,969.89209 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 245.14327,972.95709 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 247.96464,975.23819 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 250.91676,972.82489 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1.14285707;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4319"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,23.964644,58.341861)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 278.63791,770.85874 0,2.4 61.6,0 0,-2.4 z"
+       id="path4441-7"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(31.23791,-252.60346)"
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1;stroke-opacity:1"
+       id="path4414-4-6"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 232.25172,747.79528 2.08221,-1.19355 -30.63344,-53.44302 -2.08221,1.19352 z"
+       id="path4441-5-1"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.565375"
+       inkscape:transform-center-y="-27.155265"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1;stroke-opacity:1"
+       id="path4414-42"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-4.56209,-272.60346)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 233.63791,798.6691 -2.07245,-1.21036 -31.06546,53.19314 2.07246,1.2103 z"
+       id="path4441-1-3"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.439485"
+       inkscape:transform-center-y="27.230007"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-5.46209,-231.90346)"
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1;stroke-opacity:1"
+       id="path4414-5-2"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313-7);fill-opacity:1;stroke:#808000;stroke-width:0.95744675000000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3526-2"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,349.79797,-313.91949)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 249.56464,769.74807 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321-1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 246.37723,769.89207 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9-6"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 245.14327,772.95707 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 247.96464,775.23817 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 250.91676,772.82487 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1.14285707;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4319-6"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,23.96464,-141.65816)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Yellow_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 278.63791,570.85874 0,2.4 61.6,0 0,-2.4 z"
+       id="path4441-9"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(31.23791,-452.60346)"
+       sodipodi:type="arc"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:1;stroke-opacity:1"
+       id="path4414-4-5"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 232.25172,547.79528 2.08221,-1.19355 -30.63344,-53.44302 -2.08221,1.19352 z"
+       id="path4441-5-4"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.565375"
+       inkscape:transform-center-y="-27.155265"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:1;stroke-opacity:1"
+       id="path4414-3"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-4.56209,-472.60346)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#804000;fill-opacity:1;stroke:#402000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 233.63791,598.6691 -2.07245,-1.21036 -31.06546,53.19314 2.07246,1.2103 z"
+       id="path4441-1-1"
+       inkscape:connector-curvature="0"
+       inkscape:transform-center-x="15.439485"
+       inkscape:transform-center-y="27.230007"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-5.46209,-431.90346)"
+       sodipodi:type="arc"
+       style="fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:1;stroke-opacity:1"
+       id="path4414-5-23"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313-1);fill-opacity:1;stroke:#000080;stroke-width:0.95744675;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3526-3"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,349.79797,-513.91949)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 249.56464,569.74807 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321-41"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 246.37723,569.89207 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9-1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 245.14327,572.95707 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 247.96464,575.23817 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 250.91676,572.82487 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82-74"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:#808000;stroke-width:1.14285707;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path4319-2"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,23.96464,-341.65816)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Blue_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
   </g>
 </svg>

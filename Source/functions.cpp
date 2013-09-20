@@ -39,11 +39,12 @@ void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed
 	al_draw_text(font, color, cx, first_y + font_h * 2, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
 
 	ALLEGRO_TRANSFORM scale, old;
-	al_identity_transform(&scale);
-	al_scale_transform(&scale, 5, 1);
 	al_copy_transform(&old, al_get_current_transform());
+	al_copy_transform(&scale, &old);
+	al_translate_transform(&scale, cx / 5, 0);
+	al_scale_transform(&scale, 5, 1);
 	al_use_transform(&scale);{
-		al_draw_text(font, color, cx / 5, first_y + font_h, ALLEGRO_ALIGN_CENTER, "-");
+		al_draw_text(font, color, 0, first_y + font_h, ALLEGRO_ALIGN_CENTER, "-");
 	};al_use_transform(&old);
 }
 
@@ -92,26 +93,30 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 
 ALLEGRO_COLOR get_daylight_color(){
 	//ToDo initialize this somewhere else.
-	vector<pair<unsigned char, ALLEGRO_COLOR>> points;
-
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 5,  al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 6,  al_map_rgba(64,  64,  96,  128) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 255, 0  ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0, 32 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(0,   0,   32,  96 ) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(0,   0,   32,  192) ));
-	points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));
+	static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
 
 	size_t n_points = points.size();
+	if(n_points == 0){
+		//This way, this vector is only created once.
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 5,  al_map_rgba(0,   0,   32,  192) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 6,  al_map_rgba(64,  64,  96,  128) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 255, 0  ) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0, 32 ) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(0,   0,   32,  96 ) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(0,   0,   32,  192) ));
+		points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));
+	}
+
 	for(size_t p = 0; p < n_points - 1; p++){
 		if(day_minutes >= 60 * points[p].first && day_minutes < 60 * points[p+1].first){
 			return interpolate_color(day_minutes, 60 * points[p].first, 60 * points[p+1].first, points[p].second, points[p+1].second);
 		}
 	}
 
+	//If anything goes wrong, the player will see a strong red tint. This is a very obvious indicator of an error.
 	return al_map_rgba(255, 0, 0, 128);
 }
 
@@ -120,10 +125,10 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform(){
 	al_identity_transform(&t);
 	al_translate_transform(
 		&t,
-		-leaders[current_leader].x + scr_w / 2 * 1/(zoom_level),
-		-leaders[current_leader].y + scr_h/2 * 1/(zoom_level)
+		-cam_x + scr_w / 2 * 1/(cam_zoom),
+		-cam_y + scr_h/2 * 1/(cam_zoom)
 		);
-	al_scale_transform(&t, zoom_level, zoom_level);
+	al_scale_transform(&t, cam_zoom, cam_zoom);
 	return t;
 }
 
@@ -253,6 +258,21 @@ void remove_from_party(mob* party_leader, mob* member_to_remove){
 	}
 	member_to_remove->following_party = NULL;
 	member_to_remove->go_to_target = false;
+	member_to_remove->uncallable_period = UNCALLABLE_PERIOD;
+}
+
+void start_camera_pan(int final_x, int final_y){
+	cam_trans_pan_initi_x = cam_x;
+	cam_trans_pan_initi_y = cam_y;
+	cam_trans_pan_final_x = final_x;
+	cam_trans_pan_final_y = final_y;
+	cam_trans_pan_time_left = CAM_TRANSITION_DURATION;
+}
+
+void start_camera_zoom(float final_zoom_level){
+	cam_trans_zoom_initi_level = cam_zoom;
+	cam_trans_zoom_final_level = final_zoom_level;
+	cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
 }
 
 void stop_whistling(){

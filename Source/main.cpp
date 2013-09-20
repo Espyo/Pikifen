@@ -1,4 +1,4 @@
-//ToDo limit whistle to the real cursor, not ghost.
+//ToDo there are a lot of times where I do, for instance, leaders[current_leader]., replace this with a pointer for perfomance.
 
 #include <math.h>
 
@@ -53,6 +53,9 @@ int main(){
 	bmp_red_idle = al_load_bitmap("Red_idle.png");
 	bmp_yellow_idle = al_load_bitmap("Yellow_idle.png");
 	bmp_blue_idle = al_load_bitmap("Blue_idle.png");
+	bmp_red_onion = al_load_bitmap("Red_onion.png");
+	bmp_yellow_onion = al_load_bitmap("Yellow_onion.png");
+	bmp_blue_onion = al_load_bitmap("Blue_onion.png");
 	bmp_cursor = al_load_bitmap("Cursor.png");
 	bmp_mouse_cursor = al_load_bitmap("Mouse_cursor.png");
 	bmp_background = al_load_bitmap("Background.png");
@@ -124,6 +127,8 @@ int main(){
 	onions.push_back(onion(400, 100, &s, &pikmin_types[0]));
 	onions.push_back(onion(400, 200, &s, &pikmin_types[1]));
 	onions.push_back(onion(400, 300, &s, &pikmin_types[2]));
+	info_spots.push_back(info_spot(300, 0, &s, "Treasure.", false, font));
+	info_spots.push_back(info_spot(400, 0, &s, "Onions.", false, font));
 	sprays[0] = sprays[1] = 10;
 	pikmin_in_onions[0] = 200;
 	pikmin_in_onions[1] = 180;
@@ -149,9 +154,10 @@ int main(){
 
 			if(ev.mouse.dz!=0){
 				//In Pikmin 2, at normal zoom and top view, a leader's height is roughly 6% that of the screen's. Max zoom, 12%. Min zoom, 3%.
-				zoom_level += 0.1 * ev.mouse.dz;
-				if(zoom_level > MAX_ZOOM_LEVEL) zoom_level = MAX_ZOOM_LEVEL;
-				if(zoom_level < MIN_ZOOM_LEVEL) zoom_level = MIN_ZOOM_LEVEL;
+				float new_zoom = cam_zoom + 0.1 * ev.mouse.dz;
+				if(new_zoom > MAX_ZOOM_LEVEL) new_zoom = MAX_ZOOM_LEVEL;
+				if(new_zoom < MIN_ZOOM_LEVEL) new_zoom = MIN_ZOOM_LEVEL;
+				start_camera_zoom(new_zoom);
 			}
 
 		}else if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
@@ -243,44 +249,55 @@ int main(){
 
 		}else if(ev.type==ALLEGRO_EVENT_KEY_DOWN){
 			//ToDo change to angles.
-			if(ev.keyboard.keycode == ALLEGRO_KEY_W){
-				leaders[current_leader].speed_y = -LEADER_MOVE_SPEED;
-
-			}else if(ev.keyboard.keycode == ALLEGRO_KEY_A){
-				leaders[current_leader].speed_x = -LEADER_MOVE_SPEED;
-
-			}else if(ev.keyboard.keycode == ALLEGRO_KEY_S){
-				leaders[current_leader].speed_y = LEADER_MOVE_SPEED;
-
-			}else if(ev.keyboard.keycode == ALLEGRO_KEY_D){
-				leaders[current_leader].speed_x = LEADER_MOVE_SPEED;
+			if(
+				ev.keyboard.keycode == ALLEGRO_KEY_W ||
+				ev.keyboard.keycode == ALLEGRO_KEY_A ||
+				ev.keyboard.keycode == ALLEGRO_KEY_S ||
+				ev.keyboard.keycode == ALLEGRO_KEY_D
+				){
+					if(ev.keyboard.keycode == ALLEGRO_KEY_W) leaders[current_leader].speed_y = -LEADER_MOVE_SPEED;
+					if(ev.keyboard.keycode == ALLEGRO_KEY_A) leaders[current_leader].speed_x = -LEADER_MOVE_SPEED;
+					if(ev.keyboard.keycode == ALLEGRO_KEY_S) leaders[current_leader].speed_y = LEADER_MOVE_SPEED;
+					if(ev.keyboard.keycode == ALLEGRO_KEY_D) leaders[current_leader].speed_x = LEADER_MOVE_SPEED;
 
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_TAB){
+				size_t new_leader = (current_leader + 1) % leaders.size();
+				mob* swap_leader = NULL;
+
+				//ToDo even if in mid-air?
 				leaders[current_leader].speed_x = 0;
 				leaders[current_leader].speed_y = 0;
+				leaders[new_leader].speed_x = 0;
+				leaders[new_leader].speed_y = 0;
 
-				size_t new_leader = (current_leader + 1) % leaders.size();
-				bool swap_leaders = false;
-
-				//Transfer all members onto the new leader, if the new leader is in the current one's party.
-				size_t n_party_members = leaders[current_leader].party.size();
-				for(size_t m=0; m<n_party_members; m++){
-					if(leaders[current_leader].party[m] == &leaders[new_leader]) swap_leaders=true;
+				//If the new leader is in another one's party, swap them.
+				size_t n_leaders = leaders.size();
+				for(size_t l=0; l<n_leaders; l++){
+					if(l==new_leader) continue;
+					size_t n_party_members = leaders[l].party.size();
+					for(size_t m=0; m<n_party_members; m++){
+						if(leaders[l].party[m] == &leaders[new_leader]){
+							swap_leader=&leaders[l];
+							break;
+						}
+					}
 				}
 
-				if(swap_leaders){
+				if(swap_leader){
+					size_t n_party_members = swap_leader->party.size();
 					for(size_t m=0; m<n_party_members; m++){
-						mob* member = leaders[current_leader].party[0];
-						remove_from_party(&leaders[current_leader], member);
+						mob* member = swap_leader->party[0];
+						remove_from_party(swap_leader, member);
 						if(member != &leaders[new_leader]){
 							add_to_party(&leaders[new_leader], member);
 						}
 					}
-
-					add_to_party(&leaders[new_leader], &leaders[current_leader]);
+					
+					add_to_party(&leaders[new_leader], swap_leader);
 				}
 
 				current_leader = new_leader;
+				start_camera_pan(leaders[new_leader].x, leaders[new_leader].y);
 
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_LCTRL){
 				leader* current_leader_ptr = &leaders[current_leader];
@@ -289,6 +306,7 @@ int main(){
 				for(size_t m=0; m<n_party_members; m++){
 					remove_from_party(current_leader_ptr, current_leader_ptr->party[0]);
 				}
+
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE){
 				running = false;
 
@@ -299,22 +317,22 @@ int main(){
 				use_spray(1);
 
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_C){
-				if(zoom_level < 1){
-					zoom_level = MAX_ZOOM_LEVEL;
-				}else if(zoom_level > 1){
-					zoom_level = 1;
+				float new_zoom;
+				if(cam_zoom < 1){
+					new_zoom = MAX_ZOOM_LEVEL;
+				}else if(cam_zoom > 1){
+					new_zoom = 1;
 				}else{
-					zoom_level = MIN_ZOOM_LEVEL;
+					new_zoom = MIN_ZOOM_LEVEL;
 				}
+
+				start_camera_zoom(new_zoom);
 
 			}else if(ev.keyboard.keycode == ALLEGRO_KEY_T){
 				//Debug testing.
 				//ToDo remove.
 				//leaders[current_leader].health--;
-				//day_minutes += 60;
-				if(whistling) zoom_level-=0.1;
-				else zoom_level+=0.1;
-
+				day_minutes += 30;
 			}
 
 		}else if(ev.type==ALLEGRO_EVENT_KEY_UP){
@@ -366,33 +384,37 @@ int main(){
 			size_t n_pikmin = pikmin_list.size();
 			for(size_t p=0; p<n_pikmin; p++){
 				pikmin* pik_ptr = &pikmin_list[p];
-				if(whistling){
-					if(
-						dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius &&
-						pik_ptr->following_party==NULL &&
-						!pik_ptr->burrowed &&
-						!pik_ptr->was_thrown){
 
-							//Pikmin got whistled.
-							add_to_party(&leaders[current_leader], pik_ptr);
-							pik_ptr->enemy_attacking = NULL;
+				bool can_be_called = 
+					!pik_ptr->following_party &&
+					!pik_ptr->burrowed &&
+					!pik_ptr->speed_z &&
+					!pik_ptr->uncallable_period;
+				bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
+				bool touched = dist(pik_ptr->x, pik_ptr->y, leaders[current_leader].x, leaders[current_leader].y) <= pik_ptr->size * 0.5 + leaders[current_leader].size * 0.5;
+				bool is_busy = (pik_ptr->carrying_treasure || pik_ptr->enemy_attacking);
 
-							//ToDo optimize this instead of running through the spot vector.
-							if(pik_ptr->carrying_treasure){
-								for(size_t s=0; s<pik_ptr->carrying_treasure->max_carriers; s++){
-									if(pik_ptr->carrying_treasure->carrier_spots[s] == pik_ptr){
-										pik_ptr->carrying_treasure->carrier_spots[s] = NULL;
-									}
-								}
+				if(can_be_called && (whistled || (touched && !is_busy))){
+
+					//Pikmin got whistled or touched.
+					add_to_party(&leaders[current_leader], pik_ptr);
+					pik_ptr->enemy_attacking = NULL;
+
+					//ToDo optimize this instead of running through the spot vector.
+					if(pik_ptr->carrying_treasure){
+						for(size_t s=0; s<pik_ptr->carrying_treasure->max_carriers; s++){
+							if(pik_ptr->carrying_treasure->carrier_spots[s] == pik_ptr){
+								pik_ptr->carrying_treasure->carrier_spots[s] = NULL;
 							}
-
-							pik_ptr->carrying_treasure = NULL;
-							
+						}
 					}
+
+					pik_ptr->carrying_treasure = NULL;
+							
 				}
 
 				if(pik_ptr->following_party){
-					pik_ptr->target_x = pik_ptr->following_party->x + random(0, 30);
+					pik_ptr->target_x = pik_ptr->following_party->x + random(0, 60) - 30;
 					pik_ptr->target_y = pik_ptr->following_party->y + random(0, 30);
 				}
 
@@ -401,7 +423,8 @@ int main(){
 					!pik_ptr->following_party &&
 					!pik_ptr->carrying_treasure &&
 					!pik_ptr->enemy_attacking &&
-					!pik_ptr->burrowed
+					!pik_ptr->burrowed &&
+					!pik_ptr->speed_z
 					){
 						for(size_t t=0; t<n_treasures; t++){
 							if(dist(pik_ptr->x, pik_ptr->y, treasures[t].x, treasures[t].y)<=pik_ptr->size + treasures[t].size + MIN_PIKMIN_TASK_RANGE){
@@ -471,18 +494,25 @@ int main(){
 				leaders[l].tick();
 			}
 
+			if(cam_trans_pan_time_left > 0){
+				cam_trans_pan_final_x = leaders[current_leader].x;
+				cam_trans_pan_final_y = leaders[current_leader].y;
+			}else{
+				cam_x = leaders[current_leader].x;
+				cam_y = leaders[current_leader].y;
+			}
 
 			/******************
 			*            ***  *
-			*   Party   ****# *
+			*   Party   ****O *
 			*            ***  *
 			*******************/
 
 			float closest_distance = 0;
 			size_t n_members = leaders[current_leader].party.size();
-			closest_party_member = NULL;
+			closest_party_member = leaders[current_leader].holding_pikmin;
 
-			if(n_members > 0){
+			if(n_members > 0 && !closest_party_member){
 
 				for(size_t m=0; m<n_members; m++){
 					mob* ccc=leaders[current_leader].party[m];
@@ -499,18 +529,6 @@ int main(){
 					closest_party_member = NULL;
 				}
 			}
-
-
-			/*************************
-			*                   .-.  *
-			*   Timer things   ( L ) *
-			*                   `-´  *
-			**************************/
-
-			day_minutes += (1.0f / game_fps) * day_minutes_per_irl_sec;
-			if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
-
-			idle_glow_angle+=(1.0 / game_fps) * (IDLE_GLOW_SPIN_SPEED);
 
 
 			/********************
@@ -559,6 +577,36 @@ int main(){
 			for(size_t p = 0; p < n_pikmin; p++){
 				if(pikmin_list[p].was_thrown)
 					random_particle_fire(pikmin_list[p].x, pikmin_list[p].y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p].main_color, 192));
+			}
+
+			/*************************
+			*                   .-.  *
+			*   Timer things   ( L ) *
+			*                   `-´  *
+			**************************/
+
+			day_minutes += (1.0f / game_fps) * day_minutes_per_irl_sec;
+			if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
+
+			idle_glow_angle+=(1.0 / game_fps) * (IDLE_GLOW_SPIN_SPEED);
+
+			if(cam_trans_pan_time_left > 0){
+				cam_trans_pan_time_left -= 1.0/game_fps;
+				if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
+
+				float amount_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
+
+				cam_x = cam_trans_pan_initi_x + (cam_trans_pan_final_x - cam_trans_pan_initi_x) * (1-amount_left);
+				cam_y = cam_trans_pan_initi_y + (cam_trans_pan_final_y - cam_trans_pan_initi_y) * (1-amount_left);
+			}
+
+			if(cam_trans_zoom_time_left > 0){
+				cam_trans_zoom_time_left -= 1.0/game_fps;
+				if(cam_trans_zoom_time_left < 0) cam_trans_zoom_time_left = 0;
+
+				float amount_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
+
+				cam_zoom = cam_trans_zoom_initi_level + (cam_trans_zoom_final_level - cam_trans_zoom_initi_level) * (1-amount_left);
 			}
 			
 
@@ -627,7 +675,7 @@ int main(){
 			*********************/
 
 			al_use_transform(&normal_transform);
-			al_draw_rotated_bitmap(bmp_mouse_cursor, 48, 48, mouse_cursor_x, mouse_cursor_y, leaders[current_leader].angle, 0);
+			al_draw_scaled_rotated_bitmap(bmp_mouse_cursor, 48, 48, mouse_cursor_x, mouse_cursor_y, 0.5 * cam_zoom, 0.5 * cam_zoom, leaders[current_leader].angle, 0);
 			al_use_transform(&world_to_screen_transform);
 			al_draw_scaled_rotated_bitmap(bmp_cursor, 48, 48, cursor_x, cursor_y, 0.5, 0.5, leaders[current_leader].angle, 0);
 
@@ -682,7 +730,15 @@ int main(){
 			//Onions.
 			size_t n_onions = onions.size();
 			for(size_t o=0; o<n_onions; o++){
-				al_draw_filled_circle(onions[o].x, onions[o].y, onions[o].size, change_alpha(onions[o].type->color, 128));
+				//al_draw_filled_circle(onions[o].x, onions[o].y, onions[o].size, change_alpha(onions[o].type->color, 128));
+
+				ALLEGRO_BITMAP* bm;
+				if(onions[o].type->name == "R") bm = bmp_red_onion;
+				else if(onions[o].type->name == "Y") bm = bmp_yellow_onion;
+				if(onions[o].type->name == "B") bm = bmp_blue_onion;
+
+				int onion_bmp_w = 282, onion_bmp_h = 320;
+				al_draw_scaled_bitmap(bm, 0, 0, onion_bmp_w, onion_bmp_h, onions[o].x - onion_bmp_w / 4, onions[o].y - onion_bmp_h / 4, onion_bmp_w / 2, onion_bmp_h / 2, 0);
 			}
 
 			//Treasures.
@@ -690,8 +746,81 @@ int main(){
 				al_draw_filled_circle(treasures[t].x, treasures[t].y, treasures[t].size, al_map_rgb(128, 255, 255));
 			}
 
+			//Info spots.
+			size_t n_info_spots = info_spots.size();
+			for(size_t i=0; i<n_info_spots; i++){
+				al_draw_filled_rectangle(
+					info_spots[i].x - info_spots[i].size * 0.5,
+					info_spots[i].y - info_spots[i].size * 0.5,
+					info_spots[i].x + info_spots[i].size * 0.5,
+					info_spots[i].y + info_spots[i].size * 0.5,
+					al_map_rgb(192, 64, 192)
+					);
+			}
+
 
 			/* Layer 5
+			*****************************
+			*                     Help  *
+			*   On-screen text   --  -- *
+			*                      \/   *
+			*****************************/
+			
+			//Fractions.
+			for(size_t t=0; t<n_treasures; t++){
+				//ToDo only show if it has at least one carrier.
+				//ToDo fraction color.
+				//ToDo it's not taking Pikmin strength into account.
+				//ToDo can't this be more optimized than running through the vector of carrier spots?
+				size_t n_pikmin_on_treasure = 0;
+				for(size_t p=0; p<treasures[t].max_carriers; p++) if(treasures[t].carrier_spots[p]) n_pikmin_on_treasure++;
+				if(n_pikmin_on_treasure>0)
+					draw_fraction(treasures[t].x, treasures[t].y, n_pikmin_on_treasure, treasures[t].weight, al_map_rgb(192, 192, 192));
+			}
+
+			//Info spots.
+			for(size_t i=0; i<n_info_spots; i++){
+				if(dist(leaders[current_leader].x, leaders[current_leader].y, info_spots[i].x, info_spots[i].y) <= INFO_SPOT_TRIGGER_RANGE){
+					string text;
+					if(!info_spots[i].fullscreen)
+						text = info_spots[i].text;
+					else
+						text = "(...)";
+					
+					al_draw_text(font, al_map_rgb(255, 255, 255), info_spots[i].x, info_spots[i].y - info_spots[i].size * 0.5 - font_h * 2, ALLEGRO_ALIGN_CENTER, text.c_str());
+					if(!info_spots[i].fullscreen){
+						int line_y = info_spots[i].y - info_spots[i].size * 0.5 - font_h * 0.75;
+							
+						al_draw_line(
+							info_spots[i].x - info_spots[i].text_w * 0.5,
+							line_y,
+							info_spots[i].x - 8,
+							line_y,
+							al_map_rgb(192, 192, 192), 1);
+						al_draw_line(
+							info_spots[i].x + info_spots[i].text_w * 0.5,
+							line_y,
+							info_spots[i].x + 8,
+							line_y,
+							al_map_rgb(192, 192, 192), 1);
+						al_draw_line(
+							info_spots[i].x - 8,
+							line_y,
+							info_spots[i].x,
+							info_spots[i].y - info_spots[i].size * 0.5 - font_h * 0.25,
+							al_map_rgb(192, 192, 192), 1);
+						al_draw_line(
+							info_spots[i].x + 8,
+							line_y,
+							info_spots[i].x,
+							info_spots[i].y - info_spots[i].size * 0.5 - font_h * 0.25,
+							al_map_rgb(192, 192, 192), 1);
+					}
+				}
+			}
+
+
+			/* Layer 6
 			***********************
 			*                 *   *
 			*   Particles   *   * *
@@ -721,7 +850,7 @@ int main(){
 			}
 
 
-			/* Layer 6
+			/* Layer 7
 			*************************
 			*              --==## *
 			*   Daylight   --==## *
@@ -735,7 +864,7 @@ int main(){
 			}
 
 
-			/* Layer 7
+			/* Layer 8
 			*****************
 			*           (1) *
 			*   HUD         *
@@ -744,7 +873,7 @@ int main(){
 			
 			//ToDo actual image coordinates (remember the health bubble has a different image than the regular ones)
 			//ToDo actual leader top healths.
-			int leader_img_size = 32;
+			int leader_img_size = 64;
 			int bubble_img_size = 64;
 
 			//Leader health.
@@ -817,7 +946,7 @@ int main(){
 					else if(pikmin_ptr->type->name=="Y") bm=bmp_yellow;
 					if(pikmin_ptr->type->name=="B") bm=bmp_blue;
 					
-					al_draw_bitmap(bm, 250, scr_h - 20 - font_h, 0);
+					al_draw_scaled_bitmap(bm, 0, 0, 36, 36, 245, scr_h - 25 - font_h, 28, 28, 0);
 				}
 			}
 
@@ -843,18 +972,6 @@ int main(){
 				al_draw_text(font, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 16 - font_h / 2, 0, to_string((long long) sprays[0]).c_str());
 				al_draw_filled_circle(32, scr_h / 2 + 16, 8, spray_types[1].main_color);
 				al_draw_text(font, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 16 - font_h / 2, 0, to_string((long long) sprays[1]).c_str());
-			}
-
-			//Fractions.
-			for(size_t t=0; t<n_treasures; t++){
-				//ToDo only show if it has at least one carrier.
-				//ToDo fraction color.
-				//ToDo it's not taking Pikmin strength into account.
-				//ToDo can't this be more optimized than running through the vector of carrier spots?
-				size_t n_pikmin_on_treasure = 0;
-				for(size_t p=0; p<treasures[t].max_carriers; p++) if(treasures[t].carrier_spots[p]) n_pikmin_on_treasure++;
-				if(n_pikmin_on_treasure>0)
-					draw_fraction(treasures[t].x, treasures[t].y, n_pikmin_on_treasure, treasures[t].weight, al_map_rgb(128, 128, 128));
 			}
 
 			//ToDo remove me al_draw_text(font_area_name, al_map_rgb(224, 232, 64), scr_w/2, scr_h/2, ALLEGRO_ALIGN_CENTER, "Green Hill Zone");

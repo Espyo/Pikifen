@@ -39,6 +39,7 @@ public:
 	mob* following_party;  //The current mob is following this mob's party.
 	vector<mob*> party;
 	bool was_thrown;       //Is the mob airborne because it was thrown?
+	float uncallable_period; //During this period, the mob cannot be called into a party.
 
 	//Carrying.
 	unsigned int weight;

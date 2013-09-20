@@ -20,6 +20,7 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 
 	following_party = NULL;
 	was_thrown = false;
+	uncallable_period = 0;
 }
 
 void mob::tick(){
@@ -69,6 +70,12 @@ void mob::tick(){
 	}
 	
 	//ToDo collisions
+
+	//Other things.
+	if(uncallable_period > 0){
+		uncallable_period -= (1.0 / game_fps);
+		if(uncallable_period < 0) uncallable_period = 0;
+	}
 }
 
 mob::~mob(){}

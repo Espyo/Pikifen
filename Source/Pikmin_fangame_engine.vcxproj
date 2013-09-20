@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="info_spot.cpp" />
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mob.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="frame.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />
+    <ClInclude Include="info_spot.h" />
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
     <ClInclude Include="mob.h" />

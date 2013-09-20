@@ -25,6 +25,8 @@ void              random_particle_fire(float center_x, float center_y, unsigned 
 void              random_particle_splash(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void              random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color);
 void              remove_from_party(mob* party_leader, mob* member_to_remove);
+void              start_camera_pan(int final_x, int final_y);
+void              start_camera_zoom(float final_zoom_level);
 void              stop_whistling();
 void              use_spray(size_t spray_nr);
 
