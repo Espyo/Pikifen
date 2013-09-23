@@ -1,0 +1,44 @@
+Controls
+	(Control)                    (Keyboard default) (KB only default) (Mouse only default) (Joypad default)
+	Move captain                 WASD               Arrows            Mouse cursor         L-analog
+	Move cursor                  Mouse cursor       Arrrows           Mouse cursor         L-analog
+	Move Pikmin group            N/A                NP8456            N/A                  R-analog
+	Move Pikmin group to cursor  Middle mouse click N/A               Middle mouse click   N/A
+	Swtich maturity up           N/A                N/A               N/A                  D-Pad up
+	Switch maturity down         N/A                N/A               N/A                  D-Pad down
+	Switch Pikmin type left      N/A                N/A               N/A                  D-Pad left
+	Switch Pikmin type right     RMB                S                 RMB                  D-Pad right
+	Pause                        Escape             Escape            L+M+R mouse click    Start
+	Whistle                      RMB                S                 RMB                  B (or bottom button)
+	Throw                        LMB                A                 LMB                  A (or left button)
+	Dismiss                      X                  X                 Mouse wheel down     X (or right button)
+	Switch captain left          Shift+Tab          Shift+Tab         N/A                  N/A
+	Switch captain right         Tab                Tab               L+M mouse button     N/A
+	Spray 1                      R                  R                 RMB+mouse wheel up   D-Pad up
+	Spray 2                      F                  F                 RMB+mouse wheel down D-Pad down
+	Switch spray left            Q                  Q                 N/A                  D-Pad left
+	Switch spray right           E                  E                 RMB+mouse wheel down D-Pad right
+	Use spray                    F                  F                 RMB+mouse wheel up   D-Pad up
+	Lie down                     X                  X                 Mouse wheel down     X
+	Zoom in                      Mouse wheel up     N/A               N/A                  N/A
+	Zoom out                     Mouse wheel down   N/A               N/A                  N/A
+	Zoom toggle                  N/A                C                 Mouse wheel up       R (or R2)
+	
+Sectors
+	INT32 R_PointOnSide(fixed_t x, fixed_t y, node_t *node)
+	{
+		if (!node->dx)
+			return x <= node->x ? node->dy > 0 : node->dy < 0;
+
+		if (!node->dy)
+			return y <= node->y ? node->dx < 0 : node->dx > 0;
+
+		x -= node->x;
+		y -= node->y;
+
+		// Try to quickly decide by looking at sign bits.
+		if ((node->dy ^ node->dx ^ x ^ y) < 0)
+			return (node->dy ^ x) < 0;  // (left is negative)
+		return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);
+	}
+	http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle

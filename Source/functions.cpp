@@ -65,7 +65,7 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch){
 	if(shadow_stretch <= 0) return;
 
-	int shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
+	float shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
 
 	if(day_minutes < 60*12){
 		//Shadows point to the West.
@@ -147,17 +147,17 @@ void load_game_content(){
 	pikmin_types.push_back(pikmin_type());
 	pikmin_types.back().color = al_map_rgb(255, 0, 0);
 	pikmin_types.back().name = "R";
-	pikmin_types.back().max_move_speed = 50;
+	pikmin_types.back().max_move_speed = 80;
 
 	pikmin_types.push_back(pikmin_type());
 	pikmin_types.back().color = al_map_rgb(255, 255, 0);
 	pikmin_types.back().name = "Y";
-	pikmin_types.back().max_move_speed = 50;
+	pikmin_types.back().max_move_speed = 80;
 
 	pikmin_types.push_back(pikmin_type());
 	pikmin_types.back().color = al_map_rgb(0, 0, 255);
 	pikmin_types.back().name = "B";
-	pikmin_types.back().max_move_speed = 50;
+	pikmin_types.back().max_move_speed = 80;
 
 	statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
 	statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
@@ -225,7 +225,7 @@ void random_particle_splash(float center_x, float center_y, unsigned char min, u
 }
 
 void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color){
-	unsigned char n_particles = random(25,30);
+	unsigned char n_particles = random(35,40);
 
 	for(unsigned char p=0; p<n_particles; p++){
 		float angle_offset = ((random(0, (unsigned) (M_PI / 2 * 100))) / 100.0) - M_PI / 4;
@@ -242,15 +242,15 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
 			1,
 			0,
 			(random(30, 40)) / 10.0,
-			(random(30, 40)) / 10.0,
+			(random(60, 80)) / 10.0,
 			color
 			));
 	}
 }
 
 void remove_from_party(mob* party_leader, mob* member_to_remove){
-	size_t n_pikmin = party_leader->party.size();
-	for(size_t p=0; p<n_pikmin; p++){
+	size_t n_members = party_leader->party.size();
+	for(size_t p=0; p<n_members; p++){
 		if(party_leader->party[p] == member_to_remove){
 			party_leader->party.erase(party_leader->party.begin() + p);
 			break;
@@ -273,12 +273,17 @@ void start_camera_zoom(float final_zoom_level){
 	cam_trans_zoom_initi_level = cam_zoom;
 	cam_trans_zoom_final_level = final_zoom_level;
 	cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
+
+	al_stop_sample(&sfx_camera.id);
+	al_play_sample(sfx_camera.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_camera.id);
 }
 
 void stop_whistling(){
 	whistling = false;
 	whistle_radius = 0;
 	whistle_max_hold = 0;
+
+	al_stop_sample(&leaders[current_leader].sfx_whistle.id);
 }
 
 void use_spray(size_t spray_nr){

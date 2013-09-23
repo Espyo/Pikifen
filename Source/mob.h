@@ -5,9 +5,21 @@
 
 #include <allegro5\allegro.h>
 
+#include "const.h"
 #include "sector.h"
 
 using namespace std;
+
+class mob;
+
+struct carrier_info_struct{
+	size_t current_n_carriers;     //This is to avoid going through the vector to find out how many are carrying the mob.
+	vector<mob*> carrier_spots;    //Pikmin carrying, and their spots.
+	vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
+	vector<float> carrier_spots_y;
+
+	carrier_info_struct(mob* m);
+};
 
 class mob{
 public:
@@ -44,7 +56,7 @@ public:
 	//Carrying.
 	unsigned int weight;
 	unsigned int max_carriers;
-	vector<mob*> carrier_spots;
+	carrier_info_struct* carrier_info; //This is a pointer because most mobs aren't carriable. Might as well save RAM.
 	
 	void tick();
 

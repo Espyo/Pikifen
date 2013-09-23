@@ -6,10 +6,6 @@
 
 class treasure : public mob{
 public:
-	unsigned int weight;
-	unsigned int max_carriers;
-	vector<pikmin*> carrier_spots;
-
 	treasure(float x, float y, float z, float radius, float max_move_speed, sector* sec, unsigned int weight, unsigned int max_carriers);
 };
 

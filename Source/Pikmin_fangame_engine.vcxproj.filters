@@ -60,6 +60,12 @@
     <ClCompile Include="info_spot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nectar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -132,6 +138,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="info_spot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nectar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="controls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

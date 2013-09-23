@@ -6,7 +6,5 @@ treasure::treasure(float x, float y, float z, float radius, float max_move_speed
 	this->max_carriers = max_carriers;
 	size = radius;
 
-	for(unsigned int s=0; s<max_carriers; s++){
-		carrier_spots.push_back(NULL);
-	}
+	carrier_info = new carrier_info_struct(this);
 }

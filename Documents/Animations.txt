@@ -19,6 +19,8 @@ leaders
 	at ease
 	at ease 1 (looking around)
 	at ease 2 (checking equipment)
+	at ease 3 (jumping)
+	at ease 4 (yawning)
 	walking
 	standing up->lying down
 	lying down
