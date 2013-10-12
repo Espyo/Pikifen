@@ -1,5 +1,7 @@
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_audio.h>
+#include <typeinfo>
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
 
 #include "const.h"
 #include "controls.h"

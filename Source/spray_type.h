@@ -1,7 +1,7 @@
 #ifndef SPRAY_TYPE_INCLUDED
 #define SPRAY_TYPE_INCLUDED
 
-#include <allegro5\allegro.h>
+#include <allegro5/allegro.h>
 
 #include "status.h"
 

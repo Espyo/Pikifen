@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include <allegro5\allegro_font.h>
-#include <allegro5\allegro_audio.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_audio.h>
 
 #include "const.h"
 #include "info_spot.h"

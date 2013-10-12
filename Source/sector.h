@@ -1,8 +1,8 @@
 #ifndef SECTOR_INCLUDED
 #define SECTOR_INCLUDED
 
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_image.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 #include <vector>
 

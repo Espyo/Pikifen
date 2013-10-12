@@ -1,8 +1,8 @@
 #ifndef FRAME_INCLUDED
 #define FRAME_INCLUDED
 
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_image.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 class frame{
 public:

@@ -5,8 +5,8 @@
 #include <math.h>
 #include <vector>
 
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_audio.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
 
 #include "mob.h"
 

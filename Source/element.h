@@ -1,7 +1,7 @@
 #ifndef ELEMENT_INCLUDED
 #define ELEMENT_INCLUDED
 
-#include <allegro5\allegro.h>
+#include <allegro5/allegro.h>
 
 #include <string>
 
