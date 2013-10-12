@@ -64,6 +64,7 @@ extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_throw;
 
 extern vector<unsigned int>  berries;
+extern ALLEGRO_BITMAP*       bmp_error;
 extern float                 cam_trans_pan_final_x;
 extern float                 cam_trans_pan_final_y;
 extern float                 cam_trans_pan_initi_x;
@@ -90,22 +91,25 @@ extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;
 extern unsigned char         game_fps;
 extern float                 graphic_scale;
-extern float                 group_move_angle;
-extern float                 group_move_intensity;
 extern float                 idle_glow_angle;
-extern vector<info_spot>     info_spots;
-extern vector<leader>        leaders;
+extern vector<info_spot*>    info_spots;
+extern vector<leader*>       leaders;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
+extern float                 mouse_cursor_speed_x;
+extern float                 mouse_cursor_speed_y;
 extern vector<float>         move_group_arrows;  //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                 move_group_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
-extern bool                  moving_group;       //Is the "move group" button being pressed?
-extern vector<nectar>        nectars;
-extern vector<onion>         onions;
+extern float                 moving_group_angle;
+extern float                 moving_group_intensity;
+extern bool                  moving_group_to_cursor;       //Is the "move group to cursor" button being pressed?
+extern vector<nectar*>       nectars;
+extern vector<onion*>        onions;
 extern unsigned char         particle_quality;
 extern vector<particle>      particles;
+extern bool                  paused;
 extern vector<unsigned long> pikmin_in_onions;
-extern vector<pikmin>        pikmin_list;
+extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;
 extern bool                  running;
 extern unsigned short	     scr_h;
@@ -115,13 +119,20 @@ extern bool                  smooth_scaling;     //If false, images that are sca
 extern vector<unsigned long> sprays;             //How many of each spray the player has.
 extern vector<spray_type>    spray_types;
 extern vector<status>        statuses;
-extern vector<treasure>      treasures;
-extern float                 whistle_radius;
+extern string                total_error_log;
+extern vector<treasure*>     treasures;
+extern float                 whistle_dot_offset; //How much each dot of the whistle should spin.
+extern float                 whistle_dot_radius[6]; //Radius of every 6th dot.
+extern float                 whistle_fade_radius; //Radius the whistle was at pre-fade.
+extern float                 whistle_fade_time;  //Time left for the whistle's fading animations.
+extern bool                  whistle_is_circle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern float                 whistle_max_hold;   //The whistle area is at max size. Hold the whistle for these many seconds.
-extern bool                  whistling;          //Is the whistle currently being blown?
-extern vector<unsigned char> whistle_ring_colors;
-extern vector<float>         whistle_rings;
+extern float                 whistle_next_dot_time;
 extern float                 whistle_next_ring_time;
+extern float                 whistle_radius;
+extern vector<unsigned char> whistle_ring_colors;
 extern unsigned char         whistle_ring_prev_color;
+extern vector<float>         whistle_rings;
+extern bool                  whistling;          //Is the whistle currently being blown?
 
 #endif //ifndef GLOBALS_INCLUDED

@@ -12,7 +12,7 @@ void add_to_party(mob* party_leader, mob* new_member){
 	if(new_member->following_party == party_leader) return;	//Already following, never mind.
 
 	new_member->following_party = party_leader;
-	new_member->go_to_target = true;
+	//ToDo remove? new_member->go_to_target = true;
 	party_leader->party.push_back(new_member);
 }
 
@@ -34,15 +34,18 @@ void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* mag
 }
 
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color){
-	unsigned int first_y = cy - (font_h * 3) / 2;
+	float first_y = cy - (font_h * 3) / 2;
 	al_draw_text(font, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
 	al_draw_text(font, color, cx, first_y + font_h * 2, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
 
 	ALLEGRO_TRANSFORM scale, old;
 	al_copy_transform(&old, al_get_current_transform());
-	al_copy_transform(&scale, &old);
-	al_translate_transform(&scale, cx / 5, 0);
+	
+	al_identity_transform(&scale);
 	al_scale_transform(&scale, 5, 1);
+	al_translate_transform(&scale, cx, 0);
+	al_compose_transform(&scale, &old);
+
 	al_use_transform(&scale);{
 		al_draw_text(font, color, 0, first_y + font_h, ALLEGRO_ALIGN_CENTER, "-");
 	};al_use_transform(&old);
@@ -91,8 +94,34 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 		);
 }
 
+void drop_treasure(pikmin* p){
+	if(!p->carrying_treasure) return;
+
+	//ToDo optimize this instead of running through the spot vector.
+	if(p->carrying_treasure){
+		for(size_t s=0; s<p->carrying_treasure->max_carriers; s++){
+			if(p->carrying_treasure->carrier_info->carrier_spots[s] == p){
+				p->carrying_treasure->carrier_info->carrier_spots[s] = NULL;
+				p->carrying_treasure->carrier_info->current_n_carriers--;
+			}
+		}
+	}
+
+	//Did this Pikmin leaving made the treasure stop moving?
+	if(p->carrying_treasure->carrier_info->current_n_carriers < p->carrying_treasure->weight){
+		p->carrying_treasure->remove_target(true);
+	}
+
+	p->carrying_treasure = NULL;
+}
+
+void error_log(string s){
+	//ToDo
+	total_error_log += s + "\n";
+}
+
 ALLEGRO_COLOR get_daylight_color(){
-	//ToDo initialize this somewhere else.
+	//ToDo initialize this somewhere else?
 	static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
 
 	size_t n_points = points.size();
@@ -140,6 +169,27 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 		c1.b + progress * (c2.b - c1.b),
 		c1.a + progress * (c2.a - c1.a)
 		);
+}
+
+ALLEGRO_BITMAP* load_bmp(string filename){
+	ALLEGRO_BITMAP* b = NULL;
+	b=al_load_bitmap(("Game_data\\Graphics\\" + filename).c_str());
+	if(!b){
+		error_log("Could not open image " + filename + "!");
+		b = bmp_error;
+	}
+
+	return b;
+}
+
+sample_struct load_sample(string filename){
+	sample_struct s;
+	s.sample = al_load_sample(("Game_data\\Audio\\" + filename).c_str());
+	if(!s.sample){
+		error_log("Could not open audio sample " + filename + "!");
+	}
+
+	return s;
 }
 
 void load_game_content(){
@@ -228,7 +278,7 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
 	unsigned char n_particles = random(35,40);
 
 	for(unsigned char p=0; p<n_particles; p++){
-		float angle_offset = ((random(0, (unsigned) (M_PI / 2 * 100))) / 100.0) - M_PI / 4;
+		float angle_offset = ((random(0, (unsigned) (M_PI_2 * 100))) / 100.0) - M_PI_4;
 		
 		float power = random(30, 90);
 		float speed_x = cos(angle+angle_offset) * power;
@@ -257,7 +307,7 @@ void remove_from_party(mob* party_leader, mob* member_to_remove){
 		}
 	}
 	member_to_remove->following_party = NULL;
-	member_to_remove->go_to_target = false;
+	member_to_remove->remove_target(false);
 	member_to_remove->uncallable_period = UNCALLABLE_PERIOD;
 }
 
@@ -279,20 +329,25 @@ void start_camera_zoom(float final_zoom_level){
 }
 
 void stop_whistling(){
+	if(!whistling) return;
+
+	whistle_fade_time = WHISTLE_FADE_TIME;
+	whistle_fade_radius = whistle_radius;
+
 	whistling = false;
 	whistle_radius = 0;
 	whistle_max_hold = 0;
-
-	al_stop_sample(&leaders[current_leader].sfx_whistle.id);
+	
+	al_stop_sample(&leaders[current_leader]->sfx_whistle.id);
 }
 
 void use_spray(size_t spray_nr){
 	if(sprays[spray_nr]==0) return;
 
 	random_particle_spray(
-		leaders[current_leader].x,
-		leaders[current_leader].y,
-		leaders[current_leader].angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
+		leaders[current_leader]->x,
+		leaders[current_leader]->y,
+		leaders[current_leader]->angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
 		spray_types[spray_nr].main_color
 		);
 

@@ -42,3 +42,15 @@ Sectors
 		return FixedMul(y, node->dx>>FRACBITS) >= FixedMul(node->dy>>FRACBITS, x);
 	}
 	http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+
+SRB2's state actions: C:\Prog\SRB2\src\src\p_enemy.c
+
+Disclaimer:
+	The following fangame and the engine used to create it are IN NO WAY affiliated with Nintendo® and should NOT be sold.
+	
+	The fangame and the engine are NON-PROFIT projects created by fans of the Pikmin franchise.
+	No intent to infringe on the copyrights or registered trademarks of Nintendo is made by the project or its contributors.
+	
+	Pikmin® is a trademark of Nintendo. The copyrights of all associated characters, names, terms, art, music, and assets belong to Nintendo®.
+	
+	To reiterate: the following is just the product of fan work. We mean no harm to Nintendo or the amazing Pikmin series!

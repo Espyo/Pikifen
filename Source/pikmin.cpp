@@ -11,3 +11,16 @@ pikmin::pikmin(pikmin_type* type, float x, float y, sector* sec) : mob(x, y, 0, 
 
 	main_color = type->color;
 }
+
+/*pikmin::pikmin(const pikmin& p2)
+: mob(p2){
+	type = p2.type;
+	hazard_time_left = p2.hazard_time_left;
+	enemy_attacking = p2.enemy_attacking;
+	carrying_treasure = p2.carrying_treasure;
+	carrying_spot = p2.carrying_spot;
+	maturity = p2.maturity;
+	burrowed = p2.burrowed;
+}*/
+
+pikmin::~pikmin(){ }

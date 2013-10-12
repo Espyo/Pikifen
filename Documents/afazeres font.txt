@@ -1,3 +1,0 @@
-width certo
-brilho no canto sup-esq
-gradiante no fundo

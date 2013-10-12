@@ -15,8 +15,12 @@ public:
 	unsigned short health;
 	
 	//Spawn and respawn things.
-	unsigned char respawn_days;		//Days needed until it respawns.
-	unsigned short appears_after_day;	//This enemy only appears from this day onwards.
+	unsigned char respawn_days_left;		//Days needed until it respawns.
+	unsigned char respawns_after_x_days;
+	unsigned int appears_after_day;	//This enemy only appears from this day onwards.
+	unsigned int appears_before_day;
+	unsigned int appears_every_x_days;
+	
 };
 
 #endif //ifndef ENEMY_INCLUDED

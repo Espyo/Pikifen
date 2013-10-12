@@ -6,7 +6,7 @@
 
 class treasure : public mob{
 public:
-	treasure(float x, float y, float z, float radius, float max_move_speed, sector* sec, unsigned int weight, unsigned int max_carriers);
+	treasure(float x, float y, float radius, sector* sec, unsigned int weight, unsigned int max_carriers);
 };
 
 #endif //ifndef TREASURE_INCLUDED

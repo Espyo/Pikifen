@@ -13,10 +13,14 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 	speed_x = speed_y = speed_z = 0;
 	move_speed = 0;
 	angle = 0;
+	size = 1;
+
 	go_to_target = false;
+	gtt_instant = false;
 	target_x = x;
 	target_y = y;
-	size = 1;
+	target_rel_x = NULL;
+	target_rel_y = NULL;
 
 	following_party = NULL;
 	was_thrown = false;
@@ -25,12 +29,6 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 
 void mob::tick(){
 	float delta_t_mult = (1.0f / game_fps);
-
-	//Planned movement.
-	/*if(z == sec->floor){
-		//If you're in mid-air, it doesn't matter where you plan to move.
-		angle_to_coordinates(angle, move_speed, &speed_x, &speed_y);
-	}*/
 
 	//Movement.
 	bool was_airborne = z > sec->floors[0].z;
@@ -53,19 +51,41 @@ void mob::tick(){
 
 	//Automated movement.
 	if(go_to_target && speed_z == 0){
-		float square_radius = delta_t_mult * max_move_speed * 0.5;
+		float final_target_x = target_x, final_target_y = target_y;
+		if(target_rel_x) final_target_x+=*target_rel_x;
+		if(target_rel_y) final_target_y+=*target_rel_y;
 
-		if(
-			x >= target_x - square_radius &&
-			x <= target_x + square_radius &&
-			y >= target_y - square_radius &&
-			y <= target_y + square_radius){
-				//Already there. No need to move.
-				speed_x = speed_y = 0;
-		}else{
-			angle = atan2(target_y - y, target_x - x);
-			speed_x = cos(angle) * max_move_speed;
-			speed_y = sin(angle) * max_move_speed;
+		if(gtt_instant){
+
+			x = final_target_x;
+			y = final_target_y;
+			speed_x = speed_y = 0;
+
+		}else if(x != final_target_x || y != final_target_y){
+						
+			float dx = final_target_x - x, dy = final_target_y - y;
+			if(abs(dx) < 0.001){
+				dx = 0;
+				x = final_target_x;
+			}
+			if(abs(dy) < 0.001){
+				y = final_target_y;
+				dy = 0;
+			}
+			float dist = sqrt(dx * dx + dy * dy);
+
+			if(dist > 0){
+				float move_amount = min(dist * game_fps / 2, max_move_speed);
+
+				if(move_amount == 0)
+					move_amount = move_amount;
+			
+				dx *= move_amount / dist;
+				dy *= move_amount / dist;
+
+				speed_x = dx;
+				speed_y = dy;
+			}
 		}
 	}
 	
@@ -77,6 +97,46 @@ void mob::tick(){
 		if(uncallable_period < 0) uncallable_period = 0;
 	}
 }
+
+void mob::set_target(float target_x, float target_y, float *target_rel_x, float *target_rel_y, bool instant){
+	this->target_x = target_x; this->target_y = target_y;
+	this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
+	this->gtt_instant = instant;
+
+	go_to_target = true;
+}
+
+void mob::remove_target(bool stop){
+	go_to_target = false;
+	if(stop){
+		speed_x = 0;
+		speed_y = 0;
+	}
+}
+
+/*mob::mob(const mob& m2){
+	main_color = m2.main_color;
+	planned_moving_angle = m2.planned_moving_angle;
+	planned_moving_intensity = m2.planned_moving_intensity;
+	x = m2.x; y = m2.y; z = m2.z;
+	speed_x = m2.speed_x; speed_y = m2.speed_y; speed_z = m2.speed_z;
+	move_speed = m2.move_speed;
+	acceleration = m2.acceleration;
+	angle = m2.angle;
+	size = m2.size;
+	sec = m2.sec;
+	target_x = m2.target_x; target_y = m2.target_y;
+	target_rel_x = m2.target_rel_x; target_rel_y = m2.target_rel_y;
+	go_to_target = m2.go_to_target;
+	gtt_instant = m2.gtt_instant;
+	following_party = m2.following_party;
+	party = m2.party;
+	was_thrown = m2.was_thrown;
+	uncallable_period = m2.uncallable_period;
+	weight = m2.weight;
+	max_carriers = m2.max_carriers;
+	carrier_info = m2.carrier_info;
+}*/
 
 mob::~mob(){}
 

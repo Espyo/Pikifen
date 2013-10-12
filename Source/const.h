@@ -38,12 +38,16 @@ struct sample_struct{
 #define MIN_PIKMIN_TASK_RANGE      20       //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
 #define MIN_PLUCK_RANGE            30       //The leader needs to be at least this close to a burrowed Pikmin to pluck it.
 #define MIN_ZOOM_LEVEL             0.5      //Minimum zoom level possible.
+#define MOUSE_CURSOR_MOVE_SPEED    500      //How many pixels the mouse cursor moves, per second, when using an analog stick.
 #define MOVE_GROUP_ARROW_SPEED     400      //"Move group" arrows move these many units per second.
 #define MOVE_GROUP_ARROWS_INTERVAL 0.1      //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT              5        //A drop of nectar starts with this amount.
 #define SHADOW_Y_MULTIPLIER        30       //For every unit above the ground that the mob is on, the shadow goes these many units down.
 #define THROW_DISTANCE_MULTIPLIER  0.49     //When a leader throws a Pikmin, multiply their strength by this.
 #define UNCALLABLE_PERIOD          1        //A mob cannot be called to a party during this period.
+#define WHISTLE_DOT_INTERVAL       0.03     //Seconds that need to pass before another dot is added.
+#define WHISTLE_DOT_SPIN_SPEED     M_PI_2   //A whistle dot spins these many radians a second.
+#define WHISTLE_FADE_TIME          0.1      //Time the whistle animations take to fade out.
 #define WHISTLE_MAX_HOLD_TIME      1.5      //After the whistle reaches its maximum size, hold it for these many seconds until it stops by itself.
 #define WHISTLE_RADIUS_GROWTH_PS   180      //The whistle's radius grows these many units per second.
 #define WHISTLE_RING_SPEED         600      //Whistle rings move these many units per second.
@@ -90,11 +94,11 @@ enum BUTTONS{
 	BUTTON_PAUSE,
 };
 
-enum AXES_ACTIONS{
-	AXES_ACTION_NONE,
-	AXES_ACTION_MOVE,
-	AXES_ACTION_MOVE_CURSOR,
-	AXES_ACTION_MOVE_GROUP,
+enum AXIS_ACTIONS{
+	AXIS_ACTION_NONE,
+	AXIS_ACTION_MOVE,
+	AXIS_ACTION_MOVE_CURSOR,
+	AXIS_ACTION_MOVE_GROUP,
 };
 
 //ToDo these colors aren't right. The purple is pink, the cyan is light green...

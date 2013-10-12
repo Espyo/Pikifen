@@ -24,6 +24,9 @@ struct carrier_info_struct{
 class mob{
 public:
 	mob(float x, float y, float z, float max_move_speed, sector* sec);
+	//mob(const mob& m2);
+	//mob& operator=(const mob& m2);
+	virtual ~mob(); //Needed so that typeid works.
 
 	//Detail things.
 	ALLEGRO_COLOR main_color;
@@ -45,7 +48,11 @@ public:
 
 	//Target things.
 	float target_x, target_y;  //When movement is automatic, this is the spot the mob is trying to go to.
+	float *target_rel_x, *target_rel_y; //Follow these coordinates.
 	bool go_to_target;         //If true, it'll try to go to the target spot on its own.
+	bool gtt_instant; //If true, teleport instantly.
+	void set_target(float target_x, float target_y, float *target_rel_x, float *target_rel_y, bool instant);
+	void remove_target(bool stop);
 
 	//Party things.
 	mob* following_party;  //The current mob is following this mob's party.
@@ -59,8 +66,6 @@ public:
 	carrier_info_struct* carrier_info; //This is a pointer because most mobs aren't carriable. Might as well save RAM.
 	
 	void tick();
-
-	virtual ~mob(); //Needed so that typeid works.
 };
 
 #endif //ifndef MOB_INCLUDED

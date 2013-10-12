@@ -81,9 +81,11 @@
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="controls.cpp" />
+    <ClCompile Include="drawing.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="info_spot.cpp" />
     <ClCompile Include="leader.cpp" />
+    <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="nectar.cpp" />
@@ -101,6 +103,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="controls.h" />
+    <ClInclude Include="drawing.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_state.h" />
@@ -111,6 +114,7 @@
     <ClInclude Include="info_spot.h" />
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
+    <ClInclude Include="logic.h" />
     <ClInclude Include="mob.h" />
     <ClInclude Include="nectar.h" />
     <ClInclude Include="object_state.h" />

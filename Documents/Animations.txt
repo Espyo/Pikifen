@@ -3,6 +3,7 @@ Pikmin
 	at ease 1 (looking around)
 	at ease 2 (grooming)
 	at ease 3 (laying down)
+	at ease 4 (pretending to whistle)
 	walking
 	being called
 	being thrown
