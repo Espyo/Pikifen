@@ -49,10 +49,10 @@ void do_logic(){
 		}
 	}
 
-	float d = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y) * moving_group_intensity;
+	float dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y) * moving_group_intensity;
 	for(size_t a=0; a<move_group_arrows.size(); ){
 		move_group_arrows[a]+=MOVE_GROUP_ARROW_SPEED * (1.0/game_fps);
-		if(move_group_arrows[a] >= d){
+		if(move_group_arrows[a] >= dis){
 			move_group_arrows.erase(move_group_arrows.begin() + a);
 		}else{
 			a++;
@@ -101,11 +101,11 @@ void do_logic(){
 	}
 
 
-	d *= 2;
+	dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	for(size_t r=0; r<whistle_rings.size(); ){
 		//Erase rings that go beyond the cursor.
 		whistle_rings[r]+=WHISTLE_RING_SPEED * (1.0/game_fps);
-		if(whistle_rings[r] >= d){
+		if(whistle_rings[r] >= dis){
 			whistle_rings.erase(whistle_rings.begin() + r);
 			whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
 		}else{
@@ -354,8 +354,8 @@ void do_logic(){
 	cursor_y = mcy;
 
 	leaders[current_leader]->angle = atan2(cursor_y - leaders[current_leader]->y, cursor_x - leaders[current_leader]->x);
-	d = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
-	if(d > CURSOR_MAX_DIST){
+	dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
+	if(dis > CURSOR_MAX_DIST){
 		//Cursor goes beyond the range limit.
 		cursor_x = leaders[current_leader]->x + (cos(leaders[current_leader]->angle) * CURSOR_MAX_DIST);
 		cursor_y = leaders[current_leader]->y + (sin(leaders[current_leader]->angle) * CURSOR_MAX_DIST);
@@ -370,7 +370,7 @@ void do_logic(){
 
 	if(moving_group_to_cursor){
 		moving_group_angle = leaders[current_leader]->angle;
-		moving_group_intensity = d / CURSOR_MAX_DIST;
+		moving_group_intensity = dis / CURSOR_MAX_DIST;
 		if(moving_group_intensity > 1) moving_group_intensity = 1;
 	}
 
