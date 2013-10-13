@@ -511,7 +511,7 @@ void handle_analog(unsigned int action, float pos, bool x_axis){
 		*              / \ *
 		*******************/
 
-		if(abs(pos) < 0.75) pos = 0;
+		if(fabs(pos) < 0.75) pos = 0;
 
 		if(x_axis){
 			leaders[current_leader]->speed_x = pos * LEADER_MOVE_SPEED;

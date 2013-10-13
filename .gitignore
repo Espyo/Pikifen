@@ -3,3 +3,5 @@ Source/Debug/
 *.lnk
 Documents/Old/
 Error_log.txt
+*.o
+pfe

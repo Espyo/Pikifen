@@ -173,7 +173,7 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 
 ALLEGRO_BITMAP* load_bmp(string filename){
 	ALLEGRO_BITMAP* b = NULL;
-	b=al_load_bitmap(("Game_data\\Graphics\\" + filename).c_str());
+	b=al_load_bitmap(("Game_data/Graphics/" + filename).c_str());
 	if(!b){
 		error_log("Could not open image " + filename + "!");
 		b = bmp_error;
@@ -184,7 +184,7 @@ ALLEGRO_BITMAP* load_bmp(string filename){
 
 sample_struct load_sample(string filename){
 	sample_struct s;
-	s.sample = al_load_sample(("Game_data\\Audio\\" + filename).c_str());
+	s.sample = al_load_sample(("Game_data/Audio/" + filename).c_str());
 	if(!s.sample){
 		error_log("Could not open audio sample " + filename + "!");
 	}

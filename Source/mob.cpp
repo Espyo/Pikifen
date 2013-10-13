@@ -64,11 +64,11 @@ void mob::tick(){
 		}else if(x != final_target_x || y != final_target_y){
 						
 			float dx = final_target_x - x, dy = final_target_y - y;
-			if(abs(dx) < 0.001){
+			if(fabs(dx) < 0.001){
 				dx = 0;
 				x = final_target_x;
 			}
-			if(abs(dy) < 0.001){
+			if(fabs(dy) < 0.001){
 				y = final_target_y;
 				dy = 0;
 			}
