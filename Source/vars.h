@@ -48,6 +48,10 @@ extern ALLEGRO_BITMAP* bmp_yellow_burrowed[3];
 extern ALLEGRO_BITMAP* bmp_yellow_idle[3];
 extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
+extern ALLEGRO_BITMAP* bmp_test;
+extern sector test_sector;
+extern vector<linedef> test_linedefs;
+
 extern sample_struct sfx_camera;
 extern sample_struct sfx_dismiss;
 extern sample_struct sfx_louie_whistle;
@@ -114,6 +118,7 @@ extern vector<pikmin_type>   pikmin_types;
 extern bool                  running;
 extern unsigned short	     scr_h;
 extern unsigned short	     scr_w;
+extern vector<sector>        sectors;
 extern unsigned int          selected_spray;
 extern bool                  smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
 extern vector<unsigned long> sprays;             //How many of each spray the player has.

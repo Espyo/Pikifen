@@ -5,6 +5,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "const.h"
+#include "data_file.h"
 #include "functions.h"
 #include "vars.h"
 
@@ -65,6 +66,34 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 	if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
 }
 
+void draw_sector(sector &s){
+	ALLEGRO_VERTEX vs[200];
+	size_t n_linedefs = s.linedefs.size();
+	unsigned char current_floor;
+	unsigned char floors_to_draw;
+
+	current_floor = (s.floors[0].z > s.floors[1].z) ? 1 : 0;
+	floors_to_draw = (s.floors[0].z == s.floors[1].z) ? 1 : 2;	//ToDo remove this check?
+
+	for(unsigned char f = 0; f < floors_to_draw; f++){
+
+		for(size_t l=0; l<n_linedefs; l++){
+			vs[l].x = s.linedefs[l]->x1;
+			vs[l].y = s.linedefs[l]->y1;
+			vs[l].u = vs[l].x;
+			vs[l].v = vs[l].y;
+			vs[l].z = 0;
+			vs[l].color = al_map_rgba_f(s.floors[current_floor].brightness, s.floors[current_floor].brightness, s.floors[current_floor].brightness, 1);
+		}
+
+		al_draw_prim(vs, NULL, s.floors[current_floor].texture, 0, n_linedefs, ALLEGRO_PRIM_TRIANGLE_FAN);
+
+		current_floor = (current_floor == 1) ? 0 : 1;
+
+	}
+
+}
+
 void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch){
 	if(shadow_stretch <= 0) return;
 
@@ -120,6 +149,13 @@ void error_log(string s){
 	total_error_log += s + "\n";
 }
 
+void generate_background(){
+	size_t n_sectors = sectors.size();
+	for(size_t s = 0; s < n_sectors; s++){
+		draw_sector(sectors[s]);
+	}
+}
+
 ALLEGRO_COLOR get_daylight_color(){
 	//ToDo initialize this somewhere else?
 	static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
@@ -171,6 +207,53 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 		);
 }
 
+void load_area(string name){
+	sectors.clear();
+
+	data_node file = load_data_file("Areas/" + name + ".txt");
+
+	size_t n_sectors = file["sector"].size();
+	for(size_t s = 0; s<n_sectors; s++){
+		data_node sector_data = file["sector"][s];
+		sector new_sector = sector();
+		
+		size_t n_floors = sector_data["floor"].size();
+		if(n_floors > 2) n_floors = 2;
+		for(size_t f = 0; f<n_floors; f++){		//ToDo this is not the way to do it.
+			data_node floor_data = sector_data["floor"][f];
+			floor_info new_floor = floor_info();
+
+			new_floor.brightness = atof(floor_data["brightness"].get_value("1"));
+			new_floor.rot = atof(floor_data["texture_rotate"].get_value());
+			new_floor.scale = atof(floor_data["texture_scale"].get_value());
+			new_floor.trans_x = atof(floor_data["texture_trans_x"].get_value());
+			new_floor.trans_y = atof(floor_data["texture_trans_y"].get_value());
+			new_floor.texture = load_bmp("Textures/" + floor_data["texture"].get_value());	//ToDo don't load it every time.
+			new_floor.z = atof(floor_data["z"].get_value().c_str());
+			//ToDo terrain sound.
+
+			new_sector.floors[f] = new_floor;
+		}
+
+		size_t n_linedefs = sector_data["linedef"].size();
+		for(size_t l = 0; l<n_linedefs; l++){
+			data_node linedef_data = sector_data["linedef"][l];
+			linedef* new_linedef = new linedef();
+
+			new_linedef->x1 = atof(linedef_data["x"].get_value());
+			new_linedef->y1 = atof(linedef_data["y"].get_value());
+
+			//ToDo missing things.
+
+			new_sector.linedefs.push_back(new_linedef);
+		}
+
+		//ToDo missing things.
+
+		sectors.push_back(new_sector);
+	}
+}
+
 ALLEGRO_BITMAP* load_bmp(string filename){
 	ALLEGRO_BITMAP* b = NULL;
 	b=al_load_bitmap(("Game_data/Graphics/" + filename).c_str());
@@ -180,6 +263,15 @@ ALLEGRO_BITMAP* load_bmp(string filename){
 	}
 
 	return b;
+}
+
+data_node load_data_file(string filename){
+	data_node n = data_node("Game_data/" + filename);
+	if(!n.file_was_opened){
+		error_log("Could not open data file " + filename + "!");
+	}
+
+	return n;
 }
 
 sample_struct load_sample(string filename){
@@ -341,6 +433,10 @@ void stop_whistling(){
 	al_stop_sample(&leaders[current_leader]->sfx_whistle.id);
 }
 
+bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
+	return true;
+}
+
 void use_spray(size_t spray_nr){
 	if(sprays[spray_nr]==0) return;
 
@@ -353,3 +449,6 @@ void use_spray(size_t spray_nr){
 
 	sprays[spray_nr]--;
 }
+
+double atof(string s){ return atof(s.c_str()); }
+int atoi(string s){ return atof(s.c_str()); }

@@ -97,6 +97,7 @@ int main(){
 	bmp_ub_spray = load_bmp("Ultra-bitter_spray.png");
 	bmp_us_spray = load_bmp("Ultra-spicy_spray.png");
 	bmp_move_group_arrow = load_bmp("Move_group_arrow.png");
+	bmp_test = load_bmp("Test.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F, //ASCII
@@ -138,6 +139,18 @@ int main(){
 	
 	//Some temp variables.
 	sector s = sector();
+	/*test_sector = sector();
+	test_sector.floors[0].z = 100;
+	test_sector.floors[0].texture = bmp_test;
+
+	test_linedefs.push_back(linedef(0, 0, 0, 0, 0, 0));
+	test_linedefs.push_back(linedef(100, 0, 0, 0, 0, 0));
+	test_linedefs.push_back(linedef(100, 100, 0, 0, 0, 0));
+	test_linedefs.push_back(linedef(50, 150, 0, 0, 0, 0));
+	test_linedefs.push_back(linedef(0, 100, 0, 0, 0, 0));*/
+
+	load_area("test");
+	
 	leaders.push_back(new leader(0, 0, &s));
 	leaders.back()->main_color = al_map_rgb(255, 0, 0);
 	leaders.back()->health = 10;

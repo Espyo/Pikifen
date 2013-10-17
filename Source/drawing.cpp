@@ -43,6 +43,10 @@ void do_drawing(){
 		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2 - 512, 512, 512, 0);
 		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2, 512, 512, 0);
 
+		for(size_t s=0; s<sectors.size(); s++){
+			draw_sector(sectors[s]);
+		}
+
 
 		/* Layer 2
 		************************

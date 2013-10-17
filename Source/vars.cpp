@@ -31,6 +31,10 @@ ALLEGRO_BITMAP* bmp_yellow_burrowed[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_yellow_idle[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_yellow_onion = NULL;
 
+ALLEGRO_BITMAP* bmp_test = NULL;
+sector test_sector;
+vector<linedef> test_linedefs;
+
 sample_struct sfx_camera;
 sample_struct sfx_dismiss;
 sample_struct sfx_louie_whistle;
@@ -96,6 +100,7 @@ vector<pikmin_type>   pikmin_types;
 bool                  running = true;
 unsigned short        scr_h = DEF_SCR_W;
 unsigned short        scr_w = DEF_SCR_H;
+vector<sector>        sectors;
 unsigned int          selected_spray = 0;
 bool                  smooth_scaling = true;
 vector<unsigned long> sprays;
