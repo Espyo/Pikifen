@@ -15,6 +15,14 @@ void handle_controls(ALLEGRO_EVENT ev){
 		//ToDo remove.
 		//leaders[current_leader]->health--;
 		day_minutes += 30;
+
+		size_t area_image_cols = area_images.size();
+		for(size_t x=0; x < area_image_cols; x++){
+			size_t area_image_rows = area_images[x].size();
+			for(size_t y=0; y < area_image_rows; y++){
+				al_save_bitmap(("Area" + to_string((long long) x) + to_string((long long) y) + ".png").c_str(), area_images[x][y]);
+			}
+		}
 	}
 
 

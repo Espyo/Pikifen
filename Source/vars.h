@@ -67,6 +67,10 @@ extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_throw;
 
+extern vector<vector<ALLEGRO_BITMAP*>>
+	                         area_images;
+extern float                 area_x1; //Top-left corner of the area, in world coordinates.
+extern float                 area_y1;
 extern vector<unsigned int>  berries;
 extern ALLEGRO_BITMAP*       bmp_error;
 extern float                 cam_trans_pan_final_x;

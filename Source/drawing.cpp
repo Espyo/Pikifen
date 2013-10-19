@@ -38,15 +38,15 @@ void do_drawing(){
 		*                ^^^^^^ *
 		************************/
 
-		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2 - 512, scr_h/2 - 512, 512, 512, 0);
-		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2 - 512, scr_h/2, 512, 512, 0);
-		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2 - 512, 512, 512, 0);
-		al_draw_scaled_bitmap(bmp_background, 0, 0, 512, 512, scr_w/2, scr_h/2, 512, 512, 0);
-
-		for(size_t s=0; s<sectors.size(); s++){
-			draw_sector(sectors[s]);
+		//ToDo optimize
+		size_t area_image_cols = area_images.size();
+		for(size_t x=0; x < area_image_cols; x++){
+			size_t area_image_rows = area_images[x].size();
+			for(size_t y=0; y < area_image_rows; y++){
+				al_draw_bitmap(area_images[x][y], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1, 0);
+			}
 		}
-
+		
 
 		/* Layer 2
 		************************

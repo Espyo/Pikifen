@@ -150,6 +150,7 @@ int main(){
 	test_linedefs.push_back(linedef(0, 100, 0, 0, 0, 0));*/
 
 	load_area("test");
+	generate_area_images();
 	
 	leaders.push_back(new leader(0, 0, &s));
 	leaders.back()->main_color = al_map_rgb(255, 0, 0);

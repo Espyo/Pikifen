@@ -29,19 +29,19 @@ sector{
 		texture=Metal.png
 	}
 	linedef{
-		x=0
+		x=-300
+		y=-100
+	}
+	linedef{
+		x=1000
 		y=-100
 	}
 	linedef{
 		x=200
-		y=-100
-	}
-	linedef{
-		x=200
-		y=-50
+		y=1050
 	}
 	linedef{
 		x=0
-		y=-50
+		y=1050
 	}
 }

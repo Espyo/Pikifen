@@ -66,8 +66,8 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
 	if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
 }
 
-void draw_sector(sector &s){
-	ALLEGRO_VERTEX vs[200];
+void draw_sector(sector &s, float x, float y){
+	ALLEGRO_VERTEX vs[200]; //ToDo 200?
 	size_t n_linedefs = s.linedefs.size();
 	unsigned char current_floor;
 	unsigned char floors_to_draw;
@@ -78,15 +78,16 @@ void draw_sector(sector &s){
 	for(unsigned char f = 0; f < floors_to_draw; f++){
 
 		for(size_t l=0; l<n_linedefs; l++){
-			vs[l].x = s.linedefs[l]->x1;
-			vs[l].y = s.linedefs[l]->y1;
-			vs[l].u = vs[l].x;
-			vs[l].v = vs[l].y;
+			vs[l].x = s.linedefs[l]->x1 - x;
+			vs[l].y = s.linedefs[l]->y1 - y;
+			vs[l].u = s.linedefs[l]->x1;
+			vs[l].v = s.linedefs[l]->y1;
 			vs[l].z = 0;
 			vs[l].color = al_map_rgba_f(s.floors[current_floor].brightness, s.floors[current_floor].brightness, s.floors[current_floor].brightness, 1);
 		}
 
 		al_draw_prim(vs, NULL, s.floors[current_floor].texture, 0, n_linedefs, ALLEGRO_PRIM_TRIANGLE_FAN);
+		al_draw_circle(0, 0, 2, al_map_rgb(0, 255, 255), 2);
 
 		current_floor = (current_floor == 1) ? 0 : 1;
 
@@ -149,11 +150,92 @@ void error_log(string s){
 	total_error_log += s + "\n";
 }
 
-void generate_background(){
-	size_t n_sectors = sectors.size();
-	for(size_t s = 0; s < n_sectors; s++){
-		draw_sector(sectors[s]);
+void generate_area_images(){
+	//First, clear all existing area images.
+	for(size_t x = 0; x < area_images.size(); x++){
+		for(size_t y = 0; y < area_images[x].size(); y++){
+			al_destroy_bitmap(area_images[x][y]);
+		}
+		area_images[x].clear();
 	}
+	area_images.clear();
+
+	//Now, figure out how big our area is.
+	size_t n_sectors = sectors.size();
+	if(n_sectors == 0) return;
+	if(sectors[0].linedefs.size() == 0) return;
+
+	float min_x, max_x, min_y, max_y;
+	min_x = max_x = sectors[0].linedefs[0]->x1;
+	min_y = max_y = sectors[0].linedefs[0]->y1;
+
+	for(size_t s = 0; s < n_sectors; s++){
+		size_t n_linedefs = sectors[s].linedefs.size();
+		for(size_t l = 0; l<n_linedefs; l++){
+			float x = sectors[s].linedefs[l]->x1;
+			float y = sectors[s].linedefs[l]->y1;
+
+			min_x = min(x, min_x);
+			max_x = max(x, max_x);
+			min_y = min(y, min_y);
+			max_y = max(y, max_y);
+		}
+	}
+
+	area_x1 = min_x; area_y1 = min_y;
+
+	//Create the new areas on the vectors.
+	float area_width = max_x - min_x;
+	float area_height = max_y - min_y;
+	unsigned area_image_cols = ceil(area_width / AREA_IMAGE_SIZE);
+	unsigned area_image_rows = ceil(area_height / AREA_IMAGE_SIZE);
+
+	for(size_t x = 0; x < area_image_cols; x++){
+		area_images.push_back(vector<ALLEGRO_BITMAP*>());
+
+		for(size_t y = 0; y < area_image_rows; y++){
+			area_images[x].push_back(al_create_bitmap(AREA_IMAGE_SIZE, AREA_IMAGE_SIZE));
+		}
+	}
+
+	//For every sector, draw it on the area images it belongs on.
+	for(size_t s = 0; s<n_sectors; s++){
+		size_t n_linedefs = sectors[s].linedefs.size();
+		if(n_linedefs == 0) continue;
+
+		float s_min_x, s_max_x, s_min_y, s_max_y;
+		unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
+		s_min_x = s_max_x = sectors[s].linedefs[0]->x1;
+		s_min_y = s_max_y = sectors[s].linedefs[0]->y1;
+
+		for(size_t l = 1; l<n_linedefs; l++){	//Start at 1, because we already have the first linedef's values.
+			float x = sectors[s].linedefs[l]->x1;
+			float y = sectors[s].linedefs[l]->y1;
+
+			s_min_x = min(x, s_min_x);
+			s_max_x = max(x, s_max_x);
+			s_min_y = min(y, s_min_y);
+			s_max_y = max(y, s_max_y);
+		}
+
+		sector_start_col = (s_min_x - area_x1) / AREA_IMAGE_SIZE;
+		sector_end_col =   (s_max_x - area_x1) / AREA_IMAGE_SIZE;
+		sector_start_row = (s_min_y - area_y1) / AREA_IMAGE_SIZE;
+		sector_end_row =   (s_max_y - area_y1) / AREA_IMAGE_SIZE;
+
+		for(size_t x = sector_start_col; x<=sector_end_col; x++){
+			for(size_t y = sector_start_row; y<=sector_end_row; y++){
+				ALLEGRO_BITMAP* current_target_bmp = al_get_target_bitmap();
+				al_set_target_bitmap(area_images[x][y]);{
+
+					draw_sector(sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
+
+				}al_set_target_bitmap(current_target_bmp);
+			}
+		}
+
+	}
+
 }
 
 ALLEGRO_COLOR get_daylight_color(){
