@@ -100,7 +100,7 @@ void do_drawing(){
 			float x = leaders[current_leader]->x + cos(leaders[current_leader]->angle) * whistle_rings[r];
 			float y = leaders[current_leader]->y + sin(leaders[current_leader]->angle) * whistle_rings[r];
 			unsigned char n = whistle_ring_colors[r];
-			al_draw_circle(x, y, 12, al_map_rgb(WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], WHISTLE_RING_COLORS[n][3]), 1);
+			al_draw_circle(x, y, 12, al_map_rgb(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2]), 1);
 		}
 
 		if(whistle_radius > 0 || whistle_fade_time > 0){
@@ -174,7 +174,7 @@ void do_drawing(){
 		//Pikmin
 		n_pikmin = pikmin_list.size();
 		for(size_t p = 0; p<n_pikmin; p++){
-			ALLEGRO_BITMAP* bm;
+			ALLEGRO_BITMAP* bm = NULL;
 
 			bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_treasure;
 

@@ -87,8 +87,7 @@ void draw_sector(sector &s, float x, float y){
 		}
 
 		al_draw_prim(vs, NULL, s.floors[current_floor].texture, 0, n_linedefs, ALLEGRO_PRIM_TRIANGLE_FAN);
-		al_draw_circle(0, 0, 2, al_map_rgb(0, 255, 255), 2);
-
+		
 		current_floor = (current_floor == 1) ? 0 : 1;
 
 	}
@@ -151,6 +150,8 @@ void error_log(string s){
 }
 
 void generate_area_images(){
+	//ToDo if it aligns perfectly with AREA_IMAGE_SIZE, a glitch could happen. For instance, a sector that spans from 0 to 800, x and y
+
 	//First, clear all existing area images.
 	for(size_t x = 0; x < area_images.size(); x++){
 		for(size_t y = 0; y < area_images[x].size(); y++){

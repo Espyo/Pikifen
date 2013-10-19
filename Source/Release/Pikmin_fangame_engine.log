@@ -1,0 +1,42 @@
+﻿Build started 10/19/2013 10:16:57 PM.
+     1>Project "C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Pikmin_fangame_engine.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Pikmin_fangame_engine.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         c:\Prog\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Allegro\allegro-5.0.10-msvc-10.0\include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D ALLEGRO_STATICLINK /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt data_file.cpp
+         data_file.cpp
+       Link:
+         c:\Prog\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Release\Pikmin_fangame_engine.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Allegro\allegro-5.0.10-msvc-10.0\lib" "allegro-5.0.10-monolith-static-mt.lib" "dumb-0.9.3-static-mt.lib" "freetype-2.4.8-static-mt.lib" "libFLAC-1.2.1-static-mt.lib" "libogg-1.2.1-static-mt.lib" "libvorbis-1.3.2-static-mt.lib" "libvorbisfile-1.3.2-static-mt.lib" "openal-1.14-static-mt.lib" "zlib-1.2.5-static-mt.lib" winmm.lib opengl32.lib gdiplus.lib psapi.lib shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\Pikmin_fangame_engine.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Release\Pikmin_fangame_engine.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Release\Pikmin_fangame_engine.lib" /MACHINE:X86 Release\animation.obj
+         Release\controls.obj
+         Release\data_file.obj
+         Release\drawing.obj
+         Release\enemy.obj
+         Release\functions.obj
+         Release\info_spot.obj
+         Release\leader.obj
+         Release\logic.obj
+         Release\main.obj
+         Release\mob.obj
+         Release\nectar.obj
+         Release\onion.obj
+         Release\particle.obj
+         Release\pikmin.obj
+         Release\pikmin_type.obj
+         Release\sector.obj
+         Release\spray_type.obj
+         Release\status.obj
+         Release\treasure.obj
+         Release\vars.obj
+         Generating code
+         Finished generating code
+         Pikmin_fangame_engine.vcxproj -> C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Release\Pikmin_fangame_engine.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Release\Pikmin_fangame_engine.exe;#1" /manifest Release\Pikmin_fangame_engine.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\Pikmin_fangame_engine.unsuccessfulbuild".
+         Touching "Release\Pikmin_fangame_engine.lastbuildstate".
+     1>Done Building Project "C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Source\Pikmin_fangame_engine.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:11.17

@@ -5,7 +5,7 @@
  * See data_file.h.
  */
 
-#include <allegro5\allegro.h>
+#include <allegro5/allegro.h>
 
 #include <fstream>
 #include <string>
@@ -177,7 +177,7 @@ void getline(ALLEGRO_FILE* file, string &line){
 	}
 
 	size_t bytes_read;
-	void* c_ptr=new char;
+	char* c_ptr=new char;
 	char c;
 
 	bytes_read=al_fread(file, c_ptr, 1);

@@ -3,45 +3,41 @@ sector{
 		texture=Grass.png
 	}
 	linedef{
-		x=0
-		y=0
+		x=-999
+		y=-999
 	}
 	linedef{
-		x=100
-		y=0
+		x=999
+		y=-999
 	}
 	linedef{
-		x=100
-		y=100
+		x=999
+		y=999
 	}
 	linedef{
-		x=50
-		y=350
-	}
-	linedef{
-		x=0
-		y=100
+		x=-999
+		y=999
 	}
 }
 
-sector{
-	floor{
-		texture=Metal.png
-	}
-	linedef{
-		x=-300
-		y=-100
-	}
-	linedef{
-		x=1000
-		y=-100
-	}
-	linedef{
-		x=200
-		y=1050
-	}
-	linedef{
-		x=0
-		y=1050
-	}
-}
+//sector{
+//	floor{
+//		texture=Metal.png
+//	}
+//	linedef{
+//		x=-300
+//		y=-100
+//	}
+//	linedef{
+//		x=999
+//		y=-100
+//	}
+//	linedef{
+//		x=200
+//		y=1050
+//	}
+//	linedef{
+//		x=0
+//		y=1050
+//	}
+//}

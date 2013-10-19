@@ -320,9 +320,6 @@ void do_logic(){
 	if(n_members > 0 && !closest_party_member){
 
 		for(size_t m=0; m<n_members; m++){
-			mob* ccc=leaders[current_leader]->party[m];
-			float xxx=leaders[current_leader]->party[m]->x;
-			float yyy=leaders[current_leader]->party[m]->y;
 			float d = dist(leaders[current_leader]->x, leaders[current_leader]->y, leaders[current_leader]->party[m]->x, leaders[current_leader]->party[m]->y);
 			if(m==0 || d < closest_distance){
 				closest_distance = d;
