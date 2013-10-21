@@ -1,5 +1,6 @@
-#include <math.h>
 #define _USE_MATH_DEFINES
+#include <math.h>
+#include <typeinfo>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -442,8 +443,8 @@ void random_particle_splash(float center_x, float center_y, unsigned char min, u
 			(2-random(0,4)),
 			-random(2, 4),
 			0, 0.5,
-			random(14, 20)/10,
-			4,
+			random((int)(time_min*10), (int)(time_max*10))/10,
+			random((int)(size_min * 10), (int)(size_max * 10)) / 10,
 			color
 		));
 	}
@@ -504,13 +505,83 @@ void start_camera_zoom(float final_zoom_level){
 }
 
 void start_carrying(mob* m){
-	//Start moving the mob.
+	//ToDo what if an Onion hasn't been revelead yet?
+	if(!m->carrier_info) return;
+
+	float target_x, target_y;
+
+	/*
 	m->set_target(
 		ships[0]->x + ships[0]->size * 0.5 + m->size * 0.5 + 8,
 		ships[0]->y,
 		NULL,
 		NULL,
 		false);
+	*/
+
+	map<pikmin_type*, unsigned> type_quantity; //How many of each Pikmin type are carrying.
+	vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
+
+	//First, count how many of each type there are.
+	for(size_t p=0; p<m->max_carriers; p++){
+		pikmin* pik_ptr = NULL;
+		
+		if(m->carrier_info->carrier_spots[p] == NULL) continue;
+		if(typeid(*m->carrier_info->carrier_spots[p]) == typeid(pikmin))
+			pik_ptr = (pikmin*) m->carrier_info->carrier_spots[p];
+		else continue;
+
+		if(type_quantity.find(pik_ptr->type) == type_quantity.end()) type_quantity[pik_ptr->type]=0; //ToDo maps don't start the number at 0, so that's why I need this line, correct?
+		type_quantity[pik_ptr->type]++;
+	}
+
+	//Then figure out what are the majority types.
+	unsigned most = 0;
+	for(map<pikmin_type*, unsigned>::iterator t = type_quantity.begin(); t!=type_quantity.end(); t++){
+		if(t->second > most){
+			most = t->second;
+			majority_types.clear();
+		}
+		if(t->second == most) majority_types.push_back(t->first);
+	}
+
+	//Weed out the types that don't have Onions.
+	for(size_t t=0; t<majority_types.size();){
+		if(!majority_types[t]->has_onion){
+			majority_types.erase(majority_types.begin() + t);
+		}else{
+			t++;
+		}
+	}
+
+	//If we ended up with no candidates, pick a type at random, out of all possible types.
+	if(majority_types.size() == 0){
+		for(size_t t=0; t<pikmin_types.size(); t++){
+			if(pikmin_types[t].has_onion){
+				majority_types.push_back(&pikmin_types[t]);
+			}
+		}
+	}
+
+	//Of the candidate types, pick one at random (if there's only one, only that one'll be picked, so no worries).
+	if(majority_types.size() == 0) return; //ToDo warn?
+	size_t type_chosen = random(0, majority_types.size() - 1);
+	
+	//Figure out where that type's Onion is.
+	size_t onion_nr = 0;
+	for(; onion_nr<onions.size(); onion_nr++){
+		if(onions[onion_nr]->type == majority_types[type_chosen]){
+			break;
+		}
+	}
+
+	//Calculate the delivery coordinates.
+	target_x = onions[onion_nr]->x;
+	target_y = onions[onion_nr]->y;
+
+	//Finall, start moving the mob.
+	m->set_target(target_x, target_y, NULL, NULL, false);
+	m->carrier_info->carry_color = majority_types[type_chosen]->color;
 }
 
 void stop_whistling(){

@@ -325,6 +325,7 @@ void do_logic(){
 	*            ***  *
 	******************/
 
+	//ToDo every Pikmin in a group is moving, even Pikmin that are already on another leader's party!
 	float closest_distance = 0;
 	size_t n_members = leaders[current_leader]->party.size();
 	closest_party_member = leaders[current_leader]->holding_pikmin;

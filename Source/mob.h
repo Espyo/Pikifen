@@ -17,6 +17,7 @@ struct carrier_info_struct{
 	vector<mob*> carrier_spots;    //Pikmin carrying, and their spots.
 	vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
 	vector<float> carrier_spots_y;
+	ALLEGRO_COLOR carry_color;     //Color of the fraction numbers.
 
 	carrier_info_struct(mob* m);
 };

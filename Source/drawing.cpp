@@ -272,12 +272,16 @@ void do_drawing(){
 			
 		//Fractions.
 		for(size_t t=0; t<n_treasures; t++){
-			//ToDo only show if it has at least one carrier.
-			//ToDo fraction color.
 			//ToDo it's not taking Pikmin strength into account.
-			//ToDo can't this be more optimized than running through the vector of carrier spots?
-			if(treasures[t]->carrier_info->current_n_carriers>0)
-				draw_fraction(treasures[t]->x, treasures[t]->y, treasures[t]->carrier_info->current_n_carriers, treasures[t]->weight, al_map_rgb(192, 192, 192));
+			if(treasures[t]->carrier_info->current_n_carriers>0){
+				ALLEGRO_COLOR color;
+				if(treasures[t]->carrier_info->current_n_carriers >= treasures[t]->weight){ //Being carried.
+					color = treasures[t]->carrier_info->carry_color;
+				}else{
+					color = al_map_rgb(96, 192, 192);
+				}
+				draw_fraction(treasures[t]->x, treasures[t]->y, treasures[t]->carrier_info->current_n_carriers, treasures[t]->weight, color);
+			}
 		}
 
 		//Info spots.

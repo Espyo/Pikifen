@@ -170,7 +170,7 @@ int main(){
 	leaders.back()->sfx_dismiss = sfx_dismiss;
 	leaders.back()->sfx_whistle = sfx_president_whistle;
 	leaders.back()->sfx_name_call = sfx_president_name_call;
-	treasures.push_back(new treasure(300, 150, 80, &s, 30, 50));
+	treasures.push_back(new treasure(300, 150, 80, &s, 5, 50));
 	pikmin_list.push_back(new pikmin(&pikmin_types[0], 30, 30, &s));
 	pikmin_list.back()->maturity = 1;
 	pikmin_list.push_back(new pikmin(&pikmin_types[0], 40, 30, &s));
