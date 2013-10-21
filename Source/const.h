@@ -44,6 +44,8 @@ struct sample_struct{
 #define MOVE_GROUP_ARROWS_INTERVAL 0.1      //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT              5        //A drop of nectar starts with this amount.
 #define SHADOW_Y_MULTIPLIER        30       //For every unit above the ground that the mob is on, the shadow goes these many units down.
+#define SHIP_BEAM_RANGE            30       //The center of a ship's beam reaches this far.
+#define SHIP_BEAM_RING_COLOR_SPEED 255      //Red color's index moves these many units per second. (Green is fast and blue is faster still).
 #define THROW_DISTANCE_MULTIPLIER  0.49     //When a leader throws a Pikmin, multiply their strength by this.
 #define UNCALLABLE_PERIOD          1        //A mob cannot be called to a party during this period.
 #define WHISTLE_DOT_INTERVAL       0.03     //Seconds that need to pass before another dot is added.

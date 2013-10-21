@@ -47,7 +47,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
@@ -87,17 +87,18 @@
     <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="functions.cpp" />
-    <ClCompile Include="info_spot.cpp" />
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mob.cpp" />
-    <ClCompile Include="nectar.cpp" />
-    <ClCompile Include="onion.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />
     <ClCompile Include="sector.cpp" />
+    <ClCompile Include="spec_objs\info_spot.cpp" />
+    <ClCompile Include="spec_objs\nectar.cpp" />
+    <ClCompile Include="spec_objs\onion.cpp" />
+    <ClCompile Include="spec_objs\ship.cpp" />
     <ClCompile Include="spray_type.cpp" />
     <ClCompile Include="status.cpp" />
     <ClCompile Include="treasure.cpp" />
@@ -116,18 +117,19 @@
     <ClInclude Include="frame.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />
-    <ClInclude Include="info_spot.h" />
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
     <ClInclude Include="logic.h" />
     <ClInclude Include="mob.h" />
-    <ClInclude Include="nectar.h" />
     <ClInclude Include="object_state.h" />
-    <ClInclude Include="onion.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="pikmin.h" />
     <ClInclude Include="pikmin_type.h" />
     <ClInclude Include="sector.h" />
+    <ClInclude Include="spec_objs\info_spot.h" />
+    <ClInclude Include="spec_objs\nectar.h" />
+    <ClInclude Include="spec_objs\onion.h" />
+    <ClInclude Include="spec_objs\ship.h" />
     <ClInclude Include="spray_type.h" />
     <ClInclude Include="state.h" />
     <ClInclude Include="status.h" />

@@ -21,6 +21,7 @@ void do_logic(){
 
 	idle_glow_angle+=(1.0 / game_fps) * (IDLE_GLOW_SPIN_SPEED);
 
+	//Camera transitions.
 	if(cam_trans_pan_time_left > 0){
 		cam_trans_pan_time_left -= 1.0/game_fps;
 		if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
@@ -100,7 +101,6 @@ void do_logic(){
 		}
 	}
 
-
 	dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	for(size_t r=0; r<whistle_rings.size(); ){
 		//Erase rings that go beyond the cursor.
@@ -110,6 +110,24 @@ void do_logic(){
 			whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
 		}else{
 			r++;
+		}
+	}
+
+	//Ship beam ring.
+	//The way this works is that the three color indexes are saved.
+	//Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
+	//Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
+	for(unsigned char i=0; i<3; i++){
+		float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
+		signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i+1) * (1.0 / game_fps);
+		if(ship_beam_ring_color[i] + addition >= 255){
+			ship_beam_ring_color[i] = 255;
+			ship_beam_ring_color_up[i] = false;
+		}else if(ship_beam_ring_color[i] + addition <= 0){
+			ship_beam_ring_color[i] = 0;
+			ship_beam_ring_color_up[i] = true;
+		}else{
+			ship_beam_ring_color[i]+=addition;
 		}
 	}
 			
@@ -191,7 +209,7 @@ void do_logic(){
 			pik_ptr->maturity != 2
 			){
 				for(size_t n=0; n<n_nectars; n++){
-					if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->size + pik_ptr->size){
+					if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->size * 0.5+ pik_ptr->size * 0.5){
 						if(nectars[n]->amount_left > 0)
 							nectars[n]->amount_left--;
 
@@ -210,7 +228,7 @@ void do_logic(){
 			(pik_ptr->following_party && moving_group_intensity)
 			){
 				for(size_t t=0; t<n_treasures; t++){
-					if(dist(pik_ptr->x, pik_ptr->y, treasures[t]->x, treasures[t]->y)<=pik_ptr->size + treasures[t]->size + MIN_PIKMIN_TASK_RANGE){
+					if(dist(pik_ptr->x, pik_ptr->y, treasures[t]->x, treasures[t]->y)<=pik_ptr->size * 0.5 + treasures[t]->size * 0.5 + MIN_PIKMIN_TASK_RANGE){
 						//ToDo don't take the treasure if all spots are taken already.
 						pik_ptr->carrying_treasure = treasures[t];
 								
@@ -236,13 +254,7 @@ void do_logic(){
 							true);
 
 						if(treasures[t]->carrier_info->current_n_carriers >= treasures[t]->weight){
-							//Start moving the treasure.
-							treasures[t]->set_target(
-								0,
-								0,
-								NULL,
-								NULL,
-								false);
+							start_carrying(treasures[t]);
 						}
 
 						break;

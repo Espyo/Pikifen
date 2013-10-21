@@ -1,4 +1,4 @@
-#include "const.h"
+#include "../const.h"
 #include "nectar.h"
 
 nectar::nectar(float x, float y, sector* sec)

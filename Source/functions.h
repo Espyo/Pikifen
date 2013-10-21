@@ -38,6 +38,7 @@ void              random_particle_spray(float origin_x, float origin_y, float an
 void              remove_from_party(mob* party_leader, mob* member_to_remove);
 void              start_camera_pan(int final_x, int final_y);
 void              start_camera_zoom(float final_zoom_level);
+void              start_carrying(mob* m);
 void              stop_whistling();
 bool              temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
 void              use_spray(size_t spray_nr);

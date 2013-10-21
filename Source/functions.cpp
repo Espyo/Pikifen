@@ -101,10 +101,10 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 
 	if(day_minutes < 60*12){
 		//Shadows point to the West.
-		shadow_x = -shadow_w + size / 2;
+		shadow_x = -shadow_w + size * 0.5;
 	}else{
 		//Shadows point to the East.
-		shadow_x = -(size / 2);
+		shadow_x = -(size * 0.5);
 	}
 	
 	//ToDo shadow graphic dimensions.
@@ -116,7 +116,7 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 		64,
 		64,
 		cx + shadow_x,
-		(cy - size / 2) + delta_z * SHADOW_Y_MULTIPLIER,
+		(cy - size * 0.5) + delta_z * SHADOW_Y_MULTIPLIER,
 		shadow_w,
 		size,
 		0
@@ -501,6 +501,16 @@ void start_camera_zoom(float final_zoom_level){
 
 	al_stop_sample(&sfx_camera.id);
 	al_play_sample(sfx_camera.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_camera.id);
+}
+
+void start_carrying(mob* m){
+	//Start moving the mob.
+	m->set_target(
+		ships[0]->x + ships[0]->size * 0.5 + m->size * 0.5 + 8,
+		ships[0]->y,
+		NULL,
+		NULL,
+		false);
 }
 
 void stop_whistling(){

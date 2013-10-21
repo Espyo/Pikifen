@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\spec_objs">
+      <UniqueIdentifier>{f5ccfc80-9f79-45b0-b3c3-0de0ad5dfc0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\spec_objs">
+      <UniqueIdentifier>{67a77ca6-7243-4358-8e7e-463e9c4e6f69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mob.cpp">
@@ -54,15 +60,6 @@
     <ClCompile Include="treasure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="onion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="info_spot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nectar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -77,6 +74,18 @@
     </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="spec_objs\nectar.cpp">
+      <Filter>Source Files\spec_objs</Filter>
+    </ClCompile>
+    <ClCompile Include="spec_objs\onion.cpp">
+      <Filter>Source Files\spec_objs</Filter>
+    </ClCompile>
+    <ClCompile Include="spec_objs\ship.cpp">
+      <Filter>Source Files\spec_objs</Filter>
+    </ClCompile>
+    <ClCompile Include="spec_objs\info_spot.cpp">
+      <Filter>Source Files\spec_objs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,15 +155,6 @@
     <ClInclude Include="treasure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="onion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="info_spot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nectar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="controls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -166,6 +166,18 @@
     </ClInclude>
     <ClInclude Include="data_file.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\nectar.h">
+      <Filter>Header Files\spec_objs</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\onion.h">
+      <Filter>Header Files\spec_objs</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\ship.h">
+      <Filter>Header Files\spec_objs</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\info_spot.h">
+      <Filter>Header Files\spec_objs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

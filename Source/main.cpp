@@ -93,6 +93,7 @@ int main(){
 	bmp_health_bubble = load_bmp("Health_bubble.png");
 	bmp_sun = load_bmp("Sun.png");
 	bmp_shadow = load_bmp("Shadow.png");
+	bmp_ship = load_bmp("Ship.png");
 	bmp_idle_glow = load_bmp("Idle_glow.png");
 	bmp_ub_spray = load_bmp("Ultra-bitter_spray.png");
 	bmp_us_spray = load_bmp("Ultra-spicy_spray.png");
@@ -135,7 +136,6 @@ int main(){
 	pikmin_in_onions.clear();
 	size_t n_total_onions = pikmin_types.size();
 	for(size_t o=0; o<n_total_onions; o++){ pikmin_in_onions.push_back(0); }
-	size_t n_treasures = treasures.size();
 	
 	//Some temp variables.
 	sector s = sector();
@@ -170,7 +170,7 @@ int main(){
 	leaders.back()->sfx_dismiss = sfx_dismiss;
 	leaders.back()->sfx_whistle = sfx_president_whistle;
 	leaders.back()->sfx_name_call = sfx_president_name_call;
-	treasures.push_back(new treasure(300, 100, 40, &s, 30, 50));
+	treasures.push_back(new treasure(300, 150, 80, &s, 30, 50));
 	pikmin_list.push_back(new pikmin(&pikmin_types[0], 30, 30, &s));
 	pikmin_list.back()->maturity = 1;
 	pikmin_list.push_back(new pikmin(&pikmin_types[0], 40, 30, &s));
@@ -206,6 +206,7 @@ int main(){
 	pikmin_in_onions[0] = 200;
 	pikmin_in_onions[1] = 180;
 	pikmin_in_onions[2] = 160;
+	ships.push_back(new ship(-100, 100, &s));
 
 	//Main loop.
 	al_start_timer(timer);

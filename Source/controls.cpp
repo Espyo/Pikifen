@@ -15,6 +15,7 @@ void handle_controls(ALLEGRO_EVENT ev){
 		//ToDo remove.
 		//leaders[current_leader]->health--;
 		day_minutes += 30;
+		day = sectors[0].floors[0].brightness;
 	}
 
 
@@ -186,7 +187,19 @@ void handle_button_down(unsigned int button, int aux){
 				}
 			}
 		}
-				
+		
+		//Now check if the leader should heal themselves on the ship.
+		if(!done){
+			size_t n_ships = ships.size();
+			for(size_t s=0; s<n_ships; s++){
+				if(dist(leaders[current_leader]->x, leaders[current_leader]->y, ships[s]->x + ships[s]->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE){
+					//ToDo make it prettier.
+					leaders[current_leader]->health = leaders[current_leader]->max_health;
+					done = true;
+				}
+			}
+		}
+
 		//Now check if the leader should grab a Pikmin.
 
 		if(!done){
@@ -229,7 +242,7 @@ void handle_button_down(unsigned int button, int aux){
 			*                    / \  / \ *
 			******************************/
 
-			size_t new_leader = NULL;
+			size_t new_leader = current_leader;
 			if(button == BUTTON_SWITCH_CAPTAIN_R)
 				new_leader = (current_leader + 1) % leaders.size();
 			else if(button == BUTTON_SWITCH_CAPTAIN_L){

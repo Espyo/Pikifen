@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "mob.h"
+#include "../mob.h"
 
 using namespace std;
 

@@ -1,8 +1,8 @@
 #ifndef ONION_INCLUDED
 #define	ONION_INCLUDED
 
-#include "mob.h"
-#include "pikmin_type.h"
+#include "../mob.h"
+#include "../pikmin_type.h"
 
 class onion : public mob{
 public:

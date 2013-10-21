@@ -7,14 +7,15 @@
 #include <allegro5/allegro_audio.h>
 
 #include "const.h"
-#include "info_spot.h"
+#include "spec_objs/info_spot.h"
 #include "leader.h"
-#include "nectar.h"
-#include "onion.h"
+#include "spec_objs/nectar.h"
+#include "spec_objs/onion.h"
 #include "particle.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
 #include "spray_type.h"
+#include "spec_objs/ship.h"
 #include "status.h"
 #include "treasure.h"
 
@@ -40,6 +41,7 @@ extern ALLEGRO_BITMAP* bmp_red_burrowed[3];
 extern ALLEGRO_BITMAP* bmp_red_idle[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_shadow;
+extern ALLEGRO_BITMAP* bmp_ship;
 extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
@@ -67,7 +69,7 @@ extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_throw;
 
-extern vector<vector<ALLEGRO_BITMAP*>>
+extern vector<vector<ALLEGRO_BITMAP*> >
 	                         area_images;
 extern float                 area_x1; //Top-left corner of the area, in world coordinates.
 extern float                 area_y1;
@@ -124,6 +126,9 @@ extern unsigned short	     scr_h;
 extern unsigned short	     scr_w;
 extern vector<sector>        sectors;
 extern unsigned int          selected_spray;
+extern unsigned char         ship_beam_ring_color[3];
+extern bool                  ship_beam_ring_color_up[3];
+extern vector<ship*>         ships;
 extern bool                  smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
 extern vector<unsigned long> sprays;             //How many of each spray the player has.
 extern vector<spray_type>    spray_types;

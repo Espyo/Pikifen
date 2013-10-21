@@ -1,7 +1,7 @@
 #ifndef NECTAR_INCLUDED
 #define NECTAR_INCLUDED
 
-#include "mob.h"
+#include "../mob.h"
 
 class nectar : public mob{
 public:

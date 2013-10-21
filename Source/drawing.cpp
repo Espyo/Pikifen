@@ -168,7 +168,7 @@ void do_drawing(){
 
 		//Treasures.
 		for(size_t t=0; t<n_treasures; t++){
-			al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->size, al_map_rgb(128, 255, 255));
+			al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->size * 0.5, al_map_rgb(128, 255, 255));
 		}
 
 		//Pikmin
@@ -219,7 +219,7 @@ void do_drawing(){
 		//Onions.
 		size_t n_onions = onions.size();
 		for(size_t o=0; o<n_onions; o++){
-			ALLEGRO_BITMAP* bm;
+			ALLEGRO_BITMAP* bm = NULL;
 			if(onions[o]->type->name == "R") bm = bmp_red_onion;
 			else if(onions[o]->type->name == "Y") bm = bmp_yellow_onion;
 			if(onions[o]->type->name == "B") bm = bmp_blue_onion;
@@ -245,6 +245,21 @@ void do_drawing(){
 				info_spots[i]->y + info_spots[i]->size * 0.5,
 				al_map_rgb(192, 64, 192)
 				);
+		}
+
+		//Ship(s).
+		int ship_bmp_w = 274, ship_bmp_h = 225;
+		size_t n_ships = ships.size();
+		for(size_t s=0; s<n_ships; s++){
+			al_draw_scaled_bitmap(
+				bmp_ship,
+				0, 0,
+				ship_bmp_w, ship_bmp_h,
+				ships[s]->x - ship_bmp_w / 4,
+				ships[s]->y - ship_bmp_h / 4,
+				ship_bmp_w / 2, ship_bmp_h / 2,
+				0);
+			al_draw_circle(ships[s]->x + ships[s]->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
 		}
 
 
@@ -377,8 +392,8 @@ void do_drawing(){
 
 			al_draw_scaled_bitmap(
 				bm, 0, 0, leader_img_size, leader_img_size,
-				32 - icons_size / 2,
-				scr_h - (32 + y_offset + icons_size / 2),
+				32 - icons_size * 0.5,
+				scr_h - (32 + y_offset + icons_size * 0.5),
 				icons_size, icons_size, 0
 				);
 			al_draw_scaled_bitmap(bmp_bubble, 0, 0, bubble_img_size, bubble_img_size,
@@ -391,7 +406,7 @@ void do_drawing(){
 				32 + icons_size * 1.5,
 				scr_h - (32 + y_offset),
 				leaders[l_nr]->health, leaders[l_nr]->max_health,
-				icons_size / 2, true);
+				icons_size * 0.5, true);
 			al_draw_scaled_bitmap(
 				bmp_health_bubble, 0, 0, bubble_img_size, bubble_img_size,
 				(32 + icons_size * 1.5) - (icons_size * 1.2) / 2,

@@ -145,7 +145,7 @@ carrier_info_struct::carrier_info_struct(mob* m){
 	for(size_t c=0; c<m->max_carriers; c++){
 		carrier_spots.push_back(NULL);
 		float angle = (M_PI*2) / m->max_carriers * c;
-		carrier_spots_x.push_back(cos(angle) * m->size);
-		carrier_spots_y.push_back(sin(angle) * m->size);
+		carrier_spots_x.push_back(cos(angle) * m->size * 0.5);
+		carrier_spots_y.push_back(sin(angle) * m->size * 0.5);
 	}
 }
