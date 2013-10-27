@@ -93,6 +93,8 @@ vector<float>         move_group_arrows;
 float                 move_group_next_arrow_time = 0;
 float                 moving_group_angle = 0;
 float                 moving_group_intensity = 0;
+float                 moving_group_pos_x = 0;
+float                 moving_group_pos_y = 0;
 bool                  moving_group_to_cursor = false;
 vector<nectar*>       nectars;
 vector<onion*>        onions;

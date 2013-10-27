@@ -28,6 +28,7 @@ public:
 	unsigned short pokos;
 	bool can_sleep;
 	bool can_regenerate;
+	float revive_rate;
 };
 
 #endif //ifndef ENEMY_TYPE_INCLUDED

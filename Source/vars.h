@@ -111,7 +111,9 @@ extern float                 mouse_cursor_speed_y;
 extern vector<float>         move_group_arrows;  //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                 move_group_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
 extern float                 moving_group_angle;
-extern float                 moving_group_intensity;
+extern float                 moving_group_intensity; //General intensity of the group move in the specified angle.
+extern float                 moving_group_pos_x; //Intensity on the X coordinate, used for analog stick movement. Basically, position of the analog stick.
+extern float                 moving_group_pos_y;
 extern bool                  moving_group_to_cursor;       //Is the "move group to cursor" button being pressed?
 extern vector<nectar*>       nectars;
 extern vector<onion*>        onions;

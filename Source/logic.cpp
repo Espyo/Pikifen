@@ -50,10 +50,9 @@ void do_logic(){
 		}
 	}
 
-	float dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y) * moving_group_intensity;
 	for(size_t a=0; a<move_group_arrows.size(); ){
 		move_group_arrows[a]+=MOVE_GROUP_ARROW_SPEED * (1.0/game_fps);
-		if(move_group_arrows[a] >= dis){
+		if(move_group_arrows[a] >= CURSOR_MAX_DIST * moving_group_intensity){
 			move_group_arrows.erase(move_group_arrows.begin() + a);
 		}else{
 			a++;
@@ -101,11 +100,11 @@ void do_logic(){
 		}
 	}
 
-	dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
+	float leader_to_cursor_dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	for(size_t r=0; r<whistle_rings.size(); ){
 		//Erase rings that go beyond the cursor.
 		whistle_rings[r]+=WHISTLE_RING_SPEED * (1.0/game_fps);
-		if(whistle_rings[r] >= dis){
+		if(whistle_rings[r] >= leader_to_cursor_dis){
 			whistle_rings.erase(whistle_rings.begin() + r);
 			whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
 		}else{
@@ -189,7 +188,7 @@ void do_logic(){
 		//Following party.
 		if(pik_ptr->following_party){
 			float move_x, move_y;
-			angle_to_coordinates(moving_group_angle, moving_group_intensity * CURSOR_MAX_DIST * 0.5, &move_x, &move_y);
+			angle_to_coordinates(moving_group_angle, CURSOR_MAX_DIST * moving_group_intensity * 0.5, &move_x, &move_y);
 
 			pik_ptr->set_target(
 				random(0, 60) - 30 + move_x,
@@ -238,7 +237,7 @@ void do_logic(){
 						bool valid_spot = false;
 						unsigned int spot = 0;
 						while(!valid_spot){
-							spot = random(0, treasures[t]->max_carriers - 1);
+							spot = random(0, treasures[t]->carrier_info->max_carriers - 1);
 							valid_spot = !treasures[t]->carrier_info->carrier_spots[spot];
 						}
 								
@@ -345,6 +344,18 @@ void do_logic(){
 		}
 	}
 
+	if(moving_group_to_cursor){
+		moving_group_angle = leaders[current_leader]->angle;
+		moving_group_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
+	}else if(moving_group_pos_x != 0 || moving_group_pos_y != 0){
+		coordinates_to_angle(
+			moving_group_pos_x, moving_group_pos_y,
+			&moving_group_angle, &moving_group_intensity);
+		if(moving_group_intensity > 1) moving_group_intensity = 1;
+	}else{
+		moving_group_intensity = 0;
+	}
+
 
 	/********************
 	*             .-.   *
@@ -364,8 +375,8 @@ void do_logic(){
 	cursor_y = mcy;
 
 	leaders[current_leader]->angle = atan2(cursor_y - leaders[current_leader]->y, cursor_x - leaders[current_leader]->x);
-	dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
-	if(dis > CURSOR_MAX_DIST){
+	leader_to_cursor_dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
+	if(leader_to_cursor_dis > CURSOR_MAX_DIST){
 		//Cursor goes beyond the range limit.
 		cursor_x = leaders[current_leader]->x + (cos(leaders[current_leader]->angle) * CURSOR_MAX_DIST);
 		cursor_y = leaders[current_leader]->y + (sin(leaders[current_leader]->angle) * CURSOR_MAX_DIST);
@@ -376,12 +387,6 @@ void do_logic(){
 			mouse_cursor_y = cursor_y;
 			al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
 		}
-	}
-
-	if(moving_group_to_cursor){
-		moving_group_angle = leaders[current_leader]->angle;
-		moving_group_intensity = dis / CURSOR_MAX_DIST;
-		if(moving_group_intensity > 1) moving_group_intensity = 1;
 	}
 
 

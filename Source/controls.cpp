@@ -74,10 +74,10 @@ void handle_controls(ALLEGRO_EVENT ev){
 			handle_analog(AXIS_ACTION_MOVE, ev.joystick.pos, false);
 			handle_analog(AXIS_ACTION_MOVE_CURSOR, ev.joystick.pos, false);
 
-		}else if(ev.joystick.stick == 0 && ev.joystick.axis == 2){
+		}else if(ev.joystick.stick == 1 && ev.joystick.axis == 0){
 			handle_analog(AXIS_ACTION_MOVE_GROUP, ev.joystick.pos, true);
 
-		}else if(ev.joystick.stick == 1 && ev.joystick.axis == 0){
+		}else if(ev.joystick.stick == 0 && ev.joystick.axis == 2){
 			handle_analog(AXIS_ACTION_MOVE_GROUP, ev.joystick.pos, false);
 
 		}else if(ev.joystick.stick == 2 && ev.joystick.axis == 1){
@@ -428,6 +428,7 @@ void handle_button_down(unsigned int button, int aux){
 		******************/
 
 		moving_group_to_cursor = true;
+		moving_group_intensity = 1;
 
 	}
 }
@@ -553,8 +554,9 @@ void handle_analog(unsigned int action, float pos, bool x_axis){
 		******************/
 
 		if(x_axis){
-			moving_group_angle = 0;
-			moving_group_intensity = pos;
+			moving_group_pos_x = pos;
+		}else{
+			moving_group_pos_y = pos;
 		}
 
 	}

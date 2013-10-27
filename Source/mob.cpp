@@ -3,15 +3,14 @@
 #include "mob.h"
 #include "vars.h"
 
-mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
+mob::mob(float x, float y, float z, float move_speed, sector* sec){
 	this->x = x;
 	this->y = y;
 	this->z = z;
-	this->max_move_speed = max_move_speed;
 	this->sec = sec;
 
 	speed_x = speed_y = speed_z = 0;
-	move_speed = 0;
+	this->move_speed = move_speed;
 	angle = 0;
 	size = 1;
 
@@ -25,6 +24,8 @@ mob::mob(float x, float y, float z, float max_move_speed, sector* sec){
 	following_party = NULL;
 	was_thrown = false;
 	uncallable_period = 0;
+
+	carrier_info = NULL;
 }
 
 void mob::tick(){
@@ -75,7 +76,7 @@ void mob::tick(){
 			float dist = sqrt(dx * dx + dy * dy);
 
 			if(dist > 0){
-				float move_amount = min(dist * game_fps / 2, max_move_speed);
+				float move_amount = min(dist * game_fps / 2, move_speed);
 
 				if(move_amount == 0)
 					move_amount = move_amount;
@@ -140,11 +141,12 @@ void mob::remove_target(bool stop){
 
 mob::~mob(){}
 
-carrier_info_struct::carrier_info_struct(mob* m){
+carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers){
 	current_n_carriers = 0;
-	for(size_t c=0; c<m->max_carriers; c++){
+	this->max_carriers = max_carriers;
+	for(size_t c=0; c<max_carriers; c++){
 		carrier_spots.push_back(NULL);
-		float angle = (M_PI*2) / m->max_carriers * c;
+		float angle = (M_PI*2) / max_carriers * c;
 		carrier_spots_x.push_back(cos(angle) * m->size * 0.5);
 		carrier_spots_y.push_back(sin(angle) * m->size * 0.5);
 	}

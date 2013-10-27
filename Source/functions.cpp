@@ -129,7 +129,7 @@ void drop_treasure(pikmin* p){
 
 	//ToDo optimize this instead of running through the spot vector.
 	if(p->carrying_treasure){
-		for(size_t s=0; s<p->carrying_treasure->max_carriers; s++){
+		for(size_t s=0; s<p->carrying_treasure->carrier_info->max_carriers; s++){
 			if(p->carrying_treasure->carrier_info->carrier_spots[s] == p){
 				p->carrying_treasure->carrier_info->carrier_spots[s] = NULL;
 				p->carrying_treasure->carrier_info->current_n_carriers--;
@@ -523,7 +523,7 @@ void start_carrying(mob* m){
 	vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
 
 	//First, count how many of each type there are.
-	for(size_t p=0; p<m->max_carriers; p++){
+	for(size_t p=0; p<m->carrier_info->max_carriers; p++){
 		pikmin* pik_ptr = NULL;
 		
 		if(m->carrier_info->carrier_spots[p] == NULL) continue;
