@@ -129,6 +129,9 @@ void do_logic(){
 			ship_beam_ring_color[i]+=addition;
 		}
 	}
+
+	//Sun meter.
+	sun_meter_sun_angle += (1.0 / game_fps) * SUN_METER_SUN_SPIN_SPEED;
 			
 	/********************
 	*              ***  *

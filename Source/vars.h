@@ -30,10 +30,12 @@ extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_day_bubble;
 extern ALLEGRO_BITMAP* bmp_health_bubble;
+extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
 extern ALLEGRO_BITMAP* bmp_louie;
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_move_group_arrow;
+extern ALLEGRO_BITMAP* bmp_nectar;
 extern ALLEGRO_BITMAP* bmp_olimar;
 extern ALLEGRO_BITMAP* bmp_president;
 extern ALLEGRO_BITMAP* bmp_red[3];
@@ -135,6 +137,7 @@ extern bool                  smooth_scaling;     //If false, images that are sca
 extern vector<unsigned long> sprays;             //How many of each spray the player has.
 extern vector<spray_type>    spray_types;
 extern vector<status>        statuses;
+extern float                 sun_meter_sun_angle;
 extern string                total_error_log;
 extern vector<treasure*>     treasures;
 extern float                 whistle_dot_offset; //How much each dot of the whistle should spin.

@@ -100,7 +100,7 @@ void do_drawing(){
 			float x = leaders[current_leader]->x + cos(leaders[current_leader]->angle) * whistle_rings[r];
 			float y = leaders[current_leader]->y + sin(leaders[current_leader]->angle) * whistle_rings[r];
 			unsigned char n = whistle_ring_colors[r];
-			al_draw_circle(x, y, 12, al_map_rgb(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2]), 1);
+			al_draw_filled_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192));
 		}
 
 		if(whistle_radius > 0 || whistle_fade_time > 0){
@@ -158,12 +158,11 @@ void do_drawing(){
 		//Nectar.
 		size_t n_nectars = nectars.size();
 		for(size_t n=0; n<n_nectars; n++){
-			al_draw_filled_circle(
-				nectars[n]->x,
-				nectars[n]->y,
-				nectars[n]->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2),
-				al_map_rgb(255, 255, 0)
-				);
+			float size = nectars[n]->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
+			al_draw_scaled_bitmap(
+				bmp_nectar, 0, 0, 32, 32,
+				nectars[n]->x - size * 0.5, nectars[n]->y - size * 0.5, size, size, 0);
+			//ToDo actual coordinates
 		}
 
 		//Treasures.
@@ -196,13 +195,13 @@ void do_drawing(){
 			if(idling){
 				al_draw_tinted_scaled_rotated_bitmap(
 					bmp_idle_glow,
-					change_alpha(pikmin_list[p]->main_color, 128),
+					change_alpha(pikmin_list[p]->main_color, 192),
 					18,
 					18,
 					pikmin_list[p]->x,
 					pikmin_list[p]->y,
-					0.5,
-					0.5,
+					0.8,
+					0.8,
 					idle_glow_angle,
 					0
 					);
@@ -424,14 +423,17 @@ void do_drawing(){
 
 		//Sun Meter.
 		unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-		unsigned int sun_meter_span = (scr_w - 100) - 20;
+		unsigned int sun_meter_span = (scr_w - 100) - 20; //Width, from the center of the first dot to the center of the last.
 		unsigned short interval = sun_meter_span / n_hours;
+
 		for(unsigned char h = 0; h<n_hours + 1; h++){
-			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 20 + h*interval, 40, 10, 10, 0);
+			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, (20 + h*interval) - 8, 40 - 8, 16, 16, 0);
 		}
 
 		float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
-		al_draw_scaled_bitmap(bmp_sun, 0, 0, 64, 64, 10 + day_passed_ratio * sun_meter_span, 30, 30, 30, 0);
+		al_draw_tinted_scaled_rotated_bitmap(bmp_health_bubble, al_map_rgba(255, 255, 128, 192), 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, 0, 0);
+		al_draw_scaled_rotated_bitmap(bmp_sun, 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, 0, 0);
+		al_draw_scaled_rotated_bitmap(bmp_sun, 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, sun_meter_sun_angle, 0);
 
 		//Pikmin count.
 		//Count how many Pikmin only.

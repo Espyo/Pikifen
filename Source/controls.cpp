@@ -14,7 +14,7 @@ void handle_controls(ALLEGRO_EVENT ev){
 		//Debug testing.
 		//ToDo remove.
 		//leaders[current_leader]->health--;
-		day_minutes += 30;
+		day_minutes += 60;
 		day = sectors[0].floors[0].brightness;
 	}
 
@@ -91,6 +91,7 @@ void handle_controls(ALLEGRO_EVENT ev){
 		if(ev.joystick.button == 2) handle_button_down(BUTTON_WHISTLE);
 		if(ev.joystick.button == 3) handle_button_down(BUTTON_SWITCH_CAPTAIN_R);
 		if(ev.joystick.button == 5) handle_button_down(BUTTON_ZOOM_SWITCH);
+		if(ev.joystick.button == 9) handle_button_down(BUTTON_PAUSE);
 
 	}else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
 		if(ev.joystick.button == 0) handle_button_up(BUTTON_DISMISS);

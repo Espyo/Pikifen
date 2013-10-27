@@ -99,6 +99,8 @@ int main(){
 	bmp_us_spray = load_bmp("Ultra-spicy_spray.png");
 	bmp_move_group_arrow = load_bmp("Move_group_arrow.png");
 	bmp_test = load_bmp("Test.png");
+	bmp_nectar = load_bmp("Nectar.png");
+	bmp_icon = load_bmp("Icon.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F, //ASCII
@@ -207,6 +209,8 @@ int main(){
 	pikmin_in_onions[1] = 180;
 	pikmin_in_onions[2] = 160;
 	ships.push_back(new ship(-100, 100, &s));
+
+	al_set_display_icon(display, bmp_icon);
 
 	//Main loop.
 	al_start_timer(timer);

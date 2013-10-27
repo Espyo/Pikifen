@@ -19,6 +19,28 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient5479">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop5481" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop5483" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient5467">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="0"
+         id="stop5469" />
+      <stop
+         style="stop-color:#ffff40;stop-opacity:1;"
+         offset="1"
+         id="stop5472" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient6660">
       <stop
          style="stop-color:#593b3b;stop-opacity:1;"
@@ -6387,6 +6409,95 @@
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect"
        gradientTransform="translate(117,35.250015)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5467"
+       id="radialGradient5474"
+       cx="130"
+       cy="1019.8622"
+       fx="130"
+       fy="1019.8622"
+       r="15"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5479"
+       id="linearGradient5485"
+       x1="118.82143"
+       y1="1030.1479"
+       x2="118.82143"
+       y2="1032.0764"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5184-7"
+       id="radialGradient5192-1"
+       cx="534.75"
+       cy="928.11218"
+       fx="534.75"
+       fy="928.11218"
+       r="3.25"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="linearGradient5184-7">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop5186-40" />
+      <stop
+         id="stop5194-94"
+         offset="0.80000001"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop5188-8" />
+    </linearGradient>
+    <radialGradient
+       r="3.25"
+       fy="928.11218"
+       fx="534.75"
+       cy="928.11218"
+       cx="534.75"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5503"
+       xlink:href="#linearGradient5184-7"
+       inkscape:collect="always" />
+    <radialGradient
+       r="3.25"
+       fy="928.11218"
+       fx="534.75"
+       cy="928.11218"
+       cx="534.75"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5503-4"
+       xlink:href="#linearGradient5184-7-5"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient5184-7-5">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0"
+         id="stop5186-40-5" />
+      <stop
+         id="stop5194-94-1"
+         offset="0.80000001"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop5188-8-7" />
+    </linearGradient>
+    <radialGradient
+       r="3.25"
+       fy="928.11218"
+       fx="534.75"
+       cy="928.11218"
+       cx="534.75"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5540"
+       xlink:href="#linearGradient5184-7-5"
+       inkscape:collect="always" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -6395,9 +6506,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="6.5657895"
-     inkscape:cx="32"
-     inkscape:cy="5"
+     inkscape:zoom="16"
+     inkscape:cx="559.96577"
+     inkscape:cy="2.8918741"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -9445,5 +9556,41 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Ship.png"
        inkscape:export-xdpi="180.40086"
        inkscape:export-ydpi="180.40086" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5474);fill-opacity:1;stroke:none;opacity:0.8"
+       id="path4697"
+       sodipodi:cx="130"
+       sodipodi:cy="1019.8622"
+       sodipodi:rx="15"
+       sodipodi:ry="15"
+       d="m 145,1019.8622 a 15,15 0 1 1 -30,0 15,15 0 1 1 30,0 z"
+       transform="matrix(0.4,0,0,0.4,504,638.41731)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.75;fill:url(#radialGradient5503);fill-opacity:1;stroke:none"
+       id="path5140-82"
+       sodipodi:cx="534.75"
+       sodipodi:cy="928.11218"
+       sodipodi:rx="3.25"
+       sodipodi:ry="3.25"
+       d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
+       transform="matrix(0.53846171,0,0,0.54437927,266.3076,538.88638)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Ultra-bitter_spray.png"
+       inkscape:export-xdpi="180.00014"
+       inkscape:export-ydpi="180.00014" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:0.75;fill:url(#radialGradient5540);fill-opacity:1;stroke:none"
+       id="path5140-82-1"
+       sodipodi:cx="534.75"
+       sodipodi:cy="928.11218"
+       sodipodi:rx="3.25"
+       sodipodi:ry="3.25"
+       d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
+       transform="matrix(0.30769235,0,0,0.30769244,392.46152,762.28908)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Ultra-bitter_spray.png"
+       inkscape:export-xdpi="180.00014"
+       inkscape:export-ydpi="180.00014" />
   </g>
 </svg>

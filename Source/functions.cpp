@@ -103,10 +103,13 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 	if(day_minutes < 60*12){
 		//Shadows point to the West.
 		shadow_x = -shadow_w + size * 0.5;
+		shadow_x -= shadow_stretch * delta_z * SHADOW_Y_MULTIPLIER;
 	}else{
 		//Shadows point to the East.
 		shadow_x = -(size * 0.5);
+		shadow_x += shadow_stretch * delta_z * SHADOW_Y_MULTIPLIER;
 	}
+	
 	
 	//ToDo shadow graphic dimensions.
 	al_draw_tinted_scaled_bitmap(
@@ -117,7 +120,7 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 		64,
 		64,
 		cx + shadow_x,
-		(cy - size * 0.5) + delta_z * SHADOW_Y_MULTIPLIER,
+		(cy - size * 0.5),
 		shadow_w,
 		size,
 		0

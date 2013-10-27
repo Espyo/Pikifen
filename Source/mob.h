@@ -44,7 +44,7 @@ public:
 	float move_speed_mult;            //Multiply the normal moving speed by this.
 	float acceleration;        //Speed multiplies by this much each second.
 	float angle;		//0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
-	float size;			//Radius, in units. Used mostly for movement.
+	float size;			//Diameter, in units. Used mostly for movement.
 	
 	sector* sec;        //Sector it's on.
 
