@@ -12,6 +12,7 @@
 #include "spec_objs/nectar.h"
 #include "spec_objs/onion.h"
 #include "particle.h"
+#include "spec_objs/pellet.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
 #include "spray_type.h"
@@ -42,6 +43,7 @@ extern ALLEGRO_BITMAP* bmp_red[3];
 extern ALLEGRO_BITMAP* bmp_red_burrowed[3];
 extern ALLEGRO_BITMAP* bmp_red_idle[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
+extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_ship;
 extern ALLEGRO_BITMAP* bmp_sun;
@@ -122,6 +124,7 @@ extern vector<onion*>        onions;
 extern unsigned char         particle_quality;
 extern vector<particle>      particles;
 extern bool                  paused;
+extern vector<pellet*>       pellets;
 extern vector<unsigned long> pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;

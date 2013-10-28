@@ -20,6 +20,7 @@ void              draw_fraction(float cx, float cy, unsigned int current, unsign
 void              draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius = 20, bool just_chart = false);
 void              draw_sector(sector &s, float x, float y);
 void              draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch);
+void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle=0, ALLEGRO_COLOR tint=al_map_rgb(255, 255, 255));
 void              drop_treasure(pikmin* p);
 void              error_log(string s);
 void              generate_area_images();
@@ -40,7 +41,7 @@ void              start_camera_pan(int final_x, int final_y);
 void              start_camera_zoom(float final_zoom_level);
 void              start_carrying(mob* m);
 void              stop_whistling();
-bool              temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
+//bool              temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
 void              use_spray(size_t spray_nr);
 
 double atof(string s);

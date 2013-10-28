@@ -85,14 +85,11 @@ void do_drawing(){
 		for(size_t a=0; a<n_arrows; a++){
 			float x = cos(moving_group_angle) * move_group_arrows[a];
 			float y = sin(moving_group_angle) * move_group_arrows[a];
-			al_draw_scaled_rotated_bitmap(
+			draw_sprite(
 				bmp_move_group_arrow,
+				leaders[current_leader]->x + x, leaders[current_leader]->y + y,
 				16, 26,
-				leaders[current_leader]->x + x,
-				leaders[current_leader]->y + y,
-				0.5, 0.5,
-				moving_group_angle,
-				0);
+				moving_group_angle);
 		}
 
 		size_t n_rings = whistle_rings.size();
@@ -143,10 +140,18 @@ void do_drawing(){
 		}
 
 		al_use_transform(&normal_transform);
-		al_draw_scaled_rotated_bitmap(bmp_mouse_cursor, 48, 48, mouse_cursor_x, mouse_cursor_y, 0.5 * cam_zoom, 0.5 * cam_zoom, leaders[current_leader]->angle, 0);
+		draw_sprite(
+			bmp_mouse_cursor,
+			mouse_cursor_x, mouse_cursor_y,
+			cam_zoom * 48, cam_zoom * 48,
+			leaders[current_leader]->angle);
 		al_use_transform(&world_to_screen_transform);
-		al_draw_scaled_rotated_bitmap(bmp_cursor, 48, 48, cursor_x, cursor_y, 0.5, 0.5, leaders[current_leader]->angle, 0);
-
+		draw_sprite(
+			bmp_cursor,
+			cursor_x, cursor_y,
+			48, 48,
+			leaders[current_leader]->angle);
+		
 			
 		/* Layer 4
 		****************
@@ -159,15 +164,23 @@ void do_drawing(){
 		size_t n_nectars = nectars.size();
 		for(size_t n=0; n<n_nectars; n++){
 			float size = nectars[n]->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
-			al_draw_scaled_bitmap(
-				bmp_nectar, 0, 0, 32, 32,
-				nectars[n]->x - size * 0.5, nectars[n]->y - size * 0.5, size, size, 0);
-			//ToDo actual coordinates
+			draw_sprite(
+				bmp_nectar,
+				nectars[n]->x, nectars[n]->y,
+				size, size);
 		}
 
 		//Treasures.
 		for(size_t t=0; t<n_treasures; t++){
 			al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->size * 0.5, al_map_rgb(128, 255, 255));
+		}
+
+		size_t n_pellets = pellets.size();
+		for(size_t p=0; p<n_pellets; p++){
+			draw_sprite(
+				bmp_red_pellet[0],
+				pellets[p]->x, pellets[p]->y,
+				pellets[p]->size, pellets[p]->size);
 		}
 
 		//Pikmin
@@ -190,29 +203,32 @@ void do_drawing(){
 				else if(idling) bm=bmp_blue_idle[pikmin_list[p]->maturity];
 				else bm=bmp_blue[pikmin_list[p]->maturity];
 			}
-			al_draw_scaled_rotated_bitmap(bm, 18, 18, pikmin_list[p]->x, pikmin_list[p]->y, 0.5, 0.5, pikmin_list[p]->angle, 0); //ToDo actual coordinates
+			draw_sprite(
+				bm,
+				pikmin_list[p]->x, pikmin_list[p]->y,
+				pikmin_list[p]->size, pikmin_list[p]->size,
+				pikmin_list[p]->angle);
 
 			if(idling){
-				al_draw_tinted_scaled_rotated_bitmap(
+				draw_sprite(
 					bmp_idle_glow,
-					change_alpha(pikmin_list[p]->main_color, 192),
-					18,
-					18,
-					pikmin_list[p]->x,
-					pikmin_list[p]->y,
-					0.8,
-					0.8,
+					pikmin_list[p]->x, pikmin_list[p]->y,
+					30, 30,
 					idle_glow_angle,
-					0
-					);
-				//ToDo actual coordinates.
+					change_alpha(pikmin_list[p]->main_color, 160));
 			}
 		}
 
 		//Leaders.
 		for(size_t l=0; l<n_leaders; l++){
 			ALLEGRO_BITMAP* bm = (l==0) ? bmp_olimar : ((l==1) ? bmp_louie : bmp_president);
-			al_draw_scaled_rotated_bitmap(bm, 32, 32, leaders[l]->x, leaders[l]->y, 0.5, 0.5, leaders[l]->angle, 0);
+			draw_sprite(
+				bm,
+				leaders[l]->x, leaders[l]->y,
+				32,
+				32,
+				leaders[l]->angle
+				);
 		}
 
 		//Onions.
@@ -223,15 +239,11 @@ void do_drawing(){
 			else if(onions[o]->type->name == "Y") bm = bmp_yellow_onion;
 			if(onions[o]->type->name == "B") bm = bmp_blue_onion;
 
-			int onion_bmp_w = 370, onion_bmp_h = 320;
-			al_draw_tinted_scaled_bitmap(
-				bm, al_map_rgba(255, 255, 255, 192),
-				0, 0, onion_bmp_w, onion_bmp_h,
-				onions[o]->x - onion_bmp_w / 4,
-				onions[o]->y - onion_bmp_h / 4,
-				onion_bmp_w / 2,
-				onion_bmp_h / 2,
-				0);
+			draw_sprite(
+				bm,
+				onions[o]->x, onions[o]->y,
+				185, 160,
+				0, al_map_rgba(255, 255, 255, 224));
 		}
 
 		//Info spots.
@@ -247,17 +259,12 @@ void do_drawing(){
 		}
 
 		//Ship(s).
-		int ship_bmp_w = 274, ship_bmp_h = 225;
 		size_t n_ships = ships.size();
 		for(size_t s=0; s<n_ships; s++){
-			al_draw_scaled_bitmap(
+			draw_sprite(
 				bmp_ship,
-				0, 0,
-				ship_bmp_w, ship_bmp_h,
-				ships[s]->x - ship_bmp_w / 4,
-				ships[s]->y - ship_bmp_h / 4,
-				ship_bmp_w / 2, ship_bmp_h / 2,
-				0);
+				ships[s]->x, ships[s]->y,
+				138, 112);
 			al_draw_circle(ships[s]->x + ships[s]->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
 		}
 
@@ -376,10 +383,6 @@ void do_drawing(){
 		*         1/2/3 *
 		****************/
 			
-		//ToDo actual image coordinates (remember the health bubble has a different image than the regular ones)
-		int leader_img_size = 64;
-		int bubble_img_size = 64;
-
 		//Leader health.
 		for(size_t l = 0; l < 3; l++){
 			if(n_leaders < l + 1) continue;
@@ -393,28 +396,25 @@ void do_drawing(){
 			int y_offset;
 			if(l == 0) y_offset = 0; else if(l == 1) y_offset = 44; else y_offset = 80;
 
-			al_draw_scaled_bitmap(
-				bm, 0, 0, leader_img_size, leader_img_size,
-				32 - icons_size * 0.5,
-				scr_h - (32 + y_offset + icons_size * 0.5),
-				icons_size, icons_size, 0
-				);
-			al_draw_scaled_bitmap(bmp_bubble, 0, 0, bubble_img_size, bubble_img_size,
-				32 - (icons_size * 1.6) / 2,
-				scr_h - (32 + y_offset + (icons_size * 1.6) / 2),
-				icons_size * 1.6, icons_size * 1.6, 0
-				);
+			draw_sprite(
+				bm,
+				32, scr_h - (32 + y_offset),
+				icons_size, icons_size);
+			draw_sprite(
+				bmp_bubble,
+				32, scr_h - (32 + y_offset),
+				icons_size * 1.6, icons_size * 1.6);
 
 			draw_health(
 				32 + icons_size * 1.5,
 				scr_h - (32 + y_offset),
 				leaders[l_nr]->health, leaders[l_nr]->max_health,
 				icons_size * 0.5, true);
-			al_draw_scaled_bitmap(
-				bmp_health_bubble, 0, 0, bubble_img_size, bubble_img_size,
-				(32 + icons_size * 1.5) - (icons_size * 1.2) / 2,
-				scr_h - (32 + y_offset + (icons_size * 1.2) / 2),
-				icons_size * 1.2, icons_size * 1.2, 0);
+			draw_sprite(
+				bmp_health_bubble,
+				32 + icons_size * 1.5,
+				scr_h - (32 + y_offset),
+				icons_size * 1.2, icons_size * 1.2);
 		}
 
 		//Day hour.
@@ -423,17 +423,35 @@ void do_drawing(){
 
 		//Sun Meter.
 		unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-		unsigned int sun_meter_span = (scr_w - 100) - 20; //Width, from the center of the first dot to the center of the last.
-		unsigned short interval = sun_meter_span / n_hours;
+		float sun_meter_span = (scr_w - 150) - 20; //Width, from the center of the first dot to the center of the last.
+		float interval = sun_meter_span / (float) n_hours;
 
 		for(unsigned char h = 0; h<n_hours + 1; h++){
-			al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, (20 + h*interval) - 8, 40 - 8, 16, 16, 0);
+			draw_sprite(
+				bmp_bubble,
+				(20 + h*interval), 40,
+				16, 16);
 		}
 
+		draw_sprite(bmp_bubble, 20, 40, 24, 24); //Day start big circle.
+		draw_sprite(bmp_bubble, 20 + sun_meter_span * 0.5, 40, 24, 24); //Day middle big circle.
+		draw_sprite(bmp_bubble, 20 + sun_meter_span, 40, 24, 24); //Day end big circle.
+		
 		float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
-		al_draw_tinted_scaled_rotated_bitmap(bmp_health_bubble, al_map_rgba(255, 255, 128, 192), 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, 0, 0);
-		al_draw_scaled_rotated_bitmap(bmp_sun, 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, 0, 0);
-		al_draw_scaled_rotated_bitmap(bmp_sun, 32, 32, 20 + day_passed_ratio * sun_meter_span, 40, 0.75, 0.75, sun_meter_sun_angle, 0);
+		draw_sprite(
+			bmp_health_bubble,
+			20 + day_passed_ratio * sun_meter_span, 40,
+			48, 48,
+			0, al_map_rgba(255, 255, 128, 192)); //Bubble behind the Sun.
+		draw_sprite(
+			bmp_sun,
+			20 + day_passed_ratio * sun_meter_span, 40,
+			48, 48); //Static sun.
+		draw_sprite(
+			bmp_sun,
+			20 + day_passed_ratio * sun_meter_span, 40,
+			48, 48,
+			sun_meter_sun_angle); //Spinning sun.
 
 		//Pikmin count.
 		//Count how many Pikmin only.
@@ -447,27 +465,27 @@ void do_drawing(){
 		//Closest party member.
 		if(closest_party_member){
 			ALLEGRO_BITMAP* bm = NULL;
-			unsigned int bm_w = 0;
 			if(typeid(*closest_party_member) == typeid(pikmin)){
 				pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
 				if(pikmin_ptr->type->name=="R") bm=bmp_red[pikmin_ptr->maturity];
 				else if(pikmin_ptr->type->name=="Y") bm=bmp_yellow[pikmin_ptr->maturity];
 				else if(pikmin_ptr->type->name=="B") bm=bmp_blue[pikmin_ptr->maturity];
-				bm_w = 36;
 			}else if(typeid(*closest_party_member) == typeid(leader)){
 				leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
 				if(leader_ptr == leaders[0]) bm = bmp_olimar;
 				else if(leader_ptr == leaders[1]) bm = bmp_louie;
 				else if(leader_ptr == leaders[2]) bm = bmp_president;
-				bm_w = 64;
 			}
 
 			if(bm){
-				al_draw_scaled_bitmap(bm, 0, 0, bm_w, bm_w, 245, scr_h - 25 - font_h, 32, 32, 0);
+				draw_sprite(bm, 261, scr_h - font_h - 9, 32, 32);
 			}
 		}
 
-		al_draw_scaled_bitmap(bmp_bubble, 0, 0, 64, 64, 240, scr_h - 30 - font_h, 40, 40, 0);
+		draw_sprite(
+			bmp_bubble,
+			260, scr_h - font_h - 10,
+			40, 40);
 
 		//Pikmin count numbers.
 		al_draw_text(
@@ -476,27 +494,38 @@ void do_drawing(){
 			);
 
 		//Day number.
+		draw_sprite(
+			bmp_day_bubble,
+			scr_w - 50, 45,
+			60, 70);
+		
 		al_draw_text(
 			font, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
 			(to_string((long long) day)).c_str());
-
-		al_draw_scaled_bitmap(bmp_day_bubble, 0, 0, 128, 152, scr_w - 80, 10, 60, 70, 0);
 
 		//Sprays.
 		if(n_spray_types > 0){
 			size_t top_spray_nr;
 			if(n_spray_types < 3) top_spray_nr = 0; else top_spray_nr = selected_spray;
 
-			al_draw_scaled_bitmap(spray_types[top_spray_nr].bmp_spray, 0, 0, 40, 48, 24, scr_h / 2 - 32, 20, 24, 0);
+			draw_sprite(
+				spray_types[top_spray_nr].bmp_spray,
+				34, scr_h / 2 - 20,
+				20, 24);
 			al_draw_text(
 				font, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
 				("x" + to_string((long long) sprays[top_spray_nr])).c_str());
+
 			if(n_spray_types == 2){
-				al_draw_scaled_bitmap(spray_types[1].bmp_spray, 0, 0, 40, 48, 24, scr_h / 2 + 8, 20, 24, 0);
+				draw_sprite(
+					spray_types[1].bmp_spray,
+					34, scr_h / 2 + 20,
+					20, 24);
 				al_draw_text(
 					font, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
 					("x" + to_string((long long) sprays[1])).c_str());
 			}
+
 		}
 		
 	}else{ //Paused.

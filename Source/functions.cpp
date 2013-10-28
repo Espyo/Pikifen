@@ -111,20 +111,26 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 	}
 	
 	
-	//ToDo shadow graphic dimensions.
-	al_draw_tinted_scaled_bitmap(
+	draw_sprite(
 		bmp_shadow,
-		al_map_rgba(255, 255, 255, 255*(1-shadow_stretch)),
-		0,
-		0,
-		64,
-		64,
-		cx + shadow_x,
-		(cy - size * 0.5),
-		shadow_w,
-		size,
-		0
-		);
+		cx + shadow_x + shadow_w / 2, cy,
+		shadow_w, size,
+		0, al_map_rgba(255, 255, 255, 255*(1-shadow_stretch)));
+}
+
+void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle, ALLEGRO_COLOR tint){
+	float bmp_w = al_get_bitmap_width(bmp);
+	float bmp_h = al_get_bitmap_height(bmp);
+	float x_scale = w / bmp_w;
+	float y_scale = h / bmp_h;
+	al_draw_tinted_scaled_rotated_bitmap(
+		bmp,
+		tint,
+		bmp_w / 2, bmp_h / 2,
+		cx, cy,
+		x_scale, y_scale,
+		angle,
+		0);
 }
 
 void drop_treasure(pikmin* p){
@@ -600,9 +606,9 @@ void stop_whistling(){
 	al_stop_sample(&leaders[current_leader]->sfx_whistle.id);
 }
 
-bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
+/*bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
 	return true;
-}
+}*/
 
 void use_spray(size_t spray_nr){
 	if(sprays[spray_nr]==0) return;

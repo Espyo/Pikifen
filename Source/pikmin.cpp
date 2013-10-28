@@ -7,7 +7,7 @@ pikmin::pikmin(pikmin_type* type, float x, float y, sector* sec) : mob(x, y, 0, 
 	carrying_treasure = NULL;
 	maturity = 0;
 	burrowed = false;
-	size = 18; //ToDo
+	size = 20; //ToDo
 
 	main_color = type->color;
 }

@@ -50,9 +50,14 @@ void do_logic(){
 		}
 	}
 
+	float leader_to_cursor_dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	for(size_t a=0; a<move_group_arrows.size(); ){
 		move_group_arrows[a]+=MOVE_GROUP_ARROW_SPEED * (1.0/game_fps);
-		if(move_group_arrows[a] >= CURSOR_MAX_DIST * moving_group_intensity){
+
+		float max_dist =
+		((moving_group_intensity > 0) ? max_dist = CURSOR_MAX_DIST * moving_group_intensity : leader_to_cursor_dis);
+
+		if(move_group_arrows[a] >= max_dist){
 			move_group_arrows.erase(move_group_arrows.begin() + a);
 		}else{
 			a++;
@@ -100,7 +105,6 @@ void do_logic(){
 		}
 	}
 
-	float leader_to_cursor_dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	for(size_t r=0; r<whistle_rings.size(); ){
 		//Erase rings that go beyond the cursor.
 		whistle_rings[r]+=WHISTLE_RING_SPEED * (1.0/game_fps);

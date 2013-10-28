@@ -59,8 +59,8 @@ struct sample_struct{
 
 #define DEF_FPS 30
 #define DEF_PIKMIN_SIZE 24
-#define DEF_SCR_H 600
-#define DEF_SCR_W 400
+#define DEF_SCR_H 640
+#define DEF_SCR_W 480
 
 enum BUTTONS{
 	BUTTON_NONE,

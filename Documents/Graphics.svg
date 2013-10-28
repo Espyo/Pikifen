@@ -6506,9 +6506,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="559.96577"
-     inkscape:cy="2.8918741"
+     inkscape:zoom="8"
+     inkscape:cx="551.50035"
+     inkscape:cy="8.9750585"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -6541,7 +6541,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -9558,14 +9558,17 @@
        inkscape:export-ydpi="180.40086" />
     <path
        sodipodi:type="arc"
-       style="fill:url(#radialGradient5474);fill-opacity:1;stroke:none;opacity:0.8"
+       style="opacity:0.8;fill:url(#radialGradient5474);fill-opacity:1;stroke:none"
        id="path4697"
        sodipodi:cx="130"
        sodipodi:cy="1019.8622"
        sodipodi:rx="15"
        sodipodi:ry="15"
        d="m 145,1019.8622 a 15,15 0 1 1 -30,0 15,15 0 1 1 30,0 z"
-       transform="matrix(0.4,0,0,0.4,504,638.41731)" />
+       transform="matrix(0.53333333,0,0,0.53333333,488.66667,500.43572)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
     <path
        sodipodi:type="arc"
        style="opacity:0.75;fill:url(#radialGradient5503);fill-opacity:1;stroke:none"
@@ -9575,8 +9578,8 @@
        sodipodi:rx="3.25"
        sodipodi:ry="3.25"
        d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
-       transform="matrix(0.53846171,0,0,0.54437927,266.3076,538.88638)"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Ultra-bitter_spray.png"
+       transform="matrix(0.71794893,0,0,0.72583898,171.74348,367.72782)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
        inkscape:export-xdpi="180.00014"
        inkscape:export-ydpi="180.00014" />
     <path
@@ -9588,8 +9591,8 @@
        sodipodi:rx="3.25"
        sodipodi:ry="3.25"
        d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
-       transform="matrix(0.30769235,0,0,0.30769244,392.46152,762.28908)"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Ultra-bitter_spray.png"
+       transform="matrix(0.41025645,0,0,0.41025657,339.9487,665.59808)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
        inkscape:export-xdpi="180.00014"
        inkscape:export-ydpi="180.00014" />
   </g>

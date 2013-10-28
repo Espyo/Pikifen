@@ -87,6 +87,9 @@
     <ClCompile Include="spec_objs\info_spot.cpp">
       <Filter>Source Files\spec_objs</Filter>
     </ClCompile>
+    <ClCompile Include="spec_objs\pellet.cpp">
+      <Filter>Source Files\spec_objs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -177,6 +180,9 @@
       <Filter>Header Files\spec_objs</Filter>
     </ClInclude>
     <ClInclude Include="spec_objs\info_spot.h">
+      <Filter>Header Files\spec_objs</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\pellet.h">
       <Filter>Header Files\spec_objs</Filter>
     </ClInclude>
   </ItemGroup>

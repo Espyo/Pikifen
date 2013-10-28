@@ -6,5 +6,4 @@ treasure::treasure(float x, float y, float diameter, sector* sec, unsigned int w
 	size = diameter;
 
 	carrier_info = new carrier_info_struct(this, max_carriers);
-	this->carrier_info->max_carriers = max_carriers;
 }

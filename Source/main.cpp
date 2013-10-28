@@ -35,7 +35,7 @@ int main(){
 	al_init_acodec_addon();
 
 	//Event stuff.
-	ALLEGRO_DISPLAY* display = al_create_display(600, 400);
+	ALLEGRO_DISPLAY* display = al_create_display(scr_w, scr_h);
 	ALLEGRO_TIMER* timer = al_create_timer(1.0/30.0);
 
 	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
@@ -101,6 +101,7 @@ int main(){
 	bmp_test = load_bmp("Test.png");
 	bmp_nectar = load_bmp("Nectar.png");
 	bmp_icon = load_bmp("Icon.png");
+	bmp_red_pellet[0] = load_bmp("Red_1_pellet.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F, //ASCII
@@ -209,6 +210,7 @@ int main(){
 	pikmin_in_onions[1] = 180;
 	pikmin_in_onions[2] = 160;
 	ships.push_back(new ship(-100, 100, &s));
+	pellets.push_back(new pellet(200, -100, &s, &pikmin_types[0], 1));
 
 	al_set_display_icon(display, bmp_icon);
 
@@ -228,6 +230,10 @@ int main(){
 
 		if(ev.type==ALLEGRO_EVENT_DISPLAY_CLOSE){
 			running=false;
+
+		}else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE){
+			//scr_w = ev.display.width;
+			//scr_h = ev.display.height;
 
 		}else if(ev.type==ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)){
 			

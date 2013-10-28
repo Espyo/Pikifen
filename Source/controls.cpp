@@ -15,7 +15,6 @@ void handle_controls(ALLEGRO_EVENT ev){
 		//ToDo remove.
 		//leaders[current_leader]->health--;
 		day_minutes += 60;
-		day = sectors[0].floors[0].brightness;
 	}
 
 
