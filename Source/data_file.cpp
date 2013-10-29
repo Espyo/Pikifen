@@ -79,6 +79,7 @@ void data_node::load_file(string filename){
 	vector<string> lines;
 	ALLEGRO_FILE* file=al_fopen(filename.c_str(), "r");
 	bool is_first_line=true;
+	file_was_opened=false;
 	if(file){
 		file_was_opened=true;
 		while(!al_feof(file)){

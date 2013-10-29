@@ -101,15 +101,7 @@ void do_drawing(){
 		}
 
 		if(whistle_radius > 0 || whistle_fade_time > 0){
-			if(whistle_is_circle){
-				unsigned char alpha = whistle_fade_time / WHISTLE_FADE_TIME * 255;
-				float radius = whistle_fade_radius;
-				if(whistle_radius > 0){
-					alpha = 255;
-					radius = whistle_radius;
-				}
-				al_draw_circle(cursor_x, cursor_y, radius, al_map_rgba(192, 192, 0, alpha), 2);
-			}else{
+			if(pretty_whistle){
 				unsigned char n_dots = 16*6;
 				for(unsigned char d=0; d<6; d++){
 					for(unsigned char d2=0; d2<16; d2++){
@@ -136,6 +128,14 @@ void do_drawing(){
 						al_draw_filled_circle(x, y, 2, c);
 					}
 				}
+			}else{
+				unsigned char alpha = whistle_fade_time / WHISTLE_FADE_TIME * 255;
+				float radius = whistle_fade_radius;
+				if(whistle_radius > 0){
+					alpha = 255;
+					radius = whistle_radius;
+				}
+				al_draw_circle(cursor_x, cursor_y, radius, al_map_rgba(192, 192, 0, alpha), 2);
 			}
 		}
 

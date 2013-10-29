@@ -82,26 +82,28 @@ void do_logic(){
 			whistle_ring_prev_color = (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
 		}
 
-		whistle_next_dot_time-=1.0/game_fps;
-		if(whistle_next_dot_time<=0){
-			whistle_next_dot_time=WHISTLE_DOT_INTERVAL;
-			unsigned char dot=255;
-			for(unsigned char d=0; d<6; d++){ //Find WHAT dot to add.
-				if(whistle_dot_radius[d]==-1){ dot=d; break;}
+		if(pretty_whistle){
+			whistle_next_dot_time-=1.0/game_fps;
+			if(whistle_next_dot_time<=0){
+				whistle_next_dot_time=WHISTLE_DOT_INTERVAL;
+				unsigned char dot=255;
+				for(unsigned char d=0; d<6; d++){ //Find WHAT dot to add.
+					if(whistle_dot_radius[d]==-1){ dot=d; break;}
+				}
+
+				if(dot!=255) whistle_dot_radius[dot]=0;
 			}
-
-			if(dot!=255) whistle_dot_radius[dot]=0;
 		}
-	}
 
-	for(unsigned char d=0; d<6; d++){
-		if(whistle_dot_radius[d]==-1) continue;
+		for(unsigned char d=0; d<6; d++){
+			if(whistle_dot_radius[d]==-1) continue;
 
-		whistle_dot_radius[d] += (1.0 / game_fps) * WHISTLE_RADIUS_GROWTH_PS;
-		if(whistle_radius > 0 && whistle_dot_radius[d] > MAX_WHISTLE_RADIUS){
-			whistle_dot_radius[d] = MAX_WHISTLE_RADIUS;
-		}else if(whistle_fade_radius > 0 && whistle_dot_radius[d] > whistle_fade_radius){
-			whistle_dot_radius[d] = whistle_fade_radius;
+			whistle_dot_radius[d] += (1.0 / game_fps) * WHISTLE_RADIUS_GROWTH_PS;
+			if(whistle_radius > 0 && whistle_dot_radius[d] > MAX_WHISTLE_RADIUS){
+				whistle_dot_radius[d] = MAX_WHISTLE_RADIUS;
+			}else if(whistle_fade_radius > 0 && whistle_dot_radius[d] > whistle_fade_radius){
+				whistle_dot_radius[d] = whistle_fade_radius;
+			}
 		}
 	}
 

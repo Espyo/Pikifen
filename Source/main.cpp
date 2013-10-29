@@ -34,9 +34,31 @@ int main(){
 	al_init_primitives_addon();
 	al_init_acodec_addon();
 
+	//Options and default controls.
+	controls.push_back(control_info(BUTTON_PUNCH, 0, "mb_1"));
+	controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
+	controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
+	controls.push_back(control_info(BUTTON_MOVE_UP, 0, "k_23"));
+	controls.push_back(control_info(BUTTON_MOVE_LEFT, 0, "k_1"));
+	controls.push_back(control_info(BUTTON_MOVE_DOWN, 0, "k_19"));
+	controls.push_back(control_info(BUTTON_MOVE_GROUP_TO_CURSOR, 0, "k_75"));
+	controls.push_back(control_info(BUTTON_SWITCH_CAPTAIN_RIGHT, 0, "k_64"));
+	controls.push_back(control_info(BUTTON_DISMISS, 0, "k_217"));
+	controls.push_back(control_info(BUTTON_USE_SPRAY_1, 0, "k_18"));
+	controls.push_back(control_info(BUTTON_USE_SPRAY_2, 0, "k_6"));
+	controls.push_back(control_info(BUTTON_USE_SPRAY, 0, "k_18"));
+	controls.push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, 0, "k_5"));
+	controls.push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, 0, "k_17"));
+	controls.push_back(control_info(BUTTON_SWITCH_ZOOM, 0, "k_3"));
+	controls.push_back(control_info(BUTTON_ZOOM_IN, 0, "mwu"));
+	controls.push_back(control_info(BUTTON_ZOOM_OUT, 0, "mwd"));
+	controls.push_back(control_info(BUTTON_PAUSE, 0, "k_59"));
+	load_options();
+	save_options();
+
 	//Event stuff.
 	ALLEGRO_DISPLAY* display = al_create_display(scr_w, scr_h);
-	ALLEGRO_TIMER* timer = al_create_timer(1.0/30.0);
+	ALLEGRO_TIMER* timer = al_create_timer(1.0/game_fps);
 
 	ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
 	al_register_event_source(queue, al_get_mouse_event_source());

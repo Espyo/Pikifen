@@ -1,8 +1,9 @@
 Source/Debug/
 Source/Release/
-*allegro.log
-*.lnk
 Documents/Old/
 Error_log.txt
+Options.txt
+*allegro.log
+*.lnk
 *.o
 pfe

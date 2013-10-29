@@ -23,6 +23,12 @@ void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y
 	*y_coord = sin(angle) * magnitude;
 }
 
+bool atob(string s){
+	string ls = str_to_lower(s);
+	if(ls == "yes" || ls == "true" || ls == "y" || ls == "t") return true;
+	else return (atoi(ls) != 0);
+}
+
 ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a){
 	ALLEGRO_COLOR c2;
 	c2.r = c.r; c2.g = c.g; c2.b = c.b;
@@ -358,6 +364,16 @@ ALLEGRO_BITMAP* load_bmp(string filename){
 	return b;
 }
 
+void load_control(unsigned char action, unsigned char player, string name, data_node& file, string def){
+	string s = file["p" + to_string((long long) (player+1)) + "_" + name].get_value((player == 0) ? def : "");
+	vector<string> possible_controls = split(s, ",");
+	size_t n_possible_controls = possible_controls.size();
+
+	for(size_t c=0; c<n_possible_controls; c++){
+		controls.push_back(control_info(action, player, possible_controls[c]));
+	}
+}
+
 data_node load_data_file(string filename){
 	data_node n = data_node("Game_data/" + filename);
 	if(!n.file_was_opened){
@@ -365,6 +381,85 @@ data_node load_data_file(string filename){
 	}
 
 	return n;
+}
+
+void load_options(){
+	data_node file = data_node("Options.txt");
+	if(!file.file_was_opened) return;
+	
+	//Load joysticks.
+	joystick_numbers.clear();
+	int n_joysticks=al_get_num_joysticks();
+	for(int j=0; j<n_joysticks; j++){
+		joystick_numbers[al_get_joystick(j)] = j;
+	}
+
+	//Load controls.
+	//Format of a control: "p<player number>_<action>=<possible control 1>,<possible control 2>,<...>"
+	//Format of a possible control: "<input method>_<parameters, underscore separated>"
+	//Input methods: "k" (keyboard key), "mb" (mouse button), "mwu" (mouse wheel up), "mwd" (down),
+	//"mwl" (left), "mwr" (right), "jb" (joystick button), "jap" (joystick axis, positive), "jan" (joystick axis, negative).
+	//The parameters are the key/button number, joystick number, joystick stick and axis, etc.
+	//Check the constructor of control_info for more information.
+	controls.clear();
+
+	for(unsigned char p=0; p<4; p++){
+		load_control(BUTTON_PUNCH,                p, "punch", file, "mb_1");
+		load_control(BUTTON_WHISTLE,              p, "whistle", file, "mb_2");
+		load_control(BUTTON_MOVE_RIGHT,           p, "move_right", file, "k_4");
+		load_control(BUTTON_MOVE_UP,              p, "move_up", file, "k_23");
+		load_control(BUTTON_MOVE_LEFT,            p, "move_left", file, "k_1");
+		load_control(BUTTON_MOVE_DOWN,            p, "move_down", file, "k_19");
+		load_control(BUTTON_MOVE_CURSOR_RIGHT,    p, "move_cursor_right", file, "");
+		load_control(BUTTON_MOVE_CURSOR_UP,       p, "move_cursor_up", file, "");
+		load_control(BUTTON_MOVE_CURSOR_LEFT,     p, "move_cursor_left", file, "");
+		load_control(BUTTON_MOVE_CURSOR_DOWN,     p, "move_cursor_down", file, "");
+		load_control(BUTTON_MOVE_GROUP_TO_CURSOR, p, "move_group_to_cursor", file, "k_75");
+		load_control(BUTTON_MOVE_GROUP_RIGHT,     p, "move_group_right", file, "");
+		load_control(BUTTON_MOVE_GROUP_UP,        p, "move_group_up", file, "");
+		load_control(BUTTON_MOVE_GROUP_LEFT,      p, "move_group_left", file, "");
+		load_control(BUTTON_MOVE_GROUP_DOWN,      p, "move_group_down", file, "");
+		load_control(BUTTON_SWITCH_CAPTAIN_RIGHT, p, "switch_captain_right", file, "k_64");
+		load_control(BUTTON_SWITCH_CAPTAIN_LEFT,  p, "switch_captain_left", file, "");
+		load_control(BUTTON_DISMISS,              p, "dismiss", file, "k_217");
+		load_control(BUTTON_USE_SPRAY_1,          p, "use_spray_1", file, "k_18");
+		load_control(BUTTON_USE_SPRAY_2,          p, "use_spray_2", file, "k_6");
+		load_control(BUTTON_USE_SPRAY,            p, "use_spray", file, "k_18");
+		load_control(BUTTON_SWITCH_SPRAY_RIGHT,   p, "switch_spray_right", file, "k_5");
+		load_control(BUTTON_SWITCH_SPRAY_LEFT,    p, "switch_spray_left", file, "k_17");
+		load_control(BUTTON_SWITCH_ZOOM,          p, "switch_zoom", file, "k_3");
+		load_control(BUTTON_ZOOM_IN,              p, "zoom_in", file, "mwu");
+		load_control(BUTTON_ZOOM_OUT,             p, "zoom_out", file, "mwd");
+		load_control(BUTTON_SWITCH_TYPE_RIGHT,    p, "switch_type_right", file, "");
+		load_control(BUTTON_SWITCH_TYPE_LEFT,     p, "switch_type_left", file, "");
+		load_control(BUTTON_SWITCH_MATURITY_UP,   p, "switch_maturity_up", file, "");
+		load_control(BUTTON_SWITCH_MATURITY_DOWN, p, "switch_maturity_down", file, "");
+		load_control(BUTTON_LIE_DOWN,             p, "lie_down", file, "");
+		load_control(BUTTON_PAUSE,                p, "pause", file, "k_59");
+	}
+
+	//Weed out controls that didn't parse correctly.
+	size_t n_controls = controls.size();
+	for(size_t c=0; c<n_controls; ){
+		if(controls[c].action == BUTTON_NONE){
+			controls.erase(controls.begin() + c);
+		}else{
+			c++;
+		}
+	}
+
+	for(unsigned char p=0; p<4; p++){
+		mouse_moves_cursor[p] = atob(file["p" + to_string((long long) (p+1)) + "_mouse_moves_cursor"].get_value((p==0) ? "true" : "false"));
+	}
+
+	//Other options.
+	daylight_effect = atob(file["daylight_effect"].get_value("true"));
+	game_fps = atoi(file["fps"].get_value("30"));
+	scr_h = atoi(file["height"].get_value(to_string((long long) DEF_SCR_H)));
+	particle_quality = atoi(file["particle_quality"].get_value("2"));
+	pretty_whistle = atob(file["pretty_whistle"].get_value("true"));
+	scr_w = atoi(file["width"].get_value(to_string((long long) DEF_SCR_W)));
+	smooth_scaling = atob(file["smooth_scaling"].get_value("true"));
 }
 
 sample_struct load_sample(string filename){
@@ -496,6 +591,153 @@ void remove_from_party(mob* party_leader, mob* member_to_remove){
 	member_to_remove->uncallable_period = UNCALLABLE_PERIOD;
 }
 
+void save_options(){
+	//ToDo make this prettier. Like a list of constants somewhere where it associates an action with the name on the text file.
+	ALLEGRO_FILE* file=al_fopen("Options.txt", "w");
+
+	if(!file) return;
+	
+	//First, group the controls by action and player.
+	map<string, string> grouped_controls;
+
+	//Tell the map what they are.
+	for(unsigned char p=0; p<4; p++){
+		string prefix="p" + to_string((long long) (p+1)) + "_";
+		grouped_controls[prefix + "punch"] = "";
+		grouped_controls[prefix + "whistle"] = "";
+		grouped_controls[prefix + "move_right"] = "";
+		grouped_controls[prefix + "move_up"] = "";
+		grouped_controls[prefix + "move_left"] = "";
+		grouped_controls[prefix + "move_down"] = "";
+		grouped_controls[prefix + "move_cursor_right"] = "";
+		grouped_controls[prefix + "move_cursor_up"] = "";
+		grouped_controls[prefix + "move_cursor_left"] = "";
+		grouped_controls[prefix + "move_cursor_down"] = "";
+		grouped_controls[prefix + "move_group_right"] = "";
+		grouped_controls[prefix + "move_group_up"] = "";
+		grouped_controls[prefix + "move_group_left"] = "";
+		grouped_controls[prefix + "move_group_down"] = "";
+		grouped_controls[prefix + "move_group_to_cursor"] = "";
+		grouped_controls[prefix + "switch_captain_right"] = "";
+		grouped_controls[prefix + "switch_captain_left"] = "";
+		grouped_controls[prefix + "dismiss"] = "";
+		grouped_controls[prefix + "use_spray_1"] = "";
+		grouped_controls[prefix + "use_spray_2"] = "";
+		grouped_controls[prefix + "use_spray"] = "";
+		grouped_controls[prefix + "switch_spray_right"] = "";
+		grouped_controls[prefix + "switch_spray_left"] = "";
+		grouped_controls[prefix + "switch_zoom"] = "";
+		grouped_controls[prefix + "zoom_in"] = "";
+		grouped_controls[prefix + "zoom_out"] = "";
+		grouped_controls[prefix + "switch_type_right"] = "";
+		grouped_controls[prefix + "switch_type_left"] = "";
+		grouped_controls[prefix + "switch_maturity_up"] = "";
+		grouped_controls[prefix + "switch_maturity_down"] = "";
+		grouped_controls[prefix + "lie_down"] = "";
+		grouped_controls[prefix + "pause"] = "";
+	}
+
+	size_t n_controls = controls.size();
+	for(size_t c=0; c<n_controls; c++){
+		string name="p" + to_string((long long) (controls[c].player + 1)) + "_";
+		if(controls[c].action == BUTTON_PUNCH)                     name+="punch";
+		else if(controls[c].action == BUTTON_WHISTLE)              name+="whistle";
+		else if(controls[c].action == BUTTON_MOVE_RIGHT)           name+="move_right";
+		else if(controls[c].action == BUTTON_MOVE_UP)              name+="move_up";
+		else if(controls[c].action == BUTTON_MOVE_LEFT)            name+="move_left";
+		else if(controls[c].action == BUTTON_MOVE_DOWN)            name+="move_down";
+		else if(controls[c].action == BUTTON_MOVE_CURSOR_RIGHT)    name+="move_cursor_right";
+		else if(controls[c].action == BUTTON_MOVE_CURSOR_UP)       name+="move_cursor_up";
+		else if(controls[c].action == BUTTON_MOVE_CURSOR_LEFT)     name+="move_cursor_left";
+		else if(controls[c].action == BUTTON_MOVE_CURSOR_DOWN)     name+="move_cursor_down";
+		else if(controls[c].action == BUTTON_MOVE_GROUP_RIGHT)     name+="move_group_right";
+		else if(controls[c].action == BUTTON_MOVE_GROUP_UP)        name+="move_group_up";
+		else if(controls[c].action == BUTTON_MOVE_GROUP_LEFT)      name+="move_group_left";
+		else if(controls[c].action == BUTTON_MOVE_GROUP_DOWN)      name+="move_group_down";
+		else if(controls[c].action == BUTTON_MOVE_GROUP_TO_CURSOR) name+="move_group_to_cursor";
+		else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_RIGHT) name+="switch_captain_right";
+		else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_LEFT)  name+="switch_captain_left";
+		else if(controls[c].action == BUTTON_DISMISS)              name+="dismiss";
+		else if(controls[c].action == BUTTON_USE_SPRAY_1)          name+="use_spray_1";
+		else if(controls[c].action == BUTTON_USE_SPRAY_2)          name+="use_spray_2";
+		else if(controls[c].action == BUTTON_USE_SPRAY)            name+="use_spray";
+		else if(controls[c].action == BUTTON_SWITCH_SPRAY_RIGHT)   name+="switch_spray_right";
+		else if(controls[c].action == BUTTON_SWITCH_SPRAY_LEFT)    name+="switch_spray_left";
+		else if(controls[c].action == BUTTON_SWITCH_ZOOM)          name+="switch_zoom";
+		else if(controls[c].action == BUTTON_ZOOM_IN)              name+="zoom_in";
+		else if(controls[c].action == BUTTON_ZOOM_OUT)             name+="zoom_out";
+		else if(controls[c].action == BUTTON_SWITCH_TYPE_RIGHT)    name+="switch_type_right";
+		else if(controls[c].action == BUTTON_SWITCH_TYPE_LEFT)     name+="switch_type_left";
+		else if(controls[c].action == BUTTON_SWITCH_MATURITY_UP)   name+="switch_maturity_up";
+		else if(controls[c].action == BUTTON_SWITCH_MATURITY_DOWN) name+="switch_maturity_down";
+		else if(controls[c].action == BUTTON_LIE_DOWN)             name+="lie_down";
+		else if(controls[c].action == BUTTON_PAUSE)                name+="pause";
+
+		grouped_controls[name] += controls[c].stringify() + ",";
+	}
+	
+	//Save controls.
+	for(map<string, string>::iterator c=grouped_controls.begin(); c!=grouped_controls.end(); c++){
+		if(c->second.size()) c->second.erase(c->second.size()-1); //Remove the final character, which is always an extra comma.
+
+		al_fwrite(file, c->first + "=" + c->second + "\n");
+	}
+	
+	for(unsigned char p=0; p<4; p++){
+		al_fwrite(file, "p" + to_string((long long) (p+1)) + "_mouse_moves_cursor=" + btoa(mouse_moves_cursor[p]) + "\n");
+	}
+
+	//Other options.
+	al_fwrite(file, "daylight_effect=" + btoa(daylight_effect) + "\n");
+	al_fwrite(file, "fps=" + to_string((long long) game_fps) + "\n");
+	al_fwrite(file, "height=" + to_string((long long) scr_h) + "\n");
+	al_fwrite(file, "particle_quality=" + to_string((long long) particle_quality) + "\n");
+	al_fwrite(file, "pretty_whistle=" + btoa(pretty_whistle) + "\n");
+	al_fwrite(file, "width=" + to_string((long long) scr_w) + "\n");
+	al_fwrite(file, "smooth_scaling=" + btoa(smooth_scaling) + "\n");
+
+	al_fclose(file);
+}
+
+/* ----------------------------------------------------------------------------
+ * Splits a string into several substrings, by the specified delimiter.
+ * text:		The string to split.
+ * del:			The delimiter. Default is space.
+ * inc_empty:	If true, include empty substrings on the vector.
+ ** i.e. if two delimiters come together in a row, keep an empty substring between.
+ * inc_del:		If true, include the delimiters on the vector as a substring.
+ */
+vector<string> split(string text, string del, bool inc_empty, bool inc_del){
+	vector<string> v;
+	size_t pos;
+	size_t del_size = del.size();
+	
+	do {
+		pos = text.find(del);
+		if (pos != string::npos) {	//If it DID find the delimiter.
+			//Get the text between the start and the delimiter.
+			string sub=text.substr(0, pos);	
+
+			//Add the text before the delimiter to the vector.
+			if(sub!="" || inc_empty)
+				v.push_back(sub);
+
+			//Add the delimiter to the vector, but only if requested.
+			if(inc_del)
+				v.push_back(del);
+			
+			text.erase(text.begin(), text.begin() + pos + del_size);	//Delete everything before the delimiter, including the delimiter itself, and search again.
+		}
+	} while (pos != string::npos);
+	
+	//Text after the final delimiter. (If there is one. If not, it's just the whole string.)
+
+	if (text!="" || inc_empty)	//If it's a blank string, only add it if we want empty strings.
+		v.push_back(text);
+	
+    return v;
+}
+
 void start_camera_pan(int final_x, int final_y){
 	cam_trans_pan_initi_x = cam_x;
 	cam_trans_pan_initi_y = cam_y;
@@ -606,6 +848,18 @@ void stop_whistling(){
 	al_stop_sample(&leaders[current_leader]->sfx_whistle.id);
 }
 
+/* ----------------------------------------------------------------------------
+ * Converts an entire string into lowercase.
+ */
+string str_to_lower(string s){
+	unsigned short n_characters=s.size();
+	for(unsigned short c=0; c<n_characters; c++){
+		s[c]=tolower(s[c]);
+	}
+	return s;
+}
+
+
 /*bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
 	return true;
 }*/
@@ -623,5 +877,7 @@ void use_spray(size_t spray_nr){
 	sprays[spray_nr]--;
 }
 
-double atof(string s){ return atof(s.c_str()); }
-int atoi(string s){ return atof(s.c_str()); }
+inline void al_fwrite(ALLEGRO_FILE* f, string s){ al_fwrite(f, s.c_str(), s.size()); }
+inline double atof(string s){ return atof(s.c_str()); }
+inline int atoi(string s){ return atof(s.c_str()); }
+inline string btoa(bool b){ return b ? "true" : "false"; }

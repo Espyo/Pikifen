@@ -2,11 +2,13 @@
 #define GLOBALS_INCLUDED
 
 #include <vector>
+#include <map>
 
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
 
 #include "const.h"
+#include "controls.h"
 #include "spec_objs/info_spot.h"
 #include "leader.h"
 #include "spec_objs/nectar.h"
@@ -90,6 +92,7 @@ extern float                 cam_trans_zoom_time_left;
 extern float                 cam_x;
 extern float                 cam_y;
 extern float                 cam_zoom;
+extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
 extern size_t                current_leader;
 extern float                 cursor_x;           //Leader's cursor.
@@ -104,14 +107,16 @@ extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;
 extern unsigned char         game_fps;
-extern float                 graphic_scale;
 extern float                 idle_glow_angle;
 extern vector<info_spot*>    info_spots;
+extern map<ALLEGRO_JOYSTICK*, int>
+                             joystick_numbers;
 extern vector<leader*>       leaders;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
 extern float                 mouse_cursor_speed_x;
 extern float                 mouse_cursor_speed_y;
+extern bool                  mouse_moves_cursor[4];
 extern vector<float>         move_group_arrows;  //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                 move_group_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
 extern float                 moving_group_angle;
@@ -128,6 +133,7 @@ extern vector<pellet*>       pellets;
 extern vector<unsigned long> pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;
+extern bool                  pretty_whistle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern bool                  running;
 extern unsigned short	     scr_h;
 extern unsigned short	     scr_w;
@@ -147,7 +153,6 @@ extern float                 whistle_dot_offset; //How much each dot of the whis
 extern float                 whistle_dot_radius[6]; //Radius of every 6th dot.
 extern float                 whistle_fade_radius; //Radius the whistle was at pre-fade.
 extern float                 whistle_fade_time;  //Time left for the whistle's fading animations.
-extern bool                  whistle_is_circle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern float                 whistle_max_hold;   //The whistle area is at max size. Hold the whistle for these many seconds.
 extern float                 whistle_next_dot_time;
 extern float                 whistle_next_ring_time;
