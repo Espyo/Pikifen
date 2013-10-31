@@ -161,13 +161,24 @@ void do_logic(){
 	}
 
 
+	/*****************
+	*                *
+	*   Mobs   ()--> *
+	*                *
+	******************/
+
+	size_t n_mobs = mobs.size();
+	for(size_t m=0; m<n_mobs; m++){
+		mobs[m]->tick();
+	}
+
+	
 	/******************
 	*             /\  *
 	*   Pikmin   (@:) *
 	*             \/  *
 	******************/
 
-	size_t n_treasures = treasures.size();
 	size_t n_pikmin = pikmin_list.size();
 	for(size_t p=0; p<n_pikmin; p++){
 		pikmin* pik_ptr = pikmin_list[p];
@@ -179,7 +190,7 @@ void do_logic(){
 			!pik_ptr->uncallable_period;
 		bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
 		bool touched = dist(pik_ptr->x, pik_ptr->y, leaders[current_leader]->x, leaders[current_leader]->y) <= pik_ptr->size * 0.5 + leaders[current_leader]->size * 0.5;
-		bool is_busy = (pik_ptr->carrying_treasure || pik_ptr->enemy_attacking);
+		bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
 
 		if(can_be_called && (whistled || (touched && !is_busy))){
 
@@ -190,7 +201,7 @@ void do_logic(){
 
 			pik_ptr->enemy_attacking = NULL;
 
-			drop_treasure(pik_ptr);
+			drop_mob(pik_ptr);
 							
 		}
 
@@ -210,7 +221,7 @@ void do_logic(){
 		//Touching nectar.
 		size_t n_nectars = nectars.size();
 		if(
-			!pik_ptr->carrying_treasure &&
+			!pik_ptr->carrying_mob &&
 			!pik_ptr->enemy_attacking &&
 			!pik_ptr->burrowed &&
 			!pik_ptr->speed_z &&
@@ -227,18 +238,22 @@ void do_logic(){
 		}
 
 		//Finding tasks.
+		size_t n_mobs = mobs.size();
 		if(
 			(!pik_ptr->following_party &&
-			!pik_ptr->carrying_treasure &&
+			!pik_ptr->carrying_mob &&
 			!pik_ptr->enemy_attacking &&
 			!pik_ptr->burrowed &&
 			!pik_ptr->speed_z) ||
 			(pik_ptr->following_party && moving_group_intensity)
 			){
-				for(size_t t=0; t<n_treasures; t++){
-					if(dist(pik_ptr->x, pik_ptr->y, treasures[t]->x, treasures[t]->y)<=pik_ptr->size * 0.5 + treasures[t]->size * 0.5 + MIN_PIKMIN_TASK_RANGE){
-						//ToDo don't take the treasure if all spots are taken already.
-						pik_ptr->carrying_treasure = treasures[t];
+				for(size_t m=0; m<n_mobs; m++){
+
+					if(!mobs[m]->carrier_info) continue;
+					if(mobs[m]->carrier_info->current_n_carriers == mobs[m]->carrier_info->max_carriers) continue;
+
+					if(dist(pik_ptr->x, pik_ptr->y, mobs[m]->x, mobs[m]->y)<=pik_ptr->size * 0.5 + mobs[m]->size * 0.5 + MIN_PIKMIN_TASK_RANGE){
+						pik_ptr->carrying_mob = mobs[m];
 								
 						if(pik_ptr->following_party) remove_from_party(pik_ptr->following_party, pik_ptr);
 
@@ -246,31 +261,29 @@ void do_logic(){
 						bool valid_spot = false;
 						unsigned int spot = 0;
 						while(!valid_spot){
-							spot = random(0, treasures[t]->carrier_info->max_carriers - 1);
-							valid_spot = !treasures[t]->carrier_info->carrier_spots[spot];
+							spot = random(0, mobs[m]->carrier_info->max_carriers - 1);
+							valid_spot = !mobs[m]->carrier_info->carrier_spots[spot];
 						}
 								
-						treasures[t]->carrier_info->carrier_spots[spot] = pik_ptr;
-						treasures[t]->carrier_info->current_n_carriers++;
+						mobs[m]->carrier_info->carrier_spots[spot] = pik_ptr;
+						mobs[m]->carrier_info->current_n_carriers++;
 
 						pik_ptr->carrying_spot = spot;
 						pik_ptr->set_target(
-							treasures[t]->carrier_info->carrier_spots_x[spot],
-							treasures[t]->carrier_info->carrier_spots_y[spot],
-							&treasures[t]->x,
-							&treasures[t]->y,
+							mobs[m]->carrier_info->carrier_spots_x[spot],
+							mobs[m]->carrier_info->carrier_spots_y[spot],
+							&mobs[m]->x,
+							&mobs[m]->y,
 							true);
 
-						if(treasures[t]->carrier_info->current_n_carriers >= treasures[t]->weight){
-							start_carrying(treasures[t]);
+						if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->weight){
+							start_carrying(mobs[m], pik_ptr, NULL);
 						}
 
 						break;
 					}
 				}
 		}
-
-		pik_ptr->tick();
 
 	}
 
@@ -315,8 +328,7 @@ void do_logic(){
 				&leaders[l]->following_party->y,
 				false);
 		}
-				
-		leaders[l]->tick();
+		
 	}
 
 	if(cam_trans_pan_time_left > 0){
@@ -396,17 +408,6 @@ void do_logic(){
 			mouse_cursor_y = cursor_y;
 			al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
 		}
-	}
-
-
-	/**********************
-	*                .-.  *
-	*   Treasures   ($$$) *
-	*                `-´  *
-	**********************/
-
-	for(size_t t=0; t<n_treasures; t++){
-		treasures[t]->tick();
 	}
 
 

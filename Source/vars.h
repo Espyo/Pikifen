@@ -112,6 +112,7 @@ extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>
                              joystick_numbers;
 extern vector<leader*>       leaders;
+extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
 extern float                 mouse_cursor_speed_x;

@@ -124,6 +124,9 @@ int main(){
 	bmp_nectar = load_bmp("Nectar.png");
 	bmp_icon = load_bmp("Icon.png");
 	bmp_red_pellet[0] = load_bmp("Red_1_pellet.png");
+	bmp_red_pellet[1] = load_bmp("Red_5_pellet.png");
+	bmp_red_pellet[2] = load_bmp("Red_10_pellet.png");
+	bmp_red_pellet[3] = load_bmp("Red_20_pellet.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F, //ASCII
@@ -177,62 +180,64 @@ int main(){
 	load_area("test");
 	generate_area_images();
 	
-	leaders.push_back(new leader(0, 0, &s));
+	create_mob(new leader(0, 0, &s));
 	leaders.back()->main_color = al_map_rgb(255, 0, 0);
 	leaders.back()->health = 10;
 	leaders.back()->sfx_dismiss = sfx_dismiss;
 	leaders.back()->sfx_whistle = sfx_olimar_whistle;
 	leaders.back()->sfx_name_call = sfx_olimar_name_call;
-	leaders.push_back(new leader(300, 250, &s));
+	create_mob(new leader(300, 250, &s));
 	leaders.back()->main_color = al_map_rgb(0, 0, 255);
 	leaders.back()->health = 8;
 	leaders.back()->sfx_dismiss = sfx_dismiss;
 	leaders.back()->sfx_whistle = sfx_louie_whistle;
 	leaders.back()->sfx_name_call = sfx_louie_name_call;
-	leaders.push_back(new leader(350, 200, &s));
+	create_mob(new leader(350, 200, &s));
 	leaders.back()->main_color = al_map_rgb(0, 0, 255);
 	leaders.back()->health = 6;
 	leaders.back()->sfx_dismiss = sfx_dismiss;
 	leaders.back()->sfx_whistle = sfx_president_whistle;
 	leaders.back()->sfx_name_call = sfx_president_name_call;
-	treasures.push_back(new treasure(300, 150, 80, &s, 5, 50));
-	pikmin_list.push_back(new pikmin(&pikmin_types[0], 30, 30, &s));
+	create_mob(new treasure(300, 150, 80, &s, 30, 50));
+	create_mob(new pikmin(&pikmin_types[0], 30, 30, &s));
 	pikmin_list.back()->maturity = 1;
-	pikmin_list.push_back(new pikmin(&pikmin_types[0], 40, 30, &s));
+	create_mob(new pikmin(&pikmin_types[0], 40, 30, &s));
 	pikmin_list.back()->maturity = 2;
-	pikmin_list.push_back(new pikmin(&pikmin_types[1], 50, 30, &s));
+	create_mob(new pikmin(&pikmin_types[1], 50, 30, &s));
 	pikmin_list.back()->maturity = 1;
-	pikmin_list.push_back(new pikmin(&pikmin_types[1], 60, 30, &s));
+	create_mob(new pikmin(&pikmin_types[1], 60, 30, &s));
 	pikmin_list.back()->maturity = 2;
-	pikmin_list.push_back(new pikmin(&pikmin_types[2], 70, 30, &s));
+	create_mob(new pikmin(&pikmin_types[2], 70, 30, &s));
 	pikmin_list.back()->maturity = 1;
-	pikmin_list.push_back(new pikmin(&pikmin_types[2], 80, 30, &s));
+	create_mob(new pikmin(&pikmin_types[2], 80, 30, &s));
 	pikmin_list.back()->maturity = 2;
-	pikmin_list.push_back(new pikmin(&pikmin_types[0], 30, 200, &s));
+	create_mob(new pikmin(&pikmin_types[0], 30, 200, &s));
 	pikmin_list.back()->burrowed=true;
-	pikmin_list.push_back(new pikmin(&pikmin_types[1], 50, 200, &s));
+	create_mob(new pikmin(&pikmin_types[1], 50, 200, &s));
 	pikmin_list.back()->burrowed=true;
-	pikmin_list.push_back(new pikmin(&pikmin_types[2], 70, 200, &s));
+	create_mob(new pikmin(&pikmin_types[2], 70, 200, &s));
 	pikmin_list.back()->burrowed=true;
 	for(unsigned char p=0; p<10; p++){
 		for(unsigned char t=0; t<3; t++){
-			pikmin_list.push_back(new pikmin(&pikmin_types[t], 100 + 10*p + 3*t, 30, &s));
+			create_mob(new pikmin(&pikmin_types[t], 100 + 10*p + 3*t, 30, &s));
 		}
 	}
-	onions.push_back(new onion(400, 100, &s, &pikmin_types[0]));
-	onions.push_back(new onion(400, 200, &s, &pikmin_types[1]));
-	onions.push_back(new onion(400, 300, &s, &pikmin_types[2]));
-	info_spots.push_back(new info_spot(300, 0, &s, "Treasure.", false, font));
-	info_spots.push_back(new info_spot(400, 0, &s, "Onions.", false, font));
-	nectars.push_back(new nectar(0, 400, &s));
+	//create_mob(new pikmin(&pikmin_types[3], -50, -50, &s));
+	create_mob(new onion(400, 100, &s, &pikmin_types[0]));
+	create_mob(new onion(400, 200, &s, &pikmin_types[1]));
+	create_mob(new onion(400, 300, &s, &pikmin_types[2]));
+	create_mob(new info_spot(300, 0, &s, "Treasure.", false, font));
+	create_mob(new info_spot(400, 0, &s, "Onions.", false, font));
+	create_mob(new nectar(0, 400, &s));
 	sprays[0] = sprays[1] = 10;
 	spray_types[0].bmp_spray = bmp_ub_spray;
 	spray_types[1].bmp_spray = bmp_us_spray;
 	pikmin_in_onions[0] = 200;
 	pikmin_in_onions[1] = 180;
 	pikmin_in_onions[2] = 160;
-	ships.push_back(new ship(-100, 100, &s));
-	pellets.push_back(new pellet(200, -100, &s, &pikmin_types[0], 1));
+	create_mob(new ship(-100, 100, &s));
+	create_mob(new pellet(200, -100, &s, &pikmin_types[0], 32, 1, 2, 2, 1));
+	create_mob(new pellet(100, -100, &s, &pikmin_types[0], 96, 10, 20, 10, 5));
 
 	al_set_display_icon(display, bmp_icon);
 

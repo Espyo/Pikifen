@@ -115,35 +115,15 @@ void mob::remove_target(bool stop){
 	}
 }
 
-/*mob::mob(const mob& m2){
-	main_color = m2.main_color;
-	planned_moving_angle = m2.planned_moving_angle;
-	planned_moving_intensity = m2.planned_moving_intensity;
-	x = m2.x; y = m2.y; z = m2.z;
-	speed_x = m2.speed_x; speed_y = m2.speed_y; speed_z = m2.speed_z;
-	move_speed = m2.move_speed;
-	acceleration = m2.acceleration;
-	angle = m2.angle;
-	size = m2.size;
-	sec = m2.sec;
-	target_x = m2.target_x; target_y = m2.target_y;
-	target_rel_x = m2.target_rel_x; target_rel_y = m2.target_rel_y;
-	go_to_target = m2.go_to_target;
-	gtt_instant = m2.gtt_instant;
-	following_party = m2.following_party;
-	party = m2.party;
-	was_thrown = m2.was_thrown;
-	uncallable_period = m2.uncallable_period;
-	weight = m2.weight;
-	max_carriers = m2.max_carriers;
-	carrier_info = m2.carrier_info;
-}*/
-
 mob::~mob(){}
 
-carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers){
-	current_n_carriers = 0;
+carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship){
 	this->max_carriers = max_carriers;
+	this->carry_to_ship = carry_to_ship;
+
+	current_n_carriers = 0;
+	decided_type = NULL;
+	
 	for(size_t c=0; c<max_carriers; c++){
 		carrier_spots.push_back(NULL);
 		float angle = (M_PI*2) / max_carriers * c;

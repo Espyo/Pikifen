@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+#include <algorithm>
 #include <math.h>
 #include <typeinfo>
 
@@ -40,6 +41,67 @@ void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* mag
 	*angle = atan2(y_coord, x_coord);
 	*magnitude = dist(0, 0, x_coord, y_coord);
 }
+
+void create_mob(mob* m){
+	mobs.push_back(m);
+
+	if(typeid(*m) == typeid(pikmin)){
+		pikmin_list.push_back((pikmin*) m);
+
+	}else if(typeid(*m) == typeid(leader)){
+		leaders.push_back((leader*) m);
+
+	}else if(typeid(*m) == typeid(onion)){
+		onions.push_back((onion*) m);
+
+	}else if(typeid(*m) == typeid(nectar)){
+		nectars.push_back((nectar*) m);
+
+	}else if(typeid(*m) == typeid(pellet)){
+		pellets.push_back((pellet*) m);
+
+	}else if(typeid(*m) == typeid(ship)){
+		ships.push_back((ship*) m);
+
+	}else if(typeid(*m) == typeid(treasure)){
+		treasures.push_back((treasure*) m);
+
+	}else if(typeid(*m) == typeid(info_spot)){
+		info_spots.push_back((info_spot*) m);
+
+	}
+}
+
+void delete_mob(mob* m){
+	mobs.erase(find(mobs.begin(), mobs.end(), m));
+
+	if(typeid(*m) == typeid(pikmin)){
+		pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), (pikmin*) m));
+
+	}else if(typeid(*m) == typeid(leader)){
+		leaders.erase(find(leaders.begin(), leaders.end(), (leader*) m));
+
+	}else if(typeid(*m) == typeid(onion)){
+		onions.erase(find(onions.begin(), onions.end(), (onion*) m));
+
+	}else if(typeid(*m) == typeid(nectar)){
+		nectars.erase(find(nectars.begin(), nectars.end(), (nectar*) m));
+
+	}else if(typeid(*m) == typeid(pellet)){
+		pellets.erase(find(pellets.begin(), pellets.end(), (pellet*) m));
+
+	}else if(typeid(*m) == typeid(ship)){
+		ships.erase(find(ships.begin(), ships.end(), (ship*) m));
+
+	}else if(typeid(*m) == typeid(treasure)){
+		treasures.erase(find(treasures.begin(), treasures.end(), (treasure*) m));
+
+	}else if(typeid(*m) == typeid(info_spot)){
+		info_spots.erase(find(info_spots.begin(), info_spots.end(), (info_spot*) m));
+
+	}
+}
+
 
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color){
 	float first_y = cy - (font_h * 3) / 2;
@@ -125,6 +187,10 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
 }
 
 void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle, ALLEGRO_COLOR tint){
+	if(!bmp){
+		bmp = bmp_error;
+	}
+
 	float bmp_w = al_get_bitmap_width(bmp);
 	float bmp_h = al_get_bitmap_height(bmp);
 	float x_scale = w / bmp_w;
@@ -139,25 +205,26 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, floa
 		0);
 }
 
-void drop_treasure(pikmin* p){
-	if(!p->carrying_treasure) return;
+void drop_mob(pikmin* p){
+	if(!p->carrying_mob) return;
 
 	//ToDo optimize this instead of running through the spot vector.
-	if(p->carrying_treasure){
-		for(size_t s=0; s<p->carrying_treasure->carrier_info->max_carriers; s++){
-			if(p->carrying_treasure->carrier_info->carrier_spots[s] == p){
-				p->carrying_treasure->carrier_info->carrier_spots[s] = NULL;
-				p->carrying_treasure->carrier_info->current_n_carriers--;
+	if(p->carrying_mob){
+		for(size_t s=0; s<p->carrying_mob->carrier_info->max_carriers; s++){
+			if(p->carrying_mob->carrier_info->carrier_spots[s] == p){
+				p->carrying_mob->carrier_info->carrier_spots[s] = NULL;
+				p->carrying_mob->carrier_info->current_n_carriers--;
 			}
 		}
 	}
 
-	//Did this Pikmin leaving made the treasure stop moving?
-	if(p->carrying_treasure->carrier_info->current_n_carriers < p->carrying_treasure->weight){
-		p->carrying_treasure->remove_target(true);
+	//Did this Pikmin leaving made the mob stop moving?
+	if(p->carrying_mob->carrier_info->current_n_carriers < p->carrying_mob->weight){
+		p->carrying_mob->remove_target(true);
+	}else{
+		start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
 	}
-
-	p->carrying_treasure = NULL;
+	p->carrying_mob = NULL;
 }
 
 void error_log(string s){
@@ -489,6 +556,12 @@ void load_game_content(){
 	pikmin_types.back().name = "B";
 	pikmin_types.back().max_move_speed = 80;
 
+	pikmin_types.push_back(pikmin_type());
+	pikmin_types.back().color = al_map_rgb(255, 255, 255);
+	pikmin_types.back().name = "W";
+	pikmin_types.back().max_move_speed = 100;
+	pikmin_types.back().has_onion = false;
+
 	statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
 	statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
 
@@ -755,84 +828,130 @@ void start_camera_zoom(float final_zoom_level){
 	al_play_sample(sfx_camera.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_camera.id);
 }
 
-void start_carrying(mob* m){
+//m: mob to start moving.
+//np: new Pikmin; the Pikmin that justed joined. Used to detect ties and tie-breaking.
+//lp: leaving Pikmin; the Pikmin that just left. Used to detect ties and tie-breaking.
+void start_carrying(mob* m, pikmin* np, pikmin* lp){
 	//ToDo what if an Onion hasn't been revelead yet?
 	if(!m->carrier_info) return;
 
-	float target_x, target_y;
-
-	/*
-	m->set_target(
-		ships[0]->x + ships[0]->size * 0.5 + m->size * 0.5 + 8,
-		ships[0]->y,
-		NULL,
-		NULL,
-		false);
-	*/
-
-	map<pikmin_type*, unsigned> type_quantity; //How many of each Pikmin type are carrying.
-	vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
-
-	//First, count how many of each type there are.
-	for(size_t p=0; p<m->carrier_info->max_carriers; p++){
-		pikmin* pik_ptr = NULL;
+	if(m->carrier_info->carry_to_ship){
 		
-		if(m->carrier_info->carrier_spots[p] == NULL) continue;
-		if(typeid(*m->carrier_info->carrier_spots[p]) == typeid(pikmin))
+		m->set_target(
+			ships[0]->x + ships[0]->size * 0.5 + m->size * 0.5 + 8,
+			ships[0]->y,
+			NULL,
+			NULL,
+			false);
+		m->carrier_info->decided_type = NULL;
+
+	}else{
+
+		map<pikmin_type*, unsigned> type_quantity; //How many of each Pikmin type are carrying.
+		vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
+
+		//First, count how many of each type there are.
+		for(size_t p=0; p<m->carrier_info->max_carriers; p++){
+			pikmin* pik_ptr = NULL;
+		
+			if(m->carrier_info->carrier_spots[p] == NULL) continue;
+			if(typeid(*m->carrier_info->carrier_spots[p]) != typeid(pikmin)) continue;
+			
 			pik_ptr = (pikmin*) m->carrier_info->carrier_spots[p];
-		else continue;
 
-		if(type_quantity.find(pik_ptr->type) == type_quantity.end()) type_quantity[pik_ptr->type]=0; //ToDo maps don't start the number at 0, so that's why I need this line, correct?
-		type_quantity[pik_ptr->type]++;
-	}
+			if(!pik_ptr->type->has_onion) continue; //If it doesn't have an Onion, it won't even count. //ToDo what if it hasn't been discovered / Onion not on this area?
 
-	//Then figure out what are the majority types.
-	unsigned most = 0;
-	for(map<pikmin_type*, unsigned>::iterator t = type_quantity.begin(); t!=type_quantity.end(); t++){
-		if(t->second > most){
-			most = t->second;
-			majority_types.clear();
+			if(type_quantity.find(pik_ptr->type) == type_quantity.end()) type_quantity[pik_ptr->type]=0; //ToDo maps don't start the number at 0, so that's why I need this line, correct?
+			type_quantity[pik_ptr->type]++;
 		}
-		if(t->second == most) majority_types.push_back(t->first);
-	}
 
-	//Weed out the types that don't have Onions.
-	for(size_t t=0; t<majority_types.size();){
-		if(!majority_types[t]->has_onion){
-			majority_types.erase(majority_types.begin() + t);
-		}else{
-			t++;
+		//Then figure out what are the majority types.
+		unsigned most = 0;
+		for(map<pikmin_type*, unsigned>::iterator t = type_quantity.begin(); t!=type_quantity.end(); t++){
+			if(t->second > most){
+				most = t->second;
+				majority_types.clear();
+			}
+			if(t->second == most) majority_types.push_back(t->first);
 		}
-	}
 
-	//If we ended up with no candidates, pick a type at random, out of all possible types.
-	if(majority_types.size() == 0){
-		for(size_t t=0; t<pikmin_types.size(); t++){
-			if(pikmin_types[t].has_onion){
-				majority_types.push_back(&pikmin_types[t]);
+		//If we ended up with no candidates, pick a type at random, out of all possible types.
+		if(majority_types.size() == 0){
+			for(size_t t=0; t<pikmin_types.size(); t++){
+				if(pikmin_types[t].has_onion){ //ToDo what if it hasn't been discovered / Onion not on this area?
+					majority_types.push_back(&pikmin_types[t]);
+				}
 			}
 		}
-	}
 
-	//Of the candidate types, pick one at random (if there's only one, only that one'll be picked, so no worries).
-	if(majority_types.size() == 0) return; //ToDo warn?
-	size_t type_chosen = random(0, majority_types.size() - 1);
-	
-	//Figure out where that type's Onion is.
-	size_t onion_nr = 0;
-	for(; onion_nr<onions.size(); onion_nr++){
-		if(onions[onion_nr]->type == majority_types[type_chosen]){
-			break;
+		//Now let's pick an Onion.
+		if(majority_types.size() == 0){
+			return; //ToDo warn that something went horribly wrong?
+
+		}if(majority_types.size() == 1){
+			//If there's only one possible type to pick, pick it.
+			m->carrier_info->decided_type = majority_types[0];
+
+		}else{
+			//If there's a tie, let's take a careful look.
+			bool new_tie = false;
+
+			//Is the Pikmin that just joined part of the majority types?
+			//If so, that means this Pikmin just created a NEW tie!
+			//So let's pick a random Onion again.
+			if(np){
+				for(size_t mt=0; mt<majority_types.size(); mt++){
+					if(np->type == majority_types[mt]){
+						new_tie = true;
+						break;
+					}
+				}
+			}
+
+			//If a Pikmin left, check if they are related to the majority types.
+			//If not, then a new tie wasn't made, no worries.
+			//If it was related, a new tie was created.
+			if(lp){
+				new_tie = false;
+				for(size_t mt=0; mt<majority_types.size(); mt++){
+					if(lp->type == majority_types[mt]){
+						new_tie = true;
+						break;
+					}
+				}
+			}
+
+			//Check if the previously decided type belongs to one of the majorities.
+			//If so, it can be chosen again, but if not, it cannot.
+			bool can_continue = false;
+			for(size_t mt=0; mt<majority_types.size(); mt++){
+				if(majority_types[mt] == m->carrier_info->decided_type){
+					can_continue = true;
+					break;
+				}
+			}
+			if(!can_continue) m->carrier_info->decided_type = NULL;
+
+			//If the Pikmin that just joined is not a part of the majorities,
+			//then it had no impact on the existing ties.
+			//Go with the Onion that had been decided before.
+			if(new_tie || !m->carrier_info->decided_type){
+				m->carrier_info->decided_type = majority_types[random(0, majority_types.size() - 1)];
+			}
 		}
+
+	
+		//Figure out where that type's Onion is.
+		size_t onion_nr = 0;
+		for(; onion_nr<onions.size(); onion_nr++){
+			if(onions[onion_nr]->type == m->carrier_info->decided_type){
+				break;
+			}
+		}
+
+		//Finally, start moving the mob.
+		m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
 	}
-
-	//Calculate the delivery coordinates.
-	target_x = onions[onion_nr]->x;
-	target_y = onions[onion_nr]->y;
-
-	//Finall, start moving the mob.
-	m->set_target(target_x, target_y, NULL, NULL, false);
-	m->carrier_info->carry_color = majority_types[type_chosen]->color;
 }
 
 void stop_whistling(){

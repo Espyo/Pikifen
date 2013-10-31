@@ -6,6 +6,7 @@
 #include <allegro5/allegro.h>
 
 #include "const.h"
+#include "pikmin_type.h"
 #include "sector.h"
 
 using namespace std;
@@ -14,13 +15,15 @@ class mob;
 
 struct carrier_info_struct{
 	unsigned int max_carriers;
-	size_t current_n_carriers;     //This is to avoid going through the vector to find out how many are carrying the mob.
-	vector<mob*> carrier_spots;    //Pikmin carrying, and their spots.
+	bool carry_to_ship; //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
 	vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
 	vector<float> carrier_spots_y;
-	ALLEGRO_COLOR carry_color;     //Color of the fraction numbers.
 
-	carrier_info_struct(mob* m, unsigned int max_carriers);
+	size_t current_n_carriers;     //This is to avoid going through the vector to find out how many are carrying the mob.
+	vector<mob*> carrier_spots;    //Pikmin carrying, and their spots.
+	pikmin_type* decided_type;     //Current Onion type it's being taken to.
+
+	carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship);
 };
 
 class mob{

@@ -175,10 +175,17 @@ void do_drawing(){
 			al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->size * 0.5, al_map_rgb(128, 255, 255));
 		}
 
+		//Pellets.
 		size_t n_pellets = pellets.size();
 		for(size_t p=0; p<n_pellets; p++){
+			ALLEGRO_BITMAP* bm = NULL;
+			if(pellets[p]->weight == 1) bm = bmp_red_pellet[0];
+			else if(pellets[p]->weight == 5) bm = bmp_red_pellet[1];
+			else if(pellets[p]->weight == 10) bm = bmp_red_pellet[2];
+			else if(pellets[p]->weight == 20) bm = bmp_red_pellet[3];
+
 			draw_sprite(
-				bmp_red_pellet[0],
+				bm,
 				pellets[p]->x, pellets[p]->y,
 				pellets[p]->size, pellets[p]->size);
 		}
@@ -188,7 +195,7 @@ void do_drawing(){
 		for(size_t p = 0; p<n_pikmin; p++){
 			ALLEGRO_BITMAP* bm = NULL;
 
-			bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_treasure;
+			bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_mob;
 
 			if(pikmin_list[p]->type->name=="R"){
 				if(pikmin_list[p]->burrowed) bm=bmp_red_burrowed[pikmin_list[p]->maturity];
@@ -277,16 +284,22 @@ void do_drawing(){
 		****************************/
 			
 		//Fractions.
-		for(size_t t=0; t<n_treasures; t++){
+		size_t n_mobs = mobs.size();
+		for(size_t m=0; m<n_mobs; m++){
+			if(!mobs[m]->carrier_info) continue;
 			//ToDo it's not taking Pikmin strength into account.
-			if(treasures[t]->carrier_info->current_n_carriers>0){
+			if(mobs[m]->carrier_info->current_n_carriers>0){
 				ALLEGRO_COLOR color;
-				if(treasures[t]->carrier_info->current_n_carriers >= treasures[t]->weight){ //Being carried.
-					color = treasures[t]->carrier_info->carry_color;
+				if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->weight){ //Being carried.
+					if(mobs[m]->carrier_info->carry_to_ship){
+						color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
+					}else{
+						color = mobs[m]->carrier_info->decided_type->color;
+					}
 				}else{
 					color = al_map_rgb(96, 192, 192);
 				}
-				draw_fraction(treasures[t]->x, treasures[t]->y, treasures[t]->carrier_info->current_n_carriers, treasures[t]->weight, color);
+				draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->size, mobs[m]->carrier_info->current_n_carriers, mobs[m]->weight, color);
 			}
 		}
 

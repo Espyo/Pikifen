@@ -264,7 +264,7 @@ void handle_button(unsigned int button, float pos){
 					if(dist(leaders[current_leader]->x, leaders[current_leader]->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE){
 						//ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
 						pikmin_in_onions[o]--;
-						pikmin_list.push_back(new pikmin(onions[o]->type, onions[o]->x, onions[o]->y, onions[o]->sec));
+						create_mob(new pikmin(onions[o]->type, onions[o]->x, onions[o]->y, onions[o]->sec));
 						add_to_party(leaders[current_leader], pikmin_list[pikmin_list.size()-1]);
 						done = true;
 					}
