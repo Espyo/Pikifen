@@ -17,6 +17,8 @@ void add_to_party(mob* party_leader, mob* new_member){
 	new_member->following_party = party_leader;
 	//ToDo remove? new_member->go_to_target = true;
 	party_leader->party.push_back(new_member);
+
+	make_uncarriable(new_member);
 }
 
 void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord){
@@ -102,11 +104,44 @@ void delete_mob(mob* m){
 	}
 }
 
+void dismiss(){
+	leader* current_leader_ptr = leaders[current_leader];
+
+	//ToDo what if there are a lot of Pikmin types?
+	size_t n_party_members = current_leader_ptr->party.size();
+	for(size_t m=0; m<n_party_members; m++){
+		mob* member_ptr = current_leader_ptr->party[0];
+		remove_from_party(member_ptr);
+
+		float angle = 0;
+
+		if(typeid(*member_ptr) == typeid(pikmin)){
+			pikmin* pikmin_ptr = dynamic_cast<pikmin*>(member_ptr);
+			if(pikmin_ptr->type->name == "R"){
+				angle = M_PI * 1.25;
+			}else if(pikmin_ptr->type->name == "Y"){
+				angle = M_PI;
+			}else{
+				angle = M_PI * 0.75;
+			}
+
+			angle+=current_leader_ptr->angle;
+			if(moving_group_intensity > 0) angle+=M_PI; //If the leader's moving the group, they should be dismissed towards the cursor.
+
+			member_ptr->set_target(
+				current_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
+				current_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
+				NULL,
+				NULL,
+				false);
+		}					
+	}
+}
 
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color){
 	float first_y = cy - (font_h * 3) / 2;
 	al_draw_text(font, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
-	al_draw_text(font, color, cx, first_y + font_h * 2, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
+	al_draw_text(font, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
 
 	ALLEGRO_TRANSFORM scale, old;
 	al_copy_transform(&old, al_get_current_transform());
@@ -117,7 +152,7 @@ void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed
 	al_compose_transform(&scale, &old);
 
 	al_use_transform(&scale);{
-		al_draw_text(font, color, 0, first_y + font_h, ALLEGRO_ALIGN_CENTER, "-");
+		al_draw_text(font, color, 0, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
 	};al_use_transform(&old);
 }
 
@@ -224,7 +259,9 @@ void drop_mob(pikmin* p){
 	}else{
 		start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
 	}
+
 	p->carrying_mob = NULL;
+	p->remove_target(true);
 }
 
 void error_log(string s){
@@ -501,7 +538,7 @@ void load_options(){
 		load_control(BUTTON_SWITCH_TYPE_LEFT,     p, "switch_type_left", file, "");
 		load_control(BUTTON_SWITCH_MATURITY_UP,   p, "switch_maturity_up", file, "");
 		load_control(BUTTON_SWITCH_MATURITY_DOWN, p, "switch_maturity_down", file, "");
-		load_control(BUTTON_LIE_DOWN,             p, "lie_down", file, "");
+		load_control(BUTTON_LIE_DOWN,             p, "lie_down", file, "k_26");
 		load_control(BUTTON_PAUSE,                p, "pause", file, "k_59");
 	}
 
@@ -567,6 +604,18 @@ void load_game_content(){
 
 	spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
 	spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
+
+	pellet_types.push_back(pellet_type(32, 2, 1, 2, 1));
+	pellet_types.push_back(pellet_type(64, 10, 5, 5, 3));
+	pellet_types.push_back(pellet_type(96, 20, 10, 10, 5));
+	pellet_types.push_back(pellet_type(128, 50, 20, 20, 10));
+}
+
+void make_uncarriable(mob* m){
+	if(!m->carrier_info) return;
+
+	delete m->carrier_info;
+	m->carrier_info = NULL;
 }
 
 void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color){
@@ -651,17 +700,15 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
 	}
 }
 
-void remove_from_party(mob* party_leader, mob* member_to_remove){
-	size_t n_members = party_leader->party.size();
-	for(size_t p=0; p<n_members; p++){
-		if(party_leader->party[p] == member_to_remove){
-			party_leader->party.erase(party_leader->party.begin() + p);
-			break;
-		}
-	}
-	member_to_remove->following_party = NULL;
-	member_to_remove->remove_target(false);
-	member_to_remove->uncallable_period = UNCALLABLE_PERIOD;
+void remove_from_party(mob* member){
+	member->following_party->party.erase(find(
+		member->following_party->party.begin(),
+		member->following_party->party.end(),
+		member));
+
+	member->following_party = NULL;
+	member->remove_target(false);
+	member->uncallable_period = UNCALLABLE_PERIOD;
 }
 
 void save_options(){

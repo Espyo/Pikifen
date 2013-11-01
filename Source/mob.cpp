@@ -131,3 +131,13 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
 		carrier_spots_y.push_back(sin(angle) * m->size * 0.5);
 	}
 }
+
+carrier_info_struct::~carrier_info_struct(){
+	for(size_t s=0; s<max_carriers; s++){
+		if(carrier_spots[s]){
+			if(typeid(*carrier_spots[s]) == typeid(pikmin)){
+				drop_mob((pikmin*) carrier_spots[s]);
+			}
+		}
+	}
+}

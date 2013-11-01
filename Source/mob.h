@@ -24,6 +24,7 @@ struct carrier_info_struct{
 	pikmin_type* decided_type;     //Current Onion type it's being taken to.
 
 	carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship);
+	~carrier_info_struct();
 };
 
 class mob{

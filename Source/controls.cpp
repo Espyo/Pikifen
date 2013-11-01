@@ -170,6 +170,7 @@ void handle_button(unsigned int button, float pos){
 			*******************/
 
 			if(fabs(pos) < 0.75) pos = 0;
+			make_uncarriable(leaders[current_leader]);
 
 			if(button == BUTTON_MOVE_RIGHT)     leaders[current_leader]->speed_x = LEADER_MOVE_SPEED * pos;
 			else if(button == BUTTON_MOVE_UP)   leaders[current_leader]->speed_y = -LEADER_MOVE_SPEED * pos;
@@ -204,6 +205,8 @@ void handle_button(unsigned int button, float pos){
 			*   Group   ****O *
 			*            ***  *
 			******************/
+			
+			make_uncarriable(leaders[current_leader]);
 
 			if(button == BUTTON_MOVE_GROUP_RIGHT)     moving_group_pos_x = pos;
 			else if(button == BUTTON_MOVE_GROUP_UP)   moving_group_pos_y = -pos;
@@ -211,6 +214,8 @@ void handle_button(unsigned int button, float pos){
 			else if(button == BUTTON_MOVE_GROUP_DOWN) moving_group_pos_y = pos;
 
 	}else if(button == BUTTON_MOVE_GROUP_TO_CURSOR){
+
+		make_uncarriable(leaders[current_leader]);
 
 		if(pos > 0){
 			moving_group_to_cursor = true;
@@ -228,7 +233,10 @@ void handle_button(unsigned int button, float pos){
 		*            `--´  *
 		*******************/
 
+		make_uncarriable(leaders[current_leader]);
+
 		if(pos > 0){ //Button press.
+
 			bool done = false;
 				
 			//First check if the leader should pluck a Pikmin.
@@ -314,7 +322,7 @@ void handle_button(unsigned int button, float pos){
 
 				holding_ptr->was_thrown = true;
 				
-				remove_from_party(leaders[current_leader], holding_ptr);
+				remove_from_party(holding_ptr);
 				leaders[current_leader]->holding_pikmin = NULL;
 
 				al_stop_sample(&sfx_pikmin_held.id);
@@ -332,6 +340,8 @@ void handle_button(unsigned int button, float pos){
 		*   Whistle   ( @ ) *
 		*              `-´  *
 		********************/
+
+		make_uncarriable(leaders[current_leader]);
 
 		if(pos > 0){ //Button pressed.
 			whistling = true;
@@ -395,7 +405,7 @@ void handle_button(unsigned int button, float pos){
 			size_t n_party_members = swap_leader->party.size();
 			for(size_t m=0; m<n_party_members; m++){
 				mob* member = swap_leader->party[0];
-				remove_from_party(swap_leader, member);
+				remove_from_party(member);
 				if(member != leaders[new_leader]){
 					add_to_party(leaders[new_leader], member);
 				}
@@ -418,38 +428,9 @@ void handle_button(unsigned int button, float pos){
 
 		if(pos == 0) return;
 
-		leader* current_leader_ptr = leaders[current_leader];
+		make_uncarriable(leaders[current_leader]);
 
-		//ToDo what if there are a lot of Pikmin types?
-		size_t n_party_members = current_leader_ptr->party.size();
-		for(size_t m=0; m<n_party_members; m++){
-			mob* member_ptr = current_leader_ptr->party[0];
-			remove_from_party(current_leader_ptr, member_ptr);
-
-			float angle = 0;
-
-			if(typeid(*member_ptr) == typeid(pikmin)){
-				pikmin* pikmin_ptr = dynamic_cast<pikmin*>(member_ptr);
-				if(pikmin_ptr->type->name == "R"){
-					angle = M_PI * 1.25;
-				}else if(pikmin_ptr->type->name == "Y"){
-					angle = M_PI;
-				}else{
-					angle = M_PI * 0.75;
-				}
-
-				angle+=current_leader_ptr->angle;
-				if(moving_group_intensity > 0) angle+=M_PI; //If the leader's moving the group, they should be dismissed towards the cursor.
-
-				member_ptr->set_target(
-					current_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
-					current_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
-					NULL,
-					NULL,
-					false);
-			}					
-		}
-
+		dismiss();
 		al_play_sample(leaders[current_leader]->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[current_leader]->sfx_dismiss.id);
 
 	}else if(button == BUTTON_PAUSE){
@@ -474,6 +455,8 @@ void handle_button(unsigned int button, float pos){
 		*******************/
 		if(pos == 0) return;
 
+		make_uncarriable(leaders[current_leader]);
+		
 		if(spray_types.size() == 1 || spray_types.size() == 2){
 			use_spray(0);
 		}
@@ -481,6 +464,8 @@ void handle_button(unsigned int button, float pos){
 	}else if(button == BUTTON_USE_SPRAY_2){
 
 		if(pos == 0) return;
+
+		make_uncarriable(leaders[current_leader]);
 
 		if(spray_types.size() == 2){
 			use_spray(1);
@@ -502,6 +487,8 @@ void handle_button(unsigned int button, float pos){
 	}else if(button == BUTTON_USE_SPRAY){
 
 		if(pos == 0) return;
+
+		make_uncarriable(leaders[current_leader]);
 
 		if(spray_types.size() > 2){
 			use_spray(selected_spray);
@@ -552,6 +539,29 @@ void handle_button(unsigned int button, float pos){
 			start_camera_zoom(new_zoom);
 		}
 
+	}else if(button == BUTTON_LIE_DOWN){
+
+		/**********************
+		*                     *
+		*   Lie down  -()/__/ *
+		*                     *
+		***********************/
+
+		if(pos == 0) return;
+
+		leader* leader_ptr = leaders[current_leader];
+
+		if(leader_ptr->carrier_info){
+			make_uncarriable(leader_ptr);
+		}else{
+			
+			dismiss();
+
+			leader_ptr->carrier_info = new carrier_info_struct(
+				leader_ptr,
+				3, //ToDo
+				false);
+		}
 	}
 }
 

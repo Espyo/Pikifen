@@ -90,6 +90,9 @@
     <ClCompile Include="spec_objs\pellet.cpp">
       <Filter>Source Files\spec_objs</Filter>
     </ClCompile>
+    <ClCompile Include="pellet_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="spec_objs\pellet.h">
       <Filter>Header Files\spec_objs</Filter>
+    </ClInclude>
+    <ClInclude Include="pellet_type.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

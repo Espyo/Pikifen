@@ -228,7 +228,12 @@ void do_drawing(){
 
 		//Leaders.
 		for(size_t l=0; l<n_leaders; l++){
-			ALLEGRO_BITMAP* bm = (l==0) ? bmp_olimar : ((l==1) ? bmp_louie : bmp_president);
+			ALLEGRO_BITMAP* bm = NULL;
+			if(leaders[l]->carrier_info){
+				bm = (l==0) ? bmp_olimar_lying : ((l==1) ? bmp_louie_lying : bmp_president_lying);
+			}else{
+				bm = (l==0) ? bmp_olimar : ((l==1) ? bmp_louie : bmp_president);
+			}
 			draw_sprite(
 				bm,
 				leaders[l]->x, leaders[l]->y,
@@ -299,7 +304,7 @@ void do_drawing(){
 				}else{
 					color = al_map_rgb(96, 192, 192);
 				}
-				draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->size, mobs[m]->carrier_info->current_n_carriers, mobs[m]->weight, color);
+				draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->size * 0.5 - font_h * 1.25, mobs[m]->carrier_info->current_n_carriers, mobs[m]->weight, color);
 			}
 		}
 

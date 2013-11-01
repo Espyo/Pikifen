@@ -8,4 +8,5 @@ leader::leader(float x, float y, sector* sec)
 	health = 10; //ToDo
 	max_health = 10;
 	size = 32; //ToDo
+	weight = 1; //ToDo
 }

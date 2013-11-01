@@ -189,7 +189,10 @@ void do_logic(){
 			!pik_ptr->speed_z &&
 			!pik_ptr->uncallable_period;
 		bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
-		bool touched = dist(pik_ptr->x, pik_ptr->y, leaders[current_leader]->x, leaders[current_leader]->y) <= pik_ptr->size * 0.5 + leaders[current_leader]->size * 0.5;
+		bool touched =
+			dist(pik_ptr->x, pik_ptr->y, leaders[current_leader]->x, leaders[current_leader]->y) <=
+			pik_ptr->size * 0.5 + leaders[current_leader]->size * 0.5 &&
+			!leaders[current_leader]->carrier_info;
 		bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
 
 		if(can_be_called && (whistled || (touched && !is_busy))){
@@ -255,7 +258,7 @@ void do_logic(){
 					if(dist(pik_ptr->x, pik_ptr->y, mobs[m]->x, mobs[m]->y)<=pik_ptr->size * 0.5 + mobs[m]->size * 0.5 + MIN_PIKMIN_TASK_RANGE){
 						pik_ptr->carrying_mob = mobs[m];
 								
-						if(pik_ptr->following_party) remove_from_party(pik_ptr->following_party, pik_ptr);
+						if(pik_ptr->following_party) remove_from_party(pik_ptr);
 
 						//ToDo remove this random cycle and replace with something more optimal.
 						bool valid_spot = false;
@@ -279,6 +282,8 @@ void do_logic(){
 						if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->weight){
 							start_carrying(mobs[m], pik_ptr, NULL);
 						}
+
+						pik_ptr->uncallable_period = 0;
 
 						break;
 					}
@@ -313,7 +318,7 @@ void do_logic(){
 					size_t n_party_members = leaders[l]->party.size();
 					for(size_t m=0; m<n_party_members; m++){
 						mob* member = leaders[l]->party[0];
-						remove_from_party(leaders[l], member);
+						remove_from_party(member);
 						add_to_party(leaders[current_leader], member);
 					}
 				}

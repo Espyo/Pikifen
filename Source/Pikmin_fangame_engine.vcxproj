@@ -92,6 +92,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="particle.cpp" />
+    <ClCompile Include="pellet_type.cpp" />
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />
     <ClCompile Include="sector.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="mob.h" />
     <ClInclude Include="object_state.h" />
     <ClInclude Include="particle.h" />
+    <ClInclude Include="pellet_type.h" />
     <ClInclude Include="pikmin.h" />
     <ClInclude Include="pikmin_type.h" />
     <ClInclude Include="sector.h" />

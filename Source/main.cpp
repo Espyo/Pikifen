@@ -52,6 +52,7 @@ int main(){
 	controls.push_back(control_info(BUTTON_SWITCH_ZOOM, 0, "k_3"));
 	controls.push_back(control_info(BUTTON_ZOOM_IN, 0, "mwu"));
 	controls.push_back(control_info(BUTTON_ZOOM_OUT, 0, "mwd"));
+	controls.push_back(control_info(BUTTON_LIE_DOWN, 0, "k_26"));
 	controls.push_back(control_info(BUTTON_PAUSE, 0, "k_59"));
 	load_options();
 	save_options();
@@ -127,6 +128,9 @@ int main(){
 	bmp_red_pellet[1] = load_bmp("Red_5_pellet.png");
 	bmp_red_pellet[2] = load_bmp("Red_10_pellet.png");
 	bmp_red_pellet[3] = load_bmp("Red_20_pellet.png");
+	bmp_olimar_lying = load_bmp("Olimar_lying.png");
+	bmp_louie_lying = load_bmp("Louie_lying.png");
+	bmp_president_lying = load_bmp("President_lying.png");
 
 	int font_ranges[] = {
 		0x0020, 0x007F, //ASCII
@@ -236,8 +240,10 @@ int main(){
 	pikmin_in_onions[1] = 180;
 	pikmin_in_onions[2] = 160;
 	create_mob(new ship(-100, 100, &s));
-	create_mob(new pellet(200, -100, &s, &pikmin_types[0], 32, 1, 2, 2, 1));
-	create_mob(new pellet(100, -100, &s, &pikmin_types[0], 96, 10, 20, 10, 5));
+	create_mob(new pellet(320, -100, &s, &pellet_types[0], &pikmin_types[0]));
+	create_mob(new pellet(250, -100, &s, &pellet_types[1], &pikmin_types[0]));
+	create_mob(new pellet(150, -100, &s, &pellet_types[2], &pikmin_types[0]));
+	create_mob(new pellet(0, -100, &s, &pellet_types[3], &pikmin_types[0]));
 
 	al_set_display_icon(display, bmp_icon);
 
