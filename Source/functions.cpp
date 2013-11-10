@@ -11,6 +11,13 @@
 #include "functions.h"
 #include "vars.h"
 
+//Call this whenever an "active" control is inputted. An "active" control is anything that moves the captain in some way.
+//This function makes the captain wake up from lying down, stop auto-plucking, etc.
+void active_control(){
+	make_uncarriable(leaders[current_leader]);
+	leaders[current_leader]->auto_pluck_mode = false;
+}
+
 void add_to_party(mob* party_leader, mob* new_member){
 	if(new_member->following_party == party_leader) return;	//Already following, never mind.
 
@@ -359,6 +366,28 @@ void generate_area_images(){
 
 }
 
+pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved){
+	float closest_distance = 0;
+	pikmin* closest_pikmin = NULL;
+
+	size_t n_pikmin = pikmin_list.size();
+	for(size_t p=0; p<n_pikmin; p++){
+		if(!pikmin_list[p]->burrowed) continue;
+
+		float dis = dist(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
+		if(closest_pikmin == NULL || dis < closest_distance){
+
+			if(!(ignore_reserved && pikmin_list[p]->pluck_reserved)){
+				closest_distance = dis;
+				closest_pikmin = pikmin_list[p];
+			}
+		}
+	}
+
+	if(d) *d = closest_distance;
+	return closest_pikmin;
+}
+
 ALLEGRO_COLOR get_daylight_color(){
 	//ToDo initialize this somewhere else?
 	static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
@@ -642,6 +671,14 @@ void make_uncarriable(mob* m){
 
 	delete m->carrier_info;
 	m->carrier_info = NULL;
+}
+
+void pluck_pikmin(leader* l, pikmin* p){
+	if(!p->burrowed) return;
+
+	p->burrowed = false;
+	add_to_party(l, p);
+	al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
 }
 
 inline float random(float min, float max){

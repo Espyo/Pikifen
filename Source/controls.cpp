@@ -70,88 +70,6 @@ void handle_controls(ALLEGRO_EVENT ev){
 		}
 	}
 
-	/*if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
-		if(ev.keyboard.keycode == ALLEGRO_KEY_W)           handle_button_down(BUTTON_MOVE_UP);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_A)      handle_button_down(BUTTON_MOVE_LEFT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_S)      handle_button_down(BUTTON_MOVE_DOWN);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_D)      handle_button_down(BUTTON_MOVE_RIGHT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_TAB)    handle_button_down(BUTTON_SWITCH_CAPTAIN_R);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_LCTRL)  handle_button_down(BUTTON_DISMISS);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_R)      {handle_button_down(BUTTON_USE_SPRAY_1); handle_button_down(BUTTON_USE_SPRAY);}
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_F)      handle_button_down(BUTTON_USE_SPRAY_2);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_Q)      handle_button_down(BUTTON_SWITCH_SPRAY_L);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_E)      handle_button_down(BUTTON_SWITCH_SPRAY_R);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_C)      handle_button_down(BUTTON_ZOOM_SWITCH);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE)  handle_button_down(BUTTON_MOVE_GROUP_TO_CURSOR);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) handle_button_down(BUTTON_PAUSE);
-
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_UP)     handle_button_down(BUTTON_MOVE_CURSOR_UP);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT)   handle_button_down(BUTTON_MOVE_CURSOR_LEFT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN)   handle_button_down(BUTTON_MOVE_CURSOR_DOWN);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)  handle_button_down(BUTTON_MOVE_CURSOR_RIGHT);
-
-	}else if(ev.type == ALLEGRO_EVENT_KEY_UP){
-		if(ev.keyboard.keycode == ALLEGRO_KEY_W)           handle_button_up(BUTTON_MOVE_UP);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_A)      handle_button_up(BUTTON_MOVE_LEFT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_S)      handle_button_up(BUTTON_MOVE_DOWN);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_D)      handle_button_up(BUTTON_MOVE_RIGHT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE)  handle_button_up(BUTTON_MOVE_GROUP_TO_CURSOR);
-
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_UP)     handle_button_up(BUTTON_MOVE_CURSOR_UP);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT)   handle_button_up(BUTTON_MOVE_CURSOR_LEFT);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN)   handle_button_up(BUTTON_MOVE_CURSOR_DOWN);
-		else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT)  handle_button_up(BUTTON_MOVE_CURSOR_RIGHT);
-
-	}else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES){
-		handle_mouse(AXIS_ACTION_MOVE_CURSOR, ev.mouse.x, ev.mouse.y);
-
-		if(ev.mouse.dz > 0)      handle_button_down(BUTTON_ZOOM_IN, ev.mouse.dz);
-		else if(ev.mouse.dz < 0) handle_button_down(BUTTON_ZOOM_OUT, -ev.mouse.dz);
-
-	}else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-		if(ev.mouse.button == 1)      handle_button_down(BUTTON_PUNCH);
-		else if(ev.mouse.button == 2) handle_button_down(BUTTON_WHISTLE);
-
-	}else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
-		if(ev.mouse.button == 1)      handle_button_up(BUTTON_PUNCH);
-		else if(ev.mouse.button == 2) handle_button_up(BUTTON_WHISTLE);
-
-	}else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS){
-		if(ev.joystick.stick == 0 && ev.joystick.axis == 0){
-			handle_analog(AXIS_ACTION_MOVE_X, ev.joystick.pos);
-			handle_analog(AXIS_ACTION_MOVE_CURSOR_X, ev.joystick.pos);
-
-		}else if(ev.joystick.stick == 0 && ev.joystick.axis == 1){
-			handle_analog(AXIS_ACTION_MOVE_Y, ev.joystick.pos);
-			handle_analog(AXIS_ACTION_MOVE_CURSOR_Y, ev.joystick.pos);
-
-		}else if(ev.joystick.stick == 1 && ev.joystick.axis == 0){
-			handle_analog(AXIS_ACTION_MOVE_GROUP_X, ev.joystick.pos);
-
-		}else if(ev.joystick.stick == 0 && ev.joystick.axis == 2){
-			handle_analog(AXIS_ACTION_MOVE_GROUP_Y, ev.joystick.pos);
-
-		}else if(ev.joystick.stick == 2 && ev.joystick.axis == 1){
-			if(ev.joystick.pos == -1) handle_button_down(BUTTON_USE_SPRAY_1);
-			else if(ev.joystick.pos == 1) handle_button_down(BUTTON_USE_SPRAY_2);
-		}
-
-	}else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN){
-		if(ev.joystick.button == 0) handle_button_down(BUTTON_DISMISS);
-		if(ev.joystick.button == 1) handle_button_down(BUTTON_PUNCH);
-		if(ev.joystick.button == 2) handle_button_down(BUTTON_WHISTLE);
-		if(ev.joystick.button == 3) handle_button_down(BUTTON_SWITCH_CAPTAIN_R);
-		if(ev.joystick.button == 5) handle_button_down(BUTTON_ZOOM_SWITCH);
-		if(ev.joystick.button == 9) handle_button_down(BUTTON_PAUSE);
-
-	}else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
-		if(ev.joystick.button == 0) handle_button_up(BUTTON_DISMISS);
-		if(ev.joystick.button == 1) handle_button_up(BUTTON_PUNCH);
-		if(ev.joystick.button == 2) handle_button_up(BUTTON_WHISTLE);
-		if(ev.joystick.button == 3) handle_button_up(BUTTON_SWITCH_CAPTAIN_R);
-		if(ev.joystick.button == 5) handle_button_up(BUTTON_ZOOM_SWITCH);
-
-	}*/
 }
 
 void handle_button(unsigned int button, float pos){
@@ -170,7 +88,7 @@ void handle_button(unsigned int button, float pos){
 			*******************/
 
 			if(fabs(pos) < 0.75) pos = 0;
-			make_uncarriable(leaders[current_leader]);
+			active_control();
 
 			if(button == BUTTON_MOVE_RIGHT)     leaders[current_leader]->speed_x = LEADER_MOVE_SPEED * pos;
 			else if(button == BUTTON_MOVE_UP)   leaders[current_leader]->speed_y = -LEADER_MOVE_SPEED * pos;
@@ -206,7 +124,7 @@ void handle_button(unsigned int button, float pos){
 			*            ***  *
 			******************/
 			
-			make_uncarriable(leaders[current_leader]);
+			active_control();
 
 			if(button == BUTTON_MOVE_GROUP_RIGHT)     moving_group_pos_x = pos;
 			else if(button == BUTTON_MOVE_GROUP_UP)   moving_group_pos_y = -pos;
@@ -215,7 +133,7 @@ void handle_button(unsigned int button, float pos){
 
 	}else if(button == BUTTON_MOVE_GROUP_TO_CURSOR){
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 
 		if(pos > 0){
 			moving_group_to_cursor = true;
@@ -233,35 +151,32 @@ void handle_button(unsigned int button, float pos){
 		*            `--´  *
 		*******************/
 
-		make_uncarriable(leaders[current_leader]);
-
 		if(pos > 0){ //Button press.
 
+			if(auto_pluck_input_time > 0){
+				leaders[current_leader]->auto_pluck_mode = true;
+
+				size_t n_leaders = leaders.size();
+				for(size_t l=0; l<n_leaders; l++){
+					if(leaders[l]->following_party == leaders[current_leader]){
+						leaders[l]->auto_pluck_mode = true;
+					}
+				}
+			}else{
+				active_control();
+			}
+			
 			bool done = false;
 				
 			//First check if the leader should pluck a Pikmin.
-
-			float closest_distance = 0;
-			pikmin* closest_pikmin = NULL;
-			size_t n_pikmin = pikmin_list.size();
-			for(size_t p=0; p<n_pikmin; p++){
-				if(!pikmin_list[p]->burrowed) continue;
-				float d = dist(leaders[current_leader]->x, leaders[current_leader]->y, pikmin_list[p]->x, pikmin_list[p]->y);
-				if(closest_pikmin == NULL || d < closest_distance){
-					closest_distance = d;
-					closest_pikmin = pikmin_list[p];
-				}
+			float d;
+			pikmin* p = get_closest_burrowed_pikmin(leaders[current_leader]->x, leaders[current_leader]->y, &d, false);
+			if(p && d <= MIN_PLUCK_RANGE){
+				pluck_pikmin(leaders[current_leader], p);
+				auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
+				done = true;
 			}
-
-			if(closest_pikmin){
-				if(closest_distance <= MIN_PLUCK_RANGE){
-					//Pluck.
-					closest_pikmin->burrowed = false;
-					add_to_party(leaders[current_leader], closest_pikmin);
-					al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
-					done = true;
-				}
-			}
+	
 
 			//Now check if the leader should open an onion's menu.
 			if(!done){
@@ -342,7 +257,7 @@ void handle_button(unsigned int button, float pos){
 		*              `-´  *
 		********************/
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 
 		if(pos > 0){ //Button pressed.
 			whistling = true;
@@ -429,7 +344,7 @@ void handle_button(unsigned int button, float pos){
 
 		if(pos == 0) return;
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 
 		dismiss();
 		al_play_sample(leaders[current_leader]->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[current_leader]->sfx_dismiss.id);
@@ -456,7 +371,7 @@ void handle_button(unsigned int button, float pos){
 		*******************/
 		if(pos == 0) return;
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 		
 		if(spray_types.size() == 1 || spray_types.size() == 2){
 			use_spray(0);
@@ -466,7 +381,7 @@ void handle_button(unsigned int button, float pos){
 
 		if(pos == 0) return;
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 
 		if(spray_types.size() == 2){
 			use_spray(1);
@@ -489,7 +404,7 @@ void handle_button(unsigned int button, float pos){
 
 		if(pos == 0) return;
 
-		make_uncarriable(leaders[current_leader]);
+		active_control();
 
 		if(spray_types.size() > 2){
 			use_spray(selected_spray);
@@ -553,7 +468,7 @@ void handle_button(unsigned int button, float pos){
 		leader* leader_ptr = leaders[current_leader];
 
 		if(leader_ptr->carrier_info){
-			make_uncarriable(leader_ptr);
+			active_control();
 		}else{
 			
 			dismiss();

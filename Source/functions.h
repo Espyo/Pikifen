@@ -12,6 +12,7 @@
 
 #define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
 
+void              active_control();
 void              add_to_party(mob* party_leader, mob* new_member);
 void              angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
 bool              atob(string s);
@@ -28,6 +29,7 @@ void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, 
 void              drop_mob(pikmin* p);
 void              error_log(string s);
 void              generate_area_images();
+pikmin*           get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved);
 ALLEGRO_COLOR     get_daylight_color();
 ALLEGRO_TRANSFORM get_world_to_screen_transform();
 void              give_pikmin_to_onion(onion* o, unsigned amount);
@@ -40,6 +42,7 @@ void              load_options();
 sample_struct     load_sample(string filename);
 void              load_game_content();
 void              make_uncarriable(mob* m);
+void              pluck_pikmin(leader* l, pikmin* p);
 inline float      random(float min, float max);
 void              random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void              random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);

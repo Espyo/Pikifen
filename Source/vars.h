@@ -82,6 +82,7 @@ extern vector<vector<ALLEGRO_BITMAP*> >
 	                         area_images;
 extern float                 area_x1; //Top-left corner of the area, in world coordinates.
 extern float                 area_y1;
+extern float                 auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the captain auto-pluck.
 extern vector<unsigned int>  berries;
 extern ALLEGRO_BITMAP*       bmp_error;
 extern float                 cam_trans_pan_final_x;

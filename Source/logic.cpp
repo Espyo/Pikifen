@@ -138,6 +138,11 @@ void do_logic(){
 
 	//Sun meter.
 	sun_meter_sun_angle += (1.0 / game_fps) * SUN_METER_SUN_SPIN_SPEED;
+
+	if(auto_pluck_input_time > 0){
+		auto_pluck_input_time -= (1.0 / game_fps);
+		if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
+	}
 			
 	/********************
 	*              ***  *
@@ -321,6 +326,7 @@ void do_logic(){
 					!leaders[l]->was_thrown){
 					//Leader got whistled.
 					add_to_party(leaders[current_leader], leaders[l]);
+					leaders[l]->auto_pluck_mode = false;
 
 					size_t n_party_members = leaders[l]->party.size();
 					for(size_t m=0; m<n_party_members; m++){
@@ -332,13 +338,51 @@ void do_logic(){
 			}
 		}
 
-		if(leaders[l]->following_party){
+		if(leaders[l]->following_party && !leaders[l]->auto_pluck_mode){
 			leaders[l]->set_target(
 				0,
 				30,
 				&leaders[l]->following_party->x,
 				&leaders[l]->following_party->y,
 				false);
+		}else{
+			if(leaders[l]->auto_pluck_mode){
+				if(leaders[l]->auto_pluck_pikmin && leaders[l]->reached_destination){
+
+					leader* new_pikmin_leader = leaders[l];
+					if(leaders[l]->following_party){
+						if(typeid(*leaders[l]->following_party) == typeid(leader)){
+							//If this leader is following another one, then the new Pikmin should be a part of that top leader.
+							new_pikmin_leader = (leader*) leaders[l]->following_party;
+						}
+					}
+
+					//Reached the Pikmin we want to pluck. Pluck it and find a new one.
+					pluck_pikmin(new_pikmin_leader, leaders[l]->auto_pluck_pikmin);
+					leaders[l]->auto_pluck_pikmin = NULL;
+				}
+
+				if(!leaders[l]->auto_pluck_pikmin){
+					float d;
+					pikmin* new_pikmin = get_closest_burrowed_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
+
+					if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS){
+						leaders[l]->auto_pluck_pikmin = new_pikmin;
+						new_pikmin->pluck_reserved = true;
+						leaders[l]->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
+					}else{ //No more burrowed Pikmin, or none nearby. Give up.
+						leaders[l]->auto_pluck_mode = false;
+						leaders[l]->remove_target(true);
+					}
+				}
+			}else{
+				if(leaders[l]->auto_pluck_pikmin){
+					//Cleanup.
+					leaders[l]->auto_pluck_pikmin->pluck_reserved = false;
+					leaders[l]->auto_pluck_pikmin = NULL;
+					leaders[l]->remove_target(true);
+				}
+			}
 		}
 		
 	}

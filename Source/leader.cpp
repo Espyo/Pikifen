@@ -9,4 +9,6 @@ leader::leader(float x, float y, sector* sec)
 	max_health = 10;
 	size = 32; //ToDo
 	weight = 1; //ToDo
+	auto_pluck_mode = false;
+	auto_pluck_pikmin = NULL;
 }

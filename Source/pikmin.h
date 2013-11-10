@@ -22,6 +22,7 @@ public:
 
 	unsigned char maturity;     //0: leaf. 1: bud. 2: flower.
 	bool burrowed;
+	bool pluck_reserved; //If true, someone's already coming to pluck this Pikmin. This is to let other leaders now that they should pick another one.
 };
 
 #endif //ifndef PIKMIN_INCLUDED

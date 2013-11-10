@@ -24,6 +24,8 @@ struct sample_struct{
 };
 
 #define AREA_IMAGE_SIZE            800      //How many pixels the area images are (both width and height; they're square).
+#define AUTO_PLUCK_INPUT_INTERVAL  0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
+#define AUTO_PLUCK_MAX_RADIUS      160      //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION    0.5      //How many seconds a camera transition lasts for.
 #define CURSOR_MAX_DIST            200      //The cursor can only be these many units away from the captain.
 #define DISMISS_DISTANCE           64       //Dismissed Pikmin go these many units away from the captain.

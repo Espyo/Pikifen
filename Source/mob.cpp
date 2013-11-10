@@ -107,10 +107,13 @@ void mob::set_target(float target_x, float target_y, float *target_rel_x, float 
 	this->gtt_instant = instant;
 
 	go_to_target = true;
+	reached_destination = false;
 }
 
 void mob::remove_target(bool stop){
 	go_to_target = false;
+	reached_destination = false;
+
 	if(stop){
 		speed_x = 0;
 		speed_y = 0;

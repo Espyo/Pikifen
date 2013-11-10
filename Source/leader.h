@@ -22,6 +22,9 @@ public:
 	sample_struct sfx_dismiss;
 	sample_struct sfx_name_call;
 
+	bool auto_pluck_mode;
+	pikmin* auto_pluck_pikmin;
+
 	leader(float x, float y, sector* sec);
 };
 

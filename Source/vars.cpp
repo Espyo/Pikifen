@@ -60,6 +60,7 @@ vector<vector<ALLEGRO_BITMAP*>>
 	                  area_images;
 float                 area_x1 = 0;
 float                 area_y1 = 0;
+float                 auto_pluck_input_time = 0;
 vector<unsigned int>  berries;
 ALLEGRO_BITMAP*       bmp_error;
 float                 cam_trans_pan_final_x = 0;
