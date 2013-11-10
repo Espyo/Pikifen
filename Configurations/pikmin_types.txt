@@ -1,29 +1,66 @@
 pikmin_type{
-	name = "Red Pikmin"
+	name = Red Pikmin
 	color = 255 0 0
 	max_move_speed = 50
+	
+	landing{ //Damage caused when landing on an enemy
+		damage = 0
+	}
+	attack{
+		damage = 1.2
+	}
 }
 
 pikmin_type{
-	name = "Yellow Pikmin"
+	name = Yellow Pikmin
 	color = 255 255 0
 	max_move_speed = 50
+	
+	landing{
+		damage = 0
+	}
+	attack{
+		damage = 1
+	}
 }
 
 pikmin_type{
-	name = "Blue Pikmin"
+	name = Blue Pikmin
 	color = 0 0 255
 	max_move_speed = 50
+	
+	landing{
+		damage = 0
+	}
+	attack{
+		damage = 1
+	}
 }
 
 pikmin_type{
-	name = "Purple Pikmin"
+	name = Purple Pikmin
 	color = 128 0 255
 	max_move_speed = 40
+	
+	landing{
+		damage = 1
+		effect = stun, 20%
+		effect = bounce, 100%
+	}
+	attack{
+		damage = 1
+	}
 }
 
 pikmin_type{
-	name = "White Pikmin"
+	name = White Pikmin
 	color = 255 255 255
 	max_move_speed = 60
+	
+	landing{
+		damage = 0
+	}
+	attack{
+		damage = 1
+	}
 }

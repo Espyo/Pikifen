@@ -400,6 +400,32 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform(){
 	return t;
 }
 
+void give_pikmin_to_onion(onion* o, unsigned amount){
+	unsigned total_after = pikmin_list.size() + amount;
+	unsigned pikmin_to_spit = amount;
+	unsigned pikmin_to_keep = 0; //Pikmin to keep inside the Onion, without spitting.
+
+	if(total_after > max_pikmin_in_field){
+		pikmin_to_keep = total_after - max_pikmin_in_field;
+		pikmin_to_spit = amount - pikmin_to_keep;
+	}
+
+	for(unsigned p=0; p<pikmin_to_spit; p++){
+		float angle = random(0, M_PI*2);
+		float x = o->x + cos(angle) * o->size * 2;
+		float y = o->y + sin(angle) * o->size * 2;
+
+		//ToDo throw them, don't teleport them.
+		pikmin* new_pikmin = new pikmin(o->type, x, y, o->sec);
+		new_pikmin->burrowed = true;
+		create_mob(new_pikmin);
+	}
+
+	for(unsigned p=0; p<pikmin_to_keep; p++){
+		pikmin_in_onions[o->type]++;
+	}
+}
+
 ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2){
 	float progress = (float) (n - n1) / (float) (n2 - n1);
 	return al_map_rgba_f(
@@ -616,6 +642,10 @@ void make_uncarriable(mob* m){
 
 	delete m->carrier_info;
 	m->carrier_info = NULL;
+}
+
+inline float random(float min, float max){
+	return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
 
 void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color){

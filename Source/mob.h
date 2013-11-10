@@ -34,6 +34,10 @@ public:
 	//mob& operator=(const mob& m2);
 	virtual ~mob(); //Needed so that typeid works.
 
+	//Flags.
+	bool to_delete; //If true, this mob should be deleted.
+	bool reached_destination;
+
 	//Detail things.
 	ALLEGRO_COLOR main_color;
 

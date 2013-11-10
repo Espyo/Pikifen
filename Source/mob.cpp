@@ -9,6 +9,9 @@ mob::mob(float x, float y, float z, float move_speed, sector* sec){
 	this->z = z;
 	this->sec = sec;
 
+	to_delete = false;
+	reached_destination = false;
+
 	speed_x = speed_y = speed_z = 0;
 	this->move_speed = move_speed;
 	angle = 0;
@@ -78,14 +81,13 @@ void mob::tick(){
 			if(dist > 0){
 				float move_amount = min(dist * game_fps / 2, move_speed);
 
-				if(move_amount == 0)
-					move_amount = move_amount;
-			
 				dx *= move_amount / dist;
 				dy *= move_amount / dist;
 
 				speed_x = dx;
 				speed_y = dy;
+			}else{
+				reached_destination = true;
 			}
 		}
 	}

@@ -166,8 +166,8 @@ int main(){
 	size_t n_spray_types = spray_types.size();
 	for(size_t s=0; s<n_spray_types; s++){ sprays.push_back(0); }
 	pikmin_in_onions.clear();
-	size_t n_total_onions = pikmin_types.size();
-	for(size_t o=0; o<n_total_onions; o++){ pikmin_in_onions.push_back(0); }
+	size_t n_total_types = pikmin_types.size();
+	for(size_t t=0; t<n_total_types; t++){ pikmin_in_onions[&pikmin_types[t]] = 0; }
 	
 	//Some temp variables.
 	sector s = sector();
@@ -236,9 +236,9 @@ int main(){
 	sprays[0] = sprays[1] = 10;
 	spray_types[0].bmp_spray = bmp_ub_spray;
 	spray_types[1].bmp_spray = bmp_us_spray;
-	pikmin_in_onions[0] = 200;
-	pikmin_in_onions[1] = 180;
-	pikmin_in_onions[2] = 160;
+	pikmin_in_onions[&pikmin_types[0]] = 200;
+	pikmin_in_onions[&pikmin_types[1]] = 180;
+	pikmin_in_onions[&pikmin_types[2]] = 160;
 	create_mob(new ship(-100, 100, &s));
 	create_mob(new pellet(320, -100, &s, &pellet_types[0], &pikmin_types[0]));
 	create_mob(new pellet(250, -100, &s, &pellet_types[1], &pikmin_types[0]));

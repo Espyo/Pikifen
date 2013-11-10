@@ -93,6 +93,7 @@ vector<info_spot*>    info_spots;
 map<ALLEGRO_JOYSTICK*, int>
                       joystick_numbers;
 vector<leader*>       leaders;
+unsigned              max_pikmin_in_field = 100;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w/2 + CURSOR_MAX_DIST;
 float                 mouse_cursor_y = scr_h/2;
@@ -113,7 +114,8 @@ vector<particle>      particles;
 bool                  paused = false;
 vector<pellet_type>   pellet_types;
 vector<pellet*>       pellets;
-vector<unsigned long> pikmin_in_onions;
+map<pikmin_type*, unsigned long>
+                      pikmin_in_onions;
 vector<pikmin*>       pikmin_list;
 vector<pikmin_type>   pikmin_types;
 bool                  pretty_whistle = false;

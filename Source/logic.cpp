@@ -168,8 +168,15 @@ void do_logic(){
 	******************/
 
 	size_t n_mobs = mobs.size();
-	for(size_t m=0; m<n_mobs; m++){
+	for(size_t m=0; m<n_mobs;){
 		mobs[m]->tick();
+
+		if(mobs[m]->to_delete){
+			delete_mob(mobs[m]);
+			n_mobs--;
+		}else{
+			m++;
+		}
 	}
 
 	
@@ -343,6 +350,35 @@ void do_logic(){
 		cam_x = leaders[current_leader]->x;
 		cam_y = leaders[current_leader]->y;
 	}
+
+	/********************
+	*              .-.  *
+	*   Pellets   ( 1 ) *
+	*              `-´  *
+	********************/
+
+	size_t n_pellets = pellets.size();
+	for(size_t p=0; p<n_pellets; p++){
+		if(pellets[p]->reached_destination && pellets[p]->carrier_info->decided_type){
+			
+			//Find Onion.
+			size_t n_onions = onions.size();
+			size_t o = 0;
+			for(; o<n_onions; o++){
+				if(onions[o]->type == pellets[p]->carrier_info->decided_type) break;
+			}
+
+			if(pellets[p]->pik_type == pellets[p]->carrier_info->decided_type){
+				give_pikmin_to_onion(onions[o], pellets[p]->pel_type->match_seeds);
+			}else{
+				give_pikmin_to_onion(onions[o], pellets[p]->pel_type->non_match_seeds);
+			}
+
+			make_uncarriable(pellets[p]);
+			pellets[p]->to_delete = true;
+		}
+	}
+
 
 	/******************
 	*            ***  *

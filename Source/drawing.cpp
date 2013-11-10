@@ -282,11 +282,11 @@ void do_drawing(){
 
 
 		/* Layer 5
-		*****************************
-		*                     Help  *
-		*   On-screen text   --  -- *
-		*                      \/   *
-		****************************/
+		***************************
+		*                   Help  *
+		*   In-game text   --  -- *
+		*                    \/   *
+		**************************/
 			
 		//Fractions.
 		size_t n_mobs = mobs.size();
@@ -506,9 +506,15 @@ void do_drawing(){
 			40, 40);
 
 		//Pikmin count numbers.
+		size_t n_pikmin_types = pikmin_types.size();
+		unsigned long total_pikmin = pikmin_list.size();
+		for(size_t t=0; t<n_pikmin_types; t++) total_pikmin+=pikmin_in_onions[&pikmin_types[t]];
+
 		al_draw_text(
 			font, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
-			(to_string((long long) pikmin_in_party) + "/" + to_string((long long) pikmin_list.size()) + "/1234").c_str()
+			(to_string((long long) pikmin_in_party) + "/" +
+			to_string((long long) pikmin_list.size()) + "/" +
+			to_string((long long) total_pikmin)).c_str()
 			);
 
 		//Day number.

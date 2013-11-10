@@ -264,16 +264,17 @@ void handle_button(unsigned int button, float pos){
 			}
 
 			//Now check if the leader should open an onion's menu.
-
 			if(!done){
 				//ToDo
 				size_t n_onions = onions.size();
 				for(size_t o=0; o<n_onions; o++){
 					if(dist(leaders[current_leader]->x, leaders[current_leader]->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE){
-						//ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
-						pikmin_in_onions[o]--;
-						create_mob(new pikmin(onions[o]->type, onions[o]->x, onions[o]->y, onions[o]->sec));
-						add_to_party(leaders[current_leader], pikmin_list[pikmin_list.size()-1]);
+						if(pikmin_list.size() < max_pikmin_in_field){
+							//ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
+							pikmin_in_onions[onions[o]->type]--;
+							create_mob(new pikmin(onions[o]->type, onions[o]->x, onions[o]->y, onions[o]->sec));
+							add_to_party(leaders[current_leader], pikmin_list[pikmin_list.size()-1]);
+						}
 						done = true;
 					}
 				}

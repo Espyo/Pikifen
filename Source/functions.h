@@ -6,12 +6,11 @@
 
 #include "data_file.h"
 #include "leader.h"
+#include "spec_objs/onion.h"
 #include "pikmin.h"
 #include "sector.h"
 
 #define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
-
-#define random(min, max) (rand()%((max)-(min)+1))+(min)    //Returns a random number in the given interval, inclusive.
 
 void              add_to_party(mob* party_leader, mob* new_member);
 void              angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
@@ -31,6 +30,7 @@ void              error_log(string s);
 void              generate_area_images();
 ALLEGRO_COLOR     get_daylight_color();
 ALLEGRO_TRANSFORM get_world_to_screen_transform();
+void              give_pikmin_to_onion(onion* o, unsigned amount);
 ALLEGRO_COLOR     interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);
 void              load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void              load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
@@ -40,6 +40,7 @@ void              load_options();
 sample_struct     load_sample(string filename);
 void              load_game_content();
 void              make_uncarriable(mob* m);
+inline float      random(float min, float max);
 void              random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void              random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
 void              random_particle_splash(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);

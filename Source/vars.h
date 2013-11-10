@@ -115,6 +115,7 @@ extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>
                              joystick_numbers;
 extern vector<leader*>       leaders;
+extern unsigned              max_pikmin_in_field;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
@@ -135,7 +136,8 @@ extern vector<particle>      particles;
 extern bool                  paused;
 extern vector<pellet_type>   pellet_types;
 extern vector<pellet*>       pellets;
-extern vector<unsigned long> pikmin_in_onions;
+extern map<pikmin_type*, unsigned long>
+                             pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;
 extern bool                  pretty_whistle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
