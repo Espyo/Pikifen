@@ -227,6 +227,7 @@ int main(){
 		}
 	}
 	//create_mob(new pikmin(&pikmin_types[3], -50, -50, &s));
+	//create_mob(new pikmin(&pikmin_types[4], -50, -70, &s));
 	create_mob(new onion(400, 100, &s, &pikmin_types[0]));
 	create_mob(new onion(400, 200, &s, &pikmin_types[1]));
 	create_mob(new onion(400, 300, &s, &pikmin_types[2]));
