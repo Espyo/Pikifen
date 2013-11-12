@@ -7,6 +7,7 @@ class pikmin;
 
 #include "const.h"
 #include "mob.h"
+#include "misc_structs.h"
 #include "party_follower.h"
 #include "pikmin.h"
 #include "sector.h"

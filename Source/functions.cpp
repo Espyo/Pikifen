@@ -22,8 +22,15 @@ void add_to_party(mob* party_leader, mob* new_member){
 	if(new_member->following_party == party_leader) return;	//Already following, never mind.
 
 	new_member->following_party = party_leader;
-	//ToDo remove? new_member->go_to_target = true;
 	party_leader->party.push_back(new_member);
+
+	//Find a spot.
+	float spot_x = 0, spot_y = 50; //ToDo defaults if no group spots on leader.
+	if(party_leader->group_spots){
+		party_leader->group_spots->add(new_member, &spot_x, &spot_y);
+	}
+
+	new_member->set_target(spot_x, spot_y + 30, &party_leader->x, &party_leader->y, false); //ToDo that "+100".
 
 	make_uncarriable(new_member);
 }
@@ -31,12 +38,6 @@ void add_to_party(mob* party_leader, mob* new_member){
 void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord){
 	*x_coord = cos(angle) * magnitude;
 	*y_coord = sin(angle) * magnitude;
-}
-
-bool atob(string s){
-	string ls = str_to_lower(s);
-	if(ls == "yes" || ls == "true" || ls == "y" || ls == "t") return true;
-	else return (atoi(ls) != 0);
 }
 
 ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a){
@@ -112,7 +113,7 @@ void delete_mob(mob* m){
 }
 
 void dismiss(){
-	leader* current_leader_ptr = leaders[current_leader];
+	leader* cur_leader_ptr = leaders[current_leader];
 
 	float
 		min_x=0, min_y=0, max_x=0, max_y=0, //Leftmost member coordinate, rightmost, etc.
@@ -120,16 +121,16 @@ void dismiss(){
 		base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
 
 	//ToDo what if there are a lot of Pikmin types?
-	size_t n_party_members = current_leader_ptr->party.size();
+	size_t n_party_members = cur_leader_ptr->party.size();
 	if(n_party_members == 0) return;
 
 	//First, calculate what direction the party should be dismissed to.
 	if(moving_group_intensity > 0){
 		//If the leader's moving the group, they should be dismissed towards the cursor.
-		base_angle = current_leader_ptr->angle + M_PI;
+		base_angle = cur_leader_ptr->angle + M_PI;
 	}else{
 		for(size_t m=0; m<n_party_members; m++){
-			mob* member_ptr = current_leader_ptr->party[m];
+			mob* member_ptr = cur_leader_ptr->party[m];
 
 			if(member_ptr->x < min_x || m==0) min_x = member_ptr->x;
 			if(member_ptr->x > max_x || m==0) max_x = member_ptr->x;
@@ -139,15 +140,15 @@ void dismiss(){
 
 		cx = (min_x + max_x) / 2;
 		cy = (min_y + max_y) / 2;
-		base_angle = atan2(cy - current_leader_ptr->y, cx - current_leader_ptr->x) + M_PI;
+		base_angle = atan2(cy - cur_leader_ptr->y, cx - cur_leader_ptr->x) + M_PI;
 	}
 
 	//Then, calculate how many Pikmin types there are in the party.
 	map<pikmin_type*, float> type_dismiss_angles;
 	for(size_t m=0; m<n_party_members; m++){
 		
-		if(typeid(*current_leader_ptr->party[m]) == typeid(pikmin)){
-			pikmin* pikmin_ptr = dynamic_cast<pikmin*>(current_leader_ptr->party[m]);
+		if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)){
+			pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
 			
 			type_dismiss_angles[pikmin_ptr->type]=0;
 		}	
@@ -168,7 +169,7 @@ void dismiss(){
 
 	//Now, dismiss them.
 	for(size_t m=0; m<n_party_members; m++){
-		mob* member_ptr = current_leader_ptr->party[0];
+		mob* member_ptr = cur_leader_ptr->party[0];
 		remove_from_party(member_ptr);
 
 		float angle = 0;
@@ -179,8 +180,8 @@ void dismiss(){
 			angle=base_angle + type_dismiss_angles[pikmin_ptr->type] - M_PI_4 + M_PI;
 			
 			member_ptr->set_target(
-				current_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
-				current_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
+				cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
+				cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
 				NULL,
 				NULL,
 				false);
@@ -523,14 +524,14 @@ void load_area(string name){
 		for(size_t f = 0; f<n_floors; f++){		//ToDo this is not the way to do it.
 			data_node floor_data = sector_data["floor"][f];
 			floor_info new_floor = floor_info();
-
-			new_floor.brightness = atof(floor_data["brightness"].get_value("1"));
-			new_floor.rot = atof(floor_data["texture_rotate"].get_value());
-			new_floor.scale = atof(floor_data["texture_scale"].get_value());
-			new_floor.trans_x = atof(floor_data["texture_trans_x"].get_value());
-			new_floor.trans_y = atof(floor_data["texture_trans_y"].get_value());
+			
+			new_floor.brightness = tof(floor_data["brightness"].get_value("1"));
+			new_floor.rot = tof(floor_data["texture_rotate"].get_value());
+			new_floor.scale = tof(floor_data["texture_scale"].get_value());
+			new_floor.trans_x = tof(floor_data["texture_trans_x"].get_value());
+			new_floor.trans_y = tof(floor_data["texture_trans_y"].get_value());
 			new_floor.texture = load_bmp("Textures/" + floor_data["texture"].get_value());	//ToDo don't load it every time.
-			new_floor.z = atof(floor_data["z"].get_value().c_str());
+			new_floor.z = tof(floor_data["z"].get_value().c_str());
 			//ToDo terrain sound.
 
 			new_sector.floors[f] = new_floor;
@@ -541,8 +542,8 @@ void load_area(string name){
 			data_node linedef_data = sector_data["linedef"][l];
 			linedef* new_linedef = new linedef();
 
-			new_linedef->x1 = atof(linedef_data["x"].get_value());
-			new_linedef->y1 = atof(linedef_data["y"].get_value());
+			new_linedef->x1 = tof(linedef_data["x"].get_value());
+			new_linedef->y1 = tof(linedef_data["y"].get_value());
 
 			//ToDo missing things.
 
@@ -651,17 +652,17 @@ void load_options(){
 	}
 
 	for(unsigned char p=0; p<4; p++){
-		mouse_moves_cursor[p] = atob(file["p" + to_string((long long) (p+1)) + "_mouse_moves_cursor"].get_value((p==0) ? "true" : "false"));
+		mouse_moves_cursor[p] = tob(file["p" + to_string((long long) (p+1)) + "_mouse_moves_cursor"].get_value((p==0) ? "true" : "false"));
 	}
 
 	//Other options.
-	daylight_effect = atob(file["daylight_effect"].get_value("true"));
-	game_fps = atoi(file["fps"].get_value("30"));
-	scr_h = atoi(file["height"].get_value(to_string((long long) DEF_SCR_H)));
-	particle_quality = atoi(file["particle_quality"].get_value("2"));
-	pretty_whistle = atob(file["pretty_whistle"].get_value("true"));
-	scr_w = atoi(file["width"].get_value(to_string((long long) DEF_SCR_W)));
-	smooth_scaling = atob(file["smooth_scaling"].get_value("true"));
+	daylight_effect = tob(file["daylight_effect"].get_value("true"));
+	game_fps = toi(file["fps"].get_value("30"));
+	scr_h = toi(file["height"].get_value(to_string((long long) DEF_SCR_H)));
+	particle_quality = toi(file["particle_quality"].get_value("2"));
+	pretty_whistle = tob(file["pretty_whistle"].get_value("true"));
+	scr_w = toi(file["width"].get_value(to_string((long long) DEF_SCR_W)));
+	smooth_scaling = tob(file["smooth_scaling"].get_value("true"));
 }
 
 sample_struct load_sample(string filename){
@@ -822,6 +823,10 @@ void remove_from_party(mob* member){
 		member->following_party->party.end(),
 		member));
 
+	if(member->following_party->group_spots){
+		member->following_party->group_spots->remove(member);
+	}
+
 	member->following_party = NULL;
 	member->remove_target(false);
 	member->uncallable_period = UNCALLABLE_PERIOD;
@@ -920,17 +925,17 @@ void save_options(){
 	}
 	
 	for(unsigned char p=0; p<4; p++){
-		al_fwrite(file, "p" + to_string((long long) (p+1)) + "_mouse_moves_cursor=" + btoa(mouse_moves_cursor[p]) + "\n");
+		al_fwrite(file, "p" + to_string((long long) (p+1)) + "_mouse_moves_cursor=" + btos(mouse_moves_cursor[p]) + "\n");
 	}
 
 	//Other options.
-	al_fwrite(file, "daylight_effect=" + btoa(daylight_effect) + "\n");
+	al_fwrite(file, "daylight_effect=" + btos(daylight_effect) + "\n");
 	al_fwrite(file, "fps=" + to_string((long long) game_fps) + "\n");
 	al_fwrite(file, "height=" + to_string((long long) scr_h) + "\n");
 	al_fwrite(file, "particle_quality=" + to_string((long long) particle_quality) + "\n");
-	al_fwrite(file, "pretty_whistle=" + btoa(pretty_whistle) + "\n");
+	al_fwrite(file, "pretty_whistle=" + btos(pretty_whistle) + "\n");
 	al_fwrite(file, "width=" + to_string((long long) scr_w) + "\n");
-	al_fwrite(file, "smooth_scaling=" + btoa(smooth_scaling) + "\n");
+	al_fwrite(file, "smooth_scaling=" + btos(smooth_scaling) + "\n");
 
 	al_fclose(file);
 }
@@ -1160,6 +1165,12 @@ void use_spray(size_t spray_nr){
 }
 
 inline void al_fwrite(ALLEGRO_FILE* f, string s){ al_fwrite(f, s.c_str(), s.size()); }
-inline double atof(string s){ return atof(s.c_str()); }
-inline int atoi(string s){ return atof(s.c_str()); }
-inline string btoa(bool b){ return b ? "true" : "false"; }
+inline string btos(bool b){ return b ? "true" : "false"; }
+inline bool tob(string s){
+	s = str_to_lower(s);
+	s = trim_spaces(s);
+	if(s == "yes" || s == "true" || s == "y" || s == "t") return true;
+	else return (toi(s) != 0);
+}
+inline double tof(string s){ s = trim_spaces(s); replace(s.begin(), s.end(), ',', '.'); return atof(s.c_str()); }
+inline int toi(string s){ return tof(s); }

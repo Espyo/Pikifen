@@ -90,6 +90,7 @@
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="misc_structs.cpp" />
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pellet_type.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
     <ClInclude Include="logic.h" />
+    <ClInclude Include="misc_structs.h" />
     <ClInclude Include="mob.h" />
     <ClInclude Include="object_state.h" />
     <ClInclude Include="particle.h" />

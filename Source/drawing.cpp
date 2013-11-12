@@ -379,6 +379,14 @@ void do_drawing(){
 			}
 		}
 
+		//ToDo remove:
+		/*for(unsigned w = 0; w < leaders[current_leader]->group_spots->n_wheels; w++){
+			size_t n_spots = leaders[current_leader]->group_spots->x_coords[w].size();
+			for(unsigned s=0; s<n_spots; s++){
+				al_draw_filled_circle(leaders[current_leader]->x + leaders[current_leader]->group_spots->x_coords[w][s], leaders[current_leader]->y + 100 + leaders[current_leader]->group_spots->y_coords[w][s], 4, al_map_rgb(0, 0, w * 32));
+			}
+		}*/
+
 
 		/* Layer 7
 		***********************

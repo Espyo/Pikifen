@@ -10,18 +10,7 @@
 
 #include "mob.h"
 
-struct sample_struct{
-	ALLEGRO_SAMPLE*		sample;	//Pointer to the sample.
-	ALLEGRO_SAMPLE_ID	id;		//Sample id.
-
-	sample_struct(ALLEGRO_SAMPLE* s=NULL){
-		sample=s;
-
-		//I don't think I should be messing with these... But they'll give an error otherwise.
-		id._id=0;
-		id._index=0;
-	}
-};
+using namespace std;
 
 #define AREA_IMAGE_SIZE            800      //How many pixels the area images are (both width and height; they're square).
 #define AUTO_PLUCK_INPUT_INTERVAL  0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
@@ -30,6 +19,7 @@ struct sample_struct{
 #define CURSOR_MAX_DIST            200      //The cursor can only be these many units away from the captain.
 #define DISMISS_DISTANCE           64       //Dismissed Pikmin go these many units away from the captain.
 #define GRAVITY_ADDER              -2.0f    //Accelerate the Z speed of mobs affected by gravity by this amount per second.
+#define GROUP_SPOT_INTERVAL        1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
 #define IDLE_GLOW_SPIN_SPEED       M_PI*0.5 //The idle glow spins these many radians per second.
 #define INFO_SPOT_TRIGGER_RANGE    64       //If the current captain is at this distance or closer from an info spot, it gets triggered.
 #define LEADER_MOVE_SPEED          100      //Max speed at which a leader can move.

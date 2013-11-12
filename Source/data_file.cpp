@@ -116,7 +116,7 @@ size_t data_node::load_node(vector<string> lines, size_t start_line){
 	for(size_t l=start_line; l<n_lines; l++){
 		string line=lines[l];
 
-		line=trim_trailings(line, true);		//Removes the leftmost spaces.
+		line=trim_spaces(line, true);		//Removes the leftmost spaces.
 			
 		if(line.size()>=2)
 			if(line[0]=='/' && line[1]=='/') continue;		//A comment.
@@ -124,7 +124,7 @@ size_t data_node::load_node(vector<string> lines, size_t start_line){
 		//Option=value
 		size_t pos=line.find('=');
 		if(pos!=string::npos && pos>0 && line.size()>=2){
-			string option=trim_trailings(line.substr(0, pos));
+			string option=trim_spaces(line.substr(0, pos));
 			string value=line.substr(pos+1, line.size()-(pos+1));
 			nodes[option].add();
 			nodes[option].last().value=value;
@@ -134,7 +134,7 @@ size_t data_node::load_node(vector<string> lines, size_t start_line){
 		//Sub-node start
 		pos=line.find('{');
 		if(pos!=string::npos && pos>0 && line.size()>=2){
-			string section_name=trim_trailings(line.substr(0, pos));
+			string section_name=trim_spaces(line.substr(0, pos));
 			nodes[section_name].add();
 			l=nodes[section_name].last().load_node(lines, l+1);
 			continue;
@@ -198,12 +198,12 @@ void getline(ALLEGRO_FILE* file, string &line){
 }
 
 /* ----------------------------------------------------------------------------
- * Removes all trailing spaces.
+ * Removes all trailing and preceding spaces.
  * This means space and tab characters before and after the 'middle' characters.
  * s:         The original string.
  * left_only: If true, only trim the spaces at the left.
  */
-string trim_trailings(string s, bool left_only){
+string trim_spaces(string s, bool left_only){
 	//Spaces before.
 	if(s.size()){
 		while(s[0]==' ' || s[0]=='\t'){

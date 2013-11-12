@@ -221,7 +221,7 @@ void do_logic(){
 		}
 
 		//Following party.
-		if(pik_ptr->following_party){
+		/*if(pik_ptr->following_party){
 			float move_x, move_y;
 			angle_to_coordinates(moving_group_angle, CURSOR_MAX_DIST * moving_group_intensity * 0.5, &move_x, &move_y);
 
@@ -231,7 +231,7 @@ void do_logic(){
 				&pik_ptr->following_party->x,
 				&pik_ptr->following_party->y,
 				false);
-		}
+		}*/
 
 		//Touching nectar.
 		size_t n_nectars = nectars.size();
@@ -480,7 +480,10 @@ void do_logic(){
 	cursor_x = mcx;
 	cursor_y = mcy;
 
-	leaders[current_leader]->angle = atan2(cursor_y - leaders[current_leader]->y, cursor_x - leaders[current_leader]->x);
+	if(!leaders[current_leader]->auto_pluck_mode){
+		leaders[current_leader]->angle = atan2(cursor_y - leaders[current_leader]->y, cursor_x - leaders[current_leader]->x);
+	}
+
 	leader_to_cursor_dis = dist(leaders[current_leader]->x, leaders[current_leader]->y, cursor_x, cursor_y);
 	if(leader_to_cursor_dis > CURSOR_MAX_DIST){
 		//Cursor goes beyond the range limit.

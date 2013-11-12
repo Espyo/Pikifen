@@ -93,6 +93,9 @@
     <ClCompile Include="pellet_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="misc_structs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files\spec_objs</Filter>
     </ClInclude>
     <ClInclude Include="pellet_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="misc_structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

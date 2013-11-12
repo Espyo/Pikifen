@@ -111,6 +111,10 @@ extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;
 extern unsigned char         game_fps;
+extern vector<vector<float> >
+                             group_spots_x;
+extern vector<vector<float> >
+                             group_spots_y;
 extern float                 idle_glow_angle;
 extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>

@@ -27,6 +27,7 @@ mob::mob(float x, float y, float z, float move_speed, sector* sec){
 	following_party = NULL;
 	was_thrown = false;
 	uncallable_period = 0;
+	group_spots = NULL;
 
 	carrier_info = NULL;
 }
@@ -86,6 +87,7 @@ void mob::tick(){
 
 				speed_x = dx;
 				speed_y = dy;
+				angle = atan2(dy, dx);
 			}else{
 				reached_destination = true;
 			}

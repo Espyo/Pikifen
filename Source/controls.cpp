@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
@@ -73,6 +74,8 @@ void handle_controls(ALLEGRO_EVENT ev){
 }
 
 void handle_button(unsigned int button, float pos){
+
+	leader* cur_leader_ptr = leaders[current_leader];
 
 	if(
 		button == BUTTON_MOVE_RIGHT ||
@@ -259,7 +262,7 @@ void handle_button(unsigned int button, float pos){
 
 		active_control();
 
-		if(pos > 0){ //Button pressed.
+		if(pos > 0 && !leaders[current_leader]->holding_pikmin){ //Button pressed.
 			whistling = true;
 			al_play_sample(leaders[current_leader]->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[current_leader]->sfx_whistle.id);
 
@@ -478,7 +481,61 @@ void handle_button(unsigned int button, float pos){
 				3, //ToDo
 				false);
 		}
+
+	}else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT){
+
+		/****************************
+		*                     -->   *
+		*   Switch type   <(¨)> (ö) *
+		*                           *
+		*****************************/
+
+		/*if(pos == 0 || !leaders[current_leader]->holding_pikmin) return;
+
+		active_control();
+
+		vector<pikmin_type*> types_in_party;
+		
+		size_t n_members = leaders[current_leader]->party.size();
+		//Get all Pikmin types in the group.
+		for(size_t m=0; m<n_members; m++){
+			if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)){
+				pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
+			
+				if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()){
+					types_in_party.push_back(pikmin_ptr->type);
+				}
+			}else if(typeid(*cur_leader_ptr->party[m]) == typeid(leader)){
+
+				if(find(types_in_party.begin(), types_in_party.end(), NULL) == types_in_party.end()){
+					types_in_party.push_back(NULL); //NULL represents leaders.
+				}
+			}
+		}
+
+		size_t n_types = types_in_party.size();
+		if(n_types == 1) return;
+
+		//Go one type adjacent to the current member being held.
+		pikmin_type* current_type = NULL;
+		if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin))
+			current_pikmin_type = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin)->type;
+		
+		unsigned char current_maturity = 255;
+		
+		for(size_t t=0; t<n_types; t++){
+			if(current_type == types_in_party[t]){
+				if(button == BUTTON_SWITCH_TYPE_RIGHT){
+
+				}else{
+
+				}
+
+				break;
+			}
+		}*/
 	}
+
 }
 
 //void handle_button_up(unsigned int button){
@@ -617,13 +674,13 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
 	if(parts[0] == "k"){	//Keyboard.
 		if(n_parts > 1){
 			type = CONTROL_TYPE_KEYBOARD_KEY;
-			button = atoi(parts[1]);
+			button = toi(parts[1]);
 		}
 
 	}else if(parts[0] == "mb"){	//Mouse button.
 		if(n_parts > 1){
 			type = CONTROL_TYPE_MOUSE_BUTTON;
-			button = atoi(parts[1]);
+			button = toi(parts[1]);
 		}
 
 	}else if(parts[0] == "mwu"){ //Mouse wheel up.
@@ -641,23 +698,23 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
 	}else if(parts[0] == "jb"){ //Joystick button.
 		if(n_parts > 2){
 			type = CONTROL_TYPE_JOYSTICK_BUTTON;
-			device_nr = atoi(parts[1]);
-			button = atoi(parts[2]);
+			device_nr = toi(parts[1]);
+			button = toi(parts[2]);
 		}
 
 	}else if(parts[0] == "jap"){ //Joystick axis, positive.
 		if(n_parts > 3){
 			type = CONTROL_TYPE_JOYSTICK_AXIS_POS;
-			device_nr = atoi(parts[1]);
-			stick = atoi(parts[2]);
-			axis = atoi(parts[3]);
+			device_nr = toi(parts[1]);
+			stick = toi(parts[2]);
+			axis = toi(parts[3]);
 		}
 	}else if(parts[0] == "jan"){ //Joystick axis, negative.
 		if(n_parts > 3){
 			type = CONTROL_TYPE_JOYSTICK_AXIS_NEG;
-			device_nr = atoi(parts[1]);
-			stick = atoi(parts[2]);
-			axis = atoi(parts[3]);
+			device_nr = toi(parts[1]);
+			stick = toi(parts[2]);
+			axis = toi(parts[3]);
 		}
 	}else{
 		error_log(

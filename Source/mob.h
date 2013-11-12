@@ -11,6 +11,8 @@
 
 using namespace std;
 
+struct group_spot_info;
+
 class mob;
 
 struct carrier_info_struct{
@@ -69,6 +71,7 @@ public:
 	vector<mob*> party;
 	bool was_thrown;       //Is the mob airborne because it was thrown?
 	float uncallable_period; //During this period, the mob cannot be called into a party.
+	group_spot_info* group_spots;
 
 	//Carrying.
 	unsigned int weight;

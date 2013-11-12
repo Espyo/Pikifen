@@ -102,6 +102,6 @@ public:
 };
 
 void getline(ALLEGRO_FILE* file, string &line);
-string trim_trailings(string s, bool left_only=false);
+string trim_spaces(string s, bool left_only=false);
 
 #endif //ifndef DATA_FILE_H

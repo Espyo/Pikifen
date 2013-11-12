@@ -89,6 +89,10 @@ ALLEGRO_FONT*         font = NULL;
 ALLEGRO_FONT*         font_area_name = NULL;
 unsigned short        font_h = 0;
 unsigned char         game_fps = DEF_FPS;
+vector<vector<float> >
+                      group_spots_x;
+vector<vector<float> >
+                      group_spots_y;
 float                 idle_glow_angle = 0;
 vector<info_spot*>    info_spots;
 map<ALLEGRO_JOYSTICK*, int>

@@ -15,7 +15,6 @@
 void              active_control();
 void              add_to_party(mob* party_leader, mob* new_member);
 void              angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
-bool              atob(string s);
 ALLEGRO_COLOR     change_alpha(ALLEGRO_COLOR c, unsigned char a);
 void              coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude);
 void              create_mob(mob* m);
@@ -60,8 +59,9 @@ string            str_to_lower(string s);
 void              use_spray(size_t spray_nr);
 
 inline void al_fwrite(ALLEGRO_FILE* f, string s);
-inline double atof(string s);
-inline int atoi(string s);
-inline string btoa(bool b);
+inline string btos(bool b);
+inline bool tob(string s);
+inline double tof(string s);
+inline int toi(string s);
 
 #endif //ifndef FUNCTIONS_H
