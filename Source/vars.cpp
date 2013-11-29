@@ -57,7 +57,7 @@ sample_struct sfx_pikmin_thrown;
 sample_struct sfx_throw;
 
 vector<vector<ALLEGRO_BITMAP*>>
-	                  area_images;
+                             area_images;
 float                 area_x1 = 0;
 float                 area_y1 = 0;
 float                 auto_pluck_input_time = 0;
@@ -76,7 +76,7 @@ float                 cam_y = 0;
 float                 cam_zoom = 1;
 mob*                  closest_party_member = NULL;
 vector<control_info>  controls;
-size_t                current_leader = 0;
+size_t                cur_leader_nr = 0;
 float                 cursor_x = 0;
 float                 cursor_y = 0;
 unsigned int          day = 0;
@@ -90,18 +90,18 @@ ALLEGRO_FONT*         font_area_name = NULL;
 unsigned short        font_h = 0;
 unsigned char         game_fps = DEF_FPS;
 vector<vector<float> >
-                      group_spots_x;
+group_spots_x;
 vector<vector<float> >
-                      group_spots_y;
+group_spots_y;
 float                 idle_glow_angle = 0;
 vector<info_spot*>    info_spots;
 map<ALLEGRO_JOYSTICK*, int>
-                      joystick_numbers;
+joystick_numbers;
 vector<leader*>       leaders;
 unsigned              max_pikmin_in_field = 100;
 vector<mob*>          mobs;
-float                 mouse_cursor_x = scr_w/2 + CURSOR_MAX_DIST;
-float                 mouse_cursor_y = scr_h/2;
+float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
+float                 mouse_cursor_y = scr_h / 2;
 float                 mouse_cursor_speed_x = 0;
 float                 mouse_cursor_speed_y = 0;
 bool                  mouse_moves_cursor[4] = {true, false, false, false};
@@ -120,7 +120,7 @@ bool                  paused = false;
 vector<pellet_type>   pellet_types;
 vector<pellet*>       pellets;
 map<pikmin_type*, unsigned long>
-                      pikmin_in_onions;
+pikmin_in_onions;
 vector<pikmin*>       pikmin_list;
 vector<pikmin_type>   pikmin_types;
 bool                  pretty_whistle = false;
@@ -140,7 +140,7 @@ float                 sun_meter_sun_angle = 0;
 string                total_error_log;
 vector<treasure*>     treasures;
 float                 whistle_dot_offset = 0;
-float                 whistle_dot_radius[6] = {-1, -1, -1, -1, -1, -1};
+float                 whistle_dot_radius[6] = { -1, -1, -1, -1, -1, -1};
 float                 whistle_fade_radius = 0;
 float                 whistle_fade_time = 0;
 float                 whistle_max_hold = 0;

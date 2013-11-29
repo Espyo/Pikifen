@@ -79,7 +79,7 @@ extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_throw;
 
 extern vector<vector<ALLEGRO_BITMAP*> >
-	                         area_images;
+area_images;
 extern float                 area_x1; //Top-left corner of the area, in world coordinates.
 extern float                 area_y1;
 extern float                 auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the captain auto-pluck.
@@ -98,7 +98,7 @@ extern float                 cam_y;
 extern float                 cam_zoom;
 extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
-extern size_t                current_leader;
+extern size_t                cur_leader_nr;
 extern float                 cursor_x;           //Leader's cursor.
 extern float                 cursor_y;
 extern unsigned int          day;
@@ -112,13 +112,13 @@ extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;
 extern unsigned char         game_fps;
 extern vector<vector<float> >
-                             group_spots_x;
+group_spots_x;
 extern vector<vector<float> >
-                             group_spots_y;
+group_spots_y;
 extern float                 idle_glow_angle;
 extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>
-                             joystick_numbers;
+joystick_numbers;
 extern vector<leader*>       leaders;
 extern unsigned              max_pikmin_in_field;
 extern vector<mob*>          mobs;
@@ -142,13 +142,13 @@ extern bool                  paused;
 extern vector<pellet_type>   pellet_types;
 extern vector<pellet*>       pellets;
 extern map<pikmin_type*, unsigned long>
-                             pikmin_in_onions;
+pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;
 extern bool                  pretty_whistle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern bool                  running;
-extern unsigned short	     scr_h;
-extern unsigned short	     scr_w;
+extern unsigned short        scr_h;
+extern unsigned short        scr_w;
 extern vector<sector>        sectors;
 extern unsigned int          selected_spray;
 extern unsigned char         ship_beam_ring_color[3];

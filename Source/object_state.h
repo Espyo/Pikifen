@@ -8,9 +8,9 @@
 
 using namespace std;
 
-class object_state : public state{
+class object_state : public state {
 public:
-	vector<element*> elements;
+    vector<element*> elements;
 };
 
 #endif //ifndef OBJECT_STATE_INCLUDED

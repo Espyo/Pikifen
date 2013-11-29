@@ -7,9 +7,9 @@
 
 using namespace std;
 
-class element{
+class element {
 public:
-	ALLEGRO_COLOR main_color;
+    ALLEGRO_COLOR main_color;
 };
 
 #endif //ifndef ELEMENT_INCLUDED

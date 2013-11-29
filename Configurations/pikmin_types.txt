@@ -41,6 +41,7 @@ pikmin_type{
 	name = Purple Pikmin
 	color = 128 0 255
 	max_move_speed = 40
+	has_onion = false
 	
 	landing{
 		damage = 1
@@ -56,6 +57,7 @@ pikmin_type{
 	name = White Pikmin
 	color = 255 255 255
 	max_move_speed = 60
+	has_onion = false
 	
 	landing{
 		damage = 0

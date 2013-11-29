@@ -14,19 +14,19 @@ class pikmin;
 
 using namespace std;
 
-class leader : public mob{
+class leader : public mob {
 public:
-	unsigned int health;
-	unsigned int max_health;
-	mob* holding_pikmin;
-	sample_struct sfx_whistle;
-	sample_struct sfx_dismiss;
-	sample_struct sfx_name_call;
-
-	bool auto_pluck_mode;
-	pikmin* auto_pluck_pikmin;
-
-	leader(float x, float y, sector* sec);
+    unsigned int health;
+    unsigned int max_health;
+    mob* holding_pikmin;
+    sample_struct sfx_whistle;
+    sample_struct sfx_dismiss;
+    sample_struct sfx_name_call;
+    
+    bool auto_pluck_mode;
+    pikmin* auto_pluck_pikmin;
+    
+    leader(float x, float y, sector* sec);
 };
 
 #endif //ifndef LEADER_INCLUDED

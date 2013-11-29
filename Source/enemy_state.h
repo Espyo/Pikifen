@@ -8,9 +8,9 @@
 
 using namespace std;
 
-class enemy_state : public state{
-	float speed_x, speed_y;		//Movement, units per second.
-	vector<hitbox*> hitboxes;
+class enemy_state : public state {
+    float speed_x, speed_y;     //Movement, units per second.
+    vector<hitbox*> hitboxes;
 };
 
 #endif //ifndef ENEMY_STATE_INCLUDED

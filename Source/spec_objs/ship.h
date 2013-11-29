@@ -3,9 +3,9 @@
 
 #include "../mob.h"
 
-class ship : public mob{
+class ship : public mob {
 public:
-	ship(float x, float y, sector* sec);
+    ship(float x, float y, sector* sec);
 };
 
 #endif //ifndef SHIP_INCLUDED

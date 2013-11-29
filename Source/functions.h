@@ -24,7 +24,7 @@ void              draw_fraction(float cx, float cy, unsigned int current, unsign
 void              draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius = 20, bool just_chart = false);
 void              draw_sector(sector &s, float x, float y);
 void              draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch);
-void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle=0, ALLEGRO_COLOR tint=al_map_rgb(255, 255, 255));
+void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle = 0, ALLEGRO_COLOR tint = al_map_rgb(255, 255, 255));
 void              drop_mob(pikmin* p);
 void              error_log(string s);
 void              generate_area_images();
@@ -49,7 +49,7 @@ void              random_particle_splash(float center_x, float center_y, unsigne
 void              random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color);
 void              remove_from_party(mob* member);
 void              save_options();
-vector<string>    split(string text, string del=" ", bool inc_empty=false, bool inc_del=false);
+vector<string>    split(string text, string del = " ", bool inc_empty = false, bool inc_del = false);
 void              start_camera_pan(int final_x, int final_y);
 void              start_camera_zoom(float final_zoom_level);
 void              start_carrying(mob* m, pikmin* np, pikmin* lp);
