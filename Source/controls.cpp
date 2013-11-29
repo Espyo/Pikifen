@@ -491,7 +491,7 @@ void handle_button(unsigned int button, float pos) {
         *                           *
         *****************************/
         
-        /*if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
+        if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
         
         active_control();
         
@@ -499,16 +499,16 @@ void handle_button(unsigned int button, float pos) {
         
         size_t n_members = cur_leader_ptr->party.size();
         //Get all Pikmin types in the group.
-        for(size_t m=0; m<n_members; m++){
-            if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)){
+        for(size_t m = 0; m < n_members; m++) {
+            if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)) {
                 pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
-        
-                if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()){
+                
+                if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()) {
                     types_in_party.push_back(pikmin_ptr->type);
                 }
-            }else if(typeid(*cur_leader_ptr->party[m]) == typeid(leader)){
-        
-                if(find(types_in_party.begin(), types_in_party.end(), NULL) == types_in_party.end()){
+            } else if(typeid(*cur_leader_ptr->party[m]) == typeid(leader)) {
+            
+                if(find(types_in_party.begin(), types_in_party.end(), (pikmin_type*) NULL) == types_in_party.end()) {
                     types_in_party.push_back(NULL); //NULL represents leaders.
                 }
             }
@@ -517,150 +517,106 @@ void handle_button(unsigned int button, float pos) {
         size_t n_types = types_in_party.size();
         if(n_types == 1) return;
         
-        //Go one type adjacent to the current member being held.
         pikmin_type* current_type = NULL;
-        if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin))
-            current_pikmin_type = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin)->type;
-        
+        pikmin_type* new_type = NULL;
         unsigned char current_maturity = 255;
+        if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
+            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
+            current_type = pikmin_ptr->type;
+            current_maturity = pikmin_ptr->maturity;
+        }
         
-        for(size_t t=0; t<n_types; t++){
-            if(current_type == types_in_party[t]){
-                if(button == BUTTON_SWITCH_TYPE_RIGHT){
         
-                }else{
-        
+        //Go one type adjacent to the current member being held.
+        for(size_t t = 0; t < n_types; t++) {
+            if(current_type == types_in_party[t]) {
+                if(button == BUTTON_SWITCH_TYPE_RIGHT) {
+                    new_type = types_in_party[(t + 1) % n_types];
+                } else {
+                    new_type = types_in_party[((t - 1) + n_types) % n_types];
                 }
-        
-                break;
             }
-        }*/
+        }
+        
+        size_t t_match_nr = n_members + 1; //Number of the member that matches the type we want.
+        size_t tm_match_nr = n_members + 1; //Number of the member that matches the type and maturity we want.
+        
+        //Find a Pikmin of the new type.
+        for(size_t m = 0; m < n_members; m++) {
+            if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)) {
+            
+                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
+                if(pikmin_ptr->type == new_type) {
+                    t_match_nr = m;
+                    if(pikmin_ptr->maturity == current_maturity) {
+                        tm_match_nr = m;
+                        break;
+                    }
+                }
+                
+            } else if(typeid(*cur_leader_ptr->party[m]) == typeid(leader)) {
+            
+                if(new_type == NULL) {
+                    t_match_nr = m;
+                    tm_match_nr = m;
+                    break;
+                }
+            }
+        }
+        
+        //If no Pikmin matched the maturity, just use the one we found.
+        if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party[t_match_nr];
+        else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party[tm_match_nr];
+        
+    } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
+    
+        if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
+        
+        active_control();
+        
+        pikmin_type* current_type = NULL;
+        unsigned char current_maturity = 255;
+        unsigned char new_maturity = 255;
+        pikmin* partners[3] = {NULL, NULL, NULL};
+        if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
+            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
+            current_type = pikmin_ptr->type;
+            current_maturity = pikmin_ptr->maturity;
+        }
+        
+        size_t n_members = cur_leader_ptr->party.size();
+        //Get Pikmin of the same type, one for each maturity.
+        for(size_t m = 0; m < n_members; m++) {
+            if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)) {
+                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
+                
+                if(pikmin_ptr == cur_leader_ptr->holding_pikmin) continue;
+                
+                if(partners[pikmin_ptr->maturity] == NULL && pikmin_ptr->type == current_type) {
+                    partners[pikmin_ptr->maturity] = pikmin_ptr;
+                }
+            }
+        }
+        
+        bool any_partners = false;
+        for(unsigned char p = 0; p < 3; p++) {
+            if(partners[p]) any_partners = true;
+        }
+        
+        if(!any_partners) return;
+        
+        new_maturity = current_maturity;
+        do {
+            if(button == BUTTON_SWITCH_MATURITY_DOWN) new_maturity = ((new_maturity - 1) + 3) % 3;
+            else new_maturity = (new_maturity + 1) % 3;
+        } while(!partners[new_maturity]);
+        
+        cur_leader_ptr->holding_pikmin = partners[new_maturity];
+        
     }
     
 }
 
-//void handle_button_up(unsigned int button){
-//  //ToDo change to angles.
-//  if(button == BUTTON_MOVE_UP || button == BUTTON_MOVE_DOWN){
-//
-//      /*******************
-//      *              \O/ *
-//      *   Move   ---> |  *
-//      *              / \ *
-//      *******************/
-//
-//      leaders[cur_leader_nr]->speed_y = 0;
-//
-//  }else if(button == BUTTON_MOVE_LEFT || button == BUTTON_MOVE_RIGHT){
-//      leaders[cur_leader_nr]->speed_x = 0;
-//
-//  }else if(button == BUTTON_MOVE_CURSOR_UP || button == BUTTON_MOVE_CURSOR_DOWN){
-//
-//      /********************
-//      *             .-.   *
-//      *   Cursor   ( = )> *
-//      *             `-´   *
-//      ********************/
-//
-//      mouse_cursor_speed_y = 0;
-//
-//  }else if(button == BUTTON_MOVE_CURSOR_LEFT || button == BUTTON_MOVE_CURSOR_RIGHT){
-//      mouse_cursor_speed_x = 0;
-//
-//  }else if(button == BUTTON_MOVE_GROUP_TO_CURSOR){
-//
-//      /******************
-//      *            ***  *
-//      *   Group   ****O *
-//      *            ***  *
-//      ******************/
-//
-//      moving_group_to_cursor = false;
-//      moving_group_intensity = 0;
-//
-//  }else if(button == BUTTON_PUNCH){
-//
-//      /*******************
-//      *            .--._ *
-//      *   Punch   ( U  _ *
-//      *            `--´  *
-//      *******************/
-//
-//
-//
-//  }else if(button == BUTTON_WHISTLE){
-//
-//      /********************
-//      *              .--= *
-//      *   Whistle   ( @ ) *
-//      *              `-´  *
-//      ********************/
-//
-//      stop_whistling();
-//
-//  }
-//}
-//
-//void handle_analog(unsigned int action, float pos){
-//  if(action == AXIS_ACTION_MOVE_X || action == AXIS_ACTION_MOVE_Y){
-//      /*******************
-//      *              \O/ *
-//      *   Move   ---> |  *
-//      *              / \ *
-//      *******************/
-//
-//      if(fabs(pos) < 0.75) pos = 0;
-//
-//      if(action == AXIS_ACTION_MOVE_X){
-//          leaders[cur_leader_nr]->speed_x = pos * LEADER_MOVE_SPEED;
-//      }else{
-//          leaders[cur_leader_nr]->speed_y = pos * LEADER_MOVE_SPEED;
-//      }
-//
-//  }else if(action == AXIS_ACTION_MOVE_CURSOR_X || action == AXIS_ACTION_MOVE_CURSOR_Y){
-//      /********************
-//      *             .-.   *
-//      *   Cursor   ( = )> *
-//      *             `-´   *
-//      ********************/
-//
-//      if(action == AXIS_ACTION_MOVE_CURSOR_X){
-//          mouse_cursor_speed_x = pos * (1.0/game_fps) * MOUSE_CURSOR_MOVE_SPEED;
-//      }else{
-//          mouse_cursor_speed_y = pos * (1.0/game_fps) * MOUSE_CURSOR_MOVE_SPEED;
-//      }
-//
-//  }else if(action == AXIS_ACTION_MOVE_GROUP_X || action == AXIS_ACTION_MOVE_GROUP_Y){
-//      /******************
-//      *            ***  *
-//      *   Group   ****O *
-//      *            ***  *
-//      ******************/
-//
-//      if(action == AXIS_ACTION_MOVE_GROUP_X){
-//          moving_group_pos_x = pos;
-//      }else{
-//          moving_group_pos_y = pos;
-//      }
-//
-//  }
-//}
-
-//void handle_mouse(unsigned int action, float mx, float my){
-//  if(action == AXIS_ACTION_MOVE_CURSOR){
-//
-//      /********************
-//      *             .-.   *
-//      *   Cursor   ( = )> *
-//      *             `-´   *
-//      ********************/
-//
-//      mouse_cursor_x = mx;
-//      mouse_cursor_y = my;
-//
-//  }
-//
-//}
 
 
 control_info::control_info(unsigned char action, unsigned char player, string s) {

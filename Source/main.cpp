@@ -49,6 +49,7 @@ int main() {
     controls.push_back(control_info(BUTTON_USE_SPRAY, 0, "k_18"));
     controls.push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, 0, "k_5"));
     controls.push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, 0, "k_17"));
+    controls.push_back(control_info(BUTTON_SWITCH_TYPE_RIGHT, 0, "mb_2"));
     controls.push_back(control_info(BUTTON_SWITCH_ZOOM, 0, "k_3"));
     controls.push_back(control_info(BUTTON_ZOOM_IN, 0, "mwu"));
     controls.push_back(control_info(BUTTON_ZOOM_OUT, 0, "mwd"));
