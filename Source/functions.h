@@ -41,6 +41,7 @@ void              load_options();
 sample_struct     load_sample(string filename);
 void              load_game_content();
 void              make_uncarriable(mob* m);
+void              move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached);
 void              pluck_pikmin(leader* l, pikmin* p);
 inline float      random(float min, float max);
 void              random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);
@@ -61,6 +62,7 @@ void              use_spray(size_t spray_nr);
 inline void al_fwrite(ALLEGRO_FILE* f, string s);
 inline string btos(bool b);
 inline bool tob(string s);
+ALLEGRO_COLOR toc(string s);
 inline double tof(string s);
 inline int toi(string s);
 

@@ -21,6 +21,7 @@
 #include "spec_objs/ship.h"
 #include "status.h"
 #include "treasure.h"
+#include "weather.h"
 
 using namespace std;
 
@@ -99,6 +100,7 @@ extern float                 cam_zoom;
 extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
 extern size_t                cur_leader_nr;
+extern unsigned char         cur_screen;
 extern float                 cursor_x;           //Leader's cursor.
 extern float                 cursor_y;
 extern unsigned int          day;
@@ -107,6 +109,7 @@ extern float                 day_minutes_end;  //The day ends when the in-game m
 extern float                 day_minutes_per_irl_sec;  //Every real-life second, these many in-game minutes pass.
 extern float                 day_minutes_start;  //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
+extern bool                  editor_holding_m2;
 extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;
@@ -161,6 +164,8 @@ extern vector<status>        statuses;
 extern float                 sun_meter_sun_angle;
 extern string                total_error_log;
 extern vector<treasure*>     treasures;
+extern weather               weather_condition; //Current weather.
+extern map<string, weather>  weather_conditions;
 extern float                 whistle_dot_offset; //How much each dot of the whistle should spin.
 extern float                 whistle_dot_radius[6]; //Radius of every 6th dot.
 extern float                 whistle_fade_radius; //Radius the whistle was at pre-fade.

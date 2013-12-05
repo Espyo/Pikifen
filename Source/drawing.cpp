@@ -380,10 +380,10 @@ void do_drawing() {
         }
         
         //ToDo remove:
-        /*for(unsigned w = 0; w < leaders[cur_leader_nr]->group_spots->n_wheels; w++){
-            size_t n_spots = leaders[cur_leader_nr]->group_spots->x_coords[w].size();
+        /*for(unsigned w = 0; w < leaders[cur_leader_nr]->party->group_spots->n_wheels; w++){
+            size_t n_spots = leaders[cur_leader_nr]->party->group_spots->x_coords[w].size();
             for(unsigned s=0; s<n_spots; s++){
-                al_draw_filled_circle(leaders[cur_leader_nr]->x + leaders[cur_leader_nr]->group_spots->x_coords[w][s], leaders[cur_leader_nr]->y + 100 + leaders[cur_leader_nr]->group_spots->y_coords[w][s], 4, al_map_rgb(0, 0, w * 32));
+                al_draw_filled_circle(leaders[cur_leader_nr]->x + leaders[cur_leader_nr]->party->group_spots->x_coords[w][s], leaders[cur_leader_nr]->y + 100 + leaders[cur_leader_nr]->party->group_spots->y_coords[w][s], 4, al_map_rgb(0, 0, w * 32));
             }
         }*/
         
@@ -482,7 +482,7 @@ void do_drawing() {
         //Pikmin count.
         //Count how many Pikmin only.
         n_leaders = leaders.size();
-        size_t pikmin_in_party = leaders[cur_leader_nr]->party.size();
+        size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
         for(size_t l = 0; l < n_leaders; l++) {
             //If this leader is following the current one, then he's not a Pikmin, subtract him from the party count total.
             if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;

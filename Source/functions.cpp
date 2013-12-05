@@ -22,12 +22,12 @@ void add_to_party(mob* party_leader, mob* new_member) {
     if(new_member->following_party == party_leader) return; //Already following, never mind.
     
     new_member->following_party = party_leader;
-    party_leader->party.push_back(new_member);
+    party_leader->party->members.push_back(new_member);
     
     //Find a spot.
     float spot_x = 0, spot_y = 0; //ToDo defaults if no group spots on leader.
-    if(party_leader->group_spots) {
-        party_leader->group_spots->add(new_member, &spot_x, &spot_y);
+    if(party_leader->party->group_spots) {
+        party_leader->party->group_spots->add(new_member, &spot_x, &spot_y);
     }
     
     new_member->set_target(spot_x, spot_y + 30, &party_leader->x, &party_leader->y, false); //ToDo that "+30".
@@ -121,7 +121,7 @@ void dismiss() {
     base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
     
     //ToDo what if there are a lot of Pikmin types?
-    size_t n_party_members = cur_leader_ptr->party.size();
+    size_t n_party_members = cur_leader_ptr->party->members.size();
     if(n_party_members == 0) return;
     
     //First, calculate what direction the party should be dismissed to.
@@ -130,7 +130,7 @@ void dismiss() {
         base_angle = cur_leader_ptr->angle + M_PI;
     } else {
         for(size_t m = 0; m < n_party_members; m++) {
-            mob* member_ptr = cur_leader_ptr->party[m];
+            mob* member_ptr = cur_leader_ptr->party->members[m];
             
             if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
             if(member_ptr->x > max_x || m == 0) max_x = member_ptr->x;
@@ -147,8 +147,8 @@ void dismiss() {
     map<pikmin_type*, float> type_dismiss_angles;
     for(size_t m = 0; m < n_party_members; m++) {
     
-        if(typeid(*cur_leader_ptr->party[m]) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party[m]);
+        if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
+            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
             
             type_dismiss_angles[pikmin_ptr->type] = 0;
         }
@@ -169,7 +169,7 @@ void dismiss() {
     
     //Now, dismiss them.
     for(size_t m = 0; m < n_party_members; m++) {
-        mob* member_ptr = cur_leader_ptr->party[0];
+        mob* member_ptr = cur_leader_ptr->party->members[0];
         remove_from_party(member_ptr);
         
         float angle = 0;
@@ -434,7 +434,7 @@ pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_rese
 
 ALLEGRO_COLOR get_daylight_color() {
     //ToDo initialize this somewhere else?
-    static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
+    /*static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
     
     size_t n_points = points.size();
     if(n_points == 0) {
@@ -445,20 +445,35 @@ ALLEGRO_COLOR get_daylight_color() {
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 255, 0  ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0, 32 ) ));
+        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0,   32 ) ));
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(0,   0,   32,  96 ) ));
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(0,   0,   32,  192) ));
         points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));
+    }*/
+    
+    //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
+    vector<unsigned> point_nrs;
+    for(map<unsigned, ALLEGRO_COLOR>::iterator p_nr = weather_condition.lighting.begin(); p_nr != weather_condition.lighting.end(); p_nr++) {
+        point_nrs.push_back(p_nr->first);
     }
     
-    for(size_t p = 0; p < n_points - 1; p++) {
-        if(day_minutes >= 60 * points[p].first && day_minutes < 60 * points[p + 1].first) {
-            return interpolate_color(day_minutes, 60 * points[p].first, 60 * points[p + 1].first, points[p].second, points[p + 1].second);
+    size_t n_points = point_nrs.size();
+    if(n_points > 1) {
+        for(size_t p = 0; p < n_points - 1; p++) {
+            if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
+                return interpolate_color(
+                           day_minutes,
+                           point_nrs[p],
+                           point_nrs[p + 1],
+                           weather_condition.lighting[point_nrs[p]],
+                           weather_condition.lighting[point_nrs[p + 1]]
+                       );
+            }
         }
     }
     
-    //If anything goes wrong, the player will see a strong red tint. This is a very obvious indicator of an error.
-    return al_map_rgba(255, 0, 0, 128);
+    //If anything goes wrong, don't apply lighting at all.
+    return al_map_rgba(0, 0, 0, 0);
 }
 
 ALLEGRO_TRANSFORM get_world_to_screen_transform() {
@@ -512,7 +527,15 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 void load_area(string name) {
     sectors.clear();
     
-    data_node file = load_data_file("Areas/" + name + ".txt");
+    data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
+    
+    string weather_condition_name = trim_spaces(file["weather"].get_value());
+    if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
+        error_log("Area " + name + " refers to a non-existing weather condition!");
+        weather_condition = weather();
+    } else {
+        weather_condition = weather_conditions[weather_condition_name];
+    }
     
     size_t n_sectors = file["sector"].size();
     for(size_t s = 0; s < n_sectors; s++) {
@@ -545,9 +568,19 @@ void load_area(string name) {
             new_linedef->x1 = tof(linedef_data["x"].get_value());
             new_linedef->y1 = tof(linedef_data["y"].get_value());
             
+            if(new_sector.linedefs.size()) {
+                new_linedef->x2 = new_sector.linedefs.back()->x1;
+                new_linedef->y2 = new_sector.linedefs.back()->y1;
+            }
+            
             //ToDo missing things.
             
             new_sector.linedefs.push_back(new_linedef);
+        }
+        
+        if(new_sector.linedefs.size() > 2) {
+            new_sector.linedefs[0]->x2 = new_sector.linedefs.back()->x1;
+            new_sector.linedefs[0]->y2 = new_sector.linedefs.back()->y1;
         }
         
         //ToDo missing things.
@@ -584,6 +617,83 @@ data_node load_data_file(string filename) {
     }
     
     return n;
+}
+
+void load_game_content() {
+    //ToDo.
+    pikmin_types.push_back(pikmin_type());
+    pikmin_types.back().color = al_map_rgb(255, 0, 0);
+    pikmin_types.back().name = "R";
+    pikmin_types.back().max_move_speed = 80;
+    
+    pikmin_types.push_back(pikmin_type());
+    pikmin_types.back().color = al_map_rgb(255, 255, 0);
+    pikmin_types.back().name = "Y";
+    pikmin_types.back().max_move_speed = 80;
+    
+    pikmin_types.push_back(pikmin_type());
+    pikmin_types.back().color = al_map_rgb(0, 0, 255);
+    pikmin_types.back().name = "B";
+    pikmin_types.back().max_move_speed = 80;
+    
+    pikmin_types.push_back(pikmin_type());
+    pikmin_types.back().color = al_map_rgb(255, 255, 255);
+    pikmin_types.back().name = "W";
+    pikmin_types.back().max_move_speed = 100;
+    pikmin_types.back().has_onion = false;
+    
+    pikmin_types.push_back(pikmin_type());
+    pikmin_types.back().color = al_map_rgb(64, 0, 255);
+    pikmin_types.back().name = "P";
+    pikmin_types.back().max_move_speed = 60;
+    pikmin_types.back().has_onion = false;
+    
+    statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
+    statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
+    
+    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
+    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
+    
+    pellet_types.push_back(pellet_type(32, 2, 1, 2, 1));
+    pellet_types.push_back(pellet_type(64, 10, 5, 5, 3));
+    pellet_types.push_back(pellet_type(96, 20, 10, 10, 5));
+    pellet_types.push_back(pellet_type(128, 50, 20, 20, 10));
+    
+    //Weather.
+    weather_conditions.clear();
+    data_node weather_file = load_data_file(WEATHER_FILE);
+    size_t n_weather_conditions = weather_file["weather"].size();
+    
+    for(size_t wc = 0; wc < n_weather_conditions; wc++) {
+        data_node* cur_weather = &weather_file["weather"][wc];
+        
+        string name = trim_spaces(cur_weather->operator[]("name").get_value());
+        if(name.size() == 0) name = "default";
+        
+        map<unsigned, ALLEGRO_COLOR> lighting;
+        size_t n_lighting_points = cur_weather->operator[]("lighting")[0].size();
+        
+        for(size_t lp = 0; lp < n_lighting_points; lp++) {
+            string node_name;
+            string node_value = cur_weather->operator[]("lighting")[0].get_node_list_by_nr(lp, &node_name).get_value();
+            
+            unsigned point_time = toi(node_name);
+            ALLEGRO_COLOR point_color = toc(node_value);
+            
+            lighting[point_time] = point_color;
+        }
+        
+        if(lighting.size() == 0) {
+            error_log("Weather condition " + name + " has no lighting!");
+        } else {
+            if(lighting.find(24 * 60) == lighting.end()) {
+                //If there is no data for the last hour, use the data from the first point (this is because the day loops after 24:00; needed for interpolation)
+                lighting[24 * 60] = lighting.begin()->second;
+            }
+        }
+        
+        weather_conditions[name] = weather(name, lighting);
+    }
 }
 
 void load_options() {
@@ -675,52 +785,32 @@ sample_struct load_sample(string filename) {
     return s;
 }
 
-void load_game_content() {
-    //ToDo.
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 0, 0);
-    pikmin_types.back().name = "R";
-    pikmin_types.back().max_move_speed = 80;
-    
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 255, 0);
-    pikmin_types.back().name = "Y";
-    pikmin_types.back().max_move_speed = 80;
-    
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(0, 0, 255);
-    pikmin_types.back().name = "B";
-    pikmin_types.back().max_move_speed = 80;
-    
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 255, 255);
-    pikmin_types.back().name = "W";
-    pikmin_types.back().max_move_speed = 100;
-    pikmin_types.back().has_onion = false;
-    
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(64, 0, 255);
-    pikmin_types.back().name = "P";
-    pikmin_types.back().max_move_speed = 60;
-    pikmin_types.back().has_onion = false;
-    
-    statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
-    statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
-    
-    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
-    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
-    
-    pellet_types.push_back(pellet_type(32, 2, 1, 2, 1));
-    pellet_types.push_back(pellet_type(64, 10, 5, 5, 3));
-    pellet_types.push_back(pellet_type(96, 20, 10, 10, 5));
-    pellet_types.push_back(pellet_type(128, 50, 20, 20, 10));
-}
-
 void make_uncarriable(mob* m) {
     if(!m->carrier_info) return;
     
     delete m->carrier_info;
     m->carrier_info = NULL;
+}
+
+void move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached) {
+    float dx = tx - x, dy = ty - y;
+    float dist = sqrt(dx * dx + dy * dy);
+    
+    if(dist > reach_radius) {
+        float move_amount = min(dist * game_fps / 2, speed);
+        
+        dx *= move_amount / dist;
+        dy *= move_amount / dist;
+        
+        if(mx) *mx = dx;
+        if(my) *my = dy;
+        if(angle) *angle = atan2(dy, dx);
+        if(reached) *reached = false;
+    } else {
+        if(mx) *mx = 0;
+        if(my) *my = 0;
+        if(reached) *reached = true;
+    }
 }
 
 void pluck_pikmin(leader* l, pikmin* p) {
@@ -820,13 +910,13 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
 void remove_from_party(mob* member) {
     if(!member->following_party) return;
     
-    member->following_party->party.erase(find(
-            member->following_party->party.begin(),
-            member->following_party->party.end(),
-            member));
-            
-    if(member->following_party->group_spots) {
-        member->following_party->group_spots->remove(member);
+    member->following_party->party->members.erase(find(
+                member->following_party->party->members.begin(),
+                member->following_party->party->members.end(),
+                member));
+                
+    if(member->following_party->party->group_spots) {
+        member->following_party->party->group_spots->remove(member);
     }
     
     member->following_party = NULL;
@@ -1173,6 +1263,17 @@ inline bool tob(string s) {
     s = trim_spaces(s);
     if(s == "yes" || s == "true" || s == "y" || s == "t") return true;
     else return (toi(s) != 0);
+}
+ALLEGRO_COLOR toc(string s) {
+    s = trim_spaces(s);
+    vector<string> components = split(s);
+    ALLEGRO_COLOR c = al_map_rgba(
+                          ((components.size() > 0) ? toi(components[0]) : 0),
+                          ((components.size() > 1) ? toi(components[1]) : 0),
+                          ((components.size() > 2) ? toi(components[2]) : 0),
+                          ((components.size() > 3) ? toi(components[3]) : 255)
+                      );
+    return c;
 }
 inline double tof(string s) { s = trim_spaces(s); replace(s.begin(), s.end(), ',', '.'); return atof(s.c_str()); }
 inline int toi(string s) { return tof(s); }

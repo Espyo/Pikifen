@@ -1,7 +1,7 @@
 #ifndef CONTROLS_INCLUDED
 #define CONTROLS_INCLUDED
 
-void handle_controls(ALLEGRO_EVENT ev);
+void handle_game_controls(ALLEGRO_EVENT ev);
 void handle_button(unsigned int button, float pos);
 void handle_mouse(unsigned int action, float mx, float my);
 

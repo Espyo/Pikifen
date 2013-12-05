@@ -1,3 +1,5 @@
+weather = Normal
+
 sector{
 	floor{
 		texture=Grass.png

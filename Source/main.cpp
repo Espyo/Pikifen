@@ -14,6 +14,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "area_editor.h"
 #include "const.h"
 #include "controls.h"
 #include "drawing.h"
@@ -261,7 +262,11 @@ int main() {
         
         al_wait_for_event(queue, &ev);
         
-        handle_controls(ev);
+        if(cur_screen == SCREEN_GAME) {
+            handle_game_controls(ev);
+        } else {
+            handle_editor_controls(ev);
+        }
         
         if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             running = false;
@@ -272,8 +277,12 @@ int main() {
             
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
         
-            do_logic();
-            do_drawing();
+            if(cur_screen == SCREEN_GAME) {
+                do_logic();
+                do_drawing();
+            } else if(cur_screen == SCREEN_AREA_EDITOR) {
+                do_area_editor_logic();
+            }
         }
     }
     

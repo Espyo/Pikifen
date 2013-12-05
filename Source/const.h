@@ -54,6 +54,16 @@ using namespace std;
 #define DEF_SCR_W 640
 #define DEF_SCR_H 480
 
+#define AREA_FOLDER "Areas"
+#define CONFIGURATIONS_FOLDER "Configurations"
+#define WEATHER_FILE CONFIGURATIONS_FOLDER "/Weather.txt"
+
+enum SCREENS {
+    SCREEN_MAIN_MENU,
+    SCREEN_GAME,
+    SCREEN_AREA_EDITOR,
+};
+
 enum BUTTONS {
     BUTTON_NONE,
     BUTTON_PUNCH,

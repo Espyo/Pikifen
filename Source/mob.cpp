@@ -27,7 +27,7 @@ mob::mob(float x, float y, float z, float move_speed, sector* sec) {
     following_party = NULL;
     was_thrown = false;
     uncallable_period = 0;
-    group_spots = NULL;
+    party = NULL;
     
     carrier_info = NULL;
 }
@@ -68,7 +68,9 @@ void mob::tick() {
             
         } else if(x != final_target_x || y != final_target_y) {
         
-            float dx = final_target_x - x, dy = final_target_y - y;
+            move_point(x, y, final_target_x, final_target_y, move_speed, 0.001, &speed_x, &speed_y, &angle, &reached_destination);
+            
+            /*float dx = final_target_x - x, dy = final_target_y - y;
             if(fabs(dx) < 0.001) {
                 dx = 0;
                 x = final_target_x;
@@ -81,16 +83,16 @@ void mob::tick() {
             
             if(dist > 0) {
                 float move_amount = min(dist * game_fps / 2, move_speed);
-                
+            
                 dx *= move_amount / dist;
                 dy *= move_amount / dist;
-                
+            
                 speed_x = dx;
                 speed_y = dy;
                 angle = atan2(dy, dx);
             } else {
                 reached_destination = true;
-            }
+            }*/
         }
     }
     

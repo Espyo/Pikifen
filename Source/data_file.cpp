@@ -158,12 +158,12 @@ data_node::data_node() {
     file_was_opened = false;
 }
 data_node::data_node(const data_node &dn) {
-    data_node();
+    file_was_opened = dn.file_was_opened;
     nodes = dn.nodes;
     value = dn.value;
 }
 data_node::data_node(string filename) {
-    data_node();
+    file_was_opened = false;
     load_file(filename);
 }
 data_node::~data_node() {}

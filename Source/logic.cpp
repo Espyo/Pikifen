@@ -329,9 +329,9 @@ void do_logic() {
                     add_to_party(cur_leader_ptr, leaders[l]);
                     leaders[l]->auto_pluck_mode = false;
                     
-                    size_t n_party_members = leaders[l]->party.size();
+                    size_t n_party_members = leaders[l]->party->members.size();
                     for(size_t m = 0; m < n_party_members; m++) {
-                        mob* member = leaders[l]->party[0];
+                        mob* member = leaders[l]->party->members[0];
                         remove_from_party(member);
                         add_to_party(cur_leader_ptr, member);
                     }
@@ -433,16 +433,16 @@ void do_logic() {
     
     //ToDo every Pikmin in a group is moving, even Pikmin that are already on another leader's party!
     float closest_distance = 0;
-    size_t n_members = cur_leader_ptr->party.size();
+    size_t n_members = cur_leader_ptr->party->members.size();
     closest_party_member = cur_leader_ptr->holding_pikmin;
     
     if(n_members > 0 && !closest_party_member) {
     
         for(size_t m = 0; m < n_members; m++) {
-            float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party[m]->x, cur_leader_ptr->party[m]->y);
+            float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
             if(m == 0 || d < closest_distance) {
                 closest_distance = d;
-                closest_party_member = cur_leader_ptr->party[m];
+                closest_party_member = cur_leader_ptr->party->members[m];
             }
         }
         
