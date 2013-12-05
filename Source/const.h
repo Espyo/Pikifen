@@ -19,7 +19,6 @@ using namespace std;
 #define CURSOR_MAX_DIST            200      //The cursor can only be these many units away from the captain.
 #define DISMISS_DISTANCE           64       //Dismissed Pikmin go these many units away from the captain.
 #define GRAVITY_ADDER              -2.0f    //Accelerate the Z speed of mobs affected by gravity by this amount per second.
-#define GROUP_SPOT_INTERVAL        1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
 #define IDLE_GLOW_SPIN_SPEED       M_PI*0.5 //The idle glow spins these many radians per second.
 #define INFO_SPOT_TRIGGER_RANGE    64       //If the current captain is at this distance or closer from an info spot, it gets triggered.
 #define LEADER_MOVE_SPEED          100      //Max speed at which a leader can move.
@@ -35,6 +34,7 @@ using namespace std;
 #define MOVE_GROUP_ARROW_SPEED     400      //"Move group" arrows move these many units per second.
 #define MOVE_GROUP_ARROWS_INTERVAL 0.1      //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT              5        //A drop of nectar starts with this amount.
+#define PARTY_SPOT_INTERVAL        1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
 #define SHADOW_Y_MULTIPLIER        150      //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
 #define SHIP_BEAM_RANGE            30       //The center of a ship's beam reaches this far.
 #define SHIP_BEAM_RING_COLOR_SPEED 255      //Red color's index moves these many units per second. (Green is fast and blue is faster still).

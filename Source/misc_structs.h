@@ -17,7 +17,7 @@ struct sample_struct {
     sample_struct(ALLEGRO_SAMPLE* s = NULL);
 };
 
-struct group_spot_info {
+struct party_spot_info {
     /* Group spots. The way this works is that a Pikmin group surrounds a central point.
      * There are several wheels surrounding the original spot,
      * starting from the center and growing in size, each with several spots of their own.
@@ -25,6 +25,8 @@ struct group_spot_info {
      * Then other Pikmin come by, and occupy spots at random on the next wheel.
      * When that wheel has all of its spots full, the next wheel will be used, and so on.
      */
+    float spot_radius;
+    
     vector<vector<float> > x_coords;
     vector<vector<float> > y_coords;
     unsigned n_wheels;
@@ -33,7 +35,7 @@ struct group_spot_info {
     unsigned current_wheel;
     unsigned n_current_wheel_members;
     
-    group_spot_info(unsigned max_mobs, float spot_size);
+    party_spot_info(unsigned max_mobs, float spot_size);
     void add(mob* m, float* x, float* y);
     void remove(mob* m);
 };

@@ -25,12 +25,19 @@ void add_to_party(mob* party_leader, mob* new_member) {
     party_leader->party->members.push_back(new_member);
     
     //Find a spot.
-    float spot_x = 0, spot_y = 0; //ToDo defaults if no group spots on leader.
-    if(party_leader->party->group_spots) {
-        party_leader->party->group_spots->add(new_member, &spot_x, &spot_y);
+    if(party_leader->party) {
+        if(party_leader->party->party_spots) {
+            float spot_x = 0, spot_y = 0;
+            
+            party_leader->party->party_spots->add(new_member, &spot_x, &spot_y);
+            
+            new_member->set_target(
+                spot_x, spot_y,
+                &party_leader->party->party_center_x, &party_leader->party->party_center_y,
+                false
+            );
+        }
     }
-    
-    new_member->set_target(spot_x, spot_y + 30, &party_leader->x, &party_leader->y, false); //ToDo that "+30".
     
     make_uncarriable(new_member);
 }
@@ -915,8 +922,8 @@ void remove_from_party(mob* member) {
                 member->following_party->party->members.end(),
                 member));
                 
-    if(member->following_party->party->group_spots) {
-        member->following_party->party->group_spots->remove(member);
+    if(member->following_party->party->party_spots) {
+        member->following_party->party->party_spots->remove(member);
     }
     
     member->following_party = NULL;

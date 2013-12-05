@@ -158,6 +158,7 @@ int main() {
     sfx_louie_name_call = load_sample("Louie_name_call.ogg");
     sfx_president_name_call = load_sample("President_name_call.ogg");
     sfx_throw = load_sample("Throw.ogg");
+    sfx_switch_pikmin = load_sample("Switch_Pikmin.ogg");
     sfx_camera = load_sample("Camera.ogg");
     
     //Game content.

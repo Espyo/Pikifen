@@ -13,6 +13,6 @@ leader::leader(float x, float y, sector* sec)
     auto_pluck_mode = false;
     auto_pluck_pikmin = NULL;
     
-    group_spot_info* gs = new group_spot_info(max_pikmin_in_field, 8);
-    party = new party_info(gs);
+    party_spot_info* ps = new party_spot_info(max_pikmin_in_field, 8);
+    party = new party_info(ps, x, y);
 }

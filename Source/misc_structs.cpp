@@ -10,7 +10,9 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s) {
     id._index = 0;
 }
 
-group_spot_info::group_spot_info(unsigned max_mobs, float pikmin_size) {
+party_spot_info::party_spot_info(unsigned max_mobs, float spot_radius) {
+    this->spot_radius = spot_radius;
+    
     //Center spot first.
     x_coords.push_back(vector<float>(1, 0));
     y_coords.push_back(vector<float>(1, 0));
@@ -22,8 +24,8 @@ group_spot_info::group_spot_info(unsigned max_mobs, float pikmin_size) {
     
         //First, calculate how far the center of these spots are from the central spot.
         float dist_from_center =
-            pikmin_size * w + //Spots.
-            GROUP_SPOT_INTERVAL * w; //Interval between spots.
+            spot_radius * w + //Spots.
+            PARTY_SPOT_INTERVAL * w; //Interval between spots.
             
         /* Now we need to figure out what's the angular distance between each spot.
          * For that, we need the actual diameter (distance from one point to the other),
@@ -35,7 +37,7 @@ group_spot_info::group_spot_info(unsigned max_mobs, float pikmin_size) {
          * which should be the size of a Pikmin and one interval unit,
          * and we know the distance from one spot to the center.
          */
-        float actual_diameter = pikmin_size + GROUP_SPOT_INTERVAL;
+        float actual_diameter = spot_radius + PARTY_SPOT_INTERVAL;
         
         //Just calculate the remaining side of the triangle, now that we know
         //the hypotenuse and the actual diameter (one side of the triangle).
@@ -55,8 +57,8 @@ group_spot_info::group_spot_info(unsigned max_mobs, float pikmin_size) {
         y_coords.push_back(vector<float>());
         mobs_in_spots.push_back(vector<mob*>());
         for(unsigned s = 0; s < n_spots_on_wheel; s++) {
-            x_coords.back().push_back(dist_from_center * cos(angle * s) + random(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL));
-            y_coords.back().push_back(dist_from_center * sin(angle * s) + random(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL));
+            x_coords.back().push_back(dist_from_center * cos(angle * s) + random(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
+            y_coords.back().push_back(dist_from_center * sin(angle * s) + random(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
             mobs_in_spots.back().push_back(NULL);
         }
         
@@ -68,7 +70,7 @@ group_spot_info::group_spot_info(unsigned max_mobs, float pikmin_size) {
     current_wheel = n_current_wheel_members = 0;
 }
 
-void group_spot_info::add(mob* m, float* x, float* y) {
+void party_spot_info::add(mob* m, float* x, float* y) {
     if(n_current_wheel_members == mobs_in_spots[current_wheel].size()) {
         current_wheel++;
         n_current_wheel_members = 0;
@@ -88,7 +90,7 @@ void group_spot_info::add(mob* m, float* x, float* y) {
     if(y) *y = y_coords[current_wheel][chosen_spot];
 }
 
-void group_spot_info::remove(mob* m) {
+void party_spot_info::remove(mob* m) {
     unsigned mob_wheel = MAXUINT; //Wheel number of the mob we're trying to remove.
     unsigned mob_spot = MAXUINT; //Spot number of the mob we're trying to remove.
     

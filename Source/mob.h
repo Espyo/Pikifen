@@ -11,20 +11,25 @@
 
 using namespace std;
 
-struct group_spot_info;
+struct party_spot_info;
 
 class mob;
 
 struct party_info {
     vector<mob*> members;
-    group_spot_info* group_spots;
+    party_spot_info* party_spots;
+    float party_center_x, party_center_y;
     
-    party_info(group_spot_info* gs) { group_spots = gs; }
+    party_info(party_spot_info* ps, float center_x, float center_y) {
+        party_spots = ps;
+        party_center_x = center_x;
+        party_center_y = center_y;
+    }
 };
 
 struct carrier_info_struct {
     unsigned int max_carriers;
-    bool carry_to_ship; //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
+    bool carry_to_ship;            //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
     vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
     vector<float> carrier_spots_y;
     

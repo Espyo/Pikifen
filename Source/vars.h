@@ -77,6 +77,7 @@ extern sample_struct sfx_pikmin_called;
 extern sample_struct sfx_pikmin_held;
 extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
+extern sample_struct sfx_switch_pikmin;
 extern sample_struct sfx_throw;
 
 extern vector<vector<ALLEGRO_BITMAP*> >

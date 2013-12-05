@@ -54,6 +54,7 @@ sample_struct sfx_pikmin_called;
 sample_struct sfx_pikmin_held;
 sample_struct sfx_pikmin_plucked;
 sample_struct sfx_pikmin_thrown;
+sample_struct sfx_switch_pikmin;
 sample_struct sfx_throw;
 
 vector<vector<ALLEGRO_BITMAP*>>

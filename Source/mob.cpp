@@ -103,6 +103,24 @@ void mob::tick() {
         uncallable_period -= (1.0 / game_fps);
         if(uncallable_period < 0) uncallable_period = 0;
     }
+    
+    if(party) {
+        float party_center_mx = 0, party_center_my = 0;
+        move_point(
+            party->party_center_x, party->party_center_y,
+            x, y,
+            this->move_speed,
+            ((party->party_spots->current_wheel + 1) * party->party_spots->spot_radius) + (party->party_spots->current_wheel + 1) * PARTY_SPOT_INTERVAL,
+            &party_center_mx, &party_center_my, NULL, NULL
+        );
+        party->party_center_x += party_center_mx * delta_t_mult;
+        party->party_center_y += party_center_my * delta_t_mult;
+        
+        size_t n_members = party->members.size();
+        for(size_t m = 0; m < n_members; m++) {
+            party->members[m]->angle = atan2(y - party->members[m]->y, x - party->members[m]->x);
+        }
+    }
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {

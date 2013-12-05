@@ -313,8 +313,8 @@ void do_logic() {
     ********************/
     
     if(cur_leader_ptr->holding_pikmin) {
-        cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + 8;
-        cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y;
+        cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
+        cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
     }
     
     size_t n_leaders = leaders.size();
@@ -342,9 +342,9 @@ void do_logic() {
         if(leaders[l]->following_party && !leaders[l]->auto_pluck_mode) {
             leaders[l]->set_target(
                 0,
-                30,
-                &leaders[l]->following_party->x,
-                &leaders[l]->following_party->y,
+                0,
+                &leaders[l]->following_party->party->party_center_x,
+                &leaders[l]->following_party->party->party_center_y,
                 false);
         } else {
             if(leaders[l]->auto_pluck_mode) {
@@ -425,11 +425,11 @@ void do_logic() {
     }
     
     
-    /******************
-    *            ***  *
-    *   Group   ****O *
-    *            ***  *
-    ******************/
+    /***********************************
+    *                             ***  *
+    *   Current leader's group   ****O *
+    *                             ***  *
+    ************************************/
     
     //ToDo every Pikmin in a group is moving, even Pikmin that are already on another leader's party!
     float closest_distance = 0;

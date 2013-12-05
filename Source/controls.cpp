@@ -567,6 +567,7 @@ void handle_button(unsigned int button, float pos) {
         //If no Pikmin matched the maturity, just use the one we found.
         if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[t_match_nr];
         else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[tm_match_nr];
+        al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
         
     } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
     
@@ -612,6 +613,7 @@ void handle_button(unsigned int button, float pos) {
         } while(!partners[new_maturity]);
         
         cur_leader_ptr->holding_pikmin = partners[new_maturity];
+        al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
         
     }
     
