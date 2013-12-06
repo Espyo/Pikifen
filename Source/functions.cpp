@@ -134,7 +134,7 @@ void dismiss() {
     //First, calculate what direction the party should be dismissed to.
     if(moving_group_intensity > 0) {
         //If the leader's moving the group, they should be dismissed towards the cursor.
-        base_angle = cur_leader_ptr->angle + M_PI;
+        base_angle = cursor_angle + M_PI;
     } else {
         for(size_t m = 0; m < n_party_members; m++) {
             mob* member_ptr = cur_leader_ptr->party->members[m];
@@ -1256,7 +1256,7 @@ void use_spray(size_t spray_nr) {
     random_particle_spray(
         leaders[cur_leader_nr]->x,
         leaders[cur_leader_nr]->y,
-        leaders[cur_leader_nr]->angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
+        cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
         spray_types[spray_nr].main_color
     );
     

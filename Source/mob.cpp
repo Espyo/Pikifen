@@ -14,7 +14,8 @@ mob::mob(float x, float y, float z, float move_speed, sector* sec) {
     
     speed_x = speed_y = speed_z = 0;
     this->move_speed = move_speed;
-    angle = 0;
+    rotation_speed = M_PI * 2; //ToDo should this be here, in order to give the rotation speed a default value?
+    angle = intended_angle = 0;
     size = 1;
     
     go_to_target = false;
@@ -67,32 +68,12 @@ void mob::tick() {
             speed_x = speed_y = 0;
             
         } else if(x != final_target_x || y != final_target_y) {
-        
-            move_point(x, y, final_target_x, final_target_y, move_speed, 0.001, &speed_x, &speed_y, &angle, &reached_destination);
-            
-            /*float dx = final_target_x - x, dy = final_target_y - y;
-            if(fabs(dx) < 0.001) {
-                dx = 0;
-                x = final_target_x;
+            float new_angle = angle;
+            move_point(x, y, final_target_x, final_target_y, move_speed, 0.001, &speed_x, &speed_y, &new_angle, &reached_destination);
+            if(!reached_destination) {
+                //Only face the way the mob wants to go if it's still going. Otherwise, let other code turn them whichever way it wants.
+                face(new_angle);
             }
-            if(fabs(dy) < 0.001) {
-                y = final_target_y;
-                dy = 0;
-            }
-            float dist = sqrt(dx * dx + dy * dy);
-            
-            if(dist > 0) {
-                float move_amount = min(dist * game_fps / 2, move_speed);
-            
-                dx *= move_amount / dist;
-                dy *= move_amount / dist;
-            
-                speed_x = dx;
-                speed_y = dy;
-                angle = atan2(dy, dx);
-            } else {
-                reached_destination = true;
-            }*/
         }
     }
     
@@ -118,9 +99,22 @@ void mob::tick() {
         
         size_t n_members = party->members.size();
         for(size_t m = 0; m < n_members; m++) {
-            party->members[m]->angle = atan2(y - party->members[m]->y, x - party->members[m]->x);
+            party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
         }
     }
+    
+    
+    //Change the facing angle to the angle the mob wants to face.
+    if(angle > M_PI)  angle -= M_PI * 2;
+    if(angle < -M_PI) angle += M_PI * 2;
+    if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
+    if(intended_angle < -M_PI) intended_angle += M_PI * 2;
+    
+    float angle_dif = intended_angle - angle;
+    if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
+    if(angle_dif < -M_PI) angle_dif += M_PI * 2;
+    
+    angle += sign(angle_dif) * min(rotation_speed / game_fps, abs(angle_dif));
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {
@@ -140,6 +134,10 @@ void mob::remove_target(bool stop) {
         speed_x = 0;
         speed_y = 0;
     }
+}
+
+void mob::face(float new_angle) {
+    intended_angle = new_angle;
 }
 
 mob::~mob() {}

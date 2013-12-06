@@ -79,6 +79,7 @@ mob*                  closest_party_member = NULL;
 vector<control_info>  controls;
 size_t                cur_leader_nr = 0;
 unsigned char         cur_screen = SCREEN_GAME;
+float                 cursor_angle = 0;
 float                 cursor_x = 0;
 float                 cursor_y = 0;
 unsigned int          day = 0;

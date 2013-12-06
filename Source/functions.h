@@ -11,6 +11,9 @@
 #include "sector.h"
 
 #define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
+#define sign(n) (((n) >= 0) ? 1 : -1)
+#define mod(n, d) ((n) - (d) * floor((n) / (d)))
+#define normalize_angle(a) (mod((a), M_PI*2) - M_PI)
 
 void              active_control();
 void              add_to_party(mob* party_leader, mob* new_member);

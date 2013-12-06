@@ -102,6 +102,7 @@ extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
 extern size_t                cur_leader_nr;
 extern unsigned char         cur_screen;
+extern float                 cursor_angle;
 extern float                 cursor_x;           //Leader's cursor.
 extern float                 cursor_y;
 extern unsigned int          day;

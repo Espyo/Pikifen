@@ -452,7 +452,7 @@ void do_logic() {
     }
     
     if(moving_group_to_cursor) {
-        moving_group_angle = cur_leader_ptr->angle;
+        moving_group_angle = cursor_angle;
         moving_group_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
     } else if(moving_group_pos_x != 0 || moving_group_pos_y != 0) {
         coordinates_to_angle(
@@ -482,14 +482,15 @@ void do_logic() {
     cursor_y = mcy;
     
     if(!cur_leader_ptr->auto_pluck_mode) {
-        cur_leader_ptr->angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+        cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+        cur_leader_ptr->face(cursor_angle);
     }
     
     leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
     if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
         //Cursor goes beyond the range limit.
-        cursor_x = cur_leader_ptr->x + (cos(cur_leader_ptr->angle) * CURSOR_MAX_DIST);
-        cursor_y = cur_leader_ptr->y + (sin(cur_leader_ptr->angle) * CURSOR_MAX_DIST);
+        cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
+        cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
         
         if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
             //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.

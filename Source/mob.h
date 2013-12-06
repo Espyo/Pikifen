@@ -55,34 +55,32 @@ public:
     //Detail things.
     ALLEGRO_COLOR main_color;
     
-    //Planned moving.
-    float planned_moving_angle;
-    float planned_moving_intensity;
-    
     //Actual moving and other physics.
-    float x, y, z;      //Coordinates. Z is height, the higher the value, the higher in the sky.
-    float speed_x, speed_y, speed_z;  //Physics only. Don't touch.
-    float move_speed;                 //Normal moving speed.
-    float move_speed_mult;            //Multiply the normal moving speed by this.
-    float acceleration;        //Speed multiplies by this much each second.
-    float angle;        //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
-    float size;         //Diameter, in units. Used mostly for movement.
-    
-    sector* sec;        //Sector it's on.
+    float x, y, z;                   //Coordinates. Z is height, the higher the value, the higher in the sky.
+    float speed_x, speed_y, speed_z; //Physics only. Don't touch.
+    float move_speed;                //Normal moving speed.
+    float move_speed_mult;           //Multiply the normal moving speed by this.
+    float rotation_speed;            //Mob spins these many radians per second.
+    float acceleration;              //Speed multiplies by this much each second.
+    float angle;                     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
+    float intended_angle;            //Angle the mob wants to be facing.
+    float size;                      //Diameter, in units. Used mostly for movement.
+    sector* sec;                     //Sector it's on.
+    void face(float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
     
     //Target things.
-    float target_x, target_y;  //When movement is automatic, this is the spot the mob is trying to go to.
+    float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
     float* target_rel_x, *target_rel_y; //Follow these coordinates.
-    bool go_to_target;         //If true, it'll try to go to the target spot on its own.
-    bool gtt_instant; //If true, teleport instantly.
+    bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
+    bool gtt_instant;                   //If true, teleport instantly.
     void set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant);
     void remove_target(bool stop);
     
     //Party things.
-    mob* following_party;  //The current mob is following this mob's party.
-    bool was_thrown;       //Is the mob airborne because it was thrown?
+    mob* following_party;    //The current mob is following this mob's party.
+    bool was_thrown;         //Is the mob airborne because it was thrown?
     float uncallable_period; //During this period, the mob cannot be called into a party.
-    party_info* party;
+    party_info* party;       //Info on the party this mob is a leader of.
     
     //Carrying.
     unsigned int weight;

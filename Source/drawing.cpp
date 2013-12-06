@@ -94,8 +94,8 @@ void do_drawing() {
         
         size_t n_rings = whistle_rings.size();
         for(size_t r = 0; r < n_rings; r++) {
-            float x = leaders[cur_leader_nr]->x + cos(leaders[cur_leader_nr]->angle) * whistle_rings[r];
-            float y = leaders[cur_leader_nr]->y + sin(leaders[cur_leader_nr]->angle) * whistle_rings[r];
+            float x = leaders[cur_leader_nr]->x + cos(cursor_angle) * whistle_rings[r];
+            float y = leaders[cur_leader_nr]->y + sin(cursor_angle) * whistle_rings[r];
             unsigned char n = whistle_ring_colors[r];
             al_draw_filled_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192));
         }
@@ -144,13 +144,13 @@ void do_drawing() {
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
             cam_zoom * 48, cam_zoom * 48,
-            leaders[cur_leader_nr]->angle);
+            cursor_angle);
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
             cursor_x, cursor_y,
             48, 48,
-            leaders[cur_leader_nr]->angle);
+            cursor_angle);
             
             
         /* Layer 4
