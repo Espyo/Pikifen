@@ -476,6 +476,16 @@ void do_logic() {
         moving_group_intensity = 0;
     }
     
+    if(moving_group_intensity) {
+        cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
+        cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
+    } else if(prev_moving_group_intensity != 0) {
+        float d = get_leader_to_group_center_dist(cur_leader_ptr);
+        cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * d;
+        cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * d;
+    }
+    prev_moving_group_intensity = moving_group_intensity;
+    
     
     /********************
     *             .-.   *

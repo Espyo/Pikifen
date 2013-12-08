@@ -84,7 +84,7 @@ public:
     
     //Carrying.
     unsigned int weight;
-    carrier_info_struct* carrier_info; //This is a pointer because most mobs aren't carriable. Might as well save RAM.
+    carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
     
     void tick();
 };

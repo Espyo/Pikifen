@@ -33,6 +33,7 @@ void              error_log(string s);
 void              generate_area_images();
 pikmin*           get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved);
 ALLEGRO_COLOR     get_daylight_color();
+float             get_leader_to_group_center_dist(mob* l);
 ALLEGRO_TRANSFORM get_world_to_screen_transform();
 void              give_pikmin_to_onion(onion* o, unsigned amount);
 ALLEGRO_COLOR     interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);

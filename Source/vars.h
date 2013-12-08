@@ -153,6 +153,7 @@ pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern vector<pikmin_type>   pikmin_types;
 extern bool                  pretty_whistle;  //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
+extern float                 prev_moving_group_intensity; //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                  running;
 extern unsigned short        scr_h;
 extern unsigned short        scr_w;

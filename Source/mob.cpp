@@ -91,7 +91,7 @@ void mob::tick() {
             party->party_center_x, party->party_center_y,
             x, y,
             this->move_speed,
-            ((party->party_spots->current_wheel + 1) * party->party_spots->spot_radius) + (party->party_spots->current_wheel + 1) * PARTY_SPOT_INTERVAL,
+            get_leader_to_group_center_dist(this),
             &party_center_mx, &party_center_my, NULL, NULL
         );
         party->party_center_x += party_center_mx * delta_t_mult;

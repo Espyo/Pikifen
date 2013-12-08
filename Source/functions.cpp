@@ -134,7 +134,7 @@ void dismiss() {
     //First, calculate what direction the party should be dismissed to.
     if(moving_group_intensity > 0) {
         //If the leader's moving the group, they should be dismissed towards the cursor.
-        base_angle = cursor_angle + M_PI;
+        base_angle = moving_group_angle + M_PI;
     } else {
         for(size_t m = 0; m < n_party_members; m++) {
             mob* member_ptr = cur_leader_ptr->party->members[m];
@@ -481,6 +481,14 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //If anything goes wrong, don't apply lighting at all.
     return al_map_rgba(0, 0, 0, 0);
+}
+
+float get_leader_to_group_center_dist(mob* l) {
+    return
+        (l->party->party_spots->current_wheel + 1) *
+        l->party->party_spots->spot_radius +
+        (l->party->party_spots->current_wheel + 1) *
+        PARTY_SPOT_INTERVAL;
 }
 
 ALLEGRO_TRANSFORM get_world_to_screen_transform() {

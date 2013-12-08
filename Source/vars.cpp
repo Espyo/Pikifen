@@ -130,6 +130,7 @@ pikmin_in_onions;
 vector<pikmin*>       pikmin_list;
 vector<pikmin_type>   pikmin_types;
 bool                  pretty_whistle = false;
+float                 prev_moving_group_intensity = 0;
 bool                  running = true;
 unsigned short        scr_h = DEF_SCR_H;
 unsigned short        scr_w = DEF_SCR_W;
