@@ -90,9 +90,13 @@ void handle_button(unsigned int button, float pos) {
         *              / \ *
         *******************/
         
-        if(fabs(pos) < 0.75) pos = 0;
-        active_control();
+        if(pos != 0) active_control();
         
+        if(button == BUTTON_MOVE_RIGHT || button == BUTTON_MOVE_LEFT) leader_move_x =
+                ((button == BUTTON_MOVE_LEFT) ? -pos : pos);
+        if(button == BUTTON_MOVE_DOWN || button == BUTTON_MOVE_UP) leader_move_y =
+                ((button == BUTTON_MOVE_UP) ? -pos : pos);
+                
         if(button == BUTTON_MOVE_RIGHT)     cur_leader_ptr->speed_x = LEADER_MOVE_SPEED * pos;
         else if(button == BUTTON_MOVE_UP)   cur_leader_ptr->speed_y = -LEADER_MOVE_SPEED * pos;
         else if(button == BUTTON_MOVE_LEFT) cur_leader_ptr->speed_x = -LEADER_MOVE_SPEED * pos;
@@ -373,7 +377,7 @@ void handle_button(unsigned int button, float pos) {
         *   Sprays   (   ) *
         *             `-´  *
         *******************/
-        if(pos == 0) return;
+        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
         
         active_control();
         
@@ -383,7 +387,7 @@ void handle_button(unsigned int button, float pos) {
         
     } else if(button == BUTTON_USE_SPRAY_2) {
     
-        if(pos == 0) return;
+        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
         
         active_control();
         
@@ -393,7 +397,7 @@ void handle_button(unsigned int button, float pos) {
         
     } else if(button == BUTTON_SWITCH_SPRAY_RIGHT || button == BUTTON_SWITCH_SPRAY_LEFT) {
     
-        if(pos == 0) return;
+        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
         
         if(spray_types.size() > 2) {
             if(button == BUTTON_SWITCH_SPRAY_RIGHT) {
@@ -406,7 +410,7 @@ void handle_button(unsigned int button, float pos) {
         
     } else if(button == BUTTON_USE_SPRAY) {
     
-        if(pos == 0) return;
+        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
         
         active_control();
         

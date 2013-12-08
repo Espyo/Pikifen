@@ -125,6 +125,8 @@ extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>
 joystick_numbers;
 extern vector<leader*>       leaders;
+extern float                 leader_move_x; //How hard the joystick is pressed in the X axis ([-1, 1]).
+extern float                 leader_move_y;
 extern unsigned              max_pikmin_in_field;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;     //The physical mouse's cursor.

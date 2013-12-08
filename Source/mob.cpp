@@ -114,7 +114,7 @@ void mob::tick() {
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     
-    angle += sign(angle_dif) * min(rotation_speed / game_fps, abs(angle_dif));
+    angle += sign(angle_dif) * min(rotation_speed / game_fps, fabs(angle_dif));
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {

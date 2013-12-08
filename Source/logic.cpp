@@ -317,6 +317,19 @@ void do_logic() {
         cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
     }
     
+    if(!cur_leader_ptr->auto_pluck_mode) {
+        float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
+        if(leader_move_intensity < 0.75) leader_move_intensity = 0;
+        if(leader_move_intensity > 1) leader_move_intensity = 1;
+        if(leader_move_intensity == 0)
+            cur_leader_ptr->remove_target(true);
+        else
+            cur_leader_ptr->set_target(
+                cur_leader_ptr->x + leader_move_x * cur_leader_ptr->move_speed,
+                cur_leader_ptr->y + leader_move_y * cur_leader_ptr->move_speed,
+                NULL, NULL, false);
+    }
+    
     size_t n_leaders = leaders.size();
     for(size_t l = 0; l < n_leaders; l++) {
         if(whistling) {

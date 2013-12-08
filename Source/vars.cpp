@@ -102,6 +102,8 @@ vector<info_spot*>    info_spots;
 map<ALLEGRO_JOYSTICK*, int>
 joystick_numbers;
 vector<leader*>       leaders;
+float                 leader_move_x = 0;
+float                 leader_move_y = 0;
 unsigned              max_pikmin_in_field = 100;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
