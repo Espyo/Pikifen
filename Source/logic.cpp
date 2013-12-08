@@ -317,6 +317,7 @@ void do_logic() {
         cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
     }
     
+    //Current leader movement.
     if(!cur_leader_ptr->auto_pluck_mode) {
         float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
         if(leader_move_intensity < 0.75) leader_move_intensity = 0;

@@ -97,11 +97,6 @@ void handle_button(unsigned int button, float pos) {
         if(button == BUTTON_MOVE_DOWN || button == BUTTON_MOVE_UP) leader_move_y =
                 ((button == BUTTON_MOVE_UP) ? -pos : pos);
                 
-        if(button == BUTTON_MOVE_RIGHT)     cur_leader_ptr->speed_x = LEADER_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_UP)   cur_leader_ptr->speed_y = -LEADER_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_LEFT) cur_leader_ptr->speed_x = -LEADER_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_DOWN) cur_leader_ptr->speed_y = LEADER_MOVE_SPEED * pos;
-        
     } else if(
         button == BUTTON_MOVE_CURSOR_RIGHT ||
         button == BUTTON_MOVE_CURSOR_UP ||

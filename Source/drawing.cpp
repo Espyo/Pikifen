@@ -143,13 +143,13 @@ void do_drawing() {
         draw_sprite(
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
-            cam_zoom * 48, cam_zoom * 48,
+            cam_zoom * 54, cam_zoom * 54,
             cursor_angle);
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
             cursor_x, cursor_y,
-            48, 48,
+            54, 54,
             cursor_angle);
             
             
