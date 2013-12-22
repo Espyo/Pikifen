@@ -1,10 +1,6 @@
 #ifndef CONTROLS_INCLUDED
 #define CONTROLS_INCLUDED
 
-void handle_game_controls(ALLEGRO_EVENT ev);
-void handle_button(unsigned int button, float pos);
-void handle_mouse(unsigned int action, float mx, float my);
-
 struct control_info {
     unsigned char action;
     unsigned char player;
@@ -17,5 +13,8 @@ struct control_info {
     control_info(unsigned char action, unsigned char player, string s);
     string stringify();
 };
+
+void handle_game_controls(ALLEGRO_EVENT ev);
+void handle_button(unsigned int button, float pos);
 
 #endif //ifndef CONTROLS_INCLUDED

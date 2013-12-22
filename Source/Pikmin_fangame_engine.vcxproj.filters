@@ -54,19 +54,7 @@
     <ClCompile Include="status.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="treasure.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="controls.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="logic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="data_file.cpp">
@@ -96,10 +84,13 @@
     <ClCompile Include="misc_structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="area_editor.cpp">
+    <ClCompile Include="weather.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="weather.cpp">
+    <ClCompile Include="interval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,9 +152,6 @@
     <ClInclude Include="spray_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="frame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="weather.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="interval.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

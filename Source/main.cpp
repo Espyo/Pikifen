@@ -165,9 +165,9 @@ int main() {
     load_game_content();
     
     //Initializing game things.
-    sprays.clear();
+    spray_amounts.clear();
     size_t n_spray_types = spray_types.size();
-    for(size_t s = 0; s < n_spray_types; s++) { sprays.push_back(0); }
+    for(size_t s = 0; s < n_spray_types; s++) { spray_amounts.push_back(0); }
     pikmin_in_onions.clear();
     size_t n_total_types = pikmin_types.size();
     for(size_t t = 0; t < n_total_types; t++) { pikmin_in_onions[&pikmin_types[t]] = 0; }
@@ -236,8 +236,9 @@ int main() {
     create_mob(new onion(400, 300, &s, &pikmin_types[2]));
     create_mob(new info_spot(300, 0, &s, "Treasure.", false, font));
     create_mob(new info_spot(400, 0, &s, "Onions.", false, font));
+    create_mob(new info_spot(-300, 0, &s, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false, font));
     create_mob(new nectar(0, 400, &s));
-    sprays[0] = sprays[1] = 10;
+    spray_amounts[0] = spray_amounts[1] = 10;
     spray_types[0].bmp_spray = bmp_ub_spray;
     spray_types[1].bmp_spray = bmp_us_spray;
     pikmin_in_onions[&pikmin_types[0]] = 200;

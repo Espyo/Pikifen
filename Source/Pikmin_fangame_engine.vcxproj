@@ -81,15 +81,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="animation.cpp" />
-    <ClCompile Include="area_editor.cpp" />
     <ClCompile Include="controls.cpp" />
     <ClCompile Include="data_file.cpp" />
-    <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="interval.cpp" />
     <ClCompile Include="leader.cpp" />
-    <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="misc_structs.cpp" />
     <ClCompile Include="mob.cpp" />
@@ -120,9 +117,9 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_state.h" />
     <ClInclude Include="enemy_type.h" />
-    <ClInclude Include="frame.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />
+    <ClInclude Include="interval.h" />
     <ClInclude Include="leader.h" />
     <ClInclude Include="level_object.h" />
     <ClInclude Include="logic.h" />

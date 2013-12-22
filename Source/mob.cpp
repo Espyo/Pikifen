@@ -55,7 +55,7 @@ void mob::tick() {
         speed_z += (1.0f / game_fps) * (GRAVITY_ADDER);
     }
     
-    //Automated movement.
+    //Chasing a target.
     if(go_to_target && speed_z == 0) {
         float final_target_x = target_x, final_target_y = target_y;
         if(target_rel_x) final_target_x += *target_rel_x;

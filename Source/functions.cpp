@@ -11,13 +11,18 @@
 #include "functions.h"
 #include "vars.h"
 
-//Call this whenever an "active" control is inputted. An "active" control is anything that moves the captain in some way.
-//This function makes the captain wake up from lying down, stop auto-plucking, etc.
+/* ----------------------------------------------------------------------------
+ * Call this whenever an "active" control is inputted. An "active" control is anything that moves the captain in some way.
+ * This function makes the captain wake up from lying down, stop auto-plucking, etc.
+ */
 void active_control() {
     make_uncarriable(leaders[cur_leader_nr]);
     leaders[cur_leader_nr]->auto_pluck_mode = false;
 }
 
+/* ----------------------------------------------------------------------------
+ * Adds a mob to another mob's party.
+ */
 void add_to_party(mob* party_leader, mob* new_member) {
     if(new_member->following_party == party_leader) return; //Already following, never mind.
     
@@ -42,11 +47,22 @@ void add_to_party(mob* party_leader, mob* new_member) {
     make_uncarriable(new_member);
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the vector coordinates of an angle.
+ * angle:    The angle.
+ * magnitue: Its magnitude.
+ * *_coord:  Variables to return the coordinates to.
+ */
 void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord) {
     *x_coord = cos(angle) * magnitude;
     *y_coord = sin(angle) * magnitude;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the color that was provided, but with the alpha changed.
+ * color: The color to change the alpha on.
+ * a:     The new alpha, [0-255].
+ */
 ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
@@ -54,11 +70,20 @@ ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a) {
     return c2;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the angle and magnitude of vector coordinates.
+ * *_coord:   The coordinates.
+ * angle:     Variable to return the angle to.
+ * magnitude: Variable to return the magnitude to.
+ */
 void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude) {
     *angle = atan2(y_coord, x_coord);
     *magnitude = dist(0, 0, x_coord, y_coord);
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a mob, adding it to the corresponding vectors.
+ */
 void create_mob(mob* m) {
     mobs.push_back(m);
     
@@ -89,6 +114,12 @@ void create_mob(mob* m) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Deletes a mob from the relevant vectors.
+ * It's always removed from the vector of mobs, but it's
+ * also removed from the vector of Pikmin if it's a Pikmin,
+ * leaders if it's a leader, etc.
+ */
 void delete_mob(mob* m) {
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
@@ -116,9 +147,17 @@ void delete_mob(mob* m) {
     } else if(typeid(*m) == typeid(info_spot)) {
         info_spots.erase(find(info_spots.begin(), info_spots.end(), (info_spot*) m));
         
+    } else {
+        //ToDo warn somehow.
+        
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes the current leader dismiss their party.
+ * The party is then organized in groups, by type,
+ * and is dismissed close to the leader.
+ */
 void dismiss() {
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
@@ -196,6 +235,14 @@ void dismiss() {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a strength/weight fraction, in the style of Pikmin 2.
+ * The strength is above the weight.
+ * c*:      Center of the text.
+ * current: Current strength.
+ * needed:  Needed strength to lift the object (weight).
+ * color:   Color of the fraction's text.
+ */
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color) {
     float first_y = cy - (font_h * 3) / 2;
     al_draw_text(font, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
@@ -214,6 +261,14 @@ void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed
     }; al_use_transform(&old);
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a health wheel, with a pieslice that's fuller the more HP is full.
+ * c*:         Center of the wheel.
+ * health:     Current amount of health of the mob who's health we're representing.
+ * max_health: Maximum amount of health of the mob; health for when it's fully healed.
+ * radius:     Radius of the wheel (the whole wheel, not just the pieslice).
+ * just_chart: If true, only draw the actual pieslice (pie-chart). Used for leader HP on the HUD.
+ */
 void draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius, bool just_chart) {
     float ratio = (float) health / (float) max_health;
     ALLEGRO_COLOR c;
@@ -224,10 +279,15 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
     }
     
     if(!just_chart) al_draw_filled_circle(cx, cy, radius, al_map_rgba(0, 0, 0, 128));
-    al_draw_filled_pieslice(cx, cy, radius, -M_PI * 0.5, -ratio * M_PI * 2, c);
+    al_draw_filled_pieslice(cx, cy, radius, -M_PI_2, -ratio * M_PI * 2, c);
     if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a sector on the current bitmap.
+ * s:   The sector to draw.
+ * x/y: Top-left coordinates.
+ */
 void draw_sector(sector &s, float x, float y) {
     ALLEGRO_VERTEX vs[200]; //ToDo 200?
     size_t n_linedefs = s.linedefs.size();
@@ -256,6 +316,13 @@ void draw_sector(sector &s, float x, float y) {
     
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a mob's shadow.
+ * c*:             Center of the mob.
+ * size:           Size of the mob.
+ * delta_z:        The mob is these many units above the floor directly below it.
+ * shadow_stretch: How much to stretch the shadow by (used to simulate sun shadow direction casting).
+ */
 void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch) {
     if(shadow_stretch <= 0) return;
     
@@ -279,6 +346,14 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
         0, al_map_rgba(255, 255, 255, 255 * (1 - shadow_stretch)));
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a sprite.
+ * bmp:   The bitmap.
+ * c*:    Center coordinates.
+ * w/h:   Final width and height
+ * angle: Angle to rotate the sprite by.
+ * tint:  Tint the sprite with this color.
+ */
 void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle, ALLEGRO_COLOR tint) {
     if(!bmp) {
         bmp = bmp_error;
@@ -298,6 +373,42 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, floa
         0);
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws text, but if there are line breaks, it'll draw every line one under the other.
+ * It basically calls Allegro's text drawing functions, but for each line.
+ * f:    Font to use.
+ * c:    Color.
+ * x/y:  Coordinates of the text.
+ * fl:   Flags, just like the ones you'd pass to al_draw_text.
+ * va:   Vertical align: 1 for top, 2 for center, 3 for bottom.
+ * text: Text to write, line breaks included ('\n').
+ */
+void draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text) {
+    vector<string> lines = split(text, "\n", true);
+    int fh = al_get_font_line_height(f);
+    size_t n_lines = lines.size();
+    float top;
+    
+    if(va == 0) {
+        top = y;
+    } else {
+        int total_height = n_lines * fh + (n_lines - 1);  //We add n_lines - 1 because there is a 1px gap between each line.
+        if(va == 1) {
+            top = y - total_height / 2;
+        } else {
+            top = y - total_height;
+        }
+    }
+    
+    for(size_t l = 0; l < n_lines; l++) {
+        float line_y = (fh + 1) * l + top;
+        al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes a Pikmin release a mob it's carrying.
+ */
 void drop_mob(pikmin* p) {
     if(!p->carrying_mob) return;
     
@@ -322,14 +433,18 @@ void drop_mob(pikmin* p) {
     p->remove_target(true);
 }
 
+/* ----------------------------------------------------------------------------
+ * Prints something onto the error log.
+ */
 void error_log(string s) {
     //ToDo
     total_error_log += s + "\n";
 }
 
+/* ----------------------------------------------------------------------------
+ * Generates the images that make up the area.
+ */
 void generate_area_images() {
-    //ToDo if it aligns perfectly with AREA_IMAGE_SIZE, a glitch could happen. For instance, a sector that spans from 0 to 800, x and y
-    
     //First, clear all existing area images.
     for(size_t x = 0; x < area_images.size(); x++) {
         for(size_t y = 0; y < area_images[x].size(); y++) {
@@ -398,9 +513,9 @@ void generate_area_images() {
         }
         
         sector_start_col = (s_min_x - area_x1) / AREA_IMAGE_SIZE;
-        sector_end_col =   (s_max_x - area_x1) / AREA_IMAGE_SIZE;
+        sector_end_col =   ceil((s_max_x - area_x1) / AREA_IMAGE_SIZE) - 1;
         sector_start_row = (s_min_y - area_y1) / AREA_IMAGE_SIZE;
-        sector_end_row =   (s_max_y - area_y1) / AREA_IMAGE_SIZE;
+        sector_end_row =   ceil((s_max_y - area_y1) / AREA_IMAGE_SIZE) - 1;
         
         for(size_t x = sector_start_col; x <= sector_end_col; x++) {
             for(size_t y = sector_start_row; y <= sector_end_row; y++) {
@@ -417,6 +532,13 @@ void generate_area_images() {
     
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the burrowed Pikmin closest to a leader. Used when auto-plucking.
+ * x/y:             Coordinates of the leader.
+ * d:               Variable to return the distance to. NULL for none.
+ * ignore_reserved: If true, ignore any burrowed Pikmin that are "reserved"
+ ** (i.e. already chosen to be plucked by another leader).
+ */
 pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved) {
     float closest_distance = 0;
     pikmin* closest_pikmin = NULL;
@@ -439,6 +561,9 @@ pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_rese
     return closest_pikmin;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the daylight effect color for the current time, for the current weather.
+ */
 ALLEGRO_COLOR get_daylight_color() {
     //ToDo initialize this somewhere else?
     /*static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
@@ -460,7 +585,7 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(map<unsigned, ALLEGRO_COLOR>::iterator p_nr = weather_condition.lighting.begin(); p_nr != weather_condition.lighting.end(); p_nr++) {
+    for(map<unsigned, ALLEGRO_COLOR>::iterator p_nr = cur_weather.lighting.begin(); p_nr != cur_weather.lighting.end(); p_nr++) {
         point_nrs.push_back(p_nr->first);
     }
     
@@ -472,8 +597,8 @@ ALLEGRO_COLOR get_daylight_color() {
                            day_minutes,
                            point_nrs[p],
                            point_nrs[p + 1],
-                           weather_condition.lighting[point_nrs[p]],
-                           weather_condition.lighting[point_nrs[p + 1]]
+                           cur_weather.lighting[point_nrs[p]],
+                           cur_weather.lighting[point_nrs[p + 1]]
                        );
             }
         }
@@ -483,6 +608,9 @@ ALLEGRO_COLOR get_daylight_color() {
     return al_map_rgba(0, 0, 0, 0);
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the distance between a leader and the center of its group.
+ */
 float get_leader_to_group_center_dist(mob* l) {
     return
         (l->party->party_spots->current_wheel + 1) *
@@ -491,6 +619,9 @@ float get_leader_to_group_center_dist(mob* l) {
         PARTY_SPOT_INTERVAL;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns an ALLEGRO_TRANSFORM that transforms world coordinates into screen coordinates.
+ */
 ALLEGRO_TRANSFORM get_world_to_screen_transform() {
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
@@ -503,6 +634,10 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform() {
     return t;
 }
 
+/* ----------------------------------------------------------------------------
+ * Gives an Onion some Pikmin, and makes the Onion spew seeds out,
+ ** depending on how many Pikmin there are in the field (don't spew if 100).
+ */
 void give_pikmin_to_onion(onion* o, unsigned amount) {
     unsigned total_after = pikmin_list.size() + amount;
     unsigned pikmin_to_spit = amount;
@@ -529,6 +664,13 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the interpolation between two colors, given a number in an interval.
+ * n: The number.
+ * n1, n2: The interval the number falls on.
+ ** The closer to n1, the closer the final color is to c1.
+ * c1, c2: Colors.
+ */
 ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2) {
     float progress = (float) (n - n1) / (float) (n2 - n1);
     return al_map_rgba_f(
@@ -539,6 +681,9 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
            );
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads an area into memory.
+ */
 void load_area(string name) {
     sectors.clear();
     
@@ -547,9 +692,9 @@ void load_area(string name) {
     string weather_condition_name = trim_spaces(file["weather"].get_value());
     if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
         error_log("Area " + name + " refers to a non-existing weather condition!");
-        weather_condition = weather();
+        cur_weather = weather();
     } else {
-        weather_condition = weather_conditions[weather_condition_name];
+        cur_weather = weather_conditions[weather_condition_name];
     }
     
     size_t n_sectors = file["sector"].size();
@@ -604,6 +749,9 @@ void load_area(string name) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads a bitmap from the game's content.
+ */
 ALLEGRO_BITMAP* load_bmp(string filename) {
     ALLEGRO_BITMAP* b = NULL;
     b = al_load_bitmap(("Game_data/Graphics/" + filename).c_str());
@@ -615,6 +763,9 @@ ALLEGRO_BITMAP* load_bmp(string filename) {
     return b;
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads a game control.
+ */
 void load_control(unsigned char action, unsigned char player, string name, data_node &file, string def) {
     string s = file["p" + to_string((long long) (player + 1)) + "_" + name].get_value((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
@@ -625,6 +776,9 @@ void load_control(unsigned char action, unsigned char player, string name, data_
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads a data file from the game's content.
+ */
 data_node load_data_file(string filename) {
     data_node n = data_node("Game_data/" + filename);
     if(!n.file_was_opened) {
@@ -634,6 +788,9 @@ data_node load_data_file(string filename) {
     return n;
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads all of the game's content.
+ */
 void load_game_content() {
     //ToDo.
     pikmin_types.push_back(pikmin_type());
@@ -707,10 +864,18 @@ void load_game_content() {
             }
         }
         
-        weather_conditions[name] = weather(name, lighting);
+        unsigned char percipitation_type = toi(cur_weather->operator[]("percipitation_type").get_value(to_string((long long) PERCIPITATION_TYPE_NONE)));
+        interval percipitation_frequency = interval(cur_weather->operator[]("percipitation_frequency").get_value());
+        interval percipitation_speed = interval(cur_weather->operator[]("percipitation_speed").get_value());
+        interval percipitation_angle = interval(cur_weather->operator[]("percipitation_angle").get_value(to_string((long double) (M_PI + M_PI_2))));
+        
+        weather_conditions[name] = weather(name, lighting, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads the player's options.
+ */
 void load_options() {
     data_node file = data_node("Options.txt");
     if(!file.file_was_opened) return;
@@ -790,6 +955,9 @@ void load_options() {
     smooth_scaling = tob(file["smooth_scaling"].get_value("true"));
 }
 
+/* ----------------------------------------------------------------------------
+ * Loads an audio sample from the game's content.
+ */
 sample_struct load_sample(string filename) {
     sample_struct s;
     s.sample = al_load_sample(("Game_data/Audio/" + filename).c_str());
@@ -800,6 +968,9 @@ sample_struct load_sample(string filename) {
     return s;
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes a mob impossible to be carried, and makes the Pikmin carrying it drop it.
+ */
 void make_uncarriable(mob* m) {
     if(!m->carrier_info) return;
     
@@ -807,6 +978,16 @@ void make_uncarriable(mob* m) {
     m->carrier_info = NULL;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the movement necessary to move a point.
+ * x/y:          Coordinates of the initial point.
+ * tx/ty:        Coordinates of the target point.
+ * speed:        Speed at which the point can move.
+ * reach_radius: If the point is within this range of the target, consider it as already being there.
+ * mx/my:        Variables to return the amount of movement to.
+ * angle:        Variable to return the angle the point faces to.
+ * reached:      Variable to return whether the point reached the target or not to.
+ */
 void move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached) {
     float dx = tx - x, dy = ty - y;
     float dist = sqrt(dx * dx + dy * dy);
@@ -828,6 +1009,9 @@ void move_point(float x, float y, float tx, float ty, float speed, float reach_r
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
+ */
 void pluck_pikmin(leader* l, pikmin* p) {
     if(!p->burrowed) return;
     
@@ -836,10 +1020,23 @@ void pluck_pikmin(leader* l, pikmin* p) {
     al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns a random number between the provided range, inclusive.
+ */
 inline float random(float min, float max) {
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
 
+/* ----------------------------------------------------------------------------
+ * Generates random particles in an explosion fashion:
+ ** they scatter from the center point at random angles,
+ ** and drift off until they vanish.
+ * center_*: Center point of the explosion.
+ * min/max:  The number of particles is random within this range, inclusive.
+ * time_*:   Their lifetime is random within this range, inclusive.
+ * size_*:   Their size is random within this range, inclusive.
+ * color:    Particle color.
+ */
 void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
@@ -863,6 +1060,15 @@ void random_particle_explosion(float center_x, float center_y, unsigned char min
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Generates random particles in a fire fashion:
+ ** the particles go up and speed up as time goes by.
+ * center_*: Center point of the fire.
+ * min/max:  The number of particles is random within this range, inclusive.
+ * time_*:   Their lifetime is random within this range, inclusive.
+ * size_*:   Their size is random within this range, inclusive.
+ * color:    Particle color.
+ */
 void random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
@@ -881,6 +1087,16 @@ void random_particle_fire(float center_x, float center_y, unsigned char min, uns
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Generates random particles in a splash fashion:
+ ** the particles go up and are scattered horizontally,
+ ** and then go down with the effect of gravity.
+ * center_*: Center point of the splash.
+ * min/max:  The number of particles is random within this range, inclusive.
+ * time_*:   Their lifetime is random within this range, inclusive.
+ * size_*:   Their size is random within this range, inclusive.
+ * color:    Particle color.
+ */
 void random_particle_splash(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
@@ -898,6 +1114,15 @@ void random_particle_splash(float center_x, float center_y, unsigned char min, u
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Generates random particles in a spray fashion:
+ ** the particles go in the pointed direction,
+ ** and move gradually slower as they fade into the air.
+ ** Used on actual sprays in-game.
+ * origin_*: Origin point of the spray.
+ * angle:    Angle to shoot at.
+ * color:    Color of the particles.
+ */
 void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(35, 40);
     
@@ -922,6 +1147,9 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Removes a mob from its leader's party.
+ */
 void remove_from_party(mob* member) {
     if(!member->following_party) return;
     
@@ -939,6 +1167,9 @@ void remove_from_party(mob* member) {
     member->uncallable_period = UNCALLABLE_PERIOD;
 }
 
+/* ----------------------------------------------------------------------------
+ * Saves the player's options.
+ */
 void save_options() {
     //ToDo make this prettier. Like a list of constants somewhere where it associates an action with the name on the text file.
     ALLEGRO_FILE* file = al_fopen("Options.txt", "w");
@@ -1086,6 +1317,9 @@ vector<string> split(string text, string del, bool inc_empty, bool inc_del) {
     return v;
 }
 
+/* ----------------------------------------------------------------------------
+ * Starts panning the camera towards another point.
+ */
 void start_camera_pan(int final_x, int final_y) {
     cam_trans_pan_initi_x = cam_x;
     cam_trans_pan_initi_y = cam_y;
@@ -1094,6 +1328,9 @@ void start_camera_pan(int final_x, int final_y) {
     cam_trans_pan_time_left = CAM_TRANSITION_DURATION;
 }
 
+/* ----------------------------------------------------------------------------
+ * Starts moving the camera towards another zoom level.
+ */
 void start_camera_zoom(float final_zoom_level) {
     cam_trans_zoom_initi_level = cam_zoom;
     cam_trans_zoom_final_level = final_zoom_level;
@@ -1103,9 +1340,12 @@ void start_camera_zoom(float final_zoom_level) {
     al_play_sample(sfx_camera.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_camera.id);
 }
 
-//m: mob to start moving.
-//np: new Pikmin; the Pikmin that justed joined. Used to detect ties and tie-breaking.
-//lp: leaving Pikmin; the Pikmin that just left. Used to detect ties and tie-breaking.
+/* ----------------------------------------------------------------------------
+ * Makes a mob move to a spot because it's being carried.
+ * m:  Mob to start moving (the treasure, for instance).
+ * np: New Pikmin; the Pikmin that justed joined the carriers. Used to detect ties and tie-breaking.
+ * lp: Leaving Pikmin; the Pikmin that just left the carriers. Used to detect ties and tie-breaking.
+ */
 void start_carrying(mob* m, pikmin* np, pikmin* lp) {
     //ToDo what if an Onion hasn't been revelead yet?
     if(!m->carrier_info) return;
@@ -1229,6 +1469,9 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes the current leader stop whistling.
+ */
 void stop_whistling() {
     if(!whistling) return;
     
@@ -1253,32 +1496,47 @@ string str_to_lower(string s) {
     return s;
 }
 
-
+/* ----------------------------------------------------------------------------
+ * Returns whether a point is inside a sector or not.
+ * x/y:      Coordinates of the point.
+ * linedefs: Linedefs that make up the sector.
+ */
 /*bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
+    //ToDo
     return true;
 }*/
 
+/* ----------------------------------------------------------------------------
+ * Uses up a spray.
+ */
 void use_spray(size_t spray_nr) {
-    if(sprays[spray_nr] == 0) return;
+    if(spray_amounts[spray_nr] == 0) return;
+    
+    leader* cur_leader_ptr = leaders[cur_leader_nr];
+    float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
     random_particle_spray(
-        leaders[cur_leader_nr]->x,
-        leaders[cur_leader_nr]->y,
-        cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0),
+        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->size / 2,
+        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->size / 2,
+        shoot_angle,
         spray_types[spray_nr].main_color
     );
     
-    sprays[spray_nr]--;
+    spray_amounts[spray_nr]--;
 }
 
+//Calls al_fwrite, but with an std::string instead of a c-string.
 inline void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
+//Converts a boolean to a string, returning either "true" or "false".
 inline string btos(bool b) { return b ? "true" : "false"; }
+//Converts a string to a boolean, judging by the English language words that represent true and false.
 inline bool tob(string s) {
     s = str_to_lower(s);
     s = trim_spaces(s);
     if(s == "yes" || s == "true" || s == "y" || s == "t") return true;
     else return (toi(s) != 0);
 }
+//Converts a string to an Allegro color. Components are separated by spaces, and the final one (alpha) is optional.
 ALLEGRO_COLOR toc(string s) {
     s = trim_spaces(s);
     vector<string> components = split(s);
@@ -1290,5 +1548,7 @@ ALLEGRO_COLOR toc(string s) {
                       );
     return c;
 }
+//Converts a string to a float, trimming the spaces and accepting commas or points.
 inline double tof(string s) { s = trim_spaces(s); replace(s.begin(), s.end(), ',', '.'); return atof(s.c_str()); }
+//Converts a string to an integer.
 inline int toi(string s) { return tof(s); }

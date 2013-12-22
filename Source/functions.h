@@ -3,6 +3,7 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
 
 #include "data_file.h"
 #include "leader.h"
@@ -10,9 +11,13 @@
 #include "pikmin.h"
 #include "sector.h"
 
+//Returns the distance between two points.
 #define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
+//Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
+//Returns the modulus of a number, regardless of it being a float or negative.
 #define mod(n, d) ((n) - (d) * floor((n) / (d)))
+//Normalizes an angle between the range [-M_PI, M_PI]
 #define normalize_angle(a) (mod((a), M_PI*2) - M_PI)
 
 void              active_control();
@@ -28,6 +33,7 @@ void              draw_health(float cx, float cy, unsigned int health, unsigned 
 void              draw_sector(sector &s, float x, float y);
 void              draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch);
 void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle = 0, ALLEGRO_COLOR tint = al_map_rgb(255, 255, 255));
+void              draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text);
 void              drop_mob(pikmin* p);
 void              error_log(string s);
 void              generate_area_images();

@@ -10,13 +10,6 @@
 
 using namespace std;
 
-struct sample_struct {
-    ALLEGRO_SAMPLE*     sample; //Pointer to the sample.
-    ALLEGRO_SAMPLE_ID   id;     //Sample id.
-    
-    sample_struct(ALLEGRO_SAMPLE* s = NULL);
-};
-
 struct party_spot_info {
     /* Group spots. The way this works is that a Pikmin group surrounds a central point.
      * There are several wheels surrounding the original spot,
@@ -38,6 +31,20 @@ struct party_spot_info {
     party_spot_info(unsigned max_mobs, float spot_size);
     void add(mob* m, float* x, float* y);
     void remove(mob* m);
+};
+
+struct point {
+    float x, y;
+    point(float x = 0, float y = 0) {
+        this->x = x; this->y = y;
+    }
+};
+
+struct sample_struct {
+    ALLEGRO_SAMPLE*     sample; //Pointer to the sample.
+    ALLEGRO_SAMPLE_ID   id;     //Sample id.
+    
+    sample_struct(ALLEGRO_SAMPLE* s = NULL);
 };
 
 #endif //ifndef MISC_STRUCTS_INCLUDED

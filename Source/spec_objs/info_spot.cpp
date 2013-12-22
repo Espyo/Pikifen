@@ -1,5 +1,6 @@
 #include <allegro5/allegro_font.h>
 
+#include "../functions.h"
 #include "info_spot.h"
 
 info_spot::info_spot(float x, float y, sector* sec, string text, bool fullscreen, ALLEGRO_FONT* font)
@@ -7,8 +8,14 @@ info_spot::info_spot(float x, float y, sector* sec, string text, bool fullscreen
     
     this->text = text;
     this->fullscreen = fullscreen;
+    text_w = 0;
     
-    text_w = al_get_text_width(font, text.c_str());
+    vector<string> lines = split(text, "\n");
+    size_t n_lines = lines.size();
+    for(size_t l = 0; l < n_lines; l++) {
+        unsigned int line_w = al_get_text_width(font, lines[l].c_str());
+        if(line_w > text_w) text_w = line_w;
+    }
     
     size = 32;
 }

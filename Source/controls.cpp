@@ -428,18 +428,18 @@ void handle_button(unsigned int button, float pos) {
         if(cam_trans_zoom_time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
         
         if(zoom_to_compare < 1) {
-            new_zoom = MAX_ZOOM_LEVEL;
+            new_zoom = ZOOM_MAX_LEVEL;
         } else if(zoom_to_compare > 1) {
             new_zoom = 1;
         } else {
-            new_zoom = MIN_ZOOM_LEVEL;
+            new_zoom = ZOOM_MIN_LEVEL;
         }
         
         start_camera_zoom(new_zoom);
         
     } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
     
-        if((cam_zoom == MAX_ZOOM_LEVEL && button == BUTTON_ZOOM_IN) || (cam_zoom == MIN_ZOOM_LEVEL && button == BUTTON_ZOOM_OUT)) return;
+        if((cam_zoom == ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) || (cam_zoom == ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)) return;
         
         float new_zoom;
         float current_zoom;
@@ -449,8 +449,8 @@ void handle_button(unsigned int button, float pos) {
         
         if(button == BUTTON_ZOOM_IN) new_zoom = current_zoom + 0.1 * pos; else new_zoom = current_zoom - 0.1 * pos;
         
-        if(new_zoom > MAX_ZOOM_LEVEL) new_zoom = MAX_ZOOM_LEVEL;
-        if(new_zoom < MIN_ZOOM_LEVEL) new_zoom = MIN_ZOOM_LEVEL;
+        if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
+        if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
         
         if(cam_trans_zoom_time_left) {
             cam_trans_zoom_final_level = new_zoom;
