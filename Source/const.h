@@ -58,12 +58,6 @@ using namespace std;
 #define CONFIGURATIONS_FOLDER "Configurations"
 #define WEATHER_FILE CONFIGURATIONS_FOLDER "/Weather.txt"
 
-enum SCREENS {
-    SCREEN_MAIN_MENU,
-    SCREEN_GAME,
-    SCREEN_AREA_EDITOR,
-};
-
 enum BUTTONS {
     BUTTON_NONE,
     BUTTON_PUNCH,
@@ -118,6 +112,12 @@ enum PERCIPITATION_TYPES {
     PERCIPITATION_TYPE_NONE,
     PERCIPITATION_TYPE_RAIN,
     PERCIPITATION_TYPE_WIND,
+};
+
+enum SCREENS {
+    SCREEN_MAIN_MENU,
+    SCREEN_GAME,
+    SCREEN_AREA_EDITOR,
 };
 
 //ToDo these colors aren't right. The purple is pink, the cyan is light green...
