@@ -1,11 +1,13 @@
 #ifndef MOB_INCLUDED
 #define MOB_INCLUDED
 
+#include <map>
 #include <vector>
 
 #include <allegro5/allegro.h>
 
 #include "const.h"
+#include "mob_event.h"
 #include "pikmin_type.h"
 #include "sector.h"
 
@@ -13,6 +15,7 @@ using namespace std;
 
 struct party_spot_info;
 
+class mob_type;
 class mob;
 
 struct party_info {
@@ -43,10 +46,10 @@ struct carrier_info_struct {
 
 class mob {
 public:
-    mob(float x, float y, float z, float move_speed, sector* sec);
-    //mob(const mob& m2);
-    //mob& operator=(const mob& m2);
+    mob(float x, float y, float z, mob_type* t, sector* sec);
     virtual ~mob(); //Needed so that typeid works.
+    
+    mob_type* type;
     
     //Flags.
     bool to_delete; //If true, this mob should be deleted.
@@ -58,14 +61,13 @@ public:
     //Actual moving and other physics.
     float x, y, z;                   //Coordinates. Z is height, the higher the value, the higher in the sky.
     float speed_x, speed_y, speed_z; //Physics only. Don't touch.
-    float move_speed;                //Normal moving speed.
+    float home_x, home_y;            //Starting coordinates; what the mob calls "home".
     float move_speed_mult;           //Multiply the normal moving speed by this.
-    float rotation_speed;            //Mob spins these many radians per second.
     float acceleration;              //Speed multiplies by this much each second.
     float angle;                     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float intended_angle;            //Angle the mob wants to be facing.
-    float size;                      //Diameter, in units. Used mostly for movement.
     sector* sec;                     //Sector it's on.
+    bool affected_by_gravity;        //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
     void face(float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
     
     //Target things.
@@ -82,8 +84,22 @@ public:
     float uncallable_period; //During this period, the mob cannot be called into a party.
     party_info* party;       //Info on the party this mob is a leader of.
     
+    //Other properties.
+    unsigned short health;     //Current health.
+    
+    //Script.
+    vector<mob_event*> events;    //The events and actions.
+    float see_range;              //The mob can see anything within this range.
+    float near_range;             //The mob will consider anything in this range "near".
+    mob* focused_pikmin;          //The Pikmin it has focus on.
+    mob* nearest_pikmin;          //The closest Pikmin.
+    float timer;                  //The timer.
+    float timer_interval;         //The timer's interval.
+    map<string, string> vars;     //Variables.
+    float script_wait;            //Wait this much time before going on with the script.
+    mob_event* script_wait_event; //What event is the script waiting on?
+    
     //Carrying.
-    unsigned int weight;
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
     
     void tick();

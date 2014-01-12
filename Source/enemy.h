@@ -12,7 +12,6 @@ public:
     
     //Behavior.
     float original_x, original_y;   //Original coordinates. When it wanders too far, it returns to this spot.
-    unsigned short health;
     
     //Spawn and respawn things.
     float spawn_delay; //Enemy only spawns after these many seconds, a la Waterwraith.

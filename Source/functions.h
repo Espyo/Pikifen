@@ -7,6 +7,7 @@
 
 #include "data_file.h"
 #include "leader.h"
+#include "mob_event.h"
 #include "spec_objs/onion.h"
 #include "pikmin.h"
 #include "sector.h"
@@ -36,10 +37,12 @@ void              draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, 
 void              draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text);
 void              drop_mob(pikmin* p);
 void              error_log(string s);
+vector<string>    folder_to_vector(string folder_name, bool folders);
 void              generate_area_images();
 pikmin*           get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved);
 ALLEGRO_COLOR     get_daylight_color();
 float             get_leader_to_group_center_dist(mob* l);
+mob_event*        get_mob_event(mob* m, unsigned char e);
 ALLEGRO_TRANSFORM get_world_to_screen_transform();
 void              give_pikmin_to_onion(onion* o, unsigned amount);
 ALLEGRO_COLOR     interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);
@@ -47,6 +50,7 @@ void              load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void              load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*   load_bmp(string filename);
 data_node         load_data_file(string filename);
+void              load_mob_type(string filename, bool enemy);
 void              load_options();
 sample_struct     load_sample(string filename);
 void              load_game_content();

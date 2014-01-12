@@ -189,8 +189,8 @@ void handle_button(unsigned int button, float pos) {
                     if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE) {
                         if(pikmin_list.size() < max_pikmin_in_field) {
                             //ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
-                            pikmin_in_onions[onions[o]->type]--;
-                            create_mob(new pikmin(onions[o]->type, onions[o]->x, onions[o]->y, onions[o]->sec));
+                            pikmin_in_onions[onions[o]->oni_type->pik_type]--;
+                            create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->sec, onions[o]->oni_type->pik_type));
                             add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
                         }
                         done = true;
@@ -202,7 +202,7 @@ void handle_button(unsigned int button, float pos) {
             if(!done) {
                 size_t n_ships = ships.size();
                 for(size_t s = 0; s < n_ships; s++) {
-                    if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
+                    if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
                         //ToDo make it prettier.
                         cur_leader_ptr->health = cur_leader_ptr->max_health;
                         done = true;
@@ -235,8 +235,8 @@ void handle_button(unsigned int button, float pos) {
                 holding_ptr->z = cur_leader_ptr->z;
                 
                 float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-                holding_ptr->speed_x = cos(cur_leader_ptr->angle) * d * THROW_DISTANCE_MULTIPLIER;
-                holding_ptr->speed_y = sin(cur_leader_ptr->angle) * d * THROW_DISTANCE_MULTIPLIER;
+                holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
+                holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
                 holding_ptr->speed_z = 2;
                 
                 holding_ptr->was_thrown = true;

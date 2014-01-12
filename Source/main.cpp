@@ -1,5 +1,3 @@
-//ToDo there are a lot of times where I do, for instance, leaders[cur_leader_nr]->, replace this with a pointer for perfomance.
-
 #pragma warning(disable : 4996) //Disables warning about localtime being deprecated.
 
 #include <fstream>
@@ -74,7 +72,6 @@ int main() {
     //Other initial things.
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(display, "Pikmin fangame engine");
-    al_hide_mouse_cursor(display);
     if(smooth_scaling) al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
     al_reserve_samples(16);
     srand(time(NULL));
@@ -145,6 +142,8 @@ int main() {
     al_destroy_bitmap(temp_font_bitmap);
     font_h = al_get_font_line_height(font);
     
+    al_set_display_icon(display, bmp_icon);
+    
     //Sound effects.
     sfx_pikmin_held = load_sample("Pikmin_held.ogg");
     sfx_pikmin_thrown = load_sample("Pikmin_thrown.ogg");
@@ -169,8 +168,22 @@ int main() {
     size_t n_spray_types = spray_types.size();
     for(size_t s = 0; s < n_spray_types; s++) { spray_amounts.push_back(0); }
     pikmin_in_onions.clear();
-    size_t n_total_types = pikmin_types.size();
-    for(size_t t = 0; t < n_total_types; t++) { pikmin_in_onions[&pikmin_types[t]] = 0; }
+    for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) { o->second = 0; }
+    
+    //ToDo
+    info_spot_mob_type = new mob_type();
+    info_spot_mob_type->name = "Info spot";
+    info_spot_mob_type->size = 32;
+    
+    nectar_mob_type = new mob_type();
+    nectar_mob_type->name = "Nectar";
+    nectar_mob_type->always_active = true;
+    nectar_mob_type->size = 16;
+    
+    ship_mob_type = new mob_type();
+    ship_mob_type->name = "Ship";
+    ship_mob_type->always_active = true;
+    ship_mob_type->size = 140;
     
     //Some temp variables.
     sector s = sector();
@@ -187,53 +200,53 @@ int main() {
     load_area("test");
     generate_area_images();
     
-    create_mob(new leader(0, 0, &s));
+    create_mob(new leader(0, 0, &s, leader_types["Normal"]));
     leaders.back()->main_color = al_map_rgb(255, 0, 0);
     leaders.back()->health = 10;
     leaders.back()->sfx_dismiss = sfx_dismiss;
     leaders.back()->sfx_whistle = sfx_olimar_whistle;
     leaders.back()->sfx_name_call = sfx_olimar_name_call;
-    create_mob(new leader(300, 250, &s));
+    create_mob(new leader(300, 250, &s, leader_types["Normal"]));
     leaders.back()->main_color = al_map_rgb(0, 0, 255);
     leaders.back()->health = 8;
     leaders.back()->sfx_dismiss = sfx_dismiss;
     leaders.back()->sfx_whistle = sfx_louie_whistle;
     leaders.back()->sfx_name_call = sfx_louie_name_call;
-    create_mob(new leader(350, 200, &s));
+    create_mob(new leader(350, 200, &s, leader_types["Normal"]));
     leaders.back()->main_color = al_map_rgb(0, 0, 255);
     leaders.back()->health = 6;
     leaders.back()->sfx_dismiss = sfx_dismiss;
     leaders.back()->sfx_whistle = sfx_president_whistle;
     leaders.back()->sfx_name_call = sfx_president_name_call;
-    create_mob(new treasure(300, 150, 80, &s, 30, 50));
-    create_mob(new pikmin(&pikmin_types[0], 30, 30, &s));
+    create_mob(new treasure(300, 150, &s, treasure_types["Test"]));
+    create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));
     pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(&pikmin_types[0], 40, 30, &s));
+    create_mob(new pikmin(40, 30, &s, pikmin_types["Red Pikmin"]));
     pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(&pikmin_types[1], 50, 30, &s));
+    create_mob(new pikmin(50, 30, &s, pikmin_types["Red Pikmin"]));
     pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(&pikmin_types[1], 60, 30, &s));
+    create_mob(new pikmin(60, 30, &s, pikmin_types["Yellow Pikmin"]));
     pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(&pikmin_types[2], 70, 30, &s));
+    create_mob(new pikmin(70, 30, &s, pikmin_types["Yellow Pikmin"]));
     pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(&pikmin_types[2], 80, 30, &s));
+    create_mob(new pikmin(80, 30, &s, pikmin_types["Yellow Pikmin"]));
     pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(&pikmin_types[0], 30, 200, &s));
+    create_mob(new pikmin(30, 200, &s, pikmin_types["Blue Pikmin"]));
     pikmin_list.back()->burrowed = true;
-    create_mob(new pikmin(&pikmin_types[1], 50, 200, &s));
+    create_mob(new pikmin(50, 200, &s, pikmin_types["Blue Pikmin"]));
     pikmin_list.back()->burrowed = true;
-    create_mob(new pikmin(&pikmin_types[2], 70, 200, &s));
+    create_mob(new pikmin(70, 200, &s, pikmin_types["Blue Pikmin"]));
     pikmin_list.back()->burrowed = true;
     for(unsigned char p = 0; p < 10; p++) {
-        for(unsigned char t = 0; t < 3; t++) {
-            create_mob(new pikmin(&pikmin_types[t], 100 + 10 * p + 3 * t, 30, &s));
+        for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
+            create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, &s, t->second));
         }
     }
     //create_mob(new pikmin(&pikmin_types[3], -50, -50, &s));
     //create_mob(new pikmin(&pikmin_types[4], -50, -70, &s));
-    create_mob(new onion(400, 100, &s, &pikmin_types[0]));
-    create_mob(new onion(400, 200, &s, &pikmin_types[1]));
-    create_mob(new onion(400, 300, &s, &pikmin_types[2]));
+    create_mob(new onion(400, 100, &s, onion_types["Red"]));
+    create_mob(new onion(400, 200, &s, onion_types["Yellow"]));
+    create_mob(new onion(400, 300, &s, onion_types["Blue"]));
     create_mob(new info_spot(300, 0, &s, "Treasure.", false, font));
     create_mob(new info_spot(400, 0, &s, "Onions.", false, font));
     create_mob(new info_spot(-300, 0, &s, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false, font));
@@ -241,16 +254,20 @@ int main() {
     spray_amounts[0] = spray_amounts[1] = 10;
     spray_types[0].bmp_spray = bmp_ub_spray;
     spray_types[1].bmp_spray = bmp_us_spray;
-    pikmin_in_onions[&pikmin_types[0]] = 200;
-    pikmin_in_onions[&pikmin_types[1]] = 180;
-    pikmin_in_onions[&pikmin_types[2]] = 160;
+    pikmin_in_onions[pikmin_types["Red Pikmin"]] = 200;
+    pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
+    pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
     create_mob(new ship(-100, 100, &s));
-    create_mob(new pellet(320, -100, &s, &pellet_types[0], &pikmin_types[0]));
-    create_mob(new pellet(250, -100, &s, &pellet_types[1], &pikmin_types[0]));
-    create_mob(new pellet(150, -100, &s, &pellet_types[2], &pikmin_types[0]));
-    create_mob(new pellet(0, -100, &s, &pellet_types[3], &pikmin_types[0]));
+    create_mob(new pellet(320, -100, &s, pellet_types["Red 1"]));
+    create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
+    create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
+    create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
     
-    al_set_display_icon(display, bmp_icon);
+    if(cur_screen == SCREEN_GAME) {
+        al_hide_mouse_cursor(display);
+    } else {
+        al_show_mouse_cursor(display);
+    }
     
     //Main loop.
     al_start_timer(timer);

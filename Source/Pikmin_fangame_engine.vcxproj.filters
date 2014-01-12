@@ -93,6 +93,9 @@
     <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mob_event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -198,6 +201,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="interval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mob_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mob_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="treasure_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="leader_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="onion_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

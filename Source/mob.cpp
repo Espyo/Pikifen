@@ -1,22 +1,26 @@
 #include "const.h"
 #include "functions.h"
 #include "mob.h"
+#include "pikmin.h"
 #include "vars.h"
 
-mob::mob(float x, float y, float z, float move_speed, sector* sec) {
+mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     this->x = x;
     this->y = y;
     this->z = z;
     this->sec = sec;
     
+    type = t;
+    
     to_delete = false;
     reached_destination = false;
     
     speed_x = speed_y = speed_z = 0;
-    this->move_speed = move_speed;
-    rotation_speed = M_PI * 2; //ToDo should this be here, in order to give the rotation speed a default value?
+    home_x = x; home_y = y;
     angle = intended_angle = 0;
-    size = 1;
+    affected_by_gravity = true;
+    
+    health = t->max_health;
     
     go_to_target = false;
     gtt_instant = false;
@@ -24,6 +28,13 @@ mob::mob(float x, float y, float z, float move_speed, sector* sec) {
     target_y = y;
     target_rel_x = NULL;
     target_rel_y = NULL;
+    
+    see_range = near_range = 0;
+    focused_pikmin = NULL;
+    nearest_pikmin = NULL;
+    timer = timer_interval = 0;
+    script_wait = 0;
+    script_wait_event = NULL;
     
     following_party = NULL;
     was_thrown = false;
@@ -51,7 +62,7 @@ void mob::tick() {
     }
     
     //Gravity.
-    if(speed_z != 0) {
+    if(speed_z != 0 && affected_by_gravity) {
         speed_z += (1.0f / game_fps) * (GRAVITY_ADDER);
     }
     
@@ -69,7 +80,7 @@ void mob::tick() {
             
         } else if(x != final_target_x || y != final_target_y) {
             float new_angle = angle;
-            move_point(x, y, final_target_x, final_target_y, move_speed, 0.001, &speed_x, &speed_y, &new_angle, &reached_destination);
+            move_point(x, y, final_target_x, final_target_y, type->move_speed, 0.001, &speed_x, &speed_y, &new_angle, &reached_destination);
             if(!reached_destination) {
                 //Only face the way the mob wants to go if it's still going. Otherwise, let other code turn them whichever way it wants.
                 face(new_angle);
@@ -90,7 +101,7 @@ void mob::tick() {
         move_point(
             party->party_center_x, party->party_center_y,
             x, y,
-            this->move_speed,
+            type->move_speed,
             get_leader_to_group_center_dist(this),
             &party_center_mx, &party_center_my, NULL, NULL
         );
@@ -114,7 +125,108 @@ void mob::tick() {
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     
-    angle += sign(angle_dif) * min(rotation_speed / game_fps, fabs(angle_dif));
+    angle += sign(angle_dif) * min(type->rotation_speed / game_fps, fabs(angle_dif));
+    
+    //Scripts.
+    if(script_wait > 0) {
+        script_wait -= 1.0 / game_fps;
+        if(script_wait <= 0) {
+            script_wait = 0;
+            
+            script_wait_event->run(false); //Continue the waiting event.
+        }
+    }
+    
+    mob_event* ev_ptr = NULL;
+    ev_ptr = get_mob_event(this, MOB_EVENT_SEE_PIKMIN);
+    if(ev_ptr) {
+        //Find a Pikmin.
+        if(!focused_pikmin) {
+            size_t n_pikmin = pikmin_list.size();
+            for(size_t p = 0; p < n_pikmin; p++) {
+                pikmin* pik_ptr = pikmin_list[p];
+                
+                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= see_range) {
+                    focused_pikmin = pik_ptr;
+                    ev_ptr->run(true);
+                    break;
+                }
+            }
+        }
+        
+        if(!focused_pikmin) {
+            //Try the captains now.
+            size_t n_leaders = leaders.size();
+            for(size_t l = 0; l < n_leaders; l++) {
+                leader* leader_ptr = leaders[l];
+                
+                if(dist(x, y, leader_ptr->x, leader_ptr->y) <= see_range) {
+                    focused_pikmin = leader_ptr;
+                    ev_ptr->run(true);
+                    break;
+                }
+            }
+        }
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_LOSE_PIKMIN);
+    if(ev_ptr) {
+        //Lose the Pikmin in focus.
+        if(focused_pikmin) {
+            if(dist(x, y, focused_pikmin->x, focused_pikmin->y) > see_range) {
+                focused_pikmin = NULL;
+                ev_ptr->run(true);
+            }
+        }
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_NEAR_PIKMIN);
+    if(ev_ptr) {
+        //See if it's close to a Pikmin.
+        if(!nearest_pikmin) {
+            size_t n_pikmin = pikmin_list.size();
+            for(size_t p = 0; p < n_pikmin; p++) {
+                pikmin* pik_ptr = pikmin_list[p];
+                
+                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= near_range) {
+                    nearest_pikmin = pik_ptr;
+                    ev_ptr->run(true);
+                    break;
+                }
+            }
+            
+            if(!nearest_pikmin) {
+                //Try a leader.
+                size_t n_leaders = leaders.size();
+                for(size_t l = 0; l < n_leaders; l++) {
+                    leader* leader_ptr = leaders[l];
+                    
+                    if(dist(x, y, leader_ptr->x, leader_ptr->y) <= near_range) {
+                        nearest_pikmin = leader_ptr;
+                        ev_ptr->run(true);
+                        break;
+                    }
+                }
+            }
+            
+        } else {
+            //Lose the nearest Pikmin.
+            if(dist(x, y, nearest_pikmin->x, nearest_pikmin->y) > near_range) {
+                nearest_pikmin = NULL;
+            }
+        }
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_TIMER);
+    if(ev_ptr && timer_interval > 0) {
+        if(timer > 0) {
+            timer -= 1.0 / game_fps;
+            if(timer <= 0) {
+                timer = timer_interval;
+                ev_ptr->run(true);
+            }
+        }
+    }
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {
@@ -152,8 +264,8 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
     for(size_t c = 0; c < max_carriers; c++) {
         carrier_spots.push_back(NULL);
         float angle = (M_PI * 2) / max_carriers * c;
-        carrier_spots_x.push_back(cos(angle) * m->size * 0.5);
-        carrier_spots_y.push_back(sin(angle) * m->size * 0.5);
+        carrier_spots_x.push_back(cos(angle) * m->type->size * 0.5);
+        carrier_spots_y.push_back(sin(angle) * m->type->size * 0.5);
     }
 }
 

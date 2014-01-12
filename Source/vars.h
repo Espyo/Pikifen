@@ -126,13 +126,17 @@ group_spots_x;
 extern vector<vector<float> >
 group_spots_y;
 extern float                 idle_glow_angle;
+extern mob_type*             info_spot_mob_type;
 extern vector<info_spot*>    info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>
 joystick_numbers;
 extern vector<leader*>       leaders;
 extern float                 leader_move_x;              //How hard the joystick is pressed in the X axis ([-1, 1]).
 extern float                 leader_move_y;
+extern map<string, leader_type*>
+leader_types;
 extern unsigned              max_pikmin_in_field;
+extern vector<mob_type*>     mob_types;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;             //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
@@ -146,19 +150,24 @@ extern float                 moving_group_intensity;     //General intensity of 
 extern float                 moving_group_pos_x;         //Intensity on the X coordinate, used for analog stick movement. Basically, position of the analog stick.
 extern float                 moving_group_pos_y;
 extern bool                  moving_group_to_cursor;     //Is the "move group to cursor" button being pressed?
+extern mob_type*             nectar_mob_type;
 extern vector<nectar*>       nectars;
+extern map<string, onion_type*>
+onion_types;
 extern vector<onion*>        onions;
 extern unsigned char         particle_quality;
 extern vector<particle>      particles;
 extern bool                  paused;
-extern vector<pellet_type>   pellet_types;
+extern map<string, pellet_type*>
+pellet_types;
 extern vector<pellet*>       pellets;
 extern vector<point>         percipitation;
 extern float                 percipitation_time_left;
 extern map<pikmin_type*, unsigned long>
 pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
-extern vector<pikmin_type>   pikmin_types;
+extern map<string, pikmin_type*>
+pikmin_types;
 extern bool                  pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern float                 prev_moving_group_intensity; //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                  running;
@@ -168,6 +177,7 @@ extern vector<sector>        sectors;
 extern unsigned int          selected_spray;
 extern unsigned char         ship_beam_ring_color[3];
 extern bool                  ship_beam_ring_color_up[3];
+extern mob_type*             ship_mob_type;
 extern vector<ship*>         ships;
 extern bool                  smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
 extern vector<unsigned long> spray_amounts;      //How many of each spray the player has.
@@ -175,6 +185,8 @@ extern vector<spray_type>    spray_types;
 extern vector<status>        statuses;
 extern float                 sun_meter_sun_angle;
 extern string                total_error_log;
+extern map<string, treasure_type*>
+treasure_types;
 extern vector<treasure*>     treasures;
 extern map<string, weather>  weather_conditions;
 extern float                 whistle_dot_offset;    //How much each dot of the whistle should spin.

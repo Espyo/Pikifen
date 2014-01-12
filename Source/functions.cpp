@@ -423,7 +423,7 @@ void drop_mob(pikmin* p) {
     }
     
     //Did this Pikmin leaving made the mob stop moving?
-    if(p->carrying_mob->carrier_info->current_n_carriers < p->carrying_mob->weight) {
+    if(p->carrying_mob->carrier_info->current_n_carriers < p->carrying_mob->type->weight) {
         p->carrying_mob->remove_target(true);
     } else {
         start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
@@ -439,6 +439,56 @@ void drop_mob(pikmin* p) {
 void error_log(string s) {
     //ToDo
     total_error_log += s + "\n";
+}
+
+/* ----------------------------------------------------------------------------
+ * Stores the names of all files in a folder into a vector.
+ * folder_name: Name of the folder.
+ * folders:     If true, only read folders. If false, only read files.
+ */
+vector<string> folder_to_vector(string folder_name, bool folders) {
+    vector<string> v;
+    
+    //Normalize the folder's path.
+    replace(folder_name.begin(), folder_name.end(), '\\', '/');
+    if(folder_name[folder_name.size() - 1] == '/') folder_name.erase(folder_name.size() - 1, 1);
+    
+    ALLEGRO_FS_ENTRY* folder = NULL;
+    folder = al_create_fs_entry(folder_name.c_str());
+    if(!folder) return v;
+    
+    ALLEGRO_FS_ENTRY* entry = NULL;
+    
+    if(al_open_directory(folder)) {
+        while((entry = al_read_directory(folder)) != NULL) {
+            if(
+                (folders && (al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR)) ||
+                (!folders && !(al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR))) {
+                
+                string entry_name = al_get_fs_entry_name(entry);
+                if(folders) {   //If we're using folders, remove the trailing slash, lest the string be fully deleted.
+                    if(entry_name[entry_name.size() - 1] == '/' || entry_name[entry_name.size() - 1] == '\\') {
+                        entry_name = entry_name.substr(0, entry_name.size() - 1);
+                    }
+                }
+                
+                //Only save what's after the final slash.
+                size_t pos_bs = entry_name.find_last_of("\\");
+                size_t pos_fs = entry_name.find_last_of("/");
+                size_t pos = pos_bs;
+                if(pos_fs != string::npos)
+                    if(pos_fs > pos_bs) pos = pos_bs;
+                    
+                if(pos != string::npos) entry_name = entry_name.substr(pos + 1, entry_name.size() - pos - 1);
+                v.push_back(entry_name);
+            }
+        }
+        al_close_directory(folder);
+    }
+    if(folder) al_destroy_fs_entry(folder);
+    if(entry) al_destroy_fs_entry(entry);
+    
+    return v;
 }
 
 /* ----------------------------------------------------------------------------
@@ -565,24 +615,6 @@ pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_rese
  * Returns the daylight effect color for the current time, for the current weather.
  */
 ALLEGRO_COLOR get_daylight_color() {
-    //ToDo initialize this somewhere else?
-    /*static vector<pair<unsigned char, ALLEGRO_COLOR>> points;
-    
-    size_t n_points = points.size();
-    if(n_points == 0) {
-        //This way, this vector is only created once.
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 0,  al_map_rgba(0,   0,   32,  192) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 5,  al_map_rgba(0,   0,   32,  192) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 6,  al_map_rgba(64,  64,  96,  128) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 7,  al_map_rgba(255, 128, 255, 24 ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 8,  al_map_rgba(255, 255, 255, 0  ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 17, al_map_rgba(255, 255, 255, 0  ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 18, al_map_rgba(255, 128, 0,   32 ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 19, al_map_rgba(0,   0,   32,  96 ) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 20, al_map_rgba(0,   0,   32,  192) ));
-        points.push_back(make_pair<unsigned char, ALLEGRO_COLOR>( 24, al_map_rgba(0,   0,   32,  192) ));
-    }*/
-    
     //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
     for(map<unsigned, ALLEGRO_COLOR>::iterator p_nr = cur_weather.lighting.begin(); p_nr != cur_weather.lighting.end(); p_nr++) {
@@ -620,6 +652,18 @@ float get_leader_to_group_center_dist(mob* l) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns the pointer to a mob event, if the mob is listening to that event.
+ */
+mob_event* get_mob_event(mob* m, unsigned char e) {
+    size_t n_events = m->events.size();
+    for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
+        mob_event* ev = m->events[ev_nr];
+        if(ev->type == e) return ev;
+    }
+    return NULL;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns an ALLEGRO_TRANSFORM that transforms world coordinates into screen coordinates.
  */
 ALLEGRO_TRANSFORM get_world_to_screen_transform() {
@@ -650,17 +694,17 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
     
     for(unsigned p = 0; p < pikmin_to_spit; p++) {
         float angle = random(0, M_PI * 2);
-        float x = o->x + cos(angle) * o->size * 2;
-        float y = o->y + sin(angle) * o->size * 2;
+        float x = o->x + cos(angle) * o->type->size * 2;
+        float y = o->y + sin(angle) * o->type->size * 2;
         
         //ToDo throw them, don't teleport them.
-        pikmin* new_pikmin = new pikmin(o->type, x, y, o->sec);
+        pikmin* new_pikmin = new pikmin(x, y, o->sec, o->oni_type->pik_type);
         new_pikmin->burrowed = true;
         create_mob(new_pikmin);
     }
     
     for(unsigned p = 0; p < pikmin_to_keep; p++) {
-        pikmin_in_onions[o->type]++;
+        pikmin_in_onions[o->oni_type->pik_type]++;
     }
 }
 
@@ -754,7 +798,7 @@ void load_area(string name) {
  */
 ALLEGRO_BITMAP* load_bmp(string filename) {
     ALLEGRO_BITMAP* b = NULL;
-    b = al_load_bitmap(("Game_data/Graphics/" + filename).c_str());
+    b = al_load_bitmap((GRAPHICS_FOLDER "/" + filename).c_str());
     if(!b) {
         error_log("Could not open image " + filename + "!");
         b = bmp_error;
@@ -780,7 +824,7 @@ void load_control(unsigned char action, unsigned char player, string name, data_
  * Loads a data file from the game's content.
  */
 data_node load_data_file(string filename) {
-    data_node n = data_node("Game_data/" + filename);
+    data_node n = data_node(filename);
     if(!n.file_was_opened) {
         error_log("Could not open data file " + filename + "!");
     }
@@ -793,32 +837,62 @@ data_node load_data_file(string filename) {
  */
 void load_game_content() {
     //ToDo.
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 0, 0);
-    pikmin_types.back().name = "R";
-    pikmin_types.back().max_move_speed = 80;
+    pikmin_type* red_pikmin = new pikmin_type();
+    red_pikmin->name = "Red Pikmin";
+    red_pikmin->color = al_map_rgb(255, 0, 0);
+    red_pikmin->move_speed = 80;
+    red_pikmin->size = 20;
+    pikmin_types["Red Pikmin"] = red_pikmin;
     
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 255, 0);
-    pikmin_types.back().name = "Y";
-    pikmin_types.back().max_move_speed = 80;
+    pikmin_type* yellow_pikmin = new pikmin_type();
+    yellow_pikmin->name = "Yellow Pikmin";
+    yellow_pikmin->color = al_map_rgb(255, 255, 0);
+    yellow_pikmin->move_speed = 80;
+    yellow_pikmin->size = 20;
+    pikmin_types["Yellow Pikmin"] = yellow_pikmin;
     
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(0, 0, 255);
-    pikmin_types.back().name = "B";
-    pikmin_types.back().max_move_speed = 80;
+    pikmin_type* blue_pikmin = new pikmin_type();
+    blue_pikmin->name = "Blue Pikmin";
+    blue_pikmin->color = al_map_rgb(0, 0, 255);
+    blue_pikmin->move_speed = 80;
+    blue_pikmin->size = 20;
+    pikmin_types["Blue Pikmin"] = blue_pikmin;
     
+    /*
     pikmin_types.push_back(pikmin_type());
     pikmin_types.back().color = al_map_rgb(255, 255, 255);
     pikmin_types.back().name = "W";
-    pikmin_types.back().max_move_speed = 100;
+    pikmin_types.back().move_speed = 100;
     pikmin_types.back().has_onion = false;
     
     pikmin_types.push_back(pikmin_type());
     pikmin_types.back().color = al_map_rgb(64, 0, 255);
     pikmin_types.back().name = "P";
-    pikmin_types.back().max_move_speed = 60;
+    pikmin_types.back().move_speed = 60;
     pikmin_types.back().has_onion = false;
+    */
+    
+    leader_type* normal_leader_type = new leader_type();
+    normal_leader_type->move_speed = LEADER_MOVE_SPEED;
+    normal_leader_type->size = 32;
+    normal_leader_type->weight = 1;
+    leader_types["Normal"] = normal_leader_type;
+    
+    onion_type* red_onion_type = new onion_type(pikmin_types["Red Pikmin"]);
+    red_onion_type->size = 32;
+    red_onion_type->name = "Red";
+    onion_types["Red"] = red_onion_type;
+    onion_type* yellow_onion_type = new onion_type(pikmin_types["Yellow Pikmin"]);
+    yellow_onion_type->size = 32;
+    yellow_onion_type->name = "Yellow";
+    onion_types["Yellow"] = yellow_onion_type;
+    onion_type* blue_onion_type = new onion_type(pikmin_types["Blue Pikmin"]);
+    blue_onion_type->size = 32;
+    blue_onion_type->name = "Blue";
+    onion_types["Blue"] = blue_onion_type;
+    
+    treasure_type* normal_treasure_type = new treasure_type(100, 40, 50);
+    treasure_types["Test"] = normal_treasure_type;
     
     statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
@@ -826,10 +900,16 @@ void load_game_content() {
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
     
-    pellet_types.push_back(pellet_type(32, 2, 1, 2, 1));
-    pellet_types.push_back(pellet_type(64, 10, 5, 5, 3));
-    pellet_types.push_back(pellet_type(96, 20, 10, 10, 5));
-    pellet_types.push_back(pellet_type(128, 50, 20, 20, 10));
+    pellet_types["Red 1"] = new pellet_type(pikmin_types["Red Pikmin"], 32, 2, 1, 2, 1);
+    pellet_types["Red 5"] = new pellet_type(pikmin_types["Red Pikmin"], 64, 10, 5, 5, 3);
+    pellet_types["Red 10"] = new pellet_type(pikmin_types["Red Pikmin"], 96, 20, 10, 10, 5);
+    pellet_types["Red 20"] = new pellet_type(pikmin_types["Red Pikmin"], 128, 50, 20, 20, 10);
+    
+    //Mob types.
+    vector<string> enemy_folders = folder_to_vector(ENEMIES_FOLDER, false);
+    for(size_t e = 0; e < enemy_folders.size(); e++) {
+        load_mob_type(enemy_folders[e], true);
+    }
     
     //Weather.
     weather_conditions.clear();
@@ -871,6 +951,38 @@ void load_game_content() {
         
         weather_conditions[name] = weather(name, lighting, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads a mob type from a file.
+ */
+void load_mob_type(string filename, bool enemy) {
+    data_node file = data_node(filename);
+    if(!file.file_was_opened) return;
+    
+    mob_type* mt = (enemy ? (new enemy_type()) : (new mob_type()));
+    
+    mt->always_active = tob(file["always_active"].get_value("no"));
+    mt->max_health = toi(file["max_health"].get_value("0"));
+    mt->move_speed = tof(file["move_speed"].get_value("0"));
+    mt->name = trim_spaces(file["name"].get_value());
+    mt->near_radius = tof(file["near_radius"].get_value("0"));
+    mt->rotation_speed = tof(file["rotation_speed"].get_value("0"));
+    mt->sight_radius = tof(file["rotation_radius"].get_value("0"));
+    mt->size = tof(file["size"].get_value("0"));
+    mt->weight = toi(file["weight"].get_value("0"));
+    
+    if(enemy) {
+        enemy_type* et = (enemy_type*) mt;
+        et->can_regenerate = tob(file["can_regenerate"].get_value("no"));
+        et->drops_corpse = tob(file["drops_corpse"].get_value("yes"));
+        et->is_boss = tob(file["is_boss"].get_value("no"));
+        et->pikmin_seeds = toi(file["pikmin_seeds"].get_value("0"));
+        et->revive_speed = tof(file["revive_speed"].get_value("0"));
+        et->value = tof(file["value"].get_value("0"));
+    }
+    
+    mob_types.push_back(mt);
 }
 
 /* ----------------------------------------------------------------------------
@@ -960,7 +1072,7 @@ void load_options() {
  */
 sample_struct load_sample(string filename) {
     sample_struct s;
-    s.sample = al_load_sample(("Game_data/Audio/" + filename).c_str());
+    s.sample = al_load_sample((AUDIO_FOLDER "/" + filename).c_str());
     if(!s.sample) {
         error_log("Could not open audio sample " + filename + "!");
     }
@@ -1024,6 +1136,7 @@ void pluck_pikmin(leader* l, pikmin* p) {
  * Returns a random number between the provided range, inclusive.
  */
 inline float random(float min, float max) {
+    if(max == min) return min;
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
 
@@ -1353,7 +1466,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
     if(m->carrier_info->carry_to_ship) {
     
         m->set_target(
-            ships[0]->x + ships[0]->size * 0.5 + m->size * 0.5 + 8,
+            ships[0]->x + ships[0]->type->size * 0.5 + m->type->size * 0.5 + 8,
             ships[0]->y,
             NULL,
             NULL,
@@ -1392,9 +1505,9 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         
         //If we ended up with no candidates, pick a type at random, out of all possible types.
         if(majority_types.size() == 0) {
-            for(size_t t = 0; t < pikmin_types.size(); t++) {
-                if(pikmin_types[t].has_onion) { //ToDo what if it hasn't been discovered / Onion not on this area?
-                    majority_types.push_back(&pikmin_types[t]);
+            for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
+                if(t->second->has_onion) { //ToDo what if it hasn't been discovered / Onion not on this area?
+                    majority_types.push_back(t->second);
                 }
             }
         }
@@ -1459,7 +1572,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         //Figure out where that type's Onion is.
         size_t onion_nr = 0;
         for(; onion_nr < onions.size(); onion_nr++) {
-            if(onions[onion_nr]->type == m->carrier_info->decided_type) {
+            if(onions[onion_nr]->oni_type->pik_type == m->carrier_info->decided_type) {
                 break;
             }
         }
@@ -1516,8 +1629,8 @@ void use_spray(size_t spray_nr) {
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
     random_particle_spray(
-        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->size / 2,
-        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->size / 2,
+        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->size / 2,
+        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->size / 2,
         shoot_angle,
         spray_types[spray_nr].main_color
     );

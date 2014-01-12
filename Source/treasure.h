@@ -3,10 +3,11 @@
 
 #include "mob.h"
 #include "pikmin.h"
+#include "treasure_type.h"
 
 class treasure : public mob {
 public:
-    treasure(float x, float y, float radius, sector* sec, unsigned int weight, unsigned int max_carriers);
+    treasure(float x, float y, sector* sec, treasure_type* type);
 };
 
 #endif //ifndef TREASURE_INCLUDED

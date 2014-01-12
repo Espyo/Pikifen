@@ -3,12 +3,13 @@
 
 #include "../mob.h"
 #include "../pikmin_type.h"
+#include "../onion_type.h"
 
 class onion : public mob {
 public:
-    pikmin_type* type;
+    onion_type* oni_type;
     
-    onion(float x, float y, sector* sec, pikmin_type* type);
+    onion(float x, float y, sector* sec, onion_type* type);
 };
 
 #endif //ifndef ONION_INCLUDED

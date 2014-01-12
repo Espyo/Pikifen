@@ -163,7 +163,7 @@ void do_drawing() {
         //Nectar.
         size_t n_nectars = nectars.size();
         for(size_t n = 0; n < n_nectars; n++) {
-            float size = nectars[n]->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
+            float size = nectars[n]->type->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
             draw_sprite(
                 bmp_nectar,
                 nectars[n]->x, nectars[n]->y,
@@ -172,22 +172,22 @@ void do_drawing() {
         
         //Treasures.
         for(size_t t = 0; t < n_treasures; t++) {
-            al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->size * 0.5, al_map_rgb(128, 255, 255));
+            al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->type->size * 0.5, al_map_rgb(128, 255, 255));
         }
         
         //Pellets.
         size_t n_pellets = pellets.size();
         for(size_t p = 0; p < n_pellets; p++) {
             ALLEGRO_BITMAP* bm = NULL;
-            if(pellets[p]->weight == 1) bm = bmp_red_pellet[0];
-            else if(pellets[p]->weight == 5) bm = bmp_red_pellet[1];
-            else if(pellets[p]->weight == 10) bm = bmp_red_pellet[2];
-            else if(pellets[p]->weight == 20) bm = bmp_red_pellet[3];
+            if(pellets[p]->type->weight == 1) bm = bmp_red_pellet[0];
+            else if(pellets[p]->type->weight == 5) bm = bmp_red_pellet[1];
+            else if(pellets[p]->type->weight == 10) bm = bmp_red_pellet[2];
+            else if(pellets[p]->type->weight == 20) bm = bmp_red_pellet[3];
             
             draw_sprite(
                 bm,
                 pellets[p]->x, pellets[p]->y,
-                pellets[p]->size, pellets[p]->size);
+                pellets[p]->type->size, pellets[p]->type->size);
         }
         
         //Pikmin
@@ -197,15 +197,15 @@ void do_drawing() {
             
             bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_mob;
             
-            if(pikmin_list[p]->type->name == "R") {
+            if(pikmin_list[p]->type->name == "Red Pikmin") {
                 if(pikmin_list[p]->burrowed) bm = bmp_red_burrowed[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_red_idle[pikmin_list[p]->maturity];
                 else bm = bmp_red[pikmin_list[p]->maturity];
-            } else if(pikmin_list[p]->type->name == "Y") {
+            } else if(pikmin_list[p]->type->name == "Yellow Pikmin") {
                 if(pikmin_list[p]->burrowed) bm = bmp_yellow_burrowed[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_yellow_idle[pikmin_list[p]->maturity];
                 else bm = bmp_yellow[pikmin_list[p]->maturity];
-            } if(pikmin_list[p]->type->name == "B") {
+            } if(pikmin_list[p]->type->name == "Blue Pikmin") {
                 if(pikmin_list[p]->burrowed) bm = bmp_blue_burrowed[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_blue_idle[pikmin_list[p]->maturity];
                 else bm = bmp_blue[pikmin_list[p]->maturity];
@@ -213,7 +213,7 @@ void do_drawing() {
             draw_sprite(
                 bm,
                 pikmin_list[p]->x, pikmin_list[p]->y,
-                pikmin_list[p]->size, pikmin_list[p]->size,
+                pikmin_list[p]->type->size + pikmin_list[p]->z * 20, pikmin_list[p]->type->size + pikmin_list[p]->z * 20,
                 pikmin_list[p]->angle);
                 
             if(idling) {
@@ -247,9 +247,9 @@ void do_drawing() {
         size_t n_onions = onions.size();
         for(size_t o = 0; o < n_onions; o++) {
             ALLEGRO_BITMAP* bm = NULL;
-            if(onions[o]->type->name == "R") bm = bmp_red_onion;
-            else if(onions[o]->type->name == "Y") bm = bmp_yellow_onion;
-            if(onions[o]->type->name == "B") bm = bmp_blue_onion;
+            if(onions[o]->type->name == "Red") bm = bmp_red_onion;
+            else if(onions[o]->type->name == "Yellow") bm = bmp_yellow_onion;
+            else if(onions[o]->type->name == "Blue") bm = bmp_blue_onion;
             
             draw_sprite(
                 bm,
@@ -262,12 +262,14 @@ void do_drawing() {
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; i++) {
             al_draw_filled_rectangle(
-                info_spots[i]->x - info_spots[i]->size * 0.5,
-                info_spots[i]->y - info_spots[i]->size * 0.5,
-                info_spots[i]->x + info_spots[i]->size * 0.5,
-                info_spots[i]->y + info_spots[i]->size * 0.5,
+                info_spots[i]->x - info_spots[i]->type->size * 0.5,
+                info_spots[i]->y - info_spots[i]->type->size * 0.5,
+                info_spots[i]->x + info_spots[i]->type->size * 0.5,
+                info_spots[i]->y + info_spots[i]->type->size * 0.5,
                 al_map_rgb(192, 64, 192)
             );
+            
+            if(info_spots[i]->health != info_spots[i]->type->max_health) draw_health(info_spots[i]->x, info_spots[i]->y - 20, info_spots[i]->health, info_spots[i]->type->max_health); //ToDo remove.
         }
         
         //Ship(s).
@@ -277,7 +279,7 @@ void do_drawing() {
                 bmp_ship,
                 ships[s]->x, ships[s]->y,
                 138, 112);
-            al_draw_circle(ships[s]->x + ships[s]->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
+            al_draw_circle(ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
         }
         
         
@@ -295,7 +297,7 @@ void do_drawing() {
             //ToDo it's not taking Pikmin strength into account.
             if(mobs[m]->carrier_info->current_n_carriers > 0) {
                 ALLEGRO_COLOR color;
-                if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->weight) { //Being carried.
+                if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->type->weight) { //Being carried.
                     if(mobs[m]->carrier_info->carry_to_ship) {
                         color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
                     } else {
@@ -304,7 +306,7 @@ void do_drawing() {
                 } else {
                     color = al_map_rgb(96, 192, 192);
                 }
-                draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->size * 0.5 - font_h * 1.25, mobs[m]->carrier_info->current_n_carriers, mobs[m]->weight, color);
+                draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->type->size * 0.5 - font_h * 1.25, mobs[m]->carrier_info->current_n_carriers, mobs[m]->type->weight, color);
             }
         }
         
@@ -317,9 +319,9 @@ void do_drawing() {
                 else
                     text = "(...)";
                     
-                draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
+                draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
                 if(!info_spots[i]->fullscreen) {
-                    int line_y = info_spots[i]->y - info_spots[i]->size * 0.5 - font_h * 0.75;
+                    int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
                     
                     al_draw_line(
                         info_spots[i]->x - info_spots[i]->text_w * 0.5,
@@ -337,13 +339,13 @@ void do_drawing() {
                         info_spots[i]->x - 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->size * 0.5 - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
                         al_map_rgb(192, 192, 192), 1);
                     al_draw_line(
                         info_spots[i]->x + 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->size * 0.5 - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
                         al_map_rgb(192, 192, 192), 1);
                 }
             }
@@ -521,9 +523,8 @@ void do_drawing() {
             40, 40);
             
         //Pikmin count numbers.
-        size_t n_pikmin_types = pikmin_types.size();
         unsigned long total_pikmin = pikmin_list.size();
-        for(size_t t = 0; t < n_pikmin_types; t++) total_pikmin += pikmin_in_onions[&pikmin_types[t]];
+        for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
         
         al_draw_text(
             font, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,

@@ -7,10 +7,11 @@
 #include <allegro5/allegro.h>
 
 #include "element.h"
+#include "mob_type.h"
 
 using namespace std;
 
-class pikmin_type {
+class pikmin_type : public mob_type {
 public:
     string name;
     ALLEGRO_COLOR color;
@@ -19,7 +20,6 @@ public:
     float carry_strength;
     float attack_power;
     float weight;
-    float max_move_speed;
     float carry_speed;
     float size;
     bool has_onion;

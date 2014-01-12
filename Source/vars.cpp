@@ -99,13 +99,17 @@ group_spots_x;
 vector<vector<float> >
 group_spots_y;
 float                 idle_glow_angle = 0;
+mob_type*             info_spot_mob_type = NULL;
 vector<info_spot*>    info_spots;
 map<ALLEGRO_JOYSTICK*, int>
 joystick_numbers;
 vector<leader*>       leaders;
 float                 leader_move_x = 0;
 float                 leader_move_y = 0;
+map<string, leader_type*>
+leader_types;
 unsigned              max_pikmin_in_field = 100;
+vector<mob_type*>     mob_types;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
 float                 mouse_cursor_y = scr_h / 2;
@@ -119,19 +123,24 @@ float                 moving_group_intensity = 0;
 float                 moving_group_pos_x = 0;
 float                 moving_group_pos_y = 0;
 bool                  moving_group_to_cursor = false;
+mob_type*             nectar_mob_type = NULL;
 vector<nectar*>       nectars;
+map<string, onion_type*>
+onion_types;
 vector<onion*>        onions;
 unsigned char         particle_quality = 2;
 vector<particle>      particles;
 bool                  paused = false;
-vector<pellet_type>   pellet_types;
+map<string, pellet_type*>
+pellet_types;
 vector<pellet*>       pellets;
 vector<point>         percipitation;
 float                 percipitation_time_left = 0;
 map<pikmin_type*, unsigned long>
 pikmin_in_onions;
 vector<pikmin*>       pikmin_list;
-vector<pikmin_type>   pikmin_types;
+map<string, pikmin_type*>
+pikmin_types;
 bool                  pretty_whistle = false;
 float                 prev_moving_group_intensity = 0;
 bool                  running = true;
@@ -141,6 +150,7 @@ vector<sector>        sectors;
 unsigned int          selected_spray = 0;
 unsigned char         ship_beam_ring_color[3] = {0, 0, 0};
 bool                  ship_beam_ring_color_up[3] = {true, true, true};
+mob_type*             ship_mob_type = NULL;
 vector<ship*>         ships;
 bool                  smooth_scaling = true;
 vector<unsigned long> spray_amounts;
@@ -148,6 +158,8 @@ vector<spray_type>    spray_types;
 vector<status>        statuses;
 float                 sun_meter_sun_angle = 0;
 string                total_error_log;
+map<string, treasure_type*>
+treasure_types;
 vector<treasure*>     treasures;
 map<string, weather>  weather_conditions;
 float                 whistle_dot_offset = 0;

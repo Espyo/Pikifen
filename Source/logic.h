@@ -205,7 +205,7 @@ void do_logic() {
         bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
         bool touched =
             dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
-            pik_ptr->size * 0.5 + cur_leader_ptr->size * 0.5 &&
+            pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
             !cur_leader_ptr->carrier_info;
         bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
         
@@ -231,7 +231,7 @@ void do_logic() {
             pik_ptr->maturity != 2
         ) {
             for(size_t n = 0; n < n_nectars; n++) {
-                if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->size * 0.5 + pik_ptr->size * 0.5) {
+                if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->type->size * 0.5 + pik_ptr->type->size * 0.5) {
                     if(nectars[n]->amount_left > 0)
                         nectars[n]->amount_left--;
                         
@@ -257,7 +257,7 @@ void do_logic() {
                 if(!mob_ptr->carrier_info) continue;
                 if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue;
                 
-                if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->size * 0.5 + mob_ptr->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
+                if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
                     pik_ptr->carrying_mob = mob_ptr;
                     
                     if(pik_ptr->following_party) remove_from_party(pik_ptr);
@@ -281,7 +281,7 @@ void do_logic() {
                         &mob_ptr->y,
                         true);
                         
-                    if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->weight) {
+                    if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) {
                         start_carrying(mob_ptr, pik_ptr, NULL);
                     }
                     
@@ -306,8 +306,8 @@ void do_logic() {
     ********************/
     
     if(cur_leader_ptr->holding_pikmin) {
-        cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
-        cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->size / 2;
+        cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
+        cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
     }
     
     //Current leader movement.
@@ -319,8 +319,8 @@ void do_logic() {
             cur_leader_ptr->remove_target(true);
         else
             cur_leader_ptr->set_target(
-                cur_leader_ptr->x + leader_move_x * cur_leader_ptr->move_speed,
-                cur_leader_ptr->y + leader_move_y * cur_leader_ptr->move_speed,
+                cur_leader_ptr->x + leader_move_x * cur_leader_ptr->type->move_speed,
+                cur_leader_ptr->y + leader_move_y * cur_leader_ptr->type->move_speed,
                 NULL, NULL, false);
     }
     
@@ -417,10 +417,10 @@ void do_logic() {
             size_t n_onions = onions.size();
             size_t o = 0;
             for(; o < n_onions; o++) {
-                if(onions[o]->type == pellets[p]->carrier_info->decided_type) break;
+                if(onions[o]->oni_type->pik_type == pellets[p]->carrier_info->decided_type) break;
             }
             
-            if(pellets[p]->pik_type == pellets[p]->carrier_info->decided_type) {
+            if(pellets[p]->pel_type->pik_type == pellets[p]->carrier_info->decided_type) {
                 give_pikmin_to_onion(onions[o], pellets[p]->pel_type->match_seeds);
             } else {
                 give_pikmin_to_onion(onions[o], pellets[p]->pel_type->non_match_seeds);
@@ -438,7 +438,6 @@ void do_logic() {
     *                             ***  *
     ************************************/
     
-    //ToDo every Pikmin in a group is moving, even Pikmin that are already on another leader's party!
     float closest_distance = 0;
     size_t n_members = cur_leader_ptr->party->members.size();
     closest_party_member = cur_leader_ptr->holding_pikmin;

@@ -1,9 +1,7 @@
 #include "treasure.h"
 
-treasure::treasure(float x, float y, float diameter, sector* sec, unsigned int weight, unsigned int max_carriers)
-    : mob(x, y, sec->floors[0].z, 20, sec) {
-    this->weight = weight;
-    size = diameter;
+treasure::treasure(float x, float y, sector* sec, treasure_type* type)
+    : mob(x, y, sec->floors[0].z, type, sec) {
     
-    carrier_info = new carrier_info_struct(this, max_carriers, true);
+    carrier_info = new carrier_info_struct(this, type->max_carriers, true);
 }

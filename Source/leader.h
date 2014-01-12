@@ -6,6 +6,7 @@
 class pikmin;
 
 #include "const.h"
+#include "leader_type.h"
 #include "mob.h"
 #include "misc_structs.h"
 #include "party_follower.h"
@@ -26,7 +27,7 @@ public:
     bool auto_pluck_mode;
     pikmin* auto_pluck_pikmin;
     
-    leader(float x, float y, sector* sec);
+    leader(float x, float y, sector* sec, leader_type* type);
 };
 
 #endif //ifndef LEADER_INCLUDED

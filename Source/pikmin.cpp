@@ -1,6 +1,6 @@
 #include "pikmin.h"
 
-pikmin::pikmin(pikmin_type* type, float x, float y, sector* sec) : mob(x, y, 0, type->max_move_speed, sec) {
+pikmin::pikmin(float x, float y, sector* sec, pikmin_type* type) : mob(x, y, 0, type, sec) {
     this->type = type;
     hazard_time_left = -1;
     enemy_attacking = NULL;
@@ -8,7 +8,6 @@ pikmin::pikmin(pikmin_type* type, float x, float y, sector* sec) : mob(x, y, 0, 
     maturity = 0;
     burrowed = false;
     pluck_reserved = false;
-    size = 20; //ToDo
     
     main_color = type->color;
 }

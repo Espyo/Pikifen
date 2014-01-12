@@ -8,9 +8,8 @@
 class pellet : public mob {
 public:
     pellet_type* pel_type;
-    pikmin_type* pik_type;
     
-    pellet(float x, float y, sector* s, pellet_type* pel_type, pikmin_type* pik_type);
+    pellet(float x, float y, sector* s, pellet_type* type);
 };
 
 #endif //ifndef PELLET_INCLUDED

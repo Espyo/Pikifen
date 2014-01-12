@@ -30,6 +30,7 @@ using namespace std;
 #define MOVE_GROUP_ARROWS_INTERVAL  0.1    //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT               5      //A drop of nectar starts with this amount.
 #define PARTY_SPOT_INTERVAL         1      //Pikmin must be at least these many units away from one another; used when calculating group spots.
+#define PIKMIN_max_health               300    //Maximum Pikmin HP.
 #define PIKMIN_MIN_TASK_RANGE       20     //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
 #define SHADOW_MAX_WIDTH            100    //The shadows can't be any wider than this.
 #define SHADOW_Y_MULTIPLIER         150    //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
@@ -47,16 +48,25 @@ using namespace std;
 #define WHISTLE_RING_SPEED          600    //Whistle rings move these many units per second.
 #define WHISTLE_RINGS_INTERVAL      0.1    //Seconds that need to pass before another whistle ring appears.
 #define ZOOM_MAX_LEVEL              2      //Maximum zoom level possible.
+#define ZOOM_MAX_LEVEL_EDITOR       4      //Maximum zoom level possible on the area editor.
 #define ZOOM_MIN_LEVEL              0.5    //Minimum zoom level possible.
+#define ZOOM_MIN_LEVEL_EDITOR       0.05   //Minimum zoom level possible on the area editor.
 
 #define DEF_FPS 30
 #define DEF_PIKMIN_SIZE 24
 #define DEF_SCR_W 640
 #define DEF_SCR_H 480
 
-#define AREA_FOLDER "Areas"
-#define CONFIGURATIONS_FOLDER "Configurations"
-#define WEATHER_FILE CONFIGURATIONS_FOLDER "/Weather.txt"
+#define AUDIO_FOLDER           GAME_DATA_FOLDER "/Audio"
+#define AREA_FOLDER            GAME_DATA_FOLDER "/Areas"
+#define CONFIGURATIONS_FOLDER  GAME_DATA_FOLDER "/Configurations"
+#define ENEMIES_FOLDER         MOBS_FOLDER "/Enemies"
+#define GAME_DATA_FOLDER       "Game_data"
+#define GRAPHICS_FOLDER        GAME_DATA_FOLDER "/Graphics"
+#define MOBS_FOLDER            GAME_DATA_FOLDER "/Mobs"
+#define OTHER_MOBS_FOLDER      MOBS_FOLDER "/Others"
+#define TREASURES_FOLDER       MOBS_FOLDER "/Treasures"
+#define WEATHER_FILE           CONFIGURATIONS_FOLDER "/Weather.txt"
 
 enum BUTTONS {
     BUTTON_NONE,
