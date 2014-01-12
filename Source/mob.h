@@ -88,9 +88,6 @@ public:
     unsigned short health;     //Current health.
     
     //Script.
-    vector<mob_event*> events;    //The events and actions.
-    float see_range;              //The mob can see anything within this range.
-    float near_range;             //The mob will consider anything in this range "near".
     mob* focused_pikmin;          //The Pikmin it has focus on.
     mob* nearest_pikmin;          //The closest Pikmin.
     float timer;                  //The timer.
@@ -98,6 +95,7 @@ public:
     map<string, string> vars;     //Variables.
     float script_wait;            //Wait this much time before going on with the script.
     mob_event* script_wait_event; //What event is the script waiting on?
+    size_t script_wait_action;    //Number of the action the script returns to after the wait is over.
     
     //Carrying.
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.

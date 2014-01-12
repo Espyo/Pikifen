@@ -53,16 +53,17 @@ data_node_list::~data_node_list() {}
 
 
 data_node_list &data_node::operator[](string name) {
-    if(nodes.find(name) == nodes.end()) {
+    size_t pos = data_node::find(nodes, name);
+    if(pos == string::npos) {
         dummy_lists.push_back(data_node_list());
         return dummy_lists[dummy_lists.size() - 1];
     }
-    return nodes[name];
+    return nodes[pos].second;
 }
 
 data_node_list &data_node::get_node_list_by_nr(size_t nr, string* name) {
     if(nr < nodes.size()) {
-        for(map<string, data_node_list>::iterator n = nodes.begin(); n != nodes.end(); n++) {
+        for(auto n = nodes.begin(); n != nodes.end(); n++) {
             if(nr == 0) {
                 if(name) *name = n->first;
                 return n->second;
@@ -126,8 +127,14 @@ size_t data_node::load_node(vector<string> lines, size_t start_line) {
         if(pos != string::npos && pos > 0 && line.size() >= 2) {
             string option = trim_spaces(line.substr(0, pos));
             string value = line.substr(pos + 1, line.size() - (pos + 1));
-            nodes[option].add();
-            nodes[option].last().value = value;
+            
+            size_t node_pos = data_node::find(nodes, option);
+            if(node_pos == string::npos) {
+                nodes.push_back(make_pair<string, data_node_list>(option, data_node_list()));
+                node_pos = nodes.size() - 1;
+            }
+            nodes[node_pos].second.add();
+            nodes[node_pos].second.last().value = value;
             continue;
         }
         
@@ -135,8 +142,15 @@ size_t data_node::load_node(vector<string> lines, size_t start_line) {
         pos = line.find('{');
         if(pos != string::npos && pos > 0 && line.size() >= 2) {
             string section_name = trim_spaces(line.substr(0, pos));
-            nodes[section_name].add();
-            l = nodes[section_name].last().load_node(lines, l + 1);
+            
+            size_t node_pos = data_node::find(nodes, section_name);
+            if(node_pos == string::npos) {
+                nodes.push_back(make_pair<string, data_node_list>(section_name, data_node_list()));
+                node_pos = nodes.size() - 1;
+            }
+            
+            nodes[node_pos].second.add();
+            l = nodes[node_pos].second.last().load_node(lines, l + 1);
             continue;
         }
         
@@ -167,6 +181,14 @@ data_node::data_node(string filename) {
     load_file(filename);
 }
 data_node::~data_node() {}
+
+//Returns the position of a node in a list of data nodes; string::npos if not found.
+size_t data_node::find(vector<pair<string, data_node_list> > nodes, string name) {
+    for(size_t p = 0; p < nodes.size(); p++) {
+        if(nodes[p].first == name) return p;
+    }
+    return string::npos;
+}
 
 /* ----------------------------------------------------------------------------
  * Like an std::getline(), but for ALLEGRO_FILE*.

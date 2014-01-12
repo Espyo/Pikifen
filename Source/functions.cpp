@@ -111,6 +111,9 @@ void create_mob(mob* m) {
     } else if(typeid(*m) == typeid(info_spot)) {
         info_spots.push_back((info_spot*) m);
         
+    } else if(typeid(*m) == typeid(enemy)) {
+        enemies.push_back((enemy*) m);
+        
     }
 }
 
@@ -655,9 +658,9 @@ float get_leader_to_group_center_dist(mob* l) {
  * Returns the pointer to a mob event, if the mob is listening to that event.
  */
 mob_event* get_mob_event(mob* m, unsigned char e) {
-    size_t n_events = m->events.size();
+    size_t n_events = m->type->events.size();
     for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
-        mob_event* ev = m->events[ev_nr];
+        mob_event* ev = m->type->events[ev_nr];
         if(ev->type == e) return ev;
     }
     return NULL;
@@ -906,9 +909,9 @@ void load_game_content() {
     pellet_types["Red 20"] = new pellet_type(pikmin_types["Red Pikmin"], 128, 50, 20, 20, 10);
     
     //Mob types.
-    vector<string> enemy_folders = folder_to_vector(ENEMIES_FOLDER, false);
-    for(size_t e = 0; e < enemy_folders.size(); e++) {
-        load_mob_type(enemy_folders[e], true);
+    vector<string> enemy_files = folder_to_vector(ENEMIES_FOLDER, false);
+    for(size_t f = 0; f < enemy_files.size(); f++) {
+        load_mob_type(ENEMIES_FOLDER "/" + enemy_files[f], true);
     }
     
     //Weather.
@@ -968,7 +971,7 @@ void load_mob_type(string filename, bool enemy) {
     mt->name = trim_spaces(file["name"].get_value());
     mt->near_radius = tof(file["near_radius"].get_value("0"));
     mt->rotation_speed = tof(file["rotation_speed"].get_value("0"));
-    mt->sight_radius = tof(file["rotation_radius"].get_value("0"));
+    mt->sight_radius = tof(file["sight_radius"].get_value("0"));
     mt->size = tof(file["size"].get_value("0"));
     mt->weight = toi(file["weight"].get_value("0"));
     
@@ -981,6 +984,8 @@ void load_mob_type(string filename, bool enemy) {
         et->revive_speed = tof(file["revive_speed"].get_value("0"));
         et->value = tof(file["value"].get_value("0"));
     }
+    
+    mt->events = load_script(file["script"][0]);
     
     mob_types.push_back(mt);
 }
@@ -1078,6 +1083,83 @@ sample_struct load_sample(string filename) {
     }
     
     return s;
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads a script from a data node.
+ */
+vector<mob_event*> load_script(data_node node) {
+
+    vector<mob_event*> events;
+    
+    for(size_t e = 0; e < node.size(); e++) {
+        string event_name;
+        unsigned char event_type = 0;
+        data_node* event_node = &node.get_node_list_by_nr(e, &event_name)[0];
+        event_name = trim_spaces(event_name);
+        
+        if(event_name == "on_attack_hit") event_type = MOB_EVENT_ATTACK_HIT;
+        else if(event_name == "on_attack_miss") event_type = MOB_EVENT_ATTACK_MISS;
+        else if(event_name == "on_big_damage") event_type = MOB_EVENT_BIG_DAMAGE;
+        else if(event_name == "on_damage") event_type = MOB_EVENT_DAMAGE;
+        else if(event_name == "on_death") event_type = MOB_EVENT_DEATH;
+        else if(event_name == "on_enter_hazard") event_type = MOB_EVENT_ENTER_HAZARD;
+        else if(event_name == "on_idle") event_type = MOB_EVENT_IDLE;
+        else if(event_name == "on_leave_hazard") event_type = MOB_EVENT_LEAVE_HAZARD;
+        else if(event_name == "on_lose_object") event_type = MOB_EVENT_LOSE_OBJECT;
+        else if(event_name == "on_lose_pikmin") event_type = MOB_EVENT_LOSE_PIKMIN;
+        else if(event_name == "on_near_object") event_type = MOB_EVENT_NEAR_OBJECT;
+        else if(event_name == "on_near_pikmin") event_type = MOB_EVENT_NEAR_PIKMIN;
+        else if(event_name == "on_pikmin_land") event_type = MOB_EVENT_PIKMIN_LAND;
+        else if(event_name == "on_pikmin_latch") event_type = MOB_EVENT_PIKMIN_LATCH;
+        else if(event_name == "on_pikmin_touch") event_type = MOB_EVENT_PIKMIN_TOUCH;
+        else if(event_name == "on_revival") event_type = MOB_EVENT_REVIVAL;
+        else if(event_name == "on_see_object") event_type = MOB_EVENT_SEE_OBJECT;
+        else if(event_name == "on_see_pikmin") event_type = MOB_EVENT_SEE_PIKMIN;
+        else if(event_name == "on_spawn") event_type = MOB_EVENT_SPAWN;
+        else if(event_name == "on_timer") event_type = MOB_EVENT_TIMER;
+        else if(event_name == "on_wall") event_type = MOB_EVENT_WALL;
+        else {
+            error_log("Unknown script event name \"" + event_name + "\"!");
+            continue;
+        }
+        
+        vector<mob_action*> actions;
+        
+        for(size_t a = 0; a < event_node->size(); a++) {
+        
+            string action_name;
+            unsigned char action_type = 0;
+            string action_data = event_node->get_node_list_by_nr(a, &action_name).get_value();
+            action_name = trim_spaces(action_name);
+            action_data = trim_spaces(action_data);
+            
+            if(action_name == "move") action_type = MOB_ACTION_MOVE;
+            else if(action_name == "play_sound") action_type = MOB_ACTION_PLAY_SOUND;
+            else if(action_name == "animation") action_type = MOB_ACTION_SET_ANIMATION;
+            else if(action_name == "gravity") action_type = MOB_ACTION_SET_GRAVITY;
+            else if(action_name == "health") action_type = MOB_ACTION_SET_HEALTH;
+            else if(action_name == "speed") action_type = MOB_ACTION_SET_SPEED;
+            else if(action_name == "timer") action_type = MOB_ACTION_SET_TIMER;
+            else if(action_name == "var") action_type = MOB_ACTION_SET_VAR;
+            else if(action_name == "particle") action_type = MOB_ACTION_SPAWN_PARTICLE;
+            else if(action_name == "projectile") action_type = MOB_ACTION_SPAWN_PROJECTILE;
+            else if(action_name == "special_function") action_type = MOB_ACTION_SPECIAL_FUNCTION;
+            else if(action_name == "turn") action_type = MOB_ACTION_TURN;
+            else if(action_name == "wait") action_type = MOB_ACTION_WAIT;
+            else {
+                error_log("Unknown script action name \"" + action_name + "\"!");
+            }
+            
+            actions.push_back(new mob_action(action_type, action_data));
+            
+        }
+        
+        events.push_back(new mob_event(event_type, actions));
+        
+    }
+    
+    return events;
 }
 
 /* ----------------------------------------------------------------------------

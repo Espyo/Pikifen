@@ -1,7 +1,7 @@
 #include "enemy.h"
 
 enemy::enemy(float x, float y, sector* s, enemy_type* type)
-    : mob(x, y, 0, 0, s) {
+    : mob(x, y, 0, type, s) {
     
-    this->type = type;
+    ene_type = type;
 }

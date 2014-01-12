@@ -90,6 +90,7 @@ float                 day_minutes_per_irl_sec = 2;
 float                 day_minutes_start = 60 * 7;
 bool                  daylight_effect = true;
 bool                  editor_holding_m2 = false;
+vector<enemy*>        enemies;
 ALLEGRO_FONT*         font = NULL;
 ALLEGRO_FONT*         font_area_name = NULL;
 unsigned short        font_h = 0;

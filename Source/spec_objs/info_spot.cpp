@@ -19,15 +19,13 @@ info_spot::info_spot(float x, float y, sector* sec, string text, bool fullscreen
     }
     
     //ToDo remove
-    see_range = 100;
-    near_range = 30;
     //timer_interval = timer = 2;
-    vector<mob_action*> see_actions = vector<mob_action*>(1, new mob_action(this, MOB_ACTION_MOVE, "pikmin"));
-    vector<mob_action*> lose_actions = vector<mob_action*>(1, new mob_action(this, MOB_ACTION_MOVE, "home"));
-    lose_actions.push_back(new mob_action(this, MOB_ACTION_WAIT, "2"));
-    lose_actions.push_back(new mob_action(this, MOB_ACTION_SET_HEALTH, "20"));
-    events.push_back(new mob_event(this, MOB_EVENT_SEE_PIKMIN, see_actions));
-    events.push_back(new mob_event(this, MOB_EVENT_LOSE_PIKMIN, lose_actions));
-    events.push_back(new mob_event(this, MOB_EVENT_NEAR_PIKMIN, see_actions));
-    events.push_back(new mob_event(this, MOB_EVENT_TIMER, see_actions));
+    /*vector<mob_action*> see_actions = vector<mob_action*>(1, new mob_action(MOB_ACTION_MOVE, "pikmin"));
+    vector<mob_action*> lose_actions = vector<mob_action*>(1, new mob_action(MOB_ACTION_MOVE, "home"));
+    lose_actions.push_back(new mob_action(MOB_ACTION_WAIT, "2"));
+    lose_actions.push_back(new mob_action(MOB_ACTION_SET_HEALTH, "20"));
+    events.push_back(new mob_event(MOB_EVENT_SEE_PIKMIN, see_actions));
+    events.push_back(new mob_event(MOB_EVENT_LOSE_PIKMIN, lose_actions));
+    events.push_back(new mob_event(MOB_EVENT_NEAR_PIKMIN, see_actions));
+    events.push_back(new mob_event(MOB_EVENT_TIMER, see_actions));*/
 }

@@ -38,43 +38,39 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_LOSE_PIKMIN,
     MOB_EVENT_NEAR_OBJECT,
     MOB_EVENT_NEAR_PIKMIN,
-    MOB_EVENT_PIKMIN_HIT,
+    MOB_EVENT_PIKMIN_LAND,
     MOB_EVENT_PIKMIN_LATCH,
+    MOB_EVENT_PIKMIN_TOUCH,
     MOB_EVENT_REVIVAL,
     MOB_EVENT_SEE_OBJECT,
     MOB_EVENT_SEE_PIKMIN,
     MOB_EVENT_SPAWN,
     MOB_EVENT_TIMER,
-    MOB_EVENT_TOUCH_PIKMIN,
     MOB_EVENT_WALL,
 };
 
 struct mob_event;
 
 struct mob_action {
-    mob* m;
     unsigned char type;
     string data;
     
-    mob_action(mob* m, unsigned char t, string d) {
-        this->m = m; type = t; data = d;
+    mob_action(unsigned char t, string d) {
+        type = t; data = d;
     }
     
-    bool run(mob_event* parent);
+    bool run(mob* m);
 };
 
 struct mob_event {
-    mob* m;
     unsigned char type;
     vector<mob_action*> actions;
-    size_t current_action;
     
-    mob_event(mob* m, unsigned char t, vector<mob_action*> a) {
-        this->m = m; type = t; actions = a;
-        current_action = 0;
+    mob_event(unsigned char t, vector<mob_action*> a) {
+        type = t; actions = a;
     }
     
-    void run(bool from_the_start);
+    void run(mob* m, size_t starting_action);
 };
 
 #endif //ifndef MOB_EVENT_INCLUDED

@@ -49,7 +49,6 @@
 #ifndef DATA_FILE_H
 #define DATA_FILE_H
 
-#include <map>
 #include <string>
 #include <vector>
 
@@ -81,12 +80,12 @@ public:
 
 class data_node {
 private:
-    map<string, data_node_list> nodes;          //Instances of each of its nodes.
-    vector<data_node_list> dummy_lists;         //Create empty node lists here, and return them in case of error (this way, values can return empty strings).
+    vector<pair<string, data_node_list> > nodes; //Instances of each of its nodes.
+    vector<data_node_list> dummy_lists;          //Create empty node lists here, and return them in case of error (this way, values can return empty strings).
 public:
-    bool file_was_opened;                       //If we opened this with a filename, this'll tell us if it was successful.
+    bool file_was_opened;                        //If we opened this with a filename, this'll tell us if it was successful.
     
-    string value;                               //Value of this node, if it has it (node=value).
+    string value;                                //Value of this node, if it has it (node=value).
     
     data_node_list &operator[](string name);        //Accesses a sub-node's list of instances.
     size_t size();                                  //Number of nodes it contains.
@@ -99,6 +98,8 @@ public:
     data_node(string filename);                 //Create a node, and load it with a file right away.
     data_node(const data_node &dn);
     ~data_node();
+    
+    static size_t find(vector<pair<string, data_node_list> > nodes, string name);
 };
 
 void getline(ALLEGRO_FILE* file, string &line);

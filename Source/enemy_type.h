@@ -14,7 +14,6 @@ public:
     unsigned char pikmin_seeds;
     float value;
     float revive_speed;
-    bool can_sleep;
     bool can_regenerate;
     bool is_boss;
     bool drops_corpse;

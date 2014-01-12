@@ -174,6 +174,8 @@ int main() {
     info_spot_mob_type = new mob_type();
     info_spot_mob_type->name = "Info spot";
     info_spot_mob_type->size = 32;
+    info_spot_mob_type->sight_radius = 100; //ToDo testing only. Remove.
+    info_spot_mob_type->near_radius = 30; //ToDo testing only. Remove.
     
     nectar_mob_type = new mob_type();
     nectar_mob_type->name = "Nectar";
@@ -262,6 +264,7 @@ int main() {
     create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
     create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
     create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
+    create_mob(new enemy(0, -200, &s, (enemy_type*) mob_types[0]));
     
     if(cur_screen == SCREEN_GAME) {
         al_hide_mouse_cursor(display);

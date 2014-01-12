@@ -117,6 +117,7 @@ extern float                 day_minutes_per_irl_sec;  //Every real-life second,
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
 extern bool                  editor_holding_m2;
+extern vector<enemy*>        enemies;
 extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern unsigned short        font_h;

@@ -8,7 +8,7 @@
 class enemy : public mob {
 public:
     //Technical things.
-    enemy_type* type;
+    enemy_type* ene_type;
     
     //Behavior.
     float original_x, original_y;   //Original coordinates. When it wanders too far, it returns to this spot.

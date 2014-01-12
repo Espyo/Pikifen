@@ -29,7 +29,6 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     target_rel_x = NULL;
     target_rel_y = NULL;
     
-    see_range = near_range = 0;
     focused_pikmin = NULL;
     nearest_pikmin = NULL;
     timer = timer_interval = 0;
@@ -133,7 +132,7 @@ void mob::tick() {
         if(script_wait <= 0) {
             script_wait = 0;
             
-            script_wait_event->run(false); //Continue the waiting event.
+            script_wait_event->run(this, script_wait_action); //Continue the waiting event.
         }
     }
     
@@ -146,9 +145,9 @@ void mob::tick() {
             for(size_t p = 0; p < n_pikmin; p++) {
                 pikmin* pik_ptr = pikmin_list[p];
                 
-                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= see_range) {
+                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= type->sight_radius) {
                     focused_pikmin = pik_ptr;
-                    ev_ptr->run(true);
+                    ev_ptr->run(this, 0);
                     break;
                 }
             }
@@ -160,9 +159,9 @@ void mob::tick() {
             for(size_t l = 0; l < n_leaders; l++) {
                 leader* leader_ptr = leaders[l];
                 
-                if(dist(x, y, leader_ptr->x, leader_ptr->y) <= see_range) {
+                if(dist(x, y, leader_ptr->x, leader_ptr->y) <= type->sight_radius) {
                     focused_pikmin = leader_ptr;
-                    ev_ptr->run(true);
+                    ev_ptr->run(this, 0);
                     break;
                 }
             }
@@ -173,9 +172,9 @@ void mob::tick() {
     if(ev_ptr) {
         //Lose the Pikmin in focus.
         if(focused_pikmin) {
-            if(dist(x, y, focused_pikmin->x, focused_pikmin->y) > see_range) {
+            if(dist(x, y, focused_pikmin->x, focused_pikmin->y) > type->sight_radius) {
                 focused_pikmin = NULL;
-                ev_ptr->run(true);
+                ev_ptr->run(this, 0);
             }
         }
     }
@@ -188,9 +187,9 @@ void mob::tick() {
             for(size_t p = 0; p < n_pikmin; p++) {
                 pikmin* pik_ptr = pikmin_list[p];
                 
-                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= near_range) {
+                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= type->near_radius) {
                     nearest_pikmin = pik_ptr;
-                    ev_ptr->run(true);
+                    ev_ptr->run(this, 0);
                     break;
                 }
             }
@@ -201,9 +200,9 @@ void mob::tick() {
                 for(size_t l = 0; l < n_leaders; l++) {
                     leader* leader_ptr = leaders[l];
                     
-                    if(dist(x, y, leader_ptr->x, leader_ptr->y) <= near_range) {
+                    if(dist(x, y, leader_ptr->x, leader_ptr->y) <= type->near_radius) {
                         nearest_pikmin = leader_ptr;
-                        ev_ptr->run(true);
+                        ev_ptr->run(this, 0);
                         break;
                     }
                 }
@@ -211,7 +210,7 @@ void mob::tick() {
             
         } else {
             //Lose the nearest Pikmin.
-            if(dist(x, y, nearest_pikmin->x, nearest_pikmin->y) > near_range) {
+            if(dist(x, y, nearest_pikmin->x, nearest_pikmin->y) > type->near_radius) {
                 nearest_pikmin = NULL;
             }
         }
@@ -223,7 +222,7 @@ void mob::tick() {
             timer -= 1.0 / game_fps;
             if(timer <= 0) {
                 timer = timer_interval;
-                ev_ptr->run(true);
+                ev_ptr->run(this, 0);
             }
         }
     }

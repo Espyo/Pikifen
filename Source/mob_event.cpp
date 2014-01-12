@@ -2,7 +2,7 @@
 #include "mob_event.h"
 
 //Returns true if the script should stop.
-bool mob_action::run(mob_event* parent) {
+bool mob_action::run(mob* m) {
     //ToDo error detection.
     
     if(type == MOB_ACTION_MOVE) {
@@ -51,9 +51,8 @@ bool mob_action::run(mob_event* parent) {
     return false;
 }
 
-void mob_event::run(bool from_the_start) {
-    if(from_the_start) current_action = 0;
-    
+void mob_event::run(mob* m, size_t starting_action) {
+
     //ToDo remove.
     if(type == MOB_EVENT_SEE_PIKMIN) {
         cout << "See Pikmin event hit.\n";
@@ -65,10 +64,11 @@ void mob_event::run(bool from_the_start) {
         cout << "Timer event hit.\n";
     }
     
-    for(; current_action < actions.size(); current_action++) {
-        if(actions[current_action]->run(this)) {
-            current_action++;
+    for(size_t a = starting_action; a < actions.size(); a++) {
+        if(actions[a]->run(m)) {
+            a++;
             m->script_wait_event = this;
+            m->script_wait_action = a;
             return;
         }
     }

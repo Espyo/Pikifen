@@ -75,85 +75,6 @@ void do_drawing() {
         
         
         /* Layer 3
-        *********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             `-´   *
-        ********************/
-        
-        size_t n_arrows = move_group_arrows.size();
-        for(size_t a = 0; a < n_arrows; a++) {
-            float x = cos(moving_group_angle) * move_group_arrows[a];
-            float y = sin(moving_group_angle) * move_group_arrows[a];
-            draw_sprite(
-                bmp_move_group_arrow,
-                leaders[cur_leader_nr]->x + x, leaders[cur_leader_nr]->y + y,
-                16, 26,
-                moving_group_angle);
-        }
-        
-        size_t n_rings = whistle_rings.size();
-        for(size_t r = 0; r < n_rings; r++) {
-            float x = leaders[cur_leader_nr]->x + cos(cursor_angle) * whistle_rings[r];
-            float y = leaders[cur_leader_nr]->y + sin(cursor_angle) * whistle_rings[r];
-            unsigned char n = whistle_ring_colors[r];
-            al_draw_filled_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192));
-        }
-        
-        if(whistle_radius > 0 || whistle_fade_time > 0) {
-            if(pretty_whistle) {
-                unsigned char n_dots = 16 * 6;
-                for(unsigned char d = 0; d < 6; d++) {
-                    for(unsigned char d2 = 0; d2 < 16; d2++) {
-                        unsigned char current_dot = d2 * 6 + d;
-                        float angle = M_PI * 2 / n_dots * current_dot + whistle_dot_offset;
-                        
-                        float x = cursor_x + cos(angle) * whistle_dot_radius[d];
-                        float y = cursor_y + sin(angle) * whistle_dot_radius[d];
-                        
-                        ALLEGRO_COLOR c;
-                        float alpha_mult;
-                        if(whistle_fade_time > 0)
-                            alpha_mult = whistle_fade_time / WHISTLE_FADE_TIME;
-                        else
-                            alpha_mult = 1;
-                            
-                        if(d == 0)        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
-                        else if(d == 1) c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
-                        else if(d == 2) c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
-                        else if(d == 3) c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
-                        else if(d == 4) c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
-                        else            c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
-                        
-                        al_draw_filled_circle(x, y, 2, c);
-                    }
-                }
-            } else {
-                unsigned char alpha = whistle_fade_time / WHISTLE_FADE_TIME * 255;
-                float radius = whistle_fade_radius;
-                if(whistle_radius > 0) {
-                    alpha = 255;
-                    radius = whistle_radius;
-                }
-                al_draw_circle(cursor_x, cursor_y, radius, al_map_rgba(192, 192, 0, alpha), 2);
-            }
-        }
-        
-        al_use_transform(&normal_transform);
-        draw_sprite(
-            bmp_mouse_cursor,
-            mouse_cursor_x, mouse_cursor_y,
-            cam_zoom * 54, cam_zoom * 54,
-            cursor_angle);
-        al_use_transform(&world_to_screen_transform);
-        draw_sprite(
-            bmp_cursor,
-            cursor_x, cursor_y,
-            54, 54,
-            cursor_angle);
-            
-            
-        /* Layer 4
         ****************
         *          \o/ *
         *   Mobs    |  *
@@ -282,7 +203,92 @@ void do_drawing() {
             al_draw_circle(ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
         }
         
+        //Enemies.
+        size_t n_enemies = enemies.size();
+        for(size_t e = 0; e < n_enemies; e++) {
+            al_draw_filled_circle(enemies[e]->x, enemies[e]->y, enemies[e]->type->size / 2, al_map_rgb(128, 0, 0));
+        }
         
+        
+        /* Layer 4
+        *********************
+        *             .-.   *
+        *   Cursor   ( = )> *
+        *             `-´   *
+        ********************/
+        
+        size_t n_arrows = move_group_arrows.size();
+        for(size_t a = 0; a < n_arrows; a++) {
+            float x = cos(moving_group_angle) * move_group_arrows[a];
+            float y = sin(moving_group_angle) * move_group_arrows[a];
+            draw_sprite(
+                bmp_move_group_arrow,
+                leaders[cur_leader_nr]->x + x, leaders[cur_leader_nr]->y + y,
+                16, 26,
+                moving_group_angle);
+        }
+        
+        size_t n_rings = whistle_rings.size();
+        for(size_t r = 0; r < n_rings; r++) {
+            float x = leaders[cur_leader_nr]->x + cos(cursor_angle) * whistle_rings[r];
+            float y = leaders[cur_leader_nr]->y + sin(cursor_angle) * whistle_rings[r];
+            unsigned char n = whistle_ring_colors[r];
+            al_draw_filled_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192));
+        }
+        
+        if(whistle_radius > 0 || whistle_fade_time > 0) {
+            if(pretty_whistle) {
+                unsigned char n_dots = 16 * 6;
+                for(unsigned char d = 0; d < 6; d++) {
+                    for(unsigned char d2 = 0; d2 < 16; d2++) {
+                        unsigned char current_dot = d2 * 6 + d;
+                        float angle = M_PI * 2 / n_dots * current_dot + whistle_dot_offset;
+                        
+                        float x = cursor_x + cos(angle) * whistle_dot_radius[d];
+                        float y = cursor_y + sin(angle) * whistle_dot_radius[d];
+                        
+                        ALLEGRO_COLOR c;
+                        float alpha_mult;
+                        if(whistle_fade_time > 0)
+                            alpha_mult = whistle_fade_time / WHISTLE_FADE_TIME;
+                        else
+                            alpha_mult = 1;
+                            
+                        if(d == 0)        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
+                        else if(d == 1) c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
+                        else if(d == 2) c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
+                        else if(d == 3) c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
+                        else if(d == 4) c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
+                        else            c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
+                        
+                        al_draw_filled_circle(x, y, 2, c);
+                    }
+                }
+            } else {
+                unsigned char alpha = whistle_fade_time / WHISTLE_FADE_TIME * 255;
+                float radius = whistle_fade_radius;
+                if(whistle_radius > 0) {
+                    alpha = 255;
+                    radius = whistle_radius;
+                }
+                al_draw_circle(cursor_x, cursor_y, radius, al_map_rgba(192, 192, 0, alpha), 2);
+            }
+        }
+        
+        al_use_transform(&normal_transform);
+        draw_sprite(
+            bmp_mouse_cursor,
+            mouse_cursor_x, mouse_cursor_y,
+            cam_zoom * 54, cam_zoom * 54,
+            cursor_angle);
+        al_use_transform(&world_to_screen_transform);
+        draw_sprite(
+            bmp_cursor,
+            cursor_x, cursor_y,
+            54, 54,
+            cursor_angle);
+            
+            
         /* Layer 5
         ***************************
         *                   Help  *
