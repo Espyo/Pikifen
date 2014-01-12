@@ -1,23 +1,37 @@
 weather = Normal
 
-sector{
-	floor{
-		texture=Grass.png
+mobs{
+	leader{
+		coords = 0 0
+		type = Olimar
 	}
-	linedef{
-		x=-1000
-		y=-1000
+
+	enemy{
+		coords = -100 -200
+		type = Test
 	}
-	linedef{
-		x=1000
-		y=-1000
-	}
-	linedef{
-		x=1000
-		y=1000
-	}
-	linedef{
-		x=-1000
-		y=1000
+}
+
+sectors{
+	sector{
+		floor{
+			texture=Grass.png
+		}
+		linedef{
+			x=-1000
+			y=-1000
+		}
+		linedef{
+			x=1000
+			y=-1000
+		}
+		linedef{
+			x=1000
+			y=1000
+		}
+		linedef{
+			x=-1000
+			y=1000
+		}
 	}
 }

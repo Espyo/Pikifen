@@ -1,7 +1,7 @@
+name = Test
 always_active = yes
 max_health = 200
 move_speed = 50
-name = Test
 near_radius = 20
 rotation_speed = 6
 sight_radius = 100
@@ -21,7 +21,7 @@ script{
 	
 	on_lose_pikmin{
 		move = home
-		wait = 2
-		health = 120
+		wait = 1
+		health = relative -60
 	}
 }

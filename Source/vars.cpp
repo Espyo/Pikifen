@@ -110,7 +110,8 @@ float                 leader_move_y = 0;
 map<string, leader_type*>
 leader_types;
 unsigned              max_pikmin_in_field = 100;
-vector<mob_type*>     mob_types;
+map<string, mob_type*>
+mob_types;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
 float                 mouse_cursor_y = scr_h / 2;

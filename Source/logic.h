@@ -101,8 +101,8 @@ void do_logic() {
             if(whistle_dot_radius[d] == -1) continue;
             
             whistle_dot_radius[d] += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
-            if(whistle_radius > 0 && whistle_dot_radius[d] > WHISTLE_MAX_RADIUS) {
-                whistle_dot_radius[d] = WHISTLE_MAX_RADIUS;
+            if(whistle_radius > 0 && whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range) {
+                whistle_dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
             } else if(whistle_fade_radius > 0 && whistle_dot_radius[d] > whistle_fade_radius) {
                 whistle_dot_radius[d] = whistle_fade_radius;
             }
@@ -152,10 +152,10 @@ void do_logic() {
     *              ***  *
     ********************/
     
-    if(whistling && whistle_radius < WHISTLE_MAX_RADIUS) {
+    if(whistling && whistle_radius < cur_leader_ptr->lea_type->whistle_range) {
         whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
-        if(whistle_radius > WHISTLE_MAX_RADIUS) {
-            whistle_radius = WHISTLE_MAX_RADIUS;
+        if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
+            whistle_radius = cur_leader_ptr->lea_type->whistle_range;
             whistle_max_hold = WHISTLE_MAX_HOLD_TIME;
         }
     }

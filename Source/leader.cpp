@@ -3,7 +3,9 @@
 #include "vars.h"
 
 leader::leader(float x, float y, sector* sec, leader_type* type)
-    : mob(x, y, sec->floors[0].z, type, sec) { //ToDo Pikmin size.
+    : mob(x, y, sec->floors[0].z, type, sec) {
+    
+    lea_type = type;
     
     holding_pikmin = NULL;
     health = 10; //ToDo

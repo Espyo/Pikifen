@@ -76,7 +76,7 @@ data_node_list &data_node::get_node_list_by_nr(size_t nr, string* name) {
     return dummy_lists[dummy_lists.size() - 1];
 }
 
-void data_node::load_file(string filename) {
+void data_node::load_file(string filename, bool trim_values) {
     vector<string> lines;
     ALLEGRO_FILE* file = al_fopen(filename.c_str(), "r");
     bool is_first_line = true;
@@ -99,16 +99,17 @@ void data_node::load_file(string filename) {
         al_fclose(file);
     }
     
-    load_node(lines);
+    load_node(lines, trim_values, 0);
 }
 
 /*
  * Loads a node from a bit of text.
  * lines:       A vector with the lines of text.
+ * trim_values: If true, trim the spaces to the left and right of the values.
  * start_line:  Start on this line. Used for sub-nodes.
  * Returns the line number it ended on, so the parent node can continue from there.
  */
-size_t data_node::load_node(vector<string> lines, size_t start_line) {
+size_t data_node::load_node(vector<string> lines, bool trim_values, size_t start_line) {
     nodes.clear();
     value = "";
     size_t n_lines = lines.size();
@@ -127,6 +128,7 @@ size_t data_node::load_node(vector<string> lines, size_t start_line) {
         if(pos != string::npos && pos > 0 && line.size() >= 2) {
             string option = trim_spaces(line.substr(0, pos));
             string value = line.substr(pos + 1, line.size() - (pos + 1));
+            if(trim_values) value = trim_spaces(value);
             
             size_t node_pos = data_node::find(nodes, option);
             if(node_pos == string::npos) {
@@ -150,7 +152,7 @@ size_t data_node::load_node(vector<string> lines, size_t start_line) {
             }
             
             nodes[node_pos].second.add();
-            l = nodes[node_pos].second.last().load_node(lines, l + 1);
+            l = nodes[node_pos].second.last().load_node(lines, trim_values, l + 1);
             continue;
         }
         
@@ -176,9 +178,9 @@ data_node::data_node(const data_node &dn) {
     nodes = dn.nodes;
     value = dn.value;
 }
-data_node::data_node(string filename) {
+data_node::data_node(string filename, bool trim_values) {
     file_was_opened = false;
-    load_file(filename);
+    load_file(filename, trim_values);
 }
 data_node::~data_node() {}
 

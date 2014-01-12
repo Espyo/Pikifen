@@ -29,7 +29,11 @@ bool mob_action::run(mob* m) {
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
         //ToDo relative values.
-        m->health = toi(data);
+        vector<string> words = split(data);
+        unsigned short base_nr = 0;
+        if(words[0] == "relative") base_nr = m->health;
+        
+        m->health = max(0, (m->health + toi(words[1])));
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
@@ -43,8 +47,11 @@ bool mob_action::run(mob* m) {
     } else if(type == MOB_ACTION_WAIT) {
     
         //ToDo wait for animation, etc.
-        m->script_wait = tof(data);
-        return true;
+        float time_to_wait = tof(data);
+        if(time_to_wait > 0) {
+            m->script_wait = tof(data);
+            return true;
+        }
         
     }
     

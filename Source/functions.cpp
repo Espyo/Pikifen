@@ -732,11 +732,10 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
  * Loads an area into memory.
  */
 void load_area(string name) {
-    sectors.clear();
-    
+
     data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
     
-    string weather_condition_name = trim_spaces(file["weather"].get_value());
+    string weather_condition_name = file["weather"].get_value();
     if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
         error_log("Area " + name + " refers to a non-existing weather condition!");
         cur_weather = weather();
@@ -744,9 +743,13 @@ void load_area(string name) {
         cur_weather = weather_conditions[weather_condition_name];
     }
     
-    size_t n_sectors = file["sector"].size();
+    
+    //Load sectors.
+    
+    sectors.clear();
+    size_t n_sectors = file["sectors"][0]["sector"].size();
     for(size_t s = 0; s < n_sectors; s++) {
-        data_node sector_data = file["sector"][s];
+        data_node sector_data = file["sectors"][0]["sector"][s];
         sector new_sector = sector();
         
         size_t n_floors = sector_data["floor"].size();
@@ -793,6 +796,48 @@ void load_area(string name) {
         //ToDo missing things.
         
         sectors.push_back(new_sector);
+    }
+    
+    
+    //Load mobs.
+    
+    mobs.clear();
+    size_t n_mobs = file["mobs"][0].size();
+    for(size_t m = 0; m < n_mobs; m++) {
+    
+        string mt;
+        data_node* mob_node = &file["mobs"][0].get_node_list_by_nr(m, &mt)[0];
+        
+        vector<string> coords = split(mob_node->operator[]("coords").get_value());
+        float x = (coords.size() >= 1 ? tof(coords[0]) : 0);
+        float y = (coords.size() >= 2 ? tof(coords[1]) : 0);
+        
+        if(mt == "enemy") {
+        
+            string et = mob_node->operator[]("type").get_value();
+            if(mob_types.find(et) != mob_types.end()) {
+                //ToDo use the enemy_types map.
+                
+                create_mob(new enemy(
+                               x, y,
+                               &sectors[0], //ToDo
+                               (enemy_type*) mob_types[et]
+                           ));
+                           
+            } else {
+            
+                error_log("Unknown enemy type \"" + et + "\"!");
+            }
+            
+        } else if(mt == "pikmin") {
+        
+        
+        } else {
+        
+            error_log("Unknown mob type \"" + mt + "\"!");
+            continue;
+        }
+        
     }
 }
 
@@ -875,12 +920,6 @@ void load_game_content() {
     pikmin_types.back().has_onion = false;
     */
     
-    leader_type* normal_leader_type = new leader_type();
-    normal_leader_type->move_speed = LEADER_MOVE_SPEED;
-    normal_leader_type->size = 32;
-    normal_leader_type->weight = 1;
-    leader_types["Normal"] = normal_leader_type;
-    
     onion_type* red_onion_type = new onion_type(pikmin_types["Red Pikmin"]);
     red_onion_type->size = 32;
     red_onion_type->name = "Red";
@@ -911,7 +950,11 @@ void load_game_content() {
     //Mob types.
     vector<string> enemy_files = folder_to_vector(ENEMIES_FOLDER, false);
     for(size_t f = 0; f < enemy_files.size(); f++) {
-        load_mob_type(ENEMIES_FOLDER "/" + enemy_files[f], true);
+        load_mob_type(ENEMIES_FOLDER "/" + enemy_files[f], MOB_TYPE_ENEMY);
+    }
+    vector<string> leader_files = folder_to_vector(LEADERS_FOLDER, false);
+    for(size_t f = 0; f < leader_files.size(); f++) {
+        load_mob_type(LEADERS_FOLDER "/" + leader_files[f], MOB_TYPE_LEADER);
     }
     
     //Weather.
@@ -922,7 +965,7 @@ void load_game_content() {
     for(size_t wc = 0; wc < n_weather_conditions; wc++) {
         data_node* cur_weather = &weather_file["weather"][wc];
         
-        string name = trim_spaces(cur_weather->operator[]("name").get_value());
+        string name = cur_weather->operator[]("name").get_value();
         if(name.size() == 0) name = "default";
         
         map<unsigned, ALLEGRO_COLOR> lighting;
@@ -958,24 +1001,32 @@ void load_game_content() {
 
 /* ----------------------------------------------------------------------------
  * Loads a mob type from a file.
+ * type: Use MOB_TYPE_* for this.
  */
-void load_mob_type(string filename, bool enemy) {
+void load_mob_type(string filename, unsigned char type) {
     data_node file = data_node(filename);
     if(!file.file_was_opened) return;
     
-    mob_type* mt = (enemy ? (new enemy_type()) : (new mob_type()));
+    mob_type* mt;
+    if(type == MOB_TYPE_ENEMY) {
+        mt = new enemy_type();
+    } else if(type == MOB_TYPE_LEADER) {
+        mt = new leader_type();
+    } else {
+        mt = new mob_type();
+    }
     
     mt->always_active = tob(file["always_active"].get_value("no"));
     mt->max_health = toi(file["max_health"].get_value("0"));
     mt->move_speed = tof(file["move_speed"].get_value("0"));
-    mt->name = trim_spaces(file["name"].get_value());
+    mt->name = file["name"].get_value();
     mt->near_radius = tof(file["near_radius"].get_value("0"));
     mt->rotation_speed = tof(file["rotation_speed"].get_value("0"));
     mt->sight_radius = tof(file["sight_radius"].get_value("0"));
     mt->size = tof(file["size"].get_value("0"));
     mt->weight = toi(file["weight"].get_value("0"));
     
-    if(enemy) {
+    if(type == MOB_TYPE_ENEMY) {
         enemy_type* et = (enemy_type*) mt;
         et->can_regenerate = tob(file["can_regenerate"].get_value("no"));
         et->drops_corpse = tob(file["drops_corpse"].get_value("yes"));
@@ -983,11 +1034,19 @@ void load_mob_type(string filename, bool enemy) {
         et->pikmin_seeds = toi(file["pikmin_seeds"].get_value("0"));
         et->revive_speed = tof(file["revive_speed"].get_value("0"));
         et->value = tof(file["value"].get_value("0"));
+        
+    } else if(type == MOB_TYPE_LEADER) {
+        leader_type* lt = (leader_type*) mt;
+        lt->whistle_range = tof(file["whistle_range"].get_value(to_string((long double) DEF_WHISTLE_RANGE)));
+        lt->punch_strength = toi(file["punch_strength"].get_value()); //ToDo default.
+        
+        leader_types[lt->name] = lt;
+        
     }
     
     mt->events = load_script(file["script"][0]);
     
-    mob_types.push_back(mt);
+    mob_types[mt->name] = mt;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1096,7 +1155,7 @@ vector<mob_event*> load_script(data_node node) {
         string event_name;
         unsigned char event_type = 0;
         data_node* event_node = &node.get_node_list_by_nr(e, &event_name)[0];
-        event_name = trim_spaces(event_name);
+        event_name = event_name;
         
         if(event_name == "on_attack_hit") event_type = MOB_EVENT_ATTACK_HIT;
         else if(event_name == "on_attack_miss") event_type = MOB_EVENT_ATTACK_MISS;
@@ -1131,8 +1190,8 @@ vector<mob_event*> load_script(data_node node) {
             string action_name;
             unsigned char action_type = 0;
             string action_data = event_node->get_node_list_by_nr(a, &action_name).get_value();
-            action_name = trim_spaces(action_name);
-            action_data = trim_spaces(action_data);
+            action_name = action_name;
+            action_data = action_data;
             
             if(action_name == "move") action_type = MOB_ACTION_MOVE;
             else if(action_name == "play_sound") action_type = MOB_ACTION_PLAY_SOUND;

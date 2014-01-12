@@ -17,6 +17,8 @@ using namespace std;
 
 class leader : public mob {
 public:
+    leader_type* lea_type;
+    
     unsigned int health;
     unsigned int max_health;
     mob* holding_pikmin;

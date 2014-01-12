@@ -137,7 +137,8 @@ extern float                 leader_move_y;
 extern map<string, leader_type*>
 leader_types;
 extern unsigned              max_pikmin_in_field;
-extern vector<mob_type*>     mob_types;
+extern map<string, mob_type*>
+mob_types;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;             //The physical mouse's cursor.
 extern float                 mouse_cursor_y;

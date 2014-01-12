@@ -50,7 +50,7 @@ void               load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(string filename);
 data_node          load_data_file(string filename);
-void               load_mob_type(string filename, bool enemy);
+void               load_mob_type(string filename, unsigned char type);
 void               load_options();
 sample_struct      load_sample(string filename);
 vector<mob_event*> load_script(data_node node);

@@ -17,6 +17,7 @@ using namespace std;
 #define AUTO_PLUCK_MAX_RADIUS       160    //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5    //How many seconds a camera transition lasts for.
 #define CURSOR_MAX_DIST             200    //The cursor can only be these many units away from the captain.
+#define DEF_WHISTLE_RANGE           80     //The whistle can't go past this radius, by default.
 #define DISMISS_DISTANCE            64     //Dismissed Pikmin go these many units away from the captain.
 #define GRAVITY_ADDER               -2.0f  //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 #define IDLE_GLOW_SPIN_SPEED        M_PI_2 //The idle glow spins these many radians per second.
@@ -30,7 +31,7 @@ using namespace std;
 #define MOVE_GROUP_ARROWS_INTERVAL  0.1    //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT               5      //A drop of nectar starts with this amount.
 #define PARTY_SPOT_INTERVAL         1      //Pikmin must be at least these many units away from one another; used when calculating group spots.
-#define PIKMIN_max_health               300    //Maximum Pikmin HP.
+#define PIKMIN_MAX_HEALTH           300    //Maximum Pikmin HP.
 #define PIKMIN_MIN_TASK_RANGE       20     //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
 #define SHADOW_MAX_WIDTH            100    //The shadows can't be any wider than this.
 #define SHADOW_Y_MULTIPLIER         150    //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
@@ -43,7 +44,6 @@ using namespace std;
 #define WHISTLE_DOT_SPIN_SPEED      M_PI_2 //A whistle dot spins these many radians a second.
 #define WHISTLE_FADE_TIME           0.1    //Time the whistle animations take to fade out.
 #define WHISTLE_MAX_HOLD_TIME       1.5    //After the whistle reaches its maximum size, hold it for these many seconds until it stops by itself.
-#define WHISTLE_MAX_RADIUS          80     //The whistle can't go past this radius.
 #define WHISTLE_RADIUS_GROWTH_SPEED 180    //The whistle's radius grows these many units per second.
 #define WHISTLE_RING_SPEED          600    //Whistle rings move these many units per second.
 #define WHISTLE_RINGS_INTERVAL      0.1    //Seconds that need to pass before another whistle ring appears.
@@ -63,6 +63,7 @@ using namespace std;
 #define ENEMIES_FOLDER         MOBS_FOLDER "/Enemies"
 #define GAME_DATA_FOLDER       "Game_data"
 #define GRAPHICS_FOLDER        GAME_DATA_FOLDER "/Graphics"
+#define LEADERS_FOLDER         MOBS_FOLDER "/Leaders"
 #define MOBS_FOLDER            GAME_DATA_FOLDER "/Mobs"
 #define OTHER_MOBS_FOLDER      MOBS_FOLDER "/Others"
 #define TREASURES_FOLDER       MOBS_FOLDER "/Treasures"
@@ -116,6 +117,11 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_JOYSTICK_BUTTON,
     CONTROL_TYPE_JOYSTICK_AXIS_POS,
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
+};
+
+enum MOB_TYPES {
+    MOB_TYPE_ENEMY,
+    MOB_TYPE_LEADER,
 };
 
 enum PERCIPITATION_TYPES {

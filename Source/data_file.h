@@ -91,11 +91,11 @@ public:
     size_t size();                                  //Number of nodes it contains.
     data_node_list &get_node_list_by_nr(size_t nr, string* name = NULL); //Accesses a list of instances, by its number.
     
-    void load_file(string filename);            //Loads a file by filename, recursively loading every node.
-    size_t load_node(vector<string> lines, size_t start_line = 0);  //Loads an individual node.
+    void load_file(string filename, bool trim_values);             //Loads a file by filename, recursively loading every node.
+    size_t load_node(vector<string> lines, bool trim_values, size_t start_line = 0); //Loads an individual node.
     
     data_node();
-    data_node(string filename);                 //Create a node, and load it with a file right away.
+    data_node(string filename, bool trim_values = true);  //Create a node, and load it with a file right away.
     data_node(const data_node &dn);
     ~data_node();
     

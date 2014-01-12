@@ -10,9 +10,6 @@ public:
     //Technical things.
     enemy_type* ene_type;
     
-    //Behavior.
-    float original_x, original_y;   //Original coordinates. When it wanders too far, it returns to this spot.
-    
     //Spawn and respawn things.
     float spawn_delay; //Enemy only spawns after these many seconds, a la Waterwraith.
     unsigned char respawn_days_left;        //Days needed until it respawns.

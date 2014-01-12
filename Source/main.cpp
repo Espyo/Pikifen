@@ -202,19 +202,19 @@ int main() {
     load_area("test");
     generate_area_images();
     
-    create_mob(new leader(0, 0, &s, leader_types["Normal"]));
+    create_mob(new leader(0, 0, &s, leader_types["Olimar"]));
     leaders.back()->main_color = al_map_rgb(255, 0, 0);
     leaders.back()->health = 10;
     leaders.back()->sfx_dismiss = sfx_dismiss;
     leaders.back()->sfx_whistle = sfx_olimar_whistle;
     leaders.back()->sfx_name_call = sfx_olimar_name_call;
-    create_mob(new leader(300, 250, &s, leader_types["Normal"]));
+    create_mob(new leader(300, 250, &s, leader_types["Louie"]));
     leaders.back()->main_color = al_map_rgb(0, 0, 255);
     leaders.back()->health = 8;
     leaders.back()->sfx_dismiss = sfx_dismiss;
     leaders.back()->sfx_whistle = sfx_louie_whistle;
     leaders.back()->sfx_name_call = sfx_louie_name_call;
-    create_mob(new leader(350, 200, &s, leader_types["Normal"]));
+    create_mob(new leader(350, 200, &s, leader_types["President"]));
     leaders.back()->main_color = al_map_rgb(0, 0, 255);
     leaders.back()->health = 6;
     leaders.back()->sfx_dismiss = sfx_dismiss;
@@ -264,7 +264,6 @@ int main() {
     create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
     create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
     create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
-    create_mob(new enemy(0, -200, &s, (enemy_type*) mob_types[0]));
     
     if(cur_screen == SCREEN_GAME) {
         al_hide_mouse_cursor(display);

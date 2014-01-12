@@ -189,8 +189,6 @@ void do_drawing() {
                 info_spots[i]->y + info_spots[i]->type->size * 0.5,
                 al_map_rgb(192, 64, 192)
             );
-            
-            if(info_spots[i]->health != info_spots[i]->type->max_health) draw_health(info_spots[i]->x, info_spots[i]->y - 20, info_spots[i]->health, info_spots[i]->type->max_health); //ToDo remove.
         }
         
         //Ship(s).
@@ -296,23 +294,30 @@ void do_drawing() {
         *                    \/   *
         **************************/
         
-        //Fractions.
+        //Fractions and health.
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs; m++) {
-            if(!mobs[m]->carrier_info) continue;
-            //ToDo it's not taking Pikmin strength into account.
-            if(mobs[m]->carrier_info->current_n_carriers > 0) {
-                ALLEGRO_COLOR color;
-                if(mobs[m]->carrier_info->current_n_carriers >= mobs[m]->type->weight) { //Being carried.
-                    if(mobs[m]->carrier_info->carry_to_ship) {
-                        color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
+            mob* mob_ptr = mobs[m];
+            
+            if(mob_ptr->carrier_info) {
+                //ToDo it's not taking Pikmin strength into account.
+                if(mob_ptr->carrier_info->current_n_carriers > 0) {
+                    ALLEGRO_COLOR color;
+                    if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) { //Being carried.
+                        if(mob_ptr->carrier_info->carry_to_ship) {
+                            color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
+                        } else {
+                            color = mob_ptr->carrier_info->decided_type->color;
+                        }
                     } else {
-                        color = mobs[m]->carrier_info->decided_type->color;
+                        color = al_map_rgb(96, 192, 192);
                     }
-                } else {
-                    color = al_map_rgb(96, 192, 192);
+                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_n_carriers, mob_ptr->type->weight, color);
                 }
-                draw_fraction(mobs[m]->x, mobs[m]->y - mobs[m]->type->size * 0.5 - font_h * 1.25, mobs[m]->carrier_info->current_n_carriers, mobs[m]->type->weight, color);
+            }
+            
+            if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
+                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size / 2 - 8, mob_ptr->health, mob_ptr->type->max_health);
             }
         }
         

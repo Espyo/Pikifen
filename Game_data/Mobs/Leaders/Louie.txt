@@ -1,0 +1,5 @@
+name = Louie
+move_speed = 200
+size = 32
+weight = 1
+rotation_speed = 50
