@@ -735,7 +735,7 @@ void load_area(string name) {
 
     data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
     
-    string weather_condition_name = file["weather"].get_value();
+    string weather_condition_name = file.get_child_by_name("weather")->value;
     if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
         error_log("Area " + name + " refers to a non-existing weather condition!");
         cur_weather = weather();
@@ -747,36 +747,36 @@ void load_area(string name) {
     //Load sectors.
     
     sectors.clear();
-    size_t n_sectors = file["sectors"][0]["sector"].size();
+    size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
     for(size_t s = 0; s < n_sectors; s++) {
-        data_node sector_data = file["sectors"][0]["sector"][s];
+        data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
         sector new_sector = sector();
         
-        size_t n_floors = sector_data["floor"].size();
+        size_t n_floors = sector_data->get_nr_of_children_by_name("floor");
         if(n_floors > 2) n_floors = 2;
         for(size_t f = 0; f < n_floors; f++) {  //ToDo this is not the way to do it.
-            data_node floor_data = sector_data["floor"][f];
+            data_node* floor_data = sector_data->get_child_by_name("floor", f);
             floor_info new_floor = floor_info();
             
-            new_floor.brightness = tof(floor_data["brightness"].get_value("1"));
-            new_floor.rot = tof(floor_data["texture_rotate"].get_value());
-            new_floor.scale = tof(floor_data["texture_scale"].get_value());
-            new_floor.trans_x = tof(floor_data["texture_trans_x"].get_value());
-            new_floor.trans_y = tof(floor_data["texture_trans_y"].get_value());
-            new_floor.texture = load_bmp("Textures/" + floor_data["texture"].get_value());  //ToDo don't load it every time.
-            new_floor.z = tof(floor_data["z"].get_value().c_str());
+            new_floor.brightness = tof(floor_data->get_child_by_name("brightness")->get_value_or_default("1"));
+            new_floor.rot = tof(floor_data->get_child_by_name("texture_rotate")->value);
+            new_floor.scale = tof(floor_data->get_child_by_name("texture_scale")->value);
+            new_floor.trans_x = tof(floor_data->get_child_by_name("texture_trans_x")->value);
+            new_floor.trans_y = tof(floor_data->get_child_by_name("texture_trans_y")->value);
+            new_floor.texture = load_bmp("Textures/" + floor_data->get_child_by_name("texture")->value);  //ToDo don't load it every time.
+            new_floor.z = tof(floor_data->get_child_by_name("z")->value);
             //ToDo terrain sound.
             
             new_sector.floors[f] = new_floor;
         }
         
-        size_t n_linedefs = sector_data["linedef"].size();
+        size_t n_linedefs = sector_data->get_nr_of_children_by_name("linedef");
         for(size_t l = 0; l < n_linedefs; l++) {
-            data_node linedef_data = sector_data["linedef"][l];
+            data_node* linedef_data = sector_data->get_child_by_name("linedef", l);
             linedef* new_linedef = new linedef();
             
-            new_linedef->x1 = tof(linedef_data["x"].get_value());
-            new_linedef->y1 = tof(linedef_data["y"].get_value());
+            new_linedef->x1 = tof(linedef_data->get_child_by_name("x")->value);
+            new_linedef->y1 = tof(linedef_data->get_child_by_name("y")->value);
             
             if(new_sector.linedefs.size()) {
                 new_linedef->x2 = new_sector.linedefs.back()->x1;
@@ -802,19 +802,18 @@ void load_area(string name) {
     //Load mobs.
     
     mobs.clear();
-    size_t n_mobs = file["mobs"][0].size();
+    size_t n_mobs = file.get_child_by_name("mobs")->get_nr_of_children();
     for(size_t m = 0; m < n_mobs; m++) {
     
-        string mt;
-        data_node* mob_node = &file["mobs"][0].get_node_list_by_nr(m, &mt)[0];
+        data_node* mob_node = file.get_child_by_name("mobs")->get_child(m);
         
-        vector<string> coords = split(mob_node->operator[]("coords").get_value());
+        vector<string> coords = split(mob_node->get_child_by_name("coords")->value);
         float x = (coords.size() >= 1 ? tof(coords[0]) : 0);
         float y = (coords.size() >= 2 ? tof(coords[1]) : 0);
         
-        if(mt == "enemy") {
+        if(mob_node->name == "enemy") {
         
-            string et = mob_node->operator[]("type").get_value();
+            string et = mob_node->get_child_by_name("type")->value;
             if(mob_types.find(et) != mob_types.end()) {
                 //ToDo use the enemy_types map.
                 
@@ -826,9 +825,9 @@ void load_area(string name) {
                            
             } else error_log("Unknown enemy type \"" + et + "\"!");
             
-        } else if(mt == "leader") {
+        } else if(mob_node->name == "leader") {
         
-            string lt = mob_node->operator[]("type").get_value();
+            string lt = mob_node->get_child_by_name("type")->value;
             if(leader_types.find(lt) != leader_types.end()) {
                 create_mob(new leader(
                                x, y,
@@ -840,7 +839,7 @@ void load_area(string name) {
             
         } else {
         
-            error_log("Unknown mob type \"" + mt + "\"!");
+            error_log("Unknown mob type \"" + mob_node->name + "\"!");
             continue;
         }
         
@@ -865,7 +864,7 @@ ALLEGRO_BITMAP* load_bmp(string filename) {
  * Loads a game control.
  */
 void load_control(unsigned char action, unsigned char player, string name, data_node &file, string def) {
-    string s = file["p" + to_string((long long) (player + 1)) + "_" + name].get_value((player == 0) ? def : "");
+    string s = file.get_child_by_name("p" + to_string((long long) (player + 1)) + "_" + name)->get_value_or_default((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
     
@@ -966,23 +965,22 @@ void load_game_content() {
     //Weather.
     weather_conditions.clear();
     data_node weather_file = load_data_file(WEATHER_FILE);
-    size_t n_weather_conditions = weather_file["weather"].size();
+    size_t n_weather_conditions = weather_file.get_nr_of_children_by_name("weather");
     
     for(size_t wc = 0; wc < n_weather_conditions; wc++) {
-        data_node* cur_weather = &weather_file["weather"][wc];
+        data_node* cur_weather = weather_file.get_child_by_name("weather", wc);
         
-        string name = cur_weather->operator[]("name").get_value();
+        string name = cur_weather->get_child_by_name("name")->value;
         if(name.size() == 0) name = "default";
         
         map<unsigned, ALLEGRO_COLOR> lighting;
-        size_t n_lighting_points = cur_weather->operator[]("lighting")[0].size();
+        size_t n_lighting_points = cur_weather->get_child_by_name("lighting")->get_nr_of_children();
         
         for(size_t lp = 0; lp < n_lighting_points; lp++) {
-            string node_name;
-            string node_value = cur_weather->operator[]("lighting")[0].get_node_list_by_nr(lp, &node_name).get_value();
+            data_node* lighting_node = cur_weather->get_child_by_name("lighting")->get_child(lp);
             
-            unsigned point_time = toi(node_name);
-            ALLEGRO_COLOR point_color = toc(node_value);
+            unsigned point_time = toi(lighting_node->name);
+            ALLEGRO_COLOR point_color = toc(lighting_node->value);
             
             lighting[point_time] = point_color;
         }
@@ -996,10 +994,10 @@ void load_game_content() {
             }
         }
         
-        unsigned char percipitation_type = toi(cur_weather->operator[]("percipitation_type").get_value(to_string((long long) PERCIPITATION_TYPE_NONE)));
-        interval percipitation_frequency = interval(cur_weather->operator[]("percipitation_frequency").get_value());
-        interval percipitation_speed = interval(cur_weather->operator[]("percipitation_speed").get_value());
-        interval percipitation_angle = interval(cur_weather->operator[]("percipitation_angle").get_value(to_string((long double) (M_PI + M_PI_2))));
+        unsigned char percipitation_type = toi(cur_weather->get_child_by_name("percipitation_type")->get_value_or_default(to_string((long long) PERCIPITATION_TYPE_NONE)));
+        interval percipitation_frequency = interval(cur_weather->get_child_by_name("percipitation_frequency")->value);
+        interval percipitation_speed = interval(cur_weather->get_child_by_name("percipitation_speed")->value);
+        interval percipitation_angle = interval(cur_weather->get_child_by_name("percipitation_angle")->get_value_or_default(to_string((long double) (M_PI + M_PI_2))));
         
         weather_conditions[name] = weather(name, lighting, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
@@ -1022,39 +1020,39 @@ void load_mob_type(string filename, unsigned char type) {
         mt = new mob_type();
     }
     
-    mt->always_active = tob(file["always_active"].get_value("no"));
-    mt->max_health = toi(file["max_health"].get_value("0"));
-    mt->move_speed = tof(file["move_speed"].get_value("0"));
-    mt->name = file["name"].get_value();
-    mt->near_radius = tof(file["near_radius"].get_value("0"));
-    mt->rotation_speed = tof(file["rotation_speed"].get_value("0"));
-    mt->sight_radius = tof(file["sight_radius"].get_value("0"));
-    mt->size = tof(file["size"].get_value("0"));
-    mt->weight = toi(file["weight"].get_value("0"));
+    mt->always_active = tob(file.get_child_by_name("always_active")->value);
+    mt->max_health = toi(file.get_child_by_name("max_health")->value);
+    mt->move_speed = tof(file.get_child_by_name("move_speed")->value);
+    mt->name = file.get_child_by_name("name")->value;
+    mt->near_radius = tof(file.get_child_by_name("near_radius")->value);
+    mt->rotation_speed = tof(file.get_child_by_name("rotation_speed")->value);
+    mt->sight_radius = tof(file.get_child_by_name("sight_radius")->value);
+    mt->size = tof(file.get_child_by_name("size")->value);
+    mt->weight = toi(file.get_child_by_name("weight")->value);
     
     if(type == MOB_TYPE_ENEMY) {
         enemy_type* et = (enemy_type*) mt;
-        et->can_regenerate = tob(file["can_regenerate"].get_value("no"));
-        et->drops_corpse = tob(file["drops_corpse"].get_value("yes"));
-        et->is_boss = tob(file["is_boss"].get_value("no"));
-        et->pikmin_seeds = toi(file["pikmin_seeds"].get_value("0"));
-        et->revive_speed = tof(file["revive_speed"].get_value("0"));
-        et->value = tof(file["value"].get_value("0"));
+        et->can_regenerate = tob(file.get_child_by_name("can_regenerate")->value);
+        et->drops_corpse = tob(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
+        et->is_boss = tob(file.get_child_by_name("is_boss")->value);
+        et->pikmin_seeds = toi(file.get_child_by_name("pikmin_seeds")->value);
+        et->revive_speed = tof(file.get_child_by_name("revive_speed")->value);
+        et->value = tof(file.get_child_by_name("value")->value);
         
     } else if(type == MOB_TYPE_LEADER) {
         leader_type* lt = (leader_type*) mt;
-        lt->sfx_dismiss = load_sample(file["dismiss_sfx"].get_value()); //ToDo don't use load_sample.
-        lt->sfx_name_call = load_sample(file["name_call_sfx"].get_value()); //ToDo don't use load_sample.
-        lt->main_color = toc(file["main_color"].get_value());
-        lt->punch_strength = toi(file["punch_strength"].get_value()); //ToDo default.
-        lt->whistle_range = tof(file["whistle_range"].get_value(to_string((long double) DEF_WHISTLE_RANGE)));
-        lt->sfx_whistle = load_sample(file["whistle_sfx"].get_value()); //ToDo don't use load_sample.
+        lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value); //ToDo don't use load_sample.
+        lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value); //ToDo don't use load_sample.
+        lt->main_color = toc(file.get_child_by_name("main_color")->value);
+        lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
+        lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(to_string((long double) DEF_WHISTLE_RANGE)));
+        lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value); //ToDo don't use load_sample.
         
         leader_types[lt->name] = lt;
         
     }
     
-    mt->events = load_script(file["script"][0]);
+    mt->events = load_script(file.get_child_by_name("script"));
     
     mob_types[mt->name] = mt;
 }
@@ -1128,17 +1126,17 @@ void load_options() {
     }
     
     for(unsigned char p = 0; p < 4; p++) {
-        mouse_moves_cursor[p] = tob(file["p" + to_string((long long) (p + 1)) + "_mouse_moves_cursor"].get_value((p == 0) ? "true" : "false"));
+        mouse_moves_cursor[p] = tob(file.get_child_by_name("p" + to_string((long long) (p + 1)) + "_mouse_moves_cursor")->get_value_or_default((p == 0) ? "true" : "false"));
     }
     
     //Other options.
-    daylight_effect = tob(file["daylight_effect"].get_value("true"));
-    game_fps = toi(file["fps"].get_value("30"));
-    scr_h = toi(file["height"].get_value(to_string((long long) DEF_SCR_H)));
-    particle_quality = toi(file["particle_quality"].get_value("2"));
-    pretty_whistle = tob(file["pretty_whistle"].get_value("true"));
-    scr_w = toi(file["width"].get_value(to_string((long long) DEF_SCR_W)));
-    smooth_scaling = tob(file["smooth_scaling"].get_value("true"));
+    daylight_effect = tob(file.get_child_by_name("daylight_effect")->get_value_or_default("true"));
+    game_fps = toi(file.get_child_by_name("fps")->get_value_or_default("30"));
+    scr_h = toi(file.get_child_by_name("height")->get_value_or_default(to_string((long long) DEF_SCR_H)));
+    particle_quality = toi(file.get_child_by_name("particle_quality")->get_value_or_default("2"));
+    pretty_whistle = tob(file.get_child_by_name("pretty_whistle")->get_value_or_default("true"));
+    scr_w = toi(file.get_child_by_name("width")->get_value_or_default(to_string((long long) DEF_SCR_W)));
+    smooth_scaling = tob(file.get_child_by_name("smooth_scaling")->get_value_or_default("true"));
 }
 
 /* ----------------------------------------------------------------------------
@@ -1157,15 +1155,14 @@ sample_struct load_sample(string filename) {
 /* ----------------------------------------------------------------------------
  * Loads a script from a data node.
  */
-vector<mob_event*> load_script(data_node node) {
+vector<mob_event*> load_script(data_node* node) {
 
     vector<mob_event*> events;
     
-    for(size_t e = 0; e < node.size(); e++) {
-        string event_name;
+    for(size_t e = 0; e < node->get_nr_of_children(); e++) {
         unsigned char event_type = 0;
-        data_node* event_node = &node.get_node_list_by_nr(e, &event_name)[0];
-        event_name = event_name;
+        data_node* event_node = node->get_child(e);
+        string event_name = event_node->name;
         
         if(event_name == "on_attack_hit") event_type = MOB_EVENT_ATTACK_HIT;
         else if(event_name == "on_attack_miss") event_type = MOB_EVENT_ATTACK_MISS;
@@ -1195,13 +1192,12 @@ vector<mob_event*> load_script(data_node node) {
         
         vector<mob_action*> actions;
         
-        for(size_t a = 0; a < event_node->size(); a++) {
+        for(size_t a = 0; a < event_node->get_nr_of_children(); a++) {
         
-            string action_name;
             unsigned char action_type = 0;
-            string action_data = event_node->get_node_list_by_nr(a, &action_name).get_value();
-            action_name = action_name;
-            action_data = action_data;
+            data_node* action_node = event_node->get_child(a);
+            string action_name = action_node->name;
+            string action_data = action_node->value;
             
             if(action_name == "move") action_type = MOB_ACTION_MOVE;
             else if(action_name == "play_sound") action_type = MOB_ACTION_PLAY_SOUND;

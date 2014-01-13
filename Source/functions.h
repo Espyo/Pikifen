@@ -53,7 +53,7 @@ data_node          load_data_file(string filename);
 void               load_mob_type(string filename, unsigned char type);
 void               load_options();
 sample_struct      load_sample(string filename);
-vector<mob_event*> load_script(data_node node);
+vector<mob_event*> load_script(data_node* node);
 void               load_game_content();
 void               make_uncarriable(mob* m);
 void               move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached);
