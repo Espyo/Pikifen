@@ -202,24 +202,6 @@ int main() {
     load_area("test");
     generate_area_images();
     
-    create_mob(new leader(0, 0, &s, leader_types["Olimar"]));
-    leaders.back()->main_color = al_map_rgb(255, 0, 0);
-    leaders.back()->health = 10;
-    leaders.back()->sfx_dismiss = sfx_dismiss;
-    leaders.back()->sfx_whistle = sfx_olimar_whistle;
-    leaders.back()->sfx_name_call = sfx_olimar_name_call;
-    create_mob(new leader(300, 250, &s, leader_types["Louie"]));
-    leaders.back()->main_color = al_map_rgb(0, 0, 255);
-    leaders.back()->health = 8;
-    leaders.back()->sfx_dismiss = sfx_dismiss;
-    leaders.back()->sfx_whistle = sfx_louie_whistle;
-    leaders.back()->sfx_name_call = sfx_louie_name_call;
-    create_mob(new leader(350, 200, &s, leader_types["President"]));
-    leaders.back()->main_color = al_map_rgb(0, 0, 255);
-    leaders.back()->health = 6;
-    leaders.back()->sfx_dismiss = sfx_dismiss;
-    leaders.back()->sfx_whistle = sfx_president_whistle;
-    leaders.back()->sfx_name_call = sfx_president_name_call;
     create_mob(new treasure(300, 150, &s, treasure_types["Test"]));
     create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));
     pikmin_list.back()->maturity = 1;

@@ -1,5 +1,9 @@
 name = Louie
+dismiss_sfx = Dismiss.ogg
+main_color = 0 0 255
 move_speed = 200
+name_call_sfx = Louie_name_call.ogg
+rotation_speed = 50
 size = 32
 weight = 1
-rotation_speed = 50
+whistle_sfx = Louie_whistle.ogg

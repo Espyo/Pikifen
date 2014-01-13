@@ -454,7 +454,7 @@ void do_drawing() {
             draw_health(
                 32 + icons_size * 1.5,
                 scr_h - (32 + y_offset),
-                leaders[l_nr]->health, leaders[l_nr]->max_health,
+                leaders[l_nr]->health, leaders[l_nr]->type->max_health,
                 icons_size * 0.5, true);
             draw_sprite(
                 bmp_health_bubble,

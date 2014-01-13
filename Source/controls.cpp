@@ -204,7 +204,7 @@ void handle_button(unsigned int button, float pos) {
                 for(size_t s = 0; s < n_ships; s++) {
                     if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
                         //ToDo make it prettier.
-                        cur_leader_ptr->health = cur_leader_ptr->max_health;
+                        cur_leader_ptr->health = cur_leader_ptr->type->max_health;
                         done = true;
                     }
                 }
@@ -264,7 +264,7 @@ void handle_button(unsigned int button, float pos) {
         
         if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
             whistling = true;
-            al_play_sample(cur_leader_ptr->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->sfx_whistle.id);
+            al_play_sample(cur_leader_ptr->lea_type->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_whistle.id);
             
             for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
             whistle_fade_time = 0;
@@ -287,13 +287,15 @@ void handle_button(unsigned int button, float pos) {
         
         if(pos == 0) return;
         
-        size_t new_leader = cur_leader_nr;
+        size_t new_leader_nr = cur_leader_nr;
         if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
-            new_leader = (cur_leader_nr + 1) % leaders.size();
+            new_leader_nr = (cur_leader_nr + 1) % leaders.size();
         else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
-            if(cur_leader_nr == 0) new_leader = leaders.size() - 1;
-            else new_leader = cur_leader_nr - 1;
+            if(cur_leader_nr == 0) new_leader_nr = leaders.size() - 1;
+            else new_leader_nr = cur_leader_nr - 1;
         }
+        
+        if(new_leader_nr == cur_leader_nr) return;
         
         mob* swap_leader = NULL;
         
@@ -301,19 +303,19 @@ void handle_button(unsigned int button, float pos) {
             cur_leader_ptr->speed_x = 0;
             cur_leader_ptr->speed_y = 0;
         }
-        if(!leaders[new_leader]->speed_z) {
-            leaders[new_leader]->speed_x = 0;
-            leaders[new_leader]->speed_y = 0;
+        if(!leaders[new_leader_nr]->speed_z) {
+            leaders[new_leader_nr]->speed_x = 0;
+            leaders[new_leader_nr]->speed_y = 0;
         }
-        leaders[new_leader]->remove_target(true);
+        leaders[new_leader_nr]->remove_target(true);
         
         //If the new leader is in another one's party, swap them.
         size_t n_leaders = leaders.size();
         for(size_t l = 0; l < n_leaders; l++) {
-            if(l == new_leader) continue;
+            if(l == new_leader_nr) continue;
             size_t n_party_members = leaders[l]->party->members.size();
             for(size_t m = 0; m < n_party_members; m++) {
-                if(leaders[l]->party->members[m] == leaders[new_leader]) {
+                if(leaders[l]->party->members[m] == leaders[new_leader_nr]) {
                     swap_leader = leaders[l];
                     break;
                 }
@@ -325,17 +327,17 @@ void handle_button(unsigned int button, float pos) {
             for(size_t m = 0; m < n_party_members; m++) {
                 mob* member = swap_leader->party->members[0];
                 remove_from_party(member);
-                if(member != leaders[new_leader]) {
-                    add_to_party(leaders[new_leader], member);
+                if(member != leaders[new_leader_nr]) {
+                    add_to_party(leaders[new_leader_nr], member);
                 }
             }
             
-            add_to_party(leaders[new_leader], swap_leader);
+            add_to_party(leaders[new_leader_nr], swap_leader);
         }
         
-        cur_leader_nr = new_leader;
-        start_camera_pan(leaders[new_leader]->x, leaders[new_leader]->y);
-        al_play_sample(leaders[new_leader]->sfx_name_call.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[new_leader]->sfx_name_call.id);
+        cur_leader_nr = new_leader_nr;
+        start_camera_pan(leaders[new_leader_nr]->x, leaders[new_leader_nr]->y);
+        al_play_sample(leaders[new_leader_nr]->lea_type->sfx_name_call.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[new_leader_nr]->lea_type->sfx_name_call.id);
         
     } else if(button == BUTTON_DISMISS) {
     
@@ -350,7 +352,7 @@ void handle_button(unsigned int button, float pos) {
         active_control();
         
         dismiss();
-        al_play_sample(cur_leader_ptr->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->sfx_dismiss.id);
+        al_play_sample(cur_leader_ptr->lea_type->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_dismiss.id);
         
     } else if(button == BUTTON_PAUSE) {
     

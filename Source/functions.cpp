@@ -824,14 +824,20 @@ void load_area(string name) {
                                (enemy_type*) mob_types[et]
                            ));
                            
-            } else {
+            } else error_log("Unknown enemy type \"" + et + "\"!");
             
-                error_log("Unknown enemy type \"" + et + "\"!");
-            }
+        } else if(mt == "leader") {
+        
+            string lt = mob_node->operator[]("type").get_value();
+            if(leader_types.find(lt) != leader_types.end()) {
+                create_mob(new leader(
+                               x, y,
+                               &sectors[0], //ToDo
+                               leader_types[lt]
+                           ));
+                           
+            } else error_log("Unknown leader type \"" + lt + "\"!");
             
-        } else if(mt == "pikmin") {
-        
-        
         } else {
         
             error_log("Unknown mob type \"" + mt + "\"!");
@@ -1037,8 +1043,12 @@ void load_mob_type(string filename, unsigned char type) {
         
     } else if(type == MOB_TYPE_LEADER) {
         leader_type* lt = (leader_type*) mt;
-        lt->whistle_range = tof(file["whistle_range"].get_value(to_string((long double) DEF_WHISTLE_RANGE)));
+        lt->sfx_dismiss = load_sample(file["dismiss_sfx"].get_value()); //ToDo don't use load_sample.
+        lt->sfx_name_call = load_sample(file["name_call_sfx"].get_value()); //ToDo don't use load_sample.
+        lt->main_color = toc(file["main_color"].get_value());
         lt->punch_strength = toi(file["punch_strength"].get_value()); //ToDo default.
+        lt->whistle_range = tof(file["whistle_range"].get_value(to_string((long double) DEF_WHISTLE_RANGE)));
+        lt->sfx_whistle = load_sample(file["whistle_sfx"].get_value()); //ToDo don't use load_sample.
         
         leader_types[lt->name] = lt;
         
@@ -1736,7 +1746,7 @@ void stop_whistling() {
     whistle_radius = 0;
     whistle_max_hold = 0;
     
-    al_stop_sample(&leaders[cur_leader_nr]->sfx_whistle.id);
+    al_stop_sample(&leaders[cur_leader_nr]->lea_type->sfx_whistle.id);
 }
 
 /* ----------------------------------------------------------------------------

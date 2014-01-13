@@ -5,6 +5,16 @@ mobs{
 		coords = 0 0
 		type = Olimar
 	}
+	
+	leader{
+		coords = 300 250
+		type = Louie
+	}
+	
+	leader{
+		coords = 350 200
+		type = President
+	}
 
 	enemy{
 		coords = -100 -200

@@ -7,9 +7,9 @@ leader::leader(float x, float y, sector* sec, leader_type* type)
     
     lea_type = type;
     
+    main_color = type->main_color;
+    
     holding_pikmin = NULL;
-    health = 10; //ToDo
-    max_health = 10;
     auto_pluck_mode = false;
     auto_pluck_pikmin = NULL;
     

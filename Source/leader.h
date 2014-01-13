@@ -19,12 +19,7 @@ class leader : public mob {
 public:
     leader_type* lea_type;
     
-    unsigned int health;
-    unsigned int max_health;
     mob* holding_pikmin;
-    sample_struct sfx_whistle;
-    sample_struct sfx_dismiss;
-    sample_struct sfx_name_call;
     
     bool auto_pluck_mode;
     pikmin* auto_pluck_pikmin;
