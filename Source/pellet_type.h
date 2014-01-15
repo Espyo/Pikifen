@@ -11,7 +11,10 @@ public:
     unsigned match_seeds; //Number of seeds given out if the pellet's taken to a matching Onion.
     unsigned non_match_seeds; //Number of seeds given out if the pellet's taken to a non-matching Onion.
     
-    pellet_type();
+    pellet_type() {
+        pik_type = NULL;
+        number = match_seeds = non_match_seeds = 0;
+    }
 };
 
 #endif //ifndef PELLET_TYPE_INCLUDED

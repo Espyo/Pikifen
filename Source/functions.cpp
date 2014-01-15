@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+
 #include <algorithm>
 #include <math.h>
 #include <typeinfo>
@@ -248,20 +249,9 @@ void dismiss() {
  */
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color) {
     float first_y = cy - (font_h * 3) / 2;
-    al_draw_text(font, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
-    al_draw_text(font, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
-    
-    ALLEGRO_TRANSFORM scale, old;
-    al_copy_transform(&old, al_get_current_transform());
-    
-    al_identity_transform(&scale);
-    al_scale_transform(&scale, 5, 1);
-    al_translate_transform(&scale, cx, 0);
-    al_compose_transform(&scale, &old);
-    
-    al_use_transform(&scale); {
-        al_draw_text(font, color, 0, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
-    }; al_use_transform(&old);
+    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
+    al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
+    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
 }
 
 /* ----------------------------------------------------------------------------
@@ -929,7 +919,6 @@ data_node load_data_file(string filename) {
  */
 void load_game_content() {
     //ToDo.
-    
     statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
     
@@ -1009,6 +998,8 @@ void load_mob_types(string folder, unsigned char type) {
             mt = new leader_type();
         } else if(type == MOB_TYPE_ENEMY) {
             mt = new enemy_type();
+        } else if(type == MOB_TYPE_PELLET) {
+            mt = new pellet_type();
         } else {
             mt = new mob_type();
         }
@@ -1099,6 +1090,7 @@ void load_mob_types(string folder, unsigned char type) {
         }
         
     }
+    
 }
 
 /* ----------------------------------------------------------------------------

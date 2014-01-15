@@ -124,6 +124,7 @@ extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern ALLEGRO_FONT*         font_counter;
 extern unsigned short        font_h;
+extern ALLEGRO_FONT*         font_value;             //Font for the carrying / money values.
 extern unsigned char         game_fps;
 extern vector<vector<float> >
 group_spots_x;

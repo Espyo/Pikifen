@@ -95,8 +95,9 @@ enemy_types;
 vector<enemy*>        enemies;
 ALLEGRO_FONT*         font = NULL;
 ALLEGRO_FONT*         font_area_name = NULL;
-ALLEGRO_FONT*         font_counter;
+ALLEGRO_FONT*         font_counter = NULL;
 unsigned short        font_h = 0;
+ALLEGRO_FONT*         font_value = NULL;
 unsigned char         game_fps = DEF_FPS;
 vector<vector<float> >
 group_spots_x;

@@ -134,11 +134,15 @@ int main() {
     int font_ranges[] = {
         0x0020, 0x007F, //ASCII
     };
-    
     int counter_font_ranges[] = {
         0x002D, 0x002D, //Dash
         0x002F, 0x0039, //Slash and numbers
         0x0078, 0x0078, //x
+    };
+    int value_font_ranges[] = {
+        0x0024, 0x0024, //Dollar sign
+        0x002D, 0x002D, //Dash
+        0x0030, 0x0039, //Numbers
     };
     
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
@@ -147,6 +151,8 @@ int main() {
     if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
     temp_font_bitmap = load_bmp("Counter_font.png");
     if(temp_font_bitmap) font_counter = al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
+    temp_font_bitmap = load_bmp("Value_font.png");
+    if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     font_h = al_get_font_line_height(font);
     
@@ -328,4 +334,5 @@ int main() {
         }
         
     }
+    
 }
