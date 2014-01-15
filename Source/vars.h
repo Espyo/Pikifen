@@ -122,6 +122,7 @@ enemy_types;
 extern vector<enemy*>        enemies;
 extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
+extern ALLEGRO_FONT*         font_counter;
 extern unsigned short        font_h;
 extern unsigned char         game_fps;
 extern vector<vector<float> >

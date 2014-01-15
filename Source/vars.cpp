@@ -83,7 +83,7 @@ weather               cur_weather;
 float                 cursor_angle = 0;
 float                 cursor_x = 0;
 float                 cursor_y = 0;
-unsigned int          day = 0;
+unsigned int          day = 1;
 float                 day_minutes = 60 * 12; //ToDo set to the start of the day.
 float                 day_minutes_end = 60 * 19;
 float                 day_minutes_per_irl_sec = 2;
@@ -95,6 +95,7 @@ enemy_types;
 vector<enemy*>        enemies;
 ALLEGRO_FONT*         font = NULL;
 ALLEGRO_FONT*         font_area_name = NULL;
+ALLEGRO_FONT*         font_counter;
 unsigned short        font_h = 0;
 unsigned char         game_fps = DEF_FPS;
 vector<vector<float> >

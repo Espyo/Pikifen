@@ -513,9 +513,9 @@ void do_drawing() {
             ALLEGRO_BITMAP* bm = NULL;
             if(typeid(*closest_party_member) == typeid(pikmin)) {
                 pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
-                if(pikmin_ptr->type->name == "R") bm = bmp_red[pikmin_ptr->maturity];
-                else if(pikmin_ptr->type->name == "Y") bm = bmp_yellow[pikmin_ptr->maturity];
-                else if(pikmin_ptr->type->name == "B") bm = bmp_blue[pikmin_ptr->maturity];
+                if(pikmin_ptr->type->name == "Red Pikmin") bm = bmp_red[pikmin_ptr->maturity];
+                else if(pikmin_ptr->type->name == "Yellow Pikmin") bm = bmp_yellow[pikmin_ptr->maturity];
+                else if(pikmin_ptr->type->name == "Blue Pikmin") bm = bmp_blue[pikmin_ptr->maturity];
             } else if(typeid(*closest_party_member) == typeid(leader)) {
                 leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
                 if(leader_ptr == leaders[0]) bm = bmp_olimar;
@@ -538,7 +538,7 @@ void do_drawing() {
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
         
         al_draw_text(
-            font, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
+            font_counter, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
             (to_string((long long) pikmin_in_party) + "/" +
              to_string((long long) pikmin_list.size()) + "/" +
              to_string((long long) total_pikmin)).c_str()
@@ -551,7 +551,7 @@ void do_drawing() {
             60, 70);
             
         al_draw_text(
-            font, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
+            font_counter, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
             (to_string((long long) day)).c_str());
             
         //Sprays.
@@ -564,7 +564,7 @@ void do_drawing() {
                 34, scr_h / 2 - 20,
                 20, 24);
             al_draw_text(
-                font, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
+                font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
                 ("x" + to_string((long long) spray_amounts[top_spray_nr])).c_str());
                 
             if(n_spray_types == 2) {
@@ -573,7 +573,7 @@ void do_drawing() {
                     34, scr_h / 2 + 20,
                     20, 24);
                 al_draw_text(
-                    font, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
+                    font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
                     ("x" + to_string((long long) spray_amounts[1])).c_str());
             }
             
