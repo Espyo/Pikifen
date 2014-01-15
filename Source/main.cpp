@@ -97,9 +97,9 @@ int main() {
         bmp_red[m] = load_bmp(("Red_" + maturity_str + ".png").c_str());
         bmp_yellow[m] = load_bmp(("Yellow_" + maturity_str + ".png").c_str());
         bmp_blue[m] = load_bmp(("Blue_" + maturity_str + ".png").c_str());
-        bmp_red_burrowed[m] = load_bmp(("Red_burrowed_" + maturity_str + ".png").c_str());
-        bmp_yellow_burrowed[m] = load_bmp(("Yellow_burrowed_" + maturity_str + ".png").c_str());
-        bmp_blue_burrowed[m] = load_bmp(("Blue_burrowed_" + maturity_str + ".png").c_str());
+        bmp_red_buried[m] = load_bmp(("Red_buried_" + maturity_str + ".png").c_str());
+        bmp_yellow_buried[m] = load_bmp(("Yellow_buried_" + maturity_str + ".png").c_str());
+        bmp_blue_buried[m] = load_bmp(("Blue_buried_" + maturity_str + ".png").c_str());
         bmp_red_idle[m] = load_bmp(("Red_idle_" + maturity_str + ".png").c_str());
         bmp_yellow_idle[m] = load_bmp(("Yellow_idle_" + maturity_str + ".png").c_str());
         bmp_blue_idle[m] = load_bmp(("Blue_idle_" + maturity_str + ".png").c_str());
@@ -202,7 +202,6 @@ int main() {
     load_area("test");
     generate_area_images();
     
-    create_mob(new treasure(300, 150, &s, treasure_types["Test"]));
     create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));
     pikmin_list.back()->maturity = 1;
     create_mob(new pikmin(40, 30, &s, pikmin_types["Red Pikmin"]));
@@ -216,11 +215,11 @@ int main() {
     create_mob(new pikmin(80, 30, &s, pikmin_types["Yellow Pikmin"]));
     pikmin_list.back()->maturity = 2;
     create_mob(new pikmin(30, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->burrowed = true;
+    pikmin_list.back()->buried = true;
     create_mob(new pikmin(50, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->burrowed = true;
+    pikmin_list.back()->buried = true;
     create_mob(new pikmin(70, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->burrowed = true;
+    pikmin_list.back()->buried = true;
     for(unsigned char p = 0; p < 10; p++) {
         for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
             create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, &s, t->second));
@@ -228,30 +227,28 @@ int main() {
     }
     //create_mob(new pikmin(&pikmin_types[3], -50, -50, &s));
     //create_mob(new pikmin(&pikmin_types[4], -50, -70, &s));
-    create_mob(new onion(400, 100, &s, onion_types["Red"]));
-    create_mob(new onion(400, 200, &s, onion_types["Yellow"]));
-    create_mob(new onion(400, 300, &s, onion_types["Blue"]));
     create_mob(new info_spot(300, 0, &s, "Treasure.", false, font));
     create_mob(new info_spot(400, 0, &s, "Onions.", false, font));
     create_mob(new info_spot(-300, 0, &s, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false, font));
     create_mob(new nectar(0, 400, &s));
+    create_mob(new pellet(320, -100, &s, pellet_types["Red 1"]));
+    create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
+    create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
+    create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
     spray_amounts[0] = spray_amounts[1] = 10;
     spray_types[0].bmp_spray = bmp_ub_spray;
     spray_types[1].bmp_spray = bmp_us_spray;
     pikmin_in_onions[pikmin_types["Red Pikmin"]] = 200;
     pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
     pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
-    create_mob(new ship(-100, 100, &s));
-    create_mob(new pellet(320, -100, &s, pellet_types["Red 1"]));
-    create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
-    create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
-    create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
+    
     
     if(cur_screen == SCREEN_GAME) {
         al_hide_mouse_cursor(display);
     } else {
         al_show_mouse_cursor(display);
     }
+    
     
     //Main loop.
     al_start_timer(timer);
@@ -296,11 +293,11 @@ int main() {
         struct tm t = *localtime(&tt);
         total_error_log =
             to_string((long long) t.tm_year + 1900) + "/" +
-            to_string((long long) t.tm_mon + 1) + "/" +
-            to_string((long long) t.tm_mday) + " " +
-            to_string((long long) t.tm_hour) + ":" +
-            to_string((long long) t.tm_min) + ":" +
-            to_string((long long) t.tm_sec) +
+            leading_zero(t.tm_mon + 1) + "/" +
+            leading_zero(t.tm_mday) + " " +
+            leading_zero(t.tm_hour) + ":" +
+            leading_zero(t.tm_min) + ":" +
+            leading_zero(t.tm_sec) +
             "\n" + total_error_log;
             
         string prev_error_log;

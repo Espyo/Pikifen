@@ -13,10 +13,8 @@ using namespace std;
 
 class pikmin_type : public mob_type {
 public:
-    string name;
-    ALLEGRO_COLOR color;
     vector<element*> resistences;
-    unsigned char attack_attribute;
+    unsigned char attack_attribute; //What.
     float carry_strength;
     float attack_power;
     float weight;

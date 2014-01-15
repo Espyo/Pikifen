@@ -14,12 +14,14 @@
 
 //Returns the distance between two points.
 #define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
-//Returns the sign (1 or -1) of a number.
-#define sign(n) (((n) >= 0) ? 1 : -1)
+//Returns a string with a number, adding a leading zero if it's less than 10.
+#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + to_string((long long) (n)))
 //Returns the modulus of a number, regardless of it being a float or negative.
 #define mod(n, d) ((n) - (d) * floor((n) / (d)))
 //Normalizes an angle between the range [-M_PI, M_PI]
 #define normalize_angle(a) (mod((a), M_PI*2) - M_PI)
+//Returns the sign (1 or -1) of a number.
+#define sign(n) (((n) >= 0) ? 1 : -1)
 
 void               active_control();
 void               add_to_party(mob* party_leader, mob* new_member);
@@ -36,10 +38,10 @@ void               draw_shadow(float cx, float cy, float size, float delta_z, fl
 void               draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle = 0, ALLEGRO_COLOR tint = al_map_rgb(255, 255, 255));
 void               draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text);
 void               drop_mob(pikmin* p);
-void               error_log(string s);
+void               error_log(string s, data_node* d = NULL);
 vector<string>     folder_to_vector(string folder_name, bool folders);
 void               generate_area_images();
-pikmin*            get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved);
+pikmin*            get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserved);
 ALLEGRO_COLOR      get_daylight_color();
 float              get_leader_to_group_center_dist(mob* l);
 mob_event*         get_mob_event(mob* m, unsigned char e);
@@ -50,7 +52,7 @@ void               load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(string filename);
 data_node          load_data_file(string filename);
-void               load_mob_type(string filename, unsigned char type);
+void               load_mob_types(string folder, unsigned char type);
 void               load_options();
 sample_struct      load_sample(string filename);
 vector<mob_event*> load_script(data_node* node);

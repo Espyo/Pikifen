@@ -199,7 +199,7 @@ void do_logic() {
         
         bool can_be_called =
             !pik_ptr->following_party &&
-            !pik_ptr->burrowed &&
+            !pik_ptr->buried &&
             !pik_ptr->speed_z &&
             !pik_ptr->uncallable_period;
         bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
@@ -226,7 +226,7 @@ void do_logic() {
         if(
             !pik_ptr->carrying_mob &&
             !pik_ptr->enemy_attacking &&
-            !pik_ptr->burrowed &&
+            !pik_ptr->buried &&
             !pik_ptr->speed_z &&
             pik_ptr->maturity != 2
         ) {
@@ -246,7 +246,7 @@ void do_logic() {
             (!pik_ptr->following_party &&
              !pik_ptr->carrying_mob &&
              !pik_ptr->enemy_attacking &&
-             !pik_ptr->burrowed &&
+             !pik_ptr->buried &&
              !pik_ptr->speed_z) ||
             (pik_ptr->following_party && moving_group_intensity)
         ) {
@@ -372,13 +372,13 @@ void do_logic() {
                 
                 if(!leaders[l]->auto_pluck_pikmin) {
                     float d;
-                    pikmin* new_pikmin = get_closest_burrowed_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
+                    pikmin* new_pikmin = get_closest_buried_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
                     
                     if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
                         leaders[l]->auto_pluck_pikmin = new_pikmin;
                         new_pikmin->pluck_reserved = true;
                         leaders[l]->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
-                    } else { //No more burrowed Pikmin, or none nearby. Give up.
+                    } else { //No more buried Pikmin, or none nearby. Give up.
                         leaders[l]->auto_pluck_mode = false;
                         leaders[l]->remove_target(true);
                     }
@@ -561,11 +561,11 @@ void do_logic() {
     //ToDo the particles can't be created once per frame! That's overkill! ...right?
     for(size_t l = 0; l < n_leaders; l++) {
         if(leaders[l]->was_thrown)
-            random_particle_fire(leaders[l]->x, leaders[l]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l]->main_color, 192));
+            random_particle_fire(leaders[l]->x, leaders[l]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l]->type->main_color, 192));
     }
     
     for(size_t p = 0; p < n_pikmin; p++) {
         if(pikmin_list[p]->was_thrown)
-            random_particle_fire(pikmin_list[p]->x, pikmin_list[p]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p]->main_color, 192));
+            random_particle_fire(pikmin_list[p]->x, pikmin_list[p]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p]->type->main_color, 192));
     }
 }

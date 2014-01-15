@@ -78,9 +78,6 @@
     <ClCompile Include="spec_objs\pellet.cpp">
       <Filter>Source Files\spec_objs</Filter>
     </ClCompile>
-    <ClCompile Include="pellet_type.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="misc_structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -7,8 +7,6 @@ leader::leader(float x, float y, sector* sec, leader_type* type)
     
     lea_type = type;
     
-    main_color = type->main_color;
-    
     holding_pikmin = NULL;
     auto_pluck_mode = false;
     auto_pluck_pikmin = NULL;

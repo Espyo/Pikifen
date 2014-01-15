@@ -28,7 +28,7 @@ using namespace std;
 //Bitmaps.
 extern ALLEGRO_BITMAP* bmp_background;
 extern ALLEGRO_BITMAP* bmp_blue[3];
-extern ALLEGRO_BITMAP* bmp_blue_burrowed[3];
+extern ALLEGRO_BITMAP* bmp_blue_buried[3];
 extern ALLEGRO_BITMAP* bmp_blue_idle[3];
 extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
@@ -47,7 +47,7 @@ extern ALLEGRO_BITMAP* bmp_olimar_lying;
 extern ALLEGRO_BITMAP* bmp_president;
 extern ALLEGRO_BITMAP* bmp_president_lying;
 extern ALLEGRO_BITMAP* bmp_red[3];
-extern ALLEGRO_BITMAP* bmp_red_burrowed[3];
+extern ALLEGRO_BITMAP* bmp_red_buried[3];
 extern ALLEGRO_BITMAP* bmp_red_idle[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_red_pellet[4];
@@ -57,7 +57,7 @@ extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_yellow[3];
-extern ALLEGRO_BITMAP* bmp_yellow_burrowed[3];
+extern ALLEGRO_BITMAP* bmp_yellow_buried[3];
 extern ALLEGRO_BITMAP* bmp_yellow_idle[3];
 extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
@@ -117,6 +117,8 @@ extern float                 day_minutes_per_irl_sec;  //Every real-life second,
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
 extern bool                  editor_holding_m2;
+extern map<string, enemy_type*>
+enemy_types;
 extern vector<enemy*>        enemies;
 extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
@@ -137,8 +139,6 @@ extern float                 leader_move_y;
 extern map<string, leader_type*>
 leader_types;
 extern unsigned              max_pikmin_in_field;
-extern map<string, mob_type*>
-mob_types;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;             //The physical mouse's cursor.
 extern float                 mouse_cursor_y;

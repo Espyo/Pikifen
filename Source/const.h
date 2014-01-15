@@ -8,8 +8,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "mob.h"
-
 using namespace std;
 
 #define AREA_IMAGE_SIZE             800    //How many pixels the area images are (both width and height; they're square).
@@ -17,6 +15,7 @@ using namespace std;
 #define AUTO_PLUCK_MAX_RADIUS       160    //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5    //How many seconds a camera transition lasts for.
 #define CURSOR_MAX_DIST             200    //The cursor can only be these many units away from the captain.
+#define DEF_ROTATION_SPEED          M_PI * 2 //The default rotation speed of a mob type.
 #define DEF_WHISTLE_RANGE           80     //The whistle can't go past this radius, by default.
 #define DISMISS_DISTANCE            64     //Dismissed Pikmin go these many units away from the captain.
 #define GRAVITY_ADDER               -2.0f  //Accelerate the Z speed of mobs affected by gravity by this amount per second.
@@ -25,7 +24,7 @@ using namespace std;
 #define LEADER_MOVE_SPEED           100    //Max speed at which a leader can move.
 #define MIN_GRAB_RANGE              60     //The leader needs to be at least this close to a Pikmin to grab it.
 #define MIN_ONION_CHECK_RANGE       64     //The minimum distance a leader must be from the onion in order to check it.
-#define MIN_PLUCK_RANGE             30     //The leader needs to be at least this close to a burrowed Pikmin to pluck it.
+#define MIN_PLUCK_RANGE             30     //The leader needs to be at least this close to a buried Pikmin to pluck it.
 #define MOUSE_CURSOR_MOVE_SPEED     500    //How many pixels the mouse cursor moves, per second, when using an analog stick.
 #define MOVE_GROUP_ARROW_SPEED      400    //"Move group" arrows move these many units per second.
 #define MOVE_GROUP_ARROWS_INTERVAL  0.1    //Seconds that need to pass before another "move group" arrow appears.
@@ -60,13 +59,16 @@ using namespace std;
 #define AUDIO_FOLDER           GAME_DATA_FOLDER "/Audio"
 #define AREA_FOLDER            GAME_DATA_FOLDER "/Areas"
 #define CONFIGURATIONS_FOLDER  GAME_DATA_FOLDER "/Configurations"
-#define ENEMIES_FOLDER         MOBS_FOLDER "/Enemies"
+#define ENEMIES_FOLDER         TYPES_FOLDER "/Enemies"
 #define GAME_DATA_FOLDER       "Game_data"
 #define GRAPHICS_FOLDER        GAME_DATA_FOLDER "/Graphics"
-#define LEADERS_FOLDER         MOBS_FOLDER "/Leaders"
-#define MOBS_FOLDER            GAME_DATA_FOLDER "/Mobs"
-#define OTHER_MOBS_FOLDER      MOBS_FOLDER "/Others"
-#define TREASURES_FOLDER       MOBS_FOLDER "/Treasures"
+#define LEADERS_FOLDER         TYPES_FOLDER "/Leaders"
+#define ONIONS_FOLDER          TYPES_FOLDER "/Onions"
+#define OTHER_TYPES_FOLDER     TYPES_FOLDER "/Others"
+#define PELLETS_FOLDER         TYPES_FOLDER "/Pellets"
+#define PIKMIN_FOLDER          TYPES_FOLDER "/Pikmin"
+#define TREASURES_FOLDER       TYPES_FOLDER "/Treasures"
+#define TYPES_FOLDER           GAME_DATA_FOLDER "/Types"
 #define WEATHER_FILE           CONFIGURATIONS_FOLDER "/Weather.txt"
 
 enum BUTTONS {
@@ -120,8 +122,12 @@ enum CONTROL_TYPES {
 };
 
 enum MOB_TYPES {
-    MOB_TYPE_ENEMY,
+    MOB_TYPE_PIKMIN,
+    MOB_TYPE_ONION,
     MOB_TYPE_LEADER,
+    MOB_TYPE_ENEMY,
+    MOB_TYPE_TREASURE,
+    MOB_TYPE_PELLET,
 };
 
 enum PERCIPITATION_TYPES {

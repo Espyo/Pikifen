@@ -210,7 +210,7 @@ void dismiss() {
         type_dismiss_angles.begin()->second = M_PI_4;
     } else {
         unsigned current_type_nr = 0;
-        for(map<pikmin_type*, float>::iterator t = type_dismiss_angles.begin(); t != type_dismiss_angles.end(); t++) {
+        for(auto t = type_dismiss_angles.begin(); t != type_dismiss_angles.end(); t++) {
             t->second = current_type_nr * (M_PI_2 / (n_types - 1));
             current_type_nr++;
         }
@@ -428,6 +428,7 @@ void drop_mob(pikmin* p) {
     //Did this Pikmin leaving made the mob stop moving?
     if(p->carrying_mob->carrier_info->current_n_carriers < p->carrying_mob->type->weight) {
         p->carrying_mob->remove_target(true);
+        p->carrying_mob->carrier_info->decided_type = NULL;
     } else {
         start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
     }
@@ -438,10 +439,19 @@ void drop_mob(pikmin* p) {
 
 /* ----------------------------------------------------------------------------
  * Prints something onto the error log.
+ * s: String that represents the error.
+ * d: If not null, this will be used to obtain the filename and line that caused the error.
  */
-void error_log(string s) {
+void error_log(string s, data_node* d) {
     //ToDo
-    total_error_log += s + "\n";
+    if(d) {
+        s += " (" + d->filename;
+        if(d->line_nr != 0) s += " line " + to_string((long long) d->line_nr);
+        s += ")";
+    }
+    s += "\n";
+    
+    total_error_log += s;
 }
 
 /* ----------------------------------------------------------------------------
@@ -586,19 +596,19 @@ void generate_area_images() {
 }
 
 /* ----------------------------------------------------------------------------
- * Returns the burrowed Pikmin closest to a leader. Used when auto-plucking.
+ * Returns the buried Pikmin closest to a leader. Used when auto-plucking.
  * x/y:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
- * ignore_reserved: If true, ignore any burrowed Pikmin that are "reserved"
+ * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
  ** (i.e. already chosen to be plucked by another leader).
  */
-pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_reserved) {
+pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserved) {
     float closest_distance = 0;
     pikmin* closest_pikmin = NULL;
     
     size_t n_pikmin = pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; p++) {
-        if(!pikmin_list[p]->burrowed) continue;
+        if(!pikmin_list[p]->buried) continue;
         
         float dis = dist(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
         if(closest_pikmin == NULL || dis < closest_distance) {
@@ -620,7 +630,7 @@ pikmin* get_closest_burrowed_pikmin(float x, float y, float* d, bool ignore_rese
 ALLEGRO_COLOR get_daylight_color() {
     //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(map<unsigned, ALLEGRO_COLOR>::iterator p_nr = cur_weather.lighting.begin(); p_nr != cur_weather.lighting.end(); p_nr++) {
+    for(auto p_nr = cur_weather.lighting.begin(); p_nr != cur_weather.lighting.end(); p_nr++) {
         point_nrs.push_back(p_nr->first);
     }
     
@@ -702,7 +712,7 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
         
         //ToDo throw them, don't teleport them.
         pikmin* new_pikmin = new pikmin(x, y, o->sec, o->oni_type->pik_type);
-        new_pikmin->burrowed = true;
+        new_pikmin->buried = true;
         create_mob(new_pikmin);
     }
     
@@ -737,7 +747,7 @@ void load_area(string name) {
     
     string weather_condition_name = file.get_child_by_name("weather")->value;
     if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
-        error_log("Area " + name + " refers to a non-existing weather condition!");
+        error_log("Area " + name + " refers to a non-existing weather condition!", &file);
         cur_weather = weather();
     } else {
         cur_weather = weather_conditions[weather_condition_name];
@@ -814,16 +824,14 @@ void load_area(string name) {
         if(mob_node->name == "enemy") {
         
             string et = mob_node->get_child_by_name("type")->value;
-            if(mob_types.find(et) != mob_types.end()) {
-                //ToDo use the enemy_types map.
-                
+            if(enemy_types.find(et) != enemy_types.end()) {
                 create_mob(new enemy(
                                x, y,
                                &sectors[0], //ToDo
-                               (enemy_type*) mob_types[et]
+                               enemy_types[et]
                            ));
                            
-            } else error_log("Unknown enemy type \"" + et + "\"!");
+            } else error_log("Unknown enemy type \"" + et + "\"!", mob_node);
             
         } else if(mob_node->name == "leader") {
         
@@ -835,11 +843,42 @@ void load_area(string name) {
                                leader_types[lt]
                            ));
                            
-            } else error_log("Unknown leader type \"" + lt + "\"!");
+            } else error_log("Unknown leader type \"" + lt + "\"!", mob_node);
+            
+        } else if(mob_node->name == "ship") {
+        
+            create_mob(new ship(
+                           x, y,
+                           &sectors[0] //ToDo
+                       ));
+                       
+        } else if(mob_node->name == "onion") {
+        
+            string ot = mob_node->get_child_by_name("type")->value;
+            if(onion_types.find(ot) != onion_types.end()) {
+                create_mob(new onion(
+                               x, y,
+                               &sectors[0], //ToDo
+                               onion_types[ot]
+                           ));
+                           
+            } else error_log("Unknown onion type \"" + ot + "\"!", mob_node);
+            
+        } else if(mob_node->name == "treasure") {
+        
+            string tt = mob_node->get_child_by_name("type")->value;
+            if(treasure_types.find(tt) != treasure_types.end()) {
+                create_mob(new treasure(
+                               x, y,
+                               &sectors[0], //ToDo
+                               treasure_types[tt]
+                           ));
+                           
+            } else error_log("Unknown treasure type \"" + tt + "\"!", mob_node);
             
         } else {
         
-            error_log("Unknown mob type \"" + mob_node->name + "\"!");
+            error_log("Unknown mob type \"" + mob_node->name + "\"!", mob_node);
             continue;
         }
         
@@ -890,56 +929,6 @@ data_node load_data_file(string filename) {
  */
 void load_game_content() {
     //ToDo.
-    pikmin_type* red_pikmin = new pikmin_type();
-    red_pikmin->name = "Red Pikmin";
-    red_pikmin->color = al_map_rgb(255, 0, 0);
-    red_pikmin->move_speed = 80;
-    red_pikmin->size = 20;
-    pikmin_types["Red Pikmin"] = red_pikmin;
-    
-    pikmin_type* yellow_pikmin = new pikmin_type();
-    yellow_pikmin->name = "Yellow Pikmin";
-    yellow_pikmin->color = al_map_rgb(255, 255, 0);
-    yellow_pikmin->move_speed = 80;
-    yellow_pikmin->size = 20;
-    pikmin_types["Yellow Pikmin"] = yellow_pikmin;
-    
-    pikmin_type* blue_pikmin = new pikmin_type();
-    blue_pikmin->name = "Blue Pikmin";
-    blue_pikmin->color = al_map_rgb(0, 0, 255);
-    blue_pikmin->move_speed = 80;
-    blue_pikmin->size = 20;
-    pikmin_types["Blue Pikmin"] = blue_pikmin;
-    
-    /*
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(255, 255, 255);
-    pikmin_types.back().name = "W";
-    pikmin_types.back().move_speed = 100;
-    pikmin_types.back().has_onion = false;
-    
-    pikmin_types.push_back(pikmin_type());
-    pikmin_types.back().color = al_map_rgb(64, 0, 255);
-    pikmin_types.back().name = "P";
-    pikmin_types.back().move_speed = 60;
-    pikmin_types.back().has_onion = false;
-    */
-    
-    onion_type* red_onion_type = new onion_type(pikmin_types["Red Pikmin"]);
-    red_onion_type->size = 32;
-    red_onion_type->name = "Red";
-    onion_types["Red"] = red_onion_type;
-    onion_type* yellow_onion_type = new onion_type(pikmin_types["Yellow Pikmin"]);
-    yellow_onion_type->size = 32;
-    yellow_onion_type->name = "Yellow";
-    onion_types["Yellow"] = yellow_onion_type;
-    onion_type* blue_onion_type = new onion_type(pikmin_types["Blue Pikmin"]);
-    blue_onion_type->size = 32;
-    blue_onion_type->name = "Blue";
-    onion_types["Blue"] = blue_onion_type;
-    
-    treasure_type* normal_treasure_type = new treasure_type(100, 40, 50);
-    treasure_types["Test"] = normal_treasure_type;
     
     statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
@@ -947,20 +936,13 @@ void load_game_content() {
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
     
-    pellet_types["Red 1"] = new pellet_type(pikmin_types["Red Pikmin"], 32, 2, 1, 2, 1);
-    pellet_types["Red 5"] = new pellet_type(pikmin_types["Red Pikmin"], 64, 10, 5, 5, 3);
-    pellet_types["Red 10"] = new pellet_type(pikmin_types["Red Pikmin"], 96, 20, 10, 10, 5);
-    pellet_types["Red 20"] = new pellet_type(pikmin_types["Red Pikmin"], 128, 50, 20, 20, 10);
-    
     //Mob types.
-    vector<string> enemy_files = folder_to_vector(ENEMIES_FOLDER, false);
-    for(size_t f = 0; f < enemy_files.size(); f++) {
-        load_mob_type(ENEMIES_FOLDER "/" + enemy_files[f], MOB_TYPE_ENEMY);
-    }
-    vector<string> leader_files = folder_to_vector(LEADERS_FOLDER, false);
-    for(size_t f = 0; f < leader_files.size(); f++) {
-        load_mob_type(LEADERS_FOLDER "/" + leader_files[f], MOB_TYPE_LEADER);
-    }
+    load_mob_types(PIKMIN_FOLDER, MOB_TYPE_PIKMIN);
+    load_mob_types(ONIONS_FOLDER, MOB_TYPE_ONION);
+    load_mob_types(LEADERS_FOLDER, MOB_TYPE_LEADER);
+    load_mob_types(ENEMIES_FOLDER, MOB_TYPE_ENEMY);
+    load_mob_types(TREASURES_FOLDER, MOB_TYPE_TREASURE);
+    load_mob_types(PELLETS_FOLDER, MOB_TYPE_PELLET);
     
     //Weather.
     weather_conditions.clear();
@@ -1004,57 +986,119 @@ void load_game_content() {
 }
 
 /* ----------------------------------------------------------------------------
- * Loads a mob type from a file.
+ * Loads the mob types from a folder.
  * type: Use MOB_TYPE_* for this.
  */
-void load_mob_type(string filename, unsigned char type) {
-    data_node file = data_node(filename);
-    if(!file.file_was_opened) return;
-    
-    mob_type* mt;
-    if(type == MOB_TYPE_ENEMY) {
-        mt = new enemy_type();
-    } else if(type == MOB_TYPE_LEADER) {
-        mt = new leader_type();
-    } else {
-        mt = new mob_type();
+void load_mob_types(string folder, unsigned char type) {
+    vector<string> files = folder_to_vector(folder, false);
+    if(files.size() == 0) {
+        error_log("Folder not found \"" + folder + "\"!");
     }
     
-    mt->always_active = tob(file.get_child_by_name("always_active")->value);
-    mt->max_health = toi(file.get_child_by_name("max_health")->value);
-    mt->move_speed = tof(file.get_child_by_name("move_speed")->value);
-    mt->name = file.get_child_by_name("name")->value;
-    mt->near_radius = tof(file.get_child_by_name("near_radius")->value);
-    mt->rotation_speed = tof(file.get_child_by_name("rotation_speed")->value);
-    mt->sight_radius = tof(file.get_child_by_name("sight_radius")->value);
-    mt->size = tof(file.get_child_by_name("size")->value);
-    mt->weight = toi(file.get_child_by_name("weight")->value);
+    for(size_t f = 0; f < files.size(); f++) {
     
-    if(type == MOB_TYPE_ENEMY) {
-        enemy_type* et = (enemy_type*) mt;
-        et->can_regenerate = tob(file.get_child_by_name("can_regenerate")->value);
-        et->drops_corpse = tob(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
-        et->is_boss = tob(file.get_child_by_name("is_boss")->value);
-        et->pikmin_seeds = toi(file.get_child_by_name("pikmin_seeds")->value);
-        et->revive_speed = tof(file.get_child_by_name("revive_speed")->value);
-        et->value = tof(file.get_child_by_name("value")->value);
+        data_node file = data_node(folder + "/" + files[f]);
+        if(!file.file_was_opened) return;
         
-    } else if(type == MOB_TYPE_LEADER) {
-        leader_type* lt = (leader_type*) mt;
-        lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value); //ToDo don't use load_sample.
-        lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value); //ToDo don't use load_sample.
-        lt->main_color = toc(file.get_child_by_name("main_color")->value);
-        lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
-        lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(to_string((long double) DEF_WHISTLE_RANGE)));
-        lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value); //ToDo don't use load_sample.
+        mob_type* mt;
+        if(type == MOB_TYPE_PIKMIN) {
+            mt = new pikmin_type();
+        } else if(type == MOB_TYPE_ONION) {
+            mt = new onion_type();
+        } else if(type == MOB_TYPE_LEADER) {
+            mt = new leader_type();
+        } else if(type == MOB_TYPE_ENEMY) {
+            mt = new enemy_type();
+        } else {
+            mt = new mob_type();
+        }
         
-        leader_types[lt->name] = lt;
+        mt->name = file.get_child_by_name("name")->value;
+        mt->always_active = tob(file.get_child_by_name("always_active")->value);
+        mt->main_color = toc(file.get_child_by_name("main_color")->value);
+        mt->max_carriers = toi(file.get_child_by_name("max_carriers")->value);
+        mt->max_health = toi(file.get_child_by_name("max_health")->value);
+        mt->move_speed = tof(file.get_child_by_name("move_speed")->value);
+        mt->near_radius = tof(file.get_child_by_name("near_radius")->value);
+        mt->rotation_speed = tof(file.get_child_by_name("rotation_speed")->get_value_or_default(to_string((long double) DEF_ROTATION_SPEED)));
+        mt->sight_radius = tof(file.get_child_by_name("sight_radius")->value);
+        mt->size = tof(file.get_child_by_name("size")->value);
+        mt->weight = tof(file.get_child_by_name("weight")->value);
+        
+        mt->events = load_script(file.get_child_by_name("script"));
+        
+        if(type == MOB_TYPE_PIKMIN) {
+            pikmin_type* pt = (pikmin_type*) mt;
+            pt->attack_power = tof(file.get_child_by_name("attack_power")->value);
+            pt->can_carry_bomb_rocks = tob(file.get_child_by_name("can_carry_bomb_rocks")->value);
+            pt->can_dig = tob(file.get_child_by_name("can_dig")->value);
+            pt->can_latch = tob(file.get_child_by_name("can_latch")->value);
+            pt->can_swim = tob(file.get_child_by_name("can_swim")->value);
+            pt->carry_speed = tof(file.get_child_by_name("carry_speed")->value);
+            pt->carry_strength = tof(file.get_child_by_name("carry_strength")->value);
+            pt->has_onion = tob(file.get_child_by_name("has_onion")->value);
+            
+            pikmin_types[pt->name] = pt;
+            
+        } else if(type == MOB_TYPE_ONION) {
+            onion_type* ot = (onion_type*) mt;
+            data_node* pik_type_node = file.get_child_by_name("pikmin_type");
+            if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
+                error_log("Unknown Pikmin type \"" + pik_type_node->value + "\"!", pik_type_node);
+                continue;
+            }
+            ot->pik_type = pikmin_types[pik_type_node->value];
+            
+            onion_types[ot->name] = ot;
+            
+        } else if(type == MOB_TYPE_LEADER) {
+            leader_type* lt = (leader_type*) mt;
+            lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value); //ToDo don't use load_sample.
+            lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value); //ToDo don't use load_sample.
+            lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
+            lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(to_string((long double) DEF_WHISTLE_RANGE)));
+            lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value); //ToDo don't use load_sample.
+            
+            leader_types[lt->name] = lt;
+            
+        } else if(type == MOB_TYPE_ENEMY) {
+            enemy_type* et = (enemy_type*) mt;
+            et->can_regenerate = tob(file.get_child_by_name("can_regenerate")->value);
+            et->drops_corpse = tob(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
+            et->is_boss = tob(file.get_child_by_name("is_boss")->value);
+            et->pikmin_seeds = toi(file.get_child_by_name("pikmin_seeds")->value);
+            et->revive_speed = tof(file.get_child_by_name("revive_speed")->value);
+            et->value = tof(file.get_child_by_name("value")->value);
+            
+            enemy_types[et->name] = et;
+            
+        } else if(type == MOB_TYPE_TREASURE) {
+            treasure_type* tt = (treasure_type*) mt;
+            tt->move_speed = 60; //ToDo should this be here?
+            
+            treasure_types[tt->name] = tt;
+            
+        } else if(type == MOB_TYPE_PELLET) {
+            pellet_type* pt = (pellet_type*) mt;
+            data_node* pik_type_node = file.get_child_by_name("pikmin_type");
+            if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
+                error_log("Unknown Pikmin type \"" + pik_type_node->value + "\"!", pik_type_node);
+                continue;
+            }
+            
+            pt->pik_type = pikmin_types[pik_type_node->value];
+            pt->number = toi(file.get_child_by_name("number")->value);
+            pt->weight = pt->number;
+            pt->match_seeds = toi(file.get_child_by_name("match_seeds")->value);
+            pt->non_match_seeds = toi(file.get_child_by_name("non_match_seeds")->value);
+            
+            pt->move_speed = 60; //ToDo should this be here?
+            
+            pellet_types[pt->name] = pt;
+            
+        }
         
     }
-    
-    mt->events = load_script(file.get_child_by_name("script"));
-    
-    mob_types[mt->name] = mt;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1186,7 +1230,7 @@ vector<mob_event*> load_script(data_node* node) {
         else if(event_name == "on_timer") event_type = MOB_EVENT_TIMER;
         else if(event_name == "on_wall") event_type = MOB_EVENT_WALL;
         else {
-            error_log("Unknown script event name \"" + event_name + "\"!");
+            error_log("Unknown script event name \"" + event_name + "\"!", event_node);
             continue;
         }
         
@@ -1213,7 +1257,7 @@ vector<mob_event*> load_script(data_node* node) {
             else if(action_name == "turn") action_type = MOB_ACTION_TURN;
             else if(action_name == "wait") action_type = MOB_ACTION_WAIT;
             else {
-                error_log("Unknown script action name \"" + action_name + "\"!");
+                error_log("Unknown script action name \"" + action_name + "\"!", action_node);
             }
             
             actions.push_back(new mob_action(action_type, action_data));
@@ -1272,9 +1316,9 @@ void move_point(float x, float y, float tx, float ty, float speed, float reach_r
  * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
  */
 void pluck_pikmin(leader* l, pikmin* p) {
-    if(!p->burrowed) return;
+    if(!p->buried) return;
     
-    p->burrowed = false;
+    p->buried = false;
     add_to_party(l, p);
     al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
 }
@@ -1516,7 +1560,7 @@ void save_options() {
     }
     
     //Save controls.
-    for(map<string, string>::iterator c = grouped_controls.begin(); c != grouped_controls.end(); c++) {
+    for(auto c = grouped_controls.begin(); c != grouped_controls.end(); c++) {
         if(c->second.size()) c->second.erase(c->second.size() - 1); //Remove the final character, which is always an extra comma.
         
         al_fwrite(file, c->first + "=" + c->second + "\n");
@@ -1625,7 +1669,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         map<pikmin_type*, unsigned> type_quantity; //How many of each Pikmin type are carrying.
         vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
         
-        //First, count how many of each type there are.
+        //First, count how many of each type there are carrying.
         for(size_t p = 0; p < m->carrier_info->max_carriers; p++) {
             pikmin* pik_ptr = NULL;
             
@@ -1642,7 +1686,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         
         //Then figure out what are the majority types.
         unsigned most = 0;
-        for(map<pikmin_type*, unsigned>::iterator t = type_quantity.begin(); t != type_quantity.end(); t++) {
+        for(auto t = type_quantity.begin(); t != type_quantity.end(); t++) {
             if(t->second > most) {
                 most = t->second;
                 majority_types.clear();
@@ -1663,7 +1707,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         if(majority_types.size() == 0) {
             return; //ToDo warn that something went horribly wrong?
             
-        } if(majority_types.size() == 1) {
+        } else if(majority_types.size() == 1) {
             //If there's only one possible type to pick, pick it.
             m->carrier_info->decided_type = majority_types[0];
             
@@ -1683,7 +1727,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
                 }
             }
             
-            //If a Pikmin left, check if they are related to the majority types.
+            //If a Pikmin left, check if it is related to the majority types.
             //If not, then a new tie wasn't made, no worries.
             //If it was related, a new tie was created.
             if(lp) {

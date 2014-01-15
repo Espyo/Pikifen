@@ -1,0 +1,12 @@
+name = White Pikmin
+attack_power = 0.9
+can_carry_bomb_rocks = no
+can_dig = yes
+can_latch = yes
+can_swim = no
+carry_speed = 1.2
+carry_strength = 1
+has_onion = no
+main_color = 255 255 255
+move_speed = 100
+size = 20

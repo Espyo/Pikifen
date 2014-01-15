@@ -55,9 +55,6 @@ public:
     bool to_delete; //If true, this mob should be deleted.
     bool reached_destination;
     
-    //Detail things.
-    ALLEGRO_COLOR main_color;
-    
     //Actual moving and other physics.
     float x, y, z;                   //Coordinates. Z is height, the higher the value, the higher in the sky.
     float speed_x, speed_y, speed_z; //Physics only. Don't touch.

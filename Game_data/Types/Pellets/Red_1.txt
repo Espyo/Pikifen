@@ -1,0 +1,7 @@
+name = Red 1
+non_match_seeds = 1
+number = 1
+match_seeds = 2
+max_carriers = 2
+pikmin_type = Red Pikmin
+size = 32

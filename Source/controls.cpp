@@ -173,7 +173,7 @@ void handle_button(unsigned int button, float pos) {
             
             //First check if the leader should pluck a Pikmin.
             float d;
-            pikmin* p = get_closest_burrowed_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
+            pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
             if(p && d <= MIN_PLUCK_RANGE) {
                 pluck_pikmin(cur_leader_ptr, p);
                 auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;

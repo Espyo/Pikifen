@@ -119,15 +119,15 @@ void do_drawing() {
             bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_mob;
             
             if(pikmin_list[p]->type->name == "Red Pikmin") {
-                if(pikmin_list[p]->burrowed) bm = bmp_red_burrowed[pikmin_list[p]->maturity];
+                if(pikmin_list[p]->buried) bm = bmp_red_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_red_idle[pikmin_list[p]->maturity];
                 else bm = bmp_red[pikmin_list[p]->maturity];
             } else if(pikmin_list[p]->type->name == "Yellow Pikmin") {
-                if(pikmin_list[p]->burrowed) bm = bmp_yellow_burrowed[pikmin_list[p]->maturity];
+                if(pikmin_list[p]->buried) bm = bmp_yellow_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_yellow_idle[pikmin_list[p]->maturity];
                 else bm = bmp_yellow[pikmin_list[p]->maturity];
             } if(pikmin_list[p]->type->name == "Blue Pikmin") {
-                if(pikmin_list[p]->burrowed) bm = bmp_blue_burrowed[pikmin_list[p]->maturity];
+                if(pikmin_list[p]->buried) bm = bmp_blue_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_blue_idle[pikmin_list[p]->maturity];
                 else bm = bmp_blue[pikmin_list[p]->maturity];
             }
@@ -143,7 +143,7 @@ void do_drawing() {
                     pikmin_list[p]->x, pikmin_list[p]->y,
                     30, 30,
                     idle_glow_angle,
-                    change_alpha(pikmin_list[p]->main_color, 160));
+                    change_alpha(pikmin_list[p]->type->main_color, 160));
             }
         }
         
@@ -168,9 +168,9 @@ void do_drawing() {
         size_t n_onions = onions.size();
         for(size_t o = 0; o < n_onions; o++) {
             ALLEGRO_BITMAP* bm = NULL;
-            if(onions[o]->type->name == "Red") bm = bmp_red_onion;
-            else if(onions[o]->type->name == "Yellow") bm = bmp_yellow_onion;
-            else if(onions[o]->type->name == "Blue") bm = bmp_blue_onion;
+            if(onions[o]->type->name == "Red onion") bm = bmp_red_onion;
+            else if(onions[o]->type->name == "Yellow onion") bm = bmp_yellow_onion;
+            else if(onions[o]->type->name == "Blue onion") bm = bmp_blue_onion;
             
             draw_sprite(
                 bm,
@@ -307,7 +307,7 @@ void do_drawing() {
                         if(mob_ptr->carrier_info->carry_to_ship) {
                             color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
                         } else {
-                            color = mob_ptr->carrier_info->decided_type->color;
+                            color = mob_ptr->carrier_info->decided_type->main_color;
                         }
                     } else {
                         color = al_map_rgb(96, 192, 192);

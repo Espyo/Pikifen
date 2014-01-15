@@ -21,7 +21,7 @@ public:
     size_t carrying_spot;
     
     unsigned char maturity;     //0: leaf. 1: bud. 2: flower.
-    bool burrowed;
+    bool buried;
     bool pluck_reserved;        //If true, someone's already coming to pluck this Pikmin. This is to let other leaders now that they should pick another one.
 };
 

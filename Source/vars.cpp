@@ -5,7 +5,7 @@ using namespace std;
 
 ALLEGRO_BITMAP* bmp_background = NULL;
 ALLEGRO_BITMAP* bmp_blue[3] = {NULL, NULL, NULL};
-ALLEGRO_BITMAP* bmp_blue_burrowed[3] = {NULL, NULL, NULL};
+ALLEGRO_BITMAP* bmp_blue_buried[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_blue_idle[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_blue_onion = NULL;
 ALLEGRO_BITMAP* bmp_bubble = NULL;
@@ -24,7 +24,7 @@ ALLEGRO_BITMAP* bmp_olimar_lying = NULL;
 ALLEGRO_BITMAP* bmp_president = NULL;
 ALLEGRO_BITMAP* bmp_president_lying = NULL;
 ALLEGRO_BITMAP* bmp_red[3] = {NULL, NULL, NULL};
-ALLEGRO_BITMAP* bmp_red_burrowed[3] = {NULL, NULL, NULL};
+ALLEGRO_BITMAP* bmp_red_buried[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_red_idle[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_red_onion = NULL;
 ALLEGRO_BITMAP* bmp_red_pellet[4] = {NULL, NULL, NULL, NULL};
@@ -34,7 +34,7 @@ ALLEGRO_BITMAP* bmp_sun = NULL;
 ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
 ALLEGRO_BITMAP* bmp_yellow[3] = {NULL, NULL, NULL};
-ALLEGRO_BITMAP* bmp_yellow_burrowed[3] = {NULL, NULL, NULL};
+ALLEGRO_BITMAP* bmp_yellow_buried[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_yellow_idle[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_yellow_onion = NULL;
 
@@ -90,6 +90,8 @@ float                 day_minutes_per_irl_sec = 2;
 float                 day_minutes_start = 60 * 7;
 bool                  daylight_effect = true;
 bool                  editor_holding_m2 = false;
+map<string, enemy_type*>
+enemy_types;
 vector<enemy*>        enemies;
 ALLEGRO_FONT*         font = NULL;
 ALLEGRO_FONT*         font_area_name = NULL;
@@ -110,8 +112,6 @@ float                 leader_move_y = 0;
 map<string, leader_type*>
 leader_types;
 unsigned              max_pikmin_in_field = 100;
-map<string, mob_type*>
-mob_types;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
 float                 mouse_cursor_y = scr_h / 2;

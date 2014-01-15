@@ -1,0 +1,3 @@
+name = Yellow onion
+pikmin_type = Yellow Pikmin
+size = 32

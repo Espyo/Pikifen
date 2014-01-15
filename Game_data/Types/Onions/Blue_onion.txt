@@ -1,0 +1,3 @@
+name = Blue onion
+pikmin_type = Blue Pikmin
+size = 32

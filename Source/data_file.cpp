@@ -134,7 +134,7 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
             new_child->value = v;
             new_child->file_was_opened = file_was_opened;
             new_child->filename = filename;
-            new_child->line_nr = l;
+            new_child->line_nr = l + 1;
             children.push_back(new_child);
             
             continue;
@@ -144,15 +144,13 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
         pos = line.find('{');
         if(pos != string::npos && pos > 0 && line.size() >= 2) {
         
-            size_t new_child_line = l;
-            
             data_node* new_child = new data_node();
-            l = new_child->load_node(lines, trim_values, l + 1);
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value = "";
             new_child->file_was_opened = file_was_opened;
             new_child->filename = filename;
-            new_child->line_nr = new_child_line;
+            new_child->line_nr = l + 1;
+            l = new_child->load_node(lines, trim_values, l + 1);
             children.push_back(new_child);
             
             continue;
@@ -194,6 +192,7 @@ data_node::data_node(const data_node &dn2) {
 data_node::data_node(string filename, bool trim_values) {
     file_was_opened = false;
     line_nr = 0;
+    this->filename = filename;
     load_file(filename, trim_values);
 }
 

@@ -92,7 +92,6 @@
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="mob_event.cpp" />
     <ClCompile Include="particle.cpp" />
-    <ClCompile Include="pellet_type.cpp" />
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />
     <ClCompile Include="sector.cpp" />
