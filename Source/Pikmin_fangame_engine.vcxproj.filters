@@ -19,6 +19,12 @@
     <Filter Include="Source Files\spec_objs">
       <UniqueIdentifier>{67a77ca6-7243-4358-8e7e-463e9c4e6f69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\LAFI">
+      <UniqueIdentifier>{00539f69-f575-422e-bfcd-854de41758b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LAFI">
+      <UniqueIdentifier>{bc8115c0-b3e2-40f0-81b9-0b8c83a5c327}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mob.cpp">
@@ -92,6 +98,42 @@
     </ClCompile>
     <ClCompile Include="mob_event.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\button.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\checkbox.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\checkbox_box.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\frame.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\gui.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\label.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\radio_button.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\radio_button_button.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\scrollbar.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\style.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\textbox.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\widget.cpp">
+      <Filter>Source Files\LAFI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +256,48 @@
     </ClInclude>
     <ClInclude Include="onion_type.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animation_editor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\button.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\checkbox.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\checkbox_box.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\const.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\frame.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\gui.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\label.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\radio_button.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\radio_button_button.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\scrollbar.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\style.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\textbox.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\widget.h">
+      <Filter>Header Files\LAFI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

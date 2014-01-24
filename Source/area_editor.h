@@ -106,7 +106,7 @@ void do_area_editor_logic() {
     al_flip_display();
 }
 
-void handle_editor_controls(ALLEGRO_EVENT ev) {
+void handle_area_editor_controls(ALLEGRO_EVENT ev) {
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
         if(editor_holding_m2) {
             cam_x += ev.mouse.dx / cam_zoom;

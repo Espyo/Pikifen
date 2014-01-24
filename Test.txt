@@ -1,0 +1,22 @@
+hitboxes{
+	hitbox{
+		name=Main
+		type=0
+		coords=0 0 0
+		radius=64
+		multiplier=1
+		shake_angle=0
+		can_pikmin_latch=false
+		swallow=false
+	}
+	hitbox{
+		name=
+		type=0
+		coords=77 -127 70
+		radius=31.7805
+		multiplier=0
+		shake_angle=20
+		can_pikmin_latch=true
+		swallow=true
+	}
+}

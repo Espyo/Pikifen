@@ -3,6 +3,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "animation.h"
 #include "const.h"
 #include "functions.h"
 #include "vars.h"
@@ -204,7 +205,14 @@ void do_drawing() {
         //Enemies.
         size_t n_enemies = enemies.size();
         for(size_t e = 0; e < n_enemies; e++) {
-            al_draw_filled_circle(enemies[e]->x, enemies[e]->y, enemies[e]->type->size / 2, al_map_rgb(128, 0, 0));
+            draw_sprite(
+                enemies[e]->a.get_frame()->bitmap,
+                enemies[e]->x,
+                enemies[e]->y,
+                enemies[e]->a.get_frame()->final_w,
+                enemies[e]->a.get_frame()->final_h,
+                enemies[e]->angle
+            );
         }
         
         
@@ -429,152 +437,189 @@ void do_drawing() {
         *         1/2/3 *
         ****************/
         
-        //Leader health.
-        for(size_t l = 0; l < 3; l++) {
-            if(n_leaders < l + 1) continue;
-            
-            size_t l_nr = (cur_leader_nr + l) % n_leaders;
-            ALLEGRO_BITMAP* bm = (l_nr == 0) ? bmp_olimar : ((l_nr == 1) ? bmp_louie : bmp_president);
-            
-            int icons_size;
-            if(l == 0) icons_size = 32; else icons_size = 20;
-            
-            int y_offset;
-            if(l == 0) y_offset = 0; else if(l == 1) y_offset = 44; else y_offset = 80;
-            
-            draw_sprite(
-                bm,
-                32, scr_h - (32 + y_offset),
-                icons_size, icons_size);
-            draw_sprite(
-                bmp_bubble,
-                32, scr_h - (32 + y_offset),
-                icons_size * 1.6, icons_size * 1.6);
+        if(cur_message.size() == 0) {
+        
+            //Leader health.
+            for(size_t l = 0; l < 3; l++) {
+                if(n_leaders < l + 1) continue;
                 
-            draw_health(
-                32 + icons_size * 1.5,
-                scr_h - (32 + y_offset),
-                leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                icons_size * 0.5, true);
+                size_t l_nr = (cur_leader_nr + l) % n_leaders;
+                ALLEGRO_BITMAP* bm = (l_nr == 0) ? bmp_olimar : ((l_nr == 1) ? bmp_louie : bmp_president);
+                
+                int icons_size;
+                if(l == 0) icons_size = 32; else icons_size = 20;
+                
+                int y_offset;
+                if(l == 0) y_offset = 0; else if(l == 1) y_offset = 44; else y_offset = 80;
+                
+                draw_sprite(
+                    bm,
+                    32, scr_h - (32 + y_offset),
+                    icons_size, icons_size);
+                draw_sprite(
+                    bmp_bubble,
+                    32, scr_h - (32 + y_offset),
+                    icons_size * 1.6, icons_size * 1.6);
+                    
+                draw_health(
+                    32 + icons_size * 1.5,
+                    scr_h - (32 + y_offset),
+                    leaders[l_nr]->health, leaders[l_nr]->type->max_health,
+                    icons_size * 0.5, true);
+                draw_sprite(
+                    bmp_health_bubble,
+                    32 + icons_size * 1.5,
+                    scr_h - (32 + y_offset),
+                    icons_size * 1.2, icons_size * 1.2);
+            }
+            
+            //Day hour.
+            al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
+                         (to_string((long long) (day_minutes / 60)) + ":" + to_string((long long) ((int) (day_minutes) % 60))).c_str());
+                         
+            //Sun Meter.
+            unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
+            float sun_meter_span = (scr_w - 150) - 20; //Width, from the center of the first dot to the center of the last.
+            float interval = sun_meter_span / (float) n_hours;
+            
+            for(unsigned char h = 0; h < n_hours + 1; h++) {
+                draw_sprite(
+                    bmp_bubble,
+                    (20 + h * interval), 40,
+                    16, 16);
+            }
+            
+            draw_sprite(bmp_bubble, 20, 40, 24, 24); //Day start big circle.
+            draw_sprite(bmp_bubble, 20 + sun_meter_span * 0.5, 40, 24, 24); //Day middle big circle.
+            draw_sprite(bmp_bubble, 20 + sun_meter_span, 40, 24, 24); //Day end big circle.
+            
+            float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
             draw_sprite(
                 bmp_health_bubble,
-                32 + icons_size * 1.5,
-                scr_h - (32 + y_offset),
-                icons_size * 1.2, icons_size * 1.2);
-        }
-        
-        //Day hour.
-        al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
-                     (to_string((long long) (day_minutes / 60)) + ":" + to_string((long long) ((int) (day_minutes) % 60))).c_str());
-                     
-        //Sun Meter.
-        unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-        float sun_meter_span = (scr_w - 150) - 20; //Width, from the center of the first dot to the center of the last.
-        float interval = sun_meter_span / (float) n_hours;
-        
-        for(unsigned char h = 0; h < n_hours + 1; h++) {
+                20 + day_passed_ratio * sun_meter_span, 40,
+                48, 48,
+                0, al_map_rgba(255, 255, 128, 192)); //Bubble behind the Sun.
+            draw_sprite(
+                bmp_sun,
+                20 + day_passed_ratio * sun_meter_span, 40,
+                48, 48); //Static sun.
+            draw_sprite(
+                bmp_sun,
+                20 + day_passed_ratio * sun_meter_span, 40,
+                48, 48,
+                sun_meter_sun_angle); //Spinning sun.
+                
+            //Pikmin count.
+            //Count how many Pikmin only.
+            n_leaders = leaders.size();
+            size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
+            for(size_t l = 0; l < n_leaders; l++) {
+                //If this leader is following the current one, then he's not a Pikmin, subtract him from the party count total.
+                if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;
+            }
+            
+            //Closest party member.
+            if(closest_party_member) {
+                ALLEGRO_BITMAP* bm = NULL;
+                if(typeid(*closest_party_member) == typeid(pikmin)) {
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
+                    if(pikmin_ptr->type->name == "Red Pikmin") bm = bmp_red[pikmin_ptr->maturity];
+                    else if(pikmin_ptr->type->name == "Yellow Pikmin") bm = bmp_yellow[pikmin_ptr->maturity];
+                    else if(pikmin_ptr->type->name == "Blue Pikmin") bm = bmp_blue[pikmin_ptr->maturity];
+                } else if(typeid(*closest_party_member) == typeid(leader)) {
+                    leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
+                    if(leader_ptr == leaders[0]) bm = bmp_olimar;
+                    else if(leader_ptr == leaders[1]) bm = bmp_louie;
+                    else if(leader_ptr == leaders[2]) bm = bmp_president;
+                }
+                
+                if(bm) {
+                    draw_sprite(bm, 261, scr_h - font_h - 9, 32, 32);
+                }
+            }
+            
             draw_sprite(
                 bmp_bubble,
-                (20 + h * interval), 40,
-                16, 16);
-        }
-        
-        draw_sprite(bmp_bubble, 20, 40, 24, 24); //Day start big circle.
-        draw_sprite(bmp_bubble, 20 + sun_meter_span * 0.5, 40, 24, 24); //Day middle big circle.
-        draw_sprite(bmp_bubble, 20 + sun_meter_span, 40, 24, 24); //Day end big circle.
-        
-        float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
-        draw_sprite(
-            bmp_health_bubble,
-            20 + day_passed_ratio * sun_meter_span, 40,
-            48, 48,
-            0, al_map_rgba(255, 255, 128, 192)); //Bubble behind the Sun.
-        draw_sprite(
-            bmp_sun,
-            20 + day_passed_ratio * sun_meter_span, 40,
-            48, 48); //Static sun.
-        draw_sprite(
-            bmp_sun,
-            20 + day_passed_ratio * sun_meter_span, 40,
-            48, 48,
-            sun_meter_sun_angle); //Spinning sun.
-            
-        //Pikmin count.
-        //Count how many Pikmin only.
-        n_leaders = leaders.size();
-        size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
-        for(size_t l = 0; l < n_leaders; l++) {
-            //If this leader is following the current one, then he's not a Pikmin, subtract him from the party count total.
-            if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;
-        }
-        
-        //Closest party member.
-        if(closest_party_member) {
-            ALLEGRO_BITMAP* bm = NULL;
-            if(typeid(*closest_party_member) == typeid(pikmin)) {
-                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
-                if(pikmin_ptr->type->name == "Red Pikmin") bm = bmp_red[pikmin_ptr->maturity];
-                else if(pikmin_ptr->type->name == "Yellow Pikmin") bm = bmp_yellow[pikmin_ptr->maturity];
-                else if(pikmin_ptr->type->name == "Blue Pikmin") bm = bmp_blue[pikmin_ptr->maturity];
-            } else if(typeid(*closest_party_member) == typeid(leader)) {
-                leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
-                if(leader_ptr == leaders[0]) bm = bmp_olimar;
-                else if(leader_ptr == leaders[1]) bm = bmp_louie;
-                else if(leader_ptr == leaders[2]) bm = bmp_president;
-            }
-            
-            if(bm) {
-                draw_sprite(bm, 261, scr_h - font_h - 9, 32, 32);
-            }
-        }
-        
-        draw_sprite(
-            bmp_bubble,
-            260, scr_h - font_h - 10,
-            40, 40);
-            
-        //Pikmin count numbers.
-        unsigned long total_pikmin = pikmin_list.size();
-        for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
-        
-        al_draw_text(
-            font_counter, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
-            (to_string((long long) pikmin_in_party) + "/" +
-             to_string((long long) pikmin_list.size()) + "/" +
-             to_string((long long) total_pikmin)).c_str()
-        );
-        
-        //Day number.
-        draw_sprite(
-            bmp_day_bubble,
-            scr_w - 50, 45,
-            60, 70);
-            
-        al_draw_text(
-            font_counter, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER,
-            (to_string((long long) day)).c_str());
-            
-        //Sprays.
-        if(n_spray_types > 0) {
-            size_t top_spray_nr;
-            if(n_spray_types < 3) top_spray_nr = 0; else top_spray_nr = selected_spray;
-            
-            draw_sprite(
-                spray_types[top_spray_nr].bmp_spray,
-                34, scr_h / 2 - 20,
-                20, 24);
-            al_draw_text(
-                font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
-                ("x" + to_string((long long) spray_amounts[top_spray_nr])).c_str());
+                260, scr_h - font_h - 10,
+                40, 40);
                 
-            if(n_spray_types == 2) {
+            //Pikmin count numbers.
+            unsigned long total_pikmin = pikmin_list.size();
+            for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
+            
+            al_draw_text(
+                font_counter, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
+                (to_string((long long) pikmin_in_party) + "/" +
+                 to_string((long long) pikmin_list.size()) + "/" +
+                 to_string((long long) total_pikmin)).c_str()
+            );
+            
+            //Day number.
+            draw_sprite(
+                bmp_day_bubble,
+                scr_w - 50, 45,
+                60, 70);
+                
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER, 48, 0,
+                (to_string((long long) day)).c_str()
+            );
+            
+            //Sprays.
+            if(n_spray_types > 0) {
+                size_t top_spray_nr;
+                if(n_spray_types < 3) top_spray_nr = 0; else top_spray_nr = selected_spray;
+                
                 draw_sprite(
-                    spray_types[1].bmp_spray,
-                    34, scr_h / 2 + 20,
+                    spray_types[top_spray_nr].bmp_spray,
+                    34, scr_h / 2 - 20,
                     20, 24);
                 al_draw_text(
-                    font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
-                    ("x" + to_string((long long) spray_amounts[1])).c_str());
+                    font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
+                    ("x" + to_string((long long) spray_amounts[top_spray_nr])).c_str());
+                    
+                if(n_spray_types == 2) {
+                    draw_sprite(
+                        spray_types[1].bmp_spray,
+                        34, scr_h / 2 + 20,
+                        20, 24);
+                    al_draw_text(
+                        font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
+                        ("x" + to_string((long long) spray_amounts[1])).c_str());
+                }
+                
+            }
+            
+        } else { //Show a message.
+        
+            draw_sprite(
+                bmp_message_box,
+                scr_w / 2, scr_h - font_h * 2 - 4, scr_w - 16, font_h * 4
+            );
+            
+            if(cur_message_speaker) {
+                draw_sprite(
+                    cur_message_speaker,
+                    40, scr_h - font_h * 4 - 16,
+                    48, 48);
+                draw_sprite(
+                    bmp_bubble,
+                    40, scr_h - font_h * 4 - 16,
+                    64, 64);
+            }
+            
+            string text = cur_message.substr(cur_message_stopping_chars[cur_message_section], cur_message_char - cur_message_stopping_chars[cur_message_section]);
+            vector<string> lines = split(text, "\n");
+            
+            for(size_t l = 0; l < lines.size(); l++) {
+            
+                draw_compressed_text(
+                    font, al_map_rgb(255, 255, 255),
+                    24, scr_h - font_h * (4 - l) + 8,
+                    ALLEGRO_ALIGN_LEFT, scr_w - 64, 0,
+                    lines[l]
+                );
+                
             }
             
         }

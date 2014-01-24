@@ -12,14 +12,12 @@ void do_logic() {
     
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
-    /*************************
-    *                   .-.  *
-    *   Timer things   ( L ) *
-    *                   `-´  *
-    *************************/
     
-    day_minutes += (day_minutes_per_irl_sec / game_fps);
-    if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
+    /*************************************
+    *                               .-.  *
+    *   Timer things - aesthetic   ( L ) *
+    *                               `-´  *
+    **************************************/
     
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED / game_fps;
     
@@ -30,8 +28,8 @@ void do_logic() {
         
         float amount_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
         
-        cam_x = cam_trans_pan_initi_x + (cam_trans_pan_final_x - cam_trans_pan_initi_x) * (1 - amount_left);
-        cam_y = cam_trans_pan_initi_y + (cam_trans_pan_final_y - cam_trans_pan_initi_y) * (1 - amount_left);
+        cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - amount_left);
+        cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - amount_left);
     }
     
     if(cam_trans_zoom_time_left > 0) {
@@ -40,7 +38,7 @@ void do_logic() {
         
         float amount_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
         
-        cam_zoom = cam_trans_zoom_initi_level + (cam_trans_zoom_final_level - cam_trans_zoom_initi_level) * (1 - amount_left);
+        cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - amount_left);
     }
     
     //"Move group" arrows.
@@ -141,412 +139,6 @@ void do_logic() {
     //Sun meter.
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED / game_fps;
     
-    if(auto_pluck_input_time > 0) {
-        auto_pluck_input_time -= (1.0 / game_fps);
-        if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
-    }
-    
-    /********************
-    *              ***  *
-    *   Whistle   * O * *
-    *              ***  *
-    ********************/
-    
-    if(whistling && whistle_radius < cur_leader_ptr->lea_type->whistle_range) {
-        whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
-        if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
-            whistle_radius = cur_leader_ptr->lea_type->whistle_range;
-            whistle_max_hold = WHISTLE_MAX_HOLD_TIME;
-        }
-    }
-    
-    if(whistle_max_hold > 0) {
-        whistle_max_hold -= 1.0 / game_fps;
-        if(whistle_max_hold <= 0) {
-            stop_whistling();
-        }
-    }
-    
-    
-    /*****************
-    *                *
-    *   Mobs   ()--> *
-    *                *
-    ******************/
-    
-    size_t n_mobs = mobs.size();
-    for(size_t m = 0; m < n_mobs;) {
-        mobs[m]->tick();
-        
-        if(mobs[m]->to_delete) {
-            delete_mob(mobs[m]);
-            n_mobs--;
-        } else {
-            m++;
-        }
-    }
-    
-    
-    /******************
-    *             /\  *
-    *   Pikmin   (@:) *
-    *             \/  *
-    ******************/
-    
-    size_t n_pikmin = pikmin_list.size();
-    for(size_t p = 0; p < n_pikmin; p++) {
-        pikmin* pik_ptr = pikmin_list[p];
-        
-        bool can_be_called =
-            !pik_ptr->following_party &&
-            !pik_ptr->buried &&
-            !pik_ptr->speed_z &&
-            !pik_ptr->uncallable_period;
-        bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
-        bool touched =
-            dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
-            pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
-            !cur_leader_ptr->carrier_info;
-        bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
-        
-        if(can_be_called && (whistled || (touched && !is_busy))) {
-        
-            //Pikmin got whistled or touched.
-            drop_mob(pik_ptr);
-            add_to_party(cur_leader_ptr, pik_ptr);
-            al_stop_sample(&sfx_pikmin_called.id);
-            al_play_sample(sfx_pikmin_called.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_called.id);
-            
-            pik_ptr->enemy_attacking = NULL;
-            
-        }
-        
-        //Touching nectar.
-        size_t n_nectars = nectars.size();
-        if(
-            !pik_ptr->carrying_mob &&
-            !pik_ptr->enemy_attacking &&
-            !pik_ptr->buried &&
-            !pik_ptr->speed_z &&
-            pik_ptr->maturity != 2
-        ) {
-            for(size_t n = 0; n < n_nectars; n++) {
-                if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->type->size * 0.5 + pik_ptr->type->size * 0.5) {
-                    if(nectars[n]->amount_left > 0)
-                        nectars[n]->amount_left--;
-                        
-                    pik_ptr->maturity = 2;
-                }
-            }
-        }
-        
-        //Finding tasks.
-        size_t n_mobs = mobs.size();
-        if(
-            (!pik_ptr->following_party &&
-             !pik_ptr->carrying_mob &&
-             !pik_ptr->enemy_attacking &&
-             !pik_ptr->buried &&
-             !pik_ptr->speed_z) ||
-            (pik_ptr->following_party && moving_group_intensity)
-        ) {
-            for(size_t m = 0; m < n_mobs; m++) {
-            
-                mob* mob_ptr = mobs[m];
-                
-                if(!mob_ptr->carrier_info) continue;
-                if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue;
-                
-                if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
-                    pik_ptr->carrying_mob = mob_ptr;
-                    
-                    if(pik_ptr->following_party) remove_from_party(pik_ptr);
-                    
-                    //ToDo remove this random cycle and replace with something more optimal.
-                    bool valid_spot = false;
-                    unsigned int spot = 0;
-                    while(!valid_spot) {
-                        spot = random(0, mob_ptr->carrier_info->max_carriers - 1);
-                        valid_spot = !mob_ptr->carrier_info->carrier_spots[spot];
-                    }
-                    
-                    mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
-                    mob_ptr->carrier_info->current_n_carriers++;
-                    
-                    pik_ptr->carrying_spot = spot;
-                    pik_ptr->set_target(
-                        mob_ptr->carrier_info->carrier_spots_x[spot],
-                        mob_ptr->carrier_info->carrier_spots_y[spot],
-                        &mob_ptr->x,
-                        &mob_ptr->y,
-                        true);
-                        
-                    if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) {
-                        start_carrying(mob_ptr, pik_ptr, NULL);
-                    }
-                    
-                    pik_ptr->uncallable_period = 0;
-                    
-                    break;
-                }
-            }
-        }
-        
-        if(pik_ptr->carrying_mob) {
-            pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
-        }
-        
-    }
-    
-    
-    /********************
-    *              .-.  *
-    *   Leaders   (*:O) *
-    *              `-´  *
-    ********************/
-    
-    if(cur_leader_ptr->holding_pikmin) {
-        cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
-        cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
-    }
-    
-    //Current leader movement.
-    if(!cur_leader_ptr->auto_pluck_mode) {
-        float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
-        if(leader_move_intensity < 0.75) leader_move_intensity = 0;
-        if(leader_move_intensity > 1) leader_move_intensity = 1;
-        if(leader_move_intensity == 0)
-            cur_leader_ptr->remove_target(true);
-        else
-            cur_leader_ptr->set_target(
-                cur_leader_ptr->x + leader_move_x * cur_leader_ptr->type->move_speed,
-                cur_leader_ptr->y + leader_move_y * cur_leader_ptr->type->move_speed,
-                NULL, NULL, false);
-    }
-    
-    size_t n_leaders = leaders.size();
-    for(size_t l = 0; l < n_leaders; l++) {
-        if(whistling) {
-            if(l != cur_leader_nr) {
-                if(
-                    dist(leaders[l]->x, leaders[l]->y, cursor_x, cursor_y) <= whistle_radius &&
-                    !leaders[l]->following_party &&
-                    !leaders[l]->was_thrown) {
-                    //Leader got whistled.
-                    add_to_party(cur_leader_ptr, leaders[l]);
-                    leaders[l]->auto_pluck_mode = false;
-                    
-                    size_t n_party_members = leaders[l]->party->members.size();
-                    for(size_t m = 0; m < n_party_members; m++) {
-                        mob* member = leaders[l]->party->members[0];
-                        remove_from_party(member);
-                        add_to_party(cur_leader_ptr, member);
-                    }
-                }
-            }
-        }
-        
-        if(leaders[l]->following_party && !leaders[l]->auto_pluck_mode) {
-            leaders[l]->set_target(
-                0,
-                0,
-                &leaders[l]->following_party->party->party_center_x,
-                &leaders[l]->following_party->party->party_center_y,
-                false);
-        } else {
-            if(leaders[l]->auto_pluck_mode) {
-                if(leaders[l]->auto_pluck_pikmin && leaders[l]->reached_destination) {
-                
-                    leader* new_pikmin_leader = leaders[l];
-                    if(leaders[l]->following_party) {
-                        if(typeid(*leaders[l]->following_party) == typeid(leader)) {
-                            //If this leader is following another one, then the new Pikmin should be a part of that top leader.
-                            new_pikmin_leader = (leader*) leaders[l]->following_party;
-                        }
-                    }
-                    
-                    //Reached the Pikmin we want to pluck. Pluck it and find a new one.
-                    pluck_pikmin(new_pikmin_leader, leaders[l]->auto_pluck_pikmin);
-                    leaders[l]->auto_pluck_pikmin = NULL;
-                }
-                
-                if(!leaders[l]->auto_pluck_pikmin) {
-                    float d;
-                    pikmin* new_pikmin = get_closest_buried_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
-                    
-                    if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
-                        leaders[l]->auto_pluck_pikmin = new_pikmin;
-                        new_pikmin->pluck_reserved = true;
-                        leaders[l]->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
-                    } else { //No more buried Pikmin, or none nearby. Give up.
-                        leaders[l]->auto_pluck_mode = false;
-                        leaders[l]->remove_target(true);
-                    }
-                }
-            } else {
-                if(leaders[l]->auto_pluck_pikmin) {
-                    //Cleanup.
-                    leaders[l]->auto_pluck_pikmin->pluck_reserved = false;
-                    leaders[l]->auto_pluck_pikmin = NULL;
-                    leaders[l]->remove_target(true);
-                }
-            }
-        }
-        
-    }
-    
-    if(cam_trans_pan_time_left > 0) {
-        cam_trans_pan_final_x = cur_leader_ptr->x;
-        cam_trans_pan_final_y = cur_leader_ptr->y;
-    } else {
-        cam_x = cur_leader_ptr->x;
-        cam_y = cur_leader_ptr->y;
-    }
-    
-    /********************
-    *              .-.  *
-    *   Pellets   ( 1 ) *
-    *              `-´  *
-    ********************/
-    
-    size_t n_pellets = pellets.size();
-    for(size_t p = 0; p < n_pellets; p++) {
-        if(pellets[p]->reached_destination && pellets[p]->carrier_info->decided_type) {
-        
-            //Find Onion.
-            size_t n_onions = onions.size();
-            size_t o = 0;
-            for(; o < n_onions; o++) {
-                if(onions[o]->oni_type->pik_type == pellets[p]->carrier_info->decided_type) break;
-            }
-            
-            if(pellets[p]->pel_type->pik_type == pellets[p]->carrier_info->decided_type) {
-                give_pikmin_to_onion(onions[o], pellets[p]->pel_type->match_seeds);
-            } else {
-                give_pikmin_to_onion(onions[o], pellets[p]->pel_type->non_match_seeds);
-            }
-            
-            make_uncarriable(pellets[p]);
-            pellets[p]->to_delete = true;
-        }
-    }
-    
-    
-    /***********************************
-    *                             ***  *
-    *   Current leader's group   ****O *
-    *                             ***  *
-    ************************************/
-    
-    float closest_distance = 0;
-    size_t n_members = cur_leader_ptr->party->members.size();
-    closest_party_member = cur_leader_ptr->holding_pikmin;
-    
-    if(n_members > 0 && !closest_party_member) {
-    
-        for(size_t m = 0; m < n_members; m++) {
-            float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
-            if(m == 0 || d < closest_distance) {
-                closest_distance = d;
-                closest_party_member = cur_leader_ptr->party->members[m];
-            }
-        }
-        
-        if(closest_distance > MIN_GRAB_RANGE) {
-            closest_party_member = NULL;
-        }
-    }
-    
-    if(moving_group_to_cursor) {
-        moving_group_angle = cursor_angle;
-        moving_group_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
-    } else if(moving_group_pos_x != 0 || moving_group_pos_y != 0) {
-        coordinates_to_angle(
-            moving_group_pos_x, moving_group_pos_y,
-            &moving_group_angle, &moving_group_intensity);
-        if(moving_group_intensity > 1) moving_group_intensity = 1;
-    } else {
-        moving_group_intensity = 0;
-    }
-    
-    if(moving_group_intensity) {
-        cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
-        cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
-    } else if(prev_moving_group_intensity != 0) {
-        float d = get_leader_to_group_center_dist(cur_leader_ptr);
-        cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * d;
-        cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * d;
-    }
-    prev_moving_group_intensity = moving_group_intensity;
-    
-    
-    /********************
-    *             .-.   *
-    *   Cursor   ( = )> *
-    *             `-´   *
-    ********************/
-    
-    mouse_cursor_x += mouse_cursor_speed_x;
-    mouse_cursor_y += mouse_cursor_speed_y;
-    
-    float mcx = mouse_cursor_x, mcy = mouse_cursor_y;
-    ALLEGRO_TRANSFORM world_to_screen_transform = get_world_to_screen_transform();
-    ALLEGRO_TRANSFORM screen_to_world_transform = world_to_screen_transform;
-    al_invert_transform(&screen_to_world_transform);
-    al_transform_coordinates(&screen_to_world_transform, &mcx, &mcy);
-    cursor_x = mcx;
-    cursor_y = mcy;
-    
-    if(!cur_leader_ptr->auto_pluck_mode) {
-        cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
-        cur_leader_ptr->face(cursor_angle);
-    }
-    
-    leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-    if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
-        //Cursor goes beyond the range limit.
-        cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
-        cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
-        
-        if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
-            //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.
-            mouse_cursor_x = cursor_x;
-            mouse_cursor_y = cursor_y;
-            al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
-        }
-    }
-    
-    
-    /**************************
-    *                    /  / *
-    *   Percipitation     / / *
-    *                   /  /  *
-    **************************/
-    
-    if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
-        percipitation_time_left -= (1.0 / game_fps);
-        if(percipitation_time_left <= 0) {
-            percipitation_time_left = cur_weather.percipitation_frequency.get_random_number();
-            percipitation.push_back(point(0, 0));
-        }
-        
-        for(size_t p = 0; p < percipitation.size();) {
-            percipitation[p].y += cur_weather.percipitation_speed.get_random_number() / game_fps;
-            if(percipitation[p].y > scr_h) {
-                percipitation.erase(percipitation.begin() + p);
-            } else {
-                p++;
-            }
-        }
-    }
-    
-    
-    /**********************
-    *                 *   *
-    *   Particles   *   * *
-    *                ***  *
-    **********************/
-    
     //Tick all particles.
     size_t n_particles = particles.size();
     for(size_t p = 0; p < n_particles; ) {
@@ -558,14 +150,444 @@ void do_logic() {
         }
     }
     
-    //ToDo the particles can't be created once per frame! That's overkill! ...right?
-    for(size_t l = 0; l < n_leaders; l++) {
-        if(leaders[l]->was_thrown)
-            random_particle_fire(leaders[l]->x, leaders[l]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l]->type->main_color, 192));
-    }
     
-    for(size_t p = 0; p < n_pikmin; p++) {
-        if(pikmin_list[p]->was_thrown)
-            random_particle_fire(pikmin_list[p]->x, pikmin_list[p]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p]->type->main_color, 192));
+    if(cur_message.size() == 0) {
+    
+        /************************************
+        *                              .-.  *
+        *   Timer things - gameplay   ( L ) *
+        *                              `-´  *
+        *************************************/
+        
+        day_minutes += (day_minutes_per_irl_sec / game_fps);
+        if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
+        
+        if(auto_pluck_input_time > 0) {
+            auto_pluck_input_time -= (1.0 / game_fps);
+            if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
+        }
+        
+        /********************
+        *              ***  *
+        *   Whistle   * O * *
+        *              ***  *
+        ********************/
+        
+        if(whistling && whistle_radius < cur_leader_ptr->lea_type->whistle_range) {
+            whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
+            if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
+                whistle_radius = cur_leader_ptr->lea_type->whistle_range;
+                whistle_max_hold = WHISTLE_MAX_HOLD_TIME;
+            }
+        }
+        
+        if(whistle_max_hold > 0) {
+            whistle_max_hold -= 1.0 / game_fps;
+            if(whistle_max_hold <= 0) {
+                stop_whistling();
+            }
+        }
+        
+        
+        /*****************
+        *                *
+        *   Mobs   ()--> *
+        *                *
+        ******************/
+        
+        size_t n_mobs = mobs.size();
+        for(size_t m = 0; m < n_mobs;) {
+            mobs[m]->tick();
+            
+            if(mobs[m]->to_delete) {
+                delete_mob(mobs[m]);
+                n_mobs--;
+            } else {
+                m++;
+            }
+        }
+        
+        
+        /******************
+        *             /\  *
+        *   Pikmin   (@:) *
+        *             \/  *
+        ******************/
+        
+        size_t n_pikmin = pikmin_list.size();
+        for(size_t p = 0; p < n_pikmin; p++) {
+            pikmin* pik_ptr = pikmin_list[p];
+            
+            bool can_be_called =
+                !pik_ptr->following_party &&
+                !pik_ptr->buried &&
+                !pik_ptr->speed_z &&
+                !pik_ptr->uncallable_period;
+            bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
+            bool touched =
+                dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
+                pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
+                !cur_leader_ptr->carrier_info;
+            bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
+            
+            if(can_be_called && (whistled || (touched && !is_busy))) {
+            
+                //Pikmin got whistled or touched.
+                drop_mob(pik_ptr);
+                add_to_party(cur_leader_ptr, pik_ptr);
+                al_stop_sample(&sfx_pikmin_called.id);
+                al_play_sample(sfx_pikmin_called.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_called.id);
+                
+                pik_ptr->enemy_attacking = NULL;
+                
+            }
+            
+            //Touching nectar.
+            size_t n_nectars = nectars.size();
+            if(
+                !pik_ptr->carrying_mob &&
+                !pik_ptr->enemy_attacking &&
+                !pik_ptr->buried &&
+                !pik_ptr->speed_z &&
+                pik_ptr->maturity != 2
+            ) {
+                for(size_t n = 0; n < n_nectars; n++) {
+                    if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->type->size * 0.5 + pik_ptr->type->size * 0.5) {
+                        if(nectars[n]->amount_left > 0)
+                            nectars[n]->amount_left--;
+                            
+                        pik_ptr->maturity = 2;
+                    }
+                }
+            }
+            
+            //Finding tasks.
+            size_t n_mobs = mobs.size();
+            if(
+                (!pik_ptr->following_party &&
+                 !pik_ptr->carrying_mob &&
+                 !pik_ptr->enemy_attacking &&
+                 !pik_ptr->buried &&
+                 !pik_ptr->speed_z) ||
+                (pik_ptr->following_party && moving_group_intensity)
+            ) {
+                for(size_t m = 0; m < n_mobs; m++) {
+                
+                    mob* mob_ptr = mobs[m];
+                    
+                    if(!mob_ptr->carrier_info) continue;
+                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue;
+                    
+                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
+                        pik_ptr->carrying_mob = mob_ptr;
+                        
+                        if(pik_ptr->following_party) remove_from_party(pik_ptr);
+                        
+                        //ToDo remove this random cycle and replace with something more optimal.
+                        bool valid_spot = false;
+                        unsigned int spot = 0;
+                        while(!valid_spot) {
+                            spot = random(0, mob_ptr->carrier_info->max_carriers - 1);
+                            valid_spot = !mob_ptr->carrier_info->carrier_spots[spot];
+                        }
+                        
+                        mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
+                        mob_ptr->carrier_info->current_n_carriers++;
+                        
+                        pik_ptr->carrying_spot = spot;
+                        pik_ptr->set_target(
+                            mob_ptr->carrier_info->carrier_spots_x[spot],
+                            mob_ptr->carrier_info->carrier_spots_y[spot],
+                            &mob_ptr->x,
+                            &mob_ptr->y,
+                            true);
+                            
+                        if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) {
+                            start_carrying(mob_ptr, pik_ptr, NULL);
+                        }
+                        
+                        pik_ptr->uncallable_period = 0;
+                        
+                        break;
+                    }
+                }
+            }
+            
+            if(pik_ptr->carrying_mob) {
+                pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
+            }
+            
+        }
+        
+        
+        /********************
+        *              .-.  *
+        *   Leaders   (*:O) *
+        *              `-´  *
+        ********************/
+        
+        if(cur_leader_ptr->holding_pikmin) {
+            cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
+            cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
+        }
+        
+        //Current leader movement.
+        if(!cur_leader_ptr->auto_pluck_mode) {
+            float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
+            if(leader_move_intensity < 0.75) leader_move_intensity = 0;
+            if(leader_move_intensity > 1) leader_move_intensity = 1;
+            if(leader_move_intensity == 0)
+                cur_leader_ptr->remove_target(true);
+            else
+                cur_leader_ptr->set_target(
+                    cur_leader_ptr->x + leader_move_x * cur_leader_ptr->type->move_speed,
+                    cur_leader_ptr->y + leader_move_y * cur_leader_ptr->type->move_speed,
+                    NULL, NULL, false);
+        }
+        
+        size_t n_leaders = leaders.size();
+        for(size_t l = 0; l < n_leaders; l++) {
+            if(whistling) {
+                if(l != cur_leader_nr) {
+                    if(
+                        dist(leaders[l]->x, leaders[l]->y, cursor_x, cursor_y) <= whistle_radius &&
+                        !leaders[l]->following_party &&
+                        !leaders[l]->was_thrown) {
+                        //Leader got whistled.
+                        add_to_party(cur_leader_ptr, leaders[l]);
+                        leaders[l]->auto_pluck_mode = false;
+                        
+                        size_t n_party_members = leaders[l]->party->members.size();
+                        for(size_t m = 0; m < n_party_members; m++) {
+                            mob* member = leaders[l]->party->members[0];
+                            remove_from_party(member);
+                            add_to_party(cur_leader_ptr, member);
+                        }
+                    }
+                }
+            }
+            
+            if(leaders[l]->following_party && !leaders[l]->auto_pluck_mode) {
+                leaders[l]->set_target(
+                    0,
+                    0,
+                    &leaders[l]->following_party->party->party_center_x,
+                    &leaders[l]->following_party->party->party_center_y,
+                    false);
+            } else {
+                if(leaders[l]->auto_pluck_mode) {
+                    if(leaders[l]->auto_pluck_pikmin && leaders[l]->reached_destination) {
+                    
+                        leader* new_pikmin_leader = leaders[l];
+                        if(leaders[l]->following_party) {
+                            if(typeid(*leaders[l]->following_party) == typeid(leader)) {
+                                //If this leader is following another one, then the new Pikmin should be a part of that top leader.
+                                new_pikmin_leader = (leader*) leaders[l]->following_party;
+                            }
+                        }
+                        
+                        //Reached the Pikmin we want to pluck. Pluck it and find a new one.
+                        pluck_pikmin(new_pikmin_leader, leaders[l]->auto_pluck_pikmin);
+                        leaders[l]->auto_pluck_pikmin = NULL;
+                    }
+                    
+                    if(!leaders[l]->auto_pluck_pikmin) {
+                        float d;
+                        pikmin* new_pikmin = get_closest_buried_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
+                        
+                        if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
+                            leaders[l]->auto_pluck_pikmin = new_pikmin;
+                            new_pikmin->pluck_reserved = true;
+                            leaders[l]->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
+                        } else { //No more buried Pikmin, or none nearby. Give up.
+                            leaders[l]->auto_pluck_mode = false;
+                            leaders[l]->remove_target(true);
+                        }
+                    }
+                } else {
+                    if(leaders[l]->auto_pluck_pikmin) {
+                        //Cleanup.
+                        leaders[l]->auto_pluck_pikmin->pluck_reserved = false;
+                        leaders[l]->auto_pluck_pikmin = NULL;
+                        leaders[l]->remove_target(true);
+                    }
+                }
+            }
+            
+        }
+        
+        if(cam_trans_pan_time_left > 0) {
+            cam_trans_pan_final_x = cur_leader_ptr->x;
+            cam_trans_pan_final_y = cur_leader_ptr->y;
+        } else {
+            cam_x = cur_leader_ptr->x;
+            cam_y = cur_leader_ptr->y;
+        }
+        
+        /********************
+        *              .-.  *
+        *   Pellets   ( 1 ) *
+        *              `-´  *
+        ********************/
+        
+        size_t n_pellets = pellets.size();
+        for(size_t p = 0; p < n_pellets; p++) {
+            if(pellets[p]->reached_destination && pellets[p]->carrier_info->decided_type) {
+            
+                //Find Onion.
+                size_t n_onions = onions.size();
+                size_t o = 0;
+                for(; o < n_onions; o++) {
+                    if(onions[o]->oni_type->pik_type == pellets[p]->carrier_info->decided_type) break;
+                }
+                
+                if(pellets[p]->pel_type->pik_type == pellets[p]->carrier_info->decided_type) {
+                    give_pikmin_to_onion(onions[o], pellets[p]->pel_type->match_seeds);
+                } else {
+                    give_pikmin_to_onion(onions[o], pellets[p]->pel_type->non_match_seeds);
+                }
+                
+                make_uncarriable(pellets[p]);
+                pellets[p]->to_delete = true;
+            }
+        }
+        
+        
+        /***********************************
+        *                             ***  *
+        *   Current leader's group   ****O *
+        *                             ***  *
+        ************************************/
+        
+        float closest_distance = 0;
+        size_t n_members = cur_leader_ptr->party->members.size();
+        closest_party_member = cur_leader_ptr->holding_pikmin;
+        
+        if(n_members > 0 && !closest_party_member) {
+        
+            for(size_t m = 0; m < n_members; m++) {
+                float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
+                if(m == 0 || d < closest_distance) {
+                    closest_distance = d;
+                    closest_party_member = cur_leader_ptr->party->members[m];
+                }
+            }
+            
+            if(closest_distance > MIN_GRAB_RANGE) {
+                closest_party_member = NULL;
+            }
+        }
+        
+        if(moving_group_to_cursor) {
+            moving_group_angle = cursor_angle;
+            moving_group_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
+        } else if(moving_group_pos_x != 0 || moving_group_pos_y != 0) {
+            coordinates_to_angle(
+                moving_group_pos_x, moving_group_pos_y,
+                &moving_group_angle, &moving_group_intensity);
+            if(moving_group_intensity > 1) moving_group_intensity = 1;
+        } else {
+            moving_group_intensity = 0;
+        }
+        
+        if(moving_group_intensity) {
+            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
+            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
+        } else if(prev_moving_group_intensity != 0) {
+            float d = get_leader_to_group_center_dist(cur_leader_ptr);
+            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * d;
+            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * d;
+        }
+        prev_moving_group_intensity = moving_group_intensity;
+        
+        
+        /********************
+        *             .-.   *
+        *   Cursor   ( = )> *
+        *             `-´   *
+        ********************/
+        
+        mouse_cursor_x += mouse_cursor_speed_x;
+        mouse_cursor_y += mouse_cursor_speed_y;
+        
+        float mcx = mouse_cursor_x, mcy = mouse_cursor_y;
+        ALLEGRO_TRANSFORM world_to_screen_transform = get_world_to_screen_transform();
+        ALLEGRO_TRANSFORM screen_to_world_transform = world_to_screen_transform;
+        al_invert_transform(&screen_to_world_transform);
+        al_transform_coordinates(&screen_to_world_transform, &mcx, &mcy);
+        cursor_x = mcx;
+        cursor_y = mcy;
+        
+        if(!cur_leader_ptr->auto_pluck_mode) {
+            cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+            cur_leader_ptr->face(cursor_angle);
+        }
+        
+        leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
+        if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
+            //Cursor goes beyond the range limit.
+            cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
+            cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
+            
+            if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
+                //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.
+                mouse_cursor_x = cursor_x;
+                mouse_cursor_y = cursor_y;
+                al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
+            }
+        }
+        
+        
+        /**************************
+        *                    /  / *
+        *   Percipitation     / / *
+        *                   /  /  *
+        **************************/
+        
+        if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
+            percipitation_time_left -= (1.0 / game_fps);
+            if(percipitation_time_left <= 0) {
+                percipitation_time_left = cur_weather.percipitation_frequency.get_random_number();
+                percipitation.push_back(point(0, 0));
+            }
+            
+            for(size_t p = 0; p < percipitation.size();) {
+                percipitation[p].y += cur_weather.percipitation_speed.get_random_number() / game_fps;
+                if(percipitation[p].y > scr_h) {
+                    percipitation.erase(percipitation.begin() + p);
+                } else {
+                    p++;
+                }
+            }
+        }
+        
+        
+        /**********************
+        *                 *   *
+        *   Particles   *   * *
+        *                ***  *
+        **********************/
+        
+        //ToDo the particles can't be created once per frame! That's overkill! ...right?
+        for(size_t l = 0; l < n_leaders; l++) {
+            if(leaders[l]->was_thrown)
+                random_particle_fire(leaders[l]->x, leaders[l]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l]->type->main_color, 192));
+        }
+        
+        for(size_t p = 0; p < n_pikmin; p++) {
+            if(pikmin_list[p]->was_thrown)
+                random_particle_fire(pikmin_list[p]->x, pikmin_list[p]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p]->type->main_color, 192));
+        }
+        
+    } else { //Displaying a message.
+    
+        if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
+            cur_message_char_time -= 1.0 / game_fps;
+            if(cur_message_char_time <= 0) {
+                cur_message_char_time = MESSAGE_CHAR_INTERVAL;
+                cur_message_char++;
+            }
+        }
+        
     }
 }

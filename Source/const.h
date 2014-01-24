@@ -1,6 +1,8 @@
 #ifndef CONST_INCLUDED
 #define CONST_INCLUDED
 
+//ToDo move stuff out of here and into other .h files
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
@@ -15,6 +17,7 @@ using namespace std;
 #define AUTO_PLUCK_MAX_RADIUS       160    //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5    //How many seconds a camera transition lasts for.
 #define CURSOR_MAX_DIST             200    //The cursor can only be these many units away from the captain.
+#define DEF_PIKMIN_SIZE             24     //Default Pikmin size.
 #define DEF_ROTATION_SPEED          M_PI * 2 //The default rotation speed of a mob type.
 #define DEF_WHISTLE_RANGE           80     //The whistle can't go past this radius, by default.
 #define DISMISS_DISTANCE            64     //Dismissed Pikmin go these many units away from the captain.
@@ -22,6 +25,7 @@ using namespace std;
 #define IDLE_GLOW_SPIN_SPEED        M_PI_2 //The idle glow spins these many radians per second.
 #define INFO_SPOT_TRIGGER_RANGE     64     //If the current captain is at this distance or closer from an info spot, it gets triggered.
 #define LEADER_MOVE_SPEED           100    //Max speed at which a leader can move.
+#define MESSAGE_CHAR_INTERVAL       0.02   //These many seconds until a new character of the message is drawn.
 #define MIN_GRAB_RANGE              60     //The leader needs to be at least this close to a Pikmin to grab it.
 #define MIN_ONION_CHECK_RANGE       64     //The minimum distance a leader must be from the onion in order to check it.
 #define MIN_PLUCK_RANGE             30     //The leader needs to be at least this close to a buried Pikmin to pluck it.
@@ -52,7 +56,6 @@ using namespace std;
 #define ZOOM_MIN_LEVEL_EDITOR       0.05   //Minimum zoom level possible on the area editor.
 
 #define DEF_FPS 30
-#define DEF_PIKMIN_SIZE 24
 #define DEF_SCR_W 640
 #define DEF_SCR_H 480
 
@@ -121,6 +124,13 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
 };
 
+enum EDITOR_MODES {
+    EDITOR_MODE_NORMAL,
+    EDITOR_MODE_NEW_SECTOR = 1,
+    EDITOR_MODE_NEW_HITBOX = 1,
+    EDITOR_MODE_DELETE_HITBOX = 2,
+};
+
 enum MOB_TYPES {
     MOB_TYPE_PIKMIN,
     MOB_TYPE_ONION,
@@ -140,6 +150,7 @@ enum SCREENS {
     SCREEN_MAIN_MENU,
     SCREEN_GAME,
     SCREEN_AREA_EDITOR,
+    SCREEN_ANIMATION_EDITOR,
 };
 
 //ToDo these colors aren't right. The purple is pink, the cyan is light green...

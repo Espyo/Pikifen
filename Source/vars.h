@@ -9,15 +9,18 @@
 
 #include "const.h"
 #include "controls.h"
-#include "spec_objs/info_spot.h"
+#include "hitbox.h"
+#include "LAFI/gui.h"
+#include "LAFI/label.h"
 #include "leader.h"
-#include "spec_objs/nectar.h"
-#include "spec_objs/onion.h"
 #include "particle.h"
-#include "spec_objs/pellet.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
 #include "spray_type.h"
+#include "spec_objs/info_spot.h"
+#include "spec_objs/nectar.h"
+#include "spec_objs/onion.h"
+#include "spec_objs/pellet.h"
 #include "spec_objs/ship.h"
 #include "status.h"
 #include "treasure.h"
@@ -32,6 +35,7 @@ extern ALLEGRO_BITMAP* bmp_blue_buried[3];
 extern ALLEGRO_BITMAP* bmp_blue_idle[3];
 extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
+extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_day_bubble;
 extern ALLEGRO_BITMAP* bmp_health_bubble;
@@ -39,6 +43,7 @@ extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
 extern ALLEGRO_BITMAP* bmp_louie;
 extern ALLEGRO_BITMAP* bmp_louie_lying;
+extern ALLEGRO_BITMAP* bmp_message_box;
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_move_group_arrow;
 extern ALLEGRO_BITMAP* bmp_nectar;
@@ -93,11 +98,11 @@ extern vector<unsigned int>  berries;
 extern ALLEGRO_BITMAP*       bmp_error;
 extern float                 cam_trans_pan_final_x;
 extern float                 cam_trans_pan_final_y;
-extern float                 cam_trans_pan_initi_x;
-extern float                 cam_trans_pan_initi_y;
+extern float                 cam_trans_pan_initial_x;
+extern float                 cam_trans_pan_initial_y;
 extern float                 cam_trans_pan_time_left;
 extern float                 cam_trans_zoom_final_level;
-extern float                 cam_trans_zoom_initi_level;
+extern float                 cam_trans_zoom_initial_level;
 extern float                 cam_trans_zoom_time_left;
 extern float                 cam_x;
 extern float                 cam_y;
@@ -105,6 +110,12 @@ extern float                 cam_zoom;
 extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
 extern size_t                cur_leader_nr;
+extern string                cur_message;
+extern size_t                cur_message_char;
+extern float                 cur_message_char_time;
+extern size_t                cur_message_section;
+extern ALLEGRO_BITMAP*       cur_message_speaker;
+extern vector<size_t>        cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern unsigned char         cur_screen;
 extern weather               cur_weather;              //Current weather.
 extern float                 cursor_angle;
@@ -116,7 +127,17 @@ extern float                 day_minutes_end;          //The day ends when the i
 extern float                 day_minutes_per_irl_sec;  //Every real-life second, these many in-game minutes pass.
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
+extern ALLEGRO_DISPLAY*      display;
+extern ALLEGRO_BITMAP*       editor_cur_bmp;
+extern size_t                editor_cur_hitbox_nr;     //string::npos = none.
+extern vector<hitbox>        editor_cur_hitboxes;
+extern lafi_gui*             editor_gui;
+extern lafi_label*           editor_gui_status_bar;
 extern bool                  editor_holding_m2;
+extern unsigned char         editor_mode;
+extern float                 editor_new_hitbox_center_x; //FLT_MAX = none.
+extern float                 editor_new_hitbox_center_y;
+extern float                 editor_new_hitbox_radius;
 extern map<string, enemy_type*>
 enemy_types;
 extern vector<enemy*>        enemies;

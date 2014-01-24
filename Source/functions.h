@@ -31,6 +31,7 @@ void               coordinates_to_angle(float x_coord, float y_coord, float* ang
 void               create_mob(mob* m);
 void               delete_mob(mob* m);
 void               dismiss();
+void               draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, float max_w, float max_h, string text);
 void               draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color);
 void               draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius = 20, bool just_chart = false);
 void               draw_sector(sector &s, float x, float y);
@@ -52,6 +53,7 @@ void               load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(string filename);
 data_node          load_data_file(string filename);
+vector<hitbox>     load_hitboxes();
 void               load_mob_types(string folder, unsigned char type);
 void               load_options();
 sample_struct      load_sample(string filename);
@@ -71,6 +73,7 @@ vector<string>     split(string text, string del = " ", bool inc_empty = false, 
 void               start_camera_pan(int final_x, int final_y);
 void               start_camera_zoom(float final_zoom_level);
 void               start_carrying(mob* m, pikmin* np, pikmin* lp);
+void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 void               stop_whistling();
 string             str_to_lower(string s);
 //bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);

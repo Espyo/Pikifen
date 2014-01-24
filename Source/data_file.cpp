@@ -166,6 +166,44 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
     return lines.size() - 1;
 }
 
+//Saves a node into a new text file. Line numbers are ignored. If you don't provide a filename, it'll use the node's filename.
+//Returns true on success.
+bool data_node::save_file(string filename) {
+    if(filename == "") filename = this->filename;
+    
+    ALLEGRO_FILE* file = al_fopen(filename.c_str(), "w");
+    if(file) {
+        data_node::save_node(file);
+        al_fclose(file);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//Saved a node into a text file.
+void data_node::save_node(ALLEGRO_FILE* file, size_t level) {
+    string tabs = string(level, '\t');
+    
+    al_fwrite(file, tabs.c_str(), tabs.size());
+    al_fwrite(file, name.c_str(), name.size());
+    
+    if(children.size() > 0) {
+        al_fwrite(file, "{\n", 2);
+        for(size_t c = 0; c < children.size(); c++) {
+            children[c]->save_node(file, level + 1);
+        }
+        al_fwrite(file, tabs.c_str(), tabs.size());
+        al_fwrite(file, "}\n", 2);
+        
+    } else {
+        al_fwrite(file, "=", 1);
+        al_fwrite(file, value.c_str(), value.size());
+        al_fwrite(file, "\n", 1);
+    }
+    
+}
+
 //Creates an empty data node.
 data_node::data_node() {
     file_was_opened = false;
@@ -189,11 +227,19 @@ data_node::data_node(const data_node &dn2) {
 }
 
 //Creates a data node from a file, given the file name.
-data_node::data_node(string filename, bool trim_values) {
+data_node::data_node(string filename) {
     file_was_opened = false;
     line_nr = 0;
     this->filename = filename;
-    load_file(filename, trim_values);
+    load_file(filename);
+}
+
+//Creates a data node by filling its name and value.
+data_node::data_node(string name, string value) {
+    file_was_opened = false;
+    line_nr = 0;
+    this->name = name;
+    this->value = value;
 }
 
 //Destroys a data node and all the children within.

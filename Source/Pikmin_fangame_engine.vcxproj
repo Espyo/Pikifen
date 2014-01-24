@@ -51,6 +51,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -70,6 +71,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;ALLEGRO_STATICLINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -86,6 +88,18 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="interval.cpp" />
+    <ClCompile Include="LAFI\button.cpp" />
+    <ClCompile Include="LAFI\checkbox.cpp" />
+    <ClCompile Include="LAFI\checkbox_box.cpp" />
+    <ClCompile Include="LAFI\frame.cpp" />
+    <ClCompile Include="LAFI\gui.cpp" />
+    <ClCompile Include="LAFI\label.cpp" />
+    <ClCompile Include="LAFI\radio_button.cpp" />
+    <ClCompile Include="LAFI\radio_button_button.cpp" />
+    <ClCompile Include="LAFI\scrollbar.cpp" />
+    <ClCompile Include="LAFI\style.cpp" />
+    <ClCompile Include="LAFI\textbox.cpp" />
+    <ClCompile Include="LAFI\widget.cpp" />
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="misc_structs.cpp" />
@@ -108,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="animation_editor.h" />
     <ClInclude Include="area_editor.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="controls.h" />
@@ -117,6 +132,19 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_state.h" />
     <ClInclude Include="enemy_type.h" />
+    <ClInclude Include="LAFI\button.h" />
+    <ClInclude Include="LAFI\checkbox.h" />
+    <ClInclude Include="LAFI\checkbox_box.h" />
+    <ClInclude Include="LAFI\const.h" />
+    <ClInclude Include="LAFI\frame.h" />
+    <ClInclude Include="LAFI\gui.h" />
+    <ClInclude Include="LAFI\label.h" />
+    <ClInclude Include="LAFI\radio_button.h" />
+    <ClInclude Include="LAFI\radio_button_button.h" />
+    <ClInclude Include="LAFI\scrollbar.h" />
+    <ClInclude Include="LAFI\style.h" />
+    <ClInclude Include="LAFI\textbox.h" />
+    <ClInclude Include="LAFI\widget.h" />
     <ClInclude Include="leader_type.h" />
     <ClInclude Include="mob_event.h" />
     <ClInclude Include="functions.h" />

@@ -240,6 +240,33 @@ void dismiss() {
 }
 
 /* ----------------------------------------------------------------------------
+ * Draws text on the screen, but compresses (scales) it to fit within the specified range.
+ * font - flags: The parameters you'd use for al_draw_text.
+ * max_w, max_h: The maximum width and height. Use 0 to have no limit.
+ * text:         Text to draw.
+ */
+void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, float max_w, float max_h, string text) {
+    int x1, x2, y1, y2;
+    al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
+    int text_width = x2 - x1, text_height = y2 - y1;
+    float scale_x = 1, scale_y = 1;
+    
+    if(text_width > max_w && max_w != 0) scale_x = max_w / text_width;
+    if(text_height > max_h && max_h != 0) scale_y = max_h / text_height;
+    
+    ALLEGRO_TRANSFORM scale_transform, old_transform;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    al_identity_transform(&scale_transform);
+    al_scale_transform(&scale_transform, scale_x, scale_y);
+    al_translate_transform(&scale_transform, x, y);
+    al_compose_transform(&scale_transform, &old_transform);
+    
+    al_use_transform(&scale_transform); {
+        al_draw_text(font, color, 0, 0, flags, text.c_str());
+    }; al_use_transform(&old_transform);
+}
+
+/* ----------------------------------------------------------------------------
  * Draws a strength/weight fraction, in the style of Pikmin 2.
  * The strength is above the weight.
  * c*:      Center of the text.
@@ -975,6 +1002,37 @@ void load_game_content() {
 }
 
 /* ----------------------------------------------------------------------------
+ * Loads the hitboxes from a file.
+ */
+vector<hitbox> load_hitboxes() {
+    vector<hitbox> hitboxes;
+    data_node file = data_node("Test.txt");
+    data_node* hitboxes_node = file.get_child_by_name("hitboxes");
+    size_t n_hitboxes = hitboxes_node->get_nr_of_children_by_name("hitbox");
+    for(size_t h = 0; h < n_hitboxes; h++) {
+        data_node* hitbox_node = hitboxes_node->get_child_by_name("hitbox", h);
+        hitboxes.push_back(hitbox());
+        hitbox* cur_hitbox = &hitboxes.back();
+        
+        cur_hitbox->name = hitbox_node->get_child_by_name("name")->value;
+        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
+        vector<string> coords = split(hitbox_node->get_child_by_name("coords")->value);
+        if(coords.size() >= 3) {
+            cur_hitbox->x = tof(coords[0]);
+            cur_hitbox->y = tof(coords[1]);
+            cur_hitbox->z = tof(coords[2]);
+        }
+        cur_hitbox->radius = tof(hitbox_node->get_child_by_name("radius")->value);
+        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
+        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
+        cur_hitbox->shake_angle = tof(hitbox_node->get_child_by_name("shake_angle")->value);
+        cur_hitbox->swallow = tob(hitbox_node->get_child_by_name("swallow")->value);
+    }
+    
+    return hitboxes;
+}
+
+/* ----------------------------------------------------------------------------
  * Loads the mob types from a folder.
  * type: Use MOB_TYPE_* for this.
  */
@@ -1617,8 +1675,8 @@ vector<string> split(string text, string del, bool inc_empty, bool inc_del) {
  * Starts panning the camera towards another point.
  */
 void start_camera_pan(int final_x, int final_y) {
-    cam_trans_pan_initi_x = cam_x;
-    cam_trans_pan_initi_y = cam_y;
+    cam_trans_pan_initial_x = cam_x;
+    cam_trans_pan_initial_y = cam_y;
     cam_trans_pan_final_x = final_x;
     cam_trans_pan_final_y = final_y;
     cam_trans_pan_time_left = CAM_TRANSITION_DURATION;
@@ -1628,7 +1686,7 @@ void start_camera_pan(int final_x, int final_y) {
  * Starts moving the camera towards another zoom level.
  */
 void start_camera_zoom(float final_zoom_level) {
-    cam_trans_zoom_initi_level = cam_zoom;
+    cam_trans_zoom_initial_level = cam_zoom;
     cam_trans_zoom_final_level = final_zoom_level;
     cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
     
@@ -1763,6 +1821,31 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         //Finally, start moving the mob.
         m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Starts the display of a text message. If the text is empty, it closes the message box.
+ * text:        Text to display.
+ * speaker_bmp: Bitmap representing the speaker.
+ */
+void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
+    if(text.size()) if(text.back() == '\n') text.pop_back();
+    cur_message = text;
+    cur_message_char = 0;
+    cur_message_char_time = MESSAGE_CHAR_INTERVAL;
+    cur_message_speaker = speaker_bmp;
+    cur_message_stopping_chars.clear();
+    cur_message_stopping_chars.push_back(0); //First character. Makes it easier.
+    cur_message_section = 0;
+    
+    vector<string> lines = split(text, "\n");
+    for(size_t line_trio = 0; line_trio < lines.size(); line_trio += 3) {
+        cur_message_stopping_chars.push_back(0);
+        for(size_t l = 0; l < (line_trio + 1) * 3 && l < lines.size(); l++) {
+            cur_message_stopping_chars.back() += lines[l].size() + 1; //+1 because of the new line character.
+        }
+    }
+    cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
 }
 
 /* ----------------------------------------------------------------------------

@@ -16,6 +16,14 @@ void handle_game_controls(ALLEGRO_EVENT ev) {
         //ToDo remove.
         //leaders[cur_leader_nr]->health--;
         day_minutes += 30;
+        day += 5;
+        start_message(
+            "This is a test message.\n"
+            "Second line.\n"
+            "Third line, which is way too long to even be existing.\n"
+            "Secret fourth line!\n"
+            "Fifth line? Sure!\n"
+            "6th incoming.", bmp_olimar);
     }
     
     size_t n_controls = controls.size();
@@ -77,544 +85,563 @@ void handle_button(unsigned int button, float pos) {
 
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
-    if(
-        button == BUTTON_MOVE_RIGHT ||
-        button == BUTTON_MOVE_UP ||
-        button == BUTTON_MOVE_LEFT ||
-        button == BUTTON_MOVE_DOWN
-    ) {
+    if(cur_message.size() == 0) {
     
-        /*******************
-        *              \O/ *
-        *   Move   ---> |  *
-        *              / \ *
-        *******************/
+        if(
+            button == BUTTON_MOVE_RIGHT ||
+            button == BUTTON_MOVE_UP ||
+            button == BUTTON_MOVE_LEFT ||
+            button == BUTTON_MOVE_DOWN
+        ) {
         
-        if(pos != 0) active_control();
+            /*******************
+            *              \O/ *
+            *   Move   ---> |  *
+            *              / \ *
+            *******************/
+            
+            if(pos != 0) active_control();
+            
+            if(button == BUTTON_MOVE_RIGHT || button == BUTTON_MOVE_LEFT) leader_move_x =
+                    ((button == BUTTON_MOVE_LEFT) ? -pos : pos);
+            if(button == BUTTON_MOVE_DOWN || button == BUTTON_MOVE_UP) leader_move_y =
+                    ((button == BUTTON_MOVE_UP) ? -pos : pos);
+                    
+        } else if(
+            button == BUTTON_MOVE_CURSOR_RIGHT ||
+            button == BUTTON_MOVE_CURSOR_UP ||
+            button == BUTTON_MOVE_CURSOR_LEFT ||
+            button == BUTTON_MOVE_CURSOR_DOWN
+        ) {
+            /********************
+            *             .-.   *
+            *   Cursor   ( = )> *
+            *             `-´   *
+            ********************/
+            
+            if(button == BUTTON_MOVE_CURSOR_RIGHT)     mouse_cursor_speed_x = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_UP)   mouse_cursor_speed_y = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_LEFT) mouse_cursor_speed_x = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_DOWN) mouse_cursor_speed_y = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
+            
+        } else if(
+            button == BUTTON_MOVE_GROUP_RIGHT ||
+            button == BUTTON_MOVE_GROUP_UP ||
+            button == BUTTON_MOVE_GROUP_LEFT ||
+            button == BUTTON_MOVE_GROUP_DOWN
+        ) {
+            /******************
+            *            ***  *
+            *   Group   ****O *
+            *            ***  *
+            ******************/
+            
+            active_control();
+            
+            if(button == BUTTON_MOVE_GROUP_RIGHT)     moving_group_pos_x = pos;
+            else if(button == BUTTON_MOVE_GROUP_UP)   moving_group_pos_y = -pos;
+            else if(button == BUTTON_MOVE_GROUP_LEFT) moving_group_pos_x = -pos;
+            else if(button == BUTTON_MOVE_GROUP_DOWN) moving_group_pos_y = pos;
+            
+        } else if(button == BUTTON_MOVE_GROUP_TO_CURSOR) {
         
-        if(button == BUTTON_MOVE_RIGHT || button == BUTTON_MOVE_LEFT) leader_move_x =
-                ((button == BUTTON_MOVE_LEFT) ? -pos : pos);
-        if(button == BUTTON_MOVE_DOWN || button == BUTTON_MOVE_UP) leader_move_y =
-                ((button == BUTTON_MOVE_UP) ? -pos : pos);
-                
-    } else if(
-        button == BUTTON_MOVE_CURSOR_RIGHT ||
-        button == BUTTON_MOVE_CURSOR_UP ||
-        button == BUTTON_MOVE_CURSOR_LEFT ||
-        button == BUTTON_MOVE_CURSOR_DOWN
-    ) {
-        /********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             `-´   *
-        ********************/
-        
-        if(button == BUTTON_MOVE_CURSOR_RIGHT)     mouse_cursor_speed_x = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_CURSOR_UP)   mouse_cursor_speed_y = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_CURSOR_LEFT) mouse_cursor_speed_x = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-        else if(button == BUTTON_MOVE_CURSOR_DOWN) mouse_cursor_speed_y = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-        
-    } else if(
-        button == BUTTON_MOVE_GROUP_RIGHT ||
-        button == BUTTON_MOVE_GROUP_UP ||
-        button == BUTTON_MOVE_GROUP_LEFT ||
-        button == BUTTON_MOVE_GROUP_DOWN
-    ) {
-        /******************
-        *            ***  *
-        *   Group   ****O *
-        *            ***  *
-        ******************/
-        
-        active_control();
-        
-        if(button == BUTTON_MOVE_GROUP_RIGHT)     moving_group_pos_x = pos;
-        else if(button == BUTTON_MOVE_GROUP_UP)   moving_group_pos_y = -pos;
-        else if(button == BUTTON_MOVE_GROUP_LEFT) moving_group_pos_x = -pos;
-        else if(button == BUTTON_MOVE_GROUP_DOWN) moving_group_pos_y = pos;
-        
-    } else if(button == BUTTON_MOVE_GROUP_TO_CURSOR) {
-    
-        active_control();
-        
-        if(pos > 0) {
-            moving_group_to_cursor = true;
-            moving_group_intensity = 1;
-        } else {
-            moving_group_to_cursor = false;
-            moving_group_intensity = 0;
-        }
-        
-    } else if(button == BUTTON_PUNCH) {
-    
-        /*******************
-        *            .--._ *
-        *   Punch   ( U  _ *
-        *            `--´  *
-        *******************/
-        
-        if(pos > 0) { //Button press.
-        
-            if(auto_pluck_input_time > 0) {
-                cur_leader_ptr->auto_pluck_mode = true;
-                
-                size_t n_leaders = leaders.size();
-                for(size_t l = 0; l < n_leaders; l++) {
-                    if(leaders[l]->following_party == cur_leader_ptr) {
-                        leaders[l]->auto_pluck_mode = true;
-                    }
-                }
-                return;
+            active_control();
+            
+            if(pos > 0) {
+                moving_group_to_cursor = true;
+                moving_group_intensity = 1;
             } else {
-                active_control();
+                moving_group_to_cursor = false;
+                moving_group_intensity = 0;
             }
             
-            bool done = false;
+        } else if(button == BUTTON_PUNCH) {
+        
+            /*******************
+            *            .--._ *
+            *   Punch   ( U  _ *
+            *            `--´  *
+            *******************/
             
-            //First check if the leader should pluck a Pikmin.
-            float d;
-            pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
-            if(p && d <= MIN_PLUCK_RANGE) {
-                pluck_pikmin(cur_leader_ptr, p);
-                auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
-                done = true;
-            }
+            if(pos > 0) { //Button press.
             
-            
-            //Now check if the leader should open an onion's menu.
-            if(!done) {
-                //ToDo
-                size_t n_onions = onions.size();
-                for(size_t o = 0; o < n_onions; o++) {
-                    if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE) {
-                        if(pikmin_list.size() < max_pikmin_in_field) {
-                            //ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
-                            pikmin_in_onions[onions[o]->oni_type->pik_type]--;
-                            create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->sec, onions[o]->oni_type->pik_type));
-                            add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
+                if(auto_pluck_input_time > 0) {
+                    cur_leader_ptr->auto_pluck_mode = true;
+                    
+                    size_t n_leaders = leaders.size();
+                    for(size_t l = 0; l < n_leaders; l++) {
+                        if(leaders[l]->following_party == cur_leader_ptr) {
+                            leaders[l]->auto_pluck_mode = true;
                         }
-                        done = true;
                     }
+                    return;
+                } else {
+                    active_control();
                 }
-            }
-            
-            //Now check if the leader should heal themselves on the ship.
-            if(!done) {
-                size_t n_ships = ships.size();
-                for(size_t s = 0; s < n_ships; s++) {
-                    if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
-                        //ToDo make it prettier.
-                        cur_leader_ptr->health = cur_leader_ptr->type->max_health;
-                        done = true;
-                    }
-                }
-            }
-            
-            //Now check if the leader should grab a Pikmin.
-            
-            if(!done) {
-                if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
-                    cur_leader_ptr->holding_pikmin = closest_party_member;
-                    al_play_sample(sfx_pikmin_held.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_held.id);
+                
+                bool done = false;
+                
+                //First check if the leader should pluck a Pikmin.
+                float d;
+                pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
+                if(p && d <= MIN_PLUCK_RANGE) {
+                    pluck_pikmin(cur_leader_ptr, p);
+                    auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
                     done = true;
                 }
-            }
-            
-            //Now check if the leader should punch.
-            
-            if(!done) {
-                //ToDo
-            }
-            
-        } else { //Button release.
-            mob* holding_ptr = cur_leader_ptr->holding_pikmin;
-            if(holding_ptr) {
-            
-                holding_ptr->x = cur_leader_ptr->x;
-                holding_ptr->y = cur_leader_ptr->y;
-                holding_ptr->z = cur_leader_ptr->z;
                 
-                float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-                holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
-                holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
-                holding_ptr->speed_z = 2;
                 
-                holding_ptr->was_thrown = true;
-                
-                remove_from_party(holding_ptr);
-                cur_leader_ptr->holding_pikmin = NULL;
-                
-                al_stop_sample(&sfx_pikmin_held.id);
-                al_stop_sample(&sfx_pikmin_thrown.id);
-                al_stop_sample(&sfx_throw.id);
-                al_play_sample(sfx_pikmin_thrown.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_thrown.id);
-                al_play_sample(sfx_throw.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_throw.id);
-            }
-        }
-        
-    } else if(button == BUTTON_WHISTLE) {
-    
-        /********************
-        *              .--= *
-        *   Whistle   ( @ ) *
-        *              `-´  *
-        ********************/
-        
-        active_control();
-        
-        if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
-            whistling = true;
-            al_play_sample(cur_leader_ptr->lea_type->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_whistle.id);
-            
-            for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
-            whistle_fade_time = 0;
-            whistle_fade_radius = 0;
-            
-        } else { //Button released.
-            stop_whistling();
-        }
-        
-    } else if(
-        button == BUTTON_SWITCH_CAPTAIN_RIGHT ||
-        button == BUTTON_SWITCH_CAPTAIN_LEFT
-    ) {
-    
-        /******************************
-        *                    \O/  \O/ *
-        *   Switch captain    | -> |  *
-        *                    / \  / \ *
-        ******************************/
-        
-        if(pos == 0) return;
-        
-        size_t new_leader_nr = cur_leader_nr;
-        if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
-            new_leader_nr = (cur_leader_nr + 1) % leaders.size();
-        else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
-            if(cur_leader_nr == 0) new_leader_nr = leaders.size() - 1;
-            else new_leader_nr = cur_leader_nr - 1;
-        }
-        
-        if(new_leader_nr == cur_leader_nr) return;
-        
-        mob* swap_leader = NULL;
-        
-        if(!cur_leader_ptr->speed_z) {
-            cur_leader_ptr->speed_x = 0;
-            cur_leader_ptr->speed_y = 0;
-        }
-        if(!leaders[new_leader_nr]->speed_z) {
-            leaders[new_leader_nr]->speed_x = 0;
-            leaders[new_leader_nr]->speed_y = 0;
-        }
-        leaders[new_leader_nr]->remove_target(true);
-        
-        //If the new leader is in another one's party, swap them.
-        size_t n_leaders = leaders.size();
-        for(size_t l = 0; l < n_leaders; l++) {
-            if(l == new_leader_nr) continue;
-            size_t n_party_members = leaders[l]->party->members.size();
-            for(size_t m = 0; m < n_party_members; m++) {
-                if(leaders[l]->party->members[m] == leaders[new_leader_nr]) {
-                    swap_leader = leaders[l];
-                    break;
+                //Now check if the leader should open an onion's menu.
+                if(!done) {
+                    //ToDo
+                    size_t n_onions = onions.size();
+                    for(size_t o = 0; o < n_onions; o++) {
+                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE) {
+                            if(pikmin_list.size() < max_pikmin_in_field) {
+                                //ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
+                                pikmin_in_onions[onions[o]->oni_type->pik_type]--;
+                                create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->sec, onions[o]->oni_type->pik_type));
+                                add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
+                            }
+                            done = true;
+                        }
+                    }
                 }
-            }
-        }
-        
-        if(swap_leader) {
-            size_t n_party_members = swap_leader->party->members.size();
-            for(size_t m = 0; m < n_party_members; m++) {
-                mob* member = swap_leader->party->members[0];
-                remove_from_party(member);
-                if(member != leaders[new_leader_nr]) {
-                    add_to_party(leaders[new_leader_nr], member);
+                
+                //Now check if the leader should heal themselves on the ship.
+                if(!done) {
+                    size_t n_ships = ships.size();
+                    for(size_t s = 0; s < n_ships; s++) {
+                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
+                            //ToDo make it prettier.
+                            cur_leader_ptr->health = cur_leader_ptr->type->max_health;
+                            done = true;
+                        }
+                    }
+                }
+                
+                //Now check if the leader should grab a Pikmin.
+                
+                if(!done) {
+                    if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
+                        cur_leader_ptr->holding_pikmin = closest_party_member;
+                        al_play_sample(sfx_pikmin_held.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_held.id);
+                        done = true;
+                    }
+                }
+                
+                //Now check if the leader should punch.
+                
+                if(!done) {
+                    //ToDo
+                }
+                
+            } else { //Button release.
+                mob* holding_ptr = cur_leader_ptr->holding_pikmin;
+                if(holding_ptr) {
+                
+                    holding_ptr->x = cur_leader_ptr->x;
+                    holding_ptr->y = cur_leader_ptr->y;
+                    holding_ptr->z = cur_leader_ptr->z;
+                    
+                    float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
+                    holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
+                    holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
+                    holding_ptr->speed_z = 2;
+                    
+                    holding_ptr->was_thrown = true;
+                    
+                    remove_from_party(holding_ptr);
+                    cur_leader_ptr->holding_pikmin = NULL;
+                    
+                    al_stop_sample(&sfx_pikmin_held.id);
+                    al_stop_sample(&sfx_pikmin_thrown.id);
+                    al_stop_sample(&sfx_throw.id);
+                    al_play_sample(sfx_pikmin_thrown.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_thrown.id);
+                    al_play_sample(sfx_throw.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_throw.id);
                 }
             }
             
-            add_to_party(leaders[new_leader_nr], swap_leader);
-        }
+        } else if(button == BUTTON_WHISTLE) {
         
-        cur_leader_nr = new_leader_nr;
-        start_camera_pan(leaders[new_leader_nr]->x, leaders[new_leader_nr]->y);
-        al_play_sample(leaders[new_leader_nr]->lea_type->sfx_name_call.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[new_leader_nr]->lea_type->sfx_name_call.id);
-        
-    } else if(button == BUTTON_DISMISS) {
-    
-        /***********************
-        *             \O/ / *  *
-        *   Dismiss    |   - * *
-        *             / \ \ *  *
-        ***********************/
-        
-        if(pos == 0) return;
-        
-        active_control();
-        
-        dismiss();
-        al_play_sample(cur_leader_ptr->lea_type->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_dismiss.id);
-        
-    } else if(button == BUTTON_PAUSE) {
-    
-        /********************
-        *           +-+ +-+ *
-        *   Pause   | | | | *
-        *           +-+ +-+ *
-        ********************/
-        
-        if(pos == 0) return;
-        
-        running = false; //ToDo menu, not quit.
-        //paused = true;
-        
-    } else if(button == BUTTON_USE_SPRAY_1) {
-    
-        /*******************
-        *             +=== *
-        *   Sprays   (   ) *
-        *             `-´  *
-        *******************/
-        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
-        
-        active_control();
-        
-        if(spray_types.size() == 1 || spray_types.size() == 2) {
-            use_spray(0);
-        }
-        
-    } else if(button == BUTTON_USE_SPRAY_2) {
-    
-        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
-        
-        active_control();
-        
-        if(spray_types.size() == 2) {
-            use_spray(1);
-        }
-        
-    } else if(button == BUTTON_SWITCH_SPRAY_RIGHT || button == BUTTON_SWITCH_SPRAY_LEFT) {
-    
-        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
-        
-        if(spray_types.size() > 2) {
-            if(button == BUTTON_SWITCH_SPRAY_RIGHT) {
-                selected_spray = (selected_spray + 1) % spray_types.size();
-            } else {
-                if(selected_spray == 0) selected_spray = spray_types.size() - 1;
-                else selected_spray--;
-            }
-        }
-        
-    } else if(button == BUTTON_USE_SPRAY) {
-    
-        if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
-        
-        active_control();
-        
-        if(spray_types.size() > 2) {
-            use_spray(selected_spray);
-        }
-        
-    } else if(button == BUTTON_SWITCH_ZOOM) {
-    
-        /***************
-        *           _  *
-        *   Zoom   (_) *
-        *          /   *
-        ***************/
-        
-        if(pos == 0) return;
-        
-        float new_zoom;
-        float zoom_to_compare;
-        if(cam_trans_zoom_time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
-        
-        if(zoom_to_compare < 1) {
-            new_zoom = ZOOM_MAX_LEVEL;
-        } else if(zoom_to_compare > 1) {
-            new_zoom = 1;
-        } else {
-            new_zoom = ZOOM_MIN_LEVEL;
-        }
-        
-        start_camera_zoom(new_zoom);
-        
-    } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
-    
-        if((cam_zoom == ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) || (cam_zoom == ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)) return;
-        
-        float new_zoom;
-        float current_zoom;
-        if(cam_trans_zoom_time_left) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
-        
-        pos = floor(pos);
-        
-        if(button == BUTTON_ZOOM_IN) new_zoom = current_zoom + 0.1 * pos; else new_zoom = current_zoom - 0.1 * pos;
-        
-        if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
-        if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
-        
-        if(cam_trans_zoom_time_left) {
-            cam_trans_zoom_final_level = new_zoom;
-        } else {
-            start_camera_zoom(new_zoom);
-        }
-        
-    } else if(button == BUTTON_LIE_DOWN) {
-    
-        /**********************
-        *                     *
-        *   Lie down  -()/__/ *
-        *                     *
-        ***********************/
-        
-        if(pos == 0) return;
-        
-        leader* leader_ptr = cur_leader_ptr;
-        
-        if(leader_ptr->carrier_info) {
+            /********************
+            *              .--= *
+            *   Whistle   ( @ ) *
+            *              `-´  *
+            ********************/
+            
             active_control();
-        } else {
-        
-            dismiss();
             
-            leader_ptr->carrier_info = new carrier_info_struct(
-                leader_ptr,
-                3, //ToDo
-                false);
-        }
-        
-    } else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT) {
-    
-        /****************************
-        *                     -->   *
-        *   Switch type   <(¨)> (ö) *
-        *                           *
-        *****************************/
-        
-        if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
-        
-        active_control();
-        
-        vector<pikmin_type*> types_in_party;
-        
-        size_t n_members = cur_leader_ptr->party->members.size();
-        //Get all Pikmin types in the group.
-        for(size_t m = 0; m < n_members; m++) {
-            if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
-                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+            if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
+                whistling = true;
+                al_play_sample(cur_leader_ptr->lea_type->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_whistle.id);
                 
-                if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()) {
-                    types_in_party.push_back(pikmin_ptr->type);
-                }
-            } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+                for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
+                whistle_fade_time = 0;
+                whistle_fade_radius = 0;
+                
+            } else { //Button released.
+                stop_whistling();
+            }
             
-                if(find(types_in_party.begin(), types_in_party.end(), (pikmin_type*) NULL) == types_in_party.end()) {
-                    types_in_party.push_back(NULL); //NULL represents leaders.
+        } else if(
+            button == BUTTON_SWITCH_CAPTAIN_RIGHT ||
+            button == BUTTON_SWITCH_CAPTAIN_LEFT
+        ) {
+        
+            /******************************
+            *                    \O/  \O/ *
+            *   Switch captain    | -> |  *
+            *                    / \  / \ *
+            ******************************/
+            
+            if(pos == 0) return;
+            
+            size_t new_leader_nr = cur_leader_nr;
+            if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
+                new_leader_nr = (cur_leader_nr + 1) % leaders.size();
+            else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
+                if(cur_leader_nr == 0) new_leader_nr = leaders.size() - 1;
+                else new_leader_nr = cur_leader_nr - 1;
+            }
+            
+            if(new_leader_nr == cur_leader_nr) return;
+            
+            mob* swap_leader = NULL;
+            
+            if(!cur_leader_ptr->speed_z) {
+                cur_leader_ptr->speed_x = 0;
+                cur_leader_ptr->speed_y = 0;
+            }
+            if(!leaders[new_leader_nr]->speed_z) {
+                leaders[new_leader_nr]->speed_x = 0;
+                leaders[new_leader_nr]->speed_y = 0;
+            }
+            leaders[new_leader_nr]->remove_target(true);
+            
+            //If the new leader is in another one's party, swap them.
+            size_t n_leaders = leaders.size();
+            for(size_t l = 0; l < n_leaders; l++) {
+                if(l == new_leader_nr) continue;
+                size_t n_party_members = leaders[l]->party->members.size();
+                for(size_t m = 0; m < n_party_members; m++) {
+                    if(leaders[l]->party->members[m] == leaders[new_leader_nr]) {
+                        swap_leader = leaders[l];
+                        break;
+                    }
                 }
             }
-        }
+            
+            if(swap_leader) {
+                size_t n_party_members = swap_leader->party->members.size();
+                for(size_t m = 0; m < n_party_members; m++) {
+                    mob* member = swap_leader->party->members[0];
+                    remove_from_party(member);
+                    if(member != leaders[new_leader_nr]) {
+                        add_to_party(leaders[new_leader_nr], member);
+                    }
+                }
+                
+                add_to_party(leaders[new_leader_nr], swap_leader);
+            }
+            
+            cur_leader_nr = new_leader_nr;
+            start_camera_pan(leaders[new_leader_nr]->x, leaders[new_leader_nr]->y);
+            al_play_sample(leaders[new_leader_nr]->lea_type->sfx_name_call.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[new_leader_nr]->lea_type->sfx_name_call.id);
+            
+        } else if(button == BUTTON_DISMISS) {
         
-        size_t n_types = types_in_party.size();
-        if(n_types == 1) return;
+            /***********************
+            *             \O/ / *  *
+            *   Dismiss    |   - * *
+            *             / \ \ *  *
+            ***********************/
+            
+            if(pos == 0) return;
+            
+            active_control();
+            
+            dismiss();
+            al_play_sample(cur_leader_ptr->lea_type->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_dismiss.id);
+            
+        } else if(button == BUTTON_PAUSE) {
         
-        pikmin_type* current_type = NULL;
-        pikmin_type* new_type = NULL;
-        unsigned char current_maturity = 255;
-        if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
-            current_type = pikmin_ptr->type;
-            current_maturity = pikmin_ptr->maturity;
-        }
+            /********************
+            *           +-+ +-+ *
+            *   Pause   | | | | *
+            *           +-+ +-+ *
+            ********************/
+            
+            if(pos == 0) return;
+            
+            running = false; //ToDo menu, not quit.
+            //paused = true;
+            
+        } else if(button == BUTTON_USE_SPRAY_1) {
         
+            /*******************
+            *             +=== *
+            *   Sprays   (   ) *
+            *             `-´  *
+            *******************/
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            
+            active_control();
+            
+            if(spray_types.size() == 1 || spray_types.size() == 2) {
+                use_spray(0);
+            }
+            
+        } else if(button == BUTTON_USE_SPRAY_2) {
         
-        //Go one type adjacent to the current member being held.
-        for(size_t t = 0; t < n_types; t++) {
-            if(current_type == types_in_party[t]) {
-                if(button == BUTTON_SWITCH_TYPE_RIGHT) {
-                    new_type = types_in_party[(t + 1) % n_types];
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            
+            active_control();
+            
+            if(spray_types.size() == 2) {
+                use_spray(1);
+            }
+            
+        } else if(button == BUTTON_SWITCH_SPRAY_RIGHT || button == BUTTON_SWITCH_SPRAY_LEFT) {
+        
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            
+            if(spray_types.size() > 2) {
+                if(button == BUTTON_SWITCH_SPRAY_RIGHT) {
+                    selected_spray = (selected_spray + 1) % spray_types.size();
                 } else {
-                    new_type = types_in_party[((t - 1) + n_types) % n_types];
+                    if(selected_spray == 0) selected_spray = spray_types.size() - 1;
+                    else selected_spray--;
                 }
             }
-        }
-        
-        size_t t_match_nr = n_members + 1; //Number of the member that matches the type we want.
-        size_t tm_match_nr = n_members + 1; //Number of the member that matches the type and maturity we want.
-        
-        //Find a Pikmin of the new type.
-        for(size_t m = 0; m < n_members; m++) {
-            if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
             
-                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
-                if(pikmin_ptr->type == new_type) {
-                    t_match_nr = m;
-                    if(pikmin_ptr->maturity == current_maturity) {
+        } else if(button == BUTTON_USE_SPRAY) {
+        
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            
+            active_control();
+            
+            if(spray_types.size() > 2) {
+                use_spray(selected_spray);
+            }
+            
+        } else if(button == BUTTON_SWITCH_ZOOM) {
+        
+            /***************
+            *           _  *
+            *   Zoom   (_) *
+            *          /   *
+            ***************/
+            
+            if(pos == 0) return;
+            
+            float new_zoom;
+            float zoom_to_compare;
+            if(cam_trans_zoom_time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
+            
+            if(zoom_to_compare < 1) {
+                new_zoom = ZOOM_MAX_LEVEL;
+            } else if(zoom_to_compare > 1) {
+                new_zoom = 1;
+            } else {
+                new_zoom = ZOOM_MIN_LEVEL;
+            }
+            
+            start_camera_zoom(new_zoom);
+            
+        } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
+        
+            if((cam_zoom == ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) || (cam_zoom == ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)) return;
+            
+            float new_zoom;
+            float current_zoom;
+            if(cam_trans_zoom_time_left) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
+            
+            pos = floor(pos);
+            
+            if(button == BUTTON_ZOOM_IN) new_zoom = current_zoom + 0.1 * pos; else new_zoom = current_zoom - 0.1 * pos;
+            
+            if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
+            if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
+            
+            if(cam_trans_zoom_time_left) {
+                cam_trans_zoom_final_level = new_zoom;
+            } else {
+                start_camera_zoom(new_zoom);
+            }
+            
+        } else if(button == BUTTON_LIE_DOWN) {
+        
+            /**********************
+            *                     *
+            *   Lie down  -()/__/ *
+            *                     *
+            ***********************/
+            
+            if(pos == 0) return;
+            
+            leader* leader_ptr = cur_leader_ptr;
+            
+            if(leader_ptr->carrier_info) {
+                active_control();
+            } else {
+            
+                dismiss();
+                
+                leader_ptr->carrier_info = new carrier_info_struct(
+                    leader_ptr,
+                    3, //ToDo
+                    false);
+            }
+            
+        } else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT) {
+        
+            /****************************
+            *                     -->   *
+            *   Switch type   <(¨)> (ö) *
+            *                           *
+            *****************************/
+            
+            if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
+            
+            active_control();
+            
+            vector<pikmin_type*> types_in_party;
+            
+            size_t n_members = cur_leader_ptr->party->members.size();
+            //Get all Pikmin types in the group.
+            for(size_t m = 0; m < n_members; m++) {
+                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                    
+                    if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()) {
+                        types_in_party.push_back(pikmin_ptr->type);
+                    }
+                } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+                
+                    if(find(types_in_party.begin(), types_in_party.end(), (pikmin_type*) NULL) == types_in_party.end()) {
+                        types_in_party.push_back(NULL); //NULL represents leaders.
+                    }
+                }
+            }
+            
+            size_t n_types = types_in_party.size();
+            if(n_types == 1) return;
+            
+            pikmin_type* current_type = NULL;
+            pikmin_type* new_type = NULL;
+            unsigned char current_maturity = 255;
+            if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
+                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
+                current_type = pikmin_ptr->type;
+                current_maturity = pikmin_ptr->maturity;
+            }
+            
+            
+            //Go one type adjacent to the current member being held.
+            for(size_t t = 0; t < n_types; t++) {
+                if(current_type == types_in_party[t]) {
+                    if(button == BUTTON_SWITCH_TYPE_RIGHT) {
+                        new_type = types_in_party[(t + 1) % n_types];
+                    } else {
+                        new_type = types_in_party[((t - 1) + n_types) % n_types];
+                    }
+                }
+            }
+            
+            size_t t_match_nr = n_members + 1; //Number of the member that matches the type we want.
+            size_t tm_match_nr = n_members + 1; //Number of the member that matches the type and maturity we want.
+            
+            //Find a Pikmin of the new type.
+            for(size_t m = 0; m < n_members; m++) {
+                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
+                
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                    if(pikmin_ptr->type == new_type) {
+                        t_match_nr = m;
+                        if(pikmin_ptr->maturity == current_maturity) {
+                            tm_match_nr = m;
+                            break;
+                        }
+                    }
+                    
+                } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+                
+                    if(new_type == NULL) {
+                        t_match_nr = m;
                         tm_match_nr = m;
                         break;
                     }
                 }
-                
-            } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+            }
             
-                if(new_type == NULL) {
-                    t_match_nr = m;
-                    tm_match_nr = m;
-                    break;
+            //If no Pikmin matched the maturity, just use the one we found.
+            if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[t_match_nr];
+            else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[tm_match_nr];
+            al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
+            
+        } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
+        
+            if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
+            
+            active_control();
+            
+            pikmin_type* current_type = NULL;
+            unsigned char current_maturity = 255;
+            unsigned char new_maturity = 255;
+            pikmin* partners[3] = {NULL, NULL, NULL};
+            if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
+                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
+                current_type = pikmin_ptr->type;
+                current_maturity = pikmin_ptr->maturity;
+            }
+            
+            size_t n_members = cur_leader_ptr->party->members.size();
+            //Get Pikmin of the same type, one for each maturity.
+            for(size_t m = 0; m < n_members; m++) {
+                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                    
+                    if(pikmin_ptr == cur_leader_ptr->holding_pikmin) continue;
+                    
+                    if(partners[pikmin_ptr->maturity] == NULL && pikmin_ptr->type == current_type) {
+                        partners[pikmin_ptr->maturity] = pikmin_ptr;
+                    }
                 }
             }
+            
+            bool any_partners = false;
+            for(unsigned char p = 0; p < 3; p++) {
+                if(partners[p]) any_partners = true;
+            }
+            
+            if(!any_partners) return;
+            
+            new_maturity = current_maturity;
+            do {
+                if(button == BUTTON_SWITCH_MATURITY_DOWN) new_maturity = ((new_maturity - 1) + 3) % 3;
+                else new_maturity = (new_maturity + 1) % 3;
+            } while(!partners[new_maturity]);
+            
+            cur_leader_ptr->holding_pikmin = partners[new_maturity];
+            al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
+            
         }
         
-        //If no Pikmin matched the maturity, just use the one we found.
-        if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[t_match_nr];
-        else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[tm_match_nr];
-        al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
-        
-    } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
+    } else { //Displaying a message.
     
-        if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
-        
-        active_control();
-        
-        pikmin_type* current_type = NULL;
-        unsigned char current_maturity = 255;
-        unsigned char new_maturity = 255;
-        pikmin* partners[3] = {NULL, NULL, NULL};
-        if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
-            current_type = pikmin_ptr->type;
-            current_maturity = pikmin_ptr->maturity;
-        }
-        
-        size_t n_members = cur_leader_ptr->party->members.size();
-        //Get Pikmin of the same type, one for each maturity.
-        for(size_t m = 0; m < n_members; m++) {
-            if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
-                pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
-                
-                if(pikmin_ptr == cur_leader_ptr->holding_pikmin) continue;
-                
-                if(partners[pikmin_ptr->maturity] == NULL && pikmin_ptr->type == current_type) {
-                    partners[pikmin_ptr->maturity] = pikmin_ptr;
+        if((button == BUTTON_PUNCH || button == BUTTON_PAUSE) && pos == 0) {
+            size_t stopping_char = cur_message_stopping_chars[cur_message_section + 1];
+            if(cur_message_char == stopping_char) {
+                if(stopping_char == cur_message.size()) {
+                    start_message("", NULL);
+                } else {
+                    cur_message_section++;
                 }
+            } else {
+                cur_message_char = stopping_char;
             }
         }
-        
-        bool any_partners = false;
-        for(unsigned char p = 0; p < 3; p++) {
-            if(partners[p]) any_partners = true;
-        }
-        
-        if(!any_partners) return;
-        
-        new_maturity = current_maturity;
-        do {
-            if(button == BUTTON_SWITCH_MATURITY_DOWN) new_maturity = ((new_maturity - 1) + 3) % 3;
-            else new_maturity = (new_maturity + 1) % 3;
-        } while(!partners[new_maturity]);
-        
-        cur_leader_ptr->holding_pikmin = partners[new_maturity];
-        al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
         
     }
     

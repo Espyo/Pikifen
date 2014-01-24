@@ -65,9 +65,12 @@ public:
     
     void load_file(string filename, bool trim_values = true);
     size_t load_node(vector<string> &lines, bool trim_values, size_t start_line = 0);
+    bool save_file(string filename = "");
+    void save_node(ALLEGRO_FILE* file, size_t level = 0);
     
     data_node();
-    data_node(string filename, bool trim_values = true);
+    data_node(string filename);
+    data_node(string name, string value);
     data_node(const data_node &dn2);
     ~data_node();
 };
