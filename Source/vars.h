@@ -209,6 +209,7 @@ extern vector<unsigned long> spray_amounts;      //How many of each spray the pl
 extern vector<spray_type>    spray_types;
 extern vector<status>        statuses;
 extern float                 sun_meter_sun_angle;
+extern float                 throw_particle_timer;
 extern string                total_error_log;
 extern map<string, treasure_type*>
 treasure_types;

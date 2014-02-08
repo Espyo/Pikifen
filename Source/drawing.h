@@ -135,7 +135,7 @@ void do_drawing() {
             draw_sprite(
                 bm,
                 pikmin_list[p]->x, pikmin_list[p]->y,
-                pikmin_list[p]->type->size + pikmin_list[p]->z * 20, pikmin_list[p]->type->size + pikmin_list[p]->z * 20,
+                pikmin_list[p]->type->size + pikmin_list[p]->z * 0.1, pikmin_list[p]->type->size + pikmin_list[p]->z * 0.1,
                 pikmin_list[p]->angle);
                 
             if(idling) {
@@ -398,20 +398,23 @@ void do_drawing() {
         if(particle_quality > 0) {
             n_particles = particles.size();
             for(size_t p = 0; p < n_particles; p++) {
-                if(particle_quality == 1) {
+                particle* p_ptr = &particles[p];
+                
+                if(p_ptr->type == PARTICLE_TYPE_SQUARE) {
                     al_draw_filled_rectangle(
-                        particles[p].x - particles[p].size * 0.5,
-                        particles[p].y - particles[p].size * 0.5,
-                        particles[p].x + particles[p].size * 0.5,
-                        particles[p].y + particles[p].size * 0.5,
-                        change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
+                        p_ptr->x - p_ptr->size * 0.5,
+                        p_ptr->y - p_ptr->size * 0.5,
+                        p_ptr->x + p_ptr->size * 0.5,
+                        p_ptr->y + p_ptr->size * 0.5,
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
                     );
-                } else {
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_CIRCLE) {
                     al_draw_filled_circle(
-                        particles[p].x,
-                        particles[p].y,
-                        particles[p].size * 0.5,
-                        change_alpha(particles[p].color, (particles[p].time / particles[p].starting_time) * particles[p].color.a * 255)
+                        p_ptr->x,
+                        p_ptr->y,
+                        p_ptr->size * 0.5,
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
                     );
                 }
             }
@@ -604,8 +607,12 @@ void do_drawing() {
                         font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
                         ("x" + to_string((long long) spray_amounts[1])).c_str());
                 }
-                
             }
+            
+            //ToDo test stuff, remove.
+            for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, scr_w / 2 - 50, 20 + 24 * p, 14, 24); }
+            draw_sprite(bmp_test, scr_w / 2 - 75, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
+            al_draw_text(font, al_map_rgb(255, 128, 128), scr_w / 2, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());
             
         } else { //Show a message.
         

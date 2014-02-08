@@ -588,15 +588,27 @@ void do_logic() {
         *                ***  *
         **********************/
         
-        //ToDo the particles can't be created once per frame! That's overkill! ...right?
-        for(size_t l = 0; l < n_leaders; l++) {
-            if(leaders[l]->was_thrown)
-                random_particle_fire(leaders[l]->x, leaders[l]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(leaders[l]->type->main_color, 192));
-        }
-        
-        for(size_t p = 0; p < n_pikmin; p++) {
-            if(pikmin_list[p]->was_thrown)
-                random_particle_fire(pikmin_list[p]->x, pikmin_list[p]->y, 1, 1, 0.3, 0.5, 3, 4, change_alpha(pikmin_list[p]->type->main_color, 192));
+        throw_particle_timer -= 1.0 / game_fps;
+        if(throw_particle_timer <= 0) {
+            throw_particle_timer = THROW_PARTICLE_INTERVAL;
+            
+            for(size_t l = 0; l < n_leaders; l++) {
+                if(leaders[l]->was_thrown)
+                    particles.push_back(
+                        particle(
+                            PARTICLE_TYPE_CIRCLE, NULL, leaders[l]->x, leaders[l]->y, 0, 0, 0, 0, 0.6, leaders[l]->type->size * 0.5, change_alpha(leaders[l]->type->main_color, 128)
+                        )
+                    );
+            }
+            
+            for(size_t p = 0; p < n_pikmin; p++) {
+                if(pikmin_list[p]->was_thrown)
+                    particles.push_back(
+                        particle(
+                            PARTICLE_TYPE_CIRCLE, NULL, pikmin_list[p]->x, pikmin_list[p]->y, 0, 0, 0, 0, 0.6, pikmin_list[p]->type->size * 0.5, change_alpha(pikmin_list[p]->type->main_color, 128)
+                        )
+                    );
+            }
         }
         
     } else { //Displaying a message.

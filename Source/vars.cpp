@@ -179,6 +179,7 @@ vector<unsigned long> spray_amounts;
 vector<spray_type>    spray_types;
 vector<status>        statuses;
 float                 sun_meter_sun_angle = 0;
+float                 throw_particle_timer = 0;
 string                total_error_log;
 map<string, treasure_type*>
 treasure_types;

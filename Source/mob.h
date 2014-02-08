@@ -7,7 +7,6 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
-#include "const.h"
 #include "mob_event.h"
 #include "pikmin_type.h"
 #include "sector.h"
@@ -103,6 +102,8 @@ public:
     
     void tick();
 };
+
+#define GRAVITY_ADDER -1300.0f //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 
 enum MOB_TYPES {
     MOB_TYPE_PIKMIN,

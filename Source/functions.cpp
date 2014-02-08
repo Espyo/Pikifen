@@ -723,13 +723,26 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
     }
     
     for(unsigned p = 0; p < pikmin_to_spit; p++) {
+        //float angle = random(0, M_PI * 2);
+        //float x = o->x + cos(angle) * o->type->size * 2;
+        //float y = o->y + sin(angle) * o->type->size * 2;
+        //
+        ////ToDo throw them, don't teleport them.
+        //pikmin* new_pikmin = new pikmin(x, y, o->sec, o->oni_type->pik_type);
+        
+        //new_pikmin->buried = true;
+        //create_mob(new_pikmin);
+        
         float angle = random(0, M_PI * 2);
-        float x = o->x + cos(angle) * o->type->size * 2;
-        float y = o->y + sin(angle) * o->type->size * 2;
+        float sx = cos(angle) * 3;
+        float sy = sin(angle) * 3;
         
         //ToDo throw them, don't teleport them.
-        pikmin* new_pikmin = new pikmin(x, y, o->sec, o->oni_type->pik_type);
+        pikmin* new_pikmin = new pikmin(o->x, o->y, o->sec, o->oni_type->pik_type);
         new_pikmin->buried = true;
+        new_pikmin->z = 32;
+        new_pikmin->speed_x = sx;
+        new_pikmin->speed_y = sy;
         create_mob(new_pikmin);
     }
     
@@ -1385,13 +1398,14 @@ inline float random(float min, float max) {
  * Generates random particles in an explosion fashion:
  ** they scatter from the center point at random angles,
  ** and drift off until they vanish.
+ * type:     Type of particle. Use PARTICLE_TYPE_*.
  * center_*: Center point of the explosion.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_explosion(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_explosion(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1400,44 +1414,50 @@ void random_particle_explosion(float center_x, float center_y, unsigned char min
         float speed_x = cos(angle) * 30;
         float speed_y = sin(angle) * 30;
         
-        particles.push_back(particle(
-                                center_x,
-                                center_y,
-                                speed_x,
-                                speed_y,
-                                1,
-                                0,
-                                (random((unsigned) (time_min * 100), (unsigned) (time_max * 100))) / 100.0,
-                                (random((unsigned) (size_min * 100), (unsigned) (size_max * 100))) / 100.0,
-                                color
-                            ));
+        particles.push_back(
+            particle(
+                type,
+                NULL,
+                center_x, center_y,
+                speed_x, speed_y,
+                1,
+                0,
+                random(time_min, time_max),
+                random(size_min, size_max),
+                color
+            )
+        );
     }
 }
 
 /* ----------------------------------------------------------------------------
  * Generates random particles in a fire fashion:
  ** the particles go up and speed up as time goes by.
+ * type:     Type of particle. Use PARTICLE_TYPE_*.
  * center_*: Center point of the fire.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_fire(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_fire(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
-        particles.push_back(particle(
-                                center_x,
-                                center_y,
-                                (6 - random(0, 12)),
-                                -(random(10, 20)),
-                                0,
-                                -1,
-                                (random((unsigned) (time_min * 100), (unsigned) (time_max * 100))) / 100.0,
-                                (random((unsigned) (size_min * 100), (unsigned) (size_max * 100))) / 100.0,
-                                color
-                            ));
+        particles.push_back(
+            particle(
+                type,
+                NULL,
+                center_x, center_y,
+                (6 - random(0, 12)),
+                -(random(10, 20)),
+                0,
+                -1,
+                random(time_min, time_max),
+                random(size_min, size_max),
+                color
+            )
+        );
     }
 }
 
@@ -1445,26 +1465,30 @@ void random_particle_fire(float center_x, float center_y, unsigned char min, uns
  * Generates random particles in a splash fashion:
  ** the particles go up and are scattered horizontally,
  ** and then go down with the effect of gravity.
+ * type:     Type of particle. Use PARTICLE_TYPE_*.
  * center_*: Center point of the splash.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_splash(float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_splash(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
-        particles.push_back(particle(
-                                center_x,
-                                center_y,
-                                (2 - random(0, 4)),
-                                -random(2, 4),
-                                0, 0.5,
-                                random((int)(time_min * 10), (int)(time_max * 10)) / 10,
-                                random((int)(size_min * 10), (int)(size_max * 10)) / 10,
-                                color
-                            ));
+        particles.push_back(
+            particle(
+                type,
+                NULL,
+                center_x, center_y,
+                (2 - random(0, 4)),
+                -random(2, 4),
+                0, 0.5,
+                random(time_min, time_max),
+                random(size_min, size_max),
+                color
+            )
+        );
     }
 }
 
@@ -1473,11 +1497,12 @@ void random_particle_splash(float center_x, float center_y, unsigned char min, u
  ** the particles go in the pointed direction,
  ** and move gradually slower as they fade into the air.
  ** Used on actual sprays in-game.
+ * type:     Type of particle. Use PARTICLE_TYPE_*.
  * origin_*: Origin point of the spray.
  * angle:    Angle to shoot at.
  * color:    Color of the particles.
  */
-void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
+void random_particle_spray(unsigned char type, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(35, 40);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1487,17 +1512,19 @@ void random_particle_spray(float origin_x, float origin_y, float angle, ALLEGRO_
         float speed_x = cos(angle + angle_offset) * power;
         float speed_y = sin(angle + angle_offset) * power;
         
-        particles.push_back(particle(
-                                origin_x,
-                                origin_y,
-                                speed_x,
-                                speed_y,
-                                1,
-                                0,
-                                (random(30, 40)) / 10.0,
-                                (random(60, 80)) / 10.0,
-                                color
-                            ));
+        particles.push_back(
+            particle(
+                type,
+                NULL,
+                origin_x, origin_y,
+                speed_x, speed_y,
+                1,
+                0,
+                random(3, 4),
+                random(6, 8),
+                color
+            )
+        );
     }
 }
 
@@ -1895,6 +1922,7 @@ void use_spray(size_t spray_nr) {
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
     random_particle_spray(
+        PARTICLE_TYPE_CIRCLE,
         cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->size / 2,
         cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->size / 2,
         shoot_angle,

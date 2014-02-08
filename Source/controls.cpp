@@ -245,9 +245,9 @@ void handle_button(unsigned int button, float pos) {
                     holding_ptr->z = cur_leader_ptr->z;
                     
                     float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-                    holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
-                    holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER;
-                    holding_ptr->speed_z = 2;
+                    holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
+                    holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
+                    holding_ptr->speed_z = -(GRAVITY_ADDER) * 0.65; //1.3 second throw, just like in Pikmin 2.
                     
                     holding_ptr->was_thrown = true;
                     

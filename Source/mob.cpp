@@ -61,7 +61,7 @@ void mob::tick() {
     }
     
     //Gravity.
-    if(speed_z != 0 && affected_by_gravity) {
+    if(z > sec->floors[0].z && affected_by_gravity) {
         speed_z += (1.0f / game_fps) * (GRAVITY_ADDER);
     }
     
