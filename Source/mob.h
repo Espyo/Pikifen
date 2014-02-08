@@ -6,6 +6,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "animation.h"
 #include "const.h"
 #include "mob_event.h"
 #include "pikmin_type.h"
@@ -51,6 +52,8 @@ public:
     
     mob_type* type;
     
+    animation anim;
+    
     //Flags.
     bool to_delete; //If true, this mob should be deleted.
     bool reached_destination;
@@ -83,6 +86,7 @@ public:
     
     //Other properties.
     unsigned short health;     //Current health.
+    unsigned char team;        //Mob's team (who it can damage)
     
     //Script.
     mob* focused_pikmin;          //The Pikmin it has focus on.
@@ -98,6 +102,24 @@ public:
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
     
     void tick();
+};
+
+enum MOB_TYPES {
+    MOB_TYPE_PIKMIN,
+    MOB_TYPE_ONION,
+    MOB_TYPE_LEADER,
+    MOB_TYPE_ENEMY,
+    MOB_TYPE_TREASURE,
+    MOB_TYPE_PELLET,
+};
+
+enum MOB_TEAMS {
+    MOB_TEAM_NONE,     //Can hurt anyone on any team.
+    MOB_TEAM_PLAYER_1,
+    MOB_TEAM_PLAYER_2,
+    MOB_TEAM_PLAYER_3,
+    MOB_TEAM_PLAYER_4,
+    MOB_TEAM_ENEMIES,
 };
 
 #endif //ifndef MOB_INCLUDED

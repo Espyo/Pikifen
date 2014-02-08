@@ -266,7 +266,7 @@ int main() {
     pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
     
     cur_screen = SCREEN_GAME;
-    enemies.back()->a = animation(vector<frame>(1, frame(bmp_cloaking_burrow_nit, 64, 64, 30, load_hitboxes())));
+    enemies.back()->anim = animation(new vector<frame>(1, frame(bmp_cloaking_burrow_nit, 64, 64, 30, load_hitboxes())));
     
     editor_cur_bmp = bmp_cloaking_burrow_nit;
     editor_mode = EDITOR_MODE_NORMAL;

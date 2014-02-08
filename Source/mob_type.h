@@ -15,7 +15,7 @@ public:
     ALLEGRO_COLOR main_color;
     
     //Space-related things.
-    float size;
+    float size;         //Diameter.
     float move_speed;
     float rotation_speed;
     bool always_active; //If true, this mob is always active, even if it's off-camera.

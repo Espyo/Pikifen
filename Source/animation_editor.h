@@ -110,7 +110,7 @@ void do_animation_editor_logic() {
         draw_sprite(
             editor_cur_bmp,
             0, 0,
-            128, 128
+            64, 64
         );
         
         for(size_t h = 0; h < editor_cur_hitboxes.size(); h++) {

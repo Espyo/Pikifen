@@ -8,8 +8,6 @@
 
 class enemy : public mob {
 public:
-    animation a;
-    
     //Technical things.
     enemy_type* ene_type;
     

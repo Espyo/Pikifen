@@ -313,6 +313,26 @@ void do_logic() {
                 }
             }
             
+            //Touching mobs.
+            for(size_t m = 0; m < mobs.size(); m++) {
+                if(typeid(*mobs[m]) == typeid(pikmin)) continue;
+                mob* m_ptr = mobs[m];
+                frame* f_ptr = m_ptr->anim.get_frame();
+                if(f_ptr == NULL) continue; //ToDo report
+                
+                for(size_t h = 0; h < f_ptr->hitboxes.size(); h++) {
+                    hitbox* h_ptr = &f_ptr->hitboxes[h];
+                    float s = sin(m_ptr->angle);
+                    float c = cos(m_ptr->angle);
+                    float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
+                    float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
+                    
+                    if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + h_ptr->radius) {
+                        //cout << "Hit hitbox " + to_string((long long) h) + "!\n";
+                    }
+                }
+            }
+            
             if(pik_ptr->carrying_mob) {
                 pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
             }

@@ -206,13 +206,30 @@ void do_drawing() {
         size_t n_enemies = enemies.size();
         for(size_t e = 0; e < n_enemies; e++) {
             draw_sprite(
-                enemies[e]->a.get_frame()->bitmap,
+                enemies[e]->anim.get_frame()->bitmap,
                 enemies[e]->x,
                 enemies[e]->y,
-                enemies[e]->a.get_frame()->final_w,
-                enemies[e]->a.get_frame()->final_h,
+                enemies[e]->anim.get_frame()->final_w,
+                enemies[e]->anim.get_frame()->final_h,
                 enemies[e]->angle
             );
+        }
+        
+        for(size_t m = 0; m < mobs.size(); m++) {
+            if(typeid(*mobs[m]) == typeid(pikmin)) continue;
+            mob* m_ptr = mobs[m];
+            frame* f_ptr = m_ptr->anim.get_frame();
+            if(f_ptr == NULL) continue; //ToDo report
+            
+            for(size_t h = 0; h < f_ptr->hitboxes.size(); h++) {
+                hitbox* h_ptr = &f_ptr->hitboxes[h];
+                float s = sin(m_ptr->angle);
+                float c = cos(m_ptr->angle);
+                float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
+                float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
+                
+                al_draw_filled_circle(h_x, h_y, h_ptr->radius, al_map_rgba(128, 0, 0, 192));
+            }
         }
         
         

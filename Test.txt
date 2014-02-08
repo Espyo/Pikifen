@@ -1,9 +1,9 @@
 hitboxes{
 	hitbox{
-		name=Main
+		name=
 		type=0
-		coords=0 0 0
-		radius=64
+		coords=13.5 -0.5 0
+		radius=14.2697
 		multiplier=1
 		shake_angle=0
 		can_pikmin_latch=false
@@ -12,11 +12,11 @@ hitboxes{
 	hitbox{
 		name=
 		type=0
-		coords=77 -127 70
-		radius=31.7805
-		multiplier=0
-		shake_angle=20
-		can_pikmin_latch=true
-		swallow=true
+		coords=-15.75 -1.25 0
+		radius=14.2522
+		multiplier=1
+		shake_angle=0
+		can_pikmin_latch=false
+		swallow=false
 	}
 }

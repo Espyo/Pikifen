@@ -23,4 +23,10 @@ public:
     weather(string n, map<unsigned, ALLEGRO_COLOR> l, unsigned char pt, interval pf, interval ps, interval pa);
 };
 
+enum PERCIPITATION_TYPES {
+    PERCIPITATION_TYPE_NONE,
+    PERCIPITATION_TYPE_RAIN,
+    PERCIPITATION_TYPE_WIND,
+};
+
 #endif //ifndef WEATHER_INCLUDED
