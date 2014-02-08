@@ -43,6 +43,17 @@ Sectors
 	}
 	http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
 
+Approximate distance
+	fixed_t P_AproxDistance(fixed_t dx, fixed_t dy )
+	{
+		dx = abs(dx);
+		dy = abs(dy);
+		if (dx < dy)
+			return dx+dy-(dx>>1);
+		else
+			return dx+dy-(dy>>1);
+	}
+
 SRB2's state actions: C:\Prog\SRB2\src\src\p_enemy.c
 
 Disclaimer:

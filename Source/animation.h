@@ -48,17 +48,17 @@ private:
     size_t n_frames; //Used instead of frames.size() (a function call).
     
 public:
-    vector<frame> frames; //List of frames.
-    float cur_frame_time; //Time passed on the current frame.
+    vector<frame>* frames; //List of frames.
+    float cur_frame_time;  //Time passed on the current frame.
     
-    animation(vector<frame> frames) {
-        n_frames = frames.size();
+    animation(vector<frame>* frames) {
+        n_frames = frames->size();
         this->frames = frames;
         
         start();
     }
     animation(const animation &a2) {
-        n_frames = a2.frames.size();
+        n_frames = a2.frames->size();
         frames = a2.frames;
         
         start();
@@ -74,7 +74,7 @@ public:
         cur_frame_nr = 0;
     }
     void tick(float time) { //Ticks the animation.
-        frame* cur_frame = &frames[cur_frame_nr];
+        frame* cur_frame = &frames->at(cur_frame_nr);
         if(cur_frame->duration == 0) return;
         
         cur_frame_time += time;
@@ -84,12 +84,12 @@ public:
         while(cur_frame_time > cur_frame->duration) {
             cur_frame_time = cur_frame_time - cur_frame->duration;
             cur_frame_nr = (cur_frame_nr + 1) & n_frames;
-            cur_frame = &frames[cur_frame_nr];
+            cur_frame = &frames->at(cur_frame_nr);
         }
     }
     inline frame* get_frame() { //Gets a pointer to the current frame.
-        if(frames.size() == 0) return NULL;
-        return &frames[cur_frame_nr];
+        if(n_frames == 0) return NULL;
+        return &frames->at(cur_frame_nr);
     }
 };
 
