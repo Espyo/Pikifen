@@ -299,5 +299,18 @@
     <ClInclude Include="LAFI\widget.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Pikmin_fangame_engine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon.ico">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

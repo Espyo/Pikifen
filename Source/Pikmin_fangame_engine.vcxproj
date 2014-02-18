@@ -162,6 +162,7 @@
     <ClInclude Include="pellet_type.h" />
     <ClInclude Include="pikmin.h" />
     <ClInclude Include="pikmin_type.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sector.h" />
     <ClInclude Include="spec_objs\info_spot.h" />
     <ClInclude Include="spec_objs\nectar.h" />
@@ -175,6 +176,12 @@
     <ClInclude Include="treasure_type.h" />
     <ClInclude Include="vars.h" />
     <ClInclude Include="weather.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Pikmin_fangame_engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
