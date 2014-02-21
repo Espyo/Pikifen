@@ -190,6 +190,11 @@ void do_drawing() {
                 info_spots[i]->y + info_spots[i]->type->size * 0.5,
                 al_map_rgb(192, 64, 192)
             );
+            al_draw_text(
+                font, al_map_rgb(255, 255, 255),
+                info_spots[i]->x, info_spots[i]->y - font_h / 2,
+                ALLEGRO_ALIGN_CENTER, "?"
+            );
         }
         
         //Ship(s).
@@ -209,8 +214,8 @@ void do_drawing() {
                 enemies[e]->anim.get_frame()->bitmap,
                 enemies[e]->x,
                 enemies[e]->y,
-                enemies[e]->anim.get_frame()->final_w,
-                enemies[e]->anim.get_frame()->final_h,
+                enemies[e]->anim.get_frame()->game_w,
+                enemies[e]->anim.get_frame()->game_h,
                 enemies[e]->angle
             );
         }
@@ -350,13 +355,13 @@ void do_drawing() {
         for(size_t i = 0; i < n_info_spots; i++) {
             if(dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
-                if(!info_spots[i]->fullscreen)
+                if(!info_spots[i]->opens_box)
                     text = info_spots[i]->text;
                 else
                     text = "(...)";
                     
                 draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
-                if(!info_spots[i]->fullscreen) {
+                if(!info_spots[i]->opens_box) {
                     int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
                     
                     al_draw_line(
@@ -610,9 +615,9 @@ void do_drawing() {
             }
             
             //ToDo test stuff, remove.
-            for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, scr_w / 2 - 50, 20 + 24 * p, 14, 24); }
-            draw_sprite(bmp_test, scr_w / 2 - 75, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font, al_map_rgb(255, 128, 128), scr_w / 2, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());
+            for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
+            draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
+            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());
             
         } else { //Show a message.
         

@@ -50,13 +50,13 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Prog\Visual Leak Detector\include;C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Prog\Visual Leak Detector\lib\Win32;C:\Allegro\allegro-5.0.10-msvc-10.0\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>allegro-5.0.10-monolith-md-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

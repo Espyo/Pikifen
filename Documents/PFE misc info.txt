@@ -59,6 +59,9 @@ Approximate distance
 			return dx+dy-(dy>>1);
 	}
 
+Water:
+    http://madebyevan.com/webgl-water/
+
 SRB2's state actions: C:\Prog\SRB2\src\src\p_enemy.c
 
 Disclaimer:

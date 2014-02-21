@@ -226,6 +226,9 @@ void mob::tick() {
             }
         }
     }
+    
+    //Animation.
+    anim.tick(1.0 / game_fps);
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {

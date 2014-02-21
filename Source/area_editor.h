@@ -108,7 +108,7 @@ void do_area_editor_logic() {
 
 void handle_area_editor_controls(ALLEGRO_EVENT ev) {
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-        if(editor_holding_m2) {
+        if(ed_holding_m2) {
             cam_x += ev.mouse.dx / cam_zoom;
             cam_y += ev.mouse.dy / cam_zoom;
         }
@@ -121,10 +121,10 @@ void handle_area_editor_controls(ALLEGRO_EVENT ev) {
         if(cam_zoom >= ZOOM_MAX_LEVEL_EDITOR) cam_zoom = ZOOM_MAX_LEVEL_EDITOR;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-        if(ev.mouse.button == 2) editor_holding_m2 = true;
+        if(ev.mouse.button == 2) ed_holding_m2 = true;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        if(ev.mouse.button == 2) editor_holding_m2 = false;
+        if(ev.mouse.button == 2) ed_holding_m2 = false;
     }
 }
 

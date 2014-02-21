@@ -14,16 +14,7 @@ void handle_game_controls(ALLEGRO_EVENT ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR && ev.keyboard.keycode == ALLEGRO_KEY_T) {
         //Debug testing.
         //ToDo remove.
-        //leaders[cur_leader_nr]->health--;
         day_minutes += 30;
-        day += 5;
-        start_message(
-            "This is a test message.\n"
-            "Second line.\n"
-            "Third line, which is way too long to even be existing.\n"
-            "Secret fourth line!\n"
-            "Fifth line? Sure!\n"
-            "6th incoming.", bmp_olimar);
     }
     
     size_t n_controls = controls.size();
@@ -190,6 +181,20 @@ void handle_button(unsigned int button, float pos) {
                     done = true;
                 }
                 
+                //Now check if the leader should read an info spot.
+                if(!done) {
+                    size_t n_info_spots = info_spots.size();
+                    for(size_t i = 0; i < n_info_spots; i++) {
+                        info_spot* i_ptr = info_spots[i];
+                        if(i_ptr->opens_box) {
+                            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) < INFO_SPOT_TRIGGER_RANGE) {
+                                start_message(i_ptr->text, NULL);
+                                done = true;
+                                break;
+                            }
+                        }
+                    }
+                }
                 
                 //Now check if the leader should open an onion's menu.
                 if(!done) {
@@ -630,7 +635,7 @@ void handle_button(unsigned int button, float pos) {
         
     } else { //Displaying a message.
     
-        if((button == BUTTON_PUNCH || button == BUTTON_PAUSE) && pos == 0) {
+        if((button == BUTTON_PUNCH || button == BUTTON_PAUSE) && pos == 1) {
             size_t stopping_char = cur_message_stopping_chars[cur_message_section + 1];
             if(cur_message_char == stopping_char) {
                 if(stopping_char == cur_message.size()) {
@@ -646,7 +651,6 @@ void handle_button(unsigned int button, float pos) {
     }
     
 }
-
 
 
 control_info::control_info(unsigned char action, unsigned char player, string s) {

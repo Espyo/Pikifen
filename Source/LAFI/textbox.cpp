@@ -88,6 +88,8 @@ void lafi_textbox::call_change_handler() { if(change_handler) change_handler(thi
 void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
     
+    if(cursor > text.size()) cursor = 0; //If the text is changed.
+    
     if(keycode == ALLEGRO_KEY_LEFT) { //Left arrow - move cursor left.
         if(cursor && text.size()) {
             cursor--;   //Go one to the left anyway. This'll stop it from getting stuck on spaces.

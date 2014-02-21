@@ -74,10 +74,13 @@ using namespace std;
 
 
 enum EDITOR_MODES {
+    //Animation editor.
     EDITOR_MODE_NORMAL,
-    EDITOR_MODE_NEW_SECTOR = 1,
-    EDITOR_MODE_NEW_HITBOX = 1,
-    EDITOR_MODE_DELETE_HITBOX = 2,
+    EDITOR_MODE_SELECT_HITBOX,
+    EDITOR_MODE_NEW_HITBOX,
+    EDITOR_MODE_DELETE_HITBOX,
+    //Area editor
+    EDITOR_MODE_NEW_SECTOR,
 };
 
 enum SCREENS {

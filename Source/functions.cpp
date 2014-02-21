@@ -723,24 +723,15 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
     }
     
     for(unsigned p = 0; p < pikmin_to_spit; p++) {
-        //float angle = random(0, M_PI * 2);
-        //float x = o->x + cos(angle) * o->type->size * 2;
-        //float y = o->y + sin(angle) * o->type->size * 2;
-        //
-        ////ToDo throw them, don't teleport them.
-        //pikmin* new_pikmin = new pikmin(x, y, o->sec, o->oni_type->pik_type);
-        
-        //new_pikmin->buried = true;
-        //create_mob(new_pikmin);
-        
         float angle = random(0, M_PI * 2);
-        float sx = cos(angle) * 3;
-        float sy = sin(angle) * 3;
+        float sx = cos(angle) * 60;
+        float sy = sin(angle) * 60;
         
         //ToDo throw them, don't teleport them.
         pikmin* new_pikmin = new pikmin(o->x, o->y, o->sec, o->oni_type->pik_type);
         new_pikmin->buried = true;
-        new_pikmin->z = 32;
+        new_pikmin->z = 320;
+        new_pikmin->speed_z = 200;
         new_pikmin->speed_x = sx;
         new_pikmin->speed_y = sy;
         create_mob(new_pikmin);
@@ -955,6 +946,40 @@ data_node load_data_file(string filename) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Loads the frames of an animation from a file.
+ */
+vector<ext_frame> load_frames(data_node* frames_node) {
+    vector<ext_frame> frames;
+    
+    size_t n_frames = frames_node->get_nr_of_children_by_name("frame");
+    for(size_t f = 0; f < n_frames; f++) {
+        data_node* frame_node = frames_node->get_child_by_name("frame", f);
+        vector<hitbox> hitboxes = load_hitboxes(frame_node);
+        int fx = atoi(frame_node->get_child_by_name("file_x")->value.c_str());
+        int fy = atoi(frame_node->get_child_by_name("file_y")->value.c_str());
+        int fw = atoi(frame_node->get_child_by_name("file_w")->value.c_str());
+        int fh = atoi(frame_node->get_child_by_name("file_h")->value.c_str());
+        ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value.c_str());
+        frames.push_back(
+            ext_frame(
+                frame(
+                    parent,
+                    fx, fy, fw, fh,
+                    atof(frame_node->get_child_by_name("game_w")->value.c_str()),
+                    atof(frame_node->get_child_by_name("game_h")->value.c_str()),
+                    atof(frame_node->get_child_by_name("duration")->value.c_str()),
+                    hitboxes
+                ),
+                frame_node->get_child_by_name("file")->value,
+                fx, fy, fw, fh, parent
+            )
+        );
+    }
+    
+    return frames;
+}
+
+/* ----------------------------------------------------------------------------
  * Loads all of the game's content.
  */
 void load_game_content() {
@@ -1017,10 +1042,9 @@ void load_game_content() {
 /* ----------------------------------------------------------------------------
  * Loads the hitboxes from a file.
  */
-vector<hitbox> load_hitboxes() {
+vector<hitbox> load_hitboxes(data_node* frame_node) {
     vector<hitbox> hitboxes;
-    data_node file = data_node("Test.txt");
-    data_node* hitboxes_node = file.get_child_by_name("hitboxes");
+    data_node* hitboxes_node = frame_node->get_child_by_name("hitboxes");
     size_t n_hitboxes = hitboxes_node->get_nr_of_children_by_name("hitbox");
     for(size_t h = 0; h < n_hitboxes; h++) {
         data_node* hitbox_node = hitboxes_node->get_child_by_name("hitbox", h);

@@ -7,12 +7,14 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
 
+#include "animation.h"
 #include "const.h"
 #include "controls.h"
 #include "hitbox.h"
 #include "LAFI/gui.h"
 #include "LAFI/label.h"
 #include "leader.h"
+#include "misc_structs.h"
 #include "particle.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
@@ -128,16 +130,20 @@ extern float                 day_minutes_per_irl_sec;  //Every real-life second,
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
 extern ALLEGRO_DISPLAY*      display;
-extern ALLEGRO_BITMAP*       editor_cur_bmp;
-extern size_t                editor_cur_hitbox_nr;     //string::npos = none.
-extern vector<hitbox>        editor_cur_hitboxes;
-extern lafi_gui*             editor_gui;
-extern lafi_label*           editor_gui_status_bar;
-extern bool                  editor_holding_m2;
-extern unsigned char         editor_mode;
-extern float                 editor_new_hitbox_center_x; //FLT_MAX = none.
-extern float                 editor_new_hitbox_center_y;
-extern float                 editor_new_hitbox_radius;
+extern vector<ext_frame>     ed_anim;
+extern bool                  ed_anim_playing;
+extern size_t                ed_cur_frame_nr;
+extern float                 ed_cur_frame_time;
+extern float                 ed_cur_hitbox_angle;  //Angle of rotation of the current hitbox' outline.
+extern size_t                ed_cur_hitbox_nr;     //string::npos = none.
+extern lafi_gui*             ed_gui;
+extern lafi_label*           ed_gui_status_bar;
+extern bool                  ed_hitboxes_visible;
+extern bool                  ed_holding_m2;
+extern unsigned char         ed_mode;
+extern float                 ed_new_hitbox_center_x; //FLT_MAX = none.
+extern float                 ed_new_hitbox_center_y;
+extern float                 ed_new_hitbox_radius;
 extern map<string, enemy_type*>
 enemy_types;
 extern vector<enemy*>        enemies;
