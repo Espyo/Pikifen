@@ -170,3 +170,22 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
         scroll_x = min(scroll_x, (int) (text_width - box_width));
     } else scroll_x = 0;
 }
+
+void lafi_textbox::widget_on_mouse_down(int button, int x, int) {
+    if(button != 1) return;
+    
+    if(text.size() == 0) {
+        cursor = 0;
+        return;
+    }
+    //Get the relative X, from the start of the text.
+    int rel_x = x - x1 + scroll_x;
+    for(size_t c = 0; c < text.size(); c++) {
+        int width = al_get_text_width(style->text_font, text.substr(0, c + 1).c_str());
+        if(rel_x < width) {
+            cursor = c;
+            return;
+        }
+    }
+    cursor = text.size();
+}

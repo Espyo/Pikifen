@@ -7,6 +7,7 @@ class lafi_scrollbar : public lafi_widget {
 private:
     ALLEGRO_BITMAP* normal_bitmap;
     void move_button(int x, int y);
+    void create_button();
     
 public:
     lafi_widget* attached_widget;
@@ -27,7 +28,7 @@ public:
     void widget_on_mouse_move(int x, int y);
     
     void register_change_handler(void(*handler)(lafi_widget* w));
-    void make_widget_scroll(lafi_widget* widget, int max_offset);
+    void make_widget_scroll(lafi_widget* widget);
     static void widget_scroller(lafi_widget* w);
 };
 

@@ -52,42 +52,6 @@ ALLEGRO_BITMAP* lafi_button::create_button_bitmap(ALLEGRO_COLOR top_color, ALLEG
         al_draw_line(w - 0.5, h, w - 0.5, 1, bottom_color, 1);  //Right line, outermost.
         al_draw_line(w - 1.5, h, w - 1.5, 2, bottom_color, 1);  //Right line, innermost.
         
-        signed short final_text_y = 0;      //This is the center of the text, not top left.
-        signed short final_icon_y = 0;      //Top left of the icon.
-        
-        if(icon && text.size()) {       //If there's an icon and text.
-            unsigned short total_height = al_get_bitmap_height(icon) + al_get_font_line_height(style->text_font) + 2;
-            //The icon goes to the top of the 2.
-            final_icon_y = h / 2 - total_height / 2;
-            //The text uses the same base y as the icon, except lowered, obviously.
-            final_text_y = final_icon_y + al_get_bitmap_height(icon) + al_get_font_line_height(style->text_font) / 2 + 2;
-            
-        } else if(icon) {    //Icon, but no text.
-            final_icon_y = h / 2 - al_get_bitmap_height(icon) / 2;
-            
-        } else if(!icon && text.size()) {    //Text, but no icon.
-            final_text_y = h / 2;
-        }
-        
-        if(icon) {
-            al_draw_bitmap(
-                icon,
-                w / 2 - al_get_bitmap_width(icon) / 2,
-                final_icon_y,
-                0);
-        }
-        
-        if(text.size()) {
-            draw_text_lines(
-                style->text_font,
-                style->fg_color,
-                w / 2,
-                final_text_y,
-                ALLEGRO_ALIGN_CENTRE,
-                true,
-                text);
-        }
-        
     } al_set_target_bitmap(old_target_bitmap);
     
     return bitmap_to_create;
@@ -99,4 +63,42 @@ void lafi_button::draw_self() {
     else bitmap_to_draw = normal_bitmap;
     
     al_draw_bitmap(bitmap_to_draw, x1, y1, 0);
+    
+    unsigned int w = x2 - x1;
+    unsigned int h = y2 - y1;
+    signed short final_text_y = 0;      //This is the center of the text, not top left. Also, relative coordinates.
+    signed short final_icon_y = 0;      //Top left of the icon.
+    
+    if(icon && text.size()) {       //If there's an icon and text.
+        unsigned short total_height = al_get_bitmap_height(icon) + al_get_font_line_height(style->text_font) + 2;
+        //The icon goes to the top of the 2.
+        final_icon_y = h / 2 - total_height / 2;
+        //The text uses the same base y as the icon, except lowered, obviously.
+        final_text_y = final_icon_y + al_get_bitmap_height(icon) + al_get_font_line_height(style->text_font) / 2 + 2;
+        
+    } else if(icon) {    //Icon, but no text.
+        final_icon_y = h / 2 - al_get_bitmap_height(icon) / 2;
+        
+    } else if(!icon && text.size()) {    //Text, but no icon.
+        final_text_y = h / 2;
+    }
+    
+    if(icon) {
+        al_draw_bitmap(
+            icon,
+            x1 + (w / 2 - al_get_bitmap_width(icon) / 2),
+            y1 + final_icon_y,
+            0);
+    }
+    
+    if(text.size()) {
+        draw_text_lines(
+            style->text_font,
+            style->fg_color,
+            x1 + (w / 2),
+            y1 + final_text_y,
+            ALLEGRO_ALIGN_CENTRE,
+            true,
+            text);
+    }
 }

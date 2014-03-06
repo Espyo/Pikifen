@@ -13,6 +13,9 @@
 using namespace std;
 
 class lafi_widget {
+private:
+    void lose_focus();
+    
 public:
     lafi_widget* parent;
     bool mouse_in;
@@ -22,7 +25,7 @@ public:
     int y1;  //And Y.
     int x2;  //Bottom-right corner, X, global coordinates.
     int y2;  //And Y.
-    int offset_x, offset_y;
+    int children_offset_x, children_offset_y;
     string description;
     unsigned char flags;   //Flags. Use LAFI_FLAG_*.
     lafi_style* style;     //Widget style.
@@ -32,6 +35,7 @@ public:
     lafi_widget* mouse_over_widget; //The mouse is over this widget.
     
     void add(string name, lafi_widget* widget);
+    void remove(string name);
     
     bool needs_init;
     bool needs_rerender;

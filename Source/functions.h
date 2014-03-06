@@ -49,11 +49,11 @@ mob_event*         get_mob_event(mob* m, unsigned char e);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 void               give_pikmin_to_onion(onion* o, unsigned amount);
 ALLEGRO_COLOR      interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);
+map<string, animation> load_animations(data_node* frames_node);
 void               load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(string filename);
 data_node          load_data_file(string filename);
-vector<ext_frame>  load_frames(data_node* frames_node);
 vector<hitbox>     load_hitboxes(data_node* frame_node);
 void               load_mob_types(string folder, unsigned char type);
 void               load_options();

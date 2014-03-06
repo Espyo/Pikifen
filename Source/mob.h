@@ -51,7 +51,7 @@ public:
     
     mob_type* type;
     
-    animation anim;
+    animation_instance anim;
     
     //Flags.
     bool to_delete; //If true, this mob should be deleted.

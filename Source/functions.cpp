@@ -760,6 +760,54 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 }
 
 /* ----------------------------------------------------------------------------
+ * Loads the animations from a file.
+ */
+map<string, animation> load_animations(data_node* animations_node) {
+    map<string, animation> animations;
+    
+    size_t n_anims = animations_node->get_nr_of_children();
+    for(size_t a = 0; a < n_anims; a++) {
+    
+        data_node* anim_node = animations_node->get_child(a);
+        string anim_name = anim_node->name;
+        vector<frame> frames;
+        
+        size_t loop_frame = atoi(anim_node->get_child_by_name("loop_frame")->value.c_str());
+        
+        data_node* frames_node = anim_node->get_child_by_name("frames");
+        size_t n_frames = frames_node->get_nr_of_children_by_name("frame");
+        
+        for(size_t f = 0; f < n_frames; f++) {
+            data_node* frame_node = frames_node->get_child_by_name("frame", f);
+            vector<hitbox> hitboxes = load_hitboxes(frame_node);
+            int fx = atoi(frame_node->get_child_by_name("file_x")->value.c_str());
+            int fy = atoi(frame_node->get_child_by_name("file_y")->value.c_str());
+            int fw = atoi(frame_node->get_child_by_name("file_w")->value.c_str());
+            int fh = atoi(frame_node->get_child_by_name("file_h")->value.c_str());
+            ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value.c_str());
+            frames.push_back(
+                frame(
+                    parent,
+                    fx, fy, fw, fh,
+                    atof(frame_node->get_child_by_name("game_w")->value.c_str()),
+                    atof(frame_node->get_child_by_name("game_h")->value.c_str()),
+                    atof(frame_node->get_child_by_name("duration")->value.c_str()),
+                    hitboxes
+                )
+            );
+            frames.back().file = frame_node->get_child_by_name("file")->value;
+            frames.back().parent_bmp = parent;
+            frames.back().offs_x = atof(frame_node->get_child_by_name("offset_x")->value.c_str());
+            frames.back().offs_y = atof(frame_node->get_child_by_name("offset_y")->value.c_str());
+        }
+        
+        animations[anim_name] = animation(frames, loop_frame);
+    }
+    
+    return animations;
+}
+
+/* ----------------------------------------------------------------------------
  * Loads an area into memory.
  */
 void load_area(string name) {
@@ -943,40 +991,6 @@ data_node load_data_file(string filename) {
     }
     
     return n;
-}
-
-/* ----------------------------------------------------------------------------
- * Loads the frames of an animation from a file.
- */
-vector<ext_frame> load_frames(data_node* frames_node) {
-    vector<ext_frame> frames;
-    
-    size_t n_frames = frames_node->get_nr_of_children_by_name("frame");
-    for(size_t f = 0; f < n_frames; f++) {
-        data_node* frame_node = frames_node->get_child_by_name("frame", f);
-        vector<hitbox> hitboxes = load_hitboxes(frame_node);
-        int fx = atoi(frame_node->get_child_by_name("file_x")->value.c_str());
-        int fy = atoi(frame_node->get_child_by_name("file_y")->value.c_str());
-        int fw = atoi(frame_node->get_child_by_name("file_w")->value.c_str());
-        int fh = atoi(frame_node->get_child_by_name("file_h")->value.c_str());
-        ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value.c_str());
-        frames.push_back(
-            ext_frame(
-                frame(
-                    parent,
-                    fx, fy, fw, fh,
-                    atof(frame_node->get_child_by_name("game_w")->value.c_str()),
-                    atof(frame_node->get_child_by_name("game_h")->value.c_str()),
-                    atof(frame_node->get_child_by_name("duration")->value.c_str()),
-                    hitboxes
-                ),
-                frame_node->get_child_by_name("file")->value,
-                fx, fy, fw, fh, parent
-            )
-        );
-    }
-    
-    return frames;
 }
 
 /* ----------------------------------------------------------------------------

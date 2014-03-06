@@ -11,7 +11,7 @@ lafi_widget::lafi_widget(int x1, int y1, int x2, int y2, lafi_style* style, unsi
     this->flags = flags;
     this->style = style;
     
-    offset_x = offset_y = 0;
+    children_offset_x = children_offset_y = 0;
     focused_widget = NULL;
     mouse_over_widget = NULL;
     parent = NULL;
@@ -41,8 +41,8 @@ lafi_widget::lafi_widget(lafi_widget &w2) {
     flags = w2.flags;
     style = w2.style;
     
-    offset_x = w2.offset_x;
-    offset_y = w2.offset_y;
+    children_offset_x = w2.children_offset_x;
+    children_offset_y = w2.children_offset_y;
     focused_widget = w2.focused_widget;
     mouse_over_widget = w2.mouse_over_widget;
     parent = NULL;
@@ -95,7 +95,7 @@ void lafi_widget::call_lose_focus_handler() { if(lose_focus_handler) lose_focus_
 bool lafi_widget::is_mouse_in(int mx, int my) {
     int ox, oy;
     get_offset(&ox, &oy);
-    bool in_current_widget = mx - ox >= x1 && mx - ox <= x2 && my - oy >= y1 && my - oy <= y2;
+    bool in_current_widget = mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
     bool in_parent_widget = true;
     if(parent) in_parent_widget = parent->is_mouse_in(mx, my);
     
@@ -105,10 +105,10 @@ bool lafi_widget::is_mouse_in(int mx, int my) {
 void lafi_widget::get_offset(int* ox, int* oy) {
     if(!parent) { *ox = 0; *oy = 0; return; }
     
-    int parent_offset_x, parent_offset_y;
-    parent->get_offset(&parent_offset_x, &parent_offset_y);
-    *ox = parent->offset_x + parent_offset_x;
-    *oy = parent->offset_y + parent_offset_y;
+    int parent_parent_offset_x, parent_parent_offset_y;
+    parent->get_offset(&parent_parent_offset_x, &parent_parent_offset_y);
+    *ox = parent->children_offset_x + parent_parent_offset_x;
+    *oy = parent->children_offset_y + parent_parent_offset_y;
 }
 
 void lafi_widget::add(string name, lafi_widget* widget) {
@@ -147,9 +147,11 @@ void lafi_widget::draw() {
     int ocr_x, ocr_y, ocr_w, ocr_h;  //Original clipping rectangle.
     al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
     
-    al_set_clipping_rectangle(x1, y1, x2 - x1, y2 - y1); {
+    if(!(flags & LAFI_FLAG_NO_CLIPPING_RECTANGLE)) al_set_clipping_rectangle(x1, y1, x2 - x1, y2 - y1); {
         ALLEGRO_TRANSFORM t;
-        al_build_transform(&t, offset_x, offset_y, 1, 1, 0);
+        int ox, oy;
+        get_offset(&ox, &oy);
+        al_build_transform(&t, ox + children_offset_x, oy + children_offset_y, 1, 1, 0);
         
         ALLEGRO_TRANSFORM old;
         al_copy_transform(&old, al_get_current_transform());
@@ -162,12 +164,15 @@ void lafi_widget::draw() {
             
         } al_use_transform(&old);
         
-    } al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
+    } if(!(flags & LAFI_FLAG_NO_CLIPPING_RECTANGLE)) al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
     
 }
 
 void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
-    if(flags & LAFI_FLAG_DISABLED) return;
+    if(flags & LAFI_FLAG_DISABLED) {
+        mouse_over_widget = NULL;
+        return;
+    }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED) {
     
@@ -216,12 +221,12 @@ void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
             
                 w->second->widget_on_mouse_down(ev.mouse.button, ev.mouse.x, ev.mouse.y);
                 if(ev.mouse.button == 1) w->second->mouse_clicking = true;
-                for(auto b = widgets.begin(); b != widgets.end(); b++) {
-                    if(b->second->focused_widget) {
-                        b->second->focused_widget->call_lose_focus_handler();
-                        b->second->focused_widget = NULL;
-                    }
-                }
+                
+                //Mark focus lost. First go up to the topmost parent, and let it tell everybody to lose their focuses.
+                lafi_widget* p = this;
+                while(p->parent) p = p->parent;
+                p->lose_focus();
+                
                 focused_widget = w->second;
                 w->second->call_get_focus_handler();
                 w->second->call_mouse_down_handler(ev.mouse.button, ev.mouse.x, ev.mouse.y);
@@ -268,6 +273,14 @@ void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
     }
 }
 
+void lafi_widget::remove(string child_name) {
+    if(widgets.find(child_name) == widgets.end()) return;
+    
+    if(focused_widget == widgets[child_name]) focused_widget = NULL;
+    delete widgets[child_name];
+    widgets.erase(widgets.find(child_name));
+}
+
 void lafi_widget::widget_on_mouse_move(int, int) { }
 void lafi_widget::widget_on_left_mouse_click(int, int) { }
 void lafi_widget::widget_on_mouse_down(int, int, int) { }
@@ -276,3 +289,14 @@ void lafi_widget::widget_on_mouse_enter() { }
 void lafi_widget::widget_on_mouse_leave() { }
 void lafi_widget::widget_on_key_char(int, int, unsigned int) { }
 void lafi_widget::init() { }
+
+void lafi_widget::lose_focus() {
+    if(focused_widget) {
+        focused_widget->call_lose_focus_handler();
+        focused_widget = NULL;
+    }
+    
+    for(auto cw = widgets.begin(); cw != widgets.end(); cw++) {
+        cw->second->lose_focus();
+    }
+}

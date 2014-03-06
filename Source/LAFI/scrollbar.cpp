@@ -16,29 +16,7 @@ lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float 
 }
 
 void lafi_scrollbar::init() {
-    int bx1, by1, bx2, by2;
-    if(vertical) {
-        int bh = (high_value - low_value) * ((float) (y2 - y1) / (max - min));  //Pixels per value.
-        
-        bx1 = x1; by1 = y1;
-        bx2 = x2; by2 = y1 + bh;
-    } else {
-        int bw = (high_value - low_value) * ((float) (x2 - x1) / (max - min));  //Pixels per value.
-        
-        by1 = y1; bx1 = x1;
-        by2 = y2; bx2 = x1 + bw;
-    }
-    
-    add("btn_bar", new lafi_button(
-            bx1,
-            by1,
-            bx2,
-            by2,
-            "",
-            "",
-            NULL,
-            style
-        ));
+    create_button();
 }
 
 void lafi_scrollbar::widget_on_mouse_down(int button, int x, int y) {
@@ -55,7 +33,41 @@ void lafi_scrollbar::widget_on_mouse_move(int x, int y) {
     if(change_handler) change_handler(this);
 }
 
+void lafi_scrollbar::create_button() {
+    int bx1, by1, bx2, by2;
+    
+    remove("btn_bar");
+    
+    if(low_value != high_value) {
+    
+        if(vertical) {
+            int bh = (high_value - low_value) * ((float) (y2 - y1) / (max - min));  //Pixels per value.
+            
+            bx1 = x1; by1 = y1;
+            bx2 = x2; by2 = y1 + bh;
+        } else {
+            int bw = (high_value - low_value) * ((float) (x2 - x1) / (max - min));  //Pixels per value.
+            
+            by1 = y1; bx1 = x1;
+            by2 = y2; bx2 = x1 + bw;
+        }
+        
+        add("btn_bar", new lafi_button(
+                bx1,
+                by1,
+                bx2,
+                by2,
+                "",
+                "",
+                NULL,
+                style
+            ));
+    }
+}
+
 void lafi_scrollbar::move_button(int x, int y) {
+    if(low_value == high_value) return;
+    
     lafi_button* but = (lafi_button*) widgets["btn_bar"];
     
     if(vertical) {
@@ -168,32 +180,58 @@ void lafi_scrollbar::register_change_handler(void(*handler)(lafi_widget* w)) {
     change_handler = handler;
 }
 
-void lafi_scrollbar::make_widget_scroll(lafi_widget* widget, int max_offset) {
+void lafi_scrollbar::make_widget_scroll(lafi_widget* widget) {
     attached_widget = widget;
     this->min = this->low_value = 0;
-    
-    if(vertical) {
-        this->high_value = widget->y2 - widget->y1;
-        this->max = (widget->y2 - widget->y1) + max_offset;
-    } else {
-        this->high_value = widget->x2 - widget->x1;
-        this->max = (widget->x2 - widget->x1) + max_offset;
-    }
-    
     if(widget) {
+        float largest_y2 = -FLT_MIN, largest_x2 = FLT_MIN;
+        
+        for(auto w = widget->widgets.begin(); w != widget->widgets.end(); w++) {
+            if(vertical) {
+                if(w->second->y2 > largest_y2) largest_y2 = w->second->y2;
+            } else {
+                if(w->second->x2 > largest_x2) largest_x2 = w->second->x2;
+            }
+        }
+        
+        if(vertical) {
+            largest_y2 += 8; //Spacing.
+            if(largest_y2 < widget->y2 - widget->y1) {
+                this->high_value = this->max = 0;
+            } else {
+                this->high_value = widget->y2 - widget->y1;
+                this->max = largest_y2 - widget->y1;
+            }
+        } else {
+            largest_x2 += 8; //Spacing.
+            if(largest_x2 < widget->x2 - widget->x1) {
+                this->high_value = this->max = 0;
+            } else {
+                this->high_value = widget->x2 - widget->x1;
+                this->max = largest_x2 - widget->x1;
+            }
+        }
+        
         register_change_handler(widget_scroller);
+        
     } else {
+    
+        this->max = 10;
+        this->high_value = 1;
+        
         register_change_handler(NULL);
     }
+    
+    create_button();
 }
 
 void lafi_scrollbar::widget_scroller(lafi_widget* w) {
     lafi_scrollbar* scrollbar_ptr = (lafi_scrollbar*) w;
     
     if(scrollbar_ptr->vertical) {
-        scrollbar_ptr->attached_widget->offset_y = -scrollbar_ptr->low_value;
+        scrollbar_ptr->attached_widget->children_offset_y = -scrollbar_ptr->low_value;
     } else {
-        scrollbar_ptr->attached_widget->offset_x = -scrollbar_ptr->low_value;
+        scrollbar_ptr->attached_widget->children_offset_x = -scrollbar_ptr->low_value;
     }
 }
 

@@ -21,6 +21,7 @@ public:
     function<void(lafi_widget* w)> change_handler;
     
     void widget_on_key_char(int keycode, int unichar, unsigned int modifiers);
+    void widget_on_mouse_down(int button, int x, int y);
     void call_change_handler();
     
     lafi_textbox(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, string text = "", lafi_style* style = NULL, unsigned char flags = 0);
