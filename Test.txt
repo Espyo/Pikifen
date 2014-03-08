@@ -180,27 +180,14 @@ animations{
 				game_h=56
 				offset_x=0
 				offset_y=0
-				duration=1
+				duration=0.4
 				hitboxes=
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	burrow{
 		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=1
-				hitboxes=
-			}
 			frame{
 				file=CB.png
 				file_x=400
@@ -305,6 +292,11 @@ animations{
 				duration=0.1
 				hitboxes=
 			}
+		}
+		loop_frame=16
+	}
+	burrowed{
+		frames{
 			frame{
 				file=CB.png
 				file_x=0
@@ -315,11 +307,11 @@ animations{
 				game_h=56
 				offset_x=0
 				offset_y=0
-				duration=1
+				duration=0
 				hitboxes=
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	die{
 		frames{
@@ -541,11 +533,29 @@ animations{
 				game_h=56
 				offset_x=0
 				offset_y=0
-				duration=1
+				duration=0.1
 				hitboxes=
 			}
 		}
-		loop_frame=0
+		loop_frame=16
+	}
+	idle{
+		frames{
+			frame{
+				file=CB.png
+				file_x=0
+				file_y=0
+				file_w=68
+				file_h=56
+				game_w=68
+				game_h=56
+				offset_x=0
+				offset_y=0
+				duration=0
+				hitboxes=
+			}
+		}
+		loop_frame=16
 	}
 	shake{
 		frames{
@@ -835,21 +845,8 @@ animations{
 				duration=0.1
 				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=1
-				hitboxes=
-			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	unburrow{
 		frames{
@@ -970,21 +967,8 @@ animations{
 				duration=0.1
 				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=1
-				hitboxes=
-			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	walk{
 		frames{
@@ -1125,6 +1109,6 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 }

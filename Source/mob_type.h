@@ -1,17 +1,23 @@
 #ifndef MOB_TYPE_INCLUDED
 #define MOB_TYPE_INCLUDED
 
+#include <map>
+
 #include <allegro5/allegro.h>
 
+#include "animation.h"
 #include "const.h"
 #include "mob_event.h"
+
+using namespace std;
 
 class mob_type {
 public:
     //Technical things.
     string name;
     
-    //Detail things.
+    //Visual things.
+    map<string, animation> animations;
     ALLEGRO_COLOR main_color;
     
     //Space-related things.

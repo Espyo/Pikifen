@@ -683,12 +683,18 @@ float get_leader_to_group_center_dist(mob* l) {
 
 /* ----------------------------------------------------------------------------
  * Returns the pointer to a mob event, if the mob is listening to that event.
+ * Returns NULL if this event can't run, because there's already another event going on, or because the mob is dead.
  */
-mob_event* get_mob_event(mob* m, unsigned char e) {
+mob_event* get_mob_event(mob* m, unsigned char et) {
+    if(m->dead) return NULL;
     size_t n_events = m->type->events.size();
     for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
+    
         mob_event* ev = m->type->events[ev_nr];
-        if(ev->type == e) return ev;
+        if(ev->type == et) {
+            if(m->script_wait != 0 && m->script_wait_event != ev) return NULL;
+            return ev;
+        }
     }
     return NULL;
 }
@@ -1305,67 +1311,17 @@ vector<mob_event*> load_script(data_node* node) {
     vector<mob_event*> events;
     
     for(size_t e = 0; e < node->get_nr_of_children(); e++) {
-        unsigned char event_type = 0;
         data_node* event_node = node->get_child(e);
-        string event_name = event_node->name;
-        
-        if(event_name == "on_attack_hit") event_type = MOB_EVENT_ATTACK_HIT;
-        else if(event_name == "on_attack_miss") event_type = MOB_EVENT_ATTACK_MISS;
-        else if(event_name == "on_big_damage") event_type = MOB_EVENT_BIG_DAMAGE;
-        else if(event_name == "on_damage") event_type = MOB_EVENT_DAMAGE;
-        else if(event_name == "on_death") event_type = MOB_EVENT_DEATH;
-        else if(event_name == "on_enter_hazard") event_type = MOB_EVENT_ENTER_HAZARD;
-        else if(event_name == "on_idle") event_type = MOB_EVENT_IDLE;
-        else if(event_name == "on_leave_hazard") event_type = MOB_EVENT_LEAVE_HAZARD;
-        else if(event_name == "on_lose_object") event_type = MOB_EVENT_LOSE_OBJECT;
-        else if(event_name == "on_lose_pikmin") event_type = MOB_EVENT_LOSE_PIKMIN;
-        else if(event_name == "on_near_object") event_type = MOB_EVENT_NEAR_OBJECT;
-        else if(event_name == "on_near_pikmin") event_type = MOB_EVENT_NEAR_PIKMIN;
-        else if(event_name == "on_pikmin_land") event_type = MOB_EVENT_PIKMIN_LAND;
-        else if(event_name == "on_pikmin_latch") event_type = MOB_EVENT_PIKMIN_LATCH;
-        else if(event_name == "on_pikmin_touch") event_type = MOB_EVENT_PIKMIN_TOUCH;
-        else if(event_name == "on_revival") event_type = MOB_EVENT_REVIVAL;
-        else if(event_name == "on_see_object") event_type = MOB_EVENT_SEE_OBJECT;
-        else if(event_name == "on_see_pikmin") event_type = MOB_EVENT_SEE_PIKMIN;
-        else if(event_name == "on_spawn") event_type = MOB_EVENT_SPAWN;
-        else if(event_name == "on_timer") event_type = MOB_EVENT_TIMER;
-        else if(event_name == "on_wall") event_type = MOB_EVENT_WALL;
-        else {
-            error_log("Unknown script event name \"" + event_name + "\"!", event_node);
-            continue;
-        }
         
         vector<mob_action*> actions;
         
         for(size_t a = 0; a < event_node->get_nr_of_children(); a++) {
-        
-            unsigned char action_type = 0;
             data_node* action_node = event_node->get_child(a);
-            string action_name = action_node->name;
-            string action_data = action_node->value;
             
-            if(action_name == "move") action_type = MOB_ACTION_MOVE;
-            else if(action_name == "play_sound") action_type = MOB_ACTION_PLAY_SOUND;
-            else if(action_name == "animation") action_type = MOB_ACTION_SET_ANIMATION;
-            else if(action_name == "gravity") action_type = MOB_ACTION_SET_GRAVITY;
-            else if(action_name == "health") action_type = MOB_ACTION_SET_HEALTH;
-            else if(action_name == "speed") action_type = MOB_ACTION_SET_SPEED;
-            else if(action_name == "timer") action_type = MOB_ACTION_SET_TIMER;
-            else if(action_name == "var") action_type = MOB_ACTION_SET_VAR;
-            else if(action_name == "particle") action_type = MOB_ACTION_SPAWN_PARTICLE;
-            else if(action_name == "projectile") action_type = MOB_ACTION_SPAWN_PROJECTILE;
-            else if(action_name == "special_function") action_type = MOB_ACTION_SPECIAL_FUNCTION;
-            else if(action_name == "turn") action_type = MOB_ACTION_TURN;
-            else if(action_name == "wait") action_type = MOB_ACTION_WAIT;
-            else {
-                error_log("Unknown script action name \"" + action_name + "\"!", action_node);
-            }
-            
-            actions.push_back(new mob_action(action_type, action_data));
-            
+            actions.push_back(new mob_action(action_node));
         }
         
-        events.push_back(new mob_event(event_type, actions));
+        events.push_back(new mob_event(event_node, actions));
         
     }
     

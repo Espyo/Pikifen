@@ -210,14 +210,20 @@ void do_drawing() {
         //Enemies.
         size_t n_enemies = enemies.size();
         for(size_t e = 0; e < n_enemies; e++) {
-            draw_sprite(
-                enemies[e]->anim.get_frame()->bitmap,
-                enemies[e]->x,
-                enemies[e]->y,
-                enemies[e]->anim.get_frame()->game_w,
-                enemies[e]->anim.get_frame()->game_h,
-                enemies[e]->angle
-            );
+            enemy* e_ptr = enemies[e];
+            frame* f_ptr = e_ptr->anim.get_frame();
+            if(f_ptr) {
+                float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
+                //ToDo test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
+                draw_sprite(
+                    f_ptr->bitmap,
+                    e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
+                    e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
+                    f_ptr->game_w,
+                    f_ptr->game_h,
+                    e_ptr->angle
+                );
+            }
         }
         
         for(size_t m = 0; m < mobs.size(); m++) {
@@ -347,7 +353,7 @@ void do_drawing() {
             }
             
             if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
-                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size / 2 - 8, mob_ptr->health, mob_ptr->type->max_health);
+                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size - 8, mob_ptr->health, mob_ptr->type->max_health);
             }
         }
         

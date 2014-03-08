@@ -30,7 +30,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
     //Install Allegro and initialize modules.
     al_init();
     al_install_mouse();
@@ -139,7 +139,6 @@ int main() {
     bmp_louie_lying = load_bmp("Louie_lying.png");
     bmp_president_lying = load_bmp("President_lying.png");
     bmp_message_box = load_bmp("Message_box.png");
-    bmp_cloaking_burrow_nit = load_bmp("Cloaking_Burrow-nit.png");
     
     int font_ranges[] = {
         0x0020, 0x007F, //ASCII
@@ -276,18 +275,19 @@ int main() {
     pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
     pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
     
-    cur_screen = SCREEN_ANIMATION_EDITOR;
-    animation a = animation(); //load_animations(data_node("Test.txt").get_child_by_name("animations")).begin()->second;
-    enemies.back()->anim = animation_instance(&a);
+    cur_screen = SCREEN_GAME;
+    if(argc > 1) cur_screen = SCREEN_ANIMATION_EDITOR;
     
-    load_animations();
-    ed_mode = EDITOR_MODE_NORMAL;
+    enemy_types.begin()->second->animations = load_animations(data_node("Test.txt").get_child_by_name("animations"));
     
     if(cur_screen == SCREEN_GAME) {
         al_hide_mouse_cursor(display);
     } else {
         al_show_mouse_cursor(display);
         if(cur_screen == SCREEN_ANIMATION_EDITOR) {
+            load_animations();
+            ed_mode = EDITOR_MODE_NORMAL;
+            
             ed_gui = new lafi_gui(scr_w, scr_h);
             
             //Main frame.

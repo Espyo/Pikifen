@@ -72,6 +72,7 @@ public:
     //Target things.
     float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
     float* target_rel_x, *target_rel_y; //Follow these coordinates.
+    unsigned char target_code;          //Code ID for a special target, like home. Used for scripting.
     bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
     bool gtt_instant;                   //If true, teleport instantly.
     void set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant);
@@ -88,14 +89,16 @@ public:
     unsigned char team;        //Mob's team (who it can damage)
     
     //Script.
-    mob* focused_pikmin;          //The Pikmin it has focus on.
-    mob* nearest_pikmin;          //The closest Pikmin.
+    mob* focused_prey;            //The prey it has focus on.
+    bool focused_prey_near;       //Is the focused prey what's considered "near" the mob?
     float timer;                  //The timer.
     float timer_interval;         //The timer's interval.
     map<string, string> vars;     //Variables.
     float script_wait;            //Wait this much time before going on with the script.
     mob_event* script_wait_event; //What event is the script waiting on?
     size_t script_wait_action;    //Number of the action the script returns to after the wait is over.
+    bool spawn_event_done;        //Has the spawn event been triggered yet? If there's no spawn event, this doesn't matter.
+    bool dead;                    //Is the mob dead?
     
     //Carrying.
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
@@ -121,6 +124,13 @@ enum MOB_TEAMS {
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
     MOB_TEAM_ENEMIES,
+};
+
+//Special targets to chase.
+enum MOB_TARGETS {
+    MOB_TARGET_NONE,
+    MOB_TARGET_HOME,
+    MOB_TARGET_POINT,
 };
 
 #endif //ifndef MOB_INCLUDED

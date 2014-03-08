@@ -146,9 +146,6 @@
     <ClInclude Include="enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enemy_state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="enemy_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -164,16 +161,10 @@
     <ClInclude Include="mob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="object_state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="pikmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pikmin_type.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="status.h">

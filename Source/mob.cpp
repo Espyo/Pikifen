@@ -29,11 +29,12 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     target_rel_x = NULL;
     target_rel_y = NULL;
     
-    focused_pikmin = NULL;
-    nearest_pikmin = NULL;
+    focused_prey = NULL;
     timer = timer_interval = 0;
     script_wait = 0;
     script_wait_event = NULL;
+    spawn_event_done = false;
+    dead = false;
     
     following_party = NULL;
     was_thrown = false;
@@ -137,30 +138,50 @@ void mob::tick() {
     }
     
     mob_event* ev_ptr = NULL;
-    ev_ptr = get_mob_event(this, MOB_EVENT_SEE_PIKMIN);
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_NEAR_PREY);
     if(ev_ptr) {
+        if(focused_prey) {
+            if(!focused_prey_near) {
+                if(dist(x, y, focused_prey->x, focused_prey->y) <= type->near_radius) {
+                    focused_prey_near = true;
+                    ev_ptr->run(this, 0);
+                }
+            }
+        }
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_SEE_PREY);
+    if(ev_ptr) {
+        if(focused_prey && focused_prey_near) {
+            if(dist(x, y, focused_prey->x, focused_prey->y) > type->near_radius) {
+                focused_prey_near = false;
+                ev_ptr->run(this, 0);
+            }
+        }
+        
         //Find a Pikmin.
-        if(!focused_pikmin) {
+        if(!focused_prey) {
             size_t n_pikmin = pikmin_list.size();
             for(size_t p = 0; p < n_pikmin; p++) {
                 pikmin* pik_ptr = pikmin_list[p];
                 
                 if(dist(x, y, pik_ptr->x, pik_ptr->y) <= type->sight_radius) {
-                    focused_pikmin = pik_ptr;
+                    focused_prey = pik_ptr;
                     ev_ptr->run(this, 0);
                     break;
                 }
             }
         }
         
-        if(!focused_pikmin) {
+        if(!focused_prey) {
             //Try the captains now.
             size_t n_leaders = leaders.size();
             for(size_t l = 0; l < n_leaders; l++) {
                 leader* leader_ptr = leaders[l];
                 
                 if(dist(x, y, leader_ptr->x, leader_ptr->y) <= type->sight_radius) {
-                    focused_pikmin = leader_ptr;
+                    focused_prey = leader_ptr;
                     ev_ptr->run(this, 0);
                     break;
                 }
@@ -168,50 +189,13 @@ void mob::tick() {
         }
     }
     
-    ev_ptr = get_mob_event(this, MOB_EVENT_LOSE_PIKMIN);
+    ev_ptr = get_mob_event(this, MOB_EVENT_LOSE_PREY);
     if(ev_ptr) {
         //Lose the Pikmin in focus.
-        if(focused_pikmin) {
-            if(dist(x, y, focused_pikmin->x, focused_pikmin->y) > type->sight_radius) {
-                focused_pikmin = NULL;
+        if(focused_prey) {
+            if(dist(x, y, focused_prey->x, focused_prey->y) > type->sight_radius) {
+                focused_prey = NULL;
                 ev_ptr->run(this, 0);
-            }
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_NEAR_PIKMIN);
-    if(ev_ptr) {
-        //See if it's close to a Pikmin.
-        if(!nearest_pikmin) {
-            size_t n_pikmin = pikmin_list.size();
-            for(size_t p = 0; p < n_pikmin; p++) {
-                pikmin* pik_ptr = pikmin_list[p];
-                
-                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= type->near_radius) {
-                    nearest_pikmin = pik_ptr;
-                    ev_ptr->run(this, 0);
-                    break;
-                }
-            }
-            
-            if(!nearest_pikmin) {
-                //Try a leader.
-                size_t n_leaders = leaders.size();
-                for(size_t l = 0; l < n_leaders; l++) {
-                    leader* leader_ptr = leaders[l];
-                    
-                    if(dist(x, y, leader_ptr->x, leader_ptr->y) <= type->near_radius) {
-                        nearest_pikmin = leader_ptr;
-                        ev_ptr->run(this, 0);
-                        break;
-                    }
-                }
-            }
-            
-        } else {
-            //Lose the nearest Pikmin.
-            if(dist(x, y, nearest_pikmin->x, nearest_pikmin->y) > type->near_radius) {
-                nearest_pikmin = NULL;
             }
         }
     }
@@ -227,8 +211,35 @@ void mob::tick() {
         }
     }
     
+    ev_ptr = get_mob_event(this, MOB_EVENT_SPAWN);
+    if(ev_ptr && !spawn_event_done) {
+        spawn_event_done = true;
+        ev_ptr->run(this, 0);
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_REACH_HOME);
+    if(ev_ptr) {
+        if(reached_destination && target_code == MOB_TARGET_HOME) {
+            target_code = MOB_TARGET_NONE;
+            ev_ptr->run(this, 0);
+        }
+    }
+    
+    ev_ptr = get_mob_event(this, MOB_EVENT_DEATH);
+    if(ev_ptr && !dead) {
+        if(health <= 0) {
+            dead = true;
+            ev_ptr->run(this, 0);
+        }
+    }
+    
     //Animation.
-    anim.tick(1.0 / game_fps);
+    bool finished_anim = anim.tick(1.0 / game_fps);
+    
+    if(script_wait == -1 && finished_anim) { //Waiting for the animation to end.
+        script_wait = 0;
+        script_wait_event->run(this, script_wait_action); //Continue the waiting event.
+    }
 }
 
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {
@@ -238,6 +249,7 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
     
     go_to_target = true;
     reached_destination = false;
+    target_code = MOB_TARGET_NONE;
 }
 
 void mob::remove_target(bool stop) {

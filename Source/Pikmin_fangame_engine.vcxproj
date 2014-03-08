@@ -130,7 +130,6 @@
     <ClInclude Include="drawing.h" />
     <ClInclude Include="element.h" />
     <ClInclude Include="enemy.h" />
-    <ClInclude Include="enemy_state.h" />
     <ClInclude Include="enemy_type.h" />
     <ClInclude Include="LAFI\button.h" />
     <ClInclude Include="LAFI\checkbox.h" />
@@ -156,7 +155,6 @@
     <ClInclude Include="misc_structs.h" />
     <ClInclude Include="mob.h" />
     <ClInclude Include="mob_type.h" />
-    <ClInclude Include="object_state.h" />
     <ClInclude Include="onion_type.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="pellet_type.h" />
@@ -170,7 +168,6 @@
     <ClInclude Include="spec_objs\pellet.h" />
     <ClInclude Include="spec_objs\ship.h" />
     <ClInclude Include="spray_type.h" />
-    <ClInclude Include="state.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="treasure.h" />
     <ClInclude Include="treasure_type.h" />

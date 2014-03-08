@@ -42,7 +42,7 @@ mobs{
 	
 	enemy{
 		coords = -100 -200
-		type = Test
+		type = Cloaking Burrow-nit
 	}
 }
 

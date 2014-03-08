@@ -115,25 +115,32 @@ public:
         cur_frame_time = 0;
         cur_frame_nr = 0;
     }
-    void tick(float time) { //Ticks the animation.
+    bool tick(float time) { //Ticks the animation. Returns whether or not the animation reached its final frame.
+        if(!anim) return false;
         size_t n_frames = anim->frames.size();
-        if(n_frames == 0) return;
+        if(n_frames <= 1) return false;
         frame* cur_frame = &anim->frames[cur_frame_nr];
-        if(cur_frame->duration == 0) return;
+        if(cur_frame->duration == 0) return false;
         
+        bool finished = false;
         cur_frame_time += time;
         
         //This is a while instead of an if because if the framerate is too low and the next frame's duration
-        //is too short, it could be that a tick goes over an entire frame, and lands 2 frames ahead.
-        while(cur_frame_time > cur_frame->duration) {
+        //is too short, it could be that a tick goes over an entire frame, and lands 2 or more frames ahead.
+        while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
             cur_frame_time = cur_frame_time - cur_frame->duration;
+            cur_frame_nr++;
             if(cur_frame_nr >= anim->frames.size()) {
+                finished = true;
                 cur_frame_nr = (anim->loop_frame >= anim->frames.size()) ? 0 : anim->loop_frame;
             }
             cur_frame = &anim->frames[cur_frame_nr];
         }
+        
+        return finished;
     }
     inline frame* get_frame() { //Gets a pointer to the current frame.
+        if(!anim) return NULL;
         if(anim->frames.size() == 0) return NULL;
         return &anim->frames[cur_frame_nr];
     }

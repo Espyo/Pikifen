@@ -1,0 +1,60 @@
+name = Cloaking Burrow-nit
+always_active = yes
+max_carriers = 16
+max_health = 200
+move_speed = 50
+near_radius = 40
+rotation_speed = 3
+sight_radius = 100
+size = 60
+weight = 8
+can_regenerate = true
+drops_corpse = true
+is_boss = true
+pikmin_seeds = 10
+revive_speed = 10
+value = 30
+
+script{
+    on_spawn{
+        animation = burrowed
+        var = burrowed true
+    }
+
+	on_see_prey{
+        if = burrowed true
+        animation = unburrow
+        if = burrowed true
+        wait = animation
+        
+        animation = walk
+		move = prey
+        var = burrowed false
+	}
+    
+    on_near_prey{
+        move = stop
+        animation = attack
+        wait = animation
+    }
+	
+	on_lose_prey{
+        animation = walk
+		move = home
+	}
+    
+    on_reach_home{
+        animation = idle
+        wait = 0.3
+        animation = burrow
+        wait = animation
+        animation = burrowed
+        var = burrowed true
+    }
+    
+    on_death{
+        animation = die
+        wait = animation
+        special_function = die
+    }
+}
