@@ -14,6 +14,9 @@ using namespace std;
 #define AUTO_PLUCK_INPUT_INTERVAL   0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
 #define AUTO_PLUCK_MAX_RADIUS       160      //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5      //How many seconds a camera transition lasts for.
+#define CURSOR_SAVE_INTERVAL        0.03     //Every X seconds, the cursor's position is saved, to create the trail effect.
+#define CURSOR_SAVE_N_SPOTS         10       //Number of positions of the cursor to keep track of.
+#define CURSOR_SPIN_SPEED           M_PI     //How much the cursor spins per second.
 #define CURSOR_MAX_DIST             200      //The cursor can only be these many units away from the captain.
 #define DEF_PIKMIN_SIZE             24       //Default Pikmin size.
 #define DEF_ROTATION_SPEED          M_PI * 2 //The default rotation speed of a mob type.

@@ -1,6 +1,10 @@
 #ifndef CONTROLS_INCLUDED
 #define CONTROLS_INCLUDED
 
+#include <string>
+
+using namespace std;
+
 struct control_info {
     unsigned char action;
     unsigned char player;

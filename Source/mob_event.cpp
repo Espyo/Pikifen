@@ -35,7 +35,7 @@ mob_action::mob_action(unsigned char t, string d) {
  * action_nr: used by conditionals to change the flow of the script.
  * Returns true if the script should stop.
  */
-bool mob_action::run(mob* m, mob_event* ev, size_t* action_nr) {
+bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
     //ToDo error detection.
     
     

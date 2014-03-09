@@ -35,9 +35,8 @@ struct party_spot_info {
 
 struct point {
     float x, y;
-    point(float x = 0, float y = 0) {
-        this->x = x; this->y = y;
-    }
+    point(float x = 0, float y = 0) { this->x = x; this->y = y; }
+    bool operator!=(const point &p2) { return x != p2.x || y != p2.y; }
 };
 
 struct sample_struct {

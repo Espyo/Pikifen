@@ -15,6 +15,7 @@ void handle_game_controls(ALLEGRO_EVENT ev) {
         //Debug testing.
         //ToDo remove.
         day_minutes += 30;
+        day += 12;
     }
     
     size_t n_controls = controls.size();

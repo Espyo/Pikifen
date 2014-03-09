@@ -226,22 +226,23 @@ void do_drawing() {
             }
         }
         
-        for(size_t m = 0; m < mobs.size(); m++) {
+        //ToDo debugging -- remove.
+        /*for(size_t m = 0; m < mobs.size(); m++) {
             if(typeid(*mobs[m]) == typeid(pikmin)) continue;
             mob* m_ptr = mobs[m];
             frame* f_ptr = m_ptr->anim.get_frame();
             if(f_ptr == NULL) continue; //ToDo report
-            
+        
             for(size_t h = 0; h < f_ptr->hitboxes.size(); h++) {
                 hitbox* h_ptr = &f_ptr->hitboxes[h];
                 float s = sin(m_ptr->angle);
                 float c = cos(m_ptr->angle);
                 float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
                 float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
-                
+        
                 al_draw_filled_circle(h_x, h_y, h_ptr->radius, al_map_rgba(128, 0, 0, 192));
             }
-        }
+        }*/
         
         
         /* Layer 4
@@ -309,12 +310,27 @@ void do_drawing() {
             }
         }
         
+        //Cursor trail
         al_use_transform(&normal_transform);
+        for(size_t p = 1; p < cursor_spots.size(); p++) {
+            point* p_ptr = &cursor_spots[p];
+            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
+            if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
+                al_draw_line(
+                    p_ptr->x, p_ptr->y,
+                    pp_ptr->x, pp_ptr->y,
+                    al_map_rgba(255, 0, 255, (p / (float) cursor_spots.size()) * 64),
+                    p * 3
+                );
+            }
+        }
+        
+        //The actual cursor and mouse cursor
         draw_sprite(
-            bmp_mouse_cursor,
+            ((mouse_cursor_valid) ? bmp_mouse_cursor : bmp_mouse_cursor_invalid),
             mouse_cursor_x, mouse_cursor_y,
             cam_zoom * 54, cam_zoom * 54,
-            cursor_angle);
+            cursor_spin_angle);
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
@@ -477,68 +493,77 @@ void do_drawing() {
                 size_t l_nr = (cur_leader_nr + l) % n_leaders;
                 ALLEGRO_BITMAP* bm = (l_nr == 0) ? bmp_olimar : ((l_nr == 1) ? bmp_louie : bmp_president);
                 
-                int icons_size;
-                if(l == 0) icons_size = 32; else icons_size = 20;
+                float size;
+                if(l == 0) size = scr_w * 0.08; else size = scr_w * 0.06;
                 
                 int y_offset;
-                if(l == 0) y_offset = 0; else if(l == 1) y_offset = 44; else y_offset = 80;
+                if(l == 0) y_offset = 0; else if(l == 1) y_offset = scr_h * 0.10; else y_offset = scr_h * 0.19;
                 
                 draw_sprite(
                     bm,
-                    32, scr_h - (32 + y_offset),
-                    icons_size, icons_size);
+                    scr_w * 0.08, scr_h * 0.88 - y_offset,
+                    size * 0.8, size * 0.8);
                 draw_sprite(
                     bmp_bubble,
-                    32, scr_h - (32 + y_offset),
-                    icons_size * 1.6, icons_size * 1.6);
+                    scr_w * 0.08, scr_h * 0.88 - y_offset,
+                    size, size);
                     
                 draw_health(
-                    32 + icons_size * 1.5,
-                    scr_h - (32 + y_offset),
+                    scr_w * 0.08 + size * 1.1,
+                    scr_h * 0.88 - y_offset,
                     leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                    icons_size * 0.5, true);
+                    size * 0.3, true);
                 draw_sprite(
-                    bmp_health_bubble,
-                    32 + icons_size * 1.5,
-                    scr_h - (32 + y_offset),
-                    icons_size * 1.2, icons_size * 1.2);
+                    bmp_hard_bubble,
+                    scr_w * 0.08 + size * 1.1,
+                    scr_h * 0.88 - y_offset,
+                    size * 0.8, size * 0.8);
             }
             
-            //Day hour.
-            al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
-                         (to_string((long long) (day_minutes / 60)) + ":" + to_string((long long) ((int) (day_minutes) % 60))).c_str());
-                         
             //Sun Meter.
             unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-            float sun_meter_span = (scr_w - 150) - 20; //Width, from the center of the first dot to the center of the last.
+            float sun_meter_start = scr_w * 0.06; //Center of the first dot.
+            float sun_meter_end = scr_w * 0.70;
+            float sun_meter_y = scr_h * 0.10; //Center.
+            float sun_meter_span = sun_meter_end - sun_meter_start; //Width, from the center of the first dot to the center of the last.
             float interval = sun_meter_span / (float) n_hours;
+            
+            //Larger bubbles at the start, middle and end of the meter.
+            draw_sprite(bmp_hard_bubble, sun_meter_start, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
+            draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span * 0.5, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
+            draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
             
             for(unsigned char h = 0; h < n_hours + 1; h++) {
                 draw_sprite(
-                    bmp_bubble,
-                    (20 + h * interval), 40,
-                    16, 16);
+                    bmp_hard_bubble,
+                    sun_meter_start + h * interval, sun_meter_y,
+                    scr_w * 0.02, scr_w * 0.02);
             }
-            
-            draw_sprite(bmp_bubble, 20, 40, 24, 24); //Day start big circle.
-            draw_sprite(bmp_bubble, 20 + sun_meter_span * 0.5, 40, 24, 24); //Day middle big circle.
-            draw_sprite(bmp_bubble, 20 + sun_meter_span, 40, 24, 24); //Day end big circle.
             
             float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
             draw_sprite(
-                bmp_health_bubble,
-                20 + day_passed_ratio * sun_meter_span, 40,
-                48, 48,
-                0, al_map_rgba(255, 255, 128, 192)); //Bubble behind the Sun.
+                bmp_sun,
+                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
+                scr_w * 0.07, scr_w * 0.07); //Static sun.
             draw_sprite(
                 bmp_sun,
-                20 + day_passed_ratio * sun_meter_span, 40,
-                48, 48); //Static sun.
-            draw_sprite(
-                bmp_sun,
-                20 + day_passed_ratio * sun_meter_span, 40,
-                48, 48,
+                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
+                scr_w * 0.07, scr_w * 0.07,
                 sun_meter_sun_angle); //Spinning sun.
+            draw_sprite(
+                bmp_sun_bubble,
+                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
+                scr_w * 0.08, scr_w * 0.08); //Bubble in front the Sun.
+                
+            //Day number.
+            draw_sprite(
+                bmp_day_bubble,
+                scr_w * 0.89, scr_h * 0.13,
+                scr_w * 0.11, scr_h * 0.18);
+                
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.89, scr_h * 0.15,
+                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, to_string((long long) day));
                 
             //Pikmin count.
             //Count how many Pikmin only.
@@ -565,35 +590,39 @@ void do_drawing() {
                 }
                 
                 if(bm) {
-                    draw_sprite(bm, 261, scr_h - font_h - 9, 32, 32);
+                    draw_sprite(bm, scr_w * 0.30, scr_h * 0.89, scr_w * 0.06, scr_w * 0.06);
                 }
             }
             
             draw_sprite(
                 bmp_bubble,
-                260, scr_h - font_h - 10,
-                40, 40);
-                
+                scr_w * 0.30, scr_h * 0.89,
+                scr_w * 0.10, scr_w * 0.10);
+            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.38, scr_h * 0.91, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.07, scr_h * 0.08, "x");
+            
             //Pikmin count numbers.
             unsigned long total_pikmin = pikmin_list.size();
             for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
             
-            al_draw_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w - 20, scr_h - 20 - font_h, ALLEGRO_ALIGN_RIGHT,
-                (to_string((long long) pikmin_in_party) + "/" +
-                 to_string((long long) pikmin_list.size()) + "/" +
-                 to_string((long long) total_pikmin)).c_str()
-            );
-            
-            //Day number.
-            draw_sprite(
-                bmp_day_bubble,
-                scr_w - 50, 45,
-                60, 70);
-                
+            draw_sprite(bmp_number_bubble, scr_w * 0.50, scr_h * 0.90, scr_w * 0.16, scr_h * 0.1);
+            draw_sprite(bmp_number_bubble, scr_w * 0.68, scr_h * 0.91, scr_w * 0.14, scr_h * 0.08);
+            draw_sprite(bmp_number_bubble, scr_w * 0.87, scr_h * 0.91, scr_w * 0.19, scr_h * 0.08);
+            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.59, scr_h * 0.92, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.04, scr_h * 0.08, "/");
+            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.76, scr_h * 0.92, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.04, scr_h * 0.08, "/");
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w - 50, 40, ALLEGRO_ALIGN_CENTER, 48, 0,
-                (to_string((long long) day)).c_str()
+                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.57, scr_h * 0.90,
+                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.14, scr_h * 0.08,
+                to_string((long long) pikmin_in_party)
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.74, scr_h * 0.91,
+                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.12, scr_h * 0.05,
+                to_string((long long) pikmin_list.size())
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.955, scr_h * 0.91,
+                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.17, scr_h * 0.05,
+                to_string((long long) total_pikmin)
             );
             
             //Sprays.
@@ -603,27 +632,72 @@ void do_drawing() {
                 
                 draw_sprite(
                     spray_types[top_spray_nr].bmp_spray,
-                    34, scr_h / 2 - 20,
-                    20, 24);
-                al_draw_text(
-                    font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 - 32, 0,
-                    ("x" + to_string((long long) spray_amounts[top_spray_nr])).c_str());
-                    
+                    scr_w * 0.06, scr_h * 0.36,
+                    scr_w * 0.04, scr_h * 0.07);
+                draw_compressed_text(
+                    font_counter, al_map_rgb(255, 255, 255), scr_w * 0.10, scr_h * 0.37, ALLEGRO_ALIGN_CENTER, 1,
+                    scr_w * 0.03, scr_h * 0.05, "x");
+                draw_compressed_text(
+                    font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
+                    scr_w * 0.06, scr_h * 0.05,
+                    to_string((long long) spray_amounts[top_spray_nr]));
+                for(size_t c = 0; c < controls.size(); c++) {
+                    if(controls[c].action == BUTTON_USE_SPRAY_1 || controls[c].action == BUTTON_USE_SPRAY) {
+                        draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
+                        break;
+                    }
+                }
+                
                 if(n_spray_types == 2) {
                     draw_sprite(
                         spray_types[1].bmp_spray,
-                        34, scr_h / 2 + 20,
-                        20, 24);
-                    al_draw_text(
-                        font_counter, al_map_rgb(255, 255, 255), 48, scr_h / 2 + 8, 0,
-                        ("x" + to_string((long long) spray_amounts[1])).c_str());
+                        scr_w * 0.06, scr_h * 0.52,
+                        scr_w * 0.04, scr_h * 0.07);
+                    draw_compressed_text(
+                        font_counter, al_map_rgb(255, 255, 255), scr_w * 0.10, scr_h * 0.53, ALLEGRO_ALIGN_CENTER, 1,
+                        scr_w * 0.03, scr_h * 0.05, "x");
+                    draw_compressed_text(
+                        font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
+                        scr_w * 0.06, scr_h * 0.05,
+                        to_string((long long) spray_amounts[1]));
+                    for(size_t c = 0; c < controls.size(); c++) {
+                        if(controls[c].action == BUTTON_USE_SPRAY_2) {
+                            draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
+                            break;
+                        }
+                    }
+                    
+                } else if(n_spray_types > 2) {
+                    draw_sprite(
+                        spray_types[(selected_spray == 0 ? spray_types.size() - 1 : selected_spray - 1)].bmp_spray,
+                        scr_w * 0.06, scr_h * 0.52,
+                        scr_w * 0.03, scr_h * 0.05);
+                    draw_sprite(
+                        spray_types[(selected_spray + 1) % spray_types.size()].bmp_spray,
+                        scr_w * 0.13, scr_h * 0.52,
+                        scr_w * 0.03, scr_h * 0.05);
+                    for(size_t c = 0; c < controls.size(); c++) {
+                        if(controls[c].action == BUTTON_SWITCH_SPRAY_LEFT) {
+                            draw_control(font, controls[c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            break;
+                        }
+                    }
+                    for(size_t c = 0; c < controls.size(); c++) {
+                        if(controls[c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
+                            draw_control(font, controls[c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            break;
+                        }
+                    }
                 }
             }
             
             //ToDo test stuff, remove.
+            //Day hour.
+            /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
+                         (to_string((long long) (day_minutes / 60)) + ":" + to_string((long long) ((int) (day_minutes) % 60))).c_str());
             for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());
+            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());*/
             
         } else { //Show a message.
         
@@ -651,7 +725,7 @@ void do_drawing() {
                 draw_compressed_text(
                     font, al_map_rgb(255, 255, 255),
                     24, scr_h - font_h * (4 - l) + 8,
-                    ALLEGRO_ALIGN_LEFT, scr_w - 64, 0,
+                    ALLEGRO_ALIGN_LEFT, 0, scr_w - 64, 0,
                     lines[l]
                 );
                 

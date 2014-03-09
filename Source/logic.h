@@ -139,6 +139,22 @@ void do_logic() {
     //Sun meter.
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED / game_fps;
     
+    //Cursor spin angle.
+    cursor_spin_angle -= CURSOR_SPIN_SPEED / game_fps;
+    
+    //Cursor trail.
+    if(cursor_save_time > 0) {
+        cursor_save_time -= 1.0 / game_fps;
+        if(cursor_save_time <= 0) {
+            cursor_save_time = CURSOR_SAVE_INTERVAL;
+            cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
+            if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+                cursor_spots.erase(cursor_spots.begin());
+            }
+        }
+    }
+    
+    
     //Tick all particles.
     size_t n_particles = particles.size();
     for(size_t p = 0; p < n_particles; ) {
@@ -545,9 +561,11 @@ void do_logic() {
         
         leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
         if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
+            //ToDo with an analog stick, if the cursor is being moved, it's considered off-limit a lot more than it should.
             //Cursor goes beyond the range limit.
             cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
             cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
+            mouse_cursor_valid = false;
             
             if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
                 //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.
@@ -555,6 +573,8 @@ void do_logic() {
                 mouse_cursor_y = cursor_y;
                 al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
             }
+        } else {
+            mouse_cursor_valid = true;
         }
         
         

@@ -115,22 +115,7 @@ int main(int argc, char** argv) {
     bmp_red_onion = load_bmp("Red_onion.png");
     bmp_yellow_onion = load_bmp("Yellow_onion.png");
     bmp_blue_onion = load_bmp("Blue_onion.png");
-    bmp_cursor = load_bmp("Cursor.png");
-    bmp_mouse_cursor = load_bmp("Mouse_cursor.png");
-    bmp_background = load_bmp("Background.png");
-    bmp_bubble = load_bmp("Bubble.png");
-    bmp_day_bubble = load_bmp("Day_bubble.png");
-    bmp_health_bubble = load_bmp("Health_bubble.png");
-    bmp_sun = load_bmp("Sun.png");
-    bmp_shadow = load_bmp("Shadow.png");
     bmp_ship = load_bmp("Ship.png");
-    bmp_idle_glow = load_bmp("Idle_glow.png");
-    bmp_ub_spray = load_bmp("Ultra-bitter_spray.png");
-    bmp_us_spray = load_bmp("Ultra-spicy_spray.png");
-    bmp_move_group_arrow = load_bmp("Move_group_arrow.png");
-    bmp_test = load_bmp("Test.png");
-    bmp_nectar = load_bmp("Nectar.png");
-    bmp_icon = load_bmp("Icon.png");
     bmp_red_pellet[0] = load_bmp("Red_1_pellet.png");
     bmp_red_pellet[1] = load_bmp("Red_5_pellet.png");
     bmp_red_pellet[2] = load_bmp("Red_10_pellet.png");
@@ -138,7 +123,26 @@ int main(int argc, char** argv) {
     bmp_olimar_lying = load_bmp("Olimar_lying.png");
     bmp_louie_lying = load_bmp("Louie_lying.png");
     bmp_president_lying = load_bmp("President_lying.png");
-    bmp_message_box = load_bmp("Message_box.png");
+    
+    bmp_bubble = load_bmp(              "Bubble.png");
+    bmp_cursor = load_bmp(              "Cursor.png");
+    bmp_day_bubble = load_bmp(          "Day_bubble.png");
+    bmp_hard_bubble = load_bmp(         "Hard_bubble.png");
+    bmp_icon = load_bmp(                "Icon.png");
+    bmp_idle_glow = load_bmp(           "Idle_glow.png");
+    bmp_message_box = load_bmp(         "Message_box.png");
+    bmp_mouse_cursor = load_bmp(        "Mouse_cursor.png");
+    bmp_mouse_cursor_invalid = load_bmp("Mouse_cursor_invalid.png");
+    bmp_move_group_arrow = load_bmp(    "Move_group_arrow.png");
+    bmp_nectar = load_bmp(              "Nectar.png");
+    bmp_number_bubble = load_bmp(       "Number_bubble.png");
+    bmp_shadow = load_bmp(              "Shadow.png");
+    bmp_sun = load_bmp(                 "Sun.png");
+    bmp_sun_bubble = load_bmp(          "Sun_bubble.png");
+    bmp_ub_spray = load_bmp(            "Ultra-bitter_spray.png");
+    bmp_us_spray = load_bmp(            "Ultra-spicy_spray.png");
+    
+    bmp_test = load_bmp("Test.png");
     
     int font_ranges[] = {
         0x0020, 0x007F, //ASCII
@@ -163,7 +167,9 @@ int main(int argc, char** argv) {
     temp_font_bitmap = load_bmp("Value_font.png");
     if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
+    
     font_h = al_get_font_line_height(font);
+    font_counter_h = al_get_font_line_height(font_counter);
     
     al_set_display_icon(display, bmp_icon);
     

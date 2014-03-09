@@ -39,6 +39,9 @@ script{
     }
 	
 	on_lose_prey{
+        animation = idle
+        move = stop
+        wait = 0.5
         animation = walk
 		move = home
 	}

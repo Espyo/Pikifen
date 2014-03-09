@@ -5,6 +5,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 
+#include "controls.h"
 #include "data_file.h"
 #include "leader.h"
 #include "mob_event.h"
@@ -31,7 +32,8 @@ void               coordinates_to_angle(float x_coord, float y_coord, float* ang
 void               create_mob(mob* m);
 void               delete_mob(mob* m);
 void               dismiss();
-void               draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, float max_w, float max_h, string text);
+void               draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float max_w, float max_h);
+void               draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, unsigned char valign, float max_w, float max_h, string text);
 void               draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color);
 void               draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius = 20, bool just_chart = false);
 void               draw_sector(sector &s, float x, float y);

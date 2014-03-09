@@ -240,25 +240,85 @@ void dismiss() {
 }
 
 /* ----------------------------------------------------------------------------
+ * Draws a key or button on the screen.
+ * font:  Font to use for the name.
+ * c:     Info on the control.
+ * x, y:  Center of the place to draw at.
+ * max_*: Max width or height. Used to compress it if needed.
+ */
+void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float max_w, float max_h) {
+    string name;
+    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
+        name = al_keycode_to_name(c.button);
+    } else if(c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG || c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
+        name = "AXIS " + to_string((long long) c.stick) + " " + to_string((long long) c.axis);
+        name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
+    } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
+        name = to_string((long long) c.button + 1);
+    } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
+        name = "M" + to_string((long long) c.button);
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+        name = "MWD";
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
+        name = "MWL";
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
+        name = "MWR";
+    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
+        name = "MWU";
+    }
+    
+    int x1, y1, x2, y2;
+    al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
+    float total_width = min(x2 - x1 + 4, max_w);
+    float total_height = min(y2 - y1 + 4, max_h);
+    total_width = max(total_width, total_height);
+    
+    if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
+        al_draw_filled_rectangle(
+            x - total_width * 0.5, y - total_height * 0.5,
+            x + total_width * 0.5, y + total_height * 0.5,
+            al_map_rgb(255, 255, 255)
+        );
+        al_draw_rectangle(
+            x - total_width * 0.5, y - total_height * 0.5,
+            x + total_width * 0.5, y + total_height * 0.5,
+            al_map_rgb(160, 160, 160), 2
+        );
+    } else {
+        al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgb(255, 255, 255));
+        al_draw_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgb(160, 160, 160), 2);
+    }
+    draw_compressed_text(font, al_map_rgb(255, 255, 255), x, y, ALLEGRO_ALIGN_CENTER, 1, max_w - 2, max_h - 2, name);
+}
+
+/* ----------------------------------------------------------------------------
  * Draws text on the screen, but compresses (scales) it to fit within the specified range.
  * font - flags: The parameters you'd use for al_draw_text.
+ * valign:       Vertical align: 0 = top, 1 = middle, 2 = bottom.
  * max_w, max_h: The maximum width and height. Use 0 to have no limit.
  * text:         Text to draw.
  */
-void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, float max_w, float max_h, string text) {
+void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, unsigned char valign, float max_w, float max_h, string text) {
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     int text_width = x2 - x1, text_height = y2 - y1;
     float scale_x = 1, scale_y = 1;
+    float final_text_height = text_height;
     
     if(text_width > max_w && max_w != 0) scale_x = max_w / text_width;
-    if(text_height > max_h && max_h != 0) scale_y = max_h / text_height;
+    if(text_height > max_h && max_h != 0) {
+        scale_y = max_h / text_height;
+        final_text_height = max_h;
+    }
     
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
     al_scale_transform(&scale_transform, scale_x, scale_y);
-    al_translate_transform(&scale_transform, x, y);
+    al_translate_transform(
+        &scale_transform, x,
+        ((valign == 1) ? y - final_text_height * 0.5 : ((valign == 2) ? y - final_text_height : y))
+    );
     al_compose_transform(&scale_transform, &old_transform);
     
     al_use_transform(&scale_transform); {
@@ -692,7 +752,7 @@ mob_event* get_mob_event(mob* m, unsigned char et) {
     
         mob_event* ev = m->type->events[ev_nr];
         if(ev->type == et) {
-            if(m->script_wait != 0 && m->script_wait_event != ev) return NULL;
+            if(m->script_wait != 0 && m->script_wait_event != ev && et != MOB_EVENT_DEATH) return NULL;
             return ev;
         }
     }
@@ -1009,6 +1069,7 @@ void load_game_content() {
     
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
+    //spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 255, 0), NULL, NULL));
     
     //Mob types.
     load_mob_types(PIKMIN_FOLDER, MOB_TYPE_PIKMIN);
@@ -1940,13 +2001,32 @@ inline bool tob(string s) {
 //Converts a string to an Allegro color. Components are separated by spaces, and the final one (alpha) is optional.
 ALLEGRO_COLOR toc(string s) {
     s = trim_spaces(s);
+    
+    unsigned char alpha = 255;
     vector<string> components = split(s);
-    ALLEGRO_COLOR c = al_map_rgba(
-                          ((components.size() > 0) ? toi(components[0]) : 0),
-                          ((components.size() > 1) ? toi(components[1]) : 0),
-                          ((components.size() > 2) ? toi(components[2]) : 0),
-                          ((components.size() > 3) ? toi(components[3]) : 255)
-                      );
+    if(components.size() >= 2) alpha = toi(components[1]);
+    
+    if(s == "nothing" || s == "none") return al_map_rgba(0,   0,   0,   0);
+    if(s == "black")                  return al_map_rgba(0,   0,   0,   alpha);
+    if(s == "gray" || s == "grey")    return al_map_rgba(128, 128, 128, alpha);
+    if(s == "white")                  return al_map_rgba(255, 255, 255, alpha);
+    if(s == "yellow")                 return al_map_rgba(255, 255, 0,   alpha);
+    if(s == "orange")                 return al_map_rgba(255, 128, 0,   alpha);
+    if(s == "brown")                  return al_map_rgba(128, 64,  0,   alpha);
+    if(s == "red")                    return al_map_rgba(255, 0,   0,   alpha);
+    if(s == "violet")                 return al_map_rgba(255, 0,   255, alpha);
+    if(s == "purple")                 return al_map_rgba(128, 0,   255, alpha);
+    if(s == "blue")                   return al_map_rgba(0,   0,   255, alpha);
+    if(s == "cyan")                   return al_map_rgba(0,   255, 255, alpha);
+    if(s == "green")                  return al_map_rgba(0,   255, 0,   alpha);
+    
+    ALLEGRO_COLOR c =
+        al_map_rgba(
+            ((components.size() > 0) ? toi(components[0]) : 0),
+            ((components.size() > 1) ? toi(components[1]) : 0),
+            ((components.size() > 2) ? toi(components[2]) : 0),
+            ((components.size() > 3) ? toi(components[3]) : 255)
+        );
     return c;
 }
 //Converts a string to a float, trimming the spaces and accepting commas or points.

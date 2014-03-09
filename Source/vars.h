@@ -31,7 +31,6 @@
 using namespace std;
 
 //Bitmaps.
-extern ALLEGRO_BITMAP* bmp_background;
 extern ALLEGRO_BITMAP* bmp_blue[3];
 extern ALLEGRO_BITMAP* bmp_blue_buried[3];
 extern ALLEGRO_BITMAP* bmp_blue_idle[3];
@@ -40,15 +39,17 @@ extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_day_bubble;
-extern ALLEGRO_BITMAP* bmp_health_bubble;
+extern ALLEGRO_BITMAP* bmp_hard_bubble;
 extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
 extern ALLEGRO_BITMAP* bmp_louie;
 extern ALLEGRO_BITMAP* bmp_louie_lying;
 extern ALLEGRO_BITMAP* bmp_message_box;
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
+extern ALLEGRO_BITMAP* bmp_mouse_cursor_invalid;
 extern ALLEGRO_BITMAP* bmp_move_group_arrow;
 extern ALLEGRO_BITMAP* bmp_nectar;
+extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_olimar;
 extern ALLEGRO_BITMAP* bmp_olimar_lying;
 extern ALLEGRO_BITMAP* bmp_president;
@@ -61,6 +62,7 @@ extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_ship;
 extern ALLEGRO_BITMAP* bmp_sun;
+extern ALLEGRO_BITMAP* bmp_sun_bubble;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_yellow[3];
@@ -121,6 +123,9 @@ extern vector<size_t>        cur_message_stopping_chars; //The message stops scr
 extern unsigned char         cur_screen;
 extern weather               cur_weather;              //Current weather.
 extern float                 cursor_angle;
+extern float                 cursor_save_time;         //Time left until the position of the cursor is saved on the vector.
+extern float                 cursor_spin_angle;
+extern vector<point>         cursor_spots;             //Spots the cursor has been through. Used for the faint trail left behind it.
 extern float                 cursor_x;                 //Leader's cursor.
 extern float                 cursor_y;
 extern unsigned int          day;
@@ -155,7 +160,8 @@ extern vector<enemy*>        enemies;
 extern ALLEGRO_FONT*         font;
 extern ALLEGRO_FONT*         font_area_name;
 extern ALLEGRO_FONT*         font_counter;
-extern unsigned short        font_h;
+extern unsigned int          font_counter_h;
+extern unsigned int          font_h;
 extern ALLEGRO_FONT*         font_value;             //Font for the carrying / money values.
 extern unsigned char         game_fps;
 extern vector<vector<float> >
@@ -178,6 +184,7 @@ extern float                 mouse_cursor_x;             //The physical mouse's 
 extern float                 mouse_cursor_y;
 extern float                 mouse_cursor_speed_x;
 extern float                 mouse_cursor_speed_y;
+extern bool                  mouse_cursor_valid;
 extern bool                  mouse_moves_cursor[4];
 extern vector<float>         move_group_arrows;          //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                 move_group_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
