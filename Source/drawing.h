@@ -94,7 +94,16 @@ void do_drawing() {
         
         //Treasures.
         for(size_t t = 0; t < n_treasures; t++) {
-            al_draw_filled_circle(treasures[t]->x, treasures[t]->y, treasures[t]->type->size * 0.5, al_map_rgb(128, 255, 255));
+            float size = treasures[t]->type->size;
+            if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
+                size *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
+                size = max(0, size);
+            }
+            draw_sprite(
+                bmp_tp,
+                treasures[t]->x, treasures[t]->y,
+                size, size
+            );
         }
         
         //Pellets.
@@ -120,17 +129,21 @@ void do_drawing() {
             bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_mob;
             
             if(pikmin_list[p]->type->name == "Red Pikmin") {
-                if(pikmin_list[p]->buried) bm = bmp_red_buried[pikmin_list[p]->maturity];
+                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_red_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_red_idle[pikmin_list[p]->maturity];
                 else bm = bmp_red[pikmin_list[p]->maturity];
             } else if(pikmin_list[p]->type->name == "Yellow Pikmin") {
-                if(pikmin_list[p]->buried) bm = bmp_yellow_buried[pikmin_list[p]->maturity];
+                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_yellow_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_yellow_idle[pikmin_list[p]->maturity];
                 else bm = bmp_yellow[pikmin_list[p]->maturity];
-            } if(pikmin_list[p]->type->name == "Blue Pikmin") {
-                if(pikmin_list[p]->buried) bm = bmp_blue_buried[pikmin_list[p]->maturity];
+            } else if(pikmin_list[p]->type->name == "Blue Pikmin") {
+                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_blue_buried[pikmin_list[p]->maturity];
                 else if(idling) bm = bmp_blue_idle[pikmin_list[p]->maturity];
                 else bm = bmp_blue[pikmin_list[p]->maturity];
+            } else if(pikmin_list[p]->type->name == "Purple Pikmin") {
+                bm = bmp_purple[pikmin_list[p]->maturity];
+            } else if(pikmin_list[p]->type->name == "White Pikmin") {
+                bm = bmp_white[pikmin_list[p]->maturity];
             }
             draw_sprite(
                 bm,
@@ -215,12 +228,19 @@ void do_drawing() {
             if(f_ptr) {
                 float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
                 //ToDo test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
+                float width = f_ptr->game_w;
+                float height = f_ptr->game_h;
+                if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
+                    float mult = 1 - (e_ptr->time_in_state / DELIVERY_SUCK_TIME);
+                    width = max(0, width * mult);
+                    height = max(0, height * mult);
+                }
+                
                 draw_sprite(
                     f_ptr->bitmap,
                     e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
                     e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
-                    f_ptr->game_w,
-                    f_ptr->game_h,
+                    width, height,
                     e_ptr->angle
                 );
             }
@@ -289,7 +309,7 @@ void do_drawing() {
                         else
                             alpha_mult = 1;
                             
-                        if(d == 0)        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
+                        if(d == 0)      c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
                         else if(d == 1) c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
                         else if(d == 2) c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
                         else if(d == 3) c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
@@ -352,10 +372,9 @@ void do_drawing() {
             mob* mob_ptr = mobs[m];
             
             if(mob_ptr->carrier_info) {
-                //ToDo it's not taking Pikmin strength into account.
-                if(mob_ptr->carrier_info->current_n_carriers > 0) {
+                if(mob_ptr->carrier_info->current_carrying_strength > 0) {
                     ALLEGRO_COLOR color;
-                    if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) { //Being carried.
+                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { //Being carried.
                         if(mob_ptr->carrier_info->carry_to_ship) {
                             color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
                         } else {
@@ -364,7 +383,7 @@ void do_drawing() {
                     } else {
                         color = al_map_rgb(96, 192, 192);
                     }
-                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_n_carriers, mob_ptr->type->weight, color);
+                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
                 }
             }
             
@@ -443,6 +462,31 @@ void do_drawing() {
                         p_ptr->size * 0.5,
                         change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
                     );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_BITMAP) {
+                    draw_sprite(
+                        p_ptr->bitmap,
+                        p_ptr->x,
+                        p_ptr->y,
+                        p_ptr->size, p_ptr->size,
+                        0, change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
+                    draw_sprite(
+                        p_ptr->bitmap, p_ptr->x, p_ptr->y, p_ptr->size, -1,
+                        0, change_alpha(p_ptr->color,
+                                        abs(sin((p_ptr->time / p_ptr->starting_time) * M_PI)) * p_ptr->color.a * 255
+                                       )
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_ENEMY_SPIRIT) {
+                    float s = sin((p_ptr->time / p_ptr->starting_time) * M_PI);
+                    draw_sprite(
+                        p_ptr->bitmap, p_ptr->x + s * 16, p_ptr->y, p_ptr->size, -1,
+                        s * M_PI, change_alpha(p_ptr->color, abs(s) * p_ptr->color.a * 255)
+                    );
+                    
                 }
             }
         }

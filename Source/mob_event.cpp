@@ -1,5 +1,7 @@
 #include "functions.h"
 #include "mob_event.h"
+#include "particle.h"
+#include "vars.h"
 
 mob_action::mob_action(data_node* dn) {
     string n = dn->name;
@@ -115,20 +117,34 @@ bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {
     
-        if(data == "die") {
+        if(data == "die_start") {
+            if(typeid(*m) == typeid(enemy)) {
+                random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, m->x, m->y, 60, 80, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
+            }
+            
+        } else if(data == "die_end") {
             if(typeid(*m) == typeid(enemy)) {
                 enemy* e_ptr = (enemy*) m;
                 if(e_ptr->ene_type->drops_corpse) {
                     m->carrier_info = new carrier_info_struct(m, e_ptr->ene_type->max_carriers, false);
                 }
+                particles.push_back(
+                    particle(
+                        PARTICLE_TYPE_ENEMY_SPIRIT, bmp_enemy_spirit, m->x, m->y,
+                        0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 128, 255)
+                    )
+                );
             }
+            
+        } else {
+            error_log("Unknown special function \"" + data + "\"!");
+            
         }
         
         
         
     } else if(type == MOB_ACTION_WAIT) {
     
-        //ToDo wait for animation, etc.
         if(data == "animation") {
             m->script_wait = -1;
             return true;

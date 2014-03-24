@@ -36,9 +36,10 @@ struct carrier_info_struct {
     vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
     vector<float> carrier_spots_y;
     
-    size_t current_n_carriers;     //This is to avoid going through the vector to find out how many are carrying the mob.
-    vector<mob*> carrier_spots;    //Pikmin carrying, and their spots.
-    pikmin_type* decided_type;     //Current Onion type it's being taken to.
+    float current_carrying_strength; //This is to avoid going through the vector only to find out the total strength.
+    size_t current_n_carriers;       //Likewise, this is to avoid going through the vector only to find out the number. Note that this is the number of spaces reserved. A Pikmin could be on its way to its spot, not necessarily there already.
+    vector<mob*> carrier_spots;      //Pikmin carrying, and their spots.
+    pikmin_type* decided_type;       //Current Onion type it's being taken to.
     
     carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship);
     ~carrier_info_struct();
@@ -85,8 +86,8 @@ public:
     party_info* party;       //Info on the party this mob is a leader of.
     
     //Other properties.
-    unsigned short health;     //Current health.
-    unsigned char team;        //Mob's team (who it can damage)
+    float health;       //Current health.
+    unsigned char team; //Mob's team (who it can damage)
     
     //Script.
     mob* focused_prey;            //The prey it has focus on.
@@ -99,6 +100,9 @@ public:
     size_t script_wait_action;    //Number of the action the script returns to after the wait is over.
     bool spawn_event_done;        //Has the spawn event been triggered yet? If there's no spawn event, this doesn't matter.
     bool dead;                    //Is the mob dead?
+    unsigned char state;          //Current state.
+    float time_in_state;          //For how long as the mob been in this state?
+    void set_state(unsigned char new_state);
     
     //Carrying.
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
@@ -118,12 +122,13 @@ enum MOB_TYPES {
 };
 
 enum MOB_TEAMS {
-    MOB_TEAM_NONE,     //Can hurt anyone on any team.
+    MOB_TEAM_NONE,       //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
     MOB_TEAM_PLAYER_1,
     MOB_TEAM_PLAYER_2,
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
     MOB_TEAM_ENEMIES,
+    MOB_TEAM_DECORATION, //Cannot be hurt or targeted by anything.
 };
 
 //Special targets to chase.
@@ -131,6 +136,16 @@ enum MOB_TARGETS {
     MOB_TARGET_NONE,
     MOB_TARGET_HOME,
     MOB_TARGET_POINT,
+};
+
+enum MOB_STATES {
+    MOB_STATE_IDLE,
+    MOB_STATE_BEING_CARRIED,
+    MOB_STATE_BEING_DELIVERED, //Into an Onion.
+    PIKMIN_STATE_IN_GROUP,
+    PIKMIN_STATE_BURIED,
+    PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
+    PIKMIN_STATE_CARRYING,
 };
 
 #endif //ifndef MOB_INCLUDED

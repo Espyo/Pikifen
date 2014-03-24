@@ -111,6 +111,8 @@ int main(int argc, char** argv) {
         bmp_red_idle[m] = load_bmp(("Red_idle_" + maturity_str + ".png").c_str());
         bmp_yellow_idle[m] = load_bmp(("Yellow_idle_" + maturity_str + ".png").c_str());
         bmp_blue_idle[m] = load_bmp(("Blue_idle_" + maturity_str + ".png").c_str());
+        bmp_purple[m] = load_bmp(("Purple_" + maturity_str + ".png").c_str());
+        bmp_white[m] = load_bmp(("White_" + maturity_str + ".png").c_str());
     }
     bmp_red_onion = load_bmp("Red_onion.png");
     bmp_yellow_onion = load_bmp("Yellow_onion.png");
@@ -127,6 +129,7 @@ int main(int argc, char** argv) {
     bmp_bubble = load_bmp(              "Bubble.png");
     bmp_cursor = load_bmp(              "Cursor.png");
     bmp_day_bubble = load_bmp(          "Day_bubble.png");
+    bmp_enemy_spirit = load_bmp(        "Enemy_spirit.png");
     bmp_hard_bubble = load_bmp(         "Hard_bubble.png");
     bmp_icon = load_bmp(                "Icon.png");
     bmp_idle_glow = load_bmp(           "Idle_glow.png");
@@ -136,9 +139,12 @@ int main(int argc, char** argv) {
     bmp_move_group_arrow = load_bmp(    "Move_group_arrow.png");
     bmp_nectar = load_bmp(              "Nectar.png");
     bmp_number_bubble = load_bmp(       "Number_bubble.png");
+    bmp_pikmin_spirit = load_bmp(       "Pikmin_spirit.png");
     bmp_shadow = load_bmp(              "Shadow.png");
+    bmp_sparkle = load_bmp(             "Sparkle.png");
     bmp_sun = load_bmp(                 "Sun.png");
     bmp_sun_bubble = load_bmp(          "Sun_bubble.png");
+    bmp_tp = load_bmp(                  "TP.png");
     bmp_ub_spray = load_bmp(            "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(            "Ultra-spicy_spray.png");
     
@@ -203,8 +209,6 @@ int main(int argc, char** argv) {
     info_spot_mob_type = new mob_type();
     info_spot_mob_type->name = "Info spot";
     info_spot_mob_type->size = 32;
-    info_spot_mob_type->sight_radius = 100; //ToDo testing only. Remove.
-    info_spot_mob_type->near_radius = 30; //ToDo testing only. Remove.
     
     nectar_mob_type = new mob_type();
     nectar_mob_type->name = "Nectar";
@@ -244,17 +248,16 @@ int main(int argc, char** argv) {
     create_mob(new pikmin(80, 30, &s, pikmin_types["Yellow Pikmin"]));
     pikmin_list.back()->maturity = 2;
     create_mob(new pikmin(30, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->buried = true;
+    pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
     create_mob(new pikmin(50, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->buried = true;
+    pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
     create_mob(new pikmin(70, 200, &s, pikmin_types["Blue Pikmin"]));
-    pikmin_list.back()->buried = true;
+    pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
     for(unsigned char p = 0; p < 10; p++) {
         for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
             create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, &s, t->second));
         }
     }
-    create_mob(new info_spot(300, 0, &s, "Treasure.", false));
     create_mob(new info_spot(400, 0, &s, "Onions.", false));
     create_mob(new info_spot(-300, 0, &s, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false));
     create_mob(
@@ -462,7 +465,6 @@ int main(int argc, char** argv) {
             
             
             //Hitbox GUI.
-            //ToDo next/previous buttons.
             auto lambda_save_hitbox_click = [] (lafi_widget*, int, int) { save_hitbox(); };
             auto lambda_save_hitbox = [] (lafi_widget*) { save_hitbox(); };
             

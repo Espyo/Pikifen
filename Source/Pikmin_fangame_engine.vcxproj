@@ -150,7 +150,6 @@
     <ClInclude Include="hitbox.h" />
     <ClInclude Include="interval.h" />
     <ClInclude Include="leader.h" />
-    <ClInclude Include="level_object.h" />
     <ClInclude Include="logic.h" />
     <ClInclude Include="misc_structs.h" />
     <ClInclude Include="mob.h" />

@@ -27,7 +27,7 @@ public:
     bool always_active; //If true, this mob is always active, even if it's off-camera.
     
     //Behavior things.
-    unsigned int max_health;
+    float max_health;
     float sight_radius;
     float near_radius;
     unsigned int max_carriers;

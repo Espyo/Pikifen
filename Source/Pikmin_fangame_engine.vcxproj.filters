@@ -155,9 +155,6 @@
     <ClInclude Include="leader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="level_object.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mob.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -56,8 +56,9 @@ script{
     }
     
     on_death{
+        special_function = die_start
         animation = die
         wait = animation
-        special_function = die
+        special_function = die_end
     }
 }

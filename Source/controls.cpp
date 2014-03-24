@@ -16,6 +16,7 @@ void handle_game_controls(ALLEGRO_EVENT ev) {
         //ToDo remove.
         day_minutes += 30;
         day += 12;
+        pikmin_list[0]->health -= 10;
     }
     
     size_t n_controls = controls.size();
@@ -521,7 +522,7 @@ void handle_button(unsigned int button, float pos) {
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
                     
                     if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()) {
-                        types_in_party.push_back(pikmin_ptr->type);
+                        types_in_party.push_back(pikmin_ptr->pik_type);
                     }
                 } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
                 
@@ -539,7 +540,7 @@ void handle_button(unsigned int button, float pos) {
             unsigned char current_maturity = 255;
             if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
                 pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
-                current_type = pikmin_ptr->type;
+                current_type = pikmin_ptr->pik_type;
                 current_maturity = pikmin_ptr->maturity;
             }
             
@@ -598,7 +599,7 @@ void handle_button(unsigned int button, float pos) {
             pikmin* partners[3] = {NULL, NULL, NULL};
             if(typeid(*cur_leader_ptr->holding_pikmin) == typeid(pikmin)) {
                 pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->holding_pikmin);
-                current_type = pikmin_ptr->type;
+                current_type = pikmin_ptr->pik_type;
                 current_maturity = pikmin_ptr->maturity;
             }
             

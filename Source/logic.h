@@ -213,14 +213,57 @@ void do_logic() {
         
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs;) {
-            mobs[m]->tick();
+            mob* m_ptr = mobs[m];
+            m_ptr->tick();
             
-            if(mobs[m]->to_delete) {
-                delete_mob(mobs[m]);
-                n_mobs--;
-            } else {
-                m++;
+            if(m_ptr->carrier_info) {
+                if(m_ptr->state == MOB_STATE_BEING_CARRIED && m_ptr->reached_destination && m_ptr->carrier_info->decided_type) {
+                    m_ptr->set_state(MOB_STATE_BEING_DELIVERED);
+                    
+                }
             }
+            
+            if(m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
+                if(m_ptr->carrier_info->carry_to_ship) {
+                    //Find ship.
+                    //ToDo.
+                    
+                } else {
+                    //Find Onion.
+                    size_t n_onions = onions.size();
+                    size_t o = 0;
+                    for(; o < n_onions; o++) {
+                        if(onions[o]->oni_type->pik_type == m_ptr->carrier_info->decided_type) break;
+                    }
+                    
+                    if(typeid(*m_ptr) == typeid(pellet)) {
+                        pellet* p_ptr = (pellet*) m_ptr;
+                        if(p_ptr->pel_type->pik_type == p_ptr->carrier_info->decided_type) {
+                            give_pikmin_to_onion(onions[o], p_ptr->pel_type->match_seeds);
+                        } else {
+                            give_pikmin_to_onion(onions[o], p_ptr->pel_type->non_match_seeds);
+                        }
+                        
+                    } else if(typeid(*m_ptr) == typeid(enemy)) {
+                        enemy* e_ptr = (enemy*) m_ptr;
+                        give_pikmin_to_onion(onions[o], e_ptr->ene_type->pikmin_seeds);
+                        
+                    }
+                }
+                
+                make_uncarriable(m_ptr);
+                m_ptr->to_delete = true;
+            }
+            
+            //Mob deletion.
+            if(m_ptr->to_delete) {
+                delete_mob(m_ptr);
+                n_mobs--;
+                continue;
+            }
+            m++;
+            
+            
         }
         
         
@@ -236,7 +279,7 @@ void do_logic() {
             
             bool can_be_called =
                 !pik_ptr->following_party &&
-                !pik_ptr->buried &&
+                pik_ptr->state != PIKMIN_STATE_BURIED &&
                 !pik_ptr->speed_z &&
                 !pik_ptr->uncallable_period;
             bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
@@ -244,7 +287,19 @@ void do_logic() {
                 dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
                 pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
                 !cur_leader_ptr->carrier_info;
-            bool is_busy = (pik_ptr->carrying_mob || pik_ptr->enemy_attacking);
+            bool is_busy = (pik_ptr->carrying_mob || pik_ptr->attacking_enemy);
+            
+            if(pik_ptr->health <= 0 && !pik_ptr->dead) {
+                pik_ptr->dead = true;
+                pik_ptr->to_delete = true;
+                particles.push_back(
+                    particle(
+                        PARTICLE_TYPE_PIKMIN_SPIRIT, bmp_pikmin_spirit, pik_ptr->x, pik_ptr->y,
+                        0, -50, 0.5, 0, 2, pik_ptr->pik_type->size, pik_ptr->pik_type->main_color
+                    )
+                );
+                
+            }
             
             if(can_be_called && (whistled || (touched && !is_busy))) {
             
@@ -254,7 +309,8 @@ void do_logic() {
                 al_stop_sample(&sfx_pikmin_called.id);
                 al_play_sample(sfx_pikmin_called.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_called.id);
                 
-                pik_ptr->enemy_attacking = NULL;
+                pik_ptr->attacking_enemy = NULL;
+                pik_ptr->set_state(PIKMIN_STATE_IN_GROUP);
                 
             }
             
@@ -262,8 +318,8 @@ void do_logic() {
             size_t n_nectars = nectars.size();
             if(
                 !pik_ptr->carrying_mob &&
-                !pik_ptr->enemy_attacking &&
-                !pik_ptr->buried &&
+                !pik_ptr->attacking_enemy &&
+                pik_ptr->state != PIKMIN_STATE_BURIED &&
                 !pik_ptr->speed_z &&
                 pik_ptr->maturity != 2
             ) {
@@ -277,13 +333,14 @@ void do_logic() {
                 }
             }
             
-            //Finding tasks.
+            //Finding a mob to carry.
             size_t n_mobs = mobs.size();
             if(
                 (!pik_ptr->following_party &&
                  !pik_ptr->carrying_mob &&
-                 !pik_ptr->enemy_attacking &&
-                 !pik_ptr->buried &&
+                 !pik_ptr->wants_to_carry &&
+                 !pik_ptr->attacking_enemy &&
+                 pik_ptr->state != PIKMIN_STATE_BURIED &&
                  !pik_ptr->speed_z) ||
                 (pik_ptr->following_party && moving_group_intensity)
             ) {
@@ -292,10 +349,11 @@ void do_logic() {
                     mob* mob_ptr = mobs[m];
                     
                     if(!mob_ptr->carrier_info) continue;
-                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue;
+                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; //No more room.
+                    if(mob_ptr->state == MOB_STATE_BEING_DELIVERED) continue;
                     
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
-                        pik_ptr->carrying_mob = mob_ptr;
+                        pik_ptr->wants_to_carry = mob_ptr;
                         
                         if(pik_ptr->following_party) remove_from_party(pik_ptr);
                         
@@ -307,25 +365,48 @@ void do_logic() {
                             valid_spot = !mob_ptr->carrier_info->carrier_spots[spot];
                         }
                         
-                        mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
-                        mob_ptr->carrier_info->current_n_carriers++;
-                        
-                        pik_ptr->carrying_spot = spot;
                         pik_ptr->set_target(
                             mob_ptr->carrier_info->carrier_spots_x[spot],
                             mob_ptr->carrier_info->carrier_spots_y[spot],
                             &mob_ptr->x,
                             &mob_ptr->y,
-                            true);
-                            
-                        if(mob_ptr->carrier_info->current_n_carriers >= mob_ptr->type->weight) {
-                            start_carrying(mob_ptr, pik_ptr, NULL);
-                        }
+                            false
+                        );
                         
-                        pik_ptr->uncallable_period = 0;
+                        mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
+                        mob_ptr->carrier_info->current_n_carriers++;
+                        
+                        pik_ptr->carrying_spot = spot;
+                        pik_ptr->set_state(PIKMIN_STATE_MOVING_TO_CARRY_SPOT);
                         
                         break;
                     }
+                }
+            }
+            
+            //Going to the mob carry spot.
+            if(pik_ptr->state == PIKMIN_STATE_MOVING_TO_CARRY_SPOT && pik_ptr->reached_destination) {
+                pik_ptr->set_state(PIKMIN_STATE_CARRYING);
+                pik_ptr->carrying_mob = pik_ptr->wants_to_carry;
+                pik_ptr->wants_to_carry = NULL;
+                
+                if(pik_ptr->carrying_mob->state != MOB_STATE_BEING_DELIVERED) {
+                
+                    pik_ptr->set_target(
+                        pik_ptr->carrying_mob->carrier_info->carrier_spots_x[pik_ptr->carrying_spot],
+                        pik_ptr->carrying_mob->carrier_info->carrier_spots_y[pik_ptr->carrying_spot],
+                        &pik_ptr->carrying_mob->x,
+                        &pik_ptr->carrying_mob->y,
+                        true
+                    );
+                    
+                    pik_ptr->carrying_mob->carrier_info->current_carrying_strength += pik_ptr->pik_type->carry_strength;
+                    
+                    if(pik_ptr->carrying_mob->carrier_info->current_carrying_strength >= pik_ptr->carrying_mob->type->weight) {
+                        start_carrying(pik_ptr->carrying_mob, pik_ptr, NULL);
+                    }
+                    
+                    pik_ptr->uncallable_period = 0;
                 }
             }
             
@@ -344,7 +425,9 @@ void do_logic() {
                     float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
                     
                     if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + h_ptr->radius) {
-                        //cout << "Hit hitbox " + to_string((long long) h) + "!\n";
+                        if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                            pik_ptr->health = 0;
+                        }
                     }
                 }
             }

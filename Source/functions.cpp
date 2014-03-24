@@ -125,10 +125,14 @@ void create_mob(mob* m) {
  * leaders if it's a leader, etc.
  */
 void delete_mob(mob* m) {
+    remove_from_party(m);
+    
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
     if(typeid(*m) == typeid(pikmin)) {
-        pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), (pikmin*) m));
+        pikmin* p_ptr = (pikmin*) m;
+        drop_mob(p_ptr);
+        pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
         
     } else if(typeid(*m) == typeid(leader)) {
         leaders.erase(find(leaders.begin(), leaders.end(), (leader*) m));
@@ -151,10 +155,15 @@ void delete_mob(mob* m) {
     } else if(typeid(*m) == typeid(info_spot)) {
         info_spots.erase(find(info_spots.begin(), info_spots.end(), (info_spot*) m));
         
+    } else if(typeid(*m) == typeid(enemy)) {
+        enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
+        
     } else {
         //ToDo warn somehow.
         
     }
+    
+    delete m;
 }
 
 /* ----------------------------------------------------------------------------
@@ -200,7 +209,7 @@ void dismiss() {
         if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
             
-            type_dismiss_angles[pikmin_ptr->type] = 0;
+            type_dismiss_angles[pikmin_ptr->pik_type] = 0;
         }
     }
     
@@ -227,7 +236,7 @@ void dismiss() {
         if(typeid(*member_ptr) == typeid(pikmin)) {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(member_ptr);
             
-            angle = base_angle + type_dismiss_angles[pikmin_ptr->type] - M_PI_4 + M_PI;
+            angle = base_angle + type_dismiss_angles[pikmin_ptr->pik_type] - M_PI_4 + M_PI;
             
             member_ptr->set_target(
                 cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
@@ -277,18 +286,18 @@ void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float ma
         al_draw_filled_rectangle(
             x - total_width * 0.5, y - total_height * 0.5,
             x + total_width * 0.5, y + total_height * 0.5,
-            al_map_rgb(255, 255, 255)
+            al_map_rgba(255, 255, 255, 192)
         );
         al_draw_rectangle(
             x - total_width * 0.5, y - total_height * 0.5,
             x + total_width * 0.5, y + total_height * 0.5,
-            al_map_rgb(160, 160, 160), 2
+            al_map_rgba(160, 160, 160, 192), 2
         );
     } else {
-        al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgb(255, 255, 255));
-        al_draw_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgb(160, 160, 160), 2);
+        al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(255, 255, 255, 192));
+        al_draw_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(160, 160, 160, 192), 2);
     }
-    draw_compressed_text(font, al_map_rgb(255, 255, 255), x, y, ALLEGRO_ALIGN_CENTER, 1, max_w - 2, max_h - 2, name);
+    draw_compressed_text(font, al_map_rgba(255, 255, 255, 192), x, y, ALLEGRO_ALIGN_CENTER, 1, max_w - 2, max_h - 2, name);
 }
 
 /* ----------------------------------------------------------------------------
@@ -430,7 +439,7 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
  * Draws a sprite.
  * bmp:   The bitmap.
  * c*:    Center coordinates.
- * w/h:   Final width and height
+ * w/h:   Final width and height. Make this -1 one one of them to keep the aspect ratio.
  * angle: Angle to rotate the sprite by.
  * tint:  Tint the sprite with this color.
  */
@@ -441,14 +450,15 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, floa
     
     float bmp_w = al_get_bitmap_width(bmp);
     float bmp_h = al_get_bitmap_height(bmp);
-    float x_scale = w / bmp_w;
-    float y_scale = h / bmp_h;
+    float x_scale = (w / bmp_w);
+    float y_scale = (h / bmp_h);
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         tint,
         bmp_w / 2, bmp_h / 2,
         cx, cy,
-        x_scale, y_scale,
+        (w == -1) ? y_scale : x_scale,
+        (h == -1) ? x_scale : y_scale,
         angle,
         0);
 }
@@ -490,27 +500,34 @@ void draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl,
  * Makes a Pikmin release a mob it's carrying.
  */
 void drop_mob(pikmin* p) {
-    if(!p->carrying_mob) return;
+    mob* m = (p->carrying_mob ? p->carrying_mob : p->wants_to_carry);
+    
+    if(!m) return;
     
     //ToDo optimize this instead of running through the spot vector.
+    for(size_t s = 0; s < m->carrier_info->max_carriers; s++) {
+        if(m->carrier_info->carrier_spots[s] == p) {
+            m->carrier_info->carrier_spots[s] = NULL;
+            break;
+        }
+    }
+    m->carrier_info->current_n_carriers--;
+    
     if(p->carrying_mob) {
-        for(size_t s = 0; s < p->carrying_mob->carrier_info->max_carriers; s++) {
-            if(p->carrying_mob->carrier_info->carrier_spots[s] == p) {
-                p->carrying_mob->carrier_info->carrier_spots[s] = NULL;
-                p->carrying_mob->carrier_info->current_n_carriers--;
-            }
+        m->carrier_info->current_carrying_strength -= p->pik_type->carry_strength;
+        
+        //Did this Pikmin leaving made the mob stop moving?
+        if(p->carrying_mob->carrier_info->current_carrying_strength < p->carrying_mob->type->weight) {
+            p->carrying_mob->remove_target(true);
+            p->carrying_mob->carrier_info->decided_type = NULL;
+            p->carrying_mob->state = MOB_STATE_IDLE;
+        } else {
+            start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
         }
     }
     
-    //Did this Pikmin leaving made the mob stop moving?
-    if(p->carrying_mob->carrier_info->current_n_carriers < p->carrying_mob->type->weight) {
-        p->carrying_mob->remove_target(true);
-        p->carrying_mob->carrier_info->decided_type = NULL;
-    } else {
-        start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
-    }
-    
     p->carrying_mob = NULL;
+    p->wants_to_carry = NULL;
     p->remove_target(true);
 }
 
@@ -685,7 +702,7 @@ pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserv
     
     size_t n_pikmin = pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; p++) {
-        if(!pikmin_list[p]->buried) continue;
+        if(pikmin_list[p]->state != PIKMIN_STATE_BURIED) continue;
         
         float dis = dist(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
         if(closest_pikmin == NULL || dis < closest_distance) {
@@ -793,9 +810,8 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
         float sx = cos(angle) * 60;
         float sy = sin(angle) * 60;
         
-        //ToDo throw them, don't teleport them.
         pikmin* new_pikmin = new pikmin(o->x, o->y, o->sec, o->oni_type->pik_type);
-        new_pikmin->buried = true;
+        new_pikmin->set_state(PIKMIN_STATE_BURIED);
         new_pikmin->z = 320;
         new_pikmin->speed_z = 200;
         new_pikmin->speed_x = sx;
@@ -1064,8 +1080,8 @@ data_node load_data_file(string filename) {
  */
 void load_game_content() {
     //ToDo.
-    statuses.push_back(status(0, 0, 1, 0, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
-    statuses.push_back(status(1.5, 1.5, 1, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
+    statuses.push_back(status(0, 0, 1, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
+    statuses.push_back(status(1.5, 1.5, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
     
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
@@ -1434,9 +1450,9 @@ void move_point(float x, float y, float tx, float ty, float speed, float reach_r
  * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
  */
 void pluck_pikmin(leader* l, pikmin* p) {
-    if(!p->buried) return;
+    if(p->state != PIKMIN_STATE_BURIED) return;
     
-    p->buried = false;
+    p->set_state(PIKMIN_STATE_IN_GROUP);
     add_to_party(l, p);
     al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
 }
@@ -1454,25 +1470,28 @@ inline float random(float min, float max) {
  ** they scatter from the center point at random angles,
  ** and drift off until they vanish.
  * type:     Type of particle. Use PARTICLE_TYPE_*.
+ * bmp:      Bitmap to use.
  * center_*: Center point of the explosion.
+ * speed_*:  Their speed is random within this range, inclusive.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_explosion(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float center_x, float center_y, float speed_min, float speed_max, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
-        float angle = (random(0, (unsigned) (M_PI * 2) * 100)) / 100.0;
+        float angle = random(0, M_PI * 2);
+        float speed = random(speed_min, speed_max);
         
-        float speed_x = cos(angle) * 30;
-        float speed_y = sin(angle) * 30;
+        float speed_x = cos(angle) * speed;
+        float speed_y = sin(angle) * speed;
         
         particles.push_back(
             particle(
                 type,
-                NULL,
+                bmp,
                 center_x, center_y,
                 speed_x, speed_y,
                 1,
@@ -1489,21 +1508,22 @@ void random_particle_explosion(unsigned char type, float center_x, float center_
  * Generates random particles in a fire fashion:
  ** the particles go up and speed up as time goes by.
  * type:     Type of particle. Use PARTICLE_TYPE_*.
+ * bmp:      Bitmap to use.
  * center_*: Center point of the fire.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_fire(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
         particles.push_back(
             particle(
                 type,
-                NULL,
-                center_x, center_y,
+                bmp,
+                origin_x, origin_y,
                 (6 - random(0, 12)),
                 -(random(10, 20)),
                 0,
@@ -1521,21 +1541,22 @@ void random_particle_fire(unsigned char type, float center_x, float center_y, un
  ** the particles go up and are scattered horizontally,
  ** and then go down with the effect of gravity.
  * type:     Type of particle. Use PARTICLE_TYPE_*.
+ * bmp:      Bitmap to use.
  * center_*: Center point of the splash.
  * min/max:  The number of particles is random within this range, inclusive.
  * time_*:   Their lifetime is random within this range, inclusive.
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_splash(unsigned char type, float center_x, float center_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
         particles.push_back(
             particle(
                 type,
-                NULL,
-                center_x, center_y,
+                bmp,
+                origin_x, origin_y,
                 (2 - random(0, 4)),
                 -random(2, 4),
                 0, 0.5,
@@ -1553,11 +1574,12 @@ void random_particle_splash(unsigned char type, float center_x, float center_y, 
  ** and move gradually slower as they fade into the air.
  ** Used on actual sprays in-game.
  * type:     Type of particle. Use PARTICLE_TYPE_*.
+ * bmp:      Bitmap to use.
  * origin_*: Origin point of the spray.
  * angle:    Angle to shoot at.
  * color:    Color of the particles.
  */
-void random_particle_spray(unsigned char type, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
+void random_particle_spray(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
     unsigned char n_particles = random(35, 40);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1570,7 +1592,7 @@ void random_particle_spray(unsigned char type, float origin_x, float origin_y, f
         particles.push_back(
             particle(
                 type,
-                NULL,
+                bmp,
                 origin_x, origin_y,
                 speed_x, speed_y,
                 1,
@@ -1810,10 +1832,9 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
             
             pik_ptr = (pikmin*) m->carrier_info->carrier_spots[p];
             
-            if(!pik_ptr->type->has_onion) continue; //If it doesn't have an Onion, it won't even count. //ToDo what if it hasn't been discovered / Onion not on this area?
+            if(!pik_ptr->pik_type->has_onion) continue; //If it doesn't have an Onion, it won't even count. //ToDo what if it hasn't been discovered / Onion not on this area?
             
-            if(type_quantity.find(pik_ptr->type) == type_quantity.end()) type_quantity[pik_ptr->type] = 0; //ToDo maps don't start the number at 0, so that's why I need this line, correct?
-            type_quantity[pik_ptr->type]++;
+            type_quantity[pik_ptr->pik_type]++;
         }
         
         //Then figure out what are the majority types.
@@ -1902,6 +1923,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         
         //Finally, start moving the mob.
         m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
+        m->set_state(MOB_STATE_BEING_CARRIED);
     }
 }
 
@@ -1978,6 +2000,7 @@ void use_spray(size_t spray_nr) {
     
     random_particle_spray(
         PARTICLE_TYPE_CIRCLE,
+        NULL,
         cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->size / 2,
         cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->size / 2,
         shoot_angle,

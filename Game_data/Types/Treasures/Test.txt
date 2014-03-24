@@ -1,4 +1,4 @@
 name = Test
 max_carriers = 50
-size = 100
-weight = 40
+size = 228
+weight = 30

@@ -35,6 +35,8 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     script_wait_event = NULL;
     spawn_event_done = false;
     dead = false;
+    state = MOB_STATE_IDLE;
+    time_in_state = 0;
     
     following_party = NULL;
     was_thrown = false;
@@ -113,6 +115,8 @@ void mob::tick() {
             party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
         }
     }
+    
+    time_in_state += 1.0 / game_fps;
     
     
     //Change the facing angle to the angle the mob wants to face.
@@ -266,12 +270,18 @@ void mob::face(float new_angle) {
     intended_angle = new_angle;
 }
 
+void mob::set_state(unsigned char new_state) {
+    state = new_state;
+    time_in_state = 0;
+}
+
 mob::~mob() {}
 
 carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship) {
     this->max_carriers = max_carriers;
     this->carry_to_ship = carry_to_ship;
     
+    current_carrying_strength = 0;
     current_n_carriers = 0;
     decided_type = NULL;
     

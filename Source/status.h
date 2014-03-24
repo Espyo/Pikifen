@@ -9,12 +9,11 @@ public:
     float speed_multiplier;
     float attack_multiplier;
     float defense_multiplier;
-    float state_speed_multiplier;
     bool freezes_everything;
     ALLEGRO_COLOR color;
     unsigned char affects;      //What kind of mobs it affects.
     
-    status(float speed_multiplier, float attack_multiplier, float defense_multiplier, float state_speed_multiplier, bool freezes_everything, ALLEGRO_COLOR color, unsigned char affects);
+    status(float speed_multiplier, float attack_multiplier, float defense_multiplier, bool freezes_everything, ALLEGRO_COLOR color, unsigned char affects);
 };
 
 enum {
