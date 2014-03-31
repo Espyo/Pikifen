@@ -69,6 +69,7 @@ public:
     sector* sec;                     //Sector it's on.
     bool affected_by_gravity;        //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
     void face(float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
+    virtual float get_base_speed();  //Returns the normal speed of this mob. Subclasses are meant to override this.
     
     //Target things.
     float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
@@ -146,6 +147,8 @@ enum MOB_STATES {
     PIKMIN_STATE_BURIED,
     PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
     PIKMIN_STATE_CARRYING,
+    PIKMIN_STATE_ATTACKING_MOB,
+    PIKMIN_STATE_CELEBRATING,
 };
 
 #endif //ifndef MOB_INCLUDED

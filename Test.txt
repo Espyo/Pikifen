@@ -448,7 +448,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	burrow{
 		frames{
@@ -645,7 +645,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	burrowed{
 		frames{
@@ -674,7 +674,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	die{
 		frames{
@@ -939,7 +939,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	shake{
 		frames{
@@ -1572,7 +1572,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	unburrow{
 		frames{
@@ -1793,7 +1793,7 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 	walk{
 		frames{
@@ -1934,6 +1934,6 @@ animations{
 				}
 			}
 		}
-		loop_frame=0
+		loop_frame=16
 	}
 }

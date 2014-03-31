@@ -34,8 +34,8 @@ script{
     
     on_near_prey{
         move = stop
-        animation = attack
-        wait = animation
+        //animation = attack
+        //wait = animation
     }
 	
 	on_lose_prey{

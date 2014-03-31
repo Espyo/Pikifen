@@ -60,6 +60,20 @@ void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y
 }
 
 /* ----------------------------------------------------------------------------
+ * Makes m1 attack m2.
+ * Stuff like status effects and maturity (Pikmin only) are taken into account,
+ * if the attacker is a Pikmin.
+ */
+void attack(mob* m1, mob* m2, bool m1_is_pikmin, float m1_attack_power) {
+    pikmin* p_ptr = NULL;
+    if(m1_is_pikmin) {
+        p_ptr = (pikmin*) m1;
+        m1_attack_power += p_ptr->maturity * m1_attack_power * MATURITY_POWER_MULT;
+    }
+    m2->health -= m1_attack_power;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
  * color: The color to change the alpha on.
  * a:     The new alpha, [0-255].
@@ -1213,6 +1227,7 @@ void load_mob_types(string folder, unsigned char type) {
         if(type == MOB_TYPE_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;
             pt->attack_power = tof(file.get_child_by_name("attack_power")->value);
+            pt->attack_interval = tof(file.get_child_by_name("attack_interval")->get_value_or_default("0.8"));
             pt->can_carry_bomb_rocks = tob(file.get_child_by_name("can_carry_bomb_rocks")->value);
             pt->can_dig = tob(file.get_child_by_name("can_dig")->value);
             pt->can_latch = tob(file.get_child_by_name("can_latch")->value);
@@ -1734,6 +1749,16 @@ void save_options() {
     al_fwrite(file, "smooth_scaling=" + btos(smooth_scaling) + "\n");
     
     al_fclose(file);
+}
+
+/* ----------------------------------------------------------------------------
+ * Should m1 attack m2? Teams are used to decide this.
+ */
+bool should_attack(mob* m1, mob* m2) {
+    if(m2->team == MOB_TEAM_DECORATION) return false;
+    if(m1->team == MOB_TEAM_NONE) return true;
+    if(m1->team == m2->team) return false;
+    return true;
 }
 
 /* ----------------------------------------------------------------------------

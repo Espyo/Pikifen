@@ -46,4 +46,8 @@ struct sample_struct {
     sample_struct(ALLEGRO_SAMPLE* s = NULL);
 };
 
+class graphic_manager {
+    //map<string, ALLEGRO_BITMAP*>
+};
+
 #endif //ifndef MISC_STRUCTS_INCLUDED

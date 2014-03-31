@@ -26,6 +26,8 @@ using namespace std;
 #define IDLE_GLOW_SPIN_SPEED        M_PI_2   //The idle glow spins these many radians per second.
 #define INFO_SPOT_TRIGGER_RANGE     64       //If the current captain is at this distance or closer from an info spot, it gets triggered.
 #define LEADER_MOVE_SPEED           100      //Max speed at which a leader can move.
+#define MATURITY_POWER_MULT         0.2      //Every level of maturity, this much is added to the power.
+#define MATURITY_SPEED_MULT         0.5      //Every level of maturity, this much is added to the speed.
 #define MESSAGE_CHAR_INTERVAL       0.02     //These many seconds until a new character of the message is drawn.
 #define MIN_GRAB_RANGE              60       //The leader needs to be at least this close to a Pikmin to grab it.
 #define MIN_ONION_CHECK_RANGE       64       //The minimum distance a leader must be from the onion in order to check it.
@@ -36,6 +38,7 @@ using namespace std;
 #define NECTAR_AMOUNT               5        //A drop of nectar starts with this amount.
 #define PARTY_SPOT_INTERVAL         1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
 #define PIKMIN_MAX_HEALTH           300      //Maximum Pikmin HP.
+#define PIKMIN_MIN_ATTACK_RANGE     0        //If there's this gap between a Pikmin and its prey, the Pikmin will attack.
 #define PIKMIN_MIN_TASK_RANGE       20       //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
 #define SHADOW_MAX_WIDTH            100      //The shadows can't be any wider than this.
 #define SHADOW_Y_MULTIPLIER         1        //For every unit above the ground that the mob is on, the shadow goes these many units to the side.

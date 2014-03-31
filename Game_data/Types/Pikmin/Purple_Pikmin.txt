@@ -1,4 +1,5 @@
 name = Purple Pikmin
+attack_interval = 0.8
 attack_power = 1.1
 can_carry_bomb_rocks = no
 can_dig = no
@@ -9,5 +10,5 @@ carry_strength = 10
 has_onion = no
 main_color = 128 0 255
 max_health = 10
-move_speed = 60
+move_speed = 40
 size = 20

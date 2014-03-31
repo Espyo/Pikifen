@@ -1,4 +1,5 @@
 name = Blue Pikmin
+attack_interval = 0.8
 attack_power = 1
 can_carry_bomb_rocks = no
 can_dig = no
@@ -9,5 +10,5 @@ carry_strength = 1
 has_onion = yes
 main_color = 0 0 255
 max_health = 10
-move_speed = 80
+move_speed = 50
 size = 20

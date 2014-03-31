@@ -141,6 +141,7 @@ int main(int argc, char** argv) {
     bmp_number_bubble = load_bmp(       "Number_bubble.png");
     bmp_pikmin_spirit = load_bmp(       "Pikmin_spirit.png");
     bmp_shadow = load_bmp(              "Shadow.png");
+    bmp_smoke = load_bmp(               "Smoke.png");
     bmp_sparkle = load_bmp(             "Sparkle.png");
     bmp_sun = load_bmp(                 "Sun.png");
     bmp_sun_bubble = load_bmp(          "Sun_bubble.png");

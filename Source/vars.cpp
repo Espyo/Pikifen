@@ -36,6 +36,7 @@ ALLEGRO_BITMAP* bmp_red_onion = NULL;
 ALLEGRO_BITMAP* bmp_red_pellet[4] = {NULL, NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_shadow = NULL;
 ALLEGRO_BITMAP* bmp_ship = NULL;
+ALLEGRO_BITMAP* bmp_smoke = NULL;
 ALLEGRO_BITMAP* bmp_sparkle = NULL;
 ALLEGRO_BITMAP* bmp_sun = NULL;
 ALLEGRO_BITMAP* bmp_sun_bubble = NULL;

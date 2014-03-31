@@ -27,6 +27,7 @@
 void               active_control();
 void               add_to_party(mob* party_leader, mob* new_member);
 void               angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
+void               attack(mob* m1, mob* m2, bool m1_is_pikmin, float m1_attack_power);
 ALLEGRO_COLOR      change_alpha(ALLEGRO_COLOR c, unsigned char a);
 void               coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude);
 void               create_mob(mob* m);
@@ -72,6 +73,7 @@ void               random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bm
 void               random_particle_spray(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color);
 void               remove_from_party(mob* member);
 void               save_options();
+bool               should_attack(mob* m1, mob* m2);
 vector<string>     split(string text, string del = " ", bool inc_empty = false, bool inc_del = false);
 void               start_camera_pan(int final_x, int final_y);
 void               start_camera_zoom(float final_zoom_level);

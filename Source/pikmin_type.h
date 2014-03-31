@@ -17,6 +17,7 @@ public:
     unsigned char attack_attribute; //What.
     float carry_strength;
     float attack_power;
+    float attack_interval;
     float weight;
     float carry_speed;
     float size;
