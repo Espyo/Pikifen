@@ -40,10 +40,13 @@ struct point {
 };
 
 struct sample_struct {
-    ALLEGRO_SAMPLE*     sample; //Pointer to the sample.
-    ALLEGRO_SAMPLE_ID   id;     //Sample id.
+    ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
+    ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
+    //ALLEGRO_SAMPLE_ID   id;     //Sample id.
     
-    sample_struct(ALLEGRO_SAMPLE* s = NULL);
+    sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
+    void play(float max_override_pos, bool loop, float gain = 1.0, float pan = 0.5, float speed = 1.0);
+    void stop();
 };
 
 class graphic_manager {

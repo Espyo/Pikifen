@@ -83,6 +83,7 @@ extern sector test_sector;
 extern vector<linedef> test_linedefs;
 
 //Sound effects.
+extern sample_struct sfx_attack;
 extern sample_struct sfx_camera;
 extern sample_struct sfx_dismiss;
 extern sample_struct sfx_louie_whistle;
@@ -92,8 +93,14 @@ extern sample_struct sfx_olimar_whistle;
 extern sample_struct sfx_olimar_name_call;
 extern sample_struct sfx_president_whistle;
 extern sample_struct sfx_president_name_call;
+extern sample_struct sfx_pikmin_attack;
 extern sample_struct sfx_pikmin_called;
+extern sample_struct sfx_pikmin_carrying;
+extern sample_struct sfx_pikmin_carrying_grab;
+extern sample_struct sfx_pikmin_dying;
 extern sample_struct sfx_pikmin_held;
+extern sample_struct sfx_pikmin_idle;
+extern sample_struct sfx_pikmin_pluck;
 extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_switch_pikmin;
@@ -186,6 +193,7 @@ extern float                 leader_move_y;
 extern map<string, leader_type*>
 leader_types;
 extern unsigned              max_pikmin_in_field;
+extern ALLEGRO_MIXER*        mixer;
 extern vector<mob*>          mobs;
 extern float                 mouse_cursor_x;             //The physical mouse's cursor.
 extern float                 mouse_cursor_y;
@@ -239,6 +247,7 @@ extern string                total_error_log;
 extern map<string, treasure_type*>
 treasure_types;
 extern vector<treasure*>     treasures;
+extern ALLEGRO_VOICE*        voice;  //Voice from which the sound effects play.
 extern map<string, weather>  weather_conditions;
 extern float                 whistle_dot_offset;    //How much each dot of the whistle should spin.
 extern float                 whistle_dot_radius[6]; //Radius of every 6th dot.

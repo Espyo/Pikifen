@@ -219,7 +219,7 @@ void do_logic() {
             if(m_ptr->carrier_info) {
                 if(m_ptr->state == MOB_STATE_BEING_CARRIED && m_ptr->reached_destination && m_ptr->carrier_info->decided_type) {
                     m_ptr->set_state(MOB_STATE_BEING_DELIVERED);
-                    
+                    sfx_pikmin_carrying.stop();
                 }
             }
             
@@ -305,6 +305,7 @@ void do_logic() {
                         0, -50, 0.5, 0, 2, pik_ptr->pik_type->size, pik_ptr->pik_type->main_color
                     )
                 );
+                sfx_pikmin_dying.play(0.03, false);
                 
             }
             
@@ -315,8 +316,7 @@ void do_logic() {
                 pik_ptr->attacking_mob = NULL;
                 pik_ptr->attack_time = 0;
                 add_to_party(cur_leader_ptr, pik_ptr);
-                al_stop_sample(&sfx_pikmin_called.id);
-                al_play_sample(sfx_pikmin_called.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_called.id);
+                sfx_pikmin_called.play(0.03, false);
                 
                 pik_ptr->attacking_mob = NULL;
                 pik_ptr->set_state(PIKMIN_STATE_IN_GROUP);
@@ -434,7 +434,7 @@ void do_logic() {
                 }
             }
             
-            //Going to the mob carry spot.
+            //Reaching to the mob carry spot.
             if(pik_ptr->state == PIKMIN_STATE_MOVING_TO_CARRY_SPOT && pik_ptr->reached_destination) {
                 pik_ptr->set_state(PIKMIN_STATE_CARRYING);
                 pik_ptr->carrying_mob = pik_ptr->wants_to_carry;
@@ -457,6 +457,7 @@ void do_logic() {
                     }
                     
                     pik_ptr->uncallable_period = 0;
+                    sfx_pikmin_carrying_grab.play(0.03, false);
                 }
             }
             
@@ -480,6 +481,8 @@ void do_logic() {
                 if(pik_ptr->attack_time <= 0) {
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
                     attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power);
+                    sfx_attack.play(0.03, false);
+                    sfx_pikmin_attack.play(0.03, false);
                 }
                 
                 if(pik_ptr->attacking_mob->dead) {

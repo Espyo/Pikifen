@@ -53,6 +53,7 @@ ALLEGRO_BITMAP* bmp_test = NULL;
 sector test_sector;
 vector<linedef> test_linedefs;
 
+sample_struct sfx_attack;
 sample_struct sfx_camera;
 sample_struct sfx_dismiss;
 sample_struct sfx_louie_whistle;
@@ -61,8 +62,14 @@ sample_struct sfx_olimar_whistle;
 sample_struct sfx_olimar_name_call;
 sample_struct sfx_president_whistle;
 sample_struct sfx_president_name_call;
+sample_struct sfx_pikmin_attack;
 sample_struct sfx_pikmin_called;
+sample_struct sfx_pikmin_carrying;
+sample_struct sfx_pikmin_carrying_grab;
+sample_struct sfx_pikmin_dying;
 sample_struct sfx_pikmin_held;
+sample_struct sfx_pikmin_idle;
+sample_struct sfx_pikmin_pluck;
 sample_struct sfx_pikmin_plucked;
 sample_struct sfx_pikmin_thrown;
 sample_struct sfx_switch_pikmin;
@@ -153,6 +160,7 @@ float                 leader_move_y = 0;
 map<string, leader_type*>
 leader_types;
 unsigned              max_pikmin_in_field = 100;
+ALLEGRO_MIXER*        mixer = NULL;
 vector<mob*>          mobs;
 float                 mouse_cursor_x = scr_w / 2 + CURSOR_MAX_DIST;
 float                 mouse_cursor_y = scr_h / 2;
@@ -206,6 +214,7 @@ string                total_error_log;
 map<string, treasure_type*>
 treasure_types;
 vector<treasure*>     treasures;
+ALLEGRO_VOICE*        voice = NULL;
 map<string, weather>  weather_conditions;
 float                 whistle_dot_offset = 0;
 float                 whistle_dot_radius[6] = { -1, -1, -1, -1, -1, -1};

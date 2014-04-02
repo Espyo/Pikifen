@@ -2,12 +2,47 @@
 #include "functions.h"
 #include "misc_structs.h"
 
-sample_struct::sample_struct(ALLEGRO_SAMPLE* s) {
+sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
     sample = s;
+    instance = NULL;
     
+    if(!s) return;
+    instance = al_create_sample_instance(s);
+    al_attach_sample_instance_to_mixer(instance, mixer);
+    
+    /*
+    //ToDo remove this?
     //I don't think I should be messing with these... But they'll give an error otherwise.
     id._id = 0;
-    id._index = 0;
+    id._index = 0;*/
+}
+
+/*
+ * Play the sample.
+ * max_override_pos: Override the currently playing sound only if it's already in this position, or beyond.
+ ** This is in seconds. 0 means always override. -1 means never override.
+ * loop: Loop the sound?
+ * gain: Volume, 0 - 1.
+ * pan: Panning, 0 - 1 (0.5 is centered).
+ * speed: Playing speed.
+ */
+void sample_struct::play(float max_override_pos, bool loop, float gain, float pan, float speed) {
+    if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
+        float secs = al_get_sample_instance_position(instance) / (float) 44100;
+        if(secs < max_override_pos && max_override_pos > 0 || max_override_pos == -1) return;
+    }
+    
+    al_set_sample_instance_playmode(instance, (loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE));
+    al_set_sample_instance_gain(    instance, gain);
+    al_set_sample_instance_pan(     instance, pan);
+    al_set_sample_instance_speed(   instance, speed);
+    
+    al_set_sample_instance_position(instance, 0);
+    al_set_sample_instance_playing( instance, true);
+}
+
+void sample_struct::stop() {
+    al_set_sample_instance_playing(instance, false);
 }
 
 party_spot_info::party_spot_info(unsigned max_mobs, float spot_radius) {

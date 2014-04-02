@@ -60,7 +60,7 @@ data_node          load_data_file(string filename);
 vector<hitbox>     load_hitboxes(data_node* frame_node);
 void               load_mob_types(string folder, unsigned char type);
 void               load_options();
-sample_struct      load_sample(string filename);
+sample_struct      load_sample(string filename, ALLEGRO_MIXER* mixer);
 vector<mob_event*> load_script(data_node* node);
 void               load_game_content();
 void               make_uncarriable(mob* m);

@@ -30,7 +30,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
+int main(int argc, char**) {
     //Install Allegro and initialize modules.
     al_init();
     al_install_mouse();
@@ -181,20 +181,30 @@ int main(int argc, char** argv) {
     al_set_display_icon(display, bmp_icon);
     
     //Sound effects.
-    sfx_pikmin_held = load_sample("Pikmin_held.ogg");
-    sfx_pikmin_thrown = load_sample("Pikmin_thrown.ogg");
-    sfx_pikmin_plucked = load_sample("Pikmin_plucked.ogg");
-    sfx_pikmin_called = load_sample("Pikmin_called.ogg");
-    sfx_dismiss = load_sample("Dismiss.ogg");
-    sfx_olimar_whistle = load_sample("Olimar_whistle.ogg");
-    sfx_louie_whistle = load_sample("Louie_whistle.ogg");
-    sfx_president_whistle = load_sample("President_whistle.ogg");
-    sfx_olimar_name_call = load_sample("Olimar_name_call.ogg");
-    sfx_louie_name_call = load_sample("Louie_name_call.ogg");
-    sfx_president_name_call = load_sample("President_name_call.ogg");
-    sfx_throw = load_sample("Throw.ogg");
-    sfx_switch_pikmin = load_sample("Switch_Pikmin.ogg");
-    sfx_camera = load_sample("Camera.ogg");
+    voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
+    mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
+    al_attach_mixer_to_voice(mixer, voice);
+    sfx_attack = load_sample(              "Attack.ogg",               mixer);
+    sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg",        mixer);
+    sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg",      mixer);
+    sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg", mixer);
+    sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg",         mixer);
+    sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
+    sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
+    sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
+    sfx_pikmin_pluck = load_sample(        "Pikmin_pluck.ogg",         mixer);
+    sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
+    sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
+    sfx_dismiss = load_sample(             "Dismiss.ogg",              mixer);
+    sfx_olimar_whistle = load_sample(      "Olimar_whistle.ogg",       mixer);
+    sfx_louie_whistle = load_sample(       "Louie_whistle.ogg",        mixer);
+    sfx_president_whistle = load_sample(   "President_whistle.ogg",    mixer);
+    sfx_olimar_name_call = load_sample(    "Olimar_name_call.ogg",     mixer);
+    sfx_louie_name_call = load_sample(     "Louie_name_call.ogg",      mixer);
+    sfx_president_name_call = load_sample( "President_name_call.ogg",  mixer);
+    sfx_throw = load_sample(               "Throw.ogg",                mixer);
+    sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
+    sfx_camera = load_sample(              "Camera.ogg",               mixer);
     
     //Game content.
     load_game_content();

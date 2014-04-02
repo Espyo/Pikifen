@@ -260,6 +260,8 @@ void dismiss() {
                 false);
         }
     }
+    
+    sfx_pikmin_idle.play(0, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -535,6 +537,7 @@ void drop_mob(pikmin* p) {
             p->carrying_mob->remove_target(true);
             p->carrying_mob->carrier_info->decided_type = NULL;
             p->carrying_mob->state = MOB_STATE_IDLE;
+            sfx_pikmin_carrying.stop();
         } else {
             start_carrying(p->carrying_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
         }
@@ -1251,11 +1254,11 @@ void load_mob_types(string folder, unsigned char type) {
             
         } else if(type == MOB_TYPE_LEADER) {
             leader_type* lt = (leader_type*) mt;
-            lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value); //ToDo don't use load_sample.
-            lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value); //ToDo don't use load_sample.
+            lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
+            lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
             lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
             lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(to_string((long double) DEF_WHISTLE_RANGE)));
-            lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value); //ToDo don't use load_sample.
+            lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
             
             leader_types[lt->name] = lt;
             
@@ -1385,14 +1388,13 @@ void load_options() {
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
-sample_struct load_sample(string filename) {
-    sample_struct s;
-    s.sample = al_load_sample((AUDIO_FOLDER "/" + filename).c_str());
-    if(!s.sample) {
+sample_struct load_sample(string filename, ALLEGRO_MIXER* mixer) {
+    ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER "/" + filename).c_str());
+    if(!sample) {
         error_log("Could not open audio sample " + filename + "!");
     }
     
-    return s;
+    return sample_struct(sample, mixer);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1469,7 +1471,8 @@ void pluck_pikmin(leader* l, pikmin* p) {
     
     p->set_state(PIKMIN_STATE_IN_GROUP);
     add_to_party(l, p);
-    al_play_sample(sfx_pikmin_plucked.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_plucked.id);
+    sfx_pikmin_plucked.play(0, false);
+    sfx_pikmin_pluck.play(0, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1819,8 +1822,7 @@ void start_camera_zoom(float final_zoom_level) {
     cam_trans_zoom_final_level = final_zoom_level;
     cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
     
-    al_stop_sample(&sfx_camera.id);
-    al_play_sample(sfx_camera.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_camera.id);
+    sfx_camera.play(0, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1949,6 +1951,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         //Finally, start moving the mob.
         m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
         m->set_state(MOB_STATE_BEING_CARRIED);
+        sfx_pikmin_carrying.play(-1, true);
     }
 }
 
@@ -1990,7 +1993,7 @@ void stop_whistling() {
     whistle_radius = 0;
     whistle_max_hold = 0;
     
-    al_stop_sample(&leaders[cur_leader_nr]->lea_type->sfx_whistle.id);
+    leaders[cur_leader_nr]->lea_type->sfx_whistle.stop();
 }
 
 /* ----------------------------------------------------------------------------

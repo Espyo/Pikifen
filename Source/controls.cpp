@@ -232,7 +232,7 @@ void handle_button(unsigned int button, float pos) {
                 if(!done) {
                     if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
                         cur_leader_ptr->holding_pikmin = closest_party_member;
-                        al_play_sample(sfx_pikmin_held.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_held.id);
+                        sfx_pikmin_held.play(0, false);
                         done = true;
                     }
                 }
@@ -261,11 +261,11 @@ void handle_button(unsigned int button, float pos) {
                     remove_from_party(holding_ptr);
                     cur_leader_ptr->holding_pikmin = NULL;
                     
-                    al_stop_sample(&sfx_pikmin_held.id);
-                    al_stop_sample(&sfx_pikmin_thrown.id);
-                    al_stop_sample(&sfx_throw.id);
-                    al_play_sample(sfx_pikmin_thrown.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_pikmin_thrown.id);
-                    al_play_sample(sfx_throw.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_throw.id);
+                    sfx_pikmin_held.stop();
+                    sfx_pikmin_thrown.stop();
+                    sfx_throw.stop();
+                    sfx_pikmin_thrown.play(0, false);
+                    sfx_throw.play(0, false);
                 }
             }
             
@@ -281,7 +281,7 @@ void handle_button(unsigned int button, float pos) {
             
             if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
                 whistling = true;
-                al_play_sample(cur_leader_ptr->lea_type->sfx_whistle.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_whistle.id);
+                cur_leader_ptr->lea_type->sfx_whistle.play(0, false);
                 
                 for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
                 whistle_fade_time = 0;
@@ -354,7 +354,7 @@ void handle_button(unsigned int button, float pos) {
             
             cur_leader_nr = new_leader_nr;
             start_camera_pan(leaders[new_leader_nr]->x, leaders[new_leader_nr]->y);
-            al_play_sample(leaders[new_leader_nr]->lea_type->sfx_name_call.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &leaders[new_leader_nr]->lea_type->sfx_name_call.id);
+            leaders[new_leader_nr]->lea_type->sfx_name_call.play(0, false);
             
         } else if(button == BUTTON_DISMISS) {
         
@@ -369,7 +369,7 @@ void handle_button(unsigned int button, float pos) {
             active_control();
             
             dismiss();
-            al_play_sample(cur_leader_ptr->lea_type->sfx_dismiss.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &cur_leader_ptr->lea_type->sfx_dismiss.id);
+            cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
             
         } else if(button == BUTTON_PAUSE) {
         
@@ -585,7 +585,7 @@ void handle_button(unsigned int button, float pos) {
             //If no Pikmin matched the maturity, just use the one we found.
             if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[t_match_nr];
             else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[tm_match_nr];
-            al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
+            sfx_switch_pikmin.play(0, false);
             
         } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
         
@@ -631,7 +631,7 @@ void handle_button(unsigned int button, float pos) {
             } while(!partners[new_maturity]);
             
             cur_leader_ptr->holding_pikmin = partners[new_maturity];
-            al_play_sample(sfx_switch_pikmin.sample, 1, 0.5, 1, ALLEGRO_PLAYMODE_ONCE, &sfx_switch_pikmin.id);
+            sfx_switch_pikmin.play(0, false);
             
         }
         
