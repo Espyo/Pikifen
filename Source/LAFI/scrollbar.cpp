@@ -1,3 +1,5 @@
+#include <cfloat>
+
 #include "button.h"
 #include "scrollbar.h"
 

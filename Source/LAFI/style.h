@@ -1,10 +1,10 @@
 #ifndef LAFI_STYLE_INCLUDED
 #define LAFI_STYLE_INCLUDED
 
-#include <allegro5\allegro.h>
-#include <allegro5\allegro_font.h>
-#include <allegro5\allegro_image.h>
-#include <allegro5\allegro_primitives.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 
 #include "const.h"
 
