@@ -2,6 +2,7 @@
 #define INTERVAL_INCLUDED
 
 #include <vector>
+#include <cfloat>
 
 using namespace std;
 

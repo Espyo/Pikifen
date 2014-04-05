@@ -32,9 +32,9 @@ lafi_style::~lafi_style() { }
  */
 ALLEGRO_COLOR lafi_style::lighten_color(ALLEGRO_COLOR color) {
     float indexes[4] = {
-        color.r + LAFI_COLOR_SHIFT_DELTA,
-        color.g + LAFI_COLOR_SHIFT_DELTA,
-        color.b + LAFI_COLOR_SHIFT_DELTA,
+        static_cast<float>(color.r + LAFI_COLOR_SHIFT_DELTA),
+        static_cast<float>(color.g + LAFI_COLOR_SHIFT_DELTA),
+        static_cast<float>(color.b + LAFI_COLOR_SHIFT_DELTA),
         color.a
     };
     
@@ -48,9 +48,9 @@ ALLEGRO_COLOR lafi_style::lighten_color(ALLEGRO_COLOR color) {
  */
 ALLEGRO_COLOR lafi_style::darken_color(ALLEGRO_COLOR color) {
     float indexes[4] = {
-        color.r - LAFI_COLOR_SHIFT_DELTA,
-        color.g - LAFI_COLOR_SHIFT_DELTA,
-        color.b - LAFI_COLOR_SHIFT_DELTA,
+        static_cast<float>(color.r - LAFI_COLOR_SHIFT_DELTA),
+        static_cast<float>(color.g - LAFI_COLOR_SHIFT_DELTA),
+        static_cast<float>(color.b - LAFI_COLOR_SHIFT_DELTA),
         color.a
     };
     

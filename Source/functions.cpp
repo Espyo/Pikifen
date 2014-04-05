@@ -294,8 +294,8 @@ void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float ma
     
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
-    float total_width = min(x2 - x1 + 4, max_w);
-    float total_height = min(y2 - y1 + 4, max_h);
+    float total_width = min((float) (x2 - x1 + 4), max_w);
+    float total_height = min((float) (y2 - y1 + 4), max_h);
     total_width = max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {

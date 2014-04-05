@@ -1,4 +1,5 @@
 #include <typeinfo>
+#include <algorithm>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -97,7 +98,7 @@ void do_drawing() {
             float size = treasures[t]->type->size;
             if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
                 size *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
-                size = max(0, size);
+                size = max((float) 0, size);
             }
             draw_sprite(
                 bmp_tp,
@@ -232,8 +233,8 @@ void do_drawing() {
                 float height = f_ptr->game_h;
                 if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
                     float mult = 1 - (e_ptr->time_in_state / DELIVERY_SUCK_TIME);
-                    width = max(0, width * mult);
-                    height = max(0, height * mult);
+                    width = max((float) 0, width * mult);
+                    height = max((float) 0, height * mult);
                 }
                 
                 draw_sprite(

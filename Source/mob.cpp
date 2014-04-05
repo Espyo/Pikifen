@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "const.h"
 #include "functions.h"
 #include "mob.h"
