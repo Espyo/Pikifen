@@ -1,3 +1,5 @@
+#include <limits.h>
+
 #include "vars.h"
 #include "const.h"
 
@@ -230,3 +232,5 @@ vector<unsigned char> whistle_ring_colors;
 unsigned char         whistle_ring_prev_color = 0;
 vector<float>         whistle_rings;
 bool                  whistling = false;
+int                   window_x = INT_MAX;
+int                   window_y = INT_MAX;

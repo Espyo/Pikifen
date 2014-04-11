@@ -29,6 +29,8 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
  * speed: Playing speed.
  */
 void sample_struct::play(float max_override_pos, bool loop, float gain, float pan, float speed) {
+    if(!sample || !instance) return;
+    
     if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
         float secs = al_get_sample_instance_position(instance) / (float) 44100;
         if((secs < max_override_pos && max_override_pos > 0) || max_override_pos == -1) return;
@@ -94,8 +96,8 @@ party_spot_info::party_spot_info(unsigned max_mobs, float spot_radius) {
         y_coords.push_back(vector<float>());
         mobs_in_spots.push_back(vector<mob*>());
         for(unsigned s = 0; s < n_spots_on_wheel; s++) {
-            x_coords.back().push_back(dist_from_center * cos(angle * s) + random(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
-            y_coords.back().push_back(dist_from_center * sin(angle * s) + random(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
+            x_coords.back().push_back(dist_from_center * cos(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
+            y_coords.back().push_back(dist_from_center * sin(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
             mobs_in_spots.back().push_back(NULL);
         }
         
@@ -113,11 +115,18 @@ void party_spot_info::add(mob* m, float* x, float* y) {
         n_current_wheel_members = 0;
     }
     
-    unsigned chosen_spot;
     size_t n_spots_in_wheel = mobs_in_spots[current_wheel].size();
-    do {
-        chosen_spot = random(0, n_spots_in_wheel - 1);
-    } while(mobs_in_spots[current_wheel][chosen_spot]);
+    size_t chosen_spot_nr = randomi(0, (n_spots_in_wheel - n_current_wheel_members) - 1);
+    size_t chosen_spot = 0;
+    auto v = &mobs_in_spots[current_wheel];
+    for(unsigned s = 0, c = 0; s < n_spots_in_wheel; s++) {
+        if((*v)[s]) continue;
+        if(c == chosen_spot_nr) {
+            chosen_spot = s;
+            break;
+        }
+        c++;
+    }
     
     mobs_in_spots[current_wheel][chosen_spot] = m;
     
@@ -163,7 +172,7 @@ void party_spot_info::remove(mob* m) {
         unsigned n_spots = mobs_in_spots[current_wheel].size();
         
         do {
-            replacement_spot = random(0, n_spots - 1);
+            replacement_spot = randomi(0, n_spots - 1);
         } while(!mobs_in_spots[current_wheel][replacement_spot] || (current_wheel == mob_wheel && replacement_spot == mob_spot));
         
         mobs_in_spots[mob_wheel][mob_spot] = mobs_in_spots[current_wheel][replacement_spot];

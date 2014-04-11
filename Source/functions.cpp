@@ -635,16 +635,16 @@ vector<string> folder_to_vector(string folder_name, bool folders) {
                 size_t pos_fs = entry_name.find_last_of("/");
                 size_t pos = pos_bs;
                 if(pos_fs != string::npos)
-                    if(pos_fs > pos_bs) pos = pos_bs;
+                    if(pos_fs > pos_bs || pos_bs == string::npos) pos = pos_fs;
                     
                 if(pos != string::npos) entry_name = entry_name.substr(pos + 1, entry_name.size() - pos - 1);
                 v.push_back(entry_name);
             }
+            al_destroy_fs_entry(entry);
         }
         al_close_directory(folder);
+        al_destroy_fs_entry(folder);
     }
-    if(folder) al_destroy_fs_entry(folder);
-    if(entry) al_destroy_fs_entry(entry);
     
     return v;
 }
@@ -893,7 +893,7 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
     }
     
     for(unsigned p = 0; p < pikmin_to_spit; p++) {
-        float angle = random(0, M_PI * 2);
+        float angle = randomf(0, M_PI * 2);
         float sx = cos(angle) * 60;
         float sy = sin(angle) * 60;
         
@@ -1509,6 +1509,8 @@ void load_options() {
     pretty_whistle = tob(file.get_child_by_name("pretty_whistle")->get_value_or_default("true"));
     scr_w = toi(file.get_child_by_name("width")->get_value_or_default(itos(DEF_SCR_W)));
     smooth_scaling = tob(file.get_child_by_name("smooth_scaling")->get_value_or_default("true"));
+    window_x = toi(file.get_child_by_name("window_x")->get_value_or_default(itos(INT_MAX)));
+    window_y = toi(file.get_child_by_name("window_y")->get_value_or_default(itos(INT_MAX)));
 }
 
 /* ----------------------------------------------------------------------------
@@ -1602,11 +1604,21 @@ void pluck_pikmin(leader* l, pikmin* p) {
 }
 
 /* ----------------------------------------------------------------------------
- * Returns a random number between the provided range, inclusive.
+ * Returns a random float between the provided range, inclusive.
  */
-float random(float min, float max) {
-    if(max == min) return min;
+float randomf(float min, float max) {
+    if(min > max) swap(min, max);
+    if(min == max) return min;
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns a random integer between the provided range, inclusive.
+ */
+int randomi(int min, int max) {
+    if(min > max) swap(min, max);
+    if(min == max) return min;
+    return ((rand()) % (max - min + 1)) + min;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1623,11 +1635,11 @@ float random(float min, float max) {
  * color:    Particle color.
  */
 void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float center_x, float center_y, float speed_min, float speed_max, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
-    unsigned char n_particles = random(min, max);
+    unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
-        float angle = random(0, M_PI * 2);
-        float speed = random(speed_min, speed_max);
+        float angle = randomf(0, M_PI * 2);
+        float speed = randomf(speed_min, speed_max);
         
         float speed_x = cos(angle) * speed;
         float speed_y = sin(angle) * speed;
@@ -1640,8 +1652,8 @@ void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float ce
                 speed_x, speed_y,
                 1,
                 0,
-                random(time_min, time_max),
-                random(size_min, size_max),
+                randomf(time_min, time_max),
+                randomf(size_min, size_max),
                 color
             )
         );
@@ -1660,7 +1672,7 @@ void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float ce
  * color:    Particle color.
  */
 void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
-    unsigned char n_particles = random(min, max);
+    unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
         particles.push_back(
@@ -1668,12 +1680,12 @@ void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_
                 type,
                 bmp,
                 origin_x, origin_y,
-                (6 - random(0, 12)),
-                -(random(10, 20)),
+                randomf(-6, 6),
+                randomf(-10, -20),
                 0,
                 -1,
-                random(time_min, time_max),
-                random(size_min, size_max),
+                randomf(time_min, time_max),
+                randomf(size_min, size_max),
                 color
             )
         );
@@ -1693,7 +1705,7 @@ void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_
  * color:    Particle color.
  */
 void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
-    unsigned char n_particles = random(min, max);
+    unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
         particles.push_back(
@@ -1701,11 +1713,11 @@ void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origi
                 type,
                 bmp,
                 origin_x, origin_y,
-                (2 - random(0, 4)),
-                -random(2, 4),
+                randomf(-2, 2),
+                randomf(-2, -4),
                 0, 0.5,
-                random(time_min, time_max),
-                random(size_min, size_max),
+                randomf(time_min, time_max),
+                randomf(size_min, size_max),
                 color
             )
         );
@@ -1724,12 +1736,12 @@ void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origi
  * color:    Color of the particles.
  */
 void random_particle_spray(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
-    unsigned char n_particles = random(35, 40);
+    unsigned char n_particles = randomi(35, 40);
     
     for(unsigned char p = 0; p < n_particles; p++) {
-        float angle_offset = ((random(0, (unsigned) (M_PI_2 * 100))) / 100.0) - M_PI_4;
+        float angle_offset = randomf(-M_PI_4, M_PI_4);
         
-        float power = random(30, 90);
+        float power = randomf(30, 90);
         float speed_x = cos(angle + angle_offset) * power;
         float speed_y = sin(angle + angle_offset) * power;
         
@@ -1741,8 +1753,8 @@ void random_particle_spray(unsigned char type, ALLEGRO_BITMAP* bmp, float origin
                 speed_x, speed_y,
                 1,
                 0,
-                random(3, 4),
-                random(6, 8),
+                randomf(3, 4),
+                randomf(6, 8),
                 color
             )
         );
@@ -1886,6 +1898,8 @@ void save_options() {
     al_fwrite(file, "pretty_whistle=" + btos(pretty_whistle) + "\n");
     al_fwrite(file, "width=" + itos(scr_w) + "\n");
     al_fwrite(file, "smooth_scaling=" + btos(smooth_scaling) + "\n");
+    al_fwrite(file, "window_x=" + itos(window_x) + "\n");
+    al_fwrite(file, "window_y=" + itos(window_y) + "\n");
     
     al_fclose(file);
 }
@@ -2071,7 +2085,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
             //then it had no impact on the existing ties.
             //Go with the Onion that had been decided before.
             if(new_tie || !m->carrier_info->decided_type) {
-                m->carrier_info->decided_type = majority_types[random(0, majority_types.size() - 1)];
+                m->carrier_info->decided_type = majority_types[randomi(0, majority_types.size() - 1)];
             }
         }
         

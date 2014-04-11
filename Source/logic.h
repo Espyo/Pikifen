@@ -429,7 +429,7 @@ void do_logic() {
                         bool valid_spot = false;
                         unsigned int spot = 0;
                         while(!valid_spot) {
-                            spot = random(0, mob_ptr->carrier_info->max_carriers - 1);
+                            spot = randomi(0, mob_ptr->carrier_info->max_carriers - 1);
                             valid_spot = !mob_ptr->carrier_info->carrier_spots[spot];
                         }
                         

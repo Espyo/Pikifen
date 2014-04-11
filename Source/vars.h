@@ -263,5 +263,7 @@ extern vector<unsigned char> whistle_ring_colors;
 extern unsigned char         whistle_ring_prev_color;
 extern vector<float>         whistle_rings;
 extern bool                  whistling;             //Is the whistle currently being blown?
+extern int                   window_x;
+extern int                   window_y;
 
 #endif //ifndef VARS_INCLUDED

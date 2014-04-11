@@ -66,6 +66,7 @@ int main(int argc, char**) {
     save_options();
     
     //Event stuff.
+    al_set_new_window_position(window_x, window_y);
     display = al_create_display(scr_w, scr_h);
     ALLEGRO_TIMER* timer = al_create_timer(1.0 / game_fps);
     
