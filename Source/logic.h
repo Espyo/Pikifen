@@ -139,8 +139,9 @@ void do_logic() {
     //Sun meter.
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED / game_fps;
     
-    //Cursor spin angle.
+    //Cursor spin angle and invalidness effect.
     cursor_spin_angle -= CURSOR_SPIN_SPEED / game_fps;
+    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED / game_fps;
     
     //Cursor trail.
     if(cursor_save_time > 0) {
@@ -352,6 +353,18 @@ void do_logic() {
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5) continue;
                     
+                    hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
+                    pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
+                    
+                    float actual_hx, actual_hy;
+                    rotate_point(closest_hitbox->x, closest_hitbox->y, mob_ptr->angle, &actual_hx, &actual_hy);
+                    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
+                    
+                    //ToDo there should be a way to optimize this.
+                    float x_dif = pik_ptr->x - actual_hx;
+                    float y_dif = pik_ptr->y - actual_hy;
+                    rotate_point(x_dif, y_dif, -mob_ptr->angle, &pik_ptr->attacking_hitbox_x, &pik_ptr->attacking_hitbox_y);
+                    
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
                     pik_ptr->latched = true;
@@ -378,7 +391,11 @@ void do_logic() {
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) continue;
                     
+                    hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
+                    pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
+                    
                     pik_ptr->attacking_mob = mob_ptr;
+                    pik_ptr->latched = false;
                     remove_from_party(pik_ptr);
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
                 }
@@ -463,17 +480,30 @@ void do_logic() {
             
             //Fighting an enemy.
             if(pik_ptr->attacking_mob) {
-                if(pik_ptr->latched) {
-                    pik_ptr->face(atan2(pik_ptr->attacking_mob->y - pik_ptr->y, pik_ptr->attacking_mob->x - pik_ptr->x));
-                    if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                hitbox_instance* h_ptr = get_hitbox(pik_ptr->attacking_mob, pik_ptr->attacking_hitbox_name);
+                if(h_ptr) {
+                    float actual_hx, actual_hy;
+                    rotate_point(h_ptr->x, h_ptr->y, pik_ptr->attacking_mob->angle, &actual_hx, &actual_hy);
+                    actual_hx += pik_ptr->attacking_mob->x; actual_hy += pik_ptr->attacking_mob->y;
                     
-                } else {
-                    if(dist(pik_ptr->x, pik_ptr->y, pik_ptr->attacking_mob->x, pik_ptr->attacking_mob->y) <= pik_ptr->type->size * 0.5 + pik_ptr->attacking_mob->type->size * 0.5 + PIKMIN_MIN_ATTACK_RANGE) {
-                        pik_ptr->remove_target(true);
+                    if(pik_ptr->latched) {
+                        float final_px, final_py;
+                        rotate_point(pik_ptr->attacking_hitbox_x, pik_ptr->attacking_hitbox_y, pik_ptr->attacking_mob->angle, &final_px, &final_py);
+                        final_px += actual_hx; final_py += actual_hy;
+                        
+                        pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
                         pik_ptr->face(atan2(pik_ptr->attacking_mob->y - pik_ptr->y, pik_ptr->attacking_mob->x - pik_ptr->x));
                         if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                        
                     } else {
-                        pik_ptr->set_target(pik_ptr->attacking_mob->x, pik_ptr->attacking_mob->y, NULL, NULL, false);
+                        if(dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy) <= pik_ptr->type->size * 0.5 + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE) {
+                            pik_ptr->remove_target(true);
+                            pik_ptr->face(atan2(actual_hy - pik_ptr->y, actual_hx - pik_ptr->x));
+                            if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                        } else {
+                            pik_ptr->set_target(actual_hx, actual_hy, NULL, NULL, false);
+                            pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                        }
                     }
                 }
                 
@@ -481,8 +511,18 @@ void do_logic() {
                 if(pik_ptr->attack_time <= 0) {
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
                     attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power);
-                    sfx_attack.play(0.03, false);
-                    sfx_pikmin_attack.play(0.03, false);
+                    sfx_attack.play(0.06, false);
+                    sfx_pikmin_attack.play(0.06, false);
+                    particles.push_back(
+                        particle(
+                            PARTICLE_TYPE_SMACK, bmp_smack,
+                            pik_ptr->x, pik_ptr->y,
+                            0, 0, 0, 0,
+                            SMACK_PARTICLE_DUR,
+                            64,
+                            al_map_rgb(255, 160, 128)
+                        )
+                    );
                 }
                 
                 if(pik_ptr->attacking_mob->dead) {
@@ -499,15 +539,15 @@ void do_logic() {
                 frame* f_ptr = m_ptr->anim.get_frame();
                 if(f_ptr == NULL) continue; //ToDo report
                 
-                for(size_t h = 0; h < f_ptr->hitboxes.size(); h++) {
-                    hitbox* h_ptr = &f_ptr->hitboxes[h];
+                for(size_t h = 0; h < f_ptr->hitbox_instances.size(); h++) {
+                    hitbox_instance* h_ptr = &f_ptr->hitbox_instances[h];
                     float s = sin(m_ptr->angle);
                     float c = cos(m_ptr->angle);
                     float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
                     float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
                     
                     if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + h_ptr->radius) {
-                        if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                        if(m_ptr->type->anim.hitboxes[h_ptr->hitbox_name].type == HITBOX_TYPE_ATTACK) {
                             pik_ptr->health = 0;
                         }
                     }

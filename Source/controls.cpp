@@ -712,15 +712,15 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
     } else {
         error_log(
             "Unrecognized control type \"" + parts[0] + "\" for player " +
-            to_string((long long) (player + 1)) + " (value=\"" + s + "\").");
+            itos((player + 1)) + " (value=\"" + s + "\").");
     }
 }
 
 string control_info::stringify() {
     if(type == CONTROL_TYPE_KEYBOARD_KEY) {
-        return "k_" + to_string((long long) button);
+        return "k_" + itos(button);
     } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {
-        return "mb_" + to_string((long long) button);
+        return "mb_" + itos(button);
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
         return "mwu";
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
@@ -730,11 +730,11 @@ string control_info::stringify() {
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
         return "mwr";
     } else if(type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        return "jb_" + to_string((long long) device_nr) + "_" + to_string((long long) button);
+        return "jb_" + itos(device_nr) + "_" + itos(button);
     } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
-        return "jap_" + to_string((long long) device_nr) + "_" + to_string((long long) stick) + "_" + to_string((long long) axis);
+        return "jap_" + itos(device_nr) + "_" + itos(stick) + "_" + itos(axis);
     } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
-        return "jan_" + to_string((long long) device_nr) + "_" + to_string((long long) stick) + "_" + to_string((long long) axis);
+        return "jan_" + itos(device_nr) + "_" + itos(stick) + "_" + itos(axis);
     }
     
     return "";

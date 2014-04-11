@@ -28,8 +28,6 @@ public:
     void wait();
     
     void draw_self();
-    
-    void render();
 };
 
 #endif //ifndef LAFI_GUI_INCLUDED

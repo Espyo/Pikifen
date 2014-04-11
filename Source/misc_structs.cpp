@@ -1,3 +1,5 @@
+#include <climits>
+
 #include "const.h"
 #include "functions.h"
 #include "misc_structs.h"
@@ -29,7 +31,7 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
 void sample_struct::play(float max_override_pos, bool loop, float gain, float pan, float speed) {
     if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
         float secs = al_get_sample_instance_position(instance) / (float) 44100;
-        if(secs < max_override_pos && max_override_pos > 0 || max_override_pos == -1) return;
+        if((secs < max_override_pos && max_override_pos > 0) || max_override_pos == -1) return;
     }
     
     al_set_sample_instance_playmode(instance, (loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE));
@@ -126,8 +128,8 @@ void party_spot_info::add(mob* m, float* x, float* y) {
 }
 
 void party_spot_info::remove(mob* m) {
-    unsigned mob_wheel = MAXUINT; //Wheel number of the mob we're trying to remove.
-    unsigned mob_spot = MAXUINT; //Spot number of the mob we're trying to remove.
+    unsigned mob_wheel = UINT_MAX; //Wheel number of the mob we're trying to remove.
+    unsigned mob_spot = UINT_MAX; //Spot number of the mob we're trying to remove.
     
     size_t n_wheels = mobs_in_spots.size();
     for(size_t w = 0; w < n_wheels; w++) {
@@ -143,7 +145,7 @@ void party_spot_info::remove(mob* m) {
             
         }
         
-        if(mob_wheel != MAXUINT) break;
+        if(mob_wheel != UINT_MAX) break;
     }
     
     //If the member to remove is the only one from the outermost wheel, let it go.

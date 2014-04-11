@@ -1,7 +1,7 @@
 #include "particle.h"
 #include "vars.h"
 
-particle::particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y, float speed_x, float speed_y, float friction, float gravity, float time, float size, ALLEGRO_COLOR color) {
+particle::particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y, float speed_x, float speed_y, float friction, float gravity, float duration, float size, ALLEGRO_COLOR color) {
     this->type = type;
     this->bitmap = bitmap;
     this->x = x; this->y = y;
@@ -9,8 +9,8 @@ particle::particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y,
     this->speed_x = speed_x; this->speed_y = speed_y;
     this->friction = friction;
     this->gravity = gravity;
-    this->time = time;
-    this->starting_time = time;
+    this->time = duration;
+    this->duration = duration;
     this->size = size;
     this->starting_size = size;
     this->color = color;

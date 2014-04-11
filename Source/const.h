@@ -14,6 +14,7 @@ using namespace std;
 #define AUTO_PLUCK_INPUT_INTERVAL   0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
 #define AUTO_PLUCK_MAX_RADIUS       160      //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5      //How many seconds a camera transition lasts for.
+#define CURSOR_INVALID_EFFECT_SPEED M_PI * 4 //How fast the "invalid cursor" effect goes, per second.
 #define CURSOR_SAVE_INTERVAL        0.03     //Every X seconds, the cursor's position is saved, to create the trail effect.
 #define CURSOR_SAVE_N_SPOTS         10       //Number of positions of the cursor to keep track of.
 #define CURSOR_SPIN_SPEED           M_PI     //How much the cursor spins per second.
@@ -44,6 +45,7 @@ using namespace std;
 #define SHADOW_Y_MULTIPLIER         1        //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
 #define SHIP_BEAM_RANGE             30       //The center of a ship's beam reaches this far.
 #define SHIP_BEAM_RING_COLOR_SPEED  255      //Red color's index moves these many units per second. (Green is fast and blue is faster still).
+#define SMACK_PARTICLE_DUR          0.1      //Duration of the "smack" particle.
 #define SUN_METER_SUN_SPIN_SPEED    0.5      //The Sun Meter's sun spins these many radians per second.
 #define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply their strength by this.
 #define THROW_PARTICLE_INTERVAL     0.02     //A new "mob thrown" particle is spawned every X seconds.
@@ -82,9 +84,10 @@ using namespace std;
 
 enum EDITOR_MODES {
     //Animation editor.
-    EDITOR_MODE_NORMAL,
-    EDITOR_MODE_SELECT_HITBOX,
-    EDITOR_MODE_NEW_HITBOX,
+    EDITOR_MODE_MAIN,
+    EDITOR_MODE_ANIMATION,
+    EDITOR_MODE_FRAME,
+    EDITOR_MODE_HITBOX,
     //Area editor
     EDITOR_MODE_NEW_SECTOR,
 };

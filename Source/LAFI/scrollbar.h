@@ -4,11 +4,6 @@
 #include "widget.h"
 
 class lafi_scrollbar : public lafi_widget {
-private:
-    ALLEGRO_BITMAP* normal_bitmap;
-    void move_button(int x, int y);
-    void create_button();
-    
 public:
     lafi_widget* attached_widget;
     float min, max;
@@ -19,7 +14,6 @@ public:
     ~lafi_scrollbar();
     
     void init();
-    void render();
     void draw_self();
     
     void (*change_handler)(lafi_widget* w);
@@ -30,6 +24,8 @@ public:
     void register_change_handler(void(*handler)(lafi_widget* w));
     void make_widget_scroll(lafi_widget* widget);
     static void widget_scroller(lafi_widget* w);
+    void move_button(int x, int y);
+    void create_button();
 };
 
 #endif //ifndef LAFI_SCROLLBAR_INCLUDED

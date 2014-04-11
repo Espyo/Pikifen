@@ -105,9 +105,6 @@
     <ClCompile Include="LAFI\checkbox.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
-    <ClCompile Include="LAFI\checkbox_box.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
     <ClCompile Include="LAFI\frame.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
@@ -120,9 +117,6 @@
     <ClCompile Include="LAFI\radio_button.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
-    <ClCompile Include="LAFI\radio_button_button.cpp">
-      <Filter>Source Files\LAFI</Filter>
-    </ClCompile>
     <ClCompile Include="LAFI\scrollbar.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
@@ -133,6 +127,9 @@
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
     <ClCompile Include="LAFI\widget.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="LAFI\minor.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -254,9 +251,6 @@
     <ClInclude Include="LAFI\checkbox.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
-    <ClInclude Include="LAFI\checkbox_box.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
     <ClInclude Include="LAFI\const.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
@@ -270,9 +264,6 @@
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
     <ClInclude Include="LAFI\radio_button.h">
-      <Filter>Header Files\LAFI</Filter>
-    </ClInclude>
-    <ClInclude Include="LAFI\radio_button_button.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
     <ClInclude Include="LAFI\scrollbar.h">
@@ -289,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\minor.h">
+      <Filter>Header Files\LAFI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,18 @@ public:
     ~lafi_checkbox();
     void widget_on_left_mouse_click(int x, int y);
     
-    void render();
+    void draw_self();
+};
+
+class lafi_checkbox_box : public lafi_widget {
+private:
+
+public:
+    bool checked;
+    
+    lafi_checkbox_box(int x1 = 0, int y1 = 0, bool checked = false, lafi_style* style = NULL, unsigned char flags = 0);
+    ~lafi_checkbox_box();
+    
     void draw_self();
 };
 

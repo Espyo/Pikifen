@@ -1,6 +1,7 @@
 #ifndef INTERVAL_INCLUDED
 #define INTERVAL_INCLUDED
 
+#include <cfloat>
 #include <vector>
 
 using namespace std;

@@ -5,17 +5,12 @@ lafi_label::lafi_label(int x1, int y1, int x2, int y2, string text, int text_fla
     : lafi_widget(x1, y1, x2, y2, style, flags) {
     this->text = text;
     this->text_flags = text_flags;
-    normal_bitmap = NULL;
 }
 
-lafi_label::~lafi_label() {
-    if(normal_bitmap) al_destroy_bitmap(normal_bitmap);
-}
-
-void lafi_label::render() { }
+lafi_label::~lafi_label() {}
 
 void lafi_label::draw_self() {
-    al_draw_filled_rectangle(x1, y1, x2, y2, style->bg_color);
+    al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     if(style->text_font) {
         int text_x = 1;
         if(text_flags == ALLEGRO_ALIGN_CENTER) text_x = (x2 - x1) / 2;
@@ -24,7 +19,7 @@ void lafi_label::draw_self() {
         
         draw_text_lines(
             style->text_font,
-            style->fg_color,
+            get_fg_color(),
             text_x,
             y1 + (y2 - y1) / 2,
             text_flags,

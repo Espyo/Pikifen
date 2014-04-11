@@ -1,3 +1,5 @@
+#include <cfloat>
+
 #include "button.h"
 #include "scrollbar.h"
 
@@ -11,8 +13,6 @@ lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float 
     this->vertical = vertical;
     needs_init = true;
     change_handler = NULL;
-    
-    normal_bitmap = NULL;
 }
 
 void lafi_scrollbar::init() {
@@ -23,20 +23,18 @@ void lafi_scrollbar::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
     
     move_button(x, y);
-    if(change_handler) change_handler(this);
 }
 
 void lafi_scrollbar::widget_on_mouse_move(int x, int y) {
     if(!mouse_clicking) return;
     
     move_button(x, y);
-    if(change_handler) change_handler(this);
 }
 
 void lafi_scrollbar::create_button() {
     int bx1, by1, bx2, by2;
     
-    remove("btn_bar");
+    remove("but_bar");
     
     if(low_value != high_value) {
     
@@ -52,7 +50,7 @@ void lafi_scrollbar::create_button() {
             by2 = y2; bx2 = x1 + bw;
         }
         
-        add("btn_bar", new lafi_button(
+        add("but_bar", new lafi_button(
                 bx1,
                 by1,
                 bx2,
@@ -68,7 +66,7 @@ void lafi_scrollbar::create_button() {
 void lafi_scrollbar::move_button(int x, int y) {
     if(low_value == high_value) return;
     
-    lafi_button* but = (lafi_button*) widgets["btn_bar"];
+    lafi_button* but = (lafi_button*) widgets["but_bar"];
     
     if(vertical) {
         int bh = but->y2 - but->y1;
@@ -95,85 +93,74 @@ void lafi_scrollbar::move_button(int x, int y) {
         low_value = min + ((but->x1 - x1) / (float) w) * (max - min);
         high_value = min + ((but->x2 - x1) / (float) w) * (max - min);
     }
-}
-
-void lafi_scrollbar::render() {
-    if(normal_bitmap) al_destroy_bitmap(normal_bitmap);
     
-    int w = x2 - x1;
-    int h = y2 - y1;
-    
-    normal_bitmap = al_create_bitmap(w, h);
-    ALLEGRO_BITMAP* old_target_bitmap = al_get_target_bitmap();
-    al_set_target_bitmap(normal_bitmap); {
-    
-        if(vertical) {
-        
-            al_draw_filled_rectangle(
-                w / 2 - 2,
-                0,
-                w / 2 + 2,
-                h,
-                style->bg_color
-            );
-            al_draw_line(
-                w / 2 - 0.5,
-                0,
-                w / 2 - 0.5,
-                h,
-                style->lighter_bg_color,
-                1
-            );
-            al_draw_line(
-                w / 2 + 0.5,
-                0,
-                w / 2 + 0.5,
-                h,
-                style->darker_bg_color,
-                1
-            );
-            al_draw_line(w / 2 - 4, 0.5, w / 2 + 4, 0.5, style->lighter_bg_color, 1);
-            al_draw_line(w / 2 - 4, 1.5, w / 2 + 4, 1.5, style->darker_bg_color, 1);
-            al_draw_line(w / 2 - 4, h - 0.5, w / 2 + 4, h - 0.5, style->darker_bg_color, 1);
-            al_draw_line(w / 2 - 4, h - 1.5, w / 2 + 4, h - 1.5, style->lighter_bg_color, 1);
-            
-        } else { //Horizontal bar.
-        
-            al_draw_filled_rectangle(
-                0,
-                h / 2 - 2,
-                w,
-                h / 2 + 2,
-                style->bg_color
-            );
-            al_draw_line(
-                0,
-                h / 2 - 0.5,
-                w,
-                h / 2 - 0.5,
-                style->lighter_bg_color,
-                1
-            );
-            al_draw_line(
-                0,
-                h / 2 + 0.5,
-                w,
-                h / 2 + 0.5,
-                style->darker_bg_color,
-                1
-            );
-            al_draw_line(0.5, h / 2 - 4, 0.5, h / 2 + 4, style->lighter_bg_color, 1);
-            al_draw_line(1.5, h / 2 - 4, 1.5, h / 2 + 4, style->darker_bg_color, 1);
-            al_draw_line(w - 0.5, h / 2 - 4, w - 0.5, h / 2 + 4, style->darker_bg_color, 1);
-            al_draw_line(w - 1.5, h / 2 - 4, w - 1.5, h / 2 + 4, style->lighter_bg_color, 1);
-            
-        }
-        
-    } al_set_target_bitmap(old_target_bitmap);
+    if(change_handler) change_handler(this);
 }
 
 void lafi_scrollbar::draw_self() {
-    al_draw_bitmap(normal_bitmap, x1, y1, 0);
+    int w = x2 - x1;
+    int h = y2 - y1;
+    
+    if(vertical) {
+        al_draw_filled_rectangle(
+            x1 + w / 2 - 2,
+            y1 + 0.5,
+            x1 + w / 2 + 2,
+            y2 - 0.5,
+            get_bg_color()
+        );
+        al_draw_line(
+            x1 + w / 2 - 0.5,
+            y1 + 0.5,
+            x1 + w / 2 - 0.5,
+            y2 - 0.5,
+            get_lighter_bg_color(),
+            1
+        );
+        al_draw_line(
+            x1 + w / 2 + 0.5,
+            y1 + 0.5,
+            x1 + w / 2 + 0.5,
+            y2 - 0.5,
+            get_darker_bg_color(),
+            1
+        );
+        al_draw_line(x1 + w / 2 - 4, y1 + 0.5, x1 + w / 2 + 4, y1 + 0.5, get_lighter_bg_color(), 1);
+        al_draw_line(x1 + w / 2 - 4, y1 + 1.5, x1 + w / 2 + 4, y1 + 1.5, get_darker_bg_color(),  1);
+        al_draw_line(x1 + w / 2 - 4, y2 - 0.5, x1 + w / 2 + 4, y2 - 0.5, get_darker_bg_color(),  1);
+        al_draw_line(x1 + w / 2 - 4, y2 - 1.5, x1 + w / 2 + 4, y2 - 1.5, get_lighter_bg_color(), 1);
+        
+    } else { //Horizontal bar.
+    
+        al_draw_filled_rectangle(
+            x1 + 0.5,
+            y1 + h / 2 - 2,
+            x2 - 0.5,
+            y1 + h / 2 + 2,
+            get_bg_color()
+        );
+        al_draw_line(
+            x1 + 0.5,
+            y1 + h / 2 - 0.5,
+            x2 - 0.5,
+            y1 + h / 2 - 0.5,
+            get_lighter_bg_color(),
+            1
+        );
+        al_draw_line(
+            x1 + 0.5,
+            y1 + h / 2 + 0.5,
+            x2 - 0.5,
+            y1 + h / 2 + 0.5,
+            get_darker_bg_color(),
+            1
+        );
+        al_draw_line(x1 + 0.5, y1 + h / 2 - 4, x1 + 0.5, y1 + h / 2 + 4, get_lighter_bg_color(), 1);
+        al_draw_line(x1 + 1.5, y1 + h / 2 - 4, x1 + 1.5, y1 + h / 2 + 4, get_darker_bg_color(),  1);
+        al_draw_line(x2 - 0.5, y1 + h / 2 - 4, x2 - 0.5, y1 + h / 2 + 4, get_darker_bg_color(),  1);
+        al_draw_line(x2 - 1.5, y1 + h / 2 - 4, x2 - 1.5, y1 + h / 2 + 4, get_lighter_bg_color(), 1);
+        
+    }
 }
 
 void lafi_scrollbar::register_change_handler(void(*handler)(lafi_widget* w)) {
@@ -184,6 +171,7 @@ void lafi_scrollbar::make_widget_scroll(lafi_widget* widget) {
     attached_widget = widget;
     this->min = this->low_value = 0;
     if(widget) {
+        widget->children_offset_x = widget->children_offset_y = 0;
         float largest_y2 = -FLT_MIN, largest_x2 = FLT_MIN;
         
         for(auto w = widget->widgets.begin(); w != widget->widgets.end(); w++) {

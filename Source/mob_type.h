@@ -17,7 +17,7 @@ public:
     string name;
     
     //Visual things.
-    map<string, animation> animations;
+    animation_set anim;
     ALLEGRO_COLOR main_color;
     
     //Space-related things.

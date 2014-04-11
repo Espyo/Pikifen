@@ -142,7 +142,7 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
         
         //Sub-node start
         pos = line.find('{');
-        if(pos != string::npos && pos > 0 && line.size() >= 2) {
+        if(pos != string::npos) {
         
             data_node* new_child = new data_node();
             new_child->name = trim_spaces(line.substr(0, pos));
@@ -168,12 +168,18 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
 
 //Saves a node into a new text file. Line numbers are ignored. If you don't provide a filename, it'll use the node's filename.
 //Returns true on success.
-bool data_node::save_file(string filename) {
+bool data_node::save_file(string filename, bool children_only) {
     if(filename == "") filename = this->filename;
     
     ALLEGRO_FILE* file = al_fopen(filename.c_str(), "w");
     if(file) {
-        data_node::save_node(file);
+        if(children_only) {
+            for(size_t c = 0; c < children.size(); c++) {
+                children[c]->save_node(file, 0);
+            }
+        } else {
+            save_node(file);
+        }
         al_fclose(file);
         return true;
     } else {

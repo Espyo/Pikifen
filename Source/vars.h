@@ -64,6 +64,7 @@ extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_ship;
+extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
 extern ALLEGRO_BITMAP* bmp_sun;
@@ -137,6 +138,7 @@ extern vector<size_t>        cur_message_stopping_chars; //The message stops scr
 extern unsigned char         cur_screen;
 extern weather               cur_weather;              //Current weather.
 extern float                 cursor_angle;
+extern float                 cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
 extern float                 cursor_save_time;         //Time left until the position of the cursor is saved on the vector.
 extern float                 cursor_spin_angle;
 extern vector<point>         cursor_spots;             //Spots the cursor has been through. Used for the faint trail left behind it.
@@ -149,20 +151,20 @@ extern float                 day_minutes_per_irl_sec;  //Every real-life second,
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
 extern ALLEGRO_DISPLAY*      display;
-extern map<string, animation> ed_anims;
-extern animation*            ed_anim;
-extern string                ed_anim_name;
+extern animation_set         ed_anims;
 extern bool                  ed_anim_playing;
-extern size_t                ed_cur_frame_nr;
+extern animation*            ed_cur_anim;
+extern frame*                ed_cur_frame;
+extern size_t                ed_cur_frame_instance_nr;
 extern float                 ed_cur_frame_time;
-extern float                 ed_cur_hitbox_angle;  //Angle of rotation of the current hitbox' outline.
-extern size_t                ed_cur_hitbox_nr;     //string::npos = none.
+extern hitbox*               ed_cur_hitbox;
+extern float                 ed_cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
+extern size_t                ed_cur_hitbox_instance_nr;
 extern size_t                ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                  ed_grabbing_hitbox_edge;
 extern float                 ed_grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
 extern float                 ed_grabbing_hitbox_y;
 extern lafi_gui*             ed_gui;
-extern lafi_label*           ed_gui_status_bar;
 extern bool                  ed_hitboxes_visible;
 extern bool                  ed_holding_m2;
 extern unsigned char         ed_mode;
@@ -210,6 +212,7 @@ extern float                 moving_group_pos_y;
 extern bool                  moving_group_to_cursor;     //Is the "move group to cursor" button being pressed?
 extern mob_type*             nectar_mob_type;
 extern vector<nectar*>       nectars;
+extern bool                  no_error_logs_today;        //Have there been no errors in this play session?
 extern map<string, onion_type*>
 onion_types;
 extern vector<onion*>        onions;
@@ -243,7 +246,6 @@ extern vector<spray_type>    spray_types;
 extern vector<status>        statuses;
 extern float                 sun_meter_sun_angle;
 extern float                 throw_particle_timer;
-extern string                total_error_log;
 extern map<string, treasure_type*>
 treasure_types;
 extern vector<treasure*>     treasures;

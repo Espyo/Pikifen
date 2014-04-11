@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
@@ -97,7 +98,7 @@ void do_drawing() {
             float size = treasures[t]->type->size;
             if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
                 size *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
-                size = max(0, size);
+                size = max(0.0f, size);
             }
             draw_sprite(
                 bmp_tp,
@@ -119,6 +120,32 @@ void do_drawing() {
                 bm,
                 pellets[p]->x, pellets[p]->y,
                 pellets[p]->type->size, pellets[p]->type->size);
+        }
+        
+        //Enemies.
+        size_t n_enemies = enemies.size();
+        for(size_t e = 0; e < n_enemies; e++) {
+            enemy* e_ptr = enemies[e];
+            frame* f_ptr = e_ptr->anim.get_frame();
+            if(f_ptr) {
+                float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
+                //ToDo test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
+                float width = f_ptr->game_w;
+                float height = f_ptr->game_h;
+                if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
+                    float mult = 1 - (e_ptr->time_in_state / DELIVERY_SUCK_TIME);
+                    width = max(0.0f, width * mult);
+                    height = max(0.0f, height * mult);
+                }
+                
+                draw_sprite(
+                    f_ptr->bitmap,
+                    e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
+                    e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
+                    width, height,
+                    e_ptr->angle
+                );
+            }
         }
         
         //Pikmin
@@ -218,32 +245,6 @@ void do_drawing() {
                 ships[s]->x, ships[s]->y,
                 138, 112);
             al_draw_circle(ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
-        }
-        
-        //Enemies.
-        size_t n_enemies = enemies.size();
-        for(size_t e = 0; e < n_enemies; e++) {
-            enemy* e_ptr = enemies[e];
-            frame* f_ptr = e_ptr->anim.get_frame();
-            if(f_ptr) {
-                float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
-                //ToDo test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
-                float width = f_ptr->game_w;
-                float height = f_ptr->game_h;
-                if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
-                    float mult = 1 - (e_ptr->time_in_state / DELIVERY_SUCK_TIME);
-                    width = max(0, width * mult);
-                    height = max(0, height * mult);
-                }
-                
-                draw_sprite(
-                    f_ptr->bitmap,
-                    e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
-                    e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
-                    width, height,
-                    e_ptr->angle
-                );
-            }
         }
         
         //ToDo debugging -- remove.
@@ -347,10 +348,12 @@ void do_drawing() {
         
         //The actual cursor and mouse cursor
         draw_sprite(
-            ((mouse_cursor_valid) ? bmp_mouse_cursor : bmp_mouse_cursor_invalid),
+            bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
             cam_zoom * 54, cam_zoom * 54,
-            cursor_spin_angle);
+            cursor_spin_angle,
+            al_map_rgba(255, 255, 255, (mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
+        );
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
@@ -452,7 +455,7 @@ void do_drawing() {
                         p_ptr->y - p_ptr->size * 0.5,
                         p_ptr->x + p_ptr->size * 0.5,
                         p_ptr->y + p_ptr->size * 0.5,
-                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
                     );
                     
                 } else if(p_ptr->type == PARTICLE_TYPE_CIRCLE) {
@@ -460,7 +463,7 @@ void do_drawing() {
                         p_ptr->x,
                         p_ptr->y,
                         p_ptr->size * 0.5,
-                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
                     );
                     
                 } else if(p_ptr->type == PARTICLE_TYPE_BITMAP) {
@@ -469,24 +472,32 @@ void do_drawing() {
                         p_ptr->x,
                         p_ptr->y,
                         p_ptr->size, p_ptr->size,
-                        0, change_alpha(p_ptr->color, (p_ptr->time / p_ptr->starting_time) * p_ptr->color.a * 255)
+                        0, change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
                     );
                     
                 } else if(p_ptr->type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
                     draw_sprite(
                         p_ptr->bitmap, p_ptr->x, p_ptr->y, p_ptr->size, -1,
                         0, change_alpha(p_ptr->color,
-                                        abs(sin((p_ptr->time / p_ptr->starting_time) * M_PI)) * p_ptr->color.a * 255
+                                        abs(sin((p_ptr->time / p_ptr->duration) * M_PI)) * p_ptr->color.a * 255
                                        )
                     );
                     
                 } else if(p_ptr->type == PARTICLE_TYPE_ENEMY_SPIRIT) {
-                    float s = sin((p_ptr->time / p_ptr->starting_time) * M_PI);
+                    float s = sin((p_ptr->time / p_ptr->duration) * M_PI);
                     draw_sprite(
                         p_ptr->bitmap, p_ptr->x + s * 16, p_ptr->y, p_ptr->size, -1,
                         s * M_PI, change_alpha(p_ptr->color, abs(s) * p_ptr->color.a * 255)
                     );
                     
+                } else if(p_ptr->type == PARTICLE_TYPE_SMACK) {
+                    float r = p_ptr->time / p_ptr->duration;
+                    float size = p_ptr->size;
+                    float opacity = 255;
+                    if(r <= 0.5) size *= r * 2;
+                    else opacity *= (1 - r) * 2;
+                    
+                    draw_sprite(p_ptr->bitmap, p_ptr->x, p_ptr->y, size, size, 0, change_alpha(p_ptr->color, opacity));
                 }
             }
         }
@@ -607,7 +618,7 @@ void do_drawing() {
                 
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.89, scr_h * 0.15,
-                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, to_string((long long) day));
+                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, itos(day));
                 
             //Pikmin count.
             //Count how many Pikmin only.
@@ -656,17 +667,17 @@ void do_drawing() {
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.57, scr_h * 0.90,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.14, scr_h * 0.08,
-                to_string((long long) pikmin_in_party)
+                itos(pikmin_in_party)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.74, scr_h * 0.91,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.12, scr_h * 0.05,
-                to_string((long long) pikmin_list.size())
+                itos(pikmin_list.size())
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.955, scr_h * 0.91,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.17, scr_h * 0.05,
-                to_string((long long) total_pikmin)
+                itos(total_pikmin)
             );
             
             //Sprays.
@@ -684,7 +695,7 @@ void do_drawing() {
                 draw_compressed_text(
                     font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
                     scr_w * 0.06, scr_h * 0.05,
-                    to_string((long long) spray_amounts[top_spray_nr]));
+                    itos(spray_amounts[top_spray_nr]));
                 for(size_t c = 0; c < controls.size(); c++) {
                     if(controls[c].action == BUTTON_USE_SPRAY_1 || controls[c].action == BUTTON_USE_SPRAY) {
                         draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
@@ -703,7 +714,7 @@ void do_drawing() {
                     draw_compressed_text(
                         font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
                         scr_w * 0.06, scr_h * 0.05,
-                        to_string((long long) spray_amounts[1]));
+                        itos(spray_amounts[1]));
                     for(size_t c = 0; c < controls.size(); c++) {
                         if(controls[c].action == BUTTON_USE_SPRAY_2) {
                             draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
@@ -738,10 +749,10 @@ void do_drawing() {
             //ToDo test stuff, remove.
             //Day hour.
             /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
-                         (to_string((long long) (day_minutes / 60)) + ":" + to_string((long long) ((int) (day_minutes) % 60))).c_str());
+                         (itos((day_minutes / 60)) + ":" + itos(((int) (day_minutes) % 60))).c_str());
             for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, to_string((long double) pikmin_list[0]->z).c_str());*/
+            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, ftos(pikmin_list[0]->z).c_str());*/
             
         } else { //Show a message.
         

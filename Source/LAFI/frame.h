@@ -15,7 +15,6 @@ public:
     lafi_frame(lafi_frame &f2);
     ~lafi_frame();
     
-    void render();
     void draw_self();
 };
 

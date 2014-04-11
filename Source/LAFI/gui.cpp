@@ -83,7 +83,5 @@ void lafi_gui::wait() {
 lafi_gui::~lafi_gui() { }
 
 void lafi_gui::draw_self() {
-    al_draw_filled_rectangle(x1, y1, x2, y2, style->bg_color);
+    al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
 }
-
-void lafi_gui::render() { }

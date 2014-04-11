@@ -1,5 +1,7 @@
 #define _USE_MATH_DEFINES
 
+#pragma warning(disable : 4996) //Disables warning about localtime being deprecated.
+
 #include <algorithm>
 #include <math.h>
 #include <typeinfo>
@@ -276,12 +278,12 @@ void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float ma
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         name = al_keycode_to_name(c.button);
     } else if(c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG || c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
-        name = "AXIS " + to_string((long long) c.stick) + " " + to_string((long long) c.axis);
+        name = "AXIS " + itos(c.stick) + " " + itos(c.axis);
         name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
     } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        name = to_string((long long) c.button + 1);
+        name = itos(c.button + 1);
     } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
-        name = "M" + to_string((long long) c.button);
+        name = "M" + itos(c.button);
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
         name = "MWD";
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
@@ -294,8 +296,8 @@ void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float ma
     
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
-    float total_width = min(x2 - x1 + 4, max_w);
-    float total_height = min(y2 - y1 + 4, max_h);
+    float total_width = min((float) (x2 - x1 + 4), max_w);
+    float total_height = min((float) (y2 - y1 + 4), max_h);
     total_width = max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
@@ -361,9 +363,9 @@ void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, floa
  */
 void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color) {
     float first_y = cy - (font_h * 3) / 2;
-    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (to_string((long long) current).c_str()));
+    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (itos(current).c_str()));
     al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
-    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (to_string((long long) needed).c_str()));
+    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (itos(needed).c_str()));
 }
 
 /* ----------------------------------------------------------------------------
@@ -557,12 +559,44 @@ void error_log(string s, data_node* d) {
     //ToDo
     if(d) {
         s += " (" + d->filename;
-        if(d->line_nr != 0) s += " line " + to_string((long long) d->line_nr);
+        if(d->line_nr != 0) s += " line " + itos(d->line_nr);
         s += ")";
     }
     s += "\n";
     
-    total_error_log += s;
+    if(no_error_logs_today) {
+        no_error_logs_today = false;
+        time_t tt;
+        time(&tt);
+        struct tm t = *localtime(&tt);
+        s =
+            "\n" +
+            itos(t.tm_year + 1900) + "/" +
+            leading_zero(t.tm_mon + 1) + "/" +
+            leading_zero(t.tm_mday) + " " +
+            leading_zero(t.tm_hour) + ":" +
+            leading_zero(t.tm_min) + ":" +
+            leading_zero(t.tm_sec) +
+            "\n" + s;
+    }
+    
+    string prev_error_log;
+    string line;
+    ALLEGRO_FILE* file_i = al_fopen("Error_log.txt", "r");
+    if(file_i) {
+        while(!al_feof(file_i)) {
+            getline(file_i, line);
+            prev_error_log += line + "\n";
+        }
+        prev_error_log.erase(prev_error_log.size() - 1);
+        al_fclose(file_i);
+    }
+    
+    ALLEGRO_FILE* file_o = al_fopen("Error_log.txt", "w");
+    if(file_o) {
+        al_fwrite(file_o, prev_error_log + s);
+        al_fclose(file_o);
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -736,6 +770,30 @@ pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserv
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns the closest hitbox to a point, belonging to a mob's current frame of animation and position.
+ * x, y: Point.
+ * m:    The mob.
+ */
+hitbox_instance* get_closest_hitbox(float x, float y, mob* m) {
+    frame* f = m->anim.get_frame();
+    hitbox_instance* closest_hitbox = NULL;
+    float closest_hitbox_dist = 0;
+    
+    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+        hitbox_instance* h_ptr = &f->hitbox_instances[h];
+        float hx, hy;
+        rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
+        float d = dist(x - m->x, y - m->y, hx, hy) - h_ptr->radius;
+        if(h == 0 || d < closest_hitbox_dist) {
+            closest_hitbox_dist = d;
+            closest_hitbox = h_ptr;
+        }
+    }
+    
+    return closest_hitbox;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns the daylight effect color for the current time, for the current weather.
  */
 ALLEGRO_COLOR get_daylight_color() {
@@ -762,6 +820,18 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //If anything goes wrong, don't apply lighting at all.
     return al_map_rgba(0, 0, 0, 0);
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the hitbox instance in the current animation with the specified name.
+ */
+hitbox_instance* get_hitbox(mob* m, string name) {
+    frame* f = m->anim.get_frame();
+    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+        hitbox_instance* h_ptr = &f->hitbox_instances[h];
+        if(h_ptr->hitbox_name == name) return h_ptr;
+    }
+    return NULL;
 }
 
 /* ----------------------------------------------------------------------------
@@ -861,50 +931,113 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
 /* ----------------------------------------------------------------------------
  * Loads the animations from a file.
  */
-map<string, animation> load_animations(data_node* animations_node) {
+animation_set load_animation_set(data_node* file_node) {
     map<string, animation> animations;
+    map<string, frame> frames;
+    map<string, hitbox> hitboxes;
     
-    size_t n_anims = animations_node->get_nr_of_children();
+    //Animations.
+    data_node* anims_node = file_node->get_child_by_name("animations");
+    size_t n_anims = anims_node->get_nr_of_children();
     for(size_t a = 0; a < n_anims; a++) {
     
-        data_node* anim_node = animations_node->get_child(a);
-        string anim_name = anim_node->name;
-        vector<frame> frames;
+        data_node* anim_node = anims_node->get_child(a);
+        vector<frame_instance> frame_instances;
         
-        size_t loop_frame = atoi(anim_node->get_child_by_name("loop_frame")->value.c_str());
+        data_node* frame_instances_node = anim_node->get_child_by_name("frame_instances");
+        size_t n_frame_instances = frame_instances_node->get_nr_of_children();
         
-        data_node* frames_node = anim_node->get_child_by_name("frames");
-        size_t n_frames = frames_node->get_nr_of_children_by_name("frame");
-        
-        for(size_t f = 0; f < n_frames; f++) {
-            data_node* frame_node = frames_node->get_child_by_name("frame", f);
-            vector<hitbox> hitboxes = load_hitboxes(frame_node);
-            int fx = atoi(frame_node->get_child_by_name("file_x")->value.c_str());
-            int fy = atoi(frame_node->get_child_by_name("file_y")->value.c_str());
-            int fw = atoi(frame_node->get_child_by_name("file_w")->value.c_str());
-            int fh = atoi(frame_node->get_child_by_name("file_h")->value.c_str());
-            ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value.c_str());
-            frames.push_back(
-                frame(
-                    parent,
-                    fx, fy, fw, fh,
-                    atof(frame_node->get_child_by_name("game_w")->value.c_str()),
-                    atof(frame_node->get_child_by_name("game_h")->value.c_str()),
-                    atof(frame_node->get_child_by_name("duration")->value.c_str()),
-                    hitboxes
+        for(size_t f = 0; f < n_frame_instances; f++) {
+            data_node* frame_instance_node = frame_instances_node->get_child(f);
+            frame_instances.push_back(
+                frame_instance(
+                    frame_instance_node->name,
+                    tof(frame_instance_node->get_child_by_name("duration")->value)
                 )
             );
-            frames.back().file = frame_node->get_child_by_name("file")->value;
-            frames.back().parent_bmp = parent;
-            frames.back().offs_x = atof(frame_node->get_child_by_name("offset_x")->value.c_str());
-            frames.back().offs_y = atof(frame_node->get_child_by_name("offset_y")->value.c_str());
         }
         
-        animations[anim_name] = animation(frames, loop_frame);
+        animations[anim_node->name] =
+            animation(
+                anim_node->name,
+                frame_instances,
+                toi(anim_node->get_child_by_name("loop_frame")->value)
+            );
     }
     
-    return animations;
+    //Frames.
+    data_node* frames_node = file_node->get_child_by_name("frames");
+    size_t n_frames = frames_node->get_nr_of_children();
+    for(size_t f = 0; f < n_frames; f++) {
+    
+        data_node* frame_node = frames_node->get_child(f);
+        vector<hitbox_instance> hitbox_instances;
+        
+        data_node* hitbox_instances_node = frame_node->get_child_by_name("hitbox_instances");
+        size_t n_hitbox_instances = hitbox_instances_node->get_nr_of_children();
+        
+        for(size_t h = 0; h < n_hitbox_instances; h++) {
+        
+            data_node* hitbox_instance_node = hitbox_instances_node->get_child(h);
+            
+            float hx = 0, hy = 0, hz = 0;
+            vector<string> coords = split(hitbox_instance_node->get_child_by_name("coords")->value);
+            if(coords.size() >= 3) {
+                hx = tof(coords[0]);
+                hy = tof(coords[1]);
+                hz = tof(coords[2]);
+            }
+            
+            hitbox_instances.push_back(
+                hitbox_instance(
+                    hitbox_instance_node->name,
+                    hx, hy, hz,
+                    tof(hitbox_instance_node->get_child_by_name("radius")->value)
+                )
+            );
+        }
+        
+        ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value);
+        frames[frame_node->name] =
+            frame(
+                frame_node->name,
+                parent,
+                toi(frame_node->get_child_by_name("file_x")->value),
+                toi(frame_node->get_child_by_name("file_y")->value),
+                toi(frame_node->get_child_by_name("file_w")->value),
+                toi(frame_node->get_child_by_name("file_h")->value),
+                tof(frame_node->get_child_by_name("game_w")->value),
+                tof(frame_node->get_child_by_name("game_h")->value),
+                hitbox_instances
+            );
+        frames[frame_node->name].file = frame_node->get_child_by_name("file")->value;
+        frames[frame_node->name].parent_bmp = parent;
+        frames[frame_node->name].offs_x = atof(frame_node->get_child_by_name("offs_x")->value.c_str());
+        frames[frame_node->name].offs_y = atof(frame_node->get_child_by_name("offs_y")->value.c_str());
+    }
+    
+    //Hitboxes.
+    data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
+    size_t n_hitboxes = hitboxes_node->get_nr_of_children();
+    for(size_t h = 0; h < n_hitboxes; h++) {
+    
+        data_node* hitbox_node = hitboxes_node->get_child(h);
+        
+        hitboxes[hitbox_node->name] = hitbox();
+        hitbox* cur_hitbox = &hitboxes[hitbox_node->name];
+        
+        cur_hitbox->name = hitbox_node->name;
+        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
+        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
+        cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
+        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
+        cur_hitbox->shake_angle = tof(hitbox_node->get_child_by_name("shake_angle")->value);
+        cur_hitbox->swallow = tob(hitbox_node->get_child_by_name("swallow")->value);
+    }
+    
+    return animation_set(animations, frames, hitboxes);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
@@ -1071,7 +1204,7 @@ ALLEGRO_BITMAP* load_bmp(string filename) {
  * Loads a game control.
  */
 void load_control(unsigned char action, unsigned char player, string name, data_node &file, string def) {
-    string s = file.get_child_by_name("p" + to_string((long long) (player + 1)) + "_" + name)->get_value_or_default((player == 0) ? def : "");
+    string s = file.get_child_by_name("p" + itos((player + 1)) + "_" + name)->get_value_or_default((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
     
@@ -1144,10 +1277,10 @@ void load_game_content() {
             }
         }
         
-        unsigned char percipitation_type = toi(cur_weather->get_child_by_name("percipitation_type")->get_value_or_default(to_string((long long) PERCIPITATION_TYPE_NONE)));
+        unsigned char percipitation_type = toi(cur_weather->get_child_by_name("percipitation_type")->get_value_or_default(itos(PERCIPITATION_TYPE_NONE)));
         interval percipitation_frequency = interval(cur_weather->get_child_by_name("percipitation_frequency")->value);
         interval percipitation_speed = interval(cur_weather->get_child_by_name("percipitation_speed")->value);
-        interval percipitation_angle = interval(cur_weather->get_child_by_name("percipitation_angle")->get_value_or_default(to_string((long double) (M_PI + M_PI_2))));
+        interval percipitation_angle = interval(cur_weather->get_child_by_name("percipitation_angle")->get_value_or_default(ftos((M_PI + M_PI_2))));
         
         weather_conditions[name] = weather(name, lighting, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
@@ -1167,13 +1300,6 @@ vector<hitbox> load_hitboxes(data_node* frame_node) {
         
         cur_hitbox->name = hitbox_node->get_child_by_name("name")->value;
         cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
-        vector<string> coords = split(hitbox_node->get_child_by_name("coords")->value);
-        if(coords.size() >= 3) {
-            cur_hitbox->x = tof(coords[0]);
-            cur_hitbox->y = tof(coords[1]);
-            cur_hitbox->z = tof(coords[2]);
-        }
-        cur_hitbox->radius = tof(hitbox_node->get_child_by_name("radius")->value);
         cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
         cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
         cur_hitbox->shake_angle = tof(hitbox_node->get_child_by_name("shake_angle")->value);
@@ -1220,7 +1346,7 @@ void load_mob_types(string folder, unsigned char type) {
         mt->max_health = toi(file.get_child_by_name("max_health")->value);
         mt->move_speed = tof(file.get_child_by_name("move_speed")->value);
         mt->near_radius = tof(file.get_child_by_name("near_radius")->value);
-        mt->rotation_speed = tof(file.get_child_by_name("rotation_speed")->get_value_or_default(to_string((long double) DEF_ROTATION_SPEED)));
+        mt->rotation_speed = tof(file.get_child_by_name("rotation_speed")->get_value_or_default(ftos(DEF_ROTATION_SPEED)));
         mt->sight_radius = tof(file.get_child_by_name("sight_radius")->value);
         mt->size = tof(file.get_child_by_name("size")->value);
         mt->weight = tof(file.get_child_by_name("weight")->value);
@@ -1257,7 +1383,7 @@ void load_mob_types(string folder, unsigned char type) {
             lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
             lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
             lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
-            lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(to_string((long double) DEF_WHISTLE_RANGE)));
+            lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(ftos(DEF_WHISTLE_RANGE)));
             lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
             
             leader_types[lt->name] = lt;
@@ -1372,16 +1498,16 @@ void load_options() {
     }
     
     for(unsigned char p = 0; p < 4; p++) {
-        mouse_moves_cursor[p] = tob(file.get_child_by_name("p" + to_string((long long) (p + 1)) + "_mouse_moves_cursor")->get_value_or_default((p == 0) ? "true" : "false"));
+        mouse_moves_cursor[p] = tob(file.get_child_by_name("p" + itos((p + 1)) + "_mouse_moves_cursor")->get_value_or_default((p == 0) ? "true" : "false"));
     }
     
     //Other options.
     daylight_effect = tob(file.get_child_by_name("daylight_effect")->get_value_or_default("true"));
     game_fps = toi(file.get_child_by_name("fps")->get_value_or_default("30"));
-    scr_h = toi(file.get_child_by_name("height")->get_value_or_default(to_string((long long) DEF_SCR_H)));
+    scr_h = toi(file.get_child_by_name("height")->get_value_or_default(itos(DEF_SCR_H)));
     particle_quality = toi(file.get_child_by_name("particle_quality")->get_value_or_default("2"));
     pretty_whistle = tob(file.get_child_by_name("pretty_whistle")->get_value_or_default("true"));
-    scr_w = toi(file.get_child_by_name("width")->get_value_or_default(to_string((long long) DEF_SCR_W)));
+    scr_w = toi(file.get_child_by_name("width")->get_value_or_default(itos(DEF_SCR_W)));
     smooth_scaling = tob(file.get_child_by_name("smooth_scaling")->get_value_or_default("true"));
 }
 
@@ -1478,7 +1604,7 @@ void pluck_pikmin(leader* l, pikmin* p) {
 /* ----------------------------------------------------------------------------
  * Returns a random number between the provided range, inclusive.
  */
-inline float random(float min, float max) {
+float random(float min, float max) {
     if(max == min) return min;
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
@@ -1644,6 +1770,16 @@ void remove_from_party(mob* member) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Rotates a point by an angle. The x and y are meant to represent the difference between the point and the center of the rotation.
+ */
+void rotate_point(float x, float y, float angle, float* final_x, float* final_y) {
+    float c = cos(angle);
+    float s = sin(angle);
+    if(final_x) *final_x = c * x - s * y;
+    if(final_y) *final_y = s * x + c * y;
+}
+
+/* ----------------------------------------------------------------------------
  * Saves the player's options.
  */
 void save_options() {
@@ -1657,7 +1793,7 @@ void save_options() {
     
     //Tell the map what they are.
     for(unsigned char p = 0; p < 4; p++) {
-        string prefix = "p" + to_string((long long) (p + 1)) + "_";
+        string prefix = "p" + itos((p + 1)) + "_";
         grouped_controls[prefix + "punch"] = "";
         grouped_controls[prefix + "whistle"] = "";
         grouped_controls[prefix + "move_right"] = "";
@@ -1694,7 +1830,7 @@ void save_options() {
     
     size_t n_controls = controls.size();
     for(size_t c = 0; c < n_controls; c++) {
-        string name = "p" + to_string((long long) (controls[c].player + 1)) + "_";
+        string name = "p" + itos((controls[c].player + 1)) + "_";
         if(controls[c].action == BUTTON_PUNCH)                     name += "punch";
         else if(controls[c].action == BUTTON_WHISTLE)              name += "whistle";
         else if(controls[c].action == BUTTON_MOVE_RIGHT)           name += "move_right";
@@ -1739,16 +1875,16 @@ void save_options() {
     }
     
     for(unsigned char p = 0; p < 4; p++) {
-        al_fwrite(file, "p" + to_string((long long) (p + 1)) + "_mouse_moves_cursor=" + btos(mouse_moves_cursor[p]) + "\n");
+        al_fwrite(file, "p" + itos((p + 1)) + "_mouse_moves_cursor=" + btos(mouse_moves_cursor[p]) + "\n");
     }
     
     //Other options.
     al_fwrite(file, "daylight_effect=" + btos(daylight_effect) + "\n");
-    al_fwrite(file, "fps=" + to_string((long long) game_fps) + "\n");
-    al_fwrite(file, "height=" + to_string((long long) scr_h) + "\n");
-    al_fwrite(file, "particle_quality=" + to_string((long long) particle_quality) + "\n");
+    al_fwrite(file, "fps=" + itos(game_fps) + "\n");
+    al_fwrite(file, "height=" + itos(scr_h) + "\n");
+    al_fwrite(file, "particle_quality=" + itos(particle_quality) + "\n");
     al_fwrite(file, "pretty_whistle=" + btos(pretty_whistle) + "\n");
-    al_fwrite(file, "width=" + to_string((long long) scr_w) + "\n");
+    al_fwrite(file, "width=" + itos(scr_w) + "\n");
     al_fwrite(file, "smooth_scaling=" + btos(smooth_scaling) + "\n");
     
     al_fclose(file);
@@ -2039,11 +2175,11 @@ void use_spray(size_t spray_nr) {
 }
 
 //Calls al_fwrite, but with an std::string instead of a c-string.
-inline void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
+void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
 //Converts a boolean to a string, returning either "true" or "false".
-inline string btos(bool b) { return b ? "true" : "false"; }
+string btos(bool b) { return b ? "true" : "false"; }
 //Converts a string to a boolean, judging by the English language words that represent true and false.
-inline bool tob(string s) {
+bool tob(string s) {
     s = str_to_lower(s);
     s = trim_spaces(s);
     if(s == "yes" || s == "true" || s == "y" || s == "t") return true;
@@ -2081,6 +2217,6 @@ ALLEGRO_COLOR toc(string s) {
     return c;
 }
 //Converts a string to a float, trimming the spaces and accepting commas or points.
-inline double tof(string s) { s = trim_spaces(s); replace(s.begin(), s.end(), ',', '.'); return atof(s.c_str()); }
+double tof(string s) { s = trim_spaces(s); replace(s.begin(), s.end(), ',', '.'); return atof(s.c_str()); }
 //Converts a string to an integer.
-inline int toi(string s) { return tof(s); }
+int toi(string s) { return tof(s); }

@@ -100,8 +100,8 @@ void do_area_editor_logic() {
     al_use_transform(&id_transform);
     
     al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0,
-                 (to_string((long long) (mouse_cursor_x - cam_x / cam_zoom)) + "," +
-                  to_string((long long) (mouse_cursor_y - cam_y / cam_zoom))).c_str());;
+                 (itos((mouse_cursor_x - cam_x / cam_zoom)) + "," +
+                  itos((mouse_cursor_y - cam_y / cam_zoom))).c_str());;
                   
     al_flip_display();
 }

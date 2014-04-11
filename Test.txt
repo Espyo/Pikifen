@@ -1,1939 +1,812 @@
 animations{
 	attack{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			attack1{
 				duration=0.08
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.61291 0.0508556 0
-						radius=27.324
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-5.25741 0.159315 0
-						radius=27.3772
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackr{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.53193 0 0
-						radius=27.2448
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackl{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.2133 -0.318631 0
-						radius=27.7103
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackr{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.53193 -0.159315 0
-						radius=26.9361
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackl{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.2133 0 0
-						radius=27.6792
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackr{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-5.89467 -0.318631 0
-						radius=27.2727
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackl{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.05398 -0.477946 0
-						radius=28.4122
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			attackr{
+				duration=0.07
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=200
-				file_w=96
-				file_h=56
-				game_w=96
-				game_h=56
-				offset_x=14
-				offset_y=0
+			attackl{
+				duration=0.07
+			}
+			attackr{
+				duration=0.07
+			}
+			attackl{
+				duration=0.07
+			}
+			attackr{
+				duration=0.07
+			}
+			attackl{
+				duration=0.07
+			}
+			attack2{
 				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=1
-						coords=47.711 0.212049 0
-						radius=8.18519
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-5.9519 0.169421 0
-						radius=27.7296
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=23.7987 -0.836463 0
-						radius=14.9835
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=200
-				file_w=152
-				file_h=56
-				game_w=152
-				game_h=56
-				offset_x=42
-				offset_y=0
+			attack3{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=1
-						coords=51.3158 1.04902e-007 0
-						radius=8.05786
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=1
-						coords=68.2797 0.424098 0
-						radius=8.90605
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=1
-						coords=85.4557 -0.424097 0
-						radius=7.84581
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=1
-						coords=101.783 -0.212049 0
-						radius=8.4846
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-4.12887 -0.0233307 0
-						radius=28.0007
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=26.0057 0.127323 0
-						radius=16.066
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=200
-				file_w=96
-				file_h=56
-				game_w=96
-				game_h=56
-				offset_x=14
-				offset_y=0
+			attack2{
 				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=1
-						coords=46.2266 1.04308e-007 0
-						radius=8.91614
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-6.13177 -0.826436 0
-						radius=27.915
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=23.7015 -0.557209 0
-						radius=13.9714
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			idle{
 				duration=0.08
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-8.60303 -0.159315 0
-						radius=25.1764
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=17.0467 -0.637262 0
-						radius=14.5012
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=200
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			attack1{
 				duration=0.08
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-6.69125 0.159315 0
-						radius=27.7323
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			idle{
 				duration=0.4
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-7.16919 0.159315 0
-						radius=27.2546
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=14.0198 -0.159315 0
-						radius=17.2068
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	burrow{
-		frames{
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			unburrow3{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-8.48195 0.212049 0
-						radius=25.4467
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow2{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-5.93737 0.424098 0
-						radius=23.3408
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.54459 -1.48434 0
-						radius=22.9101
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrowr{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-0.636147 0 0
-						radius=21.6217
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.12049 -1.06024 0
-						radius=22.4862
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrowl{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-1.27229 -0.636146 0
-						radius=21.3833
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-1.06024 -0.636146 0
-						radius=21.4264
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-1.69639 0 0
-						radius=22.3809
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	burrowed{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			unburrow1{
 				duration=0
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-0.636147 -0.848195 0
-						radius=21.4211
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	die{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=16
+		frame_instances{
+			die1{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			idlenh{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die1{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			idlenh{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die2{
 				duration=0.08
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die3{
 				duration=0.08
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die4{
 				duration=0.08
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die5{
 				duration=0.08
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=500
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die6{
 				duration=0.4
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=600
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die7{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=500
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die6{
 				duration=0.05
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=700
-				file_y=400
-				file_w=80
-				file_h=56
-				game_w=80
-				game_h=56
-				offset_x=6
-				offset_y=0
+			die8{
 				duration=0.05
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=500
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die6{
 				duration=0.05
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=600
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die7{
 				duration=0.1
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=500
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die6{
 				duration=0.05
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=700
-				file_y=400
-				file_w=80
-				file_h=56
-				game_w=80
-				game_h=56
-				offset_x=6
-				offset_y=0
+			die8{
 				duration=0.05
-				hitboxes=
 			}
-			frame{
-				file=CB.png
-				file_x=500
-				file_y=400
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			die6{
 				duration=0.1
-				hitboxes=
 			}
 		}
-		loop_frame=16
 	}
 	idle{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			idle{
 				duration=0
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-7.84581 0.636146 0
-						radius=26.1035
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=15.6916 -0.424098 0
-						radius=16.9639
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	shake{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			shake1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.96629 -0.636146 0
-						radius=23.9625
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=10.1783 -0.636146 0
-						radius=14.4209
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shaker{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.1181 0.424098 0
-						radius=23.5527
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=11.2386 -0.848195 0
-						radius=13.4195
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shakel{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-10.8145 -0.424098 0
-						radius=22.7249
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=9.96629 -0.424098 0
-						radius=13.3658
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shaker{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-11.6627 -0.424098 0
-						radius=22.2651
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=10.8145 -0.424098 0
-						radius=13.4195
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shakel{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-11.2386 -0.424098 0
-						radius=22.3014
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=11.0265 -0.424098 0
-						radius=12.7512
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-5.08917 -0.424098 0
-						radius=28.443
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
+			shakesr{
+				duration=0.08
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shakesr2{
+				duration=0.08
+			}
+			shakesr{
+				duration=0.08
+			}
+			shakesl{
+				duration=0.08
+			}
+			shakesl2{
+				duration=0.08
+			}
+			shakesl{
+				duration=0.08
+			}
+			shakesr{
+				duration=0.08
+			}
+			shakesr2{
+				duration=0.08
+			}
+			shakesr{
+				duration=0.08
+			}
+			shakesl{
+				duration=0.08
+			}
+			shakesl2{
+				duration=0.08
+			}
+			shakesl{
+				duration=0.08
+			}
+			shaker{
+				duration=0.08
+			}
+			shakel{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-6.78556 -0.424098 0
-						radius=28.3765
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-5.08917 0.424098 0
-						radius=28.8418
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-5.08917 0.424098 0
-						radius=28.0193
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shaker{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-6.14942 -0.424098 0
-						radius=27.9912
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-4.87712 -0.636146 0
-						radius=28.6462
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-5.30122 -0.212049 0
-						radius=28.2415
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shakel{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-6.78556 -0.424098 0
-						radius=27.8293
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-4.24098 -0.424098 0
-						radius=28.4177
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.05
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-4.66507 0.424098 0
-						radius=28.4177
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			shake1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-6.57351 -0.848195 0
-						radius=27.8237
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=2
-						coords=-4.87712 -0.424098 0
-						radius=28.6266
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-10.1783 -0.212049 0
-						radius=22.9023
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=10.1783 -1.06024 0
-						radius=12.767
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.75425 -1.27229 0
-						radius=23.7646
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=12.5109 -0.424098 0
-						radius=10.8477
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.5422 0 0
-						radius=23.5985
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=11.6627 -1.27229 0
-						radius=12.0942
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.5422 -0.212049 0
-						radius=23.97
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=11.8747 0.424098 0
-						radius=12.328
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
-			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=300
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
-				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-10.8145 -0.636146 0
-						radius=23.1143
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=11.8747 -0.212049 0
-						radius=13.1624
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	unburrow{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			unburrow1{
 				duration=0.2
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-3.82357 -0.637262 0
-						radius=24.8532
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrowr{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.1345 -0.164192 0
-						radius=23.063
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.62707 -0.656768 0
-						radius=23.3245
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrowl{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.06476 -0.871724 0
-						radius=22.6403
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-2.46288 -0.328384 0
-						radius=23.1604
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrowr{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-3.77642 -0.492576 0
-						radius=23.8943
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow1{
+				duration=0.1
+			}
+			unburrowl{
+				duration=0.1
+			}
+			unburrow1{
 				duration=0.15
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-3.28384 -0.82096 0
-						radius=23.9771
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=300
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow2{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-7.22445 -1.14934 0
-						radius=22.9875
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=400
-				file_y=100
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			unburrow3{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=-9.35895 -0.82096 0
-						radius=24.1368
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
 	}
 	walk{
-		frames{
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+		loop_frame=0
+		frame_instances{
+			idle{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=13.5 -0.5 0
-						radius=14.2697
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-7.88122 0 0
-						radius=25.961
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=100
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			walkr{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=13.5 -0.5 0
-						radius=14.2697
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-8.04541 -0.328384 0
-						radius=25.13
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=0
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			idle{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=13.5 -0.5 0
-						radius=14.2697
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-7.88122 0.164192 0
-						radius=25.2861
-						multiplier=1.2
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
-			frame{
-				file=CB.png
-				file_x=200
-				file_y=0
-				file_w=68
-				file_h=56
-				game_w=68
-				game_h=56
-				offset_x=0
-				offset_y=0
+			walkl{
 				duration=0.1
-				hitboxes{
-					hitbox{
-						name=
-						type=0
-						coords=13.5 -0.5 0
-						radius=14.2697
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-					hitbox{
-						name=
-						type=0
-						coords=-7.55283 -0.328384 0
-						radius=25.9444
-						multiplier=1
-						shake_angle=0
-						can_pikmin_latch=false
-						swallow=false
-					}
-				}
 			}
 		}
-		loop_frame=16
+	}
+}
+frames{
+	attack1{
+		file=CB.png
+		file_x=0
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	attack2{
+		file=CB.png
+		file_x=300
+		file_y=200
+		file_w=96
+		file_h=56
+		game_w=96
+		game_h=56
+		offs_x=14
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=32 0 0
+				radius=20
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	attack3{
+		file=CB.png
+		file_x=400
+		file_y=200
+		file_w=152
+		file_h=56
+		game_w=152
+		game_h=56
+		offs_x=42
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=32 0 0
+				radius=18
+			}
+			mouth{
+				coords=64 0 0
+				radius=15
+			}
+			mouth{
+				coords=94 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	attackl{
+		file=CB.png
+		file_x=200
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	attackr{
+		file=CB.png
+		file_x=100
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	die1{
+		file=CB.png
+		file_x=0
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die2{
+		file=CB.png
+		file_x=100
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die3{
+		file=CB.png
+		file_x=200
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die4{
+		file=CB.png
+		file_x=300
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die5{
+		file=CB.png
+		file_x=400
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die6{
+		file=CB.png
+		file_x=500
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die7{
+		file=CB.png
+		file_x=600
+		file_y=400
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	die8{
+		file=CB.png
+		file_x=700
+		file_y=400
+		file_w=80
+		file_h=56
+		game_w=80
+		game_h=56
+		offs_x=6
+		offs_y=0
+		hitbox_instances=
+	}
+	idle{
+		file=CB.png
+		file_x=0
+		file_y=0
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	idlenh{
+		file=CB.png
+		file_x=0
+		file_y=0
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+	shake1{
+		file=CB.png
+		file_x=0
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	shakel{
+		file=CB.png
+		file_x=100
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	shaker{
+		file=CB.png
+		file_x=200
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	shakesl{
+		file=CB.png
+		file_x=100
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			shake{
+				coords=-5 0 0
+				radius=28
+			}
+		}
+	}
+	shakesl2{
+		file=CB.png
+		file_x=300
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			shake{
+				coords=-5 0 0
+				radius=28
+			}
+		}
+	}
+	shakesr{
+		file=CB.png
+		file_x=200
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			shake{
+				coords=-5 0 0
+				radius=28
+			}
+		}
+	}
+	shakesr2{
+		file=CB.png
+		file_x=400
+		file_y=300
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			shake{
+				coords=-5 0 0
+				radius=28
+			}
+		}
+	}
+	unburrow1{
+		file=CB.png
+		file_x=0
+		file_y=100
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-2 0 0
+				radius=24
+			}
+		}
+	}
+	unburrow2{
+		file=CB.png
+		file_x=300
+		file_y=100
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-6 0 0
+				radius=24
+			}
+		}
+	}
+	unburrow3{
+		file=CB.png
+		file_x=400
+		file_y=100
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-8 0 0
+				radius=24
+			}
+		}
+	}
+	unburrowl{
+		file=CB.png
+		file_x=200
+		file_y=100
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-2 0 0
+				radius=24
+			}
+		}
+	}
+	unburrowr{
+		file=CB.png
+		file_x=100
+		file_y=100
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-2 0 0
+				radius=24
+			}
+		}
+	}
+	walkl{
+		file=CB.png
+		file_x=200
+		file_y=0
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	walkr{
+		file=CB.png
+		file_x=100
+		file_y=0
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=16 0 0
+				radius=15
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+}
+hitboxes{
+	face{
+		type=0
+		multiplier=1
+		can_pikmin_latch=true
+		elements=
+		shake_angle=0
+		swallowing=false
+	}
+	hide{
+		type=0
+		multiplier=1.2
+		can_pikmin_latch=true
+		elements=
+		shake_angle=0
+		swallowing=false
+	}
+	mouth{
+		type=3
+		multiplier=1
+		can_pikmin_latch=false
+		elements=
+		shake_angle=0
+		swallowing=false
+	}
+	shake{
+		type=2
+		multiplier=1
+		can_pikmin_latch=false
+		elements=
+		shake_angle=0
+		swallowing=false
 	}
 }

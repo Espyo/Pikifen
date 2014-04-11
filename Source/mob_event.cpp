@@ -76,8 +76,8 @@ bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(m->type->animations.find(data) != m->type->animations.end()) {
-            m->anim = animation_instance(&m->type->animations[data]);
+        if(m->type->anim.animations.find(data) != m->type->anim.animations.end()) {
+            m->anim = animation_instance(&m->type->anim.animations[data], &m->type->anim);
             m->anim.start();
         } else {
             error_log("Animation \"" + data + "\" not found, called in the mob type " + m->type->name + "'s script!");
@@ -131,7 +131,7 @@ bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
                 particles.push_back(
                     particle(
                         PARTICLE_TYPE_ENEMY_SPIRIT, bmp_enemy_spirit, m->x, m->y,
-                        0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 128, 255)
+                        0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 192, 255)
                     )
                 );
             }

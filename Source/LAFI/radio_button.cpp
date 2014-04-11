@@ -1,6 +1,10 @@
+#define _USE_MATH_DEFINES
+
+#include <math.h>
+
+#include "const.h"
 #include "label.h"
 #include "radio_button.h"
-#include "radio_button_button.h"
 
 lafi_radio_button::lafi_radio_button(int x1, int y1, int x2, int y2, string text, int group, bool selected, lafi_style* style, unsigned char flags)
     : lafi_widget(x1, y1, x2, y2, style, flags) {
@@ -72,5 +76,29 @@ void lafi_radio_button::unselect() {
     ((lafi_radio_button_button*) widgets["rbb_circle"])->selected = false;
 }
 
-void lafi_radio_button::render() { }
 void lafi_radio_button::draw_self() { }
+
+
+
+
+
+lafi_radio_button_button::lafi_radio_button_button(int x1, int y1, bool selected, lafi_style* style, unsigned char flags)
+    : lafi_widget(x1, y1, x1 + LAFI_RADIO_BUTTON_BUTTON_SIZE, y1 + LAFI_RADIO_BUTTON_BUTTON_SIZE, style, flags) {
+    this->selected = selected;
+    
+}
+
+lafi_radio_button_button::~lafi_radio_button_button() {}
+
+void lafi_radio_button_button::draw_self() {
+    unsigned int w = x2 - x1;
+    unsigned int h = y2 - y1;
+    
+    al_draw_filled_circle(x1 + w / 2, y1 + h / 2, w / 2, get_bg_color());
+    al_draw_arc(x1 + w / 2, y1 + h / 2, w / 2, -M_PI * 0.25, M_PI, get_lighter_bg_color(), 1);
+    al_draw_arc(x1 + w / 2, y1 + h / 2, w / 2, M_PI * 0.75,  M_PI, get_darker_bg_color(),  1);
+    
+    if(selected) {
+        al_draw_filled_circle(x1 + w / 2, y1 + h / 2, w * 0.25, get_fg_color());
+    }
+}
