@@ -23,6 +23,7 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     affected_by_gravity = true;
     
     health = t->max_health;
+    team = MOB_TEAM_NONE;
     
     go_to_target = false;
     gtt_instant = false;

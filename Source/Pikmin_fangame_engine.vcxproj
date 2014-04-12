@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation.cpp" />
     <ClCompile Include="controls.cpp" />
     <ClCompile Include="data_file.cpp" />
     <ClCompile Include="enemy.cpp" />

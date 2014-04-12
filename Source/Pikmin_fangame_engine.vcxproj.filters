@@ -132,6 +132,9 @@
     <ClCompile Include="LAFI\minor.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">

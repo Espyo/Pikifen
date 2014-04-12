@@ -354,6 +354,7 @@ void do_logic() {
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5) continue;
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
+                    if(!closest_hitbox) continue;
                     pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
                     
                     float actual_hx, actual_hy;
@@ -392,6 +393,7 @@ void do_logic() {
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) continue;
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
+                    if(!closest_hitbox) continue;
                     pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
                     
                     pik_ptr->attacking_mob = mob_ptr;

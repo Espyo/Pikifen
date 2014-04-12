@@ -776,6 +776,7 @@ pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserv
  */
 hitbox_instance* get_closest_hitbox(float x, float y, mob* m) {
     frame* f = m->anim.get_frame();
+    if(!f) return NULL;
     hitbox_instance* closest_hitbox = NULL;
     float closest_hitbox_dist = 0;
     
