@@ -23,6 +23,8 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     affected_by_gravity = true;
     
     health = t->max_health;
+    invuln_period = 0;
+    knockdown_period = 0;
     team = MOB_TEAM_NONE;
     
     go_to_target = false;
@@ -33,17 +35,20 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     target_rel_y = NULL;
     
     focused_prey = NULL;
+    for(unsigned char e = 0; e < N_MOB_EVENTS; e++) events_queued[e] = 0;
+    events_queued[MOB_EVENT_SPAWN] = 1;
+    
     timer = timer_interval = 0;
     script_wait = 0;
     script_wait_event = NULL;
-    spawn_event_done = false;
     dead = false;
     state = MOB_STATE_IDLE;
     time_in_state = 0;
     
     following_party = NULL;
     was_thrown = false;
-    uncallable_period = 0;
+    unwhistlable_period = 0;
+    untouchable_period = 0;
     party = NULL;
     
     carrier_info = NULL;
@@ -58,12 +63,14 @@ void mob::tick() {
     y += delta_t_mult * speed_y;
     z += delta_t_mult * speed_z;
     
-    if(z <= sec->floors[0].z && was_airborne) {
+    if(z <= sec->floors[0].z) {
         z = sec->floors[0].z;
-        speed_x = 0;
-        speed_y = 0;
-        speed_z = 0;
-        was_thrown = false;
+        if(was_airborne) {
+            speed_x = 0;
+            speed_y = 0;
+            speed_z = 0;
+            was_thrown = false;
+        }
     }
     
     //Gravity.
@@ -72,7 +79,7 @@ void mob::tick() {
     }
     
     //Chasing a target.
-    if(go_to_target && speed_z == 0) {
+    if(go_to_target && ((speed_z == 0 && knockdown_period == 0) || gtt_instant)) {
         float final_target_x = target_x, final_target_y = target_y;
         if(target_rel_x) final_target_x += *target_rel_x;
         if(target_rel_y) final_target_y += *target_rel_y;
@@ -90,15 +97,19 @@ void mob::tick() {
                 //Only face the way the mob wants to go if it's still going. Otherwise, let other code turn them whichever way it wants.
                 face(new_angle);
             }
-        }
+        } else reached_destination = true;
     }
     
     //ToDo collisions
     
     //Other things.
-    if(uncallable_period > 0) {
-        uncallable_period -= (1.0 / game_fps);
-        if(uncallable_period < 0) uncallable_period = 0;
+    if(unwhistlable_period > 0) {
+        unwhistlable_period -= (1.0 / game_fps);
+        unwhistlable_period = max(unwhistlable_period, 0);
+    }
+    if(untouchable_period > 0) {
+        untouchable_period -= (1.0 / game_fps);
+        untouchable_period = max(untouchable_period, 0);
     }
     
     if(party) {
@@ -121,6 +132,18 @@ void mob::tick() {
     
     time_in_state += 1.0 / game_fps;
     
+    if(invuln_period > 0) {
+        invuln_period -= 1.0 / game_fps;
+        invuln_period = max(invuln_period, 0);
+    }
+    
+    if(speed_z == 0) {
+        if(knockdown_period > 0) {
+            knockdown_period -= 1.0 / game_fps;
+            knockdown_period = max(knockdown_period, 0);
+        }
+    }
+    
     
     //Change the facing angle to the angle the mob wants to face.
     if(angle > M_PI)  angle -= M_PI * 2;
@@ -135,108 +158,135 @@ void mob::tick() {
     angle += sign(angle_dif) * min(type->rotation_speed / game_fps, fabs(angle_dif));
     
     //Scripts.
+    if(
+        get_mob_event(this, MOB_EVENT_SEE_PREY, true) ||
+        get_mob_event(this, MOB_EVENT_LOSE_PREY, true) ||
+        get_mob_event(this, MOB_EVENT_NEAR_PREY, true)
+    ) {
+        mob* actual_prey = NULL;
+        if(focused_prey) if(!focused_prey->dead) actual_prey = focused_prey;
+        
+        if(actual_prey) {
+            float d = dist(x, y, actual_prey->x, actual_prey->y);
+            
+            //Prey is near.
+            if(d <= type->near_radius && script_wait == 0) {
+                focused_prey_near = true;
+                events_queued[MOB_EVENT_SEE_PREY] = 0;
+                events_queued[MOB_EVENT_LOSE_PREY] = 0;
+                events_queued[MOB_EVENT_NEAR_PREY] = 2;
+            }
+            
+            //Prey is suddenly out of sight.
+            if(d > type->sight_radius) {
+                unfocus_mob(this, actual_prey, true);
+                
+            } else {
+            
+                //Prey was near, but is now far.
+                if(focused_prey_near) {
+                    if( d > type->near_radius) {
+                        focused_prey_near = false;
+                        events_queued[MOB_EVENT_NEAR_PREY] = 0;
+                        events_queued[MOB_EVENT_LOSE_PREY] = 0;
+                        events_queued[MOB_EVENT_SEE_PREY] = 1;
+                    }
+                }
+            }
+            
+        } else {
+        
+            //Find a Pikmin.
+            if(!actual_prey) {
+                size_t n_pikmin = pikmin_list.size();
+                for(size_t p = 0; p < n_pikmin; p++) {
+                    pikmin* pik_ptr = pikmin_list[p];
+                    if(pik_ptr->dead) continue;
+                    
+                    float d = dist(x, y, pik_ptr->x, pik_ptr->y);
+                    if(d <= type->sight_radius) {
+                        focus_mob(this, pik_ptr, d < type->near_radius, true);
+                        break;
+                    }
+                }
+            }
+            
+            if(!focused_prey) {
+                //Try the captains now.
+                size_t n_leaders = leaders.size();
+                for(size_t l = 0; l < n_leaders; l++) {
+                    leader* leader_ptr = leaders[l];
+                    if(leader_ptr->dead) continue;
+                    
+                    float d = dist(x, y, leader_ptr->x, leader_ptr->y);
+                    if(d <= type->sight_radius) {
+                        focus_mob(this, leader_ptr, d < type->near_radius, true);
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    if(get_mob_event(this, MOB_EVENT_TIMER, true)) {
+        if(timer > 0 && timer_interval > 0) {
+            timer -= 1.0 / game_fps;
+            if(timer <= 0) {
+                timer = timer_interval;
+                events_queued[MOB_EVENT_TIMER] = 1;
+            }
+        }
+    }
+    
+    if(get_mob_event(this, MOB_EVENT_REACH_HOME, true)) {
+        if(reached_destination && target_code == MOB_TARGET_HOME) {
+            target_code = MOB_TARGET_NONE;
+            events_queued[MOB_EVENT_REACH_HOME] = 1;
+        }
+    }
+    
+    if(!dead && health <= 0) {
+        dead = true;
+        if(get_mob_event(this, MOB_EVENT_DEATH, true)) {
+            events_queued[MOB_EVENT_DEATH] = 1;
+        }
+    }
+    
+    //Actuall run the scripts, if possible.
+    bool ran_event = false;
+    for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
+        if(events_queued[e] == 1) {
+            mob_event* ev_ptr = get_mob_event(this, e);
+            if(ev_ptr) {
+                ev_ptr->run(this, 0);
+                ran_event = true;
+                events_queued[e] = 0;
+            }
+        }
+    }
+    if(!ran_event) { //Try the low priority ones now.
+        for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
+            if(events_queued[e] == 2) {
+                mob_event* ev_ptr = get_mob_event(this, e);
+                if(ev_ptr) {
+                    ev_ptr->run(this, 0);
+                    events_queued[e] = 0;
+                }
+            }
+        }
+    } else {
+        for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
+            if(events_queued[e] == 2) events_queued[e] = 0;
+        }
+    }
+    
     if(script_wait > 0) {
         script_wait -= 1.0 / game_fps;
         if(script_wait <= 0) {
             script_wait = 0;
             
             script_wait_event->run(this, script_wait_action); //Continue the waiting event.
-        }
-    }
-    
-    mob_event* ev_ptr = NULL;
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_NEAR_PREY);
-    if(ev_ptr) {
-        if(focused_prey) {
-            if(!focused_prey_near) {
-                if(dist(x, y, focused_prey->x, focused_prey->y) <= type->near_radius) {
-                    focused_prey_near = true;
-                    ev_ptr->run(this, 0);
-                }
-            }
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_SEE_PREY);
-    if(ev_ptr) {
-        if(focused_prey && focused_prey_near) {
-            if(dist(x, y, focused_prey->x, focused_prey->y) > type->near_radius) {
-                focused_prey_near = false;
-                ev_ptr->run(this, 0);
-            }
-        }
-        
-        //Find a Pikmin.
-        if(!focused_prey) {
-            size_t n_pikmin = pikmin_list.size();
-            for(size_t p = 0; p < n_pikmin; p++) {
-                pikmin* pik_ptr = pikmin_list[p];
-                
-                if(dist(x, y, pik_ptr->x, pik_ptr->y) <= type->sight_radius) {
-                    focused_prey = pik_ptr;
-                    ev_ptr->run(this, 0);
-                    break;
-                }
-            }
-        }
-        
-        if(!focused_prey) {
-            //Try the captains now.
-            size_t n_leaders = leaders.size();
-            for(size_t l = 0; l < n_leaders; l++) {
-                leader* leader_ptr = leaders[l];
-                
-                if(dist(x, y, leader_ptr->x, leader_ptr->y) <= type->sight_radius) {
-                    focused_prey = leader_ptr;
-                    ev_ptr->run(this, 0);
-                    break;
-                }
-            }
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_LOSE_PREY);
-    if(ev_ptr) {
-        //Lose the Pikmin in focus.
-        if(focused_prey) {
-            if(dist(x, y, focused_prey->x, focused_prey->y) > type->sight_radius) {
-                focused_prey = NULL;
-                ev_ptr->run(this, 0);
-            }
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_TIMER);
-    if(ev_ptr && timer_interval > 0) {
-        if(timer > 0) {
-            timer -= 1.0 / game_fps;
-            if(timer <= 0) {
-                timer = timer_interval;
-                ev_ptr->run(this, 0);
-            }
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_SPAWN);
-    if(ev_ptr && !spawn_event_done) {
-        spawn_event_done = true;
-        ev_ptr->run(this, 0);
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_REACH_HOME);
-    if(ev_ptr) {
-        if(reached_destination && target_code == MOB_TARGET_HOME) {
-            target_code = MOB_TARGET_NONE;
-            ev_ptr->run(this, 0);
-        }
-    }
-    
-    ev_ptr = get_mob_event(this, MOB_EVENT_DEATH);
-    if(ev_ptr && !dead) {
-        if(health <= 0) {
-            dead = true;
-            ev_ptr->run(this, 0);
         }
     }
     
@@ -273,13 +323,13 @@ void mob::face(float new_angle) {
     intended_angle = new_angle;
 }
 
-float mob::get_base_speed() {
-    return this->type->move_speed;
-}
-
 void mob::set_state(unsigned char new_state) {
     state = new_state;
     time_in_state = 0;
+}
+
+float mob::get_base_speed() {
+    return this->type->move_speed;
 }
 
 mob::~mob() {}

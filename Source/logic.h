@@ -289,16 +289,17 @@ void do_logic() {
                 !pik_ptr->following_party &&
                 pik_ptr->state != PIKMIN_STATE_BURIED &&
                 !pik_ptr->speed_z &&
-                !pik_ptr->uncallable_period;
-            bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling);
+                !pik_ptr->being_chomped;
+            bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling && pik_ptr->unwhistlable_period == 0);
             bool touched =
                 dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
                 pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
-                !cur_leader_ptr->carrier_info;
+                !cur_leader_ptr->carrier_info &&
+                pik_ptr->untouchable_period == 0;
             bool is_busy = (pik_ptr->carrying_mob || pik_ptr->attacking_mob);
             
-            if(pik_ptr->health <= 0 && !pik_ptr->dead) {
-                pik_ptr->dead = true;
+            if(pik_ptr->dead) {
+            
                 pik_ptr->to_delete = true;
                 particles.push_back(
                     particle(
@@ -345,26 +346,29 @@ void do_logic() {
             
             //Latch onto a mob.
             size_t n_mobs = mobs.size();
-            if(pik_ptr->was_thrown) {
+            if(pik_ptr->was_thrown && !pik_ptr->attacking_mob) {
                 for(size_t m = 0; m < n_mobs; m++) {
                 
                     mob* mob_ptr = mobs[m];
                     if(mob_ptr->dead) continue;
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
                     if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5) continue;
+                    if(pik_ptr->z > mob_ptr->z + 100) continue; //ToDo this isn't taking height into account.
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
-                    pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
+                    pik_ptr->enemy_hitbox_name = closest_hitbox->hitbox_name;
+                    pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
                     
                     float actual_hx, actual_hy;
                     rotate_point(closest_hitbox->x, closest_hitbox->y, mob_ptr->angle, &actual_hx, &actual_hy);
                     actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
                     
-                    //ToDo there should be a way to optimize this.
                     float x_dif = pik_ptr->x - actual_hx;
                     float y_dif = pik_ptr->y - actual_hy;
-                    rotate_point(x_dif, y_dif, -mob_ptr->angle, &pik_ptr->attacking_hitbox_x, &pik_ptr->attacking_hitbox_y);
+                    coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
+                    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
+                    pik_ptr->enemy_hitbox_dist /= closest_hitbox->radius; //Distance in units to distance in percentage.
                     
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
@@ -382,7 +386,7 @@ void do_logic() {
                  !pik_ptr->attacking_mob &&
                  pik_ptr->state != PIKMIN_STATE_BURIED &&
                  !pik_ptr->speed_z) ||
-                (pik_ptr->following_party && moving_group_intensity)
+                (pik_ptr->following_party == cur_leader_ptr && moving_group_intensity)
             ) {
                 for(size_t m = 0; m < n_mobs; m++) {
                 
@@ -390,11 +394,11 @@ void do_logic() {
                     
                     if(mob_ptr->dead) continue;
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
-                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) continue;
+                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range) continue;
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
-                    pik_ptr->attacking_hitbox_name = closest_hitbox->hitbox_name;
+                    pik_ptr->enemy_hitbox_name = closest_hitbox->hitbox_name;
                     
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->latched = false;
@@ -412,7 +416,7 @@ void do_logic() {
                  !pik_ptr->attacking_mob &&
                  pik_ptr->state != PIKMIN_STATE_BURIED &&
                  !pik_ptr->speed_z) ||
-                (pik_ptr->following_party && moving_group_intensity)
+                (pik_ptr->following_party == cur_leader_ptr && moving_group_intensity)
             ) {
                 for(size_t m = 0; m < n_mobs; m++) {
                 
@@ -422,7 +426,7 @@ void do_logic() {
                     if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; //No more room.
                     if(mob_ptr->state == MOB_STATE_BEING_DELIVERED) continue;
                     
-                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + PIKMIN_MIN_TASK_RANGE) {
+                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range) {
                         pik_ptr->wants_to_carry = mob_ptr;
                         remove_from_party(pik_ptr);
                         pik_ptr->set_state(PIKMIN_STATE_MOVING_TO_CARRY_SPOT);
@@ -475,22 +479,25 @@ void do_logic() {
                         start_carrying(pik_ptr->carrying_mob, pik_ptr, NULL);
                     }
                     
-                    pik_ptr->uncallable_period = 0;
+                    pik_ptr->unwhistlable_period = 0;
                     sfx_pikmin_carrying_grab.play(0.03, false);
                 }
             }
             
             //Fighting an enemy.
             if(pik_ptr->attacking_mob) {
-                hitbox_instance* h_ptr = get_hitbox(pik_ptr->attacking_mob, pik_ptr->attacking_hitbox_name);
+                hitbox_instance* h_ptr = get_hitbox(pik_ptr->attacking_mob, pik_ptr->enemy_hitbox_name);
                 if(h_ptr) {
                     float actual_hx, actual_hy;
                     rotate_point(h_ptr->x, h_ptr->y, pik_ptr->attacking_mob->angle, &actual_hx, &actual_hy);
                     actual_hx += pik_ptr->attacking_mob->x; actual_hy += pik_ptr->attacking_mob->y;
                     
-                    if(pik_ptr->latched) {
+                    if(pik_ptr->latched || pik_ptr->being_chomped) {
                         float final_px, final_py;
-                        rotate_point(pik_ptr->attacking_hitbox_x, pik_ptr->attacking_hitbox_y, pik_ptr->attacking_mob->angle, &final_px, &final_py);
+                        angle_to_coordinates(
+                            pik_ptr->enemy_hitbox_angle + pik_ptr->attacking_mob->angle,
+                            pik_ptr->enemy_hitbox_dist * h_ptr->radius,
+                            &final_px, &final_py);
                         final_px += actual_hx; final_py += actual_hy;
                         
                         pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
@@ -509,10 +516,10 @@ void do_logic() {
                     }
                 }
                 
-                pik_ptr->attack_time -= 1.0 / game_fps;
-                if(pik_ptr->attack_time <= 0) {
+                if(!pik_ptr->being_chomped) pik_ptr->attack_time -= 1.0 / game_fps;
+                if(pik_ptr->attack_time <= 0 && pik_ptr->knockdown_period == 0) {
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                    attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power);
+                    attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power, 0, 0, 0, 0);
                     sfx_attack.play(0.06, false);
                     sfx_pikmin_attack.play(0.06, false);
                     particles.push_back(
@@ -531,26 +538,54 @@ void do_logic() {
                     pik_ptr->state = PIKMIN_STATE_CELEBRATING;
                     pik_ptr->remove_target(true);
                     pik_ptr->attacking_mob = NULL;
+                    pik_ptr->being_chomped = false;
                 }
             }
             
-            //Touching mobs.
+            //Touching a mob's hitboxes.
             for(size_t m = 0; m < mobs.size(); m++) {
                 if(typeid(*mobs[m]) == typeid(pikmin)) continue;
                 mob* m_ptr = mobs[m];
                 frame* f_ptr = m_ptr->anim.get_frame();
-                if(f_ptr == NULL) continue; //ToDo report
+                if(f_ptr == NULL) continue;
                 
                 for(size_t h = 0; h < f_ptr->hitbox_instances.size(); h++) {
-                    hitbox_instance* h_ptr = &f_ptr->hitbox_instances[h];
+                    hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[h];
                     float s = sin(m_ptr->angle);
                     float c = cos(m_ptr->angle);
-                    float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
-                    float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
+                    float h_x = m_ptr->x + (hi_ptr->x * c - hi_ptr->y * s);
+                    float h_y = m_ptr->y + (hi_ptr->x * s + hi_ptr->y * c);
                     
-                    if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + h_ptr->radius) {
-                        if(m_ptr->type->anim.hitboxes[h_ptr->hitbox_name].type == HITBOX_TYPE_ATTACK) {
-                            pik_ptr->health = 0;
+                    if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + hi_ptr->radius) {
+                        hitbox* h_ptr = &m_ptr->type->anim.hitboxes[hi_ptr->hitbox_name];
+                        if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                            float knockback_angle = h_ptr->angle;
+                            if(knockback_angle == -1) {
+                                knockback_angle = atan2(pik_ptr->y - h_y, pik_ptr->x - h_x);
+                            }
+                            pik_ptr->latched = false;
+                            attack(m_ptr, pik_ptr, false, h_ptr->multiplier, knockback_angle, h_ptr->knockback, 1, 1);
+                        }
+                        
+                        if(find_in_vector(m_ptr->chomp_hitboxes, hi_ptr->hitbox_name) && !pik_ptr->being_chomped) {
+                            if(m_ptr->chomping_pikmin.size() >= m_ptr->type->chomp_max_victims) continue;
+                            
+                            float x_dif = pik_ptr->x - h_x;
+                            float y_dif = pik_ptr->y - h_y;
+                            coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
+                            pik_ptr->enemy_hitbox_angle -= m_ptr->angle; //Relative to 0 degrees.
+                            pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
+                            
+                            pik_ptr->latched = false;
+                            pik_ptr->enemy_hitbox_name = h_ptr->name;
+                            pik_ptr->attacking_mob = m_ptr;
+                            pik_ptr->being_chomped = true;
+                            sfx_pikmin_caught.play(0.06, false);
+                            
+                            m_ptr->events_queued[MOB_EVENT_ATTACK_HIT] = 1;
+                            m_ptr->events_queued[MOB_EVENT_ATTACK_MISS] = 0;
+                            m_ptr->chomping_pikmin.push_back(pik_ptr);
+                            focus_mob(m_ptr, pik_ptr, true, false);
                         }
                     }
                 }

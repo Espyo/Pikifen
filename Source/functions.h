@@ -31,11 +31,13 @@
 #define show_widget(w) (w)->flags &= ~(LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED);
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
+//Returns the task range for whether the Pikmin is idling or being C-sticked.
+#define task_range ((pik_ptr->following_party == cur_leader_ptr && moving_group_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
 
 void               active_control();
 void               add_to_party(mob* party_leader, mob* new_member);
 void               angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord);
-void               attack(mob* m1, mob* m2, bool m1_is_pikmin, float m1_attack_power);
+void               attack(mob* m1, mob* m2, bool m1_is_pikmin, float damage, float angle, float knockback, float new_invuln_period, float new_knockdown_period);
 ALLEGRO_COLOR      change_alpha(ALLEGRO_COLOR c, unsigned char a);
 void               coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude);
 void               create_mob(mob* m);
@@ -51,6 +53,8 @@ void               draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w,
 void               draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text);
 void               drop_mob(pikmin* p);
 void               error_log(string s, data_node* d = NULL);
+bool               find_in_vector(vector<string> v, string s);
+void               focus_mob(mob* m1, mob* m2, bool is_near, bool call_event);
 vector<string>     folder_to_vector(string folder_name, bool folders);
 void               generate_area_images();
 pikmin*            get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserved);
@@ -58,7 +62,7 @@ hitbox_instance*   get_closest_hitbox(float x, float y, mob* m);
 ALLEGRO_COLOR      get_daylight_color();
 hitbox_instance*   get_hitbox(mob* m, string name);
 float              get_leader_to_group_center_dist(mob* l);
-mob_event*         get_mob_event(mob* m, unsigned char e);
+mob_event*         get_mob_event(mob* m, unsigned char e, bool query = false);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 void               give_pikmin_to_onion(onion* o, unsigned amount);
 ALLEGRO_COLOR      interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2);
@@ -94,6 +98,7 @@ void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 void               stop_whistling();
 string             str_to_lower(string s);
 //bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
+void               unfocus_mob(mob* m1, mob* m2, bool call_event);
 void               use_spray(size_t spray_nr);
 
 void al_fwrite(ALLEGRO_FILE* f, string s);

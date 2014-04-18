@@ -15,12 +15,13 @@ public:
     pikmin_type* pik_type;
     float hazard_time_left;  //Time it has left until it drowns/chokes/etc.
     
-    mob* attacking_mob;           //Enemy it's attacking.
-    bool latched;                 //Is the Pikmin latched onto the enemy it's attacking?
-    string attacking_hitbox_name; //Name of the hitbox the Pikmin is attacking.
-    float attacking_hitbox_x;     //X relative to the hitbox it's attacking, only valid when latching.
-    float attacking_hitbox_y;     //Same, but Y.
-    float attack_time;            //Time left until the strike.
+    mob* attacking_mob;       //Enemy it's attacking.
+    bool latched;             //Is the Pikmin latched onto the enemy it's attacking?
+    string enemy_hitbox_name; //Name of the hitbox the Pikmin is attached to.
+    float enemy_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
+    float enemy_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
+    float attack_time;        //Time left until the strike.
+    bool being_chomped;       //Is the Pikmin stuck in the enemy's jaws?
     
     mob* wants_to_carry;     //Mob it wants to carry.
     mob* carrying_mob;       //Mob it's carrying.

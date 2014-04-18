@@ -33,7 +33,6 @@ using namespace std;
 //Bitmaps.
 extern ALLEGRO_BITMAP* bmp_blue[3];
 extern ALLEGRO_BITMAP* bmp_blue_buried[3];
-extern ALLEGRO_BITMAP* bmp_blue_idle[3];
 extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
@@ -59,7 +58,6 @@ extern ALLEGRO_BITMAP* bmp_president_lying;
 extern ALLEGRO_BITMAP* bmp_purple[3];
 extern ALLEGRO_BITMAP* bmp_red[3];
 extern ALLEGRO_BITMAP* bmp_red_buried[3];
-extern ALLEGRO_BITMAP* bmp_red_idle[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
@@ -75,7 +73,6 @@ extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_white[3];
 extern ALLEGRO_BITMAP* bmp_yellow[3];
 extern ALLEGRO_BITMAP* bmp_yellow_buried[3];
-extern ALLEGRO_BITMAP* bmp_yellow_idle[3];
 extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
 //Test things, temporary.
@@ -98,6 +95,7 @@ extern sample_struct sfx_pikmin_attack;
 extern sample_struct sfx_pikmin_called;
 extern sample_struct sfx_pikmin_carrying;
 extern sample_struct sfx_pikmin_carrying_grab;
+extern sample_struct sfx_pikmin_caught;
 extern sample_struct sfx_pikmin_dying;
 extern sample_struct sfx_pikmin_held;
 extern sample_struct sfx_pikmin_idle;

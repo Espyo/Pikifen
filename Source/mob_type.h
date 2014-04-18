@@ -32,6 +32,8 @@ public:
     float near_radius;
     unsigned int max_carriers;
     float weight;          //Pikmin strenght needed to carry it.
+    unsigned char chomp_max_victims; //The maximum number of victims in a chomp.
+    float big_damage_interval;
     
     //Script things.
     vector<mob_event*> events;    //The events and actions.
@@ -44,6 +46,7 @@ public:
         weight = 0;
         sight_radius = near_radius = 0;
         rotation_speed = DEF_ROTATION_SPEED;
+        big_damage_interval = 0;
     }
 };
 

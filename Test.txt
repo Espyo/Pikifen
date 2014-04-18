@@ -2,7 +2,7 @@ animations{
 	attack{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			attack1nh{
 				duration=0.08
 			}
 			attackr{
@@ -230,6 +230,29 @@ animations{
 			}
 		}
 	}
+	swallow{
+		loop_frame=0
+		frame_instances{
+			swallow1{
+				duration=0.2
+			}
+			swallow2{
+				duration=0.2
+			}
+			swallow1{
+				duration=0.2
+			}
+			swallow2{
+				duration=0.2
+			}
+			swallow1{
+				duration=0.2
+			}
+			swallow2{
+				duration=0.2
+			}
+		}
+	}
 	unburrow{
 		loop_frame=0
 		frame_instances{
@@ -302,6 +325,27 @@ frames{
 				coords=-6 0 0
 				radius=28
 			}
+			mouth{
+				coords=25 0 0
+				radius=6
+			}
+		}
+	}
+	attack1nh{
+		file=CB.png
+		file_x=0
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
 		}
 	}
 	attack2{
@@ -315,9 +359,9 @@ frames{
 		offs_x=14
 		offs_y=0
 		hitbox_instances{
-			face{
-				coords=32 0 0
-				radius=20
+			mouth{
+				coords=38 0 0
+				radius=15
 			}
 			hide{
 				coords=-6 0 0
@@ -336,14 +380,6 @@ frames{
 		offs_x=42
 		offs_y=0
 		hitbox_instances{
-			face{
-				coords=32 0 0
-				radius=18
-			}
-			mouth{
-				coords=64 0 0
-				radius=15
-			}
 			mouth{
 				coords=94 0 0
 				radius=15
@@ -499,6 +535,10 @@ frames{
 				coords=16 0 0
 				radius=15
 			}
+			mouth{
+				coords=35 0 0
+				radius=6
+			}
 			hide{
 				coords=-6 0 0
 				radius=28
@@ -593,7 +633,7 @@ frames{
 		hitbox_instances{
 			shake{
 				coords=-5 0 0
-				radius=28
+				radius=32
 			}
 		}
 	}
@@ -610,7 +650,7 @@ frames{
 		hitbox_instances{
 			shake{
 				coords=-5 0 0
-				radius=28
+				radius=32
 			}
 		}
 	}
@@ -627,7 +667,7 @@ frames{
 		hitbox_instances{
 			shake{
 				coords=-5 0 0
-				radius=28
+				radius=32
 			}
 		}
 	}
@@ -644,6 +684,48 @@ frames{
 		hitbox_instances{
 			shake{
 				coords=-5 0 0
+				radius=32
+			}
+		}
+	}
+	swallow1{
+		file=CB.png
+		file_x=600
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=32 0 0
+				radius=6
+			}
+			hide{
+				coords=-6 0 0
+				radius=28
+			}
+		}
+	}
+	swallow2{
+		file=CB.png
+		file_x=700
+		file_y=200
+		file_w=68
+		file_h=56
+		game_w=68
+		game_h=56
+		offs_x=0
+		offs_y=0
+		hitbox_instances{
+			face{
+				coords=32 0 0
+				radius=6
+			}
+			hide{
+				coords=-6 0 0
 				radius=28
 			}
 		}
@@ -782,31 +864,31 @@ hitboxes{
 		multiplier=1
 		can_pikmin_latch=true
 		elements=
-		shake_angle=0
-		swallowing=false
+		angle=-1
+		knockback=1
 	}
 	hide{
 		type=0
 		multiplier=1.2
 		can_pikmin_latch=true
 		elements=
-		shake_angle=0
-		swallowing=false
+		angle=-1
+		knockback=1
 	}
 	mouth{
-		type=3
+		type=0
 		multiplier=1
 		can_pikmin_latch=false
 		elements=
-		shake_angle=0
-		swallowing=false
+		angle=-1
+		knockback=1
 	}
 	shake{
-		type=2
-		multiplier=1
+		type=1
+		multiplier=0
 		can_pikmin_latch=false
 		elements=
-		shake_angle=0
-		swallowing=false
+		angle=-1
+		knockback=80
 	}
 }

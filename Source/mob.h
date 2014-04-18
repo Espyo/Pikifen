@@ -81,28 +81,35 @@ public:
     void remove_target(bool stop);
     
     //Party things.
-    mob* following_party;    //The current mob is following this mob's party.
-    bool was_thrown;         //Is the mob airborne because it was thrown?
-    float uncallable_period; //During this period, the mob cannot be called into a party.
-    party_info* party;       //Info on the party this mob is a leader of.
+    mob* following_party;      //The current mob is following this mob's party.
+    bool was_thrown;           //Is the mob airborne because it was thrown?
+    float unwhistlable_period; //During this period, the mob cannot be whistled into a party.
+    float untouchable_period;  //During this period, the mob cannot be touched into a party.
+    party_info* party;         //Info on the party this mob is a leader of.
     
     //Other properties.
-    float health;       //Current health.
-    unsigned char team; //Mob's team (who it can damage)
+    float health;           //Current health.
+    float invuln_period;    //During this period, the mob cannot be attacked.
+    float knockdown_period; //During this period, the mob cannot move, as it's been knocked down.
+    unsigned char team;     //Mob's team (who it can damage), use MOB_TEAM_*.
     
     //Script.
-    mob* focused_prey;            //The prey it has focus on.
-    bool focused_prey_near;       //Is the focused prey what's considered "near" the mob?
-    float timer;                  //The timer.
-    float timer_interval;         //The timer's interval.
-    map<string, string> vars;     //Variables.
-    float script_wait;            //Wait this much time before going on with the script.
-    mob_event* script_wait_event; //What event is the script waiting on?
-    size_t script_wait_action;    //Number of the action the script returns to after the wait is over.
-    bool spawn_event_done;        //Has the spawn event been triggered yet? If there's no spawn event, this doesn't matter.
-    bool dead;                    //Is the mob dead?
-    unsigned char state;          //Current state.
-    float time_in_state;          //For how long as the mob been in this state?
+    mob* focused_prey;                //The prey it has focus on.
+    vector<mob*> focused_by;          //Mobs that are focusing on it.
+    bool focused_prey_near;           //Is the focused prey what's considered "near" the mob?
+    float timer;                      //The timer.
+    float timer_interval;             //The timer's interval.
+    map<string, string> vars;         //Variables.
+    float script_wait;                //Wait this much time before going on with the script. 0 = Not waiting. -1 = Waiting for the animation.
+    mob_event* script_wait_event;     //What event is the script waiting on?
+    size_t script_wait_action;        //Number of the action the script returns to after the wait is over.
+    unsigned char events_queued[N_MOB_EVENTS]; //Events waiting to be ran. 0: Not waiting. 1: Waiting. 2: Waiting, but only run if nothing else is running.
+    
+    bool dead;                     //Is the mob dead?
+    unsigned char state;           //Current state.
+    float time_in_state;           //For how long as the mob been in this state?
+    vector<string> chomp_hitboxes; //List of hitboxes that will chomp Pikmin.
+    vector<mob*> chomping_pikmin;  //Mobs being chomped.
     void set_state(unsigned char new_state);
     
     //Carrying.

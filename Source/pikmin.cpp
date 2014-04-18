@@ -6,6 +6,7 @@ pikmin::pikmin(float x, float y, sector* sec, pikmin_type* type) : mob(x, y, 0, 
     attacking_mob = NULL;
     latched = false;
     attack_time = 0;
+    being_chomped = false;
     carrying_mob = NULL;
     wants_to_carry = NULL;
     maturity = 0;

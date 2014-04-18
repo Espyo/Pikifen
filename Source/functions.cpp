@@ -63,16 +63,35 @@ void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y
 
 /* ----------------------------------------------------------------------------
  * Makes m1 attack m2.
- * Stuff like status effects and maturity (Pikmin only) are taken into account,
- * if the attacker is a Pikmin.
+ * Stuff like status effects and maturity (Pikmin only) are taken into account.
  */
-void attack(mob* m1, mob* m2, bool m1_is_pikmin, float m1_attack_power) {
+void attack(mob* m1, mob* m2, bool m1_is_pikmin, float damage, float angle, float knockback, float new_invuln_period, float new_knockdown_period) {
+    if(m2->invuln_period > 0) return;
+    
     pikmin* p_ptr = NULL;
     if(m1_is_pikmin) {
         p_ptr = (pikmin*) m1;
-        m1_attack_power += p_ptr->maturity * m1_attack_power * MATURITY_POWER_MULT;
+        damage += p_ptr->maturity * damage * MATURITY_POWER_MULT;
     }
-    m2->health -= m1_attack_power;
+    
+    m2->invuln_period = new_invuln_period;
+    m2->knockdown_period = new_knockdown_period;
+    m2->health -= damage;
+    
+    if(knockback != 0) {
+        m2->speed_z = 500;
+        m2->speed_x = cos(angle) * knockback;
+        m2->speed_y = sin(angle) * knockback;
+    }
+    
+    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
+    if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
+        if(floor((m2->health + damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
+            if(get_mob_event(m2, MOB_EVENT_BIG_DAMAGE, true)) {
+                m2->events_queued[MOB_EVENT_BIG_DAMAGE] = 1;
+            }
+        }
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -142,6 +161,10 @@ void create_mob(mob* m) {
  */
 void delete_mob(mob* m) {
     remove_from_party(m);
+    vector<mob*> focusers = m->focused_by;
+    for(size_t m_nr = 0; m_nr < focusers.size(); m_nr++) {
+        unfocus_mob(focusers[m_nr], m, true);
+    }
     
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
@@ -600,6 +623,32 @@ void error_log(string s, data_node* d) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not the string s is inside the vector of strings v.
+ */
+bool find_in_vector(vector<string> v, string s) {
+    for(auto i = v.begin(); i != v.end(); i++) if(*i == s) return true;
+    return false;
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes m1 focus on m2.
+ */
+void focus_mob(mob* m1, mob* m2, bool is_near, bool call_event) {
+    unfocus_mob(m1, m1->focused_prey, false);
+    
+    m1->focused_prey = m2;
+    m1->focused_prey_near = true;
+    m2->focused_by.push_back(m1);
+    
+    if(call_event) {
+        m1->focused_prey_near = is_near;
+        m1->events_queued[MOB_EVENT_LOSE_PREY] = 0;
+        m1->events_queued[MOB_EVENT_NEAR_PREY] = (is_near ? 1 : 0);
+        m1->events_queued[MOB_EVENT_SEE_PREY] = (is_near ? 0 : 1);
+    }
+}
+
+/* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
  * folder_name: Name of the folder.
  * folders:     If true, only read folders. If false, only read files.
@@ -849,14 +898,17 @@ float get_leader_to_group_center_dist(mob* l) {
 /* ----------------------------------------------------------------------------
  * Returns the pointer to a mob event, if the mob is listening to that event.
  * Returns NULL if this event can't run, because there's already another event going on, or because the mob is dead.
+ * If query is true, then the caller only wants to know of the existence of the event, not actually do something with it.
+   * This makes it return the pointer if it exists, regardless of it being able to run or not.
  */
-mob_event* get_mob_event(mob* m, unsigned char et) {
-    if(m->dead) return NULL;
+mob_event* get_mob_event(mob* m, unsigned char et, bool query) {
+    if(m->dead && et != MOB_EVENT_DEATH) return NULL;
     size_t n_events = m->type->events.size();
     for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
     
         mob_event* ev = m->type->events[ev_nr];
         if(ev->type == et) {
+            if(query) return ev;
             if(m->script_wait != 0 && m->script_wait_event != ev && et != MOB_EVENT_DEATH) return NULL;
             return ev;
         }
@@ -1032,8 +1084,8 @@ animation_set load_animation_set(data_node* file_node) {
         cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
         cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
         cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->shake_angle = tof(hitbox_node->get_child_by_name("shake_angle")->value);
-        cur_hitbox->swallow = tob(hitbox_node->get_child_by_name("swallow")->value);
+        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
     }
     
     return animation_set(animations, frames, hitboxes);
@@ -1303,8 +1355,8 @@ vector<hitbox> load_hitboxes(data_node* frame_node) {
         cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
         cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
         cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->shake_angle = tof(hitbox_node->get_child_by_name("shake_angle")->value);
-        cur_hitbox->swallow = tob(hitbox_node->get_child_by_name("swallow")->value);
+        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
     }
     
     return hitboxes;
@@ -1342,6 +1394,8 @@ void load_mob_types(string folder, unsigned char type) {
         
         mt->name = file.get_child_by_name("name")->value;
         mt->always_active = tob(file.get_child_by_name("always_active")->value);
+        mt->big_damage_interval = tof(file.get_child_by_name("big_damage_interval")->value);
+        mt->chomp_max_victims = toi(file.get_child_by_name("chomp_max_victims")->get_value_or_default("100"));
         mt->main_color = toc(file.get_child_by_name("main_color")->value);
         mt->max_carriers = toi(file.get_child_by_name("max_carriers")->value);
         mt->max_health = toi(file.get_child_by_name("max_health")->value);
@@ -1391,10 +1445,10 @@ void load_mob_types(string folder, unsigned char type) {
             
         } else if(type == MOB_TYPE_ENEMY) {
             enemy_type* et = (enemy_type*) mt;
-            et->can_regenerate = tob(file.get_child_by_name("can_regenerate")->value);
             et->drops_corpse = tob(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
             et->is_boss = tob(file.get_child_by_name("is_boss")->value);
             et->pikmin_seeds = toi(file.get_child_by_name("pikmin_seeds")->value);
+            et->regenerate_speed = tob(file.get_child_by_name("regenerate_speed")->value);
             et->revive_speed = tof(file.get_child_by_name("revive_speed")->value);
             et->value = tof(file.get_child_by_name("value")->value);
             
@@ -1779,7 +1833,8 @@ void remove_from_party(mob* member) {
     
     member->following_party = NULL;
     member->remove_target(false);
-    member->uncallable_period = UNCALLABLE_PERIOD;
+    member->unwhistlable_period = UNWHISTLABLE_PERIOD;
+    member->untouchable_period = UNTOUCHABLE_PERIOD;
 }
 
 /* ----------------------------------------------------------------------------
@@ -2167,6 +2222,28 @@ string str_to_lower(string s) {
     //ToDo
     return true;
 }*/
+
+/* ----------------------------------------------------------------------------
+ * Makes m1 lose focus on m2.
+ */
+void unfocus_mob(mob* m1, mob* m2, bool call_event) {
+    if(m2) {
+        if(m1->focused_prey != m2) return;
+        
+        for(size_t m = 0; m < m2->focused_by.size();) {
+            if(m2->focused_by[m] == m1) m2->focused_by.erase(m2->focused_by.begin() + m);
+            else m++;
+        }
+    }
+    
+    m1->focused_prey = NULL;
+    m1->focused_prey_near = false;
+    if(call_event) {
+        m1->events_queued[MOB_EVENT_SEE_PREY] = 0;
+        m1->events_queued[MOB_EVENT_NEAR_PREY] = 0;
+        m1->events_queued[MOB_EVENT_LOSE_PREY] = 1;
+    }
+}
 
 /* ----------------------------------------------------------------------------
  * Uses up a spray.

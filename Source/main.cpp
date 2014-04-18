@@ -115,9 +115,6 @@ int main(int argc, char**) {
             bmp_red_buried[m] = load_bmp(("Red_buried_" + maturity_str + ".png").c_str());
             bmp_yellow_buried[m] = load_bmp(("Yellow_buried_" + maturity_str + ".png").c_str());
             bmp_blue_buried[m] = load_bmp(("Blue_buried_" + maturity_str + ".png").c_str());
-            bmp_red_idle[m] = load_bmp(("Red_idle_" + maturity_str + ".png").c_str());
-            bmp_yellow_idle[m] = load_bmp(("Yellow_idle_" + maturity_str + ".png").c_str());
-            bmp_blue_idle[m] = load_bmp(("Blue_idle_" + maturity_str + ".png").c_str());
             bmp_purple[m] = load_bmp(("Purple_" + maturity_str + ".png").c_str());
             bmp_white[m] = load_bmp(("White_" + maturity_str + ".png").c_str());
         }
@@ -196,6 +193,7 @@ int main(int argc, char**) {
         sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg",        mixer);
         sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg",      mixer);
         sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg", mixer);
+        sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg",        mixer);
         sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg",         mixer);
         sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
         sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
@@ -279,6 +277,7 @@ int main(int argc, char**) {
         for(unsigned char p = 0; p < 10; p++) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
                 create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, &s, t->second));
+                pikmin_list.back()->maturity = 2;
             }
         }
         create_mob(new info_spot(400, 0, &s, "Onions.", false));

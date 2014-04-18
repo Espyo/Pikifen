@@ -1,5 +1,7 @@
 name = Cloaking Burrow-nit
 always_active = yes
+big_damage_interval = 20
+chomp_max_victims = 1
 max_carriers = 16
 max_health = 200
 move_speed = 50
@@ -34,8 +36,21 @@ script{
     
     on_near_prey{
         move = stop
-        //animation = attack
-        //wait = animation
+        animation = attack
+        chomp = mouth
+        wait = animation
+        chomp = 
+    }
+    
+    on_big_damage{
+        animation = shake
+        wait = animation
+    }
+    
+    on_attack_hit{
+        animation = swallow
+        wait = animation
+        eat = all
     }
 	
 	on_lose_prey{

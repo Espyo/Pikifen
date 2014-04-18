@@ -8,8 +8,6 @@
 enum HITBOX_TYPES {
     HITBOX_TYPE_NORMAL,
     HITBOX_TYPE_ATTACK,
-    HITBOX_TYPE_SHAKE,
-    HITBOX_TYPE_CHOMP,
 };
 
 class hitbox {
@@ -17,18 +15,18 @@ public:
     string name;
     unsigned char type;
     string elements;
-    float multiplier; //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
-    float shake_angle;
+    float multiplier;      //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
+    float angle;           //Knockback angle. -1 means outward.
+    float knockback;       //Knockback strength.
     bool can_pikmin_latch; //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
-    bool swallow; //Is this chomp hitbox swallowing the Pikmin?
     
     hitbox(string name = "") {
         this->name = name;
         type = HITBOX_TYPE_NORMAL;
         multiplier = 1;
-        shake_angle = 0;
+        angle = -1;
+        knockback = 1;
         can_pikmin_latch = false;
-        swallow = false;
     }
 };
 

@@ -13,6 +13,8 @@ using namespace std;
 
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
+    MOB_ACTION_CHOMP_HITBOXES,
+    MOB_ACTION_EAT,
     MOB_ACTION_IF,
     MOB_ACTION_MOVE,
     MOB_ACTION_SET_SPEED,
@@ -53,6 +55,7 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_SPAWN,
     MOB_EVENT_TIMER,
     MOB_EVENT_WALL,
+    N_MOB_EVENTS,
 };
 
 struct mob_event;

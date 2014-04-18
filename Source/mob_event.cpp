@@ -7,7 +7,9 @@ mob_action::mob_action(data_node* dn) {
     string n = dn->name;
     data = dn->value;
     
-    if(n == "if")                    type = MOB_ACTION_IF;
+    if(n == "chomp")                 type = MOB_ACTION_CHOMP_HITBOXES;
+    else if(n == "eat")              type = MOB_ACTION_EAT;
+    else if(n == "if")               type = MOB_ACTION_IF;
     else if(n == "move")             type = MOB_ACTION_MOVE;
     else if(n == "play_sound")       type = MOB_ACTION_PLAY_SOUND;
     else if(n == "animation")        type = MOB_ACTION_SET_ANIMATION;
@@ -37,11 +39,28 @@ mob_action::mob_action(unsigned char t, string d) {
  * action_nr: used by conditionals to change the flow of the script.
  * Returns true if the script should stop.
  */
-bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
+bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
     //ToDo error detection.
     
+    if(type == MOB_ACTION_CHOMP_HITBOXES) {
     
-    if(type == MOB_ACTION_IF) {
+        m->chomp_hitboxes = split(data);
+        
+        
+        
+    } else if(type == MOB_ACTION_EAT) {
+    
+        if(data == "all") {
+            for(size_t p = 0; p < m->chomping_pikmin.size(); p++) {
+                m->chomping_pikmin[p]->health = 0;
+            }
+        }
+        //ToDo other cases besides eating all.
+        m->chomping_pikmin.clear();
+        
+        
+        
+    } else if(type == MOB_ACTION_IF) {
     
         vector<string> words = split(data);
         string var = words[0];
@@ -119,7 +138,7 @@ bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
     
         if(data == "die_start") {
             if(typeid(*m) == typeid(enemy)) {
-                random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, m->x, m->y, 60, 80, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
+                random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, m->x, m->y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
             }
             
         } else if(data == "die_end") {
@@ -135,6 +154,9 @@ bool mob_action::run(mob* m, mob_event*, size_t* action_nr) {
                     )
                 );
             }
+            
+        } else if(data == "loop") {
+            m->events_queued[e->type] = 2;
             
         } else {
             error_log("Unknown special function \"" + data + "\"!");
@@ -203,17 +225,18 @@ void mob_event::run(mob* m, size_t starting_action) {
 
     //ToDo remove.
     if(starting_action == 0) {
-        if(type == MOB_EVENT_SEE_PREY) {
-            cout << "See prey event hit.\n";
-        } else if(type == MOB_EVENT_LOSE_PREY) {
-            cout << "Lose prey event hit.\n";
-        } else if(type == MOB_EVENT_NEAR_PREY) {
-            cout << "Near prey event hit.\n";
-        } else if(type == MOB_EVENT_TIMER) {
-            cout << "Timer event hit.\n";
-        } else if(type == MOB_EVENT_REACH_HOME) {
-            cout << "Reach home event hit.\n";
-        }
+        string n = "#" + to_string((long long) type);
+        if(type == MOB_EVENT_SEE_PREY) n = "SEE PREY";
+        else if(type == MOB_EVENT_LOSE_PREY) n = "LOSE PREY";
+        else if(type == MOB_EVENT_NEAR_PREY) n = "NEAR PREY";
+        else if(type == MOB_EVENT_TIMER) n = "TIMER";
+        else if(type == MOB_EVENT_REACH_HOME) n = "REACH HOME";
+        else if(type == MOB_EVENT_SPAWN) n = "SPAWN";
+        else if(type == MOB_EVENT_ATTACK_HIT) n = "ATTACK HIT";
+        else if(type == MOB_EVENT_DEATH) n = "DEATH";
+        else if(type == MOB_EVENT_BIG_DAMAGE) n = "BIG_DAMAGE";
+        
+        cout << "Event hit: " << n << "\n";
     }
     
     for(size_t a = starting_action; a < actions.size(); a++) {

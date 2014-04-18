@@ -49,7 +49,8 @@ using namespace std;
 #define SUN_METER_SUN_SPIN_SPEED    0.5      //The Sun Meter's sun spins these many radians per second.
 #define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply their strength by this.
 #define THROW_PARTICLE_INTERVAL     0.02     //A new "mob thrown" particle is spawned every X seconds.
-#define UNCALLABLE_PERIOD           1        //A mob cannot be called to a party during this period.
+#define UNWHISTLABLE_PERIOD         1        //A mob cannot be whistled to a party during this period.
+#define UNTOUCHABLE_PERIOD          3        //A mob cannot be touched to a party during this period.
 #define WHISTLE_DOT_INTERVAL        0.03     //Seconds that need to pass before another dot is added.
 #define WHISTLE_DOT_SPIN_SPEED      M_PI_2   //A whistle dot spins these many radians a second.
 #define WHISTLE_FADE_TIME           0.1      //Time the whistle animations take to fade out.

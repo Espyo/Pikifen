@@ -152,39 +152,49 @@ void do_drawing() {
         n_pikmin = pikmin_list.size();
         for(size_t p = 0; p < n_pikmin; p++) {
             ALLEGRO_BITMAP* bm = NULL;
+            pikmin* pik_ptr = pikmin_list[p];
             
-            bool idling = !pikmin_list[p]->following_party && !pikmin_list[p]->carrying_mob;
+            bool idling = !pik_ptr->following_party && !pik_ptr->carrying_mob && !pik_ptr->attacking_mob;
             
-            if(pikmin_list[p]->type->name == "Red Pikmin") {
-                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_red_buried[pikmin_list[p]->maturity];
-                else if(idling) bm = bmp_red_idle[pikmin_list[p]->maturity];
-                else bm = bmp_red[pikmin_list[p]->maturity];
-            } else if(pikmin_list[p]->type->name == "Yellow Pikmin") {
-                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_yellow_buried[pikmin_list[p]->maturity];
-                else if(idling) bm = bmp_yellow_idle[pikmin_list[p]->maturity];
-                else bm = bmp_yellow[pikmin_list[p]->maturity];
-            } else if(pikmin_list[p]->type->name == "Blue Pikmin") {
-                if(pikmin_list[p]->state == PIKMIN_STATE_BURIED) bm = bmp_blue_buried[pikmin_list[p]->maturity];
-                else if(idling) bm = bmp_blue_idle[pikmin_list[p]->maturity];
-                else bm = bmp_blue[pikmin_list[p]->maturity];
-            } else if(pikmin_list[p]->type->name == "Purple Pikmin") {
-                bm = bmp_purple[pikmin_list[p]->maturity];
-            } else if(pikmin_list[p]->type->name == "White Pikmin") {
-                bm = bmp_white[pikmin_list[p]->maturity];
+            if(pik_ptr->type->name == "Red Pikmin") {
+                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_red_buried[pik_ptr->maturity];
+                //else if(idling) bm = bmp_red_idle[pik_ptr->maturity];
+                else bm = bmp_red[pik_ptr->maturity];
+            } else if(pik_ptr->type->name == "Yellow Pikmin") {
+                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_yellow_buried[pik_ptr->maturity];
+                //else if(idling) bm = bmp_yellow_idle[pik_ptr->maturity];
+                else bm = bmp_yellow[pik_ptr->maturity];
+            } else if(pik_ptr->type->name == "Blue Pikmin") {
+                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_blue_buried[pik_ptr->maturity];
+                //else if(idling) bm = bmp_blue_idle[pik_ptr->maturity];
+                else bm = bmp_blue[pik_ptr->maturity];
+            } else if(pik_ptr->type->name == "Purple Pikmin") {
+                bm = bmp_purple[pik_ptr->maturity];
+            } else if(pik_ptr->type->name == "White Pikmin") {
+                bm = bmp_white[pik_ptr->maturity];
             }
             draw_sprite(
                 bm,
-                pikmin_list[p]->x, pikmin_list[p]->y,
-                pikmin_list[p]->type->size + pikmin_list[p]->z * 0.1, pikmin_list[p]->type->size + pikmin_list[p]->z * 0.1,
-                pikmin_list[p]->angle);
+                pik_ptr->x, pik_ptr->y,
+                pik_ptr->type->size + pik_ptr->z * 0.1, pik_ptr->type->size + pik_ptr->z * 0.1,
+                pik_ptr->angle);
                 
             if(idling) {
+                al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+                draw_sprite(
+                    bm,
+                    pik_ptr->x, pik_ptr->y,
+                    pik_ptr->type->size + pik_ptr->z * 0.1, pik_ptr->type->size + pik_ptr->z * 0.1,
+                    pik_ptr->angle,
+                    al_map_rgb(255, 255, 255)
+                );
+                al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
                 draw_sprite(
                     bmp_idle_glow,
-                    pikmin_list[p]->x, pikmin_list[p]->y,
+                    pik_ptr->x, pik_ptr->y,
                     30, 30,
                     idle_glow_angle,
-                    change_alpha(pikmin_list[p]->type->main_color, 160));
+                    change_alpha(pik_ptr->type->main_color, 160));
             }
         }
         
@@ -289,7 +299,7 @@ void do_drawing() {
             float x = leaders[cur_leader_nr]->x + cos(cursor_angle) * whistle_rings[r];
             float y = leaders[cur_leader_nr]->y + sin(cursor_angle) * whistle_rings[r];
             unsigned char n = whistle_ring_colors[r];
-            al_draw_filled_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192));
+            al_draw_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192), 3);
         }
         
         if(whistle_radius > 0 || whistle_fade_time > 0) {

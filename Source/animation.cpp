@@ -95,7 +95,7 @@ void animation_instance::start() { //Starts or restarts an animation. It's calle
 bool animation_instance::tick(float time) { //Ticks the animation. Returns whether or not the animation reached its final frame.
     if(!anim) return false;
     size_t n_frames = anim->frame_instances.size();
-    if(n_frames <= 1) return false;
+    if(n_frames == 0) return false;
     frame_instance* cur_frame = &anim->frame_instances[cur_frame_nr];
     if(cur_frame->duration == 0) return false;
     

@@ -172,7 +172,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             call_change_handler();
         }
         
-    } else if(keycode == ALLEGRO_KEY_TAB && modifiers == 0) { //Tab - switch to the next textbox in the parent.
+    } else if(keycode == ALLEGRO_KEY_TAB && (modifiers == 0 || modifiers == ALLEGRO_KEYMOD_SHIFT)) { //Tab - switch to the next textbox in the parent.
         size_t
         next_tab_index = UINT_MAX,
         prev_tab_index = 0,

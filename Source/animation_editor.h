@@ -84,8 +84,6 @@ void animation_editor::do_logic() {
         } else if(ed_mode == EDITOR_MODE_HITBOX) {
             wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_normal"]->mouse_over_widget;
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_attack"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_shake"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_chomp"]->mouse_over_widget;
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->mouse_over_widget;
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->mouse_over_widget;
         }
@@ -148,8 +146,6 @@ void animation_editor::do_logic() {
                             hitbox_color = al_map_rgba(0, 128, 0, 192); hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
                         } else if(type == HITBOX_TYPE_ATTACK) {
                             hitbox_color = al_map_rgba(128, 0, 0, 192); hitbox_outline_color = al_map_rgba(64, 0, 0, 255);
-                        } else if(type == HITBOX_TYPE_SHAKE) {
-                            hitbox_color = al_map_rgba(0, 0, 192, 192); hitbox_outline_color = al_map_rgba(0, 0, 96, 255);
                         } else {
                             hitbox_color = al_map_rgba(128, 128, 0, 192); hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
                         }
@@ -271,13 +267,9 @@ void animation_editor::gui_load_hitbox() {
         } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
             ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text = ftos(ed_cur_hitbox->multiplier);
             ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
+            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_angle"])->text = ftos(ed_cur_hitbox->angle);
+            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text = ftos(ed_cur_hitbox->knockback);
             
-        } else if(ed_cur_hitbox->type == HITBOX_TYPE_SHAKE) {
-            ((lafi_textbox*) f->widgets["frm_shake"]->widgets["txt_angle"])->text = ftos(ed_cur_hitbox->shake_angle);
-            
-        } else if(ed_cur_hitbox->type == HITBOX_TYPE_CHOMP) {
-            if(ed_cur_hitbox->swallow) ((lafi_checkbox*) f->widgets["frm_chomp"]->widgets["chk_swallow"])->check();
-            else ((lafi_checkbox*) f->widgets["frm_chomp"]->widgets["chk_swallow"])->uncheck();
         }
     }
 }
@@ -375,8 +367,6 @@ void animation_editor::gui_save_hitbox() {
     
     if(((lafi_radio_button*) f->widgets["rad_normal"])->selected) ed_cur_hitbox->type = HITBOX_TYPE_NORMAL;
     else if(((lafi_radio_button*) f->widgets["rad_attack"])->selected) ed_cur_hitbox->type = HITBOX_TYPE_ATTACK;
-    else if(((lafi_radio_button*) f->widgets["rad_shake"])->selected) ed_cur_hitbox->type = HITBOX_TYPE_SHAKE;
-    else if(((lafi_radio_button*) f->widgets["rad_chomp"])->selected) ed_cur_hitbox->type = HITBOX_TYPE_CHOMP;
     
     if(ed_cur_hitbox->type == HITBOX_TYPE_NORMAL) {
         ed_cur_hitbox->multiplier = tof(((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text);
@@ -386,12 +376,8 @@ void animation_editor::gui_save_hitbox() {
     } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
         ed_cur_hitbox->multiplier = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text);
         ed_cur_hitbox->elements = ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text;
-        
-    } else if(ed_cur_hitbox->type == HITBOX_TYPE_SHAKE) {
-        ed_cur_hitbox->shake_angle = tof(((lafi_textbox*) f->widgets["frm_shake"]->widgets["txt_angle"])->text);
-        
-    } else if(ed_cur_hitbox->type == HITBOX_TYPE_CHOMP) {
-        ed_cur_hitbox->swallow = ((lafi_checkbox*) f->widgets["frm_chomp"]->widgets["chk_swallow"])->checked;
+        ed_cur_hitbox->angle = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_angle"])->text);
+        ed_cur_hitbox->knockback = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text);
         
     }
     
@@ -456,7 +442,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
         f = ed_cur_frame;
     }
     
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1 && ed_mode == EDITOR_MODE_FRAME) {
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) {
             if(f) {
                 for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
@@ -692,9 +678,6 @@ void animation_editor::load() {
     frm_hitbox->easy_row();
     frm_hitbox->easy_add("rad_normal",   new lafi_radio_button(0, 0, 0, 0, "Normal"), 50, 16);
     frm_hitbox->easy_add("rad_attack",   new lafi_radio_button(0, 0, 0, 0, "Attack"), 50, 16);
-    frm_hitbox->easy_row();
-    frm_hitbox->easy_add("rad_shake",    new lafi_radio_button(0, 0, 0, 0, "Shake"), 50, 16);
-    frm_hitbox->easy_add("rad_chomp",    new lafi_radio_button(0, 0, 0, 0, "Chomp"), 50, 16);
     y += frm_hitbox->easy_row();
     
     lafi_frame* frm_normal = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
@@ -724,23 +707,12 @@ void animation_editor::load() {
     frm_attack->easy_row();
     frm_attack->easy_add("txt_hazards", new lafi_textbox(0, 0, 0, 0), 100, 16);
     frm_attack->easy_row();
-    
-    lafi_frame* frm_shake = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
-    hide_widget(frm_shake);
-    frm_hitbox->add("frm_shake", frm_shake);
-    
-    frm_shake->easy_row();
-    frm_shake->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 60, 16);
-    frm_shake->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 40, 16);
-    frm_shake->easy_row();
-    
-    lafi_frame* frm_chomp = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
-    hide_widget(frm_chomp);
-    frm_hitbox->add("frm_chomp", frm_chomp);
-    
-    frm_chomp->easy_row();
-    frm_chomp->easy_add("chk_swallow", new lafi_checkbox(0, 0, 0, 0, "Swallowing"), 100, 16);
-    frm_chomp->easy_row();
+    frm_attack->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 60, 16);
+    frm_attack->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_attack->easy_row();
+    frm_attack->easy_add("lbl_knockback", new lafi_label(0, 0, 0, 0, "Knockback:"), 60, 16);
+    frm_attack->easy_add("txt_knockback", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_attack->easy_row();
     
     
     //Picker frame.
@@ -1005,8 +977,6 @@ void animation_editor::load() {
     frm_hitboxes->widgets["but_hitbox"]->description = "Pick a hitbox to edit.";
     frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_normal"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
     frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_attack"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_shake"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_chomp"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_mult"]->lose_focus_handler = lambda_gui_save_hitbox;
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_mult"]->description = "Defense multiplier. 0 = invulnerable.";
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["chk_latch"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
@@ -1017,10 +987,10 @@ void animation_editor::load() {
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_mult"]->description = "Attack multiplier.";
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_save_hitbox;
     frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_hazards"]->description = "List of hazards, comma separated.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_shake"]->widgets["txt_angle"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_shake"]->widgets["txt_angle"]->description = "Angle, in radians, in which the Pikmin are shaken to.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_chomp"]->widgets["chk_swallow"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_chomp"]->widgets["chk_swallow"]->description = "Is the enemy swallowing the Pikmin here?";
+    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_angle"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_angle"]->description = "Angle the Pikmin are knocked towards (radians). -1 = Outward.";
+    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_knockback"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_knockback"]->description = "Knockback strength.";
     
     
     //Properties -- picker.
@@ -1129,13 +1099,9 @@ void animation_editor::open_hitbox_type(unsigned char type) {
     
     ((lafi_radio_button*) f->widgets["rad_normal"])->unselect();
     ((lafi_radio_button*) f->widgets["rad_attack"])->unselect();
-    ((lafi_radio_button*) f->widgets["rad_shake"])->unselect();
-    ((lafi_radio_button*) f->widgets["rad_chomp"])->unselect();
     
     hide_widget(f->widgets["frm_normal"]);
     hide_widget(f->widgets["frm_attack"]);
-    hide_widget(f->widgets["frm_shake"]);
-    hide_widget(f->widgets["frm_chomp"]);
     
     if(type == HITBOX_TYPE_NORMAL) {
         ((lafi_radio_button*) f->widgets["rad_normal"])->select();
@@ -1143,12 +1109,6 @@ void animation_editor::open_hitbox_type(unsigned char type) {
     } else if(type == HITBOX_TYPE_ATTACK) {
         ((lafi_radio_button*) f->widgets["rad_attack"])->select();
         show_widget(f->widgets["frm_attack"]);
-    } else if(type == HITBOX_TYPE_SHAKE) {
-        ((lafi_radio_button*) f->widgets["rad_shake"])->select();
-        show_widget(f->widgets["frm_shake"]);
-    } else if(type == HITBOX_TYPE_CHOMP) {
-        ((lafi_radio_button*) f->widgets["rad_chomp"])->select();
-        show_widget(f->widgets["frm_chomp"]);
     }
 }
 
@@ -1312,8 +1272,8 @@ void animation_editor::save_animation_set() {
         hitbox_node->add(new data_node("multiplier", ftos(h->second.multiplier)));
         hitbox_node->add(new data_node("can_pikmin_latch", btos(h->second.can_pikmin_latch)));
         hitbox_node->add(new data_node("elements", h->second.elements));
-        hitbox_node->add(new data_node("shake_angle", ftos(h->second.shake_angle)));
-        hitbox_node->add(new data_node("swallowing", btos(h->second.swallow)));
+        hitbox_node->add(new data_node("angle", ftos(h->second.angle)));
+        hitbox_node->add(new data_node("knockback", ftos(h->second.knockback)));
     }
     
     file_node.save_file("Test.txt");
