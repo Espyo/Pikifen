@@ -238,10 +238,6 @@ int main(int argc, char**) {
         ship_mob_type->size = 140;
         
         //Some temp variables.
-        data_node* file = new data_node("Test.txt");
-        enemy_types.begin()->second->anim = load_animation_set(file);
-        delete file;
-        
         sector s = sector();
         /*test_sector = sector();
         test_sector.floors[0].z = 100;

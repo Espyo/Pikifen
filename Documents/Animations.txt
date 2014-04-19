@@ -15,7 +15,7 @@ Pikmin
 	dying (lying down)
 	drowning
 	running while choking/panicking
-	electrocutedz
+	electrocuted
 leaders
 	at ease
 	at ease 1 (looking around)

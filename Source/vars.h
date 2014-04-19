@@ -158,6 +158,7 @@ extern float                 ed_cur_frame_time;
 extern hitbox*               ed_cur_hitbox;
 extern float                 ed_cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
 extern size_t                ed_cur_hitbox_instance_nr;
+extern string                ed_filename;
 extern size_t                ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                  ed_grabbing_hitbox_edge;
 extern float                 ed_grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
@@ -165,9 +166,11 @@ extern float                 ed_grabbing_hitbox_y;
 extern lafi_gui*             ed_gui;
 extern bool                  ed_hitboxes_visible;
 extern bool                  ed_holding_m2;
+extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char         ed_mode;
 extern float                 ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                 ed_new_hitbox_corner_y;
+extern string                ed_object_name;
 extern map<string, enemy_type*>
 enemy_types;
 extern vector<enemy*>        enemies;

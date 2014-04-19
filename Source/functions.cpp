@@ -1367,14 +1367,14 @@ vector<hitbox> load_hitboxes(data_node* frame_node) {
  * type: Use MOB_TYPE_* for this.
  */
 void load_mob_types(string folder, unsigned char type) {
-    vector<string> files = folder_to_vector(folder, false);
-    if(files.size() == 0) {
+    vector<string> types = folder_to_vector(folder, true);
+    if(types.size() == 0) {
         error_log("Folder not found \"" + folder + "\"!");
     }
     
-    for(size_t f = 0; f < files.size(); f++) {
+    for(size_t t = 0; t < types.size(); t++) {
     
-        data_node file = data_node(folder + "/" + files[f]);
+        data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) return;
         
         mob_type* mt;
@@ -1407,6 +1407,9 @@ void load_mob_types(string folder, unsigned char type) {
         mt->weight = tof(file.get_child_by_name("weight")->value);
         
         mt->events = load_script(file.get_child_by_name("script"));
+        
+        data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
+        mt->anim = load_animation_set(&anim_file);
         
         if(type == MOB_TYPE_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;

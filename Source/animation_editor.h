@@ -16,12 +16,12 @@
 
 namespace animation_editor {
 enum ANIMATION_EDITOR_PICKER_TYPES {
-    ANIMATION_EDITOR_PICKER_OBJECT,
     ANIMATION_EDITOR_PICKER_ANIMATION,
     ANIMATION_EDITOR_PICKER_FRAME_INSTANCE,
     ANIMATION_EDITOR_PICKER_FRAME,
     ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
     ANIMATION_EDITOR_PICKER_HITBOX,
+    ANIMATION_EDITOR_PICKER_OBJECT, //Make sure this is the last one.
 };
 
 void do_logic();
@@ -517,24 +517,30 @@ void animation_editor::load() {
     ed_gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
-    frm_main->easy_add("lbl_object", new lafi_label(0, 0, 0, 0, "Object:"), 80, 16);
+    frm_main->easy_add("lbl_folder", new lafi_label(0, 0, 0, 0, "Folder:"), 100, 16);
+    frm_main->easy_row();
+    frm_main->easy_add("but_folder", new lafi_button(0, 0, 0, 0), 100, 32);
+    frm_main->easy_row();
+    frm_main->easy_add("lbl_object", new lafi_label(0, 0, 0, 0, "Object:"), 100, 16);
     frm_main->easy_row();
     frm_main->easy_add("but_object", new lafi_button(0, 0, 0, 0), 100, 32);
-    frm_main->easy_row();
-    frm_main->easy_add("lin_1", new lafi_line(0, 0, 0, 0, true), 100, 16);
-    frm_main->easy_row();
-    frm_main->easy_add("but_anims", new lafi_button(0, 0, 0, 0, "Edit animations"), 100, 32);
-    frm_main->easy_row();
-    frm_main->easy_add("but_frames", new lafi_button(0, 0, 0, 0, "Edit frames"), 100, 32);
-    frm_main->easy_row();
-    frm_main->easy_add("but_hitboxes", new lafi_button(0, 0, 0, 0, "Edit hitboxes"), 100, 32);
-    frm_main->easy_row();
-    frm_main->easy_add("lbl_n_anims", new lafi_label(0, 0, 0, 0), 100, 16);
-    frm_main->easy_row();
-    frm_main->easy_add("lbl_n_frames", new lafi_label(0, 0, 0, 0), 100, 16);
-    frm_main->easy_row();
-    frm_main->easy_add("lbl_n_hitboxes", new lafi_label(0, 0, 0, 0), 100, 16);
-    frm_main->easy_row();
+    int y = frm_main->easy_row();
+    
+    lafi_frame* frm_object = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    frm_main->add("frm_object", frm_object);
+    frm_object->easy_row();
+    frm_object->easy_add("but_anims", new lafi_button(0, 0, 0, 0, "Edit animations"), 100, 32);
+    frm_object->easy_row();
+    frm_object->easy_add("but_frames", new lafi_button(0, 0, 0, 0, "Edit frames"), 100, 32);
+    frm_object->easy_row();
+    frm_object->easy_add("but_hitboxes", new lafi_button(0, 0, 0, 0, "Edit hitboxes"), 100, 32);
+    frm_object->easy_row();
+    frm_object->easy_add("lbl_n_anims", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_row();
+    frm_object->easy_add("lbl_n_frames", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_row();
+    frm_object->easy_add("lbl_n_hitboxes", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_row();
     
     
     //Animations frame.
@@ -549,7 +555,7 @@ void animation_editor::load() {
     frm_anims->easy_add("but_del_anim", new lafi_button(0, 0, 0, 0, "-"), 15, 16);
     frm_anims->easy_row();
     frm_anims->easy_add("but_anim",     new lafi_button(0, 0, 0, 0), 100, 32);
-    int y = frm_anims->easy_row();
+    y = frm_anims->easy_row();
     
     lafi_frame* frm_anim = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_anims->add("frm_anim", frm_anim);
@@ -739,27 +745,33 @@ void animation_editor::load() {
     
     
     //Properties -- main.
-    frm_main->widgets["but_anims"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_main->widgets["but_folder"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_OBJECT, false);
+    };
+    frm_main->widgets["but_object"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_OBJECT + 1 + ed_mob_type_list, false);
+    };
+    frm_main->widgets["frm_object"]->widgets["but_anims"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_cur_hitbox_instance_nr = string::npos;
         if(ed_cur_anim) if(ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = 0;
         ed_mode = EDITOR_MODE_ANIMATION;
         hide_widget(ed_gui->widgets["frm_main"]); show_widget(ed_gui->widgets["frm_anims"]);
         gui_load_animation();
     };
-    frm_main->widgets["but_anims"]->description = "Change the way the animations look like.";
-    frm_main->widgets["but_frames"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_main->widgets["frm_object"]->widgets["but_anims"]->description = "Change the way the animations look like.";
+    frm_main->widgets["frm_object"]->widgets["but_frames"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_mode = EDITOR_MODE_FRAME;
         if(ed_cur_frame) if(ed_cur_frame->hitbox_instances.size()) ed_cur_hitbox_instance_nr = 0;
         hide_widget(ed_gui->widgets["frm_main"]); show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_frame();
     };
-    frm_main->widgets["but_frames"]->description = "Change how each individual frame looks like.";
-    frm_main->widgets["but_hitboxes"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_main->widgets["frm_object"]->widgets["but_frames"]->description = "Change how each individual frame looks like.";
+    frm_main->widgets["frm_object"]->widgets["but_hitboxes"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_mode = EDITOR_MODE_HITBOX;
         hide_widget(ed_gui->widgets["frm_main"]); show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
     };
-    frm_main->widgets["but_hitboxes"]->description = "Change the way each hitbox works.";
+    frm_main->widgets["frm_object"]->widgets["but_hitboxes"]->description = "Change the way each hitbox works.";
     
     
     //Properties -- animations.
@@ -1073,7 +1085,10 @@ void animation_editor::load_animation_set() {
         al_destroy_bitmap(f->second.bitmap);
     }
     
-    data_node file = data_node("Test.txt");
+    data_node file = data_node(ed_filename);
+    if(!file.file_was_opened) {
+        file.save_file(ed_filename, true);
+    }
     ed_anims = load_animation_set(&file);
     
     ed_anim_playing = false;
@@ -1133,7 +1148,14 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
     }
     
     vector<string> elements;
-    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
+        elements.push_back("Enemies");
+        elements.push_back("Leaders");
+        elements.push_back("Onions");
+        elements.push_back("Pellets");
+        elements.push_back("Pikmin");
+        elements.push_back("Treasures");
+    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         for(auto a = ed_anims.animations.begin(); a != ed_anims.animations.end(); a++) {
             elements.push_back(a->first);
         }
@@ -1145,9 +1167,23 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         for(auto h = ed_anims.hitboxes.begin(); h != ed_anims.hitboxes.end(); h++) {
             elements.push_back(h->first);
         }
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ENEMY) {
+        elements = folder_to_vector(ENEMIES_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_LEADER) {
+        elements = folder_to_vector(LEADERS_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ONION) {
+        elements = folder_to_vector(ONIONS_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PELLET) {
+        elements = folder_to_vector(PELLETS_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PIKMIN) {
+        elements = folder_to_vector(PIKMIN_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_TREASURE) {
+        elements = folder_to_vector(TREASURES_FOLDER, true);
     }
     
-    if(type == ANIMATION_EDITOR_PICKER_ANIMATION || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
+    if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {
+        hide_widget(ed_gui->widgets["frm_main"]);
+    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
         hide_widget(ed_gui->widgets["frm_anims"]);
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME || type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
         hide_widget(ed_gui->widgets["frm_frames"]);
@@ -1175,29 +1211,66 @@ void animation_editor::pick(string name, unsigned char type) {
     hide_widget(ed_gui->widgets["frm_picker"]);
     show_widget(ed_gui->widgets["frm_bottom"]);
     
-    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
+        if(name == "Enemies")        ed_mob_type_list = MOB_TYPE_ENEMY;
+        else if(name == "Leaders")   ed_mob_type_list = MOB_TYPE_LEADER;
+        else if(name == "Onions")    ed_mob_type_list = MOB_TYPE_ONION;
+        else if(name == "Pellets")   ed_mob_type_list = MOB_TYPE_PELLET;
+        else if(name == "Pikmin")    ed_mob_type_list = MOB_TYPE_PIKMIN;
+        else if(name == "Treasures") ed_mob_type_list = MOB_TYPE_TREASURE;
+        ed_object_name = "";
+        update_stats();
+        
+    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         ed_cur_anim = &ed_anims.animations[name];
         ed_cur_frame_instance_nr = (ed_cur_anim->frame_instances.size()) ? 0 : string::npos;
         ed_cur_hitbox_instance_nr = string::npos;
         show_widget(ed_gui->widgets["frm_anims"]);
         gui_load_animation();
+        
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
         ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name = name;
         show_widget(ed_gui->widgets["frm_anims"]);
         gui_load_frame_instance();
+        
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
         ed_cur_frame = &ed_anims.frames[name];
         ed_cur_hitbox_instance_nr = (ed_cur_frame->hitbox_instances.size()) ? 0 : string::npos;
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_frame();
+        
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
         ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_name = name;
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_hitbox_instance();
+        
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX) {
         ed_cur_hitbox = &ed_anims.hitboxes[name];
         show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
+        
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ENEMY) {
+        ed_filename = ENEMIES_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_LEADER) {
+        ed_filename = LEADERS_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ONION) {
+        ed_filename = ONIONS_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PELLET) {
+        ed_filename = PELLETS_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PIKMIN) {
+        ed_filename = PIKMIN_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_TREASURE) {
+        ed_filename = TREASURES_FOLDER;
+    }
+    
+    if(type > ANIMATION_EDITOR_PICKER_OBJECT) {
+        ed_filename += "/" + name + "/Animations.txt";
+        ed_object_name = name;
+        load_animation_set();
+    }
+    if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {
+        show_widget(ed_gui->widgets["frm_main"]);
+        update_stats();
     }
 }
 
@@ -1276,12 +1349,28 @@ void animation_editor::save_animation_set() {
         hitbox_node->add(new data_node("knockback", ftos(h->second.knockback)));
     }
     
-    file_node.save_file("Test.txt");
+    file_node.save_file(ed_filename);
 }
 
 //Update the stats on the main menu.
 void animation_editor::update_stats() {
     lafi_widget* f = ed_gui->widgets["frm_main"];
+    string s;
+    
+    if(ed_mob_type_list == MOB_TYPE_ENEMY) s = "Enemies";
+    else if(ed_mob_type_list == MOB_TYPE_LEADER) s = "Leaders";
+    else if(ed_mob_type_list == MOB_TYPE_ONION) s = "Onions";
+    else if(ed_mob_type_list == MOB_TYPE_PELLET) s = "Pellets";
+    else if(ed_mob_type_list == MOB_TYPE_PIKMIN) s = "Pikmin";
+    else if(ed_mob_type_list == MOB_TYPE_TREASURE) s = "Treasures";
+    
+    ((lafi_button*) f->widgets["but_folder"])->text = s;
+    ((lafi_button*) f->widgets["but_object"])->text = ed_object_name;
+    
+    f = f->widgets["frm_object"];
+    if(ed_object_name.size()) { show_widget(f); } //Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
+    else hide_widget(f);
+    
     ((lafi_label*) f->widgets["lbl_n_anims"])->text = itos(ed_anims.animations.size()) + " animations";
     ((lafi_label*) f->widgets["lbl_n_frames"])->text = itos(ed_anims.frames.size()) + " frames";
     ((lafi_label*) f->widgets["lbl_n_hitboxes"])->text = itos(ed_anims.hitboxes.size()) + " hitboxes";
