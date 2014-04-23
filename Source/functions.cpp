@@ -19,6 +19,10 @@
  * This function makes the captain wake up from lying down, stop auto-plucking, etc.
  */
 void active_control() {
+    if(leaders[cur_leader_nr]->carrier_info) {
+        //Getting up.
+        leaders[cur_leader_nr]->anim.change("get_up", false, false);
+    }
     make_uncarriable(leaders[cur_leader_nr]);
     leaders[cur_leader_nr]->auto_pluck_mode = false;
 }
@@ -287,6 +291,8 @@ void dismiss() {
     }
     
     sfx_pikmin_idle.play(0, false);
+    cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
+    cur_leader_ptr->anim.change("dismiss", false, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -985,37 +991,27 @@ ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, A
  * Loads the animations from a file.
  */
 animation_set load_animation_set(data_node* file_node) {
-    map<string, animation> animations;
-    map<string, frame> frames;
-    map<string, hitbox> hitboxes;
+    map<string, animation*> animations;
+    map<string, frame*> frames;
+    map<string, hitbox*> hitboxes;
     
-    //Animations.
-    data_node* anims_node = file_node->get_child_by_name("animations");
-    size_t n_anims = anims_node->get_nr_of_children();
-    for(size_t a = 0; a < n_anims; a++) {
+    //Hitboxes.
+    data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
+    size_t n_hitboxes = hitboxes_node->get_nr_of_children();
+    for(size_t h = 0; h < n_hitboxes; h++) {
     
-        data_node* anim_node = anims_node->get_child(a);
-        vector<frame_instance> frame_instances;
+        data_node* hitbox_node = hitboxes_node->get_child(h);
         
-        data_node* frame_instances_node = anim_node->get_child_by_name("frame_instances");
-        size_t n_frame_instances = frame_instances_node->get_nr_of_children();
+        hitboxes[hitbox_node->name] = new hitbox();
+        hitbox* cur_hitbox = hitboxes[hitbox_node->name];
         
-        for(size_t f = 0; f < n_frame_instances; f++) {
-            data_node* frame_instance_node = frame_instances_node->get_child(f);
-            frame_instances.push_back(
-                frame_instance(
-                    frame_instance_node->name,
-                    tof(frame_instance_node->get_child_by_name("duration")->value)
-                )
-            );
-        }
-        
-        animations[anim_node->name] =
-            animation(
-                anim_node->name,
-                frame_instances,
-                toi(anim_node->get_child_by_name("loop_frame")->value)
-            );
+        cur_hitbox->name = hitbox_node->name;
+        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
+        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
+        cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
+        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
+        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
     }
     
     //Frames.
@@ -1044,48 +1040,68 @@ animation_set load_animation_set(data_node* file_node) {
             hitbox_instances.push_back(
                 hitbox_instance(
                     hitbox_instance_node->name,
+                    hitboxes[hitbox_instance_node->name],
                     hx, hy, hz,
                     tof(hitbox_instance_node->get_child_by_name("radius")->value)
                 )
             );
         }
         
-        ALLEGRO_BITMAP* parent = load_bmp(frame_node->get_child_by_name("file")->value);
-        frames[frame_node->name] =
-            frame(
-                frame_node->name,
-                parent,
-                toi(frame_node->get_child_by_name("file_x")->value),
-                toi(frame_node->get_child_by_name("file_y")->value),
-                toi(frame_node->get_child_by_name("file_w")->value),
-                toi(frame_node->get_child_by_name("file_h")->value),
-                tof(frame_node->get_child_by_name("game_w")->value),
-                tof(frame_node->get_child_by_name("game_h")->value),
-                hitbox_instances
-            );
-        frames[frame_node->name].file = frame_node->get_child_by_name("file")->value;
-        frames[frame_node->name].parent_bmp = parent;
-        frames[frame_node->name].offs_x = atof(frame_node->get_child_by_name("offs_x")->value.c_str());
-        frames[frame_node->name].offs_y = atof(frame_node->get_child_by_name("offs_y")->value.c_str());
+        ALLEGRO_BITMAP* parent = bitmaps.get(frame_node->get_child_by_name("file")->value, frame_node->get_child_by_name("file"));
+        frame* f =
+            new frame(
+            frame_node->name,
+            parent,
+            toi(frame_node->get_child_by_name("file_x")->value),
+            toi(frame_node->get_child_by_name("file_y")->value),
+            toi(frame_node->get_child_by_name("file_w")->value),
+            toi(frame_node->get_child_by_name("file_h")->value),
+            tof(frame_node->get_child_by_name("game_w")->value),
+            tof(frame_node->get_child_by_name("game_h")->value),
+            hitbox_instances
+        );
+        frames[frame_node->name] = f;
+        
+        f->file = frame_node->get_child_by_name("file")->value;
+        f->parent_bmp = parent;
+        f->offs_x = tof(frame_node->get_child_by_name("offs_x")->value);
+        f->offs_y = tof(frame_node->get_child_by_name("offs_y")->value);
+        f->top_visible = tob(frame_node->get_child_by_name("top_visible")->value);
+        f->top_x = tof(frame_node->get_child_by_name("top_x")->value);
+        f->top_y = tof(frame_node->get_child_by_name("top_y")->value);
+        f->top_w = tof(frame_node->get_child_by_name("top_w")->value);
+        f->top_h = tof(frame_node->get_child_by_name("top_h")->value);
+        f->top_angle = tof(frame_node->get_child_by_name("top_angle")->value);
     }
     
-    //Hitboxes.
-    data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
-    size_t n_hitboxes = hitboxes_node->get_nr_of_children();
-    for(size_t h = 0; h < n_hitboxes; h++) {
+    //Animations.
+    data_node* anims_node = file_node->get_child_by_name("animations");
+    size_t n_anims = anims_node->get_nr_of_children();
+    for(size_t a = 0; a < n_anims; a++) {
     
-        data_node* hitbox_node = hitboxes_node->get_child(h);
+        data_node* anim_node = anims_node->get_child(a);
+        vector<frame_instance> frame_instances;
         
-        hitboxes[hitbox_node->name] = hitbox();
-        hitbox* cur_hitbox = &hitboxes[hitbox_node->name];
+        data_node* frame_instances_node = anim_node->get_child_by_name("frame_instances");
+        size_t n_frame_instances = frame_instances_node->get_nr_of_children();
         
-        cur_hitbox->name = hitbox_node->name;
-        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
-        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
-        cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
-        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
-        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
+        for(size_t f = 0; f < n_frame_instances; f++) {
+            data_node* frame_instance_node = frame_instances_node->get_child(f);
+            frame_instances.push_back(
+                frame_instance(
+                    frame_instance_node->name,
+                    frames[frame_instance_node->name],
+                    tof(frame_instance_node->get_child_by_name("duration")->value)
+                )
+            );
+        }
+        
+        animations[anim_node->name] =
+            new animation(
+            anim_node->name,
+            frame_instances,
+            toi(anim_node->get_child_by_name("loop_frame")->value)
+        );
     }
     
     return animation_set(animations, frames, hitboxes);
@@ -1127,7 +1143,7 @@ void load_area(string name) {
             new_floor.scale = tof(floor_data->get_child_by_name("texture_scale")->value);
             new_floor.trans_x = tof(floor_data->get_child_by_name("texture_trans_x")->value);
             new_floor.trans_y = tof(floor_data->get_child_by_name("texture_trans_y")->value);
-            new_floor.texture = load_bmp("Textures/" + floor_data->get_child_by_name("texture")->value);  //ToDo don't load it every time.
+            new_floor.texture = load_bmp("Textures/" + floor_data->get_child_by_name("texture")->value, floor_data);  //ToDo don't load it every time.
             new_floor.z = tof(floor_data->get_child_by_name("z")->value);
             //ToDo terrain sound.
             
@@ -1241,12 +1257,13 @@ void load_area(string name) {
 
 /* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
+ * If the node is present, it'll be used to report errors.
  */
-ALLEGRO_BITMAP* load_bmp(string filename) {
+ALLEGRO_BITMAP* load_bmp(string filename, data_node* node) {
     ALLEGRO_BITMAP* b = NULL;
     b = al_load_bitmap((GRAPHICS_FOLDER "/" + filename).c_str());
     if(!b) {
-        error_log("Could not open image " + filename + "!");
+        error_log("Could not open image " + filename + "!", node);
         b = bmp_error;
     }
     
@@ -1409,7 +1426,7 @@ void load_mob_types(string folder, unsigned char type) {
         mt->events = load_script(file.get_child_by_name("script"));
         
         data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
-        mt->anim = load_animation_set(&anim_file);
+        mt->anims = load_animation_set(&anim_file);
         
         if(type == MOB_TYPE_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;
@@ -1422,6 +1439,9 @@ void load_mob_types(string folder, unsigned char type) {
             pt->carry_speed = tof(file.get_child_by_name("carry_speed")->value);
             pt->carry_strength = tof(file.get_child_by_name("carry_strength")->value);
             pt->has_onion = tob(file.get_child_by_name("has_onion")->value);
+            pt->bmp_top[0] = load_bmp(file.get_child_by_name("top_leaf")->value, &file); //ToDo don't load these for every Pikmin type.
+            pt->bmp_top[1] = load_bmp(file.get_child_by_name("top_bud")->value, &file);
+            pt->bmp_top[2] = load_bmp(file.get_child_by_name("top_flower")->value, &file);
             
             pikmin_types[pt->name] = pt;
             
@@ -1561,6 +1581,7 @@ void load_options() {
     
     //Other options.
     daylight_effect = tob(file.get_child_by_name("daylight_effect")->get_value_or_default("true"));
+    draw_cursor_trail = tob(file.get_child_by_name("draw_cursor_trail")->get_value_or_default("true"));
     game_fps = toi(file.get_child_by_name("fps")->get_value_or_default("30"));
     scr_h = toi(file.get_child_by_name("height")->get_value_or_default(itos(DEF_SCR_H)));
     particle_quality = toi(file.get_child_by_name("particle_quality")->get_value_or_default("2"));
@@ -1652,11 +1673,12 @@ void move_point(float x, float y, float tx, float ty, float speed, float reach_r
 /* ----------------------------------------------------------------------------
  * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
  */
-void pluck_pikmin(leader* l, pikmin* p) {
+void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked) {
     if(p->state != PIKMIN_STATE_BURIED) return;
     
+    leader_who_plucked->anim.change("pluck", false, false);
     p->set_state(PIKMIN_STATE_IN_GROUP);
-    add_to_party(l, p);
+    add_to_party(new_leader, p);
     sfx_pikmin_plucked.play(0, false);
     sfx_pikmin_pluck.play(0, false);
 }
@@ -1951,6 +1973,7 @@ void save_options() {
     
     //Other options.
     al_fwrite(file, "daylight_effect=" + btos(daylight_effect) + "\n");
+    al_fwrite(file, "draw_cursor_trail=" + btos(draw_cursor_trail) + "\n");
     al_fwrite(file, "fps=" + itos(game_fps) + "\n");
     al_fwrite(file, "height=" + itos(scr_h) + "\n");
     al_fwrite(file, "particle_quality=" + itos(particle_quality) + "\n");
@@ -2267,6 +2290,8 @@ void use_spray(size_t spray_nr) {
     );
     
     spray_amounts[spray_nr]--;
+    
+    cur_leader_ptr->anim.change("dismiss", false, false);
 }
 
 //Calls al_fwrite, but with an std::string instead of a c-string.

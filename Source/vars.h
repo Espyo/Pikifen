@@ -31,8 +31,6 @@
 using namespace std;
 
 //Bitmaps.
-extern ALLEGRO_BITMAP* bmp_blue[3];
-extern ALLEGRO_BITMAP* bmp_blue_buried[3];
 extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
@@ -55,9 +53,7 @@ extern ALLEGRO_BITMAP* bmp_olimar_lying;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_president;
 extern ALLEGRO_BITMAP* bmp_president_lying;
-extern ALLEGRO_BITMAP* bmp_purple[3];
 extern ALLEGRO_BITMAP* bmp_red[3];
-extern ALLEGRO_BITMAP* bmp_red_buried[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
@@ -70,9 +66,6 @@ extern ALLEGRO_BITMAP* bmp_sun_bubble;
 extern ALLEGRO_BITMAP* bmp_tp;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
-extern ALLEGRO_BITMAP* bmp_white[3];
-extern ALLEGRO_BITMAP* bmp_yellow[3];
-extern ALLEGRO_BITMAP* bmp_yellow_buried[3];
 extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
 //Test things, temporary.
@@ -112,6 +105,7 @@ extern float                 area_x1;               //Top-left corner of the are
 extern float                 area_y1;
 extern float                 auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the captain auto-pluck.
 extern vector<unsigned int>  berries;
+extern bmp_manager           bitmaps;
 extern ALLEGRO_BITMAP*       bmp_error;
 extern float                 cam_trans_pan_final_x;
 extern float                 cam_trans_pan_final_y;
@@ -149,6 +143,7 @@ extern float                 day_minutes_per_irl_sec;  //Every real-life second,
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
 extern ALLEGRO_DISPLAY*      display;
+extern bool                  draw_cursor_trail;
 extern animation_set         ed_anims;
 extern bool                  ed_anim_playing;
 extern animation*            ed_cur_anim;
@@ -166,6 +161,7 @@ extern float                 ed_grabbing_hitbox_y;
 extern lafi_gui*             ed_gui;
 extern bool                  ed_hitboxes_visible;
 extern bool                  ed_holding_m2;
+extern ALLEGRO_BITMAP*       ed_leaf_bmp; //Leaf top bitmap for the current Pikmin type.
 extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char         ed_mode;
 extern float                 ed_new_hitbox_corner_x; //FLT_MAX = none.

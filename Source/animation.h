@@ -21,6 +21,10 @@ public:
     int file_w, file_h;               //Size of the sprite inside the image file.
     float game_w, game_h;             //In-game size of the sprite.
     float offs_x, offs_y;             //Offset. Move the sprite left/right/up/down to align with the previous frames and such.
+    float top_x, top_y;               //X&Y of the Pikmin's top (left/bud/flower).
+    float top_w, top_h;               //W&H of the Pikmin's top.
+    float top_angle;                  //Angle of the Pikmin's top.
+    bool top_visible;                 //Does this frame even have a visible Pikmin top?
     ALLEGRO_BITMAP* bitmap;           //Actual bitmap. This is a sub-bitmap of parent_bmp.
     vector<hitbox_instance> hitbox_instances; //List of hitboxes on this frame.
     
@@ -28,6 +32,8 @@ public:
     frame(string name, ALLEGRO_BITMAP* b, int bx, int by, int bw, int bh, float gw, float gh, vector<hitbox_instance> h);
     frame(const frame &f2);
     frame clone();
+    
+    ~frame();
 };
 
 
@@ -37,9 +43,10 @@ public:
 class frame_instance {
 public:
     string frame_name;
+    frame* frame_ptr; //Needed for performance.
     float duration; //How long this frame lasts for, in seconds.
     
-    frame_instance(string fn = "", float d = 0);
+    frame_instance(string fn = "", frame* fp = NULL, float d = 0);
 };
 
 
@@ -58,15 +65,17 @@ public:
 //A set of animations and their necessary data.
 class animation_set {
 public:
-    map<string, animation> animations;
-    map<string, frame> frames;
-    map<string, hitbox> hitboxes;
+    map<string, animation*> animations;
+    map<string, frame*> frames;
+    map<string, hitbox*> hitboxes;
     
     animation_set(
-        map<string, animation> a = map<string, animation>(),
-        map<string, frame> f = map<string, frame>(),
-        map<string, hitbox> h = map<string, hitbox>()
+        map<string, animation*> a = map<string, animation*>(),
+        map<string, frame*> f = map<string, frame*>(),
+        map<string, hitbox*> h = map<string, hitbox*>()
     );
+    
+    void destroy();
     
 };
 
@@ -77,10 +86,12 @@ public:
     animation_set* anim_set;
     float cur_frame_time;  //Time passed on the current frame.
     size_t cur_frame_nr;
+    bool done_once;
     
-    animation_instance(animation* anim = NULL, animation_set* anim_set = NULL);
+    animation_instance(animation_set* anim_set = NULL);
     animation_instance(const animation_instance &ai2);
     
+    void change(string new_anim, bool only_if_new, bool only_if_done);
     void start();
     bool tick(float time);
     frame* get_frame();

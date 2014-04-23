@@ -49,8 +49,18 @@ struct sample_struct {
     void stop();
 };
 
-class graphic_manager {
-    //map<string, ALLEGRO_BITMAP*>
+class bmp_info {
+public:
+    ALLEGRO_BITMAP* b;
+    size_t calls;
+    bmp_info(ALLEGRO_BITMAP* b = NULL);
+};
+
+class bmp_manager {
+public:
+    map<string, bmp_info> list;
+    ALLEGRO_BITMAP* get(string name, data_node* node);
+    void detach(string name);
 };
 
 #endif //ifndef MISC_STRUCTS_INCLUDED

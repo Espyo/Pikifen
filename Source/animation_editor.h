@@ -30,11 +30,13 @@ void gui_load_frame();
 void gui_load_frame_instance();
 void gui_load_hitbox();
 void gui_load_hitbox_instance();
+void gui_load_top();
 void gui_save_animation();
 void gui_save_frame();
 void gui_save_frame_instance();
 void gui_save_hitbox();
 void gui_save_hitbox_instance();
+void gui_save_top();
 void handle_controls(ALLEGRO_EVENT ev);
 void load();
 void load_animation_set();
@@ -86,6 +88,8 @@ void animation_editor::do_logic() {
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_attack"]->mouse_over_widget;
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->mouse_over_widget;
             if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->mouse_over_widget;
+        } else if(ed_mode == EDITOR_MODE_TOP) {
+            wum = ed_gui->widgets["frm_top"]->mouse_over_widget;
         }
     }
     
@@ -115,9 +119,9 @@ void animation_editor::do_logic() {
         if(ed_mode == EDITOR_MODE_ANIMATION) {
             if(ed_cur_frame_instance_nr != string::npos) {
                 string name = ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name;
-                if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = &ed_anims.frames[name];
+                if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = ed_anims.frames[name];
             }
-        } else if(ed_mode == EDITOR_MODE_FRAME) {
+        } else if(ed_mode == EDITOR_MODE_FRAME || ed_mode == EDITOR_MODE_TOP) {
             f = ed_cur_frame;
         }
         
@@ -130,7 +134,7 @@ void animation_editor::do_logic() {
                 );
             }
             
-            if(ed_hitboxes_visible && f) {
+            if(ed_hitboxes_visible) {
                 size_t n_hitboxes = f->hitbox_instances.size();
                 for(size_t h = 0; h < n_hitboxes; h++) {
                     hitbox_instance* h_ptr = &f->hitbox_instances[h];
@@ -141,7 +145,7 @@ void animation_editor::do_logic() {
                     if(ed_anims.hitboxes.find(h_ptr->hitbox_name) == ed_anims.hitboxes.end()) {
                         hitbox_color = al_map_rgba(128, 128, 128, 192); hitbox_outline_color = al_map_rgba(0, 0, 0, 255);
                     } else {
-                        unsigned char type = ed_anims.hitboxes[h_ptr->hitbox_name].type;
+                        unsigned char type = ed_anims.hitboxes[h_ptr->hitbox_name]->type;
                         if(type == HITBOX_TYPE_NORMAL) {
                             hitbox_color = al_map_rgba(0, 128, 0, 192); hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
                         } else if(type == HITBOX_TYPE_ATTACK) {
@@ -166,6 +170,15 @@ void animation_editor::do_logic() {
                         (ed_cur_hitbox_instance_nr == h ? 2 / cam_zoom : 1 / cam_zoom)
                     );
                 }
+            }
+            
+            if(f->top_visible && ed_mob_type_list == MOB_TYPE_PIKMIN) {
+                draw_sprite(
+                    ed_leaf_bmp,
+                    f->top_x, f->top_y,
+                    f->top_w, f->top_h,
+                    f->top_angle
+                );
             }
         }
         
@@ -218,6 +231,9 @@ void animation_editor::gui_load_frame() {
         ((lafi_textbox*) f->widgets["txt_gameh"])->text = ftos(ed_cur_frame->game_h);
         ((lafi_textbox*) f->widgets["txt_offsx"])->text = ftos(ed_cur_frame->offs_x);
         ((lafi_textbox*) f->widgets["txt_offsy"])->text = ftos(ed_cur_frame->offs_y);
+        
+        if(ed_mob_type_list == MOB_TYPE_PIKMIN) f->widgets["but_top"]->flags &= ~LAFI_FLAG_DISABLED;
+        else f->widgets["but_top"]->flags |= LAFI_FLAG_DISABLED;
         
         gui_load_hitbox_instance();
     }
@@ -298,6 +314,21 @@ void animation_editor::gui_load_hitbox_instance() {
     }
 }
 
+//Loads the Pikmin top's data onto the gui.
+void animation_editor::gui_load_top() {
+    lafi_widget* f = ed_gui->widgets["frm_top"];
+    
+    lafi_checkbox* c = (lafi_checkbox*) f->widgets["chk_visible"];
+    if(ed_cur_frame->top_visible) c->check();
+    else c->uncheck();
+    
+    ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_cur_frame->top_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_frame->top_y);
+    ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_cur_frame->top_w);
+    ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_cur_frame->top_h);
+    ((lafi_textbox*) f->widgets["txt_angle"])->text = ftos(ed_cur_frame->top_angle);
+}
+
 //Saves the animation's data from the gui.
 void animation_editor::gui_save_animation() {
     if(!ed_cur_anim) return;
@@ -331,7 +362,7 @@ void animation_editor::gui_save_frame() {
     
     if(ed_cur_frame->file != new_file || ed_cur_frame->file_x != new_fx || ed_cur_frame->file_y != new_fy || ed_cur_frame->file_w != new_fw || ed_cur_frame->file_h != new_fh) {
         //Changed something image-wise. Recreate it.
-        if(ed_cur_frame->parent_bmp) if(ed_cur_frame->parent_bmp != bmp_error) al_destroy_bitmap(ed_cur_frame->parent_bmp);
+        if(ed_cur_frame->parent_bmp) bitmaps.detach(ed_cur_frame->file);
         if(ed_cur_frame->bitmap) al_destroy_bitmap(ed_cur_frame->bitmap);
         ed_cur_frame->parent_bmp = load_bmp(new_file);
         ed_cur_frame->bitmap = al_create_sub_bitmap(ed_cur_frame->parent_bmp, new_fx, new_fy, new_fw, new_fh);
@@ -399,6 +430,20 @@ void animation_editor::gui_save_hitbox_instance() {
     gui_load_hitbox_instance();
 }
 
+//Saves the Pikmin top's data from the gui.
+void animation_editor::gui_save_top() {
+    lafi_widget* f = ed_gui->widgets["frm_top"];
+    
+    ed_cur_frame->top_visible = ((lafi_checkbox*) f->widgets["chk_visible"])->checked;
+    ed_cur_frame->top_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_frame->top_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_frame->top_w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
+    ed_cur_frame->top_h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
+    ed_cur_frame->top_angle = tof(((lafi_textbox*) f->widgets["txt_angle"])->text);
+    
+    gui_load_top();
+}
+
 //Handles the controls and other events.
 void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     if(
@@ -436,7 +481,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     if(ed_mode == EDITOR_MODE_ANIMATION) {
         if(ed_cur_frame_instance_nr != string::npos) {
             string name = ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name;
-            if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = &ed_anims.frames[name];
+            if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = ed_anims.frames[name];
         }
     } else if(ed_mode == EDITOR_MODE_FRAME) {
         f = ed_cur_frame;
@@ -535,11 +580,11 @@ void animation_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add("but_hitboxes", new lafi_button(0, 0, 0, 0, "Edit hitboxes"), 100, 32);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_n_anims", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_add("lbl_n_anims", new lafi_label(0, 0, 0, 0), 100, 12);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_n_frames", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_add("lbl_n_frames", new lafi_label(0, 0, 0, 0), 100, 12);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_n_hitboxes", new lafi_label(0, 0, 0, 0), 100, 16);
+    frm_object->easy_add("lbl_n_hitboxes", new lafi_label(0, 0, 0, 0), 100, 12);
     frm_object->easy_row();
     
     
@@ -560,16 +605,16 @@ void animation_editor::load() {
     lafi_frame* frm_anim = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_anims->add("frm_anim", frm_anim);
     frm_anim->easy_row();
-    frm_anim->easy_add("lin_1",    new lafi_line(  0, 0, 0, 0), 20, 16);
-    frm_anim->easy_add("lbl_data", new lafi_label( 0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER), 60, 16);
-    frm_anim->easy_add("lin_2",    new lafi_line(  0, 0, 0, 0), 20, 16);
+    frm_anim->easy_add("lin_1",    new lafi_line(  0, 0, 0, 0), 20, 12);
+    frm_anim->easy_add("lbl_data", new lafi_label( 0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER), 60, 12);
+    frm_anim->easy_add("lin_2",    new lafi_line(  0, 0, 0, 0), 20, 12);
     frm_anim->easy_row();
     frm_anim->easy_add("lbl_loop", new lafi_label( 0, 0, 0, 0, "Loop frame:"), 50, 16);
     frm_anim->easy_add("txt_loop", new lafi_textbox( 0, 0, 0, 0), 50, 16);
     frm_anim->easy_row();
-    frm_anim->easy_add("lin_3",    new lafi_line(  0, 0, 0, 0), 25, 16);
-    frm_anim->easy_add("lbl_list", new lafi_label( 0, 0, 0, 0, "Frame list", ALLEGRO_ALIGN_CENTER), 50, 16);
-    frm_anim->easy_add("lin_4",    new lafi_line(  0, 0, 0, 0), 25, 16);
+    frm_anim->easy_add("lin_3",    new lafi_line(  0, 0, 0, 0), 25, 12);
+    frm_anim->easy_add("lbl_list", new lafi_label( 0, 0, 0, 0, "Frame list", ALLEGRO_ALIGN_CENTER), 50, 12);
+    frm_anim->easy_add("lin_4",    new lafi_line(  0, 0, 0, 0), 25, 12);
     frm_anim->easy_row();
     frm_anim->easy_add("lbl_f_nr", new lafi_label( 0, 0, 0, 0), 100, 16);
     frm_anim->easy_row();
@@ -608,9 +653,9 @@ void animation_editor::load() {
     lafi_frame* frm_frame = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_frames->add("frm_frame", frm_frame);
     frm_frame->easy_row();
-    frm_frame->easy_add("lin_1",      new lafi_line(  0, 0, 0, 0), 25, 16);
-    frm_frame->easy_add("lbl_f_data", new lafi_label(0, 0, 0, 0, "Frame data", ALLEGRO_ALIGN_CENTER), 50, 16);
-    frm_frame->easy_add("lin_2",      new lafi_line(  0, 0, 0, 0), 25, 16);
+    frm_frame->easy_add("lin_1",      new lafi_line(  0, 0, 0, 0), 25, 12);
+    frm_frame->easy_add("lbl_f_data", new lafi_label(0, 0, 0, 0, "Frame data", ALLEGRO_ALIGN_CENTER), 50, 12);
+    frm_frame->easy_add("lin_2",      new lafi_line(  0, 0, 0, 0), 25, 12);
     frm_frame->easy_row();
     frm_frame->easy_add("lbl_file",   new lafi_label(0, 0, 0, 0, "File:"), 25, 16);
     frm_frame->easy_add("txt_file",   new lafi_textbox(0, 0, 0, 0), 75, 16);
@@ -631,16 +676,18 @@ void animation_editor::load() {
     frm_frame->easy_add("txt_offsx",  new lafi_textbox(0, 0, 0, 0), 27.5, 16);
     frm_frame->easy_add("txt_offsy",  new lafi_textbox(0, 0, 0, 0), 27.5, 16);
     frm_frame->easy_row();
-    frm_frame->easy_add("lin_3",      new lafi_line(  0, 0, 0, 0), 25, 16);
-    frm_frame->easy_add("lbl_list",   new lafi_label( 0, 0, 0, 0, "Hitbox list", ALLEGRO_ALIGN_CENTER), 50, 16);
-    frm_frame->easy_add("lin_4",      new lafi_line(  0, 0, 0, 0), 25, 16);
+    frm_frame->easy_add("but_top",    new lafi_button(0, 0, 0, 0, "Edit Pikmin top"), 100, 16);
     frm_frame->easy_row();
-    frm_frame->easy_add("lbl_h_nr",   new lafi_label( 0, 0, 0, 0), 100, 16);
+    frm_frame->easy_add("lin_3",      new lafi_line(  0, 0, 0, 0), 25, 12);
+    frm_frame->easy_add("lbl_list",   new lafi_label( 0, 0, 0, 0, "Hitbox list", ALLEGRO_ALIGN_CENTER), 50, 12);
+    frm_frame->easy_add("lin_4",      new lafi_line(  0, 0, 0, 0), 25, 12);
     frm_frame->easy_row();
-    frm_frame->easy_add("but_prev",   new lafi_button(0, 0, 0, 0, "<"), 20, 32);
-    frm_frame->easy_add("but_next",   new lafi_button(0, 0, 0, 0, ">"), 20, 32);
-    frm_frame->easy_add("but_add",    new lafi_button(0, 0, 0, 0, "+"), 20, 32);
-    frm_frame->easy_add("but_rem",    new lafi_button(0, 0, 0, 0, "-"), 20, 32);
+    frm_frame->easy_add("lbl_h_nr",   new lafi_label( 0, 0, 0, 0), 100, 12);
+    frm_frame->easy_row();
+    frm_frame->easy_add("but_prev",   new lafi_button(0, 0, 0, 0, "<"), 20, 24);
+    frm_frame->easy_add("but_next",   new lafi_button(0, 0, 0, 0, ">"), 20, 24);
+    frm_frame->easy_add("but_add",    new lafi_button(0, 0, 0, 0, "+"), 20, 24);
+    frm_frame->easy_add("but_rem",    new lafi_button(0, 0, 0, 0, "-"), 20, 24);
     y += frm_frame->easy_row();
     
     lafi_frame* frm_hitbox_i = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
@@ -676,11 +723,11 @@ void animation_editor::load() {
     lafi_frame* frm_hitbox = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_hitboxes->add("frm_hitbox", frm_hitbox);
     frm_hitbox->easy_row();
-    frm_hitbox->easy_add("lin_1",      new lafi_line(  0, 0, 0, 0), 25, 16);
-    frm_hitbox->easy_add("lbl_h_data", new lafi_label(0, 0, 0, 0, "Hitbox data", ALLEGRO_ALIGN_CENTER), 50, 16);
-    frm_hitbox->easy_add("lin_2",      new lafi_line(  0, 0, 0, 0), 25, 16);
+    frm_hitbox->easy_add("lin_1",      new lafi_line(  0, 0, 0, 0), 25, 12);
+    frm_hitbox->easy_add("lbl_h_data", new lafi_label(0, 0, 0, 0, "Hitbox data", ALLEGRO_ALIGN_CENTER), 50, 12);
+    frm_hitbox->easy_add("lin_2",      new lafi_line(  0, 0, 0, 0), 25, 12);
     frm_hitbox->easy_row();
-    frm_hitbox->easy_add("lbl_h_type",   new lafi_label(0, 0, 0, 0, "Hitbox type:"), 100, 16);
+    frm_hitbox->easy_add("lbl_h_type",   new lafi_label(0, 0, 0, 0, "Hitbox type:"), 100, 12);
     frm_hitbox->easy_row();
     frm_hitbox->easy_add("rad_normal",   new lafi_radio_button(0, 0, 0, 0, "Normal"), 50, 16);
     frm_hitbox->easy_add("rad_attack",   new lafi_radio_button(0, 0, 0, 0, "Attack"), 50, 16);
@@ -696,7 +743,7 @@ void animation_editor::load() {
     frm_normal->easy_row();
     frm_normal->easy_add("chk_latch",   new lafi_checkbox(0, 0, 0, 0, "Pikmin can latch"), 100, 16);
     frm_normal->easy_row();
-    frm_normal->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 16);
+    frm_normal->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 12);
     frm_normal->easy_row();
     frm_normal->easy_add("txt_hazards", new lafi_textbox(0, 0, 0, 0), 100, 16);
     frm_normal->easy_row();
@@ -709,7 +756,7 @@ void animation_editor::load() {
     frm_attack->easy_add("lbl_mult",    new lafi_label(0, 0, 0, 0, "Attack mult.:"), 60, 16);
     frm_attack->easy_add("txt_mult",    new lafi_textbox(0, 0, 0, 0), 40, 16);
     frm_attack->easy_row();
-    frm_attack->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 16);
+    frm_attack->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 12);
     frm_attack->easy_row();
     frm_attack->easy_add("txt_hazards", new lafi_textbox(0, 0, 0, 0), 100, 16);
     frm_attack->easy_row();
@@ -731,6 +778,29 @@ void animation_editor::load() {
     frm_picker->add("but_new", new lafi_button(      scr_w - 40,  32, scr_w - 8,  64, "+"));
     frm_picker->add("frm_list", new lafi_frame(      scr_w - 200, 72, scr_w - 32, scr_h - 56));
     frm_picker->add("bar_scroll", new lafi_scrollbar(scr_w - 24,  72, scr_w - 8,  scr_h - 56));
+    
+    
+    //Pikmin top frame.
+    lafi_frame* frm_top = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_top);
+    ed_gui->add("frm_top", frm_top);
+    
+    frm_top->easy_row();
+    frm_top->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_top->easy_row();
+    frm_top->easy_add("chk_visible", new lafi_checkbox(0, 0, 0, 0, "Visible"), 100, 16);
+    frm_top->easy_row();
+    frm_top->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 20, 16);
+    frm_top->easy_add("txt_x", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_top->easy_add("txt_y", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_top->easy_row();
+    frm_top->easy_add("lbl_wh", new lafi_label(0, 0, 0, 0, "W&H:"), 20, 16);
+    frm_top->easy_add("txt_w", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_top->easy_add("txt_h", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_top->easy_row();
+    frm_top->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 40, 16);
+    frm_top->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 60, 16);
+    frm_top->easy_row();
     
     
     //Bottom bar.
@@ -900,6 +970,13 @@ void animation_editor::load() {
         }
         gui_load_hitbox_instance();
     };
+    frm_frames->widgets["frm_frame"]->widgets["but_top"]->description = "Edit the Pikmin top's (leaf/bud/flower) for this frame.";
+    frm_frames->widgets["frm_frame"]->widgets["but_top"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        show_widget(ed_gui->widgets["frm_top"]);
+        hide_widget(ed_gui->widgets["frm_frames"]);
+        ed_mode = EDITOR_MODE_TOP;
+        gui_load_top();
+    };
     frm_frames->widgets["frm_frame"]->widgets["but_prev"]->description = "Previous hitbox.";
     frm_frames->widgets["frm_frame"]->widgets["but_next"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         if(ed_cur_frame->hitbox_instances.size()) {
@@ -1027,15 +1104,15 @@ void animation_editor::load() {
         
         if(ed_mode == EDITOR_MODE_ANIMATION) {
             if(ed_anims.animations.find(name) != ed_anims.animations.end()) return;
-            ed_anims.animations[name] = animation(name);
+            ed_anims.animations[name] = new animation(name);
             pick(name, ANIMATION_EDITOR_PICKER_ANIMATION);
         } else if(ed_mode == EDITOR_MODE_FRAME) {
             if(ed_anims.frames.find(name) != ed_anims.frames.end()) return;
-            ed_anims.frames[name] = frame(name);
+            ed_anims.frames[name] = new frame(name);
             pick(name, ANIMATION_EDITOR_PICKER_FRAME);
         } else if(ed_mode == EDITOR_MODE_HITBOX) {
             if(ed_anims.hitboxes.find(name) != ed_anims.hitboxes.end()) return;
-            ed_anims.hitboxes[name] = hitbox(name);
+            ed_anims.hitboxes[name] = new hitbox(name);
             pick(name, ANIMATION_EDITOR_PICKER_HITBOX);
         }
         
@@ -1046,6 +1123,24 @@ void animation_editor::load() {
         lafi_scrollbar* s = (lafi_scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"];
         s->move_button(0, (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) / 2 - 30 * dy);
     };
+    
+    
+    //Properties -- Pikmin top.
+    auto lambda_save_top = [] (lafi_widget*) { gui_save_top(); };
+    auto lambda_save_top_click = [] (lafi_widget*, int, int) { gui_save_top(); };
+    frm_top->widgets["but_back"]->description = "Go back.";
+    frm_top->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        show_widget(ed_gui->widgets["frm_frames"]);
+        hide_widget(ed_gui->widgets["frm_top"]);
+        ed_mode = EDITOR_MODE_FRAME;
+    };
+    frm_top->widgets["chk_visible"]->description = "Is the top visible in this frame?";
+    frm_top->widgets["chk_visible"]->left_mouse_click_handler = lambda_save_top_click;
+    frm_top->widgets["txt_x"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["txt_y"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["txt_w"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["txt_h"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["txt_angle"]->lose_focus_handler = lambda_save_top;
     
     
     //Properties -- bottom bar.
@@ -1079,11 +1174,7 @@ void animation_editor::load() {
 
 //Loads the animation set for the current object.
 void animation_editor::load_animation_set() {
-    for(auto f = ed_anims.frames.begin(); f != ed_anims.frames.end(); f++) {
-        if(f->second.parent_bmp != bmp_error)
-            al_destroy_bitmap(f->second.parent_bmp);
-        al_destroy_bitmap(f->second.bitmap);
-    }
+    ed_anims.destroy();
     
     data_node file = data_node(ed_filename);
     if(!file.file_was_opened) {
@@ -1095,16 +1186,18 @@ void animation_editor::load_animation_set() {
     ed_cur_anim = NULL;
     ed_cur_frame = NULL;
     ed_cur_hitbox = NULL;
+    ed_cur_frame_instance_nr = string::npos;
+    ed_cur_hitbox_instance_nr = string::npos;
     if(ed_anims.animations.size() > 0) {
-        ed_cur_anim = &ed_anims.animations.begin()->second;
+        ed_cur_anim = ed_anims.animations.begin()->second;
         if(ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = 0;
     }
     if(ed_anims.frames.size() > 0) {
-        ed_cur_frame = &ed_anims.frames.begin()->second;
+        ed_cur_frame = ed_anims.frames.begin()->second;
         if(ed_cur_frame->hitbox_instances.size()) ed_cur_hitbox_instance_nr = 0;
     }
     if(ed_anims.hitboxes.size() > 0) {
-        ed_cur_hitbox = &ed_anims.hitboxes.begin()->second;
+        ed_cur_hitbox = ed_anims.hitboxes.begin()->second;
     }
 }
 
@@ -1222,7 +1315,7 @@ void animation_editor::pick(string name, unsigned char type) {
         update_stats();
         
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        ed_cur_anim = &ed_anims.animations[name];
+        ed_cur_anim = ed_anims.animations[name];
         ed_cur_frame_instance_nr = (ed_cur_anim->frame_instances.size()) ? 0 : string::npos;
         ed_cur_hitbox_instance_nr = string::npos;
         show_widget(ed_gui->widgets["frm_anims"]);
@@ -1230,22 +1323,24 @@ void animation_editor::pick(string name, unsigned char type) {
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
         ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name = name;
+        ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_ptr = ed_anims.frames[name];
         show_widget(ed_gui->widgets["frm_anims"]);
         gui_load_frame_instance();
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
-        ed_cur_frame = &ed_anims.frames[name];
+        ed_cur_frame = ed_anims.frames[name];
         ed_cur_hitbox_instance_nr = (ed_cur_frame->hitbox_instances.size()) ? 0 : string::npos;
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_frame();
         
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
         ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_name = name;
+        ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_ptr = ed_anims.hitboxes[name];
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_hitbox_instance();
         
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX) {
-        ed_cur_hitbox = &ed_anims.hitboxes[name];
+        ed_cur_hitbox = ed_anims.hitboxes[name];
         show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
         
@@ -1264,9 +1359,21 @@ void animation_editor::pick(string name, unsigned char type) {
     }
     
     if(type > ANIMATION_EDITOR_PICKER_OBJECT) {
+        string temp_path_start = ed_filename;
         ed_filename += "/" + name + "/Animations.txt";
         ed_object_name = name;
         load_animation_set();
+        
+        //Top leaf bitmap.
+        if(ed_leaf_bmp && ed_leaf_bmp != bmp_error) {
+            al_destroy_bitmap(ed_leaf_bmp);
+            ed_leaf_bmp = NULL;
+        }
+        
+        if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
+            data_node data = data_node(temp_path_start + "/" + name + "/Data.txt");
+            ed_leaf_bmp = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+        }
     }
     if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {
         show_widget(ed_gui->widgets["frm_main"]);
@@ -1284,12 +1391,12 @@ void animation_editor::save_animation_set() {
         data_node* anim_node = new data_node(a->first, "");
         animations_node->add(anim_node);
         
-        anim_node->add(new data_node("loop_frame", itos(a->second.loop_frame)));
+        anim_node->add(new data_node("loop_frame", itos(a->second->loop_frame)));
         data_node* frame_instances_node = new data_node("frame_instances", "");
         anim_node->add(frame_instances_node);
         
-        for(size_t fi = 0; fi < a->second.frame_instances.size(); fi++) {
-            frame_instance* fi_ptr = &a->second.frame_instances[fi];
+        for(size_t fi = 0; fi < a->second->frame_instances.size(); fi++) {
+            frame_instance* fi_ptr = &a->second->frame_instances[fi];
             
             data_node* frame_instance_node = new data_node(fi_ptr->frame_name, "");
             frame_instances_node->add(frame_instance_node);
@@ -1305,21 +1412,30 @@ void animation_editor::save_animation_set() {
         data_node* frame_node = new data_node(f->first, "");
         frames_node->add(frame_node);
         
-        frame_node->add(new data_node("file", f->second.file));
-        frame_node->add(new data_node("file_x", itos(f->second.file_x)));
-        frame_node->add(new data_node("file_y", itos(f->second.file_y)));
-        frame_node->add(new data_node("file_w", itos(f->second.file_w)));
-        frame_node->add(new data_node("file_h", itos(f->second.file_h)));
-        frame_node->add(new data_node("game_w", ftos(f->second.game_w)));
-        frame_node->add(new data_node("game_h", ftos(f->second.game_h)));
-        frame_node->add(new data_node("offs_x", ftos(f->second.offs_x)));
-        frame_node->add(new data_node("offs_y", ftos(f->second.offs_y)));
+        frame_node->add(new data_node("file", f->second->file));
+        frame_node->add(new data_node("file_x", itos(f->second->file_x)));
+        frame_node->add(new data_node("file_y", itos(f->second->file_y)));
+        frame_node->add(new data_node("file_w", itos(f->second->file_w)));
+        frame_node->add(new data_node("file_h", itos(f->second->file_h)));
+        frame_node->add(new data_node("game_w", ftos(f->second->game_w)));
+        frame_node->add(new data_node("game_h", ftos(f->second->game_h)));
+        frame_node->add(new data_node("offs_x", ftos(f->second->offs_x)));
+        frame_node->add(new data_node("offs_y", ftos(f->second->offs_y)));
+        
+        if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
+            frame_node->add(new data_node("top_visible", btos(f->second->top_visible)));
+            frame_node->add(new data_node("top_x", ftos(f->second->top_x)));
+            frame_node->add(new data_node("top_y", ftos(f->second->top_y)));
+            frame_node->add(new data_node("top_w", ftos(f->second->top_w)));
+            frame_node->add(new data_node("top_h", ftos(f->second->top_h)));
+            frame_node->add(new data_node("top_angle", ftos(f->second->top_angle)));
+        }
         
         data_node* hitbox_instances_node = new data_node("hitbox_instances", "");
         frame_node->add(hitbox_instances_node);
         
-        for(size_t hi = 0; hi < f->second.hitbox_instances.size(); hi++) {
-            hitbox_instance* hi_ptr = &f->second.hitbox_instances[hi];
+        for(size_t hi = 0; hi < f->second->hitbox_instances.size(); hi++) {
+            hitbox_instance* hi_ptr = &f->second->hitbox_instances[hi];
             
             data_node* hitbox_instance_node = new data_node(hi_ptr->hitbox_name, "");
             hitbox_instances_node->add(hitbox_instance_node);
@@ -1341,12 +1457,12 @@ void animation_editor::save_animation_set() {
         data_node* hitbox_node = new data_node(h->first, "");
         hitboxes_node->add(hitbox_node);
         
-        hitbox_node->add(new data_node("type", itos(h->second.type)));
-        hitbox_node->add(new data_node("multiplier", ftos(h->second.multiplier)));
-        hitbox_node->add(new data_node("can_pikmin_latch", btos(h->second.can_pikmin_latch)));
-        hitbox_node->add(new data_node("elements", h->second.elements));
-        hitbox_node->add(new data_node("angle", ftos(h->second.angle)));
-        hitbox_node->add(new data_node("knockback", ftos(h->second.knockback)));
+        hitbox_node->add(new data_node("type", itos(h->second->type)));
+        hitbox_node->add(new data_node("multiplier", ftos(h->second->multiplier)));
+        hitbox_node->add(new data_node("can_pikmin_latch", btos(h->second->can_pikmin_latch)));
+        hitbox_node->add(new data_node("elements", h->second->elements));
+        hitbox_node->add(new data_node("angle", ftos(h->second->angle)));
+        hitbox_node->add(new data_node("knockback", ftos(h->second->knockback)));
     }
     
     file_node.save_file(ed_filename);
@@ -1371,9 +1487,9 @@ void animation_editor::update_stats() {
     if(ed_object_name.size()) { show_widget(f); } //Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
     else hide_widget(f);
     
-    ((lafi_label*) f->widgets["lbl_n_anims"])->text = itos(ed_anims.animations.size()) + " animations";
-    ((lafi_label*) f->widgets["lbl_n_frames"])->text = itos(ed_anims.frames.size()) + " frames";
-    ((lafi_label*) f->widgets["lbl_n_hitboxes"])->text = itos(ed_anims.hitboxes.size()) + " hitboxes";
+    ((lafi_label*) f->widgets["lbl_n_anims"])->text = "Animations: " + itos(ed_anims.animations.size());
+    ((lafi_label*) f->widgets["lbl_n_frames"])->text = "Frames: " + itos(ed_anims.frames.size());
+    ((lafi_label*) f->widgets["lbl_n_hitboxes"])->text = "Hitboxes: " + itos(ed_anims.hitboxes.size());
 }
 
 #endif //ifndef ANIMATION_EDITOR_INCLUDED

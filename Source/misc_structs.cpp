@@ -3,6 +3,7 @@
 #include "const.h"
 #include "functions.h"
 #include "misc_structs.h"
+#include "vars.h"
 
 sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
     sample = s;
@@ -187,5 +188,34 @@ void party_spot_info::remove(mob* m) {
             current_wheel--;
             n_current_wheel_members = mobs_in_spots[current_wheel].size();
         }
+    }
+}
+
+bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
+    this->b = b;
+    calls = 1;
+}
+
+ALLEGRO_BITMAP* bmp_manager::get(string name, data_node* node) {
+    if(list.find(name) == list.end()) {
+        ALLEGRO_BITMAP* b = load_bmp(name, node);
+        list[name] = bmp_info(b);
+        return b;
+    } else {
+        list[name].calls++;
+        return list[name].b;
+    }
+};
+
+void bmp_manager::detach(string name) {
+    auto it = list.find(name);
+    if(it == list.end()) return;
+    
+    it->second.calls--;
+    if(it->second.calls == 0) {
+        if(it->second.b != bmp_error) {
+            al_destroy_bitmap(it->second.b);
+        }
+        list.erase(it);
     }
 }

@@ -13,6 +13,7 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
     this->sec = sec;
     
     type = t;
+    anim = animation_instance(&t->anims);
     
     to_delete = false;
     reached_destination = false;

@@ -104,20 +104,6 @@ int main(int argc, char**) {
         bmp_olimar = load_bmp("Olimar.png");
         bmp_louie = load_bmp("Louie.png");
         bmp_president = load_bmp("President.png");
-        for(unsigned char m = 0; m < 3; m++) {
-            string maturity_str;
-            if(m == 0) maturity_str = "leaf";
-            else if(m == 1) maturity_str = "bud";
-            else maturity_str = "flower";
-            bmp_red[m] = load_bmp(("Red_" + maturity_str + ".png").c_str());
-            bmp_yellow[m] = load_bmp(("Yellow_" + maturity_str + ".png").c_str());
-            bmp_blue[m] = load_bmp(("Blue_" + maturity_str + ".png").c_str());
-            bmp_red_buried[m] = load_bmp(("Red_buried_" + maturity_str + ".png").c_str());
-            bmp_yellow_buried[m] = load_bmp(("Yellow_buried_" + maturity_str + ".png").c_str());
-            bmp_blue_buried[m] = load_bmp(("Blue_buried_" + maturity_str + ".png").c_str());
-            bmp_purple[m] = load_bmp(("Purple_" + maturity_str + ".png").c_str());
-            bmp_white[m] = load_bmp(("White_" + maturity_str + ".png").c_str());
-        }
         bmp_red_onion = load_bmp("Red_onion.png");
         bmp_yellow_onion = load_bmp("Yellow_onion.png");
         bmp_blue_onion = load_bmp("Blue_onion.png");
@@ -172,10 +158,16 @@ int main(int argc, char**) {
         
         ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
         if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+        al_destroy_bitmap(temp_font_bitmap);
+        
         temp_font_bitmap = load_bmp("Area_name_font.png");
         if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+        al_destroy_bitmap(temp_font_bitmap);
+        
         temp_font_bitmap = load_bmp("Counter_font.png");
         if(temp_font_bitmap) font_counter = al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
+        al_destroy_bitmap(temp_font_bitmap);
+        
         temp_font_bitmap = load_bmp("Value_font.png");
         if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
         al_destroy_bitmap(temp_font_bitmap);

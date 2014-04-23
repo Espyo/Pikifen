@@ -69,7 +69,7 @@ ALLEGRO_COLOR      interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR 
 animation_set      load_animation_set(data_node* frames_node);
 void               load_area(string name);
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
-ALLEGRO_BITMAP*    load_bmp(string filename);
+ALLEGRO_BITMAP*    load_bmp(string filename, data_node* node = NULL);
 data_node          load_data_file(string filename);
 vector<hitbox>     load_hitboxes(data_node* frame_node);
 void               load_mob_types(string folder, unsigned char type);
@@ -79,7 +79,7 @@ vector<mob_event*> load_script(data_node* node);
 void               load_game_content();
 void               make_uncarriable(mob* m);
 void               move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached);
-void               pluck_pikmin(leader* l, pikmin* p);
+void               pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
 void               random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float center_x, float center_y, float speed_min, float speed_max, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color);

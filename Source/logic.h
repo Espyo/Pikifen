@@ -144,13 +144,15 @@ void do_logic() {
     cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED / game_fps;
     
     //Cursor trail.
-    if(cursor_save_time > 0) {
-        cursor_save_time -= 1.0 / game_fps;
-        if(cursor_save_time <= 0) {
-            cursor_save_time = CURSOR_SAVE_INTERVAL;
-            cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
-            if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
-                cursor_spots.erase(cursor_spots.begin());
+    if(draw_cursor_trail) {
+        if(cursor_save_time > 0) {
+            cursor_save_time -= 1.0 / game_fps;
+            if(cursor_save_time <= 0) {
+                cursor_save_time = CURSOR_SAVE_INTERVAL;
+                cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
+                if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+                    cursor_spots.erase(cursor_spots.begin());
+                }
             }
         }
     }
@@ -373,6 +375,8 @@ void do_logic() {
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
                     pik_ptr->latched = true;
+                    pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                    pik_ptr->anim.change("attack", true, false);
                     
                     pik_ptr->set_target(0, 0, &mob_ptr->x, &mob_ptr->y, true);
                 }
@@ -503,6 +507,7 @@ void do_logic() {
                         pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
                         pik_ptr->face(atan2(pik_ptr->attacking_mob->y - pik_ptr->y, pik_ptr->attacking_mob->x - pik_ptr->x));
                         if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
+                        pik_ptr->anim.change("attack", true, false);
                         
                     } else {
                         if(dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy) <= pik_ptr->type->size * 0.5 + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE) {
@@ -557,7 +562,7 @@ void do_logic() {
                     float h_y = m_ptr->y + (hi_ptr->x * s + hi_ptr->y * c);
                     
                     if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + hi_ptr->radius) {
-                        hitbox* h_ptr = &m_ptr->type->anim.hitboxes[hi_ptr->hitbox_name];
+                        hitbox* h_ptr = m_ptr->type->anims.hitboxes[hi_ptr->hitbox_name];
                         if(h_ptr->type == HITBOX_TYPE_ATTACK) {
                             float knockback_angle = h_ptr->angle;
                             if(knockback_angle == -1) {
@@ -595,6 +600,16 @@ void do_logic() {
                 pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
             }
             
+            if(pik_ptr->state == PIKMIN_STATE_BURIED) {
+                pik_ptr->anim.change("burrowed", true, true);
+            } else if(pik_ptr->speed_z == 0 && pik_ptr->attack_time == 0) {
+                if(cur_leader_ptr->holding_pikmin != pik_ptr && (pik_ptr->speed_x != 0 || pik_ptr->speed_y != 0)) {
+                    pik_ptr->anim.change("walk", true, true);
+                } else {
+                    pik_ptr->anim.change("idle", true, true);
+                }
+            }
+            
         }
         
         
@@ -607,10 +622,11 @@ void do_logic() {
         if(cur_leader_ptr->holding_pikmin) {
             cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
             cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->size / 2;
+            cur_leader_ptr->holding_pikmin->angle = cur_leader_ptr->angle;
         }
         
         //Current leader movement.
-        if(!cur_leader_ptr->auto_pluck_mode) {
+        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->carrier_info) {
             float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
             if(leader_move_intensity < 0.75) leader_move_intensity = 0;
             if(leader_move_intensity > 1) leader_move_intensity = 1;
@@ -625,19 +641,20 @@ void do_logic() {
         
         size_t n_leaders = leaders.size();
         for(size_t l = 0; l < n_leaders; l++) {
+            leader* l_ptr = leaders[l];
             if(whistling) {
                 if(l != cur_leader_nr) {
                     if(
-                        dist(leaders[l]->x, leaders[l]->y, cursor_x, cursor_y) <= whistle_radius &&
-                        !leaders[l]->following_party &&
-                        !leaders[l]->was_thrown) {
+                        dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius &&
+                        !l_ptr->following_party &&
+                        !l_ptr->was_thrown) {
                         //Leader got whistled.
-                        add_to_party(cur_leader_ptr, leaders[l]);
-                        leaders[l]->auto_pluck_mode = false;
+                        add_to_party(cur_leader_ptr, l_ptr);
+                        l_ptr->auto_pluck_mode = false;
                         
-                        size_t n_party_members = leaders[l]->party->members.size();
+                        size_t n_party_members = l_ptr->party->members.size();
                         for(size_t m = 0; m < n_party_members; m++) {
-                            mob* member = leaders[l]->party->members[0];
+                            mob* member = l_ptr->party->members[0];
                             remove_from_party(member);
                             add_to_party(cur_leader_ptr, member);
                         }
@@ -645,52 +662,61 @@ void do_logic() {
                 }
             }
             
-            if(leaders[l]->following_party && !leaders[l]->auto_pluck_mode) {
-                leaders[l]->set_target(
+            if(l_ptr->following_party && !l_ptr->auto_pluck_mode) {
+                l_ptr->set_target(
                     0,
                     0,
-                    &leaders[l]->following_party->party->party_center_x,
-                    &leaders[l]->following_party->party->party_center_y,
+                    &l_ptr->following_party->party->party_center_x,
+                    &l_ptr->following_party->party->party_center_y,
                     false);
             } else {
-                if(leaders[l]->auto_pluck_mode) {
-                    if(leaders[l]->auto_pluck_pikmin && leaders[l]->reached_destination) {
+                if(l_ptr->auto_pluck_mode) {
+                    if(l_ptr->auto_pluck_pikmin && l_ptr->reached_destination) {
                     
-                        leader* new_pikmin_leader = leaders[l];
-                        if(leaders[l]->following_party) {
-                            if(typeid(*leaders[l]->following_party) == typeid(leader)) {
-                                //If this leader is following another one, then the new Pikmin should be a part of that top leader.
-                                new_pikmin_leader = (leader*) leaders[l]->following_party;
+                        leader* new_pikmin_leader = l_ptr;
+                        if(l_ptr->following_party) {
+                            if(typeid(*l_ptr->following_party) == typeid(leader)) {
+                                //If this leader is following another one, then the new Pikmin should be in the party of that top leader.
+                                new_pikmin_leader = (leader*) l_ptr->following_party;
                             }
                         }
                         
                         //Reached the Pikmin we want to pluck. Pluck it and find a new one.
-                        pluck_pikmin(new_pikmin_leader, leaders[l]->auto_pluck_pikmin);
-                        leaders[l]->auto_pluck_pikmin = NULL;
+                        pluck_pikmin(new_pikmin_leader, l_ptr->auto_pluck_pikmin, l_ptr);
+                        l_ptr->auto_pluck_pikmin = NULL;
                     }
                     
-                    if(!leaders[l]->auto_pluck_pikmin) {
+                    if(!l_ptr->auto_pluck_pikmin) {
                         float d;
-                        pikmin* new_pikmin = get_closest_buried_pikmin(leaders[l]->x, leaders[l]->y, &d, true);
+                        pikmin* new_pikmin = get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, true);
                         
                         if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
-                            leaders[l]->auto_pluck_pikmin = new_pikmin;
+                            l_ptr->auto_pluck_pikmin = new_pikmin;
                             new_pikmin->pluck_reserved = true;
-                            leaders[l]->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
+                            l_ptr->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
                         } else { //No more buried Pikmin, or none nearby. Give up.
-                            leaders[l]->auto_pluck_mode = false;
-                            leaders[l]->remove_target(true);
+                            l_ptr->auto_pluck_mode = false;
+                            l_ptr->remove_target(true);
                         }
                     }
                 } else {
-                    if(leaders[l]->auto_pluck_pikmin) {
+                    if(l_ptr->auto_pluck_pikmin) {
                         //Cleanup.
-                        leaders[l]->auto_pluck_pikmin->pluck_reserved = false;
-                        leaders[l]->auto_pluck_pikmin = NULL;
-                        leaders[l]->remove_target(true);
+                        l_ptr->auto_pluck_pikmin->pluck_reserved = false;
+                        l_ptr->auto_pluck_pikmin = NULL;
+                        l_ptr->remove_target(true);
                     }
                 }
             }
+            
+            if(!l_ptr->carrier_info && !whistling) {
+                if(l_ptr->speed_x != 0 || l_ptr->speed_y != 0) {
+                    l_ptr->anim.change("walk", true, true);
+                } else {
+                    l_ptr->anim.change("idle", true, true);
+                }
+            }
+            
             
         }
         
@@ -768,7 +794,7 @@ void do_logic() {
         cursor_x = mcx;
         cursor_y = mcy;
         
-        if(!cur_leader_ptr->auto_pluck_mode) {
+        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->carrier_info) {
             cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
             cur_leader_ptr->face(cursor_angle);
         }

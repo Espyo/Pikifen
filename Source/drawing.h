@@ -148,71 +148,87 @@ void do_drawing() {
             }
         }
         
-        //Pikmin
+        //Pikmin.
         n_pikmin = pikmin_list.size();
         for(size_t p = 0; p < n_pikmin; p++) {
-            ALLEGRO_BITMAP* bm = NULL;
             pikmin* pik_ptr = pikmin_list[p];
+            bool idling = !pik_ptr->following_party && !pik_ptr->carrying_mob && !pik_ptr->attacking_mob && !pik_ptr->was_thrown;
             
-            bool idling = !pik_ptr->following_party && !pik_ptr->carrying_mob && !pik_ptr->attacking_mob;
-            
-            if(pik_ptr->type->name == "Red Pikmin") {
-                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_red_buried[pik_ptr->maturity];
-                //else if(idling) bm = bmp_red_idle[pik_ptr->maturity];
-                else bm = bmp_red[pik_ptr->maturity];
-            } else if(pik_ptr->type->name == "Yellow Pikmin") {
-                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_yellow_buried[pik_ptr->maturity];
-                //else if(idling) bm = bmp_yellow_idle[pik_ptr->maturity];
-                else bm = bmp_yellow[pik_ptr->maturity];
-            } else if(pik_ptr->type->name == "Blue Pikmin") {
-                if(pik_ptr->state == PIKMIN_STATE_BURIED) bm = bmp_blue_buried[pik_ptr->maturity];
-                //else if(idling) bm = bmp_blue_idle[pik_ptr->maturity];
-                else bm = bmp_blue[pik_ptr->maturity];
-            } else if(pik_ptr->type->name == "Purple Pikmin") {
-                bm = bmp_purple[pik_ptr->maturity];
-            } else if(pik_ptr->type->name == "White Pikmin") {
-                bm = bmp_white[pik_ptr->maturity];
-            }
-            draw_sprite(
-                bm,
-                pik_ptr->x, pik_ptr->y,
-                pik_ptr->type->size + pik_ptr->z * 0.1, pik_ptr->type->size + pik_ptr->z * 0.1,
-                pik_ptr->angle);
-                
-            if(idling) {
-                al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+            frame* f = pik_ptr->anim.get_frame();
+            if(f) {
+                float c = cos(pik_ptr->angle), s = sin(pik_ptr->angle);
+                float sprite_x = pik_ptr->x + c * f->offs_x + c * f->offs_y;
+                float sprite_y = pik_ptr->y - s * f->offs_y + s * f->offs_x;
                 draw_sprite(
-                    bm,
-                    pik_ptr->x, pik_ptr->y,
-                    pik_ptr->type->size + pik_ptr->z * 0.1, pik_ptr->type->size + pik_ptr->z * 0.1,
-                    pik_ptr->angle,
-                    al_map_rgb(255, 255, 255)
+                    f->bitmap,
+                    sprite_x, sprite_y,
+                    f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
+                    pik_ptr->angle
                 );
-                al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-                draw_sprite(
-                    bmp_idle_glow,
-                    pik_ptr->x, pik_ptr->y,
-                    30, 30,
-                    idle_glow_angle,
-                    change_alpha(pik_ptr->type->main_color, 160));
+                
+                if(idling) {
+                    al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+                    draw_sprite(
+                        f->bitmap,
+                        sprite_x, sprite_y,
+                        f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
+                        pik_ptr->angle
+                    );
+                    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+                }
+                
+                if(f->top_visible) {
+                    draw_sprite(
+                        pik_ptr->pik_type->bmp_top[pik_ptr->maturity],
+                        sprite_x + c * f->top_x + c * f->top_y,
+                        sprite_y - s * f->top_y + s * f->top_x,
+                        f->top_w, f->top_h,
+                        f->top_angle + pik_ptr->angle
+                    );
+                }
+                
+                if(idling) {
+                    draw_sprite(
+                        bmp_idle_glow,
+                        pik_ptr->x, pik_ptr->y,
+                        30, 30,
+                        idle_glow_angle,
+                        change_alpha(pik_ptr->type->main_color, 160));
+                }
+                
             }
+            
         }
         
         //Leaders.
         for(size_t l = 0; l < n_leaders; l++) {
-            ALLEGRO_BITMAP* bm = NULL;
-            if(leaders[l]->carrier_info) {
-                bm = (l == 0) ? bmp_olimar_lying : ((l == 1) ? bmp_louie_lying : bmp_president_lying);
+            if(l == 0) { //ToDo
+                frame* f = leaders[l]->anim.get_frame();
+                if(f) {
+                    float c = cos(leaders[l]->angle), s = sin(leaders[l]->angle);
+                    draw_sprite(
+                        f->bitmap,
+                        leaders[l]->x + c * f->offs_x + c * f->offs_y,
+                        leaders[l]->y - s * f->offs_y + s * f->offs_x,
+                        f->game_w, f->game_h,
+                        leaders[l]->angle
+                    );
+                }
             } else {
-                bm = (l == 0) ? bmp_olimar : ((l == 1) ? bmp_louie : bmp_president);
+                ALLEGRO_BITMAP* bm = NULL;
+                if(leaders[l]->carrier_info) {
+                    bm = (l == 0) ? bmp_olimar_lying : ((l == 1) ? bmp_louie_lying : bmp_president_lying);
+                } else {
+                    bm = (l == 0) ? bmp_olimar : ((l == 1) ? bmp_louie : bmp_president);
+                }
+                draw_sprite(
+                    bm,
+                    leaders[l]->x, leaders[l]->y,
+                    32,
+                    32,
+                    leaders[l]->angle
+                );
             }
-            draw_sprite(
-                bm,
-                leaders[l]->x, leaders[l]->y,
-                32,
-                32,
-                leaders[l]->angle
-            );
         }
         
         //Onions.
@@ -343,16 +359,18 @@ void do_drawing() {
         
         //Cursor trail
         al_use_transform(&normal_transform);
-        for(size_t p = 1; p < cursor_spots.size(); p++) {
-            point* p_ptr = &cursor_spots[p];
-            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
-            if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
-                al_draw_line(
-                    p_ptr->x, p_ptr->y,
-                    pp_ptr->x, pp_ptr->y,
-                    al_map_rgba(255, 0, 255, (p / (float) cursor_spots.size()) * 64),
-                    p * 3
-                );
+        if(draw_cursor_trail) {
+            for(size_t p = 1; p < cursor_spots.size(); p++) {
+                point* p_ptr = &cursor_spots[p];
+                point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
+                if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
+                    al_draw_line(
+                        p_ptr->x, p_ptr->y,
+                        pp_ptr->x, pp_ptr->y,
+                        al_map_rgba(255, 0, 255, (p / (float) cursor_spots.size()) * 64),
+                        p * 3
+                    );
+                }
             }
         }
         
@@ -643,10 +661,7 @@ void do_drawing() {
             if(closest_party_member) {
                 ALLEGRO_BITMAP* bm = NULL;
                 if(typeid(*closest_party_member) == typeid(pikmin)) {
-                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(closest_party_member);
-                    if(pikmin_ptr->type->name == "Red Pikmin") bm = bmp_red[pikmin_ptr->maturity];
-                    else if(pikmin_ptr->type->name == "Yellow Pikmin") bm = bmp_yellow[pikmin_ptr->maturity];
-                    else if(pikmin_ptr->type->name == "Blue Pikmin") bm = bmp_blue[pikmin_ptr->maturity];
+                    //ToDo
                 } else if(typeid(*closest_party_member) == typeid(leader)) {
                     leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
                     if(leader_ptr == leaders[0]) bm = bmp_olimar;

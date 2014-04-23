@@ -16,4 +16,7 @@ pikmin_type::pikmin_type() {
     can_swim = false;
     can_latch = true;
     can_carry_bomb_rocks = false;
+    bmp_top[0] = NULL;
+    bmp_top[1] = NULL;
+    bmp_top[2] = NULL;
 }

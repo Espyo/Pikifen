@@ -95,9 +95,8 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(m->type->anim.animations.find(data) != m->type->anim.animations.end()) {
-            m->anim = animation_instance(&m->type->anim.animations[data], &m->type->anim);
-            m->anim.start();
+        if(m->type->anims.animations.find(data) != m->type->anims.animations.end()) { //ToDo move this check to the error log.
+            m->anim.change(data, false, false);
         } else {
             error_log("Animation \"" + data + "\" not found, called in the mob type " + m->type->name + "'s script!");
         }

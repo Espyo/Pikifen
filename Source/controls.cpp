@@ -179,7 +179,7 @@ void handle_button(unsigned int button, float pos) {
                 float d;
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
                 if(p && d <= MIN_PLUCK_RANGE) {
-                    pluck_pikmin(cur_leader_ptr, p);
+                    pluck_pikmin(cur_leader_ptr, p, cur_leader_ptr);
                     auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
                     done = true;
                 }
@@ -252,10 +252,13 @@ void handle_button(unsigned int button, float pos) {
                     holding_ptr->y = cur_leader_ptr->y;
                     holding_ptr->z = cur_leader_ptr->z;
                     
-                    float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-                    holding_ptr->speed_x = cos(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
-                    holding_ptr->speed_y = sin(cursor_angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
+                    float angle, d;
+                    coordinates_to_angle(cursor_x - cur_leader_ptr->x, cursor_y - cur_leader_ptr->y, &angle, &d);
+                    holding_ptr->speed_x = cos(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
+                    holding_ptr->speed_y = sin(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
                     holding_ptr->speed_z = -(GRAVITY_ADDER) * 0.65; //1.3 second throw, just like in Pikmin 2.
+                    holding_ptr->angle = angle;
+                    holding_ptr->face(angle);
                     
                     holding_ptr->was_thrown = true;
                     
@@ -267,6 +270,8 @@ void handle_button(unsigned int button, float pos) {
                     sfx_throw.stop();
                     sfx_pikmin_thrown.play(0, false);
                     sfx_throw.play(0, false);
+                    cur_leader_ptr->anim.change("throw", false, false);
+                    holding_ptr->anim.change("thrown", false, false);
                 }
             }
             
@@ -287,6 +292,7 @@ void handle_button(unsigned int button, float pos) {
                 for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
                 whistle_fade_time = 0;
                 whistle_fade_radius = 0;
+                cur_leader_ptr->anim.change("whistling", true, false);
                 
             } else { //Button released.
                 stop_whistling();
@@ -370,7 +376,6 @@ void handle_button(unsigned int button, float pos) {
             active_control();
             
             dismiss();
-            cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
             
         } else if(button == BUTTON_PAUSE) {
         
@@ -488,18 +493,18 @@ void handle_button(unsigned int button, float pos) {
             
             if(pos == 0) return;
             
-            leader* leader_ptr = cur_leader_ptr;
-            
-            if(leader_ptr->carrier_info) {
+            if(cur_leader_ptr->carrier_info) {
                 active_control();
             } else {
             
                 dismiss();
                 
-                leader_ptr->carrier_info = new carrier_info_struct(
-                    leader_ptr,
+                cur_leader_ptr->carrier_info = new carrier_info_struct(
+                    cur_leader_ptr,
                     3, //ToDo
                     false);
+                    
+                cur_leader_ptr->anim.change("lie", false, false);
             }
             
         } else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT) {

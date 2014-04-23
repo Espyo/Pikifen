@@ -33,11 +33,13 @@ public:
 class hitbox_instance {
 public:
     string hitbox_name;
+    hitbox* hitbox_ptr; //Needed for performance.
     float x, y, z;  //Relative coordinates.
     float radius;
     
-    hitbox_instance(string hn = "", float x = 0, float y = 0, float z = 0, float radius = 32) {
+    hitbox_instance(string hn = "", hitbox* hp = NULL, float x = 0, float y = 0, float z = 0, float radius = 32) {
         hitbox_name = hn;
+        hitbox_ptr = hp;
         this->x = x;
         this->y = y;
         this->z = z;
