@@ -179,7 +179,7 @@ void handle_button(unsigned int button, float pos) {
                 float d;
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
                 if(p && d <= MIN_PLUCK_RANGE) {
-                    pluck_pikmin(cur_leader_ptr, p, cur_leader_ptr);
+                    go_pluck(cur_leader_ptr, p);
                     auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
                     done = true;
                 }

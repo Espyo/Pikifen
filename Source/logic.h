@@ -626,7 +626,7 @@ void do_logic() {
         }
         
         //Current leader movement.
-        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->carrier_info) {
+        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->auto_pluck_pikmin && !cur_leader_ptr->carrier_info) {
             float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
             if(leader_move_intensity < 0.75) leader_move_intensity = 0;
             if(leader_move_intensity > 1) leader_move_intensity = 1;
@@ -669,9 +669,20 @@ void do_logic() {
                     &l_ptr->following_party->party->party_center_x,
                     &l_ptr->following_party->party->party_center_y,
                     false);
+                    
             } else {
-                if(l_ptr->auto_pluck_mode) {
-                    if(l_ptr->auto_pluck_pikmin && l_ptr->reached_destination) {
+            
+                if(l_ptr->auto_pluck_pikmin && l_ptr->reached_destination) {
+                
+                    if(l_ptr->pluck_time == -1) {
+                        l_ptr->pluck_time = l_ptr->lea_type->pluck_delay;
+                        l_ptr->anim.change("pluck", false, false);
+                    }
+                    
+                    if(l_ptr->pluck_time > 0) {
+                        l_ptr->pluck_time -= 1.0 / game_fps;
+                        
+                    } else {
                     
                         leader* new_pikmin_leader = l_ptr;
                         if(l_ptr->following_party) {
@@ -681,30 +692,21 @@ void do_logic() {
                             }
                         }
                         
-                        //Reached the Pikmin we want to pluck. Pluck it and find a new one.
                         pluck_pikmin(new_pikmin_leader, l_ptr->auto_pluck_pikmin, l_ptr);
                         l_ptr->auto_pluck_pikmin = NULL;
                     }
-                    
+                }
+                
+                if(l_ptr->auto_pluck_mode) {
                     if(!l_ptr->auto_pluck_pikmin) {
                         float d;
                         pikmin* new_pikmin = get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, true);
                         
                         if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
-                            l_ptr->auto_pluck_pikmin = new_pikmin;
-                            new_pikmin->pluck_reserved = true;
-                            l_ptr->set_target(new_pikmin->x, new_pikmin->y, NULL, NULL, false);
+                            go_pluck(l_ptr, new_pikmin);
                         } else { //No more buried Pikmin, or none nearby. Give up.
-                            l_ptr->auto_pluck_mode = false;
-                            l_ptr->remove_target(true);
+                            stop_auto_pluck(l_ptr);
                         }
-                    }
-                } else {
-                    if(l_ptr->auto_pluck_pikmin) {
-                        //Cleanup.
-                        l_ptr->auto_pluck_pikmin->pluck_reserved = false;
-                        l_ptr->auto_pluck_pikmin = NULL;
-                        l_ptr->remove_target(true);
                     }
                 }
             }

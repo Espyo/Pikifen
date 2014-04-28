@@ -24,7 +24,7 @@ void active_control() {
         leaders[cur_leader_nr]->anim.change("get_up", false, false);
     }
     make_uncarriable(leaders[cur_leader_nr]);
-    leaders[cur_leader_nr]->auto_pluck_mode = false;
+    stop_auto_pluck(leaders[cur_leader_nr]);
 }
 
 /* ----------------------------------------------------------------------------
@@ -971,6 +971,16 @@ void give_pikmin_to_onion(onion* o, unsigned amount) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Makes a leader go pluck a Pikmin.
+ */
+void go_pluck(leader* l, pikmin* p) {
+    l->auto_pluck_pikmin = p;
+    l->pluck_time = -1;
+    l->set_target(p->x, p->y, NULL, NULL, false);
+    p->pluck_reserved = true;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns the interpolation between two colors, given a number in an interval.
  * n: The number.
  * n1, n2: The interval the number falls on.
@@ -1460,6 +1470,7 @@ void load_mob_types(string folder, unsigned char type) {
             leader_type* lt = (leader_type*) mt;
             lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
             lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
+            lt->pluck_delay = tof(file.get_child_by_name("pluck_delay")->value);
             lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
             lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(ftos(DEF_WHISTLE_RANGE)));
             lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
@@ -1676,7 +1687,7 @@ void move_point(float x, float y, float tx, float ty, float speed, float reach_r
 void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked) {
     if(p->state != PIKMIN_STATE_BURIED) return;
     
-    leader_who_plucked->anim.change("pluck", false, false);
+    leader_who_plucked->pluck_time = -1;
     p->set_state(PIKMIN_STATE_IN_GROUP);
     add_to_party(new_leader, p);
     sfx_pikmin_plucked.play(0, false);
@@ -2210,6 +2221,17 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
         }
     }
     cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes a leader get out of auto-pluck mode.
+ */
+void stop_auto_pluck(leader* l) {
+    l->auto_pluck_mode = false;
+    l->remove_target(true);
+    if(l->auto_pluck_pikmin) l->auto_pluck_pikmin->pluck_reserved = false;
+    l->auto_pluck_pikmin = NULL;
+    l->pluck_time = -1;
 }
 
 /* ----------------------------------------------------------------------------

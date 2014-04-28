@@ -21,7 +21,8 @@ public:
     mob* holding_pikmin;
     
     bool auto_pluck_mode;
-    pikmin* auto_pluck_pikmin;
+    pikmin* auto_pluck_pikmin; //-1 = not plucking.
+    float pluck_time; //Time left until the Pikmin pops out.
     
     leader(float x, float y, sector* sec, leader_type* type);
 };

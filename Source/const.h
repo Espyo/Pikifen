@@ -20,6 +20,7 @@ using namespace std;
 #define CURSOR_SPIN_SPEED           M_PI     //How much the cursor spins per second.
 #define CURSOR_MAX_DIST             200      //The cursor can only be these many units away from the captain.
 #define DEF_PIKMIN_SIZE             24       //Default Pikmin size.
+#define DEF_PUNCH_STRENGTH          2        //Default leader punch strength.
 #define DEF_ROTATION_SPEED          M_PI * 2 //The default rotation speed of a mob type.
 #define DEF_WHISTLE_RANGE           80       //The whistle can't go past this radius, by default.
 #define DELIVERY_SUCK_TIME          0.5      //How long to suck a mob in for, when being delivered to an Onion/ship.
