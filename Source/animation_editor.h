@@ -182,6 +182,16 @@ void animation_editor::do_logic() {
             }
         }
         
+        if(ed_hitboxes_visible) {
+            float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
+            float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
+            float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
+            float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
+            
+            al_draw_line(0, cam_topmost, 0, cam_bottommost, al_map_rgb(240, 240, 240), 1 / cam_zoom);
+            al_draw_line(cam_leftmost, 0, cam_rightmost, 0, al_map_rgb(240, 240, 240), 1 / cam_zoom);
+        }
+        
     } al_reset_clipping_rectangle();
     
     ALLEGRO_TRANSFORM id_transform;
@@ -364,8 +374,8 @@ void animation_editor::gui_save_frame() {
         //Changed something image-wise. Recreate it.
         if(ed_cur_frame->parent_bmp) bitmaps.detach(ed_cur_frame->file);
         if(ed_cur_frame->bitmap) al_destroy_bitmap(ed_cur_frame->bitmap);
-        ed_cur_frame->parent_bmp = load_bmp(new_file);
-        ed_cur_frame->bitmap = al_create_sub_bitmap(ed_cur_frame->parent_bmp, new_fx, new_fy, new_fw, new_fh);
+        ed_cur_frame->parent_bmp = bitmaps.get(ed_cur_frame->file, NULL);
+        if(ed_cur_frame->parent_bmp) ed_cur_frame->bitmap = al_create_sub_bitmap(ed_cur_frame->parent_bmp, new_fx, new_fy, new_fw, new_fh);
         
         ed_cur_frame->file = new_file;
         ed_cur_frame->file_x = new_fx;
@@ -1121,7 +1131,9 @@ void animation_editor::load() {
     frm_picker->widgets["but_new"]->description = "Create a new one with the name on the textbox.";
     frm_picker->widgets["frm_list"]->mouse_wheel_handler = [] (lafi_widget*, int dy, int) {
         lafi_scrollbar* s = (lafi_scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"];
-        s->move_button(0, (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) / 2 - 30 * dy);
+        if(s->widgets.find("but_bar") != s->widgets.end()) {
+            s->move_button(0, (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) / 2 - 30 * dy);
+        }
     };
     
     

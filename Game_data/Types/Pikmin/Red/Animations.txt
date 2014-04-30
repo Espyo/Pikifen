@@ -103,12 +103,12 @@ animations{
 frames{
 	burrowed{
 		file=Red_Pikmin.png
-		file_x=300
-		file_y=100
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
+		file_x=98
+		file_y=42
+		file_w=12
+		file_h=12
+		game_w=6
+		game_h=6
 		offs_x=0
 		offs_y=0
 		top_visible=true
@@ -121,16 +121,16 @@ frames{
 	}
 	grab{
 		file=Red_Pikmin.png
-		file_x=400
-		file_y=0
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
+		file_x=138
+		file_y=2
+		file_w=28
+		file_h=20
+		game_w=14
+		game_h=10
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=-4
+		top_x=-6
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -139,16 +139,16 @@ frames{
 	}
 	grab_far{
 		file=Red_Pikmin.png
-		file_x=500
-		file_y=0
+		file_x=168
+		file_y=2
 		file_w=42
-		file_h=36
+		file_h=20
 		game_w=21
-		game_h=18
-		offs_x=-1.5
+		game_h=10
+		offs_x=-3.5
 		offs_y=0
 		top_visible=true
-		top_x=-13
+		top_x=-15
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -157,16 +157,16 @@ frames{
 	}
 	grab_near{
 		file=Red_Pikmin.png
-		file_x=600
+		file_x=212
 		file_y=0
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
-		offs_x=8
+		file_w=26
+		file_h=22
+		game_w=13
+		game_h=11
+		offs_x=3.5
 		offs_y=0
 		top_visible=true
-		top_x=13
+		top_x=12
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -175,12 +175,12 @@ frames{
 	}
 	half_lying{
 		file=Red_Pikmin.png
-		file_x=400
-		file_y=100
+		file_x=112
+		file_y=26
 		file_w=48
-		file_h=36
+		file_h=28
 		game_w=24
-		game_h=18
+		game_h=14
 		offs_x=0
 		offs_y=0
 		top_visible=true
@@ -194,12 +194,12 @@ frames{
 	idle{
 		file=Red_Pikmin.png
 		file_x=0
-		file_y=100
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
-		offs_x=0
+		file_y=34
+		file_w=28
+		file_h=20
+		game_w=14
+		game_h=10
+		offs_x=2
 		offs_y=0
 		top_visible=true
 		top_x=-4
@@ -211,16 +211,16 @@ frames{
 	}
 	lying{
 		file=Red_Pikmin.png
-		file_x=500
-		file_y=100
+		file_x=162
+		file_y=24
 		file_w=82
-		file_h=36
+		file_h=30
 		game_w=41
-		game_h=18
+		game_h=15
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=-20
+		top_x=-19
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -231,10 +231,10 @@ frames{
 		file=Red_Pikmin.png
 		file_x=0
 		file_y=0
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
+		file_w=28
+		file_h=22
+		game_w=14
+		game_h=11
 		offs_x=0
 		offs_y=0
 		top_visible=false
@@ -247,16 +247,16 @@ frames{
 	}
 	thrown2{
 		file=Red_Pikmin.png
-		file_x=100
-		file_y=0
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
+		file_x=30
+		file_y=2
+		file_w=34
+		file_h=20
+		game_w=17
+		game_h=10
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=-10
+		top_x=-9
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -265,16 +265,16 @@ frames{
 	}
 	thrown3{
 		file=Red_Pikmin.png
-		file_x=200
-		file_y=0
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
+		file_x=66
+		file_y=2
+		file_w=32
+		file_h=20
+		game_w=16
+		game_h=10
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=3
+		top_x=4
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -283,12 +283,12 @@ frames{
 	}
 	thrown4{
 		file=Red_Pikmin.png
-		file_x=300
-		file_y=0
+		file_x=100
+		file_y=2
 		file_w=36
-		file_h=36
+		file_h=20
 		game_w=18
-		game_h=18
+		game_h=10
 		offs_x=0
 		offs_y=0
 		top_visible=true
@@ -301,13 +301,13 @@ frames{
 	}
 	walkl{
 		file=Red_Pikmin.png
-		file_x=200
-		file_y=100
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
-		offs_x=0
+		file_x=64
+		file_y=34
+		file_w=32
+		file_h=20
+		game_w=16
+		game_h=10
+		offs_x=1.5
 		offs_y=0
 		top_visible=true
 		top_x=-4
@@ -319,13 +319,13 @@ frames{
 	}
 	walkr{
 		file=Red_Pikmin.png
-		file_x=100
-		file_y=100
-		file_w=36
-		file_h=36
-		game_w=18
-		game_h=18
-		offs_x=0
+		file_x=30
+		file_y=34
+		file_w=32
+		file_h=20
+		game_w=16
+		game_h=10
+		offs_x=1.5
 		offs_y=0
 		top_visible=true
 		top_x=-4

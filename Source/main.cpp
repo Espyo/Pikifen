@@ -101,9 +101,6 @@ int main(int argc, char**) {
     if(cur_screen == SCREEN_GAME) {
     
         //Graphics.
-        bmp_olimar = load_bmp("Olimar.png");
-        bmp_louie = load_bmp("Louie.png");
-        bmp_president = load_bmp("President.png");
         bmp_red_onion = load_bmp("Red_onion.png");
         bmp_yellow_onion = load_bmp("Yellow_onion.png");
         bmp_blue_onion = load_bmp("Blue_onion.png");
@@ -112,9 +109,6 @@ int main(int argc, char**) {
         bmp_red_pellet[1] = load_bmp("Red_5_pellet.png");
         bmp_red_pellet[2] = load_bmp("Red_10_pellet.png");
         bmp_red_pellet[3] = load_bmp("Red_20_pellet.png");
-        bmp_olimar_lying = load_bmp("Olimar_lying.png");
-        bmp_louie_lying = load_bmp("Louie_lying.png");
-        bmp_president_lying = load_bmp("President_lying.png");
         
         bmp_bubble = load_bmp(              "Bubble.png");
         bmp_cursor = load_bmp(              "Cursor.png");

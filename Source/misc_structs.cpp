@@ -197,6 +197,8 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
 }
 
 ALLEGRO_BITMAP* bmp_manager::get(string name, data_node* node) {
+    if(name.size() == 0) return NULL;
+    
     if(list.find(name) == list.end()) {
         ALLEGRO_BITMAP* b = load_bmp(name, node);
         list[name] = bmp_info(b);
@@ -208,6 +210,8 @@ ALLEGRO_BITMAP* bmp_manager::get(string name, data_node* node) {
 };
 
 void bmp_manager::detach(string name) {
+    if(name.size() == 0) return;
+    
     auto it = list.find(name);
     if(it == list.end()) return;
     

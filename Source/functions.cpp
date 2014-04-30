@@ -2227,8 +2227,8 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
  * Makes a leader get out of auto-pluck mode.
  */
 void stop_auto_pluck(leader* l) {
+    if(l->auto_pluck_pikmin) l->remove_target(true);
     l->auto_pluck_mode = false;
-    l->remove_target(true);
     if(l->auto_pluck_pikmin) l->auto_pluck_pikmin->pluck_reserved = false;
     l->auto_pluck_pikmin = NULL;
     l->pluck_time = -1;

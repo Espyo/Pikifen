@@ -313,20 +313,20 @@ frames{
 	attack1{
 		file=CB.png
 		file_x=0
-		file_y=200
-		file_w=68
+		file_y=57
+		file_w=56
 		file_h=56
-		game_w=68
+		game_w=56
 		game_h=56
-		offs_x=0
+		offs_x=-5.5
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 			mouth{
-				coords=25 0 0
+				coords=26 0 0
 				radius=6
 			}
 		}
@@ -334,29 +334,29 @@ frames{
 	attack1nh{
 		file=CB.png
 		file_x=0
-		file_y=200
-		file_w=68
+		file_y=57
+		file_w=56
 		file_h=56
-		game_w=68
+		game_w=56
 		game_h=56
-		offs_x=0
+		offs_x=-5.5
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
 	}
 	attack2{
 		file=CB.png
-		file_x=300
-		file_y=200
-		file_w=96
+		file_x=159
+		file_y=57
+		file_w=92
 		file_h=56
-		game_w=96
+		game_w=92
 		game_h=56
-		offs_x=14
+		offs_x=12.5
 		offs_y=0
 		hitbox_instances{
 			mouth{
@@ -364,62 +364,62 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
 	}
 	attack3{
 		file=CB.png
-		file_x=400
-		file_y=200
-		file_w=152
+		file_x=252
+		file_y=57
+		file_w=148
 		file_h=56
-		game_w=152
+		game_w=148
 		game_h=56
-		offs_x=42
+		offs_x=40.5
 		offs_y=0
 		hitbox_instances{
 			mouth{
-				coords=94 0 0
+				coords=100 0 0
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
 	}
 	attackl{
 		file=CB.png
-		file_x=200
-		file_y=200
-		file_w=68
+		file_x=108
+		file_y=57
+		file_w=50
 		file_h=56
-		game_w=68
+		game_w=50
 		game_h=56
-		offs_x=0
+		offs_x=-8.5
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
 	}
 	attackr{
 		file=CB.png
-		file_x=100
-		file_y=200
-		file_w=68
+		file_x=57
+		file_y=57
+		file_w=50
 		file_h=56
-		game_w=68
+		game_w=50
 		game_h=56
-		offs_x=0
+		offs_x=-8.5
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
@@ -427,19 +427,19 @@ frames{
 	die1{
 		file=CB.png
 		file_x=0
-		file_y=400
+		file_y=171
 		file_w=68
 		file_h=56
 		game_w=68
 		game_h=56
-		offs_x=0
+		offs_x=0.5
 		offs_y=0
 		hitbox_instances=
 	}
 	die2{
 		file=CB.png
-		file_x=100
-		file_y=400
+		file_x=69
+		file_y=171
 		file_w=68
 		file_h=56
 		game_w=68
@@ -450,11 +450,11 @@ frames{
 	}
 	die3{
 		file=CB.png
-		file_x=200
-		file_y=400
-		file_w=68
+		file_x=138
+		file_y=171
+		file_w=65
 		file_h=56
-		game_w=68
+		game_w=65
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -462,11 +462,11 @@ frames{
 	}
 	die4{
 		file=CB.png
-		file_x=300
-		file_y=400
-		file_w=68
+		file_x=204
+		file_y=171
+		file_w=64
 		file_h=56
-		game_w=68
+		game_w=64
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -474,11 +474,11 @@ frames{
 	}
 	die5{
 		file=CB.png
-		file_x=400
-		file_y=400
-		file_w=68
+		file_x=269
+		file_y=171
+		file_w=64
 		file_h=56
-		game_w=68
+		game_w=64
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -486,11 +486,11 @@ frames{
 	}
 	die6{
 		file=CB.png
-		file_x=500
-		file_y=400
-		file_w=68
+		file_x=334
+		file_y=171
+		file_w=64
 		file_h=56
-		game_w=68
+		game_w=64
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -498,25 +498,25 @@ frames{
 	}
 	die7{
 		file=CB.png
-		file_x=600
-		file_y=400
-		file_w=68
+		file_x=399
+		file_y=171
+		file_w=57
 		file_h=56
-		game_w=68
+		game_w=57
 		game_h=56
-		offs_x=0
+		offs_x=-3.5
 		offs_y=0
 		hitbox_instances=
 	}
 	die8{
 		file=CB.png
-		file_x=700
-		file_y=400
+		file_x=457
+		file_y=171
 		file_w=80
 		file_h=56
 		game_w=80
 		game_h=56
-		offs_x=6
+		offs_x=8
 		offs_y=0
 		hitbox_instances=
 	}
@@ -524,9 +524,9 @@ frames{
 		file=CB.png
 		file_x=0
 		file_y=0
-		file_w=68
+		file_w=67
 		file_h=56
-		game_w=68
+		game_w=67
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -540,7 +540,7 @@ frames{
 				radius=6
 			}
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
@@ -549,9 +549,9 @@ frames{
 		file=CB.png
 		file_x=0
 		file_y=0
-		file_w=68
+		file_w=67
 		file_h=56
-		game_w=68
+		game_w=67
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -560,10 +560,10 @@ frames{
 	shake1{
 		file=CB.png
 		file_x=0
-		file_y=300
-		file_w=68
+		file_y=114
+		file_w=60
 		file_h=56
-		game_w=68
+		game_w=60
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -573,18 +573,18 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=0 0 0
 				radius=28
 			}
 		}
 	}
 	shakel{
 		file=CB.png
-		file_x=100
-		file_y=300
-		file_w=68
+		file_x=61
+		file_y=114
+		file_w=58
 		file_h=56
-		game_w=68
+		game_w=58
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -594,18 +594,18 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=0 0 0
 				radius=28
 			}
 		}
 	}
 	shaker{
 		file=CB.png
-		file_x=200
-		file_y=300
-		file_w=68
+		file_x=120
+		file_y=114
+		file_w=58
 		file_h=56
-		game_w=68
+		game_w=58
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -615,86 +615,86 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=0 0 0
 				radius=28
 			}
 		}
 	}
 	shakesl{
 		file=CB.png
-		file_x=100
-		file_y=300
-		file_w=68
+		file_x=61
+		file_y=114
+		file_w=58
 		file_h=56
-		game_w=68
+		game_w=58
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			shake{
-				coords=-5 0 0
+				coords=0 0 0
 				radius=32
 			}
 		}
 	}
 	shakesl2{
 		file=CB.png
-		file_x=300
-		file_y=300
-		file_w=68
+		file_x=179
+		file_y=114
+		file_w=56
 		file_h=56
-		game_w=68
+		game_w=56
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			shake{
-				coords=-5 0 0
+				coords=0 0 0
 				radius=32
 			}
 		}
 	}
 	shakesr{
 		file=CB.png
-		file_x=200
-		file_y=300
-		file_w=68
+		file_x=120
+		file_y=114
+		file_w=58
 		file_h=56
-		game_w=68
+		game_w=58
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			shake{
-				coords=-5 0 0
+				coords=0 0 0
 				radius=32
 			}
 		}
 	}
 	shakesr2{
 		file=CB.png
-		file_x=400
-		file_y=300
-		file_w=68
+		file_x=236
+		file_y=114
+		file_w=56
 		file_h=56
-		game_w=68
+		game_w=56
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			shake{
-				coords=-5 0 0
+				coords=0 0 0
 				radius=32
 			}
 		}
 	}
 	swallow1{
 		file=CB.png
-		file_x=600
-		file_y=200
-		file_w=68
+		file_x=401
+		file_y=57
+		file_w=67
 		file_h=56
-		game_w=68
+		game_w=67
 		game_h=56
 		offs_x=0
 		offs_y=0
@@ -711,13 +711,13 @@ frames{
 	}
 	swallow2{
 		file=CB.png
-		file_x=700
-		file_y=200
+		file_x=469
+		file_y=57
 		file_w=68
 		file_h=56
 		game_w=68
 		game_h=56
-		offs_x=0
+		offs_x=0.5
 		offs_y=0
 		hitbox_instances{
 			face{
@@ -732,98 +732,98 @@ frames{
 	}
 	unburrow1{
 		file=CB.png
-		file_x=0
-		file_y=100
-		file_w=68
+		file_x=206
+		file_y=0
+		file_w=39
 		file_h=56
-		game_w=68
+		game_w=39
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-2 0 0
+				coords=-4 0 0
 				radius=24
 			}
 		}
 	}
 	unburrow2{
 		file=CB.png
-		file_x=300
-		file_y=100
-		file_w=68
+		file_x=332
+		file_y=0
+		file_w=39
 		file_h=56
-		game_w=68
+		game_w=39
 		game_h=56
-		offs_x=0
+		offs_x=-4
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=24
 			}
 		}
 	}
 	unburrow3{
 		file=CB.png
-		file_x=400
-		file_y=100
-		file_w=68
+		file_x=372
+		file_y=0
+		file_w=46
 		file_h=56
-		game_w=68
+		game_w=46
 		game_h=56
-		offs_x=0
+		offs_x=-8
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-8 0 0
+				coords=-4 0 0
 				radius=24
 			}
 		}
 	}
 	unburrowl{
 		file=CB.png
-		file_x=200
-		file_y=100
-		file_w=68
+		file_x=289
+		file_y=0
+		file_w=42
 		file_h=56
-		game_w=68
+		game_w=42
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-2 0 0
+				coords=-4 0 0
 				radius=24
 			}
 		}
 	}
 	unburrowr{
 		file=CB.png
-		file_x=100
-		file_y=100
-		file_w=68
+		file_x=246
+		file_y=0
+		file_w=42
 		file_h=56
-		game_w=68
+		game_w=42
 		game_h=56
 		offs_x=0
 		offs_y=0
 		hitbox_instances{
 			hide{
-				coords=-2 0 0
+				coords=-4 0 0
 				radius=24
 			}
 		}
 	}
 	walkl{
 		file=CB.png
-		file_x=200
+		file_x=137
 		file_y=0
 		file_w=68
 		file_h=56
 		game_w=68
 		game_h=56
-		offs_x=0
+		offs_x=0.5
 		offs_y=0
 		hitbox_instances{
 			face{
@@ -831,20 +831,20 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}
 	}
 	walkr{
 		file=CB.png
-		file_x=100
+		file_x=68
 		file_y=0
 		file_w=68
 		file_h=56
 		game_w=68
 		game_h=56
-		offs_x=0
+		offs_x=0.5
 		offs_y=0
 		hitbox_instances{
 			face{
@@ -852,7 +852,7 @@ frames{
 				radius=15
 			}
 			hide{
-				coords=-6 0 0
+				coords=-4 0 0
 				radius=28
 			}
 		}

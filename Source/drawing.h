@@ -202,30 +202,14 @@ void do_drawing() {
         
         //Leaders.
         for(size_t l = 0; l < n_leaders; l++) {
-            if(l == 0) { //ToDo
-                frame* f = leaders[l]->anim.get_frame();
-                if(f) {
-                    float c = cos(leaders[l]->angle), s = sin(leaders[l]->angle);
-                    draw_sprite(
-                        f->bitmap,
-                        leaders[l]->x + c * f->offs_x + c * f->offs_y,
-                        leaders[l]->y - s * f->offs_y + s * f->offs_x,
-                        f->game_w, f->game_h,
-                        leaders[l]->angle
-                    );
-                }
-            } else {
-                ALLEGRO_BITMAP* bm = NULL;
-                if(leaders[l]->carrier_info) {
-                    bm = (l == 0) ? bmp_olimar_lying : ((l == 1) ? bmp_louie_lying : bmp_president_lying);
-                } else {
-                    bm = (l == 0) ? bmp_olimar : ((l == 1) ? bmp_louie : bmp_president);
-                }
+            frame* f = leaders[l]->anim.get_frame();
+            if(f) {
+                float c = cos(leaders[l]->angle), s = sin(leaders[l]->angle);
                 draw_sprite(
-                    bm,
-                    leaders[l]->x, leaders[l]->y,
-                    32,
-                    32,
+                    f->bitmap,
+                    leaders[l]->x + c * f->offs_x + c * f->offs_y,
+                    leaders[l]->y - s * f->offs_y + s * f->offs_x,
+                    f->game_w, f->game_h,
                     leaders[l]->angle
                 );
             }
@@ -574,7 +558,6 @@ void do_drawing() {
                 if(n_leaders < l + 1) continue;
                 
                 size_t l_nr = (cur_leader_nr + l) % n_leaders;
-                ALLEGRO_BITMAP* bm = (l_nr == 0) ? bmp_olimar : ((l_nr == 1) ? bmp_louie : bmp_president);
                 
                 float size;
                 if(l == 0) size = scr_w * 0.08; else size = scr_w * 0.06;
@@ -582,10 +565,11 @@ void do_drawing() {
                 int y_offset;
                 if(l == 0) y_offset = 0; else if(l == 1) y_offset = scr_h * 0.10; else y_offset = scr_h * 0.19;
                 
-                draw_sprite(
+                //ToDo
+                /*draw_sprite(
                     bm,
                     scr_w * 0.08, scr_h * 0.88 - y_offset,
-                    size * 0.8, size * 0.8);
+                    size * 0.8, size * 0.8);*/
                 draw_sprite(
                     bmp_bubble,
                     scr_w * 0.08, scr_h * 0.88 - y_offset,
@@ -664,9 +648,7 @@ void do_drawing() {
                     //ToDo
                 } else if(typeid(*closest_party_member) == typeid(leader)) {
                     leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
-                    if(leader_ptr == leaders[0]) bm = bmp_olimar;
-                    else if(leader_ptr == leaders[1]) bm = bmp_louie;
-                    else if(leader_ptr == leaders[2]) bm = bmp_president;
+                    //ToDo
                 }
                 
                 if(bm) {
