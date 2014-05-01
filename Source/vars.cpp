@@ -125,12 +125,13 @@ float                 ed_grabbing_hitbox_y;
 lafi_gui*             ed_gui = NULL;
 bool                  ed_hitboxes_visible = true;
 bool                  ed_holding_m2 = false;
-ALLEGRO_BITMAP*       ed_leaf_bmp;
+unsigned char         ed_maturity = 0;
 unsigned char         ed_mob_type_list = 0;
 unsigned char         ed_mode = EDITOR_MODE_MAIN;
 float                 ed_new_hitbox_corner_x = FLT_MAX;
 float                 ed_new_hitbox_corner_y = FLT_MAX;
 string                ed_object_name;
+ALLEGRO_BITMAP*       ed_top_bmp[3] = { NULL, NULL, NULL };
 map<string, enemy_type*>
 enemy_types;
 vector<enemy*>        enemies;

@@ -262,7 +262,7 @@ void do_logic() {
                 );
                 
                 make_uncarriable(m_ptr);
-                m_ptr->to_delete = true;
+                if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
             }
             
             //Mob deletion.
@@ -300,6 +300,7 @@ void do_logic() {
                 dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
                 pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
                 !cur_leader_ptr->carrier_info &&
+                cur_leader_ptr->state != MOB_STATE_BEING_DELIVERED &&
                 pik_ptr->untouchable_period == 0;
             bool is_busy = (pik_ptr->carrying_mob || pik_ptr->attacking_mob);
             
@@ -649,19 +650,20 @@ void do_logic() {
             leader* l_ptr = leaders[l];
             if(whistling) {
                 if(l != cur_leader_nr) {
-                    if(
-                        dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius &&
-                        !l_ptr->following_party &&
-                        !l_ptr->was_thrown) {
-                        //Leader got whistled.
-                        add_to_party(cur_leader_ptr, l_ptr);
-                        l_ptr->auto_pluck_mode = false;
+                    if(dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
+                    
+                        stop_auto_pluck(l_ptr);
                         
-                        size_t n_party_members = l_ptr->party->members.size();
-                        for(size_t m = 0; m < n_party_members; m++) {
-                            mob* member = l_ptr->party->members[0];
-                            remove_from_party(member);
-                            add_to_party(cur_leader_ptr, member);
+                        if(!l_ptr->following_party && !l_ptr->was_thrown) {
+                            //Leader got whistled.
+                            add_to_party(cur_leader_ptr, l_ptr);
+                            
+                            size_t n_party_members = l_ptr->party->members.size();
+                            for(size_t m = 0; m < n_party_members; m++) {
+                                mob* member = l_ptr->party->members[0];
+                                remove_from_party(member);
+                                add_to_party(cur_leader_ptr, member);
+                            }
                         }
                     }
                 }
@@ -801,7 +803,7 @@ void do_logic() {
         cursor_x = mcx;
         cursor_y = mcy;
         
-        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->carrier_info) {
+        if(!cur_leader_ptr->auto_pluck_mode && cur_leader_ptr->pluck_time == -1 && !cur_leader_ptr->carrier_info) {
             cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
             cur_leader_ptr->face(cursor_angle);
         }

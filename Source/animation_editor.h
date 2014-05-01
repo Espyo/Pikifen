@@ -174,7 +174,7 @@ void animation_editor::do_logic() {
             
             if(f->top_visible && ed_mob_type_list == MOB_TYPE_PIKMIN) {
                 draw_sprite(
-                    ed_leaf_bmp,
+                    ed_top_bmp[ed_maturity],
                     f->top_x, f->top_y,
                     f->top_w, f->top_h,
                     f->top_angle
@@ -811,6 +811,8 @@ void animation_editor::load() {
     frm_top->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 40, 16);
     frm_top->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 60, 16);
     frm_top->easy_row();
+    frm_top->easy_add("but_maturity", new lafi_button(0, 0, 0, 0, "Change maturity"), 100, 24);
+    frm_top->easy_row();
     
     
     //Bottom bar.
@@ -980,7 +982,7 @@ void animation_editor::load() {
         }
         gui_load_hitbox_instance();
     };
-    frm_frames->widgets["frm_frame"]->widgets["but_top"]->description = "Edit the Pikmin top's (leaf/bud/flower) for this frame.";
+    frm_frames->widgets["frm_frame"]->widgets["but_top"]->description = "Edit the Pikmin's top (leaf/bud/flower) for this frame.";
     frm_frames->widgets["frm_frame"]->widgets["but_top"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         show_widget(ed_gui->widgets["frm_top"]);
         hide_widget(ed_gui->widgets["frm_frames"]);
@@ -1094,6 +1096,8 @@ void animation_editor::load() {
     
     //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ((lafi_textbox*) ed_gui->widgets["frm_picker"]->widgets["txt_new"])->text.clear();
+        
         hide_widget(ed_gui->widgets["frm_picker"]);
         show_widget(ed_gui->widgets["frm_bottom"]);
         if(ed_mode == EDITOR_MODE_MAIN) {
@@ -1153,13 +1157,17 @@ void animation_editor::load() {
     frm_top->widgets["txt_w"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["txt_h"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["txt_angle"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["but_maturity"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_maturity = (ed_maturity + 1) % 3;
+    };
+    frm_top->widgets["but_maturity"]->description = "View a different maturity top.";
     
     
     //Properties -- bottom bar.
     frm_bottom->widgets["but_toggle_hitboxes"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_hitboxes_visible = !ed_hitboxes_visible;
     };
-    frm_bottom->widgets["but_toggle_hitboxes"]->description = "Toggle hitbox visibility.";
+    frm_bottom->widgets["but_toggle_hitboxes"]->description = "Toggle hitbox and center-point grid visibility.";
     frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         load_animation_set();
         hide_widget(ed_gui->widgets["frm_anims"]);
@@ -1376,15 +1384,19 @@ void animation_editor::pick(string name, unsigned char type) {
         ed_object_name = name;
         load_animation_set();
         
-        //Top leaf bitmap.
-        if(ed_leaf_bmp && ed_leaf_bmp != bmp_error) {
-            al_destroy_bitmap(ed_leaf_bmp);
-            ed_leaf_bmp = NULL;
+        //Top bitmap.
+        for(unsigned char t = 0; t < 3; t++) {
+            if(ed_top_bmp[t] && ed_top_bmp[t] != bmp_error) {
+                al_destroy_bitmap(ed_top_bmp[t]);
+                ed_top_bmp[t] = NULL;
+            }
         }
         
         if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
             data_node data = data_node(temp_path_start + "/" + name + "/Data.txt");
-            ed_leaf_bmp = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+            ed_top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+            ed_top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
+            ed_top_bmp[2] = load_bmp(data.get_child_by_name("top_flower")->value, &data);
         }
     }
     if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {

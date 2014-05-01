@@ -92,7 +92,7 @@ void mob::tick() {
         } else if(x != final_target_x || y != final_target_y) {
             float new_angle = angle;
             move_point(x, y, final_target_x, final_target_y, get_base_speed(), 0.001, &speed_x, &speed_y, &new_angle, &reached_destination);
-            if(!reached_destination) {
+            if(!reached_destination && state != MOB_STATE_BEING_CARRIED) {
                 //Only face the way the mob wants to go if it's still going. Otherwise, let other code turn them whichever way it wants.
                 face(new_angle);
             }
@@ -252,7 +252,7 @@ void mob::tick() {
         }
     }
     
-    //Actuall run the scripts, if possible.
+    //Actually run the scripts, if possible.
     bool ran_event = false;
     for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
         if(events_queued[e] == 1) {

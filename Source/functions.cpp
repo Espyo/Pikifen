@@ -1314,8 +1314,8 @@ void load_game_content() {
     statuses.push_back(status(0, 0, 1, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
     
-    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(128, 0, 255), NULL, NULL));
-    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 0), NULL, NULL));
+    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), NULL, NULL));
+    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), NULL, NULL));
     //spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 255, 0), NULL, NULL));
     
     //Mob types.
@@ -1846,7 +1846,7 @@ void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, 
                 1,
                 0,
                 randomf(3, 4),
-                randomf(6, 8),
+                randomf(28, 32),
                 color
             )
         );
@@ -2304,8 +2304,8 @@ void use_spray(const size_t spray_nr) {
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
     random_particle_spray(
-        PARTICLE_TYPE_CIRCLE,
-        NULL,
+        PARTICLE_TYPE_BITMAP,
+        bmp_smoke,
         cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->size / 2,
         cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->size / 2,
         shoot_angle,

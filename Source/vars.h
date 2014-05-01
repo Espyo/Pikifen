@@ -156,12 +156,13 @@ extern float                 ed_grabbing_hitbox_y;
 extern lafi_gui*             ed_gui;
 extern bool                  ed_hitboxes_visible;
 extern bool                  ed_holding_m2;
-extern ALLEGRO_BITMAP*       ed_leaf_bmp; //Leaf top bitmap for the current Pikmin type.
+extern unsigned char         ed_maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
 extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char         ed_mode;
 extern float                 ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                 ed_new_hitbox_corner_y;
 extern string                ed_object_name;
+extern ALLEGRO_BITMAP*       ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
 extern map<string, enemy_type*>
 enemy_types;
 extern vector<enemy*>        enemies;
