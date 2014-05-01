@@ -104,8 +104,10 @@ float                 day_minutes_end = 60 * 19;
 float                 day_minutes_per_irl_sec = 2;
 float                 day_minutes_start = 60 * 7;
 bool                  daylight_effect = true;
+double                delta_t = 0;
 ALLEGRO_DISPLAY*      display = NULL;
 bool                  draw_cursor_trail = true;
+double                prev_frame_time = 0;
 animation_set         ed_anims;
 animation*            ed_cur_anim = NULL;
 bool                  ed_anim_playing = false;
@@ -183,6 +185,7 @@ pellet_types;
 vector<pellet*>       pellets;
 vector<point>         percipitation;
 float                 percipitation_time_left = 0;
+unsigned char         pikmin_ai_portion = 0; //On this frame, handle the nth portion of the Pikmin's AI. There are N_PIKMIN_AI_PORTIONS;
 map<pikmin_type*, unsigned long>
 pikmin_in_onions;
 vector<pikmin*>       pikmin_list;

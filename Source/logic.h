@@ -19,11 +19,11 @@ void do_logic() {
     *                               `-´  *
     **************************************/
     
-    idle_glow_angle += IDLE_GLOW_SPIN_SPEED / game_fps;
+    idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
     //Camera transitions.
     if(cam_trans_pan_time_left > 0) {
-        cam_trans_pan_time_left -= 1.0 / game_fps;
+        cam_trans_pan_time_left -= delta_t;
         if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
         
         float amount_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
@@ -33,7 +33,7 @@ void do_logic() {
     }
     
     if(cam_trans_zoom_time_left > 0) {
-        cam_trans_zoom_time_left -= 1.0 / game_fps;
+        cam_trans_zoom_time_left -= delta_t;
         if(cam_trans_zoom_time_left < 0) cam_trans_zoom_time_left = 0;
         
         float amount_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
@@ -43,7 +43,7 @@ void do_logic() {
     
     //"Move group" arrows.
     if(moving_group_intensity) {
-        move_group_next_arrow_time -= 1.0 / game_fps;
+        move_group_next_arrow_time -= delta_t;
         if(move_group_next_arrow_time <= 0) {
             move_group_next_arrow_time = MOVE_GROUP_ARROWS_INTERVAL;
             move_group_arrows.push_back(0);
@@ -52,7 +52,7 @@ void do_logic() {
     
     float leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
     for(size_t a = 0; a < move_group_arrows.size(); ) {
-        move_group_arrows[a] += MOVE_GROUP_ARROW_SPEED * (1.0 / game_fps);
+        move_group_arrows[a] += MOVE_GROUP_ARROW_SPEED * delta_t;
         
         float max_dist =
             ((moving_group_intensity > 0) ? max_dist = CURSOR_MAX_DIST* moving_group_intensity : leader_to_cursor_dis);
@@ -65,16 +65,16 @@ void do_logic() {
     }
     
     //Whistle animations.
-    whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED / game_fps;
+    whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED * delta_t;
     
     if(whistle_fade_time > 0) {
-        whistle_fade_time -= 1.0 / game_fps;
+        whistle_fade_time -= delta_t;
         if(whistle_fade_time < 0) whistle_fade_time = 0;
     }
     
     if(whistling) {
         //Create rings.
-        whistle_next_ring_time -= 1.0 / game_fps;
+        whistle_next_ring_time -= delta_t;
         if(whistle_next_ring_time <= 0) {
             whistle_next_ring_time = WHISTLE_RINGS_INTERVAL;
             whistle_rings.push_back(0);
@@ -83,7 +83,7 @@ void do_logic() {
         }
         
         if(pretty_whistle) {
-            whistle_next_dot_time -= 1.0 / game_fps;
+            whistle_next_dot_time -= delta_t;
             if(whistle_next_dot_time <= 0) {
                 whistle_next_dot_time = WHISTLE_DOT_INTERVAL;
                 unsigned char dot = 255;
@@ -98,7 +98,7 @@ void do_logic() {
         for(unsigned char d = 0; d < 6; d++) {
             if(whistle_dot_radius[d] == -1) continue;
             
-            whistle_dot_radius[d] += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
+            whistle_dot_radius[d] += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
             if(whistle_radius > 0 && whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
             } else if(whistle_fade_radius > 0 && whistle_dot_radius[d] > whistle_fade_radius) {
@@ -109,7 +109,7 @@ void do_logic() {
     
     for(size_t r = 0; r < whistle_rings.size(); ) {
         //Erase rings that go beyond the cursor.
-        whistle_rings[r] += WHISTLE_RING_SPEED / game_fps;
+        whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
         if(whistle_rings[r] >= leader_to_cursor_dis) {
             whistle_rings.erase(whistle_rings.begin() + r);
             whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
@@ -124,7 +124,7 @@ void do_logic() {
     //Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
     for(unsigned char i = 0; i < 3; i++) {
         float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
-        signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * (1.0 / game_fps);
+        signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
         if(ship_beam_ring_color[i] + addition >= 255) {
             ship_beam_ring_color[i] = 255;
             ship_beam_ring_color_up[i] = false;
@@ -137,16 +137,16 @@ void do_logic() {
     }
     
     //Sun meter.
-    sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED / game_fps;
+    sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED * delta_t;
     
     //Cursor spin angle and invalidness effect.
-    cursor_spin_angle -= CURSOR_SPIN_SPEED / game_fps;
-    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED / game_fps;
+    cursor_spin_angle -= CURSOR_SPIN_SPEED * delta_t;
+    cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
     
     //Cursor trail.
     if(draw_cursor_trail) {
         if(cursor_save_time > 0) {
-            cursor_save_time -= 1.0 / game_fps;
+            cursor_save_time -= delta_t;
             if(cursor_save_time <= 0) {
                 cursor_save_time = CURSOR_SAVE_INTERVAL;
                 cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
@@ -178,11 +178,11 @@ void do_logic() {
         *                              `-´  *
         *************************************/
         
-        day_minutes += (day_minutes_per_irl_sec / game_fps);
+        day_minutes += (day_minutes_per_irl_sec * delta_t);
         if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
         
         if(auto_pluck_input_time > 0) {
-            auto_pluck_input_time -= (1.0 / game_fps);
+            auto_pluck_input_time -= delta_t;
             if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
         }
         
@@ -193,7 +193,7 @@ void do_logic() {
         ********************/
         
         if(whistling && whistle_radius < cur_leader_ptr->lea_type->whistle_range) {
-            whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED / game_fps;
+            whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
             if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_radius = cur_leader_ptr->lea_type->whistle_range;
                 whistle_max_hold = WHISTLE_MAX_HOLD_TIME;
@@ -201,7 +201,7 @@ void do_logic() {
         }
         
         if(whistle_max_hold > 0) {
-            whistle_max_hold -= 1.0 / game_fps;
+            whistle_max_hold -= delta_t;
             if(whistle_max_hold <= 0) {
                 stop_whistling();
             }
@@ -284,7 +284,10 @@ void do_logic() {
         ******************/
         
         size_t n_pikmin = pikmin_list.size();
-        for(size_t p = 0; p < n_pikmin; p++) {
+        size_t pikmin_ai_start = floor(pikmin_ai_portion * ((double) n_pikmin / N_PIKMIN_AI_PORTIONS));
+        size_t pikmin_ai_end = floor((pikmin_ai_portion + 1) * ((double)n_pikmin / N_PIKMIN_AI_PORTIONS));
+        pikmin_ai_portion = (pikmin_ai_portion + 1) % N_PIKMIN_AI_PORTIONS;
+        for(size_t p = pikmin_ai_start; p < pikmin_ai_end; p++) {
             pikmin* pik_ptr = pikmin_list[p];
             
             bool can_be_called =
@@ -310,6 +313,7 @@ void do_logic() {
                     )
                 );
                 sfx_pikmin_dying.play(0.03, false);
+                continue;
                 
             }
             
@@ -375,6 +379,7 @@ void do_logic() {
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
                     pik_ptr->latched = true;
+                    pik_ptr->was_thrown = false;
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
                     pik_ptr->anim.change("attack", true, false);
                     
@@ -521,7 +526,7 @@ void do_logic() {
                     }
                 }
                 
-                if(!pik_ptr->being_chomped) pik_ptr->attack_time -= 1.0 / game_fps;
+                if(!pik_ptr->being_chomped) pik_ptr->attack_time -= delta_t;
                 if(pik_ptr->attack_time <= 0 && pik_ptr->knockdown_period == 0) {
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
                     attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power, 0, 0, 0, 0);
@@ -680,7 +685,7 @@ void do_logic() {
                     }
                     
                     if(l_ptr->pluck_time > 0) {
-                        l_ptr->pluck_time -= 1.0 / game_fps;
+                        l_ptr->pluck_time -= delta_t;
                         
                     } else {
                     
@@ -827,14 +832,14 @@ void do_logic() {
         **************************/
         
         if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
-            percipitation_time_left -= (1.0 / game_fps);
+            percipitation_time_left -= delta_t;
             if(percipitation_time_left <= 0) {
                 percipitation_time_left = cur_weather.percipitation_frequency.get_random_number();
                 percipitation.push_back(point(0, 0));
             }
             
             for(size_t p = 0; p < percipitation.size();) {
-                percipitation[p].y += cur_weather.percipitation_speed.get_random_number() / game_fps;
+                percipitation[p].y += cur_weather.percipitation_speed.get_random_number() * delta_t;
                 if(percipitation[p].y > scr_h) {
                     percipitation.erase(percipitation.begin() + p);
                 } else {
@@ -850,7 +855,7 @@ void do_logic() {
         *                ***  *
         **********************/
         
-        throw_particle_timer -= 1.0 / game_fps;
+        throw_particle_timer -= delta_t;
         if(throw_particle_timer <= 0) {
             throw_particle_timer = THROW_PARTICLE_INTERVAL;
             
@@ -876,7 +881,7 @@ void do_logic() {
     } else { //Displaying a message.
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
-            cur_message_char_time -= 1.0 / game_fps;
+            cur_message_char_time -= delta_t;
             if(cur_message_char_time <= 0) {
                 cur_message_char_time = MESSAGE_CHAR_INTERVAL;
                 cur_message_char++;

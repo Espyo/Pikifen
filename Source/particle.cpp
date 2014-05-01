@@ -1,7 +1,7 @@
 #include "particle.h"
 #include "vars.h"
 
-particle::particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y, float speed_x, float speed_y, float friction, float gravity, float duration, float size, ALLEGRO_COLOR color) {
+particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR color) {
     this->type = type;
     this->bitmap = bitmap;
     this->x = x; this->y = y;
@@ -17,20 +17,20 @@ particle::particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y,
 }
 
 bool particle::tick() {
-    time -= 1.0f / game_fps;
+    time -= delta_t;
     
     if(time <= 0) return false;
     
-    x += (1.0f / game_fps) * speed_x;
-    y += (1.0f / game_fps) * speed_y;
+    x += (delta_t) * speed_x;
+    y += (delta_t) * speed_y;
     
     if(friction != 0) {
-        speed_x *= 1 - ((1.0f / game_fps) * friction);
-        speed_y *= 1 - ((1.0f / game_fps) * friction);
+        speed_x *= 1 - ((delta_t) * friction);
+        speed_y *= 1 - ((delta_t) * friction);
     }
     
     if(gravity != 0) {
-        speed_y += (1.0f / game_fps) * gravity;
+        speed_y += (delta_t) * gravity;
     }
     
     return true;

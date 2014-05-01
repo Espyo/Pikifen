@@ -1,6 +1,6 @@
 #include "spray_type.h"
 
-spray_type::spray_type(status* effect, bool burpable, float duration, ALLEGRO_COLOR main_color, ALLEGRO_BITMAP* bmp_spray, ALLEGRO_BITMAP* bmp_berry, bool can_drop_blobs, unsigned int berries_needed) {
+spray_type::spray_type(status* effect, const bool burpable, const float duration, const ALLEGRO_COLOR main_color, ALLEGRO_BITMAP* bmp_spray, ALLEGRO_BITMAP* bmp_berry, const bool can_drop_blobs, const unsigned int berries_needed) {
     this->effect = effect;
     this->burpable = burpable;
     this->duration = duration;

@@ -9,7 +9,7 @@ class leader;
 
 class pikmin : public mob {
 public:
-    pikmin(float x, float y, sector* sec, pikmin_type* type);
+    pikmin(const float x, const float y, sector* sec, pikmin_type* type);
     ~pikmin();
     
     pikmin_type* pik_type;

@@ -18,7 +18,7 @@ public:
     unsigned int berries_needed; //How many berries are needed in order to concot a new spray. 0 means there are no berries for this spray type.
     bool can_drop_blobs;         //Is it possible for the game to randomly give spray blobs of this spray type?
     
-    spray_type(status* effect, bool burpable, float duration, ALLEGRO_COLOR main_color, ALLEGRO_BITMAP* bmp_spray, ALLEGRO_BITMAP* bmp_berry, bool can_drop_blobs = true, unsigned int berries_needed = 10);
+    spray_type(status* effect, const bool burpable, const float duration, const ALLEGRO_COLOR main_color, ALLEGRO_BITMAP* bmp_spray, ALLEGRO_BITMAP* bmp_berry, const bool can_drop_blobs = true, const unsigned int berries_needed = 10);
 };
 
 #endif //ifndef SPRAY_TYPE_INCLUDED

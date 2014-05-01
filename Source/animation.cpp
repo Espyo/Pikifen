@@ -6,7 +6,7 @@
 
 using namespace std;
 
-frame::frame(string name, ALLEGRO_BITMAP* b, float gw, float gh, vector<hitbox_instance> h) {
+frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const float gh, const vector<hitbox_instance> &h) {
     this->name = name;
     bitmap = b;
     game_w = gw;
@@ -19,7 +19,7 @@ frame::frame(string name, ALLEGRO_BITMAP* b, float gw, float gh, vector<hitbox_i
     parent_bmp = NULL;
 }
 
-frame::frame(string name, ALLEGRO_BITMAP* b, int bx, int by, int bw, int bh, float gw, float gh, vector<hitbox_instance> h) {
+frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h) {
     this->name = name;
     parent_bmp = b;
     bitmap = b ? al_create_sub_bitmap(b, bx, by, bw, bh) : NULL;
@@ -82,13 +82,13 @@ frame::~frame() {
     if(bitmap) al_destroy_bitmap(bitmap);
 }
 
-frame_instance::frame_instance(string fn, frame* fp, float d) {
+frame_instance::frame_instance(const string &fn, frame* fp, const float d) {
     frame_name = fn;
     frame_ptr = fp;
     duration = d;
 }
 
-animation::animation(string name, vector<frame_instance> frame_instances, size_t loop_frame) {
+animation::animation(const string &name, vector<frame_instance> frame_instances, const size_t loop_frame) {
     this->name = name;
     this->frame_instances = frame_instances;
     this->loop_frame = loop_frame;
@@ -115,7 +115,7 @@ animation_instance::animation_instance(const animation_instance &ai2) {
  * Changes to a new animation within the same animation set.
  *
  */
-void animation_instance::change(string new_anim_name, bool only_if_new, bool only_if_done) {
+void animation_instance::change(const string &new_anim_name, const bool only_if_new, const bool only_if_done) {
     //ToDo don't use .find, string lookup is slow.
     auto new_anim_it = anim_set->animations.find(new_anim_name);
     if(new_anim_it == anim_set->animations.end()) return;
@@ -133,7 +133,7 @@ void animation_instance::start() { //Starts or restarts an animation. It's calle
     done_once = false;
 }
 
-bool animation_instance::tick(float time) { //Ticks the animation. Returns whether or not the animation ended its final frame.
+bool animation_instance::tick(const float time) { //Ticks the animation. Returns whether or not the animation ended its final frame.
     if(!anim) return false;
     size_t n_frames = anim->frame_instances.size();
     if(n_frames == 0) return false;

@@ -65,7 +65,7 @@ struct mob_action {
     string data;
     
     mob_action(data_node* dn);
-    mob_action(unsigned char t, string d);
+    mob_action(const unsigned char t, const string &d);
     
     bool run(mob* m, mob_event* ev, size_t* action_nr);
 };
@@ -75,9 +75,9 @@ struct mob_event {
     vector<mob_action*> actions;
     
     mob_event(data_node* d, vector<mob_action*> a);
-    mob_event(unsigned char t, vector<mob_action*> a);
+    mob_event(const unsigned char t, vector<mob_action*> a);
     
-    void run(mob* m, size_t starting_action);
+    void run(mob* m, const size_t starting_action);
 };
 
 #endif //ifndef MOB_EVENT_INCLUDED

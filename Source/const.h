@@ -38,6 +38,7 @@ using namespace std;
 #define MOVE_GROUP_ARROW_SPEED      400      //"Move group" arrows move these many units per second.
 #define MOVE_GROUP_ARROWS_INTERVAL  0.1      //Seconds that need to pass before another "move group" arrow appears.
 #define NECTAR_AMOUNT               5        //A drop of nectar starts with this amount.
+#define N_PIKMIN_AI_PORTIONS        4        //Split the Pikmin into n groups. Every frame, only one group's AI is handled.
 #define PARTY_SPOT_INTERVAL         1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
 #define PIKMIN_MAX_HEALTH           300      //Maximum Pikmin HP.
 #define PIKMIN_MIN_ATTACK_RANGE     0        //If there's this gap between a Pikmin and its prey, the Pikmin will attack.

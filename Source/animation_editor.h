@@ -52,7 +52,7 @@ void animation_editor::do_logic() {
     if(ed_anim_playing && ed_mode == EDITOR_MODE_ANIMATION && ed_cur_anim && ed_cur_frame_instance_nr != string::npos) {
         frame_instance* fi = &ed_cur_anim->frame_instances[ed_cur_frame_instance_nr];
         if(fi->duration != 0) {
-            ed_cur_frame_time += 1.0 / game_fps;
+            ed_cur_frame_time += delta_t;
             
             while(ed_cur_frame_time > fi->duration) {
                 ed_cur_frame_time = ed_cur_frame_time - fi->duration;
@@ -97,7 +97,7 @@ void animation_editor::do_logic() {
         ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = wum->description;
     }
     
-    ed_cur_hitbox_alpha += M_PI * 3 / game_fps;
+    ed_cur_hitbox_alpha += M_PI * 3 * delta_t;
     
     //---Drawing.---
     

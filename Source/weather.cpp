@@ -2,7 +2,7 @@
 
 weather::weather() {}
 
-weather::weather(string n, map<unsigned, ALLEGRO_COLOR> l, unsigned char pt, interval pf, interval ps, interval pa) {
+weather::weather(const string &n, const map<unsigned, ALLEGRO_COLOR> &l, const unsigned char pt, const interval pf, const interval ps, const interval pa) {
     this->name = n;
     this->lighting = l;
     this->percipitation_type = pt;

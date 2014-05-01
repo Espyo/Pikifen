@@ -1,3 +1,5 @@
+//ToDo const in functions and reference parameters.
+
 #ifndef LAFI_WIDGET_INCLUDED
 #define LAFI_WIDGET_INCLUDED
 

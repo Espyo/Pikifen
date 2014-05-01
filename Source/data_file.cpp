@@ -22,13 +22,13 @@ size_t data_node::get_nr_of_children() {
 }
 
 //Returns a child node given its number on the list (direct children only).
-data_node* data_node::get_child(size_t number) {
+data_node* data_node::get_child(const size_t number) {
     if(number >= children.size()) return create_dummy();
     return children[number];
 }
 
 //Returns the number of occurences of a child name (direct children only).
-size_t data_node::get_nr_of_children_by_name(string name) {
+size_t data_node::get_nr_of_children_by_name(const string &name) {
     size_t number = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
@@ -39,7 +39,7 @@ size_t data_node::get_nr_of_children_by_name(string name) {
 }
 
 //Returns the nth child with this name on the list (direct children only).
-data_node* data_node::get_child_by_name(string name, size_t occurrence_number) {
+data_node* data_node::get_child_by_name(const string &name, const size_t occurrence_number) {
     size_t cur_occurrence_number = 0;
     
     for(size_t c = 0; c < children.size(); c++) {
@@ -57,7 +57,7 @@ data_node* data_node::get_child_by_name(string name, size_t occurrence_number) {
 }
 
 //Returns the value of a node, or def if it has no value.
-string data_node::get_value_or_default(string def) {
+string data_node::get_value_or_default(const string &def) {
     return (value.size() == 0 ? def : value);
 }
 
@@ -80,7 +80,7 @@ bool data_node::remove(data_node* node_to_remove) {
 }
 
 //Loads data from a file.
-void data_node::load_file(string filename, bool trim_values) {
+void data_node::load_file(const string &filename, const bool trim_values) {
     vector<string> lines;
     
     bool is_first_line = true;
@@ -111,7 +111,7 @@ void data_node::load_file(string filename, bool trim_values) {
 
 //Loads data from a list of text lines.
 //Returns the number of the line this node ended on, judging by start_line. This is used for the recursion.
-size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t start_line) {
+size_t data_node::load_node(const vector<string> &lines, const bool trim_values, const size_t start_line) {
     children.clear();
     
     if(start_line > lines.size()) return start_line;
@@ -171,7 +171,7 @@ size_t data_node::load_node(vector<string> &lines, bool trim_values, size_t star
 
 //Saves a node into a new text file. Line numbers are ignored. If you don't provide a filename, it'll use the node's filename.
 //Returns true on success.
-bool data_node::save_file(string filename, bool children_only) {
+bool data_node::save_file(string filename, const bool children_only) {
     if(filename == "") filename = this->filename;
     
     ALLEGRO_FILE* file = al_fopen(filename.c_str(), "w");
@@ -191,7 +191,7 @@ bool data_node::save_file(string filename, bool children_only) {
 }
 
 //Saved a node into a text file.
-void data_node::save_node(ALLEGRO_FILE* file, size_t level) {
+void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
     string tabs = string(level, '\t');
     
     al_fwrite(file, tabs.c_str(), tabs.size());
@@ -236,7 +236,7 @@ data_node::data_node(const data_node &dn2) {
 }
 
 //Creates a data node from a file, given the file name.
-data_node::data_node(string filename) {
+data_node::data_node(const string &filename) {
     file_was_opened = false;
     line_nr = 0;
     this->filename = filename;
@@ -244,7 +244,7 @@ data_node::data_node(string filename) {
 }
 
 //Creates a data node by filling its name and value.
-data_node::data_node(string name, string value) {
+data_node::data_node(const string &name, const string &value) {
     file_was_opened = false;
     line_nr = 0;
     this->name = name;
@@ -297,7 +297,7 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * s:         The original string.
  * left_only: If true, only trim the spaces at the left.
  */
-string trim_spaces(string s, bool left_only) {
+string trim_spaces(string s, const bool left_only) {
     //Spaces before.
     if(s.size()) {
         while(s[0] == ' ' || s[0] == '\t') {

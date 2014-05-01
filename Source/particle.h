@@ -18,7 +18,7 @@ public:
     float starting_size;
     ALLEGRO_COLOR color;
     
-    particle(unsigned char type, ALLEGRO_BITMAP* bitmap, float x, float y, float speed_x, float speed_y, float friction, float gravity, float duration, float size, ALLEGRO_COLOR color);
+    particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR color);
     bool tick();    //Returns true if the tick was successful. Returns false if its time to live is over.
 };
 

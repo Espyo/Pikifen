@@ -13,7 +13,7 @@ public:
     ALLEGRO_COLOR color;
     unsigned char affects;      //What kind of mobs it affects.
     
-    status(float speed_multiplier, float attack_multiplier, float defense_multiplier, bool freezes_everything, ALLEGRO_COLOR color, unsigned char affects);
+    status(const float speed_multiplier, const float attack_multiplier, const float defense_multiplier, const bool freezes_everything, const ALLEGRO_COLOR color, const unsigned char affects);
 };
 
 enum {

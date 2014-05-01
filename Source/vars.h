@@ -136,6 +136,7 @@ extern float                 day_minutes_end;          //The day ends when the i
 extern float                 day_minutes_per_irl_sec;  //Every real-life second, these many in-game minutes pass.
 extern float                 day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                  daylight_effect;
+extern double                delta_t;                  //Time between the previous frame and the current.
 extern ALLEGRO_DISPLAY*      display;
 extern bool                  draw_cursor_trail;
 extern animation_set         ed_anims;
@@ -215,12 +216,14 @@ pellet_types;
 extern vector<pellet*>       pellets;
 extern vector<point>         percipitation;
 extern float                 percipitation_time_left;
+extern unsigned char         pikmin_ai_portion;
 extern map<pikmin_type*, unsigned long>
 pikmin_in_onions;
 extern vector<pikmin*>       pikmin_list;
 extern map<string, pikmin_type*>
 pikmin_types;
 extern bool                  pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
+extern double                prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
 extern float                 prev_moving_group_intensity; //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                  running;
 extern unsigned short        scr_h;

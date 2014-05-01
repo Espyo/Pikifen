@@ -9,7 +9,7 @@
 #include "functions.h"
 #include "vars.h"
 
-void handle_game_controls(ALLEGRO_EVENT ev) {
+void handle_game_controls(const ALLEGRO_EVENT &ev) {
     //Debugging.
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR && ev.keyboard.keycode == ALLEGRO_KEY_T) {
         //Debug testing.
@@ -75,7 +75,7 @@ void handle_game_controls(ALLEGRO_EVENT ev) {
     
 }
 
-void handle_button(unsigned int button, float pos) {
+void handle_button(const unsigned int button, float pos) {
 
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
@@ -113,10 +113,10 @@ void handle_button(unsigned int button, float pos) {
             *             `-´   *
             ********************/
             
-            if(button == BUTTON_MOVE_CURSOR_RIGHT)     mouse_cursor_speed_x = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-            else if(button == BUTTON_MOVE_CURSOR_UP)   mouse_cursor_speed_y = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-            else if(button == BUTTON_MOVE_CURSOR_LEFT) mouse_cursor_speed_x = -(1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
-            else if(button == BUTTON_MOVE_CURSOR_DOWN) mouse_cursor_speed_y = (1.0 / game_fps) * MOUSE_CURSOR_MOVE_SPEED * pos;
+            if(button == BUTTON_MOVE_CURSOR_RIGHT)     mouse_cursor_speed_x = delta_t* MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_UP)   mouse_cursor_speed_y = -delta_t* MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_LEFT) mouse_cursor_speed_x = -delta_t* MOUSE_CURSOR_MOVE_SPEED * pos;
+            else if(button == BUTTON_MOVE_CURSOR_DOWN) mouse_cursor_speed_y = delta_t* MOUSE_CURSOR_MOVE_SPEED * pos;
             
         } else if(
             button == BUTTON_MOVE_GROUP_RIGHT ||

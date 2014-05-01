@@ -20,7 +20,7 @@ public:
     interval percipitation_angle;
     
     weather();
-    weather(string n, map<unsigned, ALLEGRO_COLOR> l, unsigned char pt, interval pf, interval ps, interval pa);
+    weather(const string &n, const map<unsigned, ALLEGRO_COLOR> &l, const unsigned char pt, const interval pf, const interval ps, const interval pa);
 };
 
 enum PERCIPITATION_TYPES {

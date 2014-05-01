@@ -1,6 +1,6 @@
 #include "status.h"
 
-status::status(float speed_multiplier, float attack_multiplier, float defense_multiplier, bool freezes_everything, ALLEGRO_COLOR color, unsigned char affects) {
+status::status(const float speed_multiplier, const float attack_multiplier, const float defense_multiplier, const bool freezes_everything, const ALLEGRO_COLOR color, const unsigned char affects) {
     this->speed_multiplier = speed_multiplier;
     this->attack_multiplier = attack_multiplier;
     this->defense_multiplier = defense_multiplier;

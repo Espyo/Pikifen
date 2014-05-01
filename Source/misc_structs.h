@@ -28,14 +28,14 @@ struct party_spot_info {
     unsigned current_wheel;
     unsigned n_current_wheel_members;
     
-    party_spot_info(unsigned max_mobs, float spot_size);
+    party_spot_info(const unsigned max_mobs, const float spot_size);
     void add(mob* m, float* x, float* y);
     void remove(mob* m);
 };
 
 struct point {
     float x, y;
-    point(float x = 0, float y = 0) { this->x = x; this->y = y; }
+    point(const float x = 0, const float y = 0) { this->x = x; this->y = y; }
     bool operator!=(const point &p2) { return x != p2.x || y != p2.y; }
 };
 
@@ -45,7 +45,7 @@ struct sample_struct {
     //ALLEGRO_SAMPLE_ID   id;     //Sample id.
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
-    void play(float max_override_pos, bool loop, float gain = 1.0, float pan = 0.5, float speed = 1.0);
+    void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
     void stop();
 };
 
@@ -59,8 +59,8 @@ public:
 class bmp_manager {
 public:
     map<string, bmp_info> list;
-    ALLEGRO_BITMAP* get(string name, data_node* node);
-    void detach(string name);
+    ALLEGRO_BITMAP* get(const string &name, data_node* node);
+    void detach(const string &name);
 };
 
 #endif //ifndef MISC_STRUCTS_INCLUDED

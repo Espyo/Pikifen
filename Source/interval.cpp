@@ -1,24 +1,24 @@
 #include "functions.h"
 #include "interval.h"
 
-subinterval::subinterval(float l, float u, float d) {
+subinterval::subinterval(float l, float u, const float d) {
     if(l > u) swap(l, u);
     lower = l;
     upper = u;
     divisor = d;
 }
 
-interval::interval(string s) {
+interval::interval(const string &s) {
     vector<string> subinterval_strs = split(s, ";");
     size_t n_subintervals = subinterval_strs.size();
     
-    for(size_t s = 0; s < n_subintervals; s++) {
+    for(size_t si = 0; si < n_subintervals; si++) {
         float lower = FLT_MIN;
         float upper = FLT_MAX;
         float divisor = 0;
         
-        if(subinterval_strs[s].size() > 0) {
-            vector<string> divisor_parts = split(subinterval_strs[s], "every", false, true);
+        if(subinterval_strs[si].size() > 0) {
+            vector<string> divisor_parts = split(subinterval_strs[si], "every", false, true);
             if(divisor_parts.size() >= 2) {
                 divisor = tof(divisor_parts.back());
             }
@@ -52,7 +52,7 @@ float interval::get_random_number() {
     return subintervals[0].lower; //ToDo
 }
 
-bool interval::is_number_in_interval(float n) {
+bool interval::is_number_in_interval(const float n) {
     size_t n_subintervals = subintervals.size();
     if(n_subintervals == 0) return false;
     

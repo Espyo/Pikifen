@@ -60,7 +60,7 @@ void add_to_party(mob* party_leader, mob* new_member) {
  * magnitue: Its magnitude.
  * *_coord:  Variables to return the coordinates to.
  */
-void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y_coord) {
+void angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord) {
     *x_coord = cos(angle) * magnitude;
     *y_coord = sin(angle) * magnitude;
 }
@@ -69,13 +69,14 @@ void angle_to_coordinates(float angle, float magnitude, float* x_coord, float* y
  * Makes m1 attack m2.
  * Stuff like status effects and maturity (Pikmin only) are taken into account.
  */
-void attack(mob* m1, mob* m2, bool m1_is_pikmin, float damage, float angle, float knockback, float new_invuln_period, float new_knockdown_period) {
+void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period) {
     if(m2->invuln_period > 0) return;
     
     pikmin* p_ptr = NULL;
+    float total_damage = damage;
     if(m1_is_pikmin) {
         p_ptr = (pikmin*) m1;
-        damage += p_ptr->maturity * damage * MATURITY_POWER_MULT;
+        total_damage += p_ptr->maturity * damage * MATURITY_POWER_MULT;
     }
     
     m2->invuln_period = new_invuln_period;
@@ -103,7 +104,7 @@ void attack(mob* m1, mob* m2, bool m1_is_pikmin, float damage, float angle, floa
  * color: The color to change the alpha on.
  * a:     The new alpha, [0-255].
  */
-ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a) {
+ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
@@ -116,7 +117,7 @@ ALLEGRO_COLOR change_alpha(ALLEGRO_COLOR c, unsigned char a) {
  * angle:     Variable to return the angle to.
  * magnitude: Variable to return the magnitude to.
  */
-void coordinates_to_angle(float x_coord, float y_coord, float* angle, float* magnitude) {
+void coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude) {
     *angle = atan2(y_coord, x_coord);
     *magnitude = dist(0, 0, x_coord, y_coord);
 }
@@ -302,7 +303,7 @@ void dismiss() {
  * x, y:  Center of the place to draw at.
  * max_*: Max width or height. Used to compress it if needed.
  */
-void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float max_w, float max_h) {
+void draw_control(const ALLEGRO_FONT* const font, const control_info c, const float x, const float y, const float max_w, const float max_h) {
     string name;
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         name = al_keycode_to_name(c.button);
@@ -354,7 +355,7 @@ void draw_control(ALLEGRO_FONT* font, control_info c, float x, float y, float ma
  * max_w, max_h: The maximum width and height. Use 0 to have no limit.
  * text:         Text to draw.
  */
-void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, float y, int flags, unsigned char valign, float max_w, float max_h, string text) {
+void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR color, const float x, const float y, const int flags, const unsigned char valign, const float max_w, const float max_h, const string text) {
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     int text_width = x2 - x1, text_height = y2 - y1;
@@ -390,7 +391,7 @@ void draw_compressed_text(ALLEGRO_FONT* font, ALLEGRO_COLOR color, float x, floa
  * needed:  Needed strength to lift the object (weight).
  * color:   Color of the fraction's text.
  */
-void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed, ALLEGRO_COLOR color) {
+void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR color) {
     float first_y = cy - (font_h * 3) / 2;
     al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (itos(current).c_str()));
     al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
@@ -405,7 +406,7 @@ void draw_fraction(float cx, float cy, unsigned int current, unsigned int needed
  * radius:     Radius of the wheel (the whole wheel, not just the pieslice).
  * just_chart: If true, only draw the actual pieslice (pie-chart). Used for leader HP on the HUD.
  */
-void draw_health(float cx, float cy, unsigned int health, unsigned int max_health, float radius, bool just_chart) {
+void draw_health(const float cx, const float cy, const unsigned int health, const unsigned int max_health, const float radius, const bool just_chart) {
     float ratio = (float) health / (float) max_health;
     ALLEGRO_COLOR c;
     if(ratio >= 0.5) {
@@ -424,7 +425,7 @@ void draw_health(float cx, float cy, unsigned int health, unsigned int max_healt
  * s:   The sector to draw.
  * x/y: Top-left coordinates.
  */
-void draw_sector(sector &s, float x, float y) {
+void draw_sector(sector &s, const float x, const float y) {
     ALLEGRO_VERTEX vs[200]; //ToDo 200?
     size_t n_linedefs = s.linedefs.size();
     unsigned char current_floor;
@@ -459,7 +460,7 @@ void draw_sector(sector &s, float x, float y) {
  * delta_z:        The mob is these many units above the floor directly below it.
  * shadow_stretch: How much to stretch the shadow by (used to simulate sun shadow direction casting).
  */
-void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_stretch) {
+void draw_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch) {
     if(shadow_stretch <= 0) return;
     
     float shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
@@ -490,7 +491,7 @@ void draw_shadow(float cx, float cy, float size, float delta_z, float shadow_str
  * angle: Angle to rotate the sprite by.
  * tint:  Tint the sprite with this color.
  */
-void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, float angle, ALLEGRO_COLOR tint) {
+void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle, const ALLEGRO_COLOR tint) {
     if(!bmp) {
         bmp = bmp_error;
     }
@@ -520,7 +521,7 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, float cx, float cy, float w, float h, floa
  * va:   Vertical align: 1 for top, 2 for center, 3 for bottom.
  * text: Text to write, line breaks included ('\n').
  */
-void draw_text_lines(ALLEGRO_FONT* f, ALLEGRO_COLOR c, float x, float y, int fl, unsigned char va, string text) {
+void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(f);
     size_t n_lines = lines.size();
@@ -631,7 +632,7 @@ void error_log(string s, data_node* d) {
 /* ----------------------------------------------------------------------------
  * Returns whether or not the string s is inside the vector of strings v.
  */
-bool find_in_vector(vector<string> v, string s) {
+bool find_in_vector(const vector<string> v, const string s) {
     for(auto i = v.begin(); i != v.end(); i++) if(*i == s) return true;
     return false;
 }
@@ -639,7 +640,7 @@ bool find_in_vector(vector<string> v, string s) {
 /* ----------------------------------------------------------------------------
  * Makes m1 focus on m2.
  */
-void focus_mob(mob* m1, mob* m2, bool is_near, bool call_event) {
+void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event) {
     unfocus_mob(m1, m1->focused_prey, false);
     
     m1->focused_prey = m2;
@@ -659,7 +660,7 @@ void focus_mob(mob* m1, mob* m2, bool is_near, bool call_event) {
  * folder_name: Name of the folder.
  * folders:     If true, only read folders. If false, only read files.
  */
-vector<string> folder_to_vector(string folder_name, bool folders) {
+vector<string> folder_to_vector(string folder_name, const bool folders) {
     vector<string> v;
     
     //Normalize the folder's path.
@@ -802,7 +803,7 @@ void generate_area_images() {
  * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
  ** (i.e. already chosen to be plucked by another leader).
  */
-pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserved) {
+pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved) {
     float closest_distance = 0;
     pikmin* closest_pikmin = NULL;
     
@@ -829,7 +830,7 @@ pikmin* get_closest_buried_pikmin(float x, float y, float* d, bool ignore_reserv
  * x, y: Point.
  * m:    The mob.
  */
-hitbox_instance* get_closest_hitbox(float x, float y, mob* m) {
+hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
     frame* f = m->anim.get_frame();
     if(!f) return NULL;
     hitbox_instance* closest_hitbox = NULL;
@@ -881,7 +882,7 @@ ALLEGRO_COLOR get_daylight_color() {
 /* ----------------------------------------------------------------------------
  * Returns the hitbox instance in the current animation with the specified name.
  */
-hitbox_instance* get_hitbox(mob* m, string name) {
+hitbox_instance* get_hitbox(mob* m, const string name) {
     frame* f = m->anim.get_frame();
     for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
@@ -907,7 +908,7 @@ float get_leader_to_group_center_dist(mob* l) {
  * If query is true, then the caller only wants to know of the existence of the event, not actually do something with it.
    * This makes it return the pointer if it exists, regardless of it being able to run or not.
  */
-mob_event* get_mob_event(mob* m, unsigned char et, bool query) {
+mob_event* get_mob_event(mob* m, const unsigned char et, const bool query) {
     if(m->dead && et != MOB_EVENT_DEATH) return NULL;
     size_t n_events = m->type->events.size();
     for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
@@ -941,7 +942,7 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform() {
  * Gives an Onion some Pikmin, and makes the Onion spew seeds out,
  ** depending on how many Pikmin there are in the field (don't spew if 100).
  */
-void give_pikmin_to_onion(onion* o, unsigned amount) {
+void give_pikmin_to_onion(onion* o, const unsigned amount) {
     unsigned total_after = pikmin_list.size() + amount;
     unsigned pikmin_to_spit = amount;
     unsigned pikmin_to_keep = 0; //Pikmin to keep inside the Onion, without spitting.
@@ -987,7 +988,7 @@ void go_pluck(leader* l, pikmin* p) {
  ** The closer to n1, the closer the final color is to c1.
  * c1, c2: Colors.
  */
-ALLEGRO_COLOR interpolate_color(float n, float n1, float n2, ALLEGRO_COLOR c1, ALLEGRO_COLOR c2) {
+ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2) {
     float progress = (float) (n - n1) / (float) (n2 - n1);
     return al_map_rgba_f(
                c1.r + progress * (c2.r - c1.r),
@@ -1121,7 +1122,7 @@ animation_set load_animation_set(data_node* file_node) {
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
  */
-void load_area(string name) {
+void load_area(const string name) {
 
     data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
     
@@ -1269,7 +1270,7 @@ void load_area(string name) {
  * Loads a bitmap from the game's content.
  * If the node is present, it'll be used to report errors.
  */
-ALLEGRO_BITMAP* load_bmp(string filename, data_node* node) {
+ALLEGRO_BITMAP* load_bmp(const string filename, data_node* node) {
     ALLEGRO_BITMAP* b = NULL;
     b = al_load_bitmap((GRAPHICS_FOLDER "/" + filename).c_str());
     if(!b) {
@@ -1283,7 +1284,7 @@ ALLEGRO_BITMAP* load_bmp(string filename, data_node* node) {
 /* ----------------------------------------------------------------------------
  * Loads a game control.
  */
-void load_control(unsigned char action, unsigned char player, string name, data_node &file, string def) {
+void load_control(const unsigned char action, const unsigned char player, const string name, data_node &file, const string def) {
     string s = file.get_child_by_name("p" + itos((player + 1)) + "_" + name)->get_value_or_default((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
@@ -1296,7 +1297,7 @@ void load_control(unsigned char action, unsigned char player, string name, data_
 /* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
  */
-data_node load_data_file(string filename) {
+data_node load_data_file(const string filename) {
     data_node n = data_node(filename);
     if(!n.file_was_opened) {
         error_log("Could not open data file " + filename + "!");
@@ -1393,7 +1394,7 @@ vector<hitbox> load_hitboxes(data_node* frame_node) {
  * Loads the mob types from a folder.
  * type: Use MOB_TYPE_* for this.
  */
-void load_mob_types(string folder, unsigned char type) {
+void load_mob_types(const string folder, const unsigned char type) {
     vector<string> types = folder_to_vector(folder, true);
     if(types.size() == 0) {
         error_log("Folder not found \"" + folder + "\"!");
@@ -1606,7 +1607,7 @@ void load_options() {
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
-sample_struct load_sample(string filename, ALLEGRO_MIXER* mixer) {
+sample_struct load_sample(const string filename, ALLEGRO_MIXER* const mixer) {
     ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER "/" + filename).c_str());
     if(!sample) {
         error_log("Could not open audio sample " + filename + "!");
@@ -1660,12 +1661,12 @@ void make_uncarriable(mob* m) {
  * angle:        Variable to return the angle the point faces to.
  * reached:      Variable to return whether the point reached the target or not to.
  */
-void move_point(float x, float y, float tx, float ty, float speed, float reach_radius, float* mx, float* my, float* angle, bool* reached) {
+void move_point(const float x, const float y, const float tx, const float ty, const float speed, const float reach_radius, float* mx, float* my, float* angle, bool* reached) {
     float dx = tx - x, dy = ty - y;
     float dist = sqrt(dx * dx + dy * dy);
     
     if(dist > reach_radius) {
-        float move_amount = min(dist * game_fps / 2, speed);
+        float move_amount = min(dist / delta_t / 2, speed);
         
         dx *= move_amount / dist;
         dy *= move_amount / dist;
@@ -1725,7 +1726,7 @@ int randomi(int min, int max) {
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float center_x, float center_y, float speed_min, float speed_max, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float center_x, const float center_y, const float speed_min, const float speed_max, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1762,7 +1763,7 @@ void random_particle_explosion(unsigned char type, ALLEGRO_BITMAP* bmp, float ce
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1795,7 +1796,7 @@ void random_particle_fire(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, unsigned char min, unsigned char max, float time_min, float time_max, float size_min, float size_max, ALLEGRO_COLOR color) {
+void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1826,7 +1827,7 @@ void random_particle_splash(unsigned char type, ALLEGRO_BITMAP* bmp, float origi
  * angle:    Angle to shoot at.
  * color:    Color of the particles.
  */
-void random_particle_spray(unsigned char type, ALLEGRO_BITMAP* bmp, float origin_x, float origin_y, float angle, ALLEGRO_COLOR color) {
+void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const float angle, const ALLEGRO_COLOR color) {
     unsigned char n_particles = randomi(35, 40);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -1876,7 +1877,7 @@ void remove_from_party(mob* member) {
 /* ----------------------------------------------------------------------------
  * Rotates a point by an angle. The x and y are meant to represent the difference between the point and the center of the rotation.
  */
-void rotate_point(float x, float y, float angle, float* final_x, float* final_y) {
+void rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y) {
     float c = cos(angle);
     float s = sin(angle);
     if(final_x) *final_x = c * x - s * y;
@@ -2015,7 +2016,7 @@ bool should_attack(mob* m1, mob* m2) {
  ** i.e. if two delimiters come together in a row, keep an empty substring between.
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
-vector<string> split(string text, string del, bool inc_empty, bool inc_del) {
+vector<string> split(string text, const string del, const bool inc_empty, const bool inc_del) {
     vector<string> v;
     size_t pos;
     size_t del_size = del.size();
@@ -2049,7 +2050,7 @@ vector<string> split(string text, string del, bool inc_empty, bool inc_del) {
 /* ----------------------------------------------------------------------------
  * Starts panning the camera towards another point.
  */
-void start_camera_pan(int final_x, int final_y) {
+void start_camera_pan(const int final_x, const int final_y) {
     cam_trans_pan_initial_x = cam_x;
     cam_trans_pan_initial_y = cam_y;
     cam_trans_pan_final_x = final_x;
@@ -2060,7 +2061,7 @@ void start_camera_pan(int final_x, int final_y) {
 /* ----------------------------------------------------------------------------
  * Starts moving the camera towards another zoom level.
  */
-void start_camera_zoom(float final_zoom_level) {
+void start_camera_zoom(const float final_zoom_level) {
     cam_trans_zoom_initial_level = cam_zoom;
     cam_trans_zoom_final_level = final_zoom_level;
     cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
@@ -2274,7 +2275,7 @@ string str_to_lower(string s) {
 /* ----------------------------------------------------------------------------
  * Makes m1 lose focus on m2.
  */
-void unfocus_mob(mob* m1, mob* m2, bool call_event) {
+void unfocus_mob(mob* m1, mob* m2, const bool call_event) {
     if(m2) {
         if(m1->focused_prey != m2) return;
         
@@ -2296,7 +2297,7 @@ void unfocus_mob(mob* m1, mob* m2, bool call_event) {
 /* ----------------------------------------------------------------------------
  * Uses up a spray.
  */
-void use_spray(size_t spray_nr) {
+void use_spray(const size_t spray_nr) {
     if(spray_amounts[spray_nr] == 0) return;
     
     leader* cur_leader_ptr = leaders[cur_leader_nr];

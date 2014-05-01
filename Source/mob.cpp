@@ -6,7 +6,7 @@
 #include "pikmin.h"
 #include "vars.h"
 
-mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
+mob::mob(const float x, const float y, const float z, mob_type* t, sector* sec) {
     this->x = x;
     this->y = y;
     this->z = z;
@@ -56,13 +56,11 @@ mob::mob(float x, float y, float z, mob_type* t, sector* sec) {
 }
 
 void mob::tick() {
-    float delta_t_mult = (1.0f / game_fps);
-    
     //Movement.
     bool was_airborne = z > sec->floors[0].z;
-    x += delta_t_mult * speed_x;
-    y += delta_t_mult * speed_y;
-    z += delta_t_mult * speed_z;
+    x += delta_t* speed_x;
+    y += delta_t* speed_y;
+    z += delta_t* speed_z;
     
     if(z <= sec->floors[0].z) {
         z = sec->floors[0].z;
@@ -76,7 +74,7 @@ void mob::tick() {
     
     //Gravity.
     if(z > sec->floors[0].z && affected_by_gravity) {
-        speed_z += (1.0f / game_fps) * (GRAVITY_ADDER);
+        speed_z += delta_t* (GRAVITY_ADDER);
     }
     
     //Chasing a target.
@@ -105,11 +103,11 @@ void mob::tick() {
     
     //Other things.
     if(unwhistlable_period > 0) {
-        unwhistlable_period -= (1.0 / game_fps);
+        unwhistlable_period -= delta_t;
         unwhistlable_period = max(unwhistlable_period, 0);
     }
     if(untouchable_period > 0) {
-        untouchable_period -= (1.0 / game_fps);
+        untouchable_period -= delta_t;
         untouchable_period = max(untouchable_period, 0);
     }
     
@@ -122,8 +120,8 @@ void mob::tick() {
             get_leader_to_group_center_dist(this),
             &party_center_mx, &party_center_my, NULL, NULL
         );
-        party->party_center_x += party_center_mx * delta_t_mult;
-        party->party_center_y += party_center_my * delta_t_mult;
+        party->party_center_x += party_center_mx * delta_t;
+        party->party_center_y += party_center_my * delta_t;
         
         size_t n_members = party->members.size();
         for(size_t m = 0; m < n_members; m++) {
@@ -131,16 +129,16 @@ void mob::tick() {
         }
     }
     
-    time_in_state += 1.0 / game_fps;
+    time_in_state += delta_t;
     
     if(invuln_period > 0) {
-        invuln_period -= 1.0 / game_fps;
+        invuln_period -= delta_t;
         invuln_period = max(invuln_period, 0);
     }
     
     if(speed_z == 0) {
         if(knockdown_period > 0) {
-            knockdown_period -= 1.0 / game_fps;
+            knockdown_period -= delta_t;
             knockdown_period = max(knockdown_period, 0);
         }
     }
@@ -156,7 +154,7 @@ void mob::tick() {
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     
-    angle += sign(angle_dif) * min(type->rotation_speed / game_fps, fabs(angle_dif));
+    angle += sign(angle_dif) * min(type->rotation_speed * delta_t, fabs(angle_dif));
     
     //Scripts.
     if(
@@ -232,7 +230,7 @@ void mob::tick() {
     
     if(get_mob_event(this, MOB_EVENT_TIMER, true)) {
         if(timer > 0 && timer_interval > 0) {
-            timer -= 1.0 / game_fps;
+            timer -= delta_t;
             if(timer <= 0) {
                 timer = timer_interval;
                 events_queued[MOB_EVENT_TIMER] = 1;
@@ -283,7 +281,7 @@ void mob::tick() {
     }
     
     if(script_wait > 0) {
-        script_wait -= 1.0 / game_fps;
+        script_wait -= delta_t;
         if(script_wait <= 0) {
             script_wait = 0;
             
@@ -292,7 +290,7 @@ void mob::tick() {
     }
     
     //Animation.
-    bool finished_anim = anim.tick(1.0 / game_fps);
+    bool finished_anim = anim.tick(delta_t);
     
     if(script_wait == -1 && finished_anim) { //Waiting for the animation to end.
         script_wait = 0;

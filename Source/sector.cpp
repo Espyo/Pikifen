@@ -9,7 +9,7 @@ floor_info::floor_info() {
     rot = 0;
 }
 
-linedef::linedef(float x1, float y1, float x2, float y2, unsigned fs, unsigned bs) {
+linedef::linedef(const float x1, const float y1, const float x2, const float y2, const unsigned fs, const unsigned bs) {
     this->x1 = x1; this->y1 = y1;
     this->x2 = x2; this->y2 = y2;
     this->front_sector = fs;

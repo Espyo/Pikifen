@@ -18,7 +18,7 @@ public:
     unsigned int appears_before_day;
     unsigned int appears_every_x_days;
     
-    enemy(float x, float y, sector* s, enemy_type* type);
+    enemy(const float x, const float y, sector* s, enemy_type* type);
 };
 
 #endif //ifndef ENEMY_INCLUDED

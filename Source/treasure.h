@@ -7,7 +7,7 @@
 
 class treasure : public mob {
 public:
-    treasure(float x, float y, sector* sec, treasure_type* type);
+    treasure(const float x, const float y, sector* sec, treasure_type* type);
 };
 
 #endif //ifndef TREASURE_INCLUDED

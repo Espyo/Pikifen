@@ -1,6 +1,6 @@
 #include "pikmin.h"
 
-pikmin::pikmin(float x, float y, sector* sec, pikmin_type* type) : mob(x, y, 0, type, sec) {
+pikmin::pikmin(const float x, const float y, sector* sec, pikmin_type* type) : mob(x, y, 0, type, sec) {
     this->pik_type = type;
     hazard_time_left = -1;
     attacking_mob = NULL;
@@ -11,6 +11,7 @@ pikmin::pikmin(float x, float y, sector* sec, pikmin_type* type) : mob(x, y, 0, 
     wants_to_carry = NULL;
     maturity = 0;
     pluck_reserved = false;
+    team = MOB_TEAM_PLAYER_1; //ToDo
 }
 
 pikmin::~pikmin() { }

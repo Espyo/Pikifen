@@ -325,7 +325,10 @@ int main(int argc, char**) {
             //scr_h = ev.display.height;
             
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
-        
+            double cur_time = al_get_time();
+            if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
+            delta_t = cur_time - prev_frame_time;
+            
             if(cur_screen == SCREEN_GAME) {
                 do_logic();
                 do_drawing();
@@ -334,6 +337,8 @@ int main(int argc, char**) {
             } else if(cur_screen == SCREEN_ANIMATION_EDITOR) {
                 animation_editor::do_logic();
             }
+            
+            prev_frame_time = cur_time;
         }
     }
     

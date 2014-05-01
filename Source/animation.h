@@ -28,8 +28,8 @@ public:
     ALLEGRO_BITMAP* bitmap;           //Actual bitmap. This is a sub-bitmap of parent_bmp.
     vector<hitbox_instance> hitbox_instances; //List of hitboxes on this frame.
     
-    frame(string name = "", ALLEGRO_BITMAP* b = NULL, float gw = 0, float gh = 0, vector<hitbox_instance> h = vector<hitbox_instance>());
-    frame(string name, ALLEGRO_BITMAP* b, int bx, int by, int bw, int bh, float gw, float gh, vector<hitbox_instance> h);
+    frame(const string &name = "", ALLEGRO_BITMAP* const b = NULL, const float gw = 0, const float gh = 0, const vector<hitbox_instance> &h = vector<hitbox_instance>());
+    frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h);
     frame(const frame &f2);
     frame clone();
     
@@ -46,7 +46,7 @@ public:
     frame* frame_ptr; //Needed for performance.
     float duration; //How long this frame lasts for, in seconds.
     
-    frame_instance(string fn = "", frame* fp = NULL, float d = 0);
+    frame_instance(const string &fn = "", frame* fp = NULL, const float d = 0);
 };
 
 
@@ -58,7 +58,7 @@ public:
     vector<frame_instance> frame_instances; //List of frames.
     size_t loop_frame;    //The animation loops back to this frame when it reaches the end.
     
-    animation(string name = "", vector<frame_instance> frame_instances = vector<frame_instance>(), size_t loop_frame = 0);
+    animation(const string &name = "", vector<frame_instance> frame_instances = vector<frame_instance>(), const size_t loop_frame = 0);
     animation(const animation &a2);
 };
 
@@ -91,9 +91,9 @@ public:
     animation_instance(animation_set* anim_set = NULL);
     animation_instance(const animation_instance &ai2);
     
-    void change(string new_anim, bool only_if_new, bool only_if_done);
+    void change(const string &new_anim, const bool only_if_new, const bool only_if_done);
     void start();
-    bool tick(float time);
+    bool tick(const float time);
     frame* get_frame();
 };
 

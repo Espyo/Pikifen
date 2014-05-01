@@ -29,7 +29,7 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
  * pan: Panning, 0 - 1 (0.5 is centered).
  * speed: Playing speed.
  */
-void sample_struct::play(float max_override_pos, bool loop, float gain, float pan, float speed) {
+void sample_struct::play(const float max_override_pos, const bool loop, const float gain, const float pan, const float speed) {
     if(!sample || !instance) return;
     
     if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
@@ -50,7 +50,7 @@ void sample_struct::stop() {
     al_set_sample_instance_playing(instance, false);
 }
 
-party_spot_info::party_spot_info(unsigned max_mobs, float spot_radius) {
+party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radius) {
     this->spot_radius = spot_radius;
     
     //Center spot first.
@@ -196,7 +196,7 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
     calls = 1;
 }
 
-ALLEGRO_BITMAP* bmp_manager::get(string name, data_node* node) {
+ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
     if(name.size() == 0) return NULL;
     
     if(list.find(name) == list.end()) {
@@ -209,7 +209,7 @@ ALLEGRO_BITMAP* bmp_manager::get(string name, data_node* node) {
     }
 };
 
-void bmp_manager::detach(string name) {
+void bmp_manager::detach(const string &name) {
     if(name.size() == 0) return;
     
     auto it = list.find(name);

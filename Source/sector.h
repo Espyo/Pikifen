@@ -30,7 +30,7 @@ public:
     unsigned back_sector;
     float x1, y1, x2, y2;
     
-    linedef(float x1, float y1, float x2, float y2, unsigned fs, unsigned bs);
+    linedef(const float x1, const float y1, const float x2, const float y2, const unsigned fs, const unsigned bs);
     linedef();
 };
 

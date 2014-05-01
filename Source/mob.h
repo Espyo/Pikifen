@@ -23,7 +23,7 @@ struct party_info {
     party_spot_info* party_spots;
     float party_center_x, party_center_y;
     
-    party_info(party_spot_info* ps, float center_x, float center_y) {
+    party_info(party_spot_info* ps, const float center_x, const float center_y) {
         party_spots = ps;
         party_center_x = center_x;
         party_center_y = center_y;
@@ -41,13 +41,13 @@ struct carrier_info_struct {
     vector<mob*> carrier_spots;      //Pikmin carrying, and their spots.
     pikmin_type* decided_type;       //Current Onion type it's being taken to.
     
-    carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship);
+    carrier_info_struct(mob* m, const unsigned int max_carriers, const bool carry_to_ship);
     ~carrier_info_struct();
 };
 
 class mob {
 public:
-    mob(float x, float y, float z, mob_type* t, sector* sec);
+    mob(const float x, const float y, const float z, mob_type* t, sector* sec);
     virtual ~mob(); //Needed so that typeid works.
     
     mob_type* type;
@@ -68,7 +68,7 @@ public:
     float intended_angle;            //Angle the mob wants to be facing.
     sector* sec;                     //Sector it's on.
     bool affected_by_gravity;        //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
-    void face(float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
+    void face(const float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
     virtual float get_base_speed();  //Returns the normal speed of this mob. Subclasses are meant to override this.
     
     //Target things.
@@ -77,8 +77,8 @@ public:
     unsigned char target_code;          //Code ID for a special target, like home. Used for scripting.
     bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
     bool gtt_instant;                   //If true, teleport instantly.
-    void set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant);
-    void remove_target(bool stop);
+    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant);
+    void remove_target(const bool stop);
     
     //Party things.
     mob* following_party;      //The current mob is following this mob's party.
@@ -110,7 +110,7 @@ public:
     float time_in_state;           //For how long as the mob been in this state?
     vector<string> chomp_hitboxes; //List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  //Mobs being chomped.
-    void set_state(unsigned char new_state);
+    void set_state(const unsigned char new_state);
     
     //Carrying.
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.

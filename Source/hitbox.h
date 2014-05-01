@@ -20,7 +20,7 @@ public:
     float knockback;       //Knockback strength.
     bool can_pikmin_latch; //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
-    hitbox(string name = "") {
+    hitbox(const string &name = "") {
         this->name = name;
         type = HITBOX_TYPE_NORMAL;
         multiplier = 1;
@@ -37,7 +37,7 @@ public:
     float x, y, z;  //Relative coordinates.
     float radius;
     
-    hitbox_instance(string hn = "", hitbox* hp = NULL, float x = 0, float y = 0, float z = 0, float radius = 32) {
+    hitbox_instance(const string &hn = "", hitbox* hp = NULL, const float x = 0, const float y = 0, const float z = 0, const float radius = 32) {
         hitbox_name = hn;
         hitbox_ptr = hp;
         this->x = x;

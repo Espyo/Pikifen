@@ -29,7 +29,7 @@ mob_action::mob_action(data_node* dn) {
     }
 }
 
-mob_action::mob_action(unsigned char t, string d) {
+mob_action::mob_action(const unsigned char t, const string &d) {
     type = t; data = d;
 }
 
@@ -216,11 +216,11 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     actions = a;
 }
 
-mob_event::mob_event(unsigned char t, vector<mob_action*> a) {
+mob_event::mob_event(const unsigned char t, vector<mob_action*> a) {
     type = t; actions = a;
 }
 
-void mob_event::run(mob* m, size_t starting_action) {
+void mob_event::run(mob* m, const size_t starting_action) {
 
     //ToDo remove.
     if(starting_action == 0) {

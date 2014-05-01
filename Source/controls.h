@@ -18,8 +18,8 @@ struct control_info {
     string stringify();
 };
 
-void handle_game_controls(ALLEGRO_EVENT ev);
-void handle_button(unsigned int button, float pos);
+void handle_game_controls(const ALLEGRO_EVENT &ev);
+void handle_button(const unsigned int button, float pos);
 
 enum BUTTONS {
     BUTTON_NONE,
