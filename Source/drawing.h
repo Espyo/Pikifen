@@ -647,7 +647,7 @@ void do_drawing() {
                 if(typeid(*closest_party_member) == typeid(pikmin)) {
                     //ToDo
                 } else if(typeid(*closest_party_member) == typeid(leader)) {
-                    leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
+                    //leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
                     //ToDo
                 }
                 

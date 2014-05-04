@@ -9,19 +9,18 @@ floor_info::floor_info() {
     rot = 0;
 }
 
-linedef::linedef(const float x1, const float y1, const float x2, const float y2, const unsigned fs, const unsigned bs) {
-    this->x1 = x1; this->y1 = y1;
-    this->x2 = x2; this->y2 = y2;
+linedef::linedef(vertex* v1, vertex* v2, sector* fs, sector* bs) {
+    this->vertex1 = v1; this->vertex2 = v2;
     this->front_sector = fs;
     this->back_sector = bs;
 }
 
-linedef::linedef() {
-    x1 = y1 = x2 = y2 = 0;
-    front_sector = UINT_MAX;
-    back_sector = UINT_MAX;
-}
-
 sector::sector() {
     type = SECTOR_TYPE_NORMAL;
+}
+
+void area_map::clear() {
+    vertices.clear();
+    linedefs.clear();
+    sectors.clear();
 }

@@ -7,9 +7,35 @@
 
 #include "data_file.h"
 
+class mob_type;
 class mob;
 
 using namespace std;
+
+struct mob_event;
+
+struct mob_action {
+    bool valid;
+    unsigned char type;
+    unsigned char sub_type;
+    vector<int> vi;
+    vector<float> vf;
+    vector<string> vs;
+    
+    mob_action(mob_type* mt, data_node* dn);
+    
+    bool run(mob* m, mob_event* ev, size_t* action_nr);
+};
+
+struct mob_event {
+    unsigned char type;
+    vector<mob_action*> actions;
+    
+    mob_event(data_node* d, vector<mob_action*> a);
+    mob_event(const unsigned char t, vector<mob_action*> a);
+    
+    void run(mob* m, const size_t starting_action);
+};
 
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
@@ -58,26 +84,33 @@ enum MOB_EVENT_TYPES {
     N_MOB_EVENTS,
 };
 
-struct mob_event;
-
-struct mob_action {
-    unsigned char type;
-    string data;
-    
-    mob_action(data_node* dn);
-    mob_action(const unsigned char t, const string &d);
-    
-    bool run(mob* m, mob_event* ev, size_t* action_nr);
+enum MOB_ACTION_EAT_TYPES {
+    MOB_ACTION_EAT_ALL,
+    MOB_ACTION_EAT_NUMBER,
 };
 
-struct mob_event {
-    unsigned char type;
-    vector<mob_action*> actions;
-    
-    mob_event(data_node* d, vector<mob_action*> a);
-    mob_event(const unsigned char t, vector<mob_action*> a);
-    
-    void run(mob* m, const size_t starting_action);
+enum MOB_ACTION_MOVE_TYPES {
+    MOB_ACTION_MOVE_PREY,
+    MOB_ACTION_MOVE_HOME,
+    MOB_ACTION_MOVE_STOP,
+    MOB_ACTION_MOVE_COORDS,
+    MOB_ACTION_MOVE_REL_COORDS,
+};
+
+enum MOB_ACTION_SET_HEALTH_TYPES {
+    MOB_ACTION_SET_HEALTH_ABSOLUTE,
+    MOB_ACTION_SET_HEALTH_RELATIVE,
+};
+
+enum MOB_ACTION_SPECIAL_FUNCTION_TYPES {
+    MOB_ACTION_SPECIAL_FUNCTION_DIE_START,
+    MOB_ACTION_SPECIAL_FUNCTION_DIE_END,
+    MOB_ACTION_SPECIAL_FUNCTION_LOOP,
+};
+
+enum MOB_ACTION_WAIT_TYPES {
+    MOB_ACTION_WAIT_ANIMATION,
+    MOB_ACTION_WAIT_TIME,
 };
 
 #endif //ifndef MOB_EVENT_INCLUDED

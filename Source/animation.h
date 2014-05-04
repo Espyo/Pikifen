@@ -43,10 +43,11 @@ public:
 class frame_instance {
 public:
     string frame_name;
+    size_t frame_nr;  //Needed for performance.
     frame* frame_ptr; //Needed for performance.
-    float duration; //How long this frame lasts for, in seconds.
+    float duration;   //How long this frame lasts for, in seconds.
     
-    frame_instance(const string &fn = "", frame* fp = NULL, const float d = 0);
+    frame_instance(const string &fn = "", const size_t fnr = string::npos, frame* fp = NULL, const float d = 0);
 };
 
 
@@ -65,15 +66,23 @@ public:
 //A set of animations and their necessary data.
 class animation_set {
 public:
-    map<string, animation*> animations;
-    map<string, frame*> frames;
-    map<string, hitbox*> hitboxes;
+    vector<animation*> animations;
+    vector<frame*> frames;
+    vector<hitbox*> hitboxes;
+    
+    vector<size_t> pre_named_conversions; //Conversion between pre-named animations and in-file animations.
     
     animation_set(
-        map<string, animation*> a = map<string, animation*>(),
-        map<string, frame*> f = map<string, frame*>(),
-        map<string, hitbox*> h = map<string, hitbox*>()
+        vector<animation*> a = vector<animation*>(),
+        vector<frame*>     f = vector<frame*>(),
+        vector<hitbox*>    h = vector<hitbox*>()
     );
+    
+    size_t find_animation(string name);
+    size_t find_frame(    string name);
+    size_t find_hitbox(   string name);
+    
+    void create_conversions(vector<pair<size_t, string> > conversions);
     
     void destroy();
     
@@ -91,7 +100,7 @@ public:
     animation_instance(animation_set* anim_set = NULL);
     animation_instance(const animation_instance &ai2);
     
-    void change(const string &new_anim, const bool only_if_new, const bool only_if_done);
+    void change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done);
     void start();
     bool tick(const float time);
     frame* get_frame();

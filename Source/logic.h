@@ -364,7 +364,7 @@ void do_logic() {
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
-                    pik_ptr->enemy_hitbox_name = closest_hitbox->hitbox_name;
+                    pik_ptr->enemy_hitbox_nr = closest_hitbox->hitbox_nr;
                     pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
                     
                     float actual_hx, actual_hy;
@@ -382,7 +382,7 @@ void do_logic() {
                     pik_ptr->latched = true;
                     pik_ptr->was_thrown = false;
                     pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                    pik_ptr->anim.change("attack", true, false);
+                    pik_ptr->anim.change(PIKMIN_ANIM_ATTACK, true, true, false);
                     
                     pik_ptr->set_target(0, 0, &mob_ptr->x, &mob_ptr->y, true);
                 }
@@ -408,7 +408,7 @@ void do_logic() {
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
-                    pik_ptr->enemy_hitbox_name = closest_hitbox->hitbox_name;
+                    pik_ptr->enemy_hitbox_nr = closest_hitbox->hitbox_nr;
                     
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->latched = false;
@@ -496,7 +496,7 @@ void do_logic() {
             
             //Fighting an enemy.
             if(pik_ptr->attacking_mob) {
-                hitbox_instance* h_ptr = get_hitbox(pik_ptr->attacking_mob, pik_ptr->enemy_hitbox_name);
+                hitbox_instance* h_ptr = get_hitbox_instance(pik_ptr->attacking_mob, pik_ptr->enemy_hitbox_nr);
                 if(h_ptr) {
                     float actual_hx, actual_hy;
                     rotate_point(h_ptr->x, h_ptr->y, pik_ptr->attacking_mob->angle, &actual_hx, &actual_hy);
@@ -513,7 +513,7 @@ void do_logic() {
                         pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
                         pik_ptr->face(atan2(pik_ptr->attacking_mob->y - pik_ptr->y, pik_ptr->attacking_mob->x - pik_ptr->x));
                         if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                        pik_ptr->anim.change("attack", true, false);
+                        pik_ptr->anim.change(PIKMIN_ANIM_ATTACK, true, true, false);
                         
                     } else {
                         if(dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy) <= pik_ptr->type->size * 0.5 + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE) {
@@ -568,7 +568,9 @@ void do_logic() {
                     float h_y = m_ptr->y + (hi_ptr->x * s + hi_ptr->y * c);
                     
                     if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + hi_ptr->radius) {
-                        hitbox* h_ptr = m_ptr->type->anims.hitboxes[hi_ptr->hitbox_name];
+                        hitbox* h_ptr = hi_ptr->hitbox_ptr;
+                        size_t h_nr = hi_ptr->hitbox_nr;
+                        
                         if(h_ptr->type == HITBOX_TYPE_ATTACK) {
                             float knockback_angle = h_ptr->angle;
                             if(knockback_angle == -1) {
@@ -578,7 +580,7 @@ void do_logic() {
                             attack(m_ptr, pik_ptr, false, h_ptr->multiplier, knockback_angle, h_ptr->knockback, 1, 1);
                         }
                         
-                        if(find_in_vector(m_ptr->chomp_hitboxes, hi_ptr->hitbox_name) && !pik_ptr->being_chomped) {
+                        if(find(m_ptr->chomp_hitboxes.begin(), m_ptr->chomp_hitboxes.end(), hi_ptr->hitbox_nr) != m_ptr->chomp_hitboxes.end() && !pik_ptr->being_chomped) {
                             if(m_ptr->chomping_pikmin.size() >= m_ptr->type->chomp_max_victims) continue;
                             
                             float x_dif = pik_ptr->x - h_x;
@@ -588,7 +590,7 @@ void do_logic() {
                             pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
                             
                             pik_ptr->latched = false;
-                            pik_ptr->enemy_hitbox_name = h_ptr->name;
+                            pik_ptr->enemy_hitbox_nr = h_nr;
                             pik_ptr->attacking_mob = m_ptr;
                             pik_ptr->being_chomped = true;
                             sfx_pikmin_caught.play(0.06, false);
@@ -607,12 +609,12 @@ void do_logic() {
             }
             
             if(pik_ptr->state == PIKMIN_STATE_BURIED) {
-                pik_ptr->anim.change("burrowed", true, true);
+                pik_ptr->anim.change(PIKMIN_ANIM_BURROWED, true, true, true);
             } else if(pik_ptr->speed_z == 0 && pik_ptr->attack_time == 0) {
                 if(cur_leader_ptr->holding_pikmin != pik_ptr && (pik_ptr->speed_x != 0 || pik_ptr->speed_y != 0)) {
-                    pik_ptr->anim.change("walk", true, true);
+                    pik_ptr->anim.change(PIKMIN_ANIM_WALK, true, true, true);
                 } else {
-                    pik_ptr->anim.change("idle", true, true);
+                    pik_ptr->anim.change(PIKMIN_ANIM_IDLE, true, true, true);
                 }
             }
             
@@ -683,7 +685,7 @@ void do_logic() {
                 
                     if(l_ptr->pluck_time == -1) {
                         l_ptr->pluck_time = l_ptr->lea_type->pluck_delay;
-                        l_ptr->anim.change("pluck", false, false);
+                        l_ptr->anim.change(LEADER_ANIM_PLUCK, true, false, false);
                     }
                     
                     if(l_ptr->pluck_time > 0) {
@@ -720,9 +722,9 @@ void do_logic() {
             
             if(!l_ptr->carrier_info && !whistling) {
                 if(l_ptr->speed_x != 0 || l_ptr->speed_y != 0) {
-                    l_ptr->anim.change("walk", true, true);
+                    l_ptr->anim.change(LEADER_ANIM_WALK, true, true, true);
                 } else {
-                    l_ptr->anim.change("idle", true, true);
+                    l_ptr->anim.change(LEADER_ANIM_IDLE, true, true, true);
                 }
             }
             

@@ -270,8 +270,8 @@ void handle_button(const unsigned int button, float pos) {
                     sfx_throw.stop();
                     sfx_pikmin_thrown.play(0, false);
                     sfx_throw.play(0, false);
-                    cur_leader_ptr->anim.change("throw", false, false);
-                    holding_ptr->anim.change("thrown", false, false);
+                    cur_leader_ptr->anim.change(LEADER_ANIM_THROW, true, false, false);
+                    holding_ptr->anim.change(PIKMIN_ANIM_THROWN, true, false, false);
                 }
             }
             
@@ -292,7 +292,7 @@ void handle_button(const unsigned int button, float pos) {
                 for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
                 whistle_fade_time = 0;
                 whistle_fade_radius = 0;
-                cur_leader_ptr->anim.change("whistling", true, false);
+                cur_leader_ptr->anim.change(LEADER_ANIM_WHISTLING, true, true, false);
                 
             } else { //Button released.
                 stop_whistling();
@@ -504,7 +504,7 @@ void handle_button(const unsigned int button, float pos) {
                     3, //ToDo
                     false);
                     
-                cur_leader_ptr->anim.change("lie", false, false);
+                cur_leader_ptr->anim.change(LEADER_ANIM_LIE, true, false, false);
             }
             
         } else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT) {

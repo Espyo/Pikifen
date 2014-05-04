@@ -82,8 +82,9 @@ frame::~frame() {
     if(bitmap) al_destroy_bitmap(bitmap);
 }
 
-frame_instance::frame_instance(const string &fn, frame* fp, const float d) {
+frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, const float d) {
     frame_name = fn;
+    frame_nr = fnr;
     frame_ptr = fp;
     duration = d;
 }
@@ -113,17 +114,30 @@ animation_instance::animation_instance(const animation_instance &ai2) {
 
 /*
  * Changes to a new animation within the same animation set.
- *
+ * new_anim_nr: Number of the new animation. Check the next parameter.
+ * pre_named:
+   * If true, the previous argument is the hardcoded ID (for pre-named animations).
+   * For this, the "conversions" must be created. This normally happens in load_mob_types().
+   * If false, this is the number on the animation file (don't worry, the enemy script knows the numbers).
+ * only_if_new: Only change to this animation if we're not already in it.
+ * only_if_done: Only change to this animation if the previous one looped at least once.
  */
-void animation_instance::change(const string &new_anim_name, const bool only_if_new, const bool only_if_done) {
-    //ToDo don't use .find, string lookup is slow.
-    auto new_anim_it = anim_set->animations.find(new_anim_name);
-    if(new_anim_it == anim_set->animations.end()) return;
+void animation_instance::change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done) {
+    size_t final_nr;
+    if(pre_named) {
+        if(anim_set->pre_named_conversions.size() <= new_anim_nr) return;
+        final_nr = anim_set->pre_named_conversions[new_anim_nr];
+    } else {
+        final_nr = new_anim_nr;
+    }
     
-    if(only_if_new && anim == new_anim_it->second) return;
+    if(final_nr == string::npos) return;
+    
+    animation* new_anim = anim_set->animations[final_nr];
+    if(only_if_new && anim == new_anim) return;
     if(only_if_done && !done_once) return;
     
-    anim = new_anim_it->second;
+    anim = new_anim;
     start();
 }
 
@@ -164,9 +178,9 @@ frame* animation_instance::get_frame() { //Gets a pointer to the current frame.
 }
 
 animation_set::animation_set(
-    map<string, animation*> a,
-    map<string, frame*> f,
-    map<string, hitbox*> h
+    vector<animation*> a,
+    vector<frame*> f,
+    vector<hitbox*> h
 ) {
 
     animations = a;
@@ -174,14 +188,69 @@ animation_set::animation_set(
     hitboxes = h;
 }
 
+size_t animation_set::find_animation(string name) {
+    for(size_t a = 0; a < animations.size(); a++) {
+        if(animations[a]->name == name) return a;
+    }
+    return string::npos;
+}
+
+size_t animation_set::find_frame(string name) {
+    for(size_t f = 0; f < frames.size(); f++) {
+        if(frames[f]->name == name) return f;
+    }
+    return string::npos;
+}
+
+size_t animation_set::find_hitbox(string name) {
+    for(size_t h = 0; h < hitboxes.size(); h++) {
+        if(hitboxes[h]->name == name) return h;
+    }
+    return string::npos;
+}
+
+/*
+ * Enemies and such have a regular list of animations.
+ * The only way to change these animations is through the script.
+ * So animation control is done entirely through game data.
+ * However, the animations names for Pikmin, leaders, etc. is pre-named.
+ * e.g.: The game wants there to be an "idle" animation, a "walk" animation, etc.
+ * Because we are NOT looking up with strings, if we want more than 20FPS,
+ * we need a way to convert from a numeric ID (one that stands for walking, one for idling, etc.)
+ * into the corresponding number on the animation file.
+ * This is where this comes in.
+ *
+ * conversions: A vector of size_t and strings.
+   * The size_t is the hardcoded ID (probably in some constant or enum).
+   * The string is the name of the animation in the animation file.
+ */
+void animation_set::create_conversions(vector<pair<size_t, string> > conversions) {
+    pre_named_conversions.clear();
+    
+    if(conversions.size() == 0) return;
+    
+    //First, find the highest number.
+    size_t highest = conversions[0].first;
+    for(size_t c = 1; c < conversions.size(); c++) {
+        highest = max(highest, conversions[c].first);
+    }
+    
+    pre_named_conversions.assign(highest + 1, string::npos);
+    
+    for(size_t c = 0; c < conversions.size(); c++) {
+        size_t a_pos = find_animation(conversions[c].second);
+        pre_named_conversions[conversions[c].first] = a_pos;
+    }
+}
+
 void animation_set::destroy() {
     for(auto a = animations.begin(); a != animations.end(); a++) {
-        delete a->second;
+        delete *a;
     }
     for(auto f = frames.begin(); f != frames.end(); f++) {
-        delete f->second;
+        delete *f;
     }
     for(auto h = hitboxes.begin(); h != hitboxes.end(); h++) {
-        delete h->second;
+        delete *h;
     }
 }

@@ -114,6 +114,7 @@ extern float                 cam_y;
 extern float                 cam_zoom;
 extern vector<control_info>  controls;
 extern mob*                  closest_party_member;
+extern area_map              cur_area_map;
 extern size_t                cur_leader_nr;
 extern string                cur_message;
 extern size_t                cur_message_char;
@@ -229,7 +230,6 @@ extern float                 prev_moving_group_intensity; //The group move inten
 extern bool                  running;
 extern unsigned short        scr_h;
 extern unsigned short        scr_w;
-extern vector<sector>        sectors;
 extern unsigned int          selected_spray;
 extern unsigned char         ship_beam_ring_color[3];
 extern bool                  ship_beam_ring_color_up[3];

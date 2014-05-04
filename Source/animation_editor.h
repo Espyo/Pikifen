@@ -119,7 +119,8 @@ void animation_editor::do_logic() {
         if(ed_mode == EDITOR_MODE_ANIMATION) {
             if(ed_cur_frame_instance_nr != string::npos) {
                 string name = ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name;
-                if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = ed_anims.frames[name];
+                size_t f_pos = ed_anims.find_frame(name);
+                if(f_pos != string::npos) f = ed_anims.frames[f_pos];
             }
         } else if(ed_mode == EDITOR_MODE_FRAME || ed_mode == EDITOR_MODE_TOP) {
             f = ed_cur_frame;
@@ -142,10 +143,11 @@ void animation_editor::do_logic() {
                     ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
                     unsigned char hitbox_outline_alpha = 63 + 192 * ((sin(ed_cur_hitbox_alpha) / 2) + 0.5);
                     
-                    if(ed_anims.hitboxes.find(h_ptr->hitbox_name) == ed_anims.hitboxes.end()) {
+                    size_t h_pos = ed_anims.find_hitbox(h_ptr->hitbox_name);
+                    if(h_pos == string::npos) {
                         hitbox_color = al_map_rgba(128, 128, 128, 192); hitbox_outline_color = al_map_rgba(0, 0, 0, 255);
                     } else {
-                        unsigned char type = ed_anims.hitboxes[h_ptr->hitbox_name]->type;
+                        unsigned char type = ed_anims.hitboxes[h_pos]->type;
                         if(type == HITBOX_TYPE_NORMAL) {
                             hitbox_color = al_map_rgba(0, 128, 0, 192); hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
                         } else if(type == HITBOX_TYPE_ATTACK) {
@@ -491,7 +493,8 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     if(ed_mode == EDITOR_MODE_ANIMATION) {
         if(ed_cur_frame_instance_nr != string::npos) {
             string name = ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name;
-            if(ed_anims.frames.find(name) != ed_anims.frames.end()) f = ed_anims.frames[name];
+            size_t f_pos = ed_anims.find_frame(name);
+            if(f_pos != string::npos) f = ed_anims.frames[f_pos];
         }
     } else if(ed_mode == EDITOR_MODE_FRAME) {
         f = ed_cur_frame;
@@ -869,7 +872,7 @@ void animation_editor::load() {
     frm_anims->widgets["but_back"]->description = "Go back to the main menu.";
     frm_anims->widgets["but_del_anim"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         if(!ed_cur_anim) return;
-        ed_anims.animations.erase(ed_anims.animations.find(ed_cur_anim->name));
+        ed_anims.animations.erase(ed_anims.animations.begin() + ed_anims.find_animation(ed_cur_anim->name));
         ed_anim_playing = false;
         ed_cur_anim = NULL;
         ed_cur_frame_instance_nr = string::npos;
@@ -964,7 +967,7 @@ void animation_editor::load() {
     frm_frames->widgets["but_back"]->description = "Go back to the main menu.";
     frm_frames->widgets["but_del_frame"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         if(!ed_cur_frame) return;
-        ed_anims.frames.erase(ed_anims.frames.find(ed_cur_frame->name));
+        ed_anims.frames.erase(ed_anims.frames.begin() + ed_anims.find_frame(ed_cur_frame->name));
         ed_cur_frame = NULL;
         ed_cur_hitbox_instance_nr = string::npos;
         gui_load_frame();
@@ -1067,7 +1070,7 @@ void animation_editor::load() {
     frm_hitboxes->widgets["but_back"]->description = "Go back to the main menu.";
     frm_hitboxes->widgets["but_del_h"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         if(!ed_cur_hitbox) return;
-        ed_anims.hitboxes.erase(ed_anims.hitboxes.find(ed_cur_hitbox->name));
+        ed_anims.hitboxes.erase(ed_anims.hitboxes.begin() + ed_anims.find_hitbox(ed_cur_hitbox->name));
         ed_cur_hitbox = NULL;
         gui_load_hitbox();
     };
@@ -1117,16 +1120,18 @@ void animation_editor::load() {
         if(name.size() == 0) return;
         
         if(ed_mode == EDITOR_MODE_ANIMATION) {
-            if(ed_anims.animations.find(name) != ed_anims.animations.end()) return;
-            ed_anims.animations[name] = new animation(name);
+            if(ed_anims.find_animation(name) != string::npos) return;
+            ed_anims.animations.push_back(new animation(name));
             pick(name, ANIMATION_EDITOR_PICKER_ANIMATION);
+            
         } else if(ed_mode == EDITOR_MODE_FRAME) {
-            if(ed_anims.frames.find(name) != ed_anims.frames.end()) return;
-            ed_anims.frames[name] = new frame(name);
+            if(ed_anims.find_frame(name) != string::npos) return;
+            ed_anims.frames.push_back(new frame(name));
             pick(name, ANIMATION_EDITOR_PICKER_FRAME);
+            
         } else if(ed_mode == EDITOR_MODE_HITBOX) {
-            if(ed_anims.hitboxes.find(name) != ed_anims.hitboxes.end()) return;
-            ed_anims.hitboxes[name] = new hitbox(name);
+            if(ed_anims.find_hitbox(name) != string::npos) return;
+            ed_anims.hitboxes.push_back(new hitbox(name));
             pick(name, ANIMATION_EDITOR_PICKER_HITBOX);
         }
         
@@ -1209,15 +1214,15 @@ void animation_editor::load_animation_set() {
     ed_cur_frame_instance_nr = string::npos;
     ed_cur_hitbox_instance_nr = string::npos;
     if(ed_anims.animations.size() > 0) {
-        ed_cur_anim = ed_anims.animations.begin()->second;
+        ed_cur_anim = ed_anims.animations[0];
         if(ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = 0;
     }
     if(ed_anims.frames.size() > 0) {
-        ed_cur_frame = ed_anims.frames.begin()->second;
+        ed_cur_frame = ed_anims.frames[0];
         if(ed_cur_frame->hitbox_instances.size()) ed_cur_hitbox_instance_nr = 0;
     }
     if(ed_anims.hitboxes.size() > 0) {
-        ed_cur_hitbox = ed_anims.hitboxes.begin()->second;
+        ed_cur_hitbox = ed_anims.hitboxes[0];
     }
 }
 
@@ -1269,16 +1274,16 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements.push_back("Pikmin");
         elements.push_back("Treasures");
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        for(auto a = ed_anims.animations.begin(); a != ed_anims.animations.end(); a++) {
-            elements.push_back(a->first);
+        for(size_t a = 0; a < ed_anims.animations.size(); a++) {
+            elements.push_back(ed_anims.animations[a]->name);
         }
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
-        for(auto f = ed_anims.frames.begin(); f != ed_anims.frames.end(); f++) {
-            elements.push_back(f->first);
+        for(size_t f = 0; f < ed_anims.frames.size(); f++) {
+            elements.push_back(ed_anims.frames[f]->name);
         }
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX || type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
-        for(auto h = ed_anims.hitboxes.begin(); h != ed_anims.hitboxes.end(); h++) {
-            elements.push_back(h->first);
+        for(size_t h = 0; h < ed_anims.hitboxes.size(); h++) {
+            elements.push_back(ed_anims.hitboxes[h]->name);
         }
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ENEMY) {
         elements = folder_to_vector(ENEMIES_FOLDER, true);
@@ -1335,7 +1340,7 @@ void animation_editor::pick(string name, unsigned char type) {
         update_stats();
         
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        ed_cur_anim = ed_anims.animations[name];
+        ed_cur_anim = ed_anims.animations[ed_anims.find_animation(name)];
         ed_cur_frame_instance_nr = (ed_cur_anim->frame_instances.size()) ? 0 : string::npos;
         ed_cur_hitbox_instance_nr = string::npos;
         show_widget(ed_gui->widgets["frm_anims"]);
@@ -1343,24 +1348,24 @@ void animation_editor::pick(string name, unsigned char type) {
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
         ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name = name;
-        ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_ptr = ed_anims.frames[name];
+        ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_ptr = ed_anims.frames[ed_anims.find_frame(name)];
         show_widget(ed_gui->widgets["frm_anims"]);
         gui_load_frame_instance();
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
-        ed_cur_frame = ed_anims.frames[name];
+        ed_cur_frame = ed_anims.frames[ed_anims.find_frame(name)];
         ed_cur_hitbox_instance_nr = (ed_cur_frame->hitbox_instances.size()) ? 0 : string::npos;
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_frame();
         
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
         ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_name = name;
-        ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_ptr = ed_anims.hitboxes[name];
+        ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_ptr = ed_anims.hitboxes[ed_anims.find_hitbox(name)];
         show_widget(ed_gui->widgets["frm_frames"]);
         gui_load_hitbox_instance();
         
     } else if(type == ANIMATION_EDITOR_PICKER_HITBOX) {
-        ed_cur_hitbox = ed_anims.hitboxes[name];
+        ed_cur_hitbox = ed_anims.hitboxes[ed_anims.find_hitbox(name)];
         show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
         
@@ -1411,16 +1416,16 @@ void animation_editor::save_animation_set() {
     data_node* animations_node = new data_node("animations", "");
     file_node.add(animations_node);
     
-    for(auto a = ed_anims.animations.begin(); a != ed_anims.animations.end(); a++) {
-        data_node* anim_node = new data_node(a->first, "");
+    for(size_t a = 0; a < ed_anims.animations.size(); a++) {
+        data_node* anim_node = new data_node(ed_anims.animations[a]->name, "");
         animations_node->add(anim_node);
         
-        anim_node->add(new data_node("loop_frame", itos(a->second->loop_frame)));
+        anim_node->add(new data_node("loop_frame", itos(ed_anims.animations[a]->loop_frame)));
         data_node* frame_instances_node = new data_node("frame_instances", "");
         anim_node->add(frame_instances_node);
         
-        for(size_t fi = 0; fi < a->second->frame_instances.size(); fi++) {
-            frame_instance* fi_ptr = &a->second->frame_instances[fi];
+        for(size_t fi = 0; fi < ed_anims.animations[a]->frame_instances.size(); fi++) {
+            frame_instance* fi_ptr = &ed_anims.animations[a]->frame_instances[fi];
             
             data_node* frame_instance_node = new data_node(fi_ptr->frame_name, "");
             frame_instances_node->add(frame_instance_node);
@@ -1432,34 +1437,34 @@ void animation_editor::save_animation_set() {
     data_node* frames_node = new data_node("frames", "");
     file_node.add(frames_node);
     
-    for(auto f = ed_anims.frames.begin(); f != ed_anims.frames.end(); f++) {
-        data_node* frame_node = new data_node(f->first, "");
+    for(size_t f = 0; f < ed_anims.frames.size(); f++) {
+        data_node* frame_node = new data_node(ed_anims.frames[f]->name, "");
         frames_node->add(frame_node);
         
-        frame_node->add(new data_node("file", f->second->file));
-        frame_node->add(new data_node("file_x", itos(f->second->file_x)));
-        frame_node->add(new data_node("file_y", itos(f->second->file_y)));
-        frame_node->add(new data_node("file_w", itos(f->second->file_w)));
-        frame_node->add(new data_node("file_h", itos(f->second->file_h)));
-        frame_node->add(new data_node("game_w", ftos(f->second->game_w)));
-        frame_node->add(new data_node("game_h", ftos(f->second->game_h)));
-        frame_node->add(new data_node("offs_x", ftos(f->second->offs_x)));
-        frame_node->add(new data_node("offs_y", ftos(f->second->offs_y)));
+        frame_node->add(new data_node("file", ed_anims.frames[f]->file));
+        frame_node->add(new data_node("file_x", itos(ed_anims.frames[f]->file_x)));
+        frame_node->add(new data_node("file_y", itos(ed_anims.frames[f]->file_y)));
+        frame_node->add(new data_node("file_w", itos(ed_anims.frames[f]->file_w)));
+        frame_node->add(new data_node("file_h", itos(ed_anims.frames[f]->file_h)));
+        frame_node->add(new data_node("game_w", ftos(ed_anims.frames[f]->game_w)));
+        frame_node->add(new data_node("game_h", ftos(ed_anims.frames[f]->game_h)));
+        frame_node->add(new data_node("offs_x", ftos(ed_anims.frames[f]->offs_x)));
+        frame_node->add(new data_node("offs_y", ftos(ed_anims.frames[f]->offs_y)));
         
         if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
-            frame_node->add(new data_node("top_visible", btos(f->second->top_visible)));
-            frame_node->add(new data_node("top_x", ftos(f->second->top_x)));
-            frame_node->add(new data_node("top_y", ftos(f->second->top_y)));
-            frame_node->add(new data_node("top_w", ftos(f->second->top_w)));
-            frame_node->add(new data_node("top_h", ftos(f->second->top_h)));
-            frame_node->add(new data_node("top_angle", ftos(f->second->top_angle)));
+            frame_node->add(new data_node("top_visible", btos(ed_anims.frames[f]->top_visible)));
+            frame_node->add(new data_node("top_x", ftos(ed_anims.frames[f]->top_x)));
+            frame_node->add(new data_node("top_y", ftos(ed_anims.frames[f]->top_y)));
+            frame_node->add(new data_node("top_w", ftos(ed_anims.frames[f]->top_w)));
+            frame_node->add(new data_node("top_h", ftos(ed_anims.frames[f]->top_h)));
+            frame_node->add(new data_node("top_angle", ftos(ed_anims.frames[f]->top_angle)));
         }
         
         data_node* hitbox_instances_node = new data_node("hitbox_instances", "");
         frame_node->add(hitbox_instances_node);
         
-        for(size_t hi = 0; hi < f->second->hitbox_instances.size(); hi++) {
-            hitbox_instance* hi_ptr = &f->second->hitbox_instances[hi];
+        for(size_t hi = 0; hi < ed_anims.frames[f]->hitbox_instances.size(); hi++) {
+            hitbox_instance* hi_ptr = &ed_anims.frames[f]->hitbox_instances[hi];
             
             data_node* hitbox_instance_node = new data_node(hi_ptr->hitbox_name, "");
             hitbox_instances_node->add(hitbox_instance_node);
@@ -1477,16 +1482,16 @@ void animation_editor::save_animation_set() {
     data_node* hitboxes_node = new data_node("hitboxes", "");
     file_node.add(hitboxes_node);
     
-    for(auto h = ed_anims.hitboxes.begin(); h != ed_anims.hitboxes.end(); h++) {
-        data_node* hitbox_node = new data_node(h->first, "");
+    for(size_t h = 0; h < ed_anims.hitboxes.size(); h++) {
+        data_node* hitbox_node = new data_node(ed_anims.hitboxes[h]->name, "");
         hitboxes_node->add(hitbox_node);
         
-        hitbox_node->add(new data_node("type", itos(h->second->type)));
-        hitbox_node->add(new data_node("multiplier", ftos(h->second->multiplier)));
-        hitbox_node->add(new data_node("can_pikmin_latch", btos(h->second->can_pikmin_latch)));
-        hitbox_node->add(new data_node("elements", h->second->elements));
-        hitbox_node->add(new data_node("angle", ftos(h->second->angle)));
-        hitbox_node->add(new data_node("knockback", ftos(h->second->knockback)));
+        hitbox_node->add(new data_node("type", itos(ed_anims.hitboxes[h]->type)));
+        hitbox_node->add(new data_node("multiplier", ftos(ed_anims.hitboxes[h]->multiplier)));
+        hitbox_node->add(new data_node("can_pikmin_latch", btos(ed_anims.hitboxes[h]->can_pikmin_latch)));
+        hitbox_node->add(new data_node("elements", ed_anims.hitboxes[h]->elements));
+        hitbox_node->add(new data_node("angle", ftos(ed_anims.hitboxes[h]->angle)));
+        hitbox_node->add(new data_node("knockback", ftos(ed_anims.hitboxes[h]->knockback)));
     }
     
     file_node.save_file(ed_filename);

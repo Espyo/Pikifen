@@ -17,7 +17,7 @@ public:
     
     mob* attacking_mob;       //Enemy it's attacking.
     bool latched;             //Is the Pikmin latched onto the enemy it's attacking?
-    string enemy_hitbox_name; //Name of the hitbox the Pikmin is attached to.
+    size_t enemy_hitbox_nr;   //Number of the hitbox the Pikmin is attached to.
     float enemy_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
     float enemy_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
     float attack_time;        //Time left until the strike.

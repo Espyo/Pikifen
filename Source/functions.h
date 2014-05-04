@@ -25,6 +25,8 @@
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + itos((n)))
 //Returns the modulus of a number, regardless of it being a float or negative.
 #define mod(n, d) ((n) - (d) * floor((n) / (d)))
+//Adds a new animation conversion on load_mob_types().
+#define new_anim_conversion(id, name) anim_conversions.push_back(make_pair<size_t, string>((id), (name)))
 //Normalizes an angle between the range [-M_PI, M_PI]
 #define normalize_angle(a) (mod((a), M_PI*2) - M_PI)
 //Sets a lafi widget to visible and enabled.
@@ -60,7 +62,7 @@ void               generate_area_images();
 pikmin*            get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);
 hitbox_instance*   get_closest_hitbox(const float x, const float y, mob* m);
 ALLEGRO_COLOR      get_daylight_color();
-hitbox_instance*   get_hitbox(mob* m, const string name);
+hitbox_instance*   get_hitbox_instance(mob* m, const size_t nr);
 float              get_leader_to_group_center_dist(mob* l);
 mob_event*         get_mob_event(mob* m, const unsigned char e, const bool query = false);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
@@ -76,7 +78,7 @@ vector<hitbox>     load_hitboxes(data_node* frame_node);
 void               load_mob_types(const string folder, const unsigned char type);
 void               load_options();
 sample_struct      load_sample(const string filename, ALLEGRO_MIXER* const mixer);
-vector<mob_event*> load_script(data_node* node);
+vector<mob_event*> load_script(mob_type* mt, data_node* node);
 void               load_game_content();
 void               make_uncarriable(mob* m);
 void               move_point(const float x, const float y, const float tx, const float ty, const float speed, const float reach_radius, float* mx, float* my, float* angle, bool* reached);

@@ -21,7 +21,7 @@
 void active_control() {
     if(leaders[cur_leader_nr]->carrier_info) {
         //Getting up.
-        leaders[cur_leader_nr]->anim.change("get_up", false, false);
+        leaders[cur_leader_nr]->anim.change(LEADER_ANIM_GET_UP, true, false, false);
     }
     make_uncarriable(leaders[cur_leader_nr]);
     stop_auto_pluck(leaders[cur_leader_nr]);
@@ -293,7 +293,7 @@ void dismiss() {
     
     sfx_pikmin_idle.play(0, false);
     cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
-    cur_leader_ptr->anim.change("dismiss", false, false);
+    cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -437,10 +437,11 @@ void draw_sector(sector &s, const float x, const float y) {
     for(unsigned char f = 0; f < floors_to_draw; f++) {
     
         for(size_t l = 0; l < n_linedefs; l++) {
-            vs[l].x = s.linedefs[l]->x1 - x;
-            vs[l].y = s.linedefs[l]->y1 - y;
-            vs[l].u = s.linedefs[l]->x1;
-            vs[l].v = s.linedefs[l]->y1;
+            linedef* l_ptr = &cur_area_map.linedefs[s.linedefs[l]];
+            vs[l].x = l_ptr->vertex1->x - x;
+            vs[l].y = l_ptr->vertex1->y - y;
+            vs[l].u = l_ptr->vertex2->x;
+            vs[l].v = l_ptr->vertex2->y;
             vs[l].z = 0;
             vs[l].color = al_map_rgba_f(s.floors[current_floor].brightness, s.floors[current_floor].brightness, s.floors[current_floor].brightness, 1);
         }
@@ -719,25 +720,20 @@ void generate_area_images() {
     area_images.clear();
     
     //Now, figure out how big our area is.
-    size_t n_sectors = sectors.size();
+    size_t n_sectors = cur_area_map.sectors.size();
     if(n_sectors == 0) return;
-    if(sectors[0].linedefs.size() == 0) return;
     
     float min_x, max_x, min_y, max_y;
-    min_x = max_x = sectors[0].linedefs[0]->x1;
-    min_y = max_y = sectors[0].linedefs[0]->y1;
+    size_t n_vertices = cur_area_map.vertices.size();
+    min_x = max_x = cur_area_map.vertices[0].x;
+    min_y = max_y = cur_area_map.vertices[0].y;
     
-    for(size_t s = 0; s < n_sectors; s++) {
-        size_t n_linedefs = sectors[s].linedefs.size();
-        for(size_t l = 0; l < n_linedefs; l++) {
-            float x = sectors[s].linedefs[l]->x1;
-            float y = sectors[s].linedefs[l]->y1;
-            
-            min_x = min(x, min_x);
-            max_x = max(x, max_x);
-            min_y = min(y, min_y);
-            max_y = max(y, max_y);
-        }
+    for(size_t v = 0; v < n_vertices; v++) {
+        vertex* v_ptr = &cur_area_map.vertices[v];
+        min_x = min(v_ptr->x, min_x);
+        max_x = max(v_ptr->x, max_x);
+        min_y = min(v_ptr->y, min_y);
+        max_y = max(v_ptr->y, max_y);
     }
     
     area_x1 = min_x; area_y1 = min_y;
@@ -758,17 +754,17 @@ void generate_area_images() {
     
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; s++) {
-        size_t n_linedefs = sectors[s].linedefs.size();
+        size_t n_linedefs = cur_area_map.sectors[s].linedefs.size();
         if(n_linedefs == 0) continue;
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
-        s_min_x = s_max_x = sectors[s].linedefs[0]->x1;
-        s_min_y = s_max_y = sectors[s].linedefs[0]->y1;
+        s_min_x = s_max_x = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[0]].vertex1_nr].x;
+        s_min_y = s_max_y = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[0]].vertex1_nr].y;
         
         for(size_t l = 1; l < n_linedefs; l++) { //Start at 1, because we already have the first linedef's values.
-            float x = sectors[s].linedefs[l]->x1;
-            float y = sectors[s].linedefs[l]->y1;
+            float x = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[l]].vertex1_nr].x;
+            float y = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[l]].vertex1_nr].y;
             
             s_min_x = min(x, s_min_x);
             s_max_x = max(x, s_max_x);
@@ -786,7 +782,7 @@ void generate_area_images() {
                 ALLEGRO_BITMAP* current_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
-                    draw_sector(sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
+                    draw_sector(cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
                     
                 } al_set_target_bitmap(current_target_bmp);
             }
@@ -882,11 +878,11 @@ ALLEGRO_COLOR get_daylight_color() {
 /* ----------------------------------------------------------------------------
  * Returns the hitbox instance in the current animation with the specified name.
  */
-hitbox_instance* get_hitbox(mob* m, const string name) {
+hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
     frame* f = m->anim.get_frame();
     for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
-        if(h_ptr->hitbox_name == name) return h_ptr;
+        if(h_ptr->hitbox_nr == nr) return h_ptr;
     }
     return NULL;
 }
@@ -1002,9 +998,11 @@ ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, c
  * Loads the animations from a file.
  */
 animation_set load_animation_set(data_node* file_node) {
-    map<string, animation*> animations;
-    map<string, frame*> frames;
-    map<string, hitbox*> hitboxes;
+    animation_set as;
+    
+    vector<animation*> animations;
+    vector<frame*> frames;
+    vector<hitbox*> hitboxes;
     
     //Hitboxes.
     data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
@@ -1013,8 +1011,8 @@ animation_set load_animation_set(data_node* file_node) {
     
         data_node* hitbox_node = hitboxes_node->get_child(h);
         
-        hitboxes[hitbox_node->name] = new hitbox();
-        hitbox* cur_hitbox = hitboxes[hitbox_node->name];
+        hitbox* cur_hitbox = new hitbox();
+        hitboxes.push_back(cur_hitbox);
         
         cur_hitbox->name = hitbox_node->name;
         cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
@@ -1024,6 +1022,8 @@ animation_set load_animation_set(data_node* file_node) {
         cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
         cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
     }
+    
+    as.hitboxes = hitboxes;
     
     //Frames.
     data_node* frames_node = file_node->get_child_by_name("frames");
@@ -1048,10 +1048,12 @@ animation_set load_animation_set(data_node* file_node) {
                 hz = tof(coords[2]);
             }
             
+            size_t h_pos = as.find_hitbox(hitbox_instance_node->name);
             hitbox_instances.push_back(
                 hitbox_instance(
                     hitbox_instance_node->name,
-                    hitboxes[hitbox_instance_node->name],
+                    h_pos,
+                    (h_pos == string::npos) ? NULL : hitboxes[h_pos],
                     hx, hy, hz,
                     tof(hitbox_instance_node->get_child_by_name("radius")->value)
                 )
@@ -1059,7 +1061,7 @@ animation_set load_animation_set(data_node* file_node) {
         }
         
         ALLEGRO_BITMAP* parent = bitmaps.get(frame_node->get_child_by_name("file")->value, frame_node->get_child_by_name("file"));
-        frame* f =
+        frame* new_f =
             new frame(
             frame_node->name,
             parent,
@@ -1071,19 +1073,21 @@ animation_set load_animation_set(data_node* file_node) {
             tof(frame_node->get_child_by_name("game_h")->value),
             hitbox_instances
         );
-        frames[frame_node->name] = f;
+        frames.push_back(new_f);
         
-        f->file = frame_node->get_child_by_name("file")->value;
-        f->parent_bmp = parent;
-        f->offs_x = tof(frame_node->get_child_by_name("offs_x")->value);
-        f->offs_y = tof(frame_node->get_child_by_name("offs_y")->value);
-        f->top_visible = tob(frame_node->get_child_by_name("top_visible")->value);
-        f->top_x = tof(frame_node->get_child_by_name("top_x")->value);
-        f->top_y = tof(frame_node->get_child_by_name("top_y")->value);
-        f->top_w = tof(frame_node->get_child_by_name("top_w")->value);
-        f->top_h = tof(frame_node->get_child_by_name("top_h")->value);
-        f->top_angle = tof(frame_node->get_child_by_name("top_angle")->value);
+        new_f->file = frame_node->get_child_by_name("file")->value;
+        new_f->parent_bmp = parent;
+        new_f->offs_x = tof(frame_node->get_child_by_name("offs_x")->value);
+        new_f->offs_y = tof(frame_node->get_child_by_name("offs_y")->value);
+        new_f->top_visible = tob(frame_node->get_child_by_name("top_visible")->value);
+        new_f->top_x = tof(frame_node->get_child_by_name("top_x")->value);
+        new_f->top_y = tof(frame_node->get_child_by_name("top_y")->value);
+        new_f->top_w = tof(frame_node->get_child_by_name("top_w")->value);
+        new_f->top_h = tof(frame_node->get_child_by_name("top_h")->value);
+        new_f->top_angle = tof(frame_node->get_child_by_name("top_angle")->value);
     }
+    
+    as.frames = frames;
     
     //Animations.
     data_node* anims_node = file_node->get_child_by_name("animations");
@@ -1098,24 +1102,29 @@ animation_set load_animation_set(data_node* file_node) {
         
         for(size_t f = 0; f < n_frame_instances; f++) {
             data_node* frame_instance_node = frame_instances_node->get_child(f);
+            size_t f_pos = as.find_frame(frame_instance_node->name);
             frame_instances.push_back(
                 frame_instance(
                     frame_instance_node->name,
-                    frames[frame_instance_node->name],
+                    f_pos,
+                    (f_pos == string::npos) ? NULL : frames[f_pos],
                     tof(frame_instance_node->get_child_by_name("duration")->value)
                 )
             );
         }
         
-        animations[anim_node->name] =
+        animations.push_back(
             new animation(
-            anim_node->name,
-            frame_instances,
-            toi(anim_node->get_child_by_name("loop_frame")->value)
+                anim_node->name,
+                frame_instances,
+                toi(anim_node->get_child_by_name("loop_frame")->value)
+            )
         );
     }
     
-    return animation_set(animations, frames, hitboxes);
+    as.animations = animations;
+    
+    return as;
 }
 
 
@@ -1137,7 +1146,28 @@ void load_area(const string name) {
     
     //Load sectors.
     
-    sectors.clear();
+    cur_area_map.clear();
+    
+    size_t n_vertices = file.get_child_by_name("vertices")->get_nr_of_children_by_name("vertex");
+    for(size_t v = 0; v < n_vertices; v++) {
+        data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
+        vector<string> words = split(vertex_data->value);
+        if(words.size() == 2) cur_area_map.vertices.push_back(vertex(tof(words[0]), tof(words[1])));
+    }
+    
+    size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
+    for(size_t l = 0; l < n_linedefs; l++) {
+        data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
+        linedef new_linedef = linedef();
+        
+        new_linedef.back_sector_nr = toi(linedef_data->get_child_by_name("back_sector")->value);
+        new_linedef.front_sector_nr = toi(linedef_data->get_child_by_name("front_sector")->value);
+        new_linedef.vertex1_nr = toi(linedef_data->get_child_by_name("v1")->value);
+        new_linedef.vertex2_nr = toi(linedef_data->get_child_by_name("v2")->value);
+        
+        cur_area_map.linedefs.push_back(new_linedef);
+    }
+    
     size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
     for(size_t s = 0; s < n_sectors; s++) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
@@ -1161,32 +1191,9 @@ void load_area(const string name) {
             new_sector.floors[f] = new_floor;
         }
         
-        size_t n_linedefs = sector_data->get_nr_of_children_by_name("linedef");
-        for(size_t l = 0; l < n_linedefs; l++) {
-            data_node* linedef_data = sector_data->get_child_by_name("linedef", l);
-            linedef* new_linedef = new linedef();
-            
-            new_linedef->x1 = tof(linedef_data->get_child_by_name("x")->value);
-            new_linedef->y1 = tof(linedef_data->get_child_by_name("y")->value);
-            
-            if(new_sector.linedefs.size()) {
-                new_linedef->x2 = new_sector.linedefs.back()->x1;
-                new_linedef->y2 = new_sector.linedefs.back()->y1;
-            }
-            
-            //ToDo missing things.
-            
-            new_sector.linedefs.push_back(new_linedef);
-        }
-        
-        if(new_sector.linedefs.size() > 2) {
-            new_sector.linedefs[0]->x2 = new_sector.linedefs.back()->x1;
-            new_sector.linedefs[0]->y2 = new_sector.linedefs.back()->y1;
-        }
-        
         //ToDo missing things.
         
-        sectors.push_back(new_sector);
+        cur_area_map.sectors.push_back(new_sector);
     }
     
     
@@ -1208,7 +1215,7 @@ void load_area(const string name) {
             if(enemy_types.find(et) != enemy_types.end()) {
                 create_mob(new enemy(
                                x, y,
-                               &sectors[0], //ToDo
+                               &cur_area_map.sectors[0], //ToDo
                                enemy_types[et]
                            ));
                            
@@ -1220,7 +1227,7 @@ void load_area(const string name) {
             if(leader_types.find(lt) != leader_types.end()) {
                 create_mob(new leader(
                                x, y,
-                               &sectors[0], //ToDo
+                               &cur_area_map.sectors[0], //ToDo
                                leader_types[lt]
                            ));
                            
@@ -1230,7 +1237,7 @@ void load_area(const string name) {
         
             create_mob(new ship(
                            x, y,
-                           &sectors[0] //ToDo
+                           &cur_area_map.sectors[0] //ToDo
                        ));
                        
         } else if(mob_node->name == "onion") {
@@ -1239,7 +1246,7 @@ void load_area(const string name) {
             if(onion_types.find(ot) != onion_types.end()) {
                 create_mob(new onion(
                                x, y,
-                               &sectors[0], //ToDo
+                               &cur_area_map.sectors[0], //ToDo
                                onion_types[ot]
                            ));
                            
@@ -1251,7 +1258,7 @@ void load_area(const string name) {
             if(treasure_types.find(tt) != treasure_types.end()) {
                 create_mob(new treasure(
                                x, y,
-                               &sectors[0], //ToDo
+                               &cur_area_map.sectors[0], //ToDo
                                treasure_types[tt]
                            ));
                            
@@ -1263,6 +1270,16 @@ void load_area(const string name) {
             continue;
         }
         
+    }
+    
+    
+    //Set up stuff.
+    for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+        linedef* l_ptr = &cur_area_map.linedefs[l];
+        cur_area_map.sectors[l_ptr->front_sector_nr].linedefs.push_back(l);
+        
+        l_ptr->vertex1 = &cur_area_map.vertices[l_ptr->vertex1_nr];
+        l_ptr->vertex2 = &cur_area_map.vertices[l_ptr->vertex2_nr];
     }
 }
 
@@ -1402,6 +1419,8 @@ void load_mob_types(const string folder, const unsigned char type) {
     
     for(size_t t = 0; t < types.size(); t++) {
     
+        vector<pair<size_t, string> > anim_conversions;
+        
         data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) return;
         
@@ -1434,10 +1453,10 @@ void load_mob_types(const string folder, const unsigned char type) {
         mt->size = tof(file.get_child_by_name("size")->value);
         mt->weight = tof(file.get_child_by_name("weight")->value);
         
-        mt->events = load_script(file.get_child_by_name("script"));
-        
         data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
         mt->anims = load_animation_set(&anim_file);
+        
+        mt->events = load_script(mt, file.get_child_by_name("script"));
         
         if(type == MOB_TYPE_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;
@@ -1453,6 +1472,13 @@ void load_mob_types(const string folder, const unsigned char type) {
             pt->bmp_top[0] = load_bmp(file.get_child_by_name("top_leaf")->value, &file); //ToDo don't load these for every Pikmin type.
             pt->bmp_top[1] = load_bmp(file.get_child_by_name("top_bud")->value, &file);
             pt->bmp_top[2] = load_bmp(file.get_child_by_name("top_flower")->value, &file);
+            
+            new_anim_conversion(PIKMIN_ANIM_IDLE, "idle");
+            new_anim_conversion(PIKMIN_ANIM_WALK, "walk");
+            new_anim_conversion(PIKMIN_ANIM_THROWN, "thrown");
+            new_anim_conversion(PIKMIN_ANIM_ATTACK, "attack");
+            new_anim_conversion(PIKMIN_ANIM_GRAB, "grab");
+            new_anim_conversion(PIKMIN_ANIM_BURROWED, "burrowed");
             
             pikmin_types[pt->name] = pt;
             
@@ -1475,6 +1501,15 @@ void load_mob_types(const string folder, const unsigned char type) {
             lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
             lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(ftos(DEF_WHISTLE_RANGE)));
             lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
+            
+            new_anim_conversion(LEADER_ANIM_IDLE, "idle");
+            new_anim_conversion(LEADER_ANIM_WALK, "walk");
+            new_anim_conversion(LEADER_ANIM_PLUCK, "pluck");
+            new_anim_conversion(LEADER_ANIM_GET_UP, "get_up");
+            new_anim_conversion(LEADER_ANIM_DISMISS, "dismiss");
+            new_anim_conversion(LEADER_ANIM_THROW, "thrown");
+            new_anim_conversion(LEADER_ANIM_WHISTLING, "whistling");
+            new_anim_conversion(LEADER_ANIM_LIE, "lie");
             
             leader_types[lt->name] = lt;
             
@@ -1514,6 +1549,8 @@ void load_mob_types(const string folder, const unsigned char type) {
             pellet_types[pt->name] = pt;
             
         }
+        
+        mt->anims.create_conversions(anim_conversions);
         
     }
     
@@ -1619,7 +1656,7 @@ sample_struct load_sample(const string filename, ALLEGRO_MIXER* const mixer) {
 /* ----------------------------------------------------------------------------
  * Loads a script from a data node.
  */
-vector<mob_event*> load_script(data_node* node) {
+vector<mob_event*> load_script(mob_type* mt, data_node* node) {
 
     vector<mob_event*> events;
     
@@ -1631,7 +1668,7 @@ vector<mob_event*> load_script(data_node* node) {
         for(size_t a = 0; a < event_node->get_nr_of_children(); a++) {
             data_node* action_node = event_node->get_child(a);
             
-            actions.push_back(new mob_action(action_node));
+            actions.push_back(new mob_action(mt, action_node));
         }
         
         events.push_back(new mob_event(event_node, actions));
@@ -2314,7 +2351,7 @@ void use_spray(const size_t spray_nr) {
     
     spray_amounts[spray_nr]--;
     
-    cur_leader_ptr->anim.change("dismiss", false, false);
+    cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
 }
 
 //Calls al_fwrite, but with an std::string instead of a c-string.

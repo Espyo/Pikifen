@@ -108,7 +108,7 @@ public:
     bool dead;                     //Is the mob dead?
     unsigned char state;           //Current state.
     float time_in_state;           //For how long as the mob been in this state?
-    vector<string> chomp_hitboxes; //List of hitboxes that will chomp Pikmin.
+    vector<int> chomp_hitboxes; //List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  //Mobs being chomped.
     void set_state(const unsigned char new_state);
     

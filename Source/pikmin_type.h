@@ -32,4 +32,13 @@ public:
     pikmin_type();
 };
 
+enum PIKMIN_ANIMATIONS {
+    PIKMIN_ANIM_IDLE,
+    PIKMIN_ANIM_WALK,
+    PIKMIN_ANIM_THROWN,
+    PIKMIN_ANIM_ATTACK,
+    PIKMIN_ANIM_GRAB,
+    PIKMIN_ANIM_BURROWED,
+};
+
 #endif //ifndef PIKMIN_TYPE_INCLUDED

@@ -46,26 +46,44 @@ mobs{
 	}
 }
 
+vertices{
+    vertex = -1000 -1000
+    vertex = 1000 -1000
+    vertex = 1000 1000
+    vertex = -1000 1000
+}
+
+linedefs{
+    linedef{
+        front_sector = 0
+        back_sector = -1
+        v1 = 0
+        v2 = 1
+    }
+    linedef{
+        front_sector = 0
+        back_sector = -1
+        v1 = 1
+        v2 = 2
+    }
+    linedef{
+        front_sector = 0
+        back_sector = -1
+        v1 = 2
+        v2 = 3
+    }
+    linedef{
+        front_sector = 0
+        back_sector = -1
+        v1 = 3
+        v2 = 0
+    }
+}
+
 sectors{
 	sector{
 		floor{
 			texture=Grass.png
-		}
-		linedef{
-			x=-1000
-			y=-1000
-		}
-		linedef{
-			x=1000
-			y=-1000
-		}
-		linedef{
-			x=1000
-			y=1000
-		}
-		linedef{
-			x=-1000
-			y=1000
 		}
 	}
 }

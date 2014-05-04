@@ -33,12 +33,14 @@ public:
 class hitbox_instance {
 public:
     string hitbox_name;
+    size_t hitbox_nr;   //Needed for performance.
     hitbox* hitbox_ptr; //Needed for performance.
-    float x, y, z;  //Relative coordinates.
+    float x, y, z;      //Relative coordinates.
     float radius;
     
-    hitbox_instance(const string &hn = "", hitbox* hp = NULL, const float x = 0, const float y = 0, const float z = 0, const float radius = 32) {
+    hitbox_instance(const string &hn = "", size_t hnr = string::npos, hitbox* hp = NULL, const float x = 0, const float y = 0, const float z = 0, const float radius = 32) {
         hitbox_name = hn;
+        hitbox_nr = hnr;
         hitbox_ptr = hp;
         this->x = x;
         this->y = y;

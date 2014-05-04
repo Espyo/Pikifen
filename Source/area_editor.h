@@ -67,28 +67,29 @@ void do_area_editor_logic() {
         }
     }
     
-    size_t n_sectors = sectors.size();
+    size_t n_sectors = cur_area_map.sectors.size();
     for(size_t s = 0; s < n_sectors; s++) {
-        sector* sector_ptr = &sectors[s];
+        sector* sector_ptr = &cur_area_map.sectors[s];
         
         size_t n_linedefs = sector_ptr->linedefs.size();
         
         for(size_t l = 0; l < n_linedefs; l++) {
+            linedef* l_ptr = &cur_area_map.linedefs[sector_ptr->linedefs[l]];
             al_draw_line(
-                sector_ptr->linedefs[l]->x1,
-                sector_ptr->linedefs[l]->y1,
-                sector_ptr->linedefs[l]->x2,
-                sector_ptr->linedefs[l]->y2,
+                l_ptr->vertex1->x,
+                l_ptr->vertex1->y,
+                l_ptr->vertex2->x,
+                l_ptr->vertex2->y,
                 al_map_rgb(192, 192, 192), 2.0 / cam_zoom);
                 
             al_draw_filled_circle(
-                sector_ptr->linedefs[l]->x1,
-                sector_ptr->linedefs[l]->y1,
+                l_ptr->vertex1->x,
+                l_ptr->vertex1->y,
                 3.0 / cam_zoom, al_map_rgb(224, 224, 224));
                 
             al_draw_filled_circle(
-                sector_ptr->linedefs[l]->x2,
-                sector_ptr->linedefs[l]->y2,
+                l_ptr->vertex2->x,
+                l_ptr->vertex2->y,
                 3.0 / cam_zoom, al_map_rgb(224, 224, 224));
         }
     }

@@ -1,36 +1,218 @@
+#include <algorithm>
+
 #include "functions.h"
 #include "mob_event.h"
 #include "particle.h"
 #include "vars.h"
 
-mob_action::mob_action(data_node* dn) {
+mob_action::mob_action(mob_type* mt, data_node* dn) {
+    valid = true;
+    type = MOB_ACTION_UNKNOWN;
+    sub_type = 0;
     string n = dn->name;
-    data = dn->value;
     
-    if(n == "chomp")                 type = MOB_ACTION_CHOMP_HITBOXES;
-    else if(n == "eat")              type = MOB_ACTION_EAT;
-    else if(n == "if")               type = MOB_ACTION_IF;
-    else if(n == "move")             type = MOB_ACTION_MOVE;
-    else if(n == "play_sound")       type = MOB_ACTION_PLAY_SOUND;
-    else if(n == "animation")        type = MOB_ACTION_SET_ANIMATION;
-    else if(n == "gravity")          type = MOB_ACTION_SET_GRAVITY;
-    else if(n == "health")           type = MOB_ACTION_SET_HEALTH;
-    else if(n == "speed")            type = MOB_ACTION_SET_SPEED;
-    else if(n == "timer")            type = MOB_ACTION_SET_TIMER;
-    else if(n == "var")              type = MOB_ACTION_SET_VAR;
-    else if(n == "particle")         type = MOB_ACTION_SPAWN_PARTICLE;
-    else if(n == "projectile")       type = MOB_ACTION_SPAWN_PROJECTILE;
-    else if(n == "special_function") type = MOB_ACTION_SPECIAL_FUNCTION;
-    else if(n == "turn")             type = MOB_ACTION_TURN;
-    else if(n == "wait")             type = MOB_ACTION_WAIT;
-    else {
+    if(n == "chomp") {
+        type = MOB_ACTION_CHOMP_HITBOXES;
+        
+        vector<string> hitbox_names = split(dn->value);
+        
+        for(size_t hn = 0; hn < hitbox_names.size(); hn++) {
+            size_t h_pos = mt->anims.find_hitbox(hitbox_names[hn]);
+            
+            if(h_pos == string::npos) {
+                error_log("Hitbox \"" + hitbox_names[hn] + "\" not found!", dn);
+                valid = false;
+            } else {
+                vi.push_back(h_pos);
+            }
+        }
+        
+        
+        
+    } else if(n == "eat") {
+        type = MOB_ACTION_EAT;
+        
+        if(dn->value == "all") {
+            sub_type = MOB_ACTION_EAT_ALL;
+        } else {
+            sub_type = MOB_ACTION_EAT_NUMBER;
+            vi.push_back(toi(dn->value));
+        }
+        
+        
+        
+    } else if(n == "if") {
+        //ToDo make this use integers instead of strings, eventually?
+        type = MOB_ACTION_IF;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() < 2) {
+            error_log("Not enough parts on this if: \"" + dn->value + "\"!", dn);
+            valid = false;
+        } else {
+            vs.push_back(words[0]); vs.push_back(words[1]);
+        }
+        
+        
+        
+    } else if(n == "move") {
+        type = MOB_ACTION_MOVE;
+        
+        if(dn->value == "prey") sub_type = MOB_ACTION_MOVE_PREY;
+        else if(dn->value == "home") sub_type = MOB_ACTION_MOVE_HOME;
+        else if(dn->value == "stop") sub_type = MOB_ACTION_MOVE_STOP;
+        else {
+        
+            vector<string> string_coords = split(dn->value);
+            
+            if(string_coords.size() == 0) valid = false;
+            else {
+                if(string_coords[0] == "relative") {
+                    sub_type = MOB_ACTION_MOVE_REL_COORDS;
+                    if(string_coords.size() < 3) valid = false;
+                    else {
+                        for(size_t sc = 1; sc < string_coords.size(); sc++) vf.push_back(tof(string_coords[sc]));
+                    }
+                } else {
+                    sub_type = MOB_ACTION_MOVE_COORDS;
+                    for(size_t sc = 0; sc < string_coords.size(); sc++) vf.push_back(tof(string_coords[sc]));
+                }
+            }
+            
+            if(!valid) {
+                error_log("Invalid location \"" + dn->value + "\"!", dn);
+            }
+        }
+        
+        
+        
+    } else if(n == "play_sound") {
+        type = MOB_ACTION_PLAY_SOUND;
+        
+        
+        
+    } else if(n == "animation") {
+        type = MOB_ACTION_SET_ANIMATION;
+        
+        size_t f_pos = mt->anims.find_animation(dn->value);
+        if(f_pos == string::npos) {
+            error_log("Unknown animation \"" + dn->value + "\"!", dn);
+            valid = false;
+        } else {
+            vi.push_back(f_pos);
+        }
+        
+        
+        
+    } else if(n == "gravity") {
+        type = MOB_ACTION_SET_GRAVITY;
+        
+        vi.push_back(tob(dn->value));
+        
+        
+        
+    } else if(n == "health") {
+        type = MOB_ACTION_SET_HEALTH;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() == 0) {
+            valid = false;
+        } else {
+            if(words[0] == "relative") {
+                if(words.size() < 2) {
+                    valid = false;
+                } else {
+                    sub_type = MOB_ACTION_SET_HEALTH_RELATIVE;
+                    vf.push_back(tof(words[1]));
+                }
+            } else {
+                sub_type = MOB_ACTION_SET_HEALTH_ABSOLUTE;
+                vf.push_back(tof(words[0]));
+            }
+        }
+        
+        if(!valid) {
+            error_log("Invalid health amount \"" + dn->value + "\"!", dn);
+        }
+        
+        
+        
+    } else if(n == "speed") {
+        type = MOB_ACTION_SET_SPEED;
+        
+        
+        
+    } else if(n == "timer") {
+        type = MOB_ACTION_SET_TIMER;
+        
+        vf.push_back(tof(dn->value));
+        
+        
+        
+    } else if(n == "var") {
+        type = MOB_ACTION_SET_VAR;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() < 2) {
+            error_log("Not enough info to set a variable!", dn);
+            valid = false;
+        } else {
+            vs = words;
+        }
+        
+        
+        
+    } else if(n == "particle") {
+        type = MOB_ACTION_SPAWN_PARTICLE;
+        
+        
+        
+    } else if(n == "projectile") {
+        type = MOB_ACTION_SPAWN_PROJECTILE;
+        
+        
+        
+    } else if(n == "special_function") {
+        type = MOB_ACTION_SPECIAL_FUNCTION;
+        
+        if(dn->value == "die_start") {
+            sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_START;
+        } else if(dn->value == "die_end") {
+            sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_END;
+        } else if(dn->value == "loop") {
+            sub_type = MOB_ACTION_SPECIAL_FUNCTION_LOOP;
+        } else {
+            error_log("Unknown special function \"" + dn->value + "\"!", dn);
+            valid = false;
+        }
+        
+        
+        
+    } else if(n == "turn") {
+        type = MOB_ACTION_TURN;
+        
+        
+        
+    } else if(n == "wait") {
+        type = MOB_ACTION_WAIT;
+        
+        if(dn->value == "animation") {
+            sub_type = MOB_ACTION_WAIT_ANIMATION;
+        } else {
+            sub_type = MOB_ACTION_WAIT_TIME;
+            vf.push_back(tof(dn->value));
+        }
+        
+        
+        
+    } else {
         type = MOB_ACTION_UNKNOWN;
         error_log("Unknown script action name \"" + n + "\"!", dn);
+        valid = false;
+        
+        
+        
     }
-}
-
-mob_action::mob_action(const unsigned char t, const string &d) {
-    type = t; data = d;
 }
 
 /* Runs an action.
@@ -40,17 +222,15 @@ mob_action::mob_action(const unsigned char t, const string &d) {
  * Returns true if the script should stop.
  */
 bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
-    //ToDo error detection.
-    
     if(type == MOB_ACTION_CHOMP_HITBOXES) {
     
-        m->chomp_hitboxes = split(data);
+        m->chomp_hitboxes = vi;
         
         
         
     } else if(type == MOB_ACTION_EAT) {
     
-        if(data == "all") {
+        if(sub_type == MOB_ACTION_EAT_ALL) {
             for(size_t p = 0; p < m->chomping_pikmin.size(); p++) {
                 m->chomping_pikmin[p]->health = 0;
             }
@@ -62,85 +242,80 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_IF) {
     
-        vector<string> words = split(data);
-        string var = words[0];
-        string value = words[1];
-        if(m->vars[var] != value) (*action_nr)++; //If false, skip to the next one.
+        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
         
         
         
     } else if(type == MOB_ACTION_MOVE) {
     
         //ToDo relative values.
-        if(data == "prey") {
+        if(sub_type == MOB_ACTION_MOVE_PREY) {
             if(m->focused_prey) {
                 m->set_target(0, 0, &m->focused_prey->x, &m->focused_prey->y, false);
             } else {
                 m->remove_target(true);
             }
             
-        } else if(data == "home") {
+        } else if(sub_type == MOB_ACTION_MOVE_HOME) {
             m->set_target(m->home_x, m->home_y, 0, 0, false);
             m->target_code = MOB_TARGET_HOME;
             
-        } else if(data == "stop") {
+        } else if(sub_type == MOB_ACTION_MOVE_STOP) {
             m->remove_target(true);
             
-        } else {
-            vector<string> coords = split(data);
-            m->set_target(tof(coords[0]), tof(coords[1]), NULL, NULL, false);
+        } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
+            m->set_target(vf[0], vf[1], NULL, NULL, false);
+            
+        } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
+            m->set_target(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
+            
         }
         
         
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(m->type->anims.animations.find(data) != m->type->anims.animations.end()) { //ToDo move this check to the error log.
-            m->anim.change(data, false, false);
-        } else {
-            error_log("Animation \"" + data + "\" not found, called in the mob type " + m->type->name + "'s script!");
-        }
+        m->anim.change(vi[0], false, false, false);
         
         
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
-        m->affected_by_gravity = (tob(data));
+        m->affected_by_gravity = vi[0];
         
         
         
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
-        //ToDo relative values.
-        vector<string> words = split(data);
         unsigned short base_nr = 0;
-        if(words.size() > 1) if(words[1] == "relative") base_nr = m->health;
+        if(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE) base_nr = m->health;
         
-        m->health = max(0, (base_nr + toi(words[0])));
+        m->health = max(0, (base_nr + vf[0]));
         
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
-        m->timer = m->timer_interval = tof(data);
+        m->timer = m->timer_interval = vf[0];
         
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        vector<string> words = split(data);
-        m->vars[words[0]] = words[1];
+        m->vars[vs[0]] = vs[1];
         
         
         
     } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {
     
-        if(data == "die_start") {
+        if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_START) {
+        
             if(typeid(*m) == typeid(enemy)) {
                 random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, m->x, m->y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
             }
             
-        } else if(data == "die_end") {
+        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_END) {
+        
             if(typeid(*m) == typeid(enemy)) {
                 enemy* e_ptr = (enemy*) m;
                 if(e_ptr->ene_type->drops_corpse) {
@@ -154,11 +329,8 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
                 );
             }
             
-        } else if(data == "loop") {
+        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_LOOP) {
             m->events_queued[e->type] = 2;
-            
-        } else {
-            error_log("Unknown special function \"" + data + "\"!");
             
         }
         
@@ -166,13 +338,13 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_WAIT) {
     
-        if(data == "animation") {
+        if(sub_type == MOB_ACTION_WAIT_ANIMATION) {
             m->script_wait = -1;
             return true;
         } else {
-            float time_to_wait = tof(data);
+            float time_to_wait = vf[0];
             if(time_to_wait > 0) {
-                m->script_wait = tof(data);
+                m->script_wait = vf[0];
                 return true;
             }
         }
