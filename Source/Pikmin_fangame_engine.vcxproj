@@ -84,10 +84,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="animation_editor.cpp" />
+    <ClCompile Include="area_editor.cpp" />
     <ClCompile Include="controls.cpp" />
     <ClCompile Include="data_file.cpp" />
+    <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="interval.cpp" />
     <ClCompile Include="LAFI\button.cpp" />
     <ClCompile Include="LAFI\checkbox.cpp" />
@@ -101,10 +105,12 @@
     <ClCompile Include="LAFI\textbox.cpp" />
     <ClCompile Include="LAFI\widget.cpp" />
     <ClCompile Include="leader.cpp" />
+    <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="misc_structs.cpp" />
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="mob_event.cpp" />
+    <ClCompile Include="mob_type.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pikmin.cpp" />
     <ClCompile Include="pikmin_type.cpp" />

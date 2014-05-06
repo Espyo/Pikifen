@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the sector, linedef, etc. classes and related functions.
+ */
+
 #ifndef SECTOR_INCLUDED
 #define SECTOR_INCLUDED
 
@@ -11,7 +22,10 @@
 using namespace std;
 
 
-
+/*
+ * A structure with info on a floor,
+ * like the texture.
+ */
 struct floor_info {
     float z;       //Height.
     float scale;   //Texture scale...
@@ -26,7 +40,12 @@ struct floor_info {
 };
 
 
-
+/*
+ * A sector, like the ones in Doom.
+ * It's composed of lines, so it's essentially
+ * a polygon. It has a certain height, and its looks
+ * is determined by its floors.
+ */
 struct sector {
     floor_info floors[2];
     unsigned short type;
@@ -38,13 +57,21 @@ struct sector {
 };
 
 
-
+/*
+ * A sub-sector is a convex polygon, used
+ * for drawing, seeing as OpenGL drawing doesn't
+ * support concave polygons.
+ * A sector is made of sub-sectors as a result.
+ */
 struct sub_sector {
     sector* s;
 };
 
 
-
+/*
+ * A vertex is a 2D point, used to determine
+ * the end-points of a linedef.
+ */
 struct vertex {
     float x, y;
     vertex(float x, float y) {
@@ -53,7 +80,9 @@ struct vertex {
 };
 
 
-
+/*
+ * A line that delimits a sector.
+ */
 struct linedef {
     vertex* vertex1;
     vertex* vertex2;
@@ -68,7 +97,14 @@ struct linedef {
 };
 
 
-
+/*
+ * The blockmap divides the entire area
+ * in a grid, so that collision detections only
+ * happen between stuff in the same grid cell.
+ * This is to avoid having, for instance, a Pikmin
+ * on the lake part of TIS check for collisions with
+ * a wall on the landing site part of TIS.
+ */
 struct blockmap {
     float x1, y2;
     unsigned n_cols, n_rows;
@@ -76,7 +112,13 @@ struct blockmap {
 };
 
 
-
+/*
+ * A structure that holds all of the
+ * info about the current area, so that
+ * the sectors know how to communicate with
+ * the linedefs, the linedefs with the
+ * vertices, etc.
+ */
 struct area_map {
     blockmap bmap;
     vector<vertex> vertices;

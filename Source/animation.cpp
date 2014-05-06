@@ -1,11 +1,32 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Animation, frame, animation instance,
+ * frame instance, and animation set classes,
+ * and animation-related functions.
+ */
+
 #include <map>
 #include <vector>
 
 #include "animation.h"
+#include "functions.h"
 #include "vars.h"
 
 using namespace std;
 
+/* ----------------------------------------------------------------------------
+ * Creates a frame of animation, with a pre-existing bitmap.
+ * name:   Internal name, should be unique.
+ * b:      Bitmap.
+ * gw, gh: In-game width and height of the sprite.
+ * h:      List of hitbox instances.
+ */
 frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const float gh, const vector<hitbox_instance> &h) {
     this->name = name;
     bitmap = b;
@@ -19,6 +40,15 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const 
     parent_bmp = NULL;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a frame of animation, and creates its sprite using a parent bitmap and its coordinates.
+ * name:   Internal name, should be unique.
+ * b:      Parent bitmap.
+ * bx, by: X and Y of the top-left corner of the sprite, in the parent's bitmap.
+ * bw, bh: Width and height of the sprite, in the parent's bitmap.
+ * gw, gh: In-game width and height of the sprite.
+ * h:      List of hitbox instances.
+ */
 frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h) {
     this->name = name;
     parent_bmp = b;
@@ -34,6 +64,9 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const in
     top_w = top_h = 32;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a frame by copying info from another frame.
+ */
 frame::frame(const frame &f2) {
     name = f2.name;
     parent_bmp = f2.parent_bmp;
@@ -56,6 +89,9 @@ frame::frame(const frame &f2) {
     top_angle = f2.top_angle;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a frame by cloning the data from another frame.
+ */
 frame frame::clone() {
     //ToDo hitbox cloning?
     frame f = frame(name, NULL, game_w, game_h, hitbox_instances);
@@ -77,11 +113,21 @@ frame frame::clone() {
     return f;
 }
 
+/* ----------------------------------------------------------------------------
+ * Destroys a frame and its bitmaps.
+ */
 frame::~frame() {
     if(parent_bmp) bitmaps.detach(file);
     if(bitmap) al_destroy_bitmap(bitmap);
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a frame instance.
+ * fn:  Name of the frame.
+ * fnr: Numbr of the frame on the animation set.
+ * fp:  Pointer to the frame.
+ * d:   Duration.
+ */
 frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, const float d) {
     frame_name = fn;
     frame_nr = fnr;
@@ -89,30 +135,46 @@ frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, co
     duration = d;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates an animation.
+ * name:            Name, should be unique.
+ * frame_instances: List of frame instances.
+ * loop_frame:      Loop frame number.
+ */
 animation::animation(const string &name, vector<frame_instance> frame_instances, const size_t loop_frame) {
     this->name = name;
     this->frame_instances = frame_instances;
     this->loop_frame = loop_frame;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates an animation by copying info from another animation.
+ */
 animation::animation(const animation &a2) {
     name = a2.name;
     frame_instances = a2.frame_instances;
     loop_frame = a2.loop_frame;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates an animation instance.
+ * anim_set: The animation set. Used when changing animations.
+ */
 animation_instance::animation_instance(animation_set* anim_set) {
     anim = NULL;
     this->anim_set = anim_set;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates an animation instance by copying info from another.
+ */
 animation_instance::animation_instance(const animation_instance &ai2) {
     anim = ai2.anim;
     anim_set = ai2.anim_set;
     start();
 }
 
-/*
+/* ----------------------------------------------------------------------------
  * Changes to a new animation within the same animation set.
  * new_anim_nr: Number of the new animation. Check the next parameter.
  * pre_named:
@@ -141,13 +203,21 @@ void animation_instance::change(const size_t new_anim_nr, const bool pre_named, 
     start();
 }
 
-void animation_instance::start() { //Starts or restarts an animation. It's called when the animation is created.
+/* ----------------------------------------------------------------------------
+ * Starts or restarts the animation.
+ * It's called when the animation is set.
+ */
+void animation_instance::start() {
     cur_frame_time = 0;
     cur_frame_nr = 0;
     done_once = false;
 }
 
-bool animation_instance::tick(const float time) { //Ticks the animation. Returns whether or not the animation ended its final frame.
+/* ----------------------------------------------------------------------------
+ * Ticks the animation with the given amount of time.
+ * Returns whether or not the animation ended its final frame.
+ */
+bool animation_instance::tick(const float time) {
     if(!anim) return false;
     size_t n_frames = anim->frame_instances.size();
     if(n_frames == 0) return false;
@@ -171,12 +241,18 @@ bool animation_instance::tick(const float time) { //Ticks the animation. Returns
     return done_once;
 }
 
-frame* animation_instance::get_frame() { //Gets a pointer to the current frame.
+/* ----------------------------------------------------------------------------
+ * Returns the current frame of animation.
+ */
+frame* animation_instance::get_frame() {
     if(!anim) return NULL;
     if(anim->frame_instances.size() == 0) return NULL;
     return anim->frame_instances[cur_frame_nr].frame_ptr;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates an animation set.
+ */
 animation_set::animation_set(
     vector<animation*> a,
     vector<frame*> f,
@@ -188,6 +264,10 @@ animation_set::animation_set(
     hitboxes = h;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the position of the specified animation.
+ * Returns string::npos if not found.
+ */
 size_t animation_set::find_animation(string name) {
     for(size_t a = 0; a < animations.size(); a++) {
         if(animations[a]->name == name) return a;
@@ -195,6 +275,10 @@ size_t animation_set::find_animation(string name) {
     return string::npos;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the position of the specified frame.
+ * Returns string::npos if not found.
+ */
 size_t animation_set::find_frame(string name) {
     for(size_t f = 0; f < frames.size(); f++) {
         if(frames[f]->name == name) return f;
@@ -202,6 +286,10 @@ size_t animation_set::find_frame(string name) {
     return string::npos;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the position of the specified hitbox.
+ * Returns string::npos if not found.
+ */
 size_t animation_set::find_hitbox(string name) {
     for(size_t h = 0; h < hitboxes.size(); h++) {
         if(hitboxes[h]->name == name) return h;
@@ -209,7 +297,7 @@ size_t animation_set::find_hitbox(string name) {
     return string::npos;
 }
 
-/*
+/* ----------------------------------------------------------------------------
  * Enemies and such have a regular list of animations.
  * The only way to change these animations is through the script.
  * So animation control is done entirely through game data.
@@ -243,6 +331,9 @@ void animation_set::create_conversions(vector<pair<size_t, string> > conversions
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Destroys an animation set and all of its animations, frames, and hitboxes.
+ */
 void animation_set::destroy() {
     for(auto a = animations.begin(); a != animations.end(); a++) {
         delete *a;
@@ -253,4 +344,137 @@ void animation_set::destroy() {
     for(auto h = hitboxes.begin(); h != hitboxes.end(); h++) {
         delete *h;
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads the animations from a file.
+ */
+animation_set load_animation_set(data_node* file_node) {
+    animation_set as;
+    
+    vector<animation*> animations;
+    vector<frame*> frames;
+    vector<hitbox*> hitboxes;
+    
+    //Hitboxes.
+    data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
+    size_t n_hitboxes = hitboxes_node->get_nr_of_children();
+    for(size_t h = 0; h < n_hitboxes; h++) {
+    
+        data_node* hitbox_node = hitboxes_node->get_child(h);
+        
+        hitbox* cur_hitbox = new hitbox();
+        hitboxes.push_back(cur_hitbox);
+        
+        cur_hitbox->name = hitbox_node->name;
+        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
+        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
+        cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
+        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
+        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
+    }
+    
+    as.hitboxes = hitboxes;
+    
+    //Frames.
+    data_node* frames_node = file_node->get_child_by_name("frames");
+    size_t n_frames = frames_node->get_nr_of_children();
+    for(size_t f = 0; f < n_frames; f++) {
+    
+        data_node* frame_node = frames_node->get_child(f);
+        vector<hitbox_instance> hitbox_instances;
+        
+        data_node* hitbox_instances_node = frame_node->get_child_by_name("hitbox_instances");
+        size_t n_hitbox_instances = hitbox_instances_node->get_nr_of_children();
+        
+        for(size_t h = 0; h < n_hitbox_instances; h++) {
+        
+            data_node* hitbox_instance_node = hitbox_instances_node->get_child(h);
+            
+            float hx = 0, hy = 0, hz = 0;
+            vector<string> coords = split(hitbox_instance_node->get_child_by_name("coords")->value);
+            if(coords.size() >= 3) {
+                hx = tof(coords[0]);
+                hy = tof(coords[1]);
+                hz = tof(coords[2]);
+            }
+            
+            size_t h_pos = as.find_hitbox(hitbox_instance_node->name);
+            hitbox_instances.push_back(
+                hitbox_instance(
+                    hitbox_instance_node->name,
+                    h_pos,
+                    (h_pos == string::npos) ? NULL : hitboxes[h_pos],
+                    hx, hy, hz,
+                    tof(hitbox_instance_node->get_child_by_name("radius")->value)
+                )
+            );
+        }
+        
+        ALLEGRO_BITMAP* parent = bitmaps.get(frame_node->get_child_by_name("file")->value, frame_node->get_child_by_name("file"));
+        frame* new_f =
+            new frame(
+            frame_node->name,
+            parent,
+            toi(frame_node->get_child_by_name("file_x")->value),
+            toi(frame_node->get_child_by_name("file_y")->value),
+            toi(frame_node->get_child_by_name("file_w")->value),
+            toi(frame_node->get_child_by_name("file_h")->value),
+            tof(frame_node->get_child_by_name("game_w")->value),
+            tof(frame_node->get_child_by_name("game_h")->value),
+            hitbox_instances
+        );
+        frames.push_back(new_f);
+        
+        new_f->file = frame_node->get_child_by_name("file")->value;
+        new_f->parent_bmp = parent;
+        new_f->offs_x = tof(frame_node->get_child_by_name("offs_x")->value);
+        new_f->offs_y = tof(frame_node->get_child_by_name("offs_y")->value);
+        new_f->top_visible = tob(frame_node->get_child_by_name("top_visible")->value);
+        new_f->top_x = tof(frame_node->get_child_by_name("top_x")->value);
+        new_f->top_y = tof(frame_node->get_child_by_name("top_y")->value);
+        new_f->top_w = tof(frame_node->get_child_by_name("top_w")->value);
+        new_f->top_h = tof(frame_node->get_child_by_name("top_h")->value);
+        new_f->top_angle = tof(frame_node->get_child_by_name("top_angle")->value);
+    }
+    
+    as.frames = frames;
+    
+    //Animations.
+    data_node* anims_node = file_node->get_child_by_name("animations");
+    size_t n_anims = anims_node->get_nr_of_children();
+    for(size_t a = 0; a < n_anims; a++) {
+    
+        data_node* anim_node = anims_node->get_child(a);
+        vector<frame_instance> frame_instances;
+        
+        data_node* frame_instances_node = anim_node->get_child_by_name("frame_instances");
+        size_t n_frame_instances = frame_instances_node->get_nr_of_children();
+        
+        for(size_t f = 0; f < n_frame_instances; f++) {
+            data_node* frame_instance_node = frame_instances_node->get_child(f);
+            size_t f_pos = as.find_frame(frame_instance_node->name);
+            frame_instances.push_back(
+                frame_instance(
+                    frame_instance_node->name,
+                    f_pos,
+                    (f_pos == string::npos) ? NULL : frames[f_pos],
+                    tof(frame_instance_node->get_child_by_name("duration")->value)
+                )
+            );
+        }
+        
+        animations.push_back(
+            new animation(
+                anim_node->name,
+                frame_instances,
+                toi(anim_node->get_child_by_name("loop_frame")->value)
+            )
+        );
+    }
+    
+    as.animations = animations;
+    
+    return as;
 }

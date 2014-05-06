@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the control-related classes and functions.
+ * This refers to both hardware input receiving
+ * and the corresponding in-game actions.
+ */
+
 #ifndef CONTROLS_INCLUDED
 #define CONTROLS_INCLUDED
 
@@ -5,14 +18,20 @@
 
 using namespace std;
 
+/*
+ * This holds information over a user-specified
+ * control. It has info over what hardware input
+ * is required for this in-game control,
+ * and what action it triggers.
+ */
 struct control_info {
-    unsigned char action;
-    unsigned char player;
-    unsigned char type;
-    int device_nr;
-    int button;
-    int stick;
-    int axis;
+    unsigned char action; //Action number. Use BUTTON_*.
+    unsigned char player; //Player this applies to.
+    unsigned char type;   //Type of control (hardware). Use CONTROL_TYPE_*.
+    int device_nr;        //Device number. i.e. the gamepad number.
+    int button;           //Button, whether the gamepad digital button, or the keyboard key.
+    int stick;            //Stick on the gamepad.
+    int axis;             //Axis of the stick.
     
     control_info(unsigned char action, unsigned char player, string s);
     string stringify();
@@ -20,6 +39,7 @@ struct control_info {
 
 void handle_game_controls(const ALLEGRO_EVENT &ev);
 void handle_button(const unsigned int button, float pos);
+void active_control();
 
 enum BUTTONS {
     BUTTON_NONE,

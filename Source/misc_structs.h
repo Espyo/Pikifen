@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the miscellaneous structures,
+ * too simple to warrant their own files.
+ */
+
 #ifndef MISC_STRUCTS_INCLUDED
 #define MISC_STRUCTS_INCLUDED
 
@@ -10,14 +22,16 @@
 
 using namespace std;
 
+/*
+ * Group spots. The way this works is that a Pikmin group surrounds a central point.
+ * There are several wheels surrounding the original spot,
+ * starting from the center and growing in size, each with several spots of their own.
+ * A Pikmin occupies the central spot first.
+ * Then other Pikmin come by, and occupy spots at random on the next wheel.
+ * When that wheel has all of its spots full, the next wheel will be used, and so on.
+ */
 struct party_spot_info {
-    /* Group spots. The way this works is that a Pikmin group surrounds a central point.
-     * There are several wheels surrounding the original spot,
-     * starting from the center and growing in size, each with several spots of their own.
-     * A Pikmin occupies the central spot first.
-     * Then other Pikmin come by, and occupy spots at random on the next wheel.
-     * When that wheel has all of its spots full, the next wheel will be used, and so on.
-     */
+
     float spot_radius;
     
     vector<vector<float> > x_coords;
@@ -33,22 +47,32 @@ struct party_spot_info {
     void remove(mob* m);
 };
 
+/*
+ * Simple 2D point.
+ */
 struct point {
     float x, y;
     point(const float x = 0, const float y = 0) { this->x = x; this->y = y; }
     bool operator!=(const point &p2) { return x != p2.x || y != p2.y; }
 };
 
+/*
+ * Structure that holds informatio about a sample.
+ * It also has info about sample instances, which control
+ * the sound playing from the sample.
+ */
 struct sample_struct {
     ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
     ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
-    //ALLEGRO_SAMPLE_ID   id;     //Sample id.
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
     void stop();
 };
 
+/*
+ * Structure with info for the bitmap manager.
+ */
 class bmp_info {
 public:
     ALLEGRO_BITMAP* b;
@@ -56,6 +80,37 @@ public:
     bmp_info(ALLEGRO_BITMAP* b = NULL);
 };
 
+/*
+ * Bitmap manager.
+ * When you have the likes of an animation, every
+ * frame in it is normally a sub-bitmap of the same
+ * parent bitmap.
+ * Naturally, loading from the disk and storing
+ * in memory the same parent bitmap for every single
+ * frame would be unbelievable catastrophical, so
+ * that is why the bitmap manager was created.
+ *
+ * Whenever a frame of animation is being loaded,
+ * it asks the bitmap manager to retrieve the
+ * parent bitmap from memory. If the parent bitmap
+ * has never been loaded, it gets loaded now.
+ * When the next frame comes, and requests the
+ * parent bitmap, the manager just returns the one already
+ * loaded.
+ * All the while, the manager is keeping track
+ * of how many frames are referencing this parent bitmap.
+ * When one of them doesn't need it any more, it sends
+ * a detach request (e.g.: when a frame is changed
+ * in the animation editor, the entire bitmap
+ * is destroyed and another is created).
+ * This decreases the counter by one.
+ * When the counter reaches 0, that means no frame
+ * is needing the parent bitmap, so it gets destroyed.
+ * If some other frame needs it, it'll be loaded from
+ * the disk again.
+ * Finally, it should be noted that animation frames
+ * are not the only thing using the bitmap manager.
+ */
 class bmp_manager {
 public:
     map<string, bmp_info> list;

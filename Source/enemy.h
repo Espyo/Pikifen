@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the enemy class and enemy-related functions.
+ */
+
 #ifndef ENEMY_INCLUDED
 #define ENEMY_INCLUDED
 
@@ -5,6 +16,9 @@
 #include "enemy_type.h"
 #include "mob.h"
 
+/*
+ * I don't need to explain what an enemy is.
+ */
 class enemy : public mob {
 public:
     //Technical things.

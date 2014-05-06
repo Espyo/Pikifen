@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Mob class and mob-related functions.
+ */
+
 #include <algorithm>
 
 #include "const.h"
@@ -6,6 +17,9 @@
 #include "pikmin.h"
 #include "vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a mob.
+ */
 mob::mob(const float x, const float y, const float z, mob_type* t, sector* sec) {
     this->x = x;
     this->y = y;
@@ -55,6 +69,9 @@ mob::mob(const float x, const float y, const float z, mob_type* t, sector* sec) 
     carrier_info = NULL;
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes the mob follow a game tick.
+ */
 void mob::tick() {
     //Movement.
     bool was_airborne = z > sec->floors[0].z;
@@ -298,6 +315,14 @@ void mob::tick() {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Sets a target for the mob to follow.
+ * target_*:     Coordinates of the target, relative to either the world origin,
+   * or another point, specified in the next parameters.
+ * target_rel_*: Pointers to moving coordinates. If NULL, it's the world origin.
+   * Use this to make the mob follow another mob wherever they go, for instance.
+ * instant:      If true, the mob teleports to that spot, instead of walking to it.
+ */
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
@@ -308,6 +333,10 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
     target_code = MOB_TARGET_NONE;
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes a mob not follow any target.
+ * stop: If true, the mob stops dead on its tracks.
+ */
 void mob::remove_target(bool stop) {
     go_to_target = false;
     reached_destination = false;
@@ -318,21 +347,38 @@ void mob::remove_target(bool stop) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Makes a mob gradually face a new angle.
+ */
 void mob::face(float new_angle) {
     intended_angle = new_angle;
 }
 
+/* ----------------------------------------------------------------------------
+ * Changes a mob's state.
+ * new_state: The new state ID. Use MOB_STATE_*.
+ */
 void mob::set_state(unsigned char new_state) {
     state = new_state;
     time_in_state = 0;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the base speed for this mob.
+ * This is overwritten by some child classes.
+ */
 float mob::get_base_speed() {
     return this->type->move_speed;
 }
 
 mob::~mob() {}
 
+/* ----------------------------------------------------------------------------
+ * Creates a structure with info about carrying.
+ * m:             The mob this info belongs to.
+ * max_carriers:  The maximum number of carrier Pikmin.
+ * carry_to_ship: If true, this mob is delivered to a ship. Otherwise, an Onion.
+ */
 carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship) {
     this->max_carriers = max_carriers;
     this->carry_to_ship = carry_to_ship;
@@ -349,6 +395,10 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Deletes a carrier info structure.
+ * Makes all carrying Pikmin drop it in the process.
+ */
 carrier_info_struct::~carrier_info_struct() {
     for(size_t s = 0; s < max_carriers; s++) {
         if(carrier_spots[s]) {
@@ -356,5 +406,272 @@ carrier_info_struct::~carrier_info_struct() {
                 drop_mob((pikmin*) carrier_spots[s]);
             }
         }
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Adds a mob to another mob's party.
+ */
+void add_to_party(mob* party_leader, mob* new_member) {
+    if(new_member->following_party == party_leader) return; //Already following, never mind.
+    
+    new_member->following_party = party_leader;
+    party_leader->party->members.push_back(new_member);
+    
+    //Find a spot.
+    if(party_leader->party) {
+        if(party_leader->party->party_spots) {
+            float spot_x = 0, spot_y = 0;
+            
+            party_leader->party->party_spots->add(new_member, &spot_x, &spot_y);
+            
+            new_member->set_target(
+                spot_x, spot_y,
+                &party_leader->party->party_center_x, &party_leader->party->party_center_y,
+                false
+            );
+        }
+    }
+    
+    make_uncarriable(new_member);
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes m1 attack m2.
+ * Stuff like status effects and maturity (Pikmin only) are taken into account.
+ */
+void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period) {
+    if(m2->invuln_period > 0) return;
+    
+    pikmin* p_ptr = NULL;
+    float total_damage = damage;
+    if(m1_is_pikmin) {
+        p_ptr = (pikmin*) m1;
+        total_damage += p_ptr->maturity * damage * MATURITY_POWER_MULT;
+    }
+    
+    m2->invuln_period = new_invuln_period;
+    m2->knockdown_period = new_knockdown_period;
+    m2->health -= damage;
+    
+    if(knockback != 0) {
+        m2->speed_z = 500;
+        m2->speed_x = cos(angle) * knockback;
+        m2->speed_y = sin(angle) * knockback;
+    }
+    
+    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
+    if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
+        if(floor((m2->health + damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
+            if(get_mob_event(m2, MOB_EVENT_BIG_DAMAGE, true)) {
+                m2->events_queued[MOB_EVENT_BIG_DAMAGE] = 1;
+            }
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob, adding it to the corresponding vectors.
+ */
+void create_mob(mob* m) {
+    mobs.push_back(m);
+    
+    if(typeid(*m) == typeid(pikmin)) {
+        pikmin_list.push_back((pikmin*) m);
+        
+    } else if(typeid(*m) == typeid(leader)) {
+        leaders.push_back((leader*) m);
+        
+    } else if(typeid(*m) == typeid(onion)) {
+        onions.push_back((onion*) m);
+        
+    } else if(typeid(*m) == typeid(nectar)) {
+        nectars.push_back((nectar*) m);
+        
+    } else if(typeid(*m) == typeid(pellet)) {
+        pellets.push_back((pellet*) m);
+        
+    } else if(typeid(*m) == typeid(ship)) {
+        ships.push_back((ship*) m);
+        
+    } else if(typeid(*m) == typeid(treasure)) {
+        treasures.push_back((treasure*) m);
+        
+    } else if(typeid(*m) == typeid(info_spot)) {
+        info_spots.push_back((info_spot*) m);
+        
+    } else if(typeid(*m) == typeid(enemy)) {
+        enemies.push_back((enemy*) m);
+        
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Deletes a mob from the relevant vectors.
+ * It's always removed from the vector of mobs, but it's
+ * also removed from the vector of Pikmin if it's a Pikmin,
+ * leaders if it's a leader, etc.
+ */
+void delete_mob(mob* m) {
+    remove_from_party(m);
+    vector<mob*> focusers = m->focused_by;
+    for(size_t m_nr = 0; m_nr < focusers.size(); m_nr++) {
+        unfocus_mob(focusers[m_nr], m, true);
+    }
+    
+    mobs.erase(find(mobs.begin(), mobs.end(), m));
+    
+    if(typeid(*m) == typeid(pikmin)) {
+        pikmin* p_ptr = (pikmin*) m;
+        drop_mob(p_ptr);
+        pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
+        
+    } else if(typeid(*m) == typeid(leader)) {
+        leaders.erase(find(leaders.begin(), leaders.end(), (leader*) m));
+        
+    } else if(typeid(*m) == typeid(onion)) {
+        onions.erase(find(onions.begin(), onions.end(), (onion*) m));
+        
+    } else if(typeid(*m) == typeid(nectar)) {
+        nectars.erase(find(nectars.begin(), nectars.end(), (nectar*) m));
+        
+    } else if(typeid(*m) == typeid(pellet)) {
+        pellets.erase(find(pellets.begin(), pellets.end(), (pellet*) m));
+        
+    } else if(typeid(*m) == typeid(ship)) {
+        ships.erase(find(ships.begin(), ships.end(), (ship*) m));
+        
+    } else if(typeid(*m) == typeid(treasure)) {
+        treasures.erase(find(treasures.begin(), treasures.end(), (treasure*) m));
+        
+    } else if(typeid(*m) == typeid(info_spot)) {
+        info_spots.erase(find(info_spots.begin(), info_spots.end(), (info_spot*) m));
+        
+    } else if(typeid(*m) == typeid(enemy)) {
+        enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
+        
+    } else {
+        //ToDo warn somehow.
+        
+    }
+    
+    delete m;
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes m1 focus on m2.
+ */
+void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event) {
+    unfocus_mob(m1, m1->focused_prey, false);
+    
+    m1->focused_prey = m2;
+    m1->focused_prey_near = true;
+    m2->focused_by.push_back(m1);
+    
+    if(call_event) {
+        m1->focused_prey_near = is_near;
+        m1->events_queued[MOB_EVENT_LOSE_PREY] = 0;
+        m1->events_queued[MOB_EVENT_NEAR_PREY] = (is_near ? 1 : 0);
+        m1->events_queued[MOB_EVENT_SEE_PREY] = (is_near ? 0 : 1);
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the closest hitbox to a point, belonging to a mob's current frame of animation and position.
+ * x, y: Point.
+ * m:    The mob.
+ */
+hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
+    frame* f = m->anim.get_frame();
+    if(!f) return NULL;
+    hitbox_instance* closest_hitbox = NULL;
+    float closest_hitbox_dist = 0;
+    
+    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+        hitbox_instance* h_ptr = &f->hitbox_instances[h];
+        float hx, hy;
+        rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
+        float d = dist(x - m->x, y - m->y, hx, hy) - h_ptr->radius;
+        if(h == 0 || d < closest_hitbox_dist) {
+            closest_hitbox_dist = d;
+            closest_hitbox = h_ptr;
+        }
+    }
+    
+    return closest_hitbox;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the hitbox instance in the current animation with the specified name.
+ */
+hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
+    frame* f = m->anim.get_frame();
+    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+        hitbox_instance* h_ptr = &f->hitbox_instances[h];
+        if(h_ptr->hitbox_nr == nr) return h_ptr;
+    }
+    return NULL;
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes a mob impossible to be carried, and makes the Pikmin carrying it drop it.
+ */
+void make_uncarriable(mob* m) {
+    if(!m->carrier_info) return;
+    
+    delete m->carrier_info;
+    m->carrier_info = NULL;
+}
+
+/* ----------------------------------------------------------------------------
+ * Removes a mob from its leader's party.
+ */
+void remove_from_party(mob* member) {
+    if(!member->following_party) return;
+    
+    member->following_party->party->members.erase(find(
+                member->following_party->party->members.begin(),
+                member->following_party->party->members.end(),
+                member));
+                
+    if(member->following_party->party->party_spots) {
+        member->following_party->party->party_spots->remove(member);
+    }
+    
+    member->following_party = NULL;
+    member->remove_target(false);
+    member->unwhistlable_period = UNWHISTLABLE_PERIOD;
+    member->untouchable_period = UNTOUCHABLE_PERIOD;
+}
+
+/* ----------------------------------------------------------------------------
+ * Should m1 attack m2? Teams are used to decide this.
+ */
+bool should_attack(mob* m1, mob* m2) {
+    if(m2->team == MOB_TEAM_DECORATION) return false;
+    if(m1->team == MOB_TEAM_NONE) return true;
+    if(m1->team == m2->team) return false;
+    return true;
+}
+
+/* ----------------------------------------------------------------------------
+ * Makes m1 lose focus on m2.
+ */
+void unfocus_mob(mob* m1, mob* m2, const bool call_event) {
+    if(m2) {
+        if(m1->focused_prey != m2) return;
+        
+        for(size_t m = 0; m < m2->focused_by.size();) {
+            if(m2->focused_by[m] == m1) m2->focused_by.erase(m2->focused_by.begin() + m);
+            else m++;
+        }
+    }
+    
+    m1->focused_prey = NULL;
+    m1->focused_prey_near = false;
+    if(call_event) {
+        m1->events_queued[MOB_EVENT_SEE_PREY] = 0;
+        m1->events_queued[MOB_EVENT_NEAR_PREY] = 0;
+        m1->events_queued[MOB_EVENT_LOSE_PREY] = 1;
     }
 }

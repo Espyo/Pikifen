@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Miscellaneous structures, too small
+ * to warrant their own files.
+ */
+
 #include <climits>
 
 #include "const.h"
@@ -5,6 +17,9 @@
 #include "misc_structs.h"
 #include "vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a structure with sample info.
+ */
 sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
     sample = s;
     instance = NULL;
@@ -12,15 +27,9 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
     if(!s) return;
     instance = al_create_sample_instance(s);
     al_attach_sample_instance_to_mixer(instance, mixer);
-    
-    /*
-    //ToDo remove this?
-    //I don't think I should be messing with these... But they'll give an error otherwise.
-    id._id = 0;
-    id._index = 0;*/
 }
 
-/*
+/* ----------------------------------------------------------------------------
  * Play the sample.
  * max_override_pos: Override the currently playing sound only if it's already in this position, or beyond.
  ** This is in seconds. 0 means always override. -1 means never override.
@@ -46,10 +55,16 @@ void sample_struct::play(const float max_override_pos, const bool loop, const fl
     al_set_sample_instance_playing( instance, true);
 }
 
+/* ----------------------------------------------------------------------------
+ * Stops a playing sample instance.
+ */
 void sample_struct::stop() {
     al_set_sample_instance_playing(instance, false);
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a structure with info about party spots.
+ */
 party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radius) {
     this->spot_radius = spot_radius;
     
@@ -110,6 +125,9 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
     current_wheel = n_current_wheel_members = 0;
 }
 
+/* ----------------------------------------------------------------------------
+ * Adds a member to a leader's party spots.
+ */
 void party_spot_info::add(mob* m, float* x, float* y) {
     if(n_current_wheel_members == mobs_in_spots[current_wheel].size()) {
         current_wheel++;
@@ -137,6 +155,9 @@ void party_spot_info::add(mob* m, float* x, float* y) {
     if(y) *y = y_coords[current_wheel][chosen_spot];
 }
 
+/* ----------------------------------------------------------------------------
+ * Removes a member from a leader's party spots.
+ */
 void party_spot_info::remove(mob* m) {
     unsigned mob_wheel = UINT_MAX; //Wheel number of the mob we're trying to remove.
     unsigned mob_spot = UINT_MAX; //Spot number of the mob we're trying to remove.
@@ -191,11 +212,17 @@ void party_spot_info::remove(mob* m) {
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a structure with information about a bitmap, for the manager.
+ */
 bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
     this->b = b;
     calls = 1;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the specified bitmap, by name.
+ */
 ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
     if(name.size() == 0) return NULL;
     
@@ -209,6 +236,10 @@ ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
     }
 };
 
+/* ----------------------------------------------------------------------------
+ * Marks a bitmap to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ */
 void bmp_manager::detach(const string &name) {
     if(name.size() == 0) return;
     

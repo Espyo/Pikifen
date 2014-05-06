@@ -1,5 +1,5 @@
 #include "label.h"
-#include "../functions.h"
+#include "../drawing.h"
 
 lafi_label::lafi_label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi_style* style, unsigned char flags)
     : lafi_widget(x1, y1, x2, y2, style, flags) {

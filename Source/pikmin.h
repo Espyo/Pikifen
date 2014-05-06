@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the Pikmin class and Pikmin-related functions.
+ */
+
 #ifndef PIKMIN_INCLUDED
 #define PIKMIN_INCLUDED
 
@@ -5,8 +16,12 @@ class leader;
 
 #include "enemy.h"
 #include "leader.h"
+#include "spec_objs\onion.h"
 #include "pikmin_type.h"
 
+/*
+ * The eponymous Pikmin.
+ */
 class pikmin : public mob {
 public:
     pikmin(const float x, const float y, sector* sec, pikmin_type* type);
@@ -32,5 +47,10 @@ public:
     
     float get_base_speed();
 };
+
+void drop_mob(pikmin* p);
+pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);
+void give_pikmin_to_onion(onion* o, const unsigned amount);
+void start_carrying(mob* m, pikmin* np, pikmin* lp);
 
 #endif //ifndef PIKMIN_INCLUDED

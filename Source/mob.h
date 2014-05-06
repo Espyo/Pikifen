@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the mob class and mob-related functions.
+ */
+
 #ifndef MOB_INCLUDED
 #define MOB_INCLUDED
 
@@ -18,6 +29,12 @@ struct party_spot_info;
 class mob_type;
 class mob;
 
+/*
+ * Information on a mob's party.
+ * This includes a list of its members,
+ * and the location and info of the spots in the
+ * circle, when the members are following the mob.
+ */
 struct party_info {
     vector<mob*> members;
     party_spot_info* party_spots;
@@ -30,6 +47,10 @@ struct party_info {
     }
 };
 
+/*
+ * Structure with information on how
+ * the mob should be carried.
+ */
 struct carrier_info_struct {
     unsigned int max_carriers;
     bool carry_to_ship;            //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
@@ -45,6 +66,13 @@ struct carrier_info_struct {
     ~carrier_info_struct();
 };
 
+/*
+ * A mob, short for "mobile object" or "map object",
+ * or whatever tickles your fancy, is any instance of
+ * an object in the game world. It can move, follow a point,
+ * has health, and can be a variety of different sub-types,
+ * like leader, Pikmin, enemy, Onion, etc.
+ */
 class mob {
 public:
     mob(const float x, const float y, const float z, mob_type* t, sector* sec);
@@ -118,6 +146,18 @@ public:
     void tick();
 };
 
+void add_to_party(mob* party_leader, mob* new_member);
+void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
+void create_mob(mob* m);
+void delete_mob(mob* m);
+void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event);
+hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m);
+hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
+void make_uncarriable(mob* m);
+void remove_from_party(mob* member);
+bool should_attack(mob* m1, mob* m2);
+void unfocus_mob(mob* m1, mob* m2, const bool call_event);
+
 #define GRAVITY_ADDER -1300.0f //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 
 enum MOB_TYPES {
@@ -139,7 +179,7 @@ enum MOB_TEAMS {
     MOB_TEAM_DECORATION, //Cannot be hurt or targeted by anything.
 };
 
-//Special targets to chase.
+//Special targets to chase. Used by the scripts.
 enum MOB_TARGETS {
     MOB_TARGET_NONE,
     MOB_TARGET_HOME,

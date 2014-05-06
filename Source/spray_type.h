@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the spray type and spray type-related functions.
+ */
+
 #ifndef SPRAY_TYPE_INCLUDED
 #define SPRAY_TYPE_INCLUDED
 
@@ -5,6 +16,10 @@
 
 #include "status.h"
 
+/*
+ * A spray type. It decides how the spray behaves,
+ * what status effect it causes, and some other values.
+ */
 class spray_type {
 public:
     status* effect;            //What the spray does.

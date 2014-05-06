@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the animation-related classes and functions.
+ */
+
 #ifndef ANIMATION_INCLUDED
 #define ANIMATION_INCLUDED
 
@@ -7,11 +18,53 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "data_file.h"
 #include "hitbox.h"
 
 using namespace std;
 
-//Frame of animation; a sprite.
+/*
+ * Animations work as follows:
+ * An animation links to frames.
+ * A frame links to hitboxes.
+ *
+ * A hitbox (hitbox.h) specifies a spot
+ * in which the mob is attacking, or a
+ * spot in which it can be attacked.
+ * A single hitbox can have several attributes,
+ * and a frame refers to INSTANCES of hitboxes.
+ *
+ * A frame is basically a sprite.
+ * It gathers its appearance from an image file,
+ * with some tweaks, and the changes of frames
+ * in moderately quick succession is what
+ * creates an animation, as it's always been,
+ * historically.
+ * An animation refers to INSTANCES of frames,
+ * in whichever order it wants.
+ *
+ * Finally, an animation contains data for
+ * the loop frame, which is the frame the
+ * animation goes back to when it reaches
+ * the end.
+ *
+ * To get a mob to display an animation,
+ * you need to create an animation instance.
+ * This can be played, rewinded, etc., and
+ * every mob may have a different animation
+ * instance, with a different progress time and such.
+ *
+ * In order for the animations, frames and
+ * hitboxes to connect, they're referred to using
+ * pointers. The animation set holds all of this data
+ * so the animations, frames and hitboxes know
+ * where to communicate with one another.
+ */
+
+
+/*
+ * A frame of animation; a sprite.
+ */
 class frame {
 public:
     string name;
@@ -38,8 +91,10 @@ public:
 
 
 
-//Instance of a frame inside an animation.
-//A single frame can appear multiple times in the same animation (imagine an enemy shaking back and forth).
+/*
+ * Instance of a frame inside an animation.
+ * A single frame can appear multiple times in the same animation (imagine an enemy shaking back and forth).
+ */
 class frame_instance {
 public:
     string frame_name;
@@ -52,7 +107,9 @@ public:
 
 
 
-//A list of frames, basically.
+/*
+ * A list of frames, basically.
+ */
 class animation {
 public:
     string name;
@@ -63,7 +120,9 @@ public:
     animation(const animation &a2);
 };
 
-//A set of animations and their necessary data.
+/*
+ * A set of animations and their necessary data.
+ */
 class animation_set {
 public:
     vector<animation*> animations;
@@ -88,7 +147,9 @@ public:
     
 };
 
-//Instance of a running animation. This can be played and such.
+/*
+ * Instance of a running animation. This can be played, rewinded, ...
+ */
 class animation_instance {
 public:
     animation* anim;
@@ -105,5 +166,7 @@ public:
     bool tick(const float time);
     frame* get_frame();
 };
+
+animation_set load_animation_set(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

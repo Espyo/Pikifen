@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the info spot class and info spot-related functions.
+ */
+
 #ifndef INFO_POINT_INCLUDED
 #define INFO_POINT_INCLUDED
 
@@ -7,6 +18,15 @@
 
 using namespace std;
 
+/*
+ * An info spot is basically like a sign post:
+ * it's scattered around the map and contains info.
+ * It's not a thing in any Pikmin game, but I figured
+ * it could be useful.
+ * When the player approaches it, its text appears.
+ * If the text is too big, the player can "attack" near it,
+ * in order to open a message box, where more info fits.
+ */
 class info_spot : public mob {
 public:
     string text;

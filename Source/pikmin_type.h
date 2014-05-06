@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the Pikmin type class and Pikmin type-related functions.
+ */
+
 #ifndef PIKMIN_TYPE_INCLUDED
 #define PIKMIN_TYPE_INCLUDED
 
@@ -11,6 +22,12 @@
 
 using namespace std;
 
+/*
+ * Pikmin types, almost the basic meat of the fan-games.
+ * The canon ones are Red, Yellow, Blue, White,
+ * Purple, Bulbmin, Winged and Rock, but with the engine,
+ * loads of fan-made ones can be made.
+ */
 class pikmin_type : public mob_type {
 public:
     vector<element*> resistences;

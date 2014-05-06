@@ -1,9 +1,25 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the hitbox class and hitbox-related functions.
+ */
+
 #ifndef HITBOX_INCLUDED
 #define HITBOX_INCLUDED
 
 #include <vector>
 
 #include "element.h"
+
+/*
+ * You can read more about hitboxes
+ * on animation.h.
+ */
 
 enum HITBOX_TYPES {
     HITBOX_TYPE_NORMAL,
@@ -20,14 +36,7 @@ public:
     float knockback;       //Knockback strength.
     bool can_pikmin_latch; //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
-    hitbox(const string &name = "") {
-        this->name = name;
-        type = HITBOX_TYPE_NORMAL;
-        multiplier = 1;
-        angle = -1;
-        knockback = 1;
-        can_pikmin_latch = false;
-    }
+    hitbox(const string &name = "");
 };
 
 class hitbox_instance {
@@ -38,15 +47,10 @@ public:
     float x, y, z;      //Relative coordinates.
     float radius;
     
-    hitbox_instance(const string &hn = "", size_t hnr = string::npos, hitbox* hp = NULL, const float x = 0, const float y = 0, const float z = 0, const float radius = 32) {
-        hitbox_name = hn;
-        hitbox_nr = hnr;
-        hitbox_ptr = hp;
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->radius = radius;
-    }
+    hitbox_instance(
+        const string &hn = "", size_t hnr = string::npos, hitbox* hp = NULL, const float x = 0, const float y = 0,
+        const float z = 0, const float radius = 32
+    );
 };
 
 #endif //ifndef

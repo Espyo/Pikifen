@@ -1,5 +1,5 @@
 #include "button.h"
-#include "../functions.h"
+#include "../drawing.h"
 
 /*
  * Creates a button given some parameters.

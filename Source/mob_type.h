@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the mob type class and mob type-related functions.
+ */
+
 #ifndef MOB_TYPE_INCLUDED
 #define MOB_TYPE_INCLUDED
 
@@ -6,11 +17,17 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
-#include "const.h"
 #include "mob_event.h"
 
 using namespace std;
 
+/*
+ * A mob type.
+ * There are specific types, like Pikmin,
+ * leader, etc., but these are used
+ * to create more generic mob types,
+ * like some teleporter pad, or a door.
+ */
 class mob_type {
 public:
     //Technical things.
@@ -38,16 +55,9 @@ public:
     //Script things.
     vector<mob_event*> events;    //The events and actions.
     
-    mob_type() {
-        size = move_speed = rotation_speed = 0;
-        always_active = false;
-        max_health = 0;
-        max_carriers = 0;
-        weight = 0;
-        sight_radius = near_radius = 0;
-        rotation_speed = DEF_ROTATION_SPEED;
-        big_damage_interval = 0;
-    }
+    mob_type();
 };
+
+void load_mob_types(const string folder, const unsigned char type);
 
 #endif //ifndef MOB_TYPE_INCLUDED

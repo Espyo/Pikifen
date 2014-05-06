@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the leader type class and leader type-related functions.
+ */
+
 #ifndef LEADER_TYPE_INCLUDED
 #define LEADER_TYPE_INCLUDED
 
@@ -6,6 +17,9 @@
 #include "misc_structs.h"
 #include "mob_type.h"
 
+/*
+ * A type of leader.
+ */
 class leader_type : public mob_type {
 public:
     float whistle_range;

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Control-related functions.
+ */
+
 #include <algorithm>
 #include <typeinfo>
 
@@ -9,6 +20,10 @@
 #include "functions.h"
 #include "vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Handles an Allegro event related to hardware input,
+ * and triggers the corresponding controls, if any.
+ */
 void handle_game_controls(const ALLEGRO_EVENT &ev) {
     //Debugging.
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR && ev.keyboard.keycode == ALLEGRO_KEY_T) {
@@ -75,6 +90,14 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     
 }
 
+/* ----------------------------------------------------------------------------
+ * Handles a button "press". Technically, it could also be a button release.
+ * button: The button's ID. Use BUTTON_*.
+ * pos:    The position of the button, i.e., how much it's "held".
+   * 0 means it was released. 1 means it was fully pressed.
+   * For controls with more sensibility, values between 0 and 1 are important.
+   * Like a 0.5 for the group movement makes it move at half distance.
+ */
 void handle_button(const unsigned int button, float pos) {
 
     leader* cur_leader_ptr = leaders[cur_leader_nr];
@@ -661,6 +684,26 @@ void handle_button(const unsigned int button, float pos) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Call this whenever an "active" control is inputted. An "active" control is anything that moves the captain in some way.
+ * This function makes the captain wake up from lying down, stop auto-plucking, etc.
+ */
+void active_control() {
+    if(leaders[cur_leader_nr]->carrier_info) {
+        //Getting up.
+        leaders[cur_leader_nr]->anim.change(LEADER_ANIM_GET_UP, true, false, false);
+    }
+    make_uncarriable(leaders[cur_leader_nr]);
+    stop_auto_pluck(leaders[cur_leader_nr]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates information about a control.
+ * action: The action this control does in-game. Use BUTTON_*.
+ * player: Player number.
+ * s:      The textual code that represents the hardware inputs.
+ */
 control_info::control_info(unsigned char action, unsigned char player, string s) {
     this->action = action;
     this->player = player;
@@ -722,6 +765,9 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Converts a control info's hardware input data into a string, used in the options file.
+ */
 string control_info::stringify() {
     if(type == CONTROL_TYPE_KEYBOARD_KEY) {
         return "k_" + itos(button);

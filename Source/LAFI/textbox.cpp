@@ -1,6 +1,6 @@
 #include <limits.h>
 
-#include "../functions.h"
+#include "../drawing.h"
 #include "textbox.h"
 
 size_t lafi_textbox::cur_tab_index = 0;

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Mob event class and mob event-related functions.
+ */
+
 #include <algorithm>
 
 #include "functions.h"
@@ -5,6 +16,11 @@
 #include "particle.h"
 #include "vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a mob action.
+ * mt: Mob type this belongs to.
+ * dn: Data node from which the creation information will be obtained.
+ */
 mob_action::mob_action(mob_type* mt, data_node* dn) {
     valid = true;
     type = MOB_ACTION_UNKNOWN;
@@ -215,7 +231,8 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
     }
 }
 
-/* Runs an action.
+/* ----------------------------------------------------------------------------
+ * Runs an action.
  * m:         the mob.
  * ev:        the event this action belongs to.
  * action_nr: used by conditionals to change the flow of the script.
@@ -356,6 +373,57 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
     return false;
 }
 
+/* ----------------------------------------------------------------------------
+ * Returns the pointer to a mob event, if the mob is listening to that event.
+ * Returns NULL if this event can't run, because there's already another event going on, or because the mob is dead.
+ * If query is true, then the caller only wants to know of the existence of the event, not actually do something with it.
+   * This makes it return the pointer if it exists, regardless of it being able to run or not.
+ */
+mob_event* get_mob_event(mob* m, const unsigned char et, const bool query) {
+    if(m->dead && et != MOB_EVENT_DEATH) return NULL;
+    size_t n_events = m->type->events.size();
+    for(size_t ev_nr = 0; ev_nr < n_events; ev_nr++) {
+    
+        mob_event* ev = m->type->events[ev_nr];
+        if(ev->type == et) {
+            if(query) return ev;
+            if(m->script_wait != 0 && m->script_wait_event != ev && et != MOB_EVENT_DEATH) return NULL;
+            return ev;
+        }
+    }
+    return NULL;
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads a script from a data node.
+ */
+vector<mob_event*> load_script(mob_type* mt, data_node* node) {
+
+    vector<mob_event*> events;
+    
+    for(size_t e = 0; e < node->get_nr_of_children(); e++) {
+        data_node* event_node = node->get_child(e);
+        
+        vector<mob_action*> actions;
+        
+        for(size_t a = 0; a < event_node->get_nr_of_children(); a++) {
+            data_node* action_node = event_node->get_child(a);
+            
+            actions.push_back(new mob_action(mt, action_node));
+        }
+        
+        events.push_back(new mob_event(event_node, actions));
+        
+    }
+    
+    return events;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob event using data from a data node.
+ * d: The data node.
+ * a: A vector of actions this event should run when triggered.
+ */
 mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     string n = d->name;
     if(n == "on_attack_hit")        type = MOB_EVENT_ATTACK_HIT;
@@ -388,10 +456,21 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     actions = a;
 }
 
+/* ----------------------------------------------------------------------------
+ * Creates a mob event with a pre-known type ID.
+ * t: The type.
+ * a: A vector of actions this event should run when triggered.
+ */
 mob_event::mob_event(const unsigned char t, vector<mob_action*> a) {
     type = t; actions = a;
 }
 
+/* ----------------------------------------------------------------------------
+ * Runs a mob event.
+ * m:               The mob that's requesting this event.
+ * starting_action: Start on this action. If the execution was paused
+   * (e.g. by a wait), it should continue where it left off.
+ */
 void mob_event::run(mob* m, const size_t starting_action) {
 
     //ToDo remove.

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Program start and main loop.
+ */
+
 //ToDo check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
 
 #include <fstream>
@@ -29,6 +40,14 @@
 #include "vars.h"
 
 using namespace std;
+
+/*
+ * Main function.
+ * It begins by loading Allegro stuff,
+ * the options, setting some settings,
+ * and loading all of the game content.
+ * Once that's done, it enters the main loop.
+ */
 
 int main(int argc, char**) {
     //Install Allegro and initialize modules.
@@ -312,7 +331,7 @@ int main(int argc, char**) {
         if(cur_screen == SCREEN_GAME) {
             handle_game_controls(ev);
         } else if(cur_screen == SCREEN_AREA_EDITOR) {
-            handle_area_editor_controls(ev);
+            area_editor::handle_area_editor_controls(ev);
         } else if(cur_screen == SCREEN_ANIMATION_EDITOR) {
             animation_editor::handle_controls(ev);
         }
@@ -333,7 +352,7 @@ int main(int argc, char**) {
                 do_logic();
                 do_drawing();
             } else if(cur_screen == SCREEN_AREA_EDITOR) {
-                do_area_editor_logic();
+                area_editor::do_area_editor_logic();
             } else if(cur_screen == SCREEN_ANIMATION_EDITOR) {
                 animation_editor::do_logic();
             }

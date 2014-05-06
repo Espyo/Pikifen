@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the weather class and weather-related functions.
+ */
+
 #ifndef WEATHER_INCLUDED
 #define WEATHER_INCLUDED
 
@@ -10,10 +21,19 @@
 
 using namespace std;
 
+/*
+ * Weather information.
+ * Daylight is mixed in with the weather, as
+ * different weather conditions imply different
+ * lighting throughout the day (on a sunny day,
+ * everything is bright all the way through,
+ * but on a foggy day, everything is darker
+ * and grayer).
+ */
 class weather {
 public:
     string name;
-    map<unsigned, ALLEGRO_COLOR> lighting;
+    map<unsigned, ALLEGRO_COLOR> lighting; //Map with the lighting color for each specific time of day, in minutes.
     unsigned char percipitation_type;
     interval percipitation_frequency;
     interval percipitation_speed;

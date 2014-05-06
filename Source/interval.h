@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the interval class and interval-related functions.
+ */
+
 #ifndef INTERVAL_INCLUDED
 #define INTERVAL_INCLUDED
 
@@ -5,6 +16,11 @@
 #include <vector>
 
 using namespace std;
+
+/*
+ * An interval specifies a range from which
+ * random numbers may be picked.
+ */
 
 struct subinterval {
     float lower; //Lower boundary of the interval, inclusive. FLT_MIN for none.

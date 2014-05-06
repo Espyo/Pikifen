@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for the mob event class and mob-related functions.
+ */
+
 #ifndef MOB_EVENT_INCLUDED
 #define MOB_EVENT_INCLUDED
 
@@ -14,6 +25,12 @@ using namespace std;
 
 struct mob_event;
 
+/*
+ * A mob action is an action a mob can perform,
+ * in the script.
+ * These include walking to some place,
+ * shooting a projectile, etc.
+ */
 struct mob_action {
     bool valid;
     unsigned char type;
@@ -27,6 +44,15 @@ struct mob_action {
     bool run(mob* m, mob_event* ev, size_t* action_nr);
 };
 
+/*
+ * A mob event contains information on what
+ * to make the mob do whenever the event
+ * is triggered.
+ * For instance, whenever the mob reaches
+ * its home, the "reached home" event
+ * is triggered, and then the corresponding
+ * actions are taken, like falling asleep.
+ */
 struct mob_event {
     unsigned char type;
     vector<mob_action*> actions;
@@ -36,6 +62,9 @@ struct mob_event {
     
     void run(mob* m, const size_t starting_action);
 };
+
+mob_event* get_mob_event(mob* m, const unsigned char e, const bool query = false);
+vector<mob_event*> load_script(mob_type* mt, data_node* node);
 
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,

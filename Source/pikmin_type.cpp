@@ -1,6 +1,20 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Pikmin type class and Pikmin type-related functions.
+ */
+
 #include "pikmin_type.h"
 #include "const.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a Pikmin type.
+ */
 pikmin_type::pikmin_type() {
     //ToDo
     attack_attribute = 0;
