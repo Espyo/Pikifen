@@ -479,9 +479,20 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) {
-            cam_zoom += cam_zoom * ev.mouse.dz * 0.1;
-            if(cam_zoom <= ZOOM_MIN_LEVEL_EDITOR) cam_zoom = ZOOM_MIN_LEVEL_EDITOR;
-            if(cam_zoom >= ZOOM_MAX_LEVEL_EDITOR) cam_zoom = ZOOM_MAX_LEVEL_EDITOR;
+            if(ev.mouse.dz != 0) {
+                //Zoom.
+                float new_zoom = cam_zoom + (cam_zoom * ev.mouse.dz * 0.1);
+                new_zoom = max(ZOOM_MIN_LEVEL_EDITOR, new_zoom);
+                new_zoom = min(ZOOM_MAX_LEVEL_EDITOR, new_zoom);
+                float new_mc_x = ev.mouse.x / new_zoom - cam_x - ((scr_w - 208) / 2 / new_zoom);
+                float new_mc_y = ev.mouse.y / new_zoom - cam_y - (scr_h / 2 / new_zoom);
+                
+                cam_x -= (mouse_cursor_x - new_mc_x);
+                cam_y -= (mouse_cursor_y - new_mc_y);
+                mouse_cursor_x = new_mc_x;
+                mouse_cursor_y = new_mc_y;
+                cam_zoom = new_zoom;
+            }
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {

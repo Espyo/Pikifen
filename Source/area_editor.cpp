@@ -226,9 +226,20 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             cur_area_map.vertices[ed_moving_vertex]->y = snap_to_grid(mouse_cursor_y);
         }
         
-        cam_zoom += cam_zoom * ev.mouse.dz * 0.1;
-        if(cam_zoom <= ZOOM_MIN_LEVEL_EDITOR) cam_zoom = ZOOM_MIN_LEVEL_EDITOR;
-        if(cam_zoom >= ZOOM_MAX_LEVEL_EDITOR) cam_zoom = ZOOM_MAX_LEVEL_EDITOR;
+        if(ev.mouse.dz != 0) {
+            //Zoom.
+            float new_zoom = cam_zoom + (cam_zoom * ev.mouse.dz * 0.1);
+            new_zoom = max(ZOOM_MIN_LEVEL_EDITOR, new_zoom);
+            new_zoom = min(ZOOM_MAX_LEVEL_EDITOR, new_zoom);
+            float new_mc_x = ev.mouse.x / new_zoom - cam_x - ((scr_w - 208) / 2 / new_zoom);
+            float new_mc_y = ev.mouse.y / new_zoom - cam_y - (scr_h / 2 / new_zoom);
+            
+            cam_x -= (mouse_cursor_x - new_mc_x);
+            cam_y -= (mouse_cursor_y - new_mc_y);
+            mouse_cursor_x = new_mc_x;
+            mouse_cursor_y = new_mc_y;
+            cam_zoom = new_zoom;
+        }
         
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -313,7 +324,6 @@ void area_editor::load() {
     load_area("test"); //ToDo non-fixed name, duh.
     
     //ToDo temporary stuff.
-    get_polys(cur_area_map.sectors[0], &ed_temp_o, &ed_temp_i);
     cur_area_map.triangles = triangulate(cur_area_map.sectors[0]);
     
     lafi_style* s = new lafi_style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
@@ -394,8 +404,6 @@ void area_editor::load() {
     frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_new_sector_mode = true;
     };
-    
-    
 }
 
 /* ----------------------------------------------------------------------------

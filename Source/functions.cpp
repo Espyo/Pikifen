@@ -130,8 +130,9 @@ void error_log(string s, data_node* d) {
             leading_zero(t.tm_mday) + " " +
             leading_zero(t.tm_hour) + ":" +
             leading_zero(t.tm_min) + ":" +
-            leading_zero(t.tm_sec) +
-            "\n" + s;
+            leading_zero(t.tm_sec) + "; Pikmin fangame engine version " +
+            itos(VERSION_MAJOR) + "." + itos(VERSION_MINOR) +
+            "." + itos(VERSION_REV) + "\n" + s;
     }
     
     string prev_error_log;
@@ -429,7 +430,6 @@ void load_area(const string name) {
         
         cur_area_map.sectors.push_back(new_sector);
     }
-    
     
     //Load mobs.
     

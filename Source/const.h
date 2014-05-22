@@ -21,6 +21,18 @@
 
 using namespace std;
 
+/*
+ * Version stuff.
+ * On every release, update these numbers, and
+ * update the numbers on the resouce (.rc) file.
+ */
+#define VERSION_MAJOR 0
+#define VERSION_MINOR 4
+#define VERSION_REV 0
+#define VERSION_DAY 0
+#define VERSION_MONTH 0
+#define VERSION_YEAR 0      //The year is 2000 + this.
+
 #define AREA_IMAGE_SIZE             800      //How many pixels the area images are (both width and height; they're square).
 #define AUTO_PLUCK_INPUT_INTERVAL   0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
 #define AUTO_PLUCK_MAX_RADIUS       160      //How far a leader can go to auto-pluck the next Pikmin.
