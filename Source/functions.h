@@ -25,30 +25,48 @@
 #include "sector.h"
 
 //Returns the distance between two points.
-#define dist(x1, y1, x2, y2) sqrt(((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2)))
+#define dist(x1, y1, x2, y2) sqrt(sdist((x1), (y1), (x2), (y2)))
+
 //Converts a float (or double) to a string.
 #define ftos(n) to_string((long double) (n))
+
+//Returns the previous element in a vector, but if it's the first, it retrieves the last.
+#define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
+
+//Returns the next element in a vector, but if it's the last, it retrieves the first.
+#define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
+
 //Sets a lafi widget to invisible and disabled.
 #define hide_widget(w) (w)->flags |= LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED;
+
 //Converts an integer (or long) to a string.
 #define itos(n) to_string((long long) (n))
+
 //Returns a string with a number, adding a leading zero if it's less than 10.
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + itos((n)))
-//Returns the modulus of a number, regardless of it being a float or negative.
-#define mod(n, d) ((n) - (d) * floor((n) / (d)))
+
 //Adds a new animation conversion on load_mob_types().
 #define new_anim_conversion(id, name) anim_conversions.push_back(make_pair<size_t, string>((id), (name)))
-//Normalizes an angle between the range [-M_PI, M_PI]
-#define normalize_angle(a) (mod((a), M_PI*2) - M_PI)
+
+//Rounds a number. Ugh, why do I even have to create this.
+#define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
+
+//Returns the squared distance between two points. This skips the square root.
+#define sdist(x1, y1, x2, y2) ((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2))
+
 //Sets a lafi widget to visible and enabled.
 #define show_widget(w) (w)->flags &= ~(LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED);
+
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
+
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range ((pik_ptr->following_party == cur_leader_ptr && moving_group_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
 
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
+bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
+bool               circle_touches_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2);
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
 void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> v, const string s);
@@ -65,6 +83,7 @@ void               load_options();
 sample_struct      load_sample(const string filename, ALLEGRO_MIXER* const mixer);
 void               load_game_content();
 void               move_point(const float x, const float y, const float tx, const float ty, const float speed, const float reach_radius, float* mx, float* my, float* angle, bool* reached);
+float              normalize_angle(float a);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);

@@ -12,89 +12,26 @@
 #ifndef SECTOR_INCLUDED
 #define SECTOR_INCLUDED
 
+#include <set>
+#include <vector>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-
-#include <vector>
+#include <allegro5/allegro_primitives.h>
 
 #include "element.h"
 
 using namespace std;
 
 
-/*
- * A structure with info on a floor,
- * like the texture.
- */
-struct floor_info {
-    float z;       //Height.
-    float scale;   //Texture scale...
-    float trans_x; //X translation...
-    float trans_y; //Y translation...
-    float rot;     //And rotation.
-    float brightness;
-    unsigned char terrain_sound; //Used for walking noises.
-    ALLEGRO_BITMAP* texture;
-    
-    floor_info();
-};
-
-
-/*
- * A sector, like the ones in Doom.
- * It's composed of lines, so it's essentially
- * a polygon. It has a certain height, and its looks
- * is determined by its floors.
- */
-struct sector {
-    floor_info floors[2];
-    unsigned short type;
-    unsigned int tag;
-    vector<element*> elements;
-    vector<size_t> linedefs;
-    
-    sector();
-};
-
-
-/*
- * A sub-sector is a convex polygon, used
- * for drawing, seeing as OpenGL drawing doesn't
- * support concave polygons.
- * A sector is made of sub-sectors as a result.
- */
-struct sub_sector {
-    sector* s;
-};
-
-
-/*
- * A vertex is a 2D point, used to determine
- * the end-points of a linedef.
- */
-struct vertex {
-    float x, y;
-    vertex(float x, float y) {
-        this->x = x; this->y = y;
-    }
-};
-
-
-/*
- * A line that delimits a sector.
- */
-struct linedef {
-    vertex* vertex1;
-    vertex* vertex2;
-    sector* front_sector;
-    sector* back_sector;
-    size_t vertex1_nr;
-    size_t vertex2_nr;
-    size_t front_sector_nr;
-    size_t back_sector_nr;
-    
-    linedef(vertex* v1 = NULL, vertex* v2 = NULL, sector* fs = NULL, sector* bs = NULL);
-};
+struct area_map;
+struct blockmap;
+struct linedef;
+struct sector;
+struct sector_texture;
+struct triangle;
+struct vertex;
+typedef vector<vertex*> polygon;
 
 
 /*
@@ -108,7 +45,85 @@ struct linedef {
 struct blockmap {
     float x1, y2;
     unsigned n_cols, n_rows;
-    vector<vector<size_t> > linedefs_in_blocks;
+    vector<vector<linedef*> > linedefs_in_blocks;
+};
+
+
+/*
+ * A line that delimits a sector.
+ */
+struct linedef {
+    vertex* vertices[2];
+    size_t vertex_nrs[2];
+    sector* sectors[2];
+    size_t sector_nrs[2];
+    
+    linedef(size_t v1 = string::npos, size_t v2 = string::npos);
+    void fix_pointers(area_map &a);
+};
+
+
+/*
+ * A structure with info on a texture for a sector.
+ * For sectors with two of these, the texture smoothly
+ * transitions from the first to the second.
+ */
+struct sector_texture {
+    float scale;   //Texture scale...
+    float trans_x; //X translation...
+    float trans_y; //Y translation...
+    float rot;     //And rotation.
+    ALLEGRO_BITMAP* bitmap;
+    
+    sector_texture();
+};
+
+
+/*
+ * A sector, like the ones in Doom.
+ * It's composed of lines, so it's essentially
+ * a polygon. It has a certain height, and its looks
+ * is determined by its floors.
+ */
+struct sector {
+    sector_texture textures[2];
+    unsigned short type;
+    unsigned int tag;
+    float z; //Height.
+    float brightness;
+    
+    vector<element*> elements;
+    vector<size_t> linedef_nrs;
+    vector<linedef*> linedefs;
+    
+    sector();
+    void fix_pointers(area_map &a);
+};
+
+
+/*
+ * A triangle. Sectors (polygons) are made out of triangles.
+ * These are used to detect whether a point is inside a sector,
+ * and to draw, seeing as OpenGL cannot draw concave polygons.
+ */
+struct triangle {
+    vertex* points[3];
+    sector* s_ptr;
+    triangle(vertex* v1, vertex* v2, vertex* v3, sector* s);
+};
+
+
+/*
+ * A vertex is a 2D point, used to determine
+ * the end-points of a linedef.
+ */
+struct vertex {
+    float x, y;
+    vector<size_t> linedef_nrs;
+    vector<linedef*> linedefs;
+    
+    vertex(float x, float y);
+    void fix_pointers(area_map &a);
 };
 
 
@@ -121,13 +136,27 @@ struct blockmap {
  */
 struct area_map {
     blockmap bmap;
-    vector<vertex> vertices;
-    vector<linedef> linedefs;
-    vector<sector> sectors;
+    vector<vertex*> vertices;
+    vector<linedef*> linedefs;
+    vector<sector*> sectors;
+    vector<triangle> triangles;
     
     void clear();
 };
 
+
+void clean_poly(polygon* p);
+void cut_poly(polygon* outer, vector<polygon>* inners);
+float get_angle_dif(float a1, float a2);
+void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t> &convex_vertices, vector<size_t> &concave_vertices);
+void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
+vertex* get_rightmost_vertex(map<linedef*, bool> &sides_todo);
+vertex* get_rightmost_vertex(polygon* p);
+bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
+bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
+bool is_point_in_triangle();
+bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
+vector<triangle> triangulate(sector* s);
 
 
 enum SECTOR_TYPES {
@@ -135,7 +164,6 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_BOTTOMLESS_PIT,
     SECTOR_TYPE_BASE,
 };
-
 
 
 enum TERRAIN_SOUNDS {
@@ -147,7 +175,6 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_METAL,
     TERRAIN_SOUND_WATER,
 };
-
 
 
 #endif //ifndef SECTOR_INCLUDED

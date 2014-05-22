@@ -50,6 +50,50 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns whether the distance between two points is smaller
+ * or equal to the comparison distance. This function does not
+ * use sqrt, so it's faster.
+ */
+bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check) {
+    float dx = x2 - x1;
+    float dy = y2 - y1;
+    return (dx * dx + dy * dy) <= distance_to_check * distance_to_check;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a circle is touching a line or not.
+ * cx, cy: Coordinates of the circle.
+ * cr:     Radius of the circle.
+ * x*, y*: Coordinates of the line.
+ */
+bool circle_touches_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2) {
+
+    //Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
+    
+    float vx = x2 - x1;
+    float vy = y2 - y1;
+    float xdiff = x1 - cx;
+    float ydiff = y1 - cy;
+    float a = vx * vx + vy * vy;
+    float b = 2 * ((vx * xdiff) + (vy * ydiff));
+    float c = xdiff * xdiff + ydiff * ydiff - cr * cr;
+    float quad = b * b - (4 * a * c);
+    if (quad >= 0) {
+        // An infinite collision is happening, but let's not stop here
+        float quadsqrt = sqrt(quad);
+        for (int i = -1; i <= 1; i += 2) {
+            // Returns the two coordinates of the intersection points
+            float t = (i * -b + quadsqrt) / (2 * a);
+            float x = x1 + (i * vx * t);
+            float y = y1 + (i * vy * t);
+            // If one of them is in the boundaries of the segment, it collides
+            if (x >= min(x1, x2) && x <= max(x1, x2) && y >= min(y1, y2) && y <= max(y1, y2)) return true;
+        }
+    }
+    return false;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns the angle and magnitude of vector coordinates.
  * *_coord:   The coordinates.
  * angle:     Variable to return the angle to.
@@ -186,11 +230,11 @@ void generate_area_images() {
     
     float min_x, max_x, min_y, max_y;
     size_t n_vertices = cur_area_map.vertices.size();
-    min_x = max_x = cur_area_map.vertices[0].x;
-    min_y = max_y = cur_area_map.vertices[0].y;
+    min_x = max_x = cur_area_map.vertices[0]->x;
+    min_y = max_y = cur_area_map.vertices[0]->y;
     
     for(size_t v = 0; v < n_vertices; v++) {
-        vertex* v_ptr = &cur_area_map.vertices[v];
+        vertex* v_ptr = cur_area_map.vertices[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
         min_y = min(v_ptr->y, min_y);
@@ -199,7 +243,7 @@ void generate_area_images() {
     
     area_x1 = min_x; area_y1 = min_y;
     
-    //Create the new areas on the vectors.
+    //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
     float area_height = max_y - min_y;
     unsigned area_image_cols = ceil(area_width / AREA_IMAGE_SIZE);
@@ -215,17 +259,19 @@ void generate_area_images() {
     
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; s++) {
-        size_t n_linedefs = cur_area_map.sectors[s].linedefs.size();
+        size_t n_linedefs = cur_area_map.sectors[s]->linedefs.size();
         if(n_linedefs == 0) continue;
+        
+        vector<triangle> triangles = triangulate(cur_area_map.sectors[s]);
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
-        s_min_x = s_max_x = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[0]].vertex1_nr].x;
-        s_min_y = s_max_y = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[0]].vertex1_nr].y;
+        s_min_x = s_max_x = cur_area_map.sectors[s]->linedefs[0]->vertices[0]->x;
+        s_min_y = s_max_y = cur_area_map.sectors[s]->linedefs[0]->vertices[0]->y;
         
         for(size_t l = 1; l < n_linedefs; l++) { //Start at 1, because we already have the first linedef's values.
-            float x = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[l]].vertex1_nr].x;
-            float y = cur_area_map.vertices[cur_area_map.linedefs[cur_area_map.sectors[s].linedefs[l]].vertex1_nr].y;
+            float x = cur_area_map.sectors[s]->linedefs[l]->vertices[0]->x;
+            float y = cur_area_map.sectors[s]->linedefs[l]->vertices[0]->y;
             
             s_min_x = min(x, s_min_x);
             s_max_x = max(x, s_max_x);
@@ -243,7 +289,7 @@ void generate_area_images() {
                 ALLEGRO_BITMAP* current_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
-                    draw_sector(cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
+                    draw_sector(triangles, cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
                     
                 } al_set_target_bitmap(current_target_bmp);
             }
@@ -339,18 +385,18 @@ void load_area(const string name) {
     for(size_t v = 0; v < n_vertices; v++) {
         data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
         vector<string> words = split(vertex_data->value);
-        if(words.size() == 2) cur_area_map.vertices.push_back(vertex(tof(words[0]), tof(words[1])));
+        if(words.size() == 2) cur_area_map.vertices.push_back(new vertex(tof(words[0]), tof(words[1])));
     }
     
     size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
     for(size_t l = 0; l < n_linedefs; l++) {
         data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
-        linedef new_linedef = linedef();
+        linedef* new_linedef = new linedef();
         
-        new_linedef.back_sector_nr = toi(linedef_data->get_child_by_name("back_sector")->value);
-        new_linedef.front_sector_nr = toi(linedef_data->get_child_by_name("front_sector")->value);
-        new_linedef.vertex1_nr = toi(linedef_data->get_child_by_name("v1")->value);
-        new_linedef.vertex2_nr = toi(linedef_data->get_child_by_name("v2")->value);
+        new_linedef->sector_nrs[0] = toi(linedef_data->get_child_by_name("front_sector")->value);
+        new_linedef->sector_nrs[1] = toi(linedef_data->get_child_by_name("back_sector")->value);
+        new_linedef->vertex_nrs[0] = toi(linedef_data->get_child_by_name("v1")->value);
+        new_linedef->vertex_nrs[1] = toi(linedef_data->get_child_by_name("v2")->value);
         
         cur_area_map.linedefs.push_back(new_linedef);
     }
@@ -358,24 +404,25 @@ void load_area(const string name) {
     size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
     for(size_t s = 0; s < n_sectors; s++) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
-        sector new_sector = sector();
+        sector* new_sector = new sector();
         
-        size_t n_floors = sector_data->get_nr_of_children_by_name("floor");
+        new_sector->brightness = tof(sector_data->get_child_by_name("brightness")->get_value_or_default("224"));
+        new_sector->z = tof(sector_data->get_child_by_name("z")->value);
+        
+        size_t n_floors = sector_data->get_nr_of_children_by_name("texture");
         if(n_floors > 2) n_floors = 2;
-        for(size_t f = 0; f < n_floors; f++) {  //ToDo this is not the way to do it.
-            data_node* floor_data = sector_data->get_child_by_name("floor", f);
-            floor_info new_floor = floor_info();
+        for(size_t t = 0; t < n_floors; t++) {
+            data_node* floor_data = sector_data->get_child_by_name("texture", t);
+            sector_texture new_floor = sector_texture();
             
-            new_floor.brightness = tof(floor_data->get_child_by_name("brightness")->get_value_or_default("1"));
             new_floor.rot = tof(floor_data->get_child_by_name("texture_rotate")->value);
             new_floor.scale = tof(floor_data->get_child_by_name("texture_scale")->value);
             new_floor.trans_x = tof(floor_data->get_child_by_name("texture_trans_x")->value);
             new_floor.trans_y = tof(floor_data->get_child_by_name("texture_trans_y")->value);
-            new_floor.texture = load_bmp("Textures/" + floor_data->get_child_by_name("texture")->value, floor_data);  //ToDo don't load it every time.
-            new_floor.z = tof(floor_data->get_child_by_name("z")->value);
+            new_floor.bitmap = load_bmp("Textures/" + floor_data->get_child_by_name("file")->value, floor_data);  //ToDo don't load it every time.
             //ToDo terrain sound.
             
-            new_sector.floors[f] = new_floor;
+            new_sector->textures[t] = new_floor;
         }
         
         //ToDo missing things.
@@ -402,7 +449,7 @@ void load_area(const string name) {
             if(enemy_types.find(et) != enemy_types.end()) {
                 create_mob(new enemy(
                                x, y,
-                               &cur_area_map.sectors[0], //ToDo
+                               cur_area_map.sectors[0], //ToDo
                                enemy_types[et]
                            ));
                            
@@ -414,7 +461,7 @@ void load_area(const string name) {
             if(leader_types.find(lt) != leader_types.end()) {
                 create_mob(new leader(
                                x, y,
-                               &cur_area_map.sectors[0], //ToDo
+                               cur_area_map.sectors[0], //ToDo
                                leader_types[lt]
                            ));
                            
@@ -424,7 +471,7 @@ void load_area(const string name) {
         
             create_mob(new ship(
                            x, y,
-                           &cur_area_map.sectors[0] //ToDo
+                           cur_area_map.sectors[0] //ToDo
                        ));
                        
         } else if(mob_node->name == "onion") {
@@ -433,7 +480,7 @@ void load_area(const string name) {
             if(onion_types.find(ot) != onion_types.end()) {
                 create_mob(new onion(
                                x, y,
-                               &cur_area_map.sectors[0], //ToDo
+                               cur_area_map.sectors[0], //ToDo
                                onion_types[ot]
                            ));
                            
@@ -445,7 +492,7 @@ void load_area(const string name) {
             if(treasure_types.find(tt) != treasure_types.end()) {
                 create_mob(new treasure(
                                x, y,
-                               &cur_area_map.sectors[0], //ToDo
+                               cur_area_map.sectors[0], //ToDo
                                treasure_types[tt]
                            ));
                            
@@ -461,12 +508,25 @@ void load_area(const string name) {
     
     
     //Set up stuff.
+    //ToDo error checking.
     for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
-        linedef* l_ptr = &cur_area_map.linedefs[l];
-        cur_area_map.sectors[l_ptr->front_sector_nr].linedefs.push_back(l);
+        linedef* l_ptr = cur_area_map.linedefs[l];
+        cur_area_map.sectors[l_ptr->sector_nrs[0]]->linedef_nrs.push_back(l);
+        if(l_ptr->sector_nrs[1] != l_ptr->sector_nrs[0] && l_ptr->sector_nrs[1] != string::npos) {
+            cur_area_map.sectors[l_ptr->sector_nrs[1]]->linedef_nrs.push_back(l);
+        }
         
-        l_ptr->vertex1 = &cur_area_map.vertices[l_ptr->vertex1_nr];
-        l_ptr->vertex2 = &cur_area_map.vertices[l_ptr->vertex2_nr];
+        cur_area_map.vertices[l_ptr->vertex_nrs[0]]->linedef_nrs.push_back(l);
+        cur_area_map.vertices[l_ptr->vertex_nrs[1]]->linedef_nrs.push_back(l);
+        
+        l_ptr->fix_pointers(cur_area_map);
+    }
+    
+    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        cur_area_map.sectors[s]->fix_pointers(cur_area_map);
+    }
+    for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+        cur_area_map.vertices[v]->fix_pointers(cur_area_map);
     }
 }
 
@@ -697,6 +757,15 @@ void move_point(const float x, const float y, const float tx, const float ty, co
         if(my) *my = 0;
         if(reached) *reached = true;
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Normalizes an angle so that it's between 0 and M_PI * 2.
+ */
+float normalize_angle(float a) {
+    a = fmod((double) a, M_PI * 2);
+    if(a < 0) a += 360;
+    return a;
 }
 
 /* ----------------------------------------------------------------------------

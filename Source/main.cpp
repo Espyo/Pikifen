@@ -114,8 +114,57 @@ int main(int argc, char**) {
     } al_set_target_backbuffer(display);
     
     
+    int font_ranges[] = {
+        0x0020, 0x007F, //ASCII
+    };
+    int counter_font_ranges[] = {
+        0x002D, 0x002D, //Dash
+        0x002F, 0x0039, //Slash and numbers
+        0x0078, 0x0078, //x
+    };
+    int value_font_ranges[] = {
+        0x0024, 0x0024, //Dollar sign
+        0x002D, 0x002D, //Dash
+        0x0030, 0x0039, //Numbers
+    };
+    
+    ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
+    if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+    al_destroy_bitmap(temp_font_bitmap);
+    
+    temp_font_bitmap = load_bmp("Area_name_font.png");
+    if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+    al_destroy_bitmap(temp_font_bitmap);
+    
+    temp_font_bitmap = load_bmp("Counter_font.png");
+    if(temp_font_bitmap) font_counter = al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
+    al_destroy_bitmap(temp_font_bitmap);
+    
+    temp_font_bitmap = load_bmp("Value_font.png");
+    if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
+    al_destroy_bitmap(temp_font_bitmap);
+    
+    font_h = al_get_font_line_height(font);
+    font_counter_h = al_get_font_line_height(font_counter);
+    
+    info_spot_mob_type = new mob_type();
+    info_spot_mob_type->name = "Info spot";
+    info_spot_mob_type->size = 32;
+    
+    nectar_mob_type = new mob_type();
+    nectar_mob_type->name = "Nectar";
+    nectar_mob_type->always_active = true;
+    nectar_mob_type->size = 16;
+    
+    ship_mob_type = new mob_type();
+    ship_mob_type->name = "Ship";
+    ship_mob_type->always_active = true;
+    ship_mob_type->size = 140;
+    
+    
     cur_screen = SCREEN_GAME;
-    if(argc > 1) cur_screen = SCREEN_ANIMATION_EDITOR;
+    if(argc == 2) cur_screen = SCREEN_ANIMATION_EDITOR;
+    else if(argc == 3) cur_screen = SCREEN_AREA_EDITOR;
     
     if(cur_screen == SCREEN_GAME) {
     
@@ -154,39 +203,6 @@ int main(int argc, char**) {
         bmp_us_spray = load_bmp(            "Ultra-spicy_spray.png");
         
         bmp_test = load_bmp("Test.png");
-        
-        int font_ranges[] = {
-            0x0020, 0x007F, //ASCII
-        };
-        int counter_font_ranges[] = {
-            0x002D, 0x002D, //Dash
-            0x002F, 0x0039, //Slash and numbers
-            0x0078, 0x0078, //x
-        };
-        int value_font_ranges[] = {
-            0x0024, 0x0024, //Dollar sign
-            0x002D, 0x002D, //Dash
-            0x0030, 0x0039, //Numbers
-        };
-        
-        ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
-        if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
-        al_destroy_bitmap(temp_font_bitmap);
-        
-        temp_font_bitmap = load_bmp("Area_name_font.png");
-        if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
-        al_destroy_bitmap(temp_font_bitmap);
-        
-        temp_font_bitmap = load_bmp("Counter_font.png");
-        if(temp_font_bitmap) font_counter = al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
-        al_destroy_bitmap(temp_font_bitmap);
-        
-        temp_font_bitmap = load_bmp("Value_font.png");
-        if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
-        al_destroy_bitmap(temp_font_bitmap);
-        
-        font_h = al_get_font_line_height(font);
-        font_counter_h = al_get_font_line_height(font_counter);
         
         al_set_display_icon(display, bmp_icon);
         
@@ -228,24 +244,10 @@ int main(int argc, char**) {
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) { o->second = 0; }
         
         //ToDo
-        info_spot_mob_type = new mob_type();
-        info_spot_mob_type->name = "Info spot";
-        info_spot_mob_type->size = 32;
-        
-        nectar_mob_type = new mob_type();
-        nectar_mob_type->name = "Nectar";
-        nectar_mob_type->always_active = true;
-        nectar_mob_type->size = 16;
-        
-        ship_mob_type = new mob_type();
-        ship_mob_type->name = "Ship";
-        ship_mob_type->always_active = true;
-        ship_mob_type->size = 140;
-        
         //Some temp variables.
         sector s = sector();
         /*test_sector = sector();
-        test_sector.floors[0].z = 100;
+        test_sector.z = 100;
         test_sector.floors[0].texture = bmp_test;
         
         test_linedefs.push_back(linedef(0, 0, 0, 0, 0, 0));
@@ -312,6 +314,8 @@ int main(int argc, char**) {
         al_show_mouse_cursor(display);
         if(cur_screen == SCREEN_ANIMATION_EDITOR) {
             animation_editor::load();
+        } else if(cur_screen == SCREEN_AREA_EDITOR) {
+            area_editor::load();
         }
     }
     
@@ -331,7 +335,7 @@ int main(int argc, char**) {
         if(cur_screen == SCREEN_GAME) {
             handle_game_controls(ev);
         } else if(cur_screen == SCREEN_AREA_EDITOR) {
-            area_editor::handle_area_editor_controls(ev);
+            area_editor::handle_controls(ev);
         } else if(cur_screen == SCREEN_ANIMATION_EDITOR) {
             animation_editor::handle_controls(ev);
         }
@@ -352,7 +356,7 @@ int main(int argc, char**) {
                 do_logic();
                 do_drawing();
             } else if(cur_screen == SCREEN_AREA_EDITOR) {
-                area_editor::do_area_editor_logic();
+                area_editor::do_logic();
             } else if(cur_screen == SCREEN_ANIMATION_EDITOR) {
                 animation_editor::do_logic();
             }

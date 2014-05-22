@@ -74,13 +74,13 @@ mob::mob(const float x, const float y, const float z, mob_type* t, sector* sec) 
  */
 void mob::tick() {
     //Movement.
-    bool was_airborne = z > sec->floors[0].z;
+    bool was_airborne = z > sec->z;
     x += delta_t* speed_x;
     y += delta_t* speed_y;
     z += delta_t* speed_z;
     
-    if(z <= sec->floors[0].z) {
-        z = sec->floors[0].z;
+    if(z <= sec->z) {
+        z = sec->z;
         if(was_airborne) {
             speed_x = 0;
             speed_y = 0;
@@ -90,7 +90,7 @@ void mob::tick() {
     }
     
     //Gravity.
-    if(z > sec->floors[0].z && affected_by_gravity) {
+    if(z > sec->z && affected_by_gravity) {
         speed_z += delta_t* (GRAVITY_ADDER);
     }
     

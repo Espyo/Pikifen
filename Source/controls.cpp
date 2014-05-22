@@ -213,7 +213,7 @@ void handle_button(const unsigned int button, float pos) {
                     for(size_t i = 0; i < n_info_spots; i++) {
                         info_spot* i_ptr = info_spots[i];
                         if(i_ptr->opens_box) {
-                            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) < INFO_SPOT_TRIGGER_RANGE) {
+                            if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y, INFO_SPOT_TRIGGER_RANGE)) {
                                 start_message(i_ptr->text, NULL);
                                 done = true;
                                 break;
@@ -227,7 +227,7 @@ void handle_button(const unsigned int button, float pos) {
                     //ToDo
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; o++) {
-                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) < MIN_ONION_CHECK_RANGE) {
+                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y, MIN_ONION_CHECK_RANGE)) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
                                 //ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
@@ -243,7 +243,7 @@ void handle_button(const unsigned int button, float pos) {
                 if(!done) {
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; s++) {
-                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y) < SHIP_BEAM_RANGE) {
+                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE)) {
                             //ToDo make it prettier.
                             cur_leader_ptr->health = cur_leader_ptr->type->max_health;
                             done = true;

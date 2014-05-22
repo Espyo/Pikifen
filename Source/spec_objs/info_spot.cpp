@@ -19,7 +19,7 @@
  * Creates an info spot.
  */
 info_spot::info_spot(float x, float y, sector* sec, string text, bool opens_box)
-    : mob(x, y, sec->floors[0].z, info_spot_mob_type, sec) {
+    : mob(x, y, sec->z, info_spot_mob_type, sec) {
     
     this->text = text;
     this->opens_box = opens_box;

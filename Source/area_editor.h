@@ -15,8 +15,11 @@
 #include <allegro5/allegro.h>
 
 namespace area_editor {
-void do_area_editor_logic();
-void handle_area_editor_controls(ALLEGRO_EVENT ev);
+void change_to_right_frame();
+void do_logic();
+void handle_controls(ALLEGRO_EVENT ev);
+void load();
+float snap_to_grid(const float c);
 };
 
 #endif //ifndef AREA_EDITOR_INCLUDED

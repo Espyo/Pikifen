@@ -74,7 +74,7 @@ bool interval::is_number_in_interval(const float n) {
             if(s_ptr->divisor == 0) return true;
             
             float modulus_begin = ((s_ptr->lower == FLT_MIN) ? 0 : s_ptr->lower);
-            if(mod(n - modulus_begin, s_ptr->divisor) == 0) {
+            if(fmod(n - modulus_begin, s_ptr->divisor) == 0) {
                 return true;
             }
         }

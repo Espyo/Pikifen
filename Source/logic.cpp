@@ -310,10 +310,10 @@ void do_logic() {
                 pik_ptr->state != PIKMIN_STATE_BURIED &&
                 !pik_ptr->speed_z &&
                 !pik_ptr->being_chomped;
-            bool whistled = (dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y) <= whistle_radius && whistling && pik_ptr->unwhistlable_period == 0);
+            bool whistled = check_dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y, whistle_radius) && whistling && pik_ptr->unwhistlable_period == 0;
             bool touched =
-                dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y) <=
-                pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5 &&
+                check_dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y,
+                           pik_ptr->type->size * 0.5 + cur_leader_ptr->type->size * 0.5) &&
                 !cur_leader_ptr->carrier_info &&
                 cur_leader_ptr->state != MOB_STATE_BEING_DELIVERED &&
                 pik_ptr->untouchable_period == 0;
@@ -357,7 +357,7 @@ void do_logic() {
                 pik_ptr->maturity != 2
             ) {
                 for(size_t n = 0; n < n_nectars; n++) {
-                    if(dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y) <= nectars[n]->type->size * 0.5 + pik_ptr->type->size * 0.5) {
+                    if(check_dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y, nectars[n]->type->size * 0.5 + pik_ptr->type->size * 0.5)) {
                         if(nectars[n]->amount_left > 0)
                             nectars[n]->amount_left--;
                             
@@ -374,7 +374,7 @@ void do_logic() {
                     mob* mob_ptr = mobs[m];
                     if(mob_ptr->dead) continue;
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
-                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5) continue;
+                    if(!check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5)) continue;
                     if(pik_ptr->z > mob_ptr->z + 100) continue; //ToDo this isn't taking height into account.
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
@@ -419,7 +419,7 @@ void do_logic() {
                     
                     if(mob_ptr->dead) continue;
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
-                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) > pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range) continue;
+                    if(!check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range)) continue;
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
@@ -451,7 +451,7 @@ void do_logic() {
                     if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; //No more room.
                     if(mob_ptr->state == MOB_STATE_BEING_DELIVERED) continue;
                     
-                    if(dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y) <= pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range) {
+                    if(check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->size * 0.5 + mob_ptr->type->size * 0.5 + task_range)) {
                         pik_ptr->wants_to_carry = mob_ptr;
                         remove_from_party(pik_ptr);
                         pik_ptr->set_state(PIKMIN_STATE_MOVING_TO_CARRY_SPOT);
@@ -531,7 +531,7 @@ void do_logic() {
                         pik_ptr->anim.change(PIKMIN_ANIM_ATTACK, true, true, false);
                         
                     } else {
-                        if(dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy) <= pik_ptr->type->size * 0.5 + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE) {
+                        if(check_dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy, pik_ptr->type->size * 0.5 + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE)) {
                             pik_ptr->remove_target(true);
                             pik_ptr->face(atan2(actual_hy - pik_ptr->y, actual_hx - pik_ptr->x));
                             if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
@@ -582,7 +582,7 @@ void do_logic() {
                     float h_x = m_ptr->x + (hi_ptr->x * c - hi_ptr->y * s);
                     float h_y = m_ptr->y + (hi_ptr->x * s + hi_ptr->y * c);
                     
-                    if(dist(pik_ptr->x, pik_ptr->y, h_x, h_y) <= pik_ptr->type->size / 2 + hi_ptr->radius) {
+                    if(check_dist(pik_ptr->x, pik_ptr->y, h_x, h_y, pik_ptr->type->size / 2 + hi_ptr->radius)) {
                         hitbox* h_ptr = hi_ptr->hitbox_ptr;
                         size_t h_nr = hi_ptr->hitbox_nr;
                         
@@ -667,7 +667,7 @@ void do_logic() {
             leader* l_ptr = leaders[l];
             if(whistling) {
                 if(l != cur_leader_nr) {
-                    if(dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
+                    if(check_dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y, whistle_radius)) {
                     
                         stop_auto_pluck(l_ptr);
                         

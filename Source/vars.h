@@ -160,6 +160,7 @@ extern float                 ed_cur_frame_time;
 extern hitbox*               ed_cur_hitbox;
 extern float                 ed_cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
 extern size_t                ed_cur_hitbox_instance_nr;
+extern float                 ed_double_click_time;
 extern string                ed_filename;
 extern size_t                ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                  ed_grabbing_hitbox_edge;
@@ -171,9 +172,13 @@ extern bool                  ed_holding_m2;
 extern unsigned char         ed_maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
 extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char         ed_mode;
+extern size_t                ed_moving_vertex;
 extern float                 ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                 ed_new_hitbox_corner_y;
+extern bool                  ed_new_sector_mode;
 extern string                ed_object_name;
+extern polygon               ed_temp_o; //ToDo remove me.
+extern vector<polygon>       ed_temp_i;
 extern ALLEGRO_BITMAP*       ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
 extern map<string, enemy_type*>
 enemy_types;

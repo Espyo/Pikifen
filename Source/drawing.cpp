@@ -80,11 +80,11 @@ void do_drawing() {
         }
         
         for(size_t l = 0; l < n_leaders; l++) {
-            draw_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->sec->floors[0].z, shadow_stretch);
+            draw_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->sec->z, shadow_stretch);
         }
         
         for(size_t p = 0; p < n_pikmin; p++) {
-            draw_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->sec->floors[0].z, shadow_stretch);
+            draw_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->sec->z, shadow_stretch);
         }
         
         
@@ -359,7 +359,7 @@ void do_drawing() {
             for(size_t p = 1; p < cursor_spots.size(); p++) {
                 point* p_ptr = &cursor_spots[p];
                 point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
-                if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
+                if((*p_ptr) != (*pp_ptr) && !check_dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y, 4)) {
                     al_draw_line(
                         p_ptr->x, p_ptr->y,
                         pp_ptr->x, pp_ptr->y,
@@ -421,7 +421,7 @@ void do_drawing() {
         
         //Info spots.
         for(size_t i = 0; i < n_info_spots; i++) {
-            if(dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
+            if(check_dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y, INFO_SPOT_TRIGGER_RANGE)) {
                 string text;
                 if(!info_spots[i]->opens_box)
                     text = info_spots[i]->text;
@@ -940,33 +940,29 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
 
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
- * s:   The sector to draw.
- * x/y: Top-left coordinates.
+ * vertices: Vertices that make up the triangles of the sector.
+ * s:        The sector to draw.
+ * x, y:     Top-left coordinates.
  */
-void draw_sector(sector &s, const float x, const float y) {
-    ALLEGRO_VERTEX vs[200]; //ToDo 200?
-    size_t n_linedefs = s.linedefs.size();
-    unsigned char current_floor;
-    unsigned char floors_to_draw;
+void draw_sector(const vector<triangle> &triangles, sector* s, const float x, const float y) {
+    ALLEGRO_VERTEX av[200]; //ToDo 200?
+    size_t n_vertices = triangles.size() * 3;
     
-    current_floor = (s.floors[0].z > s.floors[1].z) ? 1 : 0;
-    floors_to_draw = (s.floors[0].z == s.floors[1].z) ? 1 : 2;  //ToDo remove this check?
+    //ToDo floors don't work like this.
     
-    for(unsigned char f = 0; f < floors_to_draw; f++) {
+    for(unsigned char t = 0; t < 1; t++) {
     
-        for(size_t l = 0; l < n_linedefs; l++) {
-            linedef* l_ptr = &cur_area_map.linedefs[s.linedefs[l]];
-            vs[l].x = l_ptr->vertex1->x - x;
-            vs[l].y = l_ptr->vertex1->y - y;
-            vs[l].u = l_ptr->vertex2->x;
-            vs[l].v = l_ptr->vertex2->y;
-            vs[l].z = 0;
-            vs[l].color = al_map_rgba_f(s.floors[current_floor].brightness, s.floors[current_floor].brightness, s.floors[current_floor].brightness, 1);
+        for(size_t v = 0; v < n_vertices; v++) {
+            const triangle* t_ptr = &triangles[floor(v / 3.0)];
+            av[v].x = t_ptr->points[v % 3]->x - x;
+            av[v].y = t_ptr->points[v % 3]->y - y;
+            av[v].u = t_ptr->points[v % 3]->x;
+            av[v].v = t_ptr->points[v % 3]->y;
+            av[v].z = 0;
+            av[v].color = al_map_rgba_f(s->brightness, s->brightness, s->brightness, 1);
         }
         
-        al_draw_prim(vs, NULL, s.floors[current_floor].texture, 0, n_linedefs, ALLEGRO_PRIM_TRIANGLE_FAN);
-        
-        current_floor = (current_floor == 1) ? 0 : 1;
+        al_draw_prim(av, NULL, s->textures[t].bitmap, 0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST);
         
     }
     

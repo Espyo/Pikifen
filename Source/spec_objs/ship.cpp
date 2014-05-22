@@ -16,6 +16,6 @@
  * Creates a ship.
  */
 ship::ship(float x, float y, sector* sec)
-    : mob(x, y, sec->floors[0].z, ship_mob_type, sec) {
+    : mob(x, y, sec->z, ship_mob_type, sec) {
     
 }
