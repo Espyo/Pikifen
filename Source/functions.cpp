@@ -66,7 +66,7 @@ bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check)
  * cr:     Radius of the circle.
  * x*, y*: Coordinates of the line.
  */
-bool circle_touches_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2) {
+bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2) {
 
     //Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
     
@@ -263,7 +263,7 @@ void generate_area_images() {
         size_t n_linedefs = cur_area_map.sectors[s]->linedefs.size();
         if(n_linedefs == 0) continue;
         
-        vector<triangle> triangles = triangulate(cur_area_map.sectors[s]);
+        vector<triangle> triangles = triangulate(cur_area_map.sectors[s], s); //ToDo don't do it like this.
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
@@ -394,10 +394,16 @@ void load_area(const string name) {
         data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
         linedef* new_linedef = new linedef();
         
-        new_linedef->sector_nrs[0] = toi(linedef_data->get_child_by_name("front_sector")->value);
-        new_linedef->sector_nrs[1] = toi(linedef_data->get_child_by_name("back_sector")->value);
-        new_linedef->vertex_nrs[0] = toi(linedef_data->get_child_by_name("v1")->value);
-        new_linedef->vertex_nrs[1] = toi(linedef_data->get_child_by_name("v2")->value);
+        vector<string> s_nrs = split(linedef_data->get_child_by_name("s")->value);
+        if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "0");
+        new_linedef->sector_nrs[0] = toi(s_nrs[0]);
+        new_linedef->sector_nrs[1] = toi(s_nrs[1]);
+        
+        vector<string> v_nrs = split(linedef_data->get_child_by_name("v")->value);
+        if(v_nrs.size() < 2) v_nrs.insert(v_nrs.end(), 2, "0");
+        
+        new_linedef->vertex_nrs[0] = toi(v_nrs[0]);
+        new_linedef->vertex_nrs[1] = toi(v_nrs[1]);
         
         cur_area_map.linedefs.push_back(new_linedef);
     }
@@ -510,23 +516,23 @@ void load_area(const string name) {
     //Set up stuff.
     //ToDo error checking.
     for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
-        linedef* l_ptr = cur_area_map.linedefs[l];
-        cur_area_map.sectors[l_ptr->sector_nrs[0]]->linedef_nrs.push_back(l);
-        if(l_ptr->sector_nrs[1] != l_ptr->sector_nrs[0] && l_ptr->sector_nrs[1] != string::npos) {
-            cur_area_map.sectors[l_ptr->sector_nrs[1]]->linedef_nrs.push_back(l);
-        }
-        
-        cur_area_map.vertices[l_ptr->vertex_nrs[0]]->linedef_nrs.push_back(l);
-        cur_area_map.vertices[l_ptr->vertex_nrs[1]]->linedef_nrs.push_back(l);
-        
-        l_ptr->fix_pointers(cur_area_map);
+        cur_area_map.linedefs[l]->fix_pointers(cur_area_map);
     }
-    
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
-        cur_area_map.sectors[s]->fix_pointers(cur_area_map);
+        cur_area_map.sectors[s]->connect_linedefs(cur_area_map, s);
     }
     for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
-        cur_area_map.vertices[v]->fix_pointers(cur_area_map);
+        cur_area_map.vertices[v]->connect_linedefs(cur_area_map, v);
+    }
+    
+    //Triangulate everything.
+    cur_area_map.triangles.clear();
+    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        vector<triangle> t = triangulate(cur_area_map.sectors[s], s);
+        cur_area_map.triangles.insert(
+            cur_area_map.triangles.end(),
+            t.begin(), t.end()
+        );
     }
 }
 

@@ -97,6 +97,27 @@ void lafi_scrollbar::move_button(int x, int y) {
     if(change_handler) change_handler(this);
 }
 
+void lafi_scrollbar::set_value(float new_low) {
+    float dif = high_value - low_value;
+    if(new_low < min || new_low + dif > max) return;
+    
+    low_value = new_low;
+    high_value = new_low + dif;
+    
+    lafi_button* but = (lafi_button*) widgets["but_bar"];
+    float ratio = (low_value - min) / (max - min - dif);
+    
+    if(vertical) {
+        int but_h = but->y2 - but->y1;
+        but->y1 = y1 + ratio * ((y2 - y1) - but_h);
+        but->y2 = but->y1 + but_h;
+    } else {
+        int but_w = but->x2 - but->x1;
+        but->x1 = x1 + ratio * ((x2 - x1) - but_w);
+        but->x2 = but->x1 + but_w;
+    }
+}
+
 void lafi_scrollbar::draw_self() {
     int w = x2 - x1;
     int h = y2 - y1;

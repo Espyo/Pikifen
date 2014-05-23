@@ -16,7 +16,7 @@ public:
     void init();
     void draw_self();
     
-    void (*change_handler)(lafi_widget* w);
+    function<void(lafi_widget* w)> change_handler;
     
     void widget_on_mouse_down(int button, int x, int y);
     void widget_on_mouse_move(int x, int y);
@@ -25,6 +25,7 @@ public:
     void make_widget_scroll(lafi_widget* widget);
     static void widget_scroller(lafi_widget* w);
     void move_button(int x, int y);
+    void set_value(float new_low);
     void create_button();
 };
 

@@ -16,6 +16,7 @@
 #include "area_editor.h"
 #include "functions.h"
 #include "LAFI/button.h"
+#include "LAFI/checkbox.h"
 #include "LAFI/frame.h"
 #include "LAFI/gui.h"
 #include "LAFI/scrollbar.h"
@@ -26,11 +27,14 @@ void area_editor::change_to_right_frame() {
     hide_widget(ed_gui->widgets["frm_main"]);
     hide_widget(ed_gui->widgets["frm_picker"]);
     hide_widget(ed_gui->widgets["frm_sectors"]);
+    hide_widget(ed_gui->widgets["frm_bg"]);
     
     if(ed_mode == EDITOR_MODE_MAIN) {
         show_widget(ed_gui->widgets["frm_main"]);
     } else if(ed_mode == EDITOR_MODE_SECTORS) {
         show_widget(ed_gui->widgets["frm_sectors"]);
+    } else if(ed_mode == EDITOR_MODE_BG) {
+        show_widget(ed_gui->widgets["frm_bg"]);
     }
 }
 
@@ -190,6 +194,18 @@ void area_editor::do_logic() {
             );
         }*/
         
+        if(ed_bg_bitmap) {
+            al_draw_tinted_scaled_bitmap(
+                ed_bg_bitmap,
+                al_map_rgba(255, 255, 255, ed_bg_a),
+                0, 0,
+                al_get_bitmap_width(ed_bg_bitmap), al_get_bitmap_height(ed_bg_bitmap),
+                ed_bg_x, ed_bg_y,
+                ed_bg_w, ed_bg_h,
+                0
+            );
+        }
+        
     } al_reset_clipping_rectangle();
     
     ALLEGRO_TRANSFORM id_transform;
@@ -216,7 +232,43 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-        if(ed_holding_m2) {
+        if(ed_sec_mode == EDITOR_SEC_MODE_BG_MOUSE) {
+        
+            if(ed_holding_m1) {
+                ed_bg_x += ev.mouse.dx / cam_zoom;
+                ed_bg_y += ev.mouse.dy / cam_zoom;
+                
+            } else if(ed_holding_m2) {
+            
+                float new_w = ed_bg_w + ev.mouse.dx / cam_zoom;
+                float new_h = ed_bg_h + ev.mouse.dy / cam_zoom;
+                
+                if(ed_bg_aspect_ratio) {
+                    //Find the most significant change.
+                    if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
+                        bool most_is_width = fabs((double) ev.mouse.dx) > fabs((double) ev.mouse.dy);
+                        
+                        
+                        if(most_is_width) {
+                            float ratio = ed_bg_h / ed_bg_w;
+                            ed_bg_w = new_w;
+                            ed_bg_h = new_w * ratio;
+                        } else {
+                            float ratio = ed_bg_w / ed_bg_h;
+                            ed_bg_h = new_h;
+                            ed_bg_w = new_h * ratio;
+                        }
+                    }
+                } else {
+                    ed_bg_w = new_w;
+                    ed_bg_h = new_h;
+                }
+                
+            }
+            
+            load_bg_to_gui();
+            
+        } else if(ed_holding_m2) {
             cam_x += ev.mouse.dx / cam_zoom;
             cam_y += ev.mouse.dy / cam_zoom;
         }
@@ -243,10 +295,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-        if(ev.mouse.button == 2) ed_holding_m2 = true;
-        if(ev.mouse.button != 1) return;
+        if(ev.mouse.button == 1) ed_holding_m1 = true;
+        else if(ev.mouse.button == 2) ed_holding_m2 = true;
+        else if(ev.mouse.button != 1) return;
         
-        else if(ev.mouse.button == 1) {
+        if(ev.mouse.button == 1 && ed_sec_mode == EDITOR_SEC_MODE_NONE) {
             if(ev.mouse.x < scr_w - 208) {
             
                 //Find a vertex to drag.
@@ -268,10 +321,56 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         if(ed_new_sector_mode) {
         
+            //Place a new sector where the cursor is.
             ed_new_sector_mode = false;
+            float hotspot_x = snap_to_grid(mouse_cursor_x);
+            float hotspot_y = snap_to_grid(mouse_cursor_y);
+            size_t outer_sector_nr;
+            sector* outer_sector = get_sector(hotspot_x, hotspot_y, &outer_sector_nr);
+            
+            sector* new_sector = new sector();
+            if(outer_sector) {
+                //ToDo missing attributes.
+                new_sector->brightness = outer_sector->brightness;
+                new_sector->textures[0] = outer_sector->textures[0];
+                new_sector->textures[1] = outer_sector->textures[1];
+                new_sector->type = outer_sector->type;
+                new_sector->z = outer_sector->z;
+            }
+            
+            vertex* new_vertices[4];
+            for(size_t v = 0; v < 4; v++) new_vertices[v] = new vertex(0, 0);
+            new_vertices[0]->x = hotspot_x - 32;
+            new_vertices[0]->y = hotspot_y - 32;
+            new_vertices[1]->x = hotspot_x + 32;
+            new_vertices[1]->y = hotspot_y - 32;
+            new_vertices[2]->x = hotspot_x + 32;
+            new_vertices[2]->y = hotspot_y + 32;
+            new_vertices[3]->x = hotspot_x - 32;
+            new_vertices[3]->y = hotspot_y + 32;
+            for(size_t v = 0; v < 4; v++)cur_area_map.vertices.push_back(new_vertices[v]);
+            
+            linedef* new_linedefs[4];
+            for(size_t l = 0; l < 4; l++) {
+                new_linedefs[l] = new linedef(
+                    cur_area_map.vertices.size() - (4 - l),
+                    cur_area_map.vertices.size() - (4 - ((l + 1) % 4))
+                );
+                new_linedefs[l]->sector_nrs[0] = cur_area_map.sectors.size();
+                new_linedefs[l]->sector_nrs[1] = outer_sector_nr;
+                cur_area_map.linedefs.push_back(new_linedefs[l]);
+            }
+            
+            for(size_t l = 0; l < 4; l++) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
+            
+            cur_area_map.sectors.push_back(new_sector);
+            
+            for(size_t l = 0; l < 4; l++) new_linedefs[l]->fix_pointers(cur_area_map);
+            for(size_t v = 0; v < 4; v++) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
+            new_sector->connect_linedefs(cur_area_map, cur_area_map.sectors.size() - 1);
             
             
-        } else if(ed_moving_vertex == string::npos) {
+        } else if(ed_moving_vertex == string::npos && ed_sec_mode == EDITOR_SEC_MODE_NONE) {
         
             if(ed_double_click_time == 0) ed_double_click_time = 0.5;
             else {
@@ -282,7 +381,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     linedef* l_ptr = cur_area_map.linedefs[l];
                     
                     if(
-                        circle_touches_line(
+                        circle_intersects_line(
                             mouse_cursor_x, mouse_cursor_y, 6,
                             l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
                             l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
@@ -295,7 +394,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         cur_area_map.linedefs.push_back(new_l_ptr);
                         new_l_ptr->vertex_nrs[0] = cur_area_map.vertices.size() - 1;
                         new_l_ptr->vertices[0] = new_v_ptr;
-                        new_l_ptr->sectors[0]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
+                        if(new_l_ptr->sectors[0]) {
+                            new_l_ptr->sectors[0]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
+                            new_l_ptr->sectors[0]->linedefs.push_back(new_l_ptr);
+                        }
+                        if(new_l_ptr->sectors[1]) {
+                            new_l_ptr->sectors[1]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
+                            new_l_ptr->sectors[0]->linedefs.push_back(new_l_ptr);
+                        }
                         
                         l_ptr->vertex_nrs[1] = new_l_ptr->vertex_nrs[0];
                         l_ptr->vertices[1] = new_v_ptr;
@@ -308,9 +414,27 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        if(ev.mouse.button == 2) ed_holding_m2 = false;
-        else if(ev.mouse.button == 1) {
+        if(ev.mouse.button == 1) ed_holding_m1 = false;
+        else if(ev.mouse.button == 2) ed_holding_m2 = false;
+        
+        if(ev.mouse.button == 1 && ed_sec_mode == EDITOR_SEC_MODE_NONE) {
             ed_moving_vertex = string::npos;
+        }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
+        ) {
+            ed_shift_pressed = true;
+        }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+        if(
+            ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
+            ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
+        ) {
+            ed_shift_pressed = false;
         }
     }
 }
@@ -322,9 +446,6 @@ void area_editor::load() {
     ed_mode = EDITOR_MODE_MAIN;
     
     load_area("test"); //ToDo non-fixed name, duh.
-    
-    //ToDo temporary stuff.
-    cur_area_map.triangles = triangulate(cur_area_map.sectors[0]);
     
     lafi_style* s = new lafi_style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
     ed_gui = new lafi_gui(scr_w, scr_h, s);
@@ -346,6 +467,8 @@ void area_editor::load() {
     frm_area->easy_add("but_sectors", new lafi_button(0, 0, 0, 0, "Edit sectors"), 100, 32);
     frm_area->easy_row();
     frm_area->easy_add("but_objects", new lafi_button(0, 0, 0, 0, "Edit objects"), 100, 32);
+    frm_area->easy_row();
+    frm_area->easy_add("but_bg", new lafi_button(0, 0, 0, 0, "Edit background"), 100, 32);
     frm_area->easy_row();
     
     
@@ -384,6 +507,35 @@ void area_editor::load() {
     frm_sectors->easy_row();
     
     
+    //Background frame.
+    lafi_frame* frm_bg = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_bg);
+    ed_gui->add("frm_bg", frm_bg);
+    
+    frm_bg->easy_row();
+    frm_bg->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("lbl_file", new lafi_label(0, 0, 0, 0, "File:"), 30, 16);
+    frm_bg->easy_add("txt_file", new lafi_textbox(0, 0, 0, 0), 70, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 30, 16);
+    frm_bg->easy_add("txt_x", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("txt_y", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("lbl_wh", new lafi_label(0, 0, 0, 0, "W&H:"), 30, 16);
+    frm_bg->easy_add("txt_w", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("txt_h", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("chk_ratio", new lafi_checkbox(0, 0, 0, 0, "Keep aspect ratio"), 100, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("chk_mouse", new lafi_checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("lbl_alpha", new lafi_label(0, 0, 0, 0, "Transparency:"), 100, 16);
+    frm_bg->easy_row();
+    frm_bg->easy_add("bar_alpha", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
+    frm_bg->easy_row();
+    
+    
     //Status bar.
     lafi_label* ed_gui_status_bar = new lafi_label(0, scr_h - 16, scr_w - 208, scr_h);
     ed_gui->add("lbl_status_bar", ed_gui_status_bar);
@@ -394,9 +546,13 @@ void area_editor::load() {
         ed_mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
     };
+    frm_main->widgets["frm_area"]->widgets["but_bg"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_mode = EDITOR_MODE_BG;
+        change_to_right_frame();
+    };
     
     
-    //Properties -- main.
+    //Properties -- sectors.
     frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
@@ -404,11 +560,104 @@ void area_editor::load() {
     frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_new_sector_mode = true;
     };
+    
+    
+    //Properties -- background.
+    auto lambda_save_bg_from_gui = [] (lafi_widget*) { save_bg_from_gui(); };
+    auto lambda_save_bg_from_gui_click = [] (lafi_widget*, int, int) { save_bg_from_gui(); };
+    frm_bg->widgets["txt_file"]->lose_focus_handler = lambda_save_bg_from_gui;
+    frm_bg->widgets["txt_x"]->lose_focus_handler = lambda_save_bg_from_gui;
+    frm_bg->widgets["txt_y"]->lose_focus_handler = lambda_save_bg_from_gui;
+    frm_bg->widgets["txt_w"]->lose_focus_handler = lambda_save_bg_from_gui;
+    frm_bg->widgets["txt_h"]->lose_focus_handler = lambda_save_bg_from_gui;
+    ((lafi_scrollbar*) frm_bg->widgets["bar_alpha"])->change_handler = lambda_save_bg_from_gui;
+    frm_bg->widgets["chk_ratio"]->left_mouse_click_handler = lambda_save_bg_from_gui_click;
+    frm_bg->widgets["chk_mouse"]->left_mouse_click_handler = lambda_save_bg_from_gui_click;
+    frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_mode = EDITOR_MODE_MAIN;
+        change_to_right_frame();
+    };
+    
+    
+    load_bg_to_gui();
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads the background's data from the memory to the gui.
+ */
+void area_editor::load_bg_to_gui() {
+    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_bg"];
+    ((lafi_textbox*) f->widgets["txt_file"])->text = ed_bg_file_name;
+    ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_bg_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_bg_y);
+    ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_bg_w);
+    ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_bg_h);
+    ((lafi_checkbox*) f->widgets["chk_ratio"])->set(ed_bg_aspect_ratio);
+    ((lafi_checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == EDITOR_SEC_MODE_BG_MOUSE);
+    ((lafi_scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a);
+}
+
+/* ----------------------------------------------------------------------------
+ * Saves the background's data from the fields in the gui.
+ */
+void area_editor::save_bg_from_gui() {
+    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_bg"];
+    
+    string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
+    bool is_file_new = false;
+    
+    if(new_file_name != ed_bg_file_name) {
+        //New background image, delete the old one.
+        is_file_new = true;
+        if(ed_bg_bitmap && ed_bg_bitmap != bmp_error) al_destroy_bitmap(ed_bg_bitmap);
+        ed_bg_bitmap = load_bmp(new_file_name);
+        ed_bg_file_name = new_file_name;
+        if(ed_bg_bitmap) {
+            ed_bg_w = al_get_bitmap_width(ed_bg_bitmap);
+            ed_bg_h = al_get_bitmap_height(ed_bg_bitmap);
+        } else {
+            ed_bg_w = 0;
+            ed_bg_h = 0;
+        }
+    }
+    
+    ed_bg_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_bg_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    
+    ed_bg_aspect_ratio = ((lafi_checkbox*) f->widgets["chk_ratio"])->checked;
+    float new_w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
+    float new_h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
+    
+    if(new_w != 0 && new_h != 0 && !is_file_new) {
+        if(ed_bg_aspect_ratio) {
+            if(new_w == ed_bg_w && new_h != ed_bg_h) {
+                float ratio = ed_bg_w / ed_bg_h;
+                ed_bg_h = new_h;
+                ed_bg_w = new_h * ratio;
+            } else if(new_w != ed_bg_w && new_h == ed_bg_h) {
+                float ratio = ed_bg_h / ed_bg_w;
+                ed_bg_w = new_w;
+                ed_bg_h = new_w * ratio;
+            } else {
+                ed_bg_w = new_w;
+                ed_bg_h = new_h;
+            }
+        } else {
+            ed_bg_w = new_w;
+            ed_bg_h = new_h;
+        }
+    }
+    
+    ed_sec_mode = ((lafi_checkbox*) f->widgets["chk_mouse"])->checked ? EDITOR_SEC_MODE_BG_MOUSE : EDITOR_SEC_MODE_NONE;
+    ed_bg_a = ((lafi_scrollbar*) f->widgets["bar_alpha"])->low_value;
+    
+    load_bg_to_gui();
 }
 
 /* ----------------------------------------------------------------------------
  * Snaps a coordinate to the nearest grid space.
  */
 float area_editor::snap_to_grid(const float c) {
+    if(ed_shift_pressed) return c;
     return round(c / 32) * 32;
 }

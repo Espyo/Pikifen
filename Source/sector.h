@@ -97,6 +97,7 @@ struct sector {
     vector<linedef*> linedefs;
     
     sector();
+    void connect_linedefs(area_map &a, size_t s_nr);
     void fix_pointers(area_map &a);
 };
 
@@ -109,7 +110,8 @@ struct sector {
 struct triangle {
     vertex* points[3];
     sector* s_ptr;
-    triangle(vertex* v1, vertex* v2, vertex* v3, sector* s);
+    size_t s_nr;
+    triangle(vertex* v1, vertex* v2, vertex* v3, sector* s_ptr, size_t s_nr);
 };
 
 
@@ -123,6 +125,7 @@ struct vertex {
     vector<linedef*> linedefs;
     
     vertex(float x, float y);
+    void connect_linedefs(area_map &a, size_t v_nr);
     void fix_pointers(area_map &a);
 };
 
@@ -152,11 +155,12 @@ void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t>
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<linedef*, bool> &sides_todo);
 vertex* get_rightmost_vertex(polygon* p);
+sector* get_sector(float x, float y, size_t* sector_nr);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
-bool is_point_in_triangle();
+bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
-vector<triangle> triangulate(sector* s);
+vector<triangle> triangulate(sector* s, size_t s_nr);
 
 
 enum SECTOR_TYPES {

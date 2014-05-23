@@ -10,6 +10,7 @@ public:
     
     void check();
     void uncheck();
+    void set(bool value);
     
     void init();
     

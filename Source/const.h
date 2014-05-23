@@ -117,6 +117,12 @@ enum EDITOR_MODES {
     EDITOR_MODE_TOP,
     //Area editor
     EDITOR_MODE_SECTORS,
+    EDITOR_MODE_BG,
+};
+
+enum EDITOR_SEC_MODES {
+    EDITOR_SEC_MODE_NONE,
+    EDITOR_SEC_MODE_BG_MOUSE, //BG transformation being controlled by mouse.
 };
 
 enum SCREENS {

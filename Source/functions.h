@@ -66,7 +66,7 @@
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
 bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
-bool               circle_touches_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2);
+bool               circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2);
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
 void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> v, const string s);

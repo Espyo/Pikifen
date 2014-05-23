@@ -153,6 +153,14 @@ extern ALLEGRO_DISPLAY*      display;
 extern bool                  draw_cursor_trail;
 extern animation_set         ed_anims;
 extern bool                  ed_anim_playing;
+extern bool                  ed_bg_aspect_ratio;
+extern ALLEGRO_BITMAP*       ed_bg_bitmap;
+extern string                ed_bg_file_name;
+extern float                 ed_bg_x;
+extern float                 ed_bg_y;
+extern float                 ed_bg_w;
+extern float                 ed_bg_h;
+extern unsigned char         ed_bg_a;
 extern animation*            ed_cur_anim;
 extern frame*                ed_cur_frame;
 extern size_t                ed_cur_frame_instance_nr;
@@ -168,6 +176,7 @@ extern float                 ed_grabbing_hitbox_x; //X world coordinate of the p
 extern float                 ed_grabbing_hitbox_y;
 extern lafi_gui*             ed_gui;
 extern bool                  ed_hitboxes_visible;
+extern bool                  ed_holding_m1;
 extern bool                  ed_holding_m2;
 extern unsigned char         ed_maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
 extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
@@ -177,8 +186,8 @@ extern float                 ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                 ed_new_hitbox_corner_y;
 extern bool                  ed_new_sector_mode;
 extern string                ed_object_name;
-extern polygon               ed_temp_o; //ToDo remove me.
-extern vector<polygon>       ed_temp_i;
+extern unsigned char         ed_sec_mode; //Secondary/sub mode.
+extern bool                  ed_shift_pressed;
 extern ALLEGRO_BITMAP*       ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
 extern map<string, enemy_type*>
 enemy_types;

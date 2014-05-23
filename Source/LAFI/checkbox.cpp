@@ -49,6 +49,10 @@ void lafi_checkbox::uncheck() {
     ((lafi_checkbox_box*) widgets["box_square"])->checked = checked;
 }
 
+void lafi_checkbox::set(bool value) {
+    if(value) check(); else uncheck();
+}
+
 void lafi_checkbox::draw_self() { }
 
 

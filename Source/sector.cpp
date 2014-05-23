@@ -67,6 +67,20 @@ sector::sector() {
 }
 
 /* ----------------------------------------------------------------------------
+ * Connects the linedefs that link to it into the linedef_nrs vector.
+ */
+void sector::connect_linedefs(area_map &a, size_t s_nr) {
+    linedef_nrs.clear();
+    for(size_t l = 0; l < a.linedefs.size(); l++) {
+        linedef* l_ptr = a.linedefs[l];
+        if(l_ptr->sector_nrs[0] == s_nr || l_ptr->sector_nrs[1] == s_nr) {
+            linedef_nrs.push_back(l);
+        }
+    }
+    fix_pointers(a);
+}
+
+/* ----------------------------------------------------------------------------
  * Fixes the pointers to point them to the correct linedefs.
  */
 void sector::fix_pointers(area_map &a) {
@@ -97,11 +111,26 @@ vertex::vertex(float x, float y) {
 /* ----------------------------------------------------------------------------
  * Creates a triangle.
  */
-triangle::triangle(vertex* v1, vertex* v2, vertex* v3, sector* s) {
+triangle::triangle(vertex* v1, vertex* v2, vertex* v3, sector* s_ptr, size_t s_nr) {
     points[0] = v1;
     points[1] = v2;
     points[2] = v3;
-    s_ptr = s;
+    this->s_ptr = s_ptr;
+    this->s_nr = s_nr;
+}
+
+/* ----------------------------------------------------------------------------
+ * Connects the linedefs that link to it into the linedef_nrs vector.
+ */
+void vertex::connect_linedefs(area_map &a, size_t v_nr) {
+    linedef_nrs.clear();
+    for(size_t l = 0; l < a.linedefs.size(); l++) {
+        linedef* l_ptr = a.linedefs[l];
+        if(l_ptr->vertex_nrs[0] == v_nr || l_ptr->vertex_nrs[1] == v_nr) {
+            linedef_nrs.push_back(l);
+        }
+    }
+    fix_pointers(a);
 }
 
 /* ----------------------------------------------------------------------------
@@ -225,6 +254,29 @@ void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
             }
         }
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns which sector the specified point belongs to.
+ */
+sector* get_sector(float x, float y, size_t* sector_nr) {
+    for(size_t t = 0; t < cur_area_map.triangles.size(); t++) {
+        triangle* t_ptr = &cur_area_map.triangles[t];
+        if(
+            is_point_in_triangle(
+                x, y,
+                t_ptr->points[0]->x, t_ptr->points[0]->y,
+                t_ptr->points[1]->x, t_ptr->points[1]->y,
+                t_ptr->points[2]->x, t_ptr->points[2]->y
+            )
+        ) {
+            if(sector_nr) *sector_nr = t_ptr->s_nr;
+            return t_ptr->s_ptr;
+        }
+    }
+    
+    if(sector_nr) *sector_nr = string::npos;
+    return NULL;
 }
 
 /* ----------------------------------------------------------------------------
@@ -525,7 +577,7 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
 /* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector. This is because drawing concave polygons is not possible.
  */
-vector<triangle> triangulate(sector* s) {
+vector<triangle> triangulate(sector* s, size_t s_nr) {
 
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
@@ -581,7 +633,7 @@ vector<triangle> triangulate(sector* s) {
                     vertices_left[ears[0]],
                     get_prev_in_vector(vertices_left, ears[0]),
                     get_next_in_vector(vertices_left, ears[0]),
-                    s
+                    s, s_nr
                 )
             );
             
@@ -597,7 +649,7 @@ vector<triangle> triangulate(sector* s) {
     if(vertices_left.size() == 3) {
         triangles.push_back(
             triangle(
-                vertices_left[1], vertices_left[0], vertices_left[2], s
+                vertices_left[1], vertices_left[0], vertices_left[2], s, s_nr
             )
         );
     }
