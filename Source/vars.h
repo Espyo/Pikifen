@@ -178,6 +178,7 @@ extern lafi_gui*             ed_gui;
 extern bool                  ed_hitboxes_visible;
 extern bool                  ed_holding_m1;
 extern bool                  ed_holding_m2;
+extern vector<linedef*>      ed_intersecting_lines;
 extern unsigned char         ed_maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
 extern unsigned char         ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char         ed_mode;

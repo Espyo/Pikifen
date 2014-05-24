@@ -148,6 +148,7 @@ struct area_map {
 };
 
 
+void check_linedef_intersections();
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 float get_angle_dif(float a1, float a2);

@@ -147,6 +147,7 @@ lafi_gui*             ed_gui = NULL;
 bool                  ed_hitboxes_visible = true;
 bool                  ed_holding_m1 = false;
 bool                  ed_holding_m2 = false;
+vector<linedef*>      ed_intersecting_lines;
 unsigned char         ed_maturity = 0;
 unsigned char         ed_mob_type_list = 0;
 unsigned char         ed_mode = EDITOR_MODE_MAIN;

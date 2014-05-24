@@ -286,18 +286,16 @@ sector* get_sector(float x, float y, size_t* sector_nr) {
  * Thanks go to http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
  */
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3) {
-    float s = ty1 * tx3 - tx1 * ty3 + (ty3 - ty1) * px + (tx1 - tx3) * py;
-    float t = tx1 * ty2 - ty1 * tx2 + (ty1 - ty2) * px + (tx2 - tx1) * py;
+    float dx = px - tx1;
+    float dy = py - ty1;
     
-    if ((s < 0) != (t < 0)) return false;
+    bool s_ab = (tx2 - tx1) * dy - (ty2 - ty1) * dx > 0;
     
-    float a = -ty2 * tx3 + ty1 * (tx3 - tx2) + tx1 * (ty2 - ty3) + tx2 * ty3;
-    if (a < 0.0) {
-        s = -s;
-        t = -t;
-        a = -a;
-    }
-    return s > 0 && t > 0 && (s + t) < a;
+    if((tx3 - tx1) * dy - (ty3 - ty1) * dx > 0 == s_ab) return false;
+    
+    if((tx3 - tx2) * (py - ty2) - (ty3 - ty2) * (px - tx2) > 0 != s_ab) return false;
+    
+    return true;
 }
 
 /* ----------------------------------------------------------------------------
@@ -369,6 +367,39 @@ vertex* get_rightmost_vertex(polygon* p) {
     }
     
     return rightmost;
+}
+
+/* ----------------------------------------------------------------------------
+ * Checks intersecting linedefs, and adds them to ed_intersecting_lines;
+ */
+void check_linedef_intersections() {
+    ed_intersecting_lines.clear();
+    
+    for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+        linedef* l_ptr = cur_area_map.linedefs[l];
+        
+        if(!l_ptr->vertices[0]) continue; //It had been marked for deletion.
+        
+        bool intersects = false;
+        
+        for(size_t l2 = l + 1; l2 < cur_area_map.linedefs.size(); l2++) {
+            linedef* l2_ptr = cur_area_map.linedefs[l2];
+            
+            if(
+                lines_intersect(
+                    l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                    l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
+                    l2_ptr->vertices[0]->x, l2_ptr->vertices[0]->y,
+                    l2_ptr->vertices[1]->x, l2_ptr->vertices[1]->y,
+                    NULL, NULL)
+            ) {
+                intersects = true;
+                ed_intersecting_lines.push_back(l2_ptr);
+            }
+            
+            if(intersects) ed_intersecting_lines.push_back(l_ptr);
+        }
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -553,20 +584,22 @@ void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t
  *
  */
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul) {
-    if(!ur || !ul) return false;
-    
     float div = (l2y2 - l2y1) * (l1x2 - l1x1) - (l2x2 - l2x1) * (l1y2 - l1y1);
+    
+    float local_ul, local_ur;
     
     if(div != 0) {
     
         //Calculate the intersection distance from the line.
-        *ul = ((l2x2 - l2x1) * (l1y1 - l2y1) - (l2y2 - l2y1) * (l1x1 - l2x1)) / div;
+        local_ul = ((l2x2 - l2x1) * (l1y1 - l2y1) - (l2y2 - l2y1) * (l1x1 - l2x1)) / div;
+        if(ul) *ul = local_ul;
         
         //Calculate the intersection distance from the ray.
-        *ur = ((l1x2 - l1x1) * (l1y1 - l2y1) - (l1y2 - l1y1) * (l1x1 - l2x1)) / div;
+        local_ur = ((l1x2 - l1x1) * (l1y1 - l2y1) - (l1y2 - l1y1) * (l1x1 - l2x1)) / div;
+        if(ur) *ur = local_ur;
         
         //Return whether they intersect.
-        return (*ur >= 0) && (*ur <= 1) && (*ul > 0) && (*ul < 1);
+        return (local_ur >= 0) && (local_ur <= 1) && (local_ul > 0) && (local_ul < 1);
         
     } else {
         //No intersection.
