@@ -10,6 +10,7 @@
  */
 
 #include <iomanip>
+#include <unordered_set>
 
 #include <allegro5/allegro_primitives.h>
 
@@ -140,7 +141,7 @@ void area_editor::do_logic() {
             
             bool valid = true;
             for(size_t il = 0; il < ed_intersecting_lines.size(); il++) {
-                if(ed_intersecting_lines[il] == l_ptr) {
+                if(ed_intersecting_lines[il].contains(l_ptr)) {
                     valid = false;
                     break;
                 }
@@ -191,8 +192,8 @@ void area_editor::do_logic() {
         if(ed_new_sector_mode) {
             float x = snap_to_grid(mouse_cursor_x);
             float y = snap_to_grid(mouse_cursor_y);
-            al_draw_line(x - 16 * cam_zoom, y, x + 16 * cam_zoom, y, al_map_rgb(255, 255, 255), 1);
-            al_draw_line(x, y - 16 * cam_zoom, x, y + 16 * cam_zoom, al_map_rgb(255, 255, 255), 1);
+            al_draw_line(x - 16, y,      x + 16, y,      al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
+            al_draw_line(x,      y - 16, x,      y + 16, al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
         }
         
         //ToDo temp stuff.
@@ -203,27 +204,27 @@ void area_editor::do_logic() {
             for(size_t v = 0; v < ed_temp_i[i].size(); v++) {
                 al_draw_text(font, al_map_rgb(255, 255, 255), ed_temp_i[i][v]->x, ed_temp_i[i][v]->y - font_h * 2, ALLEGRO_ALIGN_CENTER, ("I" + to_string((long long) v)).c_str());
             }
-        }
-        for(size_t t = 0; t < cur_area_map.triangles.size(); t++) {
+        }*/
+        for(size_t t = 0; t < cur_area_map.sectors[0]->triangles.size(); t++) {
             al_draw_triangle(
-                cur_area_map.triangles[t].points[0]->x,
-                cur_area_map.triangles[t].points[0]->y,
-                cur_area_map.triangles[t].points[1]->x,
-                cur_area_map.triangles[t].points[1]->y,
-                cur_area_map.triangles[t].points[2]->x,
-                cur_area_map.triangles[t].points[2]->y,
+                cur_area_map.sectors[0]->triangles[t].points[0]->x,
+                cur_area_map.sectors[0]->triangles[t].points[0]->y,
+                cur_area_map.sectors[0]->triangles[t].points[1]->x,
+                cur_area_map.sectors[0]->triangles[t].points[1]->y,
+                cur_area_map.sectors[0]->triangles[t].points[2]->x,
+                cur_area_map.sectors[0]->triangles[t].points[2]->y,
                 al_map_rgb(192, 0, 0), 1 / cam_zoom
             );
             al_draw_filled_triangle(
-                cur_area_map.triangles[t].points[0]->x,
-                cur_area_map.triangles[t].points[0]->y,
-                cur_area_map.triangles[t].points[1]->x,
-                cur_area_map.triangles[t].points[1]->y,
-                cur_area_map.triangles[t].points[2]->x,
-                cur_area_map.triangles[t].points[2]->y,
+                cur_area_map.sectors[0]->triangles[t].points[0]->x,
+                cur_area_map.sectors[0]->triangles[t].points[0]->y,
+                cur_area_map.sectors[0]->triangles[t].points[1]->x,
+                cur_area_map.sectors[0]->triangles[t].points[1]->y,
+                cur_area_map.sectors[0]->triangles[t].points[2]->x,
+                cur_area_map.sectors[0]->triangles[t].points[2]->y,
                 al_map_rgba(0, (t % 3 == 0 ? 85 : t % 3 == 1 ? 170 : 255), 0, 128)
             );
-        }*/
+        }
         
         if(ed_bg_bitmap) {
             al_draw_tinted_scaled_bitmap(
@@ -379,6 +380,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 new_sector->z = outer_sector->z;
             }
             
+            //Create the vertices.
             vertex* new_vertices[4];
             for(size_t v = 0; v < 4; v++) new_vertices[v] = new vertex(0, 0);
             new_vertices[0]->x = hotspot_x - 32;
@@ -391,6 +393,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_vertices[3]->y = hotspot_y + 32;
             for(size_t v = 0; v < 4; v++)cur_area_map.vertices.push_back(new_vertices[v]);
             
+            //Create the linedefs.
             linedef* new_linedefs[4];
             for(size_t l = 0; l < 4; l++) {
                 new_linedefs[l] = new linedef(
@@ -402,13 +405,28 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_map.linedefs.push_back(new_linedefs[l]);
             }
             
+            //Add them to the area map.
             for(size_t l = 0; l < 4; l++) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
-            
             cur_area_map.sectors.push_back(new_sector);
             
             for(size_t l = 0; l < 4; l++) new_linedefs[l]->fix_pointers(cur_area_map);
             for(size_t v = 0; v < 4; v++) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
             new_sector->connect_linedefs(cur_area_map, cur_area_map.sectors.size() - 1);
+            
+            //Add the linedefs to the outer sector's list.
+            if(outer_sector) {
+                for(size_t l = 0; l < 4; l++) {
+                    outer_sector->linedefs.push_back(new_linedefs[l]);
+                    outer_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
+                }
+            }
+            
+            //Check for intersections.
+            for(size_t v = 0; v < 4; v += 2) check_linedef_intersections(new_vertices[v]);
+            
+            //Triangulate new sector and the parent one.
+            triangulate(new_sector);
+            if(outer_sector) triangulate(outer_sector);
             
             
             //Create a new vertex in a linedef.
@@ -456,7 +474,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         }
                         if(new_l_ptr->sectors[1]) {
                             new_l_ptr->sectors[1]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
-                            new_l_ptr->sectors[0]->linedefs.push_back(new_l_ptr);
+                            new_l_ptr->sectors[1]->linedefs.push_back(new_l_ptr);
                         }
                         
                         //Set linedefs of the new vertex.
@@ -492,10 +510,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             if(ed_moving_vertex != string::npos) {
                 vertex* moved_v_ptr = cur_area_map.vertices[ed_moving_vertex];
+                vertex* final_vertex = moved_v_ptr;
                 
                 //Check if the line's vertices intersect with any other lines.
                 //If so, they're marked with red.
-                check_linedef_intersections();
+                check_linedef_intersections(moved_v_ptr);
                 
                 
                 //Check if we should merge.
@@ -523,6 +542,18 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         break;
                                     }
                                 }
+                                
+                                //Clear it from the sector lists.
+                                for(size_t s = 0; s < 2; s++) {
+                                    for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); sl++) {
+                                        if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
+                                            l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
+                                            l_ptr->sectors[s]->linedef_nrs.erase(l_ptr->sectors[s]->linedef_nrs.begin() + sl);
+                                            break;
+                                        }
+                                    }
+                                }
+                                
                                 //Clear its info, so it gets marked for deletion.
                                 l_ptr->vertex_nrs[0] = l_ptr->vertex_nrs[1] = string::npos;
                                 l_ptr->fix_pointers(cur_area_map);
@@ -555,7 +586,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         //and tell them that it no longer exists.
                                         for(size_t v = 0; v < 2; v++) {
                                         
-                                            for(size_t vl = 0; vl < l_ptr->vertices[v]->linedefs.size();) {
+                                            for(size_t vl = 0; vl < l_ptr->vertices[v]->linedefs.size(); vl++) {
                                                 linedef* vl_ptr = l_ptr->vertices[v]->linedefs[vl];
                                                 
                                                 if(vl_ptr == l_ptr) {
@@ -563,8 +594,18 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                                         l_ptr->vertices[v]->linedefs.begin() + vl);
                                                     l_ptr->vertices[v]->linedef_nrs.erase(
                                                         l_ptr->vertices[v]->linedef_nrs.begin() + vl);
-                                                } else {
-                                                    vl++;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        
+                                        //Now tell the linedef's old sectors.
+                                        for(size_t s = 0; s < 2; s++) {
+                                            for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); sl++) {
+                                                if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
+                                                    l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
+                                                    l_ptr->sectors[s]->linedef_nrs.erase(l_ptr->sectors[s]->linedef_nrs.begin() + sl);
+                                                    break;
                                                 }
                                             }
                                         }
@@ -581,7 +622,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     }
                                 }
                                 
-                                //If it's matchless, that means it'll be joined to
+                                //If it's matchless, that means it'll just be joined to
                                 //the group of linedefs on the destination vertex.
                                 if(!has_merged) {
                                     dest_v_ptr->linedef_nrs.push_back(moved_v_ptr->linedef_nrs[l]);
@@ -609,8 +650,22 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         moved_v_ptr->linedefs.clear();
                         moved_v_ptr->x = moved_v_ptr->y = FLT_MAX; //So it's out of the way.
                         
+                        final_vertex = dest_v_ptr;
+                        
                         break;
                     }
+                }
+                
+                //Finally, re-triangulate the affected sectors.
+                unordered_set<sector*> affected_sectors;
+                for(size_t l = 0; l < final_vertex->linedefs.size(); l++) {
+                    linedef* l_ptr = final_vertex->linedefs[l];
+                    for(size_t s = 0; s < 2; s++) {
+                        if(l_ptr->sectors[s]) affected_sectors.insert(l_ptr->sectors[s]);
+                    }
+                }
+                for(auto s = affected_sectors.begin(); s != affected_sectors.end(); s++) {
+                    triangulate(*s);
                 }
                 
                 ed_moving_vertex = string::npos;

@@ -111,6 +111,7 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
  */
 void error_log(string s, data_node* d) {
     //ToDo
+    return;
     if(d) {
         s += " (" + d->filename;
         if(d->line_nr != 0) s += " line " + itos(d->line_nr);
@@ -263,7 +264,7 @@ void generate_area_images() {
         size_t n_linedefs = cur_area_map.sectors[s]->linedefs.size();
         if(n_linedefs == 0) continue;
         
-        vector<triangle> triangles = triangulate(cur_area_map.sectors[s], s); //ToDo don't do it like this.
+        triangulate(cur_area_map.sectors[s]); //ToDo don't do it like this.
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
@@ -290,7 +291,7 @@ void generate_area_images() {
                 ALLEGRO_BITMAP* current_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
-                    draw_sector(triangles, cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
+                    draw_sector(cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
                     
                 } al_set_target_bitmap(current_target_bmp);
             }
@@ -526,13 +527,10 @@ void load_area(const string name) {
     }
     
     //Triangulate everything.
-    cur_area_map.triangles.clear();
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
-        vector<triangle> t = triangulate(cur_area_map.sectors[s], s);
-        cur_area_map.triangles.insert(
-            cur_area_map.triangles.end(),
-            t.begin(), t.end()
-        );
+        sector* s_ptr = cur_area_map.sectors[s];
+        s_ptr->triangles.clear();
+        triangulate(s_ptr);
     }
 }
 

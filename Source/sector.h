@@ -34,6 +34,15 @@ struct vertex;
 typedef vector<vertex*> polygon;
 
 
+//Intersection between two lines. Used to mark
+//linedefs as red on the editor.
+struct linedef_intersection {
+    linedef* l1, *l2;
+    linedef_intersection(linedef* l1, linedef* l2);
+    bool contains(linedef* l);
+};
+
+
 /*
  * The blockmap divides the entire area
  * in a grid, so that collision detections only
@@ -95,6 +104,7 @@ struct sector {
     vector<element*> elements;
     vector<size_t> linedef_nrs;
     vector<linedef*> linedefs;
+    vector<triangle> triangles;
     
     sector();
     void connect_linedefs(area_map &a, size_t s_nr);
@@ -109,9 +119,7 @@ struct sector {
  */
 struct triangle {
     vertex* points[3];
-    sector* s_ptr;
-    size_t s_nr;
-    triangle(vertex* v1, vertex* v2, vertex* v3, sector* s_ptr, size_t s_nr);
+    triangle(vertex* v1, vertex* v2, vertex* v3);
 };
 
 
@@ -142,13 +150,12 @@ struct area_map {
     vector<vertex*> vertices;
     vector<linedef*> linedefs;
     vector<sector*> sectors;
-    vector<triangle> triangles;
     
     void clear();
 };
 
 
-void check_linedef_intersections();
+void check_linedef_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 float get_angle_dif(float a1, float a2);
@@ -161,7 +168,7 @@ bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
-vector<triangle> triangulate(sector* s, size_t s_nr);
+void triangulate(sector* s);
 
 
 enum SECTOR_TYPES {

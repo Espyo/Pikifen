@@ -944,16 +944,16 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
  * s:        The sector to draw.
  * x, y:     Top-left coordinates.
  */
-void draw_sector(const vector<triangle> &triangles, sector* s, const float x, const float y) {
+void draw_sector(sector* s, const float x, const float y) {
     ALLEGRO_VERTEX av[200]; //ToDo 200?
-    size_t n_vertices = triangles.size() * 3;
+    size_t n_vertices = s->triangles.size() * 3;
     
     //ToDo floors don't work like this.
     
     for(unsigned char t = 0; t < 1; t++) {
     
         for(size_t v = 0; v < n_vertices; v++) {
-            const triangle* t_ptr = &triangles[floor(v / 3.0)];
+            const triangle* t_ptr = &s->triangles[floor(v / 3.0)];
             av[v].x = t_ptr->points[v % 3]->x - x;
             av[v].y = t_ptr->points[v % 3]->y - y;
             av[v].u = t_ptr->points[v % 3]->x;
