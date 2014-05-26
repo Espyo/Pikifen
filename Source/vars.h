@@ -186,6 +186,7 @@ extern float                            ed_new_hitbox_corner_x; //FLT_MAX = none
 extern float                            ed_new_hitbox_corner_y;
 extern bool                             ed_new_sector_mode;
 extern string                           ed_object_name;
+extern sector*                          ed_on_sector;
 extern unsigned char                    ed_sec_mode; //Secondary/sub mode.
 extern bool                             ed_shift_pressed;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.

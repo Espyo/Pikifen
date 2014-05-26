@@ -147,16 +147,27 @@ void area_editor::do_logic() {
                 }
             }
             
+            bool sector_line = false;
+            if(ed_on_sector) {
+                for(size_t sl = 0; sl < ed_on_sector->linedefs.size(); sl++) {
+                    if(l_ptr == ed_on_sector->linedefs[sl]) {
+                        sector_line = true;
+                        break;
+                    }
+                }
+            }
+            
             al_draw_line(
                 l_ptr->vertices[0]->x,
                 l_ptr->vertices[0]->y,
                 l_ptr->vertices[1]->x,
                 l_ptr->vertices[1]->y,
-                (one_sided ? al_map_rgb(240, 240, 240) :
-                 valid ? al_map_rgb(160, 160, 160) :
+                (valid       ? al_map_rgb(160, 160, 160) :
+                 sector_line ? al_map_rgb(192, 160, 64 ) :
+                 one_sided   ? al_map_rgb(240, 240, 240) :
                  al_map_rgb(192, 64, 64)
                 ),
-                2.0 / cam_zoom
+                (sector_line ? 3.0 : 2.0) / cam_zoom
             );
             
             //Debug: uncomment this to show the sector numbers on each side.
@@ -205,25 +216,29 @@ void area_editor::do_logic() {
                 al_draw_text(font, al_map_rgb(255, 255, 255), ed_temp_i[i][v]->x, ed_temp_i[i][v]->y - font_h * 2, ALLEGRO_ALIGN_CENTER, ("I" + to_string((long long) v)).c_str());
             }
         }*/
-        for(size_t t = 0; t < cur_area_map.sectors[0]->triangles.size(); t++) {
-            al_draw_triangle(
-                cur_area_map.sectors[0]->triangles[t].points[0]->x,
-                cur_area_map.sectors[0]->triangles[t].points[0]->y,
-                cur_area_map.sectors[0]->triangles[t].points[1]->x,
-                cur_area_map.sectors[0]->triangles[t].points[1]->y,
-                cur_area_map.sectors[0]->triangles[t].points[2]->x,
-                cur_area_map.sectors[0]->triangles[t].points[2]->y,
-                al_map_rgb(192, 0, 0), 1 / cam_zoom
-            );
-            al_draw_filled_triangle(
-                cur_area_map.sectors[0]->triangles[t].points[0]->x,
-                cur_area_map.sectors[0]->triangles[t].points[0]->y,
-                cur_area_map.sectors[0]->triangles[t].points[1]->x,
-                cur_area_map.sectors[0]->triangles[t].points[1]->y,
-                cur_area_map.sectors[0]->triangles[t].points[2]->x,
-                cur_area_map.sectors[0]->triangles[t].points[2]->y,
-                al_map_rgba(0, (t % 3 == 0 ? 85 : t % 3 == 1 ? 170 : 255), 0, 128)
-            );
+        if(ed_on_sector && ed_moving_vertex == string::npos) {
+            for(size_t t = 0; t < ed_on_sector->triangles.size(); t++) {
+                triangle* t_ptr = &ed_on_sector->triangles[t];
+                /*al_draw_triangle(
+                    t_ptr->points[0]->x,
+                    t_ptr->points[0]->y,
+                    t_ptr->points[1]->x,
+                    t_ptr->points[1]->y,
+                    t_ptr->points[2]->x,
+                    t_ptr->points[2]->y,
+                    al_map_rgb(192, 0, 0),
+                    1.0 / cam_zoom
+                );*/
+                al_draw_filled_triangle(
+                    t_ptr->points[0]->x,
+                    t_ptr->points[0]->y,
+                    t_ptr->points[1]->x,
+                    t_ptr->points[1]->y,
+                    t_ptr->points[2]->x,
+                    t_ptr->points[2]->y,
+                    al_map_rgba(255, 255, 255, 12)
+                );
+            }
         }
         
         if(ed_bg_bitmap) {
@@ -267,6 +282,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     //Moving vertices, camera, etc.
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
     
+        ed_on_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL);
+        
         //Move background.
         if(ed_sec_mode == EDITOR_SEC_MODE_BG_MOUSE) {
         
@@ -534,7 +551,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             
                             //Check if it's being squashed into non-existence.
                             if(other_vertex == dest_v_ptr) {
-                                //Clear it from the vertex lists.
+                            
+                                //Clear it from its vertices' lists.
                                 for(size_t vl = 0; vl < other_vertex->linedefs.size(); vl++) {
                                     if(other_vertex->linedefs[vl] == l_ptr) {
                                         other_vertex->linedefs.erase(other_vertex->linedefs.begin() + vl);
@@ -545,6 +563,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                 
                                 //Clear it from the sector lists.
                                 for(size_t s = 0; s < 2; s++) {
+                                    if(!l_ptr->sectors[s]) continue;
                                     for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); sl++) {
                                         if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
                                             l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
@@ -570,8 +589,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     vertex* d_other_vertex = dl_ptr->vertices[0] == dest_v_ptr ? dl_ptr->vertices[1] : dl_ptr->vertices[0];
                                     
                                     if(d_other_vertex == other_vertex) {
-                                        has_merged = true;
                                         //The linedef will be merged with this one.
+                                        has_merged = true;
+                                        
+                                        //Tell the destination linedef's sectors
+                                        //to forget it; they'll be re-added later.
+                                        size_t old_dl_nr = dl_ptr->remove_from_sectors();
+                                        
+                                        //Set the new sectors.
                                         if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[0])
                                             dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[1];
                                         else if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[1])
@@ -600,16 +625,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         }
                                         
                                         //Now tell the linedef's old sectors.
-                                        for(size_t s = 0; s < 2; s++) {
-                                            for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); sl++) {
-                                                if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
-                                                    l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
-                                                    l_ptr->sectors[s]->linedef_nrs.erase(l_ptr->sectors[s]->linedef_nrs.begin() + sl);
-                                                    break;
-                                                }
-                                            }
-                                        }
+                                        l_ptr->remove_from_sectors();
                                         
+                                        //Add the linedefs to the sectors' lists.
+                                        for(size_t s = 0; s < 2; s++) {
+                                            dl_ptr->sectors[s]->linedefs.push_back(dl_ptr);
+                                            dl_ptr->sectors[s]->linedef_nrs.push_back(old_dl_nr);
+                                        }
                                         
                                         //Remove the deleted linedef's info.
                                         //This'll mark it for deletion.
@@ -812,7 +834,7 @@ void area_editor::load() {
         change_to_right_frame();
     };
     frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
-        ed_new_sector_mode = true;
+        ed_new_sector_mode = !ed_new_sector_mode;
     };
     
     

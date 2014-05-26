@@ -59,6 +59,28 @@ void linedef::fix_pointers(area_map &a) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Removes the linedef from its sectors, but doesn't mark
+ * the sectors as "none".
+ * Returns the linedef number.
+ */
+size_t linedef::remove_from_sectors() {
+    size_t l_nr = string::npos;
+    for(unsigned char s = 0; s < 2; s++) {
+        for(size_t l = 0; l < sectors[s]->linedefs.size(); l++) {
+            linedef* l_ptr = sectors[s]->linedefs[l];
+            if(l_ptr == this) {
+                sectors[s]->linedefs.erase(sectors[s]->linedefs.begin() + l);
+                auto nr_it = sectors[s]->linedef_nrs.begin() + l;
+                l_nr = *nr_it;
+                sectors[s]->linedef_nrs.erase(nr_it);
+                break;
+            }
+        }
+    }
+    return l_nr;
+}
+
+/* ----------------------------------------------------------------------------
  * Creates a sector.
  */
 sector::sector() {
@@ -184,7 +206,7 @@ void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
         
-        float prev_angle = 0; //At the start, assume the angle is 0 (right).
+        float prev_angle = M_PI; //At the start, assume the angle is 0 (right).
         
         if(!doing_outer) {
             inners->push_back(polygon());
@@ -192,7 +214,7 @@ void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
         
         while(!poly_done) {
         
-            float base_angle = prev_angle; //The angle we came from.
+            float base_angle = prev_angle - M_PI; //The angle we came from.
             
             //For every linedef attached to this vertex, find the closest one
             //that hasn't been done, in the direction of travel.
@@ -408,6 +430,7 @@ void check_linedef_intersections(vertex* v) {
         //For every other linedef in the map, check for intersections.
         for(size_t l2 = 0; l2 < cur_area_map.linedefs.size(); l2++) {
             linedef* l2_ptr = cur_area_map.linedefs[l2];
+            if(!l2_ptr->vertices[0]) continue; //It had been marked for deletion.
             
             if(
                 lines_intersect(
@@ -460,6 +483,8 @@ void clean_poly(polygon* p) {
  * polygon, as to make the outer holeless.
  */
 void cut_poly(polygon* outer, vector<polygon>* inners) {
+    vertex* outer_rightmost = get_rightmost_vertex(outer);
+    
     //Sort the inner polygons. We need to start with the
     //one with the rightmost vertex, then move to the 2nd, etc.
     //The following is pairs of inner polygon + its rightmost vertex.
@@ -479,22 +504,27 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     });
     
     for(size_t i = 0; i < sorted_inners.size(); i++) {
-        //ToDo what if both vertices of the intersecting line are on the same x-axis as the ray?
-        vertex* outer_rightmost = get_rightmost_vertex(outer);
         polygon* p = sorted_inners[i].first;
         vertex* closest_line_v1 = NULL;
         vertex* closest_line_v2 = NULL;
         float closest_line_ur = FLT_MAX;
+        vertex* closest_vertex = NULL;
+        float closest_vertex_ur = FLT_MAX;
+        vertex* best_vertex = NULL;
         
         //Find the rightmost vertex on this inner.
-        vertex* start = get_rightmost_vertex(p);
+        vertex* start = sorted_inners[i].second;
         
         //Imagine a line from this vertex to the right.
         //If any line of the outer polygon intersects it,
-        //we just find the vertex there, and make the cut.
-        //For each line on the outer polygon, check if it intersects.
-        vertex* v1 = NULL, *v2 = NULL;
+        //we just find the best vertex on that line, and make the cut.
+        //This line stretching right is known as a ray.
         float ray_width = outer_rightmost->x - start->x;
+        
+        //Let's also check the vertices.
+        //If the closest thing is a vertex, not a line, then
+        //we can skip a bunch of steps.
+        vertex* v1 = NULL, *v2 = NULL;
         for(size_t v = 0; v < outer->size(); v++) {
             v1 = outer->at(v);
             v2 = get_next_in_vector(*outer, v);
@@ -513,78 +543,125 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                     }
                 }
             }
-        }
-        
-        //ToDo what if it doesn't find any? Should it try left?
-        //ToDo and what if this inner polygon can only see another inner polygon?
-        
-        //We're on the line closest to the vertex.
-        //Go to the rightmost vertex of this line.
-        vertex* vertex_to_compare = (closest_line_v1->x > closest_line_v2->x ? closest_line_v1 : closest_line_v2);
-        
-        //Now get a list of all vertices inside the triangle
-        //marked by the inner's vertex,
-        //the point on the line,
-        //and the vertex we're comparing.
-        vector<vertex*> inside_triangle;
-        for(size_t v = 0; v < outer->size(); v++) {
-            vertex* v_ptr = outer->at(v);
-            if(
-                is_point_in_triangle(
-                    v_ptr->x, v_ptr->y, start->x, start->y,
-                    start->x + closest_line_ur * ray_width, start->y,
-                    vertex_to_compare->x, vertex_to_compare->y) &&
-                v_ptr != vertex_to_compare
-            ) {
-                inside_triangle.push_back(v_ptr);
-            }
-        }
-        
-        //Check which one makes the smallest angle compared to 0.
-        vertex* best_vertex = vertex_to_compare;
-        float closest_angle = FLT_MAX;
-        
-        for(size_t v = 0; v < inside_triangle.size(); v++) {
-            vertex* v_ptr = inside_triangle[v];
-            float angle = atan2(v_ptr->y - start->y, v_ptr->x - start->x);
-            if(fabs(angle) < closest_angle) {
-                closest_angle = fabs(angle);
-                best_vertex = v_ptr;
-            }
-        }
-        
-        //This is the final vertex. Make a segment
-        //from the start vertex to this.
-        //Find the vertex on the outer polygon,
-        //and add the bridge to the inner polygon,
-        //as well as the entire inner polygon.
-        //Then go back to the vertex we were at.
-        for(size_t v = 0; v < outer->size(); v++) {
-            vertex* v_ptr = outer->at(v);
-            if(v_ptr == best_vertex) {
             
-                //We found the vertex of the outer to make the split at.
-                //Now find which vertex of the inner we make the
-                //other point of the split at.
-                size_t iv = 0;
-                for(; iv < p->size(); iv++) {
-                    if(p->at(iv) == start) {
-                        break;
-                    }
+            if(v1->y == start->y) {
+                float ur = (v1->x - start->x) / ray_width;
+                if(!closest_vertex || ur < closest_vertex_ur) {
+                    closest_vertex = v1;
+                    closest_vertex_ur = ur;
                 }
-                
-                auto it = p->begin() + iv;
-                size_t n_after = p->size() - iv;
-                //Finally, make the bridge.
-                outer->insert(outer->begin() + v + 1, it, p->end());
-                outer->insert(outer->begin() + v + 1 + n_after, p->begin(), it); //ToDo is it included?
-                outer->insert(outer->begin() + v + 1 + n_after + iv, start); //Closes the inner polygon.
-                outer->insert(outer->begin() + v + 1 + n_after + iv + 1, best_vertex); //Closes the outer polygon.
-                
+            }
+        }
+        
+        //Which is closest, a vertex or a line?
+        if(closest_vertex_ur < closest_line_ur) {
+            //If it's a vertex, done.
+            best_vertex = closest_vertex;
+        } else {
+            //If it's a line, some more complicated steps need to be done.
+            
+            //ToDo what if it doesn't find any? Should it try left?
+            //ToDo and what if this inner polygon can only see another inner polygon?
+            
+            //We're on the line closest to the vertex.
+            //Go to the rightmost vertex of this line.
+            vertex* vertex_to_compare = (closest_line_v1->x > closest_line_v2->x ? closest_line_v1 : closest_line_v2);
+            
+            //Now get a list of all vertices inside the triangle
+            //marked by the inner's vertex,
+            //the point on the line,
+            //and the vertex we're comparing.
+            vector<vertex*> inside_triangle;
+            for(size_t v = 0; v < outer->size(); v++) {
+                vertex* v_ptr = outer->at(v);
+                if(
+                    is_point_in_triangle(
+                        v_ptr->x, v_ptr->y, start->x, start->y,
+                        start->x + closest_line_ur * ray_width, start->y,
+                        vertex_to_compare->x, vertex_to_compare->y) &&
+                    v_ptr != vertex_to_compare
+                ) {
+                    inside_triangle.push_back(v_ptr);
+                }
+            }
+            
+            //Check which one makes the smallest angle compared to 0.
+            best_vertex = vertex_to_compare;
+            float closest_angle = FLT_MAX;
+            
+            for(size_t v = 0; v < inside_triangle.size(); v++) {
+                vertex* v_ptr = inside_triangle[v];
+                float angle = atan2(v_ptr->y - start->y, v_ptr->x - start->x);
+                if(fabs(angle) < closest_angle) {
+                    closest_angle = fabs(angle);
+                    best_vertex = v_ptr;
+                }
+            }
+        }
+        
+        //This is the final vertex. Make a bridge
+        //from the start vertex to this.
+        //First, we must find whether the outer vertex
+        //already has bridges or not.
+        //If so, we place the new bridge before or after,
+        //depending on the angle.
+        //We know a bridge exists if the same vertex
+        //appears twice.
+        vector<size_t> bridges;
+        for(size_t v = 0; v < outer->size(); v++) {
+            if(outer->at(v) == best_vertex) {
+                bridges.push_back(v);
+            }
+        }
+        
+        //Insert the new bridge after this vertex.
+        size_t insertion_vertex_nr;
+        if(bridges.size() == 1) {
+            //No bridges found, just use this vertex.
+            insertion_vertex_nr = bridges[0];
+        } else {
+            //Find where to insert.
+            insertion_vertex_nr = bridges.back();
+            float new_bridge_angle = get_angle_dif(0, atan2(start->y - best_vertex->y, start->x - best_vertex->x));
+            
+            for(size_t v = 0; v < bridges.size(); v++) {
+                vertex* v_ptr = outer->at(bridges[v]);
+                vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
+                float a = get_angle_dif(0, atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x));
+                if(a < new_bridge_angle) {
+                    insertion_vertex_nr = bridges[v];
+                    break;
+                }
+            }
+        }
+        
+        //Now, make the bridge.
+        //On the outer vertex, change the next vertex
+        //to be the start of the inner, then
+        //circle the inner, and go back to the outer vertex.
+        //Let's just find where the start vertex is...
+        size_t iv = 0;
+        for(; iv < p->size(); iv++) {
+            if(p->at(iv) == start) {
                 break;
             }
         }
         
+        auto it = p->begin() + iv;
+        size_t n_after = p->size() - iv;
+        //Finally, make the bridge.
+        outer->insert(outer->begin() + insertion_vertex_nr + 1, it, p->end());
+        outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after, p->begin(), it);
+        outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start); //Closes the inner polygon.
+        
+        //Before we close the inner polygon, let's
+        //check if the inner's rightmost and the outer best vertices
+        //are not the same.
+        //This can happen if you have a square on the top-right
+        //and one on the bottom-left, united by the central vertex.
+        if(start != best_vertex) {
+            outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv + 1, best_vertex);
+        }
     }
 }
 
@@ -592,6 +669,8 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
  * Returns the difference between two angles, in radians, but clockwise.
  */
 float get_angle_dif(float a1, float a2) {
+    a1 = normalize_angle(a1);
+    a2 = normalize_angle(a2);
     if(a2 > a1) a2 -= M_PI * 2;
     return a1 - a2;
 }

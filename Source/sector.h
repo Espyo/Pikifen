@@ -69,6 +69,7 @@ struct linedef {
     
     linedef(size_t v1 = string::npos, size_t v2 = string::npos);
     void fix_pointers(area_map &a);
+    size_t remove_from_sectors();
 };
 
 

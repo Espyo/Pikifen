@@ -768,7 +768,7 @@ void move_point(const float x, const float y, const float tx, const float ty, co
  */
 float normalize_angle(float a) {
     a = fmod((double) a, M_PI * 2);
-    if(a < 0) a += 360;
+    if(a < 0) a += M_PI * 2;
     return a;
 }
 

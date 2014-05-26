@@ -156,6 +156,7 @@ float                            ed_new_hitbox_corner_x = FLT_MAX;
 float                            ed_new_hitbox_corner_y = FLT_MAX;
 bool                             ed_new_sector_mode = false;
 string                           ed_object_name;
+sector*                          ed_on_sector = NULL;
 unsigned char                    ed_sec_mode = EDITOR_SEC_MODE_NONE;
 bool                             ed_shift_pressed = false;
 polygon                          ed_temp_o;
