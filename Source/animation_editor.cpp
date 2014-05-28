@@ -48,35 +48,6 @@ void animation_editor::do_logic() {
         gui_load_animation();
     }
     
-    lafi_widget* wum = NULL; //Widget under mouse.
-    wum = ed_gui->widgets["frm_bottom"]->mouse_over_widget;
-    if(!wum) {
-        if(!(ed_gui->widgets["frm_picker"]->flags & LAFI_FLAG_DISABLED)) {
-            wum = ed_gui->widgets["frm_picker"]->mouse_over_widget;
-        } else if(ed_mode == EDITOR_MODE_MAIN) {
-            wum = ed_gui->widgets["frm_main"]->mouse_over_widget;
-        } else if(ed_mode == EDITOR_MODE_ANIMATION) {
-            wum = ed_gui->widgets["frm_anims"]->widgets["frm_anim"]->widgets["frm_frame_i"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_anims"]->widgets["frm_anim"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_anims"]->mouse_over_widget;
-        } else if(ed_mode == EDITOR_MODE_FRAME) {
-            wum = ed_gui->widgets["frm_frames"]->widgets["frm_frame"]->widgets["frm_hitbox_i"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_frames"]->widgets["frm_frame"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_frames"]->mouse_over_widget;
-        } else if(ed_mode == EDITOR_MODE_HITBOX) {
-            wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_normal"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->widgets["frm_attack"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"]->mouse_over_widget;
-            if(!wum) wum = ed_gui->widgets["frm_hitboxes"]->mouse_over_widget;
-        } else if(ed_mode == EDITOR_MODE_TOP) {
-            wum = ed_gui->widgets["frm_top"]->mouse_over_widget;
-        }
-    }
-    
-    if(wum) {
-        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = wum->description;
-    }
-    
     ed_cur_hitbox_alpha += M_PI * 3 * delta_t;
     
     //---Drawing.---
@@ -228,9 +199,9 @@ void animation_editor::gui_load_frame() {
         ((lafi_textbox*) f->widgets["txt_offsx"])->text = ftos(ed_cur_frame->offs_x);
         ((lafi_textbox*) f->widgets["txt_offsy"])->text = ftos(ed_cur_frame->offs_y);
         
-        if(ed_mob_type_list == MOB_TYPE_PIKMIN) f->widgets["but_top"]->flags &= ~LAFI_FLAG_DISABLED;
-        else f->widgets["but_top"]->flags |= LAFI_FLAG_DISABLED;
-        
+        if(ed_mob_type_list == MOB_TYPE_PIKMIN) enable_widget(f->widgets["but_top"])
+            else disable_widget(f->widgets["but_top"]);
+            
         gui_load_hitbox_instance();
     }
 }
@@ -470,6 +441,8 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     ) {
         mouse_cursor_x = ev.mouse.x / cam_zoom - cam_x - ((scr_w - 208) / 2 / cam_zoom);
         mouse_cursor_y = ev.mouse.y / cam_zoom - cam_y - (scr_h / 2 / cam_zoom);
+        lafi_widget* wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
+        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + itos(mouse_cursor_x) + "," + itos(mouse_cursor_y) + ")");
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
@@ -852,9 +825,11 @@ void animation_editor::load() {
     frm_main->widgets["but_folder"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_OBJECT, false);
     };
+    frm_main->widgets["but_folder"]->description = "Pick a folder.";
     frm_main->widgets["but_object"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_OBJECT + 1 + ed_mob_type_list, false);
     };
+    frm_main->widgets["but_object"]->description = "Pick an object to edit.";
     frm_main->widgets["frm_object"]->widgets["but_anims"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_cur_hitbox_instance_nr = string::npos;
         if(ed_cur_anim) if(ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = 0;
@@ -1206,7 +1181,7 @@ void animation_editor::load() {
         save_animation_set();
     };
     frm_bottom->widgets["but_save"]->description = "Save the object to the text file.";
-    frm_bottom->widgets["but_quit"]->description = "Quit.";
+    frm_bottom->widgets["but_quit"]->description = "Quit the animation editor.";
     
     //ToDo quit button.
     
@@ -1279,11 +1254,11 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
     lafi_widget* f = ed_gui->widgets["frm_picker"]->widgets["frm_list"];
     
     if(can_make_new) {
-        ed_gui->widgets["frm_picker"]->widgets["txt_new"]->flags &= ~LAFI_FLAG_DISABLED;
-        ed_gui->widgets["frm_picker"]->widgets["but_new"]->flags &= ~LAFI_FLAG_DISABLED;
+        enable_widget(ed_gui->widgets["frm_picker"]->widgets["txt_new"]);
+        enable_widget(ed_gui->widgets["frm_picker"]->widgets["but_new"]);
     } else {
-        ed_gui->widgets["frm_picker"]->widgets["txt_new"]->flags |= LAFI_FLAG_DISABLED;
-        ed_gui->widgets["frm_picker"]->widgets["but_new"]->flags |= LAFI_FLAG_DISABLED;
+        disable_widget(ed_gui->widgets["frm_picker"]->widgets["txt_new"]);
+        disable_widget(ed_gui->widgets["frm_picker"]->widgets["but_new"]);
     }
     
     while(f->widgets.size()) {

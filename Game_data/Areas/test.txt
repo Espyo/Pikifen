@@ -1,118 +1,103 @@
-weather = Normal
-
-mobs{
-	ship{
-		coords = -100 100
-	}
-	
-	leader{
-		coords = 0 0
-		type = Olimar
-	}
-	
-	leader{
-		coords = 300 250
-		type = Louie
-	}
-	
-	leader{
-		coords = 350 200
-		type = President
-	}
-	
-	onion{
-		coords = 400 100
-		type = Red onion
-	}
-
-	onion{
-		coords = 400 200
-		type = Yellow onion
-	}
-
-	onion{
-		coords = 400 300
-		type = Blue onion
-	}
-	
-	treasure{
-		coords = 100 350
-		type = Test
-	}
-	
-	enemy{
-		coords = -100 -200
-		type = Cloaking Burrow-nit
-	}
-}
-
 vertices{
-    vertex = -1000 -1000
-    vertex = 1000 -1000
-    vertex = 1000 1000
-    vertex = -1000 1000
-    vertex = 10 20
-    vertex = 103 107
-    vertex = 182 13
-    vertex = 183 169
-    vertex = 91 250
-    vertex = 16 168
+	vertex=-1000 -1000
+	vertex=1000 -1000
+	vertex=1000 1000
+	vertex=-1000 1000
+	vertex=10 20
+	vertex=103 107
+	vertex=182 13
+	vertex=183 169
+	vertex=91 250
+	vertex=16 168
+	vertex=-64 -192
+	vertex=-96 -416
+	vertex=32 -96
+	vertex=-128 -128
+	vertex=192 -352
+	vertex=320 -128
+	vertex=64 -224
 }
-
 linedefs{
-    linedef{
-        s = 0 -1
-        v = 0 1
-    }
-    linedef{
-        s = 0 -1
-        v = 1 2
-    }
-    linedef{
-        s = 0 -1
-        v = 2 3
-    }
-    linedef{
-        s = 0 -1
-        v = 3 0
-    }
-    linedef{
-        s = 1 0
-        v = 4 5
-    }
-    linedef{
-        s = 1 0
-        v = 5 6
-    }
-    linedef{
-        s = 1 0
-        v = 6 7
-    }
-    linedef{
-        s = 1 0
-        v = 7 8
-    }
-    linedef{
-        s = 1 0
-        v = 8 9
-    }
-    linedef{
-        s = 1 0
-        v = 9 4
-    }
+	linedef{
+		s=0 -1
+		v=0 1
+	}
+	linedef{
+		s=0 -1
+		v=1 2
+	}
+	linedef{
+		s=0 -1
+		v=2 3
+	}
+	linedef{
+		s=0 -1
+		v=3 0
+	}
+	linedef{
+		s=1 0
+		v=4 5
+	}
+	linedef{
+		s=1 0
+		v=5 6
+	}
+	linedef{
+		s=1 0
+		v=6 7
+	}
+	linedef{
+		s=1 0
+		v=7 8
+	}
+	linedef{
+		s=1 0
+		v=8 9
+	}
+	linedef{
+		s=1 0
+		v=9 4
+	}
+	linedef{
+		s=2 0
+		v=10 11
+	}
+	linedef{
+		s=2 0
+		v=11 16
+	}
+	linedef{
+		s=2 0
+		v=12 13
+	}
+	linedef{
+		s=2 0
+		v=13 10
+	}
+	linedef{
+		s=2 0
+		v=14 15
+	}
+	linedef{
+		s=2 0
+		v=15 12
+	}
+	linedef{
+		s=2 0
+		v=16 14
+	}
 }
-
 sectors{
 	sector{
-		texture{
-			file=Grass.png
-		}
-        z=0
+		z=0
+		texture_0=Grass.png
 	}
-    sector{
-        texture{
-            file=Metal.png
-        }
-        z=1
-    }
+	sector{
+		z=1
+		texture_0=Metal.png
+	}
+	sector{
+		z=0
+		texture_0=Grass.png
+	}
 }

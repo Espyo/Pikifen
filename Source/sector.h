@@ -79,11 +79,13 @@ struct linedef {
  * transitions from the first to the second.
  */
 struct sector_texture {
-    float scale;   //Texture scale...
+    float scale_x; //Texture scale, X...
+    float scale_y; //and Y.
     float trans_x; //X translation...
-    float trans_y; //Y translation...
-    float rot;     //And rotation.
+    float trans_y; //and Y.
+    float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
+    string filename; //For the editor.
     
     sector_texture();
 };
@@ -97,8 +99,10 @@ struct sector_texture {
  */
 struct sector {
     sector_texture textures[2];
+    bool fade;
+    float fade_angle;
     unsigned short type;
-    unsigned int tag;
+    unsigned int tag; //ToDo are these used?
     float z; //Height.
     float brightness;
     
@@ -175,8 +179,12 @@ void triangulate(sector* s);
 enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
     SECTOR_TYPE_BOTTOMLESS_PIT,
-    SECTOR_TYPE_BASE,
+    SECTOR_TYPE_LANDING_SITE,
 };
+
+#define SECTOR_TYPE_STR_NORMAL "Normal"
+#define SECTOR_TYPE_STR_BOTTOMLESS_PIT "Bottomless pit"
+#define SECTOR_TYPE_STR_LANDING_SITE "Landing site"
 
 
 enum TERRAIN_SOUNDS {
@@ -189,5 +197,6 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_WATER,
 };
 
+#define DEF_SECTOR_BRIGHTNESS 255
 
 #endif //ifndef SECTOR_INCLUDED

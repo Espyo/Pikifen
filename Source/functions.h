@@ -24,8 +24,14 @@
 #include "pikmin.h"
 #include "sector.h"
 
+//Disables an enabled widget.
+#define disable_widget(w) (w)->flags |= LAFI_FLAG_DISABLED;
+
 //Returns the distance between two points.
 #define dist(x1, y1, x2, y2) sqrt(sdist((x1), (y1), (x2), (y2)))
+
+//Enables a disabled widget.
+#define enable_widget(w) (w)->flags &= ~LAFI_FLAG_DISABLED;
 
 //Converts a float (or double) to a string.
 #define ftos(n) to_string((long double) (n))
@@ -67,6 +73,7 @@ void               angle_to_coordinates(const float angle, const float magnitude
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
 bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
 bool               circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2);
+void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
 void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> v, const string s);
@@ -76,6 +83,7 @@ ALLEGRO_COLOR      get_daylight_color();
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2);
 void               load_area(const string name);
+void               load_area_textures();
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(const string filename, data_node* node = NULL);
 data_node          load_data_file(const string filename);

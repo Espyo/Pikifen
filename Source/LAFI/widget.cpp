@@ -15,7 +15,6 @@ lafi_widget::lafi_widget(int x1, int y1, int x2, int y2, lafi_style* style, unsi
     
     children_offset_x = children_offset_y = 0;
     focused_widget = NULL;
-    mouse_over_widget = NULL;
     parent = NULL;
     mouse_in = false;
     mouse_clicking = false;
@@ -47,7 +46,6 @@ lafi_widget::lafi_widget(lafi_widget &w2) {
     children_offset_x = w2.children_offset_x;
     children_offset_y = w2.children_offset_y;
     focused_widget = w2.focused_widget;
-    mouse_over_widget = w2.mouse_over_widget;
     parent = NULL;
     mouse_in = false;
     mouse_clicking = false;
@@ -129,6 +127,23 @@ ALLEGRO_COLOR lafi_widget::get_alt_color() {
     return style->alt_color;
 }
 
+//Returns which widget the mouse is under.
+//It searches for the deepmost child widget, and if none has it,
+//it returns either itself, or none.
+//Disabled widgets are ignored.
+lafi_widget* lafi_widget::get_widget_under_mouse(int mx, int my) {
+    if(!(flags & LAFI_FLAG_DISABLED)) {
+        if(!(flags & LAFI_FLAG_WUM_NO_CHILDREN)) {
+            for(auto c = widgets.begin(); c != widgets.end(); c++) {
+                lafi_widget* w = c->second->get_widget_under_mouse(mx, my);
+                if(w) return w;
+            }
+        }
+        if(is_mouse_in(mx, my)) return this;
+    }
+    return NULL;
+}
+
 /*
  * Checks if the mouse cursor is inside the widget, given its coordinates.
  */
@@ -208,10 +223,7 @@ void lafi_widget::draw() {
 }
 
 void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
-    if(flags & LAFI_FLAG_DISABLED) {
-        mouse_over_widget = NULL;
-        return;
-    }
+    if(flags & LAFI_FLAG_DISABLED) return;
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
     
@@ -226,11 +238,6 @@ void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
                     w->second->widget_on_mouse_leave();
                     w->second->mouse_in = false;
                     w->second->call_mouse_leave_handler();
-                    
-                    if(mouse_over_widget == w->second) {
-                        //If the mouse was over this widget and left, set it to none.
-                        mouse_over_widget = NULL;
-                    }
                 }
                 
                 if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
@@ -250,8 +257,6 @@ void lafi_widget::handle_event(ALLEGRO_EVENT ev) {
                     w->second->widget_on_mouse_enter();
                     w->second->mouse_in = true;
                     w->second->call_mouse_enter_handler();
-                    
-                    mouse_over_widget = w->second;
                 }
             }
         }

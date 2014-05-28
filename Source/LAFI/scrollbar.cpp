@@ -17,6 +17,7 @@ lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float 
 
 void lafi_scrollbar::init() {
     create_button();
+    flags |= LAFI_FLAG_WUM_NO_CHILDREN;
 }
 
 void lafi_scrollbar::widget_on_mouse_down(int button, int x, int y) {

@@ -36,7 +36,7 @@ void lafi_radio_button::init() {
             style,
             flags
         ));
-        
+    flags |= LAFI_FLAG_WUM_NO_CHILDREN;
 }
 
 lafi_radio_button::~lafi_radio_button() {

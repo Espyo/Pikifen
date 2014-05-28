@@ -28,6 +28,7 @@ enum LAFI_WIDGET_FLAGS {
     LAFI_FLAG_INVISIBLE = 2,
     LAFI_FLAG_NOT_SELECTABLE = 4,
     LAFI_FLAG_NO_CLIPPING_RECTANGLE = 8,
+    LAFI_FLAG_WUM_NO_CHILDREN = 16, //When checking the Widget Under Mouse, do not check this widget's children.
 };
 
 enum LAFI_DRAW_LINE_SIDES {

@@ -56,7 +56,6 @@ public:
     
     map<string, lafi_widget*> widgets;
     lafi_widget* focused_widget;
-    lafi_widget* mouse_over_widget; //The mouse is over this widget.
     
     void add(string name, lafi_widget* widget);
     void remove(string name);
@@ -87,7 +86,7 @@ public:
     function<void(lafi_widget* w)> get_focus_handler;
     function<void(lafi_widget* w)> lose_focus_handler;
     
-    
+    lafi_widget* get_widget_under_mouse(int mx, int my);
     bool is_mouse_in(int mx, int my);
     void get_offset(int* ox, int* oy);
     

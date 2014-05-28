@@ -167,7 +167,10 @@ extern float                            ed_cur_frame_time;
 extern hitbox*                          ed_cur_hitbox;
 extern float                            ed_cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
 extern size_t                           ed_cur_hitbox_instance_nr;
+extern sector*                          ed_cur_sector;
 extern float                            ed_double_click_time;
+extern unsigned char                    ed_error_type;
+extern size_t                           ed_error_size_t_1;
 extern string                           ed_filename;
 extern size_t                           ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                             ed_grabbing_hitbox_edge;
@@ -184,12 +187,12 @@ extern unsigned char                    ed_mode;
 extern size_t                           ed_moving_vertex;
 extern float                            ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                            ed_new_hitbox_corner_y;
-extern bool                             ed_new_sector_mode;
 extern string                           ed_object_name;
 extern sector*                          ed_on_sector;
 extern unsigned char                    ed_sec_mode; //Secondary/sub mode.
 extern bool                             ed_shift_pressed;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
+extern lafi_widget*                     ed_wum; //Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
 extern ALLEGRO_FONT*                    font;

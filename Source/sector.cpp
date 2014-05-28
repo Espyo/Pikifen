@@ -86,6 +86,10 @@ size_t linedef::remove_from_sectors() {
 sector::sector() {
     type = SECTOR_TYPE_NORMAL;
     tag = 0;
+    brightness = DEF_SECTOR_BRIGHTNESS;
+    fade = false;
+    fade_angle = 0;
+    z = 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -131,7 +135,7 @@ void sector::fix_pointers(area_map &a) {
  * Creates a structure with floor information.
  */
 sector_texture::sector_texture() {
-    scale = 0;
+    scale_x = scale_y = 0;
     trans_x = trans_y = 0;
     rot = 0;
     bitmap = NULL;
@@ -483,6 +487,7 @@ void clean_poly(polygon* p) {
  * polygon, as to make the outer holeless.
  */
 void cut_poly(polygon* outer, vector<polygon>* inners) {
+    //ToDo aren't they sorted already?
     vertex* outer_rightmost = get_rightmost_vertex(outer);
     
     //Sort the inner polygons. We need to start with the
@@ -491,12 +496,12 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     vector<pair<polygon*, vertex*> > sorted_inners;
     for(size_t i = 0; i < inners->size(); i++) {
         polygon* p = &inners->at(i);
-        sorted_inners.push_back(
-            make_pair<polygon*, vertex*>(
-                p,
-                get_rightmost_vertex(p)
-            )
-        );
+        vertex* r = get_rightmost_vertex(p);
+        if(r) {
+            sorted_inners.push_back(
+                make_pair<polygon*, vertex*>(p, r)
+            );
+        }
     }
     
     sort(sorted_inners.begin(), sorted_inners.end(), [] (pair<polygon*, vertex*> p1, pair<polygon*, vertex*> p2) {
@@ -700,7 +705,10 @@ void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t
 }
 
 /* ----------------------------------------------------------------------------
- *
+ * Returns whether the two lines intersect.
+ * ur: Returns the distance from the start of line 2 in which the intersection happens.
+   * This is in ratio, so 0 is the start, 1 is the end of the line. Oh, and the r stands for ray.
+ * ul: Same as ur, but for line 1.
  */
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul) {
     float div = (l2y2 - l2y1) * (l1x2 - l1x1) - (l2x2 - l2x1) * (l1y2 - l1y1);

@@ -94,6 +94,18 @@ bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, fl
 }
 
 /* ----------------------------------------------------------------------------
+ * Clears the textures of the area's sectors from memory.
+ */
+void clear_area_textures() {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        sector* s_ptr = cur_area_map.sectors[s];
+        if(s_ptr->textures[0].bitmap && s_ptr->textures[0].bitmap != bmp_error) {
+            bitmaps.detach("Textures/" + s_ptr->textures[0].filename);
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------------
  * Returns the angle and magnitude of vector coordinates.
  * *_coord:   The coordinates.
  * angle:     Variable to return the angle to.
@@ -379,10 +391,11 @@ void load_area(const string name) {
     }
     
     
-    //Load sectors.
+    //Load geometry.
     
     cur_area_map.clear();
     
+    //Vertices.
     size_t n_vertices = file.get_child_by_name("vertices")->get_nr_of_children_by_name("vertex");
     for(size_t v = 0; v < n_vertices; v++) {
         data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
@@ -390,15 +403,18 @@ void load_area(const string name) {
         if(words.size() == 2) cur_area_map.vertices.push_back(new vertex(tof(words[0]), tof(words[1])));
     }
     
+    //Linedefs.
     size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
     for(size_t l = 0; l < n_linedefs; l++) {
         data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
         linedef* new_linedef = new linedef();
         
         vector<string> s_nrs = split(linedef_data->get_child_by_name("s")->value);
-        if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "0");
-        new_linedef->sector_nrs[0] = toi(s_nrs[0]);
-        new_linedef->sector_nrs[1] = toi(s_nrs[1]);
+        if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
+        for(size_t s = 0; s < 2; s++) {
+            if(s_nrs[s] == "-1") new_linedef->sector_nrs[s] = string::npos;
+            else new_linedef->sector_nrs[s] = toi(s_nrs[s]);
+        }
         
         vector<string> v_nrs = split(linedef_data->get_child_by_name("v")->value);
         if(v_nrs.size() < 2) v_nrs.insert(v_nrs.end(), 2, "0");
@@ -409,29 +425,39 @@ void load_area(const string name) {
         cur_area_map.linedefs.push_back(new_linedef);
     }
     
+    //Sectors.
     size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
     for(size_t s = 0; s < n_sectors; s++) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
         sector* new_sector = new sector();
         
-        new_sector->brightness = tof(sector_data->get_child_by_name("brightness")->get_value_or_default("224"));
+        new_sector->brightness = tof(sector_data->get_child_by_name("brightness")->get_value_or_default(itos(DEF_SECTOR_BRIGHTNESS)));
         new_sector->z = tof(sector_data->get_child_by_name("z")->value);
+        new_sector->fade = tob(sector_data->get_child_by_name("fade")->value);
+        if(new_sector->fade) new_sector->fade_angle = tof(sector_data->get_child_by_name("fade_angle")->value);
         
-        size_t n_floors = sector_data->get_nr_of_children_by_name("texture");
-        if(n_floors > 2) n_floors = 2;
-        for(size_t t = 0; t < n_floors; t++) {
-            data_node* floor_data = sector_data->get_child_by_name("texture", t);
+        for(unsigned char t = 0; t < (size_t) (new_sector->fade ? 2 : 1); t++) {
             sector_texture new_floor = sector_texture();
+            string n = itos(t);
             
-            new_floor.rot = tof(floor_data->get_child_by_name("texture_rotate")->value);
-            new_floor.scale = tof(floor_data->get_child_by_name("texture_scale")->value);
-            new_floor.trans_x = tof(floor_data->get_child_by_name("texture_trans_x")->value);
-            new_floor.trans_y = tof(floor_data->get_child_by_name("texture_trans_y")->value);
-            new_floor.bitmap = load_bmp("Textures/" + floor_data->get_child_by_name("file")->value, floor_data);  //ToDo don't load it every time.
-            //ToDo terrain sound.
+            new_floor.filename = sector_data->get_child_by_name("texture_" + n)->value;
+            new_floor.rot = tof(sector_data->get_child_by_name("texture_" + n + "_rotate")->value);
+            
+            vector<string> scales = split(sector_data->get_child_by_name("texture_" + n + "scale")->value);
+            if(scales.size() >= 2) {
+                new_floor.scale_x = tof(scales[0]);
+                new_floor.scale_y = tof(scales[0]);
+            }
+            vector<string> translations = split(sector_data->get_child_by_name("texture_" + n + "trans")->value);
+            if(translations.size() >= 2) {
+                new_floor.trans_x = tof(translations[0]);
+                new_floor.trans_y = tof(translations[0]);
+            }
+            //ToDo missing stuff.
             
             new_sector->textures[t] = new_floor;
         }
+        
         
         //ToDo missing things.
         
@@ -531,6 +557,16 @@ void load_area(const string name) {
         sector* s_ptr = cur_area_map.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads the area's sector textures.
+ */
+void load_area_textures() {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        sector* s_ptr = cur_area_map.sectors[s];
+        s_ptr->textures[0].bitmap = bitmaps.get("Textures/" + s_ptr->textures[0].filename, NULL);
     }
 }
 

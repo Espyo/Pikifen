@@ -103,6 +103,7 @@ using namespace std;
 #define OTHER_TYPES_FOLDER     TYPES_FOLDER "/Others"
 #define PELLETS_FOLDER         TYPES_FOLDER "/Pellets"
 #define PIKMIN_FOLDER          TYPES_FOLDER "/Pikmin"
+#define TEXTURES_FOLDER        GRAPHICS_FOLDER "/Textures"
 #define TREASURES_FOLDER       TYPES_FOLDER "/Treasures"
 #define TYPES_FOLDER           GAME_DATA_FOLDER "/Types"
 #define WEATHER_FILE           CONFIGURATIONS_FOLDER "/Weather.txt"
@@ -117,12 +118,24 @@ enum EDITOR_MODES {
     EDITOR_MODE_TOP,
     //Area editor
     EDITOR_MODE_SECTORS,
+    EDITOR_MODE_ADV_TEXTURE_SETTINGS,
     EDITOR_MODE_BG,
+    EDITOR_MODE_REVIEW,
 };
 
 enum EDITOR_SEC_MODES {
-    EDITOR_SEC_MODE_NONE,
-    EDITOR_SEC_MODE_BG_MOUSE, //BG transformation being controlled by mouse.
+    ESM_NONE,
+    ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
+    ESM_NEW_SECTOR,
+    ESM_SEL_SECTOR, //Sector selection.
+    ESM_TEXTURE_VIEW,
+};
+
+enum EDITOR_ERROR_TYPES {
+    EET_NONE,
+    EET_INTERSECTING_LINEDEFS,
+    EET_TEXTURE_ERROR,
+    EET_BAD_SECTOR,
 };
 
 enum SCREENS {

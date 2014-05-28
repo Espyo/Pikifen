@@ -31,6 +31,7 @@ void lafi_checkbox::init() {
             style,
             flags
         ));
+    flags |= LAFI_FLAG_WUM_NO_CHILDREN;
 }
 
 lafi_checkbox::~lafi_checkbox() { }
