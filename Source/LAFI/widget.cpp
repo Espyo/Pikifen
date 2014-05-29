@@ -28,6 +28,8 @@ lafi_widget::lafi_widget(int x1, int y1, int x2, int y2, lafi_style* style, unsi
     mouse_leave_handler = NULL;
     get_focus_handler = NULL;
     lose_focus_handler = NULL;
+    
+    needs_init = false;
 }
 
 /*
@@ -59,6 +61,8 @@ lafi_widget::lafi_widget(lafi_widget &w2) {
     mouse_leave_handler = NULL;
     get_focus_handler = NULL;
     lose_focus_handler = NULL;
+    
+    needs_init = false;
 }
 
 /*

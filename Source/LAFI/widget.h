@@ -73,7 +73,6 @@ public:
     vector<lafi_accelerator> accelerators;
     
     bool needs_init;
-    bool needs_redraw;
     void lose_focus();
     
     function<void(lafi_widget* w, int x, int y)> mouse_move_handler;

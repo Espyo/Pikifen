@@ -18,6 +18,7 @@ lafi_textbox::lafi_textbox(int x1, int y1, int x2, int y2, string text, lafi_sty
     change_handler = NULL;
     scroll_x = 0;
     enter_key_widget = NULL;
+    change_handler = NULL;
     
     tab_index = cur_tab_index++;
 }

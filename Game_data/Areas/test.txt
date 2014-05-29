@@ -16,6 +16,16 @@ vertices{
 	vertex=192 -352
 	vertex=320 -128
 	vertex=64 -224
+	vertex=576 -928
+	vertex=896 -928
+	vertex=672 -832
+	vertex=800 -832
+	vertex=896 -608
+	vertex=672 -704
+	vertex=800 -704
+	vertex=576 -608
+	vertex=672 -736
+	vertex=576 -640
 }
 linedefs{
 	linedef{
@@ -86,6 +96,58 @@ linedefs{
 		s=2 0
 		v=16 14
 	}
+	linedef{
+		s=3 0
+		v=17 18
+	}
+	linedef{
+		s=3 4
+		v=18 20
+	}
+	linedef{
+		s=3 0
+		v=20 19
+	}
+	linedef{
+		s=3 6
+		v=19 17
+	}
+	linedef{
+		s=4 0
+		v=18 21
+	}
+	linedef{
+		s=4 5
+		v=21 23
+	}
+	linedef{
+		s=4 0
+		v=23 20
+	}
+	linedef{
+		s=5 0
+		v=22 23
+	}
+	linedef{
+		s=5 0
+		v=21 24
+	}
+	linedef{
+		s=5 0
+		v=24 22
+	}
+	linedef{
+		s=6 0
+		v=19 25
+	}
+	linedef{
+		s=6 0
+		v=25 26
+	}
+	linedef{
+		s=6 0
+		v=26 17
+	}
 }
 sectors{
 	sector{
@@ -95,6 +157,22 @@ sectors{
 	sector{
 		z=1
 		texture_0=Metal.png
+	}
+	sector{
+		z=0
+		texture_0=Grass.png
+	}
+	sector{
+		z=0
+		texture_0=Grass.png
+	}
+	sector{
+		z=0
+		texture_0=Grass.png
+	}
+	sector{
+		z=0
+		texture_0=Grass.png
 	}
 	sector{
 		z=0

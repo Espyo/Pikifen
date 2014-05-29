@@ -52,9 +52,10 @@ struct linedef_intersection {
  * a wall on the landing site part of TIS.
  */
 struct blockmap {
-    float x1, y2;
+    float x1, y1;
     unsigned n_cols, n_rows;
     vector<vector<linedef*> > linedefs_in_blocks;
+    blockmap();
 };
 
 
@@ -98,13 +99,13 @@ struct sector_texture {
  * is determined by its floors.
  */
 struct sector {
+    unsigned short type;
+    float z; //Height.
+    unsigned int tag; //ToDo are these used?
+    float brightness;
     sector_texture textures[2];
     bool fade;
     float fade_angle;
-    unsigned short type;
-    unsigned int tag; //ToDo are these used?
-    float z; //Height.
-    float brightness;
     
     vector<element*> elements;
     vector<size_t> linedef_nrs;
@@ -114,6 +115,7 @@ struct sector {
     sector();
     void connect_linedefs(area_map &a, size_t s_nr);
     void fix_pointers(area_map &a);
+    ~sector();
 };
 
 
@@ -168,10 +170,11 @@ void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t>
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<linedef*, bool> &sides_todo);
 vertex* get_rightmost_vertex(polygon* p);
+vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(float x, float y, size_t* sector_nr);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
-bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3);
+bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
 void triangulate(sector* s);
 

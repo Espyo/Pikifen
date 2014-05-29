@@ -6,6 +6,7 @@
 lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float max, float low_value, float high_value, bool vertical, lafi_style* style, unsigned char flags)
     : lafi_widget(x1, y1, x2, y2, style, flags) {
     
+    attached_widget = NULL;
     this->min = min;
     this->max = max;
     this->low_value = low_value;

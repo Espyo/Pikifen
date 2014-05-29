@@ -247,7 +247,7 @@ void area_editor::do_logic() {
                 
                 //Debug: uncomment this to show the sector numbers on each side.
                 //Orientantion could be wrong, as there is no concept of front/back sector.
-                /*float mid_x = (l_ptr->vertices[0]->x + l_ptr->vertices[1]->x) / 2;
+                float mid_x = (l_ptr->vertices[0]->x + l_ptr->vertices[1]->x) / 2;
                 float mid_y = (l_ptr->vertices[0]->y + l_ptr->vertices[1]->y) / 2;
                 float angle = atan2(l_ptr->vertices[0]->y - l_ptr->vertices[1]->y, l_ptr->vertices[0]->x - l_ptr->vertices[1]->x);
                 al_draw_text(
@@ -259,7 +259,7 @@ void area_editor::do_logic() {
                     font, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle + M_PI_2) * 15,
                     mid_y + sin(angle + M_PI_2) * 15 - font_h / 2,
-                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : itos(l_ptr->sector_nrs[1]).c_str());*/
+                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : itos(l_ptr->sector_nrs[1]).c_str());
             }
             
             //Vertices.
@@ -287,9 +287,9 @@ void area_editor::do_logic() {
         //Select sector marker.
         if(ed_sec_mode == ESM_SEL_SECTOR) {
             al_draw_circle(mouse_cursor_x, mouse_cursor_y, 12, al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
-            al_draw_line(mouse_cursor_x - 16, mouse_cursor_y,      mouse_cursor_x + 16, mouse_cursor_y,
+            al_draw_line(mouse_cursor_x - 16, mouse_cursor_y, mouse_cursor_x + 16, mouse_cursor_y,
                          al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
-            al_draw_line(mouse_cursor_x,      mouse_cursor_y - 16, mouse_cursor_x,      mouse_cursor_y + 16,
+            al_draw_line(mouse_cursor_x, mouse_cursor_y - 16, mouse_cursor_x, mouse_cursor_y + 16,
                          al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
         }
         
@@ -298,7 +298,7 @@ void area_editor::do_logic() {
             if(ed_on_sector && ed_moving_vertex == string::npos) {
                 for(size_t t = 0; t < ed_on_sector->triangles.size(); t++) {
                     triangle* t_ptr = &ed_on_sector->triangles[t];
-                    /*al_draw_triangle(
+                    al_draw_triangle(
                         t_ptr->points[0]->x,
                         t_ptr->points[0]->y,
                         t_ptr->points[1]->x,
@@ -307,7 +307,7 @@ void area_editor::do_logic() {
                         t_ptr->points[2]->y,
                         al_map_rgb(192, 0, 0),
                         1.0 / cam_zoom
-                    );*/
+                    );
                     al_draw_filled_triangle(
                         t_ptr->points[0]->x,
                         t_ptr->points[0]->y,
@@ -321,6 +321,7 @@ void area_editor::do_logic() {
             }
         }
         
+        //Draw textures.
         if(ed_sec_mode == ESM_TEXTURE_VIEW) {
             for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
                 sector* s_ptr = cur_area_map.sectors[s];
@@ -405,6 +406,12 @@ void area_editor::goto_error() {
     if(ed_error_type == EET_NONE) return;
     
     if(ed_error_type == EET_INTERSECTING_LINEDEFS) {
+    
+        if(ed_error_size_t_1 >= ed_intersecting_lines.size()) {
+            area_editor::find_errors();
+            return;
+        }
+        
         linedef_intersection* li_ptr = &ed_intersecting_lines[ed_error_size_t_1];
         float min_x, max_x, min_y, max_y;
         min_x = max_x = li_ptr->l1->vertices[0]->x;
@@ -813,6 +820,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 vertex* moved_v_ptr = cur_area_map.vertices[ed_moving_vertex];
                 vertex* final_vertex = moved_v_ptr;
                 
+                unordered_set<sector*> affected_sectors;
+                
                 //Check if the line's vertices intersect with any other lines.
                 //If so, they're marked with red.
                 check_linedef_intersections(moved_v_ptr);
@@ -836,6 +845,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             //Check if it's being squashed into non-existence.
                             if(other_vertex == dest_v_ptr) {
                             
+                                affected_sectors.insert(l_ptr->sectors[0]);
+                                affected_sectors.insert(l_ptr->sectors[1]);
+                                
                                 //Clear it from its vertices' lists.
                                 for(size_t vl = 0; vl < other_vertex->linedefs.size(); vl++) {
                                     if(other_vertex->linedefs[vl] == l_ptr) {
@@ -875,19 +887,24 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     if(d_other_vertex == other_vertex) {
                                         //The linedef will be merged with this one.
                                         has_merged = true;
+                                        affected_sectors.insert(l_ptr->sectors[0]);
+                                        affected_sectors.insert(l_ptr->sectors[1]);
+                                        affected_sectors.insert(dl_ptr->sectors[0]);
+                                        affected_sectors.insert(dl_ptr->sectors[1]);
                                         
                                         //Tell the destination linedef's sectors
                                         //to forget it; they'll be re-added later.
                                         size_t old_dl_nr = dl_ptr->remove_from_sectors();
                                         
                                         //Set the new sectors.
+                                        //ToDo if one of the central sectors is null.
                                         if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[0])
                                             dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[1];
                                         else if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[1])
                                             dl_ptr->sector_nrs[1] = l_ptr->sector_nrs[1];
-                                        else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[0])
+                                        else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[0] || !l_ptr->sectors[0])
                                             dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[0];
-                                        else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[1])
+                                        else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[1] || !l_ptr->sectors[1])
                                             dl_ptr->sector_nrs[1] = l_ptr->sector_nrs[0];
                                         dl_ptr->fix_pointers(cur_area_map);
                                         
@@ -913,6 +930,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         
                                         //Add the linedefs to the sectors' lists.
                                         for(size_t s = 0; s < 2; s++) {
+                                            if(!dl_ptr->sectors[s]) continue;
                                             dl_ptr->sectors[s]->linedefs.push_back(dl_ptr);
                                             dl_ptr->sectors[s]->linedef_nrs.push_back(old_dl_nr);
                                         }
@@ -963,7 +981,6 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
                 
                 //Finally, re-triangulate the affected sectors.
-                unordered_set<sector*> affected_sectors;
                 for(size_t l = 0; l < final_vertex->linedefs.size(); l++) {
                     linedef* l_ptr = final_vertex->linedefs[l];
                     for(size_t s = 0; s < 2; s++) {
@@ -971,6 +988,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     }
                 }
                 for(auto s = affected_sectors.begin(); s != affected_sectors.end(); s++) {
+                    if(!(*s)) continue;
                     triangulate(*s);
                 }
                 
@@ -1648,7 +1666,7 @@ void area_editor::update_review_frame() {
     
     if(ed_error_type == EET_NONE) {
         disable_widget(but_goto_error);
-        lbl_error_1->text = "N/A";
+        lbl_error_1->text = "---";
         
     } else {
         enable_widget(but_goto_error);

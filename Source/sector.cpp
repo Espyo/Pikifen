@@ -25,9 +25,27 @@
  * Clears the info on an area map.
  */
 void area_map::clear() {
+    //ToDo free the memory.
+    for(size_t v = 0; v < vertices.size(); v++) {
+        delete vertices[v];
+    }
+    for(size_t l = 0; l < linedefs.size(); l++) {
+        delete linedefs[l];
+    }
+    for(size_t s = 0; s < sectors.size(); s++) {
+        delete sectors[s];
+    }
     vertices.clear();
     linedefs.clear();
     sectors.clear();
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a blockmap.
+ */
+blockmap::blockmap() {
+    x1 = y1 = 0;
+    n_cols = n_rows = 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -36,7 +54,7 @@ void area_map::clear() {
 linedef::linedef(size_t v1, size_t v2) {
     vertices[0] = vertices[1] = NULL;
     sectors[0] = sectors[1] = NULL;
-    sector_nrs[0] = string::npos; sector_nrs[1] = string::npos;
+    sector_nrs[0] = sector_nrs[1] = string::npos;
     
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
 }
@@ -66,6 +84,7 @@ void linedef::fix_pointers(area_map &a) {
 size_t linedef::remove_from_sectors() {
     size_t l_nr = string::npos;
     for(unsigned char s = 0; s < 2; s++) {
+        if(!sectors[s]) continue;
         for(size_t l = 0; l < sectors[s]->linedefs.size(); l++) {
             linedef* l_ptr = sectors[s]->linedefs[l];
             if(l_ptr == this) {
@@ -85,11 +104,22 @@ size_t linedef::remove_from_sectors() {
  */
 sector::sector() {
     type = SECTOR_TYPE_NORMAL;
+    z = 0;
     tag = 0;
     brightness = DEF_SECTOR_BRIGHTNESS;
     fade = false;
     fade_angle = 0;
-    z = 0;
+}
+
+/* ----------------------------------------------------------------------------
+ * Destroys a sector.
+ */
+sector::~sector() {
+    for(size_t t = 0; t < 2; t++) {
+        if(textures[t].bitmap && textures[t].bitmap != bmp_error) {
+            bitmaps.detach(textures[t].filename);
+        }
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -180,6 +210,13 @@ void vertex::fix_pointers(area_map &a) {
         size_t l_nr = linedef_nrs[l];
         linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns a point's sign on a line, used for detecting if it's inside a triangle.
+ */
+float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2) {
+    return (x - lx2) * (ly1 - ly2) - (lx1 - lx2) * (y - ly2);
 }
 
 /* ----------------------------------------------------------------------------
@@ -308,7 +345,8 @@ sector* get_sector(float x, float y, size_t* sector_nr) {
                     x, y,
                     t_ptr->points[0]->x, t_ptr->points[0]->y,
                     t_ptr->points[1]->x, t_ptr->points[1]->y,
-                    t_ptr->points[2]->x, t_ptr->points[2]->y
+                    t_ptr->points[2]->x, t_ptr->points[2]->y,
+                    false
                 )
             ) {
                 if(sector_nr) *sector_nr = s;
@@ -325,10 +363,32 @@ sector* get_sector(float x, float y, size_t* sector_nr) {
  * Returns whether a point is inside a triangle or not.
  * px, py: Coordinates of the point to check.
  * t**:    Coordinates of the triangle's points.
+ * loq:    Less or equal. Different code requires different precision for on-line cases.
+   * Just... don't overthink this, I added this based on what worked and didn't.
  * Thanks go to http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
  */
-bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3) {
-    float dx = px - tx1;
+bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq) {
+    bool b1, b2, b3;
+    
+    float f1, f2, f3;
+    
+    f1 = get_point_sign(px, py, tx1, ty1, tx2, ty2);
+    f2 = get_point_sign(px, py, tx2, ty2, tx3, ty3);
+    f3 = get_point_sign(px, py, tx3, ty3, tx1, ty1);
+    
+    if(loq) {
+        b1 = f1 <= 0.0f;
+        b2 = f2 <= 0.0f;
+        b3 = f3 <= 0.0f;
+    } else {
+        b1 = f1 < 0.0f;
+        b2 = f2 < 0.0f;
+        b3 = f3 < 0.0f;
+    }
+    
+    return ((b1 == b2) && (b2 == b3));
+    
+    /*float dx = px - tx1;
     float dy = py - ty1;
     
     bool s_ab = (tx2 - tx1) * dy - (ty2 - ty1) * dx > 0;
@@ -337,7 +397,7 @@ bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, f
     
     if((tx3 - tx2) * (py - ty2) - (ty3 - ty2) * (px - tx2) > 0 != s_ab) return false;
     
-    return true;
+    return true;*/
 }
 
 /* ----------------------------------------------------------------------------
@@ -366,12 +426,14 @@ bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, c
     
     for(size_t c = 0; c < concaves.size(); c++) {
         const vertex* v_to_check = vec[concaves[c]];
+        if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
         if(
             is_point_in_triangle(
                 v_to_check->x, v_to_check->y,
                 pv->x, pv->y,
                 v->x, v->y,
-                nv->x, nv->y
+                nv->x, nv->y,
+                true
             )
         ) return false;
     }
@@ -389,7 +451,7 @@ vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
         if(!rightmost) rightmost = l->first->vertices[0];
         
         for(unsigned char v = 0; v < 2; v++) {
-            if(l->first->vertices[v]->x > rightmost->x) rightmost = l->first->vertices[v];
+            rightmost = get_rightmost_vertex(l->first->vertices[v], rightmost);
         }
     }
     
@@ -397,18 +459,32 @@ vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
 }
 
 /* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right.
+ * Returns the vertex farthest to the right in a polygon.
  */
 vertex* get_rightmost_vertex(polygon* p) {
     vertex* rightmost = NULL;
     
     for(size_t v = 0; v < p->size(); v++) {
-        if(!rightmost) rightmost = p->at(v);
-        
-        if(p->at(v)->x > rightmost->x) rightmost = p->at(v);
+        vertex* v_ptr = p->at(v);
+        if(!rightmost) rightmost = v_ptr;
+        else {
+            rightmost = get_rightmost_vertex(v_ptr, rightmost);
+        }
     }
     
     return rightmost;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right between the two.
+ * In the case of a tie, the highest one is returned.
+ * This is necessary because at one point, the rightmost
+ * vertex was being decided kinda randomly.
+ */
+vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
+    if(v1->x > v2->x) return v1;
+    if(v1->x == v2->x && v1->y < v2->y) return v1;
+    return v2;
 }
 
 /* ----------------------------------------------------------------------------
@@ -487,29 +563,10 @@ void clean_poly(polygon* p) {
  * polygon, as to make the outer holeless.
  */
 void cut_poly(polygon* outer, vector<polygon>* inners) {
-    //ToDo aren't they sorted already?
     vertex* outer_rightmost = get_rightmost_vertex(outer);
     
-    //Sort the inner polygons. We need to start with the
-    //one with the rightmost vertex, then move to the 2nd, etc.
-    //The following is pairs of inner polygon + its rightmost vertex.
-    vector<pair<polygon*, vertex*> > sorted_inners;
     for(size_t i = 0; i < inners->size(); i++) {
         polygon* p = &inners->at(i);
-        vertex* r = get_rightmost_vertex(p);
-        if(r) {
-            sorted_inners.push_back(
-                make_pair<polygon*, vertex*>(p, r)
-            );
-        }
-    }
-    
-    sort(sorted_inners.begin(), sorted_inners.end(), [] (pair<polygon*, vertex*> p1, pair<polygon*, vertex*> p2) {
-        return p1.second->x > p2.second->x;
-    });
-    
-    for(size_t i = 0; i < sorted_inners.size(); i++) {
-        polygon* p = sorted_inners[i].first;
         vertex* closest_line_v1 = NULL;
         vertex* closest_line_v2 = NULL;
         float closest_line_ur = FLT_MAX;
@@ -518,7 +575,13 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         vertex* best_vertex = NULL;
         
         //Find the rightmost vertex on this inner.
-        vertex* start = sorted_inners[i].second;
+        vertex* start = get_rightmost_vertex(p);
+        
+        if(!start) {
+            //ToDo warn.
+            cout << "Inner polygon without vertices!\n";
+            continue;
+        }
         
         //Imagine a line from this vertex to the right.
         //If any line of the outer polygon intersects it,
@@ -570,7 +633,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             
             //We're on the line closest to the vertex.
             //Go to the rightmost vertex of this line.
-            vertex* vertex_to_compare = (closest_line_v1->x > closest_line_v2->x ? closest_line_v1 : closest_line_v2);
+            vertex* vertex_to_compare = get_rightmost_vertex(closest_line_v1, closest_line_v2);
             
             //Now get a list of all vertices inside the triangle
             //marked by the inner's vertex,
@@ -581,9 +644,11 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 vertex* v_ptr = outer->at(v);
                 if(
                     is_point_in_triangle(
-                        v_ptr->x, v_ptr->y, start->x, start->y,
+                        v_ptr->x, v_ptr->y,
+                        start->x, start->y,
                         start->x + closest_line_ur * ray_width, start->y,
-                        vertex_to_compare->x, vertex_to_compare->y) &&
+                        vertex_to_compare->x, vertex_to_compare->y,
+                        true) &&
                     v_ptr != vertex_to_compare
                 ) {
                     inside_triangle.push_back(v_ptr);
@@ -785,6 +850,7 @@ void triangulate(sector* s) {
         if(ears.size() == 0) {
             //Something went wrong, the polygon mightn't be simple.
             //ToDo warn.
+            cout << "Non-simple polygon detected!\n";
             break;
         } else {
             //The ear, the previous and the next vertices make a triangle.

@@ -13,6 +13,11 @@
 lafi_gui::lafi_gui(int w, int h, lafi_style* style, unsigned char flags)
     : lafi_widget(0, 0, w, h, style, flags) {
     
+    timer = NULL;
+    queue = NULL;
+    thread = NULL;
+    close_button_quits = false;
+    
     this->autonomous = false;
 }
 
