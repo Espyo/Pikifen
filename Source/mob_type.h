@@ -58,6 +58,39 @@ public:
     mob_type();
 };
 
-void load_mob_types(const string folder, const unsigned char type);
+void load_mob_types(const string folder, const unsigned char type, bool load_resources);
+void load_mob_types(bool load_resources);
+
+enum MOB_FOLDERS {
+    MOB_FOLDER_NONE,
+    MOB_FOLDER_PIKMIN,
+    MOB_FOLDER_ONIONS,
+    MOB_FOLDER_LEADERS,
+    MOB_FOLDER_ENEMIES,
+    MOB_FOLDER_TREASURES,
+    MOB_FOLDER_PELLETS,
+    N_MOB_FOLDERS,
+};
+
+const string MOB_FOLDER_NAMES[] = {
+    "",
+    "Pikmin",
+    "Onions",
+    "Leaders",
+    "Enemies",
+    "Treasures",
+    "Pellets",
+};
+
+//Singular names.
+const string MOB_FOLDER_SNAMES[] = {
+    "",
+    "Pikmin",
+    "Onion",
+    "Leader",
+    "Enemy",
+    "Treasure",
+    "Pellet",
+};
 
 #endif //ifndef MOB_TYPE_INCLUDED

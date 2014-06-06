@@ -35,10 +35,24 @@ mob_type::mob_type() {
 }
 
 /* ----------------------------------------------------------------------------
- * Loads the mob types from a folder.
- * type: Use MOB_TYPE_* for this.
+ * Loads all mob types.
  */
-void load_mob_types(const string folder, const unsigned char type) {
+void load_mob_types(bool load_resources) {
+    load_mob_types(PIKMIN_FOLDER,    MOB_FOLDER_PIKMIN,    load_resources);
+    load_mob_types(ONIONS_FOLDER,    MOB_FOLDER_ONIONS,    load_resources);
+    load_mob_types(LEADERS_FOLDER,   MOB_FOLDER_LEADERS,   load_resources);
+    load_mob_types(ENEMIES_FOLDER,   MOB_FOLDER_ENEMIES,   load_resources);
+    load_mob_types(TREASURES_FOLDER, MOB_FOLDER_TREASURES, load_resources);
+    load_mob_types(PELLETS_FOLDER,   MOB_FOLDER_PELLETS,   load_resources);
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads the mob types from a folder.
+ * folder: Name of the folder on the hard drive.
+ * type: Use MOB_FOLDER_* for this.
+ * load_animations: False if you don't need the images and sounds, so it loads faster.
+ */
+void load_mob_types(const string folder, const unsigned char type, bool load_resources) {
     vector<string> types = folder_to_vector(folder, true);
     if(types.size() == 0) {
         error_log("Folder not found \"" + folder + "\"!");
@@ -52,15 +66,15 @@ void load_mob_types(const string folder, const unsigned char type) {
         if(!file.file_was_opened) return;
         
         mob_type* mt;
-        if(type == MOB_TYPE_PIKMIN) {
+        if(type == MOB_FOLDER_PIKMIN) {
             mt = new pikmin_type();
-        } else if(type == MOB_TYPE_ONION) {
+        } else if(type == MOB_FOLDER_ONIONS) {
             mt = new onion_type();
-        } else if(type == MOB_TYPE_LEADER) {
+        } else if(type == MOB_FOLDER_LEADERS) {
             mt = new leader_type();
-        } else if(type == MOB_TYPE_ENEMY) {
+        } else if(type == MOB_FOLDER_ENEMIES) {
             mt = new enemy_type();
-        } else if(type == MOB_TYPE_PELLET) {
+        } else if(type == MOB_FOLDER_PELLETS) {
             mt = new pellet_type();
         } else {
             mt = new mob_type();
@@ -80,12 +94,14 @@ void load_mob_types(const string folder, const unsigned char type) {
         mt->size = tof(file.get_child_by_name("size")->value);
         mt->weight = tof(file.get_child_by_name("weight")->value);
         
-        data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
-        mt->anims = load_animation_set(&anim_file);
+        if(load_resources) {
+            data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
+            mt->anims = load_animation_set(&anim_file);
+            
+            mt->events = load_script(mt, file.get_child_by_name("script"));
+        }
         
-        mt->events = load_script(mt, file.get_child_by_name("script"));
-        
-        if(type == MOB_TYPE_PIKMIN) {
+        if(type == MOB_FOLDER_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;
             pt->attack_power = tof(file.get_child_by_name("attack_power")->value);
             pt->attack_interval = tof(file.get_child_by_name("attack_interval")->get_value_or_default("0.8"));
@@ -109,7 +125,7 @@ void load_mob_types(const string folder, const unsigned char type) {
             
             pikmin_types[pt->name] = pt;
             
-        } else if(type == MOB_TYPE_ONION) {
+        } else if(type == MOB_FOLDER_ONIONS) {
             onion_type* ot = (onion_type*) mt;
             data_node* pik_type_node = file.get_child_by_name("pikmin_type");
             if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
@@ -120,14 +136,17 @@ void load_mob_types(const string folder, const unsigned char type) {
             
             onion_types[ot->name] = ot;
             
-        } else if(type == MOB_TYPE_LEADER) {
+        } else if(type == MOB_FOLDER_LEADERS) {
             leader_type* lt = (leader_type*) mt;
-            lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
-            lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
             lt->pluck_delay = tof(file.get_child_by_name("pluck_delay")->value);
-            lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
             lt->whistle_range = tof(file.get_child_by_name("whistle_range")->get_value_or_default(ftos(DEF_WHISTLE_RANGE)));
-            lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
+            lt->punch_strength = toi(file.get_child_by_name("punch_strength")->value); //ToDo default.
+            
+            if(load_resources) {
+                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
+                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
+                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
+            }
             
             new_anim_conversion(LEADER_ANIM_IDLE, "idle");
             new_anim_conversion(LEADER_ANIM_WALK, "walk");
@@ -140,7 +159,7 @@ void load_mob_types(const string folder, const unsigned char type) {
             
             leader_types[lt->name] = lt;
             
-        } else if(type == MOB_TYPE_ENEMY) {
+        } else if(type == MOB_FOLDER_ENEMIES) {
             enemy_type* et = (enemy_type*) mt;
             et->drops_corpse = tob(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
             et->is_boss = tob(file.get_child_by_name("is_boss")->value);
@@ -151,13 +170,13 @@ void load_mob_types(const string folder, const unsigned char type) {
             
             enemy_types[et->name] = et;
             
-        } else if(type == MOB_TYPE_TREASURE) {
+        } else if(type == MOB_FOLDER_TREASURES) {
             treasure_type* tt = (treasure_type*) mt;
             tt->move_speed = 60; //ToDo should this be here?
             
             treasure_types[tt->name] = tt;
             
-        } else if(type == MOB_TYPE_PELLET) {
+        } else if(type == MOB_FOLDER_PELLETS) {
             pellet_type* pt = (pellet_type*) mt;
             data_node* pik_type_node = file.get_child_by_name("pikmin_type");
             if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
@@ -177,7 +196,9 @@ void load_mob_types(const string folder, const unsigned char type) {
             
         }
         
-        mt->anims.create_conversions(anim_conversions);
+        if(load_resources) {
+            mt->anims.create_conversions(anim_conversions);
+        }
         
     }
     

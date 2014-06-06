@@ -125,7 +125,7 @@ void animation_editor::do_logic() {
                 }
             }
             
-            if(f->top_visible && ed_mob_type_list == MOB_TYPE_PIKMIN) {
+            if(f->top_visible && ed_mob_type_list == MOB_FOLDER_PIKMIN) {
                 draw_sprite(
                     ed_top_bmp[ed_maturity],
                     f->top_x, f->top_y,
@@ -199,7 +199,7 @@ void animation_editor::gui_load_frame() {
         ((lafi_textbox*) f->widgets["txt_offsx"])->text = ftos(ed_cur_frame->offs_x);
         ((lafi_textbox*) f->widgets["txt_offsy"])->text = ftos(ed_cur_frame->offs_y);
         
-        if(ed_mob_type_list == MOB_TYPE_PIKMIN) enable_widget(f->widgets["but_top"])
+        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) enable_widget(f->widgets["but_top"])
             else disable_widget(f->widgets["but_top"]);
             
         gui_load_hitbox_instance();
@@ -556,7 +556,6 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
  */
 void animation_editor::load() {
     ed_mode = EDITOR_MODE_MAIN;
-    load_animation_set();
     
     lafi_style* s = new lafi_style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
     ed_gui = new lafi_gui(scr_w, scr_h, s);
@@ -1129,7 +1128,7 @@ void animation_editor::load() {
             pick(name, ANIMATION_EDITOR_PICKER_HITBOX);
         }
         
-        ((lafi_textbox*) ed_gui->widgets["frm_picker"]->widgets["txt_new"])->text = "";
+        ((lafi_textbox*) ed_gui->widgets["frm_picker"]->widgets["txt_new"])->text.clear();
     };
     frm_picker->widgets["but_new"]->description = "Create a new one with the name on the textbox.";
     frm_picker->widgets["frm_list"]->mouse_wheel_handler = [] (lafi_widget*, int dy, int) {
@@ -1189,6 +1188,8 @@ void animation_editor::load() {
     ed_gui->add("lbl_status_bar", ed_gui_status_bar);
     
     update_stats();
+    disable_widget(frm_bottom->widgets["but_load"]);
+    disable_widget(frm_bottom->widgets["but_save"]);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1220,6 +1221,9 @@ void animation_editor::load_animation_set() {
     if(ed_anims.hitboxes.size() > 0) {
         ed_cur_hitbox = ed_anims.hitboxes[0];
     }
+    
+    enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
+    enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1285,17 +1289,17 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         for(size_t h = 0; h < ed_anims.hitboxes.size(); h++) {
             elements.push_back(ed_anims.hitboxes[h]->name);
         }
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ENEMY) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ENEMIES) {
         elements = folder_to_vector(ENEMIES_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_LEADER) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_LEADERS) {
         elements = folder_to_vector(LEADERS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ONION) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ONIONS) {
         elements = folder_to_vector(ONIONS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PELLET) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PELLETS) {
         elements = folder_to_vector(PELLETS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PIKMIN) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PIKMIN) {
         elements = folder_to_vector(PIKMIN_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_TREASURE) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_TREASURES) {
         elements = folder_to_vector(TREASURES_FOLDER, true);
     }
     
@@ -1332,14 +1336,16 @@ void animation_editor::pick(string name, unsigned char type) {
     show_widget(ed_gui->widgets["frm_bottom"]);
     
     if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
-        if(name == "Enemies")        ed_mob_type_list = MOB_TYPE_ENEMY;
-        else if(name == "Leaders")   ed_mob_type_list = MOB_TYPE_LEADER;
-        else if(name == "Onions")    ed_mob_type_list = MOB_TYPE_ONION;
-        else if(name == "Pellets")   ed_mob_type_list = MOB_TYPE_PELLET;
-        else if(name == "Pikmin")    ed_mob_type_list = MOB_TYPE_PIKMIN;
-        else if(name == "Treasures") ed_mob_type_list = MOB_TYPE_TREASURE;
-        ed_object_name = "";
+        if(name == "Enemies")        ed_mob_type_list = MOB_FOLDER_ENEMIES;
+        else if(name == "Leaders")   ed_mob_type_list = MOB_FOLDER_LEADERS;
+        else if(name == "Onions")    ed_mob_type_list = MOB_FOLDER_ONIONS;
+        else if(name == "Pellets")   ed_mob_type_list = MOB_FOLDER_PELLETS;
+        else if(name == "Pikmin")    ed_mob_type_list = MOB_FOLDER_PIKMIN;
+        else if(name == "Treasures") ed_mob_type_list = MOB_FOLDER_TREASURES;
+        ed_object_name.clear();
         update_stats();
+        disable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
+        disable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
         
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         ed_cur_anim = ed_anims.animations[ed_anims.find_animation(name)];
@@ -1371,17 +1377,17 @@ void animation_editor::pick(string name, unsigned char type) {
         show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
         
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ENEMY) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ENEMIES) {
         ed_filename = ENEMIES_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_LEADER) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_LEADERS) {
         ed_filename = LEADERS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_ONION) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ONIONS) {
         ed_filename = ONIONS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PELLET) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PELLETS) {
         ed_filename = PELLETS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_PIKMIN) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PIKMIN) {
         ed_filename = PIKMIN_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_TYPE_TREASURE) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_TREASURES) {
         ed_filename = TREASURES_FOLDER;
     }
     
@@ -1399,7 +1405,7 @@ void animation_editor::pick(string name, unsigned char type) {
             }
         }
         
-        if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
+        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) {
             data_node data = data_node(temp_path_start + "/" + name + "/Data.txt");
             ed_top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
             ed_top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
@@ -1456,7 +1462,7 @@ void animation_editor::save_animation_set() {
         frame_node->add(new data_node("offs_x", ftos(ed_anims.frames[f]->offs_x)));
         frame_node->add(new data_node("offs_y", ftos(ed_anims.frames[f]->offs_y)));
         
-        if(ed_mob_type_list == MOB_TYPE_PIKMIN) {
+        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) {
             frame_node->add(new data_node("top_visible", btos(ed_anims.frames[f]->top_visible)));
             frame_node->add(new data_node("top_x", ftos(ed_anims.frames[f]->top_x)));
             frame_node->add(new data_node("top_y", ftos(ed_anims.frames[f]->top_y)));
@@ -1509,12 +1515,12 @@ void animation_editor::update_stats() {
     lafi_widget* f = ed_gui->widgets["frm_main"];
     string s;
     
-    if(ed_mob_type_list == MOB_TYPE_ENEMY) s = "Enemies";
-    else if(ed_mob_type_list == MOB_TYPE_LEADER) s = "Leaders";
-    else if(ed_mob_type_list == MOB_TYPE_ONION) s = "Onions";
-    else if(ed_mob_type_list == MOB_TYPE_PELLET) s = "Pellets";
-    else if(ed_mob_type_list == MOB_TYPE_PIKMIN) s = "Pikmin";
-    else if(ed_mob_type_list == MOB_TYPE_TREASURE) s = "Treasures";
+    if(ed_mob_type_list == MOB_FOLDER_ENEMIES)        s = "Enemies";
+    else if(ed_mob_type_list == MOB_FOLDER_LEADERS)   s = "Leaders";
+    else if(ed_mob_type_list == MOB_FOLDER_ONIONS)    s = "Onions";
+    else if(ed_mob_type_list == MOB_FOLDER_PELLETS)   s = "Pellets";
+    else if(ed_mob_type_list == MOB_FOLDER_PIKMIN)    s = "Pikmin";
+    else if(ed_mob_type_list == MOB_FOLDER_TREASURES) s = "Treasures";
     
     ((lafi_button*) f->widgets["but_folder"])->text = s;
     ((lafi_button*) f->widgets["but_object"])->text = ed_object_name;

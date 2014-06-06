@@ -93,6 +93,7 @@
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="interval.cpp" />
+    <ClCompile Include="LAFI\angle_picker.cpp" />
     <ClCompile Include="LAFI\button.cpp" />
     <ClCompile Include="LAFI\checkbox.cpp" />
     <ClCompile Include="LAFI\frame.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="element.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_type.h" />
+    <ClInclude Include="LAFI\angle_picker.h" />
     <ClInclude Include="LAFI\button.h" />
     <ClInclude Include="LAFI\checkbox.h" />
     <ClInclude Include="LAFI\const.h" />

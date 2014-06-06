@@ -941,29 +941,68 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
  * vertices: Vertices that make up the triangles of the sector.
- * s:        The sector to draw.
- * x, y:     Top-left coordinates.
+ * s:    The sector to draw.
+ * x, y: Top-left coordinates.
  */
-void draw_sector(sector* s, const float x, const float y) {
-    ALLEGRO_VERTEX av[200]; //ToDo 200?
-    size_t n_vertices = s->triangles.size() * 3;
+void draw_sector(sector* s_ptr, const float x, const float y) {
+
+    float fade_line_x1, fade_line_y1;
+    float fade_line_x2, fade_line_y2;
     
-    //ToDo floors don't work like this.
+    unsigned char n_textures = (s_ptr->fade && s_ptr->textures[1].bitmap) ? 2 : 1;
     
-    for(unsigned char t = 0; t < 1; t++) {
+    if(n_textures == 2) {
+        float min_x, min_y, max_x, max_y;
+        get_sector_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
+        fade_line_x1 = (max_x + min_x) / 2;
+        fade_line_y1 = (max_y + min_y) / 2;
+        
+        fade_line_x2 = fade_line_x1 + cos(s_ptr->fade_angle - M_PI_2);
+        fade_line_y2 = fade_line_y1 + sin(s_ptr->fade_angle - M_PI_2);
+    }
     
-        for(size_t v = 0; v < n_vertices; v++) {
-            const triangle* t_ptr = &s->triangles[floor(v / 3.0)];
-            av[v].x = t_ptr->points[v % 3]->x - x;
-            av[v].y = t_ptr->points[v % 3]->y - y;
-            av[v].u = t_ptr->points[v % 3]->x;
-            av[v].v = t_ptr->points[v % 3]->y;
-            av[v].z = 0;
-            av[v].color = al_map_rgba_f(s->brightness, s->brightness, s->brightness, 1);
+    for(unsigned char te = 0; te < n_textures; te++) {
+        for(size_t tr = 0; tr < s_ptr->triangles.size(); tr++) {
+            ALLEGRO_VERTEX av[200]; //ToDo 200?
+            size_t n_vertices = s_ptr->triangles.size() * 3;
+            
+            //ToDo floors don't work like this.
+            
+            ALLEGRO_TRANSFORM tra;
+            al_build_transform(
+                &tra,
+                -s_ptr->textures[te].trans_x,
+                -s_ptr->textures[te].trans_y,
+                1.0 / s_ptr->textures[te].scale_x,
+                1.0 / s_ptr->textures[te].scale_y,
+                -s_ptr->textures[te].rot
+            );
+            
+            for(size_t v = 0; v < n_vertices; v++) {
+            
+                const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+                float tx = x + t_ptr->points[v % 3]->x;
+                float ty = y + t_ptr->points[v % 3]->y;
+                
+                unsigned char alpha = 255;
+                if(te == 1) {
+                    if(get_point_sign(tx, ty, fade_line_x1, fade_line_y1, fade_line_x2, fade_line_y2) <= 0.0f) {
+                        alpha = 0;
+                    }
+                }
+                
+                av[v].x = tx;
+                av[v].y = ty;
+                al_transform_coordinates(&tra, &tx, &ty);
+                av[v].u = tx;
+                av[v].v = ty;
+                av[v].z = 0;
+                av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
+            }
+            
+            al_draw_prim(av, NULL, s_ptr->textures[te].bitmap, 0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST);
+            
         }
-        
-        al_draw_prim(av, NULL, s->textures[t].bitmap, 0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST);
-        
     }
     
 }

@@ -12,8 +12,9 @@
 #ifndef VARS_INCLUDED
 #define VARS_INCLUDED
 
-#include <vector>
 #include <map>
+#include <unordered_set>
+#include <vector>
 
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_audio.h>
@@ -167,10 +168,13 @@ extern float                            ed_cur_frame_time;
 extern hitbox*                          ed_cur_hitbox;
 extern float                            ed_cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
 extern size_t                           ed_cur_hitbox_instance_nr;
+extern mob_gen*                         ed_cur_mob;
 extern sector*                          ed_cur_sector;
 extern float                            ed_double_click_time;
 extern unsigned char                    ed_error_type;
-extern size_t                           ed_error_size_t_1;
+extern sector*                          ed_error_sector_ptr;
+extern string                           ed_error_string;
+extern vertex*                          ed_error_vertex_ptr;
 extern string                           ed_filename;
 extern size_t                           ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                             ed_grabbing_hitbox_edge;
@@ -181,17 +185,20 @@ extern bool                             ed_hitboxes_visible;
 extern bool                             ed_holding_m1;
 extern bool                             ed_holding_m2;
 extern vector<linedef_intersection>     ed_intersecting_lines;
+extern unordered_set<linedef*>          ed_lone_lines;
 extern unsigned char                    ed_maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
 extern unsigned char                    ed_mob_type_list; //Use MOB_TYPE_*.
 extern unsigned char                    ed_mode;
-extern size_t                           ed_moving_vertex;
+extern size_t                           ed_moving_thing; //Current vertex or object being moved.
 extern float                            ed_new_hitbox_corner_x; //FLT_MAX = none.
 extern float                            ed_new_hitbox_corner_y;
+extern unordered_set<sector*>           ed_non_simples;
 extern string                           ed_object_name;
 extern sector*                          ed_on_sector;
 extern unsigned char                    ed_sec_mode; //Secondary/sub mode.
 extern bool                             ed_shift_pressed;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
+extern string                           ed_weather_name;
 extern lafi_widget*                     ed_wum; //Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;

@@ -119,23 +119,17 @@ enum EDITOR_MODES {
     //Area editor
     EDITOR_MODE_SECTORS,
     EDITOR_MODE_ADV_TEXTURE_SETTINGS,
+    EDITOR_MODE_OBJECTS,
     EDITOR_MODE_BG,
     EDITOR_MODE_REVIEW,
 };
 
 enum EDITOR_SEC_MODES {
     ESM_NONE,
-    ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
     ESM_NEW_SECTOR,
-    ESM_SEL_SECTOR, //Sector selection.
+    ESM_NEW_OBJECT,
+    ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,
-};
-
-enum EDITOR_ERROR_TYPES {
-    EET_NONE,
-    EET_INTERSECTING_LINEDEFS,
-    EET_TEXTURE_ERROR,
-    EET_BAD_SECTOR,
 };
 
 enum SCREENS {

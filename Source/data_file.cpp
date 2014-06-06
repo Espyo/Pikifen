@@ -150,7 +150,7 @@ size_t data_node::load_node(const vector<string> &lines, const bool trim_values,
         
             data_node* new_child = new data_node();
             new_child->name = trim_spaces(line.substr(0, pos));
-            new_child->value = "";
+            new_child->value.clear();
             new_child->file_was_opened = file_was_opened;
             new_child->filename = filename;
             new_child->line_nr = l + 1;
@@ -267,7 +267,7 @@ data_node::~data_node() {
  * Like an std::getline(), but for ALLEGRO_FILE*.
  */
 void getline(ALLEGRO_FILE* file, string &line) {
-    line = "";
+    line.clear();
     if(!file) {
         return;
     }

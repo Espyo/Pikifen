@@ -20,6 +20,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "element.h"
+#include "mob_type.h"
 
 using namespace std;
 
@@ -71,6 +72,7 @@ struct linedef {
     linedef(size_t v1 = string::npos, size_t v2 = string::npos);
     void fix_pointers(area_map &a);
     size_t remove_from_sectors();
+    size_t remove_from_vertices();
 };
 
 
@@ -146,6 +148,26 @@ struct vertex {
 
 
 /*
+ * This structure holds the information for
+ * a mob's generation. It's a mob on the editor
+ * and area file, but it doesn't have the
+ * data of a LIVING mob. This only holds its
+ * position and type data, plus some other
+ * tiny things.
+ */
+struct mob_gen {
+    unsigned char folder;
+    mob_type* type;
+    
+    float x, y;
+    float angle;
+    string vars;
+    
+    mob_gen(float x = 0, float y = 0, unsigned char folder = MOB_FOLDER_NONE, mob_type* type = NULL, float angle = 0, string vars = "");
+};
+
+
+/*
  * A structure that holds all of the
  * info about the current area, so that
  * the sectors know how to communicate with
@@ -157,6 +179,7 @@ struct area_map {
     vector<vertex*> vertices;
     vector<linedef*> linedefs;
     vector<sector*> sectors;
+    vector<mob_gen*> mob_generators;
     
     void clear();
 };
@@ -167,16 +190,18 @@ void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 float get_angle_dif(float a1, float a2);
 void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t> &convex_vertices, vector<size_t> &concave_vertices);
+float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<linedef*, bool> &sides_todo);
 vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(float x, float y, size_t* sector_nr);
+void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
-void triangulate(sector* s);
+void triangulate(sector* s_pptr);
 
 
 enum SECTOR_TYPES {

@@ -11,6 +11,7 @@
 
 #include <limits.h>
 
+#include "area_editor.h"
 #include "vars.h"
 #include "const.h"
 
@@ -137,10 +138,13 @@ float                            ed_cur_frame_time = 0;
 hitbox*                          ed_cur_hitbox = NULL;
 float                            ed_cur_hitbox_alpha = 0;
 size_t                           ed_cur_hitbox_instance_nr = string::npos;
+mob_gen*                         ed_cur_mob = NULL;
 sector*                          ed_cur_sector = NULL;
 float                            ed_double_click_time = 0;
-unsigned char                    ed_error_type = EET_NONE;
-size_t                           ed_error_size_t_1 = string::npos;
+unsigned char                    ed_error_type = area_editor::EET_NONE_YET;
+sector*                          ed_error_sector_ptr = NULL;
+string                           ed_error_string;
+vertex*                          ed_error_vertex_ptr = NULL;
 string                           ed_filename;
 size_t                           ed_grabbing_hitbox = string::npos;
 bool                             ed_grabbing_hitbox_edge = false;
@@ -151,17 +155,20 @@ bool                             ed_hitboxes_visible = true;
 bool                             ed_holding_m1 = false;
 bool                             ed_holding_m2 = false;
 vector<linedef_intersection>     ed_intersecting_lines;
+unordered_set<linedef*>          ed_lone_lines;
 unsigned char                    ed_maturity = 0;
 unsigned char                    ed_mob_type_list = 0;
 unsigned char                    ed_mode = EDITOR_MODE_MAIN;
-size_t                           ed_moving_vertex = string::npos;
+size_t                           ed_moving_thing = string::npos;
 float                            ed_new_hitbox_corner_x = FLT_MAX;
 float                            ed_new_hitbox_corner_y = FLT_MAX;
+unordered_set<sector*>           ed_non_simples;
 string                           ed_object_name;
 sector*                          ed_on_sector = NULL;
 unsigned char                    ed_sec_mode = ESM_NONE;
 bool                             ed_shift_pressed = false;
 ALLEGRO_BITMAP*                  ed_top_bmp[3] = { NULL, NULL, NULL };
+string                           ed_weather_name;
 lafi_widget*                     ed_wum = NULL;
 map<string, enemy_type*>         enemy_types;
 vector<enemy*>                   enemies;

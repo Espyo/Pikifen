@@ -25,7 +25,6 @@
  * Clears the info on an area map.
  */
 void area_map::clear() {
-    //ToDo free the memory.
     for(size_t v = 0; v < vertices.size(); v++) {
         delete vertices[v];
     }
@@ -35,9 +34,14 @@ void area_map::clear() {
     for(size_t s = 0; s < sectors.size(); s++) {
         delete sectors[s];
     }
+    for(size_t m = 0; m < mob_generators.size(); m++) {
+        delete mob_generators[m];
+    }
+    
     vertices.clear();
     linedefs.clear();
     sectors.clear();
+    mob_generators.clear();
 }
 
 /* ----------------------------------------------------------------------------
@@ -97,6 +101,40 @@ size_t linedef::remove_from_sectors() {
         }
     }
     return l_nr;
+}
+
+/* ----------------------------------------------------------------------------
+ * Removes the linedef from its vertices, but doesn't mark
+ * the vertices as "none".
+ * Returns the linedef number.
+ */
+size_t linedef::remove_from_vertices() {
+    size_t l_nr = string::npos;
+    for(unsigned char v = 0; v < 2; v++) {
+        if(!vertices[v]) continue;
+        for(size_t l = 0; l < vertices[v]->linedefs.size(); l++) {
+            linedef* l_ptr = vertices[v]->linedefs[l];
+            if(l_ptr == this) {
+                vertices[v]->linedefs.erase(vertices[v]->linedefs.begin() + l);
+                auto nr_it = vertices[v]->linedef_nrs.begin() + l;
+                l_nr = *nr_it;
+                vertices[v]->linedef_nrs.erase(nr_it);
+                break;
+            }
+        }
+    }
+    return l_nr;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a mob generation structure.
+ */
+mob_gen::mob_gen(float x, float y, unsigned char folder, mob_type* type, float angle, string vars) {
+    this->folder = folder;
+    this->type = type;
+    this->x = x; this->y = y;
+    this->angle = angle;
+    this->vars = vars;
 }
 
 /* ----------------------------------------------------------------------------
@@ -165,7 +203,7 @@ void sector::fix_pointers(area_map &a) {
  * Creates a structure with floor information.
  */
 sector_texture::sector_texture() {
-    scale_x = scale_y = 0;
+    scale_x = scale_y = 1;
     trans_x = trans_y = 0;
     rot = 0;
     bitmap = NULL;
@@ -224,16 +262,16 @@ float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly
  * with the vertices ordered counter-clockwise for the outer,
  * and clockwise for the inner.
  */
-void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
-    if(!s || !outer || !inners) return;
+void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
+    if(!s_ptr || !outer || !inners) return;
     
     bool doing_outer = true;
     
     //First, compile a list of all sidedefs related to this sector.
     map<linedef*, bool> lines_done;
     
-    for(size_t l = 0; l < s->linedefs.size(); l++) {
-        lines_done[s->linedefs[l]] = false;
+    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+        lines_done[s_ptr->linedefs[l]] = false;
     }
     
     //Now travel along the lines, vertex by vertex, until we have no more left.
@@ -293,8 +331,18 @@ void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
             if(!best_line) {
             
                 //If there is no line to go to next, something went wrong.
-                //ToDo report error?
+                
+                //If this polygon is only one vertex, though, then
+                //that means it was a stray linedef. Remove it.
+                //Otherwise, something just went wrong, and this is
+                //a non-simple sector.
                 poly_done = true;
+                if(!doing_outer && inners->back().size() == 1) {
+                    ed_lone_lines.insert(inners->back()[0]->linedefs[0]);
+                    inners->erase(inners->begin() + inners->size() - 1);
+                } else {
+                    ed_non_simples.insert(s_ptr);
+                }
                 
             } else if(lines_done[best_line]) {
             
@@ -327,6 +375,29 @@ void get_polys(sector* s, polygon* outer, vector<polygon>* inners) {
             } else {
                 ++it;
             }
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Places the bounding box coordinates of a sector on the specified floats.
+ */
+void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y) {
+    if(!min_x || !min_y || !max_x || !max_y) return;
+    *min_x = s_ptr->linedefs[0]->vertices[0]->x;
+    *max_x = *min_x;
+    *min_y = s_ptr->linedefs[0]->vertices[0]->y;
+    *max_y = *min_y;
+    
+    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+        for(unsigned char v = 0; v < 2; v++) {
+            float x = s_ptr->linedefs[l]->vertices[v]->x;
+            float y = s_ptr->linedefs[l]->vertices[v]->y;
+            
+            *min_x = min(*min_x, x);
+            *max_x = max(*max_x, x);
+            *min_y = min(*min_y, y);
+            *max_y = max(*max_y, y);
         }
     }
 }
@@ -512,6 +583,12 @@ void check_linedef_intersections(vertex* v) {
             linedef* l2_ptr = cur_area_map.linedefs[l2];
             if(!l2_ptr->vertices[0]) continue; //It had been marked for deletion.
             
+            //If the linedef is actually on the same vertex, never mind.
+            if(l_ptr->vertices[0] == l2_ptr->vertices[0]) continue;
+            if(l_ptr->vertices[0] == l2_ptr->vertices[1]) continue;
+            if(l_ptr->vertices[1] == l2_ptr->vertices[0]) continue;
+            if(l_ptr->vertices[1] == l2_ptr->vertices[1]) continue;
+            
             if(
                 lines_intersect(
                     l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
@@ -545,7 +622,6 @@ void clean_poly(polygon* p) {
         
         //If the angle between this vertex and the next is the same,
         //then this is just a redundant point in the line prev - next. Delete it.
-        //ToDo is this working?
         if(fabs(atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) - atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)) < 0.00001) {
             should_delete = true;
         }
@@ -563,6 +639,18 @@ void clean_poly(polygon* p) {
  * polygon, as to make the outer holeless.
  */
 void cut_poly(polygon* outer, vector<polygon>* inners) {
+    bool outer_valid = true;
+    if(!outer) {
+        outer_valid = false;
+    } else {
+        if(outer->size() < 3) outer_valid = false;
+    }
+    
+    if(!outer_valid) {
+        //Some error happened.
+        return;
+    }
+    
     vertex* outer_rightmost = get_rightmost_vertex(outer);
     
     for(size_t i = 0; i < inners->size(); i++) {
@@ -578,8 +666,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         vertex* start = get_rightmost_vertex(p);
         
         if(!start) {
-            //ToDo warn.
-            cout << "Inner polygon without vertices!\n";
+            //Some error occured.
             continue;
         }
         
@@ -621,15 +708,19 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             }
         }
         
+        if(!closest_vertex && !closest_line_v1) {
+            //Some error occured.
+            continue;
+        }
+        
         //Which is closest, a vertex or a line?
         if(closest_vertex_ur < closest_line_ur) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
-            //If it's a line, some more complicated steps need to be done.
+            if(!closest_line_v1) continue;
             
-            //ToDo what if it doesn't find any? Should it try left?
-            //ToDo and what if this inner polygon can only see another inner polygon?
+            //If it's a line, some more complicated steps need to be done.
             
             //We're on the line closest to the vertex.
             //Go to the rightmost vertex of this line.
@@ -802,7 +893,7 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
 /* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector. This is because drawing concave polygons is not possible.
  */
-void triangulate(sector* s) {
+void triangulate(sector* s_ptr) {
 
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
@@ -810,10 +901,26 @@ void triangulate(sector* s) {
     polygon outer_poly;
     vector<polygon> inner_polys;
     
+    //Before we start, let's just remove it from the
+    //vector of non-simple sectors.
+    auto it = ed_non_simples.find(s_ptr);
+    if(it != ed_non_simples.end()) {
+        ed_non_simples.erase(it);
+    }
+    
+    //And let's clear any "lone" linedefs here.
+    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+        linedef* l_ptr = s_ptr->linedefs[l];
+        auto it = ed_lone_lines.find(l_ptr);
+        if(it != ed_lone_lines.end()) {
+            ed_lone_lines.erase(it);
+        }
+    }
+    
     //First, we need to know what vertices mark the outermost polygon,
     //and what vertices mark the inner ones.
     //There can be no islands or polygons of our sector inside the inner ones.
-    //Example of a sector:
+    //Example of a sector's polygons:
     /*
      * +-------+     +---+
      * | OUTER  \    |   |
@@ -827,7 +934,7 @@ void triangulate(sector* s) {
      *     | +---------+ |
      *     +-------------+
      */
-    get_polys(s, &outer_poly, &inner_polys);
+    get_polys(s_ptr, &outer_poly, &inner_polys);
     
     //Get rid of 0-length vertices and 180-degree vertices, as they're redundant.
     clean_poly(&outer_poly);
@@ -836,7 +943,7 @@ void triangulate(sector* s) {
     //Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
     
-    s->triangles.clear();
+    s_ptr->triangles.clear();
     vector<vertex*> vertices_left = outer_poly;
     vector<size_t> ears;
     vector<size_t> convex_vertices;
@@ -847,14 +954,15 @@ void triangulate(sector* s) {
     
     //We do a triangulation until we're left with three vertices -- the final triangle.
     while(vertices_left.size() > 3) {
+    
         if(ears.size() == 0) {
             //Something went wrong, the polygon mightn't be simple.
-            //ToDo warn.
-            cout << "Non-simple polygon detected!\n";
+            ed_non_simples.insert(s_ptr);
             break;
+            
         } else {
             //The ear, the previous and the next vertices make a triangle.
-            s->triangles.push_back(
+            s_ptr->triangles.push_back(
                 triangle(
                     vertices_left[ears[0]],
                     get_prev_in_vector(vertices_left, ears[0]),
@@ -872,7 +980,7 @@ void triangulate(sector* s) {
     
     //Finally, add the final triangle.
     if(vertices_left.size() == 3) {
-        s->triangles.push_back(
+        s_ptr->triangles.push_back(
             triangle(
                 vertices_left[1], vertices_left[0], vertices_left[2]
             )

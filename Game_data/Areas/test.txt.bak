@@ -2,46 +2,46 @@ weather = Normal
 
 mobs{
 	ship{
-		coords = -100 100
+		pos = -100 100
 	}
 	
 	leader{
-		coords = 0 0
+		pos = 0 0
 		type = Olimar
 	}
 	
 	leader{
-		coords = 300 250
+		pos = 300 250
 		type = Louie
 	}
 	
 	leader{
-		coords = 350 200
+		pos = 350 200
 		type = President
 	}
 	
 	onion{
-		coords = 400 100
+		pos = 400 100
 		type = Red onion
 	}
 
 	onion{
-		coords = 400 200
+		pos = 400 200
 		type = Yellow onion
 	}
 
 	onion{
-		coords = 400 300
+		pos = 400 300
 		type = Blue onion
 	}
 	
 	treasure{
-		coords = 100 350
+		pos = 100 350
 		type = Test
 	}
 	
 	enemy{
-		coords = -100 -200
+		pos = -100 -200
 		type = Cloaking Burrow-nit
 	}
 }

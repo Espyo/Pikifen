@@ -1,3 +1,12 @@
+weather=
+mobs{
+	Leader{
+		type=Olimar
+		pos=-96 -0
+		angle=1.2925
+		vars=tttt
+	}
+}
 vertices{
 	vertex=-1000 -1000
 	vertex=1000 -1000
@@ -26,6 +35,10 @@ vertices{
 	vertex=576 -608
 	vertex=672 -736
 	vertex=576 -640
+	vertex=-160 -960
+	vertex=288 -960
+	vertex=288 -544
+	vertex=-160 -544
 }
 linedefs{
 	linedef{
@@ -148,34 +161,66 @@ linedefs{
 		s=6 0
 		v=26 17
 	}
+	linedef{
+		s=7 0
+		v=27 28
+	}
+	linedef{
+		s=7 0
+		v=28 29
+	}
+	linedef{
+		s=7 0
+		v=29 30
+	}
+	linedef{
+		s=7 0
+		v=30 27
+	}
 }
 sectors{
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=1
 		texture_0=Metal.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
+		texture_0scale=1 1
+	}
+	sector{
+		z=0
+		fade=true
+		fade_angle=0
+		texture_0=Concrete.png
+		texture_0scale=1 1
+		texture_1=Metal.png
+		texture_1scale=1 1
 	}
 }

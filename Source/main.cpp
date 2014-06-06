@@ -115,7 +115,9 @@ int main(int argc, char**) {
     
     
     int font_ranges[] = {
-        0x0020, 0x007F, //ASCII
+        0x0020, 0x007E, //ASCII
+        0x00A0, 0x00A1, //Non-breaking space and inverted !
+        0x00BF, 0x00FF, //Inverted ? and European vowels and such
     };
     int counter_font_ranges[] = {
         0x002D, 0x002D, //Dash
@@ -129,11 +131,11 @@ int main(int argc, char**) {
     };
     
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
-    if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+    if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     
     temp_font_bitmap = load_bmp("Area_name_font.png");
-    if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+    if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     
     temp_font_bitmap = load_bmp("Counter_font.png");
@@ -144,8 +146,8 @@ int main(int argc, char**) {
     if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     
-    font_h = al_get_font_line_height(font);
-    font_counter_h = al_get_font_line_height(font_counter);
+    if(font) font_h = al_get_font_line_height(font);
+    if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
     
     info_spot_mob_type = new mob_type();
     info_spot_mob_type->name = "Info spot";
@@ -256,7 +258,7 @@ int main(int argc, char**) {
         test_linedefs.push_back(linedef(50, 150, 0, 0, 0, 0));
         test_linedefs.push_back(linedef(0, 100, 0, 0, 0, 0));*/
         
-        load_area("test");
+        load_area("test", false);
         generate_area_images();
         
         create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));

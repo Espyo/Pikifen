@@ -82,7 +82,7 @@ void               generate_area_images();
 ALLEGRO_COLOR      get_daylight_color();
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2);
-void               load_area(const string name);
+void               load_area(const string name, const bool load_for_editor);
 void               load_area_textures();
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(const string filename, data_node* node = NULL);

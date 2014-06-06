@@ -153,6 +153,9 @@
     <ClCompile Include="hitbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LAFI\angle_picker.cpp">
+      <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -303,6 +306,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LAFI\minor.h">
+      <Filter>Header Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="LAFI\angle_picker.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
   </ItemGroup>

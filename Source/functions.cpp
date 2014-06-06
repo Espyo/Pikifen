@@ -122,8 +122,6 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
  * d: If not null, this will be used to obtain the filename and line that caused the error.
  */
 void error_log(string s, data_node* d) {
-    //ToDo
-    return;
     if(d) {
         s += " (" + d->filename;
         if(d->line_nr != 0) s += " line " + itos(d->line_nr);
@@ -378,20 +376,22 @@ ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, c
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
  */
-void load_area(const string name) {
+void load_area(const string name, const bool load_for_editor) {
 
     data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
     
     string weather_condition_name = file.get_child_by_name("weather")->value;
-    if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
-        error_log("Area " + name + " refers to a non-existing weather condition!", &file);
-        cur_weather = weather();
+    if(load_for_editor) {
+        ed_weather_name = weather_condition_name;
     } else {
-        cur_weather = weather_conditions[weather_condition_name];
+        if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
+            error_log("Area " + name + " refers to a non-existing weather condition!", &file);
+            cur_weather = weather();
+        } else {
+            cur_weather = weather_conditions[weather_condition_name];
+        }
     }
     
-    
-    //Load geometry.
     
     cur_area_map.clear();
     
@@ -464,79 +464,78 @@ void load_area(const string name) {
         cur_area_map.sectors.push_back(new_sector);
     }
     
-    //Load mobs.
-    
-    mobs.clear();
+    //Mobs.
     size_t n_mobs = file.get_child_by_name("mobs")->get_nr_of_children();
     for(size_t m = 0; m < n_mobs; m++) {
     
         data_node* mob_node = file.get_child_by_name("mobs")->get_child(m);
         
-        vector<string> coords = split(mob_node->get_child_by_name("coords")->value);
-        float x = (coords.size() >= 1 ? tof(coords[0]) : 0);
-        float y = (coords.size() >= 2 ? tof(coords[1]) : 0);
+        mob_gen* mob_ptr = new mob_gen();
         
-        if(mob_node->name == "enemy") {
+        vector<string> coords = split(mob_node->get_child_by_name("pos")->value);
+        mob_ptr->x = (coords.size() >= 1 ? tof(coords[0]) : 0);
+        mob_ptr->y = (coords.size() >= 2 ? tof(coords[1]) : 0);
+        mob_ptr->angle = tof(mob_node->get_child_by_name("angle")->get_value_or_default("0"));
+        mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
+        
+        unsigned char mob_folder = MOB_FOLDER_NONE;
+        for(unsigned char f = 0; f < N_MOB_FOLDERS; f++) {
+            if(mob_node->name == MOB_FOLDER_SNAMES[f]) {
+                mob_ptr->folder = f;
+                break;
+            }
+        }
+        
+        if(mob_ptr->folder == MOB_FOLDER_ENEMIES) {
         
             string et = mob_node->get_child_by_name("type")->value;
-            if(enemy_types.find(et) != enemy_types.end()) {
-                create_mob(new enemy(
-                               x, y,
-                               cur_area_map.sectors[0], //ToDo
-                               enemy_types[et]
-                           ));
-                           
+            auto it = enemy_types.find(et);
+            if(it != enemy_types.end()) {
+                mob_ptr->type = it->second;
             } else error_log("Unknown enemy type \"" + et + "\"!", mob_node);
             
-        } else if(mob_node->name == "leader") {
+        } else if(mob_ptr->folder == MOB_FOLDER_LEADERS) {
         
             string lt = mob_node->get_child_by_name("type")->value;
-            if(leader_types.find(lt) != leader_types.end()) {
-                create_mob(new leader(
-                               x, y,
-                               cur_area_map.sectors[0], //ToDo
-                               leader_types[lt]
-                           ));
-                           
+            auto it = leader_types.find(lt);
+            if(it != leader_types.end()) {
+                mob_ptr->type = it->second;
             } else error_log("Unknown leader type \"" + lt + "\"!", mob_node);
             
         } else if(mob_node->name == "ship") {
         
+            //ToDo
+            /*
             create_mob(new ship(
                            x, y,
                            cur_area_map.sectors[0] //ToDo
                        ));
-                       
-        } else if(mob_node->name == "onion") {
+                       */
+            
+        } else if(mob_ptr->folder == MOB_FOLDER_ONIONS) {
         
             string ot = mob_node->get_child_by_name("type")->value;
-            if(onion_types.find(ot) != onion_types.end()) {
-                create_mob(new onion(
-                               x, y,
-                               cur_area_map.sectors[0], //ToDo
-                               onion_types[ot]
-                           ));
-                           
+            auto it = onion_types.find(ot);
+            if(it != onion_types.end()) {
+                mob_ptr->type = it->second;
             } else error_log("Unknown onion type \"" + ot + "\"!", mob_node);
             
-        } else if(mob_node->name == "treasure") {
+        } else if(mob_ptr->folder == MOB_FOLDER_TREASURES) {
         
             string tt = mob_node->get_child_by_name("type")->value;
-            if(treasure_types.find(tt) != treasure_types.end()) {
-                create_mob(new treasure(
-                               x, y,
-                               cur_area_map.sectors[0], //ToDo
-                               treasure_types[tt]
-                           ));
-                           
-            } else error_log("Unknown treasure type \"" + tt + "\"!", mob_node);
+            auto it = treasure_types.find(tt);
+            if(it != treasure_types.end()) {
+                mob_ptr->type = it->second;
+                
+            } else {
             
-        } else {
-        
-            error_log("Unknown mob type \"" + mob_node->name + "\"!", mob_node);
-            continue;
+                error_log("Unknown mob folder \"" + mob_node->name + "\"!", mob_node);
+                continue;
+            }
+            
         }
         
+        cur_area_map.mob_generators.push_back(mob_ptr);
     }
     
     
@@ -566,7 +565,10 @@ void load_area(const string name) {
 void load_area_textures() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         sector* s_ptr = cur_area_map.sectors[s];
-        s_ptr->textures[0].bitmap = bitmaps.get("Textures/" + s_ptr->textures[0].filename, NULL);
+        
+        for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
+            s_ptr->textures[t].bitmap = bitmaps.get("Textures/" + s_ptr->textures[t].filename, NULL);
+        }
     }
 }
 
@@ -623,12 +625,7 @@ void load_game_content() {
     //spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 255, 0), NULL, NULL));
     
     //Mob types.
-    load_mob_types(PIKMIN_FOLDER, MOB_TYPE_PIKMIN);
-    load_mob_types(ONIONS_FOLDER, MOB_TYPE_ONION);
-    load_mob_types(LEADERS_FOLDER, MOB_TYPE_LEADER);
-    load_mob_types(ENEMIES_FOLDER, MOB_TYPE_ENEMY);
-    load_mob_types(TREASURES_FOLDER, MOB_TYPE_TREASURE);
-    load_mob_types(PELLETS_FOLDER, MOB_TYPE_PELLET);
+    load_mob_types(true);
     
     //Weather.
     weather_conditions.clear();
@@ -851,38 +848,38 @@ void save_options() {
     //Tell the map what they are.
     for(unsigned char p = 0; p < 4; p++) {
         string prefix = "p" + itos((p + 1)) + "_";
-        grouped_controls[prefix + "punch"] = "";
-        grouped_controls[prefix + "whistle"] = "";
-        grouped_controls[prefix + "move_right"] = "";
-        grouped_controls[prefix + "move_up"] = "";
-        grouped_controls[prefix + "move_left"] = "";
-        grouped_controls[prefix + "move_down"] = "";
-        grouped_controls[prefix + "move_cursor_right"] = "";
-        grouped_controls[prefix + "move_cursor_up"] = "";
-        grouped_controls[prefix + "move_cursor_left"] = "";
-        grouped_controls[prefix + "move_cursor_down"] = "";
-        grouped_controls[prefix + "move_group_right"] = "";
-        grouped_controls[prefix + "move_group_up"] = "";
-        grouped_controls[prefix + "move_group_left"] = "";
-        grouped_controls[prefix + "move_group_down"] = "";
-        grouped_controls[prefix + "move_group_to_cursor"] = "";
-        grouped_controls[prefix + "switch_captain_right"] = "";
-        grouped_controls[prefix + "switch_captain_left"] = "";
-        grouped_controls[prefix + "dismiss"] = "";
-        grouped_controls[prefix + "use_spray_1"] = "";
-        grouped_controls[prefix + "use_spray_2"] = "";
-        grouped_controls[prefix + "use_spray"] = "";
-        grouped_controls[prefix + "switch_spray_right"] = "";
-        grouped_controls[prefix + "switch_spray_left"] = "";
-        grouped_controls[prefix + "switch_zoom"] = "";
-        grouped_controls[prefix + "zoom_in"] = "";
-        grouped_controls[prefix + "zoom_out"] = "";
-        grouped_controls[prefix + "switch_type_right"] = "";
-        grouped_controls[prefix + "switch_type_left"] = "";
-        grouped_controls[prefix + "switch_maturity_up"] = "";
-        grouped_controls[prefix + "switch_maturity_down"] = "";
-        grouped_controls[prefix + "lie_down"] = "";
-        grouped_controls[prefix + "pause"] = "";
+        grouped_controls[prefix + "punch"].clear();
+        grouped_controls[prefix + "whistle"].clear();
+        grouped_controls[prefix + "move_right"].clear();
+        grouped_controls[prefix + "move_up"].clear();
+        grouped_controls[prefix + "move_left"].clear();
+        grouped_controls[prefix + "move_down"].clear();
+        grouped_controls[prefix + "move_cursor_right"].clear();
+        grouped_controls[prefix + "move_cursor_up"].clear();
+        grouped_controls[prefix + "move_cursor_left"].clear();
+        grouped_controls[prefix + "move_cursor_down"].clear();
+        grouped_controls[prefix + "move_group_right"].clear();
+        grouped_controls[prefix + "move_group_up"].clear();
+        grouped_controls[prefix + "move_group_left"].clear();
+        grouped_controls[prefix + "move_group_down"].clear();
+        grouped_controls[prefix + "move_group_to_cursor"].clear();
+        grouped_controls[prefix + "switch_captain_right"].clear();
+        grouped_controls[prefix + "switch_captain_left"].clear();
+        grouped_controls[prefix + "dismiss"].clear();
+        grouped_controls[prefix + "use_spray_1"].clear();
+        grouped_controls[prefix + "use_spray_2"].clear();
+        grouped_controls[prefix + "use_spray"].clear();
+        grouped_controls[prefix + "switch_spray_right"].clear();
+        grouped_controls[prefix + "switch_spray_left"].clear();
+        grouped_controls[prefix + "switch_zoom"].clear();
+        grouped_controls[prefix + "zoom_in"].clear();
+        grouped_controls[prefix + "zoom_out"].clear();
+        grouped_controls[prefix + "switch_type_right"].clear();
+        grouped_controls[prefix + "switch_type_left"].clear();
+        grouped_controls[prefix + "switch_maturity_up"].clear();
+        grouped_controls[prefix + "switch_maturity_down"].clear();
+        grouped_controls[prefix + "lie_down"].clear();
+        grouped_controls[prefix + "pause"].clear();
     }
     
     size_t n_controls = controls.size();
