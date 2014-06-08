@@ -171,11 +171,12 @@ extern size_t                           ed_cur_hitbox_instance_nr;
 extern mob_gen*                         ed_cur_mob;
 extern sector*                          ed_cur_sector;
 extern float                            ed_double_click_time;
-extern unsigned char                    ed_error_type;
+extern mob_gen*                         ed_error_mob_ptr;
 extern sector*                          ed_error_sector_ptr;
 extern string                           ed_error_string;
+extern unsigned char                    ed_error_type;
 extern vertex*                          ed_error_vertex_ptr;
-extern string                           ed_filename;
+extern string                           ed_file_name;
 extern size_t                           ed_grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
 extern bool                             ed_grabbing_hitbox_edge;
 extern float                            ed_grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
@@ -212,7 +213,6 @@ extern unsigned char                    game_fps;
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
 extern float                            idle_glow_angle;
-extern mob_type*                        info_spot_mob_type;
 extern vector<info_spot*>               info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>      joystick_numbers;
 extern vector<leader*>                  leaders;
@@ -221,6 +221,7 @@ extern float                            leader_move_y;
 extern map<string, leader_type*>        leader_types;
 extern unsigned                         max_pikmin_in_field;
 extern ALLEGRO_MIXER*                   mixer;
+extern mob_folder_manager               mob_folders;
 extern vector<mob*>                     mobs;
 extern float                            mouse_cursor_x;             //The physical mouse's cursor.
 extern float                            mouse_cursor_y;
@@ -235,7 +236,6 @@ extern float                            moving_group_intensity;     //General in
 extern float                            moving_group_pos_x;         //Intensity on the X coordinate, used for analog stick movement. Basically, position of the analog stick.
 extern float                            moving_group_pos_y;
 extern bool                             moving_group_to_cursor;     //Is the "move group to cursor" button being pressed?
-extern mob_type*                        nectar_mob_type;
 extern vector<nectar*>                  nectars;
 extern bool                             no_error_logs_today;        //Have there been no errors in this play session?
 extern map<string, onion_type*>         onion_types;
@@ -257,12 +257,13 @@ extern float                            prev_moving_group_intensity; //The group
 extern bool                             running;
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;
+extern sector_types_manager             sector_types;
 extern unsigned int                     selected_spray;
 extern unsigned char                    ship_beam_ring_color[3];
 extern bool                             ship_beam_ring_color_up[3];
-extern mob_type*                        ship_mob_type;
 extern vector<ship*>                    ships;
 extern bool                             smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
+extern map<string, mob_type*>           special_mob_types;
 extern vector<unsigned long>            spray_amounts;      //How many of each spray the player has.
 extern vector<spray_type>               spray_types;
 extern vector<status>                   statuses;

@@ -15,6 +15,7 @@
 #include "animation_editor.h"
 #include "drawing.h"
 #include "functions.h"
+#include "LAFI/angle_picker.h"
 #include "LAFI/button.h"
 #include "LAFI/checkbox.h"
 #include "LAFI/frame.h"
@@ -252,10 +253,17 @@ void animation_editor::gui_load_hitbox() {
             ((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
             
         } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
-            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text = ftos(ed_cur_hitbox->multiplier);
-            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
-            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_angle"])->text = ftos(ed_cur_hitbox->angle);
-            ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text = ftos(ed_cur_hitbox->knockback);
+            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_mult"])->text = ftos(ed_cur_hitbox->multiplier);
+            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
+            ((lafi_checkbox*)     f->widgets["frm_attack"]->widgets["chk_outward"])->set(ed_cur_hitbox->knockback_outward);
+            ((lafi_angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->set_angle_rads(ed_cur_hitbox->knockback_angle);
+            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_knockback"])->text = ftos(ed_cur_hitbox->knockback);
+            
+            if(ed_cur_hitbox->knockback_outward) {
+                disable_widget(f->widgets["frm_attack"]->widgets["ang_angle"]);
+            } else {
+                enable_widget(f->widgets["frm_attack"]->widgets["ang_angle"]);
+            }
             
         }
     }
@@ -301,7 +309,7 @@ void animation_editor::gui_load_top() {
     ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_frame->top_y);
     ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_cur_frame->top_w);
     ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_cur_frame->top_h);
-    ((lafi_textbox*) f->widgets["txt_angle"])->text = ftos(ed_cur_frame->top_angle);
+    ((lafi_textbox*) f->widgets["ang_angle"])->text = ftos(ed_cur_frame->top_angle);
 }
 
 /* ----------------------------------------------------------------------------
@@ -313,6 +321,7 @@ void animation_editor::gui_save_animation() {
     lafi_widget* f = ed_gui->widgets["frm_anims"]->widgets["frm_anim"];
     
     ed_cur_anim->loop_frame = toi(((lafi_textbox*) f->widgets["txt_loop"])->text) - 1;
+    if(ed_cur_anim->loop_frame >= ed_cur_anim->frame_instances.size()) ed_cur_anim->loop_frame = 0;
     
     gui_save_frame_instance();
     gui_load_animation();
@@ -366,7 +375,9 @@ void animation_editor::gui_save_frame_instance() {
     
     lafi_widget* f = ed_gui->widgets["frm_anims"]->widgets["frm_anim"];
     
-    ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].duration = tof(((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text);
+    frame_instance* fi = &ed_cur_anim->frame_instances[ed_cur_frame_instance_nr];
+    fi->duration = tof(((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text);
+    if(fi->duration < 0) fi->duration = 0;
     
     gui_load_frame_instance();
 }
@@ -390,7 +401,8 @@ void animation_editor::gui_save_hitbox() {
     } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
         ed_cur_hitbox->multiplier = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text);
         ed_cur_hitbox->elements = ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text;
-        ed_cur_hitbox->angle = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_angle"])->text);
+        ed_cur_hitbox->knockback_outward = ((lafi_checkbox*) f->widgets["frm_attack"]->widgets["chk_outward"])->checked;
+        ed_cur_hitbox->knockback_angle = ((lafi_angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->get_angle_rads();
         ed_cur_hitbox->knockback = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text);
         
     }
@@ -407,10 +419,13 @@ void animation_editor::gui_save_hitbox_instance() {
     
     lafi_widget* f = ed_gui->widgets["frm_frames"]->widgets["frm_frame"]->widgets["frm_hitbox_i"];
     
-    ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
-    ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].radius = tof(((lafi_textbox*) f->widgets["txt_r"])->text);
+    hitbox_instance* hi = &ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr];
+    
+    hi->x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
+    hi->y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    hi->z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
+    hi->radius = tof(((lafi_textbox*) f->widgets["txt_r"])->text);
+    if(hi->radius <= 0) hi->radius = 16;
     
     gui_load_hitbox_instance();
 }
@@ -426,7 +441,7 @@ void animation_editor::gui_save_top() {
     ed_cur_frame->top_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
     ed_cur_frame->top_w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
     ed_cur_frame->top_h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
-    ed_cur_frame->top_angle = tof(((lafi_textbox*) f->widgets["txt_angle"])->text);
+    ed_cur_frame->top_angle = tof(((lafi_textbox*) f->widgets["ang_angle"])->text);
     
     gui_load_top();
 }
@@ -764,8 +779,10 @@ void animation_editor::load() {
     frm_attack->easy_row();
     frm_attack->easy_add("txt_hazards", new lafi_textbox(0, 0, 0, 0), 100, 16);
     frm_attack->easy_row();
+    frm_attack->easy_add("chk_outward", new lafi_checkbox(0, 0, 0, 0, "Outward knockback"), 100, 16);
+    frm_attack->easy_row();
     frm_attack->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 60, 16);
-    frm_attack->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 40, 16);
+    frm_attack->easy_add("ang_angle", new lafi_angle_picker(0, 0, 0, 0), 40, 24);
     frm_attack->easy_row();
     frm_attack->easy_add("lbl_knockback", new lafi_label(0, 0, 0, 0, "Knockback:"), 60, 16);
     frm_attack->easy_add("txt_knockback", new lafi_textbox(0, 0, 0, 0), 40, 16);
@@ -803,7 +820,7 @@ void animation_editor::load() {
     frm_top->easy_add("txt_h", new lafi_textbox(0, 0, 0, 0), 40, 16);
     frm_top->easy_row();
     frm_top->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 40, 16);
-    frm_top->easy_add("txt_angle", new lafi_textbox(0, 0, 0, 0), 60, 16);
+    frm_top->easy_add("ang_angle", new lafi_angle_picker(0, 0, 0, 0), 60, 24);
     frm_top->easy_row();
     frm_top->easy_add("but_maturity", new lafi_button(0, 0, 0, 0, "Change maturity"), 100, 24);
     frm_top->easy_row();
@@ -1071,23 +1088,25 @@ void animation_editor::load() {
     frm_hitboxes->widgets["but_hitbox"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_HITBOX, true);
     };
+    frm_hitbox->widgets["rad_normal"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
+    frm_hitbox->widgets["rad_attack"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
+    frm_normal->widgets["txt_mult"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_normal->widgets["chk_latch"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
+    frm_normal->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_attack->widgets["txt_mult"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_attack->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_attack->widgets["chk_outward"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
+    frm_attack->widgets["ang_angle"]->lose_focus_handler = lambda_gui_save_hitbox;
+    frm_attack->widgets["txt_knockback"]->lose_focus_handler = lambda_gui_save_hitbox;
     frm_hitboxes->widgets["but_hitbox"]->description = "Pick a hitbox to edit.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_normal"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["rad_attack"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_mult"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_mult"]->description = "Defense multiplier. 0 = invulnerable.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["chk_latch"]->left_mouse_click_handler = lambda_gui_save_hitbox_click;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["chk_latch"]->description = "Can the Pikmin latch on to this hitbox?";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_normal"]->widgets["txt_hazards"]->description = "List of hazards, comma separated.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_mult"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_mult"]->description = "Attack multiplier.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_hazards"]->description = "List of hazards, comma separated.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_angle"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_angle"]->description = "Angle the Pikmin are knocked towards (radians). -1 = Outward.";
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_knockback"]->lose_focus_handler = lambda_gui_save_hitbox;
-    frm_hitboxes->widgets["frm_hitbox"]->widgets["frm_attack"]->widgets["txt_knockback"]->description = "Knockback strength.";
+    frm_normal->widgets["txt_mult"]->description = "Defense multiplier. 0 = invulnerable.";
+    frm_normal->widgets["chk_latch"]->description = "Can the Pikmin latch on to this hitbox?";
+    frm_normal->widgets["txt_hazards"]->description = "List of hazards, comma separated.";
+    frm_attack->widgets["txt_mult"]->description = "Attack multiplier.";
+    frm_attack->widgets["txt_hazards"]->description = "List of hazards, comma separated.";
+    frm_attack->widgets["chk_outward"]->description = "Makes Pikmin be knocked away from the center.";
+    frm_attack->widgets["ang_angle"]->description = "Angle the Pikmin are knocked towards.";
+    frm_attack->widgets["txt_knockback"]->description = "Knockback strength.";
     
     
     //Properties -- picker.
@@ -1154,7 +1173,7 @@ void animation_editor::load() {
     frm_top->widgets["txt_y"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["txt_w"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["txt_h"]->lose_focus_handler = lambda_save_top;
-    frm_top->widgets["txt_angle"]->lose_focus_handler = lambda_save_top;
+    frm_top->widgets["ang_angle"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["but_maturity"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_maturity = (ed_maturity + 1) % 3;
     };
@@ -1198,9 +1217,9 @@ void animation_editor::load() {
 void animation_editor::load_animation_set() {
     ed_anims.destroy();
     
-    data_node file = data_node(ed_filename);
+    data_node file = data_node(ed_file_name);
     if(!file.file_was_opened) {
-        file.save_file(ed_filename, true);
+        file.save_file(ed_file_name, true);
     }
     ed_anims = load_animation_set(&file);
     
@@ -1378,22 +1397,22 @@ void animation_editor::pick(string name, unsigned char type) {
         gui_load_hitbox();
         
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ENEMIES) {
-        ed_filename = ENEMIES_FOLDER;
+        ed_file_name = ENEMIES_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_LEADERS) {
-        ed_filename = LEADERS_FOLDER;
+        ed_file_name = LEADERS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ONIONS) {
-        ed_filename = ONIONS_FOLDER;
+        ed_file_name = ONIONS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PELLETS) {
-        ed_filename = PELLETS_FOLDER;
+        ed_file_name = PELLETS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PIKMIN) {
-        ed_filename = PIKMIN_FOLDER;
+        ed_file_name = PIKMIN_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_TREASURES) {
-        ed_filename = TREASURES_FOLDER;
+        ed_file_name = TREASURES_FOLDER;
     }
     
     if(type > ANIMATION_EDITOR_PICKER_OBJECT) {
-        string temp_path_start = ed_filename;
-        ed_filename += "/" + name + "/Animations.txt";
+        string temp_path_start = ed_file_name;
+        ed_file_name += "/" + name + "/Animations.txt";
         ed_object_name = name;
         load_animation_set();
         
@@ -1501,11 +1520,12 @@ void animation_editor::save_animation_set() {
         hitbox_node->add(new data_node("multiplier", ftos(ed_anims.hitboxes[h]->multiplier)));
         hitbox_node->add(new data_node("can_pikmin_latch", btos(ed_anims.hitboxes[h]->can_pikmin_latch)));
         hitbox_node->add(new data_node("elements", ed_anims.hitboxes[h]->elements));
-        hitbox_node->add(new data_node("angle", ftos(ed_anims.hitboxes[h]->angle)));
+        hitbox_node->add(new data_node("outward", btos(ed_anims.hitboxes[h]->knockback_outward)));
+        hitbox_node->add(new data_node("angle", ftos(ed_anims.hitboxes[h]->knockback_angle)));
         hitbox_node->add(new data_node("knockback", ftos(ed_anims.hitboxes[h]->knockback)));
     }
     
-    file_node.save_file(ed_filename);
+    file_node.save_file(ed_file_name);
 }
 
 /* ----------------------------------------------------------------------------

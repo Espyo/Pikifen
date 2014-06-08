@@ -72,8 +72,9 @@ public:
     void register_accelerator(int key, unsigned int modifiers, lafi_widget* widget);
     vector<lafi_accelerator> accelerators;
     
-    bool needs_init;
-    void lose_focus();
+    lafi_widget* get_widget_under_mouse(int mx, int my);
+    bool is_mouse_in(int mx, int my);
+    void get_offset(int* ox, int* oy);
     
     function<void(lafi_widget* w, int x, int y)> mouse_move_handler;
     function<void(lafi_widget* w, int x, int y)> left_mouse_click_handler;
@@ -85,10 +86,6 @@ public:
     function<void(lafi_widget* w)> get_focus_handler;
     function<void(lafi_widget* w)> lose_focus_handler;
     
-    lafi_widget* get_widget_under_mouse(int mx, int my);
-    bool is_mouse_in(int mx, int my);
-    void get_offset(int* ox, int* oy);
-    
     //Functions for the widget classes to handle, if they want to.
     virtual void widget_on_mouse_move(int x, int y);
     virtual void widget_on_left_mouse_click(int x, int y);
@@ -98,13 +95,6 @@ public:
     virtual void widget_on_mouse_enter();
     virtual void widget_on_mouse_leave();
     virtual void widget_on_key_char(int keycode, int unichar, unsigned int modifiers);
-    virtual void handle_event(ALLEGRO_EVENT ev);
-    void draw();
-    virtual void init();
-    
-    lafi_widget(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi_style* style = NULL, unsigned char flags = 0);
-    lafi_widget(lafi_widget &w2);
-    ~lafi_widget();
     
     void call_mouse_move_handler(int x, int y);
     void call_left_mouse_click_handler(int x, int y);
@@ -116,7 +106,19 @@ public:
     void call_get_focus_handler();
     void call_lose_focus_handler();
     
+    bool needs_init;
+    void lose_focus();
+    bool is_disabled();
+    
+    virtual void handle_event(ALLEGRO_EVENT ev);
+    void draw();
+    virtual void init();
     virtual void draw_self() = 0;    //Draws just the widget itself.
+    
+    lafi_widget(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi_style* style = NULL, unsigned char flags = 0);
+    lafi_widget(lafi_widget &w2);
+    ~lafi_widget();
+    
 };
 
 void lafi_draw_line(lafi_widget* widget, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);

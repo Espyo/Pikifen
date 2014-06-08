@@ -69,28 +69,7 @@ enum MOB_FOLDERS {
     MOB_FOLDER_ENEMIES,
     MOB_FOLDER_TREASURES,
     MOB_FOLDER_PELLETS,
-    N_MOB_FOLDERS,
-};
-
-const string MOB_FOLDER_NAMES[] = {
-    "",
-    "Pikmin",
-    "Onions",
-    "Leaders",
-    "Enemies",
-    "Treasures",
-    "Pellets",
-};
-
-//Singular names.
-const string MOB_FOLDER_SNAMES[] = {
-    "",
-    "Pikmin",
-    "Onion",
-    "Leader",
-    "Enemy",
-    "Treasure",
-    "Pellet",
+    MOB_FOLDER_SPECIAL,
 };
 
 #endif //ifndef MOB_TYPE_INCLUDED

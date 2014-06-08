@@ -17,7 +17,7 @@
  * Creates a nectar.
  */
 nectar::nectar(float x, float y, sector* sec)
-    : mob(x, y, sec->z, nectar_mob_type, sec) {
+    : mob(x, y, sec->z, special_mob_types["Nectar"], sec) {
     
     amount_left = NECTAR_AMOUNT;
 }

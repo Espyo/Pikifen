@@ -36,11 +36,15 @@ enum EDITOR_ERROR_TYPES {
     EET_BAD_SECTOR,            //A sector is corrupted.
     EET_MISSING_TEXTURE,       //A sector is without texture.
     EET_UNKNOWN_TEXTURE,       //A texture is not found in the game files.
+    EET_LANDING_SITE,          //No landing site sector exists.
+    EET_TYPELESS_MOB,          //Mob with no type.
+    EET_MOB_OOB,               //Mob out of bounds.
 };
 
 void adv_textures_to_gui();
 void bg_to_gui();
 void center_camera(float min_x, float min_y, float max_x, float max_y);
+void change_background(string new_file_name);
 void change_to_right_frame(bool hide_all = false);
 void do_logic();
 void find_errors();

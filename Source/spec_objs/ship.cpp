@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Ship clas and ship-related functions.
+ * Ship class and ship-related functions.
  */
 
 #include "ship.h"
@@ -16,6 +16,6 @@
  * Creates a ship.
  */
 ship::ship(float x, float y, sector* sec)
-    : mob(x, y, sec->z, ship_mob_type, sec) {
+    : mob(x, y, sec->z, special_mob_types["Ship"], sec) {
     
 }

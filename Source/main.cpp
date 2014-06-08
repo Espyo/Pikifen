@@ -37,6 +37,7 @@
 #include "LAFI/scrollbar.h"
 #include "LAFI/textbox.h"
 #include "logic.h"
+#include "sector.h"
 #include "vars.h"
 
 using namespace std;
@@ -61,6 +62,7 @@ int main(int argc, char**) {
     al_init_acodec_addon();
     
     //Options and default controls.
+    //ToDo create a manager for this, like the mob folder manager and whatnot.
     controls.push_back(control_info(BUTTON_PUNCH, 0, "mb_1"));
     controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
     controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
@@ -103,6 +105,10 @@ int main(int argc, char**) {
     if(smooth_scaling) al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
     al_reserve_samples(16);
     srand(time(NULL));
+    
+    sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
+    sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
+    sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
     
     //Error bitmap.
     //ToDo move this somewhere else, maybe?
@@ -149,19 +155,70 @@ int main(int argc, char**) {
     if(font) font_h = al_get_font_line_height(font);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
     
-    info_spot_mob_type = new mob_type();
-    info_spot_mob_type->name = "Info spot";
-    info_spot_mob_type->size = 32;
+    mob_folders.register_folder(MOB_FOLDER_NONE, "None", "None", [] (vector<string> &) { },
+    [] (const string &) -> mob_type* { return NULL; });
     
-    nectar_mob_type = new mob_type();
-    nectar_mob_type->name = "Nectar";
-    nectar_mob_type->always_active = true;
-    nectar_mob_type->size = 16;
+    mob_folders.register_folder(MOB_FOLDER_ENEMIES, "Enemies", "Enemy", [] (vector<string> &li) {
+        for(auto e = enemy_types.begin(); e != enemy_types.end(); e++) li.push_back(e->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = enemy_types.find(n); if(it == enemy_types.end()) return NULL; return it->second;
+    });
     
-    ship_mob_type = new mob_type();
-    ship_mob_type->name = "Ship";
-    ship_mob_type->always_active = true;
-    ship_mob_type->size = 140;
+    mob_folders.register_folder(MOB_FOLDER_LEADERS, "Leaders", "Leader", [] (vector<string> &li) {
+        for(auto l = leader_types.begin(); l != leader_types.end(); l++) li.push_back(l->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = leader_types.find(n); if(it == leader_types.end()) return NULL; return it->second;
+    });
+    
+    mob_folders.register_folder(MOB_FOLDER_ONIONS, "Onions", "Onion", [] (vector<string> &li) {
+        for(auto o = onion_types.begin(); o != onion_types.end(); o++) li.push_back(o->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = onion_types.find(n); if(it == onion_types.end()) return NULL; return it->second;
+    });
+    
+    mob_folders.register_folder(MOB_FOLDER_PELLETS, "Pellets", "Pellet", [] (vector<string> &li) {
+        for(auto p = pellet_types.begin(); p != pellet_types.end(); p++) li.push_back(p->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = pellet_types.find(n); if(it == pellet_types.end()) return NULL; return it->second;
+    });
+    
+    mob_folders.register_folder(MOB_FOLDER_PIKMIN, "Pikmin", "Pikmin", [] (vector<string> &li) {
+        for(auto p = pikmin_types.begin(); p != pikmin_types.end(); p++) li.push_back(p->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = pikmin_types.find(n); if(it == pikmin_types.end()) return NULL; return it->second;
+    });
+    
+    mob_folders.register_folder(MOB_FOLDER_SPECIAL, "Special", "Special", [] (vector<string> &li) {
+        for(auto s = special_mob_types.begin(); s != special_mob_types.end(); s++) li.push_back(s->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = special_mob_types.find(n); if(it == special_mob_types.end()) return NULL; return it->second;
+    });
+    
+    mob_folders.register_folder(MOB_FOLDER_TREASURES, "Treasures", "Treasure", [] (vector<string> &li) {
+        for(auto t = treasure_types.begin(); t != treasure_types.end(); t++) li.push_back(t->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = treasure_types.find(n); if(it == treasure_types.end()) return NULL; return it->second;
+    });
+    
+    
+    
+    
+    mob_type* info_spot_mt = new mob_type();
+    info_spot_mt->name = "Info spot";
+    info_spot_mt->size = 32;
+    special_mob_types["Info spot"] = info_spot_mt;
+    
+    mob_type* nectar_mt = new mob_type();
+    nectar_mt->name = "Nectar";
+    nectar_mt->always_active = true;
+    nectar_mt->size = 16;
+    special_mob_types["Nectar"] = nectar_mt;
+    
+    mob_type* ship_mt = new mob_type();
+    ship_mt->name = "Ship";
+    ship_mt->always_active = true;
+    ship_mt->size = 140;
+    special_mob_types["Ship"] = ship_mt;
     
     
     cur_screen = SCREEN_GAME;
@@ -258,8 +315,28 @@ int main(int argc, char**) {
         test_linedefs.push_back(linedef(50, 150, 0, 0, 0, 0));
         test_linedefs.push_back(linedef(0, 100, 0, 0, 0, 0));*/
         
-        load_area("test", false);
+        load_area("Play", false);
+        load_area_textures();
         generate_area_images();
+        
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+            if(m_ptr->folder == MOB_FOLDER_ENEMIES) {
+                create_mob(new enemy(m_ptr->x, m_ptr->y, &s, (enemy_type*) m_ptr->type));
+            } else if(m_ptr->folder == MOB_FOLDER_LEADERS) {
+                create_mob(new leader(m_ptr->x, m_ptr->y, &s, (leader_type*) m_ptr->type));
+            } else if(m_ptr->folder == MOB_FOLDER_ONIONS) {
+                create_mob(new onion(m_ptr->x, m_ptr->y, &s, (onion_type*) m_ptr->type));
+            } else if(m_ptr->folder == MOB_FOLDER_PELLETS) {
+                create_mob(new pellet(m_ptr->x, m_ptr->y, &s, (pellet_type*) m_ptr->type));
+            } else if(m_ptr->folder == MOB_FOLDER_PIKMIN) {
+                create_mob(new pikmin(m_ptr->x, m_ptr->y, &s, (pikmin_type*) m_ptr->type));
+            } else if(m_ptr->folder == MOB_FOLDER_SPECIAL) {
+                create_mob(new mob(m_ptr->x, m_ptr->y, 0, m_ptr->type, &s));
+            } else if(m_ptr->folder == MOB_FOLDER_TREASURES) {
+                create_mob(new treasure(m_ptr->x, m_ptr->y, &s, (treasure_type*) m_ptr->type));
+            }
+        }
         
         create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));
         pikmin_list.back()->maturity = 1;

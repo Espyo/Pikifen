@@ -371,7 +371,8 @@ animation_set load_animation_set(data_node* file_node) {
         cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
         cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
         cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->angle = tof(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback_outward = tob(hitbox_node->get_child_by_name("outward")->value);
+        cur_hitbox->knockback_angle = tof(hitbox_node->get_child_by_name("angle")->value);
         cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
     }
     

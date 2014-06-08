@@ -966,8 +966,6 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
             ALLEGRO_VERTEX av[200]; //ToDo 200?
             size_t n_vertices = s_ptr->triangles.size() * 3;
             
-            //ToDo floors don't work like this.
-            
             ALLEGRO_TRANSFORM tra;
             al_build_transform(
                 &tra,
@@ -991,8 +989,8 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
                     }
                 }
                 
-                av[v].x = tx;
-                av[v].y = ty;
+                av[v].x = t_ptr->points[v % 3]->x;
+                av[v].y = t_ptr->points[v % 3]->y;
                 al_transform_coordinates(&tra, &tx, &ty);
                 av[v].u = tx;
                 av[v].v = ty;

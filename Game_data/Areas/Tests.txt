@@ -1,10 +1,48 @@
 weather=
 mobs{
+	Special{
+		pos = -100 100
+        type = Ship
+	}
+	
 	Leader{
-		type=Olimar
-		pos=-96 -0
-		angle=1.2925
-		vars=tttt
+		pos = 0 0
+		type = Olimar
+	}
+	
+	Leader{
+		pos = 300 250
+		type = Louie
+	}
+	
+	Leader{
+		pos = 350 200
+		type = President
+	}
+	
+	Onion{
+		pos = 400 100
+		type = Red onion
+	}
+
+	Onion{
+		pos = 400 200
+		type = Yellow onion
+	}
+
+	Onion{
+		pos = 400 300
+		type = Blue onion
+	}
+	
+	Treasure{
+		pos = 100 350
+		type = Test
+	}
+	
+	Enemy{
+		pos = -100 -200
+		type = Cloaking Burrow-nit
 	}
 }
 vertices{
@@ -182,45 +220,52 @@ sectors{
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
+		type=Landing site
 		z=1
 		texture_0=Metal.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		texture_0=Grass.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 	}
 	sector{
 		z=0
 		fade=true
 		fade_angle=0
 		texture_0=Concrete.png
-		texture_0scale=1 1
+		texture_0_scale=1 1
 		texture_1=Metal.png
-		texture_1scale=1 1
+		texture_1_scale=1 1
 	}
 }
+bg_file_name=
+bg_x=0
+bg_y=0
+bg_w=0
+bg_h=0
+bg_alpha=255

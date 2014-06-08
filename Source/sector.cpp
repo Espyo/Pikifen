@@ -155,7 +155,7 @@ sector::sector() {
 sector::~sector() {
     for(size_t t = 0; t < 2; t++) {
         if(textures[t].bitmap && textures[t].bitmap != bmp_error) {
-            bitmaps.detach(textures[t].filename);
+            bitmaps.detach(textures[t].file_name);
         }
     }
 }
@@ -622,7 +622,7 @@ void clean_poly(polygon* p) {
         
         //If the angle between this vertex and the next is the same,
         //then this is just a redundant point in the line prev - next. Delete it.
-        if(fabs(atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) - atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)) < 0.00001) {
+        if(fabs(atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) - atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)) < 0.000001) {
             should_delete = true;
         }
         

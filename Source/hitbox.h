@@ -31,10 +31,11 @@ public:
     string name;
     unsigned char type;
     string elements;
-    float multiplier;      //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
-    float angle;           //Knockback angle. -1 means outward.
-    float knockback;       //Knockback strength.
-    bool can_pikmin_latch; //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
+    float multiplier;       //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
+    bool knockback_outward; //If true, the Pikmin is knocked away from the center.
+    float knockback_angle;  //Knockback angle.
+    float knockback;        //Knockback strength.
+    bool can_pikmin_latch;  //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
     hitbox(const string &name = "");
 };

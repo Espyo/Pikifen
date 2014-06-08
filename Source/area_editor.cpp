@@ -55,7 +55,7 @@ void area_editor::adv_textures_to_gui() {
     }
     
     ((lafi_angle_picker*) f->widgets["ang_fade_a"])->set_angle_rads(ed_cur_sector->fade_angle);
-    ((lafi_textbox*) f->widgets["txt_2texture"])->text = ed_cur_sector->textures[1].filename;
+    ((lafi_textbox*) f->widgets["txt_2texture"])->text = ed_cur_sector->textures[1].file_name;
     ((lafi_textbox*) f->widgets["txt_2x"])->text =  ftos(ed_cur_sector->textures[1].trans_x);
     ((lafi_textbox*) f->widgets["txt_2y"])->text =  ftos(ed_cur_sector->textures[1].trans_y);
     ((lafi_textbox*) f->widgets["txt_2sx"])->text = ftos(ed_cur_sector->textures[1].scale_x);
@@ -99,6 +99,19 @@ void area_editor::center_camera(float min_x, float min_y, float max_x, float max
     cam_zoom = max(cam_zoom, ZOOM_MIN_LEVEL_EDITOR);
     cam_zoom = min(cam_zoom, ZOOM_MAX_LEVEL_EDITOR);
     
+}
+
+/* ----------------------------------------------------------------------------
+ * Changes the background image.
+ */
+void area_editor::change_background(string new_file_name) {
+    if(ed_bg_bitmap && ed_bg_bitmap != bmp_error) al_destroy_bitmap(ed_bg_bitmap);
+    ed_bg_bitmap = NULL;
+    
+    if(new_file_name.size()) {
+        ed_bg_bitmap = load_bmp(new_file_name, false);
+    }
+    ed_bg_file_name = new_file_name;
 }
 
 /* ----------------------------------------------------------------------------
@@ -484,7 +497,7 @@ void area_editor::find_errors() {
             sector* s_ptr = cur_area_map.sectors[s];
             for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
             
-                if(s_ptr->textures[t].filename.size() == 0 && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT) {
+                if(s_ptr->textures[t].file_name.size() == 0 && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT) {
                     ed_error_type = EET_MISSING_TEXTURE;
                     ed_error_sector_ptr = s_ptr;
                     break;
@@ -498,15 +511,15 @@ void area_editor::find_errors() {
     
     //Check for unknown textures.
     if(ed_error_type == EET_NONE) {
-        vector<string> texture_filenames = folder_to_vector(TEXTURES_FOLDER, false);
+        vector<string> texture_file_names = folder_to_vector(TEXTURES_FOLDER, false);
         for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         
             sector* s_ptr = cur_area_map.sectors[s];
             for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
             
-                if(find(texture_filenames.begin(), texture_filenames.end(), s_ptr->textures[t].filename) == texture_filenames.end()) {
+                if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->textures[t].file_name) == texture_file_names.end()) {
                     ed_error_type = EET_UNKNOWN_TEXTURE;
-                    ed_error_string = s_ptr->textures[t].filename;
+                    ed_error_string = s_ptr->textures[t].file_name;
                     ed_error_sector_ptr = s_ptr;
                     break;
                 }
@@ -516,7 +529,45 @@ void area_editor::find_errors() {
         }
     }
     
-    //ToDo objects out of bounds, objects without types.
+    //Objects with no type.
+    if(ed_error_type == EET_NONE) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+            if(!cur_area_map.mob_generators[m]->type) {
+                ed_error_type = EET_TYPELESS_MOB;
+                ed_error_mob_ptr = cur_area_map.mob_generators[m];
+                break;
+            }
+        }
+    }
+    
+    //Objects out of bounds.
+    if(ed_error_type == EET_NONE) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+            if(!get_sector(m_ptr->x, m_ptr->y, NULL)) {
+                ed_error_type = EET_MOB_OOB;
+                ed_error_mob_ptr = m_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Check if there are no landing site sectors.
+    if(ed_error_type == EET_NONE) {
+        bool landing_site_missing = true;
+        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+            sector* s_ptr = cur_area_map.sectors[s];
+            if(s_ptr->linedefs.size() == 0) continue;
+            
+            if(s_ptr->type == SECTOR_TYPE_LANDING_SITE) {
+                landing_site_missing = false;
+                break;
+            }
+        }
+        
+        if(landing_site_missing) ed_error_type = EET_LANDING_SITE;
+    }
+    
     
     update_review_frame();
 }
@@ -606,7 +657,7 @@ void area_editor::goto_error() {
             ed_error_vertex_ptr->y + 64
         );
         
-    } else if(ed_error_type == EET_MISSING_TEXTURE || EET_UNKNOWN_TEXTURE) {
+    } else if(ed_error_type == EET_MISSING_TEXTURE || ed_error_type == EET_UNKNOWN_TEXTURE) {
     
         if(!ed_error_sector_ptr) {
             find_errors(); return;
@@ -615,6 +666,23 @@ void area_editor::goto_error() {
         float min_x, min_y, max_x, max_y;
         get_sector_bounding_box(ed_error_sector_ptr, &min_x, &min_y, &max_x, &max_y);
         center_camera(min_x, min_y, max_x, max_y);
+        
+    } else if(ed_error_type == EET_TYPELESS_MOB || ed_error_type == EET_MOB_OOB) {
+    
+        if(!ed_error_mob_ptr) {
+            find_errors(); return;
+        }
+        
+        center_camera(
+            ed_error_mob_ptr->x - 64,
+            ed_error_mob_ptr->y - 64,
+            ed_error_mob_ptr->x + 64,
+            ed_error_mob_ptr->y + 64
+        );
+        
+    } else if(ed_error_type == EET_LANDING_SITE) {
+        //Nothing to focus on.
+        return;
         
     }
 }
@@ -636,7 +704,7 @@ void area_editor::gui_to_adv_textures() {
     if(ed_cur_sector->fade) {
         f = (lafi_frame*) f->widgets["frm_texture_2"];
         ed_cur_sector->fade_angle = ((lafi_angle_picker*) f->widgets["ang_fade_a"])->get_angle_rads();
-        ed_cur_sector->textures[1].filename = ((lafi_textbox*) f->widgets["txt_2texture"])->text;
+        ed_cur_sector->textures[1].file_name = ((lafi_textbox*) f->widgets["txt_2texture"])->text;
         ed_cur_sector->textures[1].trans_x = tof(((lafi_textbox*) f->widgets["txt_2x"])->text);
         ed_cur_sector->textures[1].trans_y = tof(((lafi_textbox*) f->widgets["txt_2y"])->text);
         ed_cur_sector->textures[1].scale_x = tof(((lafi_textbox*) f->widgets["txt_2sx"])->text);
@@ -658,10 +726,8 @@ void area_editor::gui_to_bg() {
     
     if(new_file_name != ed_bg_file_name) {
         //New background image, delete the old one.
+        change_background(new_file_name);
         is_file_new = true;
-        if(ed_bg_bitmap && ed_bg_bitmap != bmp_error) al_destroy_bitmap(ed_bg_bitmap);
-        ed_bg_bitmap = load_bmp(new_file_name);
-        ed_bg_file_name = new_file_name;
         if(ed_bg_bitmap) {
             ed_bg_w = al_get_bitmap_width(ed_bg_bitmap);
             ed_bg_h = al_get_bitmap_height(ed_bg_bitmap);
@@ -724,7 +790,7 @@ void area_editor::gui_to_sector() {
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
     
     ed_cur_sector->z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
-    ed_cur_sector->textures[0].filename = ((lafi_textbox*) f->widgets["txt_texture"])->text;
+    ed_cur_sector->textures[0].file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
     ed_cur_sector->brightness = toi(((lafi_textbox*) f->widgets["txt_brightness"])->text);
     //ToDo hazards.
     
@@ -858,6 +924,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         //Sector-related clicking.
         if(ed_sec_mode == ESM_NONE && ed_mode == EDITOR_MODE_SECTORS) {
         
+            ed_moving_thing = string::npos;
+            
             linedef* clicked_linedef_ptr = NULL;
             size_t clicked_linedef_nr = string::npos;
             bool created_vertex = false;
@@ -869,12 +937,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 
                 if(
                     circle_intersects_line(
-                        mouse_cursor_x, mouse_cursor_y, 6,
+                        mouse_cursor_x, mouse_cursor_y, 8 / cam_zoom,
                         l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
                         l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
                     )
                 ) {
                     clicked_linedef_ptr = l_ptr;
+                    clicked_linedef_nr = l;
                     break;
                 }
             }
@@ -885,6 +954,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 ed_double_click_time = 0;
                 
                 //New vertex, on the split point.
+                //ToDo create it on the line, not on the cursor.
                 vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
                 cur_area_map.vertices.push_back(new_v_ptr);
                 
@@ -927,11 +997,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     }
                 }
                 
+                //Start dragging the new vertex.
+                ed_moving_thing = cur_area_map.vertices.size() - 1;
+                
                 created_vertex = true;
             }
             
             //Find a vertex to drag.
-            ed_moving_thing = string::npos;
             if(!created_vertex) {
                 for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
                     if(
@@ -1167,20 +1239,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     
                                     //Go to the linedef's old vertices,
                                     //and tell them that it no longer exists.
-                                    for(size_t v = 0; v < 2; v++) {
-                                    
-                                        for(size_t vl = 0; vl < l_ptr->vertices[v]->linedefs.size(); vl++) {
-                                            linedef* vl_ptr = l_ptr->vertices[v]->linedefs[vl];
-                                            
-                                            if(vl_ptr == l_ptr) {
-                                                l_ptr->vertices[v]->linedefs.erase(
-                                                    l_ptr->vertices[v]->linedefs.begin() + vl);
-                                                l_ptr->vertices[v]->linedef_nrs.erase(
-                                                    l_ptr->vertices[v]->linedef_nrs.begin() + vl);
-                                                break;
-                                            }
-                                        }
-                                    }
+                                    l_ptr->remove_from_vertices();
                                     
                                     //Now tell the linedef's old sectors.
                                     l_ptr->remove_from_sectors();
@@ -1207,6 +1266,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             //the group of linedefs on the destination vertex.
                             if(!has_merged) {
                                 dest_v_ptr->linedef_nrs.push_back(moved_v_ptr->linedef_nrs[l]);
+                                dest_v_ptr->linedefs.push_back(moved_v_ptr->linedefs[l]);
                                 unsigned char n = (l_ptr->vertices[0] == moved_v_ptr ? 0 : 1);
                                 l_ptr->vertices[n] = dest_v_ptr;
                                 l_ptr->vertex_nrs[n] = v;
@@ -1267,6 +1327,15 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             for(auto s = affected_sectors.begin(); s != affected_sectors.end(); s++) {
                 if(!(*s)) continue;
                 triangulate(*s);
+            }
+            
+            //If somewhere along the line, the current sector
+            //got marked for deletion, unselect it.
+            if(ed_cur_sector) {
+                if(ed_cur_sector->linedefs.size() == 0) {
+                    ed_cur_sector = NULL;
+                    sector_to_gui();
+                }
             }
             
             ed_moving_thing = string::npos;
@@ -1368,6 +1437,7 @@ void area_editor::load() {
     frm_sectors->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
     frm_sectors->easy_row();
     frm_sectors->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
+    frm_sectors->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
     y = frm_sectors->easy_row();
     
     lafi_frame* frm_sector = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
@@ -1462,6 +1532,7 @@ void area_editor::load() {
     frm_objects->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
     frm_objects->easy_row();
     frm_objects->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
+    frm_objects->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
     y = frm_objects->easy_row();
     
     lafi_frame* frm_object = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
@@ -1591,6 +1662,8 @@ void area_editor::load() {
     frm_bottom->widgets["but_save"]->description = "Save the area onto the disk.";
     frm_bottom->widgets["but_quit"]->description = "Quit the area editor.";
     
+    //ToDo quit button.
+    
     
     //Properties -- sectors.
     auto lambda_gui_to_sector = [] (lafi_widget*) { gui_to_sector(); };
@@ -1601,6 +1674,10 @@ void area_editor::load() {
     frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         if(ed_sec_mode == ESM_NEW_SECTOR) ed_sec_mode = ESM_NONE;
         else ed_sec_mode = ESM_NEW_SECTOR;
+    };
+    frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_cur_sector = NULL;
+        sector_to_gui();
     };
     frm_sector->widgets["but_type"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
@@ -1616,6 +1693,7 @@ void area_editor::load() {
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sectors->widgets["but_back"]->description =      "Go back to the main menu.";
     frm_sectors->widgets["but_new"]->description =       "Create a new sector where you click.";
+    frm_sectors->widgets["but_sel_none"]->description =  "Deselect the current sector.";
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
     frm_sector->widgets["txt_texture"]->description =    "File name of the Texture (image) of the floor.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
@@ -1669,6 +1747,10 @@ void area_editor::load() {
         if(ed_sec_mode == ESM_NEW_OBJECT) ed_sec_mode = ESM_NONE;
         else ed_sec_mode = ESM_NEW_OBJECT;
     };
+    frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_cur_mob = NULL;
+        mob_to_gui();
+    };
     frm_object->widgets["but_rem"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             if(cur_area_map.mob_generators[m] == ed_cur_mob) {
@@ -1688,13 +1770,14 @@ void area_editor::load() {
     };
     frm_object->widgets["ang_angle"]->lose_focus_handler = lambda_gui_to_mob;
     frm_object->widgets["txt_vars"]->lose_focus_handler = lambda_gui_to_mob;
-    frm_objects->widgets["but_back"]->description =  "Go back to the main menu.";
-    frm_objects->widgets["but_new"]->description =   "Create a new object wherever you click.";
-    frm_object->widgets["but_rem"]->description =    "Delete the current object.";
-    frm_object->widgets["but_folder"]->description = "Choose the folder of types of object.";
-    frm_object->widgets["but_type"]->description =   "Choose the type this object is.";
-    frm_object->widgets["ang_angle"]->description =  "Angle the object is facing.";
-    frm_object->widgets["txt_vars"]->description =   "Variables used for the script.";
+    frm_objects->widgets["but_back"]->description =     "Go back to the main menu.";
+    frm_objects->widgets["but_new"]->description =      "Create a new object wherever you click.";
+    frm_objects->widgets["but_sel_none"]->description = "Deselect the current sector.";
+    frm_object->widgets["but_rem"]->description =       "Delete the current object.";
+    frm_object->widgets["but_folder"]->description =    "Choose the folder of types of object.";
+    frm_object->widgets["but_type"]->description =      "Choose the type this object is.";
+    frm_object->widgets["ang_angle"]->description =     "Angle the object is facing.";
+    frm_object->widgets["txt_vars"]->description =      "Variables used for the script.";
     
     
     //Properties -- background.
@@ -1760,7 +1843,7 @@ void area_editor::load() {
     frm_picker->widgets["but_back"]->description = "Cancel.";
     
     
-    ed_filename.clear();
+    ed_file_name.clear();
     
 }
 
@@ -1768,10 +1851,8 @@ void area_editor::load() {
  * Load the area from the disk.
  */
 void area_editor::load_area() {
-    ::load_area(ed_filename, true);
-    ed_mode = EDITOR_MODE_MAIN;
-    change_to_right_frame();
-    ((lafi_button*) ed_gui->widgets["frm_main"]->widgets["but_area"])->text = ed_filename;
+    ::load_area(ed_file_name, true);
+    ((lafi_button*) ed_gui->widgets["frm_main"]->widgets["but_area"])->text = ed_file_name;
     show_widget(ed_gui->widgets["frm_main"]->widgets["frm_area"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
@@ -1779,6 +1860,8 @@ void area_editor::load_area() {
     for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
         check_linedef_intersections(cur_area_map.vertices[v]);
     }
+    
+    change_background(ed_bg_file_name);
     
     ed_error_type = EET_NONE_YET;
     ed_error_sector_ptr = NULL;
@@ -1793,6 +1876,10 @@ void area_editor::load_area() {
     ed_cur_mob = NULL;
     sector_to_gui();
     mob_to_gui();
+    bg_to_gui();
+    
+    ed_mode = EDITOR_MODE_MAIN;
+    change_to_right_frame();
 }
 
 /* ----------------------------------------------------------------------------
@@ -1809,9 +1896,8 @@ void area_editor::mob_to_gui() {
         ((lafi_angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_mob->angle);
         ((lafi_textbox*) f->widgets["txt_vars"])->text = ed_cur_mob->vars;
         
-        ((lafi_button*) f->widgets["but_folder"])->text =
-            MOB_FOLDER_NAMES[ed_cur_mob->folder];
-            
+        ((lafi_button*) f->widgets["but_folder"])->text = mob_folders.get_pname(ed_cur_mob->folder);
+        
         lafi_button* but_type = (lafi_button*) f->widgets["but_type"];
         if(ed_cur_mob->folder == MOB_FOLDER_NONE) {
             disable_widget(but_type);
@@ -1849,14 +1935,15 @@ void area_editor::open_picker(unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
-        elements.push_back(SECTOR_TYPE_STR_NORMAL);
-        elements.push_back(SECTOR_TYPE_STR_BOTTOMLESS_PIT);
-        elements.push_back(SECTOR_TYPE_STR_LANDING_SITE);
+        for(size_t t = 0; t < sector_types.get_nr_of_types(); t++) {
+            elements.push_back(sector_types.get_name(t));
+        }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_FOLDER) {
     
-        for(unsigned char f = 1; f < N_MOB_FOLDERS; f++) { //0 is none.
-            elements.push_back(MOB_FOLDER_NAMES[f]);
+        for(unsigned char f = 0; f < mob_folders.get_nr_of_folders(); f++) { //0 is none.
+            if(f == MOB_FOLDER_NONE) continue;
+            elements.push_back(mob_folders.get_pname(f));
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
@@ -1893,6 +1980,11 @@ void area_editor::open_picker(unsigned char type) {
                     elements.push_back(t->first);
                 }
                 
+            } else if(ed_cur_mob->folder == MOB_FOLDER_SPECIAL) {
+                for(auto s = special_mob_types.begin(); s != special_mob_types.end(); s++) {
+                    elements.push_back(s->first);
+                }
+                
             }
             
         }
@@ -1923,29 +2015,22 @@ void area_editor::pick(string name, unsigned char type) {
     
     if(type == AREA_EDITOR_PICKER_AREA) {
     
-        ed_filename = name;
+        ed_file_name = name;
         load_area();
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
         if(ed_cur_sector) {
-            if(name == SECTOR_TYPE_STR_NORMAL)              ed_cur_sector->type = SECTOR_TYPE_NORMAL;
-            else if(name == SECTOR_TYPE_STR_BOTTOMLESS_PIT) ed_cur_sector->type = SECTOR_TYPE_BOTTOMLESS_PIT;
-            else if(name == SECTOR_TYPE_STR_LANDING_SITE)   ed_cur_sector->type = SECTOR_TYPE_LANDING_SITE;
+            ed_cur_sector->type = sector_types.get_nr(name);
             sector_to_gui();
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_FOLDER) {
     
         if(ed_cur_mob) {
-            for(unsigned char f = 0; f < N_MOB_FOLDERS; f++) {
-                if(name == MOB_FOLDER_NAMES[f]) {
-                    ed_cur_mob->folder = f;
-                    ed_cur_mob->type = NULL;
-                    mob_to_gui();
-                    break;
-                }
-            }
+            ed_cur_mob->folder = mob_folders.get_nr_from_pname(name);
+            ed_cur_mob->type = NULL;
+            mob_to_gui();
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
@@ -1972,6 +2057,9 @@ void area_editor::pick(string name, unsigned char type) {
                 
             } else if(ed_cur_mob->folder == MOB_FOLDER_TREASURES) {
                 ed_cur_mob->type = treasure_types[name];
+                
+            } else if(ed_cur_mob->folder == MOB_FOLDER_SPECIAL) {
+                ed_cur_mob->type = special_mob_types[name];
                 
             }
             
@@ -2079,7 +2167,7 @@ void area_editor::save_area() {
     
     for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
         mob_gen* m_ptr = cur_area_map.mob_generators[m];
-        data_node* mob_node = new data_node(MOB_FOLDER_SNAMES[m_ptr->folder], "");
+        data_node* mob_node = new data_node(mob_folders.get_sname(m_ptr->folder), "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {
@@ -2143,6 +2231,8 @@ void area_editor::save_area() {
         sector* s_ptr = cur_area_map.sectors[s];
         data_node* sector_node = new data_node("sector", "");
         sectors_node->add(sector_node);
+        
+        if(s_ptr->type != SECTOR_TYPE_NORMAL) sector_node->add(new data_node("type", sector_types.get_name(s_ptr->type)));
         sector_node->add(new data_node("z", ftos(s_ptr->z)));
         if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", itos(s_ptr->brightness)));
         if(s_ptr->fade) sector_node->add(new data_node("fade", btos(s_ptr->fade)));
@@ -2151,22 +2241,31 @@ void area_editor::save_area() {
         for(unsigned char t = 0; t < (size_t) (s_ptr->fade ? 2 : 1); t++) {
             string n = itos(t);
             
-            sector_node->add(new data_node("texture_" + n, s_ptr->textures[t].filename));
+            sector_node->add(new data_node("texture_" + n, s_ptr->textures[t].file_name));
             if(s_ptr->textures[t].rot != 0) {
-                sector_node->add(new data_node("texture_" + n + "rotate", ftos(s_ptr->textures[t].rot)));
+                sector_node->add(new data_node("texture_" + n + "_rotate", ftos(s_ptr->textures[t].rot)));
             }
-            if(s_ptr->textures[t].scale_x != 0 || s_ptr->textures[t].scale_y != 0) {
-                sector_node->add(new data_node("texture_" + n + "scale",
+            if(s_ptr->textures[t].scale_x != 1 || s_ptr->textures[t].scale_y != 1) {
+                sector_node->add(new data_node("texture_" + n + "_scale",
                                                ftos(s_ptr->textures[t].scale_x) + " " + ftos(s_ptr->textures[t].scale_y)));
             }
             if(s_ptr->textures[t].trans_x != 0 || s_ptr->textures[t].trans_y != 0) {
-                sector_node->add(new data_node("texture_" + n + "trans",
+                sector_node->add(new data_node("texture_" + n + "_trans",
                                                ftos(s_ptr->textures[t].trans_x) + " " + ftos(s_ptr->textures[t].trans_y)));
             }
         }
     }
     
-    file_node.save_file(AREA_FOLDER "/" + ed_filename + ".txt");
+    //Background.
+    file_node.add(new data_node("bg_file_name", ed_bg_file_name));
+    file_node.add(new data_node("bg_x", ftos(ed_bg_x)));
+    file_node.add(new data_node("bg_y", ftos(ed_bg_y)));
+    file_node.add(new data_node("bg_w", ftos(ed_bg_w)));
+    file_node.add(new data_node("bg_h", ftos(ed_bg_h)));
+    file_node.add(new data_node("bg_alpha", itos(ed_bg_a)));
+    
+    
+    file_node.save_file(AREA_FOLDER "/" + ed_file_name + ".txt");
     
     ed_cur_sector = NULL;
     ed_cur_mob = NULL;
@@ -2185,18 +2284,10 @@ void area_editor::sector_to_gui() {
         show_widget(f);
         
         ((lafi_textbox*) f->widgets["txt_z"])->text = ftos(ed_cur_sector->z);
-        ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->textures[0].filename;
+        ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->textures[0].file_name;
         ((lafi_textbox*) f->widgets["txt_brightness"])->text = itos(ed_cur_sector->brightness);
+        ((lafi_button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
         //ToDo hazards.
-        
-        lafi_button* but_type = ((lafi_button*) f->widgets["but_type"]);
-        if(ed_cur_sector->type == SECTOR_TYPE_NORMAL) {
-            but_type->text = SECTOR_TYPE_STR_NORMAL;
-        } else if(ed_cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
-            but_type->text = SECTOR_TYPE_STR_BOTTOMLESS_PIT;
-        } else if(ed_cur_sector->type == SECTOR_TYPE_LANDING_SITE) {
-            but_type->text = SECTOR_TYPE_STR_LANDING_SITE;
-        }
         
         adv_textures_to_gui();
         
@@ -2327,6 +2418,34 @@ void area_editor::update_review_frame() {
             lbl_error_1->text = "Sector with unknown";
             lbl_error_2->text = "texture found!";
             lbl_error_3->text = "(" + ed_error_string + ")";
+            
+        } else if(ed_error_type == EET_TYPELESS_MOB) {
+        
+            if(!ed_error_mob_ptr) {
+                find_errors(); return;
+            }
+            
+            lbl_error_1->text = "Mob with no";
+            lbl_error_2->text = "type found!";
+            
+            
+        } else if(ed_error_type == EET_MOB_OOB) {
+        
+            if(!ed_error_mob_ptr) {
+                find_errors(); return;
+            }
+            
+            lbl_error_1->text = "Mob that is not";
+            lbl_error_2->text = "on any sector";
+            lbl_error_3->text = "found! It's probably";
+            lbl_error_4->text = "out of bounds.";
+            
+            
+        } else if(ed_error_type == EET_LANDING_SITE) {
+        
+            lbl_error_1->text = "There are no";
+            lbl_error_2->text = "sectors of type";
+            lbl_error_3->text = "\"landing site\"!";
             
         }
     }

@@ -88,7 +88,7 @@ struct sector_texture {
     float trans_y; //and Y.
     float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
-    string filename; //For the editor.
+    string file_name; //For the editor.
     
     sector_texture();
 };
@@ -101,10 +101,10 @@ struct sector_texture {
  * is determined by its floors.
  */
 struct sector {
-    unsigned short type;
+    unsigned char type;
     float z; //Height.
     unsigned int tag; //ToDo are these used?
-    float brightness;
+    unsigned char brightness;
     sector_texture textures[2];
     bool fade;
     float fade_angle;
@@ -209,10 +209,6 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_BOTTOMLESS_PIT,
     SECTOR_TYPE_LANDING_SITE,
 };
-
-#define SECTOR_TYPE_STR_NORMAL "Normal"
-#define SECTOR_TYPE_STR_BOTTOMLESS_PIT "Bottomless pit"
-#define SECTOR_TYPE_STR_LANDING_SITE "Landing site"
 
 
 enum TERRAIN_SOUNDS {

@@ -101,33 +101,33 @@ void lafi_widget::call_lose_focus_handler() { if(lose_focus_handler) lose_focus_
 
 //Returns the appropriate background color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR lafi_widget::get_bg_color() {
-    if((flags & LAFI_FLAG_DISABLED) != 0) return style->disabled_bg_color;
+    if(is_disabled()) return style->disabled_bg_color;
     return style->bg_color;
 }
 
 //Returns the appropriate lighter background color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR lafi_widget::get_lighter_bg_color() {
-    if((flags & LAFI_FLAG_DISABLED) != 0) return style->lighter_disabled_bg_color;
+    if(is_disabled()) return style->lighter_disabled_bg_color;
     return style->lighter_bg_color;
 }
 
 
 //Returns the appropriate darker background color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR lafi_widget::get_darker_bg_color() {
-    if((flags & LAFI_FLAG_DISABLED) != 0) return style->darker_disabled_bg_color;
+    if(is_disabled()) return style->darker_disabled_bg_color;
     return style->darker_bg_color;
 }
 
 
 //Returns the appropriate foreground color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR lafi_widget::get_fg_color() {
-    if((flags & LAFI_FLAG_DISABLED) != 0) return style->disabled_fg_color;
+    if(is_disabled()) return style->disabled_fg_color;
     return style->fg_color;
 }
 
 //Returns the appropriate alternate color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR lafi_widget::get_alt_color() {
-    if((flags & LAFI_FLAG_DISABLED) != 0) return style->disabled_alt_color;
+    if(is_disabled()) return style->disabled_alt_color;
     return style->alt_color;
 }
 
@@ -146,6 +146,19 @@ lafi_widget* lafi_widget::get_widget_under_mouse(int mx, int my) {
         if(is_mouse_in(mx, my)) return this;
     }
     return NULL;
+}
+
+/*
+ * Checks if the widget is disabled, either because of its flags,
+ * or because of one of its parents' flags.
+ */
+bool lafi_widget::is_disabled() {
+    lafi_widget* p = this;
+    while(p->parent) {
+        if((p->flags & LAFI_FLAG_DISABLED) != 0) return true;
+        p = p->parent;
+    }
+    return false;
 }
 
 /*

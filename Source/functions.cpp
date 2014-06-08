@@ -65,8 +65,9 @@ bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check)
  * cx, cy: Coordinates of the circle.
  * cr:     Radius of the circle.
  * x*, y*: Coordinates of the line.
+ * li*:    If not NULL, the line intersection coordinates are returned here.
  */
-bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2) {
+bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2, float* lix, float* liy) {
 
     //Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
     
@@ -87,7 +88,11 @@ bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, fl
             float x = x1 + (i * vx * t);
             float y = y1 + (i * vy * t);
             // If one of them is in the boundaries of the segment, it collides
-            if (x >= min(x1, x2) && x <= max(x1, x2) && y >= min(y1, y2) && y <= max(y1, y2)) return true;
+            if (x >= min(x1, x2) && x <= max(x1, x2) && y >= min(y1, y2) && y <= max(y1, y2)) {
+                if(lix) *lix = x;
+                if(liy) *liy = y;
+                return true;
+            }
         }
     }
     return false;
@@ -100,7 +105,7 @@ void clear_area_textures() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         sector* s_ptr = cur_area_map.sectors[s];
         if(s_ptr->textures[0].bitmap && s_ptr->textures[0].bitmap != bmp_error) {
-            bitmaps.detach("Textures/" + s_ptr->textures[0].filename);
+            bitmaps.detach("Textures/" + s_ptr->textures[0].file_name);
         }
     }
 }
@@ -119,11 +124,11 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
 /* ----------------------------------------------------------------------------
  * Prints something onto the error log.
  * s: String that represents the error.
- * d: If not null, this will be used to obtain the filename and line that caused the error.
+ * d: If not null, this will be used to obtain the file_name and line that caused the error.
  */
 void error_log(string s, data_node* d) {
     if(d) {
-        s += " (" + d->filename;
+        s += " (" + d->file_name;
         if(d->line_nr != 0) s += " line " + itos(d->line_nr);
         s += ")";
     }
@@ -274,8 +279,6 @@ void generate_area_images() {
         size_t n_linedefs = cur_area_map.sectors[s]->linedefs.size();
         if(n_linedefs == 0) continue;
         
-        triangulate(cur_area_map.sectors[s]); //ToDo don't do it like this.
-        
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
         s_min_x = s_max_x = cur_area_map.sectors[s]->linedefs[0]->vertices[0]->x;
@@ -298,12 +301,12 @@ void generate_area_images() {
         
         for(size_t x = sector_start_col; x <= sector_end_col; x++) {
             for(size_t y = sector_start_row; y <= sector_end_row; y++) {
-                ALLEGRO_BITMAP* current_target_bmp = al_get_target_bitmap();
+                ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
                     draw_sector(cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
                     
-                } al_set_target_bitmap(current_target_bmp);
+                } al_set_target_bitmap(prev_target_bmp);
             }
         }
         
@@ -385,7 +388,7 @@ void load_area(const string name, const bool load_for_editor) {
         ed_weather_name = weather_condition_name;
     } else {
         if(weather_conditions.find(weather_condition_name) == weather_conditions.end()) {
-            error_log("Area " + name + " refers to a non-existing weather condition!", &file);
+            error_log("Area " + name + " refers to a non-existing weather condition, \"" + weather_condition_name + "\"!", &file);
             cur_weather = weather();
         } else {
             cur_weather = weather_conditions[weather_condition_name];
@@ -431,6 +434,8 @@ void load_area(const string name, const bool load_for_editor) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
         sector* new_sector = new sector();
         
+        new_sector->type = sector_types.get_nr(sector_data->get_child_by_name("type")->value);
+        if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
         new_sector->brightness = tof(sector_data->get_child_by_name("brightness")->get_value_or_default(itos(DEF_SECTOR_BRIGHTNESS)));
         new_sector->z = tof(sector_data->get_child_by_name("z")->value);
         new_sector->fade = tob(sector_data->get_child_by_name("fade")->value);
@@ -440,26 +445,25 @@ void load_area(const string name, const bool load_for_editor) {
             sector_texture new_floor = sector_texture();
             string n = itos(t);
             
-            new_floor.filename = sector_data->get_child_by_name("texture_" + n)->value;
+            new_floor.file_name = sector_data->get_child_by_name("texture_" + n)->value;
             new_floor.rot = tof(sector_data->get_child_by_name("texture_" + n + "_rotate")->value);
             
-            vector<string> scales = split(sector_data->get_child_by_name("texture_" + n + "scale")->value);
+            vector<string> scales = split(sector_data->get_child_by_name("texture_" + n + "_scale")->value);
             if(scales.size() >= 2) {
                 new_floor.scale_x = tof(scales[0]);
                 new_floor.scale_y = tof(scales[0]);
             }
-            vector<string> translations = split(sector_data->get_child_by_name("texture_" + n + "trans")->value);
+            vector<string> translations = split(sector_data->get_child_by_name("texture_" + n + "_trans")->value);
             if(translations.size() >= 2) {
                 new_floor.trans_x = tof(translations[0]);
                 new_floor.trans_y = tof(translations[0]);
             }
-            //ToDo missing stuff.
             
             new_sector->textures[t] = new_floor;
         }
         
         
-        //ToDo missing things.
+        //ToDo elements (and tags...?).
         
         cur_area_map.sectors.push_back(new_sector);
     }
@@ -478,65 +482,37 @@ void load_area(const string name, const bool load_for_editor) {
         mob_ptr->angle = tof(mob_node->get_child_by_name("angle")->get_value_or_default("0"));
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
         
-        unsigned char mob_folder = MOB_FOLDER_NONE;
-        for(unsigned char f = 0; f < N_MOB_FOLDERS; f++) {
-            if(mob_node->name == MOB_FOLDER_SNAMES[f]) {
-                mob_ptr->folder = f;
-                break;
-            }
+        mob_ptr->folder = mob_folders.get_nr_from_sname(mob_node->name);
+        string mt = mob_node->get_child_by_name("type")->value;
+        mob_folders.set_mob_type_ptr(mob_ptr, mt);
+        
+        if(!mob_ptr->type && !load_for_editor) {
+            //Error.
+            error_log(
+                "Unknown \"" + mob_folders.get_sname(mob_ptr->folder) + "\" mob type \"" +
+                mt + "\"!", mob_node
+            );
         }
         
-        if(mob_ptr->folder == MOB_FOLDER_ENEMIES) {
+        if((mob_ptr->folder == MOB_FOLDER_NONE || mob_ptr->folder == string::npos) && !load_for_editor) {
         
-            string et = mob_node->get_child_by_name("type")->value;
-            auto it = enemy_types.find(et);
-            if(it != enemy_types.end()) {
-                mob_ptr->type = it->second;
-            } else error_log("Unknown enemy type \"" + et + "\"!", mob_node);
-            
-        } else if(mob_ptr->folder == MOB_FOLDER_LEADERS) {
-        
-            string lt = mob_node->get_child_by_name("type")->value;
-            auto it = leader_types.find(lt);
-            if(it != leader_types.end()) {
-                mob_ptr->type = it->second;
-            } else error_log("Unknown leader type \"" + lt + "\"!", mob_node);
-            
-        } else if(mob_node->name == "ship") {
-        
-            //ToDo
-            /*
-            create_mob(new ship(
-                           x, y,
-                           cur_area_map.sectors[0] //ToDo
-                       ));
-                       */
-            
-        } else if(mob_ptr->folder == MOB_FOLDER_ONIONS) {
-        
-            string ot = mob_node->get_child_by_name("type")->value;
-            auto it = onion_types.find(ot);
-            if(it != onion_types.end()) {
-                mob_ptr->type = it->second;
-            } else error_log("Unknown onion type \"" + ot + "\"!", mob_node);
-            
-        } else if(mob_ptr->folder == MOB_FOLDER_TREASURES) {
-        
-            string tt = mob_node->get_child_by_name("type")->value;
-            auto it = treasure_types.find(tt);
-            if(it != treasure_types.end()) {
-                mob_ptr->type = it->second;
-                
-            } else {
-            
-                error_log("Unknown mob folder \"" + mob_node->name + "\"!", mob_node);
-                continue;
-            }
+            error_log("Unknown mob folder \"" + mob_node->name + "\"!", mob_node);
+            mob_ptr->folder = MOB_FOLDER_NONE;
             
         }
         
         cur_area_map.mob_generators.push_back(mob_ptr);
     }
+    
+    
+    //Background.
+    ed_bg_file_name = file.get_child_by_name("bg_file_name")->value;
+    ed_bg_x = tof(file.get_child_by_name("bg_x")->value);
+    ed_bg_y = tof(file.get_child_by_name("bg_y")->value);
+    ed_bg_w = tof(file.get_child_by_name("bg_w")->value);
+    ed_bg_h = tof(file.get_child_by_name("bg_h")->value);
+    ed_bg_a = toi(file.get_child_by_name("bg_alpha")->get_value_or_default("255"));
+    
     
     
     //Set up stuff.
@@ -567,7 +543,7 @@ void load_area_textures() {
         sector* s_ptr = cur_area_map.sectors[s];
         
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
-            s_ptr->textures[t].bitmap = bitmaps.get("Textures/" + s_ptr->textures[t].filename, NULL);
+            s_ptr->textures[t].bitmap = bitmaps.get("Textures/" + s_ptr->textures[t].file_name, NULL);
         }
     }
 }
@@ -576,11 +552,11 @@ void load_area_textures() {
  * Loads a bitmap from the game's content.
  * If the node is present, it'll be used to report errors.
  */
-ALLEGRO_BITMAP* load_bmp(const string filename, data_node* node) {
+ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_error) {
     ALLEGRO_BITMAP* b = NULL;
-    b = al_load_bitmap((GRAPHICS_FOLDER "/" + filename).c_str());
-    if(!b) {
-        error_log("Could not open image " + filename + "!", node);
+    b = al_load_bitmap((GRAPHICS_FOLDER "/" + file_name).c_str());
+    if(!b && report_error) {
+        error_log("Could not open image " + file_name + "!", node);
         b = bmp_error;
     }
     
@@ -603,10 +579,10 @@ void load_control(const unsigned char action, const unsigned char player, const 
 /* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
  */
-data_node load_data_file(const string filename) {
-    data_node n = data_node(filename);
+data_node load_data_file(const string file_name) {
+    data_node n = data_node(file_name);
     if(!n.file_was_opened) {
-        error_log("Could not open data file " + filename + "!");
+        error_log("Could not open data file " + file_name + "!");
     }
     
     return n;
@@ -756,10 +732,10 @@ void load_options() {
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
-sample_struct load_sample(const string filename, ALLEGRO_MIXER* const mixer) {
-    ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER "/" + filename).c_str());
+sample_struct load_sample(const string file_name, ALLEGRO_MIXER* const mixer) {
+    ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER "/" + file_name).c_str());
     if(!sample) {
-        error_log("Could not open audio sample " + filename + "!");
+        error_log("Could not open audio sample " + file_name + "!");
     }
     
     return sample_struct(sample, mixer);
@@ -1043,16 +1019,6 @@ string str_to_lower(string s) {
     }
     return s;
 }
-
-/* ----------------------------------------------------------------------------
- * Returns whether a point is inside a sector or not.
- * x/y:      Coordinates of the point.
- * linedefs: Linedefs that make up the sector.
- */
-/*bool temp_point_inside_sector(float x, float y, vector<linedef> &linedefs){
-    //ToDo
-    return true;
-}*/
 
 /* ----------------------------------------------------------------------------
  * Uses up a spray.

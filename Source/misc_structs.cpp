@@ -10,6 +10,7 @@
  * to warrant their own files.
  */
 
+#include <algorithm>
 #include <climits>
 
 #include "const.h"
@@ -253,4 +254,123 @@ void bmp_manager::detach(const string &name) {
         }
         list.erase(it);
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Registers a new type of sector.
+ */
+void sector_types_manager::register_type(unsigned char nr, string name) {
+    if(nr >= names.size()) {
+        names.insert(names.end(), (nr + 1) - names.size(), "");
+    }
+    names[nr] = name;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a sector type, given its name.
+ * Returns 255 on error.
+ */
+unsigned char sector_types_manager::get_nr(const string &name) {
+    for(unsigned char n = 0; n < names.size(); n++) {
+        if(names[n] == name) return n;
+    }
+    return 255;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the name of a sector type, given its number.
+ * Returns an empty string on error.
+ */
+string sector_types_manager::get_name(const unsigned char nr) {
+    if(nr < names.size()) return names[nr];
+    return "";
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of sector types registered.
+ */
+unsigned char sector_types_manager::get_nr_of_types() {
+    return names.size();
+}
+
+/* ----------------------------------------------------------------------------
+ * Registers a new mob folder.
+ */
+void mob_folder_manager::register_folder(
+    unsigned char nr, string pname, string sname,
+    function<void (vector<string> &list)> lister,
+    function<mob_type* (const string &name)> type_getter
+) {
+    if(nr >= pnames.size()) {
+        pnames.insert(pnames.end(), (nr + 1) - pnames.size(), "");
+        snames.insert(snames.end(), (nr + 1) - snames.size(), "");
+        listers.insert(listers.end(), (nr + 1) - listers.size(), function<void(vector<string> &)>());
+        type_getters.insert(type_getters.end(), (nr + 1) - type_getters.size(), function<mob_type* (const string &)>());
+    }
+    pnames[nr] = pname;
+    snames[nr] = sname;
+    listers[nr] = lister;
+    type_getters[nr]  = type_getter;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a folder given its plural name.
+ * Returns 255 on error.
+ */
+unsigned char mob_folder_manager::get_nr_from_pname(const string &pname) {
+    for(unsigned char n = 0; n < pnames.size(); n++) {
+        if(pnames[n] == pname) return n;
+    }
+    return 255;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a folder given its singular name.
+ * Returns 255 on error.
+ */
+unsigned char mob_folder_manager::get_nr_from_sname(const string &sname) {
+    for(unsigned char n = 0; n < snames.size(); n++) {
+        if(snames[n] == sname) return n;
+    }
+    return 255;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the plural name of a folder given its number.
+ * Returns an empty string on error.
+ */
+string mob_folder_manager::get_pname(const unsigned char nr) {
+    if(nr < pnames.size()) return pnames[nr];
+    return "";
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the singular name of a folder given its number.
+ * Returns an empty string on error.
+ */
+string mob_folder_manager::get_sname(const unsigned char nr) {
+    if(nr < snames.size()) return snames[nr];
+    return "";
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of registered mob folders.
+ */
+unsigned char mob_folder_manager::get_nr_of_folders() {
+    return pnames.size();
+}
+
+/* ----------------------------------------------------------------------------
+ * Lists the names of all mob types in a folder onto a vector of strings.
+ */
+void mob_folder_manager::get_list(vector<string> &l, unsigned char nr) {
+    if(nr < listers.size()) listers[nr](l);
+}
+
+/* ----------------------------------------------------------------------------
+ * Sets a mob generator's type pointer, given the type's name.
+ * It uses the mob gen's existing folder to search for the name.
+ */
+void mob_folder_manager::set_mob_type_ptr(mob_gen* m, const string &type_name) {
+    m->type = type_getters[m->folder](type_name);
 }

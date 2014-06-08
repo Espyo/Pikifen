@@ -1,0 +1,75 @@
+weather=Normal
+mobs{
+	Special{
+		type=Ship
+		pos=-224 128
+	}
+	Leader{
+		type=Olimar
+		pos=0 0
+	}
+	Leader{
+		type=Louie
+		pos=300 250
+	}
+	Leader{
+		type=President
+		pos=350 200
+	}
+	Onion{
+		type=Red onion
+		pos=400 100
+	}
+	Onion{
+		type=Yellow onion
+		pos=400 200
+	}
+	Onion{
+		type=Blue onion
+		pos=400 300
+	}
+	Treasure{
+		type=Test
+		pos=32 352
+	}
+	Enemy{
+		type=Cloaking Burrow-nit
+		pos=-100 -200
+	}
+}
+vertices{
+	vertex=-1000 -1000
+	vertex=1000 -1000
+	vertex=1000 1000
+	vertex=-1000 1000
+}
+linedefs{
+	linedef{
+		s=0 -1
+		v=0 1
+	}
+	linedef{
+		s=0 -1
+		v=1 2
+	}
+	linedef{
+		s=0 -1
+		v=2 3
+	}
+	linedef{
+		s=0 -1
+		v=3 0
+	}
+}
+sectors{
+	sector{
+		z=0
+		texture_0=Grass.png
+	}
+}
+bg_file_name=
+bg_x=0
+bg_y=0
+bg_w=0
+bg_h=0
+bg_alpha=255

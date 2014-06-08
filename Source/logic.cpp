@@ -587,9 +587,11 @@ void do_logic() {
                         size_t h_nr = hi_ptr->hitbox_nr;
                         
                         if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                            float knockback_angle = h_ptr->angle;
-                            if(knockback_angle == -1) {
+                            float knockback_angle;
+                            if(h_ptr->knockback_outward) {
                                 knockback_angle = atan2(pik_ptr->y - h_y, pik_ptr->x - h_x);
+                            } else {
+                                knockback_angle = h_ptr->knockback_angle;
                             }
                             pik_ptr->latched = false;
                             attack(m_ptr, pik_ptr, false, h_ptr->multiplier, knockback_angle, h_ptr->knockback, 1, 1);

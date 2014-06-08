@@ -11,7 +11,7 @@ using namespace std;
 data_node* data_node::create_dummy() {
     data_node* new_dummy_child = new data_node();
     new_dummy_child->line_nr = line_nr;
-    new_dummy_child->filename = filename;
+    new_dummy_child->file_name = file_name;
     new_dummy_child->file_was_opened = file_was_opened;
     dummy_children.push_back(new_dummy_child);
     return new_dummy_child;
@@ -81,14 +81,14 @@ bool data_node::remove(data_node* node_to_remove) {
 }
 
 //Loads data from a file.
-void data_node::load_file(const string &filename, const bool trim_values) {
+void data_node::load_file(const string &file_name, const bool trim_values) {
     vector<string> lines;
     
     bool is_first_line = true;
     file_was_opened = false;
-    this->filename = filename;
+    this->file_name = file_name;
     
-    ALLEGRO_FILE* file = al_fopen(filename.c_str(), "r");
+    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "r");
     if(file) {
         file_was_opened = true;
         while(!al_feof(file)) {
@@ -137,7 +137,7 @@ size_t data_node::load_node(const vector<string> &lines, const bool trim_values,
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value = v;
             new_child->file_was_opened = file_was_opened;
-            new_child->filename = filename;
+            new_child->file_name = file_name;
             new_child->line_nr = l + 1;
             children.push_back(new_child);
             
@@ -152,7 +152,7 @@ size_t data_node::load_node(const vector<string> &lines, const bool trim_values,
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value.clear();
             new_child->file_was_opened = file_was_opened;
-            new_child->filename = filename;
+            new_child->file_name = file_name;
             new_child->line_nr = l + 1;
             l = new_child->load_node(lines, trim_values, l + 1);
             children.push_back(new_child);
@@ -170,12 +170,13 @@ size_t data_node::load_node(const vector<string> &lines, const bool trim_values,
     return lines.size() - 1;
 }
 
-//Saves a node into a new text file. Line numbers are ignored. If you don't provide a filename, it'll use the node's filename.
+//Saves a node into a new text file. Line numbers are ignored.
+//If you don't provide a file name, it'll use the node's file name.
 //Returns true on success.
-bool data_node::save_file(string filename, const bool children_only) {
-    if(filename == "") filename = this->filename;
+bool data_node::save_file(string file_name, const bool children_only) {
+    if(file_name == "") file_name = this->file_name;
     
-    ALLEGRO_FILE* file = al_fopen(filename.c_str(), "w");
+    ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "w");
     if(file) {
         if(children_only) {
             for(size_t c = 0; c < children.size(); c++) {
@@ -232,16 +233,16 @@ data_node::data_node(const data_node &dn2) {
     name = dn2.name;
     value = dn2.value;
     file_was_opened = dn2.file_was_opened;
-    filename = dn2.filename;
+    file_name = dn2.file_name;
     line_nr = dn2.line_nr;
 }
 
 //Creates a data node from a file, given the file name.
-data_node::data_node(const string &filename) {
+data_node::data_node(const string &file_name) {
     file_was_opened = false;
     line_nr = 0;
-    this->filename = filename;
-    load_file(filename);
+    this->file_name = file_name;
+    load_file(file_name);
 }
 
 //Creates a data node by filling its name and value.

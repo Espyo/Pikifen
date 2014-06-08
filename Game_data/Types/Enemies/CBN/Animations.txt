@@ -864,6 +864,7 @@ hitboxes{
 		multiplier=1
 		can_pikmin_latch=true
 		elements=
+		outward=false
 		angle=-1
 		knockback=1
 	}
@@ -872,6 +873,7 @@ hitboxes{
 		multiplier=1.2
 		can_pikmin_latch=true
 		elements=
+		outward=false
 		angle=-1
 		knockback=1
 	}
@@ -880,6 +882,7 @@ hitboxes{
 		multiplier=1
 		can_pikmin_latch=false
 		elements=
+		outward=false
 		angle=-1
 		knockback=1
 	}
@@ -888,7 +891,8 @@ hitboxes{
 		multiplier=0
 		can_pikmin_latch=false
 		elements=
-		angle=-1
+		outward=true
+		angle=0
 		knockback=80
 	}
 }

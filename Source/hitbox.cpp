@@ -15,7 +15,8 @@ hitbox::hitbox(const string &name) {
     this->name = name;
     type = HITBOX_TYPE_NORMAL;
     multiplier = 1;
-    angle = -1;
+    knockback_outward = true;
+    knockback_angle = 0;
     knockback = 1;
     can_pikmin_latch = false;
 }
