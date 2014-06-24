@@ -168,6 +168,7 @@ string                           ed_object_name;
 sector*                          ed_on_sector = NULL;
 unsigned char                    ed_sec_mode = ESM_NONE;
 bool                             ed_shift_pressed = false;
+bool                             ed_show_bg = false;
 ALLEGRO_BITMAP*                  ed_top_bmp[3] = { NULL, NULL, NULL };
 string                           ed_weather_name;
 lafi_widget*                     ed_wum = NULL;

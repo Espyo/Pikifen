@@ -30,6 +30,7 @@
 #include "particle.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
+#include "sector.h"
 #include "spray_type.h"
 #include "spec_objs/info_spot.h"
 #include "spec_objs/nectar.h"
@@ -198,6 +199,7 @@ extern string                           ed_object_name;
 extern sector*                          ed_on_sector;
 extern unsigned char                    ed_sec_mode; //Secondary/sub mode.
 extern bool                             ed_shift_pressed;
+extern bool                             ed_show_bg;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
 extern string                           ed_weather_name;
 extern lafi_widget*                     ed_wum; //Widget under mouse.

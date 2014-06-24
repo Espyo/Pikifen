@@ -75,7 +75,7 @@ struct carrier_info_struct {
  */
 class mob {
 public:
-    mob(const float x, const float y, const float z, mob_type* t, sector* sec);
+    mob(const float x, const float y, mob_type* type, const float angle, const string &vars);
     virtual ~mob(); //Needed so that typeid works.
     
     mob_type* type;

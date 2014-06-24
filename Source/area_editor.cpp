@@ -40,27 +40,11 @@ void area_editor::adv_textures_to_gui() {
     
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ((lafi_textbox*) f->widgets["txt_x"])->text =  ftos(ed_cur_sector->textures[0].trans_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text =  ftos(ed_cur_sector->textures[0].trans_y);
-    ((lafi_textbox*) f->widgets["txt_sx"])->text = ftos(ed_cur_sector->textures[0].scale_x);
-    ((lafi_textbox*) f->widgets["txt_sy"])->text = ftos(ed_cur_sector->textures[0].scale_y);
-    ((lafi_angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->textures[0].rot);
-    ((lafi_checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
-    
-    f = (lafi_frame*) f->widgets["frm_texture_2"];
-    if(ed_cur_sector->fade) {
-        show_widget(f);
-    } else {
-        hide_widget(f);
-    }
-    
-    ((lafi_angle_picker*) f->widgets["ang_fade_a"])->set_angle_rads(ed_cur_sector->fade_angle);
-    ((lafi_textbox*) f->widgets["txt_2texture"])->text = ed_cur_sector->textures[1].file_name;
-    ((lafi_textbox*) f->widgets["txt_2x"])->text =  ftos(ed_cur_sector->textures[1].trans_x);
-    ((lafi_textbox*) f->widgets["txt_2y"])->text =  ftos(ed_cur_sector->textures[1].trans_y);
-    ((lafi_textbox*) f->widgets["txt_2sx"])->text = ftos(ed_cur_sector->textures[1].scale_x);
-    ((lafi_textbox*) f->widgets["txt_2sy"])->text = ftos(ed_cur_sector->textures[1].scale_y);
-    ((lafi_angle_picker*) f->widgets["ang_2a"])->set_angle_rads(ed_cur_sector->textures[1].rot);
+    ((lafi_textbox*) f->widgets["txt_x"])->text =  ftos(ed_cur_sector->trans_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text =  ftos(ed_cur_sector->trans_y);
+    ((lafi_textbox*) f->widgets["txt_sx"])->text = ftos(ed_cur_sector->scale_x);
+    ((lafi_textbox*) f->widgets["txt_sy"])->text = ftos(ed_cur_sector->scale_y);
+    ((lafi_angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->rot);
 }
 
 /* ----------------------------------------------------------------------------
@@ -171,21 +155,18 @@ void area_editor::do_logic() {
         al_clear_to_color(al_map_rgb(0, 0, 16));
         
         //Grid.
-        float grid_interval = 32;
-        float grid_interval_2 = 64;
-        
         float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
         float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
         float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
         float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
         
         if(cam_zoom >= ZOOM_MIN_LEVEL_EDITOR * 1.5) {
-            float x = floor(cam_leftmost / grid_interval) * grid_interval;
-            while(x < cam_rightmost + grid_interval) {
+            float x = floor(cam_leftmost / GRID_INTERVAL) * GRID_INTERVAL;
+            while(x < cam_rightmost + GRID_INTERVAL) {
                 ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
                 bool draw_line = true;
                 
-                if(fmod(x, grid_interval_2) == 0) {
+                if(fmod(x, GRID_INTERVAL * 2) == 0) {
                     c = al_map_rgb(0, 96, 160);
                 } else {
                     if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
@@ -195,16 +176,16 @@ void area_editor::do_logic() {
                     }
                 }
                 
-                if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + grid_interval, al_map_rgb(0, 64, 128), 1.0 / cam_zoom);
-                x += grid_interval;
+                if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + GRID_INTERVAL, al_map_rgb(0, 64, 128), 1.0 / cam_zoom);
+                x += GRID_INTERVAL;
             }
             
-            float y = floor(cam_topmost / grid_interval) * grid_interval;
-            while(y < cam_bottommost + grid_interval) {
+            float y = floor(cam_topmost / GRID_INTERVAL) * GRID_INTERVAL;
+            while(y < cam_bottommost + GRID_INTERVAL) {
                 ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
                 bool draw_line = true;
                 
-                if(fmod(y, grid_interval_2) == 0) {
+                if(fmod(y, GRID_INTERVAL * 2) == 0) {
                     c = al_map_rgb(0, 96, 160);
                 } else {
                     if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
@@ -214,14 +195,14 @@ void area_editor::do_logic() {
                     }
                 }
                 
-                if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + grid_interval, y, c, 1.0 / cam_zoom);
-                y += grid_interval;
+                if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + GRID_INTERVAL, y, c, 1.0 / cam_zoom);
+                y += GRID_INTERVAL;
             }
         }
         
         //0,0 marker.
-        al_draw_line(-(grid_interval * 2), 0, grid_interval * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
-        al_draw_line(0, -(grid_interval * 2), 0, grid_interval * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+        al_draw_line(-(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+        al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         
         //Linedefs.
         if(ed_sec_mode != ESM_TEXTURE_VIEW) {
@@ -276,7 +257,7 @@ void area_editor::do_logic() {
                     l_ptr->vertices[0]->y,
                     l_ptr->vertices[1]->x,
                     l_ptr->vertices[1]->y,
-                    (selected ?        al_map_rgb(240, 240, 64) :
+                    (selected ?        al_map_rgb(224, 224, 64) :
                      error_highlight ? al_map_rgb(192, 80,  0) :
                      !valid ?          al_map_rgb(192, 32,  32) :
                      one_sided ?       al_map_rgb(240, 240, 240) :
@@ -315,8 +296,8 @@ void area_editor::do_logic() {
             }
             
         } else {
+        
             //Draw textures.
-            
             for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
                 draw_sector(cur_area_map.sectors[s], 0, 0);
             }
@@ -324,7 +305,9 @@ void area_editor::do_logic() {
         
         //Mobs.
         unsigned char mob_opacity = 224;
-        if(ed_mode == EDITOR_MODE_SECTORS) mob_opacity = 64;
+        if(ed_mode == EDITOR_MODE_SECTORS || ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS) mob_opacity = 64;
+        if(ed_sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
+        
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             bool valid = m_ptr->type != NULL;
@@ -384,6 +367,7 @@ void area_editor::do_logic() {
             if(ed_on_sector && ed_moving_thing == string::npos) {
                 for(size_t t = 0; t < ed_on_sector->triangles.size(); t++) {
                     triangle* t_ptr = &ed_on_sector->triangles[t];
+                    //Uncomment this to show the triangles.
                     /*al_draw_triangle(
                         t_ptr->points[0]->x,
                         t_ptr->points[0]->y,
@@ -419,7 +403,7 @@ void area_editor::do_logic() {
         
         
         //Background.
-        if(ed_bg_bitmap) {
+        if(ed_bg_bitmap && ed_show_bg) {
             al_draw_tinted_scaled_bitmap(
                 ed_bg_bitmap,
                 al_map_rgba(255, 255, 255, ed_bg_a),
@@ -495,16 +479,10 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         
             sector* s_ptr = cur_area_map.sectors[s];
-            for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
-            
-                if(s_ptr->textures[t].file_name.size() == 0 && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT) {
-                    ed_error_type = EET_MISSING_TEXTURE;
-                    ed_error_sector_ptr = s_ptr;
-                    break;
-                }
-                
-                if(ed_error_type == EET_MISSING_TEXTURE) break;
-                
+            if(s_ptr->file_name.size() == 0 && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
+                ed_error_type = EET_MISSING_TEXTURE;
+                ed_error_sector_ptr = s_ptr;
+                break;
             }
         }
     }
@@ -515,17 +493,15 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         
             sector* s_ptr = cur_area_map.sectors[s];
-            for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
             
-                if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->textures[t].file_name) == texture_file_names.end()) {
-                    ed_error_type = EET_UNKNOWN_TEXTURE;
-                    ed_error_string = s_ptr->textures[t].file_name;
-                    ed_error_sector_ptr = s_ptr;
-                    break;
-                }
+            if(s_ptr->file_name.size() == 0) continue;
+            
+            if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->file_name) == texture_file_names.end()) {
+                ed_error_type = EET_UNKNOWN_TEXTURE;
+                ed_error_string = s_ptr->file_name;
+                ed_error_sector_ptr = s_ptr;
+                break;
             }
-            
-            if(ed_error_type == EET_UNKNOWN_TEXTURE) break;
         }
     }
     
@@ -694,23 +670,11 @@ void area_editor::gui_to_adv_textures() {
     if(!ed_cur_sector) return;
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ed_cur_sector->textures[0].trans_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_sector->textures[0].trans_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_sector->textures[0].scale_x = tof(((lafi_textbox*) f->widgets["txt_sx"])->text);
-    ed_cur_sector->textures[0].scale_y = tof(((lafi_textbox*) f->widgets["txt_sy"])->text);
-    ed_cur_sector->textures[0].rot = ((lafi_angle_picker*) f->widgets["ang_a"])->get_angle_rads();
-    ed_cur_sector->fade = ((lafi_checkbox*) f->widgets["chk_fade"])->checked;
-    
-    if(ed_cur_sector->fade) {
-        f = (lafi_frame*) f->widgets["frm_texture_2"];
-        ed_cur_sector->fade_angle = ((lafi_angle_picker*) f->widgets["ang_fade_a"])->get_angle_rads();
-        ed_cur_sector->textures[1].file_name = ((lafi_textbox*) f->widgets["txt_2texture"])->text;
-        ed_cur_sector->textures[1].trans_x = tof(((lafi_textbox*) f->widgets["txt_2x"])->text);
-        ed_cur_sector->textures[1].trans_y = tof(((lafi_textbox*) f->widgets["txt_2y"])->text);
-        ed_cur_sector->textures[1].scale_x = tof(((lafi_textbox*) f->widgets["txt_2sx"])->text);
-        ed_cur_sector->textures[1].scale_y = tof(((lafi_textbox*) f->widgets["txt_2sy"])->text);
-        ed_cur_sector->textures[1].rot = ((lafi_angle_picker*) f->widgets["ang_2a"])->get_angle_rads();
-    }
+    ed_cur_sector->trans_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_sector->trans_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_sector->scale_x = tof(((lafi_textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_sector->scale_y = tof(((lafi_textbox*) f->widgets["txt_sy"])->text);
+    ed_cur_sector->rot = ((lafi_angle_picker*) f->widgets["ang_a"])->get_angle_rads();
     
     adv_textures_to_gui();
 }
@@ -790,7 +754,8 @@ void area_editor::gui_to_sector() {
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
     
     ed_cur_sector->z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
-    ed_cur_sector->textures[0].file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
+    ed_cur_sector->fade = ((lafi_checkbox*) f->widgets["chk_fade"])->checked;
+    ed_cur_sector->file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
     ed_cur_sector->brightness = toi(((lafi_textbox*) f->widgets["txt_brightness"])->text);
     //ToDo hazards.
     
@@ -1045,9 +1010,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
         }
         
-        //Place a new sector where the cursor is.
         if(ed_sec_mode == ESM_NEW_SECTOR) {
-        
+            //Place a new sector where the cursor is.
+            
             ed_sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
@@ -1055,26 +1020,19 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             sector* outer_sector = get_sector(hotspot_x, hotspot_y, &outer_sector_nr);
             
             sector* new_sector = new sector();
-            if(outer_sector) {
-                //ToDo missing attributes.
-                new_sector->brightness = outer_sector->brightness;
-                new_sector->textures[0] = outer_sector->textures[0];
-                new_sector->textures[1] = outer_sector->textures[1];
-                new_sector->type = outer_sector->type;
-                new_sector->z = outer_sector->z;
-            }
+            if(outer_sector) outer_sector->clone(new_sector);
             
             //Create the vertices.
             vertex* new_vertices[4];
             for(size_t v = 0; v < 4; v++) new_vertices[v] = new vertex(0, 0);
-            new_vertices[0]->x = hotspot_x - 32;
-            new_vertices[0]->y = hotspot_y - 32;
-            new_vertices[1]->x = hotspot_x + 32;
-            new_vertices[1]->y = hotspot_y - 32;
-            new_vertices[2]->x = hotspot_x + 32;
-            new_vertices[2]->y = hotspot_y + 32;
-            new_vertices[3]->x = hotspot_x - 32;
-            new_vertices[3]->y = hotspot_y + 32;
+            new_vertices[0]->x = hotspot_x - GRID_INTERVAL / 2;
+            new_vertices[0]->y = hotspot_y - GRID_INTERVAL / 2;
+            new_vertices[1]->x = hotspot_x + GRID_INTERVAL / 2;
+            new_vertices[1]->y = hotspot_y - GRID_INTERVAL / 2;
+            new_vertices[2]->x = hotspot_x + GRID_INTERVAL / 2;
+            new_vertices[2]->y = hotspot_y + GRID_INTERVAL / 2;
+            new_vertices[3]->x = hotspot_x - GRID_INTERVAL / 2;
+            new_vertices[3]->y = hotspot_y + GRID_INTERVAL / 2;
             for(size_t v = 0; v < 4; v++)cur_area_map.vertices.push_back(new_vertices[v]);
             
             //Create the linedefs.
@@ -1116,9 +1074,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             sector_to_gui();
             
             
-            //Create a mob where the cursor is.
         } else if(ed_sec_mode == ESM_NEW_OBJECT) {
-        
+            //Create a mob where the cursor is.
+            
             ed_sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
@@ -1157,7 +1115,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 vertex* dest_v_ptr = cur_area_map.vertices[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
                 
-                if(check_dist(moved_v_ptr->x, moved_v_ptr->y, dest_v_ptr->x, dest_v_ptr->y, 10)) {
+                if(check_dist(moved_v_ptr->x, moved_v_ptr->y, dest_v_ptr->x, dest_v_ptr->y, 10 / cam_zoom)) {
                     //Merge vertices.
                     
                     //Find out what to do with every linedef of the dragged vertex.
@@ -1350,18 +1308,21 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         
-        
-        //Key press.
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        //Key press.
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
         ) {
             ed_shift_pressed = true;
+            
         }
         
-        //Key release.
+        
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+        //Key release.
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
@@ -1412,9 +1373,10 @@ void area_editor::load() {
     lafi_frame* frm_bottom = new lafi_frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     ed_gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
-    frm_bottom->easy_add("but_load", new lafi_button(           0, 0, 0, 0, "Load"), 25, 32);
-    frm_bottom->easy_add("but_save", new lafi_button(           0, 0, 0, 0, "Save"), 25, 32);
-    frm_bottom->easy_add("but_quit", new lafi_button(           0, 0, 0, 0, "X"), 25, 32);
+    frm_bottom->easy_add("but_bg", new lafi_button(  0, 0, 0, 0, "Bg"), 25, 32);
+    frm_bottom->easy_add("but_load", new lafi_button(0, 0, 0, 0, "Load"), 25, 32);
+    frm_bottom->easy_add("but_save", new lafi_button(0, 0, 0, 0, "Save"), 25, 32);
+    frm_bottom->easy_add("but_quit", new lafi_button(0, 0, 0, 0, "X"), 25, 32);
     frm_bottom->easy_row();
     
     
@@ -1445,8 +1407,13 @@ void area_editor::load() {
     hide_widget(frm_sector);
     
     frm_sector->easy_row();
+    frm_sector->easy_add("lbl_type", new lafi_label(0, 0, 0, 0, "Type:"), 30, 24);
+    frm_sector->easy_add("but_type", new lafi_button(0, 0, 0, 0), 70, 24);
+    frm_sector->easy_row();
     frm_sector->easy_add("lbl_z", new lafi_label(0, 0, 0, 0, "Height:"), 50, 16);
     frm_sector->easy_add("txt_z", new lafi_textbox(0, 0, 0, 0), 50, 16);
+    frm_sector->easy_row();
+    frm_sector->easy_add("chk_fade", new lafi_checkbox(0, 0, 0, 0, "Fade textures"), 100, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("lbl_texture", new lafi_label(0, 0, 0, 0, "Texture:"), 100, 16);
     frm_sector->easy_row();
@@ -1458,9 +1425,6 @@ void area_editor::load() {
     frm_sector->easy_row();
     frm_sector->easy_add("lbl_brightness", new lafi_label(0, 0, 0, 0, "Brightness:"), 50, 16);
     frm_sector->easy_add("txt_brightness", new lafi_textbox(0, 0, 0, 0), 50, 16);
-    frm_sector->easy_row();
-    frm_sector->easy_add("lbl_type", new lafi_label(0, 0, 0, 0, "Type:"), 30, 24);
-    frm_sector->easy_add("but_type", new lafi_button(0, 0, 0, 0), 70, 24);
     frm_sector->easy_row();
     frm_sector->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 16);
     frm_sector->easy_row();
@@ -1491,36 +1455,6 @@ void area_editor::load() {
     frm_adv_textures->easy_add("lbl_a", new lafi_label(0, 0, 0, 0, "Angle:"), 50, 16);
     frm_adv_textures->easy_add("ang_a", new lafi_angle_picker(0, 0, 0, 0), 50, 24);
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("chk_fade", new lafi_checkbox(0, 0, 0, 0, "Fade into 2nd texture"), 100, 16);
-    y = frm_adv_textures->easy_row();
-    
-    lafi_frame* frm_texture_2 = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
-    frm_adv_textures->add("frm_texture_2", frm_texture_2);
-    hide_widget(frm_texture_2);
-    
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lin_3", new lafi_line(0, 0, 0, 0), 15, 16);
-    frm_texture_2->easy_add("lbl_texture_2", new lafi_label(0, 0, 0, 0, "Second texture"), 70, 16);
-    frm_texture_2->easy_add("lin_4", new lafi_line(0, 0, 0, 0), 15, 16);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lbl_fade_a", new lafi_label(0, 0, 0, 0, "Fade angle:"), 50, 16);
-    frm_texture_2->easy_add("ang_fade_a", new lafi_angle_picker(0, 0, 0, 0), 50, 24);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lbl_texture", new lafi_label(0, 0, 0, 0, "Texture:"), 100, 16);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("txt_2texture", new lafi_textbox(0, 0, 0, 0), 100, 16);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lbl_2xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 40, 16);
-    frm_texture_2->easy_add("txt_2x", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_texture_2->easy_add("txt_2y", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lbl_2sxy", new lafi_label(0, 0, 0, 0, "Scale:"), 40, 16);
-    frm_texture_2->easy_add("txt_2sx", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_texture_2->easy_add("txt_2sy", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_texture_2->easy_row();
-    frm_texture_2->easy_add("lbl_2a", new lafi_label(0, 0, 0, 0, "Angle:"), 50, 16);
-    frm_texture_2->easy_add("ang_2a", new lafi_angle_picker(0, 0, 0, 0), 50, 24);
-    frm_texture_2->easy_row();
     
     
     //Objects frame.
@@ -1581,7 +1515,7 @@ void area_editor::load() {
     frm_bg->easy_row();
     frm_bg->easy_add("chk_mouse", new lafi_checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("lbl_alpha", new lafi_label(0, 0, 0, 0, "Transparency:"), 100, 16);
+    frm_bg->easy_add("lbl_alpha", new lafi_label(0, 0, 0, 0, "Opacity:"), 100, 16);
     frm_bg->easy_row();
     frm_bg->easy_add("bar_alpha", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
     frm_bg->easy_row();
@@ -1650,6 +1584,9 @@ void area_editor::load() {
     
     
     //Properties -- bottom.
+    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_show_bg = !ed_show_bg;
+    };
     frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         load_area();
     };
@@ -1658,6 +1595,7 @@ void area_editor::load() {
     };
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
+    frm_bottom->widgets["but_bg"]->description =   "Toggle the visibility of the background.";
     frm_bottom->widgets["but_load"]->description = "Load the area from the files.";
     frm_bottom->widgets["but_save"]->description = "Save the area onto the disk.";
     frm_bottom->widgets["but_quit"]->description = "Quit the area editor.";
@@ -1667,6 +1605,7 @@ void area_editor::load() {
     
     //Properties -- sectors.
     auto lambda_gui_to_sector = [] (lafi_widget*) { gui_to_sector(); };
+    auto lambda_gui_to_sector_click = [] (lafi_widget*, int, int) { gui_to_sector(); };
     frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
@@ -1688,17 +1627,19 @@ void area_editor::load() {
         adv_textures_to_gui();
     };
     frm_sector->widgets["txt_z"]->lose_focus_handler = lambda_gui_to_sector;
+    frm_sector->widgets["chk_fade"]->left_mouse_click_handler = lambda_gui_to_sector_click;
     frm_sector->widgets["txt_texture"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sectors->widgets["but_back"]->description =      "Go back to the main menu.";
     frm_sectors->widgets["but_new"]->description =       "Create a new sector where you click.";
     frm_sectors->widgets["but_sel_none"]->description =  "Deselect the current sector.";
+    frm_sector->widgets["but_type"]->description =       "Change the type of sector.";
+    frm_sector->widgets["chk_fade"]->description =       "Makes the surrounding textures fade into each other.";
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
     frm_sector->widgets["txt_texture"]->description =    "File name of the Texture (image) of the floor.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
-    frm_sector->widgets["but_type"]->description =       "Change the type of sector.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
     
     
@@ -1713,28 +1654,11 @@ void area_editor::load() {
     frm_adv_textures->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sx"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sy"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_adv_textures->widgets["ang_a"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_adv_textures->widgets["chk_fade"]->left_mouse_click_handler = lambda_gui_to_adv_textures_click;
-    frm_texture_2->widgets["ang_fade_a"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["txt_2texture"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["txt_2x"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["txt_2y"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["txt_2sx"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["txt_2sy"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_texture_2->widgets["ang_2a"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_x"]->description = "Scroll the texture horizontally by this much.";
     frm_adv_textures->widgets["txt_y"]->description = "Scroll the texture vertically by this much.";
     frm_adv_textures->widgets["txt_sx"]->description = "Zoom the texture horizontally by this much.";
     frm_adv_textures->widgets["txt_sy"]->description = "Zoom the texture vertically by this much.";
     frm_adv_textures->widgets["ang_a"]->description = "Rotate the texture by this much.";
-    frm_adv_textures->widgets["chk_fade"]->description = "Does the texture gradually fade into another?";
-    frm_texture_2->widgets["ang_fade_a"]->description = "The texture fades in this angle towards the 2nd one.";
-    frm_texture_2->widgets["txt_2texture"]->description = "File name of the texture to fade into.";
-    frm_texture_2->widgets["txt_2x"]->description = "Scroll the texture horizontally by this much.";
-    frm_texture_2->widgets["txt_2y"]->description = "Scroll the texture vertically by this much.";
-    frm_texture_2->widgets["txt_2sx"]->description = "Zoom the texture horizontally by this much.";
-    frm_texture_2->widgets["txt_2sy"]->description = "Zoom the texture vertically by this much.";
-    frm_texture_2->widgets["ang_2a"]->description = "Rotate the texture by this much (radians).";
     
     
     //Properties -- objects.
@@ -1784,6 +1708,8 @@ void area_editor::load() {
     auto lambda_gui_to_bg = [] (lafi_widget*) { gui_to_bg(); };
     auto lambda_gui_to_bg_click = [] (lafi_widget*, int, int) { gui_to_bg(); };
     frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_sec_mode = ESM_NONE;
+        bg_to_gui();
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
@@ -1803,7 +1729,7 @@ void area_editor::load() {
     frm_bg->widgets["txt_h"]->description = "Background total height.";
     frm_bg->widgets["bar_alpha"]->description = "How see-through the background is.";
     frm_bg->widgets["chk_ratio"]->description = "Lock the width/height proportions when changing either one.";
-    frm_bg->widgets["chk_mouse"]->description = "If checked, drag left mouse to move, right mouse to stretch.";
+    frm_bg->widgets["chk_mouse"]->description = "If checked, use left/right mouse button to move/stretch.";
     bg_to_gui();
     
     
@@ -1833,6 +1759,10 @@ void area_editor::load() {
             update_review_frame();
         }
     };
+    frm_review->widgets["but_back"]->description =         "Go back to the main menu.";
+    frm_review->widgets["but_find_errors"]->description =  "Search for problems with the area.";
+    frm_review->widgets["but_goto_error"]->description =   "Focus the camera on the problem found, if applicable.";
+    frm_review->widgets["chk_see_textures"]->description = "Check this to preview how the textures will look like.";
     
     
     //Properties -- picker.
@@ -1862,6 +1792,9 @@ void area_editor::load_area() {
     }
     
     change_background(ed_bg_file_name);
+    
+    cam_x = cam_y = 0;
+    cam_zoom = 1;
     
     ed_error_type = EET_NONE_YET;
     ed_error_sector_ptr = NULL;
@@ -2236,23 +2169,19 @@ void area_editor::save_area() {
         sector_node->add(new data_node("z", ftos(s_ptr->z)));
         if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", itos(s_ptr->brightness)));
         if(s_ptr->fade) sector_node->add(new data_node("fade", btos(s_ptr->fade)));
-        if(s_ptr->fade) sector_node->add(new data_node("fade_angle", ftos(s_ptr->fade_angle)));
         
-        for(unsigned char t = 0; t < (size_t) (s_ptr->fade ? 2 : 1); t++) {
-            string n = itos(t);
-            
-            sector_node->add(new data_node("texture_" + n, s_ptr->textures[t].file_name));
-            if(s_ptr->textures[t].rot != 0) {
-                sector_node->add(new data_node("texture_" + n + "_rotate", ftos(s_ptr->textures[t].rot)));
-            }
-            if(s_ptr->textures[t].scale_x != 1 || s_ptr->textures[t].scale_y != 1) {
-                sector_node->add(new data_node("texture_" + n + "_scale",
-                                               ftos(s_ptr->textures[t].scale_x) + " " + ftos(s_ptr->textures[t].scale_y)));
-            }
-            if(s_ptr->textures[t].trans_x != 0 || s_ptr->textures[t].trans_y != 0) {
-                sector_node->add(new data_node("texture_" + n + "_trans",
-                                               ftos(s_ptr->textures[t].trans_x) + " " + ftos(s_ptr->textures[t].trans_y)));
-            }
+        
+        sector_node->add(new data_node("texture", s_ptr->file_name));
+        if(s_ptr->rot != 0) {
+            sector_node->add(new data_node("texture_rotate", ftos(s_ptr->rot)));
+        }
+        if(s_ptr->scale_x != 1 || s_ptr->scale_y != 1) {
+            sector_node->add(new data_node("texture_scale",
+                                           ftos(s_ptr->scale_x) + " " + ftos(s_ptr->scale_y)));
+        }
+        if(s_ptr->trans_x != 0 || s_ptr->trans_y != 0) {
+            sector_node->add(new data_node("texture_trans",
+                                           ftos(s_ptr->trans_x) + " " + ftos(s_ptr->trans_y)));
         }
     }
     
@@ -2284,10 +2213,25 @@ void area_editor::sector_to_gui() {
         show_widget(f);
         
         ((lafi_textbox*) f->widgets["txt_z"])->text = ftos(ed_cur_sector->z);
-        ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->textures[0].file_name;
+        ((lafi_checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
+        ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
         ((lafi_textbox*) f->widgets["txt_brightness"])->text = itos(ed_cur_sector->brightness);
         ((lafi_button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
         //ToDo hazards.
+        
+        if(ed_cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            disable_widget(f->widgets["chk_fade"]);
+        } else {
+            enable_widget(f->widgets["chk_fade"]);
+        }
+        
+        if(ed_cur_sector->fade || ed_cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            disable_widget(f->widgets["txt_texture"]);
+            disable_widget(f->widgets["but_adv"]);
+        } else {
+            enable_widget(f->widgets["txt_texture"]);
+            enable_widget(f->widgets["but_adv"]);
+        }
         
         adv_textures_to_gui();
         
@@ -2301,7 +2245,7 @@ void area_editor::sector_to_gui() {
  */
 float area_editor::snap_to_grid(const float c) {
     if(ed_shift_pressed) return c;
-    return round(c / 32) * 32;
+    return round(c / GRID_INTERVAL) * GRID_INTERVAL;
 }
 
 /* ----------------------------------------------------------------------------

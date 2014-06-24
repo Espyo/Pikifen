@@ -14,8 +14,8 @@
 /* ----------------------------------------------------------------------------
  * Creates an enemy.
  */
-enemy::enemy(const float x, const float y, sector* s, enemy_type* type)
-    : mob(x, y, s->z, type, s) {
+enemy::enemy(const float x, const float y, enemy_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
     
     ene_type = type;
     team = MOB_TEAM_ENEMIES; //ToDo removeish.

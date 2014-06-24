@@ -14,8 +14,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a pellet.
  */
-pellet::pellet(float x, float y, sector* s, pellet_type* type)
-    : mob(x, y, s->z, type, s) {
+pellet::pellet(float x, float y, pellet_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
     
     pel_type = type;
     this->carrier_info = new carrier_info_struct(this, type->max_carriers, false);

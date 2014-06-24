@@ -26,7 +26,7 @@ class pellet : public mob {
 public:
     pellet_type* pel_type;
     
-    pellet(float x, float y, sector* s, pellet_type* type);
+    pellet(float x, float y, pellet_type* type, const float angle, const string &vars);
 };
 
 #endif //ifndef PELLET_INCLUDED

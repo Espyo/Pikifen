@@ -16,8 +16,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a leader.
  */
-leader::leader(const float x, const float y, sector* sec, leader_type* type)
-    : mob(x, y, sec->z, type, sec) {
+leader::leader(const float x, const float y, leader_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
     
     lea_type = type;
     

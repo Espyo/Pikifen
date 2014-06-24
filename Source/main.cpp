@@ -63,7 +63,7 @@ int main(int argc, char**) {
     
     //Options and default controls.
     //ToDo create a manager for this, like the mob folder manager and whatnot.
-    controls.push_back(control_info(BUTTON_PUNCH, 0, "mb_1"));
+    controls.push_back(control_info(BUTTON_THROW, 0, "mb_1"));
     controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
     controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
     controls.push_back(control_info(BUTTON_MOVE_UP, 0, "k_23"));
@@ -322,51 +322,51 @@ int main(int argc, char**) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             if(m_ptr->folder == MOB_FOLDER_ENEMIES) {
-                create_mob(new enemy(m_ptr->x, m_ptr->y, &s, (enemy_type*) m_ptr->type));
+                create_mob(new enemy(m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_LEADERS) {
-                create_mob(new leader(m_ptr->x, m_ptr->y, &s, (leader_type*) m_ptr->type));
+                create_mob(new leader(m_ptr->x, m_ptr->y, (leader_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_ONIONS) {
-                create_mob(new onion(m_ptr->x, m_ptr->y, &s, (onion_type*) m_ptr->type));
+                create_mob(new onion(m_ptr->x, m_ptr->y, (onion_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_PELLETS) {
-                create_mob(new pellet(m_ptr->x, m_ptr->y, &s, (pellet_type*) m_ptr->type));
+                create_mob(new pellet(m_ptr->x, m_ptr->y, (pellet_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_PIKMIN) {
-                create_mob(new pikmin(m_ptr->x, m_ptr->y, &s, (pikmin_type*) m_ptr->type));
+                create_mob(new pikmin(m_ptr->x, m_ptr->y, (pikmin_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_SPECIAL) {
-                create_mob(new mob(m_ptr->x, m_ptr->y, 0, m_ptr->type, &s));
+                create_mob(new mob(m_ptr->x, m_ptr->y, m_ptr->type, m_ptr->angle, m_ptr->vars));
             } else if(m_ptr->folder == MOB_FOLDER_TREASURES) {
-                create_mob(new treasure(m_ptr->x, m_ptr->y, &s, (treasure_type*) m_ptr->type));
+                create_mob(new treasure(m_ptr->x, m_ptr->y, (treasure_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             }
         }
         
-        create_mob(new pikmin(30, 30, &s, pikmin_types["Red Pikmin"]));
+        create_mob(new pikmin(30, 30, pikmin_types["Red Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(40, 30, &s, pikmin_types["Red Pikmin"]));
+        create_mob(new pikmin(40, 30, pikmin_types["Red Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(50, 30, &s, pikmin_types["Red Pikmin"]));
+        create_mob(new pikmin(50, 30, pikmin_types["Red Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(60, 30, &s, pikmin_types["Yellow Pikmin"]));
+        create_mob(new pikmin(60, 30, pikmin_types["Yellow Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(70, 30, &s, pikmin_types["Yellow Pikmin"]));
+        create_mob(new pikmin(70, 30, pikmin_types["Yellow Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(80, 30, &s, pikmin_types["Yellow Pikmin"]));
+        create_mob(new pikmin(80, 30, pikmin_types["Yellow Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(30, 200, &s, pikmin_types["Blue Pikmin"]));
+        create_mob(new pikmin(30, 200, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
-        create_mob(new pikmin(50, 200, &s, pikmin_types["Blue Pikmin"]));
+        create_mob(new pikmin(50, 200, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
-        create_mob(new pikmin(70, 200, &s, pikmin_types["Blue Pikmin"]));
+        create_mob(new pikmin(70, 200, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->set_state(PIKMIN_STATE_BURIED);
         for(unsigned char p = 0; p < 10; p++) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
-                create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, &s, t->second));
+                create_mob(new pikmin(100 + 10 * p + 3 * distance(pikmin_types.begin(), t), 30, t->second, 0, ""));
                 pikmin_list.back()->maturity = 2;
             }
         }
-        create_mob(new info_spot(400, 0, &s, "Onions.", false));
-        create_mob(new info_spot(-300, 0, &s, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false));
+        create_mob(new info_spot(400, 0, "Onions.", false));
+        create_mob(new info_spot(-300, 0, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false));
         create_mob(
             new info_spot(
-                -300, -100, &s,
+                -300, -100,
                 "This is a test message.\n"
                 "Second line.\n"
                 "Third line, which is way too long to even be existing.\n"
@@ -376,11 +376,11 @@ int main(int argc, char**) {
                 true
             )
         );
-        create_mob(new nectar(0, 400, &s));
-        create_mob(new pellet(320, -100, &s, pellet_types["Red 1"]));
-        create_mob(new pellet(250, -100, &s, pellet_types["Red 5"]));
-        create_mob(new pellet(150, -100, &s, pellet_types["Red 10"]));
-        create_mob(new pellet(0, -100, &s, pellet_types["Red 20"]));
+        create_mob(new nectar(0, 400));
+        create_mob(new pellet(320, -100, pellet_types["Red 1"], 0, ""));
+        create_mob(new pellet(250, -100, pellet_types["Red 5"], 0, ""));
+        create_mob(new pellet(150, -100, pellet_types["Red 10"], 0, ""));
+        create_mob(new pellet(0, -100, pellet_types["Red 20"], 0, ""));
         spray_amounts[0] = spray_amounts[1] = 10;
         spray_types[0].bmp_spray = bmp_ub_spray;
         spray_types[1].bmp_spray = bmp_us_spray;

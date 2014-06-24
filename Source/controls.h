@@ -43,7 +43,7 @@ void active_control();
 
 enum BUTTONS {
     BUTTON_NONE,
-    BUTTON_PUNCH,
+    BUTTON_THROW,
     BUTTON_WHISTLE,
     BUTTON_MOVE_RIGHT,
     BUTTON_MOVE_UP,

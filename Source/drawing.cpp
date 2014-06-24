@@ -46,11 +46,11 @@ void do_drawing() {
         al_use_transform(&world_to_screen_transform);
         
         /* Layer 1
-        *************************
-        *                ^^^^^^ *
-        *   Background   ^^^^^^ *
-        *                ^^^^^^ *
-        ************************/
+        *******************
+        *          ^^^^^^ *
+        *   Area   ^^^^^^ *
+        *          ^^^^^^ *
+        ******************/
         
         //ToDo optimize
         size_t area_image_cols = area_images.size();
@@ -423,13 +423,11 @@ void do_drawing() {
         for(size_t i = 0; i < n_info_spots; i++) {
             if(check_dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y, INFO_SPOT_TRIGGER_RANGE)) {
                 string text;
-                if(!info_spots[i]->opens_box)
-                    text = info_spots[i]->text;
-                else
-                    text = "(...)";
-                    
-                draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
                 if(!info_spots[i]->opens_box) {
+                    text = info_spots[i]->text;
+                    
+                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
+                    
                     int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
                     
                     al_draw_line(
@@ -437,25 +435,35 @@ void do_drawing() {
                         line_y,
                         info_spots[i]->x - 8,
                         line_y,
-                        al_map_rgb(192, 192, 192), 1);
+                        al_map_rgb(192, 192, 192), 2);
                     al_draw_line(
                         info_spots[i]->x + info_spots[i]->text_w * 0.5,
                         line_y,
                         info_spots[i]->x + 8,
                         line_y,
-                        al_map_rgb(192, 192, 192), 1);
+                        al_map_rgb(192, 192, 192), 2);
                     al_draw_line(
                         info_spots[i]->x - 8,
                         line_y,
                         info_spots[i]->x,
                         info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
-                        al_map_rgb(192, 192, 192), 1);
+                        al_map_rgb(192, 192, 192), 2);
                     al_draw_line(
                         info_spots[i]->x + 8,
                         line_y,
                         info_spots[i]->x,
                         info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
-                        al_map_rgb(192, 192, 192), 1);
+                        al_map_rgb(192, 192, 192), 2);
+                        
+                } else {
+                
+                    for(size_t c = 0; c < controls.size(); c++) {
+                        if(controls[c].action == BUTTON_THROW) {
+                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, 0, 0);
+                            break;
+                        }
+                    }
+                    
                 }
             }
         }
@@ -844,8 +852,8 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
     
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
-    float total_width = min((float) (x2 - x1 + 4), max_w);
-    float total_height = min((float) (y2 - y1 + 4), max_h);
+    float total_width =  min((float) (x2 - x1 + 4), (max_w == 0 ? FLT_MAX : max_w));
+    float total_height = min((float) (y2 - y1 + 4), (max_h == 0 ? FLT_MAX : max_h));
     total_width = max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
@@ -863,7 +871,20 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
         al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(255, 255, 255, 192));
         al_draw_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(160, 160, 160, 192), 2);
     }
-    draw_compressed_text(font, al_map_rgba(255, 255, 255, 192), x, y, ALLEGRO_ALIGN_CENTER, 1, max_w - 2, max_h - 2, name);
+    draw_compressed_text(
+        font, al_map_rgba(255, 255, 255, 192), x, y, ALLEGRO_ALIGN_CENTER, 1,
+        (max_w == 0 ? 0 : max_w - 2), (max_h == 0 ? 0 : max_h - 2), name
+    );
+}
+
+/* ----------------------------------------------------------------------------
+ * Does sector s1 cast a shadow onto sector s2?
+ */
+bool casts_shadow(sector* s1, sector* s2) {
+    if(!s1 || !s2) return false;
+    if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT || s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
+    if(s1->z <= s2->z) return false;
+    return true;
 }
 
 /* ----------------------------------------------------------------------------
@@ -946,63 +967,347 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
  */
 void draw_sector(sector* s_ptr, const float x, const float y) {
 
-    float fade_line_x1, fade_line_y1;
-    float fade_line_x2, fade_line_y2;
+    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    unsigned char n_textures = (s_ptr->fade && s_ptr->textures[1].bitmap) ? 2 : 1;
+    unsigned char n_textures = 1;
+    sector* texture_sector[2] = {NULL, NULL};
     
-    if(n_textures == 2) {
-        float min_x, min_y, max_x, max_y;
-        get_sector_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
-        fade_line_x1 = (max_x + min_x) / 2;
-        fade_line_y1 = (max_y + min_y) / 2;
+    if(s_ptr->fade) {
+        //Check all linedefs to find which two textures need merging.
+        linedef* l_ptr = NULL;
+        sector* neighbor = NULL;
+        bool valid = true;
+        map<sector*, float> neighbors;
         
-        fade_line_x2 = fade_line_x1 + cos(s_ptr->fade_angle - M_PI_2);
-        fade_line_y2 = fade_line_y1 + sin(s_ptr->fade_angle - M_PI_2);
-    }
-    
-    for(unsigned char te = 0; te < n_textures; te++) {
-        for(size_t tr = 0; tr < s_ptr->triangles.size(); tr++) {
-            ALLEGRO_VERTEX av[200]; //ToDo 200?
-            size_t n_vertices = s_ptr->triangles.size() * 3;
+        //The two neighboring sectors with the lenghtiest linedefs are picked.
+        //So save all sector/length pairs.
+        for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+            l_ptr = s_ptr->linedefs[l];
+            valid = true;
             
-            ALLEGRO_TRANSFORM tra;
-            al_build_transform(
-                &tra,
-                -s_ptr->textures[te].trans_x,
-                -s_ptr->textures[te].trans_y,
-                1.0 / s_ptr->textures[te].scale_x,
-                1.0 / s_ptr->textures[te].scale_y,
-                -s_ptr->textures[te].rot
-            );
+            if(l_ptr->sectors[0] == s_ptr) neighbor = l_ptr->sectors[1];
+            else neighbor = l_ptr->sectors[0];
             
-            for(size_t v = 0; v < n_vertices; v++) {
-            
-                const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-                float tx = x + t_ptr->points[v % 3]->x;
-                float ty = y + t_ptr->points[v % 3]->y;
-                
-                unsigned char alpha = 255;
-                if(te == 1) {
-                    if(get_point_sign(tx, ty, fade_line_x1, fade_line_y1, fade_line_x2, fade_line_y2) <= 0.0f) {
-                        alpha = 0;
-                    }
-                }
-                
-                av[v].x = t_ptr->points[v % 3]->x;
-                av[v].y = t_ptr->points[v % 3]->y;
-                al_transform_coordinates(&tra, &tx, &ty);
-                av[v].u = tx;
-                av[v].v = ty;
-                av[v].z = 0;
-                av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
+            if(neighbor) {
+                if(neighbor->fade) valid = false;
             }
             
-            al_draw_prim(av, NULL, s_ptr->textures[te].bitmap, 0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST);
-            
+            if(valid) {
+                neighbors[neighbor] +=
+                    sdist(
+                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                    );
+            }
         }
+        
+        //Find the two lengthiest ones.
+        vector<pair<float, sector*> > neighbors_vec;
+        for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
+            neighbors_vec.push_back(make_pair<float, sector*>(n->second, n->first));
+        }
+        sort(neighbors_vec.begin(), neighbors_vec.end());
+        if(neighbors_vec.size() >= 1) {
+            texture_sector[0] = neighbors_vec.back().second;
+        }
+        if(neighbors_vec.size() >= 2) {
+            texture_sector[1] = neighbors_vec[neighbors_vec.size() - 2].second;
+        }
+        
+        if(!texture_sector[1] && texture_sector[0]) {
+            //0 is always the bottom one. If we're fading into nothingness,
+            //we should swap first.
+            swap(texture_sector[0], texture_sector[1]);
+        } else if(!texture_sector[1]) {
+            //Nothing to draw.
+            return;
+        } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            swap(texture_sector[0], texture_sector[1]);
+        }
+        
+        n_textures = 2;
+        
+    } else {
+        texture_sector[0] = s_ptr;
+        
     }
     
+    for(unsigned char t = 0; t < n_textures; t++) {
+    
+        bool draw_sector_0 = true;
+        if(!texture_sector[0]) draw_sector_0 = false;
+        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) draw_sector_0 = false;
+        
+        if(n_textures == 2 && !draw_sector_0 && t == 0) continue; //Allows fading into the void.
+        
+        size_t n_vertices = s_ptr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
+        
+        //Texture transformations.
+        ALLEGRO_TRANSFORM tra;
+        if(texture_sector[t]) {
+            al_build_transform(
+                &tra,
+                -texture_sector[t]->trans_x,
+                -texture_sector[t]->trans_y,
+                1.0 / texture_sector[t]->scale_x,
+                1.0 / texture_sector[t]->scale_y,
+                -texture_sector[t]->rot
+            );
+        }
+        
+        for(size_t v = 0; v < n_vertices; v++) {
+        
+            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+            vertex* v_ptr = t_ptr->points[v % 3];
+            float vx = v_ptr->x;
+            float vy = v_ptr->y;
+            
+            unsigned char alpha = 255;
+            
+            if(t == 1) {
+                if(!draw_sector_0) {
+                    alpha = 0;
+                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); l++) {
+                        if(texture_sector[1]->linedefs[l]->vertices[0] == v_ptr) alpha = 255;
+                        if(texture_sector[1]->linedefs[l]->vertices[1] == v_ptr) alpha = 255;
+                    }
+                } else {
+                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); l++) {
+                        if(texture_sector[0]->linedefs[l]->vertices[0] == v_ptr) alpha = 0;
+                        if(texture_sector[0]->linedefs[l]->vertices[1] == v_ptr) alpha = 0;
+                    }
+                }
+            }
+            
+            av[v].x = vx - x;
+            av[v].y = vy - y;
+            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            av[v].u = vx;
+            av[v].v = vy;
+            av[v].z = 0;
+            av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
+        }
+        
+        al_draw_prim(
+            av, NULL,
+            (texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap),
+            0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
+        );
+        
+        delete av;
+    }
+    
+    
+    //Wall shadows.
+    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+        linedef* l_ptr = s_ptr->linedefs[l];
+        ALLEGRO_VERTEX av[4];
+        
+        sector* other_sector = l_ptr->sectors[(l_ptr->sectors[0] == s_ptr ? 1 : 0)];
+        
+        if(!casts_shadow(other_sector, s_ptr)) continue;
+        
+        /*
+         * The line has two points. These are not the vertex 0 and
+         * vertex 1. These must be ordered as the "starting" and
+         * "ending" points. This is necessary to determine the "front"
+         * side of the line. The "front" side points to the shaded sector.
+         * To know which is the front side, imagine you're walking from
+         * the start vertex to the end, in first person view.
+         * The "front" side would be to your left.
+         */
+        vertex* lv[2];
+        lv[0] = l_ptr->vertices[0];
+        lv[1] = l_ptr->vertices[1];
+        
+        float l_angle = atan2(lv[1]->y - lv[0]->y, lv[1]->x - lv[0]->x);
+        float l_dist = dist(lv[0]->x, lv[0]->y, lv[1]->x, lv[1]->y);
+        
+        //Let's check if the "front" side is the line's angle -90 (left).
+        float l_cos_front = cos(l_angle - M_PI_2);
+        float l_sin_front = sin(l_angle - M_PI_2);
+        
+        /*
+         * Figure out if the "front" side is the one we're
+         * assuming, or the other one. We can do this by
+         * figuring out if a point is on our sector or not.
+         * This method isn't optimal nor very reliable,
+         * but the only other way would be to make the list of
+         * sectors on the linedef be side-specific, which would
+         * make map-making a bit more strict.
+         */
+        if(
+            get_sector(
+                (lv[1]->x + lv[0]->x) / 2 + l_cos_front * 0.01,
+                (lv[1]->y + lv[0]->y) / 2 + l_sin_front * 0.01,
+                NULL
+            ) != s_ptr
+        ) {
+        
+            //The points are ordered wrong, then. Swap them.
+            swap(lv[0], lv[1]);
+            
+            l_angle += M_PI;
+            l_cos_front = -l_cos_front;
+            l_sin_front = -l_sin_front;
+        }
+        
+        
+        //Record the first two vertices of the shadow.
+        //These match the vertices of the linedef.
+        for(size_t v = 0; v < 2; v++) {
+            av[v].x = lv[v]->x;
+            av[v].y = lv[v]->y;
+            av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
+            av[v].z = 0;
+        }
+        
+        
+        /*
+         * Now, check the neighbor linedefs.
+         * Record which angle this linedef makes against
+         * them. The shadow of the current linedef
+         * spreads outward from the linedef, but the edges must
+         * be tilted so that the shadow from this linedef
+         * meets up with the shadow from the next, on a middle
+         * angle. For 90 degrees, at least. Less or more degrees
+         * requires specific treatment.
+         */
+        
+        //Angle of the neighbors, from the common vertex to the other.
+        float neighbor_angles[2] = {M_PI_2, M_PI_2};
+        //Difference between angle of current linedef and neighbors.
+        float neighbor_angle_difs[2] = {0, 0};
+        //Midway angle.
+        float mid_angles[2] = {M_PI_2, M_PI_2};
+        //Is this neighbor casting a shadow to the same sector?
+        float neighbor_shadow[2] = {false, false};
+        //Do we have a linedef for this vertex?
+        bool got_first[2] = {false, false};
+        
+        //For both neighbors.
+        for(unsigned char v = 0; v < 2; v++) {
+        
+            vertex* cur_vertex = lv[v];
+            for(size_t vl = 0; vl < cur_vertex->linedefs.size(); vl++) {
+            
+                linedef* vl_ptr = cur_vertex->linedefs[vl];
+                
+                if(vl_ptr == l_ptr) continue;
+                
+                vertex* other_vertex = vl_ptr->vertices[(vl_ptr->vertices[0] == cur_vertex ? 1 : 0)];
+                float vl_angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
+                
+                float d;
+                if(v == 0) d = get_angle_dif(vl_angle, l_angle);
+                else d = get_angle_dif(l_angle + M_PI, vl_angle);
+                
+                if(
+                    d < neighbor_angle_difs[v] ||
+                    !got_first[v]
+                ) {
+                    //Save this as the next linedef.
+                    neighbor_angles[v] = vl_angle;
+                    neighbor_angle_difs[v] = d;
+                    got_first[v] = true;
+                    
+                    sector* other_sector = vl_ptr->sectors[(vl_ptr->sectors[0] == s_ptr ? 1 : 0)];
+                    neighbor_shadow[v] = casts_shadow(other_sector, s_ptr);
+                }
+            }
+        }
+        
+        l_angle = normalize_angle(l_angle);
+        for(unsigned char n = 0; n < 2; n++) {
+            neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
+            mid_angles[n] = (n == 0 ? neighbor_angles[n] : l_angle + M_PI) + neighbor_angle_difs[n] / 2;
+        }
+        
+        point shadow_point[2];
+        ALLEGRO_VERTEX extra_av[8];
+        for(unsigned char e = 0; e < 8; e++) extra_av[e].z = 0;
+        
+        for(unsigned char v = 0; v < 2; v++) {
+        
+            if(neighbor_angle_difs[v] < M_PI) {
+                //If the shadow of the current and neighbor linedefs
+                //meet at less than 90 degrees, then the final point
+                //should be where they both intersect.
+                
+                float ul;
+                lines_intersect(
+                    av[0].x + l_cos_front * WALL_SHADOW_LENGTH, av[0].y + l_sin_front * WALL_SHADOW_LENGTH,
+                    av[1].x + l_cos_front * WALL_SHADOW_LENGTH, av[1].y + l_sin_front * WALL_SHADOW_LENGTH,
+                    av[v].x,
+                    av[v].y,
+                    av[v].x + cos(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * l_dist,
+                    av[v].y + sin(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * l_dist,
+                    NULL, &ul
+                );
+                shadow_point[v].x = av[0].x + l_cos_front * WALL_SHADOW_LENGTH + cos(l_angle) * l_dist * ul;
+                shadow_point[v].y = av[0].y + l_sin_front * WALL_SHADOW_LENGTH + sin(l_angle) * l_dist * ul;
+                
+            } else if(neighbor_angle_difs[v] > M_PI) {
+                //If the angle is greater, then
+                //draw the shadows as a rectangle, away
+                //from the linedef. Then, draw a
+                //"join" between both linedef's shadows.
+                //Like a kneecap.
+                
+                shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
+                shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+                
+                extra_av[v * 4 + 0].x = av[v].x + cos(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                extra_av[v * 4 + 0].y = av[v].y + sin(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                extra_av[v * 4 + 0].color = al_map_rgba(0, 0, 0, 0);
+                extra_av[v * 4 + 1].x = shadow_point[v].x;
+                extra_av[v * 4 + 1].y = shadow_point[v].y;
+                extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
+                extra_av[v * 4 + 2].x = av[v].x;
+                extra_av[v * 4 + 2].y = av[v].y;
+                extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
+                
+                if(!neighbor_shadow[v]) {
+                    //If the neighbor casts no shadow, glue the current
+                    //linedef's shadow to the neighbor.
+                    extra_av[v * 4 + 3].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    extra_av[v * 4 + 3].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    extra_av[v * 4 + 3].color = al_map_rgba(0, 0, 0, 0);
+                }
+                
+            } else {
+            
+                //Just draw straight outwards.
+                shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
+                shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+            }
+            
+        }
+        
+        //ToDo make the shadow's spread a constant.
+        av[2].x = shadow_point[1].x;
+        av[2].y = shadow_point[1].y;
+        av[2].color = al_map_rgba(0, 0, 0, 0);
+        av[2].z = 0;
+        av[3].x = shadow_point[0].x;
+        av[3].y = shadow_point[0].y;
+        av[3].color = al_map_rgba(0, 0, 0, 0);
+        av[3].z = 0;
+        
+        al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        
+        for(size_t v = 0; v < 2; v++) {
+            if(neighbor_angle_difs[v] > M_PI) {
+                al_draw_prim(
+                    extra_av, NULL, NULL, v * 4,
+                    v * 4 + (neighbor_shadow[v] ? 3 : 4),
+                    ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
+        }
+        
+    }
 }
 
 /* ----------------------------------------------------------------------------

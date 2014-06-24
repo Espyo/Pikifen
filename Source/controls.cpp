@@ -172,7 +172,7 @@ void handle_button(const unsigned int button, float pos) {
                 moving_group_intensity = 0;
             }
             
-        } else if(button == BUTTON_PUNCH) {
+        } else if(button == BUTTON_THROW) {
         
             /*******************
             *            .--._ *
@@ -231,7 +231,7 @@ void handle_button(const unsigned int button, float pos) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
                                 //ToDo this is not how it works, there can be less onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
-                                create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->sec, onions[o]->oni_type->pik_type));
+                                create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
                                 add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
                             }
                             done = true;
@@ -666,7 +666,7 @@ void handle_button(const unsigned int button, float pos) {
         
     } else { //Displaying a message.
     
-        if((button == BUTTON_PUNCH || button == BUTTON_PAUSE) && pos == 1) {
+        if((button == BUTTON_THROW || button == BUTTON_PAUSE) && pos == 1) {
             size_t stopping_char = cur_message_stopping_chars[cur_message_section + 1];
             if(cur_message_char == stopping_char) {
                 if(stopping_char == cur_message.size()) {
@@ -708,6 +708,11 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
     this->action = action;
     this->player = player;
     type = CONTROL_TYPE_NONE;
+    
+    device_nr = 0;
+    button = 0;
+    stick = 0;
+    axis = 0;
     
     vector<string> parts = split(s, "_");
     size_t n_parts = parts.size();

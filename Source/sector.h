@@ -77,24 +77,6 @@ struct linedef {
 
 
 /*
- * A structure with info on a texture for a sector.
- * For sectors with two of these, the texture smoothly
- * transitions from the first to the second.
- */
-struct sector_texture {
-    float scale_x; //Texture scale, X...
-    float scale_y; //and Y.
-    float trans_x; //X translation...
-    float trans_y; //and Y.
-    float rot;     //Rotation.
-    ALLEGRO_BITMAP* bitmap;
-    string file_name; //For the editor.
-    
-    sector_texture();
-};
-
-
-/*
  * A sector, like the ones in Doom.
  * It's composed of lines, so it's essentially
  * a polygon. It has a certain height, and its looks
@@ -105,9 +87,15 @@ struct sector {
     float z; //Height.
     unsigned int tag; //ToDo are these used?
     unsigned char brightness;
-    sector_texture textures[2];
+    
+    float scale_x; //Texture scale, X...
+    float scale_y; //and Y.
+    float trans_x; //X translation...
+    float trans_y; //and Y.
+    float rot;     //Rotation.
+    ALLEGRO_BITMAP* bitmap;
+    string file_name;
     bool fade;
-    float fade_angle;
     
     vector<element*> elements;
     vector<size_t> linedef_nrs;
@@ -117,6 +105,7 @@ struct sector {
     sector();
     void connect_linedefs(area_map &a, size_t s_nr);
     void fix_pointers(area_map &a);
+    void clone(sector* new_sector);
     ~sector();
 };
 
@@ -208,6 +197,7 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
     SECTOR_TYPE_BOTTOMLESS_PIT,
     SECTOR_TYPE_LANDING_SITE,
+    SECTOR_TYPE_WALL,
 };
 
 
@@ -221,6 +211,6 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_WATER,
 };
 
-#define DEF_SECTOR_BRIGHTNESS 255
+#define DEF_SECTOR_BRIGHTNESS 192
 
 #endif //ifndef SECTOR_INCLUDED

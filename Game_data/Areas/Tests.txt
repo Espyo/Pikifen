@@ -1,48 +1,40 @@
 weather=
 mobs{
 	Special{
-		pos = -100 100
-        type = Ship
+		type=Ship
+		pos=-100 100
 	}
-	
 	Leader{
-		pos = 0 0
-		type = Olimar
+		type=Olimar
+		pos=0 0
 	}
-	
 	Leader{
-		pos = 300 250
-		type = Louie
+		type=Louie
+		pos=64 -768
 	}
-	
 	Leader{
-		pos = 350 200
-		type = President
+		type=President
+		pos=350 200
 	}
-	
 	Onion{
-		pos = 400 100
-		type = Red onion
+		type=Red onion
+		pos=400 100
 	}
-
 	Onion{
-		pos = 400 200
-		type = Yellow onion
+		type=Yellow onion
+		pos=400 200
 	}
-
 	Onion{
-		pos = 400 300
-		type = Blue onion
+		type=Blue onion
+		pos=400 300
 	}
-	
 	Treasure{
-		pos = 100 350
-		type = Test
+		type=Test
+		pos=100 350
 	}
-	
 	Enemy{
-		pos = -100 -200
-		type = Cloaking Burrow-nit
+		type=Cloaking Burrow-nit
+		pos=-100 -200
 	}
 }
 vertices{
@@ -73,10 +65,25 @@ vertices{
 	vertex=576 -608
 	vertex=672 -736
 	vertex=576 -640
-	vertex=-160 -960
-	vertex=288 -960
-	vertex=288 -544
-	vertex=-160 -544
+	vertex=-832 -1696
+	vertex=-864 -1152
+	vertex=-416 -1696
+	vertex=-416 -1152
+	vertex=-832 -1248
+	vertex=-832 -1568
+	vertex=-640 -1568
+	vertex=-640 -1248
+	vertex=-864 -1312
+	vertex=-768 -1408
+	vertex=18 -655
+	vertex=169.625 -575.432
+	vertex=192 -608
+	vertex=64 -672
+	vertex=-32 -576
+	vertex=-32 -640
+	vertex=128 -768
+	vertex=256 -768
+	vertex=162.627 -564.702
 }
 linedefs{
 	linedef{
@@ -200,67 +207,144 @@ linedefs{
 		v=26 17
 	}
 	linedef{
-		s=7 0
-		v=27 28
+		s=7 -1
+		v=28 35
 	}
 	linedef{
-		s=7 0
-		v=28 29
-	}
-	linedef{
-		s=7 0
+		s=7 -1
 		v=29 30
 	}
 	linedef{
-		s=7 0
-		v=30 27
+		s=7 -1
+		v=30 28
+	}
+	linedef{
+		s=7 -1
+		v=27 29
+	}
+	linedef{
+		s=8 -1
+		v=31 32
+	}
+	linedef{
+		s=7 -1
+		v=32 27
+	}
+	linedef{
+		s=8 7
+		v=32 33
+	}
+	linedef{
+		s=8 7
+		v=33 36
+	}
+	linedef{
+		s=8 7
+		v=34 31
+	}
+	linedef{
+		s=7 -1
+		v=35 31
+	}
+	linedef{
+		s=8 7
+		v=36 34
+	}
+	linedef{
+		s=9 10
+		v=37 38
+	}
+	linedef{
+		s=9 0
+		v=38 39
+	}
+	linedef{
+		s=9 11
+		v=39 40
+	}
+	linedef{
+		s=9 0
+		v=40 37
+	}
+	linedef{
+		s=10 0
+		v=41 45
+	}
+	linedef{
+		s=10 0
+		v=37 42
+	}
+	linedef{
+		s=10 0
+		v=42 41
+	}
+	linedef{
+		s=11 0
+		v=43 44
+	}
+	linedef{
+		s=11 0
+		v=44 39
+	}
+	linedef{
+		s=11 0
+		v=40 43
+	}
+	linedef{
+		s=10 0
+		v=45 38
 	}
 }
 sectors{
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		type=Landing site
-		z=1
-		texture_0=Metal.png
-		texture_0_scale=1 1
+		z=0
+		texture=Metal.png
 	}
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		z=0
-		texture_0=Grass.png
-		texture_0_scale=1 1
+		texture=Grass.png
 	}
 	sector{
 		z=0
+		texture=Grass 2.png
+	}
+	sector{
+		z=0
+		texture=Grass 2.png
+	}
+	sector{
+		z=-32
 		fade=true
-		fade_angle=0
-		texture_0=Concrete.png
-		texture_0_scale=1 1
-		texture_1=Metal.png
-		texture_1_scale=1 1
+		texture=
+	}
+	sector{
+		z=-32
+		texture=Dirt.png
+	}
+	sector{
+		z=-32
+		texture=Grass 2.png
 	}
 }
 bg_file_name=

@@ -14,8 +14,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a treasure.
  */
-treasure::treasure(const float x, const float y, sector* sec, treasure_type* type)
-    : mob(x, y, sec->z, type, sec) {
+treasure::treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
     
     carrier_info = new carrier_info_struct(this, type->max_carriers, true);
 }

@@ -16,8 +16,10 @@
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin.
  */
-pikmin::pikmin(const float x, const float y, sector* sec, pikmin_type* type) : mob(x, y, 0, type, sec) {
-    this->pik_type = type;
+pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
+    
+    pik_type = type;
     hazard_time_left = -1;
     attacking_mob = NULL;
     latched = false;
@@ -124,7 +126,7 @@ void give_pikmin_to_onion(onion* o, const unsigned amount) {
         float sx = cos(angle) * 60;
         float sy = sin(angle) * 60;
         
-        pikmin* new_pikmin = new pikmin(o->x, o->y, o->sec, o->oni_type->pik_type);
+        pikmin* new_pikmin = new pikmin(o->x, o->y, o->oni_type->pik_type, 0, "");
         new_pikmin->set_state(PIKMIN_STATE_BURIED);
         new_pikmin->z = 320;
         new_pikmin->speed_z = 200;

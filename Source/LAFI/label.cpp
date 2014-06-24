@@ -1,5 +1,4 @@
 #include "label.h"
-#include "../drawing.h"
 
 lafi_label::lafi_label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi_style* style, unsigned char flags)
     : lafi_widget(x1, y1, x2, y2, style, flags) {
@@ -17,14 +16,13 @@ void lafi_label::draw_self() {
         else if(text_flags == ALLEGRO_ALIGN_RIGHT) text_x = (x2 - x1) - 1;
         text_x += x1;
         
-        draw_text_lines(
+        al_draw_text(
             style->text_font,
             get_fg_color(),
             text_x,
-            y1 + (y2 - y1) / 2,
+            (y1 + y2) / 2 - al_get_font_line_height(style->text_font) / 2,
             text_flags,
-            true,
-            text
+            text.c_str()
         );
     }
 }

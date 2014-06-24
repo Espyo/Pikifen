@@ -37,7 +37,7 @@
  */
 class treasure : public mob {
 public:
-    treasure(const float x, const float y, sector* sec, treasure_type* type);
+    treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
 };
 
 #endif //ifndef TREASURE_INCLUDED

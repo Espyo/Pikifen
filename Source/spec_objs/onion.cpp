@@ -14,8 +14,8 @@
 /* ----------------------------------------------------------------------------
  * Creates an onion.
  */
-onion::onion(float x, float y, sector* sec, onion_type* type)
-    : mob(x, y, sec->z, type, sec) {
+onion::onion(float x, float y, onion_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
     
     oni_type = type;
 }

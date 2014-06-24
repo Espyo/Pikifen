@@ -19,7 +19,7 @@
  */
 class ship : public mob {
 public:
-    ship(float x, float y, sector* sec);
+    ship(float x, float y);
 };
 
 #endif //ifndef SHIP_INCLUDED

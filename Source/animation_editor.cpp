@@ -1243,6 +1243,9 @@ void animation_editor::load_animation_set() {
     
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
+    
+    cam_x = cam_y = 0;
+    cam_zoom = 1;
 }
 
 /* ----------------------------------------------------------------------------

@@ -40,7 +40,7 @@ public:
     pikmin* auto_pluck_pikmin; //-1 = not plucking.
     float pluck_time; //Time left until the Pikmin pops out.
     
-    leader(const float x, const float y, sector* sec, leader_type* type);
+    leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
 };
 
 void dismiss();

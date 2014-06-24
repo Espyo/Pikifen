@@ -1,6 +1,5 @@
 #include <limits.h>
 
-#include "../drawing.h"
 #include "textbox.h"
 
 size_t lafi_textbox::cur_tab_index = 0;
@@ -65,7 +64,7 @@ void lafi_textbox::draw_self() {
                 );
             }
             
-            draw_text_lines(style->text_font, get_fg_color(), text_start, (y2 + y1) / 2, 0, 1, text);
+            al_draw_text(style->text_font, get_fg_color(), text_start, (y2 + y1) / 2  - al_get_font_line_height(style->text_font) / 2, 0, text.c_str());
             
             unsigned int cursor_x = al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
             
@@ -237,11 +236,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             cursor = sel1;
             sel_start = sel_end = cursor;
         }
-        if(
-            modifiers == 0 || modifiers & ALLEGRO_KEYMOD_ACCENT1 || modifiers & ALLEGRO_KEYMOD_ACCENT2 ||
-            modifiers & ALLEGRO_KEYMOD_ACCENT3 || modifiers & ALLEGRO_KEYMOD_ACCENT4 || modifiers & ALLEGRO_KEYMOD_CAPSLOCK ||
-            modifiers & ALLEGRO_KEYMOD_SHIFT
-        ) {
+        if(!(modifiers & ALLEGRO_KEYMOD_CTRL)) {
             text.insert(cursor, 1, unichar);
             cursor++;
             call_change_handler();

@@ -23,7 +23,7 @@ class onion : public mob {
 public:
     onion_type* oni_type;
     
-    onion(float x, float y, sector* sec, onion_type* type);
+    onion(float x, float y, onion_type* type, const float angle, const string &vars);
 };
 
 #endif //ifndef ONION_INCLUDED

@@ -146,7 +146,29 @@ sector::sector() {
     tag = 0;
     brightness = DEF_SECTOR_BRIGHTNESS;
     fade = false;
-    fade_angle = 0;
+    scale_x = scale_y = 1;
+    trans_x = trans_y = 0;
+    rot = 0;
+    bitmap = NULL;
+}
+
+/* ----------------------------------------------------------------------------
+ * Clones a sector's properties onto another,
+ * not counting the list of linedefs or bitmap
+ * (the file name is cloned too, though).
+ */
+void sector::clone(sector* new_sector) {
+    new_sector->type = type;
+    new_sector->z = z;
+    new_sector->tag = tag;
+    new_sector->brightness = brightness;
+    new_sector->fade = fade;
+    new_sector->scale_x = scale_x;
+    new_sector->scale_y = scale_y;
+    new_sector->trans_x = trans_y;
+    new_sector->rot = rot;
+    new_sector->file_name = file_name;
+    //ToDo hazards.
 }
 
 /* ----------------------------------------------------------------------------
@@ -154,8 +176,8 @@ sector::sector() {
  */
 sector::~sector() {
     for(size_t t = 0; t < 2; t++) {
-        if(textures[t].bitmap && textures[t].bitmap != bmp_error) {
-            bitmaps.detach(textures[t].file_name);
+        if(bitmap && bitmap != bmp_error) {
+            bitmaps.detach(file_name);
         }
     }
 }
@@ -197,16 +219,6 @@ void sector::fix_pointers(area_map &a) {
         size_t l_nr = linedef_nrs[l];
         linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
     }
-}
-
-/* ----------------------------------------------------------------------------
- * Creates a structure with floor information.
- */
-sector_texture::sector_texture() {
-    scale_x = scale_y = 1;
-    trans_x = trans_y = 0;
-    rot = 0;
-    bitmap = NULL;
 }
 
 /* ----------------------------------------------------------------------------
@@ -312,7 +324,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 
                 //Find the angle between our vertex and this vertex.
                 float angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
-                float angle_dif = get_angle_dif(base_angle, angle);
+                float angle_dif = get_angle_dif(angle, base_angle);
                 
                 //For the outer poly, we're going counter-clockwise. So the lowest angle difference is best.
                 //For the inner ones, it's clockwise, so the highest.
@@ -481,7 +493,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     float angle_prev = atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x);
     float angle_next = atan2(next_v->y - cur_v->y, next_v->x - cur_v->x);
     
-    return get_angle_dif(angle_next, angle_prev) <= M_PI;
+    return get_angle_dif(angle_prev, angle_next) < M_PI;
 }
 
 /* ----------------------------------------------------------------------------
@@ -697,14 +709,15 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                         closest_line_ur = ur;
                     }
                 }
-            }
-            
-            if(v1->y == start->y) {
-                float ur = (v1->x - start->x) / ray_width;
-                if(!closest_vertex || ur < closest_vertex_ur) {
-                    closest_vertex = v1;
-                    closest_vertex_ur = ur;
+                
+                if(v1->y == start->y) {
+                    float ur = (v1->x - start->x) / ray_width;
+                    if(!closest_vertex || ur < closest_vertex_ur) {
+                        closest_vertex = v1;
+                        closest_vertex_ur = ur;
+                    }
                 }
+                
             }
         }
         
@@ -783,12 +796,12 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         } else {
             //Find where to insert.
             insertion_vertex_nr = bridges.back();
-            float new_bridge_angle = get_angle_dif(0, atan2(start->y - best_vertex->y, start->x - best_vertex->x));
+            float new_bridge_angle = get_angle_dif(atan2(start->y - best_vertex->y, start->x - best_vertex->x), 0);
             
             for(size_t v = 0; v < bridges.size(); v++) {
                 vertex* v_ptr = outer->at(bridges[v]);
                 vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
-                float a = get_angle_dif(0, atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x));
+                float a = get_angle_dif(atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x), 0);
                 if(a < new_bridge_angle) {
                     insertion_vertex_nr = bridges[v];
                     break;
@@ -827,13 +840,13 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
 }
 
 /* ----------------------------------------------------------------------------
- * Returns the difference between two angles, in radians, but clockwise.
+ * Returns the clockwise distance between a1 and a2, in radians.
  */
 float get_angle_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
-    if(a2 > a1) a2 -= M_PI * 2;
-    return a1 - a2;
+    if(a1 > a2) a1 -= M_PI * 2;
+    return a2 - a1;
 }
 
 /* ----------------------------------------------------------------------------

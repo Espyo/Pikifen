@@ -104,8 +104,8 @@ bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, fl
 void clear_area_textures() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         sector* s_ptr = cur_area_map.sectors[s];
-        if(s_ptr->textures[0].bitmap && s_ptr->textures[0].bitmap != bmp_error) {
-            bitmaps.detach("Textures/" + s_ptr->textures[0].file_name);
+        if(s_ptr->bitmap && s_ptr->bitmap != bmp_error) {
+            bitmaps.detach("Textures/" + s_ptr->file_name);
         }
     }
 }
@@ -299,6 +299,8 @@ void generate_area_images() {
         sector_start_row = (s_min_y - area_y1) / AREA_IMAGE_SIZE;
         sector_end_row =   ceil((s_max_y - area_y1) / AREA_IMAGE_SIZE) - 1;
         
+        al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
+        
         for(size_t x = sector_start_col; x <= sector_end_col; x++) {
             for(size_t y = sector_start_row; y <= sector_end_row; y++) {
                 ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
@@ -309,6 +311,8 @@ void generate_area_images() {
                 } al_set_target_bitmap(prev_target_bmp);
             }
         }
+        
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
         
     }
     
@@ -439,31 +443,23 @@ void load_area(const string name, const bool load_for_editor) {
         new_sector->brightness = tof(sector_data->get_child_by_name("brightness")->get_value_or_default(itos(DEF_SECTOR_BRIGHTNESS)));
         new_sector->z = tof(sector_data->get_child_by_name("z")->value);
         new_sector->fade = tob(sector_data->get_child_by_name("fade")->value);
-        if(new_sector->fade) new_sector->fade_angle = tof(sector_data->get_child_by_name("fade_angle")->value);
         
-        for(unsigned char t = 0; t < (size_t) (new_sector->fade ? 2 : 1); t++) {
-            sector_texture new_floor = sector_texture();
-            string n = itos(t);
-            
-            new_floor.file_name = sector_data->get_child_by_name("texture_" + n)->value;
-            new_floor.rot = tof(sector_data->get_child_by_name("texture_" + n + "_rotate")->value);
-            
-            vector<string> scales = split(sector_data->get_child_by_name("texture_" + n + "_scale")->value);
-            if(scales.size() >= 2) {
-                new_floor.scale_x = tof(scales[0]);
-                new_floor.scale_y = tof(scales[0]);
-            }
-            vector<string> translations = split(sector_data->get_child_by_name("texture_" + n + "_trans")->value);
-            if(translations.size() >= 2) {
-                new_floor.trans_x = tof(translations[0]);
-                new_floor.trans_y = tof(translations[0]);
-            }
-            
-            new_sector->textures[t] = new_floor;
+        new_sector->file_name = sector_data->get_child_by_name("texture")->value;
+        new_sector->rot = tof(sector_data->get_child_by_name("texture_rotate")->value);
+        
+        vector<string> scales = split(sector_data->get_child_by_name("texture_scale")->value);
+        if(scales.size() >= 2) {
+            new_sector->scale_x = tof(scales[0]);
+            new_sector->scale_y = tof(scales[0]);
+        }
+        vector<string> translations = split(sector_data->get_child_by_name("texture_trans")->value);
+        if(translations.size() >= 2) {
+            new_sector->trans_x = tof(translations[0]);
+            new_sector->trans_y = tof(translations[0]);
         }
         
         
-        //ToDo elements (and tags...?).
+        //ToDo elements (and tags, if I really am gonna use them...).
         
         cur_area_map.sectors.push_back(new_sector);
     }
@@ -543,7 +539,11 @@ void load_area_textures() {
         sector* s_ptr = cur_area_map.sectors[s];
         
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
-            s_ptr->textures[t].bitmap = bitmaps.get("Textures/" + s_ptr->textures[t].file_name, NULL);
+            if(s_ptr->file_name.size() == 0) {
+                s_ptr->bitmap = NULL;
+            } else {
+                s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
+            }
         }
     }
 }
@@ -668,7 +668,7 @@ void load_options() {
     controls.clear();
     
     for(unsigned char p = 0; p < 4; p++) {
-        load_control(BUTTON_PUNCH,                p, "punch", file, "mb_1");
+        load_control(BUTTON_THROW,                p, "punch", file, "mb_1");
         load_control(BUTTON_WHISTLE,              p, "whistle", file, "mb_2");
         load_control(BUTTON_MOVE_RIGHT,           p, "move_right", file, "k_4");
         load_control(BUTTON_MOVE_UP,              p, "move_up", file, "k_23");
@@ -861,7 +861,7 @@ void save_options() {
     size_t n_controls = controls.size();
     for(size_t c = 0; c < n_controls; c++) {
         string name = "p" + itos((controls[c].player + 1)) + "_";
-        if(controls[c].action == BUTTON_PUNCH)                     name += "punch";
+        if(controls[c].action == BUTTON_THROW)                     name += "punch";
         else if(controls[c].action == BUTTON_WHISTLE)              name += "whistle";
         else if(controls[c].action == BUTTON_MOVE_RIGHT)           name += "move_right";
         else if(controls[c].action == BUTTON_MOVE_UP)              name += "move_up";

@@ -2,74 +2,1010 @@ weather=Normal
 mobs{
 	Special{
 		type=Ship
-		pos=-224 128
+		pos=-96 320
 	}
 	Leader{
 		type=Olimar
-		pos=0 0
+		pos=160 192
 	}
 	Leader{
 		type=Louie
-		pos=300 250
+		pos=256 256
 	}
 	Leader{
 		type=President
-		pos=350 200
+		pos=64 256
 	}
 	Onion{
 		type=Red onion
-		pos=400 100
+		pos=192 352
 	}
 	Onion{
 		type=Yellow onion
-		pos=400 200
+		pos=416 416
 	}
 	Onion{
 		type=Blue onion
-		pos=400 300
+		pos=192 608
 	}
 	Treasure{
 		type=Test
-		pos=32 352
+		pos=-128 -352
 	}
 	Enemy{
 		type=Cloaking Burrow-nit
-		pos=-100 -200
+		pos=480 -576
 	}
 }
 vertices{
-	vertex=-1000 -1000
-	vertex=1000 -1000
-	vertex=1000 1000
-	vertex=-1000 1000
+	vertex=-576 -1504
+	vertex=896 -1504
+	vertex=896 896
+	vertex=-576 896
+	vertex=255.948 94.8847
+	vertex=84.344 74.9476
+	vertex=64 672
+	vertex=352 224
+	vertex=-126.251 161.924
+	vertex=-96 -128
+	vertex=-224 -192
+	vertex=544 -192
+	vertex=257.372 -11.2105
+	vertex=-192 192
+	vertex=1088 -1696
+	vertex=1088 1088
+	vertex=-768 -1696
+	vertex=-768 1088
+	vertex=128 768
+	vertex=159.821 794.116
+	vertex=256 768
+	vertex=384 640
+	vertex=512 480
+	vertex=377.708 268.624
+	vertex=405.759 -119.415
+	vertex=-448 -800
+	vertex=768 -288
+	vertex=736 -384
+	vertex=-352 -1056
+	vertex=800 -608
+	vertex=736 -896
+	vertex=704 -992
+	vertex=224 -1280
+	vertex=608 -1088
+	vertex=448 -1248
+	vertex=-32 640
+	vertex=-96 576
+	vertex=-242.486 303.515
+	vertex=32 128
+	vertex=64 -32
+	vertex=-448 -288
+	vertex=-480 -608
+	vertex=-256 -1184
+	vertex=-64 -1280
+	vertex=-192 32
+	vertex=-288 192
+	vertex=-352 64
+	vertex=-183.964 67.1872
+	vertex=72.4797 -1.41557
+	vertex=-0 -32
+	vertex=65.8308 106.99
+	vertex=-373.503 133.336
+	vertex=-239.638 234.446
+	vertex=224.618 788.42
+	vertex=409.75 291.41
+	vertex=267.341 141.168
+	vertex=285.854 -41.8285
+	vertex=128 224
+	vertex=96 448
+	vertex=113.953 526.722
+	vertex=192 576
+	vertex=320 512
+	vertex=182.105 254.116
+	vertex=138.91 355.863
+	vertex=194.583 507.524
+	vertex=274.253 472.969
+	vertex=-343.862 168.594
+	vertex=-330.426 131.434
+	vertex=96 320
+	vertex=-320.081 94.4105
+	vertex=4.96582 5.66249
+	vertex=-271.623 157.569
+	vertex=-308.647 151.58
+	vertex=192 608
+	vertex=38.5215 650.816
+	vertex=188.934 648.535
+	vertex=365.335 666.854
+	vertex=478.796 -719.647
+	vertex=606.841 -576.757
+	vertex=590.308 -508.218
+	vertex=406.765 -450.181
+	vertex=346.551 -640.253
+	vertex=329.411 -577.685
+	vertex=543.153 -699.016
+	vertex=467.662 -433.866
+	vertex=362.511 -634.45
+	vertex=479.724 -700.162
+	vertex=466.734 -450.568
+	vertex=344.256 -575.829
+	vertex=538.8 -679.429
+	vertex=591.995 -575.829
+	vertex=571.446 -511.12
+	vertex=414.019 -463.965
+	vertex=593.21 -639.528
+	vertex=533.722 -453.083
+	vertex=349.453 -497.336
+	vertex=392.981 -692.487
+	vertex=577.975 -630.822
+	vertex=527.918 -463.965
+	vertex=363.237 -502.415
+	vertex=400.236 -679.429
+	vertex=-239.456 -364.602
+	vertex=-131.911 -468.464
+	vertex=-32.4685 -368.285
+	vertex=-129.701 -264.422
+	vertex=-78.875 -455.205
+	vertex=-39.098 -419.847
+	vertex=-39.098 -318.932
+	vertex=-75.192 -276.945
+	vertex=-179.054 -274.735
+	vertex=-218.831 -313.775
+	vertex=-225.461 -409.535
+	vertex=-192.313 -449.312
+	vertex=-132.648 -451.522
+	vertex=-47.2008 -367.548
+	vertex=-129.701 -277.681
+	vertex=-223.987 -363.865
+	vertex=-212.202 -403.642
+	vertex=-184.947 -437.526
+	vertex=-85.5045 -439.736
+	vertex=-52.357 -410.271
+	vertex=-53.8302 -325.561
+	vertex=-80.3482 -293.15
+	vertex=-173.161 -289.467
+	vertex=-206.309 -320.405
+	vertex=768 288
+	vertex=767.252 -29.0869
+	vertex=798.615 359.572
+	vertex=729.115 393.803
+	vertex=836.414 -52.1406
+	vertex=766.366 -171.843
+	vertex=838.033 254.803
+	vertex=554.016 346.976
+	vertex=160 64
+	vertex=160 -0
+	vertex=96 -96
+	vertex=75.9651 -149.551
+	vertex=96.9301 -182.611
+	vertex=209.012 -222.122
+	vertex=146.589 453.771
+	vertex=218.58 -164.393
+	vertex=210.356 -19.1907
+	vertex=151.389 -95.2817
+	vertex=145.629 -148.075
+	vertex=207.356 118.809
+	vertex=-15.2001 239.437
+	vertex=-64 224
+	vertex=-93.7068 257.129
+	vertex=-39.5261 299.147
+	vertex=-241.874 261.552
+	vertex=-74.9094 594.376
+	vertex=-49.4777 263.763
+	vertex=0 288
+	vertex=455.491 -145.72
+	vertex=564.109 304.733
+	vertex=490.829 321.017
+	vertex=690.998 -173.616
+	vertex=704 320
+	vertex=760.888 -48.955
+	vertex=821.954 -75.6392
+	vertex=279.212 700.824
 }
 linedefs{
 	linedef{
-		s=0 -1
+		s=0 2
 		v=0 1
 	}
 	linedef{
-		s=0 -1
+		s=0 2
 		v=1 2
 	}
 	linedef{
-		s=0 -1
+		s=0 2
 		v=2 3
 	}
 	linedef{
-		s=0 -1
+		s=1 0
+		v=9 10
+	}
+	linedef{
+		s=19 0
+		v=6 74
+	}
+	linedef{
+		s=5 13
+		v=7 23
+	}
+	linedef{
+		s=1 3
+		v=8 38
+	}
+	linedef{
+		s=1 0
+		v=10 40
+	}
+	linedef{
+		s=1 13
+		v=11 153
+	}
+	linedef{
+		s=5 13
+		v=12 4
+	}
+	linedef{
+		s=1 4
+		v=13 8
+	}
+	linedef{
+		s=5 13
+		v=4 55
+	}
+	linedef{
+		s=2 -1
+		v=14 15
+	}
+	linedef{
+		s=2 -1
+		v=16 14
+	}
+	linedef{
+		s=2 -1
+		v=17 16
+	}
+	linedef{
+		s=2 -1
+		v=15 17
+	}
+	linedef{
+		s=7 0
+		v=18 6
+	}
+	linedef{
+		s=7 0
+		v=19 18
+	}
+	linedef{
+		s=7 0
+		v=20 53
+	}
+	linedef{
+		s=7 0
+		v=76 160
+	}
+	linedef{
+		s=8 0
+		v=21 76
+	}
+	linedef{
+		s=1 0
+		v=22 21
+	}
+	linedef{
+		s=5 13
+		v=24 56
+	}
+	linedef{
+		s=1 0
+		v=25 28
+	}
+	linedef{
+		s=1 0
+		v=26 130
+	}
+	linedef{
+		s=1 0
+		v=27 26
+	}
+	linedef{
+		s=1 0
+		v=28 42
+	}
+	linedef{
+		s=1 0
+		v=29 27
+	}
+	linedef{
+		s=1 0
+		v=30 29
+	}
+	linedef{
+		s=1 0
+		v=31 30
+	}
+	linedef{
+		s=1 0
+		v=32 34
+	}
+	linedef{
+		s=1 0
+		v=33 31
+	}
+	linedef{
+		s=1 0
+		v=34 33
+	}
+	linedef{
+		s=1 0
+		v=35 150
+	}
+	linedef{
+		s=16 0
+		v=36 37
+	}
+	linedef{
+		s=16 0
+		v=37 149
+	}
+	linedef{
+		s=1 3
+		v=38 50
+	}
+	linedef{
+		s=1 0
+		v=39 9
+	}
+	linedef{
+		s=1 0
+		v=40 41
+	}
+	linedef{
+		s=1 0
+		v=41 25
+	}
+	linedef{
+		s=1 0
+		v=42 43
+	}
+	linedef{
+		s=1 0
+		v=43 32
+	}
+	linedef{
+		s=4 0
+		v=13 45
+	}
+	linedef{
+		s=4 0
+		v=66 51
+	}
+	linedef{
+		s=4 0
+		v=46 44
+	}
+	linedef{
+		s=4 3
+		v=48 70
+	}
+	linedef{
+		s=4 3
+		v=47 69
+	}
+	linedef{
+		s=1 4
+		v=48 39
+	}
+	linedef{
+		s=4 0
+		v=44 49
+	}
+	linedef{
+		s=4 0
+		v=49 39
+	}
+	linedef{
+		s=1 3
+		v=5 48
+	}
+	linedef{
+		s=1 3
+		v=50 5
+	}
+	linedef{
+		s=4 0
+		v=51 46
+	}
+	linedef{
+		s=1 0
+		v=52 13
+	}
+	linedef{
+		s=7 0
+		v=53 19
+	}
+	linedef{
+		s=1 0
+		v=132 22
+	}
+	linedef{
+		s=1 13
+		v=54 155
+	}
+	linedef{
+		s=5 13
+		v=55 7
+	}
+	linedef{
+		s=5 13
+		v=56 12
+	}
+	linedef{
+		s=6 1
+		v=57 133
+	}
+	linedef{
+		s=6 1
+		v=59 58
+	}
+	linedef{
+		s=6 1
+		v=60 59
+	}
+	linedef{
+		s=6 1
+		v=61 60
+	}
+	linedef{
+		s=6 5
+		v=141 144
+	}
+	linedef{
+		s=6 5
+		v=62 63
+	}
+	linedef{
+		s=6 5
+		v=63 139
+	}
+	linedef{
+		s=6 5
+		v=64 65
+	}
+	linedef{
+		s=6 5
+		v=65 23
+	}
+	linedef{
+		s=4 3
+		v=67 72
+	}
+	linedef{
+		s=4 0
+		v=45 66
+	}
+	linedef{
+		s=1 6
+		v=68 58
+	}
+	linedef{
+		s=6 1
+		v=68 57
+	}
+	linedef{
+		s=4 3
+		v=69 67
+	}
+	linedef{
+		s=4 3
+		v=70 47
+	}
+	linedef{
+		s=4 3
+		v=71 8
+	}
+	linedef{
+		s=4 3
+		v=72 71
+	}
+	linedef{
+		s=0 2
 		v=3 0
+	}
+	linedef{
+		s=19 1
+		v=74 73
+	}
+	linedef{
+		s=8 1
+		v=73 21
+	}
+	linedef{
+		s=1 0
+		v=74 35
+	}
+	linedef{
+		s=19 7
+		v=75 6
+	}
+	linedef{
+		s=8 7
+		v=76 75
+	}
+	linedef{
+		s=9 1
+		v=77 83
+	}
+	linedef{
+		s=9 1
+		v=78 79
+	}
+	linedef{
+		s=9 1
+		v=79 94
+	}
+	linedef{
+		s=9 1
+		v=80 95
+	}
+	linedef{
+		s=9 1
+		v=81 96
+	}
+	linedef{
+		s=9 1
+		v=82 81
+	}
+	linedef{
+		s=9 1
+		v=83 93
+	}
+	linedef{
+		s=9 1
+		v=84 80
+	}
+	linedef{
+		s=10 9
+		v=85 100
+	}
+	linedef{
+		s=10 9
+		v=86 89
+	}
+	linedef{
+		s=10 9
+		v=87 92
+	}
+	linedef{
+		s=10 9
+		v=88 85
+	}
+	linedef{
+		s=10 9
+		v=89 97
+	}
+	linedef{
+		s=10 9
+		v=90 91
+	}
+	linedef{
+		s=10 9
+		v=91 98
+	}
+	linedef{
+		s=10 9
+		v=92 99
+	}
+	linedef{
+		s=9 1
+		v=93 78
+	}
+	linedef{
+		s=9 1
+		v=94 84
+	}
+	linedef{
+		s=9 1
+		v=95 82
+	}
+	linedef{
+		s=9 1
+		v=96 77
+	}
+	linedef{
+		s=10 9
+		v=97 90
+	}
+	linedef{
+		s=10 9
+		v=98 87
+	}
+	linedef{
+		s=10 9
+		v=99 88
+	}
+	linedef{
+		s=10 9
+		v=100 86
+	}
+	linedef{
+		s=11 1
+		v=101 111
+	}
+	linedef{
+		s=11 1
+		v=102 105
+	}
+	linedef{
+		s=11 1
+		v=103 107
+	}
+	linedef{
+		s=11 1
+		v=104 109
+	}
+	linedef{
+		s=11 1
+		v=105 106
+	}
+	linedef{
+		s=11 1
+		v=106 103
+	}
+	linedef{
+		s=11 1
+		v=107 108
+	}
+	linedef{
+		s=11 1
+		v=108 104
+	}
+	linedef{
+		s=11 1
+		v=109 110
+	}
+	linedef{
+		s=11 1
+		v=110 101
+	}
+	linedef{
+		s=11 1
+		v=111 112
+	}
+	linedef{
+		s=11 1
+		v=112 102
+	}
+	linedef{
+		s=12 11
+		v=113 119
+	}
+	linedef{
+		s=12 11
+		v=114 121
+	}
+	linedef{
+		s=12 11
+		v=115 123
+	}
+	linedef{
+		s=12 11
+		v=116 117
+	}
+	linedef{
+		s=12 11
+		v=117 118
+	}
+	linedef{
+		s=12 11
+		v=118 113
+	}
+	linedef{
+		s=12 11
+		v=119 120
+	}
+	linedef{
+		s=12 11
+		v=120 114
+	}
+	linedef{
+		s=12 11
+		v=121 122
+	}
+	linedef{
+		s=12 11
+		v=122 115
+	}
+	linedef{
+		s=12 11
+		v=123 124
+	}
+	linedef{
+		s=12 11
+		v=124 116
+	}
+	linedef{
+		s=13 14
+		v=125 157
+	}
+	linedef{
+		s=13 14
+		v=126 125
+	}
+	linedef{
+		s=14 0
+		v=127 128
+	}
+	linedef{
+		s=14 0
+		v=128 132
+	}
+	linedef{
+		s=14 0
+		v=129 131
+	}
+	linedef{
+		s=14 0
+		v=131 127
+	}
+	linedef{
+		s=1 18
+		v=130 156
+	}
+	linedef{
+		s=18 0
+		v=130 159
+	}
+	linedef{
+		s=13 18
+		v=156 158
+	}
+	linedef{
+		s=6 1
+		v=133 134
+	}
+	linedef{
+		s=6 1
+		v=134 135
+	}
+	linedef{
+		s=6 1
+		v=135 136
+	}
+	linedef{
+		s=6 1
+		v=136 137
+	}
+	linedef{
+		s=6 1
+		v=137 138
+	}
+	linedef{
+		s=6 1
+		v=138 153
+	}
+	linedef{
+		s=6 5
+		v=140 143
+	}
+	linedef{
+		s=6 5
+		v=24 140
+	}
+	linedef{
+		s=6 5
+		v=142 141
+	}
+	linedef{
+		s=6 5
+		v=139 64
+	}
+	linedef{
+		s=6 5
+		v=143 142
+	}
+	linedef{
+		s=6 5
+		v=144 62
+	}
+	linedef{
+		s=15 1
+		v=152 150
+	}
+	linedef{
+		s=15 1
+		v=145 152
+	}
+	linedef{
+		s=15 1
+		v=146 145
+	}
+	linedef{
+		s=15 1
+		v=52 146
+	}
+	linedef{
+		s=16 15
+		v=149 147
+	}
+	linedef{
+		s=16 15
+		v=147 151
+	}
+	linedef{
+		s=16 15
+		v=148 36
+	}
+	linedef{
+		s=15 0
+		v=149 52
+	}
+	linedef{
+		s=15 0
+		v=150 36
+	}
+	linedef{
+		s=16 15
+		v=151 148
+	}
+	linedef{
+		s=6 13
+		v=23 54
+	}
+	linedef{
+		s=6 1
+		v=54 61
+	}
+	linedef{
+		s=6 13
+		v=153 24
+	}
+	linedef{
+		s=13 14
+		v=154 155
+	}
+	linedef{
+		s=1 14
+		v=155 132
+	}
+	linedef{
+		s=1 13
+		v=156 11
+	}
+	linedef{
+		s=13 14
+		v=157 154
+	}
+	linedef{
+		s=17 14
+		v=129 126
+	}
+	linedef{
+		s=17 18
+		v=158 159
+	}
+	linedef{
+		s=13 17
+		v=158 126
+	}
+	linedef{
+		s=17 0
+		v=159 129
+	}
+	linedef{
+		s=19 8
+		v=73 75
+	}
+	linedef{
+		s=7 0
+		v=160 20
 	}
 }
 sectors{
 	sector{
+		z=128
+		texture=Grass.png
+	}
+	sector{
+		type=Landing site
 		z=0
-		texture_0=Grass.png
+		texture=Grass 2.png
+	}
+	sector{
+		z=128
+		fade=true
+		texture=Grass.png
+	}
+	sector{
+		z=192
+		texture=Rock.png
+	}
+	sector{
+		z=192
+		fade=true
+		texture=Rock.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Dirt.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Grass 2.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Grass 2.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.png
+	}
+	sector{
+		z=192
+		texture=Rock.png
+	}
+	sector{
+		z=192
+		fade=true
+		texture=Grass.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Grass 2.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.png
+	}
+	sector{
+		z=192
+		fade=true
+		texture=Grass.png
+	}
+	sector{
+		z=192
+		fade=true
+		texture=
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Grass 2.png
 	}
 }
-bg_file_name=
-bg_x=0
-bg_y=0
-bg_w=0
-bg_h=0
-bg_alpha=255
+bg_file_name=tuto2.jpg
+bg_x=-704.255
+bg_y=-1627.07
+bg_w=1728.57
+bg_h=2643.86
+bg_alpha=203

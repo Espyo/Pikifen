@@ -20,24 +20,26 @@
 /* ----------------------------------------------------------------------------
  * Creates a mob.
  */
-mob::mob(const float x, const float y, const float z, mob_type* t, sector* sec) {
+mob::mob(const float x, const float y, mob_type* type, const float angle, const string &vars) {
     this->x = x;
     this->y = y;
-    this->z = z;
-    this->sec = sec;
+    this->type = type;
+    this->angle = angle;
     
-    type = t;
-    anim = animation_instance(&t->anims);
+    sec = get_sector(x, y, NULL);
+    z = sec->z;
+    intended_angle = angle;
+    
+    anim = animation_instance(&type->anims);
     
     to_delete = false;
     reached_destination = false;
     
     speed_x = speed_y = speed_z = 0;
     home_x = x; home_y = y;
-    angle = intended_angle = 0;
     affected_by_gravity = true;
     
-    health = t->max_health;
+    health = type->max_health;
     invuln_period = 0;
     knockdown_period = 0;
     team = MOB_TEAM_NONE;
