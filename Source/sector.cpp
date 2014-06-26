@@ -37,11 +37,15 @@ void area_map::clear() {
     for(size_t m = 0; m < mob_generators.size(); m++) {
         delete mob_generators[m];
     }
+    for(size_t s = 0; s < tree_shadows.size(); s++) {
+        delete tree_shadows[s];
+    }
     
     vertices.clear();
     linedefs.clear();
     sectors.clear();
     mob_generators.clear();
+    tree_shadows.clear();
 }
 
 /* ----------------------------------------------------------------------------
@@ -226,6 +230,19 @@ void sector::fix_pointers(area_map &a) {
  */
 vertex::vertex(float x, float y) {
     this->x = x; this->y = y;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a tree shadow.
+ */
+tree_shadow::tree_shadow(float x, float y, float w, float h, float an, unsigned char al, string f) {
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+    this->angle = an;
+    this->alpha = al;
+    this->file_name = f;
 }
 
 /* ----------------------------------------------------------------------------
@@ -440,6 +457,49 @@ sector* get_sector(float x, float y, size_t* sector_nr) {
     
     if(sector_nr) *sector_nr = string::npos;
     return NULL;
+}
+
+/* ----------------------------------------------------------------------------
+ * Places the bounding box coordinates of a shadow on the specified floats.
+ */
+void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y) {
+    if(!min_x || !min_y || !max_x || !max_y) return;
+    bool got_min_x = false;
+    bool got_max_x = false;
+    bool got_min_y = false;
+    bool got_max_y = false;
+    
+    for(unsigned char p = 0; p < 4; p++) {
+        float x, y, final_x, final_y;
+        
+        if(p == 0 || p == 1) x = s_ptr->x - (s_ptr->w * 0.5);
+        else                 x = s_ptr->x + (s_ptr->w * 0.5);
+        if(p == 0 || p == 2) y = s_ptr->y - (s_ptr->h * 0.5);
+        else                 y = s_ptr->y + (s_ptr->h * 0.5);
+        
+        x -= s_ptr->x;
+        y -= s_ptr->y;
+        rotate_point(x, y, s_ptr->angle, &final_x, &final_y);
+        final_x += s_ptr->x;
+        final_y += s_ptr->y;
+        
+        if(final_x < *min_x || !got_min_x) {
+            *min_x = final_x;
+            got_min_x = true;
+        }
+        if(final_y < *min_y || !got_min_y) {
+            *min_y = final_y;
+            got_min_y = true;
+        }
+        if(final_x > *max_x || !got_max_x) {
+            *max_x = final_x;
+            got_max_x = true;
+        }
+        if(final_y > *max_y || !got_max_y) {
+            *max_y = final_y;
+            got_max_y = true;
+        }
+    }
 }
 
 /* ----------------------------------------------------------------------------

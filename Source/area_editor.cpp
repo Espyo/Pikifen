@@ -109,6 +109,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(ed_gui->widgets["frm_sectors"]);
     hide_widget(ed_gui->widgets["frm_adv_textures"]);
     hide_widget(ed_gui->widgets["frm_objects"]);
+    hide_widget(ed_gui->widgets["frm_shadows"]);
     hide_widget(ed_gui->widgets["frm_bg"]);
     hide_widget(ed_gui->widgets["frm_review"]);
     
@@ -121,6 +122,8 @@ void area_editor::change_to_right_frame(bool hide_all) {
             show_widget(ed_gui->widgets["frm_adv_textures"]);
         } else if(ed_mode == EDITOR_MODE_OBJECTS) {
             show_widget(ed_gui->widgets["frm_objects"]);
+        } else if(ed_mode == EDITOR_MODE_SHADOWS) {
+            show_widget(ed_gui->widgets["frm_shadows"]);
         } else if(ed_mode == EDITOR_MODE_BG) {
             show_widget(ed_gui->widgets["frm_bg"]);
         } else if(ed_mode == EDITOR_MODE_REVIEW) {
@@ -208,7 +211,7 @@ void area_editor::do_logic() {
         if(ed_sec_mode != ESM_TEXTURE_VIEW) {
         
             unsigned char sector_opacity = 224;
-            if(ed_mode == EDITOR_MODE_OBJECTS) sector_opacity = 64;
+            if(ed_mode == EDITOR_MODE_OBJECTS || ed_mode == EDITOR_MODE_SHADOWS) sector_opacity = 64;
             
             size_t n_linedefs = cur_area_map.linedefs.size();
             for(size_t l = 0; l < n_linedefs; l++) {
@@ -257,10 +260,10 @@ void area_editor::do_logic() {
                     l_ptr->vertices[0]->y,
                     l_ptr->vertices[1]->x,
                     l_ptr->vertices[1]->y,
-                    (selected ?        al_map_rgb(224, 224, 64) :
-                     error_highlight ? al_map_rgb(192, 80,  0) :
-                     !valid ?          al_map_rgb(192, 32,  32) :
-                     one_sided ?       al_map_rgb(240, 240, 240) :
+                    (selected ?        al_map_rgba(224, 224, 64,  sector_opacity) :
+                     error_highlight ? al_map_rgba(192, 80,  0,   sector_opacity) :
+                     !valid ?          al_map_rgba(192, 32,  32,  sector_opacity) :
+                     one_sided ?       al_map_rgba(240, 240, 240, sector_opacity) :
                      al_map_rgba(160, 160, 160, sector_opacity)
                     ),
                     (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
@@ -305,7 +308,7 @@ void area_editor::do_logic() {
         
         //Mobs.
         unsigned char mob_opacity = 224;
-        if(ed_mode == EDITOR_MODE_SECTORS || ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS) mob_opacity = 64;
+        if(ed_mode == EDITOR_MODE_SECTORS || ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS || ed_mode == EDITOR_MODE_SHADOWS) mob_opacity = 64;
         if(ed_sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
         
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
@@ -354,8 +357,31 @@ void area_editor::do_logic() {
             
         }
         
+        //Shadows.
+        if(ed_mode == EDITOR_MODE_SHADOWS || (ed_sec_mode == ESM_TEXTURE_VIEW && ed_show_shadows)) {
+            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            
+                tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+                draw_sprite(
+                    s_ptr->bitmap, s_ptr->x, s_ptr->y, s_ptr->w, s_ptr->h,
+                    s_ptr->angle, al_map_rgba(255, 255, 255, s_ptr->alpha)
+                );
+                
+                if(ed_mode == EDITOR_MODE_SHADOWS) {
+                    float min_x, min_y, max_x, max_y;
+                    get_shadow_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
+                    
+                    al_draw_rectangle(
+                        min_x, min_y, max_x, max_y,
+                        (s_ptr == ed_cur_shadow ? al_map_rgb(224, 224, 64) : al_map_rgb(128, 128, 64)),
+                        2 / cam_zoom
+                    );
+                }
+            }
+        }
+        
         //New thing marker.
-        if(ed_sec_mode == ESM_NEW_SECTOR || ed_sec_mode == ESM_NEW_OBJECT) {
+        if(ed_sec_mode == ESM_NEW_SECTOR || ed_sec_mode == ESM_NEW_OBJECT || ed_sec_mode == ESM_NEW_SHADOW) {
             float x = snap_to_grid(mouse_cursor_x);
             float y = snap_to_grid(mouse_cursor_y);
             al_draw_line(x - 16, y,      x + 16, y,      al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
@@ -544,6 +570,16 @@ void area_editor::find_errors() {
         if(landing_site_missing) ed_error_type = EET_LANDING_SITE;
     }
     
+    //Check if there are tree shadows with invalid images.
+    if(ed_error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            if(cur_area_map.tree_shadows[s]->bitmap == bmp_error) {
+                ed_error_type = EET_INVALID_SHADOW;
+                ed_error_shadow_ptr = cur_area_map.tree_shadows[s];
+            }
+        }
+    }
+    
     
     update_review_frame();
 }
@@ -660,6 +696,11 @@ void area_editor::goto_error() {
         //Nothing to focus on.
         return;
         
+    } else if(ed_error_type == EET_INVALID_SHADOW) {
+    
+        float min_x, min_y, max_x, max_y;
+        get_shadow_bounding_box(ed_error_shadow_ptr, &min_x, &min_y, &max_x, &max_y);
+        center_camera(min_x, min_y, max_x, max_y);
     }
 }
 
@@ -744,6 +785,32 @@ void area_editor::gui_to_mob() {
     
     ed_cur_mob->angle = ((lafi_angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
     ed_cur_mob->vars = ((lafi_textbox*) f->widgets["txt_vars"])->text;
+}
+
+/* ----------------------------------------------------------------------------
+ * Saves the current tree shadow using the info on the gui.
+ */
+void area_editor::gui_to_shadow() {
+    if(!ed_cur_shadow) return;
+    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
+    
+    ed_cur_shadow->x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_shadow->y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_shadow->w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
+    ed_cur_shadow->h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
+    ed_cur_shadow->angle = ((lafi_angle_picker*) f->widgets["ang_an"])->get_angle_rads();
+    ed_cur_shadow->alpha = ((lafi_scrollbar*) f->widgets["bar_al"])->low_value;
+    
+    string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
+    
+    if(new_file_name != ed_cur_shadow->file_name) {
+        //New image, delete the old one.
+        if(ed_cur_shadow->bitmap != bmp_error) {
+            bitmaps.detach(ed_cur_shadow->file_name);
+        }
+        ed_cur_shadow->bitmap = bitmaps.get("Textures/" + new_file_name, NULL);
+        ed_cur_shadow->file_name = new_file_name;
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -833,22 +900,27 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             bg_to_gui();
             
-            //Move camera.
         } else if(ed_holding_m2) {
+            //Move camera.
             cam_x += ev.mouse.dx / cam_zoom;
             cam_y += ev.mouse.dy / cam_zoom;
         }
         
-        //Move vertex or mob.
+        //Move vertex, mob or shadow.
         if(ed_moving_thing != string::npos) {
             if(ed_mode == EDITOR_MODE_SECTORS) {
                 vertex* v_ptr = cur_area_map.vertices[ed_moving_thing];
                 v_ptr->x = snap_to_grid(mouse_cursor_x);
                 v_ptr->y = snap_to_grid(mouse_cursor_y);
-            } else {
+            } else if(ed_mode == EDITOR_MODE_OBJECTS) {
                 mob_gen* m_ptr = cur_area_map.mob_generators[ed_moving_thing];
                 m_ptr->x = snap_to_grid(mouse_cursor_x);
                 m_ptr->y = snap_to_grid(mouse_cursor_y);
+            } else if(ed_mode == EDITOR_MODE_SHADOWS) {
+                tree_shadow* s_ptr = cur_area_map.tree_shadows[ed_moving_thing];
+                s_ptr->x = snap_to_grid(mouse_cursor_x - ed_moving_thing_x);
+                s_ptr->y = snap_to_grid(mouse_cursor_y - ed_moving_thing_y);
+                shadow_to_gui();
             }
         }
         
@@ -884,6 +956,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             gui_to_sector();
         } else if(ed_mode == EDITOR_MODE_OBJECTS) {
             gui_to_mob();
+        } else if(ed_mode == EDITOR_MODE_SHADOWS) {
+            gui_to_shadow();
         }
         
         //Sector-related clicking.
@@ -1008,6 +1082,30 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             mob_to_gui();
             
+        } else if(ed_sec_mode == ESM_NONE && ed_mode == EDITOR_MODE_SHADOWS) {
+            //Shadow-related clicking.
+            
+            ed_cur_shadow = NULL;
+            ed_moving_thing = string::npos;
+            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            
+                tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+                float min_x, min_y, max_x, max_y;
+                get_shadow_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
+                
+                if(
+                    mouse_cursor_x >= min_x && mouse_cursor_x <= max_x &&
+                    mouse_cursor_y >= min_y && mouse_cursor_y <= max_y
+                ) {
+                    ed_cur_shadow = s_ptr;
+                    ed_moving_thing = s;
+                    ed_moving_thing_x = mouse_cursor_x - s_ptr->x;
+                    ed_moving_thing_y = mouse_cursor_y - s_ptr->y;
+                    break;
+                }
+            }
+            shadow_to_gui();
+            
         }
         
         if(ed_sec_mode == ESM_NEW_SECTOR) {
@@ -1087,6 +1185,20 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             ed_cur_mob = cur_area_map.mob_generators.back();
             mob_to_gui();
+            
+        } else if(ed_sec_mode == ESM_NEW_SHADOW) {
+            //Create a new shadow where the cursor is.
+            
+            ed_sec_mode = ESM_NONE;
+            float hotspot_x = snap_to_grid(mouse_cursor_x);
+            float hotspot_y = snap_to_grid(mouse_cursor_y);
+            
+            tree_shadow* new_shadow = new tree_shadow(hotspot_x, hotspot_y);
+            new_shadow->bitmap = bmp_error;
+            
+            cur_area_map.tree_shadows.push_back(new_shadow);
+            ed_cur_shadow = new_shadow;
+            shadow_to_gui();
             
         }
         
@@ -1363,6 +1475,8 @@ void area_editor::load() {
     frm_area->easy_row();
     frm_area->easy_add("but_objects", new lafi_button(0, 0, 0, 0, "Edit objects"), 100, 32);
     frm_area->easy_row();
+    frm_area->easy_add("but_shadows", new lafi_button(0, 0, 0, 0, "Edit shadows"), 100, 32);
+    frm_area->easy_row();
     frm_area->easy_add("but_bg", new lafi_button(0, 0, 0, 0, "Edit background"), 100, 32);
     frm_area->easy_row();
     frm_area->easy_add("but_review", new lafi_button(0, 0, 0, 0, "Review"), 100, 32);
@@ -1492,6 +1606,46 @@ void area_editor::load() {
     frm_object->easy_row();
     
     
+    //Shadows frame.
+    lafi_frame* frm_shadows = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_shadows);
+    ed_gui->add("frm_shadows", frm_shadows);
+    
+    frm_shadows->easy_row();
+    frm_shadows->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_shadows->easy_row();
+    frm_shadows->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
+    frm_shadows->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
+    y = frm_shadows->easy_row();
+    
+    lafi_frame* frm_shadow = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    frm_shadows->add("frm_shadow", frm_shadow);
+    hide_widget(frm_shadow);
+    
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("dum_1", new lafi_dummy(0, 0, 0, 0), 90, 16);
+    frm_shadow->easy_add("but_rem", new lafi_button(0, 0, 0, 0, "-"), 10, 16);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_file", new lafi_label(0, 0, 0, 0, "File:"), 20, 16);
+    frm_shadow->easy_add("txt_file", new lafi_textbox(0, 0, 0, 0), 80, 16);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 40, 16);
+    frm_shadow->easy_add("txt_x",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_y",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_wh", new lafi_label(0, 0, 0, 0, "W&H:"), 40, 16);
+    frm_shadow->easy_add("txt_w",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_h",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_an", new lafi_label(0, 0, 0, 0, "Angle:"), 40, 16);
+    frm_shadow->easy_add("ang_an", new lafi_angle_picker(0, 0, 0, 0), 60, 24);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_al", new lafi_label(0, 0, 0, 0, "Opacity:"), 40, 16);
+    frm_shadow->easy_row();
+    frm_shadow->easy_add("bar_al", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
+    frm_shadow->easy_row();
+    
+    
     //Background frame.
     lafi_frame* frm_bg = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_bg);
@@ -1547,6 +1701,9 @@ void area_editor::load() {
     frm_review->easy_row();
     frm_review->easy_add("chk_see_textures", new lafi_checkbox(0, 0, 0, 0, "See textures"), 100, 16);
     frm_review->easy_row();
+    frm_review->easy_add("dum_1", new lafi_dummy(0, 0, 0, 0), 10, 16);
+    frm_review->easy_add("chk_shadows", new lafi_checkbox(0, 0, 0, 0, "Enable shadows"), 90, 16);
+    frm_review->easy_row();
     update_review_frame();
     
     
@@ -1567,6 +1724,10 @@ void area_editor::load() {
         ed_mode = EDITOR_MODE_OBJECTS;
         change_to_right_frame();
     };
+    frm_area->widgets["but_shadows"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_mode = EDITOR_MODE_SHADOWS;
+        change_to_right_frame();
+    };
     frm_area->widgets["but_bg"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         ed_mode = EDITOR_MODE_BG;
         change_to_right_frame();
@@ -1579,6 +1740,7 @@ void area_editor::load() {
     frm_main->widgets["but_area"]->description =    "Pick the area to edit.";
     frm_area->widgets["but_sectors"]->description = "Change sector (polygon) settings.";
     frm_area->widgets["but_objects"]->description = "Change object settings and placements.";
+    frm_area->widgets["but_shadows"]->description = "Change the shadows of trees and leaves.";
     frm_area->widgets["but_bg"]->description =      "Add a background to guide you, like a blueprint.";
     frm_area->widgets["but_review"]->description =  "Tools to make sure everything is fine in the area.";
     
@@ -1704,6 +1866,46 @@ void area_editor::load() {
     frm_object->widgets["txt_vars"]->description =      "Variables used for the script.";
     
     
+    //Properties -- shadows.
+    auto lambda_gui_to_shadow = [] (lafi_widget*) { gui_to_shadow(); };
+    frm_shadows->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_sec_mode = ESM_NONE;
+        shadow_to_gui();
+        ed_mode = EDITOR_MODE_MAIN;
+        change_to_right_frame();
+    };
+    frm_shadows->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        if(ed_sec_mode == ESM_NEW_SHADOW) ed_sec_mode = ESM_NONE;
+        else ed_sec_mode = ESM_NEW_SHADOW;
+    };
+    frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        ed_cur_shadow = NULL;
+        shadow_to_gui();
+    };
+    frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            if(cur_area_map.tree_shadows[s] == ed_cur_shadow) {
+                cur_area_map.tree_shadows.erase(cur_area_map.tree_shadows.begin() + s);
+                delete ed_cur_shadow;
+                ed_cur_shadow = NULL;
+                shadow_to_gui();
+                break;
+            }
+        }
+    };
+    frm_shadow->widgets["txt_x"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_w"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_h"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["ang_an"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["bar_al"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_file"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadows->widgets["but_back"]->description =     "Go back to the main menu.";
+    frm_shadows->widgets["but_new"]->description =      "Create a new tree shadow wherever you click.";
+    frm_shadows->widgets["but_sel_none"]->description = "Deselect the current tree shadow.";
+    frm_shadow->widgets["but_rem"]->description =       "Delete the current tree shadow.";
+    
+    
     //Properties -- background.
     auto lambda_gui_to_bg = [] (lafi_widget*) { gui_to_bg(); };
     auto lambda_gui_to_bg_click = [] (lafi_widget*, int, int) { gui_to_bg(); };
@@ -1759,10 +1961,15 @@ void area_editor::load() {
             update_review_frame();
         }
     };
+    frm_review->widgets["chk_shadows"]->left_mouse_click_handler = [] (lafi_widget * c, int, int) {
+        ed_show_shadows = ((lafi_checkbox*) c)->checked;
+        update_review_frame();
+    };
     frm_review->widgets["but_back"]->description =         "Go back to the main menu.";
     frm_review->widgets["but_find_errors"]->description =  "Search for problems with the area.";
     frm_review->widgets["but_goto_error"]->description =   "Focus the camera on the problem found, if applicable.";
-    frm_review->widgets["chk_see_textures"]->description = "Check this to preview how the textures will look like.";
+    frm_review->widgets["chk_see_textures"]->description = "Preview how the textures will look like.";
+    frm_review->widgets["chk_shadows"]->description =      "Show tree shadows?";
     
     
     //Properties -- picker.
@@ -1807,6 +2014,7 @@ void area_editor::load_area() {
     
     ed_cur_sector = NULL;
     ed_cur_mob = NULL;
+    ed_cur_shadow = NULL;
     sector_to_gui();
     mob_to_gui();
     bg_to_gui();
@@ -2185,6 +2393,23 @@ void area_editor::save_area() {
         }
     }
     
+    //Tree shadows.
+    data_node* shadows_node = new data_node("tree_shadows", "");
+    file_node.add(shadows_node);
+    
+    for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+        tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+        data_node* shadow_node = new data_node("shadow", "");
+        shadows_node->add(shadow_node);
+        
+        shadow_node->add(new data_node("pos", ftos(s_ptr->x) + " " + ftos(s_ptr->y)));
+        shadow_node->add(new data_node("size", ftos(s_ptr->w) + " " + ftos(s_ptr->h)));
+        shadow_node->add(new data_node("angle", ftos(s_ptr->angle)));
+        shadow_node->add(new data_node("alpha", itos(s_ptr->alpha)));
+        shadow_node->add(new data_node("file", s_ptr->file_name));
+        
+    }
+    
     //Background.
     file_node.add(new data_node("bg_file_name", ed_bg_file_name));
     file_node.add(new data_node("bg_x", ftos(ed_bg_x)));
@@ -2234,6 +2459,27 @@ void area_editor::sector_to_gui() {
         }
         
         adv_textures_to_gui();
+        
+    } else {
+        hide_widget(f);
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads a tree shadow's info onto the gui.
+ */
+void area_editor::shadow_to_gui() {
+    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
+    if(ed_cur_shadow) {
+    
+        show_widget(f);
+        ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_cur_shadow->x);
+        ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_shadow->y);
+        ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_cur_shadow->w);
+        ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_cur_shadow->h);
+        ((lafi_angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
+        ((lafi_scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
+        ((lafi_textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
         
     } else {
         hide_widget(f);
@@ -2391,8 +2637,14 @@ void area_editor::update_review_frame() {
             lbl_error_2->text = "sectors of type";
             lbl_error_3->text = "\"landing site\"!";
             
+        } else if(ed_error_type == EET_INVALID_SHADOW) {
+        
+            lbl_error_1->text = "Tree shadow with";
+            lbl_error_2->text = "invalid image found!";
+            
         }
     }
     
     ((lafi_checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_see_textures"])->set(ed_sec_mode == ESM_TEXTURE_VIEW);
+    ((lafi_checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_shadows"])->set(ed_show_shadows);
 }

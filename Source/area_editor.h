@@ -39,6 +39,7 @@ enum EDITOR_ERROR_TYPES {
     EET_LANDING_SITE,          //No landing site sector exists.
     EET_TYPELESS_MOB,          //Mob with no type.
     EET_MOB_OOB,               //Mob out of bounds.
+    EET_INVALID_SHADOW,        //Invalid tree shadow image.
 };
 
 #define GRID_INTERVAL 32
@@ -54,6 +55,7 @@ void goto_error();
 void gui_to_bg();
 void gui_to_mob();
 void gui_to_sector();
+void gui_to_shadow();
 void gui_to_adv_textures();
 void handle_controls(ALLEGRO_EVENT ev);
 void load();
@@ -63,6 +65,7 @@ void open_picker(unsigned char type);
 void pick(string name, unsigned char type);
 void save_area();
 void sector_to_gui();
+void shadow_to_gui();
 float snap_to_grid(const float c);
 void update_review_frame();
 

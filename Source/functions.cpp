@@ -500,6 +500,33 @@ void load_area(const string name, const bool load_for_editor) {
         cur_area_map.mob_generators.push_back(mob_ptr);
     }
     
+    //Tree shadows.
+    size_t n_shadows = file.get_child_by_name("tree_shadows")->get_nr_of_children();
+    for(size_t s = 0; s < n_shadows; s++) {
+    
+        data_node* shadow_node = file.get_child_by_name("tree_shadows")->get_child(s);
+        
+        tree_shadow* s_ptr = new tree_shadow();
+        
+        vector<string> words = split(shadow_node->get_child_by_name("pos")->value);
+        s_ptr->x = (words.size() >= 1 ? tof(words[0]) : 0);
+        s_ptr->y = (words.size() >= 2 ? tof(words[1]) : 0);
+        words = split(shadow_node->get_child_by_name("size")->value);
+        s_ptr->w = (words.size() >= 1 ? tof(words[0]) : 0);
+        s_ptr->h = (words.size() >= 2 ? tof(words[1]) : 0);
+        s_ptr->angle = tof(shadow_node->get_child_by_name("angle")->value);
+        s_ptr->alpha = toi(shadow_node->get_child_by_name("alpha")->value);
+        s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
+        s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
+        
+        if(s_ptr->bitmap == bmp_error && !load_for_editor) {
+            error_log("Unknown tree shadow texture \"" + s_ptr->file_name + "\"!", shadow_node);
+        }
+        
+        cur_area_map.tree_shadows.push_back(s_ptr);
+        
+    }
+    
     
     //Background.
     ed_bg_file_name = file.get_child_by_name("bg_file_name")->value;

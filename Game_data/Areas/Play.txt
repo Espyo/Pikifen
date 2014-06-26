@@ -199,6 +199,7 @@ vertices{
 	vertex=760.888 -48.955
 	vertex=821.954 -75.6392
 	vertex=279.212 700.824
+	vertex=147.234 -125.183
 }
 linedefs{
 	linedef{
@@ -770,23 +771,23 @@ linedefs{
 		v=135 136
 	}
 	linedef{
-		s=6 1
+		s=20 1
 		v=136 137
 	}
 	linedef{
-		s=6 1
+		s=21 1
 		v=137 138
 	}
 	linedef{
-		s=6 1
+		s=21 1
 		v=138 153
 	}
 	linedef{
-		s=6 5
+		s=21 5
 		v=140 143
 	}
 	linedef{
-		s=6 5
+		s=21 5
 		v=24 140
 	}
 	linedef{
@@ -798,8 +799,8 @@ linedefs{
 		v=139 64
 	}
 	linedef{
-		s=6 5
-		v=143 142
+		s=20 5
+		v=143 161
 	}
 	linedef{
 		s=6 5
@@ -854,7 +855,7 @@ linedefs{
 		v=54 61
 	}
 	linedef{
-		s=6 13
+		s=21 13
 		v=153 24
 	}
 	linedef{
@@ -896,6 +897,18 @@ linedefs{
 	linedef{
 		s=7 0
 		v=160 20
+	}
+	linedef{
+		s=20 21
+		v=137 143
+	}
+	linedef{
+		s=20 6
+		v=161 136
+	}
+	linedef{
+		s=6 5
+		v=161 142
 	}
 }
 sectors{
@@ -1001,6 +1014,27 @@ sectors{
 		z=0
 		fade=true
 		texture=Grass 2.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Dirt.png
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Dirt.png
+	}
+}
+tree_shadows{
+	shadow{
+		pos=200 -300
+		size=2000 2900
+		angle=0
+		alpha=255
+		file=Leaf shadow.png
 	}
 }
 bg_file_name=tuto2.jpg

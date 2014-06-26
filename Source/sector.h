@@ -157,6 +157,24 @@ struct mob_gen {
 
 
 /*
+ * A structure holding info on the shadows
+ * cast onto the area by a tree (or
+ * whatever the game maker desires).
+ */
+struct tree_shadow {
+    string file_name;
+    ALLEGRO_BITMAP* bitmap;
+    
+    float x, y;  //X and Y of the center.
+    float w, h;  //Width and height.
+    float angle; //Rotation angle.
+    unsigned char alpha; //Opacity.
+    
+    tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "");
+};
+
+
+/*
  * A structure that holds all of the
  * info about the current area, so that
  * the sectors know how to communicate with
@@ -169,6 +187,7 @@ struct area_map {
     vector<linedef*> linedefs;
     vector<sector*> sectors;
     vector<mob_gen*> mob_generators;
+    vector<tree_shadow*> tree_shadows;
     
     void clear();
 };
@@ -186,11 +205,12 @@ vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(float x, float y, size_t* sector_nr);
 void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
+void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
-void triangulate(sector* s_pptr);
+void triangulate(sector* s_ptr);
 
 
 enum SECTOR_TYPES {
