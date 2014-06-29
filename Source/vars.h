@@ -58,6 +58,7 @@ extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_mouse_cursor_invalid;
 extern ALLEGRO_BITMAP* bmp_move_group_arrow;
 extern ALLEGRO_BITMAP* bmp_nectar;
+extern ALLEGRO_BITMAP* bmp_no_pikmin;
 extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_red[3];
@@ -107,6 +108,7 @@ extern sample_struct sfx_throw;
 
 //General globals.
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
+extern int                              area_image_size;
 extern float                            area_x1;               //Top-left corner of the area, in world coordinates.
 extern float                            area_y1;
 extern float                            auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the captain auto-pluck.
@@ -278,6 +280,7 @@ extern float                            sun_meter_sun_angle;
 extern float                            throw_particle_timer;
 extern map<string, treasure_type*>      treasure_types;
 extern vector<treasure*>                treasures;
+extern float                            tree_shadow_sway;
 extern ALLEGRO_VOICE*                   voice;  //Voice from which the sound effects play.
 extern map<string, weather>             weather_conditions;
 extern float                            whistle_dot_offset;    //How much each dot of the whistle should spin.

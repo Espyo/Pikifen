@@ -263,14 +263,14 @@ void generate_area_images() {
     //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
     float area_height = max_y - min_y;
-    unsigned area_image_cols = ceil(area_width / AREA_IMAGE_SIZE);
-    unsigned area_image_rows = ceil(area_height / AREA_IMAGE_SIZE);
+    unsigned area_image_cols = ceil(area_width / area_image_size);
+    unsigned area_image_rows = ceil(area_height / area_image_size);
     
     for(size_t x = 0; x < area_image_cols; x++) {
         area_images.push_back(vector<ALLEGRO_BITMAP*>());
         
         for(size_t y = 0; y < area_image_rows; y++) {
-            area_images[x].push_back(al_create_bitmap(AREA_IMAGE_SIZE, AREA_IMAGE_SIZE));
+            area_images[x].push_back(al_create_bitmap(area_image_size, area_image_size));
         }
     }
     
@@ -294,10 +294,10 @@ void generate_area_images() {
             s_max_y = max(y, s_max_y);
         }
         
-        sector_start_col = (s_min_x - area_x1) / AREA_IMAGE_SIZE;
-        sector_end_col =   ceil((s_max_x - area_x1) / AREA_IMAGE_SIZE) - 1;
-        sector_start_row = (s_min_y - area_y1) / AREA_IMAGE_SIZE;
-        sector_end_row =   ceil((s_max_y - area_y1) / AREA_IMAGE_SIZE) - 1;
+        sector_start_col = (s_min_x - area_x1) / area_image_size;
+        sector_end_col =   ceil((s_max_x - area_x1) / area_image_size) - 1;
+        sector_start_row = (s_min_y - area_y1) / area_image_size;
+        sector_end_row =   ceil((s_max_y - area_y1) / area_image_size) - 1;
         
         al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
         
@@ -306,7 +306,7 @@ void generate_area_images() {
                 ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
-                    draw_sector(cur_area_map.sectors[s], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1);
+                    draw_sector(cur_area_map.sectors[s], x * area_image_size + area_x1, y * area_image_size + area_y1);
                     
                 } al_set_target_bitmap(prev_target_bmp);
             }
@@ -511,13 +511,19 @@ void load_area(const string name, const bool load_for_editor) {
         vector<string> words = split(shadow_node->get_child_by_name("pos")->value);
         s_ptr->x = (words.size() >= 1 ? tof(words[0]) : 0);
         s_ptr->y = (words.size() >= 2 ? tof(words[1]) : 0);
+        
         words = split(shadow_node->get_child_by_name("size")->value);
         s_ptr->w = (words.size() >= 1 ? tof(words[0]) : 0);
         s_ptr->h = (words.size() >= 2 ? tof(words[1]) : 0);
-        s_ptr->angle = tof(shadow_node->get_child_by_name("angle")->value);
-        s_ptr->alpha = toi(shadow_node->get_child_by_name("alpha")->value);
+        
+        s_ptr->angle = tof(shadow_node->get_child_by_name("angle")->get_value_or_default("0"));
+        s_ptr->alpha = toi(shadow_node->get_child_by_name("alpha")->get_value_or_default("255"));
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
         s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
+        
+        words = split(shadow_node->get_child_by_name("sway")->value);
+        s_ptr->sway_x = (words.size() >= 1 ? tof(words[0]) : 0);
+        s_ptr->sway_y = (words.size() >= 2 ? tof(words[1]) : 0);
         
         if(s_ptr->bitmap == bmp_error && !load_for_editor) {
             error_log("Unknown tree shadow texture \"" + s_ptr->file_name + "\"!", shadow_node);
@@ -581,7 +587,8 @@ void load_area_textures() {
  */
 ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_error) {
     ALLEGRO_BITMAP* b = NULL;
-    b = al_load_bitmap((GRAPHICS_FOLDER "/" + file_name).c_str());
+    if(file_name.size()) b = al_load_bitmap((GRAPHICS_FOLDER "/" + file_name).c_str());
+    
     if(!b && report_error) {
         error_log("Could not open image " + file_name + "!", node);
         b = bmp_error;

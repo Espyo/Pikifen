@@ -172,17 +172,8 @@ void do_logic() {
         }
     }
     
-    
-    //Tick all particles.
-    size_t n_particles = particles.size();
-    for(size_t p = 0; p < n_particles; ) {
-        if(!particles[p].tick()) {
-            particles.erase(particles.begin() + p);
-            n_particles--;
-        } else {
-            p++;
-        }
-    }
+    //Tree shadow swaying.
+    tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
     
     if(cur_message.size() == 0) {
@@ -199,6 +190,17 @@ void do_logic() {
         if(auto_pluck_input_time > 0) {
             auto_pluck_input_time -= delta_t;
             if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
+        }
+        
+        //Tick all particles.
+        size_t n_particles = particles.size();
+        for(size_t p = 0; p < n_particles; ) {
+            if(!particles[p].tick()) {
+                particles.erase(particles.begin() + p);
+                n_particles--;
+            } else {
+                p++;
+            }
         }
         
         /********************

@@ -106,6 +106,9 @@ int main(int argc, char**) {
     al_reserve_samples(16);
     srand(time(NULL));
     
+    //ToDo the function is always return 0.
+    area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
+    
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
     sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
@@ -249,6 +252,7 @@ int main(int argc, char**) {
         bmp_mouse_cursor_invalid = load_bmp("Mouse_cursor_invalid.png");
         bmp_move_group_arrow = load_bmp(    "Move_group_arrow.png");
         bmp_nectar = load_bmp(              "Nectar.png");
+        bmp_no_pikmin = load_bmp(           "No_Pikmin.png");
         bmp_number_bubble = load_bmp(       "Number_bubble.png");
         bmp_pikmin_spirit = load_bmp(       "Pikmin_spirit.png");
         bmp_shadow = load_bmp(              "Shadow.png");

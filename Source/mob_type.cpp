@@ -50,7 +50,7 @@ void load_mob_types(bool load_resources) {
  * Loads the mob types from a folder.
  * folder: Name of the folder on the hard drive.
  * type: Use MOB_FOLDER_* for this.
- * load_animations: False if you don't need the images and sounds, so it loads faster.
+ * load_resources: False if you don't need the images and sounds, so it loads faster.
  */
 void load_mob_types(const string folder, const unsigned char type, bool load_resources) {
     vector<string> types = folder_to_vector(folder, true);
@@ -112,15 +112,20 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             pt->carry_speed = tof(file.get_child_by_name("carry_speed")->value);
             pt->carry_strength = tof(file.get_child_by_name("carry_strength")->value);
             pt->has_onion = tob(file.get_child_by_name("has_onion")->value);
-            pt->bmp_top[0] = load_bmp(file.get_child_by_name("top_leaf")->value, &file); //ToDo don't load these for every Pikmin type.
-            pt->bmp_top[1] = load_bmp(file.get_child_by_name("top_bud")->value, &file);
-            pt->bmp_top[2] = load_bmp(file.get_child_by_name("top_flower")->value, &file);
             
-            new_anim_conversion(PIKMIN_ANIM_IDLE, "idle");
-            new_anim_conversion(PIKMIN_ANIM_WALK, "walk");
-            new_anim_conversion(PIKMIN_ANIM_THROWN, "thrown");
-            new_anim_conversion(PIKMIN_ANIM_ATTACK, "attack");
-            new_anim_conversion(PIKMIN_ANIM_GRAB, "grab");
+            if(load_resources) {
+                pt->bmp_top[0] = bitmaps.get(file.get_child_by_name("top_leaf")->value,   &file);
+                pt->bmp_top[1] = bitmaps.get(file.get_child_by_name("top_bud")->value,    &file);
+                pt->bmp_top[2] = bitmaps.get(file.get_child_by_name("top_flower")->value, &file);
+                pt->bmp_icon[0] = bitmaps.get(file.get_child_by_name("icon_leaf")->value,   &file);
+                pt->bmp_icon[1] = bitmaps.get(file.get_child_by_name("icon_bud")->value,    &file);
+                pt->bmp_icon[2] = bitmaps.get(file.get_child_by_name("icon_flower")->value, &file);
+            }
+            new_anim_conversion(PIKMIN_ANIM_IDLE,     "idle");
+            new_anim_conversion(PIKMIN_ANIM_WALK,     "walk");
+            new_anim_conversion(PIKMIN_ANIM_THROWN,   "thrown");
+            new_anim_conversion(PIKMIN_ANIM_ATTACK,   "attack");
+            new_anim_conversion(PIKMIN_ANIM_GRAB,     "grab");
             new_anim_conversion(PIKMIN_ANIM_BURROWED, "burrowed");
             
             pikmin_types[pt->name] = pt;
@@ -146,16 +151,17 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
                 lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
                 lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
                 lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
+                lt->bmp_icon = bitmaps.get(file.get_child_by_name("icon")->value, &file);
             }
             
-            new_anim_conversion(LEADER_ANIM_IDLE, "idle");
-            new_anim_conversion(LEADER_ANIM_WALK, "walk");
-            new_anim_conversion(LEADER_ANIM_PLUCK, "pluck");
-            new_anim_conversion(LEADER_ANIM_GET_UP, "get_up");
-            new_anim_conversion(LEADER_ANIM_DISMISS, "dismiss");
-            new_anim_conversion(LEADER_ANIM_THROW, "thrown");
+            new_anim_conversion(LEADER_ANIM_IDLE,      "idle");
+            new_anim_conversion(LEADER_ANIM_WALK,      "walk");
+            new_anim_conversion(LEADER_ANIM_PLUCK,     "pluck");
+            new_anim_conversion(LEADER_ANIM_GET_UP,    "get_up");
+            new_anim_conversion(LEADER_ANIM_DISMISS,   "dismiss");
+            new_anim_conversion(LEADER_ANIM_THROW,     "thrown");
             new_anim_conversion(LEADER_ANIM_WHISTLING, "whistling");
-            new_anim_conversion(LEADER_ANIM_LIE, "lie");
+            new_anim_conversion(LEADER_ANIM_LIE,       "lie");
             
             leader_types[lt->name] = lt;
             

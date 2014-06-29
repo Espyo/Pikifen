@@ -33,7 +33,6 @@ using namespace std;
 #define VERSION_MONTH 0
 #define VERSION_YEAR 0      //The year is 2000 + this.
 
-#define AREA_IMAGE_SIZE             800      //How many pixels the area images are (both width and height; they're square).
 #define AUTO_PLUCK_INPUT_INTERVAL   0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
 #define AUTO_PLUCK_MAX_RADIUS       160      //How far a leader can go to auto-pluck the next Pikmin.
 #define CAM_TRANSITION_DURATION     0.5      //How many seconds a camera transition lasts for.
@@ -66,12 +65,13 @@ using namespace std;
 #define PIKMIN_MAX_HEALTH           300      //Maximum Pikmin HP.
 #define PIKMIN_MIN_ATTACK_RANGE     0        //If there's this gap between a Pikmin and its prey, the Pikmin will attack.
 #define PIKMIN_MIN_TASK_RANGE       20       //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
-#define SHADOW_MAX_WIDTH            100      //The shadows can't be any wider than this.
-#define SHADOW_Y_MULTIPLIER         1        //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
+#define MOB_SHADOW_Y_MULT           1        //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
 #define SHIP_BEAM_RANGE             30       //The center of a ship's beam reaches this far.
 #define SHIP_BEAM_RING_COLOR_SPEED  255      //Red color's index moves these many units per second. (Green is fast and blue is faster still).
 #define SMACK_PARTICLE_DUR          0.1      //Duration of the "smack" particle.
 #define SUN_METER_SUN_SPIN_SPEED    0.5      //The Sun Meter's sun spins these many radians per second.
+#define TREE_SHADOW_SWAY_AMOUNT     8        //Tree shadows sway this much away from their neutral position.
+#define TREE_SHADOW_SWAY_SPEED      M_PI_4   //Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
 #define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply their strength by this.
 #define THROW_PARTICLE_INTERVAL     0.02     //A new "mob thrown" particle is spawned every X seconds.
 #define UNWHISTLABLE_PERIOD         1        //A mob cannot be whistled to a party during this period.

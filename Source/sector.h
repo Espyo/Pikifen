@@ -169,8 +169,10 @@ struct tree_shadow {
     float w, h;  //Width and height.
     float angle; //Rotation angle.
     unsigned char alpha; //Opacity.
+    float sway_x; //Swaying is multiplied by this, horizontally.
+    float sway_y; //And vertically.
     
-    tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "");
+    tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "", float sx = 1, float sy = 0);
 };
 
 

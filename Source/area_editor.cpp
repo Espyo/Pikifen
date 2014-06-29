@@ -800,6 +800,8 @@ void area_editor::gui_to_shadow() {
     ed_cur_shadow->h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
     ed_cur_shadow->angle = ((lafi_angle_picker*) f->widgets["ang_an"])->get_angle_rads();
     ed_cur_shadow->alpha = ((lafi_scrollbar*) f->widgets["bar_al"])->low_value;
+    ed_cur_shadow->sway_x = tof(((lafi_textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_shadow->sway_y = tof(((lafi_textbox*) f->widgets["txt_sy"])->text);
     
     string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
     
@@ -1644,6 +1646,10 @@ void area_editor::load() {
     frm_shadow->easy_row();
     frm_shadow->easy_add("bar_al", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
     frm_shadow->easy_row();
+    frm_shadow->easy_add("lbl_sway", new lafi_label(0, 0, 0, 0, "Sway X&Y:"), 40, 16);
+    frm_shadow->easy_add("txt_sx",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_sy",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_row();
     
     
     //Background frame.
@@ -1900,10 +1906,21 @@ void area_editor::load() {
     frm_shadow->widgets["ang_an"]->lose_focus_handler = lambda_gui_to_shadow;
     frm_shadow->widgets["bar_al"]->lose_focus_handler = lambda_gui_to_shadow;
     frm_shadow->widgets["txt_file"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_sx"]->lose_focus_handler = lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_sy"]->lose_focus_handler = lambda_gui_to_shadow;
     frm_shadows->widgets["but_back"]->description =     "Go back to the main menu.";
     frm_shadows->widgets["but_new"]->description =      "Create a new tree shadow wherever you click.";
     frm_shadows->widgets["but_sel_none"]->description = "Deselect the current tree shadow.";
     frm_shadow->widgets["but_rem"]->description =       "Delete the current tree shadow.";
+    frm_shadow->widgets["txt_file"]->description =      "File name for the shadow's texture.";
+    frm_shadow->widgets["txt_x"]->description =         "X position of the shadow's center.";
+    frm_shadow->widgets["txt_y"]->description =         "Y position of the shadow's center.";
+    frm_shadow->widgets["txt_w"]->description =         "Width of the shadow's image.";
+    frm_shadow->widgets["txt_h"]->description =         "Height of the shadow's image.";
+    frm_shadow->widgets["ang_an"]->description =        "Angle of the shadow's image.";
+    frm_shadow->widgets["bar_al"]->description =        "How opaque the shadow's image is.";
+    frm_shadow->widgets["txt_sx"]->description =        "Horizontal sway amount multiplier (0 = no sway).";
+    frm_shadow->widgets["txt_sy"]->description =        "Vertical sway amount multiplier (0 = no sway).";
     
     
     //Properties -- background.
@@ -2404,9 +2421,10 @@ void area_editor::save_area() {
         
         shadow_node->add(new data_node("pos", ftos(s_ptr->x) + " " + ftos(s_ptr->y)));
         shadow_node->add(new data_node("size", ftos(s_ptr->w) + " " + ftos(s_ptr->h)));
-        shadow_node->add(new data_node("angle", ftos(s_ptr->angle)));
-        shadow_node->add(new data_node("alpha", itos(s_ptr->alpha)));
+        if(s_ptr->angle != 0) shadow_node->add(new data_node("angle", ftos(s_ptr->angle)));
+        if(s_ptr->alpha != 255) shadow_node->add(new data_node("alpha", itos(s_ptr->alpha)));
         shadow_node->add(new data_node("file", s_ptr->file_name));
+        shadow_node->add(new data_node("sway", ftos(s_ptr->sway_x) + " " + ftos(s_ptr->sway_y)));
         
     }
     
@@ -2480,6 +2498,8 @@ void area_editor::shadow_to_gui() {
         ((lafi_angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
         ((lafi_scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
         ((lafi_textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
+        ((lafi_textbox*) f->widgets["txt_sx"])->text = ftos(ed_cur_shadow->sway_x);
+        ((lafi_textbox*) f->widgets["txt_sy"])->text = ftos(ed_cur_shadow->sway_y);
         
     } else {
         hide_widget(f);

@@ -235,13 +235,15 @@ vertex::vertex(float x, float y) {
 /* ----------------------------------------------------------------------------
  * Creates a tree shadow.
  */
-tree_shadow::tree_shadow(float x, float y, float w, float h, float an, unsigned char al, string f) {
+tree_shadow::tree_shadow(float x, float y, float w, float h, float an, unsigned char al, string f, float sx, float sy) {
     this->x = x;
     this->y = y;
     this->w = w;
     this->h = h;
     this->angle = an;
     this->alpha = al;
+    this->sway_x = sx;
+    this->sway_y = sy;
     this->file_name = f;
 }
 

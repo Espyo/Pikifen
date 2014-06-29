@@ -32,7 +32,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         day_minutes += 30;
         day += 12;
         pikmin_list[0]->health -= 10;
-        cam_zoom = 0.6;
     }
     
     size_t n_controls = controls.size();

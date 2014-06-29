@@ -57,7 +57,7 @@ void do_drawing() {
         for(size_t x = 0; x < area_image_cols; x++) {
             size_t area_image_rows = area_images[x].size();
             for(size_t y = 0; y < area_image_rows; y++) {
-                al_draw_bitmap(area_images[x][y], x * AREA_IMAGE_SIZE + area_x1, y * AREA_IMAGE_SIZE + area_y1, 0);
+                al_draw_bitmap(area_images[x][y], x * area_image_size + area_x1, y * area_image_size + area_y1, 0);
             }
         }
         
@@ -289,11 +289,211 @@ void do_drawing() {
         
         
         /* Layer 4
+        ***********************
+        *                 *   *
+        *   Particles   *   * *
+        *                ***  *
+        **********************/
+        
+        if(particle_quality > 0) {
+            n_particles = particles.size();
+            for(size_t p = 0; p < n_particles; p++) {
+                particle* p_ptr = &particles[p];
+                
+                if(p_ptr->type == PARTICLE_TYPE_SQUARE) {
+                    al_draw_filled_rectangle(
+                        p_ptr->x - p_ptr->size * 0.5,
+                        p_ptr->y - p_ptr->size * 0.5,
+                        p_ptr->x + p_ptr->size * 0.5,
+                        p_ptr->y + p_ptr->size * 0.5,
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_CIRCLE) {
+                    al_draw_filled_circle(
+                        p_ptr->x,
+                        p_ptr->y,
+                        p_ptr->size * 0.5,
+                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_BITMAP) {
+                    draw_sprite(
+                        p_ptr->bitmap,
+                        p_ptr->x,
+                        p_ptr->y,
+                        p_ptr->size, p_ptr->size,
+                        0, change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
+                    draw_sprite(
+                        p_ptr->bitmap, p_ptr->x, p_ptr->y, p_ptr->size, -1,
+                        0, change_alpha(p_ptr->color,
+                                        abs(sin((p_ptr->time / p_ptr->duration) * M_PI)) * p_ptr->color.a * 255
+                                       )
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_ENEMY_SPIRIT) {
+                    float s = sin((p_ptr->time / p_ptr->duration) * M_PI);
+                    draw_sprite(
+                        p_ptr->bitmap, p_ptr->x + s * 16, p_ptr->y, p_ptr->size, -1,
+                        s * M_PI, change_alpha(p_ptr->color, abs(s) * p_ptr->color.a * 255)
+                    );
+                    
+                } else if(p_ptr->type == PARTICLE_TYPE_SMACK) {
+                    float r = p_ptr->time / p_ptr->duration;
+                    float size = p_ptr->size;
+                    float opacity = 255;
+                    if(r <= 0.5) size *= r * 2;
+                    else opacity *= (1 - r) * 2;
+                    
+                    draw_sprite(p_ptr->bitmap, p_ptr->x, p_ptr->y, size, size, 0, change_alpha(p_ptr->color, opacity));
+                }
+            }
+        }
+        
+        
+        /* Layer 5
+        ***************************
+        *                   Help  *
+        *   In-game text   --  -- *
+        *                    \/   *
+        **************************/
+        
+        //Fractions and health.
+        size_t n_mobs = mobs.size();
+        for(size_t m = 0; m < n_mobs; m++) {
+            mob* mob_ptr = mobs[m];
+            
+            if(mob_ptr->carrier_info) {
+                if(mob_ptr->carrier_info->current_carrying_strength > 0) {
+                    ALLEGRO_COLOR color;
+                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { //Being carried.
+                        if(mob_ptr->carrier_info->carry_to_ship) {
+                            color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
+                        } else {
+                            color = mob_ptr->carrier_info->decided_type->main_color;
+                        }
+                    } else {
+                        color = al_map_rgb(96, 192, 192);
+                    }
+                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
+                }
+            }
+            
+            if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
+                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size - 8, mob_ptr->health, mob_ptr->type->max_health);
+            }
+        }
+        
+        //Info spots.
+        for(size_t i = 0; i < n_info_spots; i++) {
+            if(check_dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y, INFO_SPOT_TRIGGER_RANGE)) {
+                string text;
+                if(!info_spots[i]->opens_box) {
+                    text = info_spots[i]->text;
+                    
+                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
+                    
+                    int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
+                    
+                    al_draw_line(
+                        info_spots[i]->x - info_spots[i]->text_w * 0.5,
+                        line_y,
+                        info_spots[i]->x - 8,
+                        line_y,
+                        al_map_rgb(192, 192, 192), 2);
+                    al_draw_line(
+                        info_spots[i]->x + info_spots[i]->text_w * 0.5,
+                        line_y,
+                        info_spots[i]->x + 8,
+                        line_y,
+                        al_map_rgb(192, 192, 192), 2);
+                    al_draw_line(
+                        info_spots[i]->x - 8,
+                        line_y,
+                        info_spots[i]->x,
+                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
+                        al_map_rgb(192, 192, 192), 2);
+                    al_draw_line(
+                        info_spots[i]->x + 8,
+                        line_y,
+                        info_spots[i]->x,
+                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
+                        al_map_rgb(192, 192, 192), 2);
+                        
+                } else {
+                
+                    for(size_t c = 0; c < controls.size(); c++) {
+                        if(controls[c].action == BUTTON_THROW) {
+                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, 0, 0);
+                            break;
+                        }
+                    }
+                    
+                }
+            }
+        }
+        
+        
+        /* Layer 6
+        ***************************
+        *                    /  / *
+        *   Percipitation     / / *
+        *                   /  /  *
+        **************************/
+        
+        if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
+            size_t n_percipitation_particles = percipitation.size();
+            for(size_t p = 0; p < n_percipitation_particles; p++) {
+                al_draw_filled_circle(percipitation[p].x, percipitation[p].y, 3, al_map_rgb(255, 255, 255));
+            }
+        }
+        
+        
+        /* Layer 7
+        **************************
+        *                  *###* *
+        *   Tree shadows   #| |# *
+        *                   |_|  *
+        *************************/
+        
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+            
+            draw_sprite(
+                s_ptr->bitmap,
+                s_ptr->x + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_x,
+                s_ptr->y + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_y,
+                s_ptr->w, s_ptr->h,
+                s_ptr->angle, al_map_rgba(255, 255, 255, s_ptr->alpha)
+            );
+        }
+        
+        
+        /* Layer 8
+        ***********************
+        *              --==## *
+        *   Daylight   --==## *
+        *              --==## *
+        **********************/
+        
+        al_use_transform(&normal_transform);
+        
+        if(daylight_effect) {
+            al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
+        }
+        
+        
+        /* Layer 9
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
         *             `-´   *
         ********************/
+        
+        al_use_transform(&world_to_screen_transform);
         
         size_t n_arrows = move_group_arrows.size();
         for(size_t a = 0; a < n_arrows; a++) {
@@ -386,190 +586,14 @@ void do_drawing() {
             cursor_angle);
             
             
-        /* Layer 5
-        ***************************
-        *                   Help  *
-        *   In-game text   --  -- *
-        *                    \/   *
-        **************************/
-        
-        //Fractions and health.
-        size_t n_mobs = mobs.size();
-        for(size_t m = 0; m < n_mobs; m++) {
-            mob* mob_ptr = mobs[m];
-            
-            if(mob_ptr->carrier_info) {
-                if(mob_ptr->carrier_info->current_carrying_strength > 0) {
-                    ALLEGRO_COLOR color;
-                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { //Being carried.
-                        if(mob_ptr->carrier_info->carry_to_ship) {
-                            color = al_map_rgb(255, 255, 255); //ToDo what if Whites have an Onion on this game? Make it changeable per game.
-                        } else {
-                            color = mob_ptr->carrier_info->decided_type->main_color;
-                        }
-                    } else {
-                        color = al_map_rgb(96, 192, 192);
-                    }
-                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
-                }
-            }
-            
-            if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
-                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size - 8, mob_ptr->health, mob_ptr->type->max_health);
-            }
-        }
-        
-        //Info spots.
-        for(size_t i = 0; i < n_info_spots; i++) {
-            if(check_dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y, INFO_SPOT_TRIGGER_RANGE)) {
-                string text;
-                if(!info_spots[i]->opens_box) {
-                    text = info_spots[i]->text;
-                    
-                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
-                    
-                    int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
-                    
-                    al_draw_line(
-                        info_spots[i]->x - info_spots[i]->text_w * 0.5,
-                        line_y,
-                        info_spots[i]->x - 8,
-                        line_y,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x + info_spots[i]->text_w * 0.5,
-                        line_y,
-                        info_spots[i]->x + 8,
-                        line_y,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x - 8,
-                        line_y,
-                        info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x + 8,
-                        line_y,
-                        info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
-                        al_map_rgb(192, 192, 192), 2);
-                        
-                } else {
-                
-                    for(size_t c = 0; c < controls.size(); c++) {
-                        if(controls[c].action == BUTTON_THROW) {
-                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, 0, 0);
-                            break;
-                        }
-                    }
-                    
-                }
-            }
-        }
-        
-        
-        /* Layer 6
-        ***********************
-        *                 *   *
-        *   Particles   *   * *
-        *                ***  *
-        **********************/
-        
-        if(particle_quality > 0) {
-            n_particles = particles.size();
-            for(size_t p = 0; p < n_particles; p++) {
-                particle* p_ptr = &particles[p];
-                
-                if(p_ptr->type == PARTICLE_TYPE_SQUARE) {
-                    al_draw_filled_rectangle(
-                        p_ptr->x - p_ptr->size * 0.5,
-                        p_ptr->y - p_ptr->size * 0.5,
-                        p_ptr->x + p_ptr->size * 0.5,
-                        p_ptr->y + p_ptr->size * 0.5,
-                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_CIRCLE) {
-                    al_draw_filled_circle(
-                        p_ptr->x,
-                        p_ptr->y,
-                        p_ptr->size * 0.5,
-                        change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_BITMAP) {
-                    draw_sprite(
-                        p_ptr->bitmap,
-                        p_ptr->x,
-                        p_ptr->y,
-                        p_ptr->size, p_ptr->size,
-                        0, change_alpha(p_ptr->color, (p_ptr->time / p_ptr->duration) * p_ptr->color.a * 255)
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
-                    draw_sprite(
-                        p_ptr->bitmap, p_ptr->x, p_ptr->y, p_ptr->size, -1,
-                        0, change_alpha(p_ptr->color,
-                                        abs(sin((p_ptr->time / p_ptr->duration) * M_PI)) * p_ptr->color.a * 255
-                                       )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_ENEMY_SPIRIT) {
-                    float s = sin((p_ptr->time / p_ptr->duration) * M_PI);
-                    draw_sprite(
-                        p_ptr->bitmap, p_ptr->x + s * 16, p_ptr->y, p_ptr->size, -1,
-                        s * M_PI, change_alpha(p_ptr->color, abs(s) * p_ptr->color.a * 255)
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_SMACK) {
-                    float r = p_ptr->time / p_ptr->duration;
-                    float size = p_ptr->size;
-                    float opacity = 255;
-                    if(r <= 0.5) size *= r * 2;
-                    else opacity *= (1 - r) * 2;
-                    
-                    draw_sprite(p_ptr->bitmap, p_ptr->x, p_ptr->y, size, size, 0, change_alpha(p_ptr->color, opacity));
-                }
-            }
-        }
-        
-        
-        /* Layer 7
-        ***************************
-        *                    /  / *
-        *   Percipitation     / / *
-        *                   /  /  *
-        **************************/
-        
-        if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
-            size_t n_percipitation_particles = percipitation.size();
-            for(size_t p = 0; p < n_percipitation_particles; p++) {
-                al_draw_filled_circle(percipitation[p].x, percipitation[p].y, 3, al_map_rgb(255, 255, 255));
-            }
-        }
-        
-        
-        /* Layer 8
-        ***********************
-        *              --==## *
-        *   Daylight   --==## *
-        *              --==## *
-        **********************/
-        
-        al_use_transform(&normal_transform);
-        
-        if(daylight_effect) {
-            al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
-        }
-        
-        
-        /* Layer 9
+        /* Layer 10
         *****************
         *           (1) *
         *   HUD         *
         *         1/2/3 *
         ****************/
+        
+        al_use_transform(&normal_transform);
         
         if(cur_message.size() == 0) {
         
@@ -585,11 +609,13 @@ void do_drawing() {
                 int y_offset;
                 if(l == 0) y_offset = 0; else if(l == 1) y_offset = scr_h * 0.10; else y_offset = scr_h * 0.19;
                 
-                //ToDo
-                /*draw_sprite(
-                    bm,
+                al_draw_filled_circle(
                     scr_w * 0.08, scr_h * 0.88 - y_offset,
-                    size * 0.8, size * 0.8);*/
+                    size * 0.4, change_alpha(leaders[l_nr]->type->main_color, 128));
+                draw_sprite(
+                    leaders[l_nr]->lea_type->bmp_icon,
+                    scr_w * 0.08, scr_h * 0.88 - y_offset,
+                    size * 0.8, size * 0.8);
                 draw_sprite(
                     bmp_bubble,
                     scr_w * 0.08, scr_h * 0.88 - y_offset,
@@ -657,29 +683,31 @@ void do_drawing() {
             n_leaders = leaders.size();
             size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
             for(size_t l = 0; l < n_leaders; l++) {
-                //If this leader is following the current one, then he's not a Pikmin, subtract him from the party count total.
+                //If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
                 if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;
             }
             
             //Closest party member.
+            ALLEGRO_BITMAP* bm = NULL;
             if(closest_party_member) {
-                ALLEGRO_BITMAP* bm = NULL;
                 if(typeid(*closest_party_member) == typeid(pikmin)) {
-                    //ToDo
+                    pikmin* p_ptr = dynamic_cast<pikmin*>(closest_party_member);
+                    bm = p_ptr->pik_type->bmp_icon[p_ptr->maturity];
+                    
                 } else if(typeid(*closest_party_member) == typeid(leader)) {
-                    //leader* leader_ptr = dynamic_cast<leader*>(closest_party_member);
-                    //ToDo
+                    leader* l_ptr = dynamic_cast<leader*>(closest_party_member);
+                    bm = l_ptr->lea_type->bmp_icon;
                 }
                 
-                if(bm) {
-                    draw_sprite(bm, scr_w * 0.30, scr_h * 0.89, scr_w * 0.06, scr_w * 0.06);
-                }
             }
             
+            if(!bm) bm = bmp_no_pikmin;
+            draw_sprite(bm, scr_w * 0.30, scr_h * 0.89, scr_w * 0.08, -1);
             draw_sprite(
                 bmp_bubble,
                 scr_w * 0.30, scr_h * 0.89,
                 scr_w * 0.10, scr_w * 0.10);
+                
             draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.38, scr_h * 0.91, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.07, scr_h * 0.08, "x");
             
             //Pikmin count numbers.
@@ -981,6 +1009,8 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         
         //The two neighboring sectors with the lenghtiest linedefs are picked.
         //So save all sector/length pairs.
+        //Sectors with different heights from the current one are also saved,
+        //but they have lower priority compared to same-heigh sectors.
         for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
             l_ptr = s_ptr->linedefs[l];
             valid = true;
@@ -1006,7 +1036,19 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
             neighbors_vec.push_back(make_pair<float, sector*>(n->second, n->first));
         }
-        sort(neighbors_vec.begin(), neighbors_vec.end());
+        sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<float, sector*> p1, pair<float, sector*> p2) -> bool {
+        
+            float height_dif_1 = 0;
+            if(p1.second) fabs(p1.second->z - s_ptr->z);
+            float height_dif_2 = 0;
+            if(p2.second) fabs(p2.second->z - s_ptr->z);
+            
+            if(height_dif_1 < height_dif_2) return true;
+            else if(height_dif_1 > height_dif_2) return false;
+            else {
+                return p1.first < p2.first;
+            }
+        });
         if(neighbors_vec.size() >= 1) {
             texture_sector[0] = neighbors_vec.back().second;
         }
@@ -1295,6 +1337,17 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         av[3].color = al_map_rgba(0, 0, 0, 0);
         av[3].z = 0;
         
+        //Before drawing, let's offset according to the area image.
+        for(unsigned char a = 0; a < 4; a++) {
+            av[a].x -= x;
+            av[a].y -= y;
+        }
+        for(unsigned char a = 0; a < 8; a++) {
+            extra_av[a].x -= x;
+            extra_av[a].y -= y;
+        }
+        
+        //Draw!
         al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
         for(size_t v = 0; v < 2; v++) {
@@ -1320,16 +1373,16 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
 void draw_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch) {
     if(shadow_stretch <= 0) return;
     
-    float shadow_x = 0, shadow_w = size + (size * 3 * shadow_stretch);
+    float shadow_x = 0, shadow_w = size + (size * shadow_stretch);
     
     if(day_minutes < 60 * 12) {
         //Shadows point to the West.
         shadow_x = -shadow_w + size * 0.5;
-        shadow_x -= shadow_stretch * delta_z * SHADOW_Y_MULTIPLIER;
+        shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     } else {
         //Shadows point to the East.
         shadow_x = -(size * 0.5);
-        shadow_x += shadow_stretch * delta_z * SHADOW_Y_MULTIPLIER;
+        shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     }
     
     

@@ -225,7 +225,7 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
  * Returns the specified bitmap, by name.
  */
 ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
-    if(name.size() == 0) return NULL;
+    if(name.size() == 0) return load_bmp("", node);
     
     if(list.find(name) == list.end()) {
         ALLEGRO_BITMAP* b = load_bmp(name, node);

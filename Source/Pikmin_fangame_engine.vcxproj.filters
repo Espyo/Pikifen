@@ -156,6 +156,9 @@
     <ClCompile Include="LAFI\angle_picker.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
+    <ClCompile Include="leader_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">

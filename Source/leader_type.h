@@ -30,14 +30,9 @@ public:
     sample_struct sfx_dismiss;
     sample_struct sfx_name_call;
     
-    ALLEGRO_COLOR main_color;
+    ALLEGRO_BITMAP* bmp_icon; //Standby icon.
     
-    leader_type() {
-        whistle_range = DEF_WHISTLE_RANGE;
-        punch_strength = DEF_PUNCH_STRENGTH;
-        pluck_delay = 0.6;
-        main_color = al_map_rgb(128, 128, 128);
-    }
+    leader_type();
 };
 
 enum LEADER_ANIMATIONS {

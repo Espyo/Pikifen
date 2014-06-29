@@ -33,4 +33,7 @@ pikmin_type::pikmin_type() {
     bmp_top[0] = NULL;
     bmp_top[1] = NULL;
     bmp_top[2] = NULL;
+    bmp_icon[0] = NULL;
+    bmp_icon[1] = NULL;
+    bmp_icon[2] = NULL;
 }

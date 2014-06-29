@@ -1032,9 +1032,8 @@ tree_shadows{
 	shadow{
 		pos=200 -300
 		size=2000 2900
-		angle=0
-		alpha=255
 		file=Leaf shadow.png
+		sway=1 0
 	}
 }
 bg_file_name=tuto2.jpg
