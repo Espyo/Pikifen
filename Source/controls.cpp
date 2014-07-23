@@ -174,9 +174,9 @@ void handle_button(const unsigned int button, float pos) {
         } else if(button == BUTTON_THROW) {
         
             /*******************
-            *            .--._ *
-            *   Punch   ( U  _ *
-            *            `--´  *
+            *             ,-.  *
+            *   Throw    /   O *
+            *           &      *
             *******************/
             
             if(pos > 0) { //Button press.
@@ -243,9 +243,11 @@ void handle_button(const unsigned int button, float pos) {
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; s++) {
                         if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE)) {
-                            //ToDo make it prettier.
-                            cur_leader_ptr->health = cur_leader_ptr->type->max_health;
-                            done = true;
+                            if(ships[s]->shi_type->can_heal) {
+                                //ToDo make it prettier.
+                                cur_leader_ptr->health = cur_leader_ptr->type->max_health;
+                                done = true;
+                            }
                         }
                     }
                 }
@@ -720,13 +722,13 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
     if(parts[0] == "k") {   //Keyboard.
         if(n_parts > 1) {
             type = CONTROL_TYPE_KEYBOARD_KEY;
-            button = toi(parts[1]);
+            button = s2i(parts[1]);
         }
         
     } else if(parts[0] == "mb") { //Mouse button.
         if(n_parts > 1) {
             type = CONTROL_TYPE_MOUSE_BUTTON;
-            button = toi(parts[1]);
+            button = s2i(parts[1]);
         }
         
     } else if(parts[0] == "mwu") { //Mouse wheel up.
@@ -744,28 +746,28 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
     } else if(parts[0] == "jb") { //Joystick button.
         if(n_parts > 2) {
             type = CONTROL_TYPE_JOYSTICK_BUTTON;
-            device_nr = toi(parts[1]);
-            button = toi(parts[2]);
+            device_nr = s2i(parts[1]);
+            button = s2i(parts[2]);
         }
         
     } else if(parts[0] == "jap") { //Joystick axis, positive.
         if(n_parts > 3) {
             type = CONTROL_TYPE_JOYSTICK_AXIS_POS;
-            device_nr = toi(parts[1]);
-            stick = toi(parts[2]);
-            axis = toi(parts[3]);
+            device_nr = s2i(parts[1]);
+            stick = s2i(parts[2]);
+            axis = s2i(parts[3]);
         }
     } else if(parts[0] == "jan") { //Joystick axis, negative.
         if(n_parts > 3) {
             type = CONTROL_TYPE_JOYSTICK_AXIS_NEG;
-            device_nr = toi(parts[1]);
-            stick = toi(parts[2]);
-            axis = toi(parts[3]);
+            device_nr = s2i(parts[1]);
+            stick = s2i(parts[2]);
+            axis = s2i(parts[3]);
         }
     } else {
         error_log(
             "Unrecognized control type \"" + parts[0] + "\" for player " +
-            itos((player + 1)) + " (value=\"" + s + "\").");
+            i2s((player + 1)) + " (value=\"" + s + "\").");
     }
 }
 
@@ -774,9 +776,9 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
  */
 string control_info::stringify() {
     if(type == CONTROL_TYPE_KEYBOARD_KEY) {
-        return "k_" + itos(button);
+        return "k_" + i2s(button);
     } else if(type == CONTROL_TYPE_MOUSE_BUTTON) {
-        return "mb_" + itos(button);
+        return "mb_" + i2s(button);
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
         return "mwu";
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
@@ -786,11 +788,11 @@ string control_info::stringify() {
     } else if(type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
         return "mwr";
     } else if(type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        return "jb_" + itos(device_nr) + "_" + itos(button);
+        return "jb_" + i2s(device_nr) + "_" + i2s(button);
     } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
-        return "jap_" + itos(device_nr) + "_" + itos(stick) + "_" + itos(axis);
+        return "jap_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
     } else if(type == CONTROL_TYPE_JOYSTICK_AXIS_NEG) {
-        return "jan_" + itos(device_nr) + "_" + itos(stick) + "_" + itos(axis);
+        return "jan_" + i2s(device_nr) + "_" + i2s(stick) + "_" + i2s(axis);
     }
     
     return "";

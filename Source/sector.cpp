@@ -22,6 +22,16 @@
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------
+ * Creates info on an area.
+ */
+area_map::area_map() {
+    bg_bmp = NULL;
+    bg_bmp_zoom = 1;
+    bg_dist = 2;
+    bg_color = map_gray(0);
+}
+
+/* ----------------------------------------------------------------------------
  * Clears the info on an area map.
  */
 void area_map::clear() {
@@ -46,6 +56,8 @@ void area_map::clear() {
     sectors.clear();
     mob_generators.clear();
     tree_shadows.clear();
+    
+    bitmaps.detach(bg_bmp_file_name);
 }
 
 /* ----------------------------------------------------------------------------
@@ -133,8 +145,8 @@ size_t linedef::remove_from_vertices() {
 /* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
  */
-mob_gen::mob_gen(float x, float y, unsigned char folder, mob_type* type, float angle, string vars) {
-    this->folder = folder;
+mob_gen::mob_gen(float x, float y, unsigned char category, mob_type* type, float angle, string vars) {
+    this->category = category;
     this->type = type;
     this->x = x; this->y = y;
     this->angle = angle;

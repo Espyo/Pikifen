@@ -37,6 +37,9 @@
  */
 class treasure : public mob {
 public:
+
+    float buried; //0: fully unburried. 1: fully buried.
+    
     treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
 };
 

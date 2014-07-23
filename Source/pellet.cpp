@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) André 'Espyo' Silva 2014.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included README file
+ * for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Pellet class and pellet-related functions.
+ */
+
+#include "pellet.h"
+
+/* ----------------------------------------------------------------------------
+ * Creates a pellet.
+ */
+pellet::pellet(float x, float y, pellet_type* type, const float angle, const string &vars)
+    : mob(x, y, type, angle, vars) {
+    
+    pel_type = type;
+    this->carrier_info = new carrier_info_struct(this, type->max_carriers, false);
+    
+    anim.change(ANIM_IDLE, true, false, false);
+    anim.start();
+}

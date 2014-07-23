@@ -52,7 +52,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
             sub_type = MOB_ACTION_EAT_ALL;
         } else {
             sub_type = MOB_ACTION_EAT_NUMBER;
-            vi.push_back(toi(dn->value));
+            vi.push_back(s2i(dn->value));
         }
         
         
@@ -87,11 +87,11 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
                     sub_type = MOB_ACTION_MOVE_REL_COORDS;
                     if(string_coords.size() < 3) valid = false;
                     else {
-                        for(size_t sc = 1; sc < string_coords.size(); sc++) vf.push_back(tof(string_coords[sc]));
+                        for(size_t sc = 1; sc < string_coords.size(); sc++) vf.push_back(s2f(string_coords[sc]));
                     }
                 } else {
                     sub_type = MOB_ACTION_MOVE_COORDS;
-                    for(size_t sc = 0; sc < string_coords.size(); sc++) vf.push_back(tof(string_coords[sc]));
+                    for(size_t sc = 0; sc < string_coords.size(); sc++) vf.push_back(s2f(string_coords[sc]));
                 }
             }
             
@@ -123,7 +123,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
     } else if(n == "gravity") {
         type = MOB_ACTION_SET_GRAVITY;
         
-        vi.push_back(tob(dn->value));
+        vi.push_back(s2b(dn->value));
         
         
         
@@ -139,11 +139,11 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
                     valid = false;
                 } else {
                     sub_type = MOB_ACTION_SET_HEALTH_RELATIVE;
-                    vf.push_back(tof(words[1]));
+                    vf.push_back(s2f(words[1]));
                 }
             } else {
                 sub_type = MOB_ACTION_SET_HEALTH_ABSOLUTE;
-                vf.push_back(tof(words[0]));
+                vf.push_back(s2f(words[0]));
             }
         }
         
@@ -161,7 +161,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
     } else if(n == "timer") {
         type = MOB_ACTION_SET_TIMER;
         
-        vf.push_back(tof(dn->value));
+        vf.push_back(s2f(dn->value));
         
         
         
@@ -216,7 +216,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
             sub_type = MOB_ACTION_WAIT_ANIMATION;
         } else {
             sub_type = MOB_ACTION_WAIT_TIME;
-            vf.push_back(tof(dn->value));
+            vf.push_back(s2f(dn->value));
         }
         
         

@@ -16,7 +16,7 @@ class leader;
 
 #include "enemy.h"
 #include "leader.h"
-#include "spec_objs\onion.h"
+#include "onion.h"
 #include "pikmin_type.h"
 
 /*

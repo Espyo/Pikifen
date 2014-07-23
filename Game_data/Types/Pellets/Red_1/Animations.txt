@@ -1,0 +1,25 @@
+animations{
+	idle{
+		loop_frame=0
+		frame_instances{
+			idle{
+				duration=0
+			}
+		}
+	}
+}
+frames{
+	idle{
+		file=Red_pellet.png
+		file_x=0
+		file_y=0
+		file_w=128
+		file_h=128
+		game_w=128
+		game_h=128
+		offs_x=0
+		offs_y=0
+		hitbox_instances=
+	}
+}
+hitboxes=

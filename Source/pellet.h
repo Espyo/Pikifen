@@ -12,9 +12,9 @@
 #ifndef PELLET_INCLUDED
 #define PELLET_INCLUDED
 
-#include "../mob.h"
-#include "../pellet_type.h"
-#include "../pikmin_type.h"
+#include "mob.h"
+#include "pellet_type.h"
+#include "pikmin_type.h"
 
 /*
  * A pellet can be delivered to an Onion in

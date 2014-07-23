@@ -367,13 +367,13 @@ animation_set load_animation_set(data_node* file_node) {
         hitboxes.push_back(cur_hitbox);
         
         cur_hitbox->name = hitbox_node->name;
-        cur_hitbox->type = toi(hitbox_node->get_child_by_name("type")->value);
-        cur_hitbox->multiplier = tof(hitbox_node->get_child_by_name("multiplier")->value);
+        cur_hitbox->type = s2i(hitbox_node->get_child_by_name("type")->value);
+        cur_hitbox->multiplier = s2f(hitbox_node->get_child_by_name("multiplier")->value);
         cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
-        cur_hitbox->can_pikmin_latch = tob(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->knockback_outward = tob(hitbox_node->get_child_by_name("outward")->value);
-        cur_hitbox->knockback_angle = tof(hitbox_node->get_child_by_name("angle")->value);
-        cur_hitbox->knockback = tof(hitbox_node->get_child_by_name("knockback")->value);
+        cur_hitbox->can_pikmin_latch = s2b(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
+        cur_hitbox->knockback_outward = s2b(hitbox_node->get_child_by_name("outward")->value);
+        cur_hitbox->knockback_angle = s2f(hitbox_node->get_child_by_name("angle")->value);
+        cur_hitbox->knockback = s2f(hitbox_node->get_child_by_name("knockback")->value);
     }
     
     as.hitboxes = hitboxes;
@@ -396,9 +396,9 @@ animation_set load_animation_set(data_node* file_node) {
             float hx = 0, hy = 0, hz = 0;
             vector<string> coords = split(hitbox_instance_node->get_child_by_name("coords")->value);
             if(coords.size() >= 3) {
-                hx = tof(coords[0]);
-                hy = tof(coords[1]);
-                hz = tof(coords[2]);
+                hx = s2f(coords[0]);
+                hy = s2f(coords[1]);
+                hz = s2f(coords[2]);
             }
             
             size_t h_pos = as.find_hitbox(hitbox_instance_node->name);
@@ -408,7 +408,7 @@ animation_set load_animation_set(data_node* file_node) {
                     h_pos,
                     (h_pos == string::npos) ? NULL : hitboxes[h_pos],
                     hx, hy, hz,
-                    tof(hitbox_instance_node->get_child_by_name("radius")->value)
+                    s2f(hitbox_instance_node->get_child_by_name("radius")->value)
                 )
             );
         }
@@ -418,26 +418,26 @@ animation_set load_animation_set(data_node* file_node) {
             new frame(
             frame_node->name,
             parent,
-            toi(frame_node->get_child_by_name("file_x")->value),
-            toi(frame_node->get_child_by_name("file_y")->value),
-            toi(frame_node->get_child_by_name("file_w")->value),
-            toi(frame_node->get_child_by_name("file_h")->value),
-            tof(frame_node->get_child_by_name("game_w")->value),
-            tof(frame_node->get_child_by_name("game_h")->value),
+            s2i(frame_node->get_child_by_name("file_x")->value),
+            s2i(frame_node->get_child_by_name("file_y")->value),
+            s2i(frame_node->get_child_by_name("file_w")->value),
+            s2i(frame_node->get_child_by_name("file_h")->value),
+            s2f(frame_node->get_child_by_name("game_w")->value),
+            s2f(frame_node->get_child_by_name("game_h")->value),
             hitbox_instances
         );
         frames.push_back(new_f);
         
         new_f->file = frame_node->get_child_by_name("file")->value;
         new_f->parent_bmp = parent;
-        new_f->offs_x = tof(frame_node->get_child_by_name("offs_x")->value);
-        new_f->offs_y = tof(frame_node->get_child_by_name("offs_y")->value);
-        new_f->top_visible = tob(frame_node->get_child_by_name("top_visible")->value);
-        new_f->top_x = tof(frame_node->get_child_by_name("top_x")->value);
-        new_f->top_y = tof(frame_node->get_child_by_name("top_y")->value);
-        new_f->top_w = tof(frame_node->get_child_by_name("top_w")->value);
-        new_f->top_h = tof(frame_node->get_child_by_name("top_h")->value);
-        new_f->top_angle = tof(frame_node->get_child_by_name("top_angle")->value);
+        new_f->offs_x = s2f(frame_node->get_child_by_name("offs_x")->value);
+        new_f->offs_y = s2f(frame_node->get_child_by_name("offs_y")->value);
+        new_f->top_visible = s2b(frame_node->get_child_by_name("top_visible")->value);
+        new_f->top_x = s2f(frame_node->get_child_by_name("top_x")->value);
+        new_f->top_y = s2f(frame_node->get_child_by_name("top_y")->value);
+        new_f->top_w = s2f(frame_node->get_child_by_name("top_w")->value);
+        new_f->top_h = s2f(frame_node->get_child_by_name("top_h")->value);
+        new_f->top_angle = s2f(frame_node->get_child_by_name("top_angle")->value);
     }
     
     as.frames = frames;
@@ -461,7 +461,7 @@ animation_set load_animation_set(data_node* file_node) {
                     frame_instance_node->name,
                     f_pos,
                     (f_pos == string::npos) ? NULL : frames[f_pos],
-                    tof(frame_instance_node->get_child_by_name("duration")->value)
+                    s2f(frame_instance_node->get_child_by_name("duration")->value)
                 )
             );
         }
@@ -470,7 +470,7 @@ animation_set load_animation_set(data_node* file_node) {
             new animation(
                 anim_node->name,
                 frame_instances,
-                toi(anim_node->get_child_by_name("loop_frame")->value)
+                s2i(anim_node->get_child_by_name("loop_frame")->value)
             )
         );
     }

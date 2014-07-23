@@ -16,8 +16,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a nectar.
  */
-nectar::nectar(float x, float y)
-    : mob(x, y, special_mob_types["Nectar"], 0, "") {
+nectar::nectar(float x, float y, const string &vars)
+    : mob(x, y, spec_mob_types["Nectar"], 0, vars) {
     
     amount_left = NECTAR_AMOUNT;
 }

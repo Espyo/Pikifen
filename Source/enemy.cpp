@@ -10,6 +10,7 @@
  */
 
 #include "enemy.h"
+#include "functions.h"
 
 /* ----------------------------------------------------------------------------
  * Creates an enemy.
@@ -19,4 +20,7 @@ enemy::enemy(const float x, const float y, enemy_type* type, const float angle, 
     
     ene_type = type;
     team = MOB_TEAM_ENEMIES; //ToDo removeish.
+    
+    spawn_delay = s2f(get_var_value(vars, "spawn_delay", "0"));
+    //ToDo day apperance interval
 }

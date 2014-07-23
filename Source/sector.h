@@ -21,6 +21,7 @@
 
 #include "element.h"
 #include "mob_type.h"
+#include "weather.h"
 
 using namespace std;
 
@@ -145,14 +146,14 @@ struct vertex {
  * tiny things.
  */
 struct mob_gen {
-    unsigned char folder;
+    unsigned char category;
     mob_type* type;
     
     float x, y;
     float angle;
     string vars;
     
-    mob_gen(float x = 0, float y = 0, unsigned char folder = MOB_FOLDER_NONE, mob_type* type = NULL, float angle = 0, string vars = "");
+    mob_gen(float x = 0, float y = 0, unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL, float angle = 0, string vars = "");
 };
 
 
@@ -191,6 +192,16 @@ struct area_map {
     vector<mob_gen*> mob_generators;
     vector<tree_shadow*> tree_shadows;
     
+    ALLEGRO_BITMAP* bg_bmp;
+    string bg_bmp_file_name;
+    float bg_bmp_zoom;
+    float bg_dist;
+    ALLEGRO_COLOR bg_color;
+    
+    weather weather_condition;
+    string weather_name;
+    
+    area_map();
     void clear();
 };
 
@@ -233,6 +244,7 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_WATER,
 };
 
-#define DEF_SECTOR_BRIGHTNESS 192
+#define DEF_SECTOR_BRIGHTNESS 255
+#define SECTOR_STEP 16 //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
 
 #endif //ifndef SECTOR_INCLUDED

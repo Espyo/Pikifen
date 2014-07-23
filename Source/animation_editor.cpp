@@ -126,7 +126,7 @@ void animation_editor::do_logic() {
                 }
             }
             
-            if(f->top_visible && ed_mob_type_list == MOB_FOLDER_PIKMIN) {
+            if(f->top_visible && ed_mob_type_list == MOB_CATEGORY_PIKMIN) {
                 draw_sprite(
                     ed_top_bmp[ed_maturity],
                     f->top_x, f->top_y,
@@ -169,7 +169,7 @@ void animation_editor::gui_load_animation() {
         show_widget(f->widgets["frm_anim"]);
         
         ((lafi_button*) f->widgets["but_anim"])->text = ed_cur_anim->name;
-        ((lafi_textbox*) f->widgets["frm_anim"]->widgets["txt_loop"])->text = itos(ed_cur_anim->loop_frame + 1);
+        ((lafi_textbox*) f->widgets["frm_anim"]->widgets["txt_loop"])->text = i2s(ed_cur_anim->loop_frame + 1);
         
         gui_load_frame_instance();
     }
@@ -191,16 +191,16 @@ void animation_editor::gui_load_frame() {
         f = f->widgets["frm_frame"];
         
         ((lafi_textbox*) f->widgets["txt_file"])->text = ed_cur_frame->file;
-        ((lafi_textbox*) f->widgets["txt_filex"])->text = itos(ed_cur_frame->file_x);
-        ((lafi_textbox*) f->widgets["txt_filey"])->text = itos(ed_cur_frame->file_y);
-        ((lafi_textbox*) f->widgets["txt_filew"])->text = itos(ed_cur_frame->file_w);
-        ((lafi_textbox*) f->widgets["txt_fileh"])->text = itos(ed_cur_frame->file_h);
-        ((lafi_textbox*) f->widgets["txt_gamew"])->text = ftos(ed_cur_frame->game_w);
-        ((lafi_textbox*) f->widgets["txt_gameh"])->text = ftos(ed_cur_frame->game_h);
-        ((lafi_textbox*) f->widgets["txt_offsx"])->text = ftos(ed_cur_frame->offs_x);
-        ((lafi_textbox*) f->widgets["txt_offsy"])->text = ftos(ed_cur_frame->offs_y);
+        ((lafi_textbox*) f->widgets["txt_filex"])->text = i2s(ed_cur_frame->file_x);
+        ((lafi_textbox*) f->widgets["txt_filey"])->text = i2s(ed_cur_frame->file_y);
+        ((lafi_textbox*) f->widgets["txt_filew"])->text = i2s(ed_cur_frame->file_w);
+        ((lafi_textbox*) f->widgets["txt_fileh"])->text = i2s(ed_cur_frame->file_h);
+        ((lafi_textbox*) f->widgets["txt_gamew"])->text = f2s(ed_cur_frame->game_w);
+        ((lafi_textbox*) f->widgets["txt_gameh"])->text = f2s(ed_cur_frame->game_h);
+        ((lafi_textbox*) f->widgets["txt_offsx"])->text = f2s(ed_cur_frame->offs_x);
+        ((lafi_textbox*) f->widgets["txt_offsy"])->text = f2s(ed_cur_frame->offs_y);
         
-        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) enable_widget(f->widgets["but_top"])
+        if(ed_mob_type_list == MOB_CATEGORY_PIKMIN) enable_widget(f->widgets["but_top"])
             else disable_widget(f->widgets["but_top"]);
             
         gui_load_hitbox_instance();
@@ -216,8 +216,8 @@ void animation_editor::gui_load_frame_instance() {
     
     ((lafi_label*) f->widgets["lbl_f_nr"])->text =
         "Current frame: " +
-        (valid ? itos((ed_cur_frame_instance_nr + 1)) : "--") +
-        " / " + itos(ed_cur_anim->frame_instances.size());
+        (valid ? i2s((ed_cur_frame_instance_nr + 1)) : "--") +
+        " / " + i2s(ed_cur_anim->frame_instances.size());
         
     if(!valid) {
         hide_widget(f->widgets["frm_frame_i"]);
@@ -225,7 +225,7 @@ void animation_editor::gui_load_frame_instance() {
         show_widget(f->widgets["frm_frame_i"]);
         
         ((lafi_button*) f->widgets["frm_frame_i"]->widgets["but_frame"])->text = ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].frame_name;
-        ((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text = ftos(ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].duration);
+        ((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text = f2s(ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].duration);
     }
 }
 
@@ -247,17 +247,17 @@ void animation_editor::gui_load_hitbox() {
         f = f->widgets["frm_hitbox"];
         
         if(ed_cur_hitbox->type == HITBOX_TYPE_NORMAL) {
-            ((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text = ftos(ed_cur_hitbox->multiplier);
+            ((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text = f2s(ed_cur_hitbox->multiplier);
             if(ed_cur_hitbox->can_pikmin_latch) ((lafi_checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->check();
             else ((lafi_checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->uncheck();
             ((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
             
         } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
-            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_mult"])->text = ftos(ed_cur_hitbox->multiplier);
+            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_mult"])->text = f2s(ed_cur_hitbox->multiplier);
             ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
             ((lafi_checkbox*)     f->widgets["frm_attack"]->widgets["chk_outward"])->set(ed_cur_hitbox->knockback_outward);
             ((lafi_angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->set_angle_rads(ed_cur_hitbox->knockback_angle);
-            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_knockback"])->text = ftos(ed_cur_hitbox->knockback);
+            ((lafi_textbox*)      f->widgets["frm_attack"]->widgets["txt_knockback"])->text = f2s(ed_cur_hitbox->knockback);
             
             if(ed_cur_hitbox->knockback_outward) {
                 disable_widget(f->widgets["frm_attack"]->widgets["ang_angle"]);
@@ -278,8 +278,8 @@ void animation_editor::gui_load_hitbox_instance() {
     
     ((lafi_label*) f->widgets["lbl_h_nr"])->text =
         "Current hitbox: " +
-        (valid ? itos((ed_cur_hitbox_instance_nr + 1)) : "--") +
-        " / " + itos(ed_cur_frame->hitbox_instances.size());
+        (valid ? i2s((ed_cur_hitbox_instance_nr + 1)) : "--") +
+        " / " + i2s(ed_cur_frame->hitbox_instances.size());
         
     f = f->widgets["frm_hitbox_i"];
     
@@ -288,10 +288,10 @@ void animation_editor::gui_load_hitbox_instance() {
     } else {
         show_widget(f);
         ((lafi_button*) f->widgets["but_hitbox"])->text = ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].hitbox_name;
-        ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].x);
-        ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].y);
-        ((lafi_textbox*) f->widgets["txt_z"])->text = ftos(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].z);
-        ((lafi_textbox*) f->widgets["txt_r"])->text = ftos(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].radius);
+        ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].x);
+        ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].y);
+        ((lafi_textbox*) f->widgets["txt_z"])->text = f2s(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].z);
+        ((lafi_textbox*) f->widgets["txt_r"])->text = f2s(ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr].radius);
     }
 }
 
@@ -305,11 +305,11 @@ void animation_editor::gui_load_top() {
     if(ed_cur_frame->top_visible) c->check();
     else c->uncheck();
     
-    ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_cur_frame->top_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_frame->top_y);
-    ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_cur_frame->top_w);
-    ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_cur_frame->top_h);
-    ((lafi_textbox*) f->widgets["ang_angle"])->text = ftos(ed_cur_frame->top_angle);
+    ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_cur_frame->top_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_frame->top_y);
+    ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_frame->top_w);
+    ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_frame->top_h);
+    ((lafi_textbox*) f->widgets["ang_angle"])->text = f2s(ed_cur_frame->top_angle);
 }
 
 /* ----------------------------------------------------------------------------
@@ -320,7 +320,7 @@ void animation_editor::gui_save_animation() {
     
     lafi_widget* f = ed_gui->widgets["frm_anims"]->widgets["frm_anim"];
     
-    ed_cur_anim->loop_frame = toi(((lafi_textbox*) f->widgets["txt_loop"])->text) - 1;
+    ed_cur_anim->loop_frame = s2i(((lafi_textbox*) f->widgets["txt_loop"])->text) - 1;
     if(ed_cur_anim->loop_frame >= ed_cur_anim->frame_instances.size()) ed_cur_anim->loop_frame = 0;
     
     gui_save_frame_instance();
@@ -339,20 +339,20 @@ void animation_editor::gui_save_frame() {
     int new_fx, new_fy, new_fw, new_fh;
     
     new_file =                 ((lafi_textbox*) f->widgets["txt_file"])->text;
-    new_fx =               toi(((lafi_textbox*) f->widgets["txt_filex"])->text);
-    new_fy =               toi(((lafi_textbox*) f->widgets["txt_filey"])->text);
-    new_fw =               toi(((lafi_textbox*) f->widgets["txt_filew"])->text);
-    new_fh =               toi(((lafi_textbox*) f->widgets["txt_fileh"])->text);
-    ed_cur_frame->game_w = tof(((lafi_textbox*) f->widgets["txt_gamew"])->text);
-    ed_cur_frame->game_h = tof(((lafi_textbox*) f->widgets["txt_gameh"])->text);
-    ed_cur_frame->offs_x = tof(((lafi_textbox*) f->widgets["txt_offsx"])->text);
-    ed_cur_frame->offs_y = tof(((lafi_textbox*) f->widgets["txt_offsy"])->text);
+    new_fx =               s2i(((lafi_textbox*) f->widgets["txt_filex"])->text);
+    new_fy =               s2i(((lafi_textbox*) f->widgets["txt_filey"])->text);
+    new_fw =               s2i(((lafi_textbox*) f->widgets["txt_filew"])->text);
+    new_fh =               s2i(((lafi_textbox*) f->widgets["txt_fileh"])->text);
+    ed_cur_frame->game_w = s2f(((lafi_textbox*) f->widgets["txt_gamew"])->text);
+    ed_cur_frame->game_h = s2f(((lafi_textbox*) f->widgets["txt_gameh"])->text);
+    ed_cur_frame->offs_x = s2f(((lafi_textbox*) f->widgets["txt_offsx"])->text);
+    ed_cur_frame->offs_y = s2f(((lafi_textbox*) f->widgets["txt_offsy"])->text);
     
     if(ed_cur_frame->file != new_file || ed_cur_frame->file_x != new_fx || ed_cur_frame->file_y != new_fy || ed_cur_frame->file_w != new_fw || ed_cur_frame->file_h != new_fh) {
         //Changed something image-wise. Recreate it.
         if(ed_cur_frame->parent_bmp) bitmaps.detach(ed_cur_frame->file);
         if(ed_cur_frame->bitmap) al_destroy_bitmap(ed_cur_frame->bitmap);
-        ed_cur_frame->parent_bmp = bitmaps.get(ed_cur_frame->file, NULL);
+        ed_cur_frame->parent_bmp = bitmaps.get(new_file, NULL);
         if(ed_cur_frame->parent_bmp) ed_cur_frame->bitmap = al_create_sub_bitmap(ed_cur_frame->parent_bmp, new_fx, new_fy, new_fw, new_fh);
         
         ed_cur_frame->file = new_file;
@@ -376,7 +376,7 @@ void animation_editor::gui_save_frame_instance() {
     lafi_widget* f = ed_gui->widgets["frm_anims"]->widgets["frm_anim"];
     
     frame_instance* fi = &ed_cur_anim->frame_instances[ed_cur_frame_instance_nr];
-    fi->duration = tof(((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text);
+    fi->duration = s2f(((lafi_textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text);
     if(fi->duration < 0) fi->duration = 0;
     
     gui_load_frame_instance();
@@ -394,16 +394,16 @@ void animation_editor::gui_save_hitbox() {
     else if(((lafi_radio_button*) f->widgets["rad_attack"])->selected) ed_cur_hitbox->type = HITBOX_TYPE_ATTACK;
     
     if(ed_cur_hitbox->type == HITBOX_TYPE_NORMAL) {
-        ed_cur_hitbox->multiplier = tof(((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text);
+        ed_cur_hitbox->multiplier = s2f(((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text);
         ed_cur_hitbox->can_pikmin_latch = ((lafi_checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->checked;
         ed_cur_hitbox->elements = ((lafi_textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text;
         
     } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
-        ed_cur_hitbox->multiplier = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text);
+        ed_cur_hitbox->multiplier = s2f(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text);
         ed_cur_hitbox->elements = ((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text;
         ed_cur_hitbox->knockback_outward = ((lafi_checkbox*) f->widgets["frm_attack"]->widgets["chk_outward"])->checked;
         ed_cur_hitbox->knockback_angle = ((lafi_angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->get_angle_rads();
-        ed_cur_hitbox->knockback = tof(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text);
+        ed_cur_hitbox->knockback = s2f(((lafi_textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text);
         
     }
     
@@ -421,10 +421,10 @@ void animation_editor::gui_save_hitbox_instance() {
     
     hitbox_instance* hi = &ed_cur_frame->hitbox_instances[ed_cur_hitbox_instance_nr];
     
-    hi->x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    hi->y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    hi->z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
-    hi->radius = tof(((lafi_textbox*) f->widgets["txt_r"])->text);
+    hi->x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
+    hi->y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
+    hi->z = s2f(((lafi_textbox*) f->widgets["txt_z"])->text);
+    hi->radius = s2f(((lafi_textbox*) f->widgets["txt_r"])->text);
     if(hi->radius <= 0) hi->radius = 16;
     
     gui_load_hitbox_instance();
@@ -437,11 +437,11 @@ void animation_editor::gui_save_top() {
     lafi_widget* f = ed_gui->widgets["frm_top"];
     
     ed_cur_frame->top_visible = ((lafi_checkbox*) f->widgets["chk_visible"])->checked;
-    ed_cur_frame->top_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_frame->top_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_frame->top_w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
-    ed_cur_frame->top_h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
-    ed_cur_frame->top_angle = tof(((lafi_textbox*) f->widgets["ang_angle"])->text);
+    ed_cur_frame->top_x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_frame->top_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_frame->top_w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
+    ed_cur_frame->top_h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
+    ed_cur_frame->top_angle = s2f(((lafi_textbox*) f->widgets["ang_angle"])->text);
     
     gui_load_top();
 }
@@ -457,7 +457,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
         mouse_cursor_x = ev.mouse.x / cam_zoom - cam_x - ((scr_w - 208) / 2 / cam_zoom);
         mouse_cursor_y = ev.mouse.y / cam_zoom - cam_y - (scr_h / 2 / cam_zoom);
         lafi_widget* wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
-        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + itos(mouse_cursor_x) + "," + itos(mouse_cursor_y) + ")");
+        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
     }
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
@@ -581,9 +581,9 @@ void animation_editor::load() {
     ed_gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
-    frm_main->easy_add("lbl_folder", new lafi_label(0, 0, 0, 0, "Folder:"), 100, 16);
+    frm_main->easy_add("lbl_category", new lafi_label(0, 0, 0, 0, "Category:"), 100, 16);
     frm_main->easy_row();
-    frm_main->easy_add("but_folder", new lafi_button(0, 0, 0, 0), 100, 32);
+    frm_main->easy_add("but_category", new lafi_button(0, 0, 0, 0), 100, 32);
     frm_main->easy_row();
     frm_main->easy_add("lbl_object", new lafi_label(0, 0, 0, 0, "Object:"), 100, 16);
     frm_main->easy_row();
@@ -838,10 +838,10 @@ void animation_editor::load() {
     
     
     //Properties -- main.
-    frm_main->widgets["but_folder"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_main->widgets["but_category"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_OBJECT, false);
     };
-    frm_main->widgets["but_folder"]->description = "Pick a folder.";
+    frm_main->widgets["but_category"]->description = "Pick a category.";
     frm_main->widgets["but_object"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_OBJECT + 1 + ed_mob_type_list, false);
     };
@@ -1311,17 +1311,17 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         for(size_t h = 0; h < ed_anims.hitboxes.size(); h++) {
             elements.push_back(ed_anims.hitboxes[h]->name);
         }
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ENEMIES) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ENEMIES) {
         elements = folder_to_vector(ENEMIES_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_LEADERS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_LEADERS) {
         elements = folder_to_vector(LEADERS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ONIONS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
         elements = folder_to_vector(ONIONS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PELLETS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
         elements = folder_to_vector(PELLETS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PIKMIN) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
         elements = folder_to_vector(PIKMIN_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_TREASURES) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
         elements = folder_to_vector(TREASURES_FOLDER, true);
     }
     
@@ -1343,7 +1343,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         b->left_mouse_click_handler = [name, type] (lafi_widget*, int, int) {
             pick(name, type);
         };
-        f->easy_add("but_" + itos(e), b, 100, 24);
+        f->easy_add("but_" + i2s(e), b, 100, 24);
         f->easy_row(0);
     }
     
@@ -1358,12 +1358,12 @@ void animation_editor::pick(string name, unsigned char type) {
     show_widget(ed_gui->widgets["frm_bottom"]);
     
     if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
-        if(name == "Enemies")        ed_mob_type_list = MOB_FOLDER_ENEMIES;
-        else if(name == "Leaders")   ed_mob_type_list = MOB_FOLDER_LEADERS;
-        else if(name == "Onions")    ed_mob_type_list = MOB_FOLDER_ONIONS;
-        else if(name == "Pellets")   ed_mob_type_list = MOB_FOLDER_PELLETS;
-        else if(name == "Pikmin")    ed_mob_type_list = MOB_FOLDER_PIKMIN;
-        else if(name == "Treasures") ed_mob_type_list = MOB_FOLDER_TREASURES;
+        if(name == "Enemies")        ed_mob_type_list = MOB_CATEGORY_ENEMIES;
+        else if(name == "Leaders")   ed_mob_type_list = MOB_CATEGORY_LEADERS;
+        else if(name == "Onions")    ed_mob_type_list = MOB_CATEGORY_ONIONS;
+        else if(name == "Pellets")   ed_mob_type_list = MOB_CATEGORY_PELLETS;
+        else if(name == "Pikmin")    ed_mob_type_list = MOB_CATEGORY_PIKMIN;
+        else if(name == "Treasures") ed_mob_type_list = MOB_CATEGORY_TREASURES;
         ed_object_name.clear();
         update_stats();
         disable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
@@ -1399,17 +1399,17 @@ void animation_editor::pick(string name, unsigned char type) {
         show_widget(ed_gui->widgets["frm_hitboxes"]);
         gui_load_hitbox();
         
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ENEMIES) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ENEMIES) {
         ed_file_name = ENEMIES_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_LEADERS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_LEADERS) {
         ed_file_name = LEADERS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_ONIONS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
         ed_file_name = ONIONS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PELLETS) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
         ed_file_name = PELLETS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_PIKMIN) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
         ed_file_name = PIKMIN_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_FOLDER_TREASURES) {
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
         ed_file_name = TREASURES_FOLDER;
     }
     
@@ -1427,7 +1427,7 @@ void animation_editor::pick(string name, unsigned char type) {
             }
         }
         
-        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) {
+        if(ed_mob_type_list == MOB_CATEGORY_PIKMIN) {
             data_node data = data_node(temp_path_start + "/" + name + "/Data.txt");
             ed_top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
             ed_top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
@@ -1453,7 +1453,7 @@ void animation_editor::save_animation_set() {
         data_node* anim_node = new data_node(ed_anims.animations[a]->name, "");
         animations_node->add(anim_node);
         
-        anim_node->add(new data_node("loop_frame", itos(ed_anims.animations[a]->loop_frame)));
+        anim_node->add(new data_node("loop_frame", i2s(ed_anims.animations[a]->loop_frame)));
         data_node* frame_instances_node = new data_node("frame_instances", "");
         anim_node->add(frame_instances_node);
         
@@ -1463,7 +1463,7 @@ void animation_editor::save_animation_set() {
             data_node* frame_instance_node = new data_node(fi_ptr->frame_name, "");
             frame_instances_node->add(frame_instance_node);
             
-            frame_instance_node->add(new data_node("duration", ftos(fi_ptr->duration)));
+            frame_instance_node->add(new data_node("duration", f2s(fi_ptr->duration)));
         }
     }
     
@@ -1475,22 +1475,22 @@ void animation_editor::save_animation_set() {
         frames_node->add(frame_node);
         
         frame_node->add(new data_node("file", ed_anims.frames[f]->file));
-        frame_node->add(new data_node("file_x", itos(ed_anims.frames[f]->file_x)));
-        frame_node->add(new data_node("file_y", itos(ed_anims.frames[f]->file_y)));
-        frame_node->add(new data_node("file_w", itos(ed_anims.frames[f]->file_w)));
-        frame_node->add(new data_node("file_h", itos(ed_anims.frames[f]->file_h)));
-        frame_node->add(new data_node("game_w", ftos(ed_anims.frames[f]->game_w)));
-        frame_node->add(new data_node("game_h", ftos(ed_anims.frames[f]->game_h)));
-        frame_node->add(new data_node("offs_x", ftos(ed_anims.frames[f]->offs_x)));
-        frame_node->add(new data_node("offs_y", ftos(ed_anims.frames[f]->offs_y)));
+        frame_node->add(new data_node("file_x", i2s(ed_anims.frames[f]->file_x)));
+        frame_node->add(new data_node("file_y", i2s(ed_anims.frames[f]->file_y)));
+        frame_node->add(new data_node("file_w", i2s(ed_anims.frames[f]->file_w)));
+        frame_node->add(new data_node("file_h", i2s(ed_anims.frames[f]->file_h)));
+        frame_node->add(new data_node("game_w", f2s(ed_anims.frames[f]->game_w)));
+        frame_node->add(new data_node("game_h", f2s(ed_anims.frames[f]->game_h)));
+        frame_node->add(new data_node("offs_x", f2s(ed_anims.frames[f]->offs_x)));
+        frame_node->add(new data_node("offs_y", f2s(ed_anims.frames[f]->offs_y)));
         
-        if(ed_mob_type_list == MOB_FOLDER_PIKMIN) {
-            frame_node->add(new data_node("top_visible", btos(ed_anims.frames[f]->top_visible)));
-            frame_node->add(new data_node("top_x", ftos(ed_anims.frames[f]->top_x)));
-            frame_node->add(new data_node("top_y", ftos(ed_anims.frames[f]->top_y)));
-            frame_node->add(new data_node("top_w", ftos(ed_anims.frames[f]->top_w)));
-            frame_node->add(new data_node("top_h", ftos(ed_anims.frames[f]->top_h)));
-            frame_node->add(new data_node("top_angle", ftos(ed_anims.frames[f]->top_angle)));
+        if(ed_mob_type_list == MOB_CATEGORY_PIKMIN) {
+            frame_node->add(new data_node("top_visible", b2s(ed_anims.frames[f]->top_visible)));
+            frame_node->add(new data_node("top_x", f2s(ed_anims.frames[f]->top_x)));
+            frame_node->add(new data_node("top_y", f2s(ed_anims.frames[f]->top_y)));
+            frame_node->add(new data_node("top_w", f2s(ed_anims.frames[f]->top_w)));
+            frame_node->add(new data_node("top_h", f2s(ed_anims.frames[f]->top_h)));
+            frame_node->add(new data_node("top_angle", f2s(ed_anims.frames[f]->top_angle)));
         }
         
         data_node* hitbox_instances_node = new data_node("hitbox_instances", "");
@@ -1505,10 +1505,10 @@ void animation_editor::save_animation_set() {
             hitbox_instance_node->add(
                 new data_node(
                     "coords",
-                    ftos(hi_ptr->x) + " " + ftos(hi_ptr->y) + " " + ftos(hi_ptr->z)
+                    f2s(hi_ptr->x) + " " + f2s(hi_ptr->y) + " " + f2s(hi_ptr->z)
                 )
             );
-            hitbox_instance_node->add(new data_node("radius", ftos(hi_ptr->radius)));
+            hitbox_instance_node->add(new data_node("radius", f2s(hi_ptr->radius)));
         }
     }
     
@@ -1519,13 +1519,13 @@ void animation_editor::save_animation_set() {
         data_node* hitbox_node = new data_node(ed_anims.hitboxes[h]->name, "");
         hitboxes_node->add(hitbox_node);
         
-        hitbox_node->add(new data_node("type", itos(ed_anims.hitboxes[h]->type)));
-        hitbox_node->add(new data_node("multiplier", ftos(ed_anims.hitboxes[h]->multiplier)));
-        hitbox_node->add(new data_node("can_pikmin_latch", btos(ed_anims.hitboxes[h]->can_pikmin_latch)));
+        hitbox_node->add(new data_node("type", i2s(ed_anims.hitboxes[h]->type)));
+        hitbox_node->add(new data_node("multiplier", f2s(ed_anims.hitboxes[h]->multiplier)));
+        hitbox_node->add(new data_node("can_pikmin_latch", b2s(ed_anims.hitboxes[h]->can_pikmin_latch)));
         hitbox_node->add(new data_node("elements", ed_anims.hitboxes[h]->elements));
-        hitbox_node->add(new data_node("outward", btos(ed_anims.hitboxes[h]->knockback_outward)));
-        hitbox_node->add(new data_node("angle", ftos(ed_anims.hitboxes[h]->knockback_angle)));
-        hitbox_node->add(new data_node("knockback", ftos(ed_anims.hitboxes[h]->knockback)));
+        hitbox_node->add(new data_node("outward", b2s(ed_anims.hitboxes[h]->knockback_outward)));
+        hitbox_node->add(new data_node("angle", f2s(ed_anims.hitboxes[h]->knockback_angle)));
+        hitbox_node->add(new data_node("knockback", f2s(ed_anims.hitboxes[h]->knockback)));
     }
     
     file_node.save_file(ed_file_name);
@@ -1538,21 +1538,21 @@ void animation_editor::update_stats() {
     lafi_widget* f = ed_gui->widgets["frm_main"];
     string s;
     
-    if(ed_mob_type_list == MOB_FOLDER_ENEMIES)        s = "Enemies";
-    else if(ed_mob_type_list == MOB_FOLDER_LEADERS)   s = "Leaders";
-    else if(ed_mob_type_list == MOB_FOLDER_ONIONS)    s = "Onions";
-    else if(ed_mob_type_list == MOB_FOLDER_PELLETS)   s = "Pellets";
-    else if(ed_mob_type_list == MOB_FOLDER_PIKMIN)    s = "Pikmin";
-    else if(ed_mob_type_list == MOB_FOLDER_TREASURES) s = "Treasures";
+    if(ed_mob_type_list == MOB_CATEGORY_ENEMIES)        s = "Enemies";
+    else if(ed_mob_type_list == MOB_CATEGORY_LEADERS)   s = "Leaders";
+    else if(ed_mob_type_list == MOB_CATEGORY_ONIONS)    s = "Onions";
+    else if(ed_mob_type_list == MOB_CATEGORY_PELLETS)   s = "Pellets";
+    else if(ed_mob_type_list == MOB_CATEGORY_PIKMIN)    s = "Pikmin";
+    else if(ed_mob_type_list == MOB_CATEGORY_TREASURES) s = "Treasures";
     
-    ((lafi_button*) f->widgets["but_folder"])->text = s;
+    ((lafi_button*) f->widgets["but_category"])->text = s;
     ((lafi_button*) f->widgets["but_object"])->text = ed_object_name;
     
     f = f->widgets["frm_object"];
     if(ed_object_name.size()) { show_widget(f); } //Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
     else hide_widget(f);
     
-    ((lafi_label*) f->widgets["lbl_n_anims"])->text = "Animations: " + itos(ed_anims.animations.size());
-    ((lafi_label*) f->widgets["lbl_n_frames"])->text = "Frames: " + itos(ed_anims.frames.size());
-    ((lafi_label*) f->widgets["lbl_n_hitboxes"])->text = "Hitboxes: " + itos(ed_anims.hitboxes.size());
+    ((lafi_label*) f->widgets["lbl_n_anims"])->text = "Animations: " + i2s(ed_anims.animations.size());
+    ((lafi_label*) f->widgets["lbl_n_frames"])->text = "Frames: " + i2s(ed_anims.frames.size());
+    ((lafi_label*) f->widgets["lbl_n_hitboxes"])->text = "Hitboxes: " + i2s(ed_anims.hitboxes.size());
 }

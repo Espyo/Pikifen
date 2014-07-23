@@ -28,7 +28,7 @@ class nectar : public mob {
 public:
     unsigned char amount_left;
     
-    nectar(float x, float y);
+    nectar(float x, float y, const string &vars);
 };
 
 #endif //ifndef NECTAR_INCLUDED

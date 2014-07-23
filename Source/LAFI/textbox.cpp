@@ -86,13 +86,14 @@ void lafi_textbox::call_change_handler() { if(change_handler) change_handler(thi
 
 void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
+    bool shift = modifiers & ALLEGRO_KEYMOD_SHIFT;
     
     if(cursor > text.size()) cursor = 0; //If the text is somehow changed.
     
     int sel1 = min(sel_start, sel_end), sel2 = max(sel_start, sel_end);
     int sel_size = sel2 - sel1;
     
-    if(keycode == ALLEGRO_KEY_LEFT && modifiers == 0) { //Left arrow - move cursor left.
+    if(keycode == ALLEGRO_KEY_LEFT && !ctrl && !shift) { //Left arrow - move cursor left.
         if(sel_size) {
             cursor = sel1;
             sel_start = sel_end = cursor;
@@ -107,7 +108,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             sel_start = sel_end = cursor;
         }
         
-    } else if(keycode == ALLEGRO_KEY_RIGHT && modifiers == 0) { //Right arrow - move cursor right.
+    } else if(keycode == ALLEGRO_KEY_RIGHT && !ctrl && !shift) { //Right arrow - move cursor right.
         if(sel_size) {
             cursor = sel2;
             sel_start = sel_end = cursor;
@@ -121,11 +122,11 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             }
         }
         
-    } else if(keycode == ALLEGRO_KEY_HOME && modifiers == 0) { //Home - place cursor at beginning.
+    } else if(keycode == ALLEGRO_KEY_HOME && !ctrl && !shift) { //Home - place cursor at beginning.
         cursor = 0;
         sel_start = sel_end = cursor;
         
-    } else if(keycode == ALLEGRO_KEY_END && modifiers == 0) {  //End - place cursor at end.
+    } else if(keycode == ALLEGRO_KEY_END && !ctrl && !shift) {  //End - place cursor at end.
         cursor = text.size();
         sel_start = sel_end = cursor;
         
@@ -172,7 +173,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             call_change_handler();
         }
         
-    } else if(keycode == ALLEGRO_KEY_TAB && (modifiers == 0 || modifiers == ALLEGRO_KEYMOD_SHIFT)) { //Tab - switch to the next textbox in the parent.
+    } else if(keycode == ALLEGRO_KEY_TAB && !ctrl) { //Tab - switch to the next textbox in the parent.
         size_t
         next_tab_index = UINT_MAX,
         prev_tab_index = 0,
@@ -180,12 +181,12 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
         longest_tab_index = 0;
         lafi_widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
         
-        bool backwards = modifiers & ALLEGRO_KEYMOD_SHIFT;
-        
         if(parent) {
             for(auto w = parent->widgets.begin(); w != parent->widgets.end(); w++) {
                 if(typeid(*w->second) == typeid(lafi_textbox)) {
                 
+                    if(w->second == this) continue;
+                    
                     size_t i = ((lafi_textbox*) w->second)->tab_index;
                     if(i < shortest_tab_index) {
                         shortest_tab_index = i;
@@ -195,18 +196,18 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
                         longest_tab_index = i;
                         last_textbox = w->second;
                     }
-                    if(i > tab_index && i < next_tab_index) {
+                    if(i >= tab_index && i < next_tab_index) {
                         next_tab_index = i;
                         next_textbox = w->second;
                     }
-                    if(i < tab_index && i > prev_tab_index) {
+                    if(i < tab_index && i >= prev_tab_index) {
                         prev_tab_index = i;
                         prev_textbox = w->second;
                     }
                 }
             }
             lafi_widget* new_focus;
-            if(!backwards) new_focus = next_textbox ? next_textbox : first_textbox;
+            if(!shift) new_focus = next_textbox ? next_textbox : first_textbox;
             else new_focus = prev_textbox ? prev_textbox : last_textbox;
             if(new_focus) {
                 parent->lose_focus();
@@ -236,7 +237,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
             cursor = sel1;
             sel_start = sel_end = cursor;
         }
-        if(!(modifiers & ALLEGRO_KEYMOD_CTRL)) {
+        if(!ctrl) {
             text.insert(cursor, 1, unichar);
             cursor++;
             call_change_handler();

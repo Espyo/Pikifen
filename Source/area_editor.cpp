@@ -40,10 +40,10 @@ void area_editor::adv_textures_to_gui() {
     
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ((lafi_textbox*) f->widgets["txt_x"])->text =  ftos(ed_cur_sector->trans_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text =  ftos(ed_cur_sector->trans_y);
-    ((lafi_textbox*) f->widgets["txt_sx"])->text = ftos(ed_cur_sector->scale_x);
-    ((lafi_textbox*) f->widgets["txt_sy"])->text = ftos(ed_cur_sector->scale_y);
+    ((lafi_textbox*) f->widgets["txt_x"])->text =  f2s(ed_cur_sector->trans_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text =  f2s(ed_cur_sector->trans_y);
+    ((lafi_textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_sector->scale_x);
+    ((lafi_textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_sector->scale_y);
     ((lafi_angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->rot);
 }
 
@@ -53,10 +53,10 @@ void area_editor::adv_textures_to_gui() {
 void area_editor::bg_to_gui() {
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_bg"];
     ((lafi_textbox*) f->widgets["txt_file"])->text = ed_bg_file_name;
-    ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_bg_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_bg_y);
-    ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_bg_w);
-    ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_bg_h);
+    ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_bg_x);
+    ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_bg_y);
+    ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_bg_w);
+    ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_bg_h);
     ((lafi_checkbox*) f->widgets["chk_ratio"])->set(ed_bg_aspect_ratio);
     ((lafi_checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == ESM_BG_MOUSE);
     ((lafi_scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a);
@@ -278,12 +278,12 @@ void area_editor::do_logic() {
                     font, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle - M_PI_2) * 15,
                     mid_y + sin(angle - M_PI_2) * 15 - font_h / 2,
-                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[0] == string::npos ? "--" : itos(l_ptr->sector_nrs[0]).c_str());
+                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[0] == string::npos ? "--" : i2s(l_ptr->sector_nrs[0]).c_str());
                 al_draw_text(
                     font, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle + M_PI_2) * 15,
                     mid_y + sin(angle + M_PI_2) * 15 - font_h / 2,
-                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : itos(l_ptr->sector_nrs[1]).c_str());*/
+                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : i2s(l_ptr->sector_nrs[1]).c_str());*/
             }
             
             //Vertices.
@@ -315,7 +315,7 @@ void area_editor::do_logic() {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             bool valid = m_ptr->type != NULL;
             
-            float radius = m_ptr->type ? m_ptr->type->size * 0.5 : 16;
+            float radius = m_ptr->type ? m_ptr->type->size == 0 ? 16 : m_ptr->type->size * 0.5 : 16;
             
             al_draw_filled_circle(
                 m_ptr->x, m_ptr->y,
@@ -364,7 +364,7 @@ void area_editor::do_logic() {
                 tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
                 draw_sprite(
                     s_ptr->bitmap, s_ptr->x, s_ptr->y, s_ptr->w, s_ptr->h,
-                    s_ptr->angle, al_map_rgba(255, 255, 255, s_ptr->alpha)
+                    s_ptr->angle, map_alpha(s_ptr->alpha)
                 );
                 
                 if(ed_mode == EDITOR_MODE_SHADOWS) {
@@ -411,7 +411,7 @@ void area_editor::do_logic() {
                         t_ptr->points[1]->y,
                         t_ptr->points[2]->x,
                         t_ptr->points[2]->y,
-                        al_map_rgba(255, 255, 255, 12)
+                        map_alpha(12)
                     );
                 }
             }
@@ -432,7 +432,7 @@ void area_editor::do_logic() {
         if(ed_bg_bitmap && ed_show_bg) {
             al_draw_tinted_scaled_bitmap(
                 ed_bg_bitmap,
-                al_map_rgba(255, 255, 255, ed_bg_a),
+                map_alpha(ed_bg_a),
                 0, 0,
                 al_get_bitmap_width(ed_bg_bitmap), al_get_bitmap_height(ed_bg_bitmap),
                 ed_bg_x, ed_bg_y,
@@ -711,10 +711,10 @@ void area_editor::gui_to_adv_textures() {
     if(!ed_cur_sector) return;
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ed_cur_sector->trans_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_sector->trans_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_sector->scale_x = tof(((lafi_textbox*) f->widgets["txt_sx"])->text);
-    ed_cur_sector->scale_y = tof(((lafi_textbox*) f->widgets["txt_sy"])->text);
+    ed_cur_sector->trans_x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_sector->trans_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_sector->scale_x = s2f(((lafi_textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_sector->scale_y = s2f(((lafi_textbox*) f->widgets["txt_sy"])->text);
     ed_cur_sector->rot = ((lafi_angle_picker*) f->widgets["ang_a"])->get_angle_rads();
     
     adv_textures_to_gui();
@@ -742,12 +742,12 @@ void area_editor::gui_to_bg() {
         }
     }
     
-    ed_bg_x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_bg_y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_bg_x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_bg_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
     
     ed_bg_aspect_ratio = ((lafi_checkbox*) f->widgets["chk_ratio"])->checked;
-    float new_w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
-    float new_h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
+    float new_w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
+    float new_h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
     
     if(new_w != 0 && new_h != 0 && !is_file_new) {
         if(ed_bg_aspect_ratio) {
@@ -794,14 +794,14 @@ void area_editor::gui_to_shadow() {
     if(!ed_cur_shadow) return;
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
     
-    ed_cur_shadow->x = tof(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_shadow->y = tof(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_shadow->w = tof(((lafi_textbox*) f->widgets["txt_w"])->text);
-    ed_cur_shadow->h = tof(((lafi_textbox*) f->widgets["txt_h"])->text);
+    ed_cur_shadow->x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
+    ed_cur_shadow->y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_cur_shadow->w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
+    ed_cur_shadow->h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
     ed_cur_shadow->angle = ((lafi_angle_picker*) f->widgets["ang_an"])->get_angle_rads();
     ed_cur_shadow->alpha = ((lafi_scrollbar*) f->widgets["bar_al"])->low_value;
-    ed_cur_shadow->sway_x = tof(((lafi_textbox*) f->widgets["txt_sx"])->text);
-    ed_cur_shadow->sway_y = tof(((lafi_textbox*) f->widgets["txt_sy"])->text);
+    ed_cur_shadow->sway_x = s2f(((lafi_textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_shadow->sway_y = s2f(((lafi_textbox*) f->widgets["txt_sy"])->text);
     
     string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
     
@@ -822,10 +822,10 @@ void area_editor::gui_to_sector() {
     if(!ed_cur_sector) return;
     lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
     
-    ed_cur_sector->z = tof(((lafi_textbox*) f->widgets["txt_z"])->text);
+    ed_cur_sector->z = s2f(((lafi_textbox*) f->widgets["txt_z"])->text);
     ed_cur_sector->fade = ((lafi_checkbox*) f->widgets["chk_fade"])->checked;
     ed_cur_sector->file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
-    ed_cur_sector->brightness = toi(((lafi_textbox*) f->widgets["txt_brightness"])->text);
+    ed_cur_sector->brightness = s2i(((lafi_textbox*) f->widgets["txt_brightness"])->text);
     //ToDo hazards.
     
     sector_to_gui();
@@ -848,7 +848,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         lafi_widget* wum;
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) wum = NULL;
         else wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
-        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + itos(mouse_cursor_x) + "," + itos(mouse_cursor_y) + ")");
+        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
     }
     
     
@@ -1074,7 +1074,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             ed_moving_thing = string::npos;
             for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
                 mob_gen* m_ptr = cur_area_map.mob_generators[m];
-                float radius = m_ptr->type ? m_ptr->type->size * 0.5 : 16;
+                float radius = m_ptr->type ? m_ptr->type->size == 0 ? 16 : m_ptr->type->size * 0.5 : 16;
                 if(check_dist(m_ptr->x, m_ptr->y, mouse_cursor_x, mouse_cursor_y, radius)) {
                 
                     ed_cur_mob = m_ptr;
@@ -1590,10 +1590,10 @@ void area_editor::load() {
     hide_widget(frm_object);
     
     frm_object->easy_row();
-    frm_object->easy_add("lbl_folder", new lafi_label(0, 0, 0, 0, "Folder:"), 90, 16);
+    frm_object->easy_add("lbl_category", new lafi_label(0, 0, 0, 0, "Category:"), 90, 16);
     frm_object->easy_add("but_rem", new lafi_button(0, 0, 0, 0, "-"), 10, 16);
     frm_object->easy_row();
-    frm_object->easy_add("but_folder", new lafi_button(0, 0, 0, 0), 100, 24);
+    frm_object->easy_add("but_category", new lafi_button(0, 0, 0, 0), 100, 24);
     frm_object->easy_row();
     frm_object->easy_add("lbl_type", new lafi_label(0, 0, 0, 0, "Type:"), 100, 16);
     frm_object->easy_row();
@@ -1854,8 +1854,8 @@ void area_editor::load() {
             }
         }
     };
-    frm_object->widgets["but_folder"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_MOB_FOLDER);
+    frm_object->widgets["but_category"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
     };
     frm_object->widgets["but_type"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
@@ -1866,10 +1866,10 @@ void area_editor::load() {
     frm_objects->widgets["but_new"]->description =      "Create a new object wherever you click.";
     frm_objects->widgets["but_sel_none"]->description = "Deselect the current sector.";
     frm_object->widgets["but_rem"]->description =       "Delete the current object.";
-    frm_object->widgets["but_folder"]->description =    "Choose the folder of types of object.";
+    frm_object->widgets["but_category"]->description =  "Choose the category of types of object.";
     frm_object->widgets["but_type"]->description =      "Choose the type this object is.";
     frm_object->widgets["ang_angle"]->description =     "Angle the object is facing.";
-    frm_object->widgets["txt_vars"]->description =      "Variables used for the script.";
+    frm_object->widgets["txt_vars"]->description =      "Extra variables (e.g.: sleep=y;jumping=n).";
     
     
     //Properties -- shadows.
@@ -2054,10 +2054,10 @@ void area_editor::mob_to_gui() {
         ((lafi_angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_mob->angle);
         ((lafi_textbox*) f->widgets["txt_vars"])->text = ed_cur_mob->vars;
         
-        ((lafi_button*) f->widgets["but_folder"])->text = mob_folders.get_pname(ed_cur_mob->folder);
+        ((lafi_button*) f->widgets["but_category"])->text = mob_categories.get_pname(ed_cur_mob->category);
         
         lafi_button* but_type = (lafi_button*) f->widgets["but_type"];
-        if(ed_cur_mob->folder == MOB_FOLDER_NONE) {
+        if(ed_cur_mob->category == MOB_CATEGORY_NONE) {
             disable_widget(but_type);
         } else {
             enable_widget(but_type);
@@ -2097,54 +2097,17 @@ void area_editor::open_picker(unsigned char type) {
             elements.push_back(sector_types.get_name(t));
         }
         
-    } else if(type == AREA_EDITOR_PICKER_MOB_FOLDER) {
+    } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
-        for(unsigned char f = 0; f < mob_folders.get_nr_of_folders(); f++) { //0 is none.
-            if(f == MOB_FOLDER_NONE) continue;
-            elements.push_back(mob_folders.get_pname(f));
+        for(unsigned char f = 0; f < mob_categories.get_nr_of_categories(); f++) { //0 is none.
+            if(f == MOB_CATEGORY_NONE) continue;
+            elements.push_back(mob_categories.get_pname(f));
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
-        if(ed_cur_mob->folder != MOB_FOLDER_NONE) {
-        
-            if(ed_cur_mob->folder == MOB_FOLDER_ENEMIES) {
-                for(auto e = enemy_types.begin(); e != enemy_types.end(); e++) {
-                    elements.push_back(e->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_LEADERS) {
-                for(auto l = leader_types.begin(); l != leader_types.end(); l++) {
-                    elements.push_back(l->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_ONIONS) {
-                for(auto o = onion_types.begin(); o != onion_types.end(); o++) {
-                    elements.push_back(o->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_PELLETS) {
-                for(auto p = pellet_types.begin(); p != pellet_types.end(); p++) {
-                    elements.push_back(p->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_PIKMIN) {
-                for(auto p = pikmin_types.begin(); p != pikmin_types.end(); p++) {
-                    elements.push_back(p->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_TREASURES) {
-                for(auto t = treasure_types.begin(); t != treasure_types.end(); t++) {
-                    elements.push_back(t->first);
-                }
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_SPECIAL) {
-                for(auto s = special_mob_types.begin(); s != special_mob_types.end(); s++) {
-                    elements.push_back(s->first);
-                }
-                
-            }
-            
+        if(ed_cur_mob->category != MOB_CATEGORY_NONE) {
+            mob_categories.get_list(elements, ed_cur_mob->category);
         }
         
     }
@@ -2157,7 +2120,7 @@ void area_editor::open_picker(unsigned char type) {
         b->left_mouse_click_handler = [name, type] (lafi_widget*, int, int) {
             pick(name, type);
         };
-        f->easy_add("but_" + itos(e), b, 100, 24);
+        f->easy_add("but_" + i2s(e), b, 100, 24);
         f->easy_row(0);
     }
     
@@ -2183,10 +2146,10 @@ void area_editor::pick(string name, unsigned char type) {
             sector_to_gui();
         }
         
-    } else if(type == AREA_EDITOR_PICKER_MOB_FOLDER) {
+    } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
         if(ed_cur_mob) {
-            ed_cur_mob->folder = mob_folders.get_nr_from_pname(name);
+            ed_cur_mob->category = mob_categories.get_nr_from_pname(name);
             ed_cur_mob->type = NULL;
             mob_to_gui();
         }
@@ -2194,33 +2157,7 @@ void area_editor::pick(string name, unsigned char type) {
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
         if(ed_cur_mob) {
-        
-            if(ed_cur_mob->folder == MOB_FOLDER_NONE) {
-                ed_cur_mob->type = NULL;
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_ENEMIES) {
-                ed_cur_mob->type = enemy_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_LEADERS) {
-                ed_cur_mob->type = leader_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_ONIONS) {
-                ed_cur_mob->type = onion_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_PELLETS) {
-                ed_cur_mob->type = pellet_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_PIKMIN) {
-                ed_cur_mob->type = pikmin_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_TREASURES) {
-                ed_cur_mob->type = treasure_types[name];
-                
-            } else if(ed_cur_mob->folder == MOB_FOLDER_SPECIAL) {
-                ed_cur_mob->type = special_mob_types[name];
-                
-            }
-            
+            mob_categories.set_mob_type_ptr(ed_cur_mob, name);
         }
         
         mob_to_gui();
@@ -2234,8 +2171,13 @@ void area_editor::pick(string name, unsigned char type) {
 void area_editor::save_area() {
     data_node file_node = data_node("", "");
     
-    //Point down the weather again.
-    file_node.add(new data_node("weather", ed_weather_name));
+    //Point down the weather and background again.
+    file_node.add(new data_node("weather", cur_area_map.weather_name));
+    if(cur_area_map.bg_bmp_file_name.size())
+        file_node.add(new data_node("bg_bmp", cur_area_map.bg_bmp_file_name));
+    file_node.add(new data_node("bg_color", c2s(cur_area_map.bg_color)));
+    file_node.add(new data_node("bg_dist", f2s(cur_area_map.bg_dist)));
+    file_node.add(new data_node("bg_zoom", f2s(cur_area_map.bg_bmp_zoom)));
     
     //Start by cleaning unused vertices, sectors and linedefs.
     //Unused vertices.
@@ -2325,7 +2267,7 @@ void area_editor::save_area() {
     
     for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
         mob_gen* m_ptr = cur_area_map.mob_generators[m];
-        data_node* mob_node = new data_node(mob_folders.get_sname(m_ptr->folder), "");
+        data_node* mob_node = new data_node(mob_categories.get_sname(m_ptr->category), "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {
@@ -2336,12 +2278,12 @@ void area_editor::save_area() {
         mob_node->add(
             new data_node(
                 "pos",
-                ftos(m_ptr->x) + " " + ftos(m_ptr->y)
+                f2s(m_ptr->x) + " " + f2s(m_ptr->y)
             )
         );
         if(m_ptr->angle != 0) {
             mob_node->add(
-                new data_node("angle", ftos(m_ptr->angle))
+                new data_node("angle", f2s(m_ptr->angle))
             );
         }
         if(m_ptr->vars.size()) {
@@ -2358,7 +2300,7 @@ void area_editor::save_area() {
     
     for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
         vertex* v_ptr = cur_area_map.vertices[v];
-        data_node* vertex_node = new data_node("vertex", ftos(v_ptr->x) + " " + ftos(v_ptr->y));
+        data_node* vertex_node = new data_node("vertex", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertices_node->add(vertex_node);
     }
     
@@ -2373,12 +2315,12 @@ void area_editor::save_area() {
         string s_str;
         for(size_t s = 0; s < 2; s++) {
             if(l_ptr->sector_nrs[s] == string::npos) s_str += "-1";
-            else s_str += itos(l_ptr->sector_nrs[s]);
+            else s_str += i2s(l_ptr->sector_nrs[s]);
             s_str += " ";
         }
         s_str.erase(s_str.size() - 1);
         linedef_node->add(new data_node("s", s_str));
-        linedef_node->add(new data_node("v", itos(l_ptr->vertex_nrs[0]) + " " + itos(l_ptr->vertex_nrs[1])));
+        linedef_node->add(new data_node("v", i2s(l_ptr->vertex_nrs[0]) + " " + i2s(l_ptr->vertex_nrs[1])));
     }
     
     //Sectors.
@@ -2391,22 +2333,22 @@ void area_editor::save_area() {
         sectors_node->add(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) sector_node->add(new data_node("type", sector_types.get_name(s_ptr->type)));
-        sector_node->add(new data_node("z", ftos(s_ptr->z)));
-        if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", itos(s_ptr->brightness)));
-        if(s_ptr->fade) sector_node->add(new data_node("fade", btos(s_ptr->fade)));
+        sector_node->add(new data_node("z", f2s(s_ptr->z)));
+        if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", i2s(s_ptr->brightness)));
+        if(s_ptr->fade) sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
         
         
         sector_node->add(new data_node("texture", s_ptr->file_name));
         if(s_ptr->rot != 0) {
-            sector_node->add(new data_node("texture_rotate", ftos(s_ptr->rot)));
+            sector_node->add(new data_node("texture_rotate", f2s(s_ptr->rot)));
         }
         if(s_ptr->scale_x != 1 || s_ptr->scale_y != 1) {
             sector_node->add(new data_node("texture_scale",
-                                           ftos(s_ptr->scale_x) + " " + ftos(s_ptr->scale_y)));
+                                           f2s(s_ptr->scale_x) + " " + f2s(s_ptr->scale_y)));
         }
         if(s_ptr->trans_x != 0 || s_ptr->trans_y != 0) {
             sector_node->add(new data_node("texture_trans",
-                                           ftos(s_ptr->trans_x) + " " + ftos(s_ptr->trans_y)));
+                                           f2s(s_ptr->trans_x) + " " + f2s(s_ptr->trans_y)));
         }
     }
     
@@ -2419,22 +2361,22 @@ void area_editor::save_area() {
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
         
-        shadow_node->add(new data_node("pos", ftos(s_ptr->x) + " " + ftos(s_ptr->y)));
-        shadow_node->add(new data_node("size", ftos(s_ptr->w) + " " + ftos(s_ptr->h)));
-        if(s_ptr->angle != 0) shadow_node->add(new data_node("angle", ftos(s_ptr->angle)));
-        if(s_ptr->alpha != 255) shadow_node->add(new data_node("alpha", itos(s_ptr->alpha)));
+        shadow_node->add(new data_node("pos", f2s(s_ptr->x) + " " + f2s(s_ptr->y)));
+        shadow_node->add(new data_node("size", f2s(s_ptr->w) + " " + f2s(s_ptr->h)));
+        if(s_ptr->angle != 0) shadow_node->add(new data_node("angle", f2s(s_ptr->angle)));
+        if(s_ptr->alpha != 255) shadow_node->add(new data_node("alpha", i2s(s_ptr->alpha)));
         shadow_node->add(new data_node("file", s_ptr->file_name));
-        shadow_node->add(new data_node("sway", ftos(s_ptr->sway_x) + " " + ftos(s_ptr->sway_y)));
+        shadow_node->add(new data_node("sway", f2s(s_ptr->sway_x) + " " + f2s(s_ptr->sway_y)));
         
     }
     
-    //Background.
-    file_node.add(new data_node("bg_file_name", ed_bg_file_name));
-    file_node.add(new data_node("bg_x", ftos(ed_bg_x)));
-    file_node.add(new data_node("bg_y", ftos(ed_bg_y)));
-    file_node.add(new data_node("bg_w", ftos(ed_bg_w)));
-    file_node.add(new data_node("bg_h", ftos(ed_bg_h)));
-    file_node.add(new data_node("bg_alpha", itos(ed_bg_a)));
+    //Editor background.
+    file_node.add(new data_node("ed_bg_file_name", ed_bg_file_name));
+    file_node.add(new data_node("ed_bg_x",         f2s(ed_bg_x)));
+    file_node.add(new data_node("ed_bg_y",         f2s(ed_bg_y)));
+    file_node.add(new data_node("ed_bg_w",         f2s(ed_bg_w)));
+    file_node.add(new data_node("ed_bg_h",         f2s(ed_bg_h)));
+    file_node.add(new data_node("ed_bg_alpha",     i2s(ed_bg_a)));
     
     
     file_node.save_file(AREA_FOLDER "/" + ed_file_name + ".txt");
@@ -2455,10 +2397,10 @@ void area_editor::sector_to_gui() {
     if(ed_cur_sector) {
         show_widget(f);
         
-        ((lafi_textbox*) f->widgets["txt_z"])->text = ftos(ed_cur_sector->z);
+        ((lafi_textbox*) f->widgets["txt_z"])->text = f2s(ed_cur_sector->z);
         ((lafi_checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
         ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
-        ((lafi_textbox*) f->widgets["txt_brightness"])->text = itos(ed_cur_sector->brightness);
+        ((lafi_textbox*) f->widgets["txt_brightness"])->text = i2s(ed_cur_sector->brightness);
         ((lafi_button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
         //ToDo hazards.
         
@@ -2491,15 +2433,15 @@ void area_editor::shadow_to_gui() {
     if(ed_cur_shadow) {
     
         show_widget(f);
-        ((lafi_textbox*) f->widgets["txt_x"])->text = ftos(ed_cur_shadow->x);
-        ((lafi_textbox*) f->widgets["txt_y"])->text = ftos(ed_cur_shadow->y);
-        ((lafi_textbox*) f->widgets["txt_w"])->text = ftos(ed_cur_shadow->w);
-        ((lafi_textbox*) f->widgets["txt_h"])->text = ftos(ed_cur_shadow->h);
+        ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_cur_shadow->x);
+        ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_shadow->y);
+        ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_shadow->w);
+        ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_shadow->h);
         ((lafi_angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
         ((lafi_scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
         ((lafi_textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
-        ((lafi_textbox*) f->widgets["txt_sx"])->text = ftos(ed_cur_shadow->sway_x);
-        ((lafi_textbox*) f->widgets["txt_sy"])->text = ftos(ed_cur_shadow->sway_y);
+        ((lafi_textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_shadow->sway_x);
+        ((lafi_textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_shadow->sway_y);
         
     } else {
         hide_widget(f);
@@ -2572,8 +2514,8 @@ void area_editor::update_review_frame() {
                           li_ptr->l1->vertices[1]->x, li_ptr->l1->vertices[1]->y
                       );
                       
-            lbl_error_3->text = "(" + ftos(floor(li_ptr->l1->vertices[0]->x + cos(a) * u * d)) +
-                                "," + ftos(floor(li_ptr->l1->vertices[0]->y + sin(a) * u * d)) + ")!";
+            lbl_error_3->text = "(" + f2s(floor(li_ptr->l1->vertices[0]->x + cos(a) * u * d)) +
+                                "," + f2s(floor(li_ptr->l1->vertices[0]->y + sin(a) * u * d)) + ")!";
                                 
         } else if(ed_error_type == EET_BAD_SECTOR) {
         
@@ -2605,8 +2547,8 @@ void area_editor::update_review_frame() {
             
             lbl_error_1->text = "Overlapping vertices";
             lbl_error_2->text =
-                "at (" + ftos(ed_error_vertex_ptr->x) + "," +
-                ftos(ed_error_vertex_ptr->y) + ")!";
+                "at (" + f2s(ed_error_vertex_ptr->x) + "," +
+                f2s(ed_error_vertex_ptr->y) + ")!";
             lbl_error_3->text = "(Drag one of them";
             lbl_error_3->text = "into the other)";
             

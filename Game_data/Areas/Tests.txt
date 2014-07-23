@@ -1,7 +1,10 @@
 weather=
+bg_color=0 0 0
+bg_dist=2
+bg_zoom=1
 mobs{
 	Special{
-		type=Ship
+		type=Info spot
 		pos=-100 100
 	}
 	Leader{
@@ -84,6 +87,18 @@ vertices{
 	vertex=128 -768
 	vertex=256 -768
 	vertex=162.627 -564.702
+	vertex=-720 -720
+	vertex=-448 -768
+	vertex=-544 -416
+	vertex=-832 -480
+	vertex=-320 -544
+	vertex=-544 -608
+	vertex=-160 -960
+	vertex=-160 -800
+	vertex=-288 -960
+	vertex=-288 -800
+	vertex=-224 -928
+	vertex=-224 -960
 }
 linedefs{
 	linedef{
@@ -294,11 +309,59 @@ linedefs{
 		s=10 0
 		v=45 38
 	}
+	linedef{
+		s=12 0
+		v=46 51
+	}
+	linedef{
+		s=12 0
+		v=47 50
+	}
+	linedef{
+		s=12 0
+		v=48 49
+	}
+	linedef{
+		s=12 0
+		v=49 46
+	}
+	linedef{
+		s=12 0
+		v=50 48
+	}
+	linedef{
+		s=12 0
+		v=51 47
+	}
+	linedef{
+		s=13 0
+		v=52 53
+	}
+	linedef{
+		s=13 0
+		v=53 55
+	}
+	linedef{
+		s=13 0
+		v=55 54
+	}
+	linedef{
+		s=13 0
+		v=54 57
+	}
+	linedef{
+		s=13 0
+		v=56 52
+	}
+	linedef{
+		s=13 0
+		v=57 56
+	}
 }
 sectors{
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass 2.png
 	}
 	sector{
 		type=Landing site
@@ -334,22 +397,32 @@ sectors{
 		texture=Grass 2.png
 	}
 	sector{
-		z=-32
+		z=0
 		fade=true
 		texture=
 	}
 	sector{
-		z=-32
+		z=0
 		texture=Dirt.png
 	}
 	sector{
-		z=-32
+		z=0
 		texture=Grass 2.png
 	}
+	sector{
+		type=Bottomless pit
+		z=0
+		texture=Grass.png
+	}
+	sector{
+		z=32
+		texture=Rock.png
+	}
 }
-bg_file_name=
-bg_x=0
-bg_y=0
-bg_w=0
-bg_h=0
-bg_alpha=255
+tree_shadows=
+ed_bg_file_name=
+ed_bg_x=0
+ed_bg_y=0
+ed_bg_w=0
+ed_bg_h=0
+ed_bg_alpha=255

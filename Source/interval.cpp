@@ -31,22 +31,22 @@ interval::interval(const string &s) {
         if(subinterval_strs[si].size() > 0) {
             vector<string> divisor_parts = split(subinterval_strs[si], "every", false, true);
             if(divisor_parts.size() >= 2) {
-                divisor = tof(divisor_parts.back());
+                divisor = s2f(divisor_parts.back());
             }
             
             if(divisor_parts[0] != "every") {
                 vector<string> range_parts = split(divisor_parts[0], "to", false, true);
                 if(range_parts.size() == 1 && range_parts[0] != "to") { //No "to".
-                    lower = upper = tof(range_parts[0]);
+                    lower = upper = s2f(range_parts[0]);
                 } else {
                     if(range_parts.size() >= 2) {
                         if(trim_spaces(range_parts[0]) != "any") {
-                            lower = tof(range_parts[0]);
+                            lower = s2f(range_parts[0]);
                         }
                     }
                     if(range_parts.size() >= 3) {
                         if(trim_spaces(range_parts[2]) != "any") {
-                            upper = tof(range_parts[2]);
+                            upper = s2f(range_parts[2]);
                         }
                     }
                 }

@@ -5,3 +5,4 @@ match_seeds = 5
 max_carriers = 10
 pikmin_type = Red Pikmin
 size = 64
+number_image = Pellet_5.png

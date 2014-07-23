@@ -103,6 +103,7 @@ using namespace std;
 #define OTHER_TYPES_FOLDER     TYPES_FOLDER "/Others"
 #define PELLETS_FOLDER         TYPES_FOLDER "/Pellets"
 #define PIKMIN_FOLDER          TYPES_FOLDER "/Pikmin"
+#define SHIPS_FOLDER           TYPES_FOLDER "/Ships"
 #define TEXTURES_FOLDER        GRAPHICS_FOLDER "/Textures"
 #define TREASURES_FOLDER       TYPES_FOLDER "/Treasures"
 #define TYPES_FOLDER           GAME_DATA_FOLDER "/Types"

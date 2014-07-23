@@ -6,16 +6,13 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Ship class and ship-related functions.
+ * Pellet type class and pellet type-related functions.
  */
 
-#include "ship.h"
-#include "../vars.h"
+#include "pellet_type.h"
 
-/* ----------------------------------------------------------------------------
- * Creates a ship.
- */
-ship::ship(float x, float y)
-    : mob(x, y, special_mob_types["Ship"], 0, "") {
-    
+pellet_type::pellet_type() {
+    pik_type = NULL;
+    number = match_seeds = non_match_seeds = 0;
+    bmp_number = NULL;
 }

@@ -27,16 +27,17 @@
 #include "LAFI/label.h"
 #include "leader.h"
 #include "misc_structs.h"
+#include "onion.h"
 #include "particle.h"
 #include "pikmin.h"
 #include "pikmin_type.h"
 #include "sector.h"
+#include "ship.h"
+#include "ship_type.h"
 #include "spray_type.h"
 #include "spec_objs/info_spot.h"
 #include "spec_objs/nectar.h"
-#include "spec_objs/onion.h"
-#include "spec_objs/pellet.h"
-#include "spec_objs/ship.h"
+#include "pellet.h"
 #include "status.h"
 #include "treasure.h"
 #include "weather.h"
@@ -53,9 +54,9 @@ extern ALLEGRO_BITMAP* bmp_enemy_spirit;
 extern ALLEGRO_BITMAP* bmp_hard_bubble;
 extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
+extern ALLEGRO_BITMAP* bmp_info_spot;
 extern ALLEGRO_BITMAP* bmp_message_box;
 extern ALLEGRO_BITMAP* bmp_mouse_cursor;
-extern ALLEGRO_BITMAP* bmp_mouse_cursor_invalid;
 extern ALLEGRO_BITMAP* bmp_move_group_arrow;
 extern ALLEGRO_BITMAP* bmp_nectar;
 extern ALLEGRO_BITMAP* bmp_no_pikmin;
@@ -63,7 +64,6 @@ extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_red[3];
 extern ALLEGRO_BITMAP* bmp_red_onion;
-extern ALLEGRO_BITMAP* bmp_red_pellet[4];
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_ship;
 extern ALLEGRO_BITMAP* bmp_smack;
@@ -137,7 +137,6 @@ extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern unsigned char                    cur_screen;
-extern weather                          cur_weather;              //Current weather.
 extern float                            cursor_angle;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
 extern float                            cursor_save_time;         //Time left until the position of the cursor is saved on the vector.
@@ -208,7 +207,6 @@ extern bool                             ed_shift_pressed;
 extern bool                             ed_show_bg;
 extern bool                             ed_show_shadows;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
-extern string                           ed_weather_name;
 extern lafi_widget*                     ed_wum; //Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
@@ -230,7 +228,7 @@ extern float                            leader_move_y;
 extern map<string, leader_type*>        leader_types;
 extern unsigned                         max_pikmin_in_field;
 extern ALLEGRO_MIXER*                   mixer;
-extern mob_folder_manager               mob_folders;
+extern mob_category_manager             mob_categories;
 extern vector<mob*>                     mobs;
 extern float                            mouse_cursor_x;             //The physical mouse's cursor.
 extern float                            mouse_cursor_y;
@@ -270,9 +268,10 @@ extern sector_types_manager             sector_types;
 extern unsigned int                     selected_spray;
 extern unsigned char                    ship_beam_ring_color[3];
 extern bool                             ship_beam_ring_color_up[3];
+extern map<string, ship_type*>          ship_types;
 extern vector<ship*>                    ships;
 extern bool                             smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
-extern map<string, mob_type*>           special_mob_types;
+extern map<string, mob_type*>           spec_mob_types;
 extern vector<unsigned long>            spray_amounts;      //How many of each spray the player has.
 extern vector<spray_type>               spray_types;
 extern vector<status>                   statuses;

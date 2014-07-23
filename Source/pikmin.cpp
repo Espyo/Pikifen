@@ -27,9 +27,11 @@ pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angl
     being_chomped = false;
     carrying_mob = NULL;
     wants_to_carry = NULL;
-    maturity = 0;
     pluck_reserved = false;
     team = MOB_TEAM_PLAYER_1; //ToDo
+    
+    maturity = s2i(get_var_value(vars, "maturity", "2"));
+    if(s2b(get_var_value(vars, "buried", "0"))) state = PIKMIN_STATE_BURIED;
 }
 
 pikmin::~pikmin() { }

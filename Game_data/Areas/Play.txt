@@ -1,7 +1,10 @@
 weather=Normal
+bg_color=0 0 0
+bg_dist=2
+bg_zoom=1
 mobs{
-	Special{
-		type=Ship
+	Ship{
+		type=Hocotate ship
 		pos=-96 320
 	}
 	Leader{
@@ -35,6 +38,32 @@ mobs{
 	Enemy{
 		type=Cloaking Burrow-nit
 		pos=480 -576
+		angle=5.35589
+	}
+	Special{
+		type=Nectar
+		pos=-32 576
+	}
+	Special{
+		type=Info spot
+		pos=192 736
+		vars=text=http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo
+	}
+	Pellet{
+		type=Red 10
+		pos=704 -64
+	}
+	Pellet{
+		type=Red 1
+		pos=576 -64
+	}
+	Pellet{
+		type=Red 20
+		pos=576 32
+	}
+	Pellet{
+		type=Red 5
+		pos=704 32
 	}
 }
 vertices{
@@ -47,7 +76,6 @@ vertices{
 	vertex=64 672
 	vertex=352 224
 	vertex=-126.251 161.924
-	vertex=-96 -128
 	vertex=-224 -192
 	vertex=544 -192
 	vertex=257.372 -11.2105
@@ -63,15 +91,12 @@ vertices{
 	vertex=512 480
 	vertex=377.708 268.624
 	vertex=405.759 -119.415
-	vertex=-448 -800
 	vertex=768 -288
 	vertex=736 -384
 	vertex=-352 -1056
 	vertex=800 -608
-	vertex=736 -896
 	vertex=704 -992
 	vertex=224 -1280
-	vertex=608 -1088
 	vertex=448 -1248
 	vertex=-32 640
 	vertex=-96 576
@@ -82,10 +107,8 @@ vertices{
 	vertex=-480 -608
 	vertex=-256 -1184
 	vertex=-64 -1280
-	vertex=-192 32
 	vertex=-288 192
-	vertex=-352 64
-	vertex=-183.964 67.1872
+	vertex=-384 96
 	vertex=72.4797 -1.41557
 	vertex=-0 -32
 	vertex=65.8308 106.99
@@ -105,12 +128,9 @@ vertices{
 	vertex=194.583 507.524
 	vertex=274.253 472.969
 	vertex=-343.862 168.594
-	vertex=-330.426 131.434
 	vertex=96 320
-	vertex=-320.081 94.4105
-	vertex=4.96582 5.66249
-	vertex=-271.623 157.569
-	vertex=-308.647 151.58
+	vertex=-0 0
+	vertex=-339.612 117.921
 	vertex=192 608
 	vertex=38.5215 650.816
 	vertex=188.934 648.535
@@ -200,6 +220,19 @@ vertices{
 	vertex=821.954 -75.6392
 	vertex=279.212 700.824
 	vertex=147.234 -125.183
+	vertex=-353.297 -245.866
+	vertex=-256 -128
+	vertex=-384 -192
+	vertex=-320 -320
+	vertex=-192 -256
+	vertex=-448 32
+	vertex=-263.681 175.869
+	vertex=-311.595 145.191
+	vertex=-384 -288
+	vertex=-207.443 -222.277
+	vertex=-335.951 -283.909
+	vertex=-364.8 -224.9
+	vertex=-237.603 -168.514
 }
 linedefs{
 	linedef{
@@ -215,296 +248,256 @@ linedefs{
 		v=2 3
 	}
 	linedef{
-		s=1 0
-		v=9 10
-	}
-	linedef{
 		s=19 0
-		v=6 74
+		v=6 65
 	}
 	linedef{
 		s=5 13
-		v=7 23
+		v=7 22
 	}
 	linedef{
 		s=1 3
-		v=8 38
+		v=8 34
 	}
 	linedef{
-		s=1 0
-		v=10 40
+		s=26 23
+		v=9 165
 	}
 	linedef{
 		s=1 13
-		v=11 153
+		v=10 144
 	}
 	linedef{
 		s=5 13
-		v=12 4
+		v=11 4
 	}
 	linedef{
 		s=1 4
-		v=13 8
+		v=12 8
 	}
 	linedef{
 		s=5 13
-		v=4 55
+		v=4 49
 	}
 	linedef{
 		s=2 -1
-		v=14 15
+		v=13 14
 	}
 	linedef{
 		s=2 -1
-		v=16 14
+		v=15 13
 	}
 	linedef{
 		s=2 -1
-		v=17 16
+		v=16 15
 	}
 	linedef{
 		s=2 -1
-		v=15 17
+		v=14 16
 	}
 	linedef{
 		s=7 0
-		v=18 6
+		v=17 6
 	}
 	linedef{
 		s=7 0
-		v=19 18
+		v=18 17
 	}
 	linedef{
 		s=7 0
-		v=20 53
+		v=19 47
 	}
 	linedef{
 		s=7 0
-		v=76 160
+		v=67 151
 	}
 	linedef{
 		s=8 0
-		v=21 76
+		v=20 67
 	}
 	linedef{
 		s=1 0
-		v=22 21
+		v=21 20
 	}
 	linedef{
 		s=5 13
-		v=24 56
+		v=23 50
 	}
 	linedef{
 		s=1 0
-		v=25 28
+		v=37 26
 	}
 	linedef{
 		s=1 0
-		v=26 130
+		v=24 121
 	}
 	linedef{
 		s=1 0
-		v=27 26
+		v=25 24
 	}
 	linedef{
 		s=1 0
-		v=28 42
+		v=26 38
 	}
 	linedef{
 		s=1 0
-		v=29 27
+		v=27 25
 	}
 	linedef{
 		s=1 0
-		v=30 29
+		v=28 27
 	}
 	linedef{
 		s=1 0
-		v=31 30
+		v=29 30
 	}
 	linedef{
 		s=1 0
-		v=32 34
+		v=30 28
 	}
 	linedef{
 		s=1 0
-		v=33 31
-	}
-	linedef{
-		s=1 0
-		v=34 33
-	}
-	linedef{
-		s=1 0
-		v=35 150
+		v=31 141
 	}
 	linedef{
 		s=16 0
+		v=32 33
+	}
+	linedef{
+		s=16 0
+		v=33 140
+	}
+	linedef{
+		s=1 3
+		v=34 44
+	}
+	linedef{
+		s=1 23
+		v=35 9
+	}
+	linedef{
+		s=1 0
 		v=36 37
 	}
 	linedef{
-		s=16 0
-		v=37 149
-	}
-	linedef{
-		s=1 3
-		v=38 50
+		s=1 0
+		v=38 39
 	}
 	linedef{
 		s=1 0
-		v=39 9
-	}
-	linedef{
-		s=1 0
-		v=40 41
-	}
-	linedef{
-		s=1 0
-		v=41 25
-	}
-	linedef{
-		s=1 0
-		v=42 43
-	}
-	linedef{
-		s=1 0
-		v=43 32
+		v=39 29
 	}
 	linedef{
 		s=4 0
-		v=13 45
+		v=12 40
 	}
 	linedef{
 		s=4 0
-		v=66 51
+		v=60 45
 	}
 	linedef{
-		s=4 0
-		v=46 44
+		s=24 23
+		v=41 43
 	}
 	linedef{
-		s=4 3
-		v=48 70
+		s=24 3
+		v=42 62
 	}
 	linedef{
-		s=4 3
-		v=47 69
-	}
-	linedef{
-		s=1 4
-		v=48 39
-	}
-	linedef{
-		s=4 0
-		v=44 49
-	}
-	linedef{
-		s=4 0
-		v=49 39
-	}
-	linedef{
-		s=1 3
-		v=5 48
-	}
-	linedef{
-		s=1 3
-		v=50 5
-	}
-	linedef{
-		s=4 0
-		v=51 46
-	}
-	linedef{
-		s=1 0
-		v=52 13
-	}
-	linedef{
-		s=7 0
-		v=53 19
-	}
-	linedef{
-		s=1 0
-		v=132 22
-	}
-	linedef{
-		s=1 13
-		v=54 155
-	}
-	linedef{
-		s=5 13
-		v=55 7
-	}
-	linedef{
-		s=5 13
-		v=56 12
-	}
-	linedef{
-		s=6 1
-		v=57 133
-	}
-	linedef{
-		s=6 1
-		v=59 58
-	}
-	linedef{
-		s=6 1
-		v=60 59
-	}
-	linedef{
-		s=6 1
-		v=61 60
-	}
-	linedef{
-		s=6 5
-		v=141 144
-	}
-	linedef{
-		s=6 5
+		s=24 3
 		v=62 63
 	}
 	linedef{
-		s=6 5
-		v=63 139
+		s=1 24
+		v=42 35
 	}
 	linedef{
-		s=6 5
-		v=64 65
+		s=1 3
+		v=5 42
 	}
 	linedef{
-		s=6 5
-		v=65 23
-	}
-	linedef{
-		s=4 3
-		v=67 72
+		s=1 3
+		v=44 5
 	}
 	linedef{
 		s=4 0
-		v=45 66
+		v=45 41
 	}
 	linedef{
-		s=1 6
-		v=68 58
+		s=1 0
+		v=46 12
+	}
+	linedef{
+		s=7 0
+		v=47 18
+	}
+	linedef{
+		s=1 0
+		v=123 21
+	}
+	linedef{
+		s=1 13
+		v=48 146
+	}
+	linedef{
+		s=5 13
+		v=49 7
+	}
+	linedef{
+		s=5 13
+		v=50 11
 	}
 	linedef{
 		s=6 1
-		v=68 57
+		v=51 124
+	}
+	linedef{
+		s=6 1
+		v=53 52
+	}
+	linedef{
+		s=6 1
+		v=54 53
+	}
+	linedef{
+		s=6 1
+		v=55 54
+	}
+	linedef{
+		s=6 5
+		v=132 135
+	}
+	linedef{
+		s=6 5
+		v=56 57
+	}
+	linedef{
+		s=6 5
+		v=57 130
+	}
+	linedef{
+		s=6 5
+		v=58 59
+	}
+	linedef{
+		s=6 5
+		v=59 22
+	}
+	linedef{
+		s=4 0
+		v=40 60
+	}
+	linedef{
+		s=1 6
+		v=61 52
+	}
+	linedef{
+		s=6 1
+		v=61 51
 	}
 	linedef{
 		s=4 3
-		v=69 67
-	}
-	linedef{
-		s=4 3
-		v=70 47
-	}
-	linedef{
-		s=4 3
-		v=71 8
-	}
-	linedef{
-		s=4 3
-		v=72 71
+		v=63 160
 	}
 	linedef{
 		s=0 2
@@ -512,403 +505,479 @@ linedefs{
 	}
 	linedef{
 		s=19 1
-		v=74 73
+		v=65 64
 	}
 	linedef{
 		s=8 1
-		v=73 21
+		v=64 20
 	}
 	linedef{
 		s=1 0
-		v=74 35
+		v=65 31
 	}
 	linedef{
 		s=19 7
-		v=75 6
+		v=66 6
 	}
 	linedef{
 		s=8 7
-		v=76 75
+		v=67 66
 	}
 	linedef{
 		s=9 1
-		v=77 83
+		v=68 74
 	}
 	linedef{
 		s=9 1
-		v=78 79
+		v=69 70
 	}
 	linedef{
 		s=9 1
-		v=79 94
+		v=70 85
 	}
 	linedef{
 		s=9 1
-		v=80 95
+		v=71 86
 	}
 	linedef{
 		s=9 1
-		v=81 96
+		v=72 87
 	}
 	linedef{
 		s=9 1
-		v=82 81
+		v=73 72
 	}
 	linedef{
 		s=9 1
-		v=83 93
+		v=74 84
 	}
 	linedef{
 		s=9 1
-		v=84 80
+		v=75 71
 	}
 	linedef{
 		s=10 9
-		v=85 100
+		v=76 91
 	}
 	linedef{
 		s=10 9
-		v=86 89
+		v=77 80
 	}
 	linedef{
 		s=10 9
-		v=87 92
+		v=78 83
 	}
 	linedef{
 		s=10 9
-		v=88 85
+		v=79 76
 	}
 	linedef{
 		s=10 9
-		v=89 97
+		v=80 88
 	}
 	linedef{
 		s=10 9
-		v=90 91
+		v=81 82
 	}
 	linedef{
 		s=10 9
-		v=91 98
+		v=82 89
 	}
 	linedef{
 		s=10 9
-		v=92 99
+		v=83 90
 	}
 	linedef{
 		s=9 1
-		v=93 78
+		v=84 69
 	}
 	linedef{
 		s=9 1
-		v=94 84
+		v=85 75
 	}
 	linedef{
 		s=9 1
-		v=95 82
+		v=86 73
 	}
 	linedef{
 		s=9 1
-		v=96 77
+		v=87 68
 	}
 	linedef{
 		s=10 9
-		v=97 90
+		v=88 81
 	}
 	linedef{
 		s=10 9
-		v=98 87
+		v=89 78
 	}
 	linedef{
 		s=10 9
-		v=99 88
+		v=90 79
 	}
 	linedef{
 		s=10 9
-		v=100 86
+		v=91 77
 	}
 	linedef{
 		s=11 1
-		v=101 111
+		v=92 102
 	}
 	linedef{
 		s=11 1
-		v=102 105
+		v=93 96
 	}
 	linedef{
 		s=11 1
-		v=103 107
+		v=94 98
 	}
 	linedef{
 		s=11 1
-		v=104 109
+		v=95 100
 	}
 	linedef{
 		s=11 1
-		v=105 106
+		v=96 97
 	}
 	linedef{
 		s=11 1
-		v=106 103
+		v=97 94
 	}
 	linedef{
 		s=11 1
+		v=98 99
+	}
+	linedef{
+		s=11 1
+		v=99 95
+	}
+	linedef{
+		s=11 1
+		v=100 101
+	}
+	linedef{
+		s=11 1
+		v=101 92
+	}
+	linedef{
+		s=11 1
+		v=102 103
+	}
+	linedef{
+		s=11 1
+		v=103 93
+	}
+	linedef{
+		s=12 11
+		v=104 110
+	}
+	linedef{
+		s=12 11
+		v=105 112
+	}
+	linedef{
+		s=12 11
+		v=106 114
+	}
+	linedef{
+		s=12 11
 		v=107 108
 	}
 	linedef{
-		s=11 1
-		v=108 104
-	}
-	linedef{
-		s=11 1
-		v=109 110
-	}
-	linedef{
-		s=11 1
-		v=110 101
-	}
-	linedef{
-		s=11 1
-		v=111 112
-	}
-	linedef{
-		s=11 1
-		v=112 102
+		s=12 11
+		v=108 109
 	}
 	linedef{
 		s=12 11
-		v=113 119
+		v=109 104
 	}
 	linedef{
 		s=12 11
-		v=114 121
+		v=110 111
 	}
 	linedef{
 		s=12 11
-		v=115 123
+		v=111 105
 	}
 	linedef{
 		s=12 11
-		v=116 117
+		v=112 113
 	}
 	linedef{
 		s=12 11
-		v=117 118
+		v=113 106
 	}
 	linedef{
 		s=12 11
-		v=118 113
+		v=114 115
 	}
 	linedef{
 		s=12 11
-		v=119 120
-	}
-	linedef{
-		s=12 11
-		v=120 114
-	}
-	linedef{
-		s=12 11
-		v=121 122
-	}
-	linedef{
-		s=12 11
-		v=122 115
-	}
-	linedef{
-		s=12 11
-		v=123 124
-	}
-	linedef{
-		s=12 11
-		v=124 116
+		v=115 107
 	}
 	linedef{
 		s=13 14
-		v=125 157
+		v=116 148
 	}
 	linedef{
 		s=13 14
-		v=126 125
+		v=117 116
 	}
 	linedef{
 		s=14 0
-		v=127 128
+		v=118 119
 	}
 	linedef{
 		s=14 0
-		v=128 132
+		v=119 123
 	}
 	linedef{
 		s=14 0
-		v=129 131
+		v=120 122
 	}
 	linedef{
 		s=14 0
-		v=131 127
+		v=122 118
 	}
 	linedef{
 		s=1 18
-		v=130 156
+		v=121 147
 	}
 	linedef{
 		s=18 0
-		v=130 159
+		v=121 150
 	}
 	linedef{
 		s=13 18
-		v=156 158
+		v=147 149
 	}
 	linedef{
 		s=6 1
-		v=133 134
+		v=124 125
 	}
 	linedef{
 		s=6 1
-		v=134 135
+		v=125 126
 	}
 	linedef{
 		s=6 1
-		v=135 136
+		v=126 127
 	}
 	linedef{
 		s=20 1
-		v=136 137
+		v=127 128
 	}
 	linedef{
 		s=21 1
-		v=137 138
+		v=128 129
 	}
 	linedef{
 		s=21 1
-		v=138 153
+		v=129 144
 	}
 	linedef{
 		s=21 5
-		v=140 143
+		v=131 134
 	}
 	linedef{
 		s=21 5
-		v=24 140
+		v=23 131
 	}
 	linedef{
 		s=6 5
-		v=142 141
+		v=133 132
 	}
 	linedef{
 		s=6 5
-		v=139 64
+		v=130 58
 	}
 	linedef{
 		s=20 5
-		v=143 161
+		v=134 152
 	}
 	linedef{
 		s=6 5
-		v=144 62
+		v=135 56
 	}
 	linedef{
 		s=15 1
-		v=152 150
+		v=143 141
 	}
 	linedef{
 		s=15 1
-		v=145 152
+		v=136 143
 	}
 	linedef{
 		s=15 1
-		v=146 145
+		v=137 136
 	}
 	linedef{
 		s=15 1
-		v=52 146
+		v=46 137
 	}
 	linedef{
 		s=16 15
-		v=149 147
+		v=140 138
 	}
 	linedef{
 		s=16 15
-		v=147 151
+		v=138 142
 	}
 	linedef{
 		s=16 15
-		v=148 36
+		v=139 32
 	}
 	linedef{
 		s=15 0
-		v=149 52
+		v=140 46
 	}
 	linedef{
 		s=15 0
-		v=150 36
+		v=141 32
 	}
 	linedef{
 		s=16 15
-		v=151 148
+		v=142 139
 	}
 	linedef{
 		s=6 13
-		v=23 54
+		v=22 48
 	}
 	linedef{
 		s=6 1
-		v=54 61
+		v=48 55
 	}
 	linedef{
 		s=21 13
-		v=153 24
+		v=144 23
 	}
 	linedef{
 		s=13 14
-		v=154 155
+		v=145 146
 	}
 	linedef{
 		s=1 14
-		v=155 132
+		v=146 123
 	}
 	linedef{
 		s=1 13
-		v=156 11
+		v=147 10
 	}
 	linedef{
 		s=13 14
-		v=157 154
+		v=148 145
 	}
 	linedef{
 		s=17 14
-		v=129 126
+		v=120 117
 	}
 	linedef{
 		s=17 18
-		v=158 159
+		v=149 150
 	}
 	linedef{
 		s=13 17
-		v=158 126
+		v=149 117
 	}
 	linedef{
 		s=17 0
-		v=159 129
+		v=150 120
 	}
 	linedef{
 		s=19 8
-		v=73 75
+		v=64 66
 	}
 	linedef{
 		s=7 0
-		v=160 20
+		v=151 19
 	}
 	linedef{
 		s=20 21
-		v=137 143
+		v=128 134
 	}
 	linedef{
 		s=20 6
-		v=161 136
+		v=152 127
 	}
 	linedef{
 		s=6 5
-		v=161 142
+		v=152 133
+	}
+	linedef{
+		s=1 23
+		v=153 161
+	}
+	linedef{
+		s=22 23
+		v=154 155
+	}
+	linedef{
+		s=22 23
+		v=155 164
+	}
+	linedef{
+		s=25 1
+		v=156 157
+	}
+	linedef{
+		s=25 1
+		v=157 162
+	}
+	linedef{
+		s=26 1
+		v=153 163
+	}
+	linedef{
+		s=23 0
+		v=158 36
+	}
+	linedef{
+		s=23 0
+		v=41 158
+	}
+	linedef{
+		s=24 4
+		v=63 41
+	}
+	linedef{
+		s=24 23
+		v=43 35
+	}
+	linedef{
+		s=4 3
+		v=159 8
+	}
+	linedef{
+		s=4 3
+		v=160 159
+	}
+	linedef{
+		s=1 23
+		v=161 36
+	}
+	linedef{
+		s=25 26
+		v=162 163
+	}
+	linedef{
+		s=26 1
+		v=162 9
+	}
+	linedef{
+		s=25 1
+		v=163 156
+	}
+	linedef{
+		s=26 23
+		v=164 153
+	}
+	linedef{
+		s=22 23
+		v=165 154
+	}
+	linedef{
+		s=26 22
+		v=165 164
 	}
 }
 sectors{
@@ -1027,6 +1096,27 @@ sectors{
 		fade=true
 		texture=Dirt.png
 	}
+	sector{
+		z=48
+		texture=Grass 2.png
+	}
+	sector{
+		z=64
+		texture=Grass 2.png
+	}
+	sector{
+		z=192
+		fade=true
+		texture=Rock.png
+	}
+	sector{
+		z=16
+		texture=Grass 2.png
+	}
+	sector{
+		z=32
+		texture=Grass 2.png
+	}
 }
 tree_shadows{
 	shadow{
@@ -1036,9 +1126,9 @@ tree_shadows{
 		sway=1 0
 	}
 }
-bg_file_name=tuto2.jpg
-bg_x=-704.255
-bg_y=-1627.07
-bg_w=1728.57
-bg_h=2643.86
-bg_alpha=203
+ed_bg_file_name=tuto2.jpg
+ed_bg_x=-704.255
+ed_bg_y=-1627.07
+ed_bg_w=1728.57
+ed_bg_h=2643.86
+ed_bg_alpha=203

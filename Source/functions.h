@@ -20,7 +20,7 @@
 #include "data_file.h"
 #include "leader.h"
 #include "mob_event.h"
-#include "spec_objs/onion.h"
+#include "onion.h"
 #include "pikmin.h"
 #include "sector.h"
 
@@ -34,7 +34,7 @@
 #define enable_widget(w) (w)->flags &= ~LAFI_FLAG_DISABLED;
 
 //Converts a float (or double) to a string.
-#define ftos(n) to_string((long double) (n))
+#define f2s(n) to_string((long double) (n))
 
 //Returns the previous element in a vector, but if it's the first, it retrieves the last.
 #define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
@@ -46,10 +46,16 @@
 #define hide_widget(w) (w)->flags |= LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED;
 
 //Converts an integer (or long) to a string.
-#define itos(n) to_string((long long) (n))
+#define i2s(n) to_string((long long) (n))
 
 //Returns a string with a number, adding a leading zero if it's less than 10.
-#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + itos((n)))
+#define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
+
+//Returns a white color with the specified alpha.
+#define map_alpha(a) al_map_rgba(255, 255, 255, (a))
+
+//Returns a gray with all indexes the same as specified value; it's fully opaque.
+#define map_gray(g) al_map_rgb((g), (g), (g))
 
 //Adds a new animation conversion on load_mob_types().
 #define new_anim_conversion(id, name) anim_conversions.push_back(make_pair<size_t, string>((id), (name)))
@@ -77,9 +83,10 @@ void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
 void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> v, const string s);
-vector<string>     folder_to_vector(string folder_name, const bool folders);
+vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);
 void               generate_area_images();
 ALLEGRO_COLOR      get_daylight_color();
+string             get_var_value(const string &vars_string, const string &var, const string &def);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2);
 void               load_area(const string name, const bool load_for_editor);
@@ -94,6 +101,7 @@ void               move_point(const float x, const float y, const float tx, cons
 float              normalize_angle(float a);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
+string             replace_all(string s, string search, string replacement);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);
 void               save_options();
 vector<string>     split(string text, const string del = " ", const bool inc_empty = false, const bool inc_del = false);
@@ -105,10 +113,11 @@ string             str_to_lower(string s);
 void               use_spray(const size_t spray_nr);
 
 void al_fwrite(ALLEGRO_FILE* f, string s);
-string btos(bool b);
-bool tob(string s);
-ALLEGRO_COLOR toc(string s);
-double tof(string s);
-int toi(string s);
+string b2s(const bool b);
+string c2s(const ALLEGRO_COLOR &c);
+bool s2b(const string &s);
+ALLEGRO_COLOR s2c(const string &s);
+double s2f(const string &s);
+int s2i(const string &s);
 
 #endif //ifndef FUNCTIONS_H

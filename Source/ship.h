@@ -12,14 +12,18 @@
 #ifndef SHIP_INCLUDED
 #define SHIP_INCLUDED
 
-#include "../mob.h"
+#include "mob.h"
+#include "ship_type.h"
 
 /*
  * A ship is where "treasure" is delivered to.
  */
 class ship : public mob {
 public:
-    ship(float x, float y);
+
+    ship_type* shi_type;
+    
+    ship(float x, float y, ship_type* type, float angle, const string &vars);
 };
 
 #endif //ifndef SHIP_INCLUDED

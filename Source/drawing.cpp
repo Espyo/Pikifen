@@ -37,21 +37,59 @@ void do_drawing() {
         size_t n_spray_types = spray_types.size();
         size_t n_treasures =   treasures.size();
         
-        al_clear_to_color(al_map_rgb(0, 0, 0));
         
         ALLEGRO_TRANSFORM normal_transform;
         al_identity_transform(&normal_transform);
         
         ALLEGRO_TRANSFORM world_to_screen_transform = get_world_to_screen_transform();
-        al_use_transform(&world_to_screen_transform);
+        
         
         /* Layer 1
+        ************************
+        *                +---+ *
+        *   Background   |###| *
+        *                +---+ *
+        ***********************/
+        
+        al_clear_to_color(cur_area_map.bg_color);
+        
+        if(cur_area_map.bg_bmp) {
+            ALLEGRO_VERTEX bg_v[4];
+            for(unsigned char v = 0; v < 4; v++) {
+                bg_v[v].color = map_gray(255);
+                bg_v[v].z = 0;
+            }
+            bg_v[0].x = 0;
+            bg_v[0].y = 0;
+            bg_v[0].u = (cam_x - scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[0].v = (cam_y - scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[1].x = scr_w;
+            bg_v[1].y = 0;
+            bg_v[1].u = (cam_x + scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[1].v = (cam_y - scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[2].x = scr_w;
+            bg_v[2].y = scr_h;
+            bg_v[2].u = (cam_x + scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[2].v = (cam_y + scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[3].x = 0;
+            bg_v[3].y = scr_h;
+            bg_v[3].u = (cam_x - scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[3].v = (cam_y + scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            
+            al_draw_prim(
+                bg_v, NULL, cur_area_map.bg_bmp, 0, 5, ALLEGRO_PRIM_TRIANGLE_FAN
+            );
+        }
+        
+        
+        /* Layer 2
         *******************
         *          ^^^^^^ *
         *   Area   ^^^^^^ *
         *          ^^^^^^ *
         ******************/
         
+        al_use_transform(&world_to_screen_transform);
         //ToDo optimize
         size_t area_image_cols = area_images.size();
         for(size_t x = 0; x < area_image_cols; x++) {
@@ -62,7 +100,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 2
+        /* Layer 3
         ************************
         *                  ##  *
         *   Mob shadows   #### *
@@ -88,7 +126,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 3
+        /* Layer 4
         ****************
         *          \o/ *
         *   Mobs    |  *
@@ -102,7 +140,7 @@ void do_drawing() {
             draw_sprite(
                 bmp_nectar,
                 nectars[n]->x, nectars[n]->y,
-                size, size);
+                size, size, 0, map_gray(nectars[n]->sec->brightness));
         }
         
         //Treasures.
@@ -115,23 +153,39 @@ void do_drawing() {
             draw_sprite(
                 bmp_tp,
                 treasures[t]->x, treasures[t]->y,
-                size, size
+                size, size, 0, map_gray(treasures[t]->sec->brightness)
             );
         }
         
         //Pellets.
         size_t n_pellets = pellets.size();
         for(size_t p = 0; p < n_pellets; p++) {
-            ALLEGRO_BITMAP* bm = NULL;
-            if(pellets[p]->type->weight == 1) bm = bmp_red_pellet[0];
-            else if(pellets[p]->type->weight == 5) bm = bmp_red_pellet[1];
-            else if(pellets[p]->type->weight == 10) bm = bmp_red_pellet[2];
-            else if(pellets[p]->type->weight == 20) bm = bmp_red_pellet[3];
+        
+            pellet* p_ptr = pellets[p];
+            frame* f_ptr = p_ptr->anim.get_frame();
             
-            draw_sprite(
-                bm,
-                pellets[p]->x, pellets[p]->y,
-                pellets[p]->type->size, pellets[p]->type->size);
+            if(f_ptr) {
+                ALLEGRO_BITMAP* bm = NULL;
+                
+                float size = pellets[p]->type->size;
+                if(pellets[p]->state == MOB_STATE_BEING_DELIVERED) {
+                    size *= 1 - (pellets[p]->time_in_state / DELIVERY_SUCK_TIME);
+                    size = max(0.0f, size);
+                }
+                
+                draw_sprite(
+                    f_ptr->bitmap,
+                    p_ptr->x, p_ptr->y,
+                    size, size, 0,
+                    map_gray(p_ptr->sec->brightness)
+                );
+                draw_sprite(
+                    p_ptr->pel_type->bmp_number,
+                    p_ptr->x, p_ptr->y,
+                    size * 0.68, -1,
+                    0, map_gray(p_ptr->sec->brightness)
+                );
+            }
         }
         
         //Enemies.
@@ -155,7 +209,8 @@ void do_drawing() {
                     e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
                     e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
                     width, height,
-                    e_ptr->angle
+                    e_ptr->angle,
+                    map_gray(e_ptr->sec->brightness)
                 );
             }
         }
@@ -175,7 +230,8 @@ void do_drawing() {
                     f->bitmap,
                     sprite_x, sprite_y,
                     f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
-                    pik_ptr->angle
+                    pik_ptr->angle,
+                    map_gray(pik_ptr->sec->brightness)
                 );
                 
                 if(idling) {
@@ -184,7 +240,8 @@ void do_drawing() {
                         f->bitmap,
                         sprite_x, sprite_y,
                         f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
-                        pik_ptr->angle
+                        pik_ptr->angle,
+                        map_gray(pik_ptr->sec->brightness)
                     );
                     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
                 }
@@ -195,7 +252,8 @@ void do_drawing() {
                         sprite_x + c * f->top_x + c * f->top_y,
                         sprite_y - s * f->top_y + s * f->top_x,
                         f->top_w, f->top_h,
-                        f->top_angle + pik_ptr->angle
+                        f->top_angle + pik_ptr->angle,
+                        map_gray(pik_ptr->sec->brightness)
                     );
                 }
                 
@@ -205,7 +263,13 @@ void do_drawing() {
                         pik_ptr->x, pik_ptr->y,
                         30, 30,
                         idle_glow_angle,
-                        change_alpha(pik_ptr->type->main_color, 160));
+                        al_map_rgba_f(
+                            pik_ptr->type->main_color.r * pik_ptr->sec->brightness / 255,
+                            pik_ptr->type->main_color.g * pik_ptr->sec->brightness / 255,
+                            pik_ptr->type->main_color.b * pik_ptr->sec->brightness / 255,
+                            1
+                        )
+                    );
                 }
                 
             }
@@ -222,7 +286,8 @@ void do_drawing() {
                     leaders[l]->x + c * f->offs_x + c * f->offs_y,
                     leaders[l]->y - s * f->offs_y + s * f->offs_x,
                     f->game_w, f->game_h,
-                    leaders[l]->angle
+                    leaders[l]->angle,
+                    map_gray(leaders[l]->sec->brightness)
                 );
             }
         }
@@ -239,23 +304,19 @@ void do_drawing() {
                 bm,
                 onions[o]->x, onions[o]->y,
                 185, 160,
-                0, al_map_rgba(255, 255, 255, 224));
+                0, al_map_rgba(onions[o]->sec->brightness, onions[o]->sec->brightness, onions[o]->sec->brightness, 224)
+            );
         }
         
         //Info spots.
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; i++) {
-            al_draw_filled_rectangle(
-                info_spots[i]->x - info_spots[i]->type->size * 0.5,
-                info_spots[i]->y - info_spots[i]->type->size * 0.5,
-                info_spots[i]->x + info_spots[i]->type->size * 0.5,
-                info_spots[i]->y + info_spots[i]->type->size * 0.5,
-                al_map_rgb(192, 64, 192)
-            );
-            al_draw_text(
-                font, al_map_rgb(255, 255, 255),
-                info_spots[i]->x, info_spots[i]->y - font_h / 2,
-                ALLEGRO_ALIGN_CENTER, "?"
+            info_spot* i_ptr = info_spots[i];
+            draw_sprite(
+                bmp_info_spot,
+                i_ptr->x, i_ptr->y,
+                i_ptr->type->size, i_ptr->type->size,
+                0, map_gray(i_ptr->sec->brightness)
             );
         }
         
@@ -265,8 +326,18 @@ void do_drawing() {
             draw_sprite(
                 bmp_ship,
                 ships[s]->x, ships[s]->y,
-                138, 112);
-            al_draw_circle(ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE, al_map_rgb(ship_beam_ring_color[0], ship_beam_ring_color[1], ship_beam_ring_color[2]), 1);
+                138, 112,
+                0, map_gray(ships[s]->sec->brightness)
+            );
+            al_draw_circle(
+                ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE,
+                ships[s]->y, SHIP_BEAM_RANGE,
+                al_map_rgb(
+                    ship_beam_ring_color[0] * 255 / ships[s]->sec->brightness,
+                    ship_beam_ring_color[1] * 255 / ships[s]->sec->brightness,
+                    ship_beam_ring_color[2] * 255 / ships[s]->sec->brightness
+                ), 1
+            );
         }
         
         //ToDo debugging -- remove.
@@ -288,11 +359,11 @@ void do_drawing() {
         }*/
         
         
-        /* Layer 4
+        /* Layer 5
         ***********************
         *                 *   *
         *   Particles   *   * *
-        *                ***  *
+        *                * *  *
         **********************/
         
         if(particle_quality > 0) {
@@ -354,7 +425,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 5
+        /* Layer 6
         ***************************
         *                   Help  *
         *   In-game text   --  -- *
@@ -437,14 +508,14 @@ void do_drawing() {
         }
         
         
-        /* Layer 6
+        /* Layer 7
         ***************************
         *                    /  / *
         *   Percipitation     / / *
         *                   /  /  *
         **************************/
         
-        if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
+        if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             size_t n_percipitation_particles = percipitation.size();
             for(size_t p = 0; p < n_percipitation_particles; p++) {
                 al_draw_filled_circle(percipitation[p].x, percipitation[p].y, 3, al_map_rgb(255, 255, 255));
@@ -452,7 +523,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 7
+        /* Layer 8
         **************************
         *                  *###* *
         *   Tree shadows   #| |# *
@@ -467,12 +538,12 @@ void do_drawing() {
                 s_ptr->x + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_x,
                 s_ptr->y + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_y,
                 s_ptr->w, s_ptr->h,
-                s_ptr->angle, al_map_rgba(255, 255, 255, s_ptr->alpha)
+                s_ptr->angle, map_alpha(s_ptr->alpha)
             );
         }
         
         
-        /* Layer 8
+        /* Layer 9
         ***********************
         *              --==## *
         *   Daylight   --==## *
@@ -486,7 +557,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 9
+        /* Layer 10
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
@@ -502,8 +573,9 @@ void do_drawing() {
             draw_sprite(
                 bmp_move_group_arrow,
                 leaders[cur_leader_nr]->x + x, leaders[cur_leader_nr]->y + y,
-                16, 26,
-                moving_group_angle);
+                16 * (1 + move_group_arrows[a] / CURSOR_MAX_DIST), -1,
+                moving_group_angle
+            );
         }
         
         size_t n_rings = whistle_rings.size();
@@ -575,18 +647,19 @@ void do_drawing() {
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
             cam_zoom * 54, cam_zoom * 54,
-            cursor_spin_angle,
-            al_map_rgba(255, 255, 255, (mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
+            cursor_angle
         );
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
             cursor_x, cursor_y,
             54, 54,
-            cursor_angle);
-            
-            
-        /* Layer 10
+            cursor_spin_angle,
+            map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
+        );
+        
+        
+        /* Layer 11
         *****************
         *           (1) *
         *   HUD         *
@@ -676,7 +749,7 @@ void do_drawing() {
                 
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.89, scr_h * 0.15,
-                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, itos(day));
+                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, i2s(day));
                 
             //Pikmin count.
             //Count how many Pikmin only.
@@ -722,17 +795,17 @@ void do_drawing() {
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.57, scr_h * 0.90,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.14, scr_h * 0.08,
-                itos(pikmin_in_party)
+                i2s(pikmin_in_party)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.74, scr_h * 0.91,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.12, scr_h * 0.05,
-                itos(pikmin_list.size())
+                i2s(pikmin_list.size())
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.955, scr_h * 0.91,
                 ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.17, scr_h * 0.05,
-                itos(total_pikmin)
+                i2s(total_pikmin)
             );
             
             //Sprays.
@@ -750,7 +823,7 @@ void do_drawing() {
                 draw_compressed_text(
                     font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
                     scr_w * 0.06, scr_h * 0.05,
-                    itos(spray_amounts[top_spray_nr]));
+                    i2s(spray_amounts[top_spray_nr]));
                 for(size_t c = 0; c < controls.size(); c++) {
                     if(controls[c].action == BUTTON_USE_SPRAY_1 || controls[c].action == BUTTON_USE_SPRAY) {
                         draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
@@ -769,7 +842,7 @@ void do_drawing() {
                     draw_compressed_text(
                         font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
                         scr_w * 0.06, scr_h * 0.05,
-                        itos(spray_amounts[1]));
+                        i2s(spray_amounts[1]));
                     for(size_t c = 0; c < controls.size(); c++) {
                         if(controls[c].action == BUTTON_USE_SPRAY_2) {
                             draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
@@ -804,10 +877,10 @@ void do_drawing() {
             //ToDo test stuff, remove.
             //Day hour.
             /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
-                         (itos((day_minutes / 60)) + ":" + itos(((int) (day_minutes) % 60))).c_str());
+                         (i2s((day_minutes / 60)) + ":" + i2s(((int) (day_minutes) % 60))).c_str());
             for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, ftos(pikmin_list[0]->z).c_str());*/
+            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
             
         } else { //Show a message.
         
@@ -862,12 +935,12 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         name = al_keycode_to_name(c.button);
     } else if(c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG || c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
-        name = "AXIS " + itos(c.stick) + " " + itos(c.axis);
+        name = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
         name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
     } else if(c.type == CONTROL_TYPE_JOYSTICK_BUTTON) {
-        name = itos(c.button + 1);
+        name = i2s(c.button + 1);
     } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
-        name = "M" + itos(c.button);
+        name = "M" + i2s(c.button);
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
         name = "MWD";
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
@@ -888,7 +961,7 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
         al_draw_filled_rectangle(
             x - total_width * 0.5, y - total_height * 0.5,
             x + total_width * 0.5, y + total_height * 0.5,
-            al_map_rgba(255, 255, 255, 192)
+            map_alpha(192)
         );
         al_draw_rectangle(
             x - total_width * 0.5, y - total_height * 0.5,
@@ -896,11 +969,11 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
             al_map_rgba(160, 160, 160, 192), 2
         );
     } else {
-        al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(255, 255, 255, 192));
+        al_draw_filled_ellipse(x, y, total_width * 0.5, total_height * 0.5, map_alpha(192));
         al_draw_ellipse(x, y, total_width * 0.5, total_height * 0.5, al_map_rgba(160, 160, 160, 192), 2);
     }
     draw_compressed_text(
-        font, al_map_rgba(255, 255, 255, 192), x, y, ALLEGRO_ALIGN_CENTER, 1,
+        font, map_alpha(192), x, y, ALLEGRO_ALIGN_CENTER, 1,
         (max_w == 0 ? 0 : max_w - 2), (max_h == 0 ? 0 : max_h - 2), name
     );
 }
@@ -911,7 +984,7 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
 bool casts_shadow(sector* s1, sector* s2) {
     if(!s1 || !s2) return false;
     if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT || s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
-    if(s1->z <= s2->z) return false;
+    if(s1->z <= s2->z + SECTOR_STEP) return false;
     return true;
 }
 
@@ -960,9 +1033,10 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR co
  */
 void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR color) {
     float first_y = cy - (font_h * 3) / 2;
-    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (itos(current).c_str()));
+    //ToDo make the largest one bigger.
+    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (i2s(current).c_str()));
     al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
-    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (itos(needed).c_str()));
+    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str()));
 }
 
 /* ----------------------------------------------------------------------------
@@ -1268,14 +1342,18 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         
         point shadow_point[2];
         ALLEGRO_VERTEX extra_av[8];
-        for(unsigned char e = 0; e < 8; e++) extra_av[e].z = 0;
+        for(unsigned char e = 0; e < 8; e++) { extra_av[e].z = 0;}
+        unsigned char draw_extra[2] = {0, 0}; //How many vertices of the extra polygon to draw.
         
         for(unsigned char v = 0; v < 2; v++) {
         
-            if(neighbor_angle_difs[v] < M_PI) {
+            if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
                 //If the shadow of the current and neighbor linedefs
-                //meet at less than 90 degrees, then the final point
-                //should be where they both intersect.
+                //meet at less than 180 degrees, and the neighbor casts
+                //a shadow, then both this shadow and the neighbor's
+                //must blend in with one another. This shadow's final
+                //point should be where they both intersect.
+                //The neighbor's shadow will do the same when we get to it.
                 
                 float ul;
                 lines_intersect(
@@ -1290,44 +1368,62 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
                 shadow_point[v].x = av[0].x + l_cos_front * WALL_SHADOW_LENGTH + cos(l_angle) * l_dist * ul;
                 shadow_point[v].y = av[0].y + l_sin_front * WALL_SHADOW_LENGTH + sin(l_angle) * l_dist * ul;
                 
-            } else if(neighbor_angle_difs[v] > M_PI) {
-                //If the angle is greater, then
-                //draw the shadows as a rectangle, away
-                //from the linedef. Then, draw a
-                //"join" between both linedef's shadows.
-                //Like a kneecap.
+            } else {
+                //Otherwise, just draw the
+                //shadows as a rectangle, away
+                //from the linedef. Then, if the angle is greater
+                //than 180, draw a "join" between both
+                //linedef's shadows. Like a kneecap.
                 
-                shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
-                shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+                if(neighbor_angle_difs[v] > M_PI_2) {
+                    shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
+                    shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+                    
+                    extra_av[v * 4 + 0].x = av[v].x;
+                    extra_av[v * 4 + 0].y = av[v].y;
+                    extra_av[v * 4 + 0].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
+                    extra_av[v * 4 + 1].x = shadow_point[v].x;
+                    extra_av[v * 4 + 1].y = shadow_point[v].y;
+                    extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
+                    
+                    if(neighbor_angle_difs[v] > M_PI) {
+                        //Draw the "kneecap".
+                        extra_av[v * 4 + 2].x = av[v].x + cos(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[v * 4 + 2].y = av[v].y + sin(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, 0);
+                        
+                        draw_extra[v] = 3;
+                    }
+                    
+                    if(!neighbor_shadow[v]) {
+                        //If the neighbor casts no shadow, add an extra polygon vertex;
+                        //this glues the current linedef's shadow to the neighbor.
+                        
+                        unsigned char index = (draw_extra[v] == 3) ? (v * 4 + 3) : (v * 4 + 2);
+                        
+                        extra_av[index].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[index].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[index].color = al_map_rgba(0, 0, 0, 0);
+                        
+                        draw_extra[v] = (draw_extra[v] == 3) ? 4 : 3;
+                    }
+                    
+                } else {
                 
-                extra_av[v * 4 + 0].x = av[v].x + cos(mid_angles[v]) * WALL_SHADOW_LENGTH;
-                extra_av[v * 4 + 0].y = av[v].y + sin(mid_angles[v]) * WALL_SHADOW_LENGTH;
-                extra_av[v * 4 + 0].color = al_map_rgba(0, 0, 0, 0);
-                extra_av[v * 4 + 1].x = shadow_point[v].x;
-                extra_av[v * 4 + 1].y = shadow_point[v].y;
-                extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
-                extra_av[v * 4 + 2].x = av[v].x;
-                extra_av[v * 4 + 2].y = av[v].y;
-                extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
-                
-                if(!neighbor_shadow[v]) {
-                    //If the neighbor casts no shadow, glue the current
-                    //linedef's shadow to the neighbor.
-                    extra_av[v * 4 + 3].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
-                    extra_av[v * 4 + 3].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
-                    extra_av[v * 4 + 3].color = al_map_rgba(0, 0, 0, 0);
+                    shadow_point[v].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    shadow_point[v].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    
                 }
                 
-            } else {
-            
-                //Just draw straight outwards.
-                shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
-                shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+                /*} else {
+                
+                    //Just draw straight outwards.
+                    shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
+                    shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;*/
             }
             
         }
         
-        //ToDo make the shadow's spread a constant.
         av[2].x = shadow_point[1].x;
         av[2].y = shadow_point[1].y;
         av[2].color = al_map_rgba(0, 0, 0, 0);
@@ -1351,10 +1447,10 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
         for(size_t v = 0; v < 2; v++) {
-            if(neighbor_angle_difs[v] > M_PI) {
+            if(draw_extra[v] > 0) {
                 al_draw_prim(
                     extra_av, NULL, NULL, v * 4,
-                    v * 4 + (neighbor_shadow[v] ? 3 : 4),
+                    v * 4 + draw_extra[v],
                     ALLEGRO_PRIM_TRIANGLE_FAN
                 );
             }
@@ -1390,7 +1486,7 @@ void draw_shadow(const float cx, const float cy, const float size, const float d
         bmp_shadow,
         cx + shadow_x + shadow_w / 2, cy,
         shadow_w, size,
-        0, al_map_rgba(255, 255, 255, 255 * (1 - shadow_stretch)));
+        0, map_alpha(255 * (1 - shadow_stretch)));
 }
 
 /* ----------------------------------------------------------------------------

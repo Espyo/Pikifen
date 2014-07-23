@@ -33,7 +33,7 @@ public:
     bool opens_box; //If true, clicking while near this info spot opens a message box with the full text.
     unsigned int text_w; //Used instead of calculating the width every time.
     
-    info_spot(float x, float y, string text, bool opens_box);
+    info_spot(const float x, const float y, const float angle, const string &vars);
 };
 
 #endif //ifndef INFO_POINT_INCLUDED

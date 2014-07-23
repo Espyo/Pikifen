@@ -835,7 +835,6 @@ void do_logic() {
             //Cursor goes beyond the range limit.
             cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
             cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
-            mouse_cursor_valid = false;
             
             if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
                 //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.
@@ -843,8 +842,6 @@ void do_logic() {
                 mouse_cursor_y = cursor_y;
                 al_transform_coordinates(&world_to_screen_transform, &mouse_cursor_x, &mouse_cursor_y);
             }
-        } else {
-            mouse_cursor_valid = true;
         }
         
         
@@ -854,15 +851,15 @@ void do_logic() {
         *                   /  /  *
         **************************/
         
-        if(cur_weather.percipitation_type != PERCIPITATION_TYPE_NONE) {
+        if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             percipitation_time_left -= delta_t;
             if(percipitation_time_left <= 0) {
-                percipitation_time_left = cur_weather.percipitation_frequency.get_random_number();
+                percipitation_time_left = cur_area_map.weather_condition.percipitation_frequency.get_random_number();
                 percipitation.push_back(point(0, 0));
             }
             
             for(size_t p = 0; p < percipitation.size();) {
-                percipitation[p].y += cur_weather.percipitation_speed.get_random_number() * delta_t;
+                percipitation[p].y += cur_area_map.weather_condition.percipitation_speed.get_random_number() * delta_t;
                 if(percipitation[p].y > scr_h) {
                     percipitation.erase(percipitation.begin() + p);
                 } else {

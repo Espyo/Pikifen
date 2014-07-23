@@ -62,7 +62,7 @@ int main(int argc, char**) {
     al_init_acodec_addon();
     
     //Options and default controls.
-    //ToDo create a manager for this, like the mob folder manager and whatnot.
+    //ToDo create a manager for this, like the mob category manager and whatnot.
     controls.push_back(control_info(BUTTON_THROW, 0, "mb_1"));
     controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
     controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
@@ -119,6 +119,7 @@ int main(int argc, char**) {
     al_get_text_dimensions(al_create_builtin_font(), "ERROR", NULL, NULL, &bmp_error_w, &bmp_error_h);
     bmp_error = al_create_bitmap(bmp_error_w, bmp_error_h);
     al_set_target_bitmap(bmp_error); {
+        al_clear_to_color(al_map_rgba(64, 0, 0, 128));
         al_draw_text(al_create_builtin_font(), al_map_rgb(255, 0, 0), 0, 0, 0, "ERROR");
     } al_set_target_backbuffer(display);
     
@@ -158,70 +159,74 @@ int main(int argc, char**) {
     if(font) font_h = al_get_font_line_height(font);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
     
-    mob_folders.register_folder(MOB_FOLDER_NONE, "None", "None", [] (vector<string> &) { },
+    mob_categories.register_category(MOB_CATEGORY_NONE, "None", "None", [] (vector<string> &) { },
     [] (const string &) -> mob_type* { return NULL; });
     
-    mob_folders.register_folder(MOB_FOLDER_ENEMIES, "Enemies", "Enemy", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", [] (vector<string> &li) {
         for(auto e = enemy_types.begin(); e != enemy_types.end(); e++) li.push_back(e->first);
     }, [] (const string & n) -> mob_type* {
         auto it = enemy_types.find(n); if(it == enemy_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_LEADERS, "Leaders", "Leader", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_LEADERS, "Leaders", "Leader", [] (vector<string> &li) {
         for(auto l = leader_types.begin(); l != leader_types.end(); l++) li.push_back(l->first);
     }, [] (const string & n) -> mob_type* {
         auto it = leader_types.find(n); if(it == leader_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_ONIONS, "Onions", "Onion", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_ONIONS, "Onions", "Onion", [] (vector<string> &li) {
         for(auto o = onion_types.begin(); o != onion_types.end(); o++) li.push_back(o->first);
     }, [] (const string & n) -> mob_type* {
         auto it = onion_types.find(n); if(it == onion_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_PELLETS, "Pellets", "Pellet", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_PELLETS, "Pellets", "Pellet", [] (vector<string> &li) {
         for(auto p = pellet_types.begin(); p != pellet_types.end(); p++) li.push_back(p->first);
     }, [] (const string & n) -> mob_type* {
         auto it = pellet_types.find(n); if(it == pellet_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_PIKMIN, "Pikmin", "Pikmin", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", [] (vector<string> &li) {
         for(auto p = pikmin_types.begin(); p != pikmin_types.end(); p++) li.push_back(p->first);
     }, [] (const string & n) -> mob_type* {
         auto it = pikmin_types.find(n); if(it == pikmin_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_SPECIAL, "Special", "Special", [] (vector<string> &li) {
-        for(auto s = special_mob_types.begin(); s != special_mob_types.end(); s++) li.push_back(s->first);
+    mob_categories.register_category(MOB_CATEGORY_SHIPS, "Ships", "Ship", [] (vector<string> &li) {
+        for(auto s = ship_types.begin(); s != ship_types.end(); s++) li.push_back(s->first);
     }, [] (const string & n) -> mob_type* {
-        auto it = special_mob_types.find(n); if(it == special_mob_types.end()) return NULL; return it->second;
+        auto it = ship_types.find(n); if(it == ship_types.end()) return NULL; return it->second;
     });
     
-    mob_folders.register_folder(MOB_FOLDER_TREASURES, "Treasures", "Treasure", [] (vector<string> &li) {
+    mob_categories.register_category(MOB_CATEGORY_SPECIAL, "Special", "Special", [] (vector<string> &li) {
+        for(auto s = spec_mob_types.begin(); s != spec_mob_types.end(); s++) li.push_back(s->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = spec_mob_types.find(n); if(it == spec_mob_types.end()) return NULL; return it->second;
+    });
+    
+    mob_categories.register_category(MOB_CATEGORY_TREASURES, "Treasures", "Treasure", [] (vector<string> &li) {
         for(auto t = treasure_types.begin(); t != treasure_types.end(); t++) li.push_back(t->first);
     }, [] (const string & n) -> mob_type* {
         auto it = treasure_types.find(n); if(it == treasure_types.end()) return NULL; return it->second;
     });
     
     
-    
-    
     mob_type* info_spot_mt = new mob_type();
     info_spot_mt->name = "Info spot";
     info_spot_mt->size = 32;
-    special_mob_types["Info spot"] = info_spot_mt;
+    info_spot_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
+        create_mob(new info_spot(x, y, angle, vars));
+    };
+    spec_mob_types["Info spot"] = info_spot_mt;
     
     mob_type* nectar_mt = new mob_type();
     nectar_mt->name = "Nectar";
     nectar_mt->always_active = true;
     nectar_mt->size = 16;
-    special_mob_types["Nectar"] = nectar_mt;
-    
-    mob_type* ship_mt = new mob_type();
-    ship_mt->name = "Ship";
-    ship_mt->always_active = true;
-    ship_mt->size = 140;
-    special_mob_types["Ship"] = ship_mt;
+    nectar_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
+        create_mob(new nectar(x, y, vars));
+    };
+    spec_mob_types["Nectar"] = nectar_mt;
     
     
     cur_screen = SCREEN_GAME;
@@ -235,35 +240,31 @@ int main(int argc, char**) {
         bmp_yellow_onion = load_bmp("Yellow_onion.png");
         bmp_blue_onion = load_bmp("Blue_onion.png");
         bmp_ship = load_bmp("Ship.png");
-        bmp_red_pellet[0] = load_bmp("Red_1_pellet.png");
-        bmp_red_pellet[1] = load_bmp("Red_5_pellet.png");
-        bmp_red_pellet[2] = load_bmp("Red_10_pellet.png");
-        bmp_red_pellet[3] = load_bmp("Red_20_pellet.png");
         
-        bmp_bubble = load_bmp(              "Bubble.png");
-        bmp_cursor = load_bmp(              "Cursor.png");
-        bmp_day_bubble = load_bmp(          "Day_bubble.png");
-        bmp_enemy_spirit = load_bmp(        "Enemy_spirit.png");
-        bmp_hard_bubble = load_bmp(         "Hard_bubble.png");
-        bmp_icon = load_bmp(                "Icon.png");
-        bmp_idle_glow = load_bmp(           "Idle_glow.png");
-        bmp_message_box = load_bmp(         "Message_box.png");
-        bmp_mouse_cursor = load_bmp(        "Mouse_cursor.png");
-        bmp_mouse_cursor_invalid = load_bmp("Mouse_cursor_invalid.png");
-        bmp_move_group_arrow = load_bmp(    "Move_group_arrow.png");
-        bmp_nectar = load_bmp(              "Nectar.png");
-        bmp_no_pikmin = load_bmp(           "No_Pikmin.png");
-        bmp_number_bubble = load_bmp(       "Number_bubble.png");
-        bmp_pikmin_spirit = load_bmp(       "Pikmin_spirit.png");
-        bmp_shadow = load_bmp(              "Shadow.png");
-        bmp_smack = load_bmp(               "Smack.png");
-        bmp_smoke = load_bmp(               "Smoke.png");
-        bmp_sparkle = load_bmp(             "Sparkle.png");
-        bmp_sun = load_bmp(                 "Sun.png");
-        bmp_sun_bubble = load_bmp(          "Sun_bubble.png");
-        bmp_tp = load_bmp(                  "TP.png");
-        bmp_ub_spray = load_bmp(            "Ultra-bitter_spray.png");
-        bmp_us_spray = load_bmp(            "Ultra-spicy_spray.png");
+        bmp_bubble = load_bmp(          "Bubble.png");
+        bmp_cursor = load_bmp(          "Cursor.png");
+        bmp_day_bubble = load_bmp(      "Day_bubble.png");
+        bmp_enemy_spirit = load_bmp(    "Enemy_spirit.png");
+        bmp_hard_bubble = load_bmp(     "Hard_bubble.png");
+        bmp_icon = load_bmp(            "Icon.png");
+        bmp_idle_glow = load_bmp(       "Idle_glow.png");
+        bmp_info_spot = load_bmp(       "Info_spot.png");
+        bmp_message_box = load_bmp(     "Message_box.png");
+        bmp_mouse_cursor = load_bmp(    "Mouse_cursor.png");
+        bmp_move_group_arrow = load_bmp("Move_group_arrow.png");
+        bmp_nectar = load_bmp(          "Nectar.png");
+        bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
+        bmp_number_bubble = load_bmp(   "Number_bubble.png");
+        bmp_pikmin_spirit = load_bmp(   "Pikmin_spirit.png");
+        bmp_shadow = load_bmp(          "Shadow.png");
+        bmp_smack = load_bmp(           "Smack.png");
+        bmp_smoke = load_bmp(           "Smoke.png");
+        bmp_sparkle = load_bmp(         "Sparkle.png");
+        bmp_sun = load_bmp(             "Sun.png");
+        bmp_sun_bubble = load_bmp(      "Sun_bubble.png");
+        bmp_tp = load_bmp(              "TP.png");
+        bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
+        bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
         
         bmp_test = load_bmp("Test.png");
         
@@ -306,38 +307,27 @@ int main(int argc, char**) {
         pikmin_in_onions.clear();
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) { o->second = 0; }
         
-        //ToDo
-        //Some temp variables.
-        sector s = sector();
-        /*test_sector = sector();
-        test_sector.z = 100;
-        test_sector.floors[0].texture = bmp_test;
-        
-        test_linedefs.push_back(linedef(0, 0, 0, 0, 0, 0));
-        test_linedefs.push_back(linedef(100, 0, 0, 0, 0, 0));
-        test_linedefs.push_back(linedef(100, 100, 0, 0, 0, 0));
-        test_linedefs.push_back(linedef(50, 150, 0, 0, 0, 0));
-        test_linedefs.push_back(linedef(0, 100, 0, 0, 0, 0));*/
-        
         load_area("Play", false);
         load_area_textures();
         generate_area_images();
         
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
-            if(m_ptr->folder == MOB_FOLDER_ENEMIES) {
+            if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
                 create_mob(new enemy(m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_LEADERS) {
+            } else if(m_ptr->category == MOB_CATEGORY_LEADERS) {
                 create_mob(new leader(m_ptr->x, m_ptr->y, (leader_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_ONIONS) {
+            } else if(m_ptr->category == MOB_CATEGORY_ONIONS) {
                 create_mob(new onion(m_ptr->x, m_ptr->y, (onion_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_PELLETS) {
+            } else if(m_ptr->category == MOB_CATEGORY_PELLETS) {
                 create_mob(new pellet(m_ptr->x, m_ptr->y, (pellet_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_PIKMIN) {
+            } else if(m_ptr->category == MOB_CATEGORY_PIKMIN) {
                 create_mob(new pikmin(m_ptr->x, m_ptr->y, (pikmin_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_SPECIAL) {
-                create_mob(new mob(m_ptr->x, m_ptr->y, m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->folder == MOB_FOLDER_TREASURES) {
+            } else if(m_ptr->category == MOB_CATEGORY_SHIPS) {
+                create_mob(new ship(m_ptr->x, m_ptr->y, (ship_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
+            } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
+                m_ptr->type->create_mob(m_ptr->x, m_ptr->y, m_ptr->angle, m_ptr->vars);
+            } else if(m_ptr->category == MOB_CATEGORY_TREASURES) {
                 create_mob(new treasure(m_ptr->x, m_ptr->y, (treasure_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
             }
         }
@@ -366,25 +356,11 @@ int main(int argc, char**) {
                 pikmin_list.back()->maturity = 2;
             }
         }
-        create_mob(new info_spot(400, 0, "Onions.", false));
-        create_mob(new info_spot(-300, 0, "http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo", false));
-        create_mob(
-            new info_spot(
-                -300, -100,
-                "This is a test message.\n"
-                "Second line.\n"
-                "Third line, which is way too long to even be existing.\n"
-                "Secret fourth line!\n"
-                "Fifth line? Sure!\n"
-                "6th incoming.",
-                true
-            )
-        );
-        create_mob(new nectar(0, 400));
+        /*
         create_mob(new pellet(320, -100, pellet_types["Red 1"], 0, ""));
         create_mob(new pellet(250, -100, pellet_types["Red 5"], 0, ""));
         create_mob(new pellet(150, -100, pellet_types["Red 10"], 0, ""));
-        create_mob(new pellet(0, -100, pellet_types["Red 20"], 0, ""));
+        create_mob(new pellet(0, -100, pellet_types["Red 20"], 0, ""));*/
         spray_amounts[0] = spray_amounts[1] = 10;
         spray_types[0].bmp_spray = bmp_ub_spray;
         spray_types[1].bmp_spray = bmp_us_spray;

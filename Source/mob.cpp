@@ -15,6 +15,7 @@
 #include "functions.h"
 #include "mob.h"
 #include "pikmin.h"
+#include "ship.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------

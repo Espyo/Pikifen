@@ -6,17 +6,17 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pellet class and pellet-related functions.
+ * Ship class and ship-related functions.
  */
 
-#include "pellet.h"
+#include "ship.h"
+#include "vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a pellet.
+ * Creates a ship.
  */
-pellet::pellet(float x, float y, pellet_type* type, const float angle, const string &vars)
+ship::ship(float x, float y, ship_type* type, float angle, const string &vars)
     : mob(x, y, type, angle, vars) {
     
-    pel_type = type;
-    this->carrier_info = new carrier_info_struct(this, type->max_carriers, false);
+    shi_type = type;
 }

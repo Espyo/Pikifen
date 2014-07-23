@@ -12,9 +12,9 @@
 #ifndef ONION_INCLUDED
 #define ONION_INCLUDED
 
-#include "../mob.h"
-#include "../pikmin_type.h"
-#include "../onion_type.h"
+#include "mob.h"
+#include "pikmin_type.h"
+#include "onion_type.h"
 
 /*
  * An Onion is where Pikmin are stored.

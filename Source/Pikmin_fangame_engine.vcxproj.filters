@@ -13,17 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\spec_objs">
-      <UniqueIdentifier>{f5ccfc80-9f79-45b0-b3c3-0de0ad5dfc0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\spec_objs">
-      <UniqueIdentifier>{67a77ca6-7243-4358-8e7e-463e9c4e6f69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\LAFI">
       <UniqueIdentifier>{00539f69-f575-422e-bfcd-854de41758b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\LAFI">
       <UniqueIdentifier>{bc8115c0-b3e2-40f0-81b9-0b8c83a5c327}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\spec_mobs">
+      <UniqueIdentifier>{f5ccfc80-9f79-45b0-b3c3-0de0ad5dfc0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\spec_mobs">
+      <UniqueIdentifier>{67a77ca6-7243-4358-8e7e-463e9c4e6f69}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,19 +70,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="spec_objs\nectar.cpp">
-      <Filter>Source Files\spec_objs</Filter>
-    </ClCompile>
-    <ClCompile Include="spec_objs\onion.cpp">
-      <Filter>Source Files\spec_objs</Filter>
-    </ClCompile>
-    <ClCompile Include="spec_objs\ship.cpp">
-      <Filter>Source Files\spec_objs</Filter>
+      <Filter>Source Files\spec_mobs</Filter>
     </ClCompile>
     <ClCompile Include="spec_objs\info_spot.cpp">
-      <Filter>Source Files\spec_objs</Filter>
-    </ClCompile>
-    <ClCompile Include="spec_objs\pellet.cpp">
-      <Filter>Source Files\spec_objs</Filter>
+      <Filter>Source Files\spec_mobs</Filter>
     </ClCompile>
     <ClCompile Include="misc_structs.cpp">
       <Filter>Source Files</Filter>
@@ -159,6 +150,21 @@
     <ClCompile Include="leader_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="onion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ship_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ship.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pellet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pellet_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -225,19 +231,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="spec_objs\nectar.h">
-      <Filter>Header Files\spec_objs</Filter>
-    </ClInclude>
-    <ClInclude Include="spec_objs\onion.h">
-      <Filter>Header Files\spec_objs</Filter>
-    </ClInclude>
-    <ClInclude Include="spec_objs\ship.h">
-      <Filter>Header Files\spec_objs</Filter>
+      <Filter>Header Files\spec_mobs</Filter>
     </ClInclude>
     <ClInclude Include="spec_objs\info_spot.h">
-      <Filter>Header Files\spec_objs</Filter>
-    </ClInclude>
-    <ClInclude Include="spec_objs\pellet.h">
-      <Filter>Header Files\spec_objs</Filter>
+      <Filter>Header Files\spec_mobs</Filter>
     </ClInclude>
     <ClInclude Include="pellet_type.h">
       <Filter>Header Files</Filter>
@@ -313,6 +310,18 @@
     </ClInclude>
     <ClInclude Include="animation_editor.h">
       <Filter>Source Files\LAFI</Filter>
+    </ClInclude>
+    <ClInclude Include="onion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ship_type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pellet.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

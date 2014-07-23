@@ -19,48 +19,128 @@
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a structure with sample info.
+ * Creates a structure with information about a bitmap, for the manager.
  */
-sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
-    sample = s;
-    instance = NULL;
-    
-    if(!s) return;
-    instance = al_create_sample_instance(s);
-    al_attach_sample_instance_to_mixer(instance, mixer);
+bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
+    this->b = b;
+    calls = 1;
 }
 
 /* ----------------------------------------------------------------------------
- * Play the sample.
- * max_override_pos: Override the currently playing sound only if it's already in this position, or beyond.
- ** This is in seconds. 0 means always override. -1 means never override.
- * loop: Loop the sound?
- * gain: Volume, 0 - 1.
- * pan: Panning, 0 - 1 (0.5 is centered).
- * speed: Playing speed.
+ * Returns the specified bitmap, by name.
  */
-void sample_struct::play(const float max_override_pos, const bool loop, const float gain, const float pan, const float speed) {
-    if(!sample || !instance) return;
+ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
+    if(name.size() == 0) return load_bmp("", node);
     
-    if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
-        float secs = al_get_sample_instance_position(instance) / (float) 44100;
-        if((secs < max_override_pos && max_override_pos > 0) || max_override_pos == -1) return;
+    if(list.find(name) == list.end()) {
+        ALLEGRO_BITMAP* b = load_bmp(name, node);
+        list[name] = bmp_info(b);
+        return b;
+    } else {
+        list[name].calls++;
+        return list[name].b;
     }
+};
+
+/* ----------------------------------------------------------------------------
+ * Marks a bitmap to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ */
+void bmp_manager::detach(const string &name) {
+    if(name.size() == 0) return;
     
-    al_set_sample_instance_playmode(instance, (loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE));
-    al_set_sample_instance_gain(    instance, gain);
-    al_set_sample_instance_pan(     instance, pan);
-    al_set_sample_instance_speed(   instance, speed);
+    auto it = list.find(name);
+    if(it == list.end()) return;
     
-    al_set_sample_instance_position(instance, 0);
-    al_set_sample_instance_playing( instance, true);
+    it->second.calls--;
+    if(it->second.calls == 0) {
+        if(it->second.b != bmp_error) {
+            al_destroy_bitmap(it->second.b);
+        }
+        list.erase(it);
+    }
 }
 
 /* ----------------------------------------------------------------------------
- * Stops a playing sample instance.
+ * Registers a new mob category.
  */
-void sample_struct::stop() {
-    al_set_sample_instance_playing(instance, false);
+void mob_category_manager::register_category(
+    unsigned char nr, string pname, string sname,
+    function<void (vector<string> &list)> lister,
+    function<mob_type* (const string &name)> type_getter
+) {
+    if(nr >= pnames.size()) {
+        pnames.insert(pnames.end(), (nr + 1) - pnames.size(), "");
+        snames.insert(snames.end(), (nr + 1) - snames.size(), "");
+        listers.insert(listers.end(), (nr + 1) - listers.size(), function<void(vector<string> &)>());
+        type_getters.insert(type_getters.end(), (nr + 1) - type_getters.size(), function<mob_type* (const string &)>());
+    }
+    pnames[nr] = pname;
+    snames[nr] = sname;
+    listers[nr] = lister;
+    type_getters[nr]  = type_getter;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a category given its plural name.
+ * Returns 255 on error.
+ */
+unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
+    for(unsigned char n = 0; n < pnames.size(); n++) {
+        if(pnames[n] == pname) return n;
+    }
+    return 255;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of a category given its singular name.
+ * Returns 255 on error.
+ */
+unsigned char mob_category_manager::get_nr_from_sname(const string &sname) {
+    for(unsigned char n = 0; n < snames.size(); n++) {
+        if(snames[n] == sname) return n;
+    }
+    return 255;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the plural name of a category given its number.
+ * Returns an empty string on error.
+ */
+string mob_category_manager::get_pname(const unsigned char nr) {
+    if(nr < pnames.size()) return pnames[nr];
+    return "";
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the singular name of a category given its number.
+ * Returns an empty string on error.
+ */
+string mob_category_manager::get_sname(const unsigned char nr) {
+    if(nr < snames.size()) return snames[nr];
+    return "";
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the number of registered mob categories.
+ */
+unsigned char mob_category_manager::get_nr_of_categories() {
+    return pnames.size();
+}
+
+/* ----------------------------------------------------------------------------
+ * Lists the names of all mob types in a category onto a vector of strings.
+ */
+void mob_category_manager::get_list(vector<string> &l, unsigned char nr) {
+    if(nr < listers.size()) listers[nr](l);
+}
+
+/* ----------------------------------------------------------------------------
+ * Sets a mob generator's type pointer, given the type's name.
+ * It uses the mob gen's existing category to search for the name.
+ */
+void mob_category_manager::set_mob_type_ptr(mob_gen* m, const string &type_name) {
+    m->type = type_getters[m->category](type_name);
 }
 
 /* ----------------------------------------------------------------------------
@@ -214,46 +294,48 @@ void party_spot_info::remove(mob* m) {
 }
 
 /* ----------------------------------------------------------------------------
- * Creates a structure with information about a bitmap, for the manager.
+ * Creates a structure with sample info.
  */
-bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
-    this->b = b;
-    calls = 1;
+sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
+    sample = s;
+    instance = NULL;
+    
+    if(!s) return;
+    instance = al_create_sample_instance(s);
+    al_attach_sample_instance_to_mixer(instance, mixer);
 }
 
 /* ----------------------------------------------------------------------------
- * Returns the specified bitmap, by name.
+ * Play the sample.
+ * max_override_pos: Override the currently playing sound only if it's already in this position, or beyond.
+ ** This is in seconds. 0 means always override. -1 means never override.
+ * loop: Loop the sound?
+ * gain: Volume, 0 - 1.
+ * pan: Panning, 0 - 1 (0.5 is centered).
+ * speed: Playing speed.
  */
-ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
-    if(name.size() == 0) return load_bmp("", node);
+void sample_struct::play(const float max_override_pos, const bool loop, const float gain, const float pan, const float speed) {
+    if(!sample || !instance) return;
     
-    if(list.find(name) == list.end()) {
-        ALLEGRO_BITMAP* b = load_bmp(name, node);
-        list[name] = bmp_info(b);
-        return b;
-    } else {
-        list[name].calls++;
-        return list[name].b;
+    if(max_override_pos != 0 && al_get_sample_instance_playing(instance)) {
+        float secs = al_get_sample_instance_position(instance) / (float) 44100;
+        if((secs < max_override_pos && max_override_pos > 0) || max_override_pos == -1) return;
     }
-};
+    
+    al_set_sample_instance_playmode(instance, (loop ? ALLEGRO_PLAYMODE_LOOP : ALLEGRO_PLAYMODE_ONCE));
+    al_set_sample_instance_gain(    instance, gain);
+    al_set_sample_instance_pan(     instance, pan);
+    al_set_sample_instance_speed(   instance, speed);
+    
+    al_set_sample_instance_position(instance, 0);
+    al_set_sample_instance_playing( instance, true);
+}
 
 /* ----------------------------------------------------------------------------
- * Marks a bitmap to have one less call.
- * If it has 0 calls, it's automatically cleared.
+ * Stops a playing sample instance.
  */
-void bmp_manager::detach(const string &name) {
-    if(name.size() == 0) return;
-    
-    auto it = list.find(name);
-    if(it == list.end()) return;
-    
-    it->second.calls--;
-    if(it->second.calls == 0) {
-        if(it->second.b != bmp_error) {
-            al_destroy_bitmap(it->second.b);
-        }
-        list.erase(it);
-    }
+void sample_struct::stop() {
+    al_set_sample_instance_playing(instance, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -291,86 +373,4 @@ string sector_types_manager::get_name(const unsigned char nr) {
  */
 unsigned char sector_types_manager::get_nr_of_types() {
     return names.size();
-}
-
-/* ----------------------------------------------------------------------------
- * Registers a new mob folder.
- */
-void mob_folder_manager::register_folder(
-    unsigned char nr, string pname, string sname,
-    function<void (vector<string> &list)> lister,
-    function<mob_type* (const string &name)> type_getter
-) {
-    if(nr >= pnames.size()) {
-        pnames.insert(pnames.end(), (nr + 1) - pnames.size(), "");
-        snames.insert(snames.end(), (nr + 1) - snames.size(), "");
-        listers.insert(listers.end(), (nr + 1) - listers.size(), function<void(vector<string> &)>());
-        type_getters.insert(type_getters.end(), (nr + 1) - type_getters.size(), function<mob_type* (const string &)>());
-    }
-    pnames[nr] = pname;
-    snames[nr] = sname;
-    listers[nr] = lister;
-    type_getters[nr]  = type_getter;
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the number of a folder given its plural name.
- * Returns 255 on error.
- */
-unsigned char mob_folder_manager::get_nr_from_pname(const string &pname) {
-    for(unsigned char n = 0; n < pnames.size(); n++) {
-        if(pnames[n] == pname) return n;
-    }
-    return 255;
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the number of a folder given its singular name.
- * Returns 255 on error.
- */
-unsigned char mob_folder_manager::get_nr_from_sname(const string &sname) {
-    for(unsigned char n = 0; n < snames.size(); n++) {
-        if(snames[n] == sname) return n;
-    }
-    return 255;
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the plural name of a folder given its number.
- * Returns an empty string on error.
- */
-string mob_folder_manager::get_pname(const unsigned char nr) {
-    if(nr < pnames.size()) return pnames[nr];
-    return "";
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the singular name of a folder given its number.
- * Returns an empty string on error.
- */
-string mob_folder_manager::get_sname(const unsigned char nr) {
-    if(nr < snames.size()) return snames[nr];
-    return "";
-}
-
-/* ----------------------------------------------------------------------------
- * Returns the number of registered mob folders.
- */
-unsigned char mob_folder_manager::get_nr_of_folders() {
-    return pnames.size();
-}
-
-/* ----------------------------------------------------------------------------
- * Lists the names of all mob types in a folder onto a vector of strings.
- */
-void mob_folder_manager::get_list(vector<string> &l, unsigned char nr) {
-    if(nr < listers.size()) listers[nr](l);
-}
-
-/* ----------------------------------------------------------------------------
- * Sets a mob generator's type pointer, given the type's name.
- * It uses the mob gen's existing folder to search for the name.
- */
-void mob_folder_manager::set_mob_type_ptr(mob_gen* m, const string &type_name) {
-    m->type = type_getters[m->folder](type_name);
 }
