@@ -12,6 +12,7 @@ main_color = 255 255 0
 max_health = 10
 move_speed = 50
 size = 20
+throw_height_mult = 1.5
 top_leaf = Leaf_top.png
 top_bud = White_bud_top.png
 top_flower = White_flower_top.png

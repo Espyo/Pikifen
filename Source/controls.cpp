@@ -278,9 +278,20 @@ void handle_button(const unsigned int button, float pos) {
                     
                     float angle, d;
                     coordinates_to_angle(cursor_x - cur_leader_ptr->x, cursor_y - cur_leader_ptr->y, &angle, &d);
-                    holding_ptr->speed_x = cos(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
-                    holding_ptr->speed_y = sin(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / 0.65);
-                    holding_ptr->speed_z = -(GRAVITY_ADDER) * 0.65; //1.3 second throw, just like in Pikmin 2.
+                    
+                    float throw_height_mult = 1.0;
+                    if(typeid(*holding_ptr) == typeid(pikmin)) {
+                        throw_height_mult = ((pikmin*) holding_ptr)->pik_type->throw_height_mult;
+                    }
+                    
+                    //This results in a 1.3 second throw, just like in Pikmin 2. Regular Pikmin are thrown about 288.88 units high.
+                    holding_ptr->speed_x =
+                        cos(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
+                    holding_ptr->speed_y =
+                        sin(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
+                    holding_ptr->speed_z =
+                        -(GRAVITY_ADDER) * (THROW_STRENGTH_MULTIPLIER * throw_height_mult);
+                        
                     holding_ptr->angle = angle;
                     holding_ptr->face(angle);
                     

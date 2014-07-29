@@ -148,7 +148,7 @@ frames{
 		offs_x=-3.5
 		offs_y=0
 		top_visible=true
-		top_x=-13
+		top_x=-15
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -166,7 +166,7 @@ frames{
 		offs_x=3.5
 		offs_y=0
 		top_visible=true
-		top_x=13
+		top_x=12
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -256,7 +256,7 @@ frames{
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=-10
+		top_x=-9
 		top_y=0
 		top_w=5.5
 		top_h=10

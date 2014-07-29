@@ -309,7 +309,7 @@ void animation_editor::gui_load_top() {
     ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_frame->top_y);
     ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_frame->top_w);
     ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_frame->top_h);
-    ((lafi_textbox*) f->widgets["ang_angle"])->text = f2s(ed_cur_frame->top_angle);
+    ((lafi_angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_frame->top_angle);
 }
 
 /* ----------------------------------------------------------------------------
@@ -441,7 +441,7 @@ void animation_editor::gui_save_top() {
     ed_cur_frame->top_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
     ed_cur_frame->top_w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
     ed_cur_frame->top_h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
-    ed_cur_frame->top_angle = s2f(((lafi_textbox*) f->widgets["ang_angle"])->text);
+    ed_cur_frame->top_angle = ((lafi_angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
     
     gui_load_top();
 }

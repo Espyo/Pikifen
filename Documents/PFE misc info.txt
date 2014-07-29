@@ -170,3 +170,4 @@ Special thanks:
     #gry folk
     id for Doom
     Doom Builder folk
+    stackoverflow and such

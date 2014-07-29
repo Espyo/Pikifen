@@ -13,6 +13,7 @@
 #define SECTOR_INCLUDED
 
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 #include <allegro5/allegro.h>
@@ -52,12 +53,20 @@ struct linedef_intersection {
  * This is to avoid having, for instance, a Pikmin
  * on the lake part of TIS check for collisions with
  * a wall on the landing site part of TIS.
+ * It's also used when checking sectors in a certain spot.
  */
 struct blockmap {
-    float x1, y1;
-    unsigned n_cols, n_rows;
-    vector<vector<linedef*> > linedefs_in_blocks;
+    float x1, y1; //Top-left corner of the blockmap.
+    vector<vector<vector<linedef*> > > linedefs; //Specifies a list of linedefs in each block.
+    vector<vector<unordered_set<sector*> > >  sectors;  //Specifies a list of sectors in each block. A block must have at least one sector.
+    size_t n_cols, n_rows;
+    
     blockmap();
+    size_t get_col(const float x);
+    size_t get_row(const float y);
+    float get_x1(const size_t col);
+    float get_y1(const size_t row);
+    void clear();
 };
 
 
@@ -97,6 +106,7 @@ struct sector {
     ALLEGRO_BITMAP* bitmap;
     string file_name;
     bool fade;
+    bool always_cast_shadow;
     
     vector<element*> elements;
     vector<size_t> linedef_nrs;
@@ -202,6 +212,7 @@ struct area_map {
     string weather_name;
     
     area_map();
+    void generate_blockmap();
     void clear();
 };
 
@@ -209,18 +220,20 @@ struct area_map {
 void check_linedef_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
-float get_angle_dif(float a1, float a2);
+float get_angle_cw_dif(float a1, float a2);
+float get_angle_smallest_dif(float a1, float a2);
 void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t> &convex_vertices, vector<size_t> &concave_vertices);
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<linedef*, bool> &sides_todo);
 vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
-sector* get_sector(float x, float y, size_t* sector_nr);
+sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap);
 void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
 void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
+bool is_point_in_sector(const float x, const float y, sector* s_ptr);
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq);
 bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
 void triangulate(sector* s_ptr);
@@ -244,7 +257,8 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_WATER,
 };
 
+#define BLOCKMAP_BLOCK_SIZE 128
 #define DEF_SECTOR_BRIGHTNESS 255
-#define SECTOR_STEP 16 //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
+#define SECTOR_STEP 50 //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
 
 #endif //ifndef SECTOR_INCLUDED

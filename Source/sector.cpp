@@ -32,7 +32,104 @@ area_map::area_map() {
 }
 
 /* ----------------------------------------------------------------------------
- * Clears the info on an area map.
+ * Generates the blockmap for the area, given the current info.
+ */
+void area_map::generate_blockmap() {
+    bmap.clear();
+    
+    if(vertices.size() == 0) return;
+    
+    //First, get the starting point and size of the blockmap.
+    float min_x, max_x, min_y, max_y;
+    min_x = max_x = vertices[0]->x;
+    min_y = max_y = vertices[0]->y;
+    
+    for(size_t v = 0; v < vertices.size(); v++) {
+        vertex* v_ptr = vertices[v];
+        min_x = min(v_ptr->x, min_x);
+        max_x = max(v_ptr->x, max_x);
+        min_y = min(v_ptr->y, min_y);
+        max_y = max(v_ptr->y, max_y);
+    }
+    
+    bmap.x1 = min_x; bmap.y1 = min_y;
+    //Add one more to the cols/rows because, suppose there's a linedef at y = 256.
+    //The row would be 2. In reality, the row should be 3.
+    bmap.n_cols = ceil((max_x - min_x) / BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_rows = ceil((max_y - min_y) / BLOCKMAP_BLOCK_SIZE) + 1;
+    
+    bmap.linedefs.assign(bmap.n_cols, vector<vector<linedef*> >(bmap.n_rows, vector<linedef*>()));
+    bmap.sectors.assign( bmap.n_cols, vector<unordered_set<sector*> >( bmap.n_rows, unordered_set<sector*>()));
+    
+    //Now, add a list of linedefs to each block.
+    size_t b_min_x, b_max_x, b_min_y, b_max_y;
+    
+    for(size_t l = 0; l < linedefs.size(); l++) {
+    
+        //Get which blocks this linedef belongs to, via bounding-box,
+        //and only then thoroughly test which it is inside of.
+        
+        linedef* l_ptr = linedefs[l];
+        
+        b_min_x = bmap.get_col(min(l_ptr->vertices[0]->x, l_ptr->vertices[1]->x));
+        b_max_x = bmap.get_col(max(l_ptr->vertices[0]->x, l_ptr->vertices[1]->x));
+        b_min_y = bmap.get_row(min(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
+        b_max_y = bmap.get_row(max(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
+        
+        for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
+            for(size_t by = b_min_y; by <= b_max_y; by++) {
+            
+                //Get the block's coordinates.
+                float bx1 = bmap.get_x1(bx);
+                float by1 = bmap.get_y1(by);
+                
+                //Check if the linedef is inside this blockmap.
+                if(
+                    square_intersects_line(
+                        bx1, by1, bx1 + BLOCKMAP_BLOCK_SIZE, by1 + BLOCKMAP_BLOCK_SIZE,
+                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                    )
+                ) {
+                
+                    //If it is, add it and the sectors to the list.
+                    bool add_linedef = true;
+                    if(l_ptr->sectors[0] && l_ptr->sectors[1])
+                        if(l_ptr->sectors[0]->z == l_ptr->sectors[1]->z)
+                            add_linedef = false;
+                            
+                    if(add_linedef) bmap.linedefs[bx][by].push_back(l_ptr);
+                    
+                    if(l_ptr->sectors[0]) bmap.sectors[bx][by].insert(l_ptr->sectors[0]);
+                    if(l_ptr->sectors[1]) bmap.sectors[bx][by].insert(l_ptr->sectors[1]);
+                }
+            }
+        }
+    }
+    
+    //If at this point, there's any block without a sector, that means
+    //that the block has no linedefs. It has, however, a single sector,
+    //so use the triangle method to get the sector. Checking the center is
+    //just a good a spot as any.
+    for(size_t bx = 0; bx < bmap.n_cols; bx++) {
+        for(size_t by = 0; by < bmap.n_rows; by++) {
+        
+            if(bmap.sectors[bx][by].size() == 0) {
+            
+                bmap.sectors[bx][by].insert(
+                    get_sector(
+                        bmap.get_x1(bx) + BLOCKMAP_BLOCK_SIZE * 0.5,
+                        bmap.get_y1(by) + BLOCKMAP_BLOCK_SIZE * 0.5,
+                        NULL, false
+                    )
+                );
+            }
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Clears the info of an area map.
  */
 void area_map::clear() {
     for(size_t v = 0; v < vertices.size(); v++) {
@@ -65,7 +162,51 @@ void area_map::clear() {
  */
 blockmap::blockmap() {
     x1 = y1 = 0;
-    n_cols = n_rows = 0;
+}
+
+/* ----------------------------------------------------------------------------
+ * Clears the info of the blockmap.
+ */
+void blockmap::clear() {
+    x1 = y1 = 0;
+    linedefs.clear();
+    sectors.clear();
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the block column in which an X coordinate is contained.
+ * Returns string::npos on error.
+ */
+size_t blockmap::get_col(const float x) {
+    if(x < x1) return string::npos;
+    float final_x = (x - x1) / BLOCKMAP_BLOCK_SIZE;
+    if(final_x >= n_cols) return string::npos;
+    return final_x;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the block row in which a Y coordinate is contained.
+ * Returns string::npos on error.
+ */
+size_t blockmap::get_row(const float y) {
+    if(y < y1) return string::npos;
+    float final_y = (y - y1) / BLOCKMAP_BLOCK_SIZE;
+    if(final_y >= n_rows) return string::npos;
+    return final_y;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the top-left X coordinate for the specified column.
+ */
+float blockmap::get_x1(const size_t col) {
+    return col * BLOCKMAP_BLOCK_SIZE + x1;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the top-left Y coordinate for the specified row.
+ */
+float blockmap::get_y1(const size_t row) {
+    return row * BLOCKMAP_BLOCK_SIZE + y1;
 }
 
 /* ----------------------------------------------------------------------------
@@ -162,6 +303,7 @@ sector::sector() {
     tag = 0;
     brightness = DEF_SECTOR_BRIGHTNESS;
     fade = false;
+    always_cast_shadow = false;
     scale_x = scale_y = 1;
     trans_x = trans_y = 0;
     rot = 0;
@@ -355,7 +497,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 
                 //Find the angle between our vertex and this vertex.
                 float angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
-                float angle_dif = get_angle_dif(angle, base_angle);
+                float angle_dif = get_angle_cw_dif(angle, base_angle);
                 
                 //For the outer poly, we're going counter-clockwise. So the lowest angle difference is best.
                 //For the inner ones, it's clockwise, so the highest.
@@ -447,30 +589,49 @@ void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* m
 
 /* ----------------------------------------------------------------------------
  * Returns which sector the specified point belongs to.
+ * x, y:         Coordinates of the point.
+ * sector_nr:    If not NULL, the number of the sector on the area map is placed here.
+   * The number will not be set if the search is using the blockmap.
+ * use_blockmap: If true, use the blockmap to search. This provides faster results,
+   * but the blockmap must be built.
  */
-sector* get_sector(float x, float y, size_t* sector_nr) {
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
-        sector* s_ptr = cur_area_map.sectors[s];
+sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap) {
+    if(use_blockmap) {
+    
+        size_t col = cur_area_map.bmap.get_col(x);
+        size_t row = cur_area_map.bmap.get_row(y);
+        if(col == string::npos || row == string::npos) return NULL;
         
-        for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
-            triangle* t_ptr = &s_ptr->triangles[t];
-            if(
-                is_point_in_triangle(
-                    x, y,
-                    t_ptr->points[0]->x, t_ptr->points[0]->y,
-                    t_ptr->points[1]->x, t_ptr->points[1]->y,
-                    t_ptr->points[2]->x, t_ptr->points[2]->y,
-                    false
-                )
-            ) {
+        unordered_set<sector*>* sectors = &cur_area_map.bmap.sectors[col][row];
+        
+        if(sectors->size() == 1) return *sectors->begin();
+        
+        for(auto s = sectors->begin(); s != sectors->end(); s++) {
+        
+            if(is_point_in_sector(x, y, *s)) {
+                return *s;
+            }
+        }
+        
+        if(sector_nr) *sector_nr = string::npos;
+        return NULL;
+        
+    } else {
+    
+        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+            sector* s_ptr = cur_area_map.sectors[s];
+            
+            if(is_point_in_sector(x, y, s_ptr)) {
                 if(sector_nr) *sector_nr = s;
                 return s_ptr;
             }
+            
         }
+        
+        if(sector_nr) *sector_nr = string::npos;
+        return NULL;
+        
     }
-    
-    if(sector_nr) *sector_nr = string::npos;
-    return NULL;
 }
 
 /* ----------------------------------------------------------------------------
@@ -517,6 +678,28 @@ void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, flo
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns whether a point is inside a sector by checking its triangles.
+ */
+bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
+    for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
+        triangle* t_ptr = &s_ptr->triangles[t];
+        if(
+            is_point_in_triangle(
+                x, y,
+                t_ptr->points[0]->x, t_ptr->points[0]->y,
+                t_ptr->points[1]->x, t_ptr->points[1]->y,
+                t_ptr->points[2]->x, t_ptr->points[2]->y,
+                false
+            )
+        ) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/* ----------------------------------------------------------------------------
  * Returns whether a point is inside a triangle or not.
  * px, py: Coordinates of the point to check.
  * t**:    Coordinates of the triangle's points.
@@ -545,6 +728,7 @@ bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, f
     
     return ((b1 == b2) && (b2 == b3));
     
+    //Old code.
     /*float dx = px - tx1;
     float dy = py - ty1;
     
@@ -567,7 +751,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     float angle_prev = atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x);
     float angle_next = atan2(next_v->y - cur_v->y, next_v->x - cur_v->x);
     
-    return get_angle_dif(angle_prev, angle_next) < M_PI;
+    return get_angle_cw_dif(angle_prev, angle_next) < M_PI;
 }
 
 /* ----------------------------------------------------------------------------
@@ -870,12 +1054,12 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         } else {
             //Find where to insert.
             insertion_vertex_nr = bridges.back();
-            float new_bridge_angle = get_angle_dif(atan2(start->y - best_vertex->y, start->x - best_vertex->x), 0);
+            float new_bridge_angle = get_angle_cw_dif(atan2(start->y - best_vertex->y, start->x - best_vertex->x), 0);
             
             for(size_t v = 0; v < bridges.size(); v++) {
                 vertex* v_ptr = outer->at(bridges[v]);
                 vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
-                float a = get_angle_dif(atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x), 0);
+                float a = get_angle_cw_dif(atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x), 0);
                 if(a < new_bridge_angle) {
                     insertion_vertex_nr = bridges[v];
                     break;
@@ -916,11 +1100,20 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
 /* ----------------------------------------------------------------------------
  * Returns the clockwise distance between a1 and a2, in radians.
  */
-float get_angle_dif(float a1, float a2) {
+float get_angle_cw_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
     if(a1 > a2) a1 -= M_PI * 2;
     return a2 - a1;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the smallest distance between two angles.
+ */
+float get_angle_smallest_dif(float a1, float a2) {
+    a1 = normalize_angle(a1);
+    a2 = normalize_angle(a2);
+    return M_PI - abs(abs(a1 - a2) - M_PI);
 }
 
 /* ----------------------------------------------------------------------------
@@ -969,7 +1162,7 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
         if(ur) *ur = local_ur;
         
         //Return whether they intersect.
-        return (local_ur >= 0) && (local_ur <= 1) && (local_ul > 0) && (local_ul < 1);
+        return (local_ur >= 0) && (local_ur <= 1) && (local_ul >= 0) && (local_ul <= 1);
         
     } else {
         //No intersection.

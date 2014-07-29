@@ -294,6 +294,18 @@ void do_logic() {
         }
         
         
+        /*******************************
+        *                              *
+        *   Mob interactions   () - () *
+        *                              *
+        *******************************/
+        
+        
+        
+        
+        
+        
+        
         /******************
         *             /\  *
         *   Pikmin   (@:) *
@@ -497,7 +509,7 @@ void do_logic() {
                         pik_ptr->carrying_mob->carrier_info->carrier_spots_y[pik_ptr->carrying_spot],
                         &pik_ptr->carrying_mob->x,
                         &pik_ptr->carrying_mob->y,
-                        true
+                        true, &pik_ptr->carrying_mob->z
                     );
                     
                     pik_ptr->carrying_mob->carrier_info->current_carrying_strength += pik_ptr->pik_type->carry_strength;

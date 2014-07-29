@@ -110,6 +110,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             pikmin_type* pt = (pikmin_type*) mt;
             pt->attack_power = s2f(file.get_child_by_name("attack_power")->value);
             pt->attack_interval = s2f(file.get_child_by_name("attack_interval")->get_value_or_default("0.8"));
+            pt->throw_height_mult = s2f(file.get_child_by_name("throw_height_mult")->get_value_or_default("1"));
             pt->can_carry_bomb_rocks = s2b(file.get_child_by_name("can_carry_bomb_rocks")->value);
             pt->can_dig = s2b(file.get_child_by_name("can_dig")->value);
             pt->can_latch = s2b(file.get_child_by_name("can_latch")->value);

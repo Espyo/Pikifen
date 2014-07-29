@@ -67,7 +67,7 @@ bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check)
  * x*, y*: Coordinates of the line.
  * li*:    If not NULL, the line intersection coordinates are returned here.
  */
-bool circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2, float* lix, float* liy) {
+bool circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix, float* liy) {
 
     //Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
     
@@ -263,7 +263,11 @@ void generate_area_images() {
         max_y = max(v_ptr->y, max_y);
     }
     
-    area_x1 = min_x; area_y1 = min_y;
+    min_x *= area_images_scale;
+    max_x *= area_images_scale;
+    min_y *= area_images_scale;
+    max_y *= area_images_scale;
+    area_images_x1 = min_x; area_images_y1 = min_y;
     
     //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
@@ -281,28 +285,23 @@ void generate_area_images() {
     
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; s++) {
-        size_t n_linedefs = cur_area_map.sectors[s]->linedefs.size();
+        sector* s_ptr = cur_area_map.sectors[s];
+        size_t n_linedefs = s_ptr->linedefs.size();
         if(n_linedefs == 0) continue;
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
-        s_min_x = s_max_x = cur_area_map.sectors[s]->linedefs[0]->vertices[0]->x;
-        s_min_y = s_max_y = cur_area_map.sectors[s]->linedefs[0]->vertices[0]->y;
+        get_sector_bounding_box(s_ptr, &s_min_x, &s_min_y, &s_max_x, &s_max_y);
         
-        for(size_t l = 1; l < n_linedefs; l++) { //Start at 1, because we already have the first linedef's values.
-            float x = cur_area_map.sectors[s]->linedefs[l]->vertices[0]->x;
-            float y = cur_area_map.sectors[s]->linedefs[l]->vertices[0]->y;
-            
-            s_min_x = min(x, s_min_x);
-            s_max_x = max(x, s_max_x);
-            s_min_y = min(y, s_min_y);
-            s_max_y = max(y, s_max_y);
-        }
+        s_min_x *= area_images_scale;
+        s_max_x *= area_images_scale;
+        s_min_y *= area_images_scale;
+        s_max_y *= area_images_scale;
         
-        sector_start_col = (s_min_x - area_x1) / area_image_size;
-        sector_end_col =   ceil((s_max_x - area_x1) / area_image_size) - 1;
-        sector_start_row = (s_min_y - area_y1) / area_image_size;
-        sector_end_row =   ceil((s_max_y - area_y1) / area_image_size) - 1;
+        sector_start_col = (s_min_x - area_images_x1) / area_image_size;
+        sector_end_col =   ceil((s_max_x - area_images_x1) / area_image_size) - 1;
+        sector_start_row = (s_min_y - area_images_y1) / area_image_size;
+        sector_end_row =   ceil((s_max_y - area_images_y1) / area_image_size) - 1;
         
         al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
         
@@ -311,7 +310,12 @@ void generate_area_images() {
                 ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
-                    draw_sector(cur_area_map.sectors[s], x * area_image_size + area_x1, y * area_image_size + area_y1);
+                    draw_sector(
+                        cur_area_map.sectors[s],
+                        (x * area_image_size + area_images_x1) / area_images_scale,
+                        (y * area_image_size + area_images_y1) / area_images_scale,
+                        area_images_scale
+                    );
                     
                 } al_set_target_bitmap(prev_target_bmp);
             }
@@ -351,6 +355,34 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //If anything goes wrong, don't apply lighting at all.
     return al_map_rgba(0, 0, 0, 0);
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the strength of the sun for the current time, for the current weather.
+ */
+unsigned char get_sun_strength() {
+    //ToDo optimize: don't fetch the points from the weather's map every time.
+    //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
+    vector<unsigned> point_nrs;
+    for(auto p_nr = cur_area_map.weather_condition.sun_strength.begin(); p_nr != cur_area_map.weather_condition.sun_strength.end(); p_nr++) {
+        point_nrs.push_back(p_nr->first);
+    }
+    
+    size_t n_points = point_nrs.size();
+    if(n_points > 1) {
+        for(size_t p = 0; p < n_points - 1; p++) {
+            if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
+                return interpolate_number(
+                           day_minutes, point_nrs[p], point_nrs[p + 1],
+                           cur_area_map.weather_condition.sun_strength[point_nrs[p]],
+                           cur_area_map.weather_condition.sun_strength[point_nrs[p + 1]]
+                       );
+            }
+        }
+    }
+    
+    //If anything goes wrong, return 0 strength.
+    return 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -401,6 +433,13 @@ ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, c
                c1.b + progress * (c2.b - c1.b),
                c1.a + progress * (c2.a - c1.a)
            );
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the interpolation of the value between two positions.
+ */
+float interpolate_number(const float p, const float p1, const float p2, const float v1, const float v2) {
+    return v1 + ((p - p1) / (float) (p2 - p1)) * (v2 - v1);
 }
 
 /* ----------------------------------------------------------------------------
@@ -472,6 +511,7 @@ void load_area(const string name, const bool load_for_editor) {
         new_sector->brightness = s2f(sector_data->get_child_by_name("brightness")->get_value_or_default(i2s(DEF_SECTOR_BRIGHTNESS)));
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
         new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
+        new_sector->always_cast_shadow = s2b(sector_data->get_child_by_name("always_cast_shadow")->value);
         
         new_sector->file_name = sector_data->get_child_by_name("texture")->value;
         new_sector->rot = s2f(sector_data->get_child_by_name("texture_rotate")->value);
@@ -484,7 +524,7 @@ void load_area(const string name, const bool load_for_editor) {
         vector<string> translations = split(sector_data->get_child_by_name("texture_trans")->value);
         if(translations.size() >= 2) {
             new_sector->trans_x = s2f(translations[0]);
-            new_sector->trans_y = s2f(translations[0]);
+            new_sector->trans_y = s2f(translations[1]);
         }
         
         
@@ -595,6 +635,8 @@ void load_area(const string name, const bool load_for_editor) {
         s_ptr->triangles.clear();
         triangulate(s_ptr);
     }
+    
+    if(!load_for_editor) cur_area_map.generate_blockmap();
 }
 
 /* ----------------------------------------------------------------------------
@@ -681,6 +723,7 @@ void load_game_content() {
         string name = cur_weather->get_child_by_name("name")->value;
         if(name.size() == 0) name = "default";
         
+        //Lighting.
         map<unsigned, ALLEGRO_COLOR> lighting;
         size_t n_lighting_points = cur_weather->get_child_by_name("lighting")->get_nr_of_children();
         
@@ -697,17 +740,41 @@ void load_game_content() {
             error_log("Weather condition " + name + " has no lighting!");
         } else {
             if(lighting.find(24 * 60) == lighting.end()) {
-                //If there is no data for the last hour, use the data from the first point (this is because the day loops after 24:00; needed for interpolation)
+                //If there is no data for the last hour, use the data from the first point
+                //(this is because the day loops after 24:00; needed for interpolation).
                 lighting[24 * 60] = lighting.begin()->second;
             }
         }
         
+        //Sun's strength.
+        map<unsigned, unsigned char> sun_strength;
+        size_t n_sun_strength_points = cur_weather->get_child_by_name("sun_strength")->get_nr_of_children();
+        
+        for(size_t sp = 0; sp < n_sun_strength_points; sp++) {
+            data_node* sun_strength_node = cur_weather->get_child_by_name("sun_strength")->get_child(sp);
+            
+            unsigned point_time = s2i(sun_strength_node->name);
+            unsigned char point_strength = s2i(sun_strength_node->value);
+            
+            sun_strength[point_time] = point_strength;
+        }
+        
+        if(sun_strength.size() > 0) {
+            if(sun_strength.find(24 * 60) == sun_strength.end()) {
+                //If there is no data for the last hour, use the data from the first point
+                //(this is because the day loops after 24:00; needed for interpolation).
+                sun_strength[24 * 60] = sun_strength.begin()->second;
+            }
+        }
+        
+        //Percipitation.
         unsigned char percipitation_type = s2i(cur_weather->get_child_by_name("percipitation_type")->get_value_or_default(i2s(PERCIPITATION_TYPE_NONE)));
         interval percipitation_frequency = interval(cur_weather->get_child_by_name("percipitation_frequency")->value);
         interval percipitation_speed = interval(cur_weather->get_child_by_name("percipitation_speed")->value);
         interval percipitation_angle = interval(cur_weather->get_child_by_name("percipitation_angle")->get_value_or_default(f2s((M_PI + M_PI_2))));
         
-        weather_conditions[name] = weather(name, lighting, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
+        //Save.
+        weather_conditions[name] = weather(name, lighting, sun_strength, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
 }
 
@@ -784,6 +851,7 @@ void load_options() {
     }
     
     //Other options.
+    area_images_scale = s2f(file.get_child_by_name("area_quality")->get_value_or_default("1"));
     daylight_effect = s2b(file.get_child_by_name("daylight_effect")->get_value_or_default("true"));
     draw_cursor_trail = s2b(file.get_child_by_name("draw_cursor_trail")->get_value_or_default("true"));
     game_fps = s2i(file.get_child_by_name("fps")->get_value_or_default("30"));
@@ -989,6 +1057,7 @@ void save_options() {
     }
     
     //Other options.
+    al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
     al_fwrite(file, "daylight_effect=" + b2s(daylight_effect) + "\n");
     al_fwrite(file, "draw_cursor_trail=" + b2s(draw_cursor_trail) + "\n");
     al_fwrite(file, "fps=" + i2s(game_fps) + "\n");
@@ -1040,6 +1109,33 @@ vector<string> split(string text, const string del, const bool inc_empty, const 
         v.push_back(text);
         
     return v;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a square intersects with a line.
+ * Also returns true if the line is fully inside the square.
+ * s**: Square coordinates.
+ * l**: Line coordinates.
+ */
+bool square_intersects_line(const float sx1, const float sy1, const float sx2, const float sy2, const float lx1, const float ly1, const float lx2, const float ly2) {
+    //Line crosses left side?
+    if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx1, sy2, NULL, NULL)) return true;
+    //Line crosses right side?
+    if(lines_intersect(lx1, ly1, lx2, ly2, sx2, sy1, sx2, sy2, NULL, NULL)) return true;
+    //Line crosses top side?
+    if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx2, sy1, NULL, NULL)) return true;
+    //Line crosses bottom side?
+    if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy2, sx2, sy2, NULL, NULL)) return true;
+    
+    if(
+        (lx1 > sx1 && lx2 > sx1) &&
+        (lx1 < sx2 && lx2 < sx2) &&
+        (ly1 > sy1 && ly2 > sy1) &&
+        (ly1 < sy2 && ly2 < sy2)
+    ) return true;
+    
+    return false;
+    
 }
 
 /* ----------------------------------------------------------------------------

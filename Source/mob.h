@@ -94,18 +94,20 @@ public:
     float acceleration;              //Speed multiplies by this much each second.
     float angle;                     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float intended_angle;            //Angle the mob wants to be facing.
-    sector* sec;                     //Sector it's on.
+    float ground_z;                  //Z of the highest ground it's on.
+    float lighting;                  //How light the mob is. Depends on the sector(s) it's on.
     bool affected_by_gravity;        //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
     void face(const float new_angle);      //Makes the mob face an angle, but it'll turn at its own pace.
     virtual float get_base_speed();  //Returns the normal speed of this mob. Subclasses are meant to override this.
     
     //Target things.
     float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
+    float* target_z;                    //When following a target in teleport mode, also change the z accordingly.
     float* target_rel_x, *target_rel_y; //Follow these coordinates.
     unsigned char target_code;          //Code ID for a special target, like home. Used for scripting.
     bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
     bool gtt_instant;                   //If true, teleport instantly.
-    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant);
+    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL);
     void remove_target(const bool stop);
     
     //Party things.
@@ -136,7 +138,7 @@ public:
     bool dead;                     //Is the mob dead?
     unsigned char state;           //Current state.
     float time_in_state;           //For how long as the mob been in this state?
-    vector<int> chomp_hitboxes; //List of hitboxes that will chomp Pikmin.
+    vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  //Mobs being chomped.
     void set_state(const unsigned char new_state);
     

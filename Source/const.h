@@ -72,8 +72,9 @@ using namespace std;
 #define SUN_METER_SUN_SPIN_SPEED    0.5      //The Sun Meter's sun spins these many radians per second.
 #define TREE_SHADOW_SWAY_AMOUNT     8        //Tree shadows sway this much away from their neutral position.
 #define TREE_SHADOW_SWAY_SPEED      M_PI_4   //Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
-#define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply their strength by this.
+#define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
 #define THROW_PARTICLE_INTERVAL     0.02     //A new "mob thrown" particle is spawned every X seconds.
+#define THROW_STRENGTH_MULTIPLIER   0.65     //When a leader throws a Pikmin, multiply the strength by this.
 #define UNWHISTLABLE_PERIOD         1        //A mob cannot be whistled to a party during this period.
 #define UNTOUCHABLE_PERIOD          3        //A mob cannot be touched to a party during this period.
 #define WHISTLE_DOT_INTERVAL        0.03     //Seconds that need to pass before another dot is added.

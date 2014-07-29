@@ -27,8 +27,10 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     this->type = type;
     this->angle = angle;
     
-    sec = get_sector(x, y, NULL);
+    sector* sec = get_sector(x, y, NULL, true);
     z = sec->z;
+    ground_z = sec->z;
+    lighting = sec->brightness;
     intended_angle = angle;
     
     anim = animation_instance(&type->anims);
@@ -49,6 +51,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     gtt_instant = false;
     target_x = x;
     target_y = y;
+    target_z = NULL;
     target_rel_x = NULL;
     target_rel_y = NULL;
     
@@ -76,27 +79,6 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
  * Makes the mob follow a game tick.
  */
 void mob::tick() {
-    //Movement.
-    bool was_airborne = z > sec->z;
-    x += delta_t* speed_x;
-    y += delta_t* speed_y;
-    z += delta_t* speed_z;
-    
-    if(z <= sec->z) {
-        z = sec->z;
-        if(was_airborne) {
-            speed_x = 0;
-            speed_y = 0;
-            speed_z = 0;
-            was_thrown = false;
-        }
-    }
-    
-    //Gravity.
-    if(z > sec->z && affected_by_gravity) {
-        speed_z += delta_t* (GRAVITY_ADDER);
-    }
-    
     //Chasing a target.
     if(go_to_target && ((speed_z == 0 && knockdown_period == 0) || gtt_instant)) {
         float final_target_x = target_x, final_target_y = target_y;
@@ -107,6 +89,7 @@ void mob::tick() {
         
             x = final_target_x;
             y = final_target_y;
+            if(target_z) z = *target_z;
             speed_x = speed_y = 0;
             
         } else if(x != final_target_x || y != final_target_y) {
@@ -119,7 +102,206 @@ void mob::tick() {
         } else reached_destination = true;
     }
     
-    //ToDo collisions
+    //Movement.
+    bool move_over = false;
+    bool doing_slide = false;
+    
+    float new_x = x, new_y = y, new_z = z;
+    float new_ground_z = ground_z;
+    unsigned char new_lighting = lighting;
+    float pre_move_ground_z = ground_z;
+    
+    float move_speed_x = speed_x;
+    float move_speed_y = speed_y;
+    
+    while(!move_over) {
+    
+        if(move_speed_x != 0 || move_speed_y != 0) {
+        
+            //Trying to move to a new spot. Check sector collisions.
+            bool successful_move = true;
+            
+            new_x = x + delta_t* move_speed_x;
+            new_y = y + delta_t* move_speed_y;
+            new_z = z;
+            new_ground_z = ground_z;
+            new_lighting = lighting;
+            
+            float move_angle;
+            float move_speed;
+            coordinates_to_angle(speed_x, speed_y, &move_angle, &move_speed);
+            
+            sector* base_sector = get_sector(new_x, new_y, NULL, true);
+            if(!base_sector) {
+                //ToDo out of bounds! Kill it!
+                return;
+            } else {
+                new_ground_z = base_sector->z;
+                new_lighting = base_sector->brightness;
+            }
+            
+            //Use the bounding box to know which blockmap blocks the mob is on.
+            size_t bx1 = cur_area_map.bmap.get_col(new_x - type->size * 0.5);
+            size_t bx2 = cur_area_map.bmap.get_col(new_x + type->size * 0.5);
+            size_t by1 = cur_area_map.bmap.get_row(new_y - type->size * 0.5);
+            size_t by2 = cur_area_map.bmap.get_row(new_y + type->size * 0.5);
+            
+            if(
+                bx1 == string::npos || bx2 == string::npos ||
+                by1 == string::npos || by2 == string::npos
+            ) {
+                //ToDo out of bounds! Kill it!
+                return;
+            }
+            
+            float slide_angle = move_angle;
+            float slide_angle_dif = -(M_PI * 4);
+            float highest_z = 0;
+            bool have_highest_z = false;
+            
+            linedef* l_ptr = NULL;
+            //Check the linedefs inside the blockmaps for collisions.
+            for(size_t bx = bx1; bx <= bx2; bx++) {
+                for(size_t by = by1; by <= by2; by++) {
+                
+                    vector<linedef*>* linedefs = &cur_area_map.bmap.linedefs[bx][by];
+                    
+                    for(size_t l = 0; l < linedefs->size(); l++) {
+                        l_ptr = (*linedefs)[l];
+                        if(
+                            circle_intersects_line(
+                                new_x, new_y, type->size * 0.5,
+                                l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                                l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
+                                NULL, NULL
+                            )
+                        ) {
+                        
+                            //If the mob intersects with the linedef, it means it's on both sectors.
+                            //Check if any of the sectors say the mob shouldn't be there.
+                            //Also, adjust height for steps and the like.
+                            for(size_t s = 0; s < 2; s++) {
+                                sector* s_ptr = l_ptr->sectors[s];
+                                
+                                if(!have_highest_z) {
+                                    have_highest_z = true;
+                                    highest_z = s_ptr->z;
+                                }
+                                
+                                if(!s_ptr) {
+                                    //ToDo out of bounds! Kill it!
+                                    
+                                } else {
+                                
+                                    if(s_ptr->type == SECTOR_TYPE_WALL) {
+                                        //The mob cannot be inside a wall-type sector whatsoever.
+                                        successful_move = false;
+                                        
+                                    } else {
+                                        if(s_ptr->z > highest_z) highest_z = s_ptr->z;
+                                        if(s_ptr->z <= new_z && s_ptr->z > new_ground_z) new_ground_z = s_ptr->z;
+                                    }
+                                }
+                                
+                                if(new_z >= s_ptr->z - SECTOR_STEP && s_ptr->z > new_z && new_z == new_ground_z) {
+                                    //Only step up a step if it's on the ground.
+                                    new_z = s_ptr->z;
+                                    new_ground_z = s_ptr->z;
+                                }
+                                if(highest_z > new_z) successful_move = false;
+                            }
+                            
+                            //Save the angle for the sliding, in case this linedef blocked something.
+                            if(!doing_slide && !successful_move) {
+                                float wall_angle1 = normalize_angle(atan2(l_ptr->vertices[1]->y - l_ptr->vertices[0]->y, l_ptr->vertices[1]->x - l_ptr->vertices[0]->x));
+                                float wall_angle2 = normalize_angle(wall_angle1 + M_PI);
+                                //Because we don't know which side of the wall the mob is on, just try both angles.
+                                float dif1 = get_angle_smallest_dif(wall_angle1, move_angle);
+                                float dif2 = get_angle_smallest_dif(wall_angle2, move_angle);
+                                
+                                if(abs(dif1 - dif2) < 0.01) {
+                                    //Just forget the slide, you're slamming against the wall head-on, perpendicularly.
+                                    successful_move = false;
+                                    doing_slide = true;
+                                    
+                                } else {
+                                
+                                    float next_angle_dif, next_angle;
+                                    if(dif1 < dif2) {
+                                        next_angle_dif = dif1;
+                                        next_angle = wall_angle1;
+                                    } else {
+                                        next_angle_dif = dif2;
+                                        next_angle = wall_angle2;
+                                    }
+                                    
+                                    if(next_angle_dif > slide_angle_dif) {
+                                        slide_angle_dif = next_angle_dif;
+                                        slide_angle = next_angle;
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if(successful_move) {
+                x = new_x;
+                y = new_y;
+                z = new_z;
+                ground_z = new_ground_z;
+                lighting = new_lighting;
+                move_over = true;
+                
+            } else {
+            
+                //Try sliding.
+                if(doing_slide) {
+                    //We already tried... Let's just stop completely.
+                    speed_x = 0;
+                    speed_y = 0;
+                    move_over = true;
+                    
+                } else {
+                
+                    doing_slide = true;
+                    move_speed *= 1 - (slide_angle_dif / M_PI);
+                    angle_to_coordinates(slide_angle, move_speed, &move_speed_x, &move_speed_y);
+                    
+                }
+                
+            }
+            
+        } else {
+            move_over = true;
+        }
+    }
+    
+    //Vertical movement.
+    //If the current ground is one step (or less) below
+    //the previous ground, just instantly go down the step.
+    if(pre_move_ground_z - ground_z <= SECTOR_STEP && z == pre_move_ground_z) {
+        z = ground_z;
+    }
+    
+    bool was_airborne = z > ground_z;
+    z += delta_t* speed_z;
+    if(z <= ground_z) {
+        z = ground_z;
+        if(was_airborne) {
+            speed_x = 0;
+            speed_y = 0;
+            speed_z = 0;
+            was_thrown = false;
+        }
+    }
+    
+    //Gravity.
+    if(z > ground_z && affected_by_gravity) {
+        speed_z += delta_t* (GRAVITY_ADDER);
+    }
     
     //Other things.
     if(unwhistlable_period > 0) {
@@ -326,10 +508,11 @@ void mob::tick() {
    * Use this to make the mob follow another mob wherever they go, for instance.
  * instant:      If true, the mob teleports to that spot, instead of walking to it.
  */
-void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant) {
+void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z) {
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
+    this->target_z;
     
     go_to_target = true;
     reached_destination = false;

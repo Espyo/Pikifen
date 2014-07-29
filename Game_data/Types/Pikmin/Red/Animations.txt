@@ -220,7 +220,7 @@ frames{
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=-19
+		top_x=-20
 		top_y=0
 		top_w=5.5
 		top_h=10
@@ -274,7 +274,7 @@ frames{
 		offs_x=0
 		offs_y=0
 		top_visible=true
-		top_x=4
+		top_x=3
 		top_y=0
 		top_w=5.5
 		top_h=10

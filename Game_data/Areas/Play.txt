@@ -29,16 +29,16 @@ mobs{
 	}
 	Onion{
 		type=Blue onion
-		pos=192 608
+		pos=128 576
 	}
 	Treasure{
 		type=Test
-		pos=-128 -352
+		pos=-128 -384
 	}
 	Enemy{
 		type=Cloaking Burrow-nit
 		pos=480 -576
-		angle=5.35589
+		angle=2.03444
 	}
 	Special{
 		type=Nectar
@@ -71,14 +71,14 @@ vertices{
 	vertex=896 -1504
 	vertex=896 896
 	vertex=-576 896
-	vertex=255.948 94.8847
+	vertex=256 96
 	vertex=84.344 74.9476
 	vertex=64 672
 	vertex=352 224
 	vertex=-126.251 161.924
 	vertex=-224 -192
 	vertex=544 -192
-	vertex=257.372 -11.2105
+	vertex=256 -0
 	vertex=-192 192
 	vertex=1088 -1696
 	vertex=1088 1088
@@ -96,7 +96,7 @@ vertices{
 	vertex=-352 -1056
 	vertex=800 -608
 	vertex=704 -992
-	vertex=224 -1280
+	vertex=229.782 -1340.13
 	vertex=448 -1248
 	vertex=-32 640
 	vertex=-96 576
@@ -228,11 +228,56 @@ vertices{
 	vertex=-448 32
 	vertex=-263.681 175.869
 	vertex=-311.595 145.191
-	vertex=-384 -288
 	vertex=-207.443 -222.277
 	vertex=-335.951 -283.909
 	vertex=-364.8 -224.9
 	vertex=-237.603 -168.514
+	vertex=-381.807 -562.293
+	vertex=-319.429 -536.528
+	vertex=-320 -384
+	vertex=-384 -480
+	vertex=-192 -896
+	vertex=-224 -704
+	vertex=-158.739 -849.773
+	vertex=-160 -896
+	vertex=-189.25 -944.017
+	vertex=32 -1088
+	vertex=-128 -960
+	vertex=96 -1184
+	vertex=160 -1152
+	vertex=128 -1248
+	vertex=224 -1184
+	vertex=164.634 -1185.37
+	vertex=285.885 -1228.42
+	vertex=178.601 -1226.45
+	vertex=168.758 -1279.6
+	vertex=232.243 -1202.33
+	vertex=297.696 -1272.71
+	vertex=275.55 -1320.44
+	vertex=181.061 -1315.03
+	vertex=128 -1280
+	vertex=288 -1184
+	vertex=355.835 -1265.76
+	vertex=427.906 -1169.13
+	vertex=576 -1120
+	vertex=448 -1056
+	vertex=672 -1024
+	vertex=693.642 -1117.71
+	vertex=704 -1024
+	vertex=723.279 -1061.19
+	vertex=511.442 -1047.87
+	vertex=138.842 -1207.14
+	vertex=117.063 -1159.57
+	vertex=-157.383 -984.02
+	vertex=-171.621 -797.565
+	vertex=-360.11 -623.314
+	vertex=-356.042 -400.925
+	vertex=-300.445 -394.823
+	vertex=-311.971 -593.482
+	vertex=460.31 -1145.99
+	vertex=386.905 -1083.16
+	vertex=513.296 -1136.88
+	vertex=544 -1216
 }
 linedefs{
 	linedef{
@@ -261,7 +306,7 @@ linedefs{
 	}
 	linedef{
 		s=26 23
-		v=9 165
+		v=9 164
 	}
 	linedef{
 		s=1 13
@@ -348,12 +393,12 @@ linedefs{
 		v=28 27
 	}
 	linedef{
-		s=1 0
-		v=29 30
+		s=29 0
+		v=29 186
 	}
 	linedef{
-		s=1 0
-		v=30 28
+		s=31 0
+		v=30 210
 	}
 	linedef{
 		s=1 0
@@ -385,7 +430,7 @@ linedefs{
 	}
 	linedef{
 		s=1 0
-		v=39 29
+		v=39 188
 	}
 	linedef{
 		s=4 0
@@ -905,7 +950,7 @@ linedefs{
 	}
 	linedef{
 		s=1 23
-		v=153 161
+		v=153 36
 	}
 	linedef{
 		s=22 23
@@ -913,19 +958,15 @@ linedefs{
 	}
 	linedef{
 		s=22 23
-		v=155 164
+		v=155 163
 	}
 	linedef{
 		s=25 1
-		v=156 157
-	}
-	linedef{
-		s=25 1
-		v=157 162
+		v=157 161
 	}
 	linedef{
 		s=26 1
-		v=153 163
+		v=153 162
 	}
 	linedef{
 		s=23 0
@@ -952,37 +993,249 @@ linedefs{
 		v=160 159
 	}
 	linedef{
-		s=1 23
-		v=161 36
-	}
-	linedef{
 		s=25 26
-		v=162 163
+		v=161 162
 	}
 	linedef{
 		s=26 1
-		v=162 9
+		v=161 9
 	}
 	linedef{
 		s=25 1
-		v=163 156
+		v=162 156
 	}
 	linedef{
 		s=26 23
-		v=164 153
+		v=163 153
 	}
 	linedef{
 		s=22 23
-		v=165 154
+		v=164 154
 	}
 	linedef{
 		s=26 22
-		v=165 164
+		v=164 163
+	}
+	linedef{
+		s=25 1
+		v=156 157
+	}
+	linedef{
+		s=27 1
+		v=165 203
+	}
+	linedef{
+		s=27 1
+		v=166 205
+	}
+	linedef{
+		s=27 1
+		v=167 204
+	}
+	linedef{
+		s=27 1
+		v=168 165
+	}
+	linedef{
+		s=27 1
+		v=169 173
+	}
+	linedef{
+		s=27 1
+		v=170 206
+	}
+	linedef{
+		s=27 1
+		v=171 202
+	}
+	linedef{
+		s=27 1
+		v=172 171
+	}
+	linedef{
+		s=27 1
+		v=173 201
+	}
+	linedef{
+		s=27 1
+		v=174 176
+	}
+	linedef{
+		s=27 1
+		v=175 172
+	}
+	linedef{
+		s=27 1
+		v=177 175
+	}
+	linedef{
+		s=27 28
+		v=176 200
+	}
+	linedef{
+		s=28 30
+		v=178 199
+	}
+	linedef{
+		s=28 1
+		v=179 177
+	}
+	linedef{
+		s=28 1
+		v=176 178
+	}
+	linedef{
+		s=28 30
+		v=180 179
+	}
+	linedef{
+		s=29 30
+		v=181 184
+	}
+	linedef{
+		s=29 30
+		v=182 183
+	}
+	linedef{
+		s=29 0
+		v=183 187
+	}
+	linedef{
+		s=29 30
+		v=184 182
+	}
+	linedef{
+		s=30 0
+		v=185 190
+	}
+	linedef{
+		s=29 30
+		v=185 181
+	}
+	linedef{
+		s=29 0
+		v=186 185
+	}
+	linedef{
+		s=29 0
+		v=187 29
+	}
+	linedef{
+		s=30 1
+		v=178 188
+	}
+	linedef{
+		s=30 0
+		v=188 183
+	}
+	linedef{
+		s=30 1
+		v=189 179
+	}
+	linedef{
+		s=31 0
+		v=190 30
+	}
+	linedef{
+		s=31 30
+		v=191 190
+	}
+	linedef{
+		s=30 1
+		v=193 208
+	}
+	linedef{
+		s=32 1
+		v=194 198
+	}
+	linedef{
+		s=1 0
+		v=194 28
+	}
+	linedef{
+		s=32 0
+		v=192 195
+	}
+	linedef{
+		s=32 0
+		v=195 197
+	}
+	linedef{
+		s=32 0
+		v=196 194
+	}
+	linedef{
+		s=32 0
+		v=197 196
+	}
+	linedef{
+		s=31 32
+		v=192 209
+	}
+	linedef{
+		s=33 1
+		v=198 193
+	}
+	linedef{
+		s=33 30
+		v=193 207
+	}
+	linedef{
+		s=28 30
+		v=199 180
+	}
+	linedef{
+		s=27 28
+		v=200 177
+	}
+	linedef{
+		s=27 1
+		v=201 174
+	}
+	linedef{
+		s=27 1
+		v=202 170
+	}
+	linedef{
+		s=27 1
+		v=203 169
+	}
+	linedef{
+		s=27 1
+		v=204 168
+	}
+	linedef{
+		s=27 1
+		v=205 167
+	}
+	linedef{
+		s=27 1
+		v=206 166
+	}
+	linedef{
+		s=31 30
+		v=207 191
+	}
+	linedef{
+		s=30 1
+		v=208 189
+	}
+	linedef{
+		s=33 32
+		v=209 198
+	}
+	linedef{
+		s=31 33
+		v=209 207
+	}
+	linedef{
+		s=31 0
+		v=210 192
 	}
 }
 sectors{
 	sector{
-		z=128
+		z=200
 		texture=Grass.png
 	}
 	sector{
@@ -991,12 +1244,13 @@ sectors{
 		texture=Grass 2.png
 	}
 	sector{
-		z=128
+		type=Wall
+		z=200
 		fade=true
 		texture=Grass.png
 	}
 	sector{
-		z=192
+		z=300
 		texture=Rock.png
 	}
 	sector{
@@ -1049,11 +1303,11 @@ sectors{
 		texture=Dirt.png
 	}
 	sector{
-		z=192
+		z=200
 		texture=Rock.png
 	}
 	sector{
-		z=192
+		z=200
 		fade=true
 		texture=Grass.png
 	}
@@ -1069,12 +1323,12 @@ sectors{
 		texture=Dirt.png
 	}
 	sector{
-		z=192
+		z=200
 		fade=true
 		texture=Grass.png
 	}
 	sector{
-		z=192
+		z=200
 		fade=true
 		texture=
 	}
@@ -1097,25 +1351,62 @@ sectors{
 		texture=Dirt.png
 	}
 	sector{
-		z=48
+		z=150
 		texture=Grass 2.png
 	}
 	sector{
-		z=64
+		z=200
 		texture=Grass 2.png
 	}
 	sector{
-		z=192
+		z=300
 		fade=true
 		texture=Rock.png
 	}
 	sector{
+		z=50
+		texture=Grass 2.png
+	}
+	sector{
+		z=100
+		texture=Grass 2.png
+	}
+	sector{
+		type=Landing site
 		z=16
+		always_cast_shadow=true
+		texture=Bark.png
+	}
+	sector{
+		type=Landing site
+		z=48
+		texture=Bark.png
+	}
+	sector{
+		type=Landing site
+		z=192
+		texture=Trunk.png
+		texture_scale=0.52 0.52
+		texture_trans=60 -5
+	}
+	sector{
+		type=Landing site
+		z=96
+		texture=Bark.png
+	}
+	sector{
+		type=Landing site
+		z=0
 		texture=Grass 2.png
 	}
 	sector{
-		z=32
-		texture=Grass 2.png
+		z=128
+		texture=Bark.png
+	}
+	sector{
+		type=Landing site
+		z=16
+		texture=Bark.png
 	}
 }
 tree_shadows{

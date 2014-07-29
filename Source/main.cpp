@@ -106,12 +106,13 @@ int main(int argc, char**) {
     al_reserve_samples(16);
     srand(time(NULL));
     
-    //ToDo the function is always return 0.
+    //ToDo the function is always returning 0.
     area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
     
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
     sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
+    sector_types.register_type(SECTOR_TYPE_WALL, "Wall");
     
     //Error bitmap.
     //ToDo move this somewhere else, maybe?
@@ -409,7 +410,7 @@ int main(int argc, char**) {
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
             double cur_time = al_get_time();
             if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
-            delta_t = cur_time - prev_frame_time;
+            delta_t = /*cur_time - prev_frame_time*/ 1.0 / 30.0; //ToDo temporary change.
             
             if(cur_screen == SCREEN_GAME) {
                 do_logic();

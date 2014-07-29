@@ -38,6 +38,7 @@ public:
     float weight;
     float carry_speed;
     float size;
+    float throw_height_mult;
     bool has_onion;
     bool can_dig;
     bool can_fly;

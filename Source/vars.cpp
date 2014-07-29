@@ -75,9 +75,10 @@ sample_struct sfx_switch_pikmin;
 sample_struct sfx_throw;
 
 vector<vector<ALLEGRO_BITMAP*> > area_images;
+float                            area_images_scale = 1;
 int                              area_image_size = 0;
-float                            area_x1 = 0;
-float                            area_y1 = 0;
+float                            area_images_x1 = 0;
+float                            area_images_y1 = 0;
 float                            auto_pluck_input_time = 0;
 vector<unsigned int>             berries;
 bmp_manager                      bitmaps;

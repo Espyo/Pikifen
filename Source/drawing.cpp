@@ -95,7 +95,15 @@ void do_drawing() {
         for(size_t x = 0; x < area_image_cols; x++) {
             size_t area_image_rows = area_images[x].size();
             for(size_t y = 0; y < area_image_rows; y++) {
-                al_draw_bitmap(area_images[x][y], x * area_image_size + area_x1, y * area_image_size + area_y1, 0);
+                al_draw_scaled_bitmap(
+                    area_images[x][y],
+                    0, 0, area_image_size, area_image_size,
+                    (x * area_image_size + area_images_x1) / area_images_scale,
+                    (y * area_image_size + area_images_y1) / area_images_scale,
+                    area_image_size / area_images_scale,
+                    area_image_size / area_images_scale,
+                    0
+                );
             }
         }
         
@@ -118,11 +126,11 @@ void do_drawing() {
         }
         
         for(size_t l = 0; l < n_leaders; l++) {
-            draw_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->sec->z, shadow_stretch);
+            draw_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->ground_z, shadow_stretch);
         }
         
         for(size_t p = 0; p < n_pikmin; p++) {
-            draw_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->sec->z, shadow_stretch);
+            draw_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->ground_z, shadow_stretch);
         }
         
         
@@ -140,7 +148,7 @@ void do_drawing() {
             draw_sprite(
                 bmp_nectar,
                 nectars[n]->x, nectars[n]->y,
-                size, size, 0, map_gray(nectars[n]->sec->brightness));
+                size, size, 0, map_gray(nectars[n]->lighting));
         }
         
         //Treasures.
@@ -153,7 +161,7 @@ void do_drawing() {
             draw_sprite(
                 bmp_tp,
                 treasures[t]->x, treasures[t]->y,
-                size, size, 0, map_gray(treasures[t]->sec->brightness)
+                size, size, 0, map_gray(treasures[t]->lighting)
             );
         }
         
@@ -177,13 +185,13 @@ void do_drawing() {
                     f_ptr->bitmap,
                     p_ptr->x, p_ptr->y,
                     size, size, 0,
-                    map_gray(p_ptr->sec->brightness)
+                    map_gray(p_ptr->lighting)
                 );
                 draw_sprite(
                     p_ptr->pel_type->bmp_number,
                     p_ptr->x, p_ptr->y,
                     size * 0.68, -1,
-                    0, map_gray(p_ptr->sec->brightness)
+                    0, map_gray(p_ptr->lighting)
                 );
             }
         }
@@ -210,7 +218,7 @@ void do_drawing() {
                     e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
                     width, height,
                     e_ptr->angle,
-                    map_gray(e_ptr->sec->brightness)
+                    map_gray(e_ptr->lighting)
                 );
             }
         }
@@ -226,12 +234,14 @@ void do_drawing() {
                 float c = cos(pik_ptr->angle), s = sin(pik_ptr->angle);
                 float sprite_x = pik_ptr->x + c * f->offs_x + c * f->offs_y;
                 float sprite_y = pik_ptr->y - s * f->offs_y + s * f->offs_x;
+                float sprite_size_mult = 1 + pik_ptr->z * 0.001;
+                
                 draw_sprite(
                     f->bitmap,
                     sprite_x, sprite_y,
-                    f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
+                    f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
                     pik_ptr->angle,
-                    map_gray(pik_ptr->sec->brightness)
+                    map_gray(pik_ptr->lighting)
                 );
                 
                 if(idling) {
@@ -239,9 +249,9 @@ void do_drawing() {
                     draw_sprite(
                         f->bitmap,
                         sprite_x, sprite_y,
-                        f->game_w + pik_ptr->z * 0.1, f->game_h + pik_ptr->z * 0.1,
+                        f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
                         pik_ptr->angle,
-                        map_gray(pik_ptr->sec->brightness)
+                        map_gray(pik_ptr->lighting)
                     );
                     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
                 }
@@ -249,11 +259,11 @@ void do_drawing() {
                 if(f->top_visible) {
                     draw_sprite(
                         pik_ptr->pik_type->bmp_top[pik_ptr->maturity],
-                        sprite_x + c * f->top_x + c * f->top_y,
-                        sprite_y - s * f->top_y + s * f->top_x,
-                        f->top_w, f->top_h,
+                        sprite_x + c * f->top_x * sprite_size_mult + c * f->top_y * sprite_size_mult,
+                        sprite_y - s * f->top_y * sprite_size_mult + s * f->top_x * sprite_size_mult,
+                        f->top_w * sprite_size_mult, f->top_h * sprite_size_mult,
                         f->top_angle + pik_ptr->angle,
-                        map_gray(pik_ptr->sec->brightness)
+                        map_gray(pik_ptr->lighting)
                     );
                 }
                 
@@ -261,12 +271,12 @@ void do_drawing() {
                     draw_sprite(
                         bmp_idle_glow,
                         pik_ptr->x, pik_ptr->y,
-                        30, 30,
+                        30 * sprite_size_mult, 30 * sprite_size_mult,
                         idle_glow_angle,
                         al_map_rgba_f(
-                            pik_ptr->type->main_color.r * pik_ptr->sec->brightness / 255,
-                            pik_ptr->type->main_color.g * pik_ptr->sec->brightness / 255,
-                            pik_ptr->type->main_color.b * pik_ptr->sec->brightness / 255,
+                            pik_ptr->type->main_color.r * pik_ptr->lighting / 255,
+                            pik_ptr->type->main_color.g * pik_ptr->lighting / 255,
+                            pik_ptr->type->main_color.b * pik_ptr->lighting / 255,
                             1
                         )
                     );
@@ -287,7 +297,7 @@ void do_drawing() {
                     leaders[l]->y - s * f->offs_y + s * f->offs_x,
                     f->game_w, f->game_h,
                     leaders[l]->angle,
-                    map_gray(leaders[l]->sec->brightness)
+                    map_gray(leaders[l]->lighting)
                 );
             }
         }
@@ -304,7 +314,7 @@ void do_drawing() {
                 bm,
                 onions[o]->x, onions[o]->y,
                 185, 160,
-                0, al_map_rgba(onions[o]->sec->brightness, onions[o]->sec->brightness, onions[o]->sec->brightness, 224)
+                0, al_map_rgba(onions[o]->lighting, onions[o]->lighting, onions[o]->lighting, 224)
             );
         }
         
@@ -316,7 +326,7 @@ void do_drawing() {
                 bmp_info_spot,
                 i_ptr->x, i_ptr->y,
                 i_ptr->type->size, i_ptr->type->size,
-                0, map_gray(i_ptr->sec->brightness)
+                0, map_gray(i_ptr->lighting)
             );
         }
         
@@ -327,36 +337,18 @@ void do_drawing() {
                 bmp_ship,
                 ships[s]->x, ships[s]->y,
                 138, 112,
-                0, map_gray(ships[s]->sec->brightness)
+                0, map_gray(ships[s]->lighting)
             );
             al_draw_circle(
                 ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE,
                 ships[s]->y, SHIP_BEAM_RANGE,
                 al_map_rgb(
-                    ship_beam_ring_color[0] * 255 / ships[s]->sec->brightness,
-                    ship_beam_ring_color[1] * 255 / ships[s]->sec->brightness,
-                    ship_beam_ring_color[2] * 255 / ships[s]->sec->brightness
+                    ship_beam_ring_color[0] * 255 / ships[s]->lighting,
+                    ship_beam_ring_color[1] * 255 / ships[s]->lighting,
+                    ship_beam_ring_color[2] * 255 / ships[s]->lighting
                 ), 1
             );
         }
-        
-        //ToDo debugging -- remove.
-        /*for(size_t m = 0; m < mobs.size(); m++) {
-            if(typeid(*mobs[m]) == typeid(pikmin)) continue;
-            mob* m_ptr = mobs[m];
-            frame* f_ptr = m_ptr->anim.get_frame();
-            if(f_ptr == NULL) continue; //ToDo report
-        
-            for(size_t h = 0; h < f_ptr->hitboxes.size(); h++) {
-                hitbox* h_ptr = &f_ptr->hitboxes[h];
-                float s = sin(m_ptr->angle);
-                float c = cos(m_ptr->angle);
-                float h_x = m_ptr->x + (h_ptr->x * c - h_ptr->y * s);
-                float h_y = m_ptr->y + (h_ptr->x * s + h_ptr->y * c);
-        
-                al_draw_filled_circle(h_x, h_y, h_ptr->radius, al_map_rgba(128, 0, 0, 192));
-            }
-        }*/
         
         
         /* Layer 5
@@ -533,12 +525,14 @@ void do_drawing() {
         for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
             tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
             
+            unsigned char alpha = ((s_ptr->alpha / 255.0) * (float) (get_sun_strength() / 255.0)) * 255;
+            
             draw_sprite(
                 s_ptr->bitmap,
                 s_ptr->x + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_x,
                 s_ptr->y + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_y,
                 s_ptr->w, s_ptr->h,
-                s_ptr->angle, map_alpha(s_ptr->alpha)
+                s_ptr->angle, map_alpha(alpha)
             );
         }
         
@@ -984,6 +978,7 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
 bool casts_shadow(sector* s1, sector* s2) {
     if(!s1 || !s2) return false;
     if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT || s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
+    if(s1->z > s2->z && s1->always_cast_shadow) return true;
     if(s1->z <= s2->z + SECTOR_STEP) return false;
     return true;
 }
@@ -1064,10 +1059,11 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
  * vertices: Vertices that make up the triangles of the sector.
- * s:    The sector to draw.
- * x, y: Top-left coordinates.
+ * s:        The sector to draw.
+ * x, y:     Top-left coordinates.
+ * scale:    Drawing scale.
  */
-void draw_sector(sector* s_ptr, const float x, const float y) {
+void draw_sector(sector* s_ptr, const float x, const float y, float scale) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
@@ -1205,6 +1201,11 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
             av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
         }
         
+        for(size_t v = 0; v < n_vertices; v++) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        
         al_draw_prim(
             av, NULL,
             (texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap),
@@ -1257,7 +1258,7 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
             get_sector(
                 (lv[1]->x + lv[0]->x) / 2 + l_cos_front * 0.01,
                 (lv[1]->y + lv[0]->y) / 2 + l_sin_front * 0.01,
-                NULL
+                NULL, false
             ) != s_ptr
         ) {
         
@@ -1316,8 +1317,8 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
                 float vl_angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
                 
                 float d;
-                if(v == 0) d = get_angle_dif(vl_angle, l_angle);
-                else d = get_angle_dif(l_angle + M_PI, vl_angle);
+                if(v == 0) d = get_angle_cw_dif(vl_angle, l_angle);
+                else d = get_angle_cw_dif(l_angle + M_PI, vl_angle);
                 
                 if(
                     d < neighbor_angle_difs[v] ||
@@ -1415,11 +1416,6 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
                     
                 }
                 
-                /*} else {
-                
-                    //Just draw straight outwards.
-                    shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
-                    shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;*/
             }
             
         }
@@ -1441,6 +1437,16 @@ void draw_sector(sector* s_ptr, const float x, const float y) {
         for(unsigned char a = 0; a < 8; a++) {
             extra_av[a].x -= x;
             extra_av[a].y -= y;
+        }
+        
+        //Do the scaling.
+        for(size_t v = 0; v < 4; v++) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        for(size_t v = 0; v < 8; v++) {
+            extra_av[v].x *= scale;
+            extra_av[v].y *= scale;
         }
         
         //Draw!

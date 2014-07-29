@@ -302,7 +302,7 @@ void area_editor::do_logic() {
         
             //Draw textures.
             for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
-                draw_sector(cur_area_map.sectors[s], 0, 0);
+                draw_sector(cur_area_map.sectors[s], 0, 0, 1.0);
             }
         }
         
@@ -546,7 +546,7 @@ void area_editor::find_errors() {
     if(ed_error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
-            if(!get_sector(m_ptr->x, m_ptr->y, NULL)) {
+            if(!get_sector(m_ptr->x, m_ptr->y, NULL, false)) {
                 ed_error_type = EET_MOB_OOB;
                 ed_error_mob_ptr = m_ptr;
                 break;
@@ -824,6 +824,7 @@ void area_editor::gui_to_sector() {
     
     ed_cur_sector->z = s2f(((lafi_textbox*) f->widgets["txt_z"])->text);
     ed_cur_sector->fade = ((lafi_checkbox*) f->widgets["chk_fade"])->checked;
+    ed_cur_sector->always_cast_shadow = ((lafi_checkbox*) f->widgets["chk_shadow"])->checked;
     ed_cur_sector->file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
     ed_cur_sector->brightness = s2i(((lafi_textbox*) f->widgets["txt_brightness"])->text);
     //ToDo hazards.
@@ -860,7 +861,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             && ed_moving_thing == string::npos && ed_sec_mode != ESM_TEXTURE_VIEW &&
             ed_mode != EDITOR_MODE_OBJECTS
         ) {
-            ed_on_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL);
+            ed_on_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
         } else {
             ed_on_sector = NULL;
         }
@@ -1062,7 +1063,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             //Find a sector to select.
             if(ed_moving_thing == string::npos && !clicked_linedef_ptr) {
-                ed_cur_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL);
+                ed_cur_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
             }
             
@@ -1117,7 +1118,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
             size_t outer_sector_nr;
-            sector* outer_sector = get_sector(hotspot_x, hotspot_y, &outer_sector_nr);
+            sector* outer_sector = get_sector(hotspot_x, hotspot_y, &outer_sector_nr, false);
             
             sector* new_sector = new sector();
             if(outer_sector) outer_sector->clone(new_sector);
@@ -1218,11 +1219,6 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             vertex* final_vertex = moved_v_ptr;
             
             unordered_set<sector*> affected_sectors;
-            
-            //Check if the line's vertices intersect with any other lines.
-            //If so, they're marked with red.
-            check_linedef_intersections(moved_v_ptr);
-            
             
             //Check if we should merge.
             for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
@@ -1410,6 +1406,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
+            //Check if the line's vertices intersect with any other lines.
+            //If so, they're marked with red.
+            if(moved_v_ptr->x != FLT_MAX) //If it didn't get marked for deletion in the meantime.
+                check_linedef_intersections(moved_v_ptr);
+                
             ed_moving_thing = string::npos;
             
             
@@ -1536,6 +1537,8 @@ void area_editor::load() {
     frm_sector->easy_add("txt_texture", new lafi_textbox(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("but_adv", new lafi_button(0, 0, 0, 0, "Adv. texture settings"), 100, 16);
+    frm_sector->easy_row();
+    frm_sector->easy_add("chk_shadow", new lafi_checkbox(0, 0, 0, 0, "Always cast shadow"), 100, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("lin_1", new lafi_line(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
@@ -1799,6 +1802,7 @@ void area_editor::load() {
     frm_sector->widgets["txt_texture"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
+    frm_sector->widgets["chk_shadow"]->left_mouse_click_handler = lambda_gui_to_sector_click;
     frm_sectors->widgets["but_back"]->description =      "Go back to the main menu.";
     frm_sectors->widgets["but_new"]->description =       "Create a new sector where you click.";
     frm_sectors->widgets["but_sel_none"]->description =  "Deselect the current sector.";
@@ -1809,6 +1813,7 @@ void area_editor::load() {
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
+    frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";
     
     
     //Properties -- advanced textures.
@@ -2336,6 +2341,7 @@ void area_editor::save_area() {
         sector_node->add(new data_node("z", f2s(s_ptr->z)));
         if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", i2s(s_ptr->brightness)));
         if(s_ptr->fade) sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
+        if(s_ptr->always_cast_shadow) sector_node->add(new data_node("always_cast_shadow", b2s(s_ptr->always_cast_shadow)));
         
         
         sector_node->add(new data_node("texture", s_ptr->file_name));
@@ -2399,6 +2405,7 @@ void area_editor::sector_to_gui() {
         
         ((lafi_textbox*) f->widgets["txt_z"])->text = f2s(ed_cur_sector->z);
         ((lafi_checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
+        ((lafi_checkbox*) f->widgets["chk_shadow"])->set(ed_cur_sector->always_cast_shadow);
         ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
         ((lafi_textbox*) f->widgets["txt_brightness"])->text = i2s(ed_cur_sector->brightness);
         ((lafi_button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);

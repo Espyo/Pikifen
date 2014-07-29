@@ -78,7 +78,7 @@
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
 bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
-bool               circle_intersects_line(float cx, float cy, float cr, float x1, float y1, float x2, float y2, float* lix = NULL, float* liy = NULL);
+bool               circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix = NULL, float* liy = NULL);
 void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
 void               error_log(string s, data_node* d = NULL);
@@ -86,9 +86,11 @@ bool               find_in_vector(const vector<string> v, const string s);
 vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);
 void               generate_area_images();
 ALLEGRO_COLOR      get_daylight_color();
+unsigned char      get_sun_strength();
 string             get_var_value(const string &vars_string, const string &var, const string &def);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2);
+float              interpolate_number(const float p, const float p1, const float p2, const float v1, const float v2);
 void               load_area(const string name, const bool load_for_editor);
 void               load_area_textures();
 //ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
@@ -105,6 +107,7 @@ string             replace_all(string s, string search, string replacement);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);
 void               save_options();
 vector<string>     split(string text, const string del = " ", const bool inc_empty = false, const bool inc_del = false);
+bool               square_intersects_line(const float sx1, const float sy1, const float sx2, const float sy2, const float lx1, const float ly1, const float lx2, const float ly2);
 void               start_camera_pan(const int final_x, const int final_y);
 void               start_camera_zoom(const float final_zoom_level);
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
