@@ -105,6 +105,7 @@ size_t                           cur_message_section = 0;
 ALLEGRO_BITMAP*                  cur_message_speaker = NULL;
 vector<size_t>                   cur_message_stopping_chars;
 unsigned char                    cur_screen = SCREEN_GAME;
+float                            cur_sun_strength = 1;
 float                            cursor_angle = 0;
 float                            cursor_invalid_effect = 0;
 float                            cursor_save_time = CURSOR_SAVE_INTERVAL;

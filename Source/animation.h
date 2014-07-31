@@ -163,6 +163,7 @@ public:
     
     void change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done);
     void start();
+    bool is_anim(const size_t anim_nr, const bool pre_named);
     bool tick(const float time);
     frame* get_frame();
 };

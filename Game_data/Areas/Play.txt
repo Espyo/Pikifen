@@ -96,7 +96,7 @@ vertices{
 	vertex=-352 -1056
 	vertex=800 -608
 	vertex=704 -992
-	vertex=229.782 -1340.13
+	vertex=229.64 -1333.75
 	vertex=448 -1248
 	vertex=-32 640
 	vertex=-96 576
@@ -243,16 +243,14 @@ vertices{
 	vertex=-189.25 -944.017
 	vertex=32 -1088
 	vertex=-128 -960
-	vertex=96 -1184
-	vertex=160 -1152
 	vertex=128 -1248
 	vertex=224 -1184
-	vertex=164.634 -1185.37
+	vertex=160 -1184
 	vertex=285.885 -1228.42
-	vertex=178.601 -1226.45
-	vertex=168.758 -1279.6
-	vertex=232.243 -1202.33
-	vertex=297.696 -1272.71
+	vertex=179.884 -1227.88
+	vertex=166.79 -1278.38
+	vertex=231.511 -1203.56
+	vertex=295.484 -1272.77
 	vertex=275.55 -1320.44
 	vertex=181.061 -1315.03
 	vertex=128 -1280
@@ -267,7 +265,6 @@ vertices{
 	vertex=723.279 -1061.19
 	vertex=511.442 -1047.87
 	vertex=138.842 -1207.14
-	vertex=117.063 -1159.57
 	vertex=-157.383 -984.02
 	vertex=-171.621 -797.565
 	vertex=-360.11 -623.314
@@ -393,12 +390,12 @@ linedefs{
 		v=28 27
 	}
 	linedef{
-		s=29 0
-		v=29 186
+		s=28 0
+		v=29 184
 	}
 	linedef{
-		s=31 0
-		v=30 210
+		s=30 0
+		v=30 207
 	}
 	linedef{
 		s=1 0
@@ -430,7 +427,7 @@ linedefs{
 	}
 	linedef{
 		s=1 0
-		v=39 188
+		v=39 186
 	}
 	linedef{
 		s=4 0
@@ -1022,15 +1019,15 @@ linedefs{
 	}
 	linedef{
 		s=27 1
-		v=165 203
+		v=165 200
 	}
 	linedef{
 		s=27 1
-		v=166 205
+		v=166 202
 	}
 	linedef{
 		s=27 1
-		v=167 204
+		v=167 201
 	}
 	linedef{
 		s=27 1
@@ -1042,11 +1039,11 @@ linedefs{
 	}
 	linedef{
 		s=27 1
-		v=170 206
+		v=170 203
 	}
 	linedef{
 		s=27 1
-		v=171 202
+		v=171 199
 	}
 	linedef{
 		s=27 1
@@ -1054,7 +1051,7 @@ linedefs{
 	}
 	linedef{
 		s=27 1
-		v=173 201
+		v=173 198
 	}
 	linedef{
 		s=27 1
@@ -1069,168 +1066,156 @@ linedefs{
 		v=177 175
 	}
 	linedef{
-		s=27 28
-		v=176 200
+		s=27 33
+		v=176 197
 	}
 	linedef{
-		s=28 30
-		v=178 199
+		s=27 33
+		v=178 177
 	}
 	linedef{
-		s=28 1
-		v=179 177
+		s=28 29
+		v=179 182
 	}
 	linedef{
-		s=28 1
-		v=176 178
+		s=28 29
+		v=180 181
 	}
 	linedef{
-		s=28 30
-		v=180 179
+		s=28 0
+		v=181 185
 	}
 	linedef{
-		s=29 30
-		v=181 184
-	}
-	linedef{
-		s=29 30
-		v=182 183
+		s=28 29
+		v=182 180
 	}
 	linedef{
 		s=29 0
-		v=183 187
+		v=183 188
 	}
 	linedef{
-		s=29 30
-		v=184 182
+		s=28 29
+		v=183 179
+	}
+	linedef{
+		s=28 0
+		v=184 183
+	}
+	linedef{
+		s=28 0
+		v=185 29
+	}
+	linedef{
+		s=29 1
+		v=176 186
+	}
+	linedef{
+		s=29 0
+		v=186 181
+	}
+	linedef{
+		s=29 1
+		v=187 177
 	}
 	linedef{
 		s=30 0
-		v=185 190
+		v=188 30
 	}
 	linedef{
-		s=29 30
-		v=185 181
+		s=30 29
+		v=189 188
 	}
 	linedef{
-		s=29 0
-		v=186 185
+		s=29 1
+		v=191 205
 	}
 	linedef{
-		s=29 0
-		v=187 29
-	}
-	linedef{
-		s=30 1
-		v=178 188
-	}
-	linedef{
-		s=30 0
-		v=188 183
-	}
-	linedef{
-		s=30 1
-		v=189 179
-	}
-	linedef{
-		s=31 0
-		v=190 30
-	}
-	linedef{
-		s=31 30
-		v=191 190
-	}
-	linedef{
-		s=30 1
-		v=193 208
-	}
-	linedef{
-		s=32 1
-		v=194 198
+		s=31 1
+		v=192 196
 	}
 	linedef{
 		s=1 0
-		v=194 28
-	}
-	linedef{
-		s=32 0
-		v=192 195
-	}
-	linedef{
-		s=32 0
-		v=195 197
-	}
-	linedef{
-		s=32 0
-		v=196 194
-	}
-	linedef{
-		s=32 0
-		v=197 196
-	}
-	linedef{
-		s=31 32
-		v=192 209
-	}
-	linedef{
-		s=33 1
-		v=198 193
-	}
-	linedef{
-		s=33 30
-		v=193 207
-	}
-	linedef{
-		s=28 30
-		v=199 180
-	}
-	linedef{
-		s=27 28
-		v=200 177
-	}
-	linedef{
-		s=27 1
-		v=201 174
-	}
-	linedef{
-		s=27 1
-		v=202 170
-	}
-	linedef{
-		s=27 1
-		v=203 169
-	}
-	linedef{
-		s=27 1
-		v=204 168
-	}
-	linedef{
-		s=27 1
-		v=205 167
-	}
-	linedef{
-		s=27 1
-		v=206 166
-	}
-	linedef{
-		s=31 30
-		v=207 191
-	}
-	linedef{
-		s=30 1
-		v=208 189
-	}
-	linedef{
-		s=33 32
-		v=209 198
-	}
-	linedef{
-		s=31 33
-		v=209 207
+		v=192 28
 	}
 	linedef{
 		s=31 0
-		v=210 192
+		v=190 193
+	}
+	linedef{
+		s=31 0
+		v=193 195
+	}
+	linedef{
+		s=31 0
+		v=194 192
+	}
+	linedef{
+		s=31 0
+		v=195 194
+	}
+	linedef{
+		s=30 31
+		v=190 206
+	}
+	linedef{
+		s=32 1
+		v=196 191
+	}
+	linedef{
+		s=32 29
+		v=191 204
+	}
+	linedef{
+		s=27 33
+		v=197 178
+	}
+	linedef{
+		s=27 1
+		v=198 174
+	}
+	linedef{
+		s=27 1
+		v=199 170
+	}
+	linedef{
+		s=27 1
+		v=200 169
+	}
+	linedef{
+		s=27 1
+		v=201 168
+	}
+	linedef{
+		s=27 1
+		v=202 167
+	}
+	linedef{
+		s=27 1
+		v=203 166
+	}
+	linedef{
+		s=30 29
+		v=204 189
+	}
+	linedef{
+		s=29 1
+		v=205 187
+	}
+	linedef{
+		s=32 31
+		v=206 196
+	}
+	linedef{
+		s=30 32
+		v=206 204
+	}
+	linedef{
+		s=30 0
+		v=207 190
+	}
+	linedef{
+		s=33 29
+		v=176 177
 	}
 }
 sectors{
@@ -1379,15 +1364,10 @@ sectors{
 	}
 	sector{
 		type=Landing site
-		z=48
-		texture=Bark.png
-	}
-	sector{
-		type=Landing site
 		z=192
 		texture=Trunk.png
-		texture_scale=0.52 0.52
-		texture_trans=60 -5
+		texture_scale=0.51 0.51
+		texture_trans=69 -53
 	}
 	sector{
 		type=Landing site
@@ -1406,6 +1386,11 @@ sectors{
 	sector{
 		type=Landing site
 		z=16
+		texture=Bark.png
+	}
+	sector{
+		type=Landing site
+		z=96
 		texture=Bark.png
 	}
 }

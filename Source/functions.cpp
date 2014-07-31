@@ -106,6 +106,7 @@ void clear_area_textures() {
         sector* s_ptr = cur_area_map.sectors[s];
         if(s_ptr->bitmap && s_ptr->bitmap != bmp_error) {
             bitmaps.detach("Textures/" + s_ptr->file_name);
+            s_ptr->bitmap = NULL;
         }
     }
 }
@@ -360,7 +361,7 @@ ALLEGRO_COLOR get_daylight_color() {
 /* ----------------------------------------------------------------------------
  * Returns the strength of the sun for the current time, for the current weather.
  */
-unsigned char get_sun_strength() {
+float get_sun_strength() {
     //ToDo optimize: don't fetch the points from the weather's map every time.
     //ToDo find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
@@ -376,13 +377,13 @@ unsigned char get_sun_strength() {
                            day_minutes, point_nrs[p], point_nrs[p + 1],
                            cur_area_map.weather_condition.sun_strength[point_nrs[p]],
                            cur_area_map.weather_condition.sun_strength[point_nrs[p + 1]]
-                       );
+                       ) / 255.0;
             }
         }
     }
     
-    //If anything goes wrong, return 0 strength.
-    return 0;
+    //If anything goes wrong, return regular strength.
+    return 1;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1208,8 +1209,8 @@ void use_spray(const size_t spray_nr) {
     random_particle_spray(
         PARTICLE_TYPE_BITMAP,
         bmp_smoke,
-        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->size / 2,
-        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->size / 2,
+        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->radius,
+        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->radius,
         shoot_angle,
         spray_types[spray_nr].main_color
     );

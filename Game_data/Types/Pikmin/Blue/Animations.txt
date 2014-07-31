@@ -31,7 +31,7 @@ animations{
 		loop_frame=1
 		frame_instances{
 			half_lying{
-				duration=0.1
+				duration=1
 			}
 			idle{
 				duration=0.1

@@ -86,7 +86,7 @@ bool               find_in_vector(const vector<string> v, const string s);
 vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);
 void               generate_area_images();
 ALLEGRO_COLOR      get_daylight_color();
-unsigned char      get_sun_strength();
+float              get_sun_strength();
 string             get_var_value(const string &vars_string, const string &var, const string &def);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
 ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2);

@@ -89,8 +89,17 @@ void mob::tick() {
         
             x = final_target_x;
             y = final_target_y;
-            if(target_z) z = *target_z;
-            speed_x = speed_y = 0;
+            
+            sector* sec = get_sector(x, y, NULL, true);
+            if(!sec) {
+                //ToDo Out of bounds! Kill it!
+            } else {
+                if(target_z) {
+                    ground_z = sec->z;
+                    z = *target_z;
+                }
+                speed_x = speed_y = speed_z = 0;
+            }
             
         } else if(x != final_target_x || y != final_target_y) {
             float new_angle = angle;
@@ -141,10 +150,10 @@ void mob::tick() {
             }
             
             //Use the bounding box to know which blockmap blocks the mob is on.
-            size_t bx1 = cur_area_map.bmap.get_col(new_x - type->size * 0.5);
-            size_t bx2 = cur_area_map.bmap.get_col(new_x + type->size * 0.5);
-            size_t by1 = cur_area_map.bmap.get_row(new_y - type->size * 0.5);
-            size_t by2 = cur_area_map.bmap.get_row(new_y + type->size * 0.5);
+            size_t bx1 = cur_area_map.bmap.get_col(new_x - type->radius);
+            size_t bx2 = cur_area_map.bmap.get_col(new_x + type->radius);
+            size_t by1 = cur_area_map.bmap.get_row(new_y - type->radius);
+            size_t by2 = cur_area_map.bmap.get_row(new_y + type->radius);
             
             if(
                 bx1 == string::npos || bx2 == string::npos ||
@@ -170,7 +179,7 @@ void mob::tick() {
                         l_ptr = (*linedefs)[l];
                         if(
                             circle_intersects_line(
-                                new_x, new_y, type->size * 0.5,
+                                new_x, new_y, type->radius,
                                 l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
                                 l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
                                 NULL, NULL
@@ -509,10 +518,12 @@ void mob::tick() {
  * instant:      If true, the mob teleports to that spot, instead of walking to it.
  */
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z) {
+    if(this->knockdown_period > 0 && !instant) return;
+    
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
-    this->target_z;
+    this->target_z = target_z;
     
     go_to_target = true;
     reached_destination = false;
@@ -526,10 +537,12 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
 void mob::remove_target(bool stop) {
     go_to_target = false;
     reached_destination = false;
+    target_z = NULL;
     
     if(stop) {
         speed_x = 0;
         speed_y = 0;
+        speed_z = 0;
     }
 }
 
@@ -576,8 +589,8 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
     for(size_t c = 0; c < max_carriers; c++) {
         carrier_spots.push_back(NULL);
         float angle = (M_PI * 2) / max_carriers * c;
-        carrier_spots_x.push_back(cos(angle) * m->type->size * 0.5);
-        carrier_spots_y.push_back(sin(angle) * m->type->size * 0.5);
+        carrier_spots_x.push_back(cos(angle) * m->type->radius);
+        carrier_spots_y.push_back(sin(angle) * m->type->radius);
     }
 }
 
@@ -641,9 +654,10 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
     m2->health -= damage;
     
     if(knockback != 0) {
-        m2->speed_z = 500;
+        m2->remove_target(true);
         m2->speed_x = cos(angle) * knockback;
         m2->speed_y = sin(angle) * knockback;
+        m2->speed_z = 500;
     }
     
     //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.

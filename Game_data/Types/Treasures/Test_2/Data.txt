@@ -1,4 +1,4 @@
 name = Test 2
 max_carriers = 2
-size = 500
+radius = 250
 weight = 1

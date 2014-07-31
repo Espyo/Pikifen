@@ -298,6 +298,10 @@ void area_editor::do_logic() {
                 );
             }
             
+            if(ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS && ed_cur_sector) {
+                draw_sector_texture(ed_cur_sector, 0, 0, 1);
+            }
+            
         } else {
         
             //Draw textures.
@@ -315,7 +319,7 @@ void area_editor::do_logic() {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             bool valid = m_ptr->type != NULL;
             
-            float radius = m_ptr->type ? m_ptr->type->size == 0 ? 16 : m_ptr->type->size * 0.5 : 16;
+            float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
             
             al_draw_filled_circle(
                 m_ptr->x, m_ptr->y,
@@ -554,6 +558,49 @@ void area_editor::find_errors() {
         }
     }
     
+    //Objects inside walls.
+    if(ed_error_type == EET_NONE) {
+        ed_error_mob_ptr = NULL;
+        
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+            
+            if(ed_error_mob_ptr) break;
+            
+            for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+                linedef* l_ptr = cur_area_map.linedefs[l];
+                
+                if(
+                    circle_intersects_line(
+                        m_ptr->x, m_ptr->y,
+                        m_ptr->type->radius,
+                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
+                        NULL, NULL
+                    )
+                ) {
+                
+                    bool in_wall = false;
+                    
+                    if(!l_ptr->sectors[0] || !l_ptr->sectors[1]) in_wall = true;
+                    else {
+                        if(l_ptr->sectors[0]->z > l_ptr->sectors[1]->z + SECTOR_STEP) in_wall = true;
+                        if(l_ptr->sectors[1]->z > l_ptr->sectors[0]->z + SECTOR_STEP) in_wall = true;
+                        if(l_ptr->sectors[0]->type == SECTOR_TYPE_WALL) in_wall = true;
+                        if(l_ptr->sectors[1]->type == SECTOR_TYPE_WALL) in_wall = true;
+                    }
+                    
+                    if(in_wall) {
+                        ed_error_type = EET_MOB_IN_WALL;
+                        ed_error_mob_ptr = m_ptr;
+                    }
+                    break;
+                    
+                }
+            }
+        }
+    }
+    
     //Check if there are no landing site sectors.
     if(ed_error_type == EET_NONE) {
         bool landing_site_missing = true;
@@ -679,7 +726,7 @@ void area_editor::goto_error() {
         get_sector_bounding_box(ed_error_sector_ptr, &min_x, &min_y, &max_x, &max_y);
         center_camera(min_x, min_y, max_x, max_y);
         
-    } else if(ed_error_type == EET_TYPELESS_MOB || ed_error_type == EET_MOB_OOB) {
+    } else if(ed_error_type == EET_TYPELESS_MOB || ed_error_type == EET_MOB_OOB || ed_error_type == EET_MOB_IN_WALL) {
     
         if(!ed_error_mob_ptr) {
             find_errors(); return;
@@ -1075,7 +1122,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             ed_moving_thing = string::npos;
             for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
                 mob_gen* m_ptr = cur_area_map.mob_generators[m];
-                float radius = m_ptr->type ? m_ptr->type->size == 0 ? 16 : m_ptr->type->size * 0.5 : 16;
+                float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
                 if(check_dist(m_ptr->x, m_ptr->y, mouse_cursor_x, mouse_cursor_y, radius)) {
                 
                     ed_cur_mob = m_ptr;
@@ -1793,6 +1840,10 @@ void area_editor::load() {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
     };
     frm_sector->widgets["but_adv"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        if(!ed_cur_sector) return;
+        
+        ed_cur_sector->bitmap = bitmaps.get("Textures/" + ed_cur_sector->file_name, NULL);
+        
         ed_mode = EDITOR_MODE_ADV_TEXTURE_SETTINGS;
         change_to_right_frame();
         adv_textures_to_gui();
@@ -1820,6 +1871,7 @@ void area_editor::load() {
     auto lambda_gui_to_adv_textures = [] (lafi_widget*) { gui_to_adv_textures(); };
     auto lambda_gui_to_adv_textures_click = [] (lafi_widget*, int, int) { gui_to_adv_textures(); };
     frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+        clear_area_textures(); //Clears the texture set when we entered this menu.
         ed_mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
     };
@@ -1827,11 +1879,11 @@ void area_editor::load() {
     frm_adv_textures->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sx"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sy"]->lose_focus_handler = lambda_gui_to_adv_textures;
-    frm_adv_textures->widgets["txt_x"]->description = "Scroll the texture horizontally by this much.";
-    frm_adv_textures->widgets["txt_y"]->description = "Scroll the texture vertically by this much.";
+    frm_adv_textures->widgets["txt_x"]->description =  "Scroll the texture horizontally by this much.";
+    frm_adv_textures->widgets["txt_y"]->description =  "Scroll the texture vertically by this much.";
     frm_adv_textures->widgets["txt_sx"]->description = "Zoom the texture horizontally by this much.";
     frm_adv_textures->widgets["txt_sy"]->description = "Zoom the texture vertically by this much.";
-    frm_adv_textures->widgets["ang_a"]->description = "Rotate the texture by this much.";
+    frm_adv_textures->widgets["ang_a"]->description =  "Rotate the texture by this much.";
     
     
     //Properties -- objects.
@@ -2015,6 +2067,8 @@ void area_editor::load_area() {
     show_widget(ed_gui->widgets["frm_main"]->widgets["frm_area"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
+    
+    clear_area_textures();
     
     for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
         check_linedef_intersections(cur_area_map.vertices[v]);
@@ -2598,6 +2652,16 @@ void area_editor::update_review_frame() {
             lbl_error_2->text = "on any sector";
             lbl_error_3->text = "found! It's probably";
             lbl_error_4->text = "out of bounds.";
+            
+            
+        } else if(ed_error_type == EET_MOB_IN_WALL) {
+        
+            if(!ed_error_mob_ptr) {
+                find_errors(); return;
+            }
+            
+            lbl_error_1->text = "Mob stuck";
+            lbl_error_2->text = "in wall found!";
             
             
         } else if(ed_error_type == EET_LANDING_SITE) {

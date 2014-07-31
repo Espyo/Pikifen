@@ -37,6 +37,8 @@ void do_drawing() {
         size_t n_spray_types = spray_types.size();
         size_t n_treasures =   treasures.size();
         
+        cur_sun_strength = get_sun_strength();
+        
         
         ALLEGRO_TRANSFORM normal_transform;
         al_identity_transform(&normal_transform);
@@ -126,11 +128,11 @@ void do_drawing() {
         }
         
         for(size_t l = 0; l < n_leaders; l++) {
-            draw_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->ground_z, shadow_stretch);
+            draw_mob_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->ground_z, shadow_stretch);
         }
         
         for(size_t p = 0; p < n_pikmin; p++) {
-            draw_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->ground_z, shadow_stretch);
+            draw_mob_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->ground_z, shadow_stretch);
         }
         
         
@@ -144,24 +146,24 @@ void do_drawing() {
         //Nectar.
         size_t n_nectars = nectars.size();
         for(size_t n = 0; n < n_nectars; n++) {
-            float size = nectars[n]->type->size * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
+            float radius = nectars[n]->type->radius * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
             draw_sprite(
                 bmp_nectar,
                 nectars[n]->x, nectars[n]->y,
-                size, size, 0, map_gray(nectars[n]->lighting));
+                radius * 2, radius * 2, 0, map_gray(nectars[n]->lighting));
         }
         
         //Treasures.
         for(size_t t = 0; t < n_treasures; t++) {
-            float size = treasures[t]->type->size;
+            float radius = treasures[t]->type->radius;
             if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
-                size *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
-                size = max(0.0f, size);
+                radius *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
+                radius = max(0.0f, radius);
             }
             draw_sprite(
                 bmp_tp,
                 treasures[t]->x, treasures[t]->y,
-                size, size, 0, map_gray(treasures[t]->lighting)
+                radius * 2, radius * 2, 0, map_gray(treasures[t]->lighting)
             );
         }
         
@@ -175,22 +177,22 @@ void do_drawing() {
             if(f_ptr) {
                 ALLEGRO_BITMAP* bm = NULL;
                 
-                float size = pellets[p]->type->size;
+                float radius = pellets[p]->type->radius;
                 if(pellets[p]->state == MOB_STATE_BEING_DELIVERED) {
-                    size *= 1 - (pellets[p]->time_in_state / DELIVERY_SUCK_TIME);
-                    size = max(0.0f, size);
+                    radius *= 1 - (pellets[p]->time_in_state / DELIVERY_SUCK_TIME);
+                    radius = max(0.0f, radius);
                 }
                 
                 draw_sprite(
                     f_ptr->bitmap,
                     p_ptr->x, p_ptr->y,
-                    size, size, 0,
+                    radius * 2, radius * 2, 0,
                     map_gray(p_ptr->lighting)
                 );
                 draw_sprite(
                     p_ptr->pel_type->bmp_number,
                     p_ptr->x, p_ptr->y,
-                    size * 0.68, -1,
+                    radius * 1.36, -1,
                     0, map_gray(p_ptr->lighting)
                 );
             }
@@ -325,7 +327,7 @@ void do_drawing() {
             draw_sprite(
                 bmp_info_spot,
                 i_ptr->x, i_ptr->y,
-                i_ptr->type->size, i_ptr->type->size,
+                i_ptr->type->radius * 2, i_ptr->type->radius * 2,
                 0, map_gray(i_ptr->lighting)
             );
         }
@@ -340,7 +342,7 @@ void do_drawing() {
                 0, map_gray(ships[s]->lighting)
             );
             al_draw_circle(
-                ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE,
+                ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE,
                 ships[s]->y, SHIP_BEAM_RANGE,
                 al_map_rgb(
                     ship_beam_ring_color[0] * 255 / ships[s]->lighting,
@@ -441,12 +443,12 @@ void do_drawing() {
                     } else {
                         color = al_map_rgb(96, 192, 192);
                     }
-                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->size * 0.5 - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
+                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
                 }
             }
             
             if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
-                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->size - 8, mob_ptr->health, mob_ptr->type->max_health);
+                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - 4, mob_ptr->health, mob_ptr->type->max_health);
             }
         }
         
@@ -457,9 +459,9 @@ void do_drawing() {
                 if(!info_spots[i]->opens_box) {
                     text = info_spots[i]->text;
                     
-                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
+                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
                     
-                    int line_y = info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.75;
+                    int line_y = info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.75;
                     
                     al_draw_line(
                         info_spots[i]->x - info_spots[i]->text_w * 0.5,
@@ -477,20 +479,20 @@ void do_drawing() {
                         info_spots[i]->x - 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.25,
                         al_map_rgb(192, 192, 192), 2);
                     al_draw_line(
                         info_spots[i]->x + 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.25,
                         al_map_rgb(192, 192, 192), 2);
                         
                 } else {
                 
                     for(size_t c = 0; c < controls.size(); c++) {
                         if(controls[c].action == BUTTON_THROW) {
-                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->size * 0.5 - font_h, 0, 0);
+                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, 0, 0);
                             break;
                         }
                     }
@@ -525,7 +527,7 @@ void do_drawing() {
         for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
             tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
             
-            unsigned char alpha = ((s_ptr->alpha / 255.0) * (float) (get_sun_strength() / 255.0)) * 255;
+            unsigned char alpha = ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
             
             draw_sprite(
                 s_ptr->bitmap,
@@ -1063,157 +1065,11 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
  * x, y:     Top-left coordinates.
  * scale:    Drawing scale.
  */
-void draw_sector(sector* s_ptr, const float x, const float y, float scale) {
+void draw_sector(sector* s_ptr, const float x, const float y, const float scale) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    unsigned char n_textures = 1;
-    sector* texture_sector[2] = {NULL, NULL};
-    
-    if(s_ptr->fade) {
-        //Check all linedefs to find which two textures need merging.
-        linedef* l_ptr = NULL;
-        sector* neighbor = NULL;
-        bool valid = true;
-        map<sector*, float> neighbors;
-        
-        //The two neighboring sectors with the lenghtiest linedefs are picked.
-        //So save all sector/length pairs.
-        //Sectors with different heights from the current one are also saved,
-        //but they have lower priority compared to same-heigh sectors.
-        for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
-            l_ptr = s_ptr->linedefs[l];
-            valid = true;
-            
-            if(l_ptr->sectors[0] == s_ptr) neighbor = l_ptr->sectors[1];
-            else neighbor = l_ptr->sectors[0];
-            
-            if(neighbor) {
-                if(neighbor->fade) valid = false;
-            }
-            
-            if(valid) {
-                neighbors[neighbor] +=
-                    sdist(
-                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
-                    );
-            }
-        }
-        
-        //Find the two lengthiest ones.
-        vector<pair<float, sector*> > neighbors_vec;
-        for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
-            neighbors_vec.push_back(make_pair<float, sector*>(n->second, n->first));
-        }
-        sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<float, sector*> p1, pair<float, sector*> p2) -> bool {
-        
-            float height_dif_1 = 0;
-            if(p1.second) fabs(p1.second->z - s_ptr->z);
-            float height_dif_2 = 0;
-            if(p2.second) fabs(p2.second->z - s_ptr->z);
-            
-            if(height_dif_1 < height_dif_2) return true;
-            else if(height_dif_1 > height_dif_2) return false;
-            else {
-                return p1.first < p2.first;
-            }
-        });
-        if(neighbors_vec.size() >= 1) {
-            texture_sector[0] = neighbors_vec.back().second;
-        }
-        if(neighbors_vec.size() >= 2) {
-            texture_sector[1] = neighbors_vec[neighbors_vec.size() - 2].second;
-        }
-        
-        if(!texture_sector[1] && texture_sector[0]) {
-            //0 is always the bottom one. If we're fading into nothingness,
-            //we should swap first.
-            swap(texture_sector[0], texture_sector[1]);
-        } else if(!texture_sector[1]) {
-            //Nothing to draw.
-            return;
-        } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
-            swap(texture_sector[0], texture_sector[1]);
-        }
-        
-        n_textures = 2;
-        
-    } else {
-        texture_sector[0] = s_ptr;
-        
-    }
-    
-    for(unsigned char t = 0; t < n_textures; t++) {
-    
-        bool draw_sector_0 = true;
-        if(!texture_sector[0]) draw_sector_0 = false;
-        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) draw_sector_0 = false;
-        
-        if(n_textures == 2 && !draw_sector_0 && t == 0) continue; //Allows fading into the void.
-        
-        size_t n_vertices = s_ptr->triangles.size() * 3;
-        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
-        
-        //Texture transformations.
-        ALLEGRO_TRANSFORM tra;
-        if(texture_sector[t]) {
-            al_build_transform(
-                &tra,
-                -texture_sector[t]->trans_x,
-                -texture_sector[t]->trans_y,
-                1.0 / texture_sector[t]->scale_x,
-                1.0 / texture_sector[t]->scale_y,
-                -texture_sector[t]->rot
-            );
-        }
-        
-        for(size_t v = 0; v < n_vertices; v++) {
-        
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
-            
-            unsigned char alpha = 255;
-            
-            if(t == 1) {
-                if(!draw_sector_0) {
-                    alpha = 0;
-                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); l++) {
-                        if(texture_sector[1]->linedefs[l]->vertices[0] == v_ptr) alpha = 255;
-                        if(texture_sector[1]->linedefs[l]->vertices[1] == v_ptr) alpha = 255;
-                    }
-                } else {
-                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); l++) {
-                        if(texture_sector[0]->linedefs[l]->vertices[0] == v_ptr) alpha = 0;
-                        if(texture_sector[0]->linedefs[l]->vertices[1] == v_ptr) alpha = 0;
-                    }
-                }
-            }
-            
-            av[v].x = vx - x;
-            av[v].y = vy - y;
-            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
-            av[v].u = vx;
-            av[v].v = vy;
-            av[v].z = 0;
-            av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
-        }
-        
-        for(size_t v = 0; v < n_vertices; v++) {
-            av[v].x *= scale;
-            av[v].y *= scale;
-        }
-        
-        al_draw_prim(
-            av, NULL,
-            (texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap),
-            0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
-        );
-        
-        delete av;
-    }
+    draw_sector_texture(s_ptr, x, y, scale);
     
     
     //Wall shadows.
@@ -1466,13 +1322,169 @@ void draw_sector(sector* s_ptr, const float x, const float y, float scale) {
 }
 
 /* ----------------------------------------------------------------------------
+ * Draws a sector, but only the texture (no wall shadows).
+ * s_ptr: Pointer to the sector.
+ * x, y:  X and Y offset.
+ * scale: Scale the sector by this much.
+ */
+void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale) {
+    unsigned char n_textures = 1;
+    sector* texture_sector[2] = {NULL, NULL};
+    
+    if(s_ptr->fade) {
+        //Check all linedefs to find which two textures need merging.
+        linedef* l_ptr = NULL;
+        sector* neighbor = NULL;
+        bool valid = true;
+        map<sector*, float> neighbors;
+        
+        //The two neighboring sectors with the lenghtiest linedefs are picked.
+        //So save all sector/length pairs.
+        //Sectors with different heights from the current one are also saved,
+        //but they have lower priority compared to same-heigh sectors.
+        for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+            l_ptr = s_ptr->linedefs[l];
+            valid = true;
+            
+            if(l_ptr->sectors[0] == s_ptr) neighbor = l_ptr->sectors[1];
+            else neighbor = l_ptr->sectors[0];
+            
+            if(neighbor) {
+                if(neighbor->fade) valid = false;
+            }
+            
+            if(valid) {
+                neighbors[neighbor] +=
+                    sdist(
+                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
+                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                    );
+            }
+        }
+        
+        //Find the two lengthiest ones.
+        vector<pair<float, sector*> > neighbors_vec;
+        for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
+            neighbors_vec.push_back(make_pair<float, sector*>(n->second, n->first));
+        }
+        sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<float, sector*> p1, pair<float, sector*> p2) -> bool {
+        
+            float height_dif_1 = 0;
+            if(p1.second) fabs(p1.second->z - s_ptr->z);
+            float height_dif_2 = 0;
+            if(p2.second) fabs(p2.second->z - s_ptr->z);
+            
+            if(height_dif_1 < height_dif_2) return true;
+            else if(height_dif_1 > height_dif_2) return false;
+            else {
+                return p1.first < p2.first;
+            }
+        });
+        if(neighbors_vec.size() >= 1) {
+            texture_sector[0] = neighbors_vec.back().second;
+        }
+        if(neighbors_vec.size() >= 2) {
+            texture_sector[1] = neighbors_vec[neighbors_vec.size() - 2].second;
+        }
+        
+        if(!texture_sector[1] && texture_sector[0]) {
+            //0 is always the bottom one. If we're fading into nothingness,
+            //we should swap first.
+            swap(texture_sector[0], texture_sector[1]);
+        } else if(!texture_sector[1]) {
+            //Nothing to draw.
+            return;
+        } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            swap(texture_sector[0], texture_sector[1]);
+        }
+        
+        n_textures = 2;
+        
+    } else {
+        texture_sector[0] = s_ptr;
+        
+    }
+    
+    for(unsigned char t = 0; t < n_textures; t++) {
+    
+        bool draw_sector_0 = true;
+        if(!texture_sector[0]) draw_sector_0 = false;
+        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) draw_sector_0 = false;
+        
+        if(n_textures == 2 && !draw_sector_0 && t == 0) continue; //Allows fading into the void.
+        
+        size_t n_vertices = s_ptr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
+        
+        //Texture transformations.
+        ALLEGRO_TRANSFORM tra;
+        if(texture_sector[t]) {
+            al_build_transform(
+                &tra,
+                -texture_sector[t]->trans_x,
+                -texture_sector[t]->trans_y,
+                1.0 / texture_sector[t]->scale_x,
+                1.0 / texture_sector[t]->scale_y,
+                -texture_sector[t]->rot
+            );
+        }
+        
+        for(size_t v = 0; v < n_vertices; v++) {
+        
+            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+            vertex* v_ptr = t_ptr->points[v % 3];
+            float vx = v_ptr->x;
+            float vy = v_ptr->y;
+            
+            unsigned char alpha = 255;
+            
+            if(t == 1) {
+                if(!draw_sector_0) {
+                    alpha = 0;
+                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); l++) {
+                        if(texture_sector[1]->linedefs[l]->vertices[0] == v_ptr) alpha = 255;
+                        if(texture_sector[1]->linedefs[l]->vertices[1] == v_ptr) alpha = 255;
+                    }
+                } else {
+                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); l++) {
+                        if(texture_sector[0]->linedefs[l]->vertices[0] == v_ptr) alpha = 0;
+                        if(texture_sector[0]->linedefs[l]->vertices[1] == v_ptr) alpha = 0;
+                    }
+                }
+            }
+            
+            av[v].x = vx - x;
+            av[v].y = vy - y;
+            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            av[v].u = vx;
+            av[v].v = vy;
+            av[v].z = 0;
+            av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
+        }
+        
+        for(size_t v = 0; v < n_vertices; v++) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        
+        al_draw_prim(
+            av, NULL,
+            (texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap),
+            0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
+        );
+        
+        delete av;
+    }
+}
+
+/* ----------------------------------------------------------------------------
  * Draws a mob's shadow.
  * c*:             Center of the mob.
  * size:           Size of the mob.
  * delta_z:        The mob is these many units above the floor directly below it.
  * shadow_stretch: How much to stretch the shadow by (used to simulate sun shadow direction casting).
  */
-void draw_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch) {
+void draw_mob_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch) {
     if(shadow_stretch <= 0) return;
     
     float shadow_x = 0, shadow_w = size + (size * shadow_stretch);
@@ -1492,7 +1504,9 @@ void draw_shadow(const float cx, const float cy, const float size, const float d
         bmp_shadow,
         cx + shadow_x + shadow_w / 2, cy,
         shadow_w, size,
-        0, map_alpha(255 * (1 - shadow_stretch)));
+        0,
+        map_alpha(255 * (1 - shadow_stretch))
+    );
 }
 
 /* ----------------------------------------------------------------------------

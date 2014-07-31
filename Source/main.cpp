@@ -214,7 +214,7 @@ int main(int argc, char**) {
     
     mob_type* info_spot_mt = new mob_type();
     info_spot_mt->name = "Info spot";
-    info_spot_mt->size = 32;
+    info_spot_mt->radius = 16;
     info_spot_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
         create_mob(new info_spot(x, y, angle, vars));
     };
@@ -223,7 +223,7 @@ int main(int argc, char**) {
     mob_type* nectar_mt = new mob_type();
     nectar_mt->name = "Nectar";
     nectar_mt->always_active = true;
-    nectar_mt->size = 16;
+    nectar_mt->radius = 8;
     nectar_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
         create_mob(new nectar(x, y, vars));
     };
@@ -410,7 +410,7 @@ int main(int argc, char**) {
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
             double cur_time = al_get_time();
             if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
-            delta_t = /*cur_time - prev_frame_time*/ 1.0 / 30.0; //ToDo temporary change.
+            delta_t = cur_time - prev_frame_time;
             
             if(cur_screen == SCREEN_GAME) {
                 do_logic();

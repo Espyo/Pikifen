@@ -204,6 +204,24 @@ void animation_instance::change(const size_t new_anim_nr, const bool pre_named, 
 }
 
 /* ----------------------------------------------------------------------------
+ * Returns whether the current animation is the specified one.
+ */
+bool animation_instance::is_anim(const size_t nr, const bool pre_named) {
+    size_t final_nr;
+    if(pre_named) {
+        if(anim_set->pre_named_conversions.size() <= nr) return false;
+        final_nr = anim_set->pre_named_conversions[nr];
+    } else {
+        final_nr = nr;
+    }
+    
+    if(anim == anim_set->animations[final_nr]) return true;
+    if(anim == NULL && final_nr == string::npos) return true;
+    
+    return false;
+}
+
+/* ----------------------------------------------------------------------------
  * Starts or restarts the animation.
  * It's called when the animation is set.
  */

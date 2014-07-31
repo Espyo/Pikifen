@@ -242,7 +242,7 @@ void handle_button(const unsigned int button, float pos) {
                 if(!done) {
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; s++) {
-                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->size / 2 + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE)) {
+                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE)) {
                             if(ships[s]->shi_type->can_heal) {
                                 //ToDo make it prettier.
                                 cur_leader_ptr->health = cur_leader_ptr->type->max_health;
@@ -344,7 +344,7 @@ void handle_button(const unsigned int button, float pos) {
             *                    / \  / \ *
             ******************************/
             
-            if(pos == 0) return;
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             size_t new_leader_nr = cur_leader_nr;
             if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
@@ -406,7 +406,7 @@ void handle_button(const unsigned int button, float pos) {
             *             / \ \ *  *
             ***********************/
             
-            if(pos == 0) return;
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
             
@@ -526,7 +526,7 @@ void handle_button(const unsigned int button, float pos) {
             *                     *
             ***********************/
             
-            if(pos == 0) return;
+            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             if(cur_leader_ptr->carrier_info) {
                 active_control();

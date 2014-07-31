@@ -138,6 +138,7 @@ extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern unsigned char                    cur_screen;
+extern float                            cur_sun_strength;
 extern float                            cursor_angle;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
 extern float                            cursor_save_time;         //Time left until the position of the cursor is saved on the vector.

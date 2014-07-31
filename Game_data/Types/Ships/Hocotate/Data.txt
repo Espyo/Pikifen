@@ -1,3 +1,3 @@
 name = Hocotate ship
 can_heal = true
-size = 140
+radius = 70

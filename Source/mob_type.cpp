@@ -24,7 +24,7 @@
  * Creates a mob type.
  */
 mob_type::mob_type() {
-    size = move_speed = rotation_speed = 0;
+    radius = move_speed = rotation_speed = 0;
     always_active = false;
     max_health = 0;
     max_carriers = 0;
@@ -96,7 +96,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
         mt->near_radius = s2f(file.get_child_by_name("near_radius")->value);
         mt->rotation_speed = s2f(file.get_child_by_name("rotation_speed")->get_value_or_default(f2s(DEF_ROTATION_SPEED)));
         mt->sight_radius = s2f(file.get_child_by_name("sight_radius")->value);
-        mt->size = s2f(file.get_child_by_name("size")->value);
+        mt->radius = s2f(file.get_child_by_name("radius")->value);
         mt->weight = s2f(file.get_child_by_name("weight")->value);
         
         if(load_resources) {
@@ -133,6 +133,8 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             new_anim_conversion(PIKMIN_ANIM_ATTACK,   "attack");
             new_anim_conversion(PIKMIN_ANIM_GRAB,     "grab");
             new_anim_conversion(PIKMIN_ANIM_BURROWED, "burrowed");
+            new_anim_conversion(PIKMIN_ANIM_LYING,    "lying");
+            new_anim_conversion(PIKMIN_ANIM_GET_UP,   "get_up");
             
             pikmin_types[pt->name] = pt;
             

@@ -155,7 +155,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
     if(m->carrier_info->carry_to_ship) {
     
         m->set_target(
-            ships[0]->x + ships[0]->type->size * 0.5 + m->type->size * 0.5 + 8,
+            ships[0]->x + ships[0]->type->radius + m->type->radius + 8,
             ships[0]->y,
             NULL,
             NULL,

@@ -39,6 +39,7 @@ enum EDITOR_ERROR_TYPES {
     EET_LANDING_SITE,          //No landing site sector exists.
     EET_TYPELESS_MOB,          //Mob with no type.
     EET_MOB_OOB,               //Mob out of bounds.
+    EET_MOB_IN_WALL,           //Mob stuck in a wall.
     EET_INVALID_SHADOW,        //Invalid tree shadow image.
 };
 
