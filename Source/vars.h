@@ -187,7 +187,7 @@ extern size_t                           ed_grabbing_hitbox;   //Hitbox being gra
 extern bool                             ed_grabbing_hitbox_edge;
 extern float                            ed_grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
 extern float                            ed_grabbing_hitbox_y;
-extern lafi_gui*                        ed_gui;
+extern lafi::gui*                        ed_gui;
 extern bool                             ed_hitboxes_visible;
 extern bool                             ed_holding_m1;
 extern bool                             ed_holding_m2;
@@ -209,7 +209,7 @@ extern bool                             ed_shift_pressed;
 extern bool                             ed_show_bg;
 extern bool                             ed_show_shadows;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
-extern lafi_widget*                     ed_wum; //Widget under mouse.
+extern lafi::widget*                     ed_wum; //Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
 extern ALLEGRO_FONT*                    font;

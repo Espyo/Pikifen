@@ -9,7 +9,9 @@
 
 using namespace std;
 
-class lafi_gui : public lafi_widget {
+namespace lafi {
+
+class gui : public widget {
 private:
     ALLEGRO_TIMER* timer;
     ALLEGRO_EVENT_QUEUE* queue;
@@ -20,14 +22,16 @@ public:
     bool autonomous;
     bool close_button_quits;
     
-    lafi_gui(int w, int h, lafi_style* style = new lafi_style(), unsigned char flags = 0);
-    //lafi_gui(unsigned int display_w, unsigned int display_h, bool close_button_quits = true, lafi_style* style = new lafi_style(), unsigned char flags = 0);
-    ~lafi_gui();
+    gui(int w, int h, lafi::style* style = new lafi::style(), unsigned char flags = 0);
+    //gui(unsigned int display_w, unsigned int display_h, bool close_button_quits = true, lafi::style* style = new style(), unsigned char flags = 0);
+    ~gui();
     
     void stop();
     void wait();
     
     void draw_self();
 };
+
+}
 
 #endif //ifndef LAFI_GUI_INCLUDED

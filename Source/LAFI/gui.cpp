@@ -1,5 +1,7 @@
 #include "gui.h"
 
+namespace lafi {
+
 /*
  * Creates a gui.
  * autonomous: if true, the gui will work without there being a need to create a display, feed it events, etc.
@@ -8,10 +10,10 @@
  * display_w: if the gui is autonomous, it'll create a display with this width.
  * display_h: if the gui is autonomous, it'll create a display with this height.
  * style: the widget style.
- * flags: widget flags. Use LAFI_FLAG_*.
+ * flags: widget flags. Use FLAG_*.
  */
-lafi_gui::lafi_gui(int w, int h, lafi_style* style, unsigned char flags)
-    : lafi_widget(0, 0, w, h, style, flags) {
+gui::gui(int w, int h, lafi::style* style, unsigned char flags)
+    : widget(0, 0, w, h, style, flags) {
     
     timer = NULL;
     queue = NULL;
@@ -21,8 +23,8 @@ lafi_gui::lafi_gui(int w, int h, lafi_style* style, unsigned char flags)
     this->autonomous = false;
 }
 
-/*lafi_gui::lafi_gui(unsigned int display_w, unsigned int display_h, bool close_button_quits, lafi_style* style, unsigned char flags)
-    : lafi_widget(0, 0, display_w, display_h, style, flags) {
+/*gui::gui(unsigned int display_w, unsigned int display_h, bool close_button_quits, lafi::style* style, unsigned char flags)
+    : widget(0, 0, display_w, display_h, style, flags) {
 
     autonomous = true;
     this->close_button_quits = close_button_quits;
@@ -53,8 +55,8 @@ lafi_gui::lafi_gui(int w, int h, lafi_style* style, unsigned char flags)
     al_start_thread(thread);
 }*/
 
-void* lafi_gui::thread_code(ALLEGRO_THREAD*, void* gui) {
-    lafi_gui* gui_ptr = (lafi_gui*) gui;
+void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
+    gui* gui_ptr = (gui*) g;
     
     al_start_timer(gui_ptr->timer);
     
@@ -74,19 +76,21 @@ void* lafi_gui::thread_code(ALLEGRO_THREAD*, void* gui) {
     return NULL;
 }
 
-void lafi_gui::stop() {
+void gui::stop() {
     if(!autonomous) return;
     
     al_destroy_thread(thread);
 }
 
-void lafi_gui::wait() {
+void gui::wait() {
     al_join_thread(thread, NULL);
 }
 
 //Destroys a gui.
-lafi_gui::~lafi_gui() { }
+gui::~gui() { }
 
-void lafi_gui::draw_self() {
+void gui::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
+}
+
 }

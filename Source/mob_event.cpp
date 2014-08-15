@@ -259,6 +259,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_IF) {
     
+        //ToDo check for vs size.
         if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
         
         
@@ -266,6 +267,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
     } else if(type == MOB_ACTION_MOVE) {
     
         //ToDo relative values.
+        //ToDo check for vf size.
         if(sub_type == MOB_ACTION_MOVE_PREY) {
             if(m->focused_prey) {
                 m->set_target(0, 0, &m->focused_prey->x, &m->focused_prey->y, false);
@@ -292,18 +294,22 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        m->anim.change(vi[0], false, false, false);
+        if(vi.size() > 0) {
+            m->anim.change(vi[0], false, false, false);
+        }
         
         
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
+        //ToDo check vi's size.
         m->affected_by_gravity = vi[0];
         
         
         
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
+        //ToDo check vf size's.
         unsigned short base_nr = 0;
         if(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE) base_nr = m->health;
         
@@ -313,12 +319,14 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
+        //ToDo check vf's size.
         m->timer = m->timer_interval = vf[0];
         
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
+        //ToDo check vs' size.
         m->vars[vs[0]] = vs[1];
         
         
@@ -355,6 +363,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_WAIT) {
     
+        //ToDo check vf's size.
         if(sub_type == MOB_ACTION_WAIT_ANIMATION) {
             m->script_wait = -1;
             return true;

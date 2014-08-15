@@ -33,7 +33,7 @@ mobs{
 	}
 	Treasure{
 		type=Test
-		pos=-128 -384
+		pos=224 -864
 	}
 	Enemy{
 		type=Cloaking Burrow-nit
@@ -51,11 +51,11 @@ mobs{
 	}
 	Pellet{
 		type=Red 10
-		pos=704 -64
+		pos=-96 32
 	}
 	Pellet{
 		type=Red 1
-		pos=576 -64
+		pos=-256 32
 	}
 	Pellet{
 		type=Red 20
@@ -63,7 +63,12 @@ mobs{
 	}
 	Pellet{
 		type=Red 5
-		pos=704 32
+		pos=231.078 -1271.18
+	}
+	Enemy{
+		type=Red Bulborb
+		pos=-133.731 -368.385
+		angle=0.558599
 	}
 }
 vertices{

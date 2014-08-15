@@ -2,13 +2,15 @@
 
 #include "textbox.h"
 
-size_t lafi_textbox::cur_tab_index = 0;
+namespace lafi {
+
+size_t textbox::cur_tab_index = 0;
 
 /*
  * Creates a textbox given some parameters.
  */
-lafi_textbox::lafi_textbox(int x1, int y1, int x2, int y2, string text, lafi_style* style, unsigned char flags)
-    : lafi_widget(x1, y1, x2, y2, style, flags) {
+textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style, unsigned char flags)
+    : widget(x1, y1, x2, y2, style, flags) {
     
     this->text = text;
     editable = true;
@@ -25,7 +27,7 @@ lafi_textbox::lafi_textbox(int x1, int y1, int x2, int y2, string text, lafi_sty
 /*
  * Creates a textbox by copying the info from another textbox.
  */
-lafi_textbox::lafi_textbox(lafi_textbox &t2) : lafi_widget(t2) {
+textbox::textbox(textbox &t2) : widget(t2) {
     text = t2.text;
     editable = t2.editable;
     cursor = sel_start = sel_end = 0;
@@ -39,52 +41,48 @@ lafi_textbox::lafi_textbox(lafi_textbox &t2) : lafi_widget(t2) {
 /*
  * Destroys a textbox.
  */
-lafi_textbox::~lafi_textbox() {}
+textbox::~textbox() {}
 
-void lafi_textbox::draw_self() {
+void textbox::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
-    lafi_draw_line(this, LAFI_DRAW_LINE_TOP,    0, 1, 0, get_darker_bg_color());  //Top line.
-    lafi_draw_line(this, LAFI_DRAW_LINE_LEFT,   0, 1, 0, get_darker_bg_color());  //Left line.
-    lafi_draw_line(this, LAFI_DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color()); //Bottom line.
-    lafi_draw_line(this, LAFI_DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color()); //Right line.
+    draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_darker_bg_color());  //Top line.
+    draw_line(this, DRAW_LINE_LEFT,   0, 1, 0, get_darker_bg_color());  //Left line.
+    draw_line(this, DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color()); //Bottom line.
+    draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color()); //Right line.
     
     if(style->text_font) {
-        int ocrx, ocry, ocrw, ocrh;
-        al_get_clipping_rectangle(&ocrx, &ocry, &ocrw, &ocrh);
-        al_set_clipping_rectangle(x1, y1, (x2 - x1), (y2 - y1)); {
-            int text_start = x1 + 2 - scroll_x;
-            
-            if(parent->focused_widget == this) {
-                al_draw_filled_rectangle(
-                    text_start + al_get_text_width(style->text_font, text.substr(0, min(sel_start, sel_end)).c_str()),
-                    y1 + 2,
-                    text_start + al_get_text_width(style->text_font, text.substr(0, max(sel_start, sel_end)).c_str()),
-                    y2 - 2,
-                    get_alt_color()
-                );
-            }
-            
-            al_draw_text(style->text_font, get_fg_color(), text_start, (y2 + y1) / 2  - al_get_font_line_height(style->text_font) / 2, 0, text.c_str());
-            
-            unsigned int cursor_x = al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
-            
-            if(parent->focused_widget == this) {
-                al_draw_line(
-                    x1 + cursor_x + 1.5 - scroll_x,
-                    y1 + 2,
-                    x1 + cursor_x + 1.5 - scroll_x,
-                    y2 - 2,
-                    get_alt_color(),
-                    1);
-            }
-        } al_set_clipping_rectangle(ocrx, ocry, ocrw, ocrh);
+        int text_start = x1 + 2 - scroll_x;
+        
+        if(parent->focused_widget == this) {
+            al_draw_filled_rectangle(
+                text_start + al_get_text_width(style->text_font, text.substr(0, min(sel_start, sel_end)).c_str()),
+                y1 + 2,
+                text_start + al_get_text_width(style->text_font, text.substr(0, max(sel_start, sel_end)).c_str()),
+                y2 - 2,
+                get_alt_color()
+            );
+        }
+        
+        al_draw_text(style->text_font, get_fg_color(), text_start, (y2 + y1) / 2  - al_get_font_line_height(style->text_font) / 2, 0, text.c_str());
+        
+        unsigned int cursor_x = al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
+        
+        if(parent->focused_widget == this) {
+            al_draw_line(
+                x1 + cursor_x + 1.5 - scroll_x,
+                y1 + 2,
+                x1 + cursor_x + 1.5 - scroll_x,
+                y2 - 2,
+                get_alt_color(),
+                1);
+        }
     }
 }
 
 //Calls the function that handles a change of the text.
-void lafi_textbox::call_change_handler() { if(change_handler) change_handler(this); }
+void textbox::call_change_handler() { if(change_handler) change_handler(this); }
 
-void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
+void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
     bool shift = modifiers & ALLEGRO_KEYMOD_SHIFT;
     
@@ -179,15 +177,15 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
         prev_tab_index = 0,
         shortest_tab_index = UINT_MAX,
         longest_tab_index = 0;
-        lafi_widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
+        widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
         
         if(parent) {
             for(auto w = parent->widgets.begin(); w != parent->widgets.end(); w++) {
-                if(typeid(*w->second) == typeid(lafi_textbox)) {
+                if(typeid(*w->second) == typeid(textbox)) {
                 
                     if(w->second == this) continue;
                     
-                    size_t i = ((lafi_textbox*) w->second)->tab_index;
+                    size_t i = ((textbox*) w->second)->tab_index;
                     if(i < shortest_tab_index) {
                         shortest_tab_index = i;
                         first_textbox = w->second;
@@ -206,13 +204,13 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
                     }
                 }
             }
-            lafi_widget* new_focus;
+            widget* new_focus;
             if(!shift) new_focus = next_textbox ? next_textbox : first_textbox;
             else new_focus = prev_textbox ? prev_textbox : last_textbox;
             if(new_focus) {
                 parent->lose_focus();
                 parent->focused_widget = new_focus;
-                lafi_textbox* t = (lafi_textbox*) new_focus;
+                textbox* t = (textbox*) new_focus;
                 t->sel_start = 0; t->sel_end = t->text.size();
             }
         }
@@ -256,7 +254,7 @@ void lafi_textbox::widget_on_key_char(int keycode, int unichar, unsigned int mod
     } else scroll_x = 0;
 }
 
-void lafi_textbox::widget_on_mouse_down(int button, int x, int) {
+void textbox::widget_on_mouse_down(int button, int x, int) {
     if(button != 1) return;
     
     cursor = mouse_to_char(x);
@@ -264,13 +262,13 @@ void lafi_textbox::widget_on_mouse_down(int button, int x, int) {
     sel_end = cursor;
 }
 
-void lafi_textbox::widget_on_mouse_move(int x, int) {
+void textbox::widget_on_mouse_move(int x, int) {
     if(!mouse_clicking) return;
     
     sel_end = mouse_to_char(x);
 }
 
-unsigned int lafi_textbox::mouse_to_char(int mouse_x) {
+unsigned int textbox::mouse_to_char(int mouse_x) {
     //Get the relative X, from the start of the text.
     int rel_x = mouse_x - x1 + scroll_x;
     for(size_t c = 0; c < text.size(); c++) {
@@ -280,4 +278,6 @@ unsigned int lafi_textbox::mouse_to_char(int mouse_x) {
         }
     }
     return text.size();
+}
+
 }

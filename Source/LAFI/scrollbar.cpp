@@ -3,8 +3,10 @@
 #include "button.h"
 #include "scrollbar.h"
 
-lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float max, float low_value, float high_value, bool vertical, lafi_style* style, unsigned char flags)
-    : lafi_widget(x1, y1, x2, y2, style, flags) {
+namespace lafi {
+
+scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min, float max, float low_value, float high_value, bool vertical, lafi::style* style, unsigned char flags)
+    : widget(x1, y1, x2, y2, style, flags) {
     
     attached_widget = NULL;
     this->min = min;
@@ -16,24 +18,24 @@ lafi_scrollbar::lafi_scrollbar(int x1, int y1, int x2, int y2, float min, float 
     change_handler = NULL;
 }
 
-void lafi_scrollbar::init() {
+void scrollbar::init() {
     create_button();
-    flags |= LAFI_FLAG_WUM_NO_CHILDREN;
+    flags |= FLAG_WUM_NO_CHILDREN;
 }
 
-void lafi_scrollbar::widget_on_mouse_down(int button, int x, int y) {
+void scrollbar::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
     
     move_button(x, y);
 }
 
-void lafi_scrollbar::widget_on_mouse_move(int x, int y) {
+void scrollbar::widget_on_mouse_move(int x, int y) {
     if(!mouse_clicking) return;
     
     move_button(x, y);
 }
 
-void lafi_scrollbar::create_button() {
+void scrollbar::create_button() {
     int bx1, by1, bx2, by2;
     
     remove("but_bar");
@@ -52,7 +54,7 @@ void lafi_scrollbar::create_button() {
             by2 = y2; bx2 = x1 + bw;
         }
         
-        add("but_bar", new lafi_button(
+        add("but_bar", new button(
                 bx1,
                 by1,
                 bx2,
@@ -65,10 +67,10 @@ void lafi_scrollbar::create_button() {
     }
 }
 
-void lafi_scrollbar::move_button(int x, int y) {
+void scrollbar::move_button(int x, int y) {
     if(low_value == high_value) return;
     
-    lafi_button* but = (lafi_button*) widgets["but_bar"];
+    button* but = (button*) widgets["but_bar"];
     
     if(vertical) {
         int bh = but->y2 - but->y1;
@@ -99,14 +101,16 @@ void lafi_scrollbar::move_button(int x, int y) {
     if(change_handler) change_handler(this);
 }
 
-void lafi_scrollbar::set_value(float new_low) {
+void scrollbar::set_value(float new_low) {
     float dif = high_value - low_value;
     if(new_low < min || new_low + dif > max) return;
+    
+    button* but = (button*) widgets["but_bar"];
+    if(!but) return;
     
     low_value = new_low;
     high_value = new_low + dif;
     
-    lafi_button* but = (lafi_button*) widgets["but_bar"];
     float ratio = (low_value - min) / (max - min - dif);
     
     if(vertical) {
@@ -118,9 +122,11 @@ void lafi_scrollbar::set_value(float new_low) {
         but->x1 = x1 + ratio * ((x2 - x1) - but_w);
         but->x2 = but->x1 + but_w;
     }
+    
+    if(change_handler) change_handler(this);
 }
 
-void lafi_scrollbar::draw_self() {
+void scrollbar::draw_self() {
     int w = x2 - x1;
     int h = y2 - y1;
     
@@ -186,18 +192,20 @@ void lafi_scrollbar::draw_self() {
     }
 }
 
-void lafi_scrollbar::register_change_handler(void(*handler)(lafi_widget* w)) {
+void scrollbar::register_change_handler(void(*handler)(widget* w)) {
     change_handler = handler;
 }
 
-void lafi_scrollbar::make_widget_scroll(lafi_widget* widget) {
+void scrollbar::make_widget_scroll(widget* widget) {
     attached_widget = widget;
     this->min = this->low_value = 0;
     if(widget) {
         widget->children_offset_x = widget->children_offset_y = 0;
-        float largest_y2 = -FLT_MIN, largest_x2 = FLT_MIN;
+        float largest_y2 = FLT_MIN, largest_x2 = FLT_MIN;
         
         for(auto w = widget->widgets.begin(); w != widget->widgets.end(); w++) {
+            if(!w->second) continue;
+            
             if(vertical) {
                 if(w->second->y2 > largest_y2) largest_y2 = w->second->y2;
             } else {
@@ -207,19 +215,21 @@ void lafi_scrollbar::make_widget_scroll(lafi_widget* widget) {
         
         if(vertical) {
             largest_y2 += 8; //Spacing.
+            largest_y2 -= widget->y1;
             if(largest_y2 < widget->y2 - widget->y1) {
                 this->high_value = this->max = 0;
             } else {
                 this->high_value = widget->y2 - widget->y1;
-                this->max = largest_y2 - widget->y1;
+                this->max = largest_y2;
             }
         } else {
             largest_x2 += 8; //Spacing.
+            largest_x2 -= widget->x1;
             if(largest_x2 < widget->x2 - widget->x1) {
                 this->high_value = this->max = 0;
             } else {
                 this->high_value = widget->x2 - widget->x1;
-                this->max = largest_x2 - widget->x1;
+                this->max = largest_x2;
             }
         }
         
@@ -236,8 +246,8 @@ void lafi_scrollbar::make_widget_scroll(lafi_widget* widget) {
     create_button();
 }
 
-void lafi_scrollbar::widget_scroller(lafi_widget* w) {
-    lafi_scrollbar* scrollbar_ptr = (lafi_scrollbar*) w;
+void scrollbar::widget_scroller(widget* w) {
+    scrollbar* scrollbar_ptr = (scrollbar*) w;
     
     if(scrollbar_ptr->vertical) {
         scrollbar_ptr->attached_widget->children_offset_y = -scrollbar_ptr->low_value;
@@ -246,4 +256,6 @@ void lafi_scrollbar::widget_scroller(lafi_widget* w) {
     }
 }
 
-lafi_scrollbar::~lafi_scrollbar() { }
+scrollbar::~scrollbar() { }
+
+}

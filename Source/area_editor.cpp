@@ -38,28 +38,28 @@ void area_editor::adv_textures_to_gui() {
         return;
     }
     
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ((lafi_textbox*) f->widgets["txt_x"])->text =  f2s(ed_cur_sector->trans_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text =  f2s(ed_cur_sector->trans_y);
-    ((lafi_textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_sector->scale_x);
-    ((lafi_textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_sector->scale_y);
-    ((lafi_angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->rot);
+    ((lafi::textbox*) f->widgets["txt_x"])->text =  f2s(ed_cur_sector->trans_x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text =  f2s(ed_cur_sector->trans_y);
+    ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_sector->scale_x);
+    ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_sector->scale_y);
+    ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->rot);
 }
 
 /* ----------------------------------------------------------------------------
  * Loads the background's data from the memory to the gui.
  */
 void area_editor::bg_to_gui() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_bg"];
-    ((lafi_textbox*) f->widgets["txt_file"])->text = ed_bg_file_name;
-    ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_bg_x);
-    ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_bg_y);
-    ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_bg_w);
-    ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_bg_h);
-    ((lafi_checkbox*) f->widgets["chk_ratio"])->set(ed_bg_aspect_ratio);
-    ((lafi_checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == ESM_BG_MOUSE);
-    ((lafi_scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a);
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_bg"];
+    ((lafi::textbox*) f->widgets["txt_file"])->text = ed_bg_file_name;
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(ed_bg_x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(ed_bg_y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(ed_bg_w);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(ed_bg_h);
+    ((lafi::checkbox*) f->widgets["chk_ratio"])->set(ed_bg_aspect_ratio);
+    ((lafi::checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == ESM_BG_MOUSE);
+    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a);
 }
 
 /* ----------------------------------------------------------------------------
@@ -756,13 +756,13 @@ void area_editor::goto_error() {
  */
 void area_editor::gui_to_adv_textures() {
     if(!ed_cur_sector) return;
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_adv_textures"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_adv_textures"];
     
-    ed_cur_sector->trans_x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_sector->trans_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_sector->scale_x = s2f(((lafi_textbox*) f->widgets["txt_sx"])->text);
-    ed_cur_sector->scale_y = s2f(((lafi_textbox*) f->widgets["txt_sy"])->text);
-    ed_cur_sector->rot = ((lafi_angle_picker*) f->widgets["ang_a"])->get_angle_rads();
+    ed_cur_sector->trans_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    ed_cur_sector->trans_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    ed_cur_sector->scale_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_sector->scale_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
+    ed_cur_sector->rot = ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
     
     adv_textures_to_gui();
 }
@@ -771,9 +771,9 @@ void area_editor::gui_to_adv_textures() {
  * Saves the background's data from the fields in the gui.
  */
 void area_editor::gui_to_bg() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_bg"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_bg"];
     
-    string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
+    string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     bool is_file_new = false;
     
     if(new_file_name != ed_bg_file_name) {
@@ -789,12 +789,12 @@ void area_editor::gui_to_bg() {
         }
     }
     
-    ed_bg_x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_bg_y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
+    ed_bg_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    ed_bg_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     
-    ed_bg_aspect_ratio = ((lafi_checkbox*) f->widgets["chk_ratio"])->checked;
-    float new_w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
-    float new_h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
+    ed_bg_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
+    float new_w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
+    float new_h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     
     if(new_w != 0 && new_h != 0 && !is_file_new) {
         if(ed_bg_aspect_ratio) {
@@ -816,8 +816,8 @@ void area_editor::gui_to_bg() {
         }
     }
     
-    ed_sec_mode = ((lafi_checkbox*) f->widgets["chk_mouse"])->checked ? ESM_BG_MOUSE : ESM_NONE;
-    ed_bg_a = ((lafi_scrollbar*) f->widgets["bar_alpha"])->low_value;
+    ed_sec_mode = ((lafi::checkbox*) f->widgets["chk_mouse"])->checked ? ESM_BG_MOUSE : ESM_NONE;
+    ed_bg_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
     
     bg_to_gui();
 }
@@ -826,12 +826,12 @@ void area_editor::gui_to_bg() {
  * Saves a mob's data using info on the gui.
  */
 void area_editor::gui_to_mob() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_objects"]->widgets["frm_object"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_objects"]->widgets["frm_object"];
     
     if(!ed_cur_mob) return;
     
-    ed_cur_mob->angle = ((lafi_angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
-    ed_cur_mob->vars = ((lafi_textbox*) f->widgets["txt_vars"])->text;
+    ed_cur_mob->angle = ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
+    ed_cur_mob->vars = ((lafi::textbox*) f->widgets["txt_vars"])->text;
 }
 
 /* ----------------------------------------------------------------------------
@@ -839,18 +839,18 @@ void area_editor::gui_to_mob() {
  */
 void area_editor::gui_to_shadow() {
     if(!ed_cur_shadow) return;
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
     
-    ed_cur_shadow->x = s2f(((lafi_textbox*) f->widgets["txt_x"])->text);
-    ed_cur_shadow->y = s2f(((lafi_textbox*) f->widgets["txt_y"])->text);
-    ed_cur_shadow->w = s2f(((lafi_textbox*) f->widgets["txt_w"])->text);
-    ed_cur_shadow->h = s2f(((lafi_textbox*) f->widgets["txt_h"])->text);
-    ed_cur_shadow->angle = ((lafi_angle_picker*) f->widgets["ang_an"])->get_angle_rads();
-    ed_cur_shadow->alpha = ((lafi_scrollbar*) f->widgets["bar_al"])->low_value;
-    ed_cur_shadow->sway_x = s2f(((lafi_textbox*) f->widgets["txt_sx"])->text);
-    ed_cur_shadow->sway_y = s2f(((lafi_textbox*) f->widgets["txt_sy"])->text);
+    ed_cur_shadow->x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    ed_cur_shadow->y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    ed_cur_shadow->w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
+    ed_cur_shadow->h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
+    ed_cur_shadow->angle = ((lafi::angle_picker*) f->widgets["ang_an"])->get_angle_rads();
+    ed_cur_shadow->alpha = ((lafi::scrollbar*) f->widgets["bar_al"])->low_value;
+    ed_cur_shadow->sway_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
+    ed_cur_shadow->sway_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
     
-    string new_file_name = ((lafi_textbox*) f->widgets["txt_file"])->text;
+    string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     
     if(new_file_name != ed_cur_shadow->file_name) {
         //New image, delete the old one.
@@ -867,13 +867,13 @@ void area_editor::gui_to_shadow() {
  */
 void area_editor::gui_to_sector() {
     if(!ed_cur_sector) return;
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
     
-    ed_cur_sector->z = s2f(((lafi_textbox*) f->widgets["txt_z"])->text);
-    ed_cur_sector->fade = ((lafi_checkbox*) f->widgets["chk_fade"])->checked;
-    ed_cur_sector->always_cast_shadow = ((lafi_checkbox*) f->widgets["chk_shadow"])->checked;
-    ed_cur_sector->file_name = ((lafi_textbox*) f->widgets["txt_texture"])->text;
-    ed_cur_sector->brightness = s2i(((lafi_textbox*) f->widgets["txt_brightness"])->text);
+    ed_cur_sector->z = s2f(((lafi::textbox*) f->widgets["txt_z"])->text);
+    ed_cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
+    ed_cur_sector->always_cast_shadow = ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
+    ed_cur_sector->file_name = ((lafi::textbox*) f->widgets["txt_texture"])->text;
+    ed_cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
     //ToDo hazards.
     
     sector_to_gui();
@@ -893,10 +893,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     ) {
         mouse_cursor_x = ev.mouse.x / cam_zoom - cam_x - ((scr_w - 208) / 2 / cam_zoom);
         mouse_cursor_y = ev.mouse.y / cam_zoom - cam_y - (scr_h / 2 / cam_zoom);
-        lafi_widget* wum;
+        lafi::widget* wum;
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) wum = NULL;
         else wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
-        ((lafi_label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
+        ((lafi::label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
     }
     
     
@@ -1503,292 +1503,292 @@ void area_editor::load() {
     
     ed_mode = EDITOR_MODE_MAIN;
     
-    lafi_style* s = new lafi_style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
-    ed_gui = new lafi_gui(scr_w, scr_h, s);
+    lafi::style* s = new lafi::style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
+    ed_gui = new lafi::gui(scr_w, scr_h, s);
     
     
     //Main frame.
-    lafi_frame* frm_main = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_main = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     ed_gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
-    frm_main->easy_add("lbl_area", new lafi_label(0, 0, 0, 0, "Area:"), 100, 16);
+    frm_main->easy_add("lbl_area", new lafi::label(0, 0, 0, 0, "Area:"), 100, 16);
     frm_main->easy_row();
-    frm_main->easy_add("but_area", new lafi_button(0, 0, 0, 0), 100, 32);
+    frm_main->easy_add("but_area", new lafi::button(0, 0, 0, 0), 100, 32);
     int y = frm_main->easy_row();
     
-    lafi_frame* frm_area = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    lafi::frame* frm_area = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_main->add("frm_area", frm_area);
     hide_widget(frm_area);
     frm_area->easy_row();
-    frm_area->easy_add("but_sectors", new lafi_button(0, 0, 0, 0, "Edit sectors"), 100, 32);
+    frm_area->easy_add("but_sectors", new lafi::button(0, 0, 0, 0, "Edit sectors"), 100, 32);
     frm_area->easy_row();
-    frm_area->easy_add("but_objects", new lafi_button(0, 0, 0, 0, "Edit objects"), 100, 32);
+    frm_area->easy_add("but_objects", new lafi::button(0, 0, 0, 0, "Edit objects"), 100, 32);
     frm_area->easy_row();
-    frm_area->easy_add("but_shadows", new lafi_button(0, 0, 0, 0, "Edit shadows"), 100, 32);
+    frm_area->easy_add("but_shadows", new lafi::button(0, 0, 0, 0, "Edit shadows"), 100, 32);
     frm_area->easy_row();
-    frm_area->easy_add("but_bg", new lafi_button(0, 0, 0, 0, "Edit background"), 100, 32);
+    frm_area->easy_add("but_bg", new lafi::button(0, 0, 0, 0, "Edit background"), 100, 32);
     frm_area->easy_row();
-    frm_area->easy_add("but_review", new lafi_button(0, 0, 0, 0, "Review"), 100, 32);
+    frm_area->easy_add("but_review", new lafi::button(0, 0, 0, 0, "Review"), 100, 32);
     frm_area->easy_row();
     
     
     //Bottom bar.
-    lafi_frame* frm_bottom = new lafi_frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
+    lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     ed_gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
-    frm_bottom->easy_add("but_bg", new lafi_button(  0, 0, 0, 0, "Bg"), 25, 32);
-    frm_bottom->easy_add("but_load", new lafi_button(0, 0, 0, 0, "Load"), 25, 32);
-    frm_bottom->easy_add("but_save", new lafi_button(0, 0, 0, 0, "Save"), 25, 32);
-    frm_bottom->easy_add("but_quit", new lafi_button(0, 0, 0, 0, "X"), 25, 32);
+    frm_bottom->easy_add("but_bg", new lafi::button(  0, 0, 0, 0, "Bg"), 25, 32);
+    frm_bottom->easy_add("but_load", new lafi::button(0, 0, 0, 0, "Load"), 25, 32);
+    frm_bottom->easy_add("but_save", new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
+    frm_bottom->easy_add("but_quit", new lafi::button(0, 0, 0, 0, "X"), 25, 32);
     frm_bottom->easy_row();
     
     
     //Picker frame.
-    lafi_frame* frm_picker = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_picker = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_picker);
     ed_gui->add("frm_picker", frm_picker);
     
-    frm_picker->add("but_back", new lafi_button(     scr_w - 200, 8, scr_w - 104, 24, "Back"));
-    frm_picker->add("frm_list", new lafi_frame(      scr_w - 200, 40, scr_w - 32, scr_h - 56));
-    frm_picker->add("bar_scroll", new lafi_scrollbar(scr_w - 24,  40, scr_w - 8,  scr_h - 56));
+    frm_picker->add("but_back", new lafi::button(     scr_w - 200, 8, scr_w - 104, 24, "Back"));
+    frm_picker->add("frm_list", new lafi::frame(      scr_w - 200, 40, scr_w - 32, scr_h - 56));
+    frm_picker->add("bar_scroll", new lafi::scrollbar(scr_w - 24,  40, scr_w - 8,  scr_h - 56));
     
     
     //Sectors frame.
-    lafi_frame* frm_sectors = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_sectors = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_sectors);
     ed_gui->add("frm_sectors", frm_sectors);
     
     frm_sectors->easy_row();
-    frm_sectors->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_sectors->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_sectors->easy_row();
-    frm_sectors->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
-    frm_sectors->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
+    frm_sectors->easy_add("but_new", new lafi::button(0, 0, 0, 0, "+"), 20, 32);
+    frm_sectors->easy_add("but_sel_none", new lafi::button(0, 0, 0, 0, "None"), 20, 32);
     y = frm_sectors->easy_row();
     
-    lafi_frame* frm_sector = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    lafi::frame* frm_sector = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_sectors->add("frm_sector", frm_sector);
     hide_widget(frm_sector);
     
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_type", new lafi_label(0, 0, 0, 0, "Type:"), 30, 24);
-    frm_sector->easy_add("but_type", new lafi_button(0, 0, 0, 0), 70, 24);
+    frm_sector->easy_add("lbl_type", new lafi::label(0, 0, 0, 0, "Type:"), 30, 24);
+    frm_sector->easy_add("but_type", new lafi::button(0, 0, 0, 0), 70, 24);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_z", new lafi_label(0, 0, 0, 0, "Height:"), 50, 16);
-    frm_sector->easy_add("txt_z", new lafi_textbox(0, 0, 0, 0), 50, 16);
+    frm_sector->easy_add("lbl_z", new lafi::label(0, 0, 0, 0, "Height:"), 50, 16);
+    frm_sector->easy_add("txt_z", new lafi::textbox(0, 0, 0, 0), 50, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("chk_fade", new lafi_checkbox(0, 0, 0, 0, "Fade textures"), 100, 16);
+    frm_sector->easy_add("chk_fade", new lafi::checkbox(0, 0, 0, 0, "Fade textures"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_texture", new lafi_label(0, 0, 0, 0, "Texture:"), 100, 16);
+    frm_sector->easy_add("lbl_texture", new lafi::label(0, 0, 0, 0, "Texture:"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("txt_texture", new lafi_textbox(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("txt_texture", new lafi::textbox(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("but_adv", new lafi_button(0, 0, 0, 0, "Adv. texture settings"), 100, 16);
+    frm_sector->easy_add("but_adv", new lafi::button(0, 0, 0, 0, "Adv. texture settings"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("chk_shadow", new lafi_checkbox(0, 0, 0, 0, "Always cast shadow"), 100, 16);
+    frm_sector->easy_add("chk_shadow", new lafi::checkbox(0, 0, 0, 0, "Always cast shadow"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lin_1", new lafi_line(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("lin_1", new lafi::line(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_brightness", new lafi_label(0, 0, 0, 0, "Brightness:"), 50, 16);
-    frm_sector->easy_add("txt_brightness", new lafi_textbox(0, 0, 0, 0), 50, 16);
+    frm_sector->easy_add("lbl_brightness", new lafi::label(0, 0, 0, 0, "Brightness:"), 50, 16);
+    frm_sector->easy_add("txt_brightness", new lafi::textbox(0, 0, 0, 0), 50, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_hazards", new lafi_label(0, 0, 0, 0, "Hazards:"), 100, 16);
+    frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("txt_hazards", new lafi_textbox(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("txt_hazards", new lafi::textbox(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
     
     
     //Advanced sector texture settings frame.
-    lafi_frame* frm_adv_textures = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_adv_textures = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_adv_textures);
     ed_gui->add("frm_adv_textures", frm_adv_textures);
     
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_adv_textures->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("lin_1", new lafi_line(0, 0, 0, 0), 20, 16);
-    frm_adv_textures->easy_add("lbl_main", new lafi_label(0, 0, 0, 0, "Main texture"), 60, 16);
-    frm_adv_textures->easy_add("lin_2", new lafi_line(0, 0, 0, 0), 20, 16);
+    frm_adv_textures->easy_add("lin_1", new lafi::line(0, 0, 0, 0), 20, 16);
+    frm_adv_textures->easy_add("lbl_main", new lafi::label(0, 0, 0, 0, "Main texture"), 60, 16);
+    frm_adv_textures->easy_add("lin_2", new lafi::line(0, 0, 0, 0), 20, 16);
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 40, 16);
-    frm_adv_textures->easy_add("txt_x", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_adv_textures->easy_add("txt_y", new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_adv_textures->easy_add("lbl_xy", new lafi::label(0, 0, 0, 0, "X&Y:"), 40, 16);
+    frm_adv_textures->easy_add("txt_x", new lafi::textbox(0, 0, 0, 0), 30, 16);
+    frm_adv_textures->easy_add("txt_y", new lafi::textbox(0, 0, 0, 0), 30, 16);
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("lbl_sxy", new lafi_label(0, 0, 0, 0, "Scale:"), 40, 16);
-    frm_adv_textures->easy_add("txt_sx", new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_adv_textures->easy_add("txt_sy", new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_adv_textures->easy_add("lbl_sxy", new lafi::label(0, 0, 0, 0, "Scale:"), 40, 16);
+    frm_adv_textures->easy_add("txt_sx", new lafi::textbox(0, 0, 0, 0), 30, 16);
+    frm_adv_textures->easy_add("txt_sy", new lafi::textbox(0, 0, 0, 0), 30, 16);
     frm_adv_textures->easy_row();
-    frm_adv_textures->easy_add("lbl_a", new lafi_label(0, 0, 0, 0, "Angle:"), 50, 16);
-    frm_adv_textures->easy_add("ang_a", new lafi_angle_picker(0, 0, 0, 0), 50, 24);
+    frm_adv_textures->easy_add("lbl_a", new lafi::label(0, 0, 0, 0, "Angle:"), 50, 16);
+    frm_adv_textures->easy_add("ang_a", new lafi::angle_picker(0, 0, 0, 0), 50, 24);
     frm_adv_textures->easy_row();
     
     
     //Objects frame.
-    lafi_frame* frm_objects = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_objects = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_objects);
     ed_gui->add("frm_objects", frm_objects);
     
     frm_objects->easy_row();
-    frm_objects->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_objects->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_objects->easy_row();
-    frm_objects->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
-    frm_objects->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
+    frm_objects->easy_add("but_new", new lafi::button(0, 0, 0, 0, "+"), 20, 32);
+    frm_objects->easy_add("but_sel_none", new lafi::button(0, 0, 0, 0, "None"), 20, 32);
     y = frm_objects->easy_row();
     
-    lafi_frame* frm_object = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    lafi::frame* frm_object = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_objects->add("frm_object", frm_object);
     hide_widget(frm_object);
     
     frm_object->easy_row();
-    frm_object->easy_add("lbl_category", new lafi_label(0, 0, 0, 0, "Category:"), 90, 16);
-    frm_object->easy_add("but_rem", new lafi_button(0, 0, 0, 0, "-"), 10, 16);
+    frm_object->easy_add("lbl_category", new lafi::label(0, 0, 0, 0, "Category:"), 90, 16);
+    frm_object->easy_add("but_rem", new lafi::button(0, 0, 0, 0, "-"), 10, 16);
     frm_object->easy_row();
-    frm_object->easy_add("but_category", new lafi_button(0, 0, 0, 0), 100, 24);
+    frm_object->easy_add("but_category", new lafi::button(0, 0, 0, 0), 100, 24);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_type", new lafi_label(0, 0, 0, 0, "Type:"), 100, 16);
+    frm_object->easy_add("lbl_type", new lafi::label(0, 0, 0, 0, "Type:"), 100, 16);
     frm_object->easy_row();
-    frm_object->easy_add("but_type", new lafi_button(0, 0, 0, 0), 100, 24);
+    frm_object->easy_add("but_type", new lafi::button(0, 0, 0, 0), 100, 24);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_angle", new lafi_label(0, 0, 0, 0, "Angle:"), 50, 16);
-    frm_object->easy_add("ang_angle", new lafi_angle_picker(0, 0, 0, 0), 50, 24);
+    frm_object->easy_add("lbl_angle", new lafi::label(0, 0, 0, 0, "Angle:"), 50, 16);
+    frm_object->easy_add("ang_angle", new lafi::angle_picker(0, 0, 0, 0), 50, 24);
     frm_object->easy_row();
-    frm_object->easy_add("lbl_vars", new lafi_label(0, 0, 0, 0, "Script variables:"), 100, 16);
+    frm_object->easy_add("lbl_vars", new lafi::label(0, 0, 0, 0, "Script variables:"), 100, 16);
     frm_object->easy_row();
-    frm_object->easy_add("txt_vars", new lafi_textbox(0, 0, 0, 0), 100, 16);
+    frm_object->easy_add("txt_vars", new lafi::textbox(0, 0, 0, 0), 100, 16);
     frm_object->easy_row();
     
     
     //Shadows frame.
-    lafi_frame* frm_shadows = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_shadows = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_shadows);
     ed_gui->add("frm_shadows", frm_shadows);
     
     frm_shadows->easy_row();
-    frm_shadows->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_shadows->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_shadows->easy_row();
-    frm_shadows->easy_add("but_new", new lafi_button(0, 0, 0, 0, "+"), 20, 32);
-    frm_shadows->easy_add("but_sel_none", new lafi_button(0, 0, 0, 0, "None"), 20, 32);
+    frm_shadows->easy_add("but_new", new lafi::button(0, 0, 0, 0, "+"), 20, 32);
+    frm_shadows->easy_add("but_sel_none", new lafi::button(0, 0, 0, 0, "None"), 20, 32);
     y = frm_shadows->easy_row();
     
-    lafi_frame* frm_shadow = new lafi_frame(scr_w - 208, y, scr_w, scr_h - 48);
+    lafi::frame* frm_shadow = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_shadows->add("frm_shadow", frm_shadow);
     hide_widget(frm_shadow);
     
     frm_shadow->easy_row();
-    frm_shadow->easy_add("dum_1", new lafi_dummy(0, 0, 0, 0), 90, 16);
-    frm_shadow->easy_add("but_rem", new lafi_button(0, 0, 0, 0, "-"), 10, 16);
+    frm_shadow->easy_add("dum_1", new lafi::dummy(0, 0, 0, 0), 90, 16);
+    frm_shadow->easy_add("but_rem", new lafi::button(0, 0, 0, 0, "-"), 10, 16);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_file", new lafi_label(0, 0, 0, 0, "File:"), 20, 16);
-    frm_shadow->easy_add("txt_file", new lafi_textbox(0, 0, 0, 0), 80, 16);
+    frm_shadow->easy_add("lbl_file", new lafi::label(0, 0, 0, 0, "File:"), 20, 16);
+    frm_shadow->easy_add("txt_file", new lafi::textbox(0, 0, 0, 0), 80, 16);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 40, 16);
-    frm_shadow->easy_add("txt_x",  new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_shadow->easy_add("txt_y",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("lbl_xy", new lafi::label(0, 0, 0, 0, "X&Y:"), 40, 16);
+    frm_shadow->easy_add("txt_x",  new lafi::textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_y",  new lafi::textbox(0, 0, 0, 0), 30, 16);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_wh", new lafi_label(0, 0, 0, 0, "W&H:"), 40, 16);
-    frm_shadow->easy_add("txt_w",  new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_shadow->easy_add("txt_h",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("lbl_wh", new lafi::label(0, 0, 0, 0, "W&H:"), 40, 16);
+    frm_shadow->easy_add("txt_w",  new lafi::textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_h",  new lafi::textbox(0, 0, 0, 0), 30, 16);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_an", new lafi_label(0, 0, 0, 0, "Angle:"), 40, 16);
-    frm_shadow->easy_add("ang_an", new lafi_angle_picker(0, 0, 0, 0), 60, 24);
+    frm_shadow->easy_add("lbl_an", new lafi::label(0, 0, 0, 0, "Angle:"), 40, 16);
+    frm_shadow->easy_add("ang_an", new lafi::angle_picker(0, 0, 0, 0), 60, 24);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_al", new lafi_label(0, 0, 0, 0, "Opacity:"), 40, 16);
+    frm_shadow->easy_add("lbl_al", new lafi::label(0, 0, 0, 0, "Opacity:"), 40, 16);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("bar_al", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
+    frm_shadow->easy_add("bar_al", new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
     frm_shadow->easy_row();
-    frm_shadow->easy_add("lbl_sway", new lafi_label(0, 0, 0, 0, "Sway X&Y:"), 40, 16);
-    frm_shadow->easy_add("txt_sx",  new lafi_textbox(0, 0, 0, 0), 30, 16);
-    frm_shadow->easy_add("txt_sy",  new lafi_textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("lbl_sway", new lafi::label(0, 0, 0, 0, "Sway X&Y:"), 40, 16);
+    frm_shadow->easy_add("txt_sx",  new lafi::textbox(0, 0, 0, 0), 30, 16);
+    frm_shadow->easy_add("txt_sy",  new lafi::textbox(0, 0, 0, 0), 30, 16);
     frm_shadow->easy_row();
     
     
     //Background frame.
-    lafi_frame* frm_bg = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_bg = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_bg);
     ed_gui->add("frm_bg", frm_bg);
     
     frm_bg->easy_row();
-    frm_bg->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_bg->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("lbl_file", new lafi_label(0, 0, 0, 0, "File:"), 30, 16);
-    frm_bg->easy_add("txt_file", new lafi_textbox(0, 0, 0, 0), 70, 16);
+    frm_bg->easy_add("lbl_file", new lafi::label(0, 0, 0, 0, "File:"), 30, 16);
+    frm_bg->easy_add("txt_file", new lafi::textbox(0, 0, 0, 0), 70, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("lbl_xy", new lafi_label(0, 0, 0, 0, "X&Y:"), 30, 16);
-    frm_bg->easy_add("txt_x", new lafi_textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_add("txt_y", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("lbl_xy", new lafi::label(0, 0, 0, 0, "X&Y:"), 30, 16);
+    frm_bg->easy_add("txt_x", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("txt_y", new lafi::textbox(0, 0, 0, 0), 35, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("lbl_wh", new lafi_label(0, 0, 0, 0, "W&H:"), 30, 16);
-    frm_bg->easy_add("txt_w", new lafi_textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_add("txt_h", new lafi_textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("lbl_wh", new lafi::label(0, 0, 0, 0, "W&H:"), 30, 16);
+    frm_bg->easy_add("txt_w", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_bg->easy_add("txt_h", new lafi::textbox(0, 0, 0, 0), 35, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("chk_ratio", new lafi_checkbox(0, 0, 0, 0, "Keep aspect ratio"), 100, 16);
+    frm_bg->easy_add("chk_ratio", new lafi::checkbox(0, 0, 0, 0, "Keep aspect ratio"), 100, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("chk_mouse", new lafi_checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
+    frm_bg->easy_add("chk_mouse", new lafi::checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("lbl_alpha", new lafi_label(0, 0, 0, 0, "Opacity:"), 100, 16);
+    frm_bg->easy_add("lbl_alpha", new lafi::label(0, 0, 0, 0, "Opacity:"), 100, 16);
     frm_bg->easy_row();
-    frm_bg->easy_add("bar_alpha", new lafi_scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
+    frm_bg->easy_add("bar_alpha", new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
     frm_bg->easy_row();
     
     
     //Review frame.
-    lafi_frame* frm_review = new lafi_frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    lafi::frame* frm_review = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_review);
     ed_gui->add("frm_review", frm_review);
     
     frm_review->easy_row();
-    frm_review->easy_add("but_back", new lafi_button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_review->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
     frm_review->easy_row();
-    frm_review->easy_add("but_find_errors", new lafi_button(0, 0, 0, 0, "Find errors"), 100, 24);
+    frm_review->easy_add("but_find_errors", new lafi::button(0, 0, 0, 0, "Find errors"), 100, 24);
     frm_review->easy_row();
-    frm_review->easy_add("lbl_error_lbl", new lafi_label(0, 0, 0, 0, "Error found:", ALLEGRO_ALIGN_CENTER), 100, 16);
+    frm_review->easy_add("lbl_error_lbl", new lafi::label(0, 0, 0, 0, "Error found:", ALLEGRO_ALIGN_CENTER), 100, 16);
     frm_review->easy_row();
-    frm_review->easy_add("lbl_error_1", new lafi_label(0, 0, 0, 0), 100, 12);
+    frm_review->easy_add("lbl_error_1", new lafi::label(0, 0, 0, 0), 100, 12);
     frm_review->easy_row();
-    frm_review->easy_add("lbl_error_2", new lafi_label(0, 0, 0, 0), 100, 12);
+    frm_review->easy_add("lbl_error_2", new lafi::label(0, 0, 0, 0), 100, 12);
     frm_review->easy_row();
-    frm_review->easy_add("lbl_error_3", new lafi_label(0, 0, 0, 0), 100, 12);
+    frm_review->easy_add("lbl_error_3", new lafi::label(0, 0, 0, 0), 100, 12);
     frm_review->easy_row();
-    frm_review->easy_add("lbl_error_4", new lafi_label(0, 0, 0, 0), 100, 12);
+    frm_review->easy_add("lbl_error_4", new lafi::label(0, 0, 0, 0), 100, 12);
     frm_review->easy_row();
-    frm_review->easy_add("but_goto_error", new lafi_button(0, 0, 0, 0, "Go to error"), 100, 24);
+    frm_review->easy_add("but_goto_error", new lafi::button(0, 0, 0, 0, "Go to error"), 100, 24);
     frm_review->easy_row();
-    frm_review->easy_add("lin_1", new lafi_line(0, 0, 0, 0), 100, 16);
+    frm_review->easy_add("lin_1", new lafi::line(0, 0, 0, 0), 100, 16);
     frm_review->easy_row();
-    frm_review->easy_add("chk_see_textures", new lafi_checkbox(0, 0, 0, 0, "See textures"), 100, 16);
+    frm_review->easy_add("chk_see_textures", new lafi::checkbox(0, 0, 0, 0, "See textures"), 100, 16);
     frm_review->easy_row();
-    frm_review->easy_add("dum_1", new lafi_dummy(0, 0, 0, 0), 10, 16);
-    frm_review->easy_add("chk_shadows", new lafi_checkbox(0, 0, 0, 0, "Enable shadows"), 90, 16);
+    frm_review->easy_add("dum_1", new lafi::dummy(0, 0, 0, 0), 10, 16);
+    frm_review->easy_add("chk_shadows", new lafi::checkbox(0, 0, 0, 0, "Enable shadows"), 90, 16);
     frm_review->easy_row();
     update_review_frame();
     
     
     //Status bar.
-    lafi_label* ed_gui_status_bar = new lafi_label(0, scr_h - 16, scr_w - 208, scr_h);
+    lafi::label* ed_gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     ed_gui->add("lbl_status_bar", ed_gui_status_bar);
     
     
     //Properties -- main.
-    frm_main->widgets["but_area"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_main->widgets["but_area"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_AREA);
     };
-    frm_area->widgets["but_sectors"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_area->widgets["but_sectors"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_objects"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_area->widgets["but_objects"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_OBJECTS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_shadows"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_area->widgets["but_shadows"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_SHADOWS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_bg"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_area->widgets["but_bg"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_BG;
         change_to_right_frame();
     };
-    frm_area->widgets["but_review"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_area->widgets["but_review"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_REVIEW;
         change_to_right_frame();
         update_review_frame();
@@ -1802,13 +1802,13 @@ void area_editor::load() {
     
     
     //Properties -- bottom.
-    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_show_bg = !ed_show_bg;
     };
-    frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         load_area();
     };
-    frm_bottom->widgets["but_save"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_bottom->widgets["but_save"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         save_area();
     };
     disable_widget(frm_bottom->widgets["but_load"]);
@@ -1822,24 +1822,24 @@ void area_editor::load() {
     
     
     //Properties -- sectors.
-    auto lambda_gui_to_sector = [] (lafi_widget*) { gui_to_sector(); };
-    auto lambda_gui_to_sector_click = [] (lafi_widget*, int, int) { gui_to_sector(); };
-    frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    auto lambda_gui_to_sector = [] (lafi::widget*) { gui_to_sector(); };
+    auto lambda_gui_to_sector_click = [] (lafi::widget*, int, int) { gui_to_sector(); };
+    frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(ed_sec_mode == ESM_NEW_SECTOR) ed_sec_mode = ESM_NONE;
         else ed_sec_mode = ESM_NEW_SECTOR;
     };
-    frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_cur_sector = NULL;
         sector_to_gui();
     };
-    frm_sector->widgets["but_type"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_sector->widgets["but_type"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
     };
-    frm_sector->widgets["but_adv"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_sector->widgets["but_adv"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(!ed_cur_sector) return;
         
         ed_cur_sector->bitmap = bitmaps.get("Textures/" + ed_cur_sector->file_name, NULL);
@@ -1868,9 +1868,9 @@ void area_editor::load() {
     
     
     //Properties -- advanced textures.
-    auto lambda_gui_to_adv_textures = [] (lafi_widget*) { gui_to_adv_textures(); };
-    auto lambda_gui_to_adv_textures_click = [] (lafi_widget*, int, int) { gui_to_adv_textures(); };
-    frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    auto lambda_gui_to_adv_textures = [] (lafi::widget*) { gui_to_adv_textures(); };
+    auto lambda_gui_to_adv_textures_click = [] (lafi::widget*, int, int) { gui_to_adv_textures(); };
+    frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         clear_area_textures(); //Clears the texture set when we entered this menu.
         ed_mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
@@ -1887,20 +1887,20 @@ void area_editor::load() {
     
     
     //Properties -- objects.
-    auto lambda_gui_to_mob = [] (lafi_widget*) { gui_to_mob(); };
-    frm_objects->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    auto lambda_gui_to_mob = [] (lafi::widget*) { gui_to_mob(); };
+    frm_objects->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_objects->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_objects->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(ed_sec_mode == ESM_NEW_OBJECT) ed_sec_mode = ESM_NONE;
         else ed_sec_mode = ESM_NEW_OBJECT;
     };
-    frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_cur_mob = NULL;
         mob_to_gui();
     };
-    frm_object->widgets["but_rem"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_object->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             if(cur_area_map.mob_generators[m] == ed_cur_mob) {
                 cur_area_map.mob_generators.erase(cur_area_map.mob_generators.begin() + m);
@@ -1911,10 +1911,10 @@ void area_editor::load() {
             }
         }
     };
-    frm_object->widgets["but_category"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_object->widgets["but_category"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
     };
-    frm_object->widgets["but_type"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_object->widgets["but_type"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
     };
     frm_object->widgets["ang_angle"]->lose_focus_handler = lambda_gui_to_mob;
@@ -1930,22 +1930,22 @@ void area_editor::load() {
     
     
     //Properties -- shadows.
-    auto lambda_gui_to_shadow = [] (lafi_widget*) { gui_to_shadow(); };
-    frm_shadows->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    auto lambda_gui_to_shadow = [] (lafi::widget*) { gui_to_shadow(); };
+    frm_shadows->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_sec_mode = ESM_NONE;
         shadow_to_gui();
         ed_mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_shadows->widgets["but_new"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_shadows->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(ed_sec_mode == ESM_NEW_SHADOW) ed_sec_mode = ESM_NONE;
         else ed_sec_mode = ESM_NEW_SHADOW;
     };
-    frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_cur_shadow = NULL;
         shadow_to_gui();
     };
-    frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
             if(cur_area_map.tree_shadows[s] == ed_cur_shadow) {
                 cur_area_map.tree_shadows.erase(cur_area_map.tree_shadows.begin() + s);
@@ -1981,9 +1981,9 @@ void area_editor::load() {
     
     
     //Properties -- background.
-    auto lambda_gui_to_bg = [] (lafi_widget*) { gui_to_bg(); };
-    auto lambda_gui_to_bg_click = [] (lafi_widget*, int, int) { gui_to_bg(); };
-    frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    auto lambda_gui_to_bg = [] (lafi::widget*) { gui_to_bg(); };
+    auto lambda_gui_to_bg_click = [] (lafi::widget*, int, int) { gui_to_bg(); };
+    frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_sec_mode = ESM_NONE;
         bg_to_gui();
         ed_mode = EDITOR_MODE_MAIN;
@@ -1994,7 +1994,7 @@ void area_editor::load() {
     frm_bg->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_bg;
     frm_bg->widgets["txt_w"]->lose_focus_handler = lambda_gui_to_bg;
     frm_bg->widgets["txt_h"]->lose_focus_handler = lambda_gui_to_bg;
-    ((lafi_scrollbar*) frm_bg->widgets["bar_alpha"])->change_handler = lambda_gui_to_bg;
+    ((lafi::scrollbar*) frm_bg->widgets["bar_alpha"])->change_handler = lambda_gui_to_bg;
     frm_bg->widgets["chk_ratio"]->left_mouse_click_handler = lambda_gui_to_bg_click;
     frm_bg->widgets["chk_mouse"]->left_mouse_click_handler = lambda_gui_to_bg_click;
     frm_bg->widgets["but_back"]->description = "Go back to the main menu.";
@@ -2010,21 +2010,21 @@ void area_editor::load() {
     
     
     //Properties -- review.
-    frm_review->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_review->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         ed_sec_mode = ESM_NONE;
         update_review_frame();
         change_to_right_frame();
     };
-    frm_review->widgets["but_find_errors"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_review->widgets["but_find_errors"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         find_errors();
     };
-    frm_review->widgets["but_goto_error"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_review->widgets["but_goto_error"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         goto_error();
     };
-    frm_review->widgets["chk_see_textures"]->left_mouse_click_handler = [] (lafi_widget * c, int, int) {
+    frm_review->widgets["chk_see_textures"]->left_mouse_click_handler = [] (lafi::widget * c, int, int) {
         ed_error_type = EET_NONE_YET;
-        if(((lafi_checkbox*) c)->checked) {
+        if(((lafi::checkbox*) c)->checked) {
             ed_sec_mode = ESM_TEXTURE_VIEW;
             clear_area_textures();
             load_area_textures();
@@ -2035,8 +2035,8 @@ void area_editor::load() {
             update_review_frame();
         }
     };
-    frm_review->widgets["chk_shadows"]->left_mouse_click_handler = [] (lafi_widget * c, int, int) {
-        ed_show_shadows = ((lafi_checkbox*) c)->checked;
+    frm_review->widgets["chk_shadows"]->left_mouse_click_handler = [] (lafi::widget * c, int, int) {
+        ed_show_shadows = ((lafi::checkbox*) c)->checked;
         update_review_frame();
     };
     frm_review->widgets["but_back"]->description =         "Go back to the main menu.";
@@ -2047,7 +2047,7 @@ void area_editor::load() {
     
     
     //Properties -- picker.
-    frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi_widget*, int, int) {
+    frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         show_widget(ed_gui->widgets["frm_bottom"]);
         change_to_right_frame();
     };
@@ -2063,7 +2063,7 @@ void area_editor::load() {
  */
 void area_editor::load_area() {
     ::load_area(ed_file_name, true);
-    ((lafi_button*) ed_gui->widgets["frm_main"]->widgets["but_area"])->text = ed_file_name;
+    ((lafi::button*) ed_gui->widgets["frm_main"]->widgets["but_area"])->text = ed_file_name;
     show_widget(ed_gui->widgets["frm_main"]->widgets["frm_area"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(ed_gui->widgets["frm_bottom"]->widgets["but_save"]);
@@ -2103,19 +2103,19 @@ void area_editor::load_area() {
  * Loads the current mob's data onto the gui.
  */
 void area_editor::mob_to_gui() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_objects"]->widgets["frm_object"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_objects"]->widgets["frm_object"];
     
     if(!ed_cur_mob) {
         hide_widget(f);
     } else {
         show_widget(f);
         
-        ((lafi_angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_mob->angle);
-        ((lafi_textbox*) f->widgets["txt_vars"])->text = ed_cur_mob->vars;
+        ((lafi::angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_mob->angle);
+        ((lafi::textbox*) f->widgets["txt_vars"])->text = ed_cur_mob->vars;
         
-        ((lafi_button*) f->widgets["but_category"])->text = mob_categories.get_pname(ed_cur_mob->category);
+        ((lafi::button*) f->widgets["but_category"])->text = mob_categories.get_pname(ed_cur_mob->category);
         
-        lafi_button* but_type = (lafi_button*) f->widgets["but_type"];
+        lafi::button* but_type = (lafi::button*) f->widgets["but_type"];
         if(ed_cur_mob->category == MOB_CATEGORY_NONE) {
             disable_widget(but_type);
         } else {
@@ -2134,7 +2134,7 @@ void area_editor::open_picker(unsigned char type) {
     show_widget(ed_gui->widgets["frm_picker"]);
     hide_widget(ed_gui->widgets["frm_bottom"]);
     
-    lafi_widget* f = ed_gui->widgets["frm_picker"]->widgets["frm_list"];
+    lafi::widget* f = ed_gui->widgets["frm_picker"]->widgets["frm_list"];
     
     while(f->widgets.size()) {
         f->remove(f->widgets.begin()->first);
@@ -2174,16 +2174,16 @@ void area_editor::open_picker(unsigned char type) {
     f->easy_reset();
     f->easy_row();
     for(size_t e = 0; e < elements.size(); e++) {
-        lafi_button* b = new lafi_button(0, 0, 0, 0, elements[e]);
+        lafi::button* b = new lafi::button(0, 0, 0, 0, elements[e]);
         string name = elements[e];
-        b->left_mouse_click_handler = [name, type] (lafi_widget*, int, int) {
+        b->left_mouse_click_handler = [name, type] (lafi::widget*, int, int) {
             pick(name, type);
         };
         f->easy_add("but_" + i2s(e), b, 100, 24);
         f->easy_row(0);
     }
     
-    ((lafi_scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"])->make_widget_scroll(f);
+    ((lafi::scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"])->make_widget_scroll(f);
 }
 
 /* ----------------------------------------------------------------------------
@@ -2453,16 +2453,16 @@ void area_editor::save_area() {
  * Loads the current sector's data onto the gui.
  */
 void area_editor::sector_to_gui() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_sectors"]->widgets["frm_sector"];
     if(ed_cur_sector) {
         show_widget(f);
         
-        ((lafi_textbox*) f->widgets["txt_z"])->text = f2s(ed_cur_sector->z);
-        ((lafi_checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
-        ((lafi_checkbox*) f->widgets["chk_shadow"])->set(ed_cur_sector->always_cast_shadow);
-        ((lafi_textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
-        ((lafi_textbox*) f->widgets["txt_brightness"])->text = i2s(ed_cur_sector->brightness);
-        ((lafi_button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
+        ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(ed_cur_sector->z);
+        ((lafi::checkbox*) f->widgets["chk_fade"])->set(ed_cur_sector->fade);
+        ((lafi::checkbox*) f->widgets["chk_shadow"])->set(ed_cur_sector->always_cast_shadow);
+        ((lafi::textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
+        ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(ed_cur_sector->brightness);
+        ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
         //ToDo hazards.
         
         if(ed_cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
@@ -2490,19 +2490,19 @@ void area_editor::sector_to_gui() {
  * Loads a tree shadow's info onto the gui.
  */
 void area_editor::shadow_to_gui() {
-    lafi_frame* f = (lafi_frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
+    lafi::frame* f = (lafi::frame*) ed_gui->widgets["frm_shadows"]->widgets["frm_shadow"];
     if(ed_cur_shadow) {
     
         show_widget(f);
-        ((lafi_textbox*) f->widgets["txt_x"])->text = f2s(ed_cur_shadow->x);
-        ((lafi_textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_shadow->y);
-        ((lafi_textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_shadow->w);
-        ((lafi_textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_shadow->h);
-        ((lafi_angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
-        ((lafi_scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
-        ((lafi_textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
-        ((lafi_textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_shadow->sway_x);
-        ((lafi_textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_shadow->sway_y);
+        ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(ed_cur_shadow->x);
+        ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(ed_cur_shadow->y);
+        ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_shadow->w);
+        ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_shadow->h);
+        ((lafi::angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
+        ((lafi::scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
+        ((lafi::textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
+        ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_shadow->sway_x);
+        ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_shadow->sway_y);
         
     } else {
         hide_widget(f);
@@ -2521,11 +2521,11 @@ float area_editor::snap_to_grid(const float c) {
  * Updates the widgets on the review frame.
  */
 void area_editor::update_review_frame() {
-    lafi_button* but_goto_error = (lafi_button*) ed_gui->widgets["frm_review"]->widgets["but_goto_error"];
-    lafi_label* lbl_error_1 = (lafi_label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_1"];
-    lafi_label* lbl_error_2 = (lafi_label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_2"];
-    lafi_label* lbl_error_3 = (lafi_label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_3"];
-    lafi_label* lbl_error_4 = (lafi_label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_4"];
+    lafi::button* but_goto_error = (lafi::button*) ed_gui->widgets["frm_review"]->widgets["but_goto_error"];
+    lafi::label* lbl_error_1 = (lafi::label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_1"];
+    lafi::label* lbl_error_2 = (lafi::label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_2"];
+    lafi::label* lbl_error_3 = (lafi::label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_3"];
+    lafi::label* lbl_error_4 = (lafi::label*) ed_gui->widgets["frm_review"]->widgets["lbl_error_4"];
     
     lbl_error_2->text.clear();
     lbl_error_3->text.clear();
@@ -2678,6 +2678,6 @@ void area_editor::update_review_frame() {
         }
     }
     
-    ((lafi_checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_see_textures"])->set(ed_sec_mode == ESM_TEXTURE_VIEW);
-    ((lafi_checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_shadows"])->set(ed_show_shadows);
+    ((lafi::checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_see_textures"])->set(ed_sec_mode == ESM_TEXTURE_VIEW);
+    ((lafi::checkbox*) ed_gui->widgets["frm_review"]->widgets["chk_shadows"])->set(ed_show_shadows);
 }

@@ -1,14 +1,16 @@
 #include "label.h"
 
-lafi_label::lafi_label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi_style* style, unsigned char flags)
-    : lafi_widget(x1, y1, x2, y2, style, flags) {
+namespace lafi {
+
+label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::style* style, unsigned char flags)
+    : widget(x1, y1, x2, y2, style, flags) {
     this->text = text;
     this->text_flags = text_flags;
 }
 
-lafi_label::~lafi_label() {}
+label::~label() {}
 
-void lafi_label::draw_self() {
+void label::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     if(style->text_font) {
         int text_x = 1;
@@ -25,4 +27,6 @@ void lafi_label::draw_self() {
             text.c_str()
         );
     }
+}
+
 }

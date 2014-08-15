@@ -1,0 +1,75 @@
+name = Red Bulborb
+always_active = yes
+big_damage_interval = 100
+chomp_max_victims = 5
+max_carriers = 20
+max_health = 750
+move_speed = 80
+near_radius = 120
+rotation_speed = 3
+sight_radius = 300
+radius = 60
+weight = 10
+can_regenerate = false
+drops_corpse = true
+is_boss = false
+pikmin_seeds = 12
+revive_speed = 0
+value = 7
+
+script{
+    on_spawn{
+        animation = sleep
+        var = sleeping true
+    }
+    
+    on_see_prey{
+        if = sleeping true
+        animation = wake_up
+        if = sleeping true
+        wait = animation
+        
+        animation = walk
+		move = prey
+        var = sleeping false
+	}
+    
+    on_near_prey{
+        move = stop
+        animation = attack
+        chomp = mouth
+        wait = animation
+        chomp = 
+    }
+    
+    on_big_damage{
+        animation = shake
+        wait = animation
+    }
+    
+    on_attack_hit{
+        animation = eat
+        wait = animation
+        eat = all
+    }
+	
+	on_lose_prey{
+        animation = walk
+		move = home
+	}
+    
+    on_reach_home{
+        animation = idle
+        wait = 0.3
+        animation = fall_asleep
+        wait = animation
+        var = sleeping true
+    }
+    
+    on_death{
+        special_function = die_start
+        animation = die
+        wait = animation
+        special_function = die_end
+    }
+}

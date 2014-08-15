@@ -308,9 +308,6 @@
     <ClInclude Include="LAFI\angle_picker.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
-    <ClInclude Include="animation_editor.h">
-      <Filter>Source Files\LAFI</Filter>
-    </ClInclude>
     <ClInclude Include="onion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -321,6 +318,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pellet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animation_editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

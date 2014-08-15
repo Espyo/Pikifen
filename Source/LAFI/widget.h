@@ -14,28 +14,32 @@
 
 using namespace std;
 
-class lafi_widget;
+namespace lafi {
+class widget;
+}
 
-struct lafi_easy_widget_info {
+namespace lafi {
+
+struct easy_widget_info {
     string name;
-    lafi_widget* widget;
+    widget* widget;
     float width, height;
     unsigned char flags;
-    lafi_easy_widget_info(string name, lafi_widget* widget, float width, float height, unsigned char flags);
+    easy_widget_info(string name, lafi::widget* widget, float width, float height, unsigned char flags);
 };
 
-struct lafi_accelerator {
+struct accelerator {
     int key;
     unsigned int modifiers;
-    lafi_widget* widget;
-    lafi_accelerator(int key, unsigned int modifiers, lafi_widget* widget);
+    widget* widget;
+    accelerator(int key, unsigned int modifiers, lafi::widget* widget);
 };
 
-class lafi_widget {
+class widget {
 private:
 
 public:
-    lafi_widget* parent;
+    widget* parent;
     bool mouse_in;
     bool mouse_clicking;    //Mouse is clicking this widget. The cursor can be on top of the widget or not, though.
     
@@ -45,8 +49,8 @@ public:
     int y2;  //And Y.
     int children_offset_x, children_offset_y;
     string description;
-    unsigned char flags;   //Flags. Use LAFI_FLAG_*.
-    lafi_style* style;     //Widget style.
+    unsigned char flags;   //Flags. Use lafi::FLAG_*.
+    lafi::style* style;    //Widget style.
     
     ALLEGRO_COLOR get_bg_color();
     ALLEGRO_COLOR get_lighter_bg_color();
@@ -54,37 +58,37 @@ public:
     ALLEGRO_COLOR get_fg_color();
     ALLEGRO_COLOR get_alt_color();
     
-    map<string, lafi_widget*> widgets;
-    lafi_widget* focused_widget;
+    map<string, widget*> widgets;
+    widget* focused_widget;
     
-    void add(string name, lafi_widget* widget);
+    void add(string name, widget* widget);
     void remove(string name);
     
     int easy_row(float vertical_padding = 8, float horizontal_padding = 8, float widget_padding = 8);
-    void easy_add(string name, lafi_widget* widget, float width, float height, unsigned char flags = 0);
+    void easy_add(string name, widget* widget, float width, float height, unsigned char flags = 0);
     void easy_reset();
-    vector<lafi_easy_widget_info> easy_row_widgets; //Widgets currently in the row buffer.
+    vector<easy_widget_info> easy_row_widgets; //Widgets currently in the row buffer.
     float easy_row_y1, easy_row_y2;                 //Top and bottom of the row.
     float easy_row_vertical_padding;                //Padding after top of the current row.
     float easy_row_horizontal_padding;              //Padding to the left and right of the current row.
     float easy_row_widget_padding;                  //Padding between widgets on the current row.
     
-    void register_accelerator(int key, unsigned int modifiers, lafi_widget* widget);
-    vector<lafi_accelerator> accelerators;
+    void register_accelerator(int key, unsigned int modifiers, widget* widget);
+    vector<accelerator> accelerators;
     
-    lafi_widget* get_widget_under_mouse(int mx, int my);
+    widget* get_widget_under_mouse(int mx, int my);
     bool is_mouse_in(int mx, int my);
     void get_offset(int* ox, int* oy);
     
-    function<void(lafi_widget* w, int x, int y)> mouse_move_handler;
-    function<void(lafi_widget* w, int x, int y)> left_mouse_click_handler;
-    function<void(lafi_widget* w, int button, int x, int y)> mouse_down_handler;
-    function<void(lafi_widget* w, int button, int x, int y)> mouse_up_handler;
-    function<void(lafi_widget* w, int dy, int dx)> mouse_wheel_handler;
-    function<void(lafi_widget* w)> mouse_enter_handler;
-    function<void(lafi_widget* w)> mouse_leave_handler;
-    function<void(lafi_widget* w)> get_focus_handler;
-    function<void(lafi_widget* w)> lose_focus_handler;
+    function<void(widget* w, int x, int y)> mouse_move_handler;
+    function<void(widget* w, int x, int y)> left_mouse_click_handler;
+    function<void(widget* w, int button, int x, int y)> mouse_down_handler;
+    function<void(widget* w, int button, int x, int y)> mouse_up_handler;
+    function<void(widget* w, int dy, int dx)> mouse_wheel_handler;
+    function<void(widget* w)> mouse_enter_handler;
+    function<void(widget* w)> mouse_leave_handler;
+    function<void(widget* w)> get_focus_handler;
+    function<void(widget* w)> lose_focus_handler;
     
     //Functions for the widget classes to handle, if they want to.
     virtual void widget_on_mouse_move(int x, int y);
@@ -108,6 +112,7 @@ public:
     
     bool needs_init;
     void lose_focus();
+    void give_focus(widget* w);
     bool is_disabled();
     
     virtual void handle_event(ALLEGRO_EVENT ev);
@@ -115,12 +120,16 @@ public:
     virtual void init();
     virtual void draw_self() = 0;    //Draws just the widget itself.
     
-    lafi_widget(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi_style* style = NULL, unsigned char flags = 0);
-    lafi_widget(lafi_widget &w2);
-    ~lafi_widget();
+    widget(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi::style* style = NULL, unsigned char flags = 0);
+    widget(widget &w2);
+    ~widget();
     
 };
 
-void lafi_draw_line(lafi_widget* widget, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);
+void draw_line(widget* widget, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);
+void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text);
+vector<string> split(string text, const string del = " ", const bool inc_empty = false, const bool inc_del = false);
+
+}
 
 #endif //ifndef LAFI_WIDGET_INCLUDED

@@ -7,16 +7,20 @@
 
 using namespace std;
 
-class lafi_label : public lafi_widget {
+namespace lafi {
+
+class label : public widget {
 public:
     int text_flags;
     
     string text;
     
-    lafi_label(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, string text = "", int text_flags = 0, lafi_style* style = NULL, unsigned char flags = 0);
-    ~lafi_label();
+    label(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, string text = "", int text_flags = 0, lafi::style* style = NULL, unsigned char flags = 0);
+    ~label();
     
     void draw_self();
 };
+
+}
 
 #endif //ifndef LAFI_LABEL_INCLUDED

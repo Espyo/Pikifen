@@ -25,13 +25,13 @@
 #include "sector.h"
 
 //Disables an enabled widget.
-#define disable_widget(w) (w)->flags |= LAFI_FLAG_DISABLED;
+#define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
 
 //Returns the distance between two points.
 #define dist(x1, y1, x2, y2) sqrt(sdist((x1), (y1), (x2), (y2)))
 
 //Enables a disabled widget.
-#define enable_widget(w) (w)->flags &= ~LAFI_FLAG_DISABLED;
+#define enable_widget(w) (w)->flags &= ~lafi::FLAG_DISABLED;
 
 //Converts a float (or double) to a string.
 #define f2s(n) to_string((long double) (n))
@@ -43,7 +43,7 @@
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
 //Sets a lafi widget to invisible and disabled.
-#define hide_widget(w) (w)->flags |= LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED;
+#define hide_widget(w) (w)->flags |= lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED;
 
 //Converts an integer (or long) to a string.
 #define i2s(n) to_string((long long) (n))
@@ -67,7 +67,7 @@
 #define sdist(x1, y1, x2, y2) ((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2))
 
 //Sets a lafi widget to visible and enabled.
-#define show_widget(w) (w)->flags &= ~(LAFI_FLAG_INVISIBLE | LAFI_FLAG_DISABLED);
+#define show_widget(w) (w)->flags &= ~(lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED);
 
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
