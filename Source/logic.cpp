@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) Andrï¿½ 'Espyo' Silva 2014.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -22,7 +22,7 @@ void do_logic() {
     /*  ********************************************
       ***  .-.                                .-.  ***
     ***** ( L )          MAIN LOGIC          ( L ) *****
-      ***  `-´                                `-´  ***
+      ***  `-ï¿½                                `-ï¿½  ***
         ********************************************/
     
     leader* cur_leader_ptr = leaders[cur_leader_nr];
@@ -31,9 +31,10 @@ void do_logic() {
     /*************************************
     *                               .-.  *
     *   Timer things - aesthetic   ( L ) *
-    *                               `-´  *
+    *                               `-ï¿½  *
     **************************************/
     
+    //Rotation angle for the glow atop idle Pikmin.
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
     //Camera transitions.
@@ -181,7 +182,7 @@ void do_logic() {
         /************************************
         *                              .-.  *
         *   Timer things - gameplay   ( L ) *
-        *                              `-´  *
+        *                              `-ï¿½  *
         *************************************/
         
         day_minutes += (day_minutes_per_irl_sec * delta_t);
@@ -233,6 +234,8 @@ void do_logic() {
         
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs;) {
+        
+            //Tick the mob.
             mob* m_ptr = mobs[m];
             m_ptr->tick();
             
@@ -663,7 +666,7 @@ void do_logic() {
         /********************
         *              .-.  *
         *   Leaders   (*:O) *
-        *              `-´  *
+        *              `-ï¿½  *
         ********************/
         
         if(cur_leader_ptr->holding_pikmin) {
@@ -830,7 +833,7 @@ void do_logic() {
         /********************
         *             .-.   *
         *   Cursor   ( = )> *
-        *             `-´   *
+        *             `-ï¿½   *
         ********************/
         
         mouse_cursor_x += mouse_cursor_speed_x;

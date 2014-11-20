@@ -187,7 +187,7 @@ extern size_t                           ed_grabbing_hitbox;   //Hitbox being gra
 extern bool                             ed_grabbing_hitbox_edge;
 extern float                            ed_grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
 extern float                            ed_grabbing_hitbox_y;
-extern lafi::gui*                        ed_gui;
+extern lafi::gui*                       ed_gui;
 extern bool                             ed_hitboxes_visible;
 extern bool                             ed_holding_m1;
 extern bool                             ed_holding_m2;
@@ -209,7 +209,7 @@ extern bool                             ed_shift_pressed;
 extern bool                             ed_show_bg;
 extern bool                             ed_show_shadows;
 extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; //Top bitmaps for the current Pikmin type.
-extern lafi::widget*                     ed_wum; //Widget under mouse.
+extern lafi::widget*                    ed_wum; //Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
 extern ALLEGRO_FONT*                    font;
@@ -218,7 +218,7 @@ extern ALLEGRO_FONT*                    font_counter;
 extern unsigned int                     font_counter_h;
 extern unsigned int                     font_h;
 extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
-extern unsigned char                    game_fps;
+extern unsigned short                   game_fps;
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
 extern float                            idle_glow_angle;
@@ -298,5 +298,11 @@ extern vector<float>                    whistle_rings;
 extern bool                             whistling;             //Is the whistle currently being blown?
 extern int                              window_x;
 extern int                              window_y;
+
+
+//Debugging variables.
+extern bool debug_show_framerate;
+extern float debug_framerate_update_timer;
+extern unsigned int debug_framerate_counter;
 
 #endif //ifndef VARS_INCLUDED

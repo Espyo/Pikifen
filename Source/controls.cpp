@@ -26,12 +26,16 @@
  */
 void handle_game_controls(const ALLEGRO_EVENT &ev) {
     //Debugging.
-    if(ev.type == ALLEGRO_EVENT_KEY_CHAR && ev.keyboard.keycode == ALLEGRO_KEY_T) {
-        //Debug testing.
-        //ToDo remove.
-        day_minutes += 30;
-        day += 12;
-        pikmin_list[0]->health -= 10;
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
+            //Debug testing.
+            //ToDo remove.
+            day_minutes += 30;
+            day += 12;
+            pikmin_list[0]->health -= 10;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+            debug_show_framerate = !debug_show_framerate;
+        }
     }
     
     size_t n_controls = controls.size();

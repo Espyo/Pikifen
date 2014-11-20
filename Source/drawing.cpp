@@ -916,6 +916,21 @@ void do_drawing() {
     
     }
     
+    //Debugging stuff.
+    if(debug_show_framerate) {
+        debug_framerate_update_timer -= delta_t;
+        if(debug_framerate_update_timer <= 0) {
+            debug_framerate_counter = round(1.0 / delta_t);
+            debug_framerate_update_timer = 1.0;
+        }
+        al_draw_text(
+            font,
+            (debug_framerate_counter >= (unsigned) (game_fps - 1) ? al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)),
+            0, 0, 0,
+            (i2s(debug_framerate_counter) + "FPS").c_str()
+        );
+    }
+    
     al_flip_display();
 }
 
