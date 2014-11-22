@@ -315,11 +315,11 @@ void mob::tick() {
     //Other things.
     if(unwhistlable_period > 0) {
         unwhistlable_period -= delta_t;
-        unwhistlable_period = max(unwhistlable_period, 0);
+        unwhistlable_period = max(unwhistlable_period, 0.0f);
     }
     if(untouchable_period > 0) {
         untouchable_period -= delta_t;
-        untouchable_period = max(untouchable_period, 0);
+        untouchable_period = max(untouchable_period, 0.0f);
     }
     
     if(party) {
@@ -344,13 +344,13 @@ void mob::tick() {
     
     if(invuln_period > 0) {
         invuln_period -= delta_t;
-        invuln_period = max(invuln_period, 0);
+        invuln_period = max(invuln_period, 0.0f);
     }
     
     if(speed_z == 0) {
         if(knockdown_period > 0) {
             knockdown_period -= delta_t;
-            knockdown_period = max(knockdown_period, 0);
+            knockdown_period = max(knockdown_period, 0.0f);
         }
     }
     
@@ -365,7 +365,7 @@ void mob::tick() {
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     
-    angle += sign(angle_dif) * min(type->rotation_speed * delta_t, fabs(angle_dif));
+    angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
     
     //Scripts.
     if(

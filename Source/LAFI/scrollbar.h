@@ -8,11 +8,11 @@ namespace lafi {
 class scrollbar : public widget {
 public:
     widget* attached_widget;
-    float min, max;
+    float min_value, max_value;
     float low_value, high_value;
     bool vertical;
     
-    scrollbar(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, float min = 0, float max = 10, float low_value = 0, float high_value = 1, bool vertical = true, lafi::style* style = NULL, unsigned char flags = 0);
+    scrollbar(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, float min_value = 0, float max_value = 10, float low_value = 0, float high_value = 1, bool vertical = true, lafi::style* style = NULL, unsigned char flags = 0);
     ~scrollbar();
     
     void init();

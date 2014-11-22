@@ -26,72 +26,72 @@ using namespace std;
  * On every release, update these numbers, and
  * update the numbers on the resouce (.rc) file.
  */
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 4
-#define VERSION_REV 0
-#define VERSION_DAY 0
-#define VERSION_MONTH 0
-#define VERSION_YEAR 0      //The year is 2000 + this.
+#define VERSION_MAJOR 0U
+#define VERSION_MINOR 4U
+#define VERSION_REV 0U
+#define VERSION_DAY 0U
+#define VERSION_MONTH 0U
+#define VERSION_YEAR 0U      //The year is 2000 + this.
 
-#define AUTO_PLUCK_INPUT_INTERVAL   0.5      //How long the player has to press the pluck button again, to make the captain auto-pluck.
-#define AUTO_PLUCK_MAX_RADIUS       160      //How far a leader can go to auto-pluck the next Pikmin.
-#define CAM_TRANSITION_DURATION     0.5      //How many seconds a camera transition lasts for.
-#define CURSOR_INVALID_EFFECT_SPEED M_PI * 4 //How fast the "invalid cursor" effect goes, per second.
-#define CURSOR_SAVE_INTERVAL        0.03     //Every X seconds, the cursor's position is saved, to create the trail effect.
-#define CURSOR_SAVE_N_SPOTS         10       //Number of positions of the cursor to keep track of.
-#define CURSOR_SPIN_SPEED           M_PI     //How much the cursor spins per second.
-#define CURSOR_MAX_DIST             200      //The cursor can only be these many units away from the captain.
-#define DEF_PIKMIN_SIZE             24       //Default Pikmin size.
-#define DEF_PUNCH_STRENGTH          2        //Default leader punch strength.
-#define DEF_ROTATION_SPEED          M_PI * 2 //The default rotation speed of a mob type.
-#define DEF_WHISTLE_RANGE           80       //The whistle can't go past this radius, by default.
-#define DELIVERY_SUCK_TIME          0.5      //How long to suck a mob in for, when being delivered to an Onion/ship.
-#define DISMISS_DISTANCE            64       //Dismissed Pikmin go these many units away from the captain.
-#define IDLE_GLOW_SPIN_SPEED        M_PI_2   //The idle glow spins these many radians per second.
-#define INFO_SPOT_TRIGGER_RANGE     64       //If the current captain is at this distance or closer from an info spot, it gets triggered.
-#define LEADER_MOVE_SPEED           100      //Max speed at which a leader can move.
-#define MATURITY_POWER_MULT         0.2      //Every level of maturity, this much is added to the power.
-#define MATURITY_SPEED_MULT         0.5      //Every level of maturity, this much is added to the speed.
-#define MESSAGE_CHAR_INTERVAL       0.02     //These many seconds until a new character of the message is drawn.
-#define MIN_GRAB_RANGE              60       //The leader needs to be at least this close to a Pikmin to grab it.
-#define MIN_ONION_CHECK_RANGE       64       //The minimum distance a leader must be from the onion in order to check it.
-#define MIN_PLUCK_RANGE             30       //The leader needs to be at least this close to a buried Pikmin to pluck it.
-#define MOUSE_CURSOR_MOVE_SPEED     500      //How many pixels the mouse cursor moves, per second, when using an analog stick.
-#define MOVE_GROUP_ARROW_SPEED      400      //"Move group" arrows move these many units per second.
-#define MOVE_GROUP_ARROWS_INTERVAL  0.1      //Seconds that need to pass before another "move group" arrow appears.
-#define NECTAR_AMOUNT               5        //A drop of nectar starts with this amount.
-#define N_PIKMIN_AI_PORTIONS        4        //Split the Pikmin into n groups. Every frame, only one group's AI is handled.
-#define PARTY_SPOT_INTERVAL         1        //Pikmin must be at least these many units away from one another; used when calculating group spots.
-#define PIKMIN_MAX_HEALTH           300      //Maximum Pikmin HP.
-#define PIKMIN_MIN_ATTACK_RANGE     0        //If there's this gap between a Pikmin and its prey, the Pikmin will attack.
-#define PIKMIN_MIN_TASK_RANGE       20       //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
-#define MOB_SHADOW_Y_MULT           1        //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
-#define SHIP_BEAM_RANGE             30       //The center of a ship's beam reaches this far.
-#define SHIP_BEAM_RING_COLOR_SPEED  255      //Red color's index moves these many units per second. (Green is fast and blue is faster still).
-#define SMACK_PARTICLE_DUR          0.1      //Duration of the "smack" particle.
-#define SUN_METER_SUN_SPIN_SPEED    0.5      //The Sun Meter's sun spins these many radians per second.
-#define TREE_SHADOW_SWAY_AMOUNT     8        //Tree shadows sway this much away from their neutral position.
-#define TREE_SHADOW_SWAY_SPEED      M_PI_4   //Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
-#define THROW_DISTANCE_MULTIPLIER   0.49     //When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
-#define THROW_PARTICLE_INTERVAL     0.02     //A new "mob thrown" particle is spawned every X seconds.
-#define THROW_STRENGTH_MULTIPLIER   0.65     //When a leader throws a Pikmin, multiply the strength by this.
-#define UNWHISTLABLE_PERIOD         1        //A mob cannot be whistled to a party during this period.
-#define UNTOUCHABLE_PERIOD          3        //A mob cannot be touched to a party during this period.
-#define WHISTLE_DOT_INTERVAL        0.03     //Seconds that need to pass before another dot is added.
-#define WHISTLE_DOT_SPIN_SPEED      M_PI_2   //A whistle dot spins these many radians a second.
-#define WHISTLE_FADE_TIME           0.1      //Time the whistle animations take to fade out.
-#define WHISTLE_MAX_HOLD_TIME       1.5      //After the whistle reaches its maximum size, hold it for these many seconds until it stops by itself.
-#define WHISTLE_RADIUS_GROWTH_SPEED 180      //The whistle's radius grows these many units per second.
-#define WHISTLE_RING_SPEED          600      //Whistle rings move these many units per second.
-#define WHISTLE_RINGS_INTERVAL      0.1      //Seconds that need to pass before another whistle ring appears.
-#define ZOOM_MAX_LEVEL              2        //Maximum zoom level possible.
-#define ZOOM_MAX_LEVEL_EDITOR       4        //Maximum zoom level possible on the area editor.
-#define ZOOM_MIN_LEVEL              0.5      //Minimum zoom level possible.
-#define ZOOM_MIN_LEVEL_EDITOR       0.05     //Minimum zoom level possible on the area editor.
+#define AUTO_PLUCK_INPUT_INTERVAL   0.5f      //How long the player has to press the pluck button again, to make the captain auto-pluck.
+#define AUTO_PLUCK_MAX_RADIUS       160.0f    //How far a leader can go to auto-pluck the next Pikmin.
+#define CAM_TRANSITION_DURATION     0.5f      //How many seconds a camera transition lasts for.
+#define CURSOR_INVALID_EFFECT_SPEED M_PI * 4.0f //How fast the "invalid cursor" effect goes, per second.
+#define CURSOR_SAVE_INTERVAL        0.03f     //Every X seconds, the cursor's position is saved, to create the trail effect.
+#define CURSOR_SAVE_N_SPOTS         10U       //Number of positions of the cursor to keep track of.
+#define CURSOR_SPIN_SPEED           M_PI      //How much the cursor spins per second.
+#define CURSOR_MAX_DIST             200.0f    //The cursor can only be these many units away from the captain.
+#define DEF_PIKMIN_SIZE             24.0f     //Default Pikmin size.
+#define DEF_PUNCH_STRENGTH          2.0f      //Default leader punch strength.
+#define DEF_ROTATION_SPEED          M_PI * 2  //The default rotation speed of a mob type.
+#define DEF_WHISTLE_RANGE           80.0f     //The whistle can't go past this radius, by default.
+#define DELIVERY_SUCK_TIME          0.5f      //How long to suck a mob in for, when being delivered to an Onion/ship.
+#define DISMISS_DISTANCE            64.0f     //Dismissed Pikmin go these many units away from the captain.
+#define IDLE_GLOW_SPIN_SPEED        M_PI_2    //The idle glow spins these many radians per second.
+#define INFO_SPOT_TRIGGER_RANGE     64.0f     //If the current captain is at this distance or closer from an info spot, it gets triggered.
+#define LEADER_MOVE_SPEED           100.0f    //Max speed at which a leader can move.
+#define MATURITY_POWER_MULT         0.2f      //Every level of maturity, this much is added to the power.
+#define MATURITY_SPEED_MULT         0.5f      //Every level of maturity, this much is added to the speed.
+#define MESSAGE_CHAR_INTERVAL       0.02f     //These many seconds until a new character of the message is drawn.
+#define MIN_GRAB_RANGE              60.0f     //The leader needs to be at least this close to a Pikmin to grab it.
+#define MIN_ONION_CHECK_RANGE       64.0f     //The minimum distance a leader must be from the onion in order to check it.
+#define MIN_PLUCK_RANGE             30.0f     //The leader needs to be at least this close to a buried Pikmin to pluck it.
+#define MOUSE_CURSOR_MOVE_SPEED     500.0f    //How many pixels the mouse cursor moves, per second, when using an analog stick.
+#define MOVE_GROUP_ARROW_SPEED      400.0f    //"Move group" arrows move these many units per second.
+#define MOVE_GROUP_ARROWS_INTERVAL  0.1f      //Seconds that need to pass before another "move group" arrow appears.
+#define NECTAR_AMOUNT               5U        //A drop of nectar starts with this amount.
+#define N_PIKMIN_AI_PORTIONS        4U        //Split the Pikmin into n groups. Every frame, only one group's AI is handled.
+#define PARTY_SPOT_INTERVAL         1.0f      //Pikmin must be at least these many units away from one another; used when calculating group spots.
+#define PIKMIN_MAX_HEALTH           300.0f    //Maximum Pikmin HP.
+#define PIKMIN_MIN_ATTACK_RANGE     0.0f      //If there's this gap between a Pikmin and its prey, the Pikmin will attack.
+#define PIKMIN_MIN_TASK_RANGE       20.0f     //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
+#define MOB_SHADOW_Y_MULT           1.0f      //For every unit above the ground that the mob is on, the shadow goes these many units to the side.
+#define SHIP_BEAM_RANGE             30.0f     //The center of a ship's beam reaches this far.
+#define SHIP_BEAM_RING_COLOR_SPEED  255U      //Red color's index moves these many units per second. (Green is fast and blue is faster still).
+#define SMACK_PARTICLE_DUR          0.1f      //Duration of the "smack" particle.
+#define SUN_METER_SUN_SPIN_SPEED    0.5f      //The Sun Meter's sun spins these many radians per second.
+#define TREE_SHADOW_SWAY_AMOUNT     8.0f      //Tree shadows sway this much away from their neutral position.
+#define TREE_SHADOW_SWAY_SPEED      M_PI_4    //Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
+#define THROW_DISTANCE_MULTIPLIER   0.49f     //When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
+#define THROW_PARTICLE_INTERVAL     0.02f     //A new "mob thrown" particle is spawned every X seconds.
+#define THROW_STRENGTH_MULTIPLIER   0.65f     //When a leader throws a Pikmin, multiply the strength by this.
+#define UNWHISTLABLE_PERIOD         1.0f      //A mob cannot be whistled to a party during this period.
+#define UNTOUCHABLE_PERIOD          3.0f      //A mob cannot be touched to a party during this period.
+#define WHISTLE_DOT_INTERVAL        0.03      //Seconds that need to pass before another dot is added.
+#define WHISTLE_DOT_SPIN_SPEED      M_PI_2    //A whistle dot spins these many radians a second.
+#define WHISTLE_FADE_TIME           0.1f      //Time the whistle animations take to fade out.
+#define WHISTLE_MAX_HOLD_TIME       1.5f      //After the whistle reaches its maximum size, hold it for these many seconds until it stops by itself.
+#define WHISTLE_RADIUS_GROWTH_SPEED 180.0f    //The whistle's radius grows these many units per second.
+#define WHISTLE_RING_SPEED          600.0f    //Whistle rings move these many units per second.
+#define WHISTLE_RINGS_INTERVAL      0.1f      //Seconds that need to pass before another whistle ring appears.
+#define ZOOM_MAX_LEVEL              2.0f      //Maximum zoom level possible.
+#define ZOOM_MAX_LEVEL_EDITOR       4.0f      //Maximum zoom level possible on the area editor.
+#define ZOOM_MIN_LEVEL              0.5f      //Minimum zoom level possible.
+#define ZOOM_MIN_LEVEL_EDITOR       0.05f     //Minimum zoom level possible on the area editor.
 
-#define DEF_FPS 30
-#define DEF_SCR_W 640
-#define DEF_SCR_H 480
+#define DEF_FPS 30U
+#define DEF_SCR_W 640U
+#define DEF_SCR_H 480U
 
 #define AUDIO_FOLDER           GAME_DATA_FOLDER "/Audio"
 #define AREA_FOLDER            GAME_DATA_FOLDER "/Areas"

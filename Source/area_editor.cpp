@@ -1869,7 +1869,6 @@ void area_editor::load() {
     
     //Properties -- advanced textures.
     auto lambda_gui_to_adv_textures = [] (lafi::widget*) { gui_to_adv_textures(); };
-    auto lambda_gui_to_adv_textures_click = [] (lafi::widget*, int, int) { gui_to_adv_textures(); };
     frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         clear_area_textures(); //Clears the texture set when we entered this menu.
         ed_mode = EDITOR_MODE_SECTORS;

@@ -313,7 +313,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         unsigned short base_nr = 0;
         if(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE) base_nr = m->health;
         
-        m->health = max(0, (base_nr + vf[0]));
+        m->health = max(0.0f, (float) (base_nr + vf[0]));
         
         
         

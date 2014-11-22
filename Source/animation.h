@@ -68,17 +68,17 @@ using namespace std;
 class frame {
 public:
     string name;
-    ALLEGRO_BITMAP* parent_bmp;       //Parent bitmap, normally a spritesheet.
-    string file;                      //File name where the image is at.
-    int file_x, file_y;               //Top-left corner of the sprite inside the image file.
-    unsigned int file_w, file_h;      //Size of the sprite inside the image file.
-    float game_w, game_h;             //In-game size of the sprite.
-    float offs_x, offs_y;             //Offset. Move the sprite left/right/up/down to align with the previous frames and such.
-    float top_x, top_y;               //X&Y of the Pikmin's top (left/bud/flower).
-    float top_w, top_h;               //W&H of the Pikmin's top.
-    float top_angle;                  //Angle of the Pikmin's top.
-    bool top_visible;                 //Does this frame even have a visible Pikmin top?
-    ALLEGRO_BITMAP* bitmap;           //Actual bitmap. This is a sub-bitmap of parent_bmp.
+    ALLEGRO_BITMAP* parent_bmp; //Parent bitmap, normally a spritesheet.
+    string file;                //File name where the image is at.
+    int file_x, file_y;         //Top-left corner of the sprite inside the image file.
+    int file_w, file_h;         //Size of the sprite inside the image file.
+    float game_w, game_h;       //In-game size of the sprite.
+    float offs_x, offs_y;       //Offset. Move the sprite left/right/up/down to align with the previous frames and such.
+    float top_x, top_y;         //X&Y of the Pikmin's top (left/bud/flower).
+    float top_w, top_h;         //W&H of the Pikmin's top.
+    float top_angle;            //Angle of the Pikmin's top.
+    bool top_visible;           //Does this frame even have a visible Pikmin top?
+    ALLEGRO_BITMAP* bitmap;     //Actual bitmap. This is a sub-bitmap of parent_bmp.
     vector<hitbox_instance> hitbox_instances; //List of hitboxes on this frame.
     
     frame(const string &name = "", ALLEGRO_BITMAP* const b = NULL, const float gw = 0, const float gh = 0, const vector<hitbox_instance> &h = vector<hitbox_instance>());

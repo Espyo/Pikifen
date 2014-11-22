@@ -5,12 +5,12 @@
 
 namespace lafi {
 
-scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min, float max, float low_value, float high_value, bool vertical, lafi::style* style, unsigned char flags)
+scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min_value, float max_value, float low_value, float high_value, bool vertical, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     
     attached_widget = NULL;
-    this->min = min;
-    this->max = max;
+    this->min_value = min_value;
+    this->max_value = max_value;
     this->low_value = low_value;
     this->high_value = high_value;
     this->vertical = vertical;
@@ -43,12 +43,12 @@ void scrollbar::create_button() {
     if(low_value != high_value) {
     
         if(vertical) {
-            int bh = (high_value - low_value) * ((float) (y2 - y1) / (max - min));  //Pixels per value.
+            int bh = (high_value - low_value) * ((float) (y2 - y1) / (max_value - min_value));  //Pixels per value.
             
             bx1 = x1; by1 = y1;
             bx2 = x2; by2 = y1 + bh;
         } else {
-            int bw = (high_value - low_value) * ((float) (x2 - x1) / (max - min));  //Pixels per value.
+            int bw = (high_value - low_value) * ((float) (x2 - x1) / (max_value - min_value));  //Pixels per value.
             
             by1 = y1; bx1 = x1;
             by2 = y2; bx2 = x1 + bw;
@@ -82,8 +82,8 @@ void scrollbar::move_button(int x, int y) {
         
         but->y2 = but->y1 + bh;
         
-        low_value = min + ((but->y1 - y1) / (float) h) * (max - min);
-        high_value = min + ((but->y2 - y1) / (float) h) * (max - min);
+        low_value =  min_value + ((but->y1 - y1) / (float) h) * (max_value - min_value);
+        high_value = min_value + ((but->y2 - y1) / (float) h) * (max_value - min_value);
     } else {
         int bw = but->x2 - but->x1;
         int w = x2 - x1;
@@ -94,8 +94,8 @@ void scrollbar::move_button(int x, int y) {
         
         but->x2 = but->x1 + bw;
         
-        low_value = min + ((but->x1 - x1) / (float) w) * (max - min);
-        high_value = min + ((but->x2 - x1) / (float) w) * (max - min);
+        low_value =  min_value + ((but->x1 - x1) / (float) w) * (max_value - min_value);
+        high_value = min_value + ((but->x2 - x1) / (float) w) * (max_value - min_value);
     }
     
     if(change_handler) change_handler(this);
@@ -103,7 +103,7 @@ void scrollbar::move_button(int x, int y) {
 
 void scrollbar::set_value(float new_low) {
     float dif = high_value - low_value;
-    if(new_low < min || new_low + dif > max) return;
+    if(new_low < min_value || new_low + dif > max_value) return;
     
     button* but = (button*) widgets["but_bar"];
     if(!but) return;
@@ -111,7 +111,7 @@ void scrollbar::set_value(float new_low) {
     low_value = new_low;
     high_value = new_low + dif;
     
-    float ratio = (low_value - min) / (max - min - dif);
+    float ratio = (low_value - min_value) / (max_value - min_value - dif);
     
     if(vertical) {
         int but_h = but->y2 - but->y1;
@@ -198,7 +198,7 @@ void scrollbar::register_change_handler(void(*handler)(widget* w)) {
 
 void scrollbar::make_widget_scroll(widget* widget) {
     attached_widget = widget;
-    this->min = this->low_value = 0;
+    this->min_value = this->low_value = 0;
     if(widget) {
         widget->children_offset_x = widget->children_offset_y = 0;
         float largest_y2 = FLT_MIN, largest_x2 = FLT_MIN;
@@ -217,19 +217,19 @@ void scrollbar::make_widget_scroll(widget* widget) {
             largest_y2 += 8; //Spacing.
             largest_y2 -= widget->y1;
             if(largest_y2 < widget->y2 - widget->y1) {
-                this->high_value = this->max = 0;
+                this->high_value = this->max_value = 0;
             } else {
                 this->high_value = widget->y2 - widget->y1;
-                this->max = largest_y2;
+                this->max_value = largest_y2;
             }
         } else {
             largest_x2 += 8; //Spacing.
             largest_x2 -= widget->x1;
             if(largest_x2 < widget->x2 - widget->x1) {
-                this->high_value = this->max = 0;
+                this->high_value = this->max_value = 0;
             } else {
                 this->high_value = widget->x2 - widget->x1;
-                this->max = largest_x2;
+                this->max_value = largest_x2;
             }
         }
         
@@ -237,7 +237,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
         
     } else {
     
-        this->max = 10;
+        this->max_value = 10;
         this->high_value = 1;
         
         register_change_handler(NULL);

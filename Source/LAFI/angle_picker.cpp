@@ -39,7 +39,7 @@ void angle_picker::widget_on_mouse_down(int button, int x, int y) {
     dragging_pointer = true;
 }
 
-void angle_picker::widget_on_mouse_up(int button, int x, int y) {
+void angle_picker::widget_on_mouse_up(int, int, int) {
     dragging_pointer = false;
 }
 

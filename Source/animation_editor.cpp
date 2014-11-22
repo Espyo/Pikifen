@@ -9,6 +9,8 @@
  * Animation editor-related functions.
  */
 
+#include <algorithm>
+
 #include <allegro5/allegro.h>
 
 #include "animation.h"
