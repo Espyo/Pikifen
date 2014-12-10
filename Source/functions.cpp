@@ -281,6 +281,10 @@ void generate_area_images() {
         
         for(size_t y = 0; y < area_image_rows; y++) {
             area_images[x].push_back(al_create_bitmap(area_image_size, area_image_size));
+            ALLEGRO_BITMAP* old_bitmap = al_get_target_bitmap();
+            al_set_target_bitmap(area_images[x].back());
+            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+            al_set_target_bitmap(old_bitmap);
         }
     }
     
@@ -324,6 +328,19 @@ void generate_area_images() {
         
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
         
+    }
+    
+    for(size_t x = 0; x < area_image_cols; x++) {
+        for(size_t y = 0; y < area_image_rows; y++) {
+            //We need to "rebuild" the images, so that the mipmaps get updated.
+            //Not doing this caused a month-old bug under OpenGL,
+            //where zooming out = fade to black.
+            ALLEGRO_BITMAP* original = area_images[x][y];
+            ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(original);
+            
+            al_destroy_bitmap(original);
+            area_images[x][y] = fixed_mipmap;
+        }
     }
     
 }
@@ -463,7 +480,7 @@ void load_area(const string name, const bool load_for_editor) {
     }
     
     cur_area_map.bg_bmp_file_name = file.get_child_by_name("bg_bmp")->value;
-    if(!load_for_editor && cur_area_map.bg_bmp_file_name.size() > 0) {
+    if(!load_for_editor && !cur_area_map.bg_bmp_file_name.empty()) {
         cur_area_map.bg_bmp = bitmaps.get(cur_area_map.bg_bmp_file_name, &file);
     }
     cur_area_map.bg_color = s2c(file.get_child_by_name("bg_color")->value);
@@ -563,7 +580,7 @@ void load_area(const string name, const bool load_for_editor) {
             problem = true;
         }
         
-        if((mob_ptr->category == MOB_CATEGORY_NONE || mob_ptr->category == string::npos) && !load_for_editor) {
+        if((mob_ptr->category == MOB_CATEGORY_NONE || mob_ptr->category == 255) && !load_for_editor) {
         
             error_log("Unknown mob category \"" + mob_node->name + "\"!", mob_node);
             mob_ptr->category = MOB_CATEGORY_NONE;
@@ -648,7 +665,7 @@ void load_area_textures() {
         sector* s_ptr = cur_area_map.sectors[s];
         
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
-            if(s_ptr->file_name.size() == 0) {
+            if(s_ptr->file_name.empty()) {
                 s_ptr->bitmap = NULL;
             } else {
                 s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
@@ -722,7 +739,7 @@ void load_game_content() {
         data_node* cur_weather = weather_file.get_child_by_name("weather", wc);
         
         string name = cur_weather->get_child_by_name("name")->value;
-        if(name.size() == 0) name = "default";
+        if(name.empty()) name = "default";
         
         //Lighting.
         map<unsigned, ALLEGRO_COLOR> lighting;
@@ -737,7 +754,7 @@ void load_game_content() {
             lighting[point_time] = point_color;
         }
         
-        if(lighting.size() == 0) {
+        if(lighting.empty()) {
             error_log("Weather condition " + name + " has no lighting!");
         } else {
             if(lighting.find(24 * 60) == lighting.end()) {
@@ -760,7 +777,7 @@ void load_game_content() {
             sun_strength[point_time] = point_strength;
         }
         
-        if(sun_strength.size() > 0) {
+        if(!sun_strength.empty()) {
             if(sun_strength.find(24 * 60) == sun_strength.end()) {
                 //If there is no data for the last hour, use the data from the first point
                 //(this is because the day loops after 24:00; needed for interpolation).
@@ -892,7 +909,7 @@ void move_point(const float x, const float y, const float tx, const float ty, co
     float dist = sqrt(dx * dx + dy * dy);
     
     if(dist > reach_radius) {
-        float move_amount = min(dist / delta_t / 2, speed);
+        float move_amount = min((double) (dist / delta_t / 2.0f), (double) speed);
         
         dx *= move_amount / dist;
         dy *= move_amount / dist;

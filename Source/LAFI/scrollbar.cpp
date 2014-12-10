@@ -101,7 +101,7 @@ void scrollbar::move_button(int x, int y) {
     if(change_handler) change_handler(this);
 }
 
-void scrollbar::set_value(float new_low) {
+void scrollbar::set_value(float new_low, bool call_handler) {
     float dif = high_value - low_value;
     if(new_low < min_value || new_low + dif > max_value) return;
     
@@ -123,7 +123,7 @@ void scrollbar::set_value(float new_low) {
         but->x2 = but->x1 + but_w;
     }
     
-    if(change_handler) change_handler(this);
+    if(change_handler && call_handler) change_handler(this);
 }
 
 void scrollbar::draw_self() {

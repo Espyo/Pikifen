@@ -264,7 +264,7 @@ bool animation_instance::tick(const float time) {
  */
 frame* animation_instance::get_frame() {
     if(!anim) return NULL;
-    if(anim->frame_instances.size() == 0) return NULL;
+    if(anim->frame_instances.empty()) return NULL;
     return anim->frame_instances[cur_frame_nr].frame_ptr;
 }
 
@@ -333,7 +333,7 @@ size_t animation_set::find_hitbox(string name) {
 void animation_set::create_conversions(vector<pair<size_t, string> > conversions) {
     pre_named_conversions.clear();
     
-    if(conversions.size() == 0) return;
+    if(conversions.empty()) return;
     
     //First, find the highest number.
     size_t highest = conversions[0].first;

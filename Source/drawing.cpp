@@ -664,7 +664,7 @@ void do_drawing() {
         
         al_use_transform(&normal_transform);
         
-        if(cur_message.size() == 0) {
+        if(cur_message.empty()) {
         
             //Leader health.
             for(size_t l = 0; l < 3; l++) {
@@ -1380,7 +1380,11 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         //Find the two lengthiest ones.
         vector<pair<float, sector*> > neighbors_vec;
         for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
-            neighbors_vec.push_back(make_pair<float, sector*>(n->second, n->first));
+            neighbors_vec.push_back(
+                make_pair<float, sector*>(
+                    (float) (n->second), (sector*) (n->first) //Yes, we do need these casts, for g++.
+                )
+            );
         }
         sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<float, sector*> p1, pair<float, sector*> p2) -> bool {
         

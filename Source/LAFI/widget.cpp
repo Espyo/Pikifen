@@ -185,15 +185,15 @@ void widget::get_offset(int* ox, int* oy) {
     *oy = parent->children_offset_y + parent_parent_offset_y;
 }
 
-void widget::add(string name, widget* widget) {
-    widgets[name] = widget;
-    widget->parent = this;
-    if(!widget->style) widget->style = style;
-    if(widget->needs_init) widget->init();
+void widget::add(string name, widget* w) {
+    widgets[name] = w;
+    w->parent = this;
+    if(!w->style) w->style = style;
+    if(w->needs_init) w->init();
 }
 
-void widget::register_accelerator(int key, unsigned int modifiers, widget* widget) {
-    accelerators.push_back(accelerator(key, modifiers, widget));
+void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
+    accelerators.push_back(accelerator(key, modifiers, w));
 }
 
 /*
@@ -341,7 +341,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
         for(size_t a = 0; a < accelerators.size(); a++) {
             accelerator* a_ptr = &accelerators[a];
             if(ev.keyboard.keycode == a_ptr->key && ev.keyboard.modifiers == a_ptr->modifiers) {
-                a_ptr->widget->call_left_mouse_click_handler(0, 0);
+                a_ptr->w->call_left_mouse_click_handler(0, 0);
             }
         }
     }
@@ -422,14 +422,14 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
                     i_ptr->width :
                     available_width * (i_ptr->width / 100)
                 );
-            i_ptr->widget->x1 = prev_x;
-            i_ptr->widget->x2 = prev_x + width;
-            prev_x = i_ptr->widget->x2 + easy_row_widget_padding;
+            i_ptr->w->x1 = prev_x;
+            i_ptr->w->x2 = prev_x + width;
+            prev_x = i_ptr->w->x2 + easy_row_widget_padding;
             
-            i_ptr->widget->y1 = y_center - i_ptr->height / 2;
-            i_ptr->widget->y2 = y_center + i_ptr->height / 2;
+            i_ptr->w->y1 = y_center - i_ptr->height / 2;
+            i_ptr->w->y2 = y_center + i_ptr->height / 2;
             
-            add(i_ptr->name, i_ptr->widget);
+            add(i_ptr->name, i_ptr->w);
         }
     }
     easy_row_widgets.clear();
@@ -450,8 +450,8 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
  * height: Height of the widget, in pixels.
  * flags:  Use EASY_FLAG_*.
  */
-void widget::easy_add(string name, widget* widget, float width, float height, unsigned char flags) {
-    easy_row_widgets.push_back(easy_widget_info(name, widget, width, height, flags));
+void widget::easy_add(string name, widget* w, float width, float height, unsigned char flags) {
+    easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
 
 /*
@@ -468,18 +468,18 @@ void widget::easy_reset() {
 
 
 
-easy_widget_info::easy_widget_info(string name, lafi::widget* widget, float width, float height, unsigned char flags) {
+easy_widget_info::easy_widget_info(string name, lafi::widget* w, float width, float height, unsigned char flags) {
     this->name = name;
-    this->widget = widget;
+    this->w = w;
     this->width = width;
     this->height = height;
     this->flags = flags;
 }
 
-accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* widget) {
+accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
     this->key = key;
     this->modifiers = modifiers;
-    this->widget = widget;
+    this->w = w;
 }
 
 
@@ -497,9 +497,9 @@ accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* widget) 
  ** e.g. if the line is BOTTOM-side, setting this to 1 makes it draw on the 2nd to last row of pixels.
  * color:           Color.
  */
-void draw_line(widget* widget, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color) {
-    int x1 = widget->x1,  x2 = widget->x2;
-    int y1 = widget->y1,  y2 = widget->y2;
+void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color) {
+    int x1 = w->x1,  x2 = w->x2;
+    int y1 = w->y1,  y2 = w->y2;
     
     if(side == DRAW_LINE_RIGHT || side == DRAW_LINE_LEFT) {
         int line_x = (side == DRAW_LINE_RIGHT) ? (x2 - location_offset + 0.5) : (x1 + location_offset + 1.5);

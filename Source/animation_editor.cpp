@@ -902,14 +902,14 @@ void animation_editor::load() {
             ed_anim_playing = false;
         } else {
             ed_anim_playing = !ed_anim_playing;
-            if(ed_cur_anim->frame_instances.size() > 0 && ed_cur_frame_instance_nr == string::npos) ed_cur_frame_instance_nr = 0;
+            if(!ed_cur_anim->frame_instances.empty() && ed_cur_frame_instance_nr == string::npos) ed_cur_frame_instance_nr = 0;
             ed_cur_frame_time = 0;
         }
     };
     frm_anims->widgets["frm_anim"]->widgets["but_play"]->description = "Play or pause the animation.";
     frm_anims->widgets["frm_anim"]->widgets["but_prev"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_anim_playing = false;
-        if(ed_cur_anim->frame_instances.size() > 0) {
+        if(!ed_cur_anim->frame_instances.empty()) {
             if(ed_cur_frame_instance_nr == string::npos) ed_cur_frame_instance_nr = 0;
             else if(ed_cur_frame_instance_nr == 0) ed_cur_frame_instance_nr = ed_cur_anim->frame_instances.size() - 1;
             else ed_cur_frame_instance_nr--;
@@ -919,7 +919,7 @@ void animation_editor::load() {
     frm_anims->widgets["frm_anim"]->widgets["but_prev"]->description = "Previous frame.";
     frm_anims->widgets["frm_anim"]->widgets["but_next"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_anim_playing = false;
-        if(ed_cur_anim->frame_instances.size() > 0) {
+        if(!ed_cur_anim->frame_instances.empty()) {
             if(ed_cur_frame_instance_nr == ed_cur_anim->frame_instances.size() - 1 || ed_cur_frame_instance_nr == string::npos) ed_cur_frame_instance_nr = 0;
             else ed_cur_frame_instance_nr++;
         }
@@ -945,7 +945,7 @@ void animation_editor::load() {
         ed_anim_playing = false;
         if(ed_cur_frame_instance_nr != string::npos) {
             ed_cur_anim->frame_instances.erase(ed_cur_anim->frame_instances.begin() + ed_cur_frame_instance_nr);
-            if(ed_cur_anim->frame_instances.size() == 0) ed_cur_frame_instance_nr = string::npos;
+            if(ed_cur_anim->frame_instances.empty()) ed_cur_frame_instance_nr = string::npos;
             else if(ed_cur_frame_instance_nr >= ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = ed_cur_anim->frame_instances.size() - 1;
         }
         gui_load_frame_instance();
@@ -1030,7 +1030,7 @@ void animation_editor::load() {
     frm_frames->widgets["frm_frame"]->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(ed_cur_hitbox_instance_nr != string::npos) {
             ed_cur_frame->hitbox_instances.erase(ed_cur_frame->hitbox_instances.begin() + ed_cur_hitbox_instance_nr);
-            if(ed_cur_frame->hitbox_instances.size() == 0) ed_cur_hitbox_instance_nr = string::npos;
+            if(ed_cur_frame->hitbox_instances.empty()) ed_cur_hitbox_instance_nr = string::npos;
             else if(ed_cur_hitbox_instance_nr >= ed_cur_frame->hitbox_instances.size()) ed_cur_hitbox_instance_nr = ed_cur_frame->hitbox_instances.size() - 1;
         }
         gui_load_hitbox_instance();
@@ -1131,7 +1131,7 @@ void animation_editor::load() {
     ((lafi::textbox*) frm_picker->widgets["txt_new"])->enter_key_widget = frm_picker->widgets["but_new"];
     frm_picker->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         string name = ((lafi::textbox*) ed_gui->widgets["frm_picker"]->widgets["txt_new"])->text;
-        if(name.size() == 0) return;
+        if(name.empty()) return;
         
         if(ed_mode == EDITOR_MODE_ANIMATION) {
             if(ed_anims.find_animation(name) != string::npos) return;
@@ -1231,15 +1231,15 @@ void animation_editor::load_animation_set() {
     ed_cur_hitbox = NULL;
     ed_cur_frame_instance_nr = string::npos;
     ed_cur_hitbox_instance_nr = string::npos;
-    if(ed_anims.animations.size() > 0) {
+    if(!ed_anims.animations.empty()) {
         ed_cur_anim = ed_anims.animations[0];
         if(ed_cur_anim->frame_instances.size()) ed_cur_frame_instance_nr = 0;
     }
-    if(ed_anims.frames.size() > 0) {
+    if(!ed_anims.frames.empty()) {
         ed_cur_frame = ed_anims.frames[0];
         if(ed_cur_frame->hitbox_instances.size()) ed_cur_hitbox_instance_nr = 0;
     }
-    if(ed_anims.hitboxes.size() > 0) {
+    if(!ed_anims.hitboxes.empty()) {
         ed_cur_hitbox = ed_anims.hitboxes[0];
     }
     

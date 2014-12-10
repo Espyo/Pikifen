@@ -192,7 +192,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         }
         
         //If we ended up with no candidates, pick a type at random, out of all possible types.
-        if(majority_types.size() == 0) {
+        if(majority_types.empty()) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
                 if(t->second->has_onion) { //ToDo what if it hasn't been discovered / Onion not on this area?
                     majority_types.push_back(t->second);
@@ -201,7 +201,7 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         }
         
         //Now let's pick an Onion.
-        if(majority_types.size() == 0) {
+        if(majority_types.empty()) {
             return; //ToDo warn that something went horribly wrong?
             
         } else if(majority_types.size() == 1) {

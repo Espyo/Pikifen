@@ -105,7 +105,7 @@ void handle_button(const unsigned int button, float pos) {
 
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
-    if(cur_message.size() == 0) {
+    if(cur_message.empty()) {
     
         if(
             button == BUTTON_MOVE_RIGHT ||

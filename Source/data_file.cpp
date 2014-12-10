@@ -59,7 +59,7 @@ data_node* data_node::get_child_by_name(const string &name, const size_t occurre
 
 //Returns the value of a node, or def if it has no value.
 string data_node::get_value_or_default(const string &def) {
-    return (value.size() == 0 ? def : value);
+    return (value.empty() ? def : value);
 }
 
 //Adds a new child to the list.
@@ -199,7 +199,7 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
     al_fwrite(file, tabs.c_str(), tabs.size());
     al_fwrite(file, name.c_str(), name.size());
     
-    if(children.size() > 0) {
+    if(!children.empty()) {
         al_fwrite(file, "{\n", 2);
         for(size_t c = 0; c < children.size(); c++) {
             children[c]->save_node(file, level + 1);
@@ -304,7 +304,7 @@ string trim_spaces(string s, const bool left_only) {
     if(s.size()) {
         while(s[0] == ' ' || s[0] == '\t') {
             s.erase(0, 1);
-            if(s.size() == 0) break;
+            if(s.empty()) break;
         }
     }
     
@@ -313,7 +313,7 @@ string trim_spaces(string s, const bool left_only) {
         if(s.size()) {
             while(s[s.size() - 1] == ' ' || s[s.size() - 1] == '\t') {
                 s.erase(s.size() - 1, 1);
-                if(s.size() == 0) break;
+                if(s.empty()) break;
             }
         }
     }

@@ -177,7 +177,7 @@ void do_logic() {
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
     
-    if(cur_message.size() == 0) {
+    if(cur_message.empty()) {
     
         /************************************
         *                              .-.  *

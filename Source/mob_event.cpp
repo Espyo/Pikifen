@@ -81,7 +81,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
         
             vector<string> string_coords = split(dn->value);
             
-            if(string_coords.size() == 0) valid = false;
+            if(string_coords.empty()) valid = false;
             else {
                 if(string_coords[0] == "relative") {
                     sub_type = MOB_ACTION_MOVE_REL_COORDS;
@@ -131,7 +131,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
         type = MOB_ACTION_SET_HEALTH;
         
         vector<string> words = split(dn->value);
-        if(words.size() == 0) {
+        if(words.empty()) {
             valid = false;
         } else {
             if(words[0] == "relative") {
@@ -294,7 +294,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(vi.size() > 0) {
+        if(!vi.empty()) {
             m->anim.change(vi[0], false, false, false);
         }
         

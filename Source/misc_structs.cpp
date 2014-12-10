@@ -30,7 +30,7 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
  * Returns the specified bitmap, by name.
  */
 ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
-    if(name.size() == 0) return load_bmp("", node);
+    if(name.empty()) return load_bmp("", node);
     
     if(list.find(name) == list.end()) {
         ALLEGRO_BITMAP* b = load_bmp(name, node);
@@ -47,7 +47,7 @@ ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
  * If it has 0 calls, it's automatically cleared.
  */
 void bmp_manager::detach(const string &name) {
-    if(name.size() == 0) return;
+    if(name.empty()) return;
     
     auto it = list.find(name);
     if(it == list.end()) return;

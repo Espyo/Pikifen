@@ -37,14 +37,14 @@ area_map::area_map() {
 void area_map::generate_blockmap() {
     bmap.clear();
     
-    if(vertices.size() == 0) return;
+    if(vertices.empty()) return;
     
     //First, get the starting point and size of the blockmap.
     float min_x, max_x, min_y, max_y;
     min_x = max_x = vertices[0]->x;
     min_y = max_y = vertices[0]->y;
     
-    for(size_t v = 0; v < vertices.size(); v++) {
+    for(size_t v = 0; v < vertices.size(); ++v) {
         vertex* v_ptr = vertices[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
@@ -64,7 +64,7 @@ void area_map::generate_blockmap() {
     //Now, add a list of linedefs to each block.
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
-    for(size_t l = 0; l < linedefs.size(); l++) {
+    for(size_t l = 0; l < linedefs.size(); ++l) {
     
         //Get which blocks this linedef belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
@@ -76,8 +76,8 @@ void area_map::generate_blockmap() {
         b_min_y = bmap.get_row(min(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
         b_max_y = bmap.get_row(max(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
         
-        for(size_t bx = b_min_x; bx <= b_max_x; bx++) {
-            for(size_t by = b_min_y; by <= b_max_y; by++) {
+        for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
+            for(size_t by = b_min_y; by <= b_max_y; ++by) {
             
                 //Get the block's coordinates.
                 float bx1 = bmap.get_x1(bx);
@@ -111,10 +111,10 @@ void area_map::generate_blockmap() {
     //that the block has no linedefs. It has, however, a single sector,
     //so use the triangle method to get the sector. Checking the center is
     //just a good a spot as any.
-    for(size_t bx = 0; bx < bmap.n_cols; bx++) {
-        for(size_t by = 0; by < bmap.n_rows; by++) {
+    for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
+        for(size_t by = 0; by < bmap.n_rows; ++by) {
         
-            if(bmap.sectors[bx][by].size() == 0) {
+            if(bmap.sectors[bx][by].empty()) {
             
                 bmap.sectors[bx][by].insert(
                     get_sector(
@@ -132,19 +132,19 @@ void area_map::generate_blockmap() {
  * Clears the info of an area map.
  */
 void area_map::clear() {
-    for(size_t v = 0; v < vertices.size(); v++) {
+    for(size_t v = 0; v < vertices.size(); ++v) {
         delete vertices[v];
     }
-    for(size_t l = 0; l < linedefs.size(); l++) {
+    for(size_t l = 0; l < linedefs.size(); ++l) {
         delete linedefs[l];
     }
-    for(size_t s = 0; s < sectors.size(); s++) {
+    for(size_t s = 0; s < sectors.size(); ++s) {
         delete sectors[s];
     }
-    for(size_t m = 0; m < mob_generators.size(); m++) {
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
         delete mob_generators[m];
     }
-    for(size_t s = 0; s < tree_shadows.size(); s++) {
+    for(size_t s = 0; s < tree_shadows.size(); ++s) {
         delete tree_shadows[s];
     }
     
@@ -225,13 +225,13 @@ linedef::linedef(size_t v1, size_t v2) {
  */
 void linedef::fix_pointers(area_map &a) {
     sectors[0] = sectors[1] = NULL;
-    for(size_t s = 0; s < 2; s++) {
+    for(size_t s = 0; s < 2; ++s) {
         size_t s_nr = sector_nrs[s];
         sectors[s] = (s_nr == string::npos ? NULL : a.sectors[s_nr]);
     }
     
     vertices[0] = vertices[1] = NULL;
-    for(size_t v = 0; v < 2; v++) {
+    for(size_t v = 0; v < 2; ++v) {
         size_t v_nr = vertex_nrs[v];
         vertices[v] = (v_nr == string::npos ? NULL : a.vertices[v_nr]);
     }
@@ -244,9 +244,9 @@ void linedef::fix_pointers(area_map &a) {
  */
 size_t linedef::remove_from_sectors() {
     size_t l_nr = string::npos;
-    for(unsigned char s = 0; s < 2; s++) {
+    for(unsigned char s = 0; s < 2; ++s) {
         if(!sectors[s]) continue;
-        for(size_t l = 0; l < sectors[s]->linedefs.size(); l++) {
+        for(size_t l = 0; l < sectors[s]->linedefs.size(); ++l) {
             linedef* l_ptr = sectors[s]->linedefs[l];
             if(l_ptr == this) {
                 sectors[s]->linedefs.erase(sectors[s]->linedefs.begin() + l);
@@ -267,9 +267,9 @@ size_t linedef::remove_from_sectors() {
  */
 size_t linedef::remove_from_vertices() {
     size_t l_nr = string::npos;
-    for(unsigned char v = 0; v < 2; v++) {
+    for(unsigned char v = 0; v < 2; ++v) {
         if(!vertices[v]) continue;
-        for(size_t l = 0; l < vertices[v]->linedefs.size(); l++) {
+        for(size_t l = 0; l < vertices[v]->linedefs.size(); ++l) {
             linedef* l_ptr = vertices[v]->linedefs[l];
             if(l_ptr == this) {
                 vertices[v]->linedefs.erase(vertices[v]->linedefs.begin() + l);
@@ -333,7 +333,7 @@ void sector::clone(sector* new_sector) {
  * Destroys a sector.
  */
 sector::~sector() {
-    for(size_t t = 0; t < 2; t++) {
+    for(size_t t = 0; t < 2; ++t) {
         if(bitmap && bitmap != bmp_error) {
             bitmaps.detach(file_name);
         }
@@ -359,7 +359,7 @@ bool linedef_intersection::contains(linedef* l) {
  */
 void sector::connect_linedefs(area_map &a, size_t s_nr) {
     linedef_nrs.clear();
-    for(size_t l = 0; l < a.linedefs.size(); l++) {
+    for(size_t l = 0; l < a.linedefs.size(); ++l) {
         linedef* l_ptr = a.linedefs[l];
         if(l_ptr->sector_nrs[0] == s_nr || l_ptr->sector_nrs[1] == s_nr) {
             linedef_nrs.push_back(l);
@@ -373,7 +373,7 @@ void sector::connect_linedefs(area_map &a, size_t s_nr) {
  */
 void sector::fix_pointers(area_map &a) {
     linedefs.clear();
-    for(size_t l = 0; l < linedef_nrs.size(); l++) {
+    for(size_t l = 0; l < linedef_nrs.size(); ++l) {
         size_t l_nr = linedef_nrs[l];
         linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
     }
@@ -415,7 +415,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
  */
 void vertex::connect_linedefs(area_map &a, size_t v_nr) {
     linedef_nrs.clear();
-    for(size_t l = 0; l < a.linedefs.size(); l++) {
+    for(size_t l = 0; l < a.linedefs.size(); ++l) {
         linedef* l_ptr = a.linedefs[l];
         if(l_ptr->vertex_nrs[0] == v_nr || l_ptr->vertex_nrs[1] == v_nr) {
             linedef_nrs.push_back(l);
@@ -429,7 +429,7 @@ void vertex::connect_linedefs(area_map &a, size_t v_nr) {
  */
 void vertex::fix_pointers(area_map &a) {
     linedefs.clear();
-    for(size_t l = 0; l < linedef_nrs.size(); l++) {
+    for(size_t l = 0; l < linedef_nrs.size(); ++l) {
         size_t l_nr = linedef_nrs[l];
         linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
     }
@@ -455,12 +455,12 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     //First, compile a list of all sidedefs related to this sector.
     map<linedef*, bool> lines_done;
     
-    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         lines_done[s_ptr->linedefs[l]] = false;
     }
     
     //Now travel along the lines, vertex by vertex, until we have no more left.
-    while(lines_done.size() > 0) {
+    while(!lines_done.empty()) {
         bool poly_done = false;
         
         //Start with the rightmost vertex.
@@ -486,7 +486,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             float best_angle_dif = 0;
             linedef* best_line = NULL;
             
-            for(size_t l = 0; l < cur_vertex->linedefs.size(); l++) {
+            for(size_t l = 0; l < cur_vertex->linedefs.size(); ++l) {
                 linedef* l_ptr = cur_vertex->linedefs[l];
                 auto it = lines_done.find(l_ptr);
                 if(it == lines_done.end()) continue; //We're not meant to check this line.
@@ -574,8 +574,8 @@ void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* m
     *min_y = s_ptr->linedefs[0]->vertices[0]->y;
     *max_y = *min_y;
     
-    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
-        for(unsigned char v = 0; v < 2; v++) {
+    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
+        for(unsigned char v = 0; v < 2; ++v) {
             float x = s_ptr->linedefs[l]->vertices[v]->x;
             float y = s_ptr->linedefs[l]->vertices[v]->y;
             
@@ -606,7 +606,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
         
         if(sectors->size() == 1) return *sectors->begin();
         
-        for(auto s = sectors->begin(); s != sectors->end(); s++) {
+        for(auto s = sectors->begin(); s != sectors->end(); ++s) {
         
             if(is_point_in_sector(x, y, *s)) {
                 return *s;
@@ -618,7 +618,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
         
     } else {
     
-        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
             sector* s_ptr = cur_area_map.sectors[s];
             
             if(is_point_in_sector(x, y, s_ptr)) {
@@ -644,7 +644,7 @@ void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, flo
     bool got_min_y = false;
     bool got_max_y = false;
     
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         float x, y, final_x, final_y;
         
         if(p == 0 || p == 1) x = s_ptr->x - (s_ptr->w * 0.5);
@@ -681,7 +681,7 @@ void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, flo
  * Returns whether a point is inside a sector by checking its triangles.
  */
 bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
-    for(size_t t = 0; t < s_ptr->triangles.size(); t++) {
+    for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
         triangle* t_ptr = &s_ptr->triangles[t];
         if(
             is_point_in_triangle(
@@ -765,7 +765,7 @@ bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, c
     const vertex* pv = get_prev_in_vector(vec, nr);
     const vertex* nv = get_next_in_vector(vec, nr);
     
-    for(size_t c = 0; c < concaves.size(); c++) {
+    for(size_t c = 0; c < concaves.size(); ++c) {
         const vertex* v_to_check = vec[concaves[c]];
         if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
         if(
@@ -788,10 +788,10 @@ bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, c
 vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
     vertex* rightmost = NULL;
     
-    for(auto l = lines.begin(); l != lines.end(); l++) {
+    for(auto l = lines.begin(); l != lines.end(); ++l) {
         if(!rightmost) rightmost = l->first->vertices[0];
         
-        for(unsigned char v = 0; v < 2; v++) {
+        for(unsigned char v = 0; v < 2; ++v) {
             rightmost = get_rightmost_vertex(l->first->vertices[v], rightmost);
         }
     }
@@ -805,7 +805,7 @@ vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
 vertex* get_rightmost_vertex(polygon* p) {
     vertex* rightmost = NULL;
     
-    for(size_t v = 0; v < p->size(); v++) {
+    for(size_t v = 0; v < p->size(); ++v) {
         vertex* v_ptr = p->at(v);
         if(!rightmost) rightmost = v_ptr;
         else {
@@ -832,7 +832,7 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
  * Checks intersecting linedefs, and adds them to ed_intersecting_lines;
  */
 void check_linedef_intersections(vertex* v) {
-    for(size_t l = 0; l < v->linedefs.size(); l++) {
+    for(size_t l = 0; l < v->linedefs.size(); ++l) {
         linedef* l_ptr = v->linedefs[l];
         
         //Check if it's on the list of intersecting lines, and remove it,
@@ -841,7 +841,7 @@ void check_linedef_intersections(vertex* v) {
             if(ed_intersecting_lines[il].contains(l_ptr)) {
                 ed_intersecting_lines.erase(ed_intersecting_lines.begin() + il);
             } else {
-                il++;
+                ++il;
             }
         }
         
@@ -849,7 +849,7 @@ void check_linedef_intersections(vertex* v) {
         if(!l_ptr->vertices[0]) continue; //It had been marked for deletion.
         
         //For every other linedef in the map, check for intersections.
-        for(size_t l2 = 0; l2 < cur_area_map.linedefs.size(); l2++) {
+        for(size_t l2 = 0; l2 < cur_area_map.linedefs.size(); ++l2) {
             linedef* l2_ptr = cur_area_map.linedefs[l2];
             if(!l2_ptr->vertices[0]) continue; //It had been marked for deletion.
             
@@ -899,7 +899,7 @@ void clean_poly(polygon* p) {
         if(should_delete) {
             p->erase(p->begin() + v);
         } else {
-            v++;
+            ++v;
         }
     }
 }
@@ -923,7 +923,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     
     vertex* outer_rightmost = get_rightmost_vertex(outer);
     
-    for(size_t i = 0; i < inners->size(); i++) {
+    for(size_t i = 0; i < inners->size(); ++i) {
         polygon* p = &inners->at(i);
         vertex* closest_line_v1 = NULL;
         vertex* closest_line_v2 = NULL;
@@ -950,7 +950,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         //If the closest thing is a vertex, not a line, then
         //we can skip a bunch of steps.
         vertex* v1 = NULL, *v2 = NULL;
-        for(size_t v = 0; v < outer->size(); v++) {
+        for(size_t v = 0; v < outer->size(); ++v) {
             v1 = outer->at(v);
             v2 = get_next_in_vector(*outer, v);
             if(
@@ -1002,7 +1002,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             //the point on the line,
             //and the vertex we're comparing.
             vector<vertex*> inside_triangle;
-            for(size_t v = 0; v < outer->size(); v++) {
+            for(size_t v = 0; v < outer->size(); ++v) {
                 vertex* v_ptr = outer->at(v);
                 if(
                     is_point_in_triangle(
@@ -1021,7 +1021,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             best_vertex = vertex_to_compare;
             float closest_angle = FLT_MAX;
             
-            for(size_t v = 0; v < inside_triangle.size(); v++) {
+            for(size_t v = 0; v < inside_triangle.size(); ++v) {
                 vertex* v_ptr = inside_triangle[v];
                 float angle = atan2(v_ptr->y - start->y, v_ptr->x - start->x);
                 if(fabs(angle) < closest_angle) {
@@ -1040,7 +1040,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         //We know a bridge exists if the same vertex
         //appears twice.
         vector<size_t> bridges;
-        for(size_t v = 0; v < outer->size(); v++) {
+        for(size_t v = 0; v < outer->size(); ++v) {
             if(outer->at(v) == best_vertex) {
                 bridges.push_back(v);
             }
@@ -1056,7 +1056,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             insertion_vertex_nr = bridges.back();
             float new_bridge_angle = get_angle_cw_dif(atan2(start->y - best_vertex->y, start->x - best_vertex->x), 0);
             
-            for(size_t v = 0; v < bridges.size(); v++) {
+            for(size_t v = 0; v < bridges.size(); ++v) {
                 vertex* v_ptr = outer->at(bridges[v]);
                 vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
                 float a = get_angle_cw_dif(atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x), 0);
@@ -1073,7 +1073,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         //circle the inner, and go back to the outer vertex.
         //Let's just find where the start vertex is...
         size_t iv = 0;
-        for(; iv < p->size(); iv++) {
+        for(; iv < p->size(); ++iv) {
             if(p->at(iv) == start) {
                 break;
             }
@@ -1123,7 +1123,7 @@ void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t
     ears.clear();
     convex_vertices.clear();
     concave_vertices.clear();
-    for(size_t v = 0; v < vertices_left.size(); v++) {
+    for(size_t v = 0; v < vertices_left.size(); ++v) {
         bool is_convex = is_vertex_convex(vertices_left, v);
         if(is_convex) {
             convex_vertices.push_back(v);
@@ -1133,7 +1133,7 @@ void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t
         }
     }
     
-    for(size_t c = 0; c < convex_vertices.size(); c++) {
+    for(size_t c = 0; c < convex_vertices.size(); ++c) {
         if(is_vertex_ear(vertices_left, concave_vertices, convex_vertices[c])) {
             ears.push_back(convex_vertices[c]);
         }
@@ -1189,7 +1189,7 @@ void triangulate(sector* s_ptr) {
     }
     
     //And let's clear any "lone" linedefs here.
-    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         linedef* l_ptr = s_ptr->linedefs[l];
         auto it = ed_lone_lines.find(l_ptr);
         if(it != ed_lone_lines.end()) {
@@ -1218,7 +1218,7 @@ void triangulate(sector* s_ptr) {
     
     //Get rid of 0-length vertices and 180-degree vertices, as they're redundant.
     clean_poly(&outer_poly);
-    for(size_t i = 0; i < inner_polys.size(); i++) clean_poly(&inner_polys[i]);
+    for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);
     
     //Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
@@ -1235,7 +1235,7 @@ void triangulate(sector* s_ptr) {
     //We do a triangulation until we're left with three vertices -- the final triangle.
     while(vertices_left.size() > 3) {
     
-        if(ears.size() == 0) {
+        if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
             ed_non_simples.insert(s_ptr);
             break;

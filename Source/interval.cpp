@@ -28,7 +28,7 @@ interval::interval(const string &s) {
         float upper = FLT_MAX;
         float divisor = 0;
         
-        if(subinterval_strs[si].size() > 0) {
+        if(!subinterval_strs[si].empty()) {
             vector<string> divisor_parts = split(subinterval_strs[si], "every", false, true);
             if(divisor_parts.size() >= 2) {
                 divisor = s2f(divisor_parts.back());

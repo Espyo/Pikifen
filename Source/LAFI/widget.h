@@ -22,17 +22,17 @@ namespace lafi {
 
 struct easy_widget_info {
     string name;
-    widget* widget;
+    widget* w;
     float width, height;
     unsigned char flags;
-    easy_widget_info(string name, lafi::widget* widget, float width, float height, unsigned char flags);
+    easy_widget_info(string name, lafi::widget* w, float width, float height, unsigned char flags);
 };
 
 struct accelerator {
     int key;
     unsigned int modifiers;
-    widget* widget;
-    accelerator(int key, unsigned int modifiers, lafi::widget* widget);
+    widget* w;
+    accelerator(int key, unsigned int modifiers, lafi::widget* w);
 };
 
 class widget {
@@ -61,11 +61,11 @@ public:
     map<string, widget*> widgets;
     widget* focused_widget;
     
-    void add(string name, widget* widget);
+    void add(string name, widget* w);
     void remove(string name);
     
     int easy_row(float vertical_padding = 8, float horizontal_padding = 8, float widget_padding = 8);
-    void easy_add(string name, widget* widget, float width, float height, unsigned char flags = 0);
+    void easy_add(string name, widget* w, float width, float height, unsigned char flags = 0);
     void easy_reset();
     vector<easy_widget_info> easy_row_widgets; //Widgets currently in the row buffer.
     float easy_row_y1, easy_row_y2;                 //Top and bottom of the row.
@@ -73,7 +73,7 @@ public:
     float easy_row_horizontal_padding;              //Padding to the left and right of the current row.
     float easy_row_widget_padding;                  //Padding between widgets on the current row.
     
-    void register_accelerator(int key, unsigned int modifiers, widget* widget);
+    void register_accelerator(int key, unsigned int modifiers, widget* w);
     vector<accelerator> accelerators;
     
     widget* get_widget_under_mouse(int mx, int my);
@@ -126,7 +126,7 @@ public:
     
 };
 
-void draw_line(widget* widget, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);
+void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);
 void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text);
 vector<string> split(string text, const string del = " ", const bool inc_empty = false, const bool inc_del = false);
 

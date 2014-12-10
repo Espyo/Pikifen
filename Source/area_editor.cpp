@@ -59,7 +59,7 @@ void area_editor::bg_to_gui() {
     ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(ed_bg_h);
     ((lafi::checkbox*) f->widgets["chk_ratio"])->set(ed_bg_aspect_ratio);
     ((lafi::checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == ESM_BG_MOUSE);
-    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a);
+    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a, false);
 }
 
 /* ----------------------------------------------------------------------------
@@ -93,7 +93,7 @@ void area_editor::change_background(string new_file_name) {
     ed_bg_bitmap = NULL;
     
     if(new_file_name.size()) {
-        ed_bg_bitmap = load_bmp(new_file_name, false);
+        ed_bg_bitmap = load_bmp(new_file_name, NULL, false);
     }
     ed_bg_file_name = new_file_name;
 }
@@ -214,7 +214,7 @@ void area_editor::do_logic() {
             if(ed_mode == EDITOR_MODE_OBJECTS || ed_mode == EDITOR_MODE_SHADOWS) sector_opacity = 64;
             
             size_t n_linedefs = cur_area_map.linedefs.size();
-            for(size_t l = 0; l < n_linedefs; l++) {
+            for(size_t l = 0; l < n_linedefs; ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 
                 if(!l_ptr->vertices[0] || !l_ptr->vertices[1]) continue;
@@ -230,7 +230,7 @@ void area_editor::do_logic() {
                     if(l_ptr->sectors[1] == ed_error_sector_ptr) error_highlight = true;
                     
                 } else {
-                    for(size_t il = 0; il < ed_intersecting_lines.size(); il++) {
+                    for(size_t il = 0; il < ed_intersecting_lines.size(); ++il) {
                         if(ed_intersecting_lines[il].contains(l_ptr)) {
                             valid = false;
                             break;
@@ -288,7 +288,7 @@ void area_editor::do_logic() {
             
             //Vertices.
             size_t n_vertices = cur_area_map.vertices.size();
-            for(size_t v = 0; v < n_vertices; v++) {
+            for(size_t v = 0; v < n_vertices; ++v) {
                 vertex* v_ptr = cur_area_map.vertices[v];
                 al_draw_filled_circle(
                     v_ptr->x,
@@ -305,7 +305,7 @@ void area_editor::do_logic() {
         } else {
         
             //Draw textures.
-            for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+            for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
                 draw_sector(cur_area_map.sectors[s], 0, 0, 1.0);
             }
         }
@@ -315,7 +315,7 @@ void area_editor::do_logic() {
         if(ed_mode == EDITOR_MODE_SECTORS || ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS || ed_mode == EDITOR_MODE_SHADOWS) mob_opacity = 64;
         if(ed_sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
         
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             bool valid = m_ptr->type != NULL;
             
@@ -465,7 +465,7 @@ void area_editor::find_errors() {
     ed_error_string.clear();
     
     //Check intersecting lines.
-    if(ed_intersecting_lines.size() > 0) {
+    if(!ed_intersecting_lines.empty()) {
         ed_error_type = EET_INTERSECTING_LINEDEFS;
     }
     
@@ -492,24 +492,24 @@ void area_editor::find_errors() {
     
     //Check non-simple sectors.
     if(ed_error_type == EET_NONE) {
-        if(ed_non_simples.size() > 0) {
+        if(!ed_non_simples.empty()) {
             ed_error_type = EET_BAD_SECTOR;
         }
     }
     
     //Check lone linedefs.
     if(ed_error_type == EET_NONE) {
-        if(ed_lone_lines.size() > 0) {
+        if(!ed_lone_lines.empty()) {
             ed_error_type = EET_LONE_LINE;
         }
     }
     
     //Check for missing textures.
     if(ed_error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_map.sectors[s];
-            if(s_ptr->file_name.size() == 0 && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
+            if(s_ptr->file_name.empty() && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
                 ed_error_type = EET_MISSING_TEXTURE;
                 ed_error_sector_ptr = s_ptr;
                 break;
@@ -520,11 +520,11 @@ void area_editor::find_errors() {
     //Check for unknown textures.
     if(ed_error_type == EET_NONE) {
         vector<string> texture_file_names = folder_to_vector(TEXTURES_FOLDER, false);
-        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_map.sectors[s];
             
-            if(s_ptr->file_name.size() == 0) continue;
+            if(s_ptr->file_name.empty()) continue;
             
             if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->file_name) == texture_file_names.end()) {
                 ed_error_type = EET_UNKNOWN_TEXTURE;
@@ -537,7 +537,7 @@ void area_editor::find_errors() {
     
     //Objects with no type.
     if(ed_error_type == EET_NONE) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             if(!cur_area_map.mob_generators[m]->type) {
                 ed_error_type = EET_TYPELESS_MOB;
                 ed_error_mob_ptr = cur_area_map.mob_generators[m];
@@ -548,7 +548,7 @@ void area_editor::find_errors() {
     
     //Objects out of bounds.
     if(ed_error_type == EET_NONE) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             if(!get_sector(m_ptr->x, m_ptr->y, NULL, false)) {
                 ed_error_type = EET_MOB_OOB;
@@ -562,12 +562,12 @@ void area_editor::find_errors() {
     if(ed_error_type == EET_NONE) {
         ed_error_mob_ptr = NULL;
         
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             
             if(ed_error_mob_ptr) break;
             
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 
                 if(
@@ -604,9 +604,9 @@ void area_editor::find_errors() {
     //Check if there are no landing site sectors.
     if(ed_error_type == EET_NONE) {
         bool landing_site_missing = true;
-        for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
             sector* s_ptr = cur_area_map.sectors[s];
-            if(s_ptr->linedefs.size() == 0) continue;
+            if(s_ptr->linedefs.empty()) continue;
             
             if(s_ptr->type == SECTOR_TYPE_LANDING_SITE) {
                 landing_site_missing = false;
@@ -619,7 +619,7 @@ void area_editor::find_errors() {
     
     //Check if there are tree shadows with invalid images.
     if(ed_error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             if(cur_area_map.tree_shadows[s]->bitmap == bmp_error) {
                 ed_error_type = EET_INVALID_SHADOW;
                 ed_error_shadow_ptr = cur_area_map.tree_shadows[s];
@@ -639,7 +639,7 @@ void area_editor::goto_error() {
     
     if(ed_error_type == EET_INTERSECTING_LINEDEFS) {
     
-        if(ed_intersecting_lines.size() == 0) {
+        if(ed_intersecting_lines.empty()) {
             find_errors(); return;
         }
         
@@ -669,7 +669,7 @@ void area_editor::goto_error() {
         
     } else if(ed_error_type == EET_BAD_SECTOR) {
     
-        if(ed_non_simples.size() == 0) {
+        if(ed_non_simples.empty()) {
             find_errors(); return;
         }
         
@@ -681,7 +681,7 @@ void area_editor::goto_error() {
         
     } else if(ed_error_type == EET_LONE_LINE) {
     
-        if(ed_lone_lines.size() == 0) {
+        if(ed_lone_lines.empty()) {
             find_errors(); return;
         }
         
@@ -1019,7 +1019,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             size_t clicked_linedef_nr = string::npos;
             bool created_vertex = false;
             
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 
                 if(!l_ptr->vertices[0] || !l_ptr->vertices[1]) continue;
@@ -1078,7 +1078,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 
                 //Update linedef data on the end vertex of the original line
                 //(it now links to the new line, not the old).
-                for(size_t vl = 0; vl < end_v_ptr->linedefs.size(); vl++) {
+                for(size_t vl = 0; vl < end_v_ptr->linedefs.size(); ++vl) {
                     if(end_v_ptr->linedefs[vl] == clicked_linedef_ptr) {
                         end_v_ptr->linedefs[vl] = new_l_ptr;
                         end_v_ptr->linedef_nrs[vl] = cur_area_map.linedefs.size() - 1;
@@ -1094,7 +1094,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             //Find a vertex to drag.
             if(!created_vertex) {
-                for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+                for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                     if(
                         check_dist(
                             mouse_cursor_x, mouse_cursor_y,
@@ -1120,7 +1120,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             ed_cur_mob = NULL;
             ed_moving_thing = string::npos;
-            for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+            for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
                 mob_gen* m_ptr = cur_area_map.mob_generators[m];
                 float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
                 if(check_dist(m_ptr->x, m_ptr->y, mouse_cursor_x, mouse_cursor_y, radius)) {
@@ -1137,7 +1137,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             ed_cur_shadow = NULL;
             ed_moving_thing = string::npos;
-            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             
                 tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
                 float min_x, min_y, max_x, max_y;
@@ -1172,7 +1172,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             //Create the vertices.
             vertex* new_vertices[4];
-            for(size_t v = 0; v < 4; v++) new_vertices[v] = new vertex(0, 0);
+            for(size_t v = 0; v < 4; ++v) new_vertices[v] = new vertex(0, 0);
             new_vertices[0]->x = hotspot_x - GRID_INTERVAL / 2;
             new_vertices[0]->y = hotspot_y - GRID_INTERVAL / 2;
             new_vertices[1]->x = hotspot_x + GRID_INTERVAL / 2;
@@ -1181,11 +1181,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_vertices[2]->y = hotspot_y + GRID_INTERVAL / 2;
             new_vertices[3]->x = hotspot_x - GRID_INTERVAL / 2;
             new_vertices[3]->y = hotspot_y + GRID_INTERVAL / 2;
-            for(size_t v = 0; v < 4; v++)cur_area_map.vertices.push_back(new_vertices[v]);
+            for(size_t v = 0; v < 4; ++v)cur_area_map.vertices.push_back(new_vertices[v]);
             
             //Create the linedefs.
             linedef* new_linedefs[4];
-            for(size_t l = 0; l < 4; l++) {
+            for(size_t l = 0; l < 4; ++l) {
                 new_linedefs[l] = new linedef(
                     cur_area_map.vertices.size() - (4 - l),
                     cur_area_map.vertices.size() - (4 - ((l + 1) % 4))
@@ -1196,16 +1196,16 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Add them to the area map.
-            for(size_t l = 0; l < 4; l++) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
+            for(size_t l = 0; l < 4; ++l) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
             cur_area_map.sectors.push_back(new_sector);
             
-            for(size_t l = 0; l < 4; l++) new_linedefs[l]->fix_pointers(cur_area_map);
-            for(size_t v = 0; v < 4; v++) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
+            for(size_t l = 0; l < 4; ++l) new_linedefs[l]->fix_pointers(cur_area_map);
+            for(size_t v = 0; v < 4; ++v) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
             new_sector->connect_linedefs(cur_area_map, cur_area_map.sectors.size() - 1);
             
             //Add the linedefs to the outer sector's list.
             if(outer_sector) {
-                for(size_t l = 0; l < 4; l++) {
+                for(size_t l = 0; l < 4; ++l) {
                     outer_sector->linedefs.push_back(new_linedefs[l]);
                     outer_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
                 }
@@ -1268,7 +1268,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             unordered_set<sector*> affected_sectors;
             
             //Check if we should merge.
-            for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+            for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                 vertex* dest_v_ptr = cur_area_map.vertices[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
                 
@@ -1289,7 +1289,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             affected_sectors.insert(l_ptr->sectors[1]);
                             
                             //Clear it from its vertices' lists.
-                            for(size_t vl = 0; vl < other_vertex->linedefs.size(); vl++) {
+                            for(size_t vl = 0; vl < other_vertex->linedefs.size(); ++vl) {
                                 if(other_vertex->linedefs[vl] == l_ptr) {
                                     other_vertex->linedefs.erase(other_vertex->linedefs.begin() + vl);
                                     other_vertex->linedef_nrs.erase(other_vertex->linedef_nrs.begin() + vl);
@@ -1298,9 +1298,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             }
                             
                             //Clear it from the sector lists.
-                            for(size_t s = 0; s < 2; s++) {
+                            for(size_t s = 0; s < 2; ++s) {
                                 if(!l_ptr->sectors[s]) continue;
-                                for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); sl++) {
+                                for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); ++sl) {
                                     if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
                                         l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
                                         l_ptr->sectors[s]->linedef_nrs.erase(l_ptr->sectors[s]->linedef_nrs.begin() + sl);
@@ -1323,7 +1323,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             //Check if the linedef will be merged with another one.
                             //These are linedefs that share a common vertex,
                             //plus the moved/destination vertex.
-                            for(size_t dl = 0; dl < dest_v_ptr->linedefs.size(); dl++) {
+                            for(size_t dl = 0; dl < dest_v_ptr->linedefs.size(); ++dl) {
                             
                                 linedef* dl_ptr = dest_v_ptr->linedefs[dl];
                                 vertex* d_other_vertex = dl_ptr->vertices[0] == dest_v_ptr ? dl_ptr->vertices[1] : dl_ptr->vertices[0];
@@ -1360,7 +1360,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     l_ptr->remove_from_sectors();
                                     
                                     //Add the linedefs to the sectors' lists.
-                                    for(size_t s = 0; s < 2; s++) {
+                                    for(size_t s = 0; s < 2; ++s) {
                                         if(!dl_ptr->sectors[s]) continue;
                                         dl_ptr->sectors[s]->linedefs.push_back(dl_ptr);
                                         dl_ptr->sectors[s]->linedef_nrs.push_back(old_dl_nr);
@@ -1388,7 +1388,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             }
                         }
                         
-                        if(!was_deleted) l++;
+                        if(!was_deleted) ++l;
                         
                     }
                     
@@ -1401,8 +1401,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         if(vl_ptr->sectors[0] == vl_ptr->sectors[1]) {
                             vl_ptr->remove_from_sectors();
                             vl_ptr->remove_from_vertices();
-                            for(size_t v = 0; v < 2; v++) {
-                                if(vl_ptr->vertices[v]->linedefs.size() == 0) {
+                            for(size_t v = 0; v < 2; ++v) {
+                                if(vl_ptr->vertices[v]->linedefs.empty()) {
                                     vl_ptr->vertices[v]->x = vl_ptr->vertices[v]->y = FLT_MAX;
                                 }
                             }
@@ -1410,13 +1410,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             vl_ptr->vertex_nrs[0] = vl_ptr->vertex_nrs[1] = string::npos;
                             vl_ptr->fix_pointers(cur_area_map);
                         } else {
-                            vl++;
+                            ++vl;
                         }
                     }
                     
                     //If this vertex is out of linedefs, it'll be
                     //deleted eventually. Move it out of the way.
-                    if(dest_v_ptr->linedefs.size() == 0) {
+                    if(dest_v_ptr->linedefs.empty()) {
                         dest_v_ptr->x = dest_v_ptr->y = FLT_MAX;
                     }
                     
@@ -1433,13 +1433,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Finally, re-triangulate the affected sectors.
-            for(size_t l = 0; l < final_vertex->linedefs.size(); l++) {
+            for(size_t l = 0; l < final_vertex->linedefs.size(); ++l) {
                 linedef* l_ptr = final_vertex->linedefs[l];
-                for(size_t s = 0; s < 2; s++) {
+                for(size_t s = 0; s < 2; ++s) {
                     if(l_ptr->sectors[s]) affected_sectors.insert(l_ptr->sectors[s]);
                 }
             }
-            for(auto s = affected_sectors.begin(); s != affected_sectors.end(); s++) {
+            for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
                 if(!(*s)) continue;
                 triangulate(*s);
             }
@@ -1447,7 +1447,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //If somewhere along the line, the current sector
             //got marked for deletion, unselect it.
             if(ed_cur_sector) {
-                if(ed_cur_sector->linedefs.size() == 0) {
+                if(ed_cur_sector->linedefs.empty()) {
                     ed_cur_sector = NULL;
                     sector_to_gui();
                 }
@@ -1900,7 +1900,7 @@ void area_editor::load() {
         mob_to_gui();
     };
     frm_object->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             if(cur_area_map.mob_generators[m] == ed_cur_mob) {
                 cur_area_map.mob_generators.erase(cur_area_map.mob_generators.begin() + m);
                 delete ed_cur_mob;
@@ -1945,7 +1945,7 @@ void area_editor::load() {
         shadow_to_gui();
     };
     frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             if(cur_area_map.tree_shadows[s] == ed_cur_shadow) {
                 cur_area_map.tree_shadows.erase(cur_area_map.tree_shadows.begin() + s);
                 delete ed_cur_shadow;
@@ -2069,7 +2069,7 @@ void area_editor::load_area() {
     
     clear_area_textures();
     
-    for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
         check_linedef_intersections(cur_area_map.vertices[v]);
     }
     
@@ -2142,7 +2142,7 @@ void area_editor::open_picker(unsigned char type) {
     vector<string> elements;
     if(type == AREA_EDITOR_PICKER_AREA) {
         elements = folder_to_vector(AREA_FOLDER, false);
-        for(size_t e = 0; e < elements.size(); e++) {
+        for(size_t e = 0; e < elements.size(); ++e) {
             size_t pos = elements[e].find(".txt");
             if(pos != string::npos) {
                 elements[e].erase(pos, 4);
@@ -2151,13 +2151,13 @@ void area_editor::open_picker(unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
-        for(size_t t = 0; t < sector_types.get_nr_of_types(); t++) {
+        for(size_t t = 0; t < sector_types.get_nr_of_types(); ++t) {
             elements.push_back(sector_types.get_name(t));
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
-        for(unsigned char f = 0; f < mob_categories.get_nr_of_categories(); f++) { //0 is none.
+        for(unsigned char f = 0; f < mob_categories.get_nr_of_categories(); ++f) { //0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
             elements.push_back(mob_categories.get_pname(f));
         }
@@ -2172,7 +2172,7 @@ void area_editor::open_picker(unsigned char type) {
     
     f->easy_reset();
     f->easy_row();
-    for(size_t e = 0; e < elements.size(); e++) {
+    for(size_t e = 0; e < elements.size(); ++e) {
         lafi::button* b = new lafi::button(0, 0, 0, 0, elements[e]);
         string name = elements[e];
         b->left_mouse_click_handler = [name, type] (lafi::widget*, int, int) {
@@ -2242,14 +2242,14 @@ void area_editor::save_area() {
     for(size_t v = 0; v < cur_area_map.vertices.size(); ) {
     
         vertex* v_ptr = cur_area_map.vertices[v];
-        if(v_ptr->linedef_nrs.size() == 0) {
+        if(v_ptr->linedef_nrs.empty()) {
         
             cur_area_map.vertices.erase(cur_area_map.vertices.begin() + v);
             
             //Fix numbers in linedef lists.
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
-                for(unsigned char lv = 0; lv < 2; lv++) {
+                for(unsigned char lv = 0; lv < 2; ++lv) {
                     if(l_ptr->vertex_nrs[lv] >= v && l_ptr->vertex_nrs[lv] != string::npos) {
                         l_ptr->vertex_nrs[lv]--;
                     }
@@ -2257,7 +2257,7 @@ void area_editor::save_area() {
             }
             
         } else {
-            v++;
+            ++v;
         }
     }
     
@@ -2265,14 +2265,14 @@ void area_editor::save_area() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); ) {
     
         sector* s_ptr = cur_area_map.sectors[s];
-        if(s_ptr->linedef_nrs.size() == 0) {
+        if(s_ptr->linedef_nrs.empty()) {
         
             cur_area_map.sectors.erase(cur_area_map.sectors.begin() + s);
             
             //Fix numbers in linedef lists.
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
-                for(unsigned char ls = 0; ls < 2; ls++) {
+                for(unsigned char ls = 0; ls < 2; ++ls) {
                     if(l_ptr->sector_nrs[ls] >= s && l_ptr->sector_nrs[ls] != string::npos) {
                         l_ptr->sector_nrs[ls]--;
                     }
@@ -2280,7 +2280,7 @@ void area_editor::save_area() {
             }
             
         } else {
-            s++;
+            ++s;
         }
     }
     
@@ -2293,19 +2293,19 @@ void area_editor::save_area() {
             cur_area_map.linedefs.erase(cur_area_map.linedefs.begin() + l);
             
             //Fix numbers in vertex lists.
-            for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+            for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                 vertex* v_ptr = cur_area_map.vertices[v];
-                for(size_t vl = 0; vl < v_ptr->linedef_nrs.size(); vl++) {
+                for(size_t vl = 0; vl < v_ptr->linedef_nrs.size(); ++vl) {
                     if(v_ptr->linedef_nrs[vl] >= l && v_ptr->linedef_nrs[vl] != string::npos) {
-                        v_ptr->linedef_nrs[vl]--;
+                        --v_ptr->linedef_nrs[vl];
                     }
                 }
             }
             
             //Fix numbers in sector lists.
-            for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+            for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
                 sector* s_ptr = cur_area_map.sectors[s];
-                for(size_t sl = 0; sl < s_ptr->linedef_nrs.size(); sl++) {
+                for(size_t sl = 0; sl < s_ptr->linedef_nrs.size(); ++sl) {
                     if(s_ptr->linedef_nrs[sl] >= l && s_ptr->linedef_nrs[sl] != string::npos) {
                         s_ptr->linedef_nrs[sl]--;
                     }
@@ -2313,7 +2313,7 @@ void area_editor::save_area() {
             }
             
         } else {
-            l++;
+            ++l;
         }
     }
     
@@ -2323,7 +2323,7 @@ void area_editor::save_area() {
     data_node* mobs_node = new data_node("mobs", "");
     file_node.add(mobs_node);
     
-    for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+    for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_map.mob_generators[m];
         data_node* mob_node = new data_node(mob_categories.get_sname(m_ptr->category), "");
         mobs_node->add(mob_node);
@@ -2356,7 +2356,7 @@ void area_editor::save_area() {
     data_node* vertices_node = new data_node("vertices", "");
     file_node.add(vertices_node);
     
-    for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
         vertex* v_ptr = cur_area_map.vertices[v];
         data_node* vertex_node = new data_node("vertex", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertices_node->add(vertex_node);
@@ -2366,12 +2366,12 @@ void area_editor::save_area() {
     data_node* linedefs_node = new data_node("linedefs", "");
     file_node.add(linedefs_node);
     
-    for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+    for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
         linedef* l_ptr = cur_area_map.linedefs[l];
         data_node* linedef_node = new data_node("linedef", "");
         linedefs_node->add(linedef_node);
         string s_str;
-        for(size_t s = 0; s < 2; s++) {
+        for(size_t s = 0; s < 2; ++s) {
             if(l_ptr->sector_nrs[s] == string::npos) s_str += "-1";
             else s_str += i2s(l_ptr->sector_nrs[s]);
             s_str += " ";
@@ -2385,7 +2385,7 @@ void area_editor::save_area() {
     data_node* sectors_node = new data_node("sectors", "");
     file_node.add(sectors_node);
     
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
         data_node* sector_node = new data_node("sector", "");
         sectors_node->add(sector_node);
@@ -2415,7 +2415,7 @@ void area_editor::save_area() {
     data_node* shadows_node = new data_node("tree_shadows", "");
     file_node.add(shadows_node);
     
-    for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
@@ -2498,7 +2498,7 @@ void area_editor::shadow_to_gui() {
         ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(ed_cur_shadow->w);
         ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(ed_cur_shadow->h);
         ((lafi::angle_picker*) f->widgets["ang_an"])->set_angle_rads(ed_cur_shadow->angle);
-        ((lafi::scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha);
+        ((lafi::scrollbar*) f->widgets["bar_al"])->set_value(ed_cur_shadow->alpha, false);
         ((lafi::textbox*) f->widgets["txt_file"])->text = ed_cur_shadow->file_name;
         ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(ed_cur_shadow->sway_x);
         ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(ed_cur_shadow->sway_y);
@@ -2549,7 +2549,7 @@ void area_editor::update_review_frame() {
     } else {
         if(ed_error_type == EET_INTERSECTING_LINEDEFS) {
         
-            if(ed_intersecting_lines.size() == 0) {
+            if(ed_intersecting_lines.empty()) {
                 find_errors(); return;
             }
             
@@ -2579,7 +2579,7 @@ void area_editor::update_review_frame() {
                                 
         } else if(ed_error_type == EET_BAD_SECTOR) {
         
-            if(ed_non_simples.size() == 0) {
+            if(ed_non_simples.empty()) {
                 find_errors(); return;
             }
             
@@ -2590,7 +2590,7 @@ void area_editor::update_review_frame() {
             
         } else if(ed_error_type == EET_LONE_LINE) {
         
-            if(ed_lone_lines.size() == 0) {
+            if(ed_lone_lines.empty()) {
                 find_errors(); return;
             }
             

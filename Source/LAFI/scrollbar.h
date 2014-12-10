@@ -27,7 +27,7 @@ public:
     void make_widget_scroll(widget* widget);
     static void widget_scroller(widget* w);
     void move_button(int x, int y);
-    void set_value(float new_low);
+    void set_value(float new_low, bool call_handler);
     void create_button();
 };
 

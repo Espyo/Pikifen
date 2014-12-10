@@ -28,6 +28,111 @@ Pikmin throw times in Pikmin 2
     Red, Blue, White: 1.3
     Yellow: 1.6
     Purple: 1.8
+    
+To optimize the leaf shadow textures, do the following:
+    1) Convert it to black and white (Pikmin 2's are a bit blueish, but b+w works best for the engine).
+    2) Apply an alpha mask of itself (inverted) onto itself. This makes the light areas transparent, and the dark ones opaque.
+    3) Set the brightness to 0% (-100 in Paint.NET), and the contrast to 150% (50 in Paint.NET).
+    4) Set the opacity of the whole thing to 75% (192 in Paint.NET).
+    Ideally, you want the areas fully shrouded in shade to be close to RGBA 0 0 0 128, and the light areas should be fully transparent (0 alpha). Tweak the brightness on step 3 and the opacity on step 4 until you get these values.
+    
+Things to do at every release
+    Check if the Error log reports any errors
+    Compile in release build
+    
+Ideas for the Onion screen
+    -When you enter the menu, pause the game and show the menu
+    -Pressing move up and move down works as usual
+    -Holding or clicking the "all" button (a new button) activates or toggles the all Onion mode, a la P3
+    -Holding a new button moves in intervals of 5
+    -Whistle button always cancels
+    -If using the mouse, you need to press cancel or ok, on-screen
+    -Each Onion has +- buttons on-screen
+    -An "all" button should be on-screen too
+    -The "all" button should only appear with 2+ Onions
+    
+Ideas on what the engine should do at boot
+    -Lists installed games, but if there's only one, it gets picked automatically
+    -If there is more than 1 game, show them all, sorted with the most recent picks
+    -If there are none, have a brief screen explaining what the engine does and what to do
+    -Upon entering a game, open the copyright screen, while loading
+    -Once the loading is done, enter the title screen for the game
+    -If this is the first time using the engine, stay on the copyright screen for 10 seconds
+    -Title screen should have the engine's logo on the corner, with the version number for the engine, and version number for the game
+    -Options:
+        -Story mode
+        -Battle
+        -Challenge
+        -Options
+        -Quit
+
+Candidate for new carrying code (December 2014):
+    -When a Pikmin is added to the carriers
+        -If the strength is enough
+            -Calculate destination
+            -Save destination and never change it
+    -When a Pikmin is removed from the carriers
+        -If the strength is now not enough
+            -Stop carrying
+            
+paralel_loading class idea:
+    -One attribute is a pointer to the code of the loading thread
+        -It takes as an argument the pointer to the class instance
+    -An attribute should store the percentage done
+    -The main thread should wait until this attribute reaches 100%, preferably on the logic loop
+
+2 player menu
+    -Level, character, and player amount select
+    -Rules button
+        -Number of enemy marble captures needed to win (0 = no marbles; in 3/4 player mode, any stolen player drops out)
+        -Number of yellow marble captures needed to win (0 = no yellow marbles)
+        -Time limit (upon reaching 0, the player with the most Pikmin at the end wins, or other tie-breaker attributes; 0 = no time limit)
+        -Number of initial Pikmin for each player
+        -Number of initial sprays for each player
+        -Number of leaders for each player
+        -Can you win by Pikmin extinction? (If not, the Onion will always spit out one seed upon would-be extinction)
+        -Can you win via leader KO? (If not, leaders don't take damage)
+        -Are there any cherries?
+        -Is there a bingo card?
+        -Should Pikmin that die to opposing Pikmin respawn at the Onion?
+
+Challenge Mode
+    -Levels have enemies and treasures
+    -When you deliver an enemy, you get Pikmin and Pokos, unless the level specifies that you can't get Pikmin this way
+    -There's a time limit
+    -There are several categories, and each one has a bronze, silver, gold and platinum level
+        -Number of Pikmin deaths
+        -Number of Pikmin raised
+        -Time spent to clear the level
+        -Dead enemies
+        -Pokos won (including enemies)
+    -The record for each category is saved independently
+
+Magic numbers on the engine's code (December 2014):
+    All colors
+    info_spot.cpp
+     l25 "0"
+    animation.cpp
+     l38 l64 0
+    animation_editor.cpp
+     l52 3
+     l61 l65 208
+     l241 255
+     l431 16
+     l1183 3
+    area_editor.cpp
+     l719 64
+     l1046 0.5
+     l1109 6
+     l1131 16
+    controls.cpp
+     4 -> N_PLAYERS
+     l327 6
+     l581 255
+     l662 and around, 3
+    drawing.cpp
+     l122 have HOUR_TO_MIN()
+     l131 32
 	
 Sectors
 	INT32 R_PointOnSide(fixed_t x, fixed_t y, node_t *node)
