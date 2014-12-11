@@ -9,7 +9,7 @@ all: $(PROG)
 $(PROG): $(OBJS)
 	$(LINK.cc) $(OBJS) -o $(PROG)
 #If the above does not work and gives linker errors, use the following line instead.
-#   g++ $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $(PROG)
+#	g++ $(CXXFLAGS) $(OBJS) $(LDFLAGS) -o $(PROG)
 
 clean:
 	$(RM) $(OBJS)
