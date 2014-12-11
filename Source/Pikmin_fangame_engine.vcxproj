@@ -107,6 +107,7 @@
     <ClCompile Include="LAFI\widget.cpp" />
     <ClCompile Include="leader.cpp" />
     <ClCompile Include="leader_type.cpp" />
+    <ClCompile Include="loader_thread.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="misc_structs.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="LAFI\textbox.h" />
     <ClInclude Include="LAFI\widget.h" />
     <ClInclude Include="leader_type.h" />
+    <ClInclude Include="loader_thread.h" />
     <ClInclude Include="mob_event.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />

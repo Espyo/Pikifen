@@ -165,6 +165,9 @@
     <ClCompile Include="pellet_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="loader_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -321,6 +324,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="animation_editor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loader_thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
