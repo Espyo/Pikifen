@@ -34,7 +34,9 @@ pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angl
     if(s2b(get_var_value(vars, "buried", "0"))) state = PIKMIN_STATE_BURIED;
 }
 
+
 pikmin::~pikmin() { }
+
 
 /* ----------------------------------------------------------------------------
  * Returns a Pikmin's base speed, without status effects and the like.
@@ -43,6 +45,7 @@ pikmin::~pikmin() { }
 float pikmin::get_base_speed() {
     return pik_type->move_speed + pik_type->move_speed * this->maturity * MATURITY_SPEED_MULT;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Makes a Pikmin release a mob it's carrying.
@@ -80,6 +83,7 @@ void drop_mob(pikmin* p) {
     p->remove_target(true);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the buried Pikmin closest to a leader. Used when auto-plucking.
  * x/y:             Coordinates of the leader.
@@ -108,6 +112,7 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const 
     if(d) *d = closest_distance;
     return closest_pikmin;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Gives an Onion some Pikmin, and makes the Onion spew seeds out,
@@ -141,6 +146,7 @@ void give_pikmin_to_onion(onion* o, const unsigned amount) {
         pikmin_in_onions[o->oni_type->pik_type]++;
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Makes a mob move to a spot because it's being carried.

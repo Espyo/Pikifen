@@ -13,10 +13,12 @@ button::button(int x1, int y1, int x2, int y2, string text, string description, 
     this->description = description;
 }
 
+
 /*
  * Destroys a button.
  */
 button::~button() { }
+
 
 void button::draw_self() {
     unsigned int w = x2 - x1;

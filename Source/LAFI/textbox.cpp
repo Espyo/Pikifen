@@ -24,6 +24,7 @@ textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style
     tab_index = cur_tab_index++;
 }
 
+
 /*
  * Creates a textbox by copying the info from another textbox.
  */
@@ -38,10 +39,12 @@ textbox::textbox(textbox &t2) : widget(t2) {
     tab_index = cur_tab_index++;
 }
 
+
 /*
  * Destroys a textbox.
  */
 textbox::~textbox() {}
+
 
 void textbox::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
@@ -79,8 +82,10 @@ void textbox::draw_self() {
     }
 }
 
+
 //Calls the function that handles a change of the text.
 void textbox::call_change_handler() { if(change_handler) change_handler(this); }
+
 
 void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
@@ -254,6 +259,7 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
     } else scroll_x = 0;
 }
 
+
 void textbox::widget_on_mouse_down(int button, int x, int) {
     if(button != 1) return;
     
@@ -262,11 +268,13 @@ void textbox::widget_on_mouse_down(int button, int x, int) {
     sel_end = cursor;
 }
 
+
 void textbox::widget_on_mouse_move(int x, int) {
     if(!mouse_clicking) return;
     
     sel_end = mouse_to_char(x);
 }
+
 
 unsigned int textbox::mouse_to_char(int mouse_x) {
     //Get the relative X, from the start of the text.

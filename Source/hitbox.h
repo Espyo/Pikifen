@@ -26,6 +26,8 @@ enum HITBOX_TYPES {
     HITBOX_TYPE_ATTACK,
 };
 
+
+
 class hitbox {
 public:
     string name;
@@ -39,6 +41,8 @@ public:
     
     hitbox(const string &name = "");
 };
+
+
 
 class hitbox_instance {
 public:
@@ -54,4 +58,4 @@ public:
     );
 };
 
-#endif //ifndef
+#endif //ifndef HITBOX_INCLUDED

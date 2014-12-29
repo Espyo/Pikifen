@@ -23,6 +23,7 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags)
     this->autonomous = false;
 }
 
+
 /*gui::gui(unsigned int display_w, unsigned int display_h, bool close_button_quits, lafi::style* style, unsigned char flags)
     : widget(0, 0, display_w, display_h, style, flags) {
 
@@ -55,6 +56,7 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags)
     al_start_thread(thread);
 }*/
 
+
 void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     gui* gui_ptr = (gui*) g;
     
@@ -76,18 +78,22 @@ void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     return NULL;
 }
 
+
 void gui::stop() {
     if(!autonomous) return;
     
     al_destroy_thread(thread);
 }
 
+
 void gui::wait() {
     al_join_thread(thread, NULL);
 }
 
+
 //Destroys a gui.
 gui::~gui() { }
+
 
 void gui::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());

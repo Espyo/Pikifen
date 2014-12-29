@@ -34,6 +34,7 @@ widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char
     needs_init = false;
 }
 
+
 /*
  * Creates a widget by copying the info from another widget.
  */
@@ -67,11 +68,13 @@ widget::widget(widget &w2) {
     needs_init = false;
 }
 
+
 /*
  * Destroys a widget.
  */
 widget::~widget() {
 }
+
 
 //Calls the function that handles a mouse move.
 void widget::call_mouse_move_handler(int x, int y) { if(mouse_move_handler) mouse_move_handler(this, x, y); }
@@ -107,6 +110,7 @@ ALLEGRO_COLOR widget::get_bg_color() {
     return style->bg_color;
 }
 
+
 //Returns the appropriate lighter background color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_lighter_bg_color() {
     if(is_disabled()) return style->lighter_disabled_bg_color;
@@ -127,11 +131,13 @@ ALLEGRO_COLOR widget::get_fg_color() {
     return style->fg_color;
 }
 
+
 //Returns the appropriate alternate color, taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_alt_color() {
     if(is_disabled()) return style->disabled_alt_color;
     return style->alt_color;
 }
+
 
 //Returns which widget the mouse is under.
 //It searches for the deepmost child widget, and if none has it,
@@ -150,6 +156,7 @@ widget* widget::get_widget_under_mouse(int mx, int my) {
     return NULL;
 }
 
+
 /*
  * Checks if the widget is disabled, either because of its flags,
  * or because of one of its parents' flags.
@@ -162,6 +169,7 @@ bool widget::is_disabled() {
     }
     return false;
 }
+
 
 /*
  * Checks if the mouse cursor is inside the widget, given its coordinates.
@@ -176,6 +184,7 @@ bool widget::is_mouse_in(int mx, int my) {
     return(in_current_widget && in_parent_widget);
 }
 
+
 void widget::get_offset(int* ox, int* oy) {
     if(!parent) { *ox = 0; *oy = 0; return; }
     
@@ -185,6 +194,7 @@ void widget::get_offset(int* ox, int* oy) {
     *oy = parent->children_offset_y + parent_parent_offset_y;
 }
 
+
 void widget::add(string name, widget* w) {
     widgets[name] = w;
     w->parent = this;
@@ -192,9 +202,11 @@ void widget::add(string name, widget* w) {
     if(w->needs_init) w->init();
 }
 
+
 void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
     accelerators.push_back(accelerator(key, modifiers, w));
 }
+
 
 /*
  * Draws the widget on the specified bitmap/display.
@@ -240,6 +252,7 @@ void widget::draw() {
     } if(!(flags & FLAG_NO_CLIPPING_RECTANGLE)) al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
     
 }
+
 
 void widget::handle_event(ALLEGRO_EVENT ev) {
     if(flags & FLAG_DISABLED) return;
@@ -352,6 +365,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     }
 }
 
+
 void widget::remove(string child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
     
@@ -359,6 +373,7 @@ void widget::remove(string child_name) {
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
 }
+
 
 void widget::widget_on_mouse_move(int, int) { }
 void widget::widget_on_left_mouse_click(int, int) { }
@@ -369,6 +384,7 @@ void widget::widget_on_mouse_enter() { }
 void widget::widget_on_mouse_leave() { }
 void widget::widget_on_key_char(int, int, unsigned int) { }
 void widget::init() { }
+
 
 void widget::lose_focus() {
     if(focused_widget) {
@@ -381,6 +397,7 @@ void widget::lose_focus() {
     }
 }
 
+
 void widget::give_focus(widget* w) {
     if(!w) return;
     //Mark focus lost. First go up to the topmost parent, and let it tell everybody to lose their focuses.
@@ -391,6 +408,7 @@ void widget::give_focus(widget* w) {
     focused_widget = w;
     w->call_get_focus_handler();
 }
+
 
 /*
  * Creates a row and commits the previous one.
@@ -442,6 +460,7 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
     return easy_row_y1;
 }
 
+
 /*
  * Adds a widget to the current row.
  * name:   Name.
@@ -453,6 +472,7 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
 void widget::easy_add(string name, widget* w, float width, float height, unsigned char flags) {
     easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
+
 
 /*
  * Resets the rows.
@@ -475,6 +495,7 @@ easy_widget_info::easy_widget_info(string name, lafi::widget* w, float width, fl
     this->height = height;
     this->flags = flags;
 }
+
 
 accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
     this->key = key;
@@ -518,6 +539,7 @@ void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, 
     }
 }
 
+
 /*
  * Draws text, but if there are line breaks, it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
@@ -550,6 +572,7 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const f
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
     }
 }
+
 
 /*
  * Splits a string into several substrings, by the specified delimiter.

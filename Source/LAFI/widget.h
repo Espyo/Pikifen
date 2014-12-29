@@ -28,12 +28,16 @@ struct easy_widget_info {
     easy_widget_info(string name, lafi::widget* w, float width, float height, unsigned char flags);
 };
 
+
+
 struct accelerator {
     int key;
     unsigned int modifiers;
     widget* w;
     accelerator(int key, unsigned int modifiers, lafi::widget* w);
 };
+
+
 
 class widget {
 private:
@@ -125,6 +129,7 @@ public:
     ~widget();
     
 };
+
 
 void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color);
 void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text);

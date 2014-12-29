@@ -37,6 +37,8 @@ public:
     status(const float speed_multiplier, const float attack_multiplier, const float defense_multiplier, const bool freezes_everything, const ALLEGRO_COLOR color, const unsigned char affects);
 };
 
+
+
 enum {
     STATUS_AFFECTS_PIKMIN = 1,
     STATUS_AFFECTS_ENEMIES = 2,

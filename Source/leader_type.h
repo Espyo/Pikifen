@@ -35,6 +35,8 @@ public:
     leader_type();
 };
 
+
+
 enum LEADER_ANIMATIONS {
     LEADER_ANIM_IDLE,
     LEADER_ANIM_WALK,

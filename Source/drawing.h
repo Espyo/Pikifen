@@ -31,6 +31,8 @@ void draw_mob_shadow(const float cx, const float cy, const float size, const flo
 void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle = 0, const ALLEGRO_COLOR tint = al_map_rgb(255, 255, 255));
 void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text);
 
+
+
 #define WALL_SHADOW_LENGTH  32  //The shadows of walls spread this much outwards.
 #define WALL_SHADOW_OPACITY 192 //The shadows of walls start with this opacity and fade to 0.
 

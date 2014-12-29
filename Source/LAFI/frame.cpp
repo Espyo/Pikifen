@@ -10,10 +10,12 @@ frame::frame(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char f
     
 }
 
+
 /*
  * Destroys a frame.
  */
 frame::~frame() {}
+
 
 void frame::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());

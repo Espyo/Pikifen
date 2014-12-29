@@ -934,6 +934,7 @@ void do_drawing() {
     al_flip_display();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Draws a key or button on the screen.
  * font:  Font to use for the name.
@@ -989,6 +990,7 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info c, const fl
     );
 }
 
+
 /* ----------------------------------------------------------------------------
  * Does sector s1 cast a shadow onto sector s2?
  */
@@ -999,6 +1001,7 @@ bool casts_shadow(sector* s1, sector* s2) {
     if(s1->z <= s2->z + SECTOR_STEP) return false;
     return true;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Draws text on the screen, but compresses (scales) it to fit within the specified range.
@@ -1035,6 +1038,7 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR co
     }; al_use_transform(&old_transform);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Draws a strength/weight fraction, in the style of Pikmin 2.
  * The strength is above the weight.
@@ -1050,6 +1054,7 @@ void draw_fraction(const float cx, const float cy, const unsigned int current, c
     al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
     al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str()));
 }
+
 
 /* ----------------------------------------------------------------------------
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
@@ -1072,6 +1077,7 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
     al_draw_filled_pieslice(cx, cy, radius, -M_PI_2, -ratio * M_PI * 2, c);
     if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
@@ -1336,6 +1342,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Draws a sector, but only the texture (no wall shadows).
  * s_ptr: Pointer to the sector.
@@ -1496,6 +1503,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Draws a mob's shadow.
  * c*:             Center of the mob.
@@ -1528,6 +1536,7 @@ void draw_mob_shadow(const float cx, const float cy, const float size, const flo
     );
 }
 
+
 /* ----------------------------------------------------------------------------
  * Draws a sprite.
  * bmp:   The bitmap.
@@ -1555,6 +1564,7 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const floa
         angle,
         0);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Draws text, but if there are line breaks, it'll draw every line one under the other.

@@ -26,6 +26,7 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
     calls = 1;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
  */
@@ -41,6 +42,7 @@ ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
         return list[name].b;
     }
 };
+
 
 /* ----------------------------------------------------------------------------
  * Marks a bitmap to have one less call.
@@ -60,6 +62,7 @@ void bmp_manager::detach(const string &name) {
         list.erase(it);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Registers a new mob category.
@@ -81,6 +84,7 @@ void mob_category_manager::register_category(
     type_getters[nr]  = type_getter;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the number of a category given its plural name.
  * Returns 255 on error.
@@ -91,6 +95,7 @@ unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
     }
     return 255;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the number of a category given its singular name.
@@ -103,6 +108,7 @@ unsigned char mob_category_manager::get_nr_from_sname(const string &sname) {
     return 255;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the plural name of a category given its number.
  * Returns an empty string on error.
@@ -111,6 +117,7 @@ string mob_category_manager::get_pname(const unsigned char nr) {
     if(nr < pnames.size()) return pnames[nr];
     return "";
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the singular name of a category given its number.
@@ -121,12 +128,14 @@ string mob_category_manager::get_sname(const unsigned char nr) {
     return "";
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the number of registered mob categories.
  */
 unsigned char mob_category_manager::get_nr_of_categories() {
     return pnames.size();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Lists the names of all mob types in a category onto a vector of strings.
@@ -135,6 +144,7 @@ void mob_category_manager::get_list(vector<string> &l, unsigned char nr) {
     if(nr < listers.size()) listers[nr](l);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Sets a mob generator's type pointer, given the type's name.
  * It uses the mob gen's existing category to search for the name.
@@ -142,6 +152,7 @@ void mob_category_manager::get_list(vector<string> &l, unsigned char nr) {
 void mob_category_manager::set_mob_type_ptr(mob_gen* m, const string &type_name) {
     m->type = type_getters[m->category](type_name);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about party spots.
@@ -206,6 +217,7 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
     current_wheel = n_current_wheel_members = 0;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Adds a member to a leader's party spots.
  */
@@ -235,6 +247,7 @@ void party_spot_info::add(mob* m, float* x, float* y) {
     if(x) *x = x_coords[current_wheel][chosen_spot];
     if(y) *y = y_coords[current_wheel][chosen_spot];
 }
+
 
 /* ----------------------------------------------------------------------------
  * Removes a member from a leader's party spots.
@@ -293,6 +306,7 @@ void party_spot_info::remove(mob* m) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a structure with sample info.
  */
@@ -304,6 +318,7 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) {
     instance = al_create_sample_instance(s);
     al_attach_sample_instance_to_mixer(instance, mixer);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Play the sample.
@@ -331,12 +346,14 @@ void sample_struct::play(const float max_override_pos, const bool loop, const fl
     al_set_sample_instance_playing( instance, true);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Stops a playing sample instance.
  */
 void sample_struct::stop() {
     al_set_sample_instance_playing(instance, false);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Registers a new type of sector.
@@ -347,6 +364,7 @@ void sector_types_manager::register_type(unsigned char nr, string name) {
     }
     names[nr] = name;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the number of a sector type, given its name.
@@ -359,6 +377,7 @@ unsigned char sector_types_manager::get_nr(const string &name) {
     return 255;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the name of a sector type, given its number.
  * Returns an empty string on error.
@@ -367,6 +386,7 @@ string sector_types_manager::get_name(const unsigned char nr) {
     if(nr < names.size()) return names[nr];
     return "";
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the number of sector types registered.

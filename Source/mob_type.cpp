@@ -35,6 +35,7 @@ mob_type::mob_type() {
     create_mob = NULL;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads all mob types.
  */
@@ -47,6 +48,7 @@ void load_mob_types(bool load_resources) {
     load_mob_types(PELLETS_FOLDER,   MOB_CATEGORY_PELLETS,   load_resources);
     load_mob_types(SHIPS_FOLDER,     MOB_CATEGORY_SHIPS,     load_resources);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the mob types from a folder.

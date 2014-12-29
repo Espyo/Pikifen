@@ -231,6 +231,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Runs an action.
  * m:         the mob.
@@ -382,6 +383,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
     return false;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the pointer to a mob event, if the mob is listening to that event.
  * Returns NULL if this event can't run, because there's already another event going on, or because the mob is dead.
@@ -402,6 +404,7 @@ mob_event* get_mob_event(mob* m, const unsigned char et, const bool query) {
     }
     return NULL;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads a script from a data node.
@@ -427,6 +430,7 @@ vector<mob_event*> load_script(mob_type* mt, data_node* node) {
     
     return events;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a mob event using data from a data node.
@@ -465,6 +469,7 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     actions = a;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a mob event with a pre-known type ID.
  * t: The type.
@@ -473,6 +478,7 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
 mob_event::mob_event(const unsigned char t, vector<mob_action*> a) {
     type = t; actions = a;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Runs a mob event.

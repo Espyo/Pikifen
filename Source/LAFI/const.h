@@ -25,6 +25,7 @@ namespace lafi {
 
 #define STANDARD_SCROLLBAR_WIDTH 20
 
+
 enum WIDGET_FLAGS {
     FLAG_DISABLED = 1,
     FLAG_INVISIBLE = 2,

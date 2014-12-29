@@ -44,6 +44,8 @@ public:
     weather(const string &n, const map<unsigned, ALLEGRO_COLOR> &l, const map<unsigned, unsigned char> &ss, const unsigned char pt, const interval pf, const interval ps, const interval pa);
 };
 
+
+
 enum PERCIPITATION_TYPES {
     PERCIPITATION_TYPE_NONE,
     PERCIPITATION_TYPE_RAIN,

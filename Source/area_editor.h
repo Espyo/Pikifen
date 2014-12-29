@@ -45,6 +45,8 @@ enum EDITOR_ERROR_TYPES {
 
 #define GRID_INTERVAL 32
 
+
+
 void adv_textures_to_gui();
 void bg_to_gui();
 void center_camera(float min_x, float min_y, float max_x, float max_y);

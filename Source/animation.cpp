@@ -40,6 +40,7 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const 
     parent_bmp = NULL;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a frame of animation, and creates its sprite using a parent bitmap and its coordinates.
  * name:   Internal name, should be unique.
@@ -63,6 +64,7 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const in
     top_x = top_y = top_angle = 0;
     top_w = top_h = 32;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a frame by copying info from another frame.
@@ -89,6 +91,7 @@ frame::frame(const frame &f2) {
     top_angle = f2.top_angle;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a frame by cloning the data from another frame.
  */
@@ -113,6 +116,7 @@ frame frame::clone() {
     return f;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Destroys a frame and its bitmaps.
  */
@@ -120,6 +124,7 @@ frame::~frame() {
     if(parent_bmp) bitmaps.detach(file);
     if(bitmap) al_destroy_bitmap(bitmap);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a frame instance.
@@ -135,6 +140,7 @@ frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, co
     duration = d;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates an animation.
  * name:            Name, should be unique.
@@ -147,6 +153,7 @@ animation::animation(const string &name, vector<frame_instance> frame_instances,
     this->loop_frame = loop_frame;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates an animation by copying info from another animation.
  */
@@ -155,6 +162,7 @@ animation::animation(const animation &a2) {
     frame_instances = a2.frame_instances;
     loop_frame = a2.loop_frame;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates an animation instance.
@@ -165,6 +173,7 @@ animation_instance::animation_instance(animation_set* anim_set) {
     this->anim_set = anim_set;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates an animation instance by copying info from another.
  */
@@ -173,6 +182,7 @@ animation_instance::animation_instance(const animation_instance &ai2) {
     anim_set = ai2.anim_set;
     start();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Changes to a new animation within the same animation set.
@@ -203,6 +213,7 @@ void animation_instance::change(const size_t new_anim_nr, const bool pre_named, 
     start();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether the current animation is the specified one.
  */
@@ -221,6 +232,7 @@ bool animation_instance::is_anim(const size_t nr, const bool pre_named) {
     return false;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Starts or restarts the animation.
  * It's called when the animation is set.
@@ -230,6 +242,7 @@ void animation_instance::start() {
     cur_frame_nr = 0;
     done_once = false;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Ticks the animation with the given amount of time.
@@ -259,6 +272,7 @@ bool animation_instance::tick(const float time) {
     return done_once;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the current frame of animation.
  */
@@ -267,6 +281,7 @@ frame* animation_instance::get_frame() {
     if(anim->frame_instances.empty()) return NULL;
     return anim->frame_instances[cur_frame_nr].frame_ptr;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates an animation set.
@@ -282,6 +297,7 @@ animation_set::animation_set(
     hitboxes = h;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified animation.
  * Returns string::npos if not found.
@@ -292,6 +308,7 @@ size_t animation_set::find_animation(string name) {
     }
     return string::npos;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified frame.
@@ -304,6 +321,7 @@ size_t animation_set::find_frame(string name) {
     return string::npos;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified hitbox.
  * Returns string::npos if not found.
@@ -314,6 +332,7 @@ size_t animation_set::find_hitbox(string name) {
     }
     return string::npos;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Enemies and such have a regular list of animations.
@@ -349,6 +368,7 @@ void animation_set::create_conversions(vector<pair<size_t, string> > conversions
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Destroys an animation set and all of its animations, frames, and hitboxes.
  */
@@ -363,6 +383,7 @@ void animation_set::destroy() {
         delete *h;
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the animations from a file.

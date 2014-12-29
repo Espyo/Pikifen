@@ -51,6 +51,8 @@ public:
     pikmin_type();
 };
 
+
+
 enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_IDLE,
     PIKMIN_ANIM_WALK,

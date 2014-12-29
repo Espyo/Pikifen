@@ -44,6 +44,8 @@ struct mob_action {
     bool run(mob* m, mob_event* ev, size_t* action_nr);
 };
 
+
+
 /*
  * A mob event contains information on what
  * to make the mob do whenever the event
@@ -63,8 +65,12 @@ struct mob_event {
     void run(mob* m, const size_t starting_action);
 };
 
+
+
 mob_event* get_mob_event(mob* m, const unsigned char e, const bool query = false);
 vector<mob_event*> load_script(mob_type* mt, data_node* node);
+
+
 
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,

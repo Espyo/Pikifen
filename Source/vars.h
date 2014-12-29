@@ -300,6 +300,7 @@ extern int                              window_x;
 extern int                              window_y;
 
 
+
 //Debugging variables.
 extern bool debug_show_framerate;
 extern float debug_framerate_update_timer;

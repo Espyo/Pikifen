@@ -47,6 +47,8 @@ struct party_info {
     }
 };
 
+
+
 /*
  * Structure with information on how
  * the mob should be carried.
@@ -65,6 +67,8 @@ struct carrier_info_struct {
     carrier_info_struct(mob* m, const unsigned int max_carriers, const bool carry_to_ship);
     ~carrier_info_struct();
 };
+
+
 
 /*
  * A mob, short for "mobile object" or "map object",
@@ -148,6 +152,8 @@ public:
     void tick();
 };
 
+
+
 void add_to_party(mob* party_leader, mob* new_member);
 void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
 void create_mob(mob* m);
@@ -159,6 +165,8 @@ void make_uncarriable(mob* m);
 void remove_from_party(mob* member);
 bool should_attack(mob* m1, mob* m2);
 void unfocus_mob(mob* m1, mob* m2, const bool call_event);
+
+
 
 #define GRAVITY_ADDER -1300.0f //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 

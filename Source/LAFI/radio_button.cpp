@@ -18,6 +18,7 @@ radio_button::radio_button(int x1, int y1, int x2, int y2, string text, int grou
     needs_init = true;
 }
 
+
 void radio_button::init() {
     add("rbb_circle", new radio_button_button(
             x1,
@@ -41,6 +42,7 @@ void radio_button::init() {
     flags |= FLAG_WUM_NO_CHILDREN;
 }
 
+
 radio_button::~radio_button() {
     /*
     //ToDo
@@ -56,9 +58,11 @@ radio_button::~radio_button() {
     */
 }
 
+
 void radio_button::widget_on_left_mouse_click(int, int) {
     select();
 }
+
 
 void radio_button::select() {
     selected = true;
@@ -73,10 +77,12 @@ void radio_button::select() {
     }
 }
 
+
 void radio_button::unselect() {
     selected = false;
     ((radio_button_button*) widgets["rbb_circle"])->selected = false;
 }
+
 
 void radio_button::draw_self() { }
 
@@ -90,7 +96,9 @@ radio_button_button::radio_button_button(int x1, int y1, bool selected, lafi::st
     
 }
 
+
 radio_button_button::~radio_button_button() {}
+
 
 void radio_button_button::draw_self() {
     unsigned int w = x2 - x1;

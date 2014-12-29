@@ -43,6 +43,8 @@ public:
     leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
 };
 
+
+
 void dismiss();
 float get_leader_to_group_center_dist(mob* l);
 void go_pluck(leader* l, pikmin* p);

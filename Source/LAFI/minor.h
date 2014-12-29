@@ -16,6 +16,8 @@ public:
     void draw_self();
 };
 
+
+
 //A dummy widget, mostly used for spacing.
 class dummy : public widget {
 public:

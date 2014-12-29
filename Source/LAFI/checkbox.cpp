@@ -13,6 +13,7 @@ checkbox::checkbox(int x1, int y1, int x2, int y2, string text, bool checked, la
     needs_init = true;
 }
 
+
 void checkbox::init() {
     add("box_square", new checkbox_box(
             x1,
@@ -36,25 +37,31 @@ void checkbox::init() {
     flags |= FLAG_WUM_NO_CHILDREN;
 }
 
+
 checkbox::~checkbox() { }
+
 
 void checkbox::widget_on_left_mouse_click(int, int) {
     if(checked) uncheck(); else check();
 }
+
 
 void checkbox::check() {
     checked = true;
     ((checkbox_box*) widgets["box_square"])->checked = checked;
 }
 
+
 void checkbox::uncheck() {
     checked = false;
     ((checkbox_box*) widgets["box_square"])->checked = checked;
 }
 
+
 void checkbox::set(bool value) {
     if(value) check(); else uncheck();
 }
+
 
 void checkbox::draw_self() { }
 
@@ -68,7 +75,9 @@ checkbox_box::checkbox_box(int x1, int y1, bool checked, lafi::style* style, uns
     this->checked = checked;
 }
 
+
 checkbox_box::~checkbox_box() { }
+
 
 void checkbox_box::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());

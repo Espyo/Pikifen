@@ -9,7 +9,9 @@ line::line(int x1, int y1, int x2, int y2, bool horizontal, int thickness, lafi:
     this->thickness = thickness;
 }
 
+
 line::~line() { }
+
 
 void line::draw_self() {
     if(horizontal) {
@@ -28,6 +30,7 @@ void line::draw_self() {
 dummy::dummy(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
 }
+
 
 void dummy::draw_self() { }
 

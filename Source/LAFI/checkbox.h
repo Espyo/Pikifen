@@ -23,6 +23,8 @@ public:
     void draw_self();
 };
 
+
+
 class checkbox_box : public widget {
 private:
 

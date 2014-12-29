@@ -43,10 +43,12 @@ public:
     size_t carrying_spot;    //Carrying spot reserved for it.
     
     unsigned char maturity;  //0: leaf. 1: bud. 2: flower.
-    bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders now that they should pick another one.
+    bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
 };
+
+
 
 void drop_mob(pikmin* p);
 pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);

@@ -37,9 +37,13 @@ struct control_info {
     string stringify();
 };
 
+
+
 void handle_game_controls(const ALLEGRO_EVENT &ev);
 void handle_button(const unsigned int button, float pos);
 void active_control();
+
+
 
 enum BUTTONS {
     BUTTON_NONE,

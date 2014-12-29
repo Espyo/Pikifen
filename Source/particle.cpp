@@ -40,6 +40,7 @@ particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const
     this->color = color;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a particle follow a game tick.
  * Returns false if its lifespan is over and it should be deleted.
@@ -63,6 +64,7 @@ bool particle::tick() {
     
     return true;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Generates random particles in an explosion fashion:
@@ -103,6 +105,7 @@ void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const b
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Generates random particles in a fire fashion:
  ** the particles go up and speed up as time goes by.
@@ -135,6 +138,7 @@ void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, c
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Generates random particles in a splash fashion:
  ** the particles go up and are scattered horizontally,
@@ -166,6 +170,7 @@ void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp,
         );
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Generates random particles in a spray fashion:

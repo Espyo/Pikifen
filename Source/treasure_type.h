@@ -23,7 +23,6 @@
  * treasures of that type in some
  * Challenge Mode levels.
  */
-
 class treasure_type : public mob_type {
 public:
 

@@ -34,6 +34,8 @@ public:
     bmp_info(ALLEGRO_BITMAP* b = NULL);
 };
 
+
+
 /*
  * Bitmap manager.
  * When you have the likes of an animation, every
@@ -72,6 +74,8 @@ public:
     void detach(const string &name);
 };
 
+
+
 /*
  * A list of the different mob categories.
  * The MOB_CATEGORY_* constants are meant to be used here.
@@ -100,6 +104,8 @@ public:
     
 };
 
+
+
 /*
  * Group spots. The way this works is that a Pikmin group surrounds a central point.
  * There are several wheels surrounding the original spot,
@@ -125,6 +131,8 @@ struct party_spot_info {
     void remove(mob* m);
 };
 
+
+
 /*
  * Simple 2D point.
  */
@@ -133,6 +141,8 @@ struct point {
     point(const float x = 0, const float y = 0) { this->x = x; this->y = y; }
     bool operator!=(const point &p2) { return x != p2.x || y != p2.y; }
 };
+
+
 
 /*
  * Structure that holds informatio about a sample.
@@ -147,6 +157,8 @@ struct sample_struct {
     void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
     void stop();
 };
+
+
 
 /*
  * Just a list of the different sector types.

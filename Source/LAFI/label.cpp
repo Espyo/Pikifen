@@ -8,7 +8,9 @@ label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::
     this->text_flags = text_flags;
 }
 
+
 label::~label() {}
+
 
 void label::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());

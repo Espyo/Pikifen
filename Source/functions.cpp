@@ -37,6 +37,7 @@ void angle_to_coordinates(const float angle, const float magnitude, float* x_coo
     *y_coord = sin(angle) * magnitude;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
  * color: The color to change the alpha on.
@@ -49,6 +50,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
     return c2;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether the distance between two points is smaller
  * or equal to the comparison distance. This function does not
@@ -59,6 +61,7 @@ bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check)
     float dy = y2 - y1;
     return (dx * dx + dy * dy) <= distance_to_check * distance_to_check;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns whether a circle is touching a line or not.
@@ -98,6 +101,7 @@ bool circle_intersects_line(const float cx, const float cy, const float cr, cons
     return false;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Clears the textures of the area's sectors from memory.
  */
@@ -111,6 +115,7 @@ void clear_area_textures() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the angle and magnitude of vector coordinates.
  * *_coord:   The coordinates.
@@ -121,6 +126,7 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
     *angle = atan2(y_coord, x_coord);
     *magnitude = dist(0, 0, x_coord, y_coord);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Prints something onto the error log.
@@ -171,6 +177,7 @@ void error_log(string s, data_node* d) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether or not the string s is inside the vector of strings v.
  */
@@ -178,6 +185,7 @@ bool find_in_vector(const vector<string> v, const string s) {
     for(auto i = v.begin(); i != v.end(); i++) if(*i == s) return true;
     return false;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
@@ -233,6 +241,7 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
     if(folder_found) *folder_found = true;
     return v;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Generates the images that make up the area.
@@ -345,6 +354,7 @@ void generate_area_images() {
     
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the daylight effect color for the current time, for the current weather.
  */
@@ -375,6 +385,7 @@ ALLEGRO_COLOR get_daylight_color() {
     return al_map_rgba(0, 0, 0, 0);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the strength of the sun for the current time, for the current weather.
  */
@@ -403,6 +414,7 @@ float get_sun_strength() {
     return 1;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the value of a var on the vars listing of a mob's spawn.
  */
@@ -421,6 +433,7 @@ string get_var_value(const string &vars_string, const string &var, const string 
     return def;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns an ALLEGRO_TRANSFORM that transforms world coordinates into screen coordinates.
  */
@@ -435,6 +448,7 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform() {
     al_scale_transform(&t, cam_zoom, cam_zoom);
     return t;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the interpolation between two colors, given a number in an interval.
@@ -453,12 +467,14 @@ ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, c
            );
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the interpolation of the value between two positions.
  */
 float interpolate_number(const float p, const float p1, const float p2, const float v1, const float v2) {
     return v1 + ((p - p1) / (float) (p2 - p1)) * (v2 - v1);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
@@ -657,6 +673,7 @@ void load_area(const string name, const bool load_for_editor) {
     if(!load_for_editor) cur_area_map.generate_blockmap();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the area's sector textures.
  */
@@ -674,6 +691,7 @@ void load_area_textures() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
  * If the node is present, it'll be used to report errors.
@@ -690,6 +708,7 @@ ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_er
     return b;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads a game control.
  */
@@ -703,6 +722,7 @@ void load_control(const unsigned char action, const unsigned char player, const 
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
  */
@@ -714,6 +734,7 @@ data_node load_data_file(const string file_name) {
     
     return n;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads all of the game's content.
@@ -795,6 +816,7 @@ void load_game_content() {
         weather_conditions[name] = weather(name, lighting, sun_strength, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the player's options.
@@ -882,6 +904,7 @@ void load_options() {
     window_y = s2i(file.get_child_by_name("window_y")->get_value_or_default(i2s(INT_MAX)));
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
@@ -893,6 +916,7 @@ sample_struct load_sample(const string file_name, ALLEGRO_MIXER* const mixer) {
     
     return sample_struct(sample, mixer);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the movement necessary to move a point.
@@ -925,6 +949,7 @@ void move_point(const float x, const float y, const float tx, const float ty, co
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Normalizes an angle so that it's between 0 and M_PI * 2.
  */
@@ -933,6 +958,7 @@ float normalize_angle(float a) {
     if(a < 0) a += M_PI * 2;
     return a;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns a random float between the provided range, inclusive.
@@ -943,6 +969,7 @@ float randomf(float min, float max) {
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns a random integer between the provided range, inclusive.
  */
@@ -951,6 +978,7 @@ int randomi(int min, int max) {
     if(min == max) return min;
     return ((rand()) % (max - min + 1)) + min;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Replaces all instances of x with y.
@@ -965,6 +993,7 @@ string replace_all(string s, string search, string replacement) {
     return s;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Rotates a point by an angle. The x and y are meant to represent the difference between the point and the center of the rotation.
  */
@@ -974,6 +1003,7 @@ void rotate_point(const float x, const float y, const float angle, float* final_
     if(final_x) *final_x = c * x - s * y;
     if(final_y) *final_y = s * x + c * y;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the player's options.
@@ -1090,6 +1120,7 @@ void save_options() {
     al_fclose(file);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Splits a string into several substrings, by the specified delimiter.
  * text:        The string to split.
@@ -1129,6 +1160,7 @@ vector<string> split(string text, const string del, const bool inc_empty, const 
     return v;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether a square intersects with a line.
  * Also returns true if the line is fully inside the square.
@@ -1156,6 +1188,7 @@ bool square_intersects_line(const float sx1, const float sy1, const float sx2, c
     
 }
 
+
 /* ----------------------------------------------------------------------------
  * Starts panning the camera towards another point.
  */
@@ -1167,6 +1200,7 @@ void start_camera_pan(const int final_x, const int final_y) {
     cam_trans_pan_time_left = CAM_TRANSITION_DURATION;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Starts moving the camera towards another zoom level.
  */
@@ -1177,6 +1211,7 @@ void start_camera_zoom(const float final_zoom_level) {
     
     sfx_camera.play(0, false);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Starts the display of a text message. If the text is empty, it closes the message box.
@@ -1203,6 +1238,7 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
 }
 
+
 /* ----------------------------------------------------------------------------
  * Converts an entire string into lowercase.
  */
@@ -1213,6 +1249,7 @@ string str_to_lower(string s) {
     }
     return s;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Uses up a spray.
@@ -1237,15 +1274,22 @@ void use_spray(const size_t spray_nr) {
     cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
 }
 
+
 //Calls al_fwrite, but with an std::string instead of a c-string.
 void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
+
+
 //Converts a boolean to a string, returning either "true" or "false".
 string b2s(const bool b) { return b ? "true" : "false"; }
+
+
 //Converts a color to its string representation.
 string c2s(const ALLEGRO_COLOR &c) {
     return f2s(c.r * 255) + " " + f2s(c.g * 255) + " " + f2s(c.b * 255) +
            (c.a == 1 ? "" : " " + f2s(c.a * 255));
 }
+
+
 //Converts a string to a boolean, judging by the English language words that represent true and false.
 bool s2b(const string &s) {
     string s2 = s;
@@ -1254,6 +1298,8 @@ bool s2b(const string &s) {
     if(s2 == "yes" || s2 == "true" || s2 == "y" || s2 == "t") return true;
     else return (s2i(s2) != 0);
 }
+
+
 //Converts a string to an Allegro color. Components are separated by spaces, and the final one (alpha) is optional.
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
@@ -1286,7 +1332,11 @@ ALLEGRO_COLOR s2c(const string &s) {
         );
     return c;
 }
+
+
 //Converts a string to a float, trimming the spaces and accepting commas or points.
 double s2f(const string &s) { string s2 = trim_spaces(s); replace(s2.begin(), s2.end(), ',', '.'); return atof(s2.c_str()); }
+
+
 //Converts a string to an integer.
 int s2i(const string &s) { return s2f(s); }

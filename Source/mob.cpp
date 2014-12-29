@@ -75,6 +75,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     carrier_info = NULL;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes the mob follow a game tick.
  */
@@ -509,6 +510,7 @@ void mob::tick() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
  * target_*:     Coordinates of the target, relative to either the world origin,
@@ -530,6 +532,7 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
     target_code = MOB_TARGET_NONE;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a mob not follow any target.
  * stop: If true, the mob stops dead on its tracks.
@@ -546,12 +549,14 @@ void mob::remove_target(bool stop) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a mob gradually face a new angle.
  */
 void mob::face(float new_angle) {
     intended_angle = new_angle;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Changes a mob's state.
@@ -562,6 +567,7 @@ void mob::set_state(unsigned char new_state) {
     time_in_state = 0;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the base speed for this mob.
  * This is overwritten by some child classes.
@@ -570,7 +576,9 @@ float mob::get_base_speed() {
     return this->type->move_speed;
 }
 
+
 mob::~mob() {}
+
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about carrying.
@@ -594,6 +602,7 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Deletes a carrier info structure.
  * Makes all carrying Pikmin drop it in the process.
@@ -607,6 +616,7 @@ carrier_info_struct::~carrier_info_struct() {
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Adds a mob to another mob's party.
@@ -634,6 +644,7 @@ void add_to_party(mob* party_leader, mob* new_member) {
     
     make_uncarriable(new_member);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Makes m1 attack m2.
@@ -670,6 +681,7 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
  */
@@ -705,6 +717,7 @@ void create_mob(mob* m) {
         
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Deletes a mob from the relevant vectors.
@@ -758,6 +771,7 @@ void delete_mob(mob* m) {
     delete m;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes m1 focus on m2.
  */
@@ -775,6 +789,7 @@ void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event) {
         m1->events_queued[MOB_EVENT_SEE_PREY] = (is_near ? 0 : 1);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the closest hitbox to a point, belonging to a mob's current frame of animation and position.
@@ -801,6 +816,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
     return closest_hitbox;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the hitbox instance in the current animation with the specified name.
  */
@@ -813,6 +829,7 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
     return NULL;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a mob impossible to be carried, and makes the Pikmin carrying it drop it.
  */
@@ -822,6 +839,7 @@ void make_uncarriable(mob* m) {
     delete m->carrier_info;
     m->carrier_info = NULL;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Removes a mob from its leader's party.
@@ -844,6 +862,7 @@ void remove_from_party(mob* member) {
     member->untouchable_period = UNTOUCHABLE_PERIOD;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Should m1 attack m2? Teams are used to decide this.
  */
@@ -853,6 +872,7 @@ bool should_attack(mob* m1, mob* m2) {
     if(m1->team == m2->team) return false;
     return true;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Makes m1 lose focus on m2.

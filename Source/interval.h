@@ -29,6 +29,8 @@ struct subinterval {
     subinterval(float l = FLT_MIN, float u = FLT_MAX, const float d = 0);
 };
 
+
+
 class interval {
 private:
     vector<subinterval> subintervals;

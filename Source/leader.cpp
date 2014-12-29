@@ -32,6 +32,7 @@ leader::leader(const float x, const float y, leader_type* type, const float angl
     party = new party_info(ps, x, y);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes the current leader dismiss their party.
  * The party is then organized in groups, by type,
@@ -118,6 +119,7 @@ void dismiss() {
     cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the distance between a leader and the center of its group.
  */
@@ -129,6 +131,7 @@ float get_leader_to_group_center_dist(mob* l) {
         PARTY_SPOT_INTERVAL;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a leader go pluck a Pikmin.
  */
@@ -138,6 +141,7 @@ void go_pluck(leader* l, pikmin* p) {
     l->set_target(p->x, p->y, NULL, NULL, false);
     p->pluck_reserved = true;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
@@ -152,6 +156,7 @@ void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked) {
     sfx_pikmin_pluck.play(0, false);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Makes a leader get out of auto-pluck mode.
  */
@@ -162,6 +167,7 @@ void stop_auto_pluck(leader* l) {
     l->auto_pluck_pikmin = NULL;
     l->pluck_time = -1;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Makes the current leader stop whistling.

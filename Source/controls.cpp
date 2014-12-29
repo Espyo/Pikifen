@@ -93,6 +93,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     
 }
 
+
 /* ----------------------------------------------------------------------------
  * Handles a button "press". Technically, it could also be a button release.
  * button: The button's ID. Use BUTTON_*.
@@ -785,6 +786,7 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
             i2s((player + 1)) + " (value=\"" + s + "\").");
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Converts a control info's hardware input data into a string, used in the options file.

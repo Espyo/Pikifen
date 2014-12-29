@@ -46,6 +46,7 @@ struct linedef_intersection {
 };
 
 
+
 /*
  * The blockmap divides the entire area
  * in a grid, so that collision detections only
@@ -70,6 +71,7 @@ struct blockmap {
 };
 
 
+
 /*
  * A line that delimits a sector.
  */
@@ -84,6 +86,7 @@ struct linedef {
     size_t remove_from_sectors();
     size_t remove_from_vertices();
 };
+
 
 
 /*
@@ -121,6 +124,7 @@ struct sector {
 };
 
 
+
 /*
  * A triangle. Sectors (polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
@@ -130,6 +134,7 @@ struct triangle {
     vertex* points[3];
     triangle(vertex* v1, vertex* v2, vertex* v3);
 };
+
 
 
 /*
@@ -145,6 +150,7 @@ struct vertex {
     void connect_linedefs(area_map &a, size_t v_nr);
     void fix_pointers(area_map &a);
 };
+
 
 
 /*
@@ -167,6 +173,7 @@ struct mob_gen {
 };
 
 
+
 /*
  * A structure holding info on the shadows
  * cast onto the area by a tree (or
@@ -185,6 +192,7 @@ struct tree_shadow {
     
     tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "", float sx = 1, float sy = 0);
 };
+
 
 
 /*
@@ -217,6 +225,7 @@ struct area_map {
 };
 
 
+
 void check_linedef_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
@@ -239,13 +248,13 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
 void triangulate(sector* s_ptr);
 
 
+
 enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
     SECTOR_TYPE_BOTTOMLESS_PIT,
     SECTOR_TYPE_LANDING_SITE,
     SECTOR_TYPE_WALL,
 };
-
 
 enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_NONE,

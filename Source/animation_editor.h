@@ -26,6 +26,8 @@ enum ANIMATION_EDITOR_PICKER_TYPES {
     ANIMATION_EDITOR_PICKER_OBJECT, //Make sure this is the last one.
 };
 
+
+
 void do_logic();
 void gui_load_animation();
 void gui_load_frame();

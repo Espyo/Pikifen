@@ -18,10 +18,12 @@ scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min_value, float max_
     change_handler = NULL;
 }
 
+
 void scrollbar::init() {
     create_button();
     flags |= FLAG_WUM_NO_CHILDREN;
 }
+
 
 void scrollbar::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
@@ -29,11 +31,13 @@ void scrollbar::widget_on_mouse_down(int button, int x, int y) {
     move_button(x, y);
 }
 
+
 void scrollbar::widget_on_mouse_move(int x, int y) {
     if(!mouse_clicking) return;
     
     move_button(x, y);
 }
+
 
 void scrollbar::create_button() {
     int bx1, by1, bx2, by2;
@@ -66,6 +70,7 @@ void scrollbar::create_button() {
             ));
     }
 }
+
 
 void scrollbar::move_button(int x, int y) {
     if(low_value == high_value) return;
@@ -101,6 +106,7 @@ void scrollbar::move_button(int x, int y) {
     if(change_handler) change_handler(this);
 }
 
+
 void scrollbar::set_value(float new_low, bool call_handler) {
     float dif = high_value - low_value;
     if(new_low < min_value || new_low + dif > max_value) return;
@@ -125,6 +131,7 @@ void scrollbar::set_value(float new_low, bool call_handler) {
     
     if(change_handler && call_handler) change_handler(this);
 }
+
 
 void scrollbar::draw_self() {
     int w = x2 - x1;
@@ -192,9 +199,11 @@ void scrollbar::draw_self() {
     }
 }
 
+
 void scrollbar::register_change_handler(void(*handler)(widget* w)) {
     change_handler = handler;
 }
+
 
 void scrollbar::make_widget_scroll(widget* widget) {
     attached_widget = widget;
@@ -246,6 +255,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
     create_button();
 }
 
+
 void scrollbar::widget_scroller(widget* w) {
     scrollbar* scrollbar_ptr = (scrollbar*) w;
     
@@ -255,6 +265,7 @@ void scrollbar::widget_scroller(widget* w) {
         scrollbar_ptr->attached_widget->children_offset_x = -scrollbar_ptr->low_value;
     }
 }
+
 
 scrollbar::~scrollbar() { }
 

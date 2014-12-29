@@ -21,6 +21,7 @@ hitbox::hitbox(const string &name) {
     can_pikmin_latch = false;
 }
 
+
 hitbox_instance::hitbox_instance(const string &hn, size_t hnr, hitbox* hp, const float x, const float y, const float z, const float radius) {
     hitbox_name = hn;
     hitbox_nr = hnr;

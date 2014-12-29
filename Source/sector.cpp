@@ -31,6 +31,7 @@ area_map::area_map() {
     bg_color = map_gray(0);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Generates the blockmap for the area, given the current info.
  */
@@ -128,6 +129,7 @@ void area_map::generate_blockmap() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Clears the info of an area map.
  */
@@ -157,12 +159,14 @@ void area_map::clear() {
     bitmaps.detach(bg_bmp_file_name);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a blockmap.
  */
 blockmap::blockmap() {
     x1 = y1 = 0;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Clears the info of the blockmap.
@@ -172,6 +176,7 @@ void blockmap::clear() {
     linedefs.clear();
     sectors.clear();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the block column in which an X coordinate is contained.
@@ -184,6 +189,7 @@ size_t blockmap::get_col(const float x) {
     return final_x;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the block row in which a Y coordinate is contained.
  * Returns string::npos on error.
@@ -195,6 +201,7 @@ size_t blockmap::get_row(const float y) {
     return final_y;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the top-left X coordinate for the specified column.
  */
@@ -202,12 +209,14 @@ float blockmap::get_x1(const size_t col) {
     return col * BLOCKMAP_BLOCK_SIZE + x1;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the top-left Y coordinate for the specified row.
  */
 float blockmap::get_y1(const size_t row) {
     return row * BLOCKMAP_BLOCK_SIZE + y1;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a linedef.
@@ -219,6 +228,7 @@ linedef::linedef(size_t v1, size_t v2) {
     
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point to the correct sectors and vertices.
@@ -236,6 +246,7 @@ void linedef::fix_pointers(area_map &a) {
         vertices[v] = (v_nr == string::npos ? NULL : a.vertices[v_nr]);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Removes the linedef from its sectors, but doesn't mark
@@ -260,6 +271,7 @@ size_t linedef::remove_from_sectors() {
     return l_nr;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Removes the linedef from its vertices, but doesn't mark
  * the vertices as "none".
@@ -283,6 +295,7 @@ size_t linedef::remove_from_vertices() {
     return l_nr;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
  */
@@ -293,6 +306,7 @@ mob_gen::mob_gen(float x, float y, unsigned char category, mob_type* type, float
     this->angle = angle;
     this->vars = vars;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a sector.
@@ -309,6 +323,7 @@ sector::sector() {
     rot = 0;
     bitmap = NULL;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Clones a sector's properties onto another,
@@ -329,6 +344,7 @@ void sector::clone(sector* new_sector) {
     //ToDo hazards.
 }
 
+
 /* ----------------------------------------------------------------------------
  * Destroys a sector.
  */
@@ -340,6 +356,7 @@ sector::~sector() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a linedef intersection info structure.
  */
@@ -347,12 +364,14 @@ linedef_intersection::linedef_intersection(linedef* l1, linedef* l2) {
     this->l1 = l1; this->l2 = l2;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Checks whether the linedef intersection contains the specified linedef.
  */
 bool linedef_intersection::contains(linedef* l) {
     return l1 == l || l2 == l;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Connects the linedefs that link to it into the linedef_nrs vector.
@@ -368,6 +387,7 @@ void sector::connect_linedefs(area_map &a, size_t s_nr) {
     fix_pointers(a);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point them to the correct linedefs.
  */
@@ -379,12 +399,14 @@ void sector::fix_pointers(area_map &a) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a vertex.
  */
 vertex::vertex(float x, float y) {
     this->x = x; this->y = y;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates a tree shadow.
@@ -401,6 +423,7 @@ tree_shadow::tree_shadow(float x, float y, float w, float h, float an, unsigned 
     this->file_name = f;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a triangle.
  */
@@ -409,6 +432,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
     points[1] = v2;
     points[2] = v3;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Connects the linedefs that link to it into the linedef_nrs vector.
@@ -424,6 +448,7 @@ void vertex::connect_linedefs(area_map &a, size_t v_nr) {
     fix_pointers(a);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point to the correct linedefs.
  */
@@ -435,12 +460,14 @@ void vertex::fix_pointers(area_map &a) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns a point's sign on a line, used for detecting if it's inside a triangle.
  */
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2) {
     return (x - lx2) * (ly1 - ly2) - (lx1 - lx2) * (y - ly2);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the outer polygon and inner polygons of a sector,
@@ -564,6 +591,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Places the bounding box coordinates of a sector on the specified floats.
  */
@@ -586,6 +614,7 @@ void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* m
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns which sector the specified point belongs to.
@@ -634,6 +663,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Places the bounding box coordinates of a shadow on the specified floats.
  */
@@ -677,6 +707,7 @@ void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, flo
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether a point is inside a sector by checking its triangles.
  */
@@ -698,6 +729,7 @@ bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
     
     return false;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns whether a point is inside a triangle or not.
@@ -741,6 +773,7 @@ bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, f
     return true;*/
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether this vertex is convex or not.
  */
@@ -754,11 +787,12 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     return get_angle_cw_dif(angle_prev, angle_next) < M_PI;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns whether this vertex is an ear or not.
  */
 bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr) {
-    //A vertex is an ear if the triangle of it, the previous and next vertices
+    //A vertex is an ear if the triangle of it, the previous, and next vertices
     //does not contain any other vertex inside. Also, if it has vertices inside,
     //they mandatorily are concave, so only check those.
     const vertex* v = vec[nr];
@@ -782,6 +816,7 @@ bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, c
     return true;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right.
  */
@@ -798,6 +833,7 @@ vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
     
     return rightmost;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right in a polygon.
@@ -816,6 +852,7 @@ vertex* get_rightmost_vertex(polygon* p) {
     return rightmost;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right between the two.
  * In the case of a tie, the highest one is returned.
@@ -827,6 +864,7 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
     if(v1->x == v2->x && v1->y < v2->y) return v1;
     return v2;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Checks intersecting linedefs, and adds them to ed_intersecting_lines;
@@ -873,6 +911,7 @@ void check_linedef_intersections(vertex* v) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Cleans a polygon's vertices.
  * This deletes 0-lenght lines, and 180-degree vertices.
@@ -903,6 +942,7 @@ void clean_poly(polygon* p) {
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * When there are inner polygons, a cut must be made between it and the outer
@@ -1097,6 +1137,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the clockwise distance between a1 and a2, in radians.
  */
@@ -1107,6 +1148,7 @@ float get_angle_cw_dif(float a1, float a2) {
     return a2 - a1;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the smallest distance between two angles.
  */
@@ -1115,6 +1157,7 @@ float get_angle_smallest_dif(float a1, float a2) {
     a2 = normalize_angle(a2);
     return M_PI - abs(abs(a1 - a2) - M_PI);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Get the convex, concave and ear vertices.
@@ -1139,6 +1182,7 @@ void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns whether the two lines intersect.
@@ -1169,6 +1213,7 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
         return false;
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector. This is because drawing concave polygons is not possible.

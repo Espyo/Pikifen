@@ -19,6 +19,7 @@ subinterval::subinterval(float l, float u, const float d) {
     divisor = d;
 }
 
+
 interval::interval(const string &s) {
     vector<string> subinterval_strs = split(s, ";");
     size_t n_subintervals = subinterval_strs.size();
@@ -57,11 +58,13 @@ interval::interval(const string &s) {
     }
 }
 
+
 float interval::get_random_number() {
     size_t n_subintervals = subintervals.size();
     if(n_subintervals == 0) return 0;
     return subintervals[0].lower; //ToDo
 }
+
 
 bool interval::is_number_in_interval(const float n) {
     size_t n_subintervals = subintervals.size();

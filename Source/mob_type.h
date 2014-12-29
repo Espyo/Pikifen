@@ -62,8 +62,12 @@ public:
     mob_type();
 };
 
+
+
 void load_mob_types(const string folder, const unsigned char type, bool load_resources);
 void load_mob_types(bool load_resources);
+
+
 
 enum mob_categories {
     MOB_CATEGORY_NONE,

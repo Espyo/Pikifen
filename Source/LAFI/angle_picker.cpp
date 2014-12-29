@@ -16,15 +16,19 @@ angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::st
     dragging_pointer = false;
 }
 
+
 angle_picker::~angle_picker() {}
+
 
 string angle_picker::angle_to_str(const float angle) {
     return to_string((long double) (angle * 180 / M_PI));
 }
 
+
 float angle_picker::str_to_angle(const string &s) {
     return atof(s.c_str()) * M_PI / 180;
 }
+
 
 void angle_picker::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
@@ -39,9 +43,11 @@ void angle_picker::widget_on_mouse_down(int button, int x, int y) {
     dragging_pointer = true;
 }
 
+
 void angle_picker::widget_on_mouse_up(int, int, int) {
     dragging_pointer = false;
 }
+
 
 void angle_picker::widget_on_mouse_move(int x, int y) {
     if(!dragging_pointer) return;
@@ -54,6 +60,7 @@ void angle_picker::widget_on_mouse_move(int x, int y) {
     
     set_angle_rads(atan2(y - circle_cy, x - circle_cx));
 }
+
 
 void angle_picker::init() {
     textbox* t = new textbox(
@@ -73,6 +80,7 @@ void angle_picker::init() {
     set_angle_rads(angle);
 }
 
+
 void angle_picker::draw_self() {
     float circle_r = (y2 - y1) / 2;
     float circle_cx = x1 + circle_r;
@@ -88,20 +96,24 @@ void angle_picker::draw_self() {
     );
 }
 
+
 void angle_picker::set_angle_rads(float a) {
     a = normalize_angle(a);
     angle = a;
     ((textbox*) widgets["txt_angle"])->text = angle_to_str(a);
 }
 
+
 float angle_picker::get_angle_rads() {
     return angle;
 }
+
 
 void angle_picker::textbox_lose_focus_handler(widget* w) {
     ((angle_picker*) w->parent)->set_angle_rads(str_to_angle(((textbox*) w)->text));
     w->parent->call_lose_focus_handler();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Normalizes an angle so that it's between 0 and M_PI * 2.

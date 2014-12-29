@@ -120,6 +120,8 @@ public:
     animation(const animation &a2);
 };
 
+
+
 /*
  * A set of animations and their necessary data.
  */
@@ -147,6 +149,8 @@ public:
     
 };
 
+
+
 /*
  * Instance of a running animation. This can be played, rewinded, ...
  */
@@ -167,6 +171,8 @@ public:
     bool tick(const float time);
     frame* get_frame();
 };
+
+
 
 animation_set load_animation_set(data_node* frames_node);
 

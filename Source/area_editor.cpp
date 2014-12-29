@@ -47,6 +47,7 @@ void area_editor::adv_textures_to_gui() {
     ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(ed_cur_sector->rot);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the background's data from the memory to the gui.
  */
@@ -61,6 +62,7 @@ void area_editor::bg_to_gui() {
     ((lafi::checkbox*) f->widgets["chk_mouse"])->set(ed_sec_mode == ESM_BG_MOUSE);
     ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(ed_bg_a, false);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Centers the camera so that these four points are in view.
@@ -85,6 +87,7 @@ void area_editor::center_camera(float min_x, float min_y, float max_x, float max
     
 }
 
+
 /* ----------------------------------------------------------------------------
  * Changes the background image.
  */
@@ -97,6 +100,7 @@ void area_editor::change_background(string new_file_name) {
     }
     ed_bg_file_name = new_file_name;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Switches to the correct frame, depending on the current editor mode.
@@ -131,6 +135,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Handles the main loop, both logic and drawing.
@@ -454,6 +459,7 @@ void area_editor::do_logic() {
     al_flip_display();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Finds errors with the map.
  * On the first error, it adds it to ed_error_type and stops.
@@ -631,6 +637,7 @@ void area_editor::find_errors() {
     update_review_frame();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Focuses the camera on the error found, if any.
  */
@@ -751,6 +758,7 @@ void area_editor::goto_error() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the advanced texture settings from the gui.
  */
@@ -766,6 +774,7 @@ void area_editor::gui_to_adv_textures() {
     
     adv_textures_to_gui();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the background's data from the fields in the gui.
@@ -822,6 +831,7 @@ void area_editor::gui_to_bg() {
     bg_to_gui();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves a mob's data using info on the gui.
  */
@@ -833,6 +843,7 @@ void area_editor::gui_to_mob() {
     ed_cur_mob->angle = ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
     ed_cur_mob->vars = ((lafi::textbox*) f->widgets["txt_vars"])->text;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the current tree shadow using the info on the gui.
@@ -862,6 +873,7 @@ void area_editor::gui_to_shadow() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the sector using the info on the gui.
  */
@@ -878,6 +890,7 @@ void area_editor::gui_to_sector() {
     
     sector_to_gui();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Handles the events for the area editor.
@@ -1494,6 +1507,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the area editor.
  */
@@ -2057,6 +2071,7 @@ void area_editor::load() {
     
 }
 
+
 /* ----------------------------------------------------------------------------
  * Load the area from the disk.
  */
@@ -2098,6 +2113,7 @@ void area_editor::load_area() {
     change_to_right_frame();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the current mob's data onto the gui.
  */
@@ -2123,6 +2139,7 @@ void area_editor::mob_to_gui() {
         but_type->text = ed_cur_mob->type ? ed_cur_mob->type->name : "";
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
@@ -2185,6 +2202,7 @@ void area_editor::open_picker(unsigned char type) {
     ((lafi::scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"])->make_widget_scroll(f);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Closes the list picker frame.
  */
@@ -2222,6 +2240,7 @@ void area_editor::pick(string name, unsigned char type) {
         
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the area onto the disk.
@@ -2448,6 +2467,7 @@ void area_editor::save_area() {
     change_to_right_frame();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the current sector's data onto the gui.
  */
@@ -2485,6 +2505,7 @@ void area_editor::sector_to_gui() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads a tree shadow's info onto the gui.
  */
@@ -2508,6 +2529,7 @@ void area_editor::shadow_to_gui() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Snaps a coordinate to the nearest grid space.
  */
@@ -2515,6 +2537,7 @@ float area_editor::snap_to_grid(const float c) {
     if(ed_shift_pressed) return c;
     return round(c / GRID_INTERVAL) * GRID_INTERVAL;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Updates the widgets on the review frame.

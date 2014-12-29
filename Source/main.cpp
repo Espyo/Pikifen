@@ -49,7 +49,6 @@ using namespace std;
  * and loading all of the game content.
  * Once that's done, it enters the main loop.
  */
-
 int main(int argc, char**) {
     //Install Allegro and initialize modules.
     al_init();

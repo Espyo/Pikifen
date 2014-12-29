@@ -157,6 +157,7 @@ void animation_editor::do_logic() {
     al_flip_display();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the animation's data onto the gui.
  */
@@ -176,6 +177,7 @@ void animation_editor::gui_load_animation() {
         gui_load_frame_instance();
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the frame's data onto the gui.
@@ -209,6 +211,7 @@ void animation_editor::gui_load_frame() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the frame instance's data onto the gui.
  */
@@ -230,6 +233,7 @@ void animation_editor::gui_load_frame_instance() {
         ((lafi::textbox*) f->widgets["frm_frame_i"]->widgets["txt_dur"])->text = f2s(ed_cur_anim->frame_instances[ed_cur_frame_instance_nr].duration);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the hitbox' data onto the gui.
@@ -271,6 +275,7 @@ void animation_editor::gui_load_hitbox() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the hitbox instance's data onto the gui.
  */
@@ -297,6 +302,7 @@ void animation_editor::gui_load_hitbox_instance() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the Pikmin top's data onto the gui.
  */
@@ -314,6 +320,7 @@ void animation_editor::gui_load_top() {
     ((lafi::angle_picker*) f->widgets["ang_angle"])->set_angle_rads(ed_cur_frame->top_angle);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the animation's data from the gui.
  */
@@ -328,6 +335,7 @@ void animation_editor::gui_save_animation() {
     gui_save_frame_instance();
     gui_load_animation();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the frame's data from the gui.
@@ -368,6 +376,7 @@ void animation_editor::gui_save_frame() {
     gui_load_frame();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the frame instance's data from the gui.
  */
@@ -383,6 +392,7 @@ void animation_editor::gui_save_frame_instance() {
     
     gui_load_frame_instance();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves the hitbox' data from the gui.
@@ -412,6 +422,7 @@ void animation_editor::gui_save_hitbox() {
     gui_load_hitbox();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the hitbox instance's data from the gui.
  */
@@ -432,6 +443,7 @@ void animation_editor::gui_save_hitbox_instance() {
     gui_load_hitbox_instance();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the Pikmin top's data from the gui.
  */
@@ -447,6 +459,7 @@ void animation_editor::gui_save_top() {
     
     gui_load_top();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Handles the controls and other events.
@@ -567,6 +580,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     
     ed_gui->handle_event(ev);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads the animation editor.
@@ -1213,6 +1227,7 @@ void animation_editor::load() {
     disable_widget(frm_bottom->widgets["but_save"]);
 }
 
+
 /* ----------------------------------------------------------------------------
  * Loads the animation set for the current object.
  */
@@ -1250,6 +1265,7 @@ void animation_editor::load_animation_set() {
     cam_zoom = 1;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Opens the correct radio button and frame for the specified hitbox type.
  */
@@ -1270,6 +1286,7 @@ void animation_editor::open_hitbox_type(unsigned char type) {
         show_widget(f->widgets["frm_attack"]);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Opens the frame where you pick from a list.
@@ -1351,6 +1368,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
     
     ((lafi::scrollbar*) ed_gui->widgets["frm_picker"]->widgets["bar_scroll"])->make_widget_scroll(f);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Closes the list picker frame.
@@ -1442,6 +1460,7 @@ void animation_editor::pick(string name, unsigned char type) {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Saves the animation set onto the mob's file.
  */
@@ -1532,6 +1551,7 @@ void animation_editor::save_animation_set() {
     
     file_node.save_file(ed_file_name);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Update the stats on the main menu, as well as some other minor things.

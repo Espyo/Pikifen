@@ -23,6 +23,7 @@ style::style(ALLEGRO_COLOR bg_color, ALLEGRO_COLOR fg_color, ALLEGRO_COLOR alt_c
     this->text_font = text_font;
 }
 
+
 /*
  * Creates a style by copying the info from another style.
  */
@@ -45,10 +46,12 @@ style::style(style &s2) {
     
 }
 
+
 /*
  * Destroys a style.
  */
 style::~style() { }
+
 
 /*
  * Returns a color that's ligther than the given color.
@@ -65,6 +68,7 @@ ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
     
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }
+
 
 /*
  * Returns a color that's darker than the given color.

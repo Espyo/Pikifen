@@ -75,6 +75,8 @@
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
 #define task_range ((pik_ptr->following_party == cur_leader_ptr && moving_group_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
 
+
+
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
 bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
@@ -114,6 +116,7 @@ void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
 //bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
 void               use_spray(const size_t spray_nr);
+
 
 void al_fwrite(ALLEGRO_FILE* f, string s);
 string b2s(const bool b);

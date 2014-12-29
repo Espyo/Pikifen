@@ -41,6 +41,8 @@ using namespace std;
 
 #define UTF8_MAGIC_NUMBER "\xEF\xBB\xBF"
 
+
+
 class data_node {
 private:
     vector<data_node*> children;
@@ -76,6 +78,8 @@ public:
     data_node(const data_node &dn2);
     ~data_node();
 };
+
+
 
 void getline(ALLEGRO_FILE* file, string &line);
 string trim_spaces(string s, bool left_only = false);
