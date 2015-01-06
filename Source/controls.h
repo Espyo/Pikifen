@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -18,7 +18,7 @@
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * This holds information over a user-specified
  * control. It has info over what hardware input
  * is required for this in-game control,

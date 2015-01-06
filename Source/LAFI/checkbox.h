@@ -5,6 +5,10 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * A button with two states: on and off. These can be toggled
+ * when the user clicks on the checkbox.
+ */
 class checkbox : public widget {
 public:
     bool checked;
@@ -25,6 +29,10 @@ public:
 
 
 
+/* ----------------------------------------------------------------------------
+ * The actual box that can be ticked. The whole checkbox widget
+ * is this plus a label.
+ */
 class checkbox_box : public widget {
 private:
 

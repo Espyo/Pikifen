@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -12,7 +12,7 @@
 #ifndef LOADER_THREAD_H
 #define LOADER_THREAD_H
 
-/*
+/* ----------------------------------------------------------------------------
  * This thread makes it easy to create threads that load content.
  * Just give it a function that loads data, and you're ready to go.
  * The loading function should take a pointer to the Allegro thread (unused)
@@ -21,8 +21,7 @@
  * smoothly as it decides. Meanwhile, the main thread is in charge of
  * waiting for it, and drawing a number on-screen, or something.
  */
-
-class loader_thread{
+class loader_thread {
 public:
     ALLEGRO_THREAD* thread;
     unsigned char percentage_done; //0 to 100.
@@ -30,8 +29,8 @@ public:
     //The loader and main threads should decide what this means.
     //It gets initialized as 0.
     unsigned int step;
-
-    loader_thread(void* (*t)(ALLEGRO_THREAD *thread, void *arg) = NULL);
+    
+    loader_thread(void* (*t)(ALLEGRO_THREAD* thread, void* arg) = NULL);
     void start();
     void wait();
     void destroy();

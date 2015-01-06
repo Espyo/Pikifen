@@ -6,7 +6,7 @@ namespace lafi {
 
 size_t textbox::cur_tab_index = 0;
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a textbox given some parameters.
  */
 textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style, unsigned char flags)
@@ -25,7 +25,7 @@ textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a textbox by copying the info from another textbox.
  */
 textbox::textbox(textbox &t2) : widget(t2) {
@@ -40,12 +40,17 @@ textbox::textbox(textbox &t2) : widget(t2) {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Destroys a textbox.
  */
 textbox::~textbox() {}
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the textbox. It's basically a rectangle with a border.
+ * The border is drawn line by line. Finally, it draws the
+ * text within.
+ */
 void textbox::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_darker_bg_color());  //Top line.
@@ -83,10 +88,16 @@ void textbox::draw_self() {
 }
 
 
-//Calls the function that handles a change of the text.
+/* ----------------------------------------------------------------------------
+ * Calls the function that handles a change of the text.
+ */
 void textbox::call_change_handler() { if(change_handler) change_handler(this); }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles a character (or key) being typed with the keyboard.
+ * It updates the textbox accordingly.
+ */
 void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifiers) {
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
     bool shift = modifiers & ALLEGRO_KEYMOD_SHIFT;
@@ -260,6 +271,10 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles the mouse being clicked. Places the caret on the
+ * correct place.
+ */
 void textbox::widget_on_mouse_down(int button, int x, int) {
     if(button != 1) return;
     
@@ -269,6 +284,10 @@ void textbox::widget_on_mouse_down(int button, int x, int) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles the mouse being moved.
+ * If the mouse button is clicked, it changes the selection.
+ */
 void textbox::widget_on_mouse_move(int x, int) {
     if(!mouse_clicking) return;
     
@@ -276,6 +295,11 @@ void textbox::widget_on_mouse_move(int x, int) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns the number of the position the caret should go at,
+ * when the mouse is clicked on the given X coordinate.
+ * Takes into account text scroll, widget position, etc.
+ */
 unsigned int textbox::mouse_to_char(int mouse_x) {
     //Get the relative X, from the start of the text.
     int rel_x = mouse_x - x1 + scroll_x;

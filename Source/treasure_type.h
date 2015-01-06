@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -14,7 +14,7 @@
 
 #include "mob_type.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * A type of treasure.
  * Although uncommon, there can be several
  * treasures of the same type at once.

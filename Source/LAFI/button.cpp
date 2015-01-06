@@ -2,7 +2,7 @@
 
 namespace lafi {
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a button given some parameters.
  */
 button::button(int x1, int y1, int x2, int y2, string text, string description, ALLEGRO_BITMAP* icon, lafi::style* style, unsigned char flags)
@@ -14,12 +14,16 @@ button::button(int x1, int y1, int x2, int y2, string text, string description, 
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Destroys a button.
  */
 button::~button() { }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the button. It' just a rectangle with a fancy border;
+ * the latter is drawn one line at a time.
+ */
 void button::draw_self() {
     unsigned int w = x2 - x1;
     unsigned int h = y2 - y1;

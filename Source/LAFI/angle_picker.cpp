@@ -7,6 +7,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Creates an angle picker.
+ */
 angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     
@@ -16,20 +19,31 @@ angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::st
     dragging_pointer = false;
 }
 
-
+//Destroys an angle picker.
 angle_picker::~angle_picker() {}
 
 
+/* ----------------------------------------------------------------------------
+ * Converts an angle in radians to a string representation, in degrees.
+ */
 string angle_picker::angle_to_str(const float angle) {
     return to_string((long double) (angle * 180 / M_PI));
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Converts a string representation of an angle in degrees to an angle in radians.
+ */
 float angle_picker::str_to_angle(const string &s) {
     return atof(s.c_str()) * M_PI / 180;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * On mouse down, check the angle to set it to, judging from the
+ * position of the click in comparison to the center of
+ * the circle.
+ */
 void angle_picker::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
     
@@ -44,11 +58,19 @@ void angle_picker::widget_on_mouse_down(int button, int x, int y) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * On mouse up, just mark the fact that the user is not
+ * dragging the pointer around.
+ */
 void angle_picker::widget_on_mouse_up(int, int, int) {
     dragging_pointer = false;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * If the mouse moves while the button is held on it,
+ * move the pointer about.
+ */
 void angle_picker::widget_on_mouse_move(int x, int y) {
     if(!dragging_pointer) return;
     
@@ -62,6 +84,10 @@ void angle_picker::widget_on_mouse_move(int x, int y) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initialize the widget. Creates a textbox (with the
+ * angle's string representation).
+ */
 void angle_picker::init() {
     textbox* t = new textbox(
         x1 + (y2 - y1) + CHECKBOX_BOX_PADDING,
@@ -81,6 +107,9 @@ void angle_picker::init() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the circle and the pointer.
+ */
 void angle_picker::draw_self() {
     float circle_r = (y2 - y1) / 2;
     float circle_cx = x1 + circle_r;
@@ -97,6 +126,10 @@ void angle_picker::draw_self() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Sets the widget's angle to a value (in radians), updating both
+ * the textbox and the circle's pointer.
+ */
 void angle_picker::set_angle_rads(float a) {
     a = normalize_angle(a);
     angle = a;
@@ -104,11 +137,18 @@ void angle_picker::set_angle_rads(float a) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns the current angle, in radians.
+ */
 float angle_picker::get_angle_rads() {
     return angle;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When the text box's focus is lost, update the pointer
+ * on the circle.
+ */
 void angle_picker::textbox_lose_focus_handler(widget* w) {
     ((angle_picker*) w->parent)->set_angle_rads(str_to_angle(((textbox*) w)->text));
     w->parent->call_lose_focus_handler();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -16,7 +16,7 @@
 #include "enemy_type.h"
 #include "mob.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * I don't need to explain what an enemy is.
  */
 class enemy : public mob {

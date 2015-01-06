@@ -2,7 +2,7 @@
 
 namespace lafi {
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a gui.
  * autonomous: if true, the gui will work without there being a need to create a display, feed it events, etc.
  * display: if the gui is not autonomous, this is the display it should be drawn on.
@@ -57,6 +57,10 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags)
 }*/
 
 
+/* ----------------------------------------------------------------------------
+ * Code for the gui thread.
+ * This handles the draw timer, the input events, etc.
+ */
 void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     gui* gui_ptr = (gui*) g;
     
@@ -79,6 +83,9 @@ void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Stops a running gui.
+ */
 void gui::stop() {
     if(!autonomous) return;
     
@@ -86,6 +93,9 @@ void gui::stop() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Waits for the gui thread to finish.
+ */
 void gui::wait() {
     al_join_thread(thread, NULL);
 }
@@ -95,6 +105,11 @@ void gui::wait() {
 gui::~gui() { }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the gui. Because the gui is pretty much defined
+ * by its widgets, there's nothing to draw except a
+ * solid color background.
+ */
 void gui::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
 }

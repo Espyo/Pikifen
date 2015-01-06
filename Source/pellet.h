@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -16,7 +16,8 @@
 #include "pellet_type.h"
 #include "pikmin_type.h"
 
-/*
+
+/* ----------------------------------------------------------------------------
  * A pellet can be delivered to an Onion in
  * order to generate more Pikmin.
  * Delivering a pellet to the matching Onion

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -29,7 +29,7 @@ struct party_spot_info;
 class mob_type;
 class mob;
 
-/*
+/* ----------------------------------------------------------------------------
  * Information on a mob's party.
  * This includes a list of its members,
  * and the location and info of the spots in the
@@ -49,7 +49,7 @@ struct party_info {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Structure with information on how
  * the mob should be carried.
  */
@@ -70,7 +70,7 @@ struct carrier_info_struct {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
  * an object in the game world. It can move, follow a point,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -25,11 +25,10 @@ class pikmin;
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * A leader controls Pikmin, and
  * is controlled by the player.
  */
-
 class leader : public mob {
 public:
     leader_type* lea_type;

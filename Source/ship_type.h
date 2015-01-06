@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -17,7 +17,7 @@
 #include "misc_structs.h"
 #include "mob_type.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * A type of ship (Hocotate Ship, research pod, golden HS, golden RP, ...).
  */
 class ship_type : public mob_type {

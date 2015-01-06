@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -25,7 +25,7 @@ using namespace std;
 
 struct mob_event;
 
-/*
+/* ----------------------------------------------------------------------------
  * A mob action is an action a mob can perform,
  * in the script.
  * These include walking to some place,
@@ -46,7 +46,7 @@ struct mob_action {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A mob event contains information on what
  * to make the mob do whenever the event
  * is triggered.

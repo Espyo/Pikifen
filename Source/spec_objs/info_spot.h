@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -18,7 +18,7 @@
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * An info spot is basically like a sign post:
  * it's scattered around the map and contains info.
  * It's not a thing in any Pikmin game, but I figured

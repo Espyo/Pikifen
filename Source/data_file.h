@@ -43,6 +43,9 @@ using namespace std;
 
 
 
+/* ----------------------------------------------------------------------------
+ * A node of data. Nodes may contain a value, and/or a list of children nodes.
+ */
 class data_node {
 private:
     vector<data_node*> children;

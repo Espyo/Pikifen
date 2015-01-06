@@ -5,6 +5,11 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * A radio button. Only one of these in a group can be selected.
+ * Selecting one (with a mouse click) unselects any others in
+ * the same group.
+ */
 class radio_button : public widget {
 public:
     bool selected;
@@ -25,6 +30,10 @@ public:
 
 
 
+/* ----------------------------------------------------------------------------
+ * The actual sphere with the dot. The radio button widget is
+ * consisted of this and a label.
+ */
 class radio_button_button : public widget {
 public:
     bool selected;

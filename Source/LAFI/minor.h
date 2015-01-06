@@ -5,6 +5,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * A simple straight line, vertical or horizontal.
+ */
 class line : public widget {
 public:
     bool horizontal;
@@ -18,7 +21,9 @@ public:
 
 
 
-//A dummy widget, mostly used for spacing.
+/* ----------------------------------------------------------------------------
+ * A dummy widget, mostly used for spacing.
+ */
 class dummy : public widget {
 public:
     dummy(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi::style* style = NULL, unsigned char flags = 0);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -37,8 +37,10 @@ struct vertex;
 typedef vector<vertex*> polygon;
 
 
-//Intersection between two lines. Used to mark
-//linedefs as red on the editor.
+/* ----------------------------------------------------------------------------
+ * Intersection between two lines. Used to mark
+ * linedefs as red on the editor.
+ */
 struct linedef_intersection {
     linedef* l1, *l2;
     linedef_intersection(linedef* l1, linedef* l2);
@@ -47,7 +49,7 @@ struct linedef_intersection {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * The blockmap divides the entire area
  * in a grid, so that collision detections only
  * happen between stuff in the same grid cell.
@@ -72,7 +74,7 @@ struct blockmap {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A line that delimits a sector.
  */
 struct linedef {
@@ -89,7 +91,7 @@ struct linedef {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A sector, like the ones in Doom.
  * It's composed of lines, so it's essentially
  * a polygon. It has a certain height, and its looks
@@ -125,7 +127,7 @@ struct sector {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A triangle. Sectors (polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
@@ -137,7 +139,7 @@ struct triangle {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A vertex is a 2D point, used to determine
  * the end-points of a linedef.
  */
@@ -153,7 +155,7 @@ struct vertex {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * This structure holds the information for
  * a mob's generation. It's a mob on the editor
  * and area file, but it doesn't have the
@@ -174,7 +176,7 @@ struct mob_gen {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A structure holding info on the shadows
  * cast onto the area by a tree (or
  * whatever the game maker desires).
@@ -195,7 +197,7 @@ struct tree_shadow {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
  * the sectors know how to communicate with

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -305,5 +305,6 @@ extern int                              window_y;
 extern bool debug_show_framerate;
 extern float debug_framerate_update_timer;
 extern unsigned int debug_framerate_counter;
+extern string debug_last_axis;
 
 #endif //ifndef VARS_INCLUDED

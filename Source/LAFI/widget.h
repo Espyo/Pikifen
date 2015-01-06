@@ -20,6 +20,10 @@ class widget;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Container of information about a widget, for the
+ * "easy widget" functionality.
+ */
 struct easy_widget_info {
     string name;
     widget* w;
@@ -30,6 +34,11 @@ struct easy_widget_info {
 
 
 
+/* ----------------------------------------------------------------------------
+ * An accelerator. This means that when the user presses the
+ * specified key combination, the specified widget
+ * is considered "clicked".
+ */
 struct accelerator {
     int key;
     unsigned int modifiers;
@@ -39,6 +48,13 @@ struct accelerator {
 
 
 
+/* ----------------------------------------------------------------------------
+ * A widget. This can be a button, a text box, etc.
+ * Widgets may contain other widgets inside.
+ * The "easy widget" functionality allows programmers to
+ * easily add widgets to this one, without the hassle
+ * of calculating coordinates and such.
+ */
 class widget {
 private:
 

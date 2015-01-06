@@ -8,6 +8,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Creates a radio button.
+ */
 radio_button::radio_button(int x1, int y1, int x2, int y2, string text, int group, bool selected, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     
@@ -19,6 +22,10 @@ radio_button::radio_button(int x1, int y1, int x2, int y2, string text, int grou
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the radio button. Creates a radio button button
+ * and a label.
+ */
 void radio_button::init() {
     add("rbb_circle", new radio_button_button(
             x1,
@@ -43,6 +50,9 @@ void radio_button::init() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a radio button.
+ */
 radio_button::~radio_button() {
     /*
     //ToDo
@@ -59,11 +69,18 @@ radio_button::~radio_button() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When the user clicks, this radio button is selected.
+ */
 void radio_button::widget_on_left_mouse_click(int, int) {
     select();
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Selects this radio button and unselects all others
+ * in the same group.
+ */
 void radio_button::select() {
     selected = true;
     ((radio_button_button*) widgets["rbb_circle"])->selected = true;
@@ -78,18 +95,29 @@ void radio_button::select() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Unselects this radio button.
+ */
 void radio_button::unselect() {
     selected = false;
     ((radio_button_button*) widgets["rbb_circle"])->selected = false;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the radio button. Because the radio button is
+ * consisted of a radio button button and a label, nothing
+ * is really drawn for the actual "radio button" widget.
+ */
 void radio_button::draw_self() { }
 
 
 
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a radio button button.
+ */
 radio_button_button::radio_button_button(int x1, int y1, bool selected, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x1 + RADIO_BUTTON_BUTTON_SIZE, y1 + RADIO_BUTTON_BUTTON_SIZE, style, flags) {
     this->selected = selected;
@@ -97,9 +125,16 @@ radio_button_button::radio_button_button(int x1, int y1, bool selected, lafi::st
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a radio button button.
+ */
 radio_button_button::~radio_button_button() {}
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the radio button button. It's just a circle, and if
+ * it is selected, it also draws a dot.
+ */
 void radio_button_button::draw_self() {
     unsigned int w = x2 - x1;
     unsigned int h = y2 - y1;

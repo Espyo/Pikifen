@@ -2,6 +2,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Creates a label.
+ */
 label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     this->text = text;
@@ -9,9 +12,16 @@ label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a label.
+ */
 label::~label() {}
 
 
+/* ----------------------------------------------------------------------------
+ * Draws a label. It draws a solid rectangle at the back, and then
+ * draws the label's text.
+ */
 void label::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     if(style->text_font) {

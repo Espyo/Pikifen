@@ -30,9 +30,9 @@ script{
         wait = animation
         
         animation = walk
-		move = prey
+        move = prey
         var = sleeping false
-	}
+    }
     
     on_near_prey{
         move = stop
@@ -52,11 +52,11 @@ script{
         wait = animation
         eat = all
     }
-	
-	on_lose_prey{
+    
+    on_lose_prey{
         animation = walk
-		move = home
-	}
+        move = home
+    }
     
     on_reach_home{
         animation = idle

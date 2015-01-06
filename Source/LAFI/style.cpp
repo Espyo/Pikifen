@@ -2,7 +2,7 @@
 
 namespace lafi {
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a style given some parameters.
  */
 style::style(ALLEGRO_COLOR bg_color, ALLEGRO_COLOR fg_color, ALLEGRO_COLOR alt_color, ALLEGRO_FONT* text_font) {
@@ -24,7 +24,7 @@ style::style(ALLEGRO_COLOR bg_color, ALLEGRO_COLOR fg_color, ALLEGRO_COLOR alt_c
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a style by copying the info from another style.
  */
 style::style(style &s2) {
@@ -47,13 +47,13 @@ style::style(style &s2) {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Destroys a style.
  */
 style::~style() { }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Returns a color that's ligther than the given color.
  */
 ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
@@ -70,7 +70,7 @@ ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Returns a color that's darker than the given color.
  */
 ALLEGRO_COLOR style::darken_color(ALLEGRO_COLOR color) {

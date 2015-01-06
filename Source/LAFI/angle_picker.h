@@ -9,6 +9,10 @@ using namespace std;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Angle picker. This allows the user to pick an angle,
+ * by rotating a dial.
+ */
 class angle_picker : public widget {
 private:
     float angle; //In radians.

@@ -11,6 +11,10 @@ using namespace std;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Graphical User Interface. The wrapper that should contain
+ * all widgets for a screen.
+ */
 class gui : public widget {
 private:
     ALLEGRO_TIMER* timer;

@@ -2,7 +2,7 @@
 
 namespace lafi {
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a widget given some parameters.
  */
 widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags) {
@@ -35,7 +35,7 @@ widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Creates a widget by copying the info from another widget.
  */
 widget::widget(widget &w2) {
@@ -69,7 +69,7 @@ widget::widget(widget &w2) {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Destroys a widget.
  */
 widget::~widget() {
@@ -157,7 +157,7 @@ widget* widget::get_widget_under_mouse(int mx, int my) {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Checks if the widget is disabled, either because of its flags,
  * or because of one of its parents' flags.
  */
@@ -171,7 +171,7 @@ bool widget::is_disabled() {
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Checks if the mouse cursor is inside the widget, given its coordinates.
  */
 bool widget::is_mouse_in(int mx, int my) {
@@ -185,6 +185,10 @@ bool widget::is_mouse_in(int mx, int my) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns the total offset in pixels.
+ * Takes into account all parent's offsets.
+ */
 void widget::get_offset(int* ox, int* oy) {
     if(!parent) { *ox = 0; *oy = 0; return; }
     
@@ -195,6 +199,9 @@ void widget::get_offset(int* ox, int* oy) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Adds a widget as a child to the current one.
+ */
 void widget::add(string name, widget* w) {
     widgets[name] = w;
     w->parent = this;
@@ -203,12 +210,15 @@ void widget::add(string name, widget* w) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Registers a key accelerator.
+ */
 void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
     accelerators.push_back(accelerator(key, modifiers, w));
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Draws the widget on the specified bitmap/display.
  */
 void widget::draw() {
@@ -254,6 +264,11 @@ void widget::draw() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles an Allegro event. The most important part of this
+ * is handling the mouse and keyboard events, so that each
+ * sub-class of widget can do whatever with them.
+ */
 void widget::handle_event(ALLEGRO_EVENT ev) {
     if(flags & FLAG_DISABLED) return;
     
@@ -366,6 +381,9 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Removes a child widget from the list.
+ */
 void widget::remove(string child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
     
@@ -386,6 +404,9 @@ void widget::widget_on_key_char(int, int, unsigned int) { }
 void widget::init() { }
 
 
+/* ----------------------------------------------------------------------------
+ * Makes this widget and all of its children lose focus.
+ */
 void widget::lose_focus() {
     if(focused_widget) {
         focused_widget->call_lose_focus_handler();
@@ -398,6 +419,10 @@ void widget::lose_focus() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Gives focus to this widget, making all other widgets
+ * lose focus in the process.
+ */
 void widget::give_focus(widget* w) {
     if(!w) return;
     //Mark focus lost. First go up to the topmost parent, and let it tell everybody to lose their focuses.
@@ -410,8 +435,8 @@ void widget::give_focus(widget* w) {
 }
 
 
-/*
- * Creates a row and commits the previous one.
+/* ----------------------------------------------------------------------------
+ * Creates an "easy add" row and commits the previous one.
  * vertical_padding:   Padding between this new row and the previous one, in pixels.
  * horizontal_padding: Padding between the left and right sides, in pixels.
  * widget_padding:     Padding between added widgets, in pixels.
@@ -461,8 +486,8 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
 }
 
 
-/*
- * Adds a widget to the current row.
+/* ----------------------------------------------------------------------------
+ * "Easy add"s a widget to the current row.
  * name:   Name.
  * widget: The widget.
  * width:  Width it takes up on the row, in percentage.
@@ -474,8 +499,8 @@ void widget::easy_add(string name, widget* w, float width, float height, unsigne
 }
 
 
-/*
- * Resets the rows.
+/* ----------------------------------------------------------------------------
+ * Resets the "easy add" rows.
  */
 void widget::easy_reset() {
     easy_row_vertical_padding = 0;
@@ -488,6 +513,9 @@ void widget::easy_reset() {
 
 
 
+/* ----------------------------------------------------------------------------
+ * Creates an "easy add" widget info structure.
+ */
 easy_widget_info::easy_widget_info(string name, lafi::widget* w, float width, float height, unsigned char flags) {
     this->name = name;
     this->w = w;
@@ -497,6 +525,9 @@ easy_widget_info::easy_widget_info(string name, lafi::widget* w, float width, fl
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Creates an accelerator.
+ */
 accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
     this->key = key;
     this->modifiers = modifiers;
@@ -506,7 +537,7 @@ accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Draws a line in one side of a rectangle. This is used because al_draw_line gets too confusing after a bit.
  * Each line is drawn from a side: right, top, left or bottom. It starts on the top-left corner for top and
  * left-side lines, top-right corner for right-side, and bottom-left corner for bottom-side.
@@ -540,7 +571,7 @@ void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, 
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Draws text, but if there are line breaks, it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
  * f:    Font to use.
@@ -574,7 +605,7 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const f
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Splits a string into several substrings, by the specified delimiter.
  * text:        The string to split.
  * del:         The delimiter. Default is space.

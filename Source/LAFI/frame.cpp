@@ -2,8 +2,8 @@
 
 namespace lafi {
 
-/*
- * Creates a frame given some parameters.
+/* ----------------------------------------------------------------------------
+ * Creates a frame.
  */
 frame::frame(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
@@ -11,12 +11,16 @@ frame::frame(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char f
 }
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Destroys a frame.
  */
 frame::~frame() {}
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the actual frame. Like the frame of a painting, this
+ * is basically a rectangle and a border.
+ */
 void frame::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_lighter_bg_color()); //Top line,    outermost.

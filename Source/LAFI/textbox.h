@@ -9,6 +9,10 @@ using namespace std;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * A box with user-insertable text. The user must first click
+ * on the box, and then type.
+ */
 class textbox : public widget {
 private:
     int scroll_x; //Scroll the text by this much. Used to keep track of the cursor.

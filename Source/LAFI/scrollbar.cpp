@@ -5,6 +5,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Creates a scrollbar.
+ */
 scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min_value, float max_value, float low_value, float high_value, bool vertical, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     
@@ -19,12 +22,19 @@ scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min_value, float max_
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the scrollbar.
+ */
 void scrollbar::init() {
     create_button();
     flags |= FLAG_WUM_NO_CHILDREN;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When the mouse is held down, the scrollbar button
+ * is moved to that location.
+ */
 void scrollbar::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
     
@@ -32,6 +42,10 @@ void scrollbar::widget_on_mouse_down(int button, int x, int y) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When the mouse is moved, if the mouse button is held
+ * down, the scrollbar button is moved with the mouse.
+ */
 void scrollbar::widget_on_mouse_move(int x, int y) {
     if(!mouse_clicking) return;
     
@@ -39,6 +53,12 @@ void scrollbar::widget_on_mouse_move(int x, int y) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * (Re)creates the button used on the scrollbar.
+ * If the values do not allow for there to be
+ * a button, it is not created (or deleted, if
+ * it already exists).
+ */
 void scrollbar::create_button() {
     int bx1, by1, bx2, by2;
     
@@ -72,6 +92,10 @@ void scrollbar::create_button() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Moves the scrollbar's button to the desired coordinates.
+ * The coordinates specify the center.
+ */
 void scrollbar::move_button(int x, int y) {
     if(low_value == high_value) return;
     
@@ -107,6 +131,9 @@ void scrollbar::move_button(int x, int y) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Sets the scrollbar's current value.
+ */
 void scrollbar::set_value(float new_low, bool call_handler) {
     float dif = high_value - low_value;
     if(new_low < min_value || new_low + dif > max_value) return;
@@ -133,6 +160,10 @@ void scrollbar::set_value(float new_low, bool call_handler) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the scrollbar. The button can draw itself, but this widget
+ * draws the harness.
+ */
 void scrollbar::draw_self() {
     int w = x2 - x1;
     int h = y2 - y1;
@@ -200,11 +231,20 @@ void scrollbar::draw_self() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Registers an external handler for when the scrollbar's
+ * value is changed.
+ */
 void scrollbar::register_change_handler(void(*handler)(widget* w)) {
     change_handler = handler;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Makes it so that this scrollbar is bound to a widget.
+ * Whenever the scrollbar is changed, the widget scrolls
+ * accordingly.
+ */
 void scrollbar::make_widget_scroll(widget* widget) {
     attached_widget = widget;
     this->min_value = this->low_value = 0;
@@ -256,6 +296,9 @@ void scrollbar::make_widget_scroll(widget* widget) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * //ToDo describe this. This is the problem of late documentation -- you document after you forget what stuff does.
+ */
 void scrollbar::widget_scroller(widget* w) {
     scrollbar* scrollbar_ptr = (scrollbar*) w;
     
@@ -267,6 +310,9 @@ void scrollbar::widget_scroller(widget* w) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a scrollbar.
+ */
 scrollbar::~scrollbar() { }
 
 }

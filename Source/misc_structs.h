@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -24,7 +24,7 @@
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * Structure with info for the bitmap manager.
  */
 class bmp_info {
@@ -36,7 +36,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same
@@ -76,7 +76,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A list of the different mob categories.
  * The MOB_CATEGORY_* constants are meant to be used here.
  * Read the sector type manager's comments for more info.
@@ -106,7 +106,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Group spots. The way this works is that a Pikmin group surrounds a central point.
  * There are several wheels surrounding the original spot,
  * starting from the center and growing in size, each with several spots of their own.
@@ -133,7 +133,7 @@ struct party_spot_info {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Simple 2D point.
  */
 struct point {
@@ -144,7 +144,7 @@ struct point {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Structure that holds informatio about a sample.
  * It also has info about sample instances, which control
  * the sound playing from the sample.
@@ -160,7 +160,7 @@ struct sample_struct {
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Just a list of the different sector types.
  * The ERROR_TYPE_* constants are meant to be used here.
  * This is a vector instead of a map because hopefully,

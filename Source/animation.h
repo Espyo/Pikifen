@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -23,7 +23,7 @@
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * Animations work as follows:
  * An animation links to frames.
  * A frame links to hitboxes.
@@ -62,7 +62,7 @@ using namespace std;
  */
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A frame of animation; a sprite.
  */
 class frame {
@@ -91,7 +91,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Instance of a frame inside an animation.
  * A single frame can appear multiple times in the same animation (imagine an enemy shaking back and forth).
  */
@@ -107,7 +107,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A list of frames, basically.
  */
 class animation {
@@ -122,7 +122,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * A set of animations and their necessary data.
  */
 class animation_set {
@@ -151,7 +151,7 @@ public:
 
 
 
-/*
+/* ----------------------------------------------------------------------------
  * Instance of a running animation. This can be played, rewinded, ...
  */
 class animation_instance {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -17,8 +17,14 @@
 #include "misc_structs.h"
 #include "mob_type.h"
 
-/*
- * A type of leader.
+/* ----------------------------------------------------------------------------
+ * A type of leader. The "leader" class is a mob, so the walking Olimar,
+ * walking Louie, etc. This leader type is actually the definition of
+ * what the leader is like. Maybe this will be clearer:
+ * The same way you have enemies and enemy types, you can have more
+ * than one leader on the map that is of the same leader type;
+ * this means you can have 3 Olimars, if you want.
+ * Why would you do that, though?
  */
 class leader_type : public mob_type {
 public:

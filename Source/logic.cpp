@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andr� 'Espyo' Silva 2014.
+ * Copyright (c) Andr´ 'Espyo' Silva 2014.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "const.h"
+#include "drawing.h"
 #include "functions.h"
 #include "logic.h"
 #include "pikmin.h"
@@ -22,7 +23,7 @@ void do_logic() {
     /*  ********************************************
       ***  .-.                                .-.  ***
     ***** ( L )          MAIN LOGIC          ( L ) *****
-      ***  `-�                                `-�  ***
+      ***  `-´                                `-´  ***
         ********************************************/
     
     leader* cur_leader_ptr = leaders[cur_leader_nr];
@@ -31,7 +32,7 @@ void do_logic() {
     /*************************************
     *                               .-.  *
     *   Timer things - aesthetic   ( L ) *
-    *                               `-�  *
+    *                               `-´  *
     **************************************/
     
     //Rotation angle for the glow atop idle Pikmin.
@@ -42,19 +43,21 @@ void do_logic() {
         cam_trans_pan_time_left -= delta_t;
         if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
         
-        float amount_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
+        percentage_left = ease(EASE_IN, percentage_left);
         
-        cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - amount_left);
-        cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - amount_left);
+        cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - percentage_left);
+        cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - percentage_left);
     }
     
     if(cam_trans_zoom_time_left > 0) {
         cam_trans_zoom_time_left -= delta_t;
         if(cam_trans_zoom_time_left < 0) cam_trans_zoom_time_left = 0;
         
-        float amount_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
+        percentage_left = ease(EASE_IN, percentage_left);
         
-        cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - amount_left);
+        cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
     }
     
     //"Move group" arrows.
@@ -182,7 +185,7 @@ void do_logic() {
         /************************************
         *                              .-.  *
         *   Timer things - gameplay   ( L ) *
-        *                              `-�  *
+        *                              `-´  *
         *************************************/
         
         day_minutes += (day_minutes_per_irl_sec * delta_t);
@@ -666,7 +669,7 @@ void do_logic() {
         /********************
         *              .-.  *
         *   Leaders   (*:O) *
-        *              `-�  *
+        *              `-´  *
         ********************/
         
         if(cur_leader_ptr->holding_pikmin) {
@@ -833,7 +836,7 @@ void do_logic() {
         /********************
         *             .-.   *
         *   Cursor   ( = )> *
-        *             `-�   *
+        *             `-´   *
         ********************/
         
         mouse_cursor_x += mouse_cursor_speed_x;

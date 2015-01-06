@@ -9,6 +9,10 @@ using namespace std;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * A basic widget container -- it has other widgets inside.
+ * It also looks a bit like a painting's frame.
+ */
 class frame : public widget {
 public:
     frame(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi::style* style = NULL, unsigned char flags = 0);

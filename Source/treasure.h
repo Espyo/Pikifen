@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -16,7 +16,7 @@
 #include "pikmin.h"
 #include "treasure_type.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * "Treasure" is the catch-all term for the
  * main collectible in the game.
  * Without it, you cannot complete the game,

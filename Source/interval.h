@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -23,8 +23,8 @@ using namespace std;
  */
 
 struct subinterval {
-    float lower; //Lower boundary of the interval, inclusive. FLT_MIN for none.
-    float upper; //Upper boundary of the interval, inclusive. FLT_MAX for none.
+    float lower;   //Lower boundary of the interval, inclusive. FLT_MIN for none.
+    float upper;   //Upper boundary of the interval, inclusive. FLT_MAX for none.
     float divisor; //Every X numbers, starting on the lower boundary (or on 0 if there is no lower boundary). 0 for no divisor.
     subinterval(float l = FLT_MIN, float u = FLT_MAX, const float d = 0);
 };

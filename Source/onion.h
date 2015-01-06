@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -16,7 +16,7 @@
 #include "pikmin_type.h"
 #include "onion_type.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * An Onion is where Pikmin are stored.
  */
 class onion : public mob {

@@ -23,16 +23,16 @@ script{
         var = burrowed true
     }
 
-	on_see_prey{
+    on_see_prey{
         if = burrowed true
         animation = unburrow
         if = burrowed true
         wait = animation
         
         animation = walk
-		move = prey
+        move = prey
         var = burrowed false
-	}
+    }
     
     on_near_prey{
         move = stop
@@ -52,14 +52,14 @@ script{
         wait = animation
         eat = all
     }
-	
-	on_lose_prey{
+    
+    on_lose_prey{
         animation = idle
         move = stop
         wait = 0.5
         animation = walk
-		move = home
-	}
+        move = home
+    }
     
     on_reach_home{
         animation = idle

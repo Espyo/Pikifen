@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -930,6 +930,9 @@ void do_drawing() {
             (i2s(debug_framerate_counter) + "FPS").c_str()
         );
     }
+    if(!debug_last_axis.empty()) {
+        al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, debug_last_axis.c_str());
+    }
     
     al_flip_display();
 }
@@ -1597,4 +1600,22 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const f
         float line_y = (fh + 1) * l + top;
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Eases a number [0, 1] in accordance to a non-linear interpolation
+ * method. Normally used for camera movement and such.
+ * method: the method to use. Use EASE_*.
+ * n:      the number to ease, in the range [0, 1].
+ */
+float ease(const unsigned char method, const float n) {
+    switch(method) {
+    case EASE_IN:
+        return pow(n, 3);
+    case EASE_OUT:
+        return 1 - (pow((1 - n), 3));
+    }
+    
+    return n;
 }

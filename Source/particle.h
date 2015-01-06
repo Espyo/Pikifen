@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -14,7 +14,7 @@
 
 #include <allegro5/allegro.h>
 
-/*
+/* ----------------------------------------------------------------------------
  * A particle is best described with examples:
  * A puff of smoke, a sparkle, a smack.
  * There are several different types, which

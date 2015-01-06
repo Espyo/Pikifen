@@ -9,6 +9,9 @@ using namespace std;
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Labels contain text. Simple as that.
+ */
 class label : public widget {
 public:
     int text_flags;

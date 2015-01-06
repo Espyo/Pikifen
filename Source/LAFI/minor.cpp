@@ -2,6 +2,9 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * Creates a line.
+ */
 line::line(int x1, int y1, int x2, int y2, bool horizontal, int thickness, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
     
@@ -10,9 +13,15 @@ line::line(int x1, int y1, int x2, int y2, bool horizontal, int thickness, lafi:
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a line.
+ */
 line::~line() { }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the line.
+ */
 void line::draw_self() {
     if(horizontal) {
         int y = (y1 + y2) / 2;
@@ -27,11 +36,17 @@ void line::draw_self() {
 
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a dummy widget.
+ */
 dummy::dummy(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags)
     : widget(x1, y1, x2, y2, style, flags) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a dummy widget.
+ */
 void dummy::draw_self() { }
 
 }

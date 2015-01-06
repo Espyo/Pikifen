@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -35,7 +35,15 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             pikmin_list[0]->health -= 10;
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
             debug_show_framerate = !debug_show_framerate;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
+            if(!debug_last_axis.empty()) debug_last_axis.clear();
+            else debug_last_axis = "Input a joystick axis control.";
         }
+    }
+    if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS && !debug_last_axis.empty()) {
+        debug_last_axis =
+            "Stick: " + i2s(ev.joystick.stick) + ". "
+            "Axis: " + i2s(ev.joystick.axis) + ".";
     }
     
     size_t n_controls = controls.size();

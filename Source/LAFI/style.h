@@ -10,6 +10,12 @@
 
 namespace lafi {
 
+/* ----------------------------------------------------------------------------
+ * The style widgets have. This includes their main color,
+ * a lighter and darker variant, some alternate colors, etc.
+ * By having all widgets share the same style, they'll all
+ * have a consistent color palette.
+ */
 class style {
 public:
     ALLEGRO_COLOR bg_color;

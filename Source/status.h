@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -15,7 +15,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
-/*
+/* ----------------------------------------------------------------------------
  * A status effect. Any mob under the influence
  * of a status effect will suffer or benefit
  * from changes in some of its values.

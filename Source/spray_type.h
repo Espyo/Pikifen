@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) André 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -16,7 +16,7 @@
 
 #include "status.h"
 
-/*
+/* ----------------------------------------------------------------------------
  * A spray type. It decides how the spray behaves,
  * what status effect it causes, and some other values.
  */
