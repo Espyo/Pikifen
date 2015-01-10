@@ -39,7 +39,7 @@
 
 using namespace std;
 
-#define UTF8_MAGIC_NUMBER "\xEF\xBB\xBF"
+const string UTF8_MAGIC_NUMBER = "\xEF\xBB\xBF";
 
 
 

@@ -81,6 +81,6 @@ enum mob_categories {
     MOB_CATEGORY_SHIPS,
 };
 
-#define ANIM_IDLE 0
+const size_t ANIM_IDLE = 0;
 
 #endif //ifndef MOB_TYPE_INCLUDED

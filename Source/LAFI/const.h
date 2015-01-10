@@ -6,24 +6,24 @@
 
 namespace lafi {
 
-#define COLOR_SHIFT_DELTA 0.2 //A color is lightened/darkened by this much.
+const float COLOR_SHIFT_DELTA = 0.2f; //A color is lightened/darkened by this much.
 
-#define CHECKBOX_BOX_SIZE 12
-#define CHECKBOX_BOX_PADDING 4 //How many pixels after the box should the label come.
-#define RADIO_BUTTON_BUTTON_SIZE 12
-#define RADIO_BUTTON_BUTTON_PADDING 4
+const int CHECKBOX_BOX_SIZE = 12;
+const int CHECKBOX_BOX_PADDING = 4; //How many pixels after the box should the label come.
+const int RADIO_BUTTON_BUTTON_SIZE = 12;
+const int RADIO_BUTTON_BUTTON_PADDING = 4;
 
-#define DEF_STYLE_BG_R 192
-#define DEF_STYLE_BG_G 192
-#define DEF_STYLE_BG_B 192
-#define DEF_STYLE_FG_R 0
-#define DEF_STYLE_FG_G 0
-#define DEF_STYLE_FG_B 0
-#define DEF_STYLE_ALT_R 96
-#define DEF_STYLE_ALT_G 96
-#define DEF_STYLE_ALT_B 192
+const unsigned char DEF_STYLE_BG_R  = 192;
+const unsigned char DEF_STYLE_BG_G  = 192;
+const unsigned char DEF_STYLE_BG_B  = 192;
+const unsigned char DEF_STYLE_FG_R  = 0;
+const unsigned char DEF_STYLE_FG_G  = 0;
+const unsigned char DEF_STYLE_FG_B  = 0;
+const unsigned char DEF_STYLE_ALT_R = 96;
+const unsigned char DEF_STYLE_ALT_G = 96;
+const unsigned char DEF_STYLE_ALT_B = 192;
 
-#define STANDARD_SCROLLBAR_WIDTH 20
+const int STANDARD_SCROLLBAR_WIDTH = 20;
 
 
 enum WIDGET_FLAGS {

@@ -2457,7 +2457,7 @@ void area_editor::save_area() {
     file_node.add(new data_node("ed_bg_alpha",     i2s(ed_bg_a)));
     
     
-    file_node.save_file(AREA_FOLDER "/" + ed_file_name + ".txt");
+    file_node.save_file(AREA_FOLDER + "/" + ed_file_name + ".txt");
     
     ed_cur_sector = NULL;
     ed_cur_mob = NULL;

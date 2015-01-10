@@ -268,8 +268,8 @@ enum TERRAIN_SOUNDS {
     TERRAIN_SOUND_WATER,
 };
 
-#define BLOCKMAP_BLOCK_SIZE 128
-#define DEF_SECTOR_BRIGHTNESS 255
-#define SECTOR_STEP 50 //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
+const float BLOCKMAP_BLOCK_SIZE = 128;
+const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
+const float SECTOR_STEP = 50; //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
 
 #endif //ifndef SECTOR_INCLUDED

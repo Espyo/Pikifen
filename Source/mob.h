@@ -168,7 +168,7 @@ void unfocus_mob(mob* m1, mob* m2, const bool call_event);
 
 
 
-#define GRAVITY_ADDER -1300.0f //Accelerate the Z speed of mobs affected by gravity by this amount per second.
+const float GRAVITY_ADDER = -1300.0f; //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 
 enum MOB_TEAMS {
     MOB_TEAM_NONE,       //Can hurt/target anyone and be hurt/targeted by anyone, on any team.

@@ -483,7 +483,7 @@ void load_area(const string name, const bool load_for_editor) {
 
     cur_area_map.clear();
     
-    data_node file = load_data_file(AREA_FOLDER "/" + name + ".txt");
+    data_node file = load_data_file(AREA_FOLDER + "/" + name + ".txt");
     
     cur_area_map.weather_name = file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
@@ -698,7 +698,7 @@ void load_area_textures() {
  */
 ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_error) {
     ALLEGRO_BITMAP* b = NULL;
-    if(file_name.size()) b = al_load_bitmap((GRAPHICS_FOLDER "/" + file_name).c_str());
+    if(file_name.size()) b = al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
     
     if(!b && report_error) {
         error_log("Could not open image " + file_name + "!", node);
@@ -909,7 +909,7 @@ void load_options() {
  * Loads an audio sample from the game's content.
  */
 sample_struct load_sample(const string file_name, ALLEGRO_MIXER* const mixer) {
-    ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER "/" + file_name).c_str());
+    ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER + "/" + file_name).c_str());
     if(!sample) {
         error_log("Could not open audio sample " + file_name + "!");
     }

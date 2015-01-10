@@ -43,7 +43,7 @@ enum EDITOR_ERROR_TYPES {
     EET_INVALID_SHADOW,        //Invalid tree shadow image.
 };
 
-#define GRID_INTERVAL 32
+const float GRID_INTERVAL = 32.0f;
 
 
 
