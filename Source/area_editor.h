@@ -16,6 +16,8 @@
 
 #include <allegro5/allegro.h>
 
+#include "sector.h"
+
 using namespace std;
 
 namespace area_editor {
@@ -61,6 +63,7 @@ void gui_to_sector();
 void gui_to_shadow();
 void gui_to_adv_textures();
 void handle_controls(ALLEGRO_EVENT ev);
+bool is_linedef_valid(linedef* l);
 void load();
 void load_area();
 void mob_to_gui();

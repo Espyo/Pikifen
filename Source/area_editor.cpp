@@ -222,7 +222,7 @@ void area_editor::do_logic() {
             for(size_t l = 0; l < n_linedefs; ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 
-                if(!l_ptr->vertices[0] || !l_ptr->vertices[1]) continue;
+                if(!is_linedef_valid(l_ptr)) continue;
                 
                 bool one_sided = true;
                 bool error_highlight = false;
@@ -575,6 +575,7 @@ void area_editor::find_errors() {
             
             for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
+                if(!is_linedef_valid(l_ptr)) continue;
                 
                 if(
                     circle_intersects_line(
@@ -1035,7 +1036,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 
-                if(!l_ptr->vertices[0] || !l_ptr->vertices[1]) continue;
+                if(!is_linedef_valid(l_ptr)) continue;
                 
                 if(
                     circle_intersects_line(
@@ -1507,6 +1508,16 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a linedef is valid.
+ * A linedef is valid if it has non-NULL vertices.
+ */
+bool area_editor::is_linedef_valid(linedef* l) {
+    if(!l->vertices[0]) return false;
+    if(!l->vertices[1]) return false;
+    return true;
+}
 
 /* ----------------------------------------------------------------------------
  * Loads the area editor.

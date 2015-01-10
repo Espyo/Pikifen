@@ -78,6 +78,15 @@ struct carrier_info_struct {
  * like leader, Pikmin, enemy, Onion, etc.
  */
 class mob {
+private:
+    void tick_animation();
+    void tick_brain();
+    void tick_misc_logic();
+    void tick_physics();
+    void tick_script();
+    
+    void get_final_target(float* x, float* y);
+    
 public:
     mob(const float x, const float y, mob_type* type, const float angle, const string &vars);
     virtual ~mob(); //Needed so that typeid works.
@@ -96,6 +105,7 @@ public:
     float home_x, home_y;            //Starting coordinates; what the mob calls "home".
     float move_speed_mult;           //Multiply the normal moving speed by this.
     float acceleration;              //Speed multiplies by this much each second.
+    float speed;                     //Speed moving forward.
     float angle;                     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float intended_angle;            //Angle the mob wants to be facing.
     float ground_z;                  //Z of the highest ground it's on.
@@ -111,7 +121,10 @@ public:
     unsigned char target_code;          //Code ID for a special target, like home. Used for scripting.
     bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
     bool gtt_instant;                   //If true, teleport instantly.
-    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL);
+    bool gtt_free_move;                 //If true, the mob can move in a direction it's not facing.
+    float target_distance;              //Distance from the target in which the mob is considered as being there.
+    bool can_move;                      //If true, this mob can control its movement.
+    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL, bool free_move = false, float target_distance = 3);
     void remove_target(const bool stop);
     
     //Party things.

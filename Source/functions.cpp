@@ -942,7 +942,9 @@ void move_point(const float x, const float y, const float tx, const float ty, co
         if(my) *my = dy;
         if(angle) *angle = atan2(dy, dx);
         if(reached) *reached = false;
+        
     } else {
+    
         if(mx) *mx = 0;
         if(my) *my = 0;
         if(reached) *reached = true;

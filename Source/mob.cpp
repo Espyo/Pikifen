@@ -54,6 +54,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     target_z = NULL;
     target_rel_x = NULL;
     target_rel_y = NULL;
+    can_move = true;
     
     focused_prey = NULL;
     for(unsigned char e = 0; e < N_MOB_EVENTS; e++) events_queued[e] = 0;
@@ -78,42 +79,131 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
 
 /* ----------------------------------------------------------------------------
  * Makes the mob follow a game tick.
+ * This basically calls sub-tickers.
+ * Think of it this way: when you want to go somewhere,
+ * you first think about rotating your body to face that
+ * point, and then think about moving your legs.
+ * Then, the actual physics go into place, your nerves
+ * send signals to the muscles, and gravity, intertia, etc.
+ * take over the rest, to make you move.
  */
 void mob::tick() {
+    tick_brain();
+    tick_physics();
+    tick_misc_logic();
+    tick_script();
+    tick_animation();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one game frame into the mob's animations.
+ */
+void mob::tick_animation() {
+    bool finished_anim = anim.tick(delta_t);
+    
+    if(script_wait == -1 && finished_anim) { //Waiting for the animation to end.
+        script_wait = 0;
+        script_wait_event->run(this, script_wait_action); //Continue the waiting event.
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the mob's brain for the next frame.
+ * This has nothing to do with the mob's individual script.
+ * This is related to mob-global things, like
+ * thinking about where to move next and such.
+ */
+void mob::tick_brain() {
     //Chasing a target.
-    if(go_to_target && ((speed_z == 0 && knockdown_period == 0) || gtt_instant)) {
-        float final_target_x = target_x, final_target_y = target_y;
-        if(target_rel_x) final_target_x += *target_rel_x;
-        if(target_rel_y) final_target_y += *target_rel_y;
+    if(go_to_target && !gtt_instant && speed_z == 0 && knockdown_period == 0) {
+    
+        //Calculate where the target is.
+        float final_target_x, final_target_y;
+        get_final_target(&final_target_x, &final_target_y);
         
-        if(gtt_instant) {
+        if(!gtt_instant) {
         
-            x = final_target_x;
-            y = final_target_y;
-            
-            sector* sec = get_sector(x, y, NULL, true);
-            if(!sec) {
-                //ToDo Out of bounds! Kill it!
+            if(
+                !(fabs(final_target_x - x) < target_distance &&
+                  fabs(final_target_y - y) < target_distance)
+            ) {
+                //If it still hasn't reached its target (or close enough to the target),
+                //time to make it think about how to get there.
+                
+                //Let the mob think about facing the actual target.
+                face(atan2(final_target_y - y, final_target_x - x));
+                //Let the mob think about moving forward.
+                speed = type->move_speed;
+                
             } else {
-                if(target_z) {
-                    ground_z = sec->z;
-                    z = *target_z;
-                }
-                speed_x = speed_y = speed_z = 0;
+                //Reached the location. The mob should now think
+                //about stopping.
+                
+                speed = 0;
             }
             
-        } else if(x != final_target_x || y != final_target_y) {
-            float new_angle = angle;
-            move_point(x, y, final_target_x, final_target_y, get_base_speed(), 0.001, &speed_x, &speed_y, &new_angle, &reached_destination);
-            if(!reached_destination && state != MOB_STATE_BEING_CARRIED) {
-                //Only face the way the mob wants to go if it's still going. Otherwise, let other code turn them whichever way it wants.
-                face(new_angle);
-            }
-        } else reached_destination = true;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Performs some logic code for this game frame.
+ */
+void mob::tick_misc_logic() {
+    //Other things.
+    if(unwhistlable_period > 0) {
+        unwhistlable_period -= delta_t;
+        unwhistlable_period = max(unwhistlable_period, 0.0f);
+    }
+    if(untouchable_period > 0) {
+        untouchable_period -= delta_t;
+        untouchable_period = max(untouchable_period, 0.0f);
     }
     
+    if(party) {
+        float party_center_mx = 0, party_center_my = 0;
+        move_point(
+            party->party_center_x, party->party_center_y,
+            x, y,
+            type->move_speed,
+            get_leader_to_group_center_dist(this),
+            &party_center_mx, &party_center_my, NULL, NULL
+        );
+        party->party_center_x += party_center_mx * delta_t;
+        party->party_center_y += party_center_my * delta_t;
+        
+        size_t n_members = party->members.size();
+        for(size_t m = 0; m < n_members; m++) {
+            party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
+        }
+    }
+    
+    time_in_state += delta_t;
+    
+    if(invuln_period > 0) {
+        invuln_period -= delta_t;
+        invuln_period = max(invuln_period, 0.0f);
+    }
+    
+    if(speed_z == 0) {
+        if(knockdown_period > 0) {
+            knockdown_period -= delta_t;
+            knockdown_period = max(knockdown_period, 0.0f);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the mob's actual physics procedures:
+ * falling because of gravity, moving forward, etc.
+ */
+void mob::tick_physics() {
     //Movement.
-    bool move_over = false;
+    bool finished_moving = false;
     bool doing_slide = false;
     
     float new_x = x, new_y = y, new_z = z;
@@ -124,7 +214,70 @@ void mob::tick() {
     float move_speed_x = speed_x;
     float move_speed_y = speed_y;
     
-    while(!move_over) {
+    //Change the facing angle to the angle the mob wants to face.
+    if(angle > M_PI)  angle -= M_PI * 2;
+    if(angle < -M_PI) angle += M_PI * 2;
+    if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
+    if(intended_angle < -M_PI) intended_angle += M_PI * 2;
+    
+    float angle_dif = intended_angle - angle;
+    if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
+    if(angle_dif < -M_PI) angle_dif += M_PI * 2;
+    
+    angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
+    
+    if(go_to_target) {
+        //If the mob is meant to teleport somewhere,
+        //let's just do so.
+        float final_target_x, final_target_y;
+        get_final_target(&final_target_x, &final_target_y);
+        
+        if(gtt_instant) {
+            sector* sec = get_sector(final_target_x, final_target_y, NULL, true);
+            if(!sec) {
+                //ToDo Out of bounds! Kill it!
+                
+            } else {
+                if(target_z) {
+                    ground_z = sec->z;
+                    z = *target_z;
+                }
+                speed_x = speed_y = speed_z = 0;
+            }
+            
+        } else if(reached_destination) {
+            go_to_target = false;
+            speed = 0;
+            
+        } else {
+            if(can_move) {
+            
+                //Make it go to the direction it wants.
+                float d = dist(x, y, final_target_x, final_target_y);
+                float move_amount = min((double) (d / delta_t), (double) speed);
+                
+                float movement_angle = gtt_free_move ?
+                                       atan2(final_target_y - y, final_target_x - x) :
+                                       angle;
+                                       
+                move_speed_x = cos(movement_angle) * move_amount;
+                move_speed_y = sin(movement_angle) * move_amount;
+            }
+        }
+    }
+    
+    if(!can_move) {
+        //If it can't consciously move, let the physics do its thing.
+        
+        move_speed_x = speed_x;
+        move_speed_y = speed_y;
+        
+    }
+    
+    
+    //Try placing it in the place it should be at, judging
+    //from the movement speed.
+    while(!finished_moving) {
     
         if(move_speed_x != 0 || move_speed_y != 0) {
         
@@ -144,7 +297,7 @@ void mob::tick() {
             sector* base_sector = get_sector(new_x, new_y, NULL, true);
             if(!base_sector) {
                 //ToDo out of bounds! Kill it!
-                return;
+                break;
             } else {
                 new_ground_z = base_sector->z;
                 new_lighting = base_sector->brightness;
@@ -161,7 +314,7 @@ void mob::tick() {
                 by1 == string::npos || by2 == string::npos
             ) {
                 //ToDo out of bounds! Kill it!
-                return;
+                break;
             }
             
             float slide_angle = move_angle;
@@ -200,6 +353,7 @@ void mob::tick() {
                                 
                                 if(!s_ptr) {
                                     //ToDo out of bounds! Kill it!
+                                    break;
                                     
                                 } else {
                                 
@@ -263,7 +417,7 @@ void mob::tick() {
                 z = new_z;
                 ground_z = new_ground_z;
                 lighting = new_lighting;
-                move_over = true;
+                finished_moving = true;
                 
             } else {
             
@@ -272,7 +426,7 @@ void mob::tick() {
                     //We already tried... Let's just stop completely.
                     speed_x = 0;
                     speed_y = 0;
-                    move_over = true;
+                    finished_moving = true;
                     
                 } else {
                 
@@ -285,9 +439,12 @@ void mob::tick() {
             }
             
         } else {
-            move_over = true;
+        
+            finished_moving = true;
+            
         }
     }
+    
     
     //Vertical movement.
     //If the current ground is one step (or less) below
@@ -312,62 +469,13 @@ void mob::tick() {
     if(z > ground_z && affected_by_gravity) {
         speed_z += delta_t* (GRAVITY_ADDER);
     }
-    
-    //Other things.
-    if(unwhistlable_period > 0) {
-        unwhistlable_period -= delta_t;
-        unwhistlable_period = max(unwhistlable_period, 0.0f);
-    }
-    if(untouchable_period > 0) {
-        untouchable_period -= delta_t;
-        untouchable_period = max(untouchable_period, 0.0f);
-    }
-    
-    if(party) {
-        float party_center_mx = 0, party_center_my = 0;
-        move_point(
-            party->party_center_x, party->party_center_y,
-            x, y,
-            type->move_speed,
-            get_leader_to_group_center_dist(this),
-            &party_center_mx, &party_center_my, NULL, NULL
-        );
-        party->party_center_x += party_center_mx * delta_t;
-        party->party_center_y += party_center_my * delta_t;
-        
-        size_t n_members = party->members.size();
-        for(size_t m = 0; m < n_members; m++) {
-            party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
-        }
-    }
-    
-    time_in_state += delta_t;
-    
-    if(invuln_period > 0) {
-        invuln_period -= delta_t;
-        invuln_period = max(invuln_period, 0.0f);
-    }
-    
-    if(speed_z == 0) {
-        if(knockdown_period > 0) {
-            knockdown_period -= delta_t;
-            knockdown_period = max(knockdown_period, 0.0f);
-        }
-    }
-    
-    
-    //Change the facing angle to the angle the mob wants to face.
-    if(angle > M_PI)  angle -= M_PI * 2;
-    if(angle < -M_PI) angle += M_PI * 2;
-    if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
-    if(intended_angle < -M_PI) intended_angle += M_PI * 2;
-    
-    float angle_dif = intended_angle - angle;
-    if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
-    if(angle_dif < -M_PI) angle_dif += M_PI * 2;
-    
-    angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
-    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the mob's script for this frame.
+ */
+void mob::tick_script() {
     //Scripts.
     if(
         get_mob_event(this, MOB_EVENT_SEE_PREY, true) ||
@@ -500,14 +608,17 @@ void mob::tick() {
             script_wait_event->run(this, script_wait_action); //Continue the waiting event.
         }
     }
-    
-    //Animation.
-    bool finished_anim = anim.tick(delta_t);
-    
-    if(script_wait == -1 && finished_anim) { //Waiting for the animation to end.
-        script_wait = 0;
-        script_wait_event->run(this, script_wait_action); //Continue the waiting event.
-    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the actual location of the movement target.
+ */
+void mob::get_final_target(float* x, float* y) {
+    *x = target_x;
+    *y = target_y;
+    if(target_rel_x) *x += *target_rel_x;
+    if(target_rel_y) *y += *target_rel_y;
 }
 
 
@@ -518,15 +629,20 @@ void mob::tick() {
  * target_rel_*: Pointers to moving coordinates. If NULL, it's the world origin.
    * Use this to make the mob follow another mob wherever they go, for instance.
  * instant:      If true, the mob teleports to that spot, instead of walking to it.
+ * target_z:     Teleports to this Z coordinate, too.
+ * free_move:    If true, the mob can go to a direction they're not facing.
+ * target_distance: Distance from the target in which the mob is considered as being there.
  */
-void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z) {
+void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z, bool free_move, float target_distance) {
     if(this->knockdown_period > 0 && !instant) return;
     
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
     this->target_z = target_z;
-    
+    this->gtt_free_move =
+        this->target_distance = target_distance;
+        
     go_to_target = true;
     reached_destination = false;
     target_code = MOB_TARGET_NONE;

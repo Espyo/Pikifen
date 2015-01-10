@@ -689,7 +689,7 @@ void do_logic() {
                 cur_leader_ptr->set_target(
                     cur_leader_ptr->x + leader_move_x * cur_leader_ptr->type->move_speed,
                     cur_leader_ptr->y + leader_move_y * cur_leader_ptr->type->move_speed,
-                    NULL, NULL, false);
+                    NULL, NULL, false, NULL, true);
         }
         
         size_t n_leaders = leaders.size();
