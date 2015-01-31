@@ -33,4 +33,4 @@ public:
     bool drops_corpse;
 };
 
-#endif //ifndef ENEMY_TYPE_INCLUDED
+#endif // ifndef ENEMY_TYPE_INCLUDED

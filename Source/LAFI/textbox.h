@@ -15,7 +15,7 @@ namespace lafi {
  */
 class textbox : public widget {
 private:
-    int scroll_x; //Scroll the text by this much. Used to keep track of the cursor.
+    int scroll_x; // Scroll the text by this much. Used to keep track of the cursor.
     
 public:
 
@@ -28,7 +28,7 @@ public:
     bool editable;
     bool multi_line;
     size_t tab_index;
-    widget* enter_key_widget; //If you press the Enter key, simulate a click on this widget.
+    widget* enter_key_widget; // If you press the Enter key, simulate a click on this widget.
     
     function<void(widget* w)> change_handler;
     
@@ -48,4 +48,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_TEXTBOX_INCLUDED
+#endif // ifndef LAFI_TEXTBOX_INCLUDED

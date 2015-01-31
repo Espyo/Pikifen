@@ -67,12 +67,12 @@ void scrollbar::create_button() {
     if(low_value != high_value) {
     
         if(vertical) {
-            int bh = (high_value - low_value) * ((float) (y2 - y1) / (max_value - min_value));  //Pixels per value.
+            int bh = (high_value - low_value) * ((float) (y2 - y1) / (max_value - min_value));  // Pixels per value.
             
             bx1 = x1; by1 = y1;
             bx2 = x2; by2 = y1 + bh;
         } else {
-            int bw = (high_value - low_value) * ((float) (x2 - x1) / (max_value - min_value));  //Pixels per value.
+            int bw = (high_value - low_value) * ((float) (x2 - x1) / (max_value - min_value));  // Pixels per value.
             
             by1 = y1; bx1 = x1;
             by2 = y2; bx2 = x1 + bw;
@@ -197,7 +197,7 @@ void scrollbar::draw_self() {
         al_draw_line(x1 + w / 2 - 4, y2 - 0.5, x1 + w / 2 + 4, y2 - 0.5, get_darker_bg_color(),  1);
         al_draw_line(x1 + w / 2 - 4, y2 - 1.5, x1 + w / 2 + 4, y2 - 1.5, get_lighter_bg_color(), 1);
         
-    } else { //Horizontal bar.
+    } else { // Horizontal bar.
     
         al_draw_filled_rectangle(
             x1 + 0.5,
@@ -263,7 +263,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
         }
         
         if(vertical) {
-            largest_y2 += 8; //Spacing.
+            largest_y2 += 8; // Spacing.
             largest_y2 -= widget->y1;
             if(largest_y2 < widget->y2 - widget->y1) {
                 this->high_value = this->max_value = 0;
@@ -272,7 +272,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
                 this->max_value = largest_y2;
             }
         } else {
-            largest_x2 += 8; //Spacing.
+            largest_x2 += 8; // Spacing.
             largest_x2 -= widget->x1;
             if(largest_x2 < widget->x2 - widget->x1) {
                 this->high_value = this->max_value = 0;
@@ -297,7 +297,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
 
 
 /* ----------------------------------------------------------------------------
- * //ToDo describe this. This is the problem of late documentation -- you document after you forget what stuff does.
+ * // TODO describe this. This is the problem of late documentation -- you document after you forget what stuff does.
  */
 void scrollbar::widget_scroller(widget* w) {
     scrollbar* scrollbar_ptr = (scrollbar*) w;

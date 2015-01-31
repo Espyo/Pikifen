@@ -32,17 +32,17 @@ enum AREA_EDITOR_PICKER_TYPES {
 enum EDITOR_ERROR_TYPES {
     EET_NONE_YET,
     EET_NONE,
-    EET_INTERSECTING_LINEDEFS, //Two linedefs intersect.
-    EET_LONE_LINE,             //A linedef is all by itself.
-    EET_OVERLAPPING_VERTICES,  //Two vertices in the same spot.
-    EET_BAD_SECTOR,            //A sector is corrupted.
-    EET_MISSING_TEXTURE,       //A sector is without texture.
-    EET_UNKNOWN_TEXTURE,       //A texture is not found in the game files.
-    EET_LANDING_SITE,          //No landing site sector exists.
-    EET_TYPELESS_MOB,          //Mob with no type.
-    EET_MOB_OOB,               //Mob out of bounds.
-    EET_MOB_IN_WALL,           //Mob stuck in a wall.
-    EET_INVALID_SHADOW,        //Invalid tree shadow image.
+    EET_INTERSECTING_LINEDEFS, // Two linedefs intersect.
+    EET_LONE_LINE,             // A linedef is all by itself.
+    EET_OVERLAPPING_VERTICES,  // Two vertices in the same spot.
+    EET_BAD_SECTOR,            // A sector is corrupted.
+    EET_MISSING_TEXTURE,       // A sector is without texture.
+    EET_UNKNOWN_TEXTURE,       // A texture is not found in the game files.
+    EET_LANDING_SITE,          // No landing site sector exists.
+    EET_TYPELESS_MOB,          // Mob with no type.
+    EET_MOB_OOB,               // Mob out of bounds.
+    EET_MOB_IN_WALL,           // Mob stuck in a wall.
+    EET_INVALID_SHADOW,        // Invalid tree shadow image.
 };
 
 const float GRID_INTERVAL = 32.0f;
@@ -77,4 +77,4 @@ void update_review_frame();
 
 };
 
-#endif //ifndef AREA_EDITOR_INCLUDED
+#endif // ifndef AREA_EDITOR_INCLUDED

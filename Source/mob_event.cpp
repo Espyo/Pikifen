@@ -58,7 +58,7 @@ mob_action::mob_action(mob_type* mt, data_node* dn) {
         
         
     } else if(n == "if") {
-        //ToDo make this use integers instead of strings, eventually?
+        // TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
         vector<string> words = split(dn->value);
@@ -253,22 +253,22 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
                 m->chomping_pikmin[p]->health = 0;
             }
         }
-        //ToDo other cases besides eating all.
+        // TODO other cases besides eating all.
         m->chomping_pikmin.clear();
         
         
         
     } else if(type == MOB_ACTION_IF) {
     
-        //ToDo check for vs size.
-        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
+        // TODO check for vs size.
+        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; // If false, skip to the next one.
         
         
         
     } else if(type == MOB_ACTION_MOVE) {
     
-        //ToDo relative values.
-        //ToDo check for vf size.
+        // TODO relative values.
+        // TODO check for vf size.
         if(sub_type == MOB_ACTION_MOVE_PREY) {
             if(m->focused_prey) {
                 m->set_target(0, 0, &m->focused_prey->x, &m->focused_prey->y, false);
@@ -303,14 +303,14 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
-        //ToDo check vi's size.
+        // TODO check vi's size.
         m->affected_by_gravity = vi[0];
         
         
         
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
-        //ToDo check vf size's.
+        // TODO check vf size's.
         unsigned short base_nr = 0;
         if(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE) base_nr = m->health;
         
@@ -320,14 +320,14 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
-        //ToDo check vf's size.
+        // TODO check vf's size.
         m->timer = m->timer_interval = vf[0];
         
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        //ToDo check vs' size.
+        // TODO check vs' size.
         m->vars[vs[0]] = vs[1];
         
         
@@ -364,7 +364,7 @@ bool mob_action::run(mob* m, mob_event* e, size_t* action_nr) {
         
     } else if(type == MOB_ACTION_WAIT) {
     
-        //ToDo check vf's size.
+        // TODO check vf's size.
         if(sub_type == MOB_ACTION_WAIT_ANIMATION) {
             m->script_wait = -1;
             return true;
@@ -488,7 +488,7 @@ mob_event::mob_event(const unsigned char t, vector<mob_action*> a) {
  */
 void mob_event::run(mob* m, const size_t starting_action) {
 
-    //ToDo remove.
+    // TODO remove.
     if(starting_action == 0) {
         string n = "#" + to_string((long long) type);
         if(type == MOB_EVENT_SEE_PREY) n = "SEE PREY";

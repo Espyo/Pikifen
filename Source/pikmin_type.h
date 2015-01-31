@@ -31,7 +31,7 @@ using namespace std;
 class pikmin_type : public mob_type {
 public:
     vector<element*> resistences;
-    unsigned char attack_attribute; //ToDo What.
+    unsigned char attack_attribute; // TODO What.
     float carry_strength;
     float attack_power;
     float attack_interval;
@@ -45,8 +45,8 @@ public:
     bool can_swim;
     bool can_latch;
     bool can_carry_bomb_rocks;
-    ALLEGRO_BITMAP* bmp_top[3]; //Top (leaf/bud/flower) bitmap for each maturity.
-    ALLEGRO_BITMAP* bmp_icon[3]; //Standby icons for each maturity.
+    ALLEGRO_BITMAP* bmp_top[3]; // Top (leaf/bud/flower) bitmap for each maturity.
+    ALLEGRO_BITMAP* bmp_icon[3]; // Standby icons for each maturity.
     
     pikmin_type();
 };
@@ -64,4 +64,4 @@ enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_GET_UP,
 };
 
-#endif //ifndef PIKMIN_TYPE_INCLUDED
+#endif // ifndef PIKMIN_TYPE_INCLUDED

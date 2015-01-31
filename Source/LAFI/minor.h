@@ -34,4 +34,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_LINE_INCLUDED
+#endif // ifndef LAFI_LINE_INCLUDED

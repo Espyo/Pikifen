@@ -142,14 +142,14 @@ void area_editor::change_to_right_frame(bool hide_all) {
  */
 void area_editor::do_logic() {
 
-    //---Logic---
+    // ---Logic---
     
     if(ed_double_click_time > 0) {
         ed_double_click_time -= delta_t;
         if(ed_double_click_time < 0) ed_double_click_time = 0;
     }
     
-    //---Drawing---
+    // ---Drawing---
     
     ed_gui->draw();
     
@@ -162,7 +162,7 @@ void area_editor::do_logic() {
     al_set_clipping_rectangle(0, 0, scr_w - 208, scr_h - 16); {
         al_clear_to_color(al_map_rgb(0, 0, 16));
         
-        //Grid.
+        // Grid.
         float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
         float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
         float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
@@ -208,11 +208,11 @@ void area_editor::do_logic() {
             }
         }
         
-        //0,0 marker.
+        // 0,0 marker.
         al_draw_line(-(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         
-        //Linedefs.
+        // Linedefs.
         if(ed_sec_mode != ESM_TEXTURE_VIEW) {
         
             unsigned char sector_opacity = 224;
@@ -274,8 +274,8 @@ void area_editor::do_logic() {
                     (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
                 );
                 
-                //Debug: uncomment this to show the sector numbers on each side.
-                //Orientantion could be wrong, as there is no concept of front/back sector.
+                // Debug: uncomment this to show the sector numbers on each side.
+                // Orientantion could be wrong, as there is no concept of front/back sector.
                 /*float mid_x = (l_ptr->vertices[0]->x + l_ptr->vertices[1]->x) / 2;
                 float mid_y = (l_ptr->vertices[0]->y + l_ptr->vertices[1]->y) / 2;
                 float angle = atan2(l_ptr->vertices[0]->y - l_ptr->vertices[1]->y, l_ptr->vertices[0]->x - l_ptr->vertices[1]->x);
@@ -291,7 +291,7 @@ void area_editor::do_logic() {
                     ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : i2s(l_ptr->sector_nrs[1]).c_str());*/
             }
             
-            //Vertices.
+            // Vertices.
             size_t n_vertices = cur_area_map.vertices.size();
             for(size_t v = 0; v < n_vertices; ++v) {
                 vertex* v_ptr = cur_area_map.vertices[v];
@@ -309,13 +309,13 @@ void area_editor::do_logic() {
             
         } else {
         
-            //Draw textures.
+            // Draw textures.
             for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
                 draw_sector(cur_area_map.sectors[s], 0, 0, 1.0);
             }
         }
         
-        //Mobs.
+        // Mobs.
         unsigned char mob_opacity = 224;
         if(ed_mode == EDITOR_MODE_SECTORS || ed_mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS || ed_mode == EDITOR_MODE_SHADOWS) mob_opacity = 64;
         if(ed_sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
@@ -366,7 +366,7 @@ void area_editor::do_logic() {
             
         }
         
-        //Shadows.
+        // Shadows.
         if(ed_mode == EDITOR_MODE_SHADOWS || (ed_sec_mode == ESM_TEXTURE_VIEW && ed_show_shadows)) {
             for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
             
@@ -389,7 +389,7 @@ void area_editor::do_logic() {
             }
         }
         
-        //New thing marker.
+        // New thing marker.
         if(ed_sec_mode == ESM_NEW_SECTOR || ed_sec_mode == ESM_NEW_OBJECT || ed_sec_mode == ESM_NEW_SHADOW) {
             float x = snap_to_grid(mouse_cursor_x);
             float y = snap_to_grid(mouse_cursor_y);
@@ -397,12 +397,12 @@ void area_editor::do_logic() {
             al_draw_line(x,      y - 16, x,      y + 16, al_map_rgb(255, 255, 255), 1.0 / cam_zoom);
         }
         
-        //Lightly glow the sector under the mouse.
+        // Lightly glow the sector under the mouse.
         if(ed_mode == EDITOR_MODE_SECTORS) {
             if(ed_on_sector && ed_moving_thing == string::npos) {
                 for(size_t t = 0; t < ed_on_sector->triangles.size(); t++) {
                     triangle* t_ptr = &ed_on_sector->triangles[t];
-                    //Uncomment this to show the triangles.
+                    // Uncomment this to show the triangles.
                     /*al_draw_triangle(
                         t_ptr->points[0]->x,
                         t_ptr->points[0]->y,
@@ -426,7 +426,7 @@ void area_editor::do_logic() {
             }
         }
         
-        //ToDo temp stuff.
+        // TODO temp stuff.
         /*for(size_t v = 0; v < ed_temp_o.size(); v++) {
             al_draw_text(font, al_map_rgb(255, 255, 255), ed_temp_o[v]->x, ed_temp_o[v]->y - font_h, ALLEGRO_ALIGN_CENTER, ("O" + to_string((long long) v)).c_str());
         }
@@ -437,7 +437,7 @@ void area_editor::do_logic() {
         }*/
         
         
-        //Background.
+        // Background.
         if(ed_bg_bitmap && ed_show_bg) {
             al_draw_tinted_scaled_bitmap(
                 ed_bg_bitmap,
@@ -470,12 +470,12 @@ void area_editor::find_errors() {
     ed_error_vertex_ptr = NULL;
     ed_error_string.clear();
     
-    //Check intersecting lines.
+    // Check intersecting lines.
     if(!ed_intersecting_lines.empty()) {
         ed_error_type = EET_INTERSECTING_LINEDEFS;
     }
     
-    //Check overlapping vertices.
+    // Check overlapping vertices.
     if(ed_error_type == EET_NONE) {
         ed_error_vertex_ptr = NULL;
         
@@ -496,21 +496,21 @@ void area_editor::find_errors() {
         }
     }
     
-    //Check non-simple sectors.
+    // Check non-simple sectors.
     if(ed_error_type == EET_NONE) {
         if(!ed_non_simples.empty()) {
             ed_error_type = EET_BAD_SECTOR;
         }
     }
     
-    //Check lone linedefs.
+    // Check lone linedefs.
     if(ed_error_type == EET_NONE) {
         if(!ed_lone_lines.empty()) {
             ed_error_type = EET_LONE_LINE;
         }
     }
     
-    //Check for missing textures.
+    // Check for missing textures.
     if(ed_error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         
@@ -523,7 +523,7 @@ void area_editor::find_errors() {
         }
     }
     
-    //Check for unknown textures.
+    // Check for unknown textures.
     if(ed_error_type == EET_NONE) {
         vector<string> texture_file_names = folder_to_vector(TEXTURES_FOLDER, false);
         for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
@@ -541,7 +541,7 @@ void area_editor::find_errors() {
         }
     }
     
-    //Objects with no type.
+    // Objects with no type.
     if(ed_error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             if(!cur_area_map.mob_generators[m]->type) {
@@ -552,7 +552,7 @@ void area_editor::find_errors() {
         }
     }
     
-    //Objects out of bounds.
+    // Objects out of bounds.
     if(ed_error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
@@ -564,7 +564,7 @@ void area_editor::find_errors() {
         }
     }
     
-    //Objects inside walls.
+    // Objects inside walls.
     if(ed_error_type == EET_NONE) {
         ed_error_mob_ptr = NULL;
         
@@ -608,7 +608,7 @@ void area_editor::find_errors() {
         }
     }
     
-    //Check if there are no landing site sectors.
+    // Check if there are no landing site sectors.
     if(ed_error_type == EET_NONE) {
         bool landing_site_missing = true;
         for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
@@ -624,7 +624,7 @@ void area_editor::find_errors() {
         if(landing_site_missing) ed_error_type = EET_LANDING_SITE;
     }
     
-    //Check if there are tree shadows with invalid images.
+    // Check if there are tree shadows with invalid images.
     if(ed_error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             if(cur_area_map.tree_shadows[s]->bitmap == bmp_error) {
@@ -748,7 +748,7 @@ void area_editor::goto_error() {
         );
         
     } else if(ed_error_type == EET_LANDING_SITE) {
-        //Nothing to focus on.
+        // Nothing to focus on.
         return;
         
     } else if(ed_error_type == EET_INVALID_SHADOW) {
@@ -787,7 +787,7 @@ void area_editor::gui_to_bg() {
     bool is_file_new = false;
     
     if(new_file_name != ed_bg_file_name) {
-        //New background image, delete the old one.
+        // New background image, delete the old one.
         change_background(new_file_name);
         is_file_new = true;
         if(ed_bg_bitmap) {
@@ -865,7 +865,7 @@ void area_editor::gui_to_shadow() {
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     
     if(new_file_name != ed_cur_shadow->file_name) {
-        //New image, delete the old one.
+        // New image, delete the old one.
         if(ed_cur_shadow->bitmap != bmp_error) {
             bitmaps.detach(ed_cur_shadow->file_name);
         }
@@ -887,7 +887,7 @@ void area_editor::gui_to_sector() {
     ed_cur_sector->always_cast_shadow = ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
     ed_cur_sector->file_name = ((lafi::textbox*) f->widgets["txt_texture"])->text;
     ed_cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
-    //ToDo hazards.
+    // TODO hazards.
     
     sector_to_gui();
 }
@@ -900,7 +900,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
 
     ed_gui->handle_event(ev);
     
-    //Update mouse cursor in world coordinates.
+    // Update mouse cursor in world coordinates.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
@@ -909,12 +909,12 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         mouse_cursor_y = ev.mouse.y / cam_zoom - cam_y - (scr_h / 2 / cam_zoom);
         lafi::widget* wum;
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) wum = NULL;
-        else wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
+        else wum = ed_gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); // Widget under mouse.
         ((lafi::label*) ed_gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
     }
     
     
-    //Moving vertices, camera, etc.
+    // Moving vertices, camera, etc.
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
     
         if(
@@ -927,7 +927,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             ed_on_sector = NULL;
         }
         
-        //Move background.
+        // Move background.
         if(ed_sec_mode == ESM_BG_MOUSE) {
         
             if(ed_holding_m1) {
@@ -940,7 +940,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 float new_h = ed_bg_h + ev.mouse.dy / cam_zoom;
                 
                 if(ed_bg_aspect_ratio) {
-                    //Find the most significant change.
+                    // Find the most significant change.
                     if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                         bool most_is_width = fabs((double) ev.mouse.dx) > fabs((double) ev.mouse.dy);
                         
@@ -965,12 +965,12 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             bg_to_gui();
             
         } else if(ed_holding_m2) {
-            //Move camera.
+            // Move camera.
             cam_x += ev.mouse.dx / cam_zoom;
             cam_y += ev.mouse.dy / cam_zoom;
         }
         
-        //Move vertex, mob or shadow.
+        // Move vertex, mob or shadow.
         if(ed_moving_thing != string::npos) {
             if(ed_mode == EDITOR_MODE_SECTORS) {
                 vertex* v_ptr = cur_area_map.vertices[ed_moving_thing];
@@ -990,7 +990,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
         if(ev.mouse.dz != 0) {
-            //Zoom.
+            // Zoom.
             float new_zoom = cam_zoom + (cam_zoom * ev.mouse.dz * 0.1);
             new_zoom = max(ZOOM_MIN_LEVEL_EDITOR, new_zoom);
             new_zoom = min(ZOOM_MAX_LEVEL_EDITOR, new_zoom);
@@ -1006,7 +1006,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16) {
-        //Clicking.
+        // Clicking.
         
         if(ev.mouse.button == 1) ed_holding_m1 = true;
         else if(ev.mouse.button == 2) ed_holding_m2 = true;
@@ -1015,7 +1015,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(ev.mouse.button != 1) return;
         if(ev.mouse.x > scr_w - 208) return;
         
-        //If the user was editing, save it.
+        // If the user was editing, save it.
         if(ed_mode == EDITOR_MODE_SECTORS) {
             gui_to_sector();
         } else if(ed_mode == EDITOR_MODE_OBJECTS) {
@@ -1024,7 +1024,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             gui_to_shadow();
         }
         
-        //Sector-related clicking.
+        // Sector-related clicking.
         if(ed_sec_mode == ESM_NONE && ed_mode == EDITOR_MODE_SECTORS) {
         
             ed_moving_thing = string::npos;
@@ -1053,28 +1053,28 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             if(ed_double_click_time == 0) ed_double_click_time = 0.5;
             else if(clicked_linedef_ptr) {
-                //Create a new vertex.
+                // Create a new vertex.
                 ed_double_click_time = 0;
                 
-                //New vertex, on the split point.
-                //ToDo create it on the line, not on the cursor.
+                // New vertex, on the split point.
+                // TODO create it on the line, not on the cursor.
                 vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
                 cur_area_map.vertices.push_back(new_v_ptr);
                 
-                //New linedef, copied from the original one.
+                // New linedef, copied from the original one.
                 linedef* new_l_ptr = new linedef(*clicked_linedef_ptr);
                 cur_area_map.linedefs.push_back(new_l_ptr);
                 
-                //Save the original end vertex for later.
+                // Save the original end vertex for later.
                 vertex* end_v_ptr = clicked_linedef_ptr->vertices[1];
                 
-                //Set vertices on the new and original linedefs.
+                // Set vertices on the new and original linedefs.
                 new_l_ptr->vertex_nrs[0] = cur_area_map.vertices.size() - 1;
                 new_l_ptr->vertices[0] = new_v_ptr;
                 clicked_linedef_ptr->vertex_nrs[1] = new_l_ptr->vertex_nrs[0];
                 clicked_linedef_ptr->vertices[1] = new_v_ptr;
                 
-                //Set sectors on the new linedef.
+                // Set sectors on the new linedef.
                 if(new_l_ptr->sectors[0]) {
                     new_l_ptr->sectors[0]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
                     new_l_ptr->sectors[0]->linedefs.push_back(new_l_ptr);
@@ -1084,14 +1084,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     new_l_ptr->sectors[1]->linedefs.push_back(new_l_ptr);
                 }
                 
-                //Set linedefs of the new vertex.
+                // Set linedefs of the new vertex.
                 new_v_ptr->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
                 new_v_ptr->linedef_nrs.push_back(clicked_linedef_nr);
                 new_v_ptr->linedefs.push_back(new_l_ptr);
                 new_v_ptr->linedefs.push_back(clicked_linedef_ptr);
                 
-                //Update linedef data on the end vertex of the original line
-                //(it now links to the new line, not the old).
+                // Update linedef data on the end vertex of the original line
+                // (it now links to the new line, not the old).
                 for(size_t vl = 0; vl < end_v_ptr->linedefs.size(); ++vl) {
                     if(end_v_ptr->linedefs[vl] == clicked_linedef_ptr) {
                         end_v_ptr->linedefs[vl] = new_l_ptr;
@@ -1100,13 +1100,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     }
                 }
                 
-                //Start dragging the new vertex.
+                // Start dragging the new vertex.
                 ed_moving_thing = cur_area_map.vertices.size() - 1;
                 
                 created_vertex = true;
             }
             
-            //Find a vertex to drag.
+            // Find a vertex to drag.
             if(!created_vertex) {
                 for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                     if(
@@ -1122,7 +1122,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
-            //Find a sector to select.
+            // Find a sector to select.
             if(ed_moving_thing == string::npos && !clicked_linedef_ptr) {
                 ed_cur_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
@@ -1130,7 +1130,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             
         } else if(ed_sec_mode == ESM_NONE && ed_mode == EDITOR_MODE_OBJECTS) {
-            //Object-related clicking.
+            // Object-related clicking.
             
             ed_cur_mob = NULL;
             ed_moving_thing = string::npos;
@@ -1147,7 +1147,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             mob_to_gui();
             
         } else if(ed_sec_mode == ESM_NONE && ed_mode == EDITOR_MODE_SHADOWS) {
-            //Shadow-related clicking.
+            // Shadow-related clicking.
             
             ed_cur_shadow = NULL;
             ed_moving_thing = string::npos;
@@ -1173,7 +1173,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         if(ed_sec_mode == ESM_NEW_SECTOR) {
-            //Place a new sector where the cursor is.
+            // Place a new sector where the cursor is.
             
             ed_sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
@@ -1184,7 +1184,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             sector* new_sector = new sector();
             if(outer_sector) outer_sector->clone(new_sector);
             
-            //Create the vertices.
+            // Create the vertices.
             vertex* new_vertices[4];
             for(size_t v = 0; v < 4; ++v) new_vertices[v] = new vertex(0, 0);
             new_vertices[0]->x = hotspot_x - GRID_INTERVAL / 2;
@@ -1197,7 +1197,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_vertices[3]->y = hotspot_y + GRID_INTERVAL / 2;
             for(size_t v = 0; v < 4; ++v)cur_area_map.vertices.push_back(new_vertices[v]);
             
-            //Create the linedefs.
+            // Create the linedefs.
             linedef* new_linedefs[4];
             for(size_t l = 0; l < 4; ++l) {
                 new_linedefs[l] = new linedef(
@@ -1209,7 +1209,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_map.linedefs.push_back(new_linedefs[l]);
             }
             
-            //Add them to the area map.
+            // Add them to the area map.
             for(size_t l = 0; l < 4; ++l) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
             cur_area_map.sectors.push_back(new_sector);
             
@@ -1217,7 +1217,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             for(size_t v = 0; v < 4; ++v) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
             new_sector->connect_linedefs(cur_area_map, cur_area_map.sectors.size() - 1);
             
-            //Add the linedefs to the outer sector's list.
+            // Add the linedefs to the outer sector's list.
             if(outer_sector) {
                 for(size_t l = 0; l < 4; ++l) {
                     outer_sector->linedefs.push_back(new_linedefs[l]);
@@ -1225,10 +1225,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
-            //Check for intersections.
+            // Check for intersections.
             for(size_t v = 0; v < 4; v += 2) check_linedef_intersections(new_vertices[v]);
             
-            //Triangulate new sector and the parent one.
+            // Triangulate new sector and the parent one.
             triangulate(new_sector);
             if(outer_sector) triangulate(outer_sector);
             
@@ -1237,7 +1237,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             
         } else if(ed_sec_mode == ESM_NEW_OBJECT) {
-            //Create a mob where the cursor is.
+            // Create a mob where the cursor is.
             
             ed_sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
@@ -1251,7 +1251,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             mob_to_gui();
             
         } else if(ed_sec_mode == ESM_NEW_SHADOW) {
-            //Create a new shadow where the cursor is.
+            // Create a new shadow where the cursor is.
             
             ed_sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
@@ -1268,41 +1268,41 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        //Mouse button release.
+        // Mouse button release.
         
         if(ev.mouse.button == 1) ed_holding_m1 = false;
         else if(ev.mouse.button == 2) ed_holding_m2 = false;
         
         if(ev.mouse.button == 1 && ed_sec_mode == ESM_NONE && ed_moving_thing != string::npos) {
-            //Release the vertex.
+            // Release the vertex.
             
             vertex* moved_v_ptr = cur_area_map.vertices[ed_moving_thing];
             vertex* final_vertex = moved_v_ptr;
             
             unordered_set<sector*> affected_sectors;
             
-            //Check if we should merge.
+            // Check if we should merge.
             for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                 vertex* dest_v_ptr = cur_area_map.vertices[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
                 
                 if(check_dist(moved_v_ptr->x, moved_v_ptr->y, dest_v_ptr->x, dest_v_ptr->y, 10 / cam_zoom)) {
-                    //Merge vertices.
+                    // Merge vertices.
                     
-                    //Find out what to do with every linedef of the dragged vertex.
+                    // Find out what to do with every linedef of the dragged vertex.
                     for(size_t l = 0; l < moved_v_ptr->linedefs.size();) {
                     
                         bool was_deleted = false;
                         linedef* l_ptr = moved_v_ptr->linedefs[l];
                         vertex* other_vertex = l_ptr->vertices[0] == moved_v_ptr ? l_ptr->vertices[1] : l_ptr->vertices[0];
                         
-                        //Check if it's being squashed into non-existence.
+                        // Check if it's being squashed into non-existence.
                         if(other_vertex == dest_v_ptr) {
                         
                             affected_sectors.insert(l_ptr->sectors[0]);
                             affected_sectors.insert(l_ptr->sectors[1]);
                             
-                            //Clear it from its vertices' lists.
+                            // Clear it from its vertices' lists.
                             for(size_t vl = 0; vl < other_vertex->linedefs.size(); ++vl) {
                                 if(other_vertex->linedefs[vl] == l_ptr) {
                                     other_vertex->linedefs.erase(other_vertex->linedefs.begin() + vl);
@@ -1311,7 +1311,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                 }
                             }
                             
-                            //Clear it from the sector lists.
+                            // Clear it from the sector lists.
                             for(size_t s = 0; s < 2; ++s) {
                                 if(!l_ptr->sectors[s]) continue;
                                 for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); ++sl) {
@@ -1323,39 +1323,39 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                 }
                             }
                             
-                            //Clear it from the list of lone lines, if there.
+                            // Clear it from the list of lone lines, if there.
                             auto it = ed_lone_lines.find(l_ptr);
                             if(it != ed_lone_lines.end()) ed_lone_lines.erase(it);
                             
-                            //Clear its info, so it gets marked for deletion.
+                            // Clear its info, so it gets marked for deletion.
                             l_ptr->vertex_nrs[0] = l_ptr->vertex_nrs[1] = string::npos;
                             l_ptr->fix_pointers(cur_area_map);
                             
                         } else {
                         
                             bool has_merged = false;
-                            //Check if the linedef will be merged with another one.
-                            //These are linedefs that share a common vertex,
-                            //plus the moved/destination vertex.
+                            // Check if the linedef will be merged with another one.
+                            // These are linedefs that share a common vertex,
+                            // plus the moved/destination vertex.
                             for(size_t dl = 0; dl < dest_v_ptr->linedefs.size(); ++dl) {
                             
                                 linedef* dl_ptr = dest_v_ptr->linedefs[dl];
                                 vertex* d_other_vertex = dl_ptr->vertices[0] == dest_v_ptr ? dl_ptr->vertices[1] : dl_ptr->vertices[0];
                                 
                                 if(d_other_vertex == other_vertex) {
-                                    //The linedef will be merged with this one.
+                                    // The linedef will be merged with this one.
                                     has_merged = true;
                                     affected_sectors.insert(l_ptr->sectors[0]);
                                     affected_sectors.insert(l_ptr->sectors[1]);
                                     affected_sectors.insert(dl_ptr->sectors[0]);
                                     affected_sectors.insert(dl_ptr->sectors[1]);
                                     
-                                    //Tell the destination linedef's sectors
-                                    //to forget it; they'll be re-added later.
+                                    // Tell the destination linedef's sectors
+                                    // to forget it; they'll be re-added later.
                                     size_t old_dl_nr = dl_ptr->remove_from_sectors();
                                     
-                                    //Set the new sectors.
-                                    //ToDo if one of the central sectors is null.
+                                    // Set the new sectors.
+                                    // TODO if one of the central sectors is null.
                                     if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[0])
                                         dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[1];
                                     else if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[1])
@@ -1366,22 +1366,22 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         dl_ptr->sector_nrs[1] = l_ptr->sector_nrs[0];
                                     dl_ptr->fix_pointers(cur_area_map);
                                     
-                                    //Go to the linedef's old vertices,
-                                    //and tell them that it no longer exists.
+                                    // Go to the linedef's old vertices,
+                                    // and tell them that it no longer exists.
                                     l_ptr->remove_from_vertices();
                                     
-                                    //Now tell the linedef's old sectors.
+                                    // Now tell the linedef's old sectors.
                                     l_ptr->remove_from_sectors();
                                     
-                                    //Add the linedefs to the sectors' lists.
+                                    // Add the linedefs to the sectors' lists.
                                     for(size_t s = 0; s < 2; ++s) {
                                         if(!dl_ptr->sectors[s]) continue;
                                         dl_ptr->sectors[s]->linedefs.push_back(dl_ptr);
                                         dl_ptr->sectors[s]->linedef_nrs.push_back(old_dl_nr);
                                     }
                                     
-                                    //Remove the deleted linedef's info.
-                                    //This'll mark it for deletion.
+                                    // Remove the deleted linedef's info.
+                                    // This'll mark it for deletion.
                                     l_ptr->sector_nrs[0] = l_ptr->sector_nrs[1] = string::npos;
                                     l_ptr->vertex_nrs[0] = l_ptr->vertex_nrs[1] = string::npos;
                                     l_ptr->fix_pointers(cur_area_map);
@@ -1391,8 +1391,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                 }
                             }
                             
-                            //If it's matchless, that means it'll just be joined to
-                            //the group of linedefs on the destination vertex.
+                            // If it's matchless, that means it'll just be joined to
+                            // the group of linedefs on the destination vertex.
                             if(!has_merged) {
                                 dest_v_ptr->linedef_nrs.push_back(moved_v_ptr->linedef_nrs[l]);
                                 dest_v_ptr->linedefs.push_back(moved_v_ptr->linedefs[l]);
@@ -1408,8 +1408,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     
                     dest_v_ptr->fix_pointers(cur_area_map);
                     
-                    //Check if any of the final linedefs have the same sector
-                    //on both sides. If so, delete them.
+                    // Check if any of the final linedefs have the same sector
+                    // on both sides. If so, delete them.
                     for(size_t vl = 0; vl < dest_v_ptr->linedefs.size(); ) {
                         linedef* vl_ptr = dest_v_ptr->linedefs[vl];
                         if(vl_ptr->sectors[0] == vl_ptr->sectors[1]) {
@@ -1428,17 +1428,17 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         }
                     }
                     
-                    //If this vertex is out of linedefs, it'll be
-                    //deleted eventually. Move it out of the way.
+                    // If this vertex is out of linedefs, it'll be
+                    // deleted eventually. Move it out of the way.
                     if(dest_v_ptr->linedefs.empty()) {
                         dest_v_ptr->x = dest_v_ptr->y = FLT_MAX;
                     }
                     
-                    //Remove the old vertex' info.
-                    //This'll mark it for deletion.
+                    // Remove the old vertex' info.
+                    // This'll mark it for deletion.
                     moved_v_ptr->linedef_nrs.clear();
                     moved_v_ptr->linedefs.clear();
-                    moved_v_ptr->x = moved_v_ptr->y = FLT_MAX; //So it's out of the way.
+                    moved_v_ptr->x = moved_v_ptr->y = FLT_MAX; // So it's out of the way.
                     
                     final_vertex = dest_v_ptr;
                     
@@ -1446,7 +1446,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
-            //Finally, re-triangulate the affected sectors.
+            // Finally, re-triangulate the affected sectors.
             for(size_t l = 0; l < final_vertex->linedefs.size(); ++l) {
                 linedef* l_ptr = final_vertex->linedefs[l];
                 for(size_t s = 0; s < 2; ++s) {
@@ -1458,8 +1458,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 triangulate(*s);
             }
             
-            //If somewhere along the line, the current sector
-            //got marked for deletion, unselect it.
+            // If somewhere along the line, the current sector
+            // got marked for deletion, unselect it.
             if(ed_cur_sector) {
                 if(ed_cur_sector->linedefs.empty()) {
                     ed_cur_sector = NULL;
@@ -1467,9 +1467,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
-            //Check if the line's vertices intersect with any other lines.
-            //If so, they're marked with red.
-            if(moved_v_ptr->x != FLT_MAX) //If it didn't get marked for deletion in the meantime.
+            // Check if the line's vertices intersect with any other lines.
+            // If so, they're marked with red.
+            if(moved_v_ptr->x != FLT_MAX) // If it didn't get marked for deletion in the meantime.
                 check_linedef_intersections(moved_v_ptr);
                 
             ed_moving_thing = string::npos;
@@ -1477,7 +1477,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             
         } else if(ev.mouse.button == 1 && ed_mode == EDITOR_MODE_OBJECTS && ed_moving_thing != string::npos) {
-            //Release object.
+            // Release object.
             
             ed_moving_thing = string::npos;
             
@@ -1485,7 +1485,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        //Key press.
+        // Key press.
         
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
@@ -1497,7 +1497,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
-        //Key release.
+        // Key release.
         
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
@@ -1532,7 +1532,7 @@ void area_editor::load() {
     ed_gui = new lafi::gui(scr_w, scr_h, s);
     
     
-    //Main frame.
+    // Main frame.
     lafi::frame* frm_main = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     ed_gui->add("frm_main", frm_main);
     
@@ -1558,7 +1558,7 @@ void area_editor::load() {
     frm_area->easy_row();
     
     
-    //Bottom bar.
+    // Bottom bar.
     lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     ed_gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
@@ -1569,7 +1569,7 @@ void area_editor::load() {
     frm_bottom->easy_row();
     
     
-    //Picker frame.
+    // Picker frame.
     lafi::frame* frm_picker = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_picker);
     ed_gui->add("frm_picker", frm_picker);
@@ -1579,7 +1579,7 @@ void area_editor::load() {
     frm_picker->add("bar_scroll", new lafi::scrollbar(scr_w - 24,  40, scr_w - 8,  scr_h - 56));
     
     
-    //Sectors frame.
+    // Sectors frame.
     lafi::frame* frm_sectors = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_sectors);
     ed_gui->add("frm_sectors", frm_sectors);
@@ -1623,7 +1623,7 @@ void area_editor::load() {
     frm_sector->easy_row();
     
     
-    //Advanced sector texture settings frame.
+    // Advanced sector texture settings frame.
     lafi::frame* frm_adv_textures = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_adv_textures);
     ed_gui->add("frm_adv_textures", frm_adv_textures);
@@ -1648,7 +1648,7 @@ void area_editor::load() {
     frm_adv_textures->easy_row();
     
     
-    //Objects frame.
+    // Objects frame.
     lafi::frame* frm_objects = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_objects);
     ed_gui->add("frm_objects", frm_objects);
@@ -1683,7 +1683,7 @@ void area_editor::load() {
     frm_object->easy_row();
     
     
-    //Shadows frame.
+    // Shadows frame.
     lafi::frame* frm_shadows = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_shadows);
     ed_gui->add("frm_shadows", frm_shadows);
@@ -1727,7 +1727,7 @@ void area_editor::load() {
     frm_shadow->easy_row();
     
     
-    //Background frame.
+    // Background frame.
     lafi::frame* frm_bg = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_bg);
     ed_gui->add("frm_bg", frm_bg);
@@ -1756,7 +1756,7 @@ void area_editor::load() {
     frm_bg->easy_row();
     
     
-    //Review frame.
+    // Review frame.
     lafi::frame* frm_review = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_review);
     ed_gui->add("frm_review", frm_review);
@@ -1788,12 +1788,12 @@ void area_editor::load() {
     update_review_frame();
     
     
-    //Status bar.
+    // Status bar.
     lafi::label* ed_gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     ed_gui->add("lbl_status_bar", ed_gui_status_bar);
     
     
-    //Properties -- main.
+    // Properties -- main.
     frm_main->widgets["but_area"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_AREA);
     };
@@ -1826,7 +1826,7 @@ void area_editor::load() {
     frm_area->widgets["but_review"]->description =  "Tools to make sure everything is fine in the area.";
     
     
-    //Properties -- bottom.
+    // Properties -- bottom.
     frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_show_bg = !ed_show_bg;
     };
@@ -1843,10 +1843,10 @@ void area_editor::load() {
     frm_bottom->widgets["but_save"]->description = "Save the area onto the disk.";
     frm_bottom->widgets["but_quit"]->description = "Quit the area editor.";
     
-    //ToDo quit button.
+    // TODO quit button.
     
     
-    //Properties -- sectors.
+    // Properties -- sectors.
     auto lambda_gui_to_sector = [] (lafi::widget*) { gui_to_sector(); };
     auto lambda_gui_to_sector_click = [] (lafi::widget*, int, int) { gui_to_sector(); };
     frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
@@ -1892,10 +1892,10 @@ void area_editor::load() {
     frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";
     
     
-    //Properties -- advanced textures.
+    // Properties -- advanced textures.
     auto lambda_gui_to_adv_textures = [] (lafi::widget*) { gui_to_adv_textures(); };
     frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        clear_area_textures(); //Clears the texture set when we entered this menu.
+        clear_area_textures(); // Clears the texture set when we entered this menu.
         ed_mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
     };
@@ -1910,7 +1910,7 @@ void area_editor::load() {
     frm_adv_textures->widgets["ang_a"]->description =  "Rotate the texture by this much.";
     
     
-    //Properties -- objects.
+    // Properties -- objects.
     auto lambda_gui_to_mob = [] (lafi::widget*) { gui_to_mob(); };
     frm_objects->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
@@ -1953,7 +1953,7 @@ void area_editor::load() {
     frm_object->widgets["txt_vars"]->description =      "Extra variables (e.g.: sleep=y;jumping=n).";
     
     
-    //Properties -- shadows.
+    // Properties -- shadows.
     auto lambda_gui_to_shadow = [] (lafi::widget*) { gui_to_shadow(); };
     frm_shadows->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_sec_mode = ESM_NONE;
@@ -2004,7 +2004,7 @@ void area_editor::load() {
     frm_shadow->widgets["txt_sy"]->description =        "Vertical sway amount multiplier (0 = no sway).";
     
     
-    //Properties -- background.
+    // Properties -- background.
     auto lambda_gui_to_bg = [] (lafi::widget*) { gui_to_bg(); };
     auto lambda_gui_to_bg_click = [] (lafi::widget*, int, int) { gui_to_bg(); };
     frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
@@ -2033,7 +2033,7 @@ void area_editor::load() {
     bg_to_gui();
     
     
-    //Properties -- review.
+    // Properties -- review.
     frm_review->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ed_mode = EDITOR_MODE_MAIN;
         ed_sec_mode = ESM_NONE;
@@ -2070,7 +2070,7 @@ void area_editor::load() {
     frm_review->widgets["chk_shadows"]->description =      "Show tree shadows?";
     
     
-    //Properties -- picker.
+    // Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         show_widget(ed_gui->widgets["frm_bottom"]);
         change_to_right_frame();
@@ -2185,7 +2185,7 @@ void area_editor::open_picker(unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
-        for(unsigned char f = 0; f < mob_categories.get_nr_of_categories(); ++f) { //0 is none.
+        for(unsigned char f = 0; f < mob_categories.get_nr_of_categories(); ++f) { // 0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
             elements.push_back(mob_categories.get_pname(f));
         }
@@ -2259,7 +2259,7 @@ void area_editor::pick(string name, unsigned char type) {
 void area_editor::save_area() {
     data_node file_node = data_node("", "");
     
-    //Point down the weather and background again.
+    // Point down the weather and background again.
     file_node.add(new data_node("weather", cur_area_map.weather_name));
     if(cur_area_map.bg_bmp_file_name.size())
         file_node.add(new data_node("bg_bmp", cur_area_map.bg_bmp_file_name));
@@ -2267,8 +2267,8 @@ void area_editor::save_area() {
     file_node.add(new data_node("bg_dist", f2s(cur_area_map.bg_dist)));
     file_node.add(new data_node("bg_zoom", f2s(cur_area_map.bg_bmp_zoom)));
     
-    //Start by cleaning unused vertices, sectors and linedefs.
-    //Unused vertices.
+    // Start by cleaning unused vertices, sectors and linedefs.
+    // Unused vertices.
     for(size_t v = 0; v < cur_area_map.vertices.size(); ) {
     
         vertex* v_ptr = cur_area_map.vertices[v];
@@ -2276,7 +2276,7 @@ void area_editor::save_area() {
         
             cur_area_map.vertices.erase(cur_area_map.vertices.begin() + v);
             
-            //Fix numbers in linedef lists.
+            // Fix numbers in linedef lists.
             for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 for(unsigned char lv = 0; lv < 2; ++lv) {
@@ -2291,7 +2291,7 @@ void area_editor::save_area() {
         }
     }
     
-    //Unused sectors.
+    // Unused sectors.
     for(size_t s = 0; s < cur_area_map.sectors.size(); ) {
     
         sector* s_ptr = cur_area_map.sectors[s];
@@ -2299,7 +2299,7 @@ void area_editor::save_area() {
         
             cur_area_map.sectors.erase(cur_area_map.sectors.begin() + s);
             
-            //Fix numbers in linedef lists.
+            // Fix numbers in linedef lists.
             for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
                 linedef* l_ptr = cur_area_map.linedefs[l];
                 for(unsigned char ls = 0; ls < 2; ++ls) {
@@ -2314,7 +2314,7 @@ void area_editor::save_area() {
         }
     }
     
-    //Unused linedefs.
+    // Unused linedefs.
     for(size_t l = 0; l < cur_area_map.linedefs.size(); ) {
     
         linedef* l_ptr = cur_area_map.linedefs[l];
@@ -2322,7 +2322,7 @@ void area_editor::save_area() {
         
             cur_area_map.linedefs.erase(cur_area_map.linedefs.begin() + l);
             
-            //Fix numbers in vertex lists.
+            // Fix numbers in vertex lists.
             for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
                 vertex* v_ptr = cur_area_map.vertices[v];
                 for(size_t vl = 0; vl < v_ptr->linedef_nrs.size(); ++vl) {
@@ -2332,7 +2332,7 @@ void area_editor::save_area() {
                 }
             }
             
-            //Fix numbers in sector lists.
+            // Fix numbers in sector lists.
             for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
                 sector* s_ptr = cur_area_map.sectors[s];
                 for(size_t sl = 0; sl < s_ptr->linedef_nrs.size(); ++sl) {
@@ -2348,8 +2348,8 @@ void area_editor::save_area() {
     }
     
     
-    //Save the content now.
-    //Mobs.
+    // Save the content now.
+    // Mobs.
     data_node* mobs_node = new data_node("mobs", "");
     file_node.add(mobs_node);
     
@@ -2382,7 +2382,7 @@ void area_editor::save_area() {
         
     }
     
-    //Vertices.
+    // Vertices.
     data_node* vertices_node = new data_node("vertices", "");
     file_node.add(vertices_node);
     
@@ -2392,7 +2392,7 @@ void area_editor::save_area() {
         vertices_node->add(vertex_node);
     }
     
-    //Linedefs.
+    // Linedefs.
     data_node* linedefs_node = new data_node("linedefs", "");
     file_node.add(linedefs_node);
     
@@ -2411,7 +2411,7 @@ void area_editor::save_area() {
         linedef_node->add(new data_node("v", i2s(l_ptr->vertex_nrs[0]) + " " + i2s(l_ptr->vertex_nrs[1])));
     }
     
-    //Sectors.
+    // Sectors.
     data_node* sectors_node = new data_node("sectors", "");
     file_node.add(sectors_node);
     
@@ -2441,7 +2441,7 @@ void area_editor::save_area() {
         }
     }
     
-    //Tree shadows.
+    // Tree shadows.
     data_node* shadows_node = new data_node("tree_shadows", "");
     file_node.add(shadows_node);
     
@@ -2459,7 +2459,7 @@ void area_editor::save_area() {
         
     }
     
-    //Editor background.
+    // Editor background.
     file_node.add(new data_node("ed_bg_file_name", ed_bg_file_name));
     file_node.add(new data_node("ed_bg_x",         f2s(ed_bg_x)));
     file_node.add(new data_node("ed_bg_y",         f2s(ed_bg_y)));
@@ -2493,7 +2493,7 @@ void area_editor::sector_to_gui() {
         ((lafi::textbox*) f->widgets["txt_texture"])->text = ed_cur_sector->file_name;
         ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(ed_cur_sector->brightness);
         ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(ed_cur_sector->type);
-        //ToDo hazards.
+        // TODO hazards.
         
         if(ed_cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["chk_fade"]);

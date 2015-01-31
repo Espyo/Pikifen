@@ -28,4 +28,4 @@ public:
 
 };
 
-#endif //ifndef TREASURE_TYPE_INCLUDED
+#endif // ifndef TREASURE_TYPE_INCLUDED

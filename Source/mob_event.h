@@ -148,4 +148,4 @@ enum MOB_ACTION_WAIT_TYPES {
     MOB_ACTION_WAIT_TIME,
 };
 
-#endif //ifndef MOB_EVENT_INCLUDED
+#endif // ifndef MOB_EVENT_INCLUDED

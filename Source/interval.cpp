@@ -37,7 +37,7 @@ interval::interval(const string &s) {
             
             if(divisor_parts[0] != "every") {
                 vector<string> range_parts = split(divisor_parts[0], "to", false, true);
-                if(range_parts.size() == 1 && range_parts[0] != "to") { //No "to".
+                if(range_parts.size() == 1 && range_parts[0] != "to") { // No "to".
                     lower = upper = s2f(range_parts[0]);
                 } else {
                     if(range_parts.size() >= 2) {
@@ -62,7 +62,7 @@ interval::interval(const string &s) {
 float interval::get_random_number() {
     size_t n_subintervals = subintervals.size();
     if(n_subintervals == 0) return 0;
-    return subintervals[0].lower; //ToDo
+    return subintervals[0].lower; // TODO
 }
 
 

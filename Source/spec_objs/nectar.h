@@ -31,4 +31,4 @@ public:
     nectar(float x, float y, const string &vars);
 };
 
-#endif //ifndef NECTAR_INCLUDED
+#endif // ifndef NECTAR_INCLUDED

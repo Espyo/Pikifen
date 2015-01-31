@@ -9,7 +9,7 @@
  * Program start and main loop.
  */
 
-//ToDo check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
+// TODO check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
 
 #include <fstream>
 #include <math.h>
@@ -29,6 +29,7 @@
 #include "controls.h"
 #include "drawing.h"
 #include "functions.h"
+#include "init.h"
 #include "LAFI/button.h"
 #include "LAFI/checkbox.h"
 #include "LAFI/frame.h"
@@ -50,184 +51,22 @@ using namespace std;
  * Once that's done, it enters the main loop.
  */
 int main(int argc, char**) {
-    //Install Allegro and initialize modules.
-    al_init();
-    al_install_mouse();
-    al_install_keyboard();
-    al_install_audio();
-    al_install_joystick();
-    al_init_image_addon();
-    al_init_primitives_addon();
-    al_init_acodec_addon();
+    init_allegro();
+    init_controls();
     
-    //Options and default controls.
-    //ToDo create a manager for this, like the mob category manager and whatnot.
-    controls.push_back(control_info(BUTTON_THROW, 0, "mb_1"));
-    controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
-    controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
-    controls.push_back(control_info(BUTTON_MOVE_UP, 0, "k_23"));
-    controls.push_back(control_info(BUTTON_MOVE_LEFT, 0, "k_1"));
-    controls.push_back(control_info(BUTTON_MOVE_DOWN, 0, "k_19"));
-    controls.push_back(control_info(BUTTON_MOVE_GROUP_TO_CURSOR, 0, "k_75"));
-    controls.push_back(control_info(BUTTON_SWITCH_CAPTAIN_RIGHT, 0, "k_64"));
-    controls.push_back(control_info(BUTTON_DISMISS, 0, "k_217"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY_1, 0, "k_18"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY_2, 0, "k_6"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY, 0, "k_18"));
-    controls.push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, 0, "k_5"));
-    controls.push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, 0, "k_17"));
-    controls.push_back(control_info(BUTTON_SWITCH_TYPE_RIGHT, 0, "mb_2"));
-    controls.push_back(control_info(BUTTON_SWITCH_ZOOM, 0, "k_3"));
-    controls.push_back(control_info(BUTTON_ZOOM_IN, 0, "mwu"));
-    controls.push_back(control_info(BUTTON_ZOOM_OUT, 0, "mwd"));
-    controls.push_back(control_info(BUTTON_LIE_DOWN, 0, "k_26"));
-    controls.push_back(control_info(BUTTON_PAUSE, 0, "k_59"));
     load_options();
     save_options();
     
     //Event stuff.
-    al_set_new_window_position(window_x, window_y);
-    display = al_create_display(scr_w, scr_h);
-    ALLEGRO_TIMER* timer = al_create_timer(1.0 / game_fps);
-    
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_joystick_event_source());
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_timer_event_source(timer));
+    ALLEGRO_TIMER* timer;
+    ALLEGRO_EVENT_QUEUE* queue;
     ALLEGRO_EVENT ev;
-    
-    //Other initial things.
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    al_set_window_title(display, "Pikmin fangame engine");
-    if(smooth_scaling) al_set_new_bitmap_flags(ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP);
-    al_reserve_samples(16);
-    srand(time(NULL));
-    
-    //ToDo the function is always returning 0.
-    area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
-    
-    sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
-    sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
-    sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
-    sector_types.register_type(SECTOR_TYPE_WALL, "Wall");
-    
-    //Error bitmap.
-    //ToDo move this somewhere else, maybe?
-    int bmp_error_w, bmp_error_h;
-    al_get_text_dimensions(al_create_builtin_font(), "ERROR", NULL, NULL, &bmp_error_w, &bmp_error_h);
-    bmp_error = al_create_bitmap(bmp_error_w, bmp_error_h);
-    al_set_target_bitmap(bmp_error); {
-        al_clear_to_color(al_map_rgba(64, 0, 0, 128));
-        al_draw_text(al_create_builtin_font(), al_map_rgb(255, 0, 0), 0, 0, 0, "ERROR");
-    } al_set_target_backbuffer(display);
-    
-    
-    int font_ranges[] = {
-        0x0020, 0x007E, //ASCII
-        0x00A0, 0x00A1, //Non-breaking space and inverted !
-        0x00BF, 0x00FF, //Inverted ? and European vowels and such
-    };
-    int counter_font_ranges[] = {
-        0x002D, 0x002D, //Dash
-        0x002F, 0x0039, //Slash and numbers
-        0x0078, 0x0078, //x
-    };
-    int value_font_ranges[] = {
-        0x0024, 0x0024, //Dollar sign
-        0x002D, 0x002D, //Dash
-        0x0030, 0x0039, //Numbers
-    };
-    
-    ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");  //We can't load the font directly because we want to set the ranges.
-    if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Area_name_font.png");
-    if(temp_font_bitmap) font_area_name = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Counter_font.png");
-    if(temp_font_bitmap) font_counter = al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Value_font.png");
-    if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    if(font) font_h = al_get_font_line_height(font);
-    if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
-    
-    mob_categories.register_category(MOB_CATEGORY_NONE, "None", "None", [] (vector<string> &) { },
-    [] (const string &) -> mob_type* { return NULL; });
-    
-    mob_categories.register_category(MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", [] (vector<string> &li) {
-        for(auto e = enemy_types.begin(); e != enemy_types.end(); e++) li.push_back(e->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = enemy_types.find(n); if(it == enemy_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_LEADERS, "Leaders", "Leader", [] (vector<string> &li) {
-        for(auto l = leader_types.begin(); l != leader_types.end(); l++) li.push_back(l->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = leader_types.find(n); if(it == leader_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_ONIONS, "Onions", "Onion", [] (vector<string> &li) {
-        for(auto o = onion_types.begin(); o != onion_types.end(); o++) li.push_back(o->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = onion_types.find(n); if(it == onion_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_PELLETS, "Pellets", "Pellet", [] (vector<string> &li) {
-        for(auto p = pellet_types.begin(); p != pellet_types.end(); p++) li.push_back(p->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = pellet_types.find(n); if(it == pellet_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", [] (vector<string> &li) {
-        for(auto p = pikmin_types.begin(); p != pikmin_types.end(); p++) li.push_back(p->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = pikmin_types.find(n); if(it == pikmin_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_SHIPS, "Ships", "Ship", [] (vector<string> &li) {
-        for(auto s = ship_types.begin(); s != ship_types.end(); s++) li.push_back(s->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = ship_types.find(n); if(it == ship_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_SPECIAL, "Special", "Special", [] (vector<string> &li) {
-        for(auto s = spec_mob_types.begin(); s != spec_mob_types.end(); s++) li.push_back(s->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = spec_mob_types.find(n); if(it == spec_mob_types.end()) return NULL; return it->second;
-    });
-    
-    mob_categories.register_category(MOB_CATEGORY_TREASURES, "Treasures", "Treasure", [] (vector<string> &li) {
-        for(auto t = treasure_types.begin(); t != treasure_types.end(); t++) li.push_back(t->first);
-    }, [] (const string & n) -> mob_type* {
-        auto it = treasure_types.find(n); if(it == treasure_types.end()) return NULL; return it->second;
-    });
-    
-    
-    mob_type* info_spot_mt = new mob_type();
-    info_spot_mt->name = "Info spot";
-    info_spot_mt->radius = 16;
-    info_spot_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
-        create_mob(new info_spot(x, y, angle, vars));
-    };
-    spec_mob_types["Info spot"] = info_spot_mt;
-    
-    mob_type* nectar_mt = new mob_type();
-    nectar_mt->name = "Nectar";
-    nectar_mt->always_active = true;
-    nectar_mt->radius = 8;
-    nectar_mt->create_mob = [] (float x, float y, float angle, const string & vars) {
-        create_mob(new nectar(x, y, vars));
-    };
-    spec_mob_types["Nectar"] = nectar_mt;
-    
+    init_event_things(timer, queue);
+    init_misc();
+    init_mob_categories();
+    init_sector_types();
+    init_error_bitmap();
+    init_fonts();
     
     cur_screen = SCREEN_GAME;
     if(argc == 2) cur_screen = SCREEN_ANIMATION_EDITOR;
@@ -235,7 +74,7 @@ int main(int argc, char**) {
     
     if(cur_screen == SCREEN_GAME) {
     
-        //Graphics.
+        // Graphics.
         bmp_red_onion = load_bmp("Red_onion.png");
         bmp_yellow_onion = load_bmp("Yellow_onion.png");
         bmp_blue_onion = load_bmp("Blue_onion.png");
@@ -251,7 +90,7 @@ int main(int argc, char**) {
         bmp_info_spot = load_bmp(       "Info_spot.png");
         bmp_message_box = load_bmp(     "Message_box.png");
         bmp_mouse_cursor = load_bmp(    "Mouse_cursor.png");
-        bmp_move_group_arrow = load_bmp("Move_group_arrow.png");
+        bmp_group_move_arrow = load_bmp("Group_move_arrow.png");
         bmp_nectar = load_bmp(          "Nectar.png");
         bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
         bmp_number_bubble = load_bmp(   "Number_bubble.png");
@@ -270,7 +109,7 @@ int main(int argc, char**) {
         
         al_set_display_icon(display, bmp_icon);
         
-        //Sound effects.
+        // Sound effects.
         voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
         mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
         al_attach_mixer_to_voice(mixer, voice);
@@ -297,10 +136,10 @@ int main(int argc, char**) {
         sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
         sfx_camera = load_sample(              "Camera.ogg",               mixer);
         
-        //Game content.
+        // Game content.
         load_game_content();
         
-        //Initializing game things.
+        // Initializing game things.
         spray_amounts.clear();
         size_t n_spray_types = spray_types.size();
         for(size_t s = 0; s < n_spray_types; s++) { spray_amounts.push_back(0); }
@@ -379,7 +218,7 @@ int main(int argc, char**) {
     }
     
     
-    //Main loop.
+    // Main loop.
     al_start_timer(timer);
     while(running) {
     
@@ -403,12 +242,12 @@ int main(int argc, char**) {
             running = false;
             
         } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
-            //scr_w = ev.display.width;
-            //scr_h = ev.display.height;
+            // scr_w = ev.display.width;
+            // scr_h = ev.display.height;
             
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
             double cur_time = al_get_time();
-            if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
+            if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; // Failsafe.
             delta_t = cur_time - prev_frame_time;
             
             if(cur_screen == SCREEN_GAME) {

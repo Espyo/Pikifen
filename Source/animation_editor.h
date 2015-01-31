@@ -23,7 +23,7 @@ enum ANIMATION_EDITOR_PICKER_TYPES {
     ANIMATION_EDITOR_PICKER_FRAME,
     ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
     ANIMATION_EDITOR_PICKER_HITBOX,
-    ANIMATION_EDITOR_PICKER_OBJECT, //Make sure this is the last one.
+    ANIMATION_EDITOR_PICKER_OBJECT, // Make sure this is the last one.
 };
 
 
@@ -51,4 +51,4 @@ void save_animation_set();
 void update_stats();
 }
 
-#endif //ifndef ANIMATION_EDITOR_INCLUDED
+#endif // ifndef ANIMATION_EDITOR_INCLUDED

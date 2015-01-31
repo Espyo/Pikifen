@@ -27,4 +27,4 @@ public:
     ALLEGRO_COLOR main_color;
 };
 
-#endif //ifndef ELEMENT_INCLUDED
+#endif // ifndef ELEMENT_INCLUDED

@@ -96,7 +96,7 @@ frame::frame(const frame &f2) {
  * Creates a frame by cloning the data from another frame.
  */
 frame frame::clone() {
-    //ToDo hitbox cloning?
+    // TODO hitbox cloning?
     frame f = frame(name, NULL, game_w, game_h, hitbox_instances);
     f.file = file;
     f.file_x = file_x;
@@ -257,8 +257,8 @@ bool animation_instance::tick(const float time) {
     
     cur_frame_time += time;
     
-    //This is a while instead of an if because if the framerate is too low and the next frame's duration
-    //is too short, it could be that a tick goes over an entire frame, and lands 2 or more frames ahead.
+    // This is a while instead of an if because if the framerate is too low and the next frame's duration
+    // is too short, it could be that a tick goes over an entire frame, and lands 2 or more frames ahead.
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
         cur_frame_nr++;
@@ -354,7 +354,7 @@ void animation_set::create_conversions(vector<pair<size_t, string> > conversions
     
     if(conversions.empty()) return;
     
-    //First, find the highest number.
+    // First, find the highest number.
     size_t highest = conversions[0].first;
     for(size_t c = 1; c < conversions.size(); c++) {
         highest = max(highest, conversions[c].first);
@@ -395,7 +395,7 @@ animation_set load_animation_set(data_node* file_node) {
     vector<frame*> frames;
     vector<hitbox*> hitboxes;
     
-    //Hitboxes.
+    // Hitboxes.
     data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
     size_t n_hitboxes = hitboxes_node->get_nr_of_children();
     for(size_t h = 0; h < n_hitboxes; h++) {
@@ -417,7 +417,7 @@ animation_set load_animation_set(data_node* file_node) {
     
     as.hitboxes = hitboxes;
     
-    //Frames.
+    // Frames.
     data_node* frames_node = file_node->get_child_by_name("frames");
     size_t n_frames = frames_node->get_nr_of_children();
     for(size_t f = 0; f < n_frames; f++) {
@@ -481,7 +481,7 @@ animation_set load_animation_set(data_node* file_node) {
     
     as.frames = frames;
     
-    //Animations.
+    // Animations.
     data_node* anims_node = file_node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
     for(size_t a = 0; a < n_anims; a++) {

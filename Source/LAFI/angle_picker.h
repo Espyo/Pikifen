@@ -15,7 +15,7 @@ namespace lafi {
  */
 class angle_picker : public widget {
 private:
-    float angle; //In radians.
+    float angle; // In radians.
     bool dragging_pointer;
     
 public:
@@ -46,4 +46,4 @@ float normalize_angle(float a);
 
 }
 
-#endif //ifndef LAFI_ANGLE_PICKER_INCLUDED
+#endif // ifndef LAFI_ANGLE_PICKER_INCLUDED

@@ -102,9 +102,9 @@ void mob::tick() {
 void mob::tick_animation() {
     bool finished_anim = anim.tick(delta_t);
     
-    if(script_wait == -1 && finished_anim) { //Waiting for the animation to end.
+    if(script_wait == -1 && finished_anim) { // Waiting for the animation to end.
         script_wait = 0;
-        script_wait_event->run(this, script_wait_action); //Continue the waiting event.
+        script_wait_event->run(this, script_wait_action); // Continue the waiting event.
     }
 }
 
@@ -116,10 +116,10 @@ void mob::tick_animation() {
  * thinking about where to move next and such.
  */
 void mob::tick_brain() {
-    //Chasing a target.
+    // Chasing a target.
     if(go_to_target && !gtt_instant && speed_z == 0 && knockdown_period == 0) {
     
-        //Calculate where the target is.
+        // Calculate where the target is.
         float final_target_x, final_target_y;
         get_final_target(&final_target_x, &final_target_y);
         
@@ -129,17 +129,17 @@ void mob::tick_brain() {
                 !(fabs(final_target_x - x) < target_distance &&
                   fabs(final_target_y - y) < target_distance)
             ) {
-                //If it still hasn't reached its target (or close enough to the target),
-                //time to make it think about how to get there.
+                // If it still hasn't reached its target (or close enough to the target),
+                // time to make it think about how to get there.
                 
-                //Let the mob think about facing the actual target.
+                // Let the mob think about facing the actual target.
                 face(atan2(final_target_y - y, final_target_x - x));
-                //Let the mob think about moving forward.
+                // Let the mob think about moving forward.
                 speed = type->move_speed;
                 
             } else {
-                //Reached the location. The mob should now think
-                //about stopping.
+                // Reached the location. The mob should now think
+                // about stopping.
                 
                 speed = 0;
             }
@@ -153,7 +153,7 @@ void mob::tick_brain() {
  * Performs some logic code for this game frame.
  */
 void mob::tick_misc_logic() {
-    //Other things.
+    // Other things.
     if(unwhistlable_period > 0) {
         unwhistlable_period -= delta_t;
         unwhistlable_period = max(unwhistlable_period, 0.0f);
@@ -202,7 +202,7 @@ void mob::tick_misc_logic() {
  * falling because of gravity, moving forward, etc.
  */
 void mob::tick_physics() {
-    //Movement.
+    // Movement.
     bool finished_moving = false;
     bool doing_slide = false;
     
@@ -214,7 +214,7 @@ void mob::tick_physics() {
     float move_speed_x = speed_x;
     float move_speed_y = speed_y;
     
-    //Change the facing angle to the angle the mob wants to face.
+    // Change the facing angle to the angle the mob wants to face.
     if(angle > M_PI)  angle -= M_PI * 2;
     if(angle < -M_PI) angle += M_PI * 2;
     if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
@@ -227,15 +227,15 @@ void mob::tick_physics() {
     angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
     
     if(go_to_target) {
-        //If the mob is meant to teleport somewhere,
-        //let's just do so.
+        // If the mob is meant to teleport somewhere,
+        // let's just do so.
         float final_target_x, final_target_y;
         get_final_target(&final_target_x, &final_target_y);
         
         if(gtt_instant) {
             sector* sec = get_sector(final_target_x, final_target_y, NULL, true);
             if(!sec) {
-                //ToDo Out of bounds! Kill it!
+                // TODO Out of bounds! Kill it!
                 
             } else {
                 if(target_z) {
@@ -252,7 +252,7 @@ void mob::tick_physics() {
         } else {
             if(can_move) {
             
-                //Make it go to the direction it wants.
+                // Make it go to the direction it wants.
                 float d = dist(x, y, final_target_x, final_target_y);
                 float move_amount = min((double) (d / delta_t), (double) speed);
                 
@@ -267,7 +267,7 @@ void mob::tick_physics() {
     }
     
     if(!can_move) {
-        //If it can't consciously move, let the physics do its thing.
+        // If it can't consciously move, let the physics do its thing.
         
         move_speed_x = speed_x;
         move_speed_y = speed_y;
@@ -275,13 +275,13 @@ void mob::tick_physics() {
     }
     
     
-    //Try placing it in the place it should be at, judging
-    //from the movement speed.
+    // Try placing it in the place it should be at, judging
+    // from the movement speed.
     while(!finished_moving) {
     
         if(move_speed_x != 0 || move_speed_y != 0) {
         
-            //Trying to move to a new spot. Check sector collisions.
+            // Trying to move to a new spot. Check sector collisions.
             bool successful_move = true;
             
             new_x = x + delta_t* move_speed_x;
@@ -296,14 +296,14 @@ void mob::tick_physics() {
             
             sector* base_sector = get_sector(new_x, new_y, NULL, true);
             if(!base_sector) {
-                //ToDo out of bounds! Kill it!
+                // TODO out of bounds! Kill it!
                 break;
             } else {
                 new_ground_z = base_sector->z;
                 new_lighting = base_sector->brightness;
             }
             
-            //Use the bounding box to know which blockmap blocks the mob is on.
+            // Use the bounding box to know which blockmap blocks the mob is on.
             size_t bx1 = cur_area_map.bmap.get_col(new_x - type->radius);
             size_t bx2 = cur_area_map.bmap.get_col(new_x + type->radius);
             size_t by1 = cur_area_map.bmap.get_row(new_y - type->radius);
@@ -313,7 +313,7 @@ void mob::tick_physics() {
                 bx1 == string::npos || bx2 == string::npos ||
                 by1 == string::npos || by2 == string::npos
             ) {
-                //ToDo out of bounds! Kill it!
+                // TODO out of bounds! Kill it!
                 break;
             }
             
@@ -323,7 +323,7 @@ void mob::tick_physics() {
             bool have_highest_z = false;
             
             linedef* l_ptr = NULL;
-            //Check the linedefs inside the blockmaps for collisions.
+            // Check the linedefs inside the blockmaps for collisions.
             for(size_t bx = bx1; bx <= bx2; bx++) {
                 for(size_t by = by1; by <= by2; by++) {
                 
@@ -340,9 +340,9 @@ void mob::tick_physics() {
                             )
                         ) {
                         
-                            //If the mob intersects with the linedef, it means it's on both sectors.
-                            //Check if any of the sectors say the mob shouldn't be there.
-                            //Also, adjust height for steps and the like.
+                            // If the mob intersects with the linedef, it means it's on both sectors.
+                            // Check if any of the sectors say the mob shouldn't be there.
+                            // Also, adjust height for steps and the like.
                             for(size_t s = 0; s < 2; s++) {
                                 sector* s_ptr = l_ptr->sectors[s];
                                 
@@ -352,13 +352,13 @@ void mob::tick_physics() {
                                 }
                                 
                                 if(!s_ptr) {
-                                    //ToDo out of bounds! Kill it!
+                                    // TODO out of bounds! Kill it!
                                     break;
                                     
                                 } else {
                                 
                                     if(s_ptr->type == SECTOR_TYPE_WALL) {
-                                        //The mob cannot be inside a wall-type sector whatsoever.
+                                        // The mob cannot be inside a wall-type sector whatsoever.
                                         successful_move = false;
                                         
                                     } else {
@@ -368,23 +368,23 @@ void mob::tick_physics() {
                                 }
                                 
                                 if(new_z >= s_ptr->z - SECTOR_STEP && s_ptr->z > new_z && new_z == new_ground_z) {
-                                    //Only step up a step if it's on the ground.
+                                    // Only step up a step if it's on the ground.
                                     new_z = s_ptr->z;
                                     new_ground_z = s_ptr->z;
                                 }
                                 if(highest_z > new_z) successful_move = false;
                             }
                             
-                            //Save the angle for the sliding, in case this linedef blocked something.
+                            // Save the angle for the sliding, in case this linedef blocked something.
                             if(!doing_slide && !successful_move) {
                                 float wall_angle1 = normalize_angle(atan2(l_ptr->vertices[1]->y - l_ptr->vertices[0]->y, l_ptr->vertices[1]->x - l_ptr->vertices[0]->x));
                                 float wall_angle2 = normalize_angle(wall_angle1 + M_PI);
-                                //Because we don't know which side of the wall the mob is on, just try both angles.
+                                // Because we don't know which side of the wall the mob is on, just try both angles.
                                 float dif1 = get_angle_smallest_dif(wall_angle1, move_angle);
                                 float dif2 = get_angle_smallest_dif(wall_angle2, move_angle);
                                 
                                 if(abs(dif1 - dif2) < 0.01) {
-                                    //Just forget the slide, you're slamming against the wall head-on, perpendicularly.
+                                    // Just forget the slide, you're slamming against the wall head-on, perpendicularly.
                                     successful_move = false;
                                     doing_slide = true;
                                     
@@ -421,9 +421,9 @@ void mob::tick_physics() {
                 
             } else {
             
-                //Try sliding.
+                // Try sliding.
                 if(doing_slide) {
-                    //We already tried... Let's just stop completely.
+                    // We already tried... Let's just stop completely.
                     speed_x = 0;
                     speed_y = 0;
                     finished_moving = true;
@@ -446,9 +446,9 @@ void mob::tick_physics() {
     }
     
     
-    //Vertical movement.
-    //If the current ground is one step (or less) below
-    //the previous ground, just instantly go down the step.
+    // Vertical movement.
+    // If the current ground is one step (or less) below
+    // the previous ground, just instantly go down the step.
     if(pre_move_ground_z - ground_z <= SECTOR_STEP && z == pre_move_ground_z) {
         z = ground_z;
     }
@@ -465,7 +465,7 @@ void mob::tick_physics() {
         }
     }
     
-    //Gravity.
+    // Gravity.
     if(z > ground_z && affected_by_gravity) {
         speed_z += delta_t* (GRAVITY_ADDER);
     }
@@ -476,7 +476,7 @@ void mob::tick_physics() {
  * Ticks the mob's script for this frame.
  */
 void mob::tick_script() {
-    //Scripts.
+    // Scripts.
     if(
         get_mob_event(this, MOB_EVENT_SEE_PREY, true) ||
         get_mob_event(this, MOB_EVENT_LOSE_PREY, true) ||
@@ -488,7 +488,7 @@ void mob::tick_script() {
         if(actual_prey) {
             float d = dist(x, y, actual_prey->x, actual_prey->y);
             
-            //Prey is near.
+            // Prey is near.
             if(d <= type->near_radius && script_wait == 0) {
                 focused_prey_near = true;
                 events_queued[MOB_EVENT_SEE_PREY] = 0;
@@ -496,13 +496,13 @@ void mob::tick_script() {
                 events_queued[MOB_EVENT_NEAR_PREY] = 2;
             }
             
-            //Prey is suddenly out of sight.
+            // Prey is suddenly out of sight.
             if(d > type->sight_radius) {
                 unfocus_mob(this, actual_prey, true);
                 
             } else {
             
-                //Prey was near, but is now far.
+                // Prey was near, but is now far.
                 if(focused_prey_near) {
                     if( d > type->near_radius) {
                         focused_prey_near = false;
@@ -515,7 +515,7 @@ void mob::tick_script() {
             
         } else {
         
-            //Find a Pikmin.
+            // Find a Pikmin.
             if(!actual_prey) {
                 size_t n_pikmin = pikmin_list.size();
                 for(size_t p = 0; p < n_pikmin; p++) {
@@ -531,7 +531,7 @@ void mob::tick_script() {
             }
             
             if(!focused_prey) {
-                //Try the captains now.
+                // Try the captains now.
                 size_t n_leaders = leaders.size();
                 for(size_t l = 0; l < n_leaders; l++) {
                     leader* leader_ptr = leaders[l];
@@ -572,7 +572,7 @@ void mob::tick_script() {
         }
     }
     
-    //Actually run the scripts, if possible.
+    // Actually run the scripts, if possible.
     bool ran_event = false;
     for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
         if(events_queued[e] == 1) {
@@ -584,7 +584,7 @@ void mob::tick_script() {
             }
         }
     }
-    if(!ran_event) { //Try the low priority ones now.
+    if(!ran_event) { // Try the low priority ones now.
         for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
             if(events_queued[e] == 2) {
                 mob_event* ev_ptr = get_mob_event(this, e);
@@ -605,7 +605,7 @@ void mob::tick_script() {
         if(script_wait <= 0) {
             script_wait = 0;
             
-            script_wait_event->run(this, script_wait_action); //Continue the waiting event.
+            script_wait_event->run(this, script_wait_action); // Continue the waiting event.
         }
     }
 }
@@ -738,12 +738,12 @@ carrier_info_struct::~carrier_info_struct() {
  * Adds a mob to another mob's party.
  */
 void add_to_party(mob* party_leader, mob* new_member) {
-    if(new_member->following_party == party_leader) return; //Already following, never mind.
+    if(new_member->following_party == party_leader) return; // Already following, never mind.
     
     new_member->following_party = party_leader;
     party_leader->party->members.push_back(new_member);
     
-    //Find a spot.
+    // Find a spot.
     if(party_leader->party) {
         if(party_leader->party->party_spots) {
             float spot_x = 0, spot_y = 0;
@@ -787,7 +787,7 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
         m2->speed_z = 500;
     }
     
-    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
+    // If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
     if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
         if(floor((m2->health + damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
             if(get_mob_event(m2, MOB_EVENT_BIG_DAMAGE, true)) {
@@ -880,7 +880,7 @@ void delete_mob(mob* m) {
         enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
         
     } else {
-        //ToDo warn somehow.
+        // TODO warn somehow.
         
     }
     

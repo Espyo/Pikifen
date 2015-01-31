@@ -37,4 +37,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_SCROLLBAR_INCLUDED
+#endif // ifndef LAFI_SCROLLBAR_INCLUDED

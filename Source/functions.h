@@ -24,56 +24,56 @@
 #include "pikmin.h"
 #include "sector.h"
 
-//Disables an enabled widget.
+// Disables an enabled widget.
 #define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
 
-//Returns the distance between two points.
+// Returns the distance between two points.
 #define dist(x1, y1, x2, y2) sqrt(sdist((x1), (y1), (x2), (y2)))
 
-//Enables a disabled widget.
+// Enables a disabled widget.
 #define enable_widget(w) (w)->flags &= ~lafi::FLAG_DISABLED;
 
-//Converts a float (or double) to a string.
+// Converts a float (or double) to a string.
 #define f2s(n) to_string((long double) (n))
 
-//Returns the previous element in a vector, but if it's the first, it retrieves the last.
+// Returns the previous element in a vector, but if it's the first, it retrieves the last.
 #define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
 
-//Returns the next element in a vector, but if it's the last, it retrieves the first.
+// Returns the next element in a vector, but if it's the last, it retrieves the first.
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
-//Sets a lafi widget to invisible and disabled.
+// Sets a lafi widget to invisible and disabled.
 #define hide_widget(w) (w)->flags |= lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED;
 
-//Converts an integer (or long) to a string.
+// Converts an integer (or long) to a string.
 #define i2s(n) to_string((long long) (n))
 
-//Returns a string with a number, adding a leading zero if it's less than 10.
+// Returns a string with a number, adding a leading zero if it's less than 10.
 #define leading_zero(n) (((n) < 10 ? "0" : (string) "") + i2s((n)))
 
-//Returns a white color with the specified alpha.
+// Returns a white color with the specified alpha.
 #define map_alpha(a) al_map_rgba(255, 255, 255, (a))
 
-//Returns a gray with all indexes the same as specified value; it's fully opaque.
+// Returns a gray with all indexes the same as specified value; it's fully opaque.
 #define map_gray(g) al_map_rgb((g), (g), (g))
 
-//Adds a new animation conversion on load_mob_types().
-#define new_anim_conversion(id, name) anim_conversions.push_back(make_pair<size_t, string>((id), (name)))
+// Adds a new animation conversion on load_mob_types().
+#define new_anim_conversion(id, name) anim_conversions.push_back(make_pair((id), (name)))
 
-//Rounds a number. Ugh, why do I even have to create this.
+// Rounds a number. Ugh, why do I even have to create this.
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
 
-//Returns the squared distance between two points. This skips the square root.
+// Returns the squared distance between two points. This skips the square root.
 #define sdist(x1, y1, x2, y2) ((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2))
 
-//Sets a lafi widget to visible and enabled.
+// Sets a lafi widget to visible and enabled.
 #define show_widget(w) (w)->flags &= ~(lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED);
 
-//Returns the sign (1 or -1) of a number.
+// Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
-//Returns the task range for whether the Pikmin is idling or being C-sticked.
-#define task_range ((pik_ptr->following_party == cur_leader_ptr && moving_group_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
+// Returns the task range for whether the Pikmin is idling or being C-sticked.
+#define task_range ((pik_ptr->following_party == cur_leader_ptr && group_move_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
 
 
 
@@ -95,7 +95,7 @@ ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float 
 float              interpolate_number(const float p, const float p1, const float p2, const float v1, const float v2);
 void               load_area(const string name, const bool load_for_editor);
 void               load_area_textures();
-//ToDo try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
+// TODO try to figure out why in the world uncommenting this gives retarded errors. void               load_control(unsigned char action, unsigned char player, string name, data_node& file, string def)
 ALLEGRO_BITMAP*    load_bmp(const string file_name, data_node* node = NULL, bool report_error = true);
 data_node          load_data_file(const string file_name);
 void               load_options();
@@ -114,7 +114,7 @@ void               start_camera_pan(const int final_x, const int final_y);
 void               start_camera_zoom(const float final_zoom_level);
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
-//bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
+// bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
 void               use_spray(const size_t spray_nr);
 
 
@@ -126,4 +126,4 @@ ALLEGRO_COLOR s2c(const string &s);
 double s2f(const string &s);
 int s2i(const string &s);
 
-#endif //ifndef FUNCTIONS_H
+#endif // ifndef FUNCTIONS_H

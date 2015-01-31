@@ -26,4 +26,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_BUTTON_INCLUDED
+#endif // ifndef LAFI_BUTTON_INCLUDED

@@ -101,7 +101,7 @@ void gui::wait() {
 }
 
 
-//Destroys a gui.
+// Destroys a gui.
 gui::~gui() { }
 
 

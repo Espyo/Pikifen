@@ -27,6 +27,7 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) {
 }
 
 
+
 /* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
  */
@@ -62,6 +63,42 @@ void bmp_manager::detach(const string &name) {
         list.erase(it);
     }
 }
+
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a movement struct with all movements set to 0.
+ */
+movement_struct::movement_struct() {
+    right = up = left = down = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assuming the movement as a joystick, this returns how far away
+ * from the center the joystick is tilted [0, 1].
+ * Because the movement is not necessarily cirular (e.g. keyboard instead
+ * of joystick), this can return values larger than 1.
+ */
+float movement_struct::get_intensity() {
+    return dist(0, 0, get_x(), get_y());
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the horizontal movement, in the range [-1, 1];
+ */
+float movement_struct::get_x() {
+    return right - left;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertical movement, in the range [-1, 1];
+ */
+float movement_struct::get_y() {
+    return down - up;
+}
+
 
 
 /* ----------------------------------------------------------------------------
@@ -154,25 +191,26 @@ void mob_category_manager::set_mob_type_ptr(mob_gen* m, const string &type_name)
 }
 
 
+
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about party spots.
  */
 party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radius) {
     this->spot_radius = spot_radius;
     
-    //Center spot first.
+    // Center spot first.
     x_coords.push_back(vector<float>(1, 0));
     y_coords.push_back(vector<float>(1, 0));
     mobs_in_spots.push_back(vector<mob*>(1, NULL));
     
-    unsigned total_spots = 1; //Starts at 1 because we did the center spot already.
-    unsigned w = 1; //Current wheel.
+    unsigned total_spots = 1; // Starts at 1 because we did the center spot already.
+    unsigned w = 1; // Current wheel.
     while(total_spots < max_mobs) {
     
-        //First, calculate how far the center of these spots are from the central spot.
+        // First, calculate how far the center of these spots are from the central spot.
         float dist_from_center =
-            spot_radius * w + //Spots.
-            PARTY_SPOT_INTERVAL * w; //Interval between spots.
+            spot_radius * w + // Spots.
+            PARTY_SPOT_INTERVAL * w; // Interval between spots.
             
         /* Now we need to figure out what's the angular distance between each spot.
          * For that, we need the actual diameter (distance from one point to the other),
@@ -186,18 +224,18 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
          */
         float actual_diameter = spot_radius + PARTY_SPOT_INTERVAL;
         
-        //Just calculate the remaining side of the triangle, now that we know
-        //the hypotenuse and the actual diameter (one side of the triangle).
+        // Just calculate the remaining side of the triangle, now that we know
+        // the hypotenuse and the actual diameter (one side of the triangle).
         float middle_distance = sqrt(
                                     (dist_from_center * dist_from_center) -
                                     (actual_diameter * 0.5 * actual_diameter * 0.5));
                                     
-        //Now, get the angular distance.
+        // Now, get the angular distance.
         float angular_dist = 2 * atan2(actual_diameter, 2 * middle_distance);
         
-        //Finally, we can calculate where the other spots are.
+        // Finally, we can calculate where the other spots are.
         unsigned n_spots_on_wheel = floor(M_PI * 2 / angular_dist);
-        //Get a better angle. One that can evenly distribute the spots.
+        // Get a better angle. One that can evenly distribute the spots.
         float angle = M_PI * 2 / n_spots_on_wheel;
         
         x_coords.push_back(vector<float>());
@@ -253,8 +291,8 @@ void party_spot_info::add(mob* m, float* x, float* y) {
  * Removes a member from a leader's party spots.
  */
 void party_spot_info::remove(mob* m) {
-    unsigned mob_wheel = UINT_MAX; //Wheel number of the mob we're trying to remove.
-    unsigned mob_spot = UINT_MAX; //Spot number of the mob we're trying to remove.
+    unsigned mob_wheel = UINT_MAX; // Wheel number of the mob we're trying to remove.
+    unsigned mob_spot = UINT_MAX; // Spot number of the mob we're trying to remove.
     
     size_t n_wheels = mobs_in_spots.size();
     for(size_t w = 0; w < n_wheels; w++) {
@@ -273,7 +311,7 @@ void party_spot_info::remove(mob* m) {
         if(mob_wheel != UINT_MAX) break;
     }
     
-    //If the member to remove is the only one from the outermost wheel, let it go.
+    // If the member to remove is the only one from the outermost wheel, let it go.
     if(n_current_wheel_members == 1 && current_wheel == mob_wheel) {
         if(current_wheel == 0) {
             n_current_wheel_members = 0;
@@ -283,7 +321,7 @@ void party_spot_info::remove(mob* m) {
         }
         mobs_in_spots[mob_wheel][mob_spot] = NULL;
     } else {
-        //If it's not from the outermost wheel, find some other mob (from the outermost wheel) to replace it.
+        // If it's not from the outermost wheel, find some other mob (from the outermost wheel) to replace it.
         unsigned replacement_spot;
         unsigned n_spots = mobs_in_spots[current_wheel].size();
         
@@ -294,7 +332,7 @@ void party_spot_info::remove(mob* m) {
         mobs_in_spots[mob_wheel][mob_spot] = mobs_in_spots[current_wheel][replacement_spot];
         mobs_in_spots[current_wheel][replacement_spot] = NULL;
         
-        //ToDo remove this temporary hack:
+        // TODO remove this temporary hack:
         mobs_in_spots[mob_wheel][mob_spot]->target_x = x_coords[mob_wheel][mob_spot];
         mobs_in_spots[mob_wheel][mob_spot]->target_y = y_coords[mob_wheel][mob_spot] + 30;
         
@@ -305,6 +343,7 @@ void party_spot_info::remove(mob* m) {
         }
     }
 }
+
 
 
 /* ----------------------------------------------------------------------------
@@ -353,6 +392,7 @@ void sample_struct::play(const float max_override_pos, const bool loop, const fl
 void sample_struct::stop() {
     al_set_sample_instance_playing(instance, false);
 }
+
 
 
 /* ----------------------------------------------------------------------------

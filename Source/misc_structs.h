@@ -83,10 +83,10 @@ public:
  */
 struct mob_category_manager {
 private:
-    vector<string> pnames; //Plural names.
-    vector<string> snames; //Singular names.
-    vector<function<void (vector<string> &list)> > listers; //Lists all types' names onto the vector.
-    vector<function<mob_type* (const string &name)> > type_getters; //Returns pointer to the type of the matching name.
+    vector<string> pnames; // Plural names.
+    vector<string> snames; // Singular names.
+    vector<function<void (vector<string> &list)> > listers; // Lists all types' names onto the vector.
+    vector<function<mob_type* (const string &name)> > type_getters; // Returns pointer to the type of the matching name.
     
 public:
     void register_category(
@@ -102,6 +102,25 @@ public:
     void get_list(vector<string> &l, unsigned char nr);
     void set_mob_type_ptr(mob_gen* m, const string &type_name);
     
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * This structure holds information about how to move something
+ * that is user-controlled. It contains the amount of movement
+ * on each of the four main directions, ranging from 0 to 1.
+ */
+struct movement_struct {
+    float right;
+    float up;
+    float left;
+    float down;
+    
+    movement_struct();
+    float get_intensity();
+    float get_x();
+    float get_y();
 };
 
 
@@ -150,8 +169,8 @@ struct point {
  * the sound playing from the sample.
  */
 struct sample_struct {
-    ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
-    ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
+    ALLEGRO_SAMPLE*          sample;   // Pointer to the sample.
+    ALLEGRO_SAMPLE_INSTANCE* instance; // Pointer to the instance.
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
@@ -179,4 +198,4 @@ public:
     
 };
 
-#endif //ifndef MISC_STRUCTS_INCLUDED
+#endif // ifndef MISC_STRUCTS_INCLUDED

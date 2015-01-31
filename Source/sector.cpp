@@ -40,7 +40,7 @@ void area_map::generate_blockmap() {
     
     if(vertices.empty()) return;
     
-    //First, get the starting point and size of the blockmap.
+    // First, get the starting point and size of the blockmap.
     float min_x, max_x, min_y, max_y;
     min_x = max_x = vertices[0]->x;
     min_y = max_y = vertices[0]->y;
@@ -54,21 +54,21 @@ void area_map::generate_blockmap() {
     }
     
     bmap.x1 = min_x; bmap.y1 = min_y;
-    //Add one more to the cols/rows because, suppose there's a linedef at y = 256.
-    //The row would be 2. In reality, the row should be 3.
+    // Add one more to the cols/rows because, suppose there's a linedef at y = 256.
+    // The row would be 2. In reality, the row should be 3.
     bmap.n_cols = ceil((max_x - min_x) / BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.n_rows = ceil((max_y - min_y) / BLOCKMAP_BLOCK_SIZE) + 1;
     
     bmap.linedefs.assign(bmap.n_cols, vector<vector<linedef*> >(bmap.n_rows, vector<linedef*>()));
     bmap.sectors.assign( bmap.n_cols, vector<unordered_set<sector*> >( bmap.n_rows, unordered_set<sector*>()));
     
-    //Now, add a list of linedefs to each block.
+    // Now, add a list of linedefs to each block.
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
     for(size_t l = 0; l < linedefs.size(); ++l) {
     
-        //Get which blocks this linedef belongs to, via bounding-box,
-        //and only then thoroughly test which it is inside of.
+        // Get which blocks this linedef belongs to, via bounding-box,
+        // and only then thoroughly test which it is inside of.
         
         linedef* l_ptr = linedefs[l];
         
@@ -80,11 +80,11 @@ void area_map::generate_blockmap() {
         for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
             for(size_t by = b_min_y; by <= b_max_y; ++by) {
             
-                //Get the block's coordinates.
+                // Get the block's coordinates.
                 float bx1 = bmap.get_x1(bx);
                 float by1 = bmap.get_y1(by);
                 
-                //Check if the linedef is inside this blockmap.
+                // Check if the linedef is inside this blockmap.
                 if(
                     square_intersects_line(
                         bx1, by1, bx1 + BLOCKMAP_BLOCK_SIZE, by1 + BLOCKMAP_BLOCK_SIZE,
@@ -93,7 +93,7 @@ void area_map::generate_blockmap() {
                     )
                 ) {
                 
-                    //If it is, add it and the sectors to the list.
+                    // If it is, add it and the sectors to the list.
                     bool add_linedef = true;
                     if(l_ptr->sectors[0] && l_ptr->sectors[1])
                         if(l_ptr->sectors[0]->z == l_ptr->sectors[1]->z)
@@ -108,10 +108,10 @@ void area_map::generate_blockmap() {
         }
     }
     
-    //If at this point, there's any block without a sector, that means
-    //that the block has no linedefs. It has, however, a single sector,
-    //so use the triangle method to get the sector. Checking the center is
-    //just a good a spot as any.
+    // If at this point, there's any block without a sector, that means
+    // that the block has no linedefs. It has, however, a single sector,
+    // so use the triangle method to get the sector. Checking the center is
+    // just a good a spot as any.
     for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
         for(size_t by = 0; by < bmap.n_rows; ++by) {
         
@@ -341,7 +341,7 @@ void sector::clone(sector* new_sector) {
     new_sector->trans_x = trans_y;
     new_sector->rot = rot;
     new_sector->file_name = file_name;
-    //ToDo hazards.
+    // TODO hazards.
 }
 
 
@@ -479,25 +479,25 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     
     bool doing_outer = true;
     
-    //First, compile a list of all sidedefs related to this sector.
+    // First, compile a list of all sidedefs related to this sector.
     map<linedef*, bool> lines_done;
     
     for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         lines_done[s_ptr->linedefs[l]] = false;
     }
     
-    //Now travel along the lines, vertex by vertex, until we have no more left.
+    // Now travel along the lines, vertex by vertex, until we have no more left.
     while(!lines_done.empty()) {
         bool poly_done = false;
         
-        //Start with the rightmost vertex.
-        //If we still haven't closed the outer polygon, then this vertex
-        //mandatorily belongs to it. Otherwise, it belongs to an inner.
+        // Start with the rightmost vertex.
+        // If we still haven't closed the outer polygon, then this vertex
+        // mandatorily belongs to it. Otherwise, it belongs to an inner.
         vertex* cur_vertex = get_rightmost_vertex(lines_done);
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
         
-        float prev_angle = M_PI; //At the start, assume the angle is 0 (right).
+        float prev_angle = M_PI; // At the start, assume the angle is 0 (right).
         
         if(!doing_outer) {
             inners->push_back(polygon());
@@ -505,10 +505,10 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         
         while(!poly_done) {
         
-            float base_angle = prev_angle - M_PI; //The angle we came from.
+            float base_angle = prev_angle - M_PI; // The angle we came from.
             
-            //For every linedef attached to this vertex, find the closest one
-            //that hasn't been done, in the direction of travel.
+            // For every linedef attached to this vertex, find the closest one
+            // that hasn't been done, in the direction of travel.
             
             float best_angle_dif = 0;
             linedef* best_line = NULL;
@@ -516,18 +516,18 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             for(size_t l = 0; l < cur_vertex->linedefs.size(); ++l) {
                 linedef* l_ptr = cur_vertex->linedefs[l];
                 auto it = lines_done.find(l_ptr);
-                if(it == lines_done.end()) continue; //We're not meant to check this line.
+                if(it == lines_done.end()) continue; // We're not meant to check this line.
                 
                 vertex* other_vertex = l_ptr->vertices[0] == cur_vertex ? l_ptr->vertices[1] : l_ptr->vertices[0];
                 
-                if(other_vertex == prev_vertex) continue; //This is where we came from.
+                if(other_vertex == prev_vertex) continue; // This is where we came from.
                 
-                //Find the angle between our vertex and this vertex.
+                // Find the angle between our vertex and this vertex.
                 float angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
                 float angle_dif = get_angle_cw_dif(angle, base_angle);
                 
-                //For the outer poly, we're going counter-clockwise. So the lowest angle difference is best.
-                //For the inner ones, it's clockwise, so the highest.
+                // For the outer poly, we're going counter-clockwise. So the lowest angle difference is best.
+                // For the inner ones, it's clockwise, so the highest.
                 if(
                     !best_line ||
                     (doing_outer  && angle_dif < best_angle_dif) ||
@@ -542,12 +542,12 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             
             if(!best_line) {
             
-                //If there is no line to go to next, something went wrong.
+                // If there is no line to go to next, something went wrong.
                 
-                //If this polygon is only one vertex, though, then
-                //that means it was a stray linedef. Remove it.
-                //Otherwise, something just went wrong, and this is
-                //a non-simple sector.
+                // If this polygon is only one vertex, though, then
+                // that means it was a stray linedef. Remove it.
+                // Otherwise, something just went wrong, and this is
+                // a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
                     ed_lone_lines.insert(inners->back()[0]->linedefs[0]);
@@ -558,7 +558,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 
             } else if(lines_done[best_line]) {
             
-                //If we already did this line, that's it, polygon closed.
+                // If we already did this line, that's it, polygon closed.
                 poly_done = true;
                 
             } else {
@@ -569,7 +569,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                     inners->back().push_back(cur_vertex);
                 }
                 
-                //Continue onto the next line.
+                // Continue onto the next line.
                 prev_vertex = cur_vertex;
                 cur_vertex = next_vertex;
                 lines_done[best_line] = true;
@@ -579,7 +579,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         
         doing_outer = false;
         
-        //Remove all lines that were done from the list.
+        // Remove all lines that were done from the list.
         auto it = lines_done.begin();
         while(it != lines_done.end()) {
             if(it->second) {
@@ -760,7 +760,7 @@ bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, f
     
     return ((b1 == b2) && (b2 == b3));
     
-    //Old code.
+    // Old code.
     /*float dx = px - tx1;
     float dy = py - ty1;
     
@@ -792,9 +792,9 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
  * Returns whether this vertex is an ear or not.
  */
 bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr) {
-    //A vertex is an ear if the triangle of it, the previous, and next vertices
-    //does not contain any other vertex inside. Also, if it has vertices inside,
-    //they mandatorily are concave, so only check those.
+    // A vertex is an ear if the triangle of it, the previous, and next vertices
+    // does not contain any other vertex inside. Also, if it has vertices inside,
+    // they mandatorily are concave, so only check those.
     const vertex* v = vec[nr];
     const vertex* pv = get_prev_in_vector(vec, nr);
     const vertex* nv = get_next_in_vector(vec, nr);
@@ -873,8 +873,8 @@ void check_linedef_intersections(vertex* v) {
     for(size_t l = 0; l < v->linedefs.size(); ++l) {
         linedef* l_ptr = v->linedefs[l];
         
-        //Check if it's on the list of intersecting lines, and remove it,
-        //so it can be recalculated now.
+        // Check if it's on the list of intersecting lines, and remove it,
+        // so it can be recalculated now.
         for(size_t il = 0; il < ed_intersecting_lines.size();) {
             if(ed_intersecting_lines[il].contains(l_ptr)) {
                 ed_intersecting_lines.erase(ed_intersecting_lines.begin() + il);
@@ -884,14 +884,14 @@ void check_linedef_intersections(vertex* v) {
         }
         
         
-        if(!l_ptr->vertices[0]) continue; //It had been marked for deletion.
+        if(!l_ptr->vertices[0]) continue; // It had been marked for deletion.
         
-        //For every other linedef in the map, check for intersections.
+        // For every other linedef in the map, check for intersections.
         for(size_t l2 = 0; l2 < cur_area_map.linedefs.size(); ++l2) {
             linedef* l2_ptr = cur_area_map.linedefs[l2];
-            if(!l2_ptr->vertices[0]) continue; //It had been marked for deletion.
+            if(!l2_ptr->vertices[0]) continue; // It had been marked for deletion.
             
-            //If the linedef is actually on the same vertex, never mind.
+            // If the linedef is actually on the same vertex, never mind.
             if(l_ptr->vertices[0] == l2_ptr->vertices[0]) continue;
             if(l_ptr->vertices[0] == l2_ptr->vertices[1]) continue;
             if(l_ptr->vertices[1] == l2_ptr->vertices[0]) continue;
@@ -923,14 +923,14 @@ void clean_poly(polygon* p) {
         vertex* cur_v =  p->at(v);
         vertex* next_v = get_next_in_vector((*p), v);
         
-        //If the distance between both vertices is so small that it's basically 0,
-        //delete this vertex from the list.
+        // If the distance between both vertices is so small that it's basically 0,
+        // delete this vertex from the list.
         if(fabs(prev_v->x - cur_v->x) < 0.00001 && fabs(prev_v->y - cur_v->y) < 0.00001) {
             should_delete = true;
         }
         
-        //If the angle between this vertex and the next is the same,
-        //then this is just a redundant point in the line prev - next. Delete it.
+        // If the angle between this vertex and the next is the same,
+        // then this is just a redundant point in the line prev - next. Delete it.
         if(fabs(atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) - atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)) < 0.000001) {
             should_delete = true;
         }
@@ -957,7 +957,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     }
     
     if(!outer_valid) {
-        //Some error happened.
+        // Some error happened.
         return;
     }
     
@@ -972,23 +972,23 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         float closest_vertex_ur = FLT_MAX;
         vertex* best_vertex = NULL;
         
-        //Find the rightmost vertex on this inner.
+        // Find the rightmost vertex on this inner.
         vertex* start = get_rightmost_vertex(p);
         
         if(!start) {
-            //Some error occured.
+            // Some error occured.
             continue;
         }
         
-        //Imagine a line from this vertex to the right.
-        //If any line of the outer polygon intersects it,
-        //we just find the best vertex on that line, and make the cut.
-        //This line stretching right is known as a ray.
+        // Imagine a line from this vertex to the right.
+        // If any line of the outer polygon intersects it,
+        // we just find the best vertex on that line, and make the cut.
+        // This line stretching right is known as a ray.
         float ray_width = outer_rightmost->x - start->x;
         
-        //Let's also check the vertices.
-        //If the closest thing is a vertex, not a line, then
-        //we can skip a bunch of steps.
+        // Let's also check the vertices.
+        // If the closest thing is a vertex, not a line, then
+        // we can skip a bunch of steps.
         vertex* v1 = NULL, *v2 = NULL;
         for(size_t v = 0; v < outer->size(); ++v) {
             v1 = outer->at(v);
@@ -1020,27 +1020,27 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         }
         
         if(!closest_vertex && !closest_line_v1) {
-            //Some error occured.
+            // Some error occured.
             continue;
         }
         
-        //Which is closest, a vertex or a line?
+        // Which is closest, a vertex or a line?
         if(closest_vertex_ur < closest_line_ur) {
-            //If it's a vertex, done.
+            // If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
             if(!closest_line_v1) continue;
             
-            //If it's a line, some more complicated steps need to be done.
+            // If it's a line, some more complicated steps need to be done.
             
-            //We're on the line closest to the vertex.
-            //Go to the rightmost vertex of this line.
+            // We're on the line closest to the vertex.
+            // Go to the rightmost vertex of this line.
             vertex* vertex_to_compare = get_rightmost_vertex(closest_line_v1, closest_line_v2);
             
-            //Now get a list of all vertices inside the triangle
-            //marked by the inner's vertex,
-            //the point on the line,
-            //and the vertex we're comparing.
+            // Now get a list of all vertices inside the triangle
+            // marked by the inner's vertex,
+            // the point on the line,
+            // and the vertex we're comparing.
             vector<vertex*> inside_triangle;
             for(size_t v = 0; v < outer->size(); ++v) {
                 vertex* v_ptr = outer->at(v);
@@ -1057,7 +1057,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 }
             }
             
-            //Check which one makes the smallest angle compared to 0.
+            // Check which one makes the smallest angle compared to 0.
             best_vertex = vertex_to_compare;
             float closest_angle = FLT_MAX;
             
@@ -1071,14 +1071,14 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             }
         }
         
-        //This is the final vertex. Make a bridge
-        //from the start vertex to this.
-        //First, we must find whether the outer vertex
-        //already has bridges or not.
-        //If so, we place the new bridge before or after,
-        //depending on the angle.
-        //We know a bridge exists if the same vertex
-        //appears twice.
+        // This is the final vertex. Make a bridge
+        // from the start vertex to this.
+        // First, we must find whether the outer vertex
+        // already has bridges or not.
+        // If so, we place the new bridge before or after,
+        // depending on the angle.
+        // We know a bridge exists if the same vertex
+        // appears twice.
         vector<size_t> bridges;
         for(size_t v = 0; v < outer->size(); ++v) {
             if(outer->at(v) == best_vertex) {
@@ -1086,13 +1086,13 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             }
         }
         
-        //Insert the new bridge after this vertex.
+        // Insert the new bridge after this vertex.
         size_t insertion_vertex_nr;
         if(bridges.size() == 1) {
-            //No bridges found, just use this vertex.
+            // No bridges found, just use this vertex.
             insertion_vertex_nr = bridges[0];
         } else {
-            //Find where to insert.
+            // Find where to insert.
             insertion_vertex_nr = bridges.back();
             float new_bridge_angle = get_angle_cw_dif(atan2(start->y - best_vertex->y, start->x - best_vertex->x), 0);
             
@@ -1107,11 +1107,11 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             }
         }
         
-        //Now, make the bridge.
-        //On the outer vertex, change the next vertex
-        //to be the start of the inner, then
-        //circle the inner, and go back to the outer vertex.
-        //Let's just find where the start vertex is...
+        // Now, make the bridge.
+        // On the outer vertex, change the next vertex
+        // to be the start of the inner, then
+        // circle the inner, and go back to the outer vertex.
+        // Let's just find where the start vertex is...
         size_t iv = 0;
         for(; iv < p->size(); ++iv) {
             if(p->at(iv) == start) {
@@ -1121,16 +1121,16 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         
         auto it = p->begin() + iv;
         size_t n_after = p->size() - iv;
-        //Finally, make the bridge.
+        // Finally, make the bridge.
         outer->insert(outer->begin() + insertion_vertex_nr + 1, it, p->end());
         outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after, p->begin(), it);
-        outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start); //Closes the inner polygon.
+        outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start); // Closes the inner polygon.
         
-        //Before we close the inner polygon, let's
-        //check if the inner's rightmost and the outer best vertices
-        //are not the same.
-        //This can happen if you have a square on the top-right
-        //and one on the bottom-left, united by the central vertex.
+        // Before we close the inner polygon, let's
+        // check if the inner's rightmost and the outer best vertices
+        // are not the same.
+        // This can happen if you have a square on the top-right
+        // and one on the bottom-left, united by the central vertex.
         if(start != best_vertex) {
             outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv + 1, best_vertex);
         }
@@ -1197,19 +1197,19 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
     
     if(div != 0) {
     
-        //Calculate the intersection distance from the line.
+        // Calculate the intersection distance from the line.
         local_ul = ((l2x2 - l2x1) * (l1y1 - l2y1) - (l2y2 - l2y1) * (l1x1 - l2x1)) / div;
         if(ul) *ul = local_ul;
         
-        //Calculate the intersection distance from the ray.
+        // Calculate the intersection distance from the ray.
         local_ur = ((l1x2 - l1x1) * (l1y1 - l2y1) - (l1y2 - l1y1) * (l1x1 - l2x1)) / div;
         if(ur) *ur = local_ur;
         
-        //Return whether they intersect.
+        // Return whether they intersect.
         return (local_ur >= 0) && (local_ur <= 1) && (local_ul >= 0) && (local_ul <= 1);
         
     } else {
-        //No intersection.
+        // No intersection.
         return false;
     }
 }
@@ -1220,20 +1220,20 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
  */
 void triangulate(sector* s_ptr) {
 
-    //We'll triangulate with the Triangulation by Ear Clipping algorithm.
-    //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
+    // We'll triangulate with the Triangulation by Ear Clipping algorithm.
+    // http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
     polygon outer_poly;
     vector<polygon> inner_polys;
     
-    //Before we start, let's just remove it from the
-    //vector of non-simple sectors.
+    // Before we start, let's just remove it from the
+    // vector of non-simple sectors.
     auto it = ed_non_simples.find(s_ptr);
     if(it != ed_non_simples.end()) {
         ed_non_simples.erase(it);
     }
     
-    //And let's clear any "lone" linedefs here.
+    // And let's clear any "lone" linedefs here.
     for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         linedef* l_ptr = s_ptr->linedefs[l];
         auto it = ed_lone_lines.find(l_ptr);
@@ -1242,10 +1242,10 @@ void triangulate(sector* s_ptr) {
         }
     }
     
-    //First, we need to know what vertices mark the outermost polygon,
-    //and what vertices mark the inner ones.
-    //There can be no islands or polygons of our sector inside the inner ones.
-    //Example of a sector's polygons:
+    // First, we need to know what vertices mark the outermost polygon,
+    // and what vertices mark the inner ones.
+    // There can be no islands or polygons of our sector inside the inner ones.
+    // Example of a sector's polygons:
     /*
      * +-------+     +---+
      * | OUTER  \    |   |
@@ -1261,11 +1261,11 @@ void triangulate(sector* s_ptr) {
      */
     get_polys(s_ptr, &outer_poly, &inner_polys);
     
-    //Get rid of 0-length vertices and 180-degree vertices, as they're redundant.
+    // Get rid of 0-length vertices and 180-degree vertices, as they're redundant.
     clean_poly(&outer_poly);
     for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);
     
-    //Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
+    // Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
     
     s_ptr->triangles.clear();
@@ -1274,19 +1274,19 @@ void triangulate(sector* s_ptr) {
     vector<size_t> convex_vertices;
     vector<size_t> concave_vertices;
     
-    //Begin by making a list of all concave, convex and ear vertices.
+    // Begin by making a list of all concave, convex and ear vertices.
     get_cce(vertices_left, ears, convex_vertices, concave_vertices);
     
-    //We do a triangulation until we're left with three vertices -- the final triangle.
+    // We do a triangulation until we're left with three vertices -- the final triangle.
     while(vertices_left.size() > 3) {
     
         if(ears.empty()) {
-            //Something went wrong, the polygon mightn't be simple.
+            // Something went wrong, the polygon mightn't be simple.
             ed_non_simples.insert(s_ptr);
             break;
             
         } else {
-            //The ear, the previous and the next vertices make a triangle.
+            // The ear, the previous and the next vertices make a triangle.
             s_ptr->triangles.push_back(
                 triangle(
                     vertices_left[ears[0]],
@@ -1295,15 +1295,15 @@ void triangulate(sector* s_ptr) {
                 )
             );
             
-            //Remove the ear.
+            // Remove the ear.
             vertices_left.erase(vertices_left.begin() + ears[0]);
             
-            //Recalculate the ears, concave and convex vertices.
+            // Recalculate the ears, concave and convex vertices.
             get_cce(vertices_left, ears, convex_vertices, concave_vertices);
         }
     }
     
-    //Finally, add the final triangle.
+    // Finally, add the final triangle.
     if(vertices_left.size() == 3) {
         s_ptr->triangles.push_back(
             triangle(

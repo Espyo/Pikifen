@@ -30,4 +30,4 @@ public:
     pellet(float x, float y, pellet_type* type, const float angle, const string &vars);
 };
 
-#endif //ifndef PELLET_INCLUDED
+#endif // ifndef PELLET_INCLUDED

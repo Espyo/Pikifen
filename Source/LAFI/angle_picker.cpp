@@ -19,7 +19,7 @@ angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::st
     dragging_pointer = false;
 }
 
-//Destroys an angle picker.
+// Destroys an angle picker.
 angle_picker::~angle_picker() {}
 
 

@@ -55,7 +55,7 @@ void radio_button::init() {
  */
 radio_button::~radio_button() {
     /*
-    //ToDo
+    // TODO
     vector<widget*>* radio_button_group = &((lafi::container*) parent)->groups[group];
     
     size_t n_radio_buttons = radio_button_group->size();

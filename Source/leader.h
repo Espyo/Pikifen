@@ -36,8 +36,8 @@ public:
     mob* holding_pikmin;
     
     bool auto_pluck_mode;
-    pikmin* auto_pluck_pikmin; //-1 = not plucking.
-    float pluck_time; //Time left until the Pikmin pops out.
+    pikmin* auto_pluck_pikmin; // -1 = not plucking.
+    float pluck_time; // Time left until the Pikmin pops out.
     
     leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
 };
@@ -51,4 +51,4 @@ void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked);
 void stop_auto_pluck(leader* l);
 void stop_whistling();
 
-#endif //ifndef LEADER_INCLUDED
+#endif // ifndef LEADER_INCLUDED

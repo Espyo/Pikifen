@@ -36,7 +36,7 @@ public:
     ALLEGRO_COLOR color;
     
     particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR color);
-    bool tick();    //Returns true if the tick was successful. Returns false if its time to live is over.
+    bool tick();    // Returns true if the tick was successful. Returns false if its time to live is over.
 };
 
 
@@ -57,4 +57,4 @@ enum PARTICLE_TYPES {
     PARTICLE_TYPE_SMACK,
 };
 
-#endif //ifndef PARTICLE_H
+#endif // ifndef PARTICLE_H

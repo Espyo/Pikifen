@@ -23,7 +23,7 @@ public:
     ALLEGRO_COLOR darker_bg_color;
     
     ALLEGRO_COLOR fg_color;
-    ALLEGRO_COLOR alt_color; //Used, for instance, as a background in selected textbox text.
+    ALLEGRO_COLOR alt_color; // Used, for instance, as a background in selected textbox text.
     
     ALLEGRO_COLOR disabled_bg_color;
     ALLEGRO_COLOR lighter_disabled_bg_color;
@@ -49,4 +49,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_STYLE_INCLUDED
+#endif // ifndef LAFI_STYLE_INCLUDED

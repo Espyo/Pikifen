@@ -6,10 +6,10 @@
 
 namespace lafi {
 
-const float COLOR_SHIFT_DELTA = 0.2f; //A color is lightened/darkened by this much.
+const float COLOR_SHIFT_DELTA = 0.2f; // A color is lightened/darkened by this much.
 
 const int CHECKBOX_BOX_SIZE = 12;
-const int CHECKBOX_BOX_PADDING = 4; //How many pixels after the box should the label come.
+const int CHECKBOX_BOX_PADDING = 4; // How many pixels after the box should the label come.
 const int RADIO_BUTTON_BUTTON_SIZE = 12;
 const int RADIO_BUTTON_BUTTON_PADDING = 4;
 
@@ -31,7 +31,7 @@ enum WIDGET_FLAGS {
     FLAG_INVISIBLE = 2,
     FLAG_NOT_SELECTABLE = 4,
     FLAG_NO_CLIPPING_RECTANGLE = 8,
-    FLAG_WUM_NO_CHILDREN = 16, //When checking the Widget Under Mouse, do not check this widget's children.
+    FLAG_WUM_NO_CHILDREN = 16, // When checking the Widget Under Mouse, do not check this widget's children.
 };
 
 enum DRAW_LINE_SIDES {
@@ -42,9 +42,9 @@ enum DRAW_LINE_SIDES {
 };
 
 enum EASY_FLAGS {
-    EASY_FLAG_WIDTH_PX = 1,  //Width is in pixels, not percentage.
+    EASY_FLAG_WIDTH_PX = 1,  // Width is in pixels, not percentage.
 };
 
 }
 
-#endif //ifndef LAFI_CONST_INCLUDED
+#endif // ifndef LAFI_CONST_INCLUDED

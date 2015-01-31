@@ -38,7 +38,7 @@ enum EASING_METHODS {
     EASE_OUT,
 };
 
-const float WALL_SHADOW_LENGTH  = 32;  //The shadows of walls spread this much outwards.
-const float WALL_SHADOW_OPACITY = 192; //The shadows of walls start with this opacity and fade to 0.
+const float WALL_SHADOW_LENGTH  = 32;  // The shadows of walls spread this much outwards.
+const float WALL_SHADOW_OPACITY = 192; // The shadows of walls start with this opacity and fade to 0.
 
-#endif //ifndef DRAWING_INCLUDED
+#endif // ifndef DRAWING_INCLUDED

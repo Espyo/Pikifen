@@ -25,13 +25,13 @@ using namespace std;
  * and what action it triggers.
  */
 struct control_info {
-    unsigned char action; //Action number. Use BUTTON_*.
-    unsigned char player; //Player this applies to.
-    unsigned char type;   //Type of control (hardware). Use CONTROL_TYPE_*.
-    int device_nr;        //Device number. i.e. the gamepad number.
-    int button;           //Button, whether the gamepad digital button, or the keyboard key.
-    int stick;            //Stick on the gamepad.
-    int axis;             //Axis of the stick.
+    unsigned char action; // Action number. Use BUTTON_*.
+    unsigned char player; // Player this applies to.
+    unsigned char type;   // Type of control (hardware). Use CONTROL_TYPE_*.
+    int device_nr;        // Device number. i.e. the gamepad number.
+    int button;           // Button, whether the gamepad digital button, or the keyboard key.
+    int stick;            // Stick on the gamepad.
+    int axis;             // Axis of the stick.
     
     control_info(unsigned char action, unsigned char player, string s);
     string stringify();
@@ -57,11 +57,11 @@ enum BUTTONS {
     BUTTON_MOVE_CURSOR_UP,
     BUTTON_MOVE_CURSOR_LEFT,
     BUTTON_MOVE_CURSOR_DOWN,
-    BUTTON_MOVE_GROUP_RIGHT,
-    BUTTON_MOVE_GROUP_UP,
-    BUTTON_MOVE_GROUP_LEFT,
-    BUTTON_MOVE_GROUP_DOWN,
-    BUTTON_MOVE_GROUP_TO_CURSOR,
+    BUTTON_GROUP_MOVE_RIGHT,
+    BUTTON_GROUP_MOVE_UP,
+    BUTTON_GROUP_MOVE_LEFT,
+    BUTTON_GROUP_MOVE_DOWN,
+    BUTTON_group_move_go_to_cursor,
     BUTTON_SWITCH_CAPTAIN_RIGHT,
     BUTTON_SWITCH_CAPTAIN_LEFT,
     BUTTON_DISMISS,
@@ -95,4 +95,4 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,
 };
 
-#endif //ifndef CONTROLS_INCLUDED
+#endif // ifndef CONTROLS_INCLUDED

@@ -47,4 +47,4 @@ public:
 
 }
 
-#endif //ifndef LAFI_CHECKBOX_INCLUDED
+#endif // ifndef LAFI_CHECKBOX_INCLUDED

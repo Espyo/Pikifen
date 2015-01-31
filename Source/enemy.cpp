@@ -19,8 +19,8 @@ enemy::enemy(const float x, const float y, enemy_type* type, const float angle, 
     : mob(x, y, type, angle, vars) {
     
     ene_type = type;
-    team = MOB_TEAM_ENEMIES; //ToDo removeish.
+    team = MOB_TEAM_ENEMIES; // TODO removeish.
     
     spawn_delay = s2f(get_var_value(vars, "spawn_delay", "0"));
-    //ToDo day apperance interval
+    // TODO day apperance interval
 }

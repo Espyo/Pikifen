@@ -4,7 +4,7 @@
  * Data file.
  * A data file is composed of nodes, that can either have a value, or children nodes.
  * In the text file, each line represents something.
-   * A line starting with "//" is a comment, and is ignored.
+   * A line starting with "// " is a comment, and is ignored.
    * A line like "option = value" is a node with a value.
    * A line like "option {" is a node with children nodes.
      * The children of this node are declared in the following lines, until a matching "}" is found.
@@ -53,12 +53,12 @@ private:
     data_node* create_dummy();
     
 public:
-    string name;    //The node's name.
-    string value;   //And its value.
+    string name;    // The node's name.
+    string value;   // And its value.
     
-    bool file_was_opened; //True if the node or parent(s) was created from a file that was opened successfuly.
-    string file_name;      //Full file name of the file used to open this node or its parent(s).
-    size_t line_nr;       //Line on the text file this node's in.
+    bool file_was_opened; // True if the node or parent(s) was created from a file that was opened successfuly.
+    string file_name;      // Full file name of the file used to open this node or its parent(s).
+    size_t line_nr;       // Line on the text file this node's in.
     
     string get_value_or_default(const string &def);
     
@@ -87,4 +87,4 @@ public:
 void getline(ALLEGRO_FILE* file, string &line);
 string trim_spaces(string s, bool left_only = false);
 
-#endif //ifndef DATA_FILE_INCLUDED
+#endif // ifndef DATA_FILE_INCLUDED

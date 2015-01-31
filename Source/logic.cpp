@@ -35,10 +35,10 @@ void do_logic() {
     *                               `-´  *
     **************************************/
     
-    //Rotation angle for the glow atop idle Pikmin.
+    // Rotation angle for the glow atop idle Pikmin.
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
-    //Camera transitions.
+    // Camera transitions.
     if(cam_trans_pan_time_left > 0) {
         cam_trans_pan_time_left -= delta_t;
         if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
@@ -60,30 +60,30 @@ void do_logic() {
         cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
     }
     
-    //"Move group" arrows.
-    if(moving_group_intensity) {
-        move_group_next_arrow_time -= delta_t;
-        if(move_group_next_arrow_time <= 0) {
-            move_group_next_arrow_time = MOVE_GROUP_ARROWS_INTERVAL;
-            move_group_arrows.push_back(0);
+    // "Move group" arrows.
+    if(group_move_intensity) {
+        group_move_next_arrow_time -= delta_t;
+        if(group_move_next_arrow_time <= 0) {
+            group_move_next_arrow_time = GROUP_MOVE_ARROWS_INTERVAL;
+            group_move_arrows.push_back(0);
         }
     }
     
     float leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-    for(size_t a = 0; a < move_group_arrows.size(); ) {
-        move_group_arrows[a] += MOVE_GROUP_ARROW_SPEED * delta_t;
+    for(size_t a = 0; a < group_move_arrows.size(); ) {
+        group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
         float max_dist =
-            ((moving_group_intensity > 0) ? max_dist = CURSOR_MAX_DIST* moving_group_intensity : leader_to_cursor_dis);
+            ((group_move_intensity > 0) ? max_dist = CURSOR_MAX_DIST* group_move_intensity : leader_to_cursor_dis);
             
-        if(move_group_arrows[a] >= max_dist) {
-            move_group_arrows.erase(move_group_arrows.begin() + a);
+        if(group_move_arrows[a] >= max_dist) {
+            group_move_arrows.erase(group_move_arrows.begin() + a);
         } else {
             a++;
         }
     }
     
-    //Whistle animations.
+    // Whistle animations.
     whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED * delta_t;
     
     if(whistle_fade_time > 0) {
@@ -92,7 +92,7 @@ void do_logic() {
     }
     
     if(whistling) {
-        //Create rings.
+        // Create rings.
         whistle_next_ring_time -= delta_t;
         if(whistle_next_ring_time <= 0) {
             whistle_next_ring_time = WHISTLE_RINGS_INTERVAL;
@@ -106,7 +106,7 @@ void do_logic() {
             if(whistle_next_dot_time <= 0) {
                 whistle_next_dot_time = WHISTLE_DOT_INTERVAL;
                 unsigned char dot = 255;
-                for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
+                for(unsigned char d = 0; d < 6; d++) { // Find WHAT dot to add.
                     if(whistle_dot_radius[d] == -1) { dot = d; break;}
                 }
                 
@@ -127,7 +127,7 @@ void do_logic() {
     }
     
     for(size_t r = 0; r < whistle_rings.size(); ) {
-        //Erase rings that go beyond the cursor.
+        // Erase rings that go beyond the cursor.
         whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
         if(whistle_rings[r] >= leader_to_cursor_dis) {
             whistle_rings.erase(whistle_rings.begin() + r);
@@ -137,10 +137,10 @@ void do_logic() {
         }
     }
     
-    //Ship beam ring.
-    //The way this works is that the three color components are saved.
-    //Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
-    //Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
+    // Ship beam ring.
+    // The way this works is that the three color components are saved.
+    // Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
+    // Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
     for(unsigned char i = 0; i < 3; i++) {
         float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
         signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
@@ -155,14 +155,14 @@ void do_logic() {
         }
     }
     
-    //Sun meter.
+    // Sun meter.
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED * delta_t;
     
-    //Cursor spin angle and invalidness effect.
+    // Cursor spin angle and invalidness effect.
     cursor_spin_angle -= CURSOR_SPIN_SPEED * delta_t;
     cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
     
-    //Cursor trail.
+    // Cursor trail.
     if(draw_cursor_trail) {
         if(cursor_save_time > 0) {
             cursor_save_time -= delta_t;
@@ -176,7 +176,7 @@ void do_logic() {
         }
     }
     
-    //Tree shadow swaying.
+    // Tree shadow swaying.
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
     
@@ -196,7 +196,7 @@ void do_logic() {
             if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
         }
         
-        //Tick all particles.
+        // Tick all particles.
         size_t n_particles = particles.size();
         for(size_t p = 0; p < n_particles; ) {
             if(!particles[p].tick()) {
@@ -238,7 +238,7 @@ void do_logic() {
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs;) {
         
-            //Tick the mob.
+            // Tick the mob.
             mob* m_ptr = mobs[m];
             m_ptr->tick();
             
@@ -251,11 +251,11 @@ void do_logic() {
             
             if(m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
                 if(m_ptr->carrier_info->carry_to_ship) {
-                    //Find ship.
-                    //ToDo.
+                    // Find ship.
+                    // TODO.
                     
                 } else {
-                    //Find Onion.
+                    // Find Onion.
                     size_t n_onions = onions.size();
                     size_t o = 0;
                     for(; o < n_onions; o++) {
@@ -288,7 +288,7 @@ void do_logic() {
                 if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
             }
             
-            //Mob deletion.
+            // Mob deletion.
             if(m_ptr->to_delete) {
                 delete_mob(m_ptr);
                 n_mobs--;
@@ -309,7 +309,7 @@ void do_logic() {
         
         
         
-        //Uh... This is a placeholder, I guess?
+        // Uh... This is a placeholder, I guess?
         
         
         
@@ -358,7 +358,7 @@ void do_logic() {
             
             if(can_be_called && (whistled || (touched && !is_busy))) {
             
-                //Pikmin got whistled or touched.
+                // Pikmin got whistled or touched.
                 drop_mob(pik_ptr);
                 pik_ptr->attacking_mob = NULL;
                 pik_ptr->attack_time = 0;
@@ -370,7 +370,7 @@ void do_logic() {
                 
             }
             
-            //Touching nectar.
+            // Touching nectar.
             size_t n_nectars = nectars.size();
             if(
                 !pik_ptr->carrying_mob &&
@@ -389,7 +389,7 @@ void do_logic() {
                 }
             }
             
-            //Latch onto a mob.
+            // Latch onto a mob.
             size_t n_mobs = mobs.size();
             if(pik_ptr->was_thrown && !pik_ptr->attacking_mob) {
                 for(size_t m = 0; m < n_mobs; m++) {
@@ -398,7 +398,7 @@ void do_logic() {
                     if(mob_ptr->dead) continue;
                     if(!should_attack(pik_ptr, mob_ptr)) continue;
                     if(!check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->radius + mob_ptr->type->radius)) continue;
-                    if(pik_ptr->z > mob_ptr->z + 100) continue; //ToDo this isn't taking height into account.
+                    if(pik_ptr->z > mob_ptr->z + 100) continue; // TODO this isn't taking height into account.
                     
                     hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
                     if(!closest_hitbox) continue;
@@ -412,8 +412,8 @@ void do_logic() {
                     float x_dif = pik_ptr->x - actual_hx;
                     float y_dif = pik_ptr->y - actual_hy;
                     coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-                    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
-                    pik_ptr->enemy_hitbox_dist /= closest_hitbox->radius; //Distance in units to distance in percentage.
+                    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; // Relative to 0 degrees.
+                    pik_ptr->enemy_hitbox_dist /= closest_hitbox->radius; // Distance in units to distance in percentage.
                     
                     pik_ptr->attacking_mob = mob_ptr;
                     pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
@@ -426,7 +426,7 @@ void do_logic() {
                 }
             }
             
-            //Finding a mob to fight.
+            // Finding a mob to fight.
             if(
                 (!pik_ptr->following_party &&
                  !pik_ptr->carrying_mob &&
@@ -434,7 +434,7 @@ void do_logic() {
                  !pik_ptr->attacking_mob &&
                  pik_ptr->state != PIKMIN_STATE_BURIED &&
                  !pik_ptr->speed_z) ||
-                (pik_ptr->following_party == cur_leader_ptr && moving_group_intensity)
+                (pik_ptr->following_party == cur_leader_ptr && group_move_intensity)
             ) {
                 for(size_t m = 0; m < n_mobs; m++) {
                 
@@ -456,7 +456,7 @@ void do_logic() {
             }
             
             
-            //Finding a mob to carry.
+            // Finding a mob to carry.
             if(
                 (!pik_ptr->following_party &&
                  !pik_ptr->carrying_mob &&
@@ -464,14 +464,14 @@ void do_logic() {
                  !pik_ptr->attacking_mob &&
                  pik_ptr->state != PIKMIN_STATE_BURIED &&
                  !pik_ptr->speed_z) ||
-                (pik_ptr->following_party == cur_leader_ptr && moving_group_intensity)
+                (pik_ptr->following_party == cur_leader_ptr && group_move_intensity)
             ) {
                 for(size_t m = 0; m < n_mobs; m++) {
                 
                     mob* mob_ptr = mobs[m];
                     
                     if(!mob_ptr->carrier_info) continue;
-                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; //No more room.
+                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; // No more room.
                     if(mob_ptr->state == MOB_STATE_BEING_DELIVERED) continue;
                     
                     if(check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->radius + mob_ptr->type->radius + task_range)) {
@@ -479,7 +479,7 @@ void do_logic() {
                         remove_from_party(pik_ptr);
                         pik_ptr->set_state(PIKMIN_STATE_MOVING_TO_CARRY_SPOT);
                         
-                        //ToDo remove this random cycle and replace with something more optimal.
+                        // TODO remove this random cycle and replace with something more optimal.
                         bool valid_spot = false;
                         unsigned int spot = 0;
                         while(!valid_spot) {
@@ -505,7 +505,7 @@ void do_logic() {
                 }
             }
             
-            //Reaching to the mob carry spot.
+            // Reaching to the mob carry spot.
             if(pik_ptr->state == PIKMIN_STATE_MOVING_TO_CARRY_SPOT && pik_ptr->reached_destination) {
                 pik_ptr->set_state(PIKMIN_STATE_CARRYING);
                 pik_ptr->carrying_mob = pik_ptr->wants_to_carry;
@@ -532,7 +532,7 @@ void do_logic() {
                 }
             }
             
-            //Fighting an enemy.
+            // Fighting an enemy.
             if(pik_ptr->attacking_mob) {
                 hitbox_instance* h_ptr = get_hitbox_instance(pik_ptr->attacking_mob, pik_ptr->enemy_hitbox_nr);
                 if(h_ptr) {
@@ -591,7 +591,7 @@ void do_logic() {
                 }
             }
             
-            //Touching a mob's hitboxes.
+            // Touching a mob's hitboxes.
             for(size_t m = 0; m < mobs.size(); m++) {
                 if(typeid(*mobs[m]) == typeid(pikmin)) continue;
                 mob* m_ptr = mobs[m];
@@ -627,8 +627,8 @@ void do_logic() {
                             float x_dif = pik_ptr->x - h_x;
                             float y_dif = pik_ptr->y - h_y;
                             coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-                            pik_ptr->enemy_hitbox_angle -= m_ptr->angle;  //Relative to 0 degrees.
-                            pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
+                            pik_ptr->enemy_hitbox_angle -= m_ptr->angle;  // Relative to 0 degrees.
+                            pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; // Distance in units to distance in percentage.
                             
                             pik_ptr->latched = false;
                             pik_ptr->enemy_hitbox_nr = h_nr;
@@ -650,7 +650,7 @@ void do_logic() {
             }
             
             if(pik_ptr->anim.is_anim(PIKMIN_ANIM_LYING, true) && pik_ptr->knockdown_period == 0) {
-                pik_ptr->anim.change(PIKMIN_ANIM_GET_UP, true, false, false); //ToDo this isn't working. This instruction runs, but the animation never changes.
+                pik_ptr->anim.change(PIKMIN_ANIM_GET_UP, true, false, false); // TODO this isn't working. This instruction runs, but the animation never changes.
             } else if(pik_ptr->state == PIKMIN_STATE_BURIED) {
                 pik_ptr->anim.change(PIKMIN_ANIM_BURROWED, true, true, true);
             } else if(pik_ptr->being_chomped) {
@@ -678,9 +678,11 @@ void do_logic() {
             cur_leader_ptr->holding_pikmin->angle = cur_leader_ptr->angle;
         }
         
-        //Current leader movement.
+        // Current leader movement.
         if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->auto_pluck_pikmin && !cur_leader_ptr->carrier_info) {
-            float leader_move_intensity = dist(0, 0, leader_move_x, leader_move_y);
+            float leader_move_x = leader_movement.get_x();
+            float leader_move_y = leader_movement.get_y();
+            float leader_move_intensity = leader_movement.get_intensity();
             if(leader_move_intensity < 0.75) leader_move_intensity = 0;
             if(leader_move_intensity > 1) leader_move_intensity = 1;
             if(leader_move_intensity == 0)
@@ -702,7 +704,7 @@ void do_logic() {
                         stop_auto_pluck(l_ptr);
                         
                         if(!l_ptr->following_party && !l_ptr->was_thrown) {
-                            //Leader got whistled.
+                            // Leader got whistled.
                             add_to_party(cur_leader_ptr, l_ptr);
                             
                             size_t n_party_members = l_ptr->party->members.size();
@@ -741,7 +743,7 @@ void do_logic() {
                         leader* new_pikmin_leader = l_ptr;
                         if(l_ptr->following_party) {
                             if(typeid(*l_ptr->following_party) == typeid(leader)) {
-                                //If this leader is following another one, then the new Pikmin should be in the party of that top leader.
+                                // If this leader is following another one, then the new Pikmin should be in the party of that top leader.
                                 new_pikmin_leader = (leader*) l_ptr->following_party;
                             }
                         }
@@ -758,7 +760,7 @@ void do_logic() {
                         
                         if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
                             go_pluck(l_ptr, new_pikmin);
-                        } else { //No more buried Pikmin, or none nearby. Give up.
+                        } else { // No more buried Pikmin, or none nearby. Give up.
                             stop_auto_pluck(l_ptr);
                         }
                     }
@@ -810,27 +812,31 @@ void do_logic() {
             }
         }
         
-        if(moving_group_to_cursor) {
-            moving_group_angle = cursor_angle;
-            moving_group_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
-        } else if(moving_group_pos_x != 0 || moving_group_pos_y != 0) {
+        float group_move_x = group_movement.get_x();
+        float group_move_y = group_movement.get_y();
+        
+        if(group_move_go_to_cursor) {
+            group_move_angle = cursor_angle;
+            group_move_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
+        } else if(group_move_x != 0 || group_move_y != 0) {
             coordinates_to_angle(
-                moving_group_pos_x, moving_group_pos_y,
-                &moving_group_angle, &moving_group_intensity);
-            if(moving_group_intensity > 1) moving_group_intensity = 1;
+                group_move_x, group_move_y,
+                &group_move_angle, &group_move_intensity
+            );
+            if(group_move_intensity > 1) group_move_intensity = 1;
         } else {
-            moving_group_intensity = 0;
+            group_move_intensity = 0;
         }
         
-        if(moving_group_intensity) {
-            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
-            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * moving_group_intensity * CURSOR_MAX_DIST;
-        } else if(prev_moving_group_intensity != 0) {
+        if(group_move_intensity) {
+            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
+            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
+        } else if(prev_group_move_intensity != 0) {
             float d = get_leader_to_group_center_dist(cur_leader_ptr);
-            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(moving_group_angle) * d;
-            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(moving_group_angle) * d;
+            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(group_move_angle) * d;
+            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(group_move_angle) * d;
         }
-        prev_moving_group_intensity = moving_group_intensity;
+        prev_group_move_intensity = group_move_intensity;
         
         
         /********************
@@ -838,6 +844,9 @@ void do_logic() {
         *   Cursor   ( = )> *
         *             `-´   *
         ********************/
+        
+        float mouse_cursor_speed_x = delta_t* MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x();
+        float mouse_cursor_speed_y = delta_t* MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y();
         
         mouse_cursor_x += mouse_cursor_speed_x;
         mouse_cursor_y += mouse_cursor_speed_y;
@@ -857,7 +866,7 @@ void do_logic() {
         
         leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
         if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
-            //ToDo with an analog stick, if the cursor is being moved, it's considered off-limit a lot more than it should.
+            //TODO with an analog stick, if the cursor is being moved, it's considered off-limit a lot more than it should.
             //Cursor goes beyond the range limit.
             cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
             cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
@@ -924,7 +933,7 @@ void do_logic() {
             }
         }
         
-    } else { //Displaying a message.
+    } else { // Displaying a message.
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
             cur_message_char_time -= delta_t;

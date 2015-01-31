@@ -165,7 +165,10 @@
     <ClCompile Include="pellet_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="loader_thread.cpp">
+    <ClCompile Include="init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parallel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -326,7 +329,10 @@
     <ClInclude Include="animation_editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="loader_thread.h">
+    <ClInclude Include="init.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parallel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

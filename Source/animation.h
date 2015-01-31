@@ -68,18 +68,18 @@ using namespace std;
 class frame {
 public:
     string name;
-    ALLEGRO_BITMAP* parent_bmp; //Parent bitmap, normally a spritesheet.
-    string file;                //File name where the image is at.
-    int file_x, file_y;         //Top-left corner of the sprite inside the image file.
-    int file_w, file_h;         //Size of the sprite inside the image file.
-    float game_w, game_h;       //In-game size of the sprite.
-    float offs_x, offs_y;       //Offset. Move the sprite left/right/up/down to align with the previous frames and such.
-    float top_x, top_y;         //X&Y of the Pikmin's top (left/bud/flower).
-    float top_w, top_h;         //W&H of the Pikmin's top.
-    float top_angle;            //Angle of the Pikmin's top.
-    bool top_visible;           //Does this frame even have a visible Pikmin top?
-    ALLEGRO_BITMAP* bitmap;     //Actual bitmap. This is a sub-bitmap of parent_bmp.
-    vector<hitbox_instance> hitbox_instances; //List of hitboxes on this frame.
+    ALLEGRO_BITMAP* parent_bmp; // Parent bitmap, normally a spritesheet.
+    string file;                // File name where the image is at.
+    int file_x, file_y;         // Top-left corner of the sprite inside the image file.
+    int file_w, file_h;         // Size of the sprite inside the image file.
+    float game_w, game_h;       // In-game size of the sprite.
+    float offs_x, offs_y;       // Offset. Move the sprite left/right/up/down to align with the previous frames and such.
+    float top_x, top_y;         // X&Y of the Pikmin's top (left/bud/flower).
+    float top_w, top_h;         // W&H of the Pikmin's top.
+    float top_angle;            // Angle of the Pikmin's top.
+    bool top_visible;           // Does this frame even have a visible Pikmin top?
+    ALLEGRO_BITMAP* bitmap;     // Actual bitmap. This is a sub-bitmap of parent_bmp.
+    vector<hitbox_instance> hitbox_instances; // List of hitboxes on this frame.
     
     frame(const string &name = "", ALLEGRO_BITMAP* const b = NULL, const float gw = 0, const float gh = 0, const vector<hitbox_instance> &h = vector<hitbox_instance>());
     frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h);
@@ -98,9 +98,9 @@ public:
 class frame_instance {
 public:
     string frame_name;
-    size_t frame_nr;  //Needed for performance.
-    frame* frame_ptr; //Needed for performance.
-    float duration;   //How long this frame lasts for, in seconds.
+    size_t frame_nr;  // Needed for performance.
+    frame* frame_ptr; // Needed for performance.
+    float duration;   // How long this frame lasts for, in seconds.
     
     frame_instance(const string &fn = "", const size_t fnr = string::npos, frame* fp = NULL, const float d = 0);
 };
@@ -113,8 +113,8 @@ public:
 class animation {
 public:
     string name;
-    vector<frame_instance> frame_instances; //List of frames.
-    size_t loop_frame;    //The animation loops back to this frame when it reaches the end.
+    vector<frame_instance> frame_instances; // List of frames.
+    size_t loop_frame;    // The animation loops back to this frame when it reaches the end.
     
     animation(const string &name = "", vector<frame_instance> frame_instances = vector<frame_instance>(), const size_t loop_frame = 0);
     animation(const animation &a2);
@@ -131,7 +131,7 @@ public:
     vector<frame*> frames;
     vector<hitbox*> hitboxes;
     
-    vector<size_t> pre_named_conversions; //Conversion between pre-named animations and in-file animations.
+    vector<size_t> pre_named_conversions; // Conversion between pre-named animations and in-file animations.
     
     animation_set(
         vector<animation*> a = vector<animation*>(),
@@ -158,7 +158,7 @@ class animation_instance {
 public:
     animation* anim;
     animation_set* anim_set;
-    float cur_frame_time;  //Time passed on the current frame.
+    float cur_frame_time;  // Time passed on the current frame.
     size_t cur_frame_nr;
     bool done_once;
     
@@ -176,4 +176,4 @@ public:
 
 animation_set load_animation_set(data_node* frames_node);
 
-#endif //ifndef ANIMATION_INCLUDED
+#endif // ifndef ANIMATION_INCLUDED

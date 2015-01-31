@@ -155,12 +155,12 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             leader_type* lt = (leader_type*) mt;
             lt->pluck_delay = s2f(file.get_child_by_name("pluck_delay")->value);
             lt->whistle_range = s2f(file.get_child_by_name("whistle_range")->get_value_or_default(f2s(DEF_WHISTLE_RANGE)));
-            lt->punch_strength = s2i(file.get_child_by_name("punch_strength")->value); //ToDo default.
+            lt->punch_strength = s2i(file.get_child_by_name("punch_strength")->value); // TODO default.
             
             if(load_resources) {
-                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //ToDo don't use load_sample.
-                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //ToDo don't use load_sample.
-                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //ToDo don't use load_sample.
+                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); // TODO don't use load_sample.
+                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); // TODO don't use load_sample.
+                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); // TODO don't use load_sample.
                 lt->bmp_icon = bitmaps.get(file.get_child_by_name("icon")->value, &file);
             }
             
@@ -188,7 +188,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
         } else if(type == MOB_CATEGORY_TREASURES) {
             treasure_type* tt = (treasure_type*) mt;
-            tt->move_speed = 60; //ToDo should this be here?
+            tt->move_speed = 60; // TODO should this be here?
             
             treasure_types[tt->name] = tt;
             
@@ -212,7 +212,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             new_anim_conversion(ANIM_IDLE, "idle");
             
-            pt->move_speed = 60; //ToDo should this be here?
+            pt->move_speed = 60; // TODO should this be here?
             
             pellet_types[pt->name] = pt;
             
