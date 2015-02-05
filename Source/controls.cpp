@@ -49,45 +49,47 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     size_t n_controls = controls.size();
     for(size_t c = 0; c < n_controls; c++) {
     
-        if(controls[c].type == CONTROL_TYPE_KEYBOARD_KEY && (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)) {
-            if(controls[c].button == ev.keyboard.keycode) {
-                handle_button(controls[c].action, (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0);
+        control_info* con = &controls[c];
+        
+        if(con->type == CONTROL_TYPE_KEYBOARD_KEY && (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)) {
+            if(con->button == ev.keyboard.keycode) {
+                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0);
             }
-        } else if(controls[c].type == CONTROL_TYPE_MOUSE_BUTTON && (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)) {
-            if(controls[c].button == (signed) ev.mouse.button) {
-                handle_button(controls[c].action, (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0);
+        } else if(con->type == CONTROL_TYPE_MOUSE_BUTTON && (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)) {
+            if(con->button == (signed) ev.mouse.button) {
+                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0);
             }
-        } else if(controls[c].type == CONTROL_TYPE_MOUSE_WHEEL_UP && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_UP && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dz > 0) {
-                handle_button(controls[c].action, ev.mouse.dz);
+                handle_button(con->action, con->player, ev.mouse.dz);
             }
-        } else if(controls[c].type == CONTROL_TYPE_MOUSE_WHEEL_DOWN && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dz < 0) {
-                handle_button(controls[c].action, -ev.mouse.dz);
+                handle_button(con->action, con->player, -ev.mouse.dz);
             }
-        } else if(controls[c].type == CONTROL_TYPE_MOUSE_WHEEL_LEFT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_LEFT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dw < 0) {
-                handle_button(controls[c].action, -ev.mouse.dw);
+                handle_button(con->action, con->player, -ev.mouse.dw);
             }
-        } else if(controls[c].type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dw > 0) {
-                handle_button(controls[c].action, ev.mouse.dz);
+                handle_button(con->action, con->player, ev.mouse.dz);
             }
-        } else if(controls[c].type == CONTROL_TYPE_JOYSTICK_BUTTON && (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
-            if(controls[c].device_nr == joystick_numbers[ev.joystick.id] && (signed) controls[c].button == ev.joystick.button) {
-                handle_button(controls[c].action, (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0);
+        } else if(con->type == CONTROL_TYPE_JOYSTICK_BUTTON && (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
+            if(con->device_nr == joystick_numbers[ev.joystick.id] && (signed) con->button == ev.joystick.button) {
+                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0);
             }
-        } else if(controls[c].type == CONTROL_TYPE_JOYSTICK_AXIS_POS && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+        } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_POS && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
             if(
-                controls[c].device_nr == joystick_numbers[ev.joystick.id] && controls[c].stick == ev.joystick.stick &&
-                controls[c].axis == ev.joystick.axis && ev.joystick.pos >= 0) {
-                handle_button(controls[c].action, ev.joystick.pos);
+                con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
+                con->axis == ev.joystick.axis && ev.joystick.pos >= 0) {
+                handle_button(con->action, con->player, ev.joystick.pos);
             }
-        } else if(controls[c].type == CONTROL_TYPE_JOYSTICK_AXIS_NEG && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+        } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
             if(
-                controls[c].device_nr == joystick_numbers[ev.joystick.id] && controls[c].stick == ev.joystick.stick &&
-                controls[c].axis == ev.joystick.axis && ev.joystick.pos <= 0) {
-                handle_button(controls[c].action, -ev.joystick.pos);
+                con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
+                con->axis == ev.joystick.axis && ev.joystick.pos <= 0) {
+                handle_button(con->action, con->player, -ev.joystick.pos);
             }
         }
     }
@@ -110,7 +112,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
    * For controls with more sensibility, values between 0 and 1 are important.
    * Like a 0.5 for the group movement makes it move at half distance.
  */
-void handle_button(const unsigned int button, float pos) {
+void handle_button(const unsigned int button, const unsigned char player, float pos) {
 
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     

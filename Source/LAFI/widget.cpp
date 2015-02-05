@@ -237,12 +237,15 @@ void widget::draw() {
         }
     }
     
-    draw_self();
-    
     int ocr_x, ocr_y, ocr_w, ocr_h;  // Original clipping rectangle.
     al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
     
-    if(!(flags & FLAG_NO_CLIPPING_RECTANGLE)) al_set_clipping_rectangle(x1, y1, x2 - x1, y2 - y1); {
+    if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
+        al_set_clipping_rectangle(x1, y1, x2 - x1, y2 - y1);
+    }
+    {
+        draw_self();
+        
         ALLEGRO_TRANSFORM t;
         int ox, oy;
         get_offset(&ox, &oy);
@@ -259,7 +262,10 @@ void widget::draw() {
             
         } al_use_transform(&old);
         
-    } if(!(flags & FLAG_NO_CLIPPING_RECTANGLE)) al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
+    }
+    if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
+        al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
+    }
     
 }
 

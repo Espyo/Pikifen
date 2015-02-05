@@ -114,7 +114,6 @@ void               start_camera_pan(const int final_x, const int final_y);
 void               start_camera_zoom(const float final_zoom_level);
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
-// bool               temp_point_inside_sector(float x, float y, vector<linedef> &linedefs);
 void               use_spray(const size_t spray_nr);
 
 

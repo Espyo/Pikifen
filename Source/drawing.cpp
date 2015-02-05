@@ -643,14 +643,14 @@ void do_drawing() {
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
             cam_zoom * 54, cam_zoom * 54,
-            cursor_angle
+            cursor_spin_angle
         );
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
             cursor_x, cursor_y,
             54, 54,
-            cursor_spin_angle,
+            cursor_angle,
             map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
         );
         

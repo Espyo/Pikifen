@@ -131,7 +131,7 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
 /* ----------------------------------------------------------------------------
  * Prints something onto the error log.
  * s: String that represents the error.
- * d: If not null, this will be used to obtain the file_name and line that caused the error.
+ * d: If not null, this will be used to obtain the file name and line that caused the error.
  */
 void error_log(string s, data_node* d) {
     if(d) {
