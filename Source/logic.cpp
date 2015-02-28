@@ -636,8 +636,7 @@ void do_logic() {
                             pik_ptr->being_chomped = true;
                             sfx_pikmin_caught.play(0.06, false);
                             
-                            m_ptr->events_queued[MOB_EVENT_ATTACK_HIT] = 1;
-                            m_ptr->events_queued[MOB_EVENT_ATTACK_MISS] = 0;
+                            m_ptr->fsm.run_event(MOB_EVENT_ATTACK_HIT, m_ptr);
                             m_ptr->chomping_pikmin.push_back(pik_ptr);
                             focus_mob(m_ptr, pik_ptr, true, false);
                         }

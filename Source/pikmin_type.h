@@ -17,7 +17,7 @@
 
 #include <allegro5/allegro.h>
 
-#include "element.h"
+#include "hazard.h"
 #include "mob_type.h"
 
 using namespace std;
@@ -30,7 +30,7 @@ using namespace std;
  */
 class pikmin_type : public mob_type {
 public:
-    vector<element*> resistences;
+    vector<hazard*> resistences;
     unsigned char attack_attribute; // TODO What.
     float carry_strength;
     float attack_power;

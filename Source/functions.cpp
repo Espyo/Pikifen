@@ -14,6 +14,7 @@
 #pragma warning(disable : 4996) // Disables warning about localtime being deprecated.
 
 #include <algorithm>
+#include <iostream>
 #include <math.h>
 #include <typeinfo>
 
@@ -140,6 +141,8 @@ void error_log(string s, data_node* d) {
         s += ")";
     }
     s += "\n";
+    
+    cout << s;
     
     if(no_error_logs_today) {
         no_error_logs_today = false;
@@ -562,7 +565,7 @@ void load_area(const string name, const bool load_for_editor) {
         }
         
         
-        // TODO elements (and tags, if I really am gonna use them...).
+        // TODO hazards (and tags, if I really am gonna use them...).
         
         cur_area_map.sectors.push_back(new_sector);
     }
@@ -852,7 +855,7 @@ void load_options() {
         load_control(BUTTON_MOVE_CURSOR_UP,       p, "move_cursor_up", file, "");
         load_control(BUTTON_MOVE_CURSOR_LEFT,     p, "move_cursor_left", file, "");
         load_control(BUTTON_MOVE_CURSOR_DOWN,     p, "move_cursor_down", file, "");
-        load_control(BUTTON_group_move_go_to_cursor, p, "group_move_go_to_cursor", file, "k_75");
+        load_control(BUTTON_GROUP_MOVE_GO_TO_CURSOR, p, "group_move_go_to_cursor", file, "k_75");
         load_control(BUTTON_GROUP_MOVE_RIGHT,     p, "group_move_right", file, "");
         load_control(BUTTON_GROUP_MOVE_UP,        p, "group_move_up", file, "");
         load_control(BUTTON_GROUP_MOVE_LEFT,      p, "group_move_left", file, "");
@@ -1073,7 +1076,7 @@ void save_options() {
         else if(controls[c].action == BUTTON_GROUP_MOVE_UP)        name += "group_move_up";
         else if(controls[c].action == BUTTON_GROUP_MOVE_LEFT)      name += "group_move_left";
         else if(controls[c].action == BUTTON_GROUP_MOVE_DOWN)      name += "group_move_down";
-        else if(controls[c].action == BUTTON_group_move_go_to_cursor) name += "group_move_go_to_cursor";
+        else if(controls[c].action == BUTTON_GROUP_MOVE_GO_TO_CURSOR) name += "group_move_go_to_cursor";
         else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_RIGHT) name += "switch_captain_right";
         else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_LEFT)  name += "switch_captain_left";
         else if(controls[c].action == BUTTON_DISMISS)              name += "dismiss";

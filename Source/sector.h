@@ -20,7 +20,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "element.h"
+#include "hazard.h"
 #include "mob_type.h"
 #include "weather.h"
 
@@ -113,7 +113,7 @@ struct sector {
     bool fade;
     bool always_cast_shadow;
     
-    vector<element*> elements;
+    vector<hazard*> elements;
     vector<size_t> linedef_nrs;
     vector<linedef*> linedefs;
     vector<triangle> triangles;

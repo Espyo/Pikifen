@@ -32,7 +32,7 @@ mob_type::mob_type() {
     sight_radius = near_radius = 0;
     rotation_speed = DEF_ROTATION_SPEED;
     big_damage_interval = 0;
-    create_mob = NULL;
+    create_mob = nullptr;
 }
 
 
@@ -105,7 +105,18 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
             mt->anims = load_animation_set(&anim_file);
             
-            mt->events = load_script(mt, file.get_child_by_name("script"));
+            mt->states = load_script(mt, file.get_child_by_name("script"));
+            if(mt->states.size()) {
+                string first_state_name = file.get_child_by_name("first_state")->value;
+                for(size_t s = 0; s < mt->states.size(); s++) {
+                    if(mt->states[s]->name == first_state_name) {
+                        mt->first_state_nr = s;
+                        break;
+                    }
+                }
+            } else {
+                mt->first_state_nr = string::npos;
+            }
         }
         
         if(type == MOB_CATEGORY_PIKMIN) {

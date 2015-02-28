@@ -18,7 +18,7 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
-#include "mob_event.h"
+#include "mob_script.h"
 
 using namespace std;
 
@@ -54,7 +54,8 @@ public:
     float big_damage_interval;
     
     // Script things.
-    vector<mob_event*> events;    // The events and actions.
+    vector<mob_state*> states;    // The states, events and actions.
+    size_t first_state_nr;        // Number of the state a mob starts at.
     
     // Used by the special mob types, as it is not possible to control which type of mob to create without a list.
     function<void(float x, float y, float angle, const string &vars)> create_mob; // Creates a mob of this type.

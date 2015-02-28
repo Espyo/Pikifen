@@ -18,7 +18,7 @@ scrollbar::scrollbar(int x1, int y1, int x2, int y2, float min_value, float max_
     this->high_value = high_value;
     this->vertical = vertical;
     needs_init = true;
-    change_handler = NULL;
+    change_handler = nullptr;
 }
 
 

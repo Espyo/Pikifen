@@ -18,62 +18,62 @@ revive_speed = 10
 value = 30
 
 script{
-    on_spawn{
-        animation = burrowed
-        var = burrowed true
-    }
-
-    on_see_prey{
-        if = burrowed true
-        animation = unburrow
-        if = burrowed true
-        wait = animation
-        
-        animation = walk
-        move = prey
-        var = burrowed false
-    }
-    
-    on_near_prey{
-        move = stop
-        animation = attack
-        chomp = mouth
-        wait = animation
-        chomp = 
-    }
-    
-    on_big_damage{
-        animation = shake
-        wait = animation
-    }
-    
-    on_attack_hit{
-        animation = swallow
-        wait = animation
-        eat = all
-    }
-    
-    on_lose_prey{
-        animation = idle
-        move = stop
-        wait = 0.5
-        animation = walk
-        move = home
-    }
-    
-    on_reach_home{
-        animation = idle
-        wait = 0.3
-        animation = burrow
-        wait = animation
-        animation = burrowed
-        var = burrowed true
-    }
-    
-    on_death{
-        special_function = die_start
-        animation = die
-        wait = animation
-        special_function = die_end
-    }
+    //on_spawn{
+    //    animation = burrowed
+    //    var = burrowed true
+    //}
+    //
+    //on_see_prey{
+    //    if = burrowed true
+    //    animation = unburrow
+    //    if = burrowed true
+    //    wait = animation
+    //    
+    //    animation = walk
+    //    move = prey
+    //    var = burrowed false
+    //}
+    //
+    //on_near_prey{
+    //    move = stop
+    //    animation = attack
+    //    chomp = mouth
+    //    wait = animation
+    //    chomp = 
+    //}
+    //
+    //on_big_damage{
+    //    animation = shake
+    //    wait = animation
+    //}
+    //
+    //on_attack_hit{
+    //    animation = swallow
+    //    wait = animation
+    //    eat = all
+    //}
+    //
+    //on_lose_prey{
+    //    animation = idle
+    //    move = stop
+    //    wait = 0.5
+    //    animation = walk
+    //    move = home
+    //}
+    //
+    //on_reach_home{
+    //    animation = idle
+    //    wait = 0.3
+    //    animation = burrow
+    //    wait = animation
+    //    animation = burrowed
+    //    var = burrowed true
+    //}
+    //
+    //on_death{
+    //    special_function = die_start
+    //    animation = die
+    //    wait = animation
+    //    special_function = die_end
+    //}
 }

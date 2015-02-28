@@ -21,15 +21,15 @@ widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char
     mouse_in = false;
     mouse_clicking = false;
     
-    mouse_move_handler = NULL;
-    left_mouse_click_handler = NULL;
-    mouse_down_handler = NULL;
-    mouse_up_handler = NULL;
-    mouse_wheel_handler = NULL;
-    mouse_enter_handler = NULL;
-    mouse_leave_handler = NULL;
-    get_focus_handler = NULL;
-    lose_focus_handler = NULL;
+	mouse_move_handler = nullptr;
+	left_mouse_click_handler = nullptr;
+	mouse_down_handler = nullptr;
+	mouse_up_handler = nullptr;
+	mouse_wheel_handler = nullptr;
+    mouse_enter_handler = nullptr;
+	mouse_leave_handler = nullptr;
+	get_focus_handler = nullptr;
+	lose_focus_handler = nullptr;
     
     needs_init = false;
 }
@@ -55,15 +55,15 @@ widget::widget(widget &w2) {
     mouse_in = false;
     mouse_clicking = false;
     
-    mouse_move_handler = NULL;
-    left_mouse_click_handler = NULL;
-    mouse_down_handler = NULL;
-    mouse_up_handler = NULL;
-    mouse_wheel_handler = NULL;
-    mouse_enter_handler = NULL;
-    mouse_leave_handler = NULL;
-    get_focus_handler = NULL;
-    lose_focus_handler = NULL;
+	mouse_move_handler = nullptr;
+	left_mouse_click_handler = nullptr;
+	mouse_down_handler = nullptr;
+	mouse_up_handler = nullptr;
+	mouse_wheel_handler = nullptr;
+	mouse_enter_handler = nullptr;
+	mouse_leave_handler = nullptr;
+	get_focus_handler = nullptr;
+	lose_focus_handler = nullptr;
     
     needs_init = false;
 }

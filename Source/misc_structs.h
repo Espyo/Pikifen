@@ -198,4 +198,15 @@ public:
     
 };
 
+
+
+struct string_int_converter {
+private:
+    vector<const string> names;
+    
+public:
+    void add_string(const string s);
+    
+};
+
 #endif // ifndef MISC_STRUCTS_INCLUDED

@@ -42,10 +42,14 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     home_x = x; home_y = y;
     affected_by_gravity = true;
     
+    //TODO TEMP, REMOVE.
+    if(type->max_health == 750) {
+        float a = 0;
+    }
     health = type->max_health;
     invuln_period = 0;
     knockdown_period = 0;
-    team = MOB_TEAM_NONE;
+    team = MOB_TEAM_DECORATION;
     
     go_to_target = false;
     gtt_instant = false;
@@ -56,12 +60,13 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     target_rel_y = NULL;
     can_move = true;
     
-    focused_prey = NULL;
-    for(unsigned char e = 0; e < N_MOB_EVENTS; e++) events_queued[e] = 0;
-    events_queued[MOB_EVENT_SPAWN] = 1;
+    focused_opponent = NULL;
+    focused_opponent_near = false;
     
+    fsm = mob_fsm(this);
+    set_state(type->first_state_nr);
+    spawned = false;
     timer = timer_interval = 0;
-    script_wait = 0;
     script_wait_event = NULL;
     dead = false;
     state = MOB_STATE_IDLE;
@@ -102,9 +107,9 @@ void mob::tick() {
 void mob::tick_animation() {
     bool finished_anim = anim.tick(delta_t);
     
-    if(script_wait == -1 && finished_anim) { // Waiting for the animation to end.
-        script_wait = 0;
-        script_wait_event->run(this, script_wait_action); // Continue the waiting event.
+    // TODO
+    if(finished_anim) {
+        fsm.run_event(MOB_EVENT_ANIMATION_END, this);
     }
 }
 
@@ -142,6 +147,7 @@ void mob::tick_brain() {
                 // about stopping.
                 
                 speed = 0;
+                reached_destination = true;
             }
             
         }
@@ -473,142 +479,91 @@ void mob::tick_physics() {
 
 
 /* ----------------------------------------------------------------------------
- * Ticks the mob's script for this frame.
+ * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {
-    // Scripts.
-    if(
-        get_mob_event(this, MOB_EVENT_SEE_PREY, true) ||
-        get_mob_event(this, MOB_EVENT_LOSE_PREY, true) ||
-        get_mob_event(this, MOB_EVENT_NEAR_PREY, true)
-    ) {
-        mob* actual_prey = NULL;
-        if(focused_prey) if(!focused_prey->dead) actual_prey = focused_prey;
+    if(!spawned) {
+        fsm.set_state(type->first_state_nr);
+        spawned = true;
+    }
+    
+    //TODO move these to the logic code, on the code where all mobs interact with all mobs.
+    mob_event* see_opponent_ev  = fsm.get_event(MOB_EVENT_SEE_OPPONENT);
+    mob_event* lose_opponent_ev = fsm.get_event(MOB_EVENT_LOSE_OPPONENT);
+    mob_event* near_opponent_ev = fsm.get_event(MOB_EVENT_NEAR_OPPONENT);
+    if(see_opponent_ev || lose_opponent_ev || near_opponent_ev) {
+    
+        mob* real_opponent = NULL;
+        if(focused_opponent) if(!focused_opponent->dead) real_opponent = focused_opponent;
         
-        if(actual_prey) {
-            float d = dist(x, y, actual_prey->x, actual_prey->y);
+        if(real_opponent) {
+            float d = dist(x, y, real_opponent->x, real_opponent->y);
             
-            // Prey is near.
-            if(d <= type->near_radius && script_wait == 0) {
-                focused_prey_near = true;
-                events_queued[MOB_EVENT_SEE_PREY] = 0;
-                events_queued[MOB_EVENT_LOSE_PREY] = 0;
-                events_queued[MOB_EVENT_NEAR_PREY] = 2;
+            // Opponent is near.
+            if(d <= type->near_radius) {
+                focused_opponent_near = true;
+                if(near_opponent_ev) near_opponent_ev->run(this);
             }
             
-            // Prey is suddenly out of sight.
             if(d > type->sight_radius) {
-                unfocus_mob(this, actual_prey, true);
+                // Opponent is suddenly out of sight.
+                unfocus_mob(this, real_opponent, true);
                 
             } else {
             
-                // Prey was near, but is now far.
-                if(focused_prey_near) {
-                    if( d > type->near_radius) {
-                        focused_prey_near = false;
-                        events_queued[MOB_EVENT_NEAR_PREY] = 0;
-                        events_queued[MOB_EVENT_LOSE_PREY] = 0;
-                        events_queued[MOB_EVENT_SEE_PREY] = 1;
+                // Opponent was near, but is now far.
+                if(focused_opponent_near) {
+                    if(d > type->near_radius) {
+                        focused_opponent_near = false;
                     }
                 }
             }
             
         } else {
         
-            // Find a Pikmin.
-            if(!actual_prey) {
-                size_t n_pikmin = pikmin_list.size();
-                for(size_t p = 0; p < n_pikmin; p++) {
-                    pikmin* pik_ptr = pikmin_list[p];
-                    if(pik_ptr->dead) continue;
-                    
-                    float d = dist(x, y, pik_ptr->x, pik_ptr->y);
+            //Find an opponent.
+            for(auto m = mobs.begin(); m != mobs.end(); m++) {
+                if(should_attack(this, *m)) {
+                    float d = dist(x, y, (*m)->x, (*m)->y);
                     if(d <= type->sight_radius) {
-                        focus_mob(this, pik_ptr, d < type->near_radius, true);
+                        focus_mob(this, *m, d <= type->near_radius, true);
                         break;
                     }
                 }
             }
             
-            if(!focused_prey) {
-                // Try the captains now.
-                size_t n_leaders = leaders.size();
-                for(size_t l = 0; l < n_leaders; l++) {
-                    leader* leader_ptr = leaders[l];
-                    if(leader_ptr->dead) continue;
-                    
-                    float d = dist(x, y, leader_ptr->x, leader_ptr->y);
-                    if(d <= type->sight_radius) {
-                        focus_mob(this, leader_ptr, d < type->near_radius, true);
-                        break;
-                    }
-                }
-            }
         }
         
     }
     
-    if(get_mob_event(this, MOB_EVENT_TIMER, true)) {
+    //Timer events.
+    mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
+    if(timer_ev) {
         if(timer > 0 && timer_interval > 0) {
             timer -= delta_t;
             if(timer <= 0) {
                 timer = timer_interval;
-                events_queued[MOB_EVENT_TIMER] = 1;
+                timer_ev->run(this);
             }
         }
     }
     
-    if(get_mob_event(this, MOB_EVENT_REACH_HOME, true)) {
+    //Has it reached its home?
+    mob_event* reach_home_ev = fsm.get_event(MOB_EVENT_REACH_HOME);
+    if(reach_home_ev) {
         if(reached_destination && target_code == MOB_TARGET_HOME) {
             target_code = MOB_TARGET_NONE;
-            events_queued[MOB_EVENT_REACH_HOME] = 1;
+            reach_home_ev->run(this);
         }
     }
     
+    //Is it dead?
     if(!dead && health <= 0) {
         dead = true;
-        if(get_mob_event(this, MOB_EVENT_DEATH, true)) {
-            events_queued[MOB_EVENT_DEATH] = 1;
-        }
-    }
-    
-    // Actually run the scripts, if possible.
-    bool ran_event = false;
-    for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
-        if(events_queued[e] == 1) {
-            mob_event* ev_ptr = get_mob_event(this, e);
-            if(ev_ptr) {
-                ev_ptr->run(this, 0);
-                ran_event = true;
-                events_queued[e] = 0;
-            }
-        }
-    }
-    if(!ran_event) { // Try the low priority ones now.
-        for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
-            if(events_queued[e] == 2) {
-                mob_event* ev_ptr = get_mob_event(this, e);
-                if(ev_ptr) {
-                    ev_ptr->run(this, 0);
-                    events_queued[e] = 0;
-                }
-            }
-        }
-    } else {
-        for(unsigned char e = 0; e < N_MOB_EVENTS; e++) {
-            if(events_queued[e] == 2) events_queued[e] = 0;
-        }
-    }
-    
-    if(script_wait > 0) {
-        script_wait -= delta_t;
-        if(script_wait <= 0) {
-            script_wait = 0;
-            
-            script_wait_event->run(this, script_wait_action); // Continue the waiting event.
-        }
+        fsm.run_event(MOB_EVENT_DEATH, this);
     }
 }
+
 
 
 /* ----------------------------------------------------------------------------
@@ -787,12 +742,12 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
         m2->speed_z = 500;
     }
     
+    m2->fsm.run_event(MOB_EVENT_DAMAGE, m2);
+    
     // If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
     if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
         if(floor((m2->health + damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
-            if(get_mob_event(m2, MOB_EVENT_BIG_DAMAGE, true)) {
-                m2->events_queued[MOB_EVENT_BIG_DAMAGE] = 1;
-            }
+            m2->fsm.run_event(MOB_EVENT_BIG_DAMAGE, m2);
         }
     }
 }
@@ -892,17 +847,16 @@ void delete_mob(mob* m) {
  * Makes m1 focus on m2.
  */
 void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event) {
-    unfocus_mob(m1, m1->focused_prey, false);
+    unfocus_mob(m1, m1->focused_opponent, false);
     
-    m1->focused_prey = m2;
-    m1->focused_prey_near = true;
+    m1->focused_opponent = m2;
+    m1->focused_opponent_near = true;
     m2->focused_by.push_back(m1);
     
     if(call_event) {
-        m1->focused_prey_near = is_near;
-        m1->events_queued[MOB_EVENT_LOSE_PREY] = 0;
-        m1->events_queued[MOB_EVENT_NEAR_PREY] = (is_near ? 1 : 0);
-        m1->events_queued[MOB_EVENT_SEE_PREY] = (is_near ? 0 : 1);
+        m1->focused_opponent_near = is_near;
+        if(is_near) m1->fsm.run_event(MOB_EVENT_NEAR_OPPONENT, m1);
+        else m1->fsm.run_event(MOB_EVENT_SEE_OPPONENT, m1);
     }
 }
 
@@ -995,7 +949,7 @@ bool should_attack(mob* m1, mob* m2) {
  */
 void unfocus_mob(mob* m1, mob* m2, const bool call_event) {
     if(m2) {
-        if(m1->focused_prey != m2) return;
+        if(m1->focused_opponent != m2) return;
         
         for(size_t m = 0; m < m2->focused_by.size();) {
             if(m2->focused_by[m] == m1) m2->focused_by.erase(m2->focused_by.begin() + m);
@@ -1003,11 +957,9 @@ void unfocus_mob(mob* m1, mob* m2, const bool call_event) {
         }
     }
     
-    m1->focused_prey = NULL;
-    m1->focused_prey_near = false;
+    m1->focused_opponent = NULL;
+    m1->focused_opponent_near = false;
     if(call_event) {
-        m1->events_queued[MOB_EVENT_SEE_PREY] = 0;
-        m1->events_queued[MOB_EVENT_NEAR_PREY] = 0;
-        m1->events_queued[MOB_EVENT_LOSE_PREY] = 1;
+        m1->fsm.run_event(MOB_EVENT_LOSE_OPPONENT, m1);
     }
 }

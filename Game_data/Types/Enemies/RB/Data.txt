@@ -16,60 +16,157 @@ is_boss = false
 pikmin_seeds = 12
 revive_speed = 0
 value = 7
+first_state = sleeping
 
 script{
-    on_spawn{
-        animation = sleep
-        var = sleeping true
+    sleeping{
+        on_enter{
+            var = chase false
+            animation = sleep
+        }
+        on_near_opponent{
+            var = chase true
+            state = waking_up
+        }
     }
     
-    on_see_prey{
-        if = sleeping true
-        animation = wake_up
-        if = sleeping true
-        wait = animation
-        
-        animation = walk
-        move = prey
-        var = sleeping false
+    waking_up{
+        on_enter{
+            animation = wake_up
+        }
+        on_animation_end{
+            state = examining
+        }
+        on_lose_opponent{
+            var = chasing false
+        }
     }
     
-    on_near_prey{
-        move = stop
-        animation = attack
-        chomp = mouth
-        wait = animation
-        chomp = 
+    examining{
+        on_enter{
+            if = chase true
+            state = hunting
+            if = chase false
+            state = returning
+        }
     }
     
-    on_big_damage{
-        animation = shake
-        wait = animation
+    hunting{
+        on_enter{
+            animation = walk
+            move = opponent
+        }
+        on_near_opponent{
+            state = attacking
+        }
+        on_lose_opponent{
+            var = chase false
+            state = examining
+        }
     }
     
-    on_attack_hit{
-        animation = eat
-        wait = animation
-        eat = all
+    attacking{
+        on_enter{
+            move = stop
+            animation = attack
+            chomp = mouth
+        }
+        on_attack_hit{
+            state = eating
+        }
+        on_animation_end{
+            state = examining
+        }
     }
     
-    on_lose_prey{
-        animation = walk
-        move = home
+    eating{
+        on_enter{
+            chomp =
+            animation = eat
+        }
+        on_animation_end{
+            eat = 5
+            state = examining
+        }
     }
     
-    on_reach_home{
-        animation = idle
-        wait = 0.3
-        animation = fall_asleep
-        wait = animation
-        var = sleeping true
+    returning{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_home{
+            state = falling_asleep
+        }
+        on_see_opponent{
+            var = chase true
+            state = hunting
+        }
     }
     
-    on_death{
-        special_function = die_start
-        animation = die
-        wait = animation
-        special_function = die_end
+    falling_asleep{
+        on_enter{
+            animation = fall_asleep
+        }
+        on_animation_end{
+            state = sleeping
+        }
     }
+    
+    
+    
+    //on_spawn{
+    //    animation = sleep
+    //    var = sleeping true
+    //}
+    //
+    //on_see_prey{
+    //    if = sleeping true
+    //    animation = wake_up
+    //    if = sleeping true
+    //    wait = animation
+    //    
+    //    animation = walk
+    //    move = prey
+    //    var = sleeping false
+    //}
+    //
+    //on_near_prey{
+    //    move = stop
+    //    animation = attack
+    //    chomp = mouth
+    //    wait = animation
+    //    chomp = 
+    //}
+    //
+    //on_big_damage{
+    //    animation = shake
+    //    wait = animation
+    //}
+    //
+    //on_attack_hit{
+    //    animation = eat
+    //    wait = animation
+    //    eat = all
+    //}
+    //
+    //on_lose_prey{
+    //    animation = walk
+    //    move = home
+    //}
+    //
+    //on_reach_home{
+    //    animation = idle
+    //    wait = 0.3
+    //    animation = fall_asleep
+    //    wait = animation
+    //    var = sleeping true
+    //}
+    //
+    //on_death{
+    //    special_function = die_start
+    //    animation = die
+    //    wait = animation
+    //    special_function = die_end
+    //}
 }

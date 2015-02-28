@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <limits.h>
 
 #include "textbox.h"
@@ -16,10 +17,10 @@ textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style
     editable = true;
     cursor = sel_start = sel_end = 0;
     multi_line = false;
-    change_handler = NULL;
+    change_handler = nullptr;
     scroll_x = 0;
     enter_key_widget = NULL;
-    change_handler = NULL;
+    change_handler = nullptr;
     
     tab_index = cur_tab_index++;
 }
@@ -33,7 +34,7 @@ textbox::textbox(textbox &t2) : widget(t2) {
     editable = t2.editable;
     cursor = sel_start = sel_end = 0;
     multi_line = false;
-    change_handler = NULL;
+    change_handler = nullptr;
     scroll_x = 0;
     enter_key_widget = NULL;
     tab_index = cur_tab_index++;

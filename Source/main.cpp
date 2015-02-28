@@ -64,6 +64,7 @@ int main(int argc, char**) {
     init_event_things(timer, queue);
     init_misc();
     init_mob_categories();
+    init_special_mob_types();
     init_sector_types();
     init_error_bitmap();
     init_fonts();

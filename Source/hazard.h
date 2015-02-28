@@ -6,11 +6,11 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the element class and element-related functions.
+ * Header for the hazard class and hazard-related functions.
  */
 
-#ifndef ELEMENT_INCLUDED
-#define ELEMENT_INCLUDED
+#ifndef HAZARD_INCLUDED
+#define HAZARD_INCLUDED
 
 #include <allegro5/allegro.h>
 
@@ -19,12 +19,14 @@
 using namespace std;
 
 /* ----------------------------------------------------------------------------
- * An element is the likes of fire, water, electricty, etc.
+ * An hazard is the likes of fire, water, electricty, crushing, etc.
  * Pikmin can be vulnerable or invulnerable to these.
+ * Most of the time, hazards are elements (of nature), but
+ * this is not necessarily the case. A hazard is just an abstract danger.
  */
-class element {
+class hazard {
 public:
     ALLEGRO_COLOR main_color;
 };
 
-#endif // ifndef ELEMENT_INCLUDED
+#endif // ifndef HAZARD_INCLUDED

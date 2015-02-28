@@ -11,6 +11,7 @@
  * and animation-related functions.
  */
 
+#include <algorithm>
 #include <map>
 #include <vector>
 
@@ -408,7 +409,7 @@ animation_set load_animation_set(data_node* file_node) {
         cur_hitbox->name = hitbox_node->name;
         cur_hitbox->type = s2i(hitbox_node->get_child_by_name("type")->value);
         cur_hitbox->multiplier = s2f(hitbox_node->get_child_by_name("multiplier")->value);
-        cur_hitbox->elements = hitbox_node->get_child_by_name("elements")->value;
+        cur_hitbox->hazards = hitbox_node->get_child_by_name("elements")->value;
         cur_hitbox->can_pikmin_latch = s2b(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
         cur_hitbox->knockback_outward = s2b(hitbox_node->get_child_by_name("outward")->value);
         cur_hitbox->knockback_angle = s2f(hitbox_node->get_child_by_name("angle")->value);

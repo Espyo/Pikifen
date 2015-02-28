@@ -87,9 +87,6 @@
     <ClCompile Include="controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mob_event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LAFI\button.cpp">
       <Filter>Source Files\LAFI</Filter>
     </ClCompile>
@@ -171,12 +168,12 @@
     <ClCompile Include="parallel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="mob_script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
@@ -257,9 +254,6 @@
     <ClInclude Include="interval.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mob_event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="mob_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -333,6 +327,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="parallel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mob_script.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hazard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -256,11 +256,11 @@ void animation_editor::gui_load_hitbox() {
             ((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text = f2s(ed_cur_hitbox->multiplier);
             if(ed_cur_hitbox->can_pikmin_latch) ((lafi::checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->check();
             else ((lafi::checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->uncheck();
-            ((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
+            ((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text = ed_cur_hitbox->hazards;
             
         } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
             ((lafi::textbox*)      f->widgets["frm_attack"]->widgets["txt_mult"])->text = f2s(ed_cur_hitbox->multiplier);
-            ((lafi::textbox*)      f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->elements;
+            ((lafi::textbox*)      f->widgets["frm_attack"]->widgets["txt_hazards"])->text = ed_cur_hitbox->hazards;
             ((lafi::checkbox*)     f->widgets["frm_attack"]->widgets["chk_outward"])->set(ed_cur_hitbox->knockback_outward);
             ((lafi::angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->set_angle_rads(ed_cur_hitbox->knockback_angle);
             ((lafi::textbox*)      f->widgets["frm_attack"]->widgets["txt_knockback"])->text = f2s(ed_cur_hitbox->knockback);
@@ -408,11 +408,11 @@ void animation_editor::gui_save_hitbox() {
     if(ed_cur_hitbox->type == HITBOX_TYPE_NORMAL) {
         ed_cur_hitbox->multiplier = s2f(((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_mult"])->text);
         ed_cur_hitbox->can_pikmin_latch = ((lafi::checkbox*) f->widgets["frm_normal"]->widgets["chk_latch"])->checked;
-        ed_cur_hitbox->elements = ((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text;
+        ed_cur_hitbox->hazards = ((lafi::textbox*) f->widgets["frm_normal"]->widgets["txt_hazards"])->text;
         
     } else if(ed_cur_hitbox->type == HITBOX_TYPE_ATTACK) {
         ed_cur_hitbox->multiplier = s2f(((lafi::textbox*) f->widgets["frm_attack"]->widgets["txt_mult"])->text);
-        ed_cur_hitbox->elements = ((lafi::textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text;
+        ed_cur_hitbox->hazards = ((lafi::textbox*) f->widgets["frm_attack"]->widgets["txt_hazards"])->text;
         ed_cur_hitbox->knockback_outward = ((lafi::checkbox*) f->widgets["frm_attack"]->widgets["chk_outward"])->checked;
         ed_cur_hitbox->knockback_angle = ((lafi::angle_picker*) f->widgets["frm_attack"]->widgets["ang_angle"])->get_angle_rads();
         ed_cur_hitbox->knockback = s2f(((lafi::textbox*) f->widgets["frm_attack"]->widgets["txt_knockback"])->text);
@@ -1543,7 +1543,7 @@ void animation_editor::save_animation_set() {
         hitbox_node->add(new data_node("type", i2s(ed_anims.hitboxes[h]->type)));
         hitbox_node->add(new data_node("multiplier", f2s(ed_anims.hitboxes[h]->multiplier)));
         hitbox_node->add(new data_node("can_pikmin_latch", b2s(ed_anims.hitboxes[h]->can_pikmin_latch)));
-        hitbox_node->add(new data_node("elements", ed_anims.hitboxes[h]->elements));
+        hitbox_node->add(new data_node("hazards", ed_anims.hitboxes[h]->hazards));
         hitbox_node->add(new data_node("outward", b2s(ed_anims.hitboxes[h]->knockback_outward)));
         hitbox_node->add(new data_node("angle", f2s(ed_anims.hitboxes[h]->knockback_angle)));
         hitbox_node->add(new data_node("knockback", f2s(ed_anims.hitboxes[h]->knockback)));

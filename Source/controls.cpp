@@ -31,8 +31,8 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             // Debug testing.
             // TODO remove.
             day_minutes += 30;
-            day += 12;
-            pikmin_list[0]->health -= 10;
+            
+            
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
             debug_show_framerate = !debug_show_framerate;
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
@@ -45,6 +45,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             "Stick: " + i2s(ev.joystick.stick) + ". "
             "Axis: " + i2s(ev.joystick.axis) + ".";
     }
+    
     
     size_t n_controls = controls.size();
     for(size_t c = 0; c < n_controls; c++) {
@@ -174,7 +175,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             else if(button == BUTTON_GROUP_MOVE_UP)    group_movement.up =    pos;
             else if(button == BUTTON_GROUP_MOVE_DOWN)  group_movement.down =  pos;
             
-        } else if(button == BUTTON_group_move_go_to_cursor) {
+        } else if(button == BUTTON_GROUP_MOVE_GO_TO_CURSOR) {
         
             active_control();
             

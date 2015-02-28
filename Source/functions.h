@@ -19,7 +19,7 @@
 #include "controls.h"
 #include "data_file.h"
 #include "leader.h"
-#include "mob_event.h"
+#include "mob_script.h"
 #include "onion.h"
 #include "pikmin.h"
 #include "sector.h"

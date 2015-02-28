@@ -18,7 +18,7 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
-#include "mob_event.h"
+#include "mob_script.h"
 #include "pikmin_type.h"
 #include "sector.h"
 
@@ -100,19 +100,19 @@ public:
     bool reached_destination;
     
     // Actual moving and other physics.
-    float x, y, z;                   // Coordinates. Z is height, the higher the value, the higher in the sky.
-    float speed_x, speed_y, speed_z; // Physics only. Don't touch.
-    float home_x, home_y;            // Starting coordinates; what the mob calls "home".
-    float move_speed_mult;           // Multiply the normal moving speed by this.
-    float acceleration;              // Speed multiplies by this much each second.
-    float speed;                     // Speed moving forward.
-    float angle;                     // 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
-    float intended_angle;            // Angle the mob wants to be facing.
-    float ground_z;                  // Z of the highest ground it's on.
-    float lighting;                  // How light the mob is. Depends on the sector(s) it's on.
-    bool affected_by_gravity;        // Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
-    void face(const float new_angle);      // Makes the mob face an angle, but it'll turn at its own pace.
-    virtual float get_base_speed();  // Returns the normal speed of this mob. Subclasses are meant to override this.
+    float x, y, z;                    // Coordinates. Z is height, the higher the value, the higher in the sky.
+    float speed_x, speed_y, speed_z;  // Physics only. Don't touch.
+    float home_x, home_y;             // Starting coordinates; what the mob calls "home".
+    float move_speed_mult;            // Multiply the normal moving speed by this.
+    float acceleration;               // Speed multiplies by this much each second.
+    float speed;                      // Speed moving forward.
+    float angle;                      // 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
+    float intended_angle;             // Angle the mob wants to be facing.
+    float ground_z;                   // Z of the highest ground it's on.
+    float lighting;                   // How light the mob is. Depends on the sector(s) it's on.
+    bool affected_by_gravity;         // Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
+    void face(const float new_angle); // Makes the mob face an angle, but it'll turn at its own pace.
+    virtual float get_base_speed();   // Returns the normal speed of this mob. Subclasses are meant to override this.
     
     // Target things.
     float target_x, target_y;           // When movement is automatic, this is the spot the mob is trying to go to.
@@ -141,16 +141,16 @@ public:
     unsigned char team;     // Mob's team (who it can damage), use MOB_TEAM_*.
     
     // Script.
-    mob* focused_prey;                // The prey it has focus on.
+    mob_fsm fsm;                      // Finitate-state machine.
+    bool spawned;                     // Has the mob actually "spawned" yet?
+    mob* focused_opponent;            // The opponent (prey) it has focus on.
+    bool focused_opponent_near;       // Was the opponent near the mob in the previous frame?
     vector<mob*> focused_by;          // Mobs that are focusing on it.
-    bool focused_prey_near;           // Is the focused prey what's considered "near" the mob?
     float timer;                      // The timer.
     float timer_interval;             // The timer's interval.
     map<string, string> vars;         // Variables.
-    float script_wait;                // Wait this much time before going on with the script. 0 = Not waiting. -1 = Waiting for the animation.
     mob_event* script_wait_event;     // What event is the script waiting on?
     size_t script_wait_action;        // Number of the action the script returns to after the wait is over.
-    unsigned char events_queued[N_MOB_EVENTS]; // Events waiting to be ran. 0: Not waiting. 1: Waiting. 2: Waiting, but only run if nothing else is running.
     
     bool dead;                     // Is the mob dead?
     unsigned char state;           // Current state.
@@ -189,7 +189,8 @@ enum MOB_TEAMS {
     MOB_TEAM_PLAYER_2,
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
-    MOB_TEAM_ENEMIES,
+    MOB_TEAM_ENEMIES_1,
+    MOB_TEAM_ENEMIES_2,
     MOB_TEAM_DECORATION, // Cannot be hurt or targeted by anything.
 };
 

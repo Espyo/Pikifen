@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include "element.h"
+#include "hazard.h"
 #include "mob_type.h"
 
 using namespace std;
