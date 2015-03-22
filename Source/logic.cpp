@@ -328,20 +328,35 @@ void do_logic() {
         for(size_t p = pikmin_ai_start; p < pikmin_ai_end; p++) {
             pikmin* pik_ptr = pikmin_list[p];
             
-            bool can_be_called =
-                !pik_ptr->following_party &&
-                pik_ptr->state != PIKMIN_STATE_BURIED &&
-                !pik_ptr->speed_z &&
-                !pik_ptr->being_chomped;
-            bool whistled = check_dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y, whistle_radius) && whistling && pik_ptr->unwhistlable_period == 0;
-            bool touched =
-                check_dist(pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y,
-                           pik_ptr->type->radius + cur_leader_ptr->type->radius) &&
-                !cur_leader_ptr->carrier_info &&
-                cur_leader_ptr->state != MOB_STATE_BEING_DELIVERED &&
-                pik_ptr->untouchable_period == 0;
-            bool is_busy = (pik_ptr->carrying_mob || pik_ptr->attacking_mob);
+            //Check if the Pikmin got whistled.
+            mob_event* whistled_ev = pik_ptr->fsm.get_event(MOB_EVENT_WHISTLED);
+            if(whistled_ev) {
+                bool got_whistled =
+                    whistling && pik_ptr->unwhistlable_period == 0 &&
+                    check_dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y, whistle_radius);
+                    
+                if(got_whistled) whistled_ev->run(pik_ptr, (void*) pik_ptr);
+            }
             
+            //Check if the Pikmin got bumped by a leader.
+            mob_event* touched_ev = pik_ptr->fsm.get_event(MOB_EVENT_TOUCHED_BY_LEADER);
+            if(touched_ev) {
+                bool got_touched =
+                    !cur_leader_ptr->carrier_info &&
+                    cur_leader_ptr->state != MOB_STATE_BEING_DELIVERED &&
+                    pik_ptr->untouchable_period == 0 &&
+                    check_dist(
+                        pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y,
+                        pik_ptr->type->radius + cur_leader_ptr->type->radius
+                    );
+                    
+                if(got_touched)
+                    touched_ev->run(pik_ptr, (void*) pik_ptr);
+            }
+            
+            
+            //Is it dead?
+            //TODO move to the script.
             if(pik_ptr->dead) {
             
                 pik_ptr->to_delete = true;
@@ -356,19 +371,22 @@ void do_logic() {
                 
             }
             
-            if(can_be_called && (whistled || (touched && !is_busy))) {
             
-                // Pikmin got whistled or touched.
-                drop_mob(pik_ptr);
-                pik_ptr->attacking_mob = NULL;
-                pik_ptr->attack_time = 0;
-                add_to_party(cur_leader_ptr, pik_ptr);
-                sfx_pikmin_called.play(0.03, false);
+            //Following a leader.
+            if(pik_ptr->following_party) {
+                mob_event* leader_near_ev = pik_ptr->fsm.get_event(MOB_EVENT_LEADER_IS_NEAR);
+                mob_event* leader_far_ev = pik_ptr->fsm.get_event(MOB_EVENT_LEADER_IS_FAR);
                 
-                pik_ptr->attacking_mob = NULL;
-                pik_ptr->set_state(PIKMIN_STATE_IN_GROUP);
-                
+                if(leader_near_ev || leader_far_ev) {
+                    float d = dist(pik_ptr->x, pik_ptr->y, pik_ptr->following_party->x, pik_ptr->following_party->y);
+                    if(leader_far_ev && d >= 50) {
+                        leader_far_ev->run(pik_ptr);
+                    } else if(leader_near_ev && d < 50) {
+                        leader_near_ev->run(pik_ptr);
+                    }
+                }
             }
+            
             
             // Touching nectar.
             size_t n_nectars = nectars.size();
@@ -648,20 +666,6 @@ void do_logic() {
                 pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
             }
             
-            if(pik_ptr->anim.is_anim(PIKMIN_ANIM_LYING, true) && pik_ptr->knockdown_period == 0) {
-                pik_ptr->anim.change(PIKMIN_ANIM_GET_UP, true, false, false); // TODO this isn't working. This instruction runs, but the animation never changes.
-            } else if(pik_ptr->state == PIKMIN_STATE_BURIED) {
-                pik_ptr->anim.change(PIKMIN_ANIM_BURROWED, true, true, true);
-            } else if(pik_ptr->being_chomped) {
-                pik_ptr->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
-            } else if(pik_ptr->speed_z == 0 && pik_ptr->attack_time == 0) {
-                if(cur_leader_ptr->holding_pikmin != pik_ptr && (pik_ptr->speed_x != 0 || pik_ptr->speed_y != 0)) {
-                    pik_ptr->anim.change(PIKMIN_ANIM_WALK, true, true, true);
-                } else {
-                    pik_ptr->anim.change(PIKMIN_ANIM_IDLE, true, true, true);
-                }
-            }
-            
         }
         
         
@@ -674,6 +678,7 @@ void do_logic() {
         if(cur_leader_ptr->holding_pikmin) {
             cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->radius;
             cur_leader_ptr->holding_pikmin->y = cur_leader_ptr->y + sin(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->radius;
+            cur_leader_ptr->holding_pikmin->z = cur_leader_ptr->z;
             cur_leader_ptr->holding_pikmin->angle = cur_leader_ptr->angle;
         }
         
@@ -684,7 +689,7 @@ void do_logic() {
             float leader_move_intensity = leader_movement.get_intensity();
             if(leader_move_intensity < 0.75) leader_move_intensity = 0;
             if(leader_move_intensity > 1) leader_move_intensity = 1;
-            if(leader_move_intensity == 0)
+            if(leader_move_intensity == 0 && cur_leader_ptr->go_to_target)
                 cur_leader_ptr->remove_target(true);
             else
                 cur_leader_ptr->set_target(
@@ -747,7 +752,8 @@ void do_logic() {
                             }
                         }
                         
-                        pluck_pikmin(new_pikmin_leader, l_ptr->auto_pluck_pikmin, l_ptr);
+                        pluck_info pi(new_pikmin_leader, l_ptr, l_ptr->auto_pluck_pikmin);
+                        l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, &pi);
                         l_ptr->auto_pluck_pikmin = NULL;
                     }
                 }

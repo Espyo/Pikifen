@@ -152,6 +152,15 @@ public:
     mob_event* script_wait_event;     // What event is the script waiting on?
     size_t script_wait_action;        // Number of the action the script returns to after the wait is over.
     
+    void set_chomp_hitboxes(const vector<int> &h);
+    void eat(size_t nr);
+    void set_animation(const size_t nr);
+    void set_health(const bool rel, const float amount);
+    void set_timer(const float time);
+    void set_var(const string name, const string value);
+    void start_dying();
+    void finish_dying();
+    
     bool dead;                     // Is the mob dead?
     unsigned char state;           // Current state.
     float time_in_state;           // For how long as the mob been in this state?
@@ -194,20 +203,20 @@ enum MOB_TEAMS {
     MOB_TEAM_DECORATION, // Cannot be hurt or targeted by anything.
 };
 
-// Special targets to chase. Used by the scripts.
-enum MOB_TARGETS {
-    MOB_TARGET_NONE,
-    MOB_TARGET_HOME,
-    MOB_TARGET_POINT,
-};
-
-enum MOB_STATES {
+enum MOB_STATE_IDS {
     MOB_STATE_IDLE,
     MOB_STATE_BEING_CARRIED,
     MOB_STATE_BEING_DELIVERED, // Into an Onion.
-    PIKMIN_STATE_IN_GROUP,
+    
+    PIKMIN_STATE_IN_GROUP_CHASING,
+    PIKMIN_STATE_IN_GROUP_STOPPED,
+    PIKMIN_STATE_IDLE,
     PIKMIN_STATE_BURIED,
     PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
+    PIKMIN_STATE_GRABBED_BY_LEADER,
+    PIKMIN_STATE_THROWN,
+    PIKMIN_STATE_GOING_TO_TASK,
+    PIKMIN_STATE_BUSY,
     PIKMIN_STATE_CARRYING,
     PIKMIN_STATE_ATTACKING_MOB,
     PIKMIN_STATE_CELEBRATING,

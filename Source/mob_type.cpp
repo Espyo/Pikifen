@@ -53,10 +53,10 @@ void load_mob_types(bool load_resources) {
 /* ----------------------------------------------------------------------------
  * Loads the mob types from a folder.
  * folder: Name of the folder on the hard drive.
- * type: Use MOB_CATEGORY_* for this.
+ * category: Use MOB_CATEGORY_* for this.
  * load_resources: False if you don't need the images and sounds, so it loads faster.
  */
-void load_mob_types(const string folder, const unsigned char type, bool load_resources) {
+void load_mob_types(const string folder, const unsigned char category, bool load_resources) {
     bool folder_found;
     vector<string> types = folder_to_vector(folder, true, &folder_found);
     if(!folder_found) {
@@ -71,17 +71,17 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
         if(!file.file_was_opened) return;
         
         mob_type* mt;
-        if(type == MOB_CATEGORY_PIKMIN) {
+        if(category == MOB_CATEGORY_PIKMIN) {
             mt = new pikmin_type();
-        } else if(type == MOB_CATEGORY_ONIONS) {
+        } else if(category == MOB_CATEGORY_ONIONS) {
             mt = new onion_type();
-        } else if(type == MOB_CATEGORY_LEADERS) {
+        } else if(category == MOB_CATEGORY_LEADERS) {
             mt = new leader_type();
-        } else if(type == MOB_CATEGORY_ENEMIES) {
+        } else if(category == MOB_CATEGORY_ENEMIES) {
             mt = new enemy_type();
-        } else if(type == MOB_CATEGORY_PELLETS) {
+        } else if(category == MOB_CATEGORY_PELLETS) {
             mt = new pellet_type();
-        } else if(type == MOB_CATEGORY_SHIPS) {
+        } else if(category == MOB_CATEGORY_SHIPS) {
             mt = new ship_type();
         } else {
             mt = new mob_type();
@@ -105,21 +105,23 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
             mt->anims = load_animation_set(&anim_file);
             
-            mt->states = load_script(mt, file.get_child_by_name("script"));
-            if(mt->states.size()) {
-                string first_state_name = file.get_child_by_name("first_state")->value;
-                for(size_t s = 0; s < mt->states.size(); s++) {
-                    if(mt->states[s]->name == first_state_name) {
-                        mt->first_state_nr = s;
-                        break;
+            if(mt->states.empty()) {
+                mt->states = load_script(mt, file.get_child_by_name("script"));
+                if(mt->states.size()) {
+                    string first_state_name = file.get_child_by_name("first_state")->value;
+                    for(size_t s = 0; s < mt->states.size(); s++) {
+                        if(mt->states[s]->name == first_state_name) {
+                            mt->first_state_nr = s;
+                            break;
+                        }
                     }
+                } else {
+                    mt->first_state_nr = string::npos;
                 }
-            } else {
-                mt->first_state_nr = string::npos;
             }
         }
         
-        if(type == MOB_CATEGORY_PIKMIN) {
+        if(category == MOB_CATEGORY_PIKMIN) {
             pikmin_type* pt = (pikmin_type*) mt;
             pt->attack_power = s2f(file.get_child_by_name("attack_power")->value);
             pt->attack_interval = s2f(file.get_child_by_name("attack_interval")->get_value_or_default("0.8"));
@@ -151,7 +153,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             pikmin_types[pt->name] = pt;
             
-        } else if(type == MOB_CATEGORY_ONIONS) {
+        } else if(category == MOB_CATEGORY_ONIONS) {
             onion_type* ot = (onion_type*) mt;
             data_node* pik_type_node = file.get_child_by_name("pikmin_type");
             if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
@@ -162,7 +164,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             onion_types[ot->name] = ot;
             
-        } else if(type == MOB_CATEGORY_LEADERS) {
+        } else if(category == MOB_CATEGORY_LEADERS) {
             leader_type* lt = (leader_type*) mt;
             lt->pluck_delay = s2f(file.get_child_by_name("pluck_delay")->value);
             lt->whistle_range = s2f(file.get_child_by_name("whistle_range")->get_value_or_default(f2s(DEF_WHISTLE_RANGE)));
@@ -186,7 +188,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             leader_types[lt->name] = lt;
             
-        } else if(type == MOB_CATEGORY_ENEMIES) {
+        } else if(category == MOB_CATEGORY_ENEMIES) {
             enemy_type* et = (enemy_type*) mt;
             et->drops_corpse = s2b(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
             et->is_boss = s2b(file.get_child_by_name("is_boss")->value);
@@ -197,13 +199,13 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             enemy_types[et->name] = et;
             
-        } else if(type == MOB_CATEGORY_TREASURES) {
+        } else if(category == MOB_CATEGORY_TREASURES) {
             treasure_type* tt = (treasure_type*) mt;
             tt->move_speed = 60; // TODO should this be here?
             
             treasure_types[tt->name] = tt;
             
-        } else if(type == MOB_CATEGORY_PELLETS) {
+        } else if(category == MOB_CATEGORY_PELLETS) {
             pellet_type* pt = (pellet_type*) mt;
             data_node* pik_type_node = file.get_child_by_name("pikmin_type");
             if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
@@ -227,7 +229,7 @@ void load_mob_types(const string folder, const unsigned char type, bool load_res
             
             pellet_types[pt->name] = pt;
             
-        } else if(type == MOB_CATEGORY_SHIPS) {
+        } else if(category == MOB_CATEGORY_SHIPS) {
             ship_type* st = (ship_type*) mt;
             st->can_heal = file.get_child_by_name("can_heal");
             

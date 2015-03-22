@@ -42,10 +42,6 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     home_x = x; home_y = y;
     affected_by_gravity = true;
     
-    //TODO TEMP, REMOVE.
-    if(type->max_health == 750) {
-        float a = 0;
-    }
     health = type->max_health;
     invuln_period = 0;
     knockdown_period = 0;
@@ -64,7 +60,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     focused_opponent_near = false;
     
     fsm = mob_fsm(this);
-    set_state(type->first_state_nr);
+    fsm.set_state(type->first_state_nr);
     spawned = false;
     timer = timer_interval = 0;
     script_wait_event = NULL;
@@ -148,6 +144,7 @@ void mob::tick_brain() {
                 
                 speed = 0;
                 reached_destination = true;
+                fsm.run_event(MOB_EVENT_REACH_DESTINATION);
             }
             
         }
@@ -252,7 +249,7 @@ void mob::tick_physics() {
             }
             
         } else if(reached_destination) {
-            go_to_target = false;
+            //go_to_target = false;
             speed = 0;
             
         } else {
@@ -468,6 +465,7 @@ void mob::tick_physics() {
             speed_y = 0;
             speed_z = 0;
             was_thrown = false;
+            fsm.run_event(MOB_EVENT_LANDED, this);
         }
     }
     
@@ -549,12 +547,9 @@ void mob::tick_script() {
     }
     
     //Has it reached its home?
-    mob_event* reach_home_ev = fsm.get_event(MOB_EVENT_REACH_HOME);
-    if(reach_home_ev) {
-        if(reached_destination && target_code == MOB_TARGET_HOME) {
-            target_code = MOB_TARGET_NONE;
-            reach_home_ev->run(this);
-        }
+    mob_event* reach_dest_ev = fsm.get_event(MOB_EVENT_REACH_DESTINATION);
+    if(reach_dest_ev && reached_destination) {
+        reach_dest_ev->run(this);
     }
     
     //Is it dead?
@@ -600,7 +595,6 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
         
     go_to_target = true;
     reached_destination = false;
-    target_code = MOB_TARGET_NONE;
 }
 
 
@@ -609,6 +603,7 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
  * stop: If true, the mob stops dead on its tracks.
  */
 void mob::remove_target(bool stop) {
+    //TODO is "stop" still needed?
     go_to_target = false;
     reached_destination = false;
     target_z = NULL;
@@ -622,10 +617,65 @@ void mob::remove_target(bool stop) {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the mob eat some of the enemies it has chomped on.
+ * nr: Number of captured enemies to swallow.
+   * 0:  Release all of them.
+   * -1: Eat all of them.
+ */
+void mob::eat(const size_t nr) {
+
+    if(nr == 0) {
+        chomping_pikmin.clear();
+        return;
+    }
+    
+    size_t total = min(nr, chomping_pikmin.size());
+    if(nr < 0) total = chomping_pikmin.size();
+    
+    for(size_t e = 0; e < total; e++) {
+        chomping_pikmin[e]->health = 0;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Makes a mob gradually face a new angle.
  */
 void mob::face(float new_angle) {
     intended_angle = new_angle;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the mob's animation.
+ * nr: Animation number.
+ */
+void mob::set_animation(const size_t nr) {
+    if(nr >= type->anims.animations.size()) return;
+    anim.change(nr, false, false, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets which hitboxes will "chomp" enemies.
+ * h: Vector of hitbox numbers.
+ */
+void mob::set_chomp_hitboxes(const vector<int> &h) {
+    chomp_hitboxes = h;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes a mob's health, relatively or absolutely.
+ * rel:    Change is relative to the current value
+   * (i.e. add or subtract from current health)
+ * amount: Health amount.
+ */
+void mob::set_health(const bool rel, const float amount) {
+    unsigned short base_nr = 0;
+    if(rel) base_nr = health;
+    
+    health = max(0.0f, (float) (base_nr + amount));
 }
 
 
@@ -636,6 +686,54 @@ void mob::face(float new_angle) {
 void mob::set_state(unsigned char new_state) {
     state = new_state;
     time_in_state = 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes the timer's time and interval.
+ * time: New time.
+ */
+void mob::set_timer(const float time) {
+    timer = timer_interval = time;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a script variable's value.
+ * name:  The variable's name
+ * value: The variable's new value.
+ */
+void mob::set_var(const string name, const string value) {
+    vars[name] = value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up stuff for the beginning of the mob's death process.
+ */
+void mob::start_dying() {
+    if(typeid(this) == typeid(enemy)) {
+        random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, x, y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up stuff for the end of the mob's dying process.
+ */
+void mob::finish_dying() {
+    if(typeid(this) == typeid(enemy)) {
+        enemy* e_ptr = (enemy*) this;
+        if(e_ptr->ene_type->drops_corpse) {
+            carrier_info = new carrier_info_struct(this, e_ptr->ene_type->max_carriers, false);
+        }
+        particles.push_back(
+            particle(
+                PARTICLE_TYPE_ENEMY_SPIRIT, bmp_enemy_spirit, x, y,
+                0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 192, 255)
+            )
+        );
+    }
 }
 
 
@@ -705,11 +803,13 @@ void add_to_party(mob* party_leader, mob* new_member) {
             
             party_leader->party->party_spots->add(new_member, &spot_x, &spot_y);
             
+            //TODO remove.
+            /*
             new_member->set_target(
                 spot_x, spot_y,
                 &party_leader->party->party_center_x, &party_leader->party->party_center_y,
                 false
-            );
+            );*/
         }
     }
     

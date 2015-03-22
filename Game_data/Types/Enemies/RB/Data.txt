@@ -95,7 +95,7 @@ script{
             move = home
             animation = walk
         }
-        on_reach_home{
+        on_reach_destination{
             state = falling_asleep
         }
         on_see_opponent{

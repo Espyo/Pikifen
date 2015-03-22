@@ -104,13 +104,10 @@ void dismiss() {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(member_ptr);
             
             angle = base_angle + type_dismiss_angles[pikmin_ptr->pik_type] - M_PI_4 + M_PI;
+            dismiss_info di(angle, pikmin_ptr);
             
-            member_ptr->set_target(
-                cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
-                cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
-                NULL,
-                NULL,
-                false);
+            pikmin_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &di);
+            
         }
     }
     
@@ -140,20 +137,6 @@ void go_pluck(leader* l, pikmin* p) {
     l->pluck_time = -1;
     l->set_target(p->x, p->y, NULL, NULL, false);
     p->pluck_reserved = true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Plucks a Pikmin from the ground, if possible, and adds it to a leader's group.
- */
-void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked) {
-    if(p->state != PIKMIN_STATE_BURIED) return;
-    
-    leader_who_plucked->pluck_time = -1;
-    p->set_state(PIKMIN_STATE_IN_GROUP);
-    add_to_party(new_leader, p);
-    sfx_pikmin_plucked.play(0, false);
-    sfx_pikmin_pluck.play(0, false);
 }
 
 

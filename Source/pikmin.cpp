@@ -9,6 +9,8 @@
  * Pikmin class and Pikmin-related functions.
  */
 
+#include <iostream>
+
 #include "functions.h"
 #include "pikmin.h"
 #include "vars.h"
@@ -89,7 +91,7 @@ void drop_mob(pikmin* p) {
  * x/y:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
  * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
- ** (i.e. already chosen to be plucked by another leader).
+   * (i.e. already chosen to be plucked by another leader).
  */
 pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved) {
     float closest_distance = 0;
@@ -97,7 +99,7 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const 
     
     size_t n_pikmin = pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; p++) {
-        if(pikmin_list[p]->state != PIKMIN_STATE_BURIED) continue;
+        if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_BURIED) continue;
         
         float dis = dist(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
         if(closest_pikmin == NULL || dis < closest_distance) {
@@ -276,4 +278,74 @@ void start_carrying(mob* m, pikmin* np, pikmin* lp) {
         m->set_state(MOB_STATE_BEING_CARRIED);
         sfx_pikmin_carrying.play(-1, true);
     }
+}
+
+void pikmin::become_buried(mob* m, void* info) {
+    m->anim.change(PIKMIN_ANIM_BURROWED, true, false, false);
+}
+
+void pikmin::be_plucked(mob* m, void* info) {
+    pluck_info* pi = (pluck_info*) info;
+    pikmin* pik = (pikmin*) m;
+    
+    pi->leader_who_plucked->pluck_time = -1;
+    pik->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    add_to_party(pi->new_leader, pik);
+    sfx_pikmin_plucked.play(0, false);
+    sfx_pikmin_pluck.play(0, false);
+}
+
+void pikmin::be_grabbed_by_friend(mob* m, void* info) {
+    sfx_pikmin_held.play(0, false);
+}
+
+void pikmin::be_dismissed(mob* m, void* info) {
+    float angle = *((float*) info);
+    pikmin* pik = (pikmin*) m;
+    
+    pik->set_target(
+        leaders[cur_leader_nr]->x + cos(angle) * DISMISS_DISTANCE,
+        leaders[cur_leader_nr]->y + sin(angle) * DISMISS_DISTANCE,
+        NULL,
+        NULL,
+        false
+    );
+}
+
+void pikmin::be_thrown(mob* m, void* info) {
+    m->anim.change(PIKMIN_ANIM_THROWN, true, false, false);
+}
+
+void pikmin::land(mob* m, void* info) {
+    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+}
+
+void pikmin::go_to_task(mob* m, void* info) {
+
+}
+
+void pikmin::called(mob* m, void* info) {
+    pikmin* pik = (pikmin*) m;
+    
+    drop_mob(pik);
+    pik->attacking_mob = NULL;
+    pik->attack_time = 0;
+    add_to_party(leaders[cur_leader_nr], pik);
+    sfx_pikmin_called.play(0.03, false);
+    
+    pik->attacking_mob = NULL;
+}
+
+void pikmin::work_on_task(mob* m, void* info) {
+
+}
+
+void pikmin::chase_leader(mob* m, void* info) {
+    m->set_target(0, 0, &m->following_party->x, &m->following_party->y, false);
+    m->anim.change(PIKMIN_ANIM_WALK, true, false, false);
+}
+
+void pikmin::stop_in_group(mob* m, void* info) {
+    m->remove_target(true);
+    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
 }

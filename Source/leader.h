@@ -47,7 +47,6 @@ public:
 void dismiss();
 float get_leader_to_group_center_dist(mob* l);
 void go_pluck(leader* l, pikmin* p);
-void pluck_pikmin(leader* new_leader, pikmin* p, leader* leader_who_plucked);
 void stop_auto_pluck(leader* l);
 void stop_whistling();
 

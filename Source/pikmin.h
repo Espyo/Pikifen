@@ -46,6 +46,18 @@ public:
     bool pluck_reserved;     // If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
+    
+    static void become_buried(mob* m, void* info);
+    static void be_plucked(mob* m, void* info);
+    static void be_grabbed_by_friend(mob* m, void* info);
+    static void be_dismissed(mob* m, void* info);
+    static void be_thrown(mob* m, void* info);
+    static void land(mob* m, void* info);
+    static void go_to_task(mob* m, void* info);
+    static void called(mob* m, void* info);
+    static void work_on_task(mob* m, void* info);
+    static void chase_leader(mob* m, void* info);
+    static void stop_in_group(mob* m, void* info);
 };
 
 
@@ -54,5 +66,25 @@ void drop_mob(pikmin* p);
 pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);
 void give_pikmin_to_onion(onion* o, const unsigned amount);
 void start_carrying(mob* m, pikmin* np, pikmin* lp);
+
+
+struct pluck_info {
+    leader* new_leader;
+    leader* leader_who_plucked;
+    pikmin* pik;
+    pluck_info(leader* new_leader, leader* leader_who_plucked, pikmin* pik) {
+        this->new_leader = new_leader;
+        this->leader_who_plucked = leader_who_plucked;
+        this->pik = pik;
+    }
+};
+
+struct dismiss_info {
+    float angle;
+    pikmin* pik;
+    dismiss_info(const float angle, pikmin* pik) {
+        this->angle = angle; this->pik = pik;
+    }
+};
 
 #endif // ifndef PIKMIN_INCLUDED

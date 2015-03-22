@@ -65,7 +65,7 @@ public:
 
 
 
-void load_mob_types(const string folder, const unsigned char type, bool load_resources);
+void load_mob_types(const string folder, const unsigned char category, bool load_resources);
 void load_mob_types(bool load_resources);
 
 

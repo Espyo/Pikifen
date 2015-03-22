@@ -273,7 +273,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 if(!done) {
                     if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
                         cur_leader_ptr->holding_pikmin = closest_party_member;
-                        sfx_pikmin_held.play(0, false);
+                        closest_party_member->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND, closest_party_member);
                         done = true;
                     }
                 }
@@ -288,6 +288,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 mob* holding_ptr = cur_leader_ptr->holding_pikmin;
                 if(holding_ptr) {
                 
+                    holding_ptr->fsm.run_event(MOB_EVENT_THROWN, holding_ptr);
+                    
                     holding_ptr->x = cur_leader_ptr->x;
                     holding_ptr->y = cur_leader_ptr->y;
                     holding_ptr->z = cur_leader_ptr->z;

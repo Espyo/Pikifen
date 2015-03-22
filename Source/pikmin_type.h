@@ -22,6 +22,8 @@
 
 using namespace std;
 
+class leader;
+
 /* ----------------------------------------------------------------------------
  * Pikmin types, almost the basic meat of the fan-games.
  * The canon ones are Red, Yellow, Blue, White,
@@ -31,7 +33,7 @@ using namespace std;
 class pikmin_type : public mob_type {
 public:
     vector<hazard*> resistences;
-    unsigned char attack_attribute; // TODO What.
+    unsigned char attack_attribute; // TODO What the hell is this.
     float carry_strength;
     float attack_power;
     float attack_interval;
@@ -49,6 +51,8 @@ public:
     ALLEGRO_BITMAP* bmp_icon[3]; // Standby icons for each maturity.
     
     pikmin_type();
+    void init_script();
+    
 };
 
 

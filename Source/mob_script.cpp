@@ -11,6 +11,7 @@
  */
 
 #include <algorithm>
+#include <iostream>
 
 #include "functions.h"
 #include "mob.h"
@@ -23,6 +24,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
     valid = true;
     type = MOB_ACTION_UNKNOWN;
     sub_type = 0;
+    code = NULL;
     string n = dn->name;
     
     
@@ -244,30 +246,44 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
     }
 }
 
-void mob_action::run(mob* m, size_t* action_nr) {
+mob_action::mob_action(MOB_ACTION_TYPES type, unsigned char sub_type) {
+    this->type = type;
+    this->sub_type = sub_type;
+    valid = true;
+    code = NULL;
+    
+}
+
+mob_action::mob_action(custom_action_code code) {
+    this->code = code;
+}
+
+void mob_action::run(mob* m, size_t* action_nr, void* custom_data) {
+
+    //Custom code (i.e. instead of text-based script, use actual code).
+    if(code) {
+        code(m, custom_data);
+        return;
+    }
+    
     if(type == MOB_ACTION_CHOMP_HITBOXES) {
     
         m->chomp_hitboxes = vi;
         
         
-        
     } else if(type == MOB_ACTION_EAT) {
     
         if(sub_type == MOB_ACTION_EAT_ALL) {
-            for(size_t p = 0; p < m->chomping_pikmin.size(); p++) {
-                m->chomping_pikmin[p]->health = 0;
-            }
+            m->eat(-1);
+        } else {
+            m->eat(vi[0]);
         }
-        // TODO other cases besides eating all.
-        m->chomping_pikmin.clear();
-        
         
         
     } else if(type == MOB_ACTION_IF) {
     
         // TODO check for vs size.
         if(m->vars[vs[0]] != vs[1]) (*action_nr)++; // If false, skip to the next one.
-        
         
         
     } else if(type == MOB_ACTION_MOVE) {
@@ -283,7 +299,6 @@ void mob_action::run(mob* m, size_t* action_nr) {
             
         } else if(sub_type == MOB_ACTION_MOVE_HOME) {
             m->set_target(m->home_x, m->home_y, 0, 0, false);
-            m->target_code = MOB_TARGET_HOME;
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
             m->remove_target(true);
@@ -297,13 +312,9 @@ void mob_action::run(mob* m, size_t* action_nr) {
         }
         
         
-        
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(!vi.empty()) {
-            m->anim.change(vi[0], false, false, false);
-        }
-        
+        if(!vi.empty()) m->set_animation(vi[0]);
         
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
@@ -316,11 +327,7 @@ void mob_action::run(mob* m, size_t* action_nr) {
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
         // TODO check vf size's.
-        unsigned short base_nr = 0;
-        if(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE) base_nr = m->health;
-        
-        m->health = max(0.0f, (float) (base_nr + vf[0]));
-        
+        m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
         
         
     } else if(type == MOB_ACTION_SET_STATE) {
@@ -328,54 +335,35 @@ void mob_action::run(mob* m, size_t* action_nr) {
         m->fsm.set_state(vi[0]);
         
         
-        
     } else if(type == MOB_ACTION_SET_TIMER) {
     
         // TODO check vf's size.
-        m->timer = m->timer_interval = vf[0];
-        
+        m->set_timer(vf[0]);
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        // TODO check vs' size.
-        m->vars[vs[0]] = vs[1];
-        
+        // TODO check vs's size.
+        m->set_var(vs[0], vs[1]);
         
         
     } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {
     
         if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_START) {
         
-            if(typeid(*m) == typeid(enemy)) {
-                random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, m->x, m->y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
-            }
+            m->start_dying();
             
         } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DIE_END) {
         
-            if(typeid(*m) == typeid(enemy)) {
-                enemy* e_ptr = (enemy*) m;
-                if(e_ptr->ene_type->drops_corpse) {
-                    m->carrier_info = new carrier_info_struct(m, e_ptr->ene_type->max_carriers, false);
-                }
-                particles.push_back(
-                    particle(
-                        PARTICLE_TYPE_ENEMY_SPIRIT, bmp_enemy_spirit, m->x, m->y,
-                        0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 192, 255)
-                    )
-                );
-            }
+            m->finish_dying();
             
         }
-        
-        
-        
     }
 }
 
-void mob_event::run(mob* m) {
+void mob_event::run(mob* m, void* custom_data) {
     for(size_t a = 0; a < actions.size(); a++) {
-        actions[a]->run(m, &a);
+        actions[a]->run(m, &a, custom_data);
     }
 }
 
@@ -394,37 +382,36 @@ mob_event* mob_fsm::get_event(const unsigned short type) {
     return cur_state->get_event(type);
 }
 
-void mob_fsm::run_event(const unsigned short type, mob* m) {
+void mob_fsm::run_event(const unsigned short type, void* custom_data) {
     mob_event* e = get_event(type);
-    if(e) e->run(m);
+    if(e) e->run(m, custom_data);
 }
 
 mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     string n = d->name;
-    if(n == "on_enter")              type = MOB_EVENT_ON_ENTER;
-    else if(n == "on_leave")         type = MOB_EVENT_ON_LEAVE;
-    else if(n == "on_animation_end") type = MOB_EVENT_ANIMATION_END;
-    else if(n == "on_attack_hit")    type = MOB_EVENT_ATTACK_HIT;
-    else if(n == "on_attack_miss")   type = MOB_EVENT_ATTACK_MISS;
-    else if(n == "on_big_damage")    type = MOB_EVENT_BIG_DAMAGE;
-    else if(n == "on_damage")        type = MOB_EVENT_DAMAGE;
-    else if(n == "on_death")         type = MOB_EVENT_DEATH;
-    else if(n == "on_enter_hazard")  type = MOB_EVENT_ENTER_HAZARD;
-    else if(n == "on_idle")          type = MOB_EVENT_IDLE;
-    else if(n == "on_leave_hazard")  type = MOB_EVENT_LEAVE_HAZARD;
-    else if(n == "on_lose_object")   type = MOB_EVENT_LOSE_OBJECT;
-    else if(n == "on_lose_opponent") type = MOB_EVENT_LOSE_OPPONENT;
-    else if(n == "on_near_object")   type = MOB_EVENT_NEAR_OBJECT;
-    else if(n == "on_near_opponent") type = MOB_EVENT_NEAR_OPPONENT;
-    else if(n == "on_pikmin_land")   type = MOB_EVENT_PIKMIN_LAND;
-    else if(n == "on_pikmin_latch")  type = MOB_EVENT_PIKMIN_LATCH;
-    else if(n == "on_pikmin_touch")  type = MOB_EVENT_PIKMIN_TOUCH;
-    else if(n == "on_reach_home")    type = MOB_EVENT_REACH_HOME;
-    else if(n == "on_revival")       type = MOB_EVENT_REVIVAL;
-    else if(n == "on_see_object")    type = MOB_EVENT_SEE_OBJECT;
-    else if(n == "on_see_opponent")  type = MOB_EVENT_SEE_OPPONENT;
-    else if(n == "on_timer")         type = MOB_EVENT_TIMER;
-    else if(n == "on_wall")          type = MOB_EVENT_WALL;
+    if(n == "on_enter")                  type = MOB_EVENT_ON_ENTER;
+    else if(n == "on_leave")             type = MOB_EVENT_ON_LEAVE;
+    else if(n == "on_animation_end")     type = MOB_EVENT_ANIMATION_END;
+    else if(n == "on_attack_hit")        type = MOB_EVENT_ATTACK_HIT;
+    else if(n == "on_attack_miss")       type = MOB_EVENT_ATTACK_MISS;
+    else if(n == "on_big_damage")        type = MOB_EVENT_BIG_DAMAGE;
+    else if(n == "on_damage")            type = MOB_EVENT_DAMAGE;
+    else if(n == "on_death")             type = MOB_EVENT_DEATH;
+    else if(n == "on_enter_hazard")      type = MOB_EVENT_ENTER_HAZARD;
+    else if(n == "on_leave_hazard")      type = MOB_EVENT_LEAVE_HAZARD;
+    else if(n == "on_lose_object")       type = MOB_EVENT_LOSE_OBJECT;
+    else if(n == "on_lose_opponent")     type = MOB_EVENT_LOSE_OPPONENT;
+    else if(n == "on_near_object")       type = MOB_EVENT_NEAR_OBJECT;
+    else if(n == "on_near_opponent")     type = MOB_EVENT_NEAR_OPPONENT;
+    else if(n == "on_pikmin_land")       type = MOB_EVENT_PIKMIN_LAND;
+    else if(n == "on_pikmin_latch")      type = MOB_EVENT_PIKMIN_LATCH;
+    else if(n == "on_pikmin_touch")      type = MOB_EVENT_PIKMIN_TOUCH;
+    else if(n == "on_reach_destination") type = MOB_EVENT_REACH_DESTINATION;
+    else if(n == "on_revival")           type = MOB_EVENT_REVIVAL;
+    else if(n == "on_see_object")        type = MOB_EVENT_SEE_OBJECT;
+    else if(n == "on_see_opponent")      type = MOB_EVENT_SEE_OPPONENT;
+    else if(n == "on_timer")             type = MOB_EVENT_TIMER;
+    else if(n == "on_wall")              type = MOB_EVENT_WALL;
     else {
         type = MOB_EVENT_UNKNOWN;
         error_log("Unknown script event name \"" + n + "\"!", d);
@@ -432,13 +419,18 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
     actions = a;
 }
 
-mob_event::mob_event(const unsigned short t, vector<mob_action*> a) {
+mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) {
     type = t; actions = a;
 }
 
 mob_state::mob_state(const string name, vector<mob_event*> e) {
     this->name = name;
     events = e;
+}
+
+mob_state::mob_state(const string name, const size_t id) {
+    this->name = name;
+    this->id   = id;
 }
 
 
@@ -500,4 +492,48 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
     }
     
     return states;
+}
+
+
+/*
+ * Fixes some things in the list of states.
+ * For instance, state-switching actions that use
+ * a name instead of a number.
+ */
+void fix_states(vector<mob_state*> &states) {
+    //Fix actions that change the state that are using a string.
+    for(size_t s = 0; s < states.size(); s++) {
+        mob_state* state = states[s];
+        
+        for(size_t e = 0; e < state->events.size(); e++) {
+            mob_event* ev = state->events[e];
+            
+            for(size_t a = 0; a < ev->actions.size(); a++) {
+                mob_action* action = ev->actions[a];
+                
+                if(action->type == MOB_ACTION_SET_STATE && !action->vs.empty()) {
+                    string state_name = action->vs[0];
+                    size_t state_nr = 0;
+                    bool found_state = false;
+                    
+                    for(; state_nr < states.size(); state_nr++) {
+                        if(states[state_nr]->name == state_name) {
+                            found_state = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found_state) {
+                        state_nr = string::npos;
+                        cout << "State " << state_name << " not found.\n";
+                    }
+                    
+                    action->vs.clear();
+                    action->vi.clear();
+                    action->vi.push_back(state_nr);
+                    
+                }
+            }
+        }
+    }
 }
