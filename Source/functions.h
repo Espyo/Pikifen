@@ -27,14 +27,8 @@
 // Disables an enabled widget.
 #define disable_widget(w) (w)->flags |= lafi::FLAG_DISABLED;
 
-// Returns the distance between two points.
-#define dist(x1, y1, x2, y2) sqrt(sdist((x1), (y1), (x2), (y2)))
-
 // Enables a disabled widget.
 #define enable_widget(w) (w)->flags &= ~lafi::FLAG_DISABLED;
-
-// Converts a float (or double) to a string.
-#define f2s(n) to_string((long double) (n))
 
 // Returns the previous element in a vector, but if it's the first, it retrieves the last.
 #define get_prev_in_vector(v, nr) (v)[((nr) == 0 ? (v).size() - 1 : ((nr) - 1))]
@@ -63,9 +57,6 @@
 // Rounds a number. Ugh, why do I even have to create this.
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
 
-// Returns the squared distance between two points. This skips the square root.
-#define sdist(x1, y1, x2, y2) ((x1)-(x2)) * ((x1)-(x2)) + ((y1)-(y2)) * ((y1)-(y2))
-
 // Sets a lafi widget to visible and enabled.
 #define show_widget(w) (w)->flags &= ~(lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED);
 
@@ -79,7 +70,6 @@
 
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR c, const unsigned char a);
-bool               check_dist(float x1, float y1, float x2, float y2, float distance_to_check);
 bool               circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix = NULL, float* liy = NULL);
 void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
@@ -120,6 +110,7 @@ void               use_spray(const size_t spray_nr);
 void al_fwrite(ALLEGRO_FILE* f, string s);
 string b2s(const bool b);
 string c2s(const ALLEGRO_COLOR &c);
+string f2s(const float f);
 bool s2b(const string &s);
 ALLEGRO_COLOR s2c(const string &s);
 double s2f(const string &s);

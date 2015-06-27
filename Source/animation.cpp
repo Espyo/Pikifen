@@ -39,6 +39,7 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const 
     top_x = top_y = top_angle = 0;
     top_w = top_h = 32;
     parent_bmp = NULL;
+    calculate_hitbox_span();
 }
 
 
@@ -64,6 +65,7 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const in
     top_visible = true;
     top_x = top_y = top_angle = 0;
     top_w = top_h = 32;
+    calculate_hitbox_span();
 }
 
 
@@ -90,6 +92,7 @@ frame::frame(const frame &f2) {
     top_w = f2.top_w;
     top_h = f2.top_h;
     top_angle = f2.top_angle;
+    hitbox_span = f2.hitbox_span;
 }
 
 
@@ -97,7 +100,7 @@ frame::frame(const frame &f2) {
  * Creates a frame by cloning the data from another frame.
  */
 frame frame::clone() {
-    // TODO hitbox cloning?
+    // TODO should the hitboxes be cloned too?
     frame f = frame(name, NULL, game_w, game_h, hitbox_instances);
     f.file = file;
     f.file_x = file_x;
@@ -114,6 +117,7 @@ frame frame::clone() {
     f.top_visible = top_visible;
     f.parent_bmp = al_clone_bitmap(parent_bmp);
     f.bitmap = al_create_sub_bitmap(f.parent_bmp, f.file_x, f.file_y, f.file_w, f.file_h);
+    f.hitbox_span = hitbox_span;
     return f;
 }
 
@@ -124,6 +128,37 @@ frame frame::clone() {
 frame::~frame() {
     if(parent_bmp) bitmaps.detach(file);
     if(bitmap) al_destroy_bitmap(bitmap);
+}
+
+/* ----------------------------------------------------------------------------
+ * Calculates the span of the hitboxes.
+ */
+void frame::calculate_hitbox_span() {
+    hitbox_span = 0;
+    for(size_t hi = 0; hi < hitbox_instances.size(); hi++) {
+        hitbox_instance* hi_ptr = &hitbox_instances[hi];
+        
+        float d = dist(0, 0, hi_ptr->x, hi_ptr->y).to_float();
+        d += hi_ptr->radius;
+        hitbox_span = max(hitbox_span, d);
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates the hitbox instances, based on the hitboxes.
+ */
+void frame::create_hitbox_instances(animation_set* const as) {
+    hitbox_instances.clear();
+    for(size_t h = 0; h < as->hitboxes.size(); h++) {
+        hitbox_instances.push_back(
+            hitbox_instance(
+                as->hitboxes[h]->name,
+                h,
+                as->hitboxes[h]
+            )
+        );
+    }
+    calculate_hitbox_span();
 }
 
 
@@ -196,6 +231,7 @@ animation_instance::animation_instance(const animation_instance &ai2) {
  * only_if_done: Only change to this animation if the previous one looped at least once.
  */
 void animation_instance::change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done) {
+    //TODO delete in favor of set_animation().
     size_t final_nr;
     if(pre_named) {
         if(anim_set->pre_named_conversions.size() <= new_anim_nr) return;
@@ -263,9 +299,9 @@ bool animation_instance::tick(const float time) {
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
         cur_frame_nr++;
-        if(cur_frame_nr >= anim->frame_instances.size()) {
+        if(cur_frame_nr >= n_frames) {
             done_once = true;
-            cur_frame_nr = (anim->loop_frame >= anim->frame_instances.size()) ? 0 : anim->loop_frame;
+            cur_frame_nr = (anim->loop_frame >= n_frames) ? 0 : anim->loop_frame;
         }
         cur_frame = &anim->frame_instances[cur_frame_nr];
     }
@@ -332,6 +368,28 @@ size_t animation_set::find_hitbox(string name) {
         if(hitboxes[h]->name == name) return h;
     }
     return string::npos;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the pointers for hitboxes on the frames.
+ */
+void animation_set::fix_hitbox_pointers() {
+    for(size_t f = 0; f < frames.size(); f++) {
+        frame* f_ptr = frames[f];
+        for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); hi++) {
+            hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[hi];
+            
+            for(size_t h = 0; h < hitboxes.size(); h++) {
+                hitbox* h_ptr = hitboxes[h];
+                if(h_ptr->name == hi_ptr->hitbox_name) {
+                    hi_ptr->hitbox_nr = h;
+                    hi_ptr->hitbox_ptr = h_ptr;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 
@@ -403,17 +461,8 @@ animation_set load_animation_set(data_node* file_node) {
     
         data_node* hitbox_node = hitboxes_node->get_child(h);
         
-        hitbox* cur_hitbox = new hitbox();
+        hitbox* cur_hitbox = new hitbox(hitbox_node->name);
         hitboxes.push_back(cur_hitbox);
-        
-        cur_hitbox->name = hitbox_node->name;
-        cur_hitbox->type = s2i(hitbox_node->get_child_by_name("type")->value);
-        cur_hitbox->multiplier = s2f(hitbox_node->get_child_by_name("multiplier")->value);
-        cur_hitbox->hazards = hitbox_node->get_child_by_name("elements")->value;
-        cur_hitbox->can_pikmin_latch = s2b(hitbox_node->get_child_by_name("can_pikmin_latch")->value);
-        cur_hitbox->knockback_outward = s2b(hitbox_node->get_child_by_name("outward")->value);
-        cur_hitbox->knockback_angle = s2f(hitbox_node->get_child_by_name("angle")->value);
-        cur_hitbox->knockback = s2f(hitbox_node->get_child_by_name("knockback")->value);
     }
     
     as.hitboxes = hitboxes;
@@ -432,25 +481,27 @@ animation_set load_animation_set(data_node* file_node) {
         for(size_t h = 0; h < n_hitbox_instances; h++) {
         
             data_node* hitbox_instance_node = hitbox_instances_node->get_child(h);
+            hitbox_instance cur_hitbox_instance = hitbox_instance();
             
-            float hx = 0, hy = 0, hz = 0;
             vector<string> coords = split(hitbox_instance_node->get_child_by_name("coords")->value);
             if(coords.size() >= 3) {
-                hx = s2f(coords[0]);
-                hy = s2f(coords[1]);
-                hz = s2f(coords[2]);
+                cur_hitbox_instance.x = s2f(coords[0]);
+                cur_hitbox_instance.y = s2f(coords[1]);
+                cur_hitbox_instance.z = s2f(coords[2]);
             }
+            cur_hitbox_instance.height = s2f(hitbox_instance_node->get_child_by_name("height")->value);
+            cur_hitbox_instance.radius = s2f(hitbox_instance_node->get_child_by_name("radius")->value);
+            cur_hitbox_instance.hitbox_name = hitbox_instance_node->name;
+            cur_hitbox_instance.type = s2i(hitbox_instance_node->get_child_by_name("type")->value);
+            cur_hitbox_instance.multiplier = s2f(hitbox_instance_node->get_child_by_name("multiplier")->value);
+            cur_hitbox_instance.hazards = hitbox_instance_node->get_child_by_name("elements")->value;
+            cur_hitbox_instance.can_pikmin_latch = s2b(hitbox_instance_node->get_child_by_name("can_pikmin_latch")->value);
+            cur_hitbox_instance.knockback_outward = s2b(hitbox_instance_node->get_child_by_name("outward")->value);
+            cur_hitbox_instance.knockback_angle = s2f(hitbox_instance_node->get_child_by_name("angle")->value);
+            cur_hitbox_instance.knockback = s2f(hitbox_instance_node->get_child_by_name("knockback")->value);
             
-            size_t h_pos = as.find_hitbox(hitbox_instance_node->name);
-            hitbox_instances.push_back(
-                hitbox_instance(
-                    hitbox_instance_node->name,
-                    h_pos,
-                    (h_pos == string::npos) ? NULL : hitboxes[h_pos],
-                    hx, hy, hz,
-                    s2f(hitbox_instance_node->get_child_by_name("radius")->value)
-                )
-            );
+            hitbox_instances.push_back(cur_hitbox_instance);
+            
         }
         
         ALLEGRO_BITMAP* parent = bitmaps.get(frame_node->get_child_by_name("file")->value, frame_node->get_child_by_name("file"));

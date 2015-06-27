@@ -96,14 +96,17 @@ void load_mob_types(const string folder, const unsigned char category, bool load
         mt->max_health = s2i(file.get_child_by_name("max_health")->value);
         mt->move_speed = s2f(file.get_child_by_name("move_speed")->value);
         mt->near_radius = s2f(file.get_child_by_name("near_radius")->value);
+        mt->near_angle = s2f(file.get_child_by_name("near_angle")->value);
         mt->rotation_speed = s2f(file.get_child_by_name("rotation_speed")->get_value_or_default(f2s(DEF_ROTATION_SPEED)));
         mt->sight_radius = s2f(file.get_child_by_name("sight_radius")->value);
+        mt->territory_radius = s2f(file.get_child_by_name("territory_radius")->value);
         mt->radius = s2f(file.get_child_by_name("radius")->value);
         mt->weight = s2f(file.get_child_by_name("weight")->value);
         
         if(load_resources) {
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
             mt->anims = load_animation_set(&anim_file);
+            mt->anims.fix_hitbox_pointers();
             
             if(mt->states.empty()) {
                 mt->states = load_script(mt, file.get_child_by_name("script"));

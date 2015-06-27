@@ -156,61 +156,6 @@ extern bool                             daylight_effect;
 extern double                           delta_t;                  // Time between the previous frame and the current.
 extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;
-extern animation_set                    ed_anims;
-extern bool                             ed_anim_playing;
-extern bool                             ed_bg_aspect_ratio;
-extern ALLEGRO_BITMAP*                  ed_bg_bitmap;
-extern string                           ed_bg_file_name;
-extern float                            ed_bg_x;
-extern float                            ed_bg_y;
-extern float                            ed_bg_w;
-extern float                            ed_bg_h;
-extern unsigned char                    ed_bg_a;
-extern animation*                       ed_cur_anim;
-extern frame*                           ed_cur_frame;
-extern size_t                           ed_cur_frame_instance_nr;
-extern float                            ed_cur_frame_time;
-extern hitbox*                          ed_cur_hitbox;
-extern float                            ed_cur_hitbox_alpha;  // The alpha is calculated using the sine of this value.
-extern size_t                           ed_cur_hitbox_instance_nr;
-extern mob_gen*                         ed_cur_mob;
-extern sector*                          ed_cur_sector;
-extern tree_shadow*                     ed_cur_shadow;
-extern float                            ed_double_click_time;
-extern mob_gen*                         ed_error_mob_ptr;
-extern sector*                          ed_error_sector_ptr;
-extern tree_shadow*                     ed_error_shadow_ptr;
-extern string                           ed_error_string;
-extern unsigned char                    ed_error_type;
-extern vertex*                          ed_error_vertex_ptr;
-extern string                           ed_file_name;
-extern size_t                           ed_grabbing_hitbox;   // Hitbox being grabbed by the mouse cursor. string::npos = none.
-extern bool                             ed_grabbing_hitbox_edge;
-extern float                            ed_grabbing_hitbox_x; // X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
-extern float                            ed_grabbing_hitbox_y;
-extern lafi::gui*                       ed_gui;
-extern bool                             ed_hitboxes_visible;
-extern bool                             ed_holding_m1;
-extern bool                             ed_holding_m2;
-extern vector<linedef_intersection>     ed_intersecting_lines;
-extern unordered_set<linedef*>          ed_lone_lines;
-extern unsigned char                    ed_maturity; // Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
-extern unsigned char                    ed_mob_type_list; // Use MOB_TYPE_*.
-extern unsigned char                    ed_mode;
-extern size_t                           ed_moving_thing; // Current vertex, object or shadow being moved.
-extern float                            ed_moving_thing_x; // Relative X coordinate of the point where the vertex, object or shadow was grabbed.
-extern float                            ed_moving_thing_y;
-extern float                            ed_new_hitbox_corner_x; // FLT_MAX = none.
-extern float                            ed_new_hitbox_corner_y;
-extern unordered_set<sector*>           ed_non_simples;
-extern string                           ed_object_name;
-extern sector*                          ed_on_sector;
-extern unsigned char                    ed_sec_mode; // Secondary/sub mode.
-extern bool                             ed_shift_pressed;
-extern bool                             ed_show_bg;
-extern bool                             ed_show_shadows;
-extern ALLEGRO_BITMAP*                  ed_top_bmp[3]; // Top bitmaps for the current Pikmin type.
-extern lafi::widget*                    ed_wum; // Widget under mouse.
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
 extern ALLEGRO_FONT*                    font;

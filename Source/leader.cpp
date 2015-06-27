@@ -104,9 +104,7 @@ void dismiss() {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(member_ptr);
             
             angle = base_angle + type_dismiss_angles[pikmin_ptr->pik_type] - M_PI_4 + M_PI;
-            dismiss_info di(angle, pikmin_ptr);
-            
-            pikmin_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &di);
+            pikmin_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &angle);
             
         }
     }

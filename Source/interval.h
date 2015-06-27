@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the interval class and interval-related functions.
+ * Header for the interval struct and interval-related functions.
  */
 
 #ifndef INTERVAL_INCLUDED
@@ -31,7 +31,7 @@ struct subinterval {
 
 
 
-class interval {
+struct interval {
 private:
     vector<subinterval> subintervals;
     

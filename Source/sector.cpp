@@ -17,6 +17,7 @@
 #include <queue>
 #include <unordered_set>
 
+#include "area_editor.h"
 #include "functions.h"
 #include "sector.h"
 #include "vars.h"
@@ -550,10 +551,10 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 // a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
-                    ed_lone_lines.insert(inners->back()[0]->linedefs[0]);
+                    area_editor::lone_lines.insert(inners->back()[0]->linedefs[0]);
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
-                    ed_non_simples.insert(s_ptr);
+                    area_editor::non_simples.insert(s_ptr);
                 }
                 
             } else if(lines_done[best_line]) {
@@ -867,7 +868,7 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks intersecting linedefs, and adds them to ed_intersecting_lines;
+ * Checks intersecting linedefs, and adds them to intersecting_lines;
  */
 void check_linedef_intersections(vertex* v) {
     for(size_t l = 0; l < v->linedefs.size(); ++l) {
@@ -875,9 +876,9 @@ void check_linedef_intersections(vertex* v) {
         
         // Check if it's on the list of intersecting lines, and remove it,
         // so it can be recalculated now.
-        for(size_t il = 0; il < ed_intersecting_lines.size();) {
-            if(ed_intersecting_lines[il].contains(l_ptr)) {
-                ed_intersecting_lines.erase(ed_intersecting_lines.begin() + il);
+        for(size_t il = 0; il < area_editor::intersecting_lines.size();) {
+            if(area_editor::intersecting_lines[il].contains(l_ptr)) {
+                area_editor::intersecting_lines.erase(area_editor::intersecting_lines.begin() + il);
             } else {
                 ++il;
             }
@@ -905,7 +906,7 @@ void check_linedef_intersections(vertex* v) {
                     l2_ptr->vertices[1]->x, l2_ptr->vertices[1]->y,
                     NULL, NULL)
             ) {
-                ed_intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
+                area_editor::intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
             }
         }
     }
@@ -1156,6 +1157,7 @@ float get_angle_smallest_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
     return M_PI - abs(abs(a1 - a2) - M_PI);
+    //TODO TEMPORARY this is either a fix, or I'm stupid: return min((double) abs(a2 - a1), abs((a1 + M_PI * 2) - a2));
 }
 
 
@@ -1228,17 +1230,17 @@ void triangulate(sector* s_ptr) {
     
     // Before we start, let's just remove it from the
     // vector of non-simple sectors.
-    auto it = ed_non_simples.find(s_ptr);
-    if(it != ed_non_simples.end()) {
-        ed_non_simples.erase(it);
+    auto it = area_editor::non_simples.find(s_ptr);
+    if(it != area_editor::non_simples.end()) {
+        area_editor::non_simples.erase(it);
     }
     
     // And let's clear any "lone" linedefs here.
     for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         linedef* l_ptr = s_ptr->linedefs[l];
-        auto it = ed_lone_lines.find(l_ptr);
-        if(it != ed_lone_lines.end()) {
-            ed_lone_lines.erase(it);
+        auto it = area_editor::lone_lines.find(l_ptr);
+        if(it != area_editor::lone_lines.end()) {
+            area_editor::lone_lines.erase(it);
         }
     }
     
@@ -1282,7 +1284,7 @@ void triangulate(sector* s_ptr) {
     
         if(ears.empty()) {
             // Something went wrong, the polygon mightn't be simple.
-            ed_non_simples.insert(s_ptr);
+            area_editor::non_simples.insert(s_ptr);
             break;
             
         } else {

@@ -229,7 +229,6 @@ void do_drawing() {
         n_pikmin = pikmin_list.size();
         for(size_t p = 0; p < n_pikmin; p++) {
             pikmin* pik_ptr = pikmin_list[p];
-            bool idling = !pik_ptr->following_party && !pik_ptr->carrying_mob && !pik_ptr->attacking_mob && !pik_ptr->was_thrown;
             
             frame* f = pik_ptr->anim.get_frame();
             if(f) {
@@ -246,7 +245,7 @@ void do_drawing() {
                     map_gray(pik_ptr->lighting)
                 );
                 
-                if(idling) {
+                if(pik_ptr->is_idle) {
                     al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
                     draw_sprite(
                         f->bitmap,
@@ -269,7 +268,7 @@ void do_drawing() {
                     );
                 }
                 
-                if(idling) {
+                if(pik_ptr->is_idle) {
                     draw_sprite(
                         bmp_idle_glow,
                         pik_ptr->x, pik_ptr->y,
@@ -454,7 +453,7 @@ void do_drawing() {
         
         // Info spots.
         for(size_t i = 0; i < n_info_spots; i++) {
-            if(check_dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y, INFO_SPOT_TRIGGER_RANGE)) {
+            if(dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
                 if(!info_spots[i]->opens_box) {
                     text = info_spots[i]->text;
@@ -627,7 +626,7 @@ void do_drawing() {
             for(size_t p = 1; p < cursor_spots.size(); p++) {
                 point* p_ptr = &cursor_spots[p];
                 point* pp_ptr = &cursor_spots[p - 1]; // Previous point.
-                if((*p_ptr) != (*pp_ptr) && !check_dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y, 4)) {
+                if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
                     al_draw_line(
                         p_ptr->x, p_ptr->y,
                         pp_ptr->x, pp_ptr->y,
@@ -1119,7 +1118,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
         lv[1] = l_ptr->vertices[1];
         
         float l_angle = atan2(lv[1]->y - lv[0]->y, lv[1]->x - lv[0]->x);
-        float l_dist = dist(lv[0]->x, lv[0]->y, lv[1]->x, lv[1]->y);
+        float l_dist = dist(lv[0]->x, lv[0]->y, lv[1]->x, lv[1]->y).to_float();
         
         // Let's check if the "front" side is the line's angle -90 (left).
         float l_cos_front = cos(l_angle - M_PI_2);
@@ -1361,7 +1360,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         linedef* l_ptr = NULL;
         sector* neighbor = NULL;
         bool valid = true;
-        map<sector*, float> neighbors;
+        map<sector*, dist> neighbors;
         
         // The two neighboring sectors with the lenghtiest linedefs are picked.
         // So save all sector/length pairs.
@@ -1380,7 +1379,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             
             if(valid) {
                 neighbors[neighbor] +=
-                    sdist(
+                    dist(
                         l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
                         l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
                     );
@@ -1388,15 +1387,15 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         }
         
         // Find the two lengthiest ones.
-        vector<pair<float, sector*> > neighbors_vec;
+        vector<pair<dist, sector*> > neighbors_vec;
         for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
             neighbors_vec.push_back(
                 make_pair(
-                    (float) (n->second), (sector*) (n->first) // Yes, we do need these casts, for g++.
+                    (dist) (n->second), (sector*) (n->first) // Yes, we do need these casts, for g++.
                 )
             );
         }
-        sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<float, sector*> p1, pair<float, sector*> p2) -> bool {
+        sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<dist, sector*> p1, pair<dist, sector*> p2) -> bool {
         
             float height_dif_1 = 0;
             if(p1.second) fabs(p1.second->z - s_ptr->z);

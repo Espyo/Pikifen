@@ -3,19 +3,19 @@ animations{
 		loop_frame=1
 		frame_instances{
 			grab{
-				duration=0.4
+				duration=0.400000
 			}
 			grab_far{
-				duration=0.3
+				duration=0.300000
 			}
 			grab{
-				duration=0.1
+				duration=0.100000
 			}
 			grab_near{
-				duration=0.3
+				duration=0.300000
 			}
 			grab{
-				duration=0.1
+				duration=0.100000
 			}
 		}
 	}
@@ -23,7 +23,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			burrowed{
-				duration=0
+				duration=0.000000
 			}
 		}
 	}
@@ -31,10 +31,10 @@ animations{
 		loop_frame=1
 		frame_instances{
 			half_lying{
-				duration=1
+				duration=1.000000
 			}
 			idle{
-				duration=0.1
+				duration=0.100000
 			}
 		}
 	}
@@ -42,7 +42,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			grab{
-				duration=0
+				duration=0.000000
 			}
 		}
 	}
@@ -50,18 +50,21 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0
+				duration=0.000000
 			}
 		}
 	}
 	lying{
-		loop_frame=1
+		loop_frame=0
 		frame_instances{
 			half_lying{
-				duration=0.1
+				duration=0.100000
 			}
 			lying{
-				duration=0.1
+				duration=2.000000
+			}
+			half_lying{
+				duration=0.100000
 			}
 		}
 	}
@@ -69,16 +72,16 @@ animations{
 		loop_frame=0
 		frame_instances{
 			thrown1{
-				duration=0.08
+				duration=0.080000
 			}
 			thrown2{
-				duration=0.08
+				duration=0.080000
 			}
 			thrown3{
-				duration=0.08
+				duration=0.080000
 			}
 			thrown4{
-				duration=0.08
+				duration=0.080000
 			}
 		}
 	}
@@ -86,16 +89,16 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0.1
+				duration=0.100000
 			}
 			walkr{
-				duration=0.1
+				duration=0.100000
 			}
 			idle{
-				duration=0.1
+				duration=0.100000
 			}
 			walkl{
-				duration=0.1
+				duration=0.100000
 			}
 		}
 	}
@@ -107,16 +110,16 @@ frames{
 		file_y=42
 		file_w=12
 		file_h=12
-		game_w=6
-		game_h=6
-		offs_x=0
-		offs_y=0
+		game_w=6.000000
+		game_h=6.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-4
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-4.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	grab{
@@ -125,16 +128,16 @@ frames{
 		file_y=2
 		file_w=28
 		file_h=20
-		game_w=14
-		game_h=10
-		offs_x=0
-		offs_y=0
+		game_w=14.000000
+		game_h=10.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-6
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-6.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	grab_far{
@@ -143,16 +146,16 @@ frames{
 		file_y=2
 		file_w=42
 		file_h=20
-		game_w=21
-		game_h=10
-		offs_x=-3.5
-		offs_y=0
+		game_w=21.000000
+		game_h=10.000000
+		offs_x=-3.500000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-15
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-15.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	grab_near{
@@ -161,16 +164,16 @@ frames{
 		file_y=0
 		file_w=26
 		file_h=22
-		game_w=13
-		game_h=11
-		offs_x=3.5
-		offs_y=0
+		game_w=13.000000
+		game_h=11.000000
+		offs_x=3.500000
+		offs_y=0.000000
 		top_visible=true
-		top_x=12
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=3.14159
+		top_x=12.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=3.141590
 		hitbox_instances=
 	}
 	half_lying{
@@ -179,16 +182,16 @@ frames{
 		file_y=26
 		file_w=48
 		file_h=28
-		game_w=24
-		game_h=14
-		offs_x=0
-		offs_y=0
+		game_w=24.000000
+		game_h=14.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-13
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-13.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	idle{
@@ -197,16 +200,16 @@ frames{
 		file_y=34
 		file_w=20
 		file_h=20
-		game_w=10
-		game_h=10
-		offs_x=0
-		offs_y=0
+		game_w=10.000000
+		game_h=10.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-4
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-4.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	lying{
@@ -215,16 +218,16 @@ frames{
 		file_y=24
 		file_w=82
 		file_h=30
-		game_w=41
-		game_h=15
-		offs_x=0
-		offs_y=0
+		game_w=41.000000
+		game_h=15.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-20
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-20.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	thrown1{
@@ -233,16 +236,16 @@ frames{
 		file_y=0
 		file_w=28
 		file_h=22
-		game_w=14
-		game_h=11
-		offs_x=0
-		offs_y=0
+		game_w=14.000000
+		game_h=11.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=false
-		top_x=0
-		top_y=0
-		top_w=1
-		top_h=1
-		top_angle=0
+		top_x=0.000000
+		top_y=0.000000
+		top_w=1.000000
+		top_h=1.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	thrown2{
@@ -251,16 +254,16 @@ frames{
 		file_y=2
 		file_w=34
 		file_h=20
-		game_w=17
-		game_h=10
-		offs_x=0
-		offs_y=0
+		game_w=17.000000
+		game_h=10.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-9
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=0
+		top_x=-9.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.000000
 		hitbox_instances=
 	}
 	thrown3{
@@ -269,16 +272,16 @@ frames{
 		file_y=2
 		file_w=32
 		file_h=20
-		game_w=16
-		game_h=10
-		offs_x=0
-		offs_y=0
+		game_w=16.000000
+		game_h=10.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=3
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=3.14159
+		top_x=3.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=3.141590
 		hitbox_instances=
 	}
 	thrown4{
@@ -287,16 +290,16 @@ frames{
 		file_y=2
 		file_w=36
 		file_h=20
-		game_w=18
-		game_h=10
-		offs_x=0
-		offs_y=0
+		game_w=18.000000
+		game_h=10.000000
+		offs_x=0.000000
+		offs_y=0.000000
 		top_visible=true
-		top_x=10
-		top_y=0
-		top_w=5.5
-		top_h=10
-		top_angle=3.14159
+		top_x=10.000000
+		top_y=0.000000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=3.141590
 		hitbox_instances=
 	}
 	walkl{
@@ -305,16 +308,16 @@ frames{
 		file_y=34
 		file_w=24
 		file_h=20
-		game_w=12
-		game_h=10
-		offs_x=-0.5
-		offs_y=0
+		game_w=12.000000
+		game_h=10.000000
+		offs_x=-0.500000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-4
-		top_y=0.2
-		top_w=5.5
-		top_h=10
-		top_angle=-0.08
+		top_x=-4.000000
+		top_y=0.200000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=-0.080000
 		hitbox_instances=
 	}
 	walkr{
@@ -323,16 +326,16 @@ frames{
 		file_y=34
 		file_w=24
 		file_h=20
-		game_w=12
-		game_h=10
-		offs_x=-0.5
-		offs_y=0
+		game_w=12.000000
+		game_h=10.000000
+		offs_x=-0.500000
+		offs_y=0.000000
 		top_visible=true
-		top_x=-4
-		top_y=-0.2
-		top_w=5.5
-		top_h=10
-		top_angle=0.08
+		top_x=-4.000000
+		top_y=-0.200000
+		top_w=5.500000
+		top_h=10.000000
+		top_angle=0.080000
 		hitbox_instances=
 	}
 }

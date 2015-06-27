@@ -23,6 +23,8 @@
 
 using namespace std;
 
+class animation_set;
+
 /* ----------------------------------------------------------------------------
  * Animations work as follows:
  * An animation links to frames.
@@ -66,6 +68,9 @@ using namespace std;
  * A frame of animation; a sprite.
  */
 class frame {
+private:
+    void calculate_hitbox_span();
+    
 public:
     string name;
     ALLEGRO_BITMAP* parent_bmp; // Parent bitmap, normally a spritesheet.
@@ -80,11 +85,13 @@ public:
     bool top_visible;           // Does this frame even have a visible Pikmin top?
     ALLEGRO_BITMAP* bitmap;     // Actual bitmap. This is a sub-bitmap of parent_bmp.
     vector<hitbox_instance> hitbox_instances; // List of hitboxes on this frame.
+    float hitbox_span;          // How far the hitboxes span.
     
     frame(const string &name = "", ALLEGRO_BITMAP* const b = NULL, const float gw = 0, const float gh = 0, const vector<hitbox_instance> &h = vector<hitbox_instance>());
     frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h);
     frame(const frame &f2);
     frame clone();
+    void create_hitbox_instances(animation_set* const as);
     
     ~frame();
 };
@@ -144,6 +151,7 @@ public:
     size_t find_hitbox(   string name);
     
     void create_conversions(vector<pair<size_t, string> > conversions);
+    void fix_hitbox_pointers();
     
     void destroy();
     

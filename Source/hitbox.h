@@ -24,6 +24,7 @@
 enum HITBOX_TYPES {
     HITBOX_TYPE_NORMAL,
     HITBOX_TYPE_ATTACK,
+    HITBOX_TYPE_DISABLED,
 };
 
 
@@ -34,13 +35,6 @@ enum HITBOX_TYPES {
 class hitbox {
 public:
     string name;
-    unsigned char type;
-    string hazards;
-    float multiplier;       // If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
-    bool knockback_outward; // If true, the Pikmin is knocked away from the center.
-    float knockback_angle;  // Knockback angle.
-    float knockback;        // Knockback strength.
-    bool can_pikmin_latch;  // Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
     hitbox(const string &name = "");
 };
@@ -54,12 +48,22 @@ public:
     string hitbox_name;
     size_t hitbox_nr;   // Needed for performance.
     hitbox* hitbox_ptr; // Needed for performance.
-    float x, y, z;      // Relative coordinates.
+    float x, y;         // Center of the hitbox (relative coordinates).
+    float z;            // Bottom of the hitbox (relative coordinates).
+    float height;
     float radius;
+    
+    unsigned char type;
+    string hazards;
+    float multiplier;       // If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
+    bool knockback_outward; // If true, the Pikmin is knocked away from the center.
+    float knockback_angle;  // Knockback angle.
+    float knockback;        // Knockback strength.
+    bool can_pikmin_latch;  // Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
     hitbox_instance(
         const string &hn = "", size_t hnr = string::npos, hitbox* hp = NULL, const float x = 0, const float y = 0,
-        const float z = 0, const float radius = 32
+        const float z = 0, const float heigh = 128, const float radius = 32
     );
 };
 

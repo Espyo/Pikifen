@@ -47,7 +47,9 @@ public:
     // Behavior things.
     float max_health;
     float sight_radius;
+    float territory_radius;
     float near_radius;
+    float near_angle;
     unsigned int max_carriers;
     float weight;          // Pikmin strenght needed to carry it.
     unsigned char chomp_max_victims; // The maximum number of victims in a chomp.

@@ -30,61 +30,59 @@ public:
     pikmin_type* pik_type;
     float hazard_time_left;  // Time it has left until it drowns/chokes/etc.
     
-    mob* attacking_mob;       // Enemy it's attacking.
-    bool latched;             // Is the Pikmin latched onto the enemy it's attacking?
     size_t enemy_hitbox_nr;   // Number of the hitbox the Pikmin is attached to.
     float enemy_hitbox_dist;  // Distance percentage from the center of the hitbox to the Pikmin's position.
     float enemy_hitbox_angle; // Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
     float attack_time;        // Time left until the strike.
     bool being_chomped;       // Is the Pikmin stuck in the enemy's jaws?
     
-    mob* wants_to_carry;     // Mob it wants to carry.
-    mob* carrying_mob;       // Mob it's carrying.
-    size_t carrying_spot;    // Carrying spot reserved for it.
+    bool grabbing_carriable_mob; //Is it actually grasping the carriable mob, or just trying to reach it?
+    size_t carrying_spot;        //Carrying spot reserved for it.
+    bool is_idle;                //Is the Pikmin idling?
     
     unsigned char maturity;  // 0: leaf. 1: bud. 2: flower.
     bool pluck_reserved;     // If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
     
-    static void become_buried(mob* m, void* info);
-    static void be_plucked(mob* m, void* info);
-    static void be_grabbed_by_friend(mob* m, void* info);
-    static void be_dismissed(mob* m, void* info);
-    static void be_thrown(mob* m, void* info);
-    static void land(mob* m, void* info);
-    static void go_to_task(mob* m, void* info);
-    static void called(mob* m, void* info);
-    static void work_on_task(mob* m, void* info);
-    static void chase_leader(mob* m, void* info);
-    static void stop_in_group(mob* m, void* info);
+    static void become_buried(          mob* m, void* info1, void* info2);
+    static void become_idle(            mob* m, void* info1, void* info2);
+    static void be_plucked(             mob* m, void* info1, void* info2);
+    static void be_grabbed_by_friend(   mob* m, void* info1, void* info2);
+    static void be_grabbed_by_enemy(    mob* m, void* info1, void* info2);
+    static void be_dismissed(           mob* m, void* info1, void* info2);
+    static void be_thrown(              mob* m, void* info1, void* info2);
+    static void be_released(            mob* m, void* info1, void* info2);
+    static void land(                   mob* m, void* info1, void* info2);
+    static void go_to_task(             mob* m, void* info1, void* info2);
+    static void called(                 mob* m, void* info1, void* info2);
+    static void work_on_task(           mob* m, void* info1, void* info2);
+    static void chase_leader(           mob* m, void* info1, void* info2);
+    static void stop_being_idle(        mob* m, void* info1, void* info2);
+    static void stop_in_group(          mob* m, void* info1, void* info2);
+    static void reach_dismiss_spot(     mob* m, void* info1, void* info2);
+    static void go_to_carriable_object( mob* m, void* info1, void* info2);
+    static void grab_carriable_object(  mob* m, void* info1, void* info2);
+    static void finish_carrying(        mob* m, void* info1, void* info2);
+    static void forget_about_carrying(  mob* m, void* info1, void* info2);
+    static void go_to_opponent(         mob* m, void* info1, void* info2);
+    static void rechase_opponent(       mob* m, void* info1, void* info2);
+    static void attack(                 mob* m, void* info1, void* info2);
+    static void land_on_mob(            mob* m, void* info1, void* info2);
+    static void tick_latched(           mob* m, void* info1, void* info2);
+    static void tick_attacking_grounded(mob* m, void* info1, void* info2);
+    static void tick_grabbed_by_enemy(  mob* m, void* info1, void* info2);
+    static void prepare_to_attack(      mob* m, void* info1, void* info2);
+    static void get_knocked_down(        mob* m, void* info1, void* info2);
+    
 };
 
 
 
-void drop_mob(pikmin* p);
 pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);
 void give_pikmin_to_onion(onion* o, const unsigned amount);
-void start_carrying(mob* m, pikmin* np, pikmin* lp);
+void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp);
+void swap_pikmin(mob* new_pik);
 
-
-struct pluck_info {
-    leader* new_leader;
-    leader* leader_who_plucked;
-    pikmin* pik;
-    pluck_info(leader* new_leader, leader* leader_who_plucked, pikmin* pik) {
-        this->new_leader = new_leader;
-        this->leader_who_plucked = leader_who_plucked;
-        this->pik = pik;
-    }
-};
-
-struct dismiss_info {
-    float angle;
-    pikmin* pik;
-    dismiss_info(const float angle, pikmin* pik) {
-        this->angle = angle; this->pik = pik;
-    }
-};
 
 #endif // ifndef PIKMIN_INCLUDED

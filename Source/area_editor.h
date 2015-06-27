@@ -13,9 +13,13 @@
 #define AREA_EDITOR_INCLUDED
 
 #include <string>
+#include <unordered_set>
+#include <vector>
 
 #include <allegro5/allegro.h>
 
+#include "LAFI/gui.h"
+#include "LAFI/widget.h"
 #include "sector.h"
 
 using namespace std;
@@ -74,6 +78,42 @@ void sector_to_gui();
 void shadow_to_gui();
 float snap_to_grid(const float c);
 void update_review_frame();
+
+extern bool                         bg_aspect_ratio;
+extern ALLEGRO_BITMAP*              bg_bitmap;
+extern string                       bg_file_name;
+extern float                        bg_x;
+extern float                        bg_y;
+extern float                        bg_w;
+extern float                        bg_h;
+extern unsigned char                bg_a;
+extern mob_gen*                     cur_mob;
+extern sector*                      cur_sector;
+extern tree_shadow*                 cur_shadow;
+extern float                        double_click_time;
+extern mob_gen*                     error_mob_ptr;
+extern sector*                      error_sector_ptr;
+extern tree_shadow*                 error_shadow_ptr;
+extern string                       error_string;
+extern unsigned char                error_type;
+extern vertex*                      error_vertex_ptr;
+extern string                       file_name;
+extern lafi::gui*                   gui;
+extern bool                         holding_m1;
+extern bool                         holding_m2;
+extern vector<linedef_intersection> intersecting_lines;
+extern unordered_set<linedef*>      lone_lines;
+extern unsigned char                mode;
+extern size_t                       moving_thing; // Current vertex, object or shadow being moved.
+extern float                        moving_thing_x; // Relative X coordinate of the point where the vertex, object or shadow was grabbed.
+extern float                        moving_thing_y;
+extern unordered_set<sector*>       non_simples;
+extern sector*                      on_sector;
+extern unsigned char                sec_mode; // Secondary/sub mode.
+extern bool                         shift_pressed;
+extern bool                         show_bg;
+extern bool                         show_shadows;
+extern lafi::widget*                wum; // Widget under mouse.
 
 };
 

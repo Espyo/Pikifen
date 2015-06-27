@@ -27,8 +27,7 @@ using namespace std;
 /* ----------------------------------------------------------------------------
  * Structure with info for the bitmap manager.
  */
-class bmp_info {
-public:
+struct bmp_info {
     ALLEGRO_BITMAP* b;
     size_t calls;
     bmp_info(ALLEGRO_BITMAP* b = NULL);
@@ -67,11 +66,44 @@ public:
  * Finally, it should be noted that animation frames
  * are not the only thing using the bitmap manager.
  */
-class bmp_manager {
+struct bmp_manager {
 public:
     map<string, bmp_info> list;
     ALLEGRO_BITMAP* get(const string &name, data_node* node);
     void detach(const string &name);
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * A distance.
+ * Basically this is just a number, but for optimization's sake,
+ * This number is actually the distance SQUARED.
+ * It's better to compare two squared distances than square-rooting them both.
+ */
+struct dist {
+private:
+    float distance_squared;
+    float normal_distance;
+    bool has_normal_distance;
+    
+public:
+    dist(const float x1, const float y1, const float x2, const float y2);
+    dist(const float d = 0.0f);
+    float to_float();
+    bool operator <(const float d2);
+    bool operator <(const dist &d2);
+    bool operator <=(const float d2);
+    bool operator <=(const dist &d2);
+    bool operator >(const float d2);
+    bool operator >(const dist &d2);
+    bool operator >=(const float d2);
+    bool operator >=(const dist &d2);
+    bool operator ==(const float d2);
+    bool operator ==(const dist &d2);
+    bool operator !=(const float d2);
+    bool operator !=(const dist &d2);
+    void operator +=(const dist &d2);
 };
 
 

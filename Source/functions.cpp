@@ -14,13 +14,16 @@
 #pragma warning(disable : 4996) // Disables warning about localtime being deprecated.
 
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <math.h>
+#include <sstream>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "area_editor.h"
 #include "const.h"
 #include "data_file.h"
 #include "drawing.h"
@@ -49,18 +52,6 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
     return c2;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the distance between two points is smaller
- * or equal to the comparison distance. This function does not
- * use sqrt, so it's faster.
- */
-bool check_dist(float x1, float y1, float x2, float y2, float distance_to_check) {
-    float dx = x2 - x1;
-    float dy = y2 - y1;
-    return (dx * dx + dy * dy) <= distance_to_check * distance_to_check;
 }
 
 
@@ -125,7 +116,7 @@ void clear_area_textures() {
  */
 void coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude) {
     *angle = atan2(y_coord, x_coord);
-    *magnitude = dist(0, 0, x_coord, y_coord);
+    *magnitude = dist(0, 0, x_coord, y_coord).to_float();
 }
 
 
@@ -185,7 +176,8 @@ void error_log(string s, data_node* d) {
  * Returns whether or not the string s is inside the vector of strings v.
  */
 bool find_in_vector(const vector<string> v, const string s) {
-    for(auto i = v.begin(); i != v.end(); i++) if(*i == s) return true;
+    size_t v_size = v.size();
+    for(size_t i = 0; i < v_size; i++) if(v[i] == s) return true;
     return false;
 }
 
@@ -645,12 +637,12 @@ void load_area(const string name, const bool load_for_editor) {
     
     
     // Editor background.
-    ed_bg_file_name = file.get_child_by_name("ed_bg_file_name")->value;
-    ed_bg_x =     s2f(file.get_child_by_name("ed_bg_x")->value);
-    ed_bg_y =     s2f(file.get_child_by_name("ed_bg_y")->value);
-    ed_bg_w =     s2f(file.get_child_by_name("ed_bg_w")->value);
-    ed_bg_h =     s2f(file.get_child_by_name("ed_bg_h")->value);
-    ed_bg_a =     s2i(file.get_child_by_name("ed_bg_alpha")->get_value_or_default("255"));
+    area_editor::bg_file_name = file.get_child_by_name("bg_file_name")->value;
+    area_editor::bg_x =     s2f(file.get_child_by_name("bg_x")->value);
+    area_editor::bg_y =     s2f(file.get_child_by_name("bg_y")->value);
+    area_editor::bg_w =     s2f(file.get_child_by_name("bg_w")->value);
+    area_editor::bg_h =     s2f(file.get_child_by_name("bg_h")->value);
+    area_editor::bg_a =     s2i(file.get_child_by_name("bg_alpha")->get_value_or_default("255"));
     
     
     
@@ -1292,6 +1284,14 @@ string b2s(const bool b) { return b ? "true" : "false"; }
 string c2s(const ALLEGRO_COLOR &c) {
     return f2s(c.r * 255) + " " + f2s(c.g * 255) + " " + f2s(c.b * 255) +
            (c.a == 1 ? "" : " " + f2s(c.a * 255));
+}
+
+
+// Converts a float to a string, with 2 decimal places.
+string f2s(const float f) {
+    std::stringstream s;
+    s << std::fixed << ::setprecision(2) << f;
+    return s.str();
 }
 
 

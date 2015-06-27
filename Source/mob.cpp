@@ -27,7 +27,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     this->type = type;
     this->angle = angle;
     
-    sector* sec = get_sector(x, y, NULL, true);
+    sector* sec = get_sector(x, y, nullptr, true);
     z = sec->z;
     ground_z = sec->z;
     lighting = sec->brightness;
@@ -51,30 +51,30 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     gtt_instant = false;
     target_x = x;
     target_y = y;
-    target_z = NULL;
-    target_rel_x = NULL;
-    target_rel_y = NULL;
+    target_z = nullptr;
+    target_rel_x = nullptr;
+    target_rel_y = nullptr;
     can_move = true;
     
-    focused_opponent = NULL;
-    focused_opponent_near = false;
+    focused_mob = nullptr;
     
     fsm = mob_fsm(this);
     fsm.set_state(type->first_state_nr);
     spawned = false;
     timer = timer_interval = 0;
-    script_wait_event = NULL;
+    script_wait_event = nullptr;
     dead = false;
     state = MOB_STATE_IDLE;
     time_in_state = 0;
+    big_damage_ev_queued = false;
     
-    following_party = NULL;
+    following_party = nullptr;
     was_thrown = false;
     unwhistlable_period = 0;
     untouchable_period = 0;
-    party = NULL;
+    party = nullptr;
     
-    carrier_info = NULL;
+    carrier_info = nullptr;
 }
 
 
@@ -144,7 +144,7 @@ void mob::tick_brain() {
                 
                 speed = 0;
                 reached_destination = true;
-                fsm.run_event(MOB_EVENT_REACH_DESTINATION);
+                fsm.run_event(MOB_EVENT_REACHED_DESTINATION);
             }
             
         }
@@ -246,17 +246,15 @@ void mob::tick_physics() {
                     z = *target_z;
                 }
                 speed_x = speed_y = speed_z = 0;
+                x = final_target_x;
+                y = final_target_y;
             }
-            
-        } else if(reached_destination) {
-            //go_to_target = false;
-            speed = 0;
             
         } else {
             if(can_move) {
             
                 // Make it go to the direction it wants.
-                float d = dist(x, y, final_target_x, final_target_y);
+                float d = dist(x, y, final_target_x, final_target_y).to_float();
                 float move_amount = min((double) (d / delta_t), (double) speed);
                 
                 float movement_angle = gtt_free_move ?
@@ -486,29 +484,30 @@ void mob::tick_script() {
     }
     
     //TODO move these to the logic code, on the code where all mobs interact with all mobs.
-    mob_event* see_opponent_ev  = fsm.get_event(MOB_EVENT_SEE_OPPONENT);
+    /*
+    mob_event* see_opponent_ev  = fsm.get_event(MOB_EVENT_SEEN_OPPONENT);
     mob_event* lose_opponent_ev = fsm.get_event(MOB_EVENT_LOSE_OPPONENT);
     mob_event* near_opponent_ev = fsm.get_event(MOB_EVENT_NEAR_OPPONENT);
     if(see_opponent_ev || lose_opponent_ev || near_opponent_ev) {
     
         mob* real_opponent = NULL;
         if(focused_opponent) if(!focused_opponent->dead) real_opponent = focused_opponent;
-        
+    
         if(real_opponent) {
-            float d = dist(x, y, real_opponent->x, real_opponent->y);
-            
+            dist d(x, y, real_opponent->x, real_opponent->y);
+    
             // Opponent is near.
             if(d <= type->near_radius) {
                 focused_opponent_near = true;
                 if(near_opponent_ev) near_opponent_ev->run(this);
             }
-            
+    
             if(d > type->sight_radius) {
                 // Opponent is suddenly out of sight.
                 unfocus_mob(this, real_opponent, true);
-                
+    
             } else {
-            
+    
                 // Opponent was near, but is now far.
                 if(focused_opponent_near) {
                     if(d > type->near_radius) {
@@ -516,23 +515,24 @@ void mob::tick_script() {
                     }
                 }
             }
-            
+    
         } else {
-        
+    
             //Find an opponent.
             for(auto m = mobs.begin(); m != mobs.end(); m++) {
                 if(should_attack(this, *m)) {
-                    float d = dist(x, y, (*m)->x, (*m)->y);
+                    dist d(x, y, (*m)->x, (*m)->y);
                     if(d <= type->sight_radius) {
                         focus_mob(this, *m, d <= type->near_radius, true);
                         break;
                     }
                 }
             }
-            
+    
         }
-        
+    
     }
+    */
     
     //Timer events.
     mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
@@ -547,13 +547,13 @@ void mob::tick_script() {
     }
     
     //Has it reached its home?
-    mob_event* reach_dest_ev = fsm.get_event(MOB_EVENT_REACH_DESTINATION);
+    mob_event* reach_dest_ev = fsm.get_event(MOB_EVENT_REACHED_DESTINATION);
     if(reach_dest_ev && reached_destination) {
         reach_dest_ev->run(this);
     }
     
     //Is it dead?
-    if(!dead && health <= 0) {
+    if(health <= 0) {
         dead = true;
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
@@ -590,9 +590,9 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
     this->target_z = target_z;
-    this->gtt_free_move =
-        this->target_distance = target_distance;
-        
+    this->gtt_free_move = free_move;
+    this->target_distance = target_distance;
+    
     go_to_target = true;
     reached_destination = false;
 }
@@ -619,22 +619,26 @@ void mob::remove_target(bool stop) {
 /* ----------------------------------------------------------------------------
  * Makes the mob eat some of the enemies it has chomped on.
  * nr: Number of captured enemies to swallow.
-   * 0:  Release all of them.
-   * -1: Eat all of them.
+   * 0:            Release all of them.
+   * string::npos: Eat all of them.
  */
 void mob::eat(const size_t nr) {
 
     if(nr == 0) {
+        for(size_t p = 0; p < chomping_pikmin.size(); p++) {
+            chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
+        }
         chomping_pikmin.clear();
         return;
     }
     
     size_t total = min(nr, chomping_pikmin.size());
-    if(nr < 0) total = chomping_pikmin.size();
     
-    for(size_t e = 0; e < total; e++) {
-        chomping_pikmin[e]->health = 0;
+    for(size_t p = 0; p < total; p++) {
+        chomping_pikmin[p]->health = 0;
+        chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
     }
+    chomping_pikmin.clear();
 }
 
 
@@ -653,15 +657,6 @@ void mob::face(float new_angle) {
 void mob::set_animation(const size_t nr) {
     if(nr >= type->anims.animations.size()) return;
     anim.change(nr, false, false, false);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets which hitboxes will "chomp" enemies.
- * h: Vector of hitbox numbers.
- */
-void mob::set_chomp_hitboxes(const vector<int> &h) {
-    chomp_hitboxes = h;
 }
 
 
@@ -712,7 +707,7 @@ void mob::set_var(const string name, const string value) {
  * Sets up stuff for the beginning of the mob's death process.
  */
 void mob::start_dying() {
-    if(typeid(this) == typeid(enemy)) {
+    if(typeid(*this) == typeid(enemy)) {
         random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, x, y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
     }
 }
@@ -722,7 +717,7 @@ void mob::start_dying() {
  * Sets up stuff for the end of the mob's dying process.
  */
 void mob::finish_dying() {
-    if(typeid(this) == typeid(enemy)) {
+    if(typeid(*this) == typeid(enemy)) {
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
             carrier_info = new carrier_info_struct(this, e_ptr->ene_type->max_carriers, false);
@@ -777,13 +772,6 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
  * Makes all carrying Pikmin drop it in the process.
  */
 carrier_info_struct::~carrier_info_struct() {
-    for(size_t s = 0; s < max_carriers; s++) {
-        if(carrier_spots[s]) {
-            if(typeid(*carrier_spots[s]) == typeid(pikmin)) {
-                drop_mob((pikmin*) carrier_spots[s]);
-            }
-        }
-    }
 }
 
 
@@ -821,7 +809,7 @@ void add_to_party(mob* party_leader, mob* new_member) {
  * Makes m1 attack m2.
  * Stuff like status effects and maturity (Pikmin only) are taken into account.
  */
-void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period) {
+void mob::attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period) {
     if(m2->invuln_period > 0) return;
     
     pikmin* p_ptr = NULL;
@@ -836,10 +824,11 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
     m2->health -= damage;
     
     if(knockback != 0) {
+        //TODO make these not be magic numbers.
         m2->remove_target(true);
-        m2->speed_x = cos(angle) * knockback;
-        m2->speed_y = sin(angle) * knockback;
-        m2->speed_z = 500;
+        m2->speed_x = cos(angle) * knockback * 130;
+        m2->speed_y = sin(angle) * knockback * 130;
+        m2->speed_z = 200;
     }
     
     m2->fsm.run_event(MOB_EVENT_DAMAGE, m2);
@@ -847,7 +836,7 @@ void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const
     // If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
     if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
         if(floor((m2->health + damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
-            m2->fsm.run_event(MOB_EVENT_BIG_DAMAGE, m2);
+            m2->big_damage_ev_queued = true;
         }
     }
 }
@@ -898,16 +887,12 @@ void create_mob(mob* m) {
  */
 void delete_mob(mob* m) {
     remove_from_party(m);
-    vector<mob*> focusers = m->focused_by;
-    for(size_t m_nr = 0; m_nr < focusers.size(); m_nr++) {
-        unfocus_mob(focusers[m_nr], m, true);
-    }
     
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
     if(typeid(*m) == typeid(pikmin)) {
         pikmin* p_ptr = (pikmin*) m;
-        drop_mob(p_ptr);
+        pikmin::forget_about_carrying(m, NULL, NULL);
         pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
         
     } else if(typeid(*m) == typeid(leader)) {
@@ -946,18 +931,10 @@ void delete_mob(mob* m) {
 /* ----------------------------------------------------------------------------
  * Makes m1 focus on m2.
  */
-void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event) {
-    unfocus_mob(m1, m1->focused_opponent, false);
+void focus_mob(mob* m1, mob* m2) {
+    unfocus_mob(m1);
     
-    m1->focused_opponent = m2;
-    m1->focused_opponent_near = true;
-    m2->focused_by.push_back(m1);
-    
-    if(call_event) {
-        m1->focused_opponent_near = is_near;
-        if(is_near) m1->fsm.run_event(MOB_EVENT_NEAR_OPPONENT, m1);
-        else m1->fsm.run_event(MOB_EVENT_SEE_OPPONENT, m1);
-    }
+    m1->focused_mob = m2;
 }
 
 
@@ -976,7 +953,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
         float hx, hy;
         rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
-        float d = dist(x - m->x, y - m->y, hx, hy) - h_ptr->radius;
+        float d = dist(x - m->x, y - m->y, hx, hy).to_float() - h_ptr->radius;
         if(h == 0 || d < closest_hitbox_dist) {
             closest_hitbox_dist = d;
             closest_hitbox = h_ptr;
@@ -988,15 +965,12 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the hitbox instance in the current animation with the specified name.
+ * Returns the hitbox instance in the current animation with the specified number.
  */
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
     frame* f = m->anim.get_frame();
-    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
-        hitbox_instance* h_ptr = &f->hitbox_instances[h];
-        if(h_ptr->hitbox_nr == nr) return h_ptr;
-    }
-    return NULL;
+    if(!f) return NULL;
+    return &f->hitbox_instances[nr];
 }
 
 
@@ -1045,21 +1019,8 @@ bool should_attack(mob* m1, mob* m2) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes m1 lose focus on m2.
+ * Makes m1 lose focus on its current mob.
  */
-void unfocus_mob(mob* m1, mob* m2, const bool call_event) {
-    if(m2) {
-        if(m1->focused_opponent != m2) return;
-        
-        for(size_t m = 0; m < m2->focused_by.size();) {
-            if(m2->focused_by[m] == m1) m2->focused_by.erase(m2->focused_by.begin() + m);
-            else m++;
-        }
-    }
-    
-    m1->focused_opponent = NULL;
-    m1->focused_opponent_near = false;
-    if(call_event) {
-        m1->fsm.run_event(MOB_EVENT_LOSE_OPPONENT, m1);
-    }
+void unfocus_mob(mob* m1) {
+    m1->focused_mob = nullptr;
 }

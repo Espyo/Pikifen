@@ -143,16 +143,14 @@ public:
     // Script.
     mob_fsm fsm;                      // Finitate-state machine.
     bool spawned;                     // Has the mob actually "spawned" yet?
-    mob* focused_opponent;            // The opponent (prey) it has focus on.
-    bool focused_opponent_near;       // Was the opponent near the mob in the previous frame?
-    vector<mob*> focused_by;          // Mobs that are focusing on it.
+    mob* focused_mob;                 // The mob it has focus on.
     float timer;                      // The timer.
     float timer_interval;             // The timer's interval.
     map<string, string> vars;         // Variables.
     mob_event* script_wait_event;     // What event is the script waiting on?
     size_t script_wait_action;        // Number of the action the script returns to after the wait is over.
+    bool big_damage_ev_queued;        // Are we waiting to report the big damage event?
     
-    void set_chomp_hitboxes(const vector<int> &h);
     void eat(size_t nr);
     void set_animation(const size_t nr);
     void set_health(const bool rel, const float amount);
@@ -166,27 +164,29 @@ public:
     float time_in_state;           // For how long as the mob been in this state?
     vector<int> chomp_hitboxes;    // List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  // Mobs being chomped.
+    size_t chomp_max;              // Max mobs it can chomp in the current attack.
     void set_state(const unsigned char new_state);
     
     // Carrying.
     carrier_info_struct* carrier_info; // Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
     
     void tick();
+    
+    static void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
 };
 
 
 
 void add_to_party(mob* party_leader, mob* new_member);
-void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
 void create_mob(mob* m);
 void delete_mob(mob* m);
-void focus_mob(mob* m1, mob* m2, const bool is_near, const bool call_event);
+void focus_mob(mob* m1, mob* m2);
 hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m);
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
 void make_uncarriable(mob* m);
 void remove_from_party(mob* member);
 bool should_attack(mob* m1, mob* m2);
-void unfocus_mob(mob* m1, mob* m2, const bool call_event);
+void unfocus_mob(mob* m1);
 
 
 
@@ -214,12 +214,18 @@ enum MOB_STATE_IDS {
     PIKMIN_STATE_BURIED,
     PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
     PIKMIN_STATE_GRABBED_BY_LEADER,
+    PIKMIN_STATE_GRABBED_BY_ENEMY,
+    PIKMIN_STATE_KNOCKED_BACK,
     PIKMIN_STATE_THROWN,
     PIKMIN_STATE_GOING_TO_TASK,
+    PIKMIN_STATE_GOING_TO_DISMISS_SPOT,
     PIKMIN_STATE_BUSY,
     PIKMIN_STATE_CARRYING,
-    PIKMIN_STATE_ATTACKING_MOB,
+    PIKMIN_STATE_ATTACKING_GROUNDED,
+    PIKMIN_STATE_ATTACKING_LATCHED,
     PIKMIN_STATE_CELEBRATING,
+    PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
+    PIKMIN_STATE_GOING_TO_OPPONENT,
 };
 
 #endif // ifndef MOB_INCLUDED

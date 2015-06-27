@@ -81,7 +81,7 @@ movement_struct::movement_struct() {
  * of joystick), this can return values larger than 1.
  */
 float movement_struct::get_intensity() {
-    return dist(0, 0, get_x(), get_y());
+    return dist(0, 0, get_x(), get_y()).to_float();
 }
 
 /* ----------------------------------------------------------------------------
@@ -97,6 +97,89 @@ float movement_struct::get_x() {
  */
 float movement_struct::get_y() {
     return down - up;
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new distance number, given two points.
+ */
+dist::dist(const float x1, const float y1, const float x2, const float y2) {
+    distance_squared = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
+    has_normal_distance = false;
+    normal_distance = 0;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a new distance number, given a non-squared distance.
+ */
+dist::dist(const float d) {
+    distance_squared = d * d;
+    has_normal_distance = true;
+    normal_distance = d;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the regular distance as a number.
+ */
+float dist::to_float() {
+    if(has_normal_distance) {
+        return normal_distance;
+    } else {
+        normal_distance = sqrt(distance_squared);
+        has_normal_distance = true;
+        return normal_distance;
+    }
+}
+
+/* ----------------------------------------------------------------------------
+ * Distance comparisons
+ */
+bool dist::operator<(const float d2) {
+    return distance_squared < (d2 * d2);
+}
+bool dist::operator>(const float d2) {
+    return distance_squared > (d2 * d2);
+}
+bool dist::operator==(const float d2) {
+    return distance_squared == (d2 * d2);
+}
+bool dist::operator<=(const float d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const float d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const float d2) {
+    return !operator==(d2);
+}
+
+bool dist::operator<(const dist &d2) {
+    return distance_squared < d2.distance_squared;
+}
+bool dist::operator>(const dist &d2) {
+    return distance_squared > d2.distance_squared;
+}
+bool dist::operator==(const dist &d2) {
+    return distance_squared == d2.distance_squared;
+}
+bool dist::operator<=(const dist &d2) {
+    return !operator>(d2);
+}
+bool dist::operator>=(const dist &d2) {
+    return !operator<(d2);
+}
+bool dist::operator!=(const dist &d2) {
+    return !operator==(d2);
+}
+
+void dist::operator+=(const dist &d2) {
+    distance_squared += d2.distance_squared;
+    if(has_normal_distance && d2.has_normal_distance) {
+        normal_distance += d2.normal_distance;
+    } else {
+        has_normal_distance = false;
+    }
 }
 
 

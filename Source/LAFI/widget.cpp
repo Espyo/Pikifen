@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "widget.h"
 
 namespace lafi {
@@ -21,15 +23,15 @@ widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char
     mouse_in = false;
     mouse_clicking = false;
     
-	mouse_move_handler = nullptr;
-	left_mouse_click_handler = nullptr;
-	mouse_down_handler = nullptr;
-	mouse_up_handler = nullptr;
-	mouse_wheel_handler = nullptr;
+    mouse_move_handler = nullptr;
+    left_mouse_click_handler = nullptr;
+    mouse_down_handler = nullptr;
+    mouse_up_handler = nullptr;
+    mouse_wheel_handler = nullptr;
     mouse_enter_handler = nullptr;
-	mouse_leave_handler = nullptr;
-	get_focus_handler = nullptr;
-	lose_focus_handler = nullptr;
+    mouse_leave_handler = nullptr;
+    get_focus_handler = nullptr;
+    lose_focus_handler = nullptr;
     
     needs_init = false;
 }
@@ -55,15 +57,15 @@ widget::widget(widget &w2) {
     mouse_in = false;
     mouse_clicking = false;
     
-	mouse_move_handler = nullptr;
-	left_mouse_click_handler = nullptr;
-	mouse_down_handler = nullptr;
-	mouse_up_handler = nullptr;
-	mouse_wheel_handler = nullptr;
-	mouse_enter_handler = nullptr;
-	mouse_leave_handler = nullptr;
-	get_focus_handler = nullptr;
-	lose_focus_handler = nullptr;
+    mouse_move_handler = nullptr;
+    left_mouse_click_handler = nullptr;
+    mouse_down_handler = nullptr;
+    mouse_up_handler = nullptr;
+    mouse_wheel_handler = nullptr;
+    mouse_enter_handler = nullptr;
+    mouse_leave_handler = nullptr;
+    get_focus_handler = nullptr;
+    lose_focus_handler = nullptr;
     
     needs_init = false;
 }
@@ -237,18 +239,32 @@ void widget::draw() {
         }
     }
     
+    int ox, oy;
+    get_offset(&ox, &oy);
+    
     int ocr_x, ocr_y, ocr_w, ocr_h;  // Original clipping rectangle.
     al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
     
     if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
-        al_set_clipping_rectangle(x1, y1, x2 - x1, y2 - y1);
+        int rx1 = x1 + ox;
+        int rx2 = x2 + ox;
+        int ry1 = y1 + oy;
+        int ry2 = y2 + oy;
+        int w = rx2 - rx1;
+        int h = ry2 - ry1;
+        int ocr_x2 = ocr_x + ocr_w;
+        int ocr_y2 = ocr_y + ocr_h;
+        al_set_clipping_rectangle(
+            max(rx1, ocr_x),
+            max(ry1, ocr_y),
+            min(ocr_x2, rx2) - rx1,
+            min(ocr_y2, ry2) - ry1
+        );
     }
     {
         draw_self();
         
         ALLEGRO_TRANSFORM t;
-        int ox, oy;
-        get_offset(&ox, &oy);
         al_build_transform(&t, ox + children_offset_x, oy + children_offset_y, 1, 1, 0);
         
         ALLEGRO_TRANSFORM old;

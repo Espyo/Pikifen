@@ -18,6 +18,10 @@
 #include "pikmin.h"
 #include "vars.h"
 
+//Because we get events so many times per frame, it's faster
+//to access them directly than to call a function.
+#define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state ? (m_ptr)->fsm.cur_state->events[(ev_type)] : nullptr)
+
 void do_logic() {
 
     /*  ********************************************
@@ -69,14 +73,14 @@ void do_logic() {
         }
     }
     
-    float leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
+    dist leader_to_cursor_dis(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
     for(size_t a = 0; a < group_move_arrows.size(); ) {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
-        float max_dist =
-            ((group_move_intensity > 0) ? max_dist = CURSOR_MAX_DIST* group_move_intensity : leader_to_cursor_dis);
+        dist max_dist =
+            ((group_move_intensity > 0) ? CURSOR_MAX_DIST* group_move_intensity : leader_to_cursor_dis);
             
-        if(group_move_arrows[a] >= max_dist) {
+        if(max_dist < group_move_arrows[a]) {
             group_move_arrows.erase(group_move_arrows.begin() + a);
         } else {
             a++;
@@ -129,7 +133,7 @@ void do_logic() {
     for(size_t r = 0; r < whistle_rings.size(); ) {
         // Erase rings that go beyond the cursor.
         whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
-        if(whistle_rings[r] >= leader_to_cursor_dis) {
+        if(leader_to_cursor_dis < whistle_rings[r]) {
             whistle_rings.erase(whistle_rings.begin() + r);
             whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
         } else {
@@ -249,12 +253,13 @@ void do_logic() {
                 }
             }
             
-            if(m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
+            if(m_ptr->carrier_info && m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
                 if(m_ptr->carrier_info->carry_to_ship) {
                     // Find ship.
                     // TODO.
                     
                 } else {
+                    //TODO make the pellet, enemy, etc. class react to this via script (i.e. was_delivered event).
                     // Find Onion.
                     size_t n_onions = onions.size();
                     size_t o = 0;
@@ -288,6 +293,313 @@ void do_logic() {
                 if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
             }
             
+            
+            
+            /********************************
+             *                              *
+             *   Mob interactions   () - () *
+             *                              *
+             ********************************/
+            //Interactions between this mob and the others.
+            
+            for(size_t m2 = 0; m2 < n_mobs; m2++) {
+                if(m == m2) continue;
+                mob* m2_ptr = mobs[m2];
+                
+                dist d(m_ptr->x, m_ptr->y, m2_ptr->x, m2_ptr->y);
+                
+                if(!m2_ptr->dead) {
+                    //Check "see"s.
+                    mob_event* see_op_ev = q_get_event(m_ptr, MOB_EVENT_SEEN_OPPONENT);
+                    mob_event* see_ob_ev = q_get_event(m_ptr, MOB_EVENT_SEEN_OBJECT);
+                    if(see_op_ev || see_ob_ev) {
+                    
+                        if(d <= (m_ptr->type->radius + m2_ptr->type->radius + m_ptr->type->sight_radius)) {
+                            if(see_ob_ev) see_ob_ev->run(m_ptr, (void*) m2_ptr);
+                            if(see_op_ev && should_attack(m_ptr, m2_ptr)) {
+                                see_op_ev->run(m_ptr, (void*) m2_ptr);
+                            }
+                        }
+                        
+                    }
+                    
+                    //Check "near"s.
+                    mob_event* near_op_ev = q_get_event(m_ptr, MOB_EVENT_NEAR_OPPONENT);
+                    mob_event* near_ob_ev = q_get_event(m_ptr, MOB_EVENT_NEAR_OBJECT);
+                    if(near_op_ev || near_ob_ev) {
+                    
+                        if(d <= (m_ptr->type->radius + m2_ptr->type->radius + m_ptr->type->near_radius)) {
+                            if(near_ob_ev) near_ob_ev->run(m_ptr, (void*) m2_ptr);
+                            if(near_op_ev && should_attack(m_ptr, m2_ptr)) {
+                                near_op_ev->run(m_ptr, (void*) m2_ptr);
+                            }
+                        }
+                        
+                    }
+                    
+                    //Check if it's facing.
+                    mob_event* facing_op_ev = q_get_event(m_ptr, MOB_EVENT_FACING_OPPONENT);
+                    mob_event* facing_ob_ev = q_get_event(m_ptr, MOB_EVENT_FACING_OBJECT);
+                    if(facing_op_ev || facing_ob_ev) {
+                    
+                        float angle_dif = get_angle_smallest_dif(m_ptr->angle, atan2(m2_ptr->y - m_ptr->y, m2_ptr->x - m_ptr->x));
+                        if(
+                            d <= (m_ptr->type->radius + m2_ptr->type->radius + m_ptr->type->near_radius) &&
+                            angle_dif <= (m_ptr->type->near_angle / 2.0)
+                        ) {
+                        
+                            if(facing_ob_ev) facing_ob_ev->run(m_ptr, (void*) m2_ptr);
+                            if(facing_op_ev && should_attack(m_ptr, m2_ptr)) {
+                                facing_op_ev->run(m_ptr, (void*) m2_ptr);
+                            }
+                        }
+                        
+                    }
+                }
+                
+                //Check touches.
+                mob_event* touch_op_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
+                mob_event* touch_le_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_LEADER);
+                mob_event* touch_ob_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
+                if(touch_op_ev || touch_le_ev || touch_ob_ev) {
+                
+                    if(d <= (m_ptr->type->radius + m2_ptr->type->radius)) {
+                        if(touch_ob_ev) touch_ob_ev->run(m_ptr, (void*) m2_ptr);
+                        if(touch_op_ev && should_attack(m_ptr, m2_ptr)) {
+                            touch_op_ev->run(m_ptr, (void*) m2_ptr);
+                        }
+                        if(touch_le_ev && m2_ptr == cur_leader_ptr) {
+                            touch_le_ev->run(m_ptr, (void*) m2_ptr);
+                        }
+                    }
+                    
+                }
+                
+                //Check hitbox touches.
+                mob_event* hitbox_touch_an_ev =  q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
+                mob_event* hitbox_touch_na_ev =  q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
+                mob_event* hitbox_touch_eat_ev = q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
+                if(hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) {
+                
+                    frame* f1_ptr = m_ptr->anim.get_frame();
+                    frame* f2_ptr = m2_ptr->anim.get_frame();
+                    
+                    bool reported_an_ev = false;
+                    bool reported_na_ev = false;
+                    bool reported_eat_ev = false;
+                    
+                    //If neither of the mobs have hitboxes up, never mind.
+                    bool m1_is_pikmin = typeid(*m_ptr) == typeid(pikmin);
+                    bool m1_has_hitboxes = f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_pikmin);
+                    bool m2_has_hitboxes = f2_ptr && !f2_ptr->hitbox_instances.empty();
+                    
+                    if(m1_has_hitboxes && m2_has_hitboxes) {
+                    
+                        //If they're so far away the hitboxes can't touch, just skip the check.
+                        if(d < f1_ptr->hitbox_span + f2_ptr->hitbox_span) {
+                        
+                            float m1_angle_sin = 0;
+                            float m1_angle_cos = 0;
+                            if(!m1_is_pikmin) {
+                                m1_angle_sin = sin(m_ptr->angle);
+                                m1_angle_cos = cos(m_ptr->angle);
+                            }
+                            float m2_angle_sin = sin(m2_ptr->angle);
+                            float m2_angle_cos = cos(m2_ptr->angle);
+                            
+                            //For all of mob 2's hitboxes, check for collisions.
+                            for(size_t h2 = 0; h2 < f2_ptr->hitbox_instances.size(); h2++) {
+                                hitbox_instance* h2_ptr = &f2_ptr->hitbox_instances[h2];
+                                
+                                //Get mob 2's real hitbox location.
+                                float m2_h_x = m2_ptr->x + (h2_ptr->x * m2_angle_cos - h2_ptr->y * m2_angle_sin);
+                                float m2_h_y = m2_ptr->y + (h2_ptr->x * m2_angle_sin + h2_ptr->y * m2_angle_cos);
+                                float m2_h_z = m2_ptr->z + h2_ptr->z;
+                                
+                                if(m1_is_pikmin) {
+                                    //Just check if the entire Pikmin touched mob 2's hitbox.
+                                    
+                                    if(
+                                        m_ptr->z >= m2_h_z &&
+                                        m_ptr->z <= m2_h_z + h2_ptr->height &&
+                                        dist(m_ptr->x, m_ptr->y, m2_h_x, m2_h_y) <
+                                        (m_ptr->type->radius + h2_ptr->radius)
+                                    ) {
+                                        //Collision!
+                                        if(
+                                            hitbox_touch_eat_ev && !reported_eat_ev &&
+                                            h2_ptr->type != HITBOX_TYPE_DISABLED &&
+                                            m2_ptr->chomping_pikmin.size() < m2_ptr->chomp_max &&
+                                            find(m2_ptr->chomp_hitboxes.begin(), m2_ptr->chomp_hitboxes.end(), h2_ptr->hitbox_nr) !=
+                                            m2_ptr->chomp_hitboxes.end()
+                                        ) {
+                                            hitbox_touch_eat_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                            m2_ptr->chomping_pikmin.push_back(m_ptr);
+                                            reported_eat_ev = true;
+                                        }
+                                        
+                                        if(
+                                            h2_ptr->type == HITBOX_TYPE_ATTACK &&
+                                            hitbox_touch_na_ev && !reported_na_ev &&
+                                            !reported_eat_ev //This way, Pikmin aren't knocked back AND eaten.
+                                        ) {
+                                            hitbox_touch_na_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                            reported_na_ev = true;
+                                            
+                                        } else if(
+                                            h2_ptr->type == HITBOX_TYPE_NORMAL &&
+                                            hitbox_touch_an_ev && !reported_an_ev
+                                        ) {
+                                            hitbox_touch_an_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                            reported_an_ev = true;
+                                        }
+                                    }
+                                    
+                                } else {
+                                    //Check if any hitbox touched mob 2's hitbox.
+                                    
+                                    for(size_t h1 = 0; h1 < f1_ptr->hitbox_instances.size(); h1++) {
+                                    
+                                        hitbox_instance* h1_ptr = &f1_ptr->hitbox_instances[h1];
+                                        if(h1_ptr->type == HITBOX_TYPE_DISABLED) continue;
+                                        
+                                        //Get mob 1's real hitbox location.
+                                        float m1_h_x = m_ptr->x + (h1_ptr->x * m1_angle_cos - h1_ptr->y * m1_angle_sin);
+                                        float m1_h_y = m_ptr->y + (h1_ptr->x * m1_angle_sin + h1_ptr->y * m1_angle_cos);
+                                        float m1_h_z = m_ptr->z + h1_ptr->z;
+                                        
+                                        if(
+                                            m_ptr->z + h1_ptr->height >= m2_h_z &&
+                                            m_ptr->z <= m2_h_z + h2_ptr->height &&
+                                            dist(m1_h_x, m1_h_y, m2_h_x, m2_h_y) <
+                                            (h1_ptr->radius + h2_ptr->radius)
+                                        ) {
+                                            //Collision!
+                                            if(
+                                                hitbox_touch_eat_ev && !reported_eat_ev &&
+                                                h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                                                h2_ptr->type != HITBOX_TYPE_DISABLED &&
+                                                m2_ptr->chomping_pikmin.size() < m2_ptr->chomp_max &&
+                                                find(m2_ptr->chomp_hitboxes.begin(), m2_ptr->chomp_hitboxes.end(), h2_ptr->hitbox_nr) !=
+                                                m2_ptr->chomp_hitboxes.end()
+                                            ) {
+                                                hitbox_touch_eat_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                                m2_ptr->chomping_pikmin.push_back(m_ptr);
+                                                reported_eat_ev = true;
+                                            }
+                                            
+                                            if(
+                                                h1_ptr->type == HITBOX_TYPE_NORMAL &&
+                                                h2_ptr->type == HITBOX_TYPE_ATTACK &&
+                                                hitbox_touch_na_ev && !reported_na_ev
+                                            ) {
+                                                hitbox_touch_na_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                                reported_na_ev = true;
+                                                
+                                            } else if(
+                                                h1_ptr->type == HITBOX_TYPE_ATTACK &&
+                                                h2_ptr->type == HITBOX_TYPE_NORMAL &&
+                                                hitbox_touch_an_ev && !reported_an_ev
+                                            ) {
+                                                hitbox_touch_an_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                                reported_an_ev = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                //Find a carriable mob to grab.
+                mob_event* near_carriable_object_ev = q_get_event(m_ptr, MOB_EVENT_NEAR_CARRIABLE_OBJECT);
+                if(near_carriable_object_ev) {
+                
+                    if(
+                        m2_ptr->carrier_info &&
+                        m2_ptr->carrier_info->current_n_carriers != m2_ptr->carrier_info->max_carriers &&
+                        d <= m_ptr->type->radius + m2_ptr->type->radius + PIKMIN_MIN_TASK_RANGE
+                    ) {
+                    
+                        near_carriable_object_ev->run(m_ptr, (void*) m2_ptr);
+                        
+                    }
+                    
+                }
+            }
+            
+            //Check if it got whistled.
+            mob_event* whistled_ev = q_get_event(m_ptr, MOB_EVENT_WHISTLED);
+            if(whistling && whistled_ev) {
+                if(dist(m_ptr->x, m_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
+                    whistled_ev->run(m_ptr);
+                }
+            }
+            
+            //Following a leader.
+            if(m_ptr->following_party) {
+                mob_event* leader_near_ev = q_get_event(m_ptr, MOB_EVENT_LEADER_IS_NEAR);
+                mob_event* leader_far_ev =  q_get_event(m_ptr, MOB_EVENT_LEADER_IS_FAR);
+                
+                if(leader_near_ev || leader_far_ev) {
+                    dist d(m_ptr->x, m_ptr->y, m_ptr->following_party->x, m_ptr->following_party->y);
+                    if(leader_far_ev && d >= 50) {
+                        leader_far_ev->run(m_ptr);
+                    } else if(leader_near_ev && d < 50) {
+                        leader_near_ev->run(m_ptr);
+                    }
+                }
+            }
+            
+            //Focused on a mob.
+            if(m_ptr->focused_mob) {
+            
+                dist d(m_ptr->x, m_ptr->y, m_ptr->focused_mob->x, m_ptr->focused_mob->y);
+                if(m_ptr->focused_mob->dead) {
+                    m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_DIED);
+                }
+                
+                if(m_ptr->focused_mob) {
+                    if(d > (m_ptr->type->sight_radius * 1.1f)) {
+                        m_ptr->fsm.run_event(MOB_EVENT_LOST_FOCUSED_MOB);
+                    }
+                }
+                
+                if(m_ptr->focused_mob) {
+                    if(!m_ptr->focused_mob->carrier_info) {
+                        m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+                    }
+                }
+                
+            }
+            
+            //Far away from home.
+            mob_event* far_from_home_ev = q_get_event(m_ptr, MOB_EVENT_FAR_FROM_HOME);
+            if(far_from_home_ev) {
+                dist d(m_ptr->x, m_ptr->y, m_ptr->home_x, m_ptr->home_y);
+                if(d >= m_ptr->type->territory_radius) {
+                    far_from_home_ev->run(m_ptr);
+                }
+            }
+            
+            //Check its mouth.
+            if(m_ptr->chomping_pikmin.empty()) {
+                m_ptr->fsm.run_event(MOB_EVENT_MOUTH_EMPTY);
+            } else {
+                m_ptr->fsm.run_event(MOB_EVENT_MOUTH_OCCUPIED);
+            }
+            
+            //Big damage.
+            mob_event* big_damage_ev = q_get_event(m_ptr, MOB_EVENT_BIG_DAMAGE);
+            if(big_damage_ev && m_ptr->big_damage_ev_queued) {
+                big_damage_ev->run(m_ptr);
+                m_ptr->big_damage_ev_queued = false;
+            }
+            
+            //Tick.
+            m_ptr->fsm.run_event(MOB_EVENT_ON_TICK);
+            
             // Mob deletion.
             if(m_ptr->to_delete) {
                 delete_mob(m_ptr);
@@ -300,20 +612,6 @@ void do_logic() {
         }
         
         
-        /*******************************
-        *                              *
-        *   Mob interactions   () - () *
-        *                              *
-        *******************************/
-        
-        
-        
-        
-        // Uh... This is a placeholder, I guess?
-        
-        
-        
-        
         
         /******************
         *             /\  *
@@ -321,42 +619,11 @@ void do_logic() {
         *             \/  *
         ******************/
         
-        size_t n_pikmin = pikmin_list.size();
-        size_t pikmin_ai_start = floor(pikmin_ai_portion * ((double) n_pikmin / N_PIKMIN_AI_PORTIONS));
-        size_t pikmin_ai_end = floor((pikmin_ai_portion + 1) * ((double)n_pikmin / N_PIKMIN_AI_PORTIONS));
-        pikmin_ai_portion = (pikmin_ai_portion + 1) % N_PIKMIN_AI_PORTIONS;
-        for(size_t p = pikmin_ai_start; p < pikmin_ai_end; p++) {
+        for(size_t p = 0; p < pikmin_list.size(); p++) {
             pikmin* pik_ptr = pikmin_list[p];
             
-            //Check if the Pikmin got whistled.
-            mob_event* whistled_ev = pik_ptr->fsm.get_event(MOB_EVENT_WHISTLED);
-            if(whistled_ev) {
-                bool got_whistled =
-                    whistling && pik_ptr->unwhistlable_period == 0 &&
-                    check_dist(pik_ptr->x, pik_ptr->y, cursor_x, cursor_y, whistle_radius);
-                    
-                if(got_whistled) whistled_ev->run(pik_ptr, (void*) pik_ptr);
-            }
-            
-            //Check if the Pikmin got bumped by a leader.
-            mob_event* touched_ev = pik_ptr->fsm.get_event(MOB_EVENT_TOUCHED_BY_LEADER);
-            if(touched_ev) {
-                bool got_touched =
-                    !cur_leader_ptr->carrier_info &&
-                    cur_leader_ptr->state != MOB_STATE_BEING_DELIVERED &&
-                    pik_ptr->untouchable_period == 0 &&
-                    check_dist(
-                        pik_ptr->x, pik_ptr->y, cur_leader_ptr->x, cur_leader_ptr->y,
-                        pik_ptr->type->radius + cur_leader_ptr->type->radius
-                    );
-                    
-                if(got_touched)
-                    touched_ev->run(pik_ptr, (void*) pik_ptr);
-            }
-            
-            
             //Is it dead?
-            //TODO move to the script.
+            //TODO move to the script?
             if(pik_ptr->dead) {
             
                 pik_ptr->to_delete = true;
@@ -370,302 +637,6 @@ void do_logic() {
                 continue;
                 
             }
-            
-            
-            //Following a leader.
-            if(pik_ptr->following_party) {
-                mob_event* leader_near_ev = pik_ptr->fsm.get_event(MOB_EVENT_LEADER_IS_NEAR);
-                mob_event* leader_far_ev = pik_ptr->fsm.get_event(MOB_EVENT_LEADER_IS_FAR);
-                
-                if(leader_near_ev || leader_far_ev) {
-                    float d = dist(pik_ptr->x, pik_ptr->y, pik_ptr->following_party->x, pik_ptr->following_party->y);
-                    if(leader_far_ev && d >= 50) {
-                        leader_far_ev->run(pik_ptr);
-                    } else if(leader_near_ev && d < 50) {
-                        leader_near_ev->run(pik_ptr);
-                    }
-                }
-            }
-            
-            
-            // Touching nectar.
-            size_t n_nectars = nectars.size();
-            if(
-                !pik_ptr->carrying_mob &&
-                !pik_ptr->attacking_mob &&
-                pik_ptr->state != PIKMIN_STATE_BURIED &&
-                !pik_ptr->speed_z &&
-                pik_ptr->maturity != 2
-            ) {
-                for(size_t n = 0; n < n_nectars; n++) {
-                    if(check_dist(pik_ptr->x, pik_ptr->y, nectars[n]->x, nectars[n]->y, nectars[n]->type->radius + pik_ptr->type->radius)) {
-                        if(nectars[n]->amount_left > 0)
-                            nectars[n]->amount_left--;
-                            
-                        pik_ptr->maturity = 2;
-                    }
-                }
-            }
-            
-            // Latch onto a mob.
-            size_t n_mobs = mobs.size();
-            if(pik_ptr->was_thrown && !pik_ptr->attacking_mob) {
-                for(size_t m = 0; m < n_mobs; m++) {
-                
-                    mob* mob_ptr = mobs[m];
-                    if(mob_ptr->dead) continue;
-                    if(!should_attack(pik_ptr, mob_ptr)) continue;
-                    if(!check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->radius + mob_ptr->type->radius)) continue;
-                    if(pik_ptr->z > mob_ptr->z + 100) continue; // TODO this isn't taking height into account.
-                    
-                    hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
-                    if(!closest_hitbox) continue;
-                    pik_ptr->enemy_hitbox_nr = closest_hitbox->hitbox_nr;
-                    pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
-                    
-                    float actual_hx, actual_hy;
-                    rotate_point(closest_hitbox->x, closest_hitbox->y, mob_ptr->angle, &actual_hx, &actual_hy);
-                    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
-                    
-                    float x_dif = pik_ptr->x - actual_hx;
-                    float y_dif = pik_ptr->y - actual_hy;
-                    coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-                    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; // Relative to 0 degrees.
-                    pik_ptr->enemy_hitbox_dist /= closest_hitbox->radius; // Distance in units to distance in percentage.
-                    
-                    pik_ptr->attacking_mob = mob_ptr;
-                    pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
-                    pik_ptr->latched = true;
-                    pik_ptr->was_thrown = false;
-                    pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                    pik_ptr->anim.change(PIKMIN_ANIM_ATTACK, true, true, false);
-                    
-                    pik_ptr->set_target(0, 0, &mob_ptr->x, &mob_ptr->y, true);
-                }
-            }
-            
-            // Finding a mob to fight.
-            if(
-                (!pik_ptr->following_party &&
-                 !pik_ptr->carrying_mob &&
-                 !pik_ptr->wants_to_carry &&
-                 !pik_ptr->attacking_mob &&
-                 pik_ptr->state != PIKMIN_STATE_BURIED &&
-                 !pik_ptr->speed_z) ||
-                (pik_ptr->following_party == cur_leader_ptr && group_move_intensity)
-            ) {
-                for(size_t m = 0; m < n_mobs; m++) {
-                
-                    mob* mob_ptr = mobs[m];
-                    
-                    if(mob_ptr->dead) continue;
-                    if(!should_attack(pik_ptr, mob_ptr)) continue;
-                    if(!check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->radius + mob_ptr->type->radius + task_range)) continue;
-                    
-                    hitbox_instance* closest_hitbox = get_closest_hitbox(pik_ptr->x, pik_ptr->y, mob_ptr);
-                    if(!closest_hitbox) continue;
-                    pik_ptr->enemy_hitbox_nr = closest_hitbox->hitbox_nr;
-                    
-                    pik_ptr->attacking_mob = mob_ptr;
-                    pik_ptr->latched = false;
-                    remove_from_party(pik_ptr);
-                    pik_ptr->state = PIKMIN_STATE_ATTACKING_MOB;
-                }
-            }
-            
-            
-            // Finding a mob to carry.
-            if(
-                (!pik_ptr->following_party &&
-                 !pik_ptr->carrying_mob &&
-                 !pik_ptr->wants_to_carry &&
-                 !pik_ptr->attacking_mob &&
-                 pik_ptr->state != PIKMIN_STATE_BURIED &&
-                 !pik_ptr->speed_z) ||
-                (pik_ptr->following_party == cur_leader_ptr && group_move_intensity)
-            ) {
-                for(size_t m = 0; m < n_mobs; m++) {
-                
-                    mob* mob_ptr = mobs[m];
-                    
-                    if(!mob_ptr->carrier_info) continue;
-                    if(mob_ptr->carrier_info->current_n_carriers == mob_ptr->carrier_info->max_carriers) continue; // No more room.
-                    if(mob_ptr->state == MOB_STATE_BEING_DELIVERED) continue;
-                    
-                    if(check_dist(pik_ptr->x, pik_ptr->y, mob_ptr->x, mob_ptr->y, pik_ptr->type->radius + mob_ptr->type->radius + task_range)) {
-                        pik_ptr->wants_to_carry = mob_ptr;
-                        remove_from_party(pik_ptr);
-                        pik_ptr->set_state(PIKMIN_STATE_MOVING_TO_CARRY_SPOT);
-                        
-                        // TODO remove this random cycle and replace with something more optimal.
-                        bool valid_spot = false;
-                        unsigned int spot = 0;
-                        while(!valid_spot) {
-                            spot = randomi(0, mob_ptr->carrier_info->max_carriers - 1);
-                            valid_spot = !mob_ptr->carrier_info->carrier_spots[spot];
-                        }
-                        
-                        pik_ptr->set_target(
-                            mob_ptr->carrier_info->carrier_spots_x[spot],
-                            mob_ptr->carrier_info->carrier_spots_y[spot],
-                            &mob_ptr->x,
-                            &mob_ptr->y,
-                            false
-                        );
-                        
-                        mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
-                        mob_ptr->carrier_info->current_n_carriers++;
-                        
-                        pik_ptr->carrying_spot = spot;
-                        
-                        break;
-                    }
-                }
-            }
-            
-            // Reaching to the mob carry spot.
-            if(pik_ptr->state == PIKMIN_STATE_MOVING_TO_CARRY_SPOT && pik_ptr->reached_destination) {
-                pik_ptr->set_state(PIKMIN_STATE_CARRYING);
-                pik_ptr->carrying_mob = pik_ptr->wants_to_carry;
-                pik_ptr->wants_to_carry = NULL;
-                
-                if(pik_ptr->carrying_mob->state != MOB_STATE_BEING_DELIVERED) {
-                
-                    pik_ptr->set_target(
-                        pik_ptr->carrying_mob->carrier_info->carrier_spots_x[pik_ptr->carrying_spot],
-                        pik_ptr->carrying_mob->carrier_info->carrier_spots_y[pik_ptr->carrying_spot],
-                        &pik_ptr->carrying_mob->x,
-                        &pik_ptr->carrying_mob->y,
-                        true, &pik_ptr->carrying_mob->z
-                    );
-                    
-                    pik_ptr->carrying_mob->carrier_info->current_carrying_strength += pik_ptr->pik_type->carry_strength;
-                    
-                    if(pik_ptr->carrying_mob->carrier_info->current_carrying_strength >= pik_ptr->carrying_mob->type->weight) {
-                        start_carrying(pik_ptr->carrying_mob, pik_ptr, NULL);
-                    }
-                    
-                    pik_ptr->unwhistlable_period = 0;
-                    sfx_pikmin_carrying_grab.play(0.03, false);
-                }
-            }
-            
-            // Fighting an enemy.
-            if(pik_ptr->attacking_mob) {
-                hitbox_instance* h_ptr = get_hitbox_instance(pik_ptr->attacking_mob, pik_ptr->enemy_hitbox_nr);
-                if(h_ptr) {
-                    float actual_hx, actual_hy;
-                    rotate_point(h_ptr->x, h_ptr->y, pik_ptr->attacking_mob->angle, &actual_hx, &actual_hy);
-                    actual_hx += pik_ptr->attacking_mob->x; actual_hy += pik_ptr->attacking_mob->y;
-                    
-                    if(pik_ptr->latched || pik_ptr->being_chomped) {
-                        float final_px, final_py;
-                        angle_to_coordinates(
-                            pik_ptr->enemy_hitbox_angle + pik_ptr->attacking_mob->angle,
-                            pik_ptr->enemy_hitbox_dist * h_ptr->radius,
-                            &final_px, &final_py);
-                        final_px += actual_hx; final_py += actual_hy;
-                        
-                        pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
-                        pik_ptr->face(atan2(pik_ptr->attacking_mob->y - pik_ptr->y, pik_ptr->attacking_mob->x - pik_ptr->x));
-                        if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                        pik_ptr->anim.change(PIKMIN_ANIM_ATTACK, true, true, false);
-                        
-                    } else {
-                        if(check_dist(pik_ptr->x, pik_ptr->y, actual_hx, actual_hy, pik_ptr->type->radius + h_ptr->radius + PIKMIN_MIN_ATTACK_RANGE)) {
-                            pik_ptr->remove_target(true);
-                            pik_ptr->face(atan2(actual_hy - pik_ptr->y, actual_hx - pik_ptr->x));
-                            if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                        } else {
-                            pik_ptr->set_target(actual_hx, actual_hy, NULL, NULL, false);
-                            pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                        }
-                    }
-                }
-                
-                if(!pik_ptr->being_chomped) pik_ptr->attack_time -= delta_t* N_PIKMIN_AI_PORTIONS;
-                if(pik_ptr->attack_time <= 0 && pik_ptr->knockdown_period == 0) {
-                    pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-                    attack(pik_ptr, pik_ptr->attacking_mob, true, pik_ptr->pik_type->attack_power, 0, 0, 0, 0);
-                    sfx_attack.play(0.06, false);
-                    sfx_pikmin_attack.play(0.06, false);
-                    particles.push_back(
-                        particle(
-                            PARTICLE_TYPE_SMACK, bmp_smack,
-                            pik_ptr->x, pik_ptr->y,
-                            0, 0, 0, 0,
-                            SMACK_PARTICLE_DUR,
-                            64,
-                            al_map_rgb(255, 160, 128)
-                        )
-                    );
-                }
-                
-                if(pik_ptr->attacking_mob->dead) {
-                    pik_ptr->state = PIKMIN_STATE_CELEBRATING;
-                    pik_ptr->remove_target(true);
-                    pik_ptr->attacking_mob = NULL;
-                    pik_ptr->being_chomped = false;
-                }
-            }
-            
-            // Touching a mob's hitboxes.
-            for(size_t m = 0; m < mobs.size(); m++) {
-                if(typeid(*mobs[m]) == typeid(pikmin)) continue;
-                mob* m_ptr = mobs[m];
-                frame* f_ptr = m_ptr->anim.get_frame();
-                if(f_ptr == NULL) continue;
-                
-                for(size_t h = 0; h < f_ptr->hitbox_instances.size(); h++) {
-                    hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[h];
-                    float s = sin(m_ptr->angle);
-                    float c = cos(m_ptr->angle);
-                    float h_x = m_ptr->x + (hi_ptr->x * c - hi_ptr->y * s);
-                    float h_y = m_ptr->y + (hi_ptr->x * s + hi_ptr->y * c);
-                    
-                    if(check_dist(pik_ptr->x, pik_ptr->y, h_x, h_y, pik_ptr->type->radius + hi_ptr->radius)) {
-                        hitbox* h_ptr = hi_ptr->hitbox_ptr;
-                        size_t h_nr = hi_ptr->hitbox_nr;
-                        
-                        if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                            float knockback_angle;
-                            if(h_ptr->knockback_outward) {
-                                knockback_angle = atan2(pik_ptr->y - h_y, pik_ptr->x - h_x);
-                            } else {
-                                knockback_angle = h_ptr->knockback_angle;
-                            }
-                            pik_ptr->latched = false;
-                            pik_ptr->anim.change(PIKMIN_ANIM_LYING, true, false, false);
-                            attack(m_ptr, pik_ptr, false, h_ptr->multiplier, knockback_angle, h_ptr->knockback, 1, 1);
-                        }
-                        
-                        if(find(m_ptr->chomp_hitboxes.begin(), m_ptr->chomp_hitboxes.end(), hi_ptr->hitbox_nr) != m_ptr->chomp_hitboxes.end() && !pik_ptr->being_chomped) {
-                            if(m_ptr->chomping_pikmin.size() >= m_ptr->type->chomp_max_victims) continue;
-                            
-                            float x_dif = pik_ptr->x - h_x;
-                            float y_dif = pik_ptr->y - h_y;
-                            coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-                            pik_ptr->enemy_hitbox_angle -= m_ptr->angle;  // Relative to 0 degrees.
-                            pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; // Distance in units to distance in percentage.
-                            
-                            pik_ptr->latched = false;
-                            pik_ptr->enemy_hitbox_nr = h_nr;
-                            pik_ptr->attacking_mob = m_ptr;
-                            pik_ptr->being_chomped = true;
-                            sfx_pikmin_caught.play(0.06, false);
-                            
-                            m_ptr->fsm.run_event(MOB_EVENT_ATTACK_HIT, m_ptr);
-                            m_ptr->chomping_pikmin.push_back(pik_ptr);
-                            focus_mob(m_ptr, pik_ptr, true, false);
-                        }
-                    }
-                }
-            }
-            
-            if(pik_ptr->carrying_mob) {
-                pik_ptr->face(atan2(pik_ptr->carrying_mob->y - pik_ptr->y, pik_ptr->carrying_mob->x - pik_ptr->x));
-            }
-            
         }
         
         
@@ -703,7 +674,7 @@ void do_logic() {
             leader* l_ptr = leaders[l];
             if(whistling) {
                 if(l != cur_leader_nr) {
-                    if(check_dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y, whistle_radius)) {
+                    if(dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
                     
                         stop_auto_pluck(l_ptr);
                         
@@ -752,8 +723,7 @@ void do_logic() {
                             }
                         }
                         
-                        pluck_info pi(new_pikmin_leader, l_ptr, l_ptr->auto_pluck_pikmin);
-                        l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, &pi);
+                        l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr, (void*) l_ptr->auto_pluck_pikmin);
                         l_ptr->auto_pluck_pikmin = NULL;
                     }
                 }
@@ -798,14 +768,14 @@ void do_logic() {
         *                             ***  *
         ************************************/
         
-        float closest_distance = 0;
+        dist closest_distance = 0;
         size_t n_members = cur_leader_ptr->party->members.size();
         closest_party_member = cur_leader_ptr->holding_pikmin;
         
         if(n_members > 0 && !closest_party_member) {
         
             for(size_t m = 0; m < n_members; m++) {
-                float d = dist(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
+                dist d(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
                 if(m == 0 || d < closest_distance) {
                     closest_distance = d;
                     closest_party_member = cur_leader_ptr->party->members[m];
@@ -822,7 +792,7 @@ void do_logic() {
         
         if(group_move_go_to_cursor) {
             group_move_angle = cursor_angle;
-            group_move_intensity = leader_to_cursor_dis / CURSOR_MAX_DIST;
+            group_move_intensity = leader_to_cursor_dis.to_float() / CURSOR_MAX_DIST;
         } else if(group_move_x != 0 || group_move_y != 0) {
             coordinates_to_angle(
                 group_move_x, group_move_y,
@@ -928,7 +898,7 @@ void do_logic() {
                     );
             }
             
-            for(size_t p = 0; p < n_pikmin; p++) {
+            for(size_t p = 0; p < pikmin_list.size(); p++) {
                 if(pikmin_list[p]->was_thrown)
                     particles.push_back(
                         particle(

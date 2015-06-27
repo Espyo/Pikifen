@@ -10,6 +10,7 @@
  */
 
 #include <algorithm>
+#include <iostream>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
@@ -31,6 +32,19 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             // Debug testing.
             // TODO remove.
             day_minutes += 30;
+            
+            dist closest_mob_to_cursor_dist = FLT_MAX;
+            mob* closest_mob_to_cursor = NULL;
+            for(size_t m = 0; m < mobs.size(); m++) {
+                dist d = dist(cursor_x, cursor_y, mobs[m]->x, mobs[m]->y);
+                if(d < closest_mob_to_cursor_dist) {
+                    closest_mob_to_cursor = mobs[m];
+                    closest_mob_to_cursor_dist = d;
+                }
+            }
+            if(closest_mob_to_cursor && closest_mob_to_cursor->fsm.cur_state) {
+                cout << "Mob's state: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
+            }
             
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
@@ -74,7 +88,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             }
         } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dw > 0) {
-                handle_button(con->action, con->player, ev.mouse.dz);
+                handle_button(con->action, con->player, ev.mouse.dw);
             }
         } else if(con->type == CONTROL_TYPE_JOYSTICK_BUTTON && (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
             if(con->device_nr == joystick_numbers[ev.joystick.id] && (signed) con->button == ev.joystick.button) {
@@ -228,7 +242,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     for(size_t i = 0; i < n_info_spots; i++) {
                         info_spot* i_ptr = info_spots[i];
                         if(i_ptr->opens_box) {
-                            if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y, INFO_SPOT_TRIGGER_RANGE)) {
+                            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) <= INFO_SPOT_TRIGGER_RANGE) {
                                 start_message(i_ptr->text, NULL);
                                 done = true;
                                 break;
@@ -237,14 +251,14 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     }
                 }
                 
-                // Now check if the leader should open an onion's menu.
+                // Now check if the leader should open an Onion's menu.
                 if(!done) {
                     // TODO
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; o++) {
-                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y, MIN_ONION_CHECK_RANGE)) {
+                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= MIN_ONION_CHECK_RANGE) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
-                                // TODO this is not how it works, there can be less onions on the field than the total number of Pikmin types.
+                                // TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
                                 create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
                                 add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
@@ -258,7 +272,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 if(!done) {
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; s++) {
-                        if(check_dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE, ships[s]->y, SHIP_BEAM_RANGE)) {
+                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE, ships[s]->y) <= SHIP_BEAM_RANGE) {
                             if(ships[s]->shi_type->can_heal) {
                                 // TODO make it prettier.
                                 cur_leader_ptr->health = cur_leader_ptr->type->max_health;
@@ -269,7 +283,6 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 }
                 
                 // Now check if the leader should grab a Pikmin.
-                
                 if(!done) {
                     if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
                         cur_leader_ptr->holding_pikmin = closest_party_member;
@@ -642,9 +655,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
             // If no Pikmin matched the maturity, just use the one we found.
-            if(tm_match_nr == n_members + 1) cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[t_match_nr];
-            else cur_leader_ptr->holding_pikmin = cur_leader_ptr->party->members[tm_match_nr];
-            sfx_switch_pikmin.play(0, false);
+            if(tm_match_nr == n_members + 1) swap_pikmin(cur_leader_ptr->party->members[t_match_nr]);
+            else swap_pikmin(cur_leader_ptr->party->members[tm_match_nr]);
             
         } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
         
@@ -689,7 +701,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 else new_maturity = (new_maturity + 1) % 3;
             } while(!partners[new_maturity]);
             
-            cur_leader_ptr->holding_pikmin = partners[new_maturity];
+            swap_pikmin(partners[new_maturity]);
             sfx_switch_pikmin.play(0, false);
             
         }
