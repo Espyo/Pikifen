@@ -19,20 +19,22 @@
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin.
  */
-pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    pik_type(type),
+    hazard_time_left(-1),
+    attack_time(0),
+    being_chomped(false),
+    pluck_reserved(false),
+    carrying_spot(0),
+    grabbing_carriable_mob(false),
+    maturity(s2i(get_var_value(vars, "maturity", "2"))),
+    enemy_hitbox_nr(0),
+    enemy_hitbox_dist(0),
+    enemy_hitbox_angle(0),
+    is_idle(true) {
     
-    pik_type = type;
-    hazard_time_left = -1;
-    attack_time = 0;
-    being_chomped = false;
-    pluck_reserved = false;
     team = MOB_TEAM_PLAYER_1; // TODO
-    
-    carrying_spot = 0;
-    grabbing_carriable_mob = false;
-    
-    maturity = s2i(get_var_value(vars, "maturity", "2"));
     if(s2b(get_var_value(vars, "buried", "0"))) state = PIKMIN_STATE_BURIED;
 }
 
@@ -86,7 +88,7 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const 
 void give_pikmin_to_onion(onion* o, const unsigned amount) {
     unsigned total_after = pikmin_list.size() + amount;
     unsigned pikmin_to_spit = amount;
-    unsigned pikmin_to_keep = 0; // Pikmin to keep inside the Onion, without spitting.
+    unsigned pikmin_to_keep = 0; //Pikmin to keep inside the Onion, without spitting.
     
     if(total_after > max_pikmin_in_field) {
         pikmin_to_keep = total_after - max_pikmin_in_field;
@@ -120,7 +122,7 @@ void give_pikmin_to_onion(onion* o, const unsigned amount) {
  * lp: Leaving Pikmin; the Pikmin that just left the carriers. Used to detect ties and tie-breaking.
  */
 void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
-    // TODO what if an Onion hasn't been revelead yet?
+    //TODO what if an Onion hasn't been revelead yet?
     if(!m->carrier_info) return;
     
     if(m->carrier_info->carry_to_ship) {
@@ -135,10 +137,10 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
         
     } else {
     
-        map<pikmin_type*, unsigned> type_quantity; // How many of each Pikmin type are carrying.
-        vector<pikmin_type*> majority_types; // The Pikmin type with the most carriers.
+        map<pikmin_type*, unsigned> type_quantity; //How many of each Pikmin type are carrying.
+        vector<pikmin_type*> majority_types; //The Pikmin type with the most carriers.
         
-        // First, count how many of each type there are carrying.
+        //First, count how many of each type there are carrying.
         for(size_t p = 0; p < m->carrier_info->max_carriers; p++) {
             pikmin* pik_ptr = NULL;
             
@@ -147,12 +149,12 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
             
             pik_ptr = (pikmin*) m->carrier_info->carrier_spots[p];
             
-            if(!pik_ptr->pik_type->has_onion) continue; // If it doesn't have an Onion, it won't even count. // TODO what if it hasn't been discovered / Onion not on this area?
+            if(!pik_ptr->pik_type->has_onion) continue; //If it doesn't have an Onion, it won't even count. //TODO what if it hasn't been discovered / Onion not on this area?
             
             type_quantity[pik_ptr->pik_type]++;
         }
         
-        // Then figure out what are the majority types.
+        //Then figure out what are the majority types.
         unsigned most = 0;
         for(auto t = type_quantity.begin(); t != type_quantity.end(); t++) {
             if(t->second > most) {
@@ -162,30 +164,30 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
             if(t->second == most) majority_types.push_back(t->first);
         }
         
-        // If we ended up with no candidates, pick a type at random, out of all possible types.
+        //If we ended up with no candidates, pick a type at random, out of all possible types.
         if(majority_types.empty()) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
-                if(t->second->has_onion) { // TODO what if it hasn't been discovered / Onion not on this area?
+                if(t->second->has_onion) { //TODO what if it hasn't been discovered / Onion not on this area?
                     majority_types.push_back(t->second);
                 }
             }
         }
         
-        // Now let's pick an Onion.
+        //Now let's pick an Onion.
         if(majority_types.empty()) {
-            return; // TODO warn that something went horribly wrong?
+            return; //TODO warn that something went horribly wrong?
             
         } else if(majority_types.size() == 1) {
-            // If there's only one possible type to pick, pick it.
+            //If there's only one possible type to pick, pick it.
             m->carrier_info->decided_type = majority_types[0];
             
         } else {
-            // If there's a tie, let's take a careful look.
+            //If there's a tie, let's take a careful look.
             bool new_tie = false;
             
-            // Is the Pikmin that just joined part of the majority types?
-            // If so, that means this Pikmin just created a NEW tie!
-            // So let's pick a random Onion again.
+            //Is the Pikmin that just joined part of the majority types?
+            //If so, that means this Pikmin just created a NEW tie!
+            //So let's pick a random Onion again.
             if(np) {
                 for(size_t mt = 0; mt < majority_types.size(); mt++) {
                     if(np->type == majority_types[mt]) {
@@ -195,9 +197,9 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
                 }
             }
             
-            // If a Pikmin left, check if it is related to the majority types.
-            // If not, then a new tie wasn't made, no worries.
-            // If it was related, a new tie was created.
+            //If a Pikmin left, check if it is related to the majority types.
+            //If not, then a new tie wasn't made, no worries.
+            //If it was related, a new tie was created.
             if(lp) {
                 new_tie = false;
                 for(size_t mt = 0; mt < majority_types.size(); mt++) {
@@ -208,8 +210,8 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
                 }
             }
             
-            // Check if the previously decided type belongs to one of the majorities.
-            // If so, it can be chosen again, but if not, it cannot.
+            //Check if the previously decided type belongs to one of the majorities.
+            //If so, it can be chosen again, but if not, it cannot.
             bool can_continue = false;
             for(size_t mt = 0; mt < majority_types.size(); mt++) {
                 if(majority_types[mt] == m->carrier_info->decided_type) {
@@ -219,16 +221,16 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
             }
             if(!can_continue) m->carrier_info->decided_type = NULL;
             
-            // If the Pikmin that just joined is not a part of the majorities,
-            // then it had no impact on the existing ties.
-            // Go with the Onion that had been decided before.
+            //If the Pikmin that just joined is not a part of the majorities,
+            //then it had no impact on the existing ties.
+            //Go with the Onion that had been decided before.
             if(new_tie || !m->carrier_info->decided_type) {
                 m->carrier_info->decided_type = majority_types[randomi(0, majority_types.size() - 1)];
             }
         }
         
         
-        // Figure out where that type's Onion is.
+        //Figure out where that type's Onion is.
         size_t onion_nr = 0;
         for(; onion_nr < onions.size(); onion_nr++) {
             if(onions[onion_nr]->oni_type->pik_type == m->carrier_info->decided_type) {
@@ -236,7 +238,7 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
             }
         }
         
-        // Finally, start moving the mob.
+        //Finally, start moving the mob.
         m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
         m->set_state(MOB_STATE_BEING_CARRIED);
         sfx_pikmin_carrying.play(-1, true);
@@ -249,10 +251,18 @@ void pikmin::become_buried(mob* m, void* info1, void* info2) {
 
 void pikmin::be_plucked(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
+    mob* lea = (mob*) info1;
+    
+    if(lea->following_party) {
+        if(typeid(*lea->following_party) == typeid(leader)) {
+            //If this leader is following another one, then the new Pikmin should be in the party of that top leader.
+            lea = lea->following_party;
+        }
+    }
     
     ((leader*) info2)->pluck_time = -1;
     pik->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
-    add_to_party((mob*) info1, pik);
+    add_to_party(lea, pik);
     sfx_pikmin_plucked.play(0, false);
     sfx_pikmin_pluck.play(0, false);
 }
@@ -280,8 +290,8 @@ void pikmin::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     float x_dif = pik_ptr->x - actual_hx;
     float y_dif = pik_ptr->y - actual_hy;
     coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; // Relative to 0 degrees.
-    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; // Distance in units to distance in percentage.
+    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
+    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
     
     pik_ptr->focused_mob = mob_ptr;
     
@@ -403,8 +413,8 @@ void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
     float x_dif = pik_ptr->x - actual_hx;
     float y_dif = pik_ptr->y - actual_hy;
     coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; // Relative to 0 degrees.
-    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; // Distance in units to distance in percentage.
+    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
+    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
     
     pik_ptr->focused_mob = mob_ptr;
     
@@ -537,7 +547,7 @@ void pikmin::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->grabbing_carriable_mob = false;
     remove_from_party(pik_ptr);
     
-    // TODO remove this random cycle and replace with something more optimal.
+    //TODO remove this random cycle and replace with something more optimal.
     bool valid_spot = false;
     unsigned int spot = 0;
     while(!valid_spot) {
@@ -590,7 +600,7 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
     if(!p->focused_mob) return;
     
     if(p->focused_mob->carrier_info) {
-        // TODO optimize this instead of running through the spot vector.
+        //TODO optimize this instead of running through the spot vector.
         for(size_t s = 0; s < p->focused_mob->carrier_info->max_carriers; s++) {
             if(p->focused_mob->carrier_info->carrier_spots[s] == p) {
                 p->focused_mob->carrier_info->carrier_spots[s] = nullptr;
@@ -602,12 +612,12 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
         if(p->grabbing_carriable_mob) {
             p->focused_mob->carrier_info->current_carrying_strength -= p->pik_type->carry_strength;
             
-            // Did this Pikmin leaving made the mob stop moving?
+            //Did this Pikmin leaving made the mob stop moving?
             if(p->focused_mob->carrier_info->current_carrying_strength < p->focused_mob->type->weight) {
                 p->focused_mob->remove_target(true);
                 p->focused_mob->carrier_info->decided_type = NULL;
             } else {
-                start_moving_carried_object(p->focused_mob, NULL, p); // Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
+                start_moving_carried_object(p->focused_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
             }
         }
     }

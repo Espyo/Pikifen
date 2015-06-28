@@ -11,8 +11,11 @@
 
 #include "pellet_type.h"
 
-pellet_type::pellet_type() {
-    pik_type = NULL;
-    number = match_seeds = non_match_seeds = 0;
-    bmp_number = NULL;
+pellet_type::pellet_type() :
+    pik_type(nullptr),
+    number(0),
+    match_seeds(0),
+    non_match_seeds(0),
+    bmp_number(nullptr) {
+    
 }

@@ -11,8 +11,8 @@
 
 #include "ship_type.h"
 
-ship_type::ship_type() {
-    can_heal = false;
+ship_type::ship_type() :
+    can_heal(false) {
     
     always_active = true;
 }

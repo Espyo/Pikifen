@@ -10,17 +10,17 @@ size_t textbox::cur_tab_index = 0;
 /* ----------------------------------------------------------------------------
  * Creates a textbox given some parameters.
  */
-textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style, unsigned char flags)
-    : widget(x1, y1, x2, y2, style, flags) {
-    
-    this->text = text;
-    editable = true;
-    cursor = sel_start = sel_end = 0;
-    multi_line = false;
-    change_handler = nullptr;
-    scroll_x = 0;
-    enter_key_widget = NULL;
-    change_handler = nullptr;
+textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style, unsigned char flags) :
+    widget(x1, y1, x2, y2, style, flags),
+    text(text),
+    editable(true),
+    cursor(0),
+    sel_start(0),
+    sel_end(0),
+    multi_line(false),
+    change_handler(nullptr),
+    scroll_x(0),
+    enter_key_widget(nullptr) {
     
     tab_index = cur_tab_index++;
 }
@@ -29,14 +29,18 @@ textbox::textbox(int x1, int y1, int x2, int y2, string text, lafi::style* style
 /* ----------------------------------------------------------------------------
  * Creates a textbox by copying the info from another textbox.
  */
-textbox::textbox(textbox &t2) : widget(t2) {
-    text = t2.text;
-    editable = t2.editable;
-    cursor = sel_start = sel_end = 0;
-    multi_line = false;
-    change_handler = nullptr;
-    scroll_x = 0;
-    enter_key_widget = NULL;
+textbox::textbox(textbox &t2) :
+    widget(t2),
+    text(t2.text),
+    editable(t2.editable),
+    cursor(0),
+    sel_start(0),
+    sel_end(0),
+    multi_line(false),
+    change_handler(nullptr),
+    scroll_x(0),
+    enter_key_widget(nullptr) {
+    
     tab_index = cur_tab_index++;
 }
 
@@ -54,10 +58,10 @@ textbox::~textbox() {}
  */
 void textbox::draw_self() {
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
-    draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_darker_bg_color());  // Top line.
-    draw_line(this, DRAW_LINE_LEFT,   0, 1, 0, get_darker_bg_color());  // Left line.
-    draw_line(this, DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color()); // Bottom line.
-    draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color()); // Right line.
+    draw_line(this, DRAW_LINE_TOP,    0, 1, 0, get_darker_bg_color());  //Top line.
+    draw_line(this, DRAW_LINE_LEFT,   0, 1, 0, get_darker_bg_color());  //Left line.
+    draw_line(this, DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color()); //Bottom line.
+    draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color()); //Right line.
     
     if(style->text_font) {
         int text_start = x1 + 2 - scroll_x;
@@ -103,19 +107,19 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
     bool ctrl = (modifiers & ALLEGRO_KEYMOD_CTRL) || (modifiers & ALLEGRO_KEYMOD_COMMAND);
     bool shift = modifiers & ALLEGRO_KEYMOD_SHIFT;
     
-    if(cursor > text.size()) cursor = 0; // If the text is somehow changed.
+    if(cursor > text.size()) cursor = 0; //If the text is somehow changed.
     
     int sel1 = min(sel_start, sel_end), sel2 = max(sel_start, sel_end);
     int sel_size = sel2 - sel1;
     
-    if(keycode == ALLEGRO_KEY_LEFT && !ctrl && !shift) { // Left arrow - move cursor left.
+    if(keycode == ALLEGRO_KEY_LEFT && !ctrl && !shift) { //Left arrow - move cursor left.
         if(sel_size) {
             cursor = sel1;
             sel_start = sel_end = cursor;
         } else if(cursor && text.size()) {
-            cursor--;   // Go one to the left anyway. This'll stop it from getting stuck on spaces.
+            cursor--;   //Go one to the left anyway. This'll stop it from getting stuck on spaces.
             
-            if(ctrl) {  // Whole word.
+            if(ctrl) {  //Whole word.
                 while(cursor && text[cursor - 1] != ' ') {
                     cursor--;
                 }
@@ -123,12 +127,12 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
             sel_start = sel_end = cursor;
         }
         
-    } else if(keycode == ALLEGRO_KEY_RIGHT && !ctrl && !shift) { // Right arrow - move cursor right.
+    } else if(keycode == ALLEGRO_KEY_RIGHT && !ctrl && !shift) { //Right arrow - move cursor right.
         if(sel_size) {
             cursor = sel2;
             sel_start = sel_end = cursor;
         } else if(cursor < text.size() && text.size()) {
-            cursor++;   // Go one to the right anyway.
+            cursor++;   //Go one to the right anyway.
             
             if(ctrl) {
                 while(cursor < text.size() && text[cursor - 1] != ' ') {
@@ -137,16 +141,16 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
             }
         }
         
-    } else if(keycode == ALLEGRO_KEY_HOME && !ctrl && !shift) { // Home - place cursor at beginning.
+    } else if(keycode == ALLEGRO_KEY_HOME && !ctrl && !shift) { //Home - place cursor at beginning.
         cursor = 0;
         sel_start = sel_end = cursor;
         
-    } else if(keycode == ALLEGRO_KEY_END && !ctrl && !shift) {  // End - place cursor at end.
+    } else if(keycode == ALLEGRO_KEY_END && !ctrl && !shift) {  //End - place cursor at end.
         cursor = text.size();
         sel_start = sel_end = cursor;
         
-    } else if(keycode == ALLEGRO_KEY_BACKSPACE) { // Backspace - delete character before cursor.
-        if(text.size()) { // If there's actually something written
+    } else if(keycode == ALLEGRO_KEY_BACKSPACE) { //Backspace - delete character before cursor.
+        if(text.size()) { //If there's actually something written
             if(sel_size) {
                 text.erase(sel1, sel2 - sel1);
                 cursor = sel1;
@@ -155,7 +159,7 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
                 unsigned short cursor_start = cursor;
                 cursor--;
                 
-                if(ctrl) {  // Whole word.
+                if(ctrl) {  //Whole word.
                     while(cursor && text[cursor - 1] != ' ') {
                         cursor--;
                     }
@@ -166,8 +170,8 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
             call_change_handler();
         }
         
-    } else if(keycode == ALLEGRO_KEY_DELETE) { // Delete - delete character after cursor.
-        if(text.size()) { // If there's actually something written.
+    } else if(keycode == ALLEGRO_KEY_DELETE) { //Delete - delete character after cursor.
+        if(text.size()) { //If there's actually something written.
             if(sel_size) {
                 text.erase(sel1, sel2 - sel1);
                 cursor = sel1;
@@ -188,15 +192,16 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
             call_change_handler();
         }
         
-    } else if(keycode == ALLEGRO_KEY_TAB && !ctrl) { // Tab - switch to the next textbox in the parent.
-        size_t
-        next_tab_index = UINT_MAX,
-        prev_tab_index = 0,
-        shortest_tab_index = UINT_MAX,
-        longest_tab_index = 0;
-        widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
-        
+    } else if(keycode == ALLEGRO_KEY_TAB && !ctrl) { //Tab - switch to the next textbox in the parent.
+    
         if(parent) {
+            size_t
+            next_tab_index = UINT_MAX,
+            prev_tab_index = 0,
+            shortest_tab_index = UINT_MAX,
+            longest_tab_index = 0;
+            widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
+            
             for(auto w = parent->widgets.begin(); w != parent->widgets.end(); w++) {
                 if(typeid(*w->second) == typeid(textbox)) {
                 
@@ -236,7 +241,7 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
         sel_start = 0;
         sel_end = text.size();
         
-    } else if(unichar > 0 && keycode != ALLEGRO_KEY_ESCAPE && keycode != ALLEGRO_KEY_TAB) { // Other key - insert the character.
+    } else if(unichar > 0 && keycode != ALLEGRO_KEY_ESCAPE && keycode != ALLEGRO_KEY_TAB) { //Other key - insert the character.
         if(keycode == ALLEGRO_KEY_ENTER || keycode == ALLEGRO_KEY_PAD_ENTER) {
             if(enter_key_widget) {
                 enter_key_widget->call_left_mouse_click_handler(0, 0);
@@ -259,7 +264,7 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
         }
     }
     
-    // Update the text scroll to match the cursor.
+    //Update the text scroll to match the cursor.
     unsigned int cursor_x = al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
     unsigned int text_width = al_get_text_width(style->text_font, text.c_str());
     unsigned int box_width = (x2 - x1) - 4;
@@ -302,7 +307,7 @@ void textbox::widget_on_mouse_move(int x, int) {
  * Takes into account text scroll, widget position, etc.
  */
 unsigned int textbox::mouse_to_char(int mouse_x) {
-    // Get the relative X, from the start of the text.
+    //Get the relative X, from the start of the text.
     int rel_x = mouse_x - x1 + scroll_x;
     for(size_t c = 0; c < text.size(); c++) {
         int width = al_get_text_width(style->text_font, text.substr(0, c + 1).c_str());

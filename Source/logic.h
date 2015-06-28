@@ -14,4 +14,4 @@
 
 void do_logic();
 
-#endif // ifndef LOGIC_INCLUDED
+#endif //ifndef LOGIC_INCLUDED

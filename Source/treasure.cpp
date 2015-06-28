@@ -15,9 +15,9 @@
 /* ----------------------------------------------------------------------------
  * Creates a treasure.
  */
-treasure::treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+treasure::treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    buried(s2f(get_var_value(vars, "buried", "0"))) {
     
     carrier_info = new carrier_info_struct(this, type->max_carriers, true);
-    buried = s2f(get_var_value(vars, "buried", "0"));
 }

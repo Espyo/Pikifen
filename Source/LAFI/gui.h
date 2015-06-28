@@ -1,4 +1,4 @@
-// TODO automated guis
+//TODO automated guis
 
 #ifndef LAFI_GUI_INCLUDED
 #define LAFI_GUI_INCLUDED
@@ -27,7 +27,7 @@ public:
     bool close_button_quits;
     
     gui(int w, int h, lafi::style* style = new lafi::style(), unsigned char flags = 0);
-    // gui(unsigned int display_w, unsigned int display_h, bool close_button_quits = true, lafi::style* style = new style(), unsigned char flags = 0);
+    //gui(unsigned int display_w, unsigned int display_h, bool close_button_quits = true, lafi::style* style = new style(), unsigned char flags = 0);
     ~gui();
     
     void stop();
@@ -38,4 +38,4 @@ public:
 
 }
 
-#endif // ifndef LAFI_GUI_INCLUDED
+#endif //ifndef LAFI_GUI_INCLUDED

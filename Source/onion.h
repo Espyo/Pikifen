@@ -26,4 +26,4 @@ public:
     onion(float x, float y, onion_type* type, const float angle, const string &vars);
 };
 
-#endif // ifndef ONION_INCLUDED
+#endif //ifndef ONION_INCLUDED

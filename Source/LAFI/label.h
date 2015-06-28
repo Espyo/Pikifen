@@ -26,4 +26,4 @@ public:
 
 }
 
-#endif // ifndef LAFI_LABEL_INCLUDED
+#endif //ifndef LAFI_LABEL_INCLUDED

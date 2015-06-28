@@ -23,16 +23,24 @@
 /* ----------------------------------------------------------------------------
  * Creates a mob type.
  */
-mob_type::mob_type() {
-    radius = move_speed = rotation_speed = 0;
-    always_active = false;
-    max_health = 0;
-    max_carriers = 0;
-    weight = 0;
-    sight_radius = near_radius = 0;
-    rotation_speed = DEF_ROTATION_SPEED;
-    big_damage_interval = 0;
-    create_mob = nullptr;
+mob_type::mob_type() :
+    radius(0),
+    move_speed(0),
+    always_active(false),
+    max_health(0),
+    max_carriers(0),
+    weight(0),
+    sight_radius(0),
+    near_radius(0),
+    rotation_speed(DEF_ROTATION_SPEED),
+    big_damage_interval(0),
+    create_mob(nullptr),
+    main_color(al_map_rgb(128, 128, 128)),
+    territory_radius(0),
+    near_angle(0),
+    chomp_max_victims(0),
+    first_state_nr(0) {
+    
 }
 
 
@@ -56,7 +64,7 @@ void load_mob_types(bool load_resources) {
  * category: Use MOB_CATEGORY_* for this.
  * load_resources: False if you don't need the images and sounds, so it loads faster.
  */
-void load_mob_types(const string folder, const unsigned char category, bool load_resources) {
+void load_mob_types(const string &folder, const unsigned char category, bool load_resources) {
     bool folder_found;
     vector<string> types = folder_to_vector(folder, true, &folder_found);
     if(!folder_found) {
@@ -171,12 +179,12 @@ void load_mob_types(const string folder, const unsigned char category, bool load
             leader_type* lt = (leader_type*) mt;
             lt->pluck_delay = s2f(file.get_child_by_name("pluck_delay")->value);
             lt->whistle_range = s2f(file.get_child_by_name("whistle_range")->get_value_or_default(f2s(DEF_WHISTLE_RANGE)));
-            lt->punch_strength = s2i(file.get_child_by_name("punch_strength")->value); // TODO default.
+            lt->punch_strength = s2i(file.get_child_by_name("punch_strength")->value); //TODO default.
             
             if(load_resources) {
-                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); // TODO don't use load_sample.
-                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); // TODO don't use load_sample.
-                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); // TODO don't use load_sample.
+                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //TODO don't use load_sample.
+                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //TODO don't use load_sample.
+                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //TODO don't use load_sample.
                 lt->bmp_icon = bitmaps.get(file.get_child_by_name("icon")->value, &file);
             }
             
@@ -204,7 +212,7 @@ void load_mob_types(const string folder, const unsigned char category, bool load
             
         } else if(category == MOB_CATEGORY_TREASURES) {
             treasure_type* tt = (treasure_type*) mt;
-            tt->move_speed = 60; // TODO should this be here?
+            tt->move_speed = 60; //TODO should this be here?
             
             treasure_types[tt->name] = tt;
             
@@ -228,7 +236,7 @@ void load_mob_types(const string folder, const unsigned char category, bool load
             
             new_anim_conversion(ANIM_IDLE, "idle");
             
-            pt->move_speed = 60; // TODO should this be here?
+            pt->move_speed = 60; //TODO should this be here?
             
             pellet_types[pt->name] = pt;
             

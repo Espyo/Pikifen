@@ -29,4 +29,4 @@ public:
     ALLEGRO_COLOR main_color;
 };
 
-#endif // ifndef HAZARD_INCLUDED
+#endif //ifndef HAZARD_INCLUDED

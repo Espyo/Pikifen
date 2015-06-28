@@ -28,20 +28,20 @@ public:
     ~pikmin();
     
     pikmin_type* pik_type;
-    float hazard_time_left;  // Time it has left until it drowns/chokes/etc.
+    float hazard_time_left;  //Time it has left until it drowns/chokes/etc.
     
-    size_t enemy_hitbox_nr;   // Number of the hitbox the Pikmin is attached to.
-    float enemy_hitbox_dist;  // Distance percentage from the center of the hitbox to the Pikmin's position.
-    float enemy_hitbox_angle; // Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
-    float attack_time;        // Time left until the strike.
-    bool being_chomped;       // Is the Pikmin stuck in the enemy's jaws?
+    size_t enemy_hitbox_nr;   //Number of the hitbox the Pikmin is attached to.
+    float enemy_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
+    float enemy_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
+    float attack_time;        //Time left until the strike.
+    bool being_chomped;       //Is the Pikmin stuck in the enemy's jaws?
     
     bool grabbing_carriable_mob; //Is it actually grasping the carriable mob, or just trying to reach it?
     size_t carrying_spot;        //Carrying spot reserved for it.
     bool is_idle;                //Is the Pikmin idling?
     
-    unsigned char maturity;  // 0: leaf. 1: bud. 2: flower.
-    bool pluck_reserved;     // If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
+    unsigned char maturity;  //0: leaf. 1: bud. 2: flower.
+    bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
     
@@ -85,4 +85,4 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp);
 void swap_pikmin(mob* new_pik);
 
 
-#endif // ifndef PIKMIN_INCLUDED
+#endif //ifndef PIKMIN_INCLUDED

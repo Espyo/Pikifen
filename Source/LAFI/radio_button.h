@@ -46,4 +46,4 @@ public:
 
 }
 
-#endif // ifndef LAFI_RADIO_BUTTON_INCLUDED
+#endif //ifndef LAFI_RADIO_BUTTON_INCLUDED

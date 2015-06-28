@@ -24,4 +24,4 @@ void init_mob_categories();
 void init_sector_types();
 void init_special_mob_types();
 
-#endif // ifndef INIT_INCLUDED
+#endif //ifndef INIT_INCLUDED

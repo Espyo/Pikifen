@@ -26,4 +26,4 @@ public:
     ship(float x, float y, ship_type* type, float angle, const string &vars);
 };
 
-#endif // ifndef SHIP_INCLUDED
+#endif //ifndef SHIP_INCLUDED

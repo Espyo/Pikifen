@@ -5,10 +5,11 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a label.
  */
-label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::style* style, unsigned char flags)
-    : widget(x1, y1, x2, y2, style, flags) {
-    this->text = text;
-    this->text_flags = text_flags;
+label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::style* style, unsigned char flags) :
+    widget(x1, y1, x2, y2, style, flags),
+    text(text),
+    text_flags(text_flags) {
+    
 }
 
 

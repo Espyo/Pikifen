@@ -1,3 +1,5 @@
+name=Engine Testing
+subtitle=A testing area for the engine
 weather=Normal
 bg_color=0 0 0
 bg_dist=2

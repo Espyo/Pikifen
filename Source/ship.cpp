@@ -15,8 +15,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a ship.
  */
-ship::ship(float x, float y, ship_type* type, float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    shi_type(type) {
     
-    shi_type = type;
 }

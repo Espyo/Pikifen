@@ -15,12 +15,17 @@
 /* ----------------------------------------------------------------------------
  * Creates an enemy.
  */
-enemy::enemy(const float x, const float y, enemy_type* type, const float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+enemy::enemy(const float x, const float y, enemy_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    ene_type(type),
+    spawn_delay(s2f(get_var_value(vars, "spawn_delay", "0"))),
+    respawn_days_left(0),
+    respawns_after_x_days(0),
+    appears_after_day(0),
+    appears_before_day(0),
+    appears_every_x_days(0) {
     
-    ene_type = type;
-    team = MOB_TEAM_ENEMIES_1; // TODO removeish.
+    team = MOB_TEAM_ENEMIES_1; //TODO removeish.
     
-    spawn_delay = s2f(get_var_value(vars, "spawn_delay", "0"));
-    // TODO day apperance interval
+    //TODO day apperance interval
 }

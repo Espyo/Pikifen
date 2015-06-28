@@ -39,10 +39,10 @@ void do_logic() {
     *                               `-´  *
     **************************************/
     
-    // Rotation angle for the glow atop idle Pikmin.
+    //Rotation angle for the glow atop idle Pikmin.
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
-    // Camera transitions.
+    //Camera transitions.
     if(cam_trans_pan_time_left > 0) {
         cam_trans_pan_time_left -= delta_t;
         if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
@@ -64,7 +64,7 @@ void do_logic() {
         cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
     }
     
-    // "Move group" arrows.
+    //"Move group" arrows.
     if(group_move_intensity) {
         group_move_next_arrow_time -= delta_t;
         if(group_move_next_arrow_time <= 0) {
@@ -87,7 +87,7 @@ void do_logic() {
         }
     }
     
-    // Whistle animations.
+    //Whistle animations.
     whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED * delta_t;
     
     if(whistle_fade_time > 0) {
@@ -96,7 +96,7 @@ void do_logic() {
     }
     
     if(whistling) {
-        // Create rings.
+        //Create rings.
         whistle_next_ring_time -= delta_t;
         if(whistle_next_ring_time <= 0) {
             whistle_next_ring_time = WHISTLE_RINGS_INTERVAL;
@@ -110,7 +110,7 @@ void do_logic() {
             if(whistle_next_dot_time <= 0) {
                 whistle_next_dot_time = WHISTLE_DOT_INTERVAL;
                 unsigned char dot = 255;
-                for(unsigned char d = 0; d < 6; d++) { // Find WHAT dot to add.
+                for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
                     if(whistle_dot_radius[d] == -1) { dot = d; break;}
                 }
                 
@@ -131,7 +131,7 @@ void do_logic() {
     }
     
     for(size_t r = 0; r < whistle_rings.size(); ) {
-        // Erase rings that go beyond the cursor.
+        //Erase rings that go beyond the cursor.
         whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
         if(leader_to_cursor_dis < whistle_rings[r]) {
             whistle_rings.erase(whistle_rings.begin() + r);
@@ -141,10 +141,10 @@ void do_logic() {
         }
     }
     
-    // Ship beam ring.
-    // The way this works is that the three color components are saved.
-    // Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
-    // Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
+    //Ship beam ring.
+    //The way this works is that the three color components are saved.
+    //Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
+    //Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
     for(unsigned char i = 0; i < 3; i++) {
         float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
         signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
@@ -159,14 +159,14 @@ void do_logic() {
         }
     }
     
-    // Sun meter.
+    //Sun meter.
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED * delta_t;
     
-    // Cursor spin angle and invalidness effect.
+    //Cursor spin angle and invalidness effect.
     cursor_spin_angle -= CURSOR_SPIN_SPEED * delta_t;
     cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
     
-    // Cursor trail.
+    //Cursor trail.
     if(draw_cursor_trail) {
         if(cursor_save_time > 0) {
             cursor_save_time -= delta_t;
@@ -180,7 +180,7 @@ void do_logic() {
         }
     }
     
-    // Tree shadow swaying.
+    //Tree shadow swaying.
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
     
@@ -200,7 +200,7 @@ void do_logic() {
             if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
         }
         
-        // Tick all particles.
+        //Tick all particles.
         size_t n_particles = particles.size();
         for(size_t p = 0; p < n_particles; ) {
             if(!particles[p].tick()) {
@@ -242,7 +242,7 @@ void do_logic() {
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs;) {
         
-            // Tick the mob.
+            //Tick the mob.
             mob* m_ptr = mobs[m];
             m_ptr->tick();
             
@@ -255,12 +255,12 @@ void do_logic() {
             
             if(m_ptr->carrier_info && m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
                 if(m_ptr->carrier_info->carry_to_ship) {
-                    // Find ship.
-                    // TODO.
+                    //Find ship.
+                    //TODO.
                     
                 } else {
                     //TODO make the pellet, enemy, etc. class react to this via script (i.e. was_delivered event).
-                    // Find Onion.
+                    //Find Onion.
                     size_t n_onions = onions.size();
                     size_t o = 0;
                     for(; o < n_onions; o++) {
@@ -384,10 +384,6 @@ void do_logic() {
                     frame* f1_ptr = m_ptr->anim.get_frame();
                     frame* f2_ptr = m2_ptr->anim.get_frame();
                     
-                    bool reported_an_ev = false;
-                    bool reported_na_ev = false;
-                    bool reported_eat_ev = false;
-                    
                     //If neither of the mobs have hitboxes up, never mind.
                     bool m1_is_pikmin = typeid(*m_ptr) == typeid(pikmin);
                     bool m1_has_hitboxes = f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_pikmin);
@@ -398,6 +394,10 @@ void do_logic() {
                         //If they're so far away the hitboxes can't touch, just skip the check.
                         if(d < f1_ptr->hitbox_span + f2_ptr->hitbox_span) {
                         
+                            bool reported_an_ev = false;
+                            bool reported_na_ev = false;
+                            bool reported_eat_ev = false;
+                            
                             float m1_angle_sin = 0;
                             float m1_angle_cos = 0;
                             if(!m1_is_pikmin) {
@@ -419,9 +419,10 @@ void do_logic() {
                                 if(m1_is_pikmin) {
                                     //Just check if the entire Pikmin touched mob 2's hitbox.
                                     
+                                    bool z_collision = !((m2_h_z > m_ptr->z) || (m2_h_z + h2_ptr->height < m_ptr->z));
+                                    
                                     if(
-                                        m_ptr->z >= m2_h_z &&
-                                        m_ptr->z <= m2_h_z + h2_ptr->height &&
+                                        z_collision &&
                                         dist(m_ptr->x, m_ptr->y, m2_h_x, m2_h_y) <
                                         (m_ptr->type->radius + h2_ptr->radius)
                                     ) {
@@ -468,9 +469,10 @@ void do_logic() {
                                         float m1_h_y = m_ptr->y + (h1_ptr->x * m1_angle_sin + h1_ptr->y * m1_angle_cos);
                                         float m1_h_z = m_ptr->z + h1_ptr->z;
                                         
+                                        bool z_collision = !((m2_h_z > m1_h_z + h1_ptr->height) || (m2_h_z + h2_ptr->height < m1_h_z));
+                                        
                                         if(
-                                            m_ptr->z + h1_ptr->height >= m2_h_z &&
-                                            m_ptr->z <= m2_h_z + h2_ptr->height &&
+                                            z_collision &&
                                             dist(m1_h_x, m1_h_y, m2_h_x, m2_h_y) <
                                             (h1_ptr->radius + h2_ptr->radius)
                                         ) {
@@ -600,7 +602,7 @@ void do_logic() {
             //Tick.
             m_ptr->fsm.run_event(MOB_EVENT_ON_TICK);
             
-            // Mob deletion.
+            //Mob deletion.
             if(m_ptr->to_delete) {
                 delete_mob(m_ptr);
                 n_mobs--;
@@ -653,7 +655,7 @@ void do_logic() {
             cur_leader_ptr->holding_pikmin->angle = cur_leader_ptr->angle;
         }
         
-        // Current leader movement.
+        //Current leader movement.
         if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->auto_pluck_pikmin && !cur_leader_ptr->carrier_info) {
             float leader_move_x = leader_movement.get_x();
             float leader_move_y = leader_movement.get_y();
@@ -679,7 +681,7 @@ void do_logic() {
                         stop_auto_pluck(l_ptr);
                         
                         if(!l_ptr->following_party && !l_ptr->was_thrown) {
-                            // Leader got whistled.
+                            //Leader got whistled.
                             add_to_party(cur_leader_ptr, l_ptr);
                             
                             size_t n_party_members = l_ptr->party->members.size();
@@ -715,14 +717,6 @@ void do_logic() {
                         
                     } else {
                     
-                        leader* new_pikmin_leader = l_ptr;
-                        if(l_ptr->following_party) {
-                            if(typeid(*l_ptr->following_party) == typeid(leader)) {
-                                // If this leader is following another one, then the new Pikmin should be in the party of that top leader.
-                                new_pikmin_leader = (leader*) l_ptr->following_party;
-                            }
-                        }
-                        
                         l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr, (void*) l_ptr->auto_pluck_pikmin);
                         l_ptr->auto_pluck_pikmin = NULL;
                     }
@@ -735,7 +729,7 @@ void do_logic() {
                         
                         if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
                             go_pluck(l_ptr, new_pikmin);
-                        } else { // No more buried Pikmin, or none nearby. Give up.
+                        } else { //No more buried Pikmin, or none nearby. Give up.
                             stop_auto_pluck(l_ptr);
                         }
                     }
@@ -908,7 +902,7 @@ void do_logic() {
             }
         }
         
-    } else { // Displaying a message.
+    } else { //Displaying a message.
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
             cur_message_char_time -= delta_t;

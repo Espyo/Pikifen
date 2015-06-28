@@ -12,10 +12,10 @@
 #include "leader_type.h"
 #include "const.h"
 
-leader_type::leader_type() {
-    whistle_range = DEF_WHISTLE_RANGE;
-    punch_strength = DEF_PUNCH_STRENGTH;
-    pluck_delay = 0.6;
+leader_type::leader_type() :
+    whistle_range(DEF_WHISTLE_RANGE),
+    punch_strength(DEF_PUNCH_STRENGTH),
+    pluck_delay(0.6),
+    bmp_icon(nullptr) {
     main_color = al_map_rgb(128, 128, 128);
-    bmp_icon = NULL;
 }

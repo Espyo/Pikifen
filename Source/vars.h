@@ -44,7 +44,7 @@
 
 using namespace std;
 
-// Bitmaps.
+//Bitmaps.
 extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
@@ -76,12 +76,12 @@ extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
-// Test things, temporary.
+//Test things, temporary.
 extern ALLEGRO_BITMAP* bmp_test;
 extern sector test_sector;
 extern vector<linedef> test_linedefs;
 
-// Sound effects.
+//Sound effects.
 extern sample_struct sfx_attack;
 extern sample_struct sfx_camera;
 extern sample_struct sfx_dismiss;
@@ -106,13 +106,13 @@ extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_switch_pikmin;
 extern sample_struct sfx_throw;
 
-// General globals.
+//General globals.
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
 extern float                            area_images_scale;
 extern int                              area_image_size;
-extern float                            area_images_x1; // Top-left corner of the area, in world coordinates.
+extern float                            area_images_x1; //Top-left corner of the area, in world coordinates.
 extern float                            area_images_y1;
-extern float                            auto_pluck_input_time; // Time left until the player can press the pluck button again, to make the captain auto-pluck.
+extern float                            auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the captain auto-pluck.
 extern vector<unsigned int>             berries;
 extern bmp_manager                      bitmaps;
 extern ALLEGRO_BITMAP*                  bmp_error;
@@ -136,24 +136,24 @@ extern size_t                           cur_message_char;
 extern float                            cur_message_char_time;
 extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
-extern vector<size_t>                   cur_message_stopping_chars; // The message stops scrolling when it reaches one of these characters.
+extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern movement_struct                  cursor_movement;            //Movement of the cursor via non-mouse.
 extern unsigned char                    cur_screen;
 extern float                            cur_sun_strength;
 extern float                            cursor_angle;
-extern float                            cursor_invalid_effect;    // Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
-extern float                            cursor_save_time;         // Time left until the position of the cursor is saved on the vector.
+extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
+extern float                            cursor_save_time;         //Time left until the position of the cursor is saved on the vector.
 extern float                            cursor_spin_angle;
-extern vector<point>                    cursor_spots;             // Spots the cursor has been through. Used for the faint trail left behind it.
-extern float                            cursor_x;                 // Leader's cursor.
+extern vector<point>                    cursor_spots;             //Spots the cursor has been through. Used for the faint trail left behind it.
+extern float                            cursor_x;                 //Leader's cursor.
 extern float                            cursor_y;
 extern unsigned int                     day;
 extern float                            day_minutes;
-extern float                            day_minutes_end;          // The day ends when the in-game minutes reach this value.
-extern float                            day_minutes_per_irl_sec;  // Every real-life second, these many in-game minutes pass.
-extern float                            day_minutes_start;        // The in-game minutes start with this value every day.
+extern float                            day_minutes_end;          //The day ends when the in-game minutes reach this value.
+extern float                            day_minutes_per_irl_sec;  //Every real-life second, these many in-game minutes pass.
+extern float                            day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                             daylight_effect;
-extern double                           delta_t;                  // Time between the previous frame and the current.
+extern double                           delta_t;                  //Time between the previous frame and the current.
 extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;
 extern map<string, enemy_type*>         enemy_types;
@@ -163,13 +163,13 @@ extern ALLEGRO_FONT*                    font_area_name;
 extern ALLEGRO_FONT*                    font_counter;
 extern unsigned int                     font_counter_h;
 extern unsigned int                     font_h;
-extern ALLEGRO_FONT*                    font_value;             // Font for the carrying / money values.
+extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
 extern unsigned short                   game_fps;
 extern float                            group_move_angle;
-extern vector<float>                    group_move_arrows;          // Distance of the arrows that appear when the "move group to cursor" button is held.
-extern float                            group_move_intensity;     // General intensity of the group move in the specified angle.
-extern float                            group_move_next_arrow_time; // Time remaining until the next arrow on the "move group arrows" appears.
-extern bool                             group_move_go_to_cursor;     // Is the "move group to cursor" button being pressed?
+extern vector<float>                    group_move_arrows;          //Distance of the arrows that appear when the "move group to cursor" button is held.
+extern float                            group_move_intensity;     //General intensity of the group move in the specified angle.
+extern float                            group_move_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
+extern bool                             group_move_go_to_cursor;     //Is the "move group to cursor" button being pressed?
 extern movement_struct                  group_movement; //Joystick coordinates for the group movement.
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
@@ -183,12 +183,12 @@ extern unsigned                         max_pikmin_in_field;
 extern ALLEGRO_MIXER*                   mixer;
 extern mob_category_manager             mob_categories;
 extern vector<mob*>                     mobs;
-extern float                            mouse_cursor_x;             // The physical mouse's cursor.
+extern float                            mouse_cursor_x;             //The physical mouse's cursor.
 extern float                            mouse_cursor_y;
 extern bool                             mouse_cursor_valid;
 extern bool                             mouse_moves_cursor[4];
 extern vector<nectar*>                  nectars;
-extern bool                             no_error_logs_today;        // Have there been no errors in this play session?
+extern bool                             no_error_logs_today;        //Have there been no errors in this play session?
 extern map<string, onion_type*>         onion_types;
 extern vector<onion*>                   onions;
 extern unsigned char                    particle_quality;
@@ -202,9 +202,9 @@ extern unsigned char                    pikmin_ai_portion;
 extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*>                  pikmin_list;
 extern map<string, pikmin_type*>        pikmin_types;
-extern bool                             pretty_whistle;              // If true, the whistle radius is merely drawn as a circle. Used to improve performance.
-extern double                           prev_frame_time;             // Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
-extern float                            prev_group_move_intensity; // The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
+extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
+extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
+extern float                            prev_group_move_intensity; //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                             running;
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;
@@ -214,9 +214,9 @@ extern unsigned char                    ship_beam_ring_color[3];
 extern bool                             ship_beam_ring_color_up[3];
 extern map<string, ship_type*>          ship_types;
 extern vector<ship*>                    ships;
-extern bool                             smooth_scaling;     // If false, images that are scaled up and down will look pixelated.
+extern bool                             smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
 extern map<string, mob_type*>           spec_mob_types;
-extern vector<unsigned long>            spray_amounts;      // How many of each spray the player has.
+extern vector<unsigned long>            spray_amounts;      //How many of each spray the player has.
 extern vector<spray_type>               spray_types;
 extern vector<status>                   statuses;
 extern float                            sun_meter_sun_angle;
@@ -224,29 +224,29 @@ extern float                            throw_particle_timer;
 extern map<string, treasure_type*>      treasure_types;
 extern vector<treasure*>                treasures;
 extern float                            tree_shadow_sway;
-extern ALLEGRO_VOICE*                   voice;  // Voice from which the sound effects play.
+extern ALLEGRO_VOICE*                   voice;  //Voice from which the sound effects play.
 extern map<string, weather>             weather_conditions;
-extern float                            whistle_dot_offset;    // How much each dot of the whistle should spin.
-extern float                            whistle_dot_radius[6]; // Radius of every 6th dot.
-extern float                            whistle_fade_radius;   // Radius the whistle was at pre-fade.
-extern float                            whistle_fade_time;     // Time left for the whistle's fading animations.
-extern float                            whistle_max_hold;      // The whistle area is at max size. Hold the whistle for these many seconds.
+extern float                            whistle_dot_offset;    //How much each dot of the whistle should spin.
+extern float                            whistle_dot_radius[6]; //Radius of every 6th dot.
+extern float                            whistle_fade_radius;   //Radius the whistle was at pre-fade.
+extern float                            whistle_fade_time;     //Time left for the whistle's fading animations.
+extern float                            whistle_max_hold;      //The whistle area is at max size. Hold the whistle for these many seconds.
 extern float                            whistle_next_dot_time;
 extern float                            whistle_next_ring_time;
 extern float                            whistle_radius;
 extern vector<unsigned char>            whistle_ring_colors;
 extern unsigned char                    whistle_ring_prev_color;
 extern vector<float>                    whistle_rings;
-extern bool                             whistling;             // Is the whistle currently being blown?
+extern bool                             whistling;             //Is the whistle currently being blown?
 extern int                              window_x;
 extern int                              window_y;
 
 
 
-// Debugging variables.
+//Debugging variables.
 extern bool debug_show_framerate;
 extern float debug_framerate_update_timer;
 extern unsigned int debug_framerate_counter;
 extern string debug_last_axis;
 
-#endif // ifndef VARS_INCLUDED
+#endif //ifndef VARS_INCLUDED

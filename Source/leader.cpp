@@ -16,17 +16,15 @@
 /* ----------------------------------------------------------------------------
  * Creates a leader.
  */
-leader::leader(const float x, const float y, leader_type* type, const float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+leader::leader(const float x, const float y, leader_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    lea_type(type),
+    holding_pikmin(nullptr),
+    auto_pluck_mode(false),
+    auto_pluck_pikmin(nullptr),
+    pluck_time(-1) {
     
-    lea_type = type;
-    
-    holding_pikmin = NULL;
-    auto_pluck_mode = false;
-    auto_pluck_pikmin = NULL;
-    pluck_time = -1;
-    
-    team = MOB_TEAM_PLAYER_1; // TODO.
+    team = MOB_TEAM_PLAYER_1; //TODO.
     
     party_spot_info* ps = new party_spot_info(max_pikmin_in_field, 12);
     party = new party_info(ps, x, y);
@@ -41,20 +39,19 @@ leader::leader(const float x, const float y, leader_type* type, const float angl
 void dismiss() {
     leader* cur_leader_ptr = leaders[cur_leader_nr];
     
-    float
-    min_x = 0, min_y = 0, max_x = 0, max_y = 0, // Leftmost member coordinate, rightmost, etc.
-    cx, cy, // Center of the group.
-    base_angle; // They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
+    float base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
     
-    // TODO what if there are a lot of Pikmin types?
+    //TODO what if there are a lot of Pikmin types?
     size_t n_party_members = cur_leader_ptr->party->members.size();
     if(n_party_members == 0) return;
     
-    // First, calculate what direction the party should be dismissed to.
+    //First, calculate what direction the party should be dismissed to.
     if(group_move_intensity > 0) {
-        // If the leader's moving the group, they should be dismissed towards the cursor.
+        //If the leader's moving the group, they should be dismissed towards the cursor.
         base_angle = group_move_angle + M_PI;
     } else {
+        float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
+        
         for(size_t m = 0; m < n_party_members; m++) {
             mob* member_ptr = cur_leader_ptr->party->members[m];
             
@@ -64,12 +61,14 @@ void dismiss() {
             if(member_ptr->y > max_y || m == 0) max_y = member_ptr->y;
         }
         
-        cx = (min_x + max_x) / 2;
-        cy = (min_y + max_y) / 2;
-        base_angle = atan2(cy - cur_leader_ptr->y, cx - cur_leader_ptr->x) + M_PI;
+        base_angle =
+            atan2(
+                ((min_y + max_y) / 2) - cur_leader_ptr->y,
+                ((min_x + max_x) / 2) - cur_leader_ptr->x
+            ) + M_PI;
     }
     
-    // Then, calculate how many Pikmin types there are in the party.
+    //Then, calculate how many Pikmin types there are in the party.
     map<pikmin_type*, float> type_dismiss_angles;
     for(size_t m = 0; m < n_party_members; m++) {
     
@@ -80,10 +79,10 @@ void dismiss() {
         }
     }
     
-    // For each type, calculate the angle;
+    //For each type, calculate the angle;
     size_t n_types = type_dismiss_angles.size();
     if(n_types == 1) {
-        // Small hack. If there's only one Pikmin type, dismiss them directly towards the base angle.
+        //Small hack. If there's only one Pikmin type, dismiss them directly towards the base angle.
         type_dismiss_angles.begin()->second = M_PI_4;
     } else {
         unsigned current_type_nr = 0;
@@ -93,7 +92,7 @@ void dismiss() {
         }
     }
     
-    // Now, dismiss them.
+    //Now, dismiss them.
     for(size_t m = 0; m < n_party_members; m++) {
         mob* member_ptr = cur_leader_ptr->party->members[0];
         remove_from_party(member_ptr);

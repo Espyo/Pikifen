@@ -25,19 +25,23 @@
  * size:     Size; diameter.
  * color:    Its color.
  */
-particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR color) {
-    this->type = type;
-    this->bitmap = bitmap;
-    this->x = x; this->y = y;
-    starting_x = x; starting_y = y;
-    this->speed_x = speed_x; this->speed_y = speed_y;
-    this->friction = friction;
-    this->gravity = gravity;
-    this->time = duration;
-    this->duration = duration;
-    this->size = size;
-    this->starting_size = size;
-    this->color = color;
+particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR &color) :
+    type(type),
+    bitmap(bitmap),
+    x(x),
+    y(y),
+    starting_x(x),
+    starting_y(y),
+    speed_x(speed_x),
+    speed_y(speed_y),
+    friction(friction),
+    gravity(gravity),
+    time(duration),
+    duration(duration),
+    size(size),
+    starting_size(size),
+    color(color) {
+    
 }
 
 
@@ -79,7 +83,7 @@ bool particle::tick() {
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float center_x, const float center_y, const float speed_min, const float speed_max, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
+void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float center_x, const float center_y, const float speed_min, const float speed_max, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -117,7 +121,7 @@ void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const b
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
+void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -151,7 +155,7 @@ void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, c
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR color) {
+void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
     for(unsigned char p = 0; p < n_particles; p++) {
@@ -183,7 +187,7 @@ void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp,
  * angle:    Angle to shoot at.
  * color:    Color of the particles.
  */
-void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const float angle, const ALLEGRO_COLOR color) {
+void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const float angle, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(35, 40);
     
     for(unsigned char p = 0; p < n_particles; p++) {

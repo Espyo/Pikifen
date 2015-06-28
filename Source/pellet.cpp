@@ -14,11 +14,11 @@
 /* ----------------------------------------------------------------------------
  * Creates a pellet.
  */
-pellet::pellet(float x, float y, pellet_type* type, const float angle, const string &vars)
-    : mob(x, y, type, angle, vars) {
+pellet::pellet(float x, float y, pellet_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
+    pel_type(type) {
     
-    pel_type = type;
-    this->carrier_info = new carrier_info_struct(this, type->max_carriers, false);
+    carrier_info = new carrier_info_struct(this, type->max_carriers, false);
     
     anim.change(ANIM_IDLE, true, false, false);
     anim.start();

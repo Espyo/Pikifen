@@ -9,7 +9,7 @@
  * Program start and main loop.
  */
 
-// TODO check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
+//TODO check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
 
 #include <fstream>
 #include <math.h>
@@ -69,13 +69,15 @@ int main(int argc, char**) {
     init_error_bitmap();
     init_fonts();
     
+    draw_loading_screen("", "Loading...", 1.0);
+    
     cur_screen = SCREEN_GAME;
     if(argc == 2) cur_screen = SCREEN_ANIMATION_EDITOR;
     else if(argc == 3) cur_screen = SCREEN_AREA_EDITOR;
     
     if(cur_screen == SCREEN_GAME) {
     
-        // Graphics.
+        //Graphics.
         bmp_red_onion = load_bmp("Red_onion.png");
         bmp_yellow_onion = load_bmp("Yellow_onion.png");
         bmp_blue_onion = load_bmp("Blue_onion.png");
@@ -110,7 +112,7 @@ int main(int argc, char**) {
         
         al_set_display_icon(display, bmp_icon);
         
-        // Sound effects.
+        //Sound effects.
         voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
         mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
         al_attach_mixer_to_voice(mixer, voice);
@@ -137,10 +139,10 @@ int main(int argc, char**) {
         sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
         sfx_camera = load_sample(              "Camera.ogg",               mixer);
         
-        // Game content.
+        //Game content.
         load_game_content();
         
-        // Initializing game things.
+        //Initializing game things.
         spray_amounts.clear();
         size_t n_spray_types = spray_types.size();
         for(size_t s = 0; s < n_spray_types; s++) { spray_amounts.push_back(0); }
@@ -222,7 +224,7 @@ int main(int argc, char**) {
     }
     
     
-    // Main loop.
+    //Main loop.
     al_start_timer(timer);
     while(running) {
     
@@ -246,12 +248,12 @@ int main(int argc, char**) {
             running = false;
             
         } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
-            // scr_w = ev.display.width;
-            // scr_h = ev.display.height;
+            //scr_w = ev.display.width;
+            //scr_h = ev.display.height;
             
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
             double cur_time = al_get_time();
-            if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; // Failsafe.
+            if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
             delta_t = cur_time - prev_frame_time;
             
             if(cur_screen == SCREEN_GAME) {

@@ -59,9 +59,9 @@ struct linedef_intersection {
  * It's also used when checking sectors in a certain spot.
  */
 struct blockmap {
-    float x1, y1; // Top-left corner of the blockmap.
-    vector<vector<vector<linedef*> > > linedefs; // Specifies a list of linedefs in each block.
-    vector<vector<unordered_set<sector*> > >  sectors;  // Specifies a list of sectors in each block. A block must have at least one sector.
+    float x1, y1; //Top-left corner of the blockmap.
+    vector<vector<vector<linedef*> > > linedefs; //Specifies a list of linedefs in each block.
+    vector<vector<unordered_set<sector*> > >  sectors;  //Specifies a list of sectors in each block. A block must have at least one sector.
     size_t n_cols, n_rows;
     
     blockmap();
@@ -99,15 +99,15 @@ struct linedef {
  */
 struct sector {
     unsigned char type;
-    float z; // Height.
-    unsigned int tag; // TODO are these used?
+    float z; //Height.
+    unsigned int tag; //TODO are these used?
     unsigned char brightness;
     
-    float scale_x; // Texture scale, X...
-    float scale_y; // and Y.
-    float trans_x; // X translation...
-    float trans_y; // and Y.
-    float rot;     // Rotation.
+    float scale_x; //Texture scale, X...
+    float scale_y; //and Y.
+    float trans_x; //X translation...
+    float trans_y; //and Y.
+    float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
     string file_name;
     bool fade;
@@ -185,12 +185,12 @@ struct tree_shadow {
     string file_name;
     ALLEGRO_BITMAP* bitmap;
     
-    float x, y;  // X and Y of the center.
-    float w, h;  // Width and height.
-    float angle; // Rotation angle.
-    unsigned char alpha; // Opacity.
-    float sway_x; // Swaying is multiplied by this, horizontally.
-    float sway_y; // And vertically.
+    float x, y;  //X and Y of the center.
+    float w, h;  //Width and height.
+    float angle; //Rotation angle.
+    unsigned char alpha; //Opacity.
+    float sway_x; //Swaying is multiplied by this, horizontally.
+    float sway_y; //And vertically.
     
     tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "", float sx = 1, float sy = 0);
 };
@@ -270,6 +270,6 @@ enum TERRAIN_SOUNDS {
 
 const float BLOCKMAP_BLOCK_SIZE = 128;
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
-const float SECTOR_STEP = 50; // Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
+const float SECTOR_STEP = 50; //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
 
-#endif // ifndef SECTOR_INCLUDED
+#endif //ifndef SECTOR_INCLUDED

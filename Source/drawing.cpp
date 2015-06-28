@@ -92,7 +92,7 @@ void do_drawing() {
         ******************/
         
         al_use_transform(&world_to_screen_transform);
-        // TODO optimize
+        //TODO optimize
         size_t area_image_cols = area_images.size();
         for(size_t x = 0; x < area_image_cols; x++) {
             size_t area_image_rows = area_images[x].size();
@@ -143,7 +143,7 @@ void do_drawing() {
         *          / \ *
         ***************/
         
-        // Nectar.
+        //Nectar.
         size_t n_nectars = nectars.size();
         for(size_t n = 0; n < n_nectars; n++) {
             float radius = nectars[n]->type->radius * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
@@ -153,7 +153,7 @@ void do_drawing() {
                 radius * 2, radius * 2, 0, map_gray(nectars[n]->lighting));
         }
         
-        // Treasures.
+        //Treasures.
         for(size_t t = 0; t < n_treasures; t++) {
             float radius = treasures[t]->type->radius;
             if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
@@ -167,7 +167,7 @@ void do_drawing() {
             );
         }
         
-        // Pellets.
+        //Pellets.
         size_t n_pellets = pellets.size();
         for(size_t p = 0; p < n_pellets; p++) {
         
@@ -175,8 +175,7 @@ void do_drawing() {
             frame* f_ptr = p_ptr->anim.get_frame();
             
             if(f_ptr) {
-                ALLEGRO_BITMAP* bm = NULL;
-                
+            
                 float radius = pellets[p]->type->radius;
                 if(pellets[p]->state == MOB_STATE_BEING_DELIVERED) {
                     radius *= 1 - (pellets[p]->time_in_state / DELIVERY_SUCK_TIME);
@@ -198,14 +197,14 @@ void do_drawing() {
             }
         }
         
-        // Enemies.
+        //Enemies.
         size_t n_enemies = enemies.size();
         for(size_t e = 0; e < n_enemies; e++) {
             enemy* e_ptr = enemies[e];
             frame* f_ptr = e_ptr->anim.get_frame();
             if(f_ptr) {
                 float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
-                // TODO test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
+                //TODO test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
                 float width = f_ptr->game_w;
                 float height = f_ptr->game_h;
                 if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
@@ -225,7 +224,7 @@ void do_drawing() {
             }
         }
         
-        // Pikmin.
+        //Pikmin.
         n_pikmin = pikmin_list.size();
         for(size_t p = 0; p < n_pikmin; p++) {
             pikmin* pik_ptr = pikmin_list[p];
@@ -287,7 +286,7 @@ void do_drawing() {
             
         }
         
-        // Leaders.
+        //Leaders.
         for(size_t l = 0; l < n_leaders; l++) {
             frame* f = leaders[l]->anim.get_frame();
             if(f) {
@@ -303,7 +302,7 @@ void do_drawing() {
             }
         }
         
-        // Onions.
+        //Onions.
         size_t n_onions = onions.size();
         for(size_t o = 0; o < n_onions; o++) {
             ALLEGRO_BITMAP* bm = NULL;
@@ -319,7 +318,7 @@ void do_drawing() {
             );
         }
         
-        // Info spots.
+        //Info spots.
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; i++) {
             info_spot* i_ptr = info_spots[i];
@@ -331,7 +330,7 @@ void do_drawing() {
             );
         }
         
-        // Ship(s).
+        //Ship(s).
         size_t n_ships = ships.size();
         for(size_t s = 0; s < n_ships; s++) {
             draw_sprite(
@@ -425,7 +424,7 @@ void do_drawing() {
         *                    \/   *
         **************************/
         
-        // Fractions and health.
+        //Fractions and health.
         size_t n_mobs = mobs.size();
         for(size_t m = 0; m < n_mobs; m++) {
             mob* mob_ptr = mobs[m];
@@ -433,9 +432,9 @@ void do_drawing() {
             if(mob_ptr->carrier_info) {
                 if(mob_ptr->carrier_info->current_carrying_strength > 0) {
                     ALLEGRO_COLOR color;
-                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { // Being carried.
+                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { //Being carried.
                         if(mob_ptr->carrier_info->carry_to_ship) {
-                            color = al_map_rgb(255, 255, 255); // TODO what if Whites have an Onion on this game? Make it changeable per game.
+                            color = al_map_rgb(255, 255, 255); //TODO what if Whites have an Onion on this game? Make it changeable per game.
                         } else {
                             color = mob_ptr->carrier_info->decided_type->main_color;
                         }
@@ -451,7 +450,7 @@ void do_drawing() {
             }
         }
         
-        // Info spots.
+        //Info spots.
         for(size_t i = 0; i < n_info_spots; i++) {
             if(dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
@@ -620,12 +619,12 @@ void do_drawing() {
             }
         }
         
-        // Cursor trail
+        //Cursor trail
         al_use_transform(&normal_transform);
         if(draw_cursor_trail) {
             for(size_t p = 1; p < cursor_spots.size(); p++) {
                 point* p_ptr = &cursor_spots[p];
-                point* pp_ptr = &cursor_spots[p - 1]; // Previous point.
+                point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
                 if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
                     al_draw_line(
                         p_ptr->x, p_ptr->y,
@@ -637,7 +636,7 @@ void do_drawing() {
             }
         }
         
-        // The actual cursor and mouse cursor
+        //The actual cursor and mouse cursor
         draw_sprite(
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
@@ -665,7 +664,7 @@ void do_drawing() {
         
         if(cur_message.empty()) {
         
-            // Leader health.
+            //Leader health.
             for(size_t l = 0; l < 3; l++) {
                 if(n_leaders < l + 1) continue;
                 
@@ -701,15 +700,15 @@ void do_drawing() {
                     size * 0.8, size * 0.8);
             }
             
-            // Sun Meter.
+            //Sun Meter.
             unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-            float sun_meter_start = scr_w * 0.06; // Center of the first dot.
+            float sun_meter_start = scr_w * 0.06; //Center of the first dot.
             float sun_meter_end = scr_w * 0.70;
-            float sun_meter_y = scr_h * 0.10; // Center.
-            float sun_meter_span = sun_meter_end - sun_meter_start; // Width, from the center of the first dot to the center of the last.
+            float sun_meter_y = scr_h * 0.10; //Center.
+            float sun_meter_span = sun_meter_end - sun_meter_start; //Width, from the center of the first dot to the center of the last.
             float interval = sun_meter_span / (float) n_hours;
             
-            // Larger bubbles at the start, middle and end of the meter.
+            //Larger bubbles at the start, middle and end of the meter.
             draw_sprite(bmp_hard_bubble, sun_meter_start, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
             draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span * 0.5, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
             draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
@@ -725,18 +724,18 @@ void do_drawing() {
             draw_sprite(
                 bmp_sun,
                 sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
-                scr_w * 0.07, scr_w * 0.07); // Static sun.
+                scr_w * 0.07, scr_w * 0.07); //Static sun.
             draw_sprite(
                 bmp_sun,
                 sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
                 scr_w * 0.07, scr_w * 0.07,
-                sun_meter_sun_angle); // Spinning sun.
+                sun_meter_sun_angle); //Spinning sun.
             draw_sprite(
                 bmp_sun_bubble,
                 sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
-                scr_w * 0.08, scr_w * 0.08); // Bubble in front the Sun.
+                scr_w * 0.08, scr_w * 0.08); //Bubble in front the Sun.
                 
-            // Day number.
+            //Day number.
             draw_sprite(
                 bmp_day_bubble,
                 scr_w * 0.89, scr_h * 0.13,
@@ -746,16 +745,16 @@ void do_drawing() {
                 font_counter, al_map_rgb(255, 255, 255), scr_w * 0.89, scr_h * 0.15,
                 ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, i2s(day));
                 
-            // Pikmin count.
-            // Count how many Pikmin only.
+            //Pikmin count.
+            //Count how many Pikmin only.
             n_leaders = leaders.size();
             size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
             for(size_t l = 0; l < n_leaders; l++) {
-                // If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
+                //If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
                 if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;
             }
             
-            // Closest party member.
+            //Closest party member.
             ALLEGRO_BITMAP* bm = NULL;
             if(closest_party_member) {
                 if(typeid(*closest_party_member) == typeid(pikmin)) {
@@ -778,7 +777,7 @@ void do_drawing() {
                 
             draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.38, scr_h * 0.91, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.07, scr_h * 0.08, "x");
             
-            // Pikmin count numbers.
+            //Pikmin count numbers.
             unsigned long total_pikmin = pikmin_list.size();
             for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
             
@@ -803,7 +802,7 @@ void do_drawing() {
                 i2s(total_pikmin)
             );
             
-            // Sprays.
+            //Sprays.
             if(n_spray_types > 0) {
                 size_t top_spray_nr;
                 if(n_spray_types < 3) top_spray_nr = 0; else top_spray_nr = selected_spray;
@@ -869,15 +868,15 @@ void do_drawing() {
                 }
             }
             
-            // TODO test stuff, remove.
-            // Day hour.
+            //TODO test stuff, remove.
+            //Day hour.
             /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
                          (i2s((day_minutes / 60)) + ":" + i2s(((int) (day_minutes) % 60))).c_str());
             for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
             al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
             
-        } else { // Show a message.
+        } else { //Show a message.
         
             draw_sprite(
                 bmp_message_box,
@@ -911,11 +910,11 @@ void do_drawing() {
             
         }
         
-    } else { // Paused.
+    } else { //Paused.
     
     }
     
-    // Debugging stuff.
+    //Debugging stuff.
     if(debug_show_framerate) {
         debug_framerate_update_timer -= delta_t;
         if(debug_framerate_update_timer <= 0) {
@@ -944,7 +943,7 @@ void do_drawing() {
  * x, y:  Center of the place to draw at.
  * max_*: Max width or height. Used to compress it if needed.
  */
-void draw_control(const ALLEGRO_FONT* const font, const control_info c, const float x, const float y, const float max_w, const float max_h) {
+void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const float x, const float y, const float max_w, const float max_h) {
     string name;
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         name = al_keycode_to_name(c.button);
@@ -1012,7 +1011,7 @@ bool casts_shadow(sector* s1, sector* s2) {
  * max_w, max_h: The maximum width and height. Use 0 to have no limit.
  * text:         Text to draw.
  */
-void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR color, const float x, const float y, const int flags, const unsigned char valign, const float max_w, const float max_h, const string text) {
+void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y, const int flags, const unsigned char valign, const float max_w, const float max_h, const string &text) {
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     int text_width = x2 - x1, text_height = y2 - y1;
@@ -1049,9 +1048,9 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR co
  * needed:  Needed strength to lift the object (weight).
  * color:   Color of the fraction's text.
  */
-void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR color) {
+void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR &color) {
     float first_y = cy - (font_h * 3) / 2;
-    // TODO make the largest one bigger.
+    //TODO make the largest one bigger.
     al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (i2s(current).c_str()));
     al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
     al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str()));
@@ -1095,7 +1094,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
     draw_sector_texture(s_ptr, x, y, scale);
     
     
-    // Wall shadows.
+    //Wall shadows.
     for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
         linedef* l_ptr = s_ptr->linedefs[l];
         ALLEGRO_VERTEX av[4];
@@ -1120,7 +1119,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
         float l_angle = atan2(lv[1]->y - lv[0]->y, lv[1]->x - lv[0]->x);
         float l_dist = dist(lv[0]->x, lv[0]->y, lv[1]->x, lv[1]->y).to_float();
         
-        // Let's check if the "front" side is the line's angle -90 (left).
+        //Let's check if the "front" side is the line's angle -90 (left).
         float l_cos_front = cos(l_angle - M_PI_2);
         float l_sin_front = sin(l_angle - M_PI_2);
         
@@ -1141,7 +1140,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
             ) != s_ptr
         ) {
         
-            // The points are ordered wrong, then. Swap them.
+            //The points are ordered wrong, then. Swap them.
             swap(lv[0], lv[1]);
             
             l_angle += M_PI;
@@ -1150,8 +1149,8 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
         }
         
         
-        // Record the first two vertices of the shadow.
-        // These match the vertices of the linedef.
+        //Record the first two vertices of the shadow.
+        //These match the vertices of the linedef.
         for(size_t v = 0; v < 2; v++) {
             av[v].x = lv[v]->x;
             av[v].y = lv[v]->y;
@@ -1171,18 +1170,18 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
          * requires specific treatment.
          */
         
-        // Angle of the neighbors, from the common vertex to the other.
+        //Angle of the neighbors, from the common vertex to the other.
         float neighbor_angles[2] = {M_PI_2, M_PI_2};
-        // Difference between angle of current linedef and neighbors.
+        //Difference between angle of current linedef and neighbors.
         float neighbor_angle_difs[2] = {0, 0};
-        // Midway angle.
+        //Midway angle.
         float mid_angles[2] = {M_PI_2, M_PI_2};
-        // Is this neighbor casting a shadow to the same sector?
+        //Is this neighbor casting a shadow to the same sector?
         float neighbor_shadow[2] = {false, false};
-        // Do we have a linedef for this vertex?
+        //Do we have a linedef for this vertex?
         bool got_first[2] = {false, false};
         
-        // For both neighbors.
+        //For both neighbors.
         for(unsigned char v = 0; v < 2; v++) {
         
             vertex* cur_vertex = lv[v];
@@ -1203,7 +1202,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
                     d < neighbor_angle_difs[v] ||
                     !got_first[v]
                 ) {
-                    // Save this as the next linedef.
+                    //Save this as the next linedef.
                     neighbor_angles[v] = vl_angle;
                     neighbor_angle_difs[v] = d;
                     got_first[v] = true;
@@ -1223,17 +1222,17 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
         point shadow_point[2];
         ALLEGRO_VERTEX extra_av[8];
         for(unsigned char e = 0; e < 8; e++) { extra_av[e].z = 0;}
-        unsigned char draw_extra[2] = {0, 0}; // How many vertices of the extra polygon to draw.
+        unsigned char draw_extra[2] = {0, 0}; //How many vertices of the extra polygon to draw.
         
         for(unsigned char v = 0; v < 2; v++) {
         
             if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
-                // If the shadow of the current and neighbor linedefs
-                // meet at less than 180 degrees, and the neighbor casts
-                // a shadow, then both this shadow and the neighbor's
-                // must blend in with one another. This shadow's final
-                // point should be where they both intersect.
-                // The neighbor's shadow will do the same when we get to it.
+                //If the shadow of the current and neighbor linedefs
+                //meet at less than 180 degrees, and the neighbor casts
+                //a shadow, then both this shadow and the neighbor's
+                //must blend in with one another. This shadow's final
+                //point should be where they both intersect.
+                //The neighbor's shadow will do the same when we get to it.
                 
                 float ul;
                 lines_intersect(
@@ -1249,11 +1248,11 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
                 shadow_point[v].y = av[0].y + l_sin_front * WALL_SHADOW_LENGTH + sin(l_angle) * l_dist * ul;
                 
             } else {
-                // Otherwise, just draw the
-                // shadows as a rectangle, away
-                // from the linedef. Then, if the angle is greater
-                // than 180, draw a "join" between both
-                // linedef's shadows. Like a kneecap.
+                //Otherwise, just draw the
+                //shadows as a rectangle, away
+                //from the linedef. Then, if the angle is greater
+                //than 180, draw a "join" between both
+                //linedef's shadows. Like a kneecap.
                 
                 if(neighbor_angle_difs[v] > M_PI_2) {
                     shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
@@ -1267,7 +1266,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
                     extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
                     
                     if(neighbor_angle_difs[v] > M_PI) {
-                        // Draw the "kneecap".
+                        //Draw the "kneecap".
                         extra_av[v * 4 + 2].x = av[v].x + cos(mid_angles[v]) * WALL_SHADOW_LENGTH;
                         extra_av[v * 4 + 2].y = av[v].y + sin(mid_angles[v]) * WALL_SHADOW_LENGTH;
                         extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, 0);
@@ -1276,8 +1275,8 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
                     }
                     
                     if(!neighbor_shadow[v]) {
-                        // If the neighbor casts no shadow, add an extra polygon vertex;
-                        // this glues the current linedef's shadow to the neighbor.
+                        //If the neighbor casts no shadow, add an extra polygon vertex;
+                        //this glues the current linedef's shadow to the neighbor.
                         
                         unsigned char index = (draw_extra[v] == 3) ? (v * 4 + 3) : (v * 4 + 2);
                         
@@ -1308,7 +1307,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
         av[3].color = al_map_rgba(0, 0, 0, 0);
         av[3].z = 0;
         
-        // Before drawing, let's offset according to the area image.
+        //Before drawing, let's offset according to the area image.
         for(unsigned char a = 0; a < 4; a++) {
             av[a].x -= x;
             av[a].y -= y;
@@ -1318,7 +1317,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
             extra_av[a].y -= y;
         }
         
-        // Do the scaling.
+        //Do the scaling.
         for(size_t v = 0; v < 4; v++) {
             av[v].x *= scale;
             av[v].y *= scale;
@@ -1328,7 +1327,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
             extra_av[v].y *= scale;
         }
         
-        // Draw!
+        //Draw!
         al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
         for(size_t v = 0; v < 2; v++) {
@@ -1356,16 +1355,16 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
     sector* texture_sector[2] = {NULL, NULL};
     
     if(s_ptr->fade) {
-        // Check all linedefs to find which two textures need merging.
+        //Check all linedefs to find which two textures need merging.
         linedef* l_ptr = NULL;
         sector* neighbor = NULL;
         bool valid = true;
         map<sector*, dist> neighbors;
         
-        // The two neighboring sectors with the lenghtiest linedefs are picked.
-        // So save all sector/length pairs.
-        // Sectors with different heights from the current one are also saved,
-        // but they have lower priority compared to same-heigh sectors.
+        //The two neighboring sectors with the lenghtiest linedefs are picked.
+        //So save all sector/length pairs.
+        //Sectors with different heights from the current one are also saved,
+        //but they have lower priority compared to same-heigh sectors.
         for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
             l_ptr = s_ptr->linedefs[l];
             valid = true;
@@ -1386,12 +1385,12 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             }
         }
         
-        // Find the two lengthiest ones.
+        //Find the two lengthiest ones.
         vector<pair<dist, sector*> > neighbors_vec;
         for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
             neighbors_vec.push_back(
                 make_pair(
-                    (dist) (n->second), (sector*) (n->first) // Yes, we do need these casts, for g++.
+                    (dist) (n->second), (sector*) (n->first) //Yes, we do need these casts, for g++.
                 )
             );
         }
@@ -1416,11 +1415,11 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         }
         
         if(!texture_sector[1] && texture_sector[0]) {
-            // 0 is always the bottom one. If we're fading into nothingness,
-            // we should swap first.
+            //0 is always the bottom one. If we're fading into nothingness,
+            //we should swap first.
             swap(texture_sector[0], texture_sector[1]);
         } else if(!texture_sector[1]) {
-            // Nothing to draw.
+            //Nothing to draw.
             return;
         } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             swap(texture_sector[0], texture_sector[1]);
@@ -1439,12 +1438,12 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         if(!texture_sector[0]) draw_sector_0 = false;
         else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) draw_sector_0 = false;
         
-        if(n_textures == 2 && !draw_sector_0 && t == 0) continue; // Allows fading into the void.
+        if(n_textures == 2 && !draw_sector_0 && t == 0) continue; //Allows fading into the void.
         
         size_t n_vertices = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
         
-        // Texture transformations.
+        //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         if(texture_sector[t]) {
             al_build_transform(
@@ -1501,8 +1500,53 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
-        delete av;
+        delete[] av;
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the loading screen for an area (or anything else, really),
+ * and swaps the buffers once.
+ * text:     The main text to show.
+ * subtitle: Subtitle to show under the text, optional.
+ * opacity:  0 to 1. 0 makes the whole loading screen black.
+ */
+void draw_loading_screen(const string &text, const string &subtitle, const float opacity) {
+    const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
+    float text_y = scr_h * 0.5 - (subtitle.empty() ? 0 : 32);
+    
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    
+    //Draw the main text.
+    draw_text_lines(
+        font_area_name, al_map_rgba(255, 215, 0, opacity * 255.0),
+        scr_w * 0.5, text_y, ALLEGRO_ALIGN_CENTER,
+        (subtitle.empty() ? 1 : 2),
+        text
+    );
+    
+    //Draw the subtitle.
+    if(!subtitle.empty()) {
+        ALLEGRO_TRANSFORM t, n;
+        al_identity_transform(&t);
+        al_identity_transform(&n);
+        al_scale_transform(&t, LOADING_SCREEN_SUBTITLE_SCALE, LOADING_SCREEN_SUBTITLE_SCALE);
+        
+        al_use_transform(&t);
+        
+        draw_text_lines(
+            font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
+            (scr_w * 0.5) * (1.0 / LOADING_SCREEN_SUBTITLE_SCALE),
+            (scr_h * 0.5 + 32) * (1.0 / LOADING_SCREEN_SUBTITLE_SCALE),
+            ALLEGRO_ALIGN_CENTER, 0,
+            subtitle
+        );
+        
+        al_use_transform(&n);
+    }
+    
+    al_flip_display();
 }
 
 
@@ -1519,11 +1563,11 @@ void draw_mob_shadow(const float cx, const float cy, const float size, const flo
     float shadow_x = 0, shadow_w = size + (size * shadow_stretch);
     
     if(day_minutes < 60 * 12) {
-        // Shadows point to the West.
+        //Shadows point to the West.
         shadow_x = -shadow_w + size * 0.5;
         shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     } else {
-        // Shadows point to the East.
+        //Shadows point to the East.
         shadow_x = -(size * 0.5);
         shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     }
@@ -1547,7 +1591,7 @@ void draw_mob_shadow(const float cx, const float cy, const float size, const flo
  * angle: Angle to rotate the sprite by.
  * tint:  Tint the sprite with this color.
  */
-void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle, const ALLEGRO_COLOR tint) {
+void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle, const ALLEGRO_COLOR &tint) {
     if(!bmp) {
         bmp = bmp_error;
     }
@@ -1575,10 +1619,10 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const floa
  * c:    Color.
  * x/y:  Coordinates of the text.
  * fl:   Flags, just like the ones you'd pass to al_draw_text.
- * va:   Vertical align: 1 for top, 2 for center, 3 for bottom.
+ * va:   Vertical align: 0 for top, 1 for center, 2 for bottom.
  * text: Text to write, line breaks included ('\n').
  */
-void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const float x, const float y, const int fl, const unsigned char va, const string text) {
+void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const float x, const float y, const int fl, const unsigned char va, const string &text) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(f);
     size_t n_lines = lines.size();
@@ -1587,7 +1631,7 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR c, const f
     if(va == 0) {
         top = y;
     } else {
-        int total_height = n_lines * fh + (n_lines - 1);  // We add n_lines - 1 because there is a 1px gap between each line.
+        int total_height = n_lines * fh + (n_lines - 1);  //We add n_lines - 1 because there is a 1px gap between each line.
         if(va == 1) {
             top = y - total_height / 2;
         } else {

@@ -28,17 +28,26 @@ using namespace std;
  * gw, gh: In-game width and height of the sprite.
  * h:      List of hitbox instances.
  */
-frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const float gh, const vector<hitbox_instance> &h) {
-    this->name = name;
-    bitmap = b;
-    game_w = gw;
-    game_h = gh;
-    hitbox_instances = h;
-    file_x = file_y = file_w = file_h = offs_x = offs_y = 0;
-    top_visible = true;
-    top_x = top_y = top_angle = 0;
-    top_w = top_h = 32;
-    parent_bmp = NULL;
+frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const float gh, const vector<hitbox_instance> &h) :
+    name(name),
+    bitmap(b),
+    game_w(gw),
+    game_h(gh),
+    hitbox_instances(h),
+    file_x(0),
+    file_y(0),
+    file_w(0),
+    file_h(0),
+    offs_x(0),
+    offs_y(0),
+    top_visible(true),
+    top_x(0),
+    top_y(0),
+    top_angle(0),
+    top_w(32),
+    top_h(32),
+    parent_bmp(nullptr) {
+    
     calculate_hitbox_span();
 }
 
@@ -52,19 +61,26 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const float gw, const 
  * gw, gh: In-game width and height of the sprite.
  * h:      List of hitbox instances.
  */
-frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h) {
-    this->name = name;
-    parent_bmp = b;
-    bitmap = b ? al_create_sub_bitmap(b, bx, by, bw, bh) : NULL;
-    game_w = gw;
-    game_h = gh;
-    hitbox_instances = h;
-    file_x = bx; file_y = by;
-    file_w = bw; file_h = bh;
-    offs_x = offs_y = 0;
-    top_visible = true;
-    top_x = top_y = top_angle = 0;
-    top_w = top_h = 32;
+frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h) :
+    name(name),
+    parent_bmp(b),
+    bitmap(b ? al_create_sub_bitmap(b, bx, by, bw, bh) : nullptr),
+    game_w(gw),
+    game_h(gh),
+    hitbox_instances(h),
+    file_x(bx),
+    file_y(by),
+    file_w(bw),
+    file_h(bh),
+    offs_x(0),
+    offs_y(0),
+    top_visible(true),
+    top_x(0),
+    top_y(0),
+    top_angle(0),
+    top_w(32),
+    top_h(32) {
+    
     calculate_hitbox_span();
 }
 
@@ -72,27 +88,28 @@ frame::frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const in
 /* ----------------------------------------------------------------------------
  * Creates a frame by copying info from another frame.
  */
-frame::frame(const frame &f2) {
-    name = f2.name;
-    parent_bmp = f2.parent_bmp;
-    bitmap = f2.bitmap;
-    hitbox_instances = f2.hitbox_instances;
-    game_w = f2.game_w;
-    game_h = f2.game_h;
-    file = f2.file;
-    file_x = f2.file_x;
-    file_y = f2.file_y;
-    file_w = f2.file_w;
-    file_h = f2.file_h;
-    offs_x = f2.offs_x;
-    offs_y = f2.offs_y;
-    top_visible = f2.top_visible;
-    top_x = f2.top_x;
-    top_y = f2.top_y;
-    top_w = f2.top_w;
-    top_h = f2.top_h;
-    top_angle = f2.top_angle;
-    hitbox_span = f2.hitbox_span;
+frame::frame(const frame &f2) :
+    name(f2.name),
+    parent_bmp(f2.parent_bmp),
+    bitmap(f2.bitmap),
+    hitbox_instances(f2.hitbox_instances),
+    game_w(f2.game_w),
+    game_h(f2.game_h),
+    file(f2.file),
+    file_x(f2.file_x),
+    file_y(f2.file_y),
+    file_w(f2.file_w),
+    file_h(f2.file_h),
+    offs_x(f2.offs_x),
+    offs_y(f2.offs_y),
+    top_visible(f2.top_visible),
+    top_x(f2.top_x),
+    top_y(f2.top_y),
+    top_w(f2.top_w),
+    top_h(f2.top_h),
+    top_angle(f2.top_angle),
+    hitbox_span(f2.hitbox_span) {
+    
 }
 
 
@@ -100,7 +117,7 @@ frame::frame(const frame &f2) {
  * Creates a frame by cloning the data from another frame.
  */
 frame frame::clone() {
-    // TODO should the hitboxes be cloned too?
+    //TODO should the hitboxes be cloned too?
     frame f = frame(name, NULL, game_w, game_h, hitbox_instances);
     f.file = file;
     f.file_x = file_x;
@@ -169,11 +186,12 @@ void frame::create_hitbox_instances(animation_set* const as) {
  * fp:  Pointer to the frame.
  * d:   Duration.
  */
-frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, const float d) {
-    frame_name = fn;
-    frame_nr = fnr;
-    frame_ptr = fp;
-    duration = d;
+frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, const float d) :
+    frame_name(fn),
+    frame_nr(fnr),
+    frame_ptr(fp),
+    duration(d) {
+    
 }
 
 
@@ -183,20 +201,21 @@ frame_instance::frame_instance(const string &fn, const size_t fnr, frame* fp, co
  * frame_instances: List of frame instances.
  * loop_frame:      Loop frame number.
  */
-animation::animation(const string &name, vector<frame_instance> frame_instances, const size_t loop_frame) {
-    this->name = name;
-    this->frame_instances = frame_instances;
-    this->loop_frame = loop_frame;
+animation::animation(const string &name, vector<frame_instance> frame_instances, const size_t loop_frame) :
+    name(name),
+    frame_instances(frame_instances),
+    loop_frame(loop_frame) {
+    
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates an animation by copying info from another animation.
  */
-animation::animation(const animation &a2) {
-    name = a2.name;
-    frame_instances = a2.frame_instances;
-    loop_frame = a2.loop_frame;
+animation::animation(const animation &a2) :
+    name(a2.name),
+    frame_instances(a2.frame_instances),
+    loop_frame(a2.loop_frame) {
 }
 
 
@@ -204,18 +223,23 @@ animation::animation(const animation &a2) {
  * Creates an animation instance.
  * anim_set: The animation set. Used when changing animations.
  */
-animation_instance::animation_instance(animation_set* anim_set) {
-    anim = NULL;
-    this->anim_set = anim_set;
+animation_instance::animation_instance(animation_set* anim_set) :
+    anim_set(anim_set),
+    anim(nullptr),
+    cur_frame_time(0),
+    cur_frame_nr(0),
+    done_once(false) {
+    
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates an animation instance by copying info from another.
  */
-animation_instance::animation_instance(const animation_instance &ai2) {
-    anim = ai2.anim;
-    anim_set = ai2.anim_set;
+animation_instance::animation_instance(const animation_instance &ai2) :
+    anim(ai2.anim),
+    anim_set(ai2.anim_set) {
+    
     start();
 }
 
@@ -294,8 +318,8 @@ bool animation_instance::tick(const float time) {
     
     cur_frame_time += time;
     
-    // This is a while instead of an if because if the framerate is too low and the next frame's duration
-    // is too short, it could be that a tick goes over an entire frame, and lands 2 or more frames ahead.
+    //This is a while instead of an if because if the framerate is too low and the next frame's duration
+    //is too short, it could be that a tick goes over an entire frame, and lands 2 or more frames ahead.
     while(cur_frame_time > cur_frame->duration && cur_frame->duration != 0) {
         cur_frame_time = cur_frame_time - cur_frame->duration;
         cur_frame_nr++;
@@ -323,15 +347,11 @@ frame* animation_instance::get_frame() {
 /* ----------------------------------------------------------------------------
  * Creates an animation set.
  */
-animation_set::animation_set(
-    vector<animation*> a,
-    vector<frame*> f,
-    vector<hitbox*> h
-) {
-
-    animations = a;
-    frames = f;
-    hitboxes = h;
+animation_set::animation_set(vector<animation*> a, vector<frame*> f, vector<hitbox*> h) :
+    animations(a),
+    frames(f),
+    hitboxes(h) {
+    
 }
 
 
@@ -413,7 +433,7 @@ void animation_set::create_conversions(vector<pair<size_t, string> > conversions
     
     if(conversions.empty()) return;
     
-    // First, find the highest number.
+    //First, find the highest number.
     size_t highest = conversions[0].first;
     for(size_t c = 1; c < conversions.size(); c++) {
         highest = max(highest, conversions[c].first);
@@ -454,7 +474,7 @@ animation_set load_animation_set(data_node* file_node) {
     vector<frame*> frames;
     vector<hitbox*> hitboxes;
     
-    // Hitboxes.
+    //Hitboxes.
     data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
     size_t n_hitboxes = hitboxes_node->get_nr_of_children();
     for(size_t h = 0; h < n_hitboxes; h++) {
@@ -467,7 +487,7 @@ animation_set load_animation_set(data_node* file_node) {
     
     as.hitboxes = hitboxes;
     
-    // Frames.
+    //Frames.
     data_node* frames_node = file_node->get_child_by_name("frames");
     size_t n_frames = frames_node->get_nr_of_children();
     for(size_t f = 0; f < n_frames; f++) {
@@ -533,7 +553,7 @@ animation_set load_animation_set(data_node* file_node) {
     
     as.frames = frames;
     
-    // Animations.
+    //Animations.
     data_node* anims_node = file_node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
     for(size_t a = 0; a < n_anims; a++) {

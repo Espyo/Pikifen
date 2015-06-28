@@ -173,9 +173,9 @@ public:
     mob_event* events[N_MOB_EVENTS];
     mob_event* get_event(const size_t type);
     
-    mob_state(const string name);
-    mob_state(const string name, mob_event* evs[N_MOB_EVENTS]);
-    mob_state(const string name, const size_t id);
+    mob_state(const string &name);
+    mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
+    mob_state(const string &name, const size_t id);
 };
 
 
@@ -183,7 +183,7 @@ class mob_fsm {
 public:
     mob* m;
     mob_state* cur_state;
-    vector<size_t> pre_named_conversions; // Conversion between pre-named states and in-file states.
+    vector<size_t> pre_named_conversions; //Conversion between pre-named states and in-file states.
     
     mob_event* get_event(const size_t type);
     void run_event(const size_t type, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
@@ -226,4 +226,4 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node);
 
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
 
-#endif // ifndef MOB_EVENT_INCLUDED
+#endif //ifndef MOB_EVENT_INCLUDED

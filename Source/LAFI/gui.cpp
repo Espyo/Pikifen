@@ -12,15 +12,14 @@ namespace lafi {
  * style: the widget style.
  * flags: widget flags. Use FLAG_*.
  */
-gui::gui(int w, int h, lafi::style* style, unsigned char flags)
-    : widget(0, 0, w, h, style, flags) {
+gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
+    widget(0, 0, w, h, style, flags),
+    timer(NULL),
+    queue(NULL),
+    thread(NULL),
+    close_button_quits(false),
+    autonomous(false) {
     
-    timer = NULL;
-    queue = NULL;
-    thread = NULL;
-    close_button_quits = false;
-    
-    this->autonomous = false;
 }
 
 
@@ -101,7 +100,7 @@ void gui::wait() {
 }
 
 
-// Destroys a gui.
+//Destroys a gui.
 gui::~gui() { }
 
 

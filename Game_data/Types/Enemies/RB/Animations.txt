@@ -3,7 +3,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0.0
+				duration=0.00
 			}
 		}
 	}
@@ -71,25 +71,25 @@ animations{
 		loop_frame=0
 		frame_instances{
 			chomp1{
-				duration=0.250
+				duration=0.25
 			}
 			chomp2{
 				duration=0.10
 			}
 			chomp3{
-				duration=0.150
+				duration=0.15
 			}
 			chomp2{
 				duration=0.10
 			}
 			chomp1{
-				duration=0.250
+				duration=0.25
 			}
 			chomp2{
 				duration=0.10
 			}
 			chomp3{
-				duration=0.150
+				duration=0.15
 			}
 			chomp2{
 				duration=0.10
@@ -106,7 +106,7 @@ animations{
 				duration=0.10
 			}
 			chomp3dead{
-				duration=1.0
+				duration=1.00
 			}
 			chomp2dead{
 				duration=0.10
@@ -126,43 +126,43 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle_shifted{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
-				duration=0.150
+				duration=0.15
 			}
 			idle_shifted{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
-				duration=0.150
+				duration=0.15
 			}
 			idle_shifted{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
 				duration=0.20
 			}
 			shaker{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
-				duration=0.150
+				duration=0.15
 			}
 			shakel{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
-				duration=0.150
+				duration=0.15
 			}
 			shaker{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
-				duration=0.150
+				duration=0.15
 			}
 			shakel{
-				duration=0.150
+				duration=0.15
 			}
 			idle{
 				duration=0.40
@@ -266,46 +266,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=103
-		game_w=153.0
-		game_h=103.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=153.00
+		game_h=103.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -315,46 +315,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=104
-		game_w=153.0
-		game_h=104.0
-		offs_x=16.0
-		offs_y=2.0
+		game_w=153.00
+		game_h=104.00
+		offs_x=16.00
+		offs_y=2.00
 		hitbox_instances{
 			body{
-				coords=52.0 4.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 4.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 4.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 4.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 4.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 4.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -364,46 +364,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=115
-		game_w=153.0
-		game_h=115.0
-		offs_x=16.0
-		offs_y=4.0
+		game_w=153.00
+		game_h=115.00
+		offs_x=16.00
+		offs_y=4.00
 		hitbox_instances{
 			body{
-				coords=52.0 10.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 10.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 10.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 10.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 10.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 10.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -413,46 +413,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=104
-		game_w=153.0
-		game_h=-104.0
-		offs_x=16.0
-		offs_y=-2.0
+		game_w=153.00
+		game_h=-104.00
+		offs_x=16.00
+		offs_y=-2.00
 		hitbox_instances{
 			body{
-				coords=52.0 -4.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 -4.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 -4.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 -4.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 -4.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 -4.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -462,46 +462,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=115
-		game_w=153.0
-		game_h=-115.0
-		offs_x=16.0
-		offs_y=-4.0
+		game_w=153.00
+		game_h=-115.00
+		offs_x=16.00
+		offs_y=-4.00
 		hitbox_instances{
 			body{
-				coords=52.0 -10.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 -10.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 -10.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 -10.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 -10.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 -10.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -511,46 +511,46 @@ frames{
 		file_y=116
 		file_w=160
 		file_h=103
-		game_w=160.0
-		game_h=103.0
-		offs_x=20.0
-		offs_y=0.0
+		game_w=160.00
+		game_h=103.00
+		offs_x=20.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 -8.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 -8.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -560,46 +560,46 @@ frames{
 		file_y=116
 		file_w=174
 		file_h=110
-		game_w=174.0
-		game_h=110.0
-		offs_x=26.0
-		offs_y=0.0
+		game_w=174.00
+		game_h=110.00
+		offs_x=26.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=55.0 -2.0 0.0
-				height=128.0
-				radius=45.0
+				coords=55.00 -2.00 0.00
+				height=128.00
+				radius=45.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 4.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 4.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=104.0 -10.0 0.0
-				height=128.0
-				radius=16.0
+				coords=104.00 -10.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -609,46 +609,46 @@ frames{
 		file_y=116
 		file_w=174
 		file_h=103
-		game_w=174.0
-		game_h=103.0
-		offs_x=28.0
-		offs_y=0.0
+		game_w=174.00
+		game_h=103.00
+		offs_x=28.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=58.0 0.0 0.0
-				height=128.0
-				radius=45.0
+				coords=58.00 0.00 0.00
+				height=128.00
+				radius=45.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=120.0 0.0 0.0
-				height=128.0
-				radius=24.0
+				coords=120.00 0.00 0.00
+				height=128.00
+				radius=24.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -658,46 +658,46 @@ frames{
 		file_y=116
 		file_w=163
 		file_h=103
-		game_w=163.0
-		game_h=103.0
-		offs_x=20.0
-		offs_y=0.0
+		game_w=163.00
+		game_h=103.00
+		offs_x=20.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=102.0 11.0 0.0
-				height=128.0
-				radius=24.0
+				coords=102.00 11.00 0.00
+				height=128.00
+				radius=24.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -707,46 +707,46 @@ frames{
 		file_y=116
 		file_w=193
 		file_h=135
-		game_w=193.0
-		game_h=135.0
-		offs_x=32.0
-		offs_y=0.0
+		game_w=193.00
+		game_h=135.00
+		offs_x=32.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=78.0 2.0 0.0
-				height=128.0
-				radius=45.0
+				coords=78.00 2.00 0.00
+				height=128.00
+				radius=45.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=12.0 -13.0 0.0
-				height=128.0
-				radius=56.0
+				coords=12.00 -13.00 0.00
+				height=128.00
+				radius=56.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=97.0 33.0 0.0
-				height=128.0
-				radius=16.0
+				coords=97.00 33.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -756,46 +756,46 @@ frames{
 		file_y=252
 		file_w=124
 		file_h=103
-		game_w=124.0
-		game_h=103.0
-		offs_x=0.0
-		offs_y=0.0
+		game_w=124.00
+		game_h=103.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=12.0 0.0 0.0
-				height=128.0
-				radius=48.0
+				coords=12.00 0.00 0.00
+				height=128.00
+				radius=48.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=55.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=55.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -803,48 +803,48 @@ frames{
 		file=Red_Bulborb.png
 		file_x=125
 		file_y=252
-		file_w=10
+		file_w=100
 		file_h=103
-		game_w=100.0
-		game_h=103.0
+		game_w=100.00
+		game_h=103.00
 		offs_x=-11.50
-		offs_y=0.0
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-44.0 0.0 0.0
-				height=128.0
-				radius=32.0
+				coords=-44.00 0.00 0.00
+				height=128.00
+				radius=32.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=28.0 0.0 0.0
-				height=128.0
-				radius=24.0
+				coords=28.00 0.00 0.00
+				height=128.00
+				radius=24.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
-				angle=0.0
-				knockback=0.0
+				angle=0.00
+				knockback=0.00
 			}
 		}
 	}
@@ -854,46 +854,46 @@ frames{
 		file_y=252
 		file_w=115
 		file_h=103
-		game_w=115.0
-		game_h=103.0
-		offs_x=-4.0
-		offs_y=0.0
+		game_w=115.00
+		game_h=103.00
+		offs_x=-4.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=0.0 0.0 0.0
-				height=128.0
-				radius=52.0
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=52.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-14.0 0.0 0.0
-				height=128.0
-				radius=48.0
+				coords=-14.00 0.00 0.00
+				height=128.00
+				radius=48.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=32.0 0.0 0.0
-				height=128.0
-				radius=24.0
+				coords=32.00 0.00 0.00
+				height=128.00
+				radius=24.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -903,46 +903,46 @@ frames{
 		file_y=252
 		file_w=172
 		file_h=103
-		game_w=172.0
-		game_h=103.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=172.00
+		game_h=103.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=46.0 0.0 0.0
-				height=128.0
-				radius=45.0
+				coords=46.00 0.00 0.00
+				height=128.00
+				radius=45.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=2
 				multiplier=0.80
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=80.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=80.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -952,46 +952,46 @@ frames{
 		file_y=252
 		file_w=159
 		file_h=105
-		game_w=159.0
-		game_h=-105.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=159.00
+		game_h=-105.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=50.0 -8.0 0.0
-				height=128.0
-				radius=50.0
+				coords=50.00 -8.00 0.00
+				height=128.00
+				radius=50.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=4.712389
-				knockback=1.0
+				angle=4.71
+				knockback=1.00
 			}
 			back{
-				coords=-13.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-13.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=4.712389
-				knockback=1.0
+				angle=4.71
+				knockback=1.00
 			}
 			mouth{
-				coords=85.0 -14.0 0.0
-				height=128.0
-				radius=16.0
+				coords=85.00 -14.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1001,46 +1001,46 @@ frames{
 		file_y=252
 		file_w=159
 		file_h=105
-		game_w=159.0
-		game_h=105.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=159.00
+		game_h=105.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=50.0 8.0 0.0
-				height=128.0
-				radius=50.0
+				coords=50.00 8.00 0.00
+				height=128.00
+				radius=50.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-13.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-13.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=1
-				multiplier=0.0
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=85.0 14.0 0.0
-				height=128.0
-				radius=16.0
+				coords=85.00 14.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1050,46 +1050,46 @@ frames{
 		file_y=116
 		file_w=163
 		file_h=103
-		game_w=163.0
-		game_h=103.0
-		offs_x=20.0
-		offs_y=0.0
+		game_w=163.00
+		game_h=103.00
+		offs_x=20.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=94.0 12.0 0.0
-				height=128.0
-				radius=16.0
+				coords=94.00 12.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1099,46 +1099,46 @@ frames{
 		file_y=252
 		file_w=124
 		file_h=103
-		game_w=124.0
-		game_h=103.0
-		offs_x=0.0
-		offs_y=0.0
+		game_w=124.00
+		game_h=103.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=12.0 0.0 0.0
-				height=128.0
-				radius=48.0
+				coords=12.00 0.00 0.00
+				height=128.00
+				radius=48.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=55.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=55.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1146,48 +1146,48 @@ frames{
 		file=Red_Bulborb.png
 		file_x=125
 		file_y=252
-		file_w=10
+		file_w=100
 		file_h=103
-		game_w=100.0
-		game_h=103.0
+		game_w=100.00
+		game_h=103.00
 		offs_x=-11.50
-		offs_y=0.0
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-44.0 0.0 0.0
-				height=128.0
-				radius=32.0
+				coords=-44.00 0.00 0.00
+				height=128.00
+				radius=32.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=28.0 0.0 0.0
-				height=128.0
-				radius=24.0
+				coords=28.00 0.00 0.00
+				height=128.00
+				radius=24.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
-				angle=0.0
-				knockback=0.0
+				angle=0.00
+				knockback=0.00
 			}
 		}
 	}
@@ -1197,46 +1197,46 @@ frames{
 		file_y=252
 		file_w=115
 		file_h=103
-		game_w=115.0
-		game_h=103.0
-		offs_x=-4.0
-		offs_y=0.0
+		game_w=115.00
+		game_h=103.00
+		offs_x=-4.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=0.0 0.0 0.0
-				height=128.0
-				radius=52.0
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=52.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-14.0 0.0 0.0
-				height=128.0
-				radius=48.0
+				coords=-14.00 0.00 0.00
+				height=128.00
+				radius=48.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=32.0 0.0 0.0
-				height=128.0
-				radius=24.0
+				coords=32.00 0.00 0.00
+				height=128.00
+				radius=24.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1246,46 +1246,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=103
-		game_w=153.0
-		game_h=103.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=153.00
+		game_h=103.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=50.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1295,46 +1295,46 @@ frames{
 		file_y=0
 		file_w=161
 		file_h=103
-		game_w=161.0
-		game_h=103.0
-		offs_x=16.0
-		offs_y=0.0
+		game_w=161.00
+		game_h=103.00
+		offs_x=16.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=53.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=53.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1344,46 +1344,46 @@ frames{
 		file_y=0
 		file_w=157
 		file_h=103
-		game_w=157.0
-		game_h=103.0
-		offs_x=14.0
-		offs_y=0.0
+		game_w=157.00
+		game_h=103.00
+		offs_x=14.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=52.0 0.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 0.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 0.0 0.0
-				height=128.0
-				radius=52.0
+				coords=-12.00 0.00 0.00
+				height=128.00
+				radius=52.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 0.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 0.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1393,46 +1393,46 @@ frames{
 		file_y=0
 		file_w=153
 		file_h=103
-		game_w=153.0
-		game_h=103.0
-		offs_x=16.0
-		offs_y=2.0
+		game_w=153.00
+		game_h=103.00
+		offs_x=16.00
+		offs_y=2.00
 		hitbox_instances{
 			body{
-				coords=52.0 2.0 0.0
-				height=128.0
-				radius=40.0
+				coords=52.00 2.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-12.0 2.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-12.00 2.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=90.0 2.0 0.0
-				height=128.0
-				radius=16.0
+				coords=90.00 2.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1442,46 +1442,46 @@ frames{
 		file_y=358
 		file_w=157
 		file_h=121
-		game_w=157.0
-		game_h=121.0
-		offs_x=16.0
-		offs_y=12.0
+		game_w=157.00
+		game_h=121.00
+		offs_x=16.00
+		offs_y=12.00
 		hitbox_instances{
 			body{
-				coords=46.0 16.0 0.0
-				height=128.0
-				radius=40.0
+				coords=46.00 16.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-8.0 -3.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-8.00 -3.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=85.0 28.0 0.0
-				height=128.0
-				radius=16.0
+				coords=85.00 28.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1491,46 +1491,46 @@ frames{
 		file_y=358
 		file_w=135
 		file_h=131
-		game_w=135.0
-		game_h=131.0
-		offs_x=6.0
-		offs_y=16.0
+		game_w=135.00
+		game_h=131.00
+		offs_x=6.00
+		offs_y=16.00
 		hitbox_instances{
 			body{
-				coords=25.0 36.0 0.0
-				height=128.0
-				radius=40.0
+				coords=25.00 36.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-10.0 1.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-10.00 1.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=52.0 66.0 0.0
-				height=128.0
-				radius=16.0
+				coords=52.00 66.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1540,46 +1540,46 @@ frames{
 		file_y=358
 		file_w=157
 		file_h=121
-		game_w=157.0
-		game_h=-121.0
-		offs_x=16.0
-		offs_y=-12.0
+		game_w=157.00
+		game_h=-121.00
+		offs_x=16.00
+		offs_y=-12.00
 		hitbox_instances{
 			body{
-				coords=46.0 -16.0 0.0
-				height=128.0
-				radius=40.0
+				coords=46.00 -16.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-8.0 3.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-8.00 3.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=85.0 -28.0 0.0
-				height=128.0
-				radius=16.0
+				coords=85.00 -28.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}
@@ -1589,46 +1589,46 @@ frames{
 		file_y=358
 		file_w=135
 		file_h=131
-		game_w=135.0
-		game_h=-131.0
-		offs_x=6.0
-		offs_y=-16.0
+		game_w=135.00
+		game_h=-131.00
+		offs_x=6.00
+		offs_y=-16.00
 		hitbox_instances{
 			body{
-				coords=25.0 -36.0 0.0
-				height=128.0
-				radius=40.0
+				coords=25.00 -36.00 0.00
+				height=128.00
+				radius=40.00
 				type=0
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			back{
-				coords=-10.0 -1.0 0.0
-				height=128.0
-				radius=50.0
+				coords=-10.00 -1.00 0.00
+				height=128.00
+				radius=50.00
 				type=0
 				multiplier=0.80
 				can_pikmin_latch=true
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 			mouth{
-				coords=52.0 -66.0 0.0
-				height=128.0
-				radius=16.0
+				coords=52.00 -66.00 0.00
+				height=128.00
+				radius=16.00
 				type=2
-				multiplier=1.0
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
-				angle=0.0
-				knockback=1.0
+				angle=0.00
+				knockback=1.00
 			}
 		}
 	}

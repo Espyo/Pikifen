@@ -10,16 +10,15 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates an angle picker.
  */
-angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::style* style, unsigned char flags)
-    : widget(x1, y1, x2, y2, style, flags) {
-    
-    this->angle = angle;
+angle_picker::angle_picker(int x1, int y1, int x2, int y2, float angle, lafi::style* style, unsigned char flags) :
+    widget(x1, y1, x2, y2, style, flags),
+    angle(angle),
+    dragging_pointer(false) {
     
     needs_init = true;
-    dragging_pointer = false;
 }
 
-// Destroys an angle picker.
+//Destroys an angle picker.
 angle_picker::~angle_picker() {}
 
 

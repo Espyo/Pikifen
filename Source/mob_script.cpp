@@ -27,13 +27,12 @@
    * vector containing the states.
  * mt:     mob type this action's fsm belongs to.
  */
-mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) {
-    valid = true;
-    type = MOB_ACTION_UNKNOWN;
-    sub_type = 0;
-    code = NULL;
+mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) :
+    valid(true),
+    type(MOB_ACTION_UNKNOWN),
+    sub_type(0),
+    code(nullptr) {
     string n = dn->name;
-    
     
     if(n == "chomp") {
         type = MOB_ACTION_CHOMP_HITBOXES;
@@ -77,7 +76,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "if") {
-        // TODO make this use integers instead of strings, eventually?
+        //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
         vector<string> words = split(dn->value);
@@ -270,11 +269,11 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
  * type:     the action type.
  * sub_type: sub-type, if any.
  */
-mob_action::mob_action(MOB_ACTION_TYPES type, unsigned char sub_type) {
-    this->type = type;
-    this->sub_type = sub_type;
-    valid = true;
-    code = NULL;
+mob_action::mob_action(MOB_ACTION_TYPES type, unsigned char sub_type) :
+    type(type),
+    sub_type(sub_type),
+    valid(true),
+    code(nullptr) {
     
 }
 
@@ -283,8 +282,12 @@ mob_action::mob_action(MOB_ACTION_TYPES type, unsigned char sub_type) {
  * Creates a new mob action that runs custom code.
  * code: the function to run.
  */
-mob_action::mob_action(custom_action_code code) {
-    this->code = code;
+mob_action::mob_action(custom_action_code code) :
+    code(code),
+    type(MOB_ACTION_UNKNOWN),
+    sub_type(MOB_ACTION_UNKNOWN),
+    valid(true) {
+    
 }
 
 
@@ -326,14 +329,14 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_IF) {
     
-        // TODO check for vs size.
-        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; // If false, skip to the next one.
+        //TODO check for vs size.
+        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
         
         
     } else if(type == MOB_ACTION_MOVE) {
     
-        // TODO relative values.
-        // TODO check for vf size.
+        //TODO relative values.
+        //TODO check for vf size.
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->set_target(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
@@ -363,14 +366,14 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
-        // TODO check vi's size.
+        //TODO check vi's size.
         m->affected_by_gravity = vi[0];
         
         
         
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
-        // TODO check vf size's.
+        //TODO check vf size's.
         m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
         
         
@@ -381,13 +384,13 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
-        // TODO check vf's size.
+        //TODO check vf's size.
         m->set_timer(vf[0]);
         
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        // TODO check vs's size.
+        //TODO check vs's size.
         m->set_var(vs[0], vs[1]);
         
         
@@ -457,7 +460,9 @@ void mob_fsm::run_event(const size_t type, void* custom_data_1, void* custom_dat
  * d: the data node.
  * a: its actions.
  */
-mob_event::mob_event(data_node* d, vector<mob_action*> a) {
+mob_event::mob_event(data_node* d, vector<mob_action*> a) :
+    actions(a) {
+    
     string n = d->name;
     if(n == "on_enter")                  type = MOB_EVENT_ON_ENTER;
     else if(n == "on_leave")             type = MOB_EVENT_ON_LEAVE;
@@ -489,7 +494,6 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
         type = MOB_EVENT_UNKNOWN;
         error_log("Unknown script event name \"" + n + "\"!", d);
     }
-    actions = a;
 }
 
 
@@ -498,8 +502,10 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) {
  * t: the event type.
  * a: its actions.
  */
-mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) {
-    type = t; actions = a;
+mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) :
+    type(t),
+    actions(a) {
+    
 }
 
 
@@ -507,9 +513,9 @@ mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) {
  * Creates a new state.
  * name: the state's name.
  */
-mob_state::mob_state(const string name) {
-    this->name = name;
-    this->id = string::npos;
+mob_state::mob_state(const string &name) :
+    name(name),
+    id(string::npos) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = nullptr;
@@ -521,9 +527,9 @@ mob_state::mob_state(const string name) {
  * name: the state's name.
  * e:    its events.
  */
-mob_state::mob_state(const string name, mob_event* evs[N_MOB_EVENTS]) {
-    this->name = name;
-    this->id = string::npos;
+mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
+    name(name),
+    id(string::npos) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = evs[e];
@@ -536,9 +542,9 @@ mob_state::mob_state(const string name, mob_event* evs[N_MOB_EVENTS]) {
  * name: the state's name.
  * id:   its ID, for sorting on the vector of states.
  */
-mob_state::mob_state(const string name, const size_t id) {
-    this->name = name;
-    this->id   = id;
+mob_state::mob_state(const string &name, const size_t id) :
+    name(name),
+    id(id) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; e++) {
         events[e] = nullptr;
@@ -551,7 +557,7 @@ mob_state::mob_state(const string name, const size_t id) {
  */
 void mob_fsm::set_state(const size_t new_state) {
     if(new_state >= m->type->states.size()) return;
-    // Run the code to leave the current state.
+    //Run the code to leave the current state.
     if(cur_state) {
         m->fsm.run_event(MOB_EVENT_ON_LEAVE, m);
     }
@@ -559,10 +565,10 @@ void mob_fsm::set_state(const size_t new_state) {
     //Uncomment this to be notified about state changes on stdout.
     //if(cur_state) cout << "State " << cur_state->name << " -> " << m->type->states[new_state]->name << "\n";
     
-    // Switch states.
+    //Switch states.
     m->fsm.cur_state = m->type->states[new_state];
     
-    // Run the code to enter the new state.
+    //Run the code to enter the new state.
     m->fsm.run_event(MOB_EVENT_ON_ENTER, m);
     
 }
@@ -571,8 +577,9 @@ void mob_fsm::set_state(const size_t new_state) {
 /* ----------------------------------------------------------------------------
  * Creates a new mob FSM.
  */
-mob_fsm::mob_fsm(mob* m) {
-    cur_state = NULL;
+mob_fsm::mob_fsm(mob* m) :
+    cur_state(nullptr) {
+    
     if(!m) return;
     this->m = m;
 }
@@ -679,9 +686,10 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
 /* ----------------------------------------------------------------------------
  * Creates the easy fsm creator.
  */
-easy_fsm_creator::easy_fsm_creator() {
-    cur_state = NULL;
-    cur_event = NULL;
+easy_fsm_creator::easy_fsm_creator() :
+    cur_state(nullptr),
+    cur_event(nullptr) {
+    
 }
 
 

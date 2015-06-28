@@ -115,10 +115,10 @@ public:
  */
 struct mob_category_manager {
 private:
-    vector<string> pnames; // Plural names.
-    vector<string> snames; // Singular names.
-    vector<function<void (vector<string> &list)> > listers; // Lists all types' names onto the vector.
-    vector<function<mob_type* (const string &name)> > type_getters; // Returns pointer to the type of the matching name.
+    vector<string> pnames; //Plural names.
+    vector<string> snames; //Singular names.
+    vector<function<void (vector<string> &list)> > listers; //Lists all types' names onto the vector.
+    vector<function<mob_type* (const string &name)> > type_getters; //Returns pointer to the type of the matching name.
     
 public:
     void register_category(
@@ -201,8 +201,8 @@ struct point {
  * the sound playing from the sample.
  */
 struct sample_struct {
-    ALLEGRO_SAMPLE*          sample;   // Pointer to the sample.
-    ALLEGRO_SAMPLE_INSTANCE* instance; // Pointer to the instance.
+    ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
+    ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
     
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
@@ -232,13 +232,14 @@ public:
 
 
 
+//TODO this isn't being used, is it?
 struct string_int_converter {
 private:
     vector<const string> names;
     
 public:
-    void add_string(const string s);
+    void add_string(const string &s);
     
 };
 
-#endif // ifndef MISC_STRUCTS_INCLUDED
+#endif //ifndef MISC_STRUCTS_INCLUDED

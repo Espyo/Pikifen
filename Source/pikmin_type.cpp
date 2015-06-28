@@ -19,27 +19,29 @@
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin type.
  */
-pikmin_type::pikmin_type() {
-    attack_attribute = 0;
-    carry_strength = 1;
-    attack_power = 1;
-    weight = 1;
-    carry_speed = 1;
-    attack_interval = 0.8;
-    size = DEF_PIKMIN_SIZE;
-    throw_height_mult = 1.0;
-    has_onion = true;
-    can_dig = false;
-    can_fly = false;
-    can_swim = false;
-    can_latch = true;
-    can_carry_bomb_rocks = false;
+pikmin_type::pikmin_type() :
+    attack_attribute(0),
+    carry_strength(1),
+    attack_power(1),
+    carry_speed(1),
+    attack_interval(0.8),
+    size(DEF_PIKMIN_SIZE),
+    throw_height_mult(1.0),
+    has_onion(true),
+    can_dig(false),
+    can_fly(false),
+    can_swim(false),
+    can_latch(true),
+    can_carry_bomb_rocks(false) {
+    
     bmp_top[0] = NULL;
     bmp_top[1] = NULL;
     bmp_top[2] = NULL;
     bmp_icon[0] = NULL;
     bmp_icon[1] = NULL;
     bmp_icon[2] = NULL;
+    
+    weight = 1;
     
     init_script();
 }

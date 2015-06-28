@@ -24,4 +24,4 @@ public:
 
 }
 
-#endif // ifndef LAFI_FRAME_INCLUDED
+#endif //ifndef LAFI_FRAME_INCLUDED

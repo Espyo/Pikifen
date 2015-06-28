@@ -115,7 +115,7 @@ vector<point>                    cursor_spots;
 float                            cursor_x = 0;
 float                            cursor_y = 0;
 unsigned int                     day = 1;
-float                            day_minutes = 60 * 12; // TODO set to the start of the day.
+float                            day_minutes = 60 * 12; //TODO set to the start of the day.
 float                            day_minutes_end = 60 * 19;
 float                            day_minutes_per_irl_sec = 2;
 float                            day_minutes_start = 60 * 7;
@@ -166,7 +166,7 @@ map<string, pellet_type*>        pellet_types;
 vector<pellet*>                  pellets;
 vector<point>                    percipitation;
 float                            percipitation_time_left = 0;
-unsigned char                    pikmin_ai_portion = 0; // On this frame, handle the nth portion of the Pikmin's AI. There are N_PIKMIN_AI_PORTIONS;
+unsigned char                    pikmin_ai_portion = 0; //On this frame, handle the nth portion of the Pikmin's AI. There are N_PIKMIN_AI_PORTIONS;
 map<pikmin_type*, unsigned long> pikmin_in_onions;
 vector<pikmin*>                  pikmin_list;
 map<string, pikmin_type*>        pikmin_types;
@@ -209,7 +209,7 @@ int                              window_x = INT_MAX;
 int                              window_y = INT_MAX;
 
 
-// Debugging variables.
+//Debugging variables.
 bool debug_show_framerate = false;
 float debug_framerate_update_timer = 0;
 unsigned int debug_framerate_counter = 30;

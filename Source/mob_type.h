@@ -31,43 +31,43 @@ using namespace std;
  */
 class mob_type {
 public:
-    // Technical things.
+    //Technical things.
     string name;
     
-    // Visual things.
+    //Visual things.
     animation_set anims;
     ALLEGRO_COLOR main_color;
     
-    // Space-related things.
-    float radius;         // Diameter.
+    //Space-related things.
+    float radius;         //Diameter.
     float move_speed;
     float rotation_speed;
-    bool always_active; // If true, this mob is always active, even if it's off-camera.
+    bool always_active; //If true, this mob is always active, even if it's off-camera.
     
-    // Behavior things.
+    //Behavior things.
     float max_health;
     float sight_radius;
     float territory_radius;
     float near_radius;
     float near_angle;
     unsigned int max_carriers;
-    float weight;          // Pikmin strenght needed to carry it.
-    unsigned char chomp_max_victims; // The maximum number of victims in a chomp.
+    float weight;          //Pikmin strenght needed to carry it.
+    unsigned char chomp_max_victims; //The maximum number of victims in a chomp.
     float big_damage_interval;
     
-    // Script things.
-    vector<mob_state*> states;    // The states, events and actions.
-    size_t first_state_nr;        // Number of the state a mob starts at.
+    //Script things.
+    vector<mob_state*> states;    //The states, events and actions.
+    size_t first_state_nr;        //Number of the state a mob starts at.
     
-    // Used by the special mob types, as it is not possible to control which type of mob to create without a list.
-    function<void(float x, float y, float angle, const string &vars)> create_mob; // Creates a mob of this type.
+    //Used by the special mob types, as it is not possible to control which type of mob to create without a list.
+    function<void(float x, float y, float angle, const string &vars)> create_mob; //Creates a mob of this type.
     
     mob_type();
 };
 
 
 
-void load_mob_types(const string folder, const unsigned char category, bool load_resources);
+void load_mob_types(const string &folder, const unsigned char category, bool load_resources);
 void load_mob_types(bool load_resources);
 
 
@@ -86,4 +86,4 @@ enum mob_categories {
 
 const size_t ANIM_IDLE = 0;
 
-#endif // ifndef MOB_TYPE_INCLUDED
+#endif //ifndef MOB_TYPE_INCLUDED

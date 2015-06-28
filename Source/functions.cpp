@@ -11,7 +11,7 @@
 
 #define _USE_MATH_DEFINES
 
-#pragma warning(disable : 4996) // Disables warning about localtime being deprecated.
+#pragma warning(disable : 4996) //Disables warning about localtime being deprecated.
 
 #include <algorithm>
 #include <iomanip>
@@ -47,7 +47,7 @@ void angle_to_coordinates(const float angle, const float magnitude, float* x_coo
  * color: The color to change the alpha on.
  * a:     The new alpha, [0-255].
  */
-ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
+ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
     ALLEGRO_COLOR c2;
     c2.r = c.r; c2.g = c.g; c2.b = c.b;
     c2.a = a / 255.0;
@@ -64,7 +64,7 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR c, const unsigned char a) {
  */
 bool circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix, float* liy) {
 
-    // Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
+    //Code by http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
     
     float vx = x2 - x1;
     float vy = y2 - y1;
@@ -75,14 +75,14 @@ bool circle_intersects_line(const float cx, const float cy, const float cr, cons
     float c = xdiff * xdiff + ydiff * ydiff - cr * cr;
     float quad = b * b - (4 * a * c);
     if (quad >= 0) {
-        // An infinite collision is happening, but let's not stop here
+        //An infinite collision is happening, but let's not stop here
         float quadsqrt = sqrt(quad);
         for (int i = -1; i <= 1; i += 2) {
-            // Returns the two coordinates of the intersection points
+            //Returns the two coordinates of the intersection points
             float t = (i * -b + quadsqrt) / (2 * a);
             float x = x1 + (i * vx * t);
             float y = y1 + (i * vy * t);
-            // If one of them is in the boundaries of the segment, it collides
+            //If one of them is in the boundaries of the segment, it collides
             if (x >= min(x1, x2) && x <= max(x1, x2) && y >= min(y1, y2) && y <= max(y1, y2)) {
                 if(lix) *lix = x;
                 if(liy) *liy = y;
@@ -175,7 +175,7 @@ void error_log(string s, data_node* d) {
 /* ----------------------------------------------------------------------------
  * Returns whether or not the string s is inside the vector of strings v.
  */
-bool find_in_vector(const vector<string> v, const string s) {
+bool find_in_vector(const vector<string> &v, const string &s) {
     size_t v_size = v.size();
     for(size_t i = 0; i < v_size; i++) if(v[i] == s) return true;
     return false;
@@ -190,7 +190,7 @@ bool find_in_vector(const vector<string> v, const string s) {
 vector<string> folder_to_vector(string folder_name, const bool folders, bool* folder_found) {
     vector<string> v;
     
-    // Normalize the folder's path.
+    //Normalize the folder's path.
     replace(folder_name.begin(), folder_name.end(), '\\', '/');
     if(folder_name.back() == '/') folder_name.pop_back();
     
@@ -198,22 +198,22 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
     folder = al_create_fs_entry(folder_name.c_str());
     if(!folder) return v;
     
-    ALLEGRO_FS_ENTRY* entry = NULL;
     
     if(al_open_directory(folder)) {
+        ALLEGRO_FS_ENTRY* entry = NULL;
         while((entry = al_read_directory(folder)) != NULL) {
             if(
                 (folders && (al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR)) ||
                 (!folders && !(al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR))) {
                 
                 string entry_name = al_get_fs_entry_name(entry);
-                if(folders) {   // If we're using folders, remove the trailing slash, lest the string be fully deleted.
+                if(folders) {   //If we're using folders, remove the trailing slash, lest the string be fully deleted.
                     if(entry_name[entry_name.size() - 1] == '/' || entry_name[entry_name.size() - 1] == '\\') {
                         entry_name = entry_name.substr(0, entry_name.size() - 1);
                     }
                 }
                 
-                // Only save what's after the final slash.
+                //Only save what's after the final slash.
                 size_t pos_bs = entry_name.find_last_of("\\");
                 size_t pos_fs = entry_name.find_last_of("/");
                 size_t pos = pos_bs;
@@ -242,7 +242,7 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
  * Generates the images that make up the area.
  */
 void generate_area_images() {
-    // First, clear all existing area images.
+    //First, clear all existing area images.
     for(size_t x = 0; x < area_images.size(); x++) {
         for(size_t y = 0; y < area_images[x].size(); y++) {
             al_destroy_bitmap(area_images[x][y]);
@@ -251,7 +251,7 @@ void generate_area_images() {
     }
     area_images.clear();
     
-    // Now, figure out how big our area is.
+    //Now, figure out how big our area is.
     size_t n_sectors = cur_area_map.sectors.size();
     if(n_sectors == 0) return;
     
@@ -274,7 +274,7 @@ void generate_area_images() {
     max_y *= area_images_scale;
     area_images_x1 = min_x; area_images_y1 = min_y;
     
-    // Create the new bitmaps on the vectors.
+    //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
     float area_height = max_y - min_y;
     unsigned area_image_cols = ceil(area_width / area_image_size);
@@ -292,7 +292,7 @@ void generate_area_images() {
         }
     }
     
-    // For every sector, draw it on the area images it belongs on.
+    //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; s++) {
         sector* s_ptr = cur_area_map.sectors[s];
         size_t n_linedefs = s_ptr->linedefs.size();
@@ -336,9 +336,9 @@ void generate_area_images() {
     
     for(size_t x = 0; x < area_image_cols; x++) {
         for(size_t y = 0; y < area_image_rows; y++) {
-            // We need to "rebuild" the images, so that the mipmaps get updated.
-            // Not doing this caused a month-old bug under OpenGL,
-            // where zooming out = fade to black.
+            //We need to "rebuild" the images, so that the mipmaps get updated.
+            //Not doing this caused a month-old bug under OpenGL,
+            //where zooming out = fade to black.
             ALLEGRO_BITMAP* original = area_images[x][y];
             ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(original);
             
@@ -354,8 +354,8 @@ void generate_area_images() {
  * Returns the daylight effect color for the current time, for the current weather.
  */
 ALLEGRO_COLOR get_daylight_color() {
-    // TODO optimize: don't fetch the points from the weather's map every time.
-    // TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
+    //TODO optimize: don't fetch the points from the weather's map every time.
+    //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
     for(auto p_nr = cur_area_map.weather_condition.lighting.begin(); p_nr != cur_area_map.weather_condition.lighting.end(); p_nr++) {
         point_nrs.push_back(p_nr->first);
@@ -376,7 +376,7 @@ ALLEGRO_COLOR get_daylight_color() {
         }
     }
     
-    // If anything goes wrong, don't apply lighting at all.
+    //If anything goes wrong, don't apply lighting at all.
     return al_map_rgba(0, 0, 0, 0);
 }
 
@@ -385,8 +385,8 @@ ALLEGRO_COLOR get_daylight_color() {
  * Returns the strength of the sun for the current time, for the current weather.
  */
 float get_sun_strength() {
-    // TODO optimize: don't fetch the points from the weather's map every time.
-    // TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
+    //TODO optimize: don't fetch the points from the weather's map every time.
+    //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
     for(auto p_nr = cur_area_map.weather_condition.sun_strength.begin(); p_nr != cur_area_map.weather_condition.sun_strength.end(); p_nr++) {
         point_nrs.push_back(p_nr->first);
@@ -405,7 +405,7 @@ float get_sun_strength() {
         }
     }
     
-    // If anything goes wrong, return regular strength.
+    //If anything goes wrong, return regular strength.
     return 1;
 }
 
@@ -452,7 +452,7 @@ ALLEGRO_TRANSFORM get_world_to_screen_transform() {
  ** The closer to n1, the closer the final color is to c1.
  * c1, c2: Colors.
  */
-ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR c1, const ALLEGRO_COLOR c2) {
+ALLEGRO_COLOR interpolate_color(const float n, const float n1, const float n2, const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2) {
     float progress = (float) (n - n1) / (float) (n2 - n1);
     return al_map_rgba_f(
                c1.r + progress * (c2.r - c1.r),
@@ -474,11 +474,18 @@ float interpolate_number(const float p, const float p1, const float p2, const fl
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
  */
-void load_area(const string name, const bool load_for_editor) {
+void load_area(const string &name, const bool load_for_editor) {
 
+    string canon_name, subtitle;
+    
     cur_area_map.clear();
     
     data_node file = load_data_file(AREA_FOLDER + "/" + name + ".txt");
+    
+    canon_name = file.get_child_by_name("name")->get_value_or_default(name);
+    subtitle = file.get_child_by_name("subtitle")->value;
+    
+    draw_loading_screen(canon_name, subtitle, 1.0);
     
     cur_area_map.weather_name = file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
@@ -499,7 +506,7 @@ void load_area(const string name, const bool load_for_editor) {
     cur_area_map.bg_bmp_zoom = s2f(file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
     
     
-    // Vertices.
+    //Vertices.
     size_t n_vertices = file.get_child_by_name("vertices")->get_nr_of_children_by_name("vertex");
     for(size_t v = 0; v < n_vertices; v++) {
         data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
@@ -507,7 +514,7 @@ void load_area(const string name, const bool load_for_editor) {
         if(words.size() == 2) cur_area_map.vertices.push_back(new vertex(s2f(words[0]), s2f(words[1])));
     }
     
-    // Linedefs.
+    //Linedefs.
     size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
     for(size_t l = 0; l < n_linedefs; l++) {
         data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
@@ -529,7 +536,7 @@ void load_area(const string name, const bool load_for_editor) {
         cur_area_map.linedefs.push_back(new_linedef);
     }
     
-    // Sectors.
+    //Sectors.
     size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
     for(size_t s = 0; s < n_sectors; s++) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
@@ -557,12 +564,12 @@ void load_area(const string name, const bool load_for_editor) {
         }
         
         
-        // TODO hazards (and tags, if I really am gonna use them...).
+        //TODO hazards (and tags, if I really am gonna use them...).
         
         cur_area_map.sectors.push_back(new_sector);
     }
     
-    // Mobs.
+    //Mobs.
     size_t n_mobs = file.get_child_by_name("mobs")->get_nr_of_children();
     for(size_t m = 0; m < n_mobs; m++) {
     
@@ -583,7 +590,7 @@ void load_area(const string name, const bool load_for_editor) {
         bool problem = false;
         
         if(!mob_ptr->type && !load_for_editor) {
-            // Error.
+            //Error.
             error_log(
                 "Unknown \"" + mob_categories.get_sname(mob_ptr->category) + "\" mob type \"" +
                 mt + "\"!", mob_node
@@ -602,7 +609,7 @@ void load_area(const string name, const bool load_for_editor) {
         if(!problem) cur_area_map.mob_generators.push_back(mob_ptr);
     }
     
-    // Tree shadows.
+    //Tree shadows.
     size_t n_shadows = file.get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; s++) {
     
@@ -636,7 +643,7 @@ void load_area(const string name, const bool load_for_editor) {
     }
     
     
-    // Editor background.
+    //Editor background.
     area_editor::bg_file_name = file.get_child_by_name("bg_file_name")->value;
     area_editor::bg_x =     s2f(file.get_child_by_name("bg_x")->value);
     area_editor::bg_y =     s2f(file.get_child_by_name("bg_y")->value);
@@ -646,8 +653,8 @@ void load_area(const string name, const bool load_for_editor) {
     
     
     
-    // Set up stuff.
-    // TODO error checking.
+    //Set up stuff.
+    //TODO error checking.
     for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
         cur_area_map.linedefs[l]->fix_pointers(cur_area_map);
     }
@@ -658,7 +665,7 @@ void load_area(const string name, const bool load_for_editor) {
         cur_area_map.vertices[v]->connect_linedefs(cur_area_map, v);
     }
     
-    // Triangulate everything.
+    //Triangulate everything.
     for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
         sector* s_ptr = cur_area_map.sectors[s];
         s_ptr->triangles.clear();
@@ -691,7 +698,7 @@ void load_area_textures() {
  * Loads a bitmap from the game's content.
  * If the node is present, it'll be used to report errors.
  */
-ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_error) {
+ALLEGRO_BITMAP* load_bmp(const string &file_name, data_node* node, bool report_error) {
     ALLEGRO_BITMAP* b = NULL;
     if(file_name.size()) b = al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
     
@@ -707,7 +714,7 @@ ALLEGRO_BITMAP* load_bmp(const string file_name, data_node* node, bool report_er
 /* ----------------------------------------------------------------------------
  * Loads a game control.
  */
-void load_control(const unsigned char action, const unsigned char player, const string name, data_node &file, const string def) {
+void load_control(const unsigned char action, const unsigned char player, const string &name, data_node &file, const string &def) {
     string s = file.get_child_by_name("p" + i2s((player + 1)) + "_" + name)->get_value_or_default((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
@@ -721,7 +728,7 @@ void load_control(const unsigned char action, const unsigned char player, const 
 /* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
  */
-data_node load_data_file(const string file_name) {
+data_node load_data_file(const string &file_name) {
     data_node n = data_node(file_name);
     if(!n.file_was_opened) {
         error_log("Could not open data file " + file_name + "!");
@@ -735,18 +742,18 @@ data_node load_data_file(const string file_name) {
  * Loads all of the game's content.
  */
 void load_game_content() {
-    // TODO.
+    //TODO.
     statuses.push_back(status(0, 0, 1, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
     
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), NULL, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), NULL, NULL));
-    // spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 255, 0), NULL, NULL));
+    //spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 255, 0), NULL, NULL));
     
-    // Mob types.
+    //Mob types.
     load_mob_types(true);
     
-    // Weather.
+    //Weather.
     weather_conditions.clear();
     data_node weather_file = load_data_file(WEATHER_FILE);
     size_t n_weather_conditions = weather_file.get_nr_of_children_by_name("weather");
@@ -757,7 +764,7 @@ void load_game_content() {
         string name = cur_weather->get_child_by_name("name")->value;
         if(name.empty()) name = "default";
         
-        // Lighting.
+        //Lighting.
         map<unsigned, ALLEGRO_COLOR> lighting;
         size_t n_lighting_points = cur_weather->get_child_by_name("lighting")->get_nr_of_children();
         
@@ -774,13 +781,13 @@ void load_game_content() {
             error_log("Weather condition " + name + " has no lighting!");
         } else {
             if(lighting.find(24 * 60) == lighting.end()) {
-                // If there is no data for the last hour, use the data from the first point
-                // (this is because the day loops after 24:00; needed for interpolation).
+                //If there is no data for the last hour, use the data from the first point
+                //(this is because the day loops after 24:00; needed for interpolation).
                 lighting[24 * 60] = lighting.begin()->second;
             }
         }
         
-        // Sun's strength.
+        //Sun's strength.
         map<unsigned, unsigned char> sun_strength;
         size_t n_sun_strength_points = cur_weather->get_child_by_name("sun_strength")->get_nr_of_children();
         
@@ -795,19 +802,19 @@ void load_game_content() {
         
         if(!sun_strength.empty()) {
             if(sun_strength.find(24 * 60) == sun_strength.end()) {
-                // If there is no data for the last hour, use the data from the first point
-                // (this is because the day loops after 24:00; needed for interpolation).
+                //If there is no data for the last hour, use the data from the first point
+                //(this is because the day loops after 24:00; needed for interpolation).
                 sun_strength[24 * 60] = sun_strength.begin()->second;
             }
         }
         
-        // Percipitation.
+        //Percipitation.
         unsigned char percipitation_type = s2i(cur_weather->get_child_by_name("percipitation_type")->get_value_or_default(i2s(PERCIPITATION_TYPE_NONE)));
         interval percipitation_frequency = interval(cur_weather->get_child_by_name("percipitation_frequency")->value);
         interval percipitation_speed = interval(cur_weather->get_child_by_name("percipitation_speed")->value);
         interval percipitation_angle = interval(cur_weather->get_child_by_name("percipitation_angle")->get_value_or_default(f2s((M_PI + M_PI_2))));
         
-        // Save.
+        //Save.
         weather_conditions[name] = weather(name, lighting, sun_strength, percipitation_type, percipitation_frequency, percipitation_speed, percipitation_angle);
     }
 }
@@ -820,20 +827,20 @@ void load_options() {
     data_node file = data_node("Options.txt");
     if(!file.file_was_opened) return;
     
-    // Load joysticks.
+    //Load joysticks.
     joystick_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
     for(int j = 0; j < n_joysticks; j++) {
         joystick_numbers[al_get_joystick(j)] = j;
     }
     
-    // Load controls.
-    // Format of a control: "p<player number>_<action>=<possible control 1>,<possible control 2>,<...>"
-    // Format of a possible control: "<input method>_<parameters, underscore separated>"
-    // Input methods: "k" (keyboard key), "mb" (mouse button), "mwu" (mouse wheel up), "mwd" (down),
-    // "mwl" (left), "mwr" (right), "jb" (joystick button), "jap" (joystick axis, positive), "jan" (joystick axis, negative).
-    // The parameters are the key/button number, joystick number, joystick stick and axis, etc.
-    // Check the constructor of control_info for more information.
+    //Load controls.
+    //Format of a control: "p<player number>_<action>=<possible control 1>,<possible control 2>,<...>"
+    //Format of a possible control: "<input method>_<parameters, underscore separated>"
+    //Input methods: "k" (keyboard key), "mb" (mouse button), "mwu" (mouse wheel up), "mwd" (down),
+    //"mwl" (left), "mwr" (right), "jb" (joystick button), "jap" (joystick axis, positive), "jan" (joystick axis, negative).
+    //The parameters are the key/button number, joystick number, joystick stick and axis, etc.
+    //Check the constructor of control_info for more information.
     controls.clear();
     
     for(unsigned char p = 0; p < 4; p++) {
@@ -871,7 +878,7 @@ void load_options() {
         load_control(BUTTON_PAUSE,                p, "pause", file, "k_59");
     }
     
-    // Weed out controls that didn't parse correctly.
+    //Weed out controls that didn't parse correctly.
     size_t n_controls = controls.size();
     for(size_t c = 0; c < n_controls; ) {
         if(controls[c].action == BUTTON_NONE) {
@@ -885,7 +892,7 @@ void load_options() {
         mouse_moves_cursor[p] = s2b(file.get_child_by_name("p" + i2s((p + 1)) + "_mouse_moves_cursor")->get_value_or_default((p == 0) ? "true" : "false"));
     }
     
-    // Other options.
+    //Other options.
     area_images_scale = s2f(file.get_child_by_name("area_quality")->get_value_or_default("1"));
     daylight_effect = s2b(file.get_child_by_name("daylight_effect")->get_value_or_default("true"));
     draw_cursor_trail = s2b(file.get_child_by_name("draw_cursor_trail")->get_value_or_default("true"));
@@ -903,7 +910,7 @@ void load_options() {
 /* ----------------------------------------------------------------------------
  * Loads an audio sample from the game's content.
  */
-sample_struct load_sample(const string file_name, ALLEGRO_MIXER* const mixer) {
+sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer) {
     ALLEGRO_SAMPLE* sample = al_load_sample((AUDIO_FOLDER + "/" + file_name).c_str());
     if(!sample) {
         error_log("Could not open audio sample " + file_name + "!");
@@ -1006,15 +1013,15 @@ void rotate_point(const float x, const float y, const float angle, float* final_
  * Saves the player's options.
  */
 void save_options() {
-    // TODO make this prettier. Like a list of constants somewhere where it associates an action with the name on the text file.
+    //TODO make this prettier. Like a list of constants somewhere where it associates an action with the name on the text file.
     ALLEGRO_FILE* file = al_fopen("Options.txt", "w");
     
     if(!file) return;
     
-    // First, group the controls by action and player.
+    //First, group the controls by action and player.
     map<string, string> grouped_controls;
     
-    // Tell the map what they are.
+    //Tell the map what they are.
     for(unsigned char p = 0; p < 4; p++) {
         string prefix = "p" + i2s((p + 1)) + "_";
         grouped_controls[prefix + "punch"].clear();
@@ -1090,9 +1097,9 @@ void save_options() {
         grouped_controls[name] += controls[c].stringify() + ",";
     }
     
-    // Save controls.
+    //Save controls.
     for(auto c = grouped_controls.begin(); c != grouped_controls.end(); c++) {
-        if(c->second.size()) c->second.erase(c->second.size() - 1); // Remove the final character, which is always an extra comma.
+        if(c->second.size()) c->second.erase(c->second.size() - 1); //Remove the final character, which is always an extra comma.
         
         al_fwrite(file, c->first + "=" + c->second + "\n");
     }
@@ -1101,7 +1108,7 @@ void save_options() {
         al_fwrite(file, "p" + i2s((p + 1)) + "_mouse_moves_cursor=" + b2s(mouse_moves_cursor[p]) + "\n");
     }
     
-    // Other options.
+    //Other options.
     al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
     al_fwrite(file, "daylight_effect=" + b2s(daylight_effect) + "\n");
     al_fwrite(file, "draw_cursor_trail=" + b2s(draw_cursor_trail) + "\n");
@@ -1126,32 +1133,32 @@ void save_options() {
  ** i.e. if two delimiters come together in a row, keep an empty substring between.
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
-vector<string> split(string text, const string del, const bool inc_empty, const bool inc_del) {
+vector<string> split(string text, const string &del, const bool inc_empty, const bool inc_del) {
     vector<string> v;
     size_t pos;
     size_t del_size = del.size();
     
     do {
         pos = text.find(del);
-        if (pos != string::npos) {  // If it DID find the delimiter.
-            // Get the text between the start and the delimiter.
+        if (pos != string::npos) {  //If it DID find the delimiter.
+            //Get the text between the start and the delimiter.
             string sub = text.substr(0, pos);
             
-            // Add the text before the delimiter to the vector.
+            //Add the text before the delimiter to the vector.
             if(sub != "" || inc_empty)
                 v.push_back(sub);
                 
-            // Add the delimiter to the vector, but only if requested.
+            //Add the delimiter to the vector, but only if requested.
             if(inc_del)
                 v.push_back(del);
                 
-            text.erase(text.begin(), text.begin() + pos + del_size);    // Delete everything before the delimiter, including the delimiter itself, and search again.
+            text.erase(text.begin(), text.begin() + pos + del_size);    //Delete everything before the delimiter, including the delimiter itself, and search again.
         }
     } while (pos != string::npos);
     
-    // Text after the final delimiter. (If there is one. If not, it's just the whole string.)
+    //Text after the final delimiter. (If there is one. If not, it's just the whole string.)
     
-    if (text != "" || inc_empty) // If it's a blank string, only add it if we want empty strings.
+    if (text != "" || inc_empty) //If it's a blank string, only add it if we want empty strings.
         v.push_back(text);
         
     return v;
@@ -1165,13 +1172,13 @@ vector<string> split(string text, const string del, const bool inc_empty, const 
  * l**: Line coordinates.
  */
 bool square_intersects_line(const float sx1, const float sy1, const float sx2, const float sy2, const float lx1, const float ly1, const float lx2, const float ly2) {
-    // Line crosses left side?
+    //Line crosses left side?
     if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx1, sy2, NULL, NULL)) return true;
-    // Line crosses right side?
+    //Line crosses right side?
     if(lines_intersect(lx1, ly1, lx2, ly2, sx2, sy1, sx2, sy2, NULL, NULL)) return true;
-    // Line crosses top side?
+    //Line crosses top side?
     if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx2, sy1, NULL, NULL)) return true;
-    // Line crosses bottom side?
+    //Line crosses bottom side?
     if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy2, sx2, sy2, NULL, NULL)) return true;
     
     if(
@@ -1222,17 +1229,17 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     cur_message_char_time = MESSAGE_CHAR_INTERVAL;
     cur_message_speaker = speaker_bmp;
     cur_message_stopping_chars.clear();
-    cur_message_stopping_chars.push_back(0); // First character. Makes it easier.
+    cur_message_stopping_chars.push_back(0); //First character. Makes it easier.
     cur_message_section = 0;
     
     vector<string> lines = split(text, "\n");
     for(size_t line_trio = 0; line_trio < lines.size(); line_trio += 3) {
         cur_message_stopping_chars.push_back(0);
         for(size_t l = 0; l < (line_trio + 1) * 3 && l < lines.size(); l++) {
-            cur_message_stopping_chars.back() += lines[l].size() + 1; // +1 because of the new line character.
+            cur_message_stopping_chars.back() += lines[l].size() + 1; //+1 because of the new line character.
         }
     }
-    cur_message_stopping_chars.back()--; // Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
+    cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
 }
 
 
@@ -1272,22 +1279,22 @@ void use_spray(const size_t spray_nr) {
 }
 
 
-// Calls al_fwrite, but with an std::string instead of a c-string.
+//Calls al_fwrite, but with an std::string instead of a c-string.
 void al_fwrite(ALLEGRO_FILE* f, string s) { al_fwrite(f, s.c_str(), s.size()); }
 
 
-// Converts a boolean to a string, returning either "true" or "false".
+//Converts a boolean to a string, returning either "true" or "false".
 string b2s(const bool b) { return b ? "true" : "false"; }
 
 
-// Converts a color to its string representation.
+//Converts a color to its string representation.
 string c2s(const ALLEGRO_COLOR &c) {
     return f2s(c.r * 255) + " " + f2s(c.g * 255) + " " + f2s(c.b * 255) +
            (c.a == 1 ? "" : " " + f2s(c.a * 255));
 }
 
 
-// Converts a float to a string, with 2 decimal places.
+//Converts a float to a string, with 2 decimal places.
 string f2s(const float f) {
     std::stringstream s;
     s << std::fixed << ::setprecision(2) << f;
@@ -1295,7 +1302,7 @@ string f2s(const float f) {
 }
 
 
-// Converts a string to a boolean, judging by the English language words that represent true and false.
+//Converts a string to a boolean, judging by the English language words that represent true and false.
 bool s2b(const string &s) {
     string s2 = s;
     s2 = str_to_lower(s2);
@@ -1305,7 +1312,7 @@ bool s2b(const string &s) {
 }
 
 
-// Converts a string to an Allegro color. Components are separated by spaces, and the final one (alpha) is optional.
+//Converts a string to an Allegro color. Components are separated by spaces, and the final one (alpha) is optional.
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
     s2 = trim_spaces(s2);
@@ -1339,9 +1346,9 @@ ALLEGRO_COLOR s2c(const string &s) {
 }
 
 
-// Converts a string to a float, trimming the spaces and accepting commas or points.
+//Converts a string to a float, trimming the spaces and accepting commas or points.
 double s2f(const string &s) { string s2 = trim_spaces(s); replace(s2.begin(), s2.end(), ',', '.'); return atof(s2.c_str()); }
 
 
-// Converts a string to an integer.
+//Converts a string to an integer.
 int s2i(const string &s) { return s2f(s); }

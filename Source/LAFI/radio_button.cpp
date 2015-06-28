@@ -11,12 +11,11 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a radio button.
  */
-radio_button::radio_button(int x1, int y1, int x2, int y2, string text, int group, bool selected, lafi::style* style, unsigned char flags)
-    : widget(x1, y1, x2, y2, style, flags) {
-    
-    this->selected = selected;
-    this->text = text;
-    this->group = group;
+radio_button::radio_button(int x1, int y1, int x2, int y2, string text, int group, bool selected, lafi::style* style, unsigned char flags) :
+    widget(x1, y1, x2, y2, style, flags),
+    selected(selected),
+    text(text),
+    group(group) {
     
     needs_init = true;
 }
@@ -55,7 +54,7 @@ void radio_button::init() {
  */
 radio_button::~radio_button() {
     /*
-    // TODO
+    //TODO
     vector<widget*>* radio_button_group = &((lafi::container*) parent)->groups[group];
     
     size_t n_radio_buttons = radio_button_group->size();
@@ -118,9 +117,9 @@ void radio_button::draw_self() { }
 /* ----------------------------------------------------------------------------
  * Creates a radio button button.
  */
-radio_button_button::radio_button_button(int x1, int y1, bool selected, lafi::style* style, unsigned char flags)
-    : widget(x1, y1, x1 + RADIO_BUTTON_BUTTON_SIZE, y1 + RADIO_BUTTON_BUTTON_SIZE, style, flags) {
-    this->selected = selected;
+radio_button_button::radio_button_button(int x1, int y1, bool selected, lafi::style* style, unsigned char flags) :
+    widget(x1, y1, x1 + RADIO_BUTTON_BUTTON_SIZE, y1 + RADIO_BUTTON_BUTTON_SIZE, style, flags),
+    selected(selected) {
     
 }
 

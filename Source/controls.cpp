@@ -26,11 +26,11 @@
  * and triggers the corresponding controls, if any.
  */
 void handle_game_controls(const ALLEGRO_EVENT &ev) {
-    // Debugging.
+    //Debugging.
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
-            // Debug testing.
-            // TODO remove.
+            //Debug testing.
+            //TODO remove.
             day_minutes += 30;
             
             dist closest_mob_to_cursor_dist = FLT_MAX;
@@ -209,7 +209,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             *           &      *
             *******************/
             
-            if(pos > 0) { // Button press.
+            if(pos > 0) { //Button press.
             
                 if(auto_pluck_input_time > 0) {
                     cur_leader_ptr->auto_pluck_mode = true;
@@ -227,7 +227,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 bool done = false;
                 
-                // First check if the leader should pluck a Pikmin.
+                //First check if the leader should pluck a Pikmin.
                 float d;
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
                 if(p && d <= MIN_PLUCK_RANGE) {
@@ -236,7 +236,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     done = true;
                 }
                 
-                // Now check if the leader should read an info spot.
+                //Now check if the leader should read an info spot.
                 if(!done) {
                     size_t n_info_spots = info_spots.size();
                     for(size_t i = 0; i < n_info_spots; i++) {
@@ -251,14 +251,14 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     }
                 }
                 
-                // Now check if the leader should open an Onion's menu.
+                //Now check if the leader should open an Onion's menu.
                 if(!done) {
-                    // TODO
+                    //TODO
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; o++) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= MIN_ONION_CHECK_RANGE) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
-                                // TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
+                                //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
                                 create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
                                 add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
@@ -268,13 +268,13 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     }
                 }
                 
-                // Now check if the leader should heal themselves on the ship.
+                //Now check if the leader should heal themselves on the ship.
                 if(!done) {
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; s++) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE, ships[s]->y) <= SHIP_BEAM_RANGE) {
                             if(ships[s]->shi_type->can_heal) {
-                                // TODO make it prettier.
+                                //TODO make it prettier.
                                 cur_leader_ptr->health = cur_leader_ptr->type->max_health;
                                 done = true;
                             }
@@ -282,7 +282,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     }
                 }
                 
-                // Now check if the leader should grab a Pikmin.
+                //Now check if the leader should grab a Pikmin.
                 if(!done) {
                     if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
                         cur_leader_ptr->holding_pikmin = closest_party_member;
@@ -291,13 +291,13 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     }
                 }
                 
-                // Now check if the leader should punch.
+                //Now check if the leader should punch.
                 
                 if(!done) {
-                    // TODO
+                    //TODO
                 }
                 
-            } else { // Button release.
+            } else { //Button release.
                 mob* holding_ptr = cur_leader_ptr->holding_pikmin;
                 if(holding_ptr) {
                 
@@ -315,7 +315,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                         throw_height_mult = ((pikmin*) holding_ptr)->pik_type->throw_height_mult;
                     }
                     
-                    // This results in a 1.3 second throw, just like in Pikmin 2. Regular Pikmin are thrown about 288.88 units high.
+                    //This results in a 1.3 second throw, just like in Pikmin 2. Regular Pikmin are thrown about 288.88 units high.
                     holding_ptr->speed_x =
                         cos(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
                     holding_ptr->speed_y =
@@ -351,7 +351,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             active_control();
             
-            if(pos > 0 && !cur_leader_ptr->holding_pikmin) { // Button pressed.
+            if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
                 whistling = true;
                 cur_leader_ptr->lea_type->sfx_whistle.play(0, false);
                 
@@ -360,7 +360,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 whistle_fade_radius = 0;
                 cur_leader_ptr->anim.change(LEADER_ANIM_WHISTLING, true, true, false);
                 
-            } else { // Button released.
+            } else { //Button released.
                 stop_whistling();
             }
             
@@ -399,7 +399,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             leaders[new_leader_nr]->remove_target(true);
             
-            // If the new leader is in another one's party, swap them.
+            //If the new leader is in another one's party, swap them.
             size_t n_leaders = leaders.size();
             for(size_t l = 0; l < n_leaders; l++) {
                 if(l == new_leader_nr) continue;
@@ -453,8 +453,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0) return;
             
-            running = false; // TODO menu, not quit.
-            // paused = true;
+            running = false; //TODO menu, not quit.
+            //paused = true;
             
         } else if(button == BUTTON_USE_SPRAY_1) {
         
@@ -567,7 +567,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 cur_leader_ptr->carrier_info = new carrier_info_struct(
                     cur_leader_ptr,
-                    3, // TODO
+                    3, //TODO
                     false);
                     
                 cur_leader_ptr->anim.change(LEADER_ANIM_LIE, true, false, false);
@@ -588,7 +588,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             vector<pikmin_type*> types_in_party;
             
             size_t n_members = cur_leader_ptr->party->members.size();
-            // Get all Pikmin types in the group.
+            //Get all Pikmin types in the group.
             for(size_t m = 0; m < n_members; m++) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
@@ -599,7 +599,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
                 
                     if(find(types_in_party.begin(), types_in_party.end(), (pikmin_type*) NULL) == types_in_party.end()) {
-                        types_in_party.push_back(NULL); // NULL represents leaders.
+                        types_in_party.push_back(NULL); //NULL represents leaders.
                     }
                 }
             }
@@ -617,7 +617,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
             
-            // Go one type adjacent to the current member being held.
+            //Go one type adjacent to the current member being held.
             for(size_t t = 0; t < n_types; t++) {
                 if(current_type == types_in_party[t]) {
                     if(button == BUTTON_SWITCH_TYPE_RIGHT) {
@@ -628,10 +628,10 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 }
             }
             
-            size_t t_match_nr = n_members + 1; // Number of the member that matches the type we want.
-            size_t tm_match_nr = n_members + 1; // Number of the member that matches the type and maturity we want.
+            size_t t_match_nr = n_members + 1; //Number of the member that matches the type we want.
+            size_t tm_match_nr = n_members + 1; //Number of the member that matches the type and maturity we want.
             
-            // Find a Pikmin of the new type.
+            //Find a Pikmin of the new type.
             for(size_t m = 0; m < n_members; m++) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                 
@@ -654,7 +654,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 }
             }
             
-            // If no Pikmin matched the maturity, just use the one we found.
+            //If no Pikmin matched the maturity, just use the one we found.
             if(tm_match_nr == n_members + 1) swap_pikmin(cur_leader_ptr->party->members[t_match_nr]);
             else swap_pikmin(cur_leader_ptr->party->members[tm_match_nr]);
             
@@ -675,7 +675,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
             size_t n_members = cur_leader_ptr->party->members.size();
-            // Get Pikmin of the same type, one for each maturity.
+            //Get Pikmin of the same type, one for each maturity.
             for(size_t m = 0; m < n_members; m++) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
@@ -706,7 +706,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
         }
         
-    } else { // Displaying a message.
+    } else { //Displaying a message.
     
         if((button == BUTTON_THROW || button == BUTTON_PAUSE) && pos == 1) {
             size_t stopping_char = cur_message_stopping_chars[cur_message_section + 1];
@@ -732,7 +732,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
  */
 void active_control() {
     if(leaders[cur_leader_nr]->carrier_info) {
-        // Getting up.
+        //Getting up.
         leaders[cur_leader_nr]->anim.change(LEADER_ANIM_GET_UP, true, false, false);
     }
     make_uncarriable(leaders[cur_leader_nr]);
@@ -746,59 +746,57 @@ void active_control() {
  * player: Player number.
  * s:      The textual code that represents the hardware inputs.
  */
-control_info::control_info(unsigned char action, unsigned char player, string s) {
-    this->action = action;
-    this->player = player;
-    type = CONTROL_TYPE_NONE;
-    
-    device_nr = 0;
-    button = 0;
-    stick = 0;
-    axis = 0;
-    
+control_info::control_info(unsigned char action, unsigned char player, string s) :
+    action(action),
+    player(player),
+    type(CONTROL_TYPE_NONE),
+    device_nr(0),
+    button(0),
+    stick(0),
+    axis(0) {
     vector<string> parts = split(s, "_");
     size_t n_parts = parts.size();
     
     if(n_parts == 0) return;
-    if(parts[0] == "k") {   // Keyboard.
+    if(parts[0] == "k") {   //Keyboard.
         if(n_parts > 1) {
             type = CONTROL_TYPE_KEYBOARD_KEY;
             button = s2i(parts[1]);
         }
         
-    } else if(parts[0] == "mb") { // Mouse button.
+    } else if(parts[0] == "mb") { //Mouse button.
         if(n_parts > 1) {
             type = CONTROL_TYPE_MOUSE_BUTTON;
             button = s2i(parts[1]);
         }
         
-    } else if(parts[0] == "mwu") { // Mouse wheel up.
+    } else if(parts[0] == "mwu") { //Mouse wheel up.
         type = CONTROL_TYPE_MOUSE_WHEEL_UP;
         
-    } else if(parts[0] == "mwd") { // Mouse wheel down.
+    } else if(parts[0] == "mwd") { //Mouse wheel down.
         type = CONTROL_TYPE_MOUSE_WHEEL_DOWN;
         
-    } else if(parts[0] == "mwl") { // Mouse wheel left.
+    } else if(parts[0] == "mwl") { //Mouse wheel left.
         type = CONTROL_TYPE_MOUSE_WHEEL_LEFT;
         
-    } else if(parts[0] == "mwr") { // Mouse wheel right.
+    } else if(parts[0] == "mwr") { //Mouse wheel right.
         type = CONTROL_TYPE_MOUSE_WHEEL_RIGHT;
         
-    } else if(parts[0] == "jb") { // Joystick button.
+    } else if(parts[0] == "jb") { //Joystick button.
         if(n_parts > 2) {
             type = CONTROL_TYPE_JOYSTICK_BUTTON;
             device_nr = s2i(parts[1]);
             button = s2i(parts[2]);
         }
         
-    } else if(parts[0] == "jap") { // Joystick axis, positive.
+    } else if(parts[0] == "jap") { //Joystick axis, positive.
         if(n_parts > 3) {
             type = CONTROL_TYPE_JOYSTICK_AXIS_POS;
             device_nr = s2i(parts[1]);
             stick = s2i(parts[2]);
             axis = s2i(parts[3]);
         }
-    } else if(parts[0] == "jan") { // Joystick axis, negative.
+    } else if(parts[0] == "jan") { //Joystick axis, negative.
         if(n_parts > 3) {
             type = CONTROL_TYPE_JOYSTICK_AXIS_NEG;
             device_nr = s2i(parts[1]);

@@ -25,4 +25,4 @@ public:
     pikmin_type* pik_type;
 };
 
-#endif // ifndef ONION_TYPE_INCLUDED
+#endif //ifndef ONION_TYPE_INCLUDED

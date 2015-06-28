@@ -30,13 +30,13 @@ class leader_type : public mob_type {
 public:
     float whistle_range;
     unsigned int punch_strength;
-    float pluck_delay; // Time until the Pikmin is actually popped out of the ground.
+    float pluck_delay; //Time until the Pikmin is actually popped out of the ground.
     
     sample_struct sfx_whistle;
     sample_struct sfx_dismiss;
     sample_struct sfx_name_call;
     
-    ALLEGRO_BITMAP* bmp_icon; // Standby icon.
+    ALLEGRO_BITMAP* bmp_icon; //Standby icon.
     
     leader_type();
 };
@@ -54,4 +54,4 @@ enum LEADER_ANIMATIONS {
     LEADER_ANIM_LIE,
 };
 
-#endif // ifndef LEADER_TYPE_INCLUDED
+#endif //ifndef LEADER_TYPE_INCLUDED

@@ -32,7 +32,7 @@
  * Handles the main loop of the animation editor, both the logic and drawing.
  */
 void animation_editor::do_logic() {
-    // ---Logic---
+    //---Logic---
     if(anim_playing && mode == EDITOR_MODE_ANIMATION && cur_anim && cur_frame_instance_nr != string::npos) {
         frame_instance* fi = &cur_anim->frame_instances[cur_frame_instance_nr];
         if(fi->duration != 0) {
@@ -54,7 +54,7 @@ void animation_editor::do_logic() {
     
     cur_hitbox_alpha += M_PI * 3 * delta_t;
     
-    // ---Drawing.---
+    //---Drawing.---
     
     
     gui->draw();
@@ -353,7 +353,7 @@ void animation_editor::gui_save_frame() {
     cur_frame->offs_y = s2f(((lafi::textbox*) f->widgets["txt_offsy"])->text);
     
     if(cur_frame->file != new_file || cur_frame->file_x != new_fx || cur_frame->file_y != new_fy || cur_frame->file_w != new_fw || cur_frame->file_h != new_fh) {
-        // Changed something image-wise. Recreate it.
+        //Changed something image-wise. Recreate it.
         if(cur_frame->parent_bmp) bitmaps.detach(cur_frame->file);
         if(cur_frame->bitmap) al_destroy_bitmap(cur_frame->bitmap);
         cur_frame->parent_bmp = bitmaps.get(new_file, NULL);
@@ -466,7 +466,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     ) {
         mouse_cursor_x = ev.mouse.x / cam_zoom - cam_x - ((scr_w - 208) / 2 / cam_zoom);
         mouse_cursor_y = ev.mouse.y / cam_zoom - cam_y - (scr_h / 2 / cam_zoom);
-        lafi::widget* wum = gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); // Widget under mouse.
+        lafi::widget* wum = gui->get_widget_under_mouse(ev.mouse.x, ev.mouse.y); //Widget under mouse.
         ((lafi::label*) gui->widgets["lbl_status_bar"])->text = (wum ? wum->description : "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")");
     }
     
@@ -478,7 +478,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
         
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) {
             if(ev.mouse.dz != 0) {
-                // Zoom.
+                //Zoom.
                 float new_zoom = cam_zoom + (cam_zoom * ev.mouse.dz * 0.1);
                 new_zoom = max(ZOOM_MIN_LEVEL_EDITOR, new_zoom);
                 new_zoom = min(ZOOM_MAX_LEVEL_EDITOR, new_zoom);
@@ -530,10 +530,10 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
                         grabbing_hitbox = h;
                         grabbing_hitbox_edge = (d > hi_ptr->radius - 5 / cam_zoom);
                         
-                        // If the user grabbed the outermost 5 pixels, change radius. Else move hitbox.
+                        //If the user grabbed the outermost 5 pixels, change radius. Else move hitbox.
                         if(grabbing_hitbox_edge) {
                             float anchor_angle = atan2(hi_ptr->y - mouse_cursor_y, hi_ptr->x - mouse_cursor_x);
-                            // These variables will actually serve to store the anchor.
+                            //These variables will actually serve to store the anchor.
                             grabbing_hitbox_x = hi_ptr->x + cos(anchor_angle) * hi_ptr->radius;
                             grabbing_hitbox_y = hi_ptr->y + sin(anchor_angle) * hi_ptr->radius;
                         } else {
@@ -587,7 +587,7 @@ void animation_editor::load() {
     gui = new lafi::gui(scr_w, scr_h, s);
     
     
-    // Main frame.
+    //Main frame.
     lafi::frame* frm_main = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     gui->add("frm_main", frm_main);
     
@@ -618,7 +618,7 @@ void animation_editor::load() {
     frm_object->easy_row();
     
     
-    // Animations frame.
+    //Animations frame.
     lafi::frame* frm_anims = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_anims);
     gui->add("frm_anims", frm_anims);
@@ -666,7 +666,7 @@ void animation_editor::load() {
     frm_frame_i->easy_row();
     
     
-    // Frames frame.
+    //Frames frame.
     lafi::frame* frm_frames = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_frames);
     gui->add("frm_frames", frm_frames);
@@ -712,7 +712,7 @@ void animation_editor::load() {
     frm_frame->easy_row();
     
     
-    // Hitboxes instances frame.
+    //Hitboxes instances frame.
     lafi::frame* frm_hitbox_is = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_hitbox_is);
     gui->add("frm_hitbox_is", frm_hitbox_is);
@@ -787,7 +787,7 @@ void animation_editor::load() {
     frm_attack->easy_row();
     
     
-    // Hitboxes frame.
+    //Hitboxes frame.
     lafi::frame* frm_hitboxes = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_hitboxes);
     gui->add("frm_hitboxes", frm_hitboxes);
@@ -827,7 +827,7 @@ void animation_editor::load() {
     frm_hitbox->easy_row();
     
     
-    // Picker frame.
+    //Picker frame.
     lafi::frame* frm_picker = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_picker);
     gui->add("frm_picker", frm_picker);
@@ -839,7 +839,7 @@ void animation_editor::load() {
     frm_picker->add("bar_scroll", new lafi::scrollbar(scr_w - 24,  72, scr_w - 8,  scr_h - 56));
     
     
-    // Pikmin top frame.
+    //Pikmin top frame.
     lafi::frame* frm_top = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_top);
     gui->add("frm_top", frm_top);
@@ -864,7 +864,7 @@ void animation_editor::load() {
     frm_top->easy_row();
     
     
-    // Bottom bar.
+    //Bottom bar.
     lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
@@ -875,7 +875,7 @@ void animation_editor::load() {
     frm_bottom->easy_row();
     
     
-    // Properties -- main.
+    //Properties -- main.
     frm_main->widgets["but_category"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         open_picker(ANIMATION_EDITOR_PICKER_OBJECT, false);
     };
@@ -909,7 +909,7 @@ void animation_editor::load() {
     frm_main->widgets["frm_object"]->widgets["but_hitboxes"]->description = "Change what hitboxes exist, and their order.";
     
     
-    // Properties -- animations.
+    //Properties -- animations.
     auto lambda_gui_save_animation = [] (lafi::widget*) { gui_save_animation(); };
     auto lambda_gui_save_frame_instance = [] (lafi::widget*) { gui_save_frame_instance(); };
     
@@ -1005,7 +1005,7 @@ void animation_editor::load() {
     frm_anims->register_accelerator(ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL | ALLEGRO_KEYMOD_SHIFT, frm_anims->widgets["frm_anim"]->widgets["but_prev"]);
     
     
-    // Properties -- frames.
+    //Properties -- frames.
     auto lambda_gui_save_frame = [] (lafi::widget*) { gui_save_frame(); };
     
     frm_frames->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
@@ -1062,7 +1062,7 @@ void animation_editor::load() {
     frm_frames->widgets["frm_frame"]->widgets["txt_offsy"]->description = "In-game, offset by this much, vertically.";
     
     
-    // Properties -- hitbox instances.
+    //Properties -- hitbox instances.
     auto lambda_gui_save_hitbox_instance = [] (lafi::widget*) { gui_save_hitbox_instance(); };
     auto lambda_gui_save_hitbox_instance_click = [] (lafi::widget*, int, int) { gui_save_hitbox_instance(); };
     
@@ -1128,7 +1128,7 @@ void animation_editor::load() {
     frm_attack->widgets["txt_knockback"]->description = "Knockback strength.";
     
     
-    // Properties -- hitboxes.
+    //Properties -- hitboxes.
     auto lambda_gui_save_hitbox = [] (lafi::widget*) { gui_save_hitbox(); };
     auto lambda_gui_save_hitbox_click = [] (lafi::widget*, int, int) { gui_save_hitbox(); };
     frm_hitboxes->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
@@ -1222,7 +1222,7 @@ void animation_editor::load() {
     frm_hitbox->widgets["but_rem"]->description    = "Delete this hitbox.";
     
     
-    // Properties -- picker.
+    //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         ((lafi::textbox*) gui->widgets["frm_picker"]->widgets["txt_new"])->text.clear();
         
@@ -1266,7 +1266,7 @@ void animation_editor::load() {
     };
     
     
-    // Properties -- Pikmin top.
+    //Properties -- Pikmin top.
     auto lambda_save_top = [] (lafi::widget*) { gui_save_top(); };
     auto lambda_save_top_click = [] (lafi::widget*, int, int) { gui_save_top(); };
     frm_top->widgets["but_back"]->description = "Go back.";
@@ -1288,7 +1288,7 @@ void animation_editor::load() {
     frm_top->widgets["but_maturity"]->description = "View a different maturity top.";
     
     
-    // Properties -- bottom bar.
+    //Properties -- bottom bar.
     frm_bottom->widgets["but_toggle_hitboxes"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         hitboxes_visible = !hitboxes_visible;
     };
@@ -1309,7 +1309,7 @@ void animation_editor::load() {
     frm_bottom->widgets["but_save"]->description = "Save the object to the text file.";
     frm_bottom->widgets["but_quit"]->description = "Quit the animation editor.";
     
-    // TODO quit button.
+    //TODO quit button.
     
     lafi::label* gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     gui->add("lbl_status_bar", gui_status_bar);
@@ -1398,7 +1398,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         disable_widget(gui->widgets["frm_picker"]->widgets["but_new"]);
     }
     
-    while(f->widgets.size()) {
+    while(!f->widgets.empty()) {
         f->remove(f->widgets.begin()->first);
     }
     
@@ -1514,7 +1514,7 @@ void animation_editor::pick(string name, unsigned char type) {
         object_name = name;
         load_animation_set();
         
-        // Top bitmap.
+        //Top bitmap.
         for(unsigned char t = 0; t < 3; t++) {
             if(top_bmp[t] && top_bmp[t] != bmp_error) {
                 al_destroy_bitmap(top_bmp[t]);
@@ -1704,7 +1704,7 @@ void animation_editor::update_stats() {
     ((lafi::button*) f->widgets["but_object"])->text = animation_editor::object_name;
     
     f = f->widgets["frm_object"];
-    if(object_name.size()) { show_widget(f); } // Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
+    if(object_name.size()) { show_widget(f); } //Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
     else hide_widget(f);
     
     ((lafi::label*) f->widgets["lbl_n_anims"])->text = "Animations: " + i2s(anims.animations.size());

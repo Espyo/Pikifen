@@ -28,4 +28,4 @@ public:
     ship_type();
 };
 
-#endif // ifndef SHIP_TYPE_INCLUDED
+#endif //ifndef SHIP_TYPE_INCLUDED

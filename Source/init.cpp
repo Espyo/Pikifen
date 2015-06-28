@@ -34,7 +34,7 @@ void init_allegro() {
 }
 
 void init_controls() {
-    // TODO create a manager for this, like the mob category manager and whatnot.
+    //TODO create a manager for this, like the mob category manager and whatnot.
     controls.push_back(control_info(BUTTON_THROW, 0, "mb_1"));
     controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
     controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
@@ -58,7 +58,7 @@ void init_controls() {
 }
 
 void init_error_bitmap() {
-    // Error bitmap.
+    //Error bitmap.
     int bmp_error_w, bmp_error_h;
     al_get_text_dimensions(al_create_builtin_font(), "ERROR", NULL, NULL, &bmp_error_w, &bmp_error_h);
     bmp_error = al_create_bitmap(bmp_error_w, bmp_error_h);
@@ -83,23 +83,23 @@ void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue) {
 
 void init_fonts() {
     int font_ranges[] = {
-        0x0020, 0x007E, // ASCII
-        0x00A0, 0x00A1, // Non-breaking space and inverted !
-        0x00BF, 0x00FF, // Inverted ? and European vowels and such
+        0x0020, 0x007E, //ASCII
+        0x00A0, 0x00A1, //Non-breaking space and inverted !
+        0x00BF, 0x00FF, //Inverted ? and European vowels and such
     };
     int counter_font_ranges[] = {
-        0x002D, 0x002D, // Dash
-        0x002F, 0x0039, // Slash and numbers
-        0x0078, 0x0078, // x
+        0x002D, 0x002D, //Dash
+        0x002F, 0x0039, //Slash and numbers
+        0x0078, 0x0078, //x
     };
     int value_font_ranges[] = {
-        0x0024, 0x0024, // Dollar sign
-        0x002D, 0x002D, // Dash
-        0x0030, 0x0039, // Numbers
+        0x0024, 0x0024, //Dollar sign
+        0x002D, 0x002D, //Dash
+        0x0030, 0x0039, //Numbers
     };
     
-    // We can't load the font directly because we want to set the ranges.
-    // So we load into a bitmap first.
+    //We can't load the font directly because we want to set the ranges.
+    //So we load into a bitmap first.
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
     if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
@@ -128,12 +128,12 @@ void init_misc() {
     
     srand(time(NULL));
     
-    // TODO the function is always returning 0.
+    //TODO the function is always returning 0.
     area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
 }
 
 void init_misc_graphics() {
-    // Graphics.
+    //Graphics.
     bmp_red_onion = load_bmp("Red_onion.png");
     bmp_yellow_onion = load_bmp("Yellow_onion.png");
     bmp_blue_onion = load_bmp("Blue_onion.png");
@@ -170,7 +170,7 @@ void init_misc_graphics() {
 }
 
 void init_misc_sounds() {
-    // Sound effects.
+    //Sound effects.
     voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
     mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
     al_attach_mixer_to_voice(mixer, voice);
