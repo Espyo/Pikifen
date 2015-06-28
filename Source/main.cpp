@@ -69,7 +69,7 @@ int main(int argc, char**) {
     init_error_bitmap();
     init_fonts();
     
-    draw_loading_screen("", "Loading...", 1.0);
+    draw_loading_screen("", "", 1.0);
     
     cur_screen = SCREEN_GAME;
     if(argc == 2) cur_screen = SCREEN_ANIMATION_EDITOR;

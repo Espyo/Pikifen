@@ -1515,6 +1515,8 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
 void draw_loading_screen(const string &text, const string &subtitle, const float opacity) {
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
     float text_y = scr_h * 0.5 - (subtitle.empty() ? 0 : 32);
+    ALLEGRO_TRANSFORM normal_transform;
+    al_identity_transform(&normal_transform);
     
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
@@ -1528,12 +1530,11 @@ void draw_loading_screen(const string &text, const string &subtitle, const float
     
     //Draw the subtitle.
     if(!subtitle.empty()) {
-        ALLEGRO_TRANSFORM t, n;
-        al_identity_transform(&t);
-        al_identity_transform(&n);
-        al_scale_transform(&t, LOADING_SCREEN_SUBTITLE_SCALE, LOADING_SCREEN_SUBTITLE_SCALE);
+        ALLEGRO_TRANSFORM subtitle_transform;
+        al_identity_transform(&subtitle_transform);
+        al_scale_transform(&subtitle_transform, LOADING_SCREEN_SUBTITLE_SCALE, LOADING_SCREEN_SUBTITLE_SCALE);
         
-        al_use_transform(&t);
+        al_use_transform(&subtitle_transform);
         
         draw_text_lines(
             font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
@@ -1543,8 +1544,27 @@ void draw_loading_screen(const string &text, const string &subtitle, const float
             subtitle
         );
         
-        al_use_transform(&n);
+        al_use_transform(&normal_transform);
     }
+    
+    float icon_x = scr_w - 8 - al_get_text_width(font, "Loading...") - 8 - font_h * 0.5;
+    float icon_y = scr_h - 8 - font_h * 0.5;
+    
+    //Draw the game's logo behind the "Loading..." text.
+    if(bmp_icon && bmp_icon != bmp_error) {
+        draw_sprite(
+            bmp_icon, icon_x, icon_y,
+            -1, font_h
+        );
+    }
+    
+    //Draw the "Loading..." text.
+    al_draw_text(
+        font, al_map_rgba(192, 192, 192, opacity * 255.0),
+        scr_w - 8,
+        scr_h - 8 - font_h,
+        ALLEGRO_ALIGN_RIGHT, "Loading..."
+    );
     
     al_flip_display();
 }
