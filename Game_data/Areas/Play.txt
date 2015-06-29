@@ -1228,177 +1228,177 @@ linedefs{
 sectors{
 	sector{
 		z=200
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		type=Wall
 		z=200
 		fade=true
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=300
-		texture=Rock.png
+		texture=Rock.jpg
 	}
 	sector{
 		z=192
 		fade=true
-		texture=Rock.png
+		texture=Rock.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
-		texture=Dirt.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		fade=true
-		texture=Dirt.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		texture=Dirt.png
+		texture=Dirt.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
 		fade=true
-		texture=Grass 2.png
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
 		fade=true
-		texture=
+		texture=Grass 2.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
-		texture=Dirt.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		fade=true
-		texture=Grass 2.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		texture=Dirt.png
-	}
-	sector{
-		z=200
-		texture=Rock.png
-	}
-	sector{
-		z=200
-		fade=true
-		texture=Grass.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		fade=true
-		texture=Grass 2.png
-	}
-	sector{
-		type=Landing site
-		z=0
-		texture=Dirt.png
-	}
-	sector{
-		z=200
-		fade=true
-		texture=Grass.png
-	}
-	sector{
-		z=200
 		fade=true
 		texture=
 	}
 	sector{
 		type=Landing site
 		z=0
-		fade=true
-		texture=Grass 2.png
+		texture=Dirt.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
 		fade=true
-		texture=Dirt.png
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.jpg
+	}
+	sector{
+		z=200
+		texture=Rock.jpg
+	}
+	sector{
+		z=200
+		fade=true
+		texture=Grass.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
 		fade=true
-		texture=Dirt.png
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Landing site
+		z=0
+		texture=Dirt.jpg
+	}
+	sector{
+		z=200
+		fade=true
+		texture=Grass.jpg
+	}
+	sector{
+		z=200
+		fade=true
+		texture=
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Landing site
+		z=0
+		fade=true
+		texture=Dirt.jpg
 	}
 	sector{
 		z=150
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=200
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=300
 		fade=true
-		texture=Rock.png
+		texture=Rock.jpg
 	}
 	sector{
 		z=50
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=100
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		type=Landing site
 		z=16
 		always_cast_shadow=true
-		texture=Bark.png
+		texture=Bark.jpg
 	}
 	sector{
 		type=Landing site
 		z=192
-		texture=Trunk.png
+		texture=Trunk.jpg
 		texture_scale=0.51 0.51
 		texture_trans=69 -53
 	}
 	sector{
 		type=Landing site
 		z=96
-		texture=Bark.png
+		texture=Bark.jpg
 	}
 	sector{
 		type=Landing site
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=128
-		texture=Bark.png
+		texture=Bark.jpg
 	}
 	sector{
 		type=Landing site
 		z=16
-		texture=Bark.png
+		texture=Bark.jpg
 	}
 	sector{
 		type=Landing site
 		z=96
-		texture=Bark.png
+		texture=Bark.jpg
 	}
 }
 tree_shadows{

@@ -361,7 +361,7 @@ linedefs{
 sectors{
 	sector{
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		type=Landing site
@@ -370,31 +370,31 @@ sectors{
 	}
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		z=0
@@ -403,20 +403,20 @@ sectors{
 	}
 	sector{
 		z=0
-		texture=Dirt.png
+		texture=Dirt.jpg
 	}
 	sector{
 		z=0
-		texture=Grass 2.png
+		texture=Grass 2.jpg
 	}
 	sector{
 		type=Bottomless pit
 		z=0
-		texture=Grass.png
+		texture=Grass.jpg
 	}
 	sector{
 		z=32
-		texture=Rock.png
+		texture=Rock.jpg
 	}
 }
 tree_shadows=

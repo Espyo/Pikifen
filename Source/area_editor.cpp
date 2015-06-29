@@ -1782,7 +1782,7 @@ void area_editor::load() {
     frm_review->easy_add("chk_see_textures", new lafi::checkbox(0, 0, 0, 0, "See textures"), 100, 16);
     frm_review->easy_row();
     frm_review->easy_add("dum_1", new lafi::dummy(0, 0, 0, 0), 10, 16);
-    frm_review->easy_add("chk_shadows", new lafi::checkbox(0, 0, 0, 0, "Enable shadows"), 90, 16);
+    frm_review->easy_add("chk_shadows", new lafi::checkbox(0, 0, 0, 0, "See tree shadows"), 90, 16);
     frm_review->easy_row();
     update_review_frame();
     
