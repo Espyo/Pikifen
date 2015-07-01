@@ -78,6 +78,7 @@ bool               find_in_vector(const vector<string> &v, const string &s);
 vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);
 void               generate_area_images();
 ALLEGRO_COLOR      get_daylight_color();
+void               get_multiline_text_dimensions(const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h);
 float              get_sun_strength();
 string             get_var_value(const string &vars_string, const string &var, const string &def);
 ALLEGRO_TRANSFORM  get_world_to_screen_transform();
@@ -95,6 +96,7 @@ void               move_point(const float x, const float y, const float tx, cons
 float              normalize_angle(float a);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
+ALLEGRO_BITMAP*    recreate_bitmap(ALLEGRO_BITMAP* b);
 string             replace_all(string s, string search, string replacement);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);
 void               save_options();

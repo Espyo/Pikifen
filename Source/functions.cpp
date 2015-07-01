@@ -339,11 +339,7 @@ void generate_area_images() {
             //We need to "rebuild" the images, so that the mipmaps get updated.
             //Not doing this caused a month-old bug under OpenGL,
             //where zooming out = fade to black.
-            ALLEGRO_BITMAP* original = area_images[x][y];
-            ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(original);
-            
-            al_destroy_bitmap(original);
-            area_images[x][y] = fixed_mipmap;
+            area_images[x][y] = recreate_bitmap(area_images[x][y]);
         }
     }
     
@@ -378,6 +374,33 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //If anything goes wrong, don't apply lighting at all.
     return al_map_rgba(0, 0, 0, 0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the width and height of a block of multi-line text.
+ * Lines are split by a single "\n" character.
+ * These are the dimensions of a bitmap that would hold a drawing by draw_text_lines().
+ * font:  The text's font.
+ * text:  The text.
+ * ret_w: The width gets returned here, if not NULL.
+ * ret_h: The height gets returned here, if not NULL.
+ */
+void get_multiline_text_dimensions(const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h) {
+    vector<string> lines = split(text, "\n", true);
+    int fh = al_get_font_line_height(font);
+    size_t n_lines = lines.size();
+    
+    if(ret_h) *ret_h = max(0, (int) ((fh + 1) * n_lines) - 1);
+    
+    if(ret_w) {
+        int largest_w = 0;
+        for(size_t l = 0; l < lines.size(); l++) {
+            largest_w = max(largest_w, al_get_text_width(font, lines[l].c_str()));
+        }
+        
+        *ret_w = largest_w;
+    }
 }
 
 
@@ -486,6 +509,7 @@ void load_area(const string &name, const bool load_for_editor) {
     subtitle = file.get_child_by_name("subtitle")->value;
     
     draw_loading_screen(canon_name, subtitle, 1.0);
+    al_flip_display();
     
     cur_area_map.weather_name = file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
@@ -981,6 +1005,18 @@ int randomi(int min, int max) {
     if(min > max) swap(min, max);
     if(min == max) return min;
     return ((rand()) % (max - min + 1)) + min;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Basically, it destroys and recreates a bitmap.
+ * The main purpose of this is to update its mipmap.
+ * b: The bitmap.
+ */
+ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b) {
+    ALLEGRO_BITMAP* fixed_mipmap = al_clone_bitmap(b);
+    al_destroy_bitmap(b);
+    return fixed_mipmap;
 }
 
 

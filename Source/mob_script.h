@@ -169,7 +169,7 @@ public:
 class mob_state {
 public:
     string name;
-    unsigned short id;
+    size_t id;
     mob_event* events[N_MOB_EVENTS];
     mob_event* get_event(const size_t type);
     

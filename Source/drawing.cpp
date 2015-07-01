@@ -1506,55 +1506,170 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
 
 
 /* ----------------------------------------------------------------------------
- * Draws the loading screen for an area (or anything else, really),
- * and swaps the buffers once.
- * text:     The main text to show.
- * subtitle: Subtitle to show under the text, optional.
- * opacity:  0 to 1. 0 makes the whole loading screen black.
+ * Draws the loading screen for an area (or anything else, really).
+ * text:    The main text to show, optional.
+ * subtext: Subtext to show under the main text, optional.
+ * opacity: 0 to 1.
  */
-void draw_loading_screen(const string &text, const string &subtitle, const float opacity) {
+void draw_loading_screen(const string &text, const string &subtext, const float opacity) {
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
-    float text_y = scr_h * 0.5 - (subtitle.empty() ? 0 : 32);
-    ALLEGRO_TRANSFORM normal_transform;
-    al_identity_transform(&normal_transform);
+    const int LOADING_SCREEN_PADDING = 64;
     
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+    ALLEGRO_BITMAP* text_bmp;
+    ALLEGRO_BITMAP* subtext_bmp;
     
-    //Draw the main text.
-    draw_text_lines(
-        font_area_name, al_map_rgba(255, 215, 0, opacity * 255.0),
-        scr_w * 0.5, text_y, ALLEGRO_ALIGN_CENTER,
-        (subtitle.empty() ? 1 : 2),
-        text
-    );
     
-    //Draw the subtitle.
-    if(!subtitle.empty()) {
-        ALLEGRO_TRANSFORM subtitle_transform;
-        al_identity_transform(&subtitle_transform);
-        al_scale_transform(&subtitle_transform, LOADING_SCREEN_SUBTITLE_SCALE, LOADING_SCREEN_SUBTITLE_SCALE);
+    al_draw_filled_rectangle(0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, opacity * 255.0f));
+    
+    //Set up the bitmap that will hold the text.
+    int text_w = 0, text_h = 0;
+    if(!text.empty()) {
+    
+        get_multiline_text_dimensions(font_area_name, text, &text_w, &text_h);
+        text_bmp = al_create_bitmap(text_w, text_h);
         
-        al_use_transform(&subtitle_transform);
+        //Draw the main text on its bitmap.
+        al_set_target_bitmap(text_bmp); {
+            draw_text_lines(
+                font_area_name, al_map_rgba(255, 215, 0, opacity * 255.0),
+                0, 0, ALLEGRO_ALIGN_LEFT, 0,
+                text
+            );
+        } al_set_target_backbuffer(display);
         
-        draw_text_lines(
-            font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
-            (scr_w * 0.5) * (1.0 / LOADING_SCREEN_SUBTITLE_SCALE),
-            (scr_h * 0.5 + 32) * (1.0 / LOADING_SCREEN_SUBTITLE_SCALE),
-            ALLEGRO_ALIGN_CENTER, 0,
-            subtitle
-        );
-        
-        al_use_transform(&normal_transform);
     }
     
+    //Now, the bitmap for the subtext.
+    int subtext_w = 0, subtext_h = 0;
+    if(!subtext.empty()) {
+    
+        get_multiline_text_dimensions(font_area_name, subtext, &subtext_w, &subtext_h);
+        subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
+        
+        al_set_target_bitmap(subtext_bmp); {
+            draw_text_lines(
+                font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
+                0, 0,
+                ALLEGRO_ALIGN_LEFT, 0,
+                subtext
+            );
+            
+        } al_set_target_backbuffer(display);
+        
+        //We'll be scaling this, so let's update the mipmap.
+        subtext_bmp = recreate_bitmap(subtext_bmp);
+        
+    }
+    
+    //Draw the text bitmap in its place.
+    float text_y = 0;
+    if(!text.empty()) {
+    
+        text_y = (subtext.empty() ? (scr_h * 0.5 - text_h * 0.5) : (scr_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h));
+        al_draw_bitmap(text_bmp, scr_w * 0.5 - text_w * 0.5, text_y, 0);
+        
+    }
+    
+    //Draw the subtext bitmap in its place.
+    float subtext_y = scr_h * 0.5 + LOADING_SCREEN_PADDING * 0.5;
+    if(!subtext.empty()) {
+    
+        al_draw_scaled_bitmap(
+            subtext_bmp,
+            0, 0, subtext_w, subtext_h,
+            scr_w * 0.5 - (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
+            subtext_y,
+            subtext_w * LOADING_SCREEN_SUBTITLE_SCALE,
+            subtext_h * LOADING_SCREEN_SUBTITLE_SCALE,
+            0
+        );
+        
+    }
+    
+    //Now, draw the polygon that will hold the reflection for the text.
+    if(!text.empty()) {
+    
+        ALLEGRO_VERTEX text_vertices[4];
+        float text_reflection_h = min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
+        //Top-left vertex.
+        text_vertices[0].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertices[0].y = text_y + text_h;
+        text_vertices[0].z = 0;
+        text_vertices[0].u = 0;
+        text_vertices[0].v = text_h;
+        text_vertices[0].color = al_map_rgba(255, 255, 255, 128);
+        //Top-right vertex.
+        text_vertices[1].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertices[1].y = text_y + text_h;
+        text_vertices[1].z = 0;
+        text_vertices[1].u = text_w;
+        text_vertices[1].v = text_h;
+        text_vertices[1].color = al_map_rgba(255, 255, 255, 128);
+        //Bottom-right vertex.
+        text_vertices[2].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertices[2].y = text_y + text_h + text_reflection_h;
+        text_vertices[2].z = 0;
+        text_vertices[2].u = text_w;
+        text_vertices[2].v = text_h - text_reflection_h;
+        text_vertices[2].color = al_map_rgba(255, 255, 255, 0);
+        //Bottom-left vertex.
+        text_vertices[3].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertices[3].y = text_y + text_h + text_reflection_h;
+        text_vertices[3].z = 0;
+        text_vertices[3].u = 0;
+        text_vertices[3].v = text_h - text_reflection_h;
+        text_vertices[3].color = al_map_rgba(255, 255, 255, 0);
+        
+        al_draw_prim(text_vertices, NULL, text_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        
+    }
+    
+    //And the polygon for the subtext.
+    if(!subtext.empty()) {
+    
+        ALLEGRO_VERTEX subtext_vertices[4];
+        float subtext_reflection_h = min((int) (LOADING_SCREEN_PADDING * 0.5), (int) (text_h * LOADING_SCREEN_SUBTITLE_SCALE));
+        //Top-left vertex.
+        subtext_vertices[0].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertices[0].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertices[0].z = 0;
+        subtext_vertices[0].u = 0;
+        subtext_vertices[0].v = subtext_h;
+        subtext_vertices[0].color = al_map_rgba(255, 255, 255, 128);
+        //Top-right vertex.
+        subtext_vertices[1].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertices[1].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertices[1].z = 0;
+        subtext_vertices[1].u = subtext_w;
+        subtext_vertices[1].v = subtext_h;
+        subtext_vertices[1].color = al_map_rgba(255, 255, 255, 128);
+        //Bottom-right vertex.
+        subtext_vertices[2].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertices[2].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
+        subtext_vertices[2].z = 0;
+        subtext_vertices[2].u = subtext_w;
+        subtext_vertices[2].v = subtext_h - subtext_reflection_h;
+        subtext_vertices[2].color = al_map_rgba(255, 255, 255, 0);
+        //Bottom-left vertex.
+        subtext_vertices[3].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertices[3].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
+        subtext_vertices[3].z = 0;
+        subtext_vertices[3].u = 0;
+        subtext_vertices[3].v = subtext_h - subtext_reflection_h;
+        subtext_vertices[3].color = al_map_rgba(255, 255, 255, 0);
+        
+        al_draw_prim(subtext_vertices, NULL, subtext_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        
+    }
+    
+    //Draw the game's logo to the left of the "Loading..." text.
     float icon_x = scr_w - 8 - al_get_text_width(font, "Loading...") - 8 - font_h * 0.5;
     float icon_y = scr_h - 8 - font_h * 0.5;
     
-    //Draw the game's logo behind the "Loading..." text.
     if(bmp_icon && bmp_icon != bmp_error) {
         draw_sprite(
             bmp_icon, icon_x, icon_y,
-            -1, font_h
+            -1, font_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
         );
     }
     
@@ -1566,7 +1681,6 @@ void draw_loading_screen(const string &text, const string &subtitle, const float
         ALLEGRO_ALIGN_RIGHT, "Loading..."
     );
     
-    al_flip_display();
 }
 
 
@@ -1607,7 +1721,8 @@ void draw_mob_shadow(const float cx, const float cy, const float size, const flo
  * Draws a sprite.
  * bmp:   The bitmap.
  * c*:    Center coordinates.
- * w/h:   Final width and height. Make this -1 one one of them to keep the aspect ratio.
+ * w/h:   Final width and height.
+ ** Make this -1 on one of them to keep the aspect ratio from the other.
  * angle: Angle to rotate the sprite by.
  * tint:  Tint the sprite with this color.
  */

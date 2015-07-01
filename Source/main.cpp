@@ -70,6 +70,7 @@ int main(int argc, char**) {
     init_fonts();
     
     draw_loading_screen("", "", 1.0);
+    al_flip_display();
     
     cur_screen = SCREEN_GAME;
     if(argc == 2) cur_screen = SCREEN_ANIMATION_EDITOR;
