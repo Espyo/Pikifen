@@ -133,6 +133,8 @@ unsigned int                     font_counter_h = 0;
 unsigned int                     font_h = 0;
 ALLEGRO_FONT*                    font_value = NULL;
 unsigned short                   game_fps = DEF_FPS;
+vector<gate*>                    gates;
+map<string, gate_type*>          gate_types;
 float                            group_move_angle = 0;
 vector<float>                    group_move_arrows;
 float                            group_move_intensity = 0;

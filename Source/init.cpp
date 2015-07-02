@@ -20,6 +20,7 @@
 
 #include "controls.h"
 #include "functions.h"
+#include "mob_script.h"
 #include "vars.h"
 
 void init_allegro() {
@@ -250,6 +251,12 @@ void init_mob_categories() {
     }, [] (const string & n) -> mob_type* {
         auto it = treasure_types.find(n); if(it == treasure_types.end()) return NULL; return it->second;
     });
+    
+    mob_categories.register_category(MOB_CATEGORY_GATES, "Gates", "Gate", [] (vector<string> &li) {
+        for(auto g = gate_types.begin(); g != gate_types.end(); g++) li.push_back(g->first);
+    }, [] (const string & n) -> mob_type* {
+        auto it = gate_types.find(n); if(it == gate_types.end()) return NULL; return it->second;
+    });
 }
 
 void init_sector_types() {
@@ -257,9 +264,11 @@ void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
     sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
     sector_types.register_type(SECTOR_TYPE_WALL, "Wall");
+    sector_types.register_type(SECTOR_TYPE_GATE, "Gate");
 }
 
 void init_special_mob_types() {
+    //Info spot.
     mob_type* info_spot_mt = new mob_type();
     info_spot_mt->name = "Info spot";
     info_spot_mt->radius = 16;
@@ -268,6 +277,7 @@ void init_special_mob_types() {
     };
     spec_mob_types["Info spot"] = info_spot_mt;
     
+    //Nectar.
     mob_type* nectar_mt = new mob_type();
     nectar_mt->name = "Nectar";
     nectar_mt->always_active = true;
@@ -276,4 +286,5 @@ void init_special_mob_types() {
         create_mob(new nectar(x, y, vars));
     };
     spec_mob_types["Nectar"] = nectar_mt;
+    
 }

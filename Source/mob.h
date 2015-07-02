@@ -198,8 +198,9 @@ enum MOB_TEAMS {
     MOB_TEAM_PLAYER_2,
     MOB_TEAM_PLAYER_3,
     MOB_TEAM_PLAYER_4,
-    MOB_TEAM_ENEMIES_1,
-    MOB_TEAM_ENEMIES_2,
+    MOB_TEAM_ENEMY_1,
+    MOB_TEAM_ENEMY_2,
+    MOB_TEAM_OBSTACLE,  //Can only be hurt by Pikmin.
     MOB_TEAM_DECORATION, //Cannot be hurt or targeted by anything.
 };
 

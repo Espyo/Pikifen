@@ -723,8 +723,8 @@ void load_area_textures() {
  * If the node is present, it'll be used to report errors.
  */
 ALLEGRO_BITMAP* load_bmp(const string &file_name, data_node* node, bool report_error) {
-    ALLEGRO_BITMAP* b = NULL;
-    if(file_name.size()) b = al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
+    if(file_name.empty()) return NULL;
+    ALLEGRO_BITMAP* b = al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
     
     if(!b && report_error) {
         error_log("Could not open image " + file_name + "!", node);

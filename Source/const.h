@@ -101,6 +101,7 @@ const string AUDIO_FOLDER          = GAME_DATA_FOLDER + "/Audio";
 const string AREA_FOLDER           = GAME_DATA_FOLDER + "/Areas";
 const string CONFIGURATIONS_FOLDER = GAME_DATA_FOLDER + "/Configurations";
 const string ENEMIES_FOLDER        = TYPES_FOLDER + "/Enemies";
+const string GATES_FOLDER          = TYPES_FOLDER + "/Gates";
 const string GRAPHICS_FOLDER       = GAME_DATA_FOLDER + "/Graphics";
 const string LEADERS_FOLDER        = TYPES_FOLDER + "/Leaders";
 const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";

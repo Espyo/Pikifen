@@ -22,6 +22,7 @@
 #include "animation.h"
 #include "const.h"
 #include "controls.h"
+#include "gate.h"
 #include "hitbox.h"
 #include "LAFI/gui.h"
 #include "LAFI/label.h"
@@ -165,6 +166,8 @@ extern unsigned int                     font_counter_h;
 extern unsigned int                     font_h;
 extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
 extern unsigned short                   game_fps;
+extern vector<gate*>                    gates;
+extern map<string, gate_type*>          gate_types;
 extern float                            group_move_angle;
 extern vector<float>                    group_move_arrows;          //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                            group_move_intensity;     //General intensity of the group move in the specified angle.

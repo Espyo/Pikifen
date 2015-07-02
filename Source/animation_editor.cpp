@@ -263,36 +263,40 @@ void animation_editor::gui_load_hitbox_instance() {
     lafi::widget* f = gui->widgets["frm_hitbox_is"]->widgets["frm_hitbox_i"];
     
     hitbox_instance* cur_hi = &cur_frame->hitbox_instances[cur_hitbox_instance_nr];
-    ((lafi::label*) gui->widgets["frm_hitbox_is"]->widgets["lbl_name"])->text = cur_hi->hitbox_name;
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_hi->x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_hi->y);
-    ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_hi->z);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_hi->height);
-    ((lafi::textbox*) f->widgets["txt_r"])->text = f2s(cur_hi->radius);
+    if(cur_hi){
+        ((lafi::label*) gui->widgets["frm_hitbox_is"]->widgets["lbl_name"])->text = cur_hi->hitbox_name;
+        ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_hi->x);
+        ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_hi->y);
+        ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_hi->z);
+        ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_hi->height);
+        ((lafi::textbox*) f->widgets["txt_r"])->text = f2s(cur_hi->radius);
+    }
     
     open_hitbox_type(cur_hi ? cur_hi->type : 255);
     
-    if(cur_hi->type == HITBOX_TYPE_NORMAL) {
-        f = f->widgets["frm_normal"];
-        ((lafi::textbox*) f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
-        if(cur_hi->can_pikmin_latch) ((lafi::checkbox*) f->widgets["chk_latch"])->check();
-        else ((lafi::checkbox*) f->widgets["chk_latch"])->uncheck();
-        ((lafi::textbox*) f->widgets["txt_hazards"])->text = cur_hi->hazards;
-        
-    } else if(cur_hi->type == HITBOX_TYPE_ATTACK) {
-        f = f->widgets["frm_attack"];
-        ((lafi::textbox*)      f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
-        ((lafi::textbox*)      f->widgets["txt_hazards"])->text = cur_hi->hazards;
-        ((lafi::checkbox*)     f->widgets["chk_outward"])->set(cur_hi->knockback_outward);
-        ((lafi::angle_picker*) f->widgets["ang_angle"])->set_angle_rads(cur_hi->knockback_angle);
-        ((lafi::textbox*)      f->widgets["txt_knockback"])->text = f2s(cur_hi->knockback);
-        
-        if(cur_hi->knockback_outward) {
-            disable_widget(f->widgets["ang_angle"]);
-        } else {
-            enable_widget(f->widgets["ang_angle"]);
+    if(cur_hi){
+        if(cur_hi->type == HITBOX_TYPE_NORMAL) {
+            f = f->widgets["frm_normal"];
+            ((lafi::textbox*) f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
+            if(cur_hi->can_pikmin_latch) ((lafi::checkbox*) f->widgets["chk_latch"])->check();
+            else ((lafi::checkbox*) f->widgets["chk_latch"])->uncheck();
+            ((lafi::textbox*) f->widgets["txt_hazards"])->text = cur_hi->hazards;
+            
+        } else if(cur_hi->type == HITBOX_TYPE_ATTACK) {
+            f = f->widgets["frm_attack"];
+            ((lafi::textbox*)      f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
+            ((lafi::textbox*)      f->widgets["txt_hazards"])->text = cur_hi->hazards;
+            ((lafi::checkbox*)     f->widgets["chk_outward"])->set(cur_hi->knockback_outward);
+            ((lafi::angle_picker*) f->widgets["ang_angle"])->set_angle_rads(cur_hi->knockback_angle);
+            ((lafi::textbox*)      f->widgets["txt_knockback"])->text = f2s(cur_hi->knockback);
+            
+            if(cur_hi->knockback_outward) {
+                disable_widget(f->widgets["ang_angle"]);
+            } else {
+                enable_widget(f->widgets["ang_angle"]);
+            }
+            
         }
-        
     }
 }
 
@@ -1407,6 +1411,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements.push_back("Enemies");
         elements.push_back("Leaders");
         elements.push_back("Onions");
+        elements.push_back("Gates");
         elements.push_back("Pellets");
         elements.push_back("Pikmin");
         elements.push_back("Treasures");
@@ -1424,6 +1429,8 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements = folder_to_vector(LEADERS_FOLDER, true);
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
         elements = folder_to_vector(ONIONS_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_GATES) {
+        elements = folder_to_vector(GATES_FOLDER, true);
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
         elements = folder_to_vector(PELLETS_FOLDER, true);
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
@@ -1466,6 +1473,7 @@ void animation_editor::pick(string name, unsigned char type) {
     if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
         if(name == "Enemies")        mob_type_list = MOB_CATEGORY_ENEMIES;
         else if(name == "Leaders")   mob_type_list = MOB_CATEGORY_LEADERS;
+        else if(name == "Gates")     mob_type_list = MOB_CATEGORY_GATES;
         else if(name == "Onions")    mob_type_list = MOB_CATEGORY_ONIONS;
         else if(name == "Pellets")   mob_type_list = MOB_CATEGORY_PELLETS;
         else if(name == "Pikmin")    mob_type_list = MOB_CATEGORY_PIKMIN;
@@ -1500,6 +1508,8 @@ void animation_editor::pick(string name, unsigned char type) {
         file_name = LEADERS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
         file_name = ONIONS_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_GATES) {
+        file_name = GATES_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
         file_name = PELLETS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
@@ -1696,6 +1706,7 @@ void animation_editor::update_stats() {
     if(mob_type_list == MOB_CATEGORY_ENEMIES)        s = "Enemies";
     else if(mob_type_list == MOB_CATEGORY_LEADERS)   s = "Leaders";
     else if(mob_type_list == MOB_CATEGORY_ONIONS)    s = "Onions";
+    else if(mob_type_list == MOB_CATEGORY_GATES)     s = "Gates";
     else if(mob_type_list == MOB_CATEGORY_PELLETS)   s = "Pellets";
     else if(mob_type_list == MOB_CATEGORY_PIKMIN)    s = "Pikmin";
     else if(mob_type_list == MOB_CATEGORY_TREASURES) s = "Treasures";

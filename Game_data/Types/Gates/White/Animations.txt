@@ -1,0 +1,123 @@
+animations{
+	idle{
+		loop_frame=0
+		frame_instances{
+			idle{
+				duration=0.00
+			}
+		}
+	}
+	nothing{
+		loop_frame=0
+		frame_instances{
+			nothing{
+				duration=0.00
+			}
+		}
+	}
+}
+frames{
+	idle{
+		file=White_gate.png
+		file_x=0
+		file_y=0
+		file_w=32
+		file_h=128
+		game_w=32.00
+		game_h=128.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances{
+			center{
+				coords=0.00 0.00 0.00
+				height=0.00
+				radius=32.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left{
+				coords=0.00 48.00 0.00
+				height=0.00
+				radius=32.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right{
+				coords=0.00 -48.00 0.00
+				height=0.00
+				radius=32.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	nothing{
+		file=
+		file_x=0
+		file_y=0
+		file_w=0
+		file_h=0
+		game_w=0.00
+		game_h=0.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances{
+			center{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+}
+hitboxes{
+	center=
+	left=
+	right=
+}

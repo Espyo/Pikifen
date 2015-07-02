@@ -25,7 +25,7 @@ enemy::enemy(const float x, const float y, enemy_type* type, const float angle, 
     appears_before_day(0),
     appears_every_x_days(0) {
     
-    team = MOB_TEAM_ENEMIES_1; //TODO removeish.
+    team = MOB_TEAM_ENEMY_1; //TODO removeish.
     
     //TODO day apperance interval
 }

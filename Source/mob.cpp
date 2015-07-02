@@ -876,6 +876,9 @@ void create_mob(mob* m) {
     } else if(typeid(*m) == typeid(enemy)) {
         enemies.push_back((enemy*) m);
         
+    } else if(typeid(*m) == typeid(gate)) {
+        gates.push_back((gate*) m);
+        
     }
 }
 
@@ -919,6 +922,9 @@ void delete_mob(mob* m) {
         
     } else if(typeid(*m) == typeid(enemy)) {
         enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
+        
+    } else if(typeid(*m) == typeid(gate)) {
+        gates.erase(find(gates.begin(), gates.end(), (gate*) m));
         
     } else {
         //TODO warn somehow.
@@ -1015,6 +1021,7 @@ bool should_attack(mob* m1, mob* m2) {
     if(m2->team == MOB_TEAM_DECORATION) return false;
     if(m1->team == MOB_TEAM_NONE) return true;
     if(m1->team == m2->team) return false;
+    if(typeid(*m1) == typeid(pikmin) && m2->team == MOB_TEAM_OBSTACLE) return true;
     return true;
 }
 

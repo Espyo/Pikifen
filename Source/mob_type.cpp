@@ -25,6 +25,7 @@
  */
 mob_type::mob_type() :
     radius(0),
+    height(0),
     move_speed(0),
     always_active(false),
     max_health(0),
@@ -55,6 +56,7 @@ void load_mob_types(bool load_resources) {
     load_mob_types(TREASURES_FOLDER, MOB_CATEGORY_TREASURES, load_resources);
     load_mob_types(PELLETS_FOLDER,   MOB_CATEGORY_PELLETS,   load_resources);
     load_mob_types(SHIPS_FOLDER,     MOB_CATEGORY_SHIPS,     load_resources);
+    load_mob_types(GATES_FOLDER,     MOB_CATEGORY_GATES,     load_resources);
 }
 
 
@@ -85,6 +87,8 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
             mt = new onion_type();
         } else if(category == MOB_CATEGORY_LEADERS) {
             mt = new leader_type();
+        } else if(category == MOB_CATEGORY_GATES) {
+            mt = new gate_type();
         } else if(category == MOB_CATEGORY_ENEMIES) {
             mt = new enemy_type();
         } else if(category == MOB_CATEGORY_PELLETS) {
@@ -109,6 +113,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         mt->sight_radius = s2f(file.get_child_by_name("sight_radius")->value);
         mt->territory_radius = s2f(file.get_child_by_name("territory_radius")->value);
         mt->radius = s2f(file.get_child_by_name("radius")->value);
+        mt->height = s2f(file.get_child_by_name("height")->value);
         mt->weight = s2f(file.get_child_by_name("weight")->value);
         
         if(load_resources) {
@@ -246,9 +251,18 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
             
             ship_types[st->name] = st;
             
+        } else if(category == MOB_CATEGORY_GATES) {
+            gate_type* gt = (gate_type*) mt;
+            
+            new_anim_conversion(GATE_ANIM_IDLE, "idle");
+            new_anim_conversion(GATE_ANIM_NOTHING, "nothing");
+            
+            gate_types[gt->name] = gt;
+            
         }
         
         if(load_resources) {
+            
             mt->anims.create_conversions(anim_conversions);
         }
         

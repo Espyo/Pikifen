@@ -109,6 +109,13 @@ void do_drawing() {
             }
         }
         
+        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); c++){
+            sector_correction* c_ptr = &cur_area_map.sector_corrections[c];
+            if(c_ptr->new_texture){
+                draw_sector(c_ptr->sec, 0, 0, 1.0f, c_ptr->new_texture);
+            }
+        }
+        
         
         /* Layer 3
         ************************
@@ -348,6 +355,28 @@ void do_drawing() {
                     ship_beam_ring_color[2] * 255 / ships[s]->lighting
                 ), 1
             );
+        }
+        
+        //Gates.
+        size_t n_gates = gates.size();
+        for(size_t g = 0; g < n_gates; g++){
+            gate* g_ptr = gates[g];
+            frame* f = g_ptr->anim.get_frame();
+            
+            if(f){
+                float c = cos(g_ptr->angle), s = sin(g_ptr->angle);
+                float sprite_x = g_ptr->x + c * f->offs_x + c * f->offs_y;
+                float sprite_y = g_ptr->y - s * f->offs_y + s * f->offs_x;
+                float sprite_size_mult = 1 + g_ptr->z * 0.001;
+                
+                draw_sprite(
+                    f->bitmap,
+                    sprite_x, sprite_y,
+                    f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
+                    g_ptr->angle,
+                    map_gray(g_ptr->lighting)
+                );
+            }
         }
         
         
@@ -1082,16 +1111,16 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
 
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
- * vertices: Vertices that make up the triangles of the sector.
  * s:        The sector to draw.
  * x, y:     Top-left coordinates.
  * scale:    Drawing scale.
+ * texture:  Custom texture. If NULL, uses the normal one.
  */
-void draw_sector(sector* s_ptr, const float x, const float y, const float scale) {
+void draw_sector(sector* s_ptr, const float x, const float y, const float scale, ALLEGRO_BITMAP* texture) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    draw_sector_texture(s_ptr, x, y, scale);
+    draw_sector_texture(s_ptr, x, y, scale, texture);
     
     
     //Wall shadows.
@@ -1346,11 +1375,12 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale)
 
 /* ----------------------------------------------------------------------------
  * Draws a sector, but only the texture (no wall shadows).
- * s_ptr: Pointer to the sector.
- * x, y:  X and Y offset.
- * scale: Scale the sector by this much.
+ * s_ptr:   Pointer to the sector.
+ * x, y:    X and Y offset.
+ * scale:   Scale the sector by this much.
+ * texture: Custom texture. If NULL, uses the normal one.
  */
-void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale) {
+void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, ALLEGRO_BITMAP* texture) {
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
     
@@ -1494,9 +1524,11 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             av[v].y *= scale;
         }
         
+        ALLEGRO_BITMAP* tex = texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap;
+        if(texture) tex = texture;
+        
         al_draw_prim(
-            av, NULL,
-            (texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap),
+            av, NULL, tex,
             0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         

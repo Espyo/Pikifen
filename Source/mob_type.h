@@ -40,6 +40,7 @@ public:
     
     //Space-related things.
     float radius;         //Diameter.
+    float height;
     float move_speed;
     float rotation_speed;
     bool always_active; //If true, this mob is always active, even if it's off-camera.
@@ -82,6 +83,7 @@ enum mob_categories {
     MOB_CATEGORY_PELLETS,
     MOB_CATEGORY_SPECIAL,
     MOB_CATEGORY_SHIPS,
+    MOB_CATEGORY_GATES,
 };
 
 const size_t ANIM_IDLE = 0;
