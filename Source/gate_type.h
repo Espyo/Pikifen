@@ -14,6 +14,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "data_file.h"
 #include "mob_type.h"
 
 /* ----------------------------------------------------------------------------
@@ -25,6 +26,7 @@ private:
     
 public:
     gate_type();
+    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 
 enum GATE_ANIMATIONS {

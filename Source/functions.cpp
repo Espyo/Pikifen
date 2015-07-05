@@ -190,6 +190,8 @@ bool find_in_vector(const vector<string> &v, const string &s) {
 vector<string> folder_to_vector(string folder_name, const bool folders, bool* folder_found) {
     vector<string> v;
     
+    if(folder_name.empty()) return v;
+    
     //Normalize the folder's path.
     replace(folder_name.begin(), folder_name.end(), '\\', '/');
     if(folder_name.back() == '/') folder_name.pop_back();
@@ -499,16 +501,14 @@ float interpolate_number(const float p, const float p1, const float p2, const fl
  */
 void load_area(const string &name, const bool load_for_editor) {
 
-    string canon_name, subtitle;
-    
     cur_area_map.clear();
     
     data_node file = load_data_file(AREA_FOLDER + "/" + name + ".txt");
     
-    canon_name = file.get_child_by_name("name")->get_value_or_default(name);
-    subtitle = file.get_child_by_name("subtitle")->value;
+    cur_area_map.name = file.get_child_by_name("name")->get_value_or_default(name);
+    cur_area_map.subtitle = file.get_child_by_name("subtitle")->value;
     
-    draw_loading_screen(canon_name, subtitle, 1.0);
+    draw_loading_screen(cur_area_map.name, cur_area_map.subtitle, 1.0);
     al_flip_display();
     
     cur_area_map.weather_name = file.get_child_by_name("weather")->value;

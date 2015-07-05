@@ -168,6 +168,21 @@
     <ClCompile Include="mob_script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gate_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="onion_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="treasure_type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -327,6 +342,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hazard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gate_type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

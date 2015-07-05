@@ -2265,6 +2265,8 @@ void area_editor::save_area() {
     file_node.add(new data_node("bg_color", c2s(cur_area_map.bg_color)));
     file_node.add(new data_node("bg_dist", f2s(cur_area_map.bg_dist)));
     file_node.add(new data_node("bg_zoom", f2s(cur_area_map.bg_bmp_zoom)));
+    file_node.add(new data_node("name", cur_area_map.name));
+    file_node.add(new data_node("subtitle", cur_area_map.subtitle));
     
     //Start by cleaning unused vertices, sectors and linedefs.
     //Unused vertices.

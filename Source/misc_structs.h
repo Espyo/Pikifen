@@ -109,30 +109,51 @@ public:
 
 
 /* ----------------------------------------------------------------------------
+ * Info about a mob category.
+ */
+struct mob_category_info {
+    string plural_name;
+    string singular_name;
+    string folder;
+    //Dumps the name of all mob types names in the category onto the vector.
+    function<void (vector<string> &list)> lister;
+    //Returns a pointer to the mob type of the given name.
+    function<mob_type* (const string &name)> type_getter;
+    //Creates a new mob type of this category.
+    function<mob_type* ()> type_constructor;
+    //Saves a mob from this type onto its corresponding vector.
+    function<void (mob_type*)> type_saver;
+    
+};
+
+/* ----------------------------------------------------------------------------
  * A list of the different mob categories.
  * The MOB_CATEGORY_* constants are meant to be used here.
  * Read the sector type manager's comments for more info.
  */
 struct mob_category_manager {
 private:
-    vector<string> pnames; //Plural names.
-    vector<string> snames; //Singular names.
-    vector<function<void (vector<string> &list)> > listers; //Lists all types' names onto the vector.
-    vector<function<mob_type* (const string &name)> > type_getters; //Returns pointer to the type of the matching name.
+    vector<mob_category_info> categories;
     
 public:
     void register_category(
-        unsigned char nr, string pname, string sname,
+        unsigned char nr,
+        string pname, string sname, string folder,
         function<void (vector<string> &list)> lister,
-        function<mob_type* (const string &name)> type_getter
+        function<mob_type* (const string &name)> type_getter,
+        function<mob_type* ()> type_constructor,
+        function<void (mob_type*)> type_saver
     );
     unsigned char get_nr_from_pname(const string &pname);
     unsigned char get_nr_from_sname(const string &sname);
-    string get_pname(const unsigned char nr);
-    string get_sname(const unsigned char nr);
+    string get_pname(const unsigned char cat_nr);
+    string get_sname(const unsigned char cat_nr);
     unsigned char get_nr_of_categories();
-    void get_list(vector<string> &l, unsigned char nr);
+    void get_list(vector<string> &l, unsigned char cat_nr);
+    string get_folder(const unsigned char cat_nr);
     void set_mob_type_ptr(mob_gen* m, const string &type_name);
+    mob_type* create_mob_type(const unsigned char cat_nr);
+    void save_mob_type(const unsigned char cat_nr, mob_type* mt);
     
 };
 
@@ -213,7 +234,7 @@ struct sample_struct {
 
 /* ----------------------------------------------------------------------------
  * Just a list of the different sector types.
- * The ERROR_TYPE_* constants are meant to be used here.
+ * The SECTOR_TYPE_* constants are meant to be used here.
  * This is a vector instead of a map because hopefully,
  * the numbers are filled in sequence, as they're from
  * an enum, hence, there are no gaps.

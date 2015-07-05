@@ -1,3 +1,4 @@
+height = 200
 name = White
-radius = 32
 max_health = 20
+radius = 32

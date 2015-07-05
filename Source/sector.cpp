@@ -97,17 +97,17 @@ void area_map::generate_blockmap() {
                 
                     //If it is, add it and the sectors to the list.
                     bool add_linedef = true;
-                    if(l_ptr->sectors[0] && l_ptr->sectors[1]){
+                    if(l_ptr->sectors[0] && l_ptr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
                             (l_ptr->sectors[0]->z == l_ptr->sectors[1]->z) &&
                             l_ptr->sectors[0]->type != SECTOR_TYPE_GATE &&
                             l_ptr->sectors[1]->type != SECTOR_TYPE_GATE
-                        ){
+                        ) {
                             add_linedef = false;
                         }
                     }
-                            
+                    
                     if(add_linedef) bmap.linedefs[bx][by].push_back(l_ptr);
                     
                     if(l_ptr->sectors[0]) bmap.sectors[bx][by].insert(l_ptr->sectors[0]);
@@ -425,7 +425,7 @@ void sector::fix_pointers(area_map &a) {
  */
 sector_correction::sector_correction(sector* sec) :
     sec(sec) {
-        
+    
     new_texture = NULL;
 }
 

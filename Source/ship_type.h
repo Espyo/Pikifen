@@ -14,6 +14,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "data_file.h"
 #include "misc_structs.h"
 #include "mob_type.h"
 
@@ -26,6 +27,7 @@ public:
     bool can_heal;
     
     ship_type();
+    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 
 #endif //ifndef SHIP_TYPE_INCLUDED

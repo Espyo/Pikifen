@@ -1,3 +1,4 @@
+height = 64
 name = Red 20
 non_match_seeds = 10
 number = 20

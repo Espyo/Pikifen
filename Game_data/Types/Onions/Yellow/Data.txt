@@ -1,3 +1,4 @@
 name = Yellow onion
+height = 200
 pikmin_type = Yellow Pikmin
 radius = 16

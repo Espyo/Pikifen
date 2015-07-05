@@ -16,3 +16,7 @@ ship_type::ship_type() :
     
     always_active = true;
 }
+
+void ship_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+    can_heal = file->get_child_by_name("can_heal");
+}

@@ -237,6 +237,8 @@ struct area_map {
     float bg_bmp_zoom;
     float bg_dist;
     ALLEGRO_COLOR bg_color;
+    string name;
+    string subtitle;
     
     weather weather_condition;
     string weather_name;

@@ -16,13 +16,13 @@
 gate::gate(const float x, const float y, gate_type* type, const string &vars) :
     mob(x, y, type, 0, vars),
     gat_type(type),
-    sec(get_sector(x, y, nullptr, true)){
-        
+    sec(get_sector(x, y, nullptr, true)) {
+    
     sec->z += 200; //TODO magic number.
     team = MOB_TEAM_OBSTACLE;
 }
 
-void gate::open(mob* m, void* info1, void* info2){
+void gate::open(mob* m, void* info1, void* info2) {
     gate* g_ptr = (gate*) m;
     g_ptr->sec->z -= 200; //TODO magic number.
     m->anim.change(GATE_ANIM_NOTHING, true, false, false);
@@ -32,6 +32,6 @@ void gate::open(mob* m, void* info1, void* info2){
     );
 }
 
-void gate::set_anim(mob* m, void* info1, void* info2){
+void gate::set_anim(mob* m, void* info1, void* info2) {
     m->anim.change(GATE_ANIM_IDLE, true, false, false);
 }

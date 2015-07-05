@@ -1,3 +1,4 @@
+height = 200
 name = Hocotate ship
 can_heal = true
 radius = 70

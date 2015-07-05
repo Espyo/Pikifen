@@ -92,7 +92,10 @@
     <ClCompile Include="data_file.cpp" />
     <ClCompile Include="drawing.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="enemy_type.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="gate.cpp" />
+    <ClCompile Include="gate_type.cpp" />
     <ClCompile Include="hitbox.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="interval.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="mob_script.cpp" />
     <ClCompile Include="mob_type.cpp" />
     <ClCompile Include="onion.cpp" />
+    <ClCompile Include="onion_type.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="pellet.cpp" />
     <ClCompile Include="pellet_type.cpp" />
@@ -130,6 +134,7 @@
     <ClCompile Include="spray_type.cpp" />
     <ClCompile Include="status.cpp" />
     <ClCompile Include="treasure.cpp" />
+    <ClCompile Include="treasure_type.cpp" />
     <ClCompile Include="vars.cpp" />
     <ClCompile Include="weather.cpp" />
   </ItemGroup>
@@ -141,6 +146,8 @@
     <ClInclude Include="controls.h" />
     <ClInclude Include="data_file.h" />
     <ClInclude Include="drawing.h" />
+    <ClInclude Include="gate.h" />
+    <ClInclude Include="gate_type.h" />
     <ClInclude Include="hazard.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="enemy_type.h" />

@@ -155,6 +155,7 @@ int main(int argc, char**) {
         load_area_textures();
         generate_area_images();
         
+        //Generate mobs.
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             if(m_ptr->category == MOB_CATEGORY_ENEMIES) {

@@ -1,3 +1,4 @@
+height = 200
 name = Test
 max_carriers = 50
 radius = 114

@@ -263,7 +263,7 @@ void animation_editor::gui_load_hitbox_instance() {
     lafi::widget* f = gui->widgets["frm_hitbox_is"]->widgets["frm_hitbox_i"];
     
     hitbox_instance* cur_hi = &cur_frame->hitbox_instances[cur_hitbox_instance_nr];
-    if(cur_hi){
+    if(cur_hi) {
         ((lafi::label*) gui->widgets["frm_hitbox_is"]->widgets["lbl_name"])->text = cur_hi->hitbox_name;
         ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_hi->x);
         ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_hi->y);
@@ -274,7 +274,7 @@ void animation_editor::gui_load_hitbox_instance() {
     
     open_hitbox_type(cur_hi ? cur_hi->type : 255);
     
-    if(cur_hi){
+    if(cur_hi) {
         if(cur_hi->type == HITBOX_TYPE_NORMAL) {
             f = f->widgets["frm_normal"];
             ((lafi::textbox*) f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
@@ -809,11 +809,11 @@ void animation_editor::load() {
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add("dummy",      new lafi::dummy(), 100, 16);
     frm_hitboxes->easy_row();
-    frm_hitboxes->easy_add("but_prev",   new lafi::button(0, 0, 0, 0, "<"), 20, 24);
-    frm_hitboxes->easy_add("but_next",   new lafi::button(0, 0, 0, 0, ">"), 20, 24);
-    frm_hitboxes->easy_row();
     frm_hitboxes->easy_add("txt_add",    new lafi::textbox(0, 0, 0, 0, ""), 80, 16);
     frm_hitboxes->easy_add("but_add",    new lafi::button(0, 0, 0, 0, "+"), 20, 24);
+    frm_hitboxes->easy_row();
+    frm_hitboxes->easy_add("but_prev",   new lafi::button(0, 0, 0, 0, "<"), 20, 24);
+    frm_hitboxes->easy_add("but_next",   new lafi::button(0, 0, 0, 0, ">"), 20, 24);
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add("lbl_n",      new lafi::label(0, 0, 0, 0, "Hitbox nr:"), 50, 16);
     frm_hitboxes->easy_add("lbl_nr",     new lafi::label(0, 0, 0, 0, ""), 50, 16);

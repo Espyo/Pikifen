@@ -18,6 +18,7 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
+#include "data_file.h"
 #include "mob_script.h"
 
 using namespace std;
@@ -64,6 +65,7 @@ public:
     function<void(float x, float y, float angle, const string &vars)> create_mob; //Creates a mob of this type.
     
     mob_type();
+    virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 
 
@@ -84,6 +86,8 @@ enum mob_categories {
     MOB_CATEGORY_SPECIAL,
     MOB_CATEGORY_SHIPS,
     MOB_CATEGORY_GATES,
+    
+    N_MOB_CATEGORIES,
 };
 
 const size_t ANIM_IDLE = 0;

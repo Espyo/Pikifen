@@ -109,9 +109,9 @@ void do_drawing() {
             }
         }
         
-        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); c++){
+        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); c++) {
             sector_correction* c_ptr = &cur_area_map.sector_corrections[c];
-            if(c_ptr->new_texture){
+            if(c_ptr->new_texture) {
                 draw_sector(c_ptr->sec, 0, 0, 1.0f, c_ptr->new_texture);
             }
         }
@@ -359,11 +359,11 @@ void do_drawing() {
         
         //Gates.
         size_t n_gates = gates.size();
-        for(size_t g = 0; g < n_gates; g++){
+        for(size_t g = 0; g < n_gates; g++) {
             gate* g_ptr = gates[g];
             frame* f = g_ptr->anim.get_frame();
             
-            if(f){
+            if(f) {
                 float c = cos(g_ptr->angle), s = sin(g_ptr->angle);
                 float sprite_x = g_ptr->x + c * f->offs_x + c * f->offs_y;
                 float sprite_y = g_ptr->y - s * f->offs_y + s * f->offs_x;

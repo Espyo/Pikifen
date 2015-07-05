@@ -2,6 +2,8 @@ weather=Normal
 bg_color=0.00 0.00 0.00
 bg_dist=2.00
 bg_zoom=1.00
+name=Testing Area
+subtitle=A testing area for the engine
 mobs{
 	Ship{
 		type=Hocotate ship

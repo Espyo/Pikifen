@@ -12,6 +12,7 @@
 #ifndef TREASURE_TYPE_INCLUDED
 #define TREASURE_TYPE_INCLUDED
 
+#include "data_file.h"
 #include "mob_type.h"
 
 /* ----------------------------------------------------------------------------
@@ -26,6 +27,7 @@
 class treasure_type : public mob_type {
 public:
 
+    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 
 #endif //ifndef TREASURE_TYPE_INCLUDED

@@ -34,6 +34,8 @@
 #ifndef DATA_FILE_INCLUDED
 #define DATA_FILE_INCLUDED
 
+#include <allegro5/allegro.h>
+
 #include <string>
 #include <vector>
 

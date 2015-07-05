@@ -362,14 +362,14 @@ void do_logic() {
                 mob_event* touch_le_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_LEADER);
                 mob_event* touch_ob_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
                 if(touch_op_ev || touch_le_ev || touch_ob_ev) {
-                    
+                
                     bool z_touch;
-                    if(m_ptr->type->height == 0 || m2_ptr->type->height == 0){
+                    if(m_ptr->type->height == 0 || m2_ptr->type->height == 0) {
                         z_touch = true;
-                    }else{
+                    } else {
                         z_touch = !((m2_ptr->z > m_ptr->z + m_ptr->type->height) || (m2_ptr->z + m2_ptr->type->height < m2_ptr->z));
                     }
-                
+                    
                     if(z_touch && d <= (m_ptr->type->radius + m2_ptr->type->radius)) {
                         if(touch_ob_ev) touch_ob_ev->run(m_ptr, (void*) m2_ptr);
                         if(touch_op_ev && should_attack(m_ptr, m2_ptr)) {
@@ -427,10 +427,10 @@ void do_logic() {
                                     //Just check if the entire Pikmin touched mob 2's hitbox.
                                     
                                     bool z_collision;
-                                    if(h2_ptr->height == 0){
+                                    if(h2_ptr->height == 0) {
                                         //Always hits vertically. Imagine the hitbox is infinitely high.
                                         z_collision = true;
-                                    }else{
+                                    } else {
                                         z_collision = !((m2_h_z > m_ptr->z) || (m2_h_z + h2_ptr->height < m_ptr->z));
                                     }
                                     
@@ -483,7 +483,7 @@ void do_logic() {
                                         float m1_h_z = m_ptr->z + h1_ptr->z;
                                         
                                         bool z_collision;
-                                        if(h1_ptr->height == 0 || h2_ptr->height == 0){
+                                        if(h1_ptr->height == 0 || h2_ptr->height == 0) {
                                             z_collision = true;
                                         } else {
                                             z_collision = !((m2_h_z > m1_h_z + h1_ptr->height) || (m2_h_z + h2_ptr->height < m1_h_z));

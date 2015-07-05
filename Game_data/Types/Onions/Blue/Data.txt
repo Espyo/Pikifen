@@ -1,3 +1,4 @@
 name = Blue onion
+height = 200
 pikmin_type = Blue Pikmin
 radius = 16

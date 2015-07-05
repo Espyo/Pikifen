@@ -46,17 +46,20 @@ mob_type::mob_type() :
 
 
 /* ----------------------------------------------------------------------------
+ * Fills class members from a data file.
+ */
+void mob_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {
-    load_mob_types(PIKMIN_FOLDER,    MOB_CATEGORY_PIKMIN,    load_resources);
-    load_mob_types(ONIONS_FOLDER,    MOB_CATEGORY_ONIONS,    load_resources);
-    load_mob_types(LEADERS_FOLDER,   MOB_CATEGORY_LEADERS,   load_resources);
-    load_mob_types(ENEMIES_FOLDER,   MOB_CATEGORY_ENEMIES,   load_resources);
-    load_mob_types(TREASURES_FOLDER, MOB_CATEGORY_TREASURES, load_resources);
-    load_mob_types(PELLETS_FOLDER,   MOB_CATEGORY_PELLETS,   load_resources);
-    load_mob_types(SHIPS_FOLDER,     MOB_CATEGORY_SHIPS,     load_resources);
-    load_mob_types(GATES_FOLDER,     MOB_CATEGORY_GATES,     load_resources);
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        load_mob_types(mob_categories.get_folder(c), c, load_resources);
+    }
 }
 
 
@@ -81,23 +84,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         if(!file.file_was_opened) return;
         
         mob_type* mt;
-        if(category == MOB_CATEGORY_PIKMIN) {
-            mt = new pikmin_type();
-        } else if(category == MOB_CATEGORY_ONIONS) {
-            mt = new onion_type();
-        } else if(category == MOB_CATEGORY_LEADERS) {
-            mt = new leader_type();
-        } else if(category == MOB_CATEGORY_GATES) {
-            mt = new gate_type();
-        } else if(category == MOB_CATEGORY_ENEMIES) {
-            mt = new enemy_type();
-        } else if(category == MOB_CATEGORY_PELLETS) {
-            mt = new pellet_type();
-        } else if(category == MOB_CATEGORY_SHIPS) {
-            mt = new ship_type();
-        } else {
-            mt = new mob_type();
-        }
+        mt = mob_categories.create_mob_type(category);
         
         mt->name = file.get_child_by_name("name")->value;
         mt->always_active = s2b(file.get_child_by_name("always_active")->value);
@@ -137,132 +124,11 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
             }
         }
         
-        if(category == MOB_CATEGORY_PIKMIN) {
-            pikmin_type* pt = (pikmin_type*) mt;
-            pt->attack_power = s2f(file.get_child_by_name("attack_power")->value);
-            pt->attack_interval = s2f(file.get_child_by_name("attack_interval")->get_value_or_default("0.8"));
-            pt->throw_height_mult = s2f(file.get_child_by_name("throw_height_mult")->get_value_or_default("1"));
-            pt->can_carry_bomb_rocks = s2b(file.get_child_by_name("can_carry_bomb_rocks")->value);
-            pt->can_dig = s2b(file.get_child_by_name("can_dig")->value);
-            pt->can_latch = s2b(file.get_child_by_name("can_latch")->value);
-            pt->can_swim = s2b(file.get_child_by_name("can_swim")->value);
-            pt->carry_speed = s2f(file.get_child_by_name("carry_speed")->value);
-            pt->carry_strength = s2f(file.get_child_by_name("carry_strength")->value);
-            pt->has_onion = s2b(file.get_child_by_name("has_onion")->value);
-            
-            if(load_resources) {
-                pt->bmp_top[0] = bitmaps.get(file.get_child_by_name("top_leaf")->value,   &file);
-                pt->bmp_top[1] = bitmaps.get(file.get_child_by_name("top_bud")->value,    &file);
-                pt->bmp_top[2] = bitmaps.get(file.get_child_by_name("top_flower")->value, &file);
-                pt->bmp_icon[0] = bitmaps.get(file.get_child_by_name("icon_leaf")->value,   &file);
-                pt->bmp_icon[1] = bitmaps.get(file.get_child_by_name("icon_bud")->value,    &file);
-                pt->bmp_icon[2] = bitmaps.get(file.get_child_by_name("icon_flower")->value, &file);
-            }
-            new_anim_conversion(PIKMIN_ANIM_IDLE,     "idle");
-            new_anim_conversion(PIKMIN_ANIM_WALK,     "walk");
-            new_anim_conversion(PIKMIN_ANIM_THROWN,   "thrown");
-            new_anim_conversion(PIKMIN_ANIM_ATTACK,   "attack");
-            new_anim_conversion(PIKMIN_ANIM_GRAB,     "grab");
-            new_anim_conversion(PIKMIN_ANIM_BURROWED, "burrowed");
-            new_anim_conversion(PIKMIN_ANIM_LYING,    "lying");
-            new_anim_conversion(PIKMIN_ANIM_GET_UP,   "get_up");
-            
-            pikmin_types[pt->name] = pt;
-            
-        } else if(category == MOB_CATEGORY_ONIONS) {
-            onion_type* ot = (onion_type*) mt;
-            data_node* pik_type_node = file.get_child_by_name("pikmin_type");
-            if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
-                error_log("Unknown Pikmin type \"" + pik_type_node->value + "\"!", pik_type_node);
-                continue;
-            }
-            ot->pik_type = pikmin_types[pik_type_node->value];
-            
-            onion_types[ot->name] = ot;
-            
-        } else if(category == MOB_CATEGORY_LEADERS) {
-            leader_type* lt = (leader_type*) mt;
-            lt->pluck_delay = s2f(file.get_child_by_name("pluck_delay")->value);
-            lt->whistle_range = s2f(file.get_child_by_name("whistle_range")->get_value_or_default(f2s(DEF_WHISTLE_RANGE)));
-            lt->punch_strength = s2i(file.get_child_by_name("punch_strength")->value); //TODO default.
-            
-            if(load_resources) {
-                lt->sfx_dismiss = load_sample(file.get_child_by_name("dismiss_sfx")->value, mixer); //TODO don't use load_sample.
-                lt->sfx_name_call = load_sample(file.get_child_by_name("name_call_sfx")->value, mixer); //TODO don't use load_sample.
-                lt->sfx_whistle = load_sample(file.get_child_by_name("whistle_sfx")->value, mixer); //TODO don't use load_sample.
-                lt->bmp_icon = bitmaps.get(file.get_child_by_name("icon")->value, &file);
-            }
-            
-            new_anim_conversion(LEADER_ANIM_IDLE,      "idle");
-            new_anim_conversion(LEADER_ANIM_WALK,      "walk");
-            new_anim_conversion(LEADER_ANIM_PLUCK,     "pluck");
-            new_anim_conversion(LEADER_ANIM_GET_UP,    "get_up");
-            new_anim_conversion(LEADER_ANIM_DISMISS,   "dismiss");
-            new_anim_conversion(LEADER_ANIM_THROW,     "thrown");
-            new_anim_conversion(LEADER_ANIM_WHISTLING, "whistling");
-            new_anim_conversion(LEADER_ANIM_LIE,       "lie");
-            
-            leader_types[lt->name] = lt;
-            
-        } else if(category == MOB_CATEGORY_ENEMIES) {
-            enemy_type* et = (enemy_type*) mt;
-            et->drops_corpse = s2b(file.get_child_by_name("drops_corpse")->get_value_or_default("yes"));
-            et->is_boss = s2b(file.get_child_by_name("is_boss")->value);
-            et->pikmin_seeds = s2i(file.get_child_by_name("pikmin_seeds")->value);
-            et->regenerate_speed = s2b(file.get_child_by_name("regenerate_speed")->value);
-            et->revive_speed = s2f(file.get_child_by_name("revive_speed")->value);
-            et->value = s2f(file.get_child_by_name("value")->value);
-            
-            enemy_types[et->name] = et;
-            
-        } else if(category == MOB_CATEGORY_TREASURES) {
-            treasure_type* tt = (treasure_type*) mt;
-            tt->move_speed = 60; //TODO should this be here?
-            
-            treasure_types[tt->name] = tt;
-            
-        } else if(category == MOB_CATEGORY_PELLETS) {
-            pellet_type* pt = (pellet_type*) mt;
-            data_node* pik_type_node = file.get_child_by_name("pikmin_type");
-            if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
-                error_log("Unknown Pikmin type \"" + pik_type_node->value + "\"!", pik_type_node);
-                continue;
-            }
-            
-            pt->pik_type = pikmin_types[pik_type_node->value];
-            pt->number = s2i(file.get_child_by_name("number")->value);
-            pt->weight = pt->number;
-            pt->match_seeds = s2i(file.get_child_by_name("match_seeds")->value);
-            pt->non_match_seeds = s2i(file.get_child_by_name("non_match_seeds")->value);
-            
-            if(load_resources) {
-                pt->bmp_number = bitmaps.get(file.get_child_by_name("number_image")->value, &file);
-            }
-            
-            new_anim_conversion(ANIM_IDLE, "idle");
-            
-            pt->move_speed = 60; //TODO should this be here?
-            
-            pellet_types[pt->name] = pt;
-            
-        } else if(category == MOB_CATEGORY_SHIPS) {
-            ship_type* st = (ship_type*) mt;
-            st->can_heal = file.get_child_by_name("can_heal");
-            
-            ship_types[st->name] = st;
-            
-        } else if(category == MOB_CATEGORY_GATES) {
-            gate_type* gt = (gate_type*) mt;
-            
-            new_anim_conversion(GATE_ANIM_IDLE, "idle");
-            new_anim_conversion(GATE_ANIM_NOTHING, "nothing");
-            
-            gate_types[gt->name] = gt;
-            
-        }
+        mt->load_from_file(&file, load_resources, &anim_conversions);
+        
+        mob_categories.save_mob_type(category, mt);
         
         if(load_resources) {
-            
             mt->anims.create_conversions(anim_conversions);
         }
         

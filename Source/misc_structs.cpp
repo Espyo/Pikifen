@@ -195,20 +195,24 @@ void dist::operator+=(const dist &d2) {
  * Registers a new mob category.
  */
 void mob_category_manager::register_category(
-    unsigned char nr, string pname, string sname,
+    unsigned char nr,
+    string pname, string sname, string folder,
     function<void (vector<string> &list)> lister,
-    function<mob_type* (const string &name)> type_getter
+    function<mob_type* (const string &name)> type_getter,
+    function<mob_type* ()> type_constructor,
+    function<void (mob_type*)> type_saver
 ) {
-    if(nr >= pnames.size()) {
-        pnames.insert(pnames.end(), (nr + 1) - pnames.size(), "");
-        snames.insert(snames.end(), (nr + 1) - snames.size(), "");
-        listers.insert(listers.end(), (nr + 1) - listers.size(), function<void(vector<string> &)>());
-        type_getters.insert(type_getters.end(), (nr + 1) - type_getters.size(), function<mob_type* (const string &)>());
+    if(nr >= categories.size()) {
+        categories.insert(categories.end(), (nr + 1) - categories.size(), mob_category_info());
     }
-    pnames[nr] = pname;
-    snames[nr] = sname;
-    listers[nr] = lister;
-    type_getters[nr]  = type_getter;
+    categories[nr].plural_name = pname;
+    categories[nr].singular_name = sname;
+    categories[nr].folder = folder;
+    categories[nr].lister = lister;
+    categories[nr].type_getter = type_getter;
+    categories[nr].type_constructor = type_constructor;
+    categories[nr].type_saver = type_saver;
+    
 }
 
 
@@ -217,8 +221,8 @@ void mob_category_manager::register_category(
  * Returns 255 on error.
  */
 unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
-    for(unsigned char n = 0; n < pnames.size(); n++) {
-        if(pnames[n] == pname) return n;
+    for(unsigned char n = 0; n < categories.size(); n++) {
+        if(categories[n].plural_name == pname) return n;
     }
     return 255;
 }
@@ -229,8 +233,8 @@ unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
  * Returns 255 on error.
  */
 unsigned char mob_category_manager::get_nr_from_sname(const string &sname) {
-    for(unsigned char n = 0; n < snames.size(); n++) {
-        if(snames[n] == sname) return n;
+    for(unsigned char n = 0; n < categories.size(); n++) {
+        if(categories[n].singular_name == sname) return n;
     }
     return 255;
 }
@@ -240,8 +244,8 @@ unsigned char mob_category_manager::get_nr_from_sname(const string &sname) {
  * Returns the plural name of a category given its number.
  * Returns an empty string on error.
  */
-string mob_category_manager::get_pname(const unsigned char nr) {
-    if(nr < pnames.size()) return pnames[nr];
+string mob_category_manager::get_pname(const unsigned char cat_nr) {
+    if(cat_nr < categories.size()) return categories[cat_nr].plural_name;
     return "";
 }
 
@@ -250,8 +254,18 @@ string mob_category_manager::get_pname(const unsigned char nr) {
  * Returns the singular name of a category given its number.
  * Returns an empty string on error.
  */
-string mob_category_manager::get_sname(const unsigned char nr) {
-    if(nr < snames.size()) return snames[nr];
+string mob_category_manager::get_sname(const unsigned char cat_nr) {
+    if(cat_nr < categories.size()) return categories[cat_nr].singular_name;
+    return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the folder of a category, given its number.
+ * Returns an empty string on error.
+ */
+string mob_category_manager::get_folder(const unsigned char cat_nr) {
+    if(cat_nr < categories.size()) return categories[cat_nr].folder;
     return "";
 }
 
@@ -260,15 +274,15 @@ string mob_category_manager::get_sname(const unsigned char nr) {
  * Returns the number of registered mob categories.
  */
 unsigned char mob_category_manager::get_nr_of_categories() {
-    return pnames.size();
+    return categories.size();
 }
 
 
 /* ----------------------------------------------------------------------------
  * Lists the names of all mob types in a category onto a vector of strings.
  */
-void mob_category_manager::get_list(vector<string> &l, unsigned char nr) {
-    if(nr < listers.size()) listers[nr](l);
+void mob_category_manager::get_list(vector<string> &l, unsigned char cat_nr) {
+    if(cat_nr < categories.size()) categories[cat_nr].lister(l);
 }
 
 
@@ -277,9 +291,24 @@ void mob_category_manager::get_list(vector<string> &l, unsigned char nr) {
  * It uses the mob gen's existing category to search for the name.
  */
 void mob_category_manager::set_mob_type_ptr(mob_gen* m, const string &type_name) {
-    m->type = type_getters[m->category](type_name);
+    m->type = categories[m->category].type_getter(type_name);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Creates a new mob type of this category.
+ */
+mob_type* mob_category_manager::create_mob_type(const unsigned char cat_nr) {
+    if(cat_nr >= categories.size()) return nullptr;
+    return categories[cat_nr].type_constructor();
+}
+
+/* ----------------------------------------------------------------------------
+ * Saves a mob type onto its own vector.
+ */
+void mob_category_manager::save_mob_type(const unsigned char cat_nr, mob_type* mt) {
+    if(cat_nr < categories.size()) categories[cat_nr].type_saver(mt);
+}
 
 
 /* ----------------------------------------------------------------------------

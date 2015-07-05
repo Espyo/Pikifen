@@ -2,6 +2,7 @@ name = Cloaking Burrow-nit
 always_active = yes
 big_damage_interval = 20
 chomp_max_victims = 1
+height = 64
 max_carriers = 16
 max_health = 200
 move_speed = 50

@@ -17,6 +17,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "data_file.h"
 #include "hazard.h"
 #include "mob_type.h"
 
@@ -50,6 +51,7 @@ public:
     ALLEGRO_BITMAP* bmp_icon[3]; //Standby icons for each maturity.
     
     pikmin_type();
+    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
     void init_script();
     
 };

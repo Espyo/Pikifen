@@ -51,9 +51,6 @@
 //Returns a gray with all indexes the same as specified value; it's fully opaque.
 #define map_gray(g) al_map_rgb((g), (g), (g))
 
-//Adds a new animation conversion on load_mob_types().
-#define new_anim_conversion(id, name) anim_conversions.push_back(make_pair((id), (name)))
-
 //Rounds a number. Ugh, why do I even have to create this.
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
 

@@ -12,6 +12,7 @@
 #ifndef PELLET_TYPE_INCLUDED
 #define PELLET_TYPE_INCLUDED
 
+#include "data_file.h"
 #include "mob_type.h"
 #include "pikmin_type.h"
 
@@ -30,6 +31,7 @@ public:
     ALLEGRO_BITMAP* bmp_number;
     
     pellet_type();
+    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 
 #endif //ifndef PELLET_TYPE_INCLUDED

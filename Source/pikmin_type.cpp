@@ -12,6 +12,7 @@
 #include "pikmin_type.h"
 
 #include "const.h"
+#include "functions.h"
 #include "leader.h"
 #include "mob_script.h"
 #include "vars.h"
@@ -44,6 +45,37 @@ pikmin_type::pikmin_type() :
     weight = 1;
     
     init_script();
+}
+
+
+void pikmin_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+    attack_power = s2f(file->get_child_by_name("attack_power")->value);
+    attack_interval = s2f(file->get_child_by_name("attack_interval")->get_value_or_default("0.8"));
+    throw_height_mult = s2f(file->get_child_by_name("throw_height_mult")->get_value_or_default("1"));
+    can_carry_bomb_rocks = s2b(file->get_child_by_name("can_carry_bomb_rocks")->value);
+    can_dig = s2b(file->get_child_by_name("can_dig")->value);
+    can_latch = s2b(file->get_child_by_name("can_latch")->value);
+    can_swim = s2b(file->get_child_by_name("can_swim")->value);
+    carry_speed = s2f(file->get_child_by_name("carry_speed")->value);
+    carry_strength = s2f(file->get_child_by_name("carry_strength")->value);
+    has_onion = s2b(file->get_child_by_name("has_onion")->value);
+    
+    if(load_resources) {
+        bmp_top[0] =  bitmaps.get(file->get_child_by_name("top_leaf")->value,    file);
+        bmp_top[1] =  bitmaps.get(file->get_child_by_name("top_bud")->value,     file);
+        bmp_top[2] =  bitmaps.get(file->get_child_by_name("top_flower")->value,  file);
+        bmp_icon[0] = bitmaps.get(file->get_child_by_name("icon_leaf")->value,   file);
+        bmp_icon[1] = bitmaps.get(file->get_child_by_name("icon_bud")->value,    file);
+        bmp_icon[2] = bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
+    }
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_IDLE,     "idle"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_WALK,     "walk"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,   "thrown"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACK,   "attack"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRAB,     "grab"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GET_UP,   "get_up"));
 }
 
 

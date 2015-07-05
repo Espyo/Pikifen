@@ -201,61 +201,119 @@ void init_misc_sounds() {
 
 void init_mob_categories() {
 
-    mob_categories.register_category(MOB_CATEGORY_NONE, "None", "None", [] (vector<string> &) { },
-    [] (const string &) -> mob_type* { return NULL; });
+    mob_categories.register_category(
+        MOB_CATEGORY_NONE, "None", "None", "",
+    [] (vector<string> &) { },
+    [] (const string &) -> mob_type* { return nullptr; },
+    [] () -> mob_type* { return nullptr; },
+    [] (mob_type * mt) {}
+    );
     
-    mob_categories.register_category(MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER,
+    [] (vector<string> &li) {
         for(auto e = enemy_types.begin(); e != enemy_types.end(); e++) li.push_back(e->first);
     }, [] (const string & n) -> mob_type* {
         auto it = enemy_types.find(n); if(it == enemy_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new enemy_type();
+    }, [] (mob_type * et) {
+        enemy_types[et->name] = (enemy_type*) et;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_LEADERS, "Leaders", "Leader", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_LEADERS, "Leaders", "Leader", LEADERS_FOLDER,
+    [] (vector<string> &li) {
         for(auto l = leader_types.begin(); l != leader_types.end(); l++) li.push_back(l->first);
     }, [] (const string & n) -> mob_type* {
         auto it = leader_types.find(n); if(it == leader_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new leader_type();
+    }, [] (mob_type * lt) {
+        leader_types[lt->name] = (leader_type*) lt;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_ONIONS, "Onions", "Onion", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_ONIONS, "Onions", "Onion", ONIONS_FOLDER,
+    [] (vector<string> &li) {
         for(auto o = onion_types.begin(); o != onion_types.end(); o++) li.push_back(o->first);
     }, [] (const string & n) -> mob_type* {
         auto it = onion_types.find(n); if(it == onion_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new onion_type();
+    }, [] (mob_type * ot) {
+        onion_types[ot->name] = (onion_type*) ot;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_PELLETS, "Pellets", "Pellet", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_PELLETS, "Pellets", "Pellet", PELLETS_FOLDER,
+    [] (vector<string> &li) {
         for(auto p = pellet_types.begin(); p != pellet_types.end(); p++) li.push_back(p->first);
     }, [] (const string & n) -> mob_type* {
         auto it = pellet_types.find(n); if(it == pellet_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new pellet_type();
+    }, [] (mob_type * pt) {
+        pellet_types[pt->name] = (pellet_type*) pt;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", PIKMIN_FOLDER,
+    [] (vector<string> &li) {
         for(auto p = pikmin_types.begin(); p != pikmin_types.end(); p++) li.push_back(p->first);
     }, [] (const string & n) -> mob_type* {
         auto it = pikmin_types.find(n); if(it == pikmin_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new pikmin_type();
+    }, [] (mob_type * pt) -> void {
+        pikmin_types[pt->name] = (pikmin_type*) pt;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_SHIPS, "Ships", "Ship", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_SHIPS, "Ships", "Ship", SHIPS_FOLDER,
+    [] (vector<string> &li) {
         for(auto s = ship_types.begin(); s != ship_types.end(); s++) li.push_back(s->first);
     }, [] (const string & n) -> mob_type* {
         auto it = ship_types.find(n); if(it == ship_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new ship_type();
+    }, [] (mob_type * st) {
+        ship_types[st->name] = (ship_type*) st;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_SPECIAL, "Special", "Special", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_SPECIAL, "Special", "Special", "",
+    [] (vector<string> &li) {
         for(auto s = spec_mob_types.begin(); s != spec_mob_types.end(); s++) li.push_back(s->first);
     }, [] (const string & n) -> mob_type* {
         auto it = spec_mob_types.find(n); if(it == spec_mob_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new mob_type();
+    }, [] (mob_type * mt) {
     });
     
-    mob_categories.register_category(MOB_CATEGORY_TREASURES, "Treasures", "Treasure", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_TREASURES, "Treasures", "Treasure", TREASURES_FOLDER,
+    [] (vector<string> &li) {
         for(auto t = treasure_types.begin(); t != treasure_types.end(); t++) li.push_back(t->first);
     }, [] (const string & n) -> mob_type* {
         auto it = treasure_types.find(n); if(it == treasure_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new treasure_type();
+    }, [] (mob_type * tt) {
+        treasure_types[tt->name] = (treasure_type*) tt;
     });
     
-    mob_categories.register_category(MOB_CATEGORY_GATES, "Gates", "Gate", [] (vector<string> &li) {
+    mob_categories.register_category(
+        MOB_CATEGORY_GATES, "Gates", "Gate", GATES_FOLDER,
+    [] (vector<string> &li) {
         for(auto g = gate_types.begin(); g != gate_types.end(); g++) li.push_back(g->first);
     }, [] (const string & n) -> mob_type* {
         auto it = gate_types.find(n); if(it == gate_types.end()) return NULL; return it->second;
+    }, [] () -> mob_type* {
+        return new gate_type();
+    }, [] (mob_type * gt) {
+        gate_types[gt->name] = (gate_type*) gt;
     });
 }
 
