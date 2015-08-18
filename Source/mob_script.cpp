@@ -556,6 +556,7 @@ mob_state::mob_state(const string &name, const size_t id) :
  * Changes the fsm to use a different state.
  */
 void mob_fsm::set_state(const size_t new_state) {
+
     if(new_state >= m->type->states.size()) return;
     //Run the code to leave the current state.
     if(cur_state) {
@@ -757,8 +758,12 @@ void easy_fsm_creator::run_function(custom_action_code code) {
  * Finishes any event or state under construction and returns the
  * final vector of states.
  */
+#include <iostream>
 vector<mob_state*> easy_fsm_creator::finish() {
     commit_event();
     commit_state();
+    sort(states.begin(), states.end(), [] (const mob_state * ms1, const mob_state * ms2) {
+        return ms1->id <= ms2->id;
+    });
     return states;
 }

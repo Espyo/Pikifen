@@ -105,6 +105,23 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob became uncarriable.
     MOB_EVENT_EATEN,                    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
     
+    LEADER_EVENT_FOCUSED,        //When the leader becomes the one controlled by the player.
+    LEADER_EVENT_UNFOCUSED,      //When the leader stops being the one controlled by the player.
+    LEADER_EVENT_MOVE_START,     //When the leader begins moving.
+    LEADER_EVENT_MOVE_END,       //When the leader stops moving.
+    LEADER_EVENT_HOLDING,        //When the leader is holding a Pikmin on their hand.
+    LEADER_EVENT_THROW,          //When the leader throws the Pikmin on their hand.
+    LEADER_EVENT_RELEASE,        //When the leader releases the Pikmin on their hand.
+    LEADER_EVENT_START_WHISTLE,  //When the leader begins whistling.
+    LEADER_EVENT_STOP_WHISTLE,   //When the leader stops whistling.
+    LEADER_EVENT_DISMISS,        //When the leader dismisses their squad.
+    LEADER_EVENT_SPRAY,          //When the leader uses a spray.
+    LEADER_EVENT_LIE_DOWN,       //When the leader lies down.
+    LEADER_EVENT_GO_PLUCK,       //When the leader has to go towards the Pikmin it intends to pluck.
+    LEADER_EVENT_INACTIVE_SEARCH_SEED, //When the leader has to go help pluck Pikmin, as an inactive leader.
+    LEADER_EVENT_REACHED_SEED,   //When the leader reaches the seed they're meant to pluck.
+    LEADER_EVENT_CANCEL_PLUCK,   //When the leader's pluck is canceled.
+    
     N_MOB_EVENTS,
 };
 

@@ -40,20 +40,8 @@ public:
     ALLEGRO_BITMAP* bmp_icon; //Standby icon.
     
     leader_type();
+    void init_script();
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
-};
-
-
-
-enum LEADER_ANIMATIONS {
-    LEADER_ANIM_IDLE,
-    LEADER_ANIM_WALK,
-    LEADER_ANIM_PLUCK,
-    LEADER_ANIM_GET_UP,
-    LEADER_ANIM_DISMISS,
-    LEADER_ANIM_THROW,
-    LEADER_ANIM_WHISTLING,
-    LEADER_ANIM_LIE,
 };
 
 #endif //ifndef LEADER_TYPE_INCLUDED

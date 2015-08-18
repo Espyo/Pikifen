@@ -1297,7 +1297,6 @@ string str_to_lower(string s) {
 void use_spray(const size_t spray_nr) {
     if(spray_amounts[spray_nr] == 0) return;
     
-    leader* cur_leader_ptr = leaders[cur_leader_nr];
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
     random_particle_spray(

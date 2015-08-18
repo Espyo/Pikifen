@@ -142,7 +142,7 @@ public:
     
     //Script.
     mob_fsm fsm;                      //Finitate-state machine.
-    bool spawned;                     //Has the mob actually "spawned" yet?
+    bool set_first_state;             //Have we set the mob's starting state yet?
     mob* focused_mob;                 //The mob it has focus on.
     float timer;                      //The timer.
     float timer_interval;             //The timer's interval.
@@ -209,24 +209,6 @@ enum MOB_STATE_IDS {
     MOB_STATE_BEING_CARRIED,
     MOB_STATE_BEING_DELIVERED, //Into an Onion.
     
-    PIKMIN_STATE_IN_GROUP_CHASING,
-    PIKMIN_STATE_IN_GROUP_STOPPED,
-    PIKMIN_STATE_IDLE,
-    PIKMIN_STATE_BURIED,
-    PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
-    PIKMIN_STATE_GRABBED_BY_LEADER,
-    PIKMIN_STATE_GRABBED_BY_ENEMY,
-    PIKMIN_STATE_KNOCKED_BACK,
-    PIKMIN_STATE_THROWN,
-    PIKMIN_STATE_GOING_TO_TASK,
-    PIKMIN_STATE_GOING_TO_DISMISS_SPOT,
-    PIKMIN_STATE_BUSY,
-    PIKMIN_STATE_CARRYING,
-    PIKMIN_STATE_ATTACKING_GROUNDED,
-    PIKMIN_STATE_ATTACKING_LATCHED,
-    PIKMIN_STATE_CELEBRATING,
-    PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
-    PIKMIN_STATE_GOING_TO_OPPONENT,
 };
 
 #endif //ifndef MOB_INCLUDED

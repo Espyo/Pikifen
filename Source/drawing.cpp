@@ -481,7 +481,7 @@ void do_drawing() {
         
         //Info spots.
         for(size_t i = 0; i < n_info_spots; i++) {
-            if(dist(leaders[cur_leader_nr]->x, leaders[cur_leader_nr]->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
+            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
                 if(!info_spots[i]->opens_box) {
                     text = info_spots[i]->text;
@@ -595,7 +595,7 @@ void do_drawing() {
             float y = sin(group_move_angle) * group_move_arrows[a];
             draw_sprite(
                 bmp_group_move_arrow,
-                leaders[cur_leader_nr]->x + x, leaders[cur_leader_nr]->y + y,
+                cur_leader_ptr->x + x, cur_leader_ptr->y + y,
                 16 * (1 + group_move_arrows[a] / CURSOR_MAX_DIST), -1,
                 group_move_angle
             );
@@ -603,8 +603,8 @@ void do_drawing() {
         
         size_t n_rings = whistle_rings.size();
         for(size_t r = 0; r < n_rings; r++) {
-            float x = leaders[cur_leader_nr]->x + cos(cursor_angle) * whistle_rings[r];
-            float y = leaders[cur_leader_nr]->y + sin(cursor_angle) * whistle_rings[r];
+            float x = cur_leader_ptr->x + cos(cursor_angle) * whistle_rings[r];
+            float y = cur_leader_ptr->y + sin(cursor_angle) * whistle_rings[r];
             unsigned char n = whistle_ring_colors[r];
             al_draw_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192), 3);
         }
@@ -777,10 +777,10 @@ void do_drawing() {
             //Pikmin count.
             //Count how many Pikmin only.
             n_leaders = leaders.size();
-            size_t pikmin_in_party = leaders[cur_leader_nr]->party->members.size();
+            size_t pikmin_in_party = cur_leader_ptr->party->members.size();
             for(size_t l = 0; l < n_leaders; l++) {
                 //If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
-                if(leaders[l]->following_party == leaders[cur_leader_nr]) pikmin_in_party--;
+                if(leaders[l]->following_party == cur_leader_ptr) pikmin_in_party--;
             }
             
             //Closest party member.

@@ -20,6 +20,249 @@ leader_type::leader_type() :
     pluck_delay(0.6),
     bmp_icon(nullptr) {
     main_color = al_map_rgb(128, 128, 128);
+    
+    init_script();
+}
+
+void leader_type::init_script() {
+
+    //TODO put the hurt event in other states
+    //TODO put the knocked down event in other states
+    //TODO put the killed event in other states
+    
+    easy_fsm_creator efc;
+    efc.new_state("idle", LEADER_STATE_IDLE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::enter_idle);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader::join_group);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader::focus);
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("active", LEADER_STATE_ACTIVE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::enter_active);
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::unfocus);
+            efc.change_state("idle");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader::move);
+            efc.run_function(leader::set_walk_anim);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader::stop);
+            efc.run_function(leader::set_stop_anim);
+        }
+        efc.new_event(LEADER_EVENT_HOLDING); {
+            efc.run_function(leader::grab_mob);
+            efc.change_state("holding");
+        }
+        efc.new_event(LEADER_EVENT_START_WHISTLE); {
+            efc.change_state("whistling");
+        }
+        efc.new_event(LEADER_EVENT_DISMISS); {
+            efc.change_state("dismissing");
+        }
+        efc.new_event(LEADER_EVENT_SPRAY); {
+            efc.change_state("spraying");
+        }
+        efc.new_event(LEADER_EVENT_LIE_DOWN); {
+            efc.change_state("sleeping");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::get_hurt);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader::go_pluck);
+            efc.change_state("going_to_pluck");
+        }
+    }
+    
+    efc.new_state("whistling", LEADER_STATE_WHISTLING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::whistle);
+        }
+        efc.new_event(LEADER_EVENT_STOP_WHISTLE); {
+            efc.run_function(leader::stop_whistle);
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader::stop_whistle);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader::move);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader::stop);
+        }
+    }
+    
+    efc.new_state("holding", LEADER_STATE_HOLDING); {
+        efc.new_event(LEADER_EVENT_THROW); {
+            efc.run_function(leader::do_throw);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_RELEASE); {
+            efc.run_function(leader::release);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader::move);
+            efc.run_function(leader::set_walk_anim);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader::stop);
+            efc.run_function(leader::set_stop_anim);
+        }
+    }
+    
+    efc.new_state("dismissing", LEADER_STATE_DISMISSING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::dismiss);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader::move);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader::stop);
+        }
+    }
+    
+    efc.new_state("spraying", LEADER_STATE_SPRAYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::spray);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("pain", LEADER_STATE_PAIN); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::pain);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("knocked_back", LEADER_STATE_KNOCKED_BACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::get_knocked_back);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("dying", LEADER_STATE_DYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::die);
+        }
+    }
+    
+    efc.new_state("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::chase_leader);
+        }
+        efc.new_event(MOB_EVENT_LEADER_IS_NEAR); {
+            efc.change_state("in_group_stopped");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(leader::be_dismissed);
+            efc.change_state("idle");
+        }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+    }
+    
+    efc.new_state("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_LEADER_IS_FAR); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(leader::be_dismissed);
+            efc.change_state("idle");
+        }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+    }
+    
+    efc.new_state("going_to_pluck", LEADER_STATE_GOING_TO_PLUCK); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(leader::start_pluck);
+            efc.change_state("plucking");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL_PLUCK); {
+            efc.run_function(leader::stop_pluck);
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("plucking", LEADER_STATE_PLUCKING); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader::stop_pluck);
+            efc.run_function(leader::search_seed);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL_PLUCK); {
+            efc.run_function(leader::stop_pluck);
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_going_to_pluck", LEADER_STATE_INACTIVE_GOING_TO_PLUCK); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(leader::start_pluck);
+            efc.change_state("inactive_plucking");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader::stop_pluck);
+            efc.change_state("in_group_chasing");
+        }
+    }
+    
+    efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader::stop_pluck);
+            efc.run_function(leader::inactive_search_seed);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader::stop_pluck);
+            efc.change_state("in_group_chasing");
+        }
+    }
+    
+    states = efc.finish();
+    first_state_nr = fix_states(states, "idle");
+    
 }
 
 void leader_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {

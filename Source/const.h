@@ -81,7 +81,6 @@ const float UNTOUCHABLE_PERIOD          = 3.0f;      //A mob cannot be touched t
 const float WHISTLE_DOT_INTERVAL        = 0.03;      //Seconds that need to pass before another dot is added.
 const float WHISTLE_DOT_SPIN_SPEED      = M_PI_2;    //A whistle dot spins these many radians a second.
 const float WHISTLE_FADE_TIME           = 0.1f;      //Time the whistle animations take to fade out.
-const float WHISTLE_MAX_HOLD_TIME       = 1.5f;      //After the whistle reaches its maximum size, hold it for these many seconds until it stops by itself.
 const float WHISTLE_RADIUS_GROWTH_SPEED = 180.0f;    //The whistle's radius grows these many units per second.
 const float WHISTLE_RING_SPEED          = 600.0f;    //Whistle rings move these many units per second.
 const float WHISTLE_RINGS_INTERVAL      = 0.1f;      //Seconds that need to pass before another whistle ring appears.

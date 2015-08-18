@@ -3,7 +3,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			duck{
-				duration=0.5
+				duration=0.50
 			}
 		}
 	}
@@ -11,13 +11,13 @@ animations{
 		loop_frame=2
 		frame_instances{
 			lying{
-				duration=0.1
+				duration=0.10
 			}
 			half_lying{
 				duration=0.07
 			}
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 		}
 	}
@@ -25,7 +25,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0
+				duration=0.00
 			}
 		}
 	}
@@ -36,7 +36,7 @@ animations{
 				duration=0.07
 			}
 			lying{
-				duration=0.1
+				duration=0.10
 			}
 		}
 	}
@@ -44,19 +44,19 @@ animations{
 		loop_frame=4
 		frame_instances{
 			duck{
-				duration=0.5
+				duration=0.50
 			}
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 			limbo{
-				duration=0.4
+				duration=0.40
 			}
 			half_limbo{
-				duration=0.1
+				duration=0.10
 			}
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 		}
 	}
@@ -64,10 +64,10 @@ animations{
 		loop_frame=1
 		frame_instances{
 			duck{
-				duration=0.2
+				duration=0.20
 			}
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 		}
 	}
@@ -75,16 +75,16 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 			walkr{
-				duration=0.1
+				duration=0.10
 			}
 			idle{
-				duration=0.1
+				duration=0.10
 			}
 			walkl{
-				duration=0.1
+				duration=0.10
 			}
 		}
 	}
@@ -92,7 +92,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			duck{
-				duration=0
+				duration=2.50
 			}
 		}
 	}
@@ -104,10 +104,10 @@ frames{
 		file_y=0
 		file_w=54
 		file_h=64
-		game_w=27
-		game_h=32
-		offs_x=4
-		offs_y=0
+		game_w=27.00
+		game_h=32.00
+		offs_x=4.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	half_limbo{
@@ -116,10 +116,10 @@ frames{
 		file_y=0
 		file_w=86
 		file_h=64
-		game_w=43
-		game_h=32
-		offs_x=-16
-		offs_y=0
+		game_w=43.00
+		game_h=32.00
+		offs_x=-16.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	half_lying{
@@ -128,10 +128,10 @@ frames{
 		file_y=66
 		file_w=92
 		file_h=64
-		game_w=46
-		game_h=32
-		offs_x=-12
-		offs_y=0
+		game_w=46.00
+		game_h=32.00
+		offs_x=-12.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	idle{
@@ -140,10 +140,10 @@ frames{
 		file_y=66
 		file_w=64
 		file_h=64
-		game_w=32
-		game_h=32
-		offs_x=0
-		offs_y=0
+		game_w=32.00
+		game_h=32.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	limbo{
@@ -152,10 +152,10 @@ frames{
 		file_y=0
 		file_w=106
 		file_h=64
-		game_w=53
-		game_h=32
-		offs_x=-20
-		offs_y=0
+		game_w=53.00
+		game_h=32.00
+		offs_x=-20.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	lying{
@@ -164,10 +164,10 @@ frames{
 		file_y=66
 		file_w=114
 		file_h=64
-		game_w=57
-		game_h=32
-		offs_x=-16
-		offs_y=0
+		game_w=57.00
+		game_h=32.00
+		offs_x=-16.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	walkl{
@@ -176,10 +176,10 @@ frames{
 		file_y=66
 		file_w=64
 		file_h=64
-		game_w=32
-		game_h=32
-		offs_x=0
-		offs_y=0
+		game_w=32.00
+		game_h=32.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 	walkr{
@@ -188,10 +188,10 @@ frames{
 		file_y=66
 		file_w=64
 		file_h=64
-		game_w=32
-		game_h=32
-		offs_x=0
-		offs_y=0
+		game_w=32.00
+		game_h=32.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 }

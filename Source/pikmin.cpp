@@ -35,7 +35,10 @@ pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angl
     is_idle(true) {
     
     team = MOB_TEAM_PLAYER_1; // TODO
-    if(s2b(get_var_value(vars, "buried", "0"))) state = PIKMIN_STATE_BURIED;
+    if(s2b(get_var_value(vars, "buried", "0"))) {
+        fsm.set_state(PIKMIN_STATE_BURIED);
+        this->set_first_state = true;
+    }
 }
 
 
@@ -58,7 +61,7 @@ float pikmin::get_base_speed() {
  * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
    * (i.e. already chosen to be plucked by another leader).
  */
-pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved) {
+pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const bool ignore_reserved) {
     dist closest_distance = 0;
     pikmin* closest_pikmin = NULL;
     
@@ -69,14 +72,14 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const 
         dist dis(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
         if(closest_pikmin == NULL || dis < closest_distance) {
         
-            if(!(ignore_reserved && pikmin_list[p]->pluck_reserved)) {
+            if(!(ignore_reserved || pikmin_list[p]->pluck_reserved)) {
                 closest_distance = dis;
                 closest_pikmin = pikmin_list[p];
             }
         }
     }
     
-    if(d) *d = closest_distance.to_float();
+    if(d) *d = closest_distance;
     return closest_pikmin;
 }
 
@@ -249,7 +252,7 @@ void pikmin::become_buried(mob* m, void* info1, void* info2) {
     m->anim.change(PIKMIN_ANIM_BURROWED, true, false, false);
 }
 
-void pikmin::be_plucked(mob* m, void* info1, void* info2) {
+void pikmin::begin_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     mob* lea = (mob*) info1;
     
@@ -260,9 +263,13 @@ void pikmin::be_plucked(mob* m, void* info1, void* info2) {
         }
     }
     
-    ((leader*) info2)->pluck_time = -1;
-    pik->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    pik->anim.change(PIKMIN_ANIM_PLUCKING, true, false, false);
     add_to_party(lea, pik);
+}
+
+void pikmin::end_pluck(mob* m, void* info1, void* info2) {
+    pikmin* pik = (pikmin*) m;
+    pik->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
     sfx_pikmin_plucked.play(0, false);
     sfx_pikmin_pluck.play(0, false);
 }
@@ -304,14 +311,14 @@ void pikmin::be_dismissed(mob* m, void* info1, void* info2) {
     float angle = *((float*) info1);
     
     m->set_target(
-        leaders[cur_leader_nr]->x + cos(angle) * DISMISS_DISTANCE,
-        leaders[cur_leader_nr]->y + sin(angle) * DISMISS_DISTANCE,
+        cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
+        cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
         NULL,
         NULL,
         false
     );
     
-    m->anim.change(PIKMIN_ANIM_WALK, true, false, false);
+    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
 }
 
 void pikmin::reach_dismiss_spot(mob* m, void* info1, void* info2) {
@@ -326,11 +333,14 @@ void pikmin::become_idle(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::be_thrown(mob* m, void* info1, void* info2) {
+    sfx_pikmin_held.stop();
+    sfx_pikmin_thrown.stop();
+    sfx_pikmin_thrown.play(0, false);
     m->anim.change(PIKMIN_ANIM_THROWN, true, false, false);
 }
 
 void pikmin::be_released(mob* m, void* info1, void* info2) {
-    leaders[cur_leader_nr]->holding_pikmin = NULL;
+    cur_leader_ptr->holding_pikmin = NULL;
 }
 
 void pikmin::land(mob* m, void* info1, void* info2) {
@@ -345,7 +355,7 @@ void pikmin::called(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     
     pik->attack_time = 0;
-    add_to_party(leaders[cur_leader_nr], pik);
+    add_to_party(cur_leader_ptr, pik);
     sfx_pikmin_called.play(0.03, false);
 }
 
@@ -631,7 +641,7 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
 }
 
 void swap_pikmin(mob* new_pik) {
-    leader* lea = leaders[cur_leader_nr];
+    leader* lea = cur_leader_ptr;
     if(lea->holding_pikmin) {
         lea->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
     }

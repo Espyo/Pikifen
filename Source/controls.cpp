@@ -31,8 +31,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
             //Debug testing.
             //TODO remove.
-            day_minutes += 30;
-            
             dist closest_mob_to_cursor_dist = FLT_MAX;
             mob* closest_mob_to_cursor = NULL;
             for(size_t m = 0; m < mobs.size(); m++) {
@@ -129,8 +127,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
  */
 void handle_button(const unsigned int button, const unsigned char player, float pos) {
 
-    leader* cur_leader_ptr = leaders[cur_leader_nr];
-    
     if(cur_message.empty()) {
     
         if(
@@ -228,10 +224,10 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 bool done = false;
                 
                 //First check if the leader should pluck a Pikmin.
-                float d;
+                dist d;
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
                 if(p && d <= MIN_PLUCK_RANGE) {
-                    go_pluck(cur_leader_ptr, p);
+                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) p);
                     auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
                     done = true;
                 }
@@ -285,14 +281,13 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 //Now check if the leader should grab a Pikmin.
                 if(!done) {
                     if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
-                        cur_leader_ptr->holding_pikmin = closest_party_member;
-                        closest_party_member->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND, closest_party_member);
+                        cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_party_member);
+                        closest_party_member->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND, (void*) closest_party_member);
                         done = true;
                     }
                 }
                 
                 //Now check if the leader should punch.
-                
                 if(!done) {
                     //TODO
                 }
@@ -300,44 +295,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             } else { //Button release.
                 mob* holding_ptr = cur_leader_ptr->holding_pikmin;
                 if(holding_ptr) {
-                
-                    holding_ptr->fsm.run_event(MOB_EVENT_THROWN, holding_ptr);
-                    
-                    holding_ptr->x = cur_leader_ptr->x;
-                    holding_ptr->y = cur_leader_ptr->y;
-                    holding_ptr->z = cur_leader_ptr->z;
-                    
-                    float angle, d;
-                    coordinates_to_angle(cursor_x - cur_leader_ptr->x, cursor_y - cur_leader_ptr->y, &angle, &d);
-                    
-                    float throw_height_mult = 1.0;
-                    if(typeid(*holding_ptr) == typeid(pikmin)) {
-                        throw_height_mult = ((pikmin*) holding_ptr)->pik_type->throw_height_mult;
-                    }
-                    
-                    //This results in a 1.3 second throw, just like in Pikmin 2. Regular Pikmin are thrown about 288.88 units high.
-                    holding_ptr->speed_x =
-                        cos(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-                    holding_ptr->speed_y =
-                        sin(angle) * d * THROW_DISTANCE_MULTIPLIER * (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-                    holding_ptr->speed_z =
-                        -(GRAVITY_ADDER) * (THROW_STRENGTH_MULTIPLIER * throw_height_mult);
-                        
-                    holding_ptr->angle = angle;
-                    holding_ptr->face(angle);
-                    
-                    holding_ptr->was_thrown = true;
-                    
-                    remove_from_party(holding_ptr);
-                    cur_leader_ptr->holding_pikmin = NULL;
-                    
-                    sfx_pikmin_held.stop();
-                    sfx_pikmin_thrown.stop();
-                    sfx_throw.stop();
-                    sfx_pikmin_thrown.play(0, false);
-                    sfx_throw.play(0, false);
-                    cur_leader_ptr->anim.change(LEADER_ANIM_THROW, true, false, false);
-                    holding_ptr->anim.change(PIKMIN_ANIM_THROWN, true, false, false);
+                    cur_leader_ptr->fsm.run_event(LEADER_EVENT_THROW);
                 }
             }
             
@@ -351,17 +309,14 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             active_control();
             
-            if(pos > 0 && !cur_leader_ptr->holding_pikmin) { //Button pressed.
-                whistling = true;
-                cur_leader_ptr->lea_type->sfx_whistle.play(0, false);
+            if(pos > 0 && !cur_leader_ptr->holding_pikmin) {
+                //Button pressed.
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
                 
-                for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
-                whistle_fade_time = 0;
-                whistle_fade_radius = 0;
-                cur_leader_ptr->anim.change(LEADER_ANIM_WHISTLING, true, true, false);
+            } else {
+                //Button released.
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_STOP_WHISTLE);
                 
-            } else { //Button released.
-                stop_whistling();
             }
             
         } else if(
@@ -378,56 +333,38 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             size_t new_leader_nr = cur_leader_nr;
-            if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
-                new_leader_nr = (cur_leader_nr + 1) % leaders.size();
-            else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
-                if(cur_leader_nr == 0) new_leader_nr = leaders.size() - 1;
-                else new_leader_nr = cur_leader_nr - 1;
-            }
+            leader* new_leader_ptr = nullptr;
+            bool search_new_leader = true;
             
-            if(new_leader_nr == cur_leader_nr) return;
-            
-            mob* swap_leader = NULL;
-            
-            if(!cur_leader_ptr->speed_z) {
-                cur_leader_ptr->speed_x = 0;
-                cur_leader_ptr->speed_y = 0;
-            }
-            if(!leaders[new_leader_nr]->speed_z) {
-                leaders[new_leader_nr]->speed_x = 0;
-                leaders[new_leader_nr]->speed_y = 0;
-            }
-            leaders[new_leader_nr]->remove_target(true);
-            
-            //If the new leader is in another one's party, swap them.
-            size_t n_leaders = leaders.size();
-            for(size_t l = 0; l < n_leaders; l++) {
-                if(l == new_leader_nr) continue;
-                size_t n_party_members = leaders[l]->party->members.size();
-                for(size_t m = 0; m < n_party_members; m++) {
-                    if(leaders[l]->party->members[m] == leaders[new_leader_nr]) {
-                        swap_leader = leaders[l];
-                        break;
-                    }
+            //Go through the list of leaders until we find a new valid one.
+            while(search_new_leader) {
+                if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
+                    new_leader_nr = (new_leader_nr + 1) % leaders.size();
+                else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
+                    if(new_leader_nr == 0) new_leader_nr = leaders.size() - 1;
+                    else new_leader_nr = new_leader_nr - 1;
                 }
-            }
-            
-            if(swap_leader) {
-                size_t n_party_members = swap_leader->party->members.size();
-                for(size_t m = 0; m < n_party_members; m++) {
-                    mob* member = swap_leader->party->members[0];
-                    remove_from_party(member);
-                    if(member != leaders[new_leader_nr]) {
-                        add_to_party(leaders[new_leader_nr], member);
-                    }
-                }
+                new_leader_ptr = leaders[new_leader_nr];
                 
-                add_to_party(leaders[new_leader_nr], swap_leader);
+                if(!new_leader_ptr->following_party) {
+                    //Found a leader which is not following a party.
+                    search_new_leader = false;
+                } else if(new_leader_ptr == cur_leader_ptr) {
+                    //Found the current leader. That means we looped the whole list.
+                    search_new_leader = false;
+                    new_leader_ptr = nullptr;
+                }
             }
+            
+            if(new_leader_ptr == cur_leader_ptr) return;
+            
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
             
             cur_leader_nr = new_leader_nr;
-            start_camera_pan(leaders[new_leader_nr]->x, leaders[new_leader_nr]->y);
-            leaders[new_leader_nr]->lea_type->sfx_name_call.play(0, false);
+            cur_leader_ptr = new_leader_ptr;
+            
+            start_camera_pan(cur_leader_ptr->x, cur_leader_ptr->y);
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
             
         } else if(button == BUTTON_DISMISS) {
         
@@ -441,7 +378,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             active_control();
             
-            dismiss();
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_DISMISS);
             
         } else if(button == BUTTON_PAUSE) {
         
@@ -559,19 +496,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
-            if(cur_leader_ptr->carrier_info) {
-                active_control();
-            } else {
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_LIE_DOWN);
             
-                dismiss();
-                
-                cur_leader_ptr->carrier_info = new carrier_info_struct(
-                    cur_leader_ptr,
-                    3, //TODO
-                    false);
-                    
-                cur_leader_ptr->anim.change(LEADER_ANIM_LIE, true, false, false);
-            }
             
         } else if(button == BUTTON_SWITCH_TYPE_RIGHT || button == BUTTON_SWITCH_TYPE_LEFT) {
         
@@ -731,12 +657,12 @@ void handle_button(const unsigned int button, const unsigned char player, float 
  * This function makes the captain wake up from lying down, stop auto-plucking, etc.
  */
 void active_control() {
-    if(leaders[cur_leader_nr]->carrier_info) {
+    if(cur_leader_ptr->carrier_info) {
         //Getting up.
-        leaders[cur_leader_nr]->anim.change(LEADER_ANIM_GET_UP, true, false, false);
+        cur_leader_ptr->anim.change(LEADER_ANIM_GET_UP, true, false, false);
     }
-    make_uncarriable(leaders[cur_leader_nr]);
-    stop_auto_pluck(leaders[cur_leader_nr]);
+    make_uncarriable(cur_leader_ptr);
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL_PLUCK);
 }
 
 

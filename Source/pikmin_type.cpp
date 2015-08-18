@@ -74,6 +74,7 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACK,   "attack"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRAB,     "grab"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_GET_UP,   "get_up"));
 }
@@ -87,10 +88,18 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::become_buried);
         }
         efc.new_event(MOB_EVENT_PLUCKED); {
-            efc.run_function(pikmin::be_plucked);
+            efc.run_function(pikmin::begin_pluck);
+            efc.change_state("plucked");
+        }
+    }
+    
+    efc.new_state("plucked", PIKMIN_STATE_PLUCKING); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(pikmin::end_pluck);
             efc.change_state("in_group_chasing");
         }
     }
+    
     efc.new_state("in_group_chasing", PIKMIN_STATE_IN_GROUP_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin::chase_leader);
@@ -115,6 +124,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("in_group_stopped", PIKMIN_STATE_IN_GROUP_STOPPED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin::stop_in_group);
@@ -139,6 +149,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("grabbed_by_leader", PIKMIN_STATE_GRABBED_BY_LEADER); {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(pikmin::be_released);
@@ -159,6 +170,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("thrown", PIKMIN_STATE_THROWN); {
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(pikmin::land);
@@ -173,6 +185,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("going_to_dismiss_spot", PIKMIN_STATE_GOING_TO_DISMISS_SPOT); {
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(pikmin::called);
@@ -191,6 +204,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("idle", PIKMIN_STATE_IDLE); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin::become_idle);
@@ -223,6 +237,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT); {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.run_function(pikmin::grab_carriable_object);
@@ -250,6 +265,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("going_to_opponent", PIKMIN_STATE_GOING_TO_OPPONENT); {
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("attacking_grounded");
@@ -273,6 +289,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("attacking_grounded", PIKMIN_STATE_ATTACKING_GROUNDED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin::prepare_to_attack);
@@ -296,6 +313,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("attacking_latched", PIKMIN_STATE_ATTACKING_LATCHED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin::prepare_to_attack);
@@ -319,6 +337,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("grabbed_by_enemy", PIKMIN_STATE_GRABBED_BY_ENEMY); {
         efc.new_event(MOB_EVENT_RELEASED); {
             efc.change_state("idle");
@@ -327,6 +346,7 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::tick_grabbed_by_enemy);
         }
     }
+    
     efc.new_state("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idle");
@@ -336,6 +356,7 @@ void pikmin_type::init_script() {
             efc.change_state("grabbed_by_enemy");
         }
     }
+    
     efc.new_state("carrying", PIKMIN_STATE_CARRYING); {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(pikmin::forget_about_carrying);
@@ -366,12 +387,4 @@ void pikmin_type::init_script() {
     
     states = efc.finish();
     first_state_nr = fix_states(states, "idle");
-    
-    first_state_nr = 0;
-    for(size_t s = 0; s < states.size(); s++) {
-        if(states[s]->name == "idle") {
-            first_state_nr = s;
-            break;
-        }
-    }
 }

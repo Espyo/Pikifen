@@ -132,6 +132,7 @@ extern vector<control_info>             controls;
 extern mob*                             closest_party_member;
 extern area_map                         cur_area_map;
 extern size_t                           cur_leader_nr;
+extern leader*                          cur_leader_ptr;
 extern string                           cur_message;
 extern size_t                           cur_message_char;
 extern float                            cur_message_char_time;
@@ -233,7 +234,6 @@ extern float                            whistle_dot_offset;    //How much each d
 extern float                            whistle_dot_radius[6]; //Radius of every 6th dot.
 extern float                            whistle_fade_radius;   //Radius the whistle was at pre-fade.
 extern float                            whistle_fade_time;     //Time left for the whistle's fading animations.
-extern float                            whistle_max_hold;      //The whistle area is at max size. Hold the whistle for these many seconds.
 extern float                            whistle_next_dot_time;
 extern float                            whistle_next_ring_time;
 extern float                            whistle_radius;

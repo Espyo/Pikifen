@@ -151,7 +151,7 @@ int main(int argc, char**) {
         pikmin_in_onions.clear();
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) { o->second = 0; }
         
-        load_area("Play", false);
+        load_area("Tests", false);
         load_area_textures();
         generate_area_images();
         
@@ -192,14 +192,14 @@ int main(int argc, char**) {
         create_mob(new pikmin(0, 200, pikmin_types["Yellow Pikmin"], 0, ""));
         pikmin_list.back()->maturity = 2;
         create_mob(new pikmin(30, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(0);
-        pikmin_list.back()->spawned = true;
+        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
+        pikmin_list.back()->set_first_state = true;
         create_mob(new pikmin(50, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(0);
-        pikmin_list.back()->spawned = true;
+        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
+        pikmin_list.back()->set_first_state = true;
         create_mob(new pikmin(70, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(0);
-        pikmin_list.back()->spawned = true;
+        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
+        pikmin_list.back()->set_first_state = true;
         for(unsigned char p = 0; p < 10; p++) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
                 create_mob(new pikmin(20 + 10 * p + 3 * distance(pikmin_types.begin(), t), 200, t->second, 0, ""));
@@ -217,6 +217,11 @@ int main(int argc, char**) {
         pikmin_in_onions[pikmin_types["Red Pikmin"]] = 200;
         pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
         pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
+        
+        cur_leader_nr = 0;
+        cur_leader_ptr = leaders[cur_leader_nr];
+        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+        cur_leader_ptr->set_first_state = true;
         
         al_hide_mouse_cursor(display);
     } else {

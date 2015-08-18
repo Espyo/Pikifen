@@ -30,9 +30,6 @@ void do_logic() {
       ***  `-´                                `-´  ***
         ********************************************/
     
-    leader* cur_leader_ptr = leaders[cur_leader_nr];
-    
-    
     /*************************************
     *                               .-.  *
     *   Timer things - aesthetic   ( L ) *
@@ -221,14 +218,6 @@ void do_logic() {
             whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
             if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_radius = cur_leader_ptr->lea_type->whistle_range;
-                whistle_max_hold = WHISTLE_MAX_HOLD_TIME;
-            }
-        }
-        
-        if(whistle_max_hold > 0) {
-            whistle_max_hold -= delta_t;
-            if(whistle_max_hold <= 0) {
-                stop_whistling();
             }
         }
         
@@ -392,8 +381,8 @@ void do_logic() {
                     frame* f2_ptr = m2_ptr->anim.get_frame();
                     
                     //If neither of the mobs have hitboxes up, never mind.
-                    bool m1_is_pikmin = typeid(*m_ptr) == typeid(pikmin);
-                    bool m1_has_hitboxes = f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_pikmin);
+                    bool m1_is_hitbox = typeid(*m_ptr) == typeid(pikmin) || typeid(*m_ptr) == typeid(leader);
+                    bool m1_has_hitboxes = f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_hitbox);
                     bool m2_has_hitboxes = f2_ptr && !f2_ptr->hitbox_instances.empty();
                     
                     if(m1_has_hitboxes && m2_has_hitboxes) {
@@ -407,7 +396,7 @@ void do_logic() {
                             
                             float m1_angle_sin = 0;
                             float m1_angle_cos = 0;
-                            if(!m1_is_pikmin) {
+                            if(!m1_is_hitbox) {
                                 m1_angle_sin = sin(m_ptr->angle);
                                 m1_angle_cos = cos(m_ptr->angle);
                             }
@@ -423,8 +412,8 @@ void do_logic() {
                                 float m2_h_y = m2_ptr->y + (h2_ptr->x * m2_angle_sin + h2_ptr->y * m2_angle_cos);
                                 float m2_h_z = m2_ptr->z + h2_ptr->z;
                                 
-                                if(m1_is_pikmin) {
-                                    //Just check if the entire Pikmin touched mob 2's hitbox.
+                                if(m1_is_hitbox) {
+                                    //Just check if the entire Pikmin/leader touched mob 2's hitbox.
                                     
                                     bool z_collision;
                                     if(h2_ptr->height == 0) {
@@ -674,95 +663,13 @@ void do_logic() {
         }
         
         //Current leader movement.
-        if(!cur_leader_ptr->auto_pluck_mode && !cur_leader_ptr->auto_pluck_pikmin && !cur_leader_ptr->carrier_info) {
-            float leader_move_x = leader_movement.get_x();
-            float leader_move_y = leader_movement.get_y();
-            float leader_move_intensity = leader_movement.get_intensity();
-            if(leader_move_intensity < 0.75) leader_move_intensity = 0;
-            if(leader_move_intensity > 1) leader_move_intensity = 1;
-            if(leader_move_intensity == 0 && cur_leader_ptr->go_to_target)
-                cur_leader_ptr->remove_target(true);
-            else
-                cur_leader_ptr->set_target(
-                    cur_leader_ptr->x + leader_move_x * cur_leader_ptr->type->move_speed,
-                    cur_leader_ptr->y + leader_move_y * cur_leader_ptr->type->move_speed,
-                    NULL, NULL, false, NULL, true);
-        }
-        
-        size_t n_leaders = leaders.size();
-        for(size_t l = 0; l < n_leaders; l++) {
-            leader* l_ptr = leaders[l];
-            if(whistling) {
-                if(l != cur_leader_nr) {
-                    if(dist(l_ptr->x, l_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
-                    
-                        stop_auto_pluck(l_ptr);
-                        
-                        if(!l_ptr->following_party && !l_ptr->was_thrown) {
-                            //Leader got whistled.
-                            add_to_party(cur_leader_ptr, l_ptr);
-                            
-                            size_t n_party_members = l_ptr->party->members.size();
-                            for(size_t m = 0; m < n_party_members; m++) {
-                                mob* member = l_ptr->party->members[0];
-                                remove_from_party(member);
-                                add_to_party(cur_leader_ptr, member);
-                            }
-                        }
-                    }
-                }
-            }
-            
-            if(l_ptr->following_party && !l_ptr->auto_pluck_mode) {
-                l_ptr->set_target(
-                    0,
-                    0,
-                    &l_ptr->following_party->party->party_center_x,
-                    &l_ptr->following_party->party->party_center_y,
-                    false);
-                    
-            } else {
-            
-                if(l_ptr->auto_pluck_pikmin && l_ptr->reached_destination) {
-                
-                    if(l_ptr->pluck_time == -1) {
-                        l_ptr->pluck_time = l_ptr->lea_type->pluck_delay;
-                        l_ptr->anim.change(LEADER_ANIM_PLUCK, true, false, false);
-                    }
-                    
-                    if(l_ptr->pluck_time > 0) {
-                        l_ptr->pluck_time -= delta_t;
-                        
-                    } else {
-                    
-                        l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr, (void*) l_ptr->auto_pluck_pikmin);
-                        l_ptr->auto_pluck_pikmin = NULL;
-                    }
-                }
-                
-                if(l_ptr->auto_pluck_mode) {
-                    if(!l_ptr->auto_pluck_pikmin) {
-                        float d;
-                        pikmin* new_pikmin = get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, true);
-                        
-                        if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
-                            go_pluck(l_ptr, new_pikmin);
-                        } else { //No more buried Pikmin, or none nearby. Give up.
-                            stop_auto_pluck(l_ptr);
-                        }
-                    }
-                }
-            }
-            
-            if(!l_ptr->carrier_info && !whistling) {
-                if(l_ptr->speed_x != 0 || l_ptr->speed_y != 0) {
-                    l_ptr->anim.change(LEADER_ANIM_WALK, true, true, true);
-                } else {
-                    l_ptr->anim.change(LEADER_ANIM_IDLE, true, true, true);
-                }
-            }
-            
-            
+        float leader_move_intensity = leader_movement.get_intensity();
+        if(leader_move_intensity < 0.75) leader_move_intensity = 0;
+        if(leader_move_intensity > 1) leader_move_intensity = 1;
+        if(leader_move_intensity == 0) {
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_END, (void*) &leader_movement);
+        } else {
+            cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_START, (void*) &leader_movement);
         }
         
         if(cam_trans_pan_time_left > 0) {
@@ -901,6 +808,7 @@ void do_logic() {
         if(throw_particle_timer <= 0) {
             throw_particle_timer = THROW_PARTICLE_INTERVAL;
             
+            size_t n_leaders = leaders.size();
             for(size_t l = 0; l < n_leaders; l++) {
                 if(leaders[l]->was_thrown)
                     particles.push_back(

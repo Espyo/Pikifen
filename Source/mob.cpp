@@ -50,7 +50,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     can_move(true),
     focused_mob(nullptr),
     fsm(this),
-    spawned(false),
+    set_first_state(false),
     timer(0),
     timer_interval(0),
     script_wait_event(nullptr),
@@ -109,7 +109,7 @@ void mob::tick_animation() {
     
     //TODO
     if(finished_anim) {
-        fsm.run_event(MOB_EVENT_ANIMATION_END, this);
+        fsm.run_event(MOB_EVENT_ANIMATION_END);
     }
 }
 
@@ -482,9 +482,9 @@ void mob::tick_physics() {
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {
-    if(!spawned) {
+    if(!set_first_state) {
         fsm.set_state(type->first_state_nr);
-        spawned = true;
+        set_first_state = true;
     }
     
     //TODO move these to the logic code, on the code where all mobs interact with all mobs.

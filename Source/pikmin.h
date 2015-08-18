@@ -47,7 +47,8 @@ public:
     
     static void become_buried(          mob* m, void* info1, void* info2);
     static void become_idle(            mob* m, void* info1, void* info2);
-    static void be_plucked(             mob* m, void* info1, void* info2);
+    static void begin_pluck(            mob* m, void* info1, void* info2);
+    static void end_pluck(              mob* m, void* info1, void* info2);
     static void be_grabbed_by_friend(   mob* m, void* info1, void* info2);
     static void be_grabbed_by_enemy(    mob* m, void* info1, void* info2);
     static void be_dismissed(           mob* m, void* info1, void* info2);
@@ -79,10 +80,45 @@ public:
 
 
 
-pikmin* get_closest_buried_pikmin(const float x, const float y, float* d, const bool ignore_reserved);
+pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const bool ignore_reserved);
 void give_pikmin_to_onion(onion* o, const unsigned amount);
 void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp);
 void swap_pikmin(mob* new_pik);
 
+
+
+enum PIKMIN_STATES {
+    PIKMIN_STATE_IN_GROUP_CHASING,
+    PIKMIN_STATE_IN_GROUP_STOPPED,
+    PIKMIN_STATE_IDLE,
+    PIKMIN_STATE_BURIED,
+    PIKMIN_STATE_PLUCKING,
+    PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
+    PIKMIN_STATE_GRABBED_BY_LEADER,
+    PIKMIN_STATE_GRABBED_BY_ENEMY,
+    PIKMIN_STATE_KNOCKED_BACK,
+    PIKMIN_STATE_THROWN,
+    PIKMIN_STATE_GOING_TO_TASK,
+    PIKMIN_STATE_GOING_TO_DISMISS_SPOT,
+    PIKMIN_STATE_BUSY,
+    PIKMIN_STATE_CARRYING,
+    PIKMIN_STATE_ATTACKING_GROUNDED,
+    PIKMIN_STATE_ATTACKING_LATCHED,
+    PIKMIN_STATE_CELEBRATING,
+    PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
+    PIKMIN_STATE_GOING_TO_OPPONENT,
+};
+
+enum PIKMIN_ANIMATIONS {
+    PIKMIN_ANIM_IDLE,
+    PIKMIN_ANIM_WALK,
+    PIKMIN_ANIM_THROWN,
+    PIKMIN_ANIM_ATTACK,
+    PIKMIN_ANIM_GRAB,
+    PIKMIN_ANIM_BURROWED,
+    PIKMIN_ANIM_PLUCKING,
+    PIKMIN_ANIM_LYING,
+    PIKMIN_ANIM_GET_UP,
+};
 
 #endif //ifndef PIKMIN_INCLUDED

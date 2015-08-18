@@ -39,15 +39,77 @@ public:
     pikmin* auto_pluck_pikmin; //-1 = not plucking.
     float pluck_time; //Time left until the Pikmin pops out.
     
+    bool is_in_walking_anim;
+    
     leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
+    
+    static void whistle(mob* m, void* info1, void* info2);
+    static void stop_whistle(mob* m, void* info1, void* info2);
+    static void join_group(mob* m, void* info1, void* info2);
+    static void focus(mob* m, void* info1, void* info2);
+    static void unfocus(mob* m, void* info1, void* info2);
+    static void enter_idle(mob* m, void* info1, void* info2);
+    static void enter_active(mob* m, void* info1, void* info2);
+    static void move(mob* m, void* info1, void* info2);
+    static void stop(mob* m, void* info1, void* info2);
+    static void set_walk_anim(mob* m, void* info1, void* info2);
+    static void set_stop_anim(mob* m, void* info1, void* info2);
+    static void grab_mob(mob* m, void* info1, void* info2);
+    static void do_throw(mob* m, void* info1, void* info2);
+    static void release(mob* m, void* info1, void* info2);
+    static void get_hurt(mob* m, void* info1, void* info2);
+    static void die(mob* m, void* info1, void* info2);
+    static void dismiss(mob* m, void* info1, void* info2);
+    static void spray(mob* m, void* info1, void* info2);
+    static void pain(mob* m, void* info1, void* info2);
+    static void get_knocked_back(mob* m, void* info1, void* info2);
+    static void sleep(mob* m, void* info1, void* info2);
+    static void chase_leader(mob* m, void* info1, void* info2);
+    static void stop_in_group(mob* m, void* info1, void* info2);
+    static void be_dismissed(mob* m, void* info1, void* info2);
+    static void go_pluck(mob* m, void* info1, void* info2);
+    static void start_pluck(mob* m, void* info1, void* info2);
+    static void stop_pluck(mob* m, void* info1, void* info2);
+    static void search_seed(mob* m, void* info1, void* info2);
+    static void inactive_search_seed(mob* m, void* info1, void* info2);
+    
 };
 
 
 
 void dismiss();
 float get_leader_to_group_center_dist(mob* l);
-void go_pluck(leader* l, pikmin* p);
-void stop_auto_pluck(leader* l);
-void stop_whistling();
+
+
+
+enum LEADER_STATES {
+    LEADER_STATE_IDLE,
+    LEADER_STATE_ACTIVE,
+    LEADER_STATE_WHISTLING,
+    LEADER_STATE_HOLDING,
+    LEADER_STATE_DISMISSING,
+    LEADER_STATE_SPRAYING,
+    LEADER_STATE_PAIN,
+    LEADER_STATE_KNOCKED_BACK,
+    LEADER_STATE_DYING,
+    LEADER_STATE_IN_GROUP_CHASING,
+    LEADER_STATE_IN_GROUP_STOPPED,
+    LEADER_STATE_GOING_TO_PLUCK,
+    LEADER_STATE_PLUCKING,
+    LEADER_STATE_INACTIVE_GOING_TO_PLUCK,
+    LEADER_STATE_INACTIVE_PLUCKING,
+    
+};
+
+enum LEADER_ANIMATIONS {
+    LEADER_ANIM_IDLE,
+    LEADER_ANIM_WALK,
+    LEADER_ANIM_PLUCK,
+    LEADER_ANIM_GET_UP,
+    LEADER_ANIM_DISMISS,
+    LEADER_ANIM_THROW,
+    LEADER_ANIM_WHISTLING,
+    LEADER_ANIM_LIE,
+};
 
 #endif //ifndef LEADER_INCLUDED
