@@ -298,14 +298,47 @@ void do_drawing() {
             frame* f = leaders[l]->anim.get_frame();
             if(f) {
                 float c = cos(leaders[l]->angle), s = sin(leaders[l]->angle);
+                float final_x = leaders[l]->x + c * f->offs_x + c * f->offs_y;
+                float final_y = leaders[l]->y - s * f->offs_y + s * f->offs_x;
                 draw_sprite(
                     f->bitmap,
-                    leaders[l]->x + c * f->offs_x + c * f->offs_y,
-                    leaders[l]->y - s * f->offs_y + s * f->offs_x,
+                    final_x, final_y,
                     f->game_w, f->game_h,
                     leaders[l]->angle,
                     map_gray(leaders[l]->lighting)
                 );
+                
+                if(leaders[l]->invuln_period) {
+                    unsigned char anim_part = (leaders[l]->invuln_period / LEADER_INVULN_PERIOD) * LEADER_ZAP_ANIM_PARTS;
+                    float x[4], y[4];
+                    float x1 = final_x - f->game_w * 0.5;
+                    float x2 = final_x + f->game_w * 0.5;
+                    for(unsigned char p = 0; p < 4; p++) {
+                        if(anim_part % 2 == 0) {
+                            x[p] = final_x + f->game_w * (deterministic_random(anim_part * 3 + p) - 0.5);
+                            y[p] = final_y + f->game_h * 0.5 * ((p % 2 == 0) ? 1 : -1);
+                        } else {
+                            x[p] = final_x + f->game_w * 0.5 * ((p % 2 == 0) ? 1 : -1);
+                            y[p] = final_y + f->game_h * (deterministic_random(anim_part * 3 + p) - 0.5);
+                        }
+                    }
+                    al_draw_line(
+                        x[0], y[0], x[1], y[1],
+                        al_map_rgba(128, 255, 255, 128),
+                        2.0f
+                    );
+                    al_draw_line(
+                        x[1], y[1], x[2], y[2],
+                        al_map_rgba(128, 255, 255, 128),
+                        2.0f
+                    );
+                    al_draw_line(
+                        x[2], y[2], x[3], y[3],
+                        al_map_rgba(128, 255, 255, 128),
+                        2.0f
+                    );
+                    
+                }
             }
         }
         
@@ -474,7 +507,11 @@ void do_drawing() {
                 }
             }
             
-            if(mob_ptr->health < mob_ptr->type->max_health && mob_ptr->health > 0) {
+            if(
+                mob_ptr->health < mob_ptr->type->max_health &&
+                mob_ptr->health > 0 &&
+                typeid(*mob_ptr) != typeid(leader)
+            ) {
                 draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - 4, mob_ptr->health, mob_ptr->type->max_health);
             }
         }

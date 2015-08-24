@@ -152,7 +152,7 @@ public:
     bool big_damage_ev_queued;        //Are we waiting to report the big damage event?
     
     void eat(size_t nr);
-    void set_animation(const size_t nr);
+    void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool rel, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
@@ -178,6 +178,7 @@ public:
 
 
 void add_to_party(mob* party_leader, mob* new_member);
+void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h, float* total_damage);
 void create_mob(mob* m);
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);

@@ -48,15 +48,15 @@ void gui_save_hitbox_instance();
 void gui_save_top();
 void handle_controls(ALLEGRO_EVENT ev);
 void load();
-void load_animation_set();
+void load_animation_pool();
 void open_hitbox_type(unsigned char type);
 void open_picker(unsigned char type, bool can_make_new);
 void pick(string name, unsigned char type);
-void save_animation_set();
+void save_animation_pool();
 void update_hitboxes();
 void update_stats();
 
-extern animation_set    anims;
+extern animation_pool    anims;
 extern bool             anim_playing;
 extern animation*       cur_anim;
 extern frame*           cur_frame;

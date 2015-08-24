@@ -57,13 +57,16 @@ public:
     static void grab_mob(mob* m, void* info1, void* info2);
     static void do_throw(mob* m, void* info1, void* info2);
     static void release(mob* m, void* info1, void* info2);
-    static void get_hurt(mob* m, void* info1, void* info2);
-    static void die(mob* m, void* info1, void* info2);
     static void dismiss(mob* m, void* info1, void* info2);
     static void spray(mob* m, void* info1, void* info2);
-    static void pain(mob* m, void* info1, void* info2);
+    static void lose_health(mob* m, void* info1, void* info2);
+    static void inactive_lose_health(mob* m, void* info1, void* info2);
+    static void die(mob* m, void* info1, void* info2);
+    static void inactive_die(mob* m, void* info1, void* info2);
+    static void suffer_pain(mob* m, void* info1, void* info2);
     static void get_knocked_back(mob* m, void* info1, void* info2);
-    static void sleep(mob* m, void* info1, void* info2);
+    static void fall_asleep(mob* m, void* info1, void* info2);
+    static void start_waking_up(mob* m, void* info1, void* info2);
     static void chase_leader(mob* m, void* info1, void* info2);
     static void stop_in_group(mob* m, void* info1, void* info2);
     static void be_dismissed(mob* m, void* info1, void* info2);
@@ -90,14 +93,21 @@ enum LEADER_STATES {
     LEADER_STATE_DISMISSING,
     LEADER_STATE_SPRAYING,
     LEADER_STATE_PAIN,
+    LEADER_STATE_INACTIVE_PAIN,
     LEADER_STATE_KNOCKED_BACK,
+    LEADER_STATE_INACTIVE_KNOCKED_BACK,
     LEADER_STATE_DYING,
+    LEADER_STATE_INACTIVE_DYING,
     LEADER_STATE_IN_GROUP_CHASING,
     LEADER_STATE_IN_GROUP_STOPPED,
     LEADER_STATE_GOING_TO_PLUCK,
     LEADER_STATE_PLUCKING,
     LEADER_STATE_INACTIVE_GOING_TO_PLUCK,
     LEADER_STATE_INACTIVE_PLUCKING,
+    LEADER_STATE_SLEEPING,
+    LEADER_STATE_INACTIVE_SLEEPING,
+    LEADER_STATE_WAKING_UP, //Time during which the leader is getting up.
+    LEADER_STATE_INACTIVE_WAKING_UP, //Time during which the leader is getting up.
     
 };
 
@@ -110,6 +120,12 @@ enum LEADER_ANIMATIONS {
     LEADER_ANIM_THROW,
     LEADER_ANIM_WHISTLING,
     LEADER_ANIM_LIE,
+    LEADER_ANIM_PAIN,
+    LEADER_ANIM_KNOCKED_DOWN,
+    LEADER_ANIM_SPRAYING,
 };
+
+const float LEADER_INVULN_PERIOD = 1.5f;
+const float LEADER_ZAP_ANIM_PARTS = 20;
 
 #endif //ifndef LEADER_INCLUDED

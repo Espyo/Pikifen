@@ -361,7 +361,7 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_ANIMATION) {
     
-        if(!vi.empty()) m->set_animation(vi[0]);
+        if(!vi.empty()) m->set_animation(vi[0], false);
         
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
@@ -379,7 +379,7 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_STATE) {
     
-        m->fsm.set_state(vi[0]);
+        m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {
@@ -554,13 +554,15 @@ mob_state::mob_state(const string &name, const size_t id) :
 
 /* ----------------------------------------------------------------------------
  * Changes the fsm to use a different state.
+ * info*: data to pass on to the code after the state change.
+   * This data comes from the event that started all of this.
  */
-void mob_fsm::set_state(const size_t new_state) {
+void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
     if(new_state >= m->type->states.size()) return;
     //Run the code to leave the current state.
     if(cur_state) {
-        m->fsm.run_event(MOB_EVENT_ON_LEAVE, m);
+        m->fsm.run_event(MOB_EVENT_ON_LEAVE, info1, info2);
     }
     
     //Uncomment this to be notified about state changes on stdout.
@@ -570,7 +572,7 @@ void mob_fsm::set_state(const size_t new_state) {
     m->fsm.cur_state = m->type->states[new_state];
     
     //Run the code to enter the new state.
-    m->fsm.run_event(MOB_EVENT_ON_ENTER, m);
+    m->fsm.run_event(MOB_EVENT_ON_ENTER, info1, info2);
     
 }
 
@@ -758,12 +760,24 @@ void easy_fsm_creator::run_function(custom_action_code code) {
  * Finishes any event or state under construction and returns the
  * final vector of states.
  */
-#include <iostream>
 vector<mob_state*> easy_fsm_creator::finish() {
     commit_event();
     commit_state();
     sort(states.begin(), states.end(), [] (const mob_state * ms1, const mob_state * ms2) {
-        return ms1->id <= ms2->id;
+        return ms1->id < ms2->id;
     });
     return states;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a structure with info about an event where two hitboxes touch.
+ * mob2: the other mob.
+ * hi1:  the current mob's hitbox.
+ * hi2:  the other mob's hitbox.
+ */
+hitbox_touch_info::hitbox_touch_info(mob* mob2, hitbox_instance* hi1, hitbox_instance* hi2) {
+    this->mob2 = mob2;
+    this->hi1  = hi1;
+    this->hi2  = hi2;
 }

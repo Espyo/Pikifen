@@ -23,7 +23,7 @@
 
 using namespace std;
 
-class animation_set;
+class animation_pool;
 
 /* ----------------------------------------------------------------------------
  * Animations work as follows:
@@ -58,7 +58,7 @@ class animation_set;
  *
  * In order for the animations, frames and
  * hitboxes to connect, they're referred to using
- * pointers. The animation set holds all of this data
+ * pointers. The animation pool holds all of this data
  * so the animations, frames and hitboxes know
  * where to communicate with one another.
  */
@@ -91,7 +91,7 @@ public:
     frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h);
     frame(const frame &f2);
     frame clone();
-    void create_hitbox_instances(animation_set* const as);
+    void create_hitbox_instances(animation_pool* const as);
     
     ~frame();
 };
@@ -132,7 +132,7 @@ public:
 /* ----------------------------------------------------------------------------
  * A set of animations and their necessary data.
  */
-class animation_set {
+class animation_pool {
 public:
     vector<animation*> animations;
     vector<frame*> frames;
@@ -140,7 +140,7 @@ public:
     
     vector<size_t> pre_named_conversions; //Conversion between pre-named animations and in-file animations.
     
-    animation_set(
+    animation_pool(
         vector<animation*> a = vector<animation*>(),
         vector<frame*>     f = vector<frame*>(),
         vector<hitbox*>    h = vector<hitbox*>()
@@ -165,23 +165,21 @@ public:
 class animation_instance {
 public:
     animation* anim;
-    animation_set* anim_set;
-    float cur_frame_time;  //Time passed on the current frame.
+    animation_pool* anim_pool; //The pool this belongs to.
+    float cur_frame_time;      //Time passed on the current frame.
     size_t cur_frame_nr;
     bool done_once;
     
-    animation_instance(animation_set* anim_set = NULL);
+    animation_instance(animation_pool* anim_pool = NULL);
     animation_instance(const animation_instance &ai2);
     
-    void change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done);
     void start();
-    bool is_anim(const size_t anim_nr, const bool pre_named);
     bool tick(const float time);
     frame* get_frame();
 };
 
 
 
-animation_set load_animation_set(data_node* frames_node);
+animation_pool load_animation_pool(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

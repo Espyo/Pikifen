@@ -656,11 +656,24 @@ void mob::face(float new_angle) {
 
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
- * nr: Animation number.
+ * nr: Animation number; it's the animation instance number from the pool.
  */
-void mob::set_animation(const size_t nr) {
+void mob::set_animation(const size_t nr, bool pre_named) {
     if(nr >= type->anims.animations.size()) return;
-    anim.change(nr, false, false, false);
+    
+    size_t final_nr;
+    if(pre_named) {
+        if(anim.anim_pool->pre_named_conversions.size() <= nr) return;
+        final_nr = anim.anim_pool->pre_named_conversions[nr];
+    } else {
+        final_nr = nr;
+    }
+    
+    if(final_nr == string::npos) return;
+    
+    animation* new_anim = anim.anim_pool->animations[final_nr];
+    anim.anim = new_anim;
+    anim.start();
 }
 
 
@@ -842,6 +855,62 @@ void mob::attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, 
     }
 }
 
+/* ----------------------------------------------------------------------------
+ * Causes a mob to damage another via hitboxes.
+ * attacker:     the attacking mob.
+ * victim:       the mob that'll take the damage.
+ * attacker_h:   the hitbox of the attacker mob, if any.
+ * victim_h:     the hitbox of the victim mob, if any.
+ * total_damage: the variable to return the total caused damage to, if any.
+ */
+void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h, float* total_damage) {
+    float attacker_offense = 0;
+    float defense_multiplier = 1;
+    float knockback = 0;
+    float knockback_angle = 0;
+    
+    if(attacker_h) {
+        attacker_offense = attacker_h->multiplier;
+        knockback = attacker_h->knockback;
+        knockback_angle = attacker_h->knockback_angle;
+    } else {
+        if(typeid(*attacker) == typeid(pikmin)) {
+            attacker_offense = ((pikmin*) attacker)->maturity * ((pikmin*) attacker)->pik_type->attack_power * MATURITY_POWER_MULT;
+        }
+    }
+    
+    if(victim_h) {
+        defense_multiplier = victim_h->multiplier;
+    }
+    
+    float damage = attacker_offense * (1.0 / defense_multiplier);
+    
+    if(total_damage) *total_damage = damage;
+    
+    //Cause the damage and the knockback.
+    victim->health -= damage;
+    if(knockback != 0) {
+        //TODO make these not be magic numbers.
+        victim->remove_target(true);
+        victim->speed_x = cos(knockback_angle) * knockback * 130;
+        victim->speed_y = sin(knockback_angle) * knockback * 130;
+        victim->speed_z = 200;
+    }
+    
+    //Script stuff.
+    victim->fsm.run_event(MOB_EVENT_DAMAGE, victim);
+    
+    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
+    if(victim->type->big_damage_interval > 0 && victim->health != victim->type->max_health) {
+        if(
+            floor((victim->health + damage) / victim->type->big_damage_interval) >
+            floor(victim->health / victim->type->big_damage_interval)
+        ) {
+            victim->big_damage_ev_queued = true;
+        }
+    }
+}
+
 
 /* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
@@ -977,6 +1046,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
     frame* f = m->anim.get_frame();
     if(!f) return NULL;
+    if(f->hitbox_instances.empty()) return NULL;
     return &f->hitbox_instances[nr];
 }
 

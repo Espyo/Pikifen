@@ -446,14 +446,16 @@ void do_logic() {
                                             hitbox_touch_na_ev && !reported_na_ev &&
                                             !reported_eat_ev //This way, Pikmin aren't knocked back AND eaten.
                                         ) {
-                                            hitbox_touch_na_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                            hitbox_touch_info ev_info = hitbox_touch_info(m2_ptr, NULL, h2_ptr);
+                                            hitbox_touch_na_ev->run(m_ptr, (void*) &ev_info);
                                             reported_na_ev = true;
                                             
                                         } else if(
                                             h2_ptr->type == HITBOX_TYPE_NORMAL &&
                                             hitbox_touch_an_ev && !reported_an_ev
                                         ) {
-                                            hitbox_touch_an_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                            hitbox_touch_info ev_info = hitbox_touch_info(m2_ptr, NULL, h2_ptr);
+                                            hitbox_touch_an_ev->run(m_ptr, (void*) &ev_info);
                                             reported_an_ev = true;
                                         }
                                     }
@@ -502,7 +504,8 @@ void do_logic() {
                                                 h2_ptr->type == HITBOX_TYPE_ATTACK &&
                                                 hitbox_touch_na_ev && !reported_na_ev
                                             ) {
-                                                hitbox_touch_na_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                                hitbox_touch_info ev_info = hitbox_touch_info(m2_ptr, h1_ptr, h2_ptr);
+                                                hitbox_touch_na_ev->run(m_ptr, (void*) &ev_info);
                                                 reported_na_ev = true;
                                                 
                                             } else if(
@@ -510,7 +513,8 @@ void do_logic() {
                                                 h2_ptr->type == HITBOX_TYPE_NORMAL &&
                                                 hitbox_touch_an_ev && !reported_an_ev
                                             ) {
-                                                hitbox_touch_an_ev->run(m_ptr, (void*) m2_ptr, (void*) h2_ptr);
+                                                hitbox_touch_info ev_info = hitbox_touch_info(m2_ptr, h1_ptr, h2_ptr);
+                                                hitbox_touch_an_ev->run(m_ptr, (void*) &ev_info);
                                                 reported_an_ev = true;
                                             }
                                         }

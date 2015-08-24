@@ -178,7 +178,6 @@ void pikmin_type::init_script() {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_A_N); {
             efc.run_function(pikmin::land_on_mob);
-            efc.change_state("attacking_latched");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
@@ -385,6 +384,14 @@ void pikmin_type::init_script() {
         }
     }
     
+    efc.new_state("celebrating", PIKMIN_STATE_CELEBRATING); {
+        //TODO
+    }
+    
     states = efc.finish();
     first_state_nr = fix_states(states, "idle");
+    
+    if(states.size() != N_PIKMIN_STATES) {
+        error_log("ENGINE WARNING: Number of Pikmin states on the FSM and the enum do not match.");
+    }
 }

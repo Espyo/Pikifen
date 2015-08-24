@@ -643,12 +643,12 @@ frames{
 				height=128.00
 				radius=24.00
 				type=1
-				multiplier=0.00
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
 				angle=0.00
-				knockback=1.00
+				knockback=0.00
 			}
 		}
 	}
@@ -692,12 +692,12 @@ frames{
 				height=128.00
 				radius=24.00
 				type=1
-				multiplier=0.00
+				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
 				outward=false
 				angle=0.00
-				knockback=1.00
+				knockback=0.00
 			}
 		}
 	}

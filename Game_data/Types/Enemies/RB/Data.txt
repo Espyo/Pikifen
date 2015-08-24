@@ -1,25 +1,26 @@
 name = Red Bulborb
+
 always_active = yes
 big_damage_interval = 100
+can_regenerate = false
 chomp_max_victims = 5
+drops_corpse = true
+first_state = sleeping
 height = 128
+is_boss = false
 max_carriers = 20
 max_health = 750
 move_speed = 80
-near_radius = 40
 near_angle = 0.78
+near_radius = 40
+pikmin_seeds = 12
+radius = 60
+revive_speed = 0
 rotation_speed = 2
 sight_radius = 300
-radius = 60
 territory_radius = 500
-weight = 10
-can_regenerate = false
-drops_corpse = true
-is_boss = false
-pikmin_seeds = 12
-revive_speed = 0
 value = 7
-first_state = sleeping
+weight = 10
 
 script{
     sleeping{

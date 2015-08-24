@@ -20,6 +20,5 @@ pellet::pellet(float x, float y, pellet_type* type, const float angle, const str
     
     carrier_info = new carrier_info_struct(this, type->max_carriers, false);
     
-    anim.change(ANIM_IDLE, true, false, false);
-    anim.start();
+    set_animation(ANIM_IDLE);
 }

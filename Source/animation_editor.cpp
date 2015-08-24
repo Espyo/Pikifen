@@ -1298,7 +1298,7 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_toggle_hitboxes"]->description = "Toggle hitbox and center-point grid visibility.";
     frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        load_animation_set();
+        load_animation_pool();
         hide_widget(gui->widgets["frm_anims"]);
         hide_widget(gui->widgets["frm_frames"]);
         hide_widget(gui->widgets["frm_hitboxes"]);
@@ -1308,7 +1308,7 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_load"]->description = "Load the object from the text file.";
     frm_bottom->widgets["but_save"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        save_animation_set();
+        save_animation_pool();
     };
     frm_bottom->widgets["but_save"]->description = "Save the object to the text file.";
     frm_bottom->widgets["but_quit"]->description = "Quit the animation editor.";
@@ -1325,16 +1325,16 @@ void animation_editor::load() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the animation set for the current object.
+ * Loads the animation pool for the current object.
  */
-void animation_editor::load_animation_set() {
+void animation_editor::load_animation_pool() {
     anims.destroy();
     
     data_node file = data_node(file_name);
     if(!file.file_was_opened) {
         file.save_file(file_name, true);
     }
-    anims = load_animation_set(&file);
+    anims = load_animation_pool(&file);
     
     anim_playing = false;
     cur_anim = NULL;
@@ -1353,6 +1353,7 @@ void animation_editor::load_animation_set() {
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
     disable_widget(gui->widgets["frm_hitbox_is"]);
+    disable_widget(gui->widgets["frm_hitboxes"]);
     
     cam_x = cam_y = 0;
     cam_zoom = 1;
@@ -1522,7 +1523,7 @@ void animation_editor::pick(string name, unsigned char type) {
         string temp_path_start = file_name;
         file_name += "/" + name + "/Animations.txt";
         object_name = name;
-        load_animation_set();
+        load_animation_pool();
         
         //Top bitmap.
         for(unsigned char t = 0; t < 3; t++) {
@@ -1547,9 +1548,9 @@ void animation_editor::pick(string name, unsigned char type) {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the animation set onto the mob's file.
+ * Saves the animation pool onto the mob's file.
  */
-void animation_editor::save_animation_set() {
+void animation_editor::save_animation_pool() {
     data_node file_node = data_node("", "");
     
     data_node* animations_node = new data_node("animations", "");
@@ -1724,7 +1725,7 @@ void animation_editor::update_stats() {
 }
 
 namespace animation_editor {
-animation_set    anims;
+animation_pool    anims;
 animation*       cur_anim = NULL;
 bool             anim_playing = false;
 frame*           cur_frame = NULL;

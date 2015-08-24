@@ -320,13 +320,13 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
         } else if(
-            button == BUTTON_SWITCH_CAPTAIN_RIGHT ||
-            button == BUTTON_SWITCH_CAPTAIN_LEFT
+            button == BUTTON_SWITCH_LEADER_RIGHT ||
+            button == BUTTON_SWITCH_LEADER_LEFT
         ) {
         
             /******************************
             *                    \O/  \O/ *
-            *   Switch captain    | -> |  *
+            *   Switch leader     | -> |  *
             *                    / \  / \ *
             ******************************/
             
@@ -338,9 +338,9 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             //Go through the list of leaders until we find a new valid one.
             while(search_new_leader) {
-                if(button == BUTTON_SWITCH_CAPTAIN_RIGHT)
+                if(button == BUTTON_SWITCH_LEADER_RIGHT)
                     new_leader_nr = (new_leader_nr + 1) % leaders.size();
-                else if(button == BUTTON_SWITCH_CAPTAIN_LEFT) {
+                else if(button == BUTTON_SWITCH_LEADER_LEFT) {
                     if(new_leader_nr == 0) new_leader_nr = leaders.size() - 1;
                     else new_leader_nr = new_leader_nr - 1;
                 }
@@ -405,7 +405,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             active_control();
             
             if(spray_types.size() == 1 || spray_types.size() == 2) {
-                use_spray(0);
+                size_t spray_nr = 0;
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) &spray_nr);
             }
             
         } else if(button == BUTTON_USE_SPRAY_2) {
@@ -415,7 +416,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             active_control();
             
             if(spray_types.size() == 2) {
-                use_spray(1);
+                size_t spray_nr = 1;
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) &spray_nr);
             }
             
         } else if(button == BUTTON_SWITCH_SPRAY_RIGHT || button == BUTTON_SWITCH_SPRAY_LEFT) {
@@ -438,7 +440,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             active_control();
             
             if(spray_types.size() > 2) {
-                use_spray(selected_spray);
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) &selected_spray);
             }
             
         } else if(button == BUTTON_SWITCH_ZOOM) {
@@ -653,16 +655,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
 
 
 /* ----------------------------------------------------------------------------
- * Call this whenever an "active" control is inputted. An "active" control is anything that moves the captain in some way.
- * This function makes the captain wake up from lying down, stop auto-plucking, etc.
+ * Call this whenever an "active" control is inputted. An "active" control is anything that moves the leader in some way.
+ * This function makes the leader wake up from lying down, stop auto-plucking, etc.
  */
 void active_control() {
-    if(cur_leader_ptr->carrier_info) {
-        //Getting up.
-        cur_leader_ptr->anim.change(LEADER_ANIM_GET_UP, true, false, false);
-    }
-    make_uncarriable(cur_leader_ptr);
-    cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL_PLUCK);
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
 }
 
 

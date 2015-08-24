@@ -24,6 +24,7 @@ using namespace std;
 class mob;
 class mob_type;
 class mob_state;
+class hitbox_instance;
 
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
@@ -120,7 +121,7 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_GO_PLUCK,       //When the leader has to go towards the Pikmin it intends to pluck.
     LEADER_EVENT_INACTIVE_SEARCH_SEED, //When the leader has to go help pluck Pikmin, as an inactive leader.
     LEADER_EVENT_REACHED_SEED,   //When the leader reaches the seed they're meant to pluck.
-    LEADER_EVENT_CANCEL_PLUCK,   //When the leader's pluck is canceled.
+    LEADER_EVENT_CANCEL,   //When the leader's pluck is canceled.
     
     N_MOB_EVENTS,
 };
@@ -204,7 +205,7 @@ public:
     
     mob_event* get_event(const size_t type);
     void run_event(const size_t type, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    void set_state(const size_t new_state);
+    void set_state(const size_t new_state, void* info1 = NULL, void* info2 = NULL);
     mob_fsm(mob* m = NULL);
 };
 
@@ -237,6 +238,13 @@ public:
     void run_function(custom_action_code code);
     vector<mob_state*> finish();
     easy_fsm_creator();
+};
+
+struct hitbox_touch_info {
+    mob* mob2; //Mob that touched our mob.
+    hitbox_instance* hi1; //Hitbox of our mob that got touched.
+    hitbox_instance* hi2; //Hitbox of the other mob.
+    hitbox_touch_info(mob* mob2 = NULL, hitbox_instance* hi1 = NULL, hitbox_instance* hi2 = NULL);
 };
 
 vector<mob_state*> load_script(mob_type* mt, data_node* node);

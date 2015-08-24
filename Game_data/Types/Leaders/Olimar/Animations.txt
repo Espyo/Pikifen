@@ -96,6 +96,51 @@ animations{
 			}
 		}
 	}
+	pain{
+		loop_frame=0
+		frame_instances{
+			half_limbo{
+				duration=0.10
+			}
+			idle{
+				duration=0.10
+			}
+			duck{
+				duration=0.10
+			}
+			idle{
+				duration=0.30
+			}
+		}
+	}
+	knocked_down{
+		loop_frame=0
+		frame_instances{
+			half_lying{
+				duration=0.10
+			}
+			lying{
+				duration=1.00
+			}
+			half_lying{
+				duration=0.10
+			}
+			idle{
+				duration=0.10
+			}
+		}
+	}
+    spraying{
+		loop_frame=0
+		frame_instances{
+			duck{
+				duration=1.00
+			}
+			idle{
+				duration=0.10
+			}
+		}
+	}
 }
 frames{
 	duck{

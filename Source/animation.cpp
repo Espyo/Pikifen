@@ -7,7 +7,7 @@
  *
  * === FILE DESCRIPTION ===
  * Animation, frame, animation instance,
- * frame instance, and animation set classes,
+ * frame instance, and animation pool classes,
  * and animation-related functions.
  */
 
@@ -164,7 +164,7 @@ void frame::calculate_hitbox_span() {
 /* ----------------------------------------------------------------------------
  * Creates the hitbox instances, based on the hitboxes.
  */
-void frame::create_hitbox_instances(animation_set* const as) {
+void frame::create_hitbox_instances(animation_pool* const as) {
     hitbox_instances.clear();
     for(size_t h = 0; h < as->hitboxes.size(); h++) {
         hitbox_instances.push_back(
@@ -182,7 +182,7 @@ void frame::create_hitbox_instances(animation_set* const as) {
 /* ----------------------------------------------------------------------------
  * Creates a frame instance.
  * fn:  Name of the frame.
- * fnr: Numbr of the frame on the animation set.
+ * fnr: Numbr of the frame on the animation pool.
  * fp:  Pointer to the frame.
  * d:   Duration.
  */
@@ -221,10 +221,10 @@ animation::animation(const animation &a2) :
 
 /* ----------------------------------------------------------------------------
  * Creates an animation instance.
- * anim_set: The animation set. Used when changing animations.
+ * anim_pool: The animation pool. Used when changing animations.
  */
-animation_instance::animation_instance(animation_set* anim_set) :
-    anim_set(anim_set),
+animation_instance::animation_instance(animation_pool* anim_pool) :
+    anim_pool(anim_pool),
     anim(nullptr),
     cur_frame_time(0),
     cur_frame_nr(0),
@@ -238,59 +238,9 @@ animation_instance::animation_instance(animation_set* anim_set) :
  */
 animation_instance::animation_instance(const animation_instance &ai2) :
     anim(ai2.anim),
-    anim_set(ai2.anim_set) {
+    anim_pool(ai2.anim_pool) {
     
     start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Changes to a new animation within the same animation set.
- * new_anim_nr: Number of the new animation. Check the next parameter.
- * pre_named:
-   * If true, the previous argument is the hardcoded ID (for pre-named animations).
-   * For this, the "conversions" must be created. This normally happens in load_mob_types().
-   * If false, this is the number on the animation file (don't worry, the enemy script knows the numbers).
- * only_if_new: Only change to this animation if we're not already in it.
- * only_if_done: Only change to this animation if the previous one looped at least once.
- */
-void animation_instance::change(const size_t new_anim_nr, const bool pre_named, const bool only_if_new, const bool only_if_done) {
-    //TODO delete in favor of set_animation().
-    size_t final_nr;
-    if(pre_named) {
-        if(anim_set->pre_named_conversions.size() <= new_anim_nr) return;
-        final_nr = anim_set->pre_named_conversions[new_anim_nr];
-    } else {
-        final_nr = new_anim_nr;
-    }
-    
-    if(final_nr == string::npos) return;
-    
-    animation* new_anim = anim_set->animations[final_nr];
-    if(only_if_new && anim == new_anim) return;
-    if(only_if_done && !done_once) return;
-    
-    anim = new_anim;
-    start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether the current animation is the specified one.
- */
-bool animation_instance::is_anim(const size_t nr, const bool pre_named) {
-    size_t final_nr;
-    if(pre_named) {
-        if(anim_set->pre_named_conversions.size() <= nr) return false;
-        final_nr = anim_set->pre_named_conversions[nr];
-    } else {
-        final_nr = nr;
-    }
-    
-    if(anim == anim_set->animations[final_nr]) return true;
-    if(anim == NULL && final_nr == string::npos) return true;
-    
-    return false;
 }
 
 
@@ -345,9 +295,9 @@ frame* animation_instance::get_frame() {
 
 
 /* ----------------------------------------------------------------------------
- * Creates an animation set.
+ * Creates an animation pool.
  */
-animation_set::animation_set(vector<animation*> a, vector<frame*> f, vector<hitbox*> h) :
+animation_pool::animation_pool(vector<animation*> a, vector<frame*> f, vector<hitbox*> h) :
     animations(a),
     frames(f),
     hitboxes(h) {
@@ -359,7 +309,7 @@ animation_set::animation_set(vector<animation*> a, vector<frame*> f, vector<hitb
  * Returns the position of the specified animation.
  * Returns string::npos if not found.
  */
-size_t animation_set::find_animation(string name) {
+size_t animation_pool::find_animation(string name) {
     for(size_t a = 0; a < animations.size(); a++) {
         if(animations[a]->name == name) return a;
     }
@@ -371,7 +321,7 @@ size_t animation_set::find_animation(string name) {
  * Returns the position of the specified frame.
  * Returns string::npos if not found.
  */
-size_t animation_set::find_frame(string name) {
+size_t animation_pool::find_frame(string name) {
     for(size_t f = 0; f < frames.size(); f++) {
         if(frames[f]->name == name) return f;
     }
@@ -383,7 +333,7 @@ size_t animation_set::find_frame(string name) {
  * Returns the position of the specified hitbox.
  * Returns string::npos if not found.
  */
-size_t animation_set::find_hitbox(string name) {
+size_t animation_pool::find_hitbox(string name) {
     for(size_t h = 0; h < hitboxes.size(); h++) {
         if(hitboxes[h]->name == name) return h;
     }
@@ -394,7 +344,7 @@ size_t animation_set::find_hitbox(string name) {
 /* ----------------------------------------------------------------------------
  * Fixes the pointers for hitboxes on the frames.
  */
-void animation_set::fix_hitbox_pointers() {
+void animation_pool::fix_hitbox_pointers() {
     for(size_t f = 0; f < frames.size(); f++) {
         frame* f_ptr = frames[f];
         for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); hi++) {
@@ -428,7 +378,7 @@ void animation_set::fix_hitbox_pointers() {
    * The size_t is the hardcoded ID (probably in some constant or enum).
    * The string is the name of the animation in the animation file.
  */
-void animation_set::create_conversions(vector<pair<size_t, string> > conversions) {
+void animation_pool::create_conversions(vector<pair<size_t, string> > conversions) {
     pre_named_conversions.clear();
     
     if(conversions.empty()) return;
@@ -449,9 +399,9 @@ void animation_set::create_conversions(vector<pair<size_t, string> > conversions
 
 
 /* ----------------------------------------------------------------------------
- * Destroys an animation set and all of its animations, frames, and hitboxes.
+ * Destroys an animation pool and all of its animations, frames, and hitboxes.
  */
-void animation_set::destroy() {
+void animation_pool::destroy() {
     for(auto a = animations.begin(); a != animations.end(); a++) {
         delete *a;
     }
@@ -467,8 +417,8 @@ void animation_set::destroy() {
 /* ----------------------------------------------------------------------------
  * Loads the animations from a file.
  */
-animation_set load_animation_set(data_node* file_node) {
-    animation_set as;
+animation_pool load_animation_pool(data_node* file_node) {
+    animation_pool as;
     
     vector<animation*> animations;
     vector<frame*> frames;

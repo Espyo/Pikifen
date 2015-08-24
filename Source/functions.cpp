@@ -121,6 +121,19 @@ void coordinates_to_angle(const float x_coord, const float y_coord, float* angle
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a random number, between 0 and 1, but it's deterministic
+ * if you use the same seed. i.e., if you feed it X, it
+ * will always return Y. Because of its simplicity and predictability,
+ * it should only be used for tiny details with unimportant randomness.
+ * seed: The seed number.
+ */
+float deterministic_random(const unsigned int seed) {
+    //This was built pretty much ad-hoc.
+    return (((seed * 1234567890L + (seed << 4)) % (seed ^ 981524)) % 65536) / 65535.0f;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Prints something onto the error log.
  * s: String that represents the error.
  * d: If not null, this will be used to obtain the file name and line that caused the error.
@@ -883,8 +896,8 @@ void load_options() {
         load_control(BUTTON_GROUP_MOVE_UP,        p, "group_move_up", file, "");
         load_control(BUTTON_GROUP_MOVE_LEFT,      p, "group_move_left", file, "");
         load_control(BUTTON_GROUP_MOVE_DOWN,      p, "group_move_down", file, "");
-        load_control(BUTTON_SWITCH_CAPTAIN_RIGHT, p, "switch_captain_right", file, "k_64");
-        load_control(BUTTON_SWITCH_CAPTAIN_LEFT,  p, "switch_captain_left", file, "");
+        load_control(BUTTON_SWITCH_LEADER_RIGHT,  p, "switch_leader_right", file, "k_64");
+        load_control(BUTTON_SWITCH_LEADER_LEFT,   p, "switch_leader_left", file, "");
         load_control(BUTTON_DISMISS,              p, "dismiss", file, "k_217");
         load_control(BUTTON_USE_SPRAY_1,          p, "use_spray_1", file, "k_18");
         load_control(BUTTON_USE_SPRAY_2,          p, "use_spray_2", file, "k_6");
@@ -1075,8 +1088,8 @@ void save_options() {
         grouped_controls[prefix + "group_move_left"].clear();
         grouped_controls[prefix + "group_move_down"].clear();
         grouped_controls[prefix + "group_move_go_to_cursor"].clear();
-        grouped_controls[prefix + "switch_captain_right"].clear();
-        grouped_controls[prefix + "switch_captain_left"].clear();
+        grouped_controls[prefix + "switch_leader_right"].clear();
+        grouped_controls[prefix + "switch_leader_left"].clear();
         grouped_controls[prefix + "dismiss"].clear();
         grouped_controls[prefix + "use_spray_1"].clear();
         grouped_controls[prefix + "use_spray_2"].clear();
@@ -1112,8 +1125,8 @@ void save_options() {
         else if(controls[c].action == BUTTON_GROUP_MOVE_LEFT)      name += "group_move_left";
         else if(controls[c].action == BUTTON_GROUP_MOVE_DOWN)      name += "group_move_down";
         else if(controls[c].action == BUTTON_GROUP_MOVE_GO_TO_CURSOR) name += "group_move_go_to_cursor";
-        else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_RIGHT) name += "switch_captain_right";
-        else if(controls[c].action == BUTTON_SWITCH_CAPTAIN_LEFT)  name += "switch_captain_left";
+        else if(controls[c].action == BUTTON_SWITCH_LEADER_RIGHT)  name += "switch_leader_right";
+        else if(controls[c].action == BUTTON_SWITCH_LEADER_LEFT)   name += "switch_leader_left";
         else if(controls[c].action == BUTTON_DISMISS)              name += "dismiss";
         else if(controls[c].action == BUTTON_USE_SPRAY_1)          name += "use_spray_1";
         else if(controls[c].action == BUTTON_USE_SPRAY_2)          name += "use_spray_2";
@@ -1310,7 +1323,7 @@ void use_spray(const size_t spray_nr) {
     
     spray_amounts[spray_nr]--;
     
-    cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
+    cur_leader_ptr->set_animation(LEADER_ANIM_DISMISS);
 }
 
 

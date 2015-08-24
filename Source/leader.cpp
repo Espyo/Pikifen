@@ -110,7 +110,7 @@ void dismiss() {
     
     sfx_pikmin_idle.play(0, false);
     cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
-    cur_leader_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
+    cur_leader_ptr->set_animation(LEADER_ANIM_DISMISS);
 }
 
 
@@ -136,7 +136,7 @@ void leader::whistle(mob* m, void* info1, void* info2) {
     whistle_fade_radius = 0;
     whistling = true;
     l_ptr->lea_type->sfx_whistle.play(0, false);
-    l_ptr->anim.change(LEADER_ANIM_WHISTLING, true, true, false);
+    l_ptr->set_animation(LEADER_ANIM_WHISTLING);
 }
 
 void leader::stop_whistle(mob* m, void* info1, void* info2) {
@@ -165,7 +165,6 @@ void leader::join_group(mob* m, void* info1, void* info2) {
 }
 
 void leader::focus(mob* m, void* info1, void* info2) {
-    //TODO
     m->speed_x = 0;
     m->speed_y = 0;
     m->remove_target(true);
@@ -173,12 +172,12 @@ void leader::focus(mob* m, void* info1, void* info2) {
 }
 
 void leader::enter_idle(mob* m, void* info1, void* info2) {
-    m->anim.change(LEADER_ANIM_IDLE, true, false, false);
+    m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
-    m->anim.change(LEADER_ANIM_IDLE, true, false, false);
+    m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::unfocus(mob* m, void* info1, void* info2) {
@@ -204,7 +203,7 @@ void leader::stop(mob* m, void* info1, void* info2) {
 void leader::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(!l_ptr->is_in_walking_anim) {
-        l_ptr->anim.change(LEADER_ANIM_WALK, true, false, false);
+        l_ptr->set_animation(LEADER_ANIM_WALK);
         l_ptr->is_in_walking_anim = true;
     }
 }
@@ -212,7 +211,7 @@ void leader::set_walk_anim(mob* m, void* info1, void* info2) {
 void leader::set_stop_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->is_in_walking_anim) {
-        l_ptr->anim.change(LEADER_ANIM_IDLE, true, false, false);
+        l_ptr->set_animation(LEADER_ANIM_IDLE);
         l_ptr->is_in_walking_anim = false;
     }
 }
@@ -258,20 +257,11 @@ void leader::do_throw(mob* m, void* info1, void* info2) {
     
     sfx_throw.stop();
     sfx_throw.play(0, false);
-    leader_ptr->anim.change(LEADER_ANIM_THROW, true, false, false);
+    leader_ptr->set_animation(LEADER_ANIM_THROW);
 }
 
 void leader::release(mob* m, void* info1, void* info2) {
 
-}
-
-void leader::get_hurt(mob* m, void* info1, void* info2) {
-    //TODO
-    m->health -= 2;
-}
-
-void leader::die(mob* m, void* info1, void* info2) {
-    //TODO
 }
 
 void leader::dismiss(mob* m, void* info1, void* info2) {
@@ -347,16 +337,18 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
         member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &angle);
     }
     
-    sfx_pikmin_idle.play(0, false); //TODO move to Pikmin FSM.
     l_ptr->lea_type->sfx_dismiss.play(0, false);
-    l_ptr->anim.change(LEADER_ANIM_DISMISS, true, false, false);
+    l_ptr->set_animation(LEADER_ANIM_DISMISS);
 }
 
 void leader::spray(mob* m, void* info1, void* info2) {
-    //TODO
+    m->remove_target(true);
     size_t spray_nr = *((size_t*) info1);
     
-    if(spray_amounts[spray_nr] == 0) return;
+    if(spray_amounts[spray_nr] == 0) {
+        m->fsm.set_state(LEADER_STATE_ACTIVE);
+        return;
+    }
     
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
     
@@ -371,43 +363,87 @@ void leader::spray(mob* m, void* info1, void* info2) {
     
     spray_amounts[spray_nr]--;
     
-    m->anim.change(LEADER_ANIM_DISMISS, true, false, false); //TODO have one specifically for spraying.
-    m->fsm.set_state(LEADER_STATE_SPRAYING);
+    m->set_animation(LEADER_ANIM_SPRAYING);
 }
 
-void leader::pain(mob* m, void* info1, void* info2) {
+void leader::lose_health(mob* m, void* info1, void* info2) {
     //TODO
+    if(m->invuln_period > 0) return;
+    m->invuln_period = LEADER_INVULN_PERIOD;
+    
+    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    float total_damage = 0;
+    cause_hitbox_damage(info->mob2, m, info->hi2, info->hi1, &total_damage);
+    if(total_damage >= 2) {
+        m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
+    } else {
+        m->fsm.set_state(LEADER_STATE_PAIN);
+    }
+}
+
+void leader::inactive_lose_health(mob* m, void* info1, void* info2) {
+    //TODO
+    if(m->invuln_period > 0) return;
+    m->invuln_period = LEADER_INVULN_PERIOD;
+    
+    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    float total_damage = 0;
+    cause_hitbox_damage(info->mob2, m, info->hi2, info->hi1, &total_damage);
+    if(total_damage >= 2) {
+        m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
+    } else {
+        m->fsm.set_state(LEADER_STATE_PAIN);
+    }
+}
+
+void leader::die(mob* m, void* info1, void* info2) {
+    //TODO
+}
+
+void leader::inactive_die(mob* m, void* info1, void* info2) {
+    //TODO
+}
+
+void leader::suffer_pain(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_PAIN);
+    m->remove_target(true);
 }
 
 void leader::get_knocked_back(mob* m, void* info1, void* info2) {
-    //TODO
+    m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
 }
 
-void leader::sleep(mob* m, void* info1, void* info2) {
+void leader::fall_asleep(mob* m, void* info1, void* info2) {
     leader::dismiss(m, info1, info2);
+    m->remove_target(true);
     
     m->carrier_info = new carrier_info_struct(
         m,
         3, //TODO
         false);
         
-    m->anim.change(LEADER_ANIM_LIE, true, false, false);
+    m->set_animation(LEADER_ANIM_LIE);
+}
+
+void leader::start_waking_up(mob* m, void* info1, void* info2) {
+    make_uncarriable(m);
+    cur_leader_ptr->set_animation(LEADER_ANIM_GET_UP);
 }
 
 void leader::chase_leader(mob* m, void* info1, void* info2) {
     m->set_target(0, 0, &m->following_party->x, &m->following_party->y, false);
-    m->anim.change(LEADER_ANIM_WALK, true, false, false);
+    m->set_animation(LEADER_ANIM_WALK);
     focus_mob(m, m->following_party);
 }
 
 void leader::stop_in_group(mob* m, void* info1, void* info2) {
     m->remove_target(true);
-    m->anim.change(LEADER_ANIM_IDLE, true, false, false);
+    m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::be_dismissed(mob* m, void* info1, void* info2) {
     m->remove_target(true);
-    m->anim.change(LEADER_ANIM_IDLE, true, false, false);
+    m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::go_pluck(mob* m, void* info1, void* info2) {
@@ -437,7 +473,7 @@ void leader::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
     l_ptr->auto_pluck_pikmin = nullptr;
-    l_ptr->anim.change(LEADER_ANIM_PLUCK, true, false, false);
+    l_ptr->set_animation(LEADER_ANIM_PLUCK);
 }
 
 void leader::stop_pluck(mob* m, void* info1, void* info2) {
@@ -448,7 +484,7 @@ void leader::stop_pluck(mob* m, void* info1, void* info2) {
     }
     l_ptr->auto_pluck_mode = false;
     l_ptr->auto_pluck_pikmin = NULL;
-    l_ptr->anim.change(LEADER_ANIM_IDLE, true, false, false);
+    l_ptr->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::search_seed(mob* m, void* info1, void* info2) {

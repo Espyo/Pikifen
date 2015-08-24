@@ -43,7 +43,7 @@ void init_controls() {
     controls.push_back(control_info(BUTTON_MOVE_LEFT, 0, "k_1"));
     controls.push_back(control_info(BUTTON_MOVE_DOWN, 0, "k_19"));
     controls.push_back(control_info(BUTTON_GROUP_MOVE_GO_TO_CURSOR, 0, "k_75"));
-    controls.push_back(control_info(BUTTON_SWITCH_CAPTAIN_RIGHT, 0, "k_64"));
+    controls.push_back(control_info(BUTTON_SWITCH_LEADER_RIGHT, 0, "k_64"));
     controls.push_back(control_info(BUTTON_DISMISS, 0, "k_217"));
     controls.push_back(control_info(BUTTON_USE_SPRAY_1, 0, "k_18"));
     controls.push_back(control_info(BUTTON_USE_SPRAY_2, 0, "k_6"));

@@ -44,6 +44,9 @@ public:
     bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
+    void do_attack(hitbox_instance* victim_hitbox_i);
+    void set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr);
+    void teleport_to_connected_hitbox();
     
     static void become_buried(          mob* m, void* info1, void* info2);
     static void become_idle(            mob* m, void* info1, void* info2);
@@ -93,20 +96,19 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_IDLE,
     PIKMIN_STATE_BURIED,
     PIKMIN_STATE_PLUCKING,
-    PIKMIN_STATE_MOVING_TO_CARRY_SPOT,
     PIKMIN_STATE_GRABBED_BY_LEADER,
     PIKMIN_STATE_GRABBED_BY_ENEMY,
     PIKMIN_STATE_KNOCKED_BACK,
     PIKMIN_STATE_THROWN,
-    PIKMIN_STATE_GOING_TO_TASK,
     PIKMIN_STATE_GOING_TO_DISMISS_SPOT,
-    PIKMIN_STATE_BUSY,
     PIKMIN_STATE_CARRYING,
     PIKMIN_STATE_ATTACKING_GROUNDED,
     PIKMIN_STATE_ATTACKING_LATCHED,
     PIKMIN_STATE_CELEBRATING,
     PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
     PIKMIN_STATE_GOING_TO_OPPONENT,
+    
+    N_PIKMIN_STATES
 };
 
 enum PIKMIN_ANIMATIONS {

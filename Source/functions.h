@@ -70,6 +70,7 @@ ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 bool               circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix = NULL, float* liy = NULL);
 void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);
+float              deterministic_random(const unsigned int seed);
 void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> &v, const string &s);
 vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);

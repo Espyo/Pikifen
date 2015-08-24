@@ -1,24 +1,216 @@
 name = Cloaking Burrow-nit
+
 always_active = yes
 big_damage_interval = 20
+can_regenerate = true
 chomp_max_victims = 1
+drops_corpse = true
+first_state = burrowed
 height = 64
+is_boss = true
 max_carriers = 16
-max_health = 200
+max_health = 500
 move_speed = 50
+near_angle = 0.78
 near_radius = 40
+pikmin_seeds = 10
+radius = 30
+revive_speed = 10
 rotation_speed = 3
 sight_radius = 100
-radius = 30
-weight = 8
-can_regenerate = true
-drops_corpse = true
-is_boss = true
-pikmin_seeds = 10
-revive_speed = 10
+territory_radius = 300
 value = 30
+weight = 8
 
 script{
+    burrowed{
+        on_enter{
+            animation = burrowed
+        }
+        on_near_opponent{
+            state = unburrowing
+        }
+    }
+    
+    unburrowing{
+        on_enter{
+            animation = unburrow
+        }
+        on_animation_end{
+            state = examining
+        }
+    }
+    
+    examining{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = returning
+        }
+    }
+    
+    examining_ignoring{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = returning_ignoring
+        }
+    }
+    
+    chasing{
+        on_enter{
+            animation = walk
+            move = focused_mob
+        }
+        on_face_opponent{
+            state = attacking
+        }
+        on_lose_focused_mob{
+            state = examining_ignoring
+        }
+        on_far_from_home{
+            state = examining_ignoring
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    attacking{
+        on_enter{
+            move = stop
+            animation = attack
+            chomp = 1 mouth
+        }
+        on_animation_end{
+            state = check_mouth
+        }
+    }
+    
+    check_mouth{
+        on_mouth_occupied{
+            state = eating
+        }
+        on_mouth_empty{
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    eating{
+        on_enter{
+            chomp =
+            animation = swallow
+        }
+        on_animation_end{
+            eat = all
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    shaking{
+        on_enter{
+            move = stop
+            animation = shake
+        }
+        on_animation_end{
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = burrowing
+        }
+        on_see_opponent{
+            state = chasing
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning_ignoring{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = burrowing
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    burrowing{
+        on_enter{
+            animation = burrow
+        }
+        on_animation_end{
+            state = burrowed
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = die
+            move = stop
+            eat = 
+        }
+        on_animation_end{
+            special_function = die_end
+            state = dead
+        }
+    }
+    
+    dead{
+        
+    }
+}
+    
+    
+    
+    
+
+
+
     //on_spawn{
     //    animation = burrowed
     //    var = burrowed true
@@ -77,4 +269,3 @@ script{
     //    wait = animation
     //    special_function = die_end
     //}
-}

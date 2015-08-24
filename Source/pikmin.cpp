@@ -55,6 +55,83 @@ float pikmin::get_base_speed() {
 
 
 /* ----------------------------------------------------------------------------
+ * Actually makes the Pikmin attack connect - the process that makes
+ * the victim lose health, the sound, the sparks, etc.
+ * victim_hitbox_i: Hitbox instance of the victim.
+ */
+void pikmin::do_attack(hitbox_instance* victim_hitbox_i) {
+    attack_time = pik_type->attack_interval;
+    cause_hitbox_damage(
+        this, focused_mob,
+        NULL, victim_hitbox_i,
+        NULL
+    );
+    sfx_attack.play(0.06, false, 0.4f);
+    sfx_pikmin_attack.play(0.06, false, 0.8f);
+    particles.push_back(
+        particle(
+            PARTICLE_TYPE_SMACK, bmp_smack,
+            x, y,
+            0, 0, 0, 0,
+            SMACK_PARTICLE_DUR,
+            64,
+            al_map_rgb(255, 160, 128)
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the info for when a Pikmin is connected to a hitbox
+ * (e.g. latching on, being carried by a mouth, ...)
+ * hi_ptr: Hitbox instance of the other mob.
+ * m:      The other mob.
+ */
+void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
+    if(!hi_ptr) return;
+    
+    float actual_hx, actual_hy;
+    rotate_point(hi_ptr->x, hi_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
+    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
+    
+    float x_dif = x - actual_hx;
+    float y_dif = y - actual_hy;
+    coordinates_to_angle(x_dif, y_dif, &enemy_hitbox_angle, &enemy_hitbox_dist);
+    
+    enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
+    enemy_hitbox_dist /= hi_ptr->radius;  //Distance in units to distance in percentage.
+    enemy_hitbox_nr = hi_ptr->hitbox_nr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Teleports the Pikmin to the hitbox it is connected to.
+ */
+void pikmin::teleport_to_connected_hitbox() {
+    speed_x = speed_y = speed_z = 0;
+    
+    hitbox_instance* h_ptr = get_hitbox_instance(focused_mob, enemy_hitbox_nr);
+    if(h_ptr) {
+        float actual_hx, actual_hy;
+        rotate_point(h_ptr->x, h_ptr->y, focused_mob->angle, &actual_hx, &actual_hy);
+        actual_hx += focused_mob->x; actual_hy += focused_mob->y;
+        
+        float final_px, final_py;
+        angle_to_coordinates(
+            enemy_hitbox_angle + focused_mob->angle,
+            enemy_hitbox_dist * h_ptr->radius,
+            &final_px, &final_py);
+        final_px += actual_hx; final_py += actual_hy;
+        
+        set_target(final_px, final_py, NULL, NULL, true);
+        face(atan2(focused_mob->y - y, focused_mob->x - x));
+        if(attack_time == 0) attack_time = pik_type->attack_interval;
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the buried Pikmin closest to a leader. Used when auto-plucking.
  * x/y:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
@@ -249,7 +326,7 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
 }
 
 void pikmin::become_buried(mob* m, void* info1, void* info2) {
-    m->anim.change(PIKMIN_ANIM_BURROWED, true, false, false);
+    m->set_animation(PIKMIN_ANIM_BURROWED);
 }
 
 void pikmin::begin_pluck(mob* m, void* info1, void* info2) {
@@ -263,47 +340,33 @@ void pikmin::begin_pluck(mob* m, void* info1, void* info2) {
         }
     }
     
-    pik->anim.change(PIKMIN_ANIM_PLUCKING, true, false, false);
+    pik->set_animation(PIKMIN_ANIM_PLUCKING);
     add_to_party(lea, pik);
 }
 
 void pikmin::end_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
-    pik->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    pik->set_animation(PIKMIN_ANIM_IDLE);
     sfx_pikmin_plucked.play(0, false);
     sfx_pikmin_pluck.play(0, false);
 }
 
 void pikmin::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     sfx_pikmin_held.play(0, false);
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
 void pikmin::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
-    //TODO merge this code with the latch-on code.
     pikmin* pik_ptr = (pikmin*) m;
     mob* mob_ptr = (mob*) info1;
     hitbox_instance* hi_ptr = (hitbox_instance*) info2;
     
-    if(!hi_ptr) return;
-    
-    pik_ptr->enemy_hitbox_nr = hi_ptr->hitbox_nr;
-    pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
-    
-    float actual_hx, actual_hy;
-    rotate_point(hi_ptr->x, hi_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
-    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
-    
-    float x_dif = pik_ptr->x - actual_hx;
-    float y_dif = pik_ptr->y - actual_hy;
-    coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
-    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
+    pik_ptr->set_connected_hitbox_info(hi_ptr, mob_ptr);
     
     pik_ptr->focused_mob = mob_ptr;
     
     sfx_pikmin_caught.play(0.2, 0);
-    pik_ptr->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    pik_ptr->set_animation(PIKMIN_ANIM_IDLE);
     remove_from_party(pik_ptr);
 }
 
@@ -317,17 +380,18 @@ void pikmin::be_dismissed(mob* m, void* info1, void* info2) {
         NULL,
         false
     );
+    sfx_pikmin_idle.play(0, false);
     
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
 void pikmin::reach_dismiss_spot(mob* m, void* info1, void* info2) {
     m->remove_target(true);
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
 void pikmin::become_idle(mob* m, void* info1, void* info2) {
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
     unfocus_mob(m);
     ((pikmin*) m)->is_idle = true;
 }
@@ -336,7 +400,7 @@ void pikmin::be_thrown(mob* m, void* info1, void* info2) {
     sfx_pikmin_held.stop();
     sfx_pikmin_thrown.stop();
     sfx_pikmin_thrown.play(0, false);
-    m->anim.change(PIKMIN_ANIM_THROWN, true, false, false);
+    m->set_animation(PIKMIN_ANIM_THROWN);
 }
 
 void pikmin::be_released(mob* m, void* info1, void* info2) {
@@ -344,7 +408,7 @@ void pikmin::be_released(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::land(mob* m, void* info1, void* info2) {
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
 void pikmin::go_to_task(mob* m, void* info1, void* info2) {
@@ -361,7 +425,8 @@ void pikmin::called(mob* m, void* info1, void* info2) {
 
 void pikmin::get_knocked_down(mob* m, void* info1, void* info2) {
     mob* m2 = (mob*) info1;
-    hitbox_instance* hi = (hitbox_instance*) info2;
+    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    hitbox_instance* hi = info->hi2;
     
     float angle = m2->angle;
     if(hi->knockback_outward) {
@@ -371,7 +436,7 @@ void pikmin::get_knocked_down(mob* m, void* info1, void* info2) {
     }
     
     mob::attack((mob*) info1, m, false, 0, angle, hi->knockback, 0, 0);
-    m->anim.change(PIKMIN_ANIM_LYING, true, false, false);
+    m->set_animation(PIKMIN_ANIM_LYING);
     
     remove_from_party(m);
 }
@@ -384,12 +449,14 @@ void pikmin::go_to_opponent(mob* m, void* info1, void* info2) {
         false, nullptr, false,
         m->focused_mob->type->radius + m->type->radius
     );
-    m->anim.change(PIKMIN_ANIM_WALK, true, false, false);
+    m->set_animation(PIKMIN_ANIM_WALK);
     remove_from_party(m);
 }
 
 void pikmin::rechase_opponent(mob* m, void* info1, void* info2) {
     if(
+        m->focused_mob &&
+        m->focused_mob->health > 0 &&
         dist(m->x, m->y, m->focused_mob->x, m->focused_mob->y) <=
         (m->focused_mob->type->radius + m->type->radius + 2)
     ) {
@@ -401,102 +468,47 @@ void pikmin::rechase_opponent(mob* m, void* info1, void* info2) {
 
 void pikmin::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
-    p->anim.change(PIKMIN_ANIM_ATTACK, true, false, false);
+    p->set_animation(PIKMIN_ANIM_ATTACK);
     ((pikmin*) p)->attack_time = p->pik_type->attack_interval;
     p->was_thrown = false;
 }
 
 void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    mob* mob_ptr = (mob*) info1;
-    hitbox_instance* hi_ptr = (hitbox_instance*) info2;
+    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    
+    mob* mob_ptr = info->mob2;
+    hitbox_instance* hi_ptr = info->hi2;
     
     if(!hi_ptr) return;
     
     pik_ptr->enemy_hitbox_nr = hi_ptr->hitbox_nr;
     pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
     
-    float actual_hx, actual_hy;
-    rotate_point(hi_ptr->x, hi_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
-    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
-    
-    float x_dif = pik_ptr->x - actual_hx;
-    float y_dif = pik_ptr->y - actual_hy;
-    coordinates_to_angle(x_dif, y_dif, &pik_ptr->enemy_hitbox_angle, &pik_ptr->enemy_hitbox_dist);
-    pik_ptr->enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
-    pik_ptr->enemy_hitbox_dist /= hi_ptr->radius; //Distance in units to distance in percentage.
-    
     pik_ptr->focused_mob = mob_ptr;
+    pik_ptr->set_connected_hitbox_info(hi_ptr, mob_ptr);
+    
+    pik_ptr->fsm.set_state(PIKMIN_STATE_ATTACKING_LATCHED);
     
 }
 
 void pikmin::tick_grabbed_by_enemy(mob* m, void* info1, void* info2) {
-    //TODO merge this code with the one on tick_latched.
     pikmin* pik_ptr = (pikmin*) m;
     if(!pik_ptr->focused_mob) return;
     
-    hitbox_instance* h_ptr = get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr);
-    if(h_ptr) {
-        float actual_hx, actual_hy;
-        rotate_point(h_ptr->x, h_ptr->y, pik_ptr->focused_mob->angle, &actual_hx, &actual_hy);
-        actual_hx += pik_ptr->focused_mob->x; actual_hy += pik_ptr->focused_mob->y;
-        
-        float final_px, final_py;
-        angle_to_coordinates(
-            pik_ptr->enemy_hitbox_angle + pik_ptr->focused_mob->angle,
-            pik_ptr->enemy_hitbox_dist * h_ptr->radius,
-            &final_px, &final_py);
-        final_px += actual_hx; final_py += actual_hy;
-        
-        pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
-        pik_ptr->face(atan2(pik_ptr->focused_mob->y - pik_ptr->y, pik_ptr->focused_mob->x - pik_ptr->x));
-        if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-        
-    }
+    pik_ptr->teleport_to_connected_hitbox();
 }
 
 void pikmin::tick_latched(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     if(!pik_ptr->focused_mob) return;
     
-    hitbox_instance* h_ptr = get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr);
-    if(h_ptr) {
-        float actual_hx, actual_hy;
-        rotate_point(h_ptr->x, h_ptr->y, pik_ptr->focused_mob->angle, &actual_hx, &actual_hy);
-        actual_hx += pik_ptr->focused_mob->x; actual_hy += pik_ptr->focused_mob->y;
-        
-        float final_px, final_py;
-        angle_to_coordinates(
-            pik_ptr->enemy_hitbox_angle + pik_ptr->focused_mob->angle,
-            pik_ptr->enemy_hitbox_dist * h_ptr->radius,
-            &final_px, &final_py);
-        final_px += actual_hx; final_py += actual_hy;
-        
-        pik_ptr->set_target(final_px, final_py, NULL, NULL, true);
-        pik_ptr->face(atan2(pik_ptr->focused_mob->y - pik_ptr->y, pik_ptr->focused_mob->x - pik_ptr->x));
-        if(pik_ptr->attack_time == 0) pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-        
-    }
+    pik_ptr->teleport_to_connected_hitbox();
     
     pik_ptr->attack_time -= delta_t;
     
-    //TODO damage caused should depend on hitbox.
-    //TODO merge this code and the one on tick_attacking_grounded in a single function.
     if(pik_ptr->attack_time <= 0) {
-        pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-        mob::attack(pik_ptr, pik_ptr->focused_mob, true, pik_ptr->pik_type->attack_power, 0, 0, 0, 0);
-        sfx_attack.play(0.06f, false, 0.4f);
-        sfx_pikmin_attack.play(0.06f, false, 0.8f);
-        particles.push_back(
-            particle(
-                PARTICLE_TYPE_SMACK, bmp_smack,
-                pik_ptr->x, pik_ptr->y,
-                0, 0, 0, 0,
-                SMACK_PARTICLE_DUR,
-                64,
-                al_map_rgb(255, 160, 128)
-            )
-        );
+        pik_ptr->do_attack(get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr));
     }
 }
 
@@ -504,22 +516,12 @@ void pikmin::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     pik_ptr->attack_time -= delta_t;
     
-    //TODO damage caused should depend on hitbox.
-    //TODO merge this code and the one on tick_latched in a single function.
+    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health == 0) {
+        return;
+    }
     if(pik_ptr->attack_time <= 0) {
-        pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
-        mob::attack(pik_ptr, pik_ptr->focused_mob, true, pik_ptr->pik_type->attack_power, 0, 0, 0, 0);
-        sfx_attack.play(0.06, false, 0.4f);
-        sfx_pikmin_attack.play(0.06, false, 0.8f);
-        particles.push_back(
-            particle(
-                PARTICLE_TYPE_SMACK, bmp_smack,
-                pik_ptr->x, pik_ptr->y,
-                0, 0, 0, 0,
-                SMACK_PARTICLE_DUR,
-                64,
-                al_map_rgb(255, 160, 128)
-            )
+        pik_ptr->do_attack(
+            get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr)
         );
     }
     
@@ -536,7 +538,7 @@ void pikmin::finish_carrying(mob* m, void* info1, void* info2) {
 
 void pikmin::chase_leader(mob* m, void* info1, void* info2) {
     m->set_target(0, 0, &m->following_party->x, &m->following_party->y, false);
-    m->anim.change(PIKMIN_ANIM_WALK, true, false, false);
+    m->set_animation(PIKMIN_ANIM_WALK);
     focus_mob(m, m->following_party);
 }
 
@@ -546,7 +548,7 @@ void pikmin::stop_being_idle(mob* m, void* info1, void* info2) {
 
 void pikmin::stop_in_group(mob* m, void* info1, void* info2) {
     m->remove_target(true);
-    m->anim.change(PIKMIN_ANIM_IDLE, true, false, false);
+    m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
 void pikmin::go_to_carriable_object(mob* m, void* info1, void* info2) {

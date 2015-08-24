@@ -26,10 +26,6 @@ leader_type::leader_type() :
 
 void leader_type::init_script() {
 
-    //TODO put the hurt event in other states
-    //TODO put the knocked down event in other states
-    //TODO put the killed event in other states
-    
     easy_fsm_creator efc;
     efc.new_state("idle", LEADER_STATE_IDLE); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
@@ -42,6 +38,12 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader::focus);
             efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
         }
     }
     
@@ -78,7 +80,7 @@ void leader_type::init_script() {
             efc.change_state("sleeping");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(leader::get_hurt);
+            efc.run_function(leader::lose_health);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
@@ -93,12 +95,13 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(leader::whistle);
         }
-        efc.new_event(LEADER_EVENT_STOP_WHISTLE); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(leader::stop_whistle);
+        }
+        efc.new_event(LEADER_EVENT_STOP_WHISTLE); {
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run_function(leader::stop_whistle);
             efc.change_state("active");
         }
         efc.new_event(LEADER_EVENT_MOVE_START); {
@@ -106,6 +109,12 @@ void leader_type::init_script() {
         }
         efc.new_event(LEADER_EVENT_MOVE_END); {
             efc.run_function(leader::stop);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
         }
     }
     
@@ -126,6 +135,13 @@ void leader_type::init_script() {
             efc.run_function(leader::stop);
             efc.run_function(leader::set_stop_anim);
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::release);
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("dismissing", LEADER_STATE_DISMISSING); {
@@ -141,6 +157,12 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_MOVE_END); {
             efc.run_function(leader::stop);
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("spraying", LEADER_STATE_SPRAYING); {
@@ -150,14 +172,30 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
     }
     
     efc.new_state("pain", LEADER_STATE_PAIN); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(leader::pain);
+            efc.run_function(leader::suffer_pain);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::suffer_pain);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader::be_dismissed);
+            efc.change_state("idle");
         }
     }
     
@@ -170,9 +208,24 @@ void leader_type::init_script() {
         }
     }
     
+    efc.new_state("inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::get_knocked_back);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idle");
+        }
+    }
+    
     efc.new_state("dying", LEADER_STATE_DYING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(leader::die);
+        }
+    }
+    
+    efc.new_state("inactive_dying", LEADER_STATE_INACTIVE_DYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::inactive_die);
         }
     }
     
@@ -194,6 +247,12 @@ void leader_type::init_script() {
             efc.run_function(leader::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
     }
     
     efc.new_state("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
@@ -214,6 +273,12 @@ void leader_type::init_script() {
             efc.run_function(leader::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
     }
     
     efc.new_state("going_to_pluck", LEADER_STATE_GOING_TO_PLUCK); {
@@ -221,9 +286,17 @@ void leader_type::init_script() {
             efc.run_function(leader::start_pluck);
             efc.change_state("plucking");
         }
-        efc.new_event(LEADER_EVENT_CANCEL_PLUCK); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(leader::stop_pluck);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
             efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
         }
     }
     
@@ -232,7 +305,7 @@ void leader_type::init_script() {
             efc.run_function(leader::stop_pluck);
             efc.run_function(leader::search_seed);
         }
-        efc.new_event(LEADER_EVENT_CANCEL_PLUCK); {
+        efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run_function(leader::stop_pluck);
             efc.change_state("active");
         }
@@ -243,9 +316,17 @@ void leader_type::init_script() {
             efc.run_function(leader::start_pluck);
             efc.change_state("inactive_plucking");
         }
-        efc.new_event(MOB_EVENT_WHISTLED); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(leader::stop_pluck);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
             efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
         }
     }
     
@@ -257,6 +338,62 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(leader::stop_pluck);
             efc.change_state("in_group_chasing");
+        }
+    }
+    
+    efc.new_state("sleeping", LEADER_STATE_SLEEPING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::fall_asleep);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader::start_waking_up);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::unfocus);
+            efc.change_state("inactive_sleeping");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("inactive_sleeping", LEADER_STATE_INACTIVE_SLEEPING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader::fall_asleep);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader::start_waking_up);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader::focus);
+            efc.change_state("sleeping");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+    }
+    
+    efc.new_state("waking_up", LEADER_STATE_WAKING_UP); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idle");
         }
     }
     
@@ -277,12 +414,16 @@ void leader_type::load_from_file(data_node* file, const bool load_resources, vec
         bmp_icon = bitmaps.get(file->get_child_by_name("icon")->value, file);
     }
     
-    anim_conversions->push_back(make_pair(LEADER_ANIM_IDLE,      "idle"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_WALK,      "walk"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_PLUCK,     "pluck"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_GET_UP,    "get_up"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_DISMISS,   "dismiss"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_THROW,     "thrown"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_WHISTLING, "whistling"));
-    anim_conversions->push_back(make_pair(LEADER_ANIM_LIE,       "lie"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_IDLE,         "idle"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_WALK,         "walk"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_PLUCK,        "pluck"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_GET_UP,       "get_up"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_DISMISS,      "dismiss"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_THROW,        "thrown"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_WHISTLING,    "whistling"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_LIE,          "lie"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_PAIN,         "pain"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_KNOCKED_DOWN, "knocked_down"));
+    anim_conversions->push_back(make_pair(LEADER_ANIM_SPRAYING,     "spraying"));
+    
 }

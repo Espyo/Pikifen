@@ -105,7 +105,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         
         if(load_resources) {
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
-            mt->anims = load_animation_set(&anim_file);
+            mt->anims = load_animation_pool(&anim_file);
             mt->anims.fix_hitbox_pointers();
             
             if(mt->states.empty()) {
