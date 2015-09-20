@@ -22,15 +22,15 @@ mobs{
 		pos=350.00 200.00
 	}
 	Onion{
-		type=Red onion
+		type=Red Onion
 		pos=400.00 100.00
 	}
 	Onion{
-		type=Yellow onion
+		type=Yellow Onion
 		pos=400.00 200.00
 	}
 	Onion{
-		type=Blue onion
+		type=Blue Onion
 		pos=400.00 300.00
 	}
 	Treasure{

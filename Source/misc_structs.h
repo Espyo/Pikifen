@@ -19,8 +19,10 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
-#include "mob.h"
 #include "mob_type.h"
+
+class mob;
+struct mob_gen;
 
 using namespace std;
 
@@ -199,7 +201,7 @@ struct party_spot_info {
     unsigned n_current_wheel_members;
     
     party_spot_info(const unsigned max_mobs, const float spot_size);
-    void add(mob* m, float* x, float* y);
+    void add(mob* m);
     void remove(mob* m);
 };
 
@@ -249,6 +251,23 @@ public:
     string get_name(const unsigned char nr);
     unsigned char get_nr_of_types();
     
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * A timer. You can set it to start at a pre-determined time, to tick, etc.
+ */
+struct timer {
+    float time_left; //How much time is left until 0.
+    float interval;  //When the timer starts, its time is set to this.
+    bool ticked;     //Has the timer reached 0?
+    
+    timer(const float interval);
+    void start();
+    void start(const float new_interval);
+    void tick(const float amount);
+    float get_ratio_left();
 };
 
 

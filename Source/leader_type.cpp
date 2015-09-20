@@ -101,7 +101,7 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_STOP_WHISTLE); {
             efc.change_state("active");
         }
-        efc.new_event(MOB_EVENT_ANIMATION_END); {
+        efc.new_event(MOB_EVENT_TIMER); {
             efc.change_state("active");
         }
         efc.new_event(LEADER_EVENT_MOVE_START); {
@@ -233,12 +233,16 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(leader::chase_leader);
         }
-        efc.new_event(MOB_EVENT_LEADER_IS_NEAR); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run_function(leader::be_dismissed);
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(leader::be_grabbed_by_friend);
+            efc.change_state("held_by_leader");
         }
         efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
             efc.run_function(leader::inactive_search_seed);
@@ -259,12 +263,16 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(leader::stop_in_group);
         }
-        efc.new_event(MOB_EVENT_LEADER_IS_FAR); {
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run_function(leader::be_dismissed);
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(leader::be_grabbed_by_friend);
+            efc.change_state("held_by_leader");
         }
         efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
             efc.run_function(leader::inactive_search_seed);
@@ -286,16 +294,16 @@ void leader_type::init_script() {
             efc.run_function(leader::start_pluck);
             efc.change_state("plucking");
         }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(leader::stop_pluck);
-        }
         efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader::stop_pluck);
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::stop_pluck);
             efc.run_function(leader::lose_health);
         }
         efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader::stop_pluck);
             efc.change_state("dying");
         }
     }
@@ -316,17 +324,21 @@ void leader_type::init_script() {
             efc.run_function(leader::start_pluck);
             efc.change_state("inactive_plucking");
         }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(leader::stop_pluck);
-        }
         efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader::stop_pluck);
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::stop_pluck);
             efc.run_function(leader::lose_health);
         }
         efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader::stop_pluck);
             efc.change_state("inactive_dying");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader::focus);
+            efc.change_state("going_to_pluck");
         }
     }
     
@@ -338,6 +350,10 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(leader::stop_pluck);
             efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader::focus);
+            efc.change_state("plucking");
         }
     }
     
@@ -397,9 +413,38 @@ void leader_type::init_script() {
         }
     }
     
+    efc.new_state("held_by_leader", LEADER_STATE_HELD); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader::be_released);
+        }
+        efc.new_event(MOB_EVENT_THROWN); {
+            efc.run_function(leader::be_thrown);
+            efc.change_state("thrown");
+        }
+        efc.new_event(MOB_EVENT_RELEASED); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+    }
+    
+    efc.new_state("thrown", LEADER_STATE_THROWN); {
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run_function(leader::land);
+            efc.change_state("idle");
+        }
+    }
+    
     states = efc.finish();
     first_state_nr = fix_states(states, "idle");
     
+    if(states.size() != N_LEADER_STATES) {
+        error_log("ENGINE WARNING: Number of leader states on the FSM and the enum do not match.");
+    }
 }
 
 void leader_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {

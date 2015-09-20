@@ -24,6 +24,8 @@ public:
     ship_type* shi_type;
     
     ship(float x, float y, ship_type* type, float angle, const string &vars);
+    
+    virtual void draw();
 };
 
 #endif //ifndef SHIP_INCLUDED

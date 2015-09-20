@@ -939,8 +939,7 @@ void load_options() {
     pretty_whistle = s2b(file.get_child_by_name("pretty_whistle")->get_value_or_default("true"));
     scr_w = s2i(file.get_child_by_name("width")->get_value_or_default(i2s(DEF_SCR_W)));
     smooth_scaling = s2b(file.get_child_by_name("smooth_scaling")->get_value_or_default("true"));
-    window_x = s2i(file.get_child_by_name("window_x")->get_value_or_default(i2s(INT_MAX)));
-    window_y = s2i(file.get_child_by_name("window_y")->get_value_or_default(i2s(INT_MAX)));
+    window_pos_hack = s2b(file.get_child_by_name("window_pos_hack")->get_value_or_default("false"));
 }
 
 
@@ -1167,8 +1166,7 @@ void save_options() {
     al_fwrite(file, "pretty_whistle=" + b2s(pretty_whistle) + "\n");
     al_fwrite(file, "width=" + i2s(scr_w) + "\n");
     al_fwrite(file, "smooth_scaling=" + b2s(smooth_scaling) + "\n");
-    al_fwrite(file, "window_x=" + i2s(window_x) + "\n");
-    al_fwrite(file, "window_y=" + i2s(window_y) + "\n");
+    al_fwrite(file, "window_pos_hack=" + b2s(window_pos_hack) + "\n");
     
     al_fclose(file);
 }
@@ -1250,7 +1248,7 @@ void start_camera_pan(const int final_x, const int final_y) {
     cam_trans_pan_initial_y = cam_y;
     cam_trans_pan_final_x = final_x;
     cam_trans_pan_final_y = final_y;
-    cam_trans_pan_time_left = CAM_TRANSITION_DURATION;
+    cam_trans_pan_timer.start();
 }
 
 
@@ -1260,7 +1258,7 @@ void start_camera_pan(const int final_x, const int final_y) {
 void start_camera_zoom(const float final_zoom_level) {
     cam_trans_zoom_initial_level = cam_zoom;
     cam_trans_zoom_final_level = final_zoom_level;
-    cam_trans_zoom_time_left = CAM_TRANSITION_DURATION;
+    cam_trans_zoom_timer.start();
     
     sfx_camera.play(0, false);
 }
@@ -1275,20 +1273,21 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     if(text.size()) if(text.back() == '\n') text.pop_back();
     cur_message = text;
     cur_message_char = 0;
-    cur_message_char_time = MESSAGE_CHAR_INTERVAL;
+    cur_message_char_timer.start();
     cur_message_speaker = speaker_bmp;
     cur_message_stopping_chars.clear();
     cur_message_stopping_chars.push_back(0); //First character. Makes it easier.
     cur_message_section = 0;
     
     vector<string> lines = split(text, "\n");
-    for(size_t line_trio = 0; line_trio < lines.size(); line_trio += 3) {
-        cur_message_stopping_chars.push_back(0);
-        for(size_t l = 0; l < (line_trio + 1) * 3 && l < lines.size(); l++) {
-            cur_message_stopping_chars.back() += lines[l].size() + 1; //+1 because of the new line character.
-        }
+    size_t char_count = 0;
+    for(size_t l = 0; l < lines.size(); l++) {
+        char_count += lines[l].size() + 1; //+1 because of the new line character.
+        if((l + 1) % 3 == 0) cur_message_stopping_chars.push_back(char_count);
     }
+    
     cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
+    cur_message_stopping_chars.push_back(cur_message.size());
 }
 
 

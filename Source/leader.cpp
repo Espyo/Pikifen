@@ -21,12 +21,11 @@ leader::leader(const float x, const float y, leader_type* type, const float angl
     mob(x, y, type, angle, vars),
     lea_type(type),
     holding_pikmin(nullptr),
-    auto_pluck_mode(false),
     auto_pluck_pikmin(nullptr),
-    pluck_time(-1),
     is_in_walking_anim(false) {
     
     team = MOB_TEAM_PLAYER_1; //TODO.
+    invuln_period = timer(LEADER_INVULN_PERIOD);
     
     party_spot_info* ps = new party_spot_info(max_pikmin_in_field, 12);
     party = new party_info(ps, x, y);
@@ -132,11 +131,12 @@ void leader::whistle(mob* m, void* info1, void* info2) {
     l_ptr->lea_type->sfx_whistle.play(0, false);
     
     for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
-    whistle_fade_time = 0;
+    whistle_fade_timer.start();
     whistle_fade_radius = 0;
     whistling = true;
     l_ptr->lea_type->sfx_whistle.play(0, false);
     l_ptr->set_animation(LEADER_ANIM_WHISTLING);
+    l_ptr->script_timer.start(2.5f);
 }
 
 void leader::stop_whistle(mob* m, void* info1, void* info2) {
@@ -144,7 +144,7 @@ void leader::stop_whistle(mob* m, void* info1, void* info2) {
     
     ((leader*) m)->lea_type->sfx_whistle.stop();
     
-    whistle_fade_time = WHISTLE_FADE_TIME;
+    whistle_fade_timer.start();
     whistle_fade_radius = whistle_radius;
     
     whistling = false;
@@ -165,10 +165,13 @@ void leader::join_group(mob* m, void* info1, void* info2) {
 }
 
 void leader::focus(mob* m, void* info1, void* info2) {
+    switch_to_leader((leader*) m);
+    
     m->speed_x = 0;
     m->speed_y = 0;
     m->remove_target(true);
     ((leader*) m)->lea_type->sfx_name_call.play(0, false);
+    
 }
 
 void leader::enter_idle(mob* m, void* info1, void* info2) {
@@ -181,8 +184,7 @@ void leader::enter_active(mob* m, void* info1, void* info2) {
 }
 
 void leader::unfocus(mob* m, void* info1, void* info2) {
-    //TODO
-    
+
 }
 
 void leader::move(mob* m, void* info1, void* info2) {
@@ -261,7 +263,7 @@ void leader::do_throw(mob* m, void* info1, void* info2) {
 }
 
 void leader::release(mob* m, void* info1, void* info2) {
-
+    cur_leader_ptr->holding_pikmin = NULL;
 }
 
 void leader::dismiss(mob* m, void* info1, void* info2) {
@@ -334,7 +336,10 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
             angle = base_angle + type_angle_map[((pikmin*) member_ptr)->pik_type] - M_PI_4 + M_PI;
         }
         
-        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &angle);
+        float x = cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE;
+        float y = cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE;
+        
+        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &x, (void*) &y);
     }
     
     l_ptr->lea_type->sfx_dismiss.play(0, false);
@@ -368,32 +373,40 @@ void leader::spray(mob* m, void* info1, void* info2) {
 
 void leader::lose_health(mob* m, void* info1, void* info2) {
     //TODO
-    if(m->invuln_period > 0) return;
-    m->invuln_period = LEADER_INVULN_PERIOD;
+    
+    if(!m->invuln_period.ticked) return;
+    m->invuln_period.start();
     
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float total_damage = 0;
-    cause_hitbox_damage(info->mob2, m, info->hi2, info->hi1, &total_damage);
-    if(total_damage >= 2) {
-        m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
+    float damage = 0;
+    float knockback = 0;
+    float knockback_angle = 0;
+    
+    damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
+    calculate_knockback(info->mob2, m, info->hi2, info->hi1, &knockback, &knockback_angle);
+    
+    m->health -= damage;
+    apply_knockback(m, knockback, knockback_angle);
+    
+    //If info2 has a value, then this leader is inactive.
+    if(knockback > 0 && damage == 0) {
+        if(info2)
+            m->fsm.set_state(LEADER_STATE_INACTIVE_KNOCKED_BACK);
+        else
+            m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
     } else {
-        m->fsm.set_state(LEADER_STATE_PAIN);
+        if(info2)
+            m->fsm.set_state(LEADER_STATE_INACTIVE_PAIN);
+        else
+            m->fsm.set_state(LEADER_STATE_PAIN);
     }
 }
 
 void leader::inactive_lose_health(mob* m, void* info1, void* info2) {
-    //TODO
-    if(m->invuln_period > 0) return;
-    m->invuln_period = LEADER_INVULN_PERIOD;
-    
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float total_damage = 0;
-    cause_hitbox_damage(info->mob2, m, info->hi2, info->hi1, &total_damage);
-    if(total_damage >= 2) {
-        m->fsm.set_state(LEADER_STATE_KNOCKED_BACK);
-    } else {
-        m->fsm.set_state(LEADER_STATE_PAIN);
-    }
+    int a = 0;
+    leader::lose_health(m, info1, &a);
+    //We need to send the function a value so it knows
+    //it's an inactive leader.
 }
 
 void leader::die(mob* m, void* info1, void* info2) {
@@ -451,7 +464,6 @@ void leader::go_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
     
     lea_ptr->auto_pluck_pikmin = pik_ptr;
-    lea_ptr->pluck_time = -1;
     lea_ptr->set_target(
         pik_ptr->x, pik_ptr->y,
         NULL, NULL,
@@ -482,7 +494,6 @@ void leader::stop_pluck(mob* m, void* info1, void* info2) {
         l_ptr->remove_target(true);
         l_ptr->auto_pluck_pikmin->pluck_reserved = false;
     }
-    l_ptr->auto_pluck_mode = false;
     l_ptr->auto_pluck_pikmin = NULL;
     l_ptr->set_animation(LEADER_ANIM_IDLE);
 }
@@ -507,4 +518,113 @@ void leader::search_seed(mob* m, void* info1, void* info2) {
 void leader::inactive_search_seed(mob* m, void* info1, void* info2) {
     int a = 0; //Dummy value.
     leader::search_seed(m, &a, NULL);
+}
+
+void leader::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
+    m->set_animation(LEADER_ANIM_IDLE);
+}
+
+void leader::be_released(mob* m, void* info1, void* info2) {
+
+}
+
+void leader::be_thrown(mob* m, void* info1, void* info2) {
+
+}
+
+void leader::land(mob* m, void* info1, void* info2) {
+
+}
+
+void swap_pikmin(mob* new_pik) {
+    leader* lea = cur_leader_ptr;
+    if(lea->holding_pikmin) {
+        lea->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
+    }
+    lea->holding_pikmin = new_pik;
+    new_pik->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND);
+    
+    sfx_switch_pikmin.play(0, false);
+}
+
+void switch_to_leader(leader* new_leader_ptr) {
+
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
+    
+    size_t new_leader_nr = cur_leader_nr;
+    for(size_t l = 0; l < leaders.size(); l++) {
+        if(leaders[l] == new_leader_ptr) {
+            new_leader_nr = l;
+            break;
+        }
+    }
+    
+    cur_leader_ptr = new_leader_ptr;
+    cur_leader_nr = new_leader_nr;
+    
+    start_camera_pan(cur_leader_ptr->x, cur_leader_ptr->y);
+    
+}
+
+void leader::draw() {
+    mob::draw();
+    
+    frame* f_ptr = anim.get_frame();
+    float draw_x, draw_y;
+    float draw_w, draw_h;
+    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    
+    if(invuln_period.time_left > 0) {
+        unsigned char anim_part = invuln_period.get_ratio_left() * LEADER_ZAP_ANIM_PARTS;
+        float zap_x[4], zap_y[4];
+        for(unsigned char p = 0; p < 4; p++) {
+            if(anim_part % 2 == 0) {
+                zap_x[p] = draw_x + draw_w * (deterministic_random(anim_part * 3 + p) - 0.5);
+                zap_y[p] = draw_y + draw_h * 0.5 * ((p % 2 == 0) ? 1 : -1);
+            } else {
+                zap_x[p] = draw_x + draw_w * 0.5 * ((p % 2 == 0) ? 1 : -1);
+                zap_y[p] = draw_y + draw_h * (deterministic_random(anim_part * 3 + p) - 0.5);
+            }
+        }
+        
+        static const ALLEGRO_COLOR LEADER_ZAP_COLOR = al_map_rgba(128, 255, 255, 128);
+        
+        al_draw_line(
+            zap_x[0], zap_y[0], zap_x[1], zap_y[1],
+            LEADER_ZAP_COLOR,
+            2.0f
+        );
+        al_draw_line(
+            zap_x[1], zap_y[1], zap_x[2], zap_y[2],
+            LEADER_ZAP_COLOR,
+            2.0f
+        );
+        al_draw_line(
+            zap_x[2], zap_y[2], zap_x[3], zap_y[3],
+            LEADER_ZAP_COLOR,
+            2.0f
+        );
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Signals the party members that the group move mode stopped.
+ */
+void leader::signal_group_move_end() {
+    for(size_t m = 0; m < party->members.size(); m++) {
+        party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_ENDED);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Signals the party members that the group move mode started.
+ */
+void leader::signal_group_move_start() {
+    for(size_t m = 0; m < party->members.size(); m++) {
+        party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_STARTED);
+    }
 }

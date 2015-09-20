@@ -113,7 +113,6 @@ extern float                            area_images_scale;
 extern int                              area_image_size;
 extern float                            area_images_x1; //Top-left corner of the area, in world coordinates.
 extern float                            area_images_y1;
-extern float                            auto_pluck_input_time; //Time left until the player can press the pluck button again, to make the leader auto-pluck.
 extern vector<unsigned int>             berries;
 extern bmp_manager                      bitmaps;
 extern ALLEGRO_BITMAP*                  bmp_error;
@@ -121,10 +120,10 @@ extern float                            cam_trans_pan_final_x;
 extern float                            cam_trans_pan_final_y;
 extern float                            cam_trans_pan_initial_x;
 extern float                            cam_trans_pan_initial_y;
-extern float                            cam_trans_pan_time_left;
+extern timer                            cam_trans_pan_timer;
 extern float                            cam_trans_zoom_final_level;
 extern float                            cam_trans_zoom_initial_level;
-extern float                            cam_trans_zoom_time_left;
+extern timer                            cam_trans_zoom_timer;
 extern float                            cam_x;
 extern float                            cam_y;
 extern float                            cam_zoom;
@@ -135,7 +134,7 @@ extern size_t                           cur_leader_nr;
 extern leader*                          cur_leader_ptr;
 extern string                           cur_message;
 extern size_t                           cur_message_char;
-extern float                            cur_message_char_time;
+extern timer                            cur_message_char_timer;
 extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
@@ -144,7 +143,7 @@ extern unsigned char                    cur_screen;
 extern float                            cur_sun_strength;
 extern float                            cursor_angle;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
-extern float                            cursor_save_time;         //Time left until the position of the cursor is saved on the vector.
+extern timer                            cursor_save_timer;        //Time left until the position of the cursor is saved on the vector.
 extern float                            cursor_spin_angle;
 extern vector<point>                    cursor_spots;             //Spots the cursor has been through. Used for the faint trail left behind it.
 extern float                            cursor_x;                 //Leader's cursor.
@@ -172,7 +171,7 @@ extern map<string, gate_type*>          gate_types;
 extern float                            group_move_angle;
 extern vector<float>                    group_move_arrows;          //Distance of the arrows that appear when the "move group to cursor" button is held.
 extern float                            group_move_intensity;     //General intensity of the group move in the specified angle.
-extern float                            group_move_next_arrow_time; //Time remaining until the next arrow on the "move group arrows" appears.
+extern timer                            group_move_next_arrow_timer; //Time remaining until the next arrow on the "move group arrows" appears.
 extern bool                             group_move_go_to_cursor;     //Is the "move group to cursor" button being pressed?
 extern movement_struct                  group_movement; //Joystick coordinates for the group movement.
 extern vector<vector<float> >           group_spots_x;
@@ -201,14 +200,14 @@ extern bool                             paused;
 extern map<string, pellet_type*>        pellet_types;
 extern vector<pellet*>                  pellets;
 extern vector<point>                    percipitation;
-extern float                            percipitation_time_left;
+extern timer                            percipitation_timer;
 extern unsigned char                    pikmin_ai_portion;
 extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*>                  pikmin_list;
 extern map<string, pikmin_type*>        pikmin_types;
 extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
-extern float                            prev_group_move_intensity; //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
+extern float                            prev_group_move_intensity;   //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                             running;
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;
@@ -224,7 +223,7 @@ extern vector<unsigned long>            spray_amounts;      //How many of each s
 extern vector<spray_type>               spray_types;
 extern vector<status>                   statuses;
 extern float                            sun_meter_sun_angle;
-extern float                            throw_particle_timer;
+extern timer                            throw_particle_timer;
 extern map<string, treasure_type*>      treasure_types;
 extern vector<treasure*>                treasures;
 extern float                            tree_shadow_sway;
@@ -233,22 +232,21 @@ extern map<string, weather>             weather_conditions;
 extern float                            whistle_dot_offset;    //How much each dot of the whistle should spin.
 extern float                            whistle_dot_radius[6]; //Radius of every 6th dot.
 extern float                            whistle_fade_radius;   //Radius the whistle was at pre-fade.
-extern float                            whistle_fade_time;     //Time left for the whistle's fading animations.
-extern float                            whistle_next_dot_time;
-extern float                            whistle_next_ring_time;
+extern timer                            whistle_fade_timer;     //Time left for the whistle's fading animations.
+extern timer                            whistle_next_dot_timer;
+extern timer                            whistle_next_ring_timer;
 extern float                            whistle_radius;
 extern vector<unsigned char>            whistle_ring_colors;
 extern unsigned char                    whistle_ring_prev_color;
 extern vector<float>                    whistle_rings;
 extern bool                             whistling;             //Is the whistle currently being blown?
-extern int                              window_x;
-extern int                              window_y;
+extern bool                             window_pos_hack; //Should we force the window's positioning (on some systems it appears out-of-bounds by default)
 
 
 
 //Debugging variables.
 extern bool debug_show_framerate;
-extern float debug_framerate_update_timer;
+extern timer debug_framerate_update_timer;
 extern unsigned int debug_framerate_counter;
 extern string debug_last_axis;
 

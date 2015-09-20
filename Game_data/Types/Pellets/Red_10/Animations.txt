@@ -3,7 +3,7 @@ animations{
 		loop_frame=0
 		frame_instances{
 			idle{
-				duration=0
+				duration=0.00
 			}
 		}
 	}
@@ -15,10 +15,10 @@ frames{
 		file_y=0
 		file_w=128
 		file_h=128
-		game_w=128
-		game_h=128
-		offs_x=0
-		offs_y=0
+		game_w=96.00
+		game_h=96.00
+		offs_x=0.00
+		offs_y=0.00
 		hitbox_instances=
 	}
 }

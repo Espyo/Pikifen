@@ -10,14 +10,14 @@ animations{
 }
 frames{
 	idle{
-		file=TP.png
+		file=Yellow_Onion.png
 		file_x=0
 		file_y=0
-		file_w=228
-		file_h=228
-		game_w=228.00
-		game_h=228.00
-		offs_x=0.00
+		file_w=370
+		file_h=320
+		game_w=185.00
+		game_h=160.00
+		offs_x=-2.00
 		offs_y=0.00
 		hitbox_instances=
 	}

@@ -1,4 +1,7 @@
-name = Red onion
+name = Red Onion
+
 height = 200
 pikmin_type = Red Pikmin
+pushable = false
+pushes = false
 radius = 16

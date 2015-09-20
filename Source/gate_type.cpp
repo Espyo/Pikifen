@@ -23,6 +23,9 @@ void gate_type::init_script() {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gate::set_anim);
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(gate::take_damage);
+        }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(gate::open);
             efc.change_state("dead");

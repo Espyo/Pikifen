@@ -22,15 +22,15 @@ mobs{
 		pos=64.00 256.00
 	}
 	Onion{
-		type=Red onion
+		type=Red Onion
 		pos=192.00 352.00
 	}
 	Onion{
-		type=Yellow onion
+		type=Yellow Onion
 		pos=416.00 416.00
 	}
 	Onion{
-		type=Blue onion
+		type=Blue Onion
 		pos=128.00 576.00
 	}
 	Treasure{
@@ -49,19 +49,19 @@ mobs{
 	Special{
 		type=Info spot
 		pos=192.00 736.00
-		vars=text=http://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo
+		vars=opens_box=true;text=This is still a WIP! Keys:\nWASD to move\nMouse to move the cursor\nLeft-click to throw\nRight-click to whistle\nSpace to move the group\nTab to switch leaders\nLeft control to dismiss\nMore info:\nhttp://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo\nand on the included README
 	}
 	Pellet{
 		type=Red 10
-		pos=-96.00 32.00
+		pos=-0.00 64.00
 	}
 	Pellet{
 		type=Red 1
-		pos=-256.00 32.00
+		pos=-320.00 -32.00
 	}
 	Pellet{
 		type=Red 20
-		pos=576.00 32.00
+		pos=352.00 64.00
 	}
 	Pellet{
 		type=Red 5
@@ -75,6 +75,10 @@ mobs{
 	Gate{
 		type=White
 		pos=560.79 480.44
+	}
+	Pellet{
+		type=Red 1
+		pos=96.00 352.00
 	}
 }
 vertices{

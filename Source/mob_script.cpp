@@ -624,6 +624,11 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
             
         }
         
+        //Inject a damage event.
+        vector<mob_action*> actions;
+        actions.push_back(new mob_action(mob::lose_health));
+        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, actions));
+        
         for(size_t e = 0; e < events.size(); e++) {
             size_t ev_type = events[e]->type;
             states[s]->events[ev_type] = events[e];

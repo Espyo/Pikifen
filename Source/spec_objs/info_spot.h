@@ -34,6 +34,7 @@ public:
     unsigned int text_w; //Used instead of calculating the width every time.
     
     info_spot(const float x, const float y, const float angle, const string &vars);
+    virtual void draw();
 };
 
 #endif //ifndef INFO_POINT_INCLUDED

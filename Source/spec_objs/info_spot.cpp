@@ -11,6 +11,7 @@
 
 #include <allegro5/allegro_font.h>
 
+#include "../drawing.h"
 #include "../functions.h"
 #include "info_spot.h"
 #include "../vars.h"
@@ -31,4 +32,14 @@ info_spot::info_spot(const float x, const float y, const float angle, const stri
         unsigned int line_w = al_get_text_width(font, lines[l].c_str());
         if(line_w > text_w) text_w = line_w;
     }
+}
+
+
+void info_spot::draw() {
+    draw_sprite(
+        bmp_info_spot,
+        x, y,
+        type->radius * 2, type->radius * 2,
+        0, map_gray(get_sprite_lighting(this))
+    );
 }

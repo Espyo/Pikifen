@@ -1,5 +1,8 @@
-height = 200
 name = Test 2
+
+height = 200
 max_carriers = 2
+pushable = false
+pushes = true
 radius = 250
 weight = 1

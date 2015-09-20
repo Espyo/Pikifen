@@ -31,6 +31,8 @@ mob_type::mob_type() :
     max_health(0),
     max_carriers(0),
     weight(0),
+    pushes(false),
+    pushable(false),
     sight_radius(0),
     near_radius(0),
     rotation_speed(DEF_ROTATION_SPEED),
@@ -39,7 +41,6 @@ mob_type::mob_type() :
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
     near_angle(0),
-    chomp_max_victims(0),
     first_state_nr(0) {
     
 }
@@ -89,7 +90,6 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         mt->name = file.get_child_by_name("name")->value;
         mt->always_active = s2b(file.get_child_by_name("always_active")->value);
         mt->big_damage_interval = s2f(file.get_child_by_name("big_damage_interval")->value);
-        mt->chomp_max_victims = s2i(file.get_child_by_name("chomp_max_victims")->get_value_or_default("100"));
         mt->main_color = s2c(file.get_child_by_name("main_color")->value);
         mt->max_carriers = s2i(file.get_child_by_name("max_carriers")->value);
         mt->max_health = s2i(file.get_child_by_name("max_health")->value);
@@ -102,6 +102,8 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         mt->radius = s2f(file.get_child_by_name("radius")->value);
         mt->height = s2f(file.get_child_by_name("height")->value);
         mt->weight = s2f(file.get_child_by_name("weight")->value);
+        mt->pushes = s2b(file.get_child_by_name("pushes")->value);
+        mt->pushable = s2b(file.get_child_by_name("pushable")->value);
         
         if(load_resources) {
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");

@@ -40,22 +40,20 @@ void do_logic() {
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
     //Camera transitions.
-    if(cam_trans_pan_time_left > 0) {
-        cam_trans_pan_time_left -= delta_t;
-        if(cam_trans_pan_time_left < 0) cam_trans_pan_time_left = 0;
+    if(cam_trans_pan_timer.time_left > 0) {
+        cam_trans_pan_timer.tick(delta_t);
         
-        float percentage_left = cam_trans_pan_time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_pan_timer.time_left / CAM_TRANSITION_DURATION;
         percentage_left = ease(EASE_IN, percentage_left);
         
         cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - percentage_left);
         cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - percentage_left);
     }
     
-    if(cam_trans_zoom_time_left > 0) {
-        cam_trans_zoom_time_left -= delta_t;
-        if(cam_trans_zoom_time_left < 0) cam_trans_zoom_time_left = 0;
+    if(cam_trans_zoom_timer.time_left > 0) {
+        cam_trans_zoom_timer.tick(delta_t);
         
-        float percentage_left = cam_trans_zoom_time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_zoom_timer.time_left / CAM_TRANSITION_DURATION;
         percentage_left = ease(EASE_IN, percentage_left);
         
         cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
@@ -63,9 +61,9 @@ void do_logic() {
     
     //"Move group" arrows.
     if(group_move_intensity) {
-        group_move_next_arrow_time -= delta_t;
-        if(group_move_next_arrow_time <= 0) {
-            group_move_next_arrow_time = GROUP_MOVE_ARROWS_INTERVAL;
+        group_move_next_arrow_timer.tick(delta_t);
+        if(group_move_next_arrow_timer.ticked) {
+            group_move_next_arrow_timer.start();
             group_move_arrows.push_back(0);
         }
     }
@@ -87,25 +85,24 @@ void do_logic() {
     //Whistle animations.
     whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED * delta_t;
     
-    if(whistle_fade_time > 0) {
-        whistle_fade_time -= delta_t;
-        if(whistle_fade_time < 0) whistle_fade_time = 0;
+    if(whistle_fade_timer.time_left > 0) {
+        whistle_fade_timer.tick(delta_t);
     }
     
     if(whistling) {
         //Create rings.
-        whistle_next_ring_time -= delta_t;
-        if(whistle_next_ring_time <= 0) {
-            whistle_next_ring_time = WHISTLE_RINGS_INTERVAL;
+        whistle_next_ring_timer.tick(delta_t);
+        if(whistle_next_ring_timer.ticked) {
+            whistle_next_ring_timer.start();
             whistle_rings.push_back(0);
             whistle_ring_colors.push_back(whistle_ring_prev_color);
             whistle_ring_prev_color = (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
         }
         
         if(pretty_whistle) {
-            whistle_next_dot_time -= delta_t;
-            if(whistle_next_dot_time <= 0) {
-                whistle_next_dot_time = WHISTLE_DOT_INTERVAL;
+            whistle_next_dot_timer.tick(delta_t);
+            if(whistle_next_dot_timer.ticked) {
+                whistle_next_dot_timer.start();
                 unsigned char dot = 255;
                 for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
                     if(whistle_dot_radius[d] == -1) { dot = d; break;}
@@ -165,14 +162,12 @@ void do_logic() {
     
     //Cursor trail.
     if(draw_cursor_trail) {
-        if(cursor_save_time > 0) {
-            cursor_save_time -= delta_t;
-            if(cursor_save_time <= 0) {
-                cursor_save_time = CURSOR_SAVE_INTERVAL;
-                cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
-                if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
-                    cursor_spots.erase(cursor_spots.begin());
-                }
+        cursor_save_timer.tick(delta_t);
+        if(cursor_save_timer.ticked) {
+            cursor_save_timer.start();
+            cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
+            if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+                cursor_spots.erase(cursor_spots.begin());
             }
         }
     }
@@ -191,11 +186,6 @@ void do_logic() {
         
         day_minutes += (day_minutes_per_irl_sec * delta_t);
         if(day_minutes > 60 * 24) day_minutes -= 60 * 24;
-        
-        if(auto_pluck_input_time > 0) {
-            auto_pluck_input_time -= delta_t;
-            if(auto_pluck_input_time < 0) auto_pluck_input_time = 0;
-        }
         
         //Tick all particles.
         size_t n_particles = particles.size();
@@ -235,53 +225,64 @@ void do_logic() {
             mob* m_ptr = mobs[m];
             m_ptr->tick();
             
-            if(m_ptr->carrier_info) {
-                if(m_ptr->state == MOB_STATE_BEING_CARRIED && m_ptr->reached_destination && m_ptr->carrier_info->decided_type) {
-                    m_ptr->set_state(MOB_STATE_BEING_DELIVERED);
-                    sfx_pikmin_carrying.stop();
-                }
+            //Big damage.
+            mob_event* big_damage_ev = q_get_event(m_ptr, MOB_EVENT_BIG_DAMAGE);
+            if(big_damage_ev && m_ptr->big_damage_ev_queued) {
+                big_damage_ev->run(m_ptr);
+                m_ptr->big_damage_ev_queued = false;
             }
             
-            if(m_ptr->carrier_info && m_ptr->state == MOB_STATE_BEING_DELIVERED && m_ptr->time_in_state >= DELIVERY_SUCK_TIME) {
-                if(m_ptr->carrier_info->carry_to_ship) {
-                    //Find ship.
-                    //TODO.
-                    
-                } else {
-                    //TODO make the pellet, enemy, etc. class react to this via script (i.e. was_delivered event).
-                    //Find Onion.
-                    size_t n_onions = onions.size();
-                    size_t o = 0;
-                    for(; o < n_onions; o++) {
-                        if(onions[o]->oni_type->pik_type == m_ptr->carrier_info->decided_type) break;
+            //Carried to an Onion or ship.
+            if(m_ptr->carrier_info) {
+                if(m_ptr->reached_destination && m_ptr->carrier_info->decided_type && m_ptr->delivery_time > DELIVERY_SUCK_TIME) {
+                    m_ptr->delivery_time = DELIVERY_SUCK_TIME;
+                    sfx_pikmin_carrying.stop();
+                    for(size_t p = 0; p < m_ptr->carrier_info->carrier_spots.size() ; p++) {
+                        if(!m_ptr->carrier_info->carrier_spots[p]) continue;
+                        m_ptr->carrier_info->carrier_spots[p]->fsm.run_event(MOB_EVENT_FINISHED_CARRYING);
                     }
-                    
-                    if(typeid(*m_ptr) == typeid(pellet)) {
-                        pellet* p_ptr = (pellet*) m_ptr;
-                        if(p_ptr->pel_type->pik_type == p_ptr->carrier_info->decided_type) {
-                            give_pikmin_to_onion(onions[o], p_ptr->pel_type->match_seeds);
-                        } else {
-                            give_pikmin_to_onion(onions[o], p_ptr->pel_type->non_match_seeds);
+                }
+                
+                if(m_ptr->delivery_time == 0.0f) {
+                    if(m_ptr->carrier_info->carry_to_ship) {
+                        //Find ship.
+                        //TODO.
+                        
+                    } else {
+                        //TODO make the pellet, enemy, etc. class react to this via script (i.e. was_delivered event).
+                        //Find Onion.
+                        size_t n_onions = onions.size();
+                        size_t o = 0;
+                        for(; o < n_onions; o++) {
+                            if(onions[o]->oni_type->pik_type == m_ptr->carrier_info->decided_type) break;
                         }
                         
-                    } else if(typeid(*m_ptr) == typeid(enemy)) {
-                        enemy* e_ptr = (enemy*) m_ptr;
-                        give_pikmin_to_onion(onions[o], e_ptr->ene_type->pikmin_seeds);
-                        
+                        if(typeid(*m_ptr) == typeid(pellet)) {
+                            pellet* p_ptr = (pellet*) m_ptr;
+                            if(p_ptr->pel_type->pik_type == p_ptr->carrier_info->decided_type) {
+                                onions[o]->receive_mob(p_ptr->pel_type->match_seeds);
+                            } else {
+                                onions[o]->receive_mob(p_ptr->pel_type->non_match_seeds);
+                            }
+                            
+                        } else if(typeid(*m_ptr) == typeid(enemy)) {
+                            enemy* e_ptr = (enemy*) m_ptr;
+                            onions[o]->receive_mob(e_ptr->ene_type->pikmin_seeds);
+                            
+                        }
                     }
+                    
+                    random_particle_explosion(
+                        PARTICLE_TYPE_BITMAP, bmp_smoke,
+                        m_ptr->x, m_ptr->y,
+                        60, 80, 10, 20,
+                        1, 2, 24, 24, al_map_rgb(255, 255, 255)
+                    );
+                    
+                    make_uncarriable(m_ptr);
+                    if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
                 }
-                
-                random_particle_explosion(
-                    PARTICLE_TYPE_BITMAP, bmp_smoke,
-                    m_ptr->x, m_ptr->y,
-                    60, 80, 10, 20,
-                    1, 2, 24, 24, al_map_rgb(255, 255, 255)
-                );
-                
-                make_uncarriable(m_ptr);
-                if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
             }
-            
             
             
             /********************************
@@ -296,6 +297,21 @@ void do_logic() {
                 mob* m2_ptr = mobs[m2];
                 
                 dist d(m_ptr->x, m_ptr->y, m2_ptr->x, m2_ptr->y);
+                
+                //Check if mob 1 should be pushed by mob 2.
+                if(
+                    m2_ptr->type->pushes &&
+                    m_ptr->type->pushable &&
+                    m2_ptr->z < m_ptr->z + m_ptr->type->height &&
+                    m2_ptr->z + m2_ptr->type->height > m_ptr->z &&
+                    d <= m2_ptr->type->radius - 5
+                ) {
+                    float d_amount = d.to_float();
+                    if(d_amount > m_ptr->push_amount) {
+                        m_ptr->push_amount = (d_amount - 10) * delta_t + 50;
+                        m_ptr->push_angle = atan2(m_ptr->y - m2_ptr->y, m_ptr->x - m2_ptr->x);
+                    }
+                }
                 
                 if(!m2_ptr->dead) {
                     //Check "see"s.
@@ -364,7 +380,11 @@ void do_logic() {
                         if(touch_op_ev && should_attack(m_ptr, m2_ptr)) {
                             touch_op_ev->run(m_ptr, (void*) m2_ptr);
                         }
-                        if(touch_le_ev && m2_ptr == cur_leader_ptr) {
+                        if(
+                            touch_le_ev && m2_ptr == cur_leader_ptr &&
+                            //Small hack. This way Pikmin don't get bumped by leaders that are, for instance, lying down.
+                            m2_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE
+                        ) {
                             touch_le_ev->run(m_ptr, (void*) m2_ptr);
                         }
                     }
@@ -532,6 +552,7 @@ void do_logic() {
                     if(
                         m2_ptr->carrier_info &&
                         m2_ptr->carrier_info->current_n_carriers != m2_ptr->carrier_info->max_carriers &&
+                        m2_ptr->delivery_time > DELIVERY_SUCK_TIME &&
                         d <= m_ptr->type->radius + m2_ptr->type->radius + PIKMIN_MIN_TASK_RANGE
                     ) {
                     
@@ -552,15 +573,19 @@ void do_logic() {
             
             //Following a leader.
             if(m_ptr->following_party) {
-                mob_event* leader_near_ev = q_get_event(m_ptr, MOB_EVENT_LEADER_IS_NEAR);
-                mob_event* leader_far_ev =  q_get_event(m_ptr, MOB_EVENT_LEADER_IS_FAR);
+                mob_event* spot_near_ev = q_get_event(m_ptr, MOB_EVENT_SPOT_IS_NEAR);
+                mob_event* spot_far_ev =  q_get_event(m_ptr, MOB_EVENT_SPOT_IS_FAR);
                 
-                if(leader_near_ev || leader_far_ev) {
-                    dist d(m_ptr->x, m_ptr->y, m_ptr->following_party->x, m_ptr->following_party->y);
-                    if(leader_far_ev && d >= 50) {
-                        leader_far_ev->run(m_ptr);
-                    } else if(leader_near_ev && d < 50) {
-                        leader_near_ev->run(m_ptr);
+                if(spot_near_ev || spot_far_ev) {
+                    dist d(
+                        m_ptr->x, m_ptr->y,
+                        m_ptr->following_party->party->party_center_x + m_ptr->party_spot_x,
+                        m_ptr->following_party->party->party_center_y + m_ptr->party_spot_y
+                    );
+                    if(spot_far_ev && d >= 5) {
+                        spot_far_ev->run(m_ptr);
+                    } else if(spot_near_ev && d < 5) {
+                        spot_near_ev->run(m_ptr);
                     }
                 }
             }
@@ -601,13 +626,6 @@ void do_logic() {
                 m_ptr->fsm.run_event(MOB_EVENT_MOUTH_EMPTY);
             } else {
                 m_ptr->fsm.run_event(MOB_EVENT_MOUTH_OCCUPIED);
-            }
-            
-            //Big damage.
-            mob_event* big_damage_ev = q_get_event(m_ptr, MOB_EVENT_BIG_DAMAGE);
-            if(big_damage_ev && m_ptr->big_damage_ev_queued) {
-                big_damage_ev->run(m_ptr);
-                m_ptr->big_damage_ev_queued = false;
             }
             
             //Tick.
@@ -653,6 +671,34 @@ void do_logic() {
         }
         
         
+        /*****************
+        *             _  *
+        *   Onions   (_) *
+        *            /|\ *
+        ******************/
+        
+        for(size_t o = 0; o < onions.size(); o++) {
+            onion* o_ptr = onions[o];
+            
+            if(o_ptr->spew_queue == 0) continue;
+            
+            if(!o_ptr->full_spew_timer.ticked) {
+                o_ptr->full_spew_timer.tick(delta_t);
+                if(o_ptr->full_spew_timer.ticked) {
+                    o_ptr->next_spew_timer.start();
+                }
+            }
+            
+            if(o_ptr->full_spew_timer.ticked) {
+                o_ptr->next_spew_timer.tick(delta_t);
+                if(o_ptr->next_spew_timer.ticked) {
+                    o_ptr->spew();
+                    o_ptr->next_spew_timer.start();
+                }
+            }
+        }
+        
+        
         /********************
         *              .-.  *
         *   Leaders   (*:O) *
@@ -676,7 +722,7 @@ void do_logic() {
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_START, (void*) &leader_movement);
         }
         
-        if(cam_trans_pan_time_left > 0) {
+        if(cam_trans_pan_timer.time_left > 0) {
             cam_trans_pan_final_x = cur_leader_ptr->x;
             cam_trans_pan_final_y = cur_leader_ptr->y;
         } else {
@@ -757,8 +803,8 @@ void do_logic() {
         cursor_x = mcx;
         cursor_y = mcy;
         
-        if(!cur_leader_ptr->auto_pluck_mode && cur_leader_ptr->pluck_time == -1 && !cur_leader_ptr->carrier_info) {
-            cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+        cursor_angle = atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+        if(cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE) {
             cur_leader_ptr->face(cursor_angle);
         }
         
@@ -785,9 +831,10 @@ void do_logic() {
         **************************/
         
         if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
-            percipitation_time_left -= delta_t;
-            if(percipitation_time_left <= 0) {
-                percipitation_time_left = cur_area_map.weather_condition.percipitation_frequency.get_random_number();
+            percipitation_timer.tick(delta_t);
+            if(percipitation_timer.ticked) {
+                percipitation_timer = timer(cur_area_map.weather_condition.percipitation_frequency.get_random_number());
+                percipitation_timer.start();
                 percipitation.push_back(point(0, 0));
             }
             
@@ -808,9 +855,9 @@ void do_logic() {
         *                ***  *
         **********************/
         
-        throw_particle_timer -= delta_t;
-        if(throw_particle_timer <= 0) {
-            throw_particle_timer = THROW_PARTICLE_INTERVAL;
+        throw_particle_timer.tick(delta_t);
+        if(throw_particle_timer.ticked) {
+            throw_particle_timer.start();
             
             size_t n_leaders = leaders.size();
             for(size_t l = 0; l < n_leaders; l++) {
@@ -835,9 +882,9 @@ void do_logic() {
     } else { //Displaying a message.
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
-            cur_message_char_time -= delta_t;
-            if(cur_message_char_time <= 0) {
-                cur_message_char_time = MESSAGE_CHAR_INTERVAL;
+            cur_message_char_timer.tick(delta_t);
+            if(cur_message_char_timer.ticked) {
+                cur_message_char_timer.start();
                 cur_message_char++;
             }
         }

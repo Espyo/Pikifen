@@ -378,7 +378,7 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
 /* ----------------------------------------------------------------------------
  * Adds a member to a leader's party spots.
  */
-void party_spot_info::add(mob* m, float* x, float* y) {
+void party_spot_info::add(mob* m) {
     if(n_current_wheel_members == mobs_in_spots[current_wheel].size()) {
         current_wheel++;
         n_current_wheel_members = 0;
@@ -401,8 +401,8 @@ void party_spot_info::add(mob* m, float* x, float* y) {
     
     n_current_wheel_members++;
     
-    if(x) *x = x_coords[current_wheel][chosen_spot];
-    if(y) *y = y_coords[current_wheel][chosen_spot];
+    m->party_spot_x = x_coords[current_wheel][chosen_spot];
+    m->party_spot_y = y_coords[current_wheel][chosen_spot];
 }
 
 
@@ -552,4 +552,54 @@ string sector_types_manager::get_name(const unsigned char nr) {
  */
 unsigned char sector_types_manager::get_nr_of_types() {
     return names.size();
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Cretes a timer.
+ */
+timer::timer(float interval) {
+    this->interval  = interval;
+    this->time_left = 0;
+    this->ticked    = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts a timer.
+ */
+void timer::start() {
+    time_left = interval;
+    ticked = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts a timer, but sets a new interval.
+ */
+void timer::start(const float new_interval) {
+    interval = new_interval;
+    start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks a timer.
+ * amount: Time to tick.
+ */
+void timer::tick(const float amount) {
+    time_left -= amount;
+    time_left = max(time_left, 0.0f);
+    if(time_left == 0.0f) {
+        ticked = true;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the ratio of time left (i.e. 0 if done, 1 if all time is left).
+ */
+float timer::get_ratio_left() {
+    return time_left / interval;
 }

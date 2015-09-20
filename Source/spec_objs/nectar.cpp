@@ -10,6 +10,8 @@
  */
 
 #include "../const.h"
+#include "../drawing.h"
+#include "../functions.h"
 #include "nectar.h"
 #include "../vars.h"
 
@@ -20,4 +22,14 @@ nectar::nectar(float x, float y, const string &vars) :
     mob(x, y, spec_mob_types["Nectar"], 0, vars),
     amount_left(NECTAR_AMOUNT) {
     
+}
+
+void nectar::draw() {
+    float radius = type->radius * (amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
+    draw_sprite(
+        bmp_nectar,
+        x, y,
+        radius * 2, radius * 2, 0,
+        map_gray(get_sprite_lighting(this))
+    );
 }

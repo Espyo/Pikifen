@@ -59,10 +59,10 @@ int main(int argc, char**) {
     save_options();
     
     //Event stuff.
-    ALLEGRO_TIMER* timer;
-    ALLEGRO_EVENT_QUEUE* queue;
+    ALLEGRO_TIMER* logic_timer;
+    ALLEGRO_EVENT_QUEUE* logic_queue;
     ALLEGRO_EVENT ev;
-    init_event_things(timer, queue);
+    init_event_things(logic_timer, logic_queue);
     init_misc();
     init_mob_categories();
     init_special_mob_types();
@@ -111,6 +111,7 @@ int main(int argc, char**) {
         bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
         
         bmp_test = load_bmp("Test.png");
+        bmp_test_bubble = load_bmp("speech bubble.png");
         
         al_set_display_icon(display, bmp_icon);
         
@@ -193,13 +194,13 @@ int main(int argc, char**) {
         pikmin_list.back()->maturity = 2;
         create_mob(new pikmin(30, 150, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->set_first_state = true;
+        pikmin_list.back()->first_state_set = true;
         create_mob(new pikmin(50, 150, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->set_first_state = true;
+        pikmin_list.back()->first_state_set = true;
         create_mob(new pikmin(70, 150, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->set_first_state = true;
+        pikmin_list.back()->first_state_set = true;
         for(unsigned char p = 0; p < 10; p++) {
             for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
                 create_mob(new pikmin(20 + 10 * p + 3 * distance(pikmin_types.begin(), t), 200, t->second, 0, ""));
@@ -221,7 +222,7 @@ int main(int argc, char**) {
         cur_leader_nr = 0;
         cur_leader_ptr = leaders[cur_leader_nr];
         cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-        cur_leader_ptr->set_first_state = true;
+        cur_leader_ptr->first_state_set = true;
         
         al_hide_mouse_cursor(display);
     } else {
@@ -235,7 +236,7 @@ int main(int argc, char**) {
     
     
     //Main loop.
-    al_start_timer(timer);
+    al_start_timer(logic_timer);
     while(running) {
     
         /*  ************************************************
@@ -244,7 +245,7 @@ int main(int argc, char**) {
           *** +---+                                  +---+ ***
             ************************************************/
         
-        al_wait_for_event(queue, &ev);
+        al_wait_for_event(logic_queue, &ev);
         
         if(cur_screen == SCREEN_GAME) {
             handle_game_controls(ev);
@@ -261,7 +262,7 @@ int main(int argc, char**) {
             //scr_w = ev.display.width;
             //scr_h = ev.display.height;
             
-        } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(queue)) {
+        } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(logic_queue)) {
             double cur_time = al_get_time();
             if(prev_frame_time == 0) prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
             delta_t = cur_time - prev_frame_time;

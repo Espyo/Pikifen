@@ -1,4 +1,7 @@
-height = 200
 name = Hocotate ship
+
 can_heal = true
+height = 200
+pushable = false
+pushes = true
 radius = 70

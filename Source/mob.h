@@ -18,6 +18,7 @@
 #include <allegro5/allegro.h>
 
 #include "animation.h"
+#include "misc_structs.h"
 #include "mob_script.h"
 #include "pikmin_type.h"
 #include "sector.h"
@@ -78,7 +79,7 @@ struct carrier_info_struct {
  * like leader, Pikmin, enemy, Onion, etc.
  */
 class mob {
-private:
+protected:
     void tick_animation();
     void tick_brain();
     void tick_misc_logic();
@@ -103,14 +104,17 @@ public:
     float x, y, z;                    //Coordinates. Z is height, the higher the value, the higher in the sky.
     float speed_x, speed_y, speed_z;  //Physics only. Don't touch.
     float home_x, home_y;             //Starting coordinates; what the mob calls "home".
-    float move_speed_mult;            //Multiply the normal moving speed by this.
-    float acceleration;               //Speed multiplies by this much each second.
-    float speed;                      //Speed moving forward.
+    float move_speed_mult;            //Multiply the normal moving speed by this. //TODO will this be used?
+    float acceleration;               //Speed multiplies by this much each second. //TODO use this.
+    float speed;                      //Speed moving forward. //TODO is this used?
     float angle;                      //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float intended_angle;             //Angle the mob wants to be facing.
     float ground_z;                   //Z of the highest ground it's on.
     float lighting;                   //How light the mob is. Depends on the sector(s) it's on.
     bool affected_by_gravity;         //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
+    float push_amount;                //Amount it's being pushed by another mob.
+    float push_angle;                 //Angle that another mob is pushing it to.
+    
     void face(const float new_angle); //Makes the mob face an angle, but it'll turn at its own pace.
     virtual float get_base_speed();   //Returns the normal speed of this mob. Subclasses are meant to override this.
     
@@ -118,12 +122,11 @@ public:
     float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
     float* target_z;                    //When following a target in teleport mode, also change the z accordingly.
     float* target_rel_x, *target_rel_y; //Follow these coordinates.
-    unsigned char target_code;          //Code ID for a special target, like home. Used for scripting.
     bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
     bool gtt_instant;                   //If true, teleport instantly.
     bool gtt_free_move;                 //If true, the mob can move in a direction it's not facing.
     float target_distance;              //Distance from the target in which the mob is considered as being there.
-    bool can_move;                      //If true, this mob can control its movement.
+    
     void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL, bool free_move = false, float target_distance = 3);
     void remove_target(const bool stop);
     
@@ -133,51 +136,61 @@ public:
     float unwhistlable_period; //During this period, the mob cannot be whistled into a party.
     float untouchable_period;  //During this period, the mob cannot be touched into a party.
     party_info* party;         //Info on the party this mob is a leader of.
+    float party_spot_x;
+    float party_spot_y;
+    
     
     //Other properties.
     float health;           //Current health.
-    float invuln_period;    //During this period, the mob cannot be attacked.
-    float knockdown_period; //During this period, the mob cannot move, as it's been knocked down.
+    timer invuln_period;    //During this period, the mob cannot be attacked.
     unsigned char team;     //Mob's team (who it can damage), use MOB_TEAM_*.
     
     //Script.
     mob_fsm fsm;                      //Finitate-state machine.
-    bool set_first_state;             //Have we set the mob's starting state yet?
+    bool first_state_set;             //Have we set the mob's starting state yet?
     mob* focused_mob;                 //The mob it has focus on.
-    float timer;                      //The timer.
-    float timer_interval;             //The timer's interval.
+    timer script_timer;               //The timer.
     map<string, string> vars;         //Variables.
-    mob_event* script_wait_event;     //What event is the script waiting on?
-    size_t script_wait_action;        //Number of the action the script returns to after the wait is over.
     bool big_damage_ev_queued;        //Are we waiting to report the big damage event?
     
-    void eat(size_t nr);
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool rel, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
+    
+    void eat(size_t nr);
     void start_dying();
     void finish_dying();
     
     bool dead;                     //Is the mob dead?
-    unsigned char state;           //Current state.
-    float time_in_state;           //For how long as the mob been in this state?
+    float delivery_time;           //Time left until the mob is fully delivered onto an Onion.
     vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
-    vector<mob*> chomping_pikmin;  //Mobs being chomped.
+    vector<mob*> chomping_pikmin;  //Mobs it is chomping.
     size_t chomp_max;              //Max mobs it can chomp in the current attack.
-    void set_state(const unsigned char new_state);
     
     //Carrying.
     carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
     
     void tick();
+    virtual void draw();
     
     static void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
+    
+    static void lose_health(mob* m, void* info1, void* info2);
+    
+    //Drawing tools.
+    void get_sprite_center(mob* m, frame* f, float* x, float* y);
+    void get_sprite_dimensions(mob* m, frame* f, float* w, float* h, float* scale = NULL);
+    float get_sprite_lighting(mob* m);
+    
 };
 
 
 
 void add_to_party(mob* party_leader, mob* new_member);
+void apply_knockback(mob* m, const float knockback, const float knockback_angle);
+float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h);
+void calculate_knockback(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h, float* knockback, float* angle);
 void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h, float* total_damage);
 void create_mob(mob* m);
 void delete_mob(mob* m);

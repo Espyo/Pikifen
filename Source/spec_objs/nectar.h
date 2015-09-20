@@ -29,6 +29,8 @@ public:
     unsigned char amount_left;
     
     nectar(float x, float y, const string &vars);
+    
+    virtual void draw();
 };
 
 #endif //ifndef NECTAR_INCLUDED

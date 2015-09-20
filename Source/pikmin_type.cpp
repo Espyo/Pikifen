@@ -108,8 +108,11 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
         }
-        efc.new_event(MOB_EVENT_LEADER_IS_NEAR); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
+            efc.change_state("group_move_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run_function(pikmin::be_dismissed);
@@ -133,7 +136,37 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
         }
-        efc.new_event(MOB_EVENT_LEADER_IS_FAR); {
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_STARTED); {
+            efc.change_state("group_move_chasing");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(pikmin::be_dismissed);
+            efc.change_state("going_to_dismiss_spot");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin::get_knocked_down);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin::be_grabbed_by_enemy);
+            efc.change_state("grabbed_by_enemy");
+        }
+    }
+    
+    efc.new_state("group_move_chasing", PIKMIN_STATE_GROUP_MOVE_CHASING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin::chase_leader);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run_function(pikmin::chase_leader);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("group_move_stopped");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
@@ -147,6 +180,49 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
+        }
+        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+            efc.run_function(pikmin::go_to_opponent);
+            efc.change_state("going_to_opponent");
+        }
+    }
+    
+    efc.new_state("group_move_stopped", PIKMIN_STATE_GROUP_MOVE_STOPPED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("group_move_stopped");
+        }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("group_move_chasing");
+        }
+        efc.new_event(MOB_EVENT_GROUP_MOVE_ENDED); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(pikmin::be_dismissed);
+            efc.change_state("going_to_dismiss_spot");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin::get_knocked_down);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin::be_grabbed_by_enemy);
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
+        }
+        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+            efc.run_function(pikmin::go_to_opponent);
+            efc.change_state("going_to_opponent");
         }
     }
     

@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "const.h"
+#include "drawing.h"
 #include "functions.h"
 #include "mob.h"
 #include "pikmin.h"
@@ -36,9 +37,10 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     home_x(x),
     home_y(y),
     affected_by_gravity(true),
+    push_amount(0),
+    push_angle(0),
     health(type->max_health),
     invuln_period(0),
-    knockdown_period(0),
     team(MOB_TEAM_DECORATION),
     go_to_target(false),
     gtt_instant(false),
@@ -47,31 +49,27 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     target_z(nullptr),
     target_rel_x(nullptr),
     target_rel_y(nullptr),
-    can_move(true),
     focused_mob(nullptr),
     fsm(this),
-    set_first_state(false),
-    timer(0),
-    timer_interval(0),
-    script_wait_event(nullptr),
+    first_state_set(false),
     dead(false),
-    state(MOB_STATE_IDLE),
-    time_in_state(0),
+    delivery_time(DELIVERY_SUCK_TIME + 1.0f),
     big_damage_ev_queued(false),
     following_party(nullptr),
     was_thrown(false),
     unwhistlable_period(0),
     untouchable_period(0),
     party(nullptr),
+    party_spot_x(0),
+    party_spot_y(0),
     carrier_info(nullptr),
     move_speed_mult(0),
     acceleration(0),
     speed(0),
-    target_code(0),
     gtt_free_move(false),
     target_distance(0),
-    script_wait_action(0),
-    chomp_max(0) {
+    chomp_max(0),
+    script_timer(0) {
     
     sector* sec = get_sector(x, y, nullptr, true);
     z = sec->z;
@@ -122,7 +120,7 @@ void mob::tick_animation() {
  */
 void mob::tick_brain() {
     //Chasing a target.
-    if(go_to_target && !gtt_instant && speed_z == 0 && knockdown_period == 0) {
+    if(go_to_target && !gtt_instant && speed_z == 0) {
     
         //Calculate where the target is.
         float final_target_x, final_target_y;
@@ -170,6 +168,11 @@ void mob::tick_misc_logic() {
         untouchable_period = max(untouchable_period, 0.0f);
     }
     
+    if(delivery_time <= DELIVERY_SUCK_TIME) {
+        delivery_time -= delta_t;
+        delivery_time = max(delivery_time, 0.0f);
+    }
+    
     if(party) {
         float party_center_mx = 0, party_center_my = 0;
         move_point(
@@ -188,19 +191,7 @@ void mob::tick_misc_logic() {
         }
     }
     
-    time_in_state += delta_t;
-    
-    if(invuln_period > 0) {
-        invuln_period -= delta_t;
-        invuln_period = max(invuln_period, 0.0f);
-    }
-    
-    if(speed_z == 0) {
-        if(knockdown_period > 0) {
-            knockdown_period -= delta_t;
-            knockdown_period = max(knockdown_period, 0.0f);
-        }
-    }
+    invuln_period.tick(delta_t);
 }
 
 
@@ -208,6 +199,7 @@ void mob::tick_misc_logic() {
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
  */
+#include <iostream> //TODO
 void mob::tick_physics() {
     //Movement.
     bool finished_moving = false;
@@ -255,28 +247,38 @@ void mob::tick_physics() {
             }
             
         } else {
-            if(can_move) {
+        
+            //Make it go to the direction it wants.
+            float d = dist(x, y, final_target_x, final_target_y).to_float();
+            float move_amount = min((double) (d / delta_t), (double) speed);
             
-                //Make it go to the direction it wants.
-                float d = dist(x, y, final_target_x, final_target_y).to_float();
-                float move_amount = min((double) (d / delta_t), (double) speed);
-                
-                float movement_angle = gtt_free_move ?
-                                       atan2(final_target_y - y, final_target_x - x) :
-                                       angle;
-                                       
-                move_speed_x = cos(movement_angle) * move_amount;
-                move_speed_y = sin(movement_angle) * move_amount;
-            }
+            float movement_angle = gtt_free_move ?
+                                   atan2(final_target_y - y, final_target_x - x) :
+                                   angle;
+                                   
+            move_speed_x = cos(movement_angle) * move_amount;
+            move_speed_y = sin(movement_angle) * move_amount;
         }
     }
     
-    if(!can_move) {
-        //If it can't consciously move, let the physics do its thing.
+    
+    //If another mob is pushing it.
+    if(push_amount != 0.0f) {
+        float push_x = cos(push_angle) * push_amount;
+        float push_y = sin(push_angle) * push_amount;
         
-        move_speed_x = speed_x;
-        move_speed_y = speed_y;
+        if(sign(push_x) == sign(move_speed_x)) {
+            move_speed_x += push_x;
+        } else {
+            move_speed_x = push_x;
+        }
+        if(sign(push_y) == sign(move_speed_y)) {
+            move_speed_y += push_y;
+        } else {
+            move_speed_y = push_y;
+        }
         
+        push_amount = 0;
     }
     
     
@@ -294,10 +296,6 @@ void mob::tick_physics() {
             new_z = z;
             new_ground_z = ground_z;
             new_lighting = lighting;
-            
-            float move_angle;
-            float move_speed;
-            coordinates_to_angle(speed_x, speed_y, &move_angle, &move_speed);
             
             sector* base_sector = get_sector(new_x, new_y, NULL, true);
             if(!base_sector) {
@@ -321,6 +319,10 @@ void mob::tick_physics() {
                 //TODO out of bounds! Kill it!
                 break;
             }
+            
+            float move_angle;
+            float move_speed;
+            coordinates_to_angle(move_speed_x, move_speed_y, &move_angle, &move_speed);
             
             float slide_angle = move_angle;
             float slide_angle_dif = -(M_PI * 4);
@@ -407,6 +409,12 @@ void mob::tick_physics() {
                                     if(next_angle_dif > slide_angle_dif) {
                                         slide_angle_dif = next_angle_dif;
                                         slide_angle = next_angle;
+                                        //Let's add a tad more to the slide, just to clear those tiny bump cases.
+                                        if(get_angle_cw_dif(slide_angle, move_angle) < M_PI) {
+                                            slide_angle -= 0.1;
+                                        } else {
+                                            slide_angle += 0.1;
+                                        }
                                     }
                                 }
                                 
@@ -482,9 +490,9 @@ void mob::tick_physics() {
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {
-    if(!set_first_state) {
+    if(!first_state_set) {
         fsm.set_state(type->first_state_nr);
-        set_first_state = true;
+        first_state_set = true;
     }
     
     //TODO move these to the logic code, on the code where all mobs interact with all mobs.
@@ -540,13 +548,11 @@ void mob::tick_script() {
     
     //Timer events.
     mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
-    if(timer_ev) {
-        if(timer > 0 && timer_interval > 0) {
-            timer -= delta_t;
-            if(timer <= 0) {
-                timer = timer_interval;
-                timer_ev->run(this);
-            }
+    if(timer_ev && script_timer.interval > 0) {
+        script_timer.tick(delta_t);
+        if(script_timer.ticked) {
+            script_timer.start();
+            timer_ev->run(this);
         }
     }
     
@@ -588,8 +594,6 @@ void mob::get_final_target(float* x, float* y) {
  * target_distance: Distance from the target in which the mob is considered as being there.
  */
 void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z, bool free_move, float target_distance) {
-    if(this->knockdown_period > 0 && !instant) return;
-    
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
@@ -692,21 +696,12 @@ void mob::set_health(const bool rel, const float amount) {
 
 
 /* ----------------------------------------------------------------------------
- * Changes a mob's state.
- * new_state: The new state ID. Use MOB_STATE_*.
- */
-void mob::set_state(unsigned char new_state) {
-    state = new_state;
-    time_in_state = 0;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Changes the timer's time and interval.
  * time: New time.
  */
 void mob::set_timer(const float time) {
-    timer = timer_interval = time;
+    script_timer.interval = time;
+    script_timer.start();
 }
 
 
@@ -803,9 +798,7 @@ void add_to_party(mob* party_leader, mob* new_member) {
     //Find a spot.
     if(party_leader->party) {
         if(party_leader->party->party_spots) {
-            float spot_x = 0, spot_y = 0;
-            
-            party_leader->party->party_spots->add(new_member, &spot_x, &spot_y);
+            party_leader->party->party_spots->add(new_member);
             
             //TODO remove.
             /*
@@ -822,38 +815,72 @@ void add_to_party(mob* party_leader, mob* new_member) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes m1 attack m2.
- * Stuff like status effects and maturity (Pikmin only) are taken into account.
+ * Applies the knockback values to a mob.
  */
-void mob::attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period) {
-    if(m2->invuln_period > 0) return;
-    
-    float total_damage = damage;
-    if(m1_is_pikmin) {
-        total_damage += ((pikmin*) m1)->maturity * damage * MATURITY_POWER_MULT;
-    }
-    
-    m2->invuln_period = new_invuln_period;
-    m2->knockdown_period = new_knockdown_period;
-    m2->health -= total_damage;
-    
+void apply_knockback(mob* m, const float knockback, const float knockback_angle) {
     if(knockback != 0) {
         //TODO make these not be magic numbers.
-        m2->remove_target(true);
-        m2->speed_x = cos(angle) * knockback * 130;
-        m2->speed_y = sin(angle) * knockback * 130;
-        m2->speed_z = 200;
+        m->remove_target(true);
+        m->speed_x = cos(knockback_angle) * knockback * 130;
+        m->speed_y = sin(knockback_angle) * knockback * 130;
+        m->speed_z = 200;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates how much damage an attack will cause.
+ * attacker:     the attacking mob.
+ * victim:       the mob that'll take the damage.
+ * attacker_h:   the hitbox of the attacker mob, if any.
+ * victim_h:     the hitbox of the victim mob, if any.
+ */
+float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h) {
+    float attacker_offense = 0;
+    float defense_multiplier = 1;
+    
+    if(attacker_h) {
+        attacker_offense = attacker_h->multiplier;
+        
+    } else {
+        if(typeid(*attacker) == typeid(pikmin)) {
+            pikmin* pik_ptr = (pikmin*) attacker;
+            attacker_offense = pik_ptr->pik_type->attack_power * (1 + pik_ptr->maturity * MATURITY_POWER_MULT);
+        }
     }
     
-    m2->fsm.run_event(MOB_EVENT_DAMAGE, m2);
+    if(victim_h) {
+        defense_multiplier = victim_h->multiplier;
+    }
     
-    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
-    if(m2->type->big_damage_interval > 0 && m2->health != m2->type->max_health) {
-        if(floor((m2->health + total_damage) / m2->type->big_damage_interval) > floor(m2->health / m2->type->big_damage_interval)) {
-            m2->big_damage_ev_queued = true;
+    return attacker_offense * (1.0 / defense_multiplier);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates how much knockback an attack will cause.
+ * attacker:   the attacking mob.
+ * victim:     the mob that'll take the damage.
+ * attacker_h: the hitbox of the attacker mob, if any.
+ * victim_h:   the hitbox of the victim mob, if any.
+ * knockback:  the variable to return the knockback amount to.
+ * angle:      the variable to return the angle of the knockback to.
+ */
+void calculate_knockback(
+    mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h,
+    float* knockback, float* angle
+) {
+    if(attacker_h) {
+        *knockback = attacker_h->knockback;
+        if(attacker_h->knockback_outward) {
+            *angle += atan2(victim->y - attacker->y, victim->x - attacker->x);
+        } else {
+            *angle += attacker_h->knockback_angle;
         }
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Causes a mob to damage another via hitboxes.
@@ -867,12 +894,17 @@ void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h
     float attacker_offense = 0;
     float defense_multiplier = 1;
     float knockback = 0;
-    float knockback_angle = 0;
+    float knockback_angle = attacker->angle;
     
     if(attacker_h) {
         attacker_offense = attacker_h->multiplier;
         knockback = attacker_h->knockback;
-        knockback_angle = attacker_h->knockback_angle;
+        if(attacker_h->knockback_outward) {
+            knockback_angle += atan2(victim->y - attacker->y, victim->x - attacker->x);
+        } else {
+            knockback_angle += attacker_h->knockback_angle;
+        }
+        
     } else {
         if(typeid(*attacker) == typeid(pikmin)) {
             attacker_offense = ((pikmin*) attacker)->maturity * ((pikmin*) attacker)->pik_type->attack_power * MATURITY_POWER_MULT;
@@ -1078,7 +1110,6 @@ void remove_from_party(mob* member) {
     }
     
     member->following_party = NULL;
-    member->remove_target(false);
     member->unwhistlable_period = UNWHISTLABLE_PERIOD;
     member->untouchable_period = UNTOUCHABLE_PERIOD;
 }
@@ -1101,4 +1132,99 @@ bool should_attack(mob* m1, mob* m2) {
  */
 void unfocus_mob(mob* m1) {
     m1->focused_mob = nullptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler that makes the mob lose health by being damaged by another.
+ */
+void mob::lose_health(mob* m, void* info1, void* info2) {
+    hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    float damage = 0;
+    
+    damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
+    m->health -= damage;
+    
+    m->fsm.run_event(MOB_EVENT_DAMAGE, info->mob2);
+    
+    //If before taking damage, the interval was dividable X times, and after it's only dividable by Y (X>Y), an interval was crossed.
+    if(
+        m->type->big_damage_interval > 0 &&
+        m->health != m->type->max_health
+    ) {
+        if(
+            floor((m->health + damage) / m->type->big_damage_interval) >
+            floor(m->health / m->type->big_damage_interval)
+        ) {
+            m->big_damage_ev_queued = true;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the mob. This should be overwritten by child classes.
+ */
+void mob::draw() {
+
+    frame* f_ptr = anim.get_frame();
+    
+    if(!f_ptr) return;
+    
+    float draw_x, draw_y;
+    float draw_w, draw_h;
+    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    
+    draw_sprite(
+        f_ptr->bitmap,
+        draw_x, draw_y,
+        draw_w, draw_h,
+        angle,
+        map_gray(get_sprite_lighting(this))
+    );
+    
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns where a sprite's center should be, for normal mob drawing routines.
+ */
+void mob::get_sprite_center(mob* m, frame* f, float* x, float* y) {
+    float c = cos(m->angle), s = sin(m->angle);
+    //TODO test if stuff that offsets both vertical and horizontally is working. I know it's working for horizontal only.
+    *x = m->x + c * f->offs_x + c * f->offs_y;
+    *y = m->y - s * f->offs_y + s * f->offs_x;
+    
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns what a sprite's dimensions should be, for normal mob drawing routines.
+ * m: the mob.
+ * f: the frame.
+ * w: variable to return the width to.
+ * h: variable to return the height to.
+ * scale: variable to return the scale used to. Optional.
+ */
+void mob::get_sprite_dimensions(mob* m, frame* f, float* w, float* h, float* scale) {
+    *w = f->game_w;
+    *h = f->game_h;
+    float sucking_mult = 1.0;
+    float height_mult = 1 + m->z * 0.0001;
+    if(m->delivery_time < DELIVERY_SUCK_TIME) {
+        sucking_mult = (m->delivery_time / DELIVERY_SUCK_TIME);
+        sucking_mult = max(sucking_mult, 0.0f);
+    }
+    
+    float final_scale = sucking_mult * height_mult;
+    if(scale) *scale = final_scale;
+    
+    *w = *w * final_scale;
+    *h = *h * final_scale;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns what a sprite's lighting should be, for normal mob drawing routines.
+ */
+float mob::get_sprite_lighting(mob* m) {
+    return m->lighting;
 }

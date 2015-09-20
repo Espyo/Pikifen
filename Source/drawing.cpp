@@ -118,11 +118,20 @@ void do_drawing() {
         
         
         /* Layer 3
-        ************************
-        *                  ##  *
-        *   Mob shadows   #### *
-        *                  ##  *
-        ***********************/
+        ****************
+        *          \o/ *
+        *   Mobs    |  *
+        *          / \ *
+        ***************/
+        
+        vector<mob*> sorted_mobs;
+        sorted_mobs = mobs;
+        sort(sorted_mobs.begin(), sorted_mobs.end(), [] (mob * m1, mob * m2) {
+            if(m1->z == m2->z) {
+                return m1->type->height < m2->type->height;
+            }
+            return m1->z < m2->z;
+        });
         
         float shadow_stretch = 0;
         
@@ -134,286 +143,15 @@ void do_drawing() {
             shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
         }
         
-        for(size_t l = 0; l < n_leaders; l++) {
-            draw_mob_shadow(leaders[l]->x, leaders[l]->y, 32, leaders[l]->z - leaders[l]->ground_z, shadow_stretch);
-        }
-        
-        for(size_t p = 0; p < n_pikmin; p++) {
-            draw_mob_shadow(pikmin_list[p]->x, pikmin_list[p]->y, 18, pikmin_list[p]->z - pikmin_list[p]->ground_z, shadow_stretch);
+        mob* mob_ptr = NULL;
+        for(size_t m = 0; m < sorted_mobs.size(); m++) {
+            mob_ptr = sorted_mobs[m];
+            draw_mob_shadow(mob_ptr->x, mob_ptr->y, mob_ptr->type->radius * 2, mob_ptr->z - mob_ptr->ground_z, shadow_stretch);
+            mob_ptr->draw();
         }
         
         
         /* Layer 4
-        ****************
-        *          \o/ *
-        *   Mobs    |  *
-        *          / \ *
-        ***************/
-        
-        //Nectar.
-        size_t n_nectars = nectars.size();
-        for(size_t n = 0; n < n_nectars; n++) {
-            float radius = nectars[n]->type->radius * (nectars[n]->amount_left + NECTAR_AMOUNT) / (NECTAR_AMOUNT * 2) * 2;
-            draw_sprite(
-                bmp_nectar,
-                nectars[n]->x, nectars[n]->y,
-                radius * 2, radius * 2, 0, map_gray(nectars[n]->lighting));
-        }
-        
-        //Treasures.
-        for(size_t t = 0; t < n_treasures; t++) {
-            float radius = treasures[t]->type->radius;
-            if(treasures[t]->state == MOB_STATE_BEING_DELIVERED) {
-                radius *= 1 - (treasures[t]->time_in_state / DELIVERY_SUCK_TIME);
-                radius = max(0.0f, radius);
-            }
-            draw_sprite(
-                bmp_tp,
-                treasures[t]->x, treasures[t]->y,
-                radius * 2, radius * 2, 0, map_gray(treasures[t]->lighting)
-            );
-        }
-        
-        //Pellets.
-        size_t n_pellets = pellets.size();
-        for(size_t p = 0; p < n_pellets; p++) {
-        
-            pellet* p_ptr = pellets[p];
-            frame* f_ptr = p_ptr->anim.get_frame();
-            
-            if(f_ptr) {
-            
-                float radius = pellets[p]->type->radius;
-                if(pellets[p]->state == MOB_STATE_BEING_DELIVERED) {
-                    radius *= 1 - (pellets[p]->time_in_state / DELIVERY_SUCK_TIME);
-                    radius = max(0.0f, radius);
-                }
-                
-                draw_sprite(
-                    f_ptr->bitmap,
-                    p_ptr->x, p_ptr->y,
-                    radius * 2, radius * 2, 0,
-                    map_gray(p_ptr->lighting)
-                );
-                draw_sprite(
-                    p_ptr->pel_type->bmp_number,
-                    p_ptr->x, p_ptr->y,
-                    radius * 1.36, -1,
-                    0, map_gray(p_ptr->lighting)
-                );
-            }
-        }
-        
-        //Enemies.
-        size_t n_enemies = enemies.size();
-        for(size_t e = 0; e < n_enemies; e++) {
-            enemy* e_ptr = enemies[e];
-            frame* f_ptr = e_ptr->anim.get_frame();
-            if(f_ptr) {
-                float c = cos(e_ptr->angle), s = sin(e_ptr->angle);
-                //TODO test if stuff that offsets both verticall and horizontally is working. I know it's working for horizontal only.
-                float width = f_ptr->game_w;
-                float height = f_ptr->game_h;
-                if(e_ptr->state == MOB_STATE_BEING_DELIVERED) {
-                    float mult = 1 - (e_ptr->time_in_state / DELIVERY_SUCK_TIME);
-                    width = max(0.0f, width * mult);
-                    height = max(0.0f, height * mult);
-                }
-                
-                draw_sprite(
-                    f_ptr->bitmap,
-                    e_ptr->x + c * f_ptr->offs_x + c * f_ptr->offs_y,
-                    e_ptr->y - s * f_ptr->offs_y + s * f_ptr->offs_x,
-                    width, height,
-                    e_ptr->angle,
-                    map_gray(e_ptr->lighting)
-                );
-            }
-        }
-        
-        //Pikmin.
-        n_pikmin = pikmin_list.size();
-        for(size_t p = 0; p < n_pikmin; p++) {
-            pikmin* pik_ptr = pikmin_list[p];
-            
-            frame* f = pik_ptr->anim.get_frame();
-            if(f) {
-                float c = cos(pik_ptr->angle), s = sin(pik_ptr->angle);
-                float sprite_x = pik_ptr->x + c * f->offs_x + c * f->offs_y;
-                float sprite_y = pik_ptr->y - s * f->offs_y + s * f->offs_x;
-                float sprite_size_mult = 1 + pik_ptr->z * 0.001;
-                
-                draw_sprite(
-                    f->bitmap,
-                    sprite_x, sprite_y,
-                    f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
-                    pik_ptr->angle,
-                    map_gray(pik_ptr->lighting)
-                );
-                
-                if(pik_ptr->is_idle) {
-                    al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
-                    draw_sprite(
-                        f->bitmap,
-                        sprite_x, sprite_y,
-                        f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
-                        pik_ptr->angle,
-                        map_gray(pik_ptr->lighting)
-                    );
-                    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-                }
-                
-                if(f->top_visible) {
-                    draw_sprite(
-                        pik_ptr->pik_type->bmp_top[pik_ptr->maturity],
-                        sprite_x + c * f->top_x * sprite_size_mult + c * f->top_y * sprite_size_mult,
-                        sprite_y - s * f->top_y * sprite_size_mult + s * f->top_x * sprite_size_mult,
-                        f->top_w * sprite_size_mult, f->top_h * sprite_size_mult,
-                        f->top_angle + pik_ptr->angle,
-                        map_gray(pik_ptr->lighting)
-                    );
-                }
-                
-                if(pik_ptr->is_idle) {
-                    draw_sprite(
-                        bmp_idle_glow,
-                        pik_ptr->x, pik_ptr->y,
-                        30 * sprite_size_mult, 30 * sprite_size_mult,
-                        idle_glow_angle,
-                        al_map_rgba_f(
-                            pik_ptr->type->main_color.r * pik_ptr->lighting / 255,
-                            pik_ptr->type->main_color.g * pik_ptr->lighting / 255,
-                            pik_ptr->type->main_color.b * pik_ptr->lighting / 255,
-                            1
-                        )
-                    );
-                }
-                
-            }
-            
-        }
-        
-        //Leaders.
-        for(size_t l = 0; l < n_leaders; l++) {
-            frame* f = leaders[l]->anim.get_frame();
-            if(f) {
-                float c = cos(leaders[l]->angle), s = sin(leaders[l]->angle);
-                float final_x = leaders[l]->x + c * f->offs_x + c * f->offs_y;
-                float final_y = leaders[l]->y - s * f->offs_y + s * f->offs_x;
-                draw_sprite(
-                    f->bitmap,
-                    final_x, final_y,
-                    f->game_w, f->game_h,
-                    leaders[l]->angle,
-                    map_gray(leaders[l]->lighting)
-                );
-                
-                if(leaders[l]->invuln_period) {
-                    unsigned char anim_part = (leaders[l]->invuln_period / LEADER_INVULN_PERIOD) * LEADER_ZAP_ANIM_PARTS;
-                    float x[4], y[4];
-                    float x1 = final_x - f->game_w * 0.5;
-                    float x2 = final_x + f->game_w * 0.5;
-                    for(unsigned char p = 0; p < 4; p++) {
-                        if(anim_part % 2 == 0) {
-                            x[p] = final_x + f->game_w * (deterministic_random(anim_part * 3 + p) - 0.5);
-                            y[p] = final_y + f->game_h * 0.5 * ((p % 2 == 0) ? 1 : -1);
-                        } else {
-                            x[p] = final_x + f->game_w * 0.5 * ((p % 2 == 0) ? 1 : -1);
-                            y[p] = final_y + f->game_h * (deterministic_random(anim_part * 3 + p) - 0.5);
-                        }
-                    }
-                    al_draw_line(
-                        x[0], y[0], x[1], y[1],
-                        al_map_rgba(128, 255, 255, 128),
-                        2.0f
-                    );
-                    al_draw_line(
-                        x[1], y[1], x[2], y[2],
-                        al_map_rgba(128, 255, 255, 128),
-                        2.0f
-                    );
-                    al_draw_line(
-                        x[2], y[2], x[3], y[3],
-                        al_map_rgba(128, 255, 255, 128),
-                        2.0f
-                    );
-                    
-                }
-            }
-        }
-        
-        //Onions.
-        size_t n_onions = onions.size();
-        for(size_t o = 0; o < n_onions; o++) {
-            ALLEGRO_BITMAP* bm = NULL;
-            if(onions[o]->type->name == "Red onion") bm = bmp_red_onion;
-            else if(onions[o]->type->name == "Yellow onion") bm = bmp_yellow_onion;
-            else if(onions[o]->type->name == "Blue onion") bm = bmp_blue_onion;
-            
-            draw_sprite(
-                bm,
-                onions[o]->x, onions[o]->y,
-                185, 160,
-                0, al_map_rgba(onions[o]->lighting, onions[o]->lighting, onions[o]->lighting, 224)
-            );
-        }
-        
-        //Info spots.
-        size_t n_info_spots = info_spots.size();
-        for(size_t i = 0; i < n_info_spots; i++) {
-            info_spot* i_ptr = info_spots[i];
-            draw_sprite(
-                bmp_info_spot,
-                i_ptr->x, i_ptr->y,
-                i_ptr->type->radius * 2, i_ptr->type->radius * 2,
-                0, map_gray(i_ptr->lighting)
-            );
-        }
-        
-        //Ship(s).
-        size_t n_ships = ships.size();
-        for(size_t s = 0; s < n_ships; s++) {
-            draw_sprite(
-                bmp_ship,
-                ships[s]->x, ships[s]->y,
-                138, 112,
-                0, map_gray(ships[s]->lighting)
-            );
-            al_draw_circle(
-                ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE,
-                ships[s]->y, SHIP_BEAM_RANGE,
-                al_map_rgb(
-                    ship_beam_ring_color[0] * 255 / ships[s]->lighting,
-                    ship_beam_ring_color[1] * 255 / ships[s]->lighting,
-                    ship_beam_ring_color[2] * 255 / ships[s]->lighting
-                ), 1
-            );
-        }
-        
-        //Gates.
-        size_t n_gates = gates.size();
-        for(size_t g = 0; g < n_gates; g++) {
-            gate* g_ptr = gates[g];
-            frame* f = g_ptr->anim.get_frame();
-            
-            if(f) {
-                float c = cos(g_ptr->angle), s = sin(g_ptr->angle);
-                float sprite_x = g_ptr->x + c * f->offs_x + c * f->offs_y;
-                float sprite_y = g_ptr->y - s * f->offs_y + s * f->offs_x;
-                float sprite_size_mult = 1 + g_ptr->z * 0.001;
-                
-                draw_sprite(
-                    f->bitmap,
-                    sprite_x, sprite_y,
-                    f->game_w * sprite_size_mult, f->game_h * sprite_size_mult,
-                    g_ptr->angle,
-                    map_gray(g_ptr->lighting)
-                );
-            }
-        }
-        
-        
-        /* Layer 5
         ***********************
         *                 *   *
         *   Particles   *   * *
@@ -479,7 +217,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 6
+        /* Layer 5
         ***************************
         *                   Help  *
         *   In-game text   --  -- *
@@ -517,6 +255,7 @@ void do_drawing() {
         }
         
         //Info spots.
+        size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; i++) {
             if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
@@ -566,7 +305,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 7
+        /* Layer 6
         ***************************
         *                    /  / *
         *   Percipitation     / / *
@@ -581,7 +320,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 8
+        /* Layer 7
         **************************
         *                  *###* *
         *   Tree shadows   #| |# *
@@ -603,7 +342,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 9
+        /* Layer 8
         ***********************
         *              --==## *
         *   Daylight   --==## *
@@ -617,7 +356,7 @@ void do_drawing() {
         }
         
         
-        /* Layer 10
+        /* Layer 9
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
@@ -646,7 +385,7 @@ void do_drawing() {
             al_draw_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192), 3);
         }
         
-        if(whistle_radius > 0 || whistle_fade_time > 0) {
+        if(whistle_radius > 0 || whistle_fade_timer.time_left > 0) {
             if(pretty_whistle) {
                 unsigned char n_dots = 16 * 6;
                 for(unsigned char d = 0; d < 6; d++) {
@@ -659,8 +398,8 @@ void do_drawing() {
                         
                         ALLEGRO_COLOR c;
                         float alpha_mult;
-                        if(whistle_fade_time > 0)
-                            alpha_mult = whistle_fade_time / WHISTLE_FADE_TIME;
+                        if(whistle_fade_timer.time_left > 0)
+                            alpha_mult = whistle_fade_timer.get_ratio_left();
                         else
                             alpha_mult = 1;
                             
@@ -675,7 +414,7 @@ void do_drawing() {
                     }
                 }
             } else {
-                unsigned char alpha = whistle_fade_time / WHISTLE_FADE_TIME * 255;
+                unsigned char alpha = whistle_fade_timer.get_ratio_left() * 255;
                 float radius = whistle_fade_radius;
                 if(whistle_radius > 0) {
                     alpha = 255;
@@ -706,20 +445,24 @@ void do_drawing() {
         draw_sprite(
             bmp_mouse_cursor,
             mouse_cursor_x, mouse_cursor_y,
-            cam_zoom * 54, cam_zoom * 54,
-            cursor_spin_angle
+            cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
+            cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5,
+            cursor_spin_angle,
+            cur_leader_ptr->lea_type->main_color
         );
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
             bmp_cursor,
             cursor_x, cursor_y,
-            54, 54,
+            al_get_bitmap_width(bmp_cursor) * 0.5,
+            al_get_bitmap_height(bmp_cursor) * 0.5,
             cursor_angle,
-            map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
+            cur_leader_ptr->lea_type->main_color
+            //map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
         );
         
         
-        /* Layer 11
+        /* Layer 10
         *****************
         *           (1) *
         *   HUD         *
@@ -963,6 +706,8 @@ void do_drawing() {
             string text = cur_message.substr(cur_message_stopping_chars[cur_message_section], cur_message_char - cur_message_stopping_chars[cur_message_section]);
             vector<string> lines = split(text, "\n");
             
+            al_hold_bitmap_drawing(true);
+            
             for(size_t l = 0; l < lines.size(); l++) {
             
                 draw_compressed_text(
@@ -974,6 +719,8 @@ void do_drawing() {
                 
             }
             
+            al_hold_bitmap_drawing(false);
+            
         }
         
     } else { //Paused.
@@ -982,10 +729,10 @@ void do_drawing() {
     
     //Debugging stuff.
     if(debug_show_framerate) {
-        debug_framerate_update_timer -= delta_t;
-        if(debug_framerate_update_timer <= 0) {
+        debug_framerate_update_timer.tick(delta_t);
+        if(debug_framerate_update_timer.ticked) {
+            debug_framerate_update_timer.start();
             debug_framerate_counter = round(1.0 / delta_t);
-            debug_framerate_update_timer = 1.0;
         }
         al_draw_text(
             font,
@@ -1763,7 +1510,7 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
 void draw_mob_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch) {
     if(shadow_stretch <= 0) return;
     
-    float shadow_x = 0, shadow_w = size + (size * shadow_stretch);
+    float shadow_x = 0, shadow_w = size + (size * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
     
     if(day_minutes < 60 * 12) {
         //Shadows point to the West.

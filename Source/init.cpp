@@ -69,17 +69,17 @@ void init_error_bitmap() {
     } al_set_target_backbuffer(display);
 }
 
-void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue) {
-    al_set_new_window_position(window_x, window_y);
+void init_event_things(ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue) {
+    if(window_pos_hack) al_set_new_window_position(64, 64);
     display = al_create_display(scr_w, scr_h);
-    timer = al_create_timer(1.0 / game_fps);
+    logic_timer = al_create_timer(1.0 / game_fps);
     
-    queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_keyboard_event_source());
-    al_register_event_source(queue, al_get_joystick_event_source());
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_timer_event_source(timer));
+    logic_queue = al_create_event_queue();
+    al_register_event_source(logic_queue, al_get_mouse_event_source());
+    al_register_event_source(logic_queue, al_get_keyboard_event_source());
+    al_register_event_source(logic_queue, al_get_joystick_event_source());
+    al_register_event_source(logic_queue, al_get_display_event_source(display));
+    al_register_event_source(logic_queue, al_get_timer_event_source(logic_timer));
 }
 
 void init_fonts() {

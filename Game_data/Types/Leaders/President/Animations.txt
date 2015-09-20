@@ -92,11 +92,14 @@ animations{
 		loop_frame=0
 		frame_instances{
 			duck{
-				duration=2.50
+				duration=0.08
+			}
+			duck2{
+				duration=0.08
 			}
 		}
 	}
-    pain{
+	pain{
 		loop_frame=0
 		frame_instances{
 			half_limbo{
@@ -113,7 +116,7 @@ animations{
 			}
 		}
 	}
-    knocked_down{
+	knocked_down{
 		loop_frame=0
 		frame_instances{
 			half_lying{
@@ -130,7 +133,7 @@ animations{
 			}
 		}
 	}
-    spraying{
+	spraying{
 		loop_frame=0
 		frame_instances{
 			duck{
@@ -157,7 +160,7 @@ frames{
 	}
 	half_limbo{
 		file=President.png
-		file_x=56
+		file_x=112
 		file_y=0
 		file_w=86
 		file_h=64
@@ -193,7 +196,7 @@ frames{
 	}
 	limbo{
 		file=President.png
-		file_x=144
+		file_x=200
 		file_y=0
 		file_w=106
 		file_h=64
@@ -236,6 +239,18 @@ frames{
 		game_w=32.00
 		game_h=32.00
 		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+	duck2{
+		file=President.png
+		file_x=56
+		file_y=0
+		file_w=54
+		file_h=64
+		game_w=27.00
+		game_h=32.00
+		offs_x=4.00
 		offs_y=0.00
 		hitbox_instances=
 	}

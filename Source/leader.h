@@ -35,13 +35,16 @@ public:
     
     mob* holding_pikmin;
     
-    bool auto_pluck_mode;
     pikmin* auto_pluck_pikmin; //-1 = not plucking.
-    float pluck_time; //Time left until the Pikmin pops out.
     
     bool is_in_walking_anim;
     
     leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
+    
+    virtual void draw();
+    
+    void signal_group_move_start();
+    void signal_group_move_end();
     
     static void whistle(mob* m, void* info1, void* info2);
     static void stop_whistle(mob* m, void* info1, void* info2);
@@ -75,6 +78,10 @@ public:
     static void stop_pluck(mob* m, void* info1, void* info2);
     static void search_seed(mob* m, void* info1, void* info2);
     static void inactive_search_seed(mob* m, void* info1, void* info2);
+    static void be_grabbed_by_friend(mob* m, void* info1, void* info2);
+    static void be_released(mob* m, void* info1, void* info2);
+    static void be_thrown(mob* m, void* info1, void* info2);
+    static void land(mob* m, void* info1, void* info2);
     
 };
 
@@ -82,6 +89,8 @@ public:
 
 void dismiss();
 float get_leader_to_group_center_dist(mob* l);
+void swap_pikmin(mob* new_pik);
+void switch_to_leader(leader* new_leader_ptr);
 
 
 
@@ -108,6 +117,10 @@ enum LEADER_STATES {
     LEADER_STATE_INACTIVE_SLEEPING,
     LEADER_STATE_WAKING_UP, //Time during which the leader is getting up.
     LEADER_STATE_INACTIVE_WAKING_UP, //Time during which the leader is getting up.
+    LEADER_STATE_HELD,
+    LEADER_STATE_THROWN,
+    
+    N_LEADER_STATES,
     
 };
 

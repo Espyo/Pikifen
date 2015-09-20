@@ -1,9 +1,12 @@
-height = 64
 name = Red 20
-non_match_seeds = 10
-number = 20
+
+height = 64
 match_seeds = 20
 max_carriers = 50
-pikmin_type = Red Pikmin
-radius = 64
+non_match_seeds = 10
+number = 20
 number_image = Pellet_20.png
+pikmin_type = Red Pikmin
+pushable = true
+pushes = true
+radius = 64

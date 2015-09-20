@@ -27,24 +27,24 @@ public:
     pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars);
     ~pikmin();
     
-    pikmin_type* pik_type;
-    float hazard_time_left;  //Time it has left until it drowns/chokes/etc.
+    virtual void draw();
     
-    size_t enemy_hitbox_nr;   //Number of the hitbox the Pikmin is attached to.
-    float enemy_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
-    float enemy_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
-    float attack_time;        //Time left until the strike.
-    bool being_chomped;       //Is the Pikmin stuck in the enemy's jaws?
+    pikmin_type* pik_type;
+    timer hazard_timer;  //Time it has left until it drowns/chokes/etc.
+    
+    size_t connected_hitbox_nr;   //Number of the hitbox the Pikmin is attached to.
+    float connected_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
+    float connected_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
+    float attack_time;            //Time left until the strike.
     
     bool grabbing_carriable_mob; //Is it actually grasping the carriable mob, or just trying to reach it?
     size_t carrying_spot;        //Carrying spot reserved for it.
-    bool is_idle;                //Is the Pikmin idling?
     
     unsigned char maturity;  //0: leaf. 1: bud. 2: flower.
     bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
     
     float get_base_speed();
-    void do_attack(hitbox_instance* victim_hitbox_i);
+    void do_attack(mob* m, hitbox_instance* victim_hitbox_i);
     void set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr);
     void teleport_to_connected_hitbox();
     
@@ -86,13 +86,14 @@ public:
 pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const bool ignore_reserved);
 void give_pikmin_to_onion(onion* o, const unsigned amount);
 void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp);
-void swap_pikmin(mob* new_pik);
 
 
 
 enum PIKMIN_STATES {
     PIKMIN_STATE_IN_GROUP_CHASING,
     PIKMIN_STATE_IN_GROUP_STOPPED,
+    PIKMIN_STATE_GROUP_MOVE_CHASING,
+    PIKMIN_STATE_GROUP_MOVE_STOPPED,
     PIKMIN_STATE_IDLE,
     PIKMIN_STATE_BURIED,
     PIKMIN_STATE_PLUCKING,

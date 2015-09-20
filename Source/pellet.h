@@ -28,6 +28,7 @@ public:
     pellet_type* pel_type;
     
     pellet(float x, float y, pellet_type* type, const float angle, const string &vars);
+    virtual void draw();
 };
 
 #endif //ifndef PELLET_INCLUDED

@@ -41,7 +41,11 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 }
             }
             if(closest_mob_to_cursor && closest_mob_to_cursor->fsm.cur_state) {
-                cout << "Mob's state: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
+                string name = closest_mob_to_cursor->type->name;
+                name += "        ";
+                if(name.size() > 8) name = name.substr(0, 8);
+                
+                cout << "Mob: " << name << ". State: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
             }
             
             
@@ -185,6 +189,12 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             else if(button == BUTTON_GROUP_MOVE_UP)    group_movement.up =    pos;
             else if(button == BUTTON_GROUP_MOVE_DOWN)  group_movement.down =  pos;
             
+            if(group_movement.get_intensity() != 0) {
+                cur_leader_ptr->signal_group_move_start();
+            } else {
+                cur_leader_ptr->signal_group_move_end();
+            }
+            
         } else if(button == BUTTON_GROUP_MOVE_GO_TO_CURSOR) {
         
             active_control();
@@ -192,9 +202,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(pos > 0) {
                 group_move_go_to_cursor = true;
                 group_move_intensity = 1;
+                cur_leader_ptr->signal_group_move_start();
             } else {
                 group_move_go_to_cursor = false;
                 group_move_intensity = 0;
+                cur_leader_ptr->signal_group_move_end();
             }
             
         } else if(button == BUTTON_THROW) {
@@ -207,19 +219,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos > 0) { //Button press.
             
-                if(auto_pluck_input_time > 0) {
-                    cur_leader_ptr->auto_pluck_mode = true;
-                    
-                    size_t n_leaders = leaders.size();
-                    for(size_t l = 0; l < n_leaders; l++) {
-                        if(leaders[l]->following_party == cur_leader_ptr) {
-                            leaders[l]->auto_pluck_mode = true;
-                        }
-                    }
-                    return;
-                } else {
-                    active_control();
-                }
+                active_control();
                 
                 bool done = false;
                 
@@ -228,7 +228,6 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
                 if(p && d <= MIN_PLUCK_RANGE) {
                     cur_leader_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) p);
-                    auto_pluck_input_time = AUTO_PLUCK_INPUT_INTERVAL;
                     done = true;
                 }
                 
@@ -330,13 +329,20 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             *                    / \  / \ *
             ******************************/
             
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(pos == 0 || leaders.size() == 1) return;
             
             size_t new_leader_nr = cur_leader_nr;
             leader* new_leader_ptr = nullptr;
             bool search_new_leader = true;
             
-            //Go through the list of leaders until we find a new valid one.
+            //We'll send the switch event to the next leader on the list.
+            //If they accept, they run a function to change leaders.
+            //If not, we try the next leader.
+            //If we return to the current leader without anything being
+            //changed, then stop trying; no leader can be switched to.
+            
+            size_t original_leader_nr = cur_leader_nr;
+            
             while(search_new_leader) {
                 if(button == BUTTON_SWITCH_LEADER_RIGHT)
                     new_leader_nr = (new_leader_nr + 1) % leaders.size();
@@ -346,25 +352,20 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 }
                 new_leader_ptr = leaders[new_leader_nr];
                 
-                if(!new_leader_ptr->following_party) {
-                    //Found a leader which is not following a party.
+                if(new_leader_nr == original_leader_nr) {
+                    //Back to the original; stop trying.
+                    return;
+                }
+                
+                new_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
+                
+                //If after we called the event, the leader is the same,
+                //then that means the leader can't be switched to.
+                //Try a new one.
+                if(cur_leader_nr != original_leader_nr) {
                     search_new_leader = false;
-                } else if(new_leader_ptr == cur_leader_ptr) {
-                    //Found the current leader. That means we looped the whole list.
-                    search_new_leader = false;
-                    new_leader_ptr = nullptr;
                 }
             }
-            
-            if(new_leader_ptr == cur_leader_ptr) return;
-            
-            cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
-            
-            cur_leader_nr = new_leader_nr;
-            cur_leader_ptr = new_leader_ptr;
-            
-            start_camera_pan(cur_leader_ptr->x, cur_leader_ptr->y);
-            cur_leader_ptr->fsm.run_event(LEADER_EVENT_FOCUSED);
             
         } else if(button == BUTTON_DISMISS) {
         
@@ -455,7 +456,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float zoom_to_compare;
-            if(cam_trans_zoom_time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
+            if(cam_trans_zoom_timer.time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
             
             if(zoom_to_compare < 1) {
                 new_zoom = ZOOM_MAX_LEVEL;
@@ -473,7 +474,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float current_zoom;
-            if(cam_trans_zoom_time_left) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
+            if(cam_trans_zoom_timer.time_left > 0) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
             
             pos = floor(pos);
             
@@ -482,7 +483,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
             if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
             
-            if(cam_trans_zoom_time_left) {
+            if(cam_trans_zoom_timer.time_left > 0) {
                 cam_trans_zoom_final_level = new_zoom;
             } else {
                 start_camera_zoom(new_zoom);

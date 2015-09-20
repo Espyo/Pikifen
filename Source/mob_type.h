@@ -45,6 +45,8 @@ public:
     float move_speed;
     float rotation_speed;
     bool always_active; //If true, this mob is always active, even if it's off-camera.
+    bool pushes; //Blocks passage of other mobs.
+    bool pushable; //Can be pushed by other mobs.
     
     //Behavior things.
     float max_health;
@@ -54,7 +56,6 @@ public:
     float near_angle;
     unsigned int max_carriers;
     float weight;          //Pikmin strenght needed to carry it.
-    unsigned char chomp_max_victims; //The maximum number of victims in a chomp.
     float big_damage_interval;
     
     //Script things.

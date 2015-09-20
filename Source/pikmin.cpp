@@ -11,6 +11,7 @@
 
 #include <iostream>
 
+#include "drawing.h"
 #include "functions.h"
 #include "mob.h"
 #include "pikmin.h"
@@ -22,22 +23,20 @@
 pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars) :
     mob(x, y, type, angle, vars),
     pik_type(type),
-    hazard_time_left(-1),
+    hazard_timer(-1), //TODO the usual time
     attack_time(0),
-    being_chomped(false),
     pluck_reserved(false),
     carrying_spot(0),
     grabbing_carriable_mob(false),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
-    enemy_hitbox_nr(0),
-    enemy_hitbox_dist(0),
-    enemy_hitbox_angle(0),
-    is_idle(true) {
+    connected_hitbox_nr(0),
+    connected_hitbox_dist(0),
+    connected_hitbox_angle(0) {
     
     team = MOB_TEAM_PLAYER_1; // TODO
     if(s2b(get_var_value(vars, "buried", "0"))) {
         fsm.set_state(PIKMIN_STATE_BURIED);
-        this->set_first_state = true;
+        this->first_state_set = true;
     }
 }
 
@@ -59,13 +58,12 @@ float pikmin::get_base_speed() {
  * the victim lose health, the sound, the sparks, etc.
  * victim_hitbox_i: Hitbox instance of the victim.
  */
-void pikmin::do_attack(hitbox_instance* victim_hitbox_i) {
+void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
     attack_time = pik_type->attack_interval;
-    cause_hitbox_damage(
-        this, focused_mob,
-        NULL, victim_hitbox_i,
-        NULL
-    );
+    
+    hitbox_touch_info info = hitbox_touch_info(this, victim_hitbox_i, NULL);
+    focused_mob->fsm.run_event(MOB_EVENT_HITBOX_TOUCH_N_A, &info);
+    
     sfx_attack.play(0.06, false, 0.4f);
     sfx_pikmin_attack.play(0.06, false, 0.8f);
     particles.push_back(
@@ -96,11 +94,11 @@ void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
     
     float x_dif = x - actual_hx;
     float y_dif = y - actual_hy;
-    coordinates_to_angle(x_dif, y_dif, &enemy_hitbox_angle, &enemy_hitbox_dist);
+    coordinates_to_angle(x_dif, y_dif, &connected_hitbox_angle, &connected_hitbox_dist);
     
-    enemy_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
-    enemy_hitbox_dist /= hi_ptr->radius;  //Distance in units to distance in percentage.
-    enemy_hitbox_nr = hi_ptr->hitbox_nr;
+    connected_hitbox_angle -= mob_ptr->angle; //Relative to 0 degrees.
+    connected_hitbox_dist /= hi_ptr->radius;  //Distance in units to distance in percentage.
+    connected_hitbox_nr = hi_ptr->hitbox_nr;
 }
 
 
@@ -110,7 +108,7 @@ void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
 void pikmin::teleport_to_connected_hitbox() {
     speed_x = speed_y = speed_z = 0;
     
-    hitbox_instance* h_ptr = get_hitbox_instance(focused_mob, enemy_hitbox_nr);
+    hitbox_instance* h_ptr = get_hitbox_instance(focused_mob, connected_hitbox_nr);
     if(h_ptr) {
         float actual_hx, actual_hy;
         rotate_point(h_ptr->x, h_ptr->y, focused_mob->angle, &actual_hx, &actual_hy);
@@ -118,8 +116,8 @@ void pikmin::teleport_to_connected_hitbox() {
         
         float final_px, final_py;
         angle_to_coordinates(
-            enemy_hitbox_angle + focused_mob->angle,
-            enemy_hitbox_dist * h_ptr->radius,
+            connected_hitbox_angle + focused_mob->angle,
+            connected_hitbox_dist * h_ptr->radius,
             &final_px, &final_py);
         final_px += actual_hx; final_py += actual_hy;
         
@@ -158,40 +156,6 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const b
     
     if(d) *d = closest_distance;
     return closest_pikmin;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Gives an Onion some Pikmin, and makes the Onion spew seeds out,
- ** depending on how many Pikmin there are in the field (don't spew if 100).
- */
-void give_pikmin_to_onion(onion* o, const unsigned amount) {
-    unsigned total_after = pikmin_list.size() + amount;
-    unsigned pikmin_to_spit = amount;
-    unsigned pikmin_to_keep = 0; //Pikmin to keep inside the Onion, without spitting.
-    
-    if(total_after > max_pikmin_in_field) {
-        pikmin_to_keep = total_after - max_pikmin_in_field;
-        pikmin_to_spit = amount - pikmin_to_keep;
-    }
-    
-    for(unsigned p = 0; p < pikmin_to_spit; p++) {
-        float angle = randomf(0, M_PI * 2);
-        float sx = cos(angle) * 60;
-        float sy = sin(angle) * 60;
-        
-        pikmin* new_pikmin = new pikmin(o->x, o->y, o->oni_type->pik_type, 0, "");
-        new_pikmin->set_state(PIKMIN_STATE_BURIED);
-        new_pikmin->z = 320;
-        new_pikmin->speed_z = 200;
-        new_pikmin->speed_x = sx;
-        new_pikmin->speed_y = sy;
-        create_mob(new_pikmin);
-    }
-    
-    for(unsigned p = 0; p < pikmin_to_keep; p++) {
-        pikmin_in_onions[o->oni_type->pik_type]++;
-    }
 }
 
 
@@ -320,7 +284,6 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
         
         //Finally, start moving the mob.
         m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
-        m->set_state(MOB_STATE_BEING_CARRIED);
         sfx_pikmin_carrying.play(-1, true);
     }
 }
@@ -371,11 +334,9 @@ void pikmin::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::be_dismissed(mob* m, void* info1, void* info2) {
-    float angle = *((float*) info1);
-    
     m->set_target(
-        cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE,
-        cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE,
+        *(float*) info1,
+        *(float*) info2,
         NULL,
         NULL,
         false
@@ -393,7 +354,6 @@ void pikmin::reach_dismiss_spot(mob* m, void* info1, void* info2) {
 void pikmin::become_idle(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     unfocus_mob(m);
-    ((pikmin*) m)->is_idle = true;
 }
 
 void pikmin::be_thrown(mob* m, void* info1, void* info2) {
@@ -404,7 +364,7 @@ void pikmin::be_thrown(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::be_released(mob* m, void* info1, void* info2) {
-    cur_leader_ptr->holding_pikmin = NULL;
+
 }
 
 void pikmin::land(mob* m, void* info1, void* info2) {
@@ -425,17 +385,14 @@ void pikmin::called(mob* m, void* info1, void* info2) {
 
 void pikmin::get_knocked_down(mob* m, void* info1, void* info2) {
     mob* m2 = (mob*) info1;
+    
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    hitbox_instance* hi = info->hi2;
+    float knockback = 0;
+    float knockback_angle = 0;
     
-    float angle = m2->angle;
-    if(hi->knockback_outward) {
-        angle += atan2(m->y - m2->y, m->x - m2->x);
-    } else {
-        angle += hi->knockback_angle;
-    }
+    calculate_knockback(info->mob2, m, info->hi2, info->hi1, &knockback, &knockback_angle);
+    apply_knockback(m, knockback, knockback_angle);
     
-    mob::attack((mob*) info1, m, false, 0, angle, hi->knockback, 0, 0);
     m->set_animation(PIKMIN_ANIM_LYING);
     
     remove_from_party(m);
@@ -443,6 +400,7 @@ void pikmin::get_knocked_down(mob* m, void* info1, void* info2) {
 
 void pikmin::go_to_opponent(mob* m, void* info1, void* info2) {
     focus_mob(m, (mob*) info1);
+    m->remove_target(true);
     m->set_target(
         0, 0,
         &m->focused_mob->x, &m->focused_mob->y,
@@ -470,7 +428,6 @@ void pikmin::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACK);
     ((pikmin*) p)->attack_time = p->pik_type->attack_interval;
-    p->was_thrown = false;
 }
 
 void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
@@ -482,7 +439,7 @@ void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
     
     if(!hi_ptr) return;
     
-    pik_ptr->enemy_hitbox_nr = hi_ptr->hitbox_nr;
+    pik_ptr->connected_hitbox_nr = hi_ptr->hitbox_nr;
     pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
     
     pik_ptr->focused_mob = mob_ptr;
@@ -508,7 +465,7 @@ void pikmin::tick_latched(mob* m, void* info1, void* info2) {
     pik_ptr->attack_time -= delta_t;
     
     if(pik_ptr->attack_time <= 0) {
-        pik_ptr->do_attack(get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr));
+        pik_ptr->do_attack(pik_ptr->focused_mob, get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr));
     }
 }
 
@@ -521,7 +478,8 @@ void pikmin::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     }
     if(pik_ptr->attack_time <= 0) {
         pik_ptr->do_attack(
-            get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->enemy_hitbox_nr)
+            pik_ptr->focused_mob,
+            get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr)
         );
     }
     
@@ -537,13 +495,17 @@ void pikmin::finish_carrying(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::chase_leader(mob* m, void* info1, void* info2) {
-    m->set_target(0, 0, &m->following_party->x, &m->following_party->y, false);
+    m->set_target(
+        m->party_spot_x, m->party_spot_y,
+        &m->following_party->party->party_center_x, &m->following_party->party->party_center_y,
+        false
+    );
     m->set_animation(PIKMIN_ANIM_WALK);
     focus_mob(m, m->following_party);
 }
 
 void pikmin::stop_being_idle(mob* m, void* info1, void* info2) {
-    ((pikmin*) m)->is_idle = false;
+
 }
 
 void pikmin::stop_in_group(mob* m, void* info1, void* info2) {
@@ -626,8 +588,10 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
             
             //Did this Pikmin leaving made the mob stop moving?
             if(p->focused_mob->carrier_info->current_carrying_strength < p->focused_mob->type->weight) {
-                p->focused_mob->remove_target(true);
-                p->focused_mob->carrier_info->decided_type = NULL;
+                if(p->focused_mob->delivery_time > DELIVERY_SUCK_TIME) {
+                    p->focused_mob->remove_target(true);
+                    p->focused_mob->carrier_info->decided_type = NULL;
+                }
             } else {
                 start_moving_carried_object(p->focused_mob, NULL, p); //Enter this code so that if this Pikmin leaving broke a tie, the Onion's picked correctly.
             }
@@ -642,13 +606,67 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
     
 }
 
-void swap_pikmin(mob* new_pik) {
-    leader* lea = cur_leader_ptr;
-    if(lea->holding_pikmin) {
-        lea->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
-    }
-    lea->holding_pikmin = new_pik;
-    new_pik->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND);
+void pikmin::draw() {
+
+    frame* f_ptr = anim.get_frame();
     
-    sfx_switch_pikmin.play(0, false);
+    if(!f_ptr) return;
+    
+    float draw_x, draw_y;
+    float draw_w, draw_h;
+    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    
+    draw_sprite(
+        f_ptr->bitmap,
+        draw_x, draw_y,
+        draw_w, draw_h,
+        angle,
+        map_gray(get_sprite_lighting(this))
+    );
+    
+    bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE);
+    if(is_idle) {
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+        draw_sprite(
+            f_ptr->bitmap,
+            draw_x, draw_y,
+            draw_w, draw_h,
+            angle,
+            map_gray(get_sprite_lighting(this))
+        );
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+    }
+    
+    float w_mult = draw_w / f_ptr->game_w;
+    float h_mult = draw_h / f_ptr->game_h;
+    
+    if(f_ptr->top_visible) {
+        float c = cos(angle), s = sin(angle);
+        draw_sprite(
+            pik_type->bmp_top[maturity],
+            draw_x + c * f_ptr->top_x * w_mult + c * f_ptr->top_y * w_mult,
+            draw_y - s * f_ptr->top_y * h_mult + s * f_ptr->top_x * h_mult,
+            f_ptr->top_w * w_mult, f_ptr->top_h * h_mult,
+            f_ptr->top_angle + angle,
+            map_gray(get_sprite_lighting(this))
+        );
+    }
+    
+    if(is_idle) {
+        draw_sprite(
+            bmp_idle_glow,
+            x, y,
+            30 * w_mult, 30 * h_mult,
+            idle_glow_angle,
+            al_map_rgba_f(
+                type->main_color.r * get_sprite_lighting(this) / 255,
+                type->main_color.g * get_sprite_lighting(this) / 255,
+                type->main_color.b * get_sprite_lighting(this) / 255,
+                1
+            )
+        );
+    }
+    
+    
 }

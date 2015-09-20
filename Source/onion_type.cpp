@@ -19,4 +19,6 @@ void onion_type::load_from_file(data_node* file, const bool load_resources, vect
         error_log("Unknown Pikmin type \"" + pik_type_node->value + "\"!", pik_type_node);
     }
     pik_type = pikmin_types[pik_type_node->value];
+    
+    anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
 }

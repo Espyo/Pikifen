@@ -35,6 +35,7 @@ public:
     gate(const float x, const float y, gate_type* type, const string &vars);
     
     static void open(mob* m, void* info1, void* info2);
+    static void take_damage(mob* m, void* info1, void* info2);
     static void set_anim(mob* m, void* info1, void* info2);
 };
 
