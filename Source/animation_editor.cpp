@@ -92,7 +92,7 @@ void animation_editor::do_logic() {
             
             if(hitboxes_visible) {
                 size_t n_hitboxes = f->hitbox_instances.size();
-                for(size_t h = 0; h < n_hitboxes; h++) {
+                for(size_t h = 0; h < n_hitboxes; ++h) {
                     hitbox_instance* h_ptr = &f->hitbox_instances[h];
                     
                     ALLEGRO_COLOR hitbox_color, hitbox_outline_color;
@@ -522,7 +522,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1 && mode == EDITOR_MODE_HITBOX_INSTANCES) {
         if(ev.mouse.x < scr_w - 208 && ev.mouse.y < scr_h - 16) {
             if(f) {
-                for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+                for(size_t h = 0; h < f->hitbox_instances.size(); ++h) {
                 
                     hitbox_instance* hi_ptr = &f->hitbox_instances[h];
                     dist d(mouse_cursor_x, mouse_cursor_y, hi_ptr->x, hi_ptr->y);
@@ -1155,7 +1155,7 @@ void animation_editor::load() {
     frm_hitboxes->widgets["but_add"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         string name = ((lafi::textbox*) gui->widgets["frm_hitboxes"]->widgets["txt_add"])->text;
         if(name.empty()) return;
-        for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
             if(anims.hitboxes[h]->name == name) {
                 cur_hitbox_nr = h;
                 gui_load_hitbox();
@@ -1177,7 +1177,7 @@ void animation_editor::load() {
             gui_load_hitbox();
             return;
         }
-        for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
             if(h == cur_hitbox_nr) continue;
             if(anims.hitboxes[h]->name == new_name) {
                 gui_load_hitbox();
@@ -1417,11 +1417,11 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements.push_back("Pikmin");
         elements.push_back("Treasures");
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        for(size_t a = 0; a < anims.animations.size(); a++) {
+        for(size_t a = 0; a < anims.animations.size(); ++a) {
             elements.push_back(anims.animations[a]->name);
         }
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
-        for(size_t f = 0; f < anims.frames.size(); f++) {
+        for(size_t f = 0; f < anims.frames.size(); ++f) {
             elements.push_back(anims.frames[f]->name);
         }
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ENEMIES) {
@@ -1450,7 +1450,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
     
     f->easy_reset();
     f->easy_row();
-    for(size_t e = 0; e < elements.size(); e++) {
+    for(size_t e = 0; e < elements.size(); ++e) {
         lafi::button* b = new lafi::button(0, 0, 0, 0, elements[e]);
         string name = elements[e];
         b->left_mouse_click_handler = [name, type] (lafi::widget*, int, int) {
@@ -1526,7 +1526,7 @@ void animation_editor::pick(string name, unsigned char type) {
         load_animation_pool();
         
         //Top bitmap.
-        for(unsigned char t = 0; t < 3; t++) {
+        for(unsigned char t = 0; t < 3; ++t) {
             if(top_bmp[t] && top_bmp[t] != bmp_error) {
                 al_destroy_bitmap(top_bmp[t]);
                 top_bmp[t] = NULL;
@@ -1556,7 +1556,7 @@ void animation_editor::save_animation_pool() {
     data_node* animations_node = new data_node("animations", "");
     file_node.add(animations_node);
     
-    for(size_t a = 0; a < anims.animations.size(); a++) {
+    for(size_t a = 0; a < anims.animations.size(); ++a) {
         data_node* anim_node = new data_node(anims.animations[a]->name, "");
         animations_node->add(anim_node);
         
@@ -1564,7 +1564,7 @@ void animation_editor::save_animation_pool() {
         data_node* frame_instances_node = new data_node("frame_instances", "");
         anim_node->add(frame_instances_node);
         
-        for(size_t fi = 0; fi < anims.animations[a]->frame_instances.size(); fi++) {
+        for(size_t fi = 0; fi < anims.animations[a]->frame_instances.size(); ++fi) {
             frame_instance* fi_ptr = &anims.animations[a]->frame_instances[fi];
             
             data_node* frame_instance_node = new data_node(fi_ptr->frame_name, "");
@@ -1577,7 +1577,7 @@ void animation_editor::save_animation_pool() {
     data_node* frames_node = new data_node("frames", "");
     file_node.add(frames_node);
     
-    for(size_t f = 0; f < anims.frames.size(); f++) {
+    for(size_t f = 0; f < anims.frames.size(); ++f) {
         data_node* frame_node = new data_node(anims.frames[f]->name, "");
         frames_node->add(frame_node);
         
@@ -1603,7 +1603,7 @@ void animation_editor::save_animation_pool() {
         data_node* hitbox_instances_node = new data_node("hitbox_instances", "");
         frame_node->add(hitbox_instances_node);
         
-        for(size_t hi = 0; hi < anims.frames[f]->hitbox_instances.size(); hi++) {
+        for(size_t hi = 0; hi < anims.frames[f]->hitbox_instances.size(); ++hi) {
             hitbox_instance* hi_ptr = &anims.frames[f]->hitbox_instances[hi];
             
             data_node* hitbox_instance_node = new data_node(hi_ptr->hitbox_name, "");
@@ -1630,7 +1630,7 @@ void animation_editor::save_animation_pool() {
     data_node* hitboxes_node = new data_node("hitboxes", "");
     file_node.add(hitboxes_node);
     
-    for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+    for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
         data_node* hitbox_node = new data_node(anims.hitboxes[h]->name, "");
         hitboxes_node->add(hitbox_node);
         
@@ -1644,7 +1644,7 @@ void animation_editor::save_animation_pool() {
  * Update every frame's hitbox instances in light of new hitbox info.
  */
 void animation_editor::update_hitboxes() {
-    for(size_t f = 0; f < anims.frames.size(); f++) {
+    for(size_t f = 0; f < anims.frames.size(); ++f) {
     
         frame* f_ptr = anims.frames[f];
         
@@ -1653,7 +1653,7 @@ void animation_editor::update_hitboxes() {
             string h_name = f_ptr->hitbox_instances[hi].hitbox_name;
             bool name_found = false;
             
-            for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+            for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
                 if(anims.hitboxes[h]->name == h_name) {
                     name_found = true;
                     break;
@@ -1668,11 +1668,11 @@ void animation_editor::update_hitboxes() {
         }
         
         //Add missing hitboxes.
-        for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
             bool hitbox_found = false;
             string name = anims.hitboxes[h]->name;
             
-            for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); hi++) {
+            for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); ++hi) {
                 if(f_ptr->hitbox_instances[hi].hitbox_name == name) {
                     hitbox_found = true;
                     break;
@@ -1687,7 +1687,7 @@ void animation_editor::update_hitboxes() {
         //Sort them with the new order.
         std::sort(f_ptr->hitbox_instances.begin(), f_ptr->hitbox_instances.end(), [] (hitbox_instance hi1, hitbox_instance hi2) {
             size_t pos1 = 0, pos2 = 1;
-            for(size_t h = 0; h < anims.hitboxes.size(); h++) {
+            for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
                 if(anims.hitboxes[h]->name == hi1.hitbox_name) pos1 = h;
                 if(anims.hitboxes[h]->name == hi2.hitbox_name) pos2 = h;
             }

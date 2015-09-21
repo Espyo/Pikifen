@@ -202,7 +202,7 @@ void textbox::widget_on_key_char(int keycode, int unichar, unsigned int modifier
             longest_tab_index = 0;
             widget* next_textbox = NULL, *prev_textbox = NULL, *first_textbox = NULL, *last_textbox = NULL;
             
-            for(auto w = parent->widgets.begin(); w != parent->widgets.end(); w++) {
+            for(auto w = parent->widgets.begin(); w != parent->widgets.end(); ++w) {
                 if(typeid(*w->second) == typeid(textbox)) {
                 
                     if(w->second == this) continue;
@@ -309,7 +309,7 @@ void textbox::widget_on_mouse_move(int x, int) {
 unsigned int textbox::mouse_to_char(int mouse_x) {
     //Get the relative X, from the start of the text.
     int rel_x = mouse_x - x1 + scroll_x;
-    for(size_t c = 0; c < text.size(); c++) {
+    for(size_t c = 0; c < text.size(); ++c) {
         int width = al_get_text_width(style->text_font, text.substr(0, c + 1).c_str());
         if(rel_x < width) {
             return c;

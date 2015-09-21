@@ -19,7 +19,9 @@ leader_type::leader_type() :
     punch_strength(DEF_PUNCH_STRENGTH),
     pluck_delay(0.6),
     bmp_icon(nullptr) {
+    
     main_color = al_map_rgb(128, 128, 128);
+    show_health = false;
     
     init_script();
 }

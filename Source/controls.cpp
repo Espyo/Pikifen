@@ -33,7 +33,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             //TODO remove.
             dist closest_mob_to_cursor_dist = FLT_MAX;
             mob* closest_mob_to_cursor = NULL;
-            for(size_t m = 0; m < mobs.size(); m++) {
+            for(size_t m = 0; m < mobs.size(); ++m) {
                 dist d = dist(cursor_x, cursor_y, mobs[m]->x, mobs[m]->y);
                 if(d < closest_mob_to_cursor_dist) {
                     closest_mob_to_cursor = mobs[m];
@@ -64,7 +64,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     
     
     size_t n_controls = controls.size();
-    for(size_t c = 0; c < n_controls; c++) {
+    for(size_t c = 0; c < n_controls; ++c) {
     
         control_info* con = &controls[c];
         
@@ -111,7 +111,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         }
     }
     
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
             mouse_cursor_x = ev.mouse.x;
             mouse_cursor_y = ev.mouse.y;
@@ -234,7 +234,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 //Now check if the leader should read an info spot.
                 if(!done) {
                     size_t n_info_spots = info_spots.size();
-                    for(size_t i = 0; i < n_info_spots; i++) {
+                    for(size_t i = 0; i < n_info_spots; ++i) {
                         info_spot* i_ptr = info_spots[i];
                         if(i_ptr->opens_box) {
                             if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) <= INFO_SPOT_TRIGGER_RANGE) {
@@ -250,7 +250,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 if(!done) {
                     //TODO
                     size_t n_onions = onions.size();
-                    for(size_t o = 0; o < n_onions; o++) {
+                    for(size_t o = 0; o < n_onions; ++o) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= MIN_ONION_CHECK_RANGE) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
                                 //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
@@ -266,7 +266,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 //Now check if the leader should heal themselves on the ship.
                 if(!done) {
                     size_t n_ships = ships.size();
-                    for(size_t s = 0; s < n_ships; s++) {
+                    for(size_t s = 0; s < n_ships; ++s) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, ships[s]->x + ships[s]->type->radius + SHIP_BEAM_RANGE, ships[s]->y) <= SHIP_BEAM_RANGE) {
                             if(ships[s]->shi_type->can_heal) {
                                 //TODO make it prettier.
@@ -518,7 +518,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             size_t n_members = cur_leader_ptr->party->members.size();
             //Get all Pikmin types in the group.
-            for(size_t m = 0; m < n_members; m++) {
+            for(size_t m = 0; m < n_members; ++m) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
                     
@@ -547,7 +547,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             
             //Go one type adjacent to the current member being held.
-            for(size_t t = 0; t < n_types; t++) {
+            for(size_t t = 0; t < n_types; ++t) {
                 if(current_type == types_in_party[t]) {
                     if(button == BUTTON_SWITCH_TYPE_RIGHT) {
                         new_type = types_in_party[(t + 1) % n_types];
@@ -561,7 +561,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             size_t tm_match_nr = n_members + 1; //Number of the member that matches the type and maturity we want.
             
             //Find a Pikmin of the new type.
-            for(size_t m = 0; m < n_members; m++) {
+            for(size_t m = 0; m < n_members; ++m) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                 
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
@@ -605,7 +605,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             size_t n_members = cur_leader_ptr->party->members.size();
             //Get Pikmin of the same type, one for each maturity.
-            for(size_t m = 0; m < n_members; m++) {
+            for(size_t m = 0; m < n_members; ++m) {
                 if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
                     pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
                     
@@ -618,7 +618,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
             bool any_partners = false;
-            for(unsigned char p = 0; p < 3; p++) {
+            for(unsigned char p = 0; p < 3; ++p) {
                 if(partners[p]) any_partners = true;
             }
             

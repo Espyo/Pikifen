@@ -14,6 +14,7 @@
 #include "mob_script.h"
 
 gate_type::gate_type() {
+    casts_shadow = false;
     init_script();
 }
 

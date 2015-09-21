@@ -86,7 +86,7 @@ bool particle::tick() {
 void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float center_x, const float center_y, const float speed_min, const float speed_max, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
-    for(unsigned char p = 0; p < n_particles; p++) {
+    for(unsigned char p = 0; p < n_particles; ++p) {
         float angle = randomf(0, M_PI * 2);
         float speed = randomf(speed_min, speed_max);
         
@@ -124,7 +124,7 @@ void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const b
 void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
-    for(unsigned char p = 0; p < n_particles; p++) {
+    for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
                 type,
@@ -158,7 +158,7 @@ void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, c
 void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(min, max);
     
-    for(unsigned char p = 0; p < n_particles; p++) {
+    for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
                 type,
@@ -190,7 +190,7 @@ void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp,
 void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const float angle, const ALLEGRO_COLOR &color) {
     unsigned char n_particles = randomi(35, 40);
     
-    for(unsigned char p = 0; p < n_particles; p++) {
+    for(unsigned char p = 0; p < n_particles; ++p) {
         float angle_offset = randomf(-M_PI_4, M_PI_4);
         
         float power = randomf(30, 90);

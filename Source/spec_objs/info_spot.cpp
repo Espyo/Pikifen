@@ -28,7 +28,7 @@ info_spot::info_spot(const float x, const float y, const float angle, const stri
     text = replace_all(text, "\\n", "\n");
     vector<string> lines = split(text, "\n");
     size_t n_lines = lines.size();
-    for(size_t l = 0; l < n_lines; l++) {
+    for(size_t l = 0; l < n_lines; ++l) {
         unsigned int line_w = al_get_text_width(font, lines[l].c_str());
         if(line_w > text_w) text_w = line_w;
     }

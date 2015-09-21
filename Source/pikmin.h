@@ -77,7 +77,8 @@ public:
     static void tick_attacking_grounded(mob* m, void* info1, void* info2);
     static void tick_grabbed_by_enemy(  mob* m, void* info1, void* info2);
     static void prepare_to_attack(      mob* m, void* info1, void* info2);
-    static void get_knocked_down(        mob* m, void* info1, void* info2);
+    static void get_knocked_down(       mob* m, void* info1, void* info2);
+    static void lose_latched_mob(       mob* m, void* info1, void* info2);
     
 };
 

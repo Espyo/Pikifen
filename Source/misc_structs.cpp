@@ -221,7 +221,7 @@ void mob_category_manager::register_category(
  * Returns 255 on error.
  */
 unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
-    for(unsigned char n = 0; n < categories.size(); n++) {
+    for(unsigned char n = 0; n < categories.size(); ++n) {
         if(categories[n].plural_name == pname) return n;
     }
     return 255;
@@ -233,7 +233,7 @@ unsigned char mob_category_manager::get_nr_from_pname(const string &pname) {
  * Returns 255 on error.
  */
 unsigned char mob_category_manager::get_nr_from_sname(const string &sname) {
-    for(unsigned char n = 0; n < categories.size(); n++) {
+    for(unsigned char n = 0; n < categories.size(); ++n) {
         if(categories[n].singular_name == sname) return n;
     }
     return 255;
@@ -360,7 +360,7 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
         x_coords.push_back(vector<float>());
         y_coords.push_back(vector<float>());
         mobs_in_spots.push_back(vector<mob*>());
-        for(unsigned s = 0; s < n_spots_on_wheel; s++) {
+        for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
             x_coords.back().push_back(dist_from_center * cos(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
             y_coords.back().push_back(dist_from_center * sin(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
             mobs_in_spots.back().push_back(NULL);
@@ -388,7 +388,7 @@ void party_spot_info::add(mob* m) {
     size_t chosen_spot_nr = randomi(0, (n_spots_in_wheel - n_current_wheel_members) - 1);
     size_t chosen_spot = 0;
     auto v = &mobs_in_spots[current_wheel];
-    for(unsigned s = 0, c = 0; s < n_spots_in_wheel; s++) {
+    for(unsigned s = 0, c = 0; s < n_spots_in_wheel; ++s) {
         if((*v)[s]) continue;
         if(c == chosen_spot_nr) {
             chosen_spot = s;
@@ -414,10 +414,10 @@ void party_spot_info::remove(mob* m) {
     unsigned mob_spot = UINT_MAX; //Spot number of the mob we're trying to remove.
     
     size_t n_wheels = mobs_in_spots.size();
-    for(size_t w = 0; w < n_wheels; w++) {
+    for(size_t w = 0; w < n_wheels; ++w) {
     
         size_t n_spots = mobs_in_spots[w].size();
-        for(size_t s = 0; s < n_spots; s++) {
+        for(size_t s = 0; s < n_spots; ++s) {
         
             if(mobs_in_spots[w][s] == m) {
                 mob_wheel = w;
@@ -530,7 +530,7 @@ void sector_types_manager::register_type(unsigned char nr, string name) {
  * Returns 255 on error.
  */
 unsigned char sector_types_manager::get_nr(const string &name) {
-    for(unsigned char n = 0; n < names.size(); n++) {
+    for(unsigned char n = 0; n < names.size(); ++n) {
         if(names[n] == name) return n;
     }
     return 255;

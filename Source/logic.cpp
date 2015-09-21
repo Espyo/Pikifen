@@ -24,12 +24,13 @@
 
 void do_logic() {
 
-    /*  ********************************************
-      ***  .-.                                .-.  ***
-    ***** ( L )          MAIN LOGIC          ( L ) *****
-      ***  `-´                                `-´  ***
-        ********************************************/
+    do_aesthetic_logic();
+    do_gameplay_logic();
     
+}
+
+void do_aesthetic_logic() {
+
     /*************************************
     *                               .-.  *
     *   Timer things - aesthetic   ( L ) *
@@ -104,7 +105,7 @@ void do_logic() {
             if(whistle_next_dot_timer.ticked) {
                 whistle_next_dot_timer.start();
                 unsigned char dot = 255;
-                for(unsigned char d = 0; d < 6; d++) { //Find WHAT dot to add.
+                for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
                     if(whistle_dot_radius[d] == -1) { dot = d; break;}
                 }
                 
@@ -112,7 +113,7 @@ void do_logic() {
             }
         }
         
-        for(unsigned char d = 0; d < 6; d++) {
+        for(unsigned char d = 0; d < 6; ++d) {
             if(whistle_dot_radius[d] == -1) continue;
             
             whistle_dot_radius[d] += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
@@ -139,7 +140,7 @@ void do_logic() {
     //The way this works is that the three color components are saved.
     //Each frame, we increase them or decrease them (if it reaches 255, set it to decrease, if 0, set it to increase).
     //Each index increases/decreases at a different speed, with red being the slowest and blue the fastest.
-    for(unsigned char i = 0; i < 3; i++) {
+    for(unsigned char i = 0; i < 3; ++i) {
         float dir_mult = (ship_beam_ring_color_up[i]) ? 1.0 : -1.0;
         signed char addition = dir_mult * SHIP_BEAM_RING_COLOR_SPEED * (i + 1) * delta_t;
         if(ship_beam_ring_color[i] + addition >= 255) {
@@ -176,6 +177,10 @@ void do_logic() {
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
     
+}
+
+void do_gameplay_logic() {
+
     if(cur_message.empty()) {
     
         /************************************
@@ -237,7 +242,7 @@ void do_logic() {
                 if(m_ptr->reached_destination && m_ptr->carrier_info->decided_type && m_ptr->delivery_time > DELIVERY_SUCK_TIME) {
                     m_ptr->delivery_time = DELIVERY_SUCK_TIME;
                     sfx_pikmin_carrying.stop();
-                    for(size_t p = 0; p < m_ptr->carrier_info->carrier_spots.size() ; p++) {
+                    for(size_t p = 0; p < m_ptr->carrier_info->carrier_spots.size(); ++p) {
                         if(!m_ptr->carrier_info->carrier_spots[p]) continue;
                         m_ptr->carrier_info->carrier_spots[p]->fsm.run_event(MOB_EVENT_FINISHED_CARRYING);
                     }
@@ -253,7 +258,7 @@ void do_logic() {
                         //Find Onion.
                         size_t n_onions = onions.size();
                         size_t o = 0;
-                        for(; o < n_onions; o++) {
+                        for(; o < n_onions; ++o) {
                             if(onions[o]->oni_type->pik_type == m_ptr->carrier_info->decided_type) break;
                         }
                         
@@ -292,7 +297,7 @@ void do_logic() {
              ********************************/
             //Interactions between this mob and the others.
             
-            for(size_t m2 = 0; m2 < n_mobs; m2++) {
+            for(size_t m2 = 0; m2 < n_mobs; ++m2) {
                 if(m == m2) continue;
                 mob* m2_ptr = mobs[m2];
                 
@@ -424,7 +429,7 @@ void do_logic() {
                             float m2_angle_cos = cos(m2_ptr->angle);
                             
                             //For all of mob 2's hitboxes, check for collisions.
-                            for(size_t h2 = 0; h2 < f2_ptr->hitbox_instances.size(); h2++) {
+                            for(size_t h2 = 0; h2 < f2_ptr->hitbox_instances.size(); ++h2) {
                                 hitbox_instance* h2_ptr = &f2_ptr->hitbox_instances[h2];
                                 
                                 //Get mob 2's real hitbox location.
@@ -483,7 +488,7 @@ void do_logic() {
                                 } else {
                                     //Check if any hitbox touched mob 2's hitbox.
                                     
-                                    for(size_t h1 = 0; h1 < f1_ptr->hitbox_instances.size(); h1++) {
+                                    for(size_t h1 = 0; h1 < f1_ptr->hitbox_instances.size(); ++h1) {
                                     
                                         hitbox_instance* h1_ptr = &f1_ptr->hitbox_instances[h1];
                                         if(h1_ptr->type == HITBOX_TYPE_DISABLED) continue;
@@ -650,7 +655,7 @@ void do_logic() {
         *             \/  *
         ******************/
         
-        for(size_t p = 0; p < pikmin_list.size(); p++) {
+        for(size_t p = 0; p < pikmin_list.size(); ++p) {
             pikmin* pik_ptr = pikmin_list[p];
             
             //Is it dead?
@@ -677,7 +682,7 @@ void do_logic() {
         *            /|\ *
         ******************/
         
-        for(size_t o = 0; o < onions.size(); o++) {
+        for(size_t o = 0; o < onions.size(); ++o) {
             onion* o_ptr = onions[o];
             
             if(o_ptr->spew_queue == 0) continue;
@@ -743,7 +748,7 @@ void do_logic() {
         
         if(n_members > 0 && !closest_party_member) {
         
-            for(size_t m = 0; m < n_members; m++) {
+            for(size_t m = 0; m < n_members; ++m) {
                 dist d(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
                 if(m == 0 || d < closest_distance) {
                     closest_distance = d;
@@ -761,6 +766,7 @@ void do_logic() {
         
         if(group_move_go_to_cursor) {
             group_move_angle = cursor_angle;
+            dist leader_to_cursor_dis(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
             group_move_intensity = leader_to_cursor_dis.to_float() / CURSOR_MAX_DIST;
         } else if(group_move_x != 0 || group_move_y != 0) {
             coordinates_to_angle(
@@ -808,7 +814,7 @@ void do_logic() {
             cur_leader_ptr->face(cursor_angle);
         }
         
-        leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
+        dist leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
         if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
             //TODO with an analog stick, if the cursor is being moved, it's considered off-limit a lot more than it should.
             //Cursor goes beyond the range limit.
@@ -860,7 +866,7 @@ void do_logic() {
             throw_particle_timer.start();
             
             size_t n_leaders = leaders.size();
-            for(size_t l = 0; l < n_leaders; l++) {
+            for(size_t l = 0; l < n_leaders; ++l) {
                 if(leaders[l]->was_thrown)
                     particles.push_back(
                         particle(
@@ -869,7 +875,7 @@ void do_logic() {
                     );
             }
             
-            for(size_t p = 0; p < pikmin_list.size(); p++) {
+            for(size_t p = 0; p < pikmin_list.size(); ++p) {
                 if(pikmin_list[p]->was_thrown)
                     particles.push_back(
                         particle(

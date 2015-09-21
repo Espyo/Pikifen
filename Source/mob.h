@@ -128,7 +128,7 @@ public:
     float target_distance;              //Distance from the target in which the mob is considered as being there.
     
     void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL, bool free_move = false, float target_distance = 3);
-    void remove_target(const bool stop);
+    void remove_target();
     
     //Party things.
     mob* following_party;      //The current mob is following this mob's party.

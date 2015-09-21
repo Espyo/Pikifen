@@ -186,7 +186,7 @@ void mob::tick_misc_logic() {
         party->party_center_y += party_center_my * delta_t;
         
         size_t n_members = party->members.size();
-        for(size_t m = 0; m < n_members; m++) {
+        for(size_t m = 0; m < n_members; ++m) {
             party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
         }
     }
@@ -331,12 +331,12 @@ void mob::tick_physics() {
             
             linedef* l_ptr = NULL;
             //Check the linedefs inside the blockmaps for collisions.
-            for(size_t bx = bx1; bx <= bx2; bx++) {
-                for(size_t by = by1; by <= by2; by++) {
+            for(size_t bx = bx1; bx <= bx2; ++bx) {
+                for(size_t by = by1; by <= by2; ++by) {
                 
                     vector<linedef*>* linedefs = &cur_area_map.bmap.linedefs[bx][by];
                     
-                    for(size_t l = 0; l < linedefs->size(); l++) {
+                    for(size_t l = 0; l < linedefs->size(); ++l) {
                         l_ptr = (*linedefs)[l];
                         if(
                             circle_intersects_line(
@@ -350,7 +350,7 @@ void mob::tick_physics() {
                             //If the mob intersects with the linedef, it means it's on both sectors.
                             //Check if any of the sectors say the mob shouldn't be there.
                             //Also, adjust height for steps and the like.
-                            for(size_t s = 0; s < 2; s++) {
+                            for(size_t s = 0; s < 2; ++s) {
                                 sector* s_ptr = l_ptr->sectors[s];
                                 
                                 if(!have_highest_z) {
@@ -531,7 +531,7 @@ void mob::tick_script() {
         } else {
     
             //Find an opponent.
-            for(auto m = mobs.begin(); m != mobs.end(); m++) {
+            for(auto m = mobs.begin(); m != mobs.end(); ++m) {
                 if(should_attack(this, *m)) {
                     dist d(x, y, (*m)->x, (*m)->y);
                     if(d <= type->sight_radius) {
@@ -608,19 +608,15 @@ void mob::set_target(float target_x, float target_y, float* target_rel_x, float*
 
 /* ----------------------------------------------------------------------------
  * Makes a mob not follow any target.
- * stop: If true, the mob stops dead on its tracks.
  */
-void mob::remove_target(bool stop) {
-    //TODO is "stop" still needed?
+void mob::remove_target() {
     go_to_target = false;
     reached_destination = false;
     target_z = NULL;
     
-    if(stop) {
-        speed_x = 0;
-        speed_y = 0;
-        speed_z = 0;
-    }
+    speed_x = 0;
+    speed_y = 0;
+    speed_z = 0;
 }
 
 
@@ -633,7 +629,7 @@ void mob::remove_target(bool stop) {
 void mob::eat(const size_t nr) {
 
     if(nr == 0) {
-        for(size_t p = 0; p < chomping_pikmin.size(); p++) {
+        for(size_t p = 0; p < chomping_pikmin.size(); ++p) {
             chomping_pikmin[p]->fsm.run_event(MOB_EVENT_RELEASED);
         }
         chomping_pikmin.clear();
@@ -642,7 +638,7 @@ void mob::eat(const size_t nr) {
     
     size_t total = min(nr, chomping_pikmin.size());
     
-    for(size_t p = 0; p < total; p++) {
+    for(size_t p = 0; p < total; ++p) {
         chomping_pikmin[p]->health = 0;
         chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
     }
@@ -769,7 +765,7 @@ carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool
     current_n_carriers(0),
     decided_type(nullptr) {
     
-    for(size_t c = 0; c < max_carriers; c++) {
+    for(size_t c = 0; c < max_carriers; ++c) {
         carrier_spots.push_back(NULL);
         float angle = (M_PI * 2) / max_carriers * c;
         carrier_spots_x.push_back(cos(angle) * m->type->radius);
@@ -820,7 +816,7 @@ void add_to_party(mob* party_leader, mob* new_member) {
 void apply_knockback(mob* m, const float knockback, const float knockback_angle) {
     if(knockback != 0) {
         //TODO make these not be magic numbers.
-        m->remove_target(true);
+        m->remove_target();
         m->speed_x = cos(knockback_angle) * knockback * 130;
         m->speed_y = sin(knockback_angle) * knockback * 130;
         m->speed_z = 200;
@@ -923,7 +919,7 @@ void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h
     victim->health -= damage;
     if(knockback != 0) {
         //TODO make these not be magic numbers.
-        victim->remove_target(true);
+        victim->remove_target();
         victim->speed_x = cos(knockback_angle) * knockback * 130;
         victim->speed_y = sin(knockback_angle) * knockback * 130;
         victim->speed_z = 200;
@@ -1057,7 +1053,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
     hitbox_instance* closest_hitbox = NULL;
     float closest_hitbox_dist = 0;
     
-    for(size_t h = 0; h < f->hitbox_instances.size(); h++) {
+    for(size_t h = 0; h < f->hitbox_instances.size(); ++h) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
         float hx, hy;
         rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);

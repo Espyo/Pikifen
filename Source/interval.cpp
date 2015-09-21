@@ -25,7 +25,7 @@ interval::interval(const string &s) {
     vector<string> subinterval_strs = split(s, ";");
     size_t n_subintervals = subinterval_strs.size();
     
-    for(size_t si = 0; si < n_subintervals; si++) {
+    for(size_t si = 0; si < n_subintervals; ++si) {
         float lower = FLT_MIN;
         float upper = FLT_MAX;
         float divisor = 0;
@@ -71,7 +71,7 @@ bool interval::is_number_in_interval(const float n) {
     size_t n_subintervals = subintervals.size();
     if(n_subintervals == 0) return false;
     
-    for(size_t s = 0; s < n_subintervals; s++) {
+    for(size_t s = 0; s < n_subintervals; ++s) {
         subinterval* s_ptr = &subintervals[s];
         if(n >= s_ptr->lower && n <= s_ptr->upper) {
         

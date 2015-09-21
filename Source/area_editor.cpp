@@ -368,7 +368,7 @@ void area_editor::do_logic() {
         
         //Shadows.
         if(mode == EDITOR_MODE_SHADOWS || (sec_mode == ESM_TEXTURE_VIEW && show_shadows)) {
-            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             
                 tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
                 draw_sprite(
@@ -400,7 +400,7 @@ void area_editor::do_logic() {
         //Lightly glow the sector under the mouse.
         if(mode == EDITOR_MODE_SECTORS) {
             if(on_sector && moving_thing == string::npos) {
-                for(size_t t = 0; t < on_sector->triangles.size(); t++) {
+                for(size_t t = 0; t < on_sector->triangles.size(); ++t) {
                     triangle* t_ptr = &on_sector->triangles[t];
                     //Uncomment this to show the triangles.
                     /*al_draw_triangle(
@@ -427,11 +427,11 @@ void area_editor::do_logic() {
         }
         
         //TODO temp stuff.
-        /*for(size_t v = 0; v < temp_o.size(); v++) {
+        /*for(size_t v = 0; v < temp_o.size(); ++v) {
             al_draw_text(font, al_map_rgb(255, 255, 255), temp_o[v]->x, temp_o[v]->y - font_h, ALLEGRO_ALIGN_CENTER, ("O" + to_string((long long) v)).c_str());
         }
-        for(size_t i = 0; i < temp_i.size(); i++) {
-            for(size_t v = 0; v < temp_i[i].size(); v++) {
+        for(size_t i = 0; i < temp_i.size(); ++i) {
+            for(size_t v = 0; v < temp_i[i].size(); ++v) {
                 al_draw_text(font, al_map_rgb(255, 255, 255), temp_i[i][v]->x, temp_i[i][v]->y - font_h * 2, ALLEGRO_ALIGN_CENTER, ("I" + to_string((long long) v)).c_str());
             }
         }*/
@@ -479,11 +479,11 @@ void area_editor::find_errors() {
     if(error_type == EET_NONE) {
         error_vertex_ptr = NULL;
         
-        for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+        for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
             vertex* v1_ptr = cur_area_map.vertices[v];
             if(v1_ptr->x == FLT_MAX) continue;
             
-            for(size_t v2 = v + 1; v2 < cur_area_map.vertices.size(); v2++) {
+            for(size_t v2 = v + 1; v2 < cur_area_map.vertices.size(); ++v2) {
                 vertex* v2_ptr = cur_area_map.vertices[v2];
                 
                 if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {

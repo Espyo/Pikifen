@@ -45,7 +45,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
             hitbox_names.erase(hitbox_names.begin());
         }
         
-        for(size_t hn = 0; hn < hitbox_names.size(); hn++) {
+        for(size_t hn = 0; hn < hitbox_names.size(); ++hn) {
             size_t h_pos = mt->anims.find_hitbox(hitbox_names[hn]);
             
             if(h_pos == string::npos) {
@@ -105,11 +105,11 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
                     sub_type = MOB_ACTION_MOVE_REL_COORDS;
                     if(string_coords.size() < 3) valid = false;
                     else {
-                        for(size_t sc = 1; sc < string_coords.size(); sc++) vf.push_back(s2f(string_coords[sc]));
+                        for(size_t sc = 1; sc < string_coords.size(); ++sc) vf.push_back(s2f(string_coords[sc]));
                     }
                 } else {
                     sub_type = MOB_ACTION_MOVE_COORDS;
-                    for(size_t sc = 0; sc < string_coords.size(); sc++) vf.push_back(s2f(string_coords[sc]));
+                    for(size_t sc = 0; sc < string_coords.size(); ++sc) vf.push_back(s2f(string_coords[sc]));
                 }
             }
             
@@ -178,7 +178,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
     } else if(n == "state") {
         type = MOB_ACTION_SET_STATE;
-        for(size_t s = 0; s < states->size(); s++) {
+        for(size_t s = 0; s < states->size(); ++s) {
             if(states->at(s)->name == dn->value) {
                 vi.push_back(s);
                 break;
@@ -341,14 +341,14 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
             if(m->focused_mob) {
                 m->set_target(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
             } else {
-                m->remove_target(true);
+                m->remove_target();
             }
             
         } else if(sub_type == MOB_ACTION_MOVE_HOME) {
             m->set_target(m->home_x, m->home_y, 0, 0, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
-            m->remove_target(true);
+            m->remove_target();
             
         } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
             m->set_target(vf[0], vf[1], NULL, NULL, false);
@@ -416,7 +416,7 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
  * custom_data_2: custom argument #2 to pass to the code.
  */
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
-    for(size_t a = 0; a < actions.size(); a++) {
+    for(size_t a = 0; a < actions.size(); ++a) {
         actions[a]->run(m, &a, custom_data_1, custom_data_2);
     }
 }
@@ -517,7 +517,7 @@ mob_state::mob_state(const string &name) :
     name(name),
     id(string::npos) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = nullptr;
     }
 }
@@ -531,7 +531,7 @@ mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
     name(name),
     id(string::npos) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = evs[e];
     }
 }
@@ -546,7 +546,7 @@ mob_state::mob_state(const string &name, const size_t id) :
     name(name),
     id(id) {
     
-    for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+    for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = nullptr;
     }
 }
@@ -597,7 +597,7 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
     vector<mob_state*> states;
     size_t n_states = node->get_nr_of_children();
     
-    for(size_t s = 0; s < n_states; s++) {
+    for(size_t s = 0; s < n_states; ++s) {
     
         data_node* state_node = node->get_child(s);
         //Let's save the state now, so that the state switching events
@@ -605,17 +605,17 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
         states.push_back(new mob_state(state_node->name));
     }
     
-    for(size_t s = 0; s < n_states; s++) {
+    for(size_t s = 0; s < n_states; ++s) {
         data_node* state_node = node->get_child(s);
         vector<mob_event*> events;
         size_t n_events = state_node->get_nr_of_children();
         
-        for(size_t e = 0; e < n_events; e++) {
+        for(size_t e = 0; e < n_events; ++e) {
         
             data_node* event_node = state_node->get_child(e);
             vector<mob_action*> actions;
             
-            for(size_t a = 0; a < event_node->get_nr_of_children(); a++) {
+            for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
                 data_node* action_node = event_node->get_child(a);
                 actions.push_back(new mob_action(action_node, &states, mt));
             }
@@ -629,7 +629,7 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
         actions.push_back(new mob_action(mob::lose_health));
         events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, actions));
         
-        for(size_t e = 0; e < events.size(); e++) {
+        for(size_t e = 0; e < events.size(); ++e) {
             size_t ev_type = events[e]->type;
             states[s]->events[ev_type] = events[e];
         }
@@ -651,15 +651,15 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
 size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
     size_t starting_state_nr = string::npos;
     //Fix actions that change the state that are using a string.
-    for(size_t s = 0; s < states.size(); s++) {
+    for(size_t s = 0; s < states.size(); ++s) {
         mob_state* state = states[s];
         if(state->name == starting_state) starting_state_nr = s;
         
-        for(size_t e = 0; e < N_MOB_EVENTS; e++) {
+        for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
             mob_event* ev = state->events[e];
             if(!ev) continue;
             
-            for(size_t a = 0; a < ev->actions.size(); a++) {
+            for(size_t a = 0; a < ev->actions.size(); ++a) {
                 mob_action* action = ev->actions[a];
                 
                 if(action->type == MOB_ACTION_SET_STATE && !action->vs.empty()) {
@@ -667,7 +667,7 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                     size_t state_nr = 0;
                     bool found_state = false;
                     
-                    for(; state_nr < states.size(); state_nr++) {
+                    for(; state_nr < states.size(); ++state_nr) {
                         if(states[state_nr]->name == state_name) {
                             found_state = true;
                             break;

@@ -57,7 +57,7 @@ void do_drawing() {
         
         if(cur_area_map.bg_bmp) {
             ALLEGRO_VERTEX bg_v[4];
-            for(unsigned char v = 0; v < 4; v++) {
+            for(unsigned char v = 0; v < 4; ++v) {
                 bg_v[v].color = map_gray(255);
                 bg_v[v].z = 0;
             }
@@ -94,9 +94,9 @@ void do_drawing() {
         al_use_transform(&world_to_screen_transform);
         //TODO optimize
         size_t area_image_cols = area_images.size();
-        for(size_t x = 0; x < area_image_cols; x++) {
+        for(size_t x = 0; x < area_image_cols; ++x) {
             size_t area_image_rows = area_images[x].size();
-            for(size_t y = 0; y < area_image_rows; y++) {
+            for(size_t y = 0; y < area_image_rows; ++y) {
                 al_draw_scaled_bitmap(
                     area_images[x][y],
                     0, 0, area_image_size, area_image_size,
@@ -109,7 +109,7 @@ void do_drawing() {
             }
         }
         
-        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); c++) {
+        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); ++c) {
             sector_correction* c_ptr = &cur_area_map.sector_corrections[c];
             if(c_ptr->new_texture) {
                 draw_sector(c_ptr->sec, 0, 0, 1.0f, c_ptr->new_texture);
@@ -144,9 +144,11 @@ void do_drawing() {
         }
         
         mob* mob_ptr = NULL;
-        for(size_t m = 0; m < sorted_mobs.size(); m++) {
+        for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
-            draw_mob_shadow(mob_ptr->x, mob_ptr->y, mob_ptr->type->radius * 2, mob_ptr->z - mob_ptr->ground_z, shadow_stretch);
+            if(mob_ptr->type->casts_shadow) {
+                draw_mob_shadow(mob_ptr->x, mob_ptr->y, mob_ptr->type->radius * 2, mob_ptr->z - mob_ptr->ground_z, shadow_stretch);
+            }
             mob_ptr->draw();
         }
         
@@ -160,7 +162,7 @@ void do_drawing() {
         
         if(particle_quality > 0) {
             n_particles = particles.size();
-            for(size_t p = 0; p < n_particles; p++) {
+            for(size_t p = 0; p < n_particles; ++p) {
                 particle* p_ptr = &particles[p];
                 
                 if(p_ptr->type == PARTICLE_TYPE_SQUARE) {
@@ -226,7 +228,7 @@ void do_drawing() {
         
         //Fractions and health.
         size_t n_mobs = mobs.size();
-        for(size_t m = 0; m < n_mobs; m++) {
+        for(size_t m = 0; m < n_mobs; ++m) {
             mob* mob_ptr = mobs[m];
             
             if(mob_ptr->carrier_info) {
@@ -246,9 +248,9 @@ void do_drawing() {
             }
             
             if(
+                mob_ptr->type->show_health &&
                 mob_ptr->health < mob_ptr->type->max_health &&
-                mob_ptr->health > 0 &&
-                typeid(*mob_ptr) != typeid(leader)
+                mob_ptr->health > 0
             ) {
                 draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - 4, mob_ptr->health, mob_ptr->type->max_health);
             }
@@ -256,7 +258,7 @@ void do_drawing() {
         
         //Info spots.
         size_t n_info_spots = info_spots.size();
-        for(size_t i = 0; i < n_info_spots; i++) {
+        for(size_t i = 0; i < n_info_spots; ++i) {
             if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
                 string text;
                 if(!info_spots[i]->opens_box) {
@@ -293,7 +295,7 @@ void do_drawing() {
                         
                 } else {
                 
-                    for(size_t c = 0; c < controls.size(); c++) {
+                    for(size_t c = 0; c < controls.size(); ++c) {
                         if(controls[c].action == BUTTON_THROW) {
                             draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, 0, 0);
                             break;
@@ -314,7 +316,7 @@ void do_drawing() {
         
         if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             size_t n_percipitation_particles = percipitation.size();
-            for(size_t p = 0; p < n_percipitation_particles; p++) {
+            for(size_t p = 0; p < n_percipitation_particles; ++p) {
                 al_draw_filled_circle(percipitation[p].x, percipitation[p].y, 3, al_map_rgb(255, 255, 255));
             }
         }
@@ -327,7 +329,7 @@ void do_drawing() {
         *                   |_|  *
         *************************/
         
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); s++) {
+        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
             
             unsigned char alpha = ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
@@ -366,7 +368,7 @@ void do_drawing() {
         al_use_transform(&world_to_screen_transform);
         
         size_t n_arrows = group_move_arrows.size();
-        for(size_t a = 0; a < n_arrows; a++) {
+        for(size_t a = 0; a < n_arrows; ++a) {
             float x = cos(group_move_angle) * group_move_arrows[a];
             float y = sin(group_move_angle) * group_move_arrows[a];
             draw_sprite(
@@ -378,7 +380,7 @@ void do_drawing() {
         }
         
         size_t n_rings = whistle_rings.size();
-        for(size_t r = 0; r < n_rings; r++) {
+        for(size_t r = 0; r < n_rings; ++r) {
             float x = cur_leader_ptr->x + cos(cursor_angle) * whistle_rings[r];
             float y = cur_leader_ptr->y + sin(cursor_angle) * whistle_rings[r];
             unsigned char n = whistle_ring_colors[r];
@@ -388,8 +390,8 @@ void do_drawing() {
         if(whistle_radius > 0 || whistle_fade_timer.time_left > 0) {
             if(pretty_whistle) {
                 unsigned char n_dots = 16 * 6;
-                for(unsigned char d = 0; d < 6; d++) {
-                    for(unsigned char d2 = 0; d2 < 16; d2++) {
+                for(unsigned char d = 0; d < 6; ++d) {
+                    for(unsigned char d2 = 0; d2 < 16; ++d2) {
                         unsigned char current_dot = d2 * 6 + d;
                         float angle = M_PI * 2 / n_dots * current_dot + whistle_dot_offset;
                         
@@ -427,7 +429,7 @@ void do_drawing() {
         //Cursor trail
         al_use_transform(&normal_transform);
         if(draw_cursor_trail) {
-            for(size_t p = 1; p < cursor_spots.size(); p++) {
+            for(size_t p = 1; p < cursor_spots.size(); ++p) {
                 point* p_ptr = &cursor_spots[p];
                 point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
                 if((*p_ptr) != (*pp_ptr) && dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4) {
@@ -474,7 +476,7 @@ void do_drawing() {
         if(cur_message.empty()) {
         
             //Leader health.
-            for(size_t l = 0; l < 3; l++) {
+            for(size_t l = 0; l < 3; ++l) {
                 if(n_leaders < l + 1) continue;
                 
                 size_t l_nr = (cur_leader_nr + l) % n_leaders;
@@ -522,7 +524,7 @@ void do_drawing() {
             draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span * 0.5, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
             draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
             
-            for(unsigned char h = 0; h < n_hours + 1; h++) {
+            for(unsigned char h = 0; h < n_hours + 1; ++h) {
                 draw_sprite(
                     bmp_hard_bubble,
                     sun_meter_start + h * interval, sun_meter_y,
@@ -558,7 +560,7 @@ void do_drawing() {
             //Count how many Pikmin only.
             n_leaders = leaders.size();
             size_t pikmin_in_party = cur_leader_ptr->party->members.size();
-            for(size_t l = 0; l < n_leaders; l++) {
+            for(size_t l = 0; l < n_leaders; ++l) {
                 //If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
                 if(leaders[l]->following_party == cur_leader_ptr) pikmin_in_party--;
             }
@@ -588,7 +590,7 @@ void do_drawing() {
             
             //Pikmin count numbers.
             unsigned long total_pikmin = pikmin_list.size();
-            for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) total_pikmin += o->second;
+            for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) total_pikmin += o->second;
             
             draw_sprite(bmp_number_bubble, scr_w * 0.50, scr_h * 0.90, scr_w * 0.16, scr_h * 0.1);
             draw_sprite(bmp_number_bubble, scr_w * 0.68, scr_h * 0.91, scr_w * 0.14, scr_h * 0.08);
@@ -627,7 +629,7 @@ void do_drawing() {
                     font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
                     scr_w * 0.06, scr_h * 0.05,
                     i2s(spray_amounts[top_spray_nr]));
-                for(size_t c = 0; c < controls.size(); c++) {
+                for(size_t c = 0; c < controls.size(); ++c) {
                     if(controls[c].action == BUTTON_USE_SPRAY_1 || controls[c].action == BUTTON_USE_SPRAY) {
                         draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
                         break;
@@ -646,7 +648,7 @@ void do_drawing() {
                         font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
                         scr_w * 0.06, scr_h * 0.05,
                         i2s(spray_amounts[1]));
-                    for(size_t c = 0; c < controls.size(); c++) {
+                    for(size_t c = 0; c < controls.size(); ++c) {
                         if(controls[c].action == BUTTON_USE_SPRAY_2) {
                             draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
                             break;
@@ -662,13 +664,13 @@ void do_drawing() {
                         spray_types[(selected_spray + 1) % spray_types.size()].bmp_spray,
                         scr_w * 0.13, scr_h * 0.52,
                         scr_w * 0.03, scr_h * 0.05);
-                    for(size_t c = 0; c < controls.size(); c++) {
+                    for(size_t c = 0; c < controls.size(); ++c) {
                         if(controls[c].action == BUTTON_SWITCH_SPRAY_LEFT) {
                             draw_control(font, controls[c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
                         }
                     }
-                    for(size_t c = 0; c < controls.size(); c++) {
+                    for(size_t c = 0; c < controls.size(); ++c) {
                         if(controls[c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
                             draw_control(font, controls[c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
@@ -681,7 +683,7 @@ void do_drawing() {
             //Day hour.
             /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
                          (i2s((day_minutes / 60)) + ":" + i2s(((int) (day_minutes) % 60))).c_str());
-            for(size_t p = 0; p < 7; p++) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
+            for(size_t p = 0; p < 7; ++p) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
             al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
             
@@ -708,7 +710,7 @@ void do_drawing() {
             
             al_hold_bitmap_drawing(true);
             
-            for(size_t l = 0; l < lines.size(); l++) {
+            for(size_t l = 0; l < lines.size(); ++l) {
             
                 draw_compressed_text(
                     font, al_map_rgb(255, 255, 255),
@@ -908,7 +910,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
     
     
     //Wall shadows.
-    for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
         linedef* l_ptr = s_ptr->linedefs[l];
         ALLEGRO_VERTEX av[4];
         
@@ -964,7 +966,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         
         //Record the first two vertices of the shadow.
         //These match the vertices of the linedef.
-        for(size_t v = 0; v < 2; v++) {
+        for(size_t v = 0; v < 2; ++v) {
             av[v].x = lv[v]->x;
             av[v].y = lv[v]->y;
             av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
@@ -995,10 +997,10 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         bool got_first[2] = {false, false};
         
         //For both neighbors.
-        for(unsigned char v = 0; v < 2; v++) {
+        for(unsigned char v = 0; v < 2; ++v) {
         
             vertex* cur_vertex = lv[v];
-            for(size_t vl = 0; vl < cur_vertex->linedefs.size(); vl++) {
+            for(size_t vl = 0; vl < cur_vertex->linedefs.size(); ++vl) {
             
                 linedef* vl_ptr = cur_vertex->linedefs[vl];
                 
@@ -1027,17 +1029,17 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         }
         
         l_angle = normalize_angle(l_angle);
-        for(unsigned char n = 0; n < 2; n++) {
+        for(unsigned char n = 0; n < 2; ++n) {
             neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
             mid_angles[n] = (n == 0 ? neighbor_angles[n] : l_angle + M_PI) + neighbor_angle_difs[n] / 2;
         }
         
         point shadow_point[2];
         ALLEGRO_VERTEX extra_av[8];
-        for(unsigned char e = 0; e < 8; e++) { extra_av[e].z = 0;}
+        for(unsigned char e = 0; e < 8; ++e) { extra_av[e].z = 0;}
         unsigned char draw_extra[2] = {0, 0}; //How many vertices of the extra polygon to draw.
         
-        for(unsigned char v = 0; v < 2; v++) {
+        for(unsigned char v = 0; v < 2; ++v) {
         
             if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
                 //If the shadow of the current and neighbor linedefs
@@ -1121,21 +1123,21 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         av[3].z = 0;
         
         //Before drawing, let's offset according to the area image.
-        for(unsigned char a = 0; a < 4; a++) {
+        for(unsigned char a = 0; a < 4; ++a) {
             av[a].x -= x;
             av[a].y -= y;
         }
-        for(unsigned char a = 0; a < 8; a++) {
+        for(unsigned char a = 0; a < 8; ++a) {
             extra_av[a].x -= x;
             extra_av[a].y -= y;
         }
         
         //Do the scaling.
-        for(size_t v = 0; v < 4; v++) {
+        for(size_t v = 0; v < 4; ++v) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
-        for(size_t v = 0; v < 8; v++) {
+        for(size_t v = 0; v < 8; ++v) {
             extra_av[v].x *= scale;
             extra_av[v].y *= scale;
         }
@@ -1143,7 +1145,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         //Draw!
         al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
-        for(size_t v = 0; v < 2; v++) {
+        for(size_t v = 0; v < 2; ++v) {
             if(draw_extra[v] > 0) {
                 al_draw_prim(
                     extra_av, NULL, NULL, v * 4,
@@ -1179,7 +1181,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         //So save all sector/length pairs.
         //Sectors with different heights from the current one are also saved,
         //but they have lower priority compared to same-heigh sectors.
-        for(size_t l = 0; l < s_ptr->linedefs.size(); l++) {
+        for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
             l_ptr = s_ptr->linedefs[l];
             valid = true;
             
@@ -1201,7 +1203,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         
         //Find the two lengthiest ones.
         vector<pair<dist, sector*> > neighbors_vec;
-        for(auto n = neighbors.begin(); n != neighbors.end(); n++) {
+        for(auto n = neighbors.begin(); n != neighbors.end(); ++n) {
             neighbors_vec.push_back(
                 make_pair(
                     (dist) (n->second), (sector*) (n->first) //Yes, we do need these casts, for g++.
@@ -1246,7 +1248,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         
     }
     
-    for(unsigned char t = 0; t < n_textures; t++) {
+    for(unsigned char t = 0; t < n_textures; ++t) {
     
         bool draw_sector_0 = true;
         if(!texture_sector[0]) draw_sector_0 = false;
@@ -1270,7 +1272,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             );
         }
         
-        for(size_t v = 0; v < n_vertices; v++) {
+        for(size_t v = 0; v < n_vertices; ++v) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
             vertex* v_ptr = t_ptr->points[v % 3];
@@ -1282,12 +1284,12 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             if(t == 1) {
                 if(!draw_sector_0) {
                     alpha = 0;
-                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); l++) {
+                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); ++l) {
                         if(texture_sector[1]->linedefs[l]->vertices[0] == v_ptr) alpha = 255;
                         if(texture_sector[1]->linedefs[l]->vertices[1] == v_ptr) alpha = 255;
                     }
                 } else {
-                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); l++) {
+                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); ++l) {
                         if(texture_sector[0]->linedefs[l]->vertices[0] == v_ptr) alpha = 0;
                         if(texture_sector[0]->linedefs[l]->vertices[1] == v_ptr) alpha = 0;
                     }
@@ -1303,7 +1305,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
         }
         
-        for(size_t v = 0; v < n_vertices; v++) {
+        for(size_t v = 0; v < n_vertices; ++v) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
@@ -1590,7 +1592,7 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const 
         }
     }
     
-    for(size_t l = 0; l < n_lines; l++) {
+    for(size_t l = 0; l < n_lines; ++l) {
         float line_y = (fh + 1) * l + top;
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
     }

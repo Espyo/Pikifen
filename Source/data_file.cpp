@@ -35,8 +35,8 @@ data_node* data_node::get_child(const size_t number) {
 size_t data_node::get_nr_of_children_by_name(const string &name) {
     size_t number = 0;
     
-    for(size_t c = 0; c < children.size(); c++) {
-        if(name == children[c]->name) number++;
+    for(size_t c = 0; c < children.size(); ++c) {
+        if(name == children[c]->name) ++number;
     }
     
     return number;
@@ -47,13 +47,13 @@ size_t data_node::get_nr_of_children_by_name(const string &name) {
 data_node* data_node::get_child_by_name(const string &name, const size_t occurrence_number) {
     size_t cur_occurrence_number = 0;
     
-    for(size_t c = 0; c < children.size(); c++) {
+    for(size_t c = 0; c < children.size(); ++c) {
         if(name == children[c]->name) {
             if(cur_occurrence_number == occurrence_number) {
                 //We found it.
                 return children[c];
             } else {
-                cur_occurrence_number++;
+                ++cur_occurrence_number;
             }
         }
     }
@@ -77,7 +77,7 @@ size_t data_node::add(data_node* new_node) {
 
 //Removes and destroys a child from the list.
 bool data_node::remove(data_node* node_to_remove) {
-    for(size_t c = 0; c < children.size(); c++) {
+    for(size_t c = 0; c < children.size(); ++c) {
         if(children[c] == node_to_remove) {
             delete node_to_remove;
             children.erase(children.begin() + c);
@@ -126,7 +126,7 @@ size_t data_node::load_node(const vector<string> &lines, const bool trim_values,
     
     if(start_line > lines.size()) return start_line;
     
-    for(size_t l = start_line; l < lines.size(); l++) {
+    for(size_t l = start_line; l < lines.size(); ++l) {
         string line = lines[l];
         
         line = trim_spaces(line, true);     //Removes the leftmost spaces.
@@ -189,7 +189,7 @@ bool data_node::save_file(string file_name, const bool children_only) {
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "w");
     if(file) {
         if(children_only) {
-            for(size_t c = 0; c < children.size(); c++) {
+            for(size_t c = 0; c < children.size(); ++c) {
                 children[c]->save_node(file, 0);
             }
         } else {
@@ -212,7 +212,7 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
     
     if(!children.empty()) {
         al_fwrite(file, "{\n", 2);
-        for(size_t c = 0; c < children.size(); c++) {
+        for(size_t c = 0; c < children.size(); ++c) {
             children[c]->save_node(file, level + 1);
         }
         al_fwrite(file, tabs.c_str(), tabs.size());
@@ -242,10 +242,10 @@ data_node::data_node(const data_node &dn2) :
     file_name(dn2.file_name),
     line_nr(dn2.line_nr) {
     
-    for(size_t c = 0; c < dn2.children.size(); c++) {
+    for(size_t c = 0; c < dn2.children.size(); ++c) {
         children.push_back(new data_node(*(dn2.children[c])));
     }
-    for(size_t dc = 0; dc < dn2.dummy_children.size(); dc++) {
+    for(size_t dc = 0; dc < dn2.dummy_children.size(); ++dc) {
         dummy_children.push_back(new data_node(*(dn2.dummy_children[dc])));
     }
 }
@@ -273,11 +273,11 @@ data_node::data_node(const string &name, const string &value) :
 
 //Destroys a data node and all the children within.
 data_node::~data_node() {
-    for(size_t c = 0; c < children.size(); c++) {
+    for(size_t c = 0; c < children.size(); ++c) {
         delete children[c];
     }
     
-    for(size_t dc = 0; dc < dummy_children.size(); dc++) {
+    for(size_t dc = 0; dc < dummy_children.size(); ++dc) {
         delete dummy_children[dc];
     }
 }

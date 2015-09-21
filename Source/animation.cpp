@@ -152,7 +152,7 @@ frame::~frame() {
  */
 void frame::calculate_hitbox_span() {
     hitbox_span = 0;
-    for(size_t hi = 0; hi < hitbox_instances.size(); hi++) {
+    for(size_t hi = 0; hi < hitbox_instances.size(); ++hi) {
         hitbox_instance* hi_ptr = &hitbox_instances[hi];
         
         float d = dist(0, 0, hi_ptr->x, hi_ptr->y).to_float();
@@ -166,7 +166,7 @@ void frame::calculate_hitbox_span() {
  */
 void frame::create_hitbox_instances(animation_pool* const as) {
     hitbox_instances.clear();
-    for(size_t h = 0; h < as->hitboxes.size(); h++) {
+    for(size_t h = 0; h < as->hitboxes.size(); ++h) {
         hitbox_instances.push_back(
             hitbox_instance(
                 as->hitboxes[h]->name,
@@ -310,7 +310,7 @@ animation_pool::animation_pool(vector<animation*> a, vector<frame*> f, vector<hi
  * Returns string::npos if not found.
  */
 size_t animation_pool::find_animation(string name) {
-    for(size_t a = 0; a < animations.size(); a++) {
+    for(size_t a = 0; a < animations.size(); ++a) {
         if(animations[a]->name == name) return a;
     }
     return string::npos;
@@ -322,7 +322,7 @@ size_t animation_pool::find_animation(string name) {
  * Returns string::npos if not found.
  */
 size_t animation_pool::find_frame(string name) {
-    for(size_t f = 0; f < frames.size(); f++) {
+    for(size_t f = 0; f < frames.size(); ++f) {
         if(frames[f]->name == name) return f;
     }
     return string::npos;
@@ -334,7 +334,7 @@ size_t animation_pool::find_frame(string name) {
  * Returns string::npos if not found.
  */
 size_t animation_pool::find_hitbox(string name) {
-    for(size_t h = 0; h < hitboxes.size(); h++) {
+    for(size_t h = 0; h < hitboxes.size(); ++h) {
         if(hitboxes[h]->name == name) return h;
     }
     return string::npos;
@@ -345,12 +345,12 @@ size_t animation_pool::find_hitbox(string name) {
  * Fixes the pointers for hitboxes on the frames.
  */
 void animation_pool::fix_hitbox_pointers() {
-    for(size_t f = 0; f < frames.size(); f++) {
+    for(size_t f = 0; f < frames.size(); ++f) {
         frame* f_ptr = frames[f];
-        for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); hi++) {
+        for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); ++hi) {
             hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[hi];
             
-            for(size_t h = 0; h < hitboxes.size(); h++) {
+            for(size_t h = 0; h < hitboxes.size(); ++h) {
                 hitbox* h_ptr = hitboxes[h];
                 if(h_ptr->name == hi_ptr->hitbox_name) {
                     hi_ptr->hitbox_nr = h;
@@ -385,13 +385,13 @@ void animation_pool::create_conversions(vector<pair<size_t, string> > conversion
     
     //First, find the highest number.
     size_t highest = conversions[0].first;
-    for(size_t c = 1; c < conversions.size(); c++) {
+    for(size_t c = 1; c < conversions.size(); ++c) {
         highest = max(highest, conversions[c].first);
     }
     
     pre_named_conversions.assign(highest + 1, string::npos);
     
-    for(size_t c = 0; c < conversions.size(); c++) {
+    for(size_t c = 0; c < conversions.size(); ++c) {
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
     }
@@ -402,13 +402,13 @@ void animation_pool::create_conversions(vector<pair<size_t, string> > conversion
  * Destroys an animation pool and all of its animations, frames, and hitboxes.
  */
 void animation_pool::destroy() {
-    for(auto a = animations.begin(); a != animations.end(); a++) {
+    for(auto a = animations.begin(); a != animations.end(); ++a) {
         delete *a;
     }
-    for(auto f = frames.begin(); f != frames.end(); f++) {
+    for(auto f = frames.begin(); f != frames.end(); ++f) {
         delete *f;
     }
-    for(auto h = hitboxes.begin(); h != hitboxes.end(); h++) {
+    for(auto h = hitboxes.begin(); h != hitboxes.end(); ++h) {
         delete *h;
     }
 }
@@ -427,7 +427,7 @@ animation_pool load_animation_pool(data_node* file_node) {
     //Hitboxes.
     data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
     size_t n_hitboxes = hitboxes_node->get_nr_of_children();
-    for(size_t h = 0; h < n_hitboxes; h++) {
+    for(size_t h = 0; h < n_hitboxes; ++h) {
     
         data_node* hitbox_node = hitboxes_node->get_child(h);
         
@@ -440,7 +440,7 @@ animation_pool load_animation_pool(data_node* file_node) {
     //Frames.
     data_node* frames_node = file_node->get_child_by_name("frames");
     size_t n_frames = frames_node->get_nr_of_children();
-    for(size_t f = 0; f < n_frames; f++) {
+    for(size_t f = 0; f < n_frames; ++f) {
     
         data_node* frame_node = frames_node->get_child(f);
         vector<hitbox_instance> hitbox_instances;
@@ -448,7 +448,7 @@ animation_pool load_animation_pool(data_node* file_node) {
         data_node* hitbox_instances_node = frame_node->get_child_by_name("hitbox_instances");
         size_t n_hitbox_instances = hitbox_instances_node->get_nr_of_children();
         
-        for(size_t h = 0; h < n_hitbox_instances; h++) {
+        for(size_t h = 0; h < n_hitbox_instances; ++h) {
         
             data_node* hitbox_instance_node = hitbox_instances_node->get_child(h);
             hitbox_instance cur_hitbox_instance = hitbox_instance();
@@ -506,7 +506,7 @@ animation_pool load_animation_pool(data_node* file_node) {
     //Animations.
     data_node* anims_node = file_node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
-    for(size_t a = 0; a < n_anims; a++) {
+    for(size_t a = 0; a < n_anims; ++a) {
     
         data_node* anim_node = anims_node->get_child(a);
         vector<frame_instance> frame_instances;
@@ -514,7 +514,7 @@ animation_pool load_animation_pool(data_node* file_node) {
         data_node* frame_instances_node = anim_node->get_child_by_name("frame_instances");
         size_t n_frame_instances = frame_instances_node->get_nr_of_children();
         
-        for(size_t f = 0; f < n_frame_instances; f++) {
+        for(size_t f = 0; f < n_frame_instances; ++f) {
             data_node* frame_instance_node = frame_instances_node->get_child(f);
             size_t f_pos = as.find_frame(frame_instance_node->name);
             frame_instances.push_back(

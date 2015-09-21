@@ -58,7 +58,7 @@ radio_button::~radio_button() {
     vector<widget*>* radio_button_group = &((lafi::container*) parent)->groups[group];
     
     size_t n_radio_buttons = radio_button_group->size();
-    for(size_t r=0; r<n_radio_buttons; r++){
+    for(size_t r=0; r<n_radio_buttons; ++r){
         if(radio_button_group->operator[](r) == this){
             radio_button_group->erase(radio_button_group->begin() + r);
             return;
@@ -85,7 +85,7 @@ void radio_button::select() {
     ((radio_button_button*) widgets["rbb_circle"])->selected = true;
     
     if(!parent) return;
-    for(auto b = parent->widgets.begin(); b != parent->widgets.end(); b++) {
+    for(auto b = parent->widgets.begin(); b != parent->widgets.end(); ++b) {
         if(typeid(*(b->second)) == typeid(radio_button)) {
             radio_button* rb_ptr = (radio_button*) b->second;
             if(rb_ptr->group == group && rb_ptr != this) rb_ptr->unselect();

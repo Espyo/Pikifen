@@ -13,5 +13,7 @@
 #define LOGIC_INCLUDED
 
 void do_logic();
+void do_aesthetic_logic();
+void do_gameplay_logic();
 
 #endif //ifndef LOGIC_INCLUDED

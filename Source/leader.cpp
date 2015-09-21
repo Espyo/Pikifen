@@ -51,7 +51,7 @@ void dismiss() {
     } else {
         float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
         
-        for(size_t m = 0; m < n_party_members; m++) {
+        for(size_t m = 0; m < n_party_members; ++m) {
             mob* member_ptr = cur_leader_ptr->party->members[m];
             
             if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
@@ -69,7 +69,7 @@ void dismiss() {
     
     //Then, calculate how many Pikmin types there are in the party.
     map<pikmin_type*, float> type_dismiss_angles;
-    for(size_t m = 0; m < n_party_members; m++) {
+    for(size_t m = 0; m < n_party_members; ++m) {
     
         if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
@@ -85,14 +85,14 @@ void dismiss() {
         type_dismiss_angles.begin()->second = M_PI_4;
     } else {
         unsigned current_type_nr = 0;
-        for(auto t = type_dismiss_angles.begin(); t != type_dismiss_angles.end(); t++) {
+        for(auto t = type_dismiss_angles.begin(); t != type_dismiss_angles.end(); ++t) {
             t->second = current_type_nr * (M_PI_2 / (n_types - 1));
             current_type_nr++;
         }
     }
     
     //Now, dismiss them.
-    for(size_t m = 0; m < n_party_members; m++) {
+    for(size_t m = 0; m < n_party_members; ++m) {
         mob* member_ptr = cur_leader_ptr->party->members[0];
         remove_from_party(member_ptr);
         
@@ -130,7 +130,7 @@ void leader::whistle(mob* m, void* info1, void* info2) {
     
     l_ptr->lea_type->sfx_whistle.play(0, false);
     
-    for(unsigned char d = 0; d < 6; d++) whistle_dot_radius[d] = -1;
+    for(unsigned char d = 0; d < 6; ++d) whistle_dot_radius[d] = -1;
     whistle_fade_timer.start();
     whistle_fade_radius = 0;
     whistling = true;
@@ -157,7 +157,7 @@ void leader::join_group(mob* m, void* info1, void* info2) {
     
     add_to_party(cur_leader_ptr, l_ptr);
     size_t n_party_members = l_ptr->party->members.size();
-    for(size_t m = 0; m < n_party_members; m++) {
+    for(size_t m = 0; m < n_party_members; ++m) {
         mob* member = l_ptr->party->members[0];
         remove_from_party(member);
         add_to_party(cur_leader_ptr, member);
@@ -169,7 +169,7 @@ void leader::focus(mob* m, void* info1, void* info2) {
     
     m->speed_x = 0;
     m->speed_y = 0;
-    m->remove_target(true);
+    m->remove_target();
     ((leader*) m)->lea_type->sfx_name_call.play(0, false);
     
 }
@@ -199,7 +199,7 @@ void leader::move(mob* m, void* info1, void* info2) {
 
 void leader::stop(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    l_ptr->remove_target(true);
+    l_ptr->remove_target();
 }
 
 void leader::set_walk_anim(mob* m, void* info1, void* info2) {
@@ -284,7 +284,7 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
     } else {
         float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
         
-        for(size_t m = 0; m < n_party_members; m++) {
+        for(size_t m = 0; m < n_party_members; ++m) {
             mob* member_ptr = l_ptr->party->members[m];
             
             if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
@@ -302,7 +302,7 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
     
     //Then, calculate how many Pikmin types there are in the party.
     map<pikmin_type*, float> type_angle_map;
-    for(size_t m = 0; m < n_party_members; m++) {
+    for(size_t m = 0; m < n_party_members; ++m) {
     
         if(typeid(*l_ptr->party->members[m]) == typeid(pikmin)) {
             pikmin* pikmin_ptr = dynamic_cast<pikmin*>(l_ptr->party->members[m]);
@@ -319,14 +319,14 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
         
     } else {
         unsigned current_type_nr = 0;
-        for(auto t = type_angle_map.begin(); t != type_angle_map.end(); t++) {
+        for(auto t = type_angle_map.begin(); t != type_angle_map.end(); ++t) {
             t->second = current_type_nr * (M_PI_2 / (n_types - 1));
             current_type_nr++;
         }
     }
     
     //Now, dismiss them.
-    for(size_t m = 0; m < n_party_members; m++) {
+    for(size_t m = 0; m < n_party_members; ++m) {
         mob* member_ptr = l_ptr->party->members[0];
         remove_from_party(member_ptr);
         
@@ -347,7 +347,7 @@ void leader::dismiss(mob* m, void* info1, void* info2) {
 }
 
 void leader::spray(mob* m, void* info1, void* info2) {
-    m->remove_target(true);
+    m->remove_target();
     size_t spray_nr = *((size_t*) info1);
     
     if(spray_amounts[spray_nr] == 0) {
@@ -419,7 +419,7 @@ void leader::inactive_die(mob* m, void* info1, void* info2) {
 
 void leader::suffer_pain(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
-    m->remove_target(true);
+    m->remove_target();
 }
 
 void leader::get_knocked_back(mob* m, void* info1, void* info2) {
@@ -428,7 +428,7 @@ void leader::get_knocked_back(mob* m, void* info1, void* info2) {
 
 void leader::fall_asleep(mob* m, void* info1, void* info2) {
     leader::dismiss(m, info1, info2);
-    m->remove_target(true);
+    m->remove_target();
     
     m->carrier_info = new carrier_info_struct(
         m,
@@ -450,12 +450,12 @@ void leader::chase_leader(mob* m, void* info1, void* info2) {
 }
 
 void leader::stop_in_group(mob* m, void* info1, void* info2) {
-    m->remove_target(true);
+    m->remove_target();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader::be_dismissed(mob* m, void* info1, void* info2) {
-    m->remove_target(true);
+    m->remove_target();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
@@ -473,7 +473,7 @@ void leader::go_pluck(mob* m, void* info1, void* info2) {
     pik_ptr->pluck_reserved = true;
     
     //Now for the leaders in the party.
-    for(size_t m = 0; m < lea_ptr->party->members.size(); m++) {
+    for(size_t m = 0; m < lea_ptr->party->members.size(); ++m) {
         mob* member_ptr = lea_ptr->party->members[m];
         if(typeid(*member_ptr) == typeid(leader)) {
             member_ptr->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
@@ -491,7 +491,7 @@ void leader::start_pluck(mob* m, void* info1, void* info2) {
 void leader::stop_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->auto_pluck_pikmin) {
-        l_ptr->remove_target(true);
+        l_ptr->remove_target();
         l_ptr->auto_pluck_pikmin->pluck_reserved = false;
     }
     l_ptr->auto_pluck_pikmin = NULL;
@@ -552,7 +552,7 @@ void switch_to_leader(leader* new_leader_ptr) {
     cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
     
     size_t new_leader_nr = cur_leader_nr;
-    for(size_t l = 0; l < leaders.size(); l++) {
+    for(size_t l = 0; l < leaders.size(); ++l) {
         if(leaders[l] == new_leader_ptr) {
             new_leader_nr = l;
             break;
@@ -578,7 +578,7 @@ void leader::draw() {
     if(invuln_period.time_left > 0) {
         unsigned char anim_part = invuln_period.get_ratio_left() * LEADER_ZAP_ANIM_PARTS;
         float zap_x[4], zap_y[4];
-        for(unsigned char p = 0; p < 4; p++) {
+        for(unsigned char p = 0; p < 4; ++p) {
             if(anim_part % 2 == 0) {
                 zap_x[p] = draw_x + draw_w * (deterministic_random(anim_part * 3 + p) - 0.5);
                 zap_y[p] = draw_y + draw_h * 0.5 * ((p % 2 == 0) ? 1 : -1);
@@ -614,7 +614,7 @@ void leader::draw() {
  * Signals the party members that the group move mode stopped.
  */
 void leader::signal_group_move_end() {
-    for(size_t m = 0; m < party->members.size(); m++) {
+    for(size_t m = 0; m < party->members.size(); ++m) {
         party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_ENDED);
     }
 }
@@ -624,7 +624,7 @@ void leader::signal_group_move_end() {
  * Signals the party members that the group move mode started.
  */
 void leader::signal_group_move_start() {
-    for(size_t m = 0; m < party->members.size(); m++) {
+    for(size_t m = 0; m < party->members.size(); ++m) {
         party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_STARTED);
     }
 }

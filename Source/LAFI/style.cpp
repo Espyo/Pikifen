@@ -57,7 +57,7 @@ ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
         color.a
     };
     
-    for(unsigned char i = 0; i < 3; i++) if(indexes[i] > 1) indexes[i] = 1;
+    for(unsigned char i = 0; i < 3; ++i) if(indexes[i] > 1) indexes[i] = 1;
     
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }
@@ -74,7 +74,7 @@ ALLEGRO_COLOR style::darken_color(ALLEGRO_COLOR color) {
         color.a
     };
     
-    for(unsigned char i = 0; i < 3; i++) if(indexes[i] < 0) indexes[i] = 0;
+    for(unsigned char i = 0; i < 3; ++i) if(indexes[i] < 0) indexes[i] = 0;
     
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }

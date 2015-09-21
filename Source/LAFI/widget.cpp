@@ -144,7 +144,7 @@ ALLEGRO_COLOR widget::get_alt_color() {
 widget* widget::get_widget_under_mouse(int mx, int my) {
     if(!(flags & FLAG_DISABLED)) {
         if(!(flags & FLAG_WUM_NO_CHILDREN)) {
-            for(auto c = widgets.begin(); c != widgets.end(); c++) {
+            for(auto c = widgets.begin(); c != widgets.end(); ++c) {
                 widget* w = c->second->get_widget_under_mouse(mx, my);
                 if(w) return w;
             }
@@ -266,7 +266,7 @@ void widget::draw() {
         
         al_use_transform(&t); {
         
-            for(auto w = widgets.begin(); w != widgets.end(); w++) {
+            for(auto w = widgets.begin(); w != widgets.end(); ++w) {
                 if(w->second) w->second->draw();
             }
             
@@ -290,7 +290,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); w++) {
+        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         
             if(!w->second) continue;
             
@@ -330,7 +330,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); w++) {
+        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         
             if(!w->second) continue;
             
@@ -352,7 +352,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
     
-        for(auto w = widgets.begin(); w != widgets.end(); w++) {
+        for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         
             if(!w->second) continue;
             
@@ -382,7 +382,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
             }
         }
         
-        for(size_t a = 0; a < accelerators.size(); a++) {
+        for(size_t a = 0; a < accelerators.size(); ++a) {
             accelerator* a_ptr = &accelerators[a];
             if(ev.keyboard.keycode == a_ptr->key && ev.keyboard.modifiers == a_ptr->modifiers) {
                 a_ptr->w->call_left_mouse_click_handler(0, 0);
@@ -391,7 +391,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
     }
     
     //Now let children widgets handle events.
-    for(auto w = widgets.begin(); w != widgets.end(); w++) {
+    for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         if(w->second) w->second->handle_event(ev);
     }
 }
@@ -429,7 +429,7 @@ void widget::lose_focus() {
         focused_widget = NULL;
     }
     
-    for(auto cw = widgets.begin(); cw != widgets.end(); cw++) {
+    for(auto cw = widgets.begin(); cw != widgets.end(); ++cw) {
         if(cw->second) cw->second->lose_focus();
     }
 }
@@ -465,14 +465,14 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
         float available_width = (x2 - x1) - ((easy_row_widgets.size() - 1) * easy_row_widget_padding) - (easy_row_horizontal_padding * 2);
         float prev_x = x1 + easy_row_horizontal_padding;
         
-        for(size_t w = 1; w < easy_row_widgets.size(); w++) {
+        for(size_t w = 1; w < easy_row_widgets.size(); ++w) {
             if(easy_row_widgets[w].height > tallest_height) tallest_height = easy_row_widgets[w].height;
         }
         
         easy_row_y2 = easy_row_y1 + tallest_height;
         float y_center = (easy_row_y2 + easy_row_y1) / 2 + y1;
         
-        for(size_t w = 0; w < easy_row_widgets.size(); w++) {
+        for(size_t w = 0; w < easy_row_widgets.size(); ++w) {
             easy_widget_info* i_ptr = &easy_row_widgets[w];
             
             float width =
@@ -615,7 +615,7 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const 
         }
     }
     
-    for(size_t l = 0; l < n_lines; l++) {
+    for(size_t l = 0; l < n_lines; ++l) {
         float line_y = (fh + 1) * l + top;
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
     }

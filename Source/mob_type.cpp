@@ -41,7 +41,9 @@ mob_type::mob_type() :
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
     near_angle(0),
-    first_state_nr(0) {
+    first_state_nr(0),
+    show_health(true),
+    casts_shadow(true) {
     
 }
 
@@ -58,7 +60,7 @@ void mob_type::load_from_file(data_node* file, const bool load_resources, vector
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {
-    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         load_mob_types(mob_categories.get_folder(c), c, load_resources);
     }
 }
@@ -77,7 +79,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         error_log("Folder \"" + folder + "\" not found!");
     }
     
-    for(size_t t = 0; t < types.size(); t++) {
+    for(size_t t = 0; t < types.size(); ++t) {
     
         vector<pair<size_t, string> > anim_conversions;
         
@@ -104,6 +106,8 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
         mt->weight = s2f(file.get_child_by_name("weight")->value);
         mt->pushes = s2b(file.get_child_by_name("pushes")->value);
         mt->pushable = s2b(file.get_child_by_name("pushable")->value);
+        mt->show_health = s2b(file.get_child_by_name("show_health")->get_value_or_default("true"));
+        mt->show_health = s2b(file.get_child_by_name("casts_shadow")->get_value_or_default("true"));
         
         if(load_resources) {
             data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
@@ -114,7 +118,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
                 mt->states = load_script(mt, file.get_child_by_name("script"));
                 if(mt->states.size()) {
                     string first_state_name = file.get_child_by_name("first_state")->value;
-                    for(size_t s = 0; s < mt->states.size(); s++) {
+                    for(size_t s = 0; s < mt->states.size(); ++s) {
                         if(mt->states[s]->name == first_state_name) {
                             mt->first_state_nr = s;
                             break;

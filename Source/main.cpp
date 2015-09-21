@@ -111,7 +111,6 @@ int main(int argc, char**) {
         bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
         
         bmp_test = load_bmp("Test.png");
-        bmp_test_bubble = load_bmp("speech bubble.png");
         
         al_set_display_icon(display, bmp_icon);
         
@@ -148,16 +147,16 @@ int main(int argc, char**) {
         //Initializing game things.
         spray_amounts.clear();
         size_t n_spray_types = spray_types.size();
-        for(size_t s = 0; s < n_spray_types; s++) { spray_amounts.push_back(0); }
+        for(size_t s = 0; s < n_spray_types; ++s) { spray_amounts.push_back(0); }
         pikmin_in_onions.clear();
-        for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); o++) { o->second = 0; }
+        for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) { o->second = 0; }
         
         load_area("Play", false);
         load_area_textures();
         generate_area_images();
         
         //Generate mobs.
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); m++) {
+        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_map.mob_generators[m];
             if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
                 create_mob(new enemy(m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
@@ -201,8 +200,8 @@ int main(int argc, char**) {
         create_mob(new pikmin(70, 150, pikmin_types["Blue Pikmin"], 0, ""));
         pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
         pikmin_list.back()->first_state_set = true;
-        for(unsigned char p = 0; p < 10; p++) {
-            for(auto t = pikmin_types.begin(); t != pikmin_types.end(); t++) {
+        for(unsigned char p = 0; p < 10; ++p) {
+            for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
                 create_mob(new pikmin(20 + 10 * p + 3 * distance(pikmin_types.begin(), t), 200, t->second, 0, ""));
                 pikmin_list.back()->maturity = 2;
             }

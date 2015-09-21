@@ -98,7 +98,7 @@ bool circle_intersects_line(const float cx, const float cy, const float cr, cons
  * Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
         if(s_ptr->bitmap && s_ptr->bitmap != bmp_error) {
             bitmaps.detach("Textures/" + s_ptr->file_name);
@@ -190,7 +190,7 @@ void error_log(string s, data_node* d) {
  */
 bool find_in_vector(const vector<string> &v, const string &s) {
     size_t v_size = v.size();
-    for(size_t i = 0; i < v_size; i++) if(v[i] == s) return true;
+    for(size_t i = 0; i < v_size; ++i) if(v[i] == s) return true;
     return false;
 }
 
@@ -258,8 +258,8 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
  */
 void generate_area_images() {
     //First, clear all existing area images.
-    for(size_t x = 0; x < area_images.size(); x++) {
-        for(size_t y = 0; y < area_images[x].size(); y++) {
+    for(size_t x = 0; x < area_images.size(); ++x) {
+        for(size_t y = 0; y < area_images[x].size(); ++y) {
             al_destroy_bitmap(area_images[x][y]);
         }
         area_images[x].clear();
@@ -275,7 +275,7 @@ void generate_area_images() {
     min_x = max_x = cur_area_map.vertices[0]->x;
     min_y = max_y = cur_area_map.vertices[0]->y;
     
-    for(size_t v = 0; v < n_vertices; v++) {
+    for(size_t v = 0; v < n_vertices; ++v) {
         vertex* v_ptr = cur_area_map.vertices[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
@@ -295,10 +295,10 @@ void generate_area_images() {
     unsigned area_image_cols = ceil(area_width / area_image_size);
     unsigned area_image_rows = ceil(area_height / area_image_size);
     
-    for(size_t x = 0; x < area_image_cols; x++) {
+    for(size_t x = 0; x < area_image_cols; ++x) {
         area_images.push_back(vector<ALLEGRO_BITMAP*>());
         
-        for(size_t y = 0; y < area_image_rows; y++) {
+        for(size_t y = 0; y < area_image_rows; ++y) {
             area_images[x].push_back(al_create_bitmap(area_image_size, area_image_size));
             ALLEGRO_BITMAP* old_bitmap = al_get_target_bitmap();
             al_set_target_bitmap(area_images[x].back());
@@ -308,7 +308,7 @@ void generate_area_images() {
     }
     
     //For every sector, draw it on the area images it belongs on.
-    for(size_t s = 0; s < n_sectors; s++) {
+    for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
         size_t n_linedefs = s_ptr->linedefs.size();
         if(n_linedefs == 0) continue;
@@ -329,8 +329,8 @@ void generate_area_images() {
         
         al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
         
-        for(size_t x = sector_start_col; x <= sector_end_col; x++) {
-            for(size_t y = sector_start_row; y <= sector_end_row; y++) {
+        for(size_t x = sector_start_col; x <= sector_end_col; ++x) {
+            for(size_t y = sector_start_row; y <= sector_end_row; ++y) {
                 ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
                 
@@ -349,8 +349,8 @@ void generate_area_images() {
         
     }
     
-    for(size_t x = 0; x < area_image_cols; x++) {
-        for(size_t y = 0; y < area_image_rows; y++) {
+    for(size_t x = 0; x < area_image_cols; ++x) {
+        for(size_t y = 0; y < area_image_rows; ++y) {
             //We need to "rebuild" the images, so that the mipmaps get updated.
             //Not doing this caused a month-old bug under OpenGL,
             //where zooming out = fade to black.
@@ -368,13 +368,13 @@ ALLEGRO_COLOR get_daylight_color() {
     //TODO optimize: don't fetch the points from the weather's map every time.
     //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_map.weather_condition.lighting.begin(); p_nr != cur_area_map.weather_condition.lighting.end(); p_nr++) {
+    for(auto p_nr = cur_area_map.weather_condition.lighting.begin(); p_nr != cur_area_map.weather_condition.lighting.end(); ++p_nr) {
         point_nrs.push_back(p_nr->first);
     }
     
     size_t n_points = point_nrs.size();
     if(n_points > 1) {
-        for(size_t p = 0; p < n_points - 1; p++) {
+        for(size_t p = 0; p < n_points - 1; ++p) {
             if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
                 return interpolate_color(
                            day_minutes,
@@ -410,7 +410,7 @@ void get_multiline_text_dimensions(const ALLEGRO_FONT* const font, const string 
     
     if(ret_w) {
         int largest_w = 0;
-        for(size_t l = 0; l < lines.size(); l++) {
+        for(size_t l = 0; l < lines.size(); ++l) {
             largest_w = max(largest_w, al_get_text_width(font, lines[l].c_str()));
         }
         
@@ -426,13 +426,13 @@ float get_sun_strength() {
     //TODO optimize: don't fetch the points from the weather's map every time.
     //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_map.weather_condition.sun_strength.begin(); p_nr != cur_area_map.weather_condition.sun_strength.end(); p_nr++) {
+    for(auto p_nr = cur_area_map.weather_condition.sun_strength.begin(); p_nr != cur_area_map.weather_condition.sun_strength.end(); ++p_nr) {
         point_nrs.push_back(p_nr->first);
     }
     
     size_t n_points = point_nrs.size();
     if(n_points > 1) {
-        for(size_t p = 0; p < n_points - 1; p++) {
+        for(size_t p = 0; p < n_points - 1; ++p) {
             if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
                 return interpolate_number(
                            day_minutes, point_nrs[p], point_nrs[p + 1],
@@ -454,7 +454,7 @@ float get_sun_strength() {
 string get_var_value(const string &vars_string, const string &var, const string &def) {
     vector<string> vars = split(vars_string, ";");
     
-    for(size_t v = 0; v < vars.size(); v++) {
+    for(size_t v = 0; v < vars.size(); ++v) {
         size_t equals_pos = vars[v].find("=");
         string var_name = trim_spaces(vars[v].substr(0, equals_pos));
         
@@ -545,7 +545,7 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Vertices.
     size_t n_vertices = file.get_child_by_name("vertices")->get_nr_of_children_by_name("vertex");
-    for(size_t v = 0; v < n_vertices; v++) {
+    for(size_t v = 0; v < n_vertices; ++v) {
         data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
         vector<string> words = split(vertex_data->value);
         if(words.size() == 2) cur_area_map.vertices.push_back(new vertex(s2f(words[0]), s2f(words[1])));
@@ -553,13 +553,13 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Linedefs.
     size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
-    for(size_t l = 0; l < n_linedefs; l++) {
+    for(size_t l = 0; l < n_linedefs; ++l) {
         data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
         linedef* new_linedef = new linedef();
         
         vector<string> s_nrs = split(linedef_data->get_child_by_name("s")->value);
         if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
-        for(size_t s = 0; s < 2; s++) {
+        for(size_t s = 0; s < 2; ++s) {
             if(s_nrs[s] == "-1") new_linedef->sector_nrs[s] = string::npos;
             else new_linedef->sector_nrs[s] = s2i(s_nrs[s]);
         }
@@ -575,7 +575,7 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Sectors.
     size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
-    for(size_t s = 0; s < n_sectors; s++) {
+    for(size_t s = 0; s < n_sectors; ++s) {
         data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
         sector* new_sector = new sector();
         
@@ -608,7 +608,7 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Mobs.
     size_t n_mobs = file.get_child_by_name("mobs")->get_nr_of_children();
-    for(size_t m = 0; m < n_mobs; m++) {
+    for(size_t m = 0; m < n_mobs; ++m) {
     
         data_node* mob_node = file.get_child_by_name("mobs")->get_child(m);
         
@@ -648,7 +648,7 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Tree shadows.
     size_t n_shadows = file.get_child_by_name("tree_shadows")->get_nr_of_children();
-    for(size_t s = 0; s < n_shadows; s++) {
+    for(size_t s = 0; s < n_shadows; ++s) {
     
         data_node* shadow_node = file.get_child_by_name("tree_shadows")->get_child(s);
         
@@ -692,18 +692,18 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Set up stuff.
     //TODO error checking.
-    for(size_t l = 0; l < cur_area_map.linedefs.size(); l++) {
+    for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
         cur_area_map.linedefs[l]->fix_pointers(cur_area_map);
     }
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         cur_area_map.sectors[s]->connect_linedefs(cur_area_map, s);
     }
-    for(size_t v = 0; v < cur_area_map.vertices.size(); v++) {
+    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
         cur_area_map.vertices[v]->connect_linedefs(cur_area_map, v);
     }
     
     //Triangulate everything.
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
@@ -717,10 +717,10 @@ void load_area(const string &name, const bool load_for_editor) {
  * Loads the area's sector textures.
  */
 void load_area_textures() {
-    for(size_t s = 0; s < cur_area_map.sectors.size(); s++) {
+    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
         
-        for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); t++) {
+        for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); ++t) {
             if(s_ptr->file_name.empty()) {
                 s_ptr->bitmap = NULL;
             } else {
@@ -756,7 +756,7 @@ void load_control(const unsigned char action, const unsigned char player, const 
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
     
-    for(size_t c = 0; c < n_possible_controls; c++) {
+    for(size_t c = 0; c < n_possible_controls; ++c) {
         controls.push_back(control_info(action, player, possible_controls[c]));
     }
 }
@@ -795,7 +795,7 @@ void load_game_content() {
     data_node weather_file = load_data_file(WEATHER_FILE);
     size_t n_weather_conditions = weather_file.get_nr_of_children_by_name("weather");
     
-    for(size_t wc = 0; wc < n_weather_conditions; wc++) {
+    for(size_t wc = 0; wc < n_weather_conditions; ++wc) {
         data_node* cur_weather = weather_file.get_child_by_name("weather", wc);
         
         string name = cur_weather->get_child_by_name("name")->value;
@@ -805,7 +805,7 @@ void load_game_content() {
         map<unsigned, ALLEGRO_COLOR> lighting;
         size_t n_lighting_points = cur_weather->get_child_by_name("lighting")->get_nr_of_children();
         
-        for(size_t lp = 0; lp < n_lighting_points; lp++) {
+        for(size_t lp = 0; lp < n_lighting_points; ++lp) {
             data_node* lighting_node = cur_weather->get_child_by_name("lighting")->get_child(lp);
             
             unsigned point_time = s2i(lighting_node->name);
@@ -828,7 +828,7 @@ void load_game_content() {
         map<unsigned, unsigned char> sun_strength;
         size_t n_sun_strength_points = cur_weather->get_child_by_name("sun_strength")->get_nr_of_children();
         
-        for(size_t sp = 0; sp < n_sun_strength_points; sp++) {
+        for(size_t sp = 0; sp < n_sun_strength_points; ++sp) {
             data_node* sun_strength_node = cur_weather->get_child_by_name("sun_strength")->get_child(sp);
             
             unsigned point_time = s2i(sun_strength_node->name);
@@ -867,7 +867,7 @@ void load_options() {
     //Load joysticks.
     joystick_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
-    for(int j = 0; j < n_joysticks; j++) {
+    for(int j = 0; j < n_joysticks; ++j) {
         joystick_numbers[al_get_joystick(j)] = j;
     }
     
@@ -880,7 +880,7 @@ void load_options() {
     //Check the constructor of control_info for more information.
     controls.clear();
     
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         load_control(BUTTON_THROW,                p, "punch", file, "mb_1");
         load_control(BUTTON_WHISTLE,              p, "whistle", file, "mb_2");
         load_control(BUTTON_MOVE_RIGHT,           p, "move_right", file, "k_4");
@@ -925,7 +925,7 @@ void load_options() {
         }
     }
     
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         mouse_moves_cursor[p] = s2b(file.get_child_by_name("p" + i2s((p + 1)) + "_mouse_moves_cursor")->get_value_or_default((p == 0) ? "true" : "false"));
     }
     
@@ -1070,7 +1070,7 @@ void save_options() {
     map<string, string> grouped_controls;
     
     //Tell the map what they are.
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
         grouped_controls[prefix + "punch"].clear();
         grouped_controls[prefix + "whistle"].clear();
@@ -1107,7 +1107,7 @@ void save_options() {
     }
     
     size_t n_controls = controls.size();
-    for(size_t c = 0; c < n_controls; c++) {
+    for(size_t c = 0; c < n_controls; ++c) {
         string name = "p" + i2s((controls[c].player + 1)) + "_";
         if(controls[c].action == BUTTON_THROW)                     name += "punch";
         else if(controls[c].action == BUTTON_WHISTLE)              name += "whistle";
@@ -1146,13 +1146,13 @@ void save_options() {
     }
     
     //Save controls.
-    for(auto c = grouped_controls.begin(); c != grouped_controls.end(); c++) {
+    for(auto c = grouped_controls.begin(); c != grouped_controls.end(); ++c) {
         if(c->second.size()) c->second.erase(c->second.size() - 1); //Remove the final character, which is always an extra comma.
         
         al_fwrite(file, c->first + "=" + c->second + "\n");
     }
     
-    for(unsigned char p = 0; p < 4; p++) {
+    for(unsigned char p = 0; p < 4; ++p) {
         al_fwrite(file, "p" + i2s((p + 1)) + "_mouse_moves_cursor=" + b2s(mouse_moves_cursor[p]) + "\n");
     }
     
@@ -1281,7 +1281,7 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     
     vector<string> lines = split(text, "\n");
     size_t char_count = 0;
-    for(size_t l = 0; l < lines.size(); l++) {
+    for(size_t l = 0; l < lines.size(); ++l) {
         char_count += lines[l].size() + 1; //+1 because of the new line character.
         if((l + 1) % 3 == 0) cur_message_stopping_chars.push_back(char_count);
     }
@@ -1296,7 +1296,7 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
  */
 string str_to_lower(string s) {
     unsigned short n_characters = s.size();
-    for(unsigned short c = 0; c < n_characters; c++) {
+    for(unsigned short c = 0; c < n_characters; ++c) {
         s[c] = tolower(s[c]);
     }
     return s;

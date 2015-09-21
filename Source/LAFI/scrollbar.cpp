@@ -252,7 +252,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
         widget->children_offset_x = widget->children_offset_y = 0;
         float largest_y2 = FLT_MIN, largest_x2 = FLT_MIN;
         
-        for(auto w = widget->widgets.begin(); w != widget->widgets.end(); w++) {
+        for(auto w = widget->widgets.begin(); w != widget->widgets.end(); ++w) {
             if(!w->second) continue;
             
             if(vertical) {

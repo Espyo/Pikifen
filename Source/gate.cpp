@@ -27,6 +27,8 @@ void gate::open(mob* m, void* info1, void* info2) {
     gate* g_ptr = (gate*) m;
     g_ptr->sec->type = SECTOR_TYPE_NORMAL;
     m->set_animation(GATE_ANIM_NOTHING);
+    m->start_dying();
+    m->finish_dying();
     random_particle_explosion(
         PARTICLE_TYPE_BITMAP, bmp_smoke, g_ptr->x, g_ptr->y,
         60, 90, 10, 12, 2.5, 3, 64, 96, al_map_rgb(238, 204, 170)
