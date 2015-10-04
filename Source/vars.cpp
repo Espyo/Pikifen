@@ -17,7 +17,6 @@
 
 using namespace std;
 
-ALLEGRO_BITMAP* bmp_blue_onion = NULL;
 ALLEGRO_BITMAP* bmp_bubble = NULL;
 ALLEGRO_BITMAP* bmp_cloaking_burrow_nit = NULL;
 ALLEGRO_BITMAP* bmp_cursor = NULL;
@@ -34,7 +33,6 @@ ALLEGRO_BITMAP* bmp_nectar = NULL;
 ALLEGRO_BITMAP* bmp_no_pikmin = NULL;
 ALLEGRO_BITMAP* bmp_number_bubble = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_spirit = NULL;
-ALLEGRO_BITMAP* bmp_red_onion = NULL;
 ALLEGRO_BITMAP* bmp_shadow = NULL;
 ALLEGRO_BITMAP* bmp_ship = NULL;
 ALLEGRO_BITMAP* bmp_smack = NULL;
@@ -45,7 +43,6 @@ ALLEGRO_BITMAP* bmp_sun_bubble = NULL;
 ALLEGRO_BITMAP* bmp_tp = NULL;
 ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
-ALLEGRO_BITMAP* bmp_yellow_onion = NULL;
 
 ALLEGRO_BITMAP* bmp_test = NULL;
 sector test_sector;
@@ -82,6 +79,7 @@ float                            area_images_y1 = 0;
 vector<unsigned int>             berries;
 bmp_manager                      bitmaps;
 ALLEGRO_BITMAP*                  bmp_error = NULL;
+vector<bridge*>                  bridges;
 float                            cam_trans_pan_final_x = 0;
 float                            cam_trans_pan_final_y = 0;
 float                            cam_trans_pan_initial_x = 0;

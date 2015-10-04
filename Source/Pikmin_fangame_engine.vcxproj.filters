@@ -183,6 +183,9 @@
     <ClCompile Include="treasure_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="spec_objs\bridge.cpp">
+      <Filter>Source Files\spec_mobs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="const.h">
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="gate_type.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spec_objs\bridge.h">
+      <Filter>Header Files\spec_mobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

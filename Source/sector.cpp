@@ -64,7 +64,37 @@ void area_map::generate_blockmap() {
     bmap.linedefs.assign(bmap.n_cols, vector<vector<linedef*> >(bmap.n_rows, vector<linedef*>()));
     bmap.sectors.assign( bmap.n_cols, vector<unordered_set<sector*> >( bmap.n_rows, unordered_set<sector*>()));
     
+    
     //Now, add a list of linedefs to each block.
+    generate_linedefs_blockmap(linedefs);
+    
+    
+    //If at this point, there's any block without a sector, that means
+    //that the block has no linedefs. It has, however, a single sector,
+    //so use the triangle method to get the sector. Checking the center is
+    //just a good a spot as any.
+    for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
+        for(size_t by = 0; by < bmap.n_rows; ++by) {
+        
+            if(bmap.sectors[bx][by].empty()) {
+            
+                bmap.sectors[bx][by].insert(
+                    get_sector(
+                        bmap.get_x1(bx) + BLOCKMAP_BLOCK_SIZE * 0.5,
+                        bmap.get_y1(by) + BLOCKMAP_BLOCK_SIZE * 0.5,
+                        NULL, false
+                    )
+                );
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Generates the blockmap for a set of linedefs.
+ */
+void area_map::generate_linedefs_blockmap(vector<linedef*> &linedefs) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
     for(size_t l = 0; l < linedefs.size(); ++l) {
@@ -113,26 +143,6 @@ void area_map::generate_blockmap() {
                     if(l_ptr->sectors[0]) bmap.sectors[bx][by].insert(l_ptr->sectors[0]);
                     if(l_ptr->sectors[1]) bmap.sectors[bx][by].insert(l_ptr->sectors[1]);
                 }
-            }
-        }
-    }
-    
-    //If at this point, there's any block without a sector, that means
-    //that the block has no linedefs. It has, however, a single sector,
-    //so use the triangle method to get the sector. Checking the center is
-    //just a good a spot as any.
-    for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
-        for(size_t by = 0; by < bmap.n_rows; ++by) {
-        
-            if(bmap.sectors[bx][by].empty()) {
-            
-                bmap.sectors[bx][by].insert(
-                    get_sector(
-                        bmap.get_x1(bx) + BLOCKMAP_BLOCK_SIZE * 0.5,
-                        bmap.get_y1(by) + BLOCKMAP_BLOCK_SIZE * 0.5,
-                        NULL, false
-                    )
-                );
             }
         }
     }
@@ -329,16 +339,9 @@ mob_gen::mob_gen(float x, float y, unsigned char category, mob_type* type, float
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
     z(0),
-    tag(0),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
-    always_cast_shadow(false),
-    scale_x(1),
-    scale_y(1),
-    trans_x(0),
-    trans_y(0),
-    rot(0),
-    bitmap(nullptr) {
+    always_cast_shadow(false) {
     
 }
 
@@ -354,11 +357,11 @@ void sector::clone(sector* new_sector) {
     new_sector->tag = tag;
     new_sector->brightness = brightness;
     new_sector->fade = fade;
-    new_sector->scale_x = scale_x;
-    new_sector->scale_y = scale_y;
-    new_sector->trans_x = trans_y;
-    new_sector->rot = rot;
-    new_sector->file_name = file_name;
+    new_sector->texture_info.scale_x = texture_info.scale_x;
+    new_sector->texture_info.scale_y = texture_info.scale_y;
+    new_sector->texture_info.trans_x = texture_info.trans_y;
+    new_sector->texture_info.rot = texture_info.rot;
+    new_sector->texture_info.file_name = texture_info.file_name;
     //TODO hazards.
 }
 
@@ -368,10 +371,24 @@ void sector::clone(sector* new_sector) {
  */
 sector::~sector() {
     for(size_t t = 0; t < 2; ++t) {
-        if(bitmap && bitmap != bmp_error) {
-            bitmaps.detach(file_name);
+        if(texture_info.bitmap && texture_info.bitmap != bmp_error) {
+            bitmaps.detach(texture_info.file_name);
         }
     }
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a sector texture's info struct.
+ */
+sector_texture_info::sector_texture_info() :
+    scale_x(1),
+    scale_y(1),
+    trans_x(0),
+    trans_y(0),
+    rot(0),
+    bitmap(nullptr) {
 }
 
 
@@ -426,7 +443,6 @@ void sector::fix_pointers(area_map &a) {
 sector_correction::sector_correction(sector* sec) :
     sec(sec) {
     
-    new_texture = NULL;
 }
 
 

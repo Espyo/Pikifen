@@ -31,7 +31,7 @@ struct area_map;
 struct blockmap;
 struct linedef;
 struct sector;
-struct sector_texture;
+struct sector_correction;
 struct triangle;
 struct vertex;
 typedef vector<vertex*> polygon;
@@ -92,6 +92,23 @@ struct linedef {
 
 
 /* ----------------------------------------------------------------------------
+ * Information about a sector's texture.
+ */
+struct sector_texture_info {
+    float scale_x; //Texture scale, X...
+    float scale_y; //and Y.
+    float trans_x; //X translation...
+    float trans_y; //and Y.
+    float rot;     //Rotation.
+    ALLEGRO_BITMAP* bitmap;
+    string file_name;
+    
+    sector_texture_info();
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * A sector, like the ones in Doom.
  * It's composed of lines, so it's essentially
  * a polygon. It has a certain height, and its looks
@@ -100,16 +117,10 @@ struct linedef {
 struct sector {
     unsigned char type;
     float z; //Height.
-    unsigned int tag; //TODO are these used?
+    string tag;
     unsigned char brightness;
     
-    float scale_x; //Texture scale, X...
-    float scale_y; //and Y.
-    float trans_x; //X translation...
-    float trans_y; //and Y.
-    float rot;     //Rotation.
-    ALLEGRO_BITMAP* bitmap;
-    string file_name;
+    sector_texture_info texture_info;
     bool fade;
     bool always_cast_shadow;
     
@@ -139,7 +150,7 @@ struct sector {
  */
 struct sector_correction {
     sector* sec;
-    ALLEGRO_BITMAP* new_texture;
+    sector_texture_info new_texture;
     
     sector_correction(sector* sec);
 };
@@ -224,6 +235,7 @@ struct tree_shadow {
  * vertices, etc.
  */
 struct area_map {
+
     blockmap bmap;
     vector<vertex*> vertices;
     vector<linedef*> linedefs;
@@ -245,6 +257,7 @@ struct area_map {
     
     area_map();
     void generate_blockmap();
+    void generate_linedefs_blockmap(vector<linedef*> &linedefs);
     void clear();
 };
 
@@ -279,6 +292,8 @@ enum SECTOR_TYPES {
     SECTOR_TYPE_LANDING_SITE,
     SECTOR_TYPE_WALL,
     SECTOR_TYPE_GATE,
+    SECTOR_TYPE_BRIDGE,
+    SECTOR_TYPE_BRIDGE_RAIL,
 };
 
 enum TERRAIN_SOUNDS {

@@ -111,8 +111,8 @@ void do_drawing() {
         
         for(size_t c = 0; c < cur_area_map.sector_corrections.size(); ++c) {
             sector_correction* c_ptr = &cur_area_map.sector_corrections[c];
-            if(c_ptr->new_texture) {
-                draw_sector(c_ptr->sec, 0, 0, 1.0f, c_ptr->new_texture);
+            if(c_ptr->new_texture.bitmap) {
+                draw_sector(c_ptr->sec, 0, 0, 1.0f, &c_ptr->new_texture);
             }
         }
         
@@ -128,6 +128,9 @@ void do_drawing() {
         sorted_mobs = mobs;
         sort(sorted_mobs.begin(), sorted_mobs.end(), [] (mob * m1, mob * m2) {
             if(m1->z == m2->z) {
+                if(m1->type->height == m2->type->height) {
+                    return m1->id < m2->id;
+                }
                 return m1->type->height < m2->type->height;
             }
             return m1->z < m2->z;
@@ -436,7 +439,7 @@ void do_drawing() {
                     al_draw_line(
                         p_ptr->x, p_ptr->y,
                         pp_ptr->x, pp_ptr->y,
-                        al_map_rgba(255, 0, 255, (p / (float) cursor_spots.size()) * 64),
+                        change_alpha(cur_leader_ptr->lea_type->main_color, (p / (float) cursor_spots.size()) * 64),
                         p * 3
                     );
                 }
@@ -902,7 +905,7 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
  * scale:    Drawing scale.
  * texture:  Custom texture. If NULL, uses the normal one.
  */
-void draw_sector(sector* s_ptr, const float x, const float y, const float scale, ALLEGRO_BITMAP* texture) {
+void draw_sector(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
@@ -1166,7 +1169,7 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
  * scale:   Scale the sector by this much.
  * texture: Custom texture. If NULL, uses the normal one.
  */
-void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, ALLEGRO_BITMAP* texture) {
+void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture) {
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
     
@@ -1259,16 +1262,20 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         size_t n_vertices = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
         
+        sector_texture_info* texture_info_to_use;
+        if(texture) texture_info_to_use = texture;
+        else texture_info_to_use = &texture_sector[t]->texture_info;
+        
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         if(texture_sector[t]) {
             al_build_transform(
                 &tra,
-                -texture_sector[t]->trans_x,
-                -texture_sector[t]->trans_y,
-                1.0 / texture_sector[t]->scale_x,
-                1.0 / texture_sector[t]->scale_y,
-                -texture_sector[t]->rot
+                -texture_info_to_use->trans_x,
+                -texture_info_to_use->trans_y,
+                1.0 / texture_info_to_use->scale_x,
+                1.0 / texture_info_to_use->scale_y,
+                -texture_info_to_use->rot
             );
         }
         
@@ -1310,8 +1317,8 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             av[v].y *= scale;
         }
         
-        ALLEGRO_BITMAP* tex = texture_sector[t] ? texture_sector[t]->bitmap : texture_sector[t == 0 ? 1 : 0]->bitmap;
-        if(texture) tex = texture;
+        ALLEGRO_BITMAP* tex = texture_sector[t] ? texture_sector[t]->texture_info.bitmap : texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
+        if(texture) tex = texture->bitmap;
         
         al_draw_prim(
             av, NULL, tex,

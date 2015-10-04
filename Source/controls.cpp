@@ -47,7 +47,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 
                 cout << "Mob: " << name << ". State: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
             }
-            
+            cout << "Z: " << cur_leader_ptr->z << "\n";
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
             debug_show_framerate = !debug_show_framerate;

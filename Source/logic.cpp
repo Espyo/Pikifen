@@ -836,14 +836,14 @@ void do_gameplay_logic() {
         *                   /  /  *
         **************************/
         
-        if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
+        /*if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             percipitation_timer.tick(delta_t);
             if(percipitation_timer.ticked) {
                 percipitation_timer = timer(cur_area_map.weather_condition.percipitation_frequency.get_random_number());
                 percipitation_timer.start();
                 percipitation.push_back(point(0, 0));
             }
-            
+        
             for(size_t p = 0; p < percipitation.size();) {
                 percipitation[p].y += cur_area_map.weather_condition.percipitation_speed.get_random_number() * delta_t;
                 if(percipitation[p].y > scr_h) {
@@ -852,7 +852,7 @@ void do_gameplay_logic() {
                     p++;
                 }
             }
-        }
+        }*/
         
         
         /**********************

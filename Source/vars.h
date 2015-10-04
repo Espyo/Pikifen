@@ -36,6 +36,7 @@
 #include "ship.h"
 #include "ship_type.h"
 #include "spray_type.h"
+#include "spec_objs/bridge.h"
 #include "spec_objs/info_spot.h"
 #include "spec_objs/nectar.h"
 #include "pellet.h"
@@ -46,7 +47,6 @@
 using namespace std;
 
 //Bitmaps.
-extern ALLEGRO_BITMAP* bmp_blue_onion;
 extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
 extern ALLEGRO_BITMAP* bmp_cursor;
@@ -64,7 +64,6 @@ extern ALLEGRO_BITMAP* bmp_no_pikmin;
 extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_red[3];
-extern ALLEGRO_BITMAP* bmp_red_onion;
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_ship;
 extern ALLEGRO_BITMAP* bmp_smack;
@@ -75,7 +74,6 @@ extern ALLEGRO_BITMAP* bmp_sun_bubble;
 extern ALLEGRO_BITMAP* bmp_tp;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
-extern ALLEGRO_BITMAP* bmp_yellow_onion;
 
 //Test things, temporary.
 extern ALLEGRO_BITMAP* bmp_test;
@@ -116,6 +114,7 @@ extern float                            area_images_y1;
 extern vector<unsigned int>             berries;
 extern bmp_manager                      bitmaps;
 extern ALLEGRO_BITMAP*                  bmp_error;
+extern vector<bridge*>                  bridges;
 extern float                            cam_trans_pan_final_x;
 extern float                            cam_trans_pan_final_y;
 extern float                            cam_trans_pan_initial_x;

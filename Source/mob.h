@@ -141,6 +141,7 @@ public:
     
     
     //Other properties.
+    size_t id;              //Incremental ID. Used for minor things.
     float health;           //Current health.
     timer invuln_period;    //During this period, the mob cannot be attacked.
     unsigned char team;     //Mob's team (who it can damage), use MOB_TEAM_*.
@@ -203,6 +204,7 @@ bool should_attack(mob* m1, mob* m2);
 void unfocus_mob(mob* m1);
 
 
+extern size_t next_mob_id;
 
 const float GRAVITY_ADDER = -1300.0f; //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 

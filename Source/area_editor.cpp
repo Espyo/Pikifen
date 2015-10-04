@@ -40,11 +40,11 @@ void area_editor::adv_textures_to_gui() {
     
     lafi::frame* f = (lafi::frame*) area_editor::gui->widgets["frm_adv_textures"];
     
-    ((lafi::textbox*) f->widgets["txt_x"])->text =  f2s(cur_sector->trans_x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text =  f2s(cur_sector->trans_y);
-    ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(cur_sector->scale_x);
-    ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(cur_sector->scale_y);
-    ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(cur_sector->rot);
+    ((lafi::textbox*) f->widgets["txt_x"])->text =  f2s(cur_sector->texture_info.trans_x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text =  f2s(cur_sector->texture_info.trans_y);
+    ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(cur_sector->texture_info.scale_x);
+    ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(cur_sector->texture_info.scale_y);
+    ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(cur_sector->texture_info.rot);
 }
 
 
@@ -515,7 +515,7 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_map.sectors[s];
-            if(s_ptr->file_name.empty() && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
+            if(s_ptr->texture_info.file_name.empty() && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
                 error_type = EET_MISSING_TEXTURE;
                 error_sector_ptr = s_ptr;
                 break;
@@ -530,11 +530,11 @@ void area_editor::find_errors() {
         
             sector* s_ptr = cur_area_map.sectors[s];
             
-            if(s_ptr->file_name.empty()) continue;
+            if(s_ptr->texture_info.file_name.empty()) continue;
             
-            if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->file_name) == texture_file_names.end()) {
+            if(find(texture_file_names.begin(), texture_file_names.end(), s_ptr->texture_info.file_name) == texture_file_names.end()) {
                 error_type = EET_UNKNOWN_TEXTURE;
-                error_string = s_ptr->file_name;
+                error_string = s_ptr->texture_info.file_name;
                 error_sector_ptr = s_ptr;
                 break;
             }
@@ -767,11 +767,11 @@ void area_editor::gui_to_adv_textures() {
     if(!cur_sector) return;
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_adv_textures"];
     
-    cur_sector->trans_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    cur_sector->trans_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-    cur_sector->scale_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
-    cur_sector->scale_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
-    cur_sector->rot = ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
+    cur_sector->texture_info.trans_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    cur_sector->texture_info.trans_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    cur_sector->texture_info.scale_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
+    cur_sector->texture_info.scale_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
+    cur_sector->texture_info.rot = ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
     
     adv_textures_to_gui();
 }
@@ -885,8 +885,9 @@ void area_editor::gui_to_sector() {
     cur_sector->z = s2f(((lafi::textbox*) f->widgets["txt_z"])->text);
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow = ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
-    cur_sector->file_name = ((lafi::textbox*) f->widgets["txt_texture"])->text;
+    cur_sector->texture_info.file_name = ((lafi::textbox*) f->widgets["txt_texture"])->text;
     cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
+    cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
     //TODO hazards.
     
     sector_to_gui();
@@ -1616,6 +1617,9 @@ void area_editor::load() {
     frm_sector->easy_add("lbl_brightness", new lafi::label(0, 0, 0, 0, "Brightness:"), 50, 16);
     frm_sector->easy_add("txt_brightness", new lafi::textbox(0, 0, 0, 0), 50, 16);
     frm_sector->easy_row();
+    frm_sector->easy_add("lbl_tag", new lafi::label(0, 0, 0, 0, "Tag:"), 20, 16);
+    frm_sector->easy_add("txt_tag", new lafi::textbox(0, 0, 0, 0), 80, 16);
+    frm_sector->easy_row();
     frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 100, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("txt_hazards", new lafi::textbox(0, 0, 0, 0), 100, 16);
@@ -1866,7 +1870,7 @@ void area_editor::load() {
     frm_sector->widgets["but_adv"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         if(!cur_sector) return;
         
-        cur_sector->bitmap = bitmaps.get("Textures/" + cur_sector->file_name, NULL);
+        cur_sector->texture_info.bitmap = bitmaps.get("Textures/" + cur_sector->texture_info.file_name, NULL);
         
         mode = EDITOR_MODE_ADV_TEXTURE_SETTINGS;
         change_to_right_frame();
@@ -1876,6 +1880,7 @@ void area_editor::load() {
     frm_sector->widgets["chk_fade"]->left_mouse_click_handler = lambda_gui_to_sector_click;
     frm_sector->widgets["txt_texture"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
+    frm_sector->widgets["txt_tag"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["chk_shadow"]->left_mouse_click_handler = lambda_gui_to_sector_click;
     frm_sectors->widgets["but_back"]->description =      "Go back to the main menu.";
@@ -1886,6 +1891,7 @@ void area_editor::load() {
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
     frm_sector->widgets["txt_texture"]->description =    "File name of the Texture (image) of the floor.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
+    frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to knowdrawing.cpp.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
     frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";
@@ -2424,21 +2430,22 @@ void area_editor::save_area() {
         if(s_ptr->type != SECTOR_TYPE_NORMAL) sector_node->add(new data_node("type", sector_types.get_name(s_ptr->type)));
         sector_node->add(new data_node("z", f2s(s_ptr->z)));
         if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) sector_node->add(new data_node("brightness", i2s(s_ptr->brightness)));
+        if(!s_ptr->tag.empty()) sector_node->add(new data_node("tag", s_ptr->tag));
         if(s_ptr->fade) sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
         if(s_ptr->always_cast_shadow) sector_node->add(new data_node("always_cast_shadow", b2s(s_ptr->always_cast_shadow)));
         
         
-        sector_node->add(new data_node("texture", s_ptr->file_name));
-        if(s_ptr->rot != 0) {
-            sector_node->add(new data_node("texture_rotate", f2s(s_ptr->rot)));
+        sector_node->add(new data_node("texture", s_ptr->texture_info.file_name));
+        if(s_ptr->texture_info.rot != 0) {
+            sector_node->add(new data_node("texture_rotate", f2s(s_ptr->texture_info.rot)));
         }
-        if(s_ptr->scale_x != 1 || s_ptr->scale_y != 1) {
+        if(s_ptr->texture_info.scale_x != 1 || s_ptr->texture_info.scale_y != 1) {
             sector_node->add(new data_node("texture_scale",
-                                           f2s(s_ptr->scale_x) + " " + f2s(s_ptr->scale_y)));
+                                           f2s(s_ptr->texture_info.scale_x) + " " + f2s(s_ptr->texture_info.scale_y)));
         }
-        if(s_ptr->trans_x != 0 || s_ptr->trans_y != 0) {
+        if(s_ptr->texture_info.trans_x != 0 || s_ptr->texture_info.trans_y != 0) {
             sector_node->add(new data_node("texture_trans",
-                                           f2s(s_ptr->trans_x) + " " + f2s(s_ptr->trans_y)));
+                                           f2s(s_ptr->texture_info.trans_x) + " " + f2s(s_ptr->texture_info.trans_y)));
         }
     }
     
@@ -2491,8 +2498,9 @@ void area_editor::sector_to_gui() {
         ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_sector->z);
         ((lafi::checkbox*) f->widgets["chk_fade"])->set(cur_sector->fade);
         ((lafi::checkbox*) f->widgets["chk_shadow"])->set(cur_sector->always_cast_shadow);
-        ((lafi::textbox*) f->widgets["txt_texture"])->text = cur_sector->file_name;
+        ((lafi::textbox*) f->widgets["txt_texture"])->text = cur_sector->texture_info.file_name;
         ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(cur_sector->brightness);
+        ((lafi::textbox*) f->widgets["txt_tag"])->text = cur_sector->tag;
         ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);
         //TODO hazards.
         

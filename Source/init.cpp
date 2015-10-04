@@ -135,9 +135,6 @@ void init_misc() {
 
 void init_misc_graphics() {
     //Graphics.
-    bmp_red_onion = load_bmp("Red_onion.png");
-    bmp_yellow_onion = load_bmp("Yellow_onion.png");
-    bmp_blue_onion = load_bmp("Blue_onion.png");
     bmp_ship = load_bmp("Ship.png");
     
     bmp_bubble = load_bmp(          "Bubble.png");
@@ -323,6 +320,8 @@ void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
     sector_types.register_type(SECTOR_TYPE_WALL, "Wall");
     sector_types.register_type(SECTOR_TYPE_GATE, "Gate");
+    sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
+    sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
 }
 
 void init_special_mob_types() {
@@ -344,5 +343,11 @@ void init_special_mob_types() {
         create_mob(new nectar(x, y, vars));
     };
     spec_mob_types["Nectar"] = nectar_mt;
+    
+    //Bridge.
+    mob_type* bridge_mt = new mob_type();
+    bridge_mt->name = "Bridge";
+    init_bridge_mob_type(bridge_mt);
+    spec_mob_types["Bridge"] = bridge_mt;
     
 }

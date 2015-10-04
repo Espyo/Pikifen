@@ -107,6 +107,7 @@ const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";
 const string OTHER_TYPES_FOLDER    = TYPES_FOLDER + "/Others";
 const string PELLETS_FOLDER        = TYPES_FOLDER + "/Pellets";
 const string PIKMIN_FOLDER         = TYPES_FOLDER + "/Pikmin";
+const string SPECIAL_MOBS_FOLDER   = TYPES_FOLDER + "/Special";
 const string SHIPS_FOLDER          = TYPES_FOLDER + "/Ships";
 const string TEXTURES_FOLDER       = GRAPHICS_FOLDER + "/Textures";
 const string TREASURES_FOLDER      = TYPES_FOLDER + "/Treasures";

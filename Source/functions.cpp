@@ -100,9 +100,9 @@ bool circle_intersects_line(const float cx, const float cy, const float cr, cons
 void clear_area_textures() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
-        if(s_ptr->bitmap && s_ptr->bitmap != bmp_error) {
-            bitmaps.detach("Textures/" + s_ptr->file_name);
-            s_ptr->bitmap = NULL;
+        if(s_ptr->texture_info.bitmap && s_ptr->texture_info.bitmap != bmp_error) {
+            bitmaps.detach("Textures/" + s_ptr->texture_info.file_name);
+            s_ptr->texture_info.bitmap = NULL;
         }
     }
 }
@@ -582,22 +582,23 @@ void load_area(const string &name, const bool load_for_editor) {
         new_sector->type = sector_types.get_nr(sector_data->get_child_by_name("type")->value);
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
         new_sector->brightness = s2f(sector_data->get_child_by_name("brightness")->get_value_or_default(i2s(DEF_SECTOR_BRIGHTNESS)));
+        new_sector->tag = sector_data->get_child_by_name("tag")->value;
         new_sector->z = s2f(sector_data->get_child_by_name("z")->value);
         new_sector->fade = s2b(sector_data->get_child_by_name("fade")->value);
         new_sector->always_cast_shadow = s2b(sector_data->get_child_by_name("always_cast_shadow")->value);
         
-        new_sector->file_name = sector_data->get_child_by_name("texture")->value;
-        new_sector->rot = s2f(sector_data->get_child_by_name("texture_rotate")->value);
+        new_sector->texture_info.file_name = sector_data->get_child_by_name("texture")->value;
+        new_sector->texture_info.rot = s2f(sector_data->get_child_by_name("texture_rotate")->value);
         
         vector<string> scales = split(sector_data->get_child_by_name("texture_scale")->value);
         if(scales.size() >= 2) {
-            new_sector->scale_x = s2f(scales[0]);
-            new_sector->scale_y = s2f(scales[0]);
+            new_sector->texture_info.scale_x = s2f(scales[0]);
+            new_sector->texture_info.scale_y = s2f(scales[0]);
         }
         vector<string> translations = split(sector_data->get_child_by_name("texture_trans")->value);
         if(translations.size() >= 2) {
-            new_sector->trans_x = s2f(translations[0]);
-            new_sector->trans_y = s2f(translations[1]);
+            new_sector->texture_info.trans_x = s2f(translations[0]);
+            new_sector->texture_info.trans_y = s2f(translations[1]);
         }
         
         
@@ -702,6 +703,7 @@ void load_area(const string &name, const bool load_for_editor) {
         cur_area_map.vertices[v]->connect_linedefs(cur_area_map, v);
     }
     
+    
     //Triangulate everything.
     for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
@@ -721,10 +723,10 @@ void load_area_textures() {
         sector* s_ptr = cur_area_map.sectors[s];
         
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); ++t) {
-            if(s_ptr->file_name.empty()) {
-                s_ptr->bitmap = NULL;
+            if(s_ptr->texture_info.file_name.empty()) {
+                s_ptr->texture_info.bitmap = NULL;
             } else {
-                s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
+                s_ptr->texture_info.bitmap = bitmaps.get("Textures/" + s_ptr->texture_info.file_name, NULL);
             }
         }
     }
@@ -1169,6 +1171,61 @@ void save_options() {
     al_fwrite(file, "window_pos_hack=" + b2s(window_pos_hack) + "\n");
     
     al_fclose(file);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is a string.
+ */
+void set_if_exists(const string value, string &var) {
+    if(value.empty()) return;
+    var = value;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is an integer.
+ */
+void set_if_exists(const string value, size_t &var) {
+    if(value.empty()) return;
+    var = s2i(value);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is a boolean.
+ */
+void set_if_exists(const string value, bool &var) {
+    if(value.empty()) return;
+    var = s2b(value);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is a float.
+ */
+void set_if_exists(const string value, float &var) {
+    if(value.empty()) return;
+    var = s2f(value);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is an Allegro color.
+ */
+void set_if_exists(const string value, ALLEGRO_COLOR &var) {
+    if(value.empty()) return;
+    var = s2c(value);
 }
 
 

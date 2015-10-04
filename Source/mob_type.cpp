@@ -52,6 +52,7 @@ mob_type::mob_type() :
  * Fills class members from a data file.
  */
 void mob_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+    if(load_from_file_func) load_from_file_func(file, load_resources, anim_conversions);
 }
 
 
@@ -60,8 +61,18 @@ void mob_type::load_from_file(data_node* file, const bool load_resources, vector
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {
+    //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         load_mob_types(mob_categories.get_folder(c), c, load_resources);
+    }
+    
+    //Load the special mob types.
+    for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
+        string folder = SPECIAL_MOBS_FOLDER + "/" + mt->first;
+        data_node file = data_node(folder + "/Data.txt");
+        if(!file.file_was_opened) return;
+        
+        load_mob_type_from_file(mt->second, file, load_resources, folder);
     }
 }
 
@@ -81,63 +92,74 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
     
     for(size_t t = 0; t < types.size(); ++t) {
     
-        vector<pair<size_t, string> > anim_conversions;
-        
         data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) return;
         
         mob_type* mt;
         mt = mob_categories.create_mob_type(category);
         
-        mt->name = file.get_child_by_name("name")->value;
-        mt->always_active = s2b(file.get_child_by_name("always_active")->value);
-        mt->big_damage_interval = s2f(file.get_child_by_name("big_damage_interval")->value);
-        mt->main_color = s2c(file.get_child_by_name("main_color")->value);
-        mt->max_carriers = s2i(file.get_child_by_name("max_carriers")->value);
-        mt->max_health = s2i(file.get_child_by_name("max_health")->value);
-        mt->move_speed = s2f(file.get_child_by_name("move_speed")->value);
-        mt->near_radius = s2f(file.get_child_by_name("near_radius")->value);
-        mt->near_angle = s2f(file.get_child_by_name("near_angle")->value);
-        mt->rotation_speed = s2f(file.get_child_by_name("rotation_speed")->get_value_or_default(f2s(DEF_ROTATION_SPEED)));
-        mt->sight_radius = s2f(file.get_child_by_name("sight_radius")->value);
-        mt->territory_radius = s2f(file.get_child_by_name("territory_radius")->value);
-        mt->radius = s2f(file.get_child_by_name("radius")->value);
-        mt->height = s2f(file.get_child_by_name("height")->value);
-        mt->weight = s2f(file.get_child_by_name("weight")->value);
-        mt->pushes = s2b(file.get_child_by_name("pushes")->value);
-        mt->pushable = s2b(file.get_child_by_name("pushable")->value);
-        mt->show_health = s2b(file.get_child_by_name("show_health")->get_value_or_default("true"));
-        mt->show_health = s2b(file.get_child_by_name("casts_shadow")->get_value_or_default("true"));
-        
-        if(load_resources) {
-            data_node anim_file = data_node(folder + "/" + types[t] + "/Animations.txt");
-            mt->anims = load_animation_pool(&anim_file);
-            mt->anims.fix_hitbox_pointers();
-            
-            if(mt->states.empty()) {
-                mt->states = load_script(mt, file.get_child_by_name("script"));
-                if(mt->states.size()) {
-                    string first_state_name = file.get_child_by_name("first_state")->value;
-                    for(size_t s = 0; s < mt->states.size(); ++s) {
-                        if(mt->states[s]->name == first_state_name) {
-                            mt->first_state_nr = s;
-                            break;
-                        }
-                    }
-                } else {
-                    mt->first_state_nr = string::npos;
-                }
-            }
-        }
-        
-        mt->load_from_file(&file, load_resources, &anim_conversions);
+        load_mob_type_from_file(mt, file, load_resources, folder + "/" + types[t]);
         
         mob_categories.save_mob_type(category, mt);
         
-        if(load_resources) {
-            mt->anims.create_conversions(anim_conversions);
-        }
-        
     }
     
+}
+
+/* ----------------------------------------------------------------------------
+ * Loads a mob type's info from a text file.
+ */
+void load_mob_type_from_file(
+    mob_type* mt, data_node &file,
+    const bool load_resources, const string folder
+) {
+
+    vector<pair<size_t, string> > anim_conversions;
+    
+    set_if_exists(file.get_child_by_name("name")->value,                mt->name);
+    set_if_exists(file.get_child_by_name("always_active")->value,       mt->always_active);
+    set_if_exists(file.get_child_by_name("big_damage_interval")->value, mt->big_damage_interval);
+    set_if_exists(file.get_child_by_name("main_color")->value,          mt->main_color);
+    set_if_exists(file.get_child_by_name("max_carriers")->value,        mt->max_carriers);
+    set_if_exists(file.get_child_by_name("max_health")->value,          mt->max_health);
+    set_if_exists(file.get_child_by_name("move_speed")->value,          mt->move_speed);
+    set_if_exists(file.get_child_by_name("near_radius")->value,         mt->near_radius);
+    set_if_exists(file.get_child_by_name("near_angle")->value,          mt->near_angle);
+    set_if_exists(file.get_child_by_name("rotation_speed")->value,      mt->rotation_speed);
+    set_if_exists(file.get_child_by_name("sight_radius")->value,        mt->sight_radius);
+    set_if_exists(file.get_child_by_name("territory_radius")->value,    mt->territory_radius);
+    set_if_exists(file.get_child_by_name("radius")->value,              mt->radius);
+    set_if_exists(file.get_child_by_name("height")->value,              mt->height);
+    set_if_exists(file.get_child_by_name("weight")->value,              mt->weight);
+    set_if_exists(file.get_child_by_name("pushes")->value,              mt->pushes);
+    set_if_exists(file.get_child_by_name("pushable")->value,            mt->pushable);
+    set_if_exists(file.get_child_by_name("show_health")->value,         mt->show_health);
+    set_if_exists(file.get_child_by_name("casts_shadow")->value,        mt->casts_shadow);
+    
+    if(load_resources) {
+        data_node anim_file = data_node(folder + "/Animations.txt");
+        mt->anims = load_animation_pool(&anim_file);
+        mt->anims.fix_hitbox_pointers();
+        
+        if(mt->states.empty()) {
+            mt->states = load_script(mt, file.get_child_by_name("script"));
+            if(mt->states.size()) {
+                string first_state_name = file.get_child_by_name("first_state")->value;
+                for(size_t s = 0; s < mt->states.size(); ++s) {
+                    if(mt->states[s]->name == first_state_name) {
+                        mt->first_state_nr = s;
+                        break;
+                    }
+                }
+            } else {
+                mt->first_state_nr = string::npos;
+            }
+        }
+    }
+    
+    mt->load_from_file(&file, load_resources, &anim_conversions);
+    
+    if(load_resources) {
+        mt->anims.create_conversions(anim_conversions);
+    }
 }

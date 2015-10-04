@@ -129,6 +129,7 @@
     <ClCompile Include="sector.cpp" />
     <ClCompile Include="ship.cpp" />
     <ClCompile Include="ship_type.cpp" />
+    <ClCompile Include="spec_objs\bridge.cpp" />
     <ClCompile Include="spec_objs\info_spot.cpp" />
     <ClCompile Include="spec_objs\nectar.cpp" />
     <ClCompile Include="spray_type.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="sector.h" />
     <ClInclude Include="ship.h" />
     <ClInclude Include="ship_type.h" />
+    <ClInclude Include="spec_objs\bridge.h" />
     <ClInclude Include="spec_objs\info_spot.h" />
     <ClInclude Include="spec_objs\nectar.h" />
     <ClInclude Include="spray_type.h" />

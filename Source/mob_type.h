@@ -66,6 +66,7 @@ public:
     
     //Used by the special mob types, as it is not possible to control which type of mob to create without a list.
     function<void(float x, float y, float angle, const string &vars)> create_mob; //Creates a mob of this type.
+    function<void(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions)> load_from_file_func;
     
     mob_type();
     virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
@@ -75,6 +76,7 @@ public:
 
 void load_mob_types(const string &folder, const unsigned char category, bool load_resources);
 void load_mob_types(bool load_resources);
+void load_mob_type_from_file(mob_type* mt, data_node &file, const bool load_resources, const string folder);
 
 
 

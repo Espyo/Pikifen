@@ -80,9 +80,6 @@ int main(int argc, char**) {
     if(cur_screen == SCREEN_GAME) {
     
         //Graphics.
-        bmp_red_onion = load_bmp("Red_onion.png");
-        bmp_yellow_onion = load_bmp("Yellow_onion.png");
-        bmp_blue_onion = load_bmp("Blue_onion.png");
         bmp_ship = load_bmp("Ship.png");
         
         bmp_bubble = load_bmp(          "Bubble.png");
@@ -151,7 +148,7 @@ int main(int argc, char**) {
         pikmin_in_onions.clear();
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) { o->second = 0; }
         
-        load_area("Play", false);
+        load_area("Tests", false);
         load_area_textures();
         generate_area_images();
         

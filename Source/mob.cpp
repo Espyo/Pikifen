@@ -19,6 +19,10 @@
 #include "ship.h"
 #include "vars.h"
 
+
+size_t next_mob_id = 0;
+
+
 /* ----------------------------------------------------------------------------
  * Creates a mob.
  */
@@ -69,7 +73,10 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     gtt_free_move(false),
     target_distance(0),
     chomp_max(0),
-    script_timer(0) {
+    script_timer(0),
+    id(next_mob_id) {
+    
+    next_mob_id++;
     
     sector* sec = get_sector(x, y, nullptr, true);
     z = sec->z;
@@ -199,7 +206,6 @@ void mob::tick_misc_logic() {
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
  */
-#include <iostream> //TODO
 void mob::tick_physics() {
     //Movement.
     bool finished_moving = false;
@@ -304,6 +310,11 @@ void mob::tick_physics() {
             } else {
                 new_ground_z = base_sector->z;
                 new_lighting = base_sector->brightness;
+            }
+            
+            //Quick panic handler: if it's under the ground, pop it out.
+            if(z < base_sector->z) {
+                z = base_sector->z;
             }
             
             //Use the bounding box to know which blockmap blocks the mob is on.
@@ -460,6 +471,7 @@ void mob::tick_physics() {
     
     
     //Vertical movement.
+    
     //If the current ground is one step (or less) below
     //the previous ground, just instantly go down the step.
     if(pre_move_ground_z - ground_z <= SECTOR_STEP && z == pre_move_ground_z) {
@@ -616,7 +628,6 @@ void mob::remove_target() {
     
     speed_x = 0;
     speed_y = 0;
-    speed_z = 0;
 }
 
 
@@ -975,6 +986,9 @@ void create_mob(mob* m) {
         
     } else if(typeid(*m) == typeid(gate)) {
         gates.push_back((gate*) m);
+        
+    } else if(typeid(*m) == typeid(bridge)) {
+        bridges.push_back((bridge*) m);
         
     }
 }

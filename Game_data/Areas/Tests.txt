@@ -1,4 +1,4 @@
-weather=
+weather=Normal
 bg_color=0.00 0.00 0.00
 bg_dist=2.00
 bg_zoom=1.00
@@ -96,6 +96,10 @@ mobs{
 		pos=-832.00 0.00
 		vars=buried=true
 	}
+	Special{
+		type=Bridge
+		pos=192.00 -288.00
+	}
 }
 vertices{
 	vertex=-1000.00 -1000.00
@@ -108,13 +112,6 @@ vertices{
 	vertex=183.00 169.00
 	vertex=91.00 250.00
 	vertex=16.00 168.00
-	vertex=-64.00 -192.00
-	vertex=-96.00 -416.00
-	vertex=32.00 -96.00
-	vertex=-128.00 -128.00
-	vertex=192.00 -352.00
-	vertex=320.00 -128.00
-	vertex=64.00 -224.00
 	vertex=576.00 -928.00
 	vertex=896.00 -928.00
 	vertex=672.00 -832.00
@@ -156,6 +153,24 @@ vertices{
 	vertex=-288.00 -800.00
 	vertex=-224.00 -928.00
 	vertex=-224.00 -960.00
+	vertex=128.00 -352.00
+	vertex=288.00 -352.00
+	vertex=288.00 -224.00
+	vertex=128.00 -224.00
+	vertex=352.00 -352.00
+	vertex=352.00 -224.00
+	vertex=416.00 -352.00
+	vertex=416.00 -224.00
+	vertex=480.00 -352.00
+	vertex=480.00 -224.00
+	vertex=544.00 -352.00
+	vertex=544.00 -224.00
+	vertex=672.00 -352.00
+	vertex=672.00 -224.00
+	vertex=128.00 -368.97
+	vertex=544.04 -368.12
+	vertex=544.04 -208.89
+	vertex=128.11 -208.31
 }
 linedefs{
 	linedef{
@@ -203,172 +218,176 @@ linedefs{
 		v=10 11
 	}
 	linedef{
-		s=2 0
-		v=11 16
+		s=2 3
+		v=11 13
 	}
 	linedef{
 		s=2 0
-		v=12 13
+		v=13 12
 	}
 	linedef{
-		s=2 0
-		v=13 10
-	}
-	linedef{
-		s=2 0
-		v=14 15
-	}
-	linedef{
-		s=2 0
-		v=15 12
-	}
-	linedef{
-		s=2 0
-		v=16 14
+		s=2 5
+		v=12 10
 	}
 	linedef{
 		s=3 0
-		v=17 18
+		v=11 14
 	}
 	linedef{
 		s=3 4
-		v=18 20
+		v=14 16
 	}
 	linedef{
 		s=3 0
-		v=20 19
-	}
-	linedef{
-		s=3 6
-		v=19 17
+		v=16 13
 	}
 	linedef{
 		s=4 0
-		v=18 21
-	}
-	linedef{
-		s=4 5
-		v=21 23
+		v=15 16
 	}
 	linedef{
 		s=4 0
-		v=23 20
+		v=14 17
+	}
+	linedef{
+		s=4 0
+		v=17 15
 	}
 	linedef{
 		s=5 0
+		v=12 18
+	}
+	linedef{
+		s=5 0
+		v=18 19
+	}
+	linedef{
+		s=5 0
+		v=19 10
+	}
+	linedef{
+		s=6 -1
+		v=21 28
+	}
+	linedef{
+		s=6 -1
 		v=22 23
 	}
 	linedef{
-		s=5 0
-		v=21 24
+		s=6 -1
+		v=23 21
 	}
 	linedef{
-		s=5 0
-		v=24 22
+		s=6 -1
+		v=20 22
 	}
 	linedef{
-		s=6 0
-		v=19 25
+		s=7 -1
+		v=24 25
 	}
 	linedef{
-		s=6 0
+		s=6 -1
+		v=25 20
+	}
+	linedef{
+		s=7 6
 		v=25 26
 	}
 	linedef{
-		s=6 0
-		v=26 17
+		s=7 6
+		v=26 29
 	}
 	linedef{
-		s=7 -1
-		v=28 35
+		s=7 6
+		v=27 24
 	}
 	linedef{
-		s=7 -1
-		v=29 30
+		s=6 -1
+		v=28 24
 	}
 	linedef{
-		s=7 -1
-		v=30 28
+		s=7 6
+		v=29 27
 	}
 	linedef{
-		s=7 -1
-		v=27 29
+		s=8 9
+		v=30 31
 	}
 	linedef{
-		s=8 -1
+		s=8 0
 		v=31 32
 	}
 	linedef{
-		s=7 -1
-		v=32 27
-	}
-	linedef{
-		s=8 7
+		s=8 10
 		v=32 33
 	}
 	linedef{
-		s=8 7
+		s=8 0
+		v=33 30
+	}
+	linedef{
+		s=9 0
+		v=34 38
+	}
+	linedef{
+		s=9 0
+		v=30 35
+	}
+	linedef{
+		s=9 0
+		v=35 34
+	}
+	linedef{
+		s=10 0
+		v=36 37
+	}
+	linedef{
+		s=10 0
+		v=37 32
+	}
+	linedef{
+		s=10 0
 		v=33 36
 	}
 	linedef{
-		s=8 7
-		v=34 31
-	}
-	linedef{
-		s=7 -1
-		v=35 31
-	}
-	linedef{
-		s=8 7
-		v=36 34
-	}
-	linedef{
-		s=9 10
-		v=37 38
-	}
-	linedef{
 		s=9 0
-		v=38 39
-	}
-	linedef{
-		s=9 11
-		v=39 40
-	}
-	linedef{
-		s=9 0
-		v=40 37
-	}
-	linedef{
-		s=10 0
-		v=41 45
-	}
-	linedef{
-		s=10 0
-		v=37 42
-	}
-	linedef{
-		s=10 0
-		v=42 41
+		v=38 31
 	}
 	linedef{
 		s=11 0
-		v=43 44
-	}
-	linedef{
-		s=11 0
-		v=44 39
+		v=39 44
 	}
 	linedef{
 		s=11 0
 		v=40 43
 	}
 	linedef{
-		s=10 0
-		v=45 38
+		s=11 0
+		v=41 42
+	}
+	linedef{
+		s=11 0
+		v=42 39
+	}
+	linedef{
+		s=11 0
+		v=43 41
+	}
+	linedef{
+		s=11 0
+		v=44 40
 	}
 	linedef{
 		s=12 0
-		v=46 51
+		v=45 46
+	}
+	linedef{
+		s=12 0
+		v=46 48
+	}
+	linedef{
+		s=12 0
+		v=48 47
 	}
 	linedef{
 		s=12 0
@@ -376,43 +395,111 @@ linedefs{
 	}
 	linedef{
 		s=12 0
-		v=48 49
+		v=49 45
 	}
 	linedef{
 		s=12 0
-		v=49 46
+		v=50 49
 	}
 	linedef{
-		s=12 0
-		v=50 48
+		s=13 19
+		v=51 52
 	}
 	linedef{
-		s=12 0
-		v=51 47
-	}
-	linedef{
-		s=13 0
+		s=13 14
 		v=52 53
 	}
 	linedef{
-		s=13 0
-		v=53 55
+		s=13 20
+		v=53 54
 	}
 	linedef{
 		s=13 0
-		v=55 54
+		v=54 51
 	}
 	linedef{
-		s=13 0
-		v=54 57
+		s=14 19
+		v=52 55
 	}
 	linedef{
-		s=13 0
-		v=56 52
+		s=14 15
+		v=55 56
 	}
 	linedef{
-		s=13 0
-		v=57 56
+		s=14 20
+		v=56 53
+	}
+	linedef{
+		s=15 19
+		v=55 57
+	}
+	linedef{
+		s=15 16
+		v=57 58
+	}
+	linedef{
+		s=15 20
+		v=58 56
+	}
+	linedef{
+		s=16 19
+		v=57 59
+	}
+	linedef{
+		s=16 17
+		v=59 60
+	}
+	linedef{
+		s=16 20
+		v=60 58
+	}
+	linedef{
+		s=17 19
+		v=59 61
+	}
+	linedef{
+		s=17 18
+		v=61 62
+	}
+	linedef{
+		s=17 20
+		v=62 60
+	}
+	linedef{
+		s=18 0
+		v=61 63
+	}
+	linedef{
+		s=18 0
+		v=63 64
+	}
+	linedef{
+		s=18 0
+		v=64 62
+	}
+	linedef{
+		s=19 0
+		v=65 66
+	}
+	linedef{
+		s=19 0
+		v=66 61
+	}
+	linedef{
+		s=19 0
+		v=51 65
+	}
+	linedef{
+		s=20 0
+		v=67 68
+	}
+	linedef{
+		s=20 0
+		v=68 54
+	}
+	linedef{
+		s=20 0
+		v=62 67
 	}
 }
 sectors{
@@ -424,10 +511,6 @@ sectors{
 		type=Landing site
 		z=0.00
 		texture=Metal.png
-	}
-	sector{
-		z=0.00
-		texture=Grass.jpg
 	}
 	sector{
 		z=0.00
@@ -474,6 +557,52 @@ sectors{
 	sector{
 		z=32.00
 		texture=Rock.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=0
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=50
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=100
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=150
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=200
+		texture=Grass 2.jpg
+	}
+	sector{
+		z=200.00
+		texture=Grass.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		tag=250
+		texture=Grass 2.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		tag=250
+		texture=Grass 2.jpg
 	}
 }
 tree_shadows=
