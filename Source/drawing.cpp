@@ -92,13 +92,16 @@ void do_drawing() {
         ******************/
         
         al_use_transform(&world_to_screen_transform);
-        //TODO optimize
         size_t area_image_cols = area_images.size();
         for(size_t x = 0; x < area_image_cols; ++x) {
-            size_t area_image_rows = area_images[x].size();
+        
+            auto x_ptr = &area_images[x];
+            size_t area_image_rows = x_ptr->size();
+            
             for(size_t y = 0; y < area_image_rows; ++y) {
+            
                 al_draw_scaled_bitmap(
-                    area_images[x][y],
+                    x_ptr->operator[](y),
                     0, 0, area_image_size, area_image_size,
                     (x * area_image_size + area_images_x1) / area_images_scale,
                     (y * area_image_size + area_images_y1) / area_images_scale,
@@ -106,7 +109,9 @@ void do_drawing() {
                     area_image_size / area_images_scale,
                     0
                 );
+                
             }
+            
         }
         
         for(size_t c = 0; c < cur_area_map.sector_corrections.size(); ++c) {
@@ -868,10 +873,25 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &c
  */
 void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR &color) {
     float first_y = cy - (font_h * 3) / 2;
-    //TODO make the largest one bigger.
-    al_draw_text(font_value, color, cx, first_y, ALLEGRO_ALIGN_CENTER, (i2s(current).c_str()));
-    al_draw_text(font_value, color, cx, first_y + font_h * 0.75, ALLEGRO_ALIGN_CENTER, "-");
-    al_draw_text(font_value, color, cx, first_y + font_h * 1.5, ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str()));
+    
+    draw_scaled_text(
+        font_value, color, cx, first_y,
+        (current >= needed ? 1.2 : 1.0),
+        (current >= needed ? 1.2 : 1.0),
+        ALLEGRO_ALIGN_CENTER, (i2s(current).c_str())
+    );
+    
+    al_draw_text(
+        font_value, color, cx, first_y + font_h * 0.75,
+        ALLEGRO_ALIGN_CENTER, "-"
+    );
+    
+    draw_scaled_text(
+        font_value, color, cx, first_y + font_h * 1.5,
+        (needed > current ? 1.2 : 1.0),
+        (needed > current ? 1.2 : 1.0),
+        ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str())
+    );
 }
 
 
@@ -895,6 +915,33 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
     if(!just_chart) al_draw_filled_circle(cx, cy, radius, al_map_rgba(0, 0, 0, 128));
     al_draw_filled_pieslice(cx, cy, radius, -M_PI_2, -ratio * M_PI * 2, c);
     if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws text, scaled
+ * font - y: The parameters you'd use for al_draw_text.
+ * scale_*:  Horizontal or vertical scale.
+ * flags:    Same flags you'd use for al_draw_text.
+ * text:     Text to draw.
+ */
+void draw_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y,
+    const float scale_x, const float scale_y, const int flags, const string &text
+) {
+
+    ALLEGRO_TRANSFORM scale_transform, old_transform;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    al_identity_transform(&scale_transform);
+    al_scale_transform(&scale_transform, scale_x, scale_y);
+    al_translate_transform(
+        &scale_transform, x, y
+    );
+    al_compose_transform(&scale_transform, &old_transform);
+    
+    al_use_transform(&scale_transform); {
+        al_draw_text(font, color, 0, 0, flags, text.c_str());
+    }; al_use_transform(&old_transform);
 }
 
 

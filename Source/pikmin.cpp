@@ -357,6 +357,7 @@ void pikmin::become_idle(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::be_thrown(mob* m, void* info1, void* info2) {
+    m->remove_target();
     sfx_pikmin_held.stop();
     sfx_pikmin_thrown.stop();
     sfx_pikmin_thrown.play(0, false);

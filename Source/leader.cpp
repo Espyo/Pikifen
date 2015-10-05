@@ -529,7 +529,7 @@ void leader::be_released(mob* m, void* info1, void* info2) {
 }
 
 void leader::be_thrown(mob* m, void* info1, void* info2) {
-
+    m->remove_target();
 }
 
 void leader::land(mob* m, void* info1, void* info2) {

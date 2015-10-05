@@ -29,6 +29,10 @@ void draw_loading_screen(const string &area_name, const string &subtitle, const 
 void draw_sector(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
 void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
 void draw_mob_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch);
+void draw_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y,
+    const float scale_x, const float scale_y, const int flags, const string &text
+);
 void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle = 0, const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255));
 void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const float x, const float y, const int fl, const unsigned char va, const string &text);
 float ease(const unsigned char method, float y);

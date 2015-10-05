@@ -426,17 +426,6 @@ void area_editor::do_logic() {
             }
         }
         
-        //TODO temp stuff.
-        /*for(size_t v = 0; v < temp_o.size(); ++v) {
-            al_draw_text(font, al_map_rgb(255, 255, 255), temp_o[v]->x, temp_o[v]->y - font_h, ALLEGRO_ALIGN_CENTER, ("O" + to_string((long long) v)).c_str());
-        }
-        for(size_t i = 0; i < temp_i.size(); ++i) {
-            for(size_t v = 0; v < temp_i[i].size(); ++v) {
-                al_draw_text(font, al_map_rgb(255, 255, 255), temp_i[i][v]->x, temp_i[i][v]->y - font_h * 2, ALLEGRO_ALIGN_CENTER, ("I" + to_string((long long) v)).c_str());
-            }
-        }*/
-        
-        
         //Background.
         if(bg_bitmap && show_bg) {
             al_draw_tinted_scaled_bitmap(

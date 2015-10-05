@@ -34,7 +34,6 @@ class leader;
 class pikmin_type : public mob_type {
 public:
     vector<hazard*> resistences;
-    unsigned char attack_attribute; //TODO What the hell is this.
     float carry_strength;
     float attack_power;
     float attack_interval;

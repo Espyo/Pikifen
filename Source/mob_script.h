@@ -10,7 +10,6 @@
  * related functions.
  */
 
-//TODO clean this file up, as well as the .cpp (add comments, for one)
 
 #ifndef MOB_EVENT_INCLUDED
 #define MOB_EVENT_INCLUDED
@@ -29,6 +28,7 @@ class hitbox_instance;
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
 
+//Types of script action.
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
     MOB_ACTION_CHOMP_HITBOXES,
@@ -51,7 +51,9 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_WAIT,
 };
 
+//Types of script events.
 enum MOB_EVENT_TYPES {
+    //"Special" events.
     MOB_EVENT_UNKNOWN,
     MOB_EVENT_ON_ENTER, //When the state is entered.
     MOB_EVENT_ON_LEAVE, //When the state is left.
@@ -108,6 +110,7 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob became uncarriable.
     MOB_EVENT_EATEN,                    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
     
+    //Events that only leaders can really handle.
     LEADER_EVENT_FOCUSED,        //When the leader becomes the one controlled by the player.
     LEADER_EVENT_UNFOCUSED,      //When the leader stops being the one controlled by the player.
     LEADER_EVENT_MOVE_START,     //When the leader begins moving.
@@ -128,11 +131,13 @@ enum MOB_EVENT_TYPES {
     N_MOB_EVENTS,
 };
 
+//Eating action sub-types.
 enum MOB_ACTION_EAT_TYPES {
     MOB_ACTION_EAT_ALL,
     MOB_ACTION_EAT_NUMBER,
 };
 
+//Moving action sub-types.
 enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_FOCUSED_MOB,
     MOB_ACTION_MOVE_HOME,
@@ -141,17 +146,20 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_REL_COORDS,
 };
 
+//Set health action sub-types.
 enum MOB_ACTION_SET_HEALTH_TYPES {
     MOB_ACTION_SET_HEALTH_ABSOLUTE,
     MOB_ACTION_SET_HEALTH_RELATIVE,
 };
 
+//Special function action sub-types.
 enum MOB_ACTION_SPECIAL_FUNCTION_TYPES {
     MOB_ACTION_SPECIAL_FUNCTION_DIE_START,
     MOB_ACTION_SPECIAL_FUNCTION_DIE_END,
     MOB_ACTION_SPECIAL_FUNCTION_LOOP,
 };
 
+//Waiting action sub-types.
 enum MOB_ACTION_WAIT_TYPES {
     MOB_ACTION_WAIT_ANIMATION,
     MOB_ACTION_WAIT_TIME,

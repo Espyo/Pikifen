@@ -100,6 +100,10 @@ mobs{
 		type=Bridge
 		pos=192.00 -288.00
 	}
+	Pellet{
+		type=Red 5
+		pos=512.00 32.00
+	}
 }
 vertices{
 	vertex=-1000.00 -1000.00

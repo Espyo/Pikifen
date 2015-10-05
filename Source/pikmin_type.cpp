@@ -21,7 +21,6 @@
  * Creates a Pikmin type.
  */
 pikmin_type::pikmin_type() :
-    attack_attribute(0),
     carry_strength(1),
     attack_power(1),
     carry_speed(1),

@@ -449,6 +449,8 @@ void party_spot_info::remove(mob* m) {
         } while(!mobs_in_spots[current_wheel][replacement_spot] || (current_wheel == mob_wheel && replacement_spot == mob_spot));
         
         mobs_in_spots[mob_wheel][mob_spot] = mobs_in_spots[current_wheel][replacement_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->party_spot_x = x_coords[mob_wheel][mob_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->party_spot_y = y_coords[mob_wheel][mob_spot];
         mobs_in_spots[current_wheel][replacement_spot] = NULL;
         
         //TODO remove this temporary hack:

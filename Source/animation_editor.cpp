@@ -1415,6 +1415,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements.push_back("Gates");
         elements.push_back("Pellets");
         elements.push_back("Pikmin");
+        elements.push_back("Special");
         elements.push_back("Treasures");
     } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
@@ -1436,6 +1437,8 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         elements = folder_to_vector(PELLETS_FOLDER, true);
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
         elements = folder_to_vector(PIKMIN_FOLDER, true);
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_SPECIAL) {
+        elements = folder_to_vector(SPECIAL_MOBS_FOLDER, true);
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
         elements = folder_to_vector(TREASURES_FOLDER, true);
     }
@@ -1478,6 +1481,7 @@ void animation_editor::pick(string name, unsigned char type) {
         else if(name == "Onions")    mob_type_list = MOB_CATEGORY_ONIONS;
         else if(name == "Pellets")   mob_type_list = MOB_CATEGORY_PELLETS;
         else if(name == "Pikmin")    mob_type_list = MOB_CATEGORY_PIKMIN;
+        else if(name == "Special")   mob_type_list = MOB_CATEGORY_SPECIAL;
         else if(name == "Treasures") mob_type_list = MOB_CATEGORY_TREASURES;
         object_name.clear();
         update_stats();
@@ -1515,6 +1519,8 @@ void animation_editor::pick(string name, unsigned char type) {
         file_name = PELLETS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
         file_name = PIKMIN_FOLDER;
+    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_SPECIAL) {
+        file_name = SPECIAL_MOBS_FOLDER;
     } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
         file_name = TREASURES_FOLDER;
     }
@@ -1710,6 +1716,7 @@ void animation_editor::update_stats() {
     else if(mob_type_list == MOB_CATEGORY_GATES)     s = "Gates";
     else if(mob_type_list == MOB_CATEGORY_PELLETS)   s = "Pellets";
     else if(mob_type_list == MOB_CATEGORY_PIKMIN)    s = "Pikmin";
+    else if(mob_type_list == MOB_CATEGORY_SPECIAL)   s = "Special";
     else if(mob_type_list == MOB_CATEGORY_TREASURES) s = "Treasures";
     
     ((lafi::button*) f->widgets["but_category"])->text = s;
