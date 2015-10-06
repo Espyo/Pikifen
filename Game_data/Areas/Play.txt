@@ -80,6 +80,11 @@ mobs{
 		type=Red 1
 		pos=96.00 352.00
 	}
+	Enemy{
+		type=Dwarf Red Bulborb
+		pos=128.00 -320.00
+		angle=4.71
+	}
 }
 vertices{
 	vertex=-576.00 -1504.00

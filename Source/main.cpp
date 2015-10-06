@@ -148,7 +148,7 @@ int main(int argc, char**) {
         pikmin_in_onions.clear();
         for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) { o->second = 0; }
         
-        load_area("Tests", false);
+        load_area("Play", false);
         load_area_textures();
         generate_area_images();
         

@@ -371,7 +371,8 @@ void do_gameplay_logic() {
                 mob_event* touch_op_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
                 mob_event* touch_le_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_LEADER);
                 mob_event* touch_ob_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
-                if(touch_op_ev || touch_le_ev || touch_ob_ev) {
+                mob_event* pik_land_ev = q_get_event(m_ptr, MOB_EVENT_PIKMIN_LANDED);
+                if(touch_op_ev || touch_le_ev || touch_ob_ev || pik_land_ev) {
                 
                     bool z_touch;
                     if(m_ptr->type->height == 0 || m2_ptr->type->height == 0) {
@@ -381,9 +382,14 @@ void do_gameplay_logic() {
                     }
                     
                     if(z_touch && d <= (m_ptr->type->radius + m2_ptr->type->radius)) {
-                        if(touch_ob_ev) touch_ob_ev->run(m_ptr, (void*) m2_ptr);
+                        if(touch_ob_ev) {
+                            touch_ob_ev->run(m_ptr, (void*) m2_ptr);
+                        }
                         if(touch_op_ev && should_attack(m_ptr, m2_ptr)) {
                             touch_op_ev->run(m_ptr, (void*) m2_ptr);
+                        }
+                        if(pik_land_ev && m2_ptr->was_thrown && typeid(*m2_ptr) == typeid(pikmin)) {
+                            pik_land_ev->run(m_ptr, (void*) m2_ptr);
                         }
                         if(
                             touch_le_ev && m2_ptr == cur_leader_ptr &&

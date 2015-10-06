@@ -438,7 +438,11 @@ void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
     mob* mob_ptr = info->mob2;
     hitbox_instance* hi_ptr = info->hi2;
     
-    if(!hi_ptr) return;
+    if(!hi_ptr || !hi_ptr->can_pikmin_latch) {
+        //No good for latching on. Make it act like it landed on the ground.
+        m->fsm.run_event(MOB_EVENT_LANDED);
+        return;
+    }
     
     pik_ptr->connected_hitbox_nr = hi_ptr->hitbox_nr;
     pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
