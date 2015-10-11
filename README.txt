@@ -32,4 +32,4 @@ Misc. questions and answers:
     Why is Louie so fast? Because having to walk to a certain point every time I'm testing something wastes a lot of time. So I made Louie fast to get there faster.
     Why is the Bulborb so cheap? Because I haven't balanced it yet.
     Why are some animations and physics so broken? Because their code is still under construction.
-    Why can't I see the game window? Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_x=2147483647", and change it to "window_x = 10". Do the same for the "window_y" line.
+    Why can't I see the game window? Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".

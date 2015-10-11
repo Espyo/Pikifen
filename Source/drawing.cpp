@@ -1259,17 +1259,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             );
         }
         sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<dist, sector*> p1, pair<dist, sector*> p2) -> bool {
-        
-            float height_dif_1 = 0;
-            if(p1.second) height_dif_1 = fabs(p1.second->z - s_ptr->z);
-            float height_dif_2 = 0;
-            if(p2.second) height_dif_2 = fabs(p2.second->z - s_ptr->z);
-            
-            if(height_dif_1 < height_dif_2) return true;
-            else if(height_dif_1 > height_dif_2) return false;
-            else {
-                return p1.first < p2.first;
-            }
+            return p1.first < p2.first;
         });
         if(neighbors_vec.size() >= 1) {
             texture_sector[0] = neighbors_vec.back().second;

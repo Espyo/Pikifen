@@ -84,6 +84,7 @@ void load_mob_types(bool load_resources) {
  * load_resources: False if you don't need the images and sounds, so it loads faster.
  */
 void load_mob_types(const string &folder, const unsigned char category, bool load_resources) {
+    if(folder.empty()) return;
     bool folder_found;
     vector<string> types = folder_to_vector(folder, true, &folder_found);
     if(!folder_found) {
