@@ -88,8 +88,8 @@ void bridge::set_anim(mob* m, void* info1, void* info2) {
 
 void init_bridge_mob_type(mob_type* mt) {
     mt->always_active = true;
-    mt->radius = 64;
-    mt->max_health = 200;
+    mt->radius = 32;
+    mt->max_health = 2000;
     mt->casts_shadow = false;
     mt->create_mob = [] (float x, float y, float angle, const string & vars) {
         create_mob(new bridge(x, y, angle, vars));

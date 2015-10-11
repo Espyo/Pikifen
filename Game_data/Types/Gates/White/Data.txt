@@ -1,6 +1,6 @@
 height = 200
 name = White
-max_health = 20
+max_health = 2000
 pushable = false
 pushes = false
 radius = 32

@@ -258,7 +258,9 @@ void mob::tick_physics() {
             float d = dist(x, y, final_target_x, final_target_y).to_float();
             float move_amount = min((double) (d / delta_t), (double) speed);
             
-            float movement_angle = gtt_free_move ?
+            bool can_free_move = gtt_free_move || move_amount <= 10.0;
+            
+            float movement_angle = can_free_move ?
                                    atan2(final_target_y - y, final_target_x - x) :
                                    angle;
                                    
@@ -507,57 +509,6 @@ void mob::tick_script() {
         first_state_set = true;
     }
     
-    //TODO move these to the logic code, on the code where all mobs interact with all mobs.
-    /*
-    mob_event* see_opponent_ev  = fsm.get_event(MOB_EVENT_SEEN_OPPONENT);
-    mob_event* lose_opponent_ev = fsm.get_event(MOB_EVENT_LOSE_OPPONENT);
-    mob_event* near_opponent_ev = fsm.get_event(MOB_EVENT_NEAR_OPPONENT);
-    if(see_opponent_ev || lose_opponent_ev || near_opponent_ev) {
-    
-        mob* real_opponent = NULL;
-        if(focused_opponent) if(!focused_opponent->dead) real_opponent = focused_opponent;
-    
-        if(real_opponent) {
-            dist d(x, y, real_opponent->x, real_opponent->y);
-    
-            //Opponent is near.
-            if(d <= type->near_radius) {
-                focused_opponent_near = true;
-                if(near_opponent_ev) near_opponent_ev->run(this);
-            }
-    
-            if(d > type->sight_radius) {
-                //Opponent is suddenly out of sight.
-                unfocus_mob(this, real_opponent, true);
-    
-            } else {
-    
-                //Opponent was near, but is now far.
-                if(focused_opponent_near) {
-                    if(d > type->near_radius) {
-                        focused_opponent_near = false;
-                    }
-                }
-            }
-    
-        } else {
-    
-            //Find an opponent.
-            for(auto m = mobs.begin(); m != mobs.end(); ++m) {
-                if(should_attack(this, *m)) {
-                    dist d(x, y, (*m)->x, (*m)->y);
-                    if(d <= type->sight_radius) {
-                        focus_mob(this, *m, d <= type->near_radius, true);
-                        break;
-                    }
-                }
-            }
-    
-        }
-    
-    }
-    */
-    
     //Timer events.
     mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
     if(timer_ev && script_timer.interval > 0) {
@@ -661,6 +612,7 @@ void mob::eat(const size_t nr) {
  * Makes a mob gradually face a new angle.
  */
 void mob::face(float new_angle) {
+    if(carrier_info) return; //If it's being carried, it shouldn't rotate.
     intended_angle = new_angle;
 }
 
@@ -1098,6 +1050,12 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
  */
 void make_uncarriable(mob* m) {
     if(!m->carrier_info) return;
+    
+    for(size_t p = 0; p < m->carrier_info->carrier_spots.size(); ++p) {
+        mob* p_ptr = m->carrier_info->carrier_spots[p];
+        if(!p_ptr) continue;
+        p_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+    }
     
     delete m->carrier_info;
     m->carrier_info = NULL;

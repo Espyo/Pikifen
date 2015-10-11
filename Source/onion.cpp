@@ -50,7 +50,6 @@ void onion::spew() {
     spew_queue--;
     
     unsigned total_after = pikmin_list.size() + 1;
-    unsigned pikmin_to_keep = 0; //Pikmin to keep inside the Onion, without spitting.
     
     if(total_after > max_pikmin_in_field) {
         pikmin_in_onions[oni_type->pik_type]++;

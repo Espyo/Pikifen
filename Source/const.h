@@ -28,11 +28,11 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 4;
+const unsigned char VERSION_MINOR = 5;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 0;
-const unsigned char VERSION_MONTH = 0;
-const unsigned int  VERSION_YEAR  = 0;      //The year is 2000 + this.
+const unsigned char VERSION_DAY   = 11;
+const unsigned char VERSION_MONTH = 10;
+const unsigned int  VERSION_YEAR  = 15;      //The year is 2000 + this.
 
 const float AUTO_PLUCK_MAX_RADIUS       = 160.0f;    //How far a leader can go to auto-pluck the next Pikmin.
 const float CAM_TRANSITION_DURATION     = 0.5f;      //How many seconds a camera transition lasts for.

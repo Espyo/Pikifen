@@ -1179,7 +1179,7 @@ void save_options() {
  * value: The string with the value.
  * var:   The var to put it into. This is a string.
  */
-void set_if_exists(const string value, string &var) {
+void set_if_exists(const string &value, string &var) {
     if(value.empty()) return;
     var = value;
 }
@@ -1190,7 +1190,7 @@ void set_if_exists(const string value, string &var) {
  * value: The string with the value.
  * var:   The var to put it into. This is an integer.
  */
-void set_if_exists(const string value, size_t &var) {
+void set_if_exists(const string &value, size_t &var) {
     if(value.empty()) return;
     var = s2i(value);
 }
@@ -1201,7 +1201,7 @@ void set_if_exists(const string value, size_t &var) {
  * value: The string with the value.
  * var:   The var to put it into. This is a boolean.
  */
-void set_if_exists(const string value, bool &var) {
+void set_if_exists(const string &value, bool &var) {
     if(value.empty()) return;
     var = s2b(value);
 }
@@ -1212,7 +1212,7 @@ void set_if_exists(const string value, bool &var) {
  * value: The string with the value.
  * var:   The var to put it into. This is a float.
  */
-void set_if_exists(const string value, float &var) {
+void set_if_exists(const string &value, float &var) {
     if(value.empty()) return;
     var = s2f(value);
 }
@@ -1223,7 +1223,7 @@ void set_if_exists(const string value, float &var) {
  * value: The string with the value.
  * var:   The var to put it into. This is an Allegro color.
  */
-void set_if_exists(const string value, ALLEGRO_COLOR &var) {
+void set_if_exists(const string &value, ALLEGRO_COLOR &var) {
     if(value.empty()) return;
     var = s2c(value);
 }

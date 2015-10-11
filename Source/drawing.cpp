@@ -33,9 +33,7 @@ void do_drawing() {
     
         size_t n_leaders =     leaders.size();
         size_t n_particles =   particles.size();
-        size_t n_pikmin =      pikmin_list.size();
         size_t n_spray_types = spray_types.size();
-        size_t n_treasures =   treasures.size();
         
         cur_sun_strength = get_sun_strength();
         
@@ -131,7 +129,7 @@ void do_drawing() {
         
         vector<mob*> sorted_mobs;
         sorted_mobs = mobs;
-        sort(sorted_mobs.begin(), sorted_mobs.end(), [] (mob * m1, mob * m2) {
+        sort(sorted_mobs.begin(), sorted_mobs.end(), [] (mob * m1, mob * m2) -> bool {
             if(m1->z == m2->z) {
                 if(m1->type->height == m2->type->height) {
                     return m1->id < m2->id;
@@ -1263,9 +1261,9 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         sort(neighbors_vec.begin(), neighbors_vec.end(), [s_ptr] (pair<dist, sector*> p1, pair<dist, sector*> p2) -> bool {
         
             float height_dif_1 = 0;
-            if(p1.second) fabs(p1.second->z - s_ptr->z);
+            if(p1.second) height_dif_1 = fabs(p1.second->z - s_ptr->z);
             float height_dif_2 = 0;
-            if(p2.second) fabs(p2.second->z - s_ptr->z);
+            if(p2.second) height_dif_2 = fabs(p2.second->z - s_ptr->z);
             
             if(height_dif_1 < height_dif_2) return true;
             else if(height_dif_1 > height_dif_2) return false;

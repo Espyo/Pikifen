@@ -61,7 +61,7 @@ mobs{
 	}
 	Pellet{
 		type=Red 20
-		pos=352.00 64.00
+		pos=640.00 64.00
 	}
 	Pellet{
 		type=Red 5
@@ -74,7 +74,7 @@ mobs{
 	}
 	Gate{
 		type=White
-		pos=560.79 480.44
+		pos=624.46 705.11
 	}
 	Pellet{
 		type=Red 1
@@ -85,11 +85,16 @@ mobs{
 		pos=128.00 -320.00
 		angle=4.71
 	}
+	Special{
+		type=Bridge
+		pos=800.00 640.00
+		angle=4.71
+	}
 }
 vertices{
 	vertex=-576.00 -1504.00
-	vertex=896.00 -1504.00
-	vertex=896.00 896.00
+	vertex=992.00 -1504.00
+	vertex=992.00 896.00
 	vertex=-576.00 896.00
 	vertex=256.00 96.00
 	vertex=84.34 74.95
@@ -100,15 +105,15 @@ vertices{
 	vertex=544.00 -192.00
 	vertex=256.00 -0.00
 	vertex=-192.00 192.00
-	vertex=1088.00 -1696.00
-	vertex=1088.00 1088.00
+	vertex=1184.00 -1696.00
+	vertex=1184.00 1088.00
 	vertex=-768.00 -1696.00
 	vertex=-768.00 1088.00
 	vertex=128.00 768.00
 	vertex=159.82 794.12
 	vertex=256.00 768.00
 	vertex=384.00 640.00
-	vertex=544.00 416.00
+	vertex=608.00 640.00
 	vertex=377.71 268.62
 	vertex=405.76 -119.42
 	vertex=768.00 -288.00
@@ -295,15 +300,48 @@ vertices{
 	vertex=386.90 -1083.16
 	vertex=513.30 -1136.88
 	vertex=544.00 -1216.00
-	vertex=544.00 544.00
-	vertex=544.00 640.00
-	vertex=576.00 416.00
-	vertex=576.00 544.00
-	vertex=640.00 384.00
-	vertex=832.00 576.00
-	vertex=768.00 640.00
+	vertex=608.00 768.00
+	vertex=416.00 736.00
 	vertex=640.00 640.00
-	vertex=800.00 448.00
+	vertex=640.00 768.00
+	vertex=736.00 544.00
+	vertex=928.00 512.00
+	vertex=928.00 640.00
+	vertex=896.00 768.00
+	vertex=480.00 832.00
+	vertex=576.00 832.00
+	vertex=704.00 800.00
+	vertex=672.00 512.00
+	vertex=678.27 663.56
+	vertex=672.90 749.47
+	vertex=801.19 559.08
+	vertex=913.71 782.84
+	vertex=703.46 818.22
+	vertex=943.42 638.41
+	vertex=945.08 512.14
+	vertex=655.82 511.74
+	vertex=624.01 639.60
+	vertex=623.55 767.84
+	vertex=689.42 697.84
+	vertex=736.00 576.00
+	vertex=864.00 576.00
+	vertex=864.00 704.00
+	vertex=736.00 704.00
+	vertex=864.00 544.00
+	vertex=928.00 480.00
+	vertex=672.00 480.00
+	vertex=736.00 448.00
+	vertex=864.00 480.00
+	vertex=864.00 448.00
+	vertex=736.00 480.00
+	vertex=736.00 512.00
+	vertex=864.00 512.00
+	vertex=881.34 703.76
+	vertex=881.80 535.64
+	vertex=720.77 704.39
+	vertex=720.08 536.10
+	vertex=720.22 456.22
+	vertex=881.91 459.66
 }
 linedefs{
 	linedef{
@@ -1248,7 +1286,7 @@ linedefs{
 	}
 	linedef{
 		s=1 0
-		v=208 209
+		v=208 217
 	}
 	linedef{
 		s=1 0
@@ -1256,39 +1294,231 @@ linedefs{
 	}
 	linedef{
 		s=34 0
-		v=21 210
+		v=21 228
 	}
 	linedef{
-		s=34 35
+		s=34 36
 		v=210 211
 	}
 	linedef{
-		s=34 0
-		v=211 208
+		s=34 37
+		v=211 229
 	}
 	linedef{
-		s=35 0
-		v=212 216
-	}
-	linedef{
-		s=35 0
+		s=35 37
 		v=213 214
 	}
 	linedef{
-		s=35 0
+		s=35 37
 		v=214 215
 	}
 	linedef{
-		s=35 0
-		v=215 211
+		s=35 37
+		v=215 218
 	}
 	linedef{
-		s=35 0
-		v=216 213
+		s=50 43
+		v=239 240
 	}
 	linedef{
-		s=35 0
-		v=210 212
+		s=35 38
+		v=210 219
+	}
+	linedef{
+		s=1 0
+		v=216 209
+	}
+	linedef{
+		s=1 0
+		v=217 216
+	}
+	linedef{
+		s=35 37
+		v=218 211
+	}
+	linedef{
+		s=36 35
+		v=210 220
+	}
+	linedef{
+		s=36 35
+		v=220 230
+	}
+	linedef{
+		s=36 35
+		v=221 211
+	}
+	linedef{
+		s=42 40
+		v=222 212
+	}
+	linedef{
+		s=37 0
+		v=223 224
+	}
+	linedef{
+		s=37 0
+		v=224 229
+	}
+	linedef{
+		s=37 0
+		v=225 223
+	}
+	linedef{
+		s=37 0
+		v=226 225
+	}
+	linedef{
+		s=38 0
+		v=227 219
+	}
+	linedef{
+		s=37 0
+		v=213 226
+	}
+	linedef{
+		s=38 0
+		v=228 227
+	}
+	linedef{
+		s=34 38
+		v=228 210
+	}
+	linedef{
+		s=34 0
+		v=229 208
+	}
+	linedef{
+		s=36 35
+		v=230 221
+	}
+	linedef{
+		s=39 40
+		v=231 232
+	}
+	linedef{
+		s=39 47
+		v=232 233
+	}
+	linedef{
+		s=39 35
+		v=233 234
+	}
+	linedef{
+		s=39 48
+		v=234 231
+	}
+	linedef{
+		s=40 48
+		v=231 212
+	}
+	linedef{
+		s=40 47
+		v=235 232
+	}
+	linedef{
+		s=42 40
+		v=235 222
+	}
+	linedef{
+		s=45 0
+		v=236 213
+	}
+	linedef{
+		s=42 41
+		v=212 235
+	}
+	linedef{
+		s=44 0
+		v=219 237
+	}
+	linedef{
+		s=44 0
+		v=237 248
+	}
+	linedef{
+		s=49 43
+		v=238 241
+	}
+	linedef{
+		s=46 50
+		v=239 243
+	}
+	linedef{
+		s=50 0
+		v=240 249
+	}
+	linedef{
+		s=46 43
+		v=241 239
+	}
+	linedef{
+		s=49 46
+		v=241 242
+	}
+	linedef{
+		s=43 0
+		v=238 240
+	}
+	linedef{
+		s=49 48
+		v=212 247
+	}
+	linedef{
+		s=45 35
+		v=213 245
+	}
+	linedef{
+		s=46 41
+		v=243 242
+	}
+	linedef{
+		s=49 41
+		v=242 212
+	}
+	linedef{
+		s=41 50
+		v=243 235
+	}
+	linedef{
+		s=47 35
+		v=245 244
+	}
+	linedef{
+		s=47 35
+		v=244 233
+	}
+	linedef{
+		s=50 47
+		v=245 235
+	}
+	linedef{
+		s=48 35
+		v=234 246
+	}
+	linedef{
+		s=48 35
+		v=246 247
+	}
+	linedef{
+		s=44 35
+		v=247 219
+	}
+	linedef{
+		s=49 44
+		v=247 248
+	}
+	linedef{
+		s=49 0
+		v=248 238
+	}
+	linedef{
+		s=50 45
+		v=249 245
+	}
+	linedef{
+		s=45 0
+		v=249 236
 	}
 }
 sectors{
@@ -1474,6 +1704,91 @@ sectors{
 	}
 	sector{
 		z=0.00
+		brightness=128
+		texture=Dirt.jpg
+	}
+	sector{
+		z=0.00
+		texture=Dirt.jpg
+	}
+	sector{
+		z=200.00
+		texture=Rock.jpg
+	}
+	sector{
+		z=200.00
+		texture=Rock.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		brightness=128
+		tag=0
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		brightness=128
+		tag=50
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=100
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=50
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=200
+		texture=Dirt.jpg
+	}
+	sector{
+		z=0.00
+		texture=Dirt.jpg
+	}
+	sector{
+		z=0.00
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge
+		z=0.00
+		tag=150
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		brightness=128
+		tag=200
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		brightness=128
+		tag=200
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		tag=200
+		texture=Dirt.jpg
+	}
+	sector{
+		type=Bridge rail
+		z=0.00
+		tag=200
 		texture=Dirt.jpg
 	}
 }

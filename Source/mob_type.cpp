@@ -111,7 +111,7 @@ void load_mob_types(const string &folder, const unsigned char category, bool loa
  */
 void load_mob_type_from_file(
     mob_type* mt, data_node &file,
-    const bool load_resources, const string folder
+    const bool load_resources, const string &folder
 ) {
 
     vector<pair<size_t, string> > anim_conversions;

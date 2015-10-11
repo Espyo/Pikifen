@@ -1691,7 +1691,7 @@ void animation_editor::update_hitboxes() {
         }
         
         //Sort them with the new order.
-        std::sort(f_ptr->hitbox_instances.begin(), f_ptr->hitbox_instances.end(), [] (hitbox_instance hi1, hitbox_instance hi2) {
+        std::sort(f_ptr->hitbox_instances.begin(), f_ptr->hitbox_instances.end(), [] (hitbox_instance hi1, hitbox_instance hi2) -> bool {
             size_t pos1 = 0, pos2 = 1;
             for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
                 if(anims.hitboxes[h]->name == hi1.hitbox_name) pos1 = h;

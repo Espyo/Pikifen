@@ -176,7 +176,9 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
             ships[0]->y,
             NULL,
             NULL,
-            false);
+            false,
+            NULL,
+            true);
         m->carrier_info->decided_type = NULL;
         
     } else {
@@ -283,7 +285,7 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
         }
         
         //Finally, start moving the mob.
-        m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false);
+        m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false, false, true);
         sfx_pikmin_carrying.play(-1, true);
     }
 }
@@ -385,8 +387,6 @@ void pikmin::called(mob* m, void* info1, void* info2) {
 }
 
 void pikmin::get_knocked_down(mob* m, void* info1, void* info2) {
-    mob* m2 = (mob*) info1;
-    
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
     float knockback = 0;
     float knockback_angle = 0;
@@ -417,7 +417,7 @@ void pikmin::rechase_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->x, m->y, m->focused_mob->x, m->focused_mob->y) <=
-        (m->focused_mob->type->radius + m->type->radius + 2)
+        (m->type->radius + m->focused_mob->type->radius + m->type->near_radius)
     ) {
         return;
     }

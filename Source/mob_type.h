@@ -76,7 +76,7 @@ public:
 
 void load_mob_types(const string &folder, const unsigned char category, bool load_resources);
 void load_mob_types(bool load_resources);
-void load_mob_type_from_file(mob_type* mt, data_node &file, const bool load_resources, const string folder);
+void load_mob_type_from_file(mob_type* mt, data_node &file, const bool load_resources, const string &folder);
 
 
 

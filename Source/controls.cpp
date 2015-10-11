@@ -279,10 +279,13 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 //Now check if the leader should grab a Pikmin.
                 if(!done) {
-                    if(closest_party_member && !cur_leader_ptr->holding_pikmin) {
-                        cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_party_member);
-                        closest_party_member->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND, (void*) closest_party_member);
-                        done = true;
+                    if(closest_party_member) {
+                        mob_event* grabbed_ev = closest_party_member->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
+                        if(!cur_leader_ptr->holding_pikmin && grabbed_ev) {
+                            cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_party_member);
+                            grabbed_ev->run(closest_party_member, (void*) closest_party_member);
+                            done = true;
+                        }
                     }
                 }
                 
