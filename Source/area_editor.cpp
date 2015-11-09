@@ -149,6 +149,15 @@ void area_editor::do_logic() {
         if(double_click_time < 0) double_click_time = 0;
     }
     
+    if(fade_mgr.is_fading() && fade_mgr.get_time_left() == 0.0f){
+        if(!fade_mgr.is_fade_in()){
+            change_game_state(GAME_STATE_MAIN_MENU);
+            return;
+        }
+        fade_mgr.finish_fade();
+    }
+    fade_mgr.tick(delta_t);
+    
     //---Drawing---
     
     gui->draw();
@@ -444,6 +453,8 @@ void area_editor::do_logic() {
     ALLEGRO_TRANSFORM id_transform;
     al_identity_transform(&id_transform);
     al_use_transform(&id_transform);
+    
+    fade_mgr.draw();
     
     al_flip_display();
 }
@@ -887,7 +898,9 @@ void area_editor::gui_to_sector() {
  * Handles the events for the area editor.
  */
 void area_editor::handle_controls(ALLEGRO_EVENT ev) {
-
+    
+    if(fade_mgr.is_fading()) return;
+    
     gui->handle_event(ev);
     
     //Update mouse cursor in world coordinates.
@@ -1482,6 +1495,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         ) {
             shift_pressed = true;
             
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+            fade_mgr.start_fade(false);
+            
         }
         
         
@@ -1513,6 +1529,8 @@ bool area_editor::is_linedef_valid(linedef* l) {
  */
 void area_editor::load() {
 
+    fade_mgr.start_fade(true);
+    
     load_mob_types(false);
     
     mode = EDITOR_MODE_MAIN;
@@ -1828,14 +1846,15 @@ void area_editor::load() {
     frm_bottom->widgets["but_save"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
         save_area();
     };
+    frm_bottom->widgets["but_quit"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+        fade_mgr.start_fade(false);
+    };
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
     frm_bottom->widgets["but_bg"]->description =   "Toggle the visibility of the background.";
     frm_bottom->widgets["but_load"]->description = "Load the area from the files.";
     frm_bottom->widgets["but_save"]->description = "Save the area onto the disk.";
     frm_bottom->widgets["but_quit"]->description = "Quit the area editor.";
-    
-    //TODO quit button.
     
     
     //Properties -- sectors.
@@ -2545,6 +2564,15 @@ void area_editor::shadow_to_gui() {
 float area_editor::snap_to_grid(const float c) {
     if(shift_pressed) return c;
     return round(c / GRID_INTERVAL) * GRID_INTERVAL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the editor from memory.
+ */
+void area_editor::unload(){
+    delete(gui->style);
+    delete(gui);
 }
 
 

@@ -176,6 +176,10 @@ void do_aesthetic_logic() {
     //Tree shadow swaying.
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
+    if(fade_mgr.is_fading() && fade_mgr.get_time_left() == 0)
+        fade_mgr.finish_fade();
+    fade_mgr.tick(delta_t);
+    
     
 }
 

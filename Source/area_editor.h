@@ -77,6 +77,7 @@ void save_area();
 void sector_to_gui();
 void shadow_to_gui();
 float snap_to_grid(const float c);
+void unload();
 void update_review_frame();
 
 extern bool                         bg_aspect_ratio;

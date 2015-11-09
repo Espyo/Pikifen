@@ -115,6 +115,8 @@
     <ClCompile Include="leader_type.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menus.cpp" />
+    <ClCompile Include="menu_widgets.cpp" />
     <ClCompile Include="misc_structs.cpp" />
     <ClCompile Include="mob.cpp" />
     <ClCompile Include="mob_script.cpp" />
@@ -167,6 +169,8 @@
     <ClInclude Include="LAFI\textbox.h" />
     <ClInclude Include="LAFI\widget.h" />
     <ClInclude Include="leader_type.h" />
+    <ClInclude Include="menus.h" />
+    <ClInclude Include="menu_widgets.h" />
     <ClInclude Include="mob_script.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="hitbox.h" />

@@ -53,6 +53,7 @@ void open_hitbox_type(unsigned char type);
 void open_picker(unsigned char type, bool can_make_new);
 void pick(string name, unsigned char type);
 void save_animation_pool();
+void unload();
 void update_hitboxes();
 void update_stats();
 

@@ -138,7 +138,7 @@ extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern movement_struct                  cursor_movement;            //Movement of the cursor via non-mouse.
-extern unsigned char                    cur_screen;
+extern unsigned char                    cur_game_state;
 extern float                            cur_sun_strength;
 extern float                            cursor_angle;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
@@ -158,6 +158,7 @@ extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
+extern fade_manager                     fade_mgr;
 extern ALLEGRO_FONT*                    font;
 extern ALLEGRO_FONT*                    font_area_name;
 extern ALLEGRO_FONT*                    font_counter;
@@ -207,6 +208,7 @@ extern map<string, pikmin_type*>        pikmin_types;
 extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
 extern float                            prev_group_move_intensity;   //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
+extern bool                             reset_delta_t;               //Is delta_t meant to be reset for the next frame?
 extern bool                             running;
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;
@@ -223,6 +225,8 @@ extern vector<spray_type>               spray_types;
 extern vector<status>                   statuses;
 extern float                            sun_meter_sun_angle;
 extern timer                            throw_particle_timer;
+extern float                            transition_time;
+extern bool                             transition_fade_in;
 extern map<string, treasure_type*>      treasure_types;
 extern vector<treasure*>                treasures;
 extern float                            tree_shadow_sway;

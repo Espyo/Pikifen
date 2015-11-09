@@ -67,6 +67,7 @@
 
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
+void               change_game_state(unsigned int new_state);
 bool               circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix = NULL, float* liy = NULL);
 void               clear_area_textures();
 void               coordinates_to_angle(const float x_coord, const float y_coord, float* angle, float* magnitude);

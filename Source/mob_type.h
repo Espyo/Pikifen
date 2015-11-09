@@ -56,8 +56,8 @@ public:
     float territory_radius;
     float near_radius;
     float near_angle;
-    unsigned int max_carriers;
-    float weight;          //Pikmin strenght needed to carry it.
+    size_t max_carriers;
+    float weight;          //Pikmin strength needed to carry it.
     float big_damage_interval;
     
     //Script things.

@@ -54,6 +54,15 @@ void animation_editor::do_logic() {
     
     cur_hitbox_alpha += M_PI * 3 * delta_t;
     
+    if(fade_mgr.is_fading() && fade_mgr.get_time_left() == 0.0f){
+        if(!fade_mgr.is_fade_in()){
+            change_game_state(GAME_STATE_MAIN_MENU);
+            return;
+        }
+        fade_mgr.finish_fade();
+    }
+    fade_mgr.tick(delta_t);
+    
     //---Drawing.---
     
     
@@ -148,6 +157,8 @@ void animation_editor::do_logic() {
     ALLEGRO_TRANSFORM id_transform;
     al_identity_transform(&id_transform);
     al_use_transform(&id_transform);
+    
+    fade_mgr.draw();
     
     al_flip_display();
 }
@@ -464,6 +475,9 @@ void animation_editor::gui_save_top() {
  * Handles the controls and other events.
  */
 void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
+    
+    if(fade_mgr.is_fading()) return;
+    
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
@@ -574,6 +588,14 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             gui_load_hitbox_instance();
         }
+        
+    } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        
+        if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+            fade_mgr.start_fade(false);
+            
+        }
+        
     }
     
     
@@ -586,6 +608,8 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
  */
 void animation_editor::load() {
     mode = EDITOR_MODE_MAIN;
+    
+    fade_mgr.start_fade(true);
     
     lafi::style* s = new lafi::style(al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32), al_map_rgb(96, 128, 160));
     gui = new lafi::gui(scr_w, scr_h, s);
@@ -1311,9 +1335,10 @@ void animation_editor::load() {
         save_animation_pool();
     };
     frm_bottom->widgets["but_save"]->description = "Save the object to the text file.";
+    frm_bottom->widgets["but_quit"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+        fade_mgr.start_fade(false);
+    };
     frm_bottom->widgets["but_quit"]->description = "Quit the animation editor.";
-    
-    //TODO quit button.
     
     lafi::label* gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     gui->add("lbl_status_bar", gui_status_bar);
@@ -1645,6 +1670,14 @@ void animation_editor::save_animation_pool() {
     file_node.save_file(file_name);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Unloads the editor from memory.
+ */
+void animation_editor::unload() {
+    delete(gui->style);
+    delete(gui);
+}
 
 /* ----------------------------------------------------------------------------
  * Update every frame's hitbox instances in light of new hitbox info.

@@ -605,3 +605,94 @@ void timer::tick(const float amount) {
 float timer::get_ratio_left() {
     return time_left / interval;
 }
+
+
+
+const float fade_manager::FADE_DURATION = 0.2f;
+
+/* ----------------------------------------------------------------------------
+ * Creates a fade manager.
+ */
+fade_manager::fade_manager() :
+    time_left(0),
+    fade_in(false),
+    currently_fading(false)
+    {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up the start of a fade.
+ */
+void fade_manager::start_fade(const bool fade_in){
+    currently_fading = true;
+    time_left = FADE_DURATION;
+    this->fade_in = fade_in;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks the current fade as finished.
+ */
+void fade_manager::finish_fade(){
+    currently_fading = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the current fade is a fade in or fade out.
+ */
+bool fade_manager::is_fade_in(){
+    return fade_in;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether we're currently fading.
+ */
+bool fade_manager::is_fading(){
+    return currently_fading;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the time left in the current fade.
+ */
+float fade_manager::get_time_left(){
+    return time_left;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the fade manager by one frame.
+ */
+void fade_manager::tick(const float time){
+    if(!currently_fading) return;
+    time_left -= time;
+    time_left = max(0.0f, time_left);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the fade overlay, if there is a fade in progress.
+ */
+#include <iostream>
+void fade_manager::draw() {
+    if(currently_fading){
+        unsigned char alpha = (fade_mgr.get_time_left() / fade_manager::FADE_DURATION) * 255;
+        al_draw_filled_rectangle(
+            0, 0, scr_w, scr_h,
+            al_map_rgba(0, 0, 0,
+                (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
+            )
+        );
+    }
+}
+
+
+
+
+
+
+

@@ -271,4 +271,27 @@ struct timer {
 };
 
 
+
+/* ----------------------------------------------------------------------------
+ * Manages fade ins/outs for transitions.
+ */
+struct fade_manager {
+private:
+    float time_left;
+    bool fade_in;
+    bool currently_fading;
+    
+public:
+    static const float FADE_DURATION;
+    
+    fade_manager();
+    void start_fade(const bool fade_in);
+    void finish_fade();
+    bool is_fading();
+    bool is_fade_in();
+    float get_time_left();
+    void tick(const float time);
+    void draw();
+};
+
 #endif //ifndef MISC_STRUCTS_INCLUDED

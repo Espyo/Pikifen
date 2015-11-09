@@ -285,7 +285,7 @@ void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp) {
         }
         
         //Finally, start moving the mob.
-        m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false, false, true);
+        m->set_target(onions[onion_nr]->x, onions[onion_nr]->y, NULL, NULL, false, NULL, true);
         sfx_pikmin_carrying.play(-1, true);
     }
 }

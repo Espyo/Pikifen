@@ -753,6 +753,8 @@ void do_drawing() {
         al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, debug_last_axis.c_str());
     }
     
+    fade_mgr.draw();
+    
     al_flip_display();
 }
 
