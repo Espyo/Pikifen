@@ -180,6 +180,6 @@ public:
 
 
 
-animation_pool load_animation_pool(data_node* frames_node);
+animation_pool load_animation_pool_from_file(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

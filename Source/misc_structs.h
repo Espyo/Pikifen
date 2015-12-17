@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -279,17 +279,16 @@ struct fade_manager {
 private:
     float time_left;
     bool fade_in;
-    bool currently_fading;
+    function<void()> on_end;
     
 public:
     static const float FADE_DURATION;
     
     fade_manager();
-    void start_fade(const bool fade_in);
-    void finish_fade();
-    bool is_fading();
+    void start_fade(const bool fade_in, function<void()> on_end);
     bool is_fade_in();
-    float get_time_left();
+    bool is_fading();
+    float get_perc_left();
     void tick(const float time);
     void draw();
 };

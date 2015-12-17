@@ -536,6 +536,11 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         lines_done[s_ptr->linedefs[l]] = false;
     }
     
+    area_editor* ae = NULL;
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+        ae = (area_editor*) game_states[cur_game_state_nr];
+    }
+    
     //Now travel along the lines, vertex by vertex, until we have no more left.
     while(!lines_done.empty()) {
         bool poly_done = false;
@@ -600,10 +605,14 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 //a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
-                    area_editor::lone_lines.insert(inners->back()[0]->linedefs[0]);
+                    if(ae){
+                        ae->lone_lines.insert(inners->back()[0]->linedefs[0]);
+                    }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
-                    area_editor::non_simples.insert(s_ptr);
+                    if(ae){
+                        ae->non_simples.insert(s_ptr);
+                    }
                 }
                 
             } else if(lines_done[best_line]) {
@@ -920,16 +929,24 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
  * Checks intersecting linedefs, and adds them to intersecting_lines;
  */
 void check_linedef_intersections(vertex* v) {
+    
+    area_editor* ae = NULL;
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+        ae = (area_editor*) game_states[cur_game_state_nr];
+    }
+    
     for(size_t l = 0; l < v->linedefs.size(); ++l) {
         linedef* l_ptr = v->linedefs[l];
         
-        //Check if it's on the list of intersecting lines, and remove it,
-        //so it can be recalculated now.
-        for(size_t il = 0; il < area_editor::intersecting_lines.size();) {
-            if(area_editor::intersecting_lines[il].contains(l_ptr)) {
-                area_editor::intersecting_lines.erase(area_editor::intersecting_lines.begin() + il);
-            } else {
-                ++il;
+        if(ae){
+            //Check if it's on the list of intersecting lines, and remove it,
+            //so it can be recalculated now.
+            for(size_t il = 0; il < ae->intersecting_lines.size();) {
+                if(ae->intersecting_lines[il].contains(l_ptr)) {
+                    ae->intersecting_lines.erase(ae->intersecting_lines.begin() + il);
+                } else {
+                    ++il;
+                }
             }
         }
         
@@ -955,7 +972,9 @@ void check_linedef_intersections(vertex* v) {
                     l2_ptr->vertices[1]->x, l2_ptr->vertices[1]->y,
                     NULL, NULL)
             ) {
-                area_editor::intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
+                if(ae){
+                    ae->intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
+                }
             }
         }
     }
@@ -1270,6 +1289,11 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
  * Triangulates (turns into triangles) a sector. This is because drawing concave polygons is not possible.
  */
 void triangulate(sector* s_ptr) {
+    
+    area_editor* ae = NULL;
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+        ae = (area_editor*) game_states[cur_game_state_nr];
+    }
 
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
@@ -1279,17 +1303,21 @@ void triangulate(sector* s_ptr) {
     
     //Before we start, let's just remove it from the
     //vector of non-simple sectors.
-    auto it = area_editor::non_simples.find(s_ptr);
-    if(it != area_editor::non_simples.end()) {
-        area_editor::non_simples.erase(it);
+    if(ae){
+        auto it = ae->non_simples.find(s_ptr);
+        if(it != ae->non_simples.end()) {
+            ae->non_simples.erase(it);
+        }
     }
     
     //And let's clear any "lone" linedefs here.
-    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-        linedef* l_ptr = s_ptr->linedefs[l];
-        auto it = area_editor::lone_lines.find(l_ptr);
-        if(it != area_editor::lone_lines.end()) {
-            area_editor::lone_lines.erase(it);
+    if(ae){
+        for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
+            linedef* l_ptr = s_ptr->linedefs[l];
+            auto it = ae->lone_lines.find(l_ptr);
+            if(it != ae->lone_lines.end()) {
+                ae->lone_lines.erase(it);
+            }
         }
     }
     
@@ -1333,7 +1361,9 @@ void triangulate(sector* s_ptr) {
     
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
-            area_editor::non_simples.insert(s_ptr);
+            if(ae){
+                ae->non_simples.insert(s_ptr);
+            }
             break;
             
         } else {

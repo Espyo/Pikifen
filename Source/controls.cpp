@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -63,55 +63,55 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     }
     
     
-    size_t n_controls = controls.size();
-    for(size_t c = 0; c < n_controls; ++c) {
-    
-        control_info* con = &controls[c];
+    for(size_t p = 0; p < 4; p++) {
+        size_t n_controls = controls[p].size();
+        for(size_t c = 0; c < n_controls; ++c) {
         
-        if(con->type == CONTROL_TYPE_KEYBOARD_KEY && (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)) {
-            if(con->button == ev.keyboard.keycode) {
-                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0);
-            }
-        } else if(con->type == CONTROL_TYPE_MOUSE_BUTTON && (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)) {
-            if(con->button == (signed) ev.mouse.button) {
-                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0);
-            }
-        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_UP && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-            if(ev.mouse.dz > 0) {
-                handle_button(con->action, con->player, ev.mouse.dz);
-            }
-        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-            if(ev.mouse.dz < 0) {
-                handle_button(con->action, con->player, -ev.mouse.dz);
-            }
-        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_LEFT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-            if(ev.mouse.dw < 0) {
-                handle_button(con->action, con->player, -ev.mouse.dw);
-            }
-        } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-            if(ev.mouse.dw > 0) {
-                handle_button(con->action, con->player, ev.mouse.dw);
-            }
-        } else if(con->type == CONTROL_TYPE_JOYSTICK_BUTTON && (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
-            if(con->device_nr == joystick_numbers[ev.joystick.id] && (signed) con->button == ev.joystick.button) {
-                handle_button(con->action, con->player, (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0);
-            }
-        } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_POS && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
-            if(
-                con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
-                con->axis == ev.joystick.axis && ev.joystick.pos >= 0) {
-                handle_button(con->action, con->player, ev.joystick.pos);
-            }
-        } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
-            if(
-                con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
-                con->axis == ev.joystick.axis && ev.joystick.pos <= 0) {
-                handle_button(con->action, con->player, -ev.joystick.pos);
+            control_info* con = &controls[p][c];
+            
+            if(con->type == CONTROL_TYPE_KEYBOARD_KEY && (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)) {
+                if(con->button == ev.keyboard.keycode) {
+                    handle_button(con->action, p, (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0);
+                }
+            } else if(con->type == CONTROL_TYPE_MOUSE_BUTTON && (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)) {
+                if(con->button == (signed) ev.mouse.button) {
+                    handle_button(con->action, p, (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0);
+                }
+            } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_UP && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+                if(ev.mouse.dz > 0) {
+                    handle_button(con->action, p, ev.mouse.dz);
+                }
+            } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+                if(ev.mouse.dz < 0) {
+                    handle_button(con->action, p, -ev.mouse.dz);
+                }
+            } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_LEFT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+                if(ev.mouse.dw < 0) {
+                    handle_button(con->action, p, -ev.mouse.dw);
+                }
+            } else if(con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT && ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
+                if(ev.mouse.dw > 0) {
+                    handle_button(con->action, p, ev.mouse.dw);
+                }
+            } else if(con->type == CONTROL_TYPE_JOYSTICK_BUTTON && (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP)) {
+                if(con->device_nr == joystick_numbers[ev.joystick.id] && (signed) con->button == ev.joystick.button) {
+                    handle_button(con->action, p, (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0);
+                }
+            } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_POS && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+                if(
+                    con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
+                    con->axis == ev.joystick.axis && ev.joystick.pos >= 0) {
+                    handle_button(con->action, p, ev.joystick.pos);
+                }
+            } else if(con->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG && ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+                if(
+                    con->device_nr == joystick_numbers[ev.joystick.id] && con->stick == ev.joystick.stick &&
+                    con->axis == ev.joystick.axis && ev.joystick.pos <= 0) {
+                    handle_button(con->action, p, -ev.joystick.pos);
+                }
             }
         }
-    }
-    
-    for(unsigned char p = 0; p < 4; ++p) {
+        
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
             mouse_cursor_x = ev.mouse.x;
             mouse_cursor_y = ev.mouse.y;
@@ -162,7 +162,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /********************
             *             .-.   *
             *   Cursor   ( = )> *
-            *             `-´   *
+            *             `-Â´   *
             ********************/
             
             if(     button == BUTTON_MOVE_CURSOR_RIGHT) cursor_movement.right = pos;
@@ -306,7 +306,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /********************
             *              .--= *
             *   Whistle   ( @ ) *
-            *              `-´  *
+            *              `-Â´  *
             ********************/
             
             active_control();
@@ -337,6 +337,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             size_t new_leader_nr = cur_leader_nr;
             leader* new_leader_ptr = nullptr;
             bool search_new_leader = true;
+            
+            if(!cur_leader_ptr->fsm.get_event(LEADER_EVENT_UNFOCUSED)) {
+                //This leader isn't ready to be switched out of. Forget it.
+                return;
+            }
             
             //We'll send the switch event to the next leader on the list.
             //If they accept, they run a function to change leaders.
@@ -402,7 +407,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /*******************
             *             +=== *
             *   Sprays   (   ) *
-            *             `-´  *
+            *             `-Â´  *
             *******************/
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
@@ -509,7 +514,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
         
             /****************************
             *                     -->   *
-            *   Switch type   <(¨)> (ö) *
+            *   Switch type   <(Â¨)> (Ã¶) *
             *                           *
             *****************************/
             
@@ -673,9 +678,8 @@ void active_control() {
  * player: Player number.
  * s:      The textual code that represents the hardware inputs.
  */
-control_info::control_info(unsigned char action, unsigned char player, string s) :
+control_info::control_info(unsigned char action, string s) :
     action(action),
-    player(player),
     type(CONTROL_TYPE_NONE),
     device_nr(0),
     button(0),
@@ -732,8 +736,7 @@ control_info::control_info(unsigned char action, unsigned char player, string s)
         }
     } else {
         error_log(
-            "Unrecognized control type \"" + parts[0] + "\" for player " +
-            i2s((player + 1)) + " (value=\"" + s + "\").");
+            "Unrecognized control type \"" + parts[0] + "\" (value=\"" + s + "\").");
     }
 }
 

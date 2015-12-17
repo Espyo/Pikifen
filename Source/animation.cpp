@@ -417,7 +417,7 @@ void animation_pool::destroy() {
 /* ----------------------------------------------------------------------------
  * Loads the animations from a file.
  */
-animation_pool load_animation_pool(data_node* file_node) {
+animation_pool load_animation_pool_from_file(data_node* file_node) {
     animation_pool as;
     
     vector<animation*> animations;

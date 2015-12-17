@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -21,7 +21,7 @@
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
  */
-void do_drawing() {
+void do_game_drawing() {
 
     /*  ***************************************
       *** |  |                           |  | ***
@@ -301,9 +301,10 @@ void do_drawing() {
                         
                 } else {
                 
-                    for(size_t c = 0; c < controls.size(); ++c) {
-                        if(controls[c].action == BUTTON_THROW) {
-                            draw_control(font, controls[c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, 0, 0);
+                    //TODO optimize this by saving the control somewhere instead of searching for it every frame.
+                    for(size_t c = 0; c < controls[0].size(); ++c) {
+                        if(controls[0][c].action == BUTTON_THROW) {
+                            draw_control(font, controls[0][c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, 0, 0);
                             break;
                         }
                     }
@@ -368,7 +369,7 @@ void do_drawing() {
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
-        *             `-´   *
+        *             `-Â´   *
         ********************/
         
         al_use_transform(&world_to_screen_transform);
@@ -456,7 +457,7 @@ void do_drawing() {
             cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
             cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5,
             cursor_spin_angle,
-            cur_leader_ptr->lea_type->main_color
+            change_color_lighting(cur_leader_ptr->lea_type->main_color, cursor_height_diff_light)
         );
         al_use_transform(&world_to_screen_transform);
         draw_sprite(
@@ -465,7 +466,7 @@ void do_drawing() {
             al_get_bitmap_width(bmp_cursor) * 0.5,
             al_get_bitmap_height(bmp_cursor) * 0.5,
             cursor_angle,
-            cur_leader_ptr->lea_type->main_color
+            change_color_lighting(cur_leader_ptr->lea_type->main_color, cursor_height_diff_light)
             //map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
         );
         
@@ -620,6 +621,7 @@ void do_drawing() {
             );
             
             //Sprays.
+            //TODO optimize this by saving the controls somewhere, instead of searching for them every time.
             if(n_spray_types > 0) {
                 size_t top_spray_nr;
                 if(n_spray_types < 3) top_spray_nr = 0; else top_spray_nr = selected_spray;
@@ -635,9 +637,9 @@ void do_drawing() {
                     font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
                     scr_w * 0.06, scr_h * 0.05,
                     i2s(spray_amounts[top_spray_nr]));
-                for(size_t c = 0; c < controls.size(); ++c) {
-                    if(controls[c].action == BUTTON_USE_SPRAY_1 || controls[c].action == BUTTON_USE_SPRAY) {
-                        draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
+                for(size_t c = 0; c < controls[0].size(); ++c) {
+                    if(controls[0][c].action == BUTTON_USE_SPRAY_1 || controls[0][c].action == BUTTON_USE_SPRAY) {
+                        draw_control(font, controls[0][c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
                         break;
                     }
                 }
@@ -654,9 +656,9 @@ void do_drawing() {
                         font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
                         scr_w * 0.06, scr_h * 0.05,
                         i2s(spray_amounts[1]));
-                    for(size_t c = 0; c < controls.size(); ++c) {
-                        if(controls[c].action == BUTTON_USE_SPRAY_2) {
-                            draw_control(font, controls[c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
+                    for(size_t c = 0; c < controls[0].size(); ++c) {
+                        if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
+                            draw_control(font, controls[0][c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
                             break;
                         }
                     }
@@ -670,15 +672,15 @@ void do_drawing() {
                         spray_types[(selected_spray + 1) % spray_types.size()].bmp_spray,
                         scr_w * 0.13, scr_h * 0.52,
                         scr_w * 0.03, scr_h * 0.05);
-                    for(size_t c = 0; c < controls.size(); ++c) {
-                        if(controls[c].action == BUTTON_SWITCH_SPRAY_LEFT) {
-                            draw_control(font, controls[c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                    for(size_t c = 0; c < controls[0].size(); ++c) {
+                        if(controls[0][c].action == BUTTON_SWITCH_SPRAY_LEFT) {
+                            draw_control(font, controls[0][c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
                         }
                     }
-                    for(size_t c = 0; c < controls.size(); ++c) {
-                        if(controls[c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
-                            draw_control(font, controls[c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                    for(size_t c = 0; c < controls[0].size(); ++c) {
+                        if(controls[0][c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
+                            draw_control(font, controls[0][c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
                         }
                     }
@@ -753,6 +755,14 @@ void do_drawing() {
         al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, debug_last_axis.c_str());
     }
     
+    if(!area_title_fade_timer.ticked) {
+        draw_loading_screen(
+            cur_area_map.name,
+            cur_area_map.subtitle,
+            area_title_fade_timer.get_ratio_left()
+        );
+    }
+    
     fade_mgr.draw();
     
     al_flip_display();
@@ -769,7 +779,7 @@ void do_drawing() {
 void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const float x, const float y, const float max_w, const float max_h) {
     string name;
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
-        name = al_keycode_to_name(c.button);
+        name = str_to_upper(al_keycode_to_name(c.button));
     } else if(c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG || c.type == CONTROL_TYPE_JOYSTICK_AXIS_POS) {
         name = "AXIS " + i2s(c.stick) + " " + i2s(c.axis);
         name += c.type == CONTROL_TYPE_JOYSTICK_AXIS_NEG ? "-" : "+";
@@ -878,7 +888,7 @@ void draw_fraction(const float cx, const float cy, const unsigned int current, c
         font_value, color, cx, first_y,
         (current >= needed ? 1.2 : 1.0),
         (current >= needed ? 1.2 : 1.0),
-        ALLEGRO_ALIGN_CENTER, (i2s(current).c_str())
+        ALLEGRO_ALIGN_CENTER, 0, (i2s(current).c_str())
     );
     
     al_draw_text(
@@ -890,7 +900,7 @@ void draw_fraction(const float cx, const float cy, const unsigned int current, c
         font_value, color, cx, first_y + font_h * 1.5,
         (needed > current ? 1.2 : 1.0),
         (needed > current ? 1.2 : 1.0),
-        ALLEGRO_ALIGN_CENTER, (i2s(needed).c_str())
+        ALLEGRO_ALIGN_CENTER, 0, (i2s(needed).c_str())
     );
 }
 
@@ -923,24 +933,23 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
  * font - y: The parameters you'd use for al_draw_text.
  * scale_*:  Horizontal or vertical scale.
  * flags:    Same flags you'd use for al_draw_text.
+ * valign:   Vertical align. 0: top, 1: center, 2: bottom.
  * text:     Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y,
-    const float scale_x, const float scale_y, const int flags, const string &text
+    const float scale_x, const float scale_y, const int flags, const unsigned char valign, const string &text
 ) {
 
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
     al_scale_transform(&scale_transform, scale_x, scale_y);
-    al_translate_transform(
-        &scale_transform, x, y
-    );
+    al_translate_transform(&scale_transform, x, y);
     al_compose_transform(&scale_transform, &old_transform);
     
     al_use_transform(&scale_transform); {
-        al_draw_text(font, color, 0, 0, flags, text.c_str());
+        draw_text_lines(font, color, 0, 0, flags, valign, text.c_str());
     }; al_use_transform(&old_transform);
 }
 
@@ -1371,7 +1380,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
  * Draws the loading screen for an area (or anything else, really).
  * text:    The main text to show, optional.
  * subtext: Subtext to show under the main text, optional.
- * opacity: 0 to 1.
+ * opacity: 0 to 1. The blackness lowers in opacity much faster.
  */
 void draw_loading_screen(const string &text, const string &subtext, const float opacity) {
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
@@ -1381,7 +1390,8 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
     ALLEGRO_BITMAP* subtext_bmp;
     
     
-    al_draw_filled_rectangle(0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, opacity * 255.0f));
+    unsigned char blackness_alpha = 255.0f * max(0.0f, opacity * 4 - 3);
+    al_draw_filled_rectangle(0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha));
     
     //Set up the bitmap that will hold the text.
     int text_w = 0, text_h = 0;
@@ -1655,6 +1665,8 @@ float ease(const unsigned char method, const float n) {
         return pow(n, 3);
     case EASE_OUT:
         return 1 - (pow((1 - n), 3));
+    case EASE_UP_AND_DOWN:
+        return sin(n * M_PI);
     }
     
     return n;

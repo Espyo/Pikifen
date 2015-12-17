@@ -1108,6 +1108,8 @@ void unfocus_mob(mob* m1) {
  */
 void mob::lose_health(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    if(!should_attack(m, info->mob2)) return;
+    
     float damage = 0;
     
     damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);

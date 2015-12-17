@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -34,6 +34,7 @@ const unsigned char VERSION_DAY   = 11;
 const unsigned char VERSION_MONTH = 10;
 const unsigned int  VERSION_YEAR  = 15;      //The year is 2000 + this.
 
+const float AREA_TITLE_FADE_DURATION    = 3.0f;      //How long it takes for the area name to fade away, in-game.
 const float AUTO_PLUCK_MAX_RADIUS       = 160.0f;    //How far a leader can go to auto-pluck the next Pikmin.
 const float CAM_TRANSITION_DURATION     = 0.5f;      //How many seconds a camera transition lasts for.
 const float CURSOR_INVALID_EFFECT_SPEED = M_PI * 4.0f; //How fast the "invalid cursor" effect goes, per second.
@@ -98,11 +99,11 @@ const string TYPES_FOLDER          = GAME_DATA_FOLDER + "/Types";
 
 const string AUDIO_FOLDER          = GAME_DATA_FOLDER + "/Audio";
 const string AREA_FOLDER           = GAME_DATA_FOLDER + "/Areas";
-const string CONFIGURATIONS_FOLDER = GAME_DATA_FOLDER + "/Configurations";
 const string ENEMIES_FOLDER        = TYPES_FOLDER + "/Enemies";
 const string GATES_FOLDER          = TYPES_FOLDER + "/Gates";
 const string GRAPHICS_FOLDER       = GAME_DATA_FOLDER + "/Graphics";
 const string LEADERS_FOLDER        = TYPES_FOLDER + "/Leaders";
+const string MISC_FOLDER           = GAME_DATA_FOLDER + "/Misc";
 const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";
 const string OTHER_TYPES_FOLDER    = TYPES_FOLDER + "/Others";
 const string PELLETS_FOLDER        = TYPES_FOLDER + "/Pellets";
@@ -111,7 +112,8 @@ const string SPECIAL_MOBS_FOLDER   = TYPES_FOLDER + "/Special";
 const string SHIPS_FOLDER          = TYPES_FOLDER + "/Ships";
 const string TEXTURES_FOLDER       = GRAPHICS_FOLDER + "/Textures";
 const string TREASURES_FOLDER      = TYPES_FOLDER + "/Treasures";
-const string WEATHER_FILE          = CONFIGURATIONS_FOLDER + "/Weather.txt";
+const string WEATHER_FILE          = MISC_FOLDER + "/Weather.txt";
+const string CONFIG_FILE           = MISC_FOLDER + "/Config.txt";
 
 
 enum EDITOR_MODES {
@@ -138,14 +140,6 @@ enum EDITOR_SEC_MODES {
     ESM_NEW_SHADOW,
     ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,
-};
-
-enum GAME_STATES {
-    GAME_STATE_MAIN_MENU,
-    GAME_STATE_GAME,
-    GAME_STATE_OPTIONS,
-    GAME_STATE_AREA_EDITOR,
-    GAME_STATE_ANIMATION_EDITOR,
 };
 
 const unsigned char N_WHISTLE_RING_COLORS = 8;

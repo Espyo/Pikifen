@@ -1,0 +1,2 @@
+game_name = Demo Fangame
+game_version = X.X.X

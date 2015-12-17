@@ -22,7 +22,7 @@
 //to access them directly than to call a function.
 #define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state ? (m_ptr)->fsm.cur_state->events[(ev_type)] : nullptr)
 
-void do_logic() {
+void do_game_logic() {
 
     do_aesthetic_logic();
     do_gameplay_logic();
@@ -176,8 +176,20 @@ void do_aesthetic_logic() {
     //Tree shadow swaying.
     tree_shadow_sway += TREE_SHADOW_SWAY_SPEED * delta_t;
     
-    if(fade_mgr.is_fading() && fade_mgr.get_time_left() == 0)
-        fade_mgr.finish_fade();
+    //Cursor being above or below the leader.
+    //TODO check this only one out of every three frames or something.
+    cursor_height_diff_light = 0;
+    sector* cursor_sector = get_sector(cursor_x, cursor_y, NULL, true);
+    if(cursor_sector) {
+        cursor_height_diff_light = (cursor_sector->z - cur_leader_ptr->z) * 0.0033;
+        cursor_height_diff_light = max(cursor_height_diff_light, -0.33f);
+        cursor_height_diff_light = min(cursor_height_diff_light, 0.33f);
+    }
+    
+    //Area title fade.
+    area_title_fade_timer.tick(delta_t);
+    
+    //Fade.
     fade_mgr.tick(delta_t);
     
     

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -22,6 +22,7 @@
 #include "animation.h"
 #include "const.h"
 #include "controls.h"
+#include "game_state.h"
 #include "gate.h"
 #include "hitbox.h"
 #include "LAFI/gui.h"
@@ -48,7 +49,7 @@ using namespace std;
 
 //Bitmaps.
 extern ALLEGRO_BITMAP* bmp_bubble;
-extern ALLEGRO_BITMAP* bmp_cloaking_burrow_nit;
+extern ALLEGRO_BITMAP* bmp_checkbox_check;
 extern ALLEGRO_BITMAP* bmp_cursor;
 extern ALLEGRO_BITMAP* bmp_day_bubble;
 extern ALLEGRO_BITMAP* bmp_enemy_spirit;
@@ -111,6 +112,7 @@ extern float                            area_images_scale;
 extern int                              area_image_size;
 extern float                            area_images_x1; //Top-left corner of the area, in world coordinates.
 extern float                            area_images_y1;
+extern timer                            area_title_fade_timer;
 extern vector<unsigned int>             berries;
 extern bmp_manager                      bitmaps;
 extern ALLEGRO_BITMAP*                  bmp_error;
@@ -126,7 +128,7 @@ extern timer                            cam_trans_zoom_timer;
 extern float                            cam_x;
 extern float                            cam_y;
 extern float                            cam_zoom;
-extern vector<control_info>             controls;
+extern vector<vector<control_info> >    controls;
 extern mob*                             closest_party_member;
 extern area_map                         cur_area_map;
 extern size_t                           cur_leader_nr;
@@ -138,9 +140,10 @@ extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
 extern movement_struct                  cursor_movement;            //Movement of the cursor via non-mouse.
-extern unsigned char                    cur_game_state;
+extern unsigned char                    cur_game_state_nr;
 extern float                            cur_sun_strength;
 extern float                            cursor_angle;
+extern float                            cursor_height_diff_light;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
 extern timer                            cursor_save_timer;        //Time left until the position of the cursor is saved on the vector.
 extern float                            cursor_spin_angle;
@@ -166,6 +169,9 @@ extern unsigned int                     font_counter_h;
 extern unsigned int                     font_h;
 extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
 extern unsigned short                   game_fps;
+extern string                           game_name;
+extern map<size_t, game_state*>         game_states;
+extern string                           game_version;
 extern vector<gate*>                    gates;
 extern map<string, gate_type*>          gate_types;
 extern float                            group_move_angle;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -58,182 +58,39 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the color provided, but darker or lighter by l amount.
+ * color: The color to change the lighting on.
+ * l:     Lighting amount, positive or negative.
+ */
+ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
+    ALLEGRO_COLOR c2;
+    c2.r = c.r + l;
+    c2.r = min(1.0f, c2.r);
+    c2.r = max(0.0f, c2.r);
+    c2.g = c.g + l;
+    c2.g = min(1.0f, c2.g);
+    c2.g = max(0.0f, c2.g);
+    c2.b = c.b + l;
+    c2.b = min(1.0f, c2.b);
+    c2.b = max(0.0f, c2.b);
+    c2.a = c.a;
+    return c2;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Changes the game's state.
  */
 void change_game_state(unsigned int new_state) {
-
-    if(cur_game_state == GAME_STATE_MAIN_MENU) {
-        main_menu::unload();
-    }
-    //TODO unload code for other game states.
-    
-    if(new_state == GAME_STATE_MAIN_MENU) {
-        main_menu::load();
-    } else if(new_state == GAME_STATE_GAME) {
-        //TODO move this out of here, maybe?
-        
-        draw_loading_screen("", "", 1.0f);
-        al_flip_display();
-        
-        //Graphics.
-        bmp_ship = load_bmp("Ship.png");
-        
-        bmp_bubble = load_bmp(          "Bubble.png");
-        bmp_cursor = load_bmp(          "Cursor.png");
-        bmp_day_bubble = load_bmp(      "Day_bubble.png");
-        bmp_enemy_spirit = load_bmp(    "Enemy_spirit.png");
-        bmp_hard_bubble = load_bmp(     "Hard_bubble.png");
-        bmp_idle_glow = load_bmp(       "Idle_glow.png");
-        bmp_info_spot = load_bmp(       "Info_spot.png");
-        bmp_message_box = load_bmp(     "Message_box.png");
-        bmp_mouse_cursor = load_bmp(    "Mouse_cursor.png");
-        bmp_group_move_arrow = load_bmp("Group_move_arrow.png");
-        bmp_nectar = load_bmp(          "Nectar.png");
-        bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
-        bmp_number_bubble = load_bmp(   "Number_bubble.png");
-        bmp_pikmin_spirit = load_bmp(   "Pikmin_spirit.png");
-        bmp_shadow = load_bmp(          "Shadow.png");
-        bmp_smack = load_bmp(           "Smack.png");
-        bmp_smoke = load_bmp(           "Smoke.png");
-        bmp_sparkle = load_bmp(         "Sparkle.png");
-        bmp_sun = load_bmp(             "Sun.png");
-        bmp_sun_bubble = load_bmp(      "Sun_bubble.png");
-        bmp_tp = load_bmp(              "TP.png");
-        bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
-        bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
-        
-        bmp_test = load_bmp("Test.png");
-        
-        al_set_display_icon(display, bmp_icon);
-        
-        //Sound effects.
-        voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
-        mixer = al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2);
-        al_attach_mixer_to_voice(mixer, voice);
-        sfx_attack = load_sample(              "Attack.ogg",               mixer);
-        sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg",        mixer);
-        sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg",      mixer);
-        sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg", mixer);
-        sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg",        mixer);
-        sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg",         mixer);
-        sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
-        sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
-        sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
-        sfx_pikmin_pluck = load_sample(        "Pikmin_pluck.ogg",         mixer);
-        sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
-        sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
-        sfx_dismiss = load_sample(             "Dismiss.ogg",              mixer);
-        sfx_olimar_whistle = load_sample(      "Olimar_whistle.ogg",       mixer);
-        sfx_louie_whistle = load_sample(       "Louie_whistle.ogg",        mixer);
-        sfx_president_whistle = load_sample(   "President_whistle.ogg",    mixer);
-        sfx_olimar_name_call = load_sample(    "Olimar_name_call.ogg",     mixer);
-        sfx_louie_name_call = load_sample(     "Louie_name_call.ogg",      mixer);
-        sfx_president_name_call = load_sample( "President_name_call.ogg",  mixer);
-        sfx_throw = load_sample(               "Throw.ogg",                mixer);
-        sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
-        sfx_camera = load_sample(              "Camera.ogg",               mixer);
-        
-        //Game content.
-        load_game_content();
-        
-        //Initializing game things.
-        spray_amounts.clear();
-        size_t n_spray_types = spray_types.size();
-        for(size_t s = 0; s < n_spray_types; ++s) { spray_amounts.push_back(0); }
-        pikmin_in_onions.clear();
-        for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) { o->second = 0; }
-        
-        load_area("Play", false);
-        load_area_textures();
-        generate_area_images();
-        
-        //Generate mobs.
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_map.mob_generators[m];
-            if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
-                create_mob(new enemy(m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_LEADERS) {
-                create_mob(new leader(m_ptr->x, m_ptr->y, (leader_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_ONIONS) {
-                create_mob(new onion(m_ptr->x, m_ptr->y, (onion_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_PELLETS) {
-                create_mob(new pellet(m_ptr->x, m_ptr->y, (pellet_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_PIKMIN) {
-                create_mob(new pikmin(m_ptr->x, m_ptr->y, (pikmin_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_SHIPS) {
-                create_mob(new ship(m_ptr->x, m_ptr->y, (ship_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_GATES) {
-                create_mob(new gate(m_ptr->x, m_ptr->y, (gate_type*) m_ptr->type, m_ptr->vars));
-            } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
-                m_ptr->type->create_mob(m_ptr->x, m_ptr->y, m_ptr->angle, m_ptr->vars);
-            } else if(m_ptr->category == MOB_CATEGORY_TREASURES) {
-                create_mob(new treasure(m_ptr->x, m_ptr->y, (treasure_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
-            }
-        }
-        
-        create_mob(new pikmin(-50, 200, pikmin_types["Red Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(-40, 200, pikmin_types["Red Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(-30, 200, pikmin_types["Red Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(-20, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(-10, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 1;
-        create_mob(new pikmin(0, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-        pikmin_list.back()->maturity = 2;
-        create_mob(new pikmin(30, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->first_state_set = true;
-        create_mob(new pikmin(50, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->first_state_set = true;
-        create_mob(new pikmin(70, 150, pikmin_types["Blue Pikmin"], 0, ""));
-        pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-        pikmin_list.back()->first_state_set = true;
-        for(unsigned char p = 0; p < 10; ++p) {
-            for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
-                create_mob(new pikmin(20 + 10 * p + 3 * distance(pikmin_types.begin(), t), 200, t->second, 0, ""));
-                pikmin_list.back()->maturity = 2;
-            }
-        }
-        /*
-        create_mob(new pellet(320, -100, pellet_types["Red 1"], 0, ""));
-        create_mob(new pellet(250, -100, pellet_types["Red 5"], 0, ""));
-        create_mob(new pellet(150, -100, pellet_types["Red 10"], 0, ""));
-        create_mob(new pellet(0, -100, pellet_types["Red 20"], 0, ""));*/
-        spray_amounts[0] = spray_amounts[1] = 10;
-        spray_types[0].bmp_spray = bmp_ub_spray;
-        spray_types[1].bmp_spray = bmp_us_spray;
-        pikmin_in_onions[pikmin_types["Red Pikmin"]] = 200;
-        pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
-        pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
-        
-        cur_leader_nr = 0;
-        cur_leader_ptr = leaders[cur_leader_nr];
-        cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-        cur_leader_ptr->first_state_set = true;
-        
-        al_hide_mouse_cursor(display);
-        
-        fade_mgr.start_fade(true);
-        
-    } else if(new_state == GAME_STATE_ANIMATION_EDITOR) {
-        animation_editor::load();
-    } else if(new_state == GAME_STATE_AREA_EDITOR) {
-        area_editor::load();
-    }
-    //TODO load code for the other game states.
-    
+    game_states[cur_game_state_nr]->unload();
+    cur_game_state_nr = new_state;
+    game_states[cur_game_state_nr]->load();
     
     //Because during the loading screens, there is no activity, on the
     //next frame, the game will assume the time between that and the last
     //non-loading frame is normal. This could be something like 2 seconds.
     //Let's reset the delta_t, then.
     reset_delta_t = true;
-    
-    cur_game_state = new_state;
     
 }
 
@@ -865,13 +722,15 @@ void load_area(const string &name, const bool load_for_editor) {
     
     
     //Editor background.
-    area_editor::bg_file_name = file.get_child_by_name("bg_file_name")->value;
-    area_editor::bg_x =     s2f(file.get_child_by_name("bg_x")->value);
-    area_editor::bg_y =     s2f(file.get_child_by_name("bg_y")->value);
-    area_editor::bg_w =     s2f(file.get_child_by_name("bg_w")->value);
-    area_editor::bg_h =     s2f(file.get_child_by_name("bg_h")->value);
-    area_editor::bg_a =     s2i(file.get_child_by_name("bg_alpha")->get_value_or_default("255"));
-    
+    if(load_for_editor) {
+        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
+        ae->set_bg_file_name(    file.get_child_by_name("bg_file_name")->value);
+        ae->set_bg_x(        s2f(file.get_child_by_name("bg_x")->value));
+        ae->set_bg_y(        s2f(file.get_child_by_name("bg_y")->value));
+        ae->set_bg_w(        s2f(file.get_child_by_name("bg_w")->value));
+        ae->set_bg_h(        s2f(file.get_child_by_name("bg_h")->value));
+        ae->set_bg_a(        s2i(file.get_child_by_name("bg_alpha")->get_value_or_default("255")));
+    }
     
     
     //Set up stuff.
@@ -942,7 +801,8 @@ void load_control(const unsigned char action, const unsigned char player, const 
     size_t n_possible_controls = possible_controls.size();
     
     for(size_t c = 0; c < n_possible_controls; ++c) {
-        controls.push_back(control_info(action, player, possible_controls[c]));
+        controls[player].push_back(control_info(action, possible_controls[c]));
+        
     }
 }
 
@@ -1063,50 +923,54 @@ void load_options() {
     //"mwl" (left), "mwr" (right), "jb" (joystick button), "jap" (joystick axis, positive), "jan" (joystick axis, negative).
     //The parameters are the key/button number, joystick number, joystick stick and axis, etc.
     //Check the constructor of control_info for more information.
-    controls.clear();
+    for(size_t p = 0; p < 4; p++) {
+        controls[p].clear();
+    }
     
     for(unsigned char p = 0; p < 4; ++p) {
-        load_control(BUTTON_THROW,                p, "punch", file, "mb_1");
-        load_control(BUTTON_WHISTLE,              p, "whistle", file, "mb_2");
-        load_control(BUTTON_MOVE_RIGHT,           p, "move_right", file, "k_4");
-        load_control(BUTTON_MOVE_UP,              p, "move_up", file, "k_23");
-        load_control(BUTTON_MOVE_LEFT,            p, "move_left", file, "k_1");
-        load_control(BUTTON_MOVE_DOWN,            p, "move_down", file, "k_19");
-        load_control(BUTTON_MOVE_CURSOR_RIGHT,    p, "move_cursor_right", file, "");
-        load_control(BUTTON_MOVE_CURSOR_UP,       p, "move_cursor_up", file, "");
-        load_control(BUTTON_MOVE_CURSOR_LEFT,     p, "move_cursor_left", file, "");
-        load_control(BUTTON_MOVE_CURSOR_DOWN,     p, "move_cursor_down", file, "");
-        load_control(BUTTON_GROUP_MOVE_GO_TO_CURSOR, p, "group_move_go_to_cursor", file, "k_75");
-        load_control(BUTTON_GROUP_MOVE_RIGHT,     p, "group_move_right", file, "");
-        load_control(BUTTON_GROUP_MOVE_UP,        p, "group_move_up", file, "");
-        load_control(BUTTON_GROUP_MOVE_LEFT,      p, "group_move_left", file, "");
-        load_control(BUTTON_GROUP_MOVE_DOWN,      p, "group_move_down", file, "");
-        load_control(BUTTON_SWITCH_LEADER_RIGHT,  p, "switch_leader_right", file, "k_64");
-        load_control(BUTTON_SWITCH_LEADER_LEFT,   p, "switch_leader_left", file, "");
-        load_control(BUTTON_DISMISS,              p, "dismiss", file, "k_217");
-        load_control(BUTTON_USE_SPRAY_1,          p, "use_spray_1", file, "k_18");
-        load_control(BUTTON_USE_SPRAY_2,          p, "use_spray_2", file, "k_6");
-        load_control(BUTTON_USE_SPRAY,            p, "use_spray", file, "k_18");
-        load_control(BUTTON_SWITCH_SPRAY_RIGHT,   p, "switch_spray_right", file, "k_5");
-        load_control(BUTTON_SWITCH_SPRAY_LEFT,    p, "switch_spray_left", file, "k_17");
-        load_control(BUTTON_SWITCH_ZOOM,          p, "switch_zoom", file, "k_3");
-        load_control(BUTTON_ZOOM_IN,              p, "zoom_in", file, "mwu");
-        load_control(BUTTON_ZOOM_OUT,             p, "zoom_out", file, "mwd");
-        load_control(BUTTON_SWITCH_TYPE_RIGHT,    p, "switch_type_right", file, "");
-        load_control(BUTTON_SWITCH_TYPE_LEFT,     p, "switch_type_left", file, "");
-        load_control(BUTTON_SWITCH_MATURITY_UP,   p, "switch_maturity_up", file, "");
-        load_control(BUTTON_SWITCH_MATURITY_DOWN, p, "switch_maturity_down", file, "");
-        load_control(BUTTON_LIE_DOWN,             p, "lie_down", file, "k_26");
-        load_control(BUTTON_PAUSE,                p, "pause", file, "k_59");
+        load_control(BUTTON_THROW,                p, "punch", file);
+        load_control(BUTTON_WHISTLE,              p, "whistle", file);
+        load_control(BUTTON_MOVE_RIGHT,           p, "move_right", file);
+        load_control(BUTTON_MOVE_UP,              p, "move_up", file);
+        load_control(BUTTON_MOVE_LEFT,            p, "move_left", file);
+        load_control(BUTTON_MOVE_DOWN,            p, "move_down", file);
+        load_control(BUTTON_MOVE_CURSOR_RIGHT,    p, "move_cursor_right", file);
+        load_control(BUTTON_MOVE_CURSOR_UP,       p, "move_cursor_up", file);
+        load_control(BUTTON_MOVE_CURSOR_LEFT,     p, "move_cursor_left", file);
+        load_control(BUTTON_MOVE_CURSOR_DOWN,     p, "move_cursor_down", file);
+        load_control(BUTTON_GROUP_MOVE_GO_TO_CURSOR, p, "group_move_go_to_cursor", file);
+        load_control(BUTTON_GROUP_MOVE_RIGHT,     p, "group_move_right", file);
+        load_control(BUTTON_GROUP_MOVE_UP,        p, "group_move_up", file);
+        load_control(BUTTON_GROUP_MOVE_LEFT,      p, "group_move_left", file);
+        load_control(BUTTON_GROUP_MOVE_DOWN,      p, "group_move_down", file);
+        load_control(BUTTON_SWITCH_LEADER_RIGHT,  p, "switch_leader_right", file);
+        load_control(BUTTON_SWITCH_LEADER_LEFT,   p, "switch_leader_left", file);
+        load_control(BUTTON_DISMISS,              p, "dismiss", file);
+        load_control(BUTTON_USE_SPRAY_1,          p, "use_spray_1", file);
+        load_control(BUTTON_USE_SPRAY_2,          p, "use_spray_2", file);
+        load_control(BUTTON_USE_SPRAY,            p, "use_spray", file);
+        load_control(BUTTON_SWITCH_SPRAY_RIGHT,   p, "switch_spray_right", file);
+        load_control(BUTTON_SWITCH_SPRAY_LEFT,    p, "switch_spray_left", file);
+        load_control(BUTTON_SWITCH_ZOOM,          p, "switch_zoom", file);
+        load_control(BUTTON_ZOOM_IN,              p, "zoom_in", file);
+        load_control(BUTTON_ZOOM_OUT,             p, "zoom_out", file);
+        load_control(BUTTON_SWITCH_TYPE_RIGHT,    p, "switch_type_right", file);
+        load_control(BUTTON_SWITCH_TYPE_LEFT,     p, "switch_type_left", file);
+        load_control(BUTTON_SWITCH_MATURITY_UP,   p, "switch_maturity_up", file);
+        load_control(BUTTON_SWITCH_MATURITY_DOWN, p, "switch_maturity_down", file);
+        load_control(BUTTON_LIE_DOWN,             p, "lie_down", file);
+        load_control(BUTTON_PAUSE,                p, "pause", file);
     }
     
     //Weed out controls that didn't parse correctly.
-    size_t n_controls = controls.size();
-    for(size_t c = 0; c < n_controls; ) {
-        if(controls[c].action == BUTTON_NONE) {
-            controls.erase(controls.begin() + c);
-        } else {
-            c++;
+    for(size_t p = 0; p < 4; p++) {
+        size_t n_controls = controls[p].size();
+        for(size_t c = 0; c < n_controls; ) {
+            if(controls[p][c].action == BUTTON_NONE) {
+                controls[p].erase(controls[p].begin() + c);
+            } else {
+                c++;
+            }
         }
     }
     
@@ -1206,6 +1070,17 @@ int randomi(int min, int max) {
 
 
 /* ----------------------------------------------------------------------------
+ * Reads the game's configuration file.
+ */
+void read_game_config() {
+    data_node file(CONFIG_FILE);
+    
+    game_name = file.get_child_by_name("game_name")->value;
+    game_version = file.get_child_by_name("game_version")->value;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Basically, it destroys and recreates a bitmap.
  * The main purpose of this is to update its mipmap.
  * b: The bitmap.
@@ -1291,43 +1166,45 @@ void save_options() {
         grouped_controls[prefix + "pause"].clear();
     }
     
-    size_t n_controls = controls.size();
-    for(size_t c = 0; c < n_controls; ++c) {
-        string name = "p" + i2s((controls[c].player + 1)) + "_";
-        if(controls[c].action == BUTTON_THROW)                     name += "punch";
-        else if(controls[c].action == BUTTON_WHISTLE)              name += "whistle";
-        else if(controls[c].action == BUTTON_MOVE_RIGHT)           name += "move_right";
-        else if(controls[c].action == BUTTON_MOVE_UP)              name += "move_up";
-        else if(controls[c].action == BUTTON_MOVE_LEFT)            name += "move_left";
-        else if(controls[c].action == BUTTON_MOVE_DOWN)            name += "move_down";
-        else if(controls[c].action == BUTTON_MOVE_CURSOR_RIGHT)    name += "move_cursor_right";
-        else if(controls[c].action == BUTTON_MOVE_CURSOR_UP)       name += "move_cursor_up";
-        else if(controls[c].action == BUTTON_MOVE_CURSOR_LEFT)     name += "move_cursor_left";
-        else if(controls[c].action == BUTTON_MOVE_CURSOR_DOWN)     name += "move_cursor_down";
-        else if(controls[c].action == BUTTON_GROUP_MOVE_RIGHT)     name += "group_move_right";
-        else if(controls[c].action == BUTTON_GROUP_MOVE_UP)        name += "group_move_up";
-        else if(controls[c].action == BUTTON_GROUP_MOVE_LEFT)      name += "group_move_left";
-        else if(controls[c].action == BUTTON_GROUP_MOVE_DOWN)      name += "group_move_down";
-        else if(controls[c].action == BUTTON_GROUP_MOVE_GO_TO_CURSOR) name += "group_move_go_to_cursor";
-        else if(controls[c].action == BUTTON_SWITCH_LEADER_RIGHT)  name += "switch_leader_right";
-        else if(controls[c].action == BUTTON_SWITCH_LEADER_LEFT)   name += "switch_leader_left";
-        else if(controls[c].action == BUTTON_DISMISS)              name += "dismiss";
-        else if(controls[c].action == BUTTON_USE_SPRAY_1)          name += "use_spray_1";
-        else if(controls[c].action == BUTTON_USE_SPRAY_2)          name += "use_spray_2";
-        else if(controls[c].action == BUTTON_USE_SPRAY)            name += "use_spray";
-        else if(controls[c].action == BUTTON_SWITCH_SPRAY_RIGHT)   name += "switch_spray_right";
-        else if(controls[c].action == BUTTON_SWITCH_SPRAY_LEFT)    name += "switch_spray_left";
-        else if(controls[c].action == BUTTON_SWITCH_ZOOM)          name += "switch_zoom";
-        else if(controls[c].action == BUTTON_ZOOM_IN)              name += "zoom_in";
-        else if(controls[c].action == BUTTON_ZOOM_OUT)             name += "zoom_out";
-        else if(controls[c].action == BUTTON_SWITCH_TYPE_RIGHT)    name += "switch_type_right";
-        else if(controls[c].action == BUTTON_SWITCH_TYPE_LEFT)     name += "switch_type_left";
-        else if(controls[c].action == BUTTON_SWITCH_MATURITY_UP)   name += "switch_maturity_up";
-        else if(controls[c].action == BUTTON_SWITCH_MATURITY_DOWN) name += "switch_maturity_down";
-        else if(controls[c].action == BUTTON_LIE_DOWN)             name += "lie_down";
-        else if(controls[c].action == BUTTON_PAUSE)                name += "pause";
-        
-        grouped_controls[name] += controls[c].stringify() + ",";
+    for(size_t p = 0; p < 4; p++) {
+        size_t n_controls = controls[p].size();
+        for(size_t c = 0; c < n_controls; ++c) {
+            string name = "p" + i2s(p + 1) + "_";
+            if(controls[p][c].action == BUTTON_THROW)                     name += "punch";
+            else if(controls[p][c].action == BUTTON_WHISTLE)              name += "whistle";
+            else if(controls[p][c].action == BUTTON_MOVE_RIGHT)           name += "move_right";
+            else if(controls[p][c].action == BUTTON_MOVE_UP)              name += "move_up";
+            else if(controls[p][c].action == BUTTON_MOVE_LEFT)            name += "move_left";
+            else if(controls[p][c].action == BUTTON_MOVE_DOWN)            name += "move_down";
+            else if(controls[p][c].action == BUTTON_MOVE_CURSOR_RIGHT)    name += "move_cursor_right";
+            else if(controls[p][c].action == BUTTON_MOVE_CURSOR_UP)       name += "move_cursor_up";
+            else if(controls[p][c].action == BUTTON_MOVE_CURSOR_LEFT)     name += "move_cursor_left";
+            else if(controls[p][c].action == BUTTON_MOVE_CURSOR_DOWN)     name += "move_cursor_down";
+            else if(controls[p][c].action == BUTTON_GROUP_MOVE_RIGHT)     name += "group_move_right";
+            else if(controls[p][c].action == BUTTON_GROUP_MOVE_UP)        name += "group_move_up";
+            else if(controls[p][c].action == BUTTON_GROUP_MOVE_LEFT)      name += "group_move_left";
+            else if(controls[p][c].action == BUTTON_GROUP_MOVE_DOWN)      name += "group_move_down";
+            else if(controls[p][c].action == BUTTON_GROUP_MOVE_GO_TO_CURSOR) name += "group_move_go_to_cursor";
+            else if(controls[p][c].action == BUTTON_SWITCH_LEADER_RIGHT)  name += "switch_leader_right";
+            else if(controls[p][c].action == BUTTON_SWITCH_LEADER_LEFT)   name += "switch_leader_left";
+            else if(controls[p][c].action == BUTTON_DISMISS)              name += "dismiss";
+            else if(controls[p][c].action == BUTTON_USE_SPRAY_1)          name += "use_spray_1";
+            else if(controls[p][c].action == BUTTON_USE_SPRAY_2)          name += "use_spray_2";
+            else if(controls[p][c].action == BUTTON_USE_SPRAY)            name += "use_spray";
+            else if(controls[p][c].action == BUTTON_SWITCH_SPRAY_RIGHT)   name += "switch_spray_right";
+            else if(controls[p][c].action == BUTTON_SWITCH_SPRAY_LEFT)    name += "switch_spray_left";
+            else if(controls[p][c].action == BUTTON_SWITCH_ZOOM)          name += "switch_zoom";
+            else if(controls[p][c].action == BUTTON_ZOOM_IN)              name += "zoom_in";
+            else if(controls[p][c].action == BUTTON_ZOOM_OUT)             name += "zoom_out";
+            else if(controls[p][c].action == BUTTON_SWITCH_TYPE_RIGHT)    name += "switch_type_right";
+            else if(controls[p][c].action == BUTTON_SWITCH_TYPE_LEFT)     name += "switch_type_left";
+            else if(controls[p][c].action == BUTTON_SWITCH_MATURITY_UP)   name += "switch_maturity_up";
+            else if(controls[p][c].action == BUTTON_SWITCH_MATURITY_DOWN) name += "switch_maturity_down";
+            else if(controls[p][c].action == BUTTON_LIE_DOWN)             name += "lie_down";
+            else if(controls[p][c].action == BUTTON_PAUSE)                name += "pause";
+            
+            grouped_controls[name] += controls[p][c].stringify() + ",";
+        }
     }
     
     //Save controls.
@@ -1538,6 +1415,18 @@ string str_to_lower(string s) {
     unsigned short n_characters = s.size();
     for(unsigned short c = 0; c < n_characters; ++c) {
         s[c] = tolower(s[c]);
+    }
+    return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts an entire string into uppercase.
+ */
+string str_to_upper(string s) {
+    unsigned short n_characters = s.size();
+    for(unsigned short c = 0; c < n_characters; ++c) {
+        s[c] = toupper(s[c]);
     }
     return s;
 }

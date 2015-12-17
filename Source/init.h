@@ -17,6 +17,7 @@ void init_controls();
 void init_error_bitmap();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_fonts();
+void init_game_states();
 void init_misc();
 void init_misc_graphics();
 void init_misc_sounds();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -67,6 +67,7 @@
 
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
+ALLEGRO_COLOR      change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void               change_game_state(unsigned int new_state);
 bool               circle_intersects_line(const float cx, const float cy, const float cr, const float x1, const float y1, const float x2, const float y2, float* lix = NULL, float* liy = NULL);
 void               clear_area_textures();
@@ -85,7 +86,7 @@ ALLEGRO_COLOR      interpolate_color(const float n, const float n1, const float 
 float              interpolate_number(const float p, const float p1, const float p2, const float v1, const float v2);
 void               load_area(const string &name, const bool load_for_editor);
 void               load_area_textures();
-void               load_control(unsigned char action, unsigned char player, const string &name, data_node &file, const string &def);
+void               load_control(unsigned char action, unsigned char player, const string &name, data_node &file, const string &def = "");
 ALLEGRO_BITMAP*    load_bmp(const string &file_name, data_node* node = NULL, bool report_error = true);
 data_node          load_data_file(const string &file_name);
 void               load_options();
@@ -95,6 +96,7 @@ void               move_point(const float x, const float y, const float tx, cons
 float              normalize_angle(float a);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
+void               read_game_config();
 ALLEGRO_BITMAP*    recreate_bitmap(ALLEGRO_BITMAP* b);
 string             replace_all(string s, string search, string replacement);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);
@@ -110,6 +112,7 @@ void               start_camera_pan(const int final_x, const int final_y);
 void               start_camera_zoom(const float final_zoom_level);
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
+string             str_to_upper(string s);
 void               use_spray(const size_t spray_nr);
 
 

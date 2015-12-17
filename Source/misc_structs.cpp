@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -608,7 +608,7 @@ float timer::get_ratio_left() {
 
 
 
-const float fade_manager::FADE_DURATION = 0.2f;
+const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------
  * Creates a fade manager.
@@ -616,7 +616,7 @@ const float fade_manager::FADE_DURATION = 0.2f;
 fade_manager::fade_manager() :
     time_left(0),
     fade_in(false),
-    currently_fading(false)
+    on_end(nullptr)
     {
     
 }
@@ -625,18 +625,10 @@ fade_manager::fade_manager() :
 /* ----------------------------------------------------------------------------
  * Sets up the start of a fade.
  */
-void fade_manager::start_fade(const bool fade_in){
-    currently_fading = true;
+void fade_manager::start_fade(const bool fade_in, function<void()> on_end){
     time_left = FADE_DURATION;
     this->fade_in = fade_in;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Marks the current fade as finished.
- */
-void fade_manager::finish_fade(){
-    currently_fading = false;
+    this->on_end = on_end;
 }
 
 
@@ -649,18 +641,17 @@ bool fade_manager::is_fade_in(){
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether we're currently fading.
+ * Returns whether or not a fade is currently in progress.
  */
-bool fade_manager::is_fading(){
-    return currently_fading;
+bool fade_manager::is_fading() {
+    return time_left > 0;
 }
 
-
 /* ----------------------------------------------------------------------------
- * Returns the time left in the current fade.
+ * Returns the percentage of progress left in the current fade.
  */
-float fade_manager::get_time_left(){
-    return time_left;
+float fade_manager::get_perc_left(){
+    return time_left / FADE_DURATION;
 }
 
 
@@ -668,19 +659,21 @@ float fade_manager::get_time_left(){
  * Ticks the fade manager by one frame.
  */
 void fade_manager::tick(const float time){
-    if(!currently_fading) return;
+    if(time_left == 0) return;
     time_left -= time;
-    time_left = max(0.0f, time_left);
+    if(time_left <= 0){
+        time_left = 0;
+        if(on_end) on_end();
+    }
 }
 
 
 /* ----------------------------------------------------------------------------
  * Draws the fade overlay, if there is a fade in progress.
  */
-#include <iostream>
 void fade_manager::draw() {
-    if(currently_fading){
-        unsigned char alpha = (fade_mgr.get_time_left() / fade_manager::FADE_DURATION) * 255;
+    if(is_fading()){
+        unsigned char alpha = (fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
             0, 0, scr_w, scr_h,
             al_map_rgba(0, 0, 0,

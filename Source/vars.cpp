@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -18,7 +18,7 @@
 using namespace std;
 
 ALLEGRO_BITMAP* bmp_bubble = NULL;
-ALLEGRO_BITMAP* bmp_cloaking_burrow_nit = NULL;
+ALLEGRO_BITMAP* bmp_checkbox_check = NULL;
 ALLEGRO_BITMAP* bmp_cursor = NULL;
 ALLEGRO_BITMAP* bmp_day_bubble = NULL;
 ALLEGRO_BITMAP* bmp_enemy_spirit = NULL;
@@ -76,6 +76,7 @@ float                            area_images_scale = 1;
 int                              area_image_size = 0;
 float                            area_images_x1 = 0;
 float                            area_images_y1 = 0;
+timer                            area_title_fade_timer(AREA_TITLE_FADE_DURATION);
 vector<unsigned int>             berries;
 bmp_manager                      bitmaps;
 ALLEGRO_BITMAP*                  bmp_error = NULL;
@@ -92,7 +93,7 @@ float                            cam_x = 0;
 float                            cam_y = 0;
 float                            cam_zoom = 1;
 mob*                             closest_party_member = NULL;
-vector<control_info>             controls;
+vector<vector<control_info> >    controls;
 area_map                         cur_area_map;
 size_t                           cur_leader_nr = 0;
 leader*                          cur_leader_ptr = nullptr;
@@ -102,9 +103,10 @@ timer                            cur_message_char_timer(MESSAGE_CHAR_INTERVAL);
 size_t                           cur_message_section = 0;
 ALLEGRO_BITMAP*                  cur_message_speaker = NULL;
 vector<size_t>                   cur_message_stopping_chars;
-unsigned char                    cur_game_state = GAME_STATE_GAME;
+unsigned char                    cur_game_state_nr = GAME_STATE_GAME;
 float                            cur_sun_strength = 1;
 float                            cursor_angle = 0;
+float                            cursor_height_diff_light = 0;
 float                            cursor_invalid_effect = 0;
 movement_struct                  cursor_movement;
 timer                            cursor_save_timer(CURSOR_SAVE_INTERVAL);
@@ -132,6 +134,9 @@ unsigned int                     font_counter_h = 0;
 unsigned int                     font_h = 0;
 ALLEGRO_FONT*                    font_value = NULL;
 unsigned short                   game_fps = DEF_FPS;
+string                           game_name;
+map<size_t, game_state*>         game_states;
+string                           game_version;
 vector<gate*>                    gates;
 map<string, gate_type*>          gate_types;
 float                            group_move_angle = 0;

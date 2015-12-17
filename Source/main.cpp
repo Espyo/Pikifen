@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -69,8 +69,11 @@ int main(int argc, char** argv) {
     
     //Other fundamental initializations.
     init_misc();
+    init_game_states();
     init_error_bitmap();
     init_fonts();
+    init_misc_graphics();
+    init_misc_sounds();
     
     //The icon is used a lot, so load it here.
     bmp_icon = load_bmp("Icon.png");
@@ -83,6 +86,7 @@ int main(int argc, char** argv) {
     init_mob_categories();
     init_special_mob_types();
     init_sector_types();
+    read_game_config();
     
     unsigned int first_game_state = GAME_STATE_MAIN_MENU;
     if(argc >= 2){
@@ -109,15 +113,7 @@ int main(int argc, char** argv) {
         
         al_wait_for_event(logic_queue, &ev);
         
-        if(cur_game_state == GAME_STATE_MAIN_MENU) {
-            main_menu::handle_controls(ev);
-        }else if(cur_game_state == GAME_STATE_GAME) {
-            handle_game_controls(ev);
-        } else if(cur_game_state == GAME_STATE_AREA_EDITOR) {
-            area_editor::handle_controls(ev);
-        } else if(cur_game_state == GAME_STATE_ANIMATION_EDITOR) {
-            animation_editor::handle_controls(ev);
-        }
+        game_states[cur_game_state_nr]->handle_controls(ev);
         
         if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             running = false;
@@ -134,16 +130,8 @@ int main(int argc, char** argv) {
             }
             delta_t = cur_time - prev_frame_time;
             
-            if(cur_game_state == GAME_STATE_MAIN_MENU) {
-                main_menu::do_logic();
-            } else if(cur_game_state == GAME_STATE_GAME) {
-                do_logic();
-                do_drawing();
-            } else if(cur_game_state == GAME_STATE_AREA_EDITOR) {
-                area_editor::do_logic();
-            } else if(cur_game_state == GAME_STATE_ANIMATION_EDITOR) {
-                animation_editor::do_logic();
-            }
+            game_states[cur_game_state_nr]->do_logic();
+            game_states[cur_game_state_nr]->do_drawing();
             
             prev_frame_time = cur_time;
         }

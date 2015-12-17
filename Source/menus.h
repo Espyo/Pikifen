@@ -16,23 +16,56 @@
 
 #include <allegro5/allegro.h>
 
+#include "game_state.h"
 #include "menu_widgets.h"
 
 using namespace std;
 
-namespace main_menu {
+class main_menu : public game_state {
+private:
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    size_t new_game_state;
+    float time_spent;
+    animation_pool logo;
+    animation_instance logo_anim;
+    
+public:
+    main_menu();
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+};
 
-extern ALLEGRO_BITMAP* bmp_menu_bg;
-extern menu_widget* selected_widget;
-extern vector<menu_widget*> menu_widgets;
-extern size_t new_game_state;
 
-void load();
-void unload();
-void handle_controls(ALLEGRO_EVENT ev);
-void do_logic();
-void set_selected(menu_widget* widget);
-
-}
+class options_menu : public game_state {
+private:
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    float time_spent;
+    
+    size_t cur_player_nr;
+    size_t cur_page_nr;
+    
+    menu_text* cur_player_nr_widget;
+    menu_text* cur_page_nr_widget;
+    menu_text* input_capture_msg_widget;
+    vector<menu_widget*> control_widgets;
+    vector<menu_widget*> bottom_widgets; //Widgets to hide during the "press something" message.
+    
+    bool capturing_input;
+    size_t input_capture_control_nr;
+    
+    void update();
+    void leave();
+    
+public:
+    options_menu();
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+};
 
 #endif //ifndef MENUS_INCLUDED

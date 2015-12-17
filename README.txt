@@ -33,3 +33,15 @@ Misc. questions and answers:
     Why is the Bulborb so cheap? Because I haven't balanced it yet.
     Why are some animations and physics so broken? Because their code is still under construction.
     Why can't I see the game window? Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+
+How to compile the engine (you likely don't need to do this):
+    First, download the source, of course.
+    Then, under Linux...
+        Install Allegro 5 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        On a terminal, go to the source's folder and write "make".
+        If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
+    Or under Windows...
+        What are you doing? Just download a pre-built binary, please!
+        ...But if you really must compile it, install Allegro 5 by following the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        Open the .sln with Visual Studio.
+        Compile. Good luck.

@@ -20,14 +20,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -94,6 +94,7 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="enemy_type.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="game_state.cpp" />
     <ClCompile Include="gate.cpp" />
     <ClCompile Include="gate_type.cpp" />
     <ClCompile Include="hitbox.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="controls.h" />
     <ClInclude Include="data_file.h" />
     <ClInclude Include="drawing.h" />
+    <ClInclude Include="game_state.h" />
     <ClInclude Include="gate.h" />
     <ClInclude Include="gate_type.h" />
     <ClInclude Include="hazard.h" />

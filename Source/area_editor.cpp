@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -27,6 +27,46 @@
 #include "LAFI/scrollbar.h"
 #include "LAFI/textbox.h"
 #include "vars.h"
+
+
+const float area_editor::GRID_INTERVAL = 32.0f;
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes area editor class stuff.
+ */
+area_editor::area_editor() :
+    bg_aspect_ratio(true),
+    bg_bitmap(NULL),
+    bg_x(0),
+    bg_y(0),
+    bg_w(1000),
+    bg_h(1000),
+    bg_a(255),
+    cur_mob(NULL),
+    cur_sector(NULL),
+    cur_shadow(NULL),
+    double_click_time(0),
+    error_mob_ptr(NULL),
+    error_sector_ptr(NULL),
+    error_shadow_ptr(NULL),
+    error_type(area_editor::EET_NONE_YET),
+    error_vertex_ptr(NULL),
+    gui(NULL),
+    holding_m1(false),
+    holding_m2(false),
+    mode(EDITOR_MODE_MAIN),
+    moving_thing(string::npos),
+    moving_thing_x(0),
+    moving_thing_y(0),
+    on_sector(NULL),
+    sec_mode(ESM_NONE),
+    shift_pressed(false),
+    show_bg(false),
+    show_shadows(true),
+    wum(NULL) {
+    
+}
 
 /* ----------------------------------------------------------------------------
  * Stores the data from the advanced texture settings onto the gui.
@@ -138,28 +178,25 @@ void area_editor::change_to_right_frame(bool hide_all) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the main loop, both logic and drawing.
+ * Handles the logic part of the main loop of the area editor.
  */
 void area_editor::do_logic() {
 
-    //---Logic---
-    
     if(double_click_time > 0) {
         double_click_time -= delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
     
-    if(fade_mgr.is_fading() && fade_mgr.get_time_left() == 0.0f){
-        if(!fade_mgr.is_fade_in()){
-            change_game_state(GAME_STATE_MAIN_MENU);
-            return;
-        }
-        fade_mgr.finish_fade();
-    }
     fade_mgr.tick(delta_t);
     
-    //---Drawing---
-    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles the drawing part of the main loop of the area editor.
+ */
+void area_editor::do_drawing() {
+
     gui->draw();
     
     ALLEGRO_TRANSFORM transform;
@@ -898,7 +935,7 @@ void area_editor::gui_to_sector() {
  * Handles the events for the area editor.
  */
 void area_editor::handle_controls(ALLEGRO_EVENT ev) {
-    
+
     if(fade_mgr.is_fading()) return;
     
     gui->handle_event(ev);
@@ -1496,7 +1533,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             shift_pressed = true;
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            fade_mgr.start_fade(false);
+            leave();
             
         }
         
@@ -1529,7 +1566,7 @@ bool area_editor::is_linedef_valid(linedef* l) {
  */
 void area_editor::load() {
 
-    fade_mgr.start_fade(true);
+    fade_mgr.start_fade(true, nullptr);
     
     load_mob_types(false);
     
@@ -1804,26 +1841,26 @@ void area_editor::load() {
     
     
     //Properties -- main.
-    frm_main->widgets["but_area"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_main->widgets["but_area"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_AREA);
     };
-    frm_area->widgets["but_sectors"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_area->widgets["but_sectors"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_objects"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_area->widgets["but_objects"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_OBJECTS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_shadows"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_area->widgets["but_shadows"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SHADOWS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_bg"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_area->widgets["but_bg"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_BG;
         change_to_right_frame();
     };
-    frm_area->widgets["but_review"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_area->widgets["but_review"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_REVIEW;
         change_to_right_frame();
         update_review_frame();
@@ -1837,17 +1874,17 @@ void area_editor::load() {
     
     
     //Properties -- bottom.
-    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         show_bg = !show_bg;
     };
-    frm_bottom->widgets["but_load"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        load_area();
+    frm_bottom->widgets["but_load"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        this->load_area();
     };
-    frm_bottom->widgets["but_save"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_bottom->widgets["but_save"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         save_area();
     };
-    frm_bottom->widgets["but_quit"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        fade_mgr.start_fade(false);
+    frm_bottom->widgets["but_quit"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        leave();
     };
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
@@ -1858,24 +1895,24 @@ void area_editor::load() {
     
     
     //Properties -- sectors.
-    auto lambda_gui_to_sector = [] (lafi::widget*) { gui_to_sector(); };
-    auto lambda_gui_to_sector_click = [] (lafi::widget*, int, int) { gui_to_sector(); };
-    frm_sectors->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    auto lambda_gui_to_sector = [this] (lafi::widget*) { gui_to_sector(); };
+    auto lambda_gui_to_sector_click = [this] (lafi::widget*, int, int) { gui_to_sector(); };
+    frm_sectors->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_sectors->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_sectors->widgets["but_new"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_SECTOR) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_SECTOR;
     };
-    frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         cur_sector = NULL;
         sector_to_gui();
     };
-    frm_sector->widgets["but_type"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_sector->widgets["but_type"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
     };
-    frm_sector->widgets["but_adv"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_sector->widgets["but_adv"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(!cur_sector) return;
         
         cur_sector->texture_info.bitmap = bitmaps.get("Textures/" + cur_sector->texture_info.file_name, NULL);
@@ -1906,8 +1943,8 @@ void area_editor::load() {
     
     
     //Properties -- advanced textures.
-    auto lambda_gui_to_adv_textures = [] (lafi::widget*) { gui_to_adv_textures(); };
-    frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    auto lambda_gui_to_adv_textures = [this] (lafi::widget*) { gui_to_adv_textures(); };
+    frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         clear_area_textures(); //Clears the texture set when we entered this menu.
         mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
@@ -1924,20 +1961,20 @@ void area_editor::load() {
     
     
     //Properties -- objects.
-    auto lambda_gui_to_mob = [] (lafi::widget*) { gui_to_mob(); };
-    frm_objects->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    auto lambda_gui_to_mob = [this] (lafi::widget*) { gui_to_mob(); };
+    frm_objects->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_objects->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_objects->widgets["but_new"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_OBJECT) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_OBJECT;
     };
-    frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         cur_mob = NULL;
         mob_to_gui();
     };
-    frm_object->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_object->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
             if(cur_area_map.mob_generators[m] == cur_mob) {
                 cur_area_map.mob_generators.erase(cur_area_map.mob_generators.begin() + m);
@@ -1948,10 +1985,10 @@ void area_editor::load() {
             }
         }
     };
-    frm_object->widgets["but_category"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_object->widgets["but_category"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
     };
-    frm_object->widgets["but_type"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_object->widgets["but_type"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
     };
     frm_object->widgets["ang_angle"]->lose_focus_handler = lambda_gui_to_mob;
@@ -1967,22 +2004,22 @@ void area_editor::load() {
     
     
     //Properties -- shadows.
-    auto lambda_gui_to_shadow = [] (lafi::widget*) { gui_to_shadow(); };
-    frm_shadows->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    auto lambda_gui_to_shadow = [this] (lafi::widget*) { gui_to_shadow(); };
+    frm_shadows->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         sec_mode = ESM_NONE;
         shadow_to_gui();
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_shadows->widgets["but_new"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_shadows->widgets["but_new"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_SHADOW) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_SHADOW;
     };
-    frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         cur_shadow = NULL;
         shadow_to_gui();
     };
-    frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
             if(cur_area_map.tree_shadows[s] == cur_shadow) {
                 cur_area_map.tree_shadows.erase(cur_area_map.tree_shadows.begin() + s);
@@ -2018,9 +2055,9 @@ void area_editor::load() {
     
     
     //Properties -- background.
-    auto lambda_gui_to_bg = [] (lafi::widget*) { gui_to_bg(); };
-    auto lambda_gui_to_bg_click = [] (lafi::widget*, int, int) { gui_to_bg(); };
-    frm_bg->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    auto lambda_gui_to_bg = [this] (lafi::widget*) { gui_to_bg(); };
+    auto lambda_gui_to_bg_click = [this] (lafi::widget*, int, int) { gui_to_bg(); };
+    frm_bg->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         sec_mode = ESM_NONE;
         bg_to_gui();
         mode = EDITOR_MODE_MAIN;
@@ -2047,19 +2084,19 @@ void area_editor::load() {
     
     
     //Properties -- review.
-    frm_review->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_review->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_MAIN;
         sec_mode = ESM_NONE;
         update_review_frame();
         change_to_right_frame();
     };
-    frm_review->widgets["but_find_errors"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_review->widgets["but_find_errors"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         find_errors();
     };
-    frm_review->widgets["but_goto_error"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
+    frm_review->widgets["but_goto_error"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         goto_error();
     };
-    frm_review->widgets["chk_see_textures"]->left_mouse_click_handler = [] (lafi::widget * c, int, int) {
+    frm_review->widgets["chk_see_textures"]->left_mouse_click_handler = [this] (lafi::widget * c, int, int) {
         error_type = EET_NONE_YET;
         if(((lafi::checkbox*) c)->checked) {
             sec_mode = ESM_TEXTURE_VIEW;
@@ -2072,7 +2109,7 @@ void area_editor::load() {
             update_review_frame();
         }
     };
-    frm_review->widgets["chk_shadows"]->left_mouse_click_handler = [] (lafi::widget * c, int, int) {
+    frm_review->widgets["chk_shadows"]->left_mouse_click_handler = [this] (lafi::widget * c, int, int) {
         show_shadows = ((lafi::checkbox*) c)->checked;
         update_review_frame();
     };
@@ -2084,8 +2121,8 @@ void area_editor::load() {
     
     
     //Properties -- picker.
-    frm_picker->widgets["but_back"]->left_mouse_click_handler = [] (lafi::widget*, int, int) {
-        show_widget(gui->widgets["frm_bottom"]);
+    frm_picker->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_bottom"]);
         change_to_right_frame();
     };
     frm_picker->widgets["but_back"]->description = "Cancel.";
@@ -2216,7 +2253,7 @@ void area_editor::open_picker(unsigned char type) {
     for(size_t e = 0; e < elements.size(); ++e) {
         lafi::button* b = new lafi::button(0, 0, 0, 0, elements[e]);
         string name = elements[e];
-        b->left_mouse_click_handler = [name, type] (lafi::widget*, int, int) {
+        b->left_mouse_click_handler = [name, type, this] (lafi::widget*, int, int) {
             pick(name, type);
         };
         f->easy_add("but_" + i2s(e), b, 100, 24);
@@ -2570,7 +2607,8 @@ float area_editor::snap_to_grid(const float c) {
 /* ----------------------------------------------------------------------------
  * Unloads the editor from memory.
  */
-void area_editor::unload(){
+void area_editor::unload() {
+    //TODO
     delete(gui->style);
     delete(gui);
 }
@@ -2741,40 +2779,34 @@ void area_editor::update_review_frame() {
     ((lafi::checkbox*) gui->widgets["frm_review"]->widgets["chk_shadows"])->set(show_shadows);
 }
 
-namespace area_editor {
-bool                         bg_aspect_ratio = true;
-ALLEGRO_BITMAP*              bg_bitmap = NULL;
-string                       bg_file_name;
-float                        bg_x = 0;
-float                        bg_y = 0;
-float                        bg_w = 1000;
-float                        bg_h = 1000;
-unsigned char                bg_a = 255;
-mob_gen*                     cur_mob = NULL;
-sector*                      cur_sector = NULL;
-tree_shadow*                 cur_shadow = NULL;
-float                        double_click_time = 0;
-mob_gen*                     error_mob_ptr = NULL;
-sector*                      error_sector_ptr = NULL;
-tree_shadow*                 error_shadow_ptr = NULL;
-string                       error_string;
-unsigned char                error_type = area_editor::EET_NONE_YET;
-vertex*                      error_vertex_ptr = NULL;
-string                       file_name;
-lafi::gui*                   gui = NULL;
-bool                         holding_m1 = false;
-bool                         holding_m2 = false;
-vector<linedef_intersection> intersecting_lines;
-unordered_set<linedef*>      lone_lines;
-unsigned char                mode = EDITOR_MODE_MAIN;
-size_t                       moving_thing = string::npos;
-float                        moving_thing_x = 0;
-float                        moving_thing_y = 0;
-unordered_set<sector*>       non_simples;
-sector*                      on_sector = NULL;
-unsigned char                sec_mode = ESM_NONE;
-bool                         shift_pressed = false;
-bool                         show_bg = false;
-bool                         show_shadows = true;
-lafi::widget*                wum = NULL;
+
+void area_editor::leave() {
+    fade_mgr.start_fade(false, [] () {
+        change_game_state(GAME_STATE_MAIN_MENU);
+    });
+}
+
+
+void area_editor::set_bg_file_name(string n) {
+    bg_file_name = n;
+}
+
+void area_editor::set_bg_x(float x) {
+    bg_x = x;
+}
+
+void area_editor::set_bg_y(float y) {
+    bg_y = y;
+}
+
+void area_editor::set_bg_w(float w) {
+    bg_w = w;
+}
+
+void area_editor::set_bg_h(float h) {
+    bg_h = h;
+}
+
+void area_editor::set_bg_a(unsigned char a) {
+    bg_a = a;
 }

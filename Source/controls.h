@@ -26,14 +26,13 @@ using namespace std;
  */
 struct control_info {
     unsigned char action; //Action number. Use BUTTON_*.
-    unsigned char player; //Player this applies to.
     unsigned char type;   //Type of control (hardware). Use CONTROL_TYPE_*.
     int device_nr;        //Device number. i.e. the gamepad number.
     int button;           //Button, whether the gamepad digital button, or the keyboard key.
     int stick;            //Stick on the gamepad.
     int axis;             //Axis of the stick.
     
-    control_info(unsigned char action, unsigned char player, string s);
+    control_info(unsigned char action, string s);
     string stringify();
 };
 
@@ -79,6 +78,8 @@ enum BUTTONS {
     BUTTON_SWITCH_MATURITY_DOWN,
     BUTTON_LIE_DOWN,
     BUTTON_PAUSE,
+    
+    N_BUTTONS,
 };
 
 enum CONTROL_TYPES {
@@ -89,7 +90,6 @@ enum CONTROL_TYPES {
     CONTROL_TYPE_MOUSE_WHEEL_DOWN,
     CONTROL_TYPE_MOUSE_WHEEL_LEFT,
     CONTROL_TYPE_MOUSE_WHEEL_RIGHT,
-    CONTROL_TYPE_MOUSE_MOVE,
     CONTROL_TYPE_JOYSTICK_BUTTON,
     CONTROL_TYPE_JOYSTICK_AXIS_POS,
     CONTROL_TYPE_JOYSTICK_AXIS_NEG,

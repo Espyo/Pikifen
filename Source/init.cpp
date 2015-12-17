@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2014.
+ * Copyright (c) AndrÃ© 'Espyo' Silva 2014.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -18,8 +18,12 @@
 
 #include "init.h"
 
+#include "area_editor.h"
+#include "animation_editor.h"
 #include "controls.h"
 #include "functions.h"
+#include "game_state.h"
+#include "menus.h"
 #include "mob_script.h"
 #include "vars.h"
 
@@ -35,27 +39,28 @@ void init_allegro() {
 }
 
 void init_controls() {
+    controls.assign(4, vector<control_info>());
     //TODO create a manager for this, like the mob category manager and whatnot.
-    controls.push_back(control_info(BUTTON_THROW, 0, "mb_1"));
-    controls.push_back(control_info(BUTTON_WHISTLE, 0, "mb_2"));
-    controls.push_back(control_info(BUTTON_MOVE_RIGHT, 0, "k_4"));
-    controls.push_back(control_info(BUTTON_MOVE_UP, 0, "k_23"));
-    controls.push_back(control_info(BUTTON_MOVE_LEFT, 0, "k_1"));
-    controls.push_back(control_info(BUTTON_MOVE_DOWN, 0, "k_19"));
-    controls.push_back(control_info(BUTTON_GROUP_MOVE_GO_TO_CURSOR, 0, "k_75"));
-    controls.push_back(control_info(BUTTON_SWITCH_LEADER_RIGHT, 0, "k_64"));
-    controls.push_back(control_info(BUTTON_DISMISS, 0, "k_217"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY_1, 0, "k_18"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY_2, 0, "k_6"));
-    controls.push_back(control_info(BUTTON_USE_SPRAY, 0, "k_18"));
-    controls.push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, 0, "k_5"));
-    controls.push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, 0, "k_17"));
-    controls.push_back(control_info(BUTTON_SWITCH_TYPE_RIGHT, 0, "mb_2"));
-    controls.push_back(control_info(BUTTON_SWITCH_ZOOM, 0, "k_3"));
-    controls.push_back(control_info(BUTTON_ZOOM_IN, 0, "mwu"));
-    controls.push_back(control_info(BUTTON_ZOOM_OUT, 0, "mwd"));
-    controls.push_back(control_info(BUTTON_LIE_DOWN, 0, "k_26"));
-    controls.push_back(control_info(BUTTON_PAUSE, 0, "k_59"));
+    controls[0].push_back(control_info(BUTTON_THROW, "mb_1"));
+    controls[0].push_back(control_info(BUTTON_WHISTLE, "mb_2"));
+    controls[0].push_back(control_info(BUTTON_MOVE_RIGHT, "k_4"));
+    controls[0].push_back(control_info(BUTTON_MOVE_UP, "k_23"));
+    controls[0].push_back(control_info(BUTTON_MOVE_LEFT, "k_1"));
+    controls[0].push_back(control_info(BUTTON_MOVE_DOWN, "k_19"));
+    controls[0].push_back(control_info(BUTTON_GROUP_MOVE_GO_TO_CURSOR, "k_75"));
+    controls[0].push_back(control_info(BUTTON_SWITCH_LEADER_RIGHT, "k_64"));
+    controls[0].push_back(control_info(BUTTON_DISMISS, "k_217"));
+    controls[0].push_back(control_info(BUTTON_USE_SPRAY_1, "k_18"));
+    controls[0].push_back(control_info(BUTTON_USE_SPRAY_2, "k_6"));
+    controls[0].push_back(control_info(BUTTON_USE_SPRAY, "k_18"));
+    controls[0].push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, "k_5"));
+    controls[0].push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, "k_17"));
+    controls[0].push_back(control_info(BUTTON_SWITCH_TYPE_RIGHT, "mb_2"));
+    controls[0].push_back(control_info(BUTTON_SWITCH_ZOOM, "k_3"));
+    controls[0].push_back(control_info(BUTTON_ZOOM_IN, "mwu"));
+    controls[0].push_back(control_info(BUTTON_ZOOM_OUT, "mwd"));
+    controls[0].push_back(control_info(BUTTON_LIE_DOWN, "k_26"));
+    controls[0].push_back(control_info(BUTTON_PAUSE, "k_59"));
 }
 
 void init_error_bitmap() {
@@ -121,6 +126,14 @@ void init_fonts() {
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
 }
 
+void init_game_states() {
+    game_states[GAME_STATE_MAIN_MENU] = new main_menu();
+    game_states[GAME_STATE_GAME] = new gameplay();
+    game_states[GAME_STATE_OPTIONS_MENU] = new options_menu();
+    game_states[GAME_STATE_AREA_EDITOR] = new area_editor();
+    game_states[GAME_STATE_ANIMATION_EDITOR] = new animation_editor();
+}
+
 void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(display, "Pikmin fangame engine");
@@ -138,6 +151,7 @@ void init_misc_graphics() {
     bmp_ship = load_bmp("Ship.png");
     
     bmp_bubble = load_bmp(          "Bubble.png");
+    bmp_checkbox_check = load_bmp(  "Checkbox_check.png");
     bmp_cursor = load_bmp(          "Cursor.png");
     bmp_day_bubble = load_bmp(      "Day_bubble.png");
     bmp_enemy_spirit = load_bmp(    "Enemy_spirit.png");

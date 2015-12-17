@@ -139,7 +139,7 @@ void load_mob_type_from_file(
     
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");
-        mt->anims = load_animation_pool(&anim_file);
+        mt->anims = load_animation_pool_from_file(&anim_file);
         mt->anims.fix_hitbox_pointers();
         
         if(mt->states.empty()) {
