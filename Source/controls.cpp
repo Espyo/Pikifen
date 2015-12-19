@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -162,7 +162,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /********************
             *             .-.   *
             *   Cursor   ( = )> *
-            *             `-´   *
+            *             '-'   *
             ********************/
             
             if(     button == BUTTON_MOVE_CURSOR_RIGHT) cursor_movement.right = pos;
@@ -212,7 +212,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
         } else if(button == BUTTON_THROW) {
         
             /*******************
-            *             ,-.  *
+            *             .-.  *
             *   Throw    /   O *
             *           &      *
             *******************/
@@ -306,7 +306,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /********************
             *              .--= *
             *   Whistle   ( @ ) *
-            *              `-´  *
+            *              '-'  *
             ********************/
             
             active_control();
@@ -399,7 +399,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0) return;
             
-            running = false; //TODO menu, not quit.
+            running = false; //TODO pause menu, not quit.
             //paused = true;
             
         } else if(button == BUTTON_USE_SPRAY_1) {
@@ -407,7 +407,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             /*******************
             *             +=== *
             *   Sprays   (   ) *
-            *             `-´  *
+            *             '-'  *
             *******************/
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
@@ -514,7 +514,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
         
             /****************************
             *                     -->   *
-            *   Switch type   <(¨)> (ö) *
+            *   Switch type   <( )> (o) *
             *                           *
             *****************************/
             

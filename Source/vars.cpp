@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -115,7 +115,7 @@ vector<point>                    cursor_spots;
 float                            cursor_x = 0;
 float                            cursor_y = 0;
 unsigned int                     day = 1;
-float                            day_minutes = 60 * 12; //TODO set to the start of the day.
+float                            day_minutes = 60 * 7;
 float                            day_minutes_end = 60 * 19;
 float                            day_minutes_per_irl_sec = 2;
 float                            day_minutes_start = 60 * 7;

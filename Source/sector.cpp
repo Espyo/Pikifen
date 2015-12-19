@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -537,7 +537,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     }
     
     area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
     
@@ -605,12 +605,12 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 //a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
-                    if(ae){
+                    if(ae) {
                         ae->lone_lines.insert(inners->back()[0]->linedefs[0]);
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
-                    if(ae){
+                    if(ae) {
                         ae->non_simples.insert(s_ptr);
                     }
                 }
@@ -929,16 +929,16 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
  * Checks intersecting linedefs, and adds them to intersecting_lines;
  */
 void check_linedef_intersections(vertex* v) {
-    
+
     area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
     
     for(size_t l = 0; l < v->linedefs.size(); ++l) {
         linedef* l_ptr = v->linedefs[l];
         
-        if(ae){
+        if(ae) {
             //Check if it's on the list of intersecting lines, and remove it,
             //so it can be recalculated now.
             for(size_t il = 0; il < ae->intersecting_lines.size();) {
@@ -972,7 +972,7 @@ void check_linedef_intersections(vertex* v) {
                     l2_ptr->vertices[1]->x, l2_ptr->vertices[1]->y,
                     NULL, NULL)
             ) {
-                if(ae){
+                if(ae) {
                     ae->intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
                 }
             }
@@ -1225,7 +1225,6 @@ float get_angle_smallest_dif(float a1, float a2) {
     a1 = normalize_angle(a1);
     a2 = normalize_angle(a2);
     return M_PI - abs(abs(a1 - a2) - M_PI);
-    //TODO TEMPORARY this is either a fix, or I'm stupid: return min((double) abs(a2 - a1), abs((a1 + M_PI * 2) - a2));
 }
 
 
@@ -1289,12 +1288,12 @@ bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1,
  * Triangulates (turns into triangles) a sector. This is because drawing concave polygons is not possible.
  */
 void triangulate(sector* s_ptr) {
-    
+
     area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR){
+    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
-
+    
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
@@ -1303,7 +1302,7 @@ void triangulate(sector* s_ptr) {
     
     //Before we start, let's just remove it from the
     //vector of non-simple sectors.
-    if(ae){
+    if(ae) {
         auto it = ae->non_simples.find(s_ptr);
         if(it != ae->non_simples.end()) {
             ae->non_simples.erase(it);
@@ -1311,7 +1310,7 @@ void triangulate(sector* s_ptr) {
     }
     
     //And let's clear any "lone" linedefs here.
-    if(ae){
+    if(ae) {
         for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
             linedef* l_ptr = s_ptr->linedefs[l];
             auto it = ae->lone_lines.find(l_ptr);
@@ -1361,7 +1360,7 @@ void triangulate(sector* s_ptr) {
     
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
-            if(ae){
+            if(ae) {
                 ae->non_simples.insert(s_ptr);
             }
             break;

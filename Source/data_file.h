@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva; no license, feel free to use!
+ * Copyright (c) Andre 'Espyo' Silva; no license, feel free to use!
  *
  * Data file.
  * A data file is composed of nodes, that can either have a value, or children nodes.

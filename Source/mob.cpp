@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -112,7 +112,6 @@ void mob::tick() {
 void mob::tick_animation() {
     bool finished_anim = anim.tick(delta_t);
     
-    //TODO
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
     }
@@ -1161,7 +1160,6 @@ void mob::draw() {
  */
 void mob::get_sprite_center(mob* m, frame* f, float* x, float* y) {
     float c = cos(m->angle), s = sin(m->angle);
-    //TODO test if stuff that offsets both vertical and horizontally is working. I know it's working for horizontal only.
     *x = m->x + c * f->offs_x + c * f->offs_y;
     *y = m->y - s * f->offs_y + s * f->offs_x;
     

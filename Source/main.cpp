@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -8,8 +8,6 @@
  * === FILE DESCRIPTION ===
  * Program start and main loop.
  */
-
-//TODO check for ".c_str()" in the code, as apparently I have some atois and atof instead of toi and tof.
 
 #include <fstream>
 #include <math.h>
@@ -89,7 +87,7 @@ int main(int argc, char** argv) {
     read_game_config();
     
     unsigned int first_game_state = GAME_STATE_MAIN_MENU;
-    if(argc >= 2){
+    if(argc >= 2) {
         string arg(argv[1]);
         if(arg == "play")
             first_game_state = GAME_STATE_GAME;
@@ -124,7 +122,7 @@ int main(int argc, char** argv) {
             
         } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(logic_queue)) {
             double cur_time = al_get_time();
-            if(reset_delta_t){
+            if(reset_delta_t) {
                 prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
                 reset_delta_t = false;
             }

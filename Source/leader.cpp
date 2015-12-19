@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -432,7 +432,7 @@ void leader::fall_asleep(mob* m, void* info1, void* info2) {
     
     m->carrier_info = new carrier_info_struct(
         m,
-        3, //TODO
+        m->type->max_carriers,
         false);
         
     m->set_animation(LEADER_ANIM_LIE);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -369,7 +369,7 @@ void do_game_drawing() {
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
-        *             `-´   *
+        *             '-'   *
         ********************/
         
         al_use_transform(&world_to_screen_transform);
@@ -949,7 +949,7 @@ void draw_scaled_text(
     al_compose_transform(&scale_transform, &old_transform);
     
     al_use_transform(&scale_transform); {
-        draw_text_lines(font, color, 0, 0, flags, valign, text.c_str());
+        draw_text_lines(font, color, 0, 0, flags, valign, text);
     }; al_use_transform(&old_transform);
 }
 

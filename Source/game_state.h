@@ -1,5 +1,5 @@
 /*
- * Copyright (c) André 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2015.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -29,7 +29,7 @@ enum GAME_STATES {
     GAME_STATE_ANIMATION_EDITOR,
 };
 
-class game_state{
+class game_state {
 protected:
     void set_selected_widget(menu_widget* widget);
     void handle_widget_events(ALLEGRO_EVENT ev);
