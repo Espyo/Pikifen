@@ -2128,6 +2128,8 @@ void area_editor::load() {
     frm_picker->widgets["but_back"]->description = "Cancel.";
     
     
+    cam_zoom = 1.0;
+    cam_x = cam_y = 0.0;
     file_name.clear();
     
 }
@@ -2609,6 +2611,7 @@ float area_editor::snap_to_grid(const float c) {
  */
 void area_editor::unload() {
     //TODO
+    cur_area_map.clear();
     delete(gui->style);
     delete(gui);
 }

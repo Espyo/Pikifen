@@ -325,11 +325,12 @@ void do_gameplay_logic() {
                     m_ptr->type->pushable &&
                     m2_ptr->z < m_ptr->z + m_ptr->type->height &&
                     m2_ptr->z + m2_ptr->type->height > m_ptr->z &&
-                    d <= m2_ptr->type->radius - 5
+                    d <= m_ptr->type->radius + m2_ptr->type->radius
                 ) {
-                    float d_amount = d.to_float();
+                    float d_amount = fabs(d.to_float() - m_ptr->type->radius - m2_ptr->type->radius);
+                    //If the mob is inside the other, it needs to be pushed out.
                     if(d_amount > m_ptr->push_amount) {
-                        m_ptr->push_amount = (d_amount - 10) * delta_t + 50;
+                        m_ptr->push_amount = d_amount / delta_t;
                         m_ptr->push_angle = atan2(m_ptr->y - m2_ptr->y, m_ptr->x - m2_ptr->x);
                     }
                 }
@@ -356,7 +357,7 @@ void do_gameplay_logic() {
                     
                         if(d <= (m_ptr->type->radius + m2_ptr->type->radius + m_ptr->type->near_radius)) {
                             if(near_ob_ev) near_ob_ev->run(m_ptr, (void*) m2_ptr);
-                            if(near_op_ev && should_attack(m_ptr, m2_ptr)) {
+                            if(near_op_ev && should_attack(m_ptr, m2_ptr) && !m2_ptr->dead) {
                                 near_op_ev->run(m_ptr, (void*) m2_ptr);
                             }
                         }

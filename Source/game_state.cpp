@@ -215,6 +215,8 @@ void gameplay::load() {
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->first_state_set = true;
     
+    cam_zoom = 1.0;
+    
     al_hide_mouse_cursor(display);
     
     area_title_fade_timer.start();

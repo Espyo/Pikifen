@@ -249,6 +249,7 @@ void mob::tick_physics() {
                 speed_x = speed_y = speed_z = 0;
                 x = final_target_x;
                 y = final_target_y;
+                finished_moving = true;
             }
             
         } else {
@@ -271,19 +272,8 @@ void mob::tick_physics() {
     
     //If another mob is pushing it.
     if(push_amount != 0.0f) {
-        float push_x = cos(push_angle) * push_amount;
-        float push_y = sin(push_angle) * push_amount;
-        
-        if(sign(push_x) == sign(move_speed_x)) {
-            move_speed_x += push_x;
-        } else {
-            move_speed_x = push_x;
-        }
-        if(sign(push_y) == sign(move_speed_y)) {
-            move_speed_y += push_y;
-        } else {
-            move_speed_y = push_y;
-        }
+        move_speed_x += cos(push_angle) * push_amount;
+        move_speed_y += sin(push_angle) * push_amount;
         
         push_amount = 0;
     }
