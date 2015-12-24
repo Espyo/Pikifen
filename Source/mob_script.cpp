@@ -101,12 +101,23 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
             
             if(string_coords.empty()) valid = false;
             else {
-                if(string_coords[0] == "relative") {
+                if(string_coords[0] == "vertically") {
+                    sub_type = MOB_ACTION_MOVE_VERTICALLY;
+                    if(string_coords.size() < 2) valid = false;
+                    else {
+                        vf.push_back(s2f(string_coords[1]));
+                    }
+                    
+                } else if(string_coords[0] == "randomly") {
+                    sub_type = MOB_ACTION_MOVE_RANDOMLY;
+                    
+                } else if(string_coords[0] == "relative") {
                     sub_type = MOB_ACTION_MOVE_REL_COORDS;
                     if(string_coords.size() < 3) valid = false;
                     else {
                         for(size_t sc = 1; sc < string_coords.size(); ++sc) vf.push_back(s2f(string_coords[sc]));
                     }
+                    
                 } else {
                     sub_type = MOB_ACTION_MOVE_COORDS;
                     for(size_t sc = 0; sc < string_coords.size(); ++sc) vf.push_back(s2f(string_coords[sc]));
@@ -203,6 +214,19 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         vector<string> words = split(dn->value);
         if(words.size() < 2) {
             error_log("Not enough info to set a variable!", dn);
+            valid = false;
+        } else {
+            vs = words;
+        }
+        
+        
+        
+    } else if(n == "inc_var") {
+        type = MOB_ACTION_INC_VAR;
+        
+        vector<string> words = split(dn->value);
+        if(words.empty()) {
+            error_log("Not enough info to increment a variable!", dn);
             valid = false;
         } else {
             vs = words;
@@ -349,9 +373,16 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
             m->remove_target();
+            m->intended_angle = m->angle;
             
         } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
             m->set_target(vf[0], vf[1], NULL, NULL, false);
+            
+        } else if(sub_type == MOB_ACTION_MOVE_VERTICALLY) {
+            m->z += vf[0]; //TODO replace this with something prettier in the future.
+            
+        } else if(sub_type == MOB_ACTION_MOVE_RANDOMLY) {
+            m->set_target(m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000), NULL, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
             m->set_target(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
@@ -392,6 +423,13 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
     
         //TODO check vs's size.
         m->set_var(vs[0], vs[1]);
+        
+        
+    } else if(type == MOB_ACTION_INC_VAR) {
+    
+        //TODO check vs's size.
+        int nr = s2i(m->vars[vs[0]]);
+        m->set_var(vs[0], i2s(nr + 1));
         
         
     } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {

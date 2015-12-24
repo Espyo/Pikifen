@@ -86,8 +86,6 @@ protected:
     void tick_physics();
     void tick_script();
     
-    void get_final_target(float* x, float* y);
-    
 public:
     mob(const float x, const float y, mob_type* type, const float angle, const string &vars);
     virtual ~mob(); //Needed so that typeid works.
@@ -116,6 +114,7 @@ public:
     float push_angle;                 //Angle that another mob is pushing it to.
     
     void face(const float new_angle); //Makes the mob face an angle, but it'll turn at its own pace.
+    void get_final_target(float* x, float* y); //Returns the final coordinates of a go_to_target target.
     virtual float get_base_speed();   //Returns the normal speed of this mob. Subclasses are meant to override this.
     
     //Target things.

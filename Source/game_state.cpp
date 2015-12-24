@@ -198,33 +198,6 @@ void gameplay::load() {
         }
     }
     
-    create_mob(new pikmin(-50, 200, pikmin_types["Red Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(-40, 200, pikmin_types["Red Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(-30, 200, pikmin_types["Red Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(-20, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(-10, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 1;
-    create_mob(new pikmin(0, 200, pikmin_types["Yellow Pikmin"], 0, ""));
-    pikmin_list.back()->maturity = 2;
-    create_mob(new pikmin(30, 150, pikmin_types["Blue Pikmin"], 0, ""));
-    pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-    pikmin_list.back()->first_state_set = true;
-    create_mob(new pikmin(50, 150, pikmin_types["Blue Pikmin"], 0, ""));
-    pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-    pikmin_list.back()->first_state_set = true;
-    create_mob(new pikmin(70, 150, pikmin_types["Blue Pikmin"], 0, ""));
-    pikmin_list.back()->fsm.set_state(PIKMIN_STATE_BURIED);
-    pikmin_list.back()->first_state_set = true;
-    for(unsigned char p = 0; p < 10; ++p) {
-        for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
-            create_mob(new pikmin(20 + 10 * p + 3 * distance(pikmin_types.begin(), t), 200, t->second, 0, ""));
-            pikmin_list.back()->maturity = 2;
-        }
-    }
     /*
     create_mob(new pellet(320, -100, pellet_types["Red 1"], 0, ""));
     create_mob(new pellet(250, -100, pellet_types["Red 5"], 0, ""));

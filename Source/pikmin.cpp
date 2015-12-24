@@ -484,14 +484,20 @@ void pikmin::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     pik_ptr->attack_time -= delta_t;
     
-    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->health == 0) {
+    if(!pik_ptr->focused_mob || pik_ptr->focused_mob->dead) {
         return;
     }
     if(pik_ptr->attack_time <= 0) {
-        pik_ptr->do_attack(
-            pik_ptr->focused_mob,
-            get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr)
-        );
+        if(!(
+                    (pik_ptr->focused_mob->z > pik_ptr->z + pik_ptr->type->height) ||
+                    (pik_ptr->focused_mob->z + pik_ptr->focused_mob->type->height < pik_ptr->z)
+                )) {
+            pik_ptr->do_attack(
+                pik_ptr->focused_mob,
+                get_hitbox_instance(pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr)
+            );
+        }
+        pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
     }
     
     pik_ptr->face(atan2(pik_ptr->focused_mob->y - pik_ptr->y, pik_ptr->focused_mob->x - pik_ptr->x));
@@ -545,7 +551,10 @@ void pikmin::go_to_carriable_object(mob* m, void* info1, void* info2) {
         carriable_mob_ptr->carrier_info->carrier_spots_y[spot],
         &carriable_mob_ptr->x,
         &carriable_mob_ptr->y,
-        false
+        false,
+        NULL,
+        false,
+        10
     );
     
     carriable_mob_ptr->carrier_info->carrier_spots[spot] = pik_ptr;
@@ -616,6 +625,12 @@ void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
     sfx_pikmin_carrying.stop();
     
 }
+
+
+void pikmin::start_carrying(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_IDLE); //TODO carrying animation
+}
+
 
 void pikmin::draw() {
 

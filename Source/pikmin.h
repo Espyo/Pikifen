@@ -79,6 +79,7 @@ public:
     static void prepare_to_attack(      mob* m, void* info1, void* info2);
     static void get_knocked_down(       mob* m, void* info1, void* info2);
     static void lose_latched_mob(       mob* m, void* info1, void* info2);
+    static void start_carrying(         mob* m, void* info1, void* info2);
     
 };
 

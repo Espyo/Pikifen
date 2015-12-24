@@ -433,6 +433,9 @@ void pikmin_type::init_script() {
     }
     
     efc.new_state("carrying", PIKMIN_STATE_CARRYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin::start_carrying);
+        }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(pikmin::forget_about_carrying);
         }

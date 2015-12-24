@@ -525,7 +525,7 @@ void mob::tick_script() {
     }
     
     //Is it dead?
-    if(health <= 0) {
+    if(health <= 0 && type->max_health != 0) {
         dead = true;
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
@@ -677,6 +677,7 @@ void mob::set_var(const string &name, const string &value) {
  * Sets up stuff for the beginning of the mob's death process.
  */
 void mob::start_dying() {
+    health = 0;
     if(typeid(*this) == typeid(enemy)) {
         random_particle_explosion(PARTICLE_TYPE_BITMAP, bmp_sparkle, x, y, 100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192));
     }
