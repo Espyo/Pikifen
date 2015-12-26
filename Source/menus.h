@@ -68,4 +68,28 @@ public:
     virtual void do_drawing();
 };
 
+
+class area_menu : public game_state {
+private:
+    ALLEGRO_BITMAP* bmp_menu_bg;
+    float time_spent;
+    size_t cur_page_nr;
+    vector<string> areas_to_pick;
+    
+    vector<menu_widget*> area_buttons;
+    menu_text* cur_page_nr_widget;
+    
+    void leave();
+    void update();
+    
+public:
+    area_menu();
+    virtual void load();
+    virtual void unload();
+    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void do_logic();
+    virtual void do_drawing();
+};
+
+
 #endif //ifndef MENUS_INCLUDED

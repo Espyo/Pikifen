@@ -77,6 +77,7 @@ int                              area_image_size = 0;
 float                            area_images_x1 = 0;
 float                            area_images_y1 = 0;
 timer                            area_title_fade_timer(AREA_TITLE_FADE_DURATION);
+string                           area_to_load;
 vector<unsigned int>             berries;
 bmp_manager                      bitmaps;
 ALLEGRO_BITMAP*                  bmp_error = NULL;

@@ -1312,7 +1312,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(ev.mouse.button == 1) holding_m1 = false;
         else if(ev.mouse.button == 2) holding_m2 = false;
         
-        if(ev.mouse.button == 1 && sec_mode == ESM_NONE && moving_thing != string::npos) {
+        if(ev.mouse.button == 1 && mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE && moving_thing != string::npos) {
             //Release the vertex.
             
             vertex* moved_v_ptr = cur_area_map.vertices[moving_thing];
@@ -1515,7 +1515,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             
             
-        } else if(ev.mouse.button == 1 && mode == EDITOR_MODE_OBJECTS && moving_thing != string::npos) {
+        } else if(ev.mouse.button == 1 && mode == EDITOR_MODE_OBJECTS && sec_mode == ESM_NONE && moving_thing != string::npos) {
             //Release object.
             
             moving_thing = string::npos;
@@ -2087,6 +2087,7 @@ void area_editor::load() {
     frm_review->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_MAIN;
         sec_mode = ESM_NONE;
+        error_type = EET_NONE_YET;
         update_review_frame();
         change_to_right_frame();
     };

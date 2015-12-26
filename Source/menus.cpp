@@ -22,6 +22,7 @@
 using namespace std;
 
 main_menu::main_menu() :
+    game_state(),
     bmp_menu_bg(NULL),
     new_game_state(0),
     time_spent(0) {
@@ -53,7 +54,7 @@ void main_menu::load() {
             scr_w * 0.5, scr_h * 0.55, scr_w * 0.8, scr_h * 0.08,
     [this] () {
         fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_GAME);
+            change_game_state(GAME_STATE_AREA_MENU);
         });
     }, "Play", font_area_name
         )
@@ -97,8 +98,9 @@ void main_menu::load() {
         )
     );
     
-    set_selected_widget(menu_widgets[0]);
     
+    //Finishing touches.
+    set_selected_widget(menu_widgets[0]);
     fade_mgr.start_fade(true, nullptr);
     
 }
@@ -121,7 +123,8 @@ void main_menu::unload() {
 
 
 void main_menu::handle_controls(ALLEGRO_EVENT ev) {
-
+    //TODO joystick navigation controls
+    
     if(fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -195,6 +198,7 @@ void main_menu::do_drawing() {
 
 
 options_menu::options_menu() :
+    game_state(),
     bmp_menu_bg(NULL),
     cur_player_nr(0),
     cur_page_nr(0),
@@ -379,6 +383,7 @@ void options_menu::load() {
     ;
     menu_widgets.push_back(input_capture_msg_widget);
     
+    //Finishing touches.
     fade_mgr.start_fade(true, nullptr);
     set_selected_widget(menu_widgets[1]);
     update();
@@ -399,9 +404,9 @@ void options_menu::unload() {
     menu_widgets.clear();
     control_widgets.clear();
     bottom_widgets.clear();
-    menu_text* cur_player_nr_widget = NULL;
-    menu_text* cur_page_nr_widget = NULL;
-    menu_text* input_capture_msg_widget = NULL;
+    cur_player_nr_widget = NULL;
+    cur_page_nr_widget = NULL;
+    input_capture_msg_widget = NULL;
     
 }
 
@@ -603,4 +608,220 @@ void options_menu::leave() {
         change_game_state(GAME_STATE_MAIN_MENU);
     });
     save_options();
+}
+
+
+
+area_menu::area_menu() :
+    game_state(),
+    time_spent(0),
+    bmp_menu_bg(NULL) {
+    
+}
+
+
+void area_menu::load() {
+    selected_widget = NULL;
+    bmp_menu_bg = NULL;
+    time_spent = 0;
+    cur_page_nr = 0;
+    
+    //Areas.
+    areas_to_pick = folder_to_vector(AREA_FOLDER, false);
+    for(size_t a = 0; a < areas_to_pick.size();) {
+        string n = areas_to_pick[a];
+        bool valid = true;
+        if(n.size() < 5) {
+            valid = false;
+        } else if(n.substr(n.size() - 4, 4) != ".txt") {
+            valid = false;
+        } else {
+            areas_to_pick[a] = n.substr(0, n.size() - 4); //Remove the ".txt".
+        }
+        
+        if(!valid) {
+            areas_to_pick.erase(areas_to_pick.begin() + a);
+        } else {
+            ++a;
+        }
+    }
+    
+    //If there's only one area, go there right away.
+    if(areas_to_pick.size() == 1) {
+        area_to_load = areas_to_pick[0];
+        change_game_state(GAME_STATE_GAME);
+        return;
+    }
+    
+    //Resources.
+    bmp_menu_bg = load_bmp("Main_menu.png");
+    
+    //Menu widgets.
+    menu_widgets.push_back(
+        new menu_text(
+            scr_w * 0.3, scr_h * 0.1, scr_w * 0.5, scr_h * 0.1,
+            "Pick an area:",
+            font, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
+        )
+    );
+    
+    menu_widgets.push_back(
+        new menu_button(
+            scr_w * 0.8, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
+    [] () {
+        fade_mgr.start_fade(false, [] () {
+            change_game_state(GAME_STATE_MAIN_MENU);
+        });
+    },
+    "Back", font
+        )
+    );
+    
+    for(size_t a = 0; a < 8; ++a) {
+        menu_widgets.push_back(
+            new menu_button(
+                scr_w * 0.5, scr_h * (0.2 + 0.08 * a), scr_w * 0.8, scr_h * 0.1,
+        [] () {
+        
+        },
+        "", font_area_name
+            )
+        );
+        area_buttons.push_back(menu_widgets.back());
+    }
+    
+    menu_widgets.push_back(
+        new menu_text(
+            scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
+            "Page:", font
+        )
+    );
+    menu_widgets.push_back(
+        new menu_button(
+            scr_w * 0.3, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+    [this] () {
+        if(cur_page_nr == 0) cur_page_nr = ceil(areas_to_pick.size() / 8.0) - 1;
+        else cur_page_nr--;
+        cur_page_nr_widget->start_juicy_grow();
+        update();
+    },
+    "<", font
+        )
+    );
+    cur_page_nr_widget =
+        new menu_text(
+        scr_w * 0.4, scr_h * 0.9, scr_w * 0.1, scr_h * 0.1,
+        "", font
+    )
+    ;
+    menu_widgets.push_back(cur_page_nr_widget);
+    menu_widgets.push_back(
+        new menu_button(
+            scr_w * 0.5, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+    [this] () {
+        cur_page_nr = (cur_page_nr + 1) % (size_t) ceil(areas_to_pick.size() / 8.0);
+        cur_page_nr_widget->start_juicy_grow();
+        update();
+    },
+    ">", font
+        )
+    );
+    
+    //Finishing touches.
+    fade_mgr.start_fade(true, nullptr);
+    set_selected_widget(menu_widgets[0]);
+    update();
+    
+}
+
+
+void area_menu::unload() {
+
+    //Resources.
+    al_destroy_bitmap(bmp_menu_bg);
+    
+    //Menu widgets.
+    set_selected_widget(NULL);
+    for(size_t w = 0; w < menu_widgets.size(); w++) {
+        delete menu_widgets[w];
+    }
+    menu_widgets.clear();
+    area_buttons.clear();
+    areas_to_pick.clear();
+    cur_page_nr_widget = NULL;
+    
+}
+
+
+void area_menu::handle_controls(ALLEGRO_EVENT ev) {
+    //TODO joystick navigation controls
+    if(fade_mgr.is_fading()) return;
+    
+    handle_widget_events(ev);
+    
+    if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
+            leave();
+        }
+    }
+    
+}
+
+
+void area_menu::do_logic() {
+    fade_mgr.tick(delta_t);
+    time_spent += delta_t;
+    
+    for(size_t w = 0; w < menu_widgets.size(); w++) {
+        menu_widgets[w]->tick(delta_t);
+    }
+}
+
+
+void area_menu::do_drawing() {
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    draw_sprite(
+        bmp_menu_bg, scr_w * 0.5, scr_h * 0.5,
+        scr_w, scr_h, 0, map_gray(128)
+    );
+    for(size_t w = 0; w < menu_widgets.size(); w++) {
+        menu_widgets[w]->draw(time_spent);
+    }
+    
+    fade_mgr.draw();
+    
+    al_flip_display();
+}
+
+
+void area_menu::leave() {
+    fade_mgr.start_fade(false, [] () {
+        change_game_state(GAME_STATE_MAIN_MENU);
+    });
+}
+
+
+void area_menu::update() {
+    cur_page_nr = min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
+    cur_page_nr_widget->text = i2s(cur_page_nr + 1);
+    
+    for(size_t aw = 0; aw < area_buttons.size(); ++aw) {
+        area_buttons[aw]->enabled = false;
+    }
+    
+    size_t area_nr = cur_page_nr * 8;
+    size_t list_nr = 0;
+    for(; list_nr < 8 && area_nr < areas_to_pick.size(); ++area_nr, ++list_nr) {
+        string area_name = areas_to_pick[area_nr];
+        
+        ((menu_button*) area_buttons[list_nr])->click_handler = [area_name] () {
+            area_to_load = area_name;
+            fade_mgr.start_fade(false, [] () {
+                change_game_state(GAME_STATE_GAME);
+            });
+        };
+        ((menu_button*) area_buttons[list_nr])->text = area_name;
+        area_buttons[list_nr]->enabled = true;
+        
+    }
 }

@@ -113,6 +113,7 @@ extern int                              area_image_size;
 extern float                            area_images_x1; //Top-left corner of the area, in world coordinates.
 extern float                            area_images_y1;
 extern timer                            area_title_fade_timer;
+extern string                           area_to_load; //Name of the area to load, from the area select.
 extern vector<unsigned int>             berries;
 extern bmp_manager                      bitmaps;
 extern ALLEGRO_BITMAP*                  bmp_error;

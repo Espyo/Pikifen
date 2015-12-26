@@ -27,6 +27,7 @@
 #include "mob_script.h"
 #include "vars.h"
 
+
 void init_allegro() {
     al_init();
     al_install_mouse();
@@ -37,6 +38,7 @@ void init_allegro() {
     al_init_primitives_addon();
     al_init_acodec_addon();
 }
+
 
 void init_controls() {
     controls.assign(4, vector<control_info>());
@@ -63,6 +65,7 @@ void init_controls() {
     controls[0].push_back(control_info(BUTTON_PAUSE, "k_59"));
 }
 
+
 void init_error_bitmap() {
     //Error bitmap.
     int bmp_error_w, bmp_error_h;
@@ -73,6 +76,7 @@ void init_error_bitmap() {
         al_draw_text(al_create_builtin_font(), al_map_rgb(255, 0, 0), 0, 0, 0, "ERROR");
     } al_set_target_backbuffer(display);
 }
+
 
 void init_event_things(ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue) {
     if(window_pos_hack) al_set_new_window_position(64, 64);
@@ -86,6 +90,7 @@ void init_event_things(ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_
     al_register_event_source(logic_queue, al_get_display_event_source(display));
     al_register_event_source(logic_queue, al_get_timer_event_source(logic_timer));
 }
+
 
 void init_fonts() {
     int font_ranges[] = {
@@ -126,13 +131,16 @@ void init_fonts() {
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
 }
 
+
 void init_game_states() {
     game_states[GAME_STATE_MAIN_MENU] = new main_menu();
+    game_states[GAME_STATE_AREA_MENU] = new area_menu();
     game_states[GAME_STATE_GAME] = new gameplay();
     game_states[GAME_STATE_OPTIONS_MENU] = new options_menu();
     game_states[GAME_STATE_AREA_EDITOR] = new area_editor();
     game_states[GAME_STATE_ANIMATION_EDITOR] = new animation_editor();
 }
+
 
 void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
@@ -145,6 +153,7 @@ void init_misc() {
     //TODO the function is always returning 0.
     area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
 }
+
 
 void init_misc_graphics() {
     //Graphics.
@@ -181,6 +190,7 @@ void init_misc_graphics() {
     al_set_display_icon(display, bmp_icon);
 }
 
+
 void init_misc_sounds() {
     //Sound effects.
     voice = al_create_voice(44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2);
@@ -209,6 +219,7 @@ void init_misc_sounds() {
     sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
     sfx_camera = load_sample(              "Camera.ogg",               mixer);
 }
+
 
 void init_mob_categories() {
 
@@ -328,6 +339,7 @@ void init_mob_categories() {
     });
 }
 
+
 void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
@@ -337,6 +349,7 @@ void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
     sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
 }
+
 
 void init_special_mob_types() {
     //Info spot.

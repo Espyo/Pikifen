@@ -151,7 +151,8 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 
 
 
-gameplay::gameplay() {}
+gameplay::gameplay() :
+    game_state() {}
 
 
 void gameplay::load() {
@@ -170,7 +171,7 @@ void gameplay::load() {
     pikmin_in_onions.clear();
     for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) { o->second = 0; }
     
-    load_area("Play", false);
+    load_area(area_to_load, false);
     load_area_textures();
     generate_area_images();
     
