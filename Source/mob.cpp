@@ -362,6 +362,7 @@ void mob::tick_physics() {
                                 
                                 if(!s_ptr) {
                                     //TODO out of bounds! Kill it!
+                                    successful_move = false;
                                     break;
                                     
                                 } else {

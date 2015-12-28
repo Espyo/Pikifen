@@ -175,7 +175,10 @@ void area_map::clear() {
     mob_generators.clear();
     tree_shadows.clear();
     
-    bitmaps.detach(bg_bmp_file_name);
+    if(!bg_bmp_file_name.empty()) {
+        bitmaps.detach(bg_bmp_file_name);
+    }
+    bg_bmp_file_name.clear();
 }
 
 
@@ -529,7 +532,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     
     bool doing_outer = true;
     
-    //First, compile a list of all sidedefs related to this sector.
+    //First, compile a list of all linedefs related to this sector.
     map<linedef*, bool> lines_done;
     
     for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
@@ -983,7 +986,7 @@ void check_linedef_intersections(vertex* v) {
 
 /* ----------------------------------------------------------------------------
  * Cleans a polygon's vertices.
- * This deletes 0-lenght lines, and 180-degree vertices.
+ * This deletes 0-length lines, and 180-degree vertices.
  */
 void clean_poly(polygon* p) {
     for(size_t v = 0; v < p->size();) {

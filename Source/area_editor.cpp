@@ -262,7 +262,7 @@ void area_editor::do_drawing() {
         if(sec_mode != ESM_TEXTURE_VIEW) {
         
             unsigned char sector_opacity = 224;
-            if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_SHADOWS) sector_opacity = 64;
+            if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_SHADOWS) sector_opacity = 128;
             
             size_t n_linedefs = cur_area_map.linedefs.size();
             for(size_t l = 0; l < n_linedefs; ++l) {
@@ -321,19 +321,20 @@ void area_editor::do_drawing() {
                 );
                 
                 //Debug: uncomment this to show the sector numbers on each side.
-                //Orientantion could be wrong, as there is no concept of front/back sector.
                 /*float mid_x = (l_ptr->vertices[0]->x + l_ptr->vertices[1]->x) / 2;
                 float mid_y = (l_ptr->vertices[0]->y + l_ptr->vertices[1]->y) / 2;
                 float angle = atan2(l_ptr->vertices[0]->y - l_ptr->vertices[1]->y, l_ptr->vertices[0]->x - l_ptr->vertices[1]->x);
-                al_draw_text(
+                draw_scaled_text(
                     font, al_map_rgb(192, 255, 192),
-                    mid_x + cos(angle - M_PI_2) * 15,
-                    mid_y + sin(angle - M_PI_2) * 15 - font_h / 2,
+                    mid_x + cos(angle + M_PI_2) * 4,
+                    mid_x + sin(angle + M_PI_2) * 4,
+                    0.5 / cam_zoom, 0.5 / cam_zoom,
                     ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[0] == string::npos ? "--" : i2s(l_ptr->sector_nrs[0]).c_str());
-                al_draw_text(
+                draw_scaled_text(
                     font, al_map_rgb(192, 255, 192),
-                    mid_x + cos(angle + M_PI_2) * 15,
-                    mid_y + sin(angle + M_PI_2) * 15 - font_h / 2,
+                    mid_x + cos(angle - M_PI_2) * 4,
+                    mid_y + sin(angle - M_PI_2) * 4,
+                    0.5 / cam_zoom, 0.5 / cam_zoom,
                     ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : i2s(l_ptr->sector_nrs[1]).c_str());*/
             }
             
@@ -643,22 +644,6 @@ void area_editor::find_errors() {
                 }
             }
         }
-    }
-    
-    //Check if there are no landing site sectors.
-    if(error_type == EET_NONE) {
-        bool landing_site_missing = true;
-        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_map.sectors[s];
-            if(s_ptr->linedefs.empty()) continue;
-            
-            if(s_ptr->type == SECTOR_TYPE_LANDING_SITE) {
-                landing_site_missing = false;
-                break;
-            }
-        }
-        
-        if(landing_site_missing) error_type = EET_LANDING_SITE;
     }
     
     //Check if there are tree shadows with invalid images.
@@ -1243,8 +1228,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     cur_area_map.vertices.size() - (4 - l),
                     cur_area_map.vertices.size() - (4 - ((l + 1) % 4))
                 );
-                new_linedefs[l]->sector_nrs[0] = cur_area_map.sectors.size();
-                new_linedefs[l]->sector_nrs[1] = outer_sector_nr;
+                new_linedefs[l]->sector_nrs[0] = outer_sector_nr;
+                new_linedefs[l]->sector_nrs[1] = cur_area_map.sectors.size();
                 cur_area_map.linedefs.push_back(new_linedefs[l]);
             }
             
@@ -1515,7 +1500,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             
             
-        } else if(ev.mouse.button == 1 && mode == EDITOR_MODE_OBJECTS && sec_mode == ESM_NONE && moving_thing != string::npos) {
+        } else if(ev.mouse.button == 1 && sec_mode == ESM_NONE && moving_thing != string::npos) {
             //Release object.
             
             moving_thing = string::npos;

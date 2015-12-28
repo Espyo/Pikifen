@@ -104,6 +104,11 @@ mobs{
 		type=Red 5
 		pos=512.00 32.00
 	}
+	Enemy{
+		type=White Spectralid
+		pos=-288.00 576.00
+		angle=0.69
+	}
 }
 vertices{
 	vertex=-1000.00 -1000.00
@@ -175,335 +180,364 @@ vertices{
 	vertex=544.04 -368.12
 	vertex=544.04 -208.89
 	vertex=128.11 -208.31
+	vertex=288.00 -96.00
+	vertex=384.00 -32.00
+	vertex=396.00 32.00
+	vertex=288.00 32.00
+	vertex=288.00 -0.00
 }
 linedefs{
 	linedef{
 		s=0 -1
-		v=0 1
+		v=1 0
 	}
 	linedef{
 		s=0 -1
-		v=1 2
+		v=2 1
 	}
 	linedef{
 		s=0 -1
-		v=2 3
+		v=3 2
 	}
 	linedef{
 		s=0 -1
-		v=3 0
+		v=0 3
 	}
 	linedef{
 		s=1 0
-		v=4 5
+		v=5 4
 	}
 	linedef{
 		s=1 0
-		v=5 6
+		v=6 5
 	}
 	linedef{
 		s=1 0
-		v=6 7
+		v=7 6
 	}
 	linedef{
 		s=1 0
-		v=7 8
+		v=8 7
 	}
 	linedef{
 		s=1 0
-		v=8 9
+		v=9 8
 	}
 	linedef{
 		s=1 0
-		v=9 4
+		v=4 9
 	}
 	linedef{
 		s=2 0
-		v=10 11
+		v=11 10
 	}
 	linedef{
 		s=2 3
-		v=11 13
+		v=13 11
 	}
 	linedef{
 		s=2 0
-		v=13 12
+		v=12 13
 	}
 	linedef{
 		s=2 5
-		v=12 10
+		v=10 12
 	}
 	linedef{
 		s=3 0
-		v=11 14
+		v=14 11
 	}
 	linedef{
 		s=3 4
-		v=14 16
+		v=16 14
 	}
 	linedef{
 		s=3 0
-		v=16 13
+		v=13 16
 	}
 	linedef{
 		s=4 0
-		v=15 16
+		v=16 15
 	}
 	linedef{
 		s=4 0
-		v=14 17
+		v=17 14
 	}
 	linedef{
 		s=4 0
-		v=17 15
+		v=15 17
 	}
 	linedef{
 		s=5 0
-		v=12 18
+		v=18 12
 	}
 	linedef{
 		s=5 0
-		v=18 19
+		v=19 18
 	}
 	linedef{
 		s=5 0
-		v=19 10
+		v=10 19
 	}
 	linedef{
 		s=6 -1
-		v=21 28
+		v=28 21
 	}
 	linedef{
 		s=6 -1
-		v=22 23
+		v=23 22
 	}
 	linedef{
 		s=6 -1
-		v=23 21
+		v=21 23
 	}
 	linedef{
 		s=6 -1
-		v=20 22
+		v=22 20
 	}
 	linedef{
 		s=7 -1
-		v=24 25
+		v=25 24
 	}
 	linedef{
 		s=6 -1
-		v=25 20
+		v=20 25
 	}
 	linedef{
 		s=7 6
-		v=25 26
+		v=26 25
 	}
 	linedef{
 		s=7 6
-		v=26 29
+		v=29 26
 	}
 	linedef{
 		s=7 6
-		v=27 24
+		v=24 27
 	}
 	linedef{
 		s=6 -1
-		v=28 24
+		v=24 28
 	}
 	linedef{
 		s=7 6
-		v=29 27
+		v=27 29
 	}
 	linedef{
 		s=8 9
-		v=30 31
+		v=31 30
 	}
 	linedef{
 		s=8 0
-		v=31 32
+		v=32 31
 	}
 	linedef{
 		s=8 10
-		v=32 33
+		v=33 32
 	}
 	linedef{
 		s=8 0
-		v=33 30
+		v=30 33
 	}
 	linedef{
 		s=9 0
-		v=34 38
+		v=38 34
 	}
 	linedef{
 		s=9 0
-		v=30 35
+		v=35 30
 	}
 	linedef{
 		s=9 0
-		v=35 34
+		v=34 35
 	}
 	linedef{
 		s=10 0
-		v=36 37
+		v=37 36
 	}
 	linedef{
 		s=10 0
-		v=37 32
+		v=32 37
 	}
 	linedef{
 		s=10 0
-		v=33 36
+		v=36 33
 	}
 	linedef{
 		s=9 0
-		v=38 31
+		v=31 38
 	}
 	linedef{
 		s=11 0
-		v=39 44
+		v=44 39
 	}
 	linedef{
 		s=11 0
-		v=40 43
+		v=43 40
 	}
 	linedef{
 		s=11 0
-		v=41 42
+		v=42 41
 	}
 	linedef{
 		s=11 0
-		v=42 39
+		v=39 42
 	}
 	linedef{
 		s=11 0
-		v=43 41
+		v=41 43
 	}
 	linedef{
 		s=11 0
-		v=44 40
+		v=40 44
 	}
 	linedef{
 		s=12 0
-		v=45 46
+		v=46 45
 	}
 	linedef{
 		s=12 0
-		v=46 48
+		v=48 46
 	}
 	linedef{
 		s=12 0
-		v=48 47
+		v=47 48
 	}
 	linedef{
 		s=12 0
-		v=47 50
+		v=50 47
 	}
 	linedef{
 		s=12 0
-		v=49 45
+		v=45 49
 	}
 	linedef{
 		s=12 0
-		v=50 49
+		v=49 50
 	}
 	linedef{
 		s=13 19
-		v=51 52
+		v=52 51
 	}
 	linedef{
 		s=13 14
-		v=52 53
+		v=53 52
 	}
 	linedef{
 		s=13 20
-		v=53 54
+		v=54 53
 	}
 	linedef{
 		s=13 0
-		v=54 51
+		v=51 54
 	}
 	linedef{
 		s=14 19
-		v=52 55
+		v=55 52
 	}
 	linedef{
 		s=14 15
-		v=55 56
+		v=56 55
 	}
 	linedef{
 		s=14 20
-		v=56 53
+		v=53 56
 	}
 	linedef{
 		s=15 19
-		v=55 57
+		v=57 55
 	}
 	linedef{
 		s=15 16
-		v=57 58
+		v=58 57
 	}
 	linedef{
 		s=15 20
-		v=58 56
+		v=56 58
 	}
 	linedef{
 		s=16 19
-		v=57 59
+		v=59 57
 	}
 	linedef{
 		s=16 17
-		v=59 60
+		v=60 59
 	}
 	linedef{
 		s=16 20
-		v=60 58
+		v=58 60
 	}
 	linedef{
 		s=17 19
-		v=59 61
+		v=61 59
 	}
 	linedef{
 		s=17 18
-		v=61 62
+		v=62 61
 	}
 	linedef{
 		s=17 20
-		v=62 60
+		v=60 62
 	}
 	linedef{
 		s=18 0
-		v=61 63
+		v=63 61
 	}
 	linedef{
 		s=18 0
-		v=63 64
+		v=64 63
 	}
 	linedef{
 		s=18 0
-		v=64 62
+		v=62 64
 	}
 	linedef{
 		s=19 0
-		v=65 66
+		v=66 65
 	}
 	linedef{
 		s=19 0
-		v=66 61
+		v=61 66
 	}
 	linedef{
 		s=19 0
-		v=51 65
+		v=65 51
 	}
 	linedef{
 		s=20 0
-		v=67 68
+		v=68 67
 	}
 	linedef{
 		s=20 0
-		v=68 54
+		v=54 68
 	}
 	linedef{
 		s=20 0
-		v=62 67
+		v=67 62
+	}
+	linedef{
+		s=0 21
+		v=69 70
+	}
+	linedef{
+		s=0 22
+		v=70 71
+	}
+	linedef{
+		s=0 22
+		v=71 72
+	}
+	linedef{
+		s=0 22
+		v=72 73
+	}
+	linedef{
+		s=21 22
+		v=73 70
+	}
+	linedef{
+		s=0 21
+		v=73 69
 	}
 }
 sectors{
@@ -513,7 +547,7 @@ sectors{
 	}
 	sector{
 		type=Landing site
-		z=0.00
+		z=200.00
 		texture=Metal.png
 	}
 	sector{
@@ -606,6 +640,14 @@ sectors{
 		type=Bridge rail
 		z=0.00
 		tag=250
+		texture=Grass 2.jpg
+	}
+	sector{
+		z=200.00
+		texture=Grass 2.jpg
+	}
+	sector{
+		z=400.00
 		texture=Grass 2.jpg
 	}
 }

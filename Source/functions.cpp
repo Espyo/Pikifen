@@ -96,7 +96,7 @@ void change_game_state(unsigned int new_state) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether a circle is touching a line or not.
+ * Returns whether a circle is touching a line segment or not.
  * cx, cy: Coordinates of the circle.
  * cr:     Radius of the circle.
  * x*, y*: Coordinates of the line.
