@@ -14,6 +14,7 @@
 #include "vars.h"
 
 pellet_type::pellet_type() :
+    mob_type(),
     pik_type(nullptr),
     number(0),
     match_seeds(0),

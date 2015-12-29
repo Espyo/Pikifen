@@ -12,6 +12,7 @@
 #include "ship_type.h"
 
 ship_type::ship_type() :
+    mob_type(),
     can_heal(false) {
     
     always_active = true;

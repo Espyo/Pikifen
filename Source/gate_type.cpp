@@ -13,7 +13,9 @@
 #include "gate_type.h"
 #include "mob_script.h"
 
-gate_type::gate_type() {
+gate_type::gate_type() :
+    mob_type() {
+    
     casts_shadow = false;
     init_script();
 }

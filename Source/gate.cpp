@@ -14,8 +14,8 @@
 #include "vars.h"
 #include <iostream>
 
-gate::gate(const float x, const float y, gate_type* type, const string &vars) :
-    mob(x, y, type, 0, vars),
+gate::gate(const float x, const float y, gate_type* type, const float angle, const string &vars) :
+    mob(x, y, type, angle, vars),
     gat_type(type),
     sec(get_sector(x, y, nullptr, true)) {
     

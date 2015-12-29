@@ -89,6 +89,48 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
         
+    } else if(n == "if_less") {
+        //TODO make this use integers instead of strings, eventually?
+        type = MOB_ACTION_IF_LESS;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() < 2) {
+            error_log("Not enough parts on this if_less: \"" + dn->value + "\"!", dn);
+            valid = false;
+        } else {
+            vs.push_back(words[0]); vs.push_back(words[1]);
+        }
+        
+        
+        
+    } else if(n == "if_more") {
+        //TODO make this use integers instead of strings, eventually?
+        type = MOB_ACTION_IF_MORE;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() < 2) {
+            error_log("Not enough parts on this if_more: \"" + dn->value + "\"!", dn);
+            valid = false;
+        } else {
+            vs.push_back(words[0]); vs.push_back(words[1]);
+        }
+        
+        
+        
+    } else if(n == "if_not") {
+        //TODO make this use integers instead of strings, eventually?
+        type = MOB_ACTION_IF_NOT;
+        
+        vector<string> words = split(dn->value);
+        if(words.size() < 2) {
+            error_log("Not enough parts on this if_not: \"" + dn->value + "\"!", dn);
+            valid = false;
+        } else {
+            vs.push_back(words[0]); vs.push_back(words[1]);
+        }
+        
+        
+        
     } else if(n == "move") {
         type = MOB_ACTION_MOVE;
         
@@ -357,6 +399,34 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
         
         
+    } else if(type == MOB_ACTION_IF_LESS) {
+    
+        //TODO check for vs size.
+        if(
+            s2i(m->vars[vs[0]]) >=
+            s2i(vs[1])
+        ) {
+            (*action_nr)++; //If false, skip to the next one.
+        }
+        
+        
+    } else if(type == MOB_ACTION_IF_MORE) {
+    
+        //TODO check for vs size.
+        if(
+            s2i(m->vars[vs[0]]) <=
+            s2i(vs[1])
+        ) {
+            (*action_nr)++; //If false, skip to the next one.
+        }
+        
+        
+    } else if(type == MOB_ACTION_IF_NOT) {
+    
+        //TODO check for vs size.
+        if(m->vars[vs[0]] == vs[1]) (*action_nr)++; //If false, skip to the next one.
+        
+        
     } else if(type == MOB_ACTION_MOVE) {
     
         //TODO relative values.
@@ -415,8 +485,10 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_TIMER) {
     
-        //TODO check vf's size.
-        m->set_timer(vf[0]);
+        float t;
+        if(vf.empty()) t = 0;
+        else t = vf[0];
+        m->set_timer(t);
         
         
     } else if(type == MOB_ACTION_SET_VAR) {

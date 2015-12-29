@@ -355,11 +355,6 @@ void mob::tick_physics() {
                             for(size_t s = 0; s < 2; ++s) {
                                 sector* s_ptr = l_ptr->sectors[s];
                                 
-                                if(!have_highest_z) {
-                                    have_highest_z = true;
-                                    highest_z = s_ptr->z;
-                                }
-                                
                                 if(!s_ptr) {
                                     //TODO out of bounds! Kill it!
                                     successful_move = false;
@@ -367,6 +362,11 @@ void mob::tick_physics() {
                                     
                                 } else {
                                 
+                                    if(!have_highest_z) {
+                                        have_highest_z = true;
+                                        highest_z = s_ptr->z;
+                                    }
+                                    
                                     if(s_ptr->type == SECTOR_TYPE_WALL) {
                                         //The mob cannot be inside a wall-type sector whatsoever.
                                         successful_move = false;

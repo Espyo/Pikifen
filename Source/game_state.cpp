@@ -191,7 +191,7 @@ void gameplay::load() {
         } else if(m_ptr->category == MOB_CATEGORY_SHIPS) {
             create_mob(new ship(m_ptr->x, m_ptr->y, (ship_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
         } else if(m_ptr->category == MOB_CATEGORY_GATES) {
-            create_mob(new gate(m_ptr->x, m_ptr->y, (gate_type*) m_ptr->type, m_ptr->vars));
+            create_mob(new gate(m_ptr->x, m_ptr->y, (gate_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
         } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
             m_ptr->type->create_mob(m_ptr->x, m_ptr->y, m_ptr->angle, m_ptr->vars);
         } else if(m_ptr->category == MOB_CATEGORY_TREASURES) {

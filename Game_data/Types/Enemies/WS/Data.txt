@@ -55,6 +55,7 @@ script{
     }
     resting{
         on_enter{
+            animation = resting
             timer = 5
         }
         on_timer{

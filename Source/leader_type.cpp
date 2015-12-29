@@ -15,6 +15,7 @@
 #include "vars.h"
 
 leader_type::leader_type() :
+    mob_type(),
     whistle_range(DEF_WHISTLE_RANGE),
     punch_strength(DEF_PUNCH_STRENGTH),
     pluck_delay(0.6),

@@ -33,8 +33,12 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             //TODO remove.
             dist closest_mob_to_cursor_dist = FLT_MAX;
             mob* closest_mob_to_cursor = NULL;
+            float actual_cursor_x = mouse_cursor_x, actual_cursor_y = mouse_cursor_y;
+            ALLEGRO_TRANSFORM t = get_world_to_screen_transform();
+            al_invert_transform(&t);
+            al_transform_coordinates(&t, &actual_cursor_x, &actual_cursor_y);
             for(size_t m = 0; m < mobs.size(); ++m) {
-                dist d = dist(cursor_x, cursor_y, mobs[m]->x, mobs[m]->y);
+                dist d = dist(actual_cursor_x, actual_cursor_y, mobs[m]->x, mobs[m]->y);
                 if(d < closest_mob_to_cursor_dist) {
                     closest_mob_to_cursor = mobs[m];
                     closest_mob_to_cursor_dist = d;
@@ -47,7 +51,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 
                 cout << "Mob: " << name << ". State: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
             }
-            cout << "Z: " << cur_leader_ptr->z << "\n";
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
             debug_show_framerate = !debug_show_framerate;

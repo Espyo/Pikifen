@@ -1401,7 +1401,9 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
         if((l + 1) % 3 == 0) cur_message_stopping_chars.push_back(char_count);
     }
     
-    cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
+    if(cur_message_stopping_chars.size() > 1) {
+        cur_message_stopping_chars.back()--; //Remove one because the last line doesn't have a new line character. Even if it does, it's invisible.
+    }
     cur_message_stopping_chars.push_back(cur_message.size());
 }
 

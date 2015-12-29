@@ -13,6 +13,13 @@
 #include "onion_type.h"
 #include "vars.h"
 
+
+onion_type::onion_type() :
+    mob_type(),
+    pik_type(NULL) {
+}
+
+
 void onion_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
     data_node* pik_type_node = file->get_child_by_name("pikmin_type");
     if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {

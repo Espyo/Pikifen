@@ -32,7 +32,7 @@ public:
     gate_type* gat_type;
     sector* sec;
     
-    gate(const float x, const float y, gate_type* type, const string &vars);
+    gate(const float x, const float y, gate_type* type, const float angle, const string &vars);
     
     static void open(mob* m, void* info1, void* info2);
     static void take_damage(mob* m, void* info1, void* info2);

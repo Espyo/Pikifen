@@ -12,6 +12,17 @@
 #include "enemy_type.h"
 #include "functions.h"
 
+
+enemy_type::enemy_type() :
+    mob_type(),
+    pikmin_seeds(0),
+    value(0),
+    revive_speed(0),
+    regenerate_speed(0),
+    is_boss(false),
+    drops_corpse(true) {
+}
+
 void enemy_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
     drops_corpse = s2b(file->get_child_by_name("drops_corpse")->get_value_or_default("yes"));
     is_boss = s2b(file->get_child_by_name("is_boss")->value);
