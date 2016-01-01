@@ -209,54 +209,56 @@ void area_editor::do_drawing() {
         al_clear_to_color(al_map_rgb(0, 0, 16));
         
         //Grid.
-        float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
-        float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
-        float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
-        float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
-        
-        if(cam_zoom >= ZOOM_MIN_LEVEL_EDITOR * 1.5) {
-            float x = floor(cam_leftmost / GRID_INTERVAL) * GRID_INTERVAL;
-            while(x < cam_rightmost + GRID_INTERVAL) {
-                ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
-                bool draw_line = true;
-                
-                if(fmod(x, GRID_INTERVAL * 2) == 0) {
-                    c = al_map_rgb(0, 96, 160);
-                } else {
-                    if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
-                        c = al_map_rgb(0, 64, 128);
+        if(sec_mode != ESM_TEXTURE_VIEW) {
+            float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
+            float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
+            float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
+            float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
+            
+            if(cam_zoom >= ZOOM_MIN_LEVEL_EDITOR * 1.5) {
+                float x = floor(cam_leftmost / GRID_INTERVAL) * GRID_INTERVAL;
+                while(x < cam_rightmost + GRID_INTERVAL) {
+                    ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
+                    bool draw_line = true;
+                    
+                    if(fmod(x, GRID_INTERVAL * 2) == 0) {
+                        c = al_map_rgb(0, 96, 160);
                     } else {
-                        draw_line = false;
+                        if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
+                            c = al_map_rgb(0, 64, 128);
+                        } else {
+                            draw_line = false;
+                        }
                     }
+                    
+                    if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + GRID_INTERVAL, c, 1.0 / cam_zoom);
+                    x += GRID_INTERVAL;
                 }
                 
-                if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + GRID_INTERVAL, c, 1.0 / cam_zoom);
-                x += GRID_INTERVAL;
+                float y = floor(cam_topmost / GRID_INTERVAL) * GRID_INTERVAL;
+                while(y < cam_bottommost + GRID_INTERVAL) {
+                    ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
+                    bool draw_line = true;
+                    
+                    if(fmod(y, GRID_INTERVAL * 2) == 0) {
+                        c = al_map_rgb(0, 96, 160);
+                    } else {
+                        if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
+                            c = al_map_rgb(0, 64, 128);
+                        } else {
+                            draw_line = false;
+                        }
+                    }
+                    
+                    if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + GRID_INTERVAL, y, c, 1.0 / cam_zoom);
+                    y += GRID_INTERVAL;
+                }
             }
             
-            float y = floor(cam_topmost / GRID_INTERVAL) * GRID_INTERVAL;
-            while(y < cam_bottommost + GRID_INTERVAL) {
-                ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
-                bool draw_line = true;
-                
-                if(fmod(y, GRID_INTERVAL * 2) == 0) {
-                    c = al_map_rgb(0, 96, 160);
-                } else {
-                    if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
-                        c = al_map_rgb(0, 64, 128);
-                    } else {
-                        draw_line = false;
-                    }
-                }
-                
-                if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + GRID_INTERVAL, y, c, 1.0 / cam_zoom);
-                y += GRID_INTERVAL;
-            }
+            //0,0 marker.
+            al_draw_line(-(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+            al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         }
-        
-        //0,0 marker.
-        al_draw_line(-(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
-        al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         
         //Linedefs.
         if(sec_mode != ESM_TEXTURE_VIEW) {

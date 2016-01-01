@@ -305,7 +305,8 @@ void animation_editor::gui_load_hitbox() {
 void animation_editor::gui_load_hitbox_instance() {
     lafi::widget* f = gui->widgets["frm_hitbox_is"]->widgets["frm_hitbox_i"];
     
-    hitbox_instance* cur_hi = &cur_frame->hitbox_instances[cur_hitbox_instance_nr];
+    hitbox_instance* cur_hi = NULL;
+    if(!cur_frame->hitbox_instances.empty()) cur_hi = &cur_frame->hitbox_instances[cur_hitbox_instance_nr];
     if(cur_hi) {
         ((lafi::label*) gui->widgets["frm_hitbox_is"]->widgets["lbl_name"])->text = cur_hi->hitbox_name;
         ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_hi->x);
@@ -318,6 +319,7 @@ void animation_editor::gui_load_hitbox_instance() {
     open_hitbox_type(cur_hi ? cur_hi->type : 255);
     
     if(cur_hi) {
+        show_widget(f);
         if(cur_hi->type == HITBOX_TYPE_NORMAL) {
             f = f->widgets["frm_normal"];
             ((lafi::textbox*) f->widgets["txt_mult"])->text = f2s(cur_hi->multiplier);
@@ -340,6 +342,8 @@ void animation_editor::gui_load_hitbox_instance() {
             }
             
         }
+    } else {
+        hide_widget(f);
     }
 }
 
@@ -695,9 +699,9 @@ void animation_editor::load() {
     lafi::frame* frm_anim = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_anims->add("frm_anim", frm_anim);
     frm_anim->easy_row();
-    frm_anim->easy_add("lin_1",    new lafi::line(  0, 0, 0, 0), 20, 12);
-    frm_anim->easy_add("lbl_data", new lafi::label( 0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER), 60, 12);
-    frm_anim->easy_add("lin_2",    new lafi::line(  0, 0, 0, 0), 20, 12);
+    frm_anim->easy_add("lin_1",    new lafi::line(  0, 0, 0, 0), 15, 12);
+    frm_anim->easy_add("lbl_data", new lafi::label( 0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER), 70, 12);
+    frm_anim->easy_add("lin_2",    new lafi::line(  0, 0, 0, 0), 15, 12);
     frm_anim->easy_row();
     frm_anim->easy_add("lbl_loop", new lafi::label( 0, 0, 0, 0, "Loop frame:"), 50, 16);
     frm_anim->easy_add("txt_loop", new lafi::textbox( 0, 0, 0, 0), 50, 16);

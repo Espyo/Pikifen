@@ -446,7 +446,9 @@ void leader_type::init_script() {
     first_state_nr = fix_states(states, "idle");
     
     if(states.size() != N_LEADER_STATES) {
-        error_log("ENGINE WARNING: Number of leader states on the FSM and the enum do not match.");
+        error_log(
+            "ENGINE WARNING: Number of leader states on the FSM (" + i2s(states.size()) +
+            ") and the enum (" + i2s(N_LEADER_STATES) + ") do not match.");
     }
 }
 

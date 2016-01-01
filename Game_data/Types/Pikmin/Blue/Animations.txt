@@ -27,17 +27,6 @@ animations{
 			}
 		}
 	}
-	get_up{
-		loop_frame=1
-		frame_instances{
-			half_lying{
-				duration=1.00
-			}
-			idle{
-				duration=0.10
-			}
-		}
-	}
 	grab{
 		loop_frame=0
 		frame_instances{

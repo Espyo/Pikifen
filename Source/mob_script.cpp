@@ -786,7 +786,11 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                     
                     if(!found_state) {
                         state_nr = string::npos;
-                        cout << "State " << state->name << " has an action to switch to an unknown state: " << state_name << ".\n";
+                        error_log(
+                            "State " + state->name +
+                            " has an action to switch to an unknown state: " + state_name,
+                            nullptr
+                        );
                     }
                     
                     action->vs.clear();

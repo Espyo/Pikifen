@@ -9,8 +9,6 @@
  * Pikmin class and Pikmin-related functions.
  */
 
-#include <iostream>
-
 #include "drawing.h"
 #include "functions.h"
 #include "mob.h"

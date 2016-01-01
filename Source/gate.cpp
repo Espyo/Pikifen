@@ -12,7 +12,6 @@
 #include "functions.h"
 #include "gate.h"
 #include "vars.h"
-#include <iostream>
 
 gate::gate(const float x, const float y, gate_type* type, const float angle, const string &vars) :
     mob(x, y, type, angle, vars),

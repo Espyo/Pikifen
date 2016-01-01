@@ -63,7 +63,7 @@ public:
     
     menu_button(
         const int x = 0, const int y = 0, const int w = 0, const int h = 0, function<void()> click_handler = nullptr,
-        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR color = al_map_rgb(255, 255, 255),
+        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );
     virtual void draw(const float time_spent);
@@ -83,7 +83,7 @@ public:
     
     menu_checkbox(
         const int x = 0, const int y = 0, const int w = 0, const int h = 0, function<void()> click_handler = nullptr,
-        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR color = al_map_rgb(255, 255, 255),
+        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_LEFT
     );
     virtual void draw(const float time_spent);
@@ -102,7 +102,7 @@ public:
     
     menu_text(
         const int x = 0, const int y = 0, const int w = 0, const int h = 0,
-        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR color = al_map_rgb(255, 255, 255),
+        string text = "", ALLEGRO_FONT* font = NULL, const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );
     virtual void draw(const float time_spent);

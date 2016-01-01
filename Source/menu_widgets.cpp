@@ -69,7 +69,7 @@ void menu_widget::start_juicy_grow() {
 
 menu_button::menu_button(
     const int x, const int y, const int w, const int h, function<void()> click_handler,
-    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR color, const int align
+    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(x, y, w, h, click_handler),
     text(text),
@@ -118,7 +118,7 @@ bool menu_button::is_clickable() { return enabled; }
 
 menu_checkbox::menu_checkbox(
     const int x, const int y, const int w, const int h, function<void()> click_handler,
-    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR color, const int align
+    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(x, y, w, h, click_handler),
     text(text),
@@ -177,7 +177,7 @@ bool menu_checkbox::is_clickable() { return enabled; }
 
 menu_text::menu_text(
     const int x, const int y, const int w, const int h, string text,
-    ALLEGRO_FONT* font, const ALLEGRO_COLOR color, const int align
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(x, y, w, h, nullptr),
     text(text),

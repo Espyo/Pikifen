@@ -38,7 +38,7 @@ void main_menu::load() {
     al_flip_display();
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.png");
+    bmp_menu_bg = load_bmp("Main_menu.jpg");
     
     data_node title_screen_logo_file(MISC_FOLDER + "/Title_screen_logo.txt");
     logo = load_animation_pool_from_file(&title_screen_logo_file);
@@ -202,6 +202,10 @@ options_menu::options_menu() :
     bmp_menu_bg(NULL),
     cur_player_nr(0),
     cur_page_nr(0),
+    cur_player_nr_widget(NULL),
+    cur_page_nr_widget(NULL),
+    input_capture_msg_widget(NULL),
+    input_capture_control_nr(0),
     capturing_input(false),
     time_spent(0) {
     
@@ -216,7 +220,7 @@ void options_menu::load() {
     capturing_input = false;
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.png");
+    bmp_menu_bg = load_bmp("Main_menu.jpg");
     
     //Menu widgets.
     menu_widgets.push_back(
@@ -615,6 +619,8 @@ void options_menu::leave() {
 area_menu::area_menu() :
     game_state(),
     time_spent(0),
+    cur_page_nr(0),
+    cur_page_nr_widget(NULL),
     bmp_menu_bg(NULL) {
     
 }
@@ -654,7 +660,7 @@ void area_menu::load() {
     }
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.png");
+    bmp_menu_bg = load_bmp("Main_menu.jpg");
     
     //Menu widgets.
     menu_widgets.push_back(

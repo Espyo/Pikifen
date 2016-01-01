@@ -28,11 +28,11 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 5;
+const unsigned char VERSION_MINOR = 6;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 11;
-const unsigned char VERSION_MONTH = 10;
-const unsigned int  VERSION_YEAR  = 15;      //The year is 2000 + this.
+const unsigned char VERSION_DAY   = 1;
+const unsigned char VERSION_MONTH = 1;
+const unsigned int  VERSION_YEAR  = 16;      //The year is 2000 + this.
 
 const float AREA_TITLE_FADE_DURATION    = 3.0f;      //How long it takes for the area name to fade away, in-game.
 const float AUTO_PLUCK_MAX_RADIUS       = 160.0f;    //How far a leader can go to auto-pluck the next Pikmin.

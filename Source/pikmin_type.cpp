@@ -76,7 +76,6 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GET_UP,   "get_up"));
 }
 
 
@@ -472,6 +471,8 @@ void pikmin_type::init_script() {
     first_state_nr = fix_states(states, "idle");
     
     if(states.size() != N_PIKMIN_STATES) {
-        error_log("ENGINE WARNING: Number of Pikmin states on the FSM and the enum do not match.");
+        error_log(
+            "ENGINE WARNING: Number of Pikmin states on the FSM (" + i2s(states.size()) +
+            ") and the enum (" + i2s(N_PIKMIN_STATES) + ") do not match.");
     }
 }
