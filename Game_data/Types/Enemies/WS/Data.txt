@@ -35,6 +35,7 @@ script{
             state = dying
         }
     }
+    
     going_home{
         on_enter{
             move = home
@@ -53,6 +54,7 @@ script{
             state = flying
         }
     }
+    
     resting{
         on_enter{
             animation = resting
@@ -71,6 +73,7 @@ script{
             state = dying
         }
     }
+    
     flying{
         on_enter{
             animation = flapping
@@ -94,6 +97,7 @@ script{
             state = going_home
         }
     }
+    
     dying{
         on_enter{
             special_function = die_start
@@ -106,6 +110,7 @@ script{
             state = dead
         }
     }
+    
     dead{
         
     }

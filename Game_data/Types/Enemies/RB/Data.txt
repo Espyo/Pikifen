@@ -1,12 +1,9 @@
 name = Red Bulborb
 
-always_active = yes
 big_damage_interval = 100
-can_regenerate = false
 drops_corpse = true
 first_state = sleeping
 height = 128
-is_boss = false
 max_carriers = 20
 max_health = 750
 move_speed = 80
@@ -16,7 +13,6 @@ pikmin_seeds = 12
 pushable = true
 pushes = true
 radius = 60
-revive_speed = 0
 rotation_speed = 2
 sight_radius = 300
 territory_radius = 500
@@ -110,11 +106,11 @@ script{
             chomp = 5 mouth
         }
         on_animation_end{
-            state = check_mouth
+            state = checking_mouth
         }
     }
     
-    check_mouth{
+    checking_mouth{
         on_mouth_occupied{
             state = eating
         }

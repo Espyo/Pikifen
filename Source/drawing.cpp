@@ -258,7 +258,7 @@ void do_game_drawing() {
                 mob_ptr->health < mob_ptr->type->max_health &&
                 mob_ptr->health > 0
             ) {
-                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - 4, mob_ptr->health, mob_ptr->type->max_health);
+                draw_health(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - DEF_HEALTH_WHEEL_RADIUS - 4, mob_ptr->health, mob_ptr->type->max_health);
             }
         }
         

@@ -1,25 +1,21 @@
 name = Dwarf Red Bulborb
 
-always_active = yes
 big_damage_interval = 50
-can_regenerate = false
 drops_corpse = true
 first_state = examining
 height = 32
-is_boss = false
 max_carriers = 6
 max_health = 200
-move_speed = 20
+move_speed = 40
 near_angle = 0.78
-near_radius = 40
+near_radius = 15
 pikmin_seeds = 4
 pushable = true
 pushes = true
 radius = 20
-revive_speed = 0
 rotation_speed = 2
 sight_radius = 100
-territory_radius = 500
+territory_radius = 300
 value = 15
 weight = 3
 
@@ -59,7 +55,34 @@ script{
             state = dying
         }
         on_animation_end{
+            state = exploring
+        }
+    }
+    
+    exploring{
+        on_enter{
+            timer = 2
+            move = randomly
+            animation = walk
+        }
+        on_reach_destination{
             state = examining
+        }
+        on_timer{
+            state = examining
+        }
+        on_far_from_home{
+            state = returning
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
         }
     }
     
@@ -114,11 +137,11 @@ script{
             chomp = 1 mouth
         }
         on_animation_end{
-            state = check_mouth
+            state = checking_mouth
         }
     }
     
-    check_mouth{
+    checking_mouth{
         on_leave{
             chomp =
         }

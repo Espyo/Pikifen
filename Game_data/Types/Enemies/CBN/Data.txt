@@ -1,13 +1,9 @@
 name = Cloaking Burrow-nit
 
-always_active = yes
 big_damage_interval = 20
-can_regenerate = true
-chomp_max_victims = 1
 drops_corpse = true
 first_state = burrowed
 height = 64
-is_boss = true
 max_carriers = 16
 max_health = 500
 move_speed = 50
@@ -17,7 +13,6 @@ pikmin_seeds = 10
 pushable = true
 pushes = true
 radius = 30
-revive_speed = 10
 rotation_speed = 3
 sight_radius = 200
 territory_radius = 300
@@ -108,11 +103,11 @@ script{
             chomp = 1 mouth
         }
         on_animation_end{
-            state = check_mouth
+            state = checking_mouth
         }
     }
     
-    check_mouth{
+    checking_mouth{
         on_mouth_occupied{
             state = eating
         }

@@ -341,7 +341,7 @@ void do_gameplay_logic() {
                     mob_event* see_ob_ev = q_get_event(m_ptr, MOB_EVENT_SEEN_OBJECT);
                     if(see_op_ev || see_ob_ev) {
                     
-                        if(d <= (m_ptr->type->radius + m2_ptr->type->radius + m_ptr->type->sight_radius)) {
+                        if(d <= m_ptr->type->sight_radius) {
                             if(see_ob_ev) see_ob_ev->run(m_ptr, (void*) m2_ptr);
                             if(see_op_ev && should_attack(m_ptr, m2_ptr)) {
                                 see_op_ev->run(m_ptr, (void*) m2_ptr);
