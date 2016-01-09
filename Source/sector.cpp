@@ -132,7 +132,9 @@ void area_map::generate_linedefs_blockmap(vector<linedef*> &linedefs) {
                         if(
                             (l_ptr->sectors[0]->z == l_ptr->sectors[1]->z) &&
                             l_ptr->sectors[0]->type != SECTOR_TYPE_GATE &&
-                            l_ptr->sectors[1]->type != SECTOR_TYPE_GATE
+                            l_ptr->sectors[1]->type != SECTOR_TYPE_GATE &&
+                            l_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
+                            l_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
                             add_linedef = false;
                         }

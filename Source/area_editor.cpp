@@ -633,8 +633,8 @@ void area_editor::find_errors() {
                     else {
                         if(l_ptr->sectors[0]->z > l_ptr->sectors[1]->z + SECTOR_STEP) in_wall = true;
                         if(l_ptr->sectors[1]->z > l_ptr->sectors[0]->z + SECTOR_STEP) in_wall = true;
-                        if(l_ptr->sectors[0]->type == SECTOR_TYPE_WALL) in_wall = true;
-                        if(l_ptr->sectors[1]->type == SECTOR_TYPE_WALL) in_wall = true;
+                        if(l_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
+                        if(l_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
                     }
                     
                     if(in_wall) {

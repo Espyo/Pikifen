@@ -48,6 +48,13 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
     }
     
     efc.new_state("active", LEADER_STATE_ACTIVE); {
@@ -55,6 +62,7 @@ void leader_type::init_script() {
             efc.run_function(leader::enter_active);
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::stop);
             efc.run_function(leader::unfocus);
             efc.change_state("idle");
         }
@@ -309,6 +317,10 @@ void leader_type::init_script() {
             efc.run_function(leader::stop_pluck);
             efc.change_state("dying");
         }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::unfocus);
+            efc.change_state("inactive_going_to_pluck");
+        }
     }
     
     efc.new_state("plucking", LEADER_STATE_PLUCKING); {
@@ -319,6 +331,10 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run_function(leader::stop_pluck);
             efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::unfocus);
+            efc.change_state("inactive_plucking");
         }
     }
     

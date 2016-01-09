@@ -18,7 +18,7 @@ gate::gate(const float x, const float y, gate_type* type, const float angle, con
     gat_type(type),
     sec(get_sector(x, y, nullptr, true)) {
     
-    sec->type = SECTOR_TYPE_WALL;
+    sec->type = SECTOR_TYPE_BLOCKING;
     team = MOB_TEAM_OBSTACLE;
 }
 

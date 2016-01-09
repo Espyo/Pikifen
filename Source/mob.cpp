@@ -367,8 +367,8 @@ void mob::tick_physics() {
                                         highest_z = s_ptr->z;
                                     }
                                     
-                                    if(s_ptr->type == SECTOR_TYPE_WALL) {
-                                        //The mob cannot be inside a wall-type sector whatsoever.
+                                    if(s_ptr->type == SECTOR_TYPE_BLOCKING) {
+                                        //The mob cannot be inside a blocking-type sector whatsoever.
                                         successful_move = false;
                                         
                                     } else {

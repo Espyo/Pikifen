@@ -166,12 +166,6 @@ void leader::join_group(mob* m, void* info1, void* info2) {
 
 void leader::focus(mob* m, void* info1, void* info2) {
     switch_to_leader((leader*) m);
-    
-    m->speed_x = 0;
-    m->speed_y = 0;
-    m->remove_target();
-    ((leader*) m)->lea_type->sfx_name_call.play(0, false);
-    
 }
 
 void leader::enter_idle(mob* m, void* info1, void* info2) {
@@ -467,7 +461,7 @@ void leader::go_pluck(mob* m, void* info1, void* info2) {
     lea_ptr->set_target(
         pik_ptr->x, pik_ptr->y,
         NULL, NULL,
-        false, nullptr, false,
+        false, nullptr, true,
         pik_ptr->type->radius + lea_ptr->type->radius
     );
     pik_ptr->pluck_reserved = true;
@@ -505,7 +499,10 @@ void leader::search_seed(mob* m, void* info1, void* info2) {
     
     //If info1 is not void, that means this is an inactive leader.
     if(info1) {
-        l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
+        if(l_ptr->following_party)
+            l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
+        else
+            l_ptr->fsm.set_state(LEADER_STATE_IDLE);
     } else {
         l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
@@ -563,6 +560,7 @@ void switch_to_leader(leader* new_leader_ptr) {
     cur_leader_nr = new_leader_nr;
     
     start_camera_pan(cur_leader_ptr->x, cur_leader_ptr->y);
+    new_leader_ptr->lea_type->sfx_name_call.play(0, false);
     
 }
 
