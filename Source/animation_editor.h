@@ -14,6 +14,8 @@
 
 #include <string>
 
+#include <allegro5/allegro_native_dialog.h>
+
 #include "animation.h"
 #include "game_state.h"
 #include "hitbox.h"
@@ -31,36 +33,35 @@ private:
         ANIMATION_EDITOR_PICKER_FRAME,
         ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
         ANIMATION_EDITOR_PICKER_HITBOX,
-        ANIMATION_EDITOR_PICKER_OBJECT, //Make sure this is the last one.
     };
     
-    animation_pool    anims;
-    bool             anim_playing;
-    animation*       cur_anim;
-    frame*           cur_frame;
-    size_t           cur_frame_instance_nr;
-    float            cur_frame_time;
-    float            cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
-    size_t           cur_hitbox_instance_nr;
-    size_t           cur_hitbox_nr;
-    string           file_name;
-    size_t           grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
-    bool             grabbing_hitbox_edge;
-    float            grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
-    float            grabbing_hitbox_y;
-    lafi::gui*       gui;
-    bool             hitboxes_visible;
-    bool             holding_m1;
-    bool             holding_m2;
-    unsigned char    maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
-    unsigned char    mob_type_list; //Use MOB_TYPE_*.
-    unsigned char    mode;
-    float            new_hitbox_corner_x; //FLT_MAX = none.
-    float            new_hitbox_corner_y;
-    string           object_name;
-    unsigned char    sec_mode; //Secondary/sub mode.
-    ALLEGRO_BITMAP*  top_bmp[3]; //Top bitmaps for the current Pikmin type.
-    lafi::widget*    wum; //Widget under mouse.
+    animation_pool       anims;
+    bool                 anim_playing;
+    animation*           cur_anim;
+    frame*               cur_frame;
+    size_t               cur_frame_instance_nr;
+    float                cur_frame_time;
+    float                cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
+    size_t               cur_hitbox_instance_nr;
+    size_t               cur_hitbox_nr;
+    string               file_path;
+    ALLEGRO_FILECHOOSER* file_dialog;
+    size_t               grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
+    bool                 grabbing_hitbox_edge;
+    float                grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
+    float                grabbing_hitbox_y;
+    lafi::gui*           gui;
+    bool                 hitboxes_visible;
+    bool                 holding_m1;
+    bool                 holding_m2;
+    bool                 is_pikmin;
+    unsigned char        maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
+    unsigned char        mode;
+    float                new_hitbox_corner_x; //FLT_MAX = none.
+    float                new_hitbox_corner_y;
+    unsigned char        sec_mode; //Secondary/sub mode.
+    ALLEGRO_BITMAP*      top_bmp[3]; //Top bitmaps for the current Pikmin type.
+    lafi::widget*        wum; //Widget under mouse.
     
     void leave();
     void gui_load_animation();

@@ -41,6 +41,7 @@ animation_editor::animation_editor() :
     cur_hitbox_alpha(0),
     cur_hitbox_instance_nr(string::npos),
     cur_hitbox_nr(string::npos),
+    file_dialog(NULL),
     grabbing_hitbox(string::npos),
     grabbing_hitbox_edge(false),
     grabbing_hitbox_x(0),
@@ -49,8 +50,8 @@ animation_editor::animation_editor() :
     hitboxes_visible(true),
     holding_m1(false),
     holding_m2(false),
+    is_pikmin(false),
     maturity(0),
-    mob_type_list(0),
     mode(EDITOR_MODE_MAIN),
     new_hitbox_corner_x(FLT_MAX),
     new_hitbox_corner_y(FLT_MAX),
@@ -164,7 +165,7 @@ void animation_editor::do_drawing() {
                 }
             }
             
-            if(f->top_visible && mob_type_list == MOB_CATEGORY_PIKMIN) {
+            if(f->top_visible && is_pikmin) {
                 draw_sprite(
                     top_bmp[maturity],
                     f->top_x, f->top_y,
@@ -242,7 +243,7 @@ void animation_editor::gui_load_frame() {
         ((lafi::textbox*) f->widgets["txt_offsx"])->text = f2s(cur_frame->offs_x);
         ((lafi::textbox*) f->widgets["txt_offsy"])->text = f2s(cur_frame->offs_y);
         
-        if(mob_type_list == MOB_CATEGORY_PIKMIN) {
+        if(is_pikmin) {
             enable_widget(f->widgets["but_top"]);
         } else {
             disable_widget(f->widgets["but_top"]);
@@ -656,13 +657,9 @@ void animation_editor::load() {
     gui->add("frm_main", frm_main);
     
     frm_main->easy_row();
-    frm_main->easy_add("lbl_category", new lafi::label(0, 0, 0, 0, "Category:"), 100, 16);
+    frm_main->easy_add("lbl_file", new lafi::label(0, 0, 0, 0, "Choose a file:"), 100, 16);
     frm_main->easy_row();
-    frm_main->easy_add("but_category", new lafi::button(0, 0, 0, 0), 100, 32);
-    frm_main->easy_row();
-    frm_main->easy_add("lbl_object", new lafi::label(0, 0, 0, 0, "Object:"), 100, 16);
-    frm_main->easy_row();
-    frm_main->easy_add("but_object", new lafi::button(0, 0, 0, 0), 100, 32);
+    frm_main->easy_add("but_file", new lafi::button(0, 0, 0, 0), 100, 32);
     int y = frm_main->easy_row();
     
     lafi::frame* frm_object = new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
@@ -940,14 +937,44 @@ void animation_editor::load() {
     
     
     //Properties -- main.
-    frm_main->widgets["but_category"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_OBJECT, false);
+    frm_main->widgets["but_file"]->left_mouse_click_handler = [this, frm_main] (lafi::widget*, int, int) {
+        al_show_native_file_dialog(display, file_dialog);
+        
+        if(al_get_native_file_dialog_count(file_dialog) == 0) return;
+        
+        file_path = al_get_native_file_dialog_path(file_dialog, 0);
+        file_path = replace_all(file_path, "\\", "/");
+        load_animation_pool();
+        
+        vector<string> file_path_parts = split(file_path, "/");
+        string name_to_show = file_path;
+        if(file_path.size() > 20) {
+            //Show the last 20 characters.
+            name_to_show = "..." + file_path.substr(file_path.size() - 20, 20);
+        }
+        ((lafi::button*) frm_main->widgets["but_file"])->text = name_to_show;
+        
+        //Top bitmap.
+        for(unsigned char t = 0; t < 3; ++t) {
+            if(top_bmp[t] && top_bmp[t] != bmp_error) {
+                al_destroy_bitmap(top_bmp[t]);
+                top_bmp[t] = NULL;
+            }
+        }
+        
+        if(file_path.find(PIKMIN_FOLDER) != string::npos) {
+            is_pikmin = true;
+            data_node data = data_node(PIKMIN_FOLDER + "/" + file_path_parts[file_path_parts.size() - 2] + "/Data.txt");
+            top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+            top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
+            top_bmp[2] = load_bmp(data.get_child_by_name("top_flower")->value, &data);
+        } else {
+            is_pikmin = false;
+        }
+        
+        update_stats();
     };
-    frm_main->widgets["but_category"]->description = "Pick a category.";
-    frm_main->widgets["but_object"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        open_picker(ANIMATION_EDITOR_PICKER_OBJECT + 1 + mob_type_list, false);
-    };
-    frm_main->widgets["but_object"]->description = "Pick an object to edit.";
+    frm_main->widgets["but_file"]->description = "Pick a file to load or create.";
     frm_main->widgets["frm_object"]->widgets["but_anims"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         cur_hitbox_instance_nr = string::npos;
         if(cur_anim) if(cur_anim->frame_instances.size()) cur_frame_instance_nr = 0;
@@ -1379,6 +1406,17 @@ void animation_editor::load() {
     lafi::label* gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     gui->add("lbl_status_bar", gui_status_bar);
     
+    
+    //File dialog.
+    file_dialog =
+        al_create_native_file_dialog(
+            NULL,
+            "Please choose an animation text file to load or create.",
+            "*.txt",
+            0
+        );
+        
+        
     update_stats();
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
@@ -1391,9 +1429,9 @@ void animation_editor::load() {
 void animation_editor::load_animation_pool() {
     anims.destroy();
     
-    data_node file = data_node(file_name);
+    data_node file = data_node(file_path);
     if(!file.file_was_opened) {
-        file.save_file(file_name, true);
+        file.save_file(file_path, true);
     }
     anims = load_animation_pool_from_file(&file);
     
@@ -1469,16 +1507,7 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
     }
     
     vector<string> elements;
-    if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
-        elements.push_back("Enemies");
-        elements.push_back("Leaders");
-        elements.push_back("Onions");
-        elements.push_back("Gates");
-        elements.push_back("Pellets");
-        elements.push_back("Pikmin");
-        elements.push_back("Special");
-        elements.push_back("Treasures");
-    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             elements.push_back(anims.animations[a]->name);
         }
@@ -1486,27 +1515,9 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         for(size_t f = 0; f < anims.frames.size(); ++f) {
             elements.push_back(anims.frames[f]->name);
         }
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ENEMIES) {
-        elements = folder_to_vector(ENEMIES_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_LEADERS) {
-        elements = folder_to_vector(LEADERS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
-        elements = folder_to_vector(ONIONS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_GATES) {
-        elements = folder_to_vector(GATES_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
-        elements = folder_to_vector(PELLETS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
-        elements = folder_to_vector(PIKMIN_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_SPECIAL) {
-        elements = folder_to_vector(SPECIAL_MOBS_FOLDER, true);
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
-        elements = folder_to_vector(TREASURES_FOLDER, true);
     }
     
-    if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {
-        hide_widget(gui->widgets["frm_main"]);
-    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
+    if(type == ANIMATION_EDITOR_PICKER_ANIMATION || type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
         hide_widget(gui->widgets["frm_anims"]);
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME || type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE) {
         hide_widget(gui->widgets["frm_frames"]);
@@ -1535,21 +1546,7 @@ void animation_editor::pick(string name, unsigned char type) {
     hide_widget(gui->widgets["frm_picker"]);
     show_widget(gui->widgets["frm_bottom"]);
     
-    if(type == ANIMATION_EDITOR_PICKER_OBJECT) {
-        if(name == "Enemies")        mob_type_list = MOB_CATEGORY_ENEMIES;
-        else if(name == "Leaders")   mob_type_list = MOB_CATEGORY_LEADERS;
-        else if(name == "Gates")     mob_type_list = MOB_CATEGORY_GATES;
-        else if(name == "Onions")    mob_type_list = MOB_CATEGORY_ONIONS;
-        else if(name == "Pellets")   mob_type_list = MOB_CATEGORY_PELLETS;
-        else if(name == "Pikmin")    mob_type_list = MOB_CATEGORY_PIKMIN;
-        else if(name == "Special")   mob_type_list = MOB_CATEGORY_SPECIAL;
-        else if(name == "Treasures") mob_type_list = MOB_CATEGORY_TREASURES;
-        object_name.clear();
-        update_stats();
-        disable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
-        disable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
-        
-    } else if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         cur_anim = anims.animations[anims.find_animation(name)];
         cur_frame_instance_nr = (cur_anim->frame_instances.size()) ? 0 : string::npos;
         cur_hitbox_instance_nr = string::npos;
@@ -1568,48 +1565,6 @@ void animation_editor::pick(string name, unsigned char type) {
         show_widget(gui->widgets["frm_frames"]);
         gui_load_frame();
         
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ENEMIES) {
-        file_name = ENEMIES_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_LEADERS) {
-        file_name = LEADERS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_ONIONS) {
-        file_name = ONIONS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_GATES) {
-        file_name = GATES_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PELLETS) {
-        file_name = PELLETS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_PIKMIN) {
-        file_name = PIKMIN_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_SPECIAL) {
-        file_name = SPECIAL_MOBS_FOLDER;
-    } else if(type == ANIMATION_EDITOR_PICKER_OBJECT + 1 + MOB_CATEGORY_TREASURES) {
-        file_name = TREASURES_FOLDER;
-    }
-    
-    if(type > ANIMATION_EDITOR_PICKER_OBJECT) {
-        string temp_path_start = file_name;
-        file_name += "/" + name + "/Animations.txt";
-        object_name = name;
-        load_animation_pool();
-        
-        //Top bitmap.
-        for(unsigned char t = 0; t < 3; ++t) {
-            if(top_bmp[t] && top_bmp[t] != bmp_error) {
-                al_destroy_bitmap(top_bmp[t]);
-                top_bmp[t] = NULL;
-            }
-        }
-        
-        if(mob_type_list == MOB_CATEGORY_PIKMIN) {
-            data_node data = data_node(temp_path_start + "/" + name + "/Data.txt");
-            top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
-            top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
-            top_bmp[2] = load_bmp(data.get_child_by_name("top_flower")->value, &data);
-        }
-    }
-    if(type >= ANIMATION_EDITOR_PICKER_OBJECT) {
-        show_widget(gui->widgets["frm_main"]);
-        update_stats();
     }
 }
 
@@ -1658,7 +1613,7 @@ void animation_editor::save_animation_pool() {
         frame_node->add(new data_node("offs_x", f2s(anims.frames[f]->offs_x)));
         frame_node->add(new data_node("offs_y", f2s(anims.frames[f]->offs_y)));
         
-        if(mob_type_list == MOB_CATEGORY_PIKMIN) {
+        if(is_pikmin) {
             frame_node->add(new data_node("top_visible", b2s(anims.frames[f]->top_visible)));
             frame_node->add(new data_node("top_x", f2s(anims.frames[f]->top_x)));
             frame_node->add(new data_node("top_y", f2s(anims.frames[f]->top_y)));
@@ -1703,7 +1658,7 @@ void animation_editor::save_animation_pool() {
         
     }
     
-    file_node.save_file(file_name);
+    file_node.save_file(file_path);
 }
 
 
@@ -1713,6 +1668,7 @@ void animation_editor::save_animation_pool() {
 void animation_editor::unload() {
     delete(gui->style);
     delete(gui);
+    al_destroy_native_file_dialog(file_dialog);
 }
 
 /* ----------------------------------------------------------------------------
@@ -1776,24 +1732,12 @@ void animation_editor::update_hitboxes() {
  * Update the stats on the main menu, as well as some other minor things.
  */
 void animation_editor::update_stats() {
-    lafi::widget* f = gui->widgets["frm_main"];
-    string s;
-    
-    if(mob_type_list == MOB_CATEGORY_ENEMIES)        s = "Enemies";
-    else if(mob_type_list == MOB_CATEGORY_LEADERS)   s = "Leaders";
-    else if(mob_type_list == MOB_CATEGORY_ONIONS)    s = "Onions";
-    else if(mob_type_list == MOB_CATEGORY_GATES)     s = "Gates";
-    else if(mob_type_list == MOB_CATEGORY_PELLETS)   s = "Pellets";
-    else if(mob_type_list == MOB_CATEGORY_PIKMIN)    s = "Pikmin";
-    else if(mob_type_list == MOB_CATEGORY_SPECIAL)   s = "Special";
-    else if(mob_type_list == MOB_CATEGORY_TREASURES) s = "Treasures";
-    
-    ((lafi::button*) f->widgets["but_category"])->text = s;
-    ((lafi::button*) f->widgets["but_object"])->text = animation_editor::object_name;
-    
-    f = f->widgets["frm_object"];
-    if(object_name.size()) { show_widget(f); } //Why the curly braces? Try removing them. You should get an "illegal else" error. Why? ...Good question.
-    else hide_widget(f);
+    lafi::widget* f = gui->widgets["frm_main"]->widgets["frm_object"];
+    if(file_path.empty()) {
+        hide_widget(f);
+    } else {
+        show_widget(f);
+    }
     
     ((lafi::label*) f->widgets["lbl_n_anims"])->text = "Animations: " + i2s(anims.animations.size());
     ((lafi::label*) f->widgets["lbl_n_frames"])->text = "Frames: " + i2s(anims.frames.size());
