@@ -1923,7 +1923,7 @@ void area_editor::load() {
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
     frm_sector->widgets["txt_texture"]->description =    "File name of the Texture (image) of the floor.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
-    frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to knowdrawing.cpp.";
+    frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to know.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
     frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";

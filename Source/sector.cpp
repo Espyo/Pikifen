@@ -1097,7 +1097,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         }
         
         //Which is closest, a vertex or a line?
-        if(closest_vertex_ur < closest_line_ur) {
+        if(closest_vertex_ur <= closest_line_ur) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
