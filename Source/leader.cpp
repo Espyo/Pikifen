@@ -530,7 +530,8 @@ void leader::be_thrown(mob* m, void* info1, void* info2) {
 }
 
 void leader::land(mob* m, void* info1, void* info2) {
-
+    m->remove_target();
+    m->speed_x = m->speed_y = 0;
 }
 
 void swap_pikmin(mob* new_pik) {

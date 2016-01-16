@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Sector, linedef, etc. classes, and related functions.
+ * Sector, edge, etc. classes, and related functions.
  */
 
 #define _USE_MATH_DEFINES
@@ -40,15 +40,15 @@ area_map::area_map() :
 void area_map::generate_blockmap() {
     bmap.clear();
     
-    if(vertices.empty()) return;
+    if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
     float min_x, max_x, min_y, max_y;
-    min_x = max_x = vertices[0]->x;
-    min_y = max_y = vertices[0]->y;
+    min_x = max_x = vertexes[0]->x;
+    min_y = max_y = vertexes[0]->y;
     
-    for(size_t v = 0; v < vertices.size(); ++v) {
-        vertex* v_ptr = vertices[v];
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
         min_y = min(v_ptr->y, min_y);
@@ -56,21 +56,21 @@ void area_map::generate_blockmap() {
     }
     
     bmap.x1 = min_x; bmap.y1 = min_y;
-    //Add one more to the cols/rows because, suppose there's a linedef at y = 256.
+    //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
     bmap.n_cols = ceil((max_x - min_x) / BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.n_rows = ceil((max_y - min_y) / BLOCKMAP_BLOCK_SIZE) + 1;
     
-    bmap.linedefs.assign(bmap.n_cols, vector<vector<linedef*> >(bmap.n_rows, vector<linedef*>()));
+    bmap.edges.assign(bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>()));
     bmap.sectors.assign( bmap.n_cols, vector<unordered_set<sector*> >( bmap.n_rows, unordered_set<sector*>()));
     
     
-    //Now, add a list of linedefs to each block.
-    generate_linedefs_blockmap(linedefs);
+    //Now, add a list of edges to each block.
+    generate_edges_blockmap(edges);
     
     
     //If at this point, there's any block without a sector, that means
-    //that the block has no linedefs. It has, however, a single sector,
+    //that the block has no edges. It has, however, a single sector,
     //so use the triangle method to get the sector. Checking the center is
     //just a good a spot as any.
     for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
@@ -92,22 +92,22 @@ void area_map::generate_blockmap() {
 
 
 /* ----------------------------------------------------------------------------
- * Generates the blockmap for a set of linedefs.
+ * Generates the blockmap for a set of edges.
  */
-void area_map::generate_linedefs_blockmap(vector<linedef*> &linedefs) {
+void area_map::generate_edges_blockmap(vector<edge*> &edges) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
-    for(size_t l = 0; l < linedefs.size(); ++l) {
+    for(size_t e = 0; e < edges.size(); ++e) {
     
-        //Get which blocks this linedef belongs to, via bounding-box,
+        //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
         
-        linedef* l_ptr = linedefs[l];
+        edge* e_ptr = edges[e];
         
-        b_min_x = bmap.get_col(min(l_ptr->vertices[0]->x, l_ptr->vertices[1]->x));
-        b_max_x = bmap.get_col(max(l_ptr->vertices[0]->x, l_ptr->vertices[1]->x));
-        b_min_y = bmap.get_row(min(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
-        b_max_y = bmap.get_row(max(l_ptr->vertices[0]->y, l_ptr->vertices[1]->y));
+        b_min_x = bmap.get_col(min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x));
+        b_max_x = bmap.get_col(max(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x));
+        b_min_y = bmap.get_row(min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
+        b_max_y = bmap.get_row(max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
         
         for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
             for(size_t by = b_min_y; by <= b_max_y; ++by) {
@@ -116,34 +116,34 @@ void area_map::generate_linedefs_blockmap(vector<linedef*> &linedefs) {
                 float bx1 = bmap.get_x1(bx);
                 float by1 = bmap.get_y1(by);
                 
-                //Check if the linedef is inside this blockmap.
+                //Check if the edge is inside this blockmap.
                 if(
                     square_intersects_line(
                         bx1, by1, bx1 + BLOCKMAP_BLOCK_SIZE, by1 + BLOCKMAP_BLOCK_SIZE,
-                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     )
                 ) {
                 
                     //If it is, add it and the sectors to the list.
-                    bool add_linedef = true;
-                    if(l_ptr->sectors[0] && l_ptr->sectors[1]) {
+                    bool add_edge = true;
+                    if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
-                            (l_ptr->sectors[0]->z == l_ptr->sectors[1]->z) &&
-                            l_ptr->sectors[0]->type != SECTOR_TYPE_GATE &&
-                            l_ptr->sectors[1]->type != SECTOR_TYPE_GATE &&
-                            l_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
-                            l_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
+                            (e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) &&
+                            e_ptr->sectors[0]->type != SECTOR_TYPE_GATE &&
+                            e_ptr->sectors[1]->type != SECTOR_TYPE_GATE &&
+                            e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
+                            e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
-                            add_linedef = false;
+                            add_edge = false;
                         }
                     }
                     
-                    if(add_linedef) bmap.linedefs[bx][by].push_back(l_ptr);
+                    if(add_edge) bmap.edges[bx][by].push_back(e_ptr);
                     
-                    if(l_ptr->sectors[0]) bmap.sectors[bx][by].insert(l_ptr->sectors[0]);
-                    if(l_ptr->sectors[1]) bmap.sectors[bx][by].insert(l_ptr->sectors[1]);
+                    if(e_ptr->sectors[0]) bmap.sectors[bx][by].insert(e_ptr->sectors[0]);
+                    if(e_ptr->sectors[1]) bmap.sectors[bx][by].insert(e_ptr->sectors[1]);
                 }
             }
         }
@@ -155,11 +155,11 @@ void area_map::generate_linedefs_blockmap(vector<linedef*> &linedefs) {
  * Clears the info of an area map.
  */
 void area_map::clear() {
-    for(size_t v = 0; v < vertices.size(); ++v) {
-        delete vertices[v];
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        delete vertexes[v];
     }
-    for(size_t l = 0; l < linedefs.size(); ++l) {
-        delete linedefs[l];
+    for(size_t e = 0; e < edges.size(); ++e) {
+        delete edges[e];
     }
     for(size_t s = 0; s < sectors.size(); ++s) {
         delete sectors[s];
@@ -171,8 +171,8 @@ void area_map::clear() {
         delete tree_shadows[s];
     }
     
-    vertices.clear();
-    linedefs.clear();
+    vertexes.clear();
+    edges.clear();
     sectors.clear();
     mob_generators.clear();
     tree_shadows.clear();
@@ -201,7 +201,7 @@ blockmap::blockmap() :
  */
 void blockmap::clear() {
     x1 = y1 = 0;
-    linedefs.clear();
+    edges.clear();
     sectors.clear();
 }
 
@@ -247,10 +247,10 @@ float blockmap::get_y1(const size_t row) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a linedef.
+ * Creates an edge.
  */
-linedef::linedef(size_t v1, size_t v2) {
-    vertices[0] = vertices[1] = NULL;
+edge::edge(size_t v1, size_t v2) {
+    vertexes[0] = vertexes[1] = NULL;
     sectors[0] = sectors[1] = NULL;
     sector_nrs[0] = sector_nrs[1] = string::npos;
     
@@ -259,68 +259,68 @@ linedef::linedef(size_t v1, size_t v2) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the pointers to point to the correct sectors and vertices.
+ * Fixes the pointers to point to the correct sectors and vertexes.
  */
-void linedef::fix_pointers(area_map &a) {
+void edge::fix_pointers(area_map &a) {
     sectors[0] = sectors[1] = NULL;
     for(size_t s = 0; s < 2; ++s) {
         size_t s_nr = sector_nrs[s];
         sectors[s] = (s_nr == string::npos ? NULL : a.sectors[s_nr]);
     }
     
-    vertices[0] = vertices[1] = NULL;
+    vertexes[0] = vertexes[1] = NULL;
     for(size_t v = 0; v < 2; ++v) {
         size_t v_nr = vertex_nrs[v];
-        vertices[v] = (v_nr == string::npos ? NULL : a.vertices[v_nr]);
+        vertexes[v] = (v_nr == string::npos ? NULL : a.vertexes[v_nr]);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Removes the linedef from its sectors, but doesn't mark
+ * Removes the edge from its sectors, but doesn't mark
  * the sectors as "none".
- * Returns the linedef number.
+ * Returns the edge number.
  */
-size_t linedef::remove_from_sectors() {
-    size_t l_nr = string::npos;
+size_t edge::remove_from_sectors() {
+    size_t e_nr = string::npos;
     for(unsigned char s = 0; s < 2; ++s) {
         if(!sectors[s]) continue;
-        for(size_t l = 0; l < sectors[s]->linedefs.size(); ++l) {
-            linedef* l_ptr = sectors[s]->linedefs[l];
-            if(l_ptr == this) {
-                sectors[s]->linedefs.erase(sectors[s]->linedefs.begin() + l);
-                auto nr_it = sectors[s]->linedef_nrs.begin() + l;
-                l_nr = *nr_it;
-                sectors[s]->linedef_nrs.erase(nr_it);
+        for(size_t e = 0; e < sectors[s]->edges.size(); ++e) {
+            edge* e_ptr = sectors[s]->edges[e];
+            if(e_ptr == this) {
+                sectors[s]->edges.erase(sectors[s]->edges.begin() + e);
+                auto nr_it = sectors[s]->edge_nrs.begin() + e;
+                e_nr = *nr_it;
+                sectors[s]->edge_nrs.erase(nr_it);
                 break;
             }
         }
     }
-    return l_nr;
+    return e_nr;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Removes the linedef from its vertices, but doesn't mark
- * the vertices as "none".
- * Returns the linedef number.
+ * Removes the edge from its vertexes, but doesn't mark
+ * the vertexes as "none".
+ * Returns the edge number.
  */
-size_t linedef::remove_from_vertices() {
-    size_t l_nr = string::npos;
+size_t edge::remove_from_vertexes() {
+    size_t e_nr = string::npos;
     for(unsigned char v = 0; v < 2; ++v) {
-        if(!vertices[v]) continue;
-        for(size_t l = 0; l < vertices[v]->linedefs.size(); ++l) {
-            linedef* l_ptr = vertices[v]->linedefs[l];
-            if(l_ptr == this) {
-                vertices[v]->linedefs.erase(vertices[v]->linedefs.begin() + l);
-                auto nr_it = vertices[v]->linedef_nrs.begin() + l;
-                l_nr = *nr_it;
-                vertices[v]->linedef_nrs.erase(nr_it);
+        if(!vertexes[v]) continue;
+        for(size_t e = 0; e < vertexes[v]->edges.size(); ++e) {
+            edge* e_ptr = vertexes[v]->edges[e];
+            if(e_ptr == this) {
+                vertexes[v]->edges.erase(vertexes[v]->edges.begin() + e);
+                auto nr_it = vertexes[v]->edge_nrs.begin() + e;
+                e_nr = *nr_it;
+                vertexes[v]->edge_nrs.erase(nr_it);
                 break;
             }
         }
     }
-    return l_nr;
+    return e_nr;
 }
 
 
@@ -353,7 +353,7 @@ sector::sector() :
 
 /* ----------------------------------------------------------------------------
  * Clones a sector's properties onto another,
- * not counting the list of linedefs or bitmap
+ * not counting the list of edges or bitmap
  * (the file name is cloned too, though).
  */
 void sector::clone(sector* new_sector) {
@@ -398,32 +398,32 @@ sector_texture_info::sector_texture_info() :
 
 
 /* ----------------------------------------------------------------------------
- * Creates a linedef intersection info structure.
+ * Creates an edge intersection info structure.
  */
-linedef_intersection::linedef_intersection(linedef* l1, linedef* l2) :
-    l1(l1),
-    l2(l2) {
+edge_intersection::edge_intersection(edge* e1, edge* e2) :
+    e1(e1),
+    e2(e2) {
     
 }
 
 
 /* ----------------------------------------------------------------------------
- * Checks whether the linedef intersection contains the specified linedef.
+ * Checks whether the edge intersection contains the specified edge.
  */
-bool linedef_intersection::contains(linedef* l) {
-    return l1 == l || l2 == l;
+bool edge_intersection::contains(edge* e) {
+    return e1 == e || e2 == e;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Connects the linedefs that link to it into the linedef_nrs vector.
+ * Connects the edges that link to it into the edge_nrs vector.
  */
-void sector::connect_linedefs(area_map &a, size_t s_nr) {
-    linedef_nrs.clear();
-    for(size_t l = 0; l < a.linedefs.size(); ++l) {
-        linedef* l_ptr = a.linedefs[l];
-        if(l_ptr->sector_nrs[0] == s_nr || l_ptr->sector_nrs[1] == s_nr) {
-            linedef_nrs.push_back(l);
+void sector::connect_edges(area_map &a, size_t s_nr) {
+    edge_nrs.clear();
+    for(size_t e = 0; e < a.edges.size(); ++e) {
+        edge* e_ptr = a.edges[e];
+        if(e_ptr->sector_nrs[0] == s_nr || e_ptr->sector_nrs[1] == s_nr) {
+            edge_nrs.push_back(e);
         }
     }
     fix_pointers(a);
@@ -431,13 +431,13 @@ void sector::connect_linedefs(area_map &a, size_t s_nr) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the pointers to point them to the correct linedefs.
+ * Fixes the pointers to point them to the correct edges.
  */
 void sector::fix_pointers(area_map &a) {
-    linedefs.clear();
-    for(size_t l = 0; l < linedef_nrs.size(); ++l) {
-        size_t l_nr = linedef_nrs[l];
-        linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
+    edges.clear();
+    for(size_t e = 0; e < edge_nrs.size(); ++e) {
+        size_t e_nr = edge_nrs[e];
+        edges.push_back(e_nr == string::npos ? NULL : a.edges[e_nr]);
     }
 }
 
@@ -490,14 +490,14 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 
 
 /* ----------------------------------------------------------------------------
- * Connects the linedefs that link to it into the linedef_nrs vector.
+ * Connects the edges that link to it into the edge_nrs vector.
  */
-void vertex::connect_linedefs(area_map &a, size_t v_nr) {
-    linedef_nrs.clear();
-    for(size_t l = 0; l < a.linedefs.size(); ++l) {
-        linedef* l_ptr = a.linedefs[l];
-        if(l_ptr->vertex_nrs[0] == v_nr || l_ptr->vertex_nrs[1] == v_nr) {
-            linedef_nrs.push_back(l);
+void vertex::connect_edges(area_map &a, size_t v_nr) {
+    edge_nrs.clear();
+    for(size_t e = 0; e < a.edges.size(); ++e) {
+        edge* e_ptr = a.edges[e];
+        if(e_ptr->vertex_nrs[0] == v_nr || e_ptr->vertex_nrs[1] == v_nr) {
+            edge_nrs.push_back(e);
         }
     }
     fix_pointers(a);
@@ -505,19 +505,19 @@ void vertex::connect_linedefs(area_map &a, size_t v_nr) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the pointers to point to the correct linedefs.
+ * Fixes the pointers to point to the correct edges.
  */
 void vertex::fix_pointers(area_map &a) {
-    linedefs.clear();
-    for(size_t l = 0; l < linedef_nrs.size(); ++l) {
-        size_t l_nr = linedef_nrs[l];
-        linedefs.push_back(l_nr == string::npos ? NULL : a.linedefs[l_nr]);
+    edges.clear();
+    for(size_t e = 0; e < edge_nrs.size(); ++e) {
+        size_t e_nr = edge_nrs[e];
+        edges.push_back(e_nr == string::npos ? NULL : a.edges[e_nr]);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns a point's sign on a line, used for detecting if it's inside a triangle.
+ * Returns a point's sign on a line segment, used for detecting if it's inside a triangle.
  */
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2) {
     return (x - lx2) * (ly1 - ly2) - (lx1 - lx2) * (y - ly2);
@@ -526,7 +526,7 @@ float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly
 
 /* ----------------------------------------------------------------------------
  * Returns the outer polygon and inner polygons of a sector,
- * with the vertices ordered counter-clockwise for the outer,
+ * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
  */
 void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
@@ -534,11 +534,11 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     
     bool doing_outer = true;
     
-    //First, compile a list of all linedefs related to this sector.
-    map<linedef*, bool> lines_done;
+    //First, compile a list of all edges related to this sector.
+    map<edge*, bool> edges_done;
     
-    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-        lines_done[s_ptr->linedefs[l]] = false;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edges_done[s_ptr->edges[e]] = false;
     }
     
     area_editor* ae = NULL;
@@ -546,14 +546,14 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
     
-    //Now travel along the lines, vertex by vertex, until we have no more left.
-    while(!lines_done.empty()) {
+    //Now travel along the edges, vertex by vertex, until we have no more left.
+    while(!edges_done.empty()) {
         bool poly_done = false;
         
         //Start with the rightmost vertex.
         //If we still haven't closed the outer polygon, then this vertex
         //mandatorily belongs to it. Otherwise, it belongs to an inner.
-        vertex* cur_vertex = get_rightmost_vertex(lines_done);
+        vertex* cur_vertex = get_rightmost_vertex(edges_done);
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
         
@@ -567,18 +567,18 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         
             float base_angle = prev_angle - M_PI; //The angle we came from.
             
-            //For every linedef attached to this vertex, find the closest one
+            //For every edge attached to this vertex, find the closest one
             //that hasn't been done, in the direction of travel.
             
             float best_angle_dif = 0;
-            linedef* best_line = NULL;
+            edge* best_edge = NULL;
             
-            for(size_t l = 0; l < cur_vertex->linedefs.size(); ++l) {
-                linedef* l_ptr = cur_vertex->linedefs[l];
-                auto it = lines_done.find(l_ptr);
-                if(it == lines_done.end()) continue; //We're not meant to check this line.
+            for(size_t e = 0; e < cur_vertex->edges.size(); ++e) {
+                edge* e_ptr = cur_vertex->edges[e];
+                auto it = edges_done.find(e_ptr);
+                if(it == edges_done.end()) continue; //We're not meant to check this edge.
                 
-                vertex* other_vertex = l_ptr->vertices[0] == cur_vertex ? l_ptr->vertices[1] : l_ptr->vertices[0];
+                vertex* other_vertex = e_ptr->vertexes[0] == cur_vertex ? e_ptr->vertexes[1] : e_ptr->vertexes[0];
                 
                 if(other_vertex == prev_vertex) continue; //This is where we came from.
                 
@@ -589,29 +589,29 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 //For the outer poly, we're going counter-clockwise. So the lowest angle difference is best.
                 //For the inner ones, it's clockwise, so the highest.
                 if(
-                    !best_line ||
+                    !best_edge ||
                     (doing_outer  && angle_dif < best_angle_dif) ||
                     (!doing_outer && angle_dif > best_angle_dif)
                 ) {
-                    best_line = l_ptr;
+                    best_edge = e_ptr;
                     best_angle_dif = angle_dif;
                     prev_angle = angle;
                     next_vertex = other_vertex;
                 }
             }
             
-            if(!best_line) {
+            if(!best_edge) {
             
-                //If there is no line to go to next, something went wrong.
+                //If there is no edge to go to next, something went wrong.
                 
                 //If this polygon is only one vertex, though, then
-                //that means it was a stray linedef. Remove it.
+                //that means it was a stray edge. Remove it.
                 //Otherwise, something just went wrong, and this is
                 //a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
                     if(ae) {
-                        ae->lone_lines.insert(inners->back()[0]->linedefs[0]);
+                        ae->lone_edges.insert(inners->back()[0]->edges[0]);
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
@@ -620,9 +620,9 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                     }
                 }
                 
-            } else if(lines_done[best_line]) {
+            } else if(edges_done[best_edge]) {
             
-                //If we already did this line, that's it, polygon closed.
+                //If we already did this edge, that's it, polygon closed.
                 poly_done = true;
                 
             } else {
@@ -633,21 +633,21 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                     inners->back().push_back(cur_vertex);
                 }
                 
-                //Continue onto the next line.
+                //Continue onto the next edge.
                 prev_vertex = cur_vertex;
                 cur_vertex = next_vertex;
-                lines_done[best_line] = true;
+                edges_done[best_edge] = true;
                 
             }
         }
         
         doing_outer = false;
         
-        //Remove all lines that were done from the list.
-        auto it = lines_done.begin();
-        while(it != lines_done.end()) {
+        //Remove all edges that were done from the list.
+        auto it = edges_done.begin();
+        while(it != edges_done.end()) {
             if(it->second) {
-                lines_done.erase(it++);
+                edges_done.erase(it++);
             } else {
                 ++it;
             }
@@ -661,15 +661,15 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
  */
 void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y) {
     if(!min_x || !min_y || !max_x || !max_y) return;
-    *min_x = s_ptr->linedefs[0]->vertices[0]->x;
+    *min_x = s_ptr->edges[0]->vertexes[0]->x;
     *max_x = *min_x;
-    *min_y = s_ptr->linedefs[0]->vertices[0]->y;
+    *min_y = s_ptr->edges[0]->vertexes[0]->y;
     *max_y = *min_y;
     
-    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         for(unsigned char v = 0; v < 2; ++v) {
-            float x = s_ptr->linedefs[l]->vertices[v]->x;
-            float y = s_ptr->linedefs[l]->vertices[v]->y;
+            float x = s_ptr->edges[e]->vertexes[v]->x;
+            float y = s_ptr->edges[e]->vertexes[v]->y;
             
             *min_x = min(*min_x, x);
             *max_x = max(*max_x, x);
@@ -800,7 +800,7 @@ bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
  * px, py: Coordinates of the point to check.
  * t**:    Coordinates of the triangle's points.
  * loq:    Less or equal. Different code requires different precision for on-line cases.
-   * Just... don't overthink this, I added this based on what worked and didn't.
+   * Just...don't overthink this, I added this based on what worked and didn't.
  * Thanks go to http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
  */
 bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq) {
@@ -856,8 +856,8 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
  * Returns whether this vertex is an ear or not.
  */
 bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, const size_t nr) {
-    //A vertex is an ear if the triangle of it, the previous, and next vertices
-    //does not contain any other vertex inside. Also, if it has vertices inside,
+    //A vertex is an ear if the triangle of it, the previous, and next vertexes
+    //does not contain any other vertex inside. Also, if it has vertexes inside,
     //they mandatorily are concave, so only check those.
     const vertex* v = vec[nr];
     const vertex* pv = get_prev_in_vector(vec, nr);
@@ -884,14 +884,14 @@ bool is_vertex_ear(const vector<vertex*> &vec, const vector<size_t> &concaves, c
 /* ----------------------------------------------------------------------------
  * Returns the vertex farthest to the right.
  */
-vertex* get_rightmost_vertex(map<linedef*, bool> &lines) {
+vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
     
-    for(auto l = lines.begin(); l != lines.end(); ++l) {
-        if(!rightmost) rightmost = l->first->vertices[0];
+    for(auto l = edges.begin(); l != edges.end(); ++l) {
+        if(!rightmost) rightmost = l->first->vertexes[0];
         
         for(unsigned char v = 0; v < 2; ++v) {
-            rightmost = get_rightmost_vertex(l->first->vertices[v], rightmost);
+            rightmost = get_rightmost_vertex(l->first->vertexes[v], rightmost);
         }
     }
     
@@ -931,54 +931,54 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks intersecting linedefs, and adds them to intersecting_lines;
+ * Checks intersecting edges, and adds them to intersecting_edges;
  */
-void check_linedef_intersections(vertex* v) {
+void check_edge_intersections(vertex* v) {
 
     area_editor* ae = NULL;
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
     
-    for(size_t l = 0; l < v->linedefs.size(); ++l) {
-        linedef* l_ptr = v->linedefs[l];
+    for(size_t e = 0; e < v->edges.size(); ++e) {
+        edge* e_ptr = v->edges[e];
         
         if(ae) {
-            //Check if it's on the list of intersecting lines, and remove it,
+            //Check if it's on the list of intersecting edges, and remove it,
             //so it can be recalculated now.
-            for(size_t il = 0; il < ae->intersecting_lines.size();) {
-                if(ae->intersecting_lines[il].contains(l_ptr)) {
-                    ae->intersecting_lines.erase(ae->intersecting_lines.begin() + il);
+            for(size_t ie = 0; ie < ae->intersecting_edges.size();) {
+                if(ae->intersecting_edges[ie].contains(e_ptr)) {
+                    ae->intersecting_edges.erase(ae->intersecting_edges.begin() + ie);
                 } else {
-                    ++il;
+                    ++ie;
                 }
             }
         }
         
         
-        if(!l_ptr->vertices[0]) continue; //It had been marked for deletion.
+        if(!e_ptr->vertexes[0]) continue; //It had been marked for deletion.
         
-        //For every other linedef in the map, check for intersections.
-        for(size_t l2 = 0; l2 < cur_area_map.linedefs.size(); ++l2) {
-            linedef* l2_ptr = cur_area_map.linedefs[l2];
-            if(!l2_ptr->vertices[0]) continue; //It had been marked for deletion.
+        //For every other edge in the map, check for intersections.
+        for(size_t e2 = 0; e2 < cur_area_map.edges.size(); ++e2) {
+            edge* e2_ptr = cur_area_map.edges[e2];
+            if(!e2_ptr->vertexes[0]) continue; //It had been marked for deletion.
             
-            //If the linedef is actually on the same vertex, never mind.
-            if(l_ptr->vertices[0] == l2_ptr->vertices[0]) continue;
-            if(l_ptr->vertices[0] == l2_ptr->vertices[1]) continue;
-            if(l_ptr->vertices[1] == l2_ptr->vertices[0]) continue;
-            if(l_ptr->vertices[1] == l2_ptr->vertices[1]) continue;
+            //If the edge is actually on the same vertex, never mind.
+            if(e_ptr->vertexes[0] == e2_ptr->vertexes[0]) continue;
+            if(e_ptr->vertexes[0] == e2_ptr->vertexes[1]) continue;
+            if(e_ptr->vertexes[1] == e2_ptr->vertexes[0]) continue;
+            if(e_ptr->vertexes[1] == e2_ptr->vertexes[1]) continue;
             
             if(
                 lines_intersect(
-                    l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                    l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
-                    l2_ptr->vertices[0]->x, l2_ptr->vertices[0]->y,
-                    l2_ptr->vertices[1]->x, l2_ptr->vertices[1]->y,
+                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                    e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y,
+                    e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y,
                     NULL, NULL)
             ) {
                 if(ae) {
-                    ae->intersecting_lines.push_back(linedef_intersection(l_ptr, l2_ptr));
+                    ae->intersecting_edges.push_back(edge_intersection(e_ptr, e2_ptr));
                 }
             }
         }
@@ -987,8 +987,8 @@ void check_linedef_intersections(vertex* v) {
 
 
 /* ----------------------------------------------------------------------------
- * Cleans a polygon's vertices.
- * This deletes 0-length lines, and 180-degree vertices.
+ * Cleans a polygon's vertexes.
+ * This deletes 0-length edges, and 180-degree vertexes.
  */
 void clean_poly(polygon* p) {
     for(size_t v = 0; v < p->size();) {
@@ -997,14 +997,14 @@ void clean_poly(polygon* p) {
         vertex* cur_v =  p->at(v);
         vertex* next_v = get_next_in_vector((*p), v);
         
-        //If the distance between both vertices is so small that it's basically 0,
+        //If the distance between both vertexes is so small that it's basically 0,
         //delete this vertex from the list.
         if(fabs(prev_v->x - cur_v->x) < 0.00001 && fabs(prev_v->y - cur_v->y) < 0.00001) {
             should_delete = true;
         }
         
         //If the angle between this vertex and the next is the same,
-        //then this is just a redundant point in the line prev - next. Delete it.
+        //then this is just a redundant point in the edge prev - next. Delete it.
         if(fabs(atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) - atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)) < 0.000001) {
             should_delete = true;
         }
@@ -1039,9 +1039,9 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     
     for(size_t i = 0; i < inners->size(); ++i) {
         polygon* p = &inners->at(i);
-        vertex* closest_line_v1 = NULL;
-        vertex* closest_line_v2 = NULL;
-        float closest_line_ur = FLT_MAX;
+        vertex* closest_edge_v1 = NULL;
+        vertex* closest_edge_v2 = NULL;
+        float closest_edge_ur = FLT_MAX;
         vertex* closest_vertex = NULL;
         float closest_vertex_ur = FLT_MAX;
         vertex* best_vertex = NULL;
@@ -1055,13 +1055,13 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         }
         
         //Imagine a line from this vertex to the right.
-        //If any line of the outer polygon intersects it,
-        //we just find the best vertex on that line, and make the cut.
+        //If any edge of the outer polygon intersects it,
+        //we just find the best vertex on that edge, and make the cut.
         //This line stretching right is known as a ray.
         float ray_width = outer_rightmost->x - start->x;
         
-        //Let's also check the vertices.
-        //If the closest thing is a vertex, not a line, then
+        //Let's also check the vertexes.
+        //If the closest thing is a vertex, not an edge, then
         //we can skip a bunch of steps.
         vertex* v1 = NULL, *v2 = NULL;
         for(size_t v = 0; v < outer->size(); ++v) {
@@ -1075,10 +1075,10 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             ) {
                 float ur;
                 if(lines_intersect(v1->x, v1->y, v2->x, v2->y, start->x, start->y, outer_rightmost->x, start->y, &ur, NULL)) {
-                    if(!closest_line_v1 || ur < closest_line_ur) {
-                        closest_line_v1 = v1;
-                        closest_line_v2 = v2;
-                        closest_line_ur = ur;
+                    if(!closest_edge_v1 || ur < closest_edge_ur) {
+                        closest_edge_v1 = v1;
+                        closest_edge_v2 = v2;
+                        closest_edge_ur = ur;
                     }
                 }
                 
@@ -1093,27 +1093,27 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             }
         }
         
-        if(!closest_vertex && !closest_line_v1) {
+        if(!closest_vertex && !closest_edge_v1) {
             //Some error occured.
             continue;
         }
         
-        //Which is closest, a vertex or a line?
-        if(closest_vertex_ur <= closest_line_ur) {
+        //Which is closest, a vertex or a edge?
+        if(closest_vertex_ur <= closest_edge_ur) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
-            if(!closest_line_v1) continue;
+            if(!closest_edge_v1) continue;
             
-            //If it's a line, some more complicated steps need to be done.
+            //If it's an edge, some more complicated steps need to be done.
             
-            //We're on the line closest to the vertex.
-            //Go to the rightmost vertex of this line.
-            vertex* vertex_to_compare = get_rightmost_vertex(closest_line_v1, closest_line_v2);
+            //We're on the edge closest to the vertex.
+            //Go to the rightmost vertex of this edge.
+            vertex* vertex_to_compare = get_rightmost_vertex(closest_edge_v1, closest_edge_v2);
             
-            //Now get a list of all vertices inside the triangle
+            //Now get a list of all vertexes inside the triangle
             //marked by the inner's vertex,
-            //the point on the line,
+            //the point on the edge,
             //and the vertex we're comparing.
             vector<vertex*> inside_triangle;
             for(size_t v = 0; v < outer->size(); ++v) {
@@ -1122,7 +1122,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                     is_point_in_triangle(
                         v_ptr->x, v_ptr->y,
                         start->x, start->y,
-                        start->x + closest_line_ur * ray_width, start->y,
+                        start->x + closest_edge_ur * ray_width, start->y,
                         vertex_to_compare->x, vertex_to_compare->y,
                         true) &&
                     v_ptr != vertex_to_compare
@@ -1201,7 +1201,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start); //Closes the inner polygon.
         
         //Before we close the inner polygon, let's
-        //check if the inner's rightmost and the outer best vertices
+        //check if the inner's rightmost and the outer best vertexes
         //are not the same.
         //This can happen if you have a square on the top-right
         //and one on the bottom-left, united by the central vertex.
@@ -1234,32 +1234,32 @@ float get_angle_smallest_dif(float a1, float a2) {
 
 
 /* ----------------------------------------------------------------------------
- * Get the convex, concave and ear vertices.
+ * Get the convex, concave and ear vertexes.
  */
-void get_cce(vector<vertex*> &vertices_left, vector<size_t> &ears, vector<size_t> &convex_vertices, vector<size_t> &concave_vertices) {
+void get_cce(vector<vertex*> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes) {
     ears.clear();
-    convex_vertices.clear();
-    concave_vertices.clear();
-    for(size_t v = 0; v < vertices_left.size(); ++v) {
-        bool is_convex = is_vertex_convex(vertices_left, v);
+    convex_vertexes.clear();
+    concave_vertexes.clear();
+    for(size_t v = 0; v < vertexes_left.size(); ++v) {
+        bool is_convex = is_vertex_convex(vertexes_left, v);
         if(is_convex) {
-            convex_vertices.push_back(v);
+            convex_vertexes.push_back(v);
             
         } else {
-            concave_vertices.push_back(v);
+            concave_vertexes.push_back(v);
         }
     }
     
-    for(size_t c = 0; c < convex_vertices.size(); ++c) {
-        if(is_vertex_ear(vertices_left, concave_vertices, convex_vertices[c])) {
-            ears.push_back(convex_vertices[c]);
+    for(size_t c = 0; c < convex_vertexes.size(); ++c) {
+        if(is_vertex_ear(vertexes_left, concave_vertexes, convex_vertexes[c])) {
+            ears.push_back(convex_vertexes[c]);
         }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether the two lines intersect.
+ * Returns whether the two line segments intersect.
  * ur: Returns the distance from the start of line 2 in which the intersection happens.
    * This is in ratio, so 0 is the start, 1 is the end of the line. Oh, and the r stands for ray.
  * ul: Same as ur, but for line 1.
@@ -1314,19 +1314,19 @@ void triangulate(sector* s_ptr) {
         }
     }
     
-    //And let's clear any "lone" linedefs here.
+    //And let's clear any "lone" edges here.
     if(ae) {
-        for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-            linedef* l_ptr = s_ptr->linedefs[l];
-            auto it = ae->lone_lines.find(l_ptr);
-            if(it != ae->lone_lines.end()) {
-                ae->lone_lines.erase(it);
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            edge* e_ptr = s_ptr->edges[e];
+            auto it = ae->lone_edges.find(e_ptr);
+            if(it != ae->lone_edges.end()) {
+                ae->lone_edges.erase(it);
             }
         }
     }
     
-    //First, we need to know what vertices mark the outermost polygon,
-    //and what vertices mark the inner ones.
+    //First, we need to know what vertexes mark the outermost polygon,
+    //and what vertexes mark the inner ones.
     //There can be no islands or polygons of our sector inside the inner ones.
     //Example of a sector's polygons:
     /*
@@ -1344,7 +1344,7 @@ void triangulate(sector* s_ptr) {
      */
     get_polys(s_ptr, &outer_poly, &inner_polys);
     
-    //Get rid of 0-length vertices and 180-degree vertices, as they're redundant.
+    //Get rid of 0-length vertexes and 180-degree vertexes, as they're redundant.
     clean_poly(&outer_poly);
     for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);
     
@@ -1352,16 +1352,16 @@ void triangulate(sector* s_ptr) {
     cut_poly(&outer_poly, &inner_polys);
     
     s_ptr->triangles.clear();
-    vector<vertex*> vertices_left = outer_poly;
+    vector<vertex*> vertexes_left = outer_poly;
     vector<size_t> ears;
-    vector<size_t> convex_vertices;
-    vector<size_t> concave_vertices;
+    vector<size_t> convex_vertexes;
+    vector<size_t> concave_vertexes;
     
-    //Begin by making a list of all concave, convex and ear vertices.
-    get_cce(vertices_left, ears, convex_vertices, concave_vertices);
+    //Begin by making a list of all concave, convex and ear vertexes.
+    get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
     
-    //We do a triangulation until we're left with three vertices -- the final triangle.
-    while(vertices_left.size() > 3) {
+    //We do a triangulation until we're left with three vertexes -- the final triangle.
+    while(vertexes_left.size() > 3) {
     
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
@@ -1371,28 +1371,28 @@ void triangulate(sector* s_ptr) {
             break;
             
         } else {
-            //The ear, the previous and the next vertices make a triangle.
+            //The ear, the previous and the next vertexes make a triangle.
             s_ptr->triangles.push_back(
                 triangle(
-                    vertices_left[ears[0]],
-                    get_prev_in_vector(vertices_left, ears[0]),
-                    get_next_in_vector(vertices_left, ears[0])
+                    vertexes_left[ears[0]],
+                    get_prev_in_vector(vertexes_left, ears[0]),
+                    get_next_in_vector(vertexes_left, ears[0])
                 )
             );
             
             //Remove the ear.
-            vertices_left.erase(vertices_left.begin() + ears[0]);
+            vertexes_left.erase(vertexes_left.begin() + ears[0]);
             
-            //Recalculate the ears, concave and convex vertices.
-            get_cce(vertices_left, ears, convex_vertices, concave_vertices);
+            //Recalculate the ears, concave and convex vertexes.
+            get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
         }
     }
     
     //Finally, add the final triangle.
-    if(vertices_left.size() == 3) {
+    if(vertexes_left.size() == 3) {
         s_ptr->triangles.push_back(
             triangle(
-                vertices_left[1], vertices_left[0], vertices_left[2]
+                vertexes_left[1], vertexes_left[0], vertexes_left[2]
             )
         );
     }

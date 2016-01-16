@@ -940,6 +940,8 @@ void animation_editor::load() {
     frm_main->widgets["but_file"]->left_mouse_click_handler = [this, frm_main] (lafi::widget*, int, int) {
         al_show_native_file_dialog(display, file_dialog);
         
+        setlocale(LC_ALL, "C"); //Reset the locale, which gets set by Allegro's native dialogs...and breaks s2f().
+        
         if(al_get_native_file_dialog_count(file_dialog) == 0) return;
         
         file_path = al_get_native_file_dialog_path(file_dialog, 0);

@@ -37,9 +37,9 @@ private:
     enum EDITOR_ERROR_TYPES {
         EET_NONE_YET,
         EET_NONE,
-        EET_INTERSECTING_LINEDEFS, //Two linedefs intersect.
-        EET_LONE_LINE,             //A linedef is all by itself.
-        EET_OVERLAPPING_VERTICES,  //Two vertices in the same spot.
+        EET_INTERSECTING_EDGES, //Two edges intersect.
+        EET_LONE_EDGE,             //A edge is all by itself.
+        EET_OVERLAPPING_VERTEXES,  //Two vertexes in the same spot.
         EET_BAD_SECTOR,            //A sector is corrupted.
         EET_MISSING_TEXTURE,       //A sector is without texture.
         EET_UNKNOWN_TEXTURE,       //A texture is not found in the game files.
@@ -98,7 +98,7 @@ private:
     void gui_to_sector();
     void gui_to_shadow();
     void gui_to_adv_textures();
-    bool is_linedef_valid(linedef* l);
+    bool is_edge_valid(edge* l);
     void load_area();
     void mob_to_gui();
     void open_picker(unsigned char type);
@@ -111,9 +111,9 @@ private:
     
 public:
 
-    vector<linedef_intersection> intersecting_lines;
+    vector<edge_intersection> intersecting_edges;
     unordered_set<sector*>       non_simples;
-    unordered_set<linedef*>      lone_lines;
+    unordered_set<edge*>      lone_edges;
     
     area_editor();
     

@@ -42,10 +42,10 @@ void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
     
     secs.push_back(s_ptr);
     
-    linedef* l_ptr = NULL;
-    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-        l_ptr = s_ptr->linedefs[l];
-        get_neighbor_bridge_sectors(l_ptr->sectors[(l_ptr->sectors[0] == s_ptr ? 1 : 0)]);
+    edge* e_ptr = NULL;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        e_ptr = s_ptr->edges[e];
+        get_neighbor_bridge_sectors(e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)]);
     }
 }
 
@@ -71,7 +71,7 @@ void bridge::open(mob* m, void* info1, void* info2) {
         sc.new_texture.rot = m->angle;
         
         cur_area_map.sector_corrections.push_back(sc);
-        cur_area_map.generate_linedefs_blockmap(s_ptr->linedefs);
+        cur_area_map.generate_edges_blockmap(s_ptr->edges);
         
     }
 }

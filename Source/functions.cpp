@@ -18,6 +18,7 @@
 #include <iostream>
 #include <math.h>
 #include <sstream>
+#include <stdlib.h>
 #include <typeinfo>
 
 #include <allegro5/allegro.h>
@@ -311,12 +312,12 @@ void generate_area_images() {
     if(n_sectors == 0) return;
     
     float min_x, max_x, min_y, max_y;
-    size_t n_vertices = cur_area_map.vertices.size();
-    min_x = max_x = cur_area_map.vertices[0]->x;
-    min_y = max_y = cur_area_map.vertices[0]->y;
+    size_t n_vertexes = cur_area_map.vertexes.size();
+    min_x = max_x = cur_area_map.vertexes[0]->x;
+    min_y = max_y = cur_area_map.vertexes[0]->y;
     
-    for(size_t v = 0; v < n_vertices; ++v) {
-        vertex* v_ptr = cur_area_map.vertices[v];
+    for(size_t v = 0; v < n_vertexes; ++v) {
+        vertex* v_ptr = cur_area_map.vertexes[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
         min_y = min(v_ptr->y, min_y);
@@ -350,8 +351,8 @@ void generate_area_images() {
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
-        size_t n_linedefs = s_ptr->linedefs.size();
-        if(n_linedefs == 0) continue;
+        size_t n_edges = s_ptr->edges.size();
+        if(n_edges == 0) continue;
         
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned sector_start_col, sector_end_col, sector_start_row, sector_end_row;
@@ -583,40 +584,40 @@ void load_area(const string &name, const bool load_for_editor) {
     cur_area_map.bg_bmp_zoom = s2f(file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
     
     
-    //Vertices.
-    size_t n_vertices = file.get_child_by_name("vertices")->get_nr_of_children_by_name("vertex");
-    for(size_t v = 0; v < n_vertices; ++v) {
-        data_node* vertex_data = file.get_child_by_name("vertices")->get_child_by_name("vertex", v);
+    //Vertexes.
+    size_t n_vertexes = file.get_child_by_name("vertexes")->get_nr_of_children_by_name("v");
+    for(size_t v = 0; v < n_vertexes; ++v) {
+        data_node* vertex_data = file.get_child_by_name("vertexes")->get_child_by_name("v", v);
         vector<string> words = split(vertex_data->value);
-        if(words.size() == 2) cur_area_map.vertices.push_back(new vertex(s2f(words[0]), s2f(words[1])));
+        if(words.size() == 2) cur_area_map.vertexes.push_back(new vertex(s2f(words[0]), s2f(words[1])));
     }
     
-    //Linedefs.
-    size_t n_linedefs = file.get_child_by_name("linedefs")->get_nr_of_children_by_name("linedef");
-    for(size_t l = 0; l < n_linedefs; ++l) {
-        data_node* linedef_data = file.get_child_by_name("linedefs")->get_child_by_name("linedef", l);
-        linedef* new_linedef = new linedef();
+    //Edges.
+    size_t n_edges = file.get_child_by_name("edges")->get_nr_of_children_by_name("e");
+    for(size_t e = 0; e < n_edges; ++e) {
+        data_node* edge_data = file.get_child_by_name("edges")->get_child_by_name("e", e);
+        edge* new_edge = new edge();
         
-        vector<string> s_nrs = split(linedef_data->get_child_by_name("s")->value);
+        vector<string> s_nrs = split(edge_data->get_child_by_name("s")->value);
         if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
         for(size_t s = 0; s < 2; ++s) {
-            if(s_nrs[s] == "-1") new_linedef->sector_nrs[s] = string::npos;
-            else new_linedef->sector_nrs[s] = s2i(s_nrs[s]);
+            if(s_nrs[s] == "-1") new_edge->sector_nrs[s] = string::npos;
+            else new_edge->sector_nrs[s] = s2i(s_nrs[s]);
         }
         
-        vector<string> v_nrs = split(linedef_data->get_child_by_name("v")->value);
+        vector<string> v_nrs = split(edge_data->get_child_by_name("v")->value);
         if(v_nrs.size() < 2) v_nrs.insert(v_nrs.end(), 2, "0");
         
-        new_linedef->vertex_nrs[0] = s2i(v_nrs[0]);
-        new_linedef->vertex_nrs[1] = s2i(v_nrs[1]);
+        new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
+        new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
         
-        cur_area_map.linedefs.push_back(new_linedef);
+        cur_area_map.edges.push_back(new_edge);
     }
     
     //Sectors.
-    size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("sector");
+    size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("s");
     for(size_t s = 0; s < n_sectors; ++s) {
-        data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("sector", s);
+        data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("s", s);
         sector* new_sector = new sector();
         
         new_sector->type = sector_types.get_nr(sector_data->get_child_by_name("type")->value);
@@ -655,7 +656,7 @@ void load_area(const string &name, const bool load_for_editor) {
         
         mob_gen* mob_ptr = new mob_gen();
         
-        vector<string> coords = split(mob_node->get_child_by_name("pos")->value);
+        vector<string> coords = split(mob_node->get_child_by_name("p")->value);
         mob_ptr->x = (coords.size() >= 1 ? s2f(coords[0]) : 0);
         mob_ptr->y = (coords.size() >= 2 ? s2f(coords[1]) : 0);
         mob_ptr->angle = s2f(mob_node->get_child_by_name("angle")->get_value_or_default("0"));
@@ -735,14 +736,14 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Set up stuff.
     //TODO error checking.
-    for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-        cur_area_map.linedefs[l]->fix_pointers(cur_area_map);
+    for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+        cur_area_map.edges[e]->fix_pointers(cur_area_map);
     }
     for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        cur_area_map.sectors[s]->connect_linedefs(cur_area_map, s);
+        cur_area_map.sectors[s]->connect_edges(cur_area_map, s);
     }
-    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-        cur_area_map.vertices[v]->connect_linedefs(cur_area_map, v);
+    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+        cur_area_map.vertexes[v]->connect_edges(cur_area_map, v);
     }
     
     
@@ -1328,7 +1329,7 @@ vector<string> split(string text, const string &del, const bool inc_empty, const
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether a square intersects with a line.
+ * Returns whether a square intersects with a line segment.
  * Also returns true if the line is fully inside the square.
  * s**: Square coordinates.
  * l**: Line coordinates.

@@ -7,648 +7,764 @@ subtitle=
 mobs{
 	Special{
 		type=Info spot
-		pos=-100.00 100.00
+		p=-100.00 100.00
 	}
 	Leader{
 		type=Olimar
-		pos=0.00 0.00
+		p=0.00 0.00
 	}
 	Leader{
 		type=Louie
-		pos=-32.00 96.00
+		p=-32.00 96.00
 	}
 	Leader{
 		type=President
-		pos=350.00 200.00
+		p=350.00 200.00
 	}
 	Onion{
 		type=Red Onion
-		pos=400.00 100.00
+		p=400.00 100.00
 	}
 	Onion{
 		type=Yellow Onion
-		pos=400.00 200.00
+		p=400.00 200.00
 	}
 	Onion{
 		type=Blue Onion
-		pos=400.00 300.00
+		p=400.00 300.00
 	}
 	Treasure{
 		type=Test
-		pos=100.00 350.00
+		p=100.00 350.00
 	}
 	Enemy{
 		type=Cloaking Burrow-nit
-		pos=-100.00 -200.00
+		p=-100.00 -200.00
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-704.00 -0.00
+		p=-704.00 -0.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-576.00 0.00
+		p=-576.00 0.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-832.00 128.00
+		p=-832.00 128.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-704.00 128.00
+		p=-704.00 128.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-576.00 128.00
+		p=-576.00 128.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-832.00 256.00
+		p=-832.00 256.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-704.00 256.00
+		p=-704.00 256.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-576.00 256.00
+		p=-576.00 256.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-832.00 384.00
+		p=-832.00 384.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-704.00 384.00
+		p=-704.00 384.00
 		vars=buried=true
 	}
 	Pikmin{
 		type=Blue Pikmin
-		pos=-832.00 0.00
+		p=-832.00 0.00
 		vars=buried=true
 	}
 	Special{
 		type=Bridge
-		pos=192.00 -288.00
+		p=192.00 -288.00
 	}
 	Pellet{
 		type=Red 5
-		pos=512.00 32.00
-	}
-	Enemy{
-		type=White Spectralid
-		pos=-288.00 576.00
-		angle=0.69
+		p=608.00 192.00
 	}
 }
-vertices{
-	vertex=-1000.00 -1000.00
-	vertex=1000.00 -1000.00
-	vertex=1000.00 1000.00
-	vertex=-1000.00 1000.00
-	vertex=10.00 20.00
-	vertex=103.00 107.00
-	vertex=182.00 13.00
-	vertex=183.00 169.00
-	vertex=91.00 250.00
-	vertex=16.00 168.00
-	vertex=576.00 -928.00
-	vertex=896.00 -928.00
-	vertex=672.00 -832.00
-	vertex=800.00 -832.00
-	vertex=896.00 -608.00
-	vertex=672.00 -704.00
-	vertex=800.00 -704.00
-	vertex=576.00 -608.00
-	vertex=672.00 -736.00
-	vertex=576.00 -640.00
-	vertex=-832.00 -1696.00
-	vertex=-864.00 -1152.00
-	vertex=-416.00 -1696.00
-	vertex=-416.00 -1152.00
-	vertex=-832.00 -1248.00
-	vertex=-832.00 -1568.00
-	vertex=-640.00 -1568.00
-	vertex=-640.00 -1248.00
-	vertex=-864.00 -1312.00
-	vertex=-768.00 -1408.00
-	vertex=18.00 -655.00
-	vertex=169.63 -575.43
-	vertex=192.00 -608.00
-	vertex=64.00 -672.00
-	vertex=-32.00 -576.00
-	vertex=-32.00 -640.00
-	vertex=128.00 -768.00
-	vertex=256.00 -768.00
-	vertex=162.63 -564.70
-	vertex=-720.00 -720.00
-	vertex=-448.00 -768.00
-	vertex=-544.00 -416.00
-	vertex=-832.00 -480.00
-	vertex=-320.00 -544.00
-	vertex=-544.00 -608.00
-	vertex=-160.00 -960.00
-	vertex=-160.00 -800.00
-	vertex=-288.00 -960.00
-	vertex=-288.00 -800.00
-	vertex=-224.00 -928.00
-	vertex=-224.00 -960.00
-	vertex=128.00 -352.00
-	vertex=288.00 -352.00
-	vertex=288.00 -224.00
-	vertex=128.00 -224.00
-	vertex=352.00 -352.00
-	vertex=352.00 -224.00
-	vertex=416.00 -352.00
-	vertex=416.00 -224.00
-	vertex=480.00 -352.00
-	vertex=480.00 -224.00
-	vertex=544.00 -352.00
-	vertex=544.00 -224.00
-	vertex=672.00 -352.00
-	vertex=672.00 -224.00
-	vertex=128.00 -368.97
-	vertex=544.04 -368.12
-	vertex=544.04 -208.89
-	vertex=128.11 -208.31
-	vertex=288.00 -96.00
-	vertex=384.00 -32.00
-	vertex=396.00 32.00
-	vertex=288.00 32.00
-	vertex=288.00 -0.00
+vertexes{
+	v=-1000.00 -1000.00
+	v=1000.00 -1000.00
+	v=1000.00 1000.00
+	v=-1000.00 1000.00
+	v=10.00 20.00
+	v=103.00 107.00
+	v=182.00 13.00
+	v=183.00 169.00
+	v=91.00 250.00
+	v=16.00 168.00
+	v=576.00 -928.00
+	v=896.00 -928.00
+	v=672.00 -832.00
+	v=800.00 -832.00
+	v=896.00 -608.00
+	v=672.00 -704.00
+	v=800.00 -704.00
+	v=576.00 -608.00
+	v=672.00 -736.00
+	v=576.00 -640.00
+	v=-832.00 -1696.00
+	v=-864.00 -1152.00
+	v=-416.00 -1696.00
+	v=-416.00 -1152.00
+	v=-832.00 -1248.00
+	v=-832.00 -1568.00
+	v=-640.00 -1568.00
+	v=-640.00 -1248.00
+	v=-864.00 -1312.00
+	v=-768.00 -1408.00
+	v=18.00 -655.00
+	v=169.63 -575.43
+	v=192.00 -608.00
+	v=64.00 -672.00
+	v=-32.00 -576.00
+	v=-32.00 -640.00
+	v=128.00 -768.00
+	v=256.00 -768.00
+	v=162.63 -564.70
+	v=-720.00 -720.00
+	v=-448.00 -768.00
+	v=-544.00 -416.00
+	v=-832.00 -480.00
+	v=-320.00 -544.00
+	v=-544.00 -608.00
+	v=-160.00 -960.00
+	v=-160.00 -800.00
+	v=-288.00 -960.00
+	v=-288.00 -800.00
+	v=-224.00 -928.00
+	v=-224.00 -960.00
+	v=128.00 -352.00
+	v=288.00 -352.00
+	v=288.00 -224.00
+	v=128.00 -224.00
+	v=352.00 -352.00
+	v=352.00 -224.00
+	v=416.00 -352.00
+	v=416.00 -224.00
+	v=480.00 -352.00
+	v=480.00 -224.00
+	v=544.00 -352.00
+	v=544.00 -224.00
+	v=672.00 -352.00
+	v=672.00 -224.00
+	v=128.00 -368.97
+	v=544.04 -368.12
+	v=544.04 -208.89
+	v=128.11 -208.31
+	v=288.00 -96.00
+	v=384.00 -32.00
+	v=396.00 32.00
+	v=288.00 32.00
+	v=288.00 -0.00
+	v=512.00 -128.00
+	v=524.86 -127.78
+	v=512.00 32.00
+	v=480.00 32.00
+	v=533.05 -127.78
+	v=526.14 31.49
+	v=540.12 -127.78
+	v=559.11 31.49
+	v=544.00 32.00
+	v=576.00 -128.00
+	v=608.00 32.00
+	v=672.00 -96.00
+	v=768.00 -32.00
+	v=672.00 -64.00
+	v=672.00 -0.00
+	v=672.00 32.00
 }
-linedefs{
-	linedef{
+edges{
+	e{
 		s=0 -1
 		v=1 0
 	}
-	linedef{
+	e{
 		s=0 -1
 		v=2 1
 	}
-	linedef{
+	e{
 		s=0 -1
 		v=3 2
 	}
-	linedef{
+	e{
 		s=0 -1
 		v=0 3
 	}
-	linedef{
+	e{
 		s=1 0
 		v=5 4
 	}
-	linedef{
+	e{
 		s=1 0
 		v=6 5
 	}
-	linedef{
+	e{
 		s=1 0
 		v=7 6
 	}
-	linedef{
+	e{
 		s=1 0
 		v=8 7
 	}
-	linedef{
+	e{
 		s=1 0
 		v=9 8
 	}
-	linedef{
+	e{
 		s=1 0
 		v=4 9
 	}
-	linedef{
+	e{
 		s=2 0
 		v=11 10
 	}
-	linedef{
+	e{
 		s=2 3
 		v=13 11
 	}
-	linedef{
+	e{
 		s=2 0
 		v=12 13
 	}
-	linedef{
+	e{
 		s=2 5
 		v=10 12
 	}
-	linedef{
+	e{
 		s=3 0
 		v=14 11
 	}
-	linedef{
+	e{
 		s=3 4
 		v=16 14
 	}
-	linedef{
+	e{
 		s=3 0
 		v=13 16
 	}
-	linedef{
+	e{
 		s=4 0
 		v=16 15
 	}
-	linedef{
+	e{
 		s=4 0
 		v=17 14
 	}
-	linedef{
+	e{
 		s=4 0
 		v=15 17
 	}
-	linedef{
+	e{
 		s=5 0
 		v=18 12
 	}
-	linedef{
+	e{
 		s=5 0
 		v=19 18
 	}
-	linedef{
+	e{
 		s=5 0
 		v=10 19
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=28 21
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=23 22
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=21 23
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=22 20
 	}
-	linedef{
+	e{
 		s=7 -1
 		v=25 24
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=20 25
 	}
-	linedef{
+	e{
 		s=7 6
 		v=26 25
 	}
-	linedef{
+	e{
 		s=7 6
 		v=29 26
 	}
-	linedef{
+	e{
 		s=7 6
 		v=24 27
 	}
-	linedef{
+	e{
 		s=6 -1
 		v=24 28
 	}
-	linedef{
+	e{
 		s=7 6
 		v=27 29
 	}
-	linedef{
+	e{
 		s=8 9
 		v=31 30
 	}
-	linedef{
+	e{
 		s=8 0
 		v=32 31
 	}
-	linedef{
+	e{
 		s=8 10
 		v=33 32
 	}
-	linedef{
+	e{
 		s=8 0
 		v=30 33
 	}
-	linedef{
+	e{
 		s=9 0
 		v=38 34
 	}
-	linedef{
+	e{
 		s=9 0
 		v=35 30
 	}
-	linedef{
+	e{
 		s=9 0
 		v=34 35
 	}
-	linedef{
+	e{
 		s=10 0
 		v=37 36
 	}
-	linedef{
+	e{
 		s=10 0
 		v=32 37
 	}
-	linedef{
+	e{
 		s=10 0
 		v=36 33
 	}
-	linedef{
+	e{
 		s=9 0
 		v=31 38
 	}
-	linedef{
+	e{
 		s=11 0
 		v=44 39
 	}
-	linedef{
+	e{
 		s=11 0
 		v=43 40
 	}
-	linedef{
+	e{
 		s=11 0
 		v=42 41
 	}
-	linedef{
+	e{
 		s=11 0
 		v=39 42
 	}
-	linedef{
+	e{
 		s=11 0
 		v=41 43
 	}
-	linedef{
+	e{
 		s=11 0
 		v=40 44
 	}
-	linedef{
+	e{
 		s=12 0
 		v=46 45
 	}
-	linedef{
+	e{
 		s=12 0
 		v=48 46
 	}
-	linedef{
+	e{
 		s=12 0
 		v=47 48
 	}
-	linedef{
+	e{
 		s=12 0
 		v=50 47
 	}
-	linedef{
+	e{
 		s=12 0
 		v=45 49
 	}
-	linedef{
+	e{
 		s=12 0
 		v=49 50
 	}
-	linedef{
+	e{
 		s=13 19
 		v=52 51
 	}
-	linedef{
+	e{
 		s=13 14
 		v=53 52
 	}
-	linedef{
+	e{
 		s=13 20
 		v=54 53
 	}
-	linedef{
+	e{
 		s=13 0
 		v=51 54
 	}
-	linedef{
+	e{
 		s=14 19
 		v=55 52
 	}
-	linedef{
+	e{
 		s=14 15
 		v=56 55
 	}
-	linedef{
+	e{
 		s=14 20
 		v=53 56
 	}
-	linedef{
+	e{
 		s=15 19
 		v=57 55
 	}
-	linedef{
+	e{
 		s=15 16
 		v=58 57
 	}
-	linedef{
+	e{
 		s=15 20
 		v=56 58
 	}
-	linedef{
+	e{
 		s=16 19
 		v=59 57
 	}
-	linedef{
+	e{
 		s=16 17
 		v=60 59
 	}
-	linedef{
+	e{
 		s=16 20
 		v=58 60
 	}
-	linedef{
+	e{
 		s=17 19
 		v=61 59
 	}
-	linedef{
+	e{
 		s=17 18
 		v=62 61
 	}
-	linedef{
+	e{
 		s=17 20
 		v=60 62
 	}
-	linedef{
+	e{
 		s=18 0
 		v=63 61
 	}
-	linedef{
+	e{
 		s=18 0
 		v=64 63
 	}
-	linedef{
+	e{
 		s=18 0
 		v=62 64
 	}
-	linedef{
+	e{
 		s=19 0
 		v=66 65
 	}
-	linedef{
+	e{
 		s=19 0
 		v=61 66
 	}
-	linedef{
+	e{
 		s=19 0
 		v=65 51
 	}
-	linedef{
+	e{
 		s=20 0
 		v=68 67
 	}
-	linedef{
+	e{
 		s=20 0
 		v=54 68
 	}
-	linedef{
+	e{
 		s=20 0
 		v=67 62
 	}
-	linedef{
+	e{
 		s=0 21
 		v=69 70
 	}
-	linedef{
+	e{
 		s=0 22
 		v=70 71
 	}
-	linedef{
+	e{
 		s=0 22
 		v=71 72
 	}
-	linedef{
+	e{
 		s=0 22
 		v=72 73
 	}
-	linedef{
+	e{
 		s=21 22
 		v=73 70
 	}
-	linedef{
+	e{
 		s=0 21
 		v=73 69
 	}
+	e{
+		s=0 23
+		v=74 75
+	}
+	e{
+		s=24 23
+		v=75 76
+	}
+	e{
+		s=0 23
+		v=76 77
+	}
+	e{
+		s=0 23
+		v=77 74
+	}
+	e{
+		s=0 24
+		v=75 78
+	}
+	e{
+		s=0 24
+		v=78 79
+	}
+	e{
+		s=0 24
+		v=79 76
+	}
+	e{
+		s=0 25
+		v=78 80
+	}
+	e{
+		s=26 25
+		v=80 81
+	}
+	e{
+		s=0 25
+		v=81 82
+	}
+	e{
+		s=0 25
+		v=82 78
+	}
+	e{
+		s=0 26
+		v=80 83
+	}
+	e{
+		s=0 26
+		v=83 84
+	}
+	e{
+		s=0 26
+		v=84 81
+	}
+	e{
+		s=0 27
+		v=85 86
+	}
+	e{
+		s=0 27
+		v=86 87
+	}
+	e{
+		s=0 27
+		v=87 85
+	}
+	e{
+		s=0 28
+		v=88 86
+	}
+	e{
+		s=0 28
+		v=86 89
+	}
+	e{
+		s=0 28
+		v=89 88
+	}
 }
 sectors{
-	sector{
+	s{
 		z=0.00
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Landing site
 		z=200.00
 		texture=Metal.png
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		fade=true
 		texture=
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Dirt.jpg
 	}
-	sector{
+	s{
 		z=0.00
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bottomless pit
 		z=0.00
 		texture=Grass.jpg
 	}
-	sector{
-		z=32.00
+	s{
+		type=Blocking
+		z=0.00
 		texture=Rock.jpg
 	}
-	sector{
+	s{
 		type=Bridge
 		z=0.00
 		tag=0
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bridge
 		z=0.00
 		tag=50
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bridge
 		z=0.00
 		tag=100
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bridge
 		z=0.00
 		tag=150
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bridge
 		z=0.00
 		tag=200
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		z=200.00
 		texture=Grass.jpg
 	}
-	sector{
+	s{
 		type=Bridge rail
 		z=0.00
 		tag=250
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		type=Bridge rail
 		z=0.00
 		tag=250
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		z=200.00
 		texture=Grass 2.jpg
 	}
-	sector{
+	s{
 		z=400.00
 		texture=Grass 2.jpg
+	}
+	s{
+		z=200.00
+		texture=Rock.jpg
+	}
+	s{
+		z=100.00
+		texture=Rock.jpg
+	}
+	s{
+		z=100.00
+		texture=Rock.jpg
+	}
+	s{
+		z=200.00
+		texture=Rock.jpg
+	}
+	s{
+		z=200.00
+		texture=Rock.jpg
+	}
+	s{
+		z=200.00
+		texture=Rock.jpg
 	}
 }
 tree_shadows=

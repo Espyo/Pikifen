@@ -969,33 +969,33 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
     
     
     //Wall shadows.
-    for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-        linedef* l_ptr = s_ptr->linedefs[l];
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edge* e_ptr = s_ptr->edges[e];
         ALLEGRO_VERTEX av[4];
         
-        sector* other_sector = l_ptr->sectors[(l_ptr->sectors[0] == s_ptr ? 1 : 0)];
+        sector* other_sector = e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)];
         
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
         /*
-         * The line has two points. These are not the vertex 0 and
+         * The edge has two points. These are not the vertex 0 and
          * vertex 1. These must be ordered as the "starting" and
          * "ending" points. This is necessary to determine the "front"
-         * side of the line. The "front" side points to the shaded sector.
+         * side of the edge. The "front" side points to the shaded sector.
          * To know which is the front side, imagine you're walking from
          * the start vertex to the end, in first person view.
          * The "front" side would be to your left.
          */
-        vertex* lv[2];
-        lv[0] = l_ptr->vertices[0];
-        lv[1] = l_ptr->vertices[1];
+        vertex* ev[2];
+        ev[0] = e_ptr->vertexes[0];
+        ev[1] = e_ptr->vertexes[1];
         
-        float l_angle = atan2(lv[1]->y - lv[0]->y, lv[1]->x - lv[0]->x);
-        float l_dist = dist(lv[0]->x, lv[0]->y, lv[1]->x, lv[1]->y).to_float();
+        float e_angle = atan2(ev[1]->y - ev[0]->y, ev[1]->x - ev[0]->x);
+        float e_dist = dist(ev[0]->x, ev[0]->y, ev[1]->x, ev[1]->y).to_float();
         
-        //Let's check if the "front" side is the line's angle -90 (left).
-        float l_cos_front = cos(l_angle - M_PI_2);
-        float l_sin_front = sin(l_angle - M_PI_2);
+        //Let's check if the "front" side is the edge's angle -90 (left).
+        float e_cos_front = cos(e_angle - M_PI_2);
+        float e_sin_front = sin(e_angle - M_PI_2);
         
         /*
          * Figure out if the "front" side is the one we're
@@ -1003,42 +1003,42 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
          * figuring out if a point is on our sector or not.
          * This method isn't optimal nor very reliable,
          * but the only other way would be to make the list of
-         * sectors on the linedef be side-specific, which would
+         * sectors on the edge be side-specific, which would
          * make map-making a bit more strict.
          */
         if(
             get_sector(
-                (lv[1]->x + lv[0]->x) / 2 + l_cos_front * 0.01,
-                (lv[1]->y + lv[0]->y) / 2 + l_sin_front * 0.01,
+                (ev[1]->x + ev[0]->x) / 2 + e_cos_front * 0.01,
+                (ev[1]->y + ev[0]->y) / 2 + e_sin_front * 0.01,
                 NULL, false
             ) != s_ptr
         ) {
         
             //The points are ordered wrong, then. Swap them.
-            swap(lv[0], lv[1]);
+            swap(ev[0], ev[1]);
             
-            l_angle += M_PI;
-            l_cos_front = -l_cos_front;
-            l_sin_front = -l_sin_front;
+            e_angle += M_PI;
+            e_cos_front = -e_cos_front;
+            e_sin_front = -e_sin_front;
         }
         
         
-        //Record the first two vertices of the shadow.
-        //These match the vertices of the linedef.
+        //Record the first two vertexes of the shadow.
+        //These match the vertexes of the edge.
         for(size_t v = 0; v < 2; ++v) {
-            av[v].x = lv[v]->x;
-            av[v].y = lv[v]->y;
+            av[v].x = ev[v]->x;
+            av[v].y = ev[v]->y;
             av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
             av[v].z = 0;
         }
         
         
         /*
-         * Now, check the neighbor linedefs.
-         * Record which angle this linedef makes against
-         * them. The shadow of the current linedef
-         * spreads outward from the linedef, but the edges must
-         * be tilted so that the shadow from this linedef
+         * Now, check the neighbor edges.
+         * Record which angle this edge makes against
+         * them. The shadow of the current edge
+         * spreads outward from the edge, but the edges must
+         * be tilted so that the shadow from this edge
          * meets up with the shadow from the next, on a middle
          * angle. For 90 degrees, at least. Less or more degrees
          * requires specific treatment.
@@ -1046,62 +1046,62 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         
         //Angle of the neighbors, from the common vertex to the other.
         float neighbor_angles[2] = {M_PI_2, M_PI_2};
-        //Difference between angle of current linedef and neighbors.
+        //Difference between angle of current edge and neighbors.
         float neighbor_angle_difs[2] = {0, 0};
         //Midway angle.
         float mid_angles[2] = {M_PI_2, M_PI_2};
         //Is this neighbor casting a shadow to the same sector?
         float neighbor_shadow[2] = {false, false};
-        //Do we have a linedef for this vertex?
+        //Do we have an edge for this vertex?
         bool got_first[2] = {false, false};
         
         //For both neighbors.
         for(unsigned char v = 0; v < 2; ++v) {
         
-            vertex* cur_vertex = lv[v];
-            for(size_t vl = 0; vl < cur_vertex->linedefs.size(); ++vl) {
+            vertex* cur_vertex = ev[v];
+            for(size_t ve = 0; ve < cur_vertex->edges.size(); ++ve) {
             
-                linedef* vl_ptr = cur_vertex->linedefs[vl];
+                edge* ve_ptr = cur_vertex->edges[ve];
                 
-                if(vl_ptr == l_ptr) continue;
+                if(ve_ptr == e_ptr) continue;
                 
-                vertex* other_vertex = vl_ptr->vertices[(vl_ptr->vertices[0] == cur_vertex ? 1 : 0)];
-                float vl_angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
+                vertex* other_vertex = ve_ptr->vertexes[(ve_ptr->vertexes[0] == cur_vertex ? 1 : 0)];
+                float ve_angle = atan2(other_vertex->y - cur_vertex->y, other_vertex->x - cur_vertex->x);
                 
                 float d;
-                if(v == 0) d = get_angle_cw_dif(vl_angle, l_angle);
-                else d = get_angle_cw_dif(l_angle + M_PI, vl_angle);
+                if(v == 0) d = get_angle_cw_dif(ve_angle, e_angle);
+                else d = get_angle_cw_dif(e_angle + M_PI, ve_angle);
                 
                 if(
                     d < neighbor_angle_difs[v] ||
                     !got_first[v]
                 ) {
-                    //Save this as the next linedef.
-                    neighbor_angles[v] = vl_angle;
+                    //Save this as the next edge.
+                    neighbor_angles[v] = ve_angle;
                     neighbor_angle_difs[v] = d;
                     got_first[v] = true;
                     
-                    sector* other_sector = vl_ptr->sectors[(vl_ptr->sectors[0] == s_ptr ? 1 : 0)];
+                    sector* other_sector = ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
                     neighbor_shadow[v] = casts_shadow(other_sector, s_ptr);
                 }
             }
         }
         
-        l_angle = normalize_angle(l_angle);
+        e_angle = normalize_angle(e_angle);
         for(unsigned char n = 0; n < 2; ++n) {
             neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
-            mid_angles[n] = (n == 0 ? neighbor_angles[n] : l_angle + M_PI) + neighbor_angle_difs[n] / 2;
+            mid_angles[n] = (n == 0 ? neighbor_angles[n] : e_angle + M_PI) + neighbor_angle_difs[n] / 2;
         }
         
         point shadow_point[2];
         ALLEGRO_VERTEX extra_av[8];
         for(unsigned char e = 0; e < 8; ++e) { extra_av[e].z = 0;}
-        unsigned char draw_extra[2] = {0, 0}; //How many vertices of the extra polygon to draw.
+        unsigned char draw_extra[2] = {0, 0}; //How many vertexes of the extra polygon to draw.
         
         for(unsigned char v = 0; v < 2; ++v) {
         
             if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
-                //If the shadow of the current and neighbor linedefs
+                //If the shadow of the current and neighbor edges
                 //meet at less than 180 degrees, and the neighbor casts
                 //a shadow, then both this shadow and the neighbor's
                 //must blend in with one another. This shadow's final
@@ -1110,27 +1110,27 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
                 
                 float ul;
                 lines_intersect(
-                    av[0].x + l_cos_front * WALL_SHADOW_LENGTH, av[0].y + l_sin_front * WALL_SHADOW_LENGTH,
-                    av[1].x + l_cos_front * WALL_SHADOW_LENGTH, av[1].y + l_sin_front * WALL_SHADOW_LENGTH,
+                    av[0].x + e_cos_front * WALL_SHADOW_LENGTH, av[0].y + e_sin_front * WALL_SHADOW_LENGTH,
+                    av[1].x + e_cos_front * WALL_SHADOW_LENGTH, av[1].y + e_sin_front * WALL_SHADOW_LENGTH,
                     av[v].x,
                     av[v].y,
-                    av[v].x + cos(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * l_dist,
-                    av[v].y + sin(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * l_dist,
+                    av[v].x + cos(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * e_dist,
+                    av[v].y + sin(neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]) * e_dist,
                     NULL, &ul
                 );
-                shadow_point[v].x = av[0].x + l_cos_front * WALL_SHADOW_LENGTH + cos(l_angle) * l_dist * ul;
-                shadow_point[v].y = av[0].y + l_sin_front * WALL_SHADOW_LENGTH + sin(l_angle) * l_dist * ul;
+                shadow_point[v].x = av[0].x + e_cos_front * WALL_SHADOW_LENGTH + cos(e_angle) * e_dist * ul;
+                shadow_point[v].y = av[0].y + e_sin_front * WALL_SHADOW_LENGTH + sin(e_angle) * e_dist * ul;
                 
             } else {
                 //Otherwise, just draw the
                 //shadows as a rectangle, away
-                //from the linedef. Then, if the angle is greater
+                //from the edge. Then, if the angle is greater
                 //than 180, draw a "join" between both
-                //linedef's shadows. Like a kneecap.
+                //edge's shadows. Like a kneecap.
                 
                 if(neighbor_angle_difs[v] > M_PI_2) {
-                    shadow_point[v].x = av[v].x + l_cos_front * WALL_SHADOW_LENGTH;
-                    shadow_point[v].y = av[v].y + l_sin_front * WALL_SHADOW_LENGTH;
+                    shadow_point[v].x = av[v].x + e_cos_front * WALL_SHADOW_LENGTH;
+                    shadow_point[v].y = av[v].y + e_sin_front * WALL_SHADOW_LENGTH;
                     
                     extra_av[v * 4 + 0].x = av[v].x;
                     extra_av[v * 4 + 0].y = av[v].y;
@@ -1150,12 +1150,12 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
                     
                     if(!neighbor_shadow[v]) {
                         //If the neighbor casts no shadow, add an extra polygon vertex;
-                        //this glues the current linedef's shadow to the neighbor.
+                        //this glues the current edge's shadow to the neighbor.
                         
                         unsigned char index = (draw_extra[v] == 3) ? (v * 4 + 3) : (v * 4 + 2);
                         
-                        extra_av[index].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
-                        extra_av[index].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[index].x = ev[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        extra_av[index].y = ev[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
                         extra_av[index].color = al_map_rgba(0, 0, 0, 0);
                         
                         draw_extra[v] = (draw_extra[v] == 3) ? 4 : 3;
@@ -1163,8 +1163,8 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
                     
                 } else {
                 
-                    shadow_point[v].x = lv[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
-                    shadow_point[v].y = lv[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    shadow_point[v].x = ev[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                    shadow_point[v].y = ev[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
                     
                 }
                 
@@ -1230,22 +1230,22 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
     sector* texture_sector[2] = {NULL, NULL};
     
     if(s_ptr->fade) {
-        //Check all linedefs to find which two textures need merging.
-        linedef* l_ptr = NULL;
+        //Check all edges to find which two textures need merging.
+        edge* e_ptr = NULL;
         sector* neighbor = NULL;
         bool valid = true;
         map<sector*, dist> neighbors;
         
-        //The two neighboring sectors with the lenghtiest linedefs are picked.
+        //The two neighboring sectors with the lenghtiest edges are picked.
         //So save all sector/length pairs.
         //Sectors with different heights from the current one are also saved,
         //but they have lower priority compared to same-heigh sectors.
-        for(size_t l = 0; l < s_ptr->linedefs.size(); ++l) {
-            l_ptr = s_ptr->linedefs[l];
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            e_ptr = s_ptr->edges[e];
             valid = true;
             
-            if(l_ptr->sectors[0] == s_ptr) neighbor = l_ptr->sectors[1];
-            else neighbor = l_ptr->sectors[0];
+            if(e_ptr->sectors[0] == s_ptr) neighbor = e_ptr->sectors[1];
+            else neighbor = e_ptr->sectors[0];
             
             if(neighbor) {
                 if(neighbor->fade) valid = false;
@@ -1254,8 +1254,8 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             if(valid) {
                 neighbors[neighbor] +=
                     dist(
-                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     );
             }
         }
@@ -1305,8 +1305,8 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         
         if(n_textures == 2 && !draw_sector_0 && t == 0) continue; //Allows fading into the void.
         
-        size_t n_vertices = s_ptr->triangles.size() * 3;
-        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertices];
+        size_t n_vertexes = s_ptr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
         sector_texture_info* texture_info_to_use;
         if(texture) texture_info_to_use = texture;
@@ -1325,7 +1325,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             );
         }
         
-        for(size_t v = 0; v < n_vertices; ++v) {
+        for(size_t v = 0; v < n_vertexes; ++v) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
             vertex* v_ptr = t_ptr->points[v % 3];
@@ -1337,14 +1337,14 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             if(t == 1) {
                 if(!draw_sector_0) {
                     alpha = 0;
-                    for(size_t l = 0; l < texture_sector[1]->linedefs.size(); ++l) {
-                        if(texture_sector[1]->linedefs[l]->vertices[0] == v_ptr) alpha = 255;
-                        if(texture_sector[1]->linedefs[l]->vertices[1] == v_ptr) alpha = 255;
+                    for(size_t e = 0; e < texture_sector[1]->edges.size(); ++e) {
+                        if(texture_sector[1]->edges[e]->vertexes[0] == v_ptr) alpha = 255;
+                        if(texture_sector[1]->edges[e]->vertexes[1] == v_ptr) alpha = 255;
                     }
                 } else {
-                    for(size_t l = 0; l < texture_sector[0]->linedefs.size(); ++l) {
-                        if(texture_sector[0]->linedefs[l]->vertices[0] == v_ptr) alpha = 0;
-                        if(texture_sector[0]->linedefs[l]->vertices[1] == v_ptr) alpha = 0;
+                    for(size_t e = 0; e < texture_sector[0]->edges.size(); ++e) {
+                        if(texture_sector[0]->edges[e]->vertexes[0] == v_ptr) alpha = 0;
+                        if(texture_sector[0]->edges[e]->vertexes[1] == v_ptr) alpha = 0;
                     }
                 }
             }
@@ -1358,7 +1358,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
             av[v].color = al_map_rgba(s_ptr->brightness, s_ptr->brightness, s_ptr->brightness, alpha);
         }
         
-        for(size_t v = 0; v < n_vertices; ++v) {
+        for(size_t v = 0; v < n_vertexes; ++v) {
             av[v].x *= scale;
             av[v].y *= scale;
         }
@@ -1368,7 +1368,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
         
         al_draw_prim(
             av, NULL, tex,
-            0, n_vertices, ALLEGRO_PRIM_TRIANGLE_LIST
+            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
         
         delete[] av;
@@ -1461,76 +1461,76 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
     
-        ALLEGRO_VERTEX text_vertices[4];
+        ALLEGRO_VERTEX text_vertexes[4];
         float text_reflection_h = min((int) (LOADING_SCREEN_PADDING * 0.5), text_h);
         //Top-left vertex.
-        text_vertices[0].x = scr_w * 0.5 - text_w * 0.5;
-        text_vertices[0].y = text_y + text_h;
-        text_vertices[0].z = 0;
-        text_vertices[0].u = 0;
-        text_vertices[0].v = text_h;
-        text_vertices[0].color = al_map_rgba(255, 255, 255, 128);
+        text_vertexes[0].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertexes[0].y = text_y + text_h;
+        text_vertexes[0].z = 0;
+        text_vertexes[0].u = 0;
+        text_vertexes[0].v = text_h;
+        text_vertexes[0].color = al_map_rgba(255, 255, 255, 128);
         //Top-right vertex.
-        text_vertices[1].x = scr_w * 0.5 + text_w * 0.5;
-        text_vertices[1].y = text_y + text_h;
-        text_vertices[1].z = 0;
-        text_vertices[1].u = text_w;
-        text_vertices[1].v = text_h;
-        text_vertices[1].color = al_map_rgba(255, 255, 255, 128);
+        text_vertexes[1].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertexes[1].y = text_y + text_h;
+        text_vertexes[1].z = 0;
+        text_vertexes[1].u = text_w;
+        text_vertexes[1].v = text_h;
+        text_vertexes[1].color = al_map_rgba(255, 255, 255, 128);
         //Bottom-right vertex.
-        text_vertices[2].x = scr_w * 0.5 + text_w * 0.5;
-        text_vertices[2].y = text_y + text_h + text_reflection_h;
-        text_vertices[2].z = 0;
-        text_vertices[2].u = text_w;
-        text_vertices[2].v = text_h - text_reflection_h;
-        text_vertices[2].color = al_map_rgba(255, 255, 255, 0);
+        text_vertexes[2].x = scr_w * 0.5 + text_w * 0.5;
+        text_vertexes[2].y = text_y + text_h + text_reflection_h;
+        text_vertexes[2].z = 0;
+        text_vertexes[2].u = text_w;
+        text_vertexes[2].v = text_h - text_reflection_h;
+        text_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        text_vertices[3].x = scr_w * 0.5 - text_w * 0.5;
-        text_vertices[3].y = text_y + text_h + text_reflection_h;
-        text_vertices[3].z = 0;
-        text_vertices[3].u = 0;
-        text_vertices[3].v = text_h - text_reflection_h;
-        text_vertices[3].color = al_map_rgba(255, 255, 255, 0);
+        text_vertexes[3].x = scr_w * 0.5 - text_w * 0.5;
+        text_vertexes[3].y = text_y + text_h + text_reflection_h;
+        text_vertexes[3].z = 0;
+        text_vertexes[3].u = 0;
+        text_vertexes[3].v = text_h - text_reflection_h;
+        text_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
-        al_draw_prim(text_vertices, NULL, text_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        al_draw_prim(text_vertexes, NULL, text_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
     }
     
     //And the polygon for the subtext.
     if(!subtext.empty()) {
     
-        ALLEGRO_VERTEX subtext_vertices[4];
+        ALLEGRO_VERTEX subtext_vertexes[4];
         float subtext_reflection_h = min((int) (LOADING_SCREEN_PADDING * 0.5), (int) (text_h * LOADING_SCREEN_SUBTITLE_SCALE));
         //Top-left vertex.
-        subtext_vertices[0].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertices[0].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
-        subtext_vertices[0].z = 0;
-        subtext_vertices[0].u = 0;
-        subtext_vertices[0].v = subtext_h;
-        subtext_vertices[0].color = al_map_rgba(255, 255, 255, 128);
+        subtext_vertexes[0].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertexes[0].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertexes[0].z = 0;
+        subtext_vertexes[0].u = 0;
+        subtext_vertexes[0].v = subtext_h;
+        subtext_vertexes[0].color = al_map_rgba(255, 255, 255, 128);
         //Top-right vertex.
-        subtext_vertices[1].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertices[1].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
-        subtext_vertices[1].z = 0;
-        subtext_vertices[1].u = subtext_w;
-        subtext_vertices[1].v = subtext_h;
-        subtext_vertices[1].color = al_map_rgba(255, 255, 255, 128);
+        subtext_vertexes[1].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertexes[1].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE;
+        subtext_vertexes[1].z = 0;
+        subtext_vertexes[1].u = subtext_w;
+        subtext_vertexes[1].v = subtext_h;
+        subtext_vertexes[1].color = al_map_rgba(255, 255, 255, 128);
         //Bottom-right vertex.
-        subtext_vertices[2].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertices[2].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
-        subtext_vertices[2].z = 0;
-        subtext_vertices[2].u = subtext_w;
-        subtext_vertices[2].v = subtext_h - subtext_reflection_h;
-        subtext_vertices[2].color = al_map_rgba(255, 255, 255, 0);
+        subtext_vertexes[2].x = scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertexes[2].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
+        subtext_vertexes[2].z = 0;
+        subtext_vertexes[2].u = subtext_w;
+        subtext_vertexes[2].v = subtext_h - subtext_reflection_h;
+        subtext_vertexes[2].color = al_map_rgba(255, 255, 255, 0);
         //Bottom-left vertex.
-        subtext_vertices[3].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
-        subtext_vertices[3].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
-        subtext_vertices[3].z = 0;
-        subtext_vertices[3].u = 0;
-        subtext_vertices[3].v = subtext_h - subtext_reflection_h;
-        subtext_vertices[3].color = al_map_rgba(255, 255, 255, 0);
+        subtext_vertexes[3].x = scr_w * 0.5 - subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
+        subtext_vertexes[3].y = subtext_y + subtext_h * LOADING_SCREEN_SUBTITLE_SCALE + subtext_reflection_h;
+        subtext_vertexes[3].z = 0;
+        subtext_vertexes[3].u = 0;
+        subtext_vertexes[3].v = subtext_h - subtext_reflection_h;
+        subtext_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
-        al_draw_prim(subtext_vertices, NULL, subtext_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        al_draw_prim(subtext_vertexes, NULL, subtext_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
         
     }
     

@@ -45,8 +45,6 @@ ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
 
 ALLEGRO_BITMAP* bmp_test = NULL;
-sector test_sector;
-vector<linedef> test_linedefs;
 
 sample_struct sfx_attack;
 sample_struct sfx_camera;

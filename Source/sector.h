@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the sector, linedef, etc. classes and related functions.
+ * Header for the sector, edge, etc. classes and related functions.
  */
 
 #ifndef SECTOR_INCLUDED
@@ -29,7 +29,7 @@ using namespace std;
 
 struct area_map;
 struct blockmap;
-struct linedef;
+struct edge;
 struct sector;
 struct sector_correction;
 struct triangle;
@@ -38,13 +38,13 @@ typedef vector<vertex*> polygon;
 
 
 /* ----------------------------------------------------------------------------
- * Intersection between two lines. Used to mark
- * linedefs as red on the editor.
+ * Intersection between two edges. Used to mark
+ * edges as red on the editor.
  */
-struct linedef_intersection {
-    linedef* l1, *l2;
-    linedef_intersection(linedef* l1, linedef* l2);
-    bool contains(linedef* l);
+struct edge_intersection {
+    edge* e1, *e2;
+    edge_intersection(edge* e1, edge* e2);
+    bool contains(edge* e);
 };
 
 
@@ -60,7 +60,7 @@ struct linedef_intersection {
  */
 struct blockmap {
     float x1, y1; //Top-left corner of the blockmap.
-    vector<vector<vector<linedef*> > > linedefs; //Specifies a list of linedefs in each block.
+    vector<vector<vector<edge*> > > edges; //Specifies a list of edges in each block.
     vector<vector<unordered_set<sector*> > >  sectors;  //Specifies a list of sectors in each block. A block must have at least one sector.
     size_t n_cols, n_rows;
     
@@ -75,18 +75,19 @@ struct blockmap {
 
 
 /* ----------------------------------------------------------------------------
- * A line that delimits a sector.
+ * An line segment that delimits a sector -- an edge of a polygon.
+ * In Doom, these are what's known as linedefs.
  */
-struct linedef {
-    vertex* vertices[2];
+struct edge {
+    vertex* vertexes[2];
     size_t vertex_nrs[2];
     sector* sectors[2];
     size_t sector_nrs[2];
     
-    linedef(size_t v1 = string::npos, size_t v2 = string::npos);
+    edge(size_t v1 = string::npos, size_t v2 = string::npos);
     void fix_pointers(area_map &a);
     size_t remove_from_sectors();
-    size_t remove_from_vertices();
+    size_t remove_from_vertexes();
 };
 
 
@@ -110,8 +111,8 @@ struct sector_texture_info {
 
 /* ----------------------------------------------------------------------------
  * A sector, like the ones in Doom.
- * It's composed of lines, so it's essentially
- * a polygon. It has a certain height, and its looks
+ * It's composed of edges (linedefs), so it's essentially
+ * a polygon. It has a certain height, and its appearance
  * is determined by its floors.
  */
 struct sector {
@@ -125,12 +126,12 @@ struct sector {
     bool always_cast_shadow;
     
     vector<hazard*> elements;
-    vector<size_t> linedef_nrs;
-    vector<linedef*> linedefs;
+    vector<size_t> edge_nrs;
+    vector<edge*> edges;
     vector<triangle> triangles;
     
     sector();
-    void connect_linedefs(area_map &a, size_t s_nr);
+    void connect_edges(area_map &a, size_t s_nr);
     void fix_pointers(area_map &a);
     void clone(sector* new_sector);
     ~sector();
@@ -171,15 +172,15 @@ struct triangle {
 
 /* ----------------------------------------------------------------------------
  * A vertex is a 2D point, used to determine
- * the end-points of a linedef.
+ * the end-points of an edge.
  */
 struct vertex {
     float x, y;
-    vector<size_t> linedef_nrs;
-    vector<linedef*> linedefs;
+    vector<size_t> edge_nrs;
+    vector<edge*> edges;
     
     vertex(float x, float y);
-    void connect_linedefs(area_map &a, size_t v_nr);
+    void connect_edges(area_map &a, size_t v_nr);
     void fix_pointers(area_map &a);
 };
 
@@ -231,14 +232,14 @@ struct tree_shadow {
  * A structure that holds all of the
  * info about the current area, so that
  * the sectors know how to communicate with
- * the linedefs, the linedefs with the
- * vertices, etc.
+ * the edges, the edges with the
+ * vertexes, etc.
  */
 struct area_map {
 
     blockmap bmap;
-    vector<vertex*> vertices;
-    vector<linedef*> linedefs;
+    vector<vertex*> vertexes;
+    vector<edge*> edges;
     vector<sector*> sectors;
     vector<mob_gen*> mob_generators;
     vector<tree_shadow*> tree_shadows;
@@ -257,21 +258,21 @@ struct area_map {
     
     area_map();
     void generate_blockmap();
-    void generate_linedefs_blockmap(vector<linedef*> &linedefs);
+    void generate_edges_blockmap(vector<edge*> &edges);
     void clear();
 };
 
 
 
-void check_linedef_intersections(vertex* v);
+void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
-void get_cce(vector<vertex> &vertices_left, vector<size_t> &ears, vector<size_t> &convex_vertices, vector<size_t> &concave_vertices);
+void get_cce(vector<vertex> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes);
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
-vertex* get_rightmost_vertex(map<linedef*, bool> &lines);
+vertex* get_rightmost_vertex(map<edge*, bool> &edges);
 vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap);

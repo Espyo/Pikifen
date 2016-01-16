@@ -283,182 +283,288 @@ void mob::tick_physics() {
     //from the movement speed.
     while(!finished_moving) {
     
-        if(move_speed_x != 0 || move_speed_y != 0) {
+        if(move_speed_x == 0 && move_speed_y == 0) break;
         
-            //Trying to move to a new spot. Check sector collisions.
-            bool successful_move = true;
+        //Start by checking sector collisions.
+        //For this, we will only check if the mob is intersecting with any edge.
+        //With this, we trust that mobs can't go so fast that they're fully on one
+        //side of an edge in one frame, and the other side on the next frame.
+        //It's pretty naive... but it works!
+        bool successful_move = true;
+        
+        new_x = x + delta_t* move_speed_x;
+        new_y = y + delta_t* move_speed_y;
+        new_z = z;
+        new_ground_z = ground_z;
+        new_lighting = lighting;
+        set<edge*> intersecting_edges;
+        
+        //Get the sector the mob is currently on.
+        sector* base_sector = get_sector(new_x, new_y, NULL, true);
+        
+        if(!base_sector) {
+            //TODO out of bounds! Kill it!
+            break;
+        } else {
+            new_ground_z = base_sector->z;
+            new_lighting = base_sector->brightness;
+        }
+        
+        //Quick panic handler: if it's under the ground, pop it out.
+        if(z < base_sector->z) {
+            z = base_sector->z;
+        }
+        
+        //Before checking the edges, let's consult the blockmap and look at
+        //the edges in the same block the mob is on.
+        //This way, we won't check for edges that are really far away.
+        //Use the bounding box to know which blockmap blocks the mob will be on.
+        size_t bx1 = cur_area_map.bmap.get_col(new_x - type->radius);
+        size_t bx2 = cur_area_map.bmap.get_col(new_x + type->radius);
+        size_t by1 = cur_area_map.bmap.get_row(new_y - type->radius);
+        size_t by2 = cur_area_map.bmap.get_row(new_y + type->radius);
+        
+        if(
+            bx1 == string::npos || bx2 == string::npos ||
+            by1 == string::npos || by2 == string::npos
+        ) {
+            //TODO out of bounds! Kill it!
+            break;
+        }
+        
+        float move_angle;
+        float move_speed;
+        coordinates_to_angle(move_speed_x, move_speed_y, &move_angle, &move_speed);
+        
+        float slide_angle = move_angle; //Angle to slide towards.
+        float slide_angle_dif = 0;      //Difference between the movement angle and the slide.
+        float step_z = new_ground_z;    //Height of the step, if any.
+        float tallest_z_below_mob = new_ground_z; //Tallest sector floor below the mob.
+        
+        edge* e_ptr = NULL;
+        
+        //Go through the blocks, to find intersections, and set up some things.
+        for(size_t bx = bx1; bx <= bx2; ++bx) {
+            for(size_t by = by1; by <= by2; ++by) {
             
-            new_x = x + delta_t* move_speed_x;
-            new_y = y + delta_t* move_speed_y;
-            new_z = z;
-            new_ground_z = ground_z;
-            new_lighting = lighting;
-            
-            sector* base_sector = get_sector(new_x, new_y, NULL, true);
-            if(!base_sector) {
-                //TODO out of bounds! Kill it!
-                break;
-            } else {
-                new_ground_z = base_sector->z;
-                new_lighting = base_sector->brightness;
-            }
-            
-            //Quick panic handler: if it's under the ground, pop it out.
-            if(z < base_sector->z) {
-                z = base_sector->z;
-            }
-            
-            //Use the bounding box to know which blockmap blocks the mob is on.
-            size_t bx1 = cur_area_map.bmap.get_col(new_x - type->radius);
-            size_t bx2 = cur_area_map.bmap.get_col(new_x + type->radius);
-            size_t by1 = cur_area_map.bmap.get_row(new_y - type->radius);
-            size_t by2 = cur_area_map.bmap.get_row(new_y + type->radius);
-            
-            if(
-                bx1 == string::npos || bx2 == string::npos ||
-                by1 == string::npos || by2 == string::npos
-            ) {
-                //TODO out of bounds! Kill it!
-                break;
-            }
-            
-            float move_angle;
-            float move_speed;
-            coordinates_to_angle(move_speed_x, move_speed_y, &move_angle, &move_speed);
-            
-            float slide_angle = move_angle;
-            float slide_angle_dif = -(M_PI * 4);
-            float highest_z = 0;
-            bool have_highest_z = false;
-            
-            linedef* l_ptr = NULL;
-            //Check the linedefs inside the blockmaps for collisions.
-            for(size_t bx = bx1; bx <= bx2; ++bx) {
-                for(size_t by = by1; by <= by2; ++by) {
+                vector<edge*>* edges = &cur_area_map.bmap.edges[bx][by];
                 
-                    vector<linedef*>* linedefs = &cur_area_map.bmap.linedefs[bx][by];
+                for(size_t e = 0; e < edges->size(); ++e) {
+                
+                    e_ptr = (*edges)[e];
+                    bool is_edge_wall = false;
                     
-                    for(size_t l = 0; l < linedefs->size(); ++l) {
-                        l_ptr = (*linedefs)[l];
+                    if(
+                        !circle_intersects_line(
+                            new_x, new_y, type->radius,
+                            e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                            e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                            NULL, NULL
+                        )
+                    ) {
+                        continue;
+                    }
+                    
+                    if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
+                    
                         if(
-                            circle_intersects_line(
-                                new_x, new_y, type->radius,
-                                l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                                l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
-                                NULL, NULL
-                            )
+                            e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
+                            e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                         ) {
-                        
-                            //If the mob intersects with the linedef, it means it's on both sectors.
-                            //Check if any of the sectors say the mob shouldn't be there.
-                            //Also, adjust height for steps and the like.
-                            for(size_t s = 0; s < 2; ++s) {
-                                sector* s_ptr = l_ptr->sectors[s];
-                                
-                                if(!s_ptr) {
-                                    //TODO out of bounds! Kill it!
-                                    successful_move = false;
-                                    break;
-                                    
-                                } else {
-                                
-                                    if(!have_highest_z) {
-                                        have_highest_z = true;
-                                        highest_z = s_ptr->z;
-                                    }
-                                    
-                                    if(s_ptr->type == SECTOR_TYPE_BLOCKING) {
-                                        //The mob cannot be inside a blocking-type sector whatsoever.
-                                        successful_move = false;
-                                        
-                                    } else {
-                                        if(s_ptr->z > highest_z) highest_z = s_ptr->z;
-                                        if(s_ptr->z <= new_z && s_ptr->z > new_ground_z) new_ground_z = s_ptr->z;
-                                    }
-                                }
-                                
-                                if(new_z >= s_ptr->z - SECTOR_STEP && s_ptr->z > new_z && new_z == new_ground_z) {
-                                    //Only step up a step if it's on the ground.
-                                    new_z = s_ptr->z;
-                                    new_ground_z = s_ptr->z;
-                                }
-                                if(highest_z > new_z) successful_move = false;
-                            }
-                            
-                            //Save the angle for the sliding, in case this linedef blocked something.
-                            if(!doing_slide && !successful_move) {
-                                float wall_angle1 = normalize_angle(atan2(l_ptr->vertices[1]->y - l_ptr->vertices[0]->y, l_ptr->vertices[1]->x - l_ptr->vertices[0]->x));
-                                float wall_angle2 = normalize_angle(wall_angle1 + M_PI);
-                                //Because we don't know which side of the wall the mob is on, just try both angles.
-                                float dif1 = get_angle_smallest_dif(wall_angle1, move_angle);
-                                float dif2 = get_angle_smallest_dif(wall_angle2, move_angle);
-                                
-                                if(abs(dif1 - dif2) < 0.01) {
-                                    //Just forget the slide, you're slamming against the wall head-on, perpendicularly.
-                                    successful_move = false;
-                                    doing_slide = true;
-                                    
-                                } else {
-                                
-                                    float next_angle_dif, next_angle;
-                                    if(dif1 < dif2) {
-                                        next_angle_dif = dif1;
-                                        next_angle = wall_angle1;
-                                    } else {
-                                        next_angle_dif = dif2;
-                                        next_angle = wall_angle2;
-                                    }
-                                    
-                                    if(next_angle_dif > slide_angle_dif) {
-                                        slide_angle_dif = next_angle_dif;
-                                        slide_angle = next_angle;
-                                        //Let's add a tad more to the slide, just to clear those tiny bump cases.
-                                        if(get_angle_cw_dif(slide_angle, move_angle) < M_PI) {
-                                            slide_angle -= 0.1;
-                                        } else {
-                                            slide_angle += 0.1;
-                                        }
-                                    }
-                                }
-                                
-                            }
+                            is_edge_wall = true;
                         }
+                        
+                        if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z && !is_edge_wall) {
+                            //No difference in floor height = no wall. Ignore this.
+                            continue;
+                        }
+                        
+                        float tallest_z; //Tallest of the two sectors.
+                        if(e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) {
+                            tallest_z = e_ptr->sectors[1]->z;
+                        } else if(e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING) {
+                            tallest_z = e_ptr->sectors[0]->z;
+                        } else {
+                            tallest_z = max(e_ptr->sectors[0]->z, e_ptr->sectors[1]->z);
+                        }
+                        
+                        if(tallest_z > tallest_z_below_mob && tallest_z <= z) {
+                            tallest_z_below_mob = tallest_z;
+                        }
+                        
+                        if(tallest_z < z && !is_edge_wall) {
+                            //An edge whose sectors are below the mob? No collision here.
+                            continue;
+                        }
+                        
+                        //Check if it can go up this step.
+                        //It can go up this step if the floor is within stepping distance
+                        //of the mob's current Z, and if this step is larger
+                        //than any step encountered of all edges crossed.
+                        if(
+                            tallest_z <= new_ground_z + SECTOR_STEP &&
+                            tallest_z > step_z
+                        ) {
+                            step_z = tallest_z;
+                        }
+                        
+                        //Add this edge to the list of intersections, then.
+                        intersecting_edges.insert(e_ptr);
+                        
+                    } else {
+                    
+                        //If we're on the edge of out-of-bounds geometry, block entirely.
+                        successful_move = false;
+                        break;
+                        
+                    }
+                    
+                }
+                
+                if(!successful_move) break;
+            }
+            
+            if(!successful_move) break;
+        }
+        
+        if(!successful_move) break;
+        
+        if(step_z > tallest_z_below_mob) tallest_z_below_mob = step_z;
+        new_ground_z = tallest_z_below_mob;
+        
+        if(z < step_z) new_z = step_z;
+        
+        //Check wall angles and heights to check which of these edges really are wall collisions.
+        for(auto e = intersecting_edges.begin(); e != intersecting_edges.end(); e++) {
+        
+            e_ptr = *e;
+            bool is_edge_wall = false;
+            unsigned char wall_sector = 0;
+            
+            for(unsigned char s = 0; s < 2; s++) {
+                if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
+                    is_edge_wall = true;
+                    wall_sector = s;
+                }
+            }
+            
+            if(!is_edge_wall) {
+                for(unsigned char s = 0; s < 2; s++) {
+                    if(e_ptr->sectors[s]->z > new_z) {
+                        is_edge_wall = true;
+                        wall_sector = s;
                     }
                 }
             }
             
-            if(successful_move) {
-                x = new_x;
-                y = new_y;
-                z = new_z;
-                ground_z = new_ground_z;
-                lighting = new_lighting;
-                finished_moving = true;
-                
-            } else {
+            //This isn't a wall... Get out of here, faker.
+            if(!is_edge_wall) continue;
             
-                //Try sliding.
-                if(doing_slide) {
-                    //We already tried... Let's just stop completely.
-                    speed_x = 0;
-                    speed_y = 0;
-                    finished_moving = true;
-                    
-                } else {
+            //If both floors of this edge are above the mob...
+            //then what does that mean? That the mob is under the ground?
+            //Nonsense! Throw this edge away! It's a false positive, and the only
+            //way for it to get caught is if it's behind a more logical
+            //edge that we actually did collide against.
+            if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
+                if(
+                    (e_ptr->sectors[0]->z > new_z || e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) &&
+                    (e_ptr->sectors[1]->z > new_z || e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING)
+                ) {
+                    continue;
+                }
+            }
+            
+            //Ok, there's obviously been a collision, so let's work out what
+            //wall the mob will slide on.
+            
+            //The wall's normal is the direction the wall is facing.
+            //i.e. the direction from the top floor to the bottom floor.
+            //We know which side of an edge is which sector because of the vertexes.
+            //Imagine you're in first person view, following the edge as a line on the ground.
+            //You start on vertex 0 and face vertex 1. Sector 0 will always be on your left.
+            if(!doing_slide) {
+            
+                float wall_normal;
+                float wall_angle = atan2(e_ptr->vertexes[1]->y - e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->x - e_ptr->vertexes[0]->x);
                 
-                    doing_slide = true;
-                    move_speed *= 1 - (slide_angle_dif / M_PI);
-                    angle_to_coordinates(slide_angle, move_speed, &move_speed_x, &move_speed_y);
-                    
+                if(wall_sector == 0) {
+                    wall_normal = normalize_angle(wall_angle + M_PI_2);
+                } else {
+                    wall_normal = normalize_angle(wall_angle - M_PI_2);
+                }
+                
+                float nd = get_angle_cw_dif(wall_normal, move_angle);
+                if(nd < M_PI_2 || nd > M_PI + M_PI_2) {
+                    //If the difference between the movement and the wall's normal is this,
+                    //that means we came FROM the wall. No way! There has to be an edge
+                    //that makes more sense.
+                    continue;
+                }
+                
+                //If we were to slide on this edge, this would be the slide angle.
+                float tentative_slide_angle;
+                if(nd < M_PI) {
+                    //Coming in from the "left" of the normal. Slide right.
+                    tentative_slide_angle = wall_normal + M_PI_2;
+                } else {
+                    //Coming in from the "right" of the normal. Slide left.
+                    tentative_slide_angle = wall_normal - M_PI_2;
+                }
+                
+                float sd = get_angle_smallest_dif(move_angle, tentative_slide_angle);
+                if(sd > slide_angle_dif) {
+                    slide_angle_dif = sd;
+                    slide_angle = tentative_slide_angle;
                 }
                 
             }
             
-        } else {
+            //By the way, if we got to this point, that means there are real
+            //collisions happening. Let's mark this move as unsuccessful.
+            successful_move = false;
+        }
         
+        //If the mob is just slamming against the wall head-on, perpendicularly,
+        //then forget any idea about sliding. It'd just be awkwardly walking in place.
+        if(!successful_move && slide_angle_dif > M_PI_2 - 0.05) {
+            doing_slide = true;
+        }
+        
+        
+        //We're done here. If the move was unobstructed, good, go there.
+        //If not, we'll use the info we gathered before to calculate sliding, and try again.
+        
+        if(successful_move) {
+            //Good news, the mob can move to this new spot freely.
+            x = new_x;
+            y = new_y;
+            z = new_z;
+            ground_z = new_ground_z;
+            lighting = new_lighting;
             finished_moving = true;
             
+        } else {
+        
+            //Try sliding.
+            if(doing_slide) {
+                //We already tried sliding, and we still hit something...
+                //Let's just stop completely. This mob can't go forward.
+                speed_x = 0;
+                speed_y = 0;
+                finished_moving = true;
+                
+            } else {
+            
+                doing_slide = true;
+                //To limit the speed, we should use a cross-product of the movement and slide vectors.
+                //But nuts to that, this is just as nice, and a lot simpler!
+                move_speed *= 1 - (slide_angle_dif / M_PI);
+                angle_to_coordinates(slide_angle, move_speed, &move_speed_x, &move_speed_y);
+                
+            }
+            
         }
+        
     }
     
     
@@ -475,8 +581,6 @@ void mob::tick_physics() {
     if(z <= ground_z) {
         z = ground_z;
         if(was_airborne) {
-            speed_x = 0;
-            speed_y = 0;
             speed_z = 0;
             was_thrown = false;
             fsm.run_event(MOB_EVENT_LANDED, this);

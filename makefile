@@ -2,7 +2,7 @@ PROG := pfe
 SRCS := $(shell find Source/ -name '*.cpp')
 OBJS := ${SRCS:.cpp=.o}
 CXXFLAGS := -std=c++0x
-LDFLAGS += -lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0`
+LDFLAGS += -lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0`
 
 all: $(PROG)
 

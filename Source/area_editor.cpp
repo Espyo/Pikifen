@@ -260,17 +260,17 @@ void area_editor::do_drawing() {
             al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         }
         
-        //Linedefs.
+        //Edges.
         if(sec_mode != ESM_TEXTURE_VIEW) {
         
             unsigned char sector_opacity = 224;
             if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_SHADOWS) sector_opacity = 128;
             
-            size_t n_linedefs = cur_area_map.linedefs.size();
-            for(size_t l = 0; l < n_linedefs; ++l) {
-                linedef* l_ptr = cur_area_map.linedefs[l];
+            size_t n_edges = cur_area_map.edges.size();
+            for(size_t e = 0; e < n_edges; ++e) {
+                edge* e_ptr = cur_area_map.edges[e];
                 
-                if(!is_linedef_valid(l_ptr)) continue;
+                if(!is_edge_valid(e_ptr)) continue;
                 
                 bool one_sided = true;
                 bool error_highlight = false;
@@ -279,40 +279,40 @@ void area_editor::do_drawing() {
                 bool selected = false;
                 
                 if(error_sector_ptr) {
-                    if(l_ptr->sectors[0] == error_sector_ptr) error_highlight = true;
-                    if(l_ptr->sectors[1] == error_sector_ptr) error_highlight = true;
+                    if(e_ptr->sectors[0] == error_sector_ptr) error_highlight = true;
+                    if(e_ptr->sectors[1] == error_sector_ptr) error_highlight = true;
                     
                 } else {
-                    for(size_t il = 0; il < intersecting_lines.size(); ++il) {
-                        if(intersecting_lines[il].contains(l_ptr)) {
+                    for(size_t ie = 0; ie < intersecting_edges.size(); ++ie) {
+                        if(intersecting_edges[ie].contains(e_ptr)) {
                             valid = false;
                             break;
                         }
                     }
                     
-                    if(non_simples.find(l_ptr->sectors[0]) != non_simples.end()) valid = false;
-                    if(non_simples.find(l_ptr->sectors[1]) != non_simples.end()) valid = false;
-                    if(lone_lines.find(l_ptr) != lone_lines.end()) valid = false;
+                    if(non_simples.find(e_ptr->sectors[0]) != non_simples.end()) valid = false;
+                    if(non_simples.find(e_ptr->sectors[1]) != non_simples.end()) valid = false;
+                    if(lone_edges.find(e_ptr) != lone_edges.end()) valid = false;
                 }
                 
-                if(l_ptr->sectors[0] && l_ptr->sectors[1]) one_sided = false;
+                if(e_ptr->sectors[0] && e_ptr->sectors[1]) one_sided = false;
                 
                 if(on_sector && mode == EDITOR_MODE_SECTORS) {
-                    if(l_ptr->sectors[0] == on_sector) mouse_on = true;
-                    if(l_ptr->sectors[1] == on_sector) mouse_on = true;
+                    if(e_ptr->sectors[0] == on_sector) mouse_on = true;
+                    if(e_ptr->sectors[1] == on_sector) mouse_on = true;
                 }
                 
                 if(cur_sector && mode == EDITOR_MODE_SECTORS) {
-                    if(l_ptr->sectors[0] == cur_sector) selected = true;
-                    if(l_ptr->sectors[1] == cur_sector) selected = true;
+                    if(e_ptr->sectors[0] == cur_sector) selected = true;
+                    if(e_ptr->sectors[1] == cur_sector) selected = true;
                 }
                 
                 
                 al_draw_line(
-                    l_ptr->vertices[0]->x,
-                    l_ptr->vertices[0]->y,
-                    l_ptr->vertices[1]->x,
-                    l_ptr->vertices[1]->y,
+                    e_ptr->vertexes[0]->x,
+                    e_ptr->vertexes[0]->y,
+                    e_ptr->vertexes[1]->x,
+                    e_ptr->vertexes[1]->y,
                     (selected ?        al_map_rgba(224, 224, 64,  sector_opacity) :
                      error_highlight ? al_map_rgba(192, 80,  0,   sector_opacity) :
                      !valid ?          al_map_rgba(192, 32,  32,  sector_opacity) :
@@ -323,27 +323,27 @@ void area_editor::do_drawing() {
                 );
                 
                 //Debug: uncomment this to show the sector numbers on each side.
-                /*float mid_x = (l_ptr->vertices[0]->x + l_ptr->vertices[1]->x) / 2;
-                float mid_y = (l_ptr->vertices[0]->y + l_ptr->vertices[1]->y) / 2;
-                float angle = atan2(l_ptr->vertices[0]->y - l_ptr->vertices[1]->y, l_ptr->vertices[0]->x - l_ptr->vertices[1]->x);
+                /*float mid_x = (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2;
+                float mid_y = (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2;
+                float angle = atan2(e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y, e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x);
                 draw_scaled_text(
                     font, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle + M_PI_2) * 4,
                     mid_x + sin(angle + M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[0] == string::npos ? "--" : i2s(l_ptr->sector_nrs[0]).c_str());
+                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[0] == string::npos ? "--" : i2s(e_ptr->sector_nrs[0]).c_str());
                 draw_scaled_text(
                     font, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle - M_PI_2) * 4,
                     mid_y + sin(angle - M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, l_ptr->sector_nrs[1] == string::npos ? "--" : i2s(l_ptr->sector_nrs[1]).c_str());*/
+                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[1] == string::npos ? "--" : i2s(e_ptr->sector_nrs[1]).c_str());*/
             }
             
-            //Vertices.
-            size_t n_vertices = cur_area_map.vertices.size();
-            for(size_t v = 0; v < n_vertices; ++v) {
-                vertex* v_ptr = cur_area_map.vertices[v];
+            //Vertexes.
+            size_t n_vertexes = cur_area_map.vertexes.size();
+            for(size_t v = 0; v < n_vertexes; ++v) {
+                vertex* v_ptr = cur_area_map.vertexes[v];
                 al_draw_filled_circle(
                     v_ptr->x,
                     v_ptr->y,
@@ -510,24 +510,24 @@ void area_editor::find_errors() {
     error_vertex_ptr = NULL;
     error_string.clear();
     
-    //Check intersecting lines.
-    if(!intersecting_lines.empty()) {
-        error_type = EET_INTERSECTING_LINEDEFS;
+    //Check intersecting edges.
+    if(!intersecting_edges.empty()) {
+        error_type = EET_INTERSECTING_EDGES;
     }
     
-    //Check overlapping vertices.
+    //Check overlapping vertexes.
     if(error_type == EET_NONE) {
         error_vertex_ptr = NULL;
         
-        for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-            vertex* v1_ptr = cur_area_map.vertices[v];
+        for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+            vertex* v1_ptr = cur_area_map.vertexes[v];
             if(v1_ptr->x == FLT_MAX) continue;
             
-            for(size_t v2 = v + 1; v2 < cur_area_map.vertices.size(); ++v2) {
-                vertex* v2_ptr = cur_area_map.vertices[v2];
+            for(size_t v2 = v + 1; v2 < cur_area_map.vertexes.size(); ++v2) {
+                vertex* v2_ptr = cur_area_map.vertexes[v2];
                 
                 if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
-                    error_type = EET_OVERLAPPING_VERTICES;
+                    error_type = EET_OVERLAPPING_VERTEXES;
                     error_vertex_ptr = v1_ptr;
                     break;
                 }
@@ -543,10 +543,10 @@ void area_editor::find_errors() {
         }
     }
     
-    //Check lone linedefs.
+    //Check lone edges.
     if(error_type == EET_NONE) {
-        if(!lone_lines.empty()) {
-            error_type = EET_LONE_LINE;
+        if(!lone_edges.empty()) {
+            error_type = EET_LONE_EDGE;
         }
     }
     
@@ -613,28 +613,28 @@ void area_editor::find_errors() {
             
             if(error_mob_ptr) break;
             
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-                linedef* l_ptr = cur_area_map.linedefs[l];
-                if(!is_linedef_valid(l_ptr)) continue;
+            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+                edge* e_ptr = cur_area_map.edges[e];
+                if(!is_edge_valid(e_ptr)) continue;
                 
                 if(
                     circle_intersects_line(
                         m_ptr->x, m_ptr->y,
                         m_ptr->type->radius,
-                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y,
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
                         NULL, NULL
                     )
                 ) {
                 
                     bool in_wall = false;
                     
-                    if(!l_ptr->sectors[0] || !l_ptr->sectors[1]) in_wall = true;
+                    if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) in_wall = true;
                     else {
-                        if(l_ptr->sectors[0]->z > l_ptr->sectors[1]->z + SECTOR_STEP) in_wall = true;
-                        if(l_ptr->sectors[1]->z > l_ptr->sectors[0]->z + SECTOR_STEP) in_wall = true;
-                        if(l_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
-                        if(l_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
+                        if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z + SECTOR_STEP) in_wall = true;
+                        if(e_ptr->sectors[1]->z > e_ptr->sectors[0]->z + SECTOR_STEP) in_wall = true;
+                        if(e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
+                        if(e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING) in_wall = true;
                     }
                     
                     if(in_wall) {
@@ -669,33 +669,33 @@ void area_editor::find_errors() {
 void area_editor::goto_error() {
     if(error_type == EET_NONE || error_type == EET_NONE_YET) return;
     
-    if(error_type == EET_INTERSECTING_LINEDEFS) {
+    if(error_type == EET_INTERSECTING_EDGES) {
     
-        if(intersecting_lines.empty()) {
+        if(intersecting_edges.empty()) {
             find_errors(); return;
         }
         
-        linedef_intersection* li_ptr = &intersecting_lines[0];
+        edge_intersection* li_ptr = &intersecting_edges[0];
         float min_x, max_x, min_y, max_y;
-        min_x = max_x = li_ptr->l1->vertices[0]->x;
-        min_y = max_y = li_ptr->l1->vertices[0]->y;
+        min_x = max_x = li_ptr->e1->vertexes[0]->x;
+        min_y = max_y = li_ptr->e1->vertexes[0]->y;
         
-        min_x = min(min_x, li_ptr->l1->vertices[0]->x);
-        min_x = min(min_x, li_ptr->l1->vertices[1]->x);
-        min_x = min(min_x, li_ptr->l2->vertices[0]->x);
-        min_x = min(min_x, li_ptr->l2->vertices[1]->x);
-        max_x = max(max_x, li_ptr->l1->vertices[0]->x);
-        max_x = max(max_x, li_ptr->l1->vertices[1]->x);
-        max_x = max(max_x, li_ptr->l2->vertices[0]->x);
-        max_x = max(max_x, li_ptr->l2->vertices[1]->x);
-        min_y = min(min_y, li_ptr->l1->vertices[0]->y);
-        min_y = min(min_y, li_ptr->l1->vertices[1]->y);
-        min_y = min(min_y, li_ptr->l2->vertices[0]->y);
-        min_y = min(min_y, li_ptr->l2->vertices[1]->y);
-        max_y = max(max_y, li_ptr->l1->vertices[0]->y);
-        max_y = max(max_y, li_ptr->l1->vertices[1]->y);
-        max_y = max(max_y, li_ptr->l2->vertices[0]->y);
-        max_y = max(max_y, li_ptr->l2->vertices[1]->y);
+        min_x = min(min_x, li_ptr->e1->vertexes[0]->x);
+        min_x = min(min_x, li_ptr->e1->vertexes[1]->x);
+        min_x = min(min_x, li_ptr->e2->vertexes[0]->x);
+        min_x = min(min_x, li_ptr->e2->vertexes[1]->x);
+        max_x = max(max_x, li_ptr->e1->vertexes[0]->x);
+        max_x = max(max_x, li_ptr->e1->vertexes[1]->x);
+        max_x = max(max_x, li_ptr->e2->vertexes[0]->x);
+        max_x = max(max_x, li_ptr->e2->vertexes[1]->x);
+        min_y = min(min_y, li_ptr->e1->vertexes[0]->y);
+        min_y = min(min_y, li_ptr->e1->vertexes[1]->y);
+        min_y = min(min_y, li_ptr->e2->vertexes[0]->y);
+        min_y = min(min_y, li_ptr->e2->vertexes[1]->y);
+        max_y = max(max_y, li_ptr->e1->vertexes[0]->y);
+        max_y = max(max_y, li_ptr->e1->vertexes[1]->y);
+        max_y = max(max_y, li_ptr->e2->vertexes[0]->y);
+        max_y = max(max_y, li_ptr->e2->vertexes[1]->y);
         
         center_camera(min_x, min_y, max_x, max_y);
         
@@ -711,31 +711,31 @@ void area_editor::goto_error() {
         
         center_camera(min_x, min_y, max_x, max_y);
         
-    } else if(error_type == EET_LONE_LINE) {
+    } else if(error_type == EET_LONE_EDGE) {
     
-        if(lone_lines.empty()) {
+        if(lone_edges.empty()) {
             find_errors(); return;
         }
         
-        linedef* l_ptr = *lone_lines.begin();
+        edge* e_ptr = *lone_edges.begin();
         float min_x, min_y, max_x, max_y;
-        min_x = l_ptr->vertices[0]->x;
+        min_x = e_ptr->vertexes[0]->x;
         max_x = min_x;
-        min_y = l_ptr->vertices[0]->y;
+        min_y = e_ptr->vertexes[0]->y;
         max_y = min_y;
         
-        min_x = min(min_x, l_ptr->vertices[0]->x);
-        min_x = min(min_x, l_ptr->vertices[1]->x);
-        max_x = max(max_x, l_ptr->vertices[0]->x);
-        max_x = max(max_x, l_ptr->vertices[1]->x);
-        min_y = min(min_y, l_ptr->vertices[0]->y);
-        min_y = min(min_y, l_ptr->vertices[1]->y);
-        max_y = max(max_y, l_ptr->vertices[0]->y);
-        max_y = max(max_y, l_ptr->vertices[1]->y);
+        min_x = min(min_x, e_ptr->vertexes[0]->x);
+        min_x = min(min_x, e_ptr->vertexes[1]->x);
+        max_x = max(max_x, e_ptr->vertexes[0]->x);
+        max_x = max(max_x, e_ptr->vertexes[1]->x);
+        min_y = min(min_y, e_ptr->vertexes[0]->y);
+        min_y = min(min_y, e_ptr->vertexes[1]->y);
+        max_y = max(max_y, e_ptr->vertexes[0]->y);
+        max_y = max(max_y, e_ptr->vertexes[1]->y);
         
         center_camera(min_x, min_y, max_x, max_y);
         
-    } else if(error_type == EET_OVERLAPPING_VERTICES) {
+    } else if(error_type == EET_OVERLAPPING_VERTEXES) {
     
         if(!error_vertex_ptr) {
             find_errors(); return;
@@ -941,7 +941,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     }
     
     
-    //Moving vertices, camera, etc.
+    //Moving vertexes, camera, etc.
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
     
         if(
@@ -1000,7 +1000,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         //Move vertex, mob or shadow.
         if(moving_thing != string::npos) {
             if(mode == EDITOR_MODE_SECTORS) {
-                vertex* v_ptr = cur_area_map.vertices[moving_thing];
+                vertex* v_ptr = cur_area_map.vertexes[moving_thing];
                 v_ptr->x = snap_to_grid(mouse_cursor_x);
                 v_ptr->y = snap_to_grid(mouse_cursor_y);
             } else if(mode == EDITOR_MODE_OBJECTS) {
@@ -1056,90 +1056,90 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         
             moving_thing = string::npos;
             
-            linedef* clicked_linedef_ptr = NULL;
-            size_t clicked_linedef_nr = string::npos;
+            edge* clicked_edge_ptr = NULL;
+            size_t clicked_edge_nr = string::npos;
             bool created_vertex = false;
             
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-                linedef* l_ptr = cur_area_map.linedefs[l];
+            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+                edge* e_ptr = cur_area_map.edges[e];
                 
-                if(!is_linedef_valid(l_ptr)) continue;
+                if(!is_edge_valid(e_ptr)) continue;
                 
                 if(
                     circle_intersects_line(
                         mouse_cursor_x, mouse_cursor_y, 8 / cam_zoom,
-                        l_ptr->vertices[0]->x, l_ptr->vertices[0]->y,
-                        l_ptr->vertices[1]->x, l_ptr->vertices[1]->y
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     )
                 ) {
-                    clicked_linedef_ptr = l_ptr;
-                    clicked_linedef_nr = l;
+                    clicked_edge_ptr = e_ptr;
+                    clicked_edge_nr = e;
                     break;
                 }
             }
             
             if(double_click_time == 0) double_click_time = 0.5;
-            else if(clicked_linedef_ptr) {
+            else if(clicked_edge_ptr) {
                 //Create a new vertex.
                 double_click_time = 0;
                 
                 //New vertex, on the split point.
-                //TODO create it on the line, not on the cursor.
+                //TODO create it on the edge, not on the cursor.
                 vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
-                cur_area_map.vertices.push_back(new_v_ptr);
+                cur_area_map.vertexes.push_back(new_v_ptr);
                 
-                //New linedef, copied from the original one.
-                linedef* new_l_ptr = new linedef(*clicked_linedef_ptr);
-                cur_area_map.linedefs.push_back(new_l_ptr);
+                //New edge, copied from the original one.
+                edge* new_e_ptr = new edge(*clicked_edge_ptr);
+                cur_area_map.edges.push_back(new_e_ptr);
                 
                 //Save the original end vertex for later.
-                vertex* end_v_ptr = clicked_linedef_ptr->vertices[1];
+                vertex* end_v_ptr = clicked_edge_ptr->vertexes[1];
                 
-                //Set vertices on the new and original linedefs.
-                new_l_ptr->vertex_nrs[0] = cur_area_map.vertices.size() - 1;
-                new_l_ptr->vertices[0] = new_v_ptr;
-                clicked_linedef_ptr->vertex_nrs[1] = new_l_ptr->vertex_nrs[0];
-                clicked_linedef_ptr->vertices[1] = new_v_ptr;
+                //Set vertexes on the new and original edges.
+                new_e_ptr->vertex_nrs[0] = cur_area_map.vertexes.size() - 1;
+                new_e_ptr->vertexes[0] = new_v_ptr;
+                clicked_edge_ptr->vertex_nrs[1] = new_e_ptr->vertex_nrs[0];
+                clicked_edge_ptr->vertexes[1] = new_v_ptr;
                 
-                //Set sectors on the new linedef.
-                if(new_l_ptr->sectors[0]) {
-                    new_l_ptr->sectors[0]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
-                    new_l_ptr->sectors[0]->linedefs.push_back(new_l_ptr);
+                //Set sectors on the new edge.
+                if(new_e_ptr->sectors[0]) {
+                    new_e_ptr->sectors[0]->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                    new_e_ptr->sectors[0]->edges.push_back(new_e_ptr);
                 }
-                if(new_l_ptr->sectors[1]) {
-                    new_l_ptr->sectors[1]->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
-                    new_l_ptr->sectors[1]->linedefs.push_back(new_l_ptr);
+                if(new_e_ptr->sectors[1]) {
+                    new_e_ptr->sectors[1]->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                    new_e_ptr->sectors[1]->edges.push_back(new_e_ptr);
                 }
                 
-                //Set linedefs of the new vertex.
-                new_v_ptr->linedef_nrs.push_back(cur_area_map.linedefs.size() - 1);
-                new_v_ptr->linedef_nrs.push_back(clicked_linedef_nr);
-                new_v_ptr->linedefs.push_back(new_l_ptr);
-                new_v_ptr->linedefs.push_back(clicked_linedef_ptr);
+                //Set edges of the new vertex.
+                new_v_ptr->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                new_v_ptr->edge_nrs.push_back(clicked_edge_nr);
+                new_v_ptr->edges.push_back(new_e_ptr);
+                new_v_ptr->edges.push_back(clicked_edge_ptr);
                 
-                //Update linedef data on the end vertex of the original line
-                //(it now links to the new line, not the old).
-                for(size_t vl = 0; vl < end_v_ptr->linedefs.size(); ++vl) {
-                    if(end_v_ptr->linedefs[vl] == clicked_linedef_ptr) {
-                        end_v_ptr->linedefs[vl] = new_l_ptr;
-                        end_v_ptr->linedef_nrs[vl] = cur_area_map.linedefs.size() - 1;
+                //Update edge data on the end vertex of the original edge
+                //(it now links to the new edge, not the old).
+                for(size_t ve = 0; ve < end_v_ptr->edges.size(); ++ve) {
+                    if(end_v_ptr->edges[ve] == clicked_edge_ptr) {
+                        end_v_ptr->edges[ve] = new_e_ptr;
+                        end_v_ptr->edge_nrs[ve] = cur_area_map.edges.size() - 1;
                         break;
                     }
                 }
                 
                 //Start dragging the new vertex.
-                moving_thing = cur_area_map.vertices.size() - 1;
+                moving_thing = cur_area_map.vertexes.size() - 1;
                 
                 created_vertex = true;
             }
             
             //Find a vertex to drag.
             if(!created_vertex) {
-                for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
+                for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
                     if(
                         dist(
                             mouse_cursor_x, mouse_cursor_y,
-                            cur_area_map.vertices[v]->x, cur_area_map.vertices[v]->y
+                            cur_area_map.vertexes[v]->x, cur_area_map.vertexes[v]->y
                         ) <= 6.0 / cam_zoom
                     ) {
                         moving_thing = v;
@@ -1149,7 +1149,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Find a sector to select.
-            if(moving_thing == string::npos && !clicked_linedef_ptr) {
+            if(moving_thing == string::npos && !clicked_edge_ptr) {
                 cur_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
             }
@@ -1210,49 +1210,49 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             sector* new_sector = new sector();
             if(outer_sector) outer_sector->clone(new_sector);
             
-            //Create the vertices.
-            vertex* new_vertices[4];
-            for(size_t v = 0; v < 4; ++v) new_vertices[v] = new vertex(0, 0);
-            new_vertices[0]->x = hotspot_x - GRID_INTERVAL / 2;
-            new_vertices[0]->y = hotspot_y - GRID_INTERVAL / 2;
-            new_vertices[1]->x = hotspot_x + GRID_INTERVAL / 2;
-            new_vertices[1]->y = hotspot_y - GRID_INTERVAL / 2;
-            new_vertices[2]->x = hotspot_x + GRID_INTERVAL / 2;
-            new_vertices[2]->y = hotspot_y + GRID_INTERVAL / 2;
-            new_vertices[3]->x = hotspot_x - GRID_INTERVAL / 2;
-            new_vertices[3]->y = hotspot_y + GRID_INTERVAL / 2;
-            for(size_t v = 0; v < 4; ++v)cur_area_map.vertices.push_back(new_vertices[v]);
+            //Create the vertexes.
+            vertex* new_vertexes[4];
+            for(size_t v = 0; v < 4; ++v) new_vertexes[v] = new vertex(0, 0);
+            new_vertexes[0]->x = hotspot_x - GRID_INTERVAL / 2;
+            new_vertexes[0]->y = hotspot_y - GRID_INTERVAL / 2;
+            new_vertexes[1]->x = hotspot_x + GRID_INTERVAL / 2;
+            new_vertexes[1]->y = hotspot_y - GRID_INTERVAL / 2;
+            new_vertexes[2]->x = hotspot_x + GRID_INTERVAL / 2;
+            new_vertexes[2]->y = hotspot_y + GRID_INTERVAL / 2;
+            new_vertexes[3]->x = hotspot_x - GRID_INTERVAL / 2;
+            new_vertexes[3]->y = hotspot_y + GRID_INTERVAL / 2;
+            for(size_t v = 0; v < 4; ++v)cur_area_map.vertexes.push_back(new_vertexes[v]);
             
-            //Create the linedefs.
-            linedef* new_linedefs[4];
+            //Create the edges.
+            edge* new_edges[4];
             for(size_t l = 0; l < 4; ++l) {
-                new_linedefs[l] = new linedef(
-                    cur_area_map.vertices.size() - (4 - l),
-                    cur_area_map.vertices.size() - (4 - ((l + 1) % 4))
+                new_edges[l] = new edge(
+                    cur_area_map.vertexes.size() - (4 - l),
+                    cur_area_map.vertexes.size() - (4 - ((l + 1) % 4))
                 );
-                new_linedefs[l]->sector_nrs[0] = outer_sector_nr;
-                new_linedefs[l]->sector_nrs[1] = cur_area_map.sectors.size();
-                cur_area_map.linedefs.push_back(new_linedefs[l]);
+                new_edges[l]->sector_nrs[0] = outer_sector_nr;
+                new_edges[l]->sector_nrs[1] = cur_area_map.sectors.size();
+                cur_area_map.edges.push_back(new_edges[l]);
             }
             
             //Add them to the area map.
-            for(size_t l = 0; l < 4; ++l) new_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
+            for(size_t e = 0; e < 4; ++e) new_sector->edge_nrs.push_back(cur_area_map.edges.size() - (4 - e));
             cur_area_map.sectors.push_back(new_sector);
             
-            for(size_t l = 0; l < 4; ++l) new_linedefs[l]->fix_pointers(cur_area_map);
-            for(size_t v = 0; v < 4; ++v) new_vertices[v]->connect_linedefs(cur_area_map, cur_area_map.vertices.size() - (4 - v));
-            new_sector->connect_linedefs(cur_area_map, cur_area_map.sectors.size() - 1);
+            for(size_t e = 0; e < 4; ++e) new_edges[e]->fix_pointers(cur_area_map);
+            for(size_t v = 0; v < 4; ++v) new_vertexes[v]->connect_edges(cur_area_map, cur_area_map.vertexes.size() - (4 - v));
+            new_sector->connect_edges(cur_area_map, cur_area_map.sectors.size() - 1);
             
-            //Add the linedefs to the outer sector's list.
+            //Add the edges to the outer sector's list.
             if(outer_sector) {
-                for(size_t l = 0; l < 4; ++l) {
-                    outer_sector->linedefs.push_back(new_linedefs[l]);
-                    outer_sector->linedef_nrs.push_back(cur_area_map.linedefs.size() - (4 - l));
+                for(size_t e = 0; e < 4; ++e) {
+                    outer_sector->edges.push_back(new_edges[e]);
+                    outer_sector->edge_nrs.push_back(cur_area_map.edges.size() - (4 - e));
                 }
             }
             
             //Check for intersections.
-            for(size_t v = 0; v < 4; v += 2) check_linedef_intersections(new_vertices[v]);
+            for(size_t v = 0; v < 4; v += 2) check_edge_intersections(new_vertexes[v]);
             
             //Triangulate new sector and the parent one.
             triangulate(new_sector);
@@ -1302,115 +1302,115 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(ev.mouse.button == 1 && mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE && moving_thing != string::npos) {
             //Release the vertex.
             
-            vertex* moved_v_ptr = cur_area_map.vertices[moving_thing];
+            vertex* moved_v_ptr = cur_area_map.vertexes[moving_thing];
             vertex* final_vertex = moved_v_ptr;
             
             unordered_set<sector*> affected_sectors;
             
             //Check if we should merge.
-            for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-                vertex* dest_v_ptr = cur_area_map.vertices[v];
+            for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+                vertex* dest_v_ptr = cur_area_map.vertexes[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
                 
                 if(dist(moved_v_ptr->x, moved_v_ptr->y, dest_v_ptr->x, dest_v_ptr->y) <= (10 / cam_zoom)) {
-                    //Merge vertices.
+                    //Merge vertexes.
                     
-                    //Find out what to do with every linedef of the dragged vertex.
-                    for(size_t l = 0; l < moved_v_ptr->linedefs.size();) {
+                    //Find out what to do with every edge of the dragged vertex.
+                    for(size_t e = 0; e < moved_v_ptr->edges.size();) {
                     
                         bool was_deleted = false;
-                        linedef* l_ptr = moved_v_ptr->linedefs[l];
-                        vertex* other_vertex = l_ptr->vertices[0] == moved_v_ptr ? l_ptr->vertices[1] : l_ptr->vertices[0];
+                        edge* e_ptr = moved_v_ptr->edges[e];
+                        vertex* other_vertex = e_ptr->vertexes[0] == moved_v_ptr ? e_ptr->vertexes[1] : e_ptr->vertexes[0];
                         
                         //Check if it's being squashed into non-existence.
                         if(other_vertex == dest_v_ptr) {
                         
-                            affected_sectors.insert(l_ptr->sectors[0]);
-                            affected_sectors.insert(l_ptr->sectors[1]);
+                            affected_sectors.insert(e_ptr->sectors[0]);
+                            affected_sectors.insert(e_ptr->sectors[1]);
                             
-                            //Clear it from its vertices' lists.
-                            for(size_t vl = 0; vl < other_vertex->linedefs.size(); ++vl) {
-                                if(other_vertex->linedefs[vl] == l_ptr) {
-                                    other_vertex->linedefs.erase(other_vertex->linedefs.begin() + vl);
-                                    other_vertex->linedef_nrs.erase(other_vertex->linedef_nrs.begin() + vl);
+                            //Clear it from its vertexes' lists.
+                            for(size_t ve = 0; ve < other_vertex->edges.size(); ++ve) {
+                                if(other_vertex->edges[ve] == e_ptr) {
+                                    other_vertex->edges.erase(other_vertex->edges.begin() + ve);
+                                    other_vertex->edge_nrs.erase(other_vertex->edge_nrs.begin() + ve);
                                     break;
                                 }
                             }
                             
                             //Clear it from the sector lists.
                             for(size_t s = 0; s < 2; ++s) {
-                                if(!l_ptr->sectors[s]) continue;
-                                for(size_t sl = 0; sl < l_ptr->sectors[s]->linedefs.size(); ++sl) {
-                                    if(l_ptr->sectors[s]->linedefs[sl] == l_ptr) {
-                                        l_ptr->sectors[s]->linedefs.erase(l_ptr->sectors[s]->linedefs.begin() + sl);
-                                        l_ptr->sectors[s]->linedef_nrs.erase(l_ptr->sectors[s]->linedef_nrs.begin() + sl);
+                                if(!e_ptr->sectors[s]) continue;
+                                for(size_t se = 0; se < e_ptr->sectors[s]->edges.size(); ++se) {
+                                    if(e_ptr->sectors[s]->edges[se] == e_ptr) {
+                                        e_ptr->sectors[s]->edges.erase(e_ptr->sectors[s]->edges.begin() + se);
+                                        e_ptr->sectors[s]->edge_nrs.erase(e_ptr->sectors[s]->edge_nrs.begin() + se);
                                         break;
                                     }
                                 }
                             }
                             
-                            //Clear it from the list of lone lines, if there.
-                            auto it = lone_lines.find(l_ptr);
-                            if(it != lone_lines.end()) lone_lines.erase(it);
+                            //Clear it from the list of lone edges, if there.
+                            auto it = lone_edges.find(e_ptr);
+                            if(it != lone_edges.end()) lone_edges.erase(it);
                             
                             //Clear its info, so it gets marked for deletion.
-                            l_ptr->vertex_nrs[0] = l_ptr->vertex_nrs[1] = string::npos;
-                            l_ptr->fix_pointers(cur_area_map);
+                            e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
+                            e_ptr->fix_pointers(cur_area_map);
                             
                         } else {
                         
                             bool has_merged = false;
-                            //Check if the linedef will be merged with another one.
-                            //These are linedefs that share a common vertex,
+                            //Check if the edge will be merged with another one.
+                            //These are edges that share a common vertex,
                             //plus the moved/destination vertex.
-                            for(size_t dl = 0; dl < dest_v_ptr->linedefs.size(); ++dl) {
+                            for(size_t de = 0; de < dest_v_ptr->edges.size(); ++de) {
                             
-                                linedef* dl_ptr = dest_v_ptr->linedefs[dl];
-                                vertex* d_other_vertex = dl_ptr->vertices[0] == dest_v_ptr ? dl_ptr->vertices[1] : dl_ptr->vertices[0];
+                                edge* de_ptr = dest_v_ptr->edges[de];
+                                vertex* d_other_vertex = de_ptr->vertexes[0] == dest_v_ptr ? de_ptr->vertexes[1] : de_ptr->vertexes[0];
                                 
                                 if(d_other_vertex == other_vertex) {
-                                    //The linedef will be merged with this one.
+                                    //The edge will be merged with this one.
                                     has_merged = true;
-                                    affected_sectors.insert(l_ptr->sectors[0]);
-                                    affected_sectors.insert(l_ptr->sectors[1]);
-                                    affected_sectors.insert(dl_ptr->sectors[0]);
-                                    affected_sectors.insert(dl_ptr->sectors[1]);
+                                    affected_sectors.insert(e_ptr->sectors[0]);
+                                    affected_sectors.insert(e_ptr->sectors[1]);
+                                    affected_sectors.insert(de_ptr->sectors[0]);
+                                    affected_sectors.insert(de_ptr->sectors[1]);
                                     
-                                    //Tell the destination linedef's sectors
+                                    //Tell the destination edge's sectors
                                     //to forget it; they'll be re-added later.
-                                    size_t old_dl_nr = dl_ptr->remove_from_sectors();
+                                    size_t old_de_nr = de_ptr->remove_from_sectors();
                                     
                                     //Set the new sectors.
                                     //TODO if one of the central sectors is null.
-                                    if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[0])
-                                        dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[1];
-                                    else if(l_ptr->sector_nrs[0] == dl_ptr->sector_nrs[1])
-                                        dl_ptr->sector_nrs[1] = l_ptr->sector_nrs[1];
-                                    else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[0] || !l_ptr->sectors[0])
-                                        dl_ptr->sector_nrs[0] = l_ptr->sector_nrs[0];
-                                    else if(l_ptr->sector_nrs[1] == dl_ptr->sector_nrs[1] || !l_ptr->sectors[1])
-                                        dl_ptr->sector_nrs[1] = l_ptr->sector_nrs[0];
-                                    dl_ptr->fix_pointers(cur_area_map);
+                                    if(e_ptr->sector_nrs[0] == de_ptr->sector_nrs[0])
+                                        de_ptr->sector_nrs[0] = e_ptr->sector_nrs[1];
+                                    else if(e_ptr->sector_nrs[0] == de_ptr->sector_nrs[1])
+                                        de_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
+                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[0] || !e_ptr->sectors[0])
+                                        de_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
+                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1] || !e_ptr->sectors[1])
+                                        de_ptr->sector_nrs[1] = e_ptr->sector_nrs[0];
+                                    de_ptr->fix_pointers(cur_area_map);
                                     
-                                    //Go to the linedef's old vertices,
+                                    //Go to the edge's old vertexes,
                                     //and tell them that it no longer exists.
-                                    l_ptr->remove_from_vertices();
+                                    e_ptr->remove_from_vertexes();
                                     
-                                    //Now tell the linedef's old sectors.
-                                    l_ptr->remove_from_sectors();
+                                    //Now tell the edge's old sectors.
+                                    e_ptr->remove_from_sectors();
                                     
-                                    //Add the linedefs to the sectors' lists.
+                                    //Add the edges to the sectors' lists.
                                     for(size_t s = 0; s < 2; ++s) {
-                                        if(!dl_ptr->sectors[s]) continue;
-                                        dl_ptr->sectors[s]->linedefs.push_back(dl_ptr);
-                                        dl_ptr->sectors[s]->linedef_nrs.push_back(old_dl_nr);
+                                        if(!de_ptr->sectors[s]) continue;
+                                        de_ptr->sectors[s]->edges.push_back(de_ptr);
+                                        de_ptr->sectors[s]->edge_nrs.push_back(old_de_nr);
                                     }
                                     
-                                    //Remove the deleted linedef's info.
+                                    //Remove the deleted edge's info.
                                     //This'll mark it for deletion.
-                                    l_ptr->sector_nrs[0] = l_ptr->sector_nrs[1] = string::npos;
-                                    l_ptr->vertex_nrs[0] = l_ptr->vertex_nrs[1] = string::npos;
-                                    l_ptr->fix_pointers(cur_area_map);
+                                    e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = string::npos;
+                                    e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
+                                    e_ptr->fix_pointers(cur_area_map);
                                     was_deleted = true;
                                     
                                     break;
@@ -1418,52 +1418,52 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             }
                             
                             //If it's matchless, that means it'll just be joined to
-                            //the group of linedefs on the destination vertex.
+                            //the group of edges on the destination vertex.
                             if(!has_merged) {
-                                dest_v_ptr->linedef_nrs.push_back(moved_v_ptr->linedef_nrs[l]);
-                                dest_v_ptr->linedefs.push_back(moved_v_ptr->linedefs[l]);
-                                unsigned char n = (l_ptr->vertices[0] == moved_v_ptr ? 0 : 1);
-                                l_ptr->vertices[n] = dest_v_ptr;
-                                l_ptr->vertex_nrs[n] = v;
+                                dest_v_ptr->edge_nrs.push_back(moved_v_ptr->edge_nrs[e]);
+                                dest_v_ptr->edges.push_back(moved_v_ptr->edges[e]);
+                                unsigned char n = (e_ptr->vertexes[0] == moved_v_ptr ? 0 : 1);
+                                e_ptr->vertexes[n] = dest_v_ptr;
+                                e_ptr->vertex_nrs[n] = v;
                             }
                         }
                         
-                        if(!was_deleted) ++l;
+                        if(!was_deleted) ++e;
                         
                     }
                     
                     dest_v_ptr->fix_pointers(cur_area_map);
                     
-                    //Check if any of the final linedefs have the same sector
+                    //Check if any of the final edges have the same sector
                     //on both sides. If so, delete them.
-                    for(size_t vl = 0; vl < dest_v_ptr->linedefs.size(); ) {
-                        linedef* vl_ptr = dest_v_ptr->linedefs[vl];
-                        if(vl_ptr->sectors[0] == vl_ptr->sectors[1]) {
-                            vl_ptr->remove_from_sectors();
-                            vl_ptr->remove_from_vertices();
+                    for(size_t ve = 0; ve < dest_v_ptr->edges.size(); ) {
+                        edge* ve_ptr = dest_v_ptr->edges[ve];
+                        if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
+                            ve_ptr->remove_from_sectors();
+                            ve_ptr->remove_from_vertexes();
                             for(size_t v = 0; v < 2; ++v) {
-                                if(vl_ptr->vertices[v]->linedefs.empty()) {
-                                    vl_ptr->vertices[v]->x = vl_ptr->vertices[v]->y = FLT_MAX;
+                                if(ve_ptr->vertexes[v]->edges.empty()) {
+                                    ve_ptr->vertexes[v]->x = ve_ptr->vertexes[v]->y = FLT_MAX;
                                 }
                             }
-                            vl_ptr->sector_nrs[0] = vl_ptr->sector_nrs[1] = string::npos;
-                            vl_ptr->vertex_nrs[0] = vl_ptr->vertex_nrs[1] = string::npos;
-                            vl_ptr->fix_pointers(cur_area_map);
+                            ve_ptr->sector_nrs[0] = ve_ptr->sector_nrs[1] = string::npos;
+                            ve_ptr->vertex_nrs[0] = ve_ptr->vertex_nrs[1] = string::npos;
+                            ve_ptr->fix_pointers(cur_area_map);
                         } else {
-                            ++vl;
+                            ++ve;
                         }
                     }
                     
-                    //If this vertex is out of linedefs, it'll be
+                    //If this vertex is out of edges, it'll be
                     //deleted eventually. Move it out of the way.
-                    if(dest_v_ptr->linedefs.empty()) {
+                    if(dest_v_ptr->edges.empty()) {
                         dest_v_ptr->x = dest_v_ptr->y = FLT_MAX;
                     }
                     
                     //Remove the old vertex' info.
                     //This'll mark it for deletion.
-                    moved_v_ptr->linedef_nrs.clear();
-                    moved_v_ptr->linedefs.clear();
+                    moved_v_ptr->edge_nrs.clear();
+                    moved_v_ptr->edges.clear();
                     moved_v_ptr->x = moved_v_ptr->y = FLT_MAX; //So it's out of the way.
                     
                     final_vertex = dest_v_ptr;
@@ -1473,10 +1473,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Finally, re-triangulate the affected sectors.
-            for(size_t l = 0; l < final_vertex->linedefs.size(); ++l) {
-                linedef* l_ptr = final_vertex->linedefs[l];
+            for(size_t e = 0; e < final_vertex->edges.size(); ++e) {
+                edge* e_ptr = final_vertex->edges[e];
                 for(size_t s = 0; s < 2; ++s) {
-                    if(l_ptr->sectors[s]) affected_sectors.insert(l_ptr->sectors[s]);
+                    if(e_ptr->sectors[s]) affected_sectors.insert(e_ptr->sectors[s]);
                 }
             }
             for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
@@ -1487,16 +1487,16 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //If somewhere along the line, the current sector
             //got marked for deletion, unselect it.
             if(cur_sector) {
-                if(cur_sector->linedefs.empty()) {
+                if(cur_sector->edges.empty()) {
                     cur_sector = NULL;
                     sector_to_gui();
                 }
             }
             
-            //Check if the line's vertices intersect with any other lines.
+            //Check if the edge's vertexes intersect with any other edges.
             //If so, they're marked with red.
             if(moved_v_ptr->x != FLT_MAX) //If it didn't get marked for deletion in the meantime.
-                check_linedef_intersections(moved_v_ptr);
+                check_edge_intersections(moved_v_ptr);
                 
             moving_thing = string::npos;
             
@@ -1539,12 +1539,12 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether or not a linedef is valid.
- * A linedef is valid if it has non-NULL vertices.
+ * Returns whether or not an edge is valid.
+ * A edge is valid if it has non-NULL vertexes.
  */
-bool area_editor::is_linedef_valid(linedef* l) {
-    if(!l->vertices[0]) return false;
-    if(!l->vertices[1]) return false;
+bool area_editor::is_edge_valid(edge* l) {
+    if(!l->vertexes[0]) return false;
+    if(!l->vertexes[1]) return false;
     return true;
 }
 
@@ -2135,8 +2135,8 @@ void area_editor::load_area() {
     
     clear_area_textures();
     
-    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-        check_linedef_intersections(cur_area_map.vertices[v]);
+    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+        check_edge_intersections(cur_area_map.vertexes[v]);
     }
     
     change_background(bg_file_name);
@@ -2149,9 +2149,9 @@ void area_editor::load_area() {
     error_string.clear();
     error_vertex_ptr = NULL;
     
-    intersecting_lines.clear();
+    intersecting_edges.clear();
     non_simples.clear();
-    lone_lines.clear();
+    lone_edges.clear();
     
     cur_sector = NULL;
     cur_mob = NULL;
@@ -2309,21 +2309,21 @@ void area_editor::save_area() {
     file_node.add(new data_node("name", cur_area_map.name));
     file_node.add(new data_node("subtitle", cur_area_map.subtitle));
     
-    //Start by cleaning unused vertices, sectors and linedefs.
-    //Unused vertices.
-    for(size_t v = 0; v < cur_area_map.vertices.size(); ) {
+    //Start by cleaning unused vertexes, sectors and edges.
+    //Unused vertexes.
+    for(size_t v = 0; v < cur_area_map.vertexes.size(); ) {
     
-        vertex* v_ptr = cur_area_map.vertices[v];
-        if(v_ptr->linedef_nrs.empty()) {
+        vertex* v_ptr = cur_area_map.vertexes[v];
+        if(v_ptr->edge_nrs.empty()) {
         
-            cur_area_map.vertices.erase(cur_area_map.vertices.begin() + v);
+            cur_area_map.vertexes.erase(cur_area_map.vertexes.begin() + v);
             
-            //Fix numbers in linedef lists.
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-                linedef* l_ptr = cur_area_map.linedefs[l];
-                for(unsigned char lv = 0; lv < 2; ++lv) {
-                    if(l_ptr->vertex_nrs[lv] >= v && l_ptr->vertex_nrs[lv] != string::npos) {
-                        l_ptr->vertex_nrs[lv]--;
+            //Fix numbers in edge lists.
+            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+                edge* e_ptr = cur_area_map.edges[e];
+                for(unsigned char ev = 0; ev < 2; ++ev) {
+                    if(e_ptr->vertex_nrs[ev] >= v && e_ptr->vertex_nrs[ev] != string::npos) {
+                        e_ptr->vertex_nrs[ev]--;
                     }
                 }
             }
@@ -2337,16 +2337,16 @@ void area_editor::save_area() {
     for(size_t s = 0; s < cur_area_map.sectors.size(); ) {
     
         sector* s_ptr = cur_area_map.sectors[s];
-        if(s_ptr->linedef_nrs.empty()) {
+        if(s_ptr->edge_nrs.empty()) {
         
             cur_area_map.sectors.erase(cur_area_map.sectors.begin() + s);
             
-            //Fix numbers in linedef lists.
-            for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-                linedef* l_ptr = cur_area_map.linedefs[l];
-                for(unsigned char ls = 0; ls < 2; ++ls) {
-                    if(l_ptr->sector_nrs[ls] >= s && l_ptr->sector_nrs[ls] != string::npos) {
-                        l_ptr->sector_nrs[ls]--;
+            //Fix numbers in edge lists.
+            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+                edge* e_ptr = cur_area_map.edges[e];
+                for(unsigned char es = 0; es < 2; ++es) {
+                    if(e_ptr->sector_nrs[es] >= s && e_ptr->sector_nrs[es] != string::npos) {
+                        e_ptr->sector_nrs[es]--;
                     }
                 }
             }
@@ -2356,20 +2356,20 @@ void area_editor::save_area() {
         }
     }
     
-    //Unused linedefs.
-    for(size_t l = 0; l < cur_area_map.linedefs.size(); ) {
+    //Unused edges.
+    for(size_t e = 0; e < cur_area_map.edges.size(); ) {
     
-        linedef* l_ptr = cur_area_map.linedefs[l];
-        if(l_ptr->vertex_nrs[0] == string::npos) {
+        edge* e_ptr = cur_area_map.edges[e];
+        if(e_ptr->vertex_nrs[0] == string::npos) {
         
-            cur_area_map.linedefs.erase(cur_area_map.linedefs.begin() + l);
+            cur_area_map.edges.erase(cur_area_map.edges.begin() + e);
             
             //Fix numbers in vertex lists.
-            for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-                vertex* v_ptr = cur_area_map.vertices[v];
-                for(size_t vl = 0; vl < v_ptr->linedef_nrs.size(); ++vl) {
-                    if(v_ptr->linedef_nrs[vl] >= l && v_ptr->linedef_nrs[vl] != string::npos) {
-                        --v_ptr->linedef_nrs[vl];
+            for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+                vertex* v_ptr = cur_area_map.vertexes[v];
+                for(size_t ve = 0; ve < v_ptr->edge_nrs.size(); ++ve) {
+                    if(v_ptr->edge_nrs[ve] >= e && v_ptr->edge_nrs[ve] != string::npos) {
+                        --v_ptr->edge_nrs[ve];
                     }
                 }
             }
@@ -2377,15 +2377,15 @@ void area_editor::save_area() {
             //Fix numbers in sector lists.
             for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
                 sector* s_ptr = cur_area_map.sectors[s];
-                for(size_t sl = 0; sl < s_ptr->linedef_nrs.size(); ++sl) {
-                    if(s_ptr->linedef_nrs[sl] >= l && s_ptr->linedef_nrs[sl] != string::npos) {
-                        s_ptr->linedef_nrs[sl]--;
+                for(size_t se = 0; se < s_ptr->edge_nrs.size(); ++se) {
+                    if(s_ptr->edge_nrs[se] >= e && s_ptr->edge_nrs[se] != string::npos) {
+                        s_ptr->edge_nrs[se]--;
                     }
                 }
             }
             
         } else {
-            ++l;
+            ++e;
         }
     }
     
@@ -2407,7 +2407,7 @@ void area_editor::save_area() {
         }
         mob_node->add(
             new data_node(
-                "pos",
+                "p",
                 f2s(m_ptr->x) + " " + f2s(m_ptr->y)
             )
         );
@@ -2424,33 +2424,33 @@ void area_editor::save_area() {
         
     }
     
-    //Vertices.
-    data_node* vertices_node = new data_node("vertices", "");
-    file_node.add(vertices_node);
+    //Vertexes.
+    data_node* vertexes_node = new data_node("vertexes", "");
+    file_node.add(vertexes_node);
     
-    for(size_t v = 0; v < cur_area_map.vertices.size(); ++v) {
-        vertex* v_ptr = cur_area_map.vertices[v];
-        data_node* vertex_node = new data_node("vertex", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
-        vertices_node->add(vertex_node);
+    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_map.vertexes[v];
+        data_node* vertex_node = new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
+        vertexes_node->add(vertex_node);
     }
     
-    //Linedefs.
-    data_node* linedefs_node = new data_node("linedefs", "");
-    file_node.add(linedefs_node);
+    //Edges.
+    data_node* edges_node = new data_node("edges", "");
+    file_node.add(edges_node);
     
-    for(size_t l = 0; l < cur_area_map.linedefs.size(); ++l) {
-        linedef* l_ptr = cur_area_map.linedefs[l];
-        data_node* linedef_node = new data_node("linedef", "");
-        linedefs_node->add(linedef_node);
+    for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
+        edge* e_ptr = cur_area_map.edges[e];
+        data_node* edge_node = new data_node("e", "");
+        edges_node->add(edge_node);
         string s_str;
         for(size_t s = 0; s < 2; ++s) {
-            if(l_ptr->sector_nrs[s] == string::npos) s_str += "-1";
-            else s_str += i2s(l_ptr->sector_nrs[s]);
+            if(e_ptr->sector_nrs[s] == string::npos) s_str += "-1";
+            else s_str += i2s(e_ptr->sector_nrs[s]);
             s_str += " ";
         }
         s_str.erase(s_str.size() - 1);
-        linedef_node->add(new data_node("s", s_str));
-        linedef_node->add(new data_node("v", i2s(l_ptr->vertex_nrs[0]) + " " + i2s(l_ptr->vertex_nrs[1])));
+        edge_node->add(new data_node("s", s_str));
+        edge_node->add(new data_node("v", i2s(e_ptr->vertex_nrs[0]) + " " + i2s(e_ptr->vertex_nrs[1])));
     }
     
     //Sectors.
@@ -2459,7 +2459,7 @@ void area_editor::save_area() {
     
     for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
         sector* s_ptr = cur_area_map.sectors[s];
-        data_node* sector_node = new data_node("sector", "");
+        data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
         
         if(s_ptr->type != SECTOR_TYPE_NORMAL) sector_node->add(new data_node("type", sector_types.get_name(s_ptr->type)));
@@ -2636,35 +2636,35 @@ void area_editor::update_review_frame() {
         }
         
     } else {
-        if(error_type == EET_INTERSECTING_LINEDEFS) {
+        if(error_type == EET_INTERSECTING_EDGES) {
         
-            if(intersecting_lines.empty()) {
+            if(intersecting_edges.empty()) {
                 find_errors(); return;
             }
             
-            lbl_error_1->text = "Two lines cross";
+            lbl_error_1->text = "Two edges cross";
             lbl_error_2->text = "each other, at";
             float u;
-            linedef_intersection* li_ptr = &intersecting_lines[0];
+            edge_intersection* ei_ptr = &intersecting_edges[0];
             lines_intersect(
-                li_ptr->l1->vertices[0]->x, li_ptr->l1->vertices[0]->y,
-                li_ptr->l1->vertices[1]->x, li_ptr->l1->vertices[1]->y,
-                li_ptr->l2->vertices[0]->x, li_ptr->l2->vertices[0]->y,
-                li_ptr->l2->vertices[1]->x, li_ptr->l2->vertices[1]->y,
+                ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
+                ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y,
+                ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y,
+                ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y,
                 NULL, &u
             );
             
             float a = atan2(
-                          li_ptr->l1->vertices[1]->y - li_ptr->l1->vertices[0]->y,
-                          li_ptr->l1->vertices[1]->x - li_ptr->l1->vertices[0]->x
+                          ei_ptr->e1->vertexes[1]->y - ei_ptr->e1->vertexes[0]->y,
+                          ei_ptr->e1->vertexes[1]->x - ei_ptr->e1->vertexes[0]->x
                       );
             dist d(
-                li_ptr->l1->vertices[0]->x, li_ptr->l1->vertices[0]->y,
-                li_ptr->l1->vertices[1]->x, li_ptr->l1->vertices[1]->y
+                ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
+                ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y
             );
             
-            lbl_error_3->text = "(" + f2s(floor(li_ptr->l1->vertices[0]->x + cos(a) * u * d.to_float())) +
-                                "," + f2s(floor(li_ptr->l1->vertices[0]->y + sin(a) * u * d.to_float())) + ")!";
+            lbl_error_3->text = "(" + f2s(floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u * d.to_float())) +
+                                "," + f2s(floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u * d.to_float())) + ")!";
                                 
         } else if(error_type == EET_BAD_SECTOR) {
         
@@ -2677,24 +2677,24 @@ void area_editor::update_review_frame() {
             lbl_error_3->text = "sector contain";
             lbl_error_4->text = "itself?)";
             
-        } else if(error_type == EET_LONE_LINE) {
+        } else if(error_type == EET_LONE_EDGE) {
         
-            if(lone_lines.empty()) {
+            if(lone_edges.empty()) {
                 find_errors(); return;
             }
             
-            lbl_error_1->text = "Lone line found!";
+            lbl_error_1->text = "Lone edge found!";
             lbl_error_2->text = "You probably want";
             lbl_error_3->text = "to drag one vertex";
             lbl_error_4->text = "to the other.";
             
-        } else if(error_type == EET_OVERLAPPING_VERTICES) {
+        } else if(error_type == EET_OVERLAPPING_VERTEXES) {
         
             if(!error_vertex_ptr) {
                 find_errors(); return;
             }
             
-            lbl_error_1->text = "Overlapping vertices";
+            lbl_error_1->text = "Overlapping vertexes";
             lbl_error_2->text =
                 "at (" + f2s(error_vertex_ptr->x) + "," +
                 f2s(error_vertex_ptr->y) + ")!";

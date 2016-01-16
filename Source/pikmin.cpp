@@ -370,6 +370,8 @@ void pikmin::be_released(mob* m, void* info1, void* info2) {
 
 void pikmin::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
+    m->remove_target();
+    m->speed_x = m->speed_y = 0;
 }
 
 void pikmin::go_to_task(mob* m, void* info1, void* info2) {
