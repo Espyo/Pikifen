@@ -2127,6 +2127,10 @@ void area_editor::load() {
  * Load the area from the disk.
  */
 void area_editor::load_area() {
+    intersecting_edges.clear();
+    non_simples.clear();
+    lone_edges.clear();
+    
     ::load_area(file_name, true);
     ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text = file_name;
     show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
@@ -2148,10 +2152,6 @@ void area_editor::load_area() {
     error_sector_ptr = NULL;
     error_string.clear();
     error_vertex_ptr = NULL;
-    
-    intersecting_edges.clear();
-    non_simples.clear();
-    lone_edges.clear();
     
     cur_sector = NULL;
     cur_mob = NULL;

@@ -653,6 +653,26 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             }
         }
     }
+    
+    //Before we quit, let's just check if the sector uses a vertex more than twice.
+    if(ae) {
+        map<vertex*, size_t> vertex_count;
+        edge* e_ptr = NULL;
+        for(size_t e = 0; e < s_ptr->edges.size(); e++) {
+            e_ptr = s_ptr->edges[e];
+            vertex_count[e_ptr->vertexes[0]]++;
+            vertex_count[e_ptr->vertexes[1]]++;
+        }
+        
+        for(auto v = vertex_count.begin(); v != vertex_count.end(); v++) {
+            if(v->second > 2) {
+                //Unfortunately, it does... That means it's a non-simple sector.
+                //This likely caused an incorrect triangulation, so let's report it.
+                ae->non_simples.insert(s_ptr);
+                break;
+            }
+        }
+    }
 }
 
 

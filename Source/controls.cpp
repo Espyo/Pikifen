@@ -284,7 +284,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 if(!done) {
                     if(closest_party_member) {
                         mob_event* grabbed_ev = closest_party_member->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
-                        if(!cur_leader_ptr->holding_pikmin && grabbed_ev) {
+                        mob_event* grabber_ev = cur_leader_ptr->fsm.get_event(LEADER_EVENT_HOLDING);
+                        if(grabber_ev && grabbed_ev) {
                             cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_party_member);
                             grabbed_ev->run(closest_party_member, (void*) closest_party_member);
                             done = true;
