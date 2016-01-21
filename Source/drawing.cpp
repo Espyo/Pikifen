@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -978,53 +978,28 @@ void draw_sector(sector* s_ptr, const float x, const float y, const float scale,
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
         /*
-         * The edge has two points. These are not the vertex 0 and
-         * vertex 1. These must be ordered as the "starting" and
-         * "ending" points. This is necessary to determine the "front"
-         * side of the edge. The "front" side points to the shaded sector.
-         * To know which is the front side, imagine you're walking from
-         * the start vertex to the end, in first person view.
-         * The "front" side would be to your left.
+         * We need to record the two vertexes of the edge as
+         * the two starting points of the procedure.
+         * Starting from vertex 0, if our sector is to the "left"
+         * then vertex 0 of the shadow is vertex of the edge.
+         * Otherwise, swap it around.
          */
         vertex* ev[2];
-        ev[0] = e_ptr->vertexes[0];
-        ev[1] = e_ptr->vertexes[1];
+        
+        if(e_ptr->sectors[0] == s_ptr) {
+            ev[0] = e_ptr->vertexes[0];
+            ev[1] = e_ptr->vertexes[1];
+        } else {
+            ev[0] = e_ptr->vertexes[1];
+            ev[1] = e_ptr->vertexes[0];
+        }
         
         float e_angle = atan2(ev[1]->y - ev[0]->y, ev[1]->x - ev[0]->x);
         float e_dist = dist(ev[0]->x, ev[0]->y, ev[1]->x, ev[1]->y).to_float();
-        
-        //Let's check if the "front" side is the edge's angle -90 (left).
         float e_cos_front = cos(e_angle - M_PI_2);
         float e_sin_front = sin(e_angle - M_PI_2);
         
-        /*
-         * Figure out if the "front" side is the one we're
-         * assuming, or the other one. We can do this by
-         * figuring out if a point is on our sector or not.
-         * This method isn't optimal nor very reliable,
-         * but the only other way would be to make the list of
-         * sectors on the edge be side-specific, which would
-         * make map-making a bit more strict.
-         */
-        if(
-            get_sector(
-                (ev[1]->x + ev[0]->x) / 2 + e_cos_front * 0.01,
-                (ev[1]->y + ev[0]->y) / 2 + e_sin_front * 0.01,
-                NULL, false
-            ) != s_ptr
-        ) {
-        
-            //The points are ordered wrong, then. Swap them.
-            swap(ev[0], ev[1]);
-            
-            e_angle += M_PI;
-            e_cos_front = -e_cos_front;
-            e_sin_front = -e_sin_front;
-        }
-        
-        
         //Record the first two vertexes of the shadow.
-        //These match the vertexes of the edge.
         for(size_t v = 0; v < 2; ++v) {
             av[v].x = ev[v]->x;
             av[v].y = ev[v]->y;

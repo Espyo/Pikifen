@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -218,3 +218,4 @@ bool debug_show_framerate = false;
 timer debug_framerate_update_timer(1.0f);
 unsigned int debug_framerate_counter = 30;
 string debug_last_axis = "";
+polygon poly_to_draw;

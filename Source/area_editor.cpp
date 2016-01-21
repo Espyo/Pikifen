@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -473,6 +473,15 @@ void area_editor::do_drawing() {
                     );
                 }
             }
+            /*
+            for(size_t p = 0; p < poly_to_draw.size(); p++) {
+                al_draw_line(
+                    poly_to_draw[p]->x, poly_to_draw[p]->y,
+                    poly_to_draw[(p + 1) % poly_to_draw.size()]->x, poly_to_draw[(p + 1) % poly_to_draw.size()]->y,
+                    al_map_rgb(128, 255, 0),
+                    2
+                );
+            }*/
         }
         
         //Background.
@@ -1473,6 +1482,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Finally, re-triangulate the affected sectors.
+            poly_to_draw.clear();
             for(size_t e = 0; e < final_vertex->edges.size(); ++e) {
                 edge* e_ptr = final_vertex->edges[e];
                 for(size_t s = 0; s < 2; ++s) {

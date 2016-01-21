@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2015.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included README file
  * for more information.
@@ -1370,6 +1370,9 @@ void triangulate(sector* s_ptr) {
     
     //Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
+    
+    //TODO TEMPORARY DEBUG CODE
+    if(poly_to_draw.size() < outer_poly.size()) poly_to_draw = outer_poly;
     
     s_ptr->triangles.clear();
     vector<vertex*> vertexes_left = outer_poly;
