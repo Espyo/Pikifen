@@ -38,7 +38,7 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
  */
 void onion::receive_mob(size_t seeds) {
     spew_queue += seeds;
-    if(full_spew_timer.time_left == 0) full_spew_timer.start();
+    if(full_spew_timer.is_over) full_spew_timer.start();
 }
 
 

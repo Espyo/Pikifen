@@ -711,11 +711,11 @@ void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* m
 sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap) {
     if(use_blockmap) {
     
-        size_t col = cur_area_map.bmap.get_col(x);
-        size_t row = cur_area_map.bmap.get_row(y);
+        size_t col = cur_area_data.bmap.get_col(x);
+        size_t row = cur_area_data.bmap.get_row(y);
         if(col == string::npos || row == string::npos) return NULL;
         
-        unordered_set<sector*>* sectors = &cur_area_map.bmap.sectors[col][row];
+        unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
         
         if(sectors->size() == 1) return *sectors->begin();
         
@@ -731,8 +731,8 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
         
     } else {
     
-        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_map.sectors[s];
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = cur_area_data.sectors[s];
             
             if(is_point_in_sector(x, y, s_ptr)) {
                 if(sector_nr) *sector_nr = s;
@@ -979,8 +979,8 @@ void check_edge_intersections(vertex* v) {
         if(!e_ptr->vertexes[0]) continue; //It had been marked for deletion.
         
         //For every other edge in the map, check for intersections.
-        for(size_t e2 = 0; e2 < cur_area_map.edges.size(); ++e2) {
-            edge* e2_ptr = cur_area_map.edges[e2];
+        for(size_t e2 = 0; e2 < cur_area_data.edges.size(); ++e2) {
+            edge* e2_ptr = cur_area_data.edges[e2];
             if(!e2_ptr->vertexes[0]) continue; //It had been marked for deletion.
             
             //If the edge is actually on the same vertex, never mind.
@@ -1370,9 +1370,6 @@ void triangulate(sector* s_ptr) {
     
     //Make cuts on the outer polygon between where it and inner polygons exist, as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
-    
-    //TODO TEMPORARY DEBUG CODE
-    if(poly_to_draw.size() < outer_poly.size()) poly_to_draw = outer_poly;
     
     s_ptr->triangles.clear();
     vector<vertex*> vertexes_left = outer_poly;

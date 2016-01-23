@@ -368,7 +368,7 @@ void leader::spray(mob* m, void* info1, void* info2) {
 void leader::lose_health(mob* m, void* info1, void* info2) {
     //TODO
     
-    if(!m->invuln_period.ticked) return;
+    if(!m->invuln_period.is_over) return;
     m->invuln_period.start();
     
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
@@ -574,7 +574,7 @@ void leader::draw() {
     get_sprite_center(this, f_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
     
-    if(invuln_period.time_left > 0) {
+    if(!invuln_period.is_over) {
         unsigned char anim_part = invuln_period.get_ratio_left() * LEADER_ZAP_ANIM_PARTS;
         float zap_x[4], zap_y[4];
         for(unsigned char p = 0; p < 4; ++p) {

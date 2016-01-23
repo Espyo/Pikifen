@@ -561,10 +561,11 @@ unsigned char sector_types_manager::get_nr_of_types() {
 /* ----------------------------------------------------------------------------
  * Cretes a timer.
  */
-timer::timer(float interval) {
+timer::timer(float interval, function<void()> on_end) {
     this->interval  = interval;
     this->time_left = 0;
-    this->ticked    = false;
+    this->is_over   = false;
+    this->on_end    = on_end;
 }
 
 
@@ -573,7 +574,7 @@ timer::timer(float interval) {
  */
 void timer::start() {
     time_left = interval;
-    ticked = false;
+    is_over = false;
 }
 
 
@@ -594,7 +595,8 @@ void timer::tick(const float amount) {
     time_left -= amount;
     time_left = max(time_left, 0.0f);
     if(time_left == 0.0f) {
-        ticked = true;
+        if(!is_over && on_end) on_end();
+        is_over = true;
     }
 }
 
@@ -616,8 +618,7 @@ const float fade_manager::FADE_DURATION = 0.15f;
 fade_manager::fade_manager() :
     time_left(0),
     fade_in(false),
-    on_end(nullptr)
-    {
+    on_end(nullptr) {
     
 }
 
@@ -625,7 +626,7 @@ fade_manager::fade_manager() :
 /* ----------------------------------------------------------------------------
  * Sets up the start of a fade.
  */
-void fade_manager::start_fade(const bool fade_in, function<void()> on_end){
+void fade_manager::start_fade(const bool fade_in, function<void()> on_end) {
     time_left = FADE_DURATION;
     this->fade_in = fade_in;
     this->on_end = on_end;
@@ -635,7 +636,7 @@ void fade_manager::start_fade(const bool fade_in, function<void()> on_end){
 /* ----------------------------------------------------------------------------
  * Returns whether the current fade is a fade in or fade out.
  */
-bool fade_manager::is_fade_in(){
+bool fade_manager::is_fade_in() {
     return fade_in;
 }
 
@@ -650,7 +651,7 @@ bool fade_manager::is_fading() {
 /* ----------------------------------------------------------------------------
  * Returns the percentage of progress left in the current fade.
  */
-float fade_manager::get_perc_left(){
+float fade_manager::get_perc_left() {
     return time_left / FADE_DURATION;
 }
 
@@ -658,10 +659,10 @@ float fade_manager::get_perc_left(){
 /* ----------------------------------------------------------------------------
  * Ticks the fade manager by one frame.
  */
-void fade_manager::tick(const float time){
+void fade_manager::tick(const float time) {
     if(time_left == 0) return;
     time_left -= time;
-    if(time_left <= 0){
+    if(time_left <= 0) {
         time_left = 0;
         if(on_end) on_end();
     }
@@ -672,13 +673,13 @@ void fade_manager::tick(const float time){
  * Draws the fade overlay, if there is a fade in progress.
  */
 void fade_manager::draw() {
-    if(is_fading()){
+    if(is_fading()) {
         unsigned char alpha = (fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
             0, 0, scr_w, scr_h,
             al_map_rgba(0, 0, 0,
-                (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
-            )
+                        (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
+                       )
         );
     }
 }

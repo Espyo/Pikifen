@@ -14,6 +14,7 @@
 
 void init_allegro();
 void init_controls();
+void init_dev_tools();
 void init_error_bitmap();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_fonts();

@@ -51,6 +51,7 @@ const float DISMISS_DISTANCE            = 64.0f;     //Dismissed Pikmin go these
 const float GROUP_MOVE_ARROW_SPEED      = 400.0f;    //"Move group" arrows move these many units per second.
 const float GROUP_MOVE_ARROWS_INTERVAL  = 0.1f;      //Seconds that need to pass before another "move group" arrow appears.
 const float IDLE_GLOW_SPIN_SPEED        = M_PI_2;    //The idle glow spins these many radians per second.
+const float INFO_PRINT_DURATION         = 10.0f;     //How long the on-screen info is printed for.
 const float INFO_SPOT_TRIGGER_RANGE     = 64.0f;     //If the current leader is at this distance or closer from an info spot, it gets triggered.
 const float LEADER_MOVE_SPEED           = 100.0f;    //Max speed at which a leader can move.
 const float MATURITY_POWER_MULT         = 0.1f;      //Every level of maturity, this much is added to the power.
@@ -140,6 +141,16 @@ enum EDITOR_SEC_MODES {
     ESM_NEW_SHADOW,
     ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,
+};
+
+enum DEV_TOOL_IDS {
+    DEV_TOOL_NONE,
+    DEV_TOOL_AREA_IMAGE,
+    DEV_TOOL_HURT_MOB,
+    DEV_TOOL_MOB_INFO,
+    DEV_TOOL_NEW_PIKMIN,
+    DEV_TOOL_COORDINATES,
+    DEV_TOOL_TELEPORT,
 };
 
 const unsigned char N_WHISTLE_RING_COLORS = 8;

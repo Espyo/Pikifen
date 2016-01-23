@@ -266,9 +266,9 @@ void area_editor::do_drawing() {
             unsigned char sector_opacity = 224;
             if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_SHADOWS) sector_opacity = 128;
             
-            size_t n_edges = cur_area_map.edges.size();
+            size_t n_edges = cur_area_data.edges.size();
             for(size_t e = 0; e < n_edges; ++e) {
-                edge* e_ptr = cur_area_map.edges[e];
+                edge* e_ptr = cur_area_data.edges[e];
                 
                 if(!is_edge_valid(e_ptr)) continue;
                 
@@ -341,9 +341,9 @@ void area_editor::do_drawing() {
             }
             
             //Vertexes.
-            size_t n_vertexes = cur_area_map.vertexes.size();
+            size_t n_vertexes = cur_area_data.vertexes.size();
             for(size_t v = 0; v < n_vertexes; ++v) {
-                vertex* v_ptr = cur_area_map.vertexes[v];
+                vertex* v_ptr = cur_area_data.vertexes[v];
                 al_draw_filled_circle(
                     v_ptr->x,
                     v_ptr->y,
@@ -359,8 +359,8 @@ void area_editor::do_drawing() {
         } else {
         
             //Draw textures.
-            for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-                draw_sector(cur_area_map.sectors[s], 0, 0, 1.0);
+            for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+                draw_sector(cur_area_data.sectors[s], 0, 0, 1.0);
             }
         }
         
@@ -369,8 +369,8 @@ void area_editor::do_drawing() {
         if(mode == EDITOR_MODE_SECTORS || mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS || mode == EDITOR_MODE_SHADOWS) mob_opacity = 64;
         if(sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
         
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = cur_area_data.mob_generators[m];
             bool valid = m_ptr->type != NULL;
             
             float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
@@ -417,9 +417,9 @@ void area_editor::do_drawing() {
         
         //Shadows.
         if(mode == EDITOR_MODE_SHADOWS || (sec_mode == ESM_TEXTURE_VIEW && show_shadows)) {
-            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
+            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             
-                tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 draw_sprite(
                     s_ptr->bitmap, s_ptr->x, s_ptr->y, s_ptr->w, s_ptr->h,
                     s_ptr->angle, map_alpha(s_ptr->alpha)
@@ -473,15 +473,6 @@ void area_editor::do_drawing() {
                     );
                 }
             }
-            /*
-            for(size_t p = 0; p < poly_to_draw.size(); p++) {
-                al_draw_line(
-                    poly_to_draw[p]->x, poly_to_draw[p]->y,
-                    poly_to_draw[(p + 1) % poly_to_draw.size()]->x, poly_to_draw[(p + 1) % poly_to_draw.size()]->y,
-                    al_map_rgb(128, 255, 0),
-                    2
-                );
-            }*/
         }
         
         //Background.
@@ -528,12 +519,12 @@ void area_editor::find_errors() {
     if(error_type == EET_NONE) {
         error_vertex_ptr = NULL;
         
-        for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-            vertex* v1_ptr = cur_area_map.vertexes[v];
+        for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+            vertex* v1_ptr = cur_area_data.vertexes[v];
             if(v1_ptr->x == FLT_MAX) continue;
             
-            for(size_t v2 = v + 1; v2 < cur_area_map.vertexes.size(); ++v2) {
-                vertex* v2_ptr = cur_area_map.vertexes[v2];
+            for(size_t v2 = v + 1; v2 < cur_area_data.vertexes.size(); ++v2) {
+                vertex* v2_ptr = cur_area_data.vertexes[v2];
                 
                 if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
                     error_type = EET_OVERLAPPING_VERTEXES;
@@ -561,9 +552,9 @@ void area_editor::find_errors() {
     
     //Check for missing textures.
     if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         
-            sector* s_ptr = cur_area_map.sectors[s];
+            sector* s_ptr = cur_area_data.sectors[s];
             if(s_ptr->texture_info.file_name.empty() && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
                 error_type = EET_MISSING_TEXTURE;
                 error_sector_ptr = s_ptr;
@@ -575,9 +566,9 @@ void area_editor::find_errors() {
     //Check for unknown textures.
     if(error_type == EET_NONE) {
         vector<string> texture_file_names = folder_to_vector(TEXTURES_FOLDER, false);
-        for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         
-            sector* s_ptr = cur_area_map.sectors[s];
+            sector* s_ptr = cur_area_data.sectors[s];
             
             if(s_ptr->texture_info.file_name.empty()) continue;
             
@@ -592,10 +583,10 @@ void area_editor::find_errors() {
     
     //Objects with no type.
     if(error_type == EET_NONE) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            if(!cur_area_map.mob_generators[m]->type) {
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            if(!cur_area_data.mob_generators[m]->type) {
                 error_type = EET_TYPELESS_MOB;
-                error_mob_ptr = cur_area_map.mob_generators[m];
+                error_mob_ptr = cur_area_data.mob_generators[m];
                 break;
             }
         }
@@ -603,8 +594,8 @@ void area_editor::find_errors() {
     
     //Objects out of bounds.
     if(error_type == EET_NONE) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = cur_area_data.mob_generators[m];
             if(!get_sector(m_ptr->x, m_ptr->y, NULL, false)) {
                 error_type = EET_MOB_OOB;
                 error_mob_ptr = m_ptr;
@@ -617,13 +608,13 @@ void area_editor::find_errors() {
     if(error_type == EET_NONE) {
         error_mob_ptr = NULL;
         
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            mob_gen* m_ptr = cur_area_map.mob_generators[m];
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = cur_area_data.mob_generators[m];
             
             if(error_mob_ptr) break;
             
-            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-                edge* e_ptr = cur_area_map.edges[e];
+            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                edge* e_ptr = cur_area_data.edges[e];
                 if(!is_edge_valid(e_ptr)) continue;
                 
                 if(
@@ -659,10 +650,10 @@ void area_editor::find_errors() {
     
     //Check if there are tree shadows with invalid images.
     if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
-            if(cur_area_map.tree_shadows[s]->bitmap == bmp_error) {
+        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            if(cur_area_data.tree_shadows[s]->bitmap == bmp_error) {
                 error_type = EET_INVALID_SHADOW;
-                error_shadow_ptr = cur_area_map.tree_shadows[s];
+                error_shadow_ptr = cur_area_data.tree_shadows[s];
             }
         }
     }
@@ -1009,15 +1000,15 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         //Move vertex, mob or shadow.
         if(moving_thing != string::npos) {
             if(mode == EDITOR_MODE_SECTORS) {
-                vertex* v_ptr = cur_area_map.vertexes[moving_thing];
+                vertex* v_ptr = cur_area_data.vertexes[moving_thing];
                 v_ptr->x = snap_to_grid(mouse_cursor_x);
                 v_ptr->y = snap_to_grid(mouse_cursor_y);
             } else if(mode == EDITOR_MODE_OBJECTS) {
-                mob_gen* m_ptr = cur_area_map.mob_generators[moving_thing];
+                mob_gen* m_ptr = cur_area_data.mob_generators[moving_thing];
                 m_ptr->x = snap_to_grid(mouse_cursor_x);
                 m_ptr->y = snap_to_grid(mouse_cursor_y);
             } else if(mode == EDITOR_MODE_SHADOWS) {
-                tree_shadow* s_ptr = cur_area_map.tree_shadows[moving_thing];
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x - moving_thing_x);
                 s_ptr->y = snap_to_grid(mouse_cursor_y - moving_thing_y);
                 shadow_to_gui();
@@ -1069,8 +1060,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             size_t clicked_edge_nr = string::npos;
             bool created_vertex = false;
             
-            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-                edge* e_ptr = cur_area_map.edges[e];
+            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                edge* e_ptr = cur_area_data.edges[e];
                 
                 if(!is_edge_valid(e_ptr)) continue;
                 
@@ -1095,33 +1086,33 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 //New vertex, on the split point.
                 //TODO create it on the edge, not on the cursor.
                 vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
-                cur_area_map.vertexes.push_back(new_v_ptr);
+                cur_area_data.vertexes.push_back(new_v_ptr);
                 
                 //New edge, copied from the original one.
                 edge* new_e_ptr = new edge(*clicked_edge_ptr);
-                cur_area_map.edges.push_back(new_e_ptr);
+                cur_area_data.edges.push_back(new_e_ptr);
                 
                 //Save the original end vertex for later.
                 vertex* end_v_ptr = clicked_edge_ptr->vertexes[1];
                 
                 //Set vertexes on the new and original edges.
-                new_e_ptr->vertex_nrs[0] = cur_area_map.vertexes.size() - 1;
+                new_e_ptr->vertex_nrs[0] = cur_area_data.vertexes.size() - 1;
                 new_e_ptr->vertexes[0] = new_v_ptr;
                 clicked_edge_ptr->vertex_nrs[1] = new_e_ptr->vertex_nrs[0];
                 clicked_edge_ptr->vertexes[1] = new_v_ptr;
                 
                 //Set sectors on the new edge.
                 if(new_e_ptr->sectors[0]) {
-                    new_e_ptr->sectors[0]->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                    new_e_ptr->sectors[0]->edge_nrs.push_back(cur_area_data.edges.size() - 1);
                     new_e_ptr->sectors[0]->edges.push_back(new_e_ptr);
                 }
                 if(new_e_ptr->sectors[1]) {
-                    new_e_ptr->sectors[1]->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                    new_e_ptr->sectors[1]->edge_nrs.push_back(cur_area_data.edges.size() - 1);
                     new_e_ptr->sectors[1]->edges.push_back(new_e_ptr);
                 }
                 
                 //Set edges of the new vertex.
-                new_v_ptr->edge_nrs.push_back(cur_area_map.edges.size() - 1);
+                new_v_ptr->edge_nrs.push_back(cur_area_data.edges.size() - 1);
                 new_v_ptr->edge_nrs.push_back(clicked_edge_nr);
                 new_v_ptr->edges.push_back(new_e_ptr);
                 new_v_ptr->edges.push_back(clicked_edge_ptr);
@@ -1131,24 +1122,24 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 for(size_t ve = 0; ve < end_v_ptr->edges.size(); ++ve) {
                     if(end_v_ptr->edges[ve] == clicked_edge_ptr) {
                         end_v_ptr->edges[ve] = new_e_ptr;
-                        end_v_ptr->edge_nrs[ve] = cur_area_map.edges.size() - 1;
+                        end_v_ptr->edge_nrs[ve] = cur_area_data.edges.size() - 1;
                         break;
                     }
                 }
                 
                 //Start dragging the new vertex.
-                moving_thing = cur_area_map.vertexes.size() - 1;
+                moving_thing = cur_area_data.vertexes.size() - 1;
                 
                 created_vertex = true;
             }
             
             //Find a vertex to drag.
             if(!created_vertex) {
-                for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
+                for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                     if(
                         dist(
                             mouse_cursor_x, mouse_cursor_y,
-                            cur_area_map.vertexes[v]->x, cur_area_map.vertexes[v]->y
+                            cur_area_data.vertexes[v]->x, cur_area_data.vertexes[v]->y
                         ) <= 6.0 / cam_zoom
                     ) {
                         moving_thing = v;
@@ -1169,8 +1160,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             cur_mob = NULL;
             moving_thing = string::npos;
-            for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-                mob_gen* m_ptr = cur_area_map.mob_generators[m];
+            for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+                mob_gen* m_ptr = cur_area_data.mob_generators[m];
                 float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
                 if(dist(m_ptr->x, m_ptr->y, mouse_cursor_x, mouse_cursor_y) <= radius) {
                 
@@ -1186,9 +1177,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             cur_shadow = NULL;
             moving_thing = string::npos;
-            for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
+            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             
-                tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 float min_x, min_y, max_x, max_y;
                 get_shadow_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
                 
@@ -1230,33 +1221,33 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_vertexes[2]->y = hotspot_y + GRID_INTERVAL / 2;
             new_vertexes[3]->x = hotspot_x - GRID_INTERVAL / 2;
             new_vertexes[3]->y = hotspot_y + GRID_INTERVAL / 2;
-            for(size_t v = 0; v < 4; ++v)cur_area_map.vertexes.push_back(new_vertexes[v]);
+            for(size_t v = 0; v < 4; ++v)cur_area_data.vertexes.push_back(new_vertexes[v]);
             
             //Create the edges.
             edge* new_edges[4];
             for(size_t l = 0; l < 4; ++l) {
                 new_edges[l] = new edge(
-                    cur_area_map.vertexes.size() - (4 - l),
-                    cur_area_map.vertexes.size() - (4 - ((l + 1) % 4))
+                    cur_area_data.vertexes.size() - (4 - l),
+                    cur_area_data.vertexes.size() - (4 - ((l + 1) % 4))
                 );
                 new_edges[l]->sector_nrs[0] = outer_sector_nr;
-                new_edges[l]->sector_nrs[1] = cur_area_map.sectors.size();
-                cur_area_map.edges.push_back(new_edges[l]);
+                new_edges[l]->sector_nrs[1] = cur_area_data.sectors.size();
+                cur_area_data.edges.push_back(new_edges[l]);
             }
             
             //Add them to the area map.
-            for(size_t e = 0; e < 4; ++e) new_sector->edge_nrs.push_back(cur_area_map.edges.size() - (4 - e));
-            cur_area_map.sectors.push_back(new_sector);
+            for(size_t e = 0; e < 4; ++e) new_sector->edge_nrs.push_back(cur_area_data.edges.size() - (4 - e));
+            cur_area_data.sectors.push_back(new_sector);
             
-            for(size_t e = 0; e < 4; ++e) new_edges[e]->fix_pointers(cur_area_map);
-            for(size_t v = 0; v < 4; ++v) new_vertexes[v]->connect_edges(cur_area_map, cur_area_map.vertexes.size() - (4 - v));
-            new_sector->connect_edges(cur_area_map, cur_area_map.sectors.size() - 1);
+            for(size_t e = 0; e < 4; ++e) new_edges[e]->fix_pointers(cur_area_data);
+            for(size_t v = 0; v < 4; ++v) new_vertexes[v]->connect_edges(cur_area_data, cur_area_data.vertexes.size() - (4 - v));
+            new_sector->connect_edges(cur_area_data, cur_area_data.sectors.size() - 1);
             
             //Add the edges to the outer sector's list.
             if(outer_sector) {
                 for(size_t e = 0; e < 4; ++e) {
                     outer_sector->edges.push_back(new_edges[e]);
-                    outer_sector->edge_nrs.push_back(cur_area_map.edges.size() - (4 - e));
+                    outer_sector->edge_nrs.push_back(cur_area_data.edges.size() - (4 - e));
                 }
             }
             
@@ -1278,11 +1269,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
             
-            cur_area_map.mob_generators.push_back(
+            cur_area_data.mob_generators.push_back(
                 new mob_gen(hotspot_x, hotspot_y)
             );
             
-            cur_mob = cur_area_map.mob_generators.back();
+            cur_mob = cur_area_data.mob_generators.back();
             mob_to_gui();
             
         } else if(sec_mode == ESM_NEW_SHADOW) {
@@ -1295,7 +1286,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             tree_shadow* new_shadow = new tree_shadow(hotspot_x, hotspot_y);
             new_shadow->bitmap = bmp_error;
             
-            cur_area_map.tree_shadows.push_back(new_shadow);
+            cur_area_data.tree_shadows.push_back(new_shadow);
             cur_shadow = new_shadow;
             shadow_to_gui();
             
@@ -1311,14 +1302,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(ev.mouse.button == 1 && mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE && moving_thing != string::npos) {
             //Release the vertex.
             
-            vertex* moved_v_ptr = cur_area_map.vertexes[moving_thing];
+            vertex* moved_v_ptr = cur_area_data.vertexes[moving_thing];
             vertex* final_vertex = moved_v_ptr;
             
             unordered_set<sector*> affected_sectors;
             
             //Check if we should merge.
-            for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-                vertex* dest_v_ptr = cur_area_map.vertexes[v];
+            for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+                vertex* dest_v_ptr = cur_area_data.vertexes[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
                 
                 if(dist(moved_v_ptr->x, moved_v_ptr->y, dest_v_ptr->x, dest_v_ptr->y) <= (10 / cam_zoom)) {
@@ -1364,7 +1355,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             
                             //Clear its info, so it gets marked for deletion.
                             e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
-                            e_ptr->fix_pointers(cur_area_map);
+                            e_ptr->fix_pointers(cur_area_data);
                             
                         } else {
                         
@@ -1399,7 +1390,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                         de_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
                                     else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1] || !e_ptr->sectors[1])
                                         de_ptr->sector_nrs[1] = e_ptr->sector_nrs[0];
-                                    de_ptr->fix_pointers(cur_area_map);
+                                    de_ptr->fix_pointers(cur_area_data);
                                     
                                     //Go to the edge's old vertexes,
                                     //and tell them that it no longer exists.
@@ -1419,7 +1410,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     //This'll mark it for deletion.
                                     e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = string::npos;
                                     e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
-                                    e_ptr->fix_pointers(cur_area_map);
+                                    e_ptr->fix_pointers(cur_area_data);
                                     was_deleted = true;
                                     
                                     break;
@@ -1441,7 +1432,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         
                     }
                     
-                    dest_v_ptr->fix_pointers(cur_area_map);
+                    dest_v_ptr->fix_pointers(cur_area_data);
                     
                     //Check if any of the final edges have the same sector
                     //on both sides. If so, delete them.
@@ -1457,7 +1448,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             }
                             ve_ptr->sector_nrs[0] = ve_ptr->sector_nrs[1] = string::npos;
                             ve_ptr->vertex_nrs[0] = ve_ptr->vertex_nrs[1] = string::npos;
-                            ve_ptr->fix_pointers(cur_area_map);
+                            ve_ptr->fix_pointers(cur_area_data);
                         } else {
                             ++ve;
                         }
@@ -1482,7 +1473,6 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Finally, re-triangulate the affected sectors.
-            poly_to_draw.clear();
             for(size_t e = 0; e < final_vertex->edges.size(); ++e) {
                 edge* e_ptr = final_vertex->edges[e];
                 for(size_t s = 0; s < 2; ++s) {
@@ -1972,9 +1962,9 @@ void area_editor::load() {
         mob_to_gui();
     };
     frm_object->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-            if(cur_area_map.mob_generators[m] == cur_mob) {
-                cur_area_map.mob_generators.erase(cur_area_map.mob_generators.begin() + m);
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            if(cur_area_data.mob_generators[m] == cur_mob) {
+                cur_area_data.mob_generators.erase(cur_area_data.mob_generators.begin() + m);
                 delete cur_mob;
                 cur_mob = NULL;
                 mob_to_gui();
@@ -2017,9 +2007,9 @@ void area_editor::load() {
         shadow_to_gui();
     };
     frm_shadow->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
-            if(cur_area_map.tree_shadows[s] == cur_shadow) {
-                cur_area_map.tree_shadows.erase(cur_area_map.tree_shadows.begin() + s);
+        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            if(cur_area_data.tree_shadows[s] == cur_shadow) {
+                cur_area_data.tree_shadows.erase(cur_area_data.tree_shadows.begin() + s);
                 delete cur_shadow;
                 cur_shadow = NULL;
                 shadow_to_gui();
@@ -2149,8 +2139,8 @@ void area_editor::load_area() {
     
     clear_area_textures();
     
-    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-        check_edge_intersections(cur_area_map.vertexes[v]);
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        check_edge_intersections(cur_area_data.vertexes[v]);
     }
     
     change_background(bg_file_name);
@@ -2310,27 +2300,27 @@ void area_editor::save_area() {
     data_node file_node = data_node("", "");
     
     //Point down the weather and background again.
-    file_node.add(new data_node("weather", cur_area_map.weather_name));
-    if(cur_area_map.bg_bmp_file_name.size())
-        file_node.add(new data_node("bg_bmp", cur_area_map.bg_bmp_file_name));
-    file_node.add(new data_node("bg_color", c2s(cur_area_map.bg_color)));
-    file_node.add(new data_node("bg_dist", f2s(cur_area_map.bg_dist)));
-    file_node.add(new data_node("bg_zoom", f2s(cur_area_map.bg_bmp_zoom)));
-    file_node.add(new data_node("name", cur_area_map.name));
-    file_node.add(new data_node("subtitle", cur_area_map.subtitle));
+    file_node.add(new data_node("weather", cur_area_data.weather_name));
+    if(cur_area_data.bg_bmp_file_name.size())
+        file_node.add(new data_node("bg_bmp", cur_area_data.bg_bmp_file_name));
+    file_node.add(new data_node("bg_color", c2s(cur_area_data.bg_color)));
+    file_node.add(new data_node("bg_dist", f2s(cur_area_data.bg_dist)));
+    file_node.add(new data_node("bg_zoom", f2s(cur_area_data.bg_bmp_zoom)));
+    file_node.add(new data_node("name", cur_area_data.name));
+    file_node.add(new data_node("subtitle", cur_area_data.subtitle));
     
     //Start by cleaning unused vertexes, sectors and edges.
     //Unused vertexes.
-    for(size_t v = 0; v < cur_area_map.vertexes.size(); ) {
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ) {
     
-        vertex* v_ptr = cur_area_map.vertexes[v];
+        vertex* v_ptr = cur_area_data.vertexes[v];
         if(v_ptr->edge_nrs.empty()) {
         
-            cur_area_map.vertexes.erase(cur_area_map.vertexes.begin() + v);
+            cur_area_data.vertexes.erase(cur_area_data.vertexes.begin() + v);
             
             //Fix numbers in edge lists.
-            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-                edge* e_ptr = cur_area_map.edges[e];
+            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                edge* e_ptr = cur_area_data.edges[e];
                 for(unsigned char ev = 0; ev < 2; ++ev) {
                     if(e_ptr->vertex_nrs[ev] >= v && e_ptr->vertex_nrs[ev] != string::npos) {
                         e_ptr->vertex_nrs[ev]--;
@@ -2344,16 +2334,16 @@ void area_editor::save_area() {
     }
     
     //Unused sectors.
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ) {
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ) {
     
-        sector* s_ptr = cur_area_map.sectors[s];
+        sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->edge_nrs.empty()) {
         
-            cur_area_map.sectors.erase(cur_area_map.sectors.begin() + s);
+            cur_area_data.sectors.erase(cur_area_data.sectors.begin() + s);
             
             //Fix numbers in edge lists.
-            for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-                edge* e_ptr = cur_area_map.edges[e];
+            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                edge* e_ptr = cur_area_data.edges[e];
                 for(unsigned char es = 0; es < 2; ++es) {
                     if(e_ptr->sector_nrs[es] >= s && e_ptr->sector_nrs[es] != string::npos) {
                         e_ptr->sector_nrs[es]--;
@@ -2367,16 +2357,16 @@ void area_editor::save_area() {
     }
     
     //Unused edges.
-    for(size_t e = 0; e < cur_area_map.edges.size(); ) {
+    for(size_t e = 0; e < cur_area_data.edges.size(); ) {
     
-        edge* e_ptr = cur_area_map.edges[e];
+        edge* e_ptr = cur_area_data.edges[e];
         if(e_ptr->vertex_nrs[0] == string::npos) {
         
-            cur_area_map.edges.erase(cur_area_map.edges.begin() + e);
+            cur_area_data.edges.erase(cur_area_data.edges.begin() + e);
             
             //Fix numbers in vertex lists.
-            for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-                vertex* v_ptr = cur_area_map.vertexes[v];
+            for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+                vertex* v_ptr = cur_area_data.vertexes[v];
                 for(size_t ve = 0; ve < v_ptr->edge_nrs.size(); ++ve) {
                     if(v_ptr->edge_nrs[ve] >= e && v_ptr->edge_nrs[ve] != string::npos) {
                         --v_ptr->edge_nrs[ve];
@@ -2385,8 +2375,8 @@ void area_editor::save_area() {
             }
             
             //Fix numbers in sector lists.
-            for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-                sector* s_ptr = cur_area_map.sectors[s];
+            for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+                sector* s_ptr = cur_area_data.sectors[s];
                 for(size_t se = 0; se < s_ptr->edge_nrs.size(); ++se) {
                     if(s_ptr->edge_nrs[se] >= e && s_ptr->edge_nrs[se] != string::npos) {
                         s_ptr->edge_nrs[se]--;
@@ -2405,8 +2395,8 @@ void area_editor::save_area() {
     data_node* mobs_node = new data_node("mobs", "");
     file_node.add(mobs_node);
     
-    for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_map.mob_generators[m];
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
         data_node* mob_node = new data_node(mob_categories.get_sname(m_ptr->category), "");
         mobs_node->add(mob_node);
         
@@ -2438,8 +2428,8 @@ void area_editor::save_area() {
     data_node* vertexes_node = new data_node("vertexes", "");
     file_node.add(vertexes_node);
     
-    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-        vertex* v_ptr = cur_area_map.vertexes[v];
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
         data_node* vertex_node = new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertexes_node->add(vertex_node);
     }
@@ -2448,8 +2438,8 @@ void area_editor::save_area() {
     data_node* edges_node = new data_node("edges", "");
     file_node.add(edges_node);
     
-    for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-        edge* e_ptr = cur_area_map.edges[e];
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = cur_area_data.edges[e];
         data_node* edge_node = new data_node("e", "");
         edges_node->add(edge_node);
         string s_str;
@@ -2467,8 +2457,8 @@ void area_editor::save_area() {
     data_node* sectors_node = new data_node("sectors", "");
     file_node.add(sectors_node);
     
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_map.sectors[s];
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
         data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
         
@@ -2498,8 +2488,8 @@ void area_editor::save_area() {
     data_node* shadows_node = new data_node("tree_shadows", "");
     file_node.add(shadows_node);
     
-    for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
-        tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
         
@@ -2609,7 +2599,7 @@ float area_editor::snap_to_grid(const float c) {
  */
 void area_editor::unload() {
     //TODO
-    cur_area_map.clear();
+    cur_area_data.clear();
     delete(gui->style);
     delete(gui);
 }

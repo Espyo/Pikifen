@@ -653,6 +653,8 @@ void pikmin::draw() {
     
     bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE);
     if(is_idle) {
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(&old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst);
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
         draw_sprite(
             f_ptr->bitmap,
@@ -661,7 +663,7 @@ void pikmin::draw() {
             angle,
             map_gray(get_sprite_lighting(this))
         );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+        al_set_separate_blender(old_op, old_src, old_dst, old_aop, old_asrc, old_adst);
     }
     
     float w_mult = draw_w / f_ptr->game_w;

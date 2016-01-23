@@ -105,6 +105,7 @@ extern sample_struct sfx_switch_pikmin;
 extern sample_struct sfx_throw;
 
 //General globals.
+extern ALLEGRO_FONT*                    allegro_font;
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
 extern float                            area_images_scale;
 extern int                              area_image_size;
@@ -129,7 +130,7 @@ extern float                            cam_y;
 extern float                            cam_zoom;
 extern vector<vector<control_info> >    controls;
 extern mob*                             closest_party_member;
-extern area_map                         cur_area_map;
+extern area_map                         cur_area_data;
 extern size_t                           cur_leader_nr;
 extern leader*                          cur_leader_ptr;
 extern string                           cur_message;
@@ -156,6 +157,11 @@ extern float                            day_minutes_per_irl_sec;  //Every real-l
 extern float                            day_minutes_start;        //The in-game minutes start with this value every day.
 extern bool                             daylight_effect;
 extern double                           delta_t;                  //Time between the previous frame and the current.
+extern string                           dev_tool_area_image_name;
+extern bool                             dev_tool_area_image_shadows;
+extern int                              dev_tool_area_image_size;
+extern unsigned char                    dev_tool_keys[10];
+extern pikmin_type*                     dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;
 extern map<string, enemy_type*>         enemy_types;
@@ -167,6 +173,8 @@ extern ALLEGRO_FONT*                    font_counter;
 extern unsigned int                     font_counter_h;
 extern unsigned int                     font_h;
 extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
+extern unsigned int                     framerate_counter;
+extern timer                            framerate_update_timer;
 extern unsigned short                   game_fps;
 extern string                           game_name;
 extern map<size_t, game_state*>         game_states;
@@ -182,6 +190,8 @@ extern movement_struct                  group_movement; //Joystick coordinates f
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
 extern float                            idle_glow_angle;
+extern string                           info_print_text;
+extern timer                            info_print_timer;
 extern vector<info_spot*>               info_spots;
 extern map<ALLEGRO_JOYSTICK*, int>      joystick_numbers;
 extern vector<leader*>                  leaders;
@@ -223,6 +233,7 @@ extern unsigned char                    ship_beam_ring_color[3];
 extern bool                             ship_beam_ring_color_up[3];
 extern map<string, ship_type*>          ship_types;
 extern vector<ship*>                    ships;
+extern bool                             show_framerate;
 extern bool                             smooth_scaling;     //If false, images that are scaled up and down will look pixelated.
 extern map<string, mob_type*>           spec_mob_types;
 extern vector<unsigned long>            spray_amounts;      //How many of each spray the player has.
@@ -250,13 +261,5 @@ extern vector<float>                    whistle_rings;
 extern bool                             whistling;             //Is the whistle currently being blown?
 extern bool                             window_pos_hack; //Should we force the window's positioning (on some systems it appears out-of-bounds by default)
 
-
-
-//Debugging variables.
-extern bool debug_show_framerate;
-extern timer debug_framerate_update_timer;
-extern unsigned int debug_framerate_counter;
-extern string debug_last_axis;
-extern polygon poly_to_draw;
 
 #endif //ifndef VARS_INCLUDED

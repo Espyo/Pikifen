@@ -319,10 +319,10 @@ void mob::tick_physics() {
         //the edges in the same block the mob is on.
         //This way, we won't check for edges that are really far away.
         //Use the bounding box to know which blockmap blocks the mob will be on.
-        size_t bx1 = cur_area_map.bmap.get_col(new_x - type->radius);
-        size_t bx2 = cur_area_map.bmap.get_col(new_x + type->radius);
-        size_t by1 = cur_area_map.bmap.get_row(new_y - type->radius);
-        size_t by2 = cur_area_map.bmap.get_row(new_y + type->radius);
+        size_t bx1 = cur_area_data.bmap.get_col(new_x - type->radius);
+        size_t bx2 = cur_area_data.bmap.get_col(new_x + type->radius);
+        size_t by1 = cur_area_data.bmap.get_row(new_y - type->radius);
+        size_t by2 = cur_area_data.bmap.get_row(new_y + type->radius);
         
         if(
             bx1 == string::npos || bx2 == string::npos ||
@@ -347,7 +347,7 @@ void mob::tick_physics() {
         for(size_t bx = bx1; bx <= bx2; ++bx) {
             for(size_t by = by1; by <= by2; ++by) {
             
-                vector<edge*>* edges = &cur_area_map.bmap.edges[bx][by];
+                vector<edge*>* edges = &cur_area_data.bmap.edges[bx][by];
                 
                 for(size_t e = 0; e < edges->size(); ++e) {
                 
@@ -607,7 +607,7 @@ void mob::tick_script() {
     mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
     if(timer_ev && script_timer.interval > 0) {
         script_timer.tick(delta_t);
-        if(script_timer.ticked) {
+        if(script_timer.is_over) {
             script_timer.start();
             timer_ev->run(this);
         }

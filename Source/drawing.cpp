@@ -20,8 +20,9 @@
 
 /* ----------------------------------------------------------------------------
  * Does the drawing for the main game loop.
+ * bmp_output: if not NULL, draw the area onto this.
  */
-void do_game_drawing() {
+void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transform) {
 
     /*  ***************************************
       *** |  |                           |  | ***
@@ -41,7 +42,15 @@ void do_game_drawing() {
         ALLEGRO_TRANSFORM normal_transform;
         al_identity_transform(&normal_transform);
         
-        ALLEGRO_TRANSFORM world_to_screen_transform = get_world_to_screen_transform();
+        ALLEGRO_TRANSFORM world_to_screen_transform;
+        
+        if(bmp_output) {
+            world_to_screen_transform = *bmp_transform;
+            al_set_target_bitmap(bmp_output);
+            al_set_separate_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA);
+        } else {
+            world_to_screen_transform = get_world_to_screen_transform();
+        }
         
         
         /* Layer 1
@@ -51,33 +60,43 @@ void do_game_drawing() {
         *                +---+ *
         ***********************/
         
-        al_clear_to_color(cur_area_map.bg_color);
+        al_clear_to_color(cur_area_data.bg_color);
         
-        if(cur_area_map.bg_bmp) {
+        if(cur_area_data.bg_bmp) {
             ALLEGRO_VERTEX bg_v[4];
             for(unsigned char v = 0; v < 4; ++v) {
                 bg_v[v].color = map_gray(255);
                 bg_v[v].z = 0;
             }
+            
+            //Not gonna lie, this uses some fancy-shnancy numbers.
+            //I mostly got here via trial and error.
+            //I apologize if you're trying to understand what it means.
+            int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : scr_w;
+            int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
+            float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
+            float zoom_x = bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use;
+            float zoom_y = bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use;
+            
             bg_v[0].x = 0;
             bg_v[0].y = 0;
-            bg_v[0].u = (cam_x - scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[0].v = (cam_y - scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[1].x = scr_w;
+            bg_v[0].u = (cam_x - zoom_x) / cur_area_data.bg_bmp_zoom;
+            bg_v[0].v = (cam_y - zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[1].x = bmp_w;
             bg_v[1].y = 0;
-            bg_v[1].u = (cam_x + scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[1].v = (cam_y - scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[2].x = scr_w;
-            bg_v[2].y = scr_h;
-            bg_v[2].u = (cam_x + scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[2].v = (cam_y + scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[1].u = (cam_x + zoom_x) / cur_area_data.bg_bmp_zoom;
+            bg_v[1].v = (cam_y - zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[2].x = bmp_w;
+            bg_v[2].y = bmp_h;
+            bg_v[2].u = (cam_x + zoom_x) / cur_area_data.bg_bmp_zoom;
+            bg_v[2].v = (cam_y + zoom_y) / cur_area_data.bg_bmp_zoom;
             bg_v[3].x = 0;
-            bg_v[3].y = scr_h;
-            bg_v[3].u = (cam_x - scr_w * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
-            bg_v[3].v = (cam_y + scr_h * 0.5 * cur_area_map.bg_dist / cam_zoom) / cur_area_map.bg_bmp_zoom;
+            bg_v[3].y = bmp_h;
+            bg_v[3].u = (cam_x - zoom_x) / cur_area_data.bg_bmp_zoom;
+            bg_v[3].v = (cam_y + zoom_y) / cur_area_data.bg_bmp_zoom;
             
             al_draw_prim(
-                bg_v, NULL, cur_area_map.bg_bmp, 0, 5, ALLEGRO_PRIM_TRIANGLE_FAN
+                bg_v, NULL, cur_area_data.bg_bmp, 0, 5, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
         
@@ -112,8 +131,8 @@ void do_game_drawing() {
             
         }
         
-        for(size_t c = 0; c < cur_area_map.sector_corrections.size(); ++c) {
-            sector_correction* c_ptr = &cur_area_map.sector_corrections[c];
+        for(size_t c = 0; c < cur_area_data.sector_corrections.size(); ++c) {
+            sector_correction* c_ptr = &cur_area_data.sector_corrections[c];
             if(c_ptr->new_texture.bitmap) {
                 draw_sector(c_ptr->sec, 0, 0, 1.0f, &c_ptr->new_texture);
             }
@@ -321,7 +340,7 @@ void do_game_drawing() {
         *                   /  /  *
         **************************/
         
-        if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
+        if(cur_area_data.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             size_t n_percipitation_particles = percipitation.size();
             for(size_t p = 0; p < n_percipitation_particles; ++p) {
                 al_draw_filled_circle(percipitation[p].x, percipitation[p].y, 3, al_map_rgb(255, 255, 255));
@@ -336,18 +355,26 @@ void do_game_drawing() {
         *                   |_|  *
         *************************/
         
-        for(size_t s = 0; s < cur_area_map.tree_shadows.size(); ++s) {
-            tree_shadow* s_ptr = cur_area_map.tree_shadows[s];
+        if(!(bmp_output && !dev_tool_area_image_shadows)) {
+        
+            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+                
+                unsigned char alpha = ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
+                
+                draw_sprite(
+                    s_ptr->bitmap,
+                    s_ptr->x + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_x,
+                    s_ptr->y + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_y,
+                    s_ptr->w, s_ptr->h,
+                    s_ptr->angle, map_alpha(alpha)
+                );
+            }
             
-            unsigned char alpha = ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
-            
-            draw_sprite(
-                s_ptr->bitmap,
-                s_ptr->x + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_x,
-                s_ptr->y + TREE_SHADOW_SWAY_AMOUNT * sin(tree_shadow_sway) * s_ptr->sway_y,
-                s_ptr->w, s_ptr->h,
-                s_ptr->angle, map_alpha(alpha)
-            );
+        }
+        if(bmp_output) {
+            al_set_target_backbuffer(display);
+            return;
         }
         
         
@@ -394,7 +421,7 @@ void do_game_drawing() {
             al_draw_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192), 3);
         }
         
-        if(whistle_radius > 0 || whistle_fade_timer.time_left > 0) {
+        if(whistle_radius > 0 || !whistle_fade_timer.is_over) {
             if(pretty_whistle) {
                 unsigned char n_dots = 16 * 6;
                 for(unsigned char d = 0; d < 6; ++d) {
@@ -407,7 +434,7 @@ void do_game_drawing() {
                         
                         ALLEGRO_COLOR c;
                         float alpha_mult;
-                        if(whistle_fade_timer.time_left > 0)
+                        if(!whistle_fade_timer.is_over)
                             alpha_mult = whistle_fade_timer.get_ratio_left();
                         else
                             alpha_mult = 1;
@@ -733,32 +760,46 @@ void do_game_drawing() {
             
         }
         
+        /* Layer 11
+        ***********************
+        *                     *
+        *   System stuff   >_ *
+        *                     *
+        ***********************/
+        
+        if(!info_print_text.empty()) {
+            al_draw_filled_rectangle(
+                0, 0, scr_w, scr_h * 0.3,
+                al_map_rgba(0, 0, 0, 96)
+            );
+            draw_text_lines(allegro_font, al_map_rgba(255, 255, 255, 128), 8, 8, 0, 0, info_print_text);
+        }
+        
+        
+        
     } else { //Paused.
     
     }
     
-    //Debugging stuff.
-    if(debug_show_framerate) {
-        debug_framerate_update_timer.tick(delta_t);
-        if(debug_framerate_update_timer.ticked) {
-            debug_framerate_update_timer.start();
-            debug_framerate_counter = round(1.0 / delta_t);
+    //Framerate.
+    if(show_framerate) {
+        framerate_update_timer.tick(delta_t);
+        if(framerate_update_timer.is_over) {
+            framerate_update_timer.start();
+            framerate_counter = round(1.0 / delta_t);
         }
         al_draw_text(
             font,
-            (debug_framerate_counter >= (unsigned) (game_fps - 1) ? al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)),
+            (framerate_counter >= (unsigned) (game_fps - 1) ? al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)),
             0, 0, 0,
-            (i2s(debug_framerate_counter) + "FPS").c_str()
+            (i2s(framerate_counter) + "FPS").c_str()
         );
     }
-    if(!debug_last_axis.empty()) {
-        al_draw_text(font, al_map_rgb(255, 255, 255), 0, 0, 0, debug_last_axis.c_str());
-    }
     
-    if(!area_title_fade_timer.ticked) {
+    if(!area_title_fade_timer.is_over) {
         draw_loading_screen(
-            cur_area_map.name,
-            cur_area_map.subtitle,
+            cur_area_data.name,
+            cur_area_data.subtitle,
             area_title_fade_timer.get_ratio_left()
         );
     }
@@ -1591,6 +1632,51 @@ void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const floa
         (h == -1) ? x_scale : y_scale,
         angle,
         0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current area and mobs to a bitmap and returns it.
+ */
+ALLEGRO_BITMAP* draw_to_bitmap() {
+    //First, get the full dimensions of the map.
+    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        min_x = min(v_ptr->x, min_x);
+        min_y = min(v_ptr->y, min_y);
+        max_x = max(v_ptr->x, max_x);
+        max_y = max(v_ptr->y, max_y);
+    }
+    
+    //Figure out the scale that will fit on the image.
+    float area_w = max_x - min_x;
+    float area_h = max_y - min_y;
+    float scale = 1.0f;
+    float final_bmp_w = dev_tool_area_image_size;
+    float final_bmp_h = dev_tool_area_image_size;
+    
+    if(area_w > area_h) {
+        scale = dev_tool_area_image_size / area_w;
+        final_bmp_h *= area_h / area_w;
+    } else {
+        scale = dev_tool_area_image_size / area_h;
+        final_bmp_w *= area_w / area_h;
+    }
+    
+    //Create the bitmap.
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
+    
+    ALLEGRO_TRANSFORM t;
+    al_identity_transform(&t);
+    al_translate_transform(&t, -min_x, -min_y);
+    al_scale_transform(&t, scale, scale);
+    
+    //Begin drawing!
+    do_game_drawing(bmp, &t);
+    
+    return bmp;
 }
 
 

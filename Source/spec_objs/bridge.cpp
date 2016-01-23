@@ -70,8 +70,8 @@ void bridge::open(mob* m, void* info1, void* info2) {
         sc.new_texture.bitmap = bitmaps.get("Textures/Bridge.png", NULL);
         sc.new_texture.rot = m->angle;
         
-        cur_area_map.sector_corrections.push_back(sc);
-        cur_area_map.generate_edges_blockmap(s_ptr->edges);
+        cur_area_data.sector_corrections.push_back(sc);
+        cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
     }
 }

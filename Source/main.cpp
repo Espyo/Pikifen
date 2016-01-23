@@ -84,6 +84,7 @@ int main(int argc, char** argv) {
     init_mob_categories();
     init_special_mob_types();
     init_sector_types();
+    init_dev_tools();
     read_game_config();
     
     unsigned int first_game_state = GAME_STATE_MAIN_MENU;

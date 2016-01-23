@@ -176,8 +176,8 @@ void gameplay::load() {
     generate_area_images();
     
     //Generate mobs.
-    for(size_t m = 0; m < cur_area_map.mob_generators.size(); ++m) {
-        mob_gen* m_ptr = cur_area_map.mob_generators[m];
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
         if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
             create_mob(new enemy(m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type, m_ptr->angle, m_ptr->vars));
         } else if(m_ptr->category == MOB_CATEGORY_LEADERS) {

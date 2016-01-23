@@ -18,6 +18,7 @@
 
 #include "const.h"
 #include "controls.h"
+#include "drawing.h"
 #include "functions.h"
 #include "vars.h"
 
@@ -26,43 +27,87 @@
  * and triggers the corresponding controls, if any.
  */
 void handle_game_controls(const ALLEGRO_EVENT &ev) {
-    //Debugging.
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_T) {
+        
             //Debug testing.
             //TODO remove.
-            dist closest_mob_to_cursor_dist = FLT_MAX;
-            mob* closest_mob_to_cursor = NULL;
-            float actual_cursor_x = mouse_cursor_x, actual_cursor_y = mouse_cursor_y;
-            ALLEGRO_TRANSFORM t = get_world_to_screen_transform();
-            al_invert_transform(&t);
-            al_transform_coordinates(&t, &actual_cursor_x, &actual_cursor_y);
-            for(size_t m = 0; m < mobs.size(); ++m) {
-                dist d = dist(actual_cursor_x, actual_cursor_y, mobs[m]->x, mobs[m]->y);
-                if(d < closest_mob_to_cursor_dist) {
-                    closest_mob_to_cursor = mobs[m];
-                    closest_mob_to_cursor_dist = d;
-                }
-            }
-            if(closest_mob_to_cursor && closest_mob_to_cursor->fsm.cur_state) {
-                string name = closest_mob_to_cursor->type->name;
-                name += "        ";
-                if(name.size() > 8) name = name.substr(0, 8);
-                
-                cout << "Mob: " << name << ". State: " << closest_mob_to_cursor->fsm.cur_state->name << "\n";
-            }
+            
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
-            debug_show_framerate = !debug_show_framerate;
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
-            if(!debug_last_axis.empty()) debug_last_axis.clear();
-            else debug_last_axis = "Input a joystick axis control.";
+        
+            show_framerate = !show_framerate;
+            
+        } else if(ev.keyboard.keycode >= ALLEGRO_KEY_F2 && ev.keyboard.keycode <= ALLEGRO_KEY_F12) {
+        
+            unsigned char id = dev_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
+            
+            if(id == DEV_TOOL_AREA_IMAGE) {
+                ALLEGRO_BITMAP* bmp = draw_to_bitmap();
+                if(!al_save_bitmap(dev_tool_area_image_name.c_str(), bmp)) {
+                    error_log(
+                        "Could not save the area onto an image, with the name \"" +
+                        dev_tool_area_image_name + "\"!"
+                    );
+                }
+                
+            } else if(id == DEV_TOOL_COORDINATES) {
+                float mx, my;
+                get_mouse_cursor_coordinates(&mx, &my);
+                print_info("Mouse coordinates: " + f2s(mx) + ", " + f2s(my) + ".");
+                
+            } else if(id == DEV_TOOL_HURT_MOB) {
+                mob* m = get_closest_mob_to_cursor();
+                if(m) {
+                    m->health = max((float) (m->health - m->type->max_health * 0.2), 0.0f);
+                }
+                
+            } else if(id == DEV_TOOL_MOB_INFO) {
+                mob* m = get_closest_mob_to_cursor();
+                if(m) {
+                    string var_list = "Vars: ";
+                    for(auto v = m->vars.begin(); v != m->vars.end(); ++v) {
+                        var_list += v->first + "=" + v->second + "; ";
+                    }
+                    if(!m->vars.empty()) var_list.erase(var_list.size() - 2, 2);
+                    
+                    print_info(
+                        "Mob: " + m->type->name + ".\n" +
+                        "State: " + m->fsm.cur_state->name + ". "
+                        "Animation: " + m->anim.anim->name + ".\n" +
+                        "Health: " + f2s(m->health) + ". "
+                        "Timer: " + f2s(m->script_timer.time_left) + ".\n" +
+                        var_list + "."
+                    );
+                }
+                
+            } else if(id == DEV_TOOL_NEW_PIKMIN) {
+                if(pikmin_list.size() < max_pikmin_in_field) {
+                    float mx, my;
+                    get_mouse_cursor_coordinates(&mx, &my);
+                    pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
+                    
+                    auto p = pikmin_types.begin();
+                    for(; p != pikmin_types.end(); ++p) {
+                        if(p->second == dev_tool_last_pikmin_type) {
+                            ++p;
+                            if(p != pikmin_types.end()) new_pikmin_type = p->second;
+                            break;
+                        }
+                    }
+                    dev_tool_last_pikmin_type = new_pikmin_type;
+                    
+                    create_mob(new pikmin(mx, my, new_pikmin_type, 0, "maturity=flower"));
+                }
+                
+            } else if(id == DEV_TOOL_TELEPORT) {
+                float mx, my;
+                get_mouse_cursor_coordinates(&mx, &my);
+                cur_leader_ptr->set_target(mx, my, NULL, NULL, true);
+                
+            }
+            
         }
-    }
-    if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS && !debug_last_axis.empty()) {
-        debug_last_axis =
-            "Stick: " + i2s(ev.joystick.stick) + ". "
-            "Axis: " + i2s(ev.joystick.axis) + ".";
     }
     
     
@@ -468,7 +513,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float zoom_to_compare;
-            if(cam_trans_zoom_timer.time_left > 0) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
+            if(!cam_trans_zoom_timer.is_over) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
             
             if(zoom_to_compare < 1) {
                 new_zoom = ZOOM_MAX_LEVEL;
@@ -486,7 +531,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float current_zoom;
-            if(cam_trans_zoom_timer.time_left > 0) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
+            if(!cam_trans_zoom_timer.is_over) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
             
             pos = floor(pos);
             
@@ -495,7 +540,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
             if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
             
-            if(cam_trans_zoom_timer.time_left > 0) {
+            if(!cam_trans_zoom_timer.is_over) {
                 cam_trans_zoom_final_level = new_zoom;
             } else {
                 start_camera_zoom(new_zoom);

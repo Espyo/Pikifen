@@ -41,20 +41,20 @@ void do_aesthetic_logic() {
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
     //Camera transitions.
-    if(cam_trans_pan_timer.time_left > 0) {
+    if(!cam_trans_pan_timer.is_over) {
         cam_trans_pan_timer.tick(delta_t);
         
-        float percentage_left = cam_trans_pan_timer.time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_pan_timer.get_ratio_left();
         percentage_left = ease(EASE_IN, percentage_left);
         
         cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - percentage_left);
         cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - percentage_left);
     }
     
-    if(cam_trans_zoom_timer.time_left > 0) {
+    if(!cam_trans_zoom_timer.is_over) {
         cam_trans_zoom_timer.tick(delta_t);
         
-        float percentage_left = cam_trans_zoom_timer.time_left / CAM_TRANSITION_DURATION;
+        float percentage_left = cam_trans_zoom_timer.get_ratio_left();
         percentage_left = ease(EASE_IN, percentage_left);
         
         cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
@@ -63,7 +63,7 @@ void do_aesthetic_logic() {
     //"Move group" arrows.
     if(group_move_intensity) {
         group_move_next_arrow_timer.tick(delta_t);
-        if(group_move_next_arrow_timer.ticked) {
+        if(group_move_next_arrow_timer.is_over) {
             group_move_next_arrow_timer.start();
             group_move_arrows.push_back(0);
         }
@@ -86,14 +86,12 @@ void do_aesthetic_logic() {
     //Whistle animations.
     whistle_dot_offset -= WHISTLE_DOT_SPIN_SPEED * delta_t;
     
-    if(whistle_fade_timer.time_left > 0) {
-        whistle_fade_timer.tick(delta_t);
-    }
+    whistle_fade_timer.tick(delta_t);
     
     if(whistling) {
         //Create rings.
         whistle_next_ring_timer.tick(delta_t);
-        if(whistle_next_ring_timer.ticked) {
+        if(whistle_next_ring_timer.is_over) {
             whistle_next_ring_timer.start();
             whistle_rings.push_back(0);
             whistle_ring_colors.push_back(whistle_ring_prev_color);
@@ -102,7 +100,7 @@ void do_aesthetic_logic() {
         
         if(pretty_whistle) {
             whistle_next_dot_timer.tick(delta_t);
-            if(whistle_next_dot_timer.ticked) {
+            if(whistle_next_dot_timer.is_over) {
                 whistle_next_dot_timer.start();
                 unsigned char dot = 255;
                 for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
@@ -164,7 +162,7 @@ void do_aesthetic_logic() {
     //Cursor trail.
     if(draw_cursor_trail) {
         cursor_save_timer.tick(delta_t);
-        if(cursor_save_timer.ticked) {
+        if(cursor_save_timer.is_over) {
             cursor_save_timer.start();
             cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
             if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
@@ -710,16 +708,16 @@ void do_gameplay_logic() {
             
             if(o_ptr->spew_queue == 0) continue;
             
-            if(!o_ptr->full_spew_timer.ticked) {
+            if(!o_ptr->full_spew_timer.is_over) {
                 o_ptr->full_spew_timer.tick(delta_t);
-                if(o_ptr->full_spew_timer.ticked) {
+                if(o_ptr->full_spew_timer.is_over) {
                     o_ptr->next_spew_timer.start();
                 }
             }
             
-            if(o_ptr->full_spew_timer.ticked) {
+            if(o_ptr->full_spew_timer.is_over) {
                 o_ptr->next_spew_timer.tick(delta_t);
-                if(o_ptr->next_spew_timer.ticked) {
+                if(o_ptr->next_spew_timer.is_over) {
                     o_ptr->spew();
                     o_ptr->next_spew_timer.start();
                 }
@@ -750,7 +748,7 @@ void do_gameplay_logic() {
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_START, (void*) &leader_movement);
         }
         
-        if(cam_trans_pan_timer.time_left > 0) {
+        if(!cam_trans_pan_timer.is_over) {
             cam_trans_pan_final_x = cur_leader_ptr->x;
             cam_trans_pan_final_y = cur_leader_ptr->y;
         } else {
@@ -859,16 +857,16 @@ void do_gameplay_logic() {
         *                   /  /  *
         **************************/
         
-        /*if(cur_area_map.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
+        /*if(cur_area_data.weather_condition.percipitation_type != PERCIPITATION_TYPE_NONE) {
             percipitation_timer.tick(delta_t);
             if(percipitation_timer.ticked) {
-                percipitation_timer = timer(cur_area_map.weather_condition.percipitation_frequency.get_random_number());
+                percipitation_timer = timer(cur_area_data.weather_condition.percipitation_frequency.get_random_number());
                 percipitation_timer.start();
                 percipitation.push_back(point(0, 0));
             }
         
             for(size_t p = 0; p < percipitation.size();) {
-                percipitation[p].y += cur_area_map.weather_condition.percipitation_speed.get_random_number() * delta_t;
+                percipitation[p].y += cur_area_data.weather_condition.percipitation_speed.get_random_number() * delta_t;
                 if(percipitation[p].y > scr_h) {
                     percipitation.erase(percipitation.begin() + p);
                 } else {
@@ -885,7 +883,7 @@ void do_gameplay_logic() {
         **********************/
         
         throw_particle_timer.tick(delta_t);
-        if(throw_particle_timer.ticked) {
+        if(throw_particle_timer.is_over) {
             throw_particle_timer.start();
             
             size_t n_leaders = leaders.size();
@@ -912,11 +910,14 @@ void do_gameplay_logic() {
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
             cur_message_char_timer.tick(delta_t);
-            if(cur_message_char_timer.ticked) {
+            if(cur_message_char_timer.is_over) {
                 cur_message_char_timer.start();
                 cur_message_char++;
             }
         }
         
     }
+    
+    info_print_timer.tick(delta_t);
+    
 }

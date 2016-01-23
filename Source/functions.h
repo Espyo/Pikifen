@@ -77,7 +77,9 @@ void               error_log(string s, data_node* d = NULL);
 bool               find_in_vector(const vector<string> &v, const string &s);
 vector<string>     folder_to_vector(string folder_name, const bool folders, bool* folder_found = NULL);
 void               generate_area_images();
+mob*               get_closest_mob_to_cursor();
 ALLEGRO_COLOR      get_daylight_color();
+void               get_mouse_cursor_coordinates(float* x, float* y);
 void               get_multiline_text_dimensions(const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h);
 float              get_sun_strength();
 string             get_var_value(const string &vars_string, const string &var, const string &def);
@@ -94,6 +96,7 @@ sample_struct      load_sample(const string &file_name, ALLEGRO_MIXER* const mix
 void               load_game_content();
 void               move_point(const float x, const float y, const float tx, const float ty, const float speed, const float reach_radius, float* mx, float* my, float* angle, bool* reached);
 float              normalize_angle(float a);
+void               print_info(string t);
 float              randomf(float min, float max);
 int                randomi(int min, int max);
 void               read_game_config();

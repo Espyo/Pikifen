@@ -139,8 +139,8 @@ bool circle_intersects_line(const float cx, const float cy, const float cr, cons
  * Clears the textures of the area's sectors from memory.
  */
 void clear_area_textures() {
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_map.sectors[s];
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->texture_info.bitmap && s_ptr->texture_info.bitmap != bmp_error) {
             bitmaps.detach("Textures/" + s_ptr->texture_info.file_name);
             s_ptr->texture_info.bitmap = NULL;
@@ -308,16 +308,16 @@ void generate_area_images() {
     area_images.clear();
     
     //Now, figure out how big our area is.
-    size_t n_sectors = cur_area_map.sectors.size();
+    size_t n_sectors = cur_area_data.sectors.size();
     if(n_sectors == 0) return;
     
     float min_x, max_x, min_y, max_y;
-    size_t n_vertexes = cur_area_map.vertexes.size();
-    min_x = max_x = cur_area_map.vertexes[0]->x;
-    min_y = max_y = cur_area_map.vertexes[0]->y;
+    size_t n_vertexes = cur_area_data.vertexes.size();
+    min_x = max_x = cur_area_data.vertexes[0]->x;
+    min_y = max_y = cur_area_data.vertexes[0]->y;
     
     for(size_t v = 0; v < n_vertexes; ++v) {
-        vertex* v_ptr = cur_area_map.vertexes[v];
+        vertex* v_ptr = cur_area_data.vertexes[v];
         min_x = min(v_ptr->x, min_x);
         max_x = max(v_ptr->x, max_x);
         min_y = min(v_ptr->y, min_y);
@@ -350,7 +350,7 @@ void generate_area_images() {
     
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; ++s) {
-        sector* s_ptr = cur_area_map.sectors[s];
+        sector* s_ptr = cur_area_data.sectors[s];
         size_t n_edges = s_ptr->edges.size();
         if(n_edges == 0) continue;
         
@@ -376,7 +376,7 @@ void generate_area_images() {
                 al_set_target_bitmap(area_images[x][y]); {
                 
                     draw_sector(
-                        cur_area_map.sectors[s],
+                        cur_area_data.sectors[s],
                         (x * area_image_size + area_images_x1) / area_images_scale,
                         (y * area_image_size + area_images_y1) / area_images_scale,
                         area_images_scale
@@ -403,13 +403,51 @@ void generate_area_images() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the mob that is closest to the mouse cursor.
+ */
+mob* get_closest_mob_to_cursor() {
+    float mx, my;
+    get_mouse_cursor_coordinates(&mx, &my);
+    
+    dist closest_mob_to_cursor_dist = FLT_MAX;
+    mob* closest_mob_to_cursor = NULL;
+    
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* m_ptr = mobs[m];
+        
+        if(!m_ptr->fsm.cur_state) continue;
+        
+        dist d = dist(mx, my, m_ptr->x, m_ptr->y);
+        if(d < closest_mob_to_cursor_dist) {
+            closest_mob_to_cursor = m_ptr;
+            closest_mob_to_cursor_dist = d;
+        }
+    }
+    
+    return closest_mob_to_cursor;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the in-world coordinates of the mouse cursor.
+ */
+void get_mouse_cursor_coordinates(float* x, float* y) {
+    *x = mouse_cursor_x;
+    *y = mouse_cursor_y;
+    ALLEGRO_TRANSFORM t = get_world_to_screen_transform();
+    al_invert_transform(&t);
+    al_transform_coordinates(&t, x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the daylight effect color for the current time, for the current weather.
  */
 ALLEGRO_COLOR get_daylight_color() {
     //TODO optimize: don't fetch the points from the weather's map every time.
     //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_map.weather_condition.lighting.begin(); p_nr != cur_area_map.weather_condition.lighting.end(); ++p_nr) {
+    for(auto p_nr = cur_area_data.weather_condition.lighting.begin(); p_nr != cur_area_data.weather_condition.lighting.end(); ++p_nr) {
         point_nrs.push_back(p_nr->first);
     }
     
@@ -421,8 +459,8 @@ ALLEGRO_COLOR get_daylight_color() {
                            day_minutes,
                            point_nrs[p],
                            point_nrs[p + 1],
-                           cur_area_map.weather_condition.lighting[point_nrs[p]],
-                           cur_area_map.weather_condition.lighting[point_nrs[p + 1]]
+                           cur_area_data.weather_condition.lighting[point_nrs[p]],
+                           cur_area_data.weather_condition.lighting[point_nrs[p + 1]]
                        );
             }
         }
@@ -467,7 +505,7 @@ float get_sun_strength() {
     //TODO optimize: don't fetch the points from the weather's map every time.
     //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
     vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_map.weather_condition.sun_strength.begin(); p_nr != cur_area_map.weather_condition.sun_strength.end(); ++p_nr) {
+    for(auto p_nr = cur_area_data.weather_condition.sun_strength.begin(); p_nr != cur_area_data.weather_condition.sun_strength.end(); ++p_nr) {
         point_nrs.push_back(p_nr->first);
     }
     
@@ -477,8 +515,8 @@ float get_sun_strength() {
             if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
                 return interpolate_number(
                            day_minutes, point_nrs[p], point_nrs[p + 1],
-                           cur_area_map.weather_condition.sun_strength[point_nrs[p]],
-                           cur_area_map.weather_condition.sun_strength[point_nrs[p + 1]]
+                           cur_area_data.weather_condition.sun_strength[point_nrs[p]],
+                           cur_area_data.weather_condition.sun_strength[point_nrs[p + 1]]
                        ) / 255.0;
             }
         }
@@ -555,33 +593,33 @@ float interpolate_number(const float p, const float p1, const float p2, const fl
  */
 void load_area(const string &name, const bool load_for_editor) {
 
-    cur_area_map.clear();
+    cur_area_data.clear();
     
     data_node file = load_data_file(AREA_FOLDER + "/" + name + ".txt");
     
-    cur_area_map.name = file.get_child_by_name("name")->get_value_or_default(name);
-    cur_area_map.subtitle = file.get_child_by_name("subtitle")->value;
+    cur_area_data.name = file.get_child_by_name("name")->get_value_or_default(name);
+    cur_area_data.subtitle = file.get_child_by_name("subtitle")->value;
     
-    draw_loading_screen(cur_area_map.name, cur_area_map.subtitle, 1.0);
+    draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
     al_flip_display();
     
-    cur_area_map.weather_name = file.get_child_by_name("weather")->value;
+    cur_area_data.weather_name = file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
-        if(weather_conditions.find(cur_area_map.weather_name) == weather_conditions.end()) {
-            error_log("Area " + name + " refers to a non-existing weather condition, \"" + cur_area_map.weather_name + "\"!", &file);
-            cur_area_map.weather_condition = weather();
+        if(weather_conditions.find(cur_area_data.weather_name) == weather_conditions.end()) {
+            error_log("Area " + name + " refers to a non-existing weather condition, \"" + cur_area_data.weather_name + "\"!", &file);
+            cur_area_data.weather_condition = weather();
         } else {
-            cur_area_map.weather_condition = weather_conditions[cur_area_map.weather_name];
+            cur_area_data.weather_condition = weather_conditions[cur_area_data.weather_name];
         }
     }
     
-    cur_area_map.bg_bmp_file_name = file.get_child_by_name("bg_bmp")->value;
-    if(!load_for_editor && !cur_area_map.bg_bmp_file_name.empty()) {
-        cur_area_map.bg_bmp = bitmaps.get(cur_area_map.bg_bmp_file_name, &file);
+    cur_area_data.bg_bmp_file_name = file.get_child_by_name("bg_bmp")->value;
+    if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
+        cur_area_data.bg_bmp = bitmaps.get(cur_area_data.bg_bmp_file_name, &file);
     }
-    cur_area_map.bg_color = s2c(file.get_child_by_name("bg_color")->value);
-    cur_area_map.bg_dist = s2f(file.get_child_by_name("bg_dist")->get_value_or_default("2"));
-    cur_area_map.bg_bmp_zoom = s2f(file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
+    cur_area_data.bg_color = s2c(file.get_child_by_name("bg_color")->value);
+    cur_area_data.bg_dist = s2f(file.get_child_by_name("bg_dist")->get_value_or_default("2"));
+    cur_area_data.bg_bmp_zoom = s2f(file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
     
     
     //Vertexes.
@@ -589,7 +627,7 @@ void load_area(const string &name, const bool load_for_editor) {
     for(size_t v = 0; v < n_vertexes; ++v) {
         data_node* vertex_data = file.get_child_by_name("vertexes")->get_child_by_name("v", v);
         vector<string> words = split(vertex_data->value);
-        if(words.size() == 2) cur_area_map.vertexes.push_back(new vertex(s2f(words[0]), s2f(words[1])));
+        if(words.size() == 2) cur_area_data.vertexes.push_back(new vertex(s2f(words[0]), s2f(words[1])));
     }
     
     //Edges.
@@ -611,7 +649,7 @@ void load_area(const string &name, const bool load_for_editor) {
         new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
         new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
         
-        cur_area_map.edges.push_back(new_edge);
+        cur_area_data.edges.push_back(new_edge);
     }
     
     //Sectors.
@@ -645,7 +683,7 @@ void load_area(const string &name, const bool load_for_editor) {
         
         //TODO hazards (and tags, if I really am gonna use them...).
         
-        cur_area_map.sectors.push_back(new_sector);
+        cur_area_data.sectors.push_back(new_sector);
     }
     
     //Mobs.
@@ -685,7 +723,7 @@ void load_area(const string &name, const bool load_for_editor) {
             
         }
         
-        if(!problem) cur_area_map.mob_generators.push_back(mob_ptr);
+        if(!problem) cur_area_data.mob_generators.push_back(mob_ptr);
     }
     
     //Tree shadows.
@@ -717,7 +755,7 @@ void load_area(const string &name, const bool load_for_editor) {
             error_log("Unknown tree shadow texture \"" + s_ptr->file_name + "\"!", shadow_node);
         }
         
-        cur_area_map.tree_shadows.push_back(s_ptr);
+        cur_area_data.tree_shadows.push_back(s_ptr);
         
     }
     
@@ -736,25 +774,25 @@ void load_area(const string &name, const bool load_for_editor) {
     
     //Set up stuff.
     //TODO error checking.
-    for(size_t e = 0; e < cur_area_map.edges.size(); ++e) {
-        cur_area_map.edges[e]->fix_pointers(cur_area_map);
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        cur_area_data.edges[e]->fix_pointers(cur_area_data);
     }
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        cur_area_map.sectors[s]->connect_edges(cur_area_map, s);
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        cur_area_data.sectors[s]->connect_edges(cur_area_data, s);
     }
-    for(size_t v = 0; v < cur_area_map.vertexes.size(); ++v) {
-        cur_area_map.vertexes[v]->connect_edges(cur_area_map, v);
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        cur_area_data.vertexes[v]->connect_edges(cur_area_data, v);
     }
     
     
     //Triangulate everything.
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_map.sectors[s];
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
     }
     
-    if(!load_for_editor) cur_area_map.generate_blockmap();
+    if(!load_for_editor) cur_area_data.generate_blockmap();
 }
 
 
@@ -762,8 +800,8 @@ void load_area(const string &name, const bool load_for_editor) {
  * Loads the area's sector textures.
  */
 void load_area_textures() {
-    for(size_t s = 0; s < cur_area_map.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_map.sectors[s];
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
         
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); ++t) {
             if(s_ptr->texture_info.file_name.empty()) {
@@ -1045,6 +1083,15 @@ float normalize_angle(float a) {
     a = fmod((double) a, M_PI * 2);
     if(a < 0) a += M_PI * 2;
     return a;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Prints a bit of info onto the screen, for some seconds.
+ */
+void print_info(string text) {
+    info_print_text = text;
+    info_print_timer.start();
 }
 
 
@@ -1466,8 +1513,8 @@ string b2s(const bool b) { return b ? "true" : "false"; }
 
 //Converts a color to its string representation.
 string c2s(const ALLEGRO_COLOR &c) {
-    return f2s(c.r * 255) + " " + f2s(c.g * 255) + " " + f2s(c.b * 255) +
-           (c.a == 1 ? "" : " " + f2s(c.a * 255));
+    return i2s(c.r * 255) + " " + i2s(c.g * 255) + " " + i2s(c.b * 255) +
+           (c.a == 1 ? "" : " " + i2s(c.a * 255));
 }
 
 

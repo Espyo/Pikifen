@@ -21,6 +21,7 @@
 #include "area_editor.h"
 #include "animation_editor.h"
 #include "controls.h"
+#include "data_file.h"
 #include "functions.h"
 #include "game_state.h"
 #include "menus.h"
@@ -63,6 +64,37 @@ void init_controls() {
     controls[0].push_back(control_info(BUTTON_ZOOM_OUT, "mwd"));
     controls[0].push_back(control_info(BUTTON_LIE_DOWN, "k_26"));
     controls[0].push_back(control_info(BUTTON_PAUSE, "k_59"));
+}
+
+
+void init_dev_tools() {
+    data_node file(MISC_FOLDER + "/Tools.txt");
+    
+    if(!s2b(file.get_child_by_name("enabled")->value)) return;
+    
+    for(unsigned char k = 0; k < 10; k++) {
+        string tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+        if(tool_name == "area_image") {
+            dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;
+        } else if(tool_name == "coordinates") {
+            dev_tool_keys[k] = DEV_TOOL_COORDINATES;
+        } else if(tool_name == "hurt_mob") {
+            dev_tool_keys[k] = DEV_TOOL_HURT_MOB;
+        } else if(tool_name == "mob_info") {
+            dev_tool_keys[k] = DEV_TOOL_MOB_INFO;
+        } else if(tool_name == "new_pikmin") {
+            dev_tool_keys[k] = DEV_TOOL_NEW_PIKMIN;
+        } else if(tool_name == "teleport") {
+            dev_tool_keys[k] = DEV_TOOL_TELEPORT;
+        } else {
+            dev_tool_keys[k] = DEV_TOOL_NONE;
+        }
+    }
+    
+    dev_tool_area_image_size = s2i(file.get_child_by_name("area_image_size")->value);
+    dev_tool_area_image_name = file.get_child_by_name("area_image_file_name")->value;
+    dev_tool_area_image_shadows = s2b(file.get_child_by_name("area_image_shadows")->value);
+    
 }
 
 
@@ -129,6 +161,8 @@ void init_fonts() {
     
     if(font) font_h = al_get_font_line_height(font);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
+    
+    allegro_font = al_create_builtin_font();
 }
 
 
