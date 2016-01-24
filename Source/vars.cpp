@@ -124,7 +124,7 @@ double                           delta_t = 0;
 string                           dev_tool_area_image_name;
 bool                             dev_tool_area_image_shadows = true;
 int                              dev_tool_area_image_size = 2048;
-unsigned char                    dev_tool_keys[10];
+unsigned char                    dev_tool_keys[9];
 pikmin_type*                     dev_tool_last_pikmin_type = NULL;
 ALLEGRO_DISPLAY*                 display = NULL;
 bool                             draw_cursor_trail = true;

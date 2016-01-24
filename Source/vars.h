@@ -160,7 +160,7 @@ extern double                           delta_t;                  //Time between
 extern string                           dev_tool_area_image_name;
 extern bool                             dev_tool_area_image_shadows;
 extern int                              dev_tool_area_image_size;
-extern unsigned char                    dev_tool_keys[10];
+extern unsigned char                    dev_tool_keys[9];
 extern pikmin_type*                     dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;

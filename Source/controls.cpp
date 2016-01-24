@@ -38,7 +38,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         
             show_framerate = !show_framerate;
             
-        } else if(ev.keyboard.keycode >= ALLEGRO_KEY_F2 && ev.keyboard.keycode <= ALLEGRO_KEY_F12) {
+        } else if(ev.keyboard.keycode >= ALLEGRO_KEY_F2 && ev.keyboard.keycode <= ALLEGRO_KEY_F11) {
         
             unsigned char id = dev_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
             
@@ -66,10 +66,15 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
                     string var_list = "Vars: ";
-                    for(auto v = m->vars.begin(); v != m->vars.end(); ++v) {
-                        var_list += v->first + "=" + v->second + "; ";
+                    if(!m->vars.empty()) {
+                        for(auto v = m->vars.begin(); v != m->vars.end(); ++v) {
+                            var_list += v->first + "=" + v->second + "; ";
+                        }
+                        var_list.erase(var_list.size() - 2, 2);
+                        var_list += ".";
+                    } else {
+                        var_list += "(None).";
                     }
-                    if(!m->vars.empty()) var_list.erase(var_list.size() - 2, 2);
                     
                     print_info(
                         "Mob: " + m->type->name + ".\n" +
@@ -77,7 +82,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                         "Animation: " + m->anim.anim->name + ".\n" +
                         "Health: " + f2s(m->health) + ". "
                         "Timer: " + f2s(m->script_timer.time_left) + ".\n" +
-                        var_list + "."
+                        var_list
                     );
                 }
                 

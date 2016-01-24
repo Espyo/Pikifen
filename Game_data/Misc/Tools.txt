@@ -1,13 +1,15 @@
 enabled = true
 
-f2 = area_image
-f3 = coordinates
-f4 = hurt_mob
-f5 = mob_info
-f6 = teleport
-f7 = new_pikmin
-f8 = 
-f9 = 
+f2  = area_image
+f3  = coordinates
+f4  = hurt_mob
+f5  = mob_info
+f6  = teleport
+f7  = new_pikmin
+f8  = 
+f9  = 
+f10 = 
+f11 = 
 
 area_image_size = 2048
 area_image_file_name = Area.jpg

@@ -133,6 +133,10 @@ int main(int argc, char** argv) {
             game_states[cur_game_state_nr]->do_drawing();
             
             prev_frame_time = cur_time;
+            
+        } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_F12) {
+            al_save_bitmap("Screenshot.png", al_get_backbuffer(display));
+            
         }
     }
     
