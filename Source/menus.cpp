@@ -633,24 +633,7 @@ void area_menu::load() {
     cur_page_nr = 0;
     
     //Areas.
-    areas_to_pick = folder_to_vector(AREA_FOLDER, false);
-    for(size_t a = 0; a < areas_to_pick.size();) {
-        string n = areas_to_pick[a];
-        bool valid = true;
-        if(n.size() < 5) {
-            valid = false;
-        } else if(n.substr(n.size() - 4, 4) != ".txt") {
-            valid = false;
-        } else {
-            areas_to_pick[a] = n.substr(0, n.size() - 4); //Remove the ".txt".
-        }
-        
-        if(!valid) {
-            areas_to_pick.erase(areas_to_pick.begin() + a);
-        } else {
-            ++a;
-        }
-    }
+    areas_to_pick = folder_to_vector(AREA_FOLDER, true);
     
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {

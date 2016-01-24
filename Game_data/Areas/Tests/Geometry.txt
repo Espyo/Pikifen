@@ -1,9 +1,3 @@
-weather=Normal
-bg_color=0.00 0.00 0.00
-bg_dist=2.00
-bg_zoom=1.00
-name=Tests
-subtitle=
 mobs{
 	Special{
 		type=Info spot
@@ -196,6 +190,8 @@ vertexes{
 	v=672.00 -64.00
 	v=672.00 -0.00
 	v=672.00 32.00
+	v=534.08 -94.79
+	v=761.54 -32.02
 }
 edges{
 	e{
@@ -572,10 +568,6 @@ edges{
 	}
 	e{
 		s=0 24
-		v=78 79
-	}
-	e{
-		s=0 24
 		v=79 76
 	}
 	e{
@@ -592,7 +584,7 @@ edges{
 	}
 	e{
 		s=0 25
-		v=82 78
+		v=82 90
 	}
 	e{
 		s=0 26
@@ -611,8 +603,8 @@ edges{
 		v=85 86
 	}
 	e{
-		s=0 27
-		v=86 87
+		s=28 27
+		v=86 91
 	}
 	e{
 		s=0 27
@@ -620,7 +612,7 @@ edges{
 	}
 	e{
 		s=0 28
-		v=88 86
+		v=88 91
 	}
 	e{
 		s=0 28
@@ -629,6 +621,18 @@ edges{
 	e{
 		s=0 28
 		v=89 88
+	}
+	e{
+		s=24 25
+		v=90 78
+	}
+	e{
+		s=0 24
+		v=90 79
+	}
+	e{
+		s=0 27
+		v=91 87
 	}
 }
 sectors{
@@ -768,9 +772,9 @@ sectors{
 	}
 }
 tree_shadows=
-bg_file_name=
-bg_x=0.00
-bg_y=0.00
-bg_w=0.00
-bg_h=0.00
-bg_alpha=255
+guide_file_name=
+guide_x=0.00
+guide_y=0.00
+guide_w=0.00
+guide_h=0.00
+guide_alpha=255

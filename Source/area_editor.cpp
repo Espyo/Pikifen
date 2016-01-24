@@ -36,13 +36,13 @@ const float area_editor::GRID_INTERVAL = 32.0f;
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
-    bg_aspect_ratio(true),
-    bg_bitmap(NULL),
-    bg_x(0),
-    bg_y(0),
-    bg_w(1000),
-    bg_h(1000),
-    bg_a(255),
+    guide_aspect_ratio(true),
+    guide_bitmap(NULL),
+    guide_x(0),
+    guide_y(0),
+    guide_w(1000),
+    guide_h(1000),
+    guide_a(255),
     cur_mob(NULL),
     cur_sector(NULL),
     cur_shadow(NULL),
@@ -62,7 +62,7 @@ area_editor::area_editor() :
     on_sector(NULL),
     sec_mode(ESM_NONE),
     shift_pressed(false),
-    show_bg(false),
+    show_guide(false),
     show_shadows(true),
     wum(NULL) {
     
@@ -85,22 +85,6 @@ void area_editor::adv_textures_to_gui() {
     ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(cur_sector->texture_info.scale_x);
     ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(cur_sector->texture_info.scale_y);
     ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(cur_sector->texture_info.rot);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the background's data from the memory to the gui.
- */
-void area_editor::bg_to_gui() {
-    lafi::frame* f = (lafi::frame*) gui->widgets["frm_bg"];
-    ((lafi::textbox*) f->widgets["txt_file"])->text = bg_file_name;
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(bg_x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(bg_y);
-    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(bg_w);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(bg_h);
-    ((lafi::checkbox*) f->widgets["chk_ratio"])->set(bg_aspect_ratio);
-    ((lafi::checkbox*) f->widgets["chk_mouse"])->set(sec_mode == ESM_BG_MOUSE);
-    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(bg_a, false);
 }
 
 
@@ -129,16 +113,16 @@ void area_editor::center_camera(float min_x, float min_y, float max_x, float max
 
 
 /* ----------------------------------------------------------------------------
- * Changes the background image.
+ * Changes the guide image.
  */
-void area_editor::change_background(string new_file_name) {
-    if(bg_bitmap && bg_bitmap != bmp_error) al_destroy_bitmap(bg_bitmap);
-    bg_bitmap = NULL;
+void area_editor::change_guide(string new_file_name) {
+    if(guide_bitmap && guide_bitmap != bmp_error) al_destroy_bitmap(guide_bitmap);
+    guide_bitmap = NULL;
     
     if(new_file_name.size()) {
-        bg_bitmap = load_bmp(new_file_name, NULL, false);
+        guide_bitmap = load_bmp(new_file_name, NULL, false);
     }
-    bg_file_name = new_file_name;
+    guide_file_name = new_file_name;
 }
 
 
@@ -154,7 +138,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(gui->widgets["frm_adv_textures"]);
     hide_widget(gui->widgets["frm_objects"]);
     hide_widget(gui->widgets["frm_shadows"]);
-    hide_widget(gui->widgets["frm_bg"]);
+    hide_widget(gui->widgets["frm_guide"]);
     hide_widget(gui->widgets["frm_review"]);
     
     if(!hide_all) {
@@ -168,8 +152,8 @@ void area_editor::change_to_right_frame(bool hide_all) {
             show_widget(gui->widgets["frm_objects"]);
         } else if(mode == EDITOR_MODE_SHADOWS) {
             show_widget(gui->widgets["frm_shadows"]);
-        } else if(mode == EDITOR_MODE_BG) {
-            show_widget(gui->widgets["frm_bg"]);
+        } else if(mode == EDITOR_MODE_GUIDE) {
+            show_widget(gui->widgets["frm_guide"]);
         } else if(mode == EDITOR_MODE_REVIEW) {
             show_widget(gui->widgets["frm_review"]);
         }
@@ -475,15 +459,15 @@ void area_editor::do_drawing() {
             }
         }
         
-        //Background.
-        if(bg_bitmap && show_bg) {
+        //Guide.
+        if(guide_bitmap && show_guide) {
             al_draw_tinted_scaled_bitmap(
-                bg_bitmap,
-                map_alpha(bg_a),
+                guide_bitmap,
+                map_alpha(guide_a),
                 0, 0,
-                al_get_bitmap_width(bg_bitmap), al_get_bitmap_height(bg_bitmap),
-                bg_x, bg_y,
-                bg_w, bg_h,
+                al_get_bitmap_width(guide_bitmap), al_get_bitmap_height(guide_bitmap),
+                guide_x, guide_y,
+                guide_w, guide_h,
                 0
             );
         }
@@ -802,58 +786,58 @@ void area_editor::gui_to_adv_textures() {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the background's data from the fields in the gui.
+ * Saves the guide's data from the fields in the gui.
  */
-void area_editor::gui_to_bg() {
-    lafi::frame* f = (lafi::frame*) gui->widgets["frm_bg"];
+void area_editor::gui_to_guide() {
+    lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
     
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     bool is_file_new = false;
     
-    if(new_file_name != bg_file_name) {
-        //New background image, delete the old one.
-        change_background(new_file_name);
+    if(new_file_name != guide_file_name) {
+        //New guide image, delete the old one.
+        change_guide(new_file_name);
         is_file_new = true;
-        if(bg_bitmap) {
-            bg_w = al_get_bitmap_width(bg_bitmap);
-            bg_h = al_get_bitmap_height(bg_bitmap);
+        if(guide_bitmap) {
+            guide_w = al_get_bitmap_width(guide_bitmap);
+            guide_h = al_get_bitmap_height(guide_bitmap);
         } else {
-            bg_w = 0;
-            bg_h = 0;
+            guide_w = 0;
+            guide_h = 0;
         }
     }
     
-    bg_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    bg_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    guide_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    guide_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     
-    bg_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
+    guide_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
     float new_w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
     float new_h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     
     if(new_w != 0 && new_h != 0 && !is_file_new) {
-        if(bg_aspect_ratio) {
-            if(new_w == bg_w && new_h != bg_h) {
-                float ratio = bg_w / bg_h;
-                bg_h = new_h;
-                bg_w = new_h * ratio;
-            } else if(new_w != bg_w && new_h == bg_h) {
-                float ratio = bg_h / bg_w;
-                bg_w = new_w;
-                bg_h = new_w * ratio;
+        if(guide_aspect_ratio) {
+            if(new_w == guide_w && new_h != guide_h) {
+                float ratio = guide_w / guide_h;
+                guide_h = new_h;
+                guide_w = new_h * ratio;
+            } else if(new_w != guide_w && new_h == guide_h) {
+                float ratio = guide_h / guide_w;
+                guide_w = new_w;
+                guide_h = new_w * ratio;
             } else {
-                bg_w = new_w;
-                bg_h = new_h;
+                guide_w = new_w;
+                guide_h = new_h;
             }
         } else {
-            bg_w = new_w;
-            bg_h = new_h;
+            guide_w = new_w;
+            guide_h = new_h;
         }
     }
     
-    sec_mode = ((lafi::checkbox*) f->widgets["chk_mouse"])->checked ? ESM_BG_MOUSE : ESM_NONE;
-    bg_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
+    sec_mode = ((lafi::checkbox*) f->widgets["chk_mouse"])->checked ? ESM_GUIDE_MOUSE : ESM_NONE;
+    guide_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
     
-    bg_to_gui();
+    guide_to_gui();
 }
 
 
@@ -919,6 +903,22 @@ void area_editor::gui_to_sector() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the guide's data from the memory to the gui.
+ */
+void area_editor::guide_to_gui() {
+    lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
+    ((lafi::textbox*) f->widgets["txt_file"])->text = guide_file_name;
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(guide_x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(guide_y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(guide_w);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(guide_h);
+    ((lafi::checkbox*) f->widgets["chk_ratio"])->set(guide_aspect_ratio);
+    ((lafi::checkbox*) f->widgets["chk_mouse"])->set(sec_mode == ESM_GUIDE_MOUSE);
+    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(guide_a, false);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles the events for the area editor.
  */
 void area_editor::handle_controls(ALLEGRO_EVENT ev) {
@@ -954,42 +954,41 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             on_sector = NULL;
         }
         
-        //Move background.
-        if(sec_mode == ESM_BG_MOUSE) {
+        //Move guide.
+        if(sec_mode == ESM_GUIDE_MOUSE) {
         
             if(holding_m1) {
-                bg_x += ev.mouse.dx / cam_zoom;
-                bg_y += ev.mouse.dy / cam_zoom;
+                guide_x += ev.mouse.dx / cam_zoom;
+                guide_y += ev.mouse.dy / cam_zoom;
                 
             } else if(holding_m2) {
             
-                float new_w = bg_w + ev.mouse.dx / cam_zoom;
-                float new_h = bg_h + ev.mouse.dy / cam_zoom;
+                float new_w = guide_w + ev.mouse.dx / cam_zoom;
+                float new_h = guide_h + ev.mouse.dy / cam_zoom;
                 
-                if(bg_aspect_ratio) {
+                if(guide_aspect_ratio) {
                     //Find the most significant change.
                     if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                         bool most_is_width = fabs((double) ev.mouse.dx) > fabs((double) ev.mouse.dy);
                         
-                        
                         if(most_is_width) {
-                            float ratio = bg_h / bg_w;
-                            bg_w = new_w;
-                            bg_h = new_w * ratio;
+                            float ratio = guide_h / guide_w;
+                            guide_w = new_w;
+                            guide_h = new_w * ratio;
                         } else {
-                            float ratio = bg_w / bg_h;
-                            bg_h = new_h;
-                            bg_w = new_h * ratio;
+                            float ratio = guide_w / guide_h;
+                            guide_h = new_h;
+                            guide_w = new_h * ratio;
                         }
                     }
                 } else {
-                    bg_w = new_w;
-                    bg_h = new_h;
+                    guide_w = new_w;
+                    guide_h = new_h;
                 }
                 
             }
             
-            bg_to_gui();
+            guide_to_gui();
             
         } else if(holding_m2) {
             //Move camera.
@@ -1583,7 +1582,7 @@ void area_editor::load() {
     frm_area->easy_row();
     frm_area->easy_add("but_shadows", new lafi::button(0, 0, 0, 0, "Edit shadows"), 100, 32);
     frm_area->easy_row();
-    frm_area->easy_add("but_bg", new lafi::button(0, 0, 0, 0, "Edit background"), 100, 32);
+    frm_area->easy_add("but_guide", new lafi::button(0, 0, 0, 0, "Edit guide"), 100, 32);
     frm_area->easy_row();
     frm_area->easy_add("but_review", new lafi::button(0, 0, 0, 0, "Review"), 100, 32);
     frm_area->easy_row();
@@ -1593,10 +1592,10 @@ void area_editor::load() {
     lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
-    frm_bottom->easy_add("but_bg", new lafi::button(  0, 0, 0, 0, "Bg"), 25, 32);
-    frm_bottom->easy_add("but_load", new lafi::button(0, 0, 0, 0, "Load"), 25, 32);
-    frm_bottom->easy_add("but_save", new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
-    frm_bottom->easy_add("but_quit", new lafi::button(0, 0, 0, 0, "X"), 25, 32);
+    frm_bottom->easy_add("but_guide", new lafi::button(0, 0, 0, 0, "G"), 25, 32);
+    frm_bottom->easy_add("but_load",  new lafi::button(0, 0, 0, 0, "Load"), 25, 32);
+    frm_bottom->easy_add("but_save",  new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
+    frm_bottom->easy_add("but_quit",  new lafi::button(0, 0, 0, 0, "X"), 25, 32);
     frm_bottom->easy_row();
     
     
@@ -1761,33 +1760,33 @@ void area_editor::load() {
     frm_shadow->easy_row();
     
     
-    //Background frame.
-    lafi::frame* frm_bg = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
-    hide_widget(frm_bg);
-    gui->add("frm_bg", frm_bg);
+    //Guide frame.
+    lafi::frame* frm_guide = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_guide);
+    gui->add("frm_guide", frm_guide);
     
-    frm_bg->easy_row();
-    frm_bg->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("lbl_file", new lafi::label(0, 0, 0, 0, "File:"), 30, 16);
-    frm_bg->easy_add("txt_file", new lafi::textbox(0, 0, 0, 0), 70, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("lbl_xy", new lafi::label(0, 0, 0, 0, "X&Y:"), 30, 16);
-    frm_bg->easy_add("txt_x", new lafi::textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_add("txt_y", new lafi::textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("lbl_wh", new lafi::label(0, 0, 0, 0, "W&H:"), 30, 16);
-    frm_bg->easy_add("txt_w", new lafi::textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_add("txt_h", new lafi::textbox(0, 0, 0, 0), 35, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("chk_ratio", new lafi::checkbox(0, 0, 0, 0, "Keep aspect ratio"), 100, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("chk_mouse", new lafi::checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("lbl_alpha", new lafi::label(0, 0, 0, 0, "Opacity:"), 100, 16);
-    frm_bg->easy_row();
-    frm_bg->easy_add("bar_alpha", new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
-    frm_bg->easy_row();
+    frm_guide->easy_row();
+    frm_guide->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("lbl_file", new lafi::label(0, 0, 0, 0, "File:"), 30, 16);
+    frm_guide->easy_add("txt_file", new lafi::textbox(0, 0, 0, 0), 70, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("lbl_xy", new lafi::label(0, 0, 0, 0, "X&Y:"), 30, 16);
+    frm_guide->easy_add("txt_x", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_guide->easy_add("txt_y", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("lbl_wh", new lafi::label(0, 0, 0, 0, "W&H:"), 30, 16);
+    frm_guide->easy_add("txt_w", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_guide->easy_add("txt_h", new lafi::textbox(0, 0, 0, 0), 35, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("chk_ratio", new lafi::checkbox(0, 0, 0, 0, "Keep aspect ratio"), 100, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("chk_mouse", new lafi::checkbox(0, 0, 0, 0, "Transform with mouse"), 100, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("lbl_alpha", new lafi::label(0, 0, 0, 0, "Opacity:"), 100, 16);
+    frm_guide->easy_row();
+    frm_guide->easy_add("bar_alpha", new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24);
+    frm_guide->easy_row();
     
     
     //Review frame.
@@ -1843,8 +1842,8 @@ void area_editor::load() {
         mode = EDITOR_MODE_SHADOWS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_bg"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_BG;
+    frm_area->widgets["but_guide"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_GUIDE;
         change_to_right_frame();
     };
     frm_area->widgets["but_review"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
@@ -1856,13 +1855,13 @@ void area_editor::load() {
     frm_area->widgets["but_sectors"]->description = "Change sector (polygon) settings.";
     frm_area->widgets["but_objects"]->description = "Change object settings and placements.";
     frm_area->widgets["but_shadows"]->description = "Change the shadows of trees and leaves.";
-    frm_area->widgets["but_bg"]->description =      "Add a background to guide you, like a blueprint.";
+    frm_area->widgets["but_guide"]->description =   "Manage the guide image.";
     frm_area->widgets["but_review"]->description =  "Tools to make sure everything is fine in the area.";
     
     
     //Properties -- bottom.
-    frm_bottom->widgets["but_bg"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        show_bg = !show_bg;
+    frm_bottom->widgets["but_guide"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        show_guide = !show_guide;
     };
     frm_bottom->widgets["but_load"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         this->load_area();
@@ -1875,10 +1874,10 @@ void area_editor::load() {
     };
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
-    frm_bottom->widgets["but_bg"]->description =   "Toggle the visibility of the background.";
-    frm_bottom->widgets["but_load"]->description = "Load the area from the files.";
-    frm_bottom->widgets["but_save"]->description = "Save the area onto the disk.";
-    frm_bottom->widgets["but_quit"]->description = "Quit the area editor.";
+    frm_bottom->widgets["but_guide"]->description = "Toggle the visibility of the guide.";
+    frm_bottom->widgets["but_load"]->description =  "Load the area from the files.";
+    frm_bottom->widgets["but_save"]->description =  "Save the area onto the disk.";
+    frm_bottom->widgets["but_quit"]->description =  "Quit the area editor.";
     
     
     //Properties -- sectors.
@@ -2041,33 +2040,33 @@ void area_editor::load() {
     frm_shadow->widgets["txt_sy"]->description =        "Vertical sway amount multiplier (0 = no sway).";
     
     
-    //Properties -- background.
-    auto lambda_gui_to_bg = [this] (lafi::widget*) { gui_to_bg(); };
-    auto lambda_gui_to_bg_click = [this] (lafi::widget*, int, int) { gui_to_bg(); };
-    frm_bg->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+    //Properties -- guide.
+    auto lambda_gui_to_guide = [this] (lafi::widget*) { gui_to_guide(); };
+    auto lambda_gui_to_guide_click = [this] (lafi::widget*, int, int) { gui_to_guide(); };
+    frm_guide->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         sec_mode = ESM_NONE;
-        bg_to_gui();
+        guide_to_gui();
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_bg->widgets["txt_file"]->lose_focus_handler = lambda_gui_to_bg;
-    frm_bg->widgets["txt_x"]->lose_focus_handler = lambda_gui_to_bg;
-    frm_bg->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_bg;
-    frm_bg->widgets["txt_w"]->lose_focus_handler = lambda_gui_to_bg;
-    frm_bg->widgets["txt_h"]->lose_focus_handler = lambda_gui_to_bg;
-    ((lafi::scrollbar*) frm_bg->widgets["bar_alpha"])->change_handler = lambda_gui_to_bg;
-    frm_bg->widgets["chk_ratio"]->left_mouse_click_handler = lambda_gui_to_bg_click;
-    frm_bg->widgets["chk_mouse"]->left_mouse_click_handler = lambda_gui_to_bg_click;
-    frm_bg->widgets["but_back"]->description = "Go back to the main menu.";
-    frm_bg->widgets["txt_file"]->description = "Image file (on the Images folder) for the background.";
-    frm_bg->widgets["txt_x"]->description = "X of the top-left corner for the background.";
-    frm_bg->widgets["txt_y"]->description = "Y of the top-left corner for the background.";
-    frm_bg->widgets["txt_w"]->description = "Background total width.";
-    frm_bg->widgets["txt_h"]->description = "Background total height.";
-    frm_bg->widgets["bar_alpha"]->description = "How see-through the background is.";
-    frm_bg->widgets["chk_ratio"]->description = "Lock the width/height proportions when changing either one.";
-    frm_bg->widgets["chk_mouse"]->description = "If checked, use left/right mouse button to move/stretch.";
-    bg_to_gui();
+    frm_guide->widgets["txt_file"]->lose_focus_handler = lambda_gui_to_guide;
+    frm_guide->widgets["txt_x"]->lose_focus_handler = lambda_gui_to_guide;
+    frm_guide->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_guide;
+    frm_guide->widgets["txt_w"]->lose_focus_handler = lambda_gui_to_guide;
+    frm_guide->widgets["txt_h"]->lose_focus_handler = lambda_gui_to_guide;
+    ((lafi::scrollbar*) frm_guide->widgets["bar_alpha"])->change_handler = lambda_gui_to_guide;
+    frm_guide->widgets["chk_ratio"]->left_mouse_click_handler = lambda_gui_to_guide_click;
+    frm_guide->widgets["chk_mouse"]->left_mouse_click_handler = lambda_gui_to_guide_click;
+    frm_guide->widgets["but_back"]->description = "Go back to the main menu.";
+    frm_guide->widgets["txt_file"]->description = "Image file (on the Images folder) for the guide.";
+    frm_guide->widgets["txt_x"]->description = "X of the top-left corner for the guide.";
+    frm_guide->widgets["txt_y"]->description = "Y of the top-left corner for the guide.";
+    frm_guide->widgets["txt_w"]->description = "Guide total width.";
+    frm_guide->widgets["txt_h"]->description = "Guide total height.";
+    frm_guide->widgets["bar_alpha"]->description = "How see-through the guide is.";
+    frm_guide->widgets["chk_ratio"]->description = "Lock the width/height proportions when changing either one.";
+    frm_guide->widgets["chk_mouse"]->description = "If checked, use left/right mouse button to move/stretch.";
+    guide_to_gui();
     
     
     //Properties -- review.
@@ -2118,7 +2117,7 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
-    file_name.clear();
+    area_name.clear();
     
 }
 
@@ -2131,8 +2130,8 @@ void area_editor::load_area() {
     non_simples.clear();
     lone_edges.clear();
     
-    ::load_area(file_name, true);
-    ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text = file_name;
+    ::load_area(area_name, true);
+    ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text = area_name;
     show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
@@ -2143,7 +2142,7 @@ void area_editor::load_area() {
         check_edge_intersections(cur_area_data.vertexes[v]);
     }
     
-    change_background(bg_file_name);
+    change_guide(guide_file_name);
     
     cam_x = cam_y = 0;
     cam_zoom = 1;
@@ -2158,7 +2157,7 @@ void area_editor::load_area() {
     cur_shadow = NULL;
     sector_to_gui();
     mob_to_gui();
-    bg_to_gui();
+    guide_to_gui();
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
@@ -2209,7 +2208,7 @@ void area_editor::open_picker(unsigned char type) {
     
     vector<string> elements;
     if(type == AREA_EDITOR_PICKER_AREA) {
-        elements = folder_to_vector(AREA_FOLDER, false);
+        elements = folder_to_vector(AREA_FOLDER, true);
         for(size_t e = 0; e < elements.size(); ++e) {
             size_t pos = elements[e].find(".txt");
             if(pos != string::npos) {
@@ -2263,7 +2262,7 @@ void area_editor::pick(string name, unsigned char type) {
     
     if(type == AREA_EDITOR_PICKER_AREA) {
     
-        file_name = name;
+        area_name = name;
         load_area();
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
@@ -2297,17 +2296,7 @@ void area_editor::pick(string name, unsigned char type) {
  * Saves the area onto the disk.
  */
 void area_editor::save_area() {
-    data_node file_node = data_node("", "");
-    
-    //Point down the weather and background again.
-    file_node.add(new data_node("weather", cur_area_data.weather_name));
-    if(cur_area_data.bg_bmp_file_name.size())
-        file_node.add(new data_node("bg_bmp", cur_area_data.bg_bmp_file_name));
-    file_node.add(new data_node("bg_color", c2s(cur_area_data.bg_color)));
-    file_node.add(new data_node("bg_dist", f2s(cur_area_data.bg_dist)));
-    file_node.add(new data_node("bg_zoom", f2s(cur_area_data.bg_bmp_zoom)));
-    file_node.add(new data_node("name", cur_area_data.name));
-    file_node.add(new data_node("subtitle", cur_area_data.subtitle));
+    data_node geometry_file = data_node("", "");
     
     //Start by cleaning unused vertexes, sectors and edges.
     //Unused vertexes.
@@ -2393,7 +2382,7 @@ void area_editor::save_area() {
     //Save the content now.
     //Mobs.
     data_node* mobs_node = new data_node("mobs", "");
-    file_node.add(mobs_node);
+    geometry_file.add(mobs_node);
     
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
@@ -2426,7 +2415,7 @@ void area_editor::save_area() {
     
     //Vertexes.
     data_node* vertexes_node = new data_node("vertexes", "");
-    file_node.add(vertexes_node);
+    geometry_file.add(vertexes_node);
     
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
@@ -2436,7 +2425,7 @@ void area_editor::save_area() {
     
     //Edges.
     data_node* edges_node = new data_node("edges", "");
-    file_node.add(edges_node);
+    geometry_file.add(edges_node);
     
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         edge* e_ptr = cur_area_data.edges[e];
@@ -2455,7 +2444,7 @@ void area_editor::save_area() {
     
     //Sectors.
     data_node* sectors_node = new data_node("sectors", "");
-    file_node.add(sectors_node);
+    geometry_file.add(sectors_node);
     
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
@@ -2486,7 +2475,7 @@ void area_editor::save_area() {
     
     //Tree shadows.
     data_node* shadows_node = new data_node("tree_shadows", "");
-    file_node.add(shadows_node);
+    geometry_file.add(shadows_node);
     
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
@@ -2502,16 +2491,16 @@ void area_editor::save_area() {
         
     }
     
-    //Editor background.
-    file_node.add(new data_node("bg_file_name", bg_file_name));
-    file_node.add(new data_node("bg_x",         f2s(bg_x)));
-    file_node.add(new data_node("bg_y",         f2s(bg_y)));
-    file_node.add(new data_node("bg_w",         f2s(bg_w)));
-    file_node.add(new data_node("bg_h",         f2s(bg_h)));
-    file_node.add(new data_node("bg_alpha",     i2s(bg_a)));
+    //Editor guide.
+    geometry_file.add(new data_node("guide_file_name", guide_file_name));
+    geometry_file.add(new data_node("guide_x",         f2s(guide_x)));
+    geometry_file.add(new data_node("guide_y",         f2s(guide_y)));
+    geometry_file.add(new data_node("guide_w",         f2s(guide_w)));
+    geometry_file.add(new data_node("guide_h",         f2s(guide_h)));
+    geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
     
     
-    file_node.save_file(AREA_FOLDER + "/" + file_name + ".txt");
+    geometry_file.save_file(AREA_FOLDER + "/" + area_name + "/Geometry.txt");
     
     cur_sector = NULL;
     cur_mob = NULL;
@@ -2778,26 +2767,26 @@ void area_editor::leave() {
 }
 
 
-void area_editor::set_bg_file_name(string n) {
-    bg_file_name = n;
+void area_editor::set_guide_file_name(string n) {
+    guide_file_name = n;
 }
 
-void area_editor::set_bg_x(float x) {
-    bg_x = x;
+void area_editor::set_guide_x(float x) {
+    guide_x = x;
 }
 
-void area_editor::set_bg_y(float y) {
-    bg_y = y;
+void area_editor::set_guide_y(float y) {
+    guide_y = y;
 }
 
-void area_editor::set_bg_w(float w) {
-    bg_w = w;
+void area_editor::set_guide_w(float w) {
+    guide_w = w;
 }
 
-void area_editor::set_bg_h(float h) {
-    bg_h = h;
+void area_editor::set_guide_h(float h) {
+    guide_h = h;
 }
 
-void area_editor::set_bg_a(unsigned char a) {
-    bg_a = a;
+void area_editor::set_guide_a(unsigned char a) {
+    guide_a = a;
 }

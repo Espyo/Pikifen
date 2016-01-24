@@ -27,7 +27,7 @@
 using namespace std;
 
 
-struct area_map;
+struct area_data;
 struct blockmap;
 struct edge;
 struct sector;
@@ -85,7 +85,7 @@ struct edge {
     size_t sector_nrs[2];
     
     edge(size_t v1 = string::npos, size_t v2 = string::npos);
-    void fix_pointers(area_map &a);
+    void fix_pointers(area_data &a);
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
 };
@@ -131,8 +131,8 @@ struct sector {
     vector<triangle> triangles;
     
     sector();
-    void connect_edges(area_map &a, size_t s_nr);
-    void fix_pointers(area_map &a);
+    void connect_edges(area_data &a, size_t s_nr);
+    void fix_pointers(area_data &a);
     void clone(sector* new_sector);
     ~sector();
 };
@@ -180,8 +180,8 @@ struct vertex {
     vector<edge*> edges;
     
     vertex(float x, float y);
-    void connect_edges(area_map &a, size_t v_nr);
-    void fix_pointers(area_map &a);
+    void connect_edges(area_data &a, size_t v_nr);
+    void fix_pointers(area_data &a);
 };
 
 
@@ -235,7 +235,7 @@ struct tree_shadow {
  * the edges, the edges with the
  * vertexes, etc.
  */
-struct area_map {
+struct area_data {
 
     blockmap bmap;
     vector<vertex*> vertexes;
@@ -256,7 +256,7 @@ struct area_map {
     weather weather_condition;
     string weather_name;
     
-    area_map();
+    area_data();
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
     void clear();

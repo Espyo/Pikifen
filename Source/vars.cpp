@@ -94,7 +94,7 @@ float                            cam_y = 0;
 float                            cam_zoom = 1;
 mob*                             closest_party_member = NULL;
 vector<vector<control_info> >    controls;
-area_map                         cur_area_data;
+area_data                        cur_area_data;
 size_t                           cur_leader_nr = 0;
 leader*                          cur_leader_ptr = nullptr;
 string                           cur_message;

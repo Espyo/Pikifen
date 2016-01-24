@@ -1,9 +1,3 @@
-weather=Normal
-bg_color=0.00 0.00 0.00
-bg_dist=2.00
-bg_zoom=1.00
-name=Testing Area
-subtitle=A testing area for the engine
 mobs{
 	Ship{
 		type=Hocotate ship
@@ -2034,9 +2028,9 @@ tree_shadows{
 		sway=1.00 0.00
 	}
 }
-bg_file_name=
-bg_x=0.00
-bg_y=0.00
-bg_w=0.00
-bg_h=0.00
-bg_alpha=255
+guide_file_name=
+guide_x=
+guide_y=
+guide_w=
+guide_h=
+guide_alpha=

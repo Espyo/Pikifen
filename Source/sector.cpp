@@ -25,7 +25,7 @@
 /* ----------------------------------------------------------------------------
  * Creates info on an area.
  */
-area_map::area_map() :
+area_data::area_data() :
     bg_bmp(nullptr),
     bg_bmp_zoom(1),
     bg_dist(2),
@@ -37,7 +37,7 @@ area_map::area_map() :
 /* ----------------------------------------------------------------------------
  * Generates the blockmap for the area, given the current info.
  */
-void area_map::generate_blockmap() {
+void area_data::generate_blockmap() {
     bmap.clear();
     
     if(vertexes.empty()) return;
@@ -94,7 +94,7 @@ void area_map::generate_blockmap() {
 /* ----------------------------------------------------------------------------
  * Generates the blockmap for a set of edges.
  */
-void area_map::generate_edges_blockmap(vector<edge*> &edges) {
+void area_data::generate_edges_blockmap(vector<edge*> &edges) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
     
     for(size_t e = 0; e < edges.size(); ++e) {
@@ -154,7 +154,7 @@ void area_map::generate_edges_blockmap(vector<edge*> &edges) {
 /* ----------------------------------------------------------------------------
  * Clears the info of an area map.
  */
-void area_map::clear() {
+void area_data::clear() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         delete vertexes[v];
     }
@@ -261,7 +261,7 @@ edge::edge(size_t v1, size_t v2) {
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point to the correct sectors and vertexes.
  */
-void edge::fix_pointers(area_map &a) {
+void edge::fix_pointers(area_data &a) {
     sectors[0] = sectors[1] = NULL;
     for(size_t s = 0; s < 2; ++s) {
         size_t s_nr = sector_nrs[s];
@@ -418,7 +418,7 @@ bool edge_intersection::contains(edge* e) {
 /* ----------------------------------------------------------------------------
  * Connects the edges that link to it into the edge_nrs vector.
  */
-void sector::connect_edges(area_map &a, size_t s_nr) {
+void sector::connect_edges(area_data &a, size_t s_nr) {
     edge_nrs.clear();
     for(size_t e = 0; e < a.edges.size(); ++e) {
         edge* e_ptr = a.edges[e];
@@ -433,7 +433,7 @@ void sector::connect_edges(area_map &a, size_t s_nr) {
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point them to the correct edges.
  */
-void sector::fix_pointers(area_map &a) {
+void sector::fix_pointers(area_data &a) {
     edges.clear();
     for(size_t e = 0; e < edge_nrs.size(); ++e) {
         size_t e_nr = edge_nrs[e];
@@ -492,7 +492,7 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 /* ----------------------------------------------------------------------------
  * Connects the edges that link to it into the edge_nrs vector.
  */
-void vertex::connect_edges(area_map &a, size_t v_nr) {
+void vertex::connect_edges(area_data &a, size_t v_nr) {
     edge_nrs.clear();
     for(size_t e = 0; e < a.edges.size(); ++e) {
         edge* e_ptr = a.edges[e];
@@ -507,7 +507,7 @@ void vertex::connect_edges(area_map &a, size_t v_nr) {
 /* ----------------------------------------------------------------------------
  * Fixes the pointers to point to the correct edges.
  */
-void vertex::fix_pointers(area_map &a) {
+void vertex::fix_pointers(area_data &a) {
     edges.clear();
     for(size_t e = 0; e < edge_nrs.size(); ++e) {
         size_t e_nr = edge_nrs[e];

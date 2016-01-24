@@ -130,7 +130,7 @@ enum EDITOR_MODES {
     EDITOR_MODE_ADV_TEXTURE_SETTINGS,
     EDITOR_MODE_OBJECTS,
     EDITOR_MODE_SHADOWS,
-    EDITOR_MODE_BG,
+    EDITOR_MODE_GUIDE,
     EDITOR_MODE_REVIEW,
 };
 
@@ -139,7 +139,7 @@ enum EDITOR_SEC_MODES {
     ESM_NEW_SECTOR,
     ESM_NEW_OBJECT,
     ESM_NEW_SHADOW,
-    ESM_BG_MOUSE,   //BG transformation being controlled by mouse.
+    ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,
 };
 

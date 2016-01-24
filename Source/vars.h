@@ -130,7 +130,7 @@ extern float                            cam_y;
 extern float                            cam_zoom;
 extern vector<vector<control_info> >    controls;
 extern mob*                             closest_party_member;
-extern area_map                         cur_area_data;
+extern area_data                        cur_area_data;
 extern size_t                           cur_leader_nr;
 extern leader*                          cur_leader_ptr;
 extern string                           cur_message;

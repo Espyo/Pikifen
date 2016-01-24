@@ -595,45 +595,47 @@ void load_area(const string &name, const bool load_for_editor) {
 
     cur_area_data.clear();
     
-    data_node file = load_data_file(AREA_FOLDER + "/" + name + ".txt");
+    data_node data_file = load_data_file(AREA_FOLDER + "/" + name + "/Data.txt");
     
-    cur_area_data.name = file.get_child_by_name("name")->get_value_or_default(name);
-    cur_area_data.subtitle = file.get_child_by_name("subtitle")->value;
+    cur_area_data.name = data_file.get_child_by_name("name")->get_value_or_default(name);
+    cur_area_data.subtitle = data_file.get_child_by_name("subtitle")->value;
     
     draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
     al_flip_display();
     
-    cur_area_data.weather_name = file.get_child_by_name("weather")->value;
+    cur_area_data.weather_name = data_file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
         if(weather_conditions.find(cur_area_data.weather_name) == weather_conditions.end()) {
-            error_log("Area " + name + " refers to a non-existing weather condition, \"" + cur_area_data.weather_name + "\"!", &file);
+            error_log("Area " + name + " refers to a non-existing weather condition, \"" + cur_area_data.weather_name + "\"!", &data_file);
             cur_area_data.weather_condition = weather();
         } else {
             cur_area_data.weather_condition = weather_conditions[cur_area_data.weather_name];
         }
     }
     
-    cur_area_data.bg_bmp_file_name = file.get_child_by_name("bg_bmp")->value;
+    cur_area_data.bg_bmp_file_name = data_file.get_child_by_name("bg_bmp")->value;
     if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
-        cur_area_data.bg_bmp = bitmaps.get(cur_area_data.bg_bmp_file_name, &file);
+        cur_area_data.bg_bmp = bitmaps.get(cur_area_data.bg_bmp_file_name, &data_file);
     }
-    cur_area_data.bg_color = s2c(file.get_child_by_name("bg_color")->value);
-    cur_area_data.bg_dist = s2f(file.get_child_by_name("bg_dist")->get_value_or_default("2"));
-    cur_area_data.bg_bmp_zoom = s2f(file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
+    cur_area_data.bg_color = s2c(data_file.get_child_by_name("bg_color")->value);
+    cur_area_data.bg_dist = s2f(data_file.get_child_by_name("bg_dist")->get_value_or_default("2"));
+    cur_area_data.bg_bmp_zoom = s2f(data_file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
     
+    
+    data_node geometry_file = load_data_file(AREA_FOLDER + "/" + name + "/Geometry.txt");
     
     //Vertexes.
-    size_t n_vertexes = file.get_child_by_name("vertexes")->get_nr_of_children_by_name("v");
+    size_t n_vertexes = geometry_file.get_child_by_name("vertexes")->get_nr_of_children_by_name("v");
     for(size_t v = 0; v < n_vertexes; ++v) {
-        data_node* vertex_data = file.get_child_by_name("vertexes")->get_child_by_name("v", v);
+        data_node* vertex_data = geometry_file.get_child_by_name("vertexes")->get_child_by_name("v", v);
         vector<string> words = split(vertex_data->value);
         if(words.size() == 2) cur_area_data.vertexes.push_back(new vertex(s2f(words[0]), s2f(words[1])));
     }
     
     //Edges.
-    size_t n_edges = file.get_child_by_name("edges")->get_nr_of_children_by_name("e");
+    size_t n_edges = geometry_file.get_child_by_name("edges")->get_nr_of_children_by_name("e");
     for(size_t e = 0; e < n_edges; ++e) {
-        data_node* edge_data = file.get_child_by_name("edges")->get_child_by_name("e", e);
+        data_node* edge_data = geometry_file.get_child_by_name("edges")->get_child_by_name("e", e);
         edge* new_edge = new edge();
         
         vector<string> s_nrs = split(edge_data->get_child_by_name("s")->value);
@@ -653,9 +655,9 @@ void load_area(const string &name, const bool load_for_editor) {
     }
     
     //Sectors.
-    size_t n_sectors = file.get_child_by_name("sectors")->get_nr_of_children_by_name("s");
+    size_t n_sectors = geometry_file.get_child_by_name("sectors")->get_nr_of_children_by_name("s");
     for(size_t s = 0; s < n_sectors; ++s) {
-        data_node* sector_data = file.get_child_by_name("sectors")->get_child_by_name("s", s);
+        data_node* sector_data = geometry_file.get_child_by_name("sectors")->get_child_by_name("s", s);
         sector* new_sector = new sector();
         
         new_sector->type = sector_types.get_nr(sector_data->get_child_by_name("type")->value);
@@ -687,10 +689,10 @@ void load_area(const string &name, const bool load_for_editor) {
     }
     
     //Mobs.
-    size_t n_mobs = file.get_child_by_name("mobs")->get_nr_of_children();
+    size_t n_mobs = geometry_file.get_child_by_name("mobs")->get_nr_of_children();
     for(size_t m = 0; m < n_mobs; ++m) {
     
-        data_node* mob_node = file.get_child_by_name("mobs")->get_child(m);
+        data_node* mob_node = geometry_file.get_child_by_name("mobs")->get_child(m);
         
         mob_gen* mob_ptr = new mob_gen();
         
@@ -727,10 +729,10 @@ void load_area(const string &name, const bool load_for_editor) {
     }
     
     //Tree shadows.
-    size_t n_shadows = file.get_child_by_name("tree_shadows")->get_nr_of_children();
+    size_t n_shadows = geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; ++s) {
     
-        data_node* shadow_node = file.get_child_by_name("tree_shadows")->get_child(s);
+        data_node* shadow_node = geometry_file.get_child_by_name("tree_shadows")->get_child(s);
         
         tree_shadow* s_ptr = new tree_shadow();
         
@@ -760,18 +762,6 @@ void load_area(const string &name, const bool load_for_editor) {
     }
     
     
-    //Editor background.
-    if(load_for_editor) {
-        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
-        ae->set_bg_file_name(    file.get_child_by_name("bg_file_name")->value);
-        ae->set_bg_x(        s2f(file.get_child_by_name("bg_x")->value));
-        ae->set_bg_y(        s2f(file.get_child_by_name("bg_y")->value));
-        ae->set_bg_w(        s2f(file.get_child_by_name("bg_w")->value));
-        ae->set_bg_h(        s2f(file.get_child_by_name("bg_h")->value));
-        ae->set_bg_a(        s2i(file.get_child_by_name("bg_alpha")->get_value_or_default("255")));
-    }
-    
-    
     //Set up stuff.
     //TODO error checking.
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
@@ -790,6 +780,18 @@ void load_area(const string &name, const bool load_for_editor) {
         sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
+    }
+    
+    
+    //Editor guide.
+    if(load_for_editor) {
+        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
+        ae->set_guide_file_name(    geometry_file.get_child_by_name("guide_file_name")->value);
+        ae->set_guide_x(        s2f(geometry_file.get_child_by_name("guide_x")->value));
+        ae->set_guide_y(        s2f(geometry_file.get_child_by_name("guide_y")->value));
+        ae->set_guide_w(        s2f(geometry_file.get_child_by_name("guide_w")->value));
+        ae->set_guide_h(        s2f(geometry_file.get_child_by_name("guide_h")->value));
+        ae->set_guide_a(        s2i(geometry_file.get_child_by_name("guide_alpha")->get_value_or_default("255")));
     }
     
     if(!load_for_editor) cur_area_data.generate_blockmap();

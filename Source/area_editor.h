@@ -52,14 +52,7 @@ private:
     
     static const float GRID_INTERVAL;
     
-    bool                         bg_aspect_ratio;
-    ALLEGRO_BITMAP*              bg_bitmap;
-    string                       bg_file_name;
-    float                        bg_x;
-    float                        bg_y;
-    float                        bg_w;
-    float                        bg_h;
-    unsigned char                bg_a;
+    string                       area_name;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
     tree_shadow*                 cur_shadow;
@@ -70,8 +63,15 @@ private:
     string                       error_string;
     unsigned char                error_type;
     vertex*                      error_vertex_ptr;
-    string                       file_name;
     lafi::gui*                   gui;
+    bool                         guide_aspect_ratio;
+    ALLEGRO_BITMAP*              guide_bitmap;
+    string                       guide_file_name;
+    float                        guide_x;
+    float                        guide_y;
+    float                        guide_w;
+    float                        guide_h;
+    unsigned char                guide_a;
     bool                         holding_m1;
     bool                         holding_m2;
     unsigned char                mode;
@@ -81,19 +81,19 @@ private:
     sector*                      on_sector;
     unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;
-    bool                         show_bg;
+    bool                         show_guide;
     bool                         show_shadows;
     lafi::widget*                wum; //Widget under mouse.
     
     void adv_textures_to_gui();
-    void bg_to_gui();
+    void guide_to_gui();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
-    void change_background(string new_file_name);
+    void change_guide(string new_file_name);
     void change_to_right_frame(bool hide_all = false);
     void leave();
     void find_errors();
     void goto_error();
-    void gui_to_bg();
+    void gui_to_guide();
     void gui_to_mob();
     void gui_to_sector();
     void gui_to_shadow();
@@ -123,12 +123,12 @@ public:
     virtual void load();
     virtual void unload();
     
-    void set_bg_file_name(string n);
-    void set_bg_x(float x);
-    void set_bg_y(float y);
-    void set_bg_w(float w);
-    void set_bg_h(float h);
-    void set_bg_a(unsigned char a);
+    void set_guide_file_name(string n);
+    void set_guide_x(float x);
+    void set_guide_y(float y);
+    void set_guide_w(float w);
+    void set_guide_h(float h);
+    void set_guide_a(unsigned char a);
     
 };
 
