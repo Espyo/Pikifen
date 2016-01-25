@@ -239,7 +239,8 @@ void mob::tick_physics() {
         if(gtt_instant) {
             sector* sec = get_sector(final_target_x, final_target_y, NULL, true);
             if(!sec) {
-                //TODO Out of bounds! Kill it!
+                //No sector, invalid teleport. No move.
+                return;
                 
             } else {
                 if(target_z) {
@@ -303,7 +304,7 @@ void mob::tick_physics() {
         sector* base_sector = get_sector(new_x, new_y, NULL, true);
         
         if(!base_sector) {
-            //TODO out of bounds! Kill it!
+            //Out of bounds. No movement.
             break;
         } else {
             new_ground_z = base_sector->z;
@@ -328,7 +329,7 @@ void mob::tick_physics() {
             bx1 == string::npos || bx2 == string::npos ||
             by1 == string::npos || by2 == string::npos
         ) {
-            //TODO out of bounds! Kill it!
+            //Somehow out of bounds. No movement.
             break;
         }
         
@@ -583,7 +584,10 @@ void mob::tick_physics() {
         if(was_airborne) {
             speed_z = 0;
             was_thrown = false;
-            fsm.run_event(MOB_EVENT_LANDED, this);
+            fsm.run_event(MOB_EVENT_LANDED);
+            if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT){
+                fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
+            }
         }
     }
     

@@ -82,6 +82,7 @@ public:
     static void be_released(mob* m, void* info1, void* info2);
     static void be_thrown(mob* m, void* info1, void* info2);
     static void land(mob* m, void* info1, void* info2);
+    static void fall_down_pit(mob* m, void* info1, void* info2);
     
 };
 

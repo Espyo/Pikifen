@@ -99,6 +99,7 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_THROWN,                   //When it is thrown.
     MOB_EVENT_RELEASED,                 //When it is released from the leader's/enemy's grasp (e.g. swap for another Pikmin while holding)
     MOB_EVENT_LANDED,                   //When it lands on the ground.
+    MOB_EVENT_BOTTOMLESS_PIT,           //When it lands on a bottomless pit.
     MOB_EVENT_NEAR_TASK,                //When it is near a task (Pikmin only).
     MOB_EVENT_WHISTLED,                 //When it is whistled by a leader.
     MOB_EVENT_SPOT_IS_NEAR,             //When its spot on the group is now near, and the mob is in the group.

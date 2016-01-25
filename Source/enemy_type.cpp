@@ -12,6 +12,7 @@
 #include "enemy_type.h"
 #include "functions.h"
 
+//TODO falling down bottomless pits.
 
 enemy_type::enemy_type() :
     mob_type(),

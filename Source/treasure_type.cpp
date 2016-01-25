@@ -12,6 +12,8 @@
 #include "functions.h"
 #include "treasure_type.h"
 
+//TODO FSM and bottomless pits.
+
 void treasure_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
     move_speed = 60; //TODO should this be here?
     

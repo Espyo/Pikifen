@@ -164,6 +164,13 @@ void leader::join_group(mob* m, void* info1, void* info2) {
     }
 }
 
+void leader::fall_down_pit(mob* m, void* info1, void* info2) {
+    m->health -= m->type->max_health * 0.2;
+    m->x = m->home_x;
+    m->y = m->home_y;
+    m->z = get_sector(m->x, m->y, NULL, true)->z + 100;
+}
+
 void leader::focus(mob* m, void* info1, void* info2) {
     switch_to_leader((leader*) m);
 }

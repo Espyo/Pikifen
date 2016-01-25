@@ -125,6 +125,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("in_group_stopped", PIKMIN_STATE_IN_GROUP_STOPPED); {
@@ -152,6 +155,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     
@@ -188,6 +194,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::go_to_opponent);
             efc.change_state("going_to_opponent");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("group_move_stopped", PIKMIN_STATE_GROUP_MOVE_STOPPED); {
@@ -223,6 +232,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::go_to_opponent);
             efc.change_state("going_to_opponent");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("grabbed_by_leader", PIKMIN_STATE_GRABBED_BY_LEADER); {
@@ -244,6 +256,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("thrown", PIKMIN_STATE_THROWN); {
@@ -257,6 +272,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     
@@ -276,6 +294,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     
@@ -310,6 +331,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT); {
@@ -338,6 +362,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("going_to_opponent", PIKMIN_STATE_GOING_TO_OPPONENT); {
@@ -361,6 +388,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     
@@ -411,6 +441,9 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
     }
     
     efc.new_state("grabbed_by_enemy", PIKMIN_STATE_GRABBED_BY_ENEMY); {
@@ -429,6 +462,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     
@@ -460,6 +496,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
         }
     }
     

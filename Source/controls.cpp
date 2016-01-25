@@ -65,24 +65,36 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    string var_list = "Vars: ";
+                    
+                    string name_str   = box_string("Mob: " + m->type->name + ".", 30);
+                    string coords_str = box_string(
+                        "Coords: " +
+                        box_string(f2s(m->x), 6) + " " +
+                        box_string(f2s(m->y), 6) + " " +
+                        box_string(f2s(m->z), 6) + ".",
+                        30
+                    );
+                    string state_str  = box_string("State: " + m->fsm.cur_state->name + ".", 30);
+                    string anim_str   = box_string("Animation: " + m->anim.anim->name + ".", 30);
+                    string health_str = box_string("Health: " + f2s(m->health) + ".", 30);
+                    string timer_str  = box_string("Timer: " + f2s(m->script_timer.time_left) + ".", 30);
+                    
+                    string vars_str = "Vars: ";
                     if(!m->vars.empty()) {
                         for(auto v = m->vars.begin(); v != m->vars.end(); ++v) {
-                            var_list += v->first + "=" + v->second + "; ";
+                            vars_str += v->first + "=" + v->second + "; ";
                         }
-                        var_list.erase(var_list.size() - 2, 2);
-                        var_list += ".";
+                        vars_str.erase(vars_str.size() - 2, 2);
+                        vars_str += ".";
                     } else {
-                        var_list += "(None).";
+                        vars_str += "(None).";
                     }
                     
                     print_info(
-                        "Mob: " + m->type->name + ".\n" +
-                        "State: " + m->fsm.cur_state->name + ". "
-                        "Animation: " + m->anim.anim->name + ".\n" +
-                        "Health: " + f2s(m->health) + ". "
-                        "Timer: " + f2s(m->script_timer.time_left) + ".\n" +
-                        var_list
+                        name_str + coords_str + "\n" +
+                        state_str + anim_str + "\n" +
+                        health_str + timer_str + "\n" +
+                        vars_str
                     );
                 }
                 

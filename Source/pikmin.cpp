@@ -507,6 +507,10 @@ void pikmin::work_on_task(mob* m, void* info1, void* info2) {
 
 }
 
+void pikmin::fall_down_pit(mob* m, void* info1, void* info2){
+    m->health = 0;
+}
+
 void pikmin::finish_carrying(mob* m, void* info1, void* info2) {
 
 }

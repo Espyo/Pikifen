@@ -1402,9 +1402,8 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
     const int LOADING_SCREEN_PADDING = 64;
     
-    ALLEGRO_BITMAP* text_bmp;
-    ALLEGRO_BITMAP* subtext_bmp;
-    
+    ALLEGRO_BITMAP* text_bmp = NULL;
+    ALLEGRO_BITMAP* subtext_bmp = NULL;
     
     unsigned char blackness_alpha = 255.0f * max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha));
@@ -1418,6 +1417,7 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
         
         //Draw the main text on its bitmap.
         al_set_target_bitmap(text_bmp); {
+            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
             draw_text_lines(
                 font_area_name, al_map_rgba(255, 215, 0, opacity * 255.0),
                 0, 0, ALLEGRO_ALIGN_LEFT, 0,
@@ -1435,6 +1435,7 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
         subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
         
         al_set_target_bitmap(subtext_bmp); {
+            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
             draw_text_lines(
                 font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
                 0, 0,
@@ -1568,6 +1569,9 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
         scr_h - 8 - font_h,
         ALLEGRO_ALIGN_RIGHT, "Loading..."
     );
+    
+    al_destroy_bitmap(text_bmp);
+    al_destroy_bitmap(subtext_bmp);
     
 }
 

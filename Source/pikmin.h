@@ -51,12 +51,13 @@ public:
     static void become_buried(          mob* m, void* info1, void* info2);
     static void become_idle(            mob* m, void* info1, void* info2);
     static void begin_pluck(            mob* m, void* info1, void* info2);
-    static void end_pluck(              mob* m, void* info1, void* info2);
     static void be_grabbed_by_friend(   mob* m, void* info1, void* info2);
     static void be_grabbed_by_enemy(    mob* m, void* info1, void* info2);
     static void be_dismissed(           mob* m, void* info1, void* info2);
     static void be_thrown(              mob* m, void* info1, void* info2);
     static void be_released(            mob* m, void* info1, void* info2);
+    static void end_pluck(              mob* m, void* info1, void* info2);
+    static void fall_down_pit(          mob* m, void* info1, void* info2);
     static void land(                   mob* m, void* info1, void* info2);
     static void go_to_task(             mob* m, void* info1, void* info2);
     static void called(                 mob* m, void* info1, void* info2);

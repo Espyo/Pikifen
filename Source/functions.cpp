@@ -46,6 +46,16 @@ void angle_to_coordinates(const float angle, const float magnitude, float* x_coo
 
 
 /* ----------------------------------------------------------------------------
+ * Boxes a string so that it becomes a specific size.
+ * Truncates if it's too big, pads with spaces if it's too small.
+ */
+string box_string(const string s, const size_t size) {
+    string spaces = string(size, ' ');
+    return (s + spaces).substr(0, size);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
  * color: The color to change the alpha on.
  * a:     The new alpha, [0-255].
@@ -247,12 +257,15 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
     if(folder_name.empty()) return v;
     
     //Normalize the folder's path.
-    replace(folder_name.begin(), folder_name.end(), '\\', '/');
+    folder_name = replace_all(folder_name, "\\", "/");
     if(folder_name.back() == '/') folder_name.pop_back();
     
     ALLEGRO_FS_ENTRY* folder = NULL;
     folder = al_create_fs_entry(folder_name.c_str());
-    if(!folder) return v;
+    if(!folder){
+        if(folder_found) *folder_found = false;
+        return v;
+    }
     
     
     if(al_open_directory(folder)) {

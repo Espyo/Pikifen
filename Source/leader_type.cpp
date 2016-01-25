@@ -55,6 +55,9 @@ void leader_type::init_script() {
             efc.run_function(leader::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("active", LEADER_STATE_ACTIVE); {
@@ -100,6 +103,9 @@ void leader_type::init_script() {
             efc.run_function(leader::go_pluck);
             efc.change_state("going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("whistling", LEADER_STATE_WHISTLING); {
@@ -127,6 +133,9 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("holding", LEADER_STATE_HOLDING); {
@@ -152,6 +161,9 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
         }
     }
     
@@ -217,6 +229,9 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("active");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK); {
@@ -225,6 +240,9 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
         }
     }
     
@@ -268,6 +286,9 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
@@ -298,6 +319,9 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("going_to_pluck", LEADER_STATE_GOING_TO_PLUCK); {
@@ -320,6 +344,9 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run_function(leader::unfocus);
             efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
         }
     }
     
@@ -359,6 +386,9 @@ void leader_type::init_script() {
             efc.run_function(leader::focus);
             efc.change_state("going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
@@ -396,6 +426,9 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("inactive_sleeping", LEADER_STATE_INACTIVE_SLEEPING); {
@@ -417,6 +450,9 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
         }
     }
     
@@ -449,12 +485,18 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
     }
     
     efc.new_state("thrown", LEADER_STATE_THROWN); {
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(leader::land);
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
         }
     }
     
