@@ -43,6 +43,7 @@ pikmin_type::pikmin_type() :
     bmp_icon[2] = NULL;
     
     weight = 1;
+    show_health = false;
     
     init_script();
 }
@@ -89,6 +90,9 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_PLUCKED); {
             efc.run_function(pikmin::begin_pluck);
             efc.change_state("plucked");
+        }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run_function(pikmin::stand_still);
         }
     }
     

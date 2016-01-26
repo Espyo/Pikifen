@@ -43,7 +43,7 @@ mobs{
 	Special{
 		type=Info spot
 		p=192.00 736.00
-		vars=opens_box=true;text=This is still a WIP! Keys:\nWASD to move\nMouse to move the cursor\nLeft-click to throw\nRight-click to whistle\nSpace to move the group\nTab to switch leaders\nLeft control to dismiss\nMore info:\nhttp://www.pikminfanon.com/\nTopic:Pikmin_Engine_by_Espyo\nand on the included README
+		vars=opens_box=true;text=This is still a WIP! Keys:\nWASD to move\nMouse to move the cursor\nLeft-click to throw\nRight-click to whistle\nSpace to move the group\nTab to switch leaders\nLeft control to dismiss\nMore info:\nhttp://www.pikminfanon.com/\nPikmin_fangame_engine\nand on the included README
 	}
 	Pellet{
 		type=Red 10

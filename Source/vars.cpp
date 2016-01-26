@@ -99,7 +99,7 @@ size_t                           cur_leader_nr = 0;
 leader*                          cur_leader_ptr = nullptr;
 string                           cur_message;
 size_t                           cur_message_char = 0;
-timer                            cur_message_char_timer(MESSAGE_CHAR_INTERVAL);
+timer                            cur_message_char_timer(MESSAGE_CHAR_INTERVAL, [] () { cur_message_char_timer.start(); cur_message_char++; } );
 size_t                           cur_message_section = 0;
 ALLEGRO_BITMAP*                  cur_message_speaker = NULL;
 vector<size_t>                   cur_message_stopping_chars;

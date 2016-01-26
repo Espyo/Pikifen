@@ -186,6 +186,46 @@ void init_misc() {
     
     //TODO the function is always returning 0.
     area_image_size = /*al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL)*/ 800;
+    
+    cursor_save_timer.on_end = [] () {
+        cursor_save_timer.start();
+        cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
+        if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
+            cursor_spots.erase(cursor_spots.begin());
+        }
+    };
+    cursor_save_timer.start();
+    
+    framerate_update_timer.on_end = [] () {
+        framerate_update_timer.start();
+        framerate_counter = round(1.0 / delta_t);
+    };
+    framerate_update_timer.start();
+    
+    group_move_next_arrow_timer.on_end = [] () {
+        group_move_next_arrow_timer.start();
+        group_move_arrows.push_back(0);
+    };
+    group_move_next_arrow_timer.start();
+    
+    whistle_next_dot_timer.on_end = [] () {
+        whistle_next_dot_timer.start();
+        unsigned char dot = 255;
+        for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
+            if(whistle_dot_radius[d] == -1) { dot = d; break;}
+        }
+        
+        if(dot != 255) whistle_dot_radius[dot] = 0;
+    };
+    whistle_next_dot_timer.start();
+    
+    whistle_next_ring_timer.on_end = [] () {
+        whistle_next_ring_timer.start();
+        whistle_rings.push_back(0);
+        whistle_ring_colors.push_back(whistle_ring_prev_color);
+        whistle_ring_prev_color = (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
+    };
+    whistle_next_ring_timer.start();
 }
 
 

@@ -370,6 +370,10 @@ void pikmin::be_released(mob* m, void* info1, void* info2) {
 
 void pikmin::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
+    pikmin::stand_still(m, NULL, NULL);
+}
+
+void pikmin::stand_still(mob* m, void* info1, void* info2) {
     m->remove_target();
     m->speed_x = m->speed_y = 0;
 }
@@ -507,7 +511,7 @@ void pikmin::work_on_task(mob* m, void* info1, void* info2) {
 
 }
 
-void pikmin::fall_down_pit(mob* m, void* info1, void* info2){
+void pikmin::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health = 0;
 }
 

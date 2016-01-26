@@ -561,10 +561,9 @@ unsigned char sector_types_manager::get_nr_of_types() {
 /* ----------------------------------------------------------------------------
  * Cretes a timer.
  */
-timer::timer(float interval, function<void()> on_end) {
-    this->interval  = interval;
+timer::timer(float duration, function<void()> on_end) {
+    this->duration  = duration;
     this->time_left = 0;
-    this->is_over   = false;
     this->on_end    = on_end;
 }
 
@@ -573,16 +572,15 @@ timer::timer(float interval, function<void()> on_end) {
  * Starts a timer.
  */
 void timer::start() {
-    time_left = interval;
-    is_over = false;
+    time_left = duration;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Starts a timer, but sets a new interval.
+ * Starts a timer, but sets a new duration.
  */
-void timer::start(const float new_interval) {
-    interval = new_interval;
+void timer::start(const float new_duration) {
+    duration = new_duration;
     start();
 }
 
@@ -592,11 +590,10 @@ void timer::start(const float new_interval) {
  * amount: Time to tick.
  */
 void timer::tick(const float amount) {
-    time_left -= amount;
-    time_left = max(time_left, 0.0f);
-    if(time_left == 0.0f) {
-        if(!is_over && on_end) on_end();
-        is_over = true;
+    if(time_left == 0.0f) return;
+    time_left = max(time_left - amount, 0.0f);
+    if(time_left == 0.0f && on_end) {
+        on_end();
     }
 }
 
@@ -605,7 +602,7 @@ void timer::tick(const float amount) {
  * Returns the ratio of time left (i.e. 0 if done, 1 if all time is left).
  */
 float timer::get_ratio_left() {
-    return time_left / interval;
+    return time_left / duration;
 }
 
 

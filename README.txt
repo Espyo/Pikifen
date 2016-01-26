@@ -3,20 +3,20 @@
 An engine that allows users to create their Pikmin fangames easily.
 
 This project is still under construction, so expect weird things to happen.
-You can find more info here on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me via IRC, on DarkMyst's #pikipedia
+You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me via IRC, on DarkMyst's #pikipedia.
 
 ===============
-1) Default controls
-2) FAQ
+1) Controls
+2) FAQ and troubleshooting
 3) Compiling
 4) Credits
 5) Disclaimer
 ===============
 
 ===============
-1) Default controls
+1) Controls
 ===============
-    These can be changed on the options menu.
+    Most of these can be changed on the options menu.
     Quit:                      Esc
     Move:                      WASD
     Move cursor:               Mouse
@@ -36,17 +36,17 @@ You can find more info here on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fa
     Lie down:                  Z
     
     Toggle framerate:          F1
-    Testing stuff (beware!):   T
+    Take screenshot:           F12
 
 ===============
-2) FAQ
+2) FAQ and troubleshooting
 ===============
-    Why is Louie so fast?
-        Because having to walk to a certain point every time I'm testing something wastes a lot of time. So I made Louie fast to get there faster.
     Why are some animations and physics so broken?
         Because their code is still under construction.
     Why can't I see the game window?
         Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    Why is it so slow?
+        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural. Check the Options.txt file and use the wiki page for settings that you can change in order to sacrifice appearance for performance.
 
 ===============
 3) Compiling

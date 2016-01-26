@@ -219,6 +219,7 @@ public:
     mob* m;
     mob_state* cur_state;
     vector<size_t> pre_named_conversions; //Conversion between pre-named states and in-file states.
+    string prev_state_name; //Helps with debugging.
     
     mob_event* get_event(const size_t type);
     void run_event(const size_t type, void* custom_data_1 = NULL, void* custom_data_2 = NULL);

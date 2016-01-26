@@ -585,7 +585,7 @@ void mob::tick_physics() {
             speed_z = 0;
             was_thrown = false;
             fsm.run_event(MOB_EVENT_LANDED);
-            if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT){
+            if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
                 fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
             }
         }
@@ -609,11 +609,12 @@ void mob::tick_script() {
     
     //Timer events.
     mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
-    if(timer_ev && script_timer.interval > 0) {
-        script_timer.tick(delta_t);
-        if(script_timer.is_over) {
-            script_timer.start();
-            timer_ev->run(this);
+    if(timer_ev && script_timer.duration > 0) {
+        if(script_timer.time_left > 0) {
+            script_timer.tick(delta_t);
+            if(script_timer.time_left == 0.0f) {
+                timer_ev->run(this);
+            }
         }
     }
     
@@ -757,7 +758,7 @@ void mob::set_health(const bool rel, const float amount) {
  * time: New time.
  */
 void mob::set_timer(const float time) {
-    script_timer.interval = time;
+    script_timer.duration = time;
     script_timer.start();
 }
 

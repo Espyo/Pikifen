@@ -59,6 +59,7 @@ public:
     static void end_pluck(              mob* m, void* info1, void* info2);
     static void fall_down_pit(          mob* m, void* info1, void* info2);
     static void land(                   mob* m, void* info1, void* info2);
+    static void stand_still(            mob* m, void* info1, void* info2);
     static void go_to_task(             mob* m, void* info1, void* info2);
     static void called(                 mob* m, void* info1, void* info2);
     static void work_on_task(           mob* m, void* info1, void* info2);

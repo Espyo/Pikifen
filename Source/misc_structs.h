@@ -260,13 +260,12 @@ public:
  */
 struct timer {
     float time_left; //How much time is left until 0.
-    float interval;  //When the timer starts, its time is set to this.
-    bool is_over;    //Has the timer reached 0?
+    float duration;  //When the timer starts, its time is set to this.
     function<void()> on_end;
     
-    timer(const float interval, const function<void()> on_end = nullptr);
+    timer(const float duration, const function<void()> on_end = nullptr);
     void start();
-    void start(const float new_interval);
+    void start(const float new_duration);
     void tick(const float amount);
     float get_ratio_left();
 };

@@ -65,16 +65,17 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    
+                
                     string name_str   = box_string("Mob: " + m->type->name + ".", 30);
                     string coords_str = box_string(
-                        "Coords: " +
-                        box_string(f2s(m->x), 6) + " " +
-                        box_string(f2s(m->y), 6) + " " +
-                        box_string(f2s(m->z), 6) + ".",
-                        30
-                    );
+                                            "Coords: " +
+                                            box_string(f2s(m->x), 6) + " " +
+                                            box_string(f2s(m->y), 6) + " " +
+                                            box_string(f2s(m->z), 6) + ".",
+                                            30
+                                        );
                     string state_str  = box_string("State: " + m->fsm.cur_state->name + ".", 30);
+                    string pstate_str = box_string("Prev. state: " + m->fsm.prev_state_name + ".", 30);
                     string anim_str   = box_string("Animation: " + m->anim.anim->name + ".", 30);
                     string health_str = box_string("Health: " + f2s(m->health) + ".", 30);
                     string timer_str  = box_string("Timer: " + f2s(m->script_timer.time_left) + ".", 30);
@@ -92,8 +93,9 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                     
                     print_info(
                         name_str + coords_str + "\n" +
-                        state_str + anim_str + "\n" +
+                        state_str + pstate_str + "\n" +
                         health_str + timer_str + "\n" +
+                        anim_str + "\n" +
                         vars_str
                     );
                 }
@@ -530,7 +532,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float zoom_to_compare;
-            if(!cam_trans_zoom_timer.is_over) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
+            if(cam_trans_zoom_timer.time_left > 0.0f) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
             
             if(zoom_to_compare < 1) {
                 new_zoom = ZOOM_MAX_LEVEL;
@@ -548,7 +550,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             float new_zoom;
             float current_zoom;
-            if(!cam_trans_zoom_timer.is_over) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
+            if(cam_trans_zoom_timer.time_left > 0.0f) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
             
             pos = floor(pos);
             
@@ -557,7 +559,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
             if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
             
-            if(!cam_trans_zoom_timer.is_over) {
+            if(cam_trans_zoom_timer.time_left > 0.0f) {
                 cam_trans_zoom_final_level = new_zoom;
             } else {
                 start_camera_zoom(new_zoom);

@@ -421,7 +421,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             al_draw_circle(x, y, 8, al_map_rgba(WHISTLE_RING_COLORS[n][0], WHISTLE_RING_COLORS[n][1], WHISTLE_RING_COLORS[n][2], 192), 3);
         }
         
-        if(whistle_radius > 0 || !whistle_fade_timer.is_over) {
+        if(whistle_radius > 0 || whistle_fade_timer.time_left > 0.0f) {
             if(pretty_whistle) {
                 unsigned char n_dots = 16 * 6;
                 for(unsigned char d = 0; d < 6; ++d) {
@@ -434,7 +434,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                         
                         ALLEGRO_COLOR c;
                         float alpha_mult;
-                        if(!whistle_fade_timer.is_over)
+                        if(whistle_fade_timer.time_left > 0.0f)
                             alpha_mult = whistle_fade_timer.get_ratio_left();
                         else
                             alpha_mult = 1;
@@ -784,10 +784,6 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
     //Framerate.
     if(show_framerate) {
         framerate_update_timer.tick(delta_t);
-        if(framerate_update_timer.is_over) {
-            framerate_update_timer.start();
-            framerate_counter = round(1.0 / delta_t);
-        }
         al_draw_text(
             font,
             (framerate_counter >= (unsigned) (game_fps - 1) ? al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)),
@@ -796,7 +792,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         );
     }
     
-    if(!area_title_fade_timer.is_over) {
+    if(area_title_fade_timer.time_left > 0) {
         draw_loading_screen(
             cur_area_data.name,
             cur_area_data.subtitle,

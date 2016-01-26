@@ -41,7 +41,7 @@ void do_aesthetic_logic() {
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
     //Camera transitions.
-    if(!cam_trans_pan_timer.is_over) {
+    if(cam_trans_pan_timer.time_left > 0.0f) {
         cam_trans_pan_timer.tick(delta_t);
         
         float percentage_left = cam_trans_pan_timer.get_ratio_left();
@@ -51,7 +51,7 @@ void do_aesthetic_logic() {
         cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - percentage_left);
     }
     
-    if(!cam_trans_zoom_timer.is_over) {
+    if(cam_trans_zoom_timer.time_left > 0.0f) {
         cam_trans_zoom_timer.tick(delta_t);
         
         float percentage_left = cam_trans_zoom_timer.get_ratio_left();
@@ -63,10 +63,6 @@ void do_aesthetic_logic() {
     //"Move group" arrows.
     if(group_move_intensity) {
         group_move_next_arrow_timer.tick(delta_t);
-        if(group_move_next_arrow_timer.is_over) {
-            group_move_next_arrow_timer.start();
-            group_move_arrows.push_back(0);
-        }
     }
     
     dist leader_to_cursor_dis(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
@@ -91,24 +87,9 @@ void do_aesthetic_logic() {
     if(whistling) {
         //Create rings.
         whistle_next_ring_timer.tick(delta_t);
-        if(whistle_next_ring_timer.is_over) {
-            whistle_next_ring_timer.start();
-            whistle_rings.push_back(0);
-            whistle_ring_colors.push_back(whistle_ring_prev_color);
-            whistle_ring_prev_color = (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
-        }
         
         if(pretty_whistle) {
             whistle_next_dot_timer.tick(delta_t);
-            if(whistle_next_dot_timer.is_over) {
-                whistle_next_dot_timer.start();
-                unsigned char dot = 255;
-                for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
-                    if(whistle_dot_radius[d] == -1) { dot = d; break;}
-                }
-                
-                if(dot != 255) whistle_dot_radius[dot] = 0;
-            }
         }
         
         for(unsigned char d = 0; d < 6; ++d) {
@@ -162,13 +143,6 @@ void do_aesthetic_logic() {
     //Cursor trail.
     if(draw_cursor_trail) {
         cursor_save_timer.tick(delta_t);
-        if(cursor_save_timer.is_over) {
-            cursor_save_timer.start();
-            cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
-            if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
-                cursor_spots.erase(cursor_spots.begin());
-            }
-        }
     }
     
     //Tree shadow swaying.
@@ -708,20 +682,9 @@ void do_gameplay_logic() {
             
             if(o_ptr->spew_queue == 0) continue;
             
-            if(!o_ptr->full_spew_timer.is_over) {
-                o_ptr->full_spew_timer.tick(delta_t);
-                if(o_ptr->full_spew_timer.is_over) {
-                    o_ptr->next_spew_timer.start();
-                }
-            }
+            o_ptr->full_spew_timer.tick(delta_t);
+            o_ptr->next_spew_timer.tick(delta_t);
             
-            if(o_ptr->full_spew_timer.is_over) {
-                o_ptr->next_spew_timer.tick(delta_t);
-                if(o_ptr->next_spew_timer.is_over) {
-                    o_ptr->spew();
-                    o_ptr->next_spew_timer.start();
-                }
-            }
         }
         
         
@@ -748,7 +711,7 @@ void do_gameplay_logic() {
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_START, (void*) &leader_movement);
         }
         
-        if(!cam_trans_pan_timer.is_over) {
+        if(cam_trans_pan_timer.time_left > 0.0f) {
             cam_trans_pan_final_x = cur_leader_ptr->x;
             cam_trans_pan_final_y = cur_leader_ptr->y;
         } else {
@@ -883,7 +846,7 @@ void do_gameplay_logic() {
         **********************/
         
         throw_particle_timer.tick(delta_t);
-        if(throw_particle_timer.is_over) {
+        if(throw_particle_timer.time_left == 0.0f) {
             throw_particle_timer.start();
             
             size_t n_leaders = leaders.size();
@@ -910,10 +873,6 @@ void do_gameplay_logic() {
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
             cur_message_char_timer.tick(delta_t);
-            if(cur_message_char_timer.is_over) {
-                cur_message_char_timer.start();
-                cur_message_char++;
-            }
         }
         
     }

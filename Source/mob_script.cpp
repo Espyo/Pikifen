@@ -672,17 +672,18 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
     if(new_state >= m->type->states.size()) return;
     //Run the code to leave the current state.
     if(cur_state) {
-        m->fsm.run_event(MOB_EVENT_ON_LEAVE, info1, info2);
+        prev_state_name = cur_state->name;
+        run_event(MOB_EVENT_ON_LEAVE, info1, info2);
     }
     
     //Uncomment this to be notified about state changes on stdout.
     //if(cur_state) cout << "State " << cur_state->name << " -> " << m->type->states[new_state]->name << "\n";
     
     //Switch states.
-    m->fsm.cur_state = m->type->states[new_state];
+    cur_state = m->type->states[new_state];
     
     //Run the code to enter the new state.
-    m->fsm.run_event(MOB_EVENT_ON_ENTER, info1, info2);
+    run_event(MOB_EVENT_ON_ENTER, info1, info2);
     
 }
 

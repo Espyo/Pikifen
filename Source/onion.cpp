@@ -25,10 +25,13 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
     spew_queue(0),
     next_spew_angle(0) {
     
-    //Increase its Z by one so that mobs that walk at ground level next to it
-    //will appear under it.
+    //Increase its Z by one so that mobs that walk at
+    //ground level next to it will appear under it.
     affected_by_gravity = false;
     z++;
+    
+    full_spew_timer.on_end = [this] () { next_spew_timer.start(); };
+    next_spew_timer.on_end = [this] () { if(spew_queue == 0) return; next_spew_timer.start(); spew(); };
     
     set_animation(ANIM_IDLE);
 }
@@ -37,8 +40,11 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
  * Receive a mob, carried by a Pikmin.
  */
 void onion::receive_mob(size_t seeds) {
+    if(spew_queue == 0) {
+        full_spew_timer.start();
+        next_spew_timer.time_left = 0.0f;
+    }
     spew_queue += seeds;
-    if(full_spew_timer.is_over) full_spew_timer.start();
 }
 
 

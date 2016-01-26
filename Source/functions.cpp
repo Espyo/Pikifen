@@ -254,7 +254,10 @@ bool find_in_vector(const vector<string> &v, const string &s) {
 vector<string> folder_to_vector(string folder_name, const bool folders, bool* folder_found) {
     vector<string> v;
     
-    if(folder_name.empty()) return v;
+    if(folder_name.empty()) {
+        if(folder_found) *folder_found = false;
+        return v;
+    }
     
     //Normalize the folder's path.
     folder_name = replace_all(folder_name, "\\", "/");
@@ -262,45 +265,39 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
     
     ALLEGRO_FS_ENTRY* folder = NULL;
     folder = al_create_fs_entry(folder_name.c_str());
-    if(!folder){
+    if(!folder || !al_open_directory(folder)) {
         if(folder_found) *folder_found = false;
         return v;
     }
     
     
-    if(al_open_directory(folder)) {
-        ALLEGRO_FS_ENTRY* entry = NULL;
-        while((entry = al_read_directory(folder)) != NULL) {
-            if(
-                (folders && (al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR)) ||
-                (!folders && !(al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR))) {
-                
-                string entry_name = al_get_fs_entry_name(entry);
-                if(folders) {   //If we're using folders, remove the trailing slash, lest the string be fully deleted.
-                    if(entry_name[entry_name.size() - 1] == '/' || entry_name[entry_name.size() - 1] == '\\') {
-                        entry_name = entry_name.substr(0, entry_name.size() - 1);
-                    }
+    ALLEGRO_FS_ENTRY* entry = NULL;
+    while((entry = al_read_directory(folder)) != NULL) {
+        if(
+            (folders && (al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR)) ||
+            (!folders && !(al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR))) {
+            
+            string entry_name = al_get_fs_entry_name(entry);
+            if(folders) {   //If we're using folders, remove the trailing slash, lest the string be fully deleted.
+                if(entry_name[entry_name.size() - 1] == '/' || entry_name[entry_name.size() - 1] == '\\') {
+                    entry_name.erase(entry_name.size() - 1);
                 }
-                
-                //Only save what's after the final slash.
-                size_t pos_bs = entry_name.find_last_of("\\");
-                size_t pos_fs = entry_name.find_last_of("/");
-                size_t pos = pos_bs;
-                if(pos_fs != string::npos)
-                    if(pos_fs > pos_bs || pos_bs == string::npos) pos = pos_fs;
-                    
-                if(pos != string::npos) entry_name = entry_name.substr(pos + 1, entry_name.size() - pos - 1);
-                v.push_back(entry_name);
             }
-            al_destroy_fs_entry(entry);
+            
+            //Only save what's after the final slash.
+            entry_name = replace_all(entry_name, "\\", "/");
+            size_t pos = entry_name.find_last_of("/");
+            
+            if(pos != string::npos) entry_name = entry_name.substr(pos + 1, entry_name.size() - pos - 1);
+            v.push_back(entry_name);
         }
-        al_close_directory(folder);
-        al_destroy_fs_entry(folder);
-        
-    } else {
-        if(folder_found) *folder_found = false;
-        return v;
+        al_destroy_fs_entry(entry);
     }
+    al_close_directory(folder);
+    al_destroy_fs_entry(folder);
+    
+    
+    sort(v.begin(), v.end());
     
     if(folder_found) *folder_found = true;
     return v;
