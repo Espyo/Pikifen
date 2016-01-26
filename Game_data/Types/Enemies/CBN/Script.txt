@@ -1,0 +1,184 @@
+first_state = burrowed
+
+script{
+    burrowed{
+        on_enter{
+            animation = burrowed
+        }
+        on_near_opponent{
+            state = unburrowing
+        }
+    }
+    
+    unburrowing{
+        on_enter{
+            animation = unburrow
+        }
+        on_animation_end{
+            state = examining
+        }
+    }
+    
+    examining{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = returning
+        }
+    }
+    
+    examining_ignoring{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = returning_ignoring
+        }
+    }
+    
+    chasing{
+        on_enter{
+            animation = walk
+            move = focused_mob
+        }
+        on_face_opponent{
+            state = attacking
+        }
+        on_lose_focused_mob{
+            state = examining_ignoring
+        }
+        on_far_from_home{
+            state = examining_ignoring
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    attacking{
+        on_enter{
+            move = stop
+            animation = attack
+            chomp = 1 mouth
+        }
+        on_animation_end{
+            state = checking_mouth
+        }
+    }
+    
+    checking_mouth{
+        on_mouth_occupied{
+            state = eating
+        }
+        on_mouth_empty{
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    eating{
+        on_enter{
+            chomp =
+            animation = swallow
+        }
+        on_animation_end{
+            eat = all
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    shaking{
+        on_enter{
+            move = stop
+            animation = shake
+        }
+        on_animation_end{
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = burrowing
+        }
+        on_see_opponent{
+            state = chasing
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning_ignoring{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = burrowing
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    burrowing{
+        on_enter{
+            animation = burrow
+        }
+        on_animation_end{
+            state = burrowed
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = die
+            move = stop
+            eat = 
+        }
+        on_animation_end{
+            special_function = die_end
+            state = dead
+        }
+    }
+    
+    dead{
+        
+    }
+}

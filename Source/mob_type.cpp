@@ -143,9 +143,10 @@ void load_mob_type_from_file(
         mt->anims.fix_hitbox_pointers();
         
         if(mt->states.empty()) {
-            mt->states = load_script(mt, file.get_child_by_name("script"));
+            data_node script_file = data_node(folder + "/Script.txt");
+            mt->states = load_script(mt, script_file.get_child_by_name("script"));
             if(mt->states.size()) {
-                string first_state_name = file.get_child_by_name("first_state")->value;
+                string first_state_name = script_file.get_child_by_name("first_state")->value;
                 for(size_t s = 0; s < mt->states.size(); ++s) {
                     if(mt->states[s]->name == first_state_name) {
                         mt->first_state_nr = s;

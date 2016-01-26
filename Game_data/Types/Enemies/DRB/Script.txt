@@ -1,0 +1,235 @@
+first_state = examining
+
+script{
+    examining{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = grazing
+        }
+    }
+    
+    grazing{
+        on_enter{
+            animation = graze
+            move = stop
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = exploring
+        }
+    }
+    
+    exploring{
+        on_enter{
+            timer = 2
+            move = randomly
+            animation = walk
+        }
+        on_reach_destination{
+            state = examining
+        }
+        on_timer{
+            state = examining
+        }
+        on_far_from_home{
+            state = returning
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
+    }
+    
+    examining_returning{
+        on_enter{
+            animation = look
+            move = stop
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+        on_animation_end{
+            state = returning_ignoring
+        }
+    }
+    
+    chasing{
+        on_enter{
+            animation = walk
+            move = focused_mob
+        }
+        on_face_opponent{
+            state = attacking
+        }
+        on_lose_focused_mob{
+            state = examining
+        }
+        on_far_from_home{
+            state = examining_returning
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    attacking{
+        on_enter{
+            move = stop
+            animation = attack
+            chomp = 1 mouth
+        }
+        on_animation_end{
+            state = checking_mouth
+        }
+    }
+    
+    checking_mouth{
+        on_leave{
+            chomp =
+        }
+        on_mouth_occupied{
+            state = eating
+        }
+        on_mouth_empty{
+            state = examining
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    eating{
+        on_enter{
+            animation = eat
+        }
+        on_animation_end{
+            eat = all
+            state = examining
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    shaking{
+        on_enter{
+            move = stop
+            animation = shake
+        }
+        on_animation_end{
+            state = examining
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = examining
+        }
+        on_see_opponent{
+            state = chasing
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning_ignoring{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = examining
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    crushed{
+        on_enter{
+            animation = crushed
+            health = 0
+            move = stop
+        }
+        on_animation_end{
+            state = dying
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = die
+            move = stop
+            eat = 
+        }
+        on_animation_end{
+            special_function = die_end
+            state = dead
+        }
+    }
+    
+    dead{
+        
+    }
+    
+}

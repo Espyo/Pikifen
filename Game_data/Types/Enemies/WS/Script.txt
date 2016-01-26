@@ -1,0 +1,100 @@
+first_state = resting
+
+script{
+    resting_start{
+        on_enter{
+            animation = resting
+            move = stop
+            timer = 1
+            gravity = true
+        }
+        on_timer{
+            state = resting
+        }
+        on_pikmin_land{
+            state = dying
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    going_home{
+        on_enter{
+            move = home
+            timer = 5
+        }
+        on_reach_destination{
+            state = resting_start
+        }
+        on_pikmin_land{
+            state = dying
+        }
+        on_death{
+            state = dying
+        }
+        on_timer{
+            state = flying
+        }
+    }
+    
+    resting{
+        on_enter{
+            animation = resting
+            timer = 5
+        }
+        on_timer{
+            state = flying
+        }
+        on_near_opponent{
+            state = flying
+        }
+        on_pikmin_land{
+            state = dying
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    flying{
+        on_enter{
+            animation = flapping
+            gravity = false
+            move = vertically 128
+            timer = 0.3
+            move = randomly
+            var = flutters 0
+        }
+        on_pikmin_land{
+            state = dying
+        }
+        on_death{
+            state = dying
+        }
+        on_timer{
+            timer = 0.3
+            move = randomly
+            inc_var = flutters
+            if = flutters 10
+            state = going_home
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = dying
+            move = stop
+            gravity = true
+        }
+        on_animation_end{
+            special_function = die_end
+            state = dead
+        }
+    }
+    
+    dead{
+        
+    }
+}
