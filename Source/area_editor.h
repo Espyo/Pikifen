@@ -51,11 +51,14 @@ private:
     };
     
     static const float GRID_INTERVAL;
+    static const float STOP_RADIUS;
+    static const float PATH_THICKNESS;
     
     string                       area_name;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
     tree_shadow*                 cur_shadow;
+    path_stop*                   cur_stop;
     float                        double_click_time;
     mob_gen*                     error_mob_ptr;
     sector*                      error_sector_ptr;
@@ -78,6 +81,7 @@ private:
     size_t                       moving_thing; //Current vertex, object or shadow being moved.
     float                        moving_thing_x; //Relative X coordinate of the point where the vertex, object or shadow was grabbed.
     float                        moving_thing_y;
+    path_stop*                   new_path_first_stop;
     sector*                      on_sector;
     unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;

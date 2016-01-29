@@ -167,6 +167,9 @@ void area_data::clear() {
     for(size_t m = 0; m < mob_generators.size(); ++m) {
         delete mob_generators[m];
     }
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        delete path_stops[s];
+    }
     for(size_t s = 0; s < tree_shadows.size(); ++s) {
         delete tree_shadows[s];
     }
@@ -175,6 +178,7 @@ void area_data::clear() {
     edges.clear();
     sectors.clear();
     mob_generators.clear();
+    path_stops.clear();
     tree_shadows.clear();
     
     if(!bg_bmp_file_name.empty()) {
@@ -413,6 +417,81 @@ edge_intersection::edge_intersection(edge* e1, edge* e2) :
 bool edge_intersection::contains(edge* e) {
     return e1 == e || e2 == e;
 }
+
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new path stop.
+ */
+path_stop::path_stop(float x, float y, vector<path_stop_link> links) :
+    x(x),
+    y(y),
+    links(links) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new stop link.
+ */
+path_stop_link::path_stop_link(path_stop* end_ptr, size_t end_nr, bool one_way) :
+    end_ptr(end_ptr),
+    end_nr(end_nr),
+    one_way(one_way),
+    distance(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates and stores the distance between the two stops.
+ * Because the link doesn't know about the starting stop,
+ * you need to provide it as a parameter when calling the function.
+ */
+void path_stop_link::calculate_dist(path_stop* start_ptr) {
+    distance =
+        dist(
+            start_ptr->x, start_ptr->y,
+            end_ptr->x, end_ptr->y
+        ).to_float();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the link pointers to point them to the correct stops.
+ */
+void path_stop::fix_pointers(area_data &a) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        path_stop_link* l_ptr = &links[l];
+        l_ptr->end_ptr = NULL;
+        
+        if(l_ptr->end_nr == string::npos) continue;
+        if(l_ptr->end_nr >= a.path_stops.size()) continue;
+        
+        l_ptr->end_ptr = a.path_stops[l_ptr->end_nr];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the link numbers to match them to the correct stop pointer.
+ */
+void path_stop::fix_nrs(area_data &a) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        path_stop_link* l_ptr = &links[l];
+        l_ptr->end_nr = string::npos;
+        
+        if(!l_ptr->end_ptr == string::npos) continue;
+        
+        for(size_t s = 0; s < a.path_stops.size(); ++s) {
+            if(a.path_stops[s] == l_ptr->end_ptr) {
+                l_ptr->end_nr = s;
+                break;
+            }
+        }
+    }
+}
+
 
 
 /* ----------------------------------------------------------------------------

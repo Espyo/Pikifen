@@ -129,6 +129,7 @@ enum EDITOR_MODES {
     EDITOR_MODE_SECTORS,
     EDITOR_MODE_ADV_TEXTURE_SETTINGS,
     EDITOR_MODE_OBJECTS,
+    EDITOR_MODE_PATHS,
     EDITOR_MODE_SHADOWS,
     EDITOR_MODE_GUIDE,
     EDITOR_MODE_REVIEW,
@@ -138,6 +139,13 @@ enum EDITOR_SEC_MODES {
     ESM_NONE,
     ESM_NEW_SECTOR,
     ESM_NEW_OBJECT,
+    ESM_NEW_STOP,
+    ESM_NEW_PATH1,  //Click #1.
+    ESM_NEW_PATH2,  //Click #2.
+    ESM_NEW_1WPATH1, //One-way path, click #1.
+    ESM_NEW_1WPATH2, //One-way path, click #2.
+    ESM_DEL_STOP,
+    ESM_DEL_PATH,
     ESM_NEW_SHADOW,
     ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,
