@@ -26,6 +26,7 @@
 class onion : public mob {
 public:
     onion_type* oni_type;
+    bool activated;
     size_t spew_queue;
     timer full_spew_timer; //Time left until it starts spewing queued seeds.
     timer next_spew_timer; //Time left until it spews the next seed in the queue.

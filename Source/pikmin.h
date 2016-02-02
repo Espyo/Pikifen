@@ -37,7 +37,6 @@ public:
     float connected_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
     float attack_time;            //Time left until the strike.
     
-    bool grabbing_carriable_mob; //Is it actually grasping the carriable mob, or just trying to reach it?
     size_t carrying_spot;        //Carrying spot reserved for it.
     
     unsigned char maturity;  //0: leaf. 1: bud. 2: flower.
@@ -67,12 +66,11 @@ public:
     static void stop_being_idle(        mob* m, void* info1, void* info2);
     static void stop_in_group(          mob* m, void* info1, void* info2);
     static void reach_dismiss_spot(     mob* m, void* info1, void* info2);
-    static void go_to_carriable_object( mob* m, void* info1, void* info2);
-    static void grab_carriable_object(  mob* m, void* info1, void* info2);
-    static void finish_carrying(        mob* m, void* info1, void* info2);
-    static void forget_about_carrying(  mob* m, void* info1, void* info2);
     static void go_to_opponent(         mob* m, void* info1, void* info2);
     static void rechase_opponent(       mob* m, void* info1, void* info2);
+    static void go_to_carriable_object( mob* m, void* info1, void* info2);
+    static void reach_carriable_object( mob* m, void* info1, void* info2);
+    static void forget_about_carrying(mob* m, void* info1, void* info2);
     static void attack(                 mob* m, void* info1, void* info2);
     static void land_on_mob(            mob* m, void* info1, void* info2);
     static void tick_latched(           mob* m, void* info1, void* info2);
@@ -81,15 +79,12 @@ public:
     static void prepare_to_attack(      mob* m, void* info1, void* info2);
     static void get_knocked_down(       mob* m, void* info1, void* info2);
     static void lose_latched_mob(       mob* m, void* info1, void* info2);
-    static void start_carrying(         mob* m, void* info1, void* info2);
     
 };
 
 
 
 pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const bool ignore_reserved);
-void give_pikmin_to_onion(onion* o, const unsigned amount);
-void start_moving_carried_object(mob* m, pikmin* np, pikmin* lp);
 
 
 

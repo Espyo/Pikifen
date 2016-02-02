@@ -20,7 +20,7 @@ pellet::pellet(float x, float y, pellet_type* type, const float angle, const str
     mob(x, y, type, angle, vars),
     pel_type(type) {
     
-    carrier_info = new carrier_info_struct(this, type->max_carriers, false);
+    become_carriable();
     
     set_animation(ANIM_IDLE);
 }

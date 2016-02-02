@@ -30,6 +30,12 @@ struct party_spot_info;
 class mob_type;
 class mob;
 
+enum carry_spot_state {
+    CARRY_SPOT_FREE,
+    CARRY_SPOT_RESERVED,
+    CARRY_SPOT_USED,
+};
+
 /* ----------------------------------------------------------------------------
  * Information on a mob's party.
  * This includes a list of its members,
@@ -51,22 +57,36 @@ struct party_info {
 
 
 /* ----------------------------------------------------------------------------
+ * Information on a carrying spot around a mob's perimeter.
+ */
+struct carrier_spot_struct {
+    carry_spot_state state;
+    float x; //relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
+    float y;
+    mob* pik_ptr;
+    carrier_spot_struct(const float x = 0, const float y = 0);
+};
+
+
+/* ----------------------------------------------------------------------------
  * Structure with information on how
  * the mob should be carried.
  */
-struct carrier_info_struct {
-    unsigned int max_carriers;
-    bool carry_to_ship;            //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
-    vector<float> carrier_spots_x; //These are the relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
-    vector<float> carrier_spots_y;
+struct carry_info_struct {
+    mob* m;
+    bool carry_to_ship; //If true, this is carried to the ship. Otherwise, it's carried to an Onion.
     
-    float current_carrying_strength; //This is to avoid going through the vector only to find out the total strength.
-    size_t current_n_carriers;       //Likewise, this is to avoid going through the vector only to find out the number. Note that this is the number of spaces reserved. A Pikmin could be on its way to its spot, not necessarily there already.
-    vector<mob*> carrier_spots;      //Pikmin carrying, and their spots.
-    pikmin_type* decided_type;       //Current Onion type it's being taken to.
+    vector<carrier_spot_struct> spot_info;
     
-    carrier_info_struct(mob* m, const unsigned int max_carriers, const bool carry_to_ship);
-    ~carrier_info_struct();
+    float cur_carrying_strength; //This is to avoid going through the vector only to find out the total strength.
+    size_t cur_n_carriers;       //Likewise, this is to avoid going through the vector only to find out the number. Note that this is the number of spaces reserved. A Pikmin could be on its way to its spot, not necessarily there already.
+    pikmin_type* decided_type;   //Current Onion type it's being taken to.
+    float final_destination_x;
+    float final_destination_y;
+    
+    carry_info_struct(mob* m, const bool carry_to_ship);
+    bool is_full();
+    ~carry_info_struct();
 };
 
 
@@ -163,13 +183,13 @@ public:
     void finish_dying();
     
     bool dead;                     //Is the mob dead?
-    float delivery_time;           //Time left until the mob is fully delivered onto an Onion.
     vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  //Mobs it is chomping.
     size_t chomp_max;              //Max mobs it can chomp in the current attack.
     
-    //Carrying.
-    carrier_info_struct* carrier_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
+    carry_info_struct* carry_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
+    void become_carriable();
+    void become_uncarriable();
     
     void tick();
     virtual void draw();
@@ -177,6 +197,10 @@ public:
     static void attack(mob* m1, mob* m2, const bool m1_is_pikmin, const float damage, const float angle, const float knockback, const float new_invuln_period, const float new_knockdown_period);
     
     static void lose_health(mob* m, void* info1, void* info2);
+    static void handle_carrier_added(mob* m, void* info1, void* info2);
+    static void handle_carrier_removed(mob* m, void* info1, void* info2);
+    static void carry_begin_move(mob* m, void* info1, void* info2);
+    void check_carrying(mob* added, mob* removed);
     
     //Drawing tools.
     void get_sprite_center(mob* m, frame* f, float* x, float* y);
@@ -197,7 +221,6 @@ void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m);
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
-void make_uncarriable(mob* m);
 void remove_from_party(mob* member);
 bool should_attack(mob* m1, mob* m2);
 void unfocus_mob(mob* m1);

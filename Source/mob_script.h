@@ -106,14 +106,18 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_SPOT_IS_FAR,              //When its spot on the group is now far, and the mob is in the group.
     MOB_EVENT_GROUP_MOVE_STARTED,       //When the group the mob is on started to move (C stick).
     MOB_EVENT_GROUP_MOVE_ENDED,         //When the group the mob is on stopped moving (C stick).
-    MOB_EVENT_FINISHED_CARRYING,        //When the object it was carrying gets delivered.
-    MOB_EVENT_NEAR_CARRIABLE_OBJECT,    //When it is near an object that can be carried.
+    MOB_EVENT_FINISHED_CARRYING,        //When the object the Pikmin was carrying gets delivered.
+    MOB_EVENT_NEAR_CARRIABLE_OBJECT,    //When the Pikmin is near an object that can be carried.
+    MOB_EVENT_REACHED_CARRIABLE_OBJECT, //When it has reached its carrying spot on the carriable object.
     MOB_EVENT_HITBOX_TOUCH_A_N,         //When one of its attack hitboxes touches another mob's normal hitbox.
     MOB_EVENT_HITBOX_TOUCH_N_A,         //When one of its normal hitboxes touches another mob's attack hitbox.
     MOB_EVENT_HITBOX_TOUCH_EAT,         //When one of its normal hitboxes touches another mob's eating hitbox.
-    MOB_EVENT_REACHED_CARRIABLE_OBJECT, //When it has reached its carrying spot on the carriable object.
-    MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob became uncarriable.
     MOB_EVENT_EATEN,                    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
+    MOB_EVENT_CARRIER_ADDED,            //When a Pikmin was added to the list of Pikmin carrying this mob.
+    MOB_EVENT_CARRIER_REMOVED,          //When a Pikmin was removed from the list of Pikmin carrying this mob.
+    MOB_EVENT_CARRY_BEGIN_MOVE,         //When the mob needs to begin moving, as it's being carried.
+    MOB_EVENT_CARRY_STOP_MOVE,          //When the mob needs to stop moving, as it's no longer being carried.
+    MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob stops being carriable.
     
     //Events that only leaders can really handle.
     LEADER_EVENT_FOCUSED,        //When the leader becomes the one controlled by the player.

@@ -23,7 +23,8 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
     full_spew_timer(ONION_FULL_SPEW_DELAY),
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
     spew_queue(0),
-    next_spew_angle(0) {
+    next_spew_angle(0),
+    activated(true) {
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.

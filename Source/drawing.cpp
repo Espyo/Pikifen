@@ -256,19 +256,25 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         for(size_t m = 0; m < n_mobs; ++m) {
             mob* mob_ptr = mobs[m];
             
-            if(mob_ptr->carrier_info) {
-                if(mob_ptr->carrier_info->current_carrying_strength > 0) {
+            if(mob_ptr->carry_info) {
+                if(mob_ptr->carry_info->cur_carrying_strength > 0) {
                     ALLEGRO_COLOR color;
-                    if(mob_ptr->carrier_info->current_carrying_strength >= mob_ptr->type->weight && (mob_ptr->carrier_info->decided_type || mob_ptr->carrier_info->carry_to_ship)) { //Being carried.
-                        if(mob_ptr->carrier_info->carry_to_ship) {
+                    if(mob_ptr->carry_info->cur_carrying_strength >= mob_ptr->type->weight) {
+                        if(mob_ptr->carry_info->carry_to_ship) {
                             color = al_map_rgb(255, 255, 255); //TODO what if Whites have an Onion on this game? Make it changeable per game.
                         } else {
-                            color = mob_ptr->carrier_info->decided_type->main_color;
+                            color = mob_ptr->carry_info->decided_type->main_color;
                         }
                     } else {
                         color = al_map_rgb(96, 192, 192);
                     }
-                    draw_fraction(mob_ptr->x, mob_ptr->y - mob_ptr->type->radius - font_h * 1.25, mob_ptr->carrier_info->current_carrying_strength, mob_ptr->type->weight, color);
+                    draw_fraction(
+                        mob_ptr->x,
+                        mob_ptr->y - mob_ptr->type->radius - font_h * 1.25,
+                        mob_ptr->carry_info->cur_carrying_strength,
+                        mob_ptr->type->weight,
+                        color
+                    );
                 }
             }
             

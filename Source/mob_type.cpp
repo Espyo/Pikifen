@@ -43,7 +43,8 @@ mob_type::mob_type() :
     near_angle(0),
     first_state_nr(0),
     show_health(true),
-    casts_shadow(true) {
+    casts_shadow(true),
+    carriable_state_id(0) {
     
 }
 
@@ -164,4 +165,29 @@ void load_mob_type_from_file(
     if(load_resources) {
         mt->anims.create_conversions(anim_conversions);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds carrying-related states to the FSM.
+ * state_id: ID of the "carriable" state. The other states are based on this.
+ */
+void mob_type::add_carrying_states(const size_t state_id) {
+    carriable_state_id = state_id;
+    
+    easy_fsm_creator efc;
+    
+    efc.new_state("carriable", carriable_state_id); {
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(mob::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+        }
+    }
+    
+    vector<mob_state*> new_states = efc.finish();
+    
+    states.insert(states.end(), new_states.begin(), new_states.end());
+    
 }

@@ -57,7 +57,6 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     fsm(this),
     first_state_set(false),
     dead(false),
-    delivery_time(DELIVERY_SUCK_TIME + 1.0f),
     big_damage_ev_queued(false),
     following_party(nullptr),
     was_thrown(false),
@@ -66,7 +65,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     party(nullptr),
     party_spot_x(0),
     party_spot_y(0),
-    carrier_info(nullptr),
+    carry_info(nullptr),
     move_speed_mult(0),
     acceleration(0),
     speed(0),
@@ -172,11 +171,6 @@ void mob::tick_misc_logic() {
     if(untouchable_period > 0) {
         untouchable_period -= delta_t;
         untouchable_period = max(untouchable_period, 0.0f);
-    }
-    
-    if(delivery_time <= DELIVERY_SUCK_TIME) {
-        delivery_time -= delta_t;
-        delivery_time = max(delivery_time, 0.0f);
     }
     
     if(party) {
@@ -711,7 +705,7 @@ void mob::eat(const size_t nr) {
  * Makes a mob gradually face a new angle.
  */
 void mob::face(float new_angle) {
-    if(carrier_info) return; //If it's being carried, it shouldn't rotate.
+    if(carry_info) return; //If it's being carried, it shouldn't rotate.
     intended_angle = new_angle;
 }
 
@@ -791,7 +785,7 @@ void mob::finish_dying() {
     if(typeid(*this) == typeid(enemy)) {
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
-            carrier_info = new carrier_info_struct(this, e_ptr->ene_type->max_carriers, false);
+            become_carriable();
         }
         particles.push_back(
             particle(
@@ -816,32 +810,56 @@ mob::~mob() {}
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a structure with info about a carrying spot.
+ */
+carrier_spot_struct::carrier_spot_struct(const float x, const float y) :
+    state(CARRY_SPOT_FREE),
+    x(x),
+    y(y),
+    pik_ptr(NULL) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a structure with info about carrying.
  * m:             The mob this info belongs to.
  * max_carriers:  The maximum number of carrier Pikmin.
  * carry_to_ship: If true, this mob is delivered to a ship. Otherwise, an Onion.
  */
-carrier_info_struct::carrier_info_struct(mob* m, unsigned int max_carriers, bool carry_to_ship) :
-    max_carriers(max_carriers),
+carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
+    m(m),
     carry_to_ship(carry_to_ship),
-    current_carrying_strength(0),
-    current_n_carriers(0),
+    cur_carrying_strength(0),
+    cur_n_carriers(0),
     decided_type(nullptr) {
     
-    for(size_t c = 0; c < max_carriers; ++c) {
-        carrier_spots.push_back(NULL);
-        float angle = (M_PI * 2) / max_carriers * c;
-        carrier_spots_x.push_back(cos(angle) * m->type->radius);
-        carrier_spots_y.push_back(sin(angle) * m->type->radius);
+    float pikmin_radius = 16;
+    //Let's assume all Pikmin are the same radius. Or at least very close.
+    if(!pikmin_types.empty()) pikmin_radius = pikmin_types.begin()->second->radius;
+    
+    for(size_t c = 0; c < m->type->max_carriers; ++c) {
+        float angle = (M_PI * 2) / m->type->max_carriers * c;
+        float x = cos(angle) * (m->type->radius + pikmin_radius);
+        float y = sin(angle) * (m->type->radius + pikmin_radius);
+        spot_info.push_back(carrier_spot_struct(x, y));
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Deletes a carrier info structure.
- * Makes all carrying Pikmin drop it in the process.
+ * Returns true if all spots are reserved. False otherwise.
  */
-carrier_info_struct::~carrier_info_struct() {
+bool carry_info_struct::is_full() {
+    return cur_n_carriers == m->type->max_carriers;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes a carrier info structure.
+ */
+carry_info_struct::~carry_info_struct() {
+    //TODO
 }
 
 
@@ -858,18 +876,8 @@ void add_to_party(mob* party_leader, mob* new_member) {
     if(party_leader->party) {
         if(party_leader->party->party_spots) {
             party_leader->party->party_spots->add(new_member);
-            
-            //TODO remove.
-            /*
-            new_member->set_target(
-                spot_x, spot_y,
-                &party_leader->party->party_center_x, &party_leader->party->party_center_y,
-                false
-            );*/
         }
     }
-    
-    make_uncarriable(new_member);
 }
 
 
@@ -1060,7 +1068,6 @@ void delete_mob(mob* m) {
     
     if(typeid(*m) == typeid(pikmin)) {
         pikmin* p_ptr = (pikmin*) m;
-        pikmin::forget_about_carrying(m, NULL, NULL);
         pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
         
     } else if(typeid(*m) == typeid(leader)) {
@@ -1151,23 +1158,6 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
 
 
 /* ----------------------------------------------------------------------------
- * Makes a mob impossible to be carried, and makes the Pikmin carrying it drop it.
- */
-void make_uncarriable(mob* m) {
-    if(!m->carrier_info) return;
-    
-    for(size_t p = 0; p < m->carrier_info->carrier_spots.size(); ++p) {
-        mob* p_ptr = m->carrier_info->carrier_spots[p];
-        if(!p_ptr) continue;
-        p_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
-    }
-    
-    delete m->carrier_info;
-    m->carrier_info = NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Removes a mob from its leader's party.
  */
 void remove_from_party(mob* member) {
@@ -1238,6 +1228,228 @@ void mob::lose_health(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets up data for a mob to become carriable.
+ */
+void mob::become_carriable() {
+    carry_info = new carry_info_struct(
+        this,
+        false //TODO
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets up data for a mob to stop being carriable.
+ */
+void mob::become_uncarriable() {
+    if(!carry_info) return;
+    
+    for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
+        if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
+            carry_info->spot_info[p].pik_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+        }
+    }
+    
+    remove_target();
+    
+    delete carry_info;
+    carry_info = NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler for a Pikmin being added as a carrier.
+ */
+void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
+    pikmin* pik_ptr = (pikmin*) info1;
+    
+    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
+    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_USED;
+    m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
+    m->carry_info->cur_n_carriers++;
+    
+    m->check_carrying((mob*) info1, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Event handler for a carrier Pikmin being removed.
+ */
+void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
+    m->check_carrying(NULL, (mob*) info1);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates carrying data, begins moving if needed, etc.
+ * added:   The Pikmin that got added, if any.
+ * removed: The Pikmin that got removed, if any.
+ */
+void mob::check_carrying(mob* added, mob* removed) {
+    if(!carry_info) return;
+    
+    if(carry_info->cur_carrying_strength < type->weight) return;
+    
+    //For starters, check if this is to be carried to the ship.
+    //Get that out of the way if so.
+    
+    if(carry_info->carry_to_ship) {
+    
+        //TODO make it better. Handle multiple ships, for one thing.
+        carry_info->final_destination_x = ships[0]->x + ships[0]->type->radius + type->radius + 8;
+        carry_info->final_destination_y = ships[0]->y;
+        
+        carry_info->decided_type = NULL;
+        
+        fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+        
+        return;
+    }
+    
+    //If it's meant for an Onion, we need to decide which Onion, based on
+    //the Pikmin. Buckle up, because it's not as easy as it might seem.
+    
+    map<pikmin_type*, unsigned> type_quantity;    //How many of each Pikmin type are carrying.
+    vector<pikmin_type*> majority_types;          //The Pikmin type with the most carriers.
+    unordered_set<pikmin_type*> available_onions;
+    
+    //First, check what Onions even are available.
+    for(size_t o = 0; o < onions.size(); o++) {
+        onion* o_ptr = onions[o];
+        if(o_ptr->activated) {
+            available_onions.insert(o_ptr->oni_type->pik_type);
+        }
+    }
+    
+    if(available_onions.empty()) {
+        //No Onions?! Well...make the Pikmin stuck.
+        //TODO make them carry in place.
+        carry_info->decided_type = NULL;
+        carry_info->final_destination_x = x;
+        carry_info->final_destination_x = y;
+        
+        fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+        
+        return;
+    }
+    
+    //Count how many of each type there are carrying.
+    for(size_t p = 0; p < type->max_carriers; ++p) {
+        pikmin* pik_ptr = NULL;
+        
+        if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
+        
+        pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
+        
+        //If it doesn't have an Onion, it won't even count.
+        if(available_onions.find(pik_ptr->pik_type) == available_onions.end()) continue;
+        
+        type_quantity[pik_ptr->pik_type]++;
+    }
+    
+    //Then figure out what are the majority types.
+    unsigned most = 0;
+    for(auto t = type_quantity.begin(); t != type_quantity.end(); ++t) {
+        if(t->second > most) {
+            most = t->second;
+            majority_types.clear();
+        }
+        if(t->second == most) majority_types.push_back(t->first);
+    }
+    
+    //If we ended up with no candidates, pick a type at random, out of all possible types.
+    if(majority_types.empty()) {
+        for(auto t = available_onions.begin(); t != available_onions.end(); ++t) {
+            majority_types.push_back(*t);
+        }
+    }
+    
+    //Now let's pick an Onion from the candidates.
+    if(majority_types.size() == 1) {
+        //If there's only one possible type to pick, pick it.
+        carry_info->decided_type = *majority_types.begin();
+        
+    } else {
+        //If there's a tie, let's take a careful look.
+        bool new_tie = false;
+        
+        //Is the Pikmin that just joined part of the majority types?
+        //If so, that means this Pikmin just created a NEW tie!
+        //So let's pick a random Onion again.
+        if(added) {
+            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+                if(added->type == majority_types[mt]) {
+                    new_tie = true;
+                    break;
+                }
+            }
+        }
+        
+        //If a Pikmin left, check if it is related to the majority types.
+        //If not, then a new tie wasn't made, no worries.
+        //If it was related, a new tie was created.
+        if(removed) {
+            new_tie = false;
+            for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+                if(removed->type == majority_types[mt]) {
+                    new_tie = true;
+                    break;
+                }
+            }
+        }
+        
+        //Check if the previously decided type belongs to one of the majorities.
+        //If so, it can be chosen again, but if not, it cannot.
+        bool can_continue = false;
+        for(size_t mt = 0; mt < majority_types.size(); ++mt) {
+            if(majority_types[mt] == carry_info->decided_type) {
+                can_continue = true;
+                break;
+            }
+        }
+        if(!can_continue) carry_info->decided_type = NULL;
+        
+        //If the Pikmin that just joined is not a part of the majorities,
+        //then it had no impact on the existing ties.
+        //Go with the Onion that had been decided before.
+        if(new_tie || !carry_info->decided_type) {
+            //TODO make this cycle instead of being picked randomly.
+            carry_info->decided_type = majority_types[randomi(0, majority_types.size() - 1)];
+        }
+    }
+    
+    
+    //Figure out where that type's Onion is.
+    size_t onion_nr = 0;
+    for(; onion_nr < onions.size(); ++onion_nr) {
+        if(onions[onion_nr]->oni_type->pik_type == carry_info->decided_type) {
+            break;
+        }
+    }
+    
+    //Finally, set the destination data.
+    carry_info->final_destination_x = onions[onion_nr]->x;
+    carry_info->final_destination_y = onions[onion_nr]->y;
+    
+    //Get going!
+    fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Begin moving a carried object.
+ */
+void mob::carry_begin_move(mob* m, void* info1, void* info2) {
+    m->set_target(
+        m->carry_info->final_destination_x,
+        m->carry_info->final_destination_y,
+        NULL, NULL,
+        false, NULL, true
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the mob. This should be overwritten by child classes.
  */
 void mob::draw() {
@@ -1284,10 +1496,6 @@ void mob::get_sprite_dimensions(mob* m, frame* f, float* w, float* h, float* sca
     *h = f->game_h;
     float sucking_mult = 1.0;
     float height_mult = 1 + m->z * 0.0001;
-    if(m->delivery_time < DELIVERY_SUCK_TIME) {
-        sucking_mult = (m->delivery_time / DELIVERY_SUCK_TIME);
-        sucking_mult = max(sucking_mult, 0.0f);
-    }
     
     float final_scale = sucking_mult * height_mult;
     if(scale) *scale = final_scale;

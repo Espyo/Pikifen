@@ -190,13 +190,13 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
-        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
-            efc.run_function(pikmin::go_to_carriable_object);
-            efc.change_state("going_to_carriable_object");
-        }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin::go_to_opponent);
             efc.change_state("going_to_opponent");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin::fall_down_pit);
@@ -228,13 +228,13 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
-        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
-            efc.run_function(pikmin::go_to_carriable_object);
-            efc.change_state("going_to_carriable_object");
-        }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin::go_to_opponent);
             efc.change_state("going_to_opponent");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin::fall_down_pit);
@@ -311,13 +311,13 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(pikmin::stop_being_idle);
         }
-        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
-            efc.run_function(pikmin::go_to_carriable_object);
-            efc.change_state("going_to_carriable_object");
-        }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin::go_to_opponent);
             efc.change_state("going_to_opponent");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(pikmin::called);
@@ -326,37 +326,6 @@ void pikmin_type::init_script() {
         efc.new_event(MOB_EVENT_TOUCHED_LEADER); {
             efc.run_function(pikmin::called);
             efc.change_state("in_group_chasing");
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(pikmin::get_knocked_down);
-            efc.change_state("knocked_back");
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run_function(pikmin::be_grabbed_by_enemy);
-            efc.change_state("grabbed_by_enemy");
-        }
-        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run_function(pikmin::fall_down_pit);
-        }
-    }
-    
-    efc.new_state("going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT); {
-        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run_function(pikmin::grab_carriable_object);
-            efc.change_state("carrying");
-        }
-        efc.new_event(MOB_EVENT_WHISTLED); {
-            efc.run_function(pikmin::forget_about_carrying);
-            efc.run_function(pikmin::called);
-            efc.change_state("in_group_chasing");
-        }
-        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
-            efc.run_function(pikmin::forget_about_carrying);
-            efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
-            efc.run_function(pikmin::forget_about_carrying);
-            efc.change_state("idle");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(pikmin::get_knocked_down);
@@ -383,6 +352,64 @@ void pikmin_type::init_script() {
             efc.change_state("idle");
         }
         efc.new_event(MOB_EVENT_FOCUSED_MOB_DIED); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin::get_knocked_down);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin::be_grabbed_by_enemy);
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("going_to_carriable_object", PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(pikmin::reach_carriable_object);
+            efc.change_state("carrying");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_DIED); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin::get_knocked_down);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin::be_grabbed_by_enemy);
+            efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("carrying", PIKMIN_STATE_CARRYING); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(pikmin::forget_about_carrying);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
             efc.change_state("idle");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -462,40 +489,6 @@ void pikmin_type::init_script() {
     efc.new_state("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
-            efc.run_function(pikmin::be_grabbed_by_enemy);
-            efc.change_state("grabbed_by_enemy");
-        }
-        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run_function(pikmin::fall_down_pit);
-        }
-    }
-    
-    efc.new_state("carrying", PIKMIN_STATE_CARRYING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(pikmin::start_carrying);
-        }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(pikmin::forget_about_carrying);
-        }
-        efc.new_event(MOB_EVENT_WHISTLED); {
-            efc.run_function(pikmin::called);
-            efc.change_state("in_group_chasing");
-        }
-        efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
-            efc.run_function(pikmin::finish_carrying);
-            efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
-            efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
-            efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(pikmin::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);

@@ -70,6 +70,8 @@ public:
     
     mob_type();
     virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void add_carrying_states(const size_t state_id); //TODO so is this gonna be used or not?
+    size_t carriable_state_id; //ID for the "carriable" state.
 };
 
 

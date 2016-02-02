@@ -225,58 +225,6 @@ void do_gameplay_logic() {
                 m_ptr->big_damage_ev_queued = false;
             }
             
-            //Carried to an Onion or ship.
-            if(m_ptr->carrier_info) {
-                if(m_ptr->reached_destination && m_ptr->carrier_info->decided_type && m_ptr->delivery_time > DELIVERY_SUCK_TIME) {
-                    m_ptr->delivery_time = DELIVERY_SUCK_TIME;
-                    sfx_pikmin_carrying.stop();
-                    for(size_t p = 0; p < m_ptr->carrier_info->carrier_spots.size(); ++p) {
-                        if(!m_ptr->carrier_info->carrier_spots[p]) continue;
-                        m_ptr->carrier_info->carrier_spots[p]->fsm.run_event(MOB_EVENT_FINISHED_CARRYING);
-                    }
-                }
-                
-                if(m_ptr->delivery_time == 0.0f) {
-                    if(m_ptr->carrier_info->carry_to_ship) {
-                        //Find ship.
-                        //TODO.
-                        
-                    } else {
-                        //TODO make the pellet, enemy, etc. class react to this via script (i.e. was_delivered event).
-                        //Find Onion.
-                        size_t n_onions = onions.size();
-                        size_t o = 0;
-                        for(; o < n_onions; ++o) {
-                            if(onions[o]->oni_type->pik_type == m_ptr->carrier_info->decided_type) break;
-                        }
-                        
-                        if(typeid(*m_ptr) == typeid(pellet)) {
-                            pellet* p_ptr = (pellet*) m_ptr;
-                            if(p_ptr->pel_type->pik_type == p_ptr->carrier_info->decided_type) {
-                                onions[o]->receive_mob(p_ptr->pel_type->match_seeds);
-                            } else {
-                                onions[o]->receive_mob(p_ptr->pel_type->non_match_seeds);
-                            }
-                            
-                        } else if(typeid(*m_ptr) == typeid(enemy)) {
-                            enemy* e_ptr = (enemy*) m_ptr;
-                            onions[o]->receive_mob(e_ptr->ene_type->pikmin_seeds);
-                            
-                        }
-                    }
-                    
-                    random_particle_explosion(
-                        PARTICLE_TYPE_BITMAP, bmp_smoke,
-                        m_ptr->x, m_ptr->y,
-                        60, 80, 10, 20,
-                        1, 2, 24, 24, al_map_rgb(255, 255, 255)
-                    );
-                    
-                    make_uncarriable(m_ptr);
-                    if(typeid(*m_ptr) != typeid(leader)) m_ptr->to_delete = true;
-                }
-            }
-            
             
             /********************************
              *                              *
@@ -550,9 +498,8 @@ void do_gameplay_logic() {
                 if(near_carriable_object_ev) {
                 
                     if(
-                        m2_ptr->carrier_info &&
-                        m2_ptr->carrier_info->current_n_carriers != m2_ptr->carrier_info->max_carriers &&
-                        m2_ptr->delivery_time > DELIVERY_SUCK_TIME &&
+                        m2_ptr->carry_info &&
+                        !m2_ptr->carry_info->is_full() &&
                         d <= m_ptr->type->radius + m2_ptr->type->radius + PIKMIN_MIN_TASK_RANGE
                     ) {
                     
@@ -605,7 +552,7 @@ void do_gameplay_logic() {
                 }
                 
                 if(m_ptr->focused_mob) {
-                    if(!m_ptr->focused_mob->carrier_info) {
+                    if(!m_ptr->focused_mob->carry_info) {
                         m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
                     }
                 }

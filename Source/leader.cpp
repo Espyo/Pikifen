@@ -431,17 +431,14 @@ void leader::fall_asleep(mob* m, void* info1, void* info2) {
     leader::dismiss(m, info1, info2);
     m->remove_target();
     
-    m->carrier_info = new carrier_info_struct(
-        m,
-        m->type->max_carriers,
-        false);
-        
+    m->become_carriable();
+    
     m->set_animation(LEADER_ANIM_LIE);
 }
 
 void leader::start_waking_up(mob* m, void* info1, void* info2) {
-    make_uncarriable(m);
-    cur_leader_ptr->set_animation(LEADER_ANIM_GET_UP);
+    m->become_uncarriable();
+    m->set_animation(LEADER_ANIM_GET_UP);
 }
 
 void leader::chase_leader(mob* m, void* info1, void* info2) {

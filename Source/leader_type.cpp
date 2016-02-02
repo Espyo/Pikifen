@@ -413,6 +413,15 @@ void leader_type::init_script() {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run_function(leader::start_waking_up);
         }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(mob::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+        }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.change_state("waking_up");
         }
@@ -502,6 +511,7 @@ void leader_type::init_script() {
     
     states = efc.finish();
     first_state_nr = fix_states(states, "idle");
+    carriable_state_id = LEADER_STATE_SLEEPING;
     
     if(states.size() != N_LEADER_STATES) {
         error_log(
