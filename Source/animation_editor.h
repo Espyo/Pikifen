@@ -55,6 +55,7 @@ private:
     bool                 holding_m1;
     bool                 holding_m2;
     bool                 is_pikmin;
+    bool                 made_changes;
     unsigned char        maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
     unsigned char        mode;
     float                new_hitbox_corner_x; //FLT_MAX = none.
@@ -63,7 +64,7 @@ private:
     ALLEGRO_BITMAP*      top_bmp[3]; //Top bitmaps for the current Pikmin type.
     lafi::widget*        wum; //Widget under mouse.
     
-    void leave();
+    void close_changes_warning();
     void gui_load_animation();
     void gui_load_frame();
     void gui_load_frame_instance();
@@ -76,11 +77,13 @@ private:
     void gui_save_hitbox();
     void gui_save_hitbox_instance();
     void gui_save_top();
+    void leave();
     void load_animation_pool();
     void open_hitbox_type(unsigned char type);
     void open_picker(unsigned char type, bool can_make_new);
     void pick(string name, unsigned char type);
     void save_animation_pool();
+    void show_changes_warning();
     void update_hitboxes();
     void update_stats();
     

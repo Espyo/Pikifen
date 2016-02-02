@@ -55,6 +55,7 @@ area_editor::area_editor() :
     gui(NULL),
     holding_m1(false),
     holding_m2(false),
+    made_changes(false),
     mode(EDITOR_MODE_MAIN),
     moving_thing(string::npos),
     moving_thing_x(0),
@@ -123,6 +124,8 @@ void area_editor::change_guide(string new_file_name) {
         guide_bitmap = load_bmp(new_file_name, NULL, false);
     }
     guide_file_name = new_file_name;
+    
+    made_changes = true;
 }
 
 
@@ -173,6 +176,15 @@ void area_editor::do_logic() {
     
     fade_mgr.tick(delta_t);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Closes the change warning box.
+ */
+void area_editor::close_changes_warning() {
+    hide_widget(gui->widgets["frm_changes"]);
+    show_widget(gui->widgets["frm_bottom"]);
 }
 
 
@@ -782,6 +794,7 @@ void area_editor::gui_to_adv_textures() {
     cur_sector->texture_info.rot = ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
     
     adv_textures_to_gui();
+    made_changes = true;
 }
 
 
@@ -838,6 +851,7 @@ void area_editor::gui_to_guide() {
     guide_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
     
     guide_to_gui();
+    made_changes = true;
 }
 
 
@@ -851,6 +865,8 @@ void area_editor::gui_to_mob() {
     
     cur_mob->angle = ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
     cur_mob->vars = ((lafi::textbox*) f->widgets["txt_vars"])->text;
+    
+    made_changes = true;
 }
 
 
@@ -880,6 +896,8 @@ void area_editor::gui_to_shadow() {
         cur_shadow->bitmap = bitmaps.get("Textures/" + new_file_name, NULL);
         cur_shadow->file_name = new_file_name;
     }
+    
+    made_changes = true;
 }
 
 
@@ -899,6 +917,7 @@ void area_editor::gui_to_sector() {
     //TODO hazards.
     
     sector_to_gui();
+    made_changes = true;
 }
 
 
@@ -1012,6 +1031,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 s_ptr->y = snap_to_grid(mouse_cursor_y - moving_thing_y);
                 shadow_to_gui();
             }
+            
+            made_changes = true;
         }
         
         
@@ -1259,6 +1280,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             cur_sector = new_sector;
             sector_to_gui();
+            made_changes = true;
             
             
         } else if(sec_mode == ESM_NEW_OBJECT) {
@@ -1274,6 +1296,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             cur_mob = cur_area_data.mob_generators.back();
             mob_to_gui();
+            made_changes = true;
             
         } else if(sec_mode == ESM_NEW_SHADOW) {
             //Create a new shadow where the cursor is.
@@ -1286,8 +1309,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_shadow->bitmap = bmp_error;
             
             cur_area_data.tree_shadows.push_back(new_shadow);
+            
             cur_shadow = new_shadow;
             shadow_to_gui();
+            made_changes = true;
             
         }
         
@@ -1518,9 +1543,6 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         ) {
             shift_pressed = true;
             
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            leave();
-            
         }
         
         
@@ -1597,6 +1619,18 @@ void area_editor::load() {
     frm_bottom->easy_add("but_save",  new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
     frm_bottom->easy_add("but_quit",  new lafi::button(0, 0, 0, 0, "X"), 25, 32);
     frm_bottom->easy_row();
+    
+    
+    //Changes warning.
+    lafi::frame* frm_changes = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
+    gui->add("frm_changes", frm_changes);
+    hide_widget(frm_changes);
+    frm_changes->easy_row();
+    frm_changes->easy_add("lbl_text1", new lafi::label(0, 0, 0, 0, "Warning: you have", ALLEGRO_ALIGN_LEFT), 80, 8);
+    frm_changes->easy_row();
+    frm_changes->easy_add("lbl_text2", new lafi::label(0, 0, 0, 0, "unsaved changes!", ALLEGRO_ALIGN_LEFT), 80, 8);
+    frm_changes->easy_row();
+    frm_changes->add("but_ok", new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok"));
     
     
     //Picker frame.
@@ -1864,20 +1898,32 @@ void area_editor::load() {
         show_guide = !show_guide;
     };
     frm_bottom->widgets["but_load"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        this->load_area();
+        if(made_changes) {
+            this->show_changes_warning();
+        } else {
+            this->load_area();
+        }
     };
     frm_bottom->widgets["but_save"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         save_area();
     };
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        leave();
+        if(made_changes) {
+            this->show_changes_warning();
+        } else {
+            leave();
+        }
     };
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
     frm_bottom->widgets["but_guide"]->description = "Toggle the visibility of the guide.";
     frm_bottom->widgets["but_load"]->description =  "Load the area from the files.";
-    frm_bottom->widgets["but_save"]->description =  "Save the area onto the disk.";
+    frm_bottom->widgets["but_save"]->description =  "Save the area onto the files.";
     frm_bottom->widgets["but_quit"]->description =  "Quit the area editor.";
+    
+    
+    //Properties -- changes warning.
+    frm_changes->widgets["but_ok"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) { close_changes_warning(); };
     
     
     //Properties -- sectors.
@@ -2158,6 +2204,8 @@ void area_editor::load_area() {
     sector_to_gui();
     mob_to_gui();
     guide_to_gui();
+    
+    made_changes = false;
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
@@ -2508,6 +2556,8 @@ void area_editor::save_area() {
     mob_to_gui();
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
+    
+    made_changes = false;
 }
 
 
@@ -2571,6 +2621,17 @@ void area_editor::shadow_to_gui() {
     } else {
         hide_widget(f);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Shows the "unsaved changes" warning.
+ */
+void area_editor::show_changes_warning() {
+    show_widget(gui->widgets["frm_changes"]);
+    hide_widget(gui->widgets["frm_bottom"]);
+    
+    made_changes = false;
 }
 
 

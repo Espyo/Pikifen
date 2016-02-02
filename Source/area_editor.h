@@ -74,6 +74,7 @@ private:
     unsigned char                guide_a;
     bool                         holding_m1;
     bool                         holding_m2;
+    bool                         made_changes;
     unsigned char                mode;
     size_t                       moving_thing; //Current vertex, object or shadow being moved.
     float                        moving_thing_x; //Relative X coordinate of the point where the vertex, object or shadow was grabbed.
@@ -88,6 +89,7 @@ private:
     void adv_textures_to_gui();
     void guide_to_gui();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
+    void close_changes_warning();
     void change_guide(string new_file_name);
     void change_to_right_frame(bool hide_all = false);
     void leave();
@@ -106,6 +108,7 @@ private:
     void save_area();
     void sector_to_gui();
     void shadow_to_gui();
+    void show_changes_warning();
     float snap_to_grid(const float c);
     void update_review_frame();
     
