@@ -439,6 +439,37 @@ mob* get_closest_mob_to_cursor() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the daylight effect color for the current time and weather.
+ */
+ALLEGRO_COLOR get_daylight_color() {
+    size_t n_points = cur_area_data.weather_condition.daylight.size();
+    
+    if(n_points == 1) {
+        return cur_area_data.weather_condition.daylight[0].second;
+    }
+    
+    for(size_t p = 0; p < n_points - 1; ++p) {
+        auto cur_ptr = &cur_area_data.weather_condition.daylight[p];
+        auto next_ptr = &cur_area_data.weather_condition.daylight[p + 1];
+        
+        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+            
+            return interpolate_color(
+                day_minutes,
+                cur_ptr->first,
+                next_ptr->first,
+                cur_ptr->second,
+                next_ptr->second
+            );
+        }
+    }
+    
+    //If anything goes wrong, return a failsafe.
+    return al_map_rgba(255, 255, 255, 0);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the in-world coordinates of the mouse cursor.
  */
 void get_mouse_cursor_coordinates(float* x, float* y) {
@@ -447,37 +478,6 @@ void get_mouse_cursor_coordinates(float* x, float* y) {
     ALLEGRO_TRANSFORM t = get_world_to_screen_transform();
     al_invert_transform(&t);
     al_transform_coordinates(&t, x, y);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the daylight effect color for the current time, for the current weather.
- */
-ALLEGRO_COLOR get_daylight_color() {
-    //TODO optimize: don't fetch the points from the weather's map every time.
-    //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
-    vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_data.weather_condition.lighting.begin(); p_nr != cur_area_data.weather_condition.lighting.end(); ++p_nr) {
-        point_nrs.push_back(p_nr->first);
-    }
-    
-    size_t n_points = point_nrs.size();
-    if(n_points > 1) {
-        for(size_t p = 0; p < n_points - 1; ++p) {
-            if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
-                return interpolate_color(
-                           day_minutes,
-                           point_nrs[p],
-                           point_nrs[p + 1],
-                           cur_area_data.weather_condition.lighting[point_nrs[p]],
-                           cur_area_data.weather_condition.lighting[point_nrs[p + 1]]
-                       );
-            }
-        }
-    }
-    
-    //If anything goes wrong, don't apply lighting at all.
-    return al_map_rgba(0, 0, 0, 0);
 }
 
 
@@ -509,31 +509,33 @@ void get_multiline_text_dimensions(const ALLEGRO_FONT* const font, const string 
 
 
 /* ----------------------------------------------------------------------------
- * Returns the strength of the sun for the current time, for the current weather.
+ * Returns the sun strength for the current time and weather.
  */
 float get_sun_strength() {
-    //TODO optimize: don't fetch the points from the weather's map every time.
-    //TODO find out how to get the iterator to give me the value of the next point, instead of putting all points in a vector.
-    vector<unsigned> point_nrs;
-    for(auto p_nr = cur_area_data.weather_condition.sun_strength.begin(); p_nr != cur_area_data.weather_condition.sun_strength.end(); ++p_nr) {
-        point_nrs.push_back(p_nr->first);
+    size_t n_points = cur_area_data.weather_condition.sun_strength.size();
+    
+    if(n_points == 1) {
+        return cur_area_data.weather_condition.sun_strength[0].second;
     }
     
-    size_t n_points = point_nrs.size();
-    if(n_points > 1) {
-        for(size_t p = 0; p < n_points - 1; ++p) {
-            if(day_minutes >= point_nrs[p] && day_minutes < point_nrs[p + 1]) {
-                return interpolate_number(
-                           day_minutes, point_nrs[p], point_nrs[p + 1],
-                           cur_area_data.weather_condition.sun_strength[point_nrs[p]],
-                           cur_area_data.weather_condition.sun_strength[point_nrs[p + 1]]
-                       ) / 255.0;
-            }
+    for(size_t p = 0; p < n_points - 1; ++p) {
+        auto cur_ptr = &cur_area_data.weather_condition.sun_strength[p];
+        auto next_ptr = &cur_area_data.weather_condition.sun_strength[p + 1];
+        
+        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+            
+            return interpolate_number(
+                day_minutes,
+                cur_ptr->first,
+                next_ptr->first,
+                cur_ptr->second,
+                next_ptr->second
+            ) / 255.0f;
         }
     }
     
-    //If anything goes wrong, return regular strength.
-    return 1;
+    //If anything goes wrong, return a failsafe.
+    return 1.0f;
 }
 
 
@@ -693,7 +695,7 @@ void load_area(const string &name, const bool load_for_editor) {
         }
         
         
-        //TODO hazards (and tags, if I really am gonna use them...).
+        //TODO hazards
         
         cur_area_data.sectors.push_back(new_sector);
     }
@@ -773,7 +775,6 @@ void load_area(const string &name, const bool load_for_editor) {
     
     
     //Set up stuff.
-    //TODO error checking.
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         cur_area_data.edges[e]->fix_pointers(cur_area_data);
     }
@@ -896,46 +897,62 @@ void load_game_content() {
         if(name.empty()) name = "default";
         
         //Lighting.
-        map<unsigned, ALLEGRO_COLOR> lighting;
+        vector<pair<size_t, ALLEGRO_COLOR> > lighting;
         size_t n_lighting_points = cur_weather->get_child_by_name("lighting")->get_nr_of_children();
+        
+        bool have_midnight = false;
         
         for(size_t lp = 0; lp < n_lighting_points; ++lp) {
             data_node* lighting_node = cur_weather->get_child_by_name("lighting")->get_child(lp);
             
-            unsigned point_time = s2i(lighting_node->name);
+            size_t point_time = s2i(lighting_node->name);
             ALLEGRO_COLOR point_color = s2c(lighting_node->value);
             
-            lighting[point_time] = point_color;
+            lighting.push_back(make_pair(point_time, point_color));
+            
+            if(point_time == 24 * 60) have_midnight = true;
         }
+        
+        sort(lighting.begin(), lighting.end(), [] (pair<size_t, ALLEGRO_COLOR> p1, pair<size_t, ALLEGRO_COLOR> p2) -> bool {
+            return p1.first < p2.first;
+        });
         
         if(lighting.empty()) {
             error_log("Weather condition " + name + " has no lighting!");
         } else {
-            if(lighting.find(24 * 60) == lighting.end()) {
+            if(!have_midnight) {
                 //If there is no data for the last hour, use the data from the first point
                 //(this is because the day loops after 24:00; needed for interpolation).
-                lighting[24 * 60] = lighting.begin()->second;
+                lighting.push_back(make_pair(24 * 60, lighting[0].second));
             }
         }
         
         //Sun's strength.
-        map<unsigned, unsigned char> sun_strength;
+        vector<pair<size_t, unsigned char> > sun_strength;
         size_t n_sun_strength_points = cur_weather->get_child_by_name("sun_strength")->get_nr_of_children();
+        
+        have_midnight = false;
         
         for(size_t sp = 0; sp < n_sun_strength_points; ++sp) {
             data_node* sun_strength_node = cur_weather->get_child_by_name("sun_strength")->get_child(sp);
             
-            unsigned point_time = s2i(sun_strength_node->name);
+            size_t point_time = s2i(sun_strength_node->name);
             unsigned char point_strength = s2i(sun_strength_node->value);
             
-            sun_strength[point_time] = point_strength;
+            sun_strength.push_back(make_pair(point_time, point_strength));
+            
+            if(point_time == 24 * 60) have_midnight = true;
         }
         
+        sort(sun_strength.begin(), sun_strength.end(), [] (pair<size_t, unsigned char> p1, pair<size_t, unsigned char> p2) -> bool {
+            return p1.first < p2.first;
+        });
+        
         if(!sun_strength.empty()) {
-            if(sun_strength.find(24 * 60) == sun_strength.end()) {
+            if(!have_midnight) {
                 //If there is no data for the last hour, use the data from the first point
                 //(this is because the day loops after 24:00; needed for interpolation).
-                sun_strength[24 * 60] = sun_strength.begin()->second;
+                sun_strength.push_back(make_pair(24 * 60, sun_strength[0].second));
             }
         }
         

@@ -21,6 +21,7 @@
 
 using namespace std;
 
+
 /* ----------------------------------------------------------------------------
  * Weather information.
  * Daylight is mixed in with the weather, as
@@ -33,15 +34,15 @@ using namespace std;
 class weather {
 public:
     string name;
-    map<unsigned, ALLEGRO_COLOR> lighting; //Map with the lighting color for each specific time of day, in minutes.
-    map<unsigned, unsigned char> sun_strength; //Map with the sun's strength for each specific time of day, in minutes.
+    vector<pair<size_t, ALLEGRO_COLOR> > daylight; //Vector with the lighting colors for specific times of day, in minutes.
+    vector<pair<size_t, unsigned char> > sun_strength; //Vector with the sun strength for specific times of day, in minutes.
     unsigned char percipitation_type;
     interval percipitation_frequency;
     interval percipitation_speed;
     interval percipitation_angle;
     
     weather();
-    weather(const string &n, const map<unsigned, ALLEGRO_COLOR> &l, const map<unsigned, unsigned char> &ss, const unsigned char pt, const interval &pf, const interval &ps, const interval &pa);
+    weather(const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl, const vector<pair<size_t, unsigned char> > &ss, const unsigned char pt, const interval &pf, const interval &ps, const interval &pa);
 };
 
 

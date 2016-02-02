@@ -90,7 +90,6 @@ public:
     frame(const string &name = "", ALLEGRO_BITMAP* const b = NULL, const float gw = 0, const float gh = 0, const vector<hitbox_instance> &h = vector<hitbox_instance>());
     frame(const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by, const int bw, const int bh, const float gw, const float gh, const vector<hitbox_instance> &h);
     frame(const frame &f2);
-    frame clone();
     void create_hitbox_instances(animation_pool* const as);
     
     ~frame();

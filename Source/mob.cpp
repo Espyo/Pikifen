@@ -873,16 +873,18 @@ void add_to_party(mob* party_leader, mob* new_member) {
 }
 
 
+const float MOB_KNOCKBACK_H_POWER = 130.0f;
+const float MOB_KNOCKBACK_V_POWER = 200.0f;
+
 /* ----------------------------------------------------------------------------
  * Applies the knockback values to a mob.
  */
 void apply_knockback(mob* m, const float knockback, const float knockback_angle) {
     if(knockback != 0) {
-        //TODO make these not be magic numbers.
         m->remove_target();
-        m->speed_x = cos(knockback_angle) * knockback * 130;
-        m->speed_y = sin(knockback_angle) * knockback * 130;
-        m->speed_z = 200;
+        m->speed_x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        m->speed_y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        m->speed_z = MOB_KNOCKBACK_V_POWER;
     }
 }
 
@@ -981,11 +983,10 @@ void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h
     //Cause the damage and the knockback.
     victim->health -= damage;
     if(knockback != 0) {
-        //TODO make these not be magic numbers.
         victim->remove_target();
-        victim->speed_x = cos(knockback_angle) * knockback * 130;
-        victim->speed_y = sin(knockback_angle) * knockback * 130;
-        victim->speed_z = 200;
+        victim->speed_x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        victim->speed_y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        victim->speed_z = MOB_KNOCKBACK_V_POWER;
     }
     
     //Script stuff.
@@ -1090,7 +1091,11 @@ void delete_mob(mob* m) {
         gates.erase(find(gates.begin(), gates.end(), (gate*) m));
         
     } else {
-        //TODO warn somehow.
+        error_log(
+            "ENGINE WARNING: Ran delete_mob() with a bad mob, of type \"" +
+            m->type->name + "\", x = " + f2s(m->x) +
+            ", y = " + f2s(m->y) + "!"
+        );
         
     }
     

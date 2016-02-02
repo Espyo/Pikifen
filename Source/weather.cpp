@@ -16,9 +16,9 @@ weather::weather() {}
 /* ----------------------------------------------------------------------------
  * Creates a weather type.
  */
-weather::weather(const string &n, const map<unsigned, ALLEGRO_COLOR> &l, const map<unsigned, unsigned char> &ss, const unsigned char pt, const interval &pf, const interval &ps, const interval &pa) :
+weather::weather(const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl, const vector<pair<size_t, unsigned char> > &ss, const unsigned char pt, const interval &pf, const interval &ps, const interval &pa) :
     name(n),
-    lighting(l),
+    daylight(dl),
     sun_strength(ss),
     percipitation_type(pt),
     percipitation_frequency(pf),

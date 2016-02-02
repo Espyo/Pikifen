@@ -114,38 +114,13 @@ frame::frame(const frame &f2) :
 
 
 /* ----------------------------------------------------------------------------
- * Creates a frame by cloning the data from another frame.
- */
-frame frame::clone() {
-    //TODO should the hitboxes be cloned too?
-    frame f = frame(name, NULL, game_w, game_h, hitbox_instances);
-    f.file = file;
-    f.file_x = file_x;
-    f.file_y = file_y;
-    f.file_w = file_w;
-    f.file_h = file_h;
-    f.offs_x = offs_x;
-    f.offs_y = offs_y;
-    f.top_x = top_x;
-    f.top_y = top_y;
-    f.top_w = top_w;
-    f.top_h = top_h;
-    f.top_angle = top_angle;
-    f.top_visible = top_visible;
-    f.parent_bmp = al_clone_bitmap(parent_bmp);
-    f.bitmap = al_create_sub_bitmap(f.parent_bmp, f.file_x, f.file_y, f.file_w, f.file_h);
-    f.hitbox_span = hitbox_span;
-    return f;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Destroys a frame and its bitmaps.
  */
 frame::~frame() {
     if(parent_bmp) bitmaps.detach(file);
     if(bitmap) al_destroy_bitmap(bitmap);
 }
+
 
 /* ----------------------------------------------------------------------------
  * Calculates the span of the hitboxes.
@@ -160,6 +135,7 @@ void frame::calculate_hitbox_span() {
         hitbox_span = max(hitbox_span, d);
     }
 }
+
 
 /* ----------------------------------------------------------------------------
  * Creates the hitbox instances, based on the hitboxes.

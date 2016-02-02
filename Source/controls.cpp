@@ -315,7 +315,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 //Now check if the leader should open an Onion's menu.
                 if(!done) {
-                    //TODO
+                    //TODO Onion dialog, of course.
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; ++o) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= MIN_ONION_CHECK_RANGE) {
