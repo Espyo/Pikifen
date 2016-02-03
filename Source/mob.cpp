@@ -851,7 +851,10 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
  * Returns true if all spots are reserved. False otherwise.
  */
 bool carry_info_struct::is_full() {
-    return cur_n_carriers == m->type->max_carriers;
+    for(size_t s = 0; s < spot_info.size(); ++s) {
+        if(spot_info[s].state == CARRY_SPOT_FREE) return false;
+    }
+    return true;
 }
 
 

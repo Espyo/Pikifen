@@ -372,6 +372,10 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::reach_carriable_object);
             efc.change_state("carrying");
         }
+        efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
+            efc.run_function(pikmin::forget_about_carrying);
+            efc.change_state("idle");
+        }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(pikmin::called);
             efc.change_state("in_group_chasing");

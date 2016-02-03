@@ -91,6 +91,7 @@ void leader_type::init_script() {
             efc.change_state("spraying");
         }
         efc.new_event(LEADER_EVENT_LIE_DOWN); {
+            efc.run_function(leader::fall_asleep);
             efc.change_state("sleeping");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -407,12 +408,6 @@ void leader_type::init_script() {
     }
     
     efc.new_state("sleeping", LEADER_STATE_SLEEPING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(leader::fall_asleep);
-        }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(leader::start_waking_up);
-        }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run_function(mob::handle_carrier_added);
         }
@@ -423,6 +418,7 @@ void leader_type::init_script() {
             efc.run_function(mob::carry_begin_move);
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader::start_waking_up);
             efc.change_state("waking_up");
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
@@ -431,8 +427,10 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader::lose_health);
+            efc.run_function(leader::start_waking_up);
         }
         efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader::start_waking_up);
             efc.change_state("dying");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
@@ -441,13 +439,8 @@ void leader_type::init_script() {
     }
     
     efc.new_state("inactive_sleeping", LEADER_STATE_INACTIVE_SLEEPING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(leader::fall_asleep);
-        }
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(leader::start_waking_up);
-        }
         efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader::start_waking_up);
             efc.change_state("inactive_waking_up");
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
@@ -455,9 +448,11 @@ void leader_type::init_script() {
             efc.change_state("sleeping");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::start_waking_up);
             efc.run_function(leader::inactive_lose_health);
         }
         efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader::start_waking_up);
             efc.change_state("inactive_dying");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
