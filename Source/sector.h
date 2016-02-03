@@ -30,6 +30,8 @@ using namespace std;
 struct area_data;
 struct blockmap;
 struct edge;
+struct path_stop;
+struct path_stop_link;
 struct sector;
 struct sector_correction;
 struct triangle;
@@ -46,6 +48,7 @@ struct edge_intersection {
     edge_intersection(edge* e1, edge* e2);
     bool contains(edge* e);
 };
+
 
 
 
@@ -74,6 +77,7 @@ struct blockmap {
 
 
 
+
 /* ----------------------------------------------------------------------------
  * An line segment that delimits a sector -- an edge of a polygon.
  * In Doom, these are what's known as linedefs.
@@ -92,6 +96,43 @@ struct edge {
 
 
 
+
+/* ----------------------------------------------------------------------------
+ * A stop is a point that makes up a path. In mathematics, this is a node
+ * in the graph. In a real-world example, this is a bus stop.
+ * Pikmin start carrying by going for the closest stop.
+ * Then they move stop by stop, following the connections, until they
+ * reach the final stop and go wherever they need.
+ */
+struct path_stop {
+    float x, y;
+    vector<path_stop_link> links;
+    
+    path_stop(float x = 0, float y = 0, vector<path_stop_link> links = vector<path_stop_link>());
+    void fix_pointers(area_data &a);
+    void fix_nrs(area_data &a);
+};
+
+
+
+
+/* ----------------------------------------------------------------------------
+ * Info about a path stop link. A path stop can link to N other path stops,
+ * and this structure holds informatio about the connection.
+ */
+struct path_stop_link {
+    path_stop* end_ptr;
+    size_t end_nr;
+    bool one_way;
+    float distance;
+    
+    path_stop_link(path_stop* end_ptr, size_t end_nr, bool one_way);
+    void calculate_dist(path_stop* start_ptr);
+};
+
+
+
+
 /* ----------------------------------------------------------------------------
  * Information about a sector's texture.
  */
@@ -106,6 +147,7 @@ struct sector_texture_info {
     
     sector_texture_info();
 };
+
 
 
 
@@ -139,6 +181,7 @@ struct sector {
 
 
 
+
 /* ----------------------------------------------------------------------------
  * List of visual corrections to be done on a sector, AFTER the area
  * buffer images have been created. This is used for sectors that
@@ -158,6 +201,7 @@ struct sector_correction {
 
 
 
+
 /* ----------------------------------------------------------------------------
  * A triangle. Sectors (polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
@@ -167,6 +211,7 @@ struct triangle {
     vertex* points[3];
     triangle(vertex* v1, vertex* v2, vertex* v3);
 };
+
 
 
 
@@ -183,6 +228,7 @@ struct vertex {
     void connect_edges(area_data &a, size_t v_nr);
     void fix_pointers(area_data &a);
 };
+
 
 
 
@@ -207,6 +253,7 @@ struct mob_gen {
 
 
 
+
 /* ----------------------------------------------------------------------------
  * A structure holding info on the shadows
  * cast onto the area by a tree (or
@@ -228,6 +275,7 @@ struct tree_shadow {
 
 
 
+
 /* ----------------------------------------------------------------------------
  * A structure that holds all of the
  * info about the current area, so that
@@ -242,6 +290,7 @@ struct area_data {
     vector<edge*> edges;
     vector<sector*> sectors;
     vector<mob_gen*> mob_generators;
+    vector<path_stop*> path_stops;
     vector<tree_shadow*> tree_shadows;
     vector<sector_correction> sector_corrections;
     
@@ -261,6 +310,7 @@ struct area_data {
     void generate_edges_blockmap(vector<edge*> &edges);
     void clear();
 };
+
 
 
 

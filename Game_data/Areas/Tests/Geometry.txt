@@ -1,104 +1,3 @@
-mobs{
-	Special{
-		type=Info spot
-		p=-100.00 100.00
-	}
-	Leader{
-		type=Olimar
-		p=0.00 0.00
-	}
-	Leader{
-		type=Louie
-		p=-32.00 96.00
-	}
-	Leader{
-		type=President
-		p=350.00 200.00
-	}
-	Onion{
-		type=Red Onion
-		p=400.00 100.00
-	}
-	Onion{
-		type=Yellow Onion
-		p=400.00 200.00
-	}
-	Onion{
-		type=Blue Onion
-		p=400.00 300.00
-	}
-	Treasure{
-		type=Test
-		p=100.00 350.00
-	}
-	Enemy{
-		type=Cloaking Burrow-nit
-		p=-100.00 -200.00
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-704.00 -0.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-576.00 0.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-832.00 128.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-704.00 128.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-576.00 128.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-832.00 256.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-704.00 256.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-576.00 256.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-832.00 384.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-704.00 384.00
-		vars=buried=true
-	}
-	Pikmin{
-		type=Blue Pikmin
-		p=-832.00 0.00
-		vars=buried=true
-	}
-	Special{
-		type=Bridge
-		p=192.00 -288.00
-	}
-	Pellet{
-		type=Red 5
-		p=608.00 192.00
-	}
-}
 vertexes{
 	v=-1000.00 -1000.00
 	v=1000.00 -1000.00
@@ -774,6 +673,180 @@ sectors{
 	s{
 		z=200.00
 		texture=Rock.jpg
+	}
+}
+mobs{
+	Special{
+		type=Info spot
+		p=-100.00 100.00
+	}
+	Leader{
+		type=Olimar
+		p=0.00 0.00
+	}
+	Leader{
+		type=Louie
+		p=-32.00 96.00
+	}
+	Leader{
+		type=President
+		p=350.00 200.00
+	}
+	Onion{
+		type=Red Onion
+		p=400.00 100.00
+	}
+	Onion{
+		type=Yellow Onion
+		p=400.00 200.00
+	}
+	Onion{
+		type=Blue Onion
+		p=400.00 300.00
+	}
+	Treasure{
+		type=Test
+		p=100.00 350.00
+	}
+	Enemy{
+		type=Cloaking Burrow-nit
+		p=-100.00 -200.00
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-704.00 -0.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-576.00 0.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-832.00 128.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-704.00 128.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-576.00 128.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-832.00 256.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-704.00 256.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-576.00 256.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-832.00 384.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-704.00 384.00
+		vars=buried=true
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-832.00 0.00
+		vars=buried=true
+	}
+	Special{
+		type=Bridge
+		p=192.00 -288.00
+	}
+	Pellet{
+		type=Red 5
+		p=608.00 192.00
+	}
+}
+path_stops{
+	s{
+		pos=-480.00 -608.00
+		links{
+			l{
+				nr=1
+				1w=true
+			}
+			l{
+				nr=7
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-224.00 -672.00
+		links{
+			l{
+				nr=2
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-256.00 -288.00
+		links{
+			l{
+				nr=3
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-896.00 -320.00
+		links{
+			l{
+				nr=4
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-864.00 -832.00
+		links{
+			l{
+				nr=5
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-448.00 -800.00
+		links{
+			l{
+				nr=0
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=-384.00 -800.00
+		links{
+			l{
+				nr=0
+				1w=false
+			}
+		}
+	}
+	s{
+		pos=-256.00 -736.00
+		links=
 	}
 }
 tree_shadows=

@@ -740,6 +740,41 @@ void load_area(const string &name, const bool load_for_editor) {
         if(!problem) cur_area_data.mob_generators.push_back(mob_ptr);
     }
     
+    //Path stops.
+    size_t n_stops = geometry_file.get_child_by_name("path_stops")->get_nr_of_children();
+    for(size_t s = 0; s < n_stops; ++s) {
+    
+        data_node* path_stop_node = geometry_file.get_child_by_name("path_stops")->get_child(s);
+        
+        path_stop* s_ptr = new path_stop();
+        
+        vector<string> words = split(path_stop_node->get_child_by_name("pos")->value);
+        s_ptr->x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        
+        data_node* links_node = path_stop_node->get_child_by_name("links");
+        size_t n_links = links_node->get_nr_of_children();
+        
+        for(size_t l = 0; l < n_links; ++l) {
+        
+            data_node* link_node = links_node->get_child(l);
+            
+            path_stop_link l_struct(NULL, string::npos, true);
+            
+            l_struct.end_nr = s2i(link_node->get_child_by_name("nr")->value);
+            l_struct.one_way = s2b(link_node->get_child_by_name("1w")->value);
+            
+            s_ptr->links.push_back(l_struct);
+            
+        }
+        
+        cur_area_data.path_stops.push_back(s_ptr);
+    }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        cur_area_data.path_stops[s]->fix_pointers(cur_area_data);
+    }
+    
     //Tree shadows.
     size_t n_shadows = geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; ++s) {
