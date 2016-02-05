@@ -46,6 +46,17 @@ void angle_to_coordinates(const float angle, const float magnitude, float* x_coo
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if two points are colliding via a bounding-box check.
+ * c*1: Coordinates of the first point.
+ * c*2: Coordinates of the second point.
+ * r:   Range of the bounding box.
+ */
+bool bbox_check(const float cx1, const float cy1, const float cx2, const float cy2, const float r) {
+    return (fabs(cx1 - cx2) <= r && fabs(cy1 - cy2) <= r);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
  */

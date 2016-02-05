@@ -627,10 +627,42 @@ void do_gameplay_logic() {
         for(size_t o = 0; o < onions.size(); ++o) {
             onion* o_ptr = onions[o];
             
-            if(o_ptr->spew_queue == 0) continue;
+            if(o_ptr->spew_queue != 0) {
             
-            o_ptr->full_spew_timer.tick(delta_t);
-            o_ptr->next_spew_timer.tick(delta_t);
+                o_ptr->full_spew_timer.tick(delta_t);
+                o_ptr->next_spew_timer.tick(delta_t);
+                
+            }
+            
+            unsigned char final_alpha = 255;
+    
+            if(
+                bbox_check(
+                    cur_leader_ptr->x, cur_leader_ptr->y,
+                    o_ptr->x, o_ptr->y,
+                    cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+                )
+            ){
+                final_alpha = ONION_SEETHROUGH_ALPHA;
+            }
+            
+            if(
+                bbox_check(
+                    cursor_x, cursor_y,
+                    o_ptr->x, o_ptr->y,
+                    cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+                )
+            ){
+                final_alpha = ONION_SEETHROUGH_ALPHA;
+            }
+            
+            if(o_ptr->seethrough != final_alpha) {
+                if(final_alpha < o_ptr->seethrough) {
+                    o_ptr->seethrough = max((double) final_alpha, o_ptr->seethrough - ONION_FADE_SPEED * delta_t);
+                } else {
+                    o_ptr->seethrough = min((double) final_alpha, o_ptr->seethrough + ONION_FADE_SPEED * delta_t);
+                }
+            }
             
         }
         

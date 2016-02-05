@@ -66,6 +66,7 @@
 
 
 void               angle_to_coordinates(const float angle, const float magnitude, float* x_coord, float* y_coord);
+bool               bbox_check(const float cx1, const float cy1, const float cx2, const float cy2, const float r);
 string             box_string(const string s, const size_t size);
 ALLEGRO_COLOR      change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR      change_color_lighting(const ALLEGRO_COLOR &c, const float l);

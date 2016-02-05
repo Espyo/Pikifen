@@ -24,7 +24,8 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
     spew_queue(0),
     next_spew_angle(0),
-    activated(true) {
+    activated(true),
+    seethrough(255) {
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
@@ -97,7 +98,7 @@ void onion::draw() {
             get_sprite_lighting(this),
             get_sprite_lighting(this),
             get_sprite_lighting(this),
-            192
+            seethrough
         )
     );
 }
