@@ -45,6 +45,7 @@ ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
 
 ALLEGRO_BITMAP* bmp_test = NULL;
+vector<path_stop*> temp_path;
 
 sample_struct sfx_attack;
 sample_struct sfx_camera;

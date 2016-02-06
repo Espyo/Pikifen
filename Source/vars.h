@@ -78,6 +78,7 @@ extern ALLEGRO_BITMAP* bmp_us_spray;
 
 //Test things, temporary.
 extern ALLEGRO_BITMAP* bmp_test;
+extern vector<path_stop*> temp_path;
 
 //Sound effects.
 extern sample_struct sfx_attack;

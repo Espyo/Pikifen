@@ -464,14 +464,14 @@ ALLEGRO_COLOR get_daylight_color() {
         auto next_ptr = &cur_area_data.weather_condition.daylight[p + 1];
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
-            
+        
             return interpolate_color(
-                day_minutes,
-                cur_ptr->first,
-                next_ptr->first,
-                cur_ptr->second,
-                next_ptr->second
-            );
+                       day_minutes,
+                       cur_ptr->first,
+                       next_ptr->first,
+                       cur_ptr->second,
+                       next_ptr->second
+                   );
         }
     }
     
@@ -534,14 +534,14 @@ float get_sun_strength() {
         auto next_ptr = &cur_area_data.weather_condition.sun_strength[p + 1];
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
-            
+        
             return interpolate_number(
-                day_minutes,
-                cur_ptr->first,
-                next_ptr->first,
-                cur_ptr->second,
-                next_ptr->second
-            ) / 255.0f;
+                       day_minutes,
+                       cur_ptr->first,
+                       next_ptr->first,
+                       cur_ptr->second,
+                       next_ptr->second
+                   ) / 255.0f;
         }
     }
     
@@ -770,7 +770,7 @@ void load_area(const string &name, const bool load_for_editor) {
         
             data_node* link_node = links_node->get_child(l);
             
-            path_stop_link l_struct(NULL, string::npos, true);
+            path_link l_struct(NULL, string::npos, true);
             
             l_struct.end_nr = s2i(link_node->get_child_by_name("nr")->value);
             l_struct.one_way = s2b(link_node->get_child_by_name("1w")->value);
@@ -782,9 +782,6 @@ void load_area(const string &name, const bool load_for_editor) {
         cur_area_data.path_stops.push_back(s_ptr);
     }
     
-    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        cur_area_data.path_stops[s]->fix_pointers(cur_area_data);
-    }
     
     //Tree shadows.
     size_t n_shadows = geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
@@ -830,6 +827,37 @@ void load_area(const string &name, const bool load_for_editor) {
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         cur_area_data.vertexes[v]->connect_edges(cur_area_data, v);
     }
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        cur_area_data.path_stops[s]->fix_pointers(cur_area_data);
+    }
+    if(!load_for_editor) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            
+                s_ptr->links[l].calculate_dist(s_ptr);
+                
+                if(!s_ptr->links[l].one_way) {
+                
+                    s_ptr->links[l].one_way = true;
+                    bool backlink_exists = false;
+                    path_stop* s2_ptr = cur_area_data.path_stops[s_ptr->links[l].end_nr];
+                    for(size_t l2 = 0; l2 < s2_ptr->links.size(); ++l2) {
+                        if(s2_ptr->links[l2].end_nr == s) {
+                            backlink_exists = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!backlink_exists) {
+                        s2_ptr->links.push_back(path_link(s_ptr, s, true));
+                    }
+                }
+            }
+        }
+    }
+    
+    
     
     
     //Triangulate everything.

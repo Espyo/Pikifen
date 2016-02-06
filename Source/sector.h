@@ -31,7 +31,7 @@ struct area_data;
 struct blockmap;
 struct edge;
 struct path_stop;
-struct path_stop_link;
+struct path_link;
 struct sector;
 struct sector_correction;
 struct triangle;
@@ -98,7 +98,7 @@ struct edge {
 
 
 /* ----------------------------------------------------------------------------
- * A stop is a point that makes up a path. In mathematics, this is a node
+ * Stops are points that make up a path. In mathematics, this is a node
  * in the graph. In a real-world example, this is a bus stop.
  * Pikmin start carrying by going for the closest stop.
  * Then they move stop by stop, following the connections, until they
@@ -106,9 +106,9 @@ struct edge {
  */
 struct path_stop {
     float x, y;
-    vector<path_stop_link> links;
+    vector<path_link> links;
     
-    path_stop(float x = 0, float y = 0, vector<path_stop_link> links = vector<path_stop_link>());
+    path_stop(float x = 0, float y = 0, vector<path_link> links = vector<path_link>());
     void fix_pointers(area_data &a);
     void fix_nrs(area_data &a);
 };
@@ -117,16 +117,16 @@ struct path_stop {
 
 
 /* ----------------------------------------------------------------------------
- * Info about a path stop link. A path stop can link to N other path stops,
- * and this structure holds informatio about the connection.
+ * Info about a path link. A path stop can link to N other path stops,
+ * and this structure holds information about the connection.
  */
-struct path_stop_link {
+struct path_link {
     path_stop* end_ptr;
     size_t end_nr;
     bool one_way;
     float distance;
     
-    path_stop_link(path_stop* end_ptr, size_t end_nr, bool one_way);
+    path_link(path_stop* end_ptr, size_t end_nr, bool one_way);
     void calculate_dist(path_stop* start_ptr);
 };
 
@@ -317,9 +317,12 @@ struct area_data {
 void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obstacle_found);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
 void get_cce(vector<vertex> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes);
+vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob* obstacle_found);
+mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
@@ -328,6 +331,7 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap);
 void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
 void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
+bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
 bool is_point_in_sector(const float x, const float y, sector* s_ptr);

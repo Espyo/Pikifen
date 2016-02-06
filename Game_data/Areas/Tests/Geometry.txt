@@ -782,11 +782,7 @@ path_stops{
 		links{
 			l{
 				nr=1
-				1w=true
-			}
-			l{
-				nr=7
-				1w=true
+				1w=false
 			}
 		}
 	}
@@ -795,7 +791,7 @@ path_stops{
 		links{
 			l{
 				nr=2
-				1w=true
+				1w=false
 			}
 		}
 	}
@@ -804,7 +800,7 @@ path_stops{
 		links{
 			l{
 				nr=3
-				1w=true
+				1w=false
 			}
 		}
 	}
@@ -813,7 +809,7 @@ path_stops{
 		links{
 			l{
 				nr=4
-				1w=true
+				1w=false
 			}
 		}
 	}
@@ -822,7 +818,7 @@ path_stops{
 		links{
 			l{
 				nr=5
-				1w=true
+				1w=false
 			}
 		}
 	}
@@ -831,22 +827,9 @@ path_stops{
 		links{
 			l{
 				nr=0
-				1w=true
-			}
-		}
-	}
-	s{
-		pos=-384.00 -800.00
-		links{
-			l{
-				nr=0
 				1w=false
 			}
 		}
-	}
-	s{
-		pos=-256.00 -736.00
-		links=
 	}
 }
 tree_shadows=

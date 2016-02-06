@@ -31,7 +31,7 @@
 
 const float area_editor::GRID_INTERVAL = 32.0f;
 const float area_editor::STOP_RADIUS = 16.0f;
-const float area_editor::PATH_THICKNESS = 2.0f;
+const float area_editor::LINK_THICKNESS = 2.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -62,7 +62,7 @@ area_editor::area_editor() :
     moving_thing(string::npos),
     moving_thing_x(0),
     moving_thing_y(0),
-    new_path_first_stop(NULL),
+    new_link_first_stop(NULL),
     on_sector(NULL),
     sec_mode(ESM_NONE),
     shift_pressed(false),
@@ -444,7 +444,7 @@ void area_editor::do_drawing() {
                         s_ptr->x, s_ptr->y,
                         s2_ptr->x, s2_ptr->y,
                         (one_way ? al_map_rgb(255, 160, 160) : al_map_rgb(255, 255, 160)),
-                        PATH_THICKNESS / cam_zoom
+                        LINK_THICKNESS / cam_zoom
                     );
                     
                     if(one_way) {
@@ -452,7 +452,7 @@ void area_editor::do_drawing() {
                         float mid_x = (s_ptr->x + s2_ptr->x) / 2.0f;
                         float mid_y = (s_ptr->y + s2_ptr->y) / 2.0f;
                         float angle = atan2(s2_ptr->y - s_ptr->y, s2_ptr->x - s_ptr->x);
-                        const float delta = (PATH_THICKNESS * 4) / cam_zoom;
+                        const float delta = (LINK_THICKNESS * 4) / cam_zoom;
                         
                         al_draw_filled_triangle(
                             mid_x + cos(angle) * delta,
@@ -467,9 +467,9 @@ void area_editor::do_drawing() {
                 }
             }
             
-            if(sec_mode == ESM_NEW_PATH2 || sec_mode == ESM_NEW_1WPATH2) {
+            if(sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
                 al_draw_line(
-                    new_path_first_stop->x, new_path_first_stop->y,
+                    new_link_first_stop->x, new_link_first_stop->y,
                     mouse_cursor_x, mouse_cursor_y,
                     al_map_rgb(255, 255, 255), 2 / cam_zoom
                 );
@@ -503,14 +503,14 @@ void area_editor::do_drawing() {
         //New thing marker.
         if(
             sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT || sec_mode == ESM_NEW_SHADOW ||
-            sec_mode == ESM_NEW_STOP || sec_mode == ESM_NEW_PATH1 || sec_mode == ESM_NEW_PATH2 ||
-            sec_mode == ESM_NEW_1WPATH1 || sec_mode == ESM_NEW_1WPATH2
+            sec_mode == ESM_NEW_STOP || sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_LINK2 ||
+            sec_mode == ESM_NEW_1WLINK1 || sec_mode == ESM_NEW_1WLINK2
         ) {
             float x = mouse_cursor_x;
             float y = mouse_cursor_y;
             if(
-                sec_mode != ESM_NEW_1WPATH1 && sec_mode != ESM_NEW_1WPATH2 &&
-                sec_mode != ESM_NEW_PATH1 && sec_mode != ESM_NEW_PATH2
+                sec_mode != ESM_NEW_1WLINK1 && sec_mode != ESM_NEW_1WLINK2 &&
+                sec_mode != ESM_NEW_LINK1 && sec_mode != ESM_NEW_LINK2
             ) {
                 x = snap_to_grid(mouse_cursor_x);
                 y = snap_to_grid(mouse_cursor_y);
@@ -521,7 +521,7 @@ void area_editor::do_drawing() {
         
         //Delete thing marker.
         if(
-            sec_mode == ESM_DEL_STOP || sec_mode == ESM_DEL_PATH
+            sec_mode == ESM_DEL_STOP || sec_mode == ESM_DEL_LINK
         ) {
             al_draw_line(
                 mouse_cursor_x - 16, mouse_cursor_y - 16,
@@ -1417,56 +1417,56 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             float hotspot_y = snap_to_grid(mouse_cursor_y);
             
             cur_area_data.path_stops.push_back(
-                new path_stop(hotspot_x, hotspot_y, vector<path_stop_link>())
+                new path_stop(hotspot_x, hotspot_y, vector<path_link>())
             );
             
             cur_stop = cur_area_data.path_stops.back();
             
             
-        } else if (sec_mode == ESM_NEW_PATH1 || sec_mode == ESM_NEW_1WPATH1) {
-            //Pick a stop to start the path on.
+        } else if (sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_1WLINK1) {
+            //Pick a stop to start the link on.
             
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
                 if(dist(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y) <= STOP_RADIUS) {
-                    new_path_first_stop = s_ptr;
-                    sec_mode = (sec_mode == ESM_NEW_PATH1 ? ESM_NEW_PATH2 : ESM_NEW_1WPATH2);
+                    new_link_first_stop = s_ptr;
+                    sec_mode = (sec_mode == ESM_NEW_LINK1 ? ESM_NEW_LINK2 : ESM_NEW_1WLINK2);
                     break;
                 }
             }
             
-        } else if (sec_mode == ESM_NEW_PATH2 || sec_mode == ESM_NEW_1WPATH2) {
-            //Pick a stop to end the path on.
+        } else if (sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
+            //Pick a stop to end the link on.
             
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
                 if(dist(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y) <= STOP_RADIUS) {
                 
-                    if(new_path_first_stop == s_ptr) continue;
+                    if(new_link_first_stop == s_ptr) continue;
                     
                     //Check if these two stops already have a link. Delete it if so.
-                    for(size_t l = 0; l < new_path_first_stop->links.size(); ++l) {
-                        if(new_path_first_stop->links[l].end_ptr == s_ptr) {
-                            new_path_first_stop->links.erase(new_path_first_stop->links.begin() + l);
+                    for(size_t l = 0; l < new_link_first_stop->links.size(); ++l) {
+                        if(new_link_first_stop->links[l].end_ptr == s_ptr) {
+                            new_link_first_stop->links.erase(new_link_first_stop->links.begin() + l);
                             break;
                         }
                     }
                     for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                        if(s_ptr->links[l].end_ptr == new_path_first_stop) {
+                        if(s_ptr->links[l].end_ptr == new_link_first_stop) {
                             s_ptr->links.erase(s_ptr->links.begin() + l);
                             break;
                         }
                     }
                     
                     
-                    new_path_first_stop->links.push_back(
-                        path_stop_link(
-                            s_ptr, s, (sec_mode == ESM_NEW_1WPATH2)
+                    new_link_first_stop->links.push_back(
+                        path_link(
+                            s_ptr, s, (sec_mode == ESM_NEW_1WLINK2)
                         )
                     );
-                    sec_mode = (sec_mode == ESM_NEW_PATH2 ? ESM_NEW_PATH1 : ESM_NEW_1WPATH1);
+                    sec_mode = (sec_mode == ESM_NEW_LINK2 ? ESM_NEW_LINK1 : ESM_NEW_1WLINK1);
                     break;
                 }
             }
@@ -1501,8 +1501,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
             }
             
-        } else if(sec_mode == ESM_DEL_PATH) {
-            //Pick a path to delete.
+        } else if(sec_mode == ESM_DEL_LINK) {
+            //Pick a link to delete.
             
             bool deleted = false;
             
@@ -1993,13 +1993,13 @@ void area_editor::load() {
     frm_paths->easy_add("lbl_create", new lafi::label(0, 0, 0, 0, "Create:"), 100, 16);
     frm_paths->easy_row();
     frm_paths->easy_add("but_new_stop", new lafi::button(0, 0, 0, 0, "Stop"), 33, 32);
-    frm_paths->easy_add("but_new_path", new lafi::button(0, 0, 0, 0, "Path"), 33, 32);
-    frm_paths->easy_add("but_new_1wpath", new lafi::button(0, 0, 0, 0, "1WPath"), 33, 32);
+    frm_paths->easy_add("but_new_link", new lafi::button(0, 0, 0, 0, "Link"), 33, 32);
+    frm_paths->easy_add("but_new_1wlink", new lafi::button(0, 0, 0, 0, "1WLink"), 33, 32);
     frm_paths->easy_row();
     frm_paths->easy_add("lbl_delete", new lafi::label(0, 0, 0, 0, "Delete:"), 100, 16);
     frm_paths->easy_row();
     frm_paths->easy_add("but_del_stop", new lafi::button(0, 0, 0, 0, "Stop"), 33, 32);
-    frm_paths->easy_add("but_del_path", new lafi::button(0, 0, 0, 0, "Path"), 33, 32);
+    frm_paths->easy_add("but_del_link", new lafi::button(0, 0, 0, 0, "Link"), 33, 32);
     frm_paths->easy_row();
     
     
@@ -2302,28 +2302,28 @@ void area_editor::load() {
         if(sec_mode == ESM_NEW_STOP) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_STOP;
     };
-    frm_paths->widgets["but_new_path"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        if(sec_mode == ESM_NEW_PATH1 || sec_mode == ESM_NEW_PATH2) sec_mode = ESM_NONE;
-        else sec_mode = ESM_NEW_PATH1;
+    frm_paths->widgets["but_new_link"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_LINK2) sec_mode = ESM_NONE;
+        else sec_mode = ESM_NEW_LINK1;
     };
-    frm_paths->widgets["but_new_1wpath"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        if(sec_mode == ESM_NEW_1WPATH1 || sec_mode == ESM_NEW_1WPATH2) sec_mode = ESM_NONE;
-        else sec_mode = ESM_NEW_1WPATH1;
+    frm_paths->widgets["but_new_1wlink"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(sec_mode == ESM_NEW_1WLINK1 || sec_mode == ESM_NEW_1WLINK2) sec_mode = ESM_NONE;
+        else sec_mode = ESM_NEW_1WLINK1;
     };
     frm_paths->widgets["but_del_stop"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_DEL_STOP) sec_mode = ESM_NONE;
         else sec_mode = ESM_DEL_STOP;
     };
-    frm_paths->widgets["but_del_path"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        if(sec_mode == ESM_DEL_PATH) sec_mode = ESM_NONE;
-        else sec_mode = ESM_DEL_PATH;
+    frm_paths->widgets["but_del_link"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(sec_mode == ESM_DEL_LINK) sec_mode = ESM_NONE;
+        else sec_mode = ESM_DEL_LINK;
     };
     frm_paths->widgets["but_back"]->description = "Go back to the main menu.";
     frm_paths->widgets["but_new_stop"]->description = "Create new stops wherever you click.";
-    frm_paths->widgets["but_new_path"]->description = "Click on two stops to connect them with a path.";
-    frm_paths->widgets["but_new_1wpath"]->description = "Click stop #1 then #2 for a one-way path connection.";
+    frm_paths->widgets["but_new_link"]->description = "Click on two stops to connect them with a link.";
+    frm_paths->widgets["but_new_1wlink"]->description = "Click stop #1 then #2 for a one-way path link.";
     frm_paths->widgets["but_del_stop"]->description = "Click stops to delete them.";
-    frm_paths->widgets["but_del_path"]->description = "Click paths to delete them.";
+    frm_paths->widgets["but_del_link"]->description = "Click links to delete them.";
     
     
     //Properties -- shadows.
@@ -2827,7 +2827,7 @@ void area_editor::save_area() {
         path_stop_node->add(links_node);
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
-            path_stop_link* l_ptr = &s_ptr->links[l];
+            path_link* l_ptr = &s_ptr->links[l];
             data_node* link_node = new data_node("l", "");
             links_node->add(link_node);
             

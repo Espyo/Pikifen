@@ -140,12 +140,12 @@ enum EDITOR_SEC_MODES {
     ESM_NEW_SECTOR,
     ESM_NEW_OBJECT,
     ESM_NEW_STOP,
-    ESM_NEW_PATH1,  //Click #1.
-    ESM_NEW_PATH2,  //Click #2.
-    ESM_NEW_1WPATH1, //One-way path, click #1.
-    ESM_NEW_1WPATH2, //One-way path, click #2.
+    ESM_NEW_LINK1,  //Click #1.
+    ESM_NEW_LINK2,  //Click #2.
+    ESM_NEW_1WLINK1, //One-way link, click #1.
+    ESM_NEW_1WLINK2, //One-way link, click #2.
     ESM_DEL_STOP,
-    ESM_DEL_PATH,
+    ESM_DEL_LINK,
     ESM_NEW_SHADOW,
     ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
     ESM_TEXTURE_VIEW,

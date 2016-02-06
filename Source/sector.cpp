@@ -423,7 +423,7 @@ bool edge_intersection::contains(edge* e) {
 /* ----------------------------------------------------------------------------
  * Creates a new path stop.
  */
-path_stop::path_stop(float x, float y, vector<path_stop_link> links) :
+path_stop::path_stop(float x, float y, vector<path_link> links) :
     x(x),
     y(y),
     links(links) {
@@ -434,7 +434,7 @@ path_stop::path_stop(float x, float y, vector<path_stop_link> links) :
 /* ----------------------------------------------------------------------------
  * Creates a new stop link.
  */
-path_stop_link::path_stop_link(path_stop* end_ptr, size_t end_nr, bool one_way) :
+path_link::path_link(path_stop* end_ptr, size_t end_nr, bool one_way) :
     end_ptr(end_ptr),
     end_nr(end_nr),
     one_way(one_way),
@@ -448,7 +448,7 @@ path_stop_link::path_stop_link(path_stop* end_ptr, size_t end_nr, bool one_way) 
  * Because the link doesn't know about the starting stop,
  * you need to provide it as a parameter when calling the function.
  */
-void path_stop_link::calculate_dist(path_stop* start_ptr) {
+void path_link::calculate_dist(path_stop* start_ptr) {
     distance =
         dist(
             start_ptr->x, start_ptr->y,
@@ -462,7 +462,7 @@ void path_stop_link::calculate_dist(path_stop* start_ptr) {
  */
 void path_stop::fix_pointers(area_data &a) {
     for(size_t l = 0; l < links.size(); ++l) {
-        path_stop_link* l_ptr = &links[l];
+        path_link* l_ptr = &links[l];
         l_ptr->end_ptr = NULL;
         
         if(l_ptr->end_nr == string::npos) continue;
@@ -478,7 +478,7 @@ void path_stop::fix_pointers(area_data &a) {
  */
 void path_stop::fix_nrs(area_data &a) {
     for(size_t l = 0; l < links.size(); ++l) {
-        path_stop_link* l_ptr = &links[l];
+        path_link* l_ptr = &links[l];
         l_ptr->end_nr = string::npos;
         
         if(!l_ptr->end_ptr == string::npos) continue;
@@ -592,6 +592,77 @@ void vertex::fix_pointers(area_data &a) {
         size_t e_nr = edge_nrs[e];
         edges.push_back(e_nr == string::npos ? NULL : a.edges[e_nr]);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the shortest available path between two points, following
+ * the area's path graph.
+ */
+vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob* obstacle_found) {
+    vector<path_stop*> full_path;
+    
+    if(cur_area_data.path_stops.empty()) return full_path;
+    
+    //Start by finding the closest stops to the start and finish.
+    path_stop* closest_to_start = NULL;
+    path_stop* closest_to_end = NULL;
+    dist closest_to_start_dist;
+    dist closest_to_end_dist;
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        
+        dist dist_to_start(start_x, start_y, s_ptr->x, s_ptr->y);
+        dist dist_to_end(end_x, end_y, s_ptr->x, s_ptr->y);
+        
+        if(!closest_to_start || dist_to_start < closest_to_start_dist) {
+            closest_to_start_dist = dist_to_start;
+            closest_to_start = s_ptr;
+        }
+        if(!closest_to_end || dist_to_end < closest_to_end_dist) {
+            closest_to_end_dist = dist_to_end;
+            closest_to_end = s_ptr;
+        }
+    }
+    
+    if(closest_to_start == closest_to_end) {
+        full_path.push_back(closest_to_start);
+        return full_path;
+    }
+    
+    return dijkstra(closest_to_start, closest_to_end, obstacle_found);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns what active obstacle stands in the way of these two stops, if any.
+ */
+mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
+    //TODO TEMPORARY DEBUG CODE. Replace with something that actually checks for obstacles.
+    if(
+        circle_intersects_line(
+            leaders[2]->x, leaders[2]->y,
+            leaders[2]->type->radius,
+            s1->x, s1->y,
+            s2->x, s2->y
+        )
+    ) {
+        return leaders[2];
+    }
+    float mx, my;
+    get_mouse_cursor_coordinates(&mx, &my);
+    if(
+        circle_intersects_line(
+            mx, my,
+            32,
+            s1->x, s1->y,
+            s2->x, s2->y
+        )
+    ) {
+        return leaders[2];
+    }
+    return NULL;
 }
 
 
@@ -1307,6 +1378,137 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         if(start != best_vertex) {
             outer->insert(outer->begin() + insertion_vertex_nr + 1 + n_after + iv + 1, best_vertex);
         }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Uses Dijstra's algorithm to get the shortest path between two nodes.
+ * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
+ * *node:          Start and end node.
+ * obstacle_found: If the only path has an obstacle, this points to it.
+ */
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obstacle_found) {
+
+    unordered_set<path_stop*> unvisited;
+    //Distance from starting node + previous stop on the best solution.
+    map<path_stop*, pair<float, path_stop*> > data;
+    //Data about any active obstacles we came across.
+    vector<pair<path_stop*, mob*> > obstacles_found;
+    //If we found an error, set this to true.
+    bool got_error = false;
+    
+    //Initialize the algorithm.
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        unvisited.insert(s_ptr);
+        data[s_ptr] = make_pair(FLT_MAX, (path_stop*) NULL);
+    }
+    
+    data[start_node].first = 0; //Distance between the start node and the start node is 0.
+    
+    while(!unvisited.empty() && !got_error) {
+    
+        //Figure out what node to work on.
+        path_stop* shortest_node = NULL;
+        float shortest_node_dist = 0;
+        pair<float, path_stop*> shortest_node_data;
+        
+        for(auto u = unvisited.begin(); u != unvisited.end(); ++u) {
+            pair<float, path_stop*> d = data[*u];
+            if(!shortest_node || d.first < shortest_node_dist) {
+                shortest_node = *u;
+                shortest_node_dist = d.first;
+                shortest_node_data = d;
+            }
+        }
+        
+        //If we reached the end node, that's it, best path found!
+        if(shortest_node == end_node) {
+        
+            vector<path_stop*> final_path;
+            path_stop* next = data[end_node].second;
+            final_path.push_back(end_node);
+            //Construct the path.
+            while(next) {
+                final_path.insert(final_path.begin(), next);
+                next = data[next].second;
+            }
+            
+            if(final_path.size() < 2) {
+                //This can't be right... Something went wrong.
+                got_error = true;
+                break;
+            } else {
+                obstacle_found = NULL;
+                return final_path;
+            }
+            
+        }
+        
+        unvisited.erase(unvisited.find(shortest_node)); //This node's been visited.
+        
+        //Check the neighbors.
+        for(size_t l = 0; l < shortest_node->links.size(); ++l) {
+            path_link* l_ptr = &shortest_node->links[l];
+            
+            //If this neighbor's been visited, forget it.
+            if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
+            
+            //Is this link unobstructed?
+            mob* obs = get_path_link_obstacle(shortest_node, l_ptr->end_ptr);
+            if(obs) {
+                obstacles_found.push_back(make_pair(shortest_node, obs));
+                continue;
+            }
+            
+            float total_dist = shortest_node_data.first + l_ptr->distance;
+            auto d = &data[l_ptr->end_ptr];
+            
+            if(total_dist < d->first) {
+                //Found a shorter path to this node.
+                d->first = total_dist;
+                d->second = shortest_node;
+            }
+        }
+    }
+    
+    //If we got to this point, there means that there is no available path!
+    if(!obstacles_found.empty()) {
+        //Let's try making a path to the closest obstacle we found, and stay there...
+        //The closest obstacle does not necessarily mean the obstacle on the best path;
+        //we can't know the best path because we can't reach the finish.
+        //By using the closest obstacle, we just hope that that is also the best path.
+        path_stop* closest_obstacle_node = NULL;
+        mob* closest_obstacle_mob = NULL;
+        dist closest_obstacle_d;
+        for(size_t o = 0; o < obstacles_found.size(); ++o) {
+            dist d(
+                start_node->x, start_node->y,
+                obstacles_found[o].first->x,
+                obstacles_found[o].first->y
+            );
+            if(d < closest_obstacle_d || !closest_obstacle_node) {
+                closest_obstacle_d = d;
+                closest_obstacle_node = obstacles_found[o].first;
+                closest_obstacle_mob = obstacles_found[o].second;
+            }
+        }
+        
+        vector<path_stop*> final_path;
+        final_path.push_back(closest_obstacle_node);
+        path_stop* next = data[closest_obstacle_node].second;
+        while(next) {
+            final_path.insert(final_path.begin(), next);
+            next = data[next].second;
+        }
+        
+        obstacle_found = closest_obstacle_mob;
+        return final_path;
+        
+    } else {
+        //No obstacle?... Something really went wrong. No path.
+        return vector<path_stop*>();
     }
 }
 

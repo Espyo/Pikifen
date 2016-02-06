@@ -177,6 +177,29 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             mob_ptr->draw();
         }
         
+        if(!temp_path.empty()) {
+            for(size_t s = 0; s < temp_path.size() - 1; ++s) {
+                path_stop* s_ptr = temp_path[s];
+                path_stop* n_ptr = temp_path[s + 1];
+                al_draw_line(
+                    s_ptr->x,
+                    s_ptr->y,
+                    n_ptr->x,
+                    n_ptr->y,
+                    al_map_rgb(255, 128, 128),
+                    3
+                );
+            }
+            for(size_t s = 0; s < temp_path.size(); ++s) {
+                path_stop* s_ptr = temp_path[s];
+                al_draw_text(
+                    font, al_map_rgb(128, 255, 128),
+                    s_ptr->x, s_ptr->y - font_h * 0.5,
+                    ALLEGRO_ALIGN_CENTER, i2s(s).c_str()
+                );
+            }
+        }
+        
         
         /* Layer 4
         ***********************
