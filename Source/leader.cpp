@@ -431,7 +431,7 @@ void leader::fall_asleep(mob* m, void* info1, void* info2) {
     leader::dismiss(m, info1, info2);
     m->remove_target();
     
-    m->become_carriable();
+    m->become_carriable(false);
     
     m->set_animation(LEADER_ANIM_LIE);
 }

@@ -17,6 +17,14 @@
 #include "pikmin_type.h"
 
 
+enum PELLET_STATES {
+    PELLET_STATE_IDLE,
+    PELLET_STATE_BEING_DELIVERED,
+    
+    N_PELLET_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A pellet can be delivered to an Onion in
  * order to generate more Pikmin.
@@ -29,6 +37,8 @@ public:
     
     pellet(float x, float y, pellet_type* type, const float angle, const string &vars);
     virtual void draw();
+    
+    static void handle_delivery(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef PELLET_INCLUDED

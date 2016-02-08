@@ -416,6 +416,17 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.run_function(mob::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(leader::start_waking_up);
+            efc.change_state("waking_up");
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run_function(leader::start_waking_up);
@@ -446,6 +457,23 @@ void leader_type::init_script() {
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader::focus);
             efc.change_state("sleeping");
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(mob::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(leader::start_waking_up);
+            efc.change_state("inactive_waking_up");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader::start_waking_up);

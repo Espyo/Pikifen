@@ -41,12 +41,23 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
 /* ----------------------------------------------------------------------------
  * Receive a mob, carried by a Pikmin.
  */
-void onion::receive_mob(size_t seeds) {
-    if(spew_queue == 0) {
-        full_spew_timer.start();
-        next_spew_timer.time_left = 0.0f;
+void onion::receive_mob(mob* m, void* info1, void* info2) {
+    size_t seeds = (size_t) info1;
+    onion* o_ptr = (onion*) m;
+    
+    if(o_ptr->spew_queue == 0) {
+        o_ptr->full_spew_timer.start();
+        o_ptr->next_spew_timer.time_left = 0.0f;
     }
-    spew_queue += seeds;
+    o_ptr->spew_queue += seeds;
+    
+    random_particle_explosion(
+        PARTICLE_TYPE_BITMAP, bmp_smoke,
+        o_ptr->x, o_ptr->y,
+        60, 80, 10, 20,
+        1, 2, 24, 24, al_map_rgb(255, 255, 255)
+    );
+    
 }
 
 

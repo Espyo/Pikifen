@@ -21,6 +21,9 @@ pellet_type::pellet_type() :
     non_match_seeds(0),
     bmp_number(nullptr) {
     
+    init_script();
+    
+    move_speed = 60; //TODO
 }
 
 void pellet_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
@@ -40,6 +43,49 @@ void pellet_type::load_from_file(data_node* file, const bool load_resources, vec
     }
     
     anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
+}
+
+
+void pellet_type::init_script() {
+    easy_fsm_creator efc;
     
-    move_speed = 60; //TODO should this be here?
+    efc.new_state("idle", PELLET_STATE_IDLE); {
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(mob::handle_carrier_added);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.run_function(mob::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(mob::start_being_delivered);
+            efc.change_state("being_delivered");
+        }
+    }
+    
+    efc.new_state("being_delivered", PELLET_STATE_BEING_DELIVERED); {
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run_function(pellet::handle_delivery);
+        }
+    }
+    
+    
+    states = efc.finish();
+    first_state_nr = fix_states(states, "idle");
+    carriable_state_id = PELLET_STATE_IDLE;
+    
+    if(states.size() != N_PELLET_STATES) {
+        error_log(
+            "ENGINE WARNING: Number of pellet states on the FSM (" + i2s(states.size()) +
+            ") and the enum (" + i2s(N_PELLET_STATES) + ") do not match.");
+    }
 }

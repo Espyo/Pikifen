@@ -19,7 +19,7 @@ treasure::treasure(const float x, const float y, treasure_type* type, const floa
     mob(x, y, type, angle, vars),
     buried(s2f(get_var_value(vars, "buried", "0"))) {
     
-    become_carriable();
+    become_carriable(true);
     
     set_animation(ANIM_IDLE);
     

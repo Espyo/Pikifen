@@ -117,7 +117,9 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_CARRIER_REMOVED,          //When a Pikmin was removed from the list of Pikmin carrying this mob.
     MOB_EVENT_CARRY_BEGIN_MOVE,         //When the mob needs to begin moving, as it's being carried.
     MOB_EVENT_CARRY_STOP_MOVE,          //When the mob needs to stop moving, as it's no longer being carried.
+    MOB_EVENT_CARRY_DELIVERED,          //When the mob was sucessfully delivered to its destination after being carried.
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob stops being carriable.
+    MOB_EVENT_RECEIVE_DELIVERY,         //When the mob receives an object that was carried to it.
     
     //Events that only leaders can really handle.
     LEADER_EVENT_FOCUSED,        //When the leader becomes the one controlled by the player.

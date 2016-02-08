@@ -385,7 +385,7 @@ mobs{
 	}
 	Onion{
 		type=Red Onion
-		p=1600.00 -0.00
+		p=544.00 -256.00
 	}
 	Pikmin{
 		type=Red Pikmin
@@ -418,6 +418,10 @@ mobs{
 	Leader{
 		type=President
 		p=672.00 160.00
+	}
+	Pellet{
+		type=Red 5
+		p=160.00 96.00
 	}
 }
 path_stops{

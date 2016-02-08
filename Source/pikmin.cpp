@@ -365,7 +365,7 @@ void pikmin::reach_carriable_object(mob* m, void* info1, void* info2) {
 void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     if(!p->focused_mob) return;
-    p->focused_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED);
+    p->focused_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED, (void*) p);
     
     p->focused_mob = NULL;
     p->remove_target();

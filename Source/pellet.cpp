@@ -20,22 +20,51 @@ pellet::pellet(float x, float y, pellet_type* type, const float angle, const str
     mob(x, y, type, angle, vars),
     pel_type(type) {
     
-    become_carriable();
+    become_carriable(false);
     
     set_animation(ANIM_IDLE);
 }
 
 void pellet::draw() {
 
-    mob::draw();
-    
     frame* f_ptr = anim.get_frame();
     if(!f_ptr) return;
     
-    float dummy_w, dummy_h, scale;
-    get_sprite_dimensions(this, f_ptr, &dummy_w, &dummy_h, &scale);
+    float draw_x, draw_y;
+    float draw_w, draw_h, scale;
+    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h, &scale);
     
     float radius = type->radius * scale;
+    bool being_delivered = false;
+    ALLEGRO_COLOR extra_color;
+    
+    if(fsm.cur_state->id == PELLET_STATE_BEING_DELIVERED) {
+        //If it's being delivered, do some changes to the scale and coloring.
+        being_delivered = true;
+        
+        if(script_timer.get_ratio_left() >= 0.5) {
+            //First half of the sucking in process = interpolated coloring.
+            extra_color = interpolate_color(
+                              script_timer.get_ratio_left(),
+                              0.5, 1.0,
+                              ((onion*) carrying_target)->oni_type->pik_type->main_color,
+                              al_map_rgb(0, 0, 0)
+                          );
+        } else {
+            //Second half of the sucking in process = interpolated scaling.
+            extra_color = ((onion*) carrying_target)->oni_type->pik_type->main_color;
+            radius *= (script_timer.get_ratio_left() * 2.0);
+        }
+    }
+    
+    draw_sprite(
+        f_ptr->bitmap,
+        draw_x, draw_y,
+        radius * 2.0, -1,
+        angle,
+        map_gray(get_sprite_lighting(this))
+    );
     
     draw_sprite(
         pel_type->bmp_number,
@@ -44,4 +73,37 @@ void pellet::draw() {
         0, map_gray(get_sprite_lighting(this))
     );
     
+    if(being_delivered) {
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(&old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst);
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+        
+        draw_sprite(
+            f_ptr->bitmap,
+            x, y,
+            radius * 2.0, -1,
+            angle,
+            extra_color
+        );
+        
+        al_set_separate_blender(old_op, old_src, old_dst, old_aop, old_asrc, old_adst);
+    }
+    
+}
+
+
+void pellet::handle_delivery(mob* m, void* info1, void* info2) {
+    size_t seeds = 0;
+    pellet* p_ptr = (pellet*) m;
+    onion* o_ptr = (onion*) p_ptr->carrying_target;
+    
+    if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
+        seeds = p_ptr->pel_type->match_seeds;
+    } else {
+        seeds = p_ptr->pel_type->non_match_seeds;
+    }
+    
+    o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
+    
+    p_ptr->to_delete = true;
 }

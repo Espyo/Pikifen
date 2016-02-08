@@ -28,6 +28,7 @@ public:
     onion_type();
     
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void init_script();
 };
 
 #endif //ifndef ONION_TYPE_INCLUDED

@@ -80,7 +80,6 @@ struct carry_info_struct {
     
     float cur_carrying_strength; //This is to avoid going through the vector only to find out the total strength.
     size_t cur_n_carriers;       //Likewise, this is to avoid going through the vector only to find out the number. Note that this is the number of spaces reserved. A Pikmin could be on its way to its spot, not necessarily there already.
-    pikmin_type* decided_type;   //Current Onion type it's being taken to.
     float final_destination_x;
     float final_destination_y;
     
@@ -145,6 +144,8 @@ public:
     bool gtt_instant;                   //If true, teleport instantly.
     bool gtt_free_move;                 //If true, the mob can move in a direction it's not facing.
     float target_distance;              //Distance from the target in which the mob is considered as being there.
+    vector<path_stop*> path;
+    size_t cur_path_stop_nr;
     
     void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL, bool free_move = false, float target_distance = 3);
     void remove_target();
@@ -188,7 +189,7 @@ public:
     size_t chomp_max;              //Max mobs it can chomp in the current attack.
     
     carry_info_struct* carry_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
-    void become_carriable();
+    void become_carriable(const bool to_ship);
     void become_uncarriable();
     
     void tick();
@@ -200,7 +201,11 @@ public:
     static void handle_carrier_added(mob* m, void* info1, void* info2);
     static void handle_carrier_removed(mob* m, void* info1, void* info2);
     static void carry_begin_move(mob* m, void* info1, void* info2);
+    static void carry_stop_move(mob* m, void* info1, void* info2);
+    static void set_next_target(mob* m, void* info1, void* info2);
+    static void start_being_delivered(mob* m, void* info1, void* info2);
     void check_carrying(mob* added, mob* removed);
+    mob* carrying_target;
     
     //Drawing tools.
     void get_sprite_center(mob* m, frame* f, float* x, float* y);

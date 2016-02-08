@@ -53,6 +53,8 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     target_z(nullptr),
     target_rel_x(nullptr),
     target_rel_y(nullptr),
+    carrying_target(nullptr),
+    cur_path_stop_nr(string::npos),
     focused_mob(nullptr),
     fsm(this),
     first_state_set(false),
@@ -785,7 +787,7 @@ void mob::finish_dying() {
     if(typeid(*this) == typeid(enemy)) {
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
-            become_carriable();
+            become_carriable(false);
         }
         particles.push_back(
             particle(
@@ -832,7 +834,8 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     carry_to_ship(carry_to_ship),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    decided_type(nullptr) {
+    final_destination_x(0),
+    final_destination_y(0) {
     
     float pikmin_radius = 16;
     //Let's assume all Pikmin are the same radius. Or at least very close.
@@ -1233,11 +1236,8 @@ void mob::lose_health(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * Sets up data for a mob to become carriable.
  */
-void mob::become_carriable() {
-    carry_info = new carry_info_struct(
-        this,
-        false //TODO
-    );
+void mob::become_carriable(const bool to_ship) {
+    carry_info = new carry_info_struct(this, to_ship);
 }
 
 
@@ -1271,7 +1271,7 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
-    m->check_carrying((mob*) info1, NULL);
+    m->check_carrying(pik_ptr, NULL);
 }
 
 
@@ -1279,7 +1279,14 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
  * Event handler for a carrier Pikmin being removed.
  */
 void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
-    m->check_carrying(NULL, (mob*) info1);
+    pikmin* pik_ptr = (pikmin*) info1;
+    
+    m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;
+    m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_FREE;
+    m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
+    m->carry_info->cur_n_carriers--;
+    
+    m->check_carrying(NULL, pik_ptr);
 }
 
 
@@ -1291,18 +1298,38 @@ void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
 void mob::check_carrying(mob* added, mob* removed) {
     if(!carry_info) return;
     
-    if(carry_info->cur_carrying_strength < type->weight) return;
+    if(carry_info->cur_carrying_strength < type->weight) {
+        fsm.run_event(MOB_EVENT_CARRY_STOP_MOVE);
+        return;
+    }
     
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
-    
     if(carry_info->carry_to_ship) {
     
-        //TODO make it better. Handle multiple ships, for one thing.
-        carry_info->final_destination_x = ships[0]->x + ships[0]->type->radius + type->radius + 8;
-        carry_info->final_destination_y = ships[0]->y;
+        ship* closest_ship = NULL;
+        dist closest_ship_dist;
         
-        carry_info->decided_type = NULL;
+        for(size_t s = 0; s < ships.size(); ++s) {
+            ship* s_ptr = ships[s];
+            dist d(x, y, s_ptr->x, s_ptr->y);
+            
+            if(!closest_ship || d < closest_ship_dist) {
+                closest_ship = s_ptr;
+                closest_ship_dist = d;
+            }
+        }
+        
+        if(closest_ship) {
+            carry_info->final_destination_x = closest_ship->x + closest_ship->type->radius + type->radius + 8;
+            carry_info->final_destination_y = closest_ship->y;
+            carrying_target = closest_ship;
+        } else {
+            //TODO make them walk in a circle.
+            carry_info->final_destination_x = x;
+            carry_info->final_destination_y = y;
+            carrying_target = NULL;
+        }
         
         fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
         
@@ -1327,9 +1354,9 @@ void mob::check_carrying(mob* added, mob* removed) {
     if(available_onions.empty()) {
         //No Onions?! Well...make the Pikmin stuck.
         //TODO make them carry in place.
-        carry_info->decided_type = NULL;
         carry_info->final_destination_x = x;
         carry_info->final_destination_x = y;
+        carrying_target = NULL;
         
         fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
         
@@ -1367,10 +1394,12 @@ void mob::check_carrying(mob* added, mob* removed) {
         }
     }
     
+    pikmin_type* decided_type = NULL;
+    
     //Now let's pick an Onion from the candidates.
     if(majority_types.size() == 1) {
         //If there's only one possible type to pick, pick it.
-        carry_info->decided_type = *majority_types.begin();
+        decided_type = *majority_types.begin();
         
     } else {
         //If there's a tie, let's take a careful look.
@@ -1405,19 +1434,19 @@ void mob::check_carrying(mob* added, mob* removed) {
         //If so, it can be chosen again, but if not, it cannot.
         bool can_continue = false;
         for(size_t mt = 0; mt < majority_types.size(); ++mt) {
-            if(majority_types[mt] == carry_info->decided_type) {
+            if(majority_types[mt] == decided_type) {
                 can_continue = true;
                 break;
             }
         }
-        if(!can_continue) carry_info->decided_type = NULL;
+        if(!can_continue) decided_type = NULL;
         
         //If the Pikmin that just joined is not a part of the majorities,
         //then it had no impact on the existing ties.
         //Go with the Onion that had been decided before.
-        if(new_tie || !carry_info->decided_type) {
+        if(new_tie || !decided_type) {
             //TODO make this cycle instead of being picked randomly.
-            carry_info->decided_type = majority_types[randomi(0, majority_types.size() - 1)];
+            decided_type = majority_types[randomi(0, majority_types.size() - 1)];
         }
     }
     
@@ -1425,7 +1454,7 @@ void mob::check_carrying(mob* added, mob* removed) {
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
     for(; onion_nr < onions.size(); ++onion_nr) {
-        if(onions[onion_nr]->oni_type->pik_type == carry_info->decided_type) {
+        if(onions[onion_nr]->oni_type->pik_type == decided_type) {
             break;
         }
     }
@@ -1433,6 +1462,7 @@ void mob::check_carrying(mob* added, mob* removed) {
     //Finally, set the destination data.
     carry_info->final_destination_x = onions[onion_nr]->x;
     carry_info->final_destination_y = onions[onion_nr]->y;
+    carrying_target = onions[onion_nr];
     
     //Get going!
     fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
@@ -1443,17 +1473,69 @@ void mob::check_carrying(mob* added, mob* removed) {
  * Begin moving a carried object.
  */
 void mob::carry_begin_move(mob* m, void* info1, void* info2) {
-    m->set_target(
-        m->carry_info->final_destination_x,
-        m->carry_info->final_destination_y,
-        NULL, NULL,
-        false, NULL, true
-    );
+    mob* obs = NULL;
+    m->path = get_path(
+                  m->x, m->y,
+                  m->carry_info->final_destination_x,
+                  m->carry_info->final_destination_y,
+                  obs
+              );
+    m->cur_path_stop_nr = string::npos;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Draws the mob. This should be overwritten by child classes.
+ * Stop moving a carried object.
+ */
+void mob::carry_stop_move(mob* m, void* info1, void* info2) {
+    m->remove_target();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts the process of a mob being delivered to an Onion/ship.
+ */
+void mob::start_being_delivered(mob* m, void* info1, void* info2) {
+    m->become_uncarriable();
+    m->set_timer(DELIVERY_SUCK_TIME);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the next target when following a path.
+ */
+void mob::set_next_target(mob* m, void* info1, void* info2) {
+    m->cur_path_stop_nr = (m->cur_path_stop_nr == string::npos ? 0 : m->cur_path_stop_nr + 1);
+    
+    if(m->cur_path_stop_nr == m->path.size()) {
+        //Reached the final stop.
+        //Go to the final destination.
+        m->set_target(
+            m->carry_info->final_destination_x,
+            m->carry_info->final_destination_y,
+            NULL, NULL, false, NULL, true
+        );
+        
+    } else if(m->cur_path_stop_nr == m->path.size() + 1) {
+        //Reached the final destination.
+        //Send event.
+        m->remove_target();
+        m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
+        
+    } else {
+        //Reached a stop.
+        //Go to the next.
+        m->set_target(
+            m->path[m->cur_path_stop_nr]->x,
+            m->path[m->cur_path_stop_nr]->y,
+            NULL, NULL, false, NULL, true
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the mob. This can be overwritten by child classes.
  */
 void mob::draw() {
 

@@ -20,6 +20,14 @@
 #include "pikmin_type.h"
 #include "onion_type.h"
 
+
+enum ONION_STATES {
+    ONION_STATE_IDLE,
+    
+    N_ONION_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * An Onion is where Pikmin are stored.
  */
@@ -36,7 +44,7 @@ public:
     onion(float x, float y, onion_type* type, const float angle, const string &vars);
     virtual void draw();
     
-    void receive_mob(size_t seeds);
+    static void receive_mob(mob* m, void* info1, void* info2);
     void spew();
 };
 
