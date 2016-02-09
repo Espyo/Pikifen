@@ -40,3 +40,18 @@ void ship::draw() {
         ), 1
     );
 }
+
+
+void ship::receive_mob(mob* m, void* info1, void* info2) {
+    size_t pokos = (size_t) info1;
+    ship* s_ptr = (ship*) m;
+    
+    random_particle_explosion(
+        PARTICLE_TYPE_BITMAP, bmp_smoke,
+        s_ptr->x + s_ptr->type->radius,
+        s_ptr->y,
+        60, 80, 10, 20,
+        1, 2, 24, 24, al_map_rgb(255, 255, 255)
+    );
+    
+}

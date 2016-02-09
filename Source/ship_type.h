@@ -18,6 +18,7 @@
 #include "misc_structs.h"
 #include "mob_type.h"
 
+
 /* ----------------------------------------------------------------------------
  * A type of ship (Hocotate Ship, research pod, golden HS, golden RP, ...).
  */
@@ -28,6 +29,7 @@ public:
     
     ship_type();
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void init_script();
 };
 
 #endif //ifndef SHIP_TYPE_INCLUDED

@@ -242,6 +242,7 @@ void do_gameplay_logic() {
                 //Check if mob 1 should be pushed by mob 2.
                 if(
                     m2_ptr->type->pushes &&
+                    m2_ptr->tangible &&
                     m_ptr->type->pushable &&
                     m2_ptr->z < m_ptr->z + m_ptr->type->height &&
                     m2_ptr->z + m2_ptr->type->height > m_ptr->z &&
@@ -318,7 +319,11 @@ void do_gameplay_logic() {
                         z_touch = !((m2_ptr->z > m_ptr->z + m_ptr->type->height) || (m2_ptr->z + m2_ptr->type->height < m2_ptr->z));
                     }
                     
-                    if(z_touch && d <= (m_ptr->type->radius + m2_ptr->type->radius)) {
+                    if(
+                        z_touch &&
+                        m2_ptr->tangible &&
+                        d <= (m_ptr->type->radius + m2_ptr->type->radius)
+                    ) {
                         if(touch_ob_ev) {
                             touch_ob_ev->run(m_ptr, (void*) m2_ptr);
                         }
@@ -635,14 +640,14 @@ void do_gameplay_logic() {
             }
             
             unsigned char final_alpha = 255;
-    
+            
             if(
                 bbox_check(
                     cur_leader_ptr->x, cur_leader_ptr->y,
                     o_ptr->x, o_ptr->y,
                     cur_leader_ptr->type->radius + o_ptr->type->radius * 3
                 )
-            ){
+            ) {
                 final_alpha = ONION_SEETHROUGH_ALPHA;
             }
             
@@ -652,7 +657,7 @@ void do_gameplay_logic() {
                     o_ptr->x, o_ptr->y,
                     cur_leader_ptr->type->radius + o_ptr->type->radius * 3
                 )
-            ){
+            ) {
                 final_alpha = ONION_SEETHROUGH_ALPHA;
             }
             

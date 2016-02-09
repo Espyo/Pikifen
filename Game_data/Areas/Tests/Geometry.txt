@@ -92,6 +92,12 @@ vertexes{
 	v=534.08 -94.79
 	v=761.54 -32.02
 	v=-544.00 -704.00
+	v=704.00 128.00
+	v=896.00 128.00
+	v=704.05 182.91
+	v=704.05 264.82
+	v=896.00 320.00
+	v=704.00 320.00
 }
 edges{
 	e{
@@ -538,6 +544,30 @@ edges{
 		s=11 0
 		v=92 39
 	}
+	e{
+		s=0 29
+		v=93 94
+	}
+	e{
+		s=0 29
+		v=94 95
+	}
+	e{
+		s=0 29
+		v=95 93
+	}
+	e{
+		s=0 30
+		v=96 97
+	}
+	e{
+		s=0 30
+		v=97 98
+	}
+	e{
+		s=0 30
+		v=98 96
+	}
 }
 sectors{
 	s{
@@ -674,6 +704,14 @@ sectors{
 		z=200.00
 		texture=Rock.jpg
 	}
+	s{
+		z=100.00
+		texture=Grass 2.jpg
+	}
+	s{
+		z=100.00
+		texture=Grass 2.jpg
+	}
 }
 mobs{
 	Special{
@@ -773,57 +811,16 @@ mobs{
 	}
 	Pellet{
 		type=Red 5
-		p=608.00 192.00
+		p=896.00 224.00
 	}
 }
 path_stops{
 	s{
-		pos=-480.00 -608.00
-		links{
-			l{
-				nr=1
-				1w=false
-			}
-		}
+		pos=832.00 224.00
+		links=
 	}
 	s{
-		pos=-224.00 -672.00
-		links{
-			l{
-				nr=2
-				1w=false
-			}
-		}
-	}
-	s{
-		pos=-256.00 -288.00
-		links{
-			l{
-				nr=3
-				1w=false
-			}
-		}
-	}
-	s{
-		pos=-896.00 -320.00
-		links{
-			l{
-				nr=4
-				1w=false
-			}
-		}
-	}
-	s{
-		pos=-864.00 -832.00
-		links{
-			l{
-				nr=5
-				1w=false
-			}
-		}
-	}
-	s{
-		pos=-448.00 -800.00
+		pos=576.00 224.00
 		links{
 			l{
 				nr=0

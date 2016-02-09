@@ -27,7 +27,11 @@
 class treasure_type : public mob_type {
 public:
 
+    float value;
+    
+    treasure_type();
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void init_script();
 };
 
 #endif //ifndef TREASURE_TYPE_INCLUDED

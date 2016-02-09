@@ -599,7 +599,7 @@ void vertex::fix_pointers(area_data &a) {
  * Returns the shortest available path between two points, following
  * the area's path graph.
  */
-vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob* obstacle_found) {
+vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob** obstacle_found) {
     vector<path_stop*> full_path;
     
     if(cur_area_data.path_stops.empty()) return full_path;
@@ -644,18 +644,6 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
         circle_intersects_line(
             leaders[2]->x, leaders[2]->y,
             leaders[2]->type->radius,
-            s1->x, s1->y,
-            s2->x, s2->y
-        )
-    ) {
-        return leaders[2];
-    }
-    float mx, my;
-    get_mouse_cursor_coordinates(&mx, &my);
-    if(
-        circle_intersects_line(
-            mx, my,
-            32,
             s1->x, s1->y,
             s2->x, s2->y
         )
@@ -1388,7 +1376,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
  * *node:          Start and end node.
  * obstacle_found: If the only path has an obstacle, this points to it.
  */
-vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obstacle_found) {
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found) {
 
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
@@ -1440,7 +1428,7 @@ vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obs
                 got_error = true;
                 break;
             } else {
-                obstacle_found = NULL;
+                if(obstacle_found) *obstacle_found = NULL;
                 return final_path;
             }
             
@@ -1503,7 +1491,7 @@ vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obs
             next = data[next].second;
         }
         
-        obstacle_found = closest_obstacle_mob;
+        if(obstacle_found) *obstacle_found = closest_obstacle_mob;
         return final_path;
         
     } else {

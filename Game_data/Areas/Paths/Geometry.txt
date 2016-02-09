@@ -1,17 +1,17 @@
 vertexes{
 	v=-64.00 -480.00
 	v=1696.00 -480.00
-	v=1696.00 512.00
-	v=-64.00 512.00
+	v=1696.00 544.00
+	v=-64.00 544.00
 	v=128.00 -32.00
 	v=288.00 -32.00
 	v=288.00 32.00
 	v=128.00 32.00
 	v=288.00 -160.00
-	v=288.00 288.00
+	v=288.00 416.00
 	v=352.00 32.00
-	v=352.00 224.00
-	v=512.00 224.00
+	v=352.00 352.00
+	v=512.00 352.00
 	v=352.00 -32.00
 	v=640.00 32.00
 	v=512.00 -32.00
@@ -57,6 +57,8 @@ vertexes{
 	v=352.00 96.00
 	v=288.00 64.00
 	v=352.00 64.00
+	v=576.00 288.00
+	v=576.00 416.00
 }
 edges{
 	e{
@@ -101,7 +103,7 @@ edges{
 	}
 	e{
 		s=0 1
-		v=25 9
+		v=25 58
 	}
 	e{
 		s=4 9
@@ -327,6 +329,14 @@ edges{
 		s=4 11
 		v=57 55
 	}
+	e{
+		s=0 1
+		v=58 59
+	}
+	e{
+		s=0 1
+		v=59 9
+	}
 }
 sectors{
 	s{
@@ -397,19 +407,19 @@ mobs{
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=32.00 64.00
+		p=-0.24 79.22
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-32.00 96.00
+		p=-16.24 63.86
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=-0.00 96.00
+		p=-16.24 79.86
 	}
 	Pikmin{
 		type=Red Pikmin
-		p=32.00 96.00
+		p=-31.60 80.50
 	}
 	Leader{
 		type=Louie
@@ -422,6 +432,42 @@ mobs{
 	Pellet{
 		type=Red 5
 		p=160.00 96.00
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-17.52 127.86
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-0.00 128.00
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-32.00 128.00
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-32.24 143.86
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-16.24 143.86
+	}
+	Pikmin{
+		type=Blue Pikmin
+		p=-0.88 143.86
+	}
+	Onion{
+		type=Blue Onion
+		p=704.00 -128.00
+	}
+	Treasure{
+		type=Test
+		p=672.00 384.00
+	}
+	Ship{
+		type=Hocotate ship
+		p=128.00 -320.00
 	}
 }
 path_stops{
@@ -469,7 +515,7 @@ path_stops{
 				1w=false
 			}
 			l{
-				nr=7
+				nr=6
 				1w=true
 			}
 		}
@@ -479,23 +525,14 @@ path_stops{
 		links=
 	}
 	s{
-		pos=320.00 256.00
-		links{
-			l{
-				nr=1
-				1w=true
-			}
-		}
-	}
-	s{
 		pos=544.00 256.00
 		links{
 			l{
-				nr=8
+				nr=7
 				1w=false
 			}
 			l{
-				nr=6
+				nr=16
 				1w=true
 			}
 		}
@@ -504,11 +541,11 @@ path_stops{
 		pos=832.00 256.00
 		links{
 			l{
-				nr=14
+				nr=13
 				1w=false
 			}
 			l{
-				nr=9
+				nr=8
 				1w=false
 			}
 		}
@@ -517,7 +554,7 @@ path_stops{
 		pos=1216.00 256.00
 		links{
 			l{
-				nr=10
+				nr=9
 				1w=false
 			}
 		}
@@ -526,7 +563,7 @@ path_stops{
 		pos=1216.00 -160.00
 		links{
 			l{
-				nr=11
+				nr=10
 				1w=false
 			}
 		}
@@ -535,7 +572,7 @@ path_stops{
 		pos=960.00 -160.00
 		links{
 			l{
-				nr=12
+				nr=11
 				1w=false
 			}
 		}
@@ -557,7 +594,7 @@ path_stops{
 		pos=832.00 128.00
 		links{
 			l{
-				nr=13
+				nr=12
 				1w=false
 			}
 		}
@@ -566,7 +603,7 @@ path_stops{
 		pos=1088.00 128.00
 		links{
 			l{
-				nr=14
+				nr=13
 				1w=true
 			}
 		}
@@ -575,7 +612,25 @@ path_stops{
 		pos=1088.00 -32.00
 		links{
 			l{
-				nr=15
+				nr=14
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=544.00 384.00
+		links{
+			l{
+				nr=17
+				1w=true
+			}
+		}
+	}
+	s{
+		pos=320.00 384.00
+		links{
+			l{
+				nr=1
 				1w=true
 			}
 		}

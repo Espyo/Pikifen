@@ -16,6 +16,15 @@
 #include "pikmin.h"
 #include "treasure_type.h"
 
+
+enum TREASURE_STATES {
+    TREASURE_STATE_IDLE,
+    TREASURE_STATE_BEING_DELIVERED,
+    
+    N_TREASURE_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * "Treasure" is the catch-all term for the
  * main collectible in the game.
@@ -38,9 +47,12 @@
 class treasure : public mob {
 public:
 
+    treasure_type* tre_type;
     float buried; //0: fully unburried. 1: fully buried.
     
     treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
+    
+    static void handle_delivery(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef TREASURE_INCLUDED

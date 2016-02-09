@@ -15,6 +15,14 @@
 #include "mob.h"
 #include "ship_type.h"
 
+
+enum SHIP_STATES {
+    SHIP_STATE_IDLE,
+    
+    N_SHIP_STATES,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A ship is where "treasure" is delivered to.
  */
@@ -26,6 +34,8 @@ public:
     ship(float x, float y, ship_type* type, float angle, const string &vars);
     
     virtual void draw();
+    
+    static void receive_mob(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef SHIP_INCLUDED

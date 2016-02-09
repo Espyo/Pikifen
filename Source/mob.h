@@ -82,6 +82,7 @@ struct carry_info_struct {
     size_t cur_n_carriers;       //Likewise, this is to avoid going through the vector only to find out the number. Note that this is the number of spaces reserved. A Pikmin could be on its way to its spot, not necessarily there already.
     float final_destination_x;
     float final_destination_y;
+    mob* obstacle_ptr;           //If the path has an obstacle, this is the pointer to it. This not being NULL also means the last stop in the path is the stop before the obstacle.
     
     carry_info_struct(mob* m, const bool carry_to_ship);
     bool is_full();
@@ -131,6 +132,7 @@ public:
     bool affected_by_gravity;         //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
     float push_amount;                //Amount it's being pushed by another mob.
     float push_angle;                 //Angle that another mob is pushing it to.
+    bool tangible;                    //If it can be touched by other mobs.
     
     void face(const float new_angle); //Makes the mob face an angle, but it'll turn at its own pace.
     void get_final_target(float* x, float* y); //Returns the final coordinates of a go_to_target target.

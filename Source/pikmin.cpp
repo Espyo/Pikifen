@@ -346,15 +346,19 @@ void pikmin::reach_carriable_object(mob* m, void* info1, void* info2) {
     
     pik_ptr->set_animation(PIKMIN_ANIM_GRAB, true);
     
+    float final_x = carriable_mob->x + carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].x;
+    float final_y = carriable_mob->y + carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].y;
+    
     pik_ptr->set_target(
         carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].x,
         carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].y,
-        &carriable_mob->x,
-        &carriable_mob->y,
+        &carriable_mob->x, &carriable_mob->y,
         true, &carriable_mob->z
     );
     
-    pik_ptr->face(atan2(carriable_mob->y - pik_ptr->y, carriable_mob->x - pik_ptr->x));
+    pik_ptr->face(atan2(carriable_mob->y - final_y, carriable_mob->x - final_x));
+    
+    pik_ptr->set_animation(PIKMIN_ANIM_CARRY);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
     pik_ptr->focused_mob->fsm.run_event(

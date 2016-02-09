@@ -1248,6 +1248,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 moving_thing = cur_area_data.vertexes.size() - 1;
                 
                 created_vertex = true;
+                made_changes = true;
             }
             
             //Find a vertex to drag.
@@ -1421,6 +1422,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             );
             
             cur_stop = cur_area_data.path_stops.back();
+            made_changes = true;
             
             
         } else if (sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_1WLINK1) {
@@ -1435,6 +1437,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     break;
                 }
             }
+            
+            made_changes = true;
             
         } else if (sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
             //Pick a stop to end the link on.
@@ -1471,6 +1475,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
+            made_changes = true;
+            
         } else if(sec_mode == ESM_DEL_STOP) {
             //Pick a stop to delete.
             
@@ -1501,6 +1507,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
             }
             
+            made_changes = true;
+            
         } else if(sec_mode == ESM_DEL_LINK) {
             //Pick a link to delete.
             
@@ -1527,6 +1535,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 
                 if(deleted) break;
             }
+            
+            made_changes = true;
             
         } else if(sec_mode == ESM_NEW_SHADOW) {
             //Create a new shadow where the cursor is.

@@ -6,3 +6,4 @@ pushable = false
 pushes = true
 radius = 114
 weight = 30
+value = 50

@@ -317,11 +317,11 @@ struct area_data {
 void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
-vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob* obstacle_found);
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
 void get_cce(vector<vertex> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes);
-vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob* obstacle_found);
+vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob** obstacle_found);
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);

@@ -63,6 +63,9 @@ void pellet_type::init_script() {
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
             efc.run_function(mob::carry_stop_move);
         }
+        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+            efc.run_function(mob::carry_stop_move);
+        }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.run_function(mob::set_next_target);
         }

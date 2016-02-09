@@ -102,6 +102,14 @@ animations{
 			}
 		}
 	}
+	carry{
+		loop_frame=0
+		frame_instances{
+			grab{
+				duration=0.00
+			}
+		}
+	}
 }
 frames{
 	burrowed{

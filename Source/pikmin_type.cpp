@@ -74,6 +74,7 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,   "thrown"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACK,   "attack"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRAB,     "grab"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_CARRY,    "carry"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
@@ -291,6 +292,14 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::reach_dismiss_spot);
             efc.change_state("idle");
         }
+        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+            efc.run_function(pikmin::go_to_opponent);
+            efc.change_state("going_to_opponent");
+        }
+        efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
+            efc.run_function(pikmin::go_to_carriable_object);
+            efc.change_state("going_to_carriable_object");
+        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(pikmin::get_knocked_down);
             efc.change_state("knocked_back");
@@ -492,7 +501,11 @@ void pikmin_type::init_script() {
     
     efc.new_state("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(pikmin::stand_still);
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run_function(pikmin::stand_still);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin::be_grabbed_by_enemy);
