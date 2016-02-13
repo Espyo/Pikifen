@@ -24,8 +24,12 @@
 
 void do_game_logic() {
 
-    do_aesthetic_logic();
+    if(dev_tool_change_speed) {
+        delta_t *= dev_tool_change_speed_mult;
+    }
+    
     do_gameplay_logic();
+    do_aesthetic_logic();
     
 }
 

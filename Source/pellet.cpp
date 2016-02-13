@@ -25,6 +25,7 @@ pellet::pellet(float x, float y, pellet_type* type, const float angle, const str
     set_animation(ANIM_IDLE);
 }
 
+
 void pellet::draw() {
 
     frame* f_ptr = anim.get_frame();
@@ -68,7 +69,7 @@ void pellet::draw() {
     
     draw_sprite(
         pel_type->bmp_number,
-        x, y,
+        draw_x, draw_y,
         radius * 1.36, -1,
         0, map_gray(get_sprite_lighting(this))
     );
@@ -80,7 +81,7 @@ void pellet::draw() {
         
         draw_sprite(
             f_ptr->bitmap,
-            x, y,
+            draw_x, draw_y,
             radius * 2.0, -1,
             angle,
             extra_color

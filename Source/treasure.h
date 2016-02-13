@@ -51,6 +51,7 @@ public:
     float buried; //0: fully unburried. 1: fully buried.
     
     treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
+    void draw();
     
     static void handle_delivery(mob* m, void* info1, void* info2);
 };

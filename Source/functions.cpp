@@ -1226,6 +1226,10 @@ void read_game_config() {
     
     game_name = file.get_child_by_name("game_name")->value;
     game_version = file.get_child_by_name("game_version")->value;
+    
+    carrying_move_color = s2c(file.get_child_by_name("carrying_move_color")->get_value_or_default("255 255 255"));
+    carrying_stop_color = s2c(file.get_child_by_name("carrying_stop_color")->get_value_or_default("96 192 192"));
+    
 }
 
 

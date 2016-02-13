@@ -53,6 +53,9 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                     );
                 }
                 
+            } else if(id == DEV_TOOL_CHANGE_SPEED) {
+                dev_tool_change_speed = !dev_tool_change_speed;
+                
             } else if(id == DEV_TOOL_COORDINATES) {
                 float mx, my;
                 get_mouse_cursor_coordinates(&mx, &my);
@@ -76,9 +79,19 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                                             box_string(f2s(m->z), 6) + ".",
                                             30
                                         );
-                    string state_str  = box_string("State: " + m->fsm.cur_state->name + ".", 30);
+                    string state_str  = box_string(
+                                            "State: " +
+                                            (m->fsm.cur_state ? m->fsm.cur_state->name : "(None!)") +
+                                            ".",
+                                            30
+                                        );
                     string pstate_str = box_string("Prev. state: " + m->fsm.prev_state_name + ".", 30);
-                    string anim_str   = box_string("Animation: " + m->anim.anim->name + ".", 30);
+                    string anim_str   = box_string(
+                                            "Animation: " +
+                                            (m->anim.anim ? m->anim.anim->name : "(None!)") +
+                                            ".",
+                                            30
+                                        );
                     string health_str = box_string("Health: " + f2s(m->health) + ".", 30);
                     string timer_str  = box_string("Timer: " + f2s(m->script_timer.time_left) + ".", 30);
                     

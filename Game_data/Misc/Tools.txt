@@ -1,16 +1,17 @@
 enabled = true
 
-f2  = area_image
-f3  = coordinates
+f2  = teleport
+f3  = change_speed
 f4  = hurt_mob
 f5  = mob_info
-f6  = teleport
+f6  = coordinates
 f7  = new_pikmin
 f8  = 
 f9  = 
 f10 = 
-f11 = 
+f11 = area_image
 
 area_image_size = 2048
 area_image_file_name = Area.jpg
 area_image_shadows = true
+change_speed_multiplier = 4.0

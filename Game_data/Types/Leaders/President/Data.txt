@@ -1,4 +1,5 @@
 name = President
+
 dismiss_sfx = Dismiss.ogg
 height = 32
 main_color = 64 32 192

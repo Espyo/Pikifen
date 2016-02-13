@@ -1,4 +1,5 @@
 name = Olimar
+
 dismiss_sfx = Dismiss.ogg
 height = 32
 main_color = 255 64 64

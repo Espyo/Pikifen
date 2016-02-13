@@ -129,6 +129,8 @@ extern timer                            cam_trans_zoom_timer;
 extern float                            cam_x;
 extern float                            cam_y;
 extern float                            cam_zoom;
+extern ALLEGRO_COLOR                    carrying_move_color;
+extern ALLEGRO_COLOR                    carrying_stop_color;
 extern vector<vector<control_info> >    controls;
 extern mob*                             closest_party_member;
 extern area_data                        cur_area_data;
@@ -161,6 +163,8 @@ extern double                           delta_t;                  //Time between
 extern string                           dev_tool_area_image_name;
 extern bool                             dev_tool_area_image_shadows;
 extern int                              dev_tool_area_image_size;
+extern bool                             dev_tool_change_speed;
+extern float                            dev_tool_change_speed_mult;
 extern unsigned char                    dev_tool_keys[9];
 extern pikmin_type*                     dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY*                 display;

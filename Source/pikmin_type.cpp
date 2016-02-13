@@ -389,12 +389,6 @@ void pikmin_type::init_script() {
             efc.run_function(pikmin::called);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
-            efc.change_state("idle");
-        }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_DIED); {
-            efc.change_state("idle");
-        }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(pikmin::get_knocked_down);
             efc.change_state("knocked_back");

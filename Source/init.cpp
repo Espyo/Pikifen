@@ -84,6 +84,8 @@ void init_dev_tools() {
             dev_tool_keys[k] = DEV_TOOL_MOB_INFO;
         } else if(tool_name == "new_pikmin") {
             dev_tool_keys[k] = DEV_TOOL_NEW_PIKMIN;
+        } else if(tool_name == "change_speed") {
+            dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
         } else if(tool_name == "teleport") {
             dev_tool_keys[k] = DEV_TOOL_TELEPORT;
         } else {
@@ -94,6 +96,7 @@ void init_dev_tools() {
     dev_tool_area_image_size = s2i(file.get_child_by_name("area_image_size")->value);
     dev_tool_area_image_name = file.get_child_by_name("area_image_file_name")->value;
     dev_tool_area_image_shadows = s2b(file.get_child_by_name("area_image_shadows")->value);
+    dev_tool_change_speed_mult = s2f(file.get_child_by_name("change_speed_multiplier")->value);
     
 }
 

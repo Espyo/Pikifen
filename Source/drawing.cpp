@@ -284,12 +284,12 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     ALLEGRO_COLOR color;
                     if(mob_ptr->carry_info->cur_carrying_strength >= mob_ptr->type->weight) {
                         if(mob_ptr->carry_info->carry_to_ship) {
-                            color = al_map_rgb(255, 255, 255); //TODO what if Whites have an Onion on this game? Make it changeable per game.
+                            color = carrying_move_color;
                         } else {
                             color = ((onion*) (mob_ptr->carrying_target))->oni_type->pik_type->main_color;
                         }
                     } else {
-                        color = al_map_rgb(96, 192, 192);
+                        color = carrying_stop_color;
                     }
                     draw_fraction(
                         mob_ptr->x,

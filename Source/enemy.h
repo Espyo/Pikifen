@@ -33,6 +33,7 @@ public:
     unsigned int appears_every_x_days;
     
     enemy(const float x, const float y, enemy_type* type, const float angle, const string &vars);
+    void draw();
 };
 
 #endif //ifndef ENEMY_INCLUDED

@@ -206,6 +206,7 @@ public:
     static void carry_stop_move(mob* m, void* info1, void* info2);
     static void set_next_target(mob* m, void* info1, void* info2);
     static void start_being_delivered(mob* m, void* info1, void* info2);
+    static void handle_delivery(mob* m, void* info1, void* info2);
     void check_carrying(mob* added, mob* removed);
     mob* carrying_target;
     

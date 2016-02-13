@@ -537,7 +537,6 @@ void leader_type::init_script() {
     
     states = efc.finish();
     first_state_nr = fix_states(states, "idle");
-    carriable_state_id = LEADER_STATE_SLEEPING;
     
     if(states.size() != N_LEADER_STATES) {
         error_log(

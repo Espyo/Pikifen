@@ -174,11 +174,7 @@ script{
         }
         on_animation_end{
             special_function = die_end
-            state = dead
         }
     }
     
-    dead{
-        
-    }
 }

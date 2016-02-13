@@ -469,6 +469,11 @@ mobs{
 		type=Hocotate ship
 		p=128.00 -320.00
 	}
+	Enemy{
+		type=Dwarf Red Bulborb
+		p=448.00 192.00
+		angle=4.25
+	}
 }
 path_stops{
 	s{

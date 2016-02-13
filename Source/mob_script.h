@@ -272,7 +272,7 @@ struct hitbox_touch_info {
     hitbox_touch_info(mob* mob2 = NULL, hitbox_instance* hi1 = NULL, hitbox_instance* hi2 = NULL);
 };
 
-vector<mob_state*> load_script(mob_type* mt, data_node* node);
+void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
 
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
 

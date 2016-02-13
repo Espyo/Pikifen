@@ -41,10 +41,9 @@ mob_type::mob_type() :
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
     near_angle(0),
-    first_state_nr(0),
+    first_state_nr(string::npos),
     show_health(true),
-    casts_shadow(true),
-    carriable_state_id(0) {
+    casts_shadow(true) {
     
 }
 
@@ -143,19 +142,16 @@ void load_mob_type_from_file(
         mt->anims = load_animation_pool_from_file(&anim_file);
         mt->anims.fix_hitbox_pointers();
         
-        if(mt->states.empty()) {
-            data_node script_file = data_node(folder + "/Script.txt");
-            mt->states = load_script(mt, script_file.get_child_by_name("script"));
-            if(mt->states.size()) {
-                string first_state_name = script_file.get_child_by_name("first_state")->value;
-                for(size_t s = 0; s < mt->states.size(); ++s) {
-                    if(mt->states[s]->name == first_state_name) {
-                        mt->first_state_nr = s;
-                        break;
-                    }
+        data_node script_file = data_node(folder + "/Script.txt");
+        size_t old_n_states = mt->states.size();
+        load_script(mt, script_file.get_child_by_name("script"), &mt->states);
+        if(mt->states.size() > old_n_states) {
+            string first_state_name = script_file.get_child_by_name("first_state")->value;
+            for(size_t s = 0; s < mt->states.size(); ++s) {
+                if(mt->states[s]->name == first_state_name) {
+                    mt->first_state_nr = s;
+                    break;
                 }
-            } else {
-                mt->first_state_nr = string::npos;
             }
         }
     }
@@ -170,23 +166,45 @@ void load_mob_type_from_file(
 
 /* ----------------------------------------------------------------------------
  * Adds carrying-related states to the FSM.
- * state_id: ID of the "carriable" state. The other states are based on this.
  */
-void mob_type::add_carrying_states(const size_t state_id) {
-    carriable_state_id = state_id;
-    
+void mob_type::add_carrying_states() {
+
     easy_fsm_creator efc;
     
-    efc.new_state("carriable", carriable_state_id); {
+    efc.new_state("carriable", ENEMY_EXTRA_STATE_CARRIABLE); {
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run_function(mob::handle_carrier_added);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run_function(mob::handle_carrier_removed);
         }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.run_function(mob::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_CARRY_STUCK); {
+            efc.run_function(mob::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(mob::start_being_delivered);
+            efc.change_state("being_delivered");
+        }
+    }
+    
+    efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run_function(mob::handle_delivery);
+        }
     }
     
     vector<mob_state*> new_states = efc.finish();
+    fix_states(new_states, "");
     
     states.insert(states.end(), new_states.begin(), new_states.end());
     

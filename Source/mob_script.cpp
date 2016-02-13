@@ -701,22 +701,23 @@ mob_fsm::mob_fsm(mob* m) :
 
 /* ----------------------------------------------------------------------------
  * Loads the states off of a data node.
- * mt:   the type of mob the states are going to.
- * node: the data node.
+ * mt:     the type of mob the states are going to.
+ * node:   the data node.
+ * states: vector of states to place the new states on.
  */
-vector<mob_state*> load_script(mob_type* mt, data_node* node) {
-    vector<mob_state*> states;
-    size_t n_states = node->get_nr_of_children();
+void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
+    size_t n_new_states = node->get_nr_of_children();
+    size_t old_n_states = states->size();
     
-    for(size_t s = 0; s < n_states; ++s) {
+    for(size_t s = 0; s < n_new_states; ++s) {
     
         data_node* state_node = node->get_child(s);
         //Let's save the state now, so that the state switching events
         //can now what numbers the events they need correspond to.
-        states.push_back(new mob_state(state_node->name));
+        states->push_back(new mob_state(state_node->name));
     }
     
-    for(size_t s = 0; s < n_states; ++s) {
+    for(size_t s = 0; s < n_new_states; ++s) {
         data_node* state_node = node->get_child(s);
         vector<mob_event*> events;
         size_t n_events = state_node->get_nr_of_children();
@@ -728,7 +729,7 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
             
             for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
                 data_node* action_node = event_node->get_child(a);
-                actions.push_back(new mob_action(action_node, &states, mt));
+                actions.push_back(new mob_action(action_node, states, mt));
             }
             
             events.push_back(new mob_event(event_node, actions));
@@ -742,12 +743,12 @@ vector<mob_state*> load_script(mob_type* mt, data_node* node) {
         
         for(size_t e = 0; e < events.size(); ++e) {
             size_t ev_type = events[e]->type;
-            states[s]->events[ev_type] = events[e];
+            states->at(s + old_n_states)->events[ev_type] = events[e];
         }
         
+        states->at(s + old_n_states)->id = s + old_n_states;
+        
     }
-    
-    return states;
 }
 
 

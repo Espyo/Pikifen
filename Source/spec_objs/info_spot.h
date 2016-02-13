@@ -9,8 +9,8 @@
  * Header for the info spot class and info spot-related functions.
  */
 
-#ifndef INFO_POINT_INCLUDED
-#define INFO_POINT_INCLUDED
+#ifndef INFO_SPOT_INCLUDED
+#define INFO_SPOT_INCLUDED
 
 #include <string>
 
@@ -37,4 +37,4 @@ public:
     virtual void draw();
 };
 
-#endif //ifndef INFO_POINT_INCLUDED
+#endif //ifndef INFO_SPOT_INCLUDED

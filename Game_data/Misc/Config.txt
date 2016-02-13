@@ -1,2 +1,5 @@
 game_name = Demo Fangame
 game_version = X.X.X
+
+carrying_move_color = 255 255 255
+carrying_stop_color = 96 192 192

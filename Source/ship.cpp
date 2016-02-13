@@ -43,7 +43,7 @@ void ship::draw() {
 
 
 void ship::receive_mob(mob* m, void* info1, void* info2) {
-    size_t pokos = (size_t) info1;
+    float pokos = *((float*) info1);
     ship* s_ptr = (ship*) m;
     
     random_particle_explosion(

@@ -680,10 +680,3 @@ void fade_manager::draw() {
         );
     }
 }
-
-
-
-
-
-
-

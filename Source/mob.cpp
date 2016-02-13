@@ -797,6 +797,7 @@ void mob::finish_dying() {
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
             become_carriable(false);
+            e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE);
         }
         particles.push_back(
             particle(
@@ -805,6 +806,21 @@ void mob::finish_dying() {
             )
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Generic handler for when the mob was delivered to an Onion/ship.
+ */
+void mob::handle_delivery(mob* m, void* info1, void* info2) {
+    enemy* e_ptr = (enemy*) m;
+    onion* o_ptr = (onion*) e_ptr->carrying_target;
+    
+    size_t seeds = e_ptr->ene_type->pikmin_seeds;
+    
+    o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
+    
+    e_ptr->to_delete = true;
 }
 
 
@@ -1256,10 +1272,11 @@ void mob::become_carriable(const bool to_ship) {
  */
 void mob::become_uncarriable() {
     if(!carry_info) return;
+    bool pik_send_event = false;
     
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
-            carry_info->spot_info[p].pik_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+            carry_info->spot_info[p].pik_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE, (void*) &pik_send_event);
         }
     }
     

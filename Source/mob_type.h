@@ -23,6 +23,13 @@
 
 using namespace std;
 
+
+enum ENEMY_EXTRA_STATES {
+    ENEMY_EXTRA_STATE_CARRIABLE,
+    ENEMY_EXTRA_STATE_BEING_DELIVERED,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A mob type.
  * There are specific types, like Pikmin,
@@ -70,8 +77,7 @@ public:
     
     mob_type();
     virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
-    void add_carrying_states(const size_t state_id); //TODO so is this gonna be used or not?
-    size_t carriable_state_id; //ID for the "carriable" state.
+    void add_carrying_states();
 };
 
 
