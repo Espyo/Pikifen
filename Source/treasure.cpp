@@ -53,12 +53,12 @@ void treasure::draw() {
             extra_color = interpolate_color(
                               script_timer.get_ratio_left(),
                               0.5, 1.0,
-                              carrying_move_color,
+                              carrying_color_move,
                               al_map_rgb(0, 0, 0)
                           );
         } else {
             //Second half of the sucking in process = interpolated scaling.
-            extra_color = carrying_move_color;
+            extra_color = carrying_color_move;
             radius *= (script_timer.get_ratio_left() * 2.0);
         }
     }

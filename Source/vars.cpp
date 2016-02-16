@@ -93,8 +93,11 @@ timer                            cam_trans_zoom_timer(CAM_TRANSITION_DURATION);
 float                            cam_x = 0;
 float                            cam_y = 0;
 float                            cam_zoom = 1;
-ALLEGRO_COLOR                    carrying_move_color = al_map_rgb(255, 255, 255);
-ALLEGRO_COLOR                    carrying_stop_color = al_map_rgb(96, 192, 192);
+ALLEGRO_COLOR                    carrying_color_move = al_map_rgb(255, 255, 255);
+ALLEGRO_COLOR                    carrying_color_stop = al_map_rgb(96, 192, 192);
+float                            carrying_speed_base_mult = 0.75; //TODO good default value.
+float                            carrying_speed_max_mult = 0.8; //TODO good default value.
+float                            carrying_speed_weight_mult = 0.01; //TODO good default value.
 mob*                             closest_party_member = NULL;
 vector<vector<control_info> >    controls;
 area_data                        cur_area_data;

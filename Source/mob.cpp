@@ -145,14 +145,12 @@ void mob::tick_brain() {
                 
                 //Let the mob think about facing the actual target.
                 face(atan2(final_target_y - y, final_target_x - x));
-                //Let the mob think about moving forward.
-                speed = type->move_speed;
                 
             } else {
                 //Reached the location. The mob should now think
                 //about stopping.
                 
-                speed = 0;
+                target_speed = 0;
                 reached_destination = true;
                 fsm.run_event(MOB_EVENT_REACHED_DESTINATION);
             }
@@ -262,7 +260,7 @@ void mob::tick_physics() {
         
             //Make it go to the direction it wants.
             float d = dist(x, y, final_target_x, final_target_y).to_float();
-            float move_amount = min((double) (d / delta_t), (double) speed);
+            float move_amount = min((double) (d / delta_t), (double) target_speed);
             
             bool can_free_move = gtt_free_move || move_amount <= 10.0;
             
@@ -651,22 +649,30 @@ void mob::get_final_target(float* x, float* y) {
 
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
- * target_*:     Coordinates of the target, relative to either the world origin,
+ * target_*:        Coordinates of the target, relative to either the world origin,
    * or another point, specified in the next parameters.
- * target_rel_*: Pointers to moving coordinates. If NULL, it's the world origin.
+ * target_rel_*:    Pointers to moving coordinates. If NULL, it's the world origin.
    * Use this to make the mob follow another mob wherever they go, for instance.
- * instant:      If true, the mob teleports to that spot, instead of walking to it.
- * target_z:     Teleports to this Z coordinate, too.
- * free_move:    If true, the mob can go to a direction they're not facing.
+ * instant:         If true, the mob teleports to that spot, instead of walking to it.
+ * target_z:        Teleports to this Z coordinate, too.
+ * free_move:       If true, the mob can go to a direction they're not facing.
  * target_distance: Distance from the target in which the mob is considered as being there.
+ * movement_speed:  Speed at which to go to the target. -1 uses the mob's speed.
  */
-void mob::set_target(float target_x, float target_y, float* target_rel_x, float* target_rel_y, bool instant, float* target_z, bool free_move, float target_distance) {
+void mob::set_target(
+    const float target_x, const float target_y,
+    float* target_rel_x, float* target_rel_y,
+    const bool instant, float* target_z,
+    const bool free_move, const float target_distance, const float movement_speed
+) {
+
     this->target_x = target_x; this->target_y = target_y;
     this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
     this->gtt_instant = instant;
     this->target_z = target_z;
     this->gtt_free_move = free_move;
     this->target_distance = target_distance;
+    this->target_speed = (movement_speed == -1 ? get_base_speed() : movement_speed);
     
     go_to_target = true;
     reached_destination = false;
@@ -873,6 +879,42 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
         float y = sin(angle) * (m->type->radius + pikmin_radius);
         spot_info.push_back(carrier_spot_struct(x, y));
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the speed at which the object should move, given the carrier Pikmin.
+ */
+float carry_info_struct::get_speed() {
+    float max_speed = 0;
+    
+    //Begin by obtaining the average walking speed of the carriers.
+    for(size_t s = 0; s < spot_info.size(); ++s) {
+        carrier_spot_struct* s_ptr = &spot_info[s];
+        
+        if(s_ptr->state != CARRY_SPOT_USED) continue;
+        
+        pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
+        max_speed += p_ptr->get_base_speed();
+    }
+    max_speed /= cur_n_carriers;
+    
+    //If the object has all carriers, the Pikmin move as fast
+    //as possible, which looks bad, since they're not jogging,
+    //they're carrying. Let's add a penalty for the weight...
+    max_speed *= (1 - carrying_speed_weight_mult * m->type->weight);
+    //...and a global carrying speed penalty.
+    max_speed *= carrying_speed_max_mult;
+    
+    //The closer the mob is to having full carriers,
+    //the closer to the max speed we get.
+    //The speed goes from carrying_speed_base_mult (0 carriers)
+    //to max_speed (all carriers).
+    return max_speed * (
+               carrying_speed_base_mult +
+               (cur_n_carriers / (float) spot_info.size()) *
+               (1 - carrying_speed_base_mult)
+           );
 }
 
 
@@ -1298,6 +1340,8 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
+    m->target_speed = m->carry_info->get_speed();
+    
     m->check_carrying(pik_ptr, NULL);
 }
 
@@ -1312,6 +1356,8 @@ void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
     m->carry_info->spot_info[pik_ptr->carrying_spot].state = CARRY_SPOT_FREE;
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
+    
+    m->target_speed = m->carry_info->get_speed();
     
     m->check_carrying(NULL, pik_ptr);
 }
@@ -1588,7 +1634,8 @@ void mob::set_next_target(mob* m, void* info1, void* info2) {
             m->set_target(
                 m->carry_info->final_destination_x,
                 m->carry_info->final_destination_y,
-                NULL, NULL, false, NULL, true
+                NULL, NULL, false, NULL, true, 3.0f,
+                m->carry_info->get_speed()
             );
             
         }
@@ -1605,7 +1652,8 @@ void mob::set_next_target(mob* m, void* info1, void* info2) {
         m->set_target(
             m->path[m->cur_path_stop_nr]->x,
             m->path[m->cur_path_stop_nr]->y,
-            NULL, NULL, false, NULL, true
+            NULL, NULL, false, NULL, true, 3.0f,
+            m->carry_info->get_speed()
         );
         
     }

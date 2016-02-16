@@ -83,6 +83,7 @@ void onion::spew() {
     new_pikmin->speed_z = 200;
     new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
     new_pikmin->first_state_set = true;
+    new_pikmin->maturity = 0;
     create_mob(new_pikmin);
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;

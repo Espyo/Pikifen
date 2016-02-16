@@ -86,6 +86,7 @@ struct carry_info_struct {
     
     carry_info_struct(mob* m, const bool carry_to_ship);
     bool is_full();
+    float get_speed();
     ~carry_info_struct();
 };
 
@@ -146,10 +147,17 @@ public:
     bool gtt_instant;                   //If true, teleport instantly.
     bool gtt_free_move;                 //If true, the mob can move in a direction it's not facing.
     float target_distance;              //Distance from the target in which the mob is considered as being there.
+    float target_speed;                 //Speed to move towards the target at.
     vector<path_stop*> path;
     size_t cur_path_stop_nr;
     
-    void set_target(const float target_x, const float target_y, float* target_rel_x, float* target_rel_y, const bool instant, float* target_z = NULL, bool free_move = false, float target_distance = 3);
+    void set_target(
+        const float target_x, const float target_y,
+        float* target_rel_x, float* target_rel_y,
+        const bool instant, float* target_z = NULL,
+        const bool free_move = false, const float target_distance = 3,
+        const float movement_speed = -1
+    );
     void remove_target();
     
     //Party things.

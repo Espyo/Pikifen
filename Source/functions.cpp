@@ -1227,8 +1227,11 @@ void read_game_config() {
     game_name = file.get_child_by_name("game_name")->value;
     game_version = file.get_child_by_name("game_version")->value;
     
-    carrying_move_color = s2c(file.get_child_by_name("carrying_move_color")->get_value_or_default("255 255 255"));
-    carrying_stop_color = s2c(file.get_child_by_name("carrying_stop_color")->get_value_or_default("96 192 192"));
+    carrying_color_move = s2c(file.get_child_by_name("carrying_color_move")->get_value_or_default("255 255 255"));
+    carrying_color_stop = s2c(file.get_child_by_name("carrying_color_stop")->get_value_or_default("96 192 192"));
+    carrying_speed_base_mult = s2f(file.get_child_by_name("carrying_speed_base_mult")->get_value_or_default("0.75")); //TODO good default value.
+    carrying_speed_max_mult = s2f(file.get_child_by_name("carrying_speed_max_mult")->get_value_or_default("0.8")); //TODO good default value.
+    carrying_speed_weight_mult = s2f(file.get_child_by_name("carrying_speed_weight_mult")->get_value_or_default("0.01")); //TODO good default value.
     
 }
 
