@@ -1333,6 +1333,11 @@ void mob::become_uncarriable() {
  * Event handler for a Pikmin being added as a carrier.
  */
 void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
+    if(!info1) {
+        m->check_carrying(NULL, NULL);
+        return;
+    }
+    
     pikmin* pik_ptr = (pikmin*) info1;
     
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = pik_ptr;
@@ -1350,6 +1355,11 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
  * Event handler for a carrier Pikmin being removed.
  */
 void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
+    if(!info1) {
+        m->check_carrying(NULL, NULL);
+        return;
+    }
+    
     pikmin* pik_ptr = (pikmin*) info1;
     
     m->carry_info->spot_info[pik_ptr->carrying_spot].pik_ptr = NULL;

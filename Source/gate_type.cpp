@@ -17,6 +17,7 @@ gate_type::gate_type() :
     mob_type() {
     
     casts_shadow = false;
+    is_obstacle = true;
     init_script();
 }
 

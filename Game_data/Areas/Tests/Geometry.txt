@@ -575,7 +575,6 @@ sectors{
 		texture=Grass 2.jpg
 	}
 	s{
-		type=Landing site
 		z=200.00
 		texture=Metal.png
 	}
@@ -744,7 +743,7 @@ mobs{
 	}
 	Treasure{
 		type=Test
-		p=100.00 350.00
+		p=96.00 384.00
 	}
 	Enemy{
 		type=Cloaking Burrow-nit

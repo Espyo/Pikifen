@@ -37,17 +37,20 @@ private:
     enum EDITOR_ERROR_TYPES {
         EET_NONE_YET,
         EET_NONE,
-        EET_INTERSECTING_EDGES, //Two edges intersect.
-        EET_LONE_EDGE,             //A edge is all by itself.
-        EET_OVERLAPPING_VERTEXES,  //Two vertexes in the same spot.
-        EET_BAD_SECTOR,            //A sector is corrupted.
-        EET_MISSING_TEXTURE,       //A sector is without texture.
-        EET_UNKNOWN_TEXTURE,       //A texture is not found in the game files.
-        EET_LANDING_SITE,          //No landing site sector exists.
-        EET_TYPELESS_MOB,          //Mob with no type.
-        EET_MOB_OOB,               //Mob out of bounds.
-        EET_MOB_IN_WALL,           //Mob stuck in a wall.
-        EET_INVALID_SHADOW,        //Invalid tree shadow image.
+        EET_INTERSECTING_EDGES,   //Two edges intersect.
+        EET_LONE_EDGE,            //An edge is all by itself.
+        EET_OVERLAPPING_VERTEXES, //Two vertexes in the same spot.
+        EET_BAD_SECTOR,           //A sector is corrupted.
+        EET_MISSING_TEXTURE,      //A sector is without texture.
+        EET_UNKNOWN_TEXTURE,      //A texture is not found in the game files.
+        EET_TYPELESS_MOB,         //Mob with no type.
+        EET_MOB_OOB,              //Mob out of bounds.
+        EET_MOB_IN_WALL,          //Mob stuck in a wall.
+        EET_LONE_PATH_STOP,       //A path stop is all by itself.
+        EET_PATH_STOP_OOB,        //A path stop is out of bounds.
+        EET_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
+        EET_PATHS_UNCONNECTED,    //The path graph is unconnected.
+        EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
     static const float GRID_INTERVAL;
@@ -61,6 +64,7 @@ private:
     path_stop*                   cur_stop;
     float                        double_click_time;
     mob_gen*                     error_mob_ptr;
+    path_stop*                   error_path_stop_ptr;
     sector*                      error_sector_ptr;
     tree_shadow*                 error_shadow_ptr;
     string                       error_string;

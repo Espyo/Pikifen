@@ -71,6 +71,9 @@ public:
     vector<mob_state*> states;    //The states, events and actions.
     size_t first_state_nr;        //Number of the state a mob starts at.
     
+    //Misc.
+    bool is_obstacle;
+    
     //Used by the special mob types, as it is not possible to control which type of mob to create without a list.
     function<void(float x, float y, float angle, const string &vars)> create_mob; //Creates a mob of this type.
     function<void(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions)> load_from_file_func;

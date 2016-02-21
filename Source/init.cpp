@@ -420,7 +420,6 @@ void init_mob_categories() {
 void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
-    sector_types.register_type(SECTOR_TYPE_LANDING_SITE, "Landing site");
     sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
     sector_types.register_type(SECTOR_TYPE_GATE, "Gate");
     sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
@@ -451,6 +450,7 @@ void init_special_mob_types() {
     //Bridge.
     mob_type* bridge_mt = new mob_type();
     bridge_mt->name = "Bridge";
+    bridge_mt->is_obstacle = true;
     init_bridge_mob_type(bridge_mt);
     spec_mob_types["Bridge"] = bridge_mt;
     

@@ -109,6 +109,7 @@ struct path_stop {
     vector<path_link> links;
     
     path_stop(float x = 0, float y = 0, vector<path_link> links = vector<path_link>());
+    bool has_link(path_stop* other_stop);
     void fix_pointers(area_data &a);
     void fix_nrs(area_data &a);
 };
@@ -317,6 +318,7 @@ struct area_data {
 void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
+void depth_first_search(vector<path_stop*> &nodes, unordered_set<path_stop*> &visited, path_stop* start);
 vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
@@ -344,7 +346,6 @@ void triangulate(sector* s_ptr);
 enum SECTOR_TYPES {
     SECTOR_TYPE_NORMAL,
     SECTOR_TYPE_BOTTOMLESS_PIT,
-    SECTOR_TYPE_LANDING_SITE,
     SECTOR_TYPE_BLOCKING,
     SECTOR_TYPE_GATE,
     SECTOR_TYPE_BRIDGE,

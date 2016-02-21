@@ -432,6 +432,19 @@ path_stop::path_stop(float x, float y, vector<path_link> links) :
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether this stop links to another stop or not.
+ * The link is one-way, meaning that if the only link is from the other stop
+ * to this one, it will not count.
+ */
+bool path_stop::has_link(path_stop* other_stop) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l].end_ptr == other_stop) return true;
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new stop link.
  */
 path_link::path_link(path_stop* end_ptr, size_t end_nr, bool one_way) :
@@ -639,16 +652,21 @@ vector<path_stop*> get_path(const float start_x, const float start_y, const floa
  * Returns what active obstacle stands in the way of these two stops, if any.
  */
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
-    //TODO TEMPORARY DEBUG CODE. Replace with something that actually checks for obstacles.
-    if(
-        circle_intersects_line(
-            leaders[2]->x, leaders[2]->y,
-            leaders[2]->type->radius,
-            s1->x, s1->y,
-            s2->x, s2->y
-        )
-    ) {
-        return leaders[2];
+    for(size_t m = 0; m < mobs.size(); ++m) {
+        mob* m_ptr = mobs[m];
+        if(!m_ptr->type->is_obstacle) continue;
+        
+        if(
+            m_ptr->health != 0 &&
+            circle_intersects_line(
+                m_ptr->x, m_ptr->y,
+                m_ptr->type->radius,
+                s1->x, s1->y,
+                s2->x, s2->y
+            )
+        ) {
+            return m_ptr;
+        }
     }
     return NULL;
 }
@@ -1256,7 +1274,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             continue;
         }
         
-        //Which is closest, a vertex or a edge?
+        //Which is closest, a vertex or an edge?
         if(closest_vertex_ur <= closest_edge_ur) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
@@ -1369,6 +1387,35 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Traverses a graph using the depth first search algorithm.
+ * nodes:   Vector of nodes.
+ * visited: Set with the visited nodes.
+ * start:   Starting node.
+ */
+void depth_first_search(vector<path_stop*> &nodes, unordered_set<path_stop*> &visited, path_stop* start) {
+    visited.insert(start);
+    unordered_set<path_stop*> links;
+    
+    for(size_t l = 0; l < start->links.size(); ++l) {
+        links.insert(start->links[l].end_ptr);
+    }
+    
+    for(size_t n = 0; n < nodes.size(); ++n) {
+        path_stop* n_ptr = nodes[n];
+        if(n_ptr == start) continue;
+        if(visited.find(n_ptr) != visited.end()) continue;
+        if(n_ptr->has_link(start)) {
+            links.insert(n_ptr);
+        }
+    }
+    
+    for(auto l = links.begin(); l != links.end(); ++l) {
+        if(visited.find(*l) != visited.end()) continue;
+        depth_first_search(nodes, visited, *l);
+    }
+}
 
 /* ----------------------------------------------------------------------------
  * Uses Dijstra's algorithm to get the shortest path between two nodes.

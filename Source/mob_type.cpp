@@ -42,6 +42,7 @@ mob_type::mob_type() :
     territory_radius(0),
     near_angle(0),
     first_state_nr(string::npos),
+    is_obstacle(false),
     show_health(true),
     casts_shadow(true) {
     

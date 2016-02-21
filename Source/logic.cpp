@@ -584,6 +584,15 @@ void do_gameplay_logic() {
                 m_ptr->fsm.run_event(MOB_EVENT_MOUTH_OCCUPIED);
             }
             
+            //Being carried, but has an obstacle.
+            if(m_ptr->carry_info) {
+                if(m_ptr->carry_info->obstacle_ptr) {
+                    if(m_ptr->carry_info->obstacle_ptr->health == 0) {
+                        m_ptr->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+                    }
+                }
+            }
+            
             //Tick.
             m_ptr->fsm.run_event(MOB_EVENT_ON_TICK);
             

@@ -50,6 +50,7 @@ area_editor::area_editor() :
     cur_shadow(NULL),
     double_click_time(0),
     error_mob_ptr(NULL),
+    error_path_stop_ptr(NULL),
     error_sector_ptr(NULL),
     error_shadow_ptr(NULL),
     error_type(area_editor::EET_NONE_YET),
@@ -693,6 +694,74 @@ void area_editor::find_errors() {
         }
     }
     
+    //Lone path stops.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            bool has_link = false;
+            
+            if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
+            
+            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+                path_stop* s2_ptr = cur_area_data.path_stops[s2];
+                if(s2_ptr == s_ptr) continue;
+                
+                if(s2_ptr->has_link(s_ptr)) {
+                    has_link = true;
+                    break;
+                }
+                
+                if(has_link) break;
+            }
+            
+            if(!has_link) {
+                error_type = EET_LONE_PATH_STOP;
+                error_path_stop_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Path stops out of bounds.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            if(!get_sector(s_ptr->x, s_ptr->y, NULL, false)) {
+                error_type = EET_PATH_STOP_OOB;
+                error_path_stop_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Two stops intersecting.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+                path_stop* s2_ptr = cur_area_data.path_stops[s2];
+                if(s2_ptr == s_ptr) continue;
+                
+                if(dist(s_ptr->x, s_ptr->y, s2_ptr->x, s2_ptr->y) <= 3.0) {
+                    error_type = EET_PATH_STOPS_TOGETHER;
+                    error_path_stop_ptr = s_ptr;
+                    break;
+                }
+            }
+        }
+    }
+    
+    //Path graph is not connected.
+    if(error_type == EET_NONE) {
+        if(!cur_area_data.path_stops.empty()) {
+            unordered_set<path_stop*> visited;
+            depth_first_search(cur_area_data.path_stops, visited, cur_area_data.path_stops[0]);
+            if(visited.size() != cur_area_data.path_stops.size()) {
+                error_type = EET_PATHS_UNCONNECTED;
+            }
+        }
+    }
+    
     //Objects inside walls.
     if(error_type == EET_NONE) {
         error_mob_ptr = NULL;
@@ -837,7 +906,10 @@ void area_editor::goto_error() {
             error_vertex_ptr->y + 64
         );
         
-    } else if(error_type == EET_MISSING_TEXTURE || error_type == EET_UNKNOWN_TEXTURE) {
+    } else if(
+        error_type == EET_MISSING_TEXTURE ||
+        error_type == EET_UNKNOWN_TEXTURE
+    ) {
     
         if(!error_sector_ptr) {
             find_errors(); return;
@@ -847,7 +919,11 @@ void area_editor::goto_error() {
         get_sector_bounding_box(error_sector_ptr, &min_x, &min_y, &max_x, &max_y);
         center_camera(min_x, min_y, max_x, max_y);
         
-    } else if(error_type == EET_TYPELESS_MOB || error_type == EET_MOB_OOB || error_type == EET_MOB_IN_WALL) {
+    } else if(
+        error_type == EET_TYPELESS_MOB ||
+        error_type == EET_MOB_OOB ||
+        error_type == EET_MOB_IN_WALL
+    ) {
     
         if(!error_mob_ptr) {
             find_errors(); return;
@@ -860,9 +936,22 @@ void area_editor::goto_error() {
             error_mob_ptr->y + 64
         );
         
-    } else if(error_type == EET_LANDING_SITE) {
-        //Nothing to focus on.
-        return;
+    } else if(
+        error_type == EET_LONE_PATH_STOP ||
+        error_type == EET_PATH_STOPS_TOGETHER ||
+        error_type == EET_PATH_STOP_OOB
+    ) {
+    
+        if(!error_path_stop_ptr) {
+            find_errors(); return;
+        }
+        
+        center_camera(
+            error_path_stop_ptr->x - 64,
+            error_path_stop_ptr->y - 64,
+            error_path_stop_ptr->x + 64,
+            error_path_stop_ptr->y + 64
+        );
         
     } else if(error_type == EET_INVALID_SHADOW) {
     
@@ -1801,7 +1890,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
 
 /* ----------------------------------------------------------------------------
  * Returns whether or not an edge is valid.
- * A edge is valid if it has non-NULL vertexes.
+ * An edge is valid if it has non-NULL vertexes.
  */
 bool area_editor::is_edge_valid(edge* l) {
     if(!l->vertexes[0]) return false;
@@ -3128,11 +3217,34 @@ void area_editor::update_review_frame() {
             lbl_error_2->text = "in wall found!";
             
             
-        } else if(error_type == EET_LANDING_SITE) {
+        } else if(error_type == EET_LONE_PATH_STOP) {
         
-            lbl_error_1->text = "There are no";
-            lbl_error_2->text = "sectors of type";
-            lbl_error_3->text = "\"landing site\"!";
+            if(!error_path_stop_ptr) {
+                find_errors(); return;
+            }
+            
+            lbl_error_1->text = "Lone path stop";
+            lbl_error_2->text = "found!";
+            
+        } else if(error_type == EET_PATHS_UNCONNECTED) {
+        
+            disable_widget(but_goto_error);
+            lbl_error_1->text = "The path is";
+            lbl_error_2->text = "split into two";
+            lbl_error_3->text = "or more parts!";
+            lbl_error_4->text = "Connect them.";
+            
+        } else if(error_type == EET_PATH_STOPS_TOGETHER) {
+        
+            lbl_error_1->text = "Two path stops";
+            lbl_error_2->text = "found close";
+            lbl_error_3->text = "together!";
+            lbl_error_4->text = "Separate them.";
+            
+        } else if(error_type == EET_PATH_STOP_OOB) {
+        
+            lbl_error_1->text = "Path stop out";
+            lbl_error_2->text = "of bounds found!";
             
         } else if(error_type == EET_INVALID_SHADOW) {
         
