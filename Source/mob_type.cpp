@@ -172,37 +172,61 @@ void mob_type::add_carrying_states() {
 
     easy_fsm_creator efc;
     
-    efc.new_state("carriable", ENEMY_EXTRA_STATE_CARRIABLE); {
+    efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(mob::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
+            efc.run_function(mob::check_carry_begin);
+        }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run_function(mob::handle_carrier_added);
+            efc.run_function(mob::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run_function(mob::handle_carrier_removed);
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("carriable_moving");
+        }
+    }
+    
+    efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(mob::carry_begin_move);
             efc.run_function(mob::set_next_target);
         }
-        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
-            efc.run_function(mob::carry_stop_move);
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+            efc.run_function(mob::check_carry_stop);
         }
-        efc.new_event(MOB_EVENT_CARRY_STUCK); {
-            efc.run_function(mob::carry_stop_move);
+        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
+            efc.change_state("carriable_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("carriable_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.run_function(mob::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
-            efc.run_function(mob::start_being_delivered);
             efc.change_state("being_delivered");
         }
     }
     
     efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(mob::start_being_delivered);
+        }
         efc.new_event(MOB_EVENT_TIMER); {
             efc.run_function(mob::handle_delivery);
         }
     }
+    
     
     vector<mob_state*> new_states = efc.finish();
     fix_states(new_states, "");

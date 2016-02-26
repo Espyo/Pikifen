@@ -199,8 +199,7 @@ void leader::move(mob* m, void* info1, void* info2) {
 }
 
 void leader::stop(mob* m, void* info1, void* info2) {
-    leader* l_ptr = (leader*) m;
-    l_ptr->remove_target();
+    m->remove_target();
 }
 
 void leader::set_walk_anim(mob* m, void* info1, void* info2) {

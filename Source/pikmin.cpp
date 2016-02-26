@@ -328,6 +328,8 @@ void pikmin::go_to_carriable_object(mob* m, void* info1, void* info2) {
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
     
+    pik_ptr->focused_mob->fsm.run_event(MOB_EVENT_CARRY_WAIT_UP);
+    
     pik_ptr->set_target(
         closest_spot_ptr->x,
         closest_spot_ptr->y,
@@ -338,6 +340,8 @@ void pikmin::go_to_carriable_object(mob* m, void* info1, void* info2) {
     );
     pik_ptr->set_animation(PIKMIN_ANIM_WALK);
     remove_from_party(pik_ptr);
+    
+    pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
 
 void pikmin::reach_carriable_object(mob* m, void* info1, void* info2) {
@@ -361,29 +365,42 @@ void pikmin::reach_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->set_animation(PIKMIN_ANIM_CARRY);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
+    pik_ptr->focused_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
     pik_ptr->focused_mob->fsm.run_event(
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
+    
 }
 
-void pikmin::forget_about_carrying(mob* m, void* info1, void* info2) {
+
+void pikmin::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     if(!p->focused_mob) return;
     
-    bool pik_send_event = info1 ? *((bool*) info1) : true;
-    if(pik_send_event) {
-        p->focused_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED, (void*) p);
-    }
+    p->focused_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
     
     p->focused_mob = NULL;
-    p->remove_target();
+    p->set_timer(0);
 }
+
+
+void pikmin::stop_carrying(mob* m, void* info1, void* info2) {
+    pikmin* p = (pikmin*) m;
+    if(!p->focused_mob) return;
+    
+    p->focused_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED, (void*) p);
+    
+    p->focused_mob = NULL;
+    p->set_timer(0);
+}
+
 
 void pikmin::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACK);
     ((pikmin*) p)->attack_time = p->pik_type->attack_interval;
 }
+
 
 void pikmin::land_on_mob(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
@@ -503,7 +520,7 @@ void pikmin::draw() {
         map_gray(get_sprite_lighting(this))
     );
     
-    bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE);
+    bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE || fsm.cur_state->id == PIKMIN_STATE_BURIED);
     if(is_idle) {
         int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
         al_get_separate_blender(&old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst);

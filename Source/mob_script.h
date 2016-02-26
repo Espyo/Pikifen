@@ -115,10 +115,11 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_EATEN,                    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
     MOB_EVENT_CARRIER_ADDED,            //When a Pikmin was added to the list of Pikmin carrying this mob.
     MOB_EVENT_CARRIER_REMOVED,          //When a Pikmin was removed from the list of Pikmin carrying this mob.
+    MOB_EVENT_CARRY_WAIT_UP,            //When the mob has to wait for a new carrier to arrive.
+    MOB_EVENT_CARRY_KEEP_GOING,         //When the mob can continue going, as the new carrier gave up.
     MOB_EVENT_CARRY_BEGIN_MOVE,         //When the mob needs to begin moving, as it's being carried.
     MOB_EVENT_CARRY_STOP_MOVE,          //When the mob needs to stop moving, as it's no longer being carried.
     MOB_EVENT_CARRY_DELIVERED,          //When the mob was sucessfully delivered to its destination after being carried.
-    MOB_EVENT_CARRY_STUCK,              //When the mob has to stop moving because it's stuck on the path.
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob stops being carriable.
     MOB_EVENT_RECEIVE_DELIVERY,         //When the mob receives an object that was carried to it.
     

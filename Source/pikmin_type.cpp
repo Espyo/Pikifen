@@ -382,7 +382,11 @@ void pikmin_type::init_script() {
             efc.change_state("carrying");
         }
         efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
-            efc.run_function(pikmin::forget_about_carrying);
+            efc.run_function(pikmin::forget_carriable_object);
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run_function(pikmin::forget_carriable_object);
             efc.change_state("idle");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
@@ -404,7 +408,8 @@ void pikmin_type::init_script() {
     
     efc.new_state("carrying", PIKMIN_STATE_CARRYING); {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(pikmin::forget_about_carrying);
+            efc.run_function(pikmin::stop_carrying);
+            efc.run_function(pikmin::stand_still);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(pikmin::called);

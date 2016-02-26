@@ -67,7 +67,7 @@ mobs{
 		angle=0.56
 	}
 	Gate{
-		type=White
+		type=White bramble gate
 		p=624.46 705.11
 	}
 	Enemy{

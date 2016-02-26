@@ -67,6 +67,7 @@ area_editor::area_editor() :
     on_sector(NULL),
     sec_mode(ESM_NONE),
     shift_pressed(false),
+    show_closest_stop(false),
     show_guide(false),
     show_shadows(true),
     wum(NULL) {
@@ -476,6 +477,25 @@ void area_editor::do_drawing() {
                 );
             }
             
+            if(show_closest_stop) {
+                path_stop* closest = NULL;
+                dist closest_dist;
+                for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+                    path_stop* s_ptr = cur_area_data.path_stops[s];
+                    dist d(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y);
+                    
+                    if(!closest || d < closest_dist) {
+                        closest = s_ptr;
+                        closest_dist = d;
+                    }
+                }
+                
+                al_draw_line(
+                    mouse_cursor_x, mouse_cursor_y,
+                    closest->x, closest->y,
+                    al_map_rgb(96, 224, 32), 2 / cam_zoom
+                );
+            }
         }
         
         //Shadows.
@@ -2100,6 +2120,8 @@ void area_editor::load() {
     frm_paths->easy_add("but_del_stop", new lafi::button(0, 0, 0, 0, "Stop"), 33, 32);
     frm_paths->easy_add("but_del_link", new lafi::button(0, 0, 0, 0, "Link"), 33, 32);
     frm_paths->easy_row();
+    frm_paths->easy_add("chk_show_closest", new lafi::checkbox(0, 0, 0, 0, "Show closest stop"), 100, 16);
+    frm_paths->easy_row();
     
     
     //Shadows frame.
@@ -2417,12 +2439,16 @@ void area_editor::load() {
         if(sec_mode == ESM_DEL_LINK) sec_mode = ESM_NONE;
         else sec_mode = ESM_DEL_LINK;
     };
+    frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        show_closest_stop = !show_closest_stop;
+    };
     frm_paths->widgets["but_back"]->description = "Go back to the main menu.";
     frm_paths->widgets["but_new_stop"]->description = "Create new stops wherever you click.";
     frm_paths->widgets["but_new_link"]->description = "Click on two stops to connect them with a link.";
     frm_paths->widgets["but_new_1wlink"]->description = "Click stop #1 then #2 for a one-way path link.";
     frm_paths->widgets["but_del_stop"]->description = "Click stops to delete them.";
     frm_paths->widgets["but_del_link"]->description = "Click links to delete them.";
+    frm_paths->widgets["chk_show_closest"]->description = "Show the closest stop to the cursor.";
     
     
     //Properties -- shadows.
@@ -2553,6 +2579,7 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
+    show_closest_stop = false;
     area_name.clear();
     
 }

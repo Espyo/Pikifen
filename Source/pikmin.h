@@ -19,6 +19,8 @@ class leader;
 #include "onion.h"
 #include "pikmin_type.h"
 
+const float PIKMIN_GOTO_TIMEOUT = 5.0f;
+
 /* ----------------------------------------------------------------------------
  * The eponymous Pikmin.
  */
@@ -70,7 +72,8 @@ public:
     static void rechase_opponent(       mob* m, void* info1, void* info2);
     static void go_to_carriable_object( mob* m, void* info1, void* info2);
     static void reach_carriable_object( mob* m, void* info1, void* info2);
-    static void forget_about_carrying(mob* m, void* info1, void* info2);
+    static void forget_carriable_object(mob* m, void* info1, void* info2);
+    static void stop_carrying(          mob* m, void* info1, void* info2);
     static void attack(                 mob* m, void* info1, void* info2);
     static void land_on_mob(            mob* m, void* info1, void* info2);
     static void tick_latched(           mob* m, void* info1, void* info2);

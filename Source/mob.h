@@ -83,6 +83,8 @@ struct carry_info_struct {
     float final_destination_x;
     float final_destination_y;
     mob* obstacle_ptr;           //If the path has an obstacle, this is the pointer to it. This not being NULL also means the last stop in the path is the stop before the obstacle.
+    unsigned char stuck_state;   //Are the Pikmin stuck with nowhere to go? 0: no. 1: going to the alternative point, 2: going back to the start.
+    bool is_moving;
     
     carry_info_struct(mob* m, const bool carry_to_ship);
     bool is_full();
@@ -184,6 +186,16 @@ public:
     map<string, string> vars;         //Variables.
     bool big_damage_ev_queued;        //Are we waiting to report the big damage event?
     
+    bool dead;                     //Is the mob dead?
+    vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
+    vector<mob*> chomping_pikmin;  //Mobs it is chomping.
+    size_t chomp_max;              //Max mobs it can chomp in the current attack.
+    
+    //Carrying.
+    carry_info_struct* carry_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
+    void become_carriable(const bool to_ship);
+    void become_uncarriable();
+    
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool rel, const float amount);
     void set_timer(const float time);
@@ -193,15 +205,6 @@ public:
     void start_dying();
     void finish_dying();
     
-    bool dead;                     //Is the mob dead?
-    vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
-    vector<mob*> chomping_pikmin;  //Mobs it is chomping.
-    size_t chomp_max;              //Max mobs it can chomp in the current attack.
-    
-    carry_info_struct* carry_info; //Structure holding information on how this mob should be carried. If NULL, it cannot be carried.
-    void become_carriable(const bool to_ship);
-    void become_uncarriable();
-    
     void tick();
     virtual void draw();
     
@@ -209,13 +212,16 @@ public:
     
     static void lose_health(mob* m, void* info1, void* info2);
     static void handle_carrier_added(mob* m, void* info1, void* info2);
+    static void recalculate_carrying_destination(mob* m, void* info1, void* info2);
     static void handle_carrier_removed(mob* m, void* info1, void* info2);
     static void carry_begin_move(mob* m, void* info1, void* info2);
     static void carry_stop_move(mob* m, void* info1, void* info2);
+    static void check_carry_begin(mob* m, void* info1, void* info2);
+    static void check_carry_stop(mob* m, void* info1, void* info2);
     static void set_next_target(mob* m, void* info1, void* info2);
     static void start_being_delivered(mob* m, void* info1, void* info2);
     static void handle_delivery(mob* m, void* info1, void* info2);
-    void check_carrying(mob* added, mob* removed);
+    void calculate_carrying_destination(mob* added, mob* removed);
     mob* carrying_target;
     
     //Drawing tools.

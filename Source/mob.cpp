@@ -196,6 +196,7 @@ void mob::tick_misc_logic() {
 }
 
 
+const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 /* ----------------------------------------------------------------------------
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
@@ -214,12 +215,6 @@ void mob::tick_physics() {
     float move_speed_y = speed_y;
     
     float radius_to_use = type->radius;
-    if(carry_info) {
-        //If it's being carried, let's increase its radius so the Pikmin
-        //carrying it are taken into account too. Let's cheat a bit, and
-        //assume all Pikmin are the same radius, or at least very very similar.
-        radius_to_use += pikmin_types.begin()->second->radius * 2;
-    }
     
     //Change the facing angle to the angle the mob wants to face.
     if(angle > M_PI)  angle -= M_PI * 2;
@@ -276,8 +271,8 @@ void mob::tick_physics() {
     
     //If another mob is pushing it.
     if(push_amount != 0.0f) {
-        move_speed_x += cos(push_angle) * push_amount;
-        move_speed_y += sin(push_angle) * push_amount;
+        move_speed_x += cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
+        move_speed_y += sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
         
         push_amount = 0;
     }
@@ -803,7 +798,7 @@ void mob::finish_dying() {
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
             become_carriable(false);
-            e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE);
+            e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
         particles.push_back(
             particle(
@@ -867,7 +862,9 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     cur_n_carriers(0),
     final_destination_x(0),
     final_destination_y(0),
-    obstacle_ptr(nullptr) {
+    obstacle_ptr(nullptr),
+    stuck_state(0),
+    is_moving(false) {
     
     float pikmin_radius = 16;
     //Let's assume all Pikmin are the same radius. Or at least very close.
@@ -1314,11 +1311,10 @@ void mob::become_carriable(const bool to_ship) {
  */
 void mob::become_uncarriable() {
     if(!carry_info) return;
-    bool pik_send_event = false;
     
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
-            carry_info->spot_info[p].pik_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE, (void*) &pik_send_event);
+            carry_info->spot_info[p].pik_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
         }
     }
     
@@ -1334,7 +1330,7 @@ void mob::become_uncarriable() {
  */
 void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
     if(!info1) {
-        m->check_carrying(NULL, NULL);
+        m->calculate_carrying_destination(NULL, NULL);
         return;
     }
     
@@ -1347,7 +1343,7 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
     
     m->target_speed = m->carry_info->get_speed();
     
-    m->check_carrying(pik_ptr, NULL);
+    m->calculate_carrying_destination(pik_ptr, NULL);
 }
 
 
@@ -1356,7 +1352,7 @@ void mob::handle_carrier_added(mob* m, void* info1, void* info2) {
  */
 void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
     if(!info1) {
-        m->check_carrying(NULL, NULL);
+        m->calculate_carrying_destination(NULL, NULL);
         return;
     }
     
@@ -1369,7 +1365,15 @@ void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
     
     m->target_speed = m->carry_info->get_speed();
     
-    m->check_carrying(NULL, pik_ptr);
+    m->calculate_carrying_destination(NULL, pik_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks the carrying destination again.
+ */
+void mob::recalculate_carrying_destination(mob* m, void* info1, void* info2) {
+    m->calculate_carrying_destination(NULL, NULL);
 }
 
 
@@ -1378,35 +1382,11 @@ void mob::handle_carrier_removed(mob* m, void* info1, void* info2) {
  * added:   The Pikmin that got added, if any.
  * removed: The Pikmin that got removed, if any.
  */
-void mob::check_carrying(mob* added, mob* removed) {
+void mob::calculate_carrying_destination(mob* added, mob* removed) {
     if(!carry_info) return;
     
-    if(carry_info->cur_carrying_strength < type->weight) {
-        //This means the object cannot be carried.
-        //But COULD it be carried before this point?
-        if(
-            removed &&
-            carry_info->cur_carrying_strength +
-            ((pikmin*) removed)->pik_type->carry_strength >=
-            type->weight
-        ) {
-            //If so, launch an event.
-            fsm.run_event(MOB_EVENT_CARRY_STOP_MOVE);
-        }
-        
-        return;
-    }
-    
+    carry_info->stuck_state = 0;
     mob* old_carrying_target = carrying_target;
-    bool started_moving = false;
-    
-    if(
-        added &&
-        carry_info->cur_carrying_strength >= type->weight &&
-        carry_info->cur_carrying_strength - ((pikmin*) added)->pik_type->carry_strength < type->weight
-    ) {
-        started_moving = true;
-    }
     
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
@@ -1430,12 +1410,9 @@ void mob::check_carrying(mob* added, mob* removed) {
             carry_info->final_destination_y = closest_ship->y;
             carrying_target = closest_ship;
             
-            if(carrying_target != old_carrying_target || started_moving) {
-                fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
-            }
         } else {
             carrying_target = NULL;
-            fsm.run_event(MOB_EVENT_CARRY_STUCK);
+            carry_info->stuck_state = 1;
             return;
         }
         
@@ -1460,7 +1437,7 @@ void mob::check_carrying(mob* added, mob* removed) {
     if(available_onions.empty()) {
         //No Onions?! Well...make the Pikmin stuck.
         carrying_target = NULL;
-        fsm.run_event(MOB_EVENT_CARRY_STUCK);
+        carry_info->stuck_state = 1;
         return;
     }
     
@@ -1564,11 +1541,6 @@ void mob::check_carrying(mob* added, mob* removed) {
     carry_info->final_destination_x = onions[onion_nr]->x;
     carry_info->final_destination_y = onions[onion_nr]->y;
     carrying_target = onions[onion_nr];
-    
-    //Get going!
-    if(carrying_target != old_carrying_target || started_moving) {
-        fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
-    }
 }
 
 
@@ -1599,6 +1571,14 @@ void mob::carry_begin_move(mob* m, void* info1, void* info2) {
     } else {
         m->cur_path_stop_nr = string::npos;
     }
+    
+    if(m->path.empty()) {
+        m->carry_info->stuck_state = 1;
+    } else {
+        m->carry_info->stuck_state = 0;
+    }
+    
+    m->carry_info->is_moving = true;
 }
 
 
@@ -1606,7 +1586,47 @@ void mob::carry_begin_move(mob* m, void* info1, void* info2) {
  * Stop moving a carried object.
  */
 void mob::carry_stop_move(mob* m, void* info1, void* info2) {
+    if(!m->carry_info) return;
+    m->carry_info->is_moving = false;
     m->remove_target();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the Pikmin should start carrying the mob.
+ */
+void mob::check_carry_begin(mob* m, void* info1, void* info2) {
+
+    for(size_t s = 0; s < m->carry_info->spot_info.size(); ++s) {
+        if(m->carry_info->spot_info[s].state == CARRY_SPOT_RESERVED) {
+            //If a Pikmin is coming, no, we can't move yet.
+            return;
+        }
+    }
+    
+    if(m->carry_info->cur_carrying_strength >= m->type->weight) {
+        m->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the Pikmin should stop carrying the mob.
+ */
+void mob::check_carry_stop(mob* m, void* info1, void* info2) {
+    bool run_event = false;
+    
+    for(size_t s = 0; s < m->carry_info->spot_info.size(); ++s) {
+        if(m->carry_info->spot_info[s].state == CARRY_SPOT_RESERVED) {
+            //If a Pikmin is coming, we should wait.
+            run_event = true;
+            break;
+        }
+    }
+    
+    if(m->carry_info->cur_carrying_strength < m->type->weight) {
+        m->fsm.run_event(MOB_EVENT_CARRY_STOP_MOVE);
+    }
 }
 
 
@@ -1620,15 +1640,31 @@ void mob::start_being_delivered(mob* m, void* info1, void* info2) {
 }
 
 
+const float CARRYING_STUCK_SWAY_AMOUNT = 20.0f;
+const float CARRYING_STUCK_SPEED_MULT = 0.3f;
 /* ----------------------------------------------------------------------------
  * Sets the next target when following a path.
  */
 void mob::set_next_target(mob* m, void* info1, void* info2) {
     m->cur_path_stop_nr = (m->cur_path_stop_nr == string::npos ? 0 : m->cur_path_stop_nr + 1);
     
-    if(m->path.empty()) {
-        //Uh-oh, no path!
-        m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+    if(m->carry_info->stuck_state > 0) {
+        //Stuck... Let's go back and forth between point A and B.
+        float final_x = m->x;
+        if(m->carry_info->stuck_state == 1) {
+            m->carry_info->stuck_state = 2;
+            final_x += CARRYING_STUCK_SWAY_AMOUNT;
+        } else {
+            m->carry_info->stuck_state = 1;
+            final_x -= CARRYING_STUCK_SWAY_AMOUNT;
+        }
+        
+        m->set_target(
+            final_x, m->y,
+            NULL, NULL,
+            false, NULL, true, 3.0f,
+            m->carry_info->get_speed() * CARRYING_STUCK_SPEED_MULT
+        );
         
     } else if(m->cur_path_stop_nr == m->path.size()) {
         //Reached the final stop.
@@ -1637,7 +1673,7 @@ void mob::set_next_target(mob* m, void* info1, void* info2) {
             //If there's an obstacle in the path, the last stop on the path
             //actually means it's the last possible stop before the obstacle.
             //Meaning the object should get stuck.
-            m->fsm.run_event(MOB_EVENT_CARRY_STUCK);
+            m->carry_info->stuck_state = 1;
             
         } else {
             //Go to the final destination.

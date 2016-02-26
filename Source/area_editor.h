@@ -90,6 +90,7 @@ private:
     sector*                      on_sector;
     unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;
+    bool                         show_closest_stop;
     bool                         show_guide;
     bool                         show_shadows;
     lafi::widget*                wum; //Widget under mouse.

@@ -282,7 +282,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             if(mob_ptr->carry_info) {
                 if(mob_ptr->carry_info->cur_carrying_strength > 0) {
                     ALLEGRO_COLOR color;
-                    if(mob_ptr->carry_info->cur_carrying_strength >= mob_ptr->type->weight) {
+                    if(mob_ptr->carry_info->is_moving) {
                         if(mob_ptr->carry_info->carry_to_ship) {
                             color = carrying_color_move;
                         } else {
