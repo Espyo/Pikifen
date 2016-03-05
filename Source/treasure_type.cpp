@@ -13,15 +13,13 @@
 #include "treasure.h"
 #include "treasure_type.h"
 
-//TODO FSM and bottomless pits.
+//TODO bottomless pits.
 
 treasure_type::treasure_type() :
     mob_type(),
     value(0) {
     
     init_script();
-    
-    move_speed = 60; //TODO should this be here?
 }
 
 

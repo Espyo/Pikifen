@@ -1,9 +1,0 @@
-name = Test
-
-height = 200
-max_carriers = 50
-pushable = false
-pushes = true
-radius = 114
-weight = 30
-value = 50

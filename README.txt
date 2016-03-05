@@ -41,12 +41,16 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 2) FAQ and troubleshooting
 ===============
-    Why are some animations and physics so broken?
+    Why are some parts of the logic and physics so broken?
         Because their code is still under construction.
+    Why are the animations so clunky and the graphics so simple?
+        I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     Why can't I see the game window?
         Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
     Why is it so slow?
         It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural. Check the Options.txt file and use the wiki page for settings that you can change in order to sacrifice appearance for performance.
+    Why did it crash?
+        Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play. Other than that, check the file Error_log.txt on the same folder as the game. It should tell you what went wrong. If you think the crash is not your fault, please let me know of the problem.
 
 ===============
 3) Compiling

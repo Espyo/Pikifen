@@ -22,8 +22,6 @@ pellet_type::pellet_type() :
     bmp_number(nullptr) {
     
     init_script();
-    
-    move_speed = 60; //TODO
 }
 
 void pellet_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {

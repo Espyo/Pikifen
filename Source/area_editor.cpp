@@ -31,6 +31,7 @@
 
 const float area_editor::GRID_INTERVAL = 32.0f;
 const float area_editor::STOP_RADIUS = 16.0f;
+const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 const float area_editor::LINK_THICKNESS = 2.0f;
 
 
@@ -60,6 +61,7 @@ area_editor::area_editor() :
     holding_m2(false),
     made_changes(false),
     mode(EDITOR_MODE_MAIN),
+    moving_path_preview_checkpoint(-1),
     moving_thing(string::npos),
     moving_thing_x(0),
     moving_thing_y(0),
@@ -69,9 +71,14 @@ area_editor::area_editor() :
     shift_pressed(false),
     show_closest_stop(false),
     show_guide(false),
+    show_path_preview(false),
     show_shadows(true),
     wum(NULL) {
     
+    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
+    path_preview_checkpoints_y[0] = 0;
+    path_preview_checkpoints_x[1] = GRID_INTERVAL;
+    path_preview_checkpoints_y[1] = 0;
 }
 
 /* ----------------------------------------------------------------------------
@@ -91,6 +98,23 @@ void area_editor::adv_textures_to_gui() {
     ((lafi::textbox*) f->widgets["txt_sx"])->text = f2s(cur_sector->texture_info.scale_x);
     ((lafi::textbox*) f->widgets["txt_sy"])->text = f2s(cur_sector->texture_info.scale_y);
     ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(cur_sector->texture_info.rot);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the preview path.
+ */
+void area_editor::calculate_preview_path() {
+    if(!show_path_preview) return;
+    
+    path_preview =
+        get_path(
+            path_preview_checkpoints_x[0],
+            path_preview_checkpoints_y[0],
+            path_preview_checkpoints_x[1],
+            path_preview_checkpoints_y[1],
+            NULL
+        );
 }
 
 
@@ -268,7 +292,11 @@ void area_editor::do_drawing() {
         if(sec_mode != ESM_TEXTURE_VIEW) {
         
             unsigned char sector_opacity = 224;
-            if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_PATHS || mode == EDITOR_MODE_SHADOWS) sector_opacity = 128;
+            bool show_vertices = true;
+            if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_PATHS || mode == EDITOR_MODE_SHADOWS) {
+                sector_opacity = 96;
+                show_vertices = false;
+            }
             
             size_t n_edges = cur_area_data.edges.size();
             for(size_t e = 0; e < n_edges; ++e) {
@@ -331,13 +359,13 @@ void area_editor::do_drawing() {
                 float mid_y = (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2;
                 float angle = atan2(e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y, e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x);
                 draw_scaled_text(
-                    font, al_map_rgb(192, 255, 192),
+                    font_main, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle + M_PI_2) * 4,
                     mid_x + sin(angle + M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
                     ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[0] == string::npos ? "--" : i2s(e_ptr->sector_nrs[0]).c_str());
                 draw_scaled_text(
-                    font, al_map_rgb(192, 255, 192),
+                    font_main, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle - M_PI_2) * 4,
                     mid_y + sin(angle - M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
@@ -345,15 +373,17 @@ void area_editor::do_drawing() {
             }
             
             //Vertexes.
-            size_t n_vertexes = cur_area_data.vertexes.size();
-            for(size_t v = 0; v < n_vertexes; ++v) {
-                vertex* v_ptr = cur_area_data.vertexes[v];
-                al_draw_filled_circle(
-                    v_ptr->x,
-                    v_ptr->y,
-                    3.0 / cam_zoom,
-                    al_map_rgba(224, 224, 224, sector_opacity)
-                );
+            if(show_vertices) {
+                size_t n_vertexes = cur_area_data.vertexes.size();
+                for(size_t v = 0; v < n_vertexes; ++v) {
+                    vertex* v_ptr = cur_area_data.vertexes[v];
+                    al_draw_filled_circle(
+                        v_ptr->x,
+                        v_ptr->y,
+                        3.0 / cam_zoom,
+                        al_map_rgba(224, 224, 224, sector_opacity)
+                    );
+                }
             }
             
             if(mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS && cur_sector) {
@@ -374,7 +404,7 @@ void area_editor::do_drawing() {
             mode == EDITOR_MODE_SECTORS || mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS ||
             mode == EDITOR_MODE_PATHS || mode == EDITOR_MODE_SHADOWS
         ) {
-            mob_opacity = 64;
+            mob_opacity = 32;
         }
         if(sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
         
@@ -440,7 +470,7 @@ void area_editor::do_drawing() {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); l++) {
                     path_stop* s2_ptr = s_ptr->links[l].end_ptr;
-                    bool one_way = s_ptr->links[l].one_way;
+                    bool one_way = !(s_ptr->links[l].end_ptr->has_link(s_ptr));
                     
                     al_draw_line(
                         s_ptr->x, s_ptr->y,
@@ -495,6 +525,62 @@ void area_editor::do_drawing() {
                     closest->x, closest->y,
                     al_map_rgb(96, 224, 32), 2 / cam_zoom
                 );
+            }
+            
+            if(show_path_preview) {
+                for(unsigned char c = 0; c < 2; ++c) {
+                    string letter = (c == 0 ? "A" : "B");
+                    
+                    al_draw_filled_rectangle(
+                        path_preview_checkpoints_x[c] - (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                        path_preview_checkpoints_y[c] - (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                        path_preview_checkpoints_x[c] + (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                        path_preview_checkpoints_y[c] + (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
+                        al_map_rgb(255, 255, 32)
+                    );
+                    draw_scaled_text(
+                        allegro_font, al_map_rgb(0, 64, 64),
+                        path_preview_checkpoints_x[c], path_preview_checkpoints_y[c],
+                        1.0 / cam_zoom, 1.0 / cam_zoom,
+                        ALLEGRO_ALIGN_CENTER, 1,
+                        letter
+                    );
+                }
+                
+                if(path_preview.empty()) {
+                    al_draw_line(
+                        path_preview_checkpoints_x[0],
+                        path_preview_checkpoints_y[0],
+                        path_preview_checkpoints_x[1],
+                        path_preview_checkpoints_y[1],
+                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                    );
+                } else {
+                    al_draw_line(
+                        path_preview_checkpoints_x[0],
+                        path_preview_checkpoints_y[0],
+                        path_preview[0]->x,
+                        path_preview[0]->y,
+                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                    );
+                    for(size_t s = 0; s < path_preview.size() - 1; ++s) {
+                        al_draw_line(
+                            path_preview[s]->x,
+                            path_preview[s]->y,
+                            path_preview[s + 1]->x,
+                            path_preview[s + 1]->y,
+                            al_map_rgb(255, 0, 0), 3 / cam_zoom
+                        );
+                    }
+                    
+                    al_draw_line(
+                        path_preview.back()->x,
+                        path_preview.back()->y,
+                        path_preview_checkpoints_x[1],
+                        path_preview_checkpoints_y[1],
+                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                    );
+                }
             }
         }
         
@@ -1231,6 +1317,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 path_stop* s_ptr = cur_area_data.path_stops[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x);
                 s_ptr->y = snap_to_grid(mouse_cursor_y);
+                calculate_preview_path();
             } else if(mode == EDITOR_MODE_SHADOWS) {
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x - moving_thing_x);
@@ -1239,6 +1326,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             made_changes = true;
+        }
+        
+        //Move path checkpoints.
+        if(moving_path_preview_checkpoint != -1) {
+            path_preview_checkpoints_x[moving_path_preview_checkpoint] = snap_to_grid(mouse_cursor_x);
+            path_preview_checkpoints_y[moving_path_preview_checkpoint] = snap_to_grid(mouse_cursor_y);
+            calculate_preview_path();
         }
         
         
@@ -1414,6 +1508,22 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
+            moving_path_preview_checkpoint = -1;
+            if(show_path_preview) {
+                for(unsigned char c = 0; c < 2; ++c) {
+                    if(
+                        dist(
+                            path_preview_checkpoints_x[c], path_preview_checkpoints_y[c],
+                            mouse_cursor_x, mouse_cursor_y
+                        ) <=
+                        PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
+                    ) {
+                        moving_path_preview_checkpoint = c;
+                        break;
+                    }
+                }
+            }
+            
         } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_SHADOWS) {
             //Shadow-related clicking.
             
@@ -1547,6 +1657,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
+            calculate_preview_path();
             made_changes = true;
             
         } else if (sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
@@ -1575,15 +1686,20 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     
                     
                     new_link_first_stop->links.push_back(
-                        path_link(
-                            s_ptr, s, (sec_mode == ESM_NEW_1WLINK2)
-                        )
+                        path_link(s_ptr, s)
                     );
+                    if(sec_mode == ESM_NEW_LINK2) {
+                        s_ptr->links.push_back(
+                            path_link(new_link_first_stop, string::npos)
+                        );
+                        s_ptr->fix_nrs(cur_area_data);
+                    }
                     sec_mode = (sec_mode == ESM_NEW_LINK2 ? ESM_NEW_LINK1 : ESM_NEW_1WLINK1);
                     break;
                 }
             }
             
+            calculate_preview_path();
             made_changes = true;
             
         } else if(sec_mode == ESM_DEL_STOP) {
@@ -1616,6 +1732,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
             }
             
+            calculate_preview_path();
             made_changes = true;
             
         } else if(sec_mode == ESM_DEL_LINK) {
@@ -1626,8 +1743,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
-                for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                    path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+                for(size_t s2 = 0; s2 < s_ptr->links.size(); ++s2) {
+                    path_stop* s2_ptr = s_ptr->links[s2].end_ptr;
                     if(
                         circle_intersects_line(
                             mouse_cursor_x, mouse_cursor_y, 8 / cam_zoom,
@@ -1636,7 +1753,15 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         )
                     ) {
                     
-                        s_ptr->links.erase(s_ptr->links.begin() + l);
+                        s_ptr->links.erase(s_ptr->links.begin() + s2);
+                        
+                        for(size_t s3 = 0; s3 < s2_ptr->links.size(); ++s3) {
+                            if(s2_ptr->links[s3].end_ptr == s_ptr) {
+                                s2_ptr->links.erase(s2_ptr->links.begin() + s3);
+                                break;
+                            }
+                        }
+                        
                         deleted = true;
                         break;
                     }
@@ -1645,6 +1770,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 if(deleted) break;
             }
             
+            calculate_preview_path();
             made_changes = true;
             
         } else if(sec_mode == ESM_NEW_SHADOW) {
@@ -1881,6 +2007,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             moving_thing = string::npos;
             
         }
+        
+        moving_path_preview_checkpoint = -1;
         
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -2121,6 +2249,8 @@ void area_editor::load() {
     frm_paths->easy_add("but_del_link", new lafi::button(0, 0, 0, 0, "Link"), 33, 32);
     frm_paths->easy_row();
     frm_paths->easy_add("chk_show_closest", new lafi::checkbox(0, 0, 0, 0, "Show closest stop"), 100, 16);
+    frm_paths->easy_row();
+    frm_paths->easy_add("chk_show_path", new lafi::checkbox(0, 0, 0, 0, "Show calculated path"), 100, 16);
     frm_paths->easy_row();
     
     
@@ -2442,6 +2572,12 @@ void area_editor::load() {
     frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         show_closest_stop = !show_closest_stop;
     };
+    frm_paths->widgets["chk_show_path"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        show_path_preview = !show_path_preview;
+        if(show_path_preview) {
+            calculate_preview_path();
+        }
+    };
     frm_paths->widgets["but_back"]->description = "Go back to the main menu.";
     frm_paths->widgets["but_new_stop"]->description = "Create new stops wherever you click.";
     frm_paths->widgets["but_new_link"]->description = "Click on two stops to connect them with a link.";
@@ -2449,6 +2585,7 @@ void area_editor::load() {
     frm_paths->widgets["but_del_stop"]->description = "Click stops to delete them.";
     frm_paths->widgets["but_del_link"]->description = "Click links to delete them.";
     frm_paths->widgets["chk_show_closest"]->description = "Show the closest stop to the cursor.";
+    frm_paths->widgets["chk_show_path"]->description = "Show path between draggable points A and B.";
     
     
     //Properties -- shadows.
@@ -2579,7 +2716,13 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
+    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
+    path_preview_checkpoints_y[0] = 0;
+    path_preview_checkpoints_x[1] = GRID_INTERVAL;
+    path_preview_checkpoints_y[1] = 0;
     show_closest_stop = false;
+    show_path_preview = false;
+    path_preview.clear();
     area_name.clear();
     
 }
@@ -2954,11 +3097,8 @@ void area_editor::save_area() {
         
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = &s_ptr->links[l];
-            data_node* link_node = new data_node("l", "");
+            data_node* link_node = new data_node("nr", i2s(l_ptr->end_nr));
             links_node->add(link_node);
-            
-            link_node->add(new data_node("nr", i2s(l_ptr->end_nr)));
-            link_node->add(new data_node("1w", b2s(l_ptr->one_way)));
         }
         
     }

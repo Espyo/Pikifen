@@ -10,13 +10,13 @@ animations{
 }
 frames{
 	idle{
-		file=TP.png
+		file=2_Euro.png
 		file_x=0
 		file_y=0
-		file_w=228
-		file_h=228
-		game_w=228.00
-		game_h=228.00
+		file_w=64
+		file_h=64
+		game_w=52.00
+		game_h=52.00
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances=

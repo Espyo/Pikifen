@@ -742,8 +742,8 @@ mobs{
 		p=400.00 300.00
 	}
 	Treasure{
-		type=Test
-		p=96.00 384.00
+		type=Billiards Ball
+		p=96.00 320.00
 	}
 	Enemy{
 		type=Cloaking Burrow-nit
@@ -815,16 +815,15 @@ mobs{
 }
 path_stops{
 	s{
-		pos=832.00 224.00
-		links=
+		pos=544.00 224.00
+		links{
+			nr=1
+		}
 	}
 	s{
-		pos=576.00 224.00
+		pos=896.00 224.00
 		links{
-			l{
-				nr=0
-				1w=false
-			}
+			nr=0
 		}
 	}
 }

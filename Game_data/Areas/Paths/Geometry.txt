@@ -518,8 +518,8 @@ mobs{
 		p=704.00 -128.00
 	}
 	Treasure{
-		type=Test
-		p=672.00 384.00
+		type=Billiards Ball
+		p=736.00 416.00
 	}
 	Ship{
 		type=Hocotate ship
@@ -542,165 +542,128 @@ path_stops{
 	s{
 		pos=160.00 -0.00
 		links{
-			l{
-				nr=1
-				1w=false
-			}
+			nr=1
 		}
 	}
 	s{
 		pos=320.00 -0.00
 		links{
-			l{
-				nr=2
-				1w=true
-			}
+			nr=2
 		}
 	}
 	s{
 		pos=320.00 -128.00
 		links{
-			l{
-				nr=3
-				1w=true
-			}
+			nr=3
 		}
 	}
 	s{
 		pos=544.00 -128.00
 		links{
-			l{
-				nr=4
-				1w=true
-			}
+			nr=4
 		}
 	}
 	s{
 		pos=544.00 0.00
 		links{
-			l{
-				nr=5
-				1w=false
-			}
-			l{
-				nr=6
-				1w=true
-			}
+			nr=6
+			nr=5
 		}
 	}
 	s{
 		pos=672.00 -0.00
-		links=
+		links{
+			nr=5
+			nr=4
+			nr=12
+		}
 	}
 	s{
 		pos=544.00 256.00
 		links{
-			l{
-				nr=7
-				1w=false
-			}
-			l{
-				nr=16
-				1w=true
-			}
+			nr=16
+			nr=6
+			nr=7
 		}
 	}
 	s{
 		pos=832.00 256.00
 		links{
-			l{
-				nr=13
-				1w=false
-			}
-			l{
-				nr=8
-				1w=false
-			}
+			nr=7
+			nr=13
+			nr=6
+			nr=8
 		}
 	}
 	s{
 		pos=1216.00 256.00
 		links{
-			l{
-				nr=9
-				1w=false
-			}
+			nr=8
+			nr=7
+			nr=9
 		}
 	}
 	s{
 		pos=1216.00 -160.00
 		links{
-			l{
-				nr=10
-				1w=false
-			}
+			nr=9
+			nr=8
+			nr=10
 		}
 	}
 	s{
 		pos=960.00 -160.00
 		links{
-			l{
-				nr=11
-				1w=false
-			}
+			nr=10
+			nr=9
+			nr=11
 		}
 	}
 	s{
 		pos=960.00 -0.00
-		links=
+		links{
+			nr=11
+			nr=10
+		}
 	}
 	s{
 		pos=832.00 -0.00
 		links{
-			l{
-				nr=5
-				1w=false
-			}
+			nr=12
+			nr=5
+			nr=13
 		}
 	}
 	s{
 		pos=832.00 128.00
 		links{
-			l{
-				nr=12
-				1w=false
-			}
+			nr=13
+			nr=12
+			nr=7
 		}
 	}
 	s{
 		pos=1088.00 128.00
 		links{
-			l{
-				nr=13
-				1w=true
-			}
+			nr=13
 		}
 	}
 	s{
 		pos=1088.00 -32.00
 		links{
-			l{
-				nr=14
-				1w=true
-			}
+			nr=14
 		}
 	}
 	s{
 		pos=544.00 384.00
 		links{
-			l{
-				nr=17
-				1w=true
-			}
+			nr=17
 		}
 	}
 	s{
 		pos=320.00 384.00
 		links{
-			l{
-				nr=1
-				1w=true
-			}
+			nr=1
 		}
 	}
 }

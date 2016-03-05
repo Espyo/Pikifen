@@ -447,10 +447,9 @@ bool path_stop::has_link(path_stop* other_stop) {
 /* ----------------------------------------------------------------------------
  * Creates a new stop link.
  */
-path_link::path_link(path_stop* end_ptr, size_t end_nr, bool one_way) :
+path_link::path_link(path_stop* end_ptr, size_t end_nr) :
     end_ptr(end_ptr),
     end_nr(end_nr),
-    one_way(one_way),
     distance(0) {
     
 }

@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
     
     //Main loop.
     al_start_timer(logic_timer);
-    while(running) {
+    while(is_game_running) {
     
         /*  ************************************************
           *** | _ |                                  | _ | ***
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
         game_states[cur_game_state_nr]->handle_controls(ev);
         
         if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-            running = false;
+            is_game_running = false;
             
         } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
             //scr_w = ev.display.width;

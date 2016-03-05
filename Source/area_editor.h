@@ -55,6 +55,7 @@ private:
     
     static const float GRID_INTERVAL;
     static const float STOP_RADIUS;
+    static const float PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float LINK_THICKNESS;
     
     string                       area_name;
@@ -83,20 +84,26 @@ private:
     bool                         holding_m2;
     bool                         made_changes;
     unsigned char                mode;
+    signed char                  moving_path_preview_checkpoint;
     size_t                       moving_thing; //Current vertex, object or shadow being moved.
     float                        moving_thing_x; //Relative X coordinate of the point where the vertex, object or shadow was grabbed.
     float                        moving_thing_y;
     path_stop*                   new_link_first_stop;
     sector*                      on_sector;
+    float                        path_preview_checkpoints_x[2];
+    float                        path_preview_checkpoints_y[2];
+    vector<path_stop*>           path_preview;
     unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;
     bool                         show_closest_stop;
+    bool                         show_path_preview;
     bool                         show_guide;
     bool                         show_shadows;
     lafi::widget*                wum; //Widget under mouse.
     
     void adv_textures_to_gui();
     void guide_to_gui();
+    void calculate_preview_path();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
     void close_changes_warning();
     void change_guide(string new_file_name);

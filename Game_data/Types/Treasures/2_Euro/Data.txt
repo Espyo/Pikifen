@@ -1,0 +1,9 @@
+name = 2 Euro
+
+height = 2
+max_carriers = 6
+pushable = false
+pushes = true
+radius = 26
+weight = 2
+value = 10

@@ -769,11 +769,9 @@ void load_area(const string &name, const bool load_for_editor) {
         for(size_t l = 0; l < n_links; ++l) {
         
             data_node* link_node = links_node->get_child(l);
+            path_link l_struct(NULL, string::npos);
             
-            path_link l_struct(NULL, string::npos, true);
-            
-            l_struct.end_nr = s2i(link_node->get_child_by_name("nr")->value);
-            l_struct.one_way = s2b(link_node->get_child_by_name("1w")->value);
+            l_struct.end_nr = s2i(link_node->value);
             
             s_ptr->links.push_back(l_struct);
             
@@ -834,25 +832,7 @@ void load_area(const string &name, const bool load_for_editor) {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = cur_area_data.path_stops[s];
             for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-            
                 s_ptr->links[l].calculate_dist(s_ptr);
-                
-                if(!s_ptr->links[l].one_way) {
-                
-                    s_ptr->links[l].one_way = true;
-                    bool backlink_exists = false;
-                    path_stop* s2_ptr = cur_area_data.path_stops[s_ptr->links[l].end_nr];
-                    for(size_t l2 = 0; l2 < s2_ptr->links.size(); ++l2) {
-                        if(s2_ptr->links[l2].end_nr == s) {
-                            backlink_exists = true;
-                            break;
-                        }
-                    }
-                    
-                    if(!backlink_exists) {
-                        s2_ptr->links.push_back(path_link(s_ptr, s, true));
-                    }
-                }
             }
         }
     }
@@ -1229,9 +1209,9 @@ void read_game_config() {
     
     carrying_color_move = s2c(file.get_child_by_name("carrying_color_move")->get_value_or_default("255 255 255"));
     carrying_color_stop = s2c(file.get_child_by_name("carrying_color_stop")->get_value_or_default("96 192 192"));
-    carrying_speed_base_mult = s2f(file.get_child_by_name("carrying_speed_base_mult")->get_value_or_default("0.75")); //TODO good default value.
-    carrying_speed_max_mult = s2f(file.get_child_by_name("carrying_speed_max_mult")->get_value_or_default("0.8")); //TODO good default value.
-    carrying_speed_weight_mult = s2f(file.get_child_by_name("carrying_speed_weight_mult")->get_value_or_default("0.01")); //TODO good default value.
+    carrying_speed_base_mult = s2f(file.get_child_by_name("carrying_speed_base_mult")->get_value_or_default("0.5"));
+    carrying_speed_max_mult = s2f(file.get_child_by_name("carrying_speed_max_mult")->get_value_or_default("0.8"));
+    carrying_speed_weight_mult = s2f(file.get_child_by_name("carrying_speed_weight_mult")->get_value_or_default("0.0004"));
     
 }
 

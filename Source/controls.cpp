@@ -482,7 +482,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0) return;
             
-            running = false; //TODO pause menu, not quit.
+            is_game_running = false; //TODO pause menu, not quit.
             //paused = true;
             
         } else if(button == BUTTON_USE_SPRAY_1) {

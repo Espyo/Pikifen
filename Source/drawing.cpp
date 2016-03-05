@@ -193,8 +193,8 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             for(size_t s = 0; s < temp_path.size(); ++s) {
                 path_stop* s_ptr = temp_path[s];
                 al_draw_text(
-                    font, al_map_rgb(128, 255, 128),
-                    s_ptr->x, s_ptr->y - font_h * 0.5,
+                    font_main, al_map_rgb(128, 255, 128),
+                    s_ptr->x, s_ptr->y - font_main_h * 0.5,
                     ALLEGRO_ALIGN_CENTER, i2s(s).c_str()
                 );
             }
@@ -293,7 +293,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     }
                     draw_fraction(
                         mob_ptr->x,
-                        mob_ptr->y - mob_ptr->type->radius - font_h * 1.25,
+                        mob_ptr->y - mob_ptr->type->radius - font_main_h * 1.25,
                         mob_ptr->carry_info->cur_carrying_strength,
                         mob_ptr->type->weight,
                         color
@@ -318,9 +318,9 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 if(!info_spots[i]->opens_box) {
                     text = info_spots[i]->text;
                     
-                    draw_text_lines(font, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, ALLEGRO_ALIGN_CENTER, 2, text);
+                    draw_text_lines(font_main, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h, ALLEGRO_ALIGN_CENTER, 2, text);
                     
-                    int line_y = info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.75;
+                    int line_y = info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.75;
                     
                     al_draw_line(
                         info_spots[i]->x - info_spots[i]->text_w * 0.5,
@@ -338,13 +338,13 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                         info_spots[i]->x - 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.25,
                         al_map_rgb(192, 192, 192), 2);
                     al_draw_line(
                         info_spots[i]->x + 8,
                         line_y,
                         info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->radius - font_h * 0.25,
+                        info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.25,
                         al_map_rgb(192, 192, 192), 2);
                         
                 } else {
@@ -352,7 +352,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     //TODO optimize this by saving the control somewhere instead of searching for it every frame.
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_THROW) {
-                            draw_control(font, controls[0][c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_h, 0, 0);
+                            draw_control(font_main, controls[0][c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h, 0, 0);
                             break;
                         }
                     }
@@ -695,7 +695,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     i2s(spray_amounts[top_spray_nr]));
                 for(size_t c = 0; c < controls[0].size(); ++c) {
                     if(controls[0][c].action == BUTTON_USE_SPRAY_1 || controls[0][c].action == BUTTON_USE_SPRAY) {
-                        draw_control(font, controls[0][c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
+                        draw_control(font_main, controls[0][c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
                         break;
                     }
                 }
@@ -714,7 +714,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                         i2s(spray_amounts[1]));
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
-                            draw_control(font, controls[0][c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
+                            draw_control(font_main, controls[0][c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
                             break;
                         }
                     }
@@ -730,13 +730,13 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                         scr_w * 0.03, scr_h * 0.05);
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_SWITCH_SPRAY_LEFT) {
-                            draw_control(font, controls[0][c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            draw_control(font_main, controls[0][c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
                         }
                     }
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
-                            draw_control(font, controls[0][c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            draw_control(font_main, controls[0][c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
                             break;
                         }
                     }
@@ -745,27 +745,27 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             
             //TODO test stuff, remove.
             //Day hour.
-            /*al_draw_text(font, al_map_rgb(255, 255, 255), 8, 8, 0,
+            /*al_draw_text(font_main, al_map_rgb(255, 255, 255), 8, 8, 0,
                          (i2s((day_minutes / 60)) + ":" + i2s(((int) (day_minutes) % 60))).c_str());
             for(size_t p = 0; p < 7; ++p) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
             draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
+            al_draw_text(font_main, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
             
         } else { //Show a message.
         
             draw_sprite(
                 bmp_message_box,
-                scr_w / 2, scr_h - font_h * 2 - 4, scr_w - 16, font_h * 4
+                scr_w / 2, scr_h - font_main_h * 2 - 4, scr_w - 16, font_main_h * 4
             );
             
             if(cur_message_speaker) {
                 draw_sprite(
                     cur_message_speaker,
-                    40, scr_h - font_h * 4 - 16,
+                    40, scr_h - font_main_h * 4 - 16,
                     48, 48);
                 draw_sprite(
                     bmp_bubble,
-                    40, scr_h - font_h * 4 - 16,
+                    40, scr_h - font_main_h * 4 - 16,
                     64, 64);
             }
             
@@ -777,8 +777,8 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             for(size_t l = 0; l < lines.size(); ++l) {
             
                 draw_compressed_text(
-                    font, al_map_rgb(255, 255, 255),
-                    24, scr_h - font_h * (4 - l) + 8,
+                    font_main, al_map_rgb(255, 255, 255),
+                    24, scr_h - font_main_h * (4 - l) + 8,
                     ALLEGRO_ALIGN_LEFT, 0, scr_w - 64, 0,
                     lines[l]
                 );
@@ -814,7 +814,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
     if(show_framerate) {
         framerate_update_timer.tick(delta_t);
         al_draw_text(
-            font,
+            font_main,
             (framerate_counter >= (unsigned) (game_fps - 1) ? al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)),
             0, 0, 0,
             (i2s(framerate_counter) + "FPS").c_str()
@@ -948,7 +948,8 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &c
  * color:   Color of the fraction's text.
  */
 void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR &color) {
-    float first_y = cy - (font_h * 3) / 2;
+    float first_y = cy - (font_main_h * 3) / 2;
+    float font_h = al_get_font_line_height(font_value);
     
     draw_scaled_text(
         font_value, color, cx, first_y,
@@ -1577,21 +1578,21 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
     }
     
     //Draw the game's logo to the left of the "Loading..." text.
-    float icon_x = scr_w - 8 - al_get_text_width(font, "Loading...") - 8 - font_h * 0.5;
-    float icon_y = scr_h - 8 - font_h * 0.5;
+    float icon_x = scr_w - 8 - al_get_text_width(font_main, "Loading...") - 8 - font_main_h * 0.5;
+    float icon_y = scr_h - 8 - font_main_h * 0.5;
     
     if(bmp_icon && bmp_icon != bmp_error) {
         draw_sprite(
             bmp_icon, icon_x, icon_y,
-            -1, font_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
+            -1, font_main_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
         );
     }
     
     //Draw the "Loading..." text.
     al_draw_text(
-        font, al_map_rgba(192, 192, 192, opacity * 255.0),
+        font_main, al_map_rgba(192, 192, 192, opacity * 255.0),
         scr_w - 8,
-        scr_h - 8 - font_h,
+        scr_h - 8 - font_main_h,
         ALLEGRO_ALIGN_RIGHT, "Loading..."
     );
     

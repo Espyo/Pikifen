@@ -72,7 +72,6 @@ extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
 extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_sun_bubble;
-extern ALLEGRO_BITMAP* bmp_tp;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 
@@ -175,11 +174,11 @@ extern bool                             draw_cursor_trail;
 extern map<string, enemy_type*>         enemy_types;
 extern vector<enemy*>                   enemies;
 extern fade_manager                     fade_mgr;
-extern ALLEGRO_FONT*                    font;
+extern ALLEGRO_FONT*                    font_main;
 extern ALLEGRO_FONT*                    font_area_name;
 extern ALLEGRO_FONT*                    font_counter;
 extern unsigned int                     font_counter_h;
-extern unsigned int                     font_h;
+extern unsigned int                     font_main_h;
 extern ALLEGRO_FONT*                    font_value;             //Font for the carrying / money values.
 extern unsigned int                     framerate_counter;
 extern timer                            framerate_update_timer;
@@ -201,6 +200,7 @@ extern float                            idle_glow_angle;
 extern string                           info_print_text;
 extern timer                            info_print_timer;
 extern vector<info_spot*>               info_spots;
+extern bool                             is_game_running;
 extern map<ALLEGRO_JOYSTICK*, int>      joystick_numbers;
 extern vector<leader*>                  leaders;
 extern movement_struct                  leader_movement; //How hard the joystick is pressed in each direction ([0, 1]);
@@ -232,7 +232,6 @@ extern bool                             pretty_whistle;              //If true, 
 extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
 extern float                            prev_group_move_intensity;   //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
 extern bool                             reset_delta_t;               //Is delta_t meant to be reset for the next frame?
-extern bool                             running;
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;
 extern sector_types_manager             sector_types;

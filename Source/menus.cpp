@@ -93,7 +93,7 @@ void main_menu::load() {
         new menu_button(
             scr_w * 0.5, scr_h * 0.87, scr_w * 0.8, scr_h * 0.08,
     [] () {
-        running = false;
+        is_game_running = false;
     }, "Exit", font_area_name
         )
     );
@@ -131,7 +131,7 @@ void main_menu::handle_controls(ALLEGRO_EVENT ev) {
     
     if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            running = false;
+            is_game_running = false;
         }
     }
     
@@ -174,14 +174,14 @@ void main_menu::do_drawing() {
     }
     
     draw_scaled_text(
-        font, al_map_rgb(255, 255, 255),
+        font_main, al_map_rgb(255, 255, 255),
         8, scr_h  - 8,
         0.4, 0.4,
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
     draw_scaled_text(
-        font, al_map_rgb(255, 255, 255),
+        font_main, al_map_rgb(255, 255, 255),
         scr_w - 8, scr_h  - 8,
         0.4, 0.4,
         ALLEGRO_ALIGN_RIGHT, 2,
@@ -226,7 +226,7 @@ void options_menu::load() {
     menu_widgets.push_back(
         new menu_text(
             scr_w * 0.15, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
-            "Player:", font
+            "Player:", font_main
         )
     );
     menu_widgets.push_back(
@@ -238,13 +238,13 @@ void options_menu::load() {
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font
+    "<", font_main
         )
     );
     cur_player_nr_widget =
         new menu_text(
         scr_w * 0.4, scr_h * 0.1, scr_w * 0.1, scr_h * 0.1,
-        "", font
+        "", font_main
     )
     ;
     menu_widgets.push_back(cur_player_nr_widget);
@@ -257,7 +257,7 @@ void options_menu::load() {
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font
+    ">", font_main
         )
     );
     menu_widgets.push_back(
@@ -266,7 +266,7 @@ void options_menu::load() {
     [this] () {
         leave();
     },
-    "Exit", font
+    "Exit", font_main
         )
     );
     
@@ -277,7 +277,7 @@ void options_menu::load() {
         [] () {
         
         },
-        "-", font
+        "-", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -287,14 +287,14 @@ void options_menu::load() {
         [] () {
         
         },
-        "<", font
+        "<", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_text(
                 scr_w * 0.43, scr_h * (0.2 + 0.08 * c), scr_w * 0.50, scr_h * 0.1,
-                "", font, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
+                "", font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -304,7 +304,7 @@ void options_menu::load() {
         [] () {
         
         },
-        ">", font
+        ">", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -314,7 +314,7 @@ void options_menu::load() {
         [] () {
         
         },
-        "", font
+        "", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
@@ -335,14 +335,14 @@ void options_menu::load() {
         this->control_widgets[((controls[cur_player_nr].size() - 1) % 8) * 5 + 2]->start_juicy_grow();
         update();
     },
-    "New", font
+    "New", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_text(
             scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
-            "Page:", font
+            "Page:", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
@@ -355,14 +355,14 @@ void options_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font
+    "<", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
     cur_page_nr_widget =
         new menu_text(
         scr_w * 0.4, scr_h * 0.9, scr_w * 0.1, scr_h * 0.1,
-        "", font
+        "", font_main
     )
     ;
     bottom_widgets.push_back(cur_page_nr_widget);
@@ -375,14 +375,14 @@ void options_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font
+    ">", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
     input_capture_msg_widget =
         new menu_text(
         scr_w * 0.5, scr_h * 0.9, scr_w, scr_h * 0.1,
-        "Waiting for any input...", font
+        "Waiting for any input...", font_main
     )
     ;
     menu_widgets.push_back(input_capture_msg_widget);
@@ -500,7 +500,7 @@ void options_menu::do_drawing() {
     for(; list_nr < 8 && control_nr < controls[cur_player_nr].size(); ++control_nr, ++list_nr) {
         control_info* c_ptr = &controls[cur_player_nr][control_nr];
         
-        draw_control(font, *c_ptr, scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr), scr_w * 0.2, scr_h * 0.1);
+        draw_control(font_main, *c_ptr, scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr), scr_w * 0.2, scr_h * 0.1);
     }
     
     fade_mgr.draw();
@@ -650,7 +650,7 @@ void area_menu::load() {
         new menu_text(
             scr_w * 0.3, scr_h * 0.1, scr_w * 0.5, scr_h * 0.1,
             "Pick an area:",
-            font, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
+            font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
         )
     );
     
@@ -662,7 +662,7 @@ void area_menu::load() {
             change_game_state(GAME_STATE_MAIN_MENU);
         });
     },
-    "Back", font
+    "Back", font_main
         )
     );
     
@@ -682,7 +682,7 @@ void area_menu::load() {
     menu_widgets.push_back(
         new menu_text(
             scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
-            "Page:", font
+            "Page:", font_main
         )
     );
     menu_widgets.push_back(
@@ -694,13 +694,13 @@ void area_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    "<", font
+    "<", font_main
         )
     );
     cur_page_nr_widget =
         new menu_text(
         scr_w * 0.4, scr_h * 0.9, scr_w * 0.1, scr_h * 0.1,
-        "", font
+        "", font_main
     )
     ;
     menu_widgets.push_back(cur_page_nr_widget);
@@ -712,7 +712,7 @@ void area_menu::load() {
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
-    ">", font
+    ">", font_main
         )
     );
     

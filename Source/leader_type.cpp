@@ -407,49 +407,6 @@ void leader_type::init_script() {
         }
     }
     
-    efc.new_state("sleeping_moving", LEADER_STATE_SLEEPING_MOVING); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(mob::carry_begin_move);
-            efc.run_function(mob::set_next_target);
-        }
-        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
-            efc.run_function(mob::handle_carrier_removed);
-            efc.run_function(mob::check_carry_stop);
-        }
-        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
-            efc.change_state("sleeping_waiting");
-        }
-        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
-            efc.change_state("sleeping_waiting");
-        }
-        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run_function(mob::set_next_target);
-        }
-        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
-            efc.run_function(leader::start_waking_up);
-            efc.change_state("waking_up");
-        }
-        efc.new_event(LEADER_EVENT_CANCEL); {
-            efc.run_function(leader::start_waking_up);
-            efc.change_state("waking_up");
-        }
-        efc.new_event(LEADER_EVENT_UNFOCUSED); {
-            efc.run_function(leader::unfocus);
-            efc.change_state("inactive_sleeping_waiting");
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(leader::lose_health);
-            efc.run_function(leader::start_waking_up);
-        }
-        efc.new_event(MOB_EVENT_DEATH); {
-            efc.run_function(leader::start_waking_up);
-            efc.change_state("dying");
-        }
-        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
-            efc.run_function(leader::fall_down_pit);
-        }
-    }
-    
     efc.new_state("sleeping_waiting", LEADER_STATE_SLEEPING_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(mob::carry_stop_move);
@@ -485,6 +442,53 @@ void leader_type::init_script() {
         }
     }
     
+    efc.new_state("sleeping_moving", LEADER_STATE_SLEEPING_MOVING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(mob::handle_carrier_removed);
+            efc.run_function(mob::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(mob::carry_begin_move);
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(mob::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(leader::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader::unfocus);
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader::lose_health);
+            efc.run_function(leader::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader::start_waking_up);
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader::fall_down_pit);
+        }
+    }
+    
     efc.new_state("inactive_sleeping_waiting", LEADER_STATE_INACTIVE_SLEEPING_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(mob::carry_stop_move);
@@ -504,7 +508,7 @@ void leader_type::init_script() {
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run_function(leader::start_waking_up);
-            efc.change_state("waking_up");
+            efc.change_state("inactive_waking_up");
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader::focus);
@@ -544,11 +548,11 @@ void leader_type::init_script() {
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.run_function(leader::start_waking_up);
-            efc.change_state("waking_up");
+            efc.change_state("inactive_waking_up");
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
             efc.run_function(leader::start_waking_up);
-            efc.change_state("waking_up");
+            efc.change_state("inactive_waking_up");
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader::focus);

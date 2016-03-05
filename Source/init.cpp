@@ -147,7 +147,7 @@ void init_fonts() {
     //We can't load the font directly because we want to set the ranges.
     //So we load into a bitmap first.
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
-    if(temp_font_bitmap) font = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
+    if(temp_font_bitmap) font_main = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     
     temp_font_bitmap = load_bmp("Area_name_font.png");
@@ -162,7 +162,7 @@ void init_fonts() {
     if(temp_font_bitmap) font_value = al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
     al_destroy_bitmap(temp_font_bitmap);
     
-    if(font) font_h = al_get_font_line_height(font);
+    if(font_main) font_main_h = al_get_font_line_height(font_main);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
     
     allegro_font = al_create_builtin_font();
@@ -258,7 +258,6 @@ void init_misc_graphics() {
     bmp_sparkle = load_bmp(         "Sparkle.png");
     bmp_sun = load_bmp(             "Sun.png");
     bmp_sun_bubble = load_bmp(      "Sun_bubble.png");
-    bmp_tp = load_bmp(              "TP.png");
     bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
     

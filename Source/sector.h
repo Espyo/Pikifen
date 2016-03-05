@@ -124,10 +124,9 @@ struct path_stop {
 struct path_link {
     path_stop* end_ptr;
     size_t end_nr;
-    bool one_way;
     float distance;
     
-    path_link(path_stop* end_ptr, size_t end_nr, bool one_way);
+    path_link(path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
 };
 

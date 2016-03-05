@@ -1,0 +1,9 @@
+name = Billiards Ball
+
+height = 100
+max_carriers = 30
+pushable = false
+pushes = true
+radius = 45
+weight = 20
+value = 50
