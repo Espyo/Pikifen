@@ -434,11 +434,13 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         for(size_t a = 0; a < n_arrows; ++a) {
             float x = cos(group_move_angle) * group_move_arrows[a];
             float y = sin(group_move_angle) * group_move_arrows[a];
+            float alpha = 64 + min(191, (int) (191 * (group_move_arrows[a] / (CURSOR_MAX_DIST * 0.4))));
             draw_sprite(
                 bmp_group_move_arrow,
                 cur_leader_ptr->x + x, cur_leader_ptr->y + y,
                 16 * (1 + group_move_arrows[a] / CURSOR_MAX_DIST), -1,
-                group_move_angle
+                group_move_angle,
+                map_alpha(alpha)
             );
         }
         
@@ -843,6 +845,41 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
  * max_*: Max width or height. Used to compress it if needed.
  */
 void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const float x, const float y, const float max_w, const float max_h) {
+    
+    if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
+        //If it's a mouse click, just draw the icon and be done with it.
+        if(c.button >= 1 && c.button <= 3) {
+            
+            int bmp_w = al_get_bitmap_width(bmp_mouse_button_icon[c.button - 1]);
+            int bmp_h = al_get_bitmap_height(bmp_mouse_button_icon[c.button - 1]);
+            draw_sprite(
+                bmp_mouse_button_icon[c.button - 1],
+                x, y,
+                min((float) bmp_w, max_w),
+                min((float) bmp_h, max_h)
+            );
+            return;
+            
+        }
+    }
+    
+    if(c.type == CONTROL_TYPE_MOUSE_WHEEL_UP || c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
+        //Likewise, if it's a mouse wheel move, just draw the icon and leave.
+        ALLEGRO_BITMAP* b = bmp_mouse_wu_icon;
+        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN){
+            b = bmp_mouse_wd_icon;
+        }
+        
+        int bmp_w = al_get_bitmap_width(b);
+        int bmp_h = al_get_bitmap_height(b);
+        draw_sprite(
+            b, x, y,
+            min((float) bmp_w, max_w),
+            min((float) bmp_h, max_h)
+        );
+        return;
+    }
+    
     string name;
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         name = str_to_upper(al_keycode_to_name(c.button));
@@ -853,14 +890,10 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const f
         name = i2s(c.button + 1);
     } else if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         name = "M" + i2s(c.button);
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
-        name = "MWD";
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_LEFT) {
         name = "MWL";
     } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT) {
         name = "MWR";
-    } else if(c.type == CONTROL_TYPE_MOUSE_WHEEL_UP) {
-        name = "MWU";
     }
     
     int x1, y1, x2, y2;
@@ -992,6 +1025,72 @@ void draw_health(const float cx, const float cy, const unsigned int health, cons
     if(!just_chart) al_draw_filled_circle(cx, cy, radius, al_map_rgba(0, 0, 0, 128));
     al_draw_filled_pieslice(cx, cy, radius, -M_PI_2, -ratio * M_PI * 2, c);
     if(!just_chart) al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
+}
+
+
+const float NOTIFICATION_PADDING = 8.0f;
+const float NOTIFICATION_CONTROL_SIZE = 24.0f;
+const unsigned char NOTIFICATION_ALPHA = 160;
+/* ----------------------------------------------------------------------------
+ * Draws a notification, like a note saying that the player can press
+ * a certain button to pluck.
+ * x, y:    Spot that the notification is pointing at.
+ * text:    Text to say.
+ * control: If not NULL, draw the control's button/key/etc. before the text.
+ */
+void draw_notification(const float x, const float y, const string text, control_info* control) {
+    
+    ALLEGRO_TRANSFORM tra, old;
+    al_identity_transform(&tra);
+    al_translate_transform(&tra, x * cam_zoom, y * cam_zoom);
+    al_scale_transform(&tra, 1.0 / cam_zoom, 1.0 / cam_zoom);
+    al_copy_transform(&old, al_get_current_transform());
+    al_compose_transform(&tra, &old);
+    al_use_transform(&tra);
+    
+    int text_w = al_get_text_width(font, text.c_str());
+    int text_h = font_h;
+    
+    int bmp_w = al_get_bitmap_width(bmp_notification);
+    int bmp_h = al_get_bitmap_height(bmp_notification);
+    
+    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
+    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
+    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
+    float text_box_y2 = NOTIFICATION_PADDING;
+    
+    draw_sprite(
+        bmp_notification,
+        0,
+        -bmp_h * 0.5,
+        bmp_w, bmp_h,
+        0,
+        map_alpha(NOTIFICATION_ALPHA)
+    );
+    
+    if(control) {
+        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
+        draw_control(
+            font, *control,
+            -bmp_w * 0.5 + NOTIFICATION_PADDING + NOTIFICATION_CONTROL_SIZE * 0.5,
+            -bmp_h * 0.5,
+            NOTIFICATION_CONTROL_SIZE,
+            NOTIFICATION_CONTROL_SIZE
+        );
+    }
+    
+    draw_compressed_text(
+        font, map_alpha(NOTIFICATION_ALPHA),
+        (text_box_x1 + text_box_x2) * 0.5,
+        (text_box_y1 + text_box_y2) * 0.5,
+        ALLEGRO_ALIGN_CENTER,
+        1,
+        text_box_x2 - text_box_x1,
+        text_box_y2 - text_box_y1,
+        text.c_str()
+    );
+    
+    al_use_transform(&old);
 }
 
 

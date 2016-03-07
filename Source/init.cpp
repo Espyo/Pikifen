@@ -247,6 +247,9 @@ void init_misc_graphics() {
     bmp_info_spot = load_bmp(       "Info_spot.png");
     bmp_message_box = load_bmp(     "Message_box.png");
     bmp_mouse_cursor = load_bmp(    "Mouse_cursor.png");
+    bmp_mouse_wd_icon = load_bmp(   "Mouse_wheel_down_icon.png");
+    bmp_mouse_wu_icon = load_bmp(   "Mouse_wheel_up_icon.png");
+    bmp_notification = load_bmp(    "Notification.png");
     bmp_group_move_arrow = load_bmp("Group_move_arrow.png");
     bmp_nectar = load_bmp(          "Nectar.png");
     bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
@@ -262,6 +265,10 @@ void init_misc_graphics() {
     bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
     
     bmp_test = load_bmp("Test.png");
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        bmp_mouse_button_icon[i] = load_bmp("Mouse_button_" + i2s(i + 1) + "_icon.png");
+    }
     
     al_set_display_icon(display, bmp_icon);
 }
