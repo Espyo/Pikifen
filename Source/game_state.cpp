@@ -216,6 +216,10 @@ void gameplay::load() {
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->first_state_set = true;
     
+    day_minutes = day_minutes_start;
+    
+    cam_x = cam_final_x = cur_leader_ptr->x;
+    cam_y = cam_final_y = cur_leader_ptr->y;
     cam_zoom = 1.0;
     
     al_hide_mouse_cursor(display);

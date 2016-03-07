@@ -545,40 +545,33 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0) return;
             
-            float new_zoom;
-            float zoom_to_compare;
-            if(cam_trans_zoom_timer.time_left > 0.0f) zoom_to_compare = cam_trans_zoom_final_level; else zoom_to_compare = cam_zoom;
-            
-            if(zoom_to_compare < 1) {
-                new_zoom = ZOOM_MAX_LEVEL;
-            } else if(zoom_to_compare > 1) {
-                new_zoom = 1;
+            if(cam_final_zoom < 1) {
+                cam_final_zoom = ZOOM_MAX_LEVEL;
+            } else if(cam_final_zoom > 1) {
+                cam_final_zoom = 1;
             } else {
-                new_zoom = ZOOM_MIN_LEVEL;
+                cam_final_zoom = ZOOM_MIN_LEVEL;
             }
             
-            start_camera_zoom(new_zoom);
+            sfx_camera.play(0, false);
             
         } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
         
-            if((cam_zoom == ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) || (cam_zoom == ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)) return;
-            
-            float new_zoom;
-            float current_zoom;
-            if(cam_trans_zoom_timer.time_left > 0.0f) current_zoom = cam_trans_zoom_final_level; else current_zoom = cam_zoom;
+            if(
+                (cam_final_zoom >= ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) ||
+                (cam_final_zoom <= ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)
+            ) {
+                return;
+            }
             
             pos = floor(pos);
             
-            if(button == BUTTON_ZOOM_IN) new_zoom = current_zoom + 0.1 * pos; else new_zoom = current_zoom - 0.1 * pos;
+            if(button == BUTTON_ZOOM_IN) cam_final_zoom = cam_final_zoom + 0.1 * pos; else cam_final_zoom = cam_final_zoom - 0.1 * pos;
             
-            if(new_zoom > ZOOM_MAX_LEVEL) new_zoom = ZOOM_MAX_LEVEL;
-            if(new_zoom < ZOOM_MIN_LEVEL) new_zoom = ZOOM_MIN_LEVEL;
+            if(cam_final_zoom > ZOOM_MAX_LEVEL) cam_final_zoom = ZOOM_MAX_LEVEL;
+            if(cam_final_zoom < ZOOM_MIN_LEVEL) cam_final_zoom = ZOOM_MIN_LEVEL;
             
-            if(cam_trans_zoom_timer.time_left > 0.0f) {
-                cam_trans_zoom_final_level = new_zoom;
-            } else {
-                start_camera_zoom(new_zoom);
-            }
+            sfx_camera.play(-1, false);
             
         } else if(button == BUTTON_LIE_DOWN) {
         

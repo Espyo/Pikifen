@@ -1,0 +1,8 @@
+time            = 40 10 70 10
+day             = 88 18 15 25
+leader_1_icon   = 10 90 5 4
+leader_2_icon   = 10 80 5 5
+leader_3_icon   = 10 70 5 5
+leader_1_health = 15 90 5 5
+leader_2_health = 15 80 5 5
+leader_3_health = 15 70 5 5

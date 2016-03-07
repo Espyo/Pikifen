@@ -6,3 +6,9 @@ carrying_color_stop = 96 192 192
 carrying_speed_base_mult = 0.5
 carrying_speed_max_mult = 0.8
 carrying_speed_weight_mult = 0.0004
+
+day_minutes_start = 420
+day_minutes_end = 1140
+day_minutes_per_irl_sec = 2
+
+max_pikmin_in_field = 100

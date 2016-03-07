@@ -19,6 +19,8 @@ void init_error_bitmap();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_fonts();
 void init_game_states();
+void init_hud_coordinate(float *i, const float x, const float y, const float w, const float h);
+void init_hud_coordinates();
 void init_misc();
 void init_misc_graphics();
 void init_misc_sounds();

@@ -545,81 +545,102 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 if(n_leaders < l + 1) continue;
                 
                 size_t l_nr = (cur_leader_nr + l) % n_leaders;
-                
-                float size;
-                if(l == 0) size = scr_w * 0.08; else size = scr_w * 0.06;
-                
-                int y_offset;
-                if(l == 0) y_offset = 0; else if(l == 1) y_offset = scr_h * 0.10; else y_offset = scr_h * 0.19;
+                int icon_id = HUD_ITEM_LEADER_1_ICON + l_nr;
+                int health_id = HUD_ITEM_LEADER_1_HEALTH + l_nr;
                 
                 al_draw_filled_circle(
-                    scr_w * 0.08, scr_h * 0.88 - y_offset,
-                    size * 0.4, change_alpha(leaders[l_nr]->type->main_color, 128));
+                    hud_coords[icon_id][0],
+                    hud_coords[icon_id][1],
+                    max(hud_coords[icon_id][2], hud_coords[icon_id][3]) / 2.0f,
+                    change_alpha(leaders[l_nr]->type->main_color, 128)
+                );
                 draw_sprite(
                     leaders[l_nr]->lea_type->bmp_icon,
-                    scr_w * 0.08, scr_h * 0.88 - y_offset,
-                    size * 0.8, size * 0.8);
+                    hud_coords[icon_id][0],
+                    hud_coords[icon_id][1],
+                    hud_coords[icon_id][2],
+                    hud_coords[icon_id][3]
+                );
                 draw_sprite(
                     bmp_bubble,
-                    scr_w * 0.08, scr_h * 0.88 - y_offset,
-                    size, size);
+                    hud_coords[icon_id][0],
+                    hud_coords[icon_id][1],
+                    hud_coords[icon_id][2],
+                    hud_coords[icon_id][3]
+                );
                     
                 draw_health(
-                    scr_w * 0.08 + size * 1.1,
-                    scr_h * 0.88 - y_offset,
+                    hud_coords[health_id][0],
+                    hud_coords[health_id][1],
                     leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                    size * 0.3, true);
+                    max(hud_coords[health_id][2], hud_coords[health_id][3]) / 2.0f
+                );
                 draw_sprite(
                     bmp_hard_bubble,
-                    scr_w * 0.08 + size * 1.1,
-                    scr_h * 0.88 - y_offset,
-                    size * 0.8, size * 0.8);
+                    hud_coords[health_id][0],
+                    hud_coords[health_id][1],
+                    hud_coords[health_id][2],
+                    hud_coords[health_id][3]
+                );
             }
             
             //Sun Meter.
-            unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60;
-            float sun_meter_start = scr_w * 0.06; //Center of the first dot.
-            float sun_meter_end = scr_w * 0.70;
-            float sun_meter_y = scr_h * 0.10; //Center.
-            float sun_meter_span = sun_meter_end - sun_meter_start; //Width, from the center of the first dot to the center of the last.
-            float interval = sun_meter_span / (float) n_hours;
+            unsigned char n_hours = (day_minutes_end - day_minutes_start) / 60.0f;
+            float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
+            float sun_radius = hud_coords[HUD_ITEM_TIME][3] / 2.0;
+            float first_dot_x = hud_coords[HUD_ITEM_TIME][0] - hud_coords[HUD_ITEM_TIME][2] * 0.5 + sun_radius;
+            float last_dot_x = hud_coords[HUD_ITEM_TIME][0] + hud_coords[HUD_ITEM_TIME][2] * 0.5 - sun_radius;
+            float dots_y = hud_coords[HUD_ITEM_TIME][1];
+            float dots_span = last_dot_x - first_dot_x; //Width, from the center of the first dot to the center of the last.
+            float dot_interval = dots_span / (float) n_hours;
             
             //Larger bubbles at the start, middle and end of the meter.
-            draw_sprite(bmp_hard_bubble, sun_meter_start, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
-            draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span * 0.5, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
-            draw_sprite(bmp_hard_bubble, sun_meter_start + sun_meter_span, sun_meter_y, scr_w * 0.03, scr_w * 0.03);
+            draw_sprite(bmp_hard_bubble, first_dot_x + dots_span * 0.0, dots_y, sun_radius * 0.9, sun_radius * 0.9);
+            draw_sprite(bmp_hard_bubble, first_dot_x + dots_span * 0.5, dots_y, sun_radius * 0.9, sun_radius * 0.9);
+            draw_sprite(bmp_hard_bubble, first_dot_x + dots_span * 1.0, dots_y, sun_radius * 0.9, sun_radius * 0.9);
             
             for(unsigned char h = 0; h < n_hours + 1; ++h) {
                 draw_sprite(
                     bmp_hard_bubble,
-                    sun_meter_start + h * interval, sun_meter_y,
-                    scr_w * 0.02, scr_w * 0.02);
+                    first_dot_x + h * dot_interval, dots_y,
+                    sun_radius * 0.6, sun_radius * 0.6);
             }
             
-            float day_passed_ratio = (float) (day_minutes - day_minutes_start) / (float) (day_minutes_end - day_minutes_start);
             draw_sprite(
                 bmp_sun,
-                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
-                scr_w * 0.07, scr_w * 0.07); //Static sun.
+                first_dot_x + day_passed_ratio * dots_span, dots_y,
+                sun_radius * 1.5, sun_radius * 1.5
+            ); //Static sun.
             draw_sprite(
                 bmp_sun,
-                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
-                scr_w * 0.07, scr_w * 0.07,
-                sun_meter_sun_angle); //Spinning sun.
+                first_dot_x + day_passed_ratio * dots_span, dots_y,
+                sun_radius * 1.5, sun_radius * 1.5,
+                sun_meter_sun_angle
+            ); //Spinning sun.
             draw_sprite(
                 bmp_sun_bubble,
-                sun_meter_start + day_passed_ratio * sun_meter_span, sun_meter_y,
-                scr_w * 0.08, scr_w * 0.08); //Bubble in front the Sun.
+                first_dot_x + day_passed_ratio * dots_span, dots_y,
+                sun_radius * 2.0, sun_radius * 2.0
+            ); //Bubble in front the sun.
                 
             //Day number.
             draw_sprite(
                 bmp_day_bubble,
-                scr_w * 0.89, scr_h * 0.13,
-                scr_w * 0.11, scr_h * 0.18);
+                hud_coords[HUD_ITEM_DAY][0],
+                hud_coords[HUD_ITEM_DAY][1],
+                hud_coords[HUD_ITEM_DAY][2],
+                hud_coords[HUD_ITEM_DAY][3]
+            );
                 
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.89, scr_h * 0.15,
-                ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.09, scr_h * 0.07, i2s(day));
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_DAY][0],
+                hud_coords[HUD_ITEM_DAY][1],
+                ALLEGRO_ALIGN_CENTER, 1,
+                hud_coords[HUD_ITEM_DAY][2] * 0.3,
+                hud_coords[HUD_ITEM_DAY][3] * 0.3,
+                i2s(day)
+            );
                 
             //Pikmin count.
             //Count how many Pikmin only.
@@ -1048,8 +1069,8 @@ void draw_notification(const float x, const float y, const string text, control_
     al_compose_transform(&tra, &old);
     al_use_transform(&tra);
     
-    int text_w = al_get_text_width(font, text.c_str());
-    int text_h = font_h;
+    int text_w = al_get_text_width(font_main, text.c_str());
+    int text_h = font_main_h;
     
     int bmp_w = al_get_bitmap_width(bmp_notification);
     int bmp_h = al_get_bitmap_height(bmp_notification);
@@ -1071,7 +1092,7 @@ void draw_notification(const float x, const float y, const string text, control_
     if(control) {
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control(
-            font, *control,
+            font_main, *control,
             -bmp_w * 0.5 + NOTIFICATION_PADDING + NOTIFICATION_CONTROL_SIZE * 0.5,
             -bmp_h * 0.5,
             NOTIFICATION_CONTROL_SIZE,
@@ -1080,7 +1101,7 @@ void draw_notification(const float x, const float y, const string text, control_
     }
     
     draw_compressed_text(
-        font, map_alpha(NOTIFICATION_ALPHA),
+        font_main, map_alpha(NOTIFICATION_ALPHA),
         (text_box_x1 + text_box_x2) * 0.5,
         (text_box_y1 + text_box_y2) * 0.5,
         ALLEGRO_ALIGN_CENTER,

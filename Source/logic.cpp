@@ -33,6 +33,8 @@ void do_game_logic() {
     
 }
 
+
+const float CAMERA_SMOOTHNESS_MULT = 4.5f;
 void do_aesthetic_logic() {
 
     /*************************************
@@ -44,25 +46,10 @@ void do_aesthetic_logic() {
     //Rotation angle for the glow atop idle Pikmin.
     idle_glow_angle += IDLE_GLOW_SPIN_SPEED * delta_t;
     
-    //Camera transitions.
-    if(cam_trans_pan_timer.time_left > 0.0f) {
-        cam_trans_pan_timer.tick(delta_t);
-        
-        float percentage_left = cam_trans_pan_timer.get_ratio_left();
-        percentage_left = ease(EASE_IN, percentage_left);
-        
-        cam_x = cam_trans_pan_initial_x + (cam_trans_pan_final_x - cam_trans_pan_initial_x) * (1 - percentage_left);
-        cam_y = cam_trans_pan_initial_y + (cam_trans_pan_final_y - cam_trans_pan_initial_y) * (1 - percentage_left);
-    }
-    
-    if(cam_trans_zoom_timer.time_left > 0.0f) {
-        cam_trans_zoom_timer.tick(delta_t);
-        
-        float percentage_left = cam_trans_zoom_timer.get_ratio_left();
-        percentage_left = ease(EASE_IN, percentage_left);
-        
-        cam_zoom = cam_trans_zoom_initial_level + (cam_trans_zoom_final_level - cam_trans_zoom_initial_level) * (1 - percentage_left);
-    }
+    //Camera movement.
+    cam_x += (cam_final_x - cam_x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_y += (cam_final_y - cam_y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_zoom += (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
     
     //"Move group" arrows.
     if(group_move_intensity) {
@@ -708,13 +695,13 @@ void do_gameplay_logic() {
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_MOVE_START, (void*) &leader_movement);
         }
         
-        if(cam_trans_pan_timer.time_left > 0.0f) {
+        /*if(cam_trans_pan_timer.time_left > 0.0f) {
             cam_trans_pan_final_x = cur_leader_ptr->x;
             cam_trans_pan_final_y = cur_leader_ptr->y;
-        } else {
-            cam_x = cur_leader_ptr->x;
-            cam_y = cur_leader_ptr->y;
-        }
+        } else {*/
+            cam_final_x = cur_leader_ptr->x;
+            cam_final_y = cur_leader_ptr->y;
+        //}
         
         
         /***********************************

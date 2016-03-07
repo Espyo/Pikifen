@@ -62,7 +62,6 @@ const float MIN_ONION_CHECK_RANGE       = 64.0f;     //The minimum distance a le
 const float MIN_PLUCK_RANGE             = 30.0f;     //The leader needs to be at least this close to a buried Pikmin to pluck it.
 const float MOUSE_CURSOR_MOVE_SPEED     = 500.0f;    //How many pixels the mouse cursor moves, per second, when using an analog stick.
 const unsigned char NECTAR_AMOUNT       = 5;         //A drop of nectar starts with this amount.
-const unsigned char N_PIKMIN_AI_PORTIONS = 4;        //Split the Pikmin into n groups. Every frame, only one group's AI is handled.
 const float PARTY_SPOT_INTERVAL         = 1.0f;      //Pikmin must be at least these many units away from one another; used when calculating group spots.
 const float PIKMIN_MAX_HEALTH           = 300.0f;    //Maximum Pikmin HP.
 const float PIKMIN_MIN_ATTACK_RANGE     = 0.0f;      //If there's this gap between a Pikmin and its opponent, the Pikmin will attack.
@@ -160,6 +159,19 @@ enum DEV_TOOL_IDS {
     DEV_TOOL_MOB_INFO,
     DEV_TOOL_NEW_PIKMIN,
     DEV_TOOL_TELEPORT,
+};
+
+enum HUD_ELEMENTS {
+    HUD_ITEM_TIME,
+    HUD_ITEM_DAY,
+    HUD_ITEM_LEADER_1_ICON,
+    HUD_ITEM_LEADER_2_ICON,
+    HUD_ITEM_LEADER_3_ICON,
+    HUD_ITEM_LEADER_1_HEALTH,
+    HUD_ITEM_LEADER_2_HEALTH,
+    HUD_ITEM_LEADER_3_HEALTH,
+    
+    N_HUD_ITEMS,
 };
 
 const unsigned char N_WHISTLE_RING_COLORS = 8;

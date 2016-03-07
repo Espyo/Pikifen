@@ -85,7 +85,9 @@ int main(int argc, char** argv) {
     init_special_mob_types();
     init_sector_types();
     init_dev_tools();
+    init_hud_coordinates();
     read_game_config();
+    load_hud_coordinates();
     
     unsigned int first_game_state = GAME_STATE_MAIN_MENU;
     if(argc >= 2) {

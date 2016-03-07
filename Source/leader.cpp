@@ -563,7 +563,6 @@ void switch_to_leader(leader* new_leader_ptr) {
     cur_leader_ptr = new_leader_ptr;
     cur_leader_nr = new_leader_nr;
     
-    start_camera_pan(cur_leader_ptr->x, cur_leader_ptr->y);
     new_leader_ptr->lea_type->sfx_name_call.play(0, false);
     
 }

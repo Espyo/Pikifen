@@ -1023,6 +1023,47 @@ void load_game_content() {
 
 
 /* ----------------------------------------------------------------------------
+ *  Loads HUD coordinates from a file.
+ */
+void load_hud_coordinates() {
+    data_node file = data_node(MISC_FOLDER + "/HUD.txt");
+    if(!file.file_was_opened) return;
+    
+    load_hud_coordinates(HUD_ITEM_TIME, file.get_child_by_name("time")->value);
+    load_hud_coordinates(HUD_ITEM_DAY,  file.get_child_by_name("day")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_ICON, file.get_child_by_name("leader_1_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_ICON, file.get_child_by_name("leader_2_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_ICON, file.get_child_by_name("leader_3_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_HEALTH, file.get_child_by_name("leader_1_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_HEALTH, file.get_child_by_name("leader_2_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_HEALTH, file.get_child_by_name("leader_3_health")->value);
+    
+    for(int i = 0; i < N_HUD_ITEMS; ++i) {
+        for(unsigned char c = 0; c < 4; c += 2) {
+            hud_coords[i][c] *= scr_w;
+        }
+        for(unsigned char c = 1; c < 4; c += 2) {
+            hud_coords[i][c] *= scr_h;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads HUD coordinates of a specific HUD item.
+ */
+void load_hud_coordinates(const int item, string data) {
+    vector<string> words = split(data);
+    if(data.size() < 4) return;
+    
+    for(unsigned char c = 0; c < 4; ++c) {
+        hud_coords[item][c] = s2f(words[c]) / 100.0f;
+    }
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Loads the player's options.
  */
 void load_options() {
@@ -1207,12 +1248,19 @@ void read_game_config() {
     game_name = file.get_child_by_name("game_name")->value;
     game_version = file.get_child_by_name("game_version")->value;
     
-    carrying_color_move = s2c(file.get_child_by_name("carrying_color_move")->get_value_or_default("255 255 255"));
-    carrying_color_stop = s2c(file.get_child_by_name("carrying_color_stop")->get_value_or_default("96 192 192"));
-    carrying_speed_base_mult = s2f(file.get_child_by_name("carrying_speed_base_mult")->get_value_or_default("0.5"));
-    carrying_speed_max_mult = s2f(file.get_child_by_name("carrying_speed_max_mult")->get_value_or_default("0.8"));
-    carrying_speed_weight_mult = s2f(file.get_child_by_name("carrying_speed_weight_mult")->get_value_or_default("0.0004"));
+    set_if_exists(file.get_child_by_name("carrying_color_move")->value, carrying_color_move);
+    set_if_exists(file.get_child_by_name("carrying_color_stop")->value, carrying_color_stop);
+    set_if_exists(file.get_child_by_name("carrying_speed_base_mult")->value, carrying_speed_base_mult);
+    set_if_exists(file.get_child_by_name("carrying_speed_max_mult")->value, carrying_speed_max_mult);
+    set_if_exists(file.get_child_by_name("carrying_speed_weight_mult")->value, carrying_speed_weight_mult);
     
+    set_if_exists(file.get_child_by_name("day_minutes_start")->value, day_minutes_start);
+    set_if_exists(file.get_child_by_name("day_minutes_end")->value, day_minutes_end);
+    set_if_exists(file.get_child_by_name("day_minutes_per_irl_sec")->value, day_minutes_per_irl_sec);
+    
+    set_if_exists(file.get_child_by_name("max_pikmin_in_field")->value, max_pikmin_in_field);
+    
+    al_set_window_title(display, game_name.c_str());
 }
 
 
@@ -1490,30 +1538,6 @@ bool square_intersects_line(const float sx1, const float sy1, const float sx2, c
     
     return false;
     
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts panning the camera towards another point.
- */
-void start_camera_pan(const int final_x, const int final_y) {
-    cam_trans_pan_initial_x = cam_x;
-    cam_trans_pan_initial_y = cam_y;
-    cam_trans_pan_final_x = final_x;
-    cam_trans_pan_final_y = final_y;
-    cam_trans_pan_timer.start();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Starts moving the camera towards another zoom level.
- */
-void start_camera_zoom(const float final_zoom_level) {
-    cam_trans_zoom_initial_level = cam_zoom;
-    cam_trans_zoom_final_level = final_zoom_level;
-    cam_trans_zoom_timer.start();
-    
-    sfx_camera.play(0, false);
 }
 
 
