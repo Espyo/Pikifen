@@ -180,18 +180,17 @@ void init_game_states() {
 
 
 void init_hud_coordinate(float *i, const float x, const float y, const float w, const float h) {
-    i[0] = x;
-    i[1] = y;
-    i[2] = w;
-    i[3] = h;
+    i[0] = x; i[1] = y; i[2] = w; i[3] = h;
 }
 
 
 void init_hud_coordinates() {
     init_hud_coordinate(hud_coords[HUD_ITEM_TIME], 0.40, 0.10, 0.70, 0.10);
-    init_hud_coordinate(hud_coords[HUD_ITEM_DAY],  0.88, 0.18, 0.15, 0.25);
+    init_hud_coordinate(hud_coords[HUD_ITEM_DAY_BUBBLE], 0.88, 0.18, 0.15, 0.25);
+    init_hud_coordinate(hud_coords[HUD_ITEM_DAY_NUMBER], 0.88, 0.18, 0.15, 0.25);
     init_hud_coordinate(hud_coords[HUD_ITEM_LEADER_1_ICON], 0.10, 0.90, 0.05, 0.05);
-    //TODO the rest.
+    //TODO give these some decent default values.
+    //TODO do the rest.
 }
 
 

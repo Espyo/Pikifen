@@ -199,11 +199,6 @@ void gameplay::load() {
         }
     }
     
-    /*
-    create_mob(new pellet(320, -100, pellet_types["Red 1"], 0, ""));
-    create_mob(new pellet(250, -100, pellet_types["Red 5"], 0, ""));
-    create_mob(new pellet(150, -100, pellet_types["Red 10"], 0, ""));
-    create_mob(new pellet(0, -100, pellet_types["Red 20"], 0, ""));*/
     spray_amounts[0] = spray_amounts[1] = 10;
     spray_types[0].bmp_spray = bmp_ub_spray;
     spray_types[1].bmp_spray = bmp_us_spray;

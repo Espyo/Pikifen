@@ -525,7 +525,6 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             al_get_bitmap_height(bmp_cursor) * 0.5,
             cursor_angle,
             change_color_lighting(cur_leader_ptr->lea_type->main_color, cursor_height_diff_light)
-            //map_alpha((mouse_cursor_valid ? 255 : 255 * ((sin(cursor_invalid_effect) + 1) / 2)))
         );
         
         
@@ -545,8 +544,8 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 if(n_leaders < l + 1) continue;
                 
                 size_t l_nr = (cur_leader_nr + l) % n_leaders;
-                int icon_id = HUD_ITEM_LEADER_1_ICON + l_nr;
-                int health_id = HUD_ITEM_LEADER_1_HEALTH + l_nr;
+                int icon_id = HUD_ITEM_LEADER_1_ICON + l;
+                int health_id = HUD_ITEM_LEADER_1_HEALTH + l;
                 
                 al_draw_filled_circle(
                     hud_coords[icon_id][0],
@@ -573,7 +572,8 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     hud_coords[health_id][0],
                     hud_coords[health_id][1],
                     leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                    max(hud_coords[health_id][2], hud_coords[health_id][3]) / 2.0f
+                    max(hud_coords[health_id][2], hud_coords[health_id][3]) * 0.4f,
+                    true
                 );
                 draw_sprite(
                     bmp_hard_bubble,
@@ -626,19 +626,19 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             //Day number.
             draw_sprite(
                 bmp_day_bubble,
-                hud_coords[HUD_ITEM_DAY][0],
-                hud_coords[HUD_ITEM_DAY][1],
-                hud_coords[HUD_ITEM_DAY][2],
-                hud_coords[HUD_ITEM_DAY][3]
+                hud_coords[HUD_ITEM_DAY_BUBBLE][0],
+                hud_coords[HUD_ITEM_DAY_BUBBLE][1],
+                hud_coords[HUD_ITEM_DAY_BUBBLE][2],
+                hud_coords[HUD_ITEM_DAY_BUBBLE][3]
             );
                 
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_DAY][0],
-                hud_coords[HUD_ITEM_DAY][1],
+                hud_coords[HUD_ITEM_DAY_NUMBER][0],
+                hud_coords[HUD_ITEM_DAY_NUMBER][1],
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_DAY][2] * 0.3,
-                hud_coords[HUD_ITEM_DAY][3] * 0.3,
+                hud_coords[HUD_ITEM_DAY_NUMBER][2] * 0.3, //TODO this shouldn't be fixed, this should use the width that comes from the HUD file.
+                hud_coords[HUD_ITEM_DAY_NUMBER][3] * 0.3,
                 i2s(day)
             );
                 
@@ -961,7 +961,7 @@ bool casts_shadow(sector* s1, sector* s2) {
  * Draws text on the screen, but compresses (scales) it to fit within the specified range.
  * font - flags: The parameters you'd use for al_draw_text.
  * valign:       Vertical align: 0 = top, 1 = middle, 2 = bottom.
- * max_w, max_h: The maximum width and height. Use 0 to have no limit.
+ * max_w, max_h: The maximum width and height. Use <= 0 to have no limit.
  * text:         Text to draw.
  */
 void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y, const int flags, const unsigned char valign, const float max_w, const float max_h, const string &text) {
@@ -971,8 +971,8 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &c
     float scale_x = 1, scale_y = 1;
     float final_text_height = text_height;
     
-    if(text_width > max_w && max_w != 0) scale_x = max_w / text_width;
-    if(text_height > max_h && max_h != 0) {
+    if(text_width > max_w && max_w > 0) scale_x = max_w / text_width;
+    if(text_height > max_h && max_h > 0) {
         scale_y = max_h / text_height;
         final_text_height = max_h;
     }

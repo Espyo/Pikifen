@@ -1029,21 +1029,40 @@ void load_hud_coordinates() {
     data_node file = data_node(MISC_FOLDER + "/HUD.txt");
     if(!file.file_was_opened) return;
     
-    load_hud_coordinates(HUD_ITEM_TIME, file.get_child_by_name("time")->value);
-    load_hud_coordinates(HUD_ITEM_DAY,  file.get_child_by_name("day")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_1_ICON, file.get_child_by_name("leader_1_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_2_ICON, file.get_child_by_name("leader_2_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_3_ICON, file.get_child_by_name("leader_3_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_1_HEALTH, file.get_child_by_name("leader_1_health")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_2_HEALTH, file.get_child_by_name("leader_2_health")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_3_HEALTH, file.get_child_by_name("leader_3_health")->value);
+    load_hud_coordinates(HUD_ITEM_TIME,              file.get_child_by_name("time")->value);
+    load_hud_coordinates(HUD_ITEM_DAY_BUBBLE,        file.get_child_by_name("day_bubble")->value);
+    load_hud_coordinates(HUD_ITEM_DAY_NUMBER,        file.get_child_by_name("day_bubble")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_ICON,     file.get_child_by_name("leader_1_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_ICON,     file.get_child_by_name("leader_2_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_ICON,     file.get_child_by_name("leader_3_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_HEALTH,   file.get_child_by_name("leader_1_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_HEALTH,   file.get_child_by_name("leader_2_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_HEALTH,   file.get_child_by_name("leader_3_health")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_ICON,      file.get_child_by_name("spray_1_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_AMOUNT,    file.get_child_by_name("spray_1_amount")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_KEY,       file.get_child_by_name("spray_1_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_ICON,      file.get_child_by_name("spray_2_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_AMOUNT,    file.get_child_by_name("spray_2_amount")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_KEY,       file.get_child_by_name("spray_2_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_ICON,    file.get_child_by_name("spray_cur_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_AMOUNT,  file.get_child_by_name("spray_cur_amount")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_KEY,     file.get_child_by_name("spray_cur_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_ICON,   file.get_child_by_name("spray_prev_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_KEY,    file.get_child_by_name("spray_prev_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_ICON,   file.get_child_by_name("spray_next_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_KEY,    file.get_child_by_name("spray_next_key")->value);
     
     for(int i = 0; i < N_HUD_ITEMS; ++i) {
-        for(unsigned char c = 0; c < 4; c += 2) {
-            hud_coords[i][c] *= scr_w;
-        }
-        for(unsigned char c = 1; c < 4; c += 2) {
-            hud_coords[i][c] *= scr_h;
+        for(unsigned char c = 0; c < 4; ++c) {
+            if(hud_coords[i][c] == 0) {
+                hud_coords[i][c] = -1;
+            } else {
+                if(c % 2 == 0) {
+                    hud_coords[i][c] *= scr_w;
+                } else {
+                    hud_coords[i][c] *= scr_h;
+                }
+            }
         }
     }
 }

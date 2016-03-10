@@ -139,7 +139,7 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_GO_PLUCK,       //When the leader has to go towards the Pikmin it intends to pluck.
     LEADER_EVENT_INACTIVE_SEARCH_SEED, //When the leader has to go help pluck Pikmin, as an inactive leader.
     LEADER_EVENT_REACHED_SEED,   //When the leader reaches the seed they're meant to pluck.
-    LEADER_EVENT_CANCEL,   //When the leader's pluck is canceled.
+    LEADER_EVENT_CANCEL,         //When the leader's pluck is canceled.
     
     N_MOB_EVENTS,
 };
