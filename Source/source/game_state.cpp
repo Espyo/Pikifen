@@ -199,13 +199,6 @@ void gameplay::load() {
         }
     }
     
-    spray_amounts[0] = spray_amounts[1] = 10;
-    spray_types[0].bmp_spray = bmp_ub_spray;
-    spray_types[1].bmp_spray = bmp_us_spray;
-    pikmin_in_onions[pikmin_types["Red Pikmin"]] = 200;
-    pikmin_in_onions[pikmin_types["Yellow Pikmin"]] = 180;
-    pikmin_in_onions[pikmin_types["Blue Pikmin"]] = 160;
-    
     cur_leader_nr = 0;
     cur_leader_ptr = leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
@@ -220,6 +213,11 @@ void gameplay::load() {
     al_hide_mouse_cursor(display);
     
     area_title_fade_timer.start();
+    
+    //Debug stuff for convenience.
+    //TODO remove.
+    spray_amounts[0] = spray_amounts[1] = 10;
+    
 }
 
 

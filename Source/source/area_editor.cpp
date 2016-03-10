@@ -1522,11 +1522,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             if(show_path_preview) {
                 for(unsigned char c = 0; c < 2; ++c) {
                     if(
-                        dist(
+                        bbox_check(
                             path_preview_checkpoints_x[c], path_preview_checkpoints_y[c],
-                            mouse_cursor_x, mouse_cursor_y
-                        ) <=
-                        PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
+                            mouse_cursor_x, mouse_cursor_y,
+                            PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
+                        )
                     ) {
                         moving_path_preview_checkpoint = c;
                         break;

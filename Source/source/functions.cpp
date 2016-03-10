@@ -933,8 +933,9 @@ void load_game_content() {
     statuses.push_back(status(0, 0, 1, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
     statuses.push_back(status(1.5, 1.5, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
     
-    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), NULL, NULL));
-    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), NULL, NULL));
+    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), bmp_us_spray, NULL));
+    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), bmp_ub_spray, NULL));
+    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 192), bmp_ub_spray, NULL));
     
     //Mob types.
     load_mob_types(true);
@@ -1029,28 +1030,34 @@ void load_hud_coordinates() {
     data_node file = data_node(MISC_FOLDER + "/HUD.txt");
     if(!file.file_was_opened) return;
     
-    load_hud_coordinates(HUD_ITEM_TIME,              file.get_child_by_name("time")->value);
-    load_hud_coordinates(HUD_ITEM_DAY_BUBBLE,        file.get_child_by_name("day_bubble")->value);
-    load_hud_coordinates(HUD_ITEM_DAY_NUMBER,        file.get_child_by_name("day_bubble")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_1_ICON,     file.get_child_by_name("leader_1_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_2_ICON,     file.get_child_by_name("leader_2_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_3_ICON,     file.get_child_by_name("leader_3_icon")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_1_HEALTH,   file.get_child_by_name("leader_1_health")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_2_HEALTH,   file.get_child_by_name("leader_2_health")->value);
-    load_hud_coordinates(HUD_ITEM_LEADER_3_HEALTH,   file.get_child_by_name("leader_3_health")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_1_ICON,      file.get_child_by_name("spray_1_icon")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_1_AMOUNT,    file.get_child_by_name("spray_1_amount")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_1_KEY,       file.get_child_by_name("spray_1_key")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_2_ICON,      file.get_child_by_name("spray_2_icon")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_2_AMOUNT,    file.get_child_by_name("spray_2_amount")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_2_KEY,       file.get_child_by_name("spray_2_key")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_ICON,    file.get_child_by_name("spray_cur_icon")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_AMOUNT,  file.get_child_by_name("spray_cur_amount")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_CUR_KEY,     file.get_child_by_name("spray_cur_key")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_ICON,   file.get_child_by_name("spray_prev_icon")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_KEY,    file.get_child_by_name("spray_prev_key")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_ICON,   file.get_child_by_name("spray_next_icon")->value);
-    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_KEY,    file.get_child_by_name("spray_next_key")->value);
+    load_hud_coordinates(HUD_ITEM_TIME,                file.get_child_by_name("time")->value);
+    load_hud_coordinates(HUD_ITEM_DAY_BUBBLE,          file.get_child_by_name("day_bubble")->value);
+    load_hud_coordinates(HUD_ITEM_DAY_NUMBER,          file.get_child_by_name("day_number")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_ICON,       file.get_child_by_name("leader_1_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_ICON,       file.get_child_by_name("leader_2_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_ICON,       file.get_child_by_name("leader_3_icon")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_1_HEALTH,     file.get_child_by_name("leader_1_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_2_HEALTH,     file.get_child_by_name("leader_2_health")->value);
+    load_hud_coordinates(HUD_ITEM_LEADER_3_HEALTH,     file.get_child_by_name("leader_3_health")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_ICON, file.get_child_by_name("pikmin_standby_icon")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_NR,   file.get_child_by_name("pikmin_standby_nr")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_X,    file.get_child_by_name("pikmin_standby_x")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_SQUAD_NR,     file.get_child_by_name("pikmin_squad_nr")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_FIELD_NR,     file.get_child_by_name("pikmin_field_nr")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_TOTAL_NR,     file.get_child_by_name("pikmin_total_nr")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_SLASH_1,      file.get_child_by_name("pikmin_slash_1")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_SLASH_2,      file.get_child_by_name("pikmin_slash_2")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_SLASH_3,      file.get_child_by_name("pikmin_slash_3")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_ICON,        file.get_child_by_name("spray_1_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_AMOUNT,      file.get_child_by_name("spray_1_amount")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_1_KEY,         file.get_child_by_name("spray_1_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_ICON,        file.get_child_by_name("spray_2_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_AMOUNT,      file.get_child_by_name("spray_2_amount")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_2_KEY,         file.get_child_by_name("spray_2_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_ICON,     file.get_child_by_name("spray_prev_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_PREV_KEY,      file.get_child_by_name("spray_prev_key")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_ICON,     file.get_child_by_name("spray_next_icon")->value);
+    load_hud_coordinates(HUD_ITEM_SPRAY_NEXT_KEY,      file.get_child_by_name("spray_next_key")->value);
     
     for(int i = 0; i < N_HUD_ITEMS; ++i) {
         for(unsigned char c = 0; c < 4; ++c) {

@@ -567,7 +567,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     hud_coords[icon_id][2],
                     hud_coords[icon_id][3]
                 );
-                    
+                
                 draw_health(
                     hud_coords[health_id][0],
                     hud_coords[health_id][1],
@@ -622,7 +622,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 first_dot_x + day_passed_ratio * dots_span, dots_y,
                 sun_radius * 2.0, sun_radius * 2.0
             ); //Bubble in front the sun.
-                
+            
             //Day number.
             draw_sprite(
                 bmp_day_bubble,
@@ -631,17 +631,17 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 hud_coords[HUD_ITEM_DAY_BUBBLE][2],
                 hud_coords[HUD_ITEM_DAY_BUBBLE][3]
             );
-                
+            
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
                 hud_coords[HUD_ITEM_DAY_NUMBER][0],
                 hud_coords[HUD_ITEM_DAY_NUMBER][1],
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_DAY_NUMBER][2] * 0.3, //TODO this shouldn't be fixed, this should use the width that comes from the HUD file.
-                hud_coords[HUD_ITEM_DAY_NUMBER][3] * 0.3,
+                hud_coords[HUD_ITEM_DAY_NUMBER][2],
+                hud_coords[HUD_ITEM_DAY_NUMBER][3],
                 i2s(day)
             );
-                
+            
             //Pikmin count.
             //Count how many Pikmin only.
             n_leaders = leaders.size();
@@ -666,38 +666,116 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             }
             
             if(!bm) bm = bmp_no_pikmin;
-            draw_sprite(bm, scr_w * 0.30, scr_h * 0.89, scr_w * 0.08, -1);
+            float sprite_w =
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] == -1 ? -1 :
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] * 0.8;
+            float sprite_h =
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3] == -1 ? -1 :
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3] * 0.8;
+            draw_sprite(
+                bm,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
+                sprite_w, sprite_h
+            );
             draw_sprite(
                 bmp_bubble,
-                scr_w * 0.30, scr_h * 0.89,
-                scr_w * 0.10, scr_w * 0.10);
-                
-            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.38, scr_h * 0.91, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.07, scr_h * 0.08, "x");
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3]
+            );
+            
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][0],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][1],
+                ALLEGRO_ALIGN_CENTER, 1,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][2],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][3],
+                "x"
+            );
             
             //Pikmin count numbers.
             unsigned long total_pikmin = pikmin_list.size();
             for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) total_pikmin += o->second;
             
-            draw_sprite(bmp_number_bubble, scr_w * 0.50, scr_h * 0.90, scr_w * 0.16, scr_h * 0.1);
-            draw_sprite(bmp_number_bubble, scr_w * 0.68, scr_h * 0.91, scr_w * 0.14, scr_h * 0.08);
-            draw_sprite(bmp_number_bubble, scr_w * 0.87, scr_h * 0.91, scr_w * 0.19, scr_h * 0.08);
-            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.59, scr_h * 0.92, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.04, scr_h * 0.08, "/");
-            draw_compressed_text(font_counter, al_map_rgb(255, 255, 255), scr_w * 0.76, scr_h * 0.92, ALLEGRO_ALIGN_CENTER, 1, scr_w * 0.04, scr_h * 0.08, "/");
+            draw_sprite(
+                bmp_number_bubble,
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][0],
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2],
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][3]
+            );
+            draw_sprite(
+                bmp_number_bubble,
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0],
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2],
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3]
+            );
+            draw_sprite(
+                bmp_number_bubble,
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0],
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2],
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3]
+            );
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.57, scr_h * 0.90,
-                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.14, scr_h * 0.08,
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][1],
+                ALLEGRO_ALIGN_CENTER, 1,
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                "/"
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][1],
+                ALLEGRO_ALIGN_CENTER, 1,
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                "/"
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][1],
+                ALLEGRO_ALIGN_CENTER, 1,
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                "/"
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][0] + hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2] * 0.4,
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][1],
+                ALLEGRO_ALIGN_RIGHT, 1,
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2] * 0.7,
+                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][3] * 0.7,
                 i2s(pikmin_in_party)
             );
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.74, scr_h * 0.91,
-                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.12, scr_h * 0.05,
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0] + hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.4,
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1],
+                ALLEGRO_ALIGN_RIGHT, 1,
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.7,
+                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3] * 0.7,
                 i2s(pikmin_list.size())
             );
             draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255), scr_w * 0.955, scr_h * 0.91,
-                ALLEGRO_ALIGN_RIGHT, 1, scr_w * 0.17, scr_h * 0.05,
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0] + hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.4,
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1],
+                ALLEGRO_ALIGN_RIGHT, 1,
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.7,
+                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3] * 0.7,
                 i2s(total_pikmin)
             );
+            //TODO number of Pikmin of the standby type.
             
             //Sprays.
             //TODO optimize this by saving the controls somewhere, instead of searching for them every time.
@@ -707,18 +785,30 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 
                 draw_sprite(
                     spray_types[top_spray_nr].bmp_spray,
-                    scr_w * 0.06, scr_h * 0.36,
-                    scr_w * 0.04, scr_h * 0.07);
+                    hud_coords[HUD_ITEM_SPRAY_1_ICON][0],
+                    hud_coords[HUD_ITEM_SPRAY_1_ICON][1],
+                    hud_coords[HUD_ITEM_SPRAY_1_ICON][2],
+                    hud_coords[HUD_ITEM_SPRAY_1_ICON][3]
+                );
                 draw_compressed_text(
-                    font_counter, al_map_rgb(255, 255, 255), scr_w * 0.10, scr_h * 0.37, ALLEGRO_ALIGN_CENTER, 1,
-                    scr_w * 0.03, scr_h * 0.05, "x");
-                draw_compressed_text(
-                    font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.37, 0, 1,
-                    scr_w * 0.06, scr_h * 0.05,
-                    i2s(spray_amounts[top_spray_nr]));
+                    font_counter, al_map_rgb(255, 255, 255),
+                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][0],
+                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][1],
+                    ALLEGRO_ALIGN_LEFT, 1,
+                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][2],
+                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][3],
+                    "x" + i2s(spray_amounts[top_spray_nr])
+                );
+                
                 for(size_t c = 0; c < controls[0].size(); ++c) {
                     if(controls[0][c].action == BUTTON_USE_SPRAY_1 || controls[0][c].action == BUTTON_USE_SPRAY) {
-                        draw_control(font_main, controls[0][c], scr_w * 0.10, scr_h * 0.42, scr_w * 0.10, scr_h * 0.05);
+                        draw_control(
+                            font_main, controls[0][c],
+                            hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
+                            hud_coords[HUD_ITEM_SPRAY_1_KEY][1],
+                            hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
+                            hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
+                        );
                         break;
                     }
                 }
@@ -726,18 +816,29 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 if(n_spray_types == 2) {
                     draw_sprite(
                         spray_types[1].bmp_spray,
-                        scr_w * 0.06, scr_h * 0.52,
-                        scr_w * 0.04, scr_h * 0.07);
+                        hud_coords[HUD_ITEM_SPRAY_2_ICON][0],
+                        hud_coords[HUD_ITEM_SPRAY_2_ICON][1],
+                        hud_coords[HUD_ITEM_SPRAY_2_ICON][2],
+                        hud_coords[HUD_ITEM_SPRAY_2_ICON][3]
+                    );
                     draw_compressed_text(
-                        font_counter, al_map_rgb(255, 255, 255), scr_w * 0.10, scr_h * 0.53, ALLEGRO_ALIGN_CENTER, 1,
-                        scr_w * 0.03, scr_h * 0.05, "x");
-                    draw_compressed_text(
-                        font_counter, al_map_rgb(255, 255, 255), scr_w * 0.11, scr_h * 0.53, 0, 1,
-                        scr_w * 0.06, scr_h * 0.05,
-                        i2s(spray_amounts[1]));
+                        font_counter, al_map_rgb(255, 255, 255),
+                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][0],
+                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][1],
+                        ALLEGRO_ALIGN_LEFT, 1,
+                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][2],
+                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][3],
+                        "x" + i2s(spray_amounts[1])
+                    );
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
-                            draw_control(font_main, controls[0][c], scr_w * 0.10, scr_h * 0.47, scr_w * 0.10, scr_h * 0.05);
+                            draw_control(
+                                font_main, controls[0][c],
+                                hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
+                                hud_coords[HUD_ITEM_SPRAY_2_KEY][1],
+                                hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
+                                hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
+                            );
                             break;
                         }
                     }
@@ -745,21 +846,39 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 } else if(n_spray_types > 2) {
                     draw_sprite(
                         spray_types[(selected_spray == 0 ? spray_types.size() - 1 : selected_spray - 1)].bmp_spray,
-                        scr_w * 0.06, scr_h * 0.52,
-                        scr_w * 0.03, scr_h * 0.05);
+                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][0],
+                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][1],
+                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][2],
+                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][3]
+                    );
                     draw_sprite(
                         spray_types[(selected_spray + 1) % spray_types.size()].bmp_spray,
-                        scr_w * 0.13, scr_h * 0.52,
-                        scr_w * 0.03, scr_h * 0.05);
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][0],
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][1],
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][2],
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
+                    );
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_SWITCH_SPRAY_LEFT) {
-                            draw_control(font_main, controls[0][c], scr_w * 0.06, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            draw_control(
+                                font_main, controls[0][c],
+                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
+                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1],
+                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
+                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
+                            );
                             break;
                         }
                     }
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
-                            draw_control(font_main, controls[0][c], scr_w * 0.13, scr_h * 0.47, scr_w * 0.04, scr_h * 0.04);
+                            draw_control(
+                                font_main, controls[0][c],
+                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
+                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1],
+                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
+                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
+                            );
                             break;
                         }
                     }
@@ -866,11 +985,11 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
  * max_*: Max width or height. Used to compress it if needed.
  */
 void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const float x, const float y, const float max_w, const float max_h) {
-    
+
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {
-            
+        
             int bmp_w = al_get_bitmap_width(bmp_mouse_button_icon[c.button - 1]);
             int bmp_h = al_get_bitmap_height(bmp_mouse_button_icon[c.button - 1]);
             draw_sprite(
@@ -887,7 +1006,7 @@ void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const f
     if(c.type == CONTROL_TYPE_MOUSE_WHEEL_UP || c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
         //Likewise, if it's a mouse wheel move, just draw the icon and leave.
         ALLEGRO_BITMAP* b = bmp_mouse_wu_icon;
-        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN){
+        if(c.type == CONTROL_TYPE_MOUSE_WHEEL_DOWN) {
             b = bmp_mouse_wd_icon;
         }
         
@@ -1060,7 +1179,7 @@ const unsigned char NOTIFICATION_ALPHA = 160;
  * control: If not NULL, draw the control's button/key/etc. before the text.
  */
 void draw_notification(const float x, const float y, const string text, control_info* control) {
-    
+
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
     al_translate_transform(&tra, x * cam_zoom, y * cam_zoom);

@@ -179,18 +179,40 @@ void init_game_states() {
 }
 
 
-void init_hud_coordinate(float *i, const float x, const float y, const float w, const float h) {
-    i[0] = x; i[1] = y; i[2] = w; i[3] = h;
+void init_hud_coordinate(const int n, const float x, const float y, const float w, const float h) {
+    hud_coords[n][0] = x; hud_coords[n][1] = y; hud_coords[n][2] = w; hud_coords[n][3] = h;
 }
 
 
 void init_hud_coordinates() {
-    init_hud_coordinate(hud_coords[HUD_ITEM_TIME], 0.40, 0.10, 0.70, 0.10);
-    init_hud_coordinate(hud_coords[HUD_ITEM_DAY_BUBBLE], 0.88, 0.18, 0.15, 0.25);
-    init_hud_coordinate(hud_coords[HUD_ITEM_DAY_NUMBER], 0.88, 0.18, 0.15, 0.25);
-    init_hud_coordinate(hud_coords[HUD_ITEM_LEADER_1_ICON], 0.10, 0.90, 0.05, 0.05);
-    //TODO give these some decent default values.
-    //TODO do the rest.
+    init_hud_coordinate(HUD_ITEM_TIME,                0.40, 0.10, 0.70, 0.10);
+    init_hud_coordinate(HUD_ITEM_DAY_BUBBLE,          0.88, 0.18, 0.15, 0.00);
+    init_hud_coordinate(HUD_ITEM_DAY_NUMBER,          0.88, 0.19, 0.10, 0.10);
+    init_hud_coordinate(HUD_ITEM_LEADER_1_ICON,       0.07, 0.90, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_2_ICON,       0.06, 0.80, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_3_ICON,       0.06, 0.72, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_1_HEALTH,     0.16, 0.90, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_2_HEALTH,     0.12, 0.80, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_3_HEALTH,     0.12, 0.72, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON, 0.30, 0.89, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,   0.38, 0.91, 0.07, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,    2.00, 0.00, 0.01, 0.01);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SQUAD_NR,     0.50, 0.90, 0.16, 0.10);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,     0.68, 0.91, 0.14, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,     0.87, 0.91, 0.19, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,      0.59, 0.92, 0.04, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_2,      0.76, 0.92, 0.04, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_3,      2.00, 0.00, 0.01, 0.01);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_ICON,        0.06, 0.36, 0.04, 0.07);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_AMOUNT,      0.10, 0.37, 0.09, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_KEY,         0.10, 0.42, 0.10, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_ICON,        0.06, 0.52, 0.04, 0.07);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_AMOUNT,      0.10, 0.53, 0.09, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_KEY,         0.10, 0.47, 0.10, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_ICON,     0.06, 0.52, 0.03, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_KEY,      0.06, 0.47, 0.04, 0.04);
+    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_ICON,     0.13, 0.52, 0.03, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_KEY,      0.13, 0.47, 0.04, 0.04);
 }
 
 
