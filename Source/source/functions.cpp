@@ -828,16 +828,12 @@ void load_area(const string &name, const bool load_for_editor) {
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         cur_area_data.path_stops[s]->fix_pointers(cur_area_data);
     }
-    if(!load_for_editor) {
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
-            for(size_t l = 0; l < s_ptr->links.size(); ++l) {
-                s_ptr->links[l].calculate_dist(s_ptr);
-            }
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            s_ptr->links[l].calculate_dist(s_ptr);
         }
     }
-    
-    
     
     
     //Triangulate everything.
@@ -923,6 +919,31 @@ data_node load_data_file(const string &file_name) {
     }
     
     return n;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the game's configuration file.
+ */
+void load_game_config() {
+    data_node file(CONFIG_FILE);
+    
+    game_name = file.get_child_by_name("game_name")->value;
+    game_version = file.get_child_by_name("game_version")->value;
+    
+    set_if_exists(file.get_child_by_name("carrying_color_move")->value, carrying_color_move);
+    set_if_exists(file.get_child_by_name("carrying_color_stop")->value, carrying_color_stop);
+    set_if_exists(file.get_child_by_name("carrying_speed_base_mult")->value, carrying_speed_base_mult);
+    set_if_exists(file.get_child_by_name("carrying_speed_max_mult")->value, carrying_speed_max_mult);
+    set_if_exists(file.get_child_by_name("carrying_speed_weight_mult")->value, carrying_speed_weight_mult);
+    
+    set_if_exists(file.get_child_by_name("day_minutes_start")->value, day_minutes_start);
+    set_if_exists(file.get_child_by_name("day_minutes_end")->value, day_minutes_end);
+    set_if_exists(file.get_child_by_name("day_minutes_per_irl_sec")->value, day_minutes_per_irl_sec);
+    
+    set_if_exists(file.get_child_by_name("max_pikmin_in_field")->value, max_pikmin_in_field);
+    
+    al_set_window_title(display, game_name.c_str());
 }
 
 
@@ -1042,7 +1063,7 @@ void load_hud_coordinates() {
     load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_ICON, file.get_child_by_name("pikmin_standby_icon")->value);
     load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_NR,   file.get_child_by_name("pikmin_standby_nr")->value);
     load_hud_coordinates(HUD_ITEM_PIKMIN_STANDBY_X,    file.get_child_by_name("pikmin_standby_x")->value);
-    load_hud_coordinates(HUD_ITEM_PIKMIN_SQUAD_NR,     file.get_child_by_name("pikmin_squad_nr")->value);
+    load_hud_coordinates(HUD_ITEM_PIKMIN_GROUP_NR,     file.get_child_by_name("pikmin_group_nr")->value);
     load_hud_coordinates(HUD_ITEM_PIKMIN_FIELD_NR,     file.get_child_by_name("pikmin_field_nr")->value);
     load_hud_coordinates(HUD_ITEM_PIKMIN_TOTAL_NR,     file.get_child_by_name("pikmin_total_nr")->value);
     load_hud_coordinates(HUD_ITEM_PIKMIN_SLASH_1,      file.get_child_by_name("pikmin_slash_1")->value);
@@ -1262,31 +1283,6 @@ int randomi(int min, int max) {
     if(min > max) swap(min, max);
     if(min == max) return min;
     return ((rand()) % (max - min + 1)) + min;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Reads the game's configuration file.
- */
-void read_game_config() {
-    data_node file(CONFIG_FILE);
-    
-    game_name = file.get_child_by_name("game_name")->value;
-    game_version = file.get_child_by_name("game_version")->value;
-    
-    set_if_exists(file.get_child_by_name("carrying_color_move")->value, carrying_color_move);
-    set_if_exists(file.get_child_by_name("carrying_color_stop")->value, carrying_color_stop);
-    set_if_exists(file.get_child_by_name("carrying_speed_base_mult")->value, carrying_speed_base_mult);
-    set_if_exists(file.get_child_by_name("carrying_speed_max_mult")->value, carrying_speed_max_mult);
-    set_if_exists(file.get_child_by_name("carrying_speed_weight_mult")->value, carrying_speed_weight_mult);
-    
-    set_if_exists(file.get_child_by_name("day_minutes_start")->value, day_minutes_start);
-    set_if_exists(file.get_child_by_name("day_minutes_end")->value, day_minutes_end);
-    set_if_exists(file.get_child_by_name("day_minutes_per_irl_sec")->value, day_minutes_per_irl_sec);
-    
-    set_if_exists(file.get_child_by_name("max_pikmin_in_field")->value, max_pikmin_in_field);
-    
-    al_set_window_title(display, game_name.c_str());
 }
 
 

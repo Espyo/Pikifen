@@ -14,6 +14,37 @@
 #include "gate_fsm.h"
 #include "../vars.h"
 
+void gate_fsm::create_fsm(mob_type* typ) {
+    easy_fsm_creator efc;
+    efc.new_state("idle", GATE_STATE_IDLE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(gate_fsm::set_anim);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(gate_fsm::take_damage);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(gate_fsm::open);
+            efc.change_state("dead");
+        }
+    }
+    
+    efc.new_state("dead", GATE_STATE_DEAD); {
+    
+    }
+    
+    
+    typ->states = efc.finish();
+    typ->first_state_nr = fix_states(typ->states, "idle");
+    
+    if(typ->states.size() != N_GATE_STATES) {
+        error_log(
+            "ENGINE WARNING: Number of gate states on the FSM (" + i2s(typ->states.size()) +
+            ") and the enum (" + i2s(N_GATE_STATES) + ") do not match."
+        );
+    }
+}
+
 void gate_fsm::open(mob* m, void* info1, void* info2) {
     gate* g_ptr = (gate*) m;
     g_ptr->sec->type = SECTOR_TYPE_NORMAL;

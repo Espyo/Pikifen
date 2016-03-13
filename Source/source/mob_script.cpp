@@ -138,6 +138,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         if(dn->value == "focused_mob") sub_type = MOB_ACTION_MOVE_FOCUSED_MOB;
         else if(dn->value == "home") sub_type = MOB_ACTION_MOVE_HOME;
         else if(dn->value == "stop") sub_type = MOB_ACTION_MOVE_STOP;
+        else if(dn->value == "stop vertically") sub_type = MOB_ACTION_MOVE_STOP_VERTICALLY;
         else {
         
             vector<string> string_coords = split(dn->value);
@@ -195,7 +196,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
     } else if(n == "gravity") {
         type = MOB_ACTION_SET_GRAVITY;
         
-        vi.push_back(s2b(dn->value));
+        vf.push_back(s2f(dn->value));
         
         
         
@@ -434,29 +435,32 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         //TODO check for vf size.
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
-                m->set_target(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
+                m->chase(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
             } else {
-                m->remove_target();
+                m->stop_chasing();
             }
             
         } else if(sub_type == MOB_ACTION_MOVE_HOME) {
-            m->set_target(m->home_x, m->home_y, 0, 0, false);
+            m->chase(m->home_x, m->home_y, 0, 0, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
-            m->remove_target();
+            m->stop_chasing();
             m->intended_angle = m->angle;
             
+        } else if(sub_type == MOB_ACTION_MOVE_STOP_VERTICALLY) {
+            m->speed_z = 0;
+            
         } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
-            m->set_target(vf[0], vf[1], NULL, NULL, false);
+            m->chase(vf[0], vf[1], NULL, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_VERTICALLY) {
             m->z += vf[0]; //TODO replace this with something prettier in the future.
             
         } else if(sub_type == MOB_ACTION_MOVE_RANDOMLY) {
-            m->set_target(m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000), NULL, NULL, false);
+            m->chase(m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000), NULL, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
-            m->set_target(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
+            m->chase(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
             
         }
         
@@ -468,8 +472,8 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
-        //TODO check vi's size.
-        m->affected_by_gravity = vi[0];
+        //TODO check vf's size.
+        m->gravity_mult = vf[0];
         
         
         

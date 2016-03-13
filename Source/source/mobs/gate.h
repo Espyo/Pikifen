@@ -20,6 +20,14 @@
 
 using namespace std;
 
+enum GATE_STATES {
+    GATE_STATE_IDLE,
+    GATE_STATE_DEAD,
+    
+    N_GATE_STATES
+};
+
+
 /* ----------------------------------------------------------------------------
  * A gate is an invisible mob that Pikmin attack.
  * When the gate's health is all gone, its associated sector

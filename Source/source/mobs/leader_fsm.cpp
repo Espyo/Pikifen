@@ -13,7 +13,607 @@
 #include "leader.h"
 #include "leader_fsm.h"
 #include "leader_type.h"
+#include "mob_fsm.h"
 #include "../vars.h"
+
+void leader_fsm::create_fsm(mob_type* typ) {
+    easy_fsm_creator efc;
+    efc.new_state("idle", LEADER_STATE_IDLE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::enter_idle);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader_fsm::join_group);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader_fsm::focus);
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader_fsm::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader_fsm::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("active", LEADER_STATE_ACTIVE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::enter_active);
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader_fsm::stop);
+            efc.run_function(leader_fsm::unfocus);
+            efc.change_state("idle");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader_fsm::move);
+            efc.run_function(leader_fsm::set_walk_anim);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader_fsm::stop);
+            efc.run_function(leader_fsm::set_stop_anim);
+        }
+        efc.new_event(LEADER_EVENT_HOLDING); {
+            efc.run_function(leader_fsm::grab_mob);
+            efc.change_state("holding");
+        }
+        efc.new_event(LEADER_EVENT_START_WHISTLE); {
+            efc.change_state("whistling");
+        }
+        efc.new_event(LEADER_EVENT_DISMISS); {
+            efc.change_state("dismissing");
+        }
+        efc.new_event(LEADER_EVENT_SPRAY); {
+            efc.change_state("spraying");
+        }
+        efc.new_event(LEADER_EVENT_LIE_DOWN); {
+            efc.run_function(leader_fsm::fall_asleep);
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader_fsm::go_pluck);
+            efc.change_state("going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("whistling", LEADER_STATE_WHISTLING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::whistle);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader_fsm::stop_whistle);
+        }
+        efc.new_event(LEADER_EVENT_STOP_WHISTLE); {
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader_fsm::move);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader_fsm::stop);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("holding", LEADER_STATE_HOLDING); {
+        efc.new_event(LEADER_EVENT_THROW); {
+            efc.run_function(leader_fsm::do_throw);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_RELEASE); {
+            efc.run_function(leader_fsm::release);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader_fsm::move);
+            efc.run_function(leader_fsm::set_walk_anim);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader_fsm::stop);
+            efc.run_function(leader_fsm::set_stop_anim);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::release);
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("dismissing", LEADER_STATE_DISMISSING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::dismiss);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_MOVE_START); {
+            efc.run_function(leader_fsm::move);
+        }
+        efc.new_event(LEADER_EVENT_MOVE_END); {
+            efc.run_function(leader_fsm::stop);
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("spraying", LEADER_STATE_SPRAYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::spray);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("pain", LEADER_STATE_PAIN); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::suffer_pain);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_pain", LEADER_STATE_INACTIVE_PAIN); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::suffer_pain);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader_fsm::be_dismissed);
+            efc.change_state("idle");
+        }
+    }
+    
+    efc.new_state("knocked_back", LEADER_STATE_KNOCKED_BACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::get_knocked_back);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("inactive_knocked_back", LEADER_STATE_INACTIVE_KNOCKED_BACK); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::get_knocked_back);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("dying", LEADER_STATE_DYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::die);
+        }
+    }
+    
+    efc.new_state("inactive_dying", LEADER_STATE_INACTIVE_DYING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::inactive_die);
+        }
+    }
+    
+    efc.new_state("in_group_chasing", LEADER_STATE_IN_GROUP_CHASING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::chase_leader);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.change_state("in_group_stopped");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(leader_fsm::be_dismissed);
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(leader_fsm::be_grabbed_by_friend);
+            efc.change_state("held_by_leader");
+        }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader_fsm::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader_fsm::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("in_group_stopped", LEADER_STATE_IN_GROUP_STOPPED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_DISMISSED); {
+            efc.run_function(leader_fsm::be_dismissed);
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(leader_fsm::be_grabbed_by_friend);
+            efc.change_state("held_by_leader");
+        }
+        efc.new_event(LEADER_EVENT_INACTIVE_SEARCH_SEED); {
+            efc.run_function(leader_fsm::inactive_search_seed);
+        }
+        efc.new_event(LEADER_EVENT_GO_PLUCK); {
+            efc.run_function(leader_fsm::go_pluck);
+            efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("going_to_pluck", LEADER_STATE_GOING_TO_PLUCK); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(leader_fsm::start_pluck);
+            efc.change_state("plucking");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("active");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("dying");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader_fsm::unfocus);
+            efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("plucking", LEADER_STATE_PLUCKING); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.run_function(leader_fsm::search_seed);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("active");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader_fsm::unfocus);
+            efc.change_state("inactive_plucking");
+        }
+    }
+    
+    efc.new_state("inactive_going_to_pluck", LEADER_STATE_INACTIVE_GOING_TO_PLUCK); {
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(leader_fsm::start_pluck);
+            efc.change_state("inactive_plucking");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.run_function(leader_fsm::lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("inactive_dying");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader_fsm::focus);
+            efc.change_state("going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.run_function(leader_fsm::inactive_search_seed);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader_fsm::stop_pluck);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader_fsm::focus);
+            efc.change_state("plucking");
+        }
+    }
+    
+    efc.new_state("sleeping_waiting", LEADER_STATE_SLEEPING_WAITING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(gen_mob_fsm::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
+            efc.run_function(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_added);
+            efc.run_function(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("sleeping_moving");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader_fsm::unfocus);
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+            efc.run_function(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("sleeping_moving", LEADER_STATE_SLEEPING_MOVING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(gen_mob_fsm::carry_begin_move);
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_removed);
+            efc.run_function(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(gen_mob_fsm::carry_begin_move);
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("waking_up");
+        }
+        efc.new_event(LEADER_EVENT_UNFOCUSED); {
+            efc.run_function(leader_fsm::unfocus);
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+            efc.run_function(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("inactive_sleeping_waiting", LEADER_STATE_INACTIVE_SLEEPING_WAITING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(gen_mob_fsm::carry_stop_move);
+        }
+        efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
+            efc.run_function(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_added);
+            efc.run_function(gen_mob_fsm::check_carry_begin);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_removed);
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.change_state("inactive_sleeping_moving");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader_fsm::focus);
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+            efc.run_function(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+    }
+    
+    efc.new_state("inactive_sleeping_moving", LEADER_STATE_INACTIVE_SLEEPING_MOVING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(gen_mob_fsm::carry_begin_move);
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
+            efc.run_function(gen_mob_fsm::handle_carrier_removed);
+            efc.run_function(gen_mob_fsm::check_carry_stop);
+        }
+        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
+            efc.change_state("inactive_sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
+            efc.run_function(gen_mob_fsm::carry_begin_move);
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run_function(gen_mob_fsm::set_next_target);
+        }
+        efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("inactive_waking_up");
+        }
+        efc.new_event(LEADER_EVENT_FOCUSED); {
+            efc.run_function(leader_fsm::focus);
+            efc.change_state("sleeping_waiting");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::lose_health);
+            efc.run_function(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.run_function(leader_fsm::start_waking_up);
+            efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("waking_up", LEADER_STATE_WAKING_UP); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("active");
+        }
+    }
+    
+    efc.new_state("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idle");
+        }
+    }
+    
+    efc.new_state("held_by_leader", LEADER_STATE_HELD); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader_fsm::be_released);
+        }
+        efc.new_event(MOB_EVENT_THROWN); {
+            efc.run_function(leader_fsm::be_thrown);
+            efc.change_state("thrown");
+        }
+        efc.new_event(MOB_EVENT_RELEASED); {
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::inactive_lose_health);
+        }
+        efc.new_event(MOB_EVENT_DEATH); {
+            efc.change_state("inactive_dying");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("thrown", LEADER_STATE_THROWN); {
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run_function(leader_fsm::land);
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::fall_down_pit);
+        }
+    }
+    
+    typ->states = efc.finish();
+    typ->first_state_nr = fix_states(typ->states, "idle");
+    
+    if(typ->states.size() != N_LEADER_STATES) {
+        error_log(
+            "ENGINE WARNING: Number of leader states on the FSM (" + i2s(typ->states.size()) +
+            ") and the enum (" + i2s(N_LEADER_STATES) + ") do not match."
+        );
+    }
+}
+
 
 void leader_fsm::whistle(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -45,12 +645,12 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     
-    add_to_party(cur_leader_ptr, l_ptr);
-    size_t n_party_members = l_ptr->party->members.size();
-    for(size_t m = 0; m < n_party_members; ++m) {
-        mob* member = l_ptr->party->members[0];
-        remove_from_party(member);
-        add_to_party(cur_leader_ptr, member);
+    add_to_group(cur_leader_ptr, l_ptr);
+    size_t n_group_members = l_ptr->group->members.size();
+    for(size_t m = 0; m < n_group_members; ++m) {
+        mob* member = l_ptr->group->members[0];
+        remove_from_group(member);
+        add_to_group(cur_leader_ptr, member);
     }
 }
 
@@ -81,7 +681,7 @@ void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
 void leader_fsm::move(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
-    l_ptr->set_target(
+    l_ptr->chase(
         l_ptr->x + mov->get_x() * l_ptr->type->move_speed,
         l_ptr->y + mov->get_y() * l_ptr->type->move_speed,
         NULL, NULL, false, NULL, true
@@ -89,7 +689,7 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
 }
 
 void leader_fsm::stop(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
 }
 
 void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
@@ -144,7 +744,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->was_thrown = true;
     
-    remove_from_party(holding_ptr);
+    remove_from_group(holding_ptr);
     leader_ptr->holding_pikmin = NULL;
     
     sfx_throw.stop();
@@ -164,18 +764,18 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
     float base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
     
     //TODO what if there are a lot of Pikmin types?
-    size_t n_party_members = l_ptr->party->members.size();
-    if(n_party_members == 0) return;
+    size_t n_group_members = l_ptr->group->members.size();
+    if(n_group_members == 0) return;
     
-    //First, calculate what direction the party should be dismissed to.
+    //First, calculate what direction the group should be dismissed to.
     if(group_move_intensity > 0) {
         //If the leader's moving the group, they should be dismissed towards the cursor.
         base_angle = group_move_angle + M_PI;
     } else {
         float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
         
-        for(size_t m = 0; m < n_party_members; ++m) {
-            mob* member_ptr = l_ptr->party->members[m];
+        for(size_t m = 0; m < n_group_members; ++m) {
+            mob* member_ptr = l_ptr->group->members[m];
             
             if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
             if(member_ptr->x > max_x || m == 0) max_x = member_ptr->x;
@@ -190,12 +790,12 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
             ) + M_PI;
     }
     
-    //Then, calculate how many Pikmin types there are in the party.
+    //Then, calculate how many Pikmin types there are in the group.
     map<pikmin_type*, float> type_angle_map;
-    for(size_t m = 0; m < n_party_members; ++m) {
+    for(size_t m = 0; m < n_group_members; ++m) {
     
-        if(typeid(*l_ptr->party->members[m]) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(l_ptr->party->members[m]);
+        if(typeid(*l_ptr->group->members[m]) == typeid(pikmin)) {
+            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(l_ptr->group->members[m]);
             
             type_angle_map[pikmin_ptr->pik_type] = 0;
         }
@@ -216,9 +816,9 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
     }
     
     //Now, dismiss them.
-    for(size_t m = 0; m < n_party_members; ++m) {
-        mob* member_ptr = l_ptr->party->members[0];
-        remove_from_party(member_ptr);
+    for(size_t m = 0; m < n_group_members; ++m) {
+        mob* member_ptr = l_ptr->group->members[0];
+        remove_from_group(member_ptr);
         
         float angle = 0;
         
@@ -237,7 +837,7 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
 }
 
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
     
     if(spray_amounts[spray_nr] == 0) {
@@ -309,7 +909,7 @@ void leader_fsm::inactive_die(mob* m, void* info1, void* info2) {
 
 void leader_fsm::suffer_pain(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
-    m->remove_target();
+    m->stop_chasing();
 }
 
 void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
@@ -318,7 +918,7 @@ void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
 
 void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
     leader_fsm::dismiss(m, info1, info2);
-    m->remove_target();
+    m->stop_chasing();
     
     m->become_carriable(false);
     
@@ -331,18 +931,18 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
 }
 
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    m->set_target(0, 0, &m->following_party->x, &m->following_party->y, false);
+    m->chase(0, 0, &m->following_group->x, &m->following_group->y, false);
     m->set_animation(LEADER_ANIM_WALK);
-    focus_mob(m, m->following_party);
+    focus_mob(m, m->following_group);
 }
 
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
 void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
@@ -351,7 +951,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) info1;
     
     lea_ptr->auto_pluck_pikmin = pik_ptr;
-    lea_ptr->set_target(
+    lea_ptr->chase(
         pik_ptr->x, pik_ptr->y,
         NULL, NULL,
         false, nullptr, true,
@@ -359,9 +959,9 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     );
     pik_ptr->pluck_reserved = true;
     
-    //Now for the leaders in the party.
-    for(size_t m = 0; m < lea_ptr->party->members.size(); ++m) {
-        mob* member_ptr = lea_ptr->party->members[m];
+    //Now for the leaders in the group.
+    for(size_t m = 0; m < lea_ptr->group->members.size(); ++m) {
+        mob* member_ptr = lea_ptr->group->members[m];
         if(typeid(*member_ptr) == typeid(leader)) {
             member_ptr->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
         }
@@ -378,7 +978,7 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
 void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->auto_pluck_pikmin) {
-        l_ptr->remove_target();
+        l_ptr->stop_chasing();
         l_ptr->auto_pluck_pikmin->pluck_reserved = false;
     }
     l_ptr->auto_pluck_pikmin = NULL;
@@ -392,7 +992,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     
     //If info1 is not void, that means this is an inactive leader.
     if(info1) {
-        if(l_ptr->following_party)
+        if(l_ptr->following_group)
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
         else
             l_ptr->fsm.set_state(LEADER_STATE_IDLE);
@@ -419,10 +1019,10 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
 }
 
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
 }
 
 void leader_fsm::land(mob* m, void* info1, void* info2) {
-    m->remove_target();
+    m->stop_chasing();
     m->speed_x = m->speed_y = 0;
 }

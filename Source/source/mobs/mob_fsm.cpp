@@ -76,7 +76,7 @@ void gen_mob_fsm::handle_carrier_added(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength += pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers++;
     
-    m->target_speed = m->carry_info->get_speed();
+    m->chase_speed = m->carry_info->get_speed();
     
     m->calculate_carrying_destination(pik_ptr, NULL);
 }
@@ -98,7 +98,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
     m->carry_info->cur_carrying_strength -= pik_ptr->pik_type->carry_strength;
     m->carry_info->cur_n_carriers--;
     
-    m->target_speed = m->carry_info->get_speed();
+    m->chase_speed = m->carry_info->get_speed();
     
     m->calculate_carrying_destination(NULL, pik_ptr);
 }
@@ -116,7 +116,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
                   m->x, m->y,
                   m->carry_info->final_destination_x,
                   m->carry_info->final_destination_y,
-                  &obs, &go_straight
+                  &obs, &go_straight, NULL
               );
     m->carry_info->obstacle_ptr = obs;
     m->carry_info->go_straight = go_straight;
@@ -150,7 +150,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
     m->carry_info->is_moving = false;
-    m->remove_target();
+    m->stop_chasing();
 }
 
 
@@ -221,7 +221,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
             final_x -= CARRYING_STUCK_SWAY_AMOUNT;
         }
         
-        m->set_target(
+        m->chase(
             final_x, m->y,
             NULL, NULL,
             false, NULL, true, 3.0f,
@@ -239,7 +239,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
             
         } else {
             //Go to the final destination.
-            m->set_target(
+            m->chase(
                 m->carry_info->final_destination_x,
                 m->carry_info->final_destination_y,
                 NULL, NULL, false, NULL, true, 3.0f,
@@ -251,13 +251,13 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
     } else if(m->cur_path_stop_nr == m->path.size() + 1) {
         //Reached the final destination.
         //Send event.
-        m->remove_target();
+        m->stop_chasing();
         m->fsm.run_event(MOB_EVENT_CARRY_DELIVERED);
         
     } else {
         //Reached a stop.
         //Go to the next.
-        m->set_target(
+        m->chase(
             m->path[m->cur_path_stop_nr]->x,
             m->path[m->cur_path_stop_nr]->y,
             NULL, NULL, false, NULL, true, 3.0f,
@@ -266,6 +266,3 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         
     }
 }
-
-
-

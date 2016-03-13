@@ -9,10 +9,14 @@
  * Onion class and Onion-related functions.
  */
 
+#include <algorithm>
+
 #include "../drawing.h"
 #include "../functions.h"
 #include "onion.h"
 #include "../vars.h"
+
+using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Creates an onion.
@@ -29,35 +33,13 @@ onion::onion(float x, float y, onion_type* type, const float angle, const string
     
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
-    affected_by_gravity = false;
+    gravity_mult = 0.0f;
     z++;
     
     full_spew_timer.on_end = [this] () { next_spew_timer.start(); };
     next_spew_timer.on_end = [this] () { if(spew_queue == 0) return; next_spew_timer.start(); spew(); };
     
     set_animation(ANIM_IDLE);
-}
-
-/* ----------------------------------------------------------------------------
- * Receive a mob, carried by a Pikmin.
- */
-void onion::fsm_receive_mob(mob* m, void* info1, void* info2) {
-    size_t seeds = (size_t) info1;
-    onion* o_ptr = (onion*) m;
-    
-    if(o_ptr->spew_queue == 0) {
-        o_ptr->full_spew_timer.start();
-        o_ptr->next_spew_timer.time_left = 0.0f;
-    }
-    o_ptr->spew_queue += seeds;
-    
-    random_particle_explosion(
-        PARTICLE_TYPE_BITMAP, bmp_smoke,
-        o_ptr->x, o_ptr->y,
-        60, 80, 10, 20,
-        1, 2, 24, 24, al_map_rgb(255, 255, 255)
-    );
-    
 }
 
 
@@ -88,6 +70,50 @@ void onion::spew() {
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
     
+}
+
+
+void onion::tick_class_specifics() {
+    for(size_t o = 0; o < onions.size(); ++o) {
+        onion* o_ptr = onions[o];
+        
+        if(o_ptr->spew_queue != 0) {
+        
+            o_ptr->full_spew_timer.tick(delta_t);
+            o_ptr->next_spew_timer.tick(delta_t);
+            
+        }
+        
+        unsigned char final_alpha = 255;
+        
+        if(
+            bbox_check(
+                cur_leader_ptr->x, cur_leader_ptr->y,
+                o_ptr->x, o_ptr->y,
+                cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+            )
+        ) {
+            final_alpha = ONION_SEETHROUGH_ALPHA;
+        }
+        
+        if(
+            bbox_check(
+                cursor_x, cursor_y,
+                o_ptr->x, o_ptr->y,
+                cur_leader_ptr->type->radius + o_ptr->type->radius * 3
+            )
+        ) {
+            final_alpha = ONION_SEETHROUGH_ALPHA;
+        }
+        
+        if(o_ptr->seethrough != final_alpha) {
+            if(final_alpha < o_ptr->seethrough) {
+                o_ptr->seethrough = max((double) final_alpha, o_ptr->seethrough - ONION_FADE_SPEED * delta_t);
+            } else {
+                o_ptr->seethrough = min((double) final_alpha, o_ptr->seethrough + ONION_FADE_SPEED * delta_t);
+            }
+        }
+    }
 }
 
 

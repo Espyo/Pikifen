@@ -40,20 +40,20 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     speed_z(0),
     home_x(x),
     home_y(y),
-    affected_by_gravity(true),
+    gravity_mult(1.0f),
     push_amount(0),
     push_angle(0),
     tangible(true),
     health(type->max_health),
     invuln_period(0),
     team(MOB_TEAM_DECORATION),
-    go_to_target(false),
-    gtt_instant(false),
-    target_x(x),
-    target_y(y),
-    target_z(nullptr),
-    target_rel_x(nullptr),
-    target_rel_y(nullptr),
+    chasing(false),
+    chase_teleport(false),
+    chase_offs_x(x),
+    chase_offs_y(y),
+    chase_teleport_z(nullptr),
+    chase_orig_x(nullptr),
+    chase_orig_y(nullptr),
     carrying_target(nullptr),
     cur_path_stop_nr(string::npos),
     focused_mob(nullptr),
@@ -61,19 +61,19 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     first_state_set(false),
     dead(false),
     big_damage_ev_queued(false),
-    following_party(nullptr),
+    following_group(nullptr),
     was_thrown(false),
     unwhistlable_period(0),
     untouchable_period(0),
-    party(nullptr),
-    party_spot_x(0),
-    party_spot_y(0),
+    group(nullptr),
+    group_spot_x(0),
+    group_spot_y(0),
     carry_info(nullptr),
     move_speed_mult(0),
     acceleration(0),
     speed(0),
-    gtt_free_move(false),
-    target_distance(0),
+    chase_free_move(false),
+    chase_target_dist(0),
     chomp_max(0),
     script_timer(0),
     id(next_mob_id) {
@@ -105,6 +105,7 @@ void mob::tick() {
     tick_misc_logic();
     tick_script();
     tick_animation();
+    tick_class_specifics();
 }
 
 
@@ -128,17 +129,17 @@ void mob::tick_animation() {
  */
 void mob::tick_brain() {
     //Chasing a target.
-    if(go_to_target && !gtt_instant && speed_z == 0) {
+    if(chasing && !chase_teleport && speed_z == 0) {
     
         //Calculate where the target is.
         float final_target_x, final_target_y;
-        get_final_target(&final_target_x, &final_target_y);
+        get_chase_target(&final_target_x, &final_target_y);
         
-        if(!gtt_instant) {
+        if(!chase_teleport) {
         
             if(
-                !(fabs(final_target_x - x) < target_distance &&
-                  fabs(final_target_y - y) < target_distance)
+                !(fabs(final_target_x - x) < chase_target_dist &&
+                  fabs(final_target_y - y) < chase_target_dist)
             ) {
                 //If it still hasn't reached its target (or close enough to the target),
                 //time to make it think about how to get there.
@@ -150,7 +151,7 @@ void mob::tick_brain() {
                 //Reached the location. The mob should now think
                 //about stopping.
                 
-                target_speed = 0;
+                chase_speed = 0;
                 reached_destination = true;
                 fsm.run_event(MOB_EVENT_REACHED_DESTINATION);
             }
@@ -174,21 +175,21 @@ void mob::tick_misc_logic() {
         untouchable_period = max(untouchable_period, 0.0f);
     }
     
-    if(party) {
-        float party_center_mx = 0, party_center_my = 0;
+    if(group) {
+        float group_center_mx = 0, group_center_my = 0;
         move_point(
-            party->party_center_x, party->party_center_y,
+            group->group_center_x, group->group_center_y,
             x, y,
             type->move_speed,
             get_leader_to_group_center_dist(this),
-            &party_center_mx, &party_center_my, NULL, NULL
+            &group_center_mx, &group_center_my, NULL, NULL
         );
-        party->party_center_x += party_center_mx * delta_t;
-        party->party_center_y += party_center_my * delta_t;
+        group->group_center_x += group_center_mx * delta_t;
+        group->group_center_y += group_center_my * delta_t;
         
-        size_t n_members = party->members.size();
+        size_t n_members = group->members.size();
         for(size_t m = 0; m < n_members; ++m) {
-            party->members[m]->face(atan2(y - party->members[m]->y, x - party->members[m]->x));
+            group->members[m]->face(atan2(y - group->members[m]->y, x - group->members[m]->x));
         }
     }
     
@@ -228,22 +229,22 @@ void mob::tick_physics() {
     
     angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
     
-    if(go_to_target) {
+    if(chasing) {
         //If the mob is meant to teleport somewhere,
         //let's just do so.
         float final_target_x, final_target_y;
-        get_final_target(&final_target_x, &final_target_y);
+        get_chase_target(&final_target_x, &final_target_y);
         
-        if(gtt_instant) {
+        if(chase_teleport) {
             sector* sec = get_sector(final_target_x, final_target_y, NULL, true);
             if(!sec) {
                 //No sector, invalid teleport. No move.
                 return;
                 
             } else {
-                if(target_z) {
+                if(chase_teleport_z) {
                     ground_z = sec->z;
-                    z = *target_z;
+                    z = *chase_teleport_z;
                 }
                 speed_x = speed_y = speed_z = 0;
                 x = final_target_x;
@@ -255,9 +256,9 @@ void mob::tick_physics() {
         
             //Make it go to the direction it wants.
             float d = dist(x, y, final_target_x, final_target_y).to_float();
-            float move_amount = min((double) (d / delta_t), (double) target_speed);
+            float move_amount = min((double) (d / delta_t), (double) chase_speed);
             
-            bool can_free_move = gtt_free_move || move_amount <= 10.0;
+            bool can_free_move = chase_free_move || move_amount <= 10.0;
             
             float movement_angle = can_free_move ?
                                    atan2(final_target_y - y, final_target_x - x) :
@@ -590,8 +591,12 @@ void mob::tick_physics() {
     }
     
     //Gravity.
-    if(z > ground_z && affected_by_gravity) {
-        speed_z += delta_t* (GRAVITY_ADDER);
+    if(gravity_mult > 0) {
+        if(z > ground_z) {
+            speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+        }
+    } else {
+        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
     }
 }
 
@@ -606,7 +611,7 @@ void mob::tick_script() {
     }
     
     //Timer events.
-    mob_event* timer_ev = fsm.get_event(MOB_EVENT_TIMER);
+    mob_event* timer_ev = q_get_event(this, MOB_EVENT_TIMER);
     if(timer_ev && script_timer.duration > 0) {
         if(script_timer.time_left > 0) {
             script_timer.tick(delta_t);
@@ -617,7 +622,7 @@ void mob::tick_script() {
     }
     
     //Has it reached its home?
-    mob_event* reach_dest_ev = fsm.get_event(MOB_EVENT_REACHED_DESTINATION);
+    mob_event* reach_dest_ev = q_get_event(this, MOB_EVENT_REACHED_DESTINATION);
     if(reach_dest_ev && reached_destination) {
         reach_dest_ev->run(this);
     }
@@ -627,49 +632,62 @@ void mob::tick_script() {
         dead = true;
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
+    
+    //Big damage.
+    mob_event* big_damage_ev = q_get_event(this, MOB_EVENT_BIG_DAMAGE);
+    if(big_damage_ev && big_damage_ev_queued) {
+        big_damage_ev->run(this);
+        big_damage_ev_queued = false;
+    }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Code specific for each class. Meant to be overwritten by the child classes.
+ */
+void mob::tick_class_specifics() {
+}
 
 
 /* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
  */
-void mob::get_final_target(float* x, float* y) {
-    *x = target_x;
-    *y = target_y;
-    if(target_rel_x) *x += *target_rel_x;
-    if(target_rel_y) *y += *target_rel_y;
+void mob::get_chase_target(float* x, float* y) {
+    *x = chase_offs_x;
+    *y = chase_offs_y;
+    if(chase_orig_x) *x += *chase_orig_x;
+    if(chase_orig_y) *y += *chase_orig_y;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
- * target_*:        Coordinates of the target, relative to either the world origin,
+ * offs_*:          Coordinates of the target, relative to either the world origin,
    * or another point, specified in the next parameters.
- * target_rel_*:    Pointers to moving coordinates. If NULL, it's the world origin.
+ * orig_*:          Pointers to changing coordinates. If NULL, it's the world origin.
    * Use this to make the mob follow another mob wherever they go, for instance.
- * instant:         If true, the mob teleports to that spot, instead of walking to it.
- * target_z:        Teleports to this Z coordinate, too.
+ * teleport:        If true, the mob teleports to that spot, instead of walking to it.
+ * teleport_z:      Teleports to this Z coordinate, too.
  * free_move:       If true, the mob can go to a direction they're not facing.
  * target_distance: Distance from the target in which the mob is considered as being there.
- * movement_speed:  Speed at which to go to the target. -1 uses the mob's speed.
+ * speed:           Speed at which to go to the target. -1 uses the mob's speed.
  */
-void mob::set_target(
-    const float target_x, const float target_y,
-    float* target_rel_x, float* target_rel_y,
-    const bool instant, float* target_z,
-    const bool free_move, const float target_distance, const float movement_speed
+void mob::chase(
+    const float offs_x, const float offs_y,
+    float* orig_x, float* orig_y,
+    const bool teleport, float* teleport_z,
+    const bool free_move, const float target_distance, const float speed
 ) {
 
-    this->target_x = target_x; this->target_y = target_y;
-    this->target_rel_x = target_rel_x; this->target_rel_y = target_rel_y;
-    this->gtt_instant = instant;
-    this->target_z = target_z;
-    this->gtt_free_move = free_move;
-    this->target_distance = target_distance;
-    this->target_speed = (movement_speed == -1 ? get_base_speed() : movement_speed);
+    this->chase_offs_x = offs_x; this->chase_offs_y = offs_y;
+    this->chase_orig_x = orig_x; this->chase_orig_y = orig_y;
+    this->chase_teleport = teleport;
+    this->chase_teleport_z = teleport_z;
+    this->chase_free_move = free_move;
+    this->chase_target_dist = target_distance;
+    this->chase_speed = (speed == -1 ? get_base_speed() : speed);
     
-    go_to_target = true;
+    chasing = true;
     reached_destination = false;
 }
 
@@ -677,10 +695,10 @@ void mob::set_target(
 /* ----------------------------------------------------------------------------
  * Makes a mob not follow any target.
  */
-void mob::remove_target() {
-    go_to_target = false;
+void mob::stop_chasing() {
+    chasing = false;
     reached_destination = false;
-    target_z = NULL;
+    chase_teleport_z = NULL;
     
     speed_x = 0;
     speed_y = 0;
@@ -921,18 +939,18 @@ carry_info_struct::~carry_info_struct() {
 
 
 /* ----------------------------------------------------------------------------
- * Adds a mob to another mob's party.
+ * Adds a mob to another mob's group.
  */
-void add_to_party(mob* party_leader, mob* new_member) {
-    if(new_member->following_party == party_leader) return; //Already following, never mind.
+void add_to_group(mob* group_leader, mob* new_member) {
+    if(new_member->following_group == group_leader) return; //Already following, never mind.
     
-    new_member->following_party = party_leader;
-    party_leader->party->members.push_back(new_member);
+    new_member->following_group = group_leader;
+    group_leader->group->members.push_back(new_member);
     
     //Find a spot.
-    if(party_leader->party) {
-        if(party_leader->party->party_spots) {
-            party_leader->party->party_spots->add(new_member);
+    if(group_leader->group) {
+        if(group_leader->group->group_spots) {
+            group_leader->group->group_spots->add(new_member);
         }
     }
 }
@@ -946,7 +964,7 @@ const float MOB_KNOCKBACK_V_POWER = 200.0f;
  */
 void apply_knockback(mob* m, const float knockback, const float knockback_angle) {
     if(knockback != 0) {
-        m->remove_target();
+        m->stop_chasing();
         m->speed_x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         m->speed_y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         m->speed_z = MOB_KNOCKBACK_V_POWER;
@@ -1048,7 +1066,7 @@ void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h
     //Cause the damage and the knockback.
     victim->health -= damage;
     if(knockback != 0) {
-        victim->remove_target();
+        victim->stop_chasing();
         victim->speed_x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         victim->speed_y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         victim->speed_z = MOB_KNOCKBACK_V_POWER;
@@ -1119,7 +1137,7 @@ void create_mob(mob* m) {
  * leaders if it's a leader, etc.
  */
 void delete_mob(mob* m) {
-    remove_from_party(m);
+    remove_from_group(m);
     
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
@@ -1215,21 +1233,21 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
 
 
 /* ----------------------------------------------------------------------------
- * Removes a mob from its leader's party.
+ * Removes a mob from its leader's group.
  */
-void remove_from_party(mob* member) {
-    if(!member->following_party) return;
+void remove_from_group(mob* member) {
+    if(!member->following_group) return;
     
-    member->following_party->party->members.erase(find(
-                member->following_party->party->members.begin(),
-                member->following_party->party->members.end(),
+    member->following_group->group->members.erase(find(
+                member->following_group->group->members.begin(),
+                member->following_group->group->members.end(),
                 member));
                 
-    if(member->following_party->party->party_spots) {
-        member->following_party->party->party_spots->remove(member);
+    if(member->following_group->group->group_spots) {
+        member->following_group->group->group_spots->remove(member);
     }
     
-    member->following_party = NULL;
+    member->following_group = NULL;
     member->unwhistlable_period = UNWHISTLABLE_PERIOD;
     member->untouchable_period = UNTOUCHABLE_PERIOD;
 }
@@ -1275,7 +1293,7 @@ void mob::become_uncarriable() {
         }
     }
     
-    remove_target();
+    stop_chasing();
     
     delete carry_info;
     carry_info = NULL;

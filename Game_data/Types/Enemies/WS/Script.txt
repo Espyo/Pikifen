@@ -6,7 +6,7 @@ script{
             animation = resting
             move = stop
             timer = 1
-            gravity = true
+            gravity = 1
         }
         on_timer{
             state = resting
@@ -60,8 +60,7 @@ script{
     flying{
         on_enter{
             animation = flapping
-            gravity = false
-            move = vertically 128
+            gravity = -2
             timer = 0.3
             move = randomly
             var = flutters 0
@@ -74,6 +73,8 @@ script{
         }
         on_timer{
             timer = 0.3
+            move = stop vertically
+            gravity = 0
             move = randomly
             inc_var = flutters
             if = flutters 10
@@ -86,7 +87,7 @@ script{
             special_function = die_start
             animation = dying
             move = stop
-            gravity = true
+            gravity = 1
         }
         on_animation_end{
             special_function = die_end

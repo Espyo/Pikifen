@@ -20,18 +20,26 @@
 #include "pikmin_type.h"
 #include "onion_type.h"
 
-
 enum ONION_STATES {
     ONION_STATE_IDLE,
     
     N_ONION_STATES,
 };
 
+const float ONION_FULL_SPEW_DELAY          = 1.5f;
+const float ONION_NEXT_SPEW_DELAY          = 0.15f;
+const float ONION_SPEW_ANGLE_SHIFT         = M_PI_4 - (M_PI_4 * 0.1);
+const unsigned char ONION_SEETHROUGH_ALPHA = 64;
+const float ONION_FADE_SPEED               = 255; //Values per second.
+
 
 /* ----------------------------------------------------------------------------
  * An Onion is where Pikmin are stored.
  */
 class onion : public mob {
+protected:
+    virtual void tick_class_specifics();
+    
 public:
     onion_type* oni_type;
     bool activated;
@@ -44,14 +52,7 @@ public:
     onion(float x, float y, onion_type* type, const float angle, const string &vars);
     virtual void draw();
     
-    static void fsm_receive_mob(mob* m, void* info1, void* info2);
     void spew();
 };
-
-const float ONION_FULL_SPEW_DELAY          = 1.5f;
-const float ONION_NEXT_SPEW_DELAY          = 0.15f;
-const float ONION_SPEW_ANGLE_SHIFT         = M_PI_4 - (M_PI_4 * 0.1);
-const unsigned char ONION_SEETHROUGH_ALPHA = 64;
-const float ONION_FADE_SPEED               = 255; //Values per second.
 
 #endif //ifndef ONION_INCLUDED

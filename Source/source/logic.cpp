@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andr´ 'Espyo' Silva 2014.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included
  * README and LICENSE files for more information.
@@ -17,10 +17,6 @@
 #include "logic.h"
 #include "mobs/pikmin.h"
 #include "vars.h"
-
-//Because we get events so many times per frame, it's faster
-//to access them directly than to call a function.
-#define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state ? (m_ptr)->fsm.cur_state->events[(ev_type)] : nullptr)
 
 void do_game_logic() {
 
@@ -208,13 +204,6 @@ void do_gameplay_logic() {
             //Tick the mob.
             mob* m_ptr = mobs[m];
             m_ptr->tick();
-            
-            //Big damage.
-            mob_event* big_damage_ev = q_get_event(m_ptr, MOB_EVENT_BIG_DAMAGE);
-            if(big_damage_ev && m_ptr->big_damage_ev_queued) {
-                big_damage_ev->run(m_ptr);
-                m_ptr->big_damage_ev_queued = false;
-            }
             
             
             /********************************
@@ -515,15 +504,15 @@ void do_gameplay_logic() {
             }
             
             //Following a leader.
-            if(m_ptr->following_party) {
+            if(m_ptr->following_group) {
                 mob_event* spot_near_ev = q_get_event(m_ptr, MOB_EVENT_SPOT_IS_NEAR);
                 mob_event* spot_far_ev =  q_get_event(m_ptr, MOB_EVENT_SPOT_IS_FAR);
                 
                 if(spot_near_ev || spot_far_ev) {
                     dist d(
                         m_ptr->x, m_ptr->y,
-                        m_ptr->following_party->party->party_center_x + m_ptr->party_spot_x,
-                        m_ptr->following_party->party->party_center_y + m_ptr->party_spot_y
+                        m_ptr->following_group->group->group_center_x + m_ptr->group_spot_x,
+                        m_ptr->following_group->group->group_center_y + m_ptr->group_spot_y
                     );
                     if(spot_far_ev && d >= 5) {
                         spot_far_ev->run(m_ptr);
@@ -580,7 +569,7 @@ void do_gameplay_logic() {
                 }
             }
             
-            //Tick.
+            //Tick event.
             m_ptr->fsm.run_event(MOB_EVENT_ON_TICK);
             
             //Mob deletion.
@@ -596,87 +585,11 @@ void do_gameplay_logic() {
         
         
         
-        /******************
-        *             /\  *
-        *   Pikmin   (@:) *
-        *             \/  *
-        ******************/
-        
-        for(size_t p = 0; p < pikmin_list.size(); ++p) {
-            pikmin* pik_ptr = pikmin_list[p];
-            
-            //Is it dead?
-            //TODO move to the script?
-            if(pik_ptr->dead) {
-            
-                pik_ptr->to_delete = true;
-                particles.push_back(
-                    particle(
-                        PARTICLE_TYPE_PIKMIN_SPIRIT, bmp_pikmin_spirit, pik_ptr->x, pik_ptr->y,
-                        0, -50, 0.5, 0, 2, pik_ptr->pik_type->size, pik_ptr->pik_type->main_color
-                    )
-                );
-                sfx_pikmin_dying.play(0.03, false);
-                continue;
-                
-            }
-        }
-        
-        
-        /*****************
-        *             _  *
-        *   Onions   (_) *
-        *            /|\ *
-        ******************/
-        
-        for(size_t o = 0; o < onions.size(); ++o) {
-            onion* o_ptr = onions[o];
-            
-            if(o_ptr->spew_queue != 0) {
-            
-                o_ptr->full_spew_timer.tick(delta_t);
-                o_ptr->next_spew_timer.tick(delta_t);
-                
-            }
-            
-            unsigned char final_alpha = 255;
-            
-            if(
-                bbox_check(
-                    cur_leader_ptr->x, cur_leader_ptr->y,
-                    o_ptr->x, o_ptr->y,
-                    cur_leader_ptr->type->radius + o_ptr->type->radius * 3
-                )
-            ) {
-                final_alpha = ONION_SEETHROUGH_ALPHA;
-            }
-            
-            if(
-                bbox_check(
-                    cursor_x, cursor_y,
-                    o_ptr->x, o_ptr->y,
-                    cur_leader_ptr->type->radius + o_ptr->type->radius * 3
-                )
-            ) {
-                final_alpha = ONION_SEETHROUGH_ALPHA;
-            }
-            
-            if(o_ptr->seethrough != final_alpha) {
-                if(final_alpha < o_ptr->seethrough) {
-                    o_ptr->seethrough = max((double) final_alpha, o_ptr->seethrough - ONION_FADE_SPEED * delta_t);
-                } else {
-                    o_ptr->seethrough = min((double) final_alpha, o_ptr->seethrough + ONION_FADE_SPEED * delta_t);
-                }
-            }
-            
-        }
-        
-        
-        /********************
-        *              .-.  *
-        *   Leaders   (*:O) *
-        *              `-´  *
-        ********************/
+        /*******************
+        *             .-.  *
+        *   Leader   (*:O) *
+        *             `-´  *
+        *******************/
         
         if(cur_leader_ptr->holding_pikmin) {
             cur_leader_ptr->holding_pikmin->x = cur_leader_ptr->x + cos(cur_leader_ptr->angle + M_PI) * cur_leader_ptr->type->radius;
@@ -706,21 +619,21 @@ void do_gameplay_logic() {
         ************************************/
         
         dist closest_distance = 0;
-        size_t n_members = cur_leader_ptr->party->members.size();
-        closest_party_member = cur_leader_ptr->holding_pikmin;
+        size_t n_members = cur_leader_ptr->group->members.size();
+        closest_group_member = cur_leader_ptr->holding_pikmin;
         
-        if(n_members > 0 && !closest_party_member) {
+        if(n_members > 0 && !closest_group_member) {
         
             for(size_t m = 0; m < n_members; ++m) {
-                dist d(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->party->members[m]->x, cur_leader_ptr->party->members[m]->y);
+                dist d(cur_leader_ptr->x, cur_leader_ptr->y, cur_leader_ptr->group->members[m]->x, cur_leader_ptr->group->members[m]->y);
                 if(m == 0 || d < closest_distance) {
                     closest_distance = d;
-                    closest_party_member = cur_leader_ptr->party->members[m];
+                    closest_group_member = cur_leader_ptr->group->members[m];
                 }
             }
             
             if(closest_distance > MIN_GRAB_RANGE) {
-                closest_party_member = NULL;
+                closest_group_member = NULL;
             }
         }
         
@@ -742,12 +655,12 @@ void do_gameplay_logic() {
         }
         
         if(group_move_intensity) {
-            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
-            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
+            cur_leader_ptr->group->group_center_x = cur_leader_ptr->x + cos(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
+            cur_leader_ptr->group->group_center_y = cur_leader_ptr->y + sin(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
         } else if(prev_group_move_intensity != 0) {
             float d = get_leader_to_group_center_dist(cur_leader_ptr);
-            cur_leader_ptr->party->party_center_x = cur_leader_ptr->x + cos(group_move_angle) * d;
-            cur_leader_ptr->party->party_center_y = cur_leader_ptr->y + sin(group_move_angle) * d;
+            cur_leader_ptr->group->group_center_x = cur_leader_ptr->x + cos(group_move_angle) * d;
+            cur_leader_ptr->group->group_center_y = cur_leader_ptr->y + sin(group_move_angle) * d;
         }
         prev_group_move_intensity = group_move_intensity;
         

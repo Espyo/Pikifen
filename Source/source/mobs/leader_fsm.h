@@ -13,8 +13,11 @@
 #define LEADER_FSM_INCLUDED
 
 #include "mob.h"
+#include "mob_type.h"
 
 namespace leader_fsm {
+void create_fsm(mob_type* typ);
+
 void be_dismissed(mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(mob* m, void* info1, void* info2);
 void be_released(mob* m, void* info1, void* info2);

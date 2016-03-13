@@ -16,7 +16,6 @@
 #include "pikmin.h"
 #include "treasure_type.h"
 
-
 enum TREASURE_STATES {
     TREASURE_STATE_IDLE_WAITING,
     TREASURE_STATE_IDLE_MOVING,
@@ -53,8 +52,6 @@ public:
     
     treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
     void draw();
-    
-    static void fsm_handle_delivery(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef TREASURE_INCLUDED

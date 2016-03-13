@@ -746,8 +746,8 @@ mobs{
 		p=96.00 320.00
 	}
 	Enemy{
-		type=Cloaking Burrow-nit
-		p=-100.00 -200.00
+		type=White Spectralid
+		p=-0.00 -192.00
 	}
 	Pikmin{
 		type=Blue Pikmin
@@ -815,13 +815,20 @@ mobs{
 }
 path_stops{
 	s{
-		pos=512.00 224.00
+		pos=512.00 480.00
 		links{
 			nr=1
+			nr=2
 		}
 	}
 	s{
-		pos=896.00 224.00
+		pos=576.00 480.00
+		links{
+			nr=0
+		}
+	}
+	s{
+		pos=448.00 480.00
 		links{
 			nr=0
 		}

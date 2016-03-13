@@ -14,48 +14,12 @@
 
 #include <vector>
 
-class pikmin;
-
-#include "../const.h"
 #include "leader_type.h"
 #include "mob.h"
-#include "../misc_structs.h"
-#include "pikmin.h"
-#include "../sector.h"
+
+class pikmin;
 
 using namespace std;
-
-/* ----------------------------------------------------------------------------
- * A leader controls Pikmin, and
- * is controlled by the player.
- */
-class leader : public mob {
-public:
-    leader_type* lea_type;
-    
-    mob* holding_pikmin;
-    
-    pikmin* auto_pluck_pikmin; //-1 = not plucking.
-    
-    bool is_in_walking_anim;
-    
-    leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
-    
-    virtual void draw();
-    
-    void signal_group_move_start();
-    void signal_group_move_end();
-    
-};
-
-
-
-void dismiss();
-float get_leader_to_group_center_dist(mob* l);
-void swap_pikmin(mob* new_pik);
-void switch_to_leader(leader* new_leader_ptr);
-
-
 
 enum LEADER_STATES {
     LEADER_STATE_IDLE,
@@ -105,5 +69,35 @@ enum LEADER_ANIMATIONS {
 
 const float LEADER_INVULN_PERIOD = 1.5f;
 const float LEADER_ZAP_ANIM_PARTS = 20;
+
+
+/* ----------------------------------------------------------------------------
+ * A leader controls Pikmin, and
+ * is controlled by the player.
+ */
+class leader : public mob {
+public:
+    leader_type* lea_type;
+    
+    mob* holding_pikmin;
+    
+    pikmin* auto_pluck_pikmin; //-1 = not plucking.
+    
+    bool is_in_walking_anim;
+    
+    leader(const float x, const float y, leader_type* type, const float angle, const string &vars);
+    
+    virtual void draw();
+    
+    void signal_group_move_start();
+    void signal_group_move_end();
+    void dismiss();
+    void swap_held_pikmin(mob* new_pik);
+    
+};
+
+
+float get_leader_to_group_center_dist(mob* l);
+void switch_to_leader(leader* new_leader_ptr);
 
 #endif //ifndef LEADER_INCLUDED

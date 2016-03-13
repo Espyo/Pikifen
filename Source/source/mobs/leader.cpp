@@ -27,32 +27,32 @@ leader::leader(const float x, const float y, leader_type* type, const float angl
     team = MOB_TEAM_PLAYER_1; //TODO.
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
-    party_spot_info* ps = new party_spot_info(max_pikmin_in_field, 12);
-    party = new party_info(ps, x, y);
+    group_spot_info* ps = new group_spot_info(max_pikmin_in_field, 12);
+    group = new group_info(ps, x, y);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Makes the current leader dismiss their party.
- * The party is then organized in groups, by type,
+ * Makes the current leader dismiss their group.
+ * The group is then organized in groups, by type,
  * and is dismissed close to the leader.
  */
-void dismiss() {
+void leader::dismiss() {
     float base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
     
     //TODO what if there are a lot of Pikmin types?
-    size_t n_party_members = cur_leader_ptr->party->members.size();
-    if(n_party_members == 0) return;
+    size_t n_group_members = group->members.size();
+    if(n_group_members == 0) return;
     
-    //First, calculate what direction the party should be dismissed to.
+    //First, calculate what direction the group should be dismissed to.
     if(group_move_intensity > 0) {
         //If the leader's moving the group, they should be dismissed towards the cursor.
         base_angle = group_move_angle + M_PI;
     } else {
         float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
         
-        for(size_t m = 0; m < n_party_members; ++m) {
-            mob* member_ptr = cur_leader_ptr->party->members[m];
+        for(size_t m = 0; m < n_group_members; ++m) {
+            mob* member_ptr = group->members[m];
             
             if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
             if(member_ptr->x > max_x || m == 0) max_x = member_ptr->x;
@@ -62,17 +62,17 @@ void dismiss() {
         
         base_angle =
             atan2(
-                ((min_y + max_y) / 2) - cur_leader_ptr->y,
-                ((min_x + max_x) / 2) - cur_leader_ptr->x
+                ((min_y + max_y) / 2) - y,
+                ((min_x + max_x) / 2) - x
             ) + M_PI;
     }
     
-    //Then, calculate how many Pikmin types there are in the party.
+    //Then, calculate how many Pikmin types there are in the group.
     map<pikmin_type*, float> type_dismiss_angles;
-    for(size_t m = 0; m < n_party_members; ++m) {
+    for(size_t m = 0; m < n_group_members; ++m) {
     
-        if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+        if(typeid(*group->members[m]) == typeid(pikmin)) {
+            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(group->members[m]);
             
             type_dismiss_angles[pikmin_ptr->pik_type] = 0;
         }
@@ -92,9 +92,9 @@ void dismiss() {
     }
     
     //Now, dismiss them.
-    for(size_t m = 0; m < n_party_members; ++m) {
-        mob* member_ptr = cur_leader_ptr->party->members[0];
-        remove_from_party(member_ptr);
+    for(size_t m = 0; m < n_group_members; ++m) {
+        mob* member_ptr = group->members[0];
+        remove_from_group(member_ptr);
         
         float angle = 0;
         
@@ -108,53 +108,28 @@ void dismiss() {
     }
     
     sfx_pikmin_idle.play(0, false);
-    cur_leader_ptr->lea_type->sfx_dismiss.play(0, false);
-    cur_leader_ptr->set_animation(LEADER_ANIM_DISMISS);
+    lea_type->sfx_dismiss.play(0, false);
+    set_animation(LEADER_ANIM_DISMISS);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the distance between a leader and the center of its group.
+ * Swaps out the curretly held Pikmin for a different one.
  */
-float get_leader_to_group_center_dist(mob* l) {
-    return
-        (l->party->party_spots->current_wheel + 1) *
-        l->party->party_spots->spot_radius +
-        (l->party->party_spots->current_wheel + 1) *
-        PARTY_SPOT_INTERVAL;
-}
-
-
-void swap_pikmin(mob* new_pik) {
-    leader* lea = cur_leader_ptr;
-    if(lea->holding_pikmin) {
-        lea->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
+void leader::swap_held_pikmin(mob* new_pik) {
+    if(holding_pikmin) {
+        holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
     }
-    lea->holding_pikmin = new_pik;
+    holding_pikmin = new_pik;
     new_pik->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND);
     
     sfx_switch_pikmin.play(0, false);
 }
 
-void switch_to_leader(leader* new_leader_ptr) {
 
-    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
-    
-    size_t new_leader_nr = cur_leader_nr;
-    for(size_t l = 0; l < leaders.size(); ++l) {
-        if(leaders[l] == new_leader_ptr) {
-            new_leader_nr = l;
-            break;
-        }
-    }
-    
-    cur_leader_ptr = new_leader_ptr;
-    cur_leader_nr = new_leader_nr;
-    
-    new_leader_ptr->lea_type->sfx_name_call.play(0, false);
-    
-}
-
+/* ----------------------------------------------------------------------------
+ * Draw a leader object.
+ */
 void leader::draw() {
     mob::draw();
     
@@ -200,20 +175,54 @@ void leader::draw() {
 
 
 /* ----------------------------------------------------------------------------
- * Signals the party members that the group move mode stopped.
+ * Signals the group members that the group move mode stopped.
  */
 void leader::signal_group_move_end() {
-    for(size_t m = 0; m < party->members.size(); ++m) {
-        party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_ENDED);
+    for(size_t m = 0; m < group->members.size(); ++m) {
+        group->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_ENDED);
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Signals the party members that the group move mode started.
+ * Signals the group members that the group move mode started.
  */
 void leader::signal_group_move_start() {
-    for(size_t m = 0; m < party->members.size(); ++m) {
-        party->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_STARTED);
+    for(size_t m = 0; m < group->members.size(); ++m) {
+        group->members[m]->fsm.run_event(MOB_EVENT_GROUP_MOVE_STARTED);
     }
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the distance between a leader and the center of its group.
+ */
+float get_leader_to_group_center_dist(mob* l) {
+    return
+        (l->group->group_spots->current_wheel + 1) *
+        l->group->group_spots->spot_radius +
+        (l->group->group_spots->current_wheel + 1) *
+        GROUP_SPOT_INTERVAL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Switch active leader.
+ */
+void switch_to_leader(leader* new_leader_ptr) {
+
+    cur_leader_ptr->fsm.run_event(LEADER_EVENT_UNFOCUSED);
+    
+    size_t new_leader_nr = cur_leader_nr;
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l] == new_leader_ptr) {
+            new_leader_nr = l;
+            break;
+        }
+    }
+    
+    cur_leader_ptr = new_leader_ptr;
+    cur_leader_nr = new_leader_nr;
+    
+    new_leader_ptr->lea_type->sfx_name_call.play(0, false);
+    
 }

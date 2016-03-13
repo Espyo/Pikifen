@@ -445,6 +445,26 @@ bool path_stop::has_link(path_stop* other_stop) {
 
 
 /* ----------------------------------------------------------------------------
+ * Calculates the distance between it and all neighbors, and does the same
+ * for the other paths, if they link back.
+ */
+void path_stop::calculate_dists() {
+    for(size_t l = 0; l < links.size(); ++l) {
+        path_link* l_ptr = &links[l];
+        l_ptr->calculate_dist(this);
+        
+        for(size_t l2 = 0; l2 < l_ptr->end_ptr->links.size(); ++l2) {
+            path_link* l2_ptr = &l_ptr->end_ptr->links[l2];
+            
+            if(l2_ptr->end_ptr == this) {
+                l2_ptr->calculate_dist(l_ptr->end_ptr);
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new stop link.
  */
 path_link::path_link(path_stop* end_ptr, size_t end_nr) :
@@ -614,11 +634,13 @@ void vertex::fix_pointers(area_data &a) {
  * end_*:          End coordinates.
  * obstacle_found: If an obstacle was found in the only path, this points to it.
  * go_straight:    This is set according to whether it's better to go straight to the end point.
+ * total_dist:     If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
     const float start_x, const float start_y,
     const float end_x, const float end_y,
-    mob** obstacle_found, bool* go_straight
+    mob** obstacle_found, bool* go_straight,
+    float* total_dist
 ) {
 
     vector<path_stop*> full_path;
@@ -651,17 +673,45 @@ vector<path_stop*> get_path(
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
-    if(dist(start_x, start_y, end_x, end_y) <= closest_to_start_dist) {
+    dist start_to_end_dist = dist(start_x, start_y, end_x, end_y);
+    if(start_to_end_dist <= closest_to_start_dist) {
         if(go_straight) *go_straight = true;
+        if(total_dist) {
+            *total_dist = start_to_end_dist.to_float();
+        }
         return full_path;
     }
     
+    //If the start and destination share the same closest spot,
+    //that means this is the only stop in the path.
     if(closest_to_start == closest_to_end) {
         full_path.push_back(closest_to_start);
+        if(total_dist) {
+            *total_dist = closest_to_start_dist.to_float();
+            *total_dist += closest_to_end_dist.to_float();
+        }
         return full_path;
     }
     
-    return dijkstra(closest_to_start, closest_to_end, obstacle_found);
+    
+    //Calculate the path.
+    full_path = dijkstra(closest_to_start, closest_to_end, obstacle_found, total_dist);
+    
+    if(total_dist && !full_path.empty()) {
+        *total_dist +=
+            dist(
+                start_x, start_y,
+                full_path[0]->x, full_path[0]->y
+            ).to_float();
+        *total_dist +=
+            dist(
+                full_path[full_path.size() - 1]->x,
+                full_path[full_path.size() - 1]->y,
+                end_x, end_y
+            ).to_float();
+    }
+    
+    return full_path;
 }
 
 
@@ -1439,8 +1489,9 @@ void depth_first_search(vector<path_stop*> &nodes, unordered_set<path_stop*> &vi
  * https://en.wikipedia.org/wiki/Dijkstra's_algorithm
  * *node:          Start and end node.
  * obstacle_found: If the only path has an obstacle, this points to it.
+ * total_dist:     If not NULL, place the total path distance here.
  */
-vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found) {
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found, float* total_dist) {
 
     unordered_set<path_stop*> unvisited;
     //Distance from starting node + previous stop on the best solution.
@@ -1481,6 +1532,7 @@ vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** ob
             vector<path_stop*> final_path;
             path_stop* next = data[end_node].second;
             final_path.push_back(end_node);
+            float td = data[end_node].first;
             //Construct the path.
             while(next) {
                 final_path.insert(final_path.begin(), next);
@@ -1493,6 +1545,7 @@ vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** ob
                 break;
             } else {
                 if(obstacle_found) *obstacle_found = NULL;
+                if(total_dist) *total_dist = td;
                 return final_path;
             }
             
@@ -1550,16 +1603,19 @@ vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** ob
         vector<path_stop*> final_path;
         final_path.push_back(closest_obstacle_node);
         path_stop* next = data[closest_obstacle_node].second;
+        float td = data[closest_obstacle_node].first;
         while(next) {
             final_path.insert(final_path.begin(), next);
             next = data[next].second;
         }
         
         if(obstacle_found) *obstacle_found = closest_obstacle_mob;
+        if(total_dist) *total_dist = td;
         return final_path;
         
     } else {
         //No obstacle?... Something really went wrong. No path.
+        if(total_dist) *total_dist = 0;
         return vector<path_stop*>();
     }
 }

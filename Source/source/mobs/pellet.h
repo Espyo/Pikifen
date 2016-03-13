@@ -16,7 +16,6 @@
 #include "pellet_type.h"
 #include "pikmin_type.h"
 
-
 enum PELLET_STATES {
     PELLET_STATE_IDLE_WAITING,
     PELLET_STATE_IDLE_MOVING,
@@ -38,8 +37,6 @@ public:
     
     pellet(float x, float y, pellet_type* type, const float angle, const string &vars);
     virtual void draw();
-    
-    static void fsm_handle_delivery(mob* m, void* info1, void* info2);
 };
 
 #endif //ifndef PELLET_INCLUDED

@@ -34,7 +34,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             //TODO remove.
             mob* m = NULL;
             bool s = false;
-            temp_path = get_path(leaders[0]->x, leaders[0]->y, leaders[1]->x, leaders[1]->y, &m, &s);
+            temp_path = get_path(leaders[0]->x, leaders[0]->y, leaders[1]->x, leaders[1]->y, &m, &s, NULL);
             
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
@@ -138,7 +138,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_TELEPORT) {
                 float mx, my;
                 get_mouse_cursor_coordinates(&mx, &my);
-                cur_leader_ptr->set_target(mx, my, NULL, NULL, true);
+                cur_leader_ptr->chase(mx, my, NULL, NULL, true);
                 
             }
             
@@ -339,7 +339,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                                 //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
                                 create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
-                                add_to_party(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
+                                add_to_group(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
                             }
                             done = true;
                         }
@@ -362,12 +362,12 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 //Now check if the leader should grab a Pikmin.
                 if(!done) {
-                    if(closest_party_member) {
-                        mob_event* grabbed_ev = closest_party_member->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
+                    if(closest_group_member) {
+                        mob_event* grabbed_ev = closest_group_member->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
                         mob_event* grabber_ev = cur_leader_ptr->fsm.get_event(LEADER_EVENT_HOLDING);
                         if(grabber_ev && grabbed_ev) {
-                            cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_party_member);
-                            grabbed_ev->run(closest_party_member, (void*) closest_party_member);
+                            cur_leader_ptr->fsm.run_event(LEADER_EVENT_HOLDING, (void*) closest_group_member);
+                            grabbed_ev->run(closest_group_member, (void*) closest_group_member);
                             done = true;
                         }
                     }
@@ -599,26 +599,26 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             active_control();
             
-            vector<pikmin_type*> types_in_party;
+            vector<pikmin_type*> types_in_group;
             
-            size_t n_members = cur_leader_ptr->party->members.size();
+            size_t n_members = cur_leader_ptr->group->members.size();
             //Get all Pikmin types in the group.
             for(size_t m = 0; m < n_members; ++m) {
-                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
-                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                if(typeid(*cur_leader_ptr->group->members[m]) == typeid(pikmin)) {
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->group->members[m]);
                     
-                    if(find(types_in_party.begin(), types_in_party.end(), pikmin_ptr->type) == types_in_party.end()) {
-                        types_in_party.push_back(pikmin_ptr->pik_type);
+                    if(find(types_in_group.begin(), types_in_group.end(), pikmin_ptr->type) == types_in_group.end()) {
+                        types_in_group.push_back(pikmin_ptr->pik_type);
                     }
-                } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+                } else if(typeid(*cur_leader_ptr->group->members[m]) == typeid(leader)) {
                 
-                    if(find(types_in_party.begin(), types_in_party.end(), (pikmin_type*) NULL) == types_in_party.end()) {
-                        types_in_party.push_back(NULL); //NULL represents leaders.
+                    if(find(types_in_group.begin(), types_in_group.end(), (pikmin_type*) NULL) == types_in_group.end()) {
+                        types_in_group.push_back(NULL); //NULL represents leaders.
                     }
                 }
             }
             
-            size_t n_types = types_in_party.size();
+            size_t n_types = types_in_group.size();
             if(n_types == 1) return;
             
             pikmin_type* current_type = NULL;
@@ -633,11 +633,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             //Go one type adjacent to the current member being held.
             for(size_t t = 0; t < n_types; ++t) {
-                if(current_type == types_in_party[t]) {
+                if(current_type == types_in_group[t]) {
                     if(button == BUTTON_SWITCH_TYPE_RIGHT) {
-                        new_type = types_in_party[(t + 1) % n_types];
+                        new_type = types_in_group[(t + 1) % n_types];
                     } else {
-                        new_type = types_in_party[((t - 1) + n_types) % n_types];
+                        new_type = types_in_group[((t - 1) + n_types) % n_types];
                     }
                 }
             }
@@ -647,9 +647,9 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             //Find a Pikmin of the new type.
             for(size_t m = 0; m < n_members; ++m) {
-                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
+                if(typeid(*cur_leader_ptr->group->members[m]) == typeid(pikmin)) {
                 
-                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->group->members[m]);
                     if(pikmin_ptr->type == new_type) {
                         t_match_nr = m;
                         if(pikmin_ptr->maturity == current_maturity) {
@@ -658,7 +658,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                         }
                     }
                     
-                } else if(typeid(*cur_leader_ptr->party->members[m]) == typeid(leader)) {
+                } else if(typeid(*cur_leader_ptr->group->members[m]) == typeid(leader)) {
                 
                     if(new_type == NULL) {
                         t_match_nr = m;
@@ -669,8 +669,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             }
             
             //If no Pikmin matched the maturity, just use the one we found.
-            if(tm_match_nr == n_members + 1) swap_pikmin(cur_leader_ptr->party->members[t_match_nr]);
-            else swap_pikmin(cur_leader_ptr->party->members[tm_match_nr]);
+            if(tm_match_nr == n_members + 1) cur_leader_ptr->swap_held_pikmin(cur_leader_ptr->group->members[t_match_nr]);
+            else cur_leader_ptr->swap_held_pikmin(cur_leader_ptr->group->members[tm_match_nr]);
             
         } else if(button == BUTTON_SWITCH_MATURITY_DOWN || button == BUTTON_SWITCH_MATURITY_UP) {
         
@@ -688,11 +688,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 current_maturity = pikmin_ptr->maturity;
             }
             
-            size_t n_members = cur_leader_ptr->party->members.size();
+            size_t n_members = cur_leader_ptr->group->members.size();
             //Get Pikmin of the same type, one for each maturity.
             for(size_t m = 0; m < n_members; ++m) {
-                if(typeid(*cur_leader_ptr->party->members[m]) == typeid(pikmin)) {
-                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->party->members[m]);
+                if(typeid(*cur_leader_ptr->group->members[m]) == typeid(pikmin)) {
+                    pikmin* pikmin_ptr = dynamic_cast<pikmin*>(cur_leader_ptr->group->members[m]);
                     
                     if(pikmin_ptr == cur_leader_ptr->holding_pikmin) continue;
                     
@@ -715,7 +715,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 else new_maturity = (new_maturity + 1) % 3;
             } while(!partners[new_maturity]);
             
-            swap_pikmin(partners[new_maturity]);
+            cur_leader_ptr->swap_held_pikmin(partners[new_maturity]);
             sfx_switch_pikmin.play(0, false);
             
         }

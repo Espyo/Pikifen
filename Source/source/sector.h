@@ -112,6 +112,7 @@ struct path_stop {
     bool has_link(path_stop* other_stop);
     void fix_pointers(area_data &a);
     void fix_nrs(area_data &a);
+    void calculate_dists();
 };
 
 
@@ -318,11 +319,11 @@ void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 void depth_first_search(vector<path_stop*> &nodes, unordered_set<path_stop*> &visited, path_stop* start);
-vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found);
+vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found, float* total_dist);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
 void get_cce(vector<vertex> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes);
-vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob** obstacle_found, bool* go_straight);
+vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob** obstacle_found, bool* go_straight, float* get_dist);
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);

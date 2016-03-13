@@ -25,42 +25,65 @@
 
 using namespace std;
 
-struct party_spot_info;
-
+struct group_spot_info;
 class mob_type;
 class mob;
 
-enum carry_spot_state {
+extern size_t next_mob_id;
+
+const float GRAVITY_ADDER = -1300.0f; //Accelerate the Z speed of mobs affected by gravity by this amount per second.
+
+
+enum MOB_TEAMS {
+    MOB_TEAM_NONE,       //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
+    MOB_TEAM_PLAYER_1,
+    MOB_TEAM_PLAYER_2,
+    MOB_TEAM_PLAYER_3,
+    MOB_TEAM_PLAYER_4,
+    MOB_TEAM_ENEMY_1,
+    MOB_TEAM_ENEMY_2,
+    MOB_TEAM_OBSTACLE,  //Can only be hurt by Pikmin.
+    MOB_TEAM_DECORATION, //Cannot be hurt or targeted by anything.
+};
+
+enum MOB_STATE_IDS {
+    MOB_STATE_IDLE,
+    MOB_STATE_BEING_CARRIED,
+    MOB_STATE_BEING_DELIVERED, //Into an Onion.
+    
+};
+
+enum CARRY_SPOT_STATES {
     CARRY_SPOT_FREE,
     CARRY_SPOT_RESERVED,
     CARRY_SPOT_USED,
 };
 
+
 /* ----------------------------------------------------------------------------
- * Information on a mob's party.
+ * Information on a mob's group.
  * This includes a list of its members,
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct party_info {
+struct group_info {
     vector<mob*> members;
-    party_spot_info* party_spots;
-    float party_center_x, party_center_y;
+    group_spot_info* group_spots;
+    float group_center_x, group_center_y;
     
-    party_info(party_spot_info* ps, const float center_x, const float center_y) {
-        party_spots = ps;
-        party_center_x = center_x;
-        party_center_y = center_y;
+    group_info(group_spot_info* ps, const float center_x, const float center_y) {
+        group_spots = ps;
+        group_center_x = center_x;
+        group_center_y = center_y;
     }
 };
-
 
 
 /* ----------------------------------------------------------------------------
  * Information on a carrying spot around a mob's perimeter.
  */
 struct carrier_spot_struct {
-    carry_spot_state state;
+    CARRY_SPOT_STATES state;
     float x; //relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
     float y;
     mob* pik_ptr;
@@ -94,7 +117,6 @@ struct carry_info_struct {
 };
 
 
-
 /* ----------------------------------------------------------------------------
  * A mob, short for "mobile object" or "map object",
  * or whatever tickles your fancy, is any instance of
@@ -109,6 +131,7 @@ protected:
     void tick_misc_logic();
     void tick_physics();
     void tick_script();
+    virtual void tick_class_specifics();
     
 public:
     mob(const float x, const float y, mob_type* type, const float angle, const string &vars);
@@ -133,44 +156,44 @@ public:
     float intended_angle;             //Angle the mob wants to be facing.
     float ground_z;                   //Z of the highest ground it's on.
     float lighting;                   //How light the mob is. Depends on the sector(s) it's on.
-    bool affected_by_gravity;         //Is the mob currently affected by gravity? Wollywogs stop in mid-air when jumping, for instance.
+    float gravity_mult;               //Multiply the mob's gravity by this.
     float push_amount;                //Amount it's being pushed by another mob.
     float push_angle;                 //Angle that another mob is pushing it to.
     bool tangible;                    //If it can be touched by other mobs.
     
     void face(const float new_angle); //Makes the mob face an angle, but it'll turn at its own pace.
-    void get_final_target(float* x, float* y); //Returns the final coordinates of a go_to_target target.
+    void get_chase_target(float* x, float* y); //Returns the final coordinates of the chasing target.
     virtual float get_base_speed();   //Returns the normal speed of this mob. Subclasses are meant to override this.
     
     //Target things.
-    float target_x, target_y;           //When movement is automatic, this is the spot the mob is trying to go to.
-    float* target_z;                    //When following a target in teleport mode, also change the z accordingly.
-    float* target_rel_x, *target_rel_y; //Follow these coordinates.
-    bool go_to_target;                  //If true, it'll try to go to the target spot on its own.
-    bool gtt_instant;                   //If true, teleport instantly.
-    bool gtt_free_move;                 //If true, the mob can move in a direction it's not facing.
-    float target_distance;              //Distance from the target in which the mob is considered as being there.
-    float target_speed;                 //Speed to move towards the target at.
+    bool chasing;                       //If true, the mob is trying to go to a certain spot.
+    float chase_offs_x, chase_offs_y;   //Chase after these coordinates, relative to the "origin" coordinates.
+    float* chase_orig_x, *chase_orig_y; //Pointers to the origin of the coordinates, or NULL for the world origin.
+    float* chase_teleport_z;            //When chasing something in teleport mode, also change the z accordingly.
+    bool chase_teleport;                //If true, teleport instantly.
+    bool chase_free_move;               //If true, the mob can move in a direction it's not facing.
+    float chase_target_dist;            //Distance from the target in which the mob is considered as being there.
+    float chase_speed;                  //Speed to move towards the target at.
     vector<path_stop*> path;
     size_t cur_path_stop_nr;
     
-    void set_target(
-        const float target_x, const float target_y,
-        float* target_rel_x, float* target_rel_y,
-        const bool instant, float* target_z = NULL,
+    void chase(
+        const float x, const float y,
+        float* rel_x, float* rel_y,
+        const bool instant, float* rel_z = NULL,
         const bool free_move = false, const float target_distance = 3,
-        const float movement_speed = -1
+        const float speed = -1
     );
-    void remove_target();
+    void stop_chasing();
     
-    //Party things.
-    mob* following_party;      //The current mob is following this mob's party.
+    //Group things.
+    mob* following_group;      //The current mob is following this mob's group.
     bool was_thrown;           //Is the mob airborne because it was thrown?
-    float unwhistlable_period; //During this period, the mob cannot be whistled into a party.
-    float untouchable_period;  //During this period, the mob cannot be touched into a party.
-    party_info* party;         //Info on the party this mob is a leader of.
-    float party_spot_x;
-    float party_spot_y;
+    float unwhistlable_period; //During this period, the mob cannot be whistled into a group.
+    float untouchable_period;  //During this period, the mob cannot be touched into a group.
+    group_info* group;         //Info on the group this mob is a leader of.
+    float group_spot_x;
+    float group_spot_y;
     
     
     //Other properties.
@@ -222,8 +245,7 @@ public:
 };
 
 
-
-void add_to_party(mob* party_leader, mob* new_member);
+void add_to_group(mob* group_leader, mob* new_member);
 void apply_knockback(mob* m, const float knockback, const float knockback_angle);
 float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h);
 void calculate_knockback(mob* attacker, mob* victim, hitbox_instance* attacker_h, hitbox_instance* victim_h, float* knockback, float* angle);
@@ -233,32 +255,8 @@ void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m);
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
-void remove_from_party(mob* member);
+void remove_from_group(mob* member);
 bool should_attack(mob* m1, mob* m2);
 void unfocus_mob(mob* m1);
-
-
-extern size_t next_mob_id;
-
-const float GRAVITY_ADDER = -1300.0f; //Accelerate the Z speed of mobs affected by gravity by this amount per second.
-
-enum MOB_TEAMS {
-    MOB_TEAM_NONE,       //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
-    MOB_TEAM_PLAYER_1,
-    MOB_TEAM_PLAYER_2,
-    MOB_TEAM_PLAYER_3,
-    MOB_TEAM_PLAYER_4,
-    MOB_TEAM_ENEMY_1,
-    MOB_TEAM_ENEMY_2,
-    MOB_TEAM_OBSTACLE,  //Can only be hurt by Pikmin.
-    MOB_TEAM_DECORATION, //Cannot be hurt or targeted by anything.
-};
-
-enum MOB_STATE_IDS {
-    MOB_STATE_IDLE,
-    MOB_STATE_BEING_CARRIED,
-    MOB_STATE_BEING_DELIVERED, //Into an Onion.
-    
-};
 
 #endif //ifndef MOB_INCLUDED

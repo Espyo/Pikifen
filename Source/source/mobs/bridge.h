@@ -14,6 +14,12 @@
 
 #include "mob.h"
 
+enum BRIDGE_ANIMATIONS {
+    BRIDGE_ANIM_IDLE,
+    BRIDGE_ANIM_NOTHING,
+};
+
+
 class bridge : public mob {
 private:
 
@@ -30,11 +36,7 @@ public:
     
 };
 
-void init_bridge_mob_type(mob_type* mt);
 
-enum BRIDGE_ANIMATIONS {
-    BRIDGE_ANIM_IDLE,
-    BRIDGE_ANIM_NOTHING,
-};
+void init_bridge_mob_type(mob_type* mt);
 
 #endif //ifndef BRIDGE_INCLUDED

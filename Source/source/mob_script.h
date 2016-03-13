@@ -133,7 +133,7 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_RELEASE,        //When the leader releases the Pikmin on their hand.
     LEADER_EVENT_START_WHISTLE,  //When the leader begins whistling.
     LEADER_EVENT_STOP_WHISTLE,   //When the leader stops whistling.
-    LEADER_EVENT_DISMISS,        //When the leader dismisses their squad.
+    LEADER_EVENT_DISMISS,        //When the leader dismisses their group.
     LEADER_EVENT_SPRAY,          //When the leader uses a spray.
     LEADER_EVENT_LIE_DOWN,       //When the leader lies down.
     LEADER_EVENT_GO_PLUCK,       //When the leader has to go towards the Pikmin it intends to pluck.
@@ -155,6 +155,7 @@ enum MOB_ACTION_MOVE_TYPES {
     MOB_ACTION_MOVE_FOCUSED_MOB,
     MOB_ACTION_MOVE_HOME,
     MOB_ACTION_MOVE_STOP,
+    MOB_ACTION_MOVE_STOP_VERTICALLY,
     MOB_ACTION_MOVE_COORDS,
     MOB_ACTION_MOVE_REL_COORDS,
     MOB_ACTION_MOVE_VERTICALLY,

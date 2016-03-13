@@ -188,7 +188,7 @@ struct movement_struct {
  * Then other Pikmin come by, and occupy spots at random on the next wheel.
  * When that wheel has all of its spots full, the next wheel will be used, and so on.
  */
-struct party_spot_info {
+struct group_spot_info {
 
     float spot_radius;
     
@@ -200,7 +200,7 @@ struct party_spot_info {
     unsigned current_wheel;
     unsigned n_current_wheel_members;
     
-    party_spot_info(const unsigned max_mobs, const float spot_size);
+    group_spot_info(const unsigned max_mobs, const float spot_size);
     void add(mob* m);
     void remove(mob* m);
 };
@@ -264,7 +264,7 @@ struct timer {
     function<void()> on_end;
     
     timer(const float duration, const function<void()> on_end = nullptr);
-    void start();
+    void start(const bool can_restart = true);
     void start(const float new_duration);
     void tick(const float amount);
     float get_ratio_left();

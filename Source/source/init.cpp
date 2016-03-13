@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2014.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2016.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included
  * README and LICENSE files for more information.
@@ -197,7 +197,7 @@ void init_hud_coordinates() {
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON, 0.30, 0.89, 0.08, 0.00);
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,   0.38, 0.91, 0.07, 0.08);
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,    2.00, 0.00, 0.01, 0.01);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SQUAD_NR,     0.50, 0.90, 0.16, 0.10);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,     0.50, 0.90, 0.16, 0.10);
     init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,     0.68, 0.91, 0.14, 0.08);
     init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,     0.87, 0.91, 0.19, 0.08);
     init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,      0.59, 0.92, 0.04, 0.08);

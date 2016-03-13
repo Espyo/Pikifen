@@ -32,6 +32,7 @@
 const float area_editor::GRID_INTERVAL = 32.0f;
 const float area_editor::STOP_RADIUS = 16.0f;
 const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+const float area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
 const float area_editor::LINK_THICKNESS = 2.0f;
 
 
@@ -67,6 +68,7 @@ area_editor::area_editor() :
     moving_thing_y(0),
     new_link_first_stop(NULL),
     on_sector(NULL),
+    path_preview_timeout(0),
     sec_mode(ESM_NONE),
     shift_pressed(false),
     show_closest_stop(false),
@@ -79,6 +81,7 @@ area_editor::area_editor() :
     path_preview_checkpoints_y[0] = 0;
     path_preview_checkpoints_x[1] = GRID_INTERVAL;
     path_preview_checkpoints_y[1] = 0;
+    path_preview_timeout = timer(PATH_PREVIEW_TIMEOUT_DUR, [this] () {calculate_preview_path();});
 }
 
 /* ----------------------------------------------------------------------------
@@ -107,14 +110,28 @@ void area_editor::adv_textures_to_gui() {
 void area_editor::calculate_preview_path() {
     if(!show_path_preview) return;
     
+    float d = 0;
     path_preview =
         get_path(
             path_preview_checkpoints_x[0],
             path_preview_checkpoints_y[0],
             path_preview_checkpoints_x[1],
             path_preview_checkpoints_y[1],
-            NULL, NULL
+            NULL, NULL, &d
         );
+        
+    if(path_preview.empty() && d == 0) {
+        d =
+            dist(
+                path_preview_checkpoints_x[0],
+                path_preview_checkpoints_y[0],
+                path_preview_checkpoints_x[1],
+                path_preview_checkpoints_y[1]
+            ).to_float();
+    }
+    
+    ((lafi::label*) gui->widgets["frm_paths"]->widgets["lbl_path_dist"])->text =
+        "  Total dist.: " + f2s(d);
 }
 
 
@@ -205,6 +222,8 @@ void area_editor::do_logic() {
         double_click_time -= delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
+    
+    path_preview_timeout.tick(delta_t);
     
     fade_mgr.tick(delta_t);
     
@@ -538,6 +557,7 @@ void area_editor::do_drawing() {
             }
             
             if(show_path_preview) {
+                //Draw the checkpoints.
                 for(unsigned char c = 0; c < 2; ++c) {
                     string letter = (c == 0 ? "A" : "B");
                     
@@ -557,6 +577,7 @@ void area_editor::do_drawing() {
                     );
                 }
                 
+                //Draw the lines of the path.
                 if(path_preview.empty()) {
                     al_draw_line(
                         path_preview_checkpoints_x[0],
@@ -1327,7 +1348,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 path_stop* s_ptr = cur_area_data.path_stops[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x);
                 s_ptr->y = snap_to_grid(mouse_cursor_y);
-                calculate_preview_path();
+                s_ptr->calculate_dists();
+                path_preview_timeout.start(false);
             } else if(mode == EDITOR_MODE_SHADOWS) {
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x - moving_thing_x);
@@ -1342,7 +1364,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(moving_path_preview_checkpoint != -1) {
             path_preview_checkpoints_x[moving_path_preview_checkpoint] = snap_to_grid(mouse_cursor_x);
             path_preview_checkpoints_y[moving_path_preview_checkpoint] = snap_to_grid(mouse_cursor_y);
-            calculate_preview_path();
+            path_preview_timeout.start(false);
         }
         
         
@@ -1667,7 +1689,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             
-            calculate_preview_path();
+            path_preview_timeout.start(false);
             made_changes = true;
             
         } else if (sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
@@ -1698,18 +1720,22 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     new_link_first_stop->links.push_back(
                         path_link(s_ptr, s)
                     );
+                    
                     if(sec_mode == ESM_NEW_LINK2) {
                         s_ptr->links.push_back(
                             path_link(new_link_first_stop, string::npos)
                         );
                         s_ptr->fix_nrs(cur_area_data);
                     }
+                    
+                    new_link_first_stop->calculate_dists();
+                    
                     sec_mode = (sec_mode == ESM_NEW_LINK2 ? ESM_NEW_LINK1 : ESM_NEW_1WLINK1);
                     break;
                 }
             }
             
-            calculate_preview_path();
+            path_preview_timeout.start(false);
             made_changes = true;
             
         } else if(sec_mode == ESM_DEL_STOP) {
@@ -1742,7 +1768,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
             }
             
-            calculate_preview_path();
+            path_preview.clear();
+            path_preview_timeout.start(false);
             made_changes = true;
             
         } else if(sec_mode == ESM_DEL_LINK) {
@@ -1780,7 +1807,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 if(deleted) break;
             }
             
-            calculate_preview_path();
+            path_preview.clear();
+            path_preview_timeout.start(false);
             made_changes = true;
             
         } else if(sec_mode == ESM_NEW_SHADOW) {
@@ -2262,6 +2290,8 @@ void area_editor::load() {
     frm_paths->easy_row();
     frm_paths->easy_add("chk_show_path", new lafi::checkbox(0, 0, 0, 0, "Show calculated path"), 100, 16);
     frm_paths->easy_row();
+    frm_paths->easy_add("lbl_path_dist", new lafi::label(0, 0, 0, 0, "  Total dist.: 0"), 100, 16);
+    frm_paths->easy_row();
     
     
     //Shadows frame.
@@ -2586,8 +2616,12 @@ void area_editor::load() {
         show_path_preview = !show_path_preview;
         if(show_path_preview) {
             calculate_preview_path();
+            show_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
+        } else {
+            hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
         }
     };
+    hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
     frm_paths->widgets["but_back"]->description = "Go back to the main menu.";
     frm_paths->widgets["but_new_stop"]->description = "Create new stops wherever you click.";
     frm_paths->widgets["but_new_link"]->description = "Click on two stops to connect them with a link.";
@@ -2596,6 +2630,7 @@ void area_editor::load() {
     frm_paths->widgets["but_del_link"]->description = "Click links to delete them.";
     frm_paths->widgets["chk_show_closest"]->description = "Show the closest stop to the cursor.";
     frm_paths->widgets["chk_show_path"]->description = "Show path between draggable points A and B.";
+    frm_paths->widgets["lbl_path_dist"]->description = "Total travel distance between A and B.";
     
     
     //Properties -- shadows.
@@ -2726,13 +2761,7 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
-    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
-    path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = GRID_INTERVAL;
-    path_preview_checkpoints_y[1] = 0;
     show_closest_stop = false;
-    show_path_preview = false;
-    path_preview.clear();
     area_name.clear();
     
 }
@@ -2767,6 +2796,15 @@ void area_editor::load_area() {
     error_sector_ptr = NULL;
     error_string.clear();
     error_vertex_ptr = NULL;
+    
+    show_path_preview = false;
+    ((lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"])->uncheck();
+    hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
+    path_preview.clear();
+    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
+    path_preview_checkpoints_y[0] = 0;
+    path_preview_checkpoints_x[1] = GRID_INTERVAL;
+    path_preview_checkpoints_y[1] = 0;
     
     cur_sector = NULL;
     cur_mob = NULL;

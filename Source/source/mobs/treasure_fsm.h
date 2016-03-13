@@ -12,4 +12,12 @@
 #ifndef TREASURE_FSM_INCLUDED
 #define TREASURE_FSM_INCLUDED
 
+#include "mob_type.h"
+
+namespace treasure_fsm {
+void create_fsm(mob_type* typ);
+
+void handle_delivery(mob* m, void* info1, void* info2);
+}
+
 #endif //ifndef TREASURE_FSM_INCLUDED

@@ -23,12 +23,28 @@
 
 using namespace std;
 
-
 enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_CARRIABLE_WAITING,
     ENEMY_EXTRA_STATE_CARRIABLE_MOVING,
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
 };
+
+enum mob_categories {
+    MOB_CATEGORY_NONE,
+    MOB_CATEGORY_PIKMIN,
+    MOB_CATEGORY_ONIONS,
+    MOB_CATEGORY_LEADERS,
+    MOB_CATEGORY_ENEMIES,
+    MOB_CATEGORY_TREASURES,
+    MOB_CATEGORY_PELLETS,
+    MOB_CATEGORY_SPECIAL,
+    MOB_CATEGORY_SHIPS,
+    MOB_CATEGORY_GATES,
+    
+    N_MOB_CATEGORIES,
+};
+
+const size_t ANIM_IDLE = 0;
 
 
 /* ----------------------------------------------------------------------------
@@ -85,28 +101,8 @@ public:
 };
 
 
-
 void load_mob_types(const string &folder, const unsigned char category, bool load_resources);
 void load_mob_types(bool load_resources);
 void load_mob_type_from_file(mob_type* mt, data_node &file, const bool load_resources, const string &folder);
-
-
-
-enum mob_categories {
-    MOB_CATEGORY_NONE,
-    MOB_CATEGORY_PIKMIN,
-    MOB_CATEGORY_ONIONS,
-    MOB_CATEGORY_LEADERS,
-    MOB_CATEGORY_ENEMIES,
-    MOB_CATEGORY_TREASURES,
-    MOB_CATEGORY_PELLETS,
-    MOB_CATEGORY_SPECIAL,
-    MOB_CATEGORY_SHIPS,
-    MOB_CATEGORY_GATES,
-    
-    N_MOB_CATEGORIES,
-};
-
-const size_t ANIM_IDLE = 0;
 
 #endif //ifndef MOB_TYPE_INCLUDED

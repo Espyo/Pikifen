@@ -12,7 +12,6 @@
 #ifndef ENEMY_INCLUDED
 #define ENEMY_INCLUDED
 
-#include "../animation.h"
 #include "enemy_type.h"
 #include "mob.h"
 

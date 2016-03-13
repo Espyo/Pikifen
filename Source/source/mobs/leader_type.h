@@ -40,7 +40,6 @@ public:
     ALLEGRO_BITMAP* bmp_icon; //Standby icon.
     
     leader_type();
-    void init_script();
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
 };
 

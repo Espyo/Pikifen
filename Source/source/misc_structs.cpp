@@ -312,9 +312,9 @@ void mob_category_manager::save_mob_type(const unsigned char cat_nr, mob_type* m
 
 
 /* ----------------------------------------------------------------------------
- * Creates a structure with info about party spots.
+ * Creates a structure with info about group spots.
  */
-party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radius) :
+group_spot_info::group_spot_info(const unsigned max_mobs, const float spot_radius) :
     spot_radius(spot_radius) {
     
     //Center spot first.
@@ -329,7 +329,7 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
         //First, calculate how far the center of these spots are from the central spot.
         float dist_from_center =
             spot_radius * w + //Spots.
-            PARTY_SPOT_INTERVAL * w; //Interval between spots.
+            GROUP_SPOT_INTERVAL * w; //Interval between spots.
             
         /* Now we need to figure out what's the angular distance between each spot.
          * For that, we need the actual diameter (distance from one point to the other),
@@ -341,7 +341,7 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
          * which should be the size of a Pikmin and one interval unit,
          * and we know the distance from one spot to the center.
          */
-        float actual_diameter = spot_radius + PARTY_SPOT_INTERVAL;
+        float actual_diameter = spot_radius + GROUP_SPOT_INTERVAL;
         
         //Just calculate the remaining side of the triangle, now that we know
         //the hypotenuse and the actual diameter (one side of the triangle).
@@ -361,8 +361,8 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
         y_coords.push_back(vector<float>());
         mobs_in_spots.push_back(vector<mob*>());
         for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
-            x_coords.back().push_back(dist_from_center * cos(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
-            y_coords.back().push_back(dist_from_center * sin(angle * s) + randomf(-PARTY_SPOT_INTERVAL, PARTY_SPOT_INTERVAL));
+            x_coords.back().push_back(dist_from_center * cos(angle * s) + randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL));
+            y_coords.back().push_back(dist_from_center * sin(angle * s) + randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL));
             mobs_in_spots.back().push_back(NULL);
         }
         
@@ -376,9 +376,9 @@ party_spot_info::party_spot_info(const unsigned max_mobs, const float spot_radiu
 
 
 /* ----------------------------------------------------------------------------
- * Adds a member to a leader's party spots.
+ * Adds a member to a leader's group spots.
  */
-void party_spot_info::add(mob* m) {
+void group_spot_info::add(mob* m) {
     if(n_current_wheel_members == mobs_in_spots[current_wheel].size()) {
         current_wheel++;
         n_current_wheel_members = 0;
@@ -401,15 +401,15 @@ void party_spot_info::add(mob* m) {
     
     n_current_wheel_members++;
     
-    m->party_spot_x = x_coords[current_wheel][chosen_spot];
-    m->party_spot_y = y_coords[current_wheel][chosen_spot];
+    m->group_spot_x = x_coords[current_wheel][chosen_spot];
+    m->group_spot_y = y_coords[current_wheel][chosen_spot];
 }
 
 
 /* ----------------------------------------------------------------------------
- * Removes a member from a leader's party spots.
+ * Removes a member from a leader's group spots.
  */
-void party_spot_info::remove(mob* m) {
+void group_spot_info::remove(mob* m) {
     unsigned mob_wheel = UINT_MAX; //Wheel number of the mob we're trying to remove.
     unsigned mob_spot = UINT_MAX; //Spot number of the mob we're trying to remove.
     
@@ -449,13 +449,13 @@ void party_spot_info::remove(mob* m) {
         } while(!mobs_in_spots[current_wheel][replacement_spot] || (current_wheel == mob_wheel && replacement_spot == mob_spot));
         
         mobs_in_spots[mob_wheel][mob_spot] = mobs_in_spots[current_wheel][replacement_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->party_spot_x = x_coords[mob_wheel][mob_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->party_spot_y = y_coords[mob_wheel][mob_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->group_spot_x = x_coords[mob_wheel][mob_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->group_spot_y = y_coords[mob_wheel][mob_spot];
         mobs_in_spots[current_wheel][replacement_spot] = NULL;
         
         //TODO remove this temporary hack:
-        mobs_in_spots[mob_wheel][mob_spot]->target_x = x_coords[mob_wheel][mob_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->target_y = y_coords[mob_wheel][mob_spot] + 30;
+        mobs_in_spots[mob_wheel][mob_spot]->chase_offs_x = x_coords[mob_wheel][mob_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->chase_offs_y = y_coords[mob_wheel][mob_spot] + 30;
         
         n_current_wheel_members--;
         if(n_current_wheel_members == 0) {
@@ -570,8 +570,11 @@ timer::timer(float duration, function<void()> on_end) {
 
 /* ----------------------------------------------------------------------------
  * Starts a timer.
+ * can_restart: If false, calling this while the timer is still ticking down
+   * will not do anything.
  */
-void timer::start() {
+void timer::start(const bool can_restart) {
+    if(!can_restart && time_left > 0) return;
     time_left = duration;
 }
 

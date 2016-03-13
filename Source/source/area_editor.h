@@ -21,6 +21,7 @@
 #include "game_state.h"
 #include "LAFI/gui.h"
 #include "LAFI/widget.h"
+#include "misc_structs.h"
 #include "sector.h"
 
 using namespace std;
@@ -56,6 +57,7 @@ private:
     static const float GRID_INTERVAL;
     static const float STOP_RADIUS;
     static const float PATH_PREVIEW_CHECKPOINT_RADIUS;
+    static const float PATH_PREVIEW_TIMEOUT_DUR;
     static const float LINK_THICKNESS;
     
     string                       area_name;
@@ -93,6 +95,7 @@ private:
     float                        path_preview_checkpoints_x[2];
     float                        path_preview_checkpoints_y[2];
     vector<path_stop*>           path_preview;
+    timer                        path_preview_timeout;
     unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;
     bool                         show_closest_stop;

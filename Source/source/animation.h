@@ -96,7 +96,6 @@ public:
 };
 
 
-
 /* ----------------------------------------------------------------------------
  * Instance of a frame inside an animation.
  * A single frame can appear multiple times in the same animation (imagine an enemy shaking back and forth).
@@ -112,7 +111,6 @@ public:
 };
 
 
-
 /* ----------------------------------------------------------------------------
  * A list of frames, basically.
  */
@@ -125,7 +123,6 @@ public:
     animation(const string &name = "", vector<frame_instance> frame_instances = vector<frame_instance>(), const size_t loop_frame = 0);
     animation(const animation &a2);
 };
-
 
 
 /* ----------------------------------------------------------------------------
@@ -157,7 +154,6 @@ public:
 };
 
 
-
 /* ----------------------------------------------------------------------------
  * Instance of a running animation. This can be played, rewinded, ...
  */
@@ -176,7 +172,6 @@ public:
     bool tick(const float time);
     frame* get_frame();
 };
-
 
 
 animation_pool load_animation_pool_from_file(data_node* frames_node);

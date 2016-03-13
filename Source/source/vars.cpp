@@ -96,7 +96,7 @@ ALLEGRO_COLOR                    carrying_color_stop = al_map_rgb(96, 192, 192);
 float                            carrying_speed_base_mult = 0.5;
 float                            carrying_speed_max_mult = 0.8;
 float                            carrying_speed_weight_mult = 0.0004;
-mob*                             closest_party_member = NULL;
+mob*                             closest_group_member = NULL;
 vector<vector<control_info> >    controls;
 area_data                        cur_area_data;
 size_t                           cur_leader_nr = 0;

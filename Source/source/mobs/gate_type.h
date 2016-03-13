@@ -17,21 +17,19 @@
 #include "../data_file.h"
 #include "mob_type.h"
 
+enum GATE_ANIMATIONS {
+    GATE_ANIM_IDLE,
+    GATE_ANIM_NOTHING,
+};
+
+
 /* ----------------------------------------------------------------------------
  * A type of gate. Brown, white, blue, whatever.
  */
 class gate_type : public mob_type {
-private:
-    void init_script();
-    
 public:
     gate_type();
     void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
-};
-
-enum GATE_ANIMATIONS {
-    GATE_ANIM_IDLE,
-    GATE_ANIM_NOTHING,
 };
 
 #endif //ifndef GATE_TYPE_INCLUDED

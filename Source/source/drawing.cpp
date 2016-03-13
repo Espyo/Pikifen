@@ -645,21 +645,21 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             //Pikmin count.
             //Count how many Pikmin only.
             n_leaders = leaders.size();
-            size_t pikmin_in_party = cur_leader_ptr->party->members.size();
+            size_t pikmin_in_group = cur_leader_ptr->group->members.size();
             for(size_t l = 0; l < n_leaders; ++l) {
-                //If this leader is following the current one, then they're not a Pikmin, subtract them from the party count total.
-                if(leaders[l]->following_party == cur_leader_ptr) pikmin_in_party--;
+                //If this leader is following the current one, then they're not a Pikmin, subtract them from the group count total.
+                if(leaders[l]->following_group == cur_leader_ptr) pikmin_in_group--;
             }
             
-            //Closest party member.
+            //Closest group member.
             ALLEGRO_BITMAP* bm = NULL;
-            if(closest_party_member) {
-                if(typeid(*closest_party_member) == typeid(pikmin)) {
-                    pikmin* p_ptr = dynamic_cast<pikmin*>(closest_party_member);
+            if(closest_group_member) {
+                if(typeid(*closest_group_member) == typeid(pikmin)) {
+                    pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
                     bm = p_ptr->pik_type->bmp_icon[p_ptr->maturity];
                     
-                } else if(typeid(*closest_party_member) == typeid(leader)) {
-                    leader* l_ptr = dynamic_cast<leader*>(closest_party_member);
+                } else if(typeid(*closest_group_member) == typeid(leader)) {
+                    leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
                     bm = l_ptr->lea_type->bmp_icon;
                 }
                 
@@ -702,10 +702,10 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             
             draw_sprite(
                 bmp_number_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][0],
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][1],
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2],
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][3]
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2],
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3]
             );
             draw_sprite(
                 bmp_number_bubble,
@@ -750,12 +750,12 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][0] + hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2] * 0.4,
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0] + hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.4,
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1],
                 ALLEGRO_ALIGN_RIGHT, 1,
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][2] * 0.7,
-                hud_coords[HUD_ITEM_PIKMIN_SQUAD_NR][3] * 0.7,
-                i2s(pikmin_in_party)
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.7,
+                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3] * 0.7,
+                i2s(pikmin_in_group)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),

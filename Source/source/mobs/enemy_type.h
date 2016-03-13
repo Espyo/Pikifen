@@ -16,7 +16,6 @@
 #include <vector>
 
 #include "../data_file.h"
-#include "../hazard.h"
 #include "mob_type.h"
 
 using namespace std;

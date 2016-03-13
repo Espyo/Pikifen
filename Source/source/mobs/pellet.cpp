@@ -91,20 +91,3 @@ void pellet::draw() {
     }
     
 }
-
-
-void pellet::fsm_handle_delivery(mob* m, void* info1, void* info2) {
-    size_t seeds = 0;
-    pellet* p_ptr = (pellet*) m;
-    onion* o_ptr = (onion*) p_ptr->carrying_target;
-    
-    if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
-        seeds = p_ptr->pel_type->match_seeds;
-    } else {
-        seeds = p_ptr->pel_type->non_match_seeds;
-    }
-    
-    o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
-    
-    p_ptr->to_delete = true;
-}

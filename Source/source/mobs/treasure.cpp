@@ -89,14 +89,3 @@ void treasure::draw() {
         al_set_separate_blender(old_op, old_src, old_dst, old_aop, old_asrc, old_adst);
     }
 }
-
-
-void treasure::fsm_handle_delivery(mob* m, void* info1, void* info2) {
-    treasure* t_ptr = (treasure*) m;
-    ship* s_ptr = (ship*) t_ptr->carrying_target;
-    float value = t_ptr->tre_type->value;
-    
-    s_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) &value);
-    
-    t_ptr->to_delete = true;
-}

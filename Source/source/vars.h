@@ -133,7 +133,7 @@ extern float                            carrying_speed_base_mult;
 extern float                            carrying_speed_max_mult;
 extern float                            carrying_speed_weight_mult;
 extern vector<vector<control_info> >    controls;
-extern mob*                             closest_party_member;
+extern mob*                             closest_group_member;
 extern area_data                        cur_area_data;
 extern size_t                           cur_leader_nr;
 extern leader*                          cur_leader_ptr;

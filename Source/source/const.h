@@ -62,7 +62,7 @@ const float MIN_ONION_CHECK_RANGE       = 64.0f;     //The minimum distance a le
 const float MIN_PLUCK_RANGE             = 30.0f;     //The leader needs to be at least this close to a buried Pikmin to pluck it.
 const float MOUSE_CURSOR_MOVE_SPEED     = 500.0f;    //How many pixels the mouse cursor moves, per second, when using an analog stick.
 const unsigned char NECTAR_AMOUNT       = 5;         //A drop of nectar starts with this amount.
-const float PARTY_SPOT_INTERVAL         = 1.0f;      //Pikmin must be at least these many units away from one another; used when calculating group spots.
+const float GROUP_SPOT_INTERVAL         = 1.0f;      //Pikmin must be at least these many units away from one another; used when calculating group spots.
 const float PIKMIN_MAX_HEALTH           = 300.0f;    //Maximum Pikmin HP.
 const float PIKMIN_MIN_ATTACK_RANGE     = 0.0f;      //If there's this gap between a Pikmin and its opponent, the Pikmin will attack.
 const float PIKMIN_MIN_TASK_RANGE       = 20.0f;     //If there's this gap between a Pikmin and a task, the Pikmin will take the task.
@@ -77,8 +77,8 @@ const float TREE_SHADOW_SWAY_SPEED      = M_PI_4;    //Tree shadows sway this mu
 const float THROW_DISTANCE_MULTIPLIER   = 0.49f;     //When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
 const float THROW_PARTICLE_INTERVAL     = 0.02f;     //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_STRENGTH_MULTIPLIER   = 0.65f;     //When a leader throws a Pikmin, multiply the strength by this.
-const float UNWHISTLABLE_PERIOD         = 1.0f;      //A mob cannot be whistled to a party during this period.
-const float UNTOUCHABLE_PERIOD          = 3.0f;      //A mob cannot be touched to a party during this period.
+const float UNWHISTLABLE_PERIOD         = 1.0f;      //A mob cannot be whistled to a group during this period.
+const float UNTOUCHABLE_PERIOD          = 3.0f;      //A mob cannot be touched to a group during this period.
 const float WHISTLE_DOT_INTERVAL        = 0.03;      //Seconds that need to pass before another dot is added.
 const float WHISTLE_DOT_SPIN_SPEED      = M_PI_2;    //A whistle dot spins these many radians a second.
 const float WHISTLE_FADE_TIME           = 0.1f;      //Time the whistle animations take to fade out.
@@ -174,7 +174,7 @@ enum HUD_ELEMENTS {
     HUD_ITEM_PIKMIN_STANDBY_ICON,
     HUD_ITEM_PIKMIN_STANDBY_NR,
     HUD_ITEM_PIKMIN_STANDBY_X,
-    HUD_ITEM_PIKMIN_SQUAD_NR,
+    HUD_ITEM_PIKMIN_GROUP_NR,
     HUD_ITEM_PIKMIN_FIELD_NR,
     HUD_ITEM_PIKMIN_TOTAL_NR,
     HUD_ITEM_PIKMIN_SLASH_1,

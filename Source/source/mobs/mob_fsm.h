@@ -12,6 +12,8 @@
 #ifndef GEN_MOB_FSM_INCLUDED
 #define GEN_MOB_FSM_INCLUDED
 
+#include "mob.h"
+
 namespace gen_mob_fsm {
 void lose_health(mob* m, void* info1, void* info2);
 void handle_carrier_added(mob* m, void* info1, void* info2);

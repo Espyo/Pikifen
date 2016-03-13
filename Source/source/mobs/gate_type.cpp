@@ -19,29 +19,10 @@ gate_type::gate_type() :
     
     casts_shadow = false;
     is_obstacle = true;
-    init_script();
+    
+    gate_fsm::create_fsm(this);
 }
 
-void gate_type::init_script() {
-    easy_fsm_creator efc;
-    efc.new_state("idle", 0); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(gate_fsm::set_anim);
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(gate_fsm::take_damage);
-        }
-        efc.new_event(MOB_EVENT_DEATH); {
-            efc.run_function(gate_fsm::open);
-            efc.change_state("dead");
-        }
-    }
-    efc.new_state("dead", 1); {
-    
-    }
-    states = efc.finish();
-    first_state_nr = fix_states(states, "idle");
-}
 
 void gate_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
     anim_conversions->push_back(make_pair(GATE_ANIM_IDLE, "idle"));
