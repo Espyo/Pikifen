@@ -26,6 +26,13 @@
 
 using namespace std;
 
+struct texture_suggestion {
+    ALLEGRO_BITMAP* bmp;
+    string name;
+    texture_suggestion(const string n);
+    ~texture_suggestion();
+};
+
 class area_editor : public game_state {
 private:
     enum AREA_EDITOR_PICKER_TYPES {
@@ -54,11 +61,12 @@ private:
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
-    static const float GRID_INTERVAL;
-    static const float STOP_RADIUS;
-    static const float PATH_PREVIEW_CHECKPOINT_RADIUS;
-    static const float PATH_PREVIEW_TIMEOUT_DUR;
-    static const float LINK_THICKNESS;
+    static const float  GRID_INTERVAL;
+    static const size_t MAX_TEXTURE_SUGGESTIONS;
+    static const float  STOP_RADIUS;
+    static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
+    static const float  PATH_PREVIEW_TIMEOUT_DUR;
+    static const float  LINK_THICKNESS;
     
     string                       area_name;
     mob_gen*                     cur_mob;
@@ -102,6 +110,7 @@ private:
     bool                         show_path_preview;
     bool                         show_guide;
     bool                         show_shadows;
+    vector<texture_suggestion>   texture_suggestions;
     lafi::widget*                wum; //Widget under mouse.
     
     void adv_textures_to_gui();
@@ -124,12 +133,14 @@ private:
     void mob_to_gui();
     void open_picker(unsigned char type);
     void pick(string name, unsigned char type);
+    void populate_texture_suggestions();
     void save_area();
     void sector_to_gui();
     void shadow_to_gui();
     void show_changes_warning();
     float snap_to_grid(const float c);
     void update_review_frame();
+    void update_texture_suggestions(const string n);
     
 public:
 

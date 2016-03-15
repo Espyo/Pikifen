@@ -308,7 +308,9 @@ vector<string> folder_to_vector(string folder_name, const bool folders, bool* fo
     al_destroy_fs_entry(folder);
     
     
-    sort(v.begin(), v.end());
+    sort(v.begin(), v.end(), [] (string s1, string s2) -> bool {
+        return str_to_lower(s1) < str_to_lower(s2);
+    });
     
     if(folder_found) *folder_found = true;
     return v;

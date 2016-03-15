@@ -21,19 +21,22 @@
 #include "LAFI/angle_picker.h"
 #include "LAFI/button.h"
 #include "LAFI/checkbox.h"
+#include "LAFI/const.h"
 #include "LAFI/frame.h"
 #include "LAFI/gui.h"
+#include "LAFI/image.h"
 #include "LAFI/minor.h"
 #include "LAFI/scrollbar.h"
 #include "LAFI/textbox.h"
 #include "vars.h"
 
 
-const float area_editor::GRID_INTERVAL = 32.0f;
-const float area_editor::STOP_RADIUS = 16.0f;
-const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
-const float area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
-const float area_editor::LINK_THICKNESS = 2.0f;
+const float  area_editor::GRID_INTERVAL = 32.0f;
+const size_t area_editor::MAX_TEXTURE_SUGGESTIONS= 20;
+const float  area_editor::STOP_RADIUS = 16.0f;
+const float  area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+const float  area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
+const float  area_editor::LINK_THICKNESS = 2.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -186,6 +189,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(gui->widgets["frm_sectors"]);
     hide_widget(gui->widgets["frm_paths"]);
     hide_widget(gui->widgets["frm_adv_textures"]);
+    hide_widget(gui->widgets["frm_texture"]);
     hide_widget(gui->widgets["frm_objects"]);
     hide_widget(gui->widgets["frm_shadows"]);
     hide_widget(gui->widgets["frm_guide"]);
@@ -198,6 +202,8 @@ void area_editor::change_to_right_frame(bool hide_all) {
             show_widget(gui->widgets["frm_sectors"]);
         } else if(mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS) {
             show_widget(gui->widgets["frm_adv_textures"]);
+        } else if(mode == EDITOR_MODE_TEXTURE) {
+            show_widget(gui->widgets["frm_texture"]);
         } else if(mode == EDITOR_MODE_OBJECTS) {
             show_widget(gui->widgets["frm_objects"]);
         } else if(mode == EDITOR_MODE_PATHS) {
@@ -362,7 +368,7 @@ void area_editor::do_drawing() {
                     if(e_ptr->sectors[1] == on_sector) mouse_on = true;
                 }
                 
-                if(cur_sector && mode == EDITOR_MODE_SECTORS) {
+                if(cur_sector && (mode == EDITOR_MODE_SECTORS || mode == EDITOR_MODE_TEXTURE)) {
                     if(e_ptr->sectors[0] == cur_sector) selected = true;
                     if(e_ptr->sectors[1] == cur_sector) selected = true;
                 }
@@ -431,6 +437,7 @@ void area_editor::do_drawing() {
         unsigned char mob_opacity = 224;
         if(
             mode == EDITOR_MODE_SECTORS || mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS ||
+            mode == EDITOR_MODE_TEXTURE ||
             mode == EDITOR_MODE_PATHS || mode == EDITOR_MODE_SHADOWS
         ) {
             mob_opacity = 32;
@@ -1230,10 +1237,12 @@ void area_editor::gui_to_sector() {
     cur_sector->z = s2f(((lafi::textbox*) f->widgets["txt_z"])->text);
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow = ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
-    cur_sector->texture_info.file_name = ((lafi::textbox*) f->widgets["txt_texture"])->text;
+    cur_sector->texture_info.file_name = ((lafi::button*) f->widgets["but_texture"])->text;
     cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
     cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
     //TODO hazards.
+    
+    ((lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"])->text.clear();
     
     sector_to_gui();
     made_changes = true;
@@ -1368,7 +1377,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         
-        if(ev.mouse.dz != 0) {
+        if(ev.mouse.dz != 0 && ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16) {
             //Zoom.
             float new_zoom = cam_zoom + (cam_zoom * ev.mouse.dz * 0.1);
             new_zoom = max(ZOOM_MIN_LEVEL_EDITOR, new_zoom);
@@ -2187,7 +2196,7 @@ void area_editor::load() {
     frm_sector->easy_row();
     frm_sector->easy_add("lbl_texture", new lafi::label(0, 0, 0, 0, "Texture:"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("txt_texture", new lafi::textbox(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("but_texture", new lafi::button(0, 0, 0, 0), 100, 24);
     frm_sector->easy_row();
     frm_sector->easy_add("but_adv", new lafi::button(0, 0, 0, 0, "Adv. texture settings"), 100, 16);
     frm_sector->easy_row();
@@ -2230,6 +2239,19 @@ void area_editor::load() {
     frm_adv_textures->easy_add("lbl_a", new lafi::label(0, 0, 0, 0, "Angle:"), 50, 16);
     frm_adv_textures->easy_add("ang_a", new lafi::angle_picker(0, 0, 0, 0), 50, 24);
     frm_adv_textures->easy_row();
+    
+    
+    //Texture picker frame.
+    lafi::frame* frm_texture = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_texture);
+    gui->add("frm_texture", frm_texture);
+    
+    frm_texture->add("but_back", new lafi::button(      scr_w - 200, 8,  scr_w - 104, 24, "Back"));
+    frm_texture->add("txt_name", new lafi::textbox(     scr_w - 200, 40, scr_w - 48,  56));
+    frm_texture->add("but_ok", new lafi::button(        scr_w - 40,  32, scr_w - 8,   64, "Ok"));
+    frm_texture->add("lbl_suggestions", new lafi::label(scr_w - 200, 72, scr_w - 8,   88, "Suggestions:"));
+    frm_texture->add("frm_list", new lafi::frame(       scr_w - 200, 96, scr_w - 32,  scr_h - 56));
+    frm_texture->add("bar_scroll", new lafi::scrollbar( scr_w - 24,  96, scr_w - 8,   scr_h - 56));
     
     
     //Objects frame.
@@ -2493,6 +2515,12 @@ void area_editor::load() {
     frm_sector->widgets["but_type"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
     };
+    frm_sector->widgets["but_texture"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(!cur_sector) return;
+        mode = EDITOR_MODE_TEXTURE;
+        populate_texture_suggestions();
+        change_to_right_frame();
+    };
     frm_sector->widgets["but_adv"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(!cur_sector) return;
         
@@ -2504,7 +2532,6 @@ void area_editor::load() {
     };
     frm_sector->widgets["txt_z"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["chk_fade"]->left_mouse_click_handler = lambda_gui_to_sector_click;
-    frm_sector->widgets["txt_texture"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_tag"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
@@ -2515,12 +2542,36 @@ void area_editor::load() {
     frm_sector->widgets["but_type"]->description =       "Change the type of sector.";
     frm_sector->widgets["chk_fade"]->description =       "Makes the surrounding textures fade into each other.";
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
-    frm_sector->widgets["txt_texture"]->description =    "File name of the Texture (image) of the floor.";
+    frm_sector->widgets["but_texture"]->description =    "Pick a texture (image) to use for the floor.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to know.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
     frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";
+    
+    
+    //Properties -- texture.
+    frm_texture->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_SECTORS;
+        change_to_right_frame();
+    };
+    frm_texture->widgets["but_ok"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        string n = ((lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"])->text;
+        if(n.empty()) return;
+        ((lafi::button*) gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = n;
+        mode = EDITOR_MODE_SECTORS;
+        change_to_right_frame();
+        update_texture_suggestions(n);
+        gui_to_sector();
+    };
+    ((lafi::textbox*) frm_texture->widgets["txt_name"])->enter_key_widget = frm_texture->widgets["but_ok"];
+    frm_texture->widgets["frm_list"]->mouse_wheel_handler = [this] (lafi::widget*, int dy, int) {
+        lafi::scrollbar* s = (lafi::scrollbar*) this->gui->widgets["frm_texture"]->widgets["bar_scroll"];
+        if(s->widgets.find("but_bar") != s->widgets.end()) {
+            s->move_button(0, (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) / 2 - 30 * dy);
+        }
+    };
+    frm_texture->widgets["but_back"]->description = "Cancel.";
     
     
     //Properties -- advanced textures.
@@ -2756,6 +2807,12 @@ void area_editor::load() {
         show_widget(this->gui->widgets["frm_bottom"]);
         change_to_right_frame();
     };
+    frm_picker->widgets["frm_list"]->mouse_wheel_handler = [this] (lafi::widget*, int dy, int) {
+        lafi::scrollbar* s = (lafi::scrollbar*) this->gui->widgets["frm_picker"]->widgets["bar_scroll"];
+        if(s->widgets.find("but_bar") != s->widgets.end()) {
+            s->move_button(0, (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) / 2 - 30 * dy);
+        }
+    };
     frm_picker->widgets["but_back"]->description = "Cancel.";
     
     
@@ -2785,6 +2842,26 @@ void area_editor::load_area() {
     
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         check_edge_intersections(cur_area_data.vertexes[v]);
+    }
+    
+    //Calculate texture suggestions.
+    map<string, size_t> texture_uses_map;
+    vector<pair<string, size_t> > texture_uses_vector;
+    
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        string n = cur_area_data.sectors[s]->texture_info.file_name;
+        if(n.empty()) continue;
+        texture_uses_map[n]++;
+    }
+    for(auto u = texture_uses_map.begin(); u != texture_uses_map.end(); ++u) {
+        texture_uses_vector.push_back(make_pair(u->first, u->second));
+    }
+    sort(texture_uses_vector.begin(), texture_uses_vector.end(), [] (pair<string, size_t> u1, pair<string, size_t> u2) -> bool {
+        return u1.second > u2.second;
+    });
+    texture_suggestions.clear();
+    for(size_t u = 0; u < texture_uses_vector.size() && u < MAX_TEXTURE_SUGGESTIONS; ++u) {
+        texture_suggestions.push_back(texture_suggestion(texture_uses_vector[u].first));
     }
     
     change_guide(guide_file_name);
@@ -2944,6 +3021,81 @@ void area_editor::pick(string name, unsigned char type) {
         
         mob_to_gui();
         
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds texture suggestions to the GUI frame.
+ */
+void area_editor::populate_texture_suggestions() {
+    lafi::frame* f = (lafi::frame*) gui->widgets["frm_texture"]->widgets["frm_list"];
+    
+    while(!f->widgets.empty()) {
+        f->remove(f->widgets.begin()->first);
+    }
+    
+    if(texture_suggestions.empty()) return;
+    
+    f->easy_reset();
+    f->easy_row();
+    
+    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+        
+        string name = texture_suggestions[s].name;
+        lafi::image* i = new lafi::image(0, 0, 0, 0, texture_suggestions[s].bmp);
+        lafi::label* l = new lafi::label(0, 0, 0, 0, name);
+        
+        auto lambda = [name, this] (lafi::widget*, int, int) {
+            ((lafi::button*) gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = name;
+            mode = EDITOR_MODE_SECTORS;
+            change_to_right_frame();
+            update_texture_suggestions(name);
+            gui_to_sector();
+        };
+        i->left_mouse_click_handler = lambda;
+        l->left_mouse_click_handler = lambda;
+        f->easy_add("img_" + i2s(s), i, 48, 48, lafi::EASY_FLAG_WIDTH_PX);
+        f->easy_add("lbl_" + i2s(s), l, 96, 48, lafi::EASY_FLAG_WIDTH_PX);
+        f->easy_row(0);
+    }
+    
+    ((lafi::scrollbar*) gui->widgets["frm_texture"]->widgets["bar_scroll"])->make_widget_scroll(f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the list of texture suggestions, adding a new one or bumping it up.
+ */
+void area_editor::update_texture_suggestions(const string n) {
+    //First, check if it exists.
+    size_t pos = string::npos;
+    
+    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+        if(texture_suggestions[s].name == n) {
+            pos = s;
+            break;
+        }
+    }
+    
+    if(pos == 0) {
+        //Already #1? Never mind.
+        return;
+    } else if(pos == string::npos) {
+        //If it doesn't exist, create it and add it to the top.
+        texture_suggestions.insert(
+            texture_suggestions.begin(),
+            texture_suggestion(n)
+        );
+    } else {
+        //Otherwise, remove it from its spot and bump it to the top.
+        texture_suggestion s = texture_suggestions[pos];
+        texture_suggestions.erase(texture_suggestions.begin() + pos);
+        texture_suggestions.insert(texture_suggestions.begin(), s);
+    }
+    
+    if(texture_suggestions.size() > MAX_TEXTURE_SUGGESTIONS) {
+        texture_suggestions.erase(texture_suggestions.begin() + texture_suggestions.size() - 1);
     }
 }
 
@@ -3202,7 +3354,7 @@ void area_editor::sector_to_gui() {
         ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_sector->z);
         ((lafi::checkbox*) f->widgets["chk_fade"])->set(cur_sector->fade);
         ((lafi::checkbox*) f->widgets["chk_shadow"])->set(cur_sector->always_cast_shadow);
-        ((lafi::textbox*) f->widgets["txt_texture"])->text = cur_sector->texture_info.file_name;
+        ((lafi::button*) f->widgets["but_texture"])->text = cur_sector->texture_info.file_name;
         ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(cur_sector->brightness);
         ((lafi::textbox*) f->widgets["txt_tag"])->text = cur_sector->tag;
         ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);
@@ -3215,10 +3367,10 @@ void area_editor::sector_to_gui() {
         }
         
         if(cur_sector->fade || cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
-            disable_widget(f->widgets["txt_texture"]);
+            disable_widget(f->widgets["but_texture"]);
             disable_widget(f->widgets["but_adv"]);
         } else {
-            enable_widget(f->widgets["txt_texture"]);
+            enable_widget(f->widgets["but_texture"]);
             enable_widget(f->widgets["but_adv"]);
         }
         
@@ -3503,4 +3655,16 @@ void area_editor::set_guide_h(float h) {
 
 void area_editor::set_guide_a(unsigned char a) {
     guide_a = a;
+}
+
+
+texture_suggestion::texture_suggestion(const string n) :
+    bmp(NULL),
+    name(n) {
+        
+    bmp = bitmaps.get("Textures/" + name, NULL);
+}
+
+texture_suggestion::~texture_suggestion() {
+    bitmaps.detach(name);
 }
