@@ -31,6 +31,7 @@ typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 //Types of script action.
 enum MOB_ACTION_TYPES {
     MOB_ACTION_UNKNOWN,
+    MOB_ACTION_CHANGE_STATE,
     MOB_ACTION_CHOMP_HITBOXES,
     MOB_ACTION_EAT,
     MOB_ACTION_FOCUS,
@@ -50,7 +51,7 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_SPAWN_PARTICLE,
     MOB_ACTION_SET_TIMER,
     MOB_ACTION_SET_HEALTH,
-    MOB_ACTION_SET_STATE,
+    MOB_ACTION_SET_SHADOW,
     MOB_ACTION_TURN,
     MOB_ACTION_WAIT,
 };

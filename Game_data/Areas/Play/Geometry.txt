@@ -1450,16 +1450,16 @@ edges{
 sectors{
 	s{
 		z=200.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
 		fade=true
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=200.00
@@ -1486,7 +1486,7 @@ sectors{
 	s{
 		z=0.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1500,7 +1500,7 @@ sectors{
 	s{
 		z=0.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1513,12 +1513,12 @@ sectors{
 	s{
 		z=200.00
 		fade=true
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1527,7 +1527,7 @@ sectors{
 	s{
 		z=200.00
 		fade=true
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=200.00
@@ -1537,7 +1537,7 @@ sectors{
 	s{
 		z=0.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1551,11 +1551,11 @@ sectors{
 	}
 	s{
 		z=150.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
@@ -1564,11 +1564,11 @@ sectors{
 	}
 	s{
 		z=50.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=100.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=16.00
@@ -1587,7 +1587,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=128.00
@@ -1605,7 +1605,7 @@ sectors{
 		type=Gate
 		z=0.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1699,7 +1699,7 @@ sectors{
 	s{
 		z=200.00
 		fade=true
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 }
 mobs{

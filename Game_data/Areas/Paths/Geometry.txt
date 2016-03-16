@@ -383,7 +383,7 @@ edges{
 sectors{
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
@@ -395,11 +395,11 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
@@ -407,7 +407,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=50.00

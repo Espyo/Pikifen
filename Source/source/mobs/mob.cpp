@@ -44,6 +44,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     push_amount(0),
     push_angle(0),
     tangible(true),
+    casts_shadow(type->casts_shadow),
     health(type->max_health),
     invuln_period(0),
     team(MOB_TEAM_DECORATION),

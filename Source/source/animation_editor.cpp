@@ -416,6 +416,10 @@ void animation_editor::gui_save_frame() {
     cur_frame->offs_x = s2f(((lafi::textbox*) f->widgets["txt_offsx"])->text);
     cur_frame->offs_y = s2f(((lafi::textbox*) f->widgets["txt_offsy"])->text);
     
+    //Automatically fill in the in-game width/height if it hasn't been set yet.
+    if(cur_frame->game_w == 0.0f) cur_frame->game_w = new_fw;
+    if(cur_frame->game_h == 0.0f) cur_frame->game_h = new_fh;
+    
     if(cur_frame->file != new_file || cur_frame->file_x != new_fx || cur_frame->file_y != new_fy || cur_frame->file_w != new_fw || cur_frame->file_h != new_fh) {
         //Changed something image-wise. Recreate it.
         if(cur_frame->parent_bmp) bitmaps.detach(cur_frame->file);
@@ -429,6 +433,8 @@ void animation_editor::gui_save_frame() {
         cur_frame->file_w = new_fw;
         cur_frame->file_h = new_fh;
     }
+    
+    last_file_used = new_file;
     
     gui_save_hitbox_instance();
     gui_load_frame();
@@ -1385,6 +1391,8 @@ void animation_editor::load() {
             
         }
         
+        made_changes = true;
+        
         ((lafi::textbox*) this->gui->widgets["frm_picker"]->widgets["txt_new"])->text.clear();
     };
     frm_picker->widgets["but_new"]->description = "Create a new one with the name on the textbox.";
@@ -1507,6 +1515,24 @@ void animation_editor::load_animation_pool() {
     
     cam_x = cam_y = 0;
     cam_zoom = 1;
+    
+    //Find the most popular file name to suggest for new frames.
+    last_file_used.clear();
+    
+    if(!anims.frames.empty()) {
+        map<string, size_t> file_uses_map;
+        vector<pair<size_t, string> > file_uses_vector;
+        for(size_t f = 0; f < anims.frames.size(); ++f) {
+            file_uses_map[anims.frames[f]->file]++;
+        }
+        for(auto u = file_uses_map.begin(); u != file_uses_map.end(); ++u){
+            file_uses_vector.push_back(make_pair(u->second, u->first));
+        }
+        sort(file_uses_vector.begin(), file_uses_vector.end(), [] (pair<size_t, string> u1, pair<size_t, string> u2) -> bool {
+            return u1.first > u2.first;
+        });
+        last_file_used = file_uses_vector[0].second;
+    }
 }
 
 
@@ -1613,6 +1639,10 @@ void animation_editor::pick(string name, unsigned char type) {
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
         cur_frame = anims.frames[anims.find_frame(name)];
         cur_hitbox_instance_nr = string::npos;
+        if(cur_frame->file.empty()) {
+            //New frame. Suggest file name.
+            cur_frame->file = last_file_used;
+        }
         show_widget(gui->widgets["frm_frames"]);
         gui_load_frame();
         

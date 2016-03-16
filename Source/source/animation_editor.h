@@ -55,6 +55,7 @@ private:
     bool                 holding_m1;
     bool                 holding_m2;
     bool                 is_pikmin;
+    string               last_file_used;
     bool                 made_changes;
     unsigned char        maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
     unsigned char        mode;

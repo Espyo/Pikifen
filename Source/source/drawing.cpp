@@ -171,7 +171,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         mob* mob_ptr = NULL;
         for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
-            if(mob_ptr->type->casts_shadow) {
+            if(mob_ptr->casts_shadow) {
                 draw_mob_shadow(mob_ptr->x, mob_ptr->y, mob_ptr->type->radius * 2, mob_ptr->z - mob_ptr->ground_z, shadow_stretch);
             }
             mob_ptr->draw();
@@ -1661,7 +1661,7 @@ void draw_sector_texture(sector* s_ptr, const float x, const float y, const floa
  * Draws the loading screen for an area (or anything else, really).
  * text:    The main text to show, optional.
  * subtext: Subtext to show under the main text, optional.
- * opacity: 0 to 1. The blackness lowers in opacity much faster.
+ * opacity: 0 to 1. The background blackness lowers in opacity much faster.
  */
 void draw_loading_screen(const string &text, const string &subtext, const float opacity) {
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
@@ -1817,23 +1817,25 @@ void draw_loading_screen(const string &text, const string &subtext, const float 
     }
     
     //Draw the game's logo to the left of the "Loading..." text.
-    float icon_x = scr_w - 8 - al_get_text_width(font_main, "Loading...") - 8 - font_main_h * 0.5;
-    float icon_y = scr_h - 8 - font_main_h * 0.5;
-    
-    if(bmp_icon && bmp_icon != bmp_error) {
-        draw_sprite(
-            bmp_icon, icon_x, icon_y,
-            -1, font_main_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
+    if(opacity == 1.0f) {
+        float icon_x = scr_w - 8 - al_get_text_width(font_main, "Loading...") - 8 - font_main_h * 0.5;
+        float icon_y = scr_h - 8 - font_main_h * 0.5;
+        
+        if(bmp_icon && bmp_icon != bmp_error) {
+            draw_sprite(
+                bmp_icon, icon_x, icon_y,
+                -1, font_main_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
+            );
+        }
+        
+        //Draw the "Loading..." text, if we're not fading.
+        al_draw_text(
+            font_main, al_map_rgb(192, 192, 192),
+            scr_w - 8,
+            scr_h - 8 - font_main_h,
+            ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }
-    
-    //Draw the "Loading..." text.
-    al_draw_text(
-        font_main, al_map_rgba(192, 192, 192, opacity * 255.0),
-        scr_w - 8,
-        scr_h - 8 - font_main_h,
-        ALLEGRO_ALIGN_RIGHT, "Loading..."
-    );
     
     al_destroy_bitmap(text_bmp);
     al_destroy_bitmap(subtext_bmp);

@@ -572,7 +572,7 @@ edges{
 sectors{
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
@@ -580,27 +580,27 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -613,12 +613,12 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bottomless pit
 		z=-200.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		type=Blocking
@@ -629,55 +629,55 @@ sectors{
 		type=Bridge
 		z=0.00
 		tag=0
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bridge
 		z=0.00
 		tag=50
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bridge
 		z=0.00
 		tag=100
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bridge
 		z=0.00
 		tag=150
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bridge
 		z=0.00
 		tag=200
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
-		texture=Grass.jpg
+		texture=Grass_dark.jpg
 	}
 	s{
 		type=Bridge rail
 		z=0.00
 		tag=250
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		type=Bridge rail
 		z=0.00
 		tag=250
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=400.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=200.00
@@ -705,11 +705,11 @@ sectors{
 	}
 	s{
 		z=100.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 	s{
 		z=100.00
-		texture=Grass 2.jpg
+		texture=Grass_light.jpg
 	}
 }
 mobs{
