@@ -143,14 +143,16 @@ extern timer                            cur_message_char_timer;
 extern size_t                           cur_message_section;
 extern ALLEGRO_BITMAP*                  cur_message_speaker;
 extern vector<size_t>                   cur_message_stopping_chars; //The message stops scrolling when it reaches one of these characters.
-extern movement_struct                  cursor_movement;            //Movement of the cursor via non-mouse.
 extern unsigned char                    cur_game_state_nr;
 extern float                            cur_sun_strength;
 extern float                            cursor_angle;
 extern float                            cursor_height_diff_light;
 extern float                            cursor_invalid_effect;    //Effect for the invalid cursor fading in or out. The opacity is calculated using this number's sign.
+extern float                            cursor_max_dist;          //Maximum distance away from the leader the cursor can go.
+extern movement_struct                  cursor_movement;          //Movement of the cursor via non-mouse.
 extern timer                            cursor_save_timer;        //Time left until the position of the cursor is saved on the vector.
 extern float                            cursor_spin_angle;
+extern float                            cursor_spin_speed;        //How much the cursor spins per second.
 extern vector<point>                    cursor_spots;             //Spots the cursor has been through. Used for the faint trail left behind it.
 extern float                            cursor_x;                 //Leader's cursor.
 extern float                            cursor_y;
@@ -199,13 +201,17 @@ extern float                            hud_coords[N_HUD_ITEMS][4];
 extern float                            idle_glow_angle;
 extern string                           info_print_text;
 extern timer                            info_print_timer;
+extern float                            info_spot_trigger_range;
 extern vector<info_spot*>               info_spots;
 extern bool                             is_game_running;
 extern map<ALLEGRO_JOYSTICK*, int>      joystick_numbers;
 extern vector<leader*>                  leaders;
 extern movement_struct                  leader_movement; //How hard the joystick is pressed in each direction ([0, 1]);
 extern map<string, leader_type*>        leader_types;
+extern float                            maturity_power_mult;   //Every level of maturity, multiply the power by 1 + this much.
+extern float                            maturity_speed_mult;   //Every level of maturity, multiply the attack by 1 + this much.
 extern unsigned                         max_pikmin_in_field;
+extern float                            message_char_interval; //These many seconds until a new character of the message is drawn.
 extern ALLEGRO_MIXER*                   mixer;
 extern mob_category_manager             mob_categories;
 extern vector<mob*>                     mobs;
@@ -213,8 +219,11 @@ extern float                            mouse_cursor_x;             //The physic
 extern float                            mouse_cursor_y;
 extern bool                             mouse_cursor_valid;
 extern bool                             mouse_moves_cursor[4];
+extern size_t                           nectar_amount;         //A drop of nectar starts with this amount.
 extern vector<nectar*>                  nectars;
-extern bool                             no_error_logs_today;        //Have there been no errors in this play session?
+extern float                            next_pluck_range;      //How far a leader can go to auto-pluck the next Pikmin.
+extern bool                             no_error_logs_today;   //Have there been no errors in this play session?
+extern float                            onion_open_range;
 extern map<string, onion_type*>         onion_types;
 extern vector<onion*>                   onions;
 extern unsigned char                    particle_quality;
@@ -224,9 +233,12 @@ extern map<string, pellet_type*>        pellet_types;
 extern vector<pellet*>                  pellets;
 extern vector<point>                    percipitation;
 extern timer                            percipitation_timer;
+extern float                            pikmin_grab_range;
 extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*>                  pikmin_list;
+extern float                            pikmin_task_range;
 extern map<string, pikmin_type*>        pikmin_types;
+extern float                            pluck_range;
 extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
 extern float                            prev_group_move_intensity;   //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
@@ -258,6 +270,7 @@ extern float                            whistle_dot_offset;    //How much each d
 extern float                            whistle_dot_radius[6]; //Radius of every 6th dot.
 extern float                            whistle_fade_radius;   //Radius the whistle was at pre-fade.
 extern timer                            whistle_fade_timer;     //Time left for the whistle's fading animations.
+extern float                            whistle_growth_speed;
 extern timer                            whistle_next_dot_timer;
 extern timer                            whistle_next_ring_timer;
 extern float                            whistle_radius;
@@ -266,6 +279,8 @@ extern unsigned char                    whistle_ring_prev_color;
 extern vector<float>                    whistle_rings;
 extern bool                             whistling;             //Is the whistle currently being blown?
 extern bool                             window_pos_hack; //Should we force the window's positioning (on some systems it appears out-of-bounds by default)
+extern float                            zoom_max_level;
+extern float                            zoom_min_level;
 
 
 #endif //ifndef VARS_INCLUDED

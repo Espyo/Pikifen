@@ -46,7 +46,7 @@ pikmin::~pikmin() { }
  * This depends on the maturity.
  */
 float pikmin::get_base_speed() {
-    return pik_type->move_speed + pik_type->move_speed * this->maturity * MATURITY_SPEED_MULT;
+    return pik_type->move_speed + pik_type->move_speed * this->maturity * maturity_speed_mult;
 }
 
 
@@ -163,7 +163,7 @@ void pikmin::tick_class_specifics() {
         particles.push_back(
             particle(
                 PARTICLE_TYPE_PIKMIN_SPIRIT, bmp_pikmin_spirit, x, y,
-                0, -50, 0.5, 0, 2, pik_type->size, pik_type->main_color
+                0, -50, 0.5, 0, 2, pik_type->radius * 2, pik_type->main_color
             )
         );
         sfx_pikmin_dying.play(0.03, false);

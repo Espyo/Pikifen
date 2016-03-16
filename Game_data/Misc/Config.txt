@@ -12,3 +12,20 @@ day_minutes_end = 1140
 day_minutes_per_irl_sec = 2
 
 max_pikmin_in_field = 100
+maturity_power_mult = 0.1
+maturity_speed_mult = 0.1
+nectar_amount = 5
+pikmin_task_range = 20
+
+cursor_max_dist = 200
+cursor_spin_speed = 3.1416
+next_pluck_range = 160
+onion_open_range = 64
+pikmin_grab_range = 64
+pluck_range = 32
+whistle_growth_speed = 180
+
+info_spot_trigger_range = 64
+message_char_interval = 0.02
+zoom_max_level = 2.0
+zoom_min_level = 0.5

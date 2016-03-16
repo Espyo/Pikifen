@@ -1000,7 +1000,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
         l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
     
-    if(new_pikmin && d <= AUTO_PLUCK_MAX_RADIUS) {
+    if(new_pikmin && d <= next_pluck_range) {
         l_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) new_pikmin);
     }
 }

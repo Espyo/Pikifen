@@ -57,7 +57,7 @@ void do_aesthetic_logic() {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
         dist max_dist =
-            ((group_move_intensity > 0) ? CURSOR_MAX_DIST* group_move_intensity : leader_to_cursor_dis);
+            ((group_move_intensity > 0) ? cursor_max_dist* group_move_intensity : leader_to_cursor_dis);
             
         if(max_dist < group_move_arrows[a]) {
             group_move_arrows.erase(group_move_arrows.begin() + a);
@@ -82,7 +82,7 @@ void do_aesthetic_logic() {
         for(unsigned char d = 0; d < 6; ++d) {
             if(whistle_dot_radius[d] == -1) continue;
             
-            whistle_dot_radius[d] += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
+            whistle_dot_radius[d] += whistle_growth_speed * delta_t;
             if(whistle_radius > 0 && whistle_dot_radius[d] > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_dot_radius[d] = cur_leader_ptr->lea_type->whistle_range;
             } else if(whistle_fade_radius > 0 && whistle_dot_radius[d] > whistle_fade_radius) {
@@ -124,7 +124,7 @@ void do_aesthetic_logic() {
     sun_meter_sun_angle += SUN_METER_SUN_SPIN_SPEED * delta_t;
     
     //Cursor spin angle and invalidness effect.
-    cursor_spin_angle -= CURSOR_SPIN_SPEED * delta_t;
+    cursor_spin_angle -= cursor_spin_speed * delta_t;
     cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
     
     //Cursor trail.
@@ -185,7 +185,7 @@ void do_gameplay_logic() {
         ********************/
         
         if(whistling && whistle_radius < cur_leader_ptr->lea_type->whistle_range) {
-            whistle_radius += WHISTLE_RADIUS_GROWTH_SPEED * delta_t;
+            whistle_radius += whistle_growth_speed * delta_t;
             if(whistle_radius > cur_leader_ptr->lea_type->whistle_range) {
                 whistle_radius = cur_leader_ptr->lea_type->whistle_range;
             }
@@ -485,7 +485,7 @@ void do_gameplay_logic() {
                     if(
                         m2_ptr->carry_info &&
                         !m2_ptr->carry_info->is_full() &&
-                        d <= m_ptr->type->radius + m2_ptr->type->radius + PIKMIN_MIN_TASK_RANGE
+                        d <= m_ptr->type->radius + m2_ptr->type->radius + pikmin_task_range
                     ) {
                     
                         near_carriable_object_ev->run(m_ptr, (void*) m2_ptr);
@@ -632,7 +632,7 @@ void do_gameplay_logic() {
                 }
             }
             
-            if(closest_distance > MIN_GRAB_RANGE) {
+            if(closest_distance > pikmin_grab_range) {
                 closest_group_member = NULL;
             }
         }
@@ -643,7 +643,7 @@ void do_gameplay_logic() {
         if(group_move_go_to_cursor) {
             group_move_angle = cursor_angle;
             dist leader_to_cursor_dis(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-            group_move_intensity = leader_to_cursor_dis.to_float() / CURSOR_MAX_DIST;
+            group_move_intensity = leader_to_cursor_dis.to_float() / cursor_max_dist;
         } else if(group_move_x != 0 || group_move_y != 0) {
             coordinates_to_angle(
                 group_move_x, group_move_y,
@@ -655,8 +655,8 @@ void do_gameplay_logic() {
         }
         
         if(group_move_intensity) {
-            cur_leader_ptr->group->group_center_x = cur_leader_ptr->x + cos(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
-            cur_leader_ptr->group->group_center_y = cur_leader_ptr->y + sin(group_move_angle) * group_move_intensity * CURSOR_MAX_DIST;
+            cur_leader_ptr->group->group_center_x = cur_leader_ptr->x + cos(group_move_angle) * group_move_intensity * cursor_max_dist;
+            cur_leader_ptr->group->group_center_y = cur_leader_ptr->y + sin(group_move_angle) * group_move_intensity * cursor_max_dist;
         } else if(prev_group_move_intensity != 0) {
             float d = get_leader_to_group_center_dist(cur_leader_ptr);
             cur_leader_ptr->group->group_center_x = cur_leader_ptr->x + cos(group_move_angle) * d;
@@ -691,11 +691,11 @@ void do_gameplay_logic() {
         }
         
         dist leader_to_cursor_dis = dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-        if(leader_to_cursor_dis > CURSOR_MAX_DIST) {
+        if(leader_to_cursor_dis > cursor_max_dist) {
             //TODO with an analog stick, if the cursor is being moved, it's considered off-limit a lot more than it should.
             //Cursor goes beyond the range limit.
-            cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * CURSOR_MAX_DIST);
-            cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * CURSOR_MAX_DIST);
+            cursor_x = cur_leader_ptr->x + (cos(cursor_angle) * cursor_max_dist);
+            cursor_y = cur_leader_ptr->y + (sin(cursor_angle) * cursor_max_dist);
             
             if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
                 //If we're speeding the mouse cursor (via analog stick), don't let it go beyond the edges.
@@ -764,7 +764,12 @@ void do_gameplay_logic() {
     } else { //Displaying a message.
     
         if(cur_message_char < cur_message_stopping_chars[cur_message_section + 1]) {
-            cur_message_char_timer.tick(delta_t);
+            if(cur_message_char_timer.duration == 0.0f) {
+                size_t stopping_char = cur_message_stopping_chars[cur_message_section + 1];
+                cur_message_char = stopping_char; //Display everything right away.
+            } else {
+                cur_message_char_timer.tick(delta_t);
+            }
         }
         
     }

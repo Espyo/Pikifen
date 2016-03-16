@@ -64,13 +64,10 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     big_damage_ev_queued(false),
     following_group(nullptr),
     was_thrown(false),
-    unwhistlable_period(0),
-    untouchable_period(0),
     group(nullptr),
     group_spot_x(0),
     group_spot_y(0),
     carry_info(nullptr),
-    move_speed_mult(0),
     acceleration(0),
     speed(0),
     chase_free_move(false),
@@ -167,15 +164,6 @@ void mob::tick_brain() {
  */
 void mob::tick_misc_logic() {
     //Other things.
-    if(unwhistlable_period > 0) {
-        unwhistlable_period -= delta_t;
-        unwhistlable_period = max(unwhistlable_period, 0.0f);
-    }
-    if(untouchable_period > 0) {
-        untouchable_period -= delta_t;
-        untouchable_period = max(untouchable_period, 0.0f);
-    }
-    
     if(group) {
         float group_center_mx = 0, group_center_my = 0;
         move_point(
@@ -990,7 +978,7 @@ float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, 
     } else {
         if(typeid(*attacker) == typeid(pikmin)) {
             pikmin* pik_ptr = (pikmin*) attacker;
-            attacker_offense = pik_ptr->pik_type->attack_power * (1 + pik_ptr->maturity * MATURITY_POWER_MULT);
+            attacker_offense = pik_ptr->pik_type->attack_power * (1 + pik_ptr->maturity * maturity_power_mult);
         }
     }
     
@@ -1052,7 +1040,7 @@ void cause_hitbox_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h
         
     } else {
         if(typeid(*attacker) == typeid(pikmin)) {
-            attacker_offense = ((pikmin*) attacker)->maturity * ((pikmin*) attacker)->pik_type->attack_power * MATURITY_POWER_MULT;
+            attacker_offense = ((pikmin*) attacker)->maturity * ((pikmin*) attacker)->pik_type->attack_power * maturity_power_mult;
         }
     }
     
@@ -1249,8 +1237,6 @@ void remove_from_group(mob* member) {
     }
     
     member->following_group = NULL;
-    member->unwhistlable_period = UNWHISTLABLE_PERIOD;
-    member->untouchable_period = UNTOUCHABLE_PERIOD;
 }
 
 

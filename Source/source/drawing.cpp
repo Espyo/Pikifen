@@ -313,7 +313,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         //Info spots.
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; ++i) {
-            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= INFO_SPOT_TRIGGER_RANGE) {
+            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= info_spot_trigger_range) {
                 string text;
                 if(!info_spots[i]->opens_box) {
                     text = info_spots[i]->text;
@@ -434,11 +434,11 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         for(size_t a = 0; a < n_arrows; ++a) {
             float x = cos(group_move_angle) * group_move_arrows[a];
             float y = sin(group_move_angle) * group_move_arrows[a];
-            float alpha = 64 + min(191, (int) (191 * (group_move_arrows[a] / (CURSOR_MAX_DIST * 0.4))));
+            float alpha = 64 + min(191, (int) (191 * (group_move_arrows[a] / (cursor_max_dist * 0.4))));
             draw_sprite(
                 bmp_group_move_arrow,
                 cur_leader_ptr->x + x, cur_leader_ptr->y + y,
-                16 * (1 + group_move_arrows[a] / CURSOR_MAX_DIST), -1,
+                16 * (1 + group_move_arrows[a] / cursor_max_dist), -1,
                 group_move_angle,
                 map_alpha(alpha)
             );

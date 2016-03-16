@@ -149,7 +149,6 @@ public:
     float x, y, z;                    //Coordinates. Z is height, the higher the value, the higher in the sky.
     float speed_x, speed_y, speed_z;  //Physics only. Don't touch.
     float home_x, home_y;             //Starting coordinates; what the mob calls "home".
-    float move_speed_mult;            //Multiply the normal moving speed by this. //TODO will this be used?
     float acceleration;               //Speed multiplies by this much each second. //TODO use this.
     float speed;                      //Speed moving forward. //TODO is this used?
     float angle;                      //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
@@ -190,8 +189,6 @@ public:
     //Group things.
     mob* following_group;      //The current mob is following this mob's group.
     bool was_thrown;           //Is the mob airborne because it was thrown?
-    float unwhistlable_period; //During this period, the mob cannot be whistled into a group.
-    float untouchable_period;  //During this period, the mob cannot be touched into a group.
     group_info* group;         //Info on the group this mob is a leader of.
     float group_spot_x;
     float group_spot_y;
@@ -201,7 +198,7 @@ public:
     size_t id;              //Incremental ID. Used for minor things.
     float health;           //Current health.
     timer invuln_period;    //During this period, the mob cannot be attacked.
-    unsigned char team;     //Mob's team (who it can damage), use MOB_TEAM_*.
+    unsigned char team;     //Mob's team (who it can damage); use MOB_TEAM_*.
     
     //Script.
     mob_fsm fsm;                      //Finitate-state machine.

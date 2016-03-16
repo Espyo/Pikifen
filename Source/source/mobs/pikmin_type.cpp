@@ -27,7 +27,6 @@ pikmin_type::pikmin_type() :
     attack_power(1),
     carry_speed(1),
     attack_interval(0.8),
-    size(DEF_PIKMIN_SIZE),
     throw_height_mult(1.0),
     has_onion(true),
     can_dig(false),

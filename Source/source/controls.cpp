@@ -309,7 +309,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 //First check if the leader should pluck a Pikmin.
                 dist d;
                 pikmin* p = get_closest_buried_pikmin(cur_leader_ptr->x, cur_leader_ptr->y, &d, false);
-                if(p && d <= MIN_PLUCK_RANGE) {
+                if(p && d <= pluck_range) {
                     cur_leader_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) p);
                     done = true;
                 }
@@ -320,7 +320,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     for(size_t i = 0; i < n_info_spots; ++i) {
                         info_spot* i_ptr = info_spots[i];
                         if(i_ptr->opens_box) {
-                            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) <= INFO_SPOT_TRIGGER_RANGE) {
+                            if(dist(cur_leader_ptr->x, cur_leader_ptr->y, i_ptr->x, i_ptr->y) <= info_spot_trigger_range) {
                                 start_message(i_ptr->text, NULL);
                                 done = true;
                                 break;
@@ -334,7 +334,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                     //TODO Onion dialog, of course.
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; ++o) {
-                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= MIN_ONION_CHECK_RANGE) {
+                        if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= onion_open_range) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
                                 //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 pikmin_in_onions[onions[o]->oni_type->pik_type]--;
@@ -547,11 +547,11 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             if(pos == 0) return;
             
             if(cam_final_zoom < 1) {
-                cam_final_zoom = ZOOM_MAX_LEVEL;
+                cam_final_zoom = zoom_max_level;
             } else if(cam_final_zoom > 1) {
                 cam_final_zoom = 1;
             } else {
-                cam_final_zoom = ZOOM_MIN_LEVEL;
+                cam_final_zoom = zoom_min_level;
             }
             
             sfx_camera.play(0, false);
@@ -559,8 +559,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
         } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
         
             if(
-                (cam_final_zoom >= ZOOM_MAX_LEVEL && button == BUTTON_ZOOM_IN) ||
-                (cam_final_zoom <= ZOOM_MIN_LEVEL && button == BUTTON_ZOOM_OUT)
+                (cam_final_zoom >= zoom_max_level && button == BUTTON_ZOOM_IN) ||
+                (cam_final_zoom <= zoom_min_level && button == BUTTON_ZOOM_OUT)
             ) {
                 return;
             }
@@ -569,8 +569,8 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(button == BUTTON_ZOOM_IN) cam_final_zoom = cam_final_zoom + 0.1 * pos; else cam_final_zoom = cam_final_zoom - 0.1 * pos;
             
-            if(cam_final_zoom > ZOOM_MAX_LEVEL) cam_final_zoom = ZOOM_MAX_LEVEL;
-            if(cam_final_zoom < ZOOM_MIN_LEVEL) cam_final_zoom = ZOOM_MIN_LEVEL;
+            if(cam_final_zoom > zoom_max_level) cam_final_zoom = zoom_max_level;
+            if(cam_final_zoom < zoom_min_level) cam_final_zoom = zoom_min_level;
             
             sfx_camera.play(-1, false);
             

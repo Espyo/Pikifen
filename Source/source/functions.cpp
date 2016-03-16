@@ -944,6 +944,23 @@ void load_game_config() {
     set_if_exists(file.get_child_by_name("day_minutes_per_irl_sec")->value, day_minutes_per_irl_sec);
     
     set_if_exists(file.get_child_by_name("max_pikmin_in_field")->value, max_pikmin_in_field);
+    set_if_exists(file.get_child_by_name("maturity_power_mult")->value, maturity_power_mult);
+    set_if_exists(file.get_child_by_name("maturity_speed_mult")->value, maturity_speed_mult);
+    set_if_exists(file.get_child_by_name("nectar_amount")->value, nectar_amount);
+    set_if_exists(file.get_child_by_name("pikmin_task_range")->value, pikmin_task_range);
+
+    set_if_exists(file.get_child_by_name("cursor_max_dist")->value, cursor_max_dist);
+    set_if_exists(file.get_child_by_name("cursor_spin_speed")->value, cursor_spin_speed);
+    set_if_exists(file.get_child_by_name("next_pluck_range")->value, next_pluck_range);
+    set_if_exists(file.get_child_by_name("onion_open_range")->value, onion_open_range);
+    set_if_exists(file.get_child_by_name("pikmin_grab_range")->value, pikmin_grab_range);
+    set_if_exists(file.get_child_by_name("pluck_range")->value, pluck_range);
+    set_if_exists(file.get_child_by_name("whistle_growth_speed")->value, whistle_growth_speed);
+    
+    set_if_exists(file.get_child_by_name("info_spot_trigger_range")->value, info_spot_trigger_range);
+    set_if_exists(file.get_child_by_name("message_char_interval")->value, message_char_interval);
+    set_if_exists(file.get_child_by_name("zoom_max_level")->value, zoom_max_level);
+    set_if_exists(file.get_child_by_name("zoom_min_level")->value, zoom_min_level);
     
     al_set_window_title(display, game_name.c_str());
 }
@@ -958,7 +975,6 @@ void load_game_content() {
     
     spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), bmp_us_spray, NULL));
     spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), bmp_ub_spray, NULL));
-    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 0, 192), bmp_ub_spray, NULL));
     
     //Mob types.
     load_mob_types(true);

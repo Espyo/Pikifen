@@ -214,6 +214,9 @@ void gameplay::load() {
     
     area_title_fade_timer.start();
     
+    //Aesthetic stuff.
+    cur_message_char_timer = timer(message_char_interval, [] () { cur_message_char_timer.start(); cur_message_char++; } );
+    
     //Debug stuff for convenience.
     //TODO remove.
     spray_amounts[0] = spray_amounts[1] = 10;

@@ -66,7 +66,7 @@
 #define sign(n) (((n) >= 0) ? 1 : -1)
 
 //Returns the task range for whether the Pikmin is idling or being C-sticked.
-#define task_range ((pik_ptr->following_group == cur_leader_ptr && group_move_intensity) ? 0 : PIKMIN_MIN_TASK_RANGE)
+#define task_range ((pik_ptr->following_group == cur_leader_ptr && group_move_intensity) ? 0 : pikmin_task_range)
 
 
 
