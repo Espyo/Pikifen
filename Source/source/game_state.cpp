@@ -210,6 +210,13 @@ void gameplay::load() {
     cam_y = cam_final_y = cur_leader_ptr->y;
     cam_zoom = 1.0;
     
+    for(size_t c = 0; c < controls[0].size(); ++c) {
+        if(controls[0][c].action == BUTTON_THROW) {
+            click_control_id = c;
+            break;
+        }
+    }
+    
     al_hide_mouse_cursor(display);
     
     area_title_fade_timer.start();

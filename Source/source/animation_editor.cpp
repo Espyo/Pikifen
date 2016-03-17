@@ -36,13 +36,13 @@ animation_editor::animation_editor() :
     cur_anim(NULL),
     anim_playing(false),
     cur_frame(NULL),
-    cur_frame_instance_nr(string::npos),
+    cur_frame_instance_nr(INVALID),
     cur_frame_time(0),
     cur_hitbox_alpha(0),
-    cur_hitbox_instance_nr(string::npos),
-    cur_hitbox_nr(string::npos),
+    cur_hitbox_instance_nr(INVALID),
+    cur_hitbox_nr(INVALID),
     file_dialog(NULL),
-    grabbing_hitbox(string::npos),
+    grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
     grabbing_hitbox_x(0),
     grabbing_hitbox_y(0),
@@ -78,7 +78,7 @@ void animation_editor::close_changes_warning() {
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
-    if(anim_playing && mode == EDITOR_MODE_ANIMATION && cur_anim && cur_frame_instance_nr != string::npos) {
+    if(anim_playing && mode == EDITOR_MODE_ANIMATION && cur_anim && cur_frame_instance_nr != INVALID) {
         frame_instance* fi = &cur_anim->frame_instances[cur_frame_instance_nr];
         if(fi->duration != 0) {
             cur_frame_time += delta_t;
@@ -124,10 +124,10 @@ void animation_editor::do_drawing() {
         frame* f = NULL;
         
         if(mode == EDITOR_MODE_ANIMATION) {
-            if(cur_frame_instance_nr != string::npos) {
+            if(cur_frame_instance_nr != INVALID) {
                 string name = cur_anim->frame_instances[cur_frame_instance_nr].frame_name;
                 size_t f_pos = anims.find_frame(name);
-                if(f_pos != string::npos) f = anims.frames[f_pos];
+                if(f_pos != INVALID) f = anims.frames[f_pos];
             }
         } else if(mode == EDITOR_MODE_FRAME || mode == EDITOR_MODE_TOP || mode == EDITOR_MODE_HITBOX_INSTANCES) {
             f = cur_frame;
@@ -267,7 +267,7 @@ void animation_editor::gui_load_frame() {
  */
 void animation_editor::gui_load_frame_instance() {
     lafi::widget* f = gui->widgets["frm_anims"]->widgets["frm_anim"];
-    bool valid = cur_frame_instance_nr != string::npos && cur_anim;
+    bool valid = cur_frame_instance_nr != INVALID && cur_anim;
     
     ((lafi::label*) f->widgets["lbl_f_nr"])->text =
         "Current frame: " +
@@ -447,7 +447,7 @@ void animation_editor::gui_save_frame() {
  * Saves the frame instance's data from the gui.
  */
 void animation_editor::gui_save_frame_instance() {
-    bool valid = cur_frame_instance_nr != string::npos && cur_anim;
+    bool valid = cur_frame_instance_nr != INVALID && cur_anim;
     if(!valid) return;
     
     lafi::widget* f = gui->widgets["frm_anims"]->widgets["frm_anim"];
@@ -476,7 +476,7 @@ void animation_editor::gui_save_hitbox() {
  * Saves the hitbox instance's data from the gui.
  */
 void animation_editor::gui_save_hitbox_instance() {
-    bool valid = cur_hitbox_instance_nr != string::npos && cur_frame;
+    bool valid = cur_hitbox_instance_nr != INVALID && cur_frame;
     if(!valid) return;
     
     lafi::widget* f = gui->widgets["frm_hitbox_is"]->widgets["frm_hitbox_i"];
@@ -587,10 +587,10 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
     
     frame* f = NULL;
     if(mode == EDITOR_MODE_ANIMATION) {
-        if(cur_frame_instance_nr != string::npos) {
+        if(cur_frame_instance_nr != INVALID) {
             string name = cur_anim->frame_instances[cur_frame_instance_nr].frame_name;
             size_t f_pos = anims.find_frame(name);
-            if(f_pos != string::npos) f = anims.frames[f_pos];
+            if(f_pos != INVALID) f = anims.frames[f_pos];
         }
     } else if(mode == EDITOR_MODE_HITBOX_INSTANCES) {
         f = cur_frame;
@@ -629,10 +629,10 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
-        grabbing_hitbox = string::npos;
+        grabbing_hitbox = INVALID;
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-        if(grabbing_hitbox != string::npos) {
+        if(grabbing_hitbox != INVALID) {
             hitbox_instance* hi_ptr = &f->hitbox_instances[grabbing_hitbox];
             
             if(grabbing_hitbox_edge) {
@@ -998,7 +998,7 @@ void animation_editor::load() {
             }
         }
         
-        if(file_path.find(PIKMIN_FOLDER) != string::npos) {
+        if(file_path.find(PIKMIN_FOLDER) != INVALID) {
             is_pikmin = true;
             data_node data = data_node(PIKMIN_FOLDER + "/" + file_path_parts[file_path_parts.size() - 2] + "/Data.txt");
             top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
@@ -1012,7 +1012,7 @@ void animation_editor::load() {
     };
     frm_main->widgets["but_file"]->description = "Pick a file to load or create.";
     frm_main->widgets["frm_object"]->widgets["but_anims"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        cur_hitbox_instance_nr = string::npos;
+        cur_hitbox_instance_nr = INVALID;
         if(cur_anim) if(cur_anim->frame_instances.size()) cur_frame_instance_nr = 0;
         mode = EDITOR_MODE_ANIMATION;
         hide_widget(this->gui->widgets["frm_main"]); show_widget(this->gui->widgets["frm_anims"]);
@@ -1021,7 +1021,7 @@ void animation_editor::load() {
     frm_main->widgets["frm_object"]->widgets["but_anims"]->description = "Change the way the animations look like.";
     frm_main->widgets["frm_object"]->widgets["but_frames"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_FRAME;
-        cur_hitbox_instance_nr = string::npos;
+        cur_hitbox_instance_nr = INVALID;
         hide_widget(this->gui->widgets["frm_main"]); show_widget(this->gui->widgets["frm_frames"]);
         gui_load_frame();
     };
@@ -1052,8 +1052,8 @@ void animation_editor::load() {
         anims.animations.erase(anims.animations.begin() + anims.find_animation(cur_anim->name));
         anim_playing = false;
         cur_anim = NULL;
-        cur_frame_instance_nr = string::npos;
-        cur_hitbox_instance_nr = string::npos;
+        cur_frame_instance_nr = INVALID;
+        cur_hitbox_instance_nr = INVALID;
         gui_load_animation();
         made_changes = true;
     };
@@ -1068,7 +1068,7 @@ void animation_editor::load() {
             anim_playing = false;
         } else {
             anim_playing = !anim_playing;
-            if(!cur_anim->frame_instances.empty() && cur_frame_instance_nr == string::npos) cur_frame_instance_nr = 0;
+            if(!cur_anim->frame_instances.empty() && cur_frame_instance_nr == INVALID) cur_frame_instance_nr = 0;
             cur_frame_time = 0;
         }
     };
@@ -1076,7 +1076,7 @@ void animation_editor::load() {
     frm_anims->widgets["frm_anim"]->widgets["but_prev"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(!cur_anim->frame_instances.empty()) {
-            if(cur_frame_instance_nr == string::npos) cur_frame_instance_nr = 0;
+            if(cur_frame_instance_nr == INVALID) cur_frame_instance_nr = 0;
             else if(cur_frame_instance_nr == 0) cur_frame_instance_nr = cur_anim->frame_instances.size() - 1;
             else cur_frame_instance_nr--;
         }
@@ -1086,7 +1086,7 @@ void animation_editor::load() {
     frm_anims->widgets["frm_anim"]->widgets["but_next"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
         if(!cur_anim->frame_instances.empty()) {
-            if(cur_frame_instance_nr == cur_anim->frame_instances.size() - 1 || cur_frame_instance_nr == string::npos) cur_frame_instance_nr = 0;
+            if(cur_frame_instance_nr == cur_anim->frame_instances.size() - 1 || cur_frame_instance_nr == INVALID) cur_frame_instance_nr = 0;
             else cur_frame_instance_nr++;
         }
         gui_load_frame_instance();
@@ -1094,7 +1094,7 @@ void animation_editor::load() {
     frm_anims->widgets["frm_anim"]->widgets["but_next"]->description = "Next frame.";
     frm_anims->widgets["frm_anim"]->widgets["but_add"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        if(cur_frame_instance_nr != string::npos) {
+        if(cur_frame_instance_nr != INVALID) {
             cur_frame_instance_nr++;
             cur_anim->frame_instances.insert(
                 cur_anim->frame_instances.begin() + cur_frame_instance_nr,
@@ -1110,9 +1110,9 @@ void animation_editor::load() {
     frm_anims->widgets["frm_anim"]->widgets["but_add"]->description = "Add a new frame after the current one (via copy).";
     frm_anims->widgets["frm_anim"]->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        if(cur_frame_instance_nr != string::npos) {
+        if(cur_frame_instance_nr != INVALID) {
             cur_anim->frame_instances.erase(cur_anim->frame_instances.begin() + cur_frame_instance_nr);
-            if(cur_anim->frame_instances.empty()) cur_frame_instance_nr = string::npos;
+            if(cur_anim->frame_instances.empty()) cur_frame_instance_nr = INVALID;
             else if(cur_frame_instance_nr >= cur_anim->frame_instances.size()) cur_frame_instance_nr = cur_anim->frame_instances.size() - 1;
         }
         gui_load_frame_instance();
@@ -1148,7 +1148,7 @@ void animation_editor::load() {
         if(!cur_frame) return;
         anims.frames.erase(anims.frames.begin() + anims.find_frame(cur_frame->name));
         cur_frame = NULL;
-        cur_hitbox_instance_nr = string::npos;
+        cur_hitbox_instance_nr = INVALID;
         gui_load_frame();
         made_changes = true;
     };
@@ -1201,12 +1201,12 @@ void animation_editor::load() {
         mode = EDITOR_MODE_FRAME;
         hide_widget(this->gui->widgets["frm_hitbox_is"]);
         show_widget(this->gui->widgets["frm_frames"]);
-        cur_hitbox_instance_nr = string::npos;
+        cur_hitbox_instance_nr = INVALID;
         update_stats();
     };
     frm_hitbox_is->widgets["but_prev"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(cur_frame->hitbox_instances.size()) {
-            if(cur_hitbox_instance_nr == string::npos) cur_hitbox_instance_nr = 0;
+            if(cur_hitbox_instance_nr == INVALID) cur_hitbox_instance_nr = 0;
             else if(cur_hitbox_instance_nr == 0) cur_hitbox_instance_nr = cur_frame->hitbox_instances.size() - 1;
             else cur_hitbox_instance_nr--;
         }
@@ -1214,7 +1214,7 @@ void animation_editor::load() {
     };
     frm_hitbox_is->widgets["but_next"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         if(cur_frame->hitbox_instances.size()) {
-            if(cur_hitbox_instance_nr == string::npos) cur_hitbox_instance_nr = 0;
+            if(cur_hitbox_instance_nr == INVALID) cur_hitbox_instance_nr = 0;
             cur_hitbox_instance_nr = (cur_hitbox_instance_nr + 1) % cur_frame->hitbox_instances.size();
         }
         gui_load_hitbox_instance();
@@ -1379,12 +1379,12 @@ void animation_editor::load() {
         if(name.empty()) return;
         
         if(mode == EDITOR_MODE_ANIMATION) {
-            if(anims.find_animation(name) != string::npos) return;
+            if(anims.find_animation(name) != INVALID) return;
             anims.animations.push_back(new animation(name));
             pick(name, ANIMATION_EDITOR_PICKER_ANIMATION);
             
         } else if(mode == EDITOR_MODE_FRAME) {
-            if(anims.find_frame(name) != string::npos) return;
+            if(anims.find_frame(name) != INVALID) return;
             anims.frames.push_back(new frame(name));
             anims.frames.back()->create_hitbox_instances(&anims);
             pick(name, ANIMATION_EDITOR_PICKER_FRAME);
@@ -1497,8 +1497,8 @@ void animation_editor::load_animation_pool() {
     anim_playing = false;
     cur_anim = NULL;
     cur_frame = NULL;
-    cur_frame_instance_nr = string::npos;
-    cur_hitbox_instance_nr = string::npos;
+    cur_frame_instance_nr = INVALID;
+    cur_hitbox_instance_nr = INVALID;
     if(!anims.animations.empty()) {
         cur_anim = anims.animations[0];
         if(cur_anim->frame_instances.size()) cur_frame_instance_nr = 0;
@@ -1625,8 +1625,8 @@ void animation_editor::pick(string name, unsigned char type) {
     
     if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         cur_anim = anims.animations[anims.find_animation(name)];
-        cur_frame_instance_nr = (cur_anim->frame_instances.size()) ? 0 : string::npos;
-        cur_hitbox_instance_nr = string::npos;
+        cur_frame_instance_nr = (cur_anim->frame_instances.size()) ? 0 : INVALID;
+        cur_hitbox_instance_nr = INVALID;
         show_widget(gui->widgets["frm_anims"]);
         gui_load_animation();
         
@@ -1638,7 +1638,7 @@ void animation_editor::pick(string name, unsigned char type) {
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
         cur_frame = anims.frames[anims.find_frame(name)];
-        cur_hitbox_instance_nr = string::npos;
+        cur_hitbox_instance_nr = INVALID;
         if(cur_frame->file.empty()) {
             //New frame. Suggest file name.
             cur_frame->file = last_file_used;

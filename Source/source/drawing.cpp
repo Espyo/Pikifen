@@ -177,29 +177,6 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             mob_ptr->draw();
         }
         
-        if(!temp_path.empty()) {
-            for(size_t s = 0; s < temp_path.size() - 1; ++s) {
-                path_stop* s_ptr = temp_path[s];
-                path_stop* n_ptr = temp_path[s + 1];
-                al_draw_line(
-                    s_ptr->x,
-                    s_ptr->y,
-                    n_ptr->x,
-                    n_ptr->y,
-                    al_map_rgb(255, 128, 128),
-                    3
-                );
-            }
-            for(size_t s = 0; s < temp_path.size(); ++s) {
-                path_stop* s_ptr = temp_path[s];
-                al_draw_text(
-                    font_main, al_map_rgb(128, 255, 128),
-                    s_ptr->x, s_ptr->y - font_main_h * 0.5,
-                    ALLEGRO_ALIGN_CENTER, i2s(s).c_str()
-                );
-            }
-        }
-        
         
         /* Layer 4
         ***********************
@@ -349,12 +326,12 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                         
                 } else {
                 
-                    //TODO optimize this by saving the control somewhere instead of searching for it every frame.
-                    for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_THROW) {
-                            draw_control(font_main, controls[0][c], info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h, 0, 0);
-                            break;
-                        }
+                    if(click_control_id != INVALID) {
+                        draw_control(
+                            font_main, controls[0][click_control_id],
+                            info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h,
+                            0, 0
+                        );
                     }
                     
                 }
@@ -884,14 +861,6 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                     }
                 }
             }
-            
-            //TODO test stuff, remove.
-            //Day hour.
-            /*al_draw_text(font_main, al_map_rgb(255, 255, 255), 8, 8, 0,
-                         (i2s((day_minutes / 60)) + ":" + i2s(((int) (day_minutes) % 60))).c_str());
-            for(size_t p = 0; p < 7; ++p) { draw_sprite(bmp_test, 25, 20 + 24 * p, 14, 24); }
-            draw_sprite(bmp_test, 10, 20 + ((24 * 6) - pikmin_list[0]->z / 2), 14, 24);
-            al_draw_text(font_main, al_map_rgb(255, 128, 128), 0, 0, 0, f2s(pikmin_list[0]->z).c_str());*/
             
         } else { //Show a message.
         

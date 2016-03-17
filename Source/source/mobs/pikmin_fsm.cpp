@@ -608,7 +608,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     focus_mob(pik_ptr, carriable_mob);
     pik_ptr->stop_chasing();
     
-    size_t closest_spot = string::npos;
+    size_t closest_spot = INVALID;
     dist closest_spot_dist;
     carrier_spot_struct* closest_spot_ptr;
     
@@ -622,7 +622,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
             carriable_mob->x + s_ptr->x,
             carriable_mob->y + s_ptr->y
         );
-        if(closest_spot == string::npos || d < closest_spot_dist) {
+        if(closest_spot == INVALID || d < closest_spot_dist) {
             closest_spot = s;
             closest_spot_dist = d;
             closest_spot_ptr = s_ptr;

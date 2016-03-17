@@ -56,7 +56,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     chase_orig_x(nullptr),
     chase_orig_y(nullptr),
     carrying_target(nullptr),
-    cur_path_stop_nr(string::npos),
+    cur_path_stop_nr(INVALID),
     focused_mob(nullptr),
     fsm(this),
     first_state_set(false),
@@ -314,8 +314,8 @@ void mob::tick_physics() {
         size_t by2 = cur_area_data.bmap.get_row(new_y + radius_to_use);
         
         if(
-            bx1 == string::npos || bx2 == string::npos ||
-            by1 == string::npos || by2 == string::npos
+            bx1 == INVALID || bx2 == INVALID ||
+            by1 == INVALID || by2 == INVALID
         ) {
             //Somehow out of bounds. No movement.
             break;
@@ -698,7 +698,7 @@ void mob::stop_chasing() {
  * Makes the mob eat some of the enemies it has chomped on.
  * nr: Number of captured enemies to swallow.
    * 0:            Release all of them.
-   * string::npos: Eat all of them.
+   * INVALID: Eat all of them.
  */
 void mob::eat(const size_t nr) {
 
@@ -744,7 +744,7 @@ void mob::set_animation(const size_t nr, bool pre_named) {
         final_nr = nr;
     }
     
-    if(final_nr == string::npos) return;
+    if(final_nr == INVALID) return;
     
     animation* new_anim = anim.anim_pool->animations[final_nr];
     anim.anim = new_anim;

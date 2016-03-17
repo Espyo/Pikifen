@@ -212,24 +212,24 @@ void blockmap::clear() {
 
 /* ----------------------------------------------------------------------------
  * Returns the block column in which an X coordinate is contained.
- * Returns string::npos on error.
+ * Returns INVALID on error.
  */
 size_t blockmap::get_col(const float x) {
-    if(x < x1) return string::npos;
+    if(x < x1) return INVALID;
     float final_x = (x - x1) / BLOCKMAP_BLOCK_SIZE;
-    if(final_x >= n_cols) return string::npos;
+    if(final_x >= n_cols) return INVALID;
     return final_x;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns the block row in which a Y coordinate is contained.
- * Returns string::npos on error.
+ * Returns INVALID on error.
  */
 size_t blockmap::get_row(const float y) {
-    if(y < y1) return string::npos;
+    if(y < y1) return INVALID;
     float final_y = (y - y1) / BLOCKMAP_BLOCK_SIZE;
-    if(final_y >= n_rows) return string::npos;
+    if(final_y >= n_rows) return INVALID;
     return final_y;
 }
 
@@ -256,7 +256,7 @@ float blockmap::get_y1(const size_t row) {
 edge::edge(size_t v1, size_t v2) {
     vertexes[0] = vertexes[1] = NULL;
     sectors[0] = sectors[1] = NULL;
-    sector_nrs[0] = sector_nrs[1] = string::npos;
+    sector_nrs[0] = sector_nrs[1] = INVALID;
     
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
 }
@@ -269,13 +269,13 @@ void edge::fix_pointers(area_data &a) {
     sectors[0] = sectors[1] = NULL;
     for(size_t s = 0; s < 2; ++s) {
         size_t s_nr = sector_nrs[s];
-        sectors[s] = (s_nr == string::npos ? NULL : a.sectors[s_nr]);
+        sectors[s] = (s_nr == INVALID ? NULL : a.sectors[s_nr]);
     }
     
     vertexes[0] = vertexes[1] = NULL;
     for(size_t v = 0; v < 2; ++v) {
         size_t v_nr = vertex_nrs[v];
-        vertexes[v] = (v_nr == string::npos ? NULL : a.vertexes[v_nr]);
+        vertexes[v] = (v_nr == INVALID ? NULL : a.vertexes[v_nr]);
     }
 }
 
@@ -286,7 +286,7 @@ void edge::fix_pointers(area_data &a) {
  * Returns the edge number.
  */
 size_t edge::remove_from_sectors() {
-    size_t e_nr = string::npos;
+    size_t e_nr = INVALID;
     for(unsigned char s = 0; s < 2; ++s) {
         if(!sectors[s]) continue;
         for(size_t e = 0; e < sectors[s]->edges.size(); ++e) {
@@ -310,7 +310,7 @@ size_t edge::remove_from_sectors() {
  * Returns the edge number.
  */
 size_t edge::remove_from_vertexes() {
-    size_t e_nr = string::npos;
+    size_t e_nr = INVALID;
     for(unsigned char v = 0; v < 2; ++v) {
         if(!vertexes[v]) continue;
         for(size_t e = 0; e < vertexes[v]->edges.size(); ++e) {
@@ -497,7 +497,7 @@ void path_stop::fix_pointers(area_data &a) {
         path_link* l_ptr = &links[l];
         l_ptr->end_ptr = NULL;
         
-        if(l_ptr->end_nr == string::npos) continue;
+        if(l_ptr->end_nr == INVALID) continue;
         if(l_ptr->end_nr >= a.path_stops.size()) continue;
         
         l_ptr->end_ptr = a.path_stops[l_ptr->end_nr];
@@ -511,9 +511,9 @@ void path_stop::fix_pointers(area_data &a) {
 void path_stop::fix_nrs(area_data &a) {
     for(size_t l = 0; l < links.size(); ++l) {
         path_link* l_ptr = &links[l];
-        l_ptr->end_nr = string::npos;
+        l_ptr->end_nr = INVALID;
         
-        if(!l_ptr->end_ptr == string::npos) continue;
+        if(!l_ptr->end_ptr == INVALID) continue;
         
         for(size_t s = 0; s < a.path_stops.size(); ++s) {
             if(a.path_stops[s] == l_ptr->end_ptr) {
@@ -548,7 +548,7 @@ void sector::fix_pointers(area_data &a) {
     edges.clear();
     for(size_t e = 0; e < edge_nrs.size(); ++e) {
         size_t e_nr = edge_nrs[e];
-        edges.push_back(e_nr == string::npos ? NULL : a.edges[e_nr]);
+        edges.push_back(e_nr == INVALID ? NULL : a.edges[e_nr]);
     }
 }
 
@@ -622,7 +622,7 @@ void vertex::fix_pointers(area_data &a) {
     edges.clear();
     for(size_t e = 0; e < edge_nrs.size(); ++e) {
         size_t e_nr = edge_nrs[e];
-        edges.push_back(e_nr == string::npos ? NULL : a.edges[e_nr]);
+        edges.push_back(e_nr == INVALID ? NULL : a.edges[e_nr]);
     }
 }
 
@@ -936,7 +936,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
     
         size_t col = cur_area_data.bmap.get_col(x);
         size_t row = cur_area_data.bmap.get_row(y);
-        if(col == string::npos || row == string::npos) return NULL;
+        if(col == INVALID || row == INVALID) return NULL;
         
         unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
         
@@ -949,7 +949,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
             }
         }
         
-        if(sector_nr) *sector_nr = string::npos;
+        if(sector_nr) *sector_nr = INVALID;
         return NULL;
         
     } else {
@@ -964,7 +964,7 @@ sector* get_sector(const float x, const float y, size_t* sector_nr, const bool u
             
         }
         
-        if(sector_nr) *sector_nr = string::npos;
+        if(sector_nr) *sector_nr = INVALID;
         return NULL;
         
     }

@@ -79,10 +79,6 @@ extern ALLEGRO_BITMAP* bmp_sun_bubble;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 
-//Test things, temporary.
-extern ALLEGRO_BITMAP* bmp_test;
-extern vector<path_stop*> temp_path;
-
 //Sound effects.
 extern sample_struct sfx_attack;
 extern sample_struct sfx_camera;
@@ -133,6 +129,7 @@ extern float                            carrying_speed_base_mult;
 extern float                            carrying_speed_max_mult;
 extern float                            carrying_speed_weight_mult;
 extern vector<vector<control_info> >    controls;
+extern size_t                           click_control_id;
 extern mob*                             closest_group_member;
 extern area_data                        cur_area_data;
 extern size_t                           cur_leader_nr;

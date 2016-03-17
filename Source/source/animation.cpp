@@ -283,37 +283,37 @@ animation_pool::animation_pool(vector<animation*> a, vector<frame*> f, vector<hi
 
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified animation.
- * Returns string::npos if not found.
+ * Returns INVALID if not found.
  */
 size_t animation_pool::find_animation(string name) {
     for(size_t a = 0; a < animations.size(); ++a) {
         if(animations[a]->name == name) return a;
     }
-    return string::npos;
+    return INVALID;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified frame.
- * Returns string::npos if not found.
+ * Returns INVALID if not found.
  */
 size_t animation_pool::find_frame(string name) {
     for(size_t f = 0; f < frames.size(); ++f) {
         if(frames[f]->name == name) return f;
     }
-    return string::npos;
+    return INVALID;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns the position of the specified hitbox.
- * Returns string::npos if not found.
+ * Returns INVALID if not found.
  */
 size_t animation_pool::find_hitbox(string name) {
     for(size_t h = 0; h < hitboxes.size(); ++h) {
         if(hitboxes[h]->name == name) return h;
     }
-    return string::npos;
+    return INVALID;
 }
 
 
@@ -365,7 +365,7 @@ void animation_pool::create_conversions(vector<pair<size_t, string> > conversion
         highest = max(highest, conversions[c].first);
     }
     
-    pre_named_conversions.assign(highest + 1, string::npos);
+    pre_named_conversions.assign(highest + 1, INVALID);
     
     for(size_t c = 0; c < conversions.size(); ++c) {
         size_t a_pos = find_animation(conversions[c].second);
@@ -497,7 +497,7 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
                 frame_instance(
                     frame_instance_node->name,
                     f_pos,
-                    (f_pos == string::npos) ? NULL : frames[f_pos],
+                    (f_pos == INVALID) ? NULL : frames[f_pos],
                     s2f(frame_instance_node->get_child_by_name("duration")->value)
                 )
             );

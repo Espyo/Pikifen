@@ -47,9 +47,6 @@ ALLEGRO_BITMAP* bmp_sun_bubble = NULL;
 ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
 
-ALLEGRO_BITMAP* bmp_test = NULL;
-vector<path_stop*> temp_path;
-
 sample_struct sfx_attack;
 sample_struct sfx_camera;
 sample_struct sfx_dismiss;
@@ -96,6 +93,7 @@ ALLEGRO_COLOR                    carrying_color_stop = al_map_rgb(96, 192, 192);
 float                            carrying_speed_base_mult = 0.5;
 float                            carrying_speed_max_mult = 0.8;
 float                            carrying_speed_weight_mult = 0.0004;
+size_t                           click_control_id = INVALID;
 mob*                             closest_group_member = NULL;
 vector<vector<control_info> >    controls;
 area_data                        cur_area_data;

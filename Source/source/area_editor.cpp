@@ -66,7 +66,7 @@ area_editor::area_editor() :
     made_changes(false),
     mode(EDITOR_MODE_MAIN),
     moving_path_preview_checkpoint(-1),
-    moving_thing(string::npos),
+    moving_thing(INVALID),
     moving_thing_x(0),
     moving_thing_y(0),
     new_link_first_stop(NULL),
@@ -398,13 +398,13 @@ void area_editor::do_drawing() {
                     mid_x + cos(angle + M_PI_2) * 4,
                     mid_x + sin(angle + M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[0] == string::npos ? "--" : i2s(e_ptr->sector_nrs[0]).c_str());
+                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[0] == INVALID ? "--" : i2s(e_ptr->sector_nrs[0]).c_str());
                 draw_scaled_text(
                     font_main, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle - M_PI_2) * 4,
                     mid_y + sin(angle - M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[1] == string::npos ? "--" : i2s(e_ptr->sector_nrs[1]).c_str());*/
+                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[1] == INVALID ? "--" : i2s(e_ptr->sector_nrs[1]).c_str());*/
             }
             
             //Vertexes.
@@ -682,7 +682,7 @@ void area_editor::do_drawing() {
         
         //Lightly glow the sector under the mouse.
         if(mode == EDITOR_MODE_SECTORS) {
-            if(on_sector && moving_thing == string::npos) {
+            if(on_sector && moving_thing == INVALID) {
                 for(size_t t = 0; t < on_sector->triangles.size(); ++t) {
                     triangle* t_ptr = &on_sector->triangles[t];
                     //Uncomment this to show the triangles.
@@ -1293,7 +1293,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
     
         if(
             ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16
-            && moving_thing == string::npos && sec_mode != ESM_TEXTURE_VIEW &&
+            && moving_thing == INVALID && sec_mode != ESM_TEXTURE_VIEW &&
             mode != EDITOR_MODE_OBJECTS
         ) {
             on_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
@@ -1344,7 +1344,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         //Move thing.
-        if(moving_thing != string::npos) {
+        if(moving_thing != INVALID) {
             if(mode == EDITOR_MODE_SECTORS) {
                 vertex* v_ptr = cur_area_data.vertexes[moving_thing];
                 v_ptr->x = snap_to_grid(mouse_cursor_x);
@@ -1415,10 +1415,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         //Sector-related clicking.
         if(sec_mode == ESM_NONE && mode == EDITOR_MODE_SECTORS) {
         
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             
             edge* clicked_edge_ptr = NULL;
-            size_t clicked_edge_nr = string::npos;
+            size_t clicked_edge_nr = INVALID;
             bool created_vertex = false;
             
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
@@ -1511,7 +1511,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Find a sector to select.
-            if(moving_thing == string::npos && !clicked_edge_ptr) {
+            if(moving_thing == INVALID && !clicked_edge_ptr) {
                 cur_sector = get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
             }
@@ -1521,7 +1521,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //Object-related clicking.
             
             cur_mob = NULL;
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
                 mob_gen* m_ptr = cur_area_data.mob_generators[m];
                 float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
@@ -1538,7 +1538,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //Path-related clicking.
             
             cur_stop = NULL;
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 if(dist(s_ptr->x, s_ptr->y, mouse_cursor_x, mouse_cursor_y) <= STOP_RADIUS) {
@@ -1569,7 +1569,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //Shadow-related clicking.
             
             cur_shadow = NULL;
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
@@ -1732,7 +1732,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     
                     if(sec_mode == ESM_NEW_LINK2) {
                         s_ptr->links.push_back(
-                            path_link(new_link_first_stop, string::npos)
+                            path_link(new_link_first_stop, INVALID)
                         );
                         s_ptr->fix_nrs(cur_area_data);
                     }
@@ -1845,7 +1845,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         if(ev.mouse.button == 1) holding_m1 = false;
         else if(ev.mouse.button == 2) holding_m2 = false;
         
-        if(ev.mouse.button == 1 && mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE && moving_thing != string::npos) {
+        if(ev.mouse.button == 1 && mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE && moving_thing != INVALID) {
             //Release the vertex.
             
             vertex* moved_v_ptr = cur_area_data.vertexes[moving_thing];
@@ -1900,7 +1900,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             if(it != lone_edges.end()) lone_edges.erase(it);
                             
                             //Clear its info, so it gets marked for deletion.
-                            e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
+                            e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = INVALID;
                             e_ptr->fix_pointers(cur_area_data);
                             
                         } else {
@@ -1954,8 +1954,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     
                                     //Remove the deleted edge's info.
                                     //This'll mark it for deletion.
-                                    e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = string::npos;
-                                    e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = string::npos;
+                                    e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = INVALID;
+                                    e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = INVALID;
                                     e_ptr->fix_pointers(cur_area_data);
                                     was_deleted = true;
                                     
@@ -1992,8 +1992,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     ve_ptr->vertexes[v]->x = ve_ptr->vertexes[v]->y = FLT_MAX;
                                 }
                             }
-                            ve_ptr->sector_nrs[0] = ve_ptr->sector_nrs[1] = string::npos;
-                            ve_ptr->vertex_nrs[0] = ve_ptr->vertex_nrs[1] = string::npos;
+                            ve_ptr->sector_nrs[0] = ve_ptr->sector_nrs[1] = INVALID;
+                            ve_ptr->vertex_nrs[0] = ve_ptr->vertex_nrs[1] = INVALID;
                             ve_ptr->fix_pointers(cur_area_data);
                         } else {
                             ++ve;
@@ -2044,14 +2044,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             if(moved_v_ptr->x != FLT_MAX) //If it didn't get marked for deletion in the meantime.
                 check_edge_intersections(moved_v_ptr);
                 
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             
             
             
-        } else if(ev.mouse.button == 1 && sec_mode == ESM_NONE && moving_thing != string::npos) {
+        } else if(ev.mouse.button == 1 && sec_mode == ESM_NONE && moving_thing != INVALID) {
             //Release thing.
             
-            moving_thing = string::npos;
+            moving_thing = INVALID;
             
         }
         
@@ -2944,7 +2944,7 @@ void area_editor::open_picker(unsigned char type) {
         elements = folder_to_vector(AREA_FOLDER, true);
         for(size_t e = 0; e < elements.size(); ++e) {
             size_t pos = elements[e].find(".txt");
-            if(pos != string::npos) {
+            if(pos != INVALID) {
                 elements[e].erase(pos, 4);
             }
         }
@@ -3069,7 +3069,7 @@ void area_editor::populate_texture_suggestions() {
  */
 void area_editor::update_texture_suggestions(const string n) {
     //First, check if it exists.
-    size_t pos = string::npos;
+    size_t pos = INVALID;
     
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
         if(texture_suggestions[s].name == n) {
@@ -3081,7 +3081,7 @@ void area_editor::update_texture_suggestions(const string n) {
     if(pos == 0) {
         //Already #1? Never mind.
         return;
-    } else if(pos == string::npos) {
+    } else if(pos == INVALID) {
         //If it doesn't exist, create it and add it to the top.
         texture_suggestions.insert(
             texture_suggestions.begin(),
@@ -3119,7 +3119,7 @@ void area_editor::save_area() {
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
                 for(unsigned char ev = 0; ev < 2; ++ev) {
-                    if(e_ptr->vertex_nrs[ev] >= v && e_ptr->vertex_nrs[ev] != string::npos) {
+                    if(e_ptr->vertex_nrs[ev] >= v && e_ptr->vertex_nrs[ev] != INVALID) {
                         e_ptr->vertex_nrs[ev]--;
                     }
                 }
@@ -3142,7 +3142,7 @@ void area_editor::save_area() {
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
                 for(unsigned char es = 0; es < 2; ++es) {
-                    if(e_ptr->sector_nrs[es] >= s && e_ptr->sector_nrs[es] != string::npos) {
+                    if(e_ptr->sector_nrs[es] >= s && e_ptr->sector_nrs[es] != INVALID) {
                         e_ptr->sector_nrs[es]--;
                     }
                 }
@@ -3157,7 +3157,7 @@ void area_editor::save_area() {
     for(size_t e = 0; e < cur_area_data.edges.size(); ) {
     
         edge* e_ptr = cur_area_data.edges[e];
-        if(e_ptr->vertex_nrs[0] == string::npos) {
+        if(e_ptr->vertex_nrs[0] == INVALID) {
         
             cur_area_data.edges.erase(cur_area_data.edges.begin() + e);
             
@@ -3165,7 +3165,7 @@ void area_editor::save_area() {
             for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                 vertex* v_ptr = cur_area_data.vertexes[v];
                 for(size_t ve = 0; ve < v_ptr->edge_nrs.size(); ++ve) {
-                    if(v_ptr->edge_nrs[ve] >= e && v_ptr->edge_nrs[ve] != string::npos) {
+                    if(v_ptr->edge_nrs[ve] >= e && v_ptr->edge_nrs[ve] != INVALID) {
                         --v_ptr->edge_nrs[ve];
                     }
                 }
@@ -3175,7 +3175,7 @@ void area_editor::save_area() {
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
                 sector* s_ptr = cur_area_data.sectors[s];
                 for(size_t se = 0; se < s_ptr->edge_nrs.size(); ++se) {
-                    if(s_ptr->edge_nrs[se] >= e && s_ptr->edge_nrs[se] != string::npos) {
+                    if(s_ptr->edge_nrs[se] >= e && s_ptr->edge_nrs[se] != INVALID) {
                         s_ptr->edge_nrs[se]--;
                     }
                 }
@@ -3208,7 +3208,7 @@ void area_editor::save_area() {
         edges_node->add(edge_node);
         string s_str;
         for(size_t s = 0; s < 2; ++s) {
-            if(e_ptr->sector_nrs[s] == string::npos) s_str += "-1";
+            if(e_ptr->sector_nrs[s] == INVALID) s_str += "-1";
             else s_str += i2s(e_ptr->sector_nrs[s]);
             s_str += " ";
         }

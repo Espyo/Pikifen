@@ -50,7 +50,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         for(size_t hn = 0; hn < hitbox_names.size(); ++hn) {
             size_t h_pos = mt->anims.find_hitbox(hitbox_names[hn]);
             
-            if(h_pos == string::npos) {
+            if(h_pos == INVALID) {
                 error_log("Hitbox \"" + hitbox_names[hn] + "\" not found!", dn);
                 valid = false;
             } else {
@@ -185,7 +185,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         type = MOB_ACTION_SET_ANIMATION;
         
         size_t f_pos = mt->anims.find_animation(dn->value);
-        if(f_pos == string::npos) {
+        if(f_pos == INVALID) {
             error_log("Unknown animation \"" + dn->value + "\"!", dn);
             valid = false;
         } else {
@@ -645,7 +645,7 @@ mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) :
  */
 mob_state::mob_state(const string &name) :
     name(name),
-    id(string::npos) {
+    id(INVALID) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = nullptr;
@@ -659,7 +659,7 @@ mob_state::mob_state(const string &name) :
  */
 mob_state::mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]) :
     name(name),
-    id(string::npos) {
+    id(INVALID) {
     
     for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
         events[e] = evs[e];
@@ -781,7 +781,7 @@ void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
  * Returns the number of the starting state.
  */
 size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
-    size_t starting_state_nr = string::npos;
+    size_t starting_state_nr = INVALID;
     //Fix actions that change the state that are using a string.
     for(size_t s = 0; s < states.size(); ++s) {
         mob_state* state = states[s];
@@ -807,7 +807,7 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
                     }
                     
                     if(!found_state) {
-                        state_nr = string::npos;
+                        state_nr = INVALID;
                         error_log(
                             "State " + state->name +
                             " has an action to switch to an unknown state: " + state_name,

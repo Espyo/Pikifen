@@ -14,6 +14,7 @@
 
 #include <vector>
 
+#include "const.h"
 #include "hazard.h"
 
 /*
@@ -62,7 +63,7 @@ public:
     bool can_pikmin_latch;  //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
     
     hitbox_instance(
-        const string &hn = "", size_t hnr = string::npos, hitbox* hp = NULL, const float x = 0, const float y = 0,
+        const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL, const float x = 0, const float y = 0,
         const float z = 0, const float heigh = 128, const float radius = 32
     );
 };

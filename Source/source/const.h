@@ -185,4 +185,6 @@ const unsigned char WHISTLE_RING_COLORS[N_WHISTLE_RING_COLORS][3] = {
     {128, 255, 0  }
 };
 
+const size_t INVALID = INT32_MAX;
+
 #endif //ifndef CONST_INCLUDED

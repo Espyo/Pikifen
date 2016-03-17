@@ -666,7 +666,7 @@ void load_area(const string &name, const bool load_for_editor) {
         vector<string> s_nrs = split(edge_data->get_child_by_name("s")->value);
         if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
         for(size_t s = 0; s < 2; ++s) {
-            if(s_nrs[s] == "-1") new_edge->sector_nrs[s] = string::npos;
+            if(s_nrs[s] == "-1") new_edge->sector_nrs[s] = INVALID;
             else new_edge->sector_nrs[s] = s2i(s_nrs[s]);
         }
         
@@ -771,7 +771,7 @@ void load_area(const string &name, const bool load_for_editor) {
         for(size_t l = 0; l < n_links; ++l) {
         
             data_node* link_node = links_node->get_child(l);
-            path_link l_struct(NULL, string::npos);
+            path_link l_struct(NULL, INVALID);
             
             l_struct.end_nr = s2i(link_node->value);
             

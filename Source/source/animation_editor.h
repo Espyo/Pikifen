@@ -46,7 +46,7 @@ private:
     size_t               cur_hitbox_nr;
     string               file_path;
     ALLEGRO_FILECHOOSER* file_dialog;
-    size_t               grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. string::npos = none.
+    size_t               grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. INVALID = none.
     bool                 grabbing_hitbox_edge;
     float                grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
     float                grabbing_hitbox_y;

@@ -32,9 +32,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         
             //Debug testing.
             //TODO remove.
-            mob* m = NULL;
-            bool s = false;
-            temp_path = get_path(leaders[0]->x, leaders[0]->y, leaders[1]->x, leaders[1]->y, &m, &s, NULL);
             
             
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {

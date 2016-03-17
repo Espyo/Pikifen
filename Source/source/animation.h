@@ -18,6 +18,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "const.h"
 #include "data_file.h"
 #include "hitbox.h"
 
@@ -107,7 +108,7 @@ public:
     frame* frame_ptr; //Needed for performance.
     float duration;   //How long this frame lasts for, in seconds.
     
-    frame_instance(const string &fn = "", const size_t fnr = string::npos, frame* fp = NULL, const float d = 0);
+    frame_instance(const string &fn = "", const size_t fnr = INVALID, frame* fp = NULL, const float d = 0);
 };
 
 

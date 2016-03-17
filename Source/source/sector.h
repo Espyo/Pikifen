@@ -20,6 +20,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "const.h"
 #include "hazard.h"
 #include "mobs/mob_type.h"
 #include "weather.h"
@@ -88,7 +89,7 @@ struct edge {
     sector* sectors[2];
     size_t sector_nrs[2];
     
-    edge(size_t v1 = string::npos, size_t v2 = string::npos);
+    edge(size_t v1 = INVALID, size_t v2 = INVALID);
     void fix_pointers(area_data &a);
     size_t remove_from_sectors();
     size_t remove_from_vertexes();

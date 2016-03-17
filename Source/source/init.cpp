@@ -301,8 +301,6 @@ void init_misc_graphics() {
     bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
     
-    bmp_test = load_bmp("Test.png");
-    
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] = load_bmp("Mouse_button_" + i2s(i + 1) + "_icon.png");
     }

@@ -131,7 +131,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
         //then just go there right away, instead of doing a back-and-forth.
         m->cur_path_stop_nr = 0;
     } else {
-        m->cur_path_stop_nr = string::npos;
+        m->cur_path_stop_nr = INVALID;
     }
     
     if(m->path.empty() && !go_straight) {
@@ -208,7 +208,7 @@ const float CARRYING_STUCK_SPEED_MULT = 0.3f;
  * Sets the next target when following a path.
  */
 void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
-    m->cur_path_stop_nr = (m->cur_path_stop_nr == string::npos ? 0 : m->cur_path_stop_nr + 1);
+    m->cur_path_stop_nr = (m->cur_path_stop_nr == INVALID ? 0 : m->cur_path_stop_nr + 1);
     
     if(m->carry_info->stuck_state > 0) {
         //Stuck... Let's go back and forth between point A and B.

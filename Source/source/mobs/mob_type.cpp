@@ -42,7 +42,7 @@ mob_type::mob_type() :
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
     near_angle(0),
-    first_state_nr(string::npos),
+    first_state_nr(INVALID),
     is_obstacle(false),
     show_health(true),
     casts_shadow(true) {
