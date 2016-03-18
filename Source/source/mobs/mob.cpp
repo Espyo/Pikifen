@@ -697,8 +697,7 @@ void mob::stop_chasing() {
 /* ----------------------------------------------------------------------------
  * Makes the mob eat some of the enemies it has chomped on.
  * nr: Number of captured enemies to swallow.
-   * 0:            Release all of them.
-   * INVALID: Eat all of them.
+   * 0:       Release all of them.
  */
 void mob::eat(const size_t nr) {
 

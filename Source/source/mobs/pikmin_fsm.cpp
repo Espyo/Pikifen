@@ -605,7 +605,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     mob* carriable_mob = (mob*) info1;
     pikmin* pik_ptr = (pikmin*) m;
     
-    focus_mob(pik_ptr, carriable_mob);
+    pik_ptr->carrying_mob = carriable_mob;
     pik_ptr->stop_chasing();
     
     size_t closest_spot = INVALID;
@@ -633,7 +633,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
     
-    pik_ptr->focused_mob->fsm.run_event(MOB_EVENT_CARRY_WAIT_UP);
+    pik_ptr->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_WAIT_UP);
     
     pik_ptr->chase(
         closest_spot_ptr->x,
@@ -651,7 +651,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
 
 void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
-    mob* carriable_mob = pik_ptr->focused_mob;
+    mob* carriable_mob = pik_ptr->carrying_mob;
     
     pik_ptr->set_animation(PIKMIN_ANIM_GRAB, true);
     
@@ -670,8 +670,8 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->set_animation(PIKMIN_ANIM_CARRY);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
-    pik_ptr->focused_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
-    pik_ptr->focused_mob->fsm.run_event(
+    pik_ptr->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
+    pik_ptr->carrying_mob->fsm.run_event(
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
     
@@ -681,20 +681,20 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     
-    p->focused_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
+    p->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
     
-    p->focused_mob = NULL;
+    p->carrying_mob = NULL;
     p->set_timer(0);
 }
 
 
 void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
-    if(!p->focused_mob) return;
+    if(!p->carrying_mob) return;
     
-    p->focused_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED, (void*) p);
+    p->carrying_mob->fsm.run_event(MOB_EVENT_CARRIER_REMOVED, (void*) p);
     
-    p->focused_mob = NULL;
+    p->carrying_mob = NULL;
     p->set_timer(0);
 }
 

@@ -530,6 +530,8 @@ void do_gameplay_logic() {
                     m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_DIED);
                 }
                 
+                //We have to recheck if the focused mob is not NULL, because
+                //sending MOB_EVENT_FOCUSED_MOB_DIED could've set this to NULL.
                 if(m_ptr->focused_mob) {
                     if(d > (m_ptr->type->sight_radius * 1.1f)) {
                         m_ptr->fsm.run_event(MOB_EVENT_LOST_FOCUSED_MOB);

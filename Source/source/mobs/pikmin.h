@@ -79,6 +79,7 @@ public:
     float connected_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
     float attack_time;            //Time left until the strike.
     
+    mob* carrying_mob;           //Mob that it is carrying.
     size_t carrying_spot;        //Carrying spot reserved for it.
     
     unsigned char maturity;  //0: leaf. 1: bud. 2: flower.

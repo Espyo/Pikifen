@@ -462,7 +462,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run_function(leader_fsm::unfocus);
-            efc.change_state("inactive_sleeping_waiting");
+            efc.change_state("inactive_sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader_fsm::lose_health);
@@ -544,7 +544,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader_fsm::focus);
-            efc.change_state("sleeping_waiting");
+            efc.change_state("sleeping_moving");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader_fsm::lose_health);

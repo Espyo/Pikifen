@@ -387,6 +387,9 @@ void animation_pool::destroy() {
     for(auto h = hitboxes.begin(); h != hitboxes.end(); ++h) {
         delete *h;
     }
+    animations.clear();
+    frames.clear();
+    hitboxes.clear();
 }
 
 

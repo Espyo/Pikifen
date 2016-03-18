@@ -24,6 +24,7 @@ pikmin::pikmin(const float x, const float y, pikmin_type* type, const float angl
     hazard_timer(-1), //TODO the usual time
     attack_time(0),
     pluck_reserved(false),
+    carrying_mob(NULL),
     carrying_spot(0),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
     connected_hitbox_nr(0),
@@ -157,6 +158,13 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const b
 
 
 void pikmin::tick_class_specifics() {
+    //Carrying object.
+    if(carrying_mob) {
+        if(carrying_mob->dead || !carrying_mob->carry_info) {
+            fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
+        }
+    }
+    
     //Is it dead?
     if(dead) {
         to_delete = true;

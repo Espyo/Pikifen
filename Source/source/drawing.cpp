@@ -292,48 +292,12 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; ++i) {
             if(dist(cur_leader_ptr->x, cur_leader_ptr->y, info_spots[i]->x, info_spots[i]->y) <= info_spot_trigger_range) {
-                string text;
+                float pivot_y = info_spots[i]->y - info_spots[i]->type->radius;
                 if(!info_spots[i]->opens_box) {
-                    text = info_spots[i]->text;
+                    draw_notification(info_spots[i]->x, pivot_y, info_spots[i]->text, NULL);
                     
-                    draw_text_lines(font_main, al_map_rgb(255, 255, 255), info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h, ALLEGRO_ALIGN_CENTER, 2, text);
-                    
-                    int line_y = info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.75;
-                    
-                    al_draw_line(
-                        info_spots[i]->x - info_spots[i]->text_w * 0.5,
-                        line_y,
-                        info_spots[i]->x - 8,
-                        line_y,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x + info_spots[i]->text_w * 0.5,
-                        line_y,
-                        info_spots[i]->x + 8,
-                        line_y,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x - 8,
-                        line_y,
-                        info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.25,
-                        al_map_rgb(192, 192, 192), 2);
-                    al_draw_line(
-                        info_spots[i]->x + 8,
-                        line_y,
-                        info_spots[i]->x,
-                        info_spots[i]->y - info_spots[i]->type->radius - font_main_h * 0.25,
-                        al_map_rgb(192, 192, 192), 2);
-                        
-                } else {
-                
-                    if(click_control_id != INVALID) {
-                        draw_control(
-                            font_main, controls[0][click_control_id],
-                            info_spots[i]->x, info_spots[i]->y - info_spots[i]->type->radius - font_main_h,
-                            0, 0
-                        );
-                    }
+                } else if(click_control_id != INVALID) {
+                    draw_notification(info_spots[i]->x, pivot_y, "Read", &controls[0][click_control_id]);
                     
                 }
             }

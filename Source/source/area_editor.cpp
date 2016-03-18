@@ -2944,7 +2944,7 @@ void area_editor::open_picker(unsigned char type) {
         elements = folder_to_vector(AREA_FOLDER, true);
         for(size_t e = 0; e < elements.size(); ++e) {
             size_t pos = elements[e].find(".txt");
-            if(pos != INVALID) {
+            if(pos != string::npos) {
                 elements[e].erase(pos, 4);
             }
         }

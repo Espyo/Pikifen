@@ -397,7 +397,7 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
     } else if(type == MOB_ACTION_EAT) {
     
         if(sub_type == MOB_ACTION_EAT_ALL) {
-            m->eat(-1);
+            m->eat(m->chomping_pikmin.size());
         } else {
             m->eat(vi[0]);
         }

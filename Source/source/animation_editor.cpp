@@ -668,6 +668,7 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
  */
 void animation_editor::load() {
     mode = EDITOR_MODE_MAIN;
+    file_path.clear();
     
     fade_mgr.start_fade(true, nullptr);
     
@@ -1511,8 +1512,8 @@ void animation_editor::load_animation_pool() {
     
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
-    disable_widget(gui->widgets["frm_hitbox_is"]);
-    disable_widget(gui->widgets["frm_hitboxes"]);
+    hide_widget(gui->widgets["frm_hitbox_is"]);
+    hide_widget(gui->widgets["frm_top"]);
     
     cam_x = cam_y = 0;
     cam_zoom = 1;
@@ -1760,6 +1761,7 @@ void animation_editor::show_changes_warning() {
  * Unloads the editor from memory.
  */
 void animation_editor::unload() {
+    anims.destroy();
     delete(gui->style);
     delete(gui);
     al_destroy_native_file_dialog(file_dialog);
