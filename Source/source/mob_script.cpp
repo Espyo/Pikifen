@@ -36,7 +36,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
     string n = dn->name;
     
     if(n == "chomp") {
-        
+    
         type = MOB_ACTION_CHOMP_HITBOXES;
         
         vector<string> hitbox_names = split(dn->value);
@@ -60,7 +60,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "eat") {
-        
+    
         type = MOB_ACTION_EAT;
         
         if(dn->value == "all") {
@@ -72,12 +72,19 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "focus") {
-        
+    
         type = MOB_ACTION_FOCUS;
         
         
-    } else if(n == "if") {
+    } else if(n == "hide") {
+    
+        type = MOB_ACTION_HIDE;
         
+        vi.push_back(s2b(dn->value));
+        
+        
+    } else if(n == "if") {
+    
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF;
         
@@ -91,7 +98,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "if_less") {
-        
+    
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_LESS;
         
@@ -105,7 +112,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "if_more") {
-        
+    
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_MORE;
         
@@ -119,7 +126,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "if_not") {
-        
+    
         //TODO make this use integers instead of strings, eventually?
         type = MOB_ACTION_IF_NOT;
         
@@ -133,7 +140,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "move") {
-        
+    
         type = MOB_ACTION_MOVE;
         
         if(dn->value == "focused_mob") sub_type = MOB_ACTION_MOVE_FOCUSED_MOB;
@@ -176,12 +183,12 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "play_sound") {
-        
+    
         type = MOB_ACTION_PLAY_SOUND;
         
         
     } else if(n == "animation") {
-        
+    
         type = MOB_ACTION_SET_ANIMATION;
         
         size_t f_pos = mt->anims.find_animation(dn->value);
@@ -194,14 +201,14 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "gravity") {
-        
+    
         type = MOB_ACTION_SET_GRAVITY;
         
         vf.push_back(s2f(dn->value));
         
         
     } else if(n == "health") {
-        
+    
         type = MOB_ACTION_SET_HEALTH;
         
         vector<string> words = split(dn->value);
@@ -226,20 +233,13 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         }
         
         
-    } else if(n == "shadow") {
-        
-        type = MOB_ACTION_SET_SHADOW;
-        
-        vi.push_back(s2b(dn->value));
-        
-        
     } else if(n == "speed") {
-        
+    
         type = MOB_ACTION_SET_SPEED;
         
         
     } else if(n == "state") {
-        
+    
         type = MOB_ACTION_CHANGE_STATE;
         
         for(size_t s = 0; s < states->size(); ++s) {
@@ -254,14 +254,14 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "timer") {
-        
+    
         type = MOB_ACTION_SET_TIMER;
         
         vf.push_back(s2f(dn->value));
         
         
     } else if(n == "var") {
-        
+    
         type = MOB_ACTION_SET_VAR;
         
         vector<string> words = split(dn->value);
@@ -274,7 +274,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "inc_var") {
-        
+    
         type = MOB_ACTION_INC_VAR;
         
         vector<string> words = split(dn->value);
@@ -287,17 +287,17 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "particle") {
-        
+    
         type = MOB_ACTION_SPAWN_PARTICLE;
         
         
     } else if(n == "projectile") {
-        
+    
         type = MOB_ACTION_SPAWN_PROJECTILE;
         
         
     } else if(n == "special_function") {
-        
+    
         type = MOB_ACTION_SPECIAL_FUNCTION;
         
         if(dn->value == "die_start") {
@@ -313,12 +313,12 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else if(n == "turn") {
-        
+    
         type = MOB_ACTION_TURN;
         
         
     } else if(n == "wait") {
-        
+    
         type = MOB_ACTION_WAIT;
         
         if(dn->value == "animation") {
@@ -330,7 +330,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
         
         
     } else {
-        
+    
         type = MOB_ACTION_UNKNOWN;
         error_log("Unknown script action name \"" + n + "\"!", dn);
         valid = false;
@@ -406,6 +406,12 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
     } else if(type == MOB_ACTION_FOCUS) {
     
         m->focused_mob = (mob*) custom_data_1;
+        
+        
+    } else if(type == MOB_ACTION_HIDE) {
+    
+        //TODO check vi's size.
+        m->hide = vi[0];
         
         
     } else if(type == MOB_ACTION_IF) {
@@ -493,12 +499,6 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
     
         //TODO check vf's size.
         m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
-        
-        
-    } else if(type == MOB_ACTION_SET_SHADOW) {
-        
-        //TODO check vi's size.
-        m->casts_shadow = vi[0];
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {

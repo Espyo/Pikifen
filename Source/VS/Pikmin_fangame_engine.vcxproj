@@ -104,6 +104,7 @@
     <ClInclude Include="..\source\LAFI\const.h" />
     <ClInclude Include="..\source\LAFI\frame.h" />
     <ClInclude Include="..\source\LAFI\gui.h" />
+    <ClInclude Include="..\source\LAFI\image.h" />
     <ClInclude Include="..\source\LAFI\label.h" />
     <ClInclude Include="..\source\LAFI\minor.h" />
     <ClInclude Include="..\source\LAFI\radio_button.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="..\source\LAFI\checkbox.cpp" />
     <ClCompile Include="..\source\LAFI\frame.cpp" />
     <ClCompile Include="..\source\LAFI\gui.cpp" />
+    <ClCompile Include="..\source\LAFI\image.cpp" />
     <ClCompile Include="..\source\LAFI\label.cpp" />
     <ClCompile Include="..\source\LAFI\minor.cpp" />
     <ClCompile Include="..\source\LAFI\radio_button.cpp" />

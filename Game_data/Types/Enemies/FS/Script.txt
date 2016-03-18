@@ -1,0 +1,112 @@
+first_state = buried
+
+script{
+    buried{
+        on_enter{
+            animation = buried
+            hide = true
+        }
+        on_near_opponent{
+            state = emerging
+        }
+        on_leave {
+            hide = false
+        }
+    }
+    
+    emerging{
+        on_enter{
+            animation = emerging
+        }
+        on_animation_end{
+            state = examining
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    examining{
+        on_enter{
+            animation = examining
+        }
+        on_near_opponent{
+            focus = mob
+            state = chasing
+        }
+        on_animation_end{
+            state = going_home
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    burying{
+        on_enter{
+            animation = burying
+        }
+        on_animation_end{
+            state = buried
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    chasing{
+        on_enter{
+            animation = moving
+            move = focused_mob
+        }
+        on_lose_focused_mob{
+            state = going_home
+        }
+        on_far_from_home{
+            state = going_home
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    going_home{
+        on_enter{
+            animation = moving
+            move = home
+        }
+        on_reach_destination{
+            state = burying
+        }
+        on_pikmin_land{
+            state = crushed
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    crushed{
+        on_enter{
+            state = dying
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = dying
+            move = stop
+        }
+        on_animation_end{
+            special_function = die_end
+        }
+    }
+    
+}

@@ -171,7 +171,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
         mob* mob_ptr = NULL;
         for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
-            if(mob_ptr->casts_shadow) {
+            if(mob_ptr->type->casts_shadow && !mob_ptr->hide) {
                 draw_mob_shadow(mob_ptr->x, mob_ptr->y, mob_ptr->type->radius * 2, mob_ptr->z - mob_ptr->ground_z, shadow_stretch);
             }
             mob_ptr->draw();
@@ -280,6 +280,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             
             if(
                 mob_ptr->type->show_health &&
+                !mob_ptr->hide &&
                 mob_ptr->health < mob_ptr->type->max_health &&
                 mob_ptr->health > 0
             ) {

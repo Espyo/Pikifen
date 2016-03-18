@@ -513,7 +513,7 @@ void path_stop::fix_nrs(area_data &a) {
         path_link* l_ptr = &links[l];
         l_ptr->end_nr = INVALID;
         
-        if(!l_ptr->end_ptr == INVALID) continue;
+        if(!l_ptr->end_ptr) continue;
         
         for(size_t s = 0; s < a.path_stops.size(); ++s) {
             if(a.path_stops[s] == l_ptr->end_ptr) {

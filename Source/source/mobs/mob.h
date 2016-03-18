@@ -159,7 +159,7 @@ public:
     float push_amount;                //Amount it's being pushed by another mob.
     float push_angle;                 //Angle that another mob is pushing it to.
     bool tangible;                    //If it can be touched by other mobs.
-    bool casts_shadow;                //If it can currently cast a shadow.
+    bool hide;                        //If it should be hidden (no shadow, no health).
     
     void face(const float new_angle); //Makes the mob face an angle, but it'll turn at its own pace.
     void get_chase_target(float* x, float* y); //Returns the final coordinates of the chasing target.

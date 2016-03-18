@@ -98,6 +98,10 @@ vertexes{
 	v=608.19 260.17
 	v=736.00 320.00
 	v=608.00 320.00
+	v=-16.00 -208.00
+	v=16.00 -208.00
+	v=16.00 -176.00
+	v=-16.00 -176.00
 }
 edges{
 	e{
@@ -568,6 +572,22 @@ edges{
 		s=0 30
 		v=98 96
 	}
+	e{
+		s=0 31
+		v=99 100
+	}
+	e{
+		s=0 31
+		v=100 101
+	}
+	e{
+		s=0 31
+		v=101 102
+	}
+	e{
+		s=0 31
+		v=102 99
+	}
 }
 sectors{
 	s{
@@ -711,6 +731,10 @@ sectors{
 		z=100.00
 		texture=Grass_light.jpg
 	}
+	s{
+		z=0.00
+		texture=Metal.png
+	}
 }
 mobs{
 	Special{
@@ -746,7 +770,7 @@ mobs{
 		p=96.00 320.00
 	}
 	Enemy{
-		type=White Spectralid
+		type=Female Sheargrub
 		p=-0.00 -192.00
 	}
 	Pikmin{
@@ -811,6 +835,26 @@ mobs{
 	Pellet{
 		type=Red 5
 		p=896.00 224.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=32.00 -192.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=32.00 -224.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=0.00 -224.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=-32.00 -224.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=-32.00 -192.00
 	}
 }
 path_stops{

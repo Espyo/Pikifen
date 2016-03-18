@@ -173,7 +173,7 @@ movement_struct                  leader_movement;
 map<string, leader_type*>        leader_types;
 float                            maturity_power_mult = 0.1f;
 float                            maturity_speed_mult = 0.1f;
-unsigned                         max_pikmin_in_field = 100;
+size_t                           max_pikmin_in_field = 100;
 float                            message_char_interval = 0.02f;
 ALLEGRO_MIXER*                   mixer = NULL;
 mob_category_manager             mob_categories;

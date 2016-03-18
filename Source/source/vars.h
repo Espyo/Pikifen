@@ -207,7 +207,7 @@ extern movement_struct                  leader_movement; //How hard the joystick
 extern map<string, leader_type*>        leader_types;
 extern float                            maturity_power_mult;   //Every level of maturity, multiply the power by 1 + this much.
 extern float                            maturity_speed_mult;   //Every level of maturity, multiply the attack by 1 + this much.
-extern unsigned                         max_pikmin_in_field;
+extern size_t                           max_pikmin_in_field;
 extern float                            message_char_interval; //These many seconds until a new character of the message is drawn.
 extern ALLEGRO_MIXER*                   mixer;
 extern mob_category_manager             mob_categories;

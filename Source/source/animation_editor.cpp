@@ -424,6 +424,7 @@ void animation_editor::gui_save_frame() {
         //Changed something image-wise. Recreate it.
         if(cur_frame->parent_bmp) bitmaps.detach(cur_frame->file);
         if(cur_frame->bitmap) al_destroy_bitmap(cur_frame->bitmap);
+        cur_frame->bitmap = NULL;
         cur_frame->parent_bmp = bitmaps.get(new_file, NULL);
         if(cur_frame->parent_bmp) cur_frame->bitmap = al_create_sub_bitmap(cur_frame->parent_bmp, new_fx, new_fy, new_fw, new_fh);
         
@@ -920,7 +921,7 @@ void animation_editor::load() {
     frm_changes->easy_add("lbl_text2", new lafi::label(0, 0, 0, 0, "unsaved changes!", ALLEGRO_ALIGN_LEFT), 80, 8);
     frm_changes->easy_row();
     frm_changes->add("but_ok", new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok"));
-
+    
     
     //Picker frame.
     lafi::frame* frm_picker = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -998,7 +999,7 @@ void animation_editor::load() {
             }
         }
         
-        if(file_path.find(PIKMIN_FOLDER) != INVALID) {
+        if(file_path.find(PIKMIN_FOLDER) != string::npos) {
             is_pikmin = true;
             data_node data = data_node(PIKMIN_FOLDER + "/" + file_path_parts[file_path_parts.size() - 2] + "/Data.txt");
             top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
@@ -1525,7 +1526,7 @@ void animation_editor::load_animation_pool() {
         for(size_t f = 0; f < anims.frames.size(); ++f) {
             file_uses_map[anims.frames[f]->file]++;
         }
-        for(auto u = file_uses_map.begin(); u != file_uses_map.end(); ++u){
+        for(auto u = file_uses_map.begin(); u != file_uses_map.end(); ++u) {
             file_uses_vector.push_back(make_pair(u->second, u->first));
         }
         sort(file_uses_vector.begin(), file_uses_vector.end(), [] (pair<size_t, string> u1, pair<size_t, string> u2) -> bool {
