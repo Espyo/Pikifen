@@ -32,7 +32,7 @@
 
 
 const float  area_editor::GRID_INTERVAL = 32.0f;
-const size_t area_editor::MAX_TEXTURE_SUGGESTIONS= 20;
+const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 const float  area_editor::STOP_RADIUS = 16.0f;
 const float  area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 const float  area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
@@ -2556,9 +2556,9 @@ void area_editor::load() {
         change_to_right_frame();
     };
     frm_texture->widgets["but_ok"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        string n = ((lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"])->text;
+        string n = ((lafi::textbox*) this->gui->widgets["frm_texture"]->widgets["txt_name"])->text;
         if(n.empty()) return;
-        ((lafi::button*) gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = n;
+        ((lafi::button*) this->gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = n;
         mode = EDITOR_MODE_SECTORS;
         change_to_right_frame();
         update_texture_suggestions(n);
@@ -2667,9 +2667,9 @@ void area_editor::load() {
         show_path_preview = !show_path_preview;
         if(show_path_preview) {
             calculate_preview_path();
-            show_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
+            show_widget(this->gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
         } else {
-            hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
+            hide_widget(this->gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
         }
     };
     hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
@@ -3041,13 +3041,13 @@ void area_editor::populate_texture_suggestions() {
     f->easy_row();
     
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
-        
+    
         string name = texture_suggestions[s].name;
         lafi::image* i = new lafi::image(0, 0, 0, 0, texture_suggestions[s].bmp);
         lafi::label* l = new lafi::label(0, 0, 0, 0, name);
         
         auto lambda = [name, this] (lafi::widget*, int, int) {
-            ((lafi::button*) gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = name;
+            ((lafi::button*) this->gui->widgets["frm_sectors"]->widgets["frm_sector"]->widgets["but_texture"])->text = name;
             mode = EDITOR_MODE_SECTORS;
             change_to_right_frame();
             update_texture_suggestions(name);
@@ -3067,7 +3067,7 @@ void area_editor::populate_texture_suggestions() {
 /* ----------------------------------------------------------------------------
  * Updates the list of texture suggestions, adding a new one or bumping it up.
  */
-void area_editor::update_texture_suggestions(const string n) {
+void area_editor::update_texture_suggestions(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
     
@@ -3658,10 +3658,10 @@ void area_editor::set_guide_a(unsigned char a) {
 }
 
 
-texture_suggestion::texture_suggestion(const string n) :
+texture_suggestion::texture_suggestion(const string &n) :
     bmp(NULL),
     name(n) {
-        
+    
     bmp = bitmaps.get("Textures/" + name, NULL);
 }
 

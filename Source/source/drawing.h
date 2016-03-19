@@ -37,7 +37,7 @@ void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &c
 void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR &color);
 void draw_health(const float cx, const float cy, const unsigned int health, const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS, const bool just_chart = false);
 void draw_loading_screen(const string &area_name, const string &subtitle, const float opacity);
-void draw_notification(const float x, const float y, const string text, control_info* control = NULL);
+void draw_notification(const float x, const float y, const string &text, control_info* control = NULL);
 void draw_sector(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
 void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
 void draw_mob_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch);

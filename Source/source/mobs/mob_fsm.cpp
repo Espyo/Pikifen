@@ -186,7 +186,7 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
         }
     }
     
-    if(m->carry_info->cur_carrying_strength < m->type->weight) {
+    if(m->carry_info->cur_carrying_strength < m->type->weight || run_event) {
         m->fsm.run_event(MOB_EVENT_CARRY_STOP_MOVE);
     }
 }

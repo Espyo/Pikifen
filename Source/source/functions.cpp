@@ -60,7 +60,7 @@ bool bbox_check(const float cx1, const float cy1, const float cx2, const float c
  * Boxes a string so that it becomes a specific size.
  * Truncates if it's too big, pads with spaces if it's too small.
  */
-string box_string(const string s, const size_t size) {
+string box_string(const string &s, const size_t size) {
     string spaces = string(size, ' ');
     return (s + spaces).substr(0, size);
 }
@@ -948,7 +948,7 @@ void load_game_config() {
     set_if_exists(file.get_child_by_name("maturity_speed_mult")->value, maturity_speed_mult);
     set_if_exists(file.get_child_by_name("nectar_amount")->value, nectar_amount);
     set_if_exists(file.get_child_by_name("pikmin_task_range")->value, pikmin_task_range);
-
+    
     set_if_exists(file.get_child_by_name("cursor_max_dist")->value, cursor_max_dist);
     set_if_exists(file.get_child_by_name("cursor_spin_speed")->value, cursor_spin_speed);
     set_if_exists(file.get_child_by_name("next_pluck_range")->value, next_pluck_range);

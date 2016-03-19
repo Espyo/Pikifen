@@ -561,7 +561,7 @@ unsigned char sector_types_manager::get_nr_of_types() {
 /* ----------------------------------------------------------------------------
  * Cretes a timer.
  */
-timer::timer(float duration, function<void()> on_end) {
+timer::timer(float duration, const function<void()> &on_end) {
     this->duration  = duration;
     this->time_left = 0;
     this->on_end    = on_end;

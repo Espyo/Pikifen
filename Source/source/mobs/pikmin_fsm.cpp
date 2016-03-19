@@ -323,18 +323,22 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idle");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::get_knocked_down);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
     }
@@ -680,6 +684,9 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
 
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
+    
+    p->carrying_mob->carry_info->spot_info[p->carrying_spot].state = CARRY_SPOT_FREE;
+    p->carrying_mob->carry_info->spot_info[p->carrying_spot].pik_ptr = NULL;
     
     p->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
     

@@ -28,10 +28,10 @@ using namespace std;
  * update the numbers on the resouce (.rc) file.
  */
 const unsigned char VERSION_MAJOR = 0;
-const unsigned char VERSION_MINOR = 6;
+const unsigned char VERSION_MINOR = 7;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 1;
-const unsigned char VERSION_MONTH = 1;
+const unsigned char VERSION_DAY   = 19;
+const unsigned char VERSION_MONTH = 3;
 const unsigned int  VERSION_YEAR  = 16;      //The year is 2000 + this.
 
 const float AREA_TITLE_FADE_DURATION    = 3.0f;      //How long it takes for the area name to fade away, in-game.
@@ -68,7 +68,7 @@ const float WHISTLE_RINGS_INTERVAL      = 0.1f;      //Seconds that need to pass
 const float ZOOM_MAX_LEVEL_EDITOR       = 4.0f;      //Maximum zoom level possible on the area editor.
 const float ZOOM_MIN_LEVEL_EDITOR       = 0.05f;     //Minimum zoom level possible on the area editor.
 
-const unsigned int DEF_FPS   = 30;
+const unsigned int DEF_FPS   = 60;
 const unsigned int DEF_SCR_W = 640;
 const unsigned int DEF_SCR_H = 480;
 

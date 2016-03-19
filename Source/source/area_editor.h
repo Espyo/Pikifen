@@ -29,7 +29,7 @@ using namespace std;
 struct texture_suggestion {
     ALLEGRO_BITMAP* bmp;
     string name;
-    texture_suggestion(const string n);
+    texture_suggestion(const string &n);
     ~texture_suggestion();
 };
 
@@ -140,7 +140,7 @@ private:
     void show_changes_warning();
     float snap_to_grid(const float c);
     void update_review_frame();
-    void update_texture_suggestions(const string n);
+    void update_texture_suggestions(const string &n);
     
 public:
 

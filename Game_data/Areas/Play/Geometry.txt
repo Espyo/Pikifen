@@ -1741,10 +1741,6 @@ mobs{
 		angle=2.03
 	}
 	Special{
-		type=Nectar
-		p=-32.00 576.00
-	}
-	Special{
 		type=Info spot
 		p=192.00 736.00
 		vars=opens_box=true;text=This is still a WIP! Keys:\nWASD to move\nMouse to move the cursor\nLeft-click to throw\nRight-click to whistle\nSpace to move the group\nTab to switch leaders\nLeft control to dismiss\nMore info:\nhttp://www.pikminfanon.com/\nPikmin_fangame_engine\nand on the included README
@@ -2002,6 +1998,26 @@ mobs{
 	Treasure{
 		type=2 Euro
 		p=800.00 320.00
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=576.00 -928.00
+		angle=2.36
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=640.00 -896.00
+		angle=2.43
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=608.00 -832.00
+		angle=2.62
+	}
+	Enemy{
+		type=Female Sheargrub
+		p=608.00 -992.00
+		angle=2.36
 	}
 }
 path_stops{

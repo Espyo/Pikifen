@@ -1112,7 +1112,7 @@ const unsigned char NOTIFICATION_ALPHA = 160;
  * text:    Text to say.
  * control: If not NULL, draw the control's button/key/etc. before the text.
  */
-void draw_notification(const float x, const float y, const string text, control_info* control) {
+void draw_notification(const float x, const float y, const string &text, control_info* control) {
 
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
@@ -1121,9 +1121,6 @@ void draw_notification(const float x, const float y, const string text, control_
     al_copy_transform(&old, al_get_current_transform());
     al_compose_transform(&tra, &old);
     al_use_transform(&tra);
-    
-    int text_w = al_get_text_width(font_main, text.c_str());
-    int text_h = font_main_h;
     
     int bmp_w = al_get_bitmap_width(bmp_notification);
     int bmp_h = al_get_bitmap_height(bmp_notification);
@@ -1161,7 +1158,7 @@ void draw_notification(const float x, const float y, const string text, control_
         1,
         text_box_x2 - text_box_x1,
         text_box_y2 - text_box_y1,
-        text.c_str()
+        text
     );
     
     al_use_transform(&old);

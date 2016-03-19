@@ -160,7 +160,7 @@ pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const b
 void pikmin::tick_class_specifics() {
     //Carrying object.
     if(carrying_mob) {
-        if(carrying_mob->dead || !carrying_mob->carry_info) {
+        if(!carrying_mob->carry_info) {
             fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
         }
     }

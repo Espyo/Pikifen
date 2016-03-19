@@ -55,6 +55,7 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     chase_teleport_z(nullptr),
     chase_orig_x(nullptr),
     chase_orig_y(nullptr),
+    chase_speed(-1),
     carrying_target(nullptr),
     cur_path_stop_nr(INVALID),
     focused_mob(nullptr),
@@ -1303,7 +1304,6 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     if(!carry_info) return;
     
     carry_info->stuck_state = 0;
-    mob* old_carrying_target = carrying_target;
     
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
