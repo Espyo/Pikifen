@@ -156,6 +156,8 @@ gameplay::gameplay() :
 
 
 void gameplay::load() {
+    ready_for_input = false;
+    
     draw_loading_screen("", "", 1.0f);
     al_flip_display();
     

@@ -778,4 +778,6 @@ void do_gameplay_logic() {
     
     info_print_timer.tick(delta_t);
     
+    ready_for_input = true;
+    
 }

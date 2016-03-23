@@ -210,6 +210,8 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
    * Like a 0.5 for the group movement makes it move at half distance.
  */
 void handle_button(const unsigned int button, const unsigned char player, float pos) {
+    
+    if(!ready_for_input) return;
 
     if(cur_message.empty()) {
     

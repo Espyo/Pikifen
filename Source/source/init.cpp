@@ -72,7 +72,7 @@ void init_dev_tools() {
     
     if(!s2b(file.get_child_by_name("enabled")->value)) return;
     
-    for(unsigned char k = 0; k < 9; k++) {
+    for(unsigned char k = 0; k < 10; k++) {
         string tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
         if(tool_name == "area_image") {
             dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;

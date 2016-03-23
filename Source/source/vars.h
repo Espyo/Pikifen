@@ -239,6 +239,7 @@ extern float                            pluck_range;
 extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.
 extern double                           prev_frame_time;             //Time since start, on the previous frame. Used to calculate the time difference between the current and last frames.
 extern float                            prev_group_move_intensity;   //The group move intensity on the previous frame. Used to figure out if, on 0-intensity, we should put the group's center near the leader or let it go there by itself.
+extern bool                             ready_for_input;             //Ready for gameplay-related input?
 extern bool                             reset_delta_t;               //Is delta_t meant to be reset for the next frame?
 extern unsigned short                   scr_h;
 extern unsigned short                   scr_w;

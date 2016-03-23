@@ -1570,10 +1570,10 @@ bool square_intersects_line(const float sx1, const float sy1, const float sx2, c
     if(lines_intersect(lx1, ly1, lx2, ly2, sx1, sy2, sx2, sy2, NULL, NULL)) return true;
     
     if(
-        (lx1 > sx1 && lx2 > sx1) &&
-        (lx1 < sx2 && lx2 < sx2) &&
-        (ly1 > sy1 && ly2 > sy1) &&
-        (ly1 < sy2 && ly2 < sy2)
+        (lx1 >= sx1 && lx2 >= sx1) &&
+        (lx1 <= sx2 && lx2 <= sx2) &&
+        (ly1 >= sy1 && ly2 >= sy1) &&
+        (ly1 <= sy2 && ly2 <= sy2)
     ) return true;
     
     return false;

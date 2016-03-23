@@ -789,6 +789,7 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_data.sectors[s];
+            if(s_ptr->edges.empty()) continue;
             if(s_ptr->texture_info.file_name.empty() && s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade) {
                 error_type = EET_MISSING_TEXTURE;
                 error_sector_ptr = s_ptr;
@@ -803,6 +804,7 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_data.sectors[s];
+            if(s_ptr->edges.empty()) continue;
             
             if(s_ptr->texture_info.file_name.empty()) continue;
             

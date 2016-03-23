@@ -1249,10 +1249,13 @@ void remove_from_group(mob* member) {
  * Should m1 attack m2? Teams are used to decide this.
  */
 bool should_attack(mob* m1, mob* m2) {
+    if(m1->team == m2->team) return false;
     if(m2->team == MOB_TEAM_DECORATION) return false;
     if(m1->team == MOB_TEAM_NONE) return true;
-    if(m1->team == m2->team) return false;
-    if(typeid(*m1) == typeid(pikmin) && m2->team == MOB_TEAM_OBSTACLE) return true;
+    if(m2->team == MOB_TEAM_OBSTACLE) {
+        if(typeid(*m1) == typeid(pikmin)) return true;
+        return false;
+    }
     return true;
 }
 

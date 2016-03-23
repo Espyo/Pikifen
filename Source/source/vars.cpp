@@ -204,6 +204,7 @@ map<string, pikmin_type*>        pikmin_types;
 float                            pluck_range = 30.0f;
 bool                             pretty_whistle = true;
 float                            prev_group_move_intensity = 0;
+bool                             ready_for_input = false;
 bool                             reset_delta_t = true;
 unsigned short                   scr_h = DEF_SCR_H;
 unsigned short                   scr_w = DEF_SCR_W;
