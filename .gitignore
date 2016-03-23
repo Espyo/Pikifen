@@ -1,5 +1,9 @@
 Source/VS/Debug/
 Source/VS/Release/
+Source/CL/Debug/
+Source/CL/Release/
+Source/CB/Debug/
+Source/CB/Release/
 Documents/
 Error_log.txt
 Options.txt

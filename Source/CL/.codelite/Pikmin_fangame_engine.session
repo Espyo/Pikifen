@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Session Name="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/CL/Pikmin_fangame_engine.workspace">
+  <int Value="0" Name="m_selectedTab"/>
+  <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/CL/Pikmin_fangame_engine.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/mobs/mob.cpp" Name="FileName"/>
+      <int Value="620" Name="FirstVisibleLine"/>
+      <int Value="629" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/mob_script.cpp" Name="FileName"/>
+      <int Value="527" Name="FirstVisibleLine"/>
+      <int Value="549" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/logic.cpp" Name="FileName"/>
+      <int Value="189" Name="FirstVisibleLine"/>
+      <int Value="205" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/mobs/mob_fsm.cpp" Name="FileName"/>
+      <int Value="38" Name="FirstVisibleLine"/>
+      <int Value="45" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+  </TabInfoArray>
+  <SerializedObject Name="m_breakpoints">
+    <long Value="2" Name="Count"/>
+    <SerializedObject Name="Breakpoint0">
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/mobs/mob.cpp" Name="file"/>
+      <int Value="629" Name="lineno"/>
+      <wxString Value="" Name="function_name"/>
+      <wxString Value="" Name="memory_address"/>
+      <int Value="1" Name="bp_type"/>
+      <int Value="0" Name="watchpoint_type"/>
+      <wxString Value="" Name="watchpt_data"/>
+      <CData Name="commandlist"/>
+      <bool Value="0" Name="regex"/>
+      <bool Value="0" Name="is_temp"/>
+      <bool Value="1" Name="is_enabled"/>
+      <int Value="0" Name="ignore_number"/>
+      <wxString Value="" Name="conditions"/>
+      <int Value="0" Name="origin"/>
+    </SerializedObject>
+    <SerializedObject Name="Breakpoint1">
+      <wxString Value="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/source/mobs/mob.cpp" Name="file"/>
+      <int Value="793" Name="lineno"/>
+      <wxString Value="" Name="function_name"/>
+      <wxString Value="" Name="memory_address"/>
+      <int Value="1" Name="bp_type"/>
+      <int Value="0" Name="watchpoint_type"/>
+      <wxString Value="" Name="watchpt_data"/>
+      <CData Name="commandlist"/>
+      <bool Value="0" Name="regex"/>
+      <bool Value="0" Name="is_temp"/>
+      <bool Value="1" Name="is_enabled"/>
+      <int Value="0" Name="ignore_number"/>
+      <wxString Value="" Name="conditions"/>
+      <int Value="0" Name="origin"/>
+    </SerializedObject>
+  </SerializedObject>
+</Session>

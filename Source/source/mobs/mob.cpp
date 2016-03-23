@@ -972,6 +972,11 @@ float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, 
     float attacker_offense = 0;
     float defense_multiplier = 1;
     
+    if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
+        //This hitbox can't be damaged! Abort!
+        return 0;
+    }
+    
     if(attacker_h) {
         attacker_offense = attacker_h->multiplier;
         

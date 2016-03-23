@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Project Name="Pikmin_fangame_engine" InternalType="Console">
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="source">
+    <File Name="../source/status.cpp"/>
+    <File Name="../source/particle.h"/>
+    <File Name="../source/weather.cpp"/>
+    <File Name="../source/mob_script.cpp"/>
+    <File Name="../source/game_state.cpp"/>
+    <File Name="../source/menu_widgets.cpp"/>
+    <File Name="../source/misc_structs.cpp"/>
+    <File Name="../source/functions.h"/>
+    <File Name="../source/spray_type.h"/>
+    <File Name="../source/particle.cpp"/>
+    <File Name="../source/mob_script.h"/>
+    <File Name="../source/hitbox.h"/>
+    <File Name="../source/data_file.h"/>
+    <File Name="../source/functions.cpp"/>
+    <File Name="../source/data_file.cpp"/>
+    <File Name="../source/hitbox.cpp"/>
+    <File Name="../source/interval.h"/>
+    <File Name="../source/interval.cpp"/>
+    <File Name="../source/drawing.cpp"/>
+    <File Name="../source/hazard.h"/>
+    <File Name="../source/weather.h"/>
+    <File Name="../source/menus.h"/>
+    <File Name="../source/main.cpp"/>
+    <File Name="../source/resource.h"/>
+    <File Name="../source/misc_structs.h"/>
+    <File Name="../source/menu_widgets.h"/>
+    <File Name="../source/area_editor.h"/>
+    <File Name="../source/init.cpp"/>
+    <File Name="../source/area_editor.cpp"/>
+    <File Name="../source/menus.cpp"/>
+    <File Name="../source/controls.cpp"/>
+    <File Name="../source/animation.h"/>
+    <File Name="../source/game_state.h"/>
+    <File Name="../source/sector.h"/>
+    <File Name="../source/animation_editor.h"/>
+    <File Name="../source/logic.cpp"/>
+    <File Name="../source/animation.cpp"/>
+    <File Name="../source/animation_editor.cpp"/>
+    <File Name="../source/drawing.h"/>
+    <File Name="../source/status.h"/>
+    <File Name="../source/controls.h"/>
+    <File Name="../source/spray_type.cpp"/>
+    <File Name="../source/vars.cpp"/>
+    <File Name="../source/const.h"/>
+    <File Name="../source/vars.h"/>
+    <File Name="../source/sector.cpp"/>
+    <File Name="../source/init.h"/>
+    <File Name="../source/logic.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="LAFI">
+    <File Name="../source/LAFI/frame.cpp"/>
+    <File Name="../source/LAFI/gui.cpp"/>
+    <File Name="../source/LAFI/label.cpp"/>
+    <File Name="../source/LAFI/angle_picker.cpp"/>
+    <File Name="../source/LAFI/widget.cpp"/>
+    <File Name="../source/LAFI/scrollbar.cpp"/>
+    <File Name="../source/LAFI/textbox.h"/>
+    <File Name="../source/LAFI/minor.h"/>
+    <File Name="../source/LAFI/label.h"/>
+    <File Name="../source/LAFI/radio_button.h"/>
+    <File Name="../source/LAFI/image.cpp"/>
+    <File Name="../source/LAFI/checkbox.cpp"/>
+    <File Name="../source/LAFI/radio_button.cpp"/>
+    <File Name="../source/LAFI/checkbox.h"/>
+    <File Name="../source/LAFI/frame.h"/>
+    <File Name="../source/LAFI/widget.h"/>
+    <File Name="../source/LAFI/image.h"/>
+    <File Name="../source/LAFI/minor.cpp"/>
+    <File Name="../source/LAFI/scrollbar.h"/>
+    <File Name="../source/LAFI/button.cpp"/>
+    <File Name="../source/LAFI/gui.h"/>
+    <File Name="../source/LAFI/button.h"/>
+    <File Name="../source/LAFI/style.h"/>
+    <File Name="../source/LAFI/angle_picker.h"/>
+    <File Name="../source/LAFI/const.h"/>
+    <File Name="../source/LAFI/style.cpp"/>
+    <File Name="../source/LAFI/textbox.cpp"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="mobs">
+    <File Name="../source/mobs/ship_type.cpp"/>
+    <File Name="../source/mobs/onion_type.h"/>
+    <File Name="../source/mobs/leader.cpp"/>
+    <File Name="../source/mobs/onion_fsm.cpp"/>
+    <File Name="../source/mobs/ship.cpp"/>
+    <File Name="../source/mobs/treasure_type.cpp"/>
+    <File Name="../source/mobs/treasure_fsm.h"/>
+    <File Name="../source/mobs/onion_fsm.h"/>
+    <File Name="../source/mobs/onion.cpp"/>
+    <File Name="../source/mobs/gate_fsm.cpp"/>
+    <File Name="../source/mobs/enemy.h"/>
+    <File Name="../source/mobs/pikmin.cpp"/>
+    <File Name="../source/mobs/gate.h"/>
+    <File Name="../source/mobs/leader_fsm.cpp"/>
+    <File Name="../source/mobs/leader.h"/>
+    <File Name="../source/mobs/info_spot.cpp"/>
+    <File Name="../source/mobs/pikmin_fsm.cpp"/>
+    <File Name="../source/mobs/pikmin_fsm.h"/>
+    <File Name="../source/mobs/onion_type.cpp"/>
+    <File Name="../source/mobs/ship_type.h"/>
+    <File Name="../source/mobs/mob_fsm.h"/>
+    <File Name="../source/mobs/mob.cpp"/>
+    <File Name="../source/mobs/gate_type.h"/>
+    <File Name="../source/mobs/enemy_type.h"/>
+    <File Name="../source/mobs/gate_fsm.h"/>
+    <File Name="../source/mobs/mob_type.cpp"/>
+    <File Name="../source/mobs/nectar.cpp"/>
+    <File Name="../source/mobs/pellet_fsm.h"/>
+    <File Name="../source/mobs/leader_type.cpp"/>
+    <File Name="../source/mobs/nectar.h"/>
+    <File Name="../source/mobs/pikmin_type.cpp"/>
+    <File Name="../source/mobs/mob_fsm.cpp"/>
+    <File Name="../source/mobs/mob.h"/>
+    <File Name="../source/mobs/gate_type.cpp"/>
+    <File Name="../source/mobs/treasure_type.h"/>
+    <File Name="../source/mobs/ship.h"/>
+    <File Name="../source/mobs/treasure.h"/>
+    <File Name="../source/mobs/pellet.h"/>
+    <File Name="../source/mobs/info_spot.h"/>
+    <File Name="../source/mobs/enemy_type.cpp"/>
+    <File Name="../source/mobs/pikmin.h"/>
+    <File Name="../source/mobs/treasure_fsm.cpp"/>
+    <File Name="../source/mobs/pikmin_type.h"/>
+    <File Name="../source/mobs/gate.cpp"/>
+    <File Name="../source/mobs/onion.h"/>
+    <File Name="../source/mobs/ship_fsm.cpp"/>
+    <File Name="../source/mobs/leader_type.h"/>
+    <File Name="../source/mobs/pellet_type.h"/>
+    <File Name="../source/mobs/pellet.cpp"/>
+    <File Name="../source/mobs/enemy.cpp"/>
+    <File Name="../source/mobs/mob_type.h"/>
+    <File Name="../source/mobs/leader_fsm.h"/>
+    <File Name="../source/mobs/pellet_fsm.cpp"/>
+    <File Name="../source/mobs/bridge.cpp"/>
+    <File Name="../source/mobs/ship_fsm.h"/>
+    <File Name="../source/mobs/treasure.cpp"/>
+    <File Name="../source/mobs/pellet_type.cpp"/>
+    <File Name="../source/mobs/bridge.h"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="" Assembler="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-O0;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0&#xA;" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="-lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0`" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Source/CL/Debug/Pikmin_fangame_engine" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="../.." PauseExecWhenProcTerminates="no" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="yes">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+        <IncludePath Value="."/>
+        <Preprocessor Value="NDEBUG"/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="yes">
+        <DebuggerSearchPaths/>
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no" EnableCpp14="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>
