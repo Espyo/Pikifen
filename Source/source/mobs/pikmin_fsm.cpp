@@ -72,6 +72,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin_fsm::stop_in_group);
         }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run_function(pikmin_fsm::face_leader);
+        }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run_function(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
@@ -140,6 +143,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     efc.new_state("group_move_stopped", PIKMIN_STATE_GROUP_MOVE_STOPPED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin_fsm::stop_in_group);
+        }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run_function(pikmin_fsm::face_leader);
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("group_move_stopped");
@@ -783,6 +789,15 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->face(atan2(pik_ptr->focused_mob->y - pik_ptr->y, pik_ptr->focused_mob->x - pik_ptr->x));
+}
+
+void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
+    m->face(
+        atan2(
+            m->following_group->y - m->y,
+            m->following_group->x - m->x
+        )
+    );
 }
 
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {

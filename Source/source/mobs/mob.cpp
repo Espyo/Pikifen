@@ -176,11 +176,6 @@ void mob::tick_misc_logic() {
         );
         group->group_center_x += group_center_mx * delta_t;
         group->group_center_y += group_center_my * delta_t;
-        
-        size_t n_members = group->members.size();
-        for(size_t m = 0; m < n_members; ++m) {
-            group->members[m]->face(atan2(y - group->members[m]->y, x - group->members[m]->x));
-        }
     }
     
     invuln_period.tick(delta_t);
@@ -220,8 +215,6 @@ void mob::tick_physics() {
     angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
     
     if(chasing) {
-        //If the mob is meant to teleport somewhere,
-        //let's just do so.
         float final_target_x, final_target_y;
         get_chase_target(&final_target_x, &final_target_y);
         
@@ -248,7 +241,7 @@ void mob::tick_physics() {
             float d = dist(x, y, final_target_x, final_target_y).to_float();
             float move_amount = min((double) (d / delta_t), (double) chase_speed);
             
-            bool can_free_move = chase_free_move || move_amount <= 10.0;
+            bool can_free_move = chase_free_move || d <= 10.0;
             
             float movement_angle = can_free_move ?
                                    atan2(final_target_y - y, final_target_x - x) :
@@ -566,17 +559,14 @@ void mob::tick_physics() {
         z = ground_z;
     }
     
-    bool was_airborne = z > ground_z;
     z += delta_t* speed_z;
     if(z <= ground_z) {
         z = ground_z;
-        if(was_airborne) {
-            speed_z = 0;
-            was_thrown = false;
-            fsm.run_event(MOB_EVENT_LANDED);
-            if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
-                fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
-            }
+        speed_z = 0;
+        was_thrown = false;
+        fsm.run_event(MOB_EVENT_LANDED);
+        if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
         }
     }
     

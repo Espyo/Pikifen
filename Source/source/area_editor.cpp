@@ -390,21 +390,25 @@ void area_editor::do_drawing() {
                 );
                 
                 //Debug: uncomment this to show the sector numbers on each side.
-                /*float mid_x = (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2;
-                float mid_y = (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2;
+                /*float mid_x = (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
+                float mid_y = (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
                 float angle = atan2(e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y, e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x);
                 draw_scaled_text(
                     font_main, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle + M_PI_2) * 4,
-                    mid_x + sin(angle + M_PI_2) * 4,
+                    mid_y + sin(angle + M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[0] == INVALID ? "--" : i2s(e_ptr->sector_nrs[0]).c_str());
+                    ALLEGRO_ALIGN_CENTER, 1,
+                    e_ptr->sector_nrs[0] == INVALID ? "--" : i2s(e_ptr->sector_nrs[0])
+                );
                 draw_scaled_text(
                     font_main, al_map_rgb(192, 255, 192),
                     mid_x + cos(angle - M_PI_2) * 4,
                     mid_y + sin(angle - M_PI_2) * 4,
                     0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, e_ptr->sector_nrs[1] == INVALID ? "--" : i2s(e_ptr->sector_nrs[1]).c_str());*/
+                    ALLEGRO_ALIGN_CENTER, 1,
+                    e_ptr->sector_nrs[1] == INVALID ? "--" : i2s(e_ptr->sector_nrs[1])
+                );*/
             }
             
             //Vertexes.
@@ -1929,14 +1933,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                     size_t old_de_nr = de_ptr->remove_from_sectors();
                                     
                                     //Set the new sectors.
-                                    //TODO if one of the central sectors is null.
                                     if(e_ptr->sector_nrs[0] == de_ptr->sector_nrs[0])
                                         de_ptr->sector_nrs[0] = e_ptr->sector_nrs[1];
                                     else if(e_ptr->sector_nrs[0] == de_ptr->sector_nrs[1])
                                         de_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
-                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[0] || !e_ptr->sectors[0])
+                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[0])
                                         de_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
-                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1] || !e_ptr->sectors[1])
+                                    else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1])
                                         de_ptr->sector_nrs[1] = e_ptr->sector_nrs[0];
                                     de_ptr->fix_pointers(cur_area_data);
                                     
@@ -2587,6 +2590,7 @@ void area_editor::load() {
     frm_adv_textures->widgets["txt_y"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sx"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sy"]->lose_focus_handler = lambda_gui_to_adv_textures;
+    frm_adv_textures->widgets["ang_a"]->lose_focus_handler = lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_x"]->description =  "Scroll the texture horizontally by this much.";
     frm_adv_textures->widgets["txt_y"]->description =  "Scroll the texture vertically by this much.";
     frm_adv_textures->widgets["txt_sx"]->description = "Zoom the texture horizontally by this much.";

@@ -28,6 +28,7 @@ void be_thrown(              mob* m, void* info1, void* info2);
 void called(                 mob* m, void* info1, void* info2);
 void chase_leader(           mob* m, void* info1, void* info2);
 void end_pluck(              mob* m, void* info1, void* info2);
+void face_leader(            mob* m, void* info1, void* info2);
 void fall_down_pit(          mob* m, void* info1, void* info2);
 void forget_carriable_object(mob* m, void* info1, void* info2);
 void get_knocked_down(       mob* m, void* info1, void* info2);

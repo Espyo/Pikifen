@@ -2,6 +2,8 @@ Source/VS/Debug/
 Source/VS/Release/
 Source/CL/Debug/
 Source/CL/Release/
+Source/CL/.codelite/
+Source/CL/Pikmin_fangame_engine.mk
 Source/CB/Debug/
 Source/CB/Release/
 Documents/

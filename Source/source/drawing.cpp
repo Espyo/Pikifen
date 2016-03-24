@@ -96,7 +96,7 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             bg_v[3].v = (cam_y + zoom_y) / cur_area_data.bg_bmp_zoom;
             
             al_draw_prim(
-                bg_v, NULL, cur_area_data.bg_bmp, 0, 5, ALLEGRO_PRIM_TRIANGLE_FAN
+                bg_v, NULL, cur_area_data.bg_bmp, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
             );
         }
         

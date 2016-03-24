@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
                 prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
                 reset_delta_t = false;
             }
-            delta_t = cur_time - prev_frame_time;
+            delta_t = min(cur_time - prev_frame_time, 0.2); //Anti speed-burst cap.
             
             game_states[cur_game_state_nr]->do_logic();
             game_states[cur_game_state_nr]->do_drawing();
