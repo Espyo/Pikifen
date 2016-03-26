@@ -338,9 +338,9 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                                 //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 if(pikmin_in_onions[onions[o]->oni_type->pik_type] > 0) {
                                     pikmin_in_onions[onions[o]->oni_type->pik_type]--;
+                                    create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
+                                    add_to_group(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
                                 }
-                                create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
-                                add_to_group(cur_leader_ptr, pikmin_list[pikmin_list.size() - 1]);
                             }
                             done = true;
                         }

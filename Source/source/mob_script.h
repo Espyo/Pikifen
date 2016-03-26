@@ -67,6 +67,7 @@ enum MOB_EVENT_TYPES {
     //Script file stuff.
     MOB_EVENT_ANIMATION_END,       //When the current animation ends.
     MOB_EVENT_BIG_DAMAGE,          //When it reaches a certain health %.
+    MOB_EVENT_BOTTOMLESS_PIT,      //When it lands on a bottomless pit.
     MOB_EVENT_DAMAGE,              //When it is damaged.
     MOB_EVENT_DEATH,               //When it dies.
     MOB_EVENT_ENTERED_HAZARD,      //When it enters a hazard sector.
@@ -100,7 +101,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_THROWN,                   //When it is thrown.
     MOB_EVENT_RELEASED,                 //When it is released from the leader's/enemy's grasp (e.g. swap for another Pikmin while holding)
     MOB_EVENT_LANDED,                   //When it lands on the ground.
-    MOB_EVENT_BOTTOMLESS_PIT,           //When it lands on a bottomless pit.
     MOB_EVENT_NEAR_TASK,                //When it is near a task (Pikmin only).
     MOB_EVENT_WHISTLED,                 //When it is whistled by a leader.
     MOB_EVENT_SPOT_IS_NEAR,             //When its spot on the group is now near, and the mob is in the group.
@@ -171,6 +171,7 @@ enum MOB_ACTION_SET_HEALTH_TYPES {
 
 //Special function action sub-types.
 enum MOB_ACTION_SPECIAL_FUNCTION_TYPES {
+    MOB_ACTION_SPECIAL_FUNCTION_DELETE,
     MOB_ACTION_SPECIAL_FUNCTION_DIE_START,
     MOB_ACTION_SPECIAL_FUNCTION_DIE_END,
     MOB_ACTION_SPECIAL_FUNCTION_LOOP,

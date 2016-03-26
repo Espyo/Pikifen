@@ -485,7 +485,7 @@ void do_gameplay_logic() {
                     if(
                         m2_ptr->carry_info &&
                         !m2_ptr->carry_info->is_full() &&
-                        d <= m_ptr->type->radius + m2_ptr->type->radius + pikmin_task_range
+                        d <= m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
                     ) {
                     
                         near_carriable_object_ev->run(m_ptr, (void*) m2_ptr);

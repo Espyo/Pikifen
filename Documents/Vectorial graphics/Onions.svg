@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg6166"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Onions.svg">
+  <defs
+     id="defs6168">
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#blue-body-2"
+       id="radialGradient4313-8"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978724"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="blue-body-2">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0"
+         id="stop4309-0" />
+      <stop
+         id="stop5661"
+         offset="0.42708334"
+         style="stop-color:#0000ff;stop-opacity:1;" />
+      <stop
+         id="stop4315-8"
+         offset="0.85416669"
+         style="stop-color:#0000e0;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311-9" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#blue-joint-1"
+       id="radialGradient5404-2"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="blue-joint-1">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0"
+         id="stop5397-2" />
+      <stop
+         style="stop-color:#0000e0;stop-opacity:1;"
+         offset="1"
+         id="stop5400-0" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#blue-joint-1"
+       id="radialGradient5393-5"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#blue-joint-1"
+       id="radialGradient5385-6"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-200.49948,-399.99904)"
+       inkscape:collect="always"
+       xlink:href="#stick-8"
+       id="linearGradient5265-8"
+       x1="280"
+       y1="970.36218"
+       x2="280"
+       y2="974.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="matrix(-0.50301895,0.86427538,-0.86427538,-0.50301895,1013.0031,846.35296)"
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5293-89"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientTransform="matrix(-0.49869623,-0.86677683,0.86677683,-0.49869623,-670.43091,1273.6329)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5461-4"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#yellow-body-9"
+       id="radialGradient4313-6"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978724"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="yellow-body-9">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="0"
+         id="stop4309-4" />
+      <stop
+         id="stop5657"
+         offset="0.42708334"
+         style="stop-color:#ffff00;stop-opacity:1;" />
+      <stop
+         id="stop4315-9"
+         offset="0.85416669"
+         style="stop-color:#e0e000;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311-4" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#yellow-joint-9"
+       id="radialGradient5404-6"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="yellow-joint-9">
+      <stop
+         style="stop-color:#ffff00;stop-opacity:1;"
+         offset="0"
+         id="stop5397-3" />
+      <stop
+         style="stop-color:#e0e000;stop-opacity:1;"
+         offset="1"
+         id="stop5400-6" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#yellow-joint-9"
+       id="radialGradient5393-2"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#yellow-joint-9"
+       id="radialGradient5385-8"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-200.49948,-199.99952)"
+       inkscape:collect="always"
+       xlink:href="#stick-8"
+       id="linearGradient5265-4"
+       x1="280"
+       y1="970.36218"
+       x2="280"
+       y2="974.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="matrix(-0.50301895,0.86427538,-0.86427538,-0.50301895,1013.0031,1046.3525)"
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5293-5"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientTransform="matrix(-0.49869623,-0.86677683,0.86677683,-0.49869623,-670.43091,1473.6324)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5461"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#red-body"
+       id="radialGradient4313"
+       cx="-97.5"
+       cy="1039.8622"
+       fx="-97.5"
+       fy="1039.8622"
+       r="22.978724"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="red-body">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop4309" />
+      <stop
+         id="stop5659"
+         offset="0.42708334"
+         style="stop-color:#ff0000;stop-opacity:1;" />
+      <stop
+         id="stop4315"
+         offset="0.85416669"
+         style="stop-color:#e00000;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4311" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#red-joint-6"
+       id="radialGradient5404"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       id="red-joint-6">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop5397" />
+      <stop
+         style="stop-color:#e00000;stop-opacity:1;"
+         offset="1"
+         id="stop5400" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#red-joint-6"
+       id="radialGradient5393"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#red-joint-6"
+       id="radialGradient5385"
+       cx="241.2"
+       cy="1024.7622"
+       fx="241.2"
+       fy="1024.7622"
+       r="6.8000002"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#stick-8"
+       id="linearGradient5265"
+       x1="280"
+       y1="970.36218"
+       x2="280"
+       y2="974.36218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-200.49974,4.8261719e-4)" />
+    <linearGradient
+       id="stick-8">
+      <stop
+         style="stop-color:#804000;stop-opacity:1;"
+         offset="0"
+         id="stop5261" />
+      <stop
+         id="stop5267"
+         offset="0.5"
+         style="stop-color:#c05f00;stop-opacity:1;" />
+      <stop
+         style="stop-color:#804000;stop-opacity:1;"
+         offset="1"
+         id="stop5263" />
+    </linearGradient>
+    <linearGradient
+       gradientTransform="matrix(-0.50301895,0.86427538,-0.86427538,-0.50301895,1013.0028,1246.3525)"
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5293"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="974.36218"
+       x2="280"
+       y1="970.36218"
+       x1="280"
+       gradientTransform="matrix(-0.49869623,-0.86677683,0.86677683,-0.49869623,-670.43117,1673.6324)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6164"
+       xlink:href="#stick-8"
+       inkscape:collect="always" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="32.326588"
+     inkscape:cy="465.46752"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1031"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4272" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata6171">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:url(#linearGradient6164);fill-opacity:1.0;stroke:none"
+       d="M 31.52008,947.88571 34.9872,945.8909 5.06543,893.88429 1.59837,895.87915 z"
+       id="path4441-4-5"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="14.960865"
+       inkscape:transform-center-y="-26.003315" />
+    <path
+       style="fill:url(#linearGradient5293);fill-opacity:1.0;stroke:none"
+       d="m 34.00026,999.37474 -3.45712,-2.01208 -30.18114,51.85654 3.45713,2.012 z"
+       id="path4441-4"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="15.09057"
+       inkscape:transform-center-y="25.928235" />
+    <path
+       style="fill:url(#linearGradient5265);fill-opacity:1;stroke:none"
+       d="m 78.50026,970.36266 0,4 60,0 0,-4 z"
+       id="path4441"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-168.76183,-52.602957)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5385);fill-opacity:1.0;stroke:none"
+       id="path4414-4"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5393);fill-opacity:1.0;stroke:none"
+       id="path4414"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-204.56183,-72.602957)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-205.46183,-31.902957)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5404);fill-opacity:1;stroke:none"
+       id="path4414-5"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313);fill-opacity:1;stroke:none"
+       id="path3526"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,149.79823,-113.91899)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 49.5649,969.74857 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 46.37749,969.89257 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 45.14353,972.95757 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 47.9649,975.23867 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 50.91702,972.82537 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:none"
+       id="path4319"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,-176.0351,58.342343)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:url(#linearGradient5461);fill-opacity:1.0;stroke:none"
+       d="M 31.52034,747.88571 34.98746,745.8909 5.06569,693.88429 1.59863,695.87915 z"
+       id="path4441-4-5-6"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="14.960865"
+       inkscape:transform-center-y="-26.003315" />
+    <path
+       style="fill:url(#linearGradient5293-5);fill-opacity:1.0;stroke:none"
+       d="m 34.00052,799.37474 -3.45712,-2.01208 -30.18114,51.85652 3.45713,2.012 z"
+       id="path4441-4-6"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="15.09057"
+       inkscape:transform-center-y="25.928235" />
+    <path
+       style="fill:url(#linearGradient5265-4);fill-opacity:1.0;stroke:none"
+       d="m 78.50052,770.36266 0,4 60,0 0,-4 z"
+       id="path4441-2"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-168.76157,-252.60296)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5385-8);fill-opacity:1.0;stroke:none"
+       id="path4414-4-3"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5393-2);fill-opacity:1.0;stroke:none"
+       id="path4414-8"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-204.56157,-272.60296)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-205.46157,-231.90296)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5404-6);fill-opacity:1;stroke:none"
+       id="path4414-5-2"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313-6);fill-opacity:1;stroke:none"
+       id="path3526-6"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,149.79849,-313.91901)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 49.56516,769.74857 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 46.37775,769.89257 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 45.14379,772.95757 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 47.96516,775.23867 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 50.91728,772.82537 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82-8"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:none"
+       id="path4319-27"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,-176.03484,-141.65766)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:url(#linearGradient5461-4);fill-opacity:1.0;stroke:none"
+       d="m 31.52034,547.88619 3.46712,-1.99481 -29.92177,-52.00661 -3.46706,1.99486 z"
+       id="path4441-4-5-8"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="14.960865"
+       inkscape:transform-center-y="-26.003315" />
+    <path
+       style="fill:url(#linearGradient5293-89);fill-opacity:1.0;stroke:none"
+       d="m 34.00052,599.37522 -3.45712,-2.01208 -30.18114,51.85652 3.45713,2.012 z"
+       id="path4441-4-64"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       inkscape:transform-center-x="15.09057"
+       inkscape:transform-center-y="25.928235" />
+    <path
+       style="fill:url(#linearGradient5265-8);fill-opacity:1.0;stroke:none"
+       d="m 78.50052,570.36314 0,4 60,0 0,-4 z"
+       id="path4441-6"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-168.76157,-452.60248)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5385-6);fill-opacity:1.0;stroke:none"
+       id="path4414-4-8"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5393-5);fill-opacity:1.0;stroke:none"
+       id="path4414-9"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       transform="translate(-204.56157,-472.60248)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       transform="translate(-205.46157,-431.90248)"
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient5404-2);fill-opacity:1;stroke:none"
+       id="path4414-5-8"
+       sodipodi:cx="241.2"
+       sodipodi:cy="1024.7622"
+       sodipodi:rx="6.8000002"
+       sodipodi:ry="6.8000002"
+       d="m 248,1024.7622 a 6.8000002,6.8000002 0 1 1 -13.6,0 6.8000002,6.8000002 0 1 1 13.6,0 z"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4313-8);fill-opacity:1;stroke:none"
+       id="path3526-3"
+       sodipodi:cx="-97.5"
+       sodipodi:cy="1039.8622"
+       sodipodi:rx="22.5"
+       sodipodi:ry="22.5"
+       d="m -75,1039.8622 a 22.5,22.5 0 1 1 -45,0 22.5,22.5 0 1 1 45,0 z"
+       transform="matrix(1.0444444,0,0,1.0444444,149.79849,-513.91853)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 49.56516,569.74905 c 6.4,-4.8 15.2,-3.2 15.2,2.4 0,5.6725 -8.8,7.2 -15.2,2.4 l -1.6,-2.3893 z"
+       id="path4321-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 46.37775,569.89305 c -2.58736,-7.57 1.65368,-15.4449 6.97959,-13.7144 5.39487,1.7529 4.12826,10.5942 -2.41452,15.1977 l -2.76678,0.7834 z"
+       id="path4321-9-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 45.14379,572.95805 c -7.99907,0.1215 -14.17797,-6.3455 -10.88637,-10.876 3.33421,-4.5891 11.3514,-0.6524 13.70774,6.9927 l -0.10997,2.8735 z"
+       id="path4321-4-1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 47.96516,575.23915 c -2.35634,7.6451 -10.41615,11.5232 -13.70774,6.9927 -3.33422,-4.5891 2.88729,-10.9974 10.88637,-10.876 l 2.69882,0.9926 z"
+       id="path4321-8-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       d="m 50.91728,572.82585 c 6.54278,4.6034 7.74044,13.4672 2.41452,15.1977 -5.39487,1.7529 -9.56696,-6.1444 -6.97959,-13.7145 l 1.77793,-2.26 z"
+       id="path4321-82-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccc"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffff00;fill-opacity:1;stroke:none"
+       id="path4319-8"
+       sodipodi:cx="256"
+       sodipodi:cy="1044.3622"
+       sodipodi:rx="4"
+       sodipodi:ry="4"
+       d="m 260,1044.3622 a 4,4 0 1 1 -8,0 4,4 0 1 1 8,0 z"
+       transform="matrix(0.875,0,0,0.875,-176.03484,-341.65718)"
+       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Red_onion.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180" />
+  </g>
+</svg>

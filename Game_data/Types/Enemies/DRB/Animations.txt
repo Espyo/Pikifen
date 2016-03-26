@@ -497,9 +497,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=34.00 0.00 0.00
+				coords=32.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=24.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -534,9 +534,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=32.00 -3.00 0.00
+				coords=32.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=24.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false

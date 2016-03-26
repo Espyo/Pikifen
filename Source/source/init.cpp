@@ -110,6 +110,7 @@ void init_error_bitmap() {
         al_clear_to_color(al_map_rgba(64, 0, 0, 128));
         al_draw_text(al_create_builtin_font(), al_map_rgb(255, 0, 0), 0, 0, 0, "ERROR");
     } al_set_target_backbuffer(display);
+    bmp_error = recreate_bitmap(bmp_error);
 }
 
 

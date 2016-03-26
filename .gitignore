@@ -4,9 +4,6 @@ Source/CL/Debug/
 Source/CL/Release/
 Source/CL/.codelite/
 Source/CL/Pikmin_fangame_engine.mk
-Source/CB/Debug/
-Source/CB/Release/
-Documents/
 Error_log.txt
 Options.txt
 *allegro.log

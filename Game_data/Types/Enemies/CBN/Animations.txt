@@ -506,7 +506,7 @@ frames{
 			mouth{
 				coords=100.00 0.00 0.00
 				height=128.00
-				radius=15.00
+				radius=24.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -1266,9 +1266,9 @@ frames{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
-				radius=15.00
+				radius=24.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1278,9 +1278,9 @@ frames{
 			hide{
 				coords=-4.00 0.00 0.00
 				height=128.00
-				radius=28.00
+				radius=32.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1315,9 +1315,9 @@ frames{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
-				radius=15.00
+				radius=24.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1327,9 +1327,9 @@ frames{
 			hide{
 				coords=-4.00 0.00 0.00
 				height=128.00
-				radius=28.00
+				radius=32.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1364,9 +1364,9 @@ frames{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
-				radius=15.00
+				radius=24.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1376,9 +1376,9 @@ frames{
 			hide{
 				coords=-4.00 0.00 0.00
 				height=128.00
-				radius=28.00
+				radius=32.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1413,9 +1413,9 @@ frames{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
-				radius=15.00
+				radius=24.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true
@@ -1425,9 +1425,9 @@ frames{
 			hide{
 				coords=-4.00 0.00 0.00
 				height=128.00
-				radius=28.00
+				radius=32.00
 				type=1
-				multiplier=1.00
+				multiplier=0.00
 				can_pikmin_latch=true
 				hazards=
 				outward=true

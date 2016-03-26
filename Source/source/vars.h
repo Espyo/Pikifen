@@ -165,7 +165,7 @@ extern bool                             dev_tool_area_image_shadows;
 extern int                              dev_tool_area_image_size;
 extern bool                             dev_tool_change_speed;
 extern float                            dev_tool_change_speed_mult;
-extern unsigned char                    dev_tool_keys[9];
+extern unsigned char                    dev_tool_keys[10];
 extern pikmin_type*                     dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY*                 display;
 extern bool                             draw_cursor_trail;
@@ -191,11 +191,13 @@ extern vector<float>                    group_move_arrows;          //Distance o
 extern float                            group_move_intensity;     //General intensity of the group move in the specified angle.
 extern timer                            group_move_next_arrow_timer; //Time remaining until the next arrow on the "move group arrows" appears.
 extern bool                             group_move_go_to_cursor;     //Is the "move group to cursor" button being pressed?
+extern float                            group_move_task_range;
 extern movement_struct                  group_movement; //Joystick coordinates for the group movement.
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
 extern float                            hud_coords[N_HUD_ITEMS][4];
 extern float                            idle_glow_angle;
+extern float                            idle_task_range;
 extern string                           info_print_text;
 extern timer                            info_print_timer;
 extern float                            info_spot_trigger_range;
@@ -233,7 +235,6 @@ extern timer                            percipitation_timer;
 extern float                            pikmin_grab_range;
 extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*>                  pikmin_list;
-extern float                            pikmin_task_range;
 extern map<string, pikmin_type*>        pikmin_types;
 extern float                            pluck_range;
 extern bool                             pretty_whistle;              //If true, the whistle radius is merely drawn as a circle. Used to improve performance.

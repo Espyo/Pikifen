@@ -46,6 +46,10 @@ script{
             move = randomly
             animation = walk
         }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
         on_reach_destination{
             state = examining
         }
@@ -58,12 +62,11 @@ script{
         on_pikmin_land{
             state = crushed
         }
+        on_bottomless_pit{
+            state = deleting
+        }
         on_death{
             state = dying
-        }
-        on_see_opponent{
-            focus = mob
-            state = chasing
         }
     }
     
@@ -78,11 +81,14 @@ script{
         on_pikmin_land{
             state = crushed
         }
-        on_death{
-            state = dying
-        }
         on_animation_end{
             state = returning_ignoring
+        }
+        on_bottomless_pit{
+            state = deleting
+        }
+        on_death{
+            state = dying
         }
     }
     
@@ -105,6 +111,9 @@ script{
         }
         on_pikmin_land{
             state = crushed
+        }
+        on_bottomless_pit{
+            state = deleting
         }
         on_death{
             state = dying
@@ -183,6 +192,9 @@ script{
         on_see_opponent{
             state = chasing
         }
+        on_bottomless_pit{
+            state = deleting
+        }
         on_death{
             state = dying
         }
@@ -198,6 +210,9 @@ script{
         }
         on_pikmin_land{
             state = crushed
+        }
+        on_bottomless_pit{
+            state = deleting
         }
         on_death{
             state = dying
@@ -224,6 +239,13 @@ script{
         }
         on_animation_end{
             special_function = die_end
+        }
+    }
+    
+    deleting{
+        on_enter{
+            special_function = die_end
+            special_function = delete
         }
     }
     

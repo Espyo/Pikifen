@@ -2579,7 +2579,7 @@ void area_editor::load() {
     frm_texture->widgets["but_back"]->description = "Cancel.";
     
     
-    //Properties -- advanced textures.
+    //Properties -- advanced texture settings.
     auto lambda_gui_to_adv_textures = [this] (lafi::widget*) { gui_to_adv_textures(); };
     frm_adv_textures->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         clear_area_textures(); //Clears the texture set when we entered this menu.

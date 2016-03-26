@@ -110,6 +110,17 @@ animations{
 			}
 		}
 	}
+	sigh{
+		loop_frame=0
+		frame_instances{
+			thrown1{
+				duration=1.50
+			}
+			idle{
+				duration=0.50
+			}
+		}
+	}
 }
 frames{
 	burrowed{

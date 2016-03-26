@@ -112,32 +112,34 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     bool go_straight = false;
     vector<path_stop*> old_path = m->path;
     
-    m->path = get_path(
-                  m->x, m->y,
-                  m->carry_info->final_destination_x,
-                  m->carry_info->final_destination_y,
-                  &obs, &go_straight, NULL
-              );
-    m->carry_info->obstacle_ptr = obs;
-    m->carry_info->go_straight = go_straight;
-    
-    if(
-        m->path.size() >= 2 &&
-        m->cur_path_stop_nr < old_path.size() &&
-        m->path[1] == old_path[m->cur_path_stop_nr]
-    ) {
-        //If the second stop of the old path is the
-        //same as the stop it was already going towards,
-        //then just go there right away, instead of doing a back-and-forth.
-        m->cur_path_stop_nr = 0;
-    } else {
-        m->cur_path_stop_nr = INVALID;
-    }
-    
-    if(m->path.empty() && !go_straight) {
-        m->carry_info->stuck_state = 1;
-    } else {
-        m->carry_info->stuck_state = 0;
+    if(m->carrying_target) {
+        m->path = get_path(
+                      m->x, m->y,
+                      m->carry_info->final_destination_x,
+                      m->carry_info->final_destination_y,
+                      &obs, &go_straight, NULL
+                  );
+        m->carry_info->obstacle_ptr = obs;
+        m->carry_info->go_straight = go_straight;
+        
+        if(
+            m->path.size() >= 2 &&
+            m->cur_path_stop_nr < old_path.size() &&
+            m->path[1] == old_path[m->cur_path_stop_nr]
+        ) {
+            //If the second stop of the old path is the
+            //same as the stop it was already going towards,
+            //then just go there right away, instead of doing a back-and-forth.
+            m->cur_path_stop_nr = 0;
+        } else {
+            m->cur_path_stop_nr = INVALID;
+        }
+        
+        if(m->path.empty() && !go_straight) {
+            m->carry_info->stuck_state = 1;
+        } else {
+            m->carry_info->stuck_state = 0;
+        }
     }
     
     m->carry_info->is_moving = true;

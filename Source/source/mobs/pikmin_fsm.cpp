@@ -326,7 +326,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TIMER); {
             efc.run_function(pikmin_fsm::forget_carriable_object);
-            efc.change_state("idle");
+            efc.change_state("sighing");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run_function(pikmin_fsm::forget_carriable_object);
@@ -346,6 +346,32 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("sighing", PIKMIN_STATE_SIGHING); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin_fsm::stand_still);
+            efc.run_function(pikmin_fsm::sigh);
+        }
+        efc.new_event(MOB_EVENT_ANIMATION_END); {
+            efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_LEADER); {
+            efc.run_function(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin_fsm::get_knocked_down);
+            efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
+            efc.change_state("grabbed_by_enemy");
         }
     }
     
@@ -557,6 +583,10 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
 void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     pikmin_fsm::stand_still(m, NULL, NULL);
+}
+
+void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_SIGH);
 }
 
 void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {

@@ -75,6 +75,9 @@ script{
         on_big_damage{
             state = shaking
         }
+        on_bottomless_pit{
+            state = deleting
+        }
         on_death{
             state = dying
         }
@@ -153,6 +156,9 @@ script{
         on_see_opponent{
             state = chasing
         }
+        on_bottomless_pit{
+            state = deleting
+        }
         on_death{
             state = dying
         }
@@ -165,6 +171,9 @@ script{
         }
         on_reach_destination{
             state = falling_asleep
+        }
+        on_bottomless_pit{
+            state = deleting
         }
         on_death{
             state = dying
@@ -189,6 +198,13 @@ script{
         }
         on_animation_end{
             special_function = die_end
+        }
+    }
+    
+    deleting{
+        on_enter{
+            special_function = die_end
+            special_function = delete
         }
     }
     

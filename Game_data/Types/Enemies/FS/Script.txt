@@ -71,6 +71,9 @@ script{
         on_pikmin_land{
             state = crushed
         }
+        on_bottomless_pit{
+            state = deleting
+        }
         on_death{
             state = dying
         }
@@ -86,6 +89,9 @@ script{
         }
         on_pikmin_land{
             state = crushed
+        }
+        on_bottomless_pit{
+            state = deleting
         }
         on_death{
             state = dying
@@ -106,6 +112,13 @@ script{
         }
         on_animation_end{
             special_function = die_end
+        }
+    }
+    
+    deleting{
+        on_enter{
+            special_function = die_end
+            special_function = delete
         }
     }
     

@@ -204,11 +204,6 @@ void gameplay::load() {
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     cur_leader_ptr->first_state_set = true;
     
-    pikmin_in_onions.clear();
-    for(size_t o = 0; o < onions.size(); ++o) {
-        pikmin_in_onions[onions[o]->oni_type->pik_type] = 0;
-    }
-    
     day_minutes = day_minutes_start;
     
     cam_x = cam_final_x = cur_leader_ptr->x;

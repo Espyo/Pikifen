@@ -255,11 +255,13 @@ void mob::tick_physics() {
     
     //If another mob is pushing it.
     if(push_amount != 0.0f) {
+        //Overly-aggressive pushing results in going through walls. Let's place a cap.
+        push_amount = min(push_amount, (float) ((type->radius / delta_t) - chase_speed));
         move_speed_x += cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
         move_speed_y += sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
-        
-        push_amount = 0;
     }
+        
+    push_amount = 0;
     
     
     //Try placing it in the place it should be at, judging

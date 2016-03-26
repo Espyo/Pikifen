@@ -1747,7 +1747,7 @@ mobs{
 	}
 	Pellet{
 		type=Red 10
-		p=-0.00 64.00
+		p=-32.00 32.00
 	}
 	Pellet{
 		type=Red 1

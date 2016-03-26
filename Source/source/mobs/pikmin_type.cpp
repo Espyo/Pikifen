@@ -74,8 +74,11 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,   "thrown"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACK,   "attack"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRAB,     "grab"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_SIGH,     "sigh"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_CARRY,    "carry"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
+    
+    pikmin_in_onions[this] = s2i(file->get_child_by_name("onion_starting_number")->value);
 }

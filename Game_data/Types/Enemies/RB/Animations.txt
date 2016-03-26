@@ -639,9 +639,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=120.00 0.00 0.00
+				coords=102.00 0.00 0.00
 				height=128.00
-				radius=24.00
+				radius=38.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -688,9 +688,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=102.00 11.00 0.00
+				coords=95.00 4.00 0.00
 				height=128.00
-				radius=24.00
+				radius=38.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -960,7 +960,7 @@ frames{
 			body{
 				coords=50.00 -8.00 0.00
 				height=128.00
-				radius=50.00
+				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -972,7 +972,7 @@ frames{
 			back{
 				coords=-13.00 0.00 0.00
 				height=128.00
-				radius=50.00
+				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -1009,7 +1009,7 @@ frames{
 			body{
 				coords=50.00 8.00 0.00
 				height=128.00
-				radius=50.00
+				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -1021,7 +1021,7 @@ frames{
 			back{
 				coords=-13.00 0.00 0.00
 				height=128.00
-				radius=50.00
+				radius=60.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false

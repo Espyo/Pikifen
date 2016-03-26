@@ -943,11 +943,12 @@ void load_game_config() {
     set_if_exists(file.get_child_by_name("day_minutes_end")->value, day_minutes_end);
     set_if_exists(file.get_child_by_name("day_minutes_per_irl_sec")->value, day_minutes_per_irl_sec);
     
+    set_if_exists(file.get_child_by_name("idle_task_range")->value, idle_task_range);
+    set_if_exists(file.get_child_by_name("group_move_task_range")->value, group_move_task_range);
     set_if_exists(file.get_child_by_name("max_pikmin_in_field")->value, max_pikmin_in_field);
     set_if_exists(file.get_child_by_name("maturity_power_mult")->value, maturity_power_mult);
     set_if_exists(file.get_child_by_name("maturity_speed_mult")->value, maturity_speed_mult);
     set_if_exists(file.get_child_by_name("nectar_amount")->value, nectar_amount);
-    set_if_exists(file.get_child_by_name("pikmin_task_range")->value, pikmin_task_range);
     
     set_if_exists(file.get_child_by_name("cursor_max_dist")->value, cursor_max_dist);
     set_if_exists(file.get_child_by_name("cursor_spin_speed")->value, cursor_spin_speed);

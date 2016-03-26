@@ -41,6 +41,7 @@ void prepare_to_attack(      mob* m, void* info1, void* info2);
 void reach_carriable_object( mob* m, void* info1, void* info2);
 void reach_dismiss_spot(     mob* m, void* info1, void* info2);
 void rechase_opponent(       mob* m, void* info1, void* info2);
+void sigh(                   mob* m, void* info1, void* info2);
 void stand_still(            mob* m, void* info1, void* info2);
 void stop_being_idle(        mob* m, void* info1, void* info2);
 void stop_carrying(          mob* m, void* info1, void* info2);
