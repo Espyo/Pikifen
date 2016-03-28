@@ -2827,6 +2827,11 @@ void area_editor::load() {
     show_closest_stop = false;
     area_name.clear();
     
+    if(!auto_load_area.empty()) {
+        area_name = auto_load_area;
+        load_area();
+    }
+    
 }
 
 

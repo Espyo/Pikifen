@@ -15,3 +15,6 @@ area_image_size = 2048
 area_image_file_name = Area.jpg
 area_image_shadows = true
 change_speed_multiplier = 4.0
+
+auto_start_mode = 
+auto_start_option = 

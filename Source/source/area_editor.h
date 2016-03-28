@@ -145,8 +145,10 @@ private:
 public:
 
     vector<edge_intersection> intersecting_edges;
-    unordered_set<sector*>       non_simples;
+    unordered_set<sector*>    non_simples;
     unordered_set<edge*>      lone_edges;
+    
+    string auto_load_area;
     
     area_editor();
     

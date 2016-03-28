@@ -92,6 +92,8 @@ public:
 
     animation_editor();
     
+    string auto_load_anim;
+    
     virtual void do_logic();
     virtual void do_drawing();
     virtual void handle_controls(ALLEGRO_EVENT ev);

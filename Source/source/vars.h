@@ -165,6 +165,8 @@ extern bool                             dev_tool_area_image_shadows;
 extern int                              dev_tool_area_image_size;
 extern bool                             dev_tool_change_speed;
 extern float                            dev_tool_change_speed_mult;
+extern string                           dev_tool_auto_start_option;
+extern string                           dev_tool_auto_start_mode;
 extern unsigned char                    dev_tool_keys[10];
 extern pikmin_type*                     dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY*                 display;

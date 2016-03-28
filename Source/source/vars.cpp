@@ -130,6 +130,8 @@ bool                             dev_tool_area_image_shadows = true;
 int                              dev_tool_area_image_size = 2048;
 bool                             dev_tool_change_speed = false;
 float                            dev_tool_change_speed_mult = 2.0;
+string                           dev_tool_auto_start_option;
+string                           dev_tool_auto_start_mode;
 unsigned char                    dev_tool_keys[10];
 pikmin_type*                     dev_tool_last_pikmin_type = NULL;
 ALLEGRO_DISPLAY*                 display = NULL;

@@ -98,6 +98,9 @@ void init_dev_tools() {
     dev_tool_area_image_shadows = s2b(file.get_child_by_name("area_image_shadows")->value);
     dev_tool_change_speed_mult = s2f(file.get_child_by_name("change_speed_multiplier")->value);
     
+    dev_tool_auto_start_option = file.get_child_by_name("auto_start_option")->value;
+    dev_tool_auto_start_mode = file.get_child_by_name("auto_start_mode")->value;
+    
 }
 
 

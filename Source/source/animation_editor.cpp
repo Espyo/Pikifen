@@ -981,36 +981,8 @@ void animation_editor::load() {
         if(al_get_native_file_dialog_count(file_dialog) == 0) return;
         
         file_path = al_get_native_file_dialog_path(file_dialog, 0);
-        file_path = replace_all(file_path, "\\", "/");
         load_animation_pool();
         
-        vector<string> file_path_parts = split(file_path, "/");
-        string name_to_show = file_path;
-        if(file_path.size() > 20) {
-            //Show the last 20 characters.
-            name_to_show = "..." + file_path.substr(file_path.size() - 20, 20);
-        }
-        ((lafi::button*) frm_main->widgets["but_file"])->text = name_to_show;
-        
-        //Top bitmap.
-        for(unsigned char t = 0; t < 3; ++t) {
-            if(top_bmp[t] && top_bmp[t] != bmp_error) {
-                al_destroy_bitmap(top_bmp[t]);
-                top_bmp[t] = NULL;
-            }
-        }
-        
-        if(file_path.find(PIKMIN_FOLDER) != string::npos) {
-            is_pikmin = true;
-            data_node data = data_node(PIKMIN_FOLDER + "/" + file_path_parts[file_path_parts.size() - 2] + "/Data.txt");
-            top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
-            top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
-            top_bmp[2] = load_bmp(data.get_child_by_name("top_flower")->value, &data);
-        } else {
-            is_pikmin = false;
-        }
-        
-        update_stats();
     };
     frm_main->widgets["but_file"]->description = "Pick a file to load or create.";
     frm_main->widgets["frm_object"]->widgets["but_anims"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
@@ -1438,12 +1410,6 @@ void animation_editor::load() {
             this->show_changes_warning();
         } else {
             load_animation_pool();
-            hide_widget(this->gui->widgets["frm_anims"]);
-            hide_widget(this->gui->widgets["frm_frames"]);
-            hide_widget(this->gui->widgets["frm_hitboxes"]);
-            show_widget(this->gui->widgets["frm_main"]);
-            mode = EDITOR_MODE_MAIN;
-            update_stats();
         }
     };
     frm_bottom->widgets["but_load"]->description = "Load the object from the text file.";
@@ -1481,6 +1447,12 @@ void animation_editor::load() {
     update_stats();
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
+    
+    if(!auto_load_anim.empty()) {
+        file_path = auto_load_anim;
+        load_animation_pool();
+    }
+    
 }
 
 
@@ -1488,6 +1460,8 @@ void animation_editor::load() {
  * Loads the animation pool for the current object.
  */
 void animation_editor::load_animation_pool() {
+    file_path = replace_all(file_path, "\\", "/");
+    
     anims.destroy();
     
     data_node file = data_node(file_path);
@@ -1535,6 +1509,39 @@ void animation_editor::load_animation_pool() {
         });
         last_file_used = file_uses_vector[0].second;
     }
+    
+    vector<string> file_path_parts = split(file_path, "/");
+    string name_to_show = file_path;
+    if(file_path.size() > 20) {
+        //Show the last 20 characters.
+        name_to_show = "..." + file_path.substr(file_path.size() - 20, 20);
+    }
+    ((lafi::button*) gui->widgets["frm_main"]->widgets["but_file"])->text = name_to_show;
+    
+    //Top bitmap.
+    for(unsigned char t = 0; t < 3; ++t) {
+        if(top_bmp[t] && top_bmp[t] != bmp_error) {
+            al_destroy_bitmap(top_bmp[t]);
+            top_bmp[t] = NULL;
+        }
+    }
+    
+    if(file_path.find(PIKMIN_FOLDER) != string::npos) {
+        is_pikmin = true;
+        data_node data = data_node(PIKMIN_FOLDER + "/" + file_path_parts[file_path_parts.size() - 2] + "/Data.txt");
+        top_bmp[0] = load_bmp(data.get_child_by_name("top_leaf")->value, &data);
+        top_bmp[1] = load_bmp(data.get_child_by_name("top_bud")->value, &data);
+        top_bmp[2] = load_bmp(data.get_child_by_name("top_flower")->value, &data);
+    } else {
+        is_pikmin = false;
+    }
+    
+    hide_widget(this->gui->widgets["frm_anims"]);
+    hide_widget(this->gui->widgets["frm_frames"]);
+    hide_widget(this->gui->widgets["frm_hitboxes"]);
+    show_widget(this->gui->widgets["frm_main"]);
+    mode = EDITOR_MODE_MAIN;
+    update_stats();
 }
 
 

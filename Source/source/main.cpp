@@ -88,18 +88,18 @@ int main(int argc, char** argv) {
     load_game_config();
     load_hud_coordinates();
     
-    unsigned int first_game_state = GAME_STATE_MAIN_MENU;
-    if(argc >= 2) {
-        string arg(argv[1]);
-        if(arg == "play")
-            first_game_state = GAME_STATE_GAME;
-        else if(arg == "anim")
-            first_game_state = GAME_STATE_ANIMATION_EDITOR;
-        else if(arg == "area")
-            first_game_state = GAME_STATE_AREA_EDITOR;
+    if(dev_tool_auto_start_mode == "play" && !dev_tool_auto_start_option.empty()) {
+        area_to_load = dev_tool_auto_start_option;
+        change_game_state(GAME_STATE_GAME);
+    } else if(dev_tool_auto_start_mode == "animation_editor") {
+        ((animation_editor*) game_states[GAME_STATE_ANIMATION_EDITOR])->auto_load_anim = dev_tool_auto_start_option;
+        change_game_state(GAME_STATE_ANIMATION_EDITOR);
+    } else if(dev_tool_auto_start_mode == "area_editor") {
+        ((area_editor*) game_states[GAME_STATE_AREA_EDITOR])->auto_load_area = dev_tool_auto_start_option;
+        change_game_state(GAME_STATE_AREA_EDITOR);
+    } else {
+        change_game_state(GAME_STATE_MAIN_MENU);
     }
-    
-    change_game_state(first_game_state);
     
     //Main loop.
     al_start_timer(logic_timer);
