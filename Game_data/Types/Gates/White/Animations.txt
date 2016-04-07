@@ -21,17 +21,17 @@ frames{
 		file=White_gate.png
 		file_x=0
 		file_y=0
-		file_w=32
-		file_h=128
-		game_w=32.00
-		game_h=128.00
+		file_w=48
+		file_h=192
+		game_w=48.00
+		game_h=192.00
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
-				radius=32.00
+				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
@@ -41,9 +41,9 @@ frames{
 				knockback=1.00
 			}
 			left{
-				coords=0.00 48.00 0.00
+				coords=0.00 80.00 0.00
 				height=0.00
-				radius=32.00
+				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
@@ -53,9 +53,9 @@ frames{
 				knockback=1.00
 			}
 			right{
-				coords=0.00 -48.00 0.00
+				coords=0.00 -80.00 0.00
 				height=0.00
-				radius=32.00
+				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=true
@@ -67,7 +67,7 @@ frames{
 		}
 	}
 	nothing{
-		file=
+		file=White_gate.png
 		file_x=0
 		file_y=0
 		file_w=0

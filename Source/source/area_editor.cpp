@@ -2465,7 +2465,7 @@ void area_editor::load() {
     frm_area->widgets["but_objects"]->description = "Change object settings and placements.";
     frm_area->widgets["but_paths"]->description =   "Change movement paths and stops.";
     frm_area->widgets["but_shadows"]->description = "Change the shadows of trees and leaves.";
-    frm_area->widgets["but_guide"]->description =   "Manage the guide image.";
+    frm_area->widgets["but_guide"]->description =   "Add an image, like a sketch, to guide you.";
     frm_area->widgets["but_review"]->description =  "Tools to make sure everything is fine in the area.";
     
     

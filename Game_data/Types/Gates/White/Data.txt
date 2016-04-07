@@ -4,4 +4,4 @@ height = 200
 max_health = 2000
 pushable = false
 pushes = false
-radius = 32
+radius = 48

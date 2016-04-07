@@ -259,13 +259,17 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             if(mob_ptr->carry_info) {
                 if(mob_ptr->carry_info->cur_carrying_strength > 0) {
                     ALLEGRO_COLOR color;
+                    bool valid = false;
                     if(mob_ptr->carry_info->is_moving) {
                         if(mob_ptr->carry_info->carry_to_ship) {
                             color = carrying_color_move;
-                        } else {
+                            valid = true;
+                        } else if(mob_ptr->carrying_target) {
                             color = ((onion*) (mob_ptr->carrying_target))->oni_type->pik_type->main_color;
+                            valid = true;
                         }
-                    } else {
+                    }
+                    if(!valid) {
                         color = carrying_color_stop;
                     }
                     draw_fraction(

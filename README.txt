@@ -47,6 +47,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     Why can't I see the game window?
         Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    Why are some textures black, but not HUD elements?
+        I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images. So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
     Why is it so slow?
         It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural. Check the Options.txt file and use the wiki page for settings that you can change in order to sacrifice appearance for performance.
     Why did it crash?
@@ -58,12 +60,12 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     (You likely don't need to do this.)
     First, download the source, of course.
     Then, under Linux...
-        Install Allegro 5 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        Install Allegro 5 (5.0.10) on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
         On a terminal, go to the source's folder and write "make".
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
     Or under Windows...
         What are you doing? Just download a pre-built binary, please!
-        ...But if you really must compile it, install Allegro 5 by following the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        ...But if you really must compile it, install Allegro 5 (5.0.10) by following the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
         Open the .sln with Visual Studio.
         Compile. Good luck.
 

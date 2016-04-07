@@ -1,0 +1,15 @@
+Code style:
+    Although I try to have my code clean by following a concise style, I don't expect to follow it 100% of the time. But 99%, sure. I use AStyle http://astyle.sourceforge.net/ to stylize the code for me, but there are some other things I also do to make the code pretty.
+    AStyle command line settings:
+        --style=java --indent=spaces=4 --align-pointer=type --align-reference=name --indent-preproc-define --indent-col1-comments --pad-oper --file-empty-lines --keep-one-line-blocks --keep-one-line-statements --convert-tabs --mode=c
+    Other things:
+        Keep two empty lines between functions in .cpp files.
+
+Quick code guide:
+    The engine runs on Allegro, which is a framework that uses OpenGL.
+    Everything starts in the main function. This is where you get some miscellaneous initializations, like Allegro things, option file loading, etc.
+    The game's main logic is split into game states. After the initializations, we load the contents for the main menu's state, which involves populating the menu, among other things.
+    When an option is clicked on the main menu, it can switch to a different game state, a process which unloads the current one.
+    On the main game's state, upon loading, a process that loads all of the fangame content begins.
+    Object types and other minor things get loaded. The topmost concept is of an object type. "Red Bulborb" is an object type (an enemy type actually, which is a subclass of object type), a "Bramble gate" is an object type, an "Olimar" is an object type, etc. When you spawn an object in the game world, it has a property for its "type" information. Enemies have a property for their enemy type, leaders for their leader type, etc.
+    Object logic works using an event-driven finite state machine. An object is on any given state, and on that state, it can handle certain events. When handling an event, it does a series of actions.
