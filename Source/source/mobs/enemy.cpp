@@ -71,7 +71,7 @@ void enemy::draw() {
         draw_w * radius_scale,
         draw_h * radius_scale,
         angle,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
     
     if(being_delivered) {

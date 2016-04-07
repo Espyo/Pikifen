@@ -658,7 +658,9 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health -= m->type->max_health * 0.2;
     m->x = m->home_x;
     m->y = m->home_y;
-    m->z = get_sector(m->x, m->y, NULL, true)->z + 100;
+    m->center_sector = get_sector(m->x, m->y, NULL, true);
+    m->ground_sector = m->center_sector;
+    m->z = m->center_sector->z + 100;
 }
 
 void leader_fsm::focus(mob* m, void* info1, void* info2) {

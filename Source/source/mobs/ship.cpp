@@ -28,15 +28,16 @@ void ship::draw() {
         bmp_ship,
         x, y,
         138, 112,
-        0, map_gray(get_sprite_lighting(this))
+        0, map_gray(get_sprite_brightness(this))
     );
+    unsigned char brightness = get_sprite_brightness(this);
     al_draw_circle(
         x + type->radius + SHIP_BEAM_RANGE,
         y, SHIP_BEAM_RANGE,
         al_map_rgb(
-            ship_beam_ring_color[0] * 255 / get_sprite_lighting(this),
-            ship_beam_ring_color[1] * 255 / get_sprite_lighting(this),
-            ship_beam_ring_color[2] * 255 / get_sprite_lighting(this)
+            ship_beam_ring_color[0] * 255 / brightness,
+            ship_beam_ring_color[1] * 255 / brightness,
+            ship_beam_ring_color[2] * 255 / brightness
         ), 1
     );
 }

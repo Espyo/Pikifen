@@ -69,7 +69,7 @@ void treasure::draw() {
         draw_y,
         radius * 2.0, -1,
         angle,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
     
     if(being_delivered) {

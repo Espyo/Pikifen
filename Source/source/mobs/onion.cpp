@@ -133,9 +133,9 @@ void onion::draw() {
         draw_w, draw_h,
         angle,
         al_map_rgba(
-            get_sprite_lighting(this),
-            get_sprite_lighting(this),
-            get_sprite_lighting(this),
+            get_sprite_brightness(this),
+            get_sprite_brightness(this),
+            get_sprite_brightness(this),
             seethrough
         )
     );

@@ -153,8 +153,8 @@ public:
     float speed;                      //Speed moving forward. //TODO is this used?
     float angle;                      //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float intended_angle;             //Angle the mob wants to be facing.
-    float ground_z;                   //Z of the highest ground it's on.
-    float lighting;                   //How light the mob is. Depends on the sector(s) it's on.
+    sector* ground_sector;            //The highest ground below the entire mob.
+    sector* center_sector;            //Sector that the mob's center is on.
     float gravity_mult;               //Multiply the mob's gravity by this.
     float push_amount;                //Amount it's being pushed by another mob.
     float push_angle;                 //Angle that another mob is pushing it to.
@@ -238,7 +238,7 @@ public:
     //Drawing tools.
     void get_sprite_center(mob* m, frame* f, float* x, float* y);
     void get_sprite_dimensions(mob* m, frame* f, float* w, float* h, float* scale = NULL);
-    float get_sprite_lighting(mob* m);
+    float get_sprite_brightness(mob* m);
     
 };
 

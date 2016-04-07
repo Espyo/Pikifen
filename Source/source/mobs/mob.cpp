@@ -81,8 +81,8 @@ mob::mob(const float x, const float y, mob_type* type, const float angle, const 
     
     sector* sec = get_sector(x, y, nullptr, true);
     z = sec->z;
-    ground_z = sec->z;
-    lighting = sec->brightness;
+    ground_sector = sec;
+    center_sector = sec;
     
     fsm.set_state(type->first_state_nr);
 }
@@ -193,9 +193,9 @@ void mob::tick_physics() {
     bool doing_slide = false;
     
     float new_x = x, new_y = y, new_z = z;
-    float new_ground_z = ground_z;
-    unsigned char new_lighting = lighting;
-    float pre_move_ground_z = ground_z;
+    sector* new_ground_sector = ground_sector;
+    sector* new_center_sector = center_sector;
+    float pre_move_ground_z = ground_sector->z;
     
     float move_speed_x = speed_x;
     float move_speed_y = speed_y;
@@ -226,7 +226,7 @@ void mob::tick_physics() {
                 
             } else {
                 if(chase_teleport_z) {
-                    ground_z = sec->z;
+                    ground_sector = sec;
                     z = *chase_teleport_z;
                 }
                 speed_x = speed_y = speed_z = 0;
@@ -260,7 +260,7 @@ void mob::tick_physics() {
         move_speed_x += cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
         move_speed_y += sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
     }
-        
+    
     push_amount = 0;
     
     
@@ -277,27 +277,26 @@ void mob::tick_physics() {
         //It's pretty naive... but it works!
         bool successful_move = true;
         
-        new_x = x + delta_t* move_speed_x;
-        new_y = y + delta_t* move_speed_y;
+        new_x = x + delta_t * move_speed_x;
+        new_y = y + delta_t * move_speed_y;
         new_z = z;
-        new_ground_z = ground_z;
-        new_lighting = lighting;
+        new_ground_sector = ground_sector;
         set<edge*> intersecting_edges;
         
-        //Get the sector the mob is currently on.
-        sector* base_sector = get_sector(new_x, new_y, NULL, true);
+        //Get the sector the mob will be on.
+        sector* new_center_sector = get_sector(new_x, new_y, NULL, true);
+        sector* step_sector = new_center_sector;
         
-        if(!base_sector) {
+        if(!new_center_sector) {
             //Out of bounds. No movement.
             break;
         } else {
-            new_ground_z = base_sector->z;
-            new_lighting = base_sector->brightness;
+            new_ground_sector = new_center_sector;
         }
         
         //Quick panic handler: if it's under the ground, pop it out.
-        if(z < base_sector->z) {
-            z = base_sector->z;
+        if(z < new_center_sector->z) {
+            z = new_center_sector->z;
         }
         
         //Before checking the edges, let's consult the blockmap and look at
@@ -323,8 +322,6 @@ void mob::tick_physics() {
         
         float slide_angle = move_angle; //Angle to slide towards.
         float slide_angle_dif = 0;      //Difference between the movement angle and the slide.
-        float step_z = new_ground_z;    //Height of the step, if any.
-        float tallest_z_below_mob = new_ground_z; //Tallest sector floor below the mob.
         
         edge* e_ptr = NULL;
         
@@ -337,7 +334,7 @@ void mob::tick_physics() {
                 for(size_t e = 0; e < edges->size(); ++e) {
                 
                     e_ptr = (*edges)[e];
-                    bool is_edge_wall = false;
+                    bool is_edge_blocking = false;
                     
                     if(
                         !circle_intersects_line(
@@ -356,41 +353,46 @@ void mob::tick_physics() {
                             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
                             e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                         ) {
-                            is_edge_wall = true;
+                            is_edge_blocking = true;
                         }
                         
-                        if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z && !is_edge_wall) {
-                            //No difference in floor height = no wall. Ignore this.
-                            continue;
+                        if(!is_edge_blocking) {
+                            if(e_ptr->sectors[0]->z < z && e_ptr->sectors[1]->z < z) {
+                                //An edge whose sectors are below the mob? No collision here.
+                                continue;
+                            }
+                            if(e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) {
+                                //No difference in floor height = no wall. Ignore this.
+                                continue;
+                            }
                         }
                         
-                        float tallest_z; //Tallest of the two sectors.
+                        sector* tallest_sector; //Tallest of the two.
                         if(e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING) {
-                            tallest_z = e_ptr->sectors[1]->z;
+                            tallest_sector = e_ptr->sectors[1];
                         } else if(e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING) {
-                            tallest_z = e_ptr->sectors[0]->z;
+                            tallest_sector = e_ptr->sectors[0];
                         } else {
-                            tallest_z = max(e_ptr->sectors[0]->z, e_ptr->sectors[1]->z);
+                            if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
+                                tallest_sector = e_ptr->sectors[0];
+                            } else {
+                                tallest_sector = e_ptr->sectors[1];
+                            }
                         }
                         
-                        if(tallest_z > tallest_z_below_mob && tallest_z <= z) {
-                            tallest_z_below_mob = tallest_z;
-                        }
-                        
-                        if(tallest_z < z && !is_edge_wall) {
-                            //An edge whose sectors are below the mob? No collision here.
-                            continue;
+                        if(tallest_sector->z > new_ground_sector->z && tallest_sector->z <= z) {
+                            new_ground_sector = tallest_sector;
                         }
                         
                         //Check if it can go up this step.
                         //It can go up this step if the floor is within stepping distance
-                        //of the mob's current Z, and if this step is larger
+                        //of the mob's current Z, and if this step is largwer
                         //than any step encountered of all edges crossed.
                         if(
-                            tallest_z <= z + SECTOR_STEP &&
-                            tallest_z > step_z
+                            tallest_sector->z <= z + SECTOR_STEP &&
+                            tallest_sector->z > step_sector->z
                         ) {
-                            step_z = tallest_z;
+                            step_sector = tallest_sector;
                         }
                         
                         //Add this edge to the list of intersections, then.
@@ -414,10 +416,11 @@ void mob::tick_physics() {
         
         if(!successful_move) break;
         
-        if(step_z > tallest_z_below_mob) tallest_z_below_mob = step_z;
-        new_ground_z = tallest_z_below_mob;
+        if(step_sector->z > new_ground_sector->z) {
+            new_ground_sector = step_sector;
+        }
         
-        if(z < step_z) new_z = step_z;
+        if(z < step_sector->z) new_z = step_sector->z;
         
         //Check wall angles and heights to check which of these edges really are wall collisions.
         for(auto e = intersecting_edges.begin(); e != intersecting_edges.end(); e++) {
@@ -524,8 +527,8 @@ void mob::tick_physics() {
             x = new_x;
             y = new_y;
             z = new_z;
-            ground_z = new_ground_z;
-            lighting = new_lighting;
+            ground_sector = new_ground_sector;
+            center_sector = new_center_sector;
             finished_moving = true;
             
         } else {
@@ -557,28 +560,28 @@ void mob::tick_physics() {
     
     //If the current ground is one step (or less) below
     //the previous ground, just instantly go down the step.
-    if(pre_move_ground_z - ground_z <= SECTOR_STEP && z == pre_move_ground_z) {
-        z = ground_z;
+    if(pre_move_ground_z - ground_sector->z <= SECTOR_STEP && z == pre_move_ground_z) {
+        z = ground_sector->z;
     }
     
-    z += delta_t* speed_z;
-    if(z <= ground_z) {
-        z = ground_z;
+    z += delta_t * speed_z;
+    if(z <= ground_sector->z) {
+        z = ground_sector->z;
         speed_z = 0;
         was_thrown = false;
         fsm.run_event(MOB_EVENT_LANDED);
-        if(get_sector(x, y, NULL, true)->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+        if(ground_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
         }
     }
     
     //Gravity.
     if(gravity_mult > 0) {
-        if(z > ground_z) {
-            speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+        if(z > ground_sector->z) {
+            speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
         }
     } else {
-        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+        speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
     }
 }
 
@@ -1480,7 +1483,7 @@ void mob::draw() {
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
     
 }
@@ -1519,6 +1522,6 @@ void mob::get_sprite_dimensions(mob* m, frame* f, float* w, float* h, float* sca
 /* ----------------------------------------------------------------------------
  * Returns what a sprite's lighting should be, for normal mob drawing routines.
  */
-float mob::get_sprite_lighting(mob* m) {
-    return m->lighting;
+float mob::get_sprite_brightness(mob* m) {
+    return m->center_sector->brightness;
 }

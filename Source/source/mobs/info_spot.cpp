@@ -40,6 +40,6 @@ void info_spot::draw() {
         bmp_info_spot,
         x, y,
         type->radius * 2, type->radius * 2,
-        0, map_gray(get_sprite_lighting(this))
+        0, map_gray(get_sprite_brightness(this))
     );
 }

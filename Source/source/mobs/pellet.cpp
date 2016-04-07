@@ -64,14 +64,14 @@ void pellet::draw() {
         draw_x, draw_y,
         radius * 2.0, -1,
         angle,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
     
     draw_sprite(
         pel_type->bmp_number,
         draw_x, draw_y,
         radius * 1.36, -1,
-        0, map_gray(get_sprite_lighting(this))
+        0, map_gray(get_sprite_brightness(this))
     );
     
     if(being_delivered) {

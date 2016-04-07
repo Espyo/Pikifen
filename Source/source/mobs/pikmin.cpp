@@ -194,7 +194,7 @@ void pikmin::draw() {
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
     
     bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE || fsm.cur_state->id == PIKMIN_STATE_BURIED);
@@ -207,7 +207,7 @@ void pikmin::draw() {
             draw_x, draw_y,
             draw_w, draw_h,
             angle,
-            map_gray(get_sprite_lighting(this))
+            map_gray(get_sprite_brightness(this))
         );
         al_set_separate_blender(old_op, old_src, old_dst, old_aop, old_asrc, old_adst);
     }
@@ -223,7 +223,7 @@ void pikmin::draw() {
             draw_y - s * f_ptr->top_y * h_mult + s * f_ptr->top_x * h_mult,
             f_ptr->top_w * w_mult, f_ptr->top_h * h_mult,
             f_ptr->top_angle + angle,
-            map_gray(get_sprite_lighting(this))
+            map_gray(get_sprite_brightness(this))
         );
     }
     
@@ -234,9 +234,9 @@ void pikmin::draw() {
             30 * w_mult, 30 * h_mult,
             idle_glow_angle,
             al_map_rgba_f(
-                type->main_color.r * get_sprite_lighting(this) / 255,
-                type->main_color.g * get_sprite_lighting(this) / 255,
-                type->main_color.b * get_sprite_lighting(this) / 255,
+                type->main_color.r * get_sprite_brightness(this) / 255,
+                type->main_color.g * get_sprite_brightness(this) / 255,
+                type->main_color.b * get_sprite_brightness(this) / 255,
                 1
             )
         );

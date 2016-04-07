@@ -30,6 +30,6 @@ void nectar::draw() {
         bmp_nectar,
         x, y,
         radius * 2, radius * 2, 0,
-        map_gray(get_sprite_lighting(this))
+        map_gray(get_sprite_brightness(this))
     );
 }
