@@ -965,10 +965,10 @@ void animation_editor::load() {
     lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
-    frm_bottom->easy_add("but_toggle_hitboxes", new lafi::button(0, 0, 0, 0, "Hit"), 25, 32);
+    frm_bottom->easy_add("but_toggle_hitboxes", new lafi::button(0, 0, 0, 0, "HB"), 25, 32);
     frm_bottom->easy_add("but_load", new lafi::button(           0, 0, 0, 0, "Load"), 25, 32);
     frm_bottom->easy_add("but_save", new lafi::button(           0, 0, 0, 0, "Save"), 25, 32);
-    frm_bottom->easy_add("but_quit", new lafi::button(           0, 0, 0, 0, "X"), 25, 32);
+    frm_bottom->easy_add("but_quit", new lafi::button(           0, 0, 0, 0, "Quit"), 25, 32);
     frm_bottom->easy_row();
     
     

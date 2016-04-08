@@ -61,8 +61,10 @@ private:
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
-    static const float  GRID_INTERVAL;
+    static const float  DEF_GRID_INTERVAL;
+    static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
+    static const float  MIN_GRID_INTERVAL;
     static const float  STOP_RADIUS;
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
@@ -81,6 +83,7 @@ private:
     string                       error_string;
     unsigned char                error_type;
     vertex*                      error_vertex_ptr;
+    float                        grid_interval;
     lafi::gui*                   gui;
     bool                         guide_aspect_ratio;
     ALLEGRO_BITMAP*              guide_bitmap;
@@ -94,6 +97,7 @@ private:
     bool                         holding_m2;
     bool                         made_changes;
     unsigned char                mode;
+    unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
     size_t                       moving_thing; //Current vertex, object or shadow being moved.
     float                        moving_thing_x; //Relative X coordinate of the point where the vertex, object or shadow was grabbed.
@@ -139,6 +143,7 @@ private:
     void shadow_to_gui();
     void show_changes_warning();
     float snap_to_grid(const float c);
+    void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);
     

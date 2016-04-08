@@ -31,8 +31,10 @@
 #include "vars.h"
 
 
-const float  area_editor::GRID_INTERVAL = 32.0f;
+const float  area_editor::DEF_GRID_INTERVAL = 32.0f;
+const float  area_editor::MAX_GRID_INTERVAL = 4096;
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+const float  area_editor::MIN_GRID_INTERVAL = 2;
 const float  area_editor::STOP_RADIUS = 16.0f;
 const float  area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 const float  area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
@@ -60,11 +62,13 @@ area_editor::area_editor() :
     error_shadow_ptr(NULL),
     error_type(area_editor::EET_NONE_YET),
     error_vertex_ptr(NULL),
+    grid_interval(DEF_GRID_INTERVAL),
     gui(NULL),
     holding_m1(false),
     holding_m2(false),
     made_changes(false),
     mode(EDITOR_MODE_MAIN),
+    mode_before_options(EDITOR_MODE_MAIN),
     moving_path_preview_checkpoint(-1),
     moving_thing(INVALID),
     moving_thing_x(0),
@@ -80,9 +84,9 @@ area_editor::area_editor() :
     show_shadows(true),
     wum(NULL) {
     
-    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
+    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = GRID_INTERVAL;
+    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[1] = 0;
     path_preview_timeout = timer(PATH_PREVIEW_TIMEOUT_DUR, [this] () {calculate_preview_path();});
 }
@@ -194,6 +198,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(gui->widgets["frm_shadows"]);
     hide_widget(gui->widgets["frm_guide"]);
     hide_widget(gui->widgets["frm_review"]);
+    hide_widget(gui->widgets["frm_options"]);
     
     if(!hide_all) {
         if(mode == EDITOR_MODE_MAIN) {
@@ -214,6 +219,8 @@ void area_editor::change_to_right_frame(bool hide_all) {
             show_widget(gui->widgets["frm_guide"]);
         } else if(mode == EDITOR_MODE_REVIEW) {
             show_widget(gui->widgets["frm_review"]);
+        } else if(mode == EDITOR_MODE_OPTIONS) {
+            show_widget(gui->widgets["frm_options"]);
         }
     }
 }
@@ -269,48 +276,40 @@ void area_editor::do_drawing() {
             float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
             
             if(cam_zoom >= ZOOM_MIN_LEVEL_EDITOR * 1.5) {
-                float x = floor(cam_leftmost / GRID_INTERVAL) * GRID_INTERVAL;
-                while(x < cam_rightmost + GRID_INTERVAL) {
+                float x = floor(cam_leftmost / grid_interval) * grid_interval;
+                while(x < cam_rightmost + grid_interval) {
                     ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
                     bool draw_line = true;
                     
-                    if(fmod(x, GRID_INTERVAL * 2) == 0) {
+                    if(fmod(x, grid_interval * 2) == 0) {
                         c = al_map_rgb(0, 96, 160);
                     } else {
-                        if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
-                            c = al_map_rgb(0, 64, 128);
-                        } else {
-                            draw_line = false;
-                        }
+                        c = al_map_rgb(0, 64, 128);
                     }
                     
-                    if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + GRID_INTERVAL, c, 1.0 / cam_zoom);
-                    x += GRID_INTERVAL;
+                    if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + grid_interval, c, 1.0 / cam_zoom);
+                    x += grid_interval;
                 }
                 
-                float y = floor(cam_topmost / GRID_INTERVAL) * GRID_INTERVAL;
-                while(y < cam_bottommost + GRID_INTERVAL) {
+                float y = floor(cam_topmost / grid_interval) * grid_interval;
+                while(y < cam_bottommost + grid_interval) {
                     ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
                     bool draw_line = true;
                     
-                    if(fmod(y, GRID_INTERVAL * 2) == 0) {
+                    if(fmod(y, grid_interval * 2) == 0) {
                         c = al_map_rgb(0, 96, 160);
                     } else {
-                        if(cam_zoom > ZOOM_MIN_LEVEL_EDITOR * 4) {
-                            c = al_map_rgb(0, 64, 128);
-                        } else {
-                            draw_line = false;
-                        }
+                        c = al_map_rgb(0, 64, 128);
                     }
                     
-                    if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + GRID_INTERVAL, y, c, 1.0 / cam_zoom);
-                    y += GRID_INTERVAL;
+                    if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + grid_interval, y, c, 1.0 / cam_zoom);
+                    y += grid_interval;
                 }
             }
             
             //0,0 marker.
-            al_draw_line(-(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
-            al_draw_line(0, -(GRID_INTERVAL * 2), 0, GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+            al_draw_line(-(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+            al_draw_line(0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
         }
         
         //Edges.
@@ -1616,14 +1615,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             //Create the vertexes.
             vertex* new_vertexes[4];
             for(size_t v = 0; v < 4; ++v) new_vertexes[v] = new vertex(0, 0);
-            new_vertexes[0]->x = hotspot_x - GRID_INTERVAL / 2;
-            new_vertexes[0]->y = hotspot_y - GRID_INTERVAL / 2;
-            new_vertexes[1]->x = hotspot_x + GRID_INTERVAL / 2;
-            new_vertexes[1]->y = hotspot_y - GRID_INTERVAL / 2;
-            new_vertexes[2]->x = hotspot_x + GRID_INTERVAL / 2;
-            new_vertexes[2]->y = hotspot_y + GRID_INTERVAL / 2;
-            new_vertexes[3]->x = hotspot_x - GRID_INTERVAL / 2;
-            new_vertexes[3]->y = hotspot_y + GRID_INTERVAL / 2;
+            new_vertexes[0]->x = hotspot_x - DEF_GRID_INTERVAL / 2;
+            new_vertexes[0]->y = hotspot_y - DEF_GRID_INTERVAL / 2;
+            new_vertexes[1]->x = hotspot_x + DEF_GRID_INTERVAL / 2;
+            new_vertexes[1]->y = hotspot_y - DEF_GRID_INTERVAL / 2;
+            new_vertexes[2]->x = hotspot_x + DEF_GRID_INTERVAL / 2;
+            new_vertexes[2]->y = hotspot_y + DEF_GRID_INTERVAL / 2;
+            new_vertexes[3]->x = hotspot_x - DEF_GRID_INTERVAL / 2;
+            new_vertexes[3]->y = hotspot_y + DEF_GRID_INTERVAL / 2;
             for(size_t v = 0; v < 4; ++v)cur_area_data.vertexes.push_back(new_vertexes[v]);
             
             //Create the edges.
@@ -2149,10 +2148,10 @@ void area_editor::load() {
     lafi::frame* frm_bottom = new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
     gui->add("frm_bottom", frm_bottom);
     frm_bottom->easy_row();
-    frm_bottom->easy_add("but_guide", new lafi::button(0, 0, 0, 0, "G"), 25, 32);
-    frm_bottom->easy_add("but_load",  new lafi::button(0, 0, 0, 0, "Load"), 25, 32);
-    frm_bottom->easy_add("but_save",  new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
-    frm_bottom->easy_add("but_quit",  new lafi::button(0, 0, 0, 0, "X"), 25, 32);
+    frm_bottom->easy_add("but_options", new lafi::button(0, 0, 0, 0, "Opt"), 25, 32);
+    frm_bottom->easy_add("but_guide",   new lafi::button(0, 0, 0, 0, "G"), 25, 32);
+    frm_bottom->easy_add("but_save",    new lafi::button(0, 0, 0, 0, "Save"), 25, 32);
+    frm_bottom->easy_add("but_quit",    new lafi::button(0, 0, 0, 0, "Quit"), 25, 32);
     frm_bottom->easy_row();
     
     
@@ -2433,6 +2432,23 @@ void area_editor::load() {
     update_review_frame();
     
     
+    //Options frame.
+    lafi::frame* frm_options = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_options);
+    gui->add("frm_options", frm_options);
+    
+    frm_options->easy_row();
+    frm_options->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_options->easy_row();
+    frm_options->easy_add("but_load", new lafi::button(0, 0, 0, 0, "Reload area"), 100, 24);
+    frm_options->easy_row();
+    frm_options->easy_add("lbl_grid", new lafi::label(0, 0, 0, 0, "Grid spacing: "), 70, 24);
+    frm_options->easy_add("but_grid_plus", new lafi::button(0, 0, 0, 0, "+"), 15, 24);
+    frm_options->easy_add("but_grid_minus", new lafi::button(0, 0, 0, 0, "-"), 15, 24);
+    frm_options->easy_row();
+    update_options_frame();
+    
+    
     //Status bar.
     lafi::label* gui_status_bar = new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     gui->add("lbl_status_bar", gui_status_bar);
@@ -2468,7 +2484,7 @@ void area_editor::load() {
         update_review_frame();
     };
     frm_main->widgets["but_area"]->description =    "Pick the area to edit.";
-    frm_area->widgets["but_sectors"]->description = "Change sector (polygon) settings.";
+    frm_area->widgets["but_sectors"]->description = "Change sectors (polygons) and their settings.";
     frm_area->widgets["but_objects"]->description = "Change object settings and placements.";
     frm_area->widgets["but_paths"]->description =   "Change movement paths and stops.";
     frm_area->widgets["but_shadows"]->description = "Change the shadows of trees and leaves.";
@@ -2477,15 +2493,14 @@ void area_editor::load() {
     
     
     //Properties -- bottom.
+    frm_bottom->widgets["but_options"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode_before_options = mode;
+        mode = EDITOR_MODE_OPTIONS;
+        change_to_right_frame();
+        update_options_frame();
+    };
     frm_bottom->widgets["but_guide"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         show_guide = !show_guide;
-    };
-    frm_bottom->widgets["but_load"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
-        if(made_changes) {
-            this->show_changes_warning();
-        } else {
-            this->load_area();
-        }
     };
     frm_bottom->widgets["but_save"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         save_area();
@@ -2497,12 +2512,11 @@ void area_editor::load() {
             leave();
         }
     };
-    disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
-    frm_bottom->widgets["but_guide"]->description = "Toggle the visibility of the guide.";
-    frm_bottom->widgets["but_load"]->description =  "Load the area from the files.";
-    frm_bottom->widgets["but_save"]->description =  "Save the area onto the files.";
-    frm_bottom->widgets["but_quit"]->description =  "Quit the area editor.";
+    frm_bottom->widgets["but_options"]->description = "Options and misc. tools.";
+    frm_bottom->widgets["but_guide"]->description =   "Toggle the visibility of the guide.";
+    frm_bottom->widgets["but_save"]->description =    "Save the area onto the files.";
+    frm_bottom->widgets["but_quit"]->description =    "Quit the area editor.";
     
     
     //Properties -- changes warning.
@@ -2817,6 +2831,30 @@ void area_editor::load() {
     frm_review->widgets["chk_shadows"]->description =      "Show tree shadows?";
     
     
+    //Properties -- options.
+    frm_options->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = mode_before_options;
+        change_to_right_frame();
+    };
+    frm_options->widgets["but_load"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        this->load_area();
+    };
+    frm_options->widgets["but_grid_plus"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(grid_interval == MAX_GRID_INTERVAL) return;
+        grid_interval *= 2;
+        update_options_frame();
+    };
+    frm_options->widgets["but_grid_minus"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        if(grid_interval == MIN_GRID_INTERVAL) return;
+        grid_interval *= 0.5;
+        update_options_frame();
+    };
+    frm_options->widgets["but_back"]->description = "Close the options.";
+    frm_options->widgets["but_load"]->description = "Discard all changes made and load the area again.";
+    frm_options->widgets["but_grid_plus"]->description = "Increase the spacing on the grid.";
+    frm_options->widgets["but_grid_minus"]->description = "Decrease the spacing on the grid.";
+    
+    
     //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_bottom"]);
@@ -2833,6 +2871,7 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
+    grid_interval = DEF_GRID_INTERVAL;
     show_closest_stop = false;
     area_name.clear();
     
@@ -2855,7 +2894,6 @@ void area_editor::load_area() {
     ::load_area(area_name, true);
     ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text = area_name;
     show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
-    enable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
     
     clear_area_textures();
@@ -2898,9 +2936,9 @@ void area_editor::load_area() {
     ((lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"])->uncheck();
     hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
     path_preview.clear();
-    path_preview_checkpoints_x[0] = -GRID_INTERVAL;
+    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = GRID_INTERVAL;
+    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[1] = 0;
     
     cur_sector = NULL;
@@ -3443,7 +3481,7 @@ void area_editor::show_changes_warning() {
  */
 float area_editor::snap_to_grid(const float c) {
     if(shift_pressed) return c;
-    return round(c / GRID_INTERVAL) * GRID_INTERVAL;
+    return round(c / grid_interval) * grid_interval;
 }
 
 
@@ -3452,9 +3490,25 @@ float area_editor::snap_to_grid(const float c) {
  */
 void area_editor::unload() {
     //TODO
+    cur_mob = NULL;
     cur_area_data.clear();
     delete(gui->style);
     delete(gui);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the widgets on the options frame.
+ */
+void area_editor::update_options_frame() {
+    ((lafi::label*) gui->widgets["frm_options"]->widgets["lbl_grid"])->text =
+        "Grid: " + i2s(grid_interval);
+    lafi::widget* but_load = gui->widgets["frm_options"]->widgets["but_load"];
+    if(area_name.empty()) {
+        disable_widget(but_load);
+    } else {
+        enable_widget(but_load);
+    }
 }
 
 

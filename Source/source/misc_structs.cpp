@@ -519,7 +519,7 @@ void sample_struct::stop() {
  * Destroys a structure with sample info.
  */
 void sample_struct::destroy() {
-    al_detach_sample_instance(instance);
+    //al_detach_sample_instance(instance); //TODO uncommenting this is causing a crash.
     al_destroy_sample_instance(instance);
     al_destroy_sample(sample);
 }
