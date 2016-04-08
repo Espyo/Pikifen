@@ -721,7 +721,6 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3] * 0.7,
                 i2s(total_pikmin)
             );
-            //TODO number of Pikmin of the standby type.
             
             //Sprays.
             //TODO optimize this by saving the controls somewhere, instead of searching for them every time.

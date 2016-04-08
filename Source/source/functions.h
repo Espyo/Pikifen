@@ -53,8 +53,7 @@
 
 //Because we get events so many times per frame, it's faster
 //to access them directly than to call a function.
-//TODO does it really make sense to be checking if state != NULL?
-#define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state ? (m_ptr)->fsm.cur_state->events[(ev_type)] : nullptr)
+#define q_get_event(m_ptr, ev_type) ((m_ptr)->fsm.cur_state->events[(ev_type)])
 
 //Rounds a number. Ugh, why do I even have to create this.
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))

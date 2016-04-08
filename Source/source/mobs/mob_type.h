@@ -29,7 +29,7 @@ enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
 };
 
-enum mob_categories {
+enum MOB_CATEGORIES {
     MOB_CATEGORY_NONE,
     MOB_CATEGORY_PIKMIN,
     MOB_CATEGORY_ONIONS,
@@ -96,6 +96,7 @@ public:
     function<void(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions)> load_from_file_func;
     
     mob_type();
+    ~mob_type();
     virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
     void add_carrying_states();
 };

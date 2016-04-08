@@ -51,6 +51,15 @@ mob_type::mob_type() :
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys a mob type.
+ */
+mob_type::~mob_type() {
+    states.clear();
+    anims.destroy();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Fills class members from a data file.
  */
 void mob_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {

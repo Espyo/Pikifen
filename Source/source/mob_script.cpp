@@ -306,9 +306,6 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_END;
         } else if(dn->value == "delete") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DELETE;
-        } else if(dn->value == "loop") {
-            //TODO is this used?
-            sub_type = MOB_ACTION_SPECIAL_FUNCTION_LOOP;
         } else {
             error_log("Unknown special function \"" + dn->value + "\"!", dn);
             valid = false;
@@ -413,48 +410,50 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_HIDE) {
     
-        //TODO check vi's size.
-        m->hide = vi[0];
+        if(!vi.empty()) m->hide = vi[0];
         
         
     } else if(type == MOB_ACTION_IF) {
     
-        //TODO check for vs size.
-        if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
+        if(vs.size() >= 2) {
+            if(m->vars[vs[0]] != vs[1]) (*action_nr)++; //If false, skip to the next one.
+        }
         
         
     } else if(type == MOB_ACTION_IF_LESS) {
     
-        //TODO check for vs size.
-        if(
-            s2i(m->vars[vs[0]]) >=
-            s2i(vs[1])
-        ) {
-            (*action_nr)++; //If false, skip to the next one.
+        if(vs.size() >= 2) {
+            if(
+                s2i(m->vars[vs[0]]) >=
+                s2i(vs[1])
+            ) {
+                (*action_nr)++; //If false, skip to the next one.
+            }
         }
         
         
     } else if(type == MOB_ACTION_IF_MORE) {
     
-        //TODO check for vs size.
-        if(
-            s2i(m->vars[vs[0]]) <=
-            s2i(vs[1])
-        ) {
-            (*action_nr)++; //If false, skip to the next one.
+        if(vs.size() >= 2) {
+            if(
+                s2i(m->vars[vs[0]]) <=
+                s2i(vs[1])
+            ) {
+                (*action_nr)++; //If false, skip to the next one.
+            }
         }
         
         
     } else if(type == MOB_ACTION_IF_NOT) {
     
-        //TODO check for vs size.
-        if(m->vars[vs[0]] == vs[1]) (*action_nr)++; //If false, skip to the next one.
+        if(vs.size() >= 2) {
+            if(m->vars[vs[0]] == vs[1]) (*action_nr)++; //If false, skip to the next one.
+        }
         
         
     } else if(type == MOB_ACTION_MOVE) {
     
         //TODO relative values.
-        //TODO check for vf size.
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
@@ -473,16 +472,22 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
             m->speed_z = 0;
             
         } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
-            m->chase(vf[0], vf[1], NULL, NULL, false);
+            if(vf.size() >= 2) {
+                m->chase(vf[0], vf[1], NULL, NULL, false);
+            }
             
         } else if(sub_type == MOB_ACTION_MOVE_VERTICALLY) {
-            m->z += vf[0]; //TODO replace this with something prettier in the future.
+            if(!vf.empty()) {
+                m->z += vf[0]; //TODO replace this with something prettier in the future.
+            }
             
         } else if(sub_type == MOB_ACTION_MOVE_RANDOMLY) {
             m->chase(m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000), NULL, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
-            m->chase(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
+            if(vf.size() >= 2) {
+                m->chase(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
+            }
             
         }
         
@@ -494,14 +499,16 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_GRAVITY) {
     
-        //TODO check vf's size.
-        m->gravity_mult = vf[0];
+        if(!vf.empty()) {
+            m->gravity_mult = vf[0];
+        }
         
         
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
-        //TODO check vf's size.
-        m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
+        if(!vf.empty()) {
+            m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
+        }
         
         
     } else if(type == MOB_ACTION_SET_TIMER) {
@@ -514,15 +521,17 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
         
     } else if(type == MOB_ACTION_SET_VAR) {
     
-        //TODO check vs's size.
-        m->set_var(vs[0], vs[1]);
+        if(vs.size() >= 2) {
+            m->set_var(vs[0], vs[1]);
+        }
         
         
     } else if(type == MOB_ACTION_INC_VAR) {
     
-        //TODO check vs's size.
-        int nr = s2i(m->vars[vs[0]]);
-        m->set_var(vs[0], i2s(nr + 1));
+        if(!vs.empty()) {
+            int nr = s2i(m->vars[vs[0]]);
+            m->set_var(vs[0], i2s(nr + 1));
+        }
         
         
     } else if(type == MOB_ACTION_SPECIAL_FUNCTION) {

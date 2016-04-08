@@ -230,6 +230,7 @@ struct sample_struct {
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(const float max_override_pos, const bool loop, const float gain = 1.0, const float pan = 0.5, const float speed = 1.0);
     void stop();
+    void destroy();
 };
 
 
@@ -264,6 +265,7 @@ struct timer {
     function<void()> on_end;
     
     timer(const float duration, const function<void()> &on_end = nullptr);
+    ~timer();
     void start(const bool can_restart = true);
     void start(const float new_duration);
     void tick(const float amount);

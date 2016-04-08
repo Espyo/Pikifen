@@ -141,4 +141,13 @@ int main(int argc, char** argv) {
         }
     }
     
+    if(cur_game_state_nr != INVALID) {
+        game_states[cur_game_state_nr]->unload();
+    }
+    destroy_special_mob_types();
+    destroy_game_states();
+    destroy_resources();
+    destroy_event_things(logic_timer, logic_queue);
+    destroy_allegro();
+    
 }

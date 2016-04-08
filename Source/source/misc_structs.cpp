@@ -515,6 +515,16 @@ void sample_struct::stop() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys a structure with sample info.
+ */
+void sample_struct::destroy() {
+    al_detach_sample_instance(instance);
+    al_destroy_sample_instance(instance);
+    al_destroy_sample(sample);
+}
+
+
 
 /* ----------------------------------------------------------------------------
  * Registers a new type of sector.
@@ -559,12 +569,20 @@ unsigned char sector_types_manager::get_nr_of_types() {
 
 
 /* ----------------------------------------------------------------------------
- * Cretes a timer.
+ * Creates a timer.
  */
 timer::timer(float duration, const function<void()> &on_end) {
     this->duration  = duration;
     this->time_left = 0;
     this->on_end    = on_end;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a timer.
+ */
+timer::~timer() {
+    //TODO Valgrind detects a leak with on_end...
 }
 
 

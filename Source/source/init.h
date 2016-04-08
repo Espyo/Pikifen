@@ -6,7 +6,8 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for functions that initialize the game data and content.
+ * Header for functions that initialize and deinitialize
+ * the game data and content.
  */
 
 #ifndef INIT_INCLUDED
@@ -27,5 +28,11 @@ void init_misc_sounds();
 void init_mob_categories();
 void init_sector_types();
 void init_special_mob_types();
+
+void destroy_allegro();
+void destroy_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
+void destroy_game_states();
+void destroy_special_mob_types();
+void destroy_resources();
 
 #endif //ifndef INIT_INCLUDED

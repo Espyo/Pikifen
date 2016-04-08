@@ -28,6 +28,8 @@ enum GAME_STATES {
     GAME_STATE_GAME,
     GAME_STATE_AREA_EDITOR,
     GAME_STATE_ANIMATION_EDITOR,
+    
+    N_GAME_STATES,
 };
 
 class game_state {

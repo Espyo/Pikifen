@@ -330,12 +330,10 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 //Now check if the leader should open an Onion's menu.
                 if(!done) {
-                    //TODO Onion dialog, of course.
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; ++o) {
                         if(dist(cur_leader_ptr->x, cur_leader_ptr->y, onions[o]->x, onions[o]->y) <= onion_open_range) {
                             if(pikmin_list.size() < max_pikmin_in_field) {
-                                //TODO this is not how it works, there can be less Onions on the field than the total number of Pikmin types.
                                 if(pikmin_in_onions[onions[o]->oni_type->pik_type] > 0) {
                                     pikmin_in_onions[onions[o]->oni_type->pik_type]--;
                                     create_mob(new pikmin(onions[o]->x, onions[o]->y, onions[o]->oni_type->pik_type, 0, ""));
@@ -376,7 +374,6 @@ void handle_button(const unsigned int button, const unsigned char player, float 
                 
                 //Now check if the leader should punch.
                 if(!done) {
-                    //TODO
                 }
                 
             } else { //Button release.
@@ -484,7 +481,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             
             if(pos == 0) return;
             
-            is_game_running = false; //TODO pause menu, not quit.
+            is_game_running = false;
             //paused = true;
             
         } else if(button == BUTTON_USE_SPRAY_1) {

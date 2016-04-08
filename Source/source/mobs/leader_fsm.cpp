@@ -755,87 +755,11 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
 }
 
 void leader_fsm::release(mob* m, void* info1, void* info2) {
-    cur_leader_ptr->holding_pikmin = NULL;
+    ((leader*) m)->holding_pikmin = NULL;
 }
 
 void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
-    //TODO
-    
-    leader* l_ptr = (leader*) m;
-    
-    float base_angle; //They are dismissed towards this angle. This is then offset a bit depending on the Pikmin type, so they spread out.
-    
-    //TODO what if there are a lot of Pikmin types?
-    size_t n_group_members = l_ptr->group->members.size();
-    if(n_group_members == 0) return;
-    
-    //First, calculate what direction the group should be dismissed to.
-    if(group_move_intensity > 0) {
-        //If the leader's moving the group, they should be dismissed towards the cursor.
-        base_angle = group_move_angle + M_PI;
-    } else {
-        float min_x = 0, min_y = 0, max_x = 0, max_y = 0; //Leftmost member coordinate, rightmost, etc.
-        
-        for(size_t m = 0; m < n_group_members; ++m) {
-            mob* member_ptr = l_ptr->group->members[m];
-            
-            if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
-            if(member_ptr->x > max_x || m == 0) max_x = member_ptr->x;
-            if(member_ptr->y < min_y || m == 0) min_y = member_ptr->y;
-            if(member_ptr->y > max_y || m == 0) max_y = member_ptr->y;
-        }
-        
-        base_angle =
-            atan2(
-                ((min_y + max_y) / 2) - l_ptr->y,
-                ((min_x + max_x) / 2) - l_ptr->x
-            ) + M_PI;
-    }
-    
-    //Then, calculate how many Pikmin types there are in the group.
-    map<pikmin_type*, float> type_angle_map;
-    for(size_t m = 0; m < n_group_members; ++m) {
-    
-        if(typeid(*l_ptr->group->members[m]) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(l_ptr->group->members[m]);
-            
-            type_angle_map[pikmin_ptr->pik_type] = 0;
-        }
-    }
-    
-    //For each type, calculate the angle;
-    size_t n_types = type_angle_map.size();
-    if(n_types == 1) {
-        //Small hack. If there's only one Pikmin type, dismiss them directly towards the base angle.
-        type_angle_map.begin()->second = M_PI_4;
-        
-    } else {
-        unsigned current_type_nr = 0;
-        for(auto t = type_angle_map.begin(); t != type_angle_map.end(); ++t) {
-            t->second = current_type_nr * (M_PI_2 / (n_types - 1));
-            current_type_nr++;
-        }
-    }
-    
-    //Now, dismiss them.
-    for(size_t m = 0; m < n_group_members; ++m) {
-        mob* member_ptr = l_ptr->group->members[0];
-        remove_from_group(member_ptr);
-        
-        float angle = 0;
-        
-        if(typeid(*member_ptr) == typeid(pikmin)) {
-            angle = base_angle + type_angle_map[((pikmin*) member_ptr)->pik_type] - M_PI_4 + M_PI;
-        }
-        
-        float x = cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE;
-        float y = cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE;
-        
-        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &x, (void*) &y);
-    }
-    
-    l_ptr->lea_type->sfx_dismiss.play(0, false);
-    l_ptr->set_animation(LEADER_ANIM_DISMISS);
+    ((leader*) m)->dismiss();
 }
 
 void leader_fsm::spray(mob* m, void* info1, void* info2) {

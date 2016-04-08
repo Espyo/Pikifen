@@ -595,6 +595,8 @@ void mob::tick_script() {
         first_state_set = true;
     }
     
+    if(!fsm.cur_state) return;
+    
     //Timer events.
     mob_event* timer_ev = q_get_event(this, MOB_EVENT_TIMER);
     if(timer_ev && script_timer.duration > 0) {

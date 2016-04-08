@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Program initializer functions.
+ * Program initializer and deinitializer functions.
  */
 
 #include <allegro5/allegro.h>
@@ -499,4 +499,105 @@ void init_special_mob_types() {
     init_bridge_mob_type(bridge_mt);
     spec_mob_types["Bridge"] = bridge_mt;
     
+}
+
+
+void destroy_allegro() {
+    al_uninstall_joystick();
+    al_uninstall_audio();
+    al_uninstall_keyboard();
+    al_uninstall_mouse();
+    al_uninstall_system();
+}
+
+
+void destroy_event_things(ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue) {
+    al_destroy_event_queue(logic_queue);
+    al_destroy_timer(logic_timer);
+    al_destroy_display(display);
+}
+
+
+void destroy_game_states() {
+    for(size_t s = 0; s < N_GAME_STATES; s++) {
+        delete game_states[s]; //TODO create the missing destructors for each state type.
+    }
+}
+
+
+void destroy_special_mob_types() {
+    for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
+        delete t->second;
+    }
+    
+    spec_mob_types.clear();
+}
+
+
+void destroy_resources() {
+    al_destroy_bitmap(bmp_error);
+    al_destroy_font(font_area_name);
+    al_destroy_font(font_counter);
+    al_destroy_font(font_main);
+    al_destroy_font(font_value);
+    
+    al_destroy_bitmap(bmp_ship);
+    al_destroy_bitmap(bmp_bubble);
+    al_destroy_bitmap(bmp_checkbox_check);
+    al_destroy_bitmap(bmp_cursor);
+    al_destroy_bitmap(bmp_day_bubble);
+    al_destroy_bitmap(bmp_enemy_spirit);
+    al_destroy_bitmap(bmp_hard_bubble);
+    al_destroy_bitmap(bmp_icon);
+    al_destroy_bitmap(bmp_idle_glow);
+    al_destroy_bitmap(bmp_info_spot);
+    al_destroy_bitmap(bmp_message_box);
+    al_destroy_bitmap(bmp_mouse_cursor);
+    al_destroy_bitmap(bmp_mouse_wd_icon);
+    al_destroy_bitmap(bmp_mouse_wu_icon);
+    al_destroy_bitmap(bmp_notification);
+    al_destroy_bitmap(bmp_group_move_arrow);
+    al_destroy_bitmap(bmp_nectar);
+    al_destroy_bitmap(bmp_no_pikmin);
+    al_destroy_bitmap(bmp_number_bubble);
+    al_destroy_bitmap(bmp_pikmin_spirit);
+    al_destroy_bitmap(bmp_shadow);
+    al_destroy_bitmap(bmp_smack);
+    al_destroy_bitmap(bmp_smoke);
+    al_destroy_bitmap(bmp_sparkle);
+    al_destroy_bitmap(bmp_sun);
+    al_destroy_bitmap(bmp_sun_bubble);
+    al_destroy_bitmap(bmp_ub_spray);
+    al_destroy_bitmap(bmp_us_spray);
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        al_destroy_bitmap(bmp_mouse_button_icon[i]);
+    }
+    
+    al_detach_voice(voice);
+    al_destroy_mixer(mixer);
+    al_destroy_voice(voice);
+    
+    sfx_attack.destroy();
+    sfx_pikmin_attack.destroy();
+    sfx_pikmin_carrying.destroy();
+    sfx_pikmin_carrying_grab.destroy();
+    sfx_pikmin_caught.destroy();
+    sfx_pikmin_dying.destroy();
+    sfx_pikmin_held.destroy();
+    sfx_pikmin_idle.destroy();
+    sfx_pikmin_thrown.destroy();
+    sfx_pikmin_pluck.destroy();
+    sfx_pikmin_plucked.destroy();
+    sfx_pikmin_called.destroy();
+    sfx_dismiss.destroy();
+    sfx_olimar_whistle.destroy();
+    sfx_louie_whistle.destroy();
+    sfx_president_whistle.destroy();
+    sfx_olimar_name_call.destroy();
+    sfx_louie_name_call.destroy();
+    sfx_president_name_call.destroy();
+    sfx_throw.destroy();
+    sfx_switch_pikmin.destroy();
+    sfx_camera.destroy();
 }
