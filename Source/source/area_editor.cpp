@@ -266,7 +266,7 @@ void area_editor::do_drawing() {
     al_use_transform(&transform);
     
     al_set_clipping_rectangle(0, 0, scr_w - 208, scr_h - 16); {
-        al_clear_to_color(al_map_rgb(0, 0, 16));
+        al_clear_to_color(al_map_rgb(0, 0, 0));
         
         //Grid.
         if(sec_mode != ESM_TEXTURE_VIEW) {
@@ -275,50 +275,50 @@ void area_editor::do_drawing() {
             float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
             float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
             
-            if(cam_zoom >= ZOOM_MIN_LEVEL_EDITOR * 1.5) {
-                float x = floor(cam_leftmost / grid_interval) * grid_interval;
-                while(x < cam_rightmost + grid_interval) {
-                    ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
-                    bool draw_line = true;
-                    
-                    if(fmod(x, grid_interval * 2) == 0) {
-                        c = al_map_rgb(0, 96, 160);
-                    } else {
-                        c = al_map_rgb(0, 64, 128);
-                    }
-                    
-                    if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + grid_interval, c, 1.0 / cam_zoom);
-                    x += grid_interval;
+            float x = floor(cam_leftmost / grid_interval) * grid_interval;
+            while(x < cam_rightmost + grid_interval) {
+                ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
+                bool draw_line = true;
+                
+                if(fmod(x, grid_interval * 2) == 0) {
+                    c = al_map_rgb(64, 64, 64);
+                    if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+                } else {
+                    if(grid_interval * cam_zoom <= 6) draw_line = false;
                 }
                 
-                float y = floor(cam_topmost / grid_interval) * grid_interval;
-                while(y < cam_bottommost + grid_interval) {
-                    ALLEGRO_COLOR c = al_map_rgb(255, 255, 255);
-                    bool draw_line = true;
-                    
-                    if(fmod(y, grid_interval * 2) == 0) {
-                        c = al_map_rgb(0, 96, 160);
-                    } else {
-                        c = al_map_rgb(0, 64, 128);
-                    }
-                    
-                    if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + grid_interval, y, c, 1.0 / cam_zoom);
-                    y += grid_interval;
+                if(draw_line) al_draw_line(x, cam_topmost, x, cam_bottommost + grid_interval, c, 1.0 / cam_zoom);
+                x += grid_interval;
+            }
+            
+            float y = floor(cam_topmost / grid_interval) * grid_interval;
+            while(y < cam_bottommost + grid_interval) {
+                ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
+                bool draw_line = true;
+                
+                if(fmod(y, grid_interval * 2) == 0) {
+                    c = al_map_rgb(64, 64, 64);
+                    if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+                } else {
+                    if(grid_interval * cam_zoom <= 6) draw_line = false;
                 }
+                
+                if(draw_line) al_draw_line(cam_leftmost, y, cam_rightmost + grid_interval, y, c, 1.0 / cam_zoom);
+                y += grid_interval;
             }
             
             //0,0 marker.
-            al_draw_line(-(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
-            al_draw_line(0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, al_map_rgb(128, 192, 255), 1.0 / cam_zoom);
+            al_draw_line(-(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0, al_map_rgb(128, 128, 255), 1.0 / cam_zoom);
+            al_draw_line(0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, al_map_rgb(128, 128, 255), 1.0 / cam_zoom);
         }
         
         //Edges.
         if(sec_mode != ESM_TEXTURE_VIEW) {
         
-            unsigned char sector_opacity = 224;
+            unsigned char sector_opacity = 255;
             bool show_vertices = true;
             if(mode == EDITOR_MODE_OBJECTS || mode == EDITOR_MODE_PATHS || mode == EDITOR_MODE_SHADOWS) {
-                sector_opacity = 96;
+                sector_opacity = 128;
                 show_vertices = false;
             }
             
@@ -381,9 +381,9 @@ void area_editor::do_drawing() {
                     (selected ?        al_map_rgba(224, 224, 64,  sector_opacity) :
                      error_highlight ? al_map_rgba(192, 80,  0,   sector_opacity) :
                      !valid ?          al_map_rgba(192, 32,  32,  sector_opacity) :
-                     one_sided ?       al_map_rgba(240, 240, 240, sector_opacity) :
-                     same_z ?          al_map_rgba(96,  96,  96,  sector_opacity) :
-                     al_map_rgba(160, 160, 160, sector_opacity)
+                     one_sided ?       al_map_rgba(255, 255, 255, sector_opacity) :
+                     same_z ?          al_map_rgba(128, 128, 128,  sector_opacity) :
+                     al_map_rgba(192, 192, 192, sector_opacity)
                     ),
                     (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
                 );
@@ -419,7 +419,7 @@ void area_editor::do_drawing() {
                         v_ptr->x,
                         v_ptr->y,
                         3.0 / cam_zoom,
-                        al_map_rgba(224, 224, 224, sector_opacity)
+                        al_map_rgba(80, 160, 255, sector_opacity)
                     );
                 }
             }
@@ -452,11 +452,12 @@ void area_editor::do_drawing() {
             bool valid = m_ptr->type != NULL;
             
             float radius = m_ptr->type ? m_ptr->type->radius == 0 ? 16 : m_ptr->type->radius : 16;
+            const unsigned char* c = MOB_CATEGORY_COLORS[m_ptr->category];
             
             al_draw_filled_circle(
                 m_ptr->x, m_ptr->y,
                 radius,
-                (valid ? al_map_rgba(96, 224, 96, mob_opacity) : al_map_rgba(224, 96, 96, mob_opacity))
+                (valid ? al_map_rgba(c[0], c[1], c[2], mob_opacity) : al_map_rgba(224, 96, 96, mob_opacity))
             );
             
             float lrw = cos(m_ptr->angle) * radius;
@@ -487,7 +488,7 @@ void area_editor::do_drawing() {
                 al_draw_circle(
                     m_ptr->x, m_ptr->y,
                     radius,
-                    al_map_rgba(192, 192, 192, mob_opacity), 2 / cam_zoom
+                    al_map_rgba(255, 255, 255, mob_opacity), 2 / cam_zoom
                 );
             }
             
@@ -650,9 +651,9 @@ void area_editor::do_drawing() {
         
         //New thing marker.
         if(
-            sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT || sec_mode == ESM_NEW_SHADOW ||
-            sec_mode == ESM_NEW_STOP || sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_LINK2 ||
-            sec_mode == ESM_NEW_1WLINK1 || sec_mode == ESM_NEW_1WLINK2
+            sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT || sec_mode == ESM_DUPLICATE_OBJECT ||
+            sec_mode == ESM_NEW_SHADOW || sec_mode == ESM_NEW_STOP || sec_mode == ESM_NEW_LINK1 ||
+            sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK1 || sec_mode == ESM_NEW_1WLINK2
         ) {
             float x = mouse_cursor_x;
             float y = mouse_cursor_y;
@@ -1680,6 +1681,27 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             mob_to_gui();
             made_changes = true;
             
+        } else if(sec_mode == ESM_DUPLICATE_OBJECT) {
+            //Duplicate the current mob to where the cursor is.
+            
+            sec_mode = ESM_NONE;
+            
+            if(cur_mob) {
+                float hotspot_x = snap_to_grid(mouse_cursor_x);
+                float hotspot_y = snap_to_grid(mouse_cursor_y);
+                
+                mob_gen* new_mg = new mob_gen(*cur_mob);
+                new_mg->x = hotspot_x;
+                new_mg->y = hotspot_y;
+                cur_area_data.mob_generators.push_back(
+                    new_mg
+                );
+                
+                cur_mob = new_mg;
+                mob_to_gui();
+                made_changes = true;
+            }
+            
         } else if(sec_mode == ESM_NEW_STOP) {
             //Create a new stop where the cursor is.
             
@@ -2074,7 +2096,6 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
         ) {
             shift_pressed = true;
-            
         }
         
         
@@ -2282,8 +2303,9 @@ void area_editor::load() {
     hide_widget(frm_object);
     
     frm_object->easy_row();
-    frm_object->easy_add("lbl_category", new lafi::label(0, 0, 0, 0, "Category:"), 90, 16);
-    frm_object->easy_add("but_rem", new lafi::button(0, 0, 0, 0, "-"), 10, 16);
+    frm_object->easy_add("lbl_category",  new lafi::label(0, 0, 0, 0,  "Category:"), 80, 16);
+    frm_object->easy_add("but_rem",       new lafi::button(0, 0, 0, 0, "-"), 10, 16);
+    frm_object->easy_add("but_duplicate", new lafi::button(0, 0, 0, 0, "D"), 10, 16);
     frm_object->easy_row();
     frm_object->easy_add("but_category", new lafi::button(0, 0, 0, 0), 100, 24);
     frm_object->easy_row();
@@ -2634,6 +2656,7 @@ void area_editor::load() {
     frm_objects->widgets["but_sel_none"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         cur_mob = NULL;
         mob_to_gui();
+        if(sec_mode == ESM_DUPLICATE_OBJECT) sec_mode = ESM_NONE;
     };
     frm_object->widgets["but_rem"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -2645,6 +2668,9 @@ void area_editor::load() {
                 break;
             }
         }
+    };
+    frm_object->widgets["but_duplicate"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        toggle_duplicate_mob_mode();
     };
     frm_object->widgets["but_category"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
@@ -2658,10 +2684,12 @@ void area_editor::load() {
     frm_objects->widgets["but_new"]->description =      "Create a new object wherever you click.";
     frm_objects->widgets["but_sel_none"]->description = "Deselect the current sector.";
     frm_object->widgets["but_rem"]->description =       "Delete the current object.";
+    frm_object->widgets["but_duplicate"]->description = "Duplicate the current object (Ctrl+D).";
     frm_object->widgets["but_category"]->description =  "Choose the category of types of object.";
     frm_object->widgets["but_type"]->description =      "Choose the type this object is.";
     frm_object->widgets["ang_angle"]->description =     "Angle the object is facing.";
     frm_object->widgets["txt_vars"]->description =      "Extra variables (e.g.: sleep=y;jumping=n).";
+    frm_object->register_accelerator(ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL, frm_object->widgets["but_duplicate"]);
     
     
     //Properties -- paths.
@@ -3482,6 +3510,14 @@ void area_editor::show_changes_warning() {
 float area_editor::snap_to_grid(const float c) {
     if(shift_pressed) return c;
     return round(c / grid_interval) * grid_interval;
+}
+
+/* ----------------------------------------------------------------------------
+ * Toggles between normal mode and mob duplication mode.
+ */
+void area_editor::toggle_duplicate_mob_mode() {
+    if(sec_mode == ESM_DUPLICATE_OBJECT) sec_mode = ESM_NONE;
+    else sec_mode = ESM_DUPLICATE_OBJECT;
 }
 
 

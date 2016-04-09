@@ -44,6 +44,19 @@ enum MOB_CATEGORIES {
     N_MOB_CATEGORIES,
 };
 
+const unsigned char MOB_CATEGORY_COLORS[N_MOB_CATEGORIES][3] = {
+    {224, 96,  96 },
+    {64,  255, 64 },
+    {48,  160, 48 },
+    {48,  80,  192},
+    {224, 48,  96 },
+    {255, 240, 64 },
+    {208, 224, 96 },
+    {32,  160, 160},
+    {128, 128, 192},
+    {224, 192, 192}
+};
+
 const size_t ANIM_IDLE = 0;
 
 

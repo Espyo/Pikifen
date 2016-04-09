@@ -143,6 +143,7 @@ private:
     void shadow_to_gui();
     void show_changes_warning();
     float snap_to_grid(const float c);
+    void toggle_duplicate_mob_mode();
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);

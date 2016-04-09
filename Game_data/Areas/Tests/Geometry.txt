@@ -911,6 +911,42 @@ mobs{
 		type=Female Sheargrub
 		p=-32.00 -192.00
 	}
+	Pikmin{
+		type=Red Pikmin
+		p=-224.00 288.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-192.00 288.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-160.00 288.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-224.00 256.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-192.00 256.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-160.00 256.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-160.00 224.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-192.00 224.00
+	}
+	Pikmin{
+		type=Red Pikmin
+		p=-224.00 224.00
+	}
 }
 path_stops{
 	s{
