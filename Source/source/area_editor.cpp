@@ -1236,7 +1236,7 @@ void area_editor::gui_to_shadow() {
 /* ----------------------------------------------------------------------------
  * Saves the sector using the info on the gui.
  */
-void area_editor::gui_to_sector() {
+void area_editor::gui_to_sector(bool called_by_brightness_bar) {
     if(!cur_sector) return;
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_sectors"]->widgets["frm_sector"];
     
@@ -1244,7 +1244,11 @@ void area_editor::gui_to_sector() {
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow = ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
     cur_sector->texture_info.file_name = ((lafi::button*) f->widgets["but_texture"])->text;
-    cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
+    if(called_by_brightness_bar) {
+        cur_sector->brightness = ((lafi::scrollbar*) f->widgets["bar_brightness"])->low_value;
+    } else {
+        cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
+    }
     cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
     //TODO hazards.
     
@@ -2197,27 +2201,30 @@ void area_editor::load() {
     frm_sector->easy_add("lbl_z", new lafi::label(0, 0, 0, 0, "Height:"), 50, 16);
     frm_sector->easy_add("txt_z", new lafi::textbox(0, 0, 0, 0), 50, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("chk_fade", new lafi::checkbox(0, 0, 0, 0, "Fade textures"), 100, 16);
+    frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_texture", new lafi::label(0, 0, 0, 0, "Texture:"), 100, 16);
+    frm_sector->easy_add("txt_hazards", new lafi::textbox(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_row();
+    frm_sector->easy_add("lin_1", new lafi::line(0, 0, 0, 0), 100, 8);
+    frm_sector->easy_row();
+    frm_sector->easy_add("lbl_texture", new lafi::label(0, 0, 0, 0, "Texture:"), 70, 16);
+    frm_sector->easy_add("chk_fade", new lafi::checkbox(0, 0, 0, 0, "Fade"), 30, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("but_texture", new lafi::button(0, 0, 0, 0), 100, 24);
     frm_sector->easy_row();
     frm_sector->easy_add("but_adv", new lafi::button(0, 0, 0, 0, "Adv. texture settings"), 100, 16);
     frm_sector->easy_row();
+    frm_sector->easy_add("lbl_brightness", new lafi::label(0, 0, 0, 0, "Brightness:"), 100, 16);
+    frm_sector->easy_row();
+    frm_sector->easy_add("bar_brightness", new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 80, 16);
+    frm_sector->easy_add("txt_brightness", new lafi::textbox(0, 0, 0, 0), 20, 16);
+    frm_sector->easy_row();
     frm_sector->easy_add("chk_shadow", new lafi::checkbox(0, 0, 0, 0, "Always cast shadow"), 100, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lin_1", new lafi::line(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("lin_2", new lafi::line(0, 0, 0, 0), 100, 8);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_brightness", new lafi::label(0, 0, 0, 0, "Brightness:"), 50, 16);
-    frm_sector->easy_add("txt_brightness", new lafi::textbox(0, 0, 0, 0), 50, 16);
-    frm_sector->easy_row();
-    frm_sector->easy_add("lbl_tag", new lafi::label(0, 0, 0, 0, "Tag:"), 20, 16);
-    frm_sector->easy_add("txt_tag", new lafi::textbox(0, 0, 0, 0), 80, 16);
-    frm_sector->easy_row();
-    frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 100, 16);
-    frm_sector->easy_row();
-    frm_sector->easy_add("txt_hazards", new lafi::textbox(0, 0, 0, 0), 100, 16);
+    frm_sector->easy_add("lbl_tag", new lafi::label(0, 0, 0, 0, "Tags:"), 25, 16);
+    frm_sector->easy_add("txt_tag", new lafi::textbox(0, 0, 0, 0), 75, 16);
     frm_sector->easy_row();
     
     
@@ -2537,6 +2544,7 @@ void area_editor::load() {
     };
     frm_sector->widgets["txt_z"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["chk_fade"]->left_mouse_click_handler = lambda_gui_to_sector_click;
+    ((lafi::scrollbar*) frm_sector->widgets["bar_brightness"])->change_handler = [this] (lafi::widget*) { gui_to_sector(true); };
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_tag"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
@@ -2548,11 +2556,12 @@ void area_editor::load() {
     frm_sector->widgets["chk_fade"]->description =       "Makes the surrounding textures fade into each other.";
     frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
     frm_sector->widgets["but_texture"]->description =    "Pick a texture (image) to use for the floor.";
+    frm_sector->widgets["bar_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to know.";
     frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
-    frm_sector->widgets["chk_shadow"]->description =     "Makes this sector always cast a shadow onto lower sectors.";
+    frm_sector->widgets["chk_shadow"]->description =     "Makes it always cast a shadow onto lower sectors.";
     
     
     //Properties -- texture.
@@ -2765,8 +2774,8 @@ void area_editor::load() {
     frm_guide->widgets["txt_w"]->description = "Guide total width.";
     frm_guide->widgets["txt_h"]->description = "Guide total height.";
     frm_guide->widgets["bar_alpha"]->description = "How see-through the guide is.";
-    frm_guide->widgets["chk_ratio"]->description = "Lock the width/height proportions when changing either one.";
-    frm_guide->widgets["chk_mouse"]->description = "If checked, use left/right mouse button to move/stretch.";
+    frm_guide->widgets["chk_ratio"]->description = "Lock width/height proportion when changing either one.";
+    frm_guide->widgets["chk_mouse"]->description = "If checked, use mouse buttons to move/stretch.";
     guide_to_gui();
     
     
@@ -3366,6 +3375,7 @@ void area_editor::sector_to_gui() {
         ((lafi::checkbox*) f->widgets["chk_fade"])->set(cur_sector->fade);
         ((lafi::checkbox*) f->widgets["chk_shadow"])->set(cur_sector->always_cast_shadow);
         ((lafi::button*) f->widgets["but_texture"])->text = cur_sector->texture_info.file_name;
+        ((lafi::scrollbar*) f->widgets["bar_brightness"])->set_value(cur_sector->brightness, false);
         ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(cur_sector->brightness);
         ((lafi::textbox*) f->widgets["txt_tag"])->text = cur_sector->tag;
         ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);

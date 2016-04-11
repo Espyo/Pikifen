@@ -125,7 +125,7 @@ private:
     void goto_error();
     void gui_to_guide();
     void gui_to_mob();
-    void gui_to_sector();
+    void gui_to_sector(bool called_by_brightness_bar = false);
     void gui_to_shadow();
     void gui_to_adv_textures();
     bool is_edge_valid(edge* l);

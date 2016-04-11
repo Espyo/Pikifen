@@ -1381,13 +1381,11 @@ void animation_editor::load() {
     //Properties -- Pikmin top.
     auto lambda_save_top = [this] (lafi::widget*) { gui_save_top(); };
     auto lambda_save_top_click = [this] (lafi::widget*, int, int) { gui_save_top(); };
-    frm_top->widgets["but_back"]->description = "Go back.";
     frm_top->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_frames"]);
         hide_widget(this->gui->widgets["frm_top"]);
         mode = EDITOR_MODE_FRAME;
     };
-    frm_top->widgets["chk_visible"]->description = "Is the top visible in this frame?";
     frm_top->widgets["chk_visible"]->left_mouse_click_handler = lambda_save_top_click;
     frm_top->widgets["txt_x"]->lose_focus_handler = lambda_save_top;
     frm_top->widgets["txt_y"]->lose_focus_handler = lambda_save_top;
@@ -1397,6 +1395,13 @@ void animation_editor::load() {
     frm_top->widgets["but_maturity"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         maturity = (maturity + 1) % 3;
     };
+    frm_top->widgets["but_back"]->description = "Go back.";
+    frm_top->widgets["chk_visible"]->description = "Is the top visible in this frame?";
+    frm_top->widgets["txt_x"]->description = "X position of the top's center.";
+    frm_top->widgets["txt_y"]->description = "Y position of the top's center.";
+    frm_top->widgets["txt_w"]->description = "In-game width of the top.";
+    frm_top->widgets["txt_h"]->description = "In-game height of the top.";
+    frm_top->widgets["ang_angle"]->description = "Angle of the top.";
     frm_top->widgets["but_maturity"]->description = "View a different maturity top.";
     
     
