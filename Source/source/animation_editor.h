@@ -83,6 +83,7 @@ private:
     void open_hitbox_type(unsigned char type);
     void open_picker(unsigned char type, bool can_make_new);
     void pick(string name, unsigned char type);
+    void resize_everything();
     void save_animation_pool();
     void show_changes_warning();
     void update_hitboxes();

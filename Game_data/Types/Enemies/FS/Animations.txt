@@ -106,15 +106,15 @@ frames{
 		file_y=32
 		file_w=38
 		file_h=28
-		game_w=38.00
-		game_h=28.00
+		game_w=28.50
+		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -131,15 +131,15 @@ frames{
 		file_y=32
 		file_w=41
 		file_h=28
-		game_w=41.00
-		game_h=28.00
-		offs_x=1.00
+		game_w=30.75
+		game_h=21.00
+		offs_x=0.75
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -156,15 +156,15 @@ frames{
 		file_y=32
 		file_w=44
 		file_h=28
-		game_w=44.00
-		game_h=28.00
-		offs_x=2.00
+		game_w=33.00
+		game_h=21.00
+		offs_x=1.50
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -181,15 +181,15 @@ frames{
 		file_y=4
 		file_w=20
 		file_h=27
-		game_w=20.00
-		game_h=27.00
-		offs_x=-12.00
+		game_w=15.00
+		game_h=20.25
+		offs_x=-9.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=12.00
+				radius=9.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -206,15 +206,15 @@ frames{
 		file_y=4
 		file_w=20
 		file_h=27
-		game_w=20.00
-		game_h=-27.00
-		offs_x=-12.00
+		game_w=15.00
+		game_h=-20.25
+		offs_x=-9.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=12.00
+				radius=9.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -231,15 +231,15 @@ frames{
 		file_y=2
 		file_w=33
 		file_h=29
-		game_w=33.00
-		game_h=29.00
-		offs_x=-6.00
+		game_w=24.75
+		game_h=21.75
+		offs_x=-4.50
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -256,15 +256,15 @@ frames{
 		file_y=2
 		file_w=33
 		file_h=29
-		game_w=33.00
-		game_h=-29.00
-		offs_x=-6.00
+		game_w=24.75
+		game_h=-21.75
+		offs_x=-4.50
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -281,15 +281,15 @@ frames{
 		file_y=0
 		file_w=36
 		file_h=31
-		game_w=36.00
-		game_h=31.00
-		offs_x=6.00
+		game_w=27.00
+		game_h=23.25
+		offs_x=4.50
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -306,15 +306,15 @@ frames{
 		file_y=0
 		file_w=36
 		file_h=31
-		game_w=36.00
-		game_h=-31.00
-		offs_x=6.00
+		game_w=27.00
+		game_h=-23.25
+		offs_x=4.50
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -331,15 +331,15 @@ frames{
 		file_y=3
 		file_w=26
 		file_h=28
-		game_w=26.00
-		game_h=28.00
-		offs_x=12.00
+		game_w=19.50
+		game_h=21.00
+		offs_x=9.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -356,15 +356,15 @@ frames{
 		file_y=3
 		file_w=26
 		file_h=28
-		game_w=26.00
-		game_h=-28.00
-		offs_x=12.00
+		game_w=19.50
+		game_h=-21.00
+		offs_x=9.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -381,15 +381,15 @@ frames{
 		file_y=0
 		file_w=0
 		file_h=0
-		game_w=1.00
-		game_h=1.00
+		game_w=0.75
+		game_h=0.75
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=128.00
-				radius=32.00
+				radius=24.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -406,15 +406,15 @@ frames{
 		file_y=61
 		file_w=38
 		file_h=28
-		game_w=38.00
-		game_h=28.00
+		game_w=28.50
+		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -431,15 +431,15 @@ frames{
 		file_y=63
 		file_w=38
 		file_h=26
-		game_w=38.00
-		game_h=26.00
+		game_w=28.50
+		game_h=19.50
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -456,15 +456,15 @@ frames{
 		file_y=63
 		file_w=38
 		file_h=26
-		game_w=38.00
-		game_h=26.00
+		game_w=28.50
+		game_h=19.50
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -481,15 +481,15 @@ frames{
 		file_y=61
 		file_w=38
 		file_h=28
-		game_w=38.00
-		game_h=28.00
+		game_w=28.50
+		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
-				radius=16.00
+				radius=12.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -506,15 +506,15 @@ frames{
 		file_y=63
 		file_w=38
 		file_h=26
-		game_w=38.00
-		game_h=-26.00
+		game_w=28.50
+		game_h=-19.50
 		offs_x=0.00
 		offs_y=0.00
 		hitbox_instances{
 			body{
 				coords=0.00 0.00 0.00
 				height=128.00
-				radius=32.00
+				radius=24.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false

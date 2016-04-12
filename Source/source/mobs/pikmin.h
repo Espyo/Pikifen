@@ -57,6 +57,7 @@ enum PIKMIN_ANIMATIONS {
 };
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
+const float PIKMIN_ATTACK_RANGE = 5.0f;
 
 
 /* ----------------------------------------------------------------------------

@@ -622,7 +622,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         0, 0,
         &m->focused_mob->x, &m->focused_mob->y,
         false, nullptr, false,
-        m->focused_mob->type->radius + m->type->radius
+        m->focused_mob->type->radius + m->type->radius + PIKMIN_ATTACK_RANGE
     );
     m->set_animation(PIKMIN_ANIM_WALK);
     remove_from_group(m);
@@ -633,7 +633,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob &&
         m->focused_mob->health > 0 &&
         dist(m->x, m->y, m->focused_mob->x, m->focused_mob->y) <=
-        (m->type->radius + m->focused_mob->type->radius + m->type->near_radius)
+        (m->type->radius + m->focused_mob->type->radius + PIKMIN_ATTACK_RANGE)
     ) {
         return;
     }

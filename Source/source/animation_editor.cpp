@@ -695,6 +695,8 @@ void animation_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add("but_hitboxes",   new lafi::button(0, 0, 0, 0, "Edit hitboxes"), 100, 32);
     frm_object->easy_row();
+    frm_object->easy_add("but_tools",      new lafi::button(0, 0, 0, 0, "Special tools"), 100, 32);
+    frm_object->easy_row();
     frm_object->easy_add("lbl_n_anims",    new lafi::label(0, 0, 0, 0), 100, 12);
     frm_object->easy_row();
     frm_object->easy_add("lbl_n_frames",   new lafi::label(0, 0, 0, 0), 100, 12);
@@ -864,10 +866,10 @@ void animation_editor::load() {
     frm_attack->easy_row();
     frm_attack->easy_add("chk_outward",   new lafi::checkbox(0, 0, 0, 0, "Outward knockback"), 100, 16);
     frm_attack->easy_row();
-    frm_attack->easy_add("lbl_angle",     new lafi::label(0, 0, 0, 0, "Angle:"), 60, 16);
+    frm_attack->easy_add("lbl_angle",     new lafi::label(0, 0, 0, 0, "KB angle:"), 60, 16);
     frm_attack->easy_add("ang_angle",     new lafi::angle_picker(0, 0, 0, 0), 40, 24);
     frm_attack->easy_row();
-    frm_attack->easy_add("lbl_knockback", new lafi::label(0, 0, 0, 0, "Knockback:"), 60, 16);
+    frm_attack->easy_add("lbl_knockback", new lafi::label(0, 0, 0, 0, "KB strength:"), 60, 16);
     frm_attack->easy_add("txt_knockback", new lafi::textbox(0, 0, 0, 0), 40, 16);
     frm_attack->easy_row();
     
@@ -910,6 +912,21 @@ void animation_editor::load() {
     frm_hitbox->easy_add("but_right",  new lafi::button(0, 0, 0, 0, "=>"), 20, 24);
     frm_hitbox->easy_add("but_rem",    new lafi::button(0, 0, 0, 0, "-"), 20, 24);
     frm_hitbox->easy_row();
+    
+    
+    //Tools frame.
+    lafi::frame* frm_tools = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_tools);
+    gui->add("frm_tools", frm_tools);
+    
+    frm_tools->easy_row();
+    frm_tools->easy_add("but_back",   new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_tools->easy_row();
+    frm_tools->easy_add("lbl_resize", new lafi::label(0, 0, 0, 0, "Resize everything:"), 100, 16);
+    frm_tools->easy_row();
+    frm_tools->easy_add("txt_resize", new lafi::textbox(0, 0, 0, 0), 80, 16);
+    frm_tools->easy_add("but_resize", new lafi::button(0, 0, 0, 0, "Ok"), 20, 24);
+    frm_tools->easy_row();
     
     
     //Changes warning.
@@ -1008,6 +1025,12 @@ void animation_editor::load() {
         gui_load_hitbox();
     };
     frm_main->widgets["frm_object"]->widgets["but_hitboxes"]->description = "Change what hitboxes exist, and their order.";
+    frm_main->widgets["frm_object"]->widgets["but_tools"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_TOOLS;
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_tools"]);
+    };
+    frm_main->widgets["frm_object"]->widgets["but_tools"]->description = "Special tools to help with specific tasks.";
     
     
     //Properties -- animations.
@@ -1330,6 +1353,21 @@ void animation_editor::load() {
     frm_hitbox->widgets["but_left"]->description   = "Move this hitbox to the left on the list.";
     frm_hitbox->widgets["but_right"]->description  = "Move this hitbox to the right on the list.";
     frm_hitbox->widgets["but_rem"]->description    = "Delete this hitbox.";
+    
+    
+    //Properties -- tools.
+    frm_tools->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_tools"]);
+        show_widget(this->gui->widgets["frm_main"]);
+        update_stats();
+    };
+    frm_tools->widgets["but_resize"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        resize_everything();
+    };
+    frm_tools->widgets["but_back"]->description = "Go back to the main menu.";
+    frm_tools->widgets["txt_resize"]->description = "Resize multiplier. (0.5 = half, 2 = double)";
+    frm_tools->widgets["but_resize"]->description = "Resize all in-game X/Y and W/H by the given amount.";
     
     
     //Properties -- picker.
@@ -1660,6 +1698,36 @@ void animation_editor::pick(string name, unsigned char type) {
         show_widget(gui->widgets["frm_frames"]);
         gui_load_frame();
         
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resizes frames, hitboxes, etc. by a multiplier.
+ */
+void animation_editor::resize_everything() {
+    lafi::textbox* txt_resize = (lafi::textbox*) gui->widgets["frm_tools"]->widgets["txt_resize"];
+    float mult = s2f(txt_resize->text);
+    
+    for(size_t f = 0; f < anims.frames.size(); ++f) {
+        frame* f_ptr = anims.frames[f];
+        
+        f_ptr->game_w *= mult;
+        f_ptr->game_h *= mult;
+        f_ptr->offs_x *= mult;
+        f_ptr->offs_y *= mult;
+        f_ptr->top_x  *= mult;
+        f_ptr->top_y  *= mult;
+        f_ptr->top_w  *= mult;
+        f_ptr->top_h  *= mult;
+        
+        for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); ++hi) {
+            hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[hi];
+            
+            hi_ptr->radius *= mult;
+            hi_ptr->x      *= mult;
+            hi_ptr->y      *= mult;
+        }
     }
 }
 
