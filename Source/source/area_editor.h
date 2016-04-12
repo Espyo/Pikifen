@@ -138,6 +138,7 @@ private:
     void open_picker(unsigned char type);
     void pick(string name, unsigned char type);
     void populate_texture_suggestions();
+    void resize_everything();
     void save_area();
     void sector_to_gui();
     void shadow_to_gui();

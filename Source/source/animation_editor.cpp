@@ -1729,6 +1729,8 @@ void animation_editor::resize_everything() {
             hi_ptr->y      *= mult;
         }
     }
+    
+    made_changes = true;
 }
 
 

@@ -198,6 +198,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(gui->widgets["frm_shadows"]);
     hide_widget(gui->widgets["frm_guide"]);
     hide_widget(gui->widgets["frm_review"]);
+    hide_widget(gui->widgets["frm_tools"]);
     hide_widget(gui->widgets["frm_options"]);
     
     if(!hide_all) {
@@ -219,6 +220,8 @@ void area_editor::change_to_right_frame(bool hide_all) {
             show_widget(gui->widgets["frm_guide"]);
         } else if(mode == EDITOR_MODE_REVIEW) {
             show_widget(gui->widgets["frm_review"]);
+        } else if(mode == EDITOR_MODE_TOOLS) {
+            show_widget(gui->widgets["frm_tools"]);
         } else if(mode == EDITOR_MODE_OPTIONS) {
             show_widget(gui->widgets["frm_options"]);
         }
@@ -2163,6 +2166,8 @@ void area_editor::load() {
     frm_area->easy_row();
     frm_area->easy_add("but_review", new lafi::button(0, 0, 0, 0, "Review"), 100, 32);
     frm_area->easy_row();
+    frm_area->easy_add("but_tools", new lafi::button(0, 0, 0, 0, "Special tools"), 100, 32);
+    frm_area->easy_row();
     
     
     //Bottom bar.
@@ -2454,6 +2459,21 @@ void area_editor::load() {
     update_review_frame();
     
     
+    //Tools frame.
+    lafi::frame* frm_tools = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_tools);
+    gui->add("frm_tools", frm_tools);
+    
+    frm_tools->easy_row();
+    frm_tools->easy_add("but_back", new lafi::button(0, 0, 0, 0, "Back"), 50, 16);
+    frm_tools->easy_row();
+    frm_tools->easy_add("lbl_resize", new lafi::label(0, 0, 0, 0, "Resize everything:"), 100, 16);
+    frm_tools->easy_row();
+    frm_tools->easy_add("txt_resize", new lafi::textbox(0, 0, 0, 0), 80, 16);
+    frm_tools->easy_add("but_resize", new lafi::button(0, 0, 0, 0, "Ok"), 20, 24);
+    frm_tools->easy_row();
+    
+    
     //Options frame.
     lafi::frame* frm_options = new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_options);
@@ -2505,6 +2525,10 @@ void area_editor::load() {
         change_to_right_frame();
         update_review_frame();
     };
+    frm_area->widgets["but_tools"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_TOOLS;
+        change_to_right_frame();
+    };
     frm_main->widgets["but_area"]->description =    "Pick the area to edit.";
     frm_area->widgets["but_sectors"]->description = "Change sectors (polygons) and their settings.";
     frm_area->widgets["but_objects"]->description = "Change object settings and placements.";
@@ -2512,6 +2536,7 @@ void area_editor::load() {
     frm_area->widgets["but_shadows"]->description = "Change the shadows of trees and leaves.";
     frm_area->widgets["but_guide"]->description =   "Add an image, like a sketch, to guide you.";
     frm_area->widgets["but_review"]->description =  "Tools to make sure everything is fine in the area.";
+    frm_area->widgets["but_tools"]->description =   "Special tools to help with specific tasks.";
     
     
     //Properties -- bottom.
@@ -2859,6 +2884,19 @@ void area_editor::load() {
     frm_review->widgets["chk_shadows"]->description =      "Show tree shadows?";
     
     
+    //Properties -- tools.
+    frm_tools->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        change_to_right_frame();
+    };
+    frm_tools->widgets["but_resize"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
+        resize_everything();
+    };
+    frm_tools->widgets["but_back"]->description = "Go back to the main menu.";
+    frm_tools->widgets["txt_resize"]->description = "Resize multiplier. (0.5 = half, 2 = double)";
+    frm_tools->widgets["but_resize"]->description = "Resize all X/Y coordinates by the given amount.";
+    
+    
     //Properties -- options.
     frm_options->widgets["but_back"]->left_mouse_click_handler = [this] (lafi::widget*, int, int) {
         mode = mode_before_options;
@@ -3183,6 +3221,60 @@ void area_editor::update_texture_suggestions(const string &n) {
     if(texture_suggestions.size() > MAX_TEXTURE_SUGGESTIONS) {
         texture_suggestions.erase(texture_suggestions.begin() + texture_suggestions.size() - 1);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resizes all X and Y coordinates etc. by a multiplier.
+ */
+void area_editor::resize_everything() {
+    lafi::textbox* txt_resize = (lafi::textbox*) gui->widgets["frm_tools"]->widgets["txt_resize"];
+    float mult = s2f(txt_resize->text);
+    
+    if(mult == 0) return;
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        v_ptr->x *= mult;
+        v_ptr->y *= mult;
+    }
+    
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        s_ptr->texture_info.scale_x *= mult;
+        s_ptr->texture_info.scale_y *= mult;
+        s_ptr->texture_info.trans_x *= mult;
+        s_ptr->texture_info.trans_y *= mult;
+        s_ptr->triangles.clear();
+        triangulate(s_ptr);
+    }
+    
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        m_ptr->x *= mult;
+        m_ptr->y *= mult;
+    }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        s_ptr->x *= mult;
+        s_ptr->y *= mult;
+    }
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        cur_area_data.path_stops[s]->calculate_dists();
+    }
+    
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+        s_ptr->x      *= mult;
+        s_ptr->y      *= mult;
+        s_ptr->w      *= mult;
+        s_ptr->h      *= mult;
+        s_ptr->sway_x *= mult;
+        s_ptr->sway_y *= mult;
+    }
+    
+    made_changes = true;
 }
 
 

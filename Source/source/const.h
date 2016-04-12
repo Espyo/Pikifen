@@ -97,12 +97,12 @@ const string CONFIG_FILE           = MISC_FOLDER + "/Config.txt";
 enum EDITOR_MODES {
     //Common.
     EDITOR_MODE_MAIN,
+    EDITOR_MODE_TOOLS,
     EDITOR_MODE_OPTIONS,
     //Animation editor.
     EDITOR_MODE_ANIMATION,
     EDITOR_MODE_FRAME,
     EDITOR_MODE_HITBOX,
-    EDITOR_MODE_TOOLS,
     EDITOR_MODE_HITBOX_INSTANCES,
     EDITOR_MODE_TOP,
     //Area editor
