@@ -29,9 +29,9 @@ using namespace std;
  */
 const unsigned char VERSION_MAJOR = 0;
 const unsigned char VERSION_MINOR = 7;
-const unsigned char VERSION_REV   = 1;
-const unsigned char VERSION_DAY   = 26;
-const unsigned char VERSION_MONTH = 3;
+const unsigned char VERSION_REV   = 2;
+const unsigned char VERSION_DAY   = 12;
+const unsigned char VERSION_MONTH = 4;
 const unsigned int  VERSION_YEAR  = 16;      //The year is 2000 + this.
 
 const float AREA_TITLE_FADE_DURATION    = 3.0f;      //How long it takes for the area name to fade away, in-game.
