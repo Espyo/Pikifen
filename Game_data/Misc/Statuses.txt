@@ -1,0 +1,15 @@
+spicy {
+    color = 255 64 64
+    affects_pikmin = true
+    auto_remove_time = 40
+    speed_multiplier = 1.5
+}
+
+bitter {
+    color = 128 0 255
+    affects_enemies = true
+    auto_remove_time = 10
+    speed_multiplier = 0
+    anim_speed_multiplier = 0
+    defense_multiplier = 1.2
+}

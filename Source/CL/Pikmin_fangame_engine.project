@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Pikmin_fangame_engine" InternalType="Console">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
   "name": "Debug",
@@ -12,9 +15,6 @@
   "arguments": [],
   "parentProject": ""
  }]]]>
-    </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
     </Plugin>
   </Plugins>
   <Description/>
@@ -68,6 +68,7 @@
     <File Name="../source/sector.cpp"/>
     <File Name="../source/init.h"/>
     <File Name="../source/logic.h"/>
+    <File Name="../source/hazard.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>

@@ -54,12 +54,12 @@ bool particle::tick() {
     
     if(time <= 0) return false;
     
-    x += delta_t* speed_x;
-    y += delta_t* speed_y;
+    x += delta_t * speed_x;
+    y += delta_t * speed_y;
     
     if(friction != 0) {
-        speed_x *= 1 - (delta_t* friction);
-        speed_y *= 1 - (delta_t* friction);
+        speed_x *= 1 - (delta_t * friction);
+        speed_y *= 1 - (delta_t * friction);
     }
     
     if(gravity != 0) {
@@ -181,19 +181,24 @@ void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp,
  ** the particles go in the pointed direction,
  ** and move gradually slower as they fade into the air.
  ** Used on actual sprays in-game.
- * type:     Type of particle. Use PARTICLE_TYPE_*.
- * bmp:      Bitmap to use.
- * origin_*: Origin point of the spray.
- * angle:    Angle to shoot at.
- * color:    Color of the particles.
+ * type:           Type of particle. Use PARTICLE_TYPE_*.
+ * bmp:            Bitmap to use.
+ * origin_*:       Origin point of the spray.
+ * angle:          Angle to shoot at.
+ * distance_range: How far they reach.
+ * angle_range:    How far they spread.
+ * color:          Color of the particles.
  */
-void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const float angle, const ALLEGRO_COLOR &color) {
+void random_particle_spray(
+    const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y,
+    const float angle, const float distance_range, const float angle_range, const ALLEGRO_COLOR &color
+) {
     unsigned char n_particles = randomi(35, 40);
     
     for(unsigned char p = 0; p < n_particles; ++p) {
-        float angle_offset = randomf(-M_PI_4, M_PI_4);
+        float angle_offset = randomf(-angle_range * 0.5, angle_range * 0.5);
         
-        float power = randomf(30, 90);
+        float power = randomf(distance_range * 0.3, distance_range * 1.2);
         float speed_x = cos(angle + angle_offset) * power;
         float speed_y = sin(angle + angle_offset) * power;
         
@@ -206,7 +211,7 @@ void random_particle_spray(const unsigned char type, ALLEGRO_BITMAP* const bmp, 
                 1,
                 0,
                 randomf(3, 4),
-                randomf(28, 32),
+                randomf(48, 56),
                 color
             )
         );

@@ -531,7 +531,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             active_control();
             
             if(spray_types.size() > 2) {
-                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) &selected_spray);
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) selected_spray);
             }
             
         } else if(button == BUTTON_SWITCH_ZOOM) {

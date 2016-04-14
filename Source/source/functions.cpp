@@ -707,8 +707,17 @@ void load_area(const string &name, const bool load_for_editor) {
             new_sector->texture_info.trans_y = s2f(translations[1]);
         }
         
-        
-        //TODO hazards
+        data_node* hazards_node = sector_data->get_child_by_name("hazards");
+        vector<string> hazards_strs = split(hazards_node->value, ";");
+        for(size_t h = 0; h < hazards_strs.size(); ++h) {
+            string hazard_name = hazards_strs[h];
+            if(hazards.find(hazard_name) == hazards.end()) {
+                error_log("Hazard \"" + hazard_name + "\" not found!", hazards_node);
+            } else {
+                new_sector->hazards.push_back(&(hazards[hazard_name]));
+            }
+        }
+        new_sector->hazards_str = hazards_node->value;
         
         cur_area_data.sectors.push_back(new_sector);
     }
@@ -971,11 +980,9 @@ void load_game_config() {
  * Loads all of the game's content.
  */
 void load_game_content() {
-    statuses.push_back(status(0, 0, 1, true, al_map_rgb(128, 0, 255), STATUS_AFFECTS_ENEMIES));
-    statuses.push_back(status(1.5, 1.5, 1, false, al_map_rgb(255, 64, 64), STATUS_AFFECTS_PIKMIN));
-    
-    spray_types.push_back(spray_type(&statuses[0], false, 10, al_map_rgb(160, 0, 255), bmp_us_spray, NULL));
-    spray_types.push_back(spray_type(&statuses[1], true, 40, al_map_rgb(255, 160, 192), bmp_ub_spray, NULL));
+    load_status_types();
+    load_spray_types();
+    load_hazards();
     
     //Mob types.
     load_mob_types(true);
@@ -1116,6 +1123,38 @@ void load_hud_coordinates() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the hazards from the game data.
+ */
+void load_hazards() {
+    data_node file = data_node(MISC_FOLDER + "/Hazards.txt");
+    if(!file.file_was_opened) return;
+    
+    size_t n_hazards = file.get_nr_of_children();
+    for(size_t h = 0; h < n_hazards; ++h) {
+        data_node* h_node = file.get_child(h);
+        hazard h_struct;
+        
+        h_struct.name = h_node->name;
+        
+        data_node* effects_node = h_node->get_child_by_name("effects");
+        vector<string> effects_strs = split(effects_node->value, ";");
+        for(size_t e = 0; e < effects_strs.size(); ++e) {
+            string effect_name = effects_strs[e];
+            if(status_types.find(effect_name) == status_types.end()) {
+                error_log("Status effect \"" + effect_name + "\" not found!", effects_node);
+            } else {
+                h_struct.effects.push_back(&(status_types[effect_name]));
+            }
+        }
+        
+        set_if_exists(h_node->get_child_by_name("color")->value, h_struct.main_color);
+        
+        hazards[h_node->name] = h_struct;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads HUD coordinates of a specific HUD item.
  */
 void load_hud_coordinates(const int item, string data) {
@@ -1229,6 +1268,93 @@ sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer) {
     }
     
     return sample_struct(sample, mixer);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads spray types from the game data.
+ */
+void load_spray_types() {
+    data_node file = data_node(MISC_FOLDER + "/Sprays.txt");
+    if(!file.file_was_opened) return;
+    
+    size_t n_sprays = file.get_nr_of_children();
+    for(size_t s = 0; s < n_sprays; ++s) {
+        data_node* s_node = file.get_child(s);
+        spray_type st;
+        
+        st.name = s_node->name;
+        
+        data_node* effects_node = s_node->get_child_by_name("effects");
+        vector<string> effects_strs = split(effects_node->value, ";");
+        for(size_t e = 0; e < effects_strs.size(); ++e) {
+            string effect_name = effects_strs[e];
+            if(status_types.find(effect_name) == status_types.end()) {
+                error_log("Status effect \"" + effect_name + "\" not found!", effects_node);
+            } else {
+                st.effects.push_back(&(status_types[effect_name]));
+            }
+        }
+        
+        set_if_exists(s_node->get_child_by_name("to_party")->value, st.to_party);
+        set_if_exists(s_node->get_child_by_name("angle")->value, st.angle);
+        set_if_exists(s_node->get_child_by_name("distance_range")->value, st.distance_range);
+        set_if_exists(s_node->get_child_by_name("angle_range")->value, st.angle_range);
+        set_if_exists(s_node->get_child_by_name("color")->value, st.main_color);
+        set_if_exists(s_node->get_child_by_name("berries_needed")->value, st.berries_needed);
+        
+        data_node* icon_node = s_node->get_child_by_name("icon");
+        st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
+        
+        spray_types.push_back(st);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads status effect types from the game data.
+ */
+void load_status_types() {
+    data_node file = data_node(MISC_FOLDER + "/Statuses.txt");
+    if(!file.file_was_opened) return;
+    
+    size_t n_statuses = file.get_nr_of_children();
+    for(size_t s = 0; s < n_statuses; ++s) {
+        data_node* s_node = file.get_child(s);
+        status_type st;
+        
+        st.name = s_node->name;
+        
+        bool affects_pikmin;
+        bool affects_leaders;
+        bool affects_enemies;
+        bool affects_enemy_pikmin;
+        bool affects_obstacles;
+        set_if_exists(s_node->get_child_by_name("affects_pikmin")->value, affects_pikmin);
+        set_if_exists(s_node->get_child_by_name("affects_leaders")->value, affects_leaders);
+        set_if_exists(s_node->get_child_by_name("affects_enemies")->value, affects_enemies);
+        set_if_exists(s_node->get_child_by_name("affects_enemy_pikmin")->value, affects_enemy_pikmin);
+        set_if_exists(s_node->get_child_by_name("affects_obstacles")->value, affects_obstacles);
+        st.affects =
+            (affects_pikmin       ? STATUS_AFFECTS_PIKMIN       : 0) |
+            (affects_leaders      ? STATUS_AFFECTS_LEADERS      : 0) |
+            (affects_enemies      ? STATUS_AFFECTS_ENEMIES      : 0) |
+            (affects_enemy_pikmin ? STATUS_AFFECTS_ENEMY_PIKMIN : 0) |
+            (affects_obstacles    ? STATUS_AFFECTS_OBSTACLES    : 0);
+            
+        set_if_exists(s_node->get_child_by_name("color")->value, st.color);
+        set_if_exists(s_node->get_child_by_name("removable_with_whistle")->value, st.removable_with_whistle);
+        set_if_exists(s_node->get_child_by_name("auto_remove_time")->value, st.auto_remove_time);
+        set_if_exists(s_node->get_child_by_name("health_change_ratio")->value, st.health_change_ratio);
+        set_if_exists(s_node->get_child_by_name("causes_panic")->value, st.causes_panic);
+        set_if_exists(s_node->get_child_by_name("causes_flailing")->value, st.causes_flailing);
+        set_if_exists(s_node->get_child_by_name("speed_multiplier")->value, st.speed_multiplier);
+        set_if_exists(s_node->get_child_by_name("attack_multiplier")->value, st.attack_multiplier);
+        set_if_exists(s_node->get_child_by_name("defense_multiplier")->value, st.defense_multiplier);
+        set_if_exists(s_node->get_child_by_name("anim_speed_multiplier")->value, st.anim_speed_multiplier);
+        
+        status_types[st.name] = st;
+    }
 }
 
 
@@ -1632,29 +1758,6 @@ string str_to_upper(string s) {
         s[c] = toupper(s[c]);
     }
     return s;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Uses up a spray.
- */
-void use_spray(const size_t spray_nr) {
-    if(spray_amounts[spray_nr] == 0) return;
-    
-    float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
-    
-    random_particle_spray(
-        PARTICLE_TYPE_BITMAP,
-        bmp_smoke,
-        cur_leader_ptr->x + cos(shoot_angle) * cur_leader_ptr->type->radius,
-        cur_leader_ptr->y + sin(shoot_angle) * cur_leader_ptr->type->radius,
-        shoot_angle,
-        spray_types[spray_nr].main_color
-    );
-    
-    spray_amounts[spray_nr]--;
-    
-    cur_leader_ptr->set_animation(LEADER_ANIM_DISMISS);
 }
 
 

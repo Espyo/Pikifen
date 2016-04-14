@@ -15,6 +15,9 @@
 #include <allegro5/allegro.h>
 
 #include <string>
+#include <vector>
+
+#include "status.h"
 
 using namespace std;
 
@@ -22,11 +25,15 @@ using namespace std;
  * An hazard is the likes of fire, water, electricty, crushing, etc.
  * Pikmin can be vulnerable or invulnerable to these.
  * Most of the time, hazards are elements (of nature), but
- * this is not necessarily the case. A hazard is just an abstract danger.
+ * this is not necessarily the case. A hazard is just an abstract danger,
+ * not an object that emits said danger.
  */
-class hazard {
-public:
+struct hazard {
+    string name;
     ALLEGRO_COLOR main_color;
+    vector<status_type*> effects;
+    
+    hazard();
 };
 
 #endif //ifndef HAZARD_INCLUDED

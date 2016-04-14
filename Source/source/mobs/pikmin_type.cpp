@@ -61,6 +61,17 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     carry_strength = s2f(file->get_child_by_name("carry_strength")->value);
     has_onion = s2b(file->get_child_by_name("has_onion")->value);
     
+    data_node* hazards_node = file->get_child_by_name("resistances");
+    vector<string> hazards_strs = split(hazards_node->value, ";");
+    for(size_t h = 0; h < hazards_strs.size(); ++h) {
+        string hazard_name = hazards_strs[h];
+        if(hazards.find(hazard_name) == hazards.end()) {
+            error_log("Hazard \"" + hazard_name + "\" not found!", hazards_node);
+        } else {
+            resistences.push_back(&(hazards[hazard_name]));
+        }
+    }
+    
     if(load_resources) {
         bmp_top[0] =  bitmaps.get(file->get_child_by_name("top_leaf")->value,    file);
         bmp_top[1] =  bitmaps.get(file->get_child_by_name("top_bud")->value,     file);

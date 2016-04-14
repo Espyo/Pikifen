@@ -97,12 +97,15 @@ void               load_area_textures();
 void               load_control(unsigned char action, unsigned char player, const string &name, data_node &file, const string &def = "");
 ALLEGRO_BITMAP*    load_bmp(const string &file_name, data_node* node = NULL, bool report_error = true);
 data_node          load_data_file(const string &file_name);
+void               load_hazards();
 void               load_hud_coordinates();
 void               load_hud_coordinates(const int item, string data);
 void               load_options();
 sample_struct      load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
 void               load_game_config();
 void               load_game_content();
+void               load_spray_types();
+void               load_status_types();
 void               move_point(const float x, const float y, const float tx, const float ty, const float speed, const float reach_radius, float* mx, float* my, float* angle, bool* reached);
 float              normalize_angle(float a);
 void               print_info(string t);
@@ -122,7 +125,6 @@ bool               square_intersects_line(const float sx1, const float sy1, cons
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
 string             str_to_upper(string s);
-void               use_spray(const size_t spray_nr);
 
 
 void al_fwrite(ALLEGRO_FILE* f, string s);

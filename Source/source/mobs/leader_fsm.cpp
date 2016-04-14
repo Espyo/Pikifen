@@ -764,21 +764,23 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
 
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    size_t spray_nr = *((size_t*) info1);
+    size_t spray_nr = (size_t) info1;
     
     if(spray_amounts[spray_nr] == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
         return;
     }
     
-    float shoot_angle = cursor_angle + ((spray_types[spray_nr].burpable) ? M_PI : 0);
+    float shoot_angle = cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
     
     random_particle_spray(
         PARTICLE_TYPE_BITMAP,
         bmp_smoke,
-        m->x + cos(shoot_angle) * m->type->radius,
-        m->y + sin(shoot_angle) * m->type->radius,
+        m->x,
+        m->y,
         shoot_angle,
+        spray_types[spray_nr].distance_range,
+        spray_types[spray_nr].angle_range,
         spray_types[spray_nr].main_color
     );
     

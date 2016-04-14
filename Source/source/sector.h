@@ -169,7 +169,9 @@ struct sector {
     bool fade;
     bool always_cast_shadow;
     
-    vector<hazard*> elements;
+    string hazards_str; //For the editor.
+    vector<hazard*> hazards; //For gameplay.
+    
     vector<size_t> edge_nrs;
     vector<edge*> edges;
     vector<triangle> triangles;

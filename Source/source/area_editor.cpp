@@ -1253,7 +1253,7 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
         cur_sector->brightness = s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
     }
     cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
-    //TODO hazards.
+    cur_sector->hazards_str = ((lafi::textbox*) f->widgets["txt_hazards"])->text;
     
     ((lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"])->text.clear();
     
@@ -2620,7 +2620,7 @@ void area_editor::load() {
     frm_sector->widgets["bar_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
     frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to know.";
-    frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has.";
+    frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has. (e.g. \"fire; poison\")";
     frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
     frm_sector->widgets["chk_shadow"]->description =     "Makes it always cast a shadow onto lower sectors.";
     
@@ -3410,7 +3410,7 @@ void area_editor::save_area() {
         if(!s_ptr->tag.empty()) sector_node->add(new data_node("tag", s_ptr->tag));
         if(s_ptr->fade) sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
         if(s_ptr->always_cast_shadow) sector_node->add(new data_node("always_cast_shadow", b2s(s_ptr->always_cast_shadow)));
-        
+        if(!s_ptr->hazards_str.empty()) sector_node->add(new data_node("hazards", s_ptr->hazards_str));
         
         sector_node->add(new data_node("texture", s_ptr->texture_info.file_name));
         if(s_ptr->texture_info.rot != 0) {
@@ -3529,15 +3529,15 @@ void area_editor::sector_to_gui() {
     if(cur_sector) {
         show_widget(f);
         
-        ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_sector->z);
-        ((lafi::checkbox*) f->widgets["chk_fade"])->set(cur_sector->fade);
-        ((lafi::checkbox*) f->widgets["chk_shadow"])->set(cur_sector->always_cast_shadow);
-        ((lafi::button*) f->widgets["but_texture"])->text = cur_sector->texture_info.file_name;
+        ((lafi::textbox*)   f->widgets["txt_z"])->text = f2s(cur_sector->z);
+        ((lafi::checkbox*)  f->widgets["chk_fade"])->set(cur_sector->fade);
+        ((lafi::checkbox*)  f->widgets["chk_shadow"])->set(cur_sector->always_cast_shadow);
+        ((lafi::button*)    f->widgets["but_texture"])->text = cur_sector->texture_info.file_name;
         ((lafi::scrollbar*) f->widgets["bar_brightness"])->set_value(cur_sector->brightness, false);
-        ((lafi::textbox*) f->widgets["txt_brightness"])->text = i2s(cur_sector->brightness);
-        ((lafi::textbox*) f->widgets["txt_tag"])->text = cur_sector->tag;
-        ((lafi::button*) f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);
-        //TODO hazards.
+        ((lafi::textbox*)   f->widgets["txt_brightness"])->text = i2s(cur_sector->brightness);
+        ((lafi::textbox*)   f->widgets["txt_tag"])->text = cur_sector->tag;
+        ((lafi::button*)    f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);
+        ((lafi::textbox*)   f->widgets["txt_hazards"])->text = cur_sector->hazards_str;
         
         if(cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["chk_fade"]);

@@ -1,0 +1,9 @@
+fire {
+    color = 255 0 0
+    effects = burning
+}
+
+water_bubble {
+    color = 0 255 255
+    effects = choking_water
+}

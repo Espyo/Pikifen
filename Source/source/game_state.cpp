@@ -226,7 +226,9 @@ void gameplay::load() {
     
     //Debug stuff for convenience.
     //TODO remove.
-    spray_amounts[0] = spray_amounts[1] = 10;
+    for(size_t s = 0; s < spray_types.size(); ++s) {
+        spray_amounts[s] = 20;
+    }
     
 }
 

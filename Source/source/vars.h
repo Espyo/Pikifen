@@ -197,6 +197,7 @@ extern float                            group_move_task_range;
 extern movement_struct                  group_movement; //Joystick coordinates for the group movement.
 extern vector<vector<float> >           group_spots_x;
 extern vector<vector<float> >           group_spots_y;
+extern map<string, hazard>              hazards;
 extern float                            hud_coords[N_HUD_ITEMS][4];
 extern float                            idle_glow_angle;
 extern float                            idle_task_range;
@@ -257,7 +258,7 @@ extern bool                             smooth_scaling;     //If false, images t
 extern map<string, mob_type*>           spec_mob_types;
 extern vector<unsigned long>            spray_amounts;      //How many of each spray the player has.
 extern vector<spray_type>               spray_types;
-extern vector<status>                   statuses;
+extern map<string, status_type>         status_types;
 extern float                            sun_meter_sun_angle;
 extern timer                            throw_particle_timer;
 extern float                            transition_time;

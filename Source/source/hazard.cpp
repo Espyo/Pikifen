@@ -6,21 +6,15 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Spray type class and spray type-related functions.
+ * Hazard class and hazard-related functions.
  */
 
-#include "spray_type.h"
+#include "hazard.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a spray type.
+ * Creates a hazard.
  */
-spray_type::spray_type() :
-    to_party(true),
-    angle(0),
-    distance_range(0),
-    angle_range(0),
-    main_color(al_map_rgba(0, 0, 0, 0)),
-    bmp_spray(nullptr),
-    berries_needed(0) {
+hazard::hazard() :
+    main_color(al_map_rgba(0, 0, 0, 0)) {
     
 }
