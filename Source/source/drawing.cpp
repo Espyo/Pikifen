@@ -611,6 +611,19 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 
             }
             
+            size_t n_standby_pikmin = 0;
+            if(closest_group_member) {
+                for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+                    mob* m_ptr = cur_leader_ptr->group->members[m];
+                    if(
+                        (typeid(*m_ptr) == typeid(leader) && typeid(*closest_group_member) == typeid(leader)) ||
+                        (m_ptr->type == closest_group_member->type)
+                    ) {
+                        n_standby_pikmin++;
+                    }
+                }
+            }
+            
             if(!bm) bm = bmp_no_pikmin;
             float sprite_w =
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] == -1 ? -1 :
@@ -646,6 +659,13 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
             unsigned long total_pikmin = pikmin_list.size();
             for(auto o = pikmin_in_onions.begin(); o != pikmin_in_onions.end(); ++o) total_pikmin += o->second;
             
+            draw_sprite(
+                bmp_number_bubble,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2],
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3]
+            );
             draw_sprite(
                 bmp_number_bubble,
                 hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
@@ -693,6 +713,15 @@ void do_game_drawing(ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transfor
                 hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
                 hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
                 "/"
+            );
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0] + hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.4,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1],
+                ALLEGRO_ALIGN_RIGHT, 1,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.7,
+                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3] * 0.7,
+                i2s(n_standby_pikmin)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),

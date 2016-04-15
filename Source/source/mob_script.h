@@ -185,7 +185,7 @@ enum MOB_ACTION_WAIT_TYPES {
 
 class mob_action {
 public:
-    MOB_ACTION_TYPES type;
+    unsigned char type;
     unsigned char sub_type;
     custom_action_code code;
     bool valid;
@@ -195,19 +195,19 @@ public:
     
     void run(mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2);
     mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
-    mob_action(MOB_ACTION_TYPES type, unsigned char sub_type = 0);
+    mob_action(unsigned char type, unsigned char sub_type = 0);
     mob_action(custom_action_code code);
 };
 
 
 class mob_event {
 public:
-    MOB_EVENT_TYPES type;
+    unsigned char type;
     vector<mob_action*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
     mob_event(data_node* d, vector<mob_action*> a);
-    mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a = vector<mob_action*>());
+    mob_event(const unsigned char t, vector<mob_action*> a = vector<mob_action*>());
 };
 
 
@@ -261,7 +261,7 @@ private:
     
 public:
     void new_state(const string &name, const size_t id);
-    void new_event(const MOB_EVENT_TYPES type);
+    void new_event(const unsigned char type);
     void change_state(const string &new_state);
     void run_function(custom_action_code code);
     vector<mob_state*> finish();

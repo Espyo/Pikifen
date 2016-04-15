@@ -83,7 +83,7 @@ struct group_info {
  * Information on a carrying spot around a mob's perimeter.
  */
 struct carrier_spot_struct {
-    CARRY_SPOT_STATES state;
+    unsigned char state;
     float x; //relative coordinates of each spot. They avoid calculating several sines and cosines over and over.
     float y;
     mob* pik_ptr;

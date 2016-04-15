@@ -345,7 +345,7 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
  * type:     the action type.
  * sub_type: sub-type, if any.
  */
-mob_action::mob_action(MOB_ACTION_TYPES type, unsigned char sub_type) :
+mob_action::mob_action(unsigned char type, unsigned char sub_type) :
     type(type),
     sub_type(sub_type),
     valid(true),
@@ -649,7 +649,7 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) :
  * t: the event type.
  * a: its actions.
  */
-mob_event::mob_event(const MOB_EVENT_TYPES t, vector<mob_action*> a) :
+mob_event::mob_event(const unsigned char t, vector<mob_action*> a) :
     type(t),
     actions(a) {
     
@@ -888,7 +888,7 @@ void easy_fsm_creator::new_state(const string &name, const size_t id) {
  * Finishes the previous event, if any, creates a new event for the
  * current state, and starts tracking for the creation of its actions.
  */
-void easy_fsm_creator::new_event(const MOB_EVENT_TYPES type) {
+void easy_fsm_creator::new_event(const unsigned char type) {
     commit_event();
     cur_event = new mob_event(type);
     cur_state->events[type] = cur_event;

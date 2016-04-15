@@ -63,7 +63,7 @@ struct status {
 
 
 
-enum {
+enum STATUS_AFFECTS_FLAGS {
     STATUS_AFFECTS_PIKMIN = 1,
     STATUS_AFFECTS_ENEMIES = 2,
     STATUS_AFFECTS_LEADERS = 4,
