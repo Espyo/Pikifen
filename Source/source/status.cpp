@@ -9,6 +9,8 @@
  * Status effect classes and status effect-related functions.
  */
 
+#include <algorithm>
+
 #include "status.h"
 
 /* ----------------------------------------------------------------------------

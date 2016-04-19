@@ -163,6 +163,7 @@
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
         <IncludePath Value="."/>
+        <IncludePath Value="/usr/include/allegro5"/>
       </Compiler>
       <Linker Options="">
         <LibraryPath Value="."/>

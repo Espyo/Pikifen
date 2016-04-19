@@ -9,6 +9,7 @@
  * Program start and main loop.
  */
 
+#include <algorithm>
 #include <fstream>
 #include <math.h>
 #include <string>
@@ -19,6 +20,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
 
 #include "animation_editor.h"
@@ -50,6 +52,14 @@ using namespace std;
  * Once that's done, it enters the main loop.
  */
 int main(int argc, char** argv) {
+    //Panic check: is there a Game_data folder?
+    if(folder_to_vector(GAME_DATA_FOLDER, true).empty()) {
+        al_show_native_message_box(
+            NULL, "Game_data folder not found!", "Game_data folder not found!", "Could not find the \"Game_data\" folder! "
+            "If you are running the engine from a zip file, you have to unpack it first.", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+        return -1;
+    }
+    
     //Allegro initializations.
     init_allegro();
     
