@@ -55,7 +55,8 @@ public:
     float radius;
     
     unsigned char type;
-    string hazards;
+    string hazards_str;
+    vector<hazard*> hazards;
     float multiplier;       //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
     bool knockback_outward; //If true, the Pikmin is knocked away from the center.
     float knockback_angle;  //Knockback angle.

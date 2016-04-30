@@ -9,6 +9,7 @@ can_swim = no
 carry_speed = 1
 carry_strength = 10
 has_onion = no
+health_regen = 1
 height = 24
 main_color = 128 0 255
 max_health = 10

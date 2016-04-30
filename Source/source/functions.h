@@ -115,6 +115,7 @@ ALLEGRO_BITMAP*    recreate_bitmap(ALLEGRO_BITMAP* b);
 string             replace_all(string s, string search, string replacement);
 void               rotate_point(const float x, const float y, const float angle, float* final_x, float* final_y);
 void               save_options();
+vector<string>     semicolon_list_to_vector(const string s);
 void               set_if_exists(const string &value, string &var);
 void               set_if_exists(const string &value, size_t &var);
 void               set_if_exists(const string &value, bool &var);
@@ -125,6 +126,8 @@ bool               square_intersects_line(const float sx1, const float sy1, cons
 void               start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string             str_to_lower(string s);
 string             str_to_upper(string s);
+void               unload_hazards();
+void               unload_status_types();
 
 
 void al_fwrite(ALLEGRO_FILE* f, string s);

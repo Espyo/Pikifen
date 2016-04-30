@@ -33,6 +33,9 @@ public:
     
     enemy(const float x, const float y, enemy_type* type, const float angle, const string &vars);
     void draw();
+    
+    virtual bool can_receive_status(status_type* s);
+
 };
 
 #endif //ifndef ENEMY_INCLUDED

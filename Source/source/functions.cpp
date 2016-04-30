@@ -556,7 +556,7 @@ float get_sun_strength() {
  * Returns the value of a var on the vars listing of a mob's spawn.
  */
 string get_var_value(const string &vars_string, const string &var, const string &def) {
-    vector<string> vars = split(vars_string, ";");
+    vector<string> vars = semicolon_list_to_vector(vars_string);
     
     for(size_t v = 0; v < vars.size(); ++v) {
         size_t equals_pos = vars[v].find("=");
@@ -708,7 +708,7 @@ void load_area(const string &name, const bool load_for_editor) {
         }
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
-        vector<string> hazards_strs = split(hazards_node->value, ";");
+        vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
         for(size_t h = 0; h < hazards_strs.size(); ++h) {
             string hazard_name = hazards_strs[h];
             if(hazards.find(hazard_name) == hazards.end()) {
@@ -718,6 +718,7 @@ void load_area(const string &name, const bool load_for_editor) {
             }
         }
         new_sector->hazards_str = hazards_node->value;
+        new_sector->hazard_floor = s2b(sector_data->get_child_by_name("hazards_floor")->get_value_or_default("true"));
         
         cur_area_data.sectors.push_back(new_sector);
     }
@@ -1137,7 +1138,7 @@ void load_hazards() {
         h_struct.name = h_node->name;
         
         data_node* effects_node = h_node->get_child_by_name("effects");
-        vector<string> effects_strs = split(effects_node->value, ";");
+        vector<string> effects_strs = semicolon_list_to_vector(effects_node->value);
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
             if(status_types.find(effect_name) == status_types.end()) {
@@ -1286,7 +1287,7 @@ void load_spray_types() {
         st.name = s_node->name;
         
         data_node* effects_node = s_node->get_child_by_name("effects");
-        vector<string> effects_strs = split(effects_node->value, ";");
+        vector<string> effects_strs = semicolon_list_to_vector(effects_node->value);
         for(size_t e = 0; e < effects_strs.size(); ++e) {
             string effect_name = effects_strs[e];
             if(status_types.find(effect_name) == status_types.end()) {
@@ -1296,7 +1297,7 @@ void load_spray_types() {
             }
         }
         
-        set_if_exists(s_node->get_child_by_name("to_party")->value, st.to_party);
+        set_if_exists(s_node->get_child_by_name("group")->value, st.group);
         set_if_exists(s_node->get_child_by_name("angle")->value, st.angle);
         set_if_exists(s_node->get_child_by_name("distance_range")->value, st.distance_range);
         set_if_exists(s_node->get_child_by_name("angle_range")->value, st.angle_range);
@@ -1325,24 +1326,8 @@ void load_status_types() {
         
         st.name = s_node->name;
         
-        bool affects_pikmin;
-        bool affects_leaders;
-        bool affects_enemies;
-        bool affects_enemy_pikmin;
-        bool affects_obstacles;
-        set_if_exists(s_node->get_child_by_name("affects_pikmin")->value, affects_pikmin);
-        set_if_exists(s_node->get_child_by_name("affects_leaders")->value, affects_leaders);
-        set_if_exists(s_node->get_child_by_name("affects_enemies")->value, affects_enemies);
-        set_if_exists(s_node->get_child_by_name("affects_enemy_pikmin")->value, affects_enemy_pikmin);
-        set_if_exists(s_node->get_child_by_name("affects_obstacles")->value, affects_obstacles);
-        st.affects =
-            (affects_pikmin       ? STATUS_AFFECTS_PIKMIN       : 0) |
-            (affects_leaders      ? STATUS_AFFECTS_LEADERS      : 0) |
-            (affects_enemies      ? STATUS_AFFECTS_ENEMIES      : 0) |
-            (affects_enemy_pikmin ? STATUS_AFFECTS_ENEMY_PIKMIN : 0) |
-            (affects_obstacles    ? STATUS_AFFECTS_OBSTACLES    : 0);
-            
         set_if_exists(s_node->get_child_by_name("color")->value, st.color);
+        set_if_exists(s_node->get_child_by_name("tint")->value, st.tint);
         set_if_exists(s_node->get_child_by_name("removable_with_whistle")->value, st.removable_with_whistle);
         set_if_exists(s_node->get_child_by_name("auto_remove_time")->value, st.auto_remove_time);
         set_if_exists(s_node->get_child_by_name("health_change_ratio")->value, st.health_change_ratio);
@@ -1352,6 +1337,11 @@ void load_status_types() {
         set_if_exists(s_node->get_child_by_name("attack_multiplier")->value, st.attack_multiplier);
         set_if_exists(s_node->get_child_by_name("defense_multiplier")->value, st.defense_multiplier);
         set_if_exists(s_node->get_child_by_name("anim_speed_multiplier")->value, st.anim_speed_multiplier);
+        
+        st.affects = 0;
+        if(s2b(s_node->get_child_by_name("affects_pikmin")->value))  st.affects |= STATUS_AFFECTS_PIKMIN;
+        if(s2b(s_node->get_child_by_name("affects_leaders")->value)) st.affects |= STATUS_AFFECTS_LEADERS;
+        if(s2b(s_node->get_child_by_name("affects_enemies")->value)) st.affects |= STATUS_AFFECTS_ENEMIES;
         
         status_types[st.name] = st;
     }
@@ -1630,6 +1620,18 @@ void set_if_exists(const string &value, float &var) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a vector with all items inside a semicolon-separated list.
+ */
+vector<string> semicolon_list_to_vector(const string s) {
+    vector<string> parts = split(s, ";");
+    for(size_t p = 0; p < parts.size(); ++p) {
+        parts[p] = trim_spaces(parts[p]);
+    }
+    return parts;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets a variable to a value, but only if its string is not-empty
  * value: The string with the value.
  * var:   The var to put it into. This is an Allegro color.
@@ -1758,6 +1760,22 @@ string str_to_upper(string s) {
         s[c] = toupper(s[c]);
     }
     return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads hazards loaded in memory.
+ */
+void unload_hazards() {
+    hazards.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads status types loaded in memory.
+ */
+void unload_status_types() {
+    status_types.clear();
 }
 
 

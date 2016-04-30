@@ -210,9 +210,9 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
    * Like a 0.5 for the group movement makes it move at half distance.
  */
 void handle_button(const unsigned int button, const unsigned char player, float pos) {
-    
-    if(!ready_for_input) return;
 
+    if(!ready_for_input) return;
+    
     if(cur_message.empty()) {
     
         if(
@@ -531,7 +531,7 @@ void handle_button(const unsigned int button, const unsigned char player, float 
             active_control();
             
             if(spray_types.size() > 2) {
-                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) selected_spray);
+                cur_leader_ptr->fsm.run_event(LEADER_EVENT_SPRAY, (void*) &selected_spray);
             }
             
         } else if(button == BUTTON_SWITCH_ZOOM) {

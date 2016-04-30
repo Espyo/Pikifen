@@ -30,6 +30,7 @@ mob_type::mob_type() :
     move_speed(0),
     always_active(false),
     max_health(0),
+    health_regen(0),
     max_carriers(0),
     weight(0),
     pushes(false),
@@ -134,6 +135,7 @@ void load_mob_type_from_file(
     set_if_exists(file.get_child_by_name("main_color")->value,          mt->main_color);
     set_if_exists(file.get_child_by_name("max_carriers")->value,        mt->max_carriers);
     set_if_exists(file.get_child_by_name("max_health")->value,          mt->max_health);
+    set_if_exists(file.get_child_by_name("health_regen")->value,        mt->health_regen);
     set_if_exists(file.get_child_by_name("move_speed")->value,          mt->move_speed);
     set_if_exists(file.get_child_by_name("near_radius")->value,         mt->near_radius);
     set_if_exists(file.get_child_by_name("near_angle")->value,          mt->near_angle);

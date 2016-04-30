@@ -13,15 +13,18 @@
 
 #include "status.h"
 
+using namespace std;
+
 /* ----------------------------------------------------------------------------
  * Creates a status effect type.
  */
 status_type::status_type() :
     color(al_map_rgba(0, 0, 0, 0)),
-    affects(0),
+    tint(al_map_rgb(255, 255, 255)),
     removable_with_whistle(false),
     auto_remove_time(0.0f),
     health_change_ratio(1.0f),
+    maturity_change_amount(0),
     causes_panic(false),
     causes_flailing(false),
     speed_multiplier(1.0f),
@@ -37,7 +40,8 @@ status_type::status_type() :
  * Creates a status effect instance.
  */
 status::status(status_type* type) :
-    type(type) {
+    type(type),
+    to_delete(false) {
     
     time_left = type->auto_remove_time;
 }
@@ -49,6 +53,8 @@ status::status(status_type* type) :
 void status::tick(const float delta_t) {
     if(type->auto_remove_time > 0.0f) {
         time_left -= delta_t;
-        time_left = max(time_left, 0.0f);
+        if(time_left <= 0.0f) {
+            to_delete = true;
+        }
     }
 }

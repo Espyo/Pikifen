@@ -17,6 +17,7 @@
 #include "mob.h"
 #include "pikmin.h"
 #include "ship.h"
+#include "../status.h"
 #include "../vars.h"
 
 
@@ -112,7 +113,12 @@ void mob::tick() {
  * Ticks one game frame into the mob's animations.
  */
 void mob::tick_animation() {
-    bool finished_anim = anim.tick(delta_t);
+    float mult = 1.0f;
+    for(size_t s = 0; s < this->statuses.size(); ++s) {
+        mult *= this->statuses[s].type->anim_speed_multiplier;
+    }
+    
+    bool finished_anim = anim.tick(delta_t * mult);
     
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
@@ -179,6 +185,12 @@ void mob::tick_misc_logic() {
     }
     
     invuln_period.tick(delta_t);
+    
+    for(size_t s = 0; s < this->statuses.size(); ++s) {
+        statuses[s].tick(delta_t);
+        health += type->max_health * statuses[s].type->health_change_ratio * delta_t;
+    }
+    delete_old_status_effects();
 }
 
 
@@ -212,7 +224,12 @@ void mob::tick_physics() {
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
     
-    angle += sign(angle_dif) * min((double) (type->rotation_speed * delta_t), (double) fabs(angle_dif));
+    float movement_speed_mult = 1.0f;
+    for(size_t s = 0; s < this->statuses.size(); ++s) {
+        movement_speed_mult *= this->statuses[s].type->speed_multiplier;
+    }
+    
+    angle += sign(angle_dif) * min((double) (type->rotation_speed * movement_speed_mult * delta_t), (double) fabs(angle_dif));
     
     if(chasing) {
         float final_target_x, final_target_y;
@@ -239,7 +256,8 @@ void mob::tick_physics() {
         
             //Make it go to the direction it wants.
             float d = dist(x, y, final_target_x, final_target_y).to_float();
-            float move_amount = min((double) (d / delta_t), (double) chase_speed);
+            
+            float move_amount = min((double) (d / delta_t), (double) chase_speed * movement_speed_mult);
             
             bool can_free_move = chase_free_move || d <= 10.0;
             
@@ -573,6 +591,10 @@ void mob::tick_physics() {
         if(ground_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
         }
+        
+        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+            fsm.run_event(MOB_EVENT_TOUCHED_HAZARD, (void*) ground_sector->hazards[h]);
+        }
     }
     
     //Gravity.
@@ -582,6 +604,13 @@ void mob::tick_physics() {
         }
     } else {
         speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
+    }
+    
+    //On a sector that has a hazard.
+    if(z > ground_sector->z && !ground_sector->hazard_floor) {
+        for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
+            fsm.run_event(MOB_EVENT_TOUCHED_HAZARD, (void*) ground_sector->hazards[h]);
+        }
     }
 }
 
@@ -594,6 +623,10 @@ void mob::tick_script() {
         fsm.set_state(type->first_state_nr);
         first_state_set = true;
     }
+    
+    //Health regeneration.
+    health += type->health_regen * delta_t;
+    health = min(health, type->max_health);
     
     if(!fsm.cur_state) return;
     
@@ -815,12 +848,97 @@ void mob::finish_dying() {
 
 
 /* ----------------------------------------------------------------------------
+ * Applies a status effect's effects.
+ */
+void mob::apply_status_effect(status_type* s, const bool refill) {
+    if(!can_receive_status(s)) return;
+    
+    //Check if the mob is already under this status.
+    for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
+        if(this->statuses[ms].type == s) {
+            //Already exists. Can we refill its duration?
+            
+            if(refill && s->auto_remove_time > 0.0f) {
+                this->statuses[ms].time_left = s->auto_remove_time;
+            }
+            
+            return;
+        }
+    }
+    
+    //This status is not already inflicted. Let's do so.
+    this->statuses.push_back(status(s));
+    if(s->causes_panic) {
+        receive_panic_from_status();
+    }
+    if(s->causes_flailing) {
+        receive_flailing_from_status();
+    }
+    change_maturity_amount_from_status(s->maturity_change_amount);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes all status effects asking to be deleted.
+ */
+void mob::delete_old_status_effects() {
+    for(size_t s = 0; s < this->statuses.size(); ) {
+        if(statuses[s].to_delete) {
+            if(statuses[s].type->causes_panic) {
+                lose_panic_from_status();
+            }
+            this->statuses.erase(this->statuses.begin() + s);
+        } else {
+            ++s;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the average tint color for all non-white-tint status effects.
+ */
+ALLEGRO_COLOR mob::get_status_tint_color() {
+    size_t n_tints = 0;
+    ALLEGRO_COLOR ret = al_map_rgba(0, 0, 0, 0);
+    size_t n_statuses = this->statuses.size();
+    for(size_t s = 0; s < n_statuses; ++s) {
+        status_type* t = this->statuses[s].type;
+        if(t->tint.r == t->tint.g == t->tint.b == t->tint.a == 1.0f) continue;
+        
+        ret.r += t->tint.r;
+        ret.g += t->tint.g;
+        ret.b += t->tint.b;
+        ret.a += t->tint.a;
+        n_tints++;
+    }
+    
+    if(n_tints == 0) {
+        return al_map_rgb(255, 255, 255);
+    } else {
+        ret.r /= n_statuses;
+        ret.g /= n_statuses;
+        ret.b /= n_statuses;
+        ret.a /= n_statuses;
+        return ret;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the base speed for this mob.
  * This is overwritten by some child classes.
  */
 float mob::get_base_speed() {
     return this->type->move_speed;
 }
+
+
+bool mob::can_receive_status(status_type* s) { return false; };
+void mob::receive_flailing_from_status() {}
+void mob::receive_panic_from_status() {}
+void mob::lose_panic_from_status() {}
+void mob::change_maturity_amount_from_status(const int amount) {}
 
 
 mob::~mob() {}
@@ -986,6 +1104,13 @@ float calculate_damage(mob* attacker, mob* victim, hitbox_instance* attacker_h, 
     
     if(victim_h) {
         defense_multiplier = victim_h->multiplier;
+    }
+    
+    for(size_t s = 0; s < attacker->statuses.size(); ++s) {
+        attacker_offense *= attacker->statuses[s].type->attack_multiplier;
+    }
+    for(size_t s = 0; s < victim->statuses.size(); ++s) {
+        defense_multiplier *= victim->statuses[s].type->defense_multiplier;
     }
     
     return attacker_offense * (1.0 / defense_multiplier);
@@ -1480,12 +1605,19 @@ void mob::draw() {
     get_sprite_center(this, f_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
     
+    ALLEGRO_COLOR tint = get_status_tint_color();
+    float brightness = get_sprite_brightness(this) / 255.0;
+    tint.r *= brightness;
+    tint.g *= brightness;
+    tint.b *= brightness;
+    tint.a *= brightness;
+    
     draw_sprite(
         f_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
-        map_gray(get_sprite_brightness(this))
+        tint
     );
     
 }

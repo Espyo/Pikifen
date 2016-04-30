@@ -43,6 +43,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::go_pluck);
             efc.change_state("inactive_going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -92,6 +98,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::go_pluck);
             efc.change_state("going_to_pluck");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -122,6 +134,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -150,6 +168,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("dying");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
@@ -275,6 +299,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -308,6 +338,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -333,6 +369,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run_function(leader_fsm::unfocus);
             efc.change_state("inactive_going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
@@ -374,6 +416,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run_function(leader_fsm::focus);
             efc.change_state("going_to_pluck");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
@@ -424,6 +472,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::lose_health);
             efc.run_function(leader_fsm::start_waking_up);
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(leader_fsm::start_waking_up);
             efc.change_state("dying");
@@ -472,6 +526,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -505,6 +565,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader_fsm::lose_health);
             efc.run_function(leader_fsm::start_waking_up);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(leader_fsm::start_waking_up);
@@ -554,6 +620,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::start_waking_up);
             efc.change_state("dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -588,6 +660,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_DEATH); {
             efc.change_state("inactive_dying");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
         }
@@ -597,6 +675,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(leader_fsm::land);
             efc.change_state("idle");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
@@ -678,6 +762,24 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
 
 void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
 
+}
+
+void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
+    leader* l = (leader*) m;
+    hazard* h = (hazard*) info1;
+    
+    for(size_t e = 0; e < h->effects.size(); ++e) {
+        l->apply_status_effect(h->effects[e], false);
+    }
+}
+
+void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
+    leader* l = (leader*) m;
+    spray_type* s = (spray_type*) info1;
+    
+    for(size_t e = 0; e < s->effects.size(); ++e) {
+        l->apply_status_effect(s->effects[e], false);
+    }
 }
 
 void leader_fsm::move(mob* m, void* info1, void* info2) {
@@ -764,11 +866,40 @@ void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
 
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    size_t spray_nr = (size_t) info1;
+    size_t spray_nr = *((size_t*) info1);
     
     if(spray_amounts[spray_nr] == 0) {
         m->fsm.set_state(LEADER_STATE_ACTIVE);
         return;
+    }
+    
+    unordered_set<mob*> affected_mobs;
+    if(spray_types[spray_nr].group) {
+        for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
+            if(typeid(*m->group->members[gm]) == typeid(pikmin)) {
+                affected_mobs.insert(m->group->members[gm]);
+            }
+        }
+        if(affected_mobs.empty()) return; //Nothing to get sprayed. Better not waste it.
+        
+    } else {
+        for(size_t am = 0; am < mobs.size(); ++am) {
+            mob* am_ptr = mobs[am];
+            if(am_ptr == m) continue;
+            
+            dist d = dist(m->x, m->y, am_ptr->x, am_ptr->y);
+            if(d > spray_types[spray_nr].distance_range) continue;
+            
+            float angle_dif = get_angle_smallest_dif(m->angle, atan2(am_ptr->y - m->y, am_ptr->x - m->x));
+            if(angle_dif > spray_types[spray_nr].angle_range / 2) continue;
+            
+            affected_mobs.insert(am_ptr);
+        }
+        
+    }
+    
+    for(auto am = affected_mobs.begin(); am != affected_mobs.end(); ++am) {
+        (*am)->fsm.run_event(MOB_EVENT_TOUCHED_SPRAY, (void*) &spray_types[spray_nr]);
     }
     
     float shoot_angle = cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);

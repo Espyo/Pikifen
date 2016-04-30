@@ -29,13 +29,15 @@ using namespace std;
  */
 struct status_type {
     string name;
+    unsigned char affects;
     ALLEGRO_COLOR color;
+    ALLEGRO_COLOR tint;
     
-    unsigned char affects; //What types of mobs it affects.
     bool removable_with_whistle;
     float auto_remove_time;
     
     float health_change_ratio; //Health addition/subtraction percentage per second.
+    int maturity_change_amount; //Increase/decrease in maturity when the status is gained.
     bool causes_panic;
     bool causes_flailing;
     
@@ -55,6 +57,7 @@ struct status {
     status_type* type;
     
     float time_left; //If this status effect auto-removes itself.
+    bool to_delete;
     
     void tick(const float delta_t);
     

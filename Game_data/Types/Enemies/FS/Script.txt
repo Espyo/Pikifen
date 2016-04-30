@@ -12,6 +12,9 @@ script{
         on_leave {
             hide = false
         }
+        on_touch_spray {
+            special_function = spray
+        }
     }
     
     emerging{
@@ -20,6 +23,9 @@ script{
         }
         on_animation_end{
             state = examining
+        }
+        on_touch_spray {
+            special_function = spray
         }
         on_death{
             state = dying
@@ -40,6 +46,9 @@ script{
         on_pikmin_land{
             state = crushed
         }
+        on_touch_spray {
+            special_function = spray
+        }
         on_death{
             state = dying
         }
@@ -51,6 +60,9 @@ script{
         }
         on_animation_end{
             state = buried
+        }
+        on_touch_spray {
+            special_function = spray
         }
         on_death{
             state = dying
@@ -74,6 +86,9 @@ script{
         on_bottomless_pit{
             state = deleting
         }
+        on_touch_spray {
+            special_function = spray
+        }
         on_death{
             state = dying
         }
@@ -92,6 +107,9 @@ script{
         }
         on_bottomless_pit{
             state = deleting
+        }
+        on_touch_spray {
+            special_function = spray
         }
         on_death{
             state = dying

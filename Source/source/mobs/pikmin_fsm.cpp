@@ -10,6 +10,7 @@
  */
 
 #include "../functions.h"
+#include "../hazard.h"
 #include "mob_fsm.h"
 #include "pikmin.h"
 #include "pikmin_fsm.h"
@@ -63,6 +64,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -96,6 +103,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -134,6 +147,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -176,6 +195,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
             efc.change_state("going_to_carriable_object");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -200,6 +225,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -216,6 +247,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -246,6 +283,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -283,6 +326,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -309,6 +358,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -343,6 +398,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::forget_carriable_object);
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -368,6 +429,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(pikmin_fsm::get_knocked_down);
             efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
@@ -401,6 +468,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -423,6 +496,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(pikmin_fsm::get_knocked_down);
             efc.change_state("knocked_back");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
@@ -453,6 +532,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -478,6 +563,32 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
+            efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
+            efc.run_function(pikmin_fsm::touched_spray);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
+    efc.new_state("flailing", PIKMIN_STATE_FLAILING); {
+        //TODO
+    }
+    
+    efc.new_state("panic", PIKMIN_STATE_PANIC); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin_fsm::start_panicking);
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run_function(pikmin_fsm::panic_new_chase);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
@@ -596,6 +707,13 @@ void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
 
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
+    
+    for(size_t s = 0; s < m->statuses.size(); ++s) {
+        if(m->statuses[s].type->removable_with_whistle) {
+            m->statuses[s].to_delete = true;
+        }
+    }
+    m->delete_old_status_effects();
     
     pik->attack_time = 0;
     add_to_group(cur_leader_ptr, pik);
@@ -742,6 +860,12 @@ void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
 }
 
 
+void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
+    m->chase(m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000), NULL, NULL, false);
+    m->set_timer(PIKMIN_PANIC_CHASE_INTERVAL);
+}
+
+
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACK);
@@ -844,6 +968,11 @@ void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     focus_mob(m, m->following_group);
 }
 
+void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
+    remove_from_group(m);
+    pikmin_fsm::panic_new_chase(m, info1, info2);
+}
+
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
 
 }
@@ -851,4 +980,24 @@ void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
 void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLE);
+}
+
+void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
+    pikmin* p = (pikmin*) m;
+    hazard* h = (hazard*) info1;
+    for(size_t r = 0; r < p->pik_type->resistances.size(); ++r) {
+        if(p->pik_type->resistances[r] == h) return; //Immune!
+    }
+    
+    for(size_t e = 0; e < h->effects.size(); ++e) {
+        p->apply_status_effect(h->effects[e], false);
+    }
+}
+
+void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
+    spray_type* s = (spray_type*) info1;
+    
+    for(size_t e = 0; e < s->effects.size(); ++e) {
+        m->apply_status_effect(s->effects[e], false);
+    }
 }

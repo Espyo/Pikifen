@@ -37,11 +37,13 @@ void go_to_opponent(         mob* m, void* info1, void* info2);
 void land(                   mob* m, void* info1, void* info2);
 void land_on_mob(            mob* m, void* info1, void* info2);
 void lose_latched_mob(       mob* m, void* info1, void* info2);
+void panic_new_chase(        mob* m, void* info1, void* info2);
 void prepare_to_attack(      mob* m, void* info1, void* info2);
 void reach_carriable_object( mob* m, void* info1, void* info2);
 void reach_dismiss_spot(     mob* m, void* info1, void* info2);
 void rechase_opponent(       mob* m, void* info1, void* info2);
 void sigh(                   mob* m, void* info1, void* info2);
+void start_panicking(        mob* m, void* info1, void* info2);
 void stand_still(            mob* m, void* info1, void* info2);
 void stop_being_idle(        mob* m, void* info1, void* info2);
 void stop_carrying(          mob* m, void* info1, void* info2);
@@ -49,6 +51,8 @@ void stop_in_group(          mob* m, void* info1, void* info2);
 void tick_attacking_grounded(mob* m, void* info1, void* info2);
 void tick_grabbed_by_enemy(  mob* m, void* info1, void* info2);
 void tick_latched(           mob* m, void* info1, void* info2);
+void touched_hazard(         mob* m, void* info1, void* info2);
+void touched_spray(          mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef PIKMIN_FSM_INCLUDED

@@ -22,7 +22,7 @@ subinterval::subinterval(float l, float u, const float d) :
 
 
 interval::interval(const string &s) {
-    vector<string> subinterval_strs = split(s, ";");
+    vector<string> subinterval_strs = semicolon_list_to_vector(s);
     size_t n_subintervals = subinterval_strs.size();
     
     for(size_t si = 0; si < n_subintervals; ++si) {

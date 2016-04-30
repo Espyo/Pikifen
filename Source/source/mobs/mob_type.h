@@ -89,6 +89,7 @@ public:
     
     //Behavior things.
     float max_health;
+    float health_regen; //Health points per second.
     float sight_radius;
     float territory_radius;
     float near_radius;

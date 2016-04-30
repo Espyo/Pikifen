@@ -171,6 +171,7 @@ struct sector {
     
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.
+    bool hazard_floor;
     
     vector<size_t> edge_nrs;
     vector<edge*> edges;

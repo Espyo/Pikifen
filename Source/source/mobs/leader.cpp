@@ -227,3 +227,8 @@ void switch_to_leader(leader* new_leader_ptr) {
     new_leader_ptr->lea_type->sfx_name_call.play(0, false);
     
 }
+
+
+bool leader::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_LEADERS;
+}

@@ -47,7 +47,8 @@ pikmin::~pikmin() { }
  * This depends on the maturity.
  */
 float pikmin::get_base_speed() {
-    return pik_type->move_speed + pik_type->move_speed * this->maturity * maturity_speed_mult;
+    float base = mob::get_base_speed();
+    return base + (base * this->maturity * maturity_speed_mult);
 }
 
 
@@ -189,12 +190,19 @@ void pikmin::draw() {
     get_sprite_center(this, f_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
     
+    ALLEGRO_COLOR tint = get_status_tint_color();
+    float brightness = get_sprite_brightness(this) / 255.0;
+    tint.r *= brightness;
+    tint.g *= brightness;
+    tint.b *= brightness;
+    tint.a *= brightness;
+    
     draw_sprite(
         f_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
-        map_gray(get_sprite_brightness(this))
+        tint
     );
     
     bool is_idle = (fsm.cur_state->id == PIKMIN_STATE_IDLE || fsm.cur_state->id == PIKMIN_STATE_BURIED);
@@ -243,4 +251,34 @@ void pikmin::draw() {
     }
     
     
+}
+
+
+bool pikmin::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_PIKMIN;
+}
+
+
+void pikmin::receive_flailing_from_status() {
+    fsm.set_state(PIKMIN_STATE_FLAILING);
+}
+
+
+void pikmin::receive_panic_from_status() {
+    fsm.set_state(PIKMIN_STATE_PANIC);
+}
+
+
+void pikmin::lose_panic_from_status() {
+    if(fsm.cur_state->id == PIKMIN_STATE_PANIC) {
+        fsm.set_state(PIKMIN_STATE_IDLE);
+    }
+}
+
+
+void pikmin::change_maturity_amount_from_status(const int amount) {
+    int new_maturity = maturity + amount;
+    new_maturity = max(0, new_maturity);
+    new_maturity = min(new_maturity, 2);
+    maturity = new_maturity;
 }

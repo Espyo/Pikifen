@@ -348,6 +348,7 @@ mob_gen::mob_gen(float x, float y, unsigned char category, mob_type* type, float
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
     z(0),
+    hazard_floor(true),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
     always_cast_shadow(false) {

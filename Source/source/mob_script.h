@@ -70,12 +70,10 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_BOTTOMLESS_PIT,      //When it lands on a bottomless pit.
     MOB_EVENT_DAMAGE,              //When it is damaged.
     MOB_EVENT_DEATH,               //When it dies.
-    MOB_EVENT_ENTERED_HAZARD,      //When it enters a hazard sector.
     MOB_EVENT_FAR_FROM_HOME,       //When the mob is far away from its home.
     MOB_EVENT_FACING_OPPONENT,     //When it faces and is near its opponent.
     MOB_EVENT_FACING_OBJECT,       //When it faces and is near its target object.
     MOB_EVENT_FOCUSED_MOB_DIED,    //When the mob it was focused on died.
-    MOB_EVENT_LEFT_HAZARD,         //When it leaves a hazard sector.
     MOB_EVENT_LOST_FOCUSED_MOB,    //When it can no longer see the focused mob.
     MOB_EVENT_MOUTH_OCCUPIED,      //When its mouth has a Pikmin in it.
     MOB_EVENT_MOUTH_EMPTY,         //When its mouth is empty.
@@ -89,6 +87,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_SEEN_OBJECT,         //When it sees an object.
     MOB_EVENT_SEEN_OPPONENT,       //When it sees an opponent.
     MOB_EVENT_TOUCHED_LEADER,      //When it gets touched by a leader.
+    MOB_EVENT_TOUCHED_HAZARD,      //When it touches a hazard (sector or hitbox).
+    MOB_EVENT_TOUCHED_SPRAY,       //When it touches a sprayed spray.
     MOB_EVENT_TOUCHED_OBJECT,      //When it gets touched by an object.
     MOB_EVENT_TOUCHED_OPPONENT,    //When it gets touched by an opponent.
     MOB_EVENT_TIMER,               //When its timer ticks.
@@ -174,6 +174,8 @@ enum MOB_ACTION_SPECIAL_FUNCTION_TYPES {
     MOB_ACTION_SPECIAL_FUNCTION_DELETE,
     MOB_ACTION_SPECIAL_FUNCTION_DIE_START,
     MOB_ACTION_SPECIAL_FUNCTION_DIE_END,
+    MOB_ACTION_SPECIAL_FUNCTION_HAZARD,
+    MOB_ACTION_SPECIAL_FUNCTION_SPRAY,
 };
 
 //Waiting action sub-types.

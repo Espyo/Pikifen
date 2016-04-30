@@ -39,6 +39,8 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_CELEBRATING,
     PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
     PIKMIN_STATE_GOING_TO_OPPONENT,
+    PIKMIN_STATE_FLAILING,
+    PIKMIN_STATE_PANIC,
     
     N_PIKMIN_STATES
 };
@@ -58,6 +60,7 @@ enum PIKMIN_ANIMATIONS {
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
 const float PIKMIN_ATTACK_RANGE = 5.0f;
+const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
 
 
 /* ----------------------------------------------------------------------------
@@ -91,6 +94,12 @@ public:
     void do_attack(mob* m, hitbox_instance* victim_hitbox_i);
     void set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr);
     void teleport_to_connected_hitbox();
+    
+    virtual bool can_receive_status(status_type* s);
+    virtual void receive_flailing_from_status();
+    virtual void receive_panic_from_status();
+    virtual void lose_panic_from_status();
+    virtual void change_maturity_amount_from_status(const int amount);
 };
 
 

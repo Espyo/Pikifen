@@ -1,5 +1,26 @@
+burning {
+    color = 255 0 0
+    tint = 255 192 192
+    affects_pikmin = true
+    removable_with_whistle = true
+    health_change_ratio = -0.3
+    causes_panic = true
+    speed_multiplier = 2.0
+}
+
+choking_ink {
+    color = 64 64 64
+    tint = 192 192 192
+    affects_pikmin = true
+    removable_with_whistle = true
+    auto_remove_time = 5
+    causes_panic = true
+    speed_multiplier = 2.0
+}
+
 spicy {
     color = 255 64 64
+    tint = 255 192 160
     affects_pikmin = true
     auto_remove_time = 40
     speed_multiplier = 1.5
@@ -7,6 +28,7 @@ spicy {
 
 bitter {
     color = 128 0 255
+    tint = 64 64 64
     affects_enemies = true
     auto_remove_time = 10
     speed_multiplier = 0

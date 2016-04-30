@@ -178,9 +178,9 @@ public:
     size_t cur_path_stop_nr;
     
     void chase(
-        const float x, const float y,
-        float* rel_x, float* rel_y,
-        const bool instant, float* rel_z = NULL,
+        const float offs_x, const float offs_y,
+        float* orig_x, float* orig_y,
+        const bool teleport, float* teleport_z = NULL,
         const bool free_move = false, const float target_distance = 3,
         const float speed = -1
     );
@@ -208,6 +208,7 @@ public:
     map<string, string> vars;         //Variables.
     bool big_damage_ev_queued;        //Are we waiting to report the big damage event?
     
+    vector<status> statuses;       //Status effects currently inflicted on the mob.
     bool dead;                     //Is the mob dead?
     vector<int> chomp_hitboxes;    //List of hitboxes that will chomp Pikmin.
     vector<mob*> chomping_pikmin;  //Mobs it is chomping.
@@ -226,6 +227,16 @@ public:
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
+    
+    
+    void apply_status_effect(status_type* s, const bool refill);
+    void delete_old_status_effects();
+    ALLEGRO_COLOR get_status_tint_color();
+    virtual bool can_receive_status(status_type* s);
+    virtual void receive_flailing_from_status();
+    virtual void receive_panic_from_status();
+    virtual void lose_panic_from_status();
+    virtual void change_maturity_amount_from_status(const int amount);
     
     void tick();
     virtual void draw();

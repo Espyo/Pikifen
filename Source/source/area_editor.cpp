@@ -1254,6 +1254,7 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
     }
     cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
     cur_sector->hazards_str = ((lafi::textbox*) f->widgets["txt_hazards"])->text;
+    cur_sector->hazard_floor = ((lafi::checkbox*) f->widgets["chk_hazards_floor"])->checked;
     
     ((lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"])->text.clear();
     
@@ -2132,6 +2133,8 @@ void area_editor::load() {
 
     fade_mgr.start_fade(true, nullptr);
     
+    load_status_types();
+    load_hazards();
     load_mob_types(false);
     
     mode = EDITOR_MODE_MAIN;
@@ -2226,7 +2229,8 @@ void area_editor::load() {
     frm_sector->easy_add("lbl_z", new lafi::label(0, 0, 0, 0, "Height:"), 50, 16);
     frm_sector->easy_add("txt_z", new lafi::textbox(0, 0, 0, 0), 50, 16);
     frm_sector->easy_row();
-    frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 100, 16);
+    frm_sector->easy_add("lbl_hazards", new lafi::label(0, 0, 0, 0, "Hazards:"), 65, 16);
+    frm_sector->easy_add("chk_hazards_floor", new lafi::checkbox(0, 0, 0, 0, "Floor"), 35, 16);
     frm_sector->easy_row();
     frm_sector->easy_add("txt_hazards", new lafi::textbox(0, 0, 0, 0), 100, 16);
     frm_sector->easy_row();
@@ -2609,20 +2613,22 @@ void area_editor::load() {
     frm_sector->widgets["txt_brightness"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_tag"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->lose_focus_handler = lambda_gui_to_sector;
+    frm_sector->widgets["chk_hazards_floor"]->lose_focus_handler = lambda_gui_to_sector;
     frm_sector->widgets["chk_shadow"]->left_mouse_click_handler = lambda_gui_to_sector_click;
-    frm_sectors->widgets["but_back"]->description =      "Go back to the main menu.";
-    frm_sectors->widgets["but_new"]->description =       "Create a new sector where you click.";
-    frm_sectors->widgets["but_sel_none"]->description =  "Deselect the current sector.";
-    frm_sector->widgets["but_type"]->description =       "Change the type of sector.";
-    frm_sector->widgets["chk_fade"]->description =       "Makes the surrounding textures fade into each other.";
-    frm_sector->widgets["txt_z"]->description =          "Height of the floor.";
-    frm_sector->widgets["but_texture"]->description =    "Pick a texture (image) to use for the floor.";
-    frm_sector->widgets["bar_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
-    frm_sector->widgets["txt_brightness"]->description = "0 = pitch black sector. 255 = normal lighting.";
-    frm_sector->widgets["txt_tag"]->description =        "Special values you may want the sector to know.";
-    frm_sector->widgets["txt_hazards"]->description =    "Hazards the sector has. (e.g. \"fire; poison\")";
-    frm_sector->widgets["but_adv"]->description =        "Advanced settings for the sector's texture.";
-    frm_sector->widgets["chk_shadow"]->description =     "Makes it always cast a shadow onto lower sectors.";
+    frm_sectors->widgets["but_back"]->description =         "Go back to the main menu.";
+    frm_sectors->widgets["but_new"]->description =          "Create a new sector where you click.";
+    frm_sectors->widgets["but_sel_none"]->description =     "Deselect the current sector.";
+    frm_sector->widgets["but_type"]->description =          "Change the type of sector.";
+    frm_sector->widgets["chk_fade"]->description =          "Makes the surrounding textures fade into each other.";
+    frm_sector->widgets["txt_z"]->description =             "Height of the floor.";
+    frm_sector->widgets["but_texture"]->description =       "Pick a texture (image) to use for the floor.";
+    frm_sector->widgets["bar_brightness"]->description =    "0 = pitch black sector. 255 = normal lighting.";
+    frm_sector->widgets["txt_brightness"]->description =    "0 = pitch black sector. 255 = normal lighting.";
+    frm_sector->widgets["txt_tag"]->description =           "Special values you may want the sector to know.";
+    frm_sector->widgets["chk_hazards_floor"]->description = "Trigger hazard on the floor only or in the air too?";
+    frm_sector->widgets["txt_hazards"]->description =       "Hazards the sector has. (e.g. \"fire; poison\")";
+    frm_sector->widgets["but_adv"]->description =           "Advanced settings for the sector's texture.";
+    frm_sector->widgets["chk_shadow"]->description =        "Makes it always cast a shadow onto lower sectors.";
     
     
     //Properties -- texture.
@@ -3410,7 +3416,10 @@ void area_editor::save_area() {
         if(!s_ptr->tag.empty()) sector_node->add(new data_node("tag", s_ptr->tag));
         if(s_ptr->fade) sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
         if(s_ptr->always_cast_shadow) sector_node->add(new data_node("always_cast_shadow", b2s(s_ptr->always_cast_shadow)));
-        if(!s_ptr->hazards_str.empty()) sector_node->add(new data_node("hazards", s_ptr->hazards_str));
+        if(!s_ptr->hazards_str.empty()) {
+            sector_node->add(new data_node("hazards", s_ptr->hazards_str));
+            sector_node->add(new data_node("hazards_floor", b2s(s_ptr->hazard_floor)));
+        }
         
         sector_node->add(new data_node("texture", s_ptr->texture_info.file_name));
         if(s_ptr->texture_info.rot != 0) {
@@ -3538,6 +3547,7 @@ void area_editor::sector_to_gui() {
         ((lafi::textbox*)   f->widgets["txt_tag"])->text = cur_sector->tag;
         ((lafi::button*)    f->widgets["but_type"])->text = sector_types.get_name(cur_sector->type);
         ((lafi::textbox*)   f->widgets["txt_hazards"])->text = cur_sector->hazards_str;
+        ((lafi::checkbox*)  f->widgets["chk_hazards_floor"])->set(cur_sector->hazard_floor);
         
         if(cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["chk_fade"]);
@@ -3622,6 +3632,8 @@ void area_editor::unload() {
     cur_area_data.clear();
     delete(gui->style);
     delete(gui);
+    
+    unload_hazards();
 }
 
 

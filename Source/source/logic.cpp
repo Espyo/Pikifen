@@ -45,7 +45,7 @@ void do_aesthetic_logic() {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
         dist max_dist =
-            ((group_move_intensity > 0) ? cursor_max_dist* group_move_intensity : leader_to_cursor_dis);
+            ((group_move_intensity > 0) ? cursor_max_dist * group_move_intensity : leader_to_cursor_dis);
             
         if(max_dist < group_move_arrows[a]) {
             group_move_arrows.erase(group_move_arrows.begin() + a);
@@ -316,13 +316,23 @@ void do_gameplay_logic() {
                     mob_event* hitbox_touch_an_ev =  q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_A_N);
                     mob_event* hitbox_touch_na_ev =  q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_N_A);
                     mob_event* hitbox_touch_eat_ev = q_get_event(m_ptr, MOB_EVENT_HITBOX_TOUCH_EAT);
+                    mob_event* hitbox_touch_haz_ev = q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
                     if(hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) {
                     
                         frame* f1_ptr = m_ptr->anim.get_frame();
                         frame* f2_ptr = m2_ptr->anim.get_frame();
                         
                         //If neither of the mobs have hitboxes up, never mind.
-                        bool m1_is_hitbox = typeid(*m_ptr) == typeid(pikmin) || typeid(*m_ptr) == typeid(leader);
+                        bool m1_is_hitbox = false;
+                        vector<hazard*> m1_resistances;
+                        
+                        if(typeid(*m_ptr) == typeid(pikmin)) {
+                            m1_is_hitbox = true;
+                            m1_resistances = ((pikmin*) m_ptr)->pik_type->resistances;
+                        } else if(typeid(*m_ptr) == typeid(leader)) {
+                            m1_is_hitbox = true;
+                        }
+                        
                         bool m1_has_hitboxes = f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_hitbox);
                         bool m2_has_hitboxes = f2_ptr && !f2_ptr->hitbox_instances.empty();
                         
@@ -334,6 +344,7 @@ void do_gameplay_logic() {
                                 bool reported_an_ev = false;
                                 bool reported_na_ev = false;
                                 bool reported_eat_ev = false;
+                                bool reported_haz_ev = false;
                                 
                                 float m1_angle_sin = 0;
                                 float m1_angle_cos = 0;
@@ -347,6 +358,23 @@ void do_gameplay_logic() {
                                 //For all of mob 2's hitboxes, check for collisions.
                                 for(size_t h2 = 0; h2 < f2_ptr->hitbox_instances.size(); ++h2) {
                                     hitbox_instance* h2_ptr = &f2_ptr->hitbox_instances[h2];
+                                    
+                                    //Hazard resistance check.
+                                    if(!h2_ptr->hazards.empty()) {
+                                        size_t n_resistances = 0;
+                                        for(size_t h = 0; h < h2_ptr->hazards.size(); ++h) {
+                                            for(size_t r = 0; r < m1_resistances.size(); ++r) {
+                                                if(h2_ptr->hazards[h] == m1_resistances[r]) {
+                                                    n_resistances++;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        if(n_resistances == h2_ptr->hazards.size()) {
+                                            //The mob can resist all of this hitbox's hazards!
+                                            continue;
+                                        }
+                                    }
                                     
                                     //Get mob 2's real hitbox location.
                                     float m2_h_x = m2_ptr->x + (h2_ptr->x * m2_angle_cos - h2_ptr->y * m2_angle_sin);
@@ -383,9 +411,24 @@ void do_gameplay_logic() {
                                             }
                                             
                                             if(
+                                                !reported_haz_ev &&
+                                                hitbox_touch_haz_ev &&
+                                                !h2_ptr->hazards.empty()
+                                            ) {
+                                                for(size_t h = 0; h < h2_ptr->hazards.size(); ++h) {
+                                                    hitbox_touch_haz_ev->run(
+                                                        m_ptr,
+                                                        (void*) h2_ptr->hazards[h]
+                                                    );
+                                                }
+                                                reported_haz_ev = true;
+                                            }
+                                            
+                                            if(
                                                 h2_ptr->type == HITBOX_TYPE_ATTACK &&
                                                 hitbox_touch_na_ev && !reported_na_ev &&
-                                                !reported_eat_ev //This way, Pikmin aren't knocked back AND eaten.
+                                                !reported_eat_ev && //This way, Pikmin aren't knocked back AND eaten.
+                                                !reported_haz_ev
                                             ) {
                                                 hitbox_touch_info ev_info = hitbox_touch_info(m2_ptr, NULL, h2_ptr);
                                                 hitbox_touch_na_ev->run(m_ptr, (void*) &ev_info);
@@ -663,8 +706,8 @@ void do_gameplay_logic() {
         *             `-´   *
         ********************/
         
-        float mouse_cursor_speed_x = delta_t* MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x();
-        float mouse_cursor_speed_y = delta_t* MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y();
+        float mouse_cursor_speed_x = delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x();
+        float mouse_cursor_speed_y = delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y();
         
         mouse_cursor_x += mouse_cursor_speed_x;
         mouse_cursor_y += mouse_cursor_speed_y;

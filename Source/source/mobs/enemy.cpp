@@ -65,13 +65,20 @@ void enemy::draw() {
         }
     }
     
+    ALLEGRO_COLOR tint = get_status_tint_color();
+    float brightness = get_sprite_brightness(this) / 255.0;
+    tint.r *= brightness;
+    tint.g *= brightness;
+    tint.b *= brightness;
+    tint.a *= brightness;
+    
     draw_sprite(
         f_ptr->bitmap,
         draw_x, draw_y,
         draw_w * radius_scale,
         draw_h * radius_scale,
         angle,
-        map_gray(get_sprite_brightness(this))
+        tint
     );
     
     if(being_delivered) {
@@ -90,4 +97,8 @@ void enemy::draw() {
         
         al_set_separate_blender(old_op, old_src, old_dst, old_aop, old_asrc, old_adst);
     }
+}
+
+bool enemy::can_receive_status(status_type* s) {
+    return s->affects & STATUS_AFFECTS_ENEMIES;
 }

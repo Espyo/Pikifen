@@ -62,13 +62,13 @@ void pikmin_type::load_from_file(data_node* file, const bool load_resources, vec
     has_onion = s2b(file->get_child_by_name("has_onion")->value);
     
     data_node* hazards_node = file->get_child_by_name("resistances");
-    vector<string> hazards_strs = split(hazards_node->value, ";");
+    vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
     for(size_t h = 0; h < hazards_strs.size(); ++h) {
         string hazard_name = hazards_strs[h];
         if(hazards.find(hazard_name) == hazards.end()) {
             error_log("Hazard \"" + hazard_name + "\" not found!", hazards_node);
         } else {
-            resistences.push_back(&(hazards[hazard_name]));
+            resistances.push_back(&(hazards[hazard_name]));
         }
     }
     

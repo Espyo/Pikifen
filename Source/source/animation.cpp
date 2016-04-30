@@ -443,11 +443,23 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
             cur_hitbox_instance.hitbox_name = hitbox_instance_node->name;
             cur_hitbox_instance.type = s2i(hitbox_instance_node->get_child_by_name("type")->value);
             cur_hitbox_instance.multiplier = s2f(hitbox_instance_node->get_child_by_name("multiplier")->value);
-            cur_hitbox_instance.hazards = hitbox_instance_node->get_child_by_name("elements")->value;
             cur_hitbox_instance.can_pikmin_latch = s2b(hitbox_instance_node->get_child_by_name("can_pikmin_latch")->value);
             cur_hitbox_instance.knockback_outward = s2b(hitbox_instance_node->get_child_by_name("outward")->value);
             cur_hitbox_instance.knockback_angle = s2f(hitbox_instance_node->get_child_by_name("angle")->value);
             cur_hitbox_instance.knockback = s2f(hitbox_instance_node->get_child_by_name("knockback")->value);
+            
+            data_node* hazards_node = hitbox_instance_node->get_child_by_name("hazards");
+            cur_hitbox_instance.hazards_str = hazards_node->value;
+            vector<string> hazards_strs = semicolon_list_to_vector(cur_hitbox_instance.hazards_str);
+            for(size_t h = 0; h < hazards_strs.size(); ++h) {
+                string hazard_name = hazards_strs[h];
+                if(hazards.find(hazard_name) == hazards.end()) {
+                    error_log("Hazard \"" + hazard_name + "\" not found!", hazards_node);
+                } else {
+                    cur_hitbox_instance.hazards.push_back(&(hazards[hazard_name]));
+                }
+            }
+            
             
             hitbox_instances.push_back(cur_hitbox_instance);
             

@@ -28,10 +28,10 @@ class spray_type {
 public:
     string name;
     vector<status_type*> effects; //What the spray does.
-    bool to_party;                //True: applied to the entire party. False: applied in a specified range.
-    float angle;                  //If applied outside of the party, this is the angle of shooting.
-    float distance_range;         //If applied outside of the party, this is the distance range.
-    float angle_range;            //If applied outside of the party, this is the angle range.
+    bool group;           //True: applied to the entire party. False: applied in a specified range.
+    float angle;          //If applied outside of the party, this is the angle of shooting.
+    float distance_range; //If applied outside of the party, this is the distance range.
+    float angle_range;    //If applied outside of the party, this is the angle range.
     
     ALLEGRO_COLOR main_color;
     ALLEGRO_BITMAP* bmp_spray; //Bitmap for the spray count.

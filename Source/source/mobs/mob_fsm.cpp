@@ -15,6 +15,31 @@
 #include "mob_fsm.h"
 #include "onion.h"
 #include "pikmin.h"
+#include "../spray_type.h"
+
+/* ----------------------------------------------------------------------------
+ * Generic handler for the mob touching a hazard.
+ */
+void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
+    hazard* h = (hazard*) info1;
+    
+    for(size_t e = 0; e < h->effects.size(); ++e) {
+        m->apply_status_effect(h->effects[e], false);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Generic handler for the mob touching a spray.
+ */
+void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
+    spray_type* s = (spray_type*) info1;
+    
+    for(size_t e = 0; e < s->effects.size(); ++e) {
+        m->apply_status_effect(s->effects[e], false);
+    }
+}
+
 
 /* ----------------------------------------------------------------------------
  * Generic handler for when the mob was delivered to an Onion/ship.

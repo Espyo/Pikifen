@@ -1,9 +1,9 @@
 Ultra-Bitter Spray {
     effects = bitter
-    to_party = false
+    group = false
     angle = 0
-    distance_range = 192
-    angle_range = 3.14159
+    distance_range = 128
+    angle_range = 2.3561925
     color = 128 0 255
     icon = Ultra-bitter_spray.png
     berries = 10
@@ -11,7 +11,7 @@ Ultra-Bitter Spray {
 
 Ultra-Spicy Spray {
     effects = spicy
-    to_party = true
+    group = true
     angle = 3.14159
     distance_range = 192
     angle_range = 1.570795

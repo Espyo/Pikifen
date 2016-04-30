@@ -15,6 +15,8 @@
 #include "mob.h"
 
 namespace gen_mob_fsm {
+void touch_hazard(mob* m, void* info1, void* info2);
+void touch_spray(mob* m, void* info1, void* info2);
 void lose_health(mob* m, void* info1, void* info2);
 void handle_carrier_added(mob* m, void* info1, void* info2);
 void handle_carrier_removed(mob* m, void* info1, void* info2);

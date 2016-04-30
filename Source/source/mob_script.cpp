@@ -306,6 +306,10 @@ mob_action::mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt) 
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DIE_END;
         } else if(dn->value == "delete") {
             sub_type = MOB_ACTION_SPECIAL_FUNCTION_DELETE;
+        } else if(dn->value == "hazard") {
+            sub_type = MOB_ACTION_SPECIAL_FUNCTION_HAZARD;
+        } else if(dn->value == "spray") {
+            sub_type = MOB_ACTION_SPECIAL_FUNCTION_SPRAY;
         } else {
             error_log("Unknown special function \"" + dn->value + "\"!", dn);
             valid = false;
@@ -545,8 +549,16 @@ void mob_action::run(mob* m, size_t* action_nr, void* custom_data_1, void* custo
             m->finish_dying();
             
         } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_DELETE) {
-            
+        
             m->to_delete = true;
+            
+        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_HAZARD) {
+        
+            gen_mob_fsm::touch_hazard(m, custom_data_1, NULL);
+            
+        } else if(sub_type == MOB_ACTION_SPECIAL_FUNCTION_SPRAY) {
+        
+            gen_mob_fsm::touch_spray(m, custom_data_1, NULL);
             
         }
         
@@ -617,11 +629,9 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) :
     else if(n == "on_bottomless_pit")    type = MOB_EVENT_BOTTOMLESS_PIT;
     else if(n == "on_damage")            type = MOB_EVENT_DAMAGE;
     else if(n == "on_death")             type = MOB_EVENT_DEATH;
-    else if(n == "on_enter_hazard")      type = MOB_EVENT_ENTERED_HAZARD;
     else if(n == "on_face_opponent")     type = MOB_EVENT_FACING_OPPONENT;
     else if(n == "on_face_object")       type = MOB_EVENT_FACING_OBJECT;
     else if(n == "on_far_from_home")     type = MOB_EVENT_FAR_FROM_HOME;
-    else if(n == "on_leave_hazard")      type = MOB_EVENT_LEFT_HAZARD;
     else if(n == "on_lose_focused_mob")  type = MOB_EVENT_LOST_FOCUSED_MOB;
     else if(n == "on_mouth_empty")       type = MOB_EVENT_MOUTH_EMPTY;
     else if(n == "on_mouth_occupied")    type = MOB_EVENT_MOUTH_OCCUPIED;
@@ -634,7 +644,9 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) :
     else if(n == "on_revival")           type = MOB_EVENT_REVIVED;
     else if(n == "on_see_object")        type = MOB_EVENT_SEEN_OBJECT;
     else if(n == "on_see_opponent")      type = MOB_EVENT_SEEN_OPPONENT;
+    else if(n == "on_touch_hazard")      type = MOB_EVENT_TOUCHED_HAZARD;
     else if(n == "on_touch_opponent")    type = MOB_EVENT_TOUCHED_OPPONENT;
+    else if(n == "on_touch_spray")       type = MOB_EVENT_TOUCHED_SPRAY;
     else if(n == "on_timer")             type = MOB_EVENT_TIMER;
     else if(n == "on_wall")              type = MOB_EVENT_TOUCHED_WALL;
     else {

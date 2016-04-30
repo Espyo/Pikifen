@@ -94,6 +94,8 @@ public:
     void dismiss();
     void swap_held_pikmin(mob* new_pik);
     
+    virtual bool can_receive_status(status_type* s);
+    
 };
 
 

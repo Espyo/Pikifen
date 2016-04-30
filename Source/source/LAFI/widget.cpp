@@ -567,18 +567,18 @@ accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
  * color:           Color.
  */
 void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color) {
-    int x1 = w->x1,  x2 = w->x2;
-    int y1 = w->y1,  y2 = w->y2;
+    float x1 = w->x1, x2 = w->x2;
+    float y1 = w->y1, y2 = w->y2;
     
     if(side == DRAW_LINE_RIGHT || side == DRAW_LINE_LEFT) {
-        int line_x = (side == DRAW_LINE_RIGHT) ? (x2 - location_offset + 0.5) : (x1 + location_offset + 1.5);
+        float line_x = (side == DRAW_LINE_RIGHT) ? (x2 - location_offset - 0.5) : (x1 + location_offset + 0.5);
         al_draw_line(
             line_x, y1 + start_offset,
             line_x, y2 - end_offset,
             color, 1
         );
     } else {
-        int line_y = (side == DRAW_LINE_TOP) ? (y1 + location_offset + 1.5) : (y2 - location_offset + 0.5);
+        float line_y = (side == DRAW_LINE_TOP) ? (y1 + location_offset + 0.5) : (y2 - location_offset - 0.5);
         al_draw_line(
             x1 + start_offset, line_y,
             x2 - end_offset, line_y,

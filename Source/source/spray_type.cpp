@@ -15,7 +15,7 @@
  * Creates a spray type.
  */
 spray_type::spray_type() :
-    to_party(true),
+    group(true),
     angle(0),
     distance_range(0),
     angle_range(0),
