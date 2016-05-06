@@ -59,89 +59,171 @@ enum MOB_ACTION_TYPES {
 //Types of script events.
 enum MOB_EVENT_TYPES {
     //"Special" events.
+
     MOB_EVENT_UNKNOWN,
-    MOB_EVENT_ON_ENTER, //When the state is entered.
-    MOB_EVENT_ON_LEAVE, //When the state is left.
-    MOB_EVENT_ON_TICK,  //When the game ticks a frame.
-    
+    //When the state is entered.
+    MOB_EVENT_ON_ENTER,
+    //When the state is left.
+    MOB_EVENT_ON_LEAVE,
+    //When the game ticks a frame.
+    MOB_EVENT_ON_TICK,
+
     //Script file stuff.
-    MOB_EVENT_ANIMATION_END,       //When the current animation ends.
-    MOB_EVENT_BIG_DAMAGE,          //When it reaches a certain health %.
-    MOB_EVENT_BOTTOMLESS_PIT,      //When it lands on a bottomless pit.
-    MOB_EVENT_DAMAGE,              //When it is damaged.
-    MOB_EVENT_DEATH,               //When it dies.
-    MOB_EVENT_FAR_FROM_HOME,       //When the mob is far away from its home.
-    MOB_EVENT_FACING_OPPONENT,     //When it faces and is near its opponent.
-    MOB_EVENT_FACING_OBJECT,       //When it faces and is near its target object.
-    MOB_EVENT_FOCUSED_MOB_DIED,    //When the mob it was focused on died.
-    MOB_EVENT_LOST_FOCUSED_MOB,    //When it can no longer see the focused mob.
-    MOB_EVENT_MOUTH_OCCUPIED,      //When its mouth has a Pikmin in it.
-    MOB_EVENT_MOUTH_EMPTY,         //When its mouth is empty.
-    MOB_EVENT_NEAR_OBJECT,         //When it gets near its target object.
-    MOB_EVENT_NEAR_OPPONENT,       //When it gets near its opponent.
-    MOB_EVENT_PIKMIN_LANDED,       //When a Pikmin lands on it.
-    MOB_EVENT_PIKMIN_LATCHED,      //When a Pikmin latches on to it.
-    MOB_EVENT_PIKMIN_TOUCHED,      //When a Pikmin touches it.
-    MOB_EVENT_REACHED_DESTINATION, //When it reaches its destination.
-    MOB_EVENT_REVIVED,             //When it revives from being dead.
-    MOB_EVENT_SEEN_OBJECT,         //When it sees an object.
-    MOB_EVENT_SEEN_OPPONENT,       //When it sees an opponent.
-    MOB_EVENT_TOUCHED_LEADER,      //When it gets touched by a leader.
-    MOB_EVENT_TOUCHED_HAZARD,      //When it touches a hazard (sector or hitbox).
-    MOB_EVENT_TOUCHED_SPRAY,       //When it touches a sprayed spray.
-    MOB_EVENT_TOUCHED_OBJECT,      //When it gets touched by an object.
-    MOB_EVENT_TOUCHED_OPPONENT,    //When it gets touched by an opponent.
-    MOB_EVENT_TIMER,               //When its timer ticks.
-    MOB_EVENT_TOUCHED_WALL,        //When it touches a wall.
-    
+
+    //When the current animation ends.
+    MOB_EVENT_ANIMATION_END,
+    //When it reaches a certain health %.
+    MOB_EVENT_BIG_DAMAGE,
+    //When it lands on a bottomless pit.
+    MOB_EVENT_BOTTOMLESS_PIT,
+    //When it is damaged.
+    MOB_EVENT_DAMAGE,
+    //When it dies.
+    MOB_EVENT_DEATH,
+    //When the mob is far away from its home.
+    MOB_EVENT_FAR_FROM_HOME,
+    //When it faces and is near its opponent.
+    MOB_EVENT_FACING_OPPONENT,
+    //When it faces and is near its target object.
+    MOB_EVENT_FACING_OBJECT,
+    //When the mob it was focused on died.
+    MOB_EVENT_FOCUSED_MOB_DIED,
+    //When it can no longer see the focused mob.
+    MOB_EVENT_LOST_FOCUSED_MOB,
+    //When its mouth has a Pikmin in it.
+    MOB_EVENT_MOUTH_OCCUPIED,
+    //When its mouth is empty.
+    MOB_EVENT_MOUTH_EMPTY,
+    //When it gets near its target object.
+    MOB_EVENT_NEAR_OBJECT,
+    //When it gets near its opponent.
+    MOB_EVENT_NEAR_OPPONENT,
+    //When a Pikmin lands on it.
+    MOB_EVENT_PIKMIN_LANDED,
+    //When a Pikmin latches on to it.
+    MOB_EVENT_PIKMIN_LATCHED,
+    //When a Pikmin touches it.
+    MOB_EVENT_PIKMIN_TOUCHED,
+    //When it reaches its destination.
+    MOB_EVENT_REACHED_DESTINATION,
+    //When it revives from being dead.
+    MOB_EVENT_REVIVED,
+    //When it sees an object.
+    MOB_EVENT_SEEN_OBJECT,
+    //When it sees an opponent.
+    MOB_EVENT_SEEN_OPPONENT,
+    //When it gets touched by a leader.
+    MOB_EVENT_TOUCHED_LEADER,
+    //When it touches a hazard (sector or hitbox).
+    MOB_EVENT_TOUCHED_HAZARD,
+    //When it touches a sprayed spray.
+    MOB_EVENT_TOUCHED_SPRAY,
+    //When it gets touched by an object.
+    MOB_EVENT_TOUCHED_OBJECT,
+    //When it gets touched by an opponent.
+    MOB_EVENT_TOUCHED_OPPONENT,
+    //When its timer ticks.
+    MOB_EVENT_TIMER,
+    //When it touches a wall.
+    MOB_EVENT_TOUCHED_WALL,
+
+
     //More internal script stuff.
-    MOB_EVENT_PLUCKED,                  //When it is plucked off the ground (Pikmin only).
-    MOB_EVENT_GRABBED_BY_FRIEND,        //When it is grabbed by a friend.
-    MOB_EVENT_DISMISSED,                //When it is dismissed by its leader.
-    MOB_EVENT_THROWN,                   //When it is thrown.
-    MOB_EVENT_RELEASED,                 //When it is released from the leader's/enemy's grasp (e.g. swap for another Pikmin while holding)
-    MOB_EVENT_LANDED,                   //When it lands on the ground.
-    MOB_EVENT_NEAR_TASK,                //When it is near a task (Pikmin only).
-    MOB_EVENT_WHISTLED,                 //When it is whistled by a leader.
-    MOB_EVENT_SPOT_IS_NEAR,             //When its spot on the group is now near, and the mob is in the group.
-    MOB_EVENT_SPOT_IS_FAR,              //When its spot on the group is now far, and the mob is in the group.
-    MOB_EVENT_GROUP_MOVE_STARTED,       //When the group the mob is on started to move (C stick).
-    MOB_EVENT_GROUP_MOVE_ENDED,         //When the group the mob is on stopped moving (C stick).
-    MOB_EVENT_FINISHED_CARRYING,        //When the object the Pikmin was carrying gets delivered.
-    MOB_EVENT_NEAR_CARRIABLE_OBJECT,    //When the Pikmin is near an object that can be carried.
-    MOB_EVENT_REACHED_CARRIABLE_OBJECT, //When it has reached its carrying spot on the carriable object.
-    MOB_EVENT_HITBOX_TOUCH_A_N,         //When one of its attack hitboxes touches another mob's normal hitbox.
-    MOB_EVENT_HITBOX_TOUCH_N_A,         //When one of its normal hitboxes touches another mob's attack hitbox.
-    MOB_EVENT_HITBOX_TOUCH_EAT,         //When one of its normal hitboxes touches another mob's eating hitbox.
-    MOB_EVENT_EATEN,                    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
-    MOB_EVENT_CARRIER_ADDED,            //When a Pikmin was added to the list of Pikmin carrying this mob.
-    MOB_EVENT_CARRIER_REMOVED,          //When a Pikmin was removed from the list of Pikmin carrying this mob.
-    MOB_EVENT_CARRY_WAIT_UP,            //When the mob has to wait for a new carrier to arrive.
-    MOB_EVENT_CARRY_KEEP_GOING,         //When the mob can continue going, as the new carrier gave up.
-    MOB_EVENT_CARRY_BEGIN_MOVE,         //When the mob needs to begin moving, as it's being carried.
-    MOB_EVENT_CARRY_STOP_MOVE,          //When the mob needs to stop moving, as it's no longer being carried.
-    MOB_EVENT_CARRY_DELIVERED,          //When the mob was sucessfully delivered to its destination after being carried.
-    MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,  //When the focused mob stops being carriable.
-    MOB_EVENT_RECEIVE_DELIVERY,         //When the mob receives an object that was carried to it.
-    
+
+    //When it is plucked off the ground (Pikmin only).
+    MOB_EVENT_PLUCKED,
+    //When it is grabbed by a friend.
+    MOB_EVENT_GRABBED_BY_FRIEND,
+    //When it is dismissed by its leader.
+    MOB_EVENT_DISMISSED,
+    //When it is thrown.
+    MOB_EVENT_THROWN,
+    //When it is released from the leader's/enemy's grasp
+    //(e.g. swap for another Pikmin while holding)
+    MOB_EVENT_RELEASED,
+    //When it lands on the ground.
+    MOB_EVENT_LANDED,
+    //When it is near a task (Pikmin only).
+    MOB_EVENT_NEAR_TASK,
+    //When it is whistled by a leader.
+    MOB_EVENT_WHISTLED,
+    //When its spot on the group is now near, and the mob is in the group.
+    MOB_EVENT_SPOT_IS_NEAR,
+    //When its spot on the group is now far, and the mob is in the group.
+    MOB_EVENT_SPOT_IS_FAR,
+    //When the group the mob is on started to move (C stick).
+    MOB_EVENT_GROUP_MOVE_STARTED,
+    //When the group the mob is on stopped moving (C stick).
+    MOB_EVENT_GROUP_MOVE_ENDED,
+    //When the object the Pikmin was carrying gets delivered.
+    MOB_EVENT_FINISHED_CARRYING,
+    //When the Pikmin is near an object that can be carried.
+    MOB_EVENT_NEAR_CARRIABLE_OBJECT,
+    //When it has reached its carrying spot on the carriable object.
+    MOB_EVENT_REACHED_CARRIABLE_OBJECT,
+    //When one of its attack hitboxes touches another mob's normal hitbox.
+    MOB_EVENT_HITBOX_TOUCH_A_N,
+    //When one of its normal hitboxes touches another mob's attack hitbox.
+    MOB_EVENT_HITBOX_TOUCH_N_A,
+    //When one of its normal hitboxes touches another mob's eating hitbox.
+    MOB_EVENT_HITBOX_TOUCH_EAT,
+    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
+    MOB_EVENT_EATEN,
+    //When a Pikmin was added to the list of Pikmin carrying this mob.
+    MOB_EVENT_CARRIER_ADDED,
+    //When a Pikmin was removed from the list of Pikmin carrying this mob.
+    MOB_EVENT_CARRIER_REMOVED,
+    //When the mob has to wait for a new carrier to arrive.
+    MOB_EVENT_CARRY_WAIT_UP,
+    //When the mob can continue going, as the new carrier gave up.
+    MOB_EVENT_CARRY_KEEP_GOING,
+    //When the mob needs to begin moving, as it's being carried.
+    MOB_EVENT_CARRY_BEGIN_MOVE,
+    //When the mob needs to stop moving, as it's no longer being carried.
+    MOB_EVENT_CARRY_STOP_MOVE,
+    //When the mob was sucessfully delivered
+    //to its destination after being carried.
+    MOB_EVENT_CARRY_DELIVERED,
+    //When the focused mob stops being carriable.
+    MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,
+    //When the mob receives an object that was carried to it.
+    MOB_EVENT_RECEIVE_DELIVERY,
+
     //Events that only leaders can really handle.
-    LEADER_EVENT_FOCUSED,        //When the leader becomes the one controlled by the player.
-    LEADER_EVENT_UNFOCUSED,      //When the leader stops being the one controlled by the player.
-    LEADER_EVENT_MOVE_START,     //When the leader begins moving.
-    LEADER_EVENT_MOVE_END,       //When the leader stops moving.
-    LEADER_EVENT_HOLDING,        //When the leader is holding a Pikmin on their hand.
-    LEADER_EVENT_THROW,          //When the leader throws the Pikmin on their hand.
-    LEADER_EVENT_RELEASE,        //When the leader releases the Pikmin on their hand.
-    LEADER_EVENT_START_WHISTLE,  //When the leader begins whistling.
-    LEADER_EVENT_STOP_WHISTLE,   //When the leader stops whistling.
-    LEADER_EVENT_DISMISS,        //When the leader dismisses their group.
-    LEADER_EVENT_SPRAY,          //When the leader uses a spray.
-    LEADER_EVENT_LIE_DOWN,       //When the leader lies down.
-    LEADER_EVENT_GO_PLUCK,       //When the leader has to go towards the Pikmin it intends to pluck.
-    LEADER_EVENT_INACTIVE_SEARCH_SEED, //When the leader has to go help pluck Pikmin, as an inactive leader.
-    LEADER_EVENT_REACHED_SEED,   //When the leader reaches the seed they're meant to pluck.
-    LEADER_EVENT_CANCEL,         //When the leader's pluck is canceled.
-    
+
+    //When the leader becomes the one controlled by the player.
+    LEADER_EVENT_FOCUSED,
+    //When the leader stops being the one controlled by the player.
+    LEADER_EVENT_UNFOCUSED,
+    //When the leader begins moving.
+    LEADER_EVENT_MOVE_START,
+    //When the leader stops moving.
+    LEADER_EVENT_MOVE_END,
+    //When the leader is holding a Pikmin on their hand.
+    LEADER_EVENT_HOLDING,
+    //When the leader throws the Pikmin on their hand.
+    LEADER_EVENT_THROW,
+    //When the leader releases the Pikmin on their hand.
+    LEADER_EVENT_RELEASE,
+    //When the leader begins whistling.
+    LEADER_EVENT_START_WHISTLE,
+    //When the leader stops whistling.
+    LEADER_EVENT_STOP_WHISTLE,
+    //When the leader dismisses their group.
+    LEADER_EVENT_DISMISS,
+    //When the leader uses a spray.
+    LEADER_EVENT_SPRAY,
+    //When the leader lies down.
+    LEADER_EVENT_LIE_DOWN,
+    //When the leader has to go towards the Pikmin it intends to pluck.
+    LEADER_EVENT_GO_PLUCK,
+    //When the leader has to go help pluck Pikmin, as an inactive leader.
+    LEADER_EVENT_INACTIVE_SEARCH_SEED,
+    //When the leader reaches the seed they're meant to pluck.
+    LEADER_EVENT_REACHED_SEED,
+    //When the leader's pluck is canceled.
+    LEADER_EVENT_CANCEL,
+
     N_MOB_EVENTS,
 };
 
@@ -194,8 +276,10 @@ public:
     vector<int> vi;
     vector<float> vf;
     vector<string> vs;
-    
-    void run(mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2);
+
+    void run(
+        mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2
+    );
     mob_action(data_node* dn, vector<mob_state*>* states, mob_type* mt);
     mob_action(unsigned char type, unsigned char sub_type = 0);
     mob_action(custom_action_code code);
@@ -206,10 +290,12 @@ class mob_event {
 public:
     unsigned char type;
     vector<mob_action*> actions;
-    
+
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
     mob_event(data_node* d, vector<mob_action*> a);
-    mob_event(const unsigned char t, vector<mob_action*> a = vector<mob_action*>());
+    mob_event(
+        const unsigned char t, vector<mob_action*> a = vector<mob_action*>()
+    );
 };
 
 
@@ -219,7 +305,7 @@ public:
     size_t id;
     mob_event* events[N_MOB_EVENTS];
     mob_event* get_event(const size_t type);
-    
+
     mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
     mob_state(const string &name, const size_t id);
@@ -230,12 +316,19 @@ class mob_fsm {
 public:
     mob* m;
     mob_state* cur_state;
-    vector<size_t> pre_named_conversions; //Conversion between pre-named states and in-file states.
-    string prev_state_name; //Helps with debugging.
-    
+    //Conversion between pre-named states and in-file states.
+    vector<size_t> pre_named_conversions;
+    //Knowing the previous state's name helps with debugging.
+    string prev_state_name;
+
     mob_event* get_event(const size_t type);
-    void run_event(const size_t type, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    void set_state(const size_t new_state, void* info1 = NULL, void* info2 = NULL);
+    void run_event(
+        const size_t type,
+        void* custom_data_1 = NULL, void* custom_data_2 = NULL
+    );
+    void set_state(
+        const size_t new_state, void* info1 = NULL, void* info2 = NULL
+    );
     mob_fsm(mob* m = NULL);
 };
 
@@ -260,7 +353,7 @@ private:
     mob_event* cur_event;
     void commit_state();
     void commit_event();
-    
+
 public:
     void new_state(const string &name, const size_t id);
     void new_event(const unsigned char type);
@@ -274,7 +367,10 @@ struct hitbox_touch_info {
     mob* mob2; //Mob that touched our mob.
     hitbox_instance* hi1; //Hitbox of our mob that got touched.
     hitbox_instance* hi2; //Hitbox of the other mob.
-    hitbox_touch_info(mob* mob2 = NULL, hitbox_instance* hi1 = NULL, hitbox_instance* hi2 = NULL);
+    hitbox_touch_info(
+        mob* mob2 = NULL,
+        hitbox_instance* hi1 = NULL, hitbox_instance* hi2 = NULL
+    );
 };
 
 void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);

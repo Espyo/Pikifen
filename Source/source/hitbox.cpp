@@ -13,11 +13,14 @@
 
 hitbox::hitbox(const string &name) :
     name(name) {
-    
+
 }
 
 
-hitbox_instance::hitbox_instance(const string &hn, size_t hnr, hitbox* hp, const float x, const float y, const float z, const float height, const float radius) :
+hitbox_instance::hitbox_instance(
+    const string &hn, size_t hnr, hitbox* hp, const float x, const float y,
+    const float z, const float height, const float radius
+) :
     hitbox_name(hn),
     hitbox_nr(hnr),
     hitbox_ptr(hp),
@@ -32,5 +35,5 @@ hitbox_instance::hitbox_instance(const string &hn, size_t hnr, hitbox* hp, const
     knockback_angle(0),
     knockback(1),
     can_pikmin_latch(false) {
-    
+
 }

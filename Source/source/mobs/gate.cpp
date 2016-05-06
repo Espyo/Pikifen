@@ -12,11 +12,14 @@
 
 #include "gate.h"
 
-gate::gate(const float x, const float y, gate_type* type, const float angle, const string &vars) :
+gate::gate(
+    const float x, const float y, gate_type* type,
+    const float angle, const string &vars
+) :
     mob(x, y, type, angle, vars),
     gat_type(type),
     sec(get_sector(x, y, nullptr, true)) {
-    
+
     sec->type = SECTOR_TYPE_BLOCKING;
     team = MOB_TEAM_OBSTACLE;
 }

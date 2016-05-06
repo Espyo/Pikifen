@@ -20,16 +20,22 @@ enemy_type::enemy_type() :
     regenerate_speed(0),
     is_boss(false),
     drops_corpse(true) {
-    
+
     add_carrying_states();
 }
 
-void enemy_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
-    drops_corpse = s2b(file->get_child_by_name("drops_corpse")->get_value_or_default("yes"));
+void enemy_type::load_from_file(
+    data_node* file, const bool load_resources,
+    vector<pair<size_t, string> >* anim_conversions
+) {
+    drops_corpse =
+        s2b(
+            file->get_child_by_name("drops_corpse")->get_value_or_default("yes")
+        );
     is_boss = s2b(file->get_child_by_name("is_boss")->value);
     pikmin_seeds = s2i(file->get_child_by_name("pikmin_seeds")->value);
     regenerate_speed = s2b(file->get_child_by_name("regenerate_speed")->value);
     revive_speed = s2f(file->get_child_by_name("revive_speed")->value);
     value = s2f(file->get_child_by_name("value")->value);
-    
+
 }

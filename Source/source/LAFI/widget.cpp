@@ -7,7 +7,9 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a widget given some parameters.
  */
-widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags) :
+widget::widget(
+    int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags
+) :
     x1(x1),
     y1(y1),
     x2(x2),
@@ -30,7 +32,7 @@ widget::widget(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char
     get_focus_handler(nullptr),
     lose_focus_handler(nullptr),
     needs_init(false) {
-    
+
     easy_reset();
 }
 
@@ -61,9 +63,9 @@ widget::widget(widget &w2) :
     get_focus_handler(nullptr),
     lose_focus_handler(nullptr),
     needs_init(false) {
-    
+
     easy_reset();
-    
+
 }
 
 
@@ -75,62 +77,85 @@ widget::~widget() {
 
 
 //Calls the function that handles a mouse move.
-void widget::call_mouse_move_handler(int x, int y) { if(mouse_move_handler) mouse_move_handler(this, x, y); }
+void widget::call_mouse_move_handler(int x, int y) {
+    if(mouse_move_handler) mouse_move_handler(this, x, y);
+}
 
 //Calls the function that handles a left mouse click.
-void widget::call_left_mouse_click_handler(int x, int y) { if(left_mouse_click_handler) left_mouse_click_handler(this, x, y); }
+void widget::call_left_mouse_click_handler(int x, int y) {
+    if(left_mouse_click_handler) left_mouse_click_handler(this, x, y);
+}
 
 //Calls the function that handles a mouse button down.
-void widget::call_mouse_down_handler(int button, int x, int y) { if(mouse_down_handler) mouse_down_handler(this, button, x, y); }
+void widget::call_mouse_down_handler(int button, int x, int y) {
+    if(mouse_down_handler) mouse_down_handler(this, button, x, y);
+}
 
 //Calls the function that handles a mouse button up.
-void widget::call_mouse_up_handler(int button, int x, int y) { if(mouse_up_handler) mouse_up_handler(this, button, x, y); }
+void widget::call_mouse_up_handler(int button, int x, int y) {
+    if(mouse_up_handler) mouse_up_handler(this, button, x, y);
+}
 
 //Calls the function that handles a mouse wheel move.
-void widget::call_mouse_wheel_handler(int dy, int dx) { if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx); }
+void widget::call_mouse_wheel_handler(int dy, int dx) {
+    if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx);
+}
 
 //Calls the function that handles the mouse entering.
-void widget::call_mouse_enter_handler() { if(mouse_enter_handler) mouse_enter_handler(this); }
+void widget::call_mouse_enter_handler() {
+    if(mouse_enter_handler) mouse_enter_handler(this);
+}
 
 //Calls the function that handles the mouse leaving.
-void widget::call_mouse_leave_handler() { if(mouse_leave_handler) mouse_leave_handler(this); }
+void widget::call_mouse_leave_handler() {
+    if(mouse_leave_handler) mouse_leave_handler(this);
+}
 
 //Calls the function that handles the focus being obtained.
-void widget::call_get_focus_handler() { if(get_focus_handler) get_focus_handler(this); }
+void widget::call_get_focus_handler() {
+    if(get_focus_handler) get_focus_handler(this);
+}
 
 //Calls the function that handles the focus being lost.
-void widget::call_lose_focus_handler() { if(lose_focus_handler) lose_focus_handler(this); }
+void widget::call_lose_focus_handler() {
+    if(lose_focus_handler) lose_focus_handler(this);
+}
 
 
-//Returns the appropriate background color, taking into account whether the widget is enabled or not.
+//Returns the appropriate background color,
+//taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_bg_color() {
     if(is_disabled()) return style->disabled_bg_color;
     return style->bg_color;
 }
 
 
-//Returns the appropriate lighter background color, taking into account whether the widget is enabled or not.
+//Returns the appropriate lighter background color,
+//taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_lighter_bg_color() {
     if(is_disabled()) return style->lighter_disabled_bg_color;
     return style->lighter_bg_color;
 }
 
 
-//Returns the appropriate darker background color, taking into account whether the widget is enabled or not.
+//Returns the appropriate darker background color,
+//taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_darker_bg_color() {
     if(is_disabled()) return style->darker_disabled_bg_color;
     return style->darker_bg_color;
 }
 
 
-//Returns the appropriate foreground color, taking into account whether the widget is enabled or not.
+//Returns the appropriate foreground color,
+//taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_fg_color() {
     if(is_disabled()) return style->disabled_fg_color;
     return style->fg_color;
 }
 
 
-//Returns the appropriate alternate color, taking into account whether the widget is enabled or not.
+//Returns the appropriate alternate color,
+//taking into account whether the widget is enabled or not.
 ALLEGRO_COLOR widget::get_alt_color() {
     if(is_disabled()) return style->disabled_alt_color;
     return style->alt_color;
@@ -175,10 +200,11 @@ bool widget::is_disabled() {
 bool widget::is_mouse_in(int mx, int my) {
     int ox, oy;
     get_offset(&ox, &oy);
-    bool in_current_widget = mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
+    bool in_current_widget =
+        mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
     bool in_parent_widget = true;
     if(parent) in_parent_widget = parent->is_mouse_in(mx, my);
-    
+
     return(in_current_widget && in_parent_widget);
 }
 
@@ -189,7 +215,7 @@ bool widget::is_mouse_in(int mx, int my) {
  */
 void widget::get_offset(int* ox, int* oy) {
     if(!parent) { *ox = 0; *oy = 0; return; }
-    
+
     int parent_parent_offset_x, parent_parent_offset_y;
     parent->get_offset(&parent_parent_offset_x, &parent_parent_offset_y);
     *ox = parent->children_offset_x + parent_parent_offset_x;
@@ -221,9 +247,11 @@ void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
  */
 void widget::draw() {
     if(flags & FLAG_INVISIBLE) return;
-    
+
     if(!style) {
-        //Last attempt at making things right: if there's no style, try using the parent's style now. If not even the parent has it, try to use the default style.
+        //Last attempt at making things right: if there's no style,
+        //try using the parent's style now. If not even the parent has it,
+        //try to use the default style.
         if(parent) {
             if(parent->style) {
                 style = parent->style;
@@ -234,13 +262,13 @@ void widget::draw() {
             style = new lafi::style();
         }
     }
-    
+
     int ox, oy;
     get_offset(&ox, &oy);
-    
+
     int ocr_x, ocr_y, ocr_w, ocr_h;  //Original clipping rectangle.
     al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
-    
+
     if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
         int rx1 = x1 + ox;
         int rx2 = x2 + ox;
@@ -257,26 +285,28 @@ void widget::draw() {
     }
     {
         draw_self();
-        
+
         ALLEGRO_TRANSFORM t;
-        al_build_transform(&t, ox + children_offset_x, oy + children_offset_y, 1, 1, 0);
-        
+        al_build_transform(
+            &t, ox + children_offset_x, oy + children_offset_y, 1, 1, 0
+        );
+
         ALLEGRO_TRANSFORM old;
         al_copy_transform(&old, al_get_current_transform());
-        
+
         al_use_transform(&t); {
-        
+
             for(auto w = widgets.begin(); w != widgets.end(); ++w) {
                 if(w->second) w->second->draw();
             }
-            
+
         } al_use_transform(&old);
-        
+
     }
     if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
         al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
     }
-    
+
 }
 
 
@@ -287,37 +317,44 @@ void widget::draw() {
  */
 void widget::handle_event(ALLEGRO_EVENT ev) {
     if(flags & FLAG_DISABLED) return;
-    
-    if(ev.type == ALLEGRO_EVENT_MOUSE_AXES || ev.type == ALLEGRO_EVENT_MOUSE_WARPED || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-    
+
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
+    ) {
+
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-        
+
             if(!w->second) continue;
-            
+
             if(w->second->flags & FLAG_DISABLED) continue;
-            
+
             if(w->second->mouse_in) {
                 if(!w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
-                
+
                     //Mouse was in but left.
                     w->second->widget_on_mouse_leave();
                     w->second->mouse_in = false;
                     w->second->call_mouse_leave_handler();
                 }
-                
+
                 if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                     w->second->widget_on_mouse_move(ev.mouse.x, ev.mouse.y);
                     w->second->call_mouse_move_handler(ev.mouse.x, ev.mouse.y);
                 }
                 if(ev.mouse.dz != 0 || ev.mouse.dw != 0) {
                     w->second->widget_on_mouse_wheel(ev.mouse.dz, ev.mouse.dw);
-                    w->second->call_mouse_wheel_handler(ev.mouse.dz, ev.mouse.dw);
+                    w->second->call_mouse_wheel_handler(
+                        ev.mouse.dz, ev.mouse.dw
+                    );
                 }
-                
+
             } else {
-            
+
                 if(w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
-                
+
                     //Mouse was out but is now in.
                     w->second->widget_on_mouse_enter();
                     w->second->mouse_in = true;
@@ -325,71 +362,90 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
                 }
             }
         }
-        
+
     }
-    
+
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-    
+
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-        
+
             if(!w->second) continue;
-            
+
             if(w->second->flags & FLAG_DISABLED) continue;
-            
+
             if(w->second->mouse_in) {
-            
-                w->second->widget_on_mouse_down(ev.mouse.button, ev.mouse.x, ev.mouse.y);
+
+                w->second->widget_on_mouse_down(
+                    ev.mouse.button, ev.mouse.x, ev.mouse.y
+                );
                 if(ev.mouse.button == 1) w->second->mouse_clicking = true;
-                
+
                 give_focus(w->second);
-                
-                w->second->call_mouse_down_handler(ev.mouse.button, ev.mouse.x, ev.mouse.y);
-                
+
+                w->second->call_mouse_down_handler(
+                    ev.mouse.button, ev.mouse.x, ev.mouse.y
+                );
+
             } else {
                 if(ev.mouse.button == 1) w->second->mouse_clicking = false;
             }
         }
-        
+
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-    
+
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-        
+
             if(!w->second) continue;
-            
+
             if(w->second->flags & FLAG_DISABLED) continue;
-            
+
             if(w->second->mouse_in) {
-            
-                w->second->widget_on_mouse_up(ev.mouse.button, ev.mouse.x, ev.mouse.y);
-                w->second->call_mouse_up_handler(ev.mouse.button, ev.mouse.x, ev.mouse.y);
-                
+
+                w->second->widget_on_mouse_up(
+                    ev.mouse.button, ev.mouse.x, ev.mouse.y
+                );
+                w->second->call_mouse_up_handler(
+                    ev.mouse.button, ev.mouse.x, ev.mouse.y
+                );
+
                 if(ev.mouse.button == 1) {
                     if(w->second->mouse_clicking) {
-                    
-                        //Mouse was clicking, and a button up just happened. So a full click just happened.
-                        w->second->widget_on_left_mouse_click(ev.mouse.x, ev.mouse.y);
-                        w->second->call_left_mouse_click_handler(ev.mouse.x, ev.mouse.y);
+
+                        //Mouse was clicking, and a button up just happened.
+                        //So a full click just happened.
+                        w->second->widget_on_left_mouse_click(
+                            ev.mouse.x, ev.mouse.y
+                        );
+                        w->second->call_left_mouse_click_handler(
+                            ev.mouse.x, ev.mouse.y
+                        );
                     }
                 }
             }
             if(ev.mouse.button == 1) w->second->mouse_clicking = false;
         }
-        
+
     } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(focused_widget) {
             if(!(focused_widget->flags & FLAG_DISABLED)) {
-                focused_widget->widget_on_key_char(ev.keyboard.keycode, ev.keyboard.unichar, ev.keyboard.modifiers);
+                focused_widget->widget_on_key_char(
+                    ev.keyboard.keycode, ev.keyboard.unichar,
+                    ev.keyboard.modifiers
+                );
             }
         }
-        
+
         for(size_t a = 0; a < accelerators.size(); ++a) {
             accelerator* a_ptr = &accelerators[a];
-            if(ev.keyboard.keycode == a_ptr->key && ev.keyboard.modifiers == a_ptr->modifiers) {
+            if(
+                ev.keyboard.keycode == a_ptr->key &&
+                ev.keyboard.modifiers == a_ptr->modifiers
+            ) {
                 a_ptr->w->call_left_mouse_click_handler(0, 0);
             }
         }
     }
-    
+
     //Now let children widgets handle events.
     for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         if(w->second) w->second->handle_event(ev);
@@ -402,7 +458,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
  */
 void widget::remove(string child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
-    
+
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
@@ -428,7 +484,7 @@ void widget::lose_focus() {
         focused_widget->call_lose_focus_handler();
         focused_widget = NULL;
     }
-    
+
     for(auto cw = widgets.begin(); cw != widgets.end(); ++cw) {
         if(cw->second) cw->second->lose_focus();
     }
@@ -441,11 +497,12 @@ void widget::lose_focus() {
  */
 void widget::give_focus(widget* w) {
     if(!w) return;
-    //Mark focus lost. First go up to the topmost parent, and let it tell everybody to lose their focuses.
+    //Mark focus lost. First go up to the topmost parent,
+    //and let it tell everybody to lose their focuses.
     widget* p = this;
     while(p->parent) p = p->parent;
     p->lose_focus();
-    
+
     focused_widget = w;
     w->call_get_focus_handler();
 }
@@ -453,28 +510,38 @@ void widget::give_focus(widget* w) {
 
 /* ----------------------------------------------------------------------------
  * Creates an "easy add" row and commits the previous one.
- * vertical_padding:   Padding between this new row and the previous one, in pixels.
+ * vertical_padding:   Padding between this new row and the previous one,
+   * in pixels.
  * horizontal_padding: Padding between the left and right sides, in pixels.
  * widget_padding:     Padding between added widgets, in pixels.
  * Returns the y of the next row.
  */
-int widget::easy_row(float vertical_padding, float horizontal_padding, float widget_padding) {
+int widget::easy_row(
+    float vertical_padding, float horizontal_padding, float widget_padding
+) {
     if(easy_row_widgets.size()) {
         //Find the tallest widget.
         float tallest_height = easy_row_widgets[0].height;
-        float available_width = (x2 - x1) - ((easy_row_widgets.size() - 1) * easy_row_widget_padding) - (easy_row_horizontal_padding * 2);
+        float available_width =
+            (x2 - x1) - (
+                (
+                    easy_row_widgets.size() - 1) *
+                easy_row_widget_padding
+            ) - (easy_row_horizontal_padding * 2);
         float prev_x = x1 + easy_row_horizontal_padding;
-        
+
         for(size_t w = 1; w < easy_row_widgets.size(); ++w) {
-            if(easy_row_widgets[w].height > tallest_height) tallest_height = easy_row_widgets[w].height;
+            if(easy_row_widgets[w].height > tallest_height) {
+                tallest_height = easy_row_widgets[w].height;
+            }
         }
-        
+
         easy_row_y2 = easy_row_y1 + tallest_height;
         float y_center = (easy_row_y2 + easy_row_y1) / 2 + y1;
-        
+
         for(size_t w = 0; w < easy_row_widgets.size(); ++w) {
             easy_widget_info* i_ptr = &easy_row_widgets[w];
-            
+
             float width =
                 (
                     (i_ptr->flags & EASY_FLAG_WIDTH_PX) != 0 ?
@@ -484,10 +551,10 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
             i_ptr->w->x1 = prev_x;
             i_ptr->w->x2 = prev_x + width;
             prev_x = i_ptr->w->x2 + easy_row_widget_padding;
-            
+
             i_ptr->w->y1 = y_center - i_ptr->height / 2;
             i_ptr->w->y2 = y_center + i_ptr->height / 2;
-            
+
             add(i_ptr->name, i_ptr->w);
         }
     }
@@ -497,7 +564,7 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
     easy_row_vertical_padding = vertical_padding;
     easy_row_horizontal_padding = horizontal_padding;
     easy_row_widget_padding = widget_padding;
-    
+
     return easy_row_y1;
 }
 
@@ -510,7 +577,9 @@ int widget::easy_row(float vertical_padding, float horizontal_padding, float wid
  * height: Height of the widget, in pixels.
  * flags:  Use EASY_FLAG_*.
  */
-void widget::easy_add(string name, widget* w, float width, float height, unsigned char flags) {
+void widget::easy_add(
+    string name, widget* w, float width, float height, unsigned char flags
+) {
     easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
 
@@ -532,13 +601,16 @@ void widget::easy_reset() {
 /* ----------------------------------------------------------------------------
  * Creates an "easy add" widget info structure.
  */
-easy_widget_info::easy_widget_info(string name, lafi::widget* w, float width, float height, unsigned char flags) :
+easy_widget_info::easy_widget_info(
+    string name, lafi::widget* w, float width, float height,
+    unsigned char flags
+) :
     name(name),
     w(w),
     width(width),
     height(height),
     flags(flags) {
-    
+
 }
 
 
@@ -555,30 +627,45 @@ accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
 
 
 /* ----------------------------------------------------------------------------
- * Draws a line in one side of a rectangle. This is used because al_draw_line gets too confusing after a bit.
- * Each line is drawn from a side: right, top, left or bottom. It starts on the top-left corner for top and
- * left-side lines, top-right corner for right-side, and bottom-left corner for bottom-side.
+ * Draws a line in one side of a rectangle.
+ * This is used because al_draw_line gets too confusing after a bit.
+ * Each line is drawn from a side: right, top, left or bottom.
+ * It starts on the top-left corner for top and
+ * left-side lines, top-right corner for right-side,
+ * and bottom-left corner for bottom-side.
  * widget:          Widget, used to get the coordinates.
  * side:            Side of the rectangle to draw. Use DRAW_LINE_*.
- * start_offset:    Start these many points to the right (horizontal lines) or down (vertical). 0 means the exact corner.
- * end_offset:      End these many pixels to the left (horizontal lines) or above (vertical). 0 means the exact corner.
+ * start_offset:    Start these many points to the right (horizontal lines)
+   * or down (vertical). 0 means the exact corner.
+ * end_offset:      End these many pixels to the left (horizontal lines)
+   * or above (vertical). 0 means the exact corner.
  * location_offset: Place the lines these many pixels closer to the center.
- ** e.g. if the line is BOTTOM-side, setting this to 1 makes it draw on the 2nd to last row of pixels.
+   * e.g. if the line is BOTTOM-side, setting this to 1 makes it draw on the
+   * 2nd to last row of pixels.
  * color:           Color.
  */
-void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, int location_offset, ALLEGRO_COLOR color) {
+void draw_line(
+    widget* w, unsigned char side, int start_offset, int end_offset,
+    int location_offset, ALLEGRO_COLOR color
+) {
     float x1 = w->x1, x2 = w->x2;
     float y1 = w->y1, y2 = w->y2;
-    
+
     if(side == DRAW_LINE_RIGHT || side == DRAW_LINE_LEFT) {
-        float line_x = (side == DRAW_LINE_RIGHT) ? (x2 - location_offset - 0.5) : (x1 + location_offset + 0.5);
+        float line_x =
+            (side == DRAW_LINE_RIGHT) ?
+            (x2 - location_offset - 0.5) :
+            (x1 + location_offset + 0.5);
         al_draw_line(
             line_x, y1 + start_offset,
             line_x, y2 - end_offset,
             color, 1
         );
     } else {
-        float line_y = (side == DRAW_LINE_TOP) ? (y1 + location_offset + 0.5) : (y2 - location_offset - 0.5);
+        float line_y =
+            (side == DRAW_LINE_TOP) ?
+            (y1 + location_offset + 0.5) :
+            (y2 - location_offset - 0.5);
         al_draw_line(
             x1 + start_offset, line_y,
             x2 - end_offset, line_y,
@@ -589,7 +676,8 @@ void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, 
 
 
 /* ----------------------------------------------------------------------------
- * Draws text, but if there are line breaks, it'll draw every line one under the other.
+ * Draws text, but if there are line breaks,
+ * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
  * f:    Font to use.
  * c:    Color.
@@ -598,23 +686,28 @@ void draw_line(widget* w, unsigned char side, int start_offset, int end_offset, 
  * va:   Vertical align: 0 for top, 1 for center, 2 for bottom.
  * text: Text to write, line breaks included ('\n').
  */
-void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const float x, const float y, const int fl, const unsigned char va, const string &text) {
+void draw_text_lines(
+    const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c,
+    const float x, const float y, const int fl,
+    const unsigned char va, const string &text
+) {
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(f);
     size_t n_lines = lines.size();
     float top;
-    
+
     if(va == 0) {
         top = y;
     } else {
-        int total_height = n_lines * fh + (n_lines - 1);  //We add n_lines - 1 because there is a 1px gap between each line.
+        //We add n_lines - 1 because there is a 1px gap between each line.
+        int total_height = n_lines * fh + (n_lines - 1);
         if(va == 1) {
             top = y - total_height / 2;
         } else {
             top = y - total_height;
         }
     }
-    
+
     for(size_t l = 0; l < n_lines; ++l) {
         float line_y = (fh + 1) * l + top;
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
@@ -627,37 +720,43 @@ void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const 
  * text:        The string to split.
  * del:         The delimiter. Default is space.
  * inc_empty:   If true, include empty substrings on the vector.
- ** i.e. if two delimiters come together in a row, keep an empty substring between.
+   * i.e. if two delimiters come together in a row,
+   * keep an empty substring between.
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
-vector<string> split(string text, const string &del, const bool inc_empty, const bool inc_del) {
+vector<string> split(
+    string text, const string &del, const bool inc_empty, const bool inc_del
+) {
     vector<string> v;
     size_t pos;
     size_t del_size = del.size();
-    
+
     do {
         pos = text.find(del);
         if (pos != string::npos) {  //If it DID find the delimiter.
             //Get the text between the start and the delimiter.
             string sub = text.substr(0, pos);
-            
+
             //Add the text before the delimiter to the vector.
             if(sub != "" || inc_empty)
                 v.push_back(sub);
-                
+
             //Add the delimiter to the vector, but only if requested.
             if(inc_del)
                 v.push_back(del);
-                
-            text.erase(text.begin(), text.begin() + pos + del_size);    //Delete everything before the delimiter, including the delimiter itself, and search again.
+
+            //Delete everything before the delimiter, including
+            //the delimiter itself, and search again.
+            text.erase(text.begin(), text.begin() + pos + del_size);
         }
     } while (pos != string::npos);
-    
-    //Text after the final delimiter. (If there is one. If not, it's just the whole string.)
-    
-    if (text != "" || inc_empty) //If it's a blank string, only add it if we want empty strings.
+
+    //Text after the final delimiter.
+    //(If there is one. If not, it's just the whole string.)
+    //If it's a blank string, only add it if we want empty strings.
+    if (text != "" || inc_empty)
         v.push_back(text);
-        
+
     return v;
 }
 

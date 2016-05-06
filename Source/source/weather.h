@@ -34,15 +34,21 @@ using namespace std;
 class weather {
 public:
     string name;
-    vector<pair<size_t, ALLEGRO_COLOR> > daylight; //Vector with the lighting colors for specific times of day, in minutes.
-    vector<pair<size_t, unsigned char> > sun_strength; //Vector with the sun strength for specific times of day, in minutes.
+    //Vector with the lighting colors for specific times of day, in minutes.
+    vector<pair<size_t, ALLEGRO_COLOR> > daylight;
+    //Vector with the sun strength for specific times of day, in minutes.
+    vector<pair<size_t, unsigned char> > sun_strength;
     unsigned char percipitation_type;
     interval percipitation_frequency;
     interval percipitation_speed;
     interval percipitation_angle;
-    
+
     weather();
-    weather(const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl, const vector<pair<size_t, unsigned char> > &ss, const unsigned char pt, const interval &pf, const interval &ps, const interval &pa);
+    weather(
+        const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl,
+        const vector<pair<size_t, unsigned char> > &ss, const unsigned char pt,
+        const interval &pf, const interval &ps, const interval &pa
+    );
 };
 
 

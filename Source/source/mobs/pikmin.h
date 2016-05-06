@@ -41,7 +41,7 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_GOING_TO_OPPONENT,
     PIKMIN_STATE_FLAILING,
     PIKMIN_STATE_PANIC,
-    
+
     N_PIKMIN_STATES
 };
 
@@ -69,32 +69,45 @@ const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
 class pikmin : public mob {
 protected:
     virtual void tick_class_specifics();
-    
+
 public:
-    pikmin(const float x, const float y, pikmin_type* type, const float angle, const string &vars);
+    pikmin(
+        const float x, const float y, pikmin_type* type,
+        const float angle, const string &vars
+    );
     ~pikmin();
-    
+
     virtual void draw();
     virtual float get_base_speed();
-    
+
     pikmin_type* pik_type;
-    timer hazard_timer;  //Time it has left until it drowns/chokes/etc.
-    
-    size_t connected_hitbox_nr;   //Number of the hitbox the Pikmin is attached to.
-    float connected_hitbox_dist;  //Distance percentage from the center of the hitbox to the Pikmin's position.
-    float connected_hitbox_angle; //Angle the Pikmin makes with the center of the hitbox (with the hitbox' owner at 0 degrees).
-    float attack_time;            //Time left until the strike.
-    
-    mob* carrying_mob;           //Mob that it is carrying.
-    size_t carrying_spot;        //Carrying spot reserved for it.
-    
-    unsigned char maturity;  //0: leaf. 1: bud. 2: flower.
-    bool pluck_reserved;     //If true, someone's already coming to pluck this Pikmin. This is to let other leaders know that they should pick another one.
-    
+
+    //Number of the hitbox the Pikmin is attached to.
+    size_t connected_hitbox_nr;
+    //Distance percentage from the center of the hitbox
+    //to the Pikmin's position.
+    float connected_hitbox_dist;
+    //Angle the Pikmin makes with the center of the hitbox
+    //(with the hitbox' owner at 0 degrees).
+    float connected_hitbox_angle;
+    //Time left until the strike.
+    float attack_time;
+
+    //Mob that it is carrying.
+    mob* carrying_mob;
+    //Carrying spot reserved for it.
+    size_t carrying_spot;
+
+    //0: leaf. 1: bud. 2: flower.
+    unsigned char maturity;
+    //If true, someone's already coming to pluck this Pikmin.
+    //This is to let other leaders know that they should pick a different one.
+    bool pluck_reserved;
+
     void do_attack(mob* m, hitbox_instance* victim_hitbox_i);
     void set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr);
     void teleport_to_connected_hitbox();
-    
+
     virtual bool can_receive_status(status_type* s);
     virtual void receive_flailing_from_status();
     virtual void receive_panic_from_status();
@@ -103,6 +116,8 @@ public:
 };
 
 
-pikmin* get_closest_buried_pikmin(const float x, const float y, dist* d, const bool ignore_reserved);
+pikmin* get_closest_buried_pikmin(
+    const float x, const float y, dist* d, const bool ignore_reserved
+);
 
 #endif //ifndef PIKMIN_INCLUDED

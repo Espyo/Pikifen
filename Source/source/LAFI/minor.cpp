@@ -5,11 +5,14 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a line.
  */
-line::line(int x1, int y1, int x2, int y2, bool horizontal, int thickness, lafi::style* style, unsigned char flags) :
+line::line(
+    int x1, int y1, int x2, int y2, bool horizontal, int thickness,
+    lafi::style* style, unsigned char flags
+) :
     widget(x1, y1, x2, y2, style, flags),
     horizontal(horizontal),
     thickness(thickness) {
-    
+
 }
 
 
@@ -39,7 +42,9 @@ void line::draw_self() {
 /* ----------------------------------------------------------------------------
  * Creates a dummy widget.
  */
-dummy::dummy(int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags) :
+dummy::dummy(
+    int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags
+) :
     widget(x1, y1, x2, y2, style, flags) {
 }
 

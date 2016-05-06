@@ -25,13 +25,19 @@ using namespace std;
  * and what action it triggers.
  */
 struct control_info {
-    unsigned char action; //Action number. Use BUTTON_*.
-    unsigned char type;   //Type of control (hardware). Use CONTROL_TYPE_*.
-    int device_nr;        //Device number. i.e. the gamepad number.
-    int button;           //Button, whether the gamepad digital button, or the keyboard key.
-    int stick;            //Stick on the gamepad.
-    int axis;             //Axis of the stick.
-    
+    //Action number. Use BUTTON_*.
+    unsigned char action;
+    //Type of control (hardware). Use CONTROL_TYPE_*.
+    unsigned char type;
+    //Device number. i.e. the gamepad number.
+    int device_nr;
+    //Button, whether the gamepad digital button, or the keyboard key.
+    int button;
+    //Stick on the gamepad.
+    int stick;
+    //Axis of the stick.
+    int axis;
+
     control_info(unsigned char action, string s);
     string stringify();
 };
@@ -39,7 +45,9 @@ struct control_info {
 
 
 void handle_game_controls(const ALLEGRO_EVENT &ev);
-void handle_button(const unsigned int button, const unsigned char player, float pos);
+void handle_button(
+    const unsigned int button, const unsigned char player, float pos
+);
 void active_control();
 
 
@@ -78,7 +86,7 @@ enum BUTTONS {
     BUTTON_SWITCH_MATURITY_DOWN,
     BUTTON_LIE_DOWN,
     BUTTON_PAUSE,
-    
+
     N_BUTTONS,
 };
 

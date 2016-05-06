@@ -12,6 +12,7 @@ pushable = true
 pushes = false
 rotation_speed = 6.28319
 radius = 16
+throw_height_mult = 0.5
 weight = 1
 whistle_sfx = President_whistle.ogg
 icon = President_icon.png

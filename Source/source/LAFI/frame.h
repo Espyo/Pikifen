@@ -15,10 +15,13 @@ namespace lafi {
  */
 class frame : public widget {
 public:
-    frame(int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, lafi::style* style = NULL, unsigned char flags = 0);
+    frame(
+        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
+        lafi::style* style = NULL, unsigned char flags = 0
+    );
     frame(frame &f2);
     ~frame();
-    
+
     void draw_self();
 };
 

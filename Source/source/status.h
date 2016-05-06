@@ -32,20 +32,22 @@ struct status_type {
     unsigned char affects;
     ALLEGRO_COLOR color;
     ALLEGRO_COLOR tint;
-    
+
     bool removable_with_whistle;
     float auto_remove_time;
-    
-    float health_change_ratio; //Health addition/subtraction percentage per second.
-    int maturity_change_amount; //Increase/decrease in maturity when the status is gained.
+
+    //Health addition/subtraction percentage per second.
+    float health_change_ratio;
+    //Increase/decrease in maturity when the status is gained.
+    int maturity_change_amount;
     bool causes_panic;
     bool causes_flailing;
-    
+
     float speed_multiplier;
     float attack_multiplier;
     float defense_multiplier;
     float anim_speed_multiplier;
-    
+
     status_type();
 };
 
@@ -55,12 +57,12 @@ struct status_type {
  */
 struct status {
     status_type* type;
-    
+
     float time_left; //If this status effect auto-removes itself.
     bool to_delete;
-    
+
     void tick(const float delta_t);
-    
+
     status(status_type* type);
 };
 

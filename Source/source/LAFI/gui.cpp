@@ -4,9 +4,13 @@ namespace lafi {
 
 /* ----------------------------------------------------------------------------
  * Creates a gui.
- * autonomous: if true, the gui will work without there being a need to create a display, feed it events, etc.
- * display: if the gui is not autonomous, this is the display it should be drawn on.
- * close_button_quits: if the gui is autonomous, this specifies whether the close button on the window makes the application stop or not.
+ * autonomous: if true, the gui will work without there being a need
+   * to create a display, feed it events, etc.
+ * display: if the gui is not autonomous, this is the display
+   * it should be drawn on.
+ * close_button_quits: if the gui is autonomous,
+   * this specifies whether the close button
+   * on the window makes the application stop or not.
  * display_w: if the gui is autonomous, it'll create a display with this width.
  * display_h: if the gui is autonomous, it'll create a display with this height.
  * style: the widget style.
@@ -19,12 +23,15 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
     thread(NULL),
     close_button_quits(false),
     autonomous(false) {
-    
+
 }
 
 
-/*gui::gui(unsigned int display_w, unsigned int display_h, bool close_button_quits, lafi::style* style, unsigned char flags)
-    : widget(0, 0, display_w, display_h, style, flags) {
+/*gui::gui(
+    unsigned int display_w, unsigned int display_h, bool close_button_quits,
+    lafi::style* style, unsigned char flags
+) :
+    widget(0, 0, display_w, display_h, style, flags) {
 
     autonomous = true;
     this->close_button_quits = close_button_quits;
@@ -62,22 +69,25 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
  */
 void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     gui* gui_ptr = (gui*) g;
-    
+
     al_start_timer(gui_ptr->timer);
-    
+
     while(1) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(gui_ptr->queue, &ev);
         gui_ptr->handle_event(ev);
-        
-        if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(gui_ptr->queue)) {
+
+        if(
+            ev.type == ALLEGRO_EVENT_TIMER &&
+            al_is_event_queue_empty(gui_ptr->queue)
+        ) {
             gui_ptr->draw();
             al_flip_display();
         } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             return NULL;
         }
     }
-    
+
     return NULL;
 }
 
@@ -87,7 +97,7 @@ void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
  */
 void gui::stop() {
     if(!autonomous) return;
-    
+
     al_destroy_thread(thread);
 }
 

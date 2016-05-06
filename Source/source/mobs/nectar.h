@@ -27,9 +27,9 @@
 class nectar : public mob {
 public:
     unsigned char amount_left;
-    
+
     nectar(float x, float y, const string &vars);
-    
+
     virtual void draw();
 };
 

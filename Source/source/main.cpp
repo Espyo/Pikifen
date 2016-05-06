@@ -55,25 +55,31 @@ int main(int argc, char** argv) {
     //Panic check: is there a Game_data folder?
     if(folder_to_vector(GAME_DATA_FOLDER, true).empty()) {
         al_show_native_message_box(
-            NULL, "Game_data folder not found!", "Game_data folder not found!", "Could not find the \"Game_data\" folder! "
-            "If you are running the engine from a zip file, you have to unpack it first.", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+            NULL, "Game_data folder not found!",
+            "Game_data folder not found!",
+            "Could not find the \"Game_data\" folder! "
+            "If you are running the engine from a zip file, "
+            "you have to unpack it first.",
+            NULL,
+            ALLEGRO_MESSAGEBOX_ERROR
+        );
         return -1;
     }
-    
+
     //Allegro initializations.
     init_allegro();
-    
+
     //Controls and options.
     init_controls();
     load_options();
     save_options();
-    
+
     //Event stuff.
     ALLEGRO_TIMER* logic_timer;
     ALLEGRO_EVENT_QUEUE* logic_queue;
     ALLEGRO_EVENT ev;
     init_event_things(logic_timer, logic_queue);
-    
+
     //Other fundamental initializations.
     init_misc();
     init_game_states();
@@ -81,14 +87,14 @@ int main(int argc, char** argv) {
     init_fonts();
     init_misc_graphics();
     init_misc_sounds();
-    
+
     //The icon is used a lot, so load it here.
     bmp_icon = load_bmp("Icon.png");
-    
+
     //Draw the basic loading screen.
     draw_loading_screen("", "", 1.0);
     al_flip_display();
-    
+
     //Init some other things.
     init_mob_categories();
     init_special_mob_types();
@@ -97,60 +103,78 @@ int main(int argc, char** argv) {
     init_hud_coordinates();
     load_game_config();
     load_hud_coordinates();
-    
-    if(dev_tool_auto_start_mode == "play" && !dev_tool_auto_start_option.empty()) {
+
+    if(
+        dev_tool_auto_start_mode == "play" &&
+        !dev_tool_auto_start_option.empty()
+    ) {
         area_to_load = dev_tool_auto_start_option;
         change_game_state(GAME_STATE_GAME);
     } else if(dev_tool_auto_start_mode == "animation_editor") {
-        ((animation_editor*) game_states[GAME_STATE_ANIMATION_EDITOR])->auto_load_anim = dev_tool_auto_start_option;
+        (
+            (animation_editor*)
+            game_states[GAME_STATE_ANIMATION_EDITOR]
+        )->auto_load_anim = dev_tool_auto_start_option;
         change_game_state(GAME_STATE_ANIMATION_EDITOR);
     } else if(dev_tool_auto_start_mode == "area_editor") {
-        ((area_editor*) game_states[GAME_STATE_AREA_EDITOR])->auto_load_area = dev_tool_auto_start_option;
+        (
+            (area_editor*)
+            game_states[GAME_STATE_AREA_EDITOR]
+        )->auto_load_area = dev_tool_auto_start_option;
         change_game_state(GAME_STATE_AREA_EDITOR);
     } else {
         change_game_state(GAME_STATE_MAIN_MENU);
     }
-    
+
     //Main loop.
     al_start_timer(logic_timer);
     while(is_game_running) {
-    
+
         /*  ************************************************
           *** | _ |                                  | _ | ***
         *****  \_/           EVENT HANDLING           \_/  *****
           *** +---+                                  +---+ ***
             ************************************************/
-        
+
         al_wait_for_event(logic_queue, &ev);
-        
+
         game_states[cur_game_state_nr]->handle_controls(ev);
-        
+
         if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
             is_game_running = false;
-            
+
         } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
             //scr_w = ev.display.width;
             //scr_h = ev.display.height;
-            
-        } else if(ev.type == ALLEGRO_EVENT_TIMER && al_is_event_queue_empty(logic_queue)) {
+
+        } else if(
+            ev.type == ALLEGRO_EVENT_TIMER &&
+            al_is_event_queue_empty(logic_queue)
+        ) {
             double cur_time = al_get_time();
             if(reset_delta_t) {
-                prev_frame_time = cur_time - 1.0f / game_fps; //Failsafe.
+                //Failsafe.
+                prev_frame_time = cur_time - 1.0f / game_fps;
                 reset_delta_t = false;
             }
-            delta_t = min(cur_time - prev_frame_time, 0.2); //Anti speed-burst cap.
-            
+
+            //Anti speed-burst cap.
+            delta_t = min(cur_time - prev_frame_time, 0.2);
+
             game_states[cur_game_state_nr]->do_logic();
             game_states[cur_game_state_nr]->do_drawing();
-            
+
             prev_frame_time = cur_time;
-            
-        } else if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_F12) {
+
+        } else if (
+            ev.type == ALLEGRO_EVENT_KEY_DOWN &&
+            ev.keyboard.keycode == ALLEGRO_KEY_F12
+        ) {
             al_save_bitmap("Screenshot.png", al_get_backbuffer(display));
-            
+
         }
     }
-    
+
     if(cur_game_state_nr != INVALID) {
         game_states[cur_game_state_nr]->unload();
     }
@@ -159,5 +183,5 @@ int main(int argc, char** argv) {
     destroy_resources();
     destroy_event_things(logic_timer, logic_queue);
     destroy_allegro();
-    
+
 }

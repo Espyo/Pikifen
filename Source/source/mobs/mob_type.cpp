@@ -47,7 +47,7 @@ mob_type::mob_type() :
     is_obstacle(false),
     show_health(true),
     casts_shadow(true) {
-    
+
 }
 
 
@@ -63,8 +63,13 @@ mob_type::~mob_type() {
 /* ----------------------------------------------------------------------------
  * Fills class members from a data file.
  */
-void mob_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
-    if(load_from_file_func) load_from_file_func(file, load_resources, anim_conversions);
+void mob_type::load_from_file(
+    data_node* file, const bool load_resources,
+    vector<pair<size_t, string> >* anim_conversions
+) {
+    if(load_from_file_func) {
+        load_from_file_func(file, load_resources, anim_conversions);
+    }
 }
 
 
@@ -77,13 +82,13 @@ void load_mob_types(bool load_resources) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         load_mob_types(mob_categories.get_folder(c), c, load_resources);
     }
-    
+
     //Load the special mob types.
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
         string folder = SPECIAL_MOBS_FOLDER + "/" + mt->first;
         data_node file = data_node(folder + "/Data.txt");
         if(!file.file_was_opened) return;
-        
+
         load_mob_type_from_file(mt->second, file, load_resources, folder);
     }
 }
@@ -93,30 +98,35 @@ void load_mob_types(bool load_resources) {
  * Loads the mob types from a folder.
  * folder: Name of the folder on the hard drive.
  * category: Use MOB_CATEGORY_* for this.
- * load_resources: False if you don't need the images and sounds, so it loads faster.
+ * load_resources: False if you don't need the images and sounds,
+   * so it loads faster.
  */
-void load_mob_types(const string &folder, const unsigned char category, bool load_resources) {
+void load_mob_types(
+    const string &folder, const unsigned char category, bool load_resources
+) {
     if(folder.empty()) return;
     bool folder_found;
     vector<string> types = folder_to_vector(folder, true, &folder_found);
     if(!folder_found) {
-        error_log("Folder \"" + folder + "\" not found!");
+        log_error("Folder \"" + folder + "\" not found!");
     }
-    
+
     for(size_t t = 0; t < types.size(); ++t) {
-    
+
         data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) return;
-        
+
         mob_type* mt;
         mt = mob_categories.create_mob_type(category);
-        
-        load_mob_type_from_file(mt, file, load_resources, folder + "/" + types[t]);
-        
+
+        load_mob_type_from_file(
+            mt, file, load_resources, folder + "/" + types[t]
+        );
+
         mob_categories.save_mob_type(category, mt);
-        
+
     }
-    
+
 }
 
 /* ----------------------------------------------------------------------------
@@ -128,38 +138,44 @@ void load_mob_type_from_file(
 ) {
 
     vector<pair<size_t, string> > anim_conversions;
-    
-    set_if_exists(file.get_child_by_name("name")->value,                mt->name);
-    set_if_exists(file.get_child_by_name("always_active")->value,       mt->always_active);
-    set_if_exists(file.get_child_by_name("big_damage_interval")->value, mt->big_damage_interval);
-    set_if_exists(file.get_child_by_name("main_color")->value,          mt->main_color);
-    set_if_exists(file.get_child_by_name("max_carriers")->value,        mt->max_carriers);
-    set_if_exists(file.get_child_by_name("max_health")->value,          mt->max_health);
-    set_if_exists(file.get_child_by_name("health_regen")->value,        mt->health_regen);
-    set_if_exists(file.get_child_by_name("move_speed")->value,          mt->move_speed);
-    set_if_exists(file.get_child_by_name("near_radius")->value,         mt->near_radius);
-    set_if_exists(file.get_child_by_name("near_angle")->value,          mt->near_angle);
-    set_if_exists(file.get_child_by_name("rotation_speed")->value,      mt->rotation_speed);
-    set_if_exists(file.get_child_by_name("sight_radius")->value,        mt->sight_radius);
-    set_if_exists(file.get_child_by_name("territory_radius")->value,    mt->territory_radius);
-    set_if_exists(file.get_child_by_name("radius")->value,              mt->radius);
-    set_if_exists(file.get_child_by_name("height")->value,              mt->height);
-    set_if_exists(file.get_child_by_name("weight")->value,              mt->weight);
-    set_if_exists(file.get_child_by_name("pushes")->value,              mt->pushes);
-    set_if_exists(file.get_child_by_name("pushable")->value,            mt->pushable);
-    set_if_exists(file.get_child_by_name("show_health")->value,         mt->show_health);
-    set_if_exists(file.get_child_by_name("casts_shadow")->value,        mt->casts_shadow);
-    
+
+#define setter(name, var) \
+    set_if_exists(file.get_child_by_name(name)->value, mt->var)
+
+    setter("name",                name);
+    setter("always_active",       always_active);
+    setter("big_damage_interval", big_damage_interval);
+    setter("main_color",          main_color);
+    setter("max_carriers",        max_carriers);
+    setter("max_health",          max_health);
+    setter("health_regen",        health_regen);
+    setter("move_speed",          move_speed);
+    setter("near_radius",         near_radius);
+    setter("near_angle",          near_angle);
+    setter("rotation_speed",      rotation_speed);
+    setter("sight_radius",        sight_radius);
+    setter("territory_radius",    territory_radius);
+    setter("radius",              radius);
+    setter("height",              height);
+    setter("weight",              weight);
+    setter("pushes",              pushes);
+    setter("pushable",            pushable);
+    setter("show_health",         show_health);
+    setter("casts_shadow",        casts_shadow);
+
+#undef setter
+
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");
         mt->anims = load_animation_pool_from_file(&anim_file);
         mt->anims.fix_hitbox_pointers();
-        
+
         data_node script_file = data_node(folder + "/Script.txt");
         size_t old_n_states = mt->states.size();
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
         if(mt->states.size() > old_n_states) {
-            string first_state_name = script_file.get_child_by_name("first_state")->value;
+            string first_state_name =
+                script_file.get_child_by_name("first_state")->value;
             for(size_t s = 0; s < mt->states.size(); ++s) {
                 if(mt->states[s]->name == first_state_name) {
                     mt->first_state_nr = s;
@@ -168,9 +184,9 @@ void load_mob_type_from_file(
             }
         }
     }
-    
+
     mt->load_from_file(&file, load_resources, &anim_conversions);
-    
+
     if(load_resources) {
         mt->anims.create_conversions(anim_conversions);
     }
@@ -183,7 +199,7 @@ void load_mob_type_from_file(
 void mob_type::add_carrying_states() {
 
     easy_fsm_creator efc;
-    
+
     efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_stop_move);
@@ -202,7 +218,7 @@ void mob_type::add_carrying_states() {
             efc.change_state("carriable_moving");
         }
     }
-    
+
     efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_begin_move);
@@ -229,7 +245,7 @@ void mob_type::add_carrying_states() {
             efc.change_state("being_delivered");
         }
     }
-    
+
     efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::start_being_delivered);
@@ -238,11 +254,11 @@ void mob_type::add_carrying_states() {
             efc.run_function(gen_mob_fsm::handle_delivery);
         }
     }
-    
-    
+
+
     vector<mob_state*> new_states = efc.finish();
     fix_states(new_states, "");
-    
+
     states.insert(states.end(), new_states.begin(), new_states.end());
-    
+
 }

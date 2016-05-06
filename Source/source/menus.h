@@ -28,7 +28,7 @@ private:
     float time_spent;
     animation_pool logo;
     animation_instance logo_anim;
-    
+
 public:
     main_menu();
     virtual void load();
@@ -43,22 +43,23 @@ class options_menu : public game_state {
 private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     float time_spent;
-    
+
     size_t cur_player_nr;
     size_t cur_page_nr;
-    
+
     menu_text* cur_player_nr_widget;
     menu_text* cur_page_nr_widget;
     menu_text* input_capture_msg_widget;
     vector<menu_widget*> control_widgets;
-    vector<menu_widget*> bottom_widgets; //Widgets to hide during the "press something" message.
-    
+    //Widgets to hide during the "press something" message.
+    vector<menu_widget*> bottom_widgets;
+
     bool capturing_input;
     size_t input_capture_control_nr;
-    
+
     void update();
     void leave();
-    
+
 public:
     options_menu();
     virtual void load();
@@ -75,13 +76,13 @@ private:
     float time_spent;
     size_t cur_page_nr;
     vector<string> areas_to_pick;
-    
+
     vector<menu_widget*> area_buttons;
     menu_text* cur_page_nr_widget;
-    
+
     void leave();
     void update();
-    
+
 public:
     area_menu();
     virtual void load();

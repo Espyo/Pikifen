@@ -23,7 +23,7 @@ using namespace std;
 enum GATE_STATES {
     GATE_STATE_IDLE,
     GATE_STATE_DEAD,
-    
+
     N_GATE_STATES
 };
 
@@ -39,9 +39,12 @@ class gate : public mob {
 public:
     gate_type* gat_type;
     sector* sec;
-    
-    gate(const float x, const float y, gate_type* type, const float angle, const string &vars);
-    
+
+    gate(
+        const float x, const float y, gate_type* type,
+        const float angle, const string &vars
+    );
+
 };
 
 #endif //ifndef GATE_INCLUDED

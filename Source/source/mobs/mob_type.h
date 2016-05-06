@@ -40,7 +40,7 @@ enum MOB_CATEGORIES {
     MOB_CATEGORY_SPECIAL,
     MOB_CATEGORY_SHIPS,
     MOB_CATEGORY_GATES,
-    
+
     N_MOB_CATEGORIES,
 };
 
@@ -71,22 +71,23 @@ class mob_type {
 public:
     //Technical things.
     string name;
-    
+
     //Visual things.
     animation_pool anims;
     ALLEGRO_COLOR main_color;
     bool show_health;
     bool casts_shadow;
-    
+
     //Space-related things.
     float radius;         //Diameter.
     float height;
     float move_speed;
     float rotation_speed;
-    bool always_active; //If true, this mob is always active, even if it's off-camera.
+    //If true, this mob is always active, even if it's off-camera.
+    bool always_active;
     bool pushes; //Blocks passage of other mobs.
     bool pushable; //Can be pushed by other mobs.
-    
+
     //Behavior things.
     float max_health;
     float health_regen; //Health points per second.
@@ -97,27 +98,41 @@ public:
     size_t max_carriers;
     float weight;          //Pikmin strength needed to carry it.
     float big_damage_interval;
-    
+
     //Script things.
     vector<mob_state*> states;    //The states, events and actions.
     size_t first_state_nr;        //Number of the state a mob starts at.
-    
+
     //Misc.
     bool is_obstacle;
-    
-    //Used by the special mob types, as it is not possible to control which type of mob to create without a list.
-    function<void(float x, float y, float angle, const string &vars)> create_mob; //Creates a mob of this type.
-    function<void(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions)> load_from_file_func;
-    
+
+    //Used by the special mob types, as it is not possible to control
+    //which type of mob to create without a list.
+    function<void(
+        float x, float y, float angle, const string &vars
+    )> create_mob;
+    function<void(
+        data_node* file, const bool load_resources,
+        vector<pair<size_t, string> >* anim_conversions
+    )> load_from_file_func;
+
     mob_type();
     ~mob_type();
-    virtual void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    virtual void load_from_file(
+        data_node* file, const bool load_resources,
+        vector<pair<size_t, string> >* anim_conversions
+    );
     void add_carrying_states();
 };
 
 
-void load_mob_types(const string &folder, const unsigned char category, bool load_resources);
+void load_mob_types(
+    const string &folder, const unsigned char category, bool load_resources
+);
 void load_mob_types(bool load_resources);
-void load_mob_type_from_file(mob_type* mt, data_node &file, const bool load_resources, const string &folder);
+void load_mob_type_from_file(
+    mob_type* mt, data_node &file, const bool load_resources,
+    const string &folder
+);
 
 #endif //ifndef MOB_TYPE_INCLUDED

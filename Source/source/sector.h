@@ -63,11 +63,15 @@ struct edge_intersection {
  * It's also used when checking sectors in a certain spot.
  */
 struct blockmap {
-    float x1, y1; //Top-left corner of the blockmap.
-    vector<vector<vector<edge*> > > edges; //Specifies a list of edges in each block.
-    vector<vector<unordered_set<sector*> > >  sectors;  //Specifies a list of sectors in each block. A block must have at least one sector.
+    //Top-left corner of the blockmap.
+    float x1, y1;
+    //Specifies a list of edges in each block.
+    vector<vector<vector<edge*> > > edges;
+    //Specifies a list of sectors in each block.
+    //A block must have at least one sector.
+    vector<vector<unordered_set<sector*> > >  sectors;
     size_t n_cols, n_rows;
-    
+
     blockmap();
     size_t get_col(const float x);
     size_t get_row(const float y);
@@ -88,7 +92,7 @@ struct edge {
     size_t vertex_nrs[2];
     sector* sectors[2];
     size_t sector_nrs[2];
-    
+
     edge(size_t v1 = INVALID, size_t v2 = INVALID);
     void fix_pointers(area_data &a);
     size_t remove_from_sectors();
@@ -108,8 +112,10 @@ struct edge {
 struct path_stop {
     float x, y;
     vector<path_link> links;
-    
-    path_stop(float x = 0, float y = 0, vector<path_link> links = vector<path_link>());
+
+    path_stop(
+        float x = 0, float y = 0, vector<path_link> links = vector<path_link>()
+    );
     bool has_link(path_stop* other_stop);
     void fix_pointers(area_data &a);
     void fix_nrs(area_data &a);
@@ -127,7 +133,7 @@ struct path_link {
     path_stop* end_ptr;
     size_t end_nr;
     float distance;
-    
+
     path_link(path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
 };
@@ -146,7 +152,7 @@ struct sector_texture_info {
     float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
     string file_name;
-    
+
     sector_texture_info();
 };
 
@@ -164,19 +170,19 @@ struct sector {
     float z; //Height.
     string tag;
     unsigned char brightness;
-    
+
     sector_texture_info texture_info;
     bool fade;
     bool always_cast_shadow;
-    
+
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.
     bool hazard_floor;
-    
+
     vector<size_t> edge_nrs;
     vector<edge*> edges;
     vector<triangle> triangles;
-    
+
     sector();
     void connect_edges(area_data &a, size_t s_nr);
     void fix_pointers(area_data &a);
@@ -200,7 +206,7 @@ struct sector {
 struct sector_correction {
     sector* sec;
     sector_texture_info new_texture;
-    
+
     sector_correction(sector* sec);
 };
 
@@ -228,7 +234,7 @@ struct vertex {
     float x, y;
     vector<size_t> edge_nrs;
     vector<edge*> edges;
-    
+
     vertex(float x, float y);
     void connect_edges(area_data &a, size_t v_nr);
     void fix_pointers(area_data &a);
@@ -248,12 +254,16 @@ struct vertex {
 struct mob_gen {
     unsigned char category;
     mob_type* type;
-    
+
     float x, y;
     float angle;
     string vars;
-    
-    mob_gen(float x = 0, float y = 0, unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL, float angle = 0, string vars = "");
+
+    mob_gen(
+        float x = 0, float y = 0,
+        unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL,
+        float angle = 0, string vars = ""
+    );
 };
 
 
@@ -267,15 +277,19 @@ struct mob_gen {
 struct tree_shadow {
     string file_name;
     ALLEGRO_BITMAP* bitmap;
-    
+
     float x, y;  //X and Y of the center.
     float w, h;  //Width and height.
     float angle; //Rotation angle.
     unsigned char alpha; //Opacity.
     float sway_x; //Swaying is multiplied by this, horizontally.
     float sway_y; //And vertically.
-    
-    tree_shadow(float x = 0, float y = 0, float w = 100, float h = 100, float an = 0, unsigned char al = 255, string f = "", float sx = 1, float sy = 0);
+
+    tree_shadow(
+        float x = 0, float y = 0, float w = 100, float h = 100,
+        float an = 0, unsigned char al = 255, string f = "",
+        float sx = 1, float sy = 0
+    );
 };
 
 
@@ -298,7 +312,7 @@ struct area_data {
     vector<path_stop*> path_stops;
     vector<tree_shadow*> tree_shadows;
     vector<sector_correction> sector_corrections;
-    
+
     ALLEGRO_BITMAP* bg_bmp;
     string bg_bmp_file_name;
     float bg_bmp_zoom;
@@ -306,10 +320,10 @@ struct area_data {
     ALLEGRO_COLOR bg_color;
     string name;
     string subtitle;
-    
+
     weather weather_condition;
     string weather_name;
-    
+
     area_data();
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
@@ -322,27 +336,58 @@ struct area_data {
 void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
-void depth_first_search(vector<path_stop*> &nodes, unordered_set<path_stop*> &visited, path_stop* start);
-vector<path_stop*> dijkstra(path_stop* start_node, path_stop* end_node, mob** obstacle_found, float* total_dist);
+void depth_first_search(
+    vector<path_stop*> &nodes,
+    unordered_set<path_stop*> &visited, path_stop* start
+);
+vector<path_stop*> dijkstra(
+    path_stop* start_node, path_stop* end_node,
+    mob** obstacle_found, float* total_dist
+);
 float get_angle_cw_dif(float a1, float a2);
 float get_angle_smallest_dif(float a1, float a2);
-void get_cce(vector<vertex> &vertexes_left, vector<size_t> &ears, vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes);
-vector<path_stop*> get_path(const float start_x, const float start_y, const float end_x, const float end_y, mob** obstacle_found, bool* go_straight, float* get_dist);
+void get_cce(
+    vector<vertex> &vertexes_left, vector<size_t> &ears,
+    vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
+);
+vector<path_stop*> get_path(
+    const float start_x, const float start_y,
+    const float end_x, const float end_y,
+    mob** obstacle_found, bool* go_straight, float* get_dist
+);
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
-float get_point_sign(float x, float y, float lx1, float ly1, float lx2, float ly2);
+float get_point_sign(
+    float x, float y, float lx1, float ly1, float lx2, float ly2
+);
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
 vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
-sector* get_sector(const float x, const float y, size_t* sector_nr, const bool use_blockmap);
-void get_sector_bounding_box(sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
-void get_shadow_bounding_box(tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y);
+sector* get_sector(
+    const float x, const float y, size_t* sector_nr, const bool use_blockmap
+);
+void get_sector_bounding_box(
+    sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+);
+void get_shadow_bounding_box(
+    tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+);
 bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
-bool is_vertex_ear(const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr);
+bool is_vertex_ear(
+    const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr
+);
 bool is_point_in_sector(const float x, const float y, sector* s_ptr);
-bool is_point_in_triangle(float px, float py, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, bool loq);
-bool lines_intersect(float l1x1, float l1y1, float l1x2, float l1y2, float l2x1, float l2y1, float l2x2, float l2y2, float* ur, float* ul);
+bool is_point_in_triangle(
+    float px, float py,
+    float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
+    bool loq
+);
+bool lines_intersect(
+    float l1x1, float l1y1, float l1x2, float l1y2,
+    float l2x1, float l2y1, float l2x2, float l2y2,
+    float* ur, float* ul
+);
 void triangulate(sector* s_ptr);
 
 
@@ -368,6 +413,8 @@ enum TERRAIN_SOUNDS {
 
 const float BLOCKMAP_BLOCK_SIZE = 128;
 const unsigned char DEF_SECTOR_BRIGHTNESS = 255;
-const float SECTOR_STEP = 50; //Mobs can walk up sectors that are, at the most, this high from the current one, as if climbing up steps.
+//Mobs can walk up sectors that are, at the most,
+//this high from the current one, as if climbing up steps.
+const float SECTOR_STEP = 50;
 
 #endif //ifndef SECTOR_INCLUDED

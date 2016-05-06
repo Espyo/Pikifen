@@ -41,7 +41,7 @@ private:
         AREA_EDITOR_PICKER_MOB_CATEGORY,
         AREA_EDITOR_PICKER_MOB_TYPE,
     };
-    
+
     enum EDITOR_ERROR_TYPES {
         EET_NONE_YET,
         EET_NONE,
@@ -60,7 +60,7 @@ private:
         EET_PATHS_UNCONNECTED,    //The path graph is unconnected.
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
-    
+
     static const float  DEF_GRID_INTERVAL;
     static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
@@ -69,7 +69,7 @@ private:
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
     static const float  LINK_THICKNESS;
-    
+
     string                       area_name;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
@@ -99,8 +99,11 @@ private:
     unsigned char                mode;
     unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
-    size_t                       moving_thing; //Current vertex, object or shadow being moved.
-    float                        moving_thing_x; //Relative X coordinate of the point where the vertex, object or shadow was grabbed.
+    //Current vertex, object or shadow being moved.
+    size_t                       moving_thing;
+    //Relative X/Y coordinate of the point where the vertex,
+    //object or shadow was grabbed.
+    float                        moving_thing_x;
     float                        moving_thing_y;
     path_stop*                   new_link_first_stop;
     sector*                      on_sector;
@@ -116,7 +119,7 @@ private:
     bool                         show_shadows;
     vector<texture_suggestion>   texture_suggestions;
     lafi::widget*                wum; //Widget under mouse.
-    
+
     void adv_textures_to_gui();
     void guide_to_gui();
     void calculate_preview_path();
@@ -134,6 +137,10 @@ private:
     void gui_to_adv_textures();
     bool is_edge_valid(edge* l);
     void load_area();
+    void merge_vertex(
+        vertex* v1, vertex* v2,
+        const size_t v1_nr, unordered_set<sector*>* affected_sectors
+    );
     void mob_to_gui();
     void open_picker(unsigned char type);
     void pick(string name, unsigned char type);
@@ -148,30 +155,30 @@ private:
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);
-    
+
 public:
 
     vector<edge_intersection> intersecting_edges;
     unordered_set<sector*>    non_simples;
     unordered_set<edge*>      lone_edges;
-    
+
     string auto_load_area;
-    
+
     area_editor();
-    
+
     virtual void do_logic();
     virtual void do_drawing();
     virtual void handle_controls(ALLEGRO_EVENT ev);
     virtual void load();
     virtual void unload();
-    
+
     void set_guide_file_name(string n);
     void set_guide_x(float x);
     void set_guide_y(float y);
     void set_guide_w(float w);
     void set_guide_h(float h);
     void set_guide_a(unsigned char a);
-    
+
 };
 
 #endif //ifndef AREA_EDITOR_INCLUDED

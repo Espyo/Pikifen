@@ -20,14 +20,17 @@
 treasure_type::treasure_type() :
     mob_type(),
     value(0) {
-    
+
     treasure_fsm::create_fsm(this);
 }
 
 
-void treasure_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+void treasure_type::load_from_file(
+    data_node* file, const bool load_resources,
+    vector<pair<size_t, string> >* anim_conversions
+) {
 
     value = s2f(file->get_child_by_name("value")->value);
-    
+
     anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
 }

@@ -53,30 +53,39 @@ private:
     vector<data_node*> children;
     vector<data_node*> dummy_children;
     data_node* create_dummy();
-    
+
 public:
     string name;    //The node's name.
     string value;   //And its value.
-    
-    bool file_was_opened; //True if the node or parent(s) was created from a file that was opened successfuly.
-    string file_name;      //Full file name of the file used to open this node or its parent(s).
-    size_t line_nr;       //Line on the text file this node's in.
-    
+
+    //True if the node or parent(s) was created from a file
+    //that was opened successfuly.
+    bool file_was_opened;
+    //Full file name of the file used to open this node or its parent(s).
+    string file_name;
+    //Line on the text file this node's in.
+    size_t line_nr;
+
     string get_value_or_default(const string &def);
-    
+
     size_t get_nr_of_children();
     data_node* get_child(const size_t number);
     size_t get_nr_of_children_by_name(const string &name);
-    data_node* get_child_by_name(const string &name, const size_t occurrence_number = 0);
-    
+    data_node* get_child_by_name(
+        const string &name, const size_t occurrence_number = 0
+    );
+
     size_t add(data_node* new_node);
     bool remove(data_node* node_to_remove);
-    
+
     void load_file(const string &file_name, const bool trim_values = true);
-    size_t load_node(const vector<string> &lines, const bool trim_values, const size_t start_line = 0);
+    size_t load_node(
+        const vector<string> &lines, const bool trim_values,
+        const size_t start_line = 0
+    );
     bool save_file(string file_name = "", const bool children_only = true);
     void save_node(ALLEGRO_FILE* file, const size_t level = 0);
-    
+
     data_node();
     data_node(const string &file_name);
     data_node(const string &name, const string &value);

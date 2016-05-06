@@ -36,7 +36,7 @@ enum HITBOX_TYPES {
 class hitbox {
 public:
     string name;
-    
+
     hitbox(const string &name = "");
 };
 
@@ -53,18 +53,26 @@ public:
     float z;            //Bottom of the hitbox (relative coordinates).
     float height;
     float radius;
-    
+
     unsigned char type;
     string hazards_str;
     vector<hazard*> hazards;
-    float multiplier;       //If it's a normal hitbox, this is the defense multiplier. If it's an attack one, the attack multiplier.
-    bool knockback_outward; //If true, the Pikmin is knocked away from the center.
-    float knockback_angle;  //Knockback angle.
-    float knockback;        //Knockback strength.
-    bool can_pikmin_latch;  //Can the Pikmin latch on to this hitbox to continue inflicting damage? Example of a non-latchable hitbox: Goolix' larger core.
-    
+    //If it's a normal hitbox, this is the defense multiplier.
+    //If it's an attack one, the attack multiplier.
+    float multiplier;
+    //If true, the Pikmin is knocked away from the center.
+    bool knockback_outward;
+    //Knockback angle.
+    float knockback_angle;
+    //Knockback strength.
+    float knockback;
+    //Can the Pikmin latch on to this hitbox to continue inflicting damage?
+    //Example of a non-latchable hitbox: Goolix' larger core.
+    bool can_pikmin_latch;
+
     hitbox_instance(
-        const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL, const float x = 0, const float y = 0,
+        const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL,
+        const float x = 0, const float y = 0,
         const float z = 0, const float heigh = 128, const float radius = 32
     );
 };

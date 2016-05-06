@@ -5,10 +5,13 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates an image.
  */
-image::image(int x1, int y1, int x2, int y2, ALLEGRO_BITMAP* bmp, lafi::style* style, unsigned char flags) :
+image::image(
+    int x1, int y1, int x2, int y2, ALLEGRO_BITMAP* bmp,
+    lafi::style* style, unsigned char flags
+) :
     widget(x1, y1, x2, y2, style, flags),
     bmp(bmp) {
-    
+
 }
 
 

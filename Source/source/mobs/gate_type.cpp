@@ -16,15 +16,18 @@
 
 gate_type::gate_type() :
     mob_type() {
-    
+
     casts_shadow = false;
     is_obstacle = true;
-    
+
     gate_fsm::create_fsm(this);
 }
 
 
-void gate_type::load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+void gate_type::load_from_file(
+    data_node* file, const bool load_resources,
+    vector<pair<size_t, string> >* anim_conversions
+) {
     anim_conversions->push_back(make_pair(GATE_ANIM_IDLE, "idle"));
     anim_conversions->push_back(make_pair(GATE_ANIM_NOTHING, "nothing"));
 }

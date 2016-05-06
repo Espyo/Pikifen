@@ -45,12 +45,17 @@ public:
     bool can_swim;
     bool can_latch;
     bool can_carry_bomb_rocks;
-    ALLEGRO_BITMAP* bmp_top[3]; //Top (leaf/bud/flower) bitmap for each maturity.
-    ALLEGRO_BITMAP* bmp_icon[3]; //Standby icons for each maturity.
-    
+    //Top (leaf/bud/flower) bitmap for each maturity.
+    ALLEGRO_BITMAP* bmp_top[3];
+    //Standby icons for each maturity.
+    ALLEGRO_BITMAP* bmp_icon[3];
+
     pikmin_type();
-    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
-    
+    void load_from_file(
+        data_node* file, const bool load_resources,
+        vector<pair<size_t, string> >* anim_conversions
+    );
+
 };
 
 #endif //ifndef PIKMIN_TYPE_INCLUDED

@@ -25,13 +25,19 @@
 class pellet_type : public mob_type {
 public:
     pikmin_type* pik_type;
-    unsigned number; //Number on the pellet, and hence, its weight.
-    unsigned match_seeds; //Number of seeds given out if the pellet's taken to a matching Onion.
-    unsigned non_match_seeds; //Number of seeds given out if the pellet's taken to a non-matching Onion.
+    //Number on the pellet, and hence, its weight.
+    unsigned number;
+    //Number of seeds given out if the pellet's taken to a matching Onion.
+    unsigned match_seeds;
+    //Number of seeds given out if the pellet's taken to a non-matching Onion.
+    unsigned non_match_seeds;
     ALLEGRO_BITMAP* bmp_number;
-    
+
     pellet_type();
-    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void load_from_file(
+        data_node* file, const bool load_resources,
+        vector<pair<size_t, string> >* anim_conversions
+    );
 };
 
 #endif //ifndef PELLET_TYPE_INCLUDED

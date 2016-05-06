@@ -29,7 +29,10 @@ enum GATE_ANIMATIONS {
 class gate_type : public mob_type {
 public:
     gate_type();
-    void load_from_file(data_node* file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions);
+    void load_from_file(
+        data_node* file, const bool load_resources,
+        vector<pair<size_t, string> >* anim_conversions
+    );
 };
 
 #endif //ifndef GATE_TYPE_INCLUDED

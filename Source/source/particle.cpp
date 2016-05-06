@@ -25,7 +25,12 @@
  * size:     Size; diameter.
  * color:    Its color.
  */
-particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const float x, const float y, const float speed_x, const float speed_y, const float friction, const float gravity, const float duration, const float size, const ALLEGRO_COLOR &color) :
+particle::particle(
+    const unsigned char type, ALLEGRO_BITMAP* const bitmap,
+    const float x, const float y, const float speed_x, const float speed_y,
+    const float friction, const float gravity, const float duration,
+    const float size, const ALLEGRO_COLOR &color
+) :
     type(type),
     bitmap(bitmap),
     x(x),
@@ -41,7 +46,7 @@ particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const
     size(size),
     starting_size(size),
     color(color) {
-    
+
 }
 
 
@@ -51,21 +56,21 @@ particle::particle(const unsigned char type, ALLEGRO_BITMAP* const bitmap, const
  */
 bool particle::tick() {
     time -= delta_t;
-    
+
     if(time <= 0) return false;
-    
-    x += delta_t * speed_x;
-    y += delta_t * speed_y;
-    
+
+    x += delta_t* speed_x;
+    y += delta_t* speed_y;
+
     if(friction != 0) {
-        speed_x *= 1 - (delta_t * friction);
-        speed_y *= 1 - (delta_t * friction);
+        speed_x *= 1 - (delta_t* friction);
+        speed_y *= 1 - (delta_t* friction);
     }
-    
+
     if(gravity != 0) {
         speed_y += (delta_t) * gravity;
     }
-    
+
     return true;
 }
 
@@ -83,16 +88,25 @@ bool particle::tick() {
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float center_x, const float center_y, const float speed_min, const float speed_max, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
+void random_particle_explosion(
+    const unsigned char type, ALLEGRO_BITMAP* const bmp,
+    const float center_x, const float center_y,
+    const float speed_min, const float speed_max,
+    const unsigned char min, const unsigned char max,
+    const float time_min, const float time_max,
+    const float size_min, const float size_max,
+    const ALLEGRO_COLOR &color
+) {
+
     unsigned char n_particles = randomi(min, max);
-    
+
     for(unsigned char p = 0; p < n_particles; ++p) {
         float angle = randomf(0, M_PI * 2);
         float speed = randomf(speed_min, speed_max);
-        
+
         float speed_x = cos(angle) * speed;
         float speed_y = sin(angle) * speed;
-        
+
         particles.push_back(
             particle(
                 type,
@@ -121,9 +135,17 @@ void random_particle_explosion(const unsigned char type, ALLEGRO_BITMAP* const b
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
+void random_particle_fire(
+    const unsigned char type, ALLEGRO_BITMAP* const bmp,
+    const float origin_x, const float origin_y,
+    const unsigned char min, const unsigned char max,
+    const float time_min, const float time_max,
+    const float size_min, const float size_max,
+    const ALLEGRO_COLOR &color
+) {
+
     unsigned char n_particles = randomi(min, max);
-    
+
     for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
@@ -155,9 +177,17 @@ void random_particle_fire(const unsigned char type, ALLEGRO_BITMAP* const bmp, c
  * size_*:   Their size is random within this range, inclusive.
  * color:    Particle color.
  */
-void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y, const unsigned char min, const unsigned char max, const float time_min, const float time_max, const float size_min, const float size_max, const ALLEGRO_COLOR &color) {
+void random_particle_splash(
+    const unsigned char type, ALLEGRO_BITMAP* const bmp,
+    const float origin_x, const float origin_y,
+    const unsigned char min, const unsigned char max,
+    const float time_min, const float time_max,
+    const float size_min, const float size_max,
+    const ALLEGRO_COLOR &color
+) {
+
     unsigned char n_particles = randomi(min, max);
-    
+
     for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
@@ -190,18 +220,21 @@ void random_particle_splash(const unsigned char type, ALLEGRO_BITMAP* const bmp,
  * color:          Color of the particles.
  */
 void random_particle_spray(
-    const unsigned char type, ALLEGRO_BITMAP* const bmp, const float origin_x, const float origin_y,
-    const float angle, const float distance_range, const float angle_range, const ALLEGRO_COLOR &color
+    const unsigned char type, ALLEGRO_BITMAP* const bmp,
+    const float origin_x, const float origin_y,
+    const float angle, const float distance_range,
+    const float angle_range, const ALLEGRO_COLOR &color
 ) {
+
     unsigned char n_particles = randomi(35, 40);
-    
+
     for(unsigned char p = 0; p < n_particles; ++p) {
         float angle_offset = randomf(-angle_range * 0.5, angle_range * 0.5);
-        
+
         float power = randomf(distance_range * 0.3, distance_range * 1.2);
         float speed_x = cos(angle + angle_offset) * power;
         float speed_y = sin(angle + angle_offset) * power;
-        
+
         particles.push_back(
             particle(
                 type,

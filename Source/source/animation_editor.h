@@ -34,21 +34,25 @@ private:
         ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
         ANIMATION_EDITOR_PICKER_HITBOX,
     };
-    
+
     animation_pool       anims;
     bool                 anim_playing;
     animation*           cur_anim;
     frame*               cur_frame;
     size_t               cur_frame_instance_nr;
     float                cur_frame_time;
-    float                cur_hitbox_alpha;  //The alpha is calculated using the sine of this value.
+    //The alpha is calculated using the sine of this value.
+    float                cur_hitbox_alpha;
     size_t               cur_hitbox_instance_nr;
     size_t               cur_hitbox_nr;
     string               file_path;
     ALLEGRO_FILECHOOSER* file_dialog;
-    size_t               grabbing_hitbox;   //Hitbox being grabbed by the mouse cursor. INVALID = none.
+    //Hitbox being grabbed by the mouse cursor. INVALID = none.
+    size_t               grabbing_hitbox;
     bool                 grabbing_hitbox_edge;
-    float                grabbing_hitbox_x; //X world coordinate of the point we're grabbing, or the anchor, when in resize mode.
+    //X world coordinate of the point we're grabbing,
+    //or the anchor, when in resize mode.
+    float                grabbing_hitbox_x;
     float                grabbing_hitbox_y;
     lafi::gui*           gui;
     bool                 hitboxes_visible;
@@ -57,14 +61,20 @@ private:
     bool                 is_pikmin;
     string               last_file_used;
     bool                 made_changes;
-    unsigned char        maturity; //Current maturity of the Pikmin, used to check the visuals of different Pikmin tops.
+    //Current maturity of the Pikmin,
+    //used to check the visuals of different Pikmin tops.
+    unsigned char        maturity;
     unsigned char        mode;
-    float                new_hitbox_corner_x; //FLT_MAX = none.
+    //Hitbox corner coordinates. FLT_MAX = none.
+    float                new_hitbox_corner_x;
     float                new_hitbox_corner_y;
-    unsigned char        sec_mode; //Secondary/sub mode.
-    ALLEGRO_BITMAP*      top_bmp[3]; //Top bitmaps for the current Pikmin type.
-    lafi::widget*        wum; //Widget under mouse.
-    
+    //Secondary/sub mode.
+    unsigned char        sec_mode;
+    //Top bitmaps for the current Pikmin type.
+    ALLEGRO_BITMAP*      top_bmp[3];
+    //Widget under mouse.
+    lafi::widget*        wum;
+
     void close_changes_warning();
     void gui_load_animation();
     void gui_load_frame();
@@ -88,19 +98,19 @@ private:
     void show_changes_warning();
     void update_hitboxes();
     void update_stats();
-    
+
 public:
 
     animation_editor();
-    
+
     string auto_load_anim;
-    
+
     virtual void do_logic();
     virtual void do_drawing();
     virtual void handle_controls(ALLEGRO_EVENT ev);
     virtual void load();
     virtual void unload();
-    
+
 };
 
 #endif //ifndef ANIMATION_EDITOR_INCLUDED

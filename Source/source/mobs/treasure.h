@@ -20,7 +20,7 @@ enum TREASURE_STATES {
     TREASURE_STATE_IDLE_WAITING,
     TREASURE_STATE_IDLE_MOVING,
     TREASURE_STATE_BEING_DELIVERED,
-    
+
     N_TREASURE_STATES,
 };
 
@@ -49,8 +49,11 @@ public:
 
     treasure_type* tre_type;
     float buried; //0: fully unburried. 1: fully buried.
-    
-    treasure(const float x, const float y, treasure_type* type, const float angle, const string &vars);
+
+    treasure(
+        const float x, const float y, treasure_type* type,
+        const float angle, const string &vars
+    );
     void draw();
 };
 

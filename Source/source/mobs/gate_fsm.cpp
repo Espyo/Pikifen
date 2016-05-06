@@ -28,18 +28,19 @@ void gate_fsm::create_fsm(mob_type* typ) {
             efc.change_state("dead");
         }
     }
-    
+
     efc.new_state("dead", GATE_STATE_DEAD); {
-    
+
     }
-    
-    
+
+
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle");
-    
+
     if(typ->states.size() != N_GATE_STATES) {
-        error_log(
-            "ENGINE WARNING: Number of gate states on the FSM (" + i2s(typ->states.size()) +
+        log_error(
+            "ENGINE WARNING: Number of gate states on the FSM (" +
+            i2s(typ->states.size()) +
             ") and the enum (" + i2s(N_GATE_STATES) + ") do not match."
         );
     }

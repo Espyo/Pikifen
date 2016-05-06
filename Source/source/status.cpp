@@ -31,7 +31,7 @@ status_type::status_type() :
     attack_multiplier(1.0f),
     defense_multiplier(1.0f),
     anim_speed_multiplier(1.0f) {
-    
+
 }
 
 
@@ -42,7 +42,7 @@ status_type::status_type() :
 status::status(status_type* type) :
     type(type),
     to_delete(false) {
-    
+
     time_left = type->auto_remove_time;
 }
 

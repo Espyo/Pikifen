@@ -18,8 +18,10 @@
 #include "controls.h"
 #include "functions.h"
 
-const float WALL_SHADOW_LENGTH  = 32;  //The shadows of walls spread this much outwards.
-const float WALL_SHADOW_OPACITY = 192; //The shadows of walls start with this opacity and fade to 0.
+//The shadows of walls spread this much outwards.
+const float WALL_SHADOW_LENGTH  = 32;
+//The shadows of walls start with this opacity and fade to 0.
+const float WALL_SHADOW_OPACITY = 192;
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 
 enum EASING_METHODS {
@@ -29,26 +31,69 @@ enum EASING_METHODS {
 };
 
 
-void do_game_drawing(ALLEGRO_BITMAP* bmp_output = NULL, ALLEGRO_TRANSFORM* bmp_transform = NULL);
-
-bool casts_shadow(sector* s1, sector* s2);
-void draw_control(const ALLEGRO_FONT* const font, const control_info &c, const float x, const float y, const float max_w, const float max_h);
-void draw_compressed_text(const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y, const int flags, const unsigned char valign, const float max_w, const float max_h, const string &text);
-void draw_fraction(const float cx, const float cy, const unsigned int current, const unsigned int needed, const ALLEGRO_COLOR &color);
-void draw_health(const float cx, const float cy, const unsigned int health, const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS, const bool just_chart = false);
-void draw_loading_screen(const string &area_name, const string &subtitle, const float opacity);
-void draw_notification(const float x, const float y, const string &text, control_info* control = NULL);
-void draw_sector(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
-void draw_sector_texture(sector* s_ptr, const float x, const float y, const float scale, sector_texture_info* texture = NULL);
-void draw_mob_shadow(const float cx, const float cy, const float size, const float delta_z, const float shadow_stretch);
-void draw_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color, const float x, const float y,
-    const float scale_x, const float scale_y, const int flags, const unsigned char valign, const string &text
+void do_game_drawing(
+    ALLEGRO_BITMAP* bmp_output = NULL, ALLEGRO_TRANSFORM* bmp_transform = NULL
 );
-void draw_sprite(ALLEGRO_BITMAP* bmp, const float cx, const float cy, const float w, const float h, const float angle = 0, const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255));
+
+bool casts_shadow(
+    sector* s1, sector* s2
+);
+void draw_control(
+    const ALLEGRO_FONT* const font, const control_info &c,
+    const float x, const float y, const float max_w, const float max_h
+);
+void draw_compressed_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const float x, const float y, const int flags, const unsigned char valign,
+    const float max_w, const float max_h, const string &text
+);
+void draw_fraction(
+    const float cx, const float cy, const unsigned int current,
+    const unsigned int needed, const ALLEGRO_COLOR &color
+);
+void draw_health(
+    const float cx, const float cy, const unsigned int health,
+    const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS,
+    const bool just_chart = false
+);
+void draw_loading_screen(
+    const string &area_name, const string &subtitle, const float opacity
+);
+void draw_notification(
+    const float x, const float y, const string &text,
+    control_info* control = NULL
+);
+void draw_sector(
+    sector* s_ptr, const float x, const float y,
+    const float scale, sector_texture_info* texture = NULL
+);
+void draw_sector_texture(
+    sector* s_ptr, const float x, const float y,
+    const float scale, sector_texture_info* texture = NULL
+);
+void draw_mob_shadow(
+    const float cx, const float cy, const float size,
+    const float delta_z, const float shadow_stretch
+);
+void draw_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const float x, const float y, const float scale_x, const float scale_y,
+    const int flags, const unsigned char valign, const string &text
+);
+void draw_sprite(
+    ALLEGRO_BITMAP* bmp, const float cx, const float cy,
+    const float w, const float h, const float angle = 0,
+    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+);
 ALLEGRO_BITMAP* draw_to_bitmap();
-void draw_text_lines(const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c, const float x, const float y, const int fl, const unsigned char va, const string &text);
-float ease(const unsigned char method, float y);
+void draw_text_lines(
+    const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c,
+    const float x, const float y, const int fl, const unsigned char va,
+    const string &text
+);
+float ease(
+    const unsigned char method, float y
+);
 
 
 #endif //ifndef DRAWING_INCLUDED

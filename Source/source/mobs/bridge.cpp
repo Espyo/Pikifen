@@ -16,36 +16,40 @@
 /* ----------------------------------------------------------------------------
  * Creates a bridge.
  */
-bridge::bridge(const float x, const float y, const float angle, const string &vars) :
+bridge::bridge(
+    const float x, const float y, const float angle, const string &vars
+) :
     mob(x, y, spec_mob_types["Bridge"], angle, vars) {
-    
+
     //Search neighboring sectors.
     get_neighbor_bridge_sectors(get_sector(x, y, NULL, true));
     team = MOB_TEAM_OBSTACLE;
-    
+
 }
 
 void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
 
     if(!s_ptr) return;
-    
+
     //If this sector is not a bridge sector, skip it.
     if(
         s_ptr->type != SECTOR_TYPE_BRIDGE &&
         s_ptr->type != SECTOR_TYPE_BRIDGE_RAIL
     ) return;
-    
+
     //If this sector is already on the list, skip.
     for(size_t s = 0; s < secs.size(); ++s) {
         if(secs[s] == s_ptr) return;
     }
-    
+
     secs.push_back(s_ptr);
-    
+
     edge* e_ptr = NULL;
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         e_ptr = s_ptr->edges[e];
-        get_neighbor_bridge_sectors(e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)]);
+        get_neighbor_bridge_sectors(
+            e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)]
+        );
     }
 }
 
@@ -59,20 +63,21 @@ void bridge::open(mob* m, void* info1, void* info2) {
         PARTICLE_TYPE_BITMAP, bmp_smoke, b_ptr->x, b_ptr->y,
         60, 90, 10, 12, 2.5, 3, 64, 96, al_map_rgb(238, 204, 170)
     );
-    
+
     for(size_t s = 0; s < b_ptr->secs.size(); s++) {
         sector* s_ptr = b_ptr->secs[s];
-        
+
         s_ptr->z = s2f(s_ptr->tag);
-        
+
         sector_correction sc(s_ptr);
-        //TODO the file name is so static... plus, the railing should have its own texture.
+        //TODO the file name is so static...
+        //plus, the railing should have its own texture.
         sc.new_texture.bitmap = bitmaps.get("Textures/Bridge.png", NULL);
         sc.new_texture.rot = m->angle;
-        
+
         cur_area_data.sector_corrections.push_back(sc);
         cur_area_data.generate_edges_blockmap(s_ptr->edges);
-        
+
     }
 }
 
@@ -94,13 +99,17 @@ void init_bridge_mob_type(mob_type* mt) {
     mt->create_mob = [] (float x, float y, float angle, const string & vars) {
         create_mob(new bridge(x, y, angle, vars));
     };
-    mt->load_from_file_func = [] (data_node * file, const bool load_resources, vector<pair<size_t, string> >* anim_conversions) {
+    mt->load_from_file_func =
+        [] (
+            data_node * file, const bool load_resources,
+            vector<pair<size_t, string> >* anim_conversions
+    ) {
         if(load_resources) {
             anim_conversions->push_back(make_pair(0, "idle"));
             anim_conversions->push_back(make_pair(1, "nothing"));
         }
     };
-    
+
     easy_fsm_creator efc;
     efc.new_state("idle", 0); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
@@ -115,10 +124,10 @@ void init_bridge_mob_type(mob_type* mt) {
         }
     }
     efc.new_state("dead", 1); {
-    
+
     }
-    
-    
+
+
     mt->states = efc.finish();
     mt->first_state_nr = fix_states(mt->states, "idle");
 }

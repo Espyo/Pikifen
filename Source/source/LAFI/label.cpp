@@ -5,11 +5,14 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a label.
  */
-label::label(int x1, int y1, int x2, int y2, string text, int text_flags, lafi::style* style, unsigned char flags) :
+label::label(
+    int x1, int y1, int x2, int y2, string text,
+    int text_flags, lafi::style* style, unsigned char flags
+) :
     widget(x1, y1, x2, y2, style, flags),
     text(text),
     text_flags(text_flags) {
-    
+
 }
 
 
@@ -30,7 +33,7 @@ void label::draw_self() {
         if(text_flags == ALLEGRO_ALIGN_CENTER) text_x = (x2 - x1) / 2;
         else if(text_flags == ALLEGRO_ALIGN_RIGHT) text_x = (x2 - x1) - 1;
         text_x += x1;
-        
+
         al_draw_text(
             style->text_font,
             get_fg_color(),

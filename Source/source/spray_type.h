@@ -27,17 +27,25 @@ using namespace std;
 class spray_type {
 public:
     string name;
-    vector<status_type*> effects; //What the spray does.
-    bool group;           //True: applied to the entire party. False: applied in a specified range.
-    float angle;          //If applied outside of the party, this is the angle of shooting.
-    float distance_range; //If applied outside of the party, this is the distance range.
-    float angle_range;    //If applied outside of the party, this is the angle range.
-    
+    //What the spray does.
+    vector<status_type*> effects;
+    //True: applied to the entire party. False: applied in a specified range.
+    bool group;
+    //If applied outside of the party, this is the angle of shooting.
+    float angle;
+    //If applied outside of the party, this is the distance range.
+    float distance_range;
+    //If applied outside of the party, this is the angle range.
+    float angle_range;
+
     ALLEGRO_COLOR main_color;
-    ALLEGRO_BITMAP* bmp_spray; //Bitmap for the spray count.
-    
-    size_t berries_needed; //How many berries are needed in order to concot a new spray. 0 means there are no berries for this spray type.
-    
+    //Bitmap for the spray count.
+    ALLEGRO_BITMAP* bmp_spray;
+
+    //How many berries are needed in order to concot a new spray.
+    //0 means there are no berries for this spray type.
+    size_t berries_needed;
+
     spray_type();
 };
 

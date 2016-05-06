@@ -32,7 +32,7 @@ struct hazard {
     string name;
     ALLEGRO_COLOR main_color;
     vector<status_type*> effects;
-    
+
     hazard();
 };
 

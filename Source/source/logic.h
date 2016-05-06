@@ -14,5 +14,6 @@
 
 void do_aesthetic_logic();
 void do_gameplay_logic();
+void process_mob(mob* m_ptr, size_t m);
 
 #endif //ifndef LOGIC_INCLUDED

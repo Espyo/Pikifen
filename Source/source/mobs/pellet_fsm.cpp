@@ -17,7 +17,7 @@
 
 void pellet_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-    
+
     efc.new_state("idle_waiting", PELLET_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_stop_move);
@@ -36,7 +36,7 @@ void pellet_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idle_moving");
         }
     }
-    
+
     efc.new_state("idle_moving", PELLET_STATE_IDLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_begin_move);
@@ -63,7 +63,7 @@ void pellet_fsm::create_fsm(mob_type* typ) {
             efc.change_state("being_delivered");
         }
     }
-    
+
     efc.new_state("being_delivered", PELLET_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::start_being_delivered);
@@ -72,14 +72,15 @@ void pellet_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pellet_fsm::handle_delivery);
         }
     }
-    
-    
+
+
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle_waiting");
-    
+
     if(typ->states.size() != N_PELLET_STATES) {
-        error_log(
-            "ENGINE WARNING: Number of pellet states on the FSM (" + i2s(typ->states.size()) +
+        log_error(
+            "ENGINE WARNING: Number of pellet states on the FSM (" +
+            i2s(typ->states.size()) +
             ") and the enum (" + i2s(N_PELLET_STATES) + ") do not match."
         );
     }
@@ -89,14 +90,14 @@ void pellet_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     size_t seeds = 0;
     pellet* p_ptr = (pellet*) m;
     onion* o_ptr = (onion*) p_ptr->carrying_target;
-    
+
     if(p_ptr->pel_type->pik_type == o_ptr->oni_type->pik_type) {
         seeds = p_ptr->pel_type->match_seeds;
     } else {
         seeds = p_ptr->pel_type->non_match_seeds;
     }
-    
+
     o_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) seeds);
-    
+
     p_ptr->to_delete = true;
 }

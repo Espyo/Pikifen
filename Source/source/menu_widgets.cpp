@@ -23,7 +23,10 @@ const float menu_widget::ICON_SWAY_TIME_SCALE = 1.0f;
 const float menu_widget::JUICY_GROW_DELTA = 0.05f;
 const float menu_widget::JUICY_GROW_DURATION = 0.3f;
 
-menu_widget::menu_widget(const int x, const int y, const int w, const int h, function<void()> click_handler) :
+menu_widget::menu_widget(
+    const int x, const int y, const int w, const int h,
+    function<void()> click_handler
+) :
     x(x),
     y(y),
     w(w),
@@ -32,8 +35,8 @@ menu_widget::menu_widget(const int x, const int y, const int w, const int h, fun
     selected(false),
     enabled(true),
     juicy_grow_time_left(0) {
-    
-    
+
+
 }
 
 
@@ -68,21 +71,21 @@ void menu_widget::start_juicy_grow() {
 
 
 menu_button::menu_button(
-    const int x, const int y, const int w, const int h, function<void()> click_handler,
-    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
+    const int x, const int y, const int w, const int h,
+    function<void()> click_handler, string text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(x, y, w, h, click_handler),
     text(text),
     font(font),
     text_color(color),
     text_align(align) {
-    
-    
+
+
 }
 
 void menu_button::draw(const float time_spent) {
     if(!font || !enabled) return;
-    //al_draw_filled_rectangle(x - w * 0.5, y - h * 0.5, x + w * 0.5, y + h * 0.5, al_map_rgb(128, 64, 32));
     if(selected) {
         draw_sprite(
             bmp_icon, x - w * 0.5 + 16, y,
@@ -93,14 +96,14 @@ void menu_button::draw(const float time_spent) {
             16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
-    
+
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-    
+
     draw_text_lines(
         font, text_color,
         text_x, y,
@@ -117,8 +120,9 @@ bool menu_button::is_clickable() { return enabled; }
 
 
 menu_checkbox::menu_checkbox(
-    const int x, const int y, const int w, const int h, function<void()> click_handler,
-    string text, ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
+    const int x, const int y, const int w, const int h,
+    function<void()> click_handler, string text, ALLEGRO_FONT* font,
+    const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(x, y, w, h, click_handler),
     text(text),
@@ -126,14 +130,13 @@ menu_checkbox::menu_checkbox(
     text_color(color),
     text_align(align),
     checked(false) {
-    
-    
+
+
 }
 
 
 void menu_checkbox::draw(const float time_spent) {
     if(!font || !enabled) return;
-    //al_draw_filled_rectangle(x - w * 0.5, y - h * 0.5, x + w * 0.5, y + h * 0.5, al_map_rgb(128, 64, 32));
     if(selected) {
         draw_sprite(
             bmp_icon, x - w * 0.5 + 16, y,
@@ -144,14 +147,14 @@ void menu_checkbox::draw(const float time_spent) {
             16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
-    
+
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-    
+
     draw_text_lines(
         font, text_color,
         text_x, y,
@@ -184,8 +187,8 @@ menu_text::menu_text(
     font(font),
     text_color(color),
     text_align(align) {
-    
-    
+
+
 }
 
 
@@ -194,18 +197,20 @@ void menu_text::on_click() {}
 
 void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
-    
-    //al_draw_filled_rectangle(x - w * 0.5, y - h * 0.5, x + w * 0.5, y + h * 0.5, al_map_rgb(128, 64, 32));
-    
+
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-    
-    float juicy_grow_amount = ease(EASE_UP_AND_DOWN, juicy_grow_time_left / JUICY_GROW_DURATION) * JUICY_GROW_DELTA;
-    
+
+    float juicy_grow_amount =
+        ease(
+            EASE_UP_AND_DOWN,
+            juicy_grow_time_left / JUICY_GROW_DURATION
+        ) * JUICY_GROW_DELTA;
+
     draw_scaled_text(
         font, text_color,
         text_x, y,
