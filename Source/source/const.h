@@ -112,6 +112,7 @@ const unsigned int DEF_SCR_H = 480;
 const string GAME_DATA_FOLDER      = "Game_data";
 const string TYPES_FOLDER          = GAME_DATA_FOLDER + "/Types";
 
+const string ANIMATIONS_FOLDER     = GAME_DATA_FOLDER + "/Animations";
 const string AUDIO_FOLDER          = GAME_DATA_FOLDER + "/Audio";
 const string AREA_FOLDER           = GAME_DATA_FOLDER + "/Areas";
 const string ENEMIES_FOLDER        = TYPES_FOLDER + "/Enemies";

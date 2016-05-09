@@ -205,7 +205,8 @@ public:
     void face(const float new_angle);
     //Returns the final coordinates of the chasing target.
     void get_chase_target(float* x, float* y);
-    //Returns the normal speed of this mob. Subclasses are meant to override this.
+    //Returns the normal speed of this mob.
+    //Subclasses are meant to override this.
     virtual float get_base_speed();
 
     //Target things.

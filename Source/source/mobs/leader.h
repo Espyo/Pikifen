@@ -44,13 +44,15 @@ enum LEADER_STATES {
     LEADER_STATE_SLEEPING_MOVING,
     LEADER_STATE_INACTIVE_SLEEPING_WAITING,
     LEADER_STATE_INACTIVE_SLEEPING_MOVING,
-    LEADER_STATE_WAKING_UP, //Time during which the leader is getting up.
-    LEADER_STATE_INACTIVE_WAKING_UP, //Time during which the leader is getting up.
+    //Time during which the leader is getting up.
+    LEADER_STATE_WAKING_UP,
+    //Time during which the leader is getting up.
+    LEADER_STATE_INACTIVE_WAKING_UP,
     LEADER_STATE_HELD,
     LEADER_STATE_THROWN,
-
+    
     N_LEADER_STATES,
-
+    
 };
 
 enum LEADER_ANIMATIONS {
@@ -78,27 +80,27 @@ const float LEADER_ZAP_ANIM_PARTS = 20;
 class leader : public mob {
 public:
     leader_type* lea_type;
-
+    
     mob* holding_pikmin;
-
+    
     pikmin* auto_pluck_pikmin; //-1 = not plucking.
-
+    
     bool is_in_walking_anim;
-
+    
     leader(
         const float x, const float y, leader_type* type,
         const float angle, const string &vars
     );
-
+    
     virtual void draw();
-
+    
     void signal_group_move_start();
     void signal_group_move_end();
     void dismiss();
     void swap_held_pikmin(mob* new_pik);
-
+    
     virtual bool can_receive_status(status_type* s);
-
+    
 };
 
 

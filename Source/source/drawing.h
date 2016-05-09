@@ -18,11 +18,15 @@
 #include "controls.h"
 #include "functions.h"
 
+const float DEF_HEALTH_WHEEL_RADIUS = 20;
+const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
+const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 //The shadows of walls spread this much outwards.
 const float WALL_SHADOW_LENGTH  = 32;
 //The shadows of walls start with this opacity and fade to 0.
 const float WALL_SHADOW_OPACITY = 192;
-const float DEF_HEALTH_WHEEL_RADIUS = 20;
+//A water wave ring lasts this long.
+const float WAVE_RING_DURATION = 1.0f;
 
 enum EASING_METHODS {
     EASE_IN,
@@ -58,6 +62,9 @@ void draw_health(
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
+);
+void draw_liquid(
+    sector* s_ptr, const float x, const float y, const float scale
 );
 void draw_notification(
     const float x, const float y, const string &text,

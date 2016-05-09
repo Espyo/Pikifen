@@ -69,9 +69,9 @@ void init_controls() {
 
 void init_dev_tools() {
     data_node file(MISC_FOLDER + "/Tools.txt");
-
+    
     if(!s2b(file.get_child_by_name("enabled")->value)) return;
-
+    
     for(unsigned char k = 0; k < 10; k++) {
         string tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
         if(tool_name == "area_image") {
@@ -92,7 +92,7 @@ void init_dev_tools() {
             dev_tool_keys[k] = DEV_TOOL_NONE;
         }
     }
-
+    
     dev_tool_area_image_size =
         s2i(file.get_child_by_name("area_image_size")->value);
     dev_tool_area_image_name =
@@ -101,12 +101,12 @@ void init_dev_tools() {
         s2b(file.get_child_by_name("area_image_shadows")->value);
     dev_tool_change_speed_mult =
         s2f(file.get_child_by_name("change_speed_multiplier")->value);
-
+        
     dev_tool_auto_start_option =
         file.get_child_by_name("auto_start_option")->value;
     dev_tool_auto_start_mode =
         file.get_child_by_name("auto_start_mode")->value;
-
+        
 }
 
 
@@ -134,7 +134,7 @@ void init_event_things(
     if(window_pos_hack) al_set_new_window_position(64, 64);
     display = al_create_display(scr_w, scr_h);
     logic_timer = al_create_timer(1.0 / game_fps);
-
+    
     logic_queue = al_create_event_queue();
     al_register_event_source(logic_queue, al_get_mouse_event_source());
     al_register_event_source(logic_queue, al_get_keyboard_event_source());
@@ -162,7 +162,7 @@ void init_fonts() {
         0x002D, 0x002D, //Dash
         0x0030, 0x0039, //Numbers
     };
-
+    
     //We can't load the font directly because we want to set the ranges.
     //So we load into a bitmap first.
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
@@ -170,31 +170,31 @@ void init_fonts() {
         font_main = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
-
+    
     temp_font_bitmap = load_bmp("Area_name_font.png");
     if(temp_font_bitmap) {
         font_area_name =
             al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
-
+    
     temp_font_bitmap = load_bmp("Counter_font.png");
     if(temp_font_bitmap) {
         font_counter =
             al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
-
+    
     temp_font_bitmap = load_bmp("Value_font.png");
     if(temp_font_bitmap) {
         font_value =
             al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
-
+    
     if(font_main) font_main_h = al_get_font_line_height(font_main);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
-
+    
     allegro_font = al_create_builtin_font();
 }
 
@@ -258,13 +258,13 @@ void init_misc() {
         );
     }
     al_reserve_samples(16);
-
+    
     srand(time(NULL));
-
+    
     //TODO the function is always returning 0.
     // = al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL);
     area_image_size = 800;
-
+    
     cursor_save_timer.on_end = [] () {
         cursor_save_timer.start();
         cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
@@ -273,30 +273,30 @@ void init_misc() {
         }
     };
     cursor_save_timer.start();
-
+    
     framerate_update_timer.on_end = [] () {
         framerate_update_timer.start();
         framerate_counter = round(1.0 / delta_t);
     };
     framerate_update_timer.start();
-
+    
     group_move_next_arrow_timer.on_end = [] () {
         group_move_next_arrow_timer.start();
         group_move_arrows.push_back(0);
     };
     group_move_next_arrow_timer.start();
-
+    
     whistle_next_dot_timer.on_end = [] () {
         whistle_next_dot_timer.start();
         unsigned char dot = 255;
         for(unsigned char d = 0; d < 6; ++d) { //Find WHAT dot to add.
             if(whistle_dot_radius[d] == -1) { dot = d; break;}
         }
-
+        
         if(dot != 255) whistle_dot_radius[dot] = 0;
     };
     whistle_next_dot_timer.start();
-
+    
     whistle_next_ring_timer.on_end = [] () {
         whistle_next_ring_timer.start();
         whistle_rings.push_back(0);
@@ -311,7 +311,7 @@ void init_misc() {
 void init_misc_graphics() {
     //Graphics.
     bmp_ship = load_bmp("Ship.png");
-
+    
     bmp_bubble = load_bmp(          "Bubble.png");
     bmp_checkbox_check = load_bmp(  "Checkbox_check.png");
     bmp_cursor = load_bmp(          "Cursor.png");
@@ -339,14 +339,15 @@ void init_misc_graphics() {
     bmp_sun_bubble = load_bmp(      "Sun_bubble.png");
     bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
-
+    bmp_wave_ring = load_bmp(       "Wave_ring.png");
+    
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] =
             load_bmp(
                 "Mouse_button_" + i2s(i + 1) + "_icon.png"
             );
     }
-
+    
     al_set_display_icon(display, bmp_icon);
 }
 
@@ -396,7 +397,7 @@ void init_mob_categories() {
     [] () -> mob_type* { return nullptr; },
     [] (mob_type * mt) {}
     );
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER,
     [] (vector<string> &li) {
@@ -412,7 +413,7 @@ void init_mob_categories() {
     }, [] (mob_type * et) {
         enemy_types[et->name] = (enemy_type*) et;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_LEADERS, "Leaders", "Leader", LEADERS_FOLDER,
     [] (vector<string> &li) {
@@ -428,7 +429,7 @@ void init_mob_categories() {
     }, [] (mob_type * lt) {
         leader_types[lt->name] = (leader_type*) lt;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_ONIONS, "Onions", "Onion", ONIONS_FOLDER,
     [] (vector<string> &li) {
@@ -444,7 +445,7 @@ void init_mob_categories() {
     }, [] (mob_type * ot) {
         onion_types[ot->name] = (onion_type*) ot;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_PELLETS, "Pellets", "Pellet", PELLETS_FOLDER,
     [] (vector<string> &li) {
@@ -460,7 +461,7 @@ void init_mob_categories() {
     }, [] (mob_type * pt) {
         pellet_types[pt->name] = (pellet_type*) pt;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", PIKMIN_FOLDER,
     [] (vector<string> &li) {
@@ -476,7 +477,7 @@ void init_mob_categories() {
     }, [] (mob_type * pt) -> void {
         pikmin_types[pt->name] = (pikmin_type*) pt;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_SHIPS, "Ships", "Ship", SHIPS_FOLDER,
     [] (vector<string> &li) {
@@ -492,7 +493,7 @@ void init_mob_categories() {
     }, [] (mob_type * st) {
         ship_types[st->name] = (ship_type*) st;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_SPECIAL, "Special", "Special", "",
     [] (vector<string> &li) {
@@ -507,7 +508,7 @@ void init_mob_categories() {
         return new mob_type();
     }, [] (mob_type * mt) {
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_TREASURES, "Treasures", "Treasure", TREASURES_FOLDER,
     [] (vector<string> &li) {
@@ -523,7 +524,7 @@ void init_mob_categories() {
     }, [] (mob_type * tt) {
         treasure_types[tt->name] = (treasure_type*) tt;
     });
-
+    
     mob_categories.register_category(
         MOB_CATEGORY_GATES, "Gates", "Gate", GATES_FOLDER,
     [] (vector<string> &li) {
@@ -562,7 +563,7 @@ void init_special_mob_types() {
         create_mob(new info_spot(x, y, angle, vars));
     };
     spec_mob_types["Info spot"] = info_spot_mt;
-
+    
     //Nectar.
     mob_type* nectar_mt = new mob_type();
     nectar_mt->name = "Nectar";
@@ -573,14 +574,14 @@ void init_special_mob_types() {
         create_mob(new nectar(x, y, vars));
     };
     spec_mob_types["Nectar"] = nectar_mt;
-
+    
     //Bridge.
     mob_type* bridge_mt = new mob_type();
     bridge_mt->name = "Bridge";
     bridge_mt->is_obstacle = true;
     init_bridge_mob_type(bridge_mt);
     spec_mob_types["Bridge"] = bridge_mt;
-
+    
 }
 
 
@@ -614,7 +615,7 @@ void destroy_special_mob_types() {
     for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
         delete t->second;
     }
-
+    
     spec_mob_types.clear();
 }
 
@@ -625,7 +626,7 @@ void destroy_resources() {
     al_destroy_font(font_counter);
     al_destroy_font(font_main);
     al_destroy_font(font_value);
-
+    
     al_destroy_bitmap(bmp_ship);
     al_destroy_bitmap(bmp_bubble);
     al_destroy_bitmap(bmp_checkbox_check);
@@ -654,15 +655,15 @@ void destroy_resources() {
     al_destroy_bitmap(bmp_sun_bubble);
     al_destroy_bitmap(bmp_ub_spray);
     al_destroy_bitmap(bmp_us_spray);
-
+    
     for(unsigned char i = 0; i < 3; ++i) {
         al_destroy_bitmap(bmp_mouse_button_icon[i]);
     }
-
+    
     al_detach_voice(voice);
     al_destroy_mixer(mixer);
     al_destroy_voice(voice);
-
+    
     sfx_attack.destroy();
     sfx_pikmin_attack.destroy();
     sfx_pikmin_carrying.destroy();

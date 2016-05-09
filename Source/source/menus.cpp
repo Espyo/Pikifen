@@ -26,28 +26,30 @@ main_menu::main_menu() :
     bmp_menu_bg(NULL),
     new_game_state(0),
     time_spent(0) {
-
+    
 }
 
 
 void main_menu::load() {
 
     selected_widget = NULL;
-
+    
     draw_loading_screen("", "", 1.0);
     al_flip_display();
-
+    
     //Resources.
     bmp_menu_bg = load_bmp("Main_menu.jpg");
-
-    data_node title_screen_logo_file(MISC_FOLDER + "/Title_screen_logo.txt");
+    
+    data_node title_screen_logo_file(
+        ANIMATIONS_FOLDER + "/Title_screen_logo.txt"
+    );
     logo = load_animation_pool_from_file(&title_screen_logo_file);
     if(!logo.animations.empty()) {
         logo_anim = animation_instance(&logo);
         logo_anim.anim = logo.animations[0];
         logo_anim.start();
     }
-
+    
     //Menu widgets.
     menu_widgets.push_back(
         new menu_button(
@@ -97,12 +99,12 @@ void main_menu::load() {
     }, "Exit", font_area_name
         )
     );
-
-
+    
+    
     //Finishing touches.
     set_selected_widget(menu_widgets[0]);
     fade_mgr.start_fade(true, nullptr);
-
+    
 }
 
 
@@ -111,43 +113,43 @@ void main_menu::unload() {
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
     logo.destroy();
-
+    
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         delete menu_widgets[w];
     }
     menu_widgets.clear();
-
+    
 }
 
 
 void main_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
-
+    
     if(fade_mgr.is_fading()) return;
-
+    
     handle_widget_events(ev);
-
+    
     if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
             is_game_running = false;
         }
     }
-
+    
 }
 
 
 void main_menu::do_logic() {
     time_spent += delta_t;
     logo_anim.tick(delta_t);
-
+    
     //Fade manager needs to come last, because if
     //the fade finishes and the state changes, and
     //after that we still attempt to do stuff in
     //this function, we're going to have a bad time.
     fade_mgr.tick(delta_t);
-
+    
 }
 
 
@@ -157,7 +159,7 @@ void main_menu::do_drawing() {
         bmp_menu_bg, scr_w * 0.5, scr_h * 0.5,
         scr_w, scr_h
     );
-
+    
     frame* logo_anim_f = logo_anim.get_frame();
     if(logo_anim_f) {
         draw_sprite(
@@ -168,11 +170,11 @@ void main_menu::do_drawing() {
             logo_anim_f->game_h
         );
     }
-
+    
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
     }
-
+    
     draw_scaled_text(
         font_main, al_map_rgb(255, 255, 255),
         8, scr_h  - 8,
@@ -189,9 +191,9 @@ void main_menu::do_drawing() {
         " is powered by PFE " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
     );
-
+    
     fade_mgr.draw();
-
+    
     al_flip_display();
 }
 
@@ -208,7 +210,7 @@ options_menu::options_menu() :
     input_capture_control_nr(0),
     capturing_input(false),
     time_spent(0) {
-
+    
 }
 
 
@@ -218,10 +220,10 @@ void options_menu::load() {
     cur_page_nr = 0;
     cur_player_nr = 0;
     capturing_input = false;
-
+    
     //Resources.
     bmp_menu_bg = load_bmp("Main_menu.jpg");
-
+    
     //Menu widgets.
     menu_widgets.push_back(
         new menu_text(
@@ -269,7 +271,7 @@ void options_menu::load() {
     "Exit", font_main
         )
     );
-
+    
     for(size_t c = 0; c < 8; c++) {
         control_widgets.push_back(
             new menu_button(
@@ -311,9 +313,9 @@ void options_menu::load() {
             )
         );
         menu_widgets.push_back(control_widgets.back());
-
+        
     }
-
+    
     bottom_widgets.push_back(
         new menu_button(
             scr_w * 0.9, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
@@ -390,12 +392,12 @@ void options_menu::load() {
     )
     ;
     menu_widgets.push_back(input_capture_msg_widget);
-
+    
     //Finishing touches.
     fade_mgr.start_fade(true, nullptr);
     set_selected_widget(menu_widgets[1]);
     update();
-
+    
 }
 
 
@@ -403,7 +405,7 @@ void options_menu::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
-
+    
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -415,28 +417,28 @@ void options_menu::unload() {
     cur_player_nr_widget = NULL;
     cur_page_nr_widget = NULL;
     input_capture_msg_widget = NULL;
-
+    
 }
 
 
 void options_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
-
+    
     if(capturing_input) {
-
+    
         control_info* c_ptr =
             &controls[cur_player_nr][input_capture_control_nr];
         bool valid = true;
-
+        
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             c_ptr->type = CONTROL_TYPE_KEYBOARD_KEY;
             c_ptr->button = ev.keyboard.keycode;
-
+            
         } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
             c_ptr->type = CONTROL_TYPE_MOUSE_BUTTON;
             c_ptr->button = ev.mouse.button;
-
+            
         } else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
             if(ev.mouse.dz > 0) {
                 c_ptr->type = CONTROL_TYPE_MOUSE_WHEEL_UP;
@@ -449,12 +451,12 @@ void options_menu::handle_controls(ALLEGRO_EVENT ev) {
             } else {
                 valid = false;
             }
-
+            
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
             c_ptr->type = CONTROL_TYPE_JOYSTICK_BUTTON;
             c_ptr->device_nr = joystick_numbers[ev.joystick.id];
             c_ptr->button = ev.joystick.button;
-
+            
         } else if(ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
             c_ptr->type =
                 (
@@ -465,36 +467,36 @@ void options_menu::handle_controls(ALLEGRO_EVENT ev) {
             c_ptr->device_nr = joystick_numbers[ev.joystick.id];
             c_ptr->stick = ev.joystick.stick;
             c_ptr->axis = ev.joystick.axis;
-
+            
         } else {
             valid = false;
-
+            
         }
-
+        
         if(valid) {
             capturing_input = false;
             update();
         }
-
+        
     } else {
-
+    
         handle_widget_events(ev);
-
+        
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
             if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
                 leave();
             }
         }
-
+        
     }
-
+    
 }
 
 
 void options_menu::do_logic() {
     fade_mgr.tick(delta_t);
     time_spent += delta_t;
-
+    
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->tick(delta_t);
     }
@@ -510,7 +512,7 @@ void options_menu::do_drawing() {
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
     }
-
+    
     size_t control_nr = cur_page_nr * 8;
     size_t list_nr = 0;
     for(
@@ -519,15 +521,15 @@ void options_menu::do_drawing() {
         ++control_nr, ++list_nr
     ) {
         control_info* c_ptr = &controls[cur_player_nr][control_nr];
-
+        
         draw_control(
             font_main, *c_ptr, scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr),
             scr_w * 0.2, scr_h * 0.1
         );
     }
-
+    
     fade_mgr.draw();
-
+    
     al_flip_display();
 }
 
@@ -540,11 +542,11 @@ void options_menu::update() {
         );
     cur_player_nr_widget->text = i2s(cur_player_nr + 1);
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
-
+    
     for(size_t cw = 0; cw < control_widgets.size(); ++cw) {
         control_widgets[cw]->enabled = false;
     }
-
+    
     size_t control_nr = cur_page_nr * 8;
     size_t list_nr = 0;
     for(
@@ -553,10 +555,10 @@ void options_menu::update() {
         ++control_nr, ++list_nr
     ) {
         control_info* c_ptr = &controls[cur_player_nr][control_nr];
-
+        
 #define setter(id, name) \
     if(c_ptr->action == id) action_name = name
-
+        
         string action_name;
         setter(     BUTTON_NONE,                    "---");
         else setter(BUTTON_THROW,                   "Throw");
@@ -591,7 +593,7 @@ void options_menu::update() {
         else setter(BUTTON_SWITCH_MATURITY_DOWN,    "Prev. maturity");
         else setter(BUTTON_LIE_DOWN,                "Lie down");
         else setter(BUTTON_PAUSE,                   "Pause");
-
+        
         for(size_t cw = 0; cw < 5; ++cw) {
             control_widgets[list_nr * 5 + cw]->enabled = true;
         }
@@ -627,23 +629,23 @@ void options_menu::update() {
             input_capture_control_nr = control_nr;
             update();
         };
-
-
+        
+        
     }
-
+    
     //Show or hide the "please press something" message.
     if(capturing_input) {
         input_capture_msg_widget->enabled = true;
         for(size_t bw = 0; bw < bottom_widgets.size(); ++bw) {
             bottom_widgets[bw]->enabled = false;
         }
-
+        
     } else {
         input_capture_msg_widget->enabled = false;
         for(size_t bw = 0; bw < bottom_widgets.size(); ++bw) {
             bottom_widgets[bw]->enabled = true;
         }
-
+        
     }
 }
 
@@ -663,7 +665,7 @@ area_menu::area_menu() :
     cur_page_nr(0),
     cur_page_nr_widget(NULL),
     bmp_menu_bg(NULL) {
-
+    
 }
 
 
@@ -672,20 +674,20 @@ void area_menu::load() {
     bmp_menu_bg = NULL;
     time_spent = 0;
     cur_page_nr = 0;
-
+    
     //Areas.
     areas_to_pick = folder_to_vector(AREA_FOLDER, true);
-
+    
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {
         area_to_load = areas_to_pick[0];
         change_game_state(GAME_STATE_GAME);
         return;
     }
-
+    
     //Resources.
     bmp_menu_bg = load_bmp("Main_menu.jpg");
-
+    
     //Menu widgets.
     menu_widgets.push_back(
         new menu_text(
@@ -694,7 +696,7 @@ void area_menu::load() {
             font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
         )
     );
-
+    
     menu_widgets.push_back(
         new menu_button(
             scr_w * 0.8, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
@@ -706,20 +708,20 @@ void area_menu::load() {
     "Back", font_main
         )
     );
-
+    
     for(size_t a = 0; a < 8; ++a) {
         menu_widgets.push_back(
             new menu_button(
                 scr_w * 0.5, scr_h * (0.2 + 0.08 * a), scr_w * 0.8, scr_h * 0.1,
         [] () {
-
+        
         },
         "", font_area_name
             )
         );
         area_buttons.push_back(menu_widgets.back());
     }
-
+    
     menu_widgets.push_back(
         new menu_text(
             scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
@@ -757,12 +759,12 @@ void area_menu::load() {
     ">", font_main
         )
     );
-
+    
     //Finishing touches.
     fade_mgr.start_fade(true, nullptr);
     set_selected_widget(menu_widgets[0]);
     update();
-
+    
 }
 
 
@@ -770,7 +772,7 @@ void area_menu::unload() {
 
     //Resources.
     al_destroy_bitmap(bmp_menu_bg);
-
+    
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
@@ -780,29 +782,29 @@ void area_menu::unload() {
     area_buttons.clear();
     areas_to_pick.clear();
     cur_page_nr_widget = NULL;
-
+    
 }
 
 
 void area_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
-
+    
     handle_widget_events(ev);
-
+    
     if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
             leave();
         }
     }
-
+    
 }
 
 
 void area_menu::do_logic() {
     fade_mgr.tick(delta_t);
     time_spent += delta_t;
-
+    
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->tick(delta_t);
     }
@@ -818,9 +820,9 @@ void area_menu::do_drawing() {
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
     }
-
+    
     fade_mgr.draw();
-
+    
     al_flip_display();
 }
 
@@ -836,16 +838,16 @@ void area_menu::update() {
     cur_page_nr =
         min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));
     cur_page_nr_widget->text = i2s(cur_page_nr + 1);
-
+    
     for(size_t aw = 0; aw < area_buttons.size(); ++aw) {
         area_buttons[aw]->enabled = false;
     }
-
+    
     size_t area_nr = cur_page_nr * 8;
     size_t list_nr = 0;
     for(; list_nr < 8 && area_nr < areas_to_pick.size(); ++area_nr, ++list_nr) {
         string area_name = areas_to_pick[area_nr];
-
+        
         ((menu_button*) area_buttons[list_nr])->click_handler = [area_name] () {
             area_to_load = area_name;
             fade_mgr.start_fade(false, [] () {
@@ -854,6 +856,6 @@ void area_menu::update() {
         };
         ((menu_button*) area_buttons[list_nr])->text = area_name;
         area_buttons[list_nr]->enabled = true;
-
+        
     }
 }

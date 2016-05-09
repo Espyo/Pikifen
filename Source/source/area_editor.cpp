@@ -83,7 +83,7 @@ area_editor::area_editor() :
     show_path_preview(false),
     show_shadows(true),
     wum(NULL) {
-
+    
     path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[0] = 0;
     path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
@@ -104,10 +104,10 @@ void area_editor::adv_textures_to_gui() {
         change_to_right_frame();
         return;
     }
-
+    
     lafi::frame* f =
         (lafi::frame*) area_editor::gui->widgets["frm_adv_textures"];
-
+        
     ((lafi::textbox*) f->widgets["txt_x"])->text =
         f2s(cur_sector->texture_info.trans_x);
     ((lafi::textbox*) f->widgets["txt_y"])->text =
@@ -127,7 +127,7 @@ void area_editor::adv_textures_to_gui() {
  */
 void area_editor::calculate_preview_path() {
     if(!show_path_preview) return;
-
+    
     float d = 0;
     path_preview =
         get_path(
@@ -137,7 +137,7 @@ void area_editor::calculate_preview_path() {
             path_preview_checkpoints_y[1],
             NULL, NULL, &d
         );
-
+        
     if(path_preview.empty() && d == 0) {
         d =
             dist(
@@ -147,7 +147,7 @@ void area_editor::calculate_preview_path() {
                 path_preview_checkpoints_y[1]
             ).to_float();
     }
-
+    
     ((lafi::label*) gui->widgets["frm_paths"]->widgets["lbl_path_dist"])->text =
         "  Total dist.: " + f2s(d);
 }
@@ -164,18 +164,18 @@ void area_editor::center_camera(
 ) {
     float width = max_x - min_x;
     float height = max_y - min_y;
-
+    
     cam_x = -floor(min_x + width  / 2);
     cam_y = -floor(min_y + height / 2);
-
+    
     if(width > height) cam_zoom = (scr_w - 208) / width;
     else cam_zoom = (scr_h - 16) / height;
-
+    
     cam_zoom -= cam_zoom * 0.1;
-
+    
     cam_zoom = max(cam_zoom, ZOOM_MIN_LEVEL_EDITOR);
     cam_zoom = min(cam_zoom, ZOOM_MAX_LEVEL_EDITOR);
-
+    
 }
 
 
@@ -187,12 +187,12 @@ void area_editor::change_guide(string new_file_name) {
         al_destroy_bitmap(guide_bitmap);
     }
     guide_bitmap = NULL;
-
+    
     if(new_file_name.size()) {
         guide_bitmap = load_bmp(new_file_name, NULL, false);
     }
     guide_file_name = new_file_name;
-
+    
     made_changes = true;
 }
 
@@ -202,7 +202,7 @@ void area_editor::change_guide(string new_file_name) {
  */
 void area_editor::change_to_right_frame(bool hide_all) {
     sec_mode = ESM_NONE;
-
+    
     hide_widget(gui->widgets["frm_main"]);
     hide_widget(gui->widgets["frm_picker"]);
     hide_widget(gui->widgets["frm_sectors"]);
@@ -215,7 +215,7 @@ void area_editor::change_to_right_frame(bool hide_all) {
     hide_widget(gui->widgets["frm_review"]);
     hide_widget(gui->widgets["frm_tools"]);
     hide_widget(gui->widgets["frm_options"]);
-
+    
     if(!hide_all) {
         if(mode == EDITOR_MODE_MAIN) {
             show_widget(gui->widgets["frm_main"]);
@@ -253,11 +253,11 @@ void area_editor::do_logic() {
         double_click_time -= delta_t;
         if(double_click_time < 0) double_click_time = 0;
     }
-
+    
     path_preview_timeout.tick(delta_t);
-
+    
     fade_mgr.tick(delta_t);
-
+    
 }
 
 
@@ -276,7 +276,7 @@ void area_editor::close_changes_warning() {
 void area_editor::do_drawing() {
 
     gui->draw();
-
+    
     ALLEGRO_TRANSFORM transform;
     al_identity_transform(&transform);
     al_translate_transform(
@@ -285,29 +285,29 @@ void area_editor::do_drawing() {
     );
     al_scale_transform(&transform, cam_zoom, cam_zoom);
     al_use_transform(&transform);
-
+    
     al_set_clipping_rectangle(0, 0, scr_w - 208, scr_h - 16); {
         al_clear_to_color(al_map_rgb(0, 0, 0));
-
+        
         //Grid.
         if(sec_mode != ESM_TEXTURE_VIEW) {
             float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
             float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
             float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
             float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
-
+            
             float x = floor(cam_leftmost / grid_interval) * grid_interval;
             while(x < cam_rightmost + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
-
+                
                 if(fmod(x, grid_interval * 2) == 0) {
                     c = al_map_rgb(64, 64, 64);
                     if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
                 } else {
                     if(grid_interval * cam_zoom <= 6) draw_line = false;
                 }
-
+                
                 if(draw_line) {
                     al_draw_line(
                         x, cam_topmost, x, cam_bottommost + grid_interval,
@@ -316,19 +316,19 @@ void area_editor::do_drawing() {
                 }
                 x += grid_interval;
             }
-
+            
             float y = floor(cam_topmost / grid_interval) * grid_interval;
             while(y < cam_bottommost + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
-
+                
                 if(fmod(y, grid_interval * 2) == 0) {
                     c = al_map_rgb(64, 64, 64);
                     if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
                 } else {
                     if(grid_interval * cam_zoom <= 6) draw_line = false;
                 }
-
+                
                 if(draw_line) {
                     al_draw_line(
                         cam_leftmost, y, cam_rightmost + grid_interval, y,
@@ -337,7 +337,7 @@ void area_editor::do_drawing() {
                 }
                 y += grid_interval;
             }
-
+            
             //0,0 marker.
             al_draw_line(
                 -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0,
@@ -348,10 +348,10 @@ void area_editor::do_drawing() {
                 al_map_rgb(128, 128, 255), 1.0 / cam_zoom
             );
         }
-
+        
         //Edges.
         if(sec_mode != ESM_TEXTURE_VIEW) {
-
+        
             unsigned char sector_opacity = 255;
             bool show_vertices = true;
             if(
@@ -362,20 +362,20 @@ void area_editor::do_drawing() {
                 sector_opacity = 128;
                 show_vertices = false;
             }
-
+            
             size_t n_edges = cur_area_data.edges.size();
             for(size_t e = 0; e < n_edges; ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
-
+                
                 if(!is_edge_valid(e_ptr)) continue;
-
+                
                 bool one_sided = true;
                 bool same_z = false;
                 bool error_highlight = false;
                 bool valid = true;
                 bool mouse_on = false;
                 bool selected = false;
-
+                
                 if(error_sector_ptr) {
                     if(
                         e_ptr->sectors[0] == error_sector_ptr ||
@@ -383,7 +383,7 @@ void area_editor::do_drawing() {
                     ) {
                         error_highlight = true;
                     }
-
+                    
                 } else {
                     for(size_t ie = 0; ie < intersecting_edges.size(); ++ie) {
                         if(intersecting_edges[ie].contains(e_ptr)) {
@@ -391,7 +391,7 @@ void area_editor::do_drawing() {
                             break;
                         }
                     }
-
+                    
                     if(
                         non_simples.find(e_ptr->sectors[0]) !=
                         non_simples.end()
@@ -408,9 +408,9 @@ void area_editor::do_drawing() {
                         valid = false;
                     }
                 }
-
+                
                 if(e_ptr->sectors[0] && e_ptr->sectors[1]) one_sided = false;
-
+                
                 if(
                     !one_sided &&
                     e_ptr->sectors[0]->z == e_ptr->sectors[1]->z &&
@@ -418,12 +418,12 @@ void area_editor::do_drawing() {
                 ) {
                     same_z = true;
                 }
-
+                
                 if(on_sector && mode == EDITOR_MODE_SECTORS) {
                     if(e_ptr->sectors[0] == on_sector) mouse_on = true;
                     if(e_ptr->sectors[1] == on_sector) mouse_on = true;
                 }
-
+                
                 if(
                     cur_sector &&
                     (mode == EDITOR_MODE_SECTORS || mode == EDITOR_MODE_TEXTURE)
@@ -431,8 +431,8 @@ void area_editor::do_drawing() {
                     if(e_ptr->sectors[0] == cur_sector) selected = true;
                     if(e_ptr->sectors[1] == cur_sector) selected = true;
                 }
-
-
+                
+                
                 al_draw_line(
                     e_ptr->vertexes[0]->x,
                     e_ptr->vertexes[0]->y,
@@ -453,7 +453,7 @@ void area_editor::do_drawing() {
                     ),
                     (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
                 );
-
+                
                 //Debug: uncomment this to show the sector numbers on each side.
                 /*float mid_x =
                     (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
@@ -489,7 +489,7 @@ void area_editor::do_drawing() {
                     )
                 );*/
             }
-
+            
             //Vertexes.
             if(show_vertices) {
                 size_t n_vertexes = cur_area_data.vertexes.size();
@@ -503,19 +503,19 @@ void area_editor::do_drawing() {
                     );
                 }
             }
-
+            
             if(mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS && cur_sector) {
                 draw_sector_texture(cur_sector, 0, 0, 1);
             }
-
+            
         } else {
-
+        
             //Draw textures.
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
                 draw_sector(cur_area_data.sectors[s], 0, 0, 1.0);
             }
         }
-
+        
         //Mobs.
         unsigned char mob_opacity = 224;
         if(
@@ -528,17 +528,17 @@ void area_editor::do_drawing() {
             mob_opacity = 32;
         }
         if(sec_mode == ESM_TEXTURE_VIEW) mob_opacity = 0;
-
+        
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
             bool valid = m_ptr->type != NULL;
-
+            
             float radius =
                 m_ptr->type ?
                 m_ptr->type->radius == 0 ? 16 :
                 m_ptr->type->radius : 16;
             const unsigned char* c = MOB_CATEGORY_COLORS[m_ptr->category];
-
+            
             al_draw_filled_circle(
                 m_ptr->x, m_ptr->y,
                 radius,
@@ -547,17 +547,17 @@ void area_editor::do_drawing() {
                     al_map_rgba(224, 96, 96, mob_opacity)
                 )
             );
-
+            
             float lrw = cos(m_ptr->angle) * radius;
             float lrh = sin(m_ptr->angle) * radius;
             float lt = radius / 8.0;
-
+            
             al_draw_line(
                 m_ptr->x - lrw * 0.8, m_ptr->y - lrh * 0.8,
                 m_ptr->x + lrw * 0.8, m_ptr->y + lrh * 0.8,
                 al_map_rgba(0, 0, 0, mob_opacity), lt
             );
-
+            
             float tx1 = m_ptr->x + lrw;
             float ty1 = m_ptr->y + lrh;
             float tx2 =
@@ -568,14 +568,14 @@ void area_editor::do_drawing() {
                 tx1 + cos(m_ptr->angle + (M_PI_2 + M_PI_4)) * radius * 0.5;
             float ty3 =
                 ty1 + sin(m_ptr->angle + (M_PI_2 + M_PI_4)) * radius * 0.5;
-
+                
             al_draw_filled_triangle(
                 tx1, ty1,
                 tx2, ty2,
                 tx3, ty3,
                 al_map_rgba(0, 0, 0, mob_opacity)
             );
-
+            
             if(m_ptr == cur_mob && mode == EDITOR_MODE_OBJECTS) {
                 al_draw_circle(
                     m_ptr->x, m_ptr->y,
@@ -583,12 +583,12 @@ void area_editor::do_drawing() {
                     al_map_rgba(255, 255, 255, mob_opacity), 2 / cam_zoom
                 );
             }
-
+            
         }
-
+        
         //Paths.
         if(mode == EDITOR_MODE_PATHS) {
-
+        
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 al_draw_filled_circle(
@@ -597,13 +597,13 @@ void area_editor::do_drawing() {
                     al_map_rgb(224, 192, 160)
                 );
             }
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); l++) {
                     path_stop* s2_ptr = s_ptr->links[l].end_ptr;
                     bool one_way = !(s_ptr->links[l].end_ptr->has_link(s_ptr));
-
+                    
                     al_draw_line(
                         s_ptr->x, s_ptr->y,
                         s2_ptr->x, s2_ptr->y,
@@ -613,7 +613,7 @@ void area_editor::do_drawing() {
                         ),
                         LINK_THICKNESS / cam_zoom
                     );
-
+                    
                     if(one_way) {
                         //Draw a triangle down the middle.
                         float mid_x =
@@ -623,7 +623,7 @@ void area_editor::do_drawing() {
                         float angle =
                             atan2(s2_ptr->y - s_ptr->y, s2_ptr->x - s_ptr->x);
                         const float delta = (LINK_THICKNESS * 4) / cam_zoom;
-
+                        
                         al_draw_filled_triangle(
                             mid_x + cos(angle) * delta,
                             mid_y + sin(angle) * delta,
@@ -636,7 +636,7 @@ void area_editor::do_drawing() {
                     }
                 }
             }
-
+            
             if(sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
                 al_draw_line(
                     new_link_first_stop->x, new_link_first_stop->y,
@@ -644,32 +644,32 @@ void area_editor::do_drawing() {
                     al_map_rgb(255, 255, 255), 2 / cam_zoom
                 );
             }
-
+            
             if(show_closest_stop) {
                 path_stop* closest = NULL;
                 dist closest_dist;
                 for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                     path_stop* s_ptr = cur_area_data.path_stops[s];
                     dist d(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y);
-
+                    
                     if(!closest || d < closest_dist) {
                         closest = s_ptr;
                         closest_dist = d;
                     }
                 }
-
+                
                 al_draw_line(
                     mouse_cursor_x, mouse_cursor_y,
                     closest->x, closest->y,
                     al_map_rgb(96, 224, 32), 2 / cam_zoom
                 );
             }
-
+            
             if(show_path_preview) {
                 //Draw the checkpoints.
                 for(unsigned char c = 0; c < 2; ++c) {
                     string letter = (c == 0 ? "A" : "B");
-
+                    
                     al_draw_filled_rectangle(
                         path_preview_checkpoints_x[c] -
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
@@ -690,7 +690,7 @@ void area_editor::do_drawing() {
                         letter
                     );
                 }
-
+                
                 //Draw the lines of the path.
                 if(path_preview.empty()) {
                     al_draw_line(
@@ -717,7 +717,7 @@ void area_editor::do_drawing() {
                             al_map_rgb(255, 0, 0), 3 / cam_zoom
                         );
                     }
-
+                    
                     al_draw_line(
                         path_preview.back()->x,
                         path_preview.back()->y,
@@ -728,26 +728,26 @@ void area_editor::do_drawing() {
                 }
             }
         }
-
+        
         //Shadows.
         if(
             mode == EDITOR_MODE_SHADOWS ||
             (sec_mode == ESM_TEXTURE_VIEW && show_shadows)
         ) {
             for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-
+            
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 draw_sprite(
                     s_ptr->bitmap, s_ptr->x, s_ptr->y, s_ptr->w, s_ptr->h,
                     s_ptr->angle, map_alpha(s_ptr->alpha)
                 );
-
+                
                 if(mode == EDITOR_MODE_SHADOWS) {
                     float min_x, min_y, max_x, max_y;
                     get_shadow_bounding_box(
                         s_ptr, &min_x, &min_y, &max_x, &max_y
                     );
-
+                    
                     al_draw_rectangle(
                         min_x, min_y, max_x, max_y,
                         (
@@ -760,7 +760,7 @@ void area_editor::do_drawing() {
                 }
             }
         }
-
+        
         //New thing marker.
         if(
             sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT ||
@@ -787,7 +787,7 @@ void area_editor::do_drawing() {
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
         }
-
+        
         //Delete thing marker.
         if(
             sec_mode == ESM_DEL_STOP || sec_mode == ESM_DEL_LINK
@@ -803,7 +803,7 @@ void area_editor::do_drawing() {
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
         }
-
+        
         //Lightly glow the sector under the mouse.
         if(mode == EDITOR_MODE_SECTORS) {
             if(on_sector && moving_thing == INVALID) {
@@ -832,7 +832,7 @@ void area_editor::do_drawing() {
                 }
             }
         }
-
+        
         //Guide.
         if(guide_bitmap && show_guide) {
             al_draw_tinted_scaled_bitmap(
@@ -846,15 +846,15 @@ void area_editor::do_drawing() {
                 0
             );
         }
-
+        
     } al_reset_clipping_rectangle();
-
+    
     ALLEGRO_TRANSFORM id_transform;
     al_identity_transform(&id_transform);
     al_use_transform(&id_transform);
-
+    
     fade_mgr.draw();
-
+    
     al_flip_display();
 }
 
@@ -868,23 +868,23 @@ void area_editor::find_errors() {
     error_sector_ptr = NULL;
     error_vertex_ptr = NULL;
     error_string.clear();
-
+    
     //Check intersecting edges.
     if(!intersecting_edges.empty()) {
         error_type = EET_INTERSECTING_EDGES;
     }
-
+    
     //Check overlapping vertexes.
     if(error_type == EET_NONE) {
         error_vertex_ptr = NULL;
-
+        
         for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
             vertex* v1_ptr = cur_area_data.vertexes[v];
             if(v1_ptr->x == FLT_MAX) continue;
-
+            
             for(size_t v2 = v + 1; v2 < cur_area_data.vertexes.size(); ++v2) {
                 vertex* v2_ptr = cur_area_data.vertexes[v2];
-
+                
                 if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
                     error_type = EET_OVERLAPPING_VERTEXES;
                     error_vertex_ptr = v1_ptr;
@@ -894,25 +894,43 @@ void area_editor::find_errors() {
             if(error_vertex_ptr) break;
         }
     }
-
+    
     //Check non-simple sectors.
     if(error_type == EET_NONE) {
         if(!non_simples.empty()) {
             error_type = EET_BAD_SECTOR;
         }
     }
-
+    
     //Check lone edges.
     if(error_type == EET_NONE) {
         if(!lone_edges.empty()) {
             error_type = EET_LONE_EDGE;
         }
     }
-
+    
+    //Check for the existence of a leader object.
+    if(error_type == EET_NONE) {
+        bool has_leader = false;
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            if(
+                cur_area_data.mob_generators[m]->category ==
+                MOB_CATEGORY_LEADERS &&
+                cur_area_data.mob_generators[m]->type != NULL
+            ) {
+                has_leader = true;
+                break;
+            }
+        }
+        if(!has_leader) {
+            error_type = EET_MISSING_LEADER;
+        }
+    }
+    
     //Check for missing textures.
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-
+        
             sector* s_ptr = cur_area_data.sectors[s];
             if(s_ptr->edges.empty()) continue;
             if(
@@ -925,18 +943,18 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Check for unknown textures.
     if(error_type == EET_NONE) {
         vector<string> texture_file_names =
             folder_to_vector(TEXTURES_FOLDER, false);
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-
+        
             sector* s_ptr = cur_area_data.sectors[s];
             if(s_ptr->edges.empty()) continue;
-
+            
             if(s_ptr->texture_info.file_name.empty()) continue;
-
+            
             if(
                 find(
                     texture_file_names.begin(), texture_file_names.end(),
@@ -950,7 +968,7 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Objects with no type.
     if(error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -961,7 +979,7 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Objects out of bounds.
     if(error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -973,27 +991,27 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Lone path stops.
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = cur_area_data.path_stops[s];
             bool has_link = false;
-
+            
             if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
-
+            
             for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
                 path_stop* s2_ptr = cur_area_data.path_stops[s2];
                 if(s2_ptr == s_ptr) continue;
-
+                
                 if(s2_ptr->has_link(s_ptr)) {
                     has_link = true;
                     break;
                 }
-
+                
                 if(has_link) break;
             }
-
+            
             if(!has_link) {
                 error_type = EET_LONE_PATH_STOP;
                 error_path_stop_ptr = s_ptr;
@@ -1001,7 +1019,7 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Path stops out of bounds.
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
@@ -1013,7 +1031,7 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Two stops intersecting.
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
@@ -1021,7 +1039,7 @@ void area_editor::find_errors() {
             for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
                 path_stop* s2_ptr = cur_area_data.path_stops[s2];
                 if(s2_ptr == s_ptr) continue;
-
+                
                 if(dist(s_ptr->x, s_ptr->y, s2_ptr->x, s2_ptr->y) <= 3.0) {
                     error_type = EET_PATH_STOPS_TOGETHER;
                     error_path_stop_ptr = s_ptr;
@@ -1030,7 +1048,7 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Path graph is not connected.
     if(error_type == EET_NONE) {
         if(!cur_area_data.path_stops.empty()) {
@@ -1043,20 +1061,20 @@ void area_editor::find_errors() {
             }
         }
     }
-
+    
     //Objects inside walls.
     if(error_type == EET_NONE) {
         error_mob_ptr = NULL;
-
+        
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
-
+            
             if(error_mob_ptr) break;
-
+            
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
                 if(!is_edge_valid(e_ptr)) continue;
-
+                
                 if(
                     circle_intersects_line(
                         m_ptr->x, m_ptr->y,
@@ -1066,9 +1084,9 @@ void area_editor::find_errors() {
                         NULL, NULL
                     )
                 ) {
-
+                
                     bool in_wall = false;
-
+                    
                     if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) in_wall = true;
                     else {
                         if(
@@ -1094,18 +1112,18 @@ void area_editor::find_errors() {
                             in_wall = true;
                         }
                     }
-
+                    
                     if(in_wall) {
                         error_type = EET_MOB_IN_WALL;
                         error_mob_ptr = m_ptr;
                     }
                     break;
-
+                    
                 }
             }
         }
     }
-
+    
     //Check if there are tree shadows with invalid images.
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
@@ -1115,8 +1133,8 @@ void area_editor::find_errors() {
             }
         }
     }
-
-
+    
+    
     update_review_frame();
 }
 
@@ -1126,18 +1144,18 @@ void area_editor::find_errors() {
  */
 void area_editor::goto_error() {
     if(error_type == EET_NONE || error_type == EET_NONE_YET) return;
-
+    
     if(error_type == EET_INTERSECTING_EDGES) {
-
+    
         if(intersecting_edges.empty()) {
             find_errors(); return;
         }
-
+        
         edge_intersection* li_ptr = &intersecting_edges[0];
         float min_x, max_x, min_y, max_y;
         min_x = max_x = li_ptr->e1->vertexes[0]->x;
         min_y = max_y = li_ptr->e1->vertexes[0]->y;
-
+        
         min_x = min(min_x, li_ptr->e1->vertexes[0]->x);
         min_x = min(min_x, li_ptr->e1->vertexes[1]->x);
         min_x = min(min_x, li_ptr->e2->vertexes[0]->x);
@@ -1154,34 +1172,34 @@ void area_editor::goto_error() {
         max_y = max(max_y, li_ptr->e1->vertexes[1]->y);
         max_y = max(max_y, li_ptr->e2->vertexes[0]->y);
         max_y = max(max_y, li_ptr->e2->vertexes[1]->y);
-
+        
         center_camera(min_x, min_y, max_x, max_y);
-
+        
     } else if(error_type == EET_BAD_SECTOR) {
-
+    
         if(non_simples.empty()) {
             find_errors(); return;
         }
-
+        
         sector* s_ptr = *non_simples.begin();
         float min_x, min_y, max_x, max_y;
         get_sector_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
-
+        
         center_camera(min_x, min_y, max_x, max_y);
-
+        
     } else if(error_type == EET_LONE_EDGE) {
-
+    
         if(lone_edges.empty()) {
             find_errors(); return;
         }
-
+        
         edge* e_ptr = *lone_edges.begin();
         float min_x, min_y, max_x, max_y;
         min_x = e_ptr->vertexes[0]->x;
         max_x = min_x;
         min_y = e_ptr->vertexes[0]->y;
         max_y = min_y;
-
+        
         min_x = min(min_x, e_ptr->vertexes[0]->x);
         min_x = min(min_x, e_ptr->vertexes[1]->x);
         max_x = max(max_x, e_ptr->vertexes[0]->x);
@@ -1190,73 +1208,77 @@ void area_editor::goto_error() {
         min_y = min(min_y, e_ptr->vertexes[1]->y);
         max_y = max(max_y, e_ptr->vertexes[0]->y);
         max_y = max(max_y, e_ptr->vertexes[1]->y);
-
+        
         center_camera(min_x, min_y, max_x, max_y);
-
+        
     } else if(error_type == EET_OVERLAPPING_VERTEXES) {
-
+    
         if(!error_vertex_ptr) {
             find_errors(); return;
         }
-
+        
         center_camera(
             error_vertex_ptr->x - 64,
             error_vertex_ptr->y - 64,
             error_vertex_ptr->x + 64,
             error_vertex_ptr->y + 64
         );
-
+        
+    } else if(error_type == EET_MISSING_LEADER) {
+    
+        return;
+        
     } else if(
         error_type == EET_MISSING_TEXTURE ||
         error_type == EET_UNKNOWN_TEXTURE
     ) {
-
+    
         if(!error_sector_ptr) {
             find_errors(); return;
         }
-
+        
         float min_x, min_y, max_x, max_y;
         get_sector_bounding_box(
             error_sector_ptr, &min_x, &min_y, &max_x, &max_y
         );
         center_camera(min_x, min_y, max_x, max_y);
-
+        
     } else if(
         error_type == EET_TYPELESS_MOB ||
         error_type == EET_MOB_OOB ||
         error_type == EET_MOB_IN_WALL
     ) {
-
+    
         if(!error_mob_ptr) {
             find_errors(); return;
         }
-
+        
         center_camera(
             error_mob_ptr->x - 64,
             error_mob_ptr->y - 64,
             error_mob_ptr->x + 64,
             error_mob_ptr->y + 64
         );
-
+        
     } else if(
         error_type == EET_LONE_PATH_STOP ||
         error_type == EET_PATH_STOPS_TOGETHER ||
         error_type == EET_PATH_STOP_OOB
     ) {
-
+    
         if(!error_path_stop_ptr) {
             find_errors(); return;
         }
-
+        
         center_camera(
             error_path_stop_ptr->x - 64,
             error_path_stop_ptr->y - 64,
             error_path_stop_ptr->x + 64,
             error_path_stop_ptr->y + 64
         );
-
+        
     } else if(error_type == EET_INVALID_SHADOW) {
-
+    
         float min_x, min_y, max_x, max_y;
         get_shadow_bounding_box(
             error_shadow_ptr, &min_x, &min_y, &max_x, &max_y
@@ -1272,7 +1294,7 @@ void area_editor::goto_error() {
 void area_editor::gui_to_adv_textures() {
     if(!cur_sector) return;
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_adv_textures"];
-
+    
     cur_sector->texture_info.trans_x =
         s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
     cur_sector->texture_info.trans_y =
@@ -1283,7 +1305,7 @@ void area_editor::gui_to_adv_textures() {
         s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
     cur_sector->texture_info.rot =
         ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
-
+        
     adv_textures_to_gui();
     made_changes = true;
 }
@@ -1294,10 +1316,10 @@ void area_editor::gui_to_adv_textures() {
  */
 void area_editor::gui_to_guide() {
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
-
+    
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     bool is_file_new = false;
-
+    
     if(new_file_name != guide_file_name) {
         //New guide image, delete the old one.
         change_guide(new_file_name);
@@ -1310,14 +1332,14 @@ void area_editor::gui_to_guide() {
             guide_h = 0;
         }
     }
-
+    
     guide_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
     guide_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-
+    
     guide_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
     float new_w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
     float new_h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
-
+    
     if(new_w != 0 && new_h != 0 && !is_file_new) {
         if(guide_aspect_ratio) {
             if(new_w == guide_w && new_h != guide_h) {
@@ -1337,12 +1359,12 @@ void area_editor::gui_to_guide() {
             guide_h = new_h;
         }
     }
-
+    
     sec_mode =
         ((lafi::checkbox*) f->widgets["chk_mouse"])->checked ?
         ESM_GUIDE_MOUSE : ESM_NONE;
     guide_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
-
+    
     guide_to_gui();
     made_changes = true;
 }
@@ -1354,14 +1376,14 @@ void area_editor::gui_to_guide() {
 void area_editor::gui_to_mob() {
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_objects"]->widgets["frm_object"];
-
+        
     if(!cur_mob) return;
-
+    
     cur_mob->angle =
         ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
     cur_mob->vars =
         ((lafi::textbox*) f->widgets["txt_vars"])->text;
-
+        
     made_changes = true;
 }
 
@@ -1373,7 +1395,7 @@ void area_editor::gui_to_shadow() {
     if(!cur_shadow) return;
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_shadows"]->widgets["frm_shadow"];
-
+        
     cur_shadow->x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
     cur_shadow->y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     cur_shadow->w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
@@ -1383,9 +1405,9 @@ void area_editor::gui_to_shadow() {
     cur_shadow->alpha = ((lafi::scrollbar*) f->widgets["bar_al"])->low_value;
     cur_shadow->sway_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
     cur_shadow->sway_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
-
+    
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
-
+    
     if(new_file_name != cur_shadow->file_name) {
         //New image, delete the old one.
         if(cur_shadow->bitmap != bmp_error) {
@@ -1394,7 +1416,7 @@ void area_editor::gui_to_shadow() {
         cur_shadow->bitmap = bitmaps.get("Textures/" + new_file_name, NULL);
         cur_shadow->file_name = new_file_name;
     }
-
+    
     made_changes = true;
 }
 
@@ -1406,7 +1428,7 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
     if(!cur_sector) return;
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_sectors"]->widgets["frm_sector"];
-
+        
     cur_sector->z = s2f(((lafi::textbox*) f->widgets["txt_z"])->text);
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow =
@@ -1425,11 +1447,11 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
         ((lafi::textbox*) f->widgets["txt_hazards"])->text;
     cur_sector->hazard_floor =
         ((lafi::checkbox*) f->widgets["chk_hazards_floor"])->checked;
-
+        
     (
         (lafi::textbox*) gui->widgets["frm_texture"]->widgets["txt_name"]
     )->text.clear();
-
+    
     sector_to_gui();
     made_changes = true;
 }
@@ -1459,9 +1481,9 @@ void area_editor::guide_to_gui() {
 void area_editor::handle_controls(ALLEGRO_EVENT ev) {
 
     if(fade_mgr.is_fading()) return;
-
+    
     gui->handle_event(ev);
-
+    
     //Update mouse cursor in world coordinates.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
@@ -1490,11 +1512,11 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 "(" + i2s(mouse_cursor_x) + "," + i2s(mouse_cursor_y) + ")"
             );
     }
-
-
+    
+    
     //Moving vertexes, camera, etc.
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
-
+    
         if(
             ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16
             && moving_thing == INVALID && sec_mode != ESM_TEXTURE_VIEW &&
@@ -1504,26 +1526,26 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         } else {
             on_sector = NULL;
         }
-
+        
         //Move guide.
         if(sec_mode == ESM_GUIDE_MOUSE) {
-
+        
             if(holding_m1) {
                 guide_x += ev.mouse.dx / cam_zoom;
                 guide_y += ev.mouse.dy / cam_zoom;
-
+                
             } else if(holding_m2) {
-
+            
                 float new_w = guide_w + ev.mouse.dx / cam_zoom;
                 float new_h = guide_h + ev.mouse.dy / cam_zoom;
-
+                
                 if(guide_aspect_ratio) {
                     //Find the most significant change.
                     if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                         bool most_is_width =
                             fabs((double) ev.mouse.dx) >
                             fabs((double) ev.mouse.dy);
-
+                            
                         if(most_is_width) {
                             float ratio = guide_h / guide_w;
                             guide_w = new_w;
@@ -1538,17 +1560,17 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     guide_w = new_w;
                     guide_h = new_h;
                 }
-
+                
             }
-
+            
             guide_to_gui();
-
+            
         } else if(holding_m2) {
             //Move camera.
             cam_x += ev.mouse.dx / cam_zoom;
             cam_y += ev.mouse.dy / cam_zoom;
         }
-
+        
         //Move thing.
         if(moving_thing != INVALID) {
             if(mode == EDITOR_MODE_SECTORS) {
@@ -1571,10 +1593,10 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 s_ptr->y = snap_to_grid(mouse_cursor_y - moving_thing_y);
                 shadow_to_gui();
             }
-
+            
             made_changes = true;
         }
-
+        
         //Move path checkpoints.
         if(moving_path_preview_checkpoint != -1) {
             path_preview_checkpoints_x[moving_path_preview_checkpoint] =
@@ -1583,8 +1605,8 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 snap_to_grid(mouse_cursor_y);
             path_preview_timeout.start(false);
         }
-
-
+        
+        
         if(
             ev.mouse.dz != 0 && ev.mouse.x <= scr_w - 208 &&
             ev.mouse.y < scr_h - 16
@@ -1597,28 +1619,28 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 ev.mouse.x / new_zoom - cam_x - ((scr_w - 208) / 2 / new_zoom);
             float new_mc_y =
                 ev.mouse.y / new_zoom - cam_y - (scr_h / 2 / new_zoom);
-
+                
             cam_x -= (mouse_cursor_x - new_mc_x);
             cam_y -= (mouse_cursor_y - new_mc_y);
             mouse_cursor_x = new_mc_x;
             mouse_cursor_y = new_mc_y;
             cam_zoom = new_zoom;
         }
-
-
+        
+        
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16
     ) {
         //Clicking.
-
+        
         if(ev.mouse.button == 1) holding_m1 = true;
         else if(ev.mouse.button == 2) holding_m2 = true;
         else if(ev.mouse.button == 3) cam_zoom = 1.0;
-
+        
         if(ev.mouse.button != 1) return;
         if(ev.mouse.x > scr_w - 208) return;
-
+        
         //If the user was editing, save it.
         if(mode == EDITOR_MODE_SECTORS) {
             gui_to_sector();
@@ -1627,21 +1649,21 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         } else if(mode == EDITOR_MODE_SHADOWS) {
             gui_to_shadow();
         }
-
+        
         //Sector-related clicking.
         if(sec_mode == ESM_NONE && mode == EDITOR_MODE_SECTORS) {
-
+        
             moving_thing = INVALID;
-
+            
             edge* clicked_edge_ptr = NULL;
             size_t clicked_edge_nr = INVALID;
             bool created_vertex = false;
-
+            
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
-
+                
                 if(!is_edge_valid(e_ptr)) continue;
-
+                
                 if(
                     circle_intersects_line(
                         mouse_cursor_x, mouse_cursor_y, 8 / cam_zoom,
@@ -1654,30 +1676,30 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     break;
                 }
             }
-
+            
             if(double_click_time == 0) double_click_time = 0.5;
             else if(clicked_edge_ptr) {
                 //Create a new vertex.
                 double_click_time = 0;
-
+                
                 //New vertex, on the split point.
                 //TODO create it on the edge, not on the cursor.
                 vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
                 cur_area_data.vertexes.push_back(new_v_ptr);
-
+                
                 //New edge, copied from the original one.
                 edge* new_e_ptr = new edge(*clicked_edge_ptr);
                 cur_area_data.edges.push_back(new_e_ptr);
-
+                
                 //Save the original end vertex for later.
                 vertex* end_v_ptr = clicked_edge_ptr->vertexes[1];
-
+                
                 //Set vertexes on the new and original edges.
                 new_e_ptr->vertex_nrs[0] = cur_area_data.vertexes.size() - 1;
                 new_e_ptr->vertexes[0] = new_v_ptr;
                 clicked_edge_ptr->vertex_nrs[1] = new_e_ptr->vertex_nrs[0];
                 clicked_edge_ptr->vertexes[1] = new_v_ptr;
-
+                
                 //Set sectors on the new edge.
                 if(new_e_ptr->sectors[0]) {
                     new_e_ptr->sectors[0]->edge_nrs.push_back(
@@ -1691,13 +1713,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     );
                     new_e_ptr->sectors[1]->edges.push_back(new_e_ptr);
                 }
-
+                
                 //Set edges of the new vertex.
                 new_v_ptr->edge_nrs.push_back(cur_area_data.edges.size() - 1);
                 new_v_ptr->edge_nrs.push_back(clicked_edge_nr);
                 new_v_ptr->edges.push_back(new_e_ptr);
                 new_v_ptr->edges.push_back(clicked_edge_ptr);
-
+                
                 //Update edge data on the end vertex of the original edge
                 //(it now links to the new edge, not the old).
                 for(size_t ve = 0; ve < end_v_ptr->edges.size(); ++ve) {
@@ -1709,14 +1731,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                         break;
                     }
                 }
-
+                
                 //Start dragging the new vertex.
                 moving_thing = cur_area_data.vertexes.size() - 1;
-
+                
                 created_vertex = true;
                 made_changes = true;
             }
-
+            
             //Find a vertex to drag.
             if(!created_vertex) {
                 for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
@@ -1732,18 +1754,18 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     }
                 }
             }
-
+            
             //Find a sector to select.
             if(moving_thing == INVALID && !clicked_edge_ptr) {
                 cur_sector =
                     get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
             }
-
-
+            
+            
         } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_OBJECTS) {
             //Object-related clicking.
-
+            
             cur_mob = NULL;
             moving_thing = INVALID;
             for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -1755,17 +1777,17 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     dist(m_ptr->x, m_ptr->y, mouse_cursor_x, mouse_cursor_y) <=
                     radius
                 ) {
-
+                
                     cur_mob = m_ptr;
                     moving_thing = m;
                     break;
                 }
             }
             mob_to_gui();
-
+            
         } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_PATHS) {
             //Path-related clicking.
-
+            
             cur_stop = NULL;
             moving_thing = INVALID;
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
@@ -1774,13 +1796,13 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     dist(s_ptr->x, s_ptr->y, mouse_cursor_x, mouse_cursor_y)
                     <= STOP_RADIUS
                 ) {
-
+                
                     cur_stop = s_ptr;
                     moving_thing = s;
                     break;
                 }
             }
-
+            
             moving_path_preview_checkpoint = -1;
             if(show_path_preview) {
                 for(unsigned char c = 0; c < 2; ++c) {
@@ -1797,18 +1819,18 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     }
                 }
             }
-
+            
         } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_SHADOWS) {
             //Shadow-related clicking.
-
+            
             cur_shadow = NULL;
             moving_thing = INVALID;
             for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-
+            
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 float min_x, min_y, max_x, max_y;
                 get_shadow_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
-
+                
                 if(
                     mouse_cursor_x >= min_x && mouse_cursor_x <= max_x &&
                     mouse_cursor_y >= min_y && mouse_cursor_y <= max_y
@@ -1821,22 +1843,22 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 }
             }
             shadow_to_gui();
-
+            
         }
-
+        
         if(sec_mode == ESM_NEW_SECTOR) {
             //Place a new sector where the cursor is.
-
+            
             sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
             size_t outer_sector_nr;
             sector* outer_sector =
                 get_sector(hotspot_x, hotspot_y, &outer_sector_nr, false);
-
+                
             sector* new_sector = new sector();
             if(outer_sector) outer_sector->clone(new_sector);
-
+            
             //Create the vertexes.
             vertex* new_vertexes[4];
             for(size_t v = 0; v < 4; ++v) new_vertexes[v] = new vertex(0, 0);
@@ -1851,7 +1873,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             for(size_t v = 0; v < 4; ++v) {
                 cur_area_data.vertexes.push_back(new_vertexes[v]);
             }
-
+            
             //Create the edges.
             edge* new_edges[4];
             for(size_t l = 0; l < 4; ++l) {
@@ -1863,7 +1885,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 new_edges[l]->sector_nrs[1] = cur_area_data.sectors.size();
                 cur_area_data.edges.push_back(new_edges[l]);
             }
-
+            
             //Add them to the area map.
             for(size_t e = 0; e < 4; ++e) {
                 new_sector->edge_nrs.push_back(
@@ -1871,7 +1893,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 );
             }
             cur_area_data.sectors.push_back(new_sector);
-
+            
             for(size_t e = 0; e < 4; ++e) {
                 new_edges[e]->fix_pointers(cur_area_data);
             }
@@ -1883,7 +1905,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             new_sector->connect_edges(
                 cur_area_data, cur_area_data.sectors.size() - 1
             );
-
+            
             //Add the edges to the outer sector's list.
             if(outer_sector) {
                 for(size_t e = 0; e < 4; ++e) {
@@ -1893,77 +1915,77 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     );
                 }
             }
-
+            
             //Check for intersections.
             for(size_t v = 0; v < 4; v += 2) {
                 check_edge_intersections(new_vertexes[v]);
             }
-
+            
             //Triangulate new sector and the parent one.
             triangulate(new_sector);
             if(outer_sector) triangulate(outer_sector);
-
+            
             cur_sector = new_sector;
             sector_to_gui();
             made_changes = true;
-
-
+            
+            
         } else if(sec_mode == ESM_NEW_OBJECT) {
             //Create a mob where the cursor is.
-
+            
             sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
-
+            
             cur_area_data.mob_generators.push_back(
                 new mob_gen(hotspot_x, hotspot_y)
             );
-
+            
             cur_mob = cur_area_data.mob_generators.back();
             mob_to_gui();
             made_changes = true;
-
+            
         } else if(sec_mode == ESM_DUPLICATE_OBJECT) {
             //Duplicate the current mob to where the cursor is.
-
+            
             sec_mode = ESM_NONE;
-
+            
             if(cur_mob) {
                 float hotspot_x = snap_to_grid(mouse_cursor_x);
                 float hotspot_y = snap_to_grid(mouse_cursor_y);
-
+                
                 mob_gen* new_mg = new mob_gen(*cur_mob);
                 new_mg->x = hotspot_x;
                 new_mg->y = hotspot_y;
                 cur_area_data.mob_generators.push_back(
                     new_mg
                 );
-
+                
                 cur_mob = new_mg;
                 mob_to_gui();
                 made_changes = true;
             }
-
+            
         } else if(sec_mode == ESM_NEW_STOP) {
             //Create a new stop where the cursor is.
-
+            
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
-
+            
             cur_area_data.path_stops.push_back(
                 new path_stop(hotspot_x, hotspot_y, vector<path_link>())
             );
-
+            
             cur_stop = cur_area_data.path_stops.back();
             made_changes = true;
-
-
+            
+            
         } else if (sec_mode == ESM_NEW_LINK1 || sec_mode == ESM_NEW_1WLINK1) {
             //Pick a stop to start the link on.
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-
+                
                 if(
                     dist(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y) <=
                     STOP_RADIUS
@@ -1975,23 +1997,23 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     break;
                 }
             }
-
+            
             path_preview_timeout.start(false);
             made_changes = true;
-
+            
         } else if (sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
             //Pick a stop to end the link on.
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-
+                
                 if(
                     dist(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y) <=
                     STOP_RADIUS
                 ) {
-
+                
                     if(new_link_first_stop == s_ptr) continue;
-
+                    
                     //Check if these two stops already have a link.
                     //Delete it if so.
                     for(
@@ -2011,42 +2033,42 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             break;
                         }
                     }
-
-
+                    
+                    
                     new_link_first_stop->links.push_back(
                         path_link(s_ptr, s)
                     );
-
+                    
                     if(sec_mode == ESM_NEW_LINK2) {
                         s_ptr->links.push_back(
                             path_link(new_link_first_stop, INVALID)
                         );
                         s_ptr->fix_nrs(cur_area_data);
                     }
-
+                    
                     new_link_first_stop->calculate_dists();
-
+                    
                     sec_mode =
                         sec_mode == ESM_NEW_LINK2 ? ESM_NEW_LINK1 :
                         ESM_NEW_1WLINK1;
                     break;
                 }
             }
-
+            
             path_preview_timeout.start(false);
             made_changes = true;
-
+            
         } else if(sec_mode == ESM_DEL_STOP) {
             //Pick a stop to delete.
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-
+                
                 if(
                     dist(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y) <=
                     STOP_RADIUS
                 ) {
-
+                
                     //Check all links to this stop.
                     for(
                         size_t s2 = 0; s2 < cur_area_data.path_stops.size();
@@ -2060,7 +2082,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             }
                         }
                     }
-
+                    
                     //Finally, delete the stop.
                     delete s_ptr;
                     cur_area_data.path_stops.erase(
@@ -2069,23 +2091,23 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     break;
                 }
             }
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
             }
-
+            
             path_preview.clear();
             path_preview_timeout.start(false);
             made_changes = true;
-
+            
         } else if(sec_mode == ESM_DEL_LINK) {
             //Pick a link to delete.
-
+            
             bool deleted = false;
-
+            
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-
+                
                 for(size_t s2 = 0; s2 < s_ptr->links.size(); ++s2) {
                     path_stop* s2_ptr = s_ptr->links[s2].end_ptr;
                     if(
@@ -2095,9 +2117,9 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                             s2_ptr->x, s2_ptr->y
                         )
                     ) {
-
+                    
                         s_ptr->links.erase(s_ptr->links.begin() + s2);
-
+                        
                         for(size_t s3 = 0; s3 < s2_ptr->links.size(); ++s3) {
                             if(s2_ptr->links[s3].end_ptr == s_ptr) {
                                 s2_ptr->links.erase(
@@ -2106,61 +2128,61 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                                 break;
                             }
                         }
-
+                        
                         deleted = true;
                         break;
                     }
                 }
-
+                
                 if(deleted) break;
             }
-
+            
             path_preview.clear();
             path_preview_timeout.start(false);
             made_changes = true;
-
+            
         } else if(sec_mode == ESM_NEW_SHADOW) {
             //Create a new shadow where the cursor is.
-
+            
             sec_mode = ESM_NONE;
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
-
+            
             tree_shadow* new_shadow = new tree_shadow(hotspot_x, hotspot_y);
             new_shadow->bitmap = bmp_error;
-
+            
             cur_area_data.tree_shadows.push_back(new_shadow);
-
+            
             cur_shadow = new_shadow;
             shadow_to_gui();
             made_changes = true;
-
+            
         }
-
-
+        
+        
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
         //Mouse button release.
-
+        
         if(ev.mouse.button == 1) holding_m1 = false;
         else if(ev.mouse.button == 2) holding_m2 = false;
-
+        
         if(
             ev.mouse.button == 1 &&
             mode == EDITOR_MODE_SECTORS && sec_mode == ESM_NONE &&
             moving_thing != INVALID
         ) {
             //Release the vertex.
-
+            
             vertex* moved_v_ptr = cur_area_data.vertexes[moving_thing];
             vertex* final_vertex = moved_v_ptr;
-
+            
             unordered_set<sector*> affected_sectors;
-
+            
             //Check if we should merge.
             for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                 vertex* dest_v_ptr = cur_area_data.vertexes[v];
                 if(dest_v_ptr == moved_v_ptr) continue;
-
+                
                 if(
                     dist(
                         moved_v_ptr->x, moved_v_ptr->y,
@@ -2175,7 +2197,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     break;
                 }
             }
-
+            
             //Finally, re-triangulate the affected sectors.
             for(size_t e = 0; e < final_vertex->edges.size(); ++e) {
                 edge* e_ptr = final_vertex->edges[e];
@@ -2192,7 +2214,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                 if(!(*s)) continue;
                 triangulate(*s);
             }
-
+            
             //If somewhere along the line, the current sector
             //got marked for deletion, unselect it.
             if(cur_sector) {
@@ -2201,45 +2223,45 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     sector_to_gui();
                 }
             }
-
+            
             //Check if the edge's vertexes intersect with any other edges.
             //If so, they're marked with red.
             if(moved_v_ptr->x != FLT_MAX) {
                 //If it didn't get marked for deletion in the meantime.
                 check_edge_intersections(moved_v_ptr);
             }
-
+            
             moving_thing = INVALID;
-
-
-
+            
+            
+            
         } else if(
             ev.mouse.button == 1 && sec_mode == ESM_NONE &&
             moving_thing != INVALID
         ) {
             //Release thing.
-
+            
             moving_thing = INVALID;
-
+            
         }
-
+        
         moving_path_preview_checkpoint = -1;
-
-
+        
+        
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
         //Key press.
-
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
         ) {
             shift_pressed = true;
         }
-
-
+        
+        
     } else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
         //Key release.
-
+        
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_LSHIFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
@@ -2266,26 +2288,27 @@ bool area_editor::is_edge_valid(edge* l) {
 void area_editor::load() {
 
     fade_mgr.start_fade(true, nullptr);
-
+    
+    load_liquids();
     load_status_types();
     load_hazards();
     load_mob_types(false);
-
+    
     mode = EDITOR_MODE_MAIN;
-
+    
     lafi::style* s =
         new lafi::style(
         al_map_rgb(192, 192, 208), al_map_rgb(0, 0, 32),
         al_map_rgb(96, 128, 160)
     );
     gui = new lafi::gui(scr_w, scr_h, s);
-
-
+    
+    
     //Main frame.
     lafi::frame* frm_main =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     gui->add("frm_main", frm_main);
-
+    
     frm_main->easy_row();
     frm_main->easy_add(
         "lbl_area",
@@ -2297,7 +2320,7 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0), 100, 32
     );
     int y = frm_main->easy_row();
-
+    
     lafi::frame* frm_area =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_main->add("frm_area", frm_area);
@@ -2338,8 +2361,8 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "Special tools"), 100, 32
     );
     frm_area->easy_row();
-
-
+    
+    
     //Bottom bar.
     lafi::frame* frm_bottom =
         new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
@@ -2362,8 +2385,8 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "Quit"), 25, 32
     );
     frm_bottom->easy_row();
-
-
+    
+    
     //Changes warning.
     lafi::frame* frm_changes =
         new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
@@ -2386,14 +2409,14 @@ void area_editor::load() {
         "but_ok",
         new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok")
     );
-
-
+    
+    
     //Picker frame.
     lafi::frame* frm_picker =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_picker);
     gui->add("frm_picker", frm_picker);
-
+    
     frm_picker->add(
         "but_back",
         new lafi::button(     scr_w - 200, 8, scr_w - 104, 24, "Back")
@@ -2406,14 +2429,14 @@ void area_editor::load() {
         "bar_scroll",
         new lafi::scrollbar(scr_w - 24,  40, scr_w - 8,  scr_h - 56)
     );
-
-
+    
+    
     //Sectors frame.
     lafi::frame* frm_sectors =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_sectors);
     gui->add("frm_sectors", frm_sectors);
-
+    
     frm_sectors->easy_row();
     frm_sectors->easy_add(
         "but_back",
@@ -2429,12 +2452,12 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "None"), 20, 32
     );
     y = frm_sectors->easy_row();
-
+    
     lafi::frame* frm_sector =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_sectors->add("frm_sector", frm_sector);
     hide_widget(frm_sector);
-
+    
     frm_sector->easy_row();
     frm_sector->easy_add(
         "lbl_type",
@@ -2525,14 +2548,14 @@ void area_editor::load() {
         new lafi::textbox(0, 0, 0, 0), 75, 16
     );
     frm_sector->easy_row();
-
-
+    
+    
     //Advanced sector texture settings frame.
     lafi::frame* frm_adv_textures =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_adv_textures);
     gui->add("frm_adv_textures", frm_adv_textures);
-
+    
     frm_adv_textures->easy_row();
     frm_adv_textures->easy_add(
         "but_back",
@@ -2587,14 +2610,14 @@ void area_editor::load() {
         new lafi::angle_picker(0, 0, 0, 0), 50, 24
     );
     frm_adv_textures->easy_row();
-
-
+    
+    
     //Texture picker frame.
     lafi::frame* frm_texture =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_texture);
     gui->add("frm_texture", frm_texture);
-
+    
     frm_texture->add(
         "but_back",
         new lafi::button(      scr_w - 200, 8,  scr_w - 104, 24, "Back")
@@ -2619,14 +2642,14 @@ void area_editor::load() {
         "bar_scroll",
         new lafi::scrollbar( scr_w - 24,  96, scr_w - 8,   scr_h - 56)
     );
-
-
+    
+    
     //Objects frame.
     lafi::frame* frm_objects =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_objects);
     gui->add("frm_objects", frm_objects);
-
+    
     frm_objects->easy_row();
     frm_objects->easy_add(
         "but_back",
@@ -2642,12 +2665,12 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "None"), 20, 32
     );
     y = frm_objects->easy_row();
-
+    
     lafi::frame* frm_object =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_objects->add("frm_object", frm_object);
     hide_widget(frm_object);
-
+    
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_category",
@@ -2696,14 +2719,14 @@ void area_editor::load() {
         new lafi::textbox(0, 0, 0, 0), 100, 16
     );
     frm_object->easy_row();
-
-
+    
+    
     //Paths frame.
     lafi::frame* frm_paths =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_paths);
     gui->add("frm_paths", frm_paths);
-
+    
     frm_paths->easy_row();
     frm_paths->easy_add(
         "but_back",
@@ -2757,14 +2780,14 @@ void area_editor::load() {
         new lafi::label(0, 0, 0, 0, "  Total dist.: 0"), 100, 16
     );
     frm_paths->easy_row();
-
-
+    
+    
     //Shadows frame.
     lafi::frame* frm_shadows =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_shadows);
     gui->add("frm_shadows", frm_shadows);
-
+    
     frm_shadows->easy_row();
     frm_shadows->easy_add(
         "but_back",
@@ -2780,12 +2803,12 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "None"), 20, 32
     );
     y = frm_shadows->easy_row();
-
+    
     lafi::frame* frm_shadow =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_shadows->add("frm_shadow", frm_shadow);
     hide_widget(frm_shadow);
-
+    
     frm_shadow->easy_row();
     frm_shadow->easy_add(
         "dum_1",
@@ -2863,14 +2886,14 @@ void area_editor::load() {
         new lafi::textbox(0, 0, 0, 0), 30, 16
     );
     frm_shadow->easy_row();
-
-
+    
+    
     //Guide frame.
     lafi::frame* frm_guide =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_guide);
     gui->add("frm_guide", frm_guide);
-
+    
     frm_guide->easy_row();
     frm_guide->easy_add(
         "but_back",
@@ -2932,14 +2955,14 @@ void area_editor::load() {
         new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24
     );
     frm_guide->easy_row();
-
-
+    
+    
     //Review frame.
     lafi::frame* frm_review =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_review);
     gui->add("frm_review", frm_review);
-
+    
     frm_review->easy_row();
     frm_review->easy_add(
         "but_back",
@@ -3002,14 +3025,14 @@ void area_editor::load() {
     );
     frm_review->easy_row();
     update_review_frame();
-
-
+    
+    
     //Tools frame.
     lafi::frame* frm_tools =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_tools);
     gui->add("frm_tools", frm_tools);
-
+    
     frm_tools->easy_row();
     frm_tools->easy_add(
         "but_back",
@@ -3030,14 +3053,14 @@ void area_editor::load() {
         new lafi::button(0, 0, 0, 0, "Ok"), 20, 24
     );
     frm_tools->easy_row();
-
-
+    
+    
     //Options frame.
     lafi::frame* frm_options =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_options);
     gui->add("frm_options", frm_options);
-
+    
     frm_options->easy_row();
     frm_options->easy_add(
         "but_back",
@@ -3063,14 +3086,14 @@ void area_editor::load() {
     );
     frm_options->easy_row();
     update_options_frame();
-
-
+    
+    
     //Status bar.
     lafi::label* gui_status_bar =
         new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
     gui->add("lbl_status_bar", gui_status_bar);
-
-
+    
+    
     //Properties -- main.
     frm_main->widgets["but_area"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3128,8 +3151,8 @@ void area_editor::load() {
         "Tools to make sure everything is fine in the area.";
     frm_area->widgets["but_tools"]->description =
         "Special tools to help with specific tasks.";
-
-
+        
+        
     //Properties -- bottom.
     frm_bottom->widgets["but_options"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3163,13 +3186,13 @@ void area_editor::load() {
         "Save the area onto the files.";
     frm_bottom->widgets["but_quit"]->description =
         "Quit the area editor.";
-
-
+        
+        
     //Properties -- changes warning.
     frm_changes->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) { close_changes_warning(); };
-
-
+    
+    
     //Properties -- sectors.
     auto lambda_gui_to_sector =
     [this] (lafi::widget*) { gui_to_sector(); };
@@ -3204,10 +3227,10 @@ void area_editor::load() {
     frm_sector->widgets["but_adv"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_sector) return;
-
+        
         cur_sector->texture_info.bitmap =
             bitmaps.get("Textures/" + cur_sector->texture_info.file_name, NULL);
-
+            
         mode = EDITOR_MODE_ADV_TEXTURE_SETTINGS;
         change_to_right_frame();
         adv_textures_to_gui();
@@ -3256,8 +3279,8 @@ void area_editor::load() {
         "Advanced settings for the sector's texture.";
     frm_sector->widgets["chk_shadow"]->description =
         "Makes it always cast a shadow onto lower sectors.";
-
-
+        
+        
     //Properties -- texture.
     frm_texture->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3300,8 +3323,8 @@ void area_editor::load() {
     };
     frm_texture->widgets["but_back"]->description =
         "Cancel.";
-
-
+        
+        
     //Properties -- advanced texture settings.
     auto lambda_gui_to_adv_textures =
     [this] (lafi::widget*) { gui_to_adv_textures(); };
@@ -3332,8 +3355,8 @@ void area_editor::load() {
         "Zoom the texture vertically by this much.";
     frm_adv_textures->widgets["ang_a"]->description =
         "Rotate the texture by this much.";
-
-
+        
+        
     //Properties -- objects.
     auto lambda_gui_to_mob = [this] (lafi::widget*) { gui_to_mob(); };
     frm_objects->widgets["but_back"]->left_mouse_click_handler =
@@ -3404,8 +3427,8 @@ void area_editor::load() {
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
         frm_object->widgets["but_duplicate"]
     );
-
-
+    
+    
     //Properties -- paths.
     frm_paths->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3486,8 +3509,8 @@ void area_editor::load() {
         "Show path between draggable points A and B.";
     frm_paths->widgets["lbl_path_dist"]->description =
         "Total travel distance between A and B.";
-
-
+        
+        
     //Properties -- shadows.
     auto lambda_gui_to_shadow = [this] (lafi::widget*) { gui_to_shadow(); };
     frm_shadows->widgets["but_back"]->left_mouse_click_handler =
@@ -3565,8 +3588,8 @@ void area_editor::load() {
         "Horizontal sway amount multiplier (0 = no sway).";
     frm_shadow->widgets["txt_sy"]->description =
         "Vertical sway amount multiplier (0 = no sway).";
-
-
+        
+        
     //Properties -- guide.
     auto lambda_gui_to_guide =
     [this] (lafi::widget*) { gui_to_guide(); };
@@ -3614,8 +3637,8 @@ void area_editor::load() {
     frm_guide->widgets["chk_mouse"]->description =
         "If checked, use mouse buttons to move/stretch.";
     guide_to_gui();
-
-
+    
+    
     //Properties -- review.
     frm_review->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3641,7 +3664,7 @@ void area_editor::load() {
             clear_area_textures();
             load_area_textures();
             update_review_frame();
-
+            
         } else {
             sec_mode = ESM_NONE;
             update_review_frame();
@@ -3662,8 +3685,8 @@ void area_editor::load() {
         "Preview how the textures will look like.";
     frm_review->widgets["chk_shadows"]->description =
         "Show tree shadows?";
-
-
+        
+        
     //Properties -- tools.
     frm_tools->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3680,8 +3703,8 @@ void area_editor::load() {
         "Resize multiplier. (0.5 = half, 2 = double)";
     frm_tools->widgets["but_resize"]->description =
         "Resize all X/Y coordinates by the given amount.";
-
-
+        
+        
     //Properties -- options.
     frm_options->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3712,8 +3735,8 @@ void area_editor::load() {
         "Increase the spacing on the grid.";
     frm_options->widgets["but_grid_minus"]->description =
         "Decrease the spacing on the grid.";
-
-
+        
+        
     //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -3735,19 +3758,19 @@ void area_editor::load() {
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
-
-
+        
+        
     cam_zoom = 1.0;
     cam_x = cam_y = 0.0;
     grid_interval = DEF_GRID_INTERVAL;
     show_closest_stop = false;
     area_name.clear();
-
+    
     if(!auto_load_area.empty()) {
         area_name = auto_load_area;
         load_area();
     }
-
+    
 }
 
 
@@ -3758,23 +3781,23 @@ void area_editor::load_area() {
     intersecting_edges.clear();
     non_simples.clear();
     lone_edges.clear();
-
+    
     ::load_area(area_name, true);
     ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text =
         area_name;
     show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
-
+    
     clear_area_textures();
-
+    
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         check_edge_intersections(cur_area_data.vertexes[v]);
     }
-
+    
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
     vector<pair<string, size_t> > texture_uses_vector;
-
+    
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         string n = cur_area_data.sectors[s]->texture_info.file_name;
         if(n.empty()) continue;
@@ -3799,17 +3822,17 @@ void area_editor::load_area() {
             texture_suggestion(texture_uses_vector[u].first)
         );
     }
-
+    
     change_guide(guide_file_name);
-
+    
     cam_x = cam_y = 0;
     cam_zoom = 1;
-
+    
     error_type = EET_NONE_YET;
     error_sector_ptr = NULL;
     error_string.clear();
     error_vertex_ptr = NULL;
-
+    
     show_path_preview = false;
     (
         (lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"]
@@ -3820,16 +3843,16 @@ void area_editor::load_area() {
     path_preview_checkpoints_y[0] = 0;
     path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
     path_preview_checkpoints_y[1] = 0;
-
+    
     cur_sector = NULL;
     cur_mob = NULL;
     cur_shadow = NULL;
     sector_to_gui();
     mob_to_gui();
     guide_to_gui();
-
+    
     made_changes = false;
-
+    
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
 }
@@ -3841,19 +3864,19 @@ void area_editor::merge_vertex(
 ) {
     //Find out what to do with every edge of the dragged vertex.
     for(size_t e = 0; e < v1->edges.size();) {
-
+    
         bool was_deleted = false;
         edge* e_ptr = v1->edges[e];
         vertex* other_vertex =
             e_ptr->vertexes[0] == v1 ?
             e_ptr->vertexes[1] : e_ptr->vertexes[0];
-
+            
         //Check if it's being squashed into non-existence.
         if(other_vertex == v2) {
-
+        
             affected_sectors->insert(e_ptr->sectors[0]);
             affected_sectors->insert(e_ptr->sectors[1]);
-
+            
             //Clear it from its vertexes' lists.
             for(
                 size_t ve = 0; ve < other_vertex->edges.size();
@@ -3869,7 +3892,7 @@ void area_editor::merge_vertex(
                     break;
                 }
             }
-
+            
             //Clear it from the sector lists.
             for(size_t s = 0; s < 2; ++s) {
                 if(!e_ptr->sectors[s]) continue;
@@ -3891,18 +3914,18 @@ void area_editor::merge_vertex(
                     }
                 }
             }
-
+            
             //Clear it from the list of lone edges, if there.
             auto it = lone_edges.find(e_ptr);
             if(it != lone_edges.end()) lone_edges.erase(it);
-
+            
             //Clear its info, so it gets marked for deletion.
             e_ptr->vertex_nrs[0] = INVALID;
             e_ptr->vertex_nrs[1] = INVALID;
             e_ptr->fix_pointers(cur_area_data);
-
+            
         } else {
-
+        
             bool has_merged = false;
             //Check if the edge will be merged with another one.
             //These are edges that share a common vertex,
@@ -3911,12 +3934,12 @@ void area_editor::merge_vertex(
                 size_t de = 0; de < v2->edges.size();
                 ++de
             ) {
-
+            
                 edge* de_ptr = v2->edges[de];
                 vertex* d_other_vertex =
                     de_ptr->vertexes[0] == v2 ?
                     de_ptr->vertexes[1] : de_ptr->vertexes[0];
-
+                    
                 if(d_other_vertex == other_vertex) {
                     //The edge will be merged with this one.
                     has_merged = true;
@@ -3924,12 +3947,12 @@ void area_editor::merge_vertex(
                     affected_sectors->insert(e_ptr->sectors[1]);
                     affected_sectors->insert(de_ptr->sectors[0]);
                     affected_sectors->insert(de_ptr->sectors[1]);
-
+                    
                     //Tell the destination edge's sectors
                     //to forget it; they'll be re-added later.
                     size_t old_de_nr =
                         de_ptr->remove_from_sectors();
-
+                        
                     //Set the new sectors.
                     if(e_ptr->sector_nrs[0] == de_ptr->sector_nrs[0])
                         de_ptr->sector_nrs[0] = e_ptr->sector_nrs[1];
@@ -3940,32 +3963,32 @@ void area_editor::merge_vertex(
                     else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1])
                         de_ptr->sector_nrs[1] = e_ptr->sector_nrs[0];
                     de_ptr->fix_pointers(cur_area_data);
-
+                    
                     //Go to the edge's old vertexes,
                     //and tell them that it no longer exists.
                     e_ptr->remove_from_vertexes();
-
+                    
                     //Now tell the edge's old sectors.
                     e_ptr->remove_from_sectors();
-
+                    
                     //Add the edges to the sectors' lists.
                     for(size_t s = 0; s < 2; ++s) {
                         if(!de_ptr->sectors[s]) continue;
                         de_ptr->sectors[s]->edges.push_back(de_ptr);
                         de_ptr->sectors[s]->edge_nrs.push_back(old_de_nr);
                     }
-
+                    
                     //Remove the deleted edge's info.
                     //This'll mark it for deletion.
                     e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = INVALID;
                     e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = INVALID;
                     e_ptr->fix_pointers(cur_area_data);
                     was_deleted = true;
-
+                    
                     break;
                 }
             }
-
+            
             //If it's matchless, that means it'll just be joined to
             //the group of edges on the destination vertex.
             if(!has_merged) {
@@ -3976,13 +3999,13 @@ void area_editor::merge_vertex(
                 e_ptr->vertex_nrs[n] = v1_nr;
             }
         }
-
+        
         if(!was_deleted) ++e;
-
+        
     }
-
+    
     v2->fix_pointers(cur_area_data);
-
+    
     //Check if any of the final edges have the same sector
     //on both sides. If so, delete them.
     for(size_t ve = 0; ve < v2->edges.size(); ) {
@@ -4002,13 +4025,13 @@ void area_editor::merge_vertex(
             ++ve;
         }
     }
-
+    
     //If this vertex is out of edges, it'll be
     //deleted eventually. Move it out of the way.
     if(v2->edges.empty()) {
         v2->x = v2->y = FLT_MAX;
     }
-
+    
     //Remove the old vertex' info.
     //This'll mark it for deletion.
     v1->edge_nrs.clear();
@@ -4023,20 +4046,20 @@ void area_editor::merge_vertex(
 void area_editor::mob_to_gui() {
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_objects"]->widgets["frm_object"];
-
+        
     if(!cur_mob) {
         hide_widget(f);
     } else {
         show_widget(f);
-
+        
         (
             (lafi::angle_picker*) f->widgets["ang_angle"]
         )->set_angle_rads(cur_mob->angle);
         ((lafi::textbox*) f->widgets["txt_vars"])->text = cur_mob->vars;
-
+        
         ((lafi::button*) f->widgets["but_category"])->text =
             mob_categories.get_pname(cur_mob->category);
-
+            
         lafi::button* but_type = (lafi::button*) f->widgets["but_type"];
         if(cur_mob->category == MOB_CATEGORY_NONE) {
             disable_widget(but_type);
@@ -4056,13 +4079,13 @@ void area_editor::open_picker(unsigned char type) {
     change_to_right_frame(true);
     show_widget(gui->widgets["frm_picker"]);
     hide_widget(gui->widgets["frm_bottom"]);
-
+    
     lafi::widget* f = gui->widgets["frm_picker"]->widgets["frm_list"];
-
+    
     while(!f->widgets.empty()) {
         f->remove(f->widgets.begin()->first);
     }
-
+    
     vector<string> elements;
     if(type == AREA_EDITOR_PICKER_AREA) {
         elements = folder_to_vector(AREA_FOLDER, true);
@@ -4072,15 +4095,15 @@ void area_editor::open_picker(unsigned char type) {
                 elements[e].erase(pos, 4);
             }
         }
-
+        
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
-
+    
         for(size_t t = 0; t < sector_types.get_nr_of_types(); ++t) {
             elements.push_back(sector_types.get_name(t));
         }
-
+        
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
-
+    
         for(
             unsigned char f = 0; f < mob_categories.get_nr_of_categories();
             ++f
@@ -4089,15 +4112,15 @@ void area_editor::open_picker(unsigned char type) {
             if(f == MOB_CATEGORY_NONE) continue;
             elements.push_back(mob_categories.get_pname(f));
         }
-
+        
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
-
+    
         if(cur_mob->category != MOB_CATEGORY_NONE) {
             mob_categories.get_list(elements, cur_mob->category);
         }
-
+        
     }
-
+    
     f->easy_reset();
     f->easy_row();
     for(size_t e = 0; e < elements.size(); ++e) {
@@ -4110,7 +4133,7 @@ void area_editor::open_picker(unsigned char type) {
         f->easy_add("but_" + i2s(e), b, 100, 24);
         f->easy_row(0);
     }
-
+    
     (
         (lafi::scrollbar*) gui->widgets["frm_picker"]->widgets["bar_scroll"]
     )->make_widget_scroll(f);
@@ -4123,35 +4146,35 @@ void area_editor::open_picker(unsigned char type) {
 void area_editor::pick(string name, unsigned char type) {
     change_to_right_frame();
     show_widget(gui->widgets["frm_bottom"]);
-
+    
     if(type == AREA_EDITOR_PICKER_AREA) {
-
+    
         area_name = name;
         load_area();
-
+        
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
-
+    
         if(cur_sector) {
             cur_sector->type = sector_types.get_nr(name);
             sector_to_gui();
         }
-
+        
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
-
+    
         if(cur_mob) {
             cur_mob->category = mob_categories.get_nr_from_pname(name);
             cur_mob->type = NULL;
             mob_to_gui();
         }
-
+        
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
-
+    
         if(cur_mob) {
             mob_categories.set_mob_type_ptr(cur_mob, name);
         }
-
+        
         mob_to_gui();
-
+        
     }
 }
 
@@ -4162,24 +4185,24 @@ void area_editor::pick(string name, unsigned char type) {
 void area_editor::populate_texture_suggestions() {
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_texture"]->widgets["frm_list"];
-
+        
     while(!f->widgets.empty()) {
         f->remove(f->widgets.begin()->first);
     }
-
+    
     if(texture_suggestions.empty()) return;
-
+    
     f->easy_reset();
     f->easy_row();
-
+    
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
-
+    
         string name = texture_suggestions[s].name;
         lafi::image* i =
             new lafi::image(0, 0, 0, 0, texture_suggestions[s].bmp);
         lafi::label* l =
             new lafi::label(0, 0, 0, 0, name);
-
+            
         auto lambda = [name, this] (lafi::widget*, int, int) {
             lafi::widget* frm_sector =
                 this->gui->widgets["frm_sectors"]->widgets["frm_sector"];
@@ -4198,7 +4221,7 @@ void area_editor::populate_texture_suggestions() {
         f->easy_add("lbl_" + i2s(s), l, 96, 48, lafi::EASY_FLAG_WIDTH_PX);
         f->easy_row(0);
     }
-
+    
     (
         (lafi::scrollbar*)
         gui->widgets["frm_texture"]->widgets["bar_scroll"]
@@ -4212,14 +4235,14 @@ void area_editor::populate_texture_suggestions() {
 void area_editor::update_texture_suggestions(const string &n) {
     //First, check if it exists.
     size_t pos = INVALID;
-
+    
     for(size_t s = 0; s < texture_suggestions.size(); ++s) {
         if(texture_suggestions[s].name == n) {
             pos = s;
             break;
         }
     }
-
+    
     if(pos == 0) {
         //Already #1? Never mind.
         return;
@@ -4235,7 +4258,7 @@ void area_editor::update_texture_suggestions(const string &n) {
         texture_suggestions.erase(texture_suggestions.begin() + pos);
         texture_suggestions.insert(texture_suggestions.begin(), s);
     }
-
+    
     if(texture_suggestions.size() > MAX_TEXTURE_SUGGESTIONS) {
         texture_suggestions.erase(
             texture_suggestions.begin() + texture_suggestions.size() - 1
@@ -4251,15 +4274,15 @@ void area_editor::resize_everything() {
     lafi::textbox* txt_resize =
         (lafi::textbox*) gui->widgets["frm_tools"]->widgets["txt_resize"];
     float mult = s2f(txt_resize->text);
-
+    
     if(mult == 0) return;
-
+    
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         v_ptr->x *= mult;
         v_ptr->y *= mult;
     }
-
+    
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->texture_info.scale_x *= mult;
@@ -4269,13 +4292,13 @@ void area_editor::resize_everything() {
         s_ptr->triangles.clear();
         triangulate(s_ptr);
     }
-
+    
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         m_ptr->x *= mult;
         m_ptr->y *= mult;
     }
-
+    
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         s_ptr->x *= mult;
@@ -4284,7 +4307,7 @@ void area_editor::resize_everything() {
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         cur_area_data.path_stops[s]->calculate_dists();
     }
-
+    
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
         s_ptr->x      *= mult;
@@ -4294,7 +4317,7 @@ void area_editor::resize_everything() {
         s_ptr->sway_x *= mult;
         s_ptr->sway_y *= mult;
     }
-
+    
     made_changes = true;
 }
 
@@ -4304,16 +4327,16 @@ void area_editor::resize_everything() {
  */
 void area_editor::save_area() {
     data_node geometry_file = data_node("", "");
-
+    
     //Start by cleaning unused vertex, sector, etc. ids.
     //Unused vertex ids.
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ) {
-
+    
         vertex* v_ptr = cur_area_data.vertexes[v];
         if(v_ptr->edge_nrs.empty()) {
-
+        
             cur_area_data.vertexes.erase(cur_area_data.vertexes.begin() + v);
-
+            
             //Fix numbers in edge lists.
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
@@ -4326,20 +4349,20 @@ void area_editor::save_area() {
                     }
                 }
             }
-
+            
         } else {
             ++v;
         }
     }
-
+    
     //Unused sector ids.
     for(size_t s = 0; s < cur_area_data.sectors.size(); ) {
-
+    
         sector* s_ptr = cur_area_data.sectors[s];
         if(s_ptr->edge_nrs.empty()) {
-
+        
             cur_area_data.sectors.erase(cur_area_data.sectors.begin() + s);
-
+            
             //Fix numbers in edge lists.
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
@@ -4352,20 +4375,20 @@ void area_editor::save_area() {
                     }
                 }
             }
-
+            
         } else {
             ++s;
         }
     }
-
+    
     //Unused edge ids.
     for(size_t e = 0; e < cur_area_data.edges.size(); ) {
-
+    
         edge* e_ptr = cur_area_data.edges[e];
         if(e_ptr->vertex_nrs[0] == INVALID) {
-
+        
             cur_area_data.edges.erase(cur_area_data.edges.begin() + e);
-
+            
             //Fix numbers in vertex lists.
             for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                 vertex* v_ptr = cur_area_data.vertexes[v];
@@ -4378,7 +4401,7 @@ void area_editor::save_area() {
                     }
                 }
             }
-
+            
             //Fix numbers in sector lists.
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
                 sector* s_ptr = cur_area_data.sectors[s];
@@ -4391,29 +4414,29 @@ void area_editor::save_area() {
                     }
                 }
             }
-
+            
         } else {
             ++e;
         }
     }
-
-
+    
+    
     //Save the content now.
     //Vertexes.
     data_node* vertexes_node = new data_node("vertexes", "");
     geometry_file.add(vertexes_node);
-
+    
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         data_node* vertex_node =
             new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
         vertexes_node->add(vertex_node);
     }
-
+    
     //Edges.
     data_node* edges_node = new data_node("edges", "");
     geometry_file.add(edges_node);
-
+    
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         edge* e_ptr = cur_area_data.edges[e];
         data_node* edge_node = new data_node("e", "");
@@ -4433,16 +4456,16 @@ void area_editor::save_area() {
             )
         );
     }
-
+    
     //Sectors.
     data_node* sectors_node = new data_node("sectors", "");
     geometry_file.add(sectors_node);
-
+    
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         data_node* sector_node = new data_node("s", "");
         sectors_node->add(sector_node);
-
+        
         if(s_ptr->type != SECTOR_TYPE_NORMAL) {
             sector_node->add(
                 new data_node("type", sector_types.get_name(s_ptr->type))
@@ -4477,7 +4500,7 @@ void area_editor::save_area() {
                 )
             );
         }
-
+        
         sector_node->add(
             new data_node(
                 "texture",
@@ -4517,17 +4540,17 @@ void area_editor::save_area() {
             );
         }
     }
-
+    
     //Mobs.
     data_node* mobs_node = new data_node("mobs", "");
     geometry_file.add(mobs_node);
-
+    
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         data_node* mob_node =
             new data_node(mob_categories.get_sname(m_ptr->category), "");
         mobs_node->add(mob_node);
-
+        
         if(m_ptr->type) {
             mob_node->add(
                 new data_node("type", m_ptr->type->name)
@@ -4549,42 +4572,42 @@ void area_editor::save_area() {
                 new data_node("vars", m_ptr->vars)
             );
         }
-
+        
     }
-
+    
     //Path stops.
     data_node* path_stops_node = new data_node("path_stops", "");
     geometry_file.add(path_stops_node);
-
+    
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         data_node* path_stop_node = new data_node("s", "");
         path_stops_node->add(path_stop_node);
-
+        
         path_stop_node->add(
             new data_node("pos", f2s(s_ptr->x) + " " + f2s(s_ptr->y))
         );
-
+        
         data_node* links_node = new data_node("links", "");
         path_stop_node->add(links_node);
-
+        
         for(size_t l = 0; l < s_ptr->links.size(); l++) {
             path_link* l_ptr = &s_ptr->links[l];
             data_node* link_node = new data_node("nr", i2s(l_ptr->end_nr));
             links_node->add(link_node);
         }
-
+        
     }
-
+    
     //Tree shadows.
     data_node* shadows_node = new data_node("tree_shadows", "");
     geometry_file.add(shadows_node);
-
+    
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
         data_node* shadow_node = new data_node("shadow", "");
         shadows_node->add(shadow_node);
-
+        
         shadow_node->add(
             new data_node("pos", f2s(s_ptr->x) + " " + f2s(s_ptr->y))
         );
@@ -4601,9 +4624,9 @@ void area_editor::save_area() {
         shadow_node->add(
             new data_node("sway", f2s(s_ptr->sway_x) + " " + f2s(s_ptr->sway_y))
         );
-
+        
     }
-
+    
     //Editor guide.
     geometry_file.add(new data_node("guide_file_name", guide_file_name));
     geometry_file.add(new data_node("guide_x",         f2s(guide_x)));
@@ -4611,17 +4634,17 @@ void area_editor::save_area() {
     geometry_file.add(new data_node("guide_w",         f2s(guide_w)));
     geometry_file.add(new data_node("guide_h",         f2s(guide_h)));
     geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
-
-
+    
+    
     geometry_file.save_file(AREA_FOLDER + "/" + area_name + "/Geometry.txt");
-
+    
     cur_sector = NULL;
     cur_mob = NULL;
     sector_to_gui();
     mob_to_gui();
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
-
+    
     made_changes = false;
 }
 
@@ -4634,7 +4657,7 @@ void area_editor::sector_to_gui() {
         (lafi::frame*) gui->widgets["frm_sectors"]->widgets["frm_sector"];
     if(cur_sector) {
         show_widget(f);
-
+        
         ((lafi::textbox*) f->widgets["txt_z"])->text =
             f2s(cur_sector->z);
         ((lafi::checkbox*) f->widgets["chk_fade"])->set(
@@ -4659,13 +4682,13 @@ void area_editor::sector_to_gui() {
         ((lafi::checkbox*) f->widgets["chk_hazards_floor"])->set(
             cur_sector->hazard_floor
         );
-
+        
         if(cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["chk_fade"]);
         } else {
             enable_widget(f->widgets["chk_fade"]);
         }
-
+        
         if(cur_sector->fade || cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["but_texture"]);
             disable_widget(f->widgets["but_adv"]);
@@ -4673,9 +4696,9 @@ void area_editor::sector_to_gui() {
             enable_widget(f->widgets["but_texture"]);
             enable_widget(f->widgets["but_adv"]);
         }
-
+        
         adv_textures_to_gui();
-
+        
     } else {
         hide_widget(f);
     }
@@ -4689,7 +4712,7 @@ void area_editor::shadow_to_gui() {
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_shadows"]->widgets["frm_shadow"];
     if(cur_shadow) {
-
+    
         show_widget(f);
         ((lafi::textbox*) f->widgets["txt_x"])->text =
             f2s(cur_shadow->x);
@@ -4711,7 +4734,7 @@ void area_editor::shadow_to_gui() {
             f2s(cur_shadow->sway_x);
         ((lafi::textbox*) f->widgets["txt_sy"])->text =
             f2s(cur_shadow->sway_y);
-
+            
     } else {
         hide_widget(f);
     }
@@ -4724,7 +4747,7 @@ void area_editor::shadow_to_gui() {
 void area_editor::show_changes_warning() {
     show_widget(gui->widgets["frm_changes"]);
     hide_widget(gui->widgets["frm_bottom"]);
-
+    
     made_changes = false;
 }
 
@@ -4755,7 +4778,7 @@ void area_editor::unload() {
     cur_area_data.clear();
     delete(gui->style);
     delete(gui);
-
+    
     unload_hazards();
 }
 
@@ -4789,11 +4812,11 @@ void area_editor::update_review_frame() {
         (lafi::label*) gui->widgets["frm_review"]->widgets["lbl_error_3"];
     lafi::label* lbl_error_4 =
         (lafi::label*) gui->widgets["frm_review"]->widgets["lbl_error_4"];
-
+        
     lbl_error_2->text.clear();
     lbl_error_3->text.clear();
     lbl_error_4->text.clear();
-
+    
     if(sec_mode == ESM_TEXTURE_VIEW) {
         disable_widget(gui->widgets["frm_review"]->widgets["but_find_errors"]);
         disable_widget(gui->widgets["frm_review"]->widgets["but_goto_error"]);
@@ -4801,7 +4824,7 @@ void area_editor::update_review_frame() {
         enable_widget(gui->widgets["frm_review"]->widgets["but_find_errors"]);
         enable_widget(gui->widgets["frm_review"]->widgets["but_goto_error"]);
     }
-
+    
     if(error_type == EET_NONE_YET || error_type == EET_NONE) {
         disable_widget(but_goto_error);
         if(error_type == EET_NONE_YET) {
@@ -4809,168 +4832,173 @@ void area_editor::update_review_frame() {
         } else {
             lbl_error_1->text = "No errors found.";
         }
-
-    } else {
-        if(error_type == EET_INTERSECTING_EDGES) {
-
-            if(intersecting_edges.empty()) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Two edges cross";
-            lbl_error_2->text = "each other, at";
-            float u;
-            edge_intersection* ei_ptr = &intersecting_edges[0];
-            lines_intersect(
-                ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
-                ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y,
-                ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y,
-                ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y,
-                NULL, &u
-            );
-
-            float a =
-                atan2(
-                    ei_ptr->e1->vertexes[1]->y - ei_ptr->e1->vertexes[0]->y,
-                    ei_ptr->e1->vertexes[1]->x - ei_ptr->e1->vertexes[0]->x
-                );
-            dist d(
-                ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
-                ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y
-            );
-
-            lbl_error_3->text =
-                "(" + f2s(
-                    floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u *
-                          d.to_float())
-                ) + "," + f2s(
-                    floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
-                          d.to_float())
-                ) + ")!";
-
-        } else if(error_type == EET_BAD_SECTOR) {
-
-            if(non_simples.empty()) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Non-simple sector";
-            lbl_error_2->text = "found! (Does the";
-            lbl_error_3->text = "sector contain";
-            lbl_error_4->text = "itself?)";
-
-        } else if(error_type == EET_LONE_EDGE) {
-
-            if(lone_edges.empty()) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Lone edge found!";
-            lbl_error_2->text = "You probably want";
-            lbl_error_3->text = "to drag one vertex";
-            lbl_error_4->text = "to the other.";
-
-        } else if(error_type == EET_OVERLAPPING_VERTEXES) {
-
-            if(!error_vertex_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Overlapping vertexes";
-            lbl_error_2->text =
-                "at (" + f2s(error_vertex_ptr->x) + "," +
-                f2s(error_vertex_ptr->y) + ")!";
-            lbl_error_3->text = "(Drag one of them";
-            lbl_error_3->text = "into the other)";
-
-        } else if(error_type == EET_MISSING_TEXTURE) {
-
-            if(!error_sector_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Sector without";
-            lbl_error_2->text = "texture found!";
-
-        } else if(error_type == EET_UNKNOWN_TEXTURE) {
-
-            if(!error_sector_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Sector with unknown";
-            lbl_error_2->text = "texture found!";
-            lbl_error_3->text = "(" + error_string + ")";
-
-        } else if(error_type == EET_TYPELESS_MOB) {
-
-            if(!error_mob_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Mob with no";
-            lbl_error_2->text = "type found!";
-
-
-        } else if(error_type == EET_MOB_OOB) {
-
-            if(!error_mob_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Mob that is not";
-            lbl_error_2->text = "on any sector";
-            lbl_error_3->text = "found! It's probably";
-            lbl_error_4->text = "out of bounds.";
-
-
-        } else if(error_type == EET_MOB_IN_WALL) {
-
-            if(!error_mob_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Mob stuck";
-            lbl_error_2->text = "in wall found!";
-
-
-        } else if(error_type == EET_LONE_PATH_STOP) {
-
-            if(!error_path_stop_ptr) {
-                find_errors(); return;
-            }
-
-            lbl_error_1->text = "Lone path stop";
-            lbl_error_2->text = "found!";
-
-        } else if(error_type == EET_PATHS_UNCONNECTED) {
-
-            disable_widget(but_goto_error);
-            lbl_error_1->text = "The path is";
-            lbl_error_2->text = "split into two";
-            lbl_error_3->text = "or more parts!";
-            lbl_error_4->text = "Connect them.";
-
-        } else if(error_type == EET_PATH_STOPS_TOGETHER) {
-
-            lbl_error_1->text = "Two path stops";
-            lbl_error_2->text = "found close";
-            lbl_error_3->text = "together!";
-            lbl_error_4->text = "Separate them.";
-
-        } else if(error_type == EET_PATH_STOP_OOB) {
-
-            lbl_error_1->text = "Path stop out";
-            lbl_error_2->text = "of bounds found!";
-
-        } else if(error_type == EET_INVALID_SHADOW) {
-
-            lbl_error_1->text = "Tree shadow with";
-            lbl_error_2->text = "invalid image found!";
-
+        
+    } else if(error_type == EET_INTERSECTING_EDGES) {
+    
+        if(intersecting_edges.empty()) {
+            find_errors(); return;
         }
+        
+        lbl_error_1->text = "Two edges cross";
+        lbl_error_2->text = "each other, at";
+        float u;
+        edge_intersection* ei_ptr = &intersecting_edges[0];
+        lines_intersect(
+            ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
+            ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y,
+            ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y,
+            ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y,
+            NULL, &u
+        );
+        
+        float a =
+            atan2(
+                ei_ptr->e1->vertexes[1]->y - ei_ptr->e1->vertexes[0]->y,
+                ei_ptr->e1->vertexes[1]->x - ei_ptr->e1->vertexes[0]->x
+            );
+        dist d(
+            ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
+            ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y
+        );
+        
+        lbl_error_3->text =
+            "(" + f2s(
+                floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u *
+                      d.to_float())
+            ) + "," + f2s(
+                floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
+                      d.to_float())
+            ) + ")!";
+            
+    } else if(error_type == EET_BAD_SECTOR) {
+    
+        if(non_simples.empty()) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Non-simple sector";
+        lbl_error_2->text = "found! (Does the";
+        lbl_error_3->text = "sector contain";
+        lbl_error_4->text = "itself?)";
+        
+    } else if(error_type == EET_LONE_EDGE) {
+    
+        if(lone_edges.empty()) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Lone edge found!";
+        lbl_error_2->text = "You probably want";
+        lbl_error_3->text = "to drag one vertex";
+        lbl_error_4->text = "to the other.";
+        
+    } else if(error_type == EET_OVERLAPPING_VERTEXES) {
+    
+        if(!error_vertex_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Overlapping vertexes";
+        lbl_error_2->text =
+            "at (" + f2s(error_vertex_ptr->x) + "," +
+            f2s(error_vertex_ptr->y) + ")!";
+        lbl_error_3->text = "(Drag one of them";
+        lbl_error_3->text = "into the other)";
+        
+    } else if(error_type == EET_MISSING_TEXTURE) {
+    
+        if(!error_sector_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Sector without";
+        lbl_error_2->text = "texture found!";
+        
+    } else if(error_type == EET_UNKNOWN_TEXTURE) {
+    
+        if(!error_sector_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Sector with unknown";
+        lbl_error_2->text = "texture found!";
+        lbl_error_3->text = "(" + error_string + ")";
+        
+    } else if(error_type == EET_MISSING_LEADER) {
+    
+        lbl_error_1->text = "No leader found!";
+        lbl_error_2->text = "You need at least";
+        lbl_error_3->text = "one to play.";
+        disable_widget(gui->widgets["frm_review"]->widgets["but_goto_error"]);
+        
+    } else if(error_type == EET_TYPELESS_MOB) {
+    
+        if(!error_mob_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Mob with no";
+        lbl_error_2->text = "type found!";
+        
+        
+    } else if(error_type == EET_MOB_OOB) {
+    
+        if(!error_mob_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Mob that is not";
+        lbl_error_2->text = "on any sector";
+        lbl_error_3->text = "found! It's probably";
+        lbl_error_4->text = "out of bounds.";
+        
+        
+    } else if(error_type == EET_MOB_IN_WALL) {
+    
+        if(!error_mob_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Mob stuck";
+        lbl_error_2->text = "in wall found!";
+        
+        
+    } else if(error_type == EET_LONE_PATH_STOP) {
+    
+        if(!error_path_stop_ptr) {
+            find_errors(); return;
+        }
+        
+        lbl_error_1->text = "Lone path stop";
+        lbl_error_2->text = "found!";
+        
+    } else if(error_type == EET_PATHS_UNCONNECTED) {
+    
+        disable_widget(but_goto_error);
+        lbl_error_1->text = "The path is";
+        lbl_error_2->text = "split into two";
+        lbl_error_3->text = "or more parts!";
+        lbl_error_4->text = "Connect them.";
+        
+    } else if(error_type == EET_PATH_STOPS_TOGETHER) {
+    
+        lbl_error_1->text = "Two path stops";
+        lbl_error_2->text = "found close";
+        lbl_error_3->text = "together!";
+        lbl_error_4->text = "Separate them.";
+        
+    } else if(error_type == EET_PATH_STOP_OOB) {
+    
+        lbl_error_1->text = "Path stop out";
+        lbl_error_2->text = "of bounds found!";
+        
+    } else if(error_type == EET_INVALID_SHADOW) {
+    
+        lbl_error_1->text = "Tree shadow with";
+        lbl_error_2->text = "invalid image found!";
+        
     }
-
+    
     (
         (lafi::checkbox*)
         gui->widgets["frm_review"]->widgets["chk_see_textures"]
@@ -5017,7 +5045,7 @@ void area_editor::set_guide_a(unsigned char a) {
 texture_suggestion::texture_suggestion(const string &n) :
     bmp(NULL),
     name(n) {
-
+    
     bmp = bitmaps.get("Textures/" + name, NULL);
 }
 

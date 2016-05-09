@@ -258,6 +258,7 @@ void gameplay::load() {
     cur_leader_ptr->first_state_set = true;
 
     day_minutes = day_minutes_start;
+    area_time_passed = 0;
 
     cam_x = cam_final_x = cur_leader_ptr->x;
     cam_y = cam_final_y = cur_leader_ptr->y;

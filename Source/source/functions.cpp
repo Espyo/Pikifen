@@ -113,13 +113,13 @@ void change_game_state(unsigned int new_state) {
     game_states[cur_game_state_nr]->unload();
     cur_game_state_nr = new_state;
     game_states[cur_game_state_nr]->load();
-
+    
     //Because during the loading screens, there is no activity, on the
     //next frame, the game will assume the time between that and the last
     //non-loading frame is normal. This could be something like 2 seconds.
     //Let's reset the delta_t, then.
     reset_delta_t = true;
-
+    
 }
 
 
@@ -139,7 +139,7 @@ bool circle_intersects_line(
     //Code by
     //  http://www.melloland.com/scripts-and-tutos/
     //  collision-detection-between-circles-and-lines
-
+    
     float vx = x2 - x1;
     float vy = y2 - y1;
     float xdiff = x1 - cx;
@@ -237,31 +237,31 @@ vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found
 ) {
     vector<string> v;
-
+    
     if(folder_name.empty()) {
         if(folder_found) *folder_found = false;
         return v;
     }
-
+    
     //Normalize the folder's path.
     folder_name = replace_all(folder_name, "\\", "/");
     if(folder_name.back() == '/') folder_name.pop_back();
-
+    
     ALLEGRO_FS_ENTRY* folder = NULL;
     folder = al_create_fs_entry(folder_name.c_str());
     if(!folder || !al_open_directory(folder)) {
         if(folder_found) *folder_found = false;
         return v;
     }
-
-
+    
+    
     ALLEGRO_FS_ENTRY* entry = NULL;
     while((entry = al_read_directory(folder)) != NULL) {
         if(
             folders ==
-            (al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR)
+            ((al_get_fs_entry_mode(entry) & ALLEGRO_FILEMODE_ISDIR) > 0)
         ) {
-
+        
             string entry_name = al_get_fs_entry_name(entry);
             if(folders) {
                 //If we're using folders, remove the trailing slash,
@@ -273,11 +273,11 @@ vector<string> folder_to_vector(
                     entry_name.erase(entry_name.size() - 1);
                 }
             }
-
+            
             //Only save what's after the final slash.
             entry_name = replace_all(entry_name, "\\", "/");
             size_t pos = entry_name.find_last_of("/");
-
+            
             if(pos != string::npos) {
                 entry_name =
                     entry_name.substr(pos + 1, entry_name.size() - pos - 1);
@@ -288,12 +288,12 @@ vector<string> folder_to_vector(
     }
     al_close_directory(folder);
     al_destroy_fs_entry(folder);
-
-
+    
+    
     sort(v.begin(), v.end(), [] (string s1, string s2) -> bool {
         return str_to_lower(s1) < str_to_lower(s2);
     });
-
+    
     if(folder_found) *folder_found = true;
     return v;
 }
@@ -311,16 +311,16 @@ void generate_area_images() {
         area_images[x].clear();
     }
     area_images.clear();
-
+    
     //Now, figure out how big our area is.
     size_t n_sectors = cur_area_data.sectors.size();
     if(n_sectors == 0) return;
-
+    
     float min_x, max_x, min_y, max_y;
     size_t n_vertexes = cur_area_data.vertexes.size();
     min_x = max_x = cur_area_data.vertexes[0]->x;
     min_y = max_y = cur_area_data.vertexes[0]->y;
-
+    
     for(size_t v = 0; v < n_vertexes; ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         min_x = min(v_ptr->x, min_x);
@@ -328,22 +328,22 @@ void generate_area_images() {
         min_y = min(v_ptr->y, min_y);
         max_y = max(v_ptr->y, max_y);
     }
-
+    
     min_x *= area_images_scale;
     max_x *= area_images_scale;
     min_y *= area_images_scale;
     max_y *= area_images_scale;
     area_images_x1 = min_x; area_images_y1 = min_y;
-
+    
     //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
     float area_height = max_y - min_y;
     unsigned area_image_cols = ceil(area_width / area_image_size);
     unsigned area_image_rows = ceil(area_height / area_image_size);
-
+    
     for(size_t x = 0; x < area_image_cols; ++x) {
         area_images.push_back(vector<ALLEGRO_BITMAP*>());
-
+        
         for(size_t y = 0; y < area_image_rows; ++y) {
             area_images[x].push_back(
                 al_create_bitmap(area_image_size, area_image_size)
@@ -354,23 +354,23 @@ void generate_area_images() {
             al_set_target_bitmap(old_bitmap);
         }
     }
-
+    
     //For every sector, draw it on the area images it belongs on.
     for(size_t s = 0; s < n_sectors; ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         size_t n_edges = s_ptr->edges.size();
         if(n_edges == 0) continue;
-
+        
         float s_min_x, s_max_x, s_min_y, s_max_y;
         unsigned int sector_start_col, sector_end_col;
         unsigned int sector_start_row, sector_end_row;
         get_sector_bounding_box(s_ptr, &s_min_x, &s_min_y, &s_max_x, &s_max_y);
-
+        
         s_min_x *= area_images_scale;
         s_max_x *= area_images_scale;
         s_min_y *= area_images_scale;
         s_max_y *= area_images_scale;
-
+        
         sector_start_col =
             (s_min_x - area_images_x1) / area_image_size;
         sector_end_col =
@@ -379,18 +379,18 @@ void generate_area_images() {
             (s_min_y - area_images_y1) / area_image_size;
         sector_end_row =
             ceil((s_max_y - area_images_y1) / area_image_size) - 1;
-
+            
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
             ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
             ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
         );
-
+        
         for(size_t x = sector_start_col; x <= sector_end_col; ++x) {
             for(size_t y = sector_start_row; y <= sector_end_row; ++y) {
                 ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
                 al_set_target_bitmap(area_images[x][y]); {
-
+                
                     draw_sector(
                         cur_area_data.sectors[s],
                         (x * area_image_size + area_images_x1) /
@@ -399,15 +399,15 @@ void generate_area_images() {
                         area_images_scale,
                         area_images_scale
                     );
-
+                    
                 } al_set_target_bitmap(prev_target_bmp);
             }
         }
-
+        
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-
+        
     }
-
+    
     for(size_t x = 0; x < area_image_cols; ++x) {
         for(size_t y = 0; y < area_image_rows; ++y) {
             //We need to "rebuild" the images, so that the mipmaps get updated.
@@ -416,7 +416,7 @@ void generate_area_images() {
             area_images[x][y] = recreate_bitmap(area_images[x][y]);
         }
     }
-
+    
 }
 
 
@@ -426,22 +426,22 @@ void generate_area_images() {
 mob* get_closest_mob_to_cursor() {
     float mx, my;
     get_mouse_cursor_coordinates(&mx, &my);
-
+    
     dist closest_mob_to_cursor_dist = FLT_MAX;
     mob* closest_mob_to_cursor = NULL;
-
+    
     for(size_t m = 0; m < mobs.size(); ++m) {
         mob* m_ptr = mobs[m];
-
+        
         if(!m_ptr->fsm.cur_state) continue;
-
+        
         dist d = dist(mx, my, m_ptr->x, m_ptr->y);
         if(d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
         }
     }
-
+    
     return closest_mob_to_cursor;
 }
 
@@ -451,17 +451,17 @@ mob* get_closest_mob_to_cursor() {
  */
 ALLEGRO_COLOR get_daylight_color() {
     size_t n_points = cur_area_data.weather_condition.daylight.size();
-
+    
     if(n_points == 1) {
         return cur_area_data.weather_condition.daylight[0].second;
     }
-
+    
     for(size_t p = 0; p < n_points - 1; ++p) {
         auto cur_ptr = &cur_area_data.weather_condition.daylight[p];
         auto next_ptr = &cur_area_data.weather_condition.daylight[p + 1];
-
+        
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
-
+        
             return interpolate_color(
                        day_minutes,
                        cur_ptr->first,
@@ -471,7 +471,7 @@ ALLEGRO_COLOR get_daylight_color() {
                    );
         }
     }
-
+    
     //If anything goes wrong, return a failsafe.
     return al_map_rgba(255, 255, 255, 0);
 }
@@ -505,9 +505,9 @@ void get_multiline_text_dimensions(
     vector<string> lines = split(text, "\n", true);
     int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
-
+    
     if(ret_h) *ret_h = max(0, (int) ((fh + 1) * n_lines) - 1);
-
+    
     if(ret_w) {
         int largest_w = 0;
         for(size_t l = 0; l < lines.size(); ++l) {
@@ -516,7 +516,7 @@ void get_multiline_text_dimensions(
                     largest_w, al_get_text_width(font, lines[l].c_str())
                 );
         }
-
+        
         *ret_w = largest_w;
     }
 }
@@ -527,17 +527,17 @@ void get_multiline_text_dimensions(
  */
 float get_sun_strength() {
     size_t n_points = cur_area_data.weather_condition.sun_strength.size();
-
+    
     if(n_points == 1) {
         return cur_area_data.weather_condition.sun_strength[0].second;
     }
-
+    
     for(size_t p = 0; p < n_points - 1; ++p) {
         auto cur_ptr = &cur_area_data.weather_condition.sun_strength[p];
         auto next_ptr = &cur_area_data.weather_condition.sun_strength[p + 1];
-
+        
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
-
+        
             return interpolate_number(
                        day_minutes,
                        cur_ptr->first,
@@ -547,7 +547,7 @@ float get_sun_strength() {
                    ) / 255.0f;
         }
     }
-
+    
     //If anything goes wrong, return a failsafe.
     return 1.0f;
 }
@@ -560,13 +560,13 @@ string get_var_value(
     const string &vars_string, const string &var, const string &def
 ) {
     vector<string> vars = semicolon_list_to_vector(vars_string);
-
+    
     for(size_t v = 0; v < vars.size(); ++v) {
         size_t equals_pos = vars[v].find("=");
         string var_name = trim_spaces(vars[v].substr(0, equals_pos));
-
+        
         if(var_name != var) continue;
-
+        
         return
             trim_spaces(
                 vars[v].substr(
@@ -575,7 +575,7 @@ string get_var_value(
                 true
             );
     }
-
+    
     return def;
 }
 
@@ -635,18 +635,18 @@ float interpolate_number(
 void load_area(const string &name, const bool load_for_editor) {
 
     cur_area_data.clear();
-
+    
     data_node data_file =
         load_data_file(AREA_FOLDER + "/" + name + "/Data.txt");
-
+        
     cur_area_data.name =
         data_file.get_child_by_name("name")->get_value_or_default(name);
     cur_area_data.subtitle =
         data_file.get_child_by_name("subtitle")->value;
-
+        
     draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
     al_flip_display();
-
+    
     cur_area_data.weather_name = data_file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
         if(
@@ -661,13 +661,13 @@ void load_area(const string &name, const bool load_for_editor) {
             );
             cur_area_data.weather_condition =
                 weather();
-
+                
         } else {
             cur_area_data.weather_condition =
                 weather_conditions[cur_area_data.weather_name];
         }
     }
-
+    
     cur_area_data.bg_bmp_file_name =
         data_file.get_child_by_name("bg_bmp")->value;
     if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
@@ -680,11 +680,11 @@ void load_area(const string &name, const bool load_for_editor) {
         s2f(data_file.get_child_by_name("bg_dist")->get_value_or_default("2"));
     cur_area_data.bg_bmp_zoom =
         s2f(data_file.get_child_by_name("bg_zoom")->get_value_or_default("1"));
-
-
+        
+        
     data_node geometry_file =
         load_data_file(AREA_FOLDER + "/" + name + "/Geometry.txt");
-
+        
     //Vertexes.
     size_t n_vertexes =
         geometry_file.get_child_by_name(
@@ -702,7 +702,7 @@ void load_area(const string &name, const bool load_for_editor) {
             );
         }
     }
-
+    
     //Edges.
     size_t n_edges =
         geometry_file.get_child_by_name(
@@ -714,23 +714,23 @@ void load_area(const string &name, const bool load_for_editor) {
                 "edges"
             )->get_child_by_name("e", e);
         edge* new_edge = new edge();
-
+        
         vector<string> s_nrs = split(edge_data->get_child_by_name("s")->value);
         if(s_nrs.size() < 2) s_nrs.insert(s_nrs.end(), 2, "-1");
         for(size_t s = 0; s < 2; ++s) {
             if(s_nrs[s] == "-1") new_edge->sector_nrs[s] = INVALID;
             else new_edge->sector_nrs[s] = s2i(s_nrs[s]);
         }
-
+        
         vector<string> v_nrs = split(edge_data->get_child_by_name("v")->value);
         if(v_nrs.size() < 2) v_nrs.insert(v_nrs.end(), 2, "0");
-
+        
         new_edge->vertex_nrs[0] = s2i(v_nrs[0]);
         new_edge->vertex_nrs[1] = s2i(v_nrs[1]);
-
+        
         cur_area_data.edges.push_back(new_edge);
     }
-
+    
     //Sectors.
     size_t n_sectors =
         geometry_file.get_child_by_name(
@@ -742,7 +742,7 @@ void load_area(const string &name, const bool load_for_editor) {
                 "sectors"
             )->get_child_by_name("s", s);
         sector* new_sector = new sector();
-
+        
         new_sector->type =
             sector_types.get_nr(sector_data->get_child_by_name("type")->value);
         if(new_sector->type == 255) new_sector->type = SECTOR_TYPE_NORMAL;
@@ -759,12 +759,12 @@ void load_area(const string &name, const bool load_for_editor) {
             s2b(
                 sector_data->get_child_by_name("always_cast_shadow")->value
             );
-
+            
         new_sector->texture_info.file_name =
             sector_data->get_child_by_name("texture")->value;
         new_sector->texture_info.rot =
             s2f(sector_data->get_child_by_name("texture_rotate")->value);
-
+            
         vector<string> scales =
             split(sector_data->get_child_by_name("texture_scale")->value);
         if(scales.size() >= 2) {
@@ -777,7 +777,7 @@ void load_area(const string &name, const bool load_for_editor) {
             new_sector->texture_info.trans_x = s2f(translations[0]);
             new_sector->texture_info.trans_y = s2f(translations[1]);
         }
-
+        
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
@@ -790,6 +790,10 @@ void load_area(const string &name, const bool load_for_editor) {
                 );
             } else {
                 new_sector->hazards.push_back(&(hazards[hazard_name]));
+                if(hazards[hazard_name].associated_liquid) {
+                    new_sector->associated_liquid =
+                        hazards[hazard_name].associated_liquid;
+                }
             }
         }
         new_sector->hazards_str = hazards_node->value;
@@ -799,20 +803,20 @@ void load_area(const string &name, const bool load_for_editor) {
                     "hazards_floor"
                 )->get_value_or_default("true")
             );
-
+            
         cur_area_data.sectors.push_back(new_sector);
     }
-
+    
     //Mobs.
     size_t n_mobs =
         geometry_file.get_child_by_name("mobs")->get_nr_of_children();
     for(size_t m = 0; m < n_mobs; ++m) {
-
+    
         data_node* mob_node =
             geometry_file.get_child_by_name("mobs")->get_child(m);
-
+            
         mob_gen* mob_ptr = new mob_gen();
-
+        
         vector<string> coords = split(mob_node->get_child_by_name("p")->value);
         mob_ptr->x = (coords.size() >= 1 ? s2f(coords[0]) : 0);
         mob_ptr->y = (coords.size() >= 2 ? s2f(coords[1]) : 0);
@@ -821,13 +825,13 @@ void load_area(const string &name, const bool load_for_editor) {
                 mob_node->get_child_by_name("angle")->get_value_or_default("0")
             );
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
-
+        
         mob_ptr->category = mob_categories.get_nr_from_sname(mob_node->name);
         string mt = mob_node->get_child_by_name("type")->value;
         mob_categories.set_mob_type_ptr(mob_ptr, mt);
-
+        
         bool problem = false;
-
+        
         if(!mob_ptr->type && !load_for_editor) {
             //Error.
             log_error(
@@ -838,77 +842,77 @@ void load_area(const string &name, const bool load_for_editor) {
             );
             problem = true;
         }
-
+        
         if(
             (
                 mob_ptr->category == MOB_CATEGORY_NONE ||
                 mob_ptr->category == 255
             ) && !load_for_editor
         ) {
-
+        
             log_error(
                 "Unknown mob category \"" + mob_node->name + "\"!", mob_node
             );
             mob_ptr->category = MOB_CATEGORY_NONE;
             problem = true;
-
+            
         }
-
+        
         if(!problem) cur_area_data.mob_generators.push_back(mob_ptr);
     }
-
+    
     //Path stops.
     size_t n_stops =
         geometry_file.get_child_by_name("path_stops")->get_nr_of_children();
     for(size_t s = 0; s < n_stops; ++s) {
-
+    
         data_node* path_stop_node =
             geometry_file.get_child_by_name("path_stops")->get_child(s);
-
+            
         path_stop* s_ptr = new path_stop();
-
+        
         vector<string> words =
             split(path_stop_node->get_child_by_name("pos")->value);
         s_ptr->x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->y = (words.size() >= 2 ? s2f(words[1]) : 0);
-
+        
         data_node* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
-
+        
         for(size_t l = 0; l < n_links; ++l) {
-
+        
             data_node* link_node = links_node->get_child(l);
             path_link l_struct(NULL, INVALID);
-
+            
             l_struct.end_nr = s2i(link_node->value);
-
+            
             s_ptr->links.push_back(l_struct);
-
+            
         }
-
+        
         cur_area_data.path_stops.push_back(s_ptr);
     }
-
-
+    
+    
     //Tree shadows.
     size_t n_shadows =
         geometry_file.get_child_by_name("tree_shadows")->get_nr_of_children();
     for(size_t s = 0; s < n_shadows; ++s) {
-
+    
         data_node* shadow_node =
             geometry_file.get_child_by_name("tree_shadows")->get_child(s);
-
+            
         tree_shadow* s_ptr = new tree_shadow();
-
+        
         vector<string> words =
             split(shadow_node->get_child_by_name("pos")->value);
         s_ptr->x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->y = (words.size() >= 2 ? s2f(words[1]) : 0);
-
+        
         words = split(shadow_node->get_child_by_name("size")->value);
         s_ptr->w = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->h = (words.size() >= 2 ? s2f(words[1]) : 0);
-
+        
         s_ptr->angle =
             s2f(
                 shadow_node->get_child_by_name(
@@ -923,23 +927,23 @@ void load_area(const string &name, const bool load_for_editor) {
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
         s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
-
+        
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway_x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->sway_y = (words.size() >= 2 ? s2f(words[1]) : 0);
-
+        
         if(s_ptr->bitmap == bmp_error && !load_for_editor) {
             log_error(
                 "Unknown tree shadow texture \"" + s_ptr->file_name + "\"!",
                 shadow_node
             );
         }
-
+        
         cur_area_data.tree_shadows.push_back(s_ptr);
-
+        
     }
-
-
+    
+    
     //Set up stuff.
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         cur_area_data.edges[e]->fix_pointers(cur_area_data);
@@ -959,16 +963,16 @@ void load_area(const string &name, const bool load_for_editor) {
             s_ptr->links[l].calculate_dist(s_ptr);
         }
     }
-
-
+    
+    
     //Triangulate everything.
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
     }
-
-
+    
+    
     //Editor guide.
     if(load_for_editor) {
         area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
@@ -995,7 +999,7 @@ void load_area(const string &name, const bool load_for_editor) {
             )
         );
     }
-
+    
     if(!load_for_editor) cur_area_data.generate_blockmap();
 }
 
@@ -1006,7 +1010,7 @@ void load_area(const string &name, const bool load_for_editor) {
 void load_area_textures() {
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
-
+        
         for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); ++t) {
             if(s_ptr->texture_info.file_name.empty()) {
                 s_ptr->texture_info.bitmap = NULL;
@@ -1031,12 +1035,12 @@ ALLEGRO_BITMAP* load_bmp(
     if(file_name.empty()) return NULL;
     ALLEGRO_BITMAP* b =
         al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
-
+        
     if(!b && report_error) {
         log_error("Could not open image " + file_name + "!", node);
         b = bmp_error;
     }
-
+    
     return b;
 }
 
@@ -1054,10 +1058,10 @@ void load_control(
         )->get_value_or_default((player == 0) ? def : "");
     vector<string> possible_controls = split(s, ",");
     size_t n_possible_controls = possible_controls.size();
-
+    
     for(size_t c = 0; c < n_possible_controls; ++c) {
         controls[player].push_back(control_info(action, possible_controls[c]));
-
+        
     }
 }
 
@@ -1070,7 +1074,7 @@ data_node load_data_file(const string &file_name) {
     if(!n.file_was_opened) {
         log_error("Could not open data file " + file_name + "!");
     }
-
+    
     return n;
 }
 
@@ -1080,30 +1084,30 @@ data_node load_data_file(const string &file_name) {
  */
 void load_game_config() {
     data_node file(CONFIG_FILE);
-
+    
     game_name = file.get_child_by_name("game_name")->value;
     game_version = file.get_child_by_name("game_version")->value;
-
+    
 #define setter(name, var) \
     set_if_exists(file.get_child_by_name(name)->value, var)
-
+    
     setter("carrying_color_move", carrying_color_move);
     setter("carrying_color_stop", carrying_color_stop);
     setter("carrying_speed_base_mult", carrying_speed_base_mult);
     setter("carrying_speed_max_mult", carrying_speed_max_mult);
     setter("carrying_speed_weight_mult", carrying_speed_weight_mult);
-
+    
     setter("day_minutes_start", day_minutes_start);
     setter("day_minutes_end", day_minutes_end);
     setter("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
-
+    
     setter("idle_task_range", idle_task_range);
     setter("group_move_task_range", group_move_task_range);
     setter("max_pikmin_in_field", max_pikmin_in_field);
     setter("maturity_power_mult", maturity_power_mult);
     setter("maturity_speed_mult", maturity_speed_mult);
     setter("nectar_amount", nectar_amount);
-
+    
     setter("cursor_max_dist", cursor_max_dist);
     setter("cursor_spin_speed", cursor_spin_speed);
     setter("next_pluck_range", next_pluck_range);
@@ -1111,14 +1115,14 @@ void load_game_config() {
     setter("pikmin_grab_range", pikmin_grab_range);
     setter("pluck_range", pluck_range);
     setter("whistle_growth_speed", whistle_growth_speed);
-
+    
     setter("info_spot_trigger_range", info_spot_trigger_range);
     setter("message_char_interval", message_char_interval);
     setter("zoom_max_level", zoom_max_level);
     setter("zoom_min_level", zoom_min_level);
-
+    
 #undef setter
-
+    
     al_set_window_title(display, game_name.c_str());
 }
 
@@ -1127,44 +1131,45 @@ void load_game_config() {
  * Loads all of the game's content.
  */
 void load_game_content() {
+    load_liquids();
     load_status_types();
     load_spray_types();
     load_hazards();
-
+    
     //Mob types.
     load_mob_types(true);
-
+    
     //Weather.
     weather_conditions.clear();
     data_node weather_file = load_data_file(WEATHER_FILE);
     size_t n_weather_conditions =
         weather_file.get_nr_of_children_by_name("weather");
-
+        
     for(size_t wc = 0; wc < n_weather_conditions; ++wc) {
         data_node* cur_weather = weather_file.get_child_by_name("weather", wc);
-
+        
         string name = cur_weather->get_child_by_name("name")->value;
         if(name.empty()) name = "default";
-
+        
         //Lighting.
         vector<pair<size_t, ALLEGRO_COLOR> > lighting;
         size_t n_lighting_points =
             cur_weather->get_child_by_name("lighting")->get_nr_of_children();
-
+            
         bool have_midnight = false;
-
+        
         for(size_t lp = 0; lp < n_lighting_points; ++lp) {
             data_node* lighting_node =
                 cur_weather->get_child_by_name("lighting")->get_child(lp);
-
+                
             size_t point_time = s2i(lighting_node->name);
             ALLEGRO_COLOR point_color = s2c(lighting_node->value);
-
+            
             lighting.push_back(make_pair(point_time, point_color));
-
+            
             if(point_time == 24 * 60) have_midnight = true;
         }
-
+        
         sort(
             lighting.begin(), lighting.end(),
             [] (
@@ -1173,7 +1178,7 @@ void load_game_content() {
             return p1.first < p2.first;
         }
         );
-
+        
         if(lighting.empty()) {
             log_error("Weather condition " + name + " has no lighting!");
         } else {
@@ -1185,28 +1190,28 @@ void load_game_content() {
                 lighting.push_back(make_pair(24 * 60, lighting[0].second));
             }
         }
-
+        
         //Sun's strength.
         vector<pair<size_t, unsigned char> > sun_strength;
         size_t n_sun_strength_points =
             cur_weather->get_child_by_name(
                 "sun_strength"
             )->get_nr_of_children();
-
+            
         have_midnight = false;
-
+        
         for(size_t sp = 0; sp < n_sun_strength_points; ++sp) {
             data_node* sun_strength_node =
                 cur_weather->get_child_by_name("sun_strength")->get_child(sp);
-
+                
             size_t point_time = s2i(sun_strength_node->name);
             unsigned char point_strength = s2i(sun_strength_node->value);
-
+            
             sun_strength.push_back(make_pair(point_time, point_strength));
-
+            
             if(point_time == 24 * 60) have_midnight = true;
         }
-
+        
         sort(
             sun_strength.begin(), sun_strength.end(),
             [] (
@@ -1216,7 +1221,7 @@ void load_game_content() {
             return p1.first < p2.first;
         }
         );
-
+        
         if(!sun_strength.empty()) {
             if(!have_midnight) {
                 //If there is no data for the last hour,
@@ -1228,7 +1233,7 @@ void load_game_content() {
                 );
             }
         }
-
+        
         //Percipitation.
         unsigned char percipitation_type =
             s2i(
@@ -1254,7 +1259,7 @@ void load_game_content() {
                     "percipitation_angle"
                 )->get_value_or_default(f2s((M_PI + M_PI_2)))
             );
-
+            
         //Save.
         weather_conditions[name] =
             weather(
@@ -1272,10 +1277,10 @@ void load_game_content() {
 void load_hud_coordinates() {
     data_node file = data_node(MISC_FOLDER + "/HUD.txt");
     if(!file.file_was_opened) return;
-
+    
 #define loader(id, name) \
     load_hud_coordinates(id, file.get_child_by_name(name)->value)
-
+    
     loader(HUD_ITEM_TIME,                "time");
     loader(HUD_ITEM_DAY_BUBBLE,          "day_bubble");
     loader(HUD_ITEM_DAY_NUMBER,          "day_number");
@@ -1304,9 +1309,9 @@ void load_hud_coordinates() {
     loader(HUD_ITEM_SPRAY_PREV_KEY,      "spray_prev_key");
     loader(HUD_ITEM_SPRAY_NEXT_ICON,     "spray_next_icon");
     loader(HUD_ITEM_SPRAY_NEXT_KEY,      "spray_next_key");
-
+    
 #undef loader
-
+    
     for(int i = 0; i < N_HUD_ITEMS; ++i) {
         for(unsigned char c = 0; c < 4; ++c) {
             if(hud_coords[i][c] == 0) {
@@ -1329,14 +1334,14 @@ void load_hud_coordinates() {
 void load_hazards() {
     data_node file = data_node(MISC_FOLDER + "/Hazards.txt");
     if(!file.file_was_opened) return;
-
+    
     size_t n_hazards = file.get_nr_of_children();
     for(size_t h = 0; h < n_hazards; ++h) {
         data_node* h_node = file.get_child(h);
         hazard h_struct;
-
+        
         h_struct.name = h_node->name;
-
+        
         data_node* effects_node = h_node->get_child_by_name("effects");
         vector<string> effects_strs =
             semicolon_list_to_vector(effects_node->value);
@@ -1351,11 +1356,22 @@ void load_hazards() {
                 h_struct.effects.push_back(&(status_types[effect_name]));
             }
         }
-
+        data_node* l_node = h_node->get_child_by_name("liquid");
+        if(!l_node->value.empty()) {
+            if(liquids.find(l_node->value) == liquids.end()) {
+                log_error(
+                    "Liquid \"" + l_node->value + "\" not found!",
+                    l_node
+                );
+            } else {
+                h_struct.associated_liquid = &(liquids[l_node->value]);
+            }
+        }
+        
         set_if_exists(
             h_node->get_child_by_name("color")->value, h_struct.main_color
         );
-
+        
         hazards[h_node->name] = h_struct;
     }
 }
@@ -1367,12 +1383,61 @@ void load_hazards() {
 void load_hud_coordinates(const int item, string data) {
     vector<string> words = split(data);
     if(data.size() < 4) return;
-
+    
     for(unsigned char c = 0; c < 4; ++c) {
         hud_coords[item][c] = s2f(words[c]) / 100.0f;
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Loads the liquids from the game data.
+ */
+void load_liquids() {
+    data_node file = data_node(MISC_FOLDER + "/Liquids.txt");
+    if(!file.file_was_opened) return;
+    
+    map<string, data_node*> nodes;
+    
+    size_t n_liquids = file.get_nr_of_children();
+    for(size_t l = 0; l < n_liquids; ++l) {
+        data_node* l_node = file.get_child(l);
+        liquid l_struct;
+        
+        l_struct.name = l_node->name;
+        set_if_exists(
+            l_node->get_child_by_name("color")->value, l_struct.main_color
+        );
+        set_if_exists(
+            l_node->get_child_by_name("surface_1_speed")->value,
+            l_struct.surface_speed[0]
+        );
+        set_if_exists(
+            l_node->get_child_by_name("surface_2_speed")->value,
+            l_struct.surface_speed[0]
+        );
+        set_if_exists(
+            l_node->get_child_by_name("surface_alpha")->value,
+            l_struct.surface_alpha
+        );
+        
+        liquids[l_node->name] = l_struct;
+        nodes[l_node->name] = l_node;
+    }
+    
+    for(auto l = liquids.begin(); l != liquids.end(); ++l) {
+        data_node anim_file(
+            ANIMATIONS_FOLDER + "/" +
+            nodes[l->first]->get_child_by_name("animation")->value
+        );
+        l->second.anim_pool = load_animation_pool_from_file(&anim_file);
+        if(!l->second.anim_pool.animations.empty()) {
+            l->second.anim_instance = animation_instance(&l->second.anim_pool);
+            l->second.anim_instance.anim = l->second.anim_pool.animations[0];
+            l->second.anim_instance.start();
+        }
+    }
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -1381,14 +1446,14 @@ void load_hud_coordinates(const int item, string data) {
 void load_options() {
     data_node file = data_node("Options.txt");
     if(!file.file_was_opened) return;
-
+    
     //Load joysticks.
     joystick_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
     for(int j = 0; j < n_joysticks; ++j) {
         joystick_numbers[al_get_joystick(j)] = j;
     }
-
+    
     /* Load controls.
      * Format of a control:
      * "p<player>_<action>=<possible control 1>,<possible control 2>,<...>"
@@ -1406,12 +1471,12 @@ void load_options() {
     for(size_t p = 0; p < 4; p++) {
         controls[p].clear();
     }
-
+    
     for(unsigned char p = 0; p < 4; ++p) {
-
+    
 #define loader(id, name) \
     load_control(id, p, name, file)
-
+    
         loader(BUTTON_THROW,                   "punch");
         loader(BUTTON_WHISTLE,                 "whistle");
         loader(BUTTON_MOVE_RIGHT,              "move_right");
@@ -1444,11 +1509,11 @@ void load_options() {
         loader(BUTTON_SWITCH_MATURITY_DOWN,    "switch_maturity_down");
         loader(BUTTON_LIE_DOWN,                "lie_down");
         loader(BUTTON_PAUSE,                   "pause");
-
+        
 #undef loader
-
+        
     }
-
+    
     //Weed out controls that didn't parse correctly.
     for(size_t p = 0; p < 4; p++) {
         size_t n_controls = controls[p].size();
@@ -1460,7 +1525,7 @@ void load_options() {
             }
         }
     }
-
+    
     for(unsigned char p = 0; p < 4; ++p) {
         mouse_moves_cursor[p] =
             s2b(
@@ -1469,7 +1534,7 @@ void load_options() {
                 )->get_value_or_default((p == 0) ? "true" : "false")
             );
     }
-
+    
     //Other options.
     area_images_scale =
         s2f(file.get_child_by_name("area_quality")->get_value_or_default("1"));
@@ -1537,7 +1602,7 @@ sample_struct load_sample(
     if(!sample) {
         log_error("Could not open audio sample " + file_name + "!");
     }
-
+    
     return sample_struct(sample, mixer);
 }
 
@@ -1548,14 +1613,14 @@ sample_struct load_sample(
 void load_spray_types() {
     data_node file = data_node(MISC_FOLDER + "/Sprays.txt");
     if(!file.file_was_opened) return;
-
+    
     size_t n_sprays = file.get_nr_of_children();
     for(size_t s = 0; s < n_sprays; ++s) {
         data_node* s_node = file.get_child(s);
         spray_type st;
-
+        
         st.name = s_node->name;
-
+        
         data_node* effects_node = s_node->get_child_by_name("effects");
         vector<string> effects_strs =
             semicolon_list_to_vector(effects_node->value);
@@ -1570,7 +1635,7 @@ void load_spray_types() {
                 st.effects.push_back(&(status_types[effect_name]));
             }
         }
-
+        
         set_if_exists(s_node->get_child_by_name("group")->value, st.group);
         set_if_exists(s_node->get_child_by_name("angle")->value, st.angle);
         set_if_exists(
@@ -1587,10 +1652,10 @@ void load_spray_types() {
             s_node->get_child_by_name("berries_needed")->value,
             st.berries_needed
         );
-
+        
         data_node* icon_node = s_node->get_child_by_name("icon");
         st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
-
+        
         spray_types.push_back(st);
     }
 }
@@ -1602,14 +1667,14 @@ void load_spray_types() {
 void load_status_types() {
     data_node file = data_node(MISC_FOLDER + "/Statuses.txt");
     if(!file.file_was_opened) return;
-
+    
     size_t n_statuses = file.get_nr_of_children();
     for(size_t s = 0; s < n_statuses; ++s) {
         data_node* s_node = file.get_child(s);
         status_type st;
-
+        
         st.name = s_node->name;
-
+        
         set_if_exists(
             s_node->get_child_by_name("color")->value, st.color
         );
@@ -1651,7 +1716,7 @@ void load_status_types() {
             s_node->get_child_by_name("anim_speed_multiplier")->value,
             st.anim_speed_multiplier
         );
-
+        
         st.affects = 0;
         if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
             st.affects |= STATUS_AFFECTS_PIKMIN;
@@ -1662,7 +1727,7 @@ void load_status_types() {
         if(s2b(s_node->get_child_by_name("affects_enemies")->value)) {
             st.affects |= STATUS_AFFECTS_ENEMIES;
         }
-
+        
         status_types[st.name] = st;
     }
 }
@@ -1681,9 +1746,9 @@ void log_error(string s, data_node* d) {
         s += ")";
     }
     s += "\n";
-
+    
     cout << s;
-
+    
     if(no_error_logs_today) {
         no_error_logs_today = false;
         time_t tt;
@@ -1700,7 +1765,7 @@ void log_error(string s, data_node* d) {
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV) + "\n" + s;
     }
-
+    
     string prev_error_log;
     string line;
     ALLEGRO_FILE* file_i = al_fopen("Error_log.txt", "r");
@@ -1712,7 +1777,7 @@ void log_error(string s, data_node* d) {
         prev_error_log.erase(prev_error_log.size() - 1);
         al_fclose(file_i);
     }
-
+    
     ALLEGRO_FILE* file_o = al_fopen("Error_log.txt", "w");
     if(file_o) {
         al_fwrite(file_o, prev_error_log + s);
@@ -1739,21 +1804,21 @@ void move_point(
 ) {
     float dx = tx - x, dy = ty - y;
     float dist = sqrt(dx * dx + dy * dy);
-
+    
     if(dist > reach_radius) {
         float move_amount =
             min((double) (dist / delta_t / 2.0f), (double) speed);
-
+            
         dx *= move_amount / dist;
         dy *= move_amount / dist;
-
+        
         if(mx) *mx = dx;
         if(my) *my = dy;
         if(angle) *angle = atan2(dy, dx);
         if(reached) *reached = false;
-
+        
     } else {
-
+    
         if(mx) *mx = 0;
         if(my) *my = 0;
         if(reached) *reached = true;
@@ -1821,7 +1886,7 @@ string replace_all(string s, string search, string replacement) {
         s.replace(pos, search.size(), replacement);
         pos = s.find(search, pos + replacement.size());
     };
-
+    
     return s;
 }
 
@@ -1850,12 +1915,12 @@ void save_options() {
     //Like a list of constants somewhere where it associates
     //an action with the name on the text file.
     ALLEGRO_FILE* file = al_fopen("Options.txt", "w");
-
+    
     if(!file) return;
-
+    
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
-
+    
     //Tell the map what they are.
     for(unsigned char p = 0; p < 4; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
@@ -1892,15 +1957,15 @@ void save_options() {
         grouped_controls[prefix + "lie_down"].clear();
         grouped_controls[prefix + "pause"].clear();
     }
-
+    
     for(size_t p = 0; p < 4; p++) {
         size_t n_controls = controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
             string name = "p" + i2s(p + 1) + "_";
-
+            
 #define adder(id, name_str) \
     if(controls[p][c].action == id) name += name_str
-
+            
             adder(     BUTTON_THROW,                   "punch");
             else adder(BUTTON_WHISTLE,                 "whistle");
             else adder(BUTTON_MOVE_RIGHT,              "move_right");
@@ -1935,21 +2000,21 @@ void save_options() {
             else adder(BUTTON_SWITCH_MATURITY_DOWN,    "switch_maturity_down");
             else adder(BUTTON_LIE_DOWN,                "lie_down");
             else adder(BUTTON_PAUSE,                   "pause");
-
+            
 #undef adder
-
+            
             grouped_controls[name] += controls[p][c].stringify() + ",";
         }
     }
-
+    
     //Save controls.
     for(auto c = grouped_controls.begin(); c != grouped_controls.end(); ++c) {
         //Remove the final character, which is always an extra comma.
         if(c->second.size()) c->second.erase(c->second.size() - 1);
-
+        
         al_fwrite(file, c->first + "=" + c->second + "\n");
     }
-
+    
     for(unsigned char p = 0; p < 4; ++p) {
         al_fwrite(
             file,
@@ -1957,7 +2022,7 @@ void save_options() {
             b2s(mouse_moves_cursor[p]) + "\n"
         );
     }
-
+    
     //Other options.
     al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
     al_fwrite(file, "daylight_effect=" + b2s(daylight_effect) + "\n");
@@ -1969,7 +2034,7 @@ void save_options() {
     al_fwrite(file, "width=" + i2s(scr_w) + "\n");
     al_fwrite(file, "smooth_scaling=" + b2s(smooth_scaling) + "\n");
     al_fwrite(file, "window_pos_hack=" + b2s(window_pos_hack) + "\n");
-
+    
     al_fclose(file);
 }
 
@@ -1991,6 +2056,17 @@ void set_if_exists(const string &value, string &var) {
  * var:   The var to put it into. This is an integer.
  */
 void set_if_exists(const string &value, size_t &var) {
+    if(value.empty()) return;
+    var = s2i(value);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a variable to a value, but only if its string is not-empty
+ * value: The string with the value.
+ * var:   The var to put it into. This is an unsigned char.
+ */
+void set_if_exists(const string &value, unsigned char &var) {
     if(value.empty()) return;
     var = s2i(value);
 }
@@ -2056,36 +2132,36 @@ vector<string> split(
     vector<string> v;
     size_t pos;
     size_t del_size = del.size();
-
+    
     do {
         pos = text.find(del);
         if (pos != string::npos) {  //If it DID find the delimiter.
             //Get the text between the start and the delimiter.
             string sub = text.substr(0, pos);
-
+            
             //Add the text before the delimiter to the vector.
             if(sub != "" || inc_empty)
                 v.push_back(sub);
-
+                
             //Add the delimiter to the vector, but only if requested.
             if(inc_del)
                 v.push_back(del);
-
+                
             //Delete everything before the delimiter,
             //including the delimiter itself, and search again.
             text.erase(text.begin(), text.begin() + pos + del_size);
         }
     } while (pos != string::npos);
-
+    
     //Text after the final delimiter.
     //(If there is one. If not, it's just the whole string.)
-
+    
     //If it's a blank string,
     //only add it if we want empty strings.
     if (text != "" || inc_empty) {
         v.push_back(text);
     }
-
+    
     return v;
 }
 
@@ -2112,16 +2188,16 @@ bool square_intersects_line(
     ) {
         return true;
     }
-
+    
     if(
         (lx1 >= sx1 && lx2 >= sx1) &&
         (lx1 <= sx2 && lx2 <= sx2) &&
         (ly1 >= sy1 && ly2 >= sy1) &&
         (ly1 <= sy2 && ly2 <= sy2)
     ) return true;
-
+    
     return false;
-
+    
 }
 
 
@@ -2141,7 +2217,7 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
     //First character. Makes it easier.
     cur_message_stopping_chars.push_back(0);
     cur_message_section = 0;
-
+    
     vector<string> lines = split(text, "\n");
     size_t char_count = 0;
     for(size_t l = 0; l < lines.size(); ++l) {
@@ -2149,7 +2225,7 @@ void start_message(string text, ALLEGRO_BITMAP* speaker_bmp) {
         char_count += lines[l].size() + 1;
         if((l + 1) % 3 == 0) cur_message_stopping_chars.push_back(char_count);
     }
-
+    
     if(cur_message_stopping_chars.size() > 1) {
         //Remove one because the last line doesn't have a new line character.
         //Even if it does, it's invisible.
@@ -2238,11 +2314,11 @@ bool s2b(const string &s) {
 ALLEGRO_COLOR s2c(const string &s) {
     string s2 = s;
     s2 = trim_spaces(s2);
-
+    
     unsigned char alpha = 255;
     vector<string> components = split(s2);
     if(components.size() >= 2) alpha = s2i(components[1]);
-
+    
     if(s2 == "nothing") return al_map_rgba(0,   0,   0,   0);
     if(s2 == "none")    return al_map_rgba(0,   0,   0,   0);
     if(s2 == "black")   return al_map_rgba(0,   0,   0,   alpha);
@@ -2258,7 +2334,7 @@ ALLEGRO_COLOR s2c(const string &s) {
     if(s2 == "blue")    return al_map_rgba(0,   0,   255, alpha);
     if(s2 == "cyan")    return al_map_rgba(0,   255, 255, alpha);
     if(s2 == "green")   return al_map_rgba(0,   255, 0,   alpha);
-
+    
     ALLEGRO_COLOR c =
         al_map_rgba(
             ((components.size() > 0) ? s2i(components[0]) : 0),

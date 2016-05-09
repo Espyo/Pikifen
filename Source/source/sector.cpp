@@ -30,7 +30,7 @@ area_data::area_data() :
     bg_bmp_zoom(1),
     bg_dist(2),
     bg_color(map_gray(0)) {
-
+    
 }
 
 
@@ -39,14 +39,14 @@ area_data::area_data() :
  */
 void area_data::generate_blockmap() {
     bmap.clear();
-
+    
     if(vertexes.empty()) return;
-
+    
     //First, get the starting point and size of the blockmap.
     float min_x, max_x, min_y, max_y;
     min_x = max_x = vertexes[0]->x;
     min_y = max_y = vertexes[0]->y;
-
+    
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
         min_x = min(v_ptr->x, min_x);
@@ -54,13 +54,13 @@ void area_data::generate_blockmap() {
         min_y = min(v_ptr->y, min_y);
         max_y = max(v_ptr->y, max_y);
     }
-
+    
     bmap.x1 = min_x; bmap.y1 = min_y;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
     bmap.n_cols = ceil((max_x - min_x) / BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.n_rows = ceil((max_y - min_y) / BLOCKMAP_BLOCK_SIZE) + 1;
-
+    
     bmap.edges.assign(
         bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())
     );
@@ -69,21 +69,21 @@ void area_data::generate_blockmap() {
             bmap.n_rows, unordered_set<sector*>()
         )
     );
-
-
+    
+    
     //Now, add a list of edges to each block.
     generate_edges_blockmap(edges);
-
-
+    
+    
     //If at this point, there's any block without a sector, that means
-    //that the block has no edges. It has, however, a single sector,
+    //that the block has no edges. It has, however, a single sector (or NULL),
     //so use the triangle method to get the sector. Checking the center is
     //just a good a spot as any.
     for(size_t bx = 0; bx < bmap.n_cols; ++bx) {
         for(size_t by = 0; by < bmap.n_rows; ++by) {
-
+        
             if(bmap.sectors[bx][by].empty()) {
-
+            
                 bmap.sectors[bx][by].insert(
                     get_sector(
                         bmap.get_x1(bx) + BLOCKMAP_BLOCK_SIZE * 0.5,
@@ -102,14 +102,14 @@ void area_data::generate_blockmap() {
  */
 void area_data::generate_edges_blockmap(vector<edge*> &edges) {
     size_t b_min_x, b_max_x, b_min_y, b_max_y;
-
+    
     for(size_t e = 0; e < edges.size(); ++e) {
-
+    
         //Get which blocks this edge belongs to, via bounding-box,
         //and only then thoroughly test which it is inside of.
-
+        
         edge* e_ptr = edges[e];
-
+        
         b_min_x =
             bmap.get_col(min(e_ptr->vertexes[0]->x, e_ptr->vertexes[1]->x));
         b_max_x =
@@ -118,14 +118,14 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
             bmap.get_row(min(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
         b_max_y =
             bmap.get_row(max(e_ptr->vertexes[0]->y, e_ptr->vertexes[1]->y));
-
+            
         for(size_t bx = b_min_x; bx <= b_max_x; ++bx) {
             for(size_t by = b_min_y; by <= b_max_y; ++by) {
-
+            
                 //Get the block's coordinates.
                 float bx1 = bmap.get_x1(bx);
                 float by1 = bmap.get_y1(by);
-
+                
                 //Check if the edge is inside this blockmap.
                 if(
                     square_intersects_line(
@@ -135,7 +135,7 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                         e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
                     )
                 ) {
-
+                
                     //If it is, add it and the sectors to the list.
                     bool add_edge = true;
                     if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
@@ -150,9 +150,9 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                             add_edge = false;
                         }
                     }
-
+                    
                     if(add_edge) bmap.edges[bx][by].push_back(e_ptr);
-
+                    
                     if(e_ptr->sectors[0]) {
                         bmap.sectors[bx][by].insert(e_ptr->sectors[0]);
                     }
@@ -188,14 +188,14 @@ void area_data::clear() {
     for(size_t s = 0; s < tree_shadows.size(); ++s) {
         delete tree_shadows[s];
     }
-
+    
     vertexes.clear();
     edges.clear();
     sectors.clear();
     mob_generators.clear();
     path_stops.clear();
     tree_shadows.clear();
-
+    
     if(!bg_bmp_file_name.empty()) {
         bitmaps.detach(bg_bmp_file_name);
     }
@@ -211,7 +211,7 @@ blockmap::blockmap() :
     y1(0),
     n_cols(0),
     n_rows(0) {
-
+    
 }
 
 
@@ -272,7 +272,7 @@ edge::edge(size_t v1, size_t v2) {
     vertexes[0] = vertexes[1] = NULL;
     sectors[0] = sectors[1] = NULL;
     sector_nrs[0] = sector_nrs[1] = INVALID;
-
+    
     vertex_nrs[0] = v1; vertex_nrs[1] = v2;
 }
 
@@ -286,7 +286,7 @@ void edge::fix_pointers(area_data &a) {
         size_t s_nr = sector_nrs[s];
         sectors[s] = (s_nr == INVALID ? NULL : a.sectors[s_nr]);
     }
-
+    
     vertexes[0] = vertexes[1] = NULL;
     for(size_t v = 0; v < 2; ++v) {
         size_t v_nr = vertex_nrs[v];
@@ -356,7 +356,7 @@ mob_gen::mob_gen(
     y(y),
     angle(angle),
     vars(vars) {
-
+    
 }
 
 
@@ -369,8 +369,9 @@ sector::sector() :
     hazard_floor(true),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
-    always_cast_shadow(false) {
-
+    always_cast_shadow(false),
+    associated_liquid(nullptr) {
+    
 }
 
 
@@ -426,7 +427,7 @@ sector_texture_info::sector_texture_info() :
 edge_intersection::edge_intersection(edge* e1, edge* e2) :
     e1(e1),
     e2(e2) {
-
+    
 }
 
 
@@ -446,7 +447,7 @@ path_stop::path_stop(float x, float y, vector<path_link> links) :
     x(x),
     y(y),
     links(links) {
-
+    
 }
 
 
@@ -471,10 +472,10 @@ void path_stop::calculate_dists() {
     for(size_t l = 0; l < links.size(); ++l) {
         path_link* l_ptr = &links[l];
         l_ptr->calculate_dist(this);
-
+        
         for(size_t l2 = 0; l2 < l_ptr->end_ptr->links.size(); ++l2) {
             path_link* l2_ptr = &l_ptr->end_ptr->links[l2];
-
+            
             if(l2_ptr->end_ptr == this) {
                 l2_ptr->calculate_dist(l_ptr->end_ptr);
             }
@@ -490,7 +491,7 @@ path_link::path_link(path_stop* end_ptr, size_t end_nr) :
     end_ptr(end_ptr),
     end_nr(end_nr),
     distance(0) {
-
+    
 }
 
 
@@ -515,10 +516,10 @@ void path_stop::fix_pointers(area_data &a) {
     for(size_t l = 0; l < links.size(); ++l) {
         path_link* l_ptr = &links[l];
         l_ptr->end_ptr = NULL;
-
+        
         if(l_ptr->end_nr == INVALID) continue;
         if(l_ptr->end_nr >= a.path_stops.size()) continue;
-
+        
         l_ptr->end_ptr = a.path_stops[l_ptr->end_nr];
     }
 }
@@ -531,9 +532,9 @@ void path_stop::fix_nrs(area_data &a) {
     for(size_t l = 0; l < links.size(); ++l) {
         path_link* l_ptr = &links[l];
         l_ptr->end_nr = INVALID;
-
+        
         if(!l_ptr->end_ptr) continue;
-
+        
         for(size_t s = 0; s < a.path_stops.size(); ++s) {
             if(a.path_stops[s] == l_ptr->end_ptr) {
                 l_ptr->end_nr = s;
@@ -577,7 +578,7 @@ void sector::fix_pointers(area_data &a) {
  */
 sector_correction::sector_correction(sector* sec) :
     sec(sec) {
-
+    
 }
 
 
@@ -587,7 +588,7 @@ sector_correction::sector_correction(sector* sec) :
 vertex::vertex(float x, float y) :
     x(x),
     y(y) {
-
+    
 }
 
 
@@ -608,7 +609,7 @@ tree_shadow::tree_shadow(
     sway_y(sy),
     file_name(f),
     bitmap(nullptr) {
-
+    
 }
 
 
@@ -668,21 +669,21 @@ vector<path_stop*> get_path(
 
     vector<path_stop*> full_path;
     if(go_straight) *go_straight = false;
-
+    
     if(cur_area_data.path_stops.empty()) return full_path;
-
+    
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;
     path_stop* closest_to_end = NULL;
     dist closest_to_start_dist;
     dist closest_to_end_dist;
-
+    
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
-
+        
         dist dist_to_start(start_x, start_y, s_ptr->x, s_ptr->y);
         dist dist_to_end(end_x, end_y, s_ptr->x, s_ptr->y);
-
+        
         if(!closest_to_start || dist_to_start < closest_to_start_dist) {
             closest_to_start_dist = dist_to_start;
             closest_to_start = s_ptr;
@@ -692,7 +693,7 @@ vector<path_stop*> get_path(
             closest_to_end = s_ptr;
         }
     }
-
+    
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
@@ -704,7 +705,7 @@ vector<path_stop*> get_path(
         }
         return full_path;
     }
-
+    
     //If the start and destination share the same closest spot,
     //that means this is the only stop in the path.
     if(closest_to_start == closest_to_end) {
@@ -715,14 +716,14 @@ vector<path_stop*> get_path(
         }
         return full_path;
     }
-
-
+    
+    
     //Calculate the path.
     full_path =
         dijkstra(
             closest_to_start, closest_to_end, obstacle_found, total_dist
         );
-
+        
     if(total_dist && !full_path.empty()) {
         *total_dist +=
             dist(
@@ -736,7 +737,7 @@ vector<path_stop*> get_path(
                 end_x, end_y
             ).to_float();
     }
-
+    
     return full_path;
 }
 
@@ -748,7 +749,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
     for(size_t m = 0; m < mobs.size(); ++m) {
         mob* m_ptr = mobs[m];
         if(!m_ptr->type->is_obstacle) continue;
-
+        
         if(
             m_ptr->health != 0 &&
             circle_intersects_line(
@@ -783,48 +784,48 @@ float get_point_sign(
  */
 void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     if(!s_ptr || !outer || !inners) return;
-
+    
     bool doing_outer = true;
-
+    
     //First, compile a list of all edges related to this sector.
     map<edge*, bool> edges_done;
-
+    
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         edges_done[s_ptr->edges[e]] = false;
     }
-
+    
     area_editor* ae = NULL;
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
-
+    
     //Now travel along the edges, vertex by vertex, until we have no more left.
     while(!edges_done.empty()) {
         bool poly_done = false;
-
+        
         //Start with the rightmost vertex.
         //If we still haven't closed the outer polygon, then this vertex
         //mandatorily belongs to it. Otherwise, it belongs to an inner.
         vertex* cur_vertex = get_rightmost_vertex(edges_done);
         vertex* next_vertex = NULL;
         vertex* prev_vertex = NULL;
-
+        
         float prev_angle = M_PI; //At the start, assume the angle is 0 (right).
-
+        
         if(!doing_outer) {
             inners->push_back(polygon());
         }
-
+        
         while(!poly_done) {
-
+        
             float base_angle = prev_angle - M_PI; //The angle we came from.
-
+            
             //For every edge attached to this vertex, find the closest one
             //that hasn't been done, in the direction of travel.
-
+            
             float best_angle_dif = 0;
             edge* best_edge = NULL;
-
+            
             for(size_t e = 0; e < cur_vertex->edges.size(); ++e) {
                 edge* e_ptr = cur_vertex->edges[e];
                 auto it = edges_done.find(e_ptr);
@@ -832,17 +833,17 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                     //We're not meant to check this edge.
                     continue;
                 }
-
+                
                 vertex* other_vertex =
                     e_ptr->vertexes[0] == cur_vertex ?
                     e_ptr->vertexes[1] :
                     e_ptr->vertexes[0];
-
+                    
                 if(other_vertex == prev_vertex) {
                     //This is where we came from.
                     continue;
                 }
-
+                
                 //Find the angle between our vertex and this vertex.
                 float angle =
                     atan2(
@@ -850,7 +851,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                         other_vertex->x - cur_vertex->x
                     );
                 float angle_dif = get_angle_cw_dif(angle, base_angle);
-
+                
                 //For the outer poly, we're going counter-clockwise.
                 //So the lowest angle difference is best.
                 //For the inner ones, it's clockwise, so the highest.
@@ -865,11 +866,11 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                     next_vertex = other_vertex;
                 }
             }
-
+            
             if(!best_edge) {
-
+            
                 //If there is no edge to go to next, something went wrong.
-
+                
                 //If this polygon is only one vertex, though, then
                 //that means it was a stray edge. Remove it.
                 //Otherwise, something just went wrong, and this is
@@ -885,30 +886,30 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                         ae->non_simples.insert(s_ptr);
                     }
                 }
-
+                
             } else if(edges_done[best_edge]) {
-
+            
                 //If we already did this edge, that's it, polygon closed.
                 poly_done = true;
-
+                
             } else {
-
+            
                 if(doing_outer) {
                     outer->push_back(cur_vertex);
                 } else {
                     inners->back().push_back(cur_vertex);
                 }
-
+                
                 //Continue onto the next edge.
                 prev_vertex = cur_vertex;
                 cur_vertex = next_vertex;
                 edges_done[best_edge] = true;
-
+                
             }
         }
-
+        
         doing_outer = false;
-
+        
         //Remove all edges that were done from the list.
         auto it = edges_done.begin();
         while(it != edges_done.end()) {
@@ -919,7 +920,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             }
         }
     }
-
+    
     //Before we quit, let's just check if the sector
     //uses a vertex more than twice.
     if(ae) {
@@ -930,7 +931,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
             vertex_count[e_ptr->vertexes[0]]++;
             vertex_count[e_ptr->vertexes[1]]++;
         }
-
+        
         for(auto v = vertex_count.begin(); v != vertex_count.end(); v++) {
             if(v->second > 2) {
                 //Unfortunately, it does...
@@ -956,12 +957,12 @@ void get_sector_bounding_box(
     *max_x = *min_x;
     *min_y = s_ptr->edges[0]->vertexes[0]->y;
     *max_y = *min_y;
-
+    
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         for(unsigned char v = 0; v < 2; ++v) {
             float x = s_ptr->edges[e]->vertexes[v]->x;
             float y = s_ptr->edges[e]->vertexes[v]->y;
-
+            
             *min_x = min(*min_x, x);
             *max_x = max(*max_x, x);
             *min_y = min(*min_y, y);
@@ -985,40 +986,40 @@ sector* get_sector(
 ) {
 
     if(use_blockmap) {
-
+    
         size_t col = cur_area_data.bmap.get_col(x);
         size_t row = cur_area_data.bmap.get_row(y);
         if(col == INVALID || row == INVALID) return NULL;
-
+        
         unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
-
+        
         if(sectors->size() == 1) return *sectors->begin();
-
+        
         for(auto s = sectors->begin(); s != sectors->end(); ++s) {
-
+        
             if(is_point_in_sector(x, y, *s)) {
                 return *s;
             }
         }
-
+        
         if(sector_nr) *sector_nr = INVALID;
         return NULL;
-
+        
     } else {
-
+    
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = cur_area_data.sectors[s];
-
+            
             if(is_point_in_sector(x, y, s_ptr)) {
                 if(sector_nr) *sector_nr = s;
                 return s_ptr;
             }
-
+            
         }
-
+        
         if(sector_nr) *sector_nr = INVALID;
         return NULL;
-
+        
     }
 }
 
@@ -1035,21 +1036,21 @@ void get_shadow_bounding_box(
     bool got_max_x = false;
     bool got_min_y = false;
     bool got_max_y = false;
-
+    
     for(unsigned char p = 0; p < 4; ++p) {
         float x, y, final_x, final_y;
-
+        
         if(p == 0 || p == 1) x = s_ptr->x - (s_ptr->w * 0.5);
         else                 x = s_ptr->x + (s_ptr->w * 0.5);
         if(p == 0 || p == 2) y = s_ptr->y - (s_ptr->h * 0.5);
         else                 y = s_ptr->y + (s_ptr->h * 0.5);
-
+        
         x -= s_ptr->x;
         y -= s_ptr->y;
         rotate_point(x, y, s_ptr->angle, &final_x, &final_y);
         final_x += s_ptr->x;
         final_y += s_ptr->y;
-
+        
         if(final_x < *min_x || !got_min_x) {
             *min_x = final_x;
             got_min_x = true;
@@ -1088,7 +1089,7 @@ bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
             return true;
         }
     }
-
+    
     return false;
 }
 
@@ -1111,13 +1112,13 @@ bool is_point_in_triangle(
 ) {
 
     bool b1, b2, b3;
-
+    
     float f1, f2, f3;
-
+    
     f1 = get_point_sign(px, py, tx1, ty1, tx2, ty2);
     f2 = get_point_sign(px, py, tx2, ty2, tx3, ty3);
     f3 = get_point_sign(px, py, tx3, ty3, tx1, ty1);
-
+    
     if(loq) {
         b1 = f1 <= 0.0f;
         b2 = f2 <= 0.0f;
@@ -1127,21 +1128,21 @@ bool is_point_in_triangle(
         b2 = f2 < 0.0f;
         b3 = f3 < 0.0f;
     }
-
+    
     return ((b1 == b2) && (b2 == b3));
-
+    
     //Old code.
     /*float dx = px - tx1;
     float dy = py - ty1;
-
+    
     bool s_ab = (tx2 - tx1) * dy - (ty2 - ty1) * dx > 0;
-
+    
     if((tx3 - tx1) * dy - (ty3 - ty1) * dx > 0 == s_ab) return false;
-
+    
     if((tx3 - tx2) * (py - ty2) - (ty3 - ty2) * (px - tx2) > 0 != s_ab) {
         return false;
     }
-
+    
     return true;*/
 }
 
@@ -1155,7 +1156,7 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     const vertex* next_v = get_next_in_vector(vec, nr);
     float angle_prev = atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x);
     float angle_next = atan2(next_v->y - cur_v->y, next_v->x - cur_v->x);
-
+    
     return get_angle_cw_dif(angle_prev, angle_next) < M_PI;
 }
 
@@ -1172,7 +1173,7 @@ bool is_vertex_ear(
     const vertex* v = vec[nr];
     const vertex* pv = get_prev_in_vector(vec, nr);
     const vertex* nv = get_next_in_vector(vec, nr);
-
+    
     for(size_t c = 0; c < concaves.size(); ++c) {
         const vertex* v_to_check = vec[concaves[c]];
         if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
@@ -1186,7 +1187,7 @@ bool is_vertex_ear(
             )
         ) return false;
     }
-
+    
     return true;
 }
 
@@ -1196,15 +1197,15 @@ bool is_vertex_ear(
  */
 vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
-
+    
     for(auto l = edges.begin(); l != edges.end(); ++l) {
         if(!rightmost) rightmost = l->first->vertexes[0];
-
+        
         for(unsigned char v = 0; v < 2; ++v) {
             rightmost = get_rightmost_vertex(l->first->vertexes[v], rightmost);
         }
     }
-
+    
     return rightmost;
 }
 
@@ -1214,7 +1215,7 @@ vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
  */
 vertex* get_rightmost_vertex(polygon* p) {
     vertex* rightmost = NULL;
-
+    
     for(size_t v = 0; v < p->size(); ++v) {
         vertex* v_ptr = p->at(v);
         if(!rightmost) rightmost = v_ptr;
@@ -1222,7 +1223,7 @@ vertex* get_rightmost_vertex(polygon* p) {
             rightmost = get_rightmost_vertex(v_ptr, rightmost);
         }
     }
-
+    
     return rightmost;
 }
 
@@ -1249,10 +1250,10 @@ void check_edge_intersections(vertex* v) {
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
-
+    
     for(size_t e = 0; e < v->edges.size(); ++e) {
         edge* e_ptr = v->edges[e];
-
+        
         if(ae) {
             //Check if it's on the list of intersecting edges, and remove it,
             //so it can be recalculated now.
@@ -1266,10 +1267,10 @@ void check_edge_intersections(vertex* v) {
                 }
             }
         }
-
-
+        
+        
         if(!e_ptr->vertexes[0]) continue; //It had been marked for deletion.
-
+        
         //For every other edge in the map, check for intersections.
         for(size_t e2 = 0; e2 < cur_area_data.edges.size(); ++e2) {
             edge* e2_ptr = cur_area_data.edges[e2];
@@ -1277,13 +1278,13 @@ void check_edge_intersections(vertex* v) {
                 //It had been marked for deletion.
                 continue;
             }
-
+            
             //If the edge is actually on the same vertex, never mind.
             if(e_ptr->vertexes[0] == e2_ptr->vertexes[0]) continue;
             if(e_ptr->vertexes[0] == e2_ptr->vertexes[1]) continue;
             if(e_ptr->vertexes[1] == e2_ptr->vertexes[0]) continue;
             if(e_ptr->vertexes[1] == e2_ptr->vertexes[1]) continue;
-
+            
             if(
                 lines_intersect(
                     e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
@@ -1313,7 +1314,7 @@ void clean_poly(polygon* p) {
         vertex* prev_v = get_prev_in_vector((*p), v);
         vertex* cur_v =  p->at(v);
         vertex* next_v = get_next_in_vector((*p), v);
-
+        
         //If the distance between both vertexes is so small
         //that it's basically 0, delete this vertex from the list.
         if(
@@ -1322,7 +1323,7 @@ void clean_poly(polygon* p) {
         ) {
             should_delete = true;
         }
-
+        
         //If the angle between this vertex and the next is the same, then
         //this is just a redundant point in the edge prev - next. Delete it.
         if(
@@ -1333,7 +1334,7 @@ void clean_poly(polygon* p) {
         ) {
             should_delete = true;
         }
-
+        
         if(should_delete) {
             p->erase(p->begin() + v);
         } else {
@@ -1354,14 +1355,14 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
     } else {
         if(outer->size() < 3) outer_valid = false;
     }
-
+    
     if(!outer_valid) {
         //Some error happened.
         return;
     }
-
+    
     vertex* outer_rightmost = get_rightmost_vertex(outer);
-
+    
     for(size_t i = 0; i < inners->size(); ++i) {
         polygon* p = &inners->at(i);
         vertex* closest_edge_v1 = NULL;
@@ -1370,21 +1371,21 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         vertex* closest_vertex = NULL;
         float closest_vertex_ur = FLT_MAX;
         vertex* best_vertex = NULL;
-
+        
         //Find the rightmost vertex on this inner.
         vertex* start = get_rightmost_vertex(p);
-
+        
         if(!start) {
             //Some error occured.
             continue;
         }
-
+        
         //Imagine a line from this vertex to the right.
         //If any edge of the outer polygon intersects it,
         //we just find the best vertex on that edge, and make the cut.
         //This line stretching right is known as a ray.
         float ray_width = outer_rightmost->x - start->x;
-
+        
         //Let's also check the vertexes.
         //If the closest thing is a vertex, not an edge, then
         //we can skip a bunch of steps.
@@ -1412,7 +1413,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                         closest_edge_ur = ur;
                     }
                 }
-
+                
                 if(v1->y == start->y) {
                     float ur = (v1->x - start->x) / ray_width;
                     if(!closest_vertex || ur < closest_vertex_ur) {
@@ -1420,29 +1421,29 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                         closest_vertex_ur = ur;
                     }
                 }
-
+                
             }
         }
-
+        
         if(!closest_vertex && !closest_edge_v1) {
             //Some error occured.
             continue;
         }
-
+        
         //Which is closest, a vertex or an edge?
         if(closest_vertex_ur <= closest_edge_ur) {
             //If it's a vertex, done.
             best_vertex = closest_vertex;
         } else {
             if(!closest_edge_v1) continue;
-
+            
             //If it's an edge, some more complicated steps need to be done.
-
+            
             //We're on the edge closest to the vertex.
             //Go to the rightmost vertex of this edge.
             vertex* vertex_to_compare =
                 get_rightmost_vertex(closest_edge_v1, closest_edge_v2);
-
+                
             //Now get a list of all vertexes inside the triangle
             //marked by the inner's vertex,
             //the point on the edge,
@@ -1462,11 +1463,11 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                     inside_triangle.push_back(v_ptr);
                 }
             }
-
+            
             //Check which one makes the smallest angle compared to 0.
             best_vertex = vertex_to_compare;
             float closest_angle = FLT_MAX;
-
+            
             for(size_t v = 0; v < inside_triangle.size(); ++v) {
                 vertex* v_ptr = inside_triangle[v];
                 float angle = atan2(v_ptr->y - start->y, v_ptr->x - start->x);
@@ -1476,7 +1477,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 }
             }
         }
-
+        
         //This is the final vertex. Make a bridge
         //from the start vertex to this.
         //First, we must find whether the outer vertex
@@ -1491,7 +1492,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 bridges.push_back(v);
             }
         }
-
+        
         //Insert the new bridge after this vertex.
         size_t insertion_vertex_nr;
         if(bridges.size() == 1) {
@@ -1507,7 +1508,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                         start->x - best_vertex->x
                     ), 0.0f
                 );
-
+                
             for(size_t v = 0; v < bridges.size(); ++v) {
                 vertex* v_ptr = outer->at(bridges[v]);
                 vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
@@ -1522,7 +1523,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 }
             }
         }
-
+        
         //Now, make the bridge.
         //On the outer vertex, change the next vertex
         //to be the start of the inner, then
@@ -1534,7 +1535,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 break;
             }
         }
-
+        
         auto it = p->begin() + iv;
         size_t n_after = p->size() - iv;
         //Finally, make the bridge.
@@ -1548,7 +1549,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
         outer->insert(
             outer->begin() + insertion_vertex_nr + 1 + n_after + iv, start
         );
-
+        
         //Before we close the inner polygon, let's
         //check if the inner's rightmost and the outer best vertexes
         //are not the same.
@@ -1576,11 +1577,11 @@ void depth_first_search(
 ) {
     visited.insert(start);
     unordered_set<path_stop*> links;
-
+    
     for(size_t l = 0; l < start->links.size(); ++l) {
         links.insert(start->links[l].end_ptr);
     }
-
+    
     for(size_t n = 0; n < nodes.size(); ++n) {
         path_stop* n_ptr = nodes[n];
         if(n_ptr == start) continue;
@@ -1589,7 +1590,7 @@ void depth_first_search(
             links.insert(n_ptr);
         }
     }
-
+    
     for(auto l = links.begin(); l != links.end(); ++l) {
         if(visited.find(*l) != visited.end()) continue;
         depth_first_search(nodes, visited, *l);
@@ -1615,24 +1616,24 @@ vector<path_stop*> dijkstra(
     vector<pair<path_stop*, mob*> > obstacles_found;
     //If we found an error, set this to true.
     bool got_error = false;
-
+    
     //Initialize the algorithm.
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         unvisited.insert(s_ptr);
         data[s_ptr] = make_pair(FLT_MAX, (path_stop*) NULL);
     }
-
+    
     //The distance between the start node and the start node is 0.
     data[start_node].first = 0;
-
+    
     while(!unvisited.empty() && !got_error) {
-
+    
         //Figure out what node to work on.
         path_stop* shortest_node = NULL;
         float shortest_node_dist = 0;
         pair<float, path_stop*> shortest_node_data;
-
+        
         for(auto u = unvisited.begin(); u != unvisited.end(); ++u) {
             pair<float, path_stop*> d = data[*u];
             if(!shortest_node || d.first < shortest_node_dist) {
@@ -1641,10 +1642,10 @@ vector<path_stop*> dijkstra(
                 shortest_node_data = d;
             }
         }
-
+        
         //If we reached the end node, that's it, best path found!
         if(shortest_node == end_node) {
-
+        
             vector<path_stop*> final_path;
             path_stop* next = data[end_node].second;
             final_path.push_back(end_node);
@@ -1654,7 +1655,7 @@ vector<path_stop*> dijkstra(
                 final_path.insert(final_path.begin(), next);
                 next = data[next].second;
             }
-
+            
             if(final_path.size() < 2) {
                 //This can't be right... Something went wrong.
                 got_error = true;
@@ -1664,29 +1665,29 @@ vector<path_stop*> dijkstra(
                 if(total_dist) *total_dist = td;
                 return final_path;
             }
-
+            
         }
-
+        
         //This node's been visited.
         unvisited.erase(unvisited.find(shortest_node));
-
+        
         //Check the neighbors.
         for(size_t l = 0; l < shortest_node->links.size(); ++l) {
             path_link* l_ptr = &shortest_node->links[l];
-
+            
             //If this neighbor's been visited, forget it.
             if(unvisited.find(l_ptr->end_ptr) == unvisited.end()) continue;
-
+            
             //Is this link unobstructed?
             mob* obs = get_path_link_obstacle(shortest_node, l_ptr->end_ptr);
             if(obs) {
                 obstacles_found.push_back(make_pair(shortest_node, obs));
                 continue;
             }
-
+            
             float total_dist = shortest_node_data.first + l_ptr->distance;
             auto d = &data[l_ptr->end_ptr];
-
+            
             if(total_dist < d->first) {
                 //Found a shorter path to this node.
                 d->first = total_dist;
@@ -1694,7 +1695,7 @@ vector<path_stop*> dijkstra(
             }
         }
     }
-
+    
     //If we got to this point, there means that there is no available path!
     if(!obstacles_found.empty()) {
         //Let's try making a path to the closest obstacle we found,
@@ -1717,7 +1718,7 @@ vector<path_stop*> dijkstra(
                 closest_obstacle_mob = obstacles_found[o].second;
             }
         }
-
+        
         vector<path_stop*> final_path;
         final_path.push_back(closest_obstacle_node);
         path_stop* next = data[closest_obstacle_node].second;
@@ -1726,11 +1727,11 @@ vector<path_stop*> dijkstra(
             final_path.insert(final_path.begin(), next);
             next = data[next].second;
         }
-
+        
         if(obstacle_found) *obstacle_found = closest_obstacle_mob;
         if(total_dist) *total_dist = td;
         return final_path;
-
+        
     } else {
         //No obstacle?... Something really went wrong. No path.
         if(total_dist) *total_dist = 0;
@@ -1774,12 +1775,12 @@ void get_cce(
         bool is_convex = is_vertex_convex(vertexes_left, v);
         if(is_convex) {
             convex_vertexes.push_back(v);
-
+            
         } else {
             concave_vertexes.push_back(v);
         }
     }
-
+    
     for(size_t c = 0; c < convex_vertexes.size(); ++c) {
         if(is_vertex_ear(vertexes_left, concave_vertexes, convex_vertexes[c])) {
             ears.push_back(convex_vertexes[c]);
@@ -1803,28 +1804,28 @@ bool lines_intersect(
 ) {
 
     float div = (l2y2 - l2y1) * (l1x2 - l1x1) - (l2x2 - l2x1) * (l1y2 - l1y1);
-
+    
     if(div != 0) {
-
+    
         float local_ul, local_ur;
-
+        
         //Calculate the intersection distance from the line.
         local_ul =
             ((l2x2 - l2x1) * (l1y1 - l2y1) - (l2y2 - l2y1) * (l1x1 - l2x1)) /
             div;
         if(ul) *ul = local_ul;
-
+        
         //Calculate the intersection distance from the ray.
         local_ur =
             ((l1x2 - l1x1) * (l1y1 - l2y1) - (l1y2 - l1y1) * (l1x1 - l2x1)) /
             div;
         if(ur) *ur = local_ur;
-
+        
         //Return whether they intersect.
         return
             (local_ur >= 0) && (local_ur <= 1) &&
             (local_ul >= 0) && (local_ul <= 1);
-
+            
     } else {
         //No intersection.
         return false;
@@ -1842,13 +1843,13 @@ void triangulate(sector* s_ptr) {
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
         ae = (area_editor*) game_states[cur_game_state_nr];
     }
-
+    
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
-
+    
     polygon outer_poly;
     vector<polygon> inner_polys;
-
+    
     //Before we start, let's just remove it from the
     //vector of non-simple sectors.
     if(ae) {
@@ -1857,7 +1858,7 @@ void triangulate(sector* s_ptr) {
             ae->non_simples.erase(it);
         }
     }
-
+    
     //And let's clear any "lone" edges here.
     if(ae) {
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -1868,7 +1869,7 @@ void triangulate(sector* s_ptr) {
             }
         }
     }
-
+    
     //First, we need to know what vertexes mark the outermost polygon,
     //and what vertexes mark the inner ones.
     //There can be no islands or polygons of our sector inside the inner ones.
@@ -1887,36 +1888,36 @@ void triangulate(sector* s_ptr) {
      *     +-------------+
      */
     get_polys(s_ptr, &outer_poly, &inner_polys);
-
+    
     //Get rid of 0-length vertexes and 180-degree vertexes,
     //as they're redundant.
     clean_poly(&outer_poly);
     for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);
-
+    
     //Make cuts on the outer polygon between where it and inner polygons exist,
     //as to make it holeless.
     cut_poly(&outer_poly, &inner_polys);
-
+    
     s_ptr->triangles.clear();
     vector<vertex*> vertexes_left = outer_poly;
     vector<size_t> ears;
     vector<size_t> convex_vertexes;
     vector<size_t> concave_vertexes;
-
+    
     //Begin by making a list of all concave, convex and ear vertexes.
     get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
-
+    
     //We do a triangulation until we're left
     //with three vertexes -- the final triangle.
     while(vertexes_left.size() > 3) {
-
+    
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
             if(ae) {
                 ae->non_simples.insert(s_ptr);
             }
             break;
-
+            
         } else {
             //The ear, the previous and the next vertexes make a triangle.
             s_ptr->triangles.push_back(
@@ -1926,15 +1927,15 @@ void triangulate(sector* s_ptr) {
                     get_next_in_vector(vertexes_left, ears[0])
                 )
             );
-
+            
             //Remove the ear.
             vertexes_left.erase(vertexes_left.begin() + ears[0]);
-
+            
             //Recalculate the ears, concave and convex vertexes.
             get_cce(vertexes_left, ears, convex_vertexes, concave_vertexes);
         }
     }
-
+    
     //Finally, add the final triangle.
     if(vertexes_left.size() == 3) {
         s_ptr->triangles.push_back(

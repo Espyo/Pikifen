@@ -8,6 +8,14 @@ burning {
     speed_multiplier = 2.0
 }
 
+water_drowning {
+    color = 0 0 255
+    affects_pikmin = true
+    health_change_ratio = -0.3
+    causes_flailing = true
+    speed_multiplier = 0.2
+}
+
 choking_ink {
     color = 64 64 64
     tint = 192 192 192

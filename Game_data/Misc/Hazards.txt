@@ -7,3 +7,9 @@ ink {
     color = 64 64 64
     effects = choking_ink
 }
+
+water {
+    color = 0 0 255
+    effects = water_drowning
+    liquid = water
+}

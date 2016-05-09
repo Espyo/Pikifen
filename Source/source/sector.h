@@ -68,7 +68,6 @@ struct blockmap {
     //Specifies a list of edges in each block.
     vector<vector<vector<edge*> > > edges;
     //Specifies a list of sectors in each block.
-    //A block must have at least one sector.
     vector<vector<unordered_set<sector*> > >  sectors;
     size_t n_cols, n_rows;
 
@@ -178,6 +177,7 @@ struct sector {
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.
     bool hazard_floor;
+    liquid* associated_liquid;
 
     vector<size_t> edge_nrs;
     vector<edge*> edges;

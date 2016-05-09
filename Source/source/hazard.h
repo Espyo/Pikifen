@@ -21,6 +21,8 @@
 
 using namespace std;
 
+struct liquid;
+
 /* ----------------------------------------------------------------------------
  * An hazard is the likes of fire, water, electricty, crushing, etc.
  * Pikmin can be vulnerable or invulnerable to these.
@@ -32,6 +34,7 @@ struct hazard {
     string name;
     ALLEGRO_COLOR main_color;
     vector<status_type*> effects;
+    liquid* associated_liquid;
 
     hazard();
 };

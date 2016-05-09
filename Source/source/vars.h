@@ -28,6 +28,7 @@
 #include "LAFI/gui.h"
 #include "LAFI/label.h"
 #include "mobs/leader.h"
+#include "liquid.h"
 #include "misc_structs.h"
 #include "mobs/onion.h"
 #include "particle.h"
@@ -78,6 +79,7 @@ extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_sun_bubble;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
+extern ALLEGRO_BITMAP* bmp_wave_ring;
 
 //Sound effects.
 extern sample_struct sfx_attack;
@@ -113,6 +115,8 @@ extern int area_image_size;
 //Top-left corner of the area, in world coordinates.
 extern float area_images_x1;
 extern float area_images_y1;
+//How much real time has passed since the area was loaded.
+extern float area_time_passed;
 extern timer area_title_fade_timer;
 //Name of the area to load, from the area select.
 extern string area_to_load;
@@ -157,7 +161,6 @@ extern float cursor_max_dist;
 extern movement_struct cursor_movement;
 //Time left until the position of the cursor is saved on the vector.
 extern timer cursor_save_timer;
-extern float cursor_spin_angle;
 //How much the cursor spins per second.
 extern float cursor_spin_speed;
 //Spots the cursor has been through. Used for the faint trail left behind it.
@@ -222,7 +225,6 @@ extern vector<vector<float> > group_spots_x;
 extern vector<vector<float> > group_spots_y;
 extern map<string, hazard> hazards;
 extern float hud_coords[N_HUD_ITEMS][4];
-extern float idle_glow_angle;
 extern float idle_task_range;
 extern string info_print_text;
 extern timer info_print_timer;
@@ -230,6 +232,7 @@ extern float info_spot_trigger_range;
 extern vector<info_spot*> info_spots;
 extern bool is_game_running;
 extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
+extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
 //How hard the joystick is pressed in each direction ([0, 1]);
 extern movement_struct leader_movement;
@@ -301,18 +304,14 @@ extern map<string, mob_type*> spec_mob_types;
 extern vector<unsigned long> spray_amounts;
 extern vector<spray_type> spray_types;
 extern map<string, status_type> status_types;
-extern float sun_meter_sun_angle;
 extern timer throw_particle_timer;
 extern float transition_time;
 extern bool transition_fade_in;
 extern map<string, treasure_type*> treasure_types;
 extern vector<treasure*> treasures;
-extern float tree_shadow_sway;
 //Voice from which the sound effects play.
 extern ALLEGRO_VOICE* voice;
 extern map<string, weather> weather_conditions;
-//How much each dot of the whistle should spin.
-extern float whistle_dot_offset;
 //Radius of every 6th dot.
 extern float whistle_dot_radius[6];
 //Radius the whistle was at pre-fade.

@@ -69,6 +69,8 @@
     <File Name="../source/init.h"/>
     <File Name="../source/logic.h"/>
     <File Name="../source/hazard.cpp"/>
+    <File Name="../source/liquid.cpp"/>
+    <File Name="../source/liquid.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>
@@ -159,6 +161,8 @@
     <File Name="../source/mobs/pellet_type.cpp"/>
     <File Name="../source/mobs/bridge.h"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -171,7 +175,7 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0&#xA;" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-std=c++0x;-D_GLIBCXX_USE_CXX11_ABI=0" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
       </Compiler>
       <Linker Options="-lm `pkg-config --libs allegro-5.0 allegro_audio-5.0 allegro_image-5.0 allegro_font-5.0 allegro_acodec-5.0 allegro_primitives-5.0 allegro_dialog-5.0`" Required="yes"/>

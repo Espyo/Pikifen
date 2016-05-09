@@ -6,16 +6,18 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Hazard class and hazard-related functions.
+ * Liquid class and liquid-related functions.
  */
 
-#include "hazard.h"
+#include "liquid.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a hazard.
+ * Creates a liquid type.
  */
-hazard::hazard() :
+liquid::liquid() :
     main_color(al_map_rgba(0, 0, 0, 0)),
-    associated_liquid(nullptr) {
-
+    surface_alpha(255) {
+    
+    surface_speed[0] = 10;
+    surface_speed[1] = -13;
 }

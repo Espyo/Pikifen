@@ -258,7 +258,7 @@ void pikmin::draw() {
             bmp_idle_glow,
             x, y,
             30 * w_mult, 30 * h_mult,
-            idle_glow_angle,
+            area_time_passed * IDLE_GLOW_SPIN_SPEED,
             al_map_rgba_f(
                 type->main_color.r * get_sprite_brightness(this) / 255,
                 type->main_color.g * get_sprite_brightness(this) / 255,

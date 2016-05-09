@@ -41,7 +41,7 @@ private:
         AREA_EDITOR_PICKER_MOB_CATEGORY,
         AREA_EDITOR_PICKER_MOB_TYPE,
     };
-
+    
     enum EDITOR_ERROR_TYPES {
         EET_NONE_YET,
         EET_NONE,
@@ -49,6 +49,7 @@ private:
         EET_LONE_EDGE,            //An edge is all by itself.
         EET_OVERLAPPING_VERTEXES, //Two vertexes in the same spot.
         EET_BAD_SECTOR,           //A sector is corrupted.
+        EET_MISSING_LEADER,       //No leader mob found.
         EET_MISSING_TEXTURE,      //A sector is without texture.
         EET_UNKNOWN_TEXTURE,      //A texture is not found in the game files.
         EET_TYPELESS_MOB,         //Mob with no type.
@@ -60,7 +61,7 @@ private:
         EET_PATHS_UNCONNECTED,    //The path graph is unconnected.
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
-
+    
     static const float  DEF_GRID_INTERVAL;
     static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
@@ -69,7 +70,7 @@ private:
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
     static const float  LINK_THICKNESS;
-
+    
     string                       area_name;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
@@ -119,7 +120,7 @@ private:
     bool                         show_shadows;
     vector<texture_suggestion>   texture_suggestions;
     lafi::widget*                wum; //Widget under mouse.
-
+    
     void adv_textures_to_gui();
     void guide_to_gui();
     void calculate_preview_path();
@@ -155,30 +156,30 @@ private:
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);
-
+    
 public:
 
     vector<edge_intersection> intersecting_edges;
     unordered_set<sector*>    non_simples;
     unordered_set<edge*>      lone_edges;
-
+    
     string auto_load_area;
-
+    
     area_editor();
-
+    
     virtual void do_logic();
     virtual void do_drawing();
     virtual void handle_controls(ALLEGRO_EVENT ev);
     virtual void load();
     virtual void unload();
-
+    
     void set_guide_file_name(string n);
     void set_guide_x(float x);
     void set_guide_y(float y);
     void set_guide_w(float w);
     void set_guide_h(float h);
     void set_guide_a(unsigned char a);
-
+    
 };
 
 #endif //ifndef AREA_EDITOR_INCLUDED
