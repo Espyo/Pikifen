@@ -19,7 +19,7 @@
 using namespace std;
 
 /* ----------------------------------------------------------------------------
- * Creates an onion.
+ * Creates an Onion mob.
  */
 onion::onion(
     float x, float y, onion_type* type, const float angle, const string &vars
@@ -79,6 +79,9 @@ void onion::spew() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks some logic specific to Onions.
+ */
 void onion::tick_class_specifics() {
     for(size_t o = 0; o < onions.size(); ++o) {
         onion* o_ptr = onions[o];
@@ -131,6 +134,9 @@ void onion::tick_class_specifics() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws an Onion.
+ */
 void onion::draw() {
     frame* f_ptr = anim.get_frame();
 

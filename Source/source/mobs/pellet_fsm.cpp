@@ -15,6 +15,9 @@
 #include "pellet.h"
 #include "pellet_fsm.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the pellet's logic.
+ */
 void pellet_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
 
@@ -86,6 +89,10 @@ void pellet_fsm::create_fsm(mob_type* typ) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a pellet gets delivered to an Onion.
+ */
 void pellet_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     size_t seeds = 0;
     pellet* p_ptr = (pellet*) m;

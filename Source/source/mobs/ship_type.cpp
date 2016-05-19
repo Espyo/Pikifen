@@ -14,6 +14,9 @@
 #include "ship_fsm.h"
 #include "ship_type.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of ship.
+ */
 ship_type::ship_type() :
     mob_type(),
     can_heal(false) {
@@ -23,6 +26,9 @@ ship_type::ship_type() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads data about the ship type from a data file.
+ */
 void ship_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

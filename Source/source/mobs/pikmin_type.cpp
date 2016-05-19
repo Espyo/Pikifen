@@ -19,7 +19,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a Pikmin type.
+ * Creates a type of Pikmin.
  */
 pikmin_type::pikmin_type() :
     mob_type(),
@@ -49,6 +49,9 @@ pikmin_type::pikmin_type() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads data about the Pikmin type from a data file.
+ */
 void pikmin_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

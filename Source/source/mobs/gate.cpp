@@ -12,6 +12,9 @@
 
 #include "gate.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a gate mob.
+ */
 gate::gate(
     const float x, const float y, gate_type* type,
     const float angle, const string &vars

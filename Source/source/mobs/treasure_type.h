@@ -20,7 +20,7 @@
  * Although uncommon, there can be several
  * treasures of the same type at once.
  * Like the "small red marble" treasure
- * type in Pikmin 2, you can see multiple
+ * type in Pikmin 2; you can see multiple
  * treasures of that type in some
  * Challenge Mode levels.
  */

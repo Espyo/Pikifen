@@ -14,7 +14,7 @@
 #include "pellet.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a pellet.
+ * Creates a pellet mob.
  */
 pellet::pellet(
     float x, float y, pellet_type* type, const float angle, const string &vars
@@ -28,6 +28,9 @@ pellet::pellet(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws a pellet, with the number and all.
+ */
 void pellet::draw() {
 
     frame* f_ptr = anim.get_frame();

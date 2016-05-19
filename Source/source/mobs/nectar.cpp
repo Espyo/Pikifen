@@ -16,7 +16,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a nectar.
+ * Creates a nectar mob.
  */
 nectar::nectar(float x, float y, const string &vars) :
     mob(x, y, spec_mob_types["Nectar"], 0, vars),
@@ -24,6 +24,10 @@ nectar::nectar(float x, float y, const string &vars) :
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Draws the nectar mob.
+ */
 void nectar::draw() {
     float radius =
         type->radius * (amount_left + nectar_amount) / (nectar_amount * 2) * 2;

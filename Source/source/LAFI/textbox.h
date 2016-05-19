@@ -10,7 +10,7 @@ using namespace std;
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A box with user-insertable text. The user must first click
+ * A box widget with user-insertable text. The user must first click
  * on the box, and then type.
  */
 class textbox : public widget {

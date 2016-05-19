@@ -14,7 +14,7 @@
 #include "../functions.h"
 
 /* ----------------------------------------------------------------------------
- * Creates an enemy.
+ * Creates an enemy mob.
  */
 enemy::enemy(
     const float x, const float y, enemy_type* type, const float angle,
@@ -35,6 +35,9 @@ enemy::enemy(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws an enemy, tinting it if necessary (for Onion delivery).
+ */
 void enemy::draw() {
     frame* f_ptr = anim.get_frame();
     if(!f_ptr) return;
@@ -108,6 +111,10 @@ void enemy::draw() {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not an enemy can receive a given status effect.
+ */
 bool enemy::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_ENEMIES;
 }

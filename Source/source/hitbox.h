@@ -73,7 +73,7 @@ public:
     hitbox_instance(
         const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL,
         const float x = 0, const float y = 0,
-        const float z = 0, const float heigh = 128, const float radius = 32
+        const float z = 0, const float height = 128, const float radius = 32
     );
 };
 

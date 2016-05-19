@@ -16,6 +16,9 @@
 #include "../const.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of leader.
+ */
 leader_type::leader_type() :
     mob_type(),
     whistle_range(DEF_WHISTLE_RANGE),
@@ -30,6 +33,10 @@ leader_type::leader_type() :
     leader_fsm::create_fsm(this);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Loads data about the leader type from a data file.
+ */
 void leader_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

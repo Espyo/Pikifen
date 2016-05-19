@@ -6,7 +6,7 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A simple straight line, vertical or horizontal.
+ * A simple straight line widget, vertical or horizontal.
  */
 class line : public widget {
 public:

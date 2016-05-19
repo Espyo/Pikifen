@@ -21,6 +21,9 @@
 const float DEF_HEALTH_WHEEL_RADIUS = 20;
 const float LIQUID_WOBBLE_TIME_SCALE = 2.0f;
 const float LIQUID_WOBBLE_DELTA_X = 3.0f;
+const float NOTIFICATION_PADDING = 8.0f;
+const float NOTIFICATION_CONTROL_SIZE = 24.0f;
+const unsigned char NOTIFICATION_ALPHA = 160;
 //The shadows of walls spread this much outwards.
 const float WALL_SHADOW_LENGTH  = 32;
 //The shadows of walls start with this opacity and fade to 0.

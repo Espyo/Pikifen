@@ -17,6 +17,9 @@
 
 //TODO bottomless pits.
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of treasure.
+ */
 treasure_type::treasure_type() :
     mob_type(),
     value(0) {
@@ -25,6 +28,9 @@ treasure_type::treasure_type() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads data about the treasure type from a data file.
+ */
 void treasure_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

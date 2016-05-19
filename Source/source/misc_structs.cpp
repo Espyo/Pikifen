@@ -28,7 +28,6 @@ bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
  */
@@ -66,7 +65,6 @@ void bmp_manager::detach(const string &name) {
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Initializes a movement struct with all movements set to 0.
  */
@@ -89,6 +87,7 @@ float movement_struct::get_intensity() {
     return dist(0, 0, get_x(), get_y()).to_float();
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the horizontal movement, in the range [-1, 1];
  */
@@ -105,7 +104,6 @@ float movement_struct::get_y() {
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Creates a new distance number, given two points.
  */
@@ -116,6 +114,7 @@ dist::dist(const float x1, const float y1, const float x2, const float y2) :
 
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates a new distance number, given a non-squared distance.
  */
@@ -125,6 +124,7 @@ dist::dist(const float d) :
     normal_distance(d) {
 
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the regular distance as a number.
@@ -139,8 +139,9 @@ float dist::to_float() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
- * Distance comparisons
+ * Distance comparisons and plain operations.
  */
 bool dist::operator<(const float d2) {
     return distance_squared < (d2 * d2);
@@ -160,7 +161,6 @@ bool dist::operator>=(const float d2) {
 bool dist::operator!=(const float d2) {
     return !operator==(d2);
 }
-
 bool dist::operator<(const dist &d2) {
     return distance_squared < d2.distance_squared;
 }
@@ -179,7 +179,6 @@ bool dist::operator>=(const dist &d2) {
 bool dist::operator!=(const dist &d2) {
     return !operator==(d2);
 }
-
 void dist::operator+=(const dist &d2) {
     distance_squared += d2.distance_squared;
     if(has_normal_distance && d2.has_normal_distance) {
@@ -188,7 +187,6 @@ void dist::operator+=(const dist &d2) {
         has_normal_distance = false;
     }
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -308,6 +306,7 @@ mob_type* mob_category_manager::create_mob_type(const unsigned char cat_nr) {
     if(cat_nr >= categories.size()) return nullptr;
     return categories[cat_nr].type_constructor();
 }
+
 
 /* ----------------------------------------------------------------------------
  * Saves a mob type onto its own vector.
@@ -501,7 +500,6 @@ void group_spot_info::remove(mob* m) {
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Creates a structure with sample info.
  */
@@ -572,7 +570,6 @@ void sample_struct::destroy() {
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Registers a new type of sector.
  */
@@ -612,7 +609,6 @@ string sector_types_manager::get_name(const unsigned char nr) {
 unsigned char sector_types_manager::get_nr_of_types() {
     return names.size();
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -674,7 +670,6 @@ float timer::get_ratio_left() {
 }
 
 
-
 const float fade_manager::FADE_DURATION = 0.15f;
 
 /* ----------------------------------------------------------------------------
@@ -712,6 +707,7 @@ bool fade_manager::is_fade_in() {
 bool fade_manager::is_fading() {
     return time_left > 0;
 }
+
 
 /* ----------------------------------------------------------------------------
  * Returns the percentage of progress left in the current fade.

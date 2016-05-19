@@ -15,6 +15,9 @@
 #include "mob.h"
 #include "mob_type.h"
 
+/* ----------------------------------------------------------------------------
+ * Functions about the gate's finite state machine and behavior.
+ */
 namespace gate_fsm {
 void create_fsm(mob_type* typ);
 

@@ -860,7 +860,7 @@ void area_editor::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
- * Finds errors with the map.
+ * Finds errors with the area.
  * On the first error, it adds it to error_type and stops.
  */
 void area_editor::find_errors() {
@@ -5010,6 +5010,9 @@ void area_editor::update_review_frame() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Leaves the area editor, with a fade out.
+ */
 void area_editor::leave() {
     fade_mgr.start_fade(false, [] () {
         change_game_state(GAME_STATE_MAIN_MENU);
@@ -5017,31 +5020,57 @@ void area_editor::leave() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Sets the guide's file name.
+ */
 void area_editor::set_guide_file_name(string n) {
     guide_file_name = n;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the guide's X coordinate.
+ */
 void area_editor::set_guide_x(float x) {
     guide_x = x;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the guide's Y coordinate.
+ */
 void area_editor::set_guide_y(float y) {
     guide_y = y;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the guide's width.
+ */
 void area_editor::set_guide_w(float w) {
     guide_w = w;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the guide's height.
+ */
 void area_editor::set_guide_h(float h) {
     guide_h = h;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the guide's alpha.
+ */
 void area_editor::set_guide_a(unsigned char a) {
     guide_a = a;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a texture suggestion.
+ */
 texture_suggestion::texture_suggestion(const string &n) :
     bmp(NULL),
     name(n) {
@@ -5049,6 +5078,10 @@ texture_suggestion::texture_suggestion(const string &n) :
     bmp = bitmaps.get("Textures/" + name, NULL);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Destroys a texture suggestion.
+ */
 texture_suggestion::~texture_suggestion() {
     bitmaps.detach(name);
 }

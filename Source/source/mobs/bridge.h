@@ -20,6 +20,13 @@ enum BRIDGE_ANIMATIONS {
 };
 
 
+/* ----------------------------------------------------------------------------
+ * A bridge mob. Bridges on the engine are made up of two parts:
+ * the mob itself, which Pikmin damage, and the sectors Pikmin can walk on.
+ * The sectors initially start as something else (normally ground at a
+ * lower level, or some water), and when the bridge opens, they change
+ * into walkable wood.
+ */
 class bridge : public mob {
 private:
 

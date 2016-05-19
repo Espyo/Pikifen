@@ -12,6 +12,9 @@
 #include "enemy_type.h"
 #include "../functions.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of enemy.
+ */
 enemy_type::enemy_type() :
     mob_type(),
     pikmin_seeds(0),
@@ -24,6 +27,10 @@ enemy_type::enemy_type() :
     add_carrying_states();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Loads data about the enemy type from a data file.
+ */
 void enemy_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

@@ -15,6 +15,9 @@
 #include "pellet_type.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of pellet.
+ */
 pellet_type::pellet_type() :
     mob_type(),
     pik_type(nullptr),
@@ -26,6 +29,10 @@ pellet_type::pellet_type() :
     pellet_fsm::create_fsm(this);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Loads data about the pellet type from a data file.
+ */
 void pellet_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

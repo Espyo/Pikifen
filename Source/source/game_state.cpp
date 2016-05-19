@@ -18,12 +18,18 @@
 #include "vars.h"
 
 
+/* ----------------------------------------------------------------------------
+ * Creates a game state.
+ */
 game_state::game_state() :
     selected_widget(NULL) {
 
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Sets the currently selected widget.
+ */
 void game_state::set_selected_widget(menu_widget* widget) {
     if(selected_widget) selected_widget->selected = false;
     selected_widget = widget;
@@ -31,6 +37,10 @@ void game_state::set_selected_widget(menu_widget* widget) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Pass an Allegro event to this so the state's widgets can
+ * handle it if necessary.
+ */
 void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 
     //Mousing over a widget and clicking.
@@ -162,10 +172,19 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 
 
 
+/* ----------------------------------------------------------------------------
+ * Creates the "gameplay" state.
+ */
 gameplay::gameplay() :
-    game_state() {}
+    game_state() {
+    
+    
+}
 
 
+/* ----------------------------------------------------------------------------
+ * Loads the "gameplay" state into memory.
+ */
 void gameplay::load() {
     ready_for_input = false;
 
@@ -292,16 +311,25 @@ void gameplay::load() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Unloads the "gameplay" state from memory.
+ */
 void gameplay::unload() {
     //TODO
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handle Allegro events.
+ */
 void gameplay::handle_controls(ALLEGRO_EVENT ev) {
     handle_game_controls(ev);
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Tick the gameplay logic by one frame.
+ */
 void gameplay::do_logic() {
     if(dev_tool_change_speed) {
         delta_t *= dev_tool_change_speed_mult;
@@ -312,6 +340,9 @@ void gameplay::do_logic() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draw the gameplay.
+ */
 void gameplay::do_drawing() {
     do_game_drawing();
 }

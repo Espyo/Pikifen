@@ -15,6 +15,9 @@
 #include "ship_fsm.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the ship's logic.
+ */
 void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
 
@@ -36,6 +39,10 @@ void ship_fsm::create_fsm(mob_type* typ) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a ship receives a mob carried by Pikmin.
+ */
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     float pokos = *((float*) info1);
     ship* s_ptr = (ship*) m;

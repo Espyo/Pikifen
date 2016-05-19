@@ -15,7 +15,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a leader.
+ * Creates a leader mob.
  */
 leader::leader(
     const float x, const float y, leader_type* type,
@@ -36,7 +36,7 @@ leader::leader(
 
 
 /* ----------------------------------------------------------------------------
- * Makes the current leader dismiss their group.
+ * Makes a leader dismiss their group.
  * The group is then organized in groups, by type,
  * and is dismissed close to the leader.
  */
@@ -127,7 +127,7 @@ void leader::dismiss() {
 
 
 /* ----------------------------------------------------------------------------
- * Swaps out the curretly held Pikmin for a different one.
+ * Swaps out the currently held Pikmin for a different one.
  */
 void leader::swap_held_pikmin(mob* new_pik) {
     if(holding_pikmin) {
@@ -141,7 +141,7 @@ void leader::swap_held_pikmin(mob* new_pik) {
 
 
 /* ----------------------------------------------------------------------------
- * Draw a leader object.
+ * Draw a leader mob.
  */
 void leader::draw() {
     mob::draw();
@@ -214,6 +214,7 @@ void leader::signal_group_move_start() {
     }
 }
 
+
 /* ----------------------------------------------------------------------------
  * Returns the distance between a leader and the center of its group.
  */
@@ -249,6 +250,9 @@ void switch_to_leader(leader* new_leader_ptr) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a leader can receive a given status effect.
+ */
 bool leader::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_LEADERS;
 }

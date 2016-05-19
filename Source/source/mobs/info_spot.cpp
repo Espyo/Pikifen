@@ -17,7 +17,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates an info spot.
+ * Creates an info spot mob.
  */
 info_spot::info_spot(
     const float x, const float y, const float angle, const string &vars
@@ -37,6 +37,9 @@ info_spot::info_spot(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draw the info spot.
+ */
 void info_spot::draw() {
     draw_sprite(
         bmp_info_spot,

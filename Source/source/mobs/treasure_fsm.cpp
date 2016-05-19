@@ -15,6 +15,9 @@
 #include "treasure_fsm.h"
 #include "ship.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the treasure's logic.
+ */
 void treasure_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
 
@@ -86,6 +89,10 @@ void treasure_fsm::create_fsm(mob_type* typ) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a treasure gets delivered to a ship.
+ */
 void treasure_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     treasure* t_ptr = (treasure*) m;
     ship* s_ptr = (ship*) t_ptr->carrying_target;

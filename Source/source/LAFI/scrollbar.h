@@ -6,7 +6,7 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A button that can be dragged up and down (or left and right)
+ * A button widget that can be dragged up and down (or left and right)
  * to pan a document, amongst other things.
  */
 class scrollbar : public widget {

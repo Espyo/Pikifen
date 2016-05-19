@@ -168,10 +168,11 @@ map<string, hazard> hazards;
 float hud_coords[N_HUD_ITEMS][4];
 float idle_task_range = 50;
 string info_print_text;
-timer info_print_timer = timer(
-                             INFO_PRINT_DURATION,
-[] () { info_print_text.clear(); }
-                         );
+timer info_print_timer =
+    timer(
+        INFO_PRINT_DURATION,
+    [] () { info_print_text.clear(); }
+    );
 float info_spot_trigger_range = 64.0f;
 vector<info_spot*> info_spots;
 bool is_game_running = true;

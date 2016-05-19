@@ -16,7 +16,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a Pikmin.
+ * Creates a Pikmin mob.
  */
 pikmin::pikmin(
     const float x, const float y, pikmin_type* type,
@@ -169,6 +169,9 @@ pikmin* get_closest_buried_pikmin(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks some logic specific to Pikmin.
+ */
 void pikmin::tick_class_specifics() {
     //Carrying object.
     if(carrying_mob) {
@@ -190,6 +193,10 @@ void pikmin::tick_class_specifics() {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
+ */
 void pikmin::draw() {
 
     frame* f_ptr = anim.get_frame();
@@ -272,28 +279,43 @@ void pikmin::draw() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns whether or not a Pikmin can receive a given status effect.
+ */
 bool pikmin::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_PIKMIN;
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handler for when a status effect causes "flailing".
+ */
 void pikmin::receive_flailing_from_status() {
     fsm.set_state(PIKMIN_STATE_FLAILING);
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handler for when a status effect causes "panic".
+ */
 void pikmin::receive_panic_from_status() {
     fsm.set_state(PIKMIN_STATE_PANIC);
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handler for when a status effect no longer causes "panic".
+ */
 void pikmin::lose_panic_from_status() {
     if(fsm.cur_state->id == PIKMIN_STATE_PANIC) {
         fsm.set_state(PIKMIN_STATE_IDLE);
     }
 }
 
-
+/* ----------------------------------------------------------------------------
+ * Handler for when a status effect changes maturity.
+ * amount: Amount to increase or decrease.
+ */
 void pikmin::change_maturity_amount_from_status(const int amount) {
     int new_maturity = maturity + amount;
     new_maturity = max(0, new_maturity);

@@ -26,10 +26,10 @@ using namespace std;
 class leader;
 
 /* ----------------------------------------------------------------------------
- * Pikmin types, almost the basic meat of the fan-games.
- * The canon ones are Red, Yellow, Blue, White,
- * Purple, Bulbmin, Winged and Rock, but with the engine,
- * loads of fan-made ones can be made.
+ * Pikmin types, almost the basic meat of the fangames.
+ * The canon ones (at the time of writing this) are
+ * Red, Yellow, Blue, White, Purple, Bulbmin, Winged, and Rock,
+ * but with the engine, loads of fan-made ones can be made.
  */
 class pikmin_type : public mob_type {
 public:

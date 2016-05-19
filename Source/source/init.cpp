@@ -29,6 +29,9 @@
 #include "vars.h"
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes Allegro and its modules.
+ */
 void init_allegro() {
     al_init();
     al_install_mouse();
@@ -41,6 +44,9 @@ void init_allegro() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the default controls.
+ */
 void init_controls() {
     controls.assign(4, vector<control_info>());
     //TODO create a manager for this, like the mob category manager and whatnot.
@@ -67,6 +73,9 @@ void init_controls() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the development tools from the Tools.txt file.
+ */
 void init_dev_tools() {
     data_node file(MISC_FOLDER + "/Tools.txt");
     
@@ -110,6 +119,9 @@ void init_dev_tools() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the error bitmap.
+ */
 void init_error_bitmap() {
     //Error bitmap.
     int bmp_error_w, bmp_error_h;
@@ -128,6 +140,9 @@ void init_error_bitmap() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes things regarding Allegro events, like the queue, timer, etc.
+ */
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
@@ -146,6 +161,9 @@ void init_event_things(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes and loads the game's fonts.
+ */
 void init_fonts() {
     int font_ranges[] = {
         0x0020, 0x007E, //ASCII
@@ -199,6 +217,9 @@ void init_fonts() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the game states.
+ */
 void init_game_states() {
     game_states[GAME_STATE_MAIN_MENU] = new main_menu();
     game_states[GAME_STATE_AREA_MENU] = new area_menu();
@@ -209,6 +230,9 @@ void init_game_states() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Helper function to initialize a HUD coordinate.
+ */
 void init_hud_coordinate(
     const int n, const float x, const float y, const float w, const float h
 ) {
@@ -217,6 +241,9 @@ void init_hud_coordinate(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the default HUD coordinates.
+ */
 void init_hud_coordinates() {
     init_hud_coordinate(HUD_ITEM_TIME,                0.40, 0.10, 0.70, 0.10);
     init_hud_coordinate(HUD_ITEM_DAY_BUBBLE,          0.88, 0.18, 0.15, 0.00);
@@ -249,6 +276,9 @@ void init_hud_coordinates() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes miscellaneous things and settings.
+ */
 void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(display, "Pikmin fangame engine");
@@ -308,6 +338,9 @@ void init_misc() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes miscellaneous fixed graphics.
+ */
 void init_misc_graphics() {
     //Graphics.
     bmp_ship = load_bmp("Ship.png");
@@ -352,6 +385,9 @@ void init_misc_graphics() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes miscellaneous fixed sound effects.
+ */
 void init_misc_sounds() {
     //Sound effects.
     voice =
@@ -388,6 +424,9 @@ void init_misc_sounds() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the list of mob categories.
+ */
 void init_mob_categories() {
 
     mob_categories.register_category(
@@ -543,6 +582,9 @@ void init_mob_categories() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the list of sector types.
+ */
 void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
@@ -553,6 +595,9 @@ void init_sector_types() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Initializes the special mob types.
+ */
 void init_special_mob_types() {
     //Info spot.
     mob_type* info_spot_mt = new mob_type();
@@ -585,6 +630,9 @@ void init_special_mob_types() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys Allegro and modules.
+ */
 void destroy_allegro() {
     al_uninstall_joystick();
     al_uninstall_audio();
@@ -594,6 +642,9 @@ void destroy_allegro() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys Allegro's event-related things.
+ */
 void destroy_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
@@ -603,6 +654,9 @@ void destroy_event_things(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys the list of game states.
+ */
 void destroy_game_states() {
     for(size_t s = 0; s < N_GAME_STATES; s++) {
         //TODO create the missing destructors for each state type.
@@ -611,6 +665,9 @@ void destroy_game_states() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys the list of mob types.
+ */
 void destroy_special_mob_types() {
     for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
         delete t->second;
@@ -620,6 +677,9 @@ void destroy_special_mob_types() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Destroys miscellaneous graphics, sounds, and other resources.
+ */
 void destroy_resources() {
     al_destroy_bitmap(bmp_error);
     al_destroy_font(font_area_name);

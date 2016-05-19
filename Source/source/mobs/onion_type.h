@@ -18,8 +18,7 @@
 
 /* ----------------------------------------------------------------------------
  * An Onion type.
- * It's basically associated with a
- * Pikmin type.
+ * It's basically associated with a Pikmin type.
  */
 class onion_type : public mob_type {
 public:

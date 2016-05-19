@@ -32,6 +32,10 @@ enum GAME_STATES {
     N_GAME_STATES,
 };
 
+/* ----------------------------------------------------------------------------
+ * A game macro-state. It might be easier to think of this as a "screen".
+ * You've got the title screen, the options screen, the gameplay screen, etc.
+ */
 class game_state {
 protected:
     void set_selected_widget(menu_widget* widget);
@@ -50,6 +54,9 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * Standard gameplay state. This is where the action happens.
+ */
 class gameplay : public game_state {
 public:
     gameplay();

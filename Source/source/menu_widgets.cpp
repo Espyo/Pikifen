@@ -23,6 +23,9 @@ const float menu_widget::ICON_SWAY_TIME_SCALE = 1.0f;
 const float menu_widget::JUICY_GROW_DELTA = 0.05f;
 const float menu_widget::JUICY_GROW_DURATION = 0.3f;
 
+/* ----------------------------------------------------------------------------
+ * Creates a menu widget.
+ */
 menu_widget::menu_widget(
     const int x, const int y, const int w, const int h,
     function<void()> click_handler
@@ -40,6 +43,9 @@ menu_widget::menu_widget(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns whether or not the mouse cursor is on top of this widget.
+ */
 bool menu_widget::mouse_on(const int mx, const int my) {
     return (
                mx >= x - w * 0.5 &&
@@ -50,6 +56,10 @@ bool menu_widget::mouse_on(const int mx, const int my) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Runs the widget's "click" code, used when the player clicks on the widget,
+ * if possible.
+ */
 void menu_widget::click() {
     if(!enabled) return;
     on_click();
@@ -57,6 +67,9 @@ void menu_widget::click() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks an in-game frame worth of logic.
+ */
 void menu_widget::tick(const float time) {
     if(juicy_grow_time_left > 0) {
         juicy_grow_time_left = max(0.0f, juicy_grow_time_left - time);
@@ -64,12 +77,17 @@ void menu_widget::tick(const float time) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Begins the growth animation process.
+ */
 void menu_widget::start_juicy_grow() {
     juicy_grow_time_left = JUICY_GROW_DURATION;
 }
 
 
-
+/* ----------------------------------------------------------------------------
+ * Creates a clickable button widget.
+ */
 menu_button::menu_button(
     const int x, const int y, const int w, const int h,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
@@ -84,6 +102,9 @@ menu_button::menu_button(
 
 }
 
+/* ----------------------------------------------------------------------------
+ * Draws a button widget.
+ */
 void menu_button::draw(const float time_spent) {
     if(!font || !enabled) return;
     if(selected) {
@@ -113,12 +134,12 @@ void menu_button::draw(const float time_spent) {
 
 
 void menu_button::on_click() {}
-
-
 bool menu_button::is_clickable() { return enabled; }
 
 
-
+/* ----------------------------------------------------------------------------
+ * Creates a checkbox widget.
+ */
 menu_checkbox::menu_checkbox(
     const int x, const int y, const int w, const int h,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
@@ -135,6 +156,9 @@ menu_checkbox::menu_checkbox(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws a checkbox.
+ */
 void menu_checkbox::draw(const float time_spent) {
     if(!font || !enabled) return;
     if(selected) {
@@ -169,15 +193,13 @@ void menu_checkbox::draw(const float time_spent) {
 }
 
 
-void menu_checkbox::on_click() {
-    checked = !checked;
-}
-
-
+void menu_checkbox::on_click() { checked = !checked; }
 bool menu_checkbox::is_clickable() { return enabled; }
 
 
-
+/* ----------------------------------------------------------------------------
+ * Creates a text widget.
+ */
 menu_text::menu_text(
     const int x, const int y, const int w, const int h, string text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
@@ -192,9 +214,9 @@ menu_text::menu_text(
 }
 
 
-void menu_text::on_click() {}
-
-
+/* ----------------------------------------------------------------------------
+ * Draws a text widget.
+ */
 void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
 
@@ -221,4 +243,5 @@ void menu_text::draw(const float time_spent) {
 }
 
 
+void menu_text::on_click() {}
 bool menu_text::is_clickable() { return false; }

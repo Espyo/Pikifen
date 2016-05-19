@@ -2851,6 +2851,9 @@ void animation_editor::update_stats() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Exits out of the animation editor, with a fade.
+ */
 void animation_editor::leave() {
     fade_mgr.start_fade(false, [] () {
         change_game_state(GAME_STATE_MAIN_MENU);

@@ -14,7 +14,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a bridge.
+ * Creates a bridge mob.
  */
 bridge::bridge(
     const float x, const float y, const float angle, const string &vars
@@ -27,6 +27,12 @@ bridge::bridge(
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Populates this bridge's list of sectors by checking all
+ * neighboring sectors recursively, until it can't find any more
+ * sectors of the "bridge" or "bridge rail" type.
+ */
 void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
 
     if(!s_ptr) return;
@@ -54,6 +60,10 @@ void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Opens up the bridge. Updates all relevant sectors,
+ * does the particle explosion, etc.
+ */
 void bridge::open(mob* m, void* info1, void* info2) {
     bridge* b_ptr = (bridge*) m;
     b_ptr->set_animation(BRIDGE_ANIM_NOTHING);
@@ -81,16 +91,28 @@ void bridge::open(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Damage the bridge, depending on the Pikmin, hitbox, etc.
+ */
 void bridge::take_damage(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
     float damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
     m->health -= damage;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Sets the standard "idle" animation.
+ */
 void bridge::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(BRIDGE_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Initializes the bridge mob type.
+ */
 void init_bridge_mob_type(mob_type* mt) {
     mt->always_active = true;
     mt->radius = 32;

@@ -14,7 +14,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a ship.
+ * Creates a ship mob.
  */
 ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
     mob(x, y, type, angle, vars),
@@ -23,6 +23,9 @@ ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws a ship.
+ */
 void ship::draw() {
     draw_sprite(
         bmp_ship,

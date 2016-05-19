@@ -6,7 +6,7 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A radio button. Only one of these in a group can be selected.
+ * A radio button widget. Only one of these in a group can be selected.
  * Selecting one (with a mouse click) unselects any others in
  * the same group.
  */

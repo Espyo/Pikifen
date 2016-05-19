@@ -22,7 +22,7 @@
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a mob type.
+ * Creates a non-specific mob type.
  */
 mob_type::mob_type() :
     radius(0),
@@ -71,7 +71,6 @@ void mob_type::load_from_file(
         load_from_file_func(file, load_resources, anim_conversions);
     }
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -128,6 +127,7 @@ void load_mob_types(
     }
 
 }
+
 
 /* ----------------------------------------------------------------------------
  * Loads a mob type's info from a text file.

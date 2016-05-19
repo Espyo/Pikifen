@@ -14,6 +14,9 @@
 #include "gate_fsm.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the gate's logic.
+ */
 void gate_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idle", GATE_STATE_IDLE); {
@@ -46,6 +49,11 @@ void gate_fsm::create_fsm(mob_type* typ) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a gate is opened. This creates the particle explosion,
+ * changes the associated sector, etc.
+ */
 void gate_fsm::open(mob* m, void* info1, void* info2) {
     gate* g_ptr = (gate*) m;
     g_ptr->sec->type = SECTOR_TYPE_NORMAL;
@@ -58,12 +66,20 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     );
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a gate takes damage, based on the Pikmin, hitboxes, etc.
+ */
 void gate_fsm::take_damage(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
     float damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
     m->health -= damage;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a gate needs to enter its default "idle" animation.
+ */
 void gate_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(GATE_ANIM_IDLE);
 }

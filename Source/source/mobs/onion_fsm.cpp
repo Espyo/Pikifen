@@ -15,6 +15,9 @@
 #include "../particle.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the Onion's logic.
+ */
 void onion_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
 
@@ -37,7 +40,7 @@ void onion_fsm::create_fsm(mob_type* typ) {
 }
 
 /* ----------------------------------------------------------------------------
- * Receive a mob, carried by a Pikmin.
+ * When an Onion receives a mob, carried by Pikmin.
  */
 void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     size_t seeds = (size_t) info1;

@@ -14,6 +14,9 @@
 
 #include "mob_type.h"
 
+/* ----------------------------------------------------------------------------
+ * Functions about the Pikmin's finite state machine and behavior.
+ */
 namespace pikmin_fsm {
 void create_fsm(mob_type* typ);
 

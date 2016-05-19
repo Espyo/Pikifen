@@ -18,7 +18,7 @@
 #include "../spray_type.h"
 
 /* ----------------------------------------------------------------------------
- * Generic handler for the mob touching a hazard.
+ * Generic handler for a mob touching a hazard.
  */
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     hazard* h = (hazard*) info1;
@@ -30,7 +30,7 @@ void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Generic handler for the mob touching a spray.
+ * Generic handler for a mob touching a spray.
  */
 void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
@@ -42,7 +42,7 @@ void gen_mob_fsm::touch_spray(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Generic handler for when the mob was delivered to an Onion/ship.
+ * Generic handler for when a mob was delivered to an Onion/ship.
  */
 void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     enemy* e_ptr = (enemy*) m;
@@ -57,7 +57,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Event handler that makes the mob lose health by being damaged by another.
+ * Event handler that makes a mob lose health by being damaged by another.
  */
 void gen_mob_fsm::lose_health(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
@@ -131,7 +131,7 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Begin moving a carried object.
+ * When a carried object begins moving.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     mob* obs = NULL;
@@ -173,7 +173,7 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Stop moving a carried object.
+ * When a carried object stops moving.
  */
 void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
     if(!m->carry_info) return;
@@ -183,7 +183,7 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if the Pikmin should start carrying the mob.
+ * When a Pikmin checks if it should start carrying the mob.
  */
 void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
 
@@ -201,7 +201,7 @@ void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if the Pikmin should stop carrying the mob.
+ * When a Pikmin checks if it should stop carrying the mob.
  */
 void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
     bool run_event = false;
@@ -221,7 +221,7 @@ void gen_mob_fsm::check_carry_stop(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Starts the process of a mob being delivered to an Onion/ship.
+ * When a mob starts the process of being delivered to an Onion/ship.
  */
 void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
     m->tangible = false;
@@ -230,10 +230,8 @@ void gen_mob_fsm::start_being_delivered(mob* m, void* info1, void* info2) {
 }
 
 
-const float CARRYING_STUCK_SWAY_AMOUNT = 20.0f;
-const float CARRYING_STUCK_SPEED_MULT = 0.3f;
 /* ----------------------------------------------------------------------------
- * Sets the next target when following a path.
+ * When a mob sets the next target when following a path.
  */
 void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
     m->cur_path_stop_nr =

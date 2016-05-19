@@ -19,7 +19,7 @@
 #include "mob_type.h"
 
 /* ----------------------------------------------------------------------------
- * A type of ship (Hocotate Ship, research pod, golden HS, golden RP, ...).
+ * A type of ship (Hocotate ship, research pod, golden HS, S.S. Drake, etc.).
  */
 class ship_type : public mob_type {
 public:

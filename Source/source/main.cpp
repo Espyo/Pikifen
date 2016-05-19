@@ -44,7 +44,7 @@
 
 using namespace std;
 
-/*
+/* ----------------------------------------------------------------------------
  * Main function.
  * It begins by loading Allegro stuff,
  * the options, setting some settings,

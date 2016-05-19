@@ -15,7 +15,9 @@
 #include "onion_type.h"
 #include "../vars.h"
 
-
+/* ----------------------------------------------------------------------------
+ * Creates a type of Onion.
+ */
 onion_type::onion_type() :
     mob_type(),
     pik_type(NULL) {
@@ -24,6 +26,9 @@ onion_type::onion_type() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads data about the Onion type from a data file.
+ */
 void onion_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

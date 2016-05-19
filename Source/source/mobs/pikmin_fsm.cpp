@@ -16,6 +16,9 @@
 #include "pikmin_fsm.h"
 #include "../vars.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the Pikmin's logic.
+ */
 void pikmin_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("buried", PIKMIN_STATE_BURIED); {
@@ -616,10 +619,18 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a Pikmin becomes buried.
+ */
 void pikmin_fsm::become_buried(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_BURROWED);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Makes a Pikmin begin its plucking process.
+ * info1: Pointer to the leader that plucked.
+ */
 void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     mob* lea = (mob*) info1;
@@ -636,6 +647,10 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     add_to_group(lea, pik);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Makes a Pikmin finish its plucking process.
+ */
 void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     pik->set_animation(PIKMIN_ANIM_IDLE);
@@ -643,11 +658,21 @@ void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
     sfx_pikmin_pluck.play(0, false);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is grabbed by a leader.
+ */
 void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     sfx_pikmin_held.play(0, false);
     m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is grabbed by an enemy.
+ * info1: Pointer to the mob.
+ * info2: Pointer to the hitbox instance that grabbed.
+ */
 void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* mob_ptr = (mob*) info1;
@@ -662,6 +687,12 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     remove_from_group(pik_ptr);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is dismissed by its leader.
+ * info1: Pointer to the world X coordinate to go to.
+ * info2: Pointer to the world Y coordinate to go to.
+ */
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(
         *(float*) info1,
@@ -675,16 +706,28 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin reaches its dismissal spot.
+ */
 void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin becomes idle.
+ */
 void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     unfocus_mob(m);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is thrown by a leader.
+ */
 void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     sfx_pikmin_held.stop();
@@ -693,24 +736,45 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_THROWN);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is gently released by a leader.
+ */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a thrown Pikmin lands.
+ */
 void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     pikmin_fsm::stand_still(m, NULL, NULL);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to sigh.
+ */
 void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_SIGH);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to stand still in place.
+ */
 void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed_x = m->speed_y = 0;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is called over by a leader, either by being whistled,
+ * or touched when idle.
+ */
 void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
 
@@ -726,6 +790,11 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     sfx_pikmin_called.play(0.03, false);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is hit by an attack and gets knocked back.
+ * info1: Pointer to the hitbox touch information structure.
+ */
 void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
     float knockback = 0;
@@ -741,6 +810,11 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     remove_from_group(m);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to walk towards an opponent.
+ * info1: Pointer to the opponent.
+ */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     focus_mob(m, (mob*) info1);
     m->stop_chasing();
@@ -754,6 +828,11 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     remove_from_group(m);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin that just attacked an opponent needs to walk
+ * towards it again.
+ */
 void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
     if(
         m->focused_mob &&
@@ -767,6 +846,11 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
     m->fsm.set_state(PIKMIN_STATE_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to go towards its spot on a carriable object.
+ * info1: Pointer to the mob to carry.
+ */
 void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     mob* carriable_mob = (mob*) info1;
     pikmin* pik_ptr = (pikmin*) m;
@@ -815,6 +899,10 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin reaches its spot on a carriable object.
+ */
 void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* carriable_mob = pik_ptr->carrying_mob;
@@ -850,6 +938,10 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to drop the object it's carrying, or
+ * stop chasing the object if it's not carrying it yet, but wants to.
+ */
 void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
 
@@ -865,6 +957,9 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to release an object it is carrying.
+ */
 void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     if(!p->carrying_mob) return;
@@ -876,6 +971,10 @@ void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to decide a new spot to run off to whilst
+ * in panic.
+ */
 void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
     m->chase(
         m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000),
@@ -885,6 +984,9 @@ void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to reel back to unleash an attack.
+ */
 void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->set_animation(PIKMIN_ANIM_ATTACK);
@@ -892,6 +994,10 @@ void pikmin_fsm::prepare_to_attack(mob* m, void* info1, void* info2) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a thrown Pikmin lands on a mob, to latch on to it.
+ * info1: Pointer to the hitbox touch information structure.
+ */
 void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
@@ -917,10 +1023,18 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When the mob the Pikmin is latched on to disappears.
+ */
 void pikmin_fsm::lose_latched_mob(mob* m, void* info1, void* info2) {
     m->stop_chasing();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a frame has passed while the Pikmin is being grabbed by an enemy.
+ */
 void pikmin_fsm::tick_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     if(!pik_ptr->focused_mob) return;
@@ -928,6 +1042,10 @@ void pikmin_fsm::tick_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pik_ptr->teleport_to_connected_hitbox();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a frame has passed while the Pikmin is latched on to an enemy.
+ */
 void pikmin_fsm::tick_latched(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     if(!pik_ptr->focused_mob) return;
@@ -946,6 +1064,10 @@ void pikmin_fsm::tick_latched(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a frame has passed while a Pikmin is attacking on the ground.
+ */
 void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     pik_ptr->attack_time -= delta_t;
@@ -985,6 +1107,10 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
     );
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to turn towards its leader.
+ */
 void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
     m->face(
         atan2(
@@ -994,10 +1120,19 @@ void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
     );
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin falls down a bottomless pit.
+ */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health = 0;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to chase after its leader (or the group spot
+ * belonging to the leader).
+ */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     m->chase(
         m->group_spot_x, m->group_spot_y,
@@ -1009,20 +1144,37 @@ void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     focus_mob(m, m->following_group);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin starts panicking.
+ */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
     remove_from_group(m);
     pikmin_fsm::panic_new_chase(m, info1, info2);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin must no longer be idle.
+ */
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin stands still while in a leader's group.
+ */
 void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin touches a hazard.
+ * info1: Pointer to the hazard type.
+ */
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     hazard* h = (hazard*) info1;
@@ -1035,6 +1187,11 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is sprayed.
+ * info1: Pointer to the spray type.
+ */
 void pikmin_fsm::touched_spray(mob* m, void* info1, void* info2) {
     spray_type* s = (spray_type*) info1;
 

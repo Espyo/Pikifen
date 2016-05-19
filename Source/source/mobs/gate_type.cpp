@@ -14,6 +14,9 @@
 #include "gate_type.h"
 #include "../mob_script.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a type of gate.
+ */
 gate_type::gate_type() :
     mob_type() {
 
@@ -24,6 +27,9 @@ gate_type::gate_type() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads data about the gate type from a data file.
+ */
 void gate_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions

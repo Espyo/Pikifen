@@ -10,7 +10,7 @@ using namespace std;
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A standard clickable button. Upon being clicked (mouse button down
+ * A standard clickable button widget. Upon being clicked (mouse button down
  * and mouse button up), it'll run some code.
  */
 class button : public widget {

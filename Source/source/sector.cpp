@@ -407,7 +407,6 @@ sector::~sector() {
 }
 
 
-
 /* ----------------------------------------------------------------------------
  * Creates a sector texture's info struct.
  */
@@ -437,7 +436,6 @@ edge_intersection::edge_intersection(edge* e1, edge* e2) :
 bool edge_intersection::contains(edge* e) {
     return e1 == e || e2 == e;
 }
-
 
 
 /* ----------------------------------------------------------------------------
@@ -543,7 +541,6 @@ void path_stop::fix_nrs(area_data &a) {
         }
     }
 }
-
 
 
 /* ----------------------------------------------------------------------------

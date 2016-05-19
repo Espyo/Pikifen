@@ -11,12 +11,26 @@
 
 #include "hitbox.h"
 
+/* ----------------------------------------------------------------------------
+ * Creates a hitbox.
+ */
 hitbox::hitbox(const string &name) :
     name(name) {
 
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Creates an instance of a hitbox.
+ * hn:     Name of the hitbox.
+ * hnr:    Number of the hitbox.
+ * hp:     Pointer to the hitbox.
+ * x, y:   Instance's coordinates, from the center of the mob.
+ * z:      Z coordinate of the bottom point of the instance.
+ * height: The hitbox instance's total height.
+   * 0 means it spans indefinitely across the Z axis.
+ * radius: Hitbox radius for X and Y.
+ */
 hitbox_instance::hitbox_instance(
     const string &hn, size_t hnr, hitbox* hp, const float x, const float y,
     const float z, const float height, const float radius

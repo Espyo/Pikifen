@@ -25,7 +25,7 @@ size_t next_mob_id = 0;
 
 
 /* ----------------------------------------------------------------------------
- * Creates a mob.
+ * Creates a mob of no particular type.
  */
 mob::mob(
     const float x, const float y, mob_type* type,
@@ -199,7 +199,6 @@ void mob::tick_misc_logic() {
 }
 
 
-const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 /* ----------------------------------------------------------------------------
  * Ticks the mob's actual physics procedures:
  * falling because of gravity, moving forward, etc.
@@ -789,7 +788,7 @@ void mob::chase(
 
 
 /* ----------------------------------------------------------------------------
- * Makes a mob not follow any target.
+ * Makes a mob not follow any target any more.
  */
 void mob::stop_chasing() {
     chasing = false;
@@ -1141,9 +1140,6 @@ void add_to_group(mob* group_leader, mob* new_member) {
     }
 }
 
-
-const float MOB_KNOCKBACK_H_POWER = 130.0f;
-const float MOB_KNOCKBACK_V_POWER = 200.0f;
 
 /* ----------------------------------------------------------------------------
  * Applies the knockback values to a mob.

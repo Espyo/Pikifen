@@ -10,7 +10,7 @@ using namespace std;
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * Angle picker. This allows the user to pick an angle,
+ * Angle picker widget. This allows the user to pick an angle,
  * by rotating a dial.
  */
 class angle_picker : public widget {
@@ -42,7 +42,6 @@ public:
     void draw_self();
 
 };
-
 
 
 float normalize_angle(float a);

@@ -33,7 +33,9 @@ extern size_t next_mob_id;
 
 //Accelerate the Z speed of mobs affected by gravity by this amount per second.
 const float GRAVITY_ADDER = -1300.0f;
-
+const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
+const float MOB_KNOCKBACK_H_POWER = 130.0f;
+const float MOB_KNOCKBACK_V_POWER = 200.0f;
 
 enum MOB_TEAMS {
     //Can hurt/target anyone and be hurt/targeted by anyone, on any team.

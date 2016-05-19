@@ -10,7 +10,7 @@ using namespace std;
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * Labels contain text. Simple as that.
+ * Label widgets contain text. Simple as that.
  */
 class label : public widget {
 public:

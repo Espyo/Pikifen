@@ -1361,9 +1361,6 @@ void draw_health(
 }
 
 
-const float NOTIFICATION_PADDING = 8.0f;
-const float NOTIFICATION_CONTROL_SIZE = 24.0f;
-const unsigned char NOTIFICATION_ALPHA = 160;
 /* ----------------------------------------------------------------------------
  * Draws a notification, like a note saying that the player can press
  * a certain button to pluck.

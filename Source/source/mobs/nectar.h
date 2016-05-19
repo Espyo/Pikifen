@@ -21,7 +21,7 @@
  * There are two ways to make nectars work:
  * the classic way, in which a single Pikmin can
  * selfishly drink the whole thing, or the new
- * method, which allows 4 individual
+ * method, which allows X individual
  * Pikmin to drink it without it draining.
  */
 class nectar : public mob {

@@ -19,6 +19,11 @@
 #include "vars.h"
 
 const float CAMERA_SMOOTHNESS_MULT = 4.5f;
+
+/* ----------------------------------------------------------------------------
+ * Ticks the logic of aesthetic things. If the game is paused, these can
+ * be frozen in place without any negative impact.
+ */
 void do_aesthetic_logic() {
 
     /*************************************
@@ -148,6 +153,10 @@ void do_aesthetic_logic() {
     
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Ticks the logic of gameplay-related things.
+ */
 void do_gameplay_logic() {
 
     if(cur_message.empty()) {
@@ -485,6 +494,11 @@ void do_gameplay_logic() {
     
 }
 
+
+/* ----------------------------------------------------------------------------
+ * Handles the logic required to tick a specific mob and its interactions
+ * with other mobs.
+ */
 void process_mob(mob* m_ptr, size_t m) {
     /********************************
      *                              *

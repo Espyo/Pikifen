@@ -22,6 +22,7 @@ using namespace std;
 
 /* ----------------------------------------------------------------------------
  * A type of enemy. A species, if you will.
+ * Red Bulborb, Orange Bulborb, Cloaking Burrow-nit, etc.
  */
 class enemy_type : public mob_type {
 public:

@@ -16,6 +16,10 @@
 #include "mob_fsm.h"
 #include "../vars.h"
 
+
+/* ----------------------------------------------------------------------------
+ * Creates the finite state machine for the leader's logic.
+ */
 void leader_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idle", LEADER_STATE_IDLE); {
@@ -708,6 +712,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * When a leader begins whistling.
+ */
 void leader_fsm::whistle(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
 
@@ -722,6 +729,10 @@ void leader_fsm::whistle(mob* m, void* info1, void* info2) {
     l_ptr->script_timer.start(2.5f);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader stops whistling.
+ */
 void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
     if(!whistling) return;
 
@@ -735,6 +746,10 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader joins another leader's group. This transfers their Pikmin.
+ */
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
 
@@ -747,6 +762,11 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader falls down a bottomless pit.
+ * This damages and respawns them.
+ */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health -= m->type->max_health * 0.2;
     m->x = m->home_x;
@@ -756,23 +776,44 @@ void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->z = m->center_sector->z + 100;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader is meant to become the active one.
+ */
 void leader_fsm::focus(mob* m, void* info1, void* info2) {
     switch_to_leader((leader*) m);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader enters the idle state.
+ */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader enters the active state.
+ */
 void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader stops being the active one.
+ */
 void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader touches a hazard.
+ * info1: Pointer to the hazard.
+ */
 void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     leader* l = (leader*) m;
     hazard* h = (hazard*) info1;
@@ -782,6 +823,11 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader is sprayed.
+ * info1: Pointer to the spray type.
+ */
 void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     leader* l = (leader*) m;
     spray_type* s = (spray_type*) info1;
@@ -791,6 +837,11 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader begins to move via player control.
+ * info1: Pointer to the movement info structure.
+ */
 void leader_fsm::move(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
@@ -801,10 +852,18 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
     );
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader stops moving.
+ */
 void leader_fsm::stop(mob* m, void* info1, void* info2) {
     m->stop_chasing();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader needs to change to the walking animation.
+ */
 void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(!l_ptr->is_in_walking_anim) {
@@ -813,6 +872,10 @@ void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader needs to change to the idle animation.
+ */
 void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->is_in_walking_anim) {
@@ -821,11 +884,20 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader grabs onto a mob.
+ * info1: Pointer to the mob.
+ */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     ((leader*) m)->holding_pikmin = (mob*) info1;
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader throws the grabbed mob.
+ */
 void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader* leader_ptr = (leader*) m;
     mob* holding_ptr = leader_ptr->holding_pikmin;
@@ -874,14 +946,27 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     leader_ptr->set_animation(LEADER_ANIM_THROW);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader gently releases the held mob.
+ */
 void leader_fsm::release(mob* m, void* info1, void* info2) {
     ((leader*) m)->holding_pikmin = NULL;
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader dismisses the group.
+ */
 void leader_fsm::dismiss(mob* m, void* info1, void* info2) {
     ((leader*) m)->dismiss();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader uses a spray.
+ * info1: Pointer to a size_t with the spray's ID number.
+ */
 void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
@@ -945,6 +1030,12 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_SPRAYING);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader loses health.
+ * info1: Pointer to the hitbox touch information structure.
+ * info2: If not NULL, that means this leader is inactive.
+ */
 void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
     //TODO
 
@@ -978,6 +1069,11 @@ void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When an inactive leader loses health.
+ * info1: Pointer to the hitbox touch information structure.
+ */
 void leader_fsm::inactive_lose_health(mob* m, void* info1, void* info2) {
     int a = 0;
     leader_fsm::lose_health(m, info1, &a);
@@ -985,25 +1081,45 @@ void leader_fsm::inactive_lose_health(mob* m, void* info1, void* info2) {
     //it's an inactive leader.
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader dies.
+ */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
     //TODO
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When an inactive leader dies.
+ */
 void leader_fsm::inactive_die(mob* m, void* info1, void* info2) {
     //TODO
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader reels back in pain from being hurt.
+ */
 void leader_fsm::suffer_pain(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_PAIN);
     m->stop_chasing();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader lies down from being knocked back.
+ */
 void leader_fsm::get_knocked_back(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_KNOCKED_DOWN);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader falls asleep.
+ */
 void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
-    leader_fsm::dismiss(m, info1, info2);
+    leader_fsm::dismiss(m, NULL, NULL);
     m->stop_chasing();
 
     m->become_carriable(false);
@@ -1011,27 +1127,49 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_LIE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader wakes up.
+ */
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
     m->set_animation(LEADER_ANIM_GET_UP);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader must chase another.
+ */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     m->chase(0, 0, &m->following_group->x, &m->following_group->y, false);
     m->set_animation(LEADER_ANIM_WALK);
     focus_mob(m, m->following_group);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader stands still while in another's group.
+ */
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader's leader dismisses them.
+ */
 void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader heads towards a Pikmin with the intent to pluck it.
+ * Also signals other leaders in the group to search for other seeds.
+ * info1: Pointer to the Pikmin to be plucked.
+ */
 void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     pikmin* pik_ptr = (pikmin*) info1;
@@ -1054,6 +1192,10 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader grab on to a buried Pikmin and begin plucking it out.
+ */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
@@ -1061,6 +1203,10 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     l_ptr->set_animation(LEADER_ANIM_PLUCK);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader quits the plucking mindset.
+ */
 void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->auto_pluck_pikmin) {
@@ -1071,13 +1217,18 @@ void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
     l_ptr->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader searches for a seed next to them.
+ * If found, issues events to go towards the seed.
+ * info1: If not NULL, this leader is inactive.
+ */
 void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     dist d;
     pikmin* new_pikmin =
         get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, false);
 
-    //If info1 is not void, that means this is an inactive leader.
     if(info1) {
         if(l_ptr->following_group)
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
@@ -1092,23 +1243,44 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     }
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When an inactive leader searches for a seed next to them.
+ * This just calls search_seed().
+ */
 void leader_fsm::inactive_search_seed(mob* m, void* info1, void* info2) {
     int a = 0; //Dummy value.
     leader_fsm::search_seed(m, &a, NULL);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader is grabbed by another leader.
+ */
 void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
     m->set_animation(LEADER_ANIM_IDLE);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader grabbed by another is released.
+ */
 void leader_fsm::be_released(mob* m, void* info1, void* info2) {
 
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a leader grabbed by another is thrown.
+ */
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When a thrown leader lands.
+ */
 void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed_x = m->speed_y = 0;

@@ -33,6 +33,9 @@ treasure::treasure(
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws a treasure.
+ */
 void treasure::draw() {
     frame* f_ptr = anim.get_frame();
     if(!f_ptr) return;

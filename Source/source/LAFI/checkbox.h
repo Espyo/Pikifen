@@ -6,7 +6,7 @@
 namespace lafi {
 
 /* ----------------------------------------------------------------------------
- * A button with two states: on and off. These can be toggled
+ * A button widget with two states: on and off. These can be toggled
  * when the user clicks on the checkbox.
  */
 class checkbox : public widget {

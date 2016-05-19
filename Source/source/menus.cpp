@@ -21,6 +21,9 @@
 
 using namespace std;
 
+/* ----------------------------------------------------------------------------
+ * Creates a "main menu" state.
+ */
 main_menu::main_menu() :
     game_state(),
     bmp_menu_bg(NULL),
@@ -30,6 +33,9 @@ main_menu::main_menu() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads the main menu into memory.
+ */
 void main_menu::load() {
 
     selected_widget = NULL;
@@ -108,6 +114,9 @@ void main_menu::load() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Unloads the main menu from memory.
+ */
 void main_menu::unload() {
 
     //Resources.
@@ -124,6 +133,9 @@ void main_menu::unload() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles Allegro events.
+ */
 void main_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
     
@@ -140,6 +152,9 @@ void main_menu::handle_controls(ALLEGRO_EVENT ev) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks a frame's worth of logic.
+ */
 void main_menu::do_logic() {
     time_spent += delta_t;
     logo_anim.tick(delta_t);
@@ -153,6 +168,9 @@ void main_menu::do_logic() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the main menu.
+ */
 void main_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
@@ -198,7 +216,9 @@ void main_menu::do_drawing() {
 }
 
 
-
+/* ----------------------------------------------------------------------------
+ * Creates an "options menu" state.
+ */
 options_menu::options_menu() :
     game_state(),
     bmp_menu_bg(NULL),
@@ -214,6 +234,9 @@ options_menu::options_menu() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads the options menu into memory.
+ */
 void options_menu::load() {
     selected_widget = NULL;
     bmp_menu_bg = NULL;
@@ -401,6 +424,9 @@ void options_menu::load() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Unloads the options menu from memory.
+ */
 void options_menu::unload() {
 
     //Resources.
@@ -421,6 +447,9 @@ void options_menu::unload() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles Allegro events.
+ */
 void options_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
@@ -493,6 +522,9 @@ void options_menu::handle_controls(ALLEGRO_EVENT ev) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks one frame's worth of logic.
+ */
 void options_menu::do_logic() {
     fade_mgr.tick(delta_t);
     time_spent += delta_t;
@@ -503,6 +535,9 @@ void options_menu::do_logic() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the options menu.
+ */
 void options_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
@@ -534,6 +569,9 @@ void options_menu::do_drawing() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Updates the contents of the options menu.
+ */
 void options_menu::update() {
     cur_page_nr =
         min(
@@ -650,6 +688,9 @@ void options_menu::update() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Leaves the options menu and goes to the main menu.
+ */
 void options_menu::leave() {
     fade_mgr.start_fade(false, [] () {
         change_game_state(GAME_STATE_MAIN_MENU);
@@ -658,7 +699,9 @@ void options_menu::leave() {
 }
 
 
-
+/* ----------------------------------------------------------------------------
+ * Creates an "area menu" state.
+ */
 area_menu::area_menu() :
     game_state(),
     time_spent(0),
@@ -669,6 +712,9 @@ area_menu::area_menu() :
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Loads the area menu into memory.
+ */
 void area_menu::load() {
     selected_widget = NULL;
     bmp_menu_bg = NULL;
@@ -768,6 +814,9 @@ void area_menu::load() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Unloads the area menu from memory.
+ */
 void area_menu::unload() {
 
     //Resources.
@@ -786,6 +835,9 @@ void area_menu::unload() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Handles Allegro events.
+ */
 void area_menu::handle_controls(ALLEGRO_EVENT ev) {
     //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
@@ -801,6 +853,9 @@ void area_menu::handle_controls(ALLEGRO_EVENT ev) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Ticks one frame's worth of logic.
+ */
 void area_menu::do_logic() {
     fade_mgr.tick(delta_t);
     time_spent += delta_t;
@@ -811,6 +866,9 @@ void area_menu::do_logic() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Draws the area menu.
+ */
 void area_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
@@ -827,6 +885,9 @@ void area_menu::do_drawing() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Leaves the area menu and goes into the main menu.
+ */
 void area_menu::leave() {
     fade_mgr.start_fade(false, [] () {
         change_game_state(GAME_STATE_MAIN_MENU);
@@ -834,6 +895,9 @@ void area_menu::leave() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Updates the contents of the area menu.
+ */
 void area_menu::update() {
     cur_page_nr =
         min(cur_page_nr, (size_t) (ceil(areas_to_pick.size() / 8.0) - 1));

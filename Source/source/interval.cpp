@@ -12,6 +12,8 @@
 #include "functions.h"
 #include "interval.h"
 
+//TODO document these functions.
+
 subinterval::subinterval(float l, float u, const float d) :
     divisor(d) {
 
