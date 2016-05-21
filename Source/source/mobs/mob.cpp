@@ -77,6 +77,7 @@ mob::mob(
     speed(0),
     chase_free_move(false),
     chase_target_dist(0),
+    on_hazard(nullptr),
     chomp_max(0),
     script_timer(0),
     id(next_mob_id) {
@@ -647,8 +648,10 @@ void mob::tick_physics() {
     ) {
         z = ground_sector->z;
     }
-
-    z += delta_t* speed_z;
+    
+    //Landing on a bottomless pit or hazardous floor.
+    hazard* new_on_hazard = NULL;
+    z += delta_t * speed_z;
     if(z <= ground_sector->z) {
         z = ground_sector->z;
         speed_z = 0;
@@ -663,6 +666,7 @@ void mob::tick_physics() {
                 MOB_EVENT_TOUCHED_HAZARD,
                 (void*) ground_sector->hazards[h]
             );
+            new_on_hazard = ground_sector->hazards[h];
         }
     }
 
@@ -675,15 +679,24 @@ void mob::tick_physics() {
         speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
     }
 
-    //On a sector that has a hazard.
+    //On a sector that has a hazard, not on the floor.
     if(z > ground_sector->z && !ground_sector->hazard_floor) {
         for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
             fsm.run_event(
                 MOB_EVENT_TOUCHED_HAZARD,
                 (void*) ground_sector->hazards[h]
             );
+            new_on_hazard = ground_sector->hazards[h];
         }
     }
+    
+    if(new_on_hazard != on_hazard && on_hazard != NULL) {
+        fsm.run_event(
+            MOB_EVENT_LEFT_HAZARD,
+            (void*) on_hazard
+        );
+    }
+    on_hazard = new_on_hazard;
 }
 
 
@@ -982,8 +995,15 @@ ALLEGRO_COLOR mob::get_status_tint_color() {
     size_t n_statuses = this->statuses.size();
     for(size_t s = 0; s < n_statuses; ++s) {
         status_type* t = this->statuses[s].type;
-        if(t->tint.r == t->tint.g == t->tint.b == t->tint.a == 1.0f) continue;
-
+        if(
+            t->tint.r == 1.0f &&
+            t->tint.g == 1.0f &&
+            t->tint.b == 1.0f &&
+            t->tint.a == 1.0f
+        ) {
+            continue;
+        }
+        
         ret.r += t->tint.r;
         ret.g += t->tint.g;
         ret.b += t->tint.b;

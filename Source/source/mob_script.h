@@ -118,6 +118,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TOUCHED_HAZARD,
     //When it touches a sprayed spray.
     MOB_EVENT_TOUCHED_SPRAY,
+    //When it leaves a hazard in a sector.
+    MOB_EVENT_LEFT_HAZARD,
     //When it gets touched by an object.
     MOB_EVENT_TOUCHED_OBJECT,
     //When it gets touched by an opponent.

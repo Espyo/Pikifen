@@ -583,7 +583,21 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
 
     efc.new_state("flailing", PIKMIN_STATE_FLAILING); {
-        //TODO
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin_fsm::start_flailing);
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run_function(pikmin_fsm::stand_still);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::check_remove_flailing);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::flail_to_whistle);
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin_fsm::fall_down_pit);
+        }
     }
 
     efc.new_state("panic", PIKMIN_STATE_PANIC); {
@@ -1142,6 +1156,69 @@ void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     );
     m->set_animation(PIKMIN_ANIM_WALK);
     focus_mob(m, m->following_group);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin starts flailing.
+ */
+void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
+    //If the Pikmin is following a moveable point, let's change it to
+    //a static point. This will make the Pikmin continue to move
+    //forward into the water in a straight line.
+    float final_x, final_y;
+    m->get_chase_target(&final_x, &final_y);
+    m->chase(
+        final_x, final_y,
+        NULL, NULL,
+        false
+    );
+    
+    remove_from_group(m);
+    
+    //Let the Pikmin continue to swim into the water for a bit
+    //before coming to a stop. Otherwise the Pikmin would stop nearly
+    //on the edge of the water, and that just looks bad.
+    m->set_timer(1.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin checks if it's no longer meant to be flailing.
+ * info1: Points to the hazard that the Pikmin left.
+ */
+void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
+    hazard* h_ptr = (hazard*) info1;
+    
+    for(size_t s = 0; s < m->statuses.size(); ++s) {
+        for(size_t e = 0; e < h_ptr->effects.size(); ++e) {
+            if(
+                m->statuses[s].type == h_ptr->effects[e] &&
+                h_ptr->effects[e]->causes_flailing
+            ) {
+            
+                m->statuses[s].to_delete = true;
+                m->fsm.set_state(PIKMIN_STATE_IDLE);
+                pikmin_fsm::stand_still(m, NULL, NULL);
+                
+            }
+        }
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin must move towards the whistle.
+ */
+void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
+    m->chase(
+        cur_leader_ptr->x,
+        cur_leader_ptr->y,
+        NULL, NULL,
+        false,
+        NULL, true
+    );
 }
 
 

@@ -276,6 +276,8 @@ public:
 
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
+    //Hazard of the sector the mob is currently on.
+    hazard* on_hazard;
     //Is the mob dead?
     bool dead;
     //List of hitboxes that will chomp Pikmin.
