@@ -81,14 +81,14 @@ mob::mob(
     chomp_max(0),
     script_timer(0),
     id(next_mob_id) {
-
+    
     next_mob_id++;
-
+    
     sector* sec = get_sector(x, y, nullptr, true);
     z = sec->z;
     ground_sector = sec;
     center_sector = sec;
-
+    
     fsm.set_state(type->first_state_nr);
 }
 
@@ -121,9 +121,9 @@ void mob::tick_animation() {
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         mult *= this->statuses[s].type->anim_speed_multiplier;
     }
-
-    bool finished_anim = anim.tick(delta_t* mult);
-
+    
+    bool finished_anim = anim.tick(delta_t * mult);
+    
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
     }
@@ -139,13 +139,13 @@ void mob::tick_animation() {
 void mob::tick_brain() {
     //Chasing a target.
     if(chasing && !chase_teleport && speed_z == 0) {
-
+    
         //Calculate where the target is.
         float final_target_x, final_target_y;
         get_chase_target(&final_target_x, &final_target_y);
-
+        
         if(!chase_teleport) {
-
+        
             if(
                 !(fabs(final_target_x - x) < chase_target_dist &&
                   fabs(final_target_y - y) < chase_target_dist)
@@ -153,19 +153,19 @@ void mob::tick_brain() {
                 //If it still hasn't reached its target
                 //(or close enough to the target),
                 //time to make it think about how to get there.
-
+                
                 //Let the mob think about facing the actual target.
                 face(atan2(final_target_y - y, final_target_x - x));
-
+                
             } else {
                 //Reached the location. The mob should now think
                 //about stopping.
-
+                
                 chase_speed = 0;
                 reached_destination = true;
                 fsm.run_event(MOB_EVENT_REACHED_DESTINATION);
             }
-
+            
         }
     }
 }
@@ -188,9 +188,9 @@ void mob::tick_misc_logic() {
         group->group_center_x += group_center_mx * delta_t;
         group->group_center_y += group_center_my * delta_t;
     }
-
+    
     invuln_period.tick(delta_t);
-
+    
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         statuses[s].tick(delta_t);
         health +=
@@ -208,49 +208,49 @@ void mob::tick_physics() {
     //Movement.
     bool finished_moving = false;
     bool doing_slide = false;
-
+    
     float new_x = x, new_y = y, new_z = z;
     sector* new_ground_sector = ground_sector;
     sector* new_center_sector = center_sector;
     float pre_move_ground_z = ground_sector->z;
-
+    
     float move_speed_x = speed_x;
     float move_speed_y = speed_y;
-
+    
     float radius_to_use = type->radius;
-
+    
     //Change the facing angle to the angle the mob wants to face.
     if(angle > M_PI)  angle -= M_PI * 2;
     if(angle < -M_PI) angle += M_PI * 2;
     if(intended_angle > M_PI)  intended_angle -= M_PI * 2;
     if(intended_angle < -M_PI) intended_angle += M_PI * 2;
-
+    
     float angle_dif = intended_angle - angle;
     if(angle_dif > M_PI)  angle_dif -= M_PI * 2;
     if(angle_dif < -M_PI) angle_dif += M_PI * 2;
-
+    
     float movement_speed_mult = 1.0f;
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         movement_speed_mult *= this->statuses[s].type->speed_multiplier;
     }
-
+    
     angle +=
         sign(angle_dif) * min(
             (double) (type->rotation_speed * movement_speed_mult * delta_t),
             (double) fabs(angle_dif)
         );
-
+        
     if(chasing) {
         float final_target_x, final_target_y;
         get_chase_target(&final_target_x, &final_target_y);
-
+        
         if(chase_teleport) {
             sector* sec =
                 get_sector(final_target_x, final_target_y, NULL, true);
             if(!sec) {
                 //No sector, invalid teleport. No move.
                 return;
-
+                
             } else {
                 if(chase_teleport_z) {
                     ground_sector = sec;
@@ -261,31 +261,31 @@ void mob::tick_physics() {
                 y = final_target_y;
                 finished_moving = true;
             }
-
+            
         } else {
-
+        
             //Make it go to the direction it wants.
             float d = dist(x, y, final_target_x, final_target_y).to_float();
-
+            
             float move_amount =
                 min(
                     (double) (d / delta_t),
                     (double) chase_speed * movement_speed_mult
                 );
-
+                
             bool can_free_move = chase_free_move || d <= 10.0;
-
+            
             float movement_angle =
                 can_free_move ?
                 atan2(final_target_y - y, final_target_x - x) :
                 angle;
-
+                
             move_speed_x = cos(movement_angle) * move_amount;
             move_speed_y = sin(movement_angle) * move_amount;
         }
     }
-
-
+    
+    
     //If another mob is pushing it.
     if(push_amount != 0.0f) {
         //Overly-aggressive pushing results in going through walls.
@@ -297,16 +297,16 @@ void mob::tick_physics() {
         move_speed_y +=
             sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
     }
-
+    
     push_amount = 0;
-
-
+    
+    
     //Try placing it in the place it should be at, judging
     //from the movement speed.
     while(!finished_moving) {
-
+    
         if(move_speed_x == 0 && move_speed_y == 0) break;
-
+        
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
         //with any edge. With this, we trust that mobs can't go so fast
@@ -314,29 +314,29 @@ void mob::tick_physics() {
         //and the other side on the next frame.
         //It's pretty naive...but it works!
         bool successful_move = true;
-
-        new_x = x + delta_t* move_speed_x;
-        new_y = y + delta_t* move_speed_y;
+        
+        new_x = x + delta_t * move_speed_x;
+        new_y = y + delta_t * move_speed_y;
         new_z = z;
         new_ground_sector = ground_sector;
         set<edge*> intersecting_edges;
-
+        
         //Get the sector the mob will be on.
         sector* new_center_sector = get_sector(new_x, new_y, NULL, true);
         sector* step_sector = new_center_sector;
-
+        
         if(!new_center_sector) {
             //Out of bounds. No movement.
             break;
         } else {
             new_ground_sector = new_center_sector;
         }
-
+        
         //Quick panic handler: if it's under the ground, pop it out.
         if(z < new_center_sector->z) {
             z = new_center_sector->z;
         }
-
+        
         //Before checking the edges, let's consult the blockmap and look at
         //the edges in the same block the mob is on.
         //This way, we won't check for edges that are really far away.
@@ -345,7 +345,7 @@ void mob::tick_physics() {
         size_t bx2 = cur_area_data.bmap.get_col(new_x + radius_to_use);
         size_t by1 = cur_area_data.bmap.get_row(new_y - radius_to_use);
         size_t by2 = cur_area_data.bmap.get_row(new_y + radius_to_use);
-
+        
         if(
             bx1 == INVALID || bx2 == INVALID ||
             by1 == INVALID || by2 == INVALID
@@ -353,31 +353,31 @@ void mob::tick_physics() {
             //Somehow out of bounds. No movement.
             break;
         }
-
+        
         float move_angle;
         float move_speed;
         coordinates_to_angle(
             move_speed_x, move_speed_y, &move_angle, &move_speed
         );
-
+        
         //Angle to slide towards.
         float slide_angle = move_angle;
         //Difference between the movement angle and the slide.
         float slide_angle_dif = 0;
-
+        
         edge* e_ptr = NULL;
-
+        
         //Go through the blocks, to find intersections, and set up some things.
         for(size_t bx = bx1; bx <= bx2; ++bx) {
             for(size_t by = by1; by <= by2; ++by) {
-
+            
                 vector<edge*>* edges = &cur_area_data.bmap.edges[bx][by];
-
+                
                 for(size_t e = 0; e < edges->size(); ++e) {
-
+                
                     e_ptr = (*edges)[e];
                     bool is_edge_blocking = false;
-
+                    
                     if(
                         !circle_intersects_line(
                             new_x, new_y, radius_to_use,
@@ -388,16 +388,16 @@ void mob::tick_physics() {
                     ) {
                         continue;
                     }
-
+                    
                     if(e_ptr->sectors[0] && e_ptr->sectors[1]) {
-
+                    
                         if(
                             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING ||
                             e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                         ) {
                             is_edge_blocking = true;
                         }
-
+                        
                         if(!is_edge_blocking) {
                             if(
                                 e_ptr->sectors[0]->z < z &&
@@ -413,18 +413,18 @@ void mob::tick_physics() {
                                 continue;
                             }
                         }
-
+                        
                         sector* tallest_sector; //Tallest of the two.
                         if(
                             e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
                         ) {
                             tallest_sector = e_ptr->sectors[1];
-
+                            
                         } else if(
                             e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
                         ) {
                             tallest_sector = e_ptr->sectors[0];
-
+                            
                         } else {
                             if(e_ptr->sectors[0]->z > e_ptr->sectors[1]->z) {
                                 tallest_sector = e_ptr->sectors[0];
@@ -432,14 +432,14 @@ void mob::tick_physics() {
                                 tallest_sector = e_ptr->sectors[1];
                             }
                         }
-
+                        
                         if(
                             tallest_sector->z > new_ground_sector->z &&
                             tallest_sector->z <= z
                         ) {
                             new_ground_sector = tallest_sector;
                         }
-
+                        
                         //Check if it can go up this step.
                         //It can go up this step if the floor is within
                         //stepping distance of the mob's current Z,
@@ -451,53 +451,53 @@ void mob::tick_physics() {
                         ) {
                             step_sector = tallest_sector;
                         }
-
+                        
                         //Add this edge to the list of intersections, then.
                         intersecting_edges.insert(e_ptr);
-
+                        
                     } else {
-
+                    
                         //If we're on the edge of out-of-bounds geometry,
                         //block entirely.
                         successful_move = false;
                         break;
-
+                        
                     }
-
+                    
                 }
-
+                
                 if(!successful_move) break;
             }
-
+            
             if(!successful_move) break;
         }
-
+        
         if(!successful_move) break;
-
+        
         if(step_sector->z > new_ground_sector->z) {
             new_ground_sector = step_sector;
         }
-
+        
         if(z < step_sector->z) new_z = step_sector->z;
-
+        
         //Check wall angles and heights to check which of these edges
         //really are wall collisions.
         for(
             auto e = intersecting_edges.begin();
             e != intersecting_edges.end(); e++
         ) {
-
+        
             e_ptr = *e;
             bool is_edge_wall = false;
             unsigned char wall_sector = 0;
-
+            
             for(unsigned char s = 0; s < 2; s++) {
                 if(e_ptr->sectors[s]->type == SECTOR_TYPE_BLOCKING) {
                     is_edge_wall = true;
                     wall_sector = s;
                 }
             }
-
+            
             if(!is_edge_wall) {
                 for(unsigned char s = 0; s < 2; s++) {
                     if(e_ptr->sectors[s]->z > new_z) {
@@ -506,10 +506,10 @@ void mob::tick_physics() {
                     }
                 }
             }
-
+            
             //This isn't a wall... Get out of here, faker.
             if(!is_edge_wall) continue;
-
+            
             //If both floors of this edge are above the mob...
             //then what does that mean? That the mob is under the ground?
             //Nonsense! Throw this edge away!
@@ -530,10 +530,10 @@ void mob::tick_physics() {
                     continue;
                 }
             }
-
+            
             //Ok, there's obviously been a collision, so let's work out what
             //wall the mob will slide on.
-
+            
             //The wall's normal is the direction the wall is facing.
             //i.e. the direction from the top floor to the bottom floor.
             //We know which side of an edge is which sector because of
@@ -542,20 +542,20 @@ void mob::tick_physics() {
             //You start on vertex 0 and face vertex 1.
             //Sector 0 will always be on your left.
             if(!doing_slide) {
-
+            
                 float wall_normal;
                 float wall_angle =
                     atan2(
                         e_ptr->vertexes[1]->y - e_ptr->vertexes[0]->y,
                         e_ptr->vertexes[1]->x - e_ptr->vertexes[0]->x
                     );
-
+                    
                 if(wall_sector == 0) {
                     wall_normal = normalize_angle(wall_angle + M_PI_2);
                 } else {
                     wall_normal = normalize_angle(wall_angle - M_PI_2);
                 }
-
+                
                 float nd = get_angle_cw_dif(wall_normal, move_angle);
                 if(nd < M_PI_2 || nd > M_PI + M_PI_2) {
                     //If the difference between the movement and the wall's
@@ -563,7 +563,7 @@ void mob::tick_physics() {
                     //No way! There has to be an edge that makes more sense.
                     continue;
                 }
-
+                
                 //If we were to slide on this edge, this would be
                 //the slide angle.
                 float tentative_slide_angle;
@@ -574,33 +574,33 @@ void mob::tick_physics() {
                     //Coming in from the "right" of the normal. Slide left.
                     tentative_slide_angle = wall_normal - M_PI_2;
                 }
-
+                
                 float sd =
                     get_angle_smallest_dif(move_angle, tentative_slide_angle);
                 if(sd > slide_angle_dif) {
                     slide_angle_dif = sd;
                     slide_angle = tentative_slide_angle;
                 }
-
+                
             }
-
+            
             //By the way, if we got to this point, that means there are real
             //collisions happening. Let's mark this move as unsuccessful.
             successful_move = false;
         }
-
+        
         //If the mob is just slamming against the wall head-on, perpendicularly,
         //then forget any idea about sliding.
         //It'd just be awkwardly walking in place.
         if(!successful_move && slide_angle_dif > M_PI_2 - 0.05) {
             doing_slide = true;
         }
-
-
+        
+        
         //We're done here. If the move was unobstructed, good, go there.
         //If not, we'll use the info we gathered before to calculate sliding,
         //and try again.
-
+        
         if(successful_move) {
             //Good news, the mob can move to this new spot freely.
             x = new_x;
@@ -609,9 +609,9 @@ void mob::tick_physics() {
             ground_sector = new_ground_sector;
             center_sector = new_center_sector;
             finished_moving = true;
-
+            
         } else {
-
+        
             //Try sliding.
             if(doing_slide) {
                 //We already tried sliding, and we still hit something...
@@ -619,9 +619,9 @@ void mob::tick_physics() {
                 speed_x = 0;
                 speed_y = 0;
                 finished_moving = true;
-
+                
             } else {
-
+            
                 doing_slide = true;
                 //To limit the speed, we should use a cross-product of the
                 //movement and slide vectors.
@@ -630,16 +630,16 @@ void mob::tick_physics() {
                 angle_to_coordinates(
                     slide_angle, move_speed, &move_speed_x, &move_speed_y
                 );
-
+                
             }
-
+            
         }
-
+        
     }
-
-
+    
+    
     //Vertical movement.
-
+    
     //If the current ground is one step (or less) below
     //the previous ground, just instantly go down the step.
     if(
@@ -660,7 +660,7 @@ void mob::tick_physics() {
         if(ground_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             fsm.run_event(MOB_EVENT_BOTTOMLESS_PIT);
         }
-
+        
         for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
             fsm.run_event(
                 MOB_EVENT_TOUCHED_HAZARD,
@@ -669,16 +669,16 @@ void mob::tick_physics() {
             new_on_hazard = ground_sector->hazards[h];
         }
     }
-
+    
     //Gravity.
     if(gravity_mult > 0) {
         if(z > ground_sector->z) {
-            speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+            speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
         }
     } else {
-        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
+        speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
     }
-
+    
     //On a sector that has a hazard, not on the floor.
     if(z > ground_sector->z && !ground_sector->hazard_floor) {
         for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
@@ -708,13 +708,13 @@ void mob::tick_script() {
         fsm.set_state(type->first_state_nr);
         first_state_set = true;
     }
-
+    
     //Health regeneration.
     health += type->health_regen * delta_t;
     health = min(health, type->max_health);
-
+    
     if(!fsm.cur_state) return;
-
+    
     //Timer events.
     mob_event* timer_ev = q_get_event(this, MOB_EVENT_TIMER);
     if(timer_ev && script_timer.duration > 0) {
@@ -725,19 +725,19 @@ void mob::tick_script() {
             }
         }
     }
-
+    
     //Has it reached its home?
     mob_event* reach_dest_ev = q_get_event(this, MOB_EVENT_REACHED_DESTINATION);
     if(reach_dest_ev && reached_destination) {
         reach_dest_ev->run(this);
     }
-
+    
     //Is it dead?
     if(health <= 0 && type->max_health != 0) {
         dead = true;
         fsm.run_event(MOB_EVENT_DEATH, this);
     }
-
+    
     //Big damage.
     mob_event* big_damage_ev = q_get_event(this, MOB_EVENT_BIG_DAMAGE);
     if(big_damage_ev && big_damage_ev_queued) {
@@ -794,7 +794,7 @@ void mob::chase(
     this->chase_free_move = free_move;
     this->chase_target_dist = target_distance;
     this->chase_speed = (speed == -1 ? get_base_speed() : speed);
-
+    
     chasing = true;
     reached_destination = false;
 }
@@ -807,7 +807,7 @@ void mob::stop_chasing() {
     chasing = false;
     reached_destination = false;
     chase_teleport_z = NULL;
-
+    
     speed_x = 0;
     speed_y = 0;
 }
@@ -827,9 +827,9 @@ void mob::eat(const size_t nr) {
         chomping_pikmin.clear();
         return;
     }
-
+    
     size_t total = min(nr, chomping_pikmin.size());
-
+    
     for(size_t p = 0; p < total; ++p) {
         chomping_pikmin[p]->health = 0;
         chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
@@ -853,7 +853,7 @@ void mob::face(const float new_angle) {
  */
 void mob::set_animation(const size_t nr, bool pre_named) {
     if(nr >= type->anims.animations.size()) return;
-
+    
     size_t final_nr;
     if(pre_named) {
         if(anim.anim_pool->pre_named_conversions.size() <= nr) return;
@@ -861,9 +861,9 @@ void mob::set_animation(const size_t nr, bool pre_named) {
     } else {
         final_nr = nr;
     }
-
+    
     if(final_nr == INVALID) return;
-
+    
     animation* new_anim = anim.anim_pool->animations[final_nr];
     anim.anim = new_anim;
     anim.start();
@@ -879,7 +879,7 @@ void mob::set_animation(const size_t nr, bool pre_named) {
 void mob::set_health(const bool rel, const float amount) {
     unsigned short base_nr = 0;
     if(rel) base_nr = health;
-
+    
     health = max(0.0f, (float) (base_nr + amount));
 }
 
@@ -943,20 +943,20 @@ void mob::finish_dying() {
  */
 void mob::apply_status_effect(status_type* s, const bool refill) {
     if(!can_receive_status(s)) return;
-
+    
     //Check if the mob is already under this status.
     for(size_t ms = 0; ms < this->statuses.size(); ++ms) {
         if(this->statuses[ms].type == s) {
             //Already exists. Can we refill its duration?
-
+            
             if(refill && s->auto_remove_time > 0.0f) {
                 this->statuses[ms].time_left = s->auto_remove_time;
             }
-
+            
             return;
         }
     }
-
+    
     //This status is not already inflicted. Let's do so.
     this->statuses.push_back(status(s));
     if(s->causes_panic) {
@@ -1010,7 +1010,7 @@ ALLEGRO_COLOR mob::get_status_tint_color() {
         ret.a += t->tint.a;
         n_tints++;
     }
-
+    
     if(n_tints == 0) {
         return al_map_rgb(255, 255, 255);
     } else {
@@ -1050,7 +1050,7 @@ carrier_spot_struct::carrier_spot_struct(const float x, const float y) :
     x(x),
     y(y),
     pik_ptr(NULL) {
-
+    
 }
 
 
@@ -1071,13 +1071,13 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     go_straight(false),
     stuck_state(0),
     is_moving(false) {
-
+    
     float pikmin_radius = 16;
     //Let's assume all Pikmin are the same radius. Or at least very close.
     if(!pikmin_types.empty()) {
         pikmin_radius = pikmin_types.begin()->second->radius;
     }
-
+    
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = (M_PI * 2) / m->type->max_carriers * c;
         float x = cos(angle) * (m->type->radius + pikmin_radius);
@@ -1092,25 +1092,25 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
  */
 float carry_info_struct::get_speed() {
     float max_speed = 0;
-
+    
     //Begin by obtaining the average walking speed of the carriers.
     for(size_t s = 0; s < spot_info.size(); ++s) {
         carrier_spot_struct* s_ptr = &spot_info[s];
-
+        
         if(s_ptr->state != CARRY_SPOT_USED) continue;
-
+        
         pikmin* p_ptr = (pikmin*) s_ptr->pik_ptr;
         max_speed += p_ptr->get_base_speed();
     }
     max_speed /= cur_n_carriers;
-
+    
     //If the object has all carriers, the Pikmin move as fast
     //as possible, which looks bad, since they're not jogging,
     //they're carrying. Let's add a penalty for the weight...
     max_speed *= (1 - carrying_speed_weight_mult * m->type->weight);
     //...and a global carrying speed penalty.
     max_speed *= carrying_speed_max_mult;
-
+    
     //The closer the mob is to having full carriers,
     //the closer to the max speed we get.
     //The speed goes from carrying_speed_base_mult (0 carriers)
@@ -1148,10 +1148,10 @@ carry_info_struct::~carry_info_struct() {
 void add_to_group(mob* group_leader, mob* new_member) {
     //If it's already following, never mind.
     if(new_member->following_group == group_leader) return;
-
+    
     new_member->following_group = group_leader;
     group_leader->group->members.push_back(new_member);
-
+    
     //Find a spot.
     if(group_leader->group) {
         if(group_leader->group->group_spots) {
@@ -1189,15 +1189,15 @@ float calculate_damage(
 ) {
     float attacker_offense = 0;
     float defense_multiplier = 1;
-
+    
     if(victim_h && victim_h->type != HITBOX_TYPE_NORMAL) {
         //This hitbox can't be damaged! Abort!
         return 0;
     }
-
+    
     if(attacker_h) {
         attacker_offense = attacker_h->multiplier;
-
+        
     } else {
         if(typeid(*attacker) == typeid(pikmin)) {
             pikmin* pik_ptr = (pikmin*) attacker;
@@ -1206,20 +1206,20 @@ float calculate_damage(
                 (1 + pik_ptr->maturity * maturity_power_mult);
         }
     }
-
+    
     if(victim_h) {
         defense_multiplier = victim_h->multiplier;
     }
-
+    
     for(size_t s = 0; s < attacker->statuses.size(); ++s) {
         attacker_offense *= attacker->statuses[s].type->attack_multiplier;
     }
     for(size_t s = 0; s < victim->statuses.size(); ++s) {
         defense_multiplier *= victim->statuses[s].type->defense_multiplier;
     }
-
+    
     return attacker_offense * (1.0 / defense_multiplier);
-
+    
 }
 
 
@@ -1263,7 +1263,7 @@ void cause_hitbox_damage(
     float defense_multiplier = 1;
     float knockback = 0;
     float knockback_angle = attacker->angle;
-
+    
     if(attacker_h) {
         attacker_offense = attacker_h->multiplier;
         knockback = attacker_h->knockback;
@@ -1273,7 +1273,7 @@ void cause_hitbox_damage(
         } else {
             knockback_angle += attacker_h->knockback_angle;
         }
-
+        
     } else {
         if(typeid(*attacker) == typeid(pikmin)) {
             attacker_offense =
@@ -1282,15 +1282,15 @@ void cause_hitbox_damage(
                 maturity_power_mult;
         }
     }
-
+    
     if(victim_h) {
         defense_multiplier = victim_h->multiplier;
     }
-
+    
     float damage = attacker_offense * (1.0 / defense_multiplier);
-
+    
     if(total_damage) *total_damage = damage;
-
+    
     //Cause the damage and the knockback.
     victim->health -= damage;
     if(knockback != 0) {
@@ -1302,10 +1302,10 @@ void cause_hitbox_damage(
         victim->speed_z =
             MOB_KNOCKBACK_V_POWER;
     }
-
+    
     //Script stuff.
     victim->fsm.run_event(MOB_EVENT_DAMAGE, victim);
-
+    
     //If before taking damage, the interval was dividable X times,
     //and after it's only dividable by Y (X>Y), an interval was crossed.
     if(
@@ -1328,40 +1328,40 @@ void cause_hitbox_damage(
  */
 void create_mob(mob* m) {
     mobs.push_back(m);
-
+    
     if(typeid(*m) == typeid(pikmin)) {
         pikmin_list.push_back((pikmin*) m);
-
+        
     } else if(typeid(*m) == typeid(leader)) {
         leaders.push_back((leader*) m);
-
+        
     } else if(typeid(*m) == typeid(onion)) {
         onions.push_back((onion*) m);
-
+        
     } else if(typeid(*m) == typeid(nectar)) {
         nectars.push_back((nectar*) m);
-
+        
     } else if(typeid(*m) == typeid(pellet)) {
         pellets.push_back((pellet*) m);
-
+        
     } else if(typeid(*m) == typeid(ship)) {
         ships.push_back((ship*) m);
-
+        
     } else if(typeid(*m) == typeid(treasure)) {
         treasures.push_back((treasure*) m);
-
+        
     } else if(typeid(*m) == typeid(info_spot)) {
         info_spots.push_back((info_spot*) m);
-
+        
     } else if(typeid(*m) == typeid(enemy)) {
         enemies.push_back((enemy*) m);
-
+        
     } else if(typeid(*m) == typeid(gate)) {
         gates.push_back((gate*) m);
-
+        
     } else if(typeid(*m) == typeid(bridge)) {
         bridges.push_back((bridge*) m);
-
+        
     }
 }
 
@@ -1374,53 +1374,53 @@ void create_mob(mob* m) {
  */
 void delete_mob(mob* m) {
     remove_from_group(m);
-
+    
     mobs.erase(find(mobs.begin(), mobs.end(), m));
-
+    
     if(typeid(*m) == typeid(pikmin)) {
         pikmin* p_ptr = (pikmin*) m;
         pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
-
+        
     } else if(typeid(*m) == typeid(leader)) {
         leaders.erase(find(leaders.begin(), leaders.end(), (leader*) m));
-
+        
     } else if(typeid(*m) == typeid(onion)) {
         onions.erase(find(onions.begin(), onions.end(), (onion*) m));
-
+        
     } else if(typeid(*m) == typeid(nectar)) {
         nectars.erase(find(nectars.begin(), nectars.end(), (nectar*) m));
-
+        
     } else if(typeid(*m) == typeid(pellet)) {
         pellets.erase(find(pellets.begin(), pellets.end(), (pellet*) m));
-
+        
     } else if(typeid(*m) == typeid(ship)) {
         ships.erase(find(ships.begin(), ships.end(), (ship*) m));
-
+        
     } else if(typeid(*m) == typeid(treasure)) {
         treasures.erase(
             find(treasures.begin(), treasures.end(), (treasure*) m)
         );
-
+        
     } else if(typeid(*m) == typeid(info_spot)) {
         info_spots.erase(
             find(info_spots.begin(), info_spots.end(), (info_spot*) m)
         );
-
+        
     } else if(typeid(*m) == typeid(enemy)) {
         enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
-
+        
     } else if(typeid(*m) == typeid(gate)) {
         gates.erase(find(gates.begin(), gates.end(), (gate*) m));
-
+        
     } else {
         log_error(
             "ENGINE WARNING: Ran delete_mob() with a bad mob, of type \"" +
             m->type->name + "\", x = " + f2s(m->x) +
             ", y = " + f2s(m->y) + "!"
         );
-
+        
     }
-
+    
     delete m;
 }
 
@@ -1430,7 +1430,7 @@ void delete_mob(mob* m) {
  */
 void focus_mob(mob* m1, mob* m2) {
     unfocus_mob(m1);
-
+    
     m1->focused_mob = m2;
 }
 
@@ -1446,7 +1446,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
     if(!f) return NULL;
     hitbox_instance* closest_hitbox = NULL;
     float closest_hitbox_dist = 0;
-
+    
     for(size_t h = 0; h < f->hitbox_instances.size(); ++h) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
         float hx, hy;
@@ -1457,7 +1457,7 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
             closest_hitbox = h_ptr;
         }
     }
-
+    
     return closest_hitbox;
 }
 
@@ -1479,16 +1479,19 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
  */
 void remove_from_group(mob* member) {
     if(!member->following_group) return;
-
-    member->following_group->group->members.erase(find(
-                member->following_group->group->members.begin(),
-                member->following_group->group->members.end(),
-                member));
-
+    
+    member->following_group->group->members.erase(
+        find(
+            member->following_group->group->members.begin(),
+            member->following_group->group->members.end(),
+            member
+        )
+    );
+    
     if(member->following_group->group->group_spots) {
         member->following_group->group->group_spots->remove(member);
     }
-
+    
     member->following_group = NULL;
 }
 
@@ -1529,7 +1532,7 @@ void mob::become_carriable(const bool to_ship) {
  */
 void mob::become_uncarriable() {
     if(!carry_info) return;
-
+    
     for(size_t p = 0; p < carry_info->spot_info.size(); ++p) {
         if(carry_info->spot_info[p].state != CARRY_SPOT_FREE) {
             carry_info->spot_info[p].pik_ptr->fsm.run_event(
@@ -1537,9 +1540,9 @@ void mob::become_uncarriable() {
             );
         }
     }
-
+    
     stop_chasing();
-
+    
     delete carry_info;
     carry_info = NULL;
 }
@@ -1560,51 +1563,51 @@ void mob::recalculate_carrying_destination(mob* m, void* info1, void* info2) {
  */
 void mob::calculate_carrying_destination(mob* added, mob* removed) {
     if(!carry_info) return;
-
+    
     carry_info->stuck_state = 0;
-
+    
     //For starters, check if this is to be carried to the ship.
     //Get that out of the way if so.
     if(carry_info->carry_to_ship) {
-
+    
         ship* closest_ship = NULL;
         dist closest_ship_dist;
-
+        
         for(size_t s = 0; s < ships.size(); ++s) {
             ship* s_ptr = ships[s];
             dist d(x, y, s_ptr->x, s_ptr->y);
-
+            
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
                 closest_ship_dist = d;
             }
         }
-
+        
         if(closest_ship) {
             carry_info->final_destination_x =
                 closest_ship->x + closest_ship->type->radius + type->radius + 8;
             carry_info->final_destination_y =
                 closest_ship->y;
             carrying_target = closest_ship;
-
+            
         } else {
             carrying_target = NULL;
             carry_info->stuck_state = 1;
             return;
         }
-
+        
         return;
     }
-
+    
     //If it's meant for an Onion, we need to decide which Onion, based on
     //the Pikmin. Buckle up, because it's not as easy as it might seem.
-
+    
     //How many of each Pikmin type are carrying.
     map<pikmin_type*, unsigned> type_quantity;
     //The Pikmin type with the most carriers.
     vector<pikmin_type*> majority_types;
     unordered_set<pikmin_type*> available_onions;
-
+    
     //First, check what Onions even are available.
     for(size_t o = 0; o < onions.size(); o++) {
         onion* o_ptr = onions[o];
@@ -1612,30 +1615,30 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
             available_onions.insert(o_ptr->oni_type->pik_type);
         }
     }
-
+    
     if(available_onions.empty()) {
         //No Onions?! Well...make the Pikmin stuck.
         carrying_target = NULL;
         carry_info->stuck_state = 1;
         return;
     }
-
+    
     //Count how many of each type there are carrying.
     for(size_t p = 0; p < type->max_carriers; ++p) {
         pikmin* pik_ptr = NULL;
-
+        
         if(carry_info->spot_info[p].state != CARRY_SPOT_USED) continue;
-
+        
         pik_ptr = (pikmin*) carry_info->spot_info[p].pik_ptr;
-
+        
         //If it doesn't have an Onion, it won't even count.
         if(available_onions.find(pik_ptr->pik_type) == available_onions.end()) {
             continue;
         }
-
+        
         type_quantity[pik_ptr->pik_type]++;
     }
-
+    
     //Then figure out what are the majority types.
     unsigned most = 0;
     for(auto t = type_quantity.begin(); t != type_quantity.end(); ++t) {
@@ -1645,7 +1648,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         }
         if(t->second == most) majority_types.push_back(t->first);
     }
-
+    
     //If we ended up with no candidates, pick a type at random,
     //out of all possible types.
     if(majority_types.empty()) {
@@ -1656,18 +1659,18 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
             majority_types.push_back(*t);
         }
     }
-
+    
     pikmin_type* decided_type = NULL;
-
+    
     //Now let's pick an Onion from the candidates.
     if(majority_types.size() == 1) {
         //If there's only one possible type to pick, pick it.
         decided_type = *majority_types.begin();
-
+        
     } else {
         //If there's a tie, let's take a careful look.
         bool new_tie = false;
-
+        
         //Is the Pikmin that just joined part of the majority types?
         //If so, that means this Pikmin just created a NEW tie!
         //So let's pick a random Onion again.
@@ -1679,7 +1682,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
                 }
             }
         }
-
+        
         //If a Pikmin left, check if it is related to the majority types.
         //If not, then a new tie wasn't made, no worries.
         //If it was related, a new tie was created.
@@ -1692,7 +1695,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
                 }
             }
         }
-
+        
         //Check if the previously decided type belongs to one of the majorities.
         //If so, it can be chosen again, but if not, it cannot.
         bool can_continue = false;
@@ -1703,7 +1706,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
             }
         }
         if(!can_continue) decided_type = NULL;
-
+        
         //If the Pikmin that just joined is not a part of the majorities,
         //then it had no impact on the existing ties.
         //Go with the Onion that had been decided before.
@@ -1713,8 +1716,8 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
                 majority_types[randomi(0, majority_types.size() - 1)];
         }
     }
-
-
+    
+    
     //Figure out where that type's Onion is.
     size_t onion_nr = 0;
     for(; onion_nr < onions.size(); ++onion_nr) {
@@ -1722,7 +1725,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
             break;
         }
     }
-
+    
     //Finally, set the destination data.
     carry_info->final_destination_x = onions[onion_nr]->x;
     carry_info->final_destination_y = onions[onion_nr]->y;
@@ -1736,21 +1739,21 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
 void mob::draw() {
 
     frame* f_ptr = anim.get_frame();
-
+    
     if(!f_ptr) return;
-
+    
     float draw_x, draw_y;
     float draw_w, draw_h;
     get_sprite_center(this, f_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
-
+    
     ALLEGRO_COLOR tint = get_status_tint_color();
     float brightness = get_sprite_brightness(this) / 255.0;
     tint.r *= brightness;
     tint.g *= brightness;
     tint.b *= brightness;
     tint.a *= brightness;
-
+    
     draw_sprite(
         f_ptr->bitmap,
         draw_x, draw_y,
@@ -1758,7 +1761,7 @@ void mob::draw() {
         angle,
         tint
     );
-
+    
 }
 
 /* ----------------------------------------------------------------------------
@@ -1768,7 +1771,7 @@ void mob::get_sprite_center(mob* m, frame* f, float* x, float* y) {
     float c = cos(m->angle), s = sin(m->angle);
     *x = m->x + c * f->offs_x + c * f->offs_y;
     *y = m->y - s * f->offs_y + s * f->offs_x;
-
+    
 }
 
 /* ----------------------------------------------------------------------------
@@ -1787,10 +1790,10 @@ void mob::get_sprite_dimensions(
     *h = f->game_h;
     float sucking_mult = 1.0;
     float height_mult = 1 + m->z * 0.0001;
-
+    
     float final_scale = sucking_mult * height_mult;
     if(scale) *scale = final_scale;
-
+    
     *w = *w * final_scale;
     *h = *h * final_scale;
 }

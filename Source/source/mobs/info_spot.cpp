@@ -26,7 +26,7 @@ info_spot::info_spot(
     text(get_var_value(vars, "text", "")),
     opens_box(s2b(get_var_value(vars, "opens_box", "0"))),
     text_w(0) {
-
+    
     text = replace_all(text, "\\n", "\n");
     vector<string> lines = split(text, "\n");
     size_t n_lines = lines.size();

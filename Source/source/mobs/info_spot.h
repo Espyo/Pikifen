@@ -34,7 +34,7 @@ public:
     //opens a message box with the full text.
     bool opens_box;
     unsigned int text_w; //Used instead of calculating the width every time.
-
+    
     info_spot(
         const float x, const float y, const float angle, const string &vars
     );

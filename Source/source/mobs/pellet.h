@@ -20,7 +20,7 @@ enum PELLET_STATES {
     PELLET_STATE_IDLE_WAITING,
     PELLET_STATE_IDLE_MOVING,
     PELLET_STATE_BEING_DELIVERED,
-
+    
     N_PELLET_STATES,
 };
 
@@ -34,7 +34,7 @@ enum PELLET_STATES {
 class pellet : public mob {
 public:
     pellet_type* pel_type;
-
+    
     pellet(
         float x, float y, pellet_type* type,
         const float angle, const string &vars

@@ -49,13 +49,13 @@ public:
     ALLEGRO_BITMAP* bmp_top[3];
     //Standby icons for each maturity.
     ALLEGRO_BITMAP* bmp_icon[3];
-
+    
     pikmin_type();
     void load_from_file(
         data_node* file, const bool load_resources,
         vector<pair<size_t, string> >* anim_conversions
     );
-
+    
 };
 
 #endif //ifndef PIKMIN_TYPE_INCLUDED

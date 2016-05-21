@@ -17,7 +17,7 @@ angle_picker::angle_picker(
     widget(x1, y1, x2, y2, style, flags),
     angle(angle),
     dragging_pointer(false) {
-
+    
     needs_init = true;
 }
 
@@ -49,13 +49,13 @@ float angle_picker::str_to_angle(const string &s) {
  */
 void angle_picker::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
-
+    
     float circle_r = (y2 - y1) / 2;
     float circle_cx = x1 + circle_r;
     float circle_cy = y1 + circle_r;
-
+    
     if(x > x1 + circle_r * 2) return;
-
+    
     set_angle_rads(atan2(y - circle_cy, x - circle_cx));
     dragging_pointer = true;
 }
@@ -76,13 +76,13 @@ void angle_picker::widget_on_mouse_up(int, int, int) {
  */
 void angle_picker::widget_on_mouse_move(int x, int y) {
     if(!dragging_pointer) return;
-
+    
     float circle_r = (y2 - y1) / 2;
     float circle_cx = x1 + circle_r;
     float circle_cy = y1 + circle_r;
-
+    
     if(x > x1 + circle_r * 2) return;
-
+    
     set_angle_rads(atan2(y - circle_cy, x - circle_cx));
 }
 
@@ -99,13 +99,13 @@ void angle_picker::init() {
         style,
         flags
     );
-
+    
     t->lose_focus_handler = textbox_lose_focus_handler;
-
+    
     add("txt_angle", t);
-
+    
     flags |= FLAG_WUM_NO_CHILDREN;
-
+    
     set_angle_rads(angle);
 }
 

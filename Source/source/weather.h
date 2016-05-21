@@ -42,7 +42,7 @@ public:
     interval percipitation_frequency;
     interval percipitation_speed;
     interval percipitation_angle;
-
+    
     weather();
     weather(
         const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl,

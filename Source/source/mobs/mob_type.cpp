@@ -47,7 +47,7 @@ mob_type::mob_type() :
     is_obstacle(false),
     show_health(true),
     casts_shadow(true) {
-
+    
 }
 
 
@@ -81,13 +81,13 @@ void load_mob_types(bool load_resources) {
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         load_mob_types(mob_categories.get_folder(c), c, load_resources);
     }
-
+    
     //Load the special mob types.
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
         string folder = SPECIAL_MOBS_FOLDER + "/" + mt->first;
         data_node file = data_node(folder + "/Data.txt");
         if(!file.file_was_opened) return;
-
+        
         load_mob_type_from_file(mt->second, file, load_resources, folder);
     }
 }
@@ -109,23 +109,23 @@ void load_mob_types(
     if(!folder_found) {
         log_error("Folder \"" + folder + "\" not found!");
     }
-
+    
     for(size_t t = 0; t < types.size(); ++t) {
-
+    
         data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) return;
-
+        
         mob_type* mt;
         mt = mob_categories.create_mob_type(category);
-
+        
         load_mob_type_from_file(
             mt, file, load_resources, folder + "/" + types[t]
         );
-
+        
         mob_categories.save_mob_type(category, mt);
-
+        
     }
-
+    
 }
 
 
@@ -138,10 +138,10 @@ void load_mob_type_from_file(
 ) {
 
     vector<pair<size_t, string> > anim_conversions;
-
+    
 #define setter(name, var) \
     set_if_exists(file.get_child_by_name(name)->value, mt->var)
-
+    
     setter("name",                name);
     setter("always_active",       always_active);
     setter("big_damage_interval", big_damage_interval);
@@ -162,14 +162,14 @@ void load_mob_type_from_file(
     setter("pushable",            pushable);
     setter("show_health",         show_health);
     setter("casts_shadow",        casts_shadow);
-
+    
 #undef setter
-
+    
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");
         mt->anims = load_animation_pool_from_file(&anim_file);
         mt->anims.fix_hitbox_pointers();
-
+        
         data_node script_file = data_node(folder + "/Script.txt");
         size_t old_n_states = mt->states.size();
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
@@ -184,9 +184,9 @@ void load_mob_type_from_file(
             }
         }
     }
-
+    
     mt->load_from_file(&file, load_resources, &anim_conversions);
-
+    
     if(load_resources) {
         mt->anims.create_conversions(anim_conversions);
     }
@@ -199,7 +199,7 @@ void load_mob_type_from_file(
 void mob_type::add_carrying_states() {
 
     easy_fsm_creator efc;
-
+    
     efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_stop_move);
@@ -218,7 +218,7 @@ void mob_type::add_carrying_states() {
             efc.change_state("carriable_moving");
         }
     }
-
+    
     efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_begin_move);
@@ -245,7 +245,7 @@ void mob_type::add_carrying_states() {
             efc.change_state("being_delivered");
         }
     }
-
+    
     efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::start_being_delivered);
@@ -254,11 +254,11 @@ void mob_type::add_carrying_states() {
             efc.run_function(gen_mob_fsm::handle_delivery);
         }
     }
-
-
+    
+    
     vector<mob_state*> new_states = efc.finish();
     fix_states(new_states, "");
-
+    
     states.insert(states.end(), new_states.begin(), new_states.end());
-
+    
 }

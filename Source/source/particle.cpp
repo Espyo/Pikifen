@@ -46,7 +46,7 @@ particle::particle(
     size(size),
     starting_size(size),
     color(color) {
-
+    
 }
 
 
@@ -56,21 +56,21 @@ particle::particle(
  */
 bool particle::tick() {
     time -= delta_t;
-
+    
     if(time <= 0) return false;
-
-    x += delta_t* speed_x;
-    y += delta_t* speed_y;
-
+    
+    x += delta_t * speed_x;
+    y += delta_t * speed_y;
+    
     if(friction != 0) {
-        speed_x *= 1 - (delta_t* friction);
-        speed_y *= 1 - (delta_t* friction);
+        speed_x *= 1 - (delta_t * friction);
+        speed_y *= 1 - (delta_t * friction);
     }
-
+    
     if(gravity != 0) {
         speed_y += (delta_t) * gravity;
     }
-
+    
     return true;
 }
 
@@ -99,14 +99,14 @@ void random_particle_explosion(
 ) {
 
     unsigned char n_particles = randomi(min, max);
-
+    
     for(unsigned char p = 0; p < n_particles; ++p) {
         float angle = randomf(0, M_PI * 2);
         float speed = randomf(speed_min, speed_max);
-
+        
         float speed_x = cos(angle) * speed;
         float speed_y = sin(angle) * speed;
-
+        
         particles.push_back(
             particle(
                 type,
@@ -145,7 +145,7 @@ void random_particle_fire(
 ) {
 
     unsigned char n_particles = randomi(min, max);
-
+    
     for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
@@ -187,7 +187,7 @@ void random_particle_splash(
 ) {
 
     unsigned char n_particles = randomi(min, max);
-
+    
     for(unsigned char p = 0; p < n_particles; ++p) {
         particles.push_back(
             particle(
@@ -227,14 +227,14 @@ void random_particle_spray(
 ) {
 
     unsigned char n_particles = randomi(35, 40);
-
+    
     for(unsigned char p = 0; p < n_particles; ++p) {
         float angle_offset = randomf(-angle_range * 0.5, angle_range * 0.5);
-
+        
         float power = randomf(distance_range * 0.3, distance_range * 1.2);
         float speed_x = cos(angle + angle_offset) * power;
         float speed_y = sin(angle + angle_offset) * power;
-
+        
         particles.push_back(
             particle(
                 type,

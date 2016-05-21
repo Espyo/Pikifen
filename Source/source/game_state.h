@@ -28,7 +28,7 @@ enum GAME_STATES {
     GAME_STATE_GAME,
     GAME_STATE_AREA_EDITOR,
     GAME_STATE_ANIMATION_EDITOR,
-
+    
     N_GAME_STATES,
 };
 
@@ -40,11 +40,11 @@ class game_state {
 protected:
     void set_selected_widget(menu_widget* widget);
     void handle_widget_events(ALLEGRO_EVENT ev);
-
+    
 public:
     vector<menu_widget*> menu_widgets;
     menu_widget* selected_widget;
-
+    
     game_state();
     virtual void load() = 0;
     virtual void unload() = 0;

@@ -56,7 +56,7 @@ enum MOB_STATE_IDS {
     MOB_STATE_IDLE,
     MOB_STATE_BEING_CARRIED,
     MOB_STATE_BEING_DELIVERED, //Into an Onion.
-
+    
 };
 
 enum CARRY_SPOT_STATES {
@@ -76,7 +76,7 @@ struct group_info {
     vector<mob*> members;
     group_spot_info* group_spots;
     float group_center_x, group_center_y;
-
+    
     group_info(
         group_spot_info* ps, const float center_x, const float center_y
     ) {
@@ -110,9 +110,9 @@ struct carry_info_struct {
     //If true, this is carried to the ship.
     //Otherwise, it's carried to an Onion.
     bool carry_to_ship;
-
+    
     vector<carrier_spot_struct> spot_info;
-
+    
     //This is to avoid going through the vector
     //only to find out the total strength.
     float cur_carrying_strength;
@@ -134,7 +134,7 @@ struct carry_info_struct {
     //0: no. 1: going to the alternative point, 2: going back to the start.
     unsigned char stuck_state;
     bool is_moving;
-
+    
     carry_info_struct(mob* m, const bool carry_to_ship);
     bool is_full();
     float get_speed();
@@ -157,22 +157,22 @@ protected:
     void tick_physics();
     void tick_script();
     virtual void tick_class_specifics();
-
+    
 public:
     mob(
         const float x, const float y, mob_type* type,
         const float angle, const string &vars
     );
     virtual ~mob(); //Needed so that typeid works.
-
+    
     mob_type* type;
-
+    
     animation_instance anim;
-
+    
     //Flags.
     bool to_delete; //If true, this mob should be deleted.
     bool reached_destination;
-
+    
     //Actual moving and other physics.
     //Coordinates. Z is height, the higher the value, the higher in the sky.
     float x, y, z;
@@ -202,7 +202,7 @@ public:
     bool tangible;
     //If it should be hidden (no shadow, no health).
     bool hide;
-
+    
     //Makes the mob face an angle, but it'll turn at its own pace.
     void face(const float new_angle);
     //Returns the final coordinates of the chasing target.
@@ -210,7 +210,7 @@ public:
     //Returns the normal speed of this mob.
     //Subclasses are meant to override this.
     virtual float get_base_speed();
-
+    
     //Target things.
     //If true, the mob is trying to go to a certain spot.
     bool chasing;
@@ -230,7 +230,7 @@ public:
     float chase_speed;
     vector<path_stop*> path;
     size_t cur_path_stop_nr;
-
+    
     void chase(
         const float offs_x, const float offs_y,
         float* orig_x, float* orig_y,
@@ -239,7 +239,7 @@ public:
         const float speed = -1
     );
     void stop_chasing();
-
+    
     //Group things.
     //The current mob is following this mob's group.
     mob* following_group;
@@ -249,7 +249,7 @@ public:
     group_info* group;
     float group_spot_x;
     float group_spot_y;
-
+    
     //Script.
     //Finite-state machine.
     mob_fsm fsm;
@@ -263,7 +263,7 @@ public:
     map<string, string> vars;
     //Are we waiting to report the big damage event?
     bool big_damage_ev_queued;
-
+    
     //Other properties.
     //Incremental ID. Used for minor things.
     size_t id;
@@ -273,7 +273,7 @@ public:
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.
     unsigned char team;
-
+    
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
     //Hazard of the sector the mob is currently on.
@@ -286,24 +286,24 @@ public:
     vector<mob*> chomping_pikmin;
     //Max mobs it can chomp in the current attack.
     size_t chomp_max;
-
+    
     //Carrying.
     //Structure holding information on how this mob should be carried.
     //If NULL, it cannot be carried.
     carry_info_struct* carry_info;
     void become_carriable(const bool to_ship);
     void become_uncarriable();
-
+    
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool rel, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
-
+    
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
-
-
+    
+    
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
     ALLEGRO_COLOR get_status_tint_color();
@@ -312,10 +312,10 @@ public:
     virtual void receive_panic_from_status();
     virtual void lose_panic_from_status();
     virtual void change_maturity_amount_from_status(const int amount);
-
+    
     void tick();
     virtual void draw();
-
+    
     static void attack(
         mob* m1, mob* m2, const bool m1_is_pikmin, const float damage,
         const float angle, const float knockback,
@@ -326,14 +326,14 @@ public:
     );
     void calculate_carrying_destination(mob* added, mob* removed);
     mob* carrying_target;
-
+    
     //Drawing tools.
     void get_sprite_center(mob* m, frame* f, float* x, float* y);
     void get_sprite_dimensions(
         mob* m, frame* f, float* w, float* h, float* scale = NULL
     );
     float get_sprite_brightness(mob* m);
-
+    
 };
 
 

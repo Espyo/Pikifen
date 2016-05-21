@@ -40,7 +40,7 @@ enum MOB_CATEGORIES {
     MOB_CATEGORY_SPECIAL,
     MOB_CATEGORY_SHIPS,
     MOB_CATEGORY_GATES,
-
+    
     N_MOB_CATEGORIES,
 };
 
@@ -71,13 +71,13 @@ class mob_type {
 public:
     //Technical things.
     string name;
-
+    
     //Visual things.
     animation_pool anims;
     ALLEGRO_COLOR main_color;
     bool show_health;
     bool casts_shadow;
-
+    
     //Space-related things.
     float radius;         //Diameter.
     float height;
@@ -87,7 +87,7 @@ public:
     bool always_active;
     bool pushes; //Blocks passage of other mobs.
     bool pushable; //Can be pushed by other mobs.
-
+    
     //Behavior things.
     float max_health;
     float health_regen; //Health points per second.
@@ -98,24 +98,24 @@ public:
     size_t max_carriers;
     float weight;          //Pikmin strength needed to carry it.
     float big_damage_interval;
-
+    
     //Script things.
     vector<mob_state*> states;    //The states, events and actions.
     size_t first_state_nr;        //Number of the state a mob starts at.
-
+    
     //Misc.
     bool is_obstacle;
-
+    
     //Used by the special mob types, as it is not possible to control
     //which type of mob to create without a list.
-    function<void(
+    function < void(
         float x, float y, float angle, const string &vars
-    )> create_mob;
-    function<void(
+    ) > create_mob;
+    function < void(
         data_node* file, const bool load_resources,
         vector<pair<size_t, string> >* anim_conversions
-    )> load_from_file_func;
-
+    ) > load_from_file_func;
+    
     mob_type();
     ~mob_type();
     virtual void load_from_file(

@@ -14,7 +14,7 @@ checkbox::checkbox(
     widget(x1, y1, x2, y2, style, flags),
     checked(checked),
     text(text) {
-
+    
     needs_init = true;
 }
 
@@ -30,7 +30,7 @@ void checkbox::init() {
             style,
             flags
         ));
-
+        
     int label_width = CHECKBOX_BOX_SIZE + CHECKBOX_BOX_PADDING;
     add("lbl_text", new label(
             x1 + label_width,
@@ -109,7 +109,7 @@ checkbox_box::checkbox_box(
         y1 + CHECKBOX_BOX_SIZE, style, flags
     ),
     checked(checked) {
-
+    
 }
 
 
@@ -134,7 +134,7 @@ void checkbox_box::draw_self() {
     draw_line(this, DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color());
     //Right line.
     draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color());
-
+    
     if(checked) {
         //Southeast-going line.
         al_draw_line(x1 + 2.5, y1 + 6.5, x1 + 5.5, y1 + 9.5, get_fg_color(), 3);

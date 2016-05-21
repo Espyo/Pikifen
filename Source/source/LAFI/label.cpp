@@ -12,7 +12,7 @@ label::label(
     widget(x1, y1, x2, y2, style, flags),
     text(text),
     text_flags(text_flags) {
-
+    
 }
 
 
@@ -33,7 +33,7 @@ void label::draw_self() {
         if(text_flags == ALLEGRO_ALIGN_CENTER) text_x = (x2 - x1) / 2;
         else if(text_flags == ALLEGRO_ALIGN_RIGHT) text_x = (x2 - x1) - 1;
         text_x += x1;
-
+        
         al_draw_text(
             style->text_font,
             get_fg_color(),

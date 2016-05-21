@@ -12,14 +12,14 @@ class line : public widget {
 public:
     bool horizontal;
     int thickness;
-
+    
     line(
         int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
         bool horizontal = true, int thickness = 1,
         lafi::style* style = NULL, unsigned char flags = 0
     );
     ~line();
-
+    
     void draw_self();
 };
 
@@ -35,7 +35,7 @@ public:
         lafi::style* style = NULL, unsigned char flags = 0
     );
     ~dummy();
-
+    
     void draw_self();
 };
 

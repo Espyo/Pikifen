@@ -38,8 +38,8 @@ menu_widget::menu_widget(
     selected(false),
     enabled(true),
     juicy_grow_time_left(0) {
-
-
+    
+    
 }
 
 
@@ -98,8 +98,8 @@ menu_button::menu_button(
     font(font),
     text_color(color),
     text_align(align) {
-
-
+    
+    
 }
 
 /* ----------------------------------------------------------------------------
@@ -117,14 +117,14 @@ void menu_button::draw(const float time_spent) {
             16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
-
+    
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-
+    
     draw_text_lines(
         font, text_color,
         text_x, y,
@@ -151,8 +151,8 @@ menu_checkbox::menu_checkbox(
     text_color(color),
     text_align(align),
     checked(false) {
-
-
+    
+    
 }
 
 
@@ -171,14 +171,14 @@ void menu_checkbox::draw(const float time_spent) {
             16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
-
+    
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-
+    
     draw_text_lines(
         font, text_color,
         text_x, y,
@@ -209,8 +209,8 @@ menu_text::menu_text(
     font(font),
     text_color(color),
     text_align(align) {
-
-
+    
+    
 }
 
 
@@ -219,20 +219,20 @@ menu_text::menu_text(
  */
 void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
-
+    
     int text_x = x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
         text_x = x - w * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
         text_x = x + w * 0.5 - 32;
     }
-
+    
     float juicy_grow_amount =
         ease(
             EASE_UP_AND_DOWN,
             juicy_grow_time_left / JUICY_GROW_DURATION
         ) * JUICY_GROW_DELTA;
-
+        
     draw_scaled_text(
         font, text_color,
         text_x, y,

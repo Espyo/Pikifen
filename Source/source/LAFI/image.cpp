@@ -11,7 +11,7 @@ image::image(
 ) :
     widget(x1, y1, x2, y2, style, flags),
     bmp(bmp) {
-
+    
 }
 
 

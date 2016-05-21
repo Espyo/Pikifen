@@ -17,5 +17,5 @@
 hazard::hazard() :
     main_color(al_map_rgba(0, 0, 0, 0)),
     associated_liquid(nullptr) {
-
+    
 }

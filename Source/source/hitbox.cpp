@@ -16,7 +16,7 @@
  */
 hitbox::hitbox(const string &name) :
     name(name) {
-
+    
 }
 
 
@@ -49,5 +49,5 @@ hitbox_instance::hitbox_instance(
     knockback_angle(0),
     knockback(1),
     can_pikmin_latch(false) {
-
+    
 }

@@ -28,7 +28,7 @@ class treasure_type : public mob_type {
 public:
 
     float value;
-
+    
     treasure_type();
     void load_from_file(
         data_node* file, const bool load_resources,

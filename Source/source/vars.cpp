@@ -171,7 +171,7 @@ string info_print_text;
 timer info_print_timer =
     timer(
         INFO_PRINT_DURATION,
-    [] () { info_print_text.clear(); }
+[] () { info_print_text.clear(); }
     );
 float info_spot_trigger_range = 64.0f;
 vector<info_spot*> info_spots;

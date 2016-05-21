@@ -25,7 +25,7 @@ pellet_type::pellet_type() :
     match_seeds(0),
     non_match_seeds(0),
     bmp_number(nullptr) {
-
+    
     pellet_fsm::create_fsm(this);
 }
 
@@ -44,17 +44,17 @@ void pellet_type::load_from_file(
             pik_type_node
         );
     }
-
+    
     pik_type = pikmin_types[pik_type_node->value];
     number = s2i(file->get_child_by_name("number")->value);
     weight = number;
     match_seeds = s2i(file->get_child_by_name("match_seeds")->value);
     non_match_seeds = s2i(file->get_child_by_name("non_match_seeds")->value);
-
+    
     if(load_resources) {
         bmp_number =
             bitmaps.get(file->get_child_by_name("number_image")->value, file);
     }
-
+    
     anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
 }

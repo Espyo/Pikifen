@@ -36,7 +36,7 @@ enum HITBOX_TYPES {
 class hitbox {
 public:
     string name;
-
+    
     hitbox(const string &name = "");
 };
 
@@ -53,7 +53,7 @@ public:
     float z;            //Bottom of the hitbox (relative coordinates).
     float height;
     float radius;
-
+    
     unsigned char type;
     string hazards_str;
     vector<hazard*> hazards;
@@ -69,7 +69,7 @@ public:
     //Can the Pikmin latch on to this hitbox to continue inflicting damage?
     //Example of a non-latchable hitbox: Goolix' larger core.
     bool can_pikmin_latch;
-
+    
     hitbox_instance(
         const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL,
         const float x = 0, const float y = 0,

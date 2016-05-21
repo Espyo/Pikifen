@@ -24,7 +24,7 @@ textbox::textbox(
     change_handler(nullptr),
     scroll_x(0),
     enter_key_widget(nullptr) {
-
+    
     tab_index = cur_tab_index++;
 }
 
@@ -43,7 +43,7 @@ textbox::textbox(textbox &t2) :
     change_handler(nullptr),
     scroll_x(0),
     enter_key_widget(nullptr) {
-
+    
     tab_index = cur_tab_index++;
 }
 
@@ -69,10 +69,10 @@ void textbox::draw_self() {
     draw_line(this, DRAW_LINE_BOTTOM, 1, 0, 0, get_lighter_bg_color());
     //Right line.
     draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, get_lighter_bg_color());
-
+    
     if(style->text_font) {
         int text_start = x1 + 2 - scroll_x;
-
+        
         if(parent->focused_widget == this) {
             al_draw_filled_rectangle(
                 text_start + al_get_text_width(
@@ -88,16 +88,16 @@ void textbox::draw_self() {
                 get_alt_color()
             );
         }
-
+        
         al_draw_text(
             style->text_font, get_fg_color(), text_start,
             (y2 + y1) / 2  - al_get_font_line_height(style->text_font) / 2, 0,
             text.c_str()
         );
-
+        
         unsigned int cursor_x =
             al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
-
+            
         if(parent->focused_widget == this) {
             al_draw_line(
                 x1 + cursor_x + 1.5 - scroll_x,
@@ -128,12 +128,12 @@ void textbox::widget_on_key_char(
         (modifiers & ALLEGRO_KEYMOD_CTRL) ||
         (modifiers & ALLEGRO_KEYMOD_COMMAND);
     bool shift = modifiers & ALLEGRO_KEYMOD_SHIFT;
-
+    
     if(cursor > text.size()) cursor = 0; //If the text is somehow changed.
-
+    
     int sel1 = min(sel_start, sel_end), sel2 = max(sel_start, sel_end);
     int sel_size = sel2 - sel1;
-
+    
     if(keycode == ALLEGRO_KEY_LEFT && !ctrl && !shift) {
         //Left arrow - move cursor left.
         if(sel_size) {
@@ -143,7 +143,7 @@ void textbox::widget_on_key_char(
             //Go one to the left anyway.
             //This'll stop it from getting stuck on spaces.
             cursor--;
-
+            
             if(ctrl) { //Whole word.
                 while(cursor && text[cursor - 1] != ' ') {
                     cursor--;
@@ -151,7 +151,7 @@ void textbox::widget_on_key_char(
             }
             sel_start = sel_end = cursor;
         }
-
+        
     } else if(keycode == ALLEGRO_KEY_RIGHT && !ctrl && !shift) {
         //Right arrow - move cursor right.
         if(sel_size) {
@@ -159,24 +159,24 @@ void textbox::widget_on_key_char(
             sel_start = sel_end = cursor;
         } else if(cursor < text.size() && text.size()) {
             cursor++; //Go one to the right anyway.
-
+            
             if(ctrl) {
                 while(cursor < text.size() && text[cursor - 1] != ' ') {
                     cursor++;
                 }
             }
         }
-
+        
     } else if(keycode == ALLEGRO_KEY_HOME && !ctrl && !shift) {
         //Home - place cursor at beginning.
         cursor = 0;
         sel_start = sel_end = cursor;
-
+        
     } else if(keycode == ALLEGRO_KEY_END && !ctrl && !shift) {
         //End - place cursor at end.
         cursor = text.size();
         sel_start = sel_end = cursor;
-
+        
     } else if(keycode == ALLEGRO_KEY_BACKSPACE) {
         //Backspace - delete character before cursor.
         if(text.size()) { //If there's actually something written
@@ -187,18 +187,18 @@ void textbox::widget_on_key_char(
             } else if(cursor) {
                 unsigned short cursor_start = cursor;
                 cursor--;
-
+                
                 if(ctrl) { //Whole word.
                     while(cursor && text[cursor - 1] != ' ') {
                         cursor--;
                     }
                 }
-
+                
                 text.erase(cursor, cursor_start - cursor);
             }
             call_change_handler();
         }
-
+        
     } else if(keycode == ALLEGRO_KEY_DELETE) {
         //Delete - delete character after cursor.
         if(text.size()) {
@@ -210,22 +210,22 @@ void textbox::widget_on_key_char(
             } else if(cursor < text.size()) {
                 unsigned short cursor_start = cursor;
                 cursor++;
-
+                
                 if(ctrl) {
                     while(cursor < text.size() && text[cursor - 1] != ' ') {
                         cursor++;
                     }
                 }
-
+                
                 text.erase(cursor_start, cursor - cursor_start);
                 cursor = cursor_start;
             }
             call_change_handler();
         }
-
+        
     } else if(keycode == ALLEGRO_KEY_TAB && !ctrl) {
         //Tab - switch to the next textbox in the parent.
-
+        
         if(parent) {
             size_t
             next_tab_index = UINT_MAX,
@@ -236,15 +236,15 @@ void textbox::widget_on_key_char(
             widget* prev_textbox = NULL;
             widget* first_textbox = NULL;
             widget* last_textbox = NULL;
-
+            
             for(
                 auto w = parent->widgets.begin();
                 w != parent->widgets.end(); ++w
             ) {
                 if(typeid(*w->second) == typeid(textbox)) {
-
+                
                     if(w->second == this) continue;
-
+                    
                     size_t i = ((textbox*) w->second)->tab_index;
                     if(i < shortest_tab_index) {
                         shortest_tab_index = i;
@@ -274,11 +274,11 @@ void textbox::widget_on_key_char(
                 t->sel_start = 0; t->sel_end = t->text.size();
             }
         }
-
+        
     } else if(keycode == ALLEGRO_KEY_A && ctrl) {
         sel_start = 0;
         sel_end = text.size();
-
+        
     } else if(
         unichar > 0 && keycode != ALLEGRO_KEY_ESCAPE &&
         keycode != ALLEGRO_KEY_TAB
@@ -293,7 +293,7 @@ void textbox::widget_on_key_char(
                 else unichar = '\n';
             }
         }
-
+        
         if(sel_size) {
             text.erase(sel1, sel2 - sel1);
             cursor = sel1;
@@ -305,14 +305,14 @@ void textbox::widget_on_key_char(
             call_change_handler();
         }
     }
-
+    
     //Update the text scroll to match the cursor.
     unsigned int cursor_x =
         al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
     unsigned int text_width =
         al_get_text_width(style->text_font, text.c_str());
     unsigned int box_width = (x2 - x1) - 4;
-
+    
     if(text_width > box_width) {
         if(box_width / 2 < cursor_x) scroll_x = cursor_x - box_width / 2;
         else scroll_x = 0;
@@ -327,7 +327,7 @@ void textbox::widget_on_key_char(
  */
 void textbox::widget_on_mouse_down(int button, int x, int) {
     if(button != 1) return;
-
+    
     cursor = mouse_to_char(x);
     sel_start = cursor;
     sel_end = cursor;
@@ -340,7 +340,7 @@ void textbox::widget_on_mouse_down(int button, int x, int) {
  */
 void textbox::widget_on_mouse_move(int x, int) {
     if(!mouse_clicking) return;
-
+    
     sel_end = mouse_to_char(x);
 }
 

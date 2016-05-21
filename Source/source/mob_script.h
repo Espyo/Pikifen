@@ -59,7 +59,7 @@ enum MOB_ACTION_TYPES {
 //Types of script events.
 enum MOB_EVENT_TYPES {
     //"Special" events.
-
+    
     MOB_EVENT_UNKNOWN,
     //When the state is entered.
     MOB_EVENT_ON_ENTER,
@@ -67,9 +67,9 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_ON_LEAVE,
     //When the game ticks a frame.
     MOB_EVENT_ON_TICK,
-
+    
     //Script file stuff.
-
+    
     //When the current animation ends.
     MOB_EVENT_ANIMATION_END,
     //When it reaches a certain health %.
@@ -128,10 +128,10 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_TIMER,
     //When it touches a wall.
     MOB_EVENT_TOUCHED_WALL,
-
-
+    
+    
     //More internal script stuff.
-
+    
     //When it is plucked off the ground (Pikmin only).
     MOB_EVENT_PLUCKED,
     //When it is grabbed by a friend.
@@ -190,9 +190,9 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FOCUSED_MOB_UNCARRIABLE,
     //When the mob receives an object that was carried to it.
     MOB_EVENT_RECEIVE_DELIVERY,
-
+    
     //Events that only leaders can really handle.
-
+    
     //When the leader becomes the one controlled by the player.
     LEADER_EVENT_FOCUSED,
     //When the leader stops being the one controlled by the player.
@@ -225,7 +225,7 @@ enum MOB_EVENT_TYPES {
     LEADER_EVENT_REACHED_SEED,
     //When the leader's pluck is canceled.
     LEADER_EVENT_CANCEL,
-
+    
     N_MOB_EVENTS,
 };
 
@@ -278,7 +278,7 @@ public:
     vector<int> vi;
     vector<float> vf;
     vector<string> vs;
-
+    
     void run(
         mob* m, size_t* action_nr, void* custom_data_1, void* custom_data_2
     );
@@ -292,7 +292,7 @@ class mob_event {
 public:
     unsigned char type;
     vector<mob_action*> actions;
-
+    
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
     mob_event(data_node* d, vector<mob_action*> a);
     mob_event(
@@ -307,7 +307,7 @@ public:
     size_t id;
     mob_event* events[N_MOB_EVENTS];
     mob_event* get_event(const size_t type);
-
+    
     mob_state(const string &name);
     mob_state(const string &name, mob_event* evs[N_MOB_EVENTS]);
     mob_state(const string &name, const size_t id);
@@ -322,7 +322,7 @@ public:
     vector<size_t> pre_named_conversions;
     //Knowing the previous state's name helps with debugging.
     string prev_state_name;
-
+    
     mob_event* get_event(const size_t type);
     void run_event(
         const size_t type,
@@ -355,7 +355,7 @@ private:
     mob_event* cur_event;
     void commit_state();
     void commit_event();
-
+    
 public:
     void new_state(const string &name, const size_t id);
     void new_event(const unsigned char type);

@@ -37,15 +37,15 @@ public:
     float distance_range;
     //If applied outside of the party, this is the angle range.
     float angle_range;
-
+    
     ALLEGRO_COLOR main_color;
     //Bitmap for the spray count.
     ALLEGRO_BITMAP* bmp_spray;
-
+    
     //How many berries are needed in order to concot a new spray.
     //0 means there are no berries for this spray type.
     size_t berries_needed;
-
+    
     spray_type();
 };
 

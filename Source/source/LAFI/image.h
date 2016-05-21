@@ -16,7 +16,7 @@ namespace lafi {
 class image : public widget {
 private:
     ALLEGRO_BITMAP* bmp;
-
+    
 public:
     image(
         int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
@@ -25,7 +25,7 @@ public:
     );
     image(image &i2);
     ~image();
-
+    
     void draw_self();
 };
 

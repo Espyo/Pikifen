@@ -19,10 +19,10 @@
  */
 gate_type::gate_type() :
     mob_type() {
-
+    
     casts_shadow = false;
     is_obstacle = true;
-
+    
     gate_fsm::create_fsm(this);
 }
 

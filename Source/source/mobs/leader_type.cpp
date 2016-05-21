@@ -26,10 +26,10 @@ leader_type::leader_type() :
     throw_height_mult(1.0),
     pluck_delay(0.6),
     bmp_icon(nullptr) {
-
+    
     main_color = al_map_rgb(128, 128, 128);
     show_health = false;
-
+    
     leader_fsm::create_fsm(this);
 }
 
@@ -57,7 +57,7 @@ void leader_type::load_from_file(
                 "1"
             )
         );
-
+        
     if(load_resources) {
         //TODO don't use load_sample for these.
         sfx_dismiss =
@@ -69,10 +69,10 @@ void leader_type::load_from_file(
         bmp_icon =
             bitmaps.get(file->get_child_by_name("icon")->value, file);
     }
-
+    
 #define new_conversion(id, name) \
     anim_conversions->push_back(make_pair((id), (name)))
-
+    
     new_conversion(LEADER_ANIM_IDLE,         "idle");
     new_conversion(LEADER_ANIM_WALK,         "walk");
     new_conversion(LEADER_ANIM_PLUCK,        "pluck");
@@ -84,7 +84,7 @@ void leader_type::load_from_file(
     new_conversion(LEADER_ANIM_PAIN,         "pain");
     new_conversion(LEADER_ANIM_KNOCKED_DOWN, "knocked_down");
     new_conversion(LEADER_ANIM_SPRAYING,     "spraying");
-
+    
 #undef new_conversion
-
+    
 }

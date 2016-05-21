@@ -17,14 +17,14 @@ class button : public widget {
 public:
     string text;
     ALLEGRO_BITMAP* icon;
-
+    
     button(
         int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
         string text = "", string description = "", ALLEGRO_BITMAP* icon = NULL,
         lafi::style* style = NULL, unsigned char flags = 0
     );
     ~button();
-
+    
     void draw_self();
 };
 

@@ -32,7 +32,7 @@ public:
     //Number of seeds given out if the pellet's taken to a non-matching Onion.
     unsigned non_match_seeds;
     ALLEGRO_BITMAP* bmp_number;
-
+    
     pellet_type();
     void load_from_file(
         data_node* file, const bool load_resources,

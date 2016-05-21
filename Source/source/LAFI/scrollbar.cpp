@@ -21,7 +21,7 @@ scrollbar::scrollbar(
     high_value(high_value),
     vertical(vertical),
     change_handler(nullptr) {
-
+    
     needs_init = true;
 }
 
@@ -41,7 +41,7 @@ void scrollbar::init() {
  */
 void scrollbar::widget_on_mouse_down(int button, int x, int y) {
     if(button != 1) return;
-
+    
     move_button(x, y);
 }
 
@@ -52,7 +52,7 @@ void scrollbar::widget_on_mouse_down(int button, int x, int y) {
  */
 void scrollbar::widget_on_mouse_move(int x, int y) {
     if(!mouse_clicking) return;
-
+    
     move_button(x, y);
 }
 
@@ -65,17 +65,17 @@ void scrollbar::widget_on_mouse_move(int x, int y) {
  */
 void scrollbar::create_button() {
     remove("but_bar");
-
+    
     if(low_value != high_value) {
-
+    
         int bx1, by1, bx2, by2;
-
+        
         if(vertical) {
             //Pixels per value.
             int bh =
                 (high_value - low_value) *
                 ((float) (y2 - y1) / (max_value - min_value));
-
+                
             bx1 = x1; by1 = y1;
             bx2 = x2; by2 = y1 + bh;
         } else {
@@ -83,11 +83,11 @@ void scrollbar::create_button() {
             int bw =
                 (high_value - low_value) *
                 ((float) (x2 - x1) / (max_value - min_value));
-
+                
             by1 = y1; bx1 = x1;
             by2 = y2; bx2 = x1 + bw;
         }
-
+        
         add("but_bar", new button(
                 bx1,
                 by1,
@@ -108,36 +108,36 @@ void scrollbar::create_button() {
  */
 void scrollbar::move_button(int x, int y) {
     if(low_value == high_value) return;
-
+    
     button* but = (button*) widgets["but_bar"];
-
+    
     if(vertical) {
         int bh = but->y2 - but->y1;
         int h = y2 - y1;
-
+        
         but->y1 = y - (but->y2 - but->y1) / 2;
         if(but->y1 < y1) but->y1 = y1;
         if(but->y1 + bh > y2) but->y1 = y2 - bh;
-
+        
         but->y2 = but->y1 + bh;
-
+        
         low_value =
             min_value + ((but->y1 - y1) / (float) h) *
             (max_value - min_value);
         high_value =
             min_value + ((but->y2 - y1) / (float) h) *
             (max_value - min_value);
-
+            
     } else {
         int bw = but->x2 - but->x1;
         int w = x2 - x1;
-
+        
         but->x1 = x - (but->x2 - but->x1) / 2;
         if(but->x1 < x1) but->x1 = x1;
         if(but->x1 + bw > x2) but->x1 = x2 - bw;
-
+        
         but->x2 = but->x1 + bw;
-
+        
         low_value =
             min_value + ((but->x1 - x1) / (float) w) *
             (max_value - min_value);
@@ -145,7 +145,7 @@ void scrollbar::move_button(int x, int y) {
             min_value + ((but->x2 - x1) / (float) w) *
             (max_value - min_value);
     }
-
+    
     if(change_handler) change_handler(this);
 }
 
@@ -156,15 +156,15 @@ void scrollbar::move_button(int x, int y) {
 void scrollbar::set_value(float new_low, bool call_handler) {
     float dif = high_value - low_value;
     if(new_low < min_value || new_low + dif > max_value) return;
-
+    
     button* but = (button*) widgets["but_bar"];
     if(!but) return;
-
+    
     low_value = new_low;
     high_value = new_low + dif;
-
+    
     float ratio = (low_value - min_value) / (max_value - min_value - dif);
-
+    
     if(vertical) {
         int but_h = but->y2 - but->y1;
         but->y1 = y1 + ratio * ((y2 - y1) - but_h);
@@ -174,7 +174,7 @@ void scrollbar::set_value(float new_low, bool call_handler) {
         but->x1 = x1 + ratio * ((x2 - x1) - but_w);
         but->x2 = but->x1 + but_w;
     }
-
+    
     if(change_handler && call_handler) change_handler(this);
 }
 
@@ -186,7 +186,7 @@ void scrollbar::set_value(float new_low, bool call_handler) {
 void scrollbar::draw_self() {
     int w = x2 - x1;
     int h = y2 - y1;
-
+    
     if(vertical) {
         al_draw_filled_rectangle(
             x1 + w / 2 - 2,
@@ -227,9 +227,9 @@ void scrollbar::draw_self() {
             x1 + w / 2 - 4, y2 - 1.5, x1 + w / 2 + 4, y2 - 1.5,
             get_lighter_bg_color(), 1
         );
-
+        
     } else { //Horizontal bar.
-
+    
         al_draw_filled_rectangle(
             x1 + 0.5,
             y1 + h / 2 - 2,
@@ -269,7 +269,7 @@ void scrollbar::draw_self() {
             x2 - 1.5, y1 + h / 2 - 4, x2 - 1.5, y1 + h / 2 + 4,
             get_lighter_bg_color(), 1
         );
-
+        
     }
 }
 
@@ -294,17 +294,17 @@ void scrollbar::make_widget_scroll(widget* widget) {
     if(widget) {
         widget->children_offset_x = widget->children_offset_y = 0;
         float largest_y2 = FLT_MIN, largest_x2 = FLT_MIN;
-
+        
         for(auto w = widget->widgets.begin(); w != widget->widgets.end(); ++w) {
             if(!w->second) continue;
-
+            
             if(vertical) {
                 if(w->second->y2 > largest_y2) largest_y2 = w->second->y2;
             } else {
                 if(w->second->x2 > largest_x2) largest_x2 = w->second->x2;
             }
         }
-
+        
         if(vertical) {
             largest_y2 += 8; //Spacing.
             largest_y2 -= widget->y1;
@@ -324,17 +324,17 @@ void scrollbar::make_widget_scroll(widget* widget) {
                 this->max_value = largest_x2;
             }
         }
-
+        
         register_change_handler(widget_scroller);
-
+        
     } else {
-
+    
         this->max_value = 10;
         this->high_value = 1;
-
+        
         register_change_handler(NULL);
     }
-
+    
     create_button();
 }
 
@@ -345,7 +345,7 @@ void scrollbar::make_widget_scroll(widget* widget) {
  */
 void scrollbar::widget_scroller(widget* w) {
     scrollbar* scrollbar_ptr = (scrollbar*) w;
-
+    
     if(scrollbar_ptr->vertical) {
         scrollbar_ptr->attached_widget->children_offset_y =
             -scrollbar_ptr->low_value;

@@ -20,7 +20,7 @@
 ship_type::ship_type() :
     mob_type(),
     can_heal(false) {
-
+    
     ship_fsm::create_fsm(this);
     always_active = true;
 }

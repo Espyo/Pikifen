@@ -22,7 +22,7 @@
 
 enum ONION_STATES {
     ONION_STATE_IDLE,
-
+    
     N_ONION_STATES,
 };
 
@@ -39,7 +39,7 @@ const float ONION_FADE_SPEED               = 255; //Values per second.
 class onion : public mob {
 protected:
     virtual void tick_class_specifics();
-
+    
 public:
     onion_type* oni_type;
     bool activated;
@@ -52,13 +52,13 @@ public:
     float next_spew_angle;
     //The Onion's alpha.
     unsigned char seethrough;
-
+    
     onion(
         float x, float y, onion_type* type,
         const float angle, const string &vars
     );
     virtual void draw();
-
+    
     void spew();
 };
 

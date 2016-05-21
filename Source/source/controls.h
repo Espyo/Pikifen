@@ -37,7 +37,7 @@ struct control_info {
     int stick;
     //Axis of the stick.
     int axis;
-
+    
     control_info(unsigned char action, string s);
     string stringify();
 };
@@ -86,7 +86,7 @@ enum BUTTONS {
     BUTTON_SWITCH_MATURITY_DOWN,
     BUTTON_LIE_DOWN,
     BUTTON_PAUSE,
-
+    
     N_BUTTONS,
 };
 

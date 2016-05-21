@@ -22,5 +22,5 @@ spray_type::spray_type() :
     main_color(al_map_rgba(0, 0, 0, 0)),
     bmp_spray(nullptr),
     berries_needed(0) {
-
+    
 }

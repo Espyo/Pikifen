@@ -28,5 +28,5 @@ weather::weather(
     percipitation_frequency(pf),
     percipitation_speed(ps),
     percipitation_angle(pa) {
-
+    
 }

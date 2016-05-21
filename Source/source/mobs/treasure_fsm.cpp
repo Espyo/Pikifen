@@ -20,7 +20,7 @@
  */
 void treasure_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-
+    
     efc.new_state("idle_waiting", TREASURE_STATE_IDLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_stop_move);
@@ -39,7 +39,7 @@ void treasure_fsm::create_fsm(mob_type* typ) {
             efc.change_state("idle_moving");
         }
     }
-
+    
     efc.new_state("idle_moving", TREASURE_STATE_IDLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::carry_begin_move);
@@ -66,7 +66,7 @@ void treasure_fsm::create_fsm(mob_type* typ) {
             efc.change_state("being_delivered");
         }
     }
-
+    
     efc.new_state("being_delivered", TREASURE_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gen_mob_fsm::start_being_delivered);
@@ -75,11 +75,11 @@ void treasure_fsm::create_fsm(mob_type* typ) {
             efc.run_function(treasure_fsm::handle_delivery);
         }
     }
-
-
+    
+    
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle_waiting");
-
+    
     if(typ->states.size() != N_TREASURE_STATES) {
         log_error(
             "ENGINE WARNING: Number of treasure states on the FSM (" +
@@ -97,8 +97,8 @@ void treasure_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     treasure* t_ptr = (treasure*) m;
     ship* s_ptr = (ship*) t_ptr->carrying_target;
     float value = t_ptr->tre_type->value;
-
+    
     s_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) &value);
-
+    
     t_ptr->to_delete = true;
 }

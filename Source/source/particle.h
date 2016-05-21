@@ -34,7 +34,7 @@ public:
     float size;
     float starting_size;
     ALLEGRO_COLOR color;
-
+    
     particle(
         const unsigned char type, ALLEGRO_BITMAP* const bitmap,
         const float x, const float y,

@@ -35,13 +35,13 @@ public:
     float pluck_delay;
     //When this leader is thrown, multiply the height by this.
     float throw_height_mult;
-
+    
     sample_struct sfx_whistle;
     sample_struct sfx_dismiss;
     sample_struct sfx_name_call;
-
+    
     ALLEGRO_BITMAP* bmp_icon; //Standby icon.
-
+    
     leader_type();
     void load_from_file(
         data_node* file, const bool load_resources,

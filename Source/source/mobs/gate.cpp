@@ -22,7 +22,7 @@ gate::gate(
     mob(x, y, type, angle, vars),
     gat_type(type),
     sec(get_sector(x, y, nullptr, true)) {
-
+    
     sec->type = SECTOR_TYPE_BLOCKING;
     team = MOB_TEAM_OBSTACLE;
 }

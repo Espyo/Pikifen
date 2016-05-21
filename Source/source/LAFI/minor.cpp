@@ -12,7 +12,7 @@ line::line(
     widget(x1, y1, x2, y2, style, flags),
     horizontal(horizontal),
     thickness(thickness) {
-
+    
 }
 
 

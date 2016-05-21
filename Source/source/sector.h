@@ -70,7 +70,7 @@ struct blockmap {
     //Specifies a list of sectors in each block.
     vector<vector<unordered_set<sector*> > >  sectors;
     size_t n_cols, n_rows;
-
+    
     blockmap();
     size_t get_col(const float x);
     size_t get_row(const float y);
@@ -91,7 +91,7 @@ struct edge {
     size_t vertex_nrs[2];
     sector* sectors[2];
     size_t sector_nrs[2];
-
+    
     edge(size_t v1 = INVALID, size_t v2 = INVALID);
     void fix_pointers(area_data &a);
     size_t remove_from_sectors();
@@ -111,7 +111,7 @@ struct edge {
 struct path_stop {
     float x, y;
     vector<path_link> links;
-
+    
     path_stop(
         float x = 0, float y = 0, vector<path_link> links = vector<path_link>()
     );
@@ -132,7 +132,7 @@ struct path_link {
     path_stop* end_ptr;
     size_t end_nr;
     float distance;
-
+    
     path_link(path_stop* end_ptr, size_t end_nr);
     void calculate_dist(path_stop* start_ptr);
 };
@@ -151,7 +151,7 @@ struct sector_texture_info {
     float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
     string file_name;
-
+    
     sector_texture_info();
 };
 
@@ -169,20 +169,20 @@ struct sector {
     float z; //Height.
     string tag;
     unsigned char brightness;
-
+    
     sector_texture_info texture_info;
     bool fade;
     bool always_cast_shadow;
-
+    
     string hazards_str; //For the editor.
     vector<hazard*> hazards; //For gameplay.
     bool hazard_floor;
     liquid* associated_liquid;
-
+    
     vector<size_t> edge_nrs;
     vector<edge*> edges;
     vector<triangle> triangles;
-
+    
     sector();
     void connect_edges(area_data &a, size_t s_nr);
     void fix_pointers(area_data &a);
@@ -206,7 +206,7 @@ struct sector {
 struct sector_correction {
     sector* sec;
     sector_texture_info new_texture;
-
+    
     sector_correction(sector* sec);
 };
 
@@ -234,7 +234,7 @@ struct vertex {
     float x, y;
     vector<size_t> edge_nrs;
     vector<edge*> edges;
-
+    
     vertex(float x, float y);
     void connect_edges(area_data &a, size_t v_nr);
     void fix_pointers(area_data &a);
@@ -254,11 +254,11 @@ struct vertex {
 struct mob_gen {
     unsigned char category;
     mob_type* type;
-
+    
     float x, y;
     float angle;
     string vars;
-
+    
     mob_gen(
         float x = 0, float y = 0,
         unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL,
@@ -277,14 +277,14 @@ struct mob_gen {
 struct tree_shadow {
     string file_name;
     ALLEGRO_BITMAP* bitmap;
-
+    
     float x, y;  //X and Y of the center.
     float w, h;  //Width and height.
     float angle; //Rotation angle.
     unsigned char alpha; //Opacity.
     float sway_x; //Swaying is multiplied by this, horizontally.
     float sway_y; //And vertically.
-
+    
     tree_shadow(
         float x = 0, float y = 0, float w = 100, float h = 100,
         float an = 0, unsigned char al = 255, string f = "",
@@ -312,7 +312,7 @@ struct area_data {
     vector<path_stop*> path_stops;
     vector<tree_shadow*> tree_shadows;
     vector<sector_correction> sector_corrections;
-
+    
     ALLEGRO_BITMAP* bg_bmp;
     string bg_bmp_file_name;
     float bg_bmp_zoom;
@@ -320,10 +320,10 @@ struct area_data {
     ALLEGRO_COLOR bg_color;
     string name;
     string subtitle;
-
+    
     weather weather_condition;
     string weather_name;
-
+    
     area_data();
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);

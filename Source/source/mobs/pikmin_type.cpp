@@ -34,17 +34,17 @@ pikmin_type::pikmin_type() :
     can_swim(false),
     can_latch(true),
     can_carry_bomb_rocks(false) {
-
+    
     bmp_top[0] = NULL;
     bmp_top[1] = NULL;
     bmp_top[2] = NULL;
     bmp_icon[0] = NULL;
     bmp_icon[1] = NULL;
     bmp_icon[2] = NULL;
-
+    
     weight = 1;
     show_health = false;
-
+    
     pikmin_fsm::create_fsm(this);
 }
 
@@ -79,7 +79,7 @@ void pikmin_type::load_from_file(
     carry_speed = s2f(file->get_child_by_name("carry_speed")->value);
     carry_strength = s2f(file->get_child_by_name("carry_strength")->value);
     has_onion = s2b(file->get_child_by_name("has_onion")->value);
-
+    
     data_node* hazards_node = file->get_child_by_name("resistances");
     vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);
     for(size_t h = 0; h < hazards_strs.size(); ++h) {
@@ -90,7 +90,7 @@ void pikmin_type::load_from_file(
             resistances.push_back(&(hazards[hazard_name]));
         }
     }
-
+    
     if(load_resources) {
         bmp_top[0] =
             bitmaps.get(file->get_child_by_name("top_leaf")->value, file);
@@ -115,7 +115,7 @@ void pikmin_type::load_from_file(
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
-
+    
     pikmin_in_onions[this] =
         s2i(file->get_child_by_name("onion_starting_number")->value);
 }

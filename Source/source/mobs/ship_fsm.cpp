@@ -20,16 +20,16 @@
  */
 void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-
+    
     efc.new_state("idle", SHIP_STATE_IDLE); {
         efc.new_event(MOB_EVENT_RECEIVE_DELIVERY); {
             efc.run_function(ship_fsm::receive_mob);
         }
     }
-
+    
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle");
-
+    
     if(typ->states.size() != N_SHIP_STATES) {
         log_error(
             "ENGINE WARNING: Number of ship states on the FSM (" +
@@ -46,7 +46,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
 void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     float pokos = *((float*) info1);
     ship* s_ptr = (ship*) m;
-
+    
     random_particle_explosion(
         PARTICLE_TYPE_BITMAP, bmp_smoke,
         s_ptr->x + s_ptr->type->radius,
@@ -54,5 +54,5 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
         60, 80, 10, 20,
         1, 2, 24, 24, al_map_rgb(255, 255, 255)
     );
-
+    
 }

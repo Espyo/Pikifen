@@ -21,7 +21,7 @@ public:
     );
     frame(frame &f2);
     ~frame();
-
+    
     void draw_self();
 };
 

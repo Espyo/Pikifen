@@ -21,7 +21,7 @@
 nectar::nectar(float x, float y, const string &vars) :
     mob(x, y, spec_mob_types["Nectar"], 0, vars),
     amount_left(nectar_amount) {
-
+    
 }
 
 

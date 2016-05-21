@@ -71,7 +71,7 @@ class animation_pool;
 class frame {
 private:
     void calculate_hitbox_span();
-
+    
 public:
     string name;
     //Parent bitmap, normally a spritesheet.
@@ -101,7 +101,7 @@ public:
     vector<hitbox_instance> hitbox_instances;
     //How far the hitboxes span.
     float hitbox_span;
-
+    
     frame(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
         const float gw = 0, const float gh = 0,
@@ -114,7 +114,7 @@ public:
     );
     frame(const frame &f2);
     void create_hitbox_instances(animation_pool* const as);
-
+    
     ~frame();
 };
 
@@ -130,7 +130,7 @@ public:
     size_t frame_nr;  //Needed for performance.
     frame* frame_ptr; //Needed for performance.
     float duration;   //How long this frame lasts for, in seconds.
-
+    
     frame_instance(
         const string &fn = "", const size_t fnr = INVALID,
         frame* fp = NULL, const float d = 0
@@ -148,7 +148,7 @@ public:
     vector<frame_instance> frame_instances;
     //The animation loops back to this frame when it reaches the end.
     size_t loop_frame;
-
+    
     animation(
         const string &name = "",
         vector<frame_instance> frame_instances = vector<frame_instance>(),
@@ -166,25 +166,25 @@ public:
     vector<animation*> animations;
     vector<frame*> frames;
     vector<hitbox*> hitboxes;
-
+    
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
-
+    
     animation_pool(
         vector<animation*> a = vector<animation*>(),
         vector<frame*>     f = vector<frame*>(),
         vector<hitbox*>    h = vector<hitbox*>()
     );
-
+    
     size_t find_animation(string name);
     size_t find_frame(    string name);
     size_t find_hitbox(   string name);
-
+    
     void create_conversions(vector<pair<size_t, string> > conversions);
     void fix_hitbox_pointers();
-
+    
     void destroy();
-
+    
 };
 
 
@@ -198,10 +198,10 @@ public:
     float cur_frame_time;      //Time passed on the current frame.
     size_t cur_frame_nr;
     bool done_once;
-
+    
     animation_instance(animation_pool* anim_pool = NULL);
     animation_instance(const animation_instance &ai2);
-
+    
     void start();
     bool tick(const float time);
     frame* get_frame();

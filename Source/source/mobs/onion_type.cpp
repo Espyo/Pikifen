@@ -21,7 +21,7 @@
 onion_type::onion_type() :
     mob_type(),
     pik_type(NULL) {
-
+    
     onion_fsm::create_fsm(this);
 }
 
@@ -41,6 +41,6 @@ void onion_type::load_from_file(
         );
     }
     pik_type = pikmin_types[pik_type_node->value];
-
+    
     anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
 }

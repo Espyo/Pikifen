@@ -28,9 +28,9 @@ enemy::enemy(
     appears_after_day(0),
     appears_before_day(0),
     appears_every_x_days(0) {
-
+    
     team = MOB_TEAM_ENEMY_1; //TODO removeish.
-
+    
     //TODO day apperance interval
 }
 
@@ -41,21 +41,21 @@ enemy::enemy(
 void enemy::draw() {
     frame* f_ptr = anim.get_frame();
     if(!f_ptr) return;
-
+    
     float draw_x, draw_y;
     float draw_w, draw_h;
     get_sprite_center(this, f_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
-
+    
     float radius_scale = 1.0f;
-
+    
     bool being_delivered = false;
     ALLEGRO_COLOR extra_color;
-
+    
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
         //If it's being delivered, do some changes to the scale and coloring.
         being_delivered = true;
-
+        
         if(script_timer.get_ratio_left() >= 0.5) {
             //First half of the sucking in process = interpolated coloring.
             extra_color =
@@ -72,14 +72,14 @@ void enemy::draw() {
             radius_scale = (script_timer.get_ratio_left() * 2.0);
         }
     }
-
+    
     ALLEGRO_COLOR tint = get_status_tint_color();
     float brightness = get_sprite_brightness(this) / 255.0;
     tint.r *= brightness;
     tint.g *= brightness;
     tint.b *= brightness;
     tint.a *= brightness;
-
+    
     draw_sprite(
         f_ptr->bitmap,
         draw_x, draw_y,
@@ -88,14 +88,14 @@ void enemy::draw() {
         angle,
         tint
     );
-
+    
     if(being_delivered) {
         int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
         al_get_separate_blender(
             &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
         );
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
-
+        
         draw_sprite(
             f_ptr->bitmap,
             draw_x, draw_y,
@@ -104,7 +104,7 @@ void enemy::draw() {
             angle,
             extra_color
         );
-
+        
         al_set_separate_blender(
             old_op, old_src, old_dst, old_aop, old_asrc, old_adst
         );

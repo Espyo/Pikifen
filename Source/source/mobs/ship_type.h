@@ -25,7 +25,7 @@ class ship_type : public mob_type {
 public:
 
     bool can_heal;
-
+    
     ship_type();
     void load_from_file(
         data_node* file, const bool load_resources,

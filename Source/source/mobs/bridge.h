@@ -31,16 +31,16 @@ class bridge : public mob {
 private:
 
     void get_neighbor_bridge_sectors(sector* s_ptr);
-
+    
 public:
     vector<sector*> secs;
-
+    
     bridge(const float x, const float y, const float angle, const string &vars);
-
+    
     static void open(mob* m, void* info1, void* info2);
     static void take_damage(mob* m, void* info1, void* info2);
     static void set_anim(mob* m, void* info1, void* info2);
-
+    
 };
 
 

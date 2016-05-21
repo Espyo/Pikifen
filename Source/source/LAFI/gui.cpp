@@ -23,7 +23,7 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
     thread(NULL),
     close_button_quits(false),
     autonomous(false) {
-
+    
 }
 
 
@@ -69,14 +69,14 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
  */
 void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     gui* gui_ptr = (gui*) g;
-
+    
     al_start_timer(gui_ptr->timer);
-
+    
     while(1) {
         ALLEGRO_EVENT ev;
         al_wait_for_event(gui_ptr->queue, &ev);
         gui_ptr->handle_event(ev);
-
+        
         if(
             ev.type == ALLEGRO_EVENT_TIMER &&
             al_is_event_queue_empty(gui_ptr->queue)
@@ -87,7 +87,7 @@ void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
             return NULL;
         }
     }
-
+    
     return NULL;
 }
 
@@ -97,7 +97,7 @@ void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
  */
 void gui::stop() {
     if(!autonomous) return;
-
+    
     al_destroy_thread(thread);
 }
 

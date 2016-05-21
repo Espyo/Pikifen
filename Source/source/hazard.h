@@ -35,7 +35,7 @@ struct hazard {
     ALLEGRO_COLOR main_color;
     vector<status_type*> effects;
     liquid* associated_liquid;
-
+    
     hazard();
 };
 

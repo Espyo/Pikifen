@@ -13,7 +13,7 @@ button::button(
     widget(x1, y1, x2, y2, style, flags),
     text(text),
     icon(icon) {
-
+    
     this->description = description;
 }
 
@@ -31,7 +31,7 @@ button::~button() { }
 void button::draw_self() {
     unsigned int w = x2 - x1;
     unsigned int h = y2 - y1;
-
+    
     ALLEGRO_COLOR top_color, bottom_color;
     if(mouse_clicking && mouse_in) {
         top_color =    get_darker_bg_color();
@@ -40,7 +40,7 @@ void button::draw_self() {
         top_color =    get_lighter_bg_color();
         bottom_color = get_darker_bg_color();
     }
-
+    
     al_draw_filled_rectangle(x1, y1, x2, y2, get_bg_color());
     //Top line, outermost.
     draw_line(this, DRAW_LINE_TOP,    0, 1, 0, top_color);
@@ -58,12 +58,12 @@ void button::draw_self() {
     draw_line(this, DRAW_LINE_RIGHT,  1, 0, 0, bottom_color);
     //Right line, innermost.
     draw_line(this, DRAW_LINE_RIGHT,  2, 0, 1, bottom_color);
-
+    
     //This is the center of the text, not top left. Also, relative coordinates.
     signed short final_text_y = 0;
     //Top left of the icon.
     signed short final_icon_y = 0;
-
+    
     if(icon && text.size()) {
         //If there's an icon and text.
         unsigned short total_height =
@@ -75,14 +75,14 @@ void button::draw_self() {
         final_text_y =
             final_icon_y + al_get_bitmap_height(icon) +
             al_get_font_line_height(style->text_font) / 2 + 2;
-
+            
     } else if(icon) {    //Icon, but no text.
         final_icon_y = h / 2 - al_get_bitmap_height(icon) / 2;
-
+        
     } else if(!icon && text.size()) {    //Text, but no icon.
         final_text_y = h / 2;
     }
-
+    
     if(icon) {
         al_draw_bitmap(
             icon,
@@ -90,7 +90,7 @@ void button::draw_self() {
             y1 + final_icon_y,
             0);
     }
-
+    
     if(text.size()) {
         draw_text_lines(
             style->text_font,

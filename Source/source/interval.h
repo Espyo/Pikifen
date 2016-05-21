@@ -38,7 +38,7 @@ struct subinterval {
 struct interval {
 private:
     vector<subinterval> subintervals;
-
+    
 public:
     interval(const string &s = "");
     float get_random_number();

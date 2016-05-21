@@ -22,7 +22,7 @@ class enemy : public mob {
 public:
     //Technical things.
     enemy_type* ene_type;
-
+    
     //Spawn and respawn things.
     //Enemy only spawns after these many seconds, a la Waterwraith.
     float spawn_delay;
@@ -33,15 +33,15 @@ public:
     unsigned int appears_after_day;
     unsigned int appears_before_day;
     unsigned int appears_every_x_days;
-
+    
     enemy(
         const float x, const float y, enemy_type* type,
         const float angle, const string &vars
     );
     void draw();
-
+    
     virtual bool can_receive_status(status_type* s);
-
+    
 };
 
 #endif //ifndef ENEMY_INCLUDED

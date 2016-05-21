@@ -35,11 +35,11 @@ data_node* data_node::get_child(const size_t number) {
 //Returns the number of occurences of a child name (direct children only).
 size_t data_node::get_nr_of_children_by_name(const string &name) {
     size_t number = 0;
-
+    
     for(size_t c = 0; c < children.size(); ++c) {
         if(name == children[c]->name) ++number;
     }
-
+    
     return number;
 }
 
@@ -49,7 +49,7 @@ data_node* data_node::get_child_by_name(
     const string &name, const size_t occurrence_number
 ) {
     size_t cur_occurrence_number = 0;
-
+    
     for(size_t c = 0; c < children.size(); ++c) {
         if(name == children[c]->name) {
             if(cur_occurrence_number == occurrence_number) {
@@ -60,7 +60,7 @@ data_node* data_node::get_child_by_name(
             }
         }
     }
-
+    
     return create_dummy();
 }
 
@@ -94,10 +94,10 @@ bool data_node::remove(data_node* node_to_remove) {
 //Loads data from a file.
 void data_node::load_file(const string &file_name, const bool trim_values) {
     vector<string> lines;
-
+    
     file_was_opened = false;
     this->file_name = file_name;
-
+    
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "r");
     if(file) {
         bool is_first_line = true;
@@ -105,7 +105,7 @@ void data_node::load_file(const string &file_name, const bool trim_values) {
         while(!al_feof(file)) {
             string line;
             getline(file, line);
-
+            
             if(is_first_line) {
                 //Let's just check if it starts with the UTF-8 Magic Number.
                 if(
@@ -120,7 +120,7 @@ void data_node::load_file(const string &file_name, const bool trim_values) {
         }
         al_fclose(file);
     }
-
+    
     load_node(lines, trim_values, 0);
 }
 
@@ -133,26 +133,26 @@ size_t data_node::load_node(
     const size_t start_line
 ) {
     children.clear();
-
+    
     if(start_line > lines.size()) return start_line;
-
+    
     for(size_t l = start_line; l < lines.size(); ++l) {
         string line = lines[l];
-
+        
         line = trim_spaces(line, true);     //Removes the leftmost spaces.
-
+        
         if(line.size() >= 2) {
             //A comment; ignore this line.
             if(line[0] == '/' && line[1] == '/') continue;
         }
-
+        
         //Option=value
         size_t pos = line.find('=');
         if(pos != string::npos && pos > 0 && line.size() >= 2) {
-
+        
             string v = line.substr(pos + 1, line.size() - (pos + 1));
             if(trim_values) v = trim_spaces(v);
-
+            
             data_node* new_child = new data_node();
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value = v;
@@ -160,14 +160,14 @@ size_t data_node::load_node(
             new_child->file_name = file_name;
             new_child->line_nr = l + 1;
             children.push_back(new_child);
-
+            
             continue;
         }
-
+        
         //Sub-node start
         pos = line.find('{');
         if(pos != string::npos) {
-
+        
             data_node* new_child = new data_node();
             new_child->name = trim_spaces(line.substr(0, pos));
             new_child->value.clear();
@@ -176,17 +176,17 @@ size_t data_node::load_node(
             new_child->line_nr = l + 1;
             l = new_child->load_node(lines, trim_values, l + 1);
             children.push_back(new_child);
-
+            
             continue;
         }
-
+        
         //Sub-node end
         pos = line.find('}');
         if(pos != string::npos) {
             return l;
         }
     }
-
+    
     return lines.size() - 1;
 }
 
@@ -196,7 +196,7 @@ size_t data_node::load_node(
 //Returns true on success.
 bool data_node::save_file(string file_name, const bool children_only) {
     if(file_name == "") file_name = this->file_name;
-
+    
     ALLEGRO_FILE* file = al_fopen(file_name.c_str(), "w");
     if(file) {
         if(children_only) {
@@ -217,10 +217,10 @@ bool data_node::save_file(string file_name, const bool children_only) {
 //Saved a node into a text file.
 void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
     string tabs = string(level, '\t');
-
+    
     al_fwrite(file, tabs.c_str(), tabs.size());
     al_fwrite(file, name.c_str(), name.size());
-
+    
     if(!children.empty()) {
         al_fwrite(file, "{\n", 2);
         for(size_t c = 0; c < children.size(); ++c) {
@@ -228,13 +228,13 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
         }
         al_fwrite(file, tabs.c_str(), tabs.size());
         al_fwrite(file, "}\n", 2);
-
+        
     } else {
         al_fwrite(file, "=", 1);
         al_fwrite(file, value.c_str(), value.size());
         al_fwrite(file, "\n", 1);
     }
-
+    
 }
 
 
@@ -253,7 +253,7 @@ data_node::data_node(const data_node &dn2) :
     file_was_opened(dn2.file_was_opened),
     file_name(dn2.file_name),
     line_nr(dn2.line_nr) {
-
+    
     for(size_t c = 0; c < dn2.children.size(); ++c) {
         children.push_back(new data_node(*(dn2.children[c])));
     }
@@ -268,7 +268,7 @@ data_node::data_node(const string &file_name) :
     file_was_opened(false),
     line_nr(0),
     file_name(file_name) {
-
+    
     load_file(file_name);
 }
 
@@ -279,7 +279,7 @@ data_node::data_node(const string &name, const string &value) :
     line_nr(0),
     name(name),
     value(value) {
-
+    
 }
 
 
@@ -288,7 +288,7 @@ data_node::~data_node() {
     for(size_t c = 0; c < children.size(); ++c) {
         delete children[c];
     }
-
+    
     for(size_t dc = 0; dc < dummy_children.size(); ++dc) {
         delete dummy_children[dc];
     }
@@ -303,24 +303,24 @@ void getline(ALLEGRO_FILE* file, string &line) {
     if(!file) {
         return;
     }
-
+    
     size_t bytes_read;
     char* c_ptr = new char;
     char c;
-
+    
     bytes_read = al_fread(file, c_ptr, 1);
     while(bytes_read > 0) {
         c = *((char*) c_ptr);
-
+        
         if(c == '\r' || c == '\n') {
             break;
         } else {
             line.push_back(c);
         }
-
+        
         bytes_read = al_fread(file, c_ptr, 1);
     }
-
+    
     delete c_ptr;
 }
 
@@ -339,7 +339,7 @@ string trim_spaces(string s, const bool left_only) {
             if(s.empty()) break;
         }
     }
-
+    
     if(!left_only) {
         //Spaces after.
         if(s.size()) {
@@ -349,6 +349,6 @@ string trim_spaces(string s, const bool left_only) {
             }
         }
     }
-
+    
     return s;
 }

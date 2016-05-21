@@ -32,7 +32,7 @@ widget::widget(
     get_focus_handler(nullptr),
     lose_focus_handler(nullptr),
     needs_init(false) {
-
+    
     easy_reset();
 }
 
@@ -63,9 +63,9 @@ widget::widget(widget &w2) :
     get_focus_handler(nullptr),
     lose_focus_handler(nullptr),
     needs_init(false) {
-
+    
     easy_reset();
-
+    
 }
 
 
@@ -204,7 +204,7 @@ bool widget::is_mouse_in(int mx, int my) {
         mx >= x1 + ox && mx <= x2 + ox && my >= y1 + oy && my <= y2 + oy;
     bool in_parent_widget = true;
     if(parent) in_parent_widget = parent->is_mouse_in(mx, my);
-
+    
     return(in_current_widget && in_parent_widget);
 }
 
@@ -215,7 +215,7 @@ bool widget::is_mouse_in(int mx, int my) {
  */
 void widget::get_offset(int* ox, int* oy) {
     if(!parent) { *ox = 0; *oy = 0; return; }
-
+    
     int parent_parent_offset_x, parent_parent_offset_y;
     parent->get_offset(&parent_parent_offset_x, &parent_parent_offset_y);
     *ox = parent->children_offset_x + parent_parent_offset_x;
@@ -247,7 +247,7 @@ void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
  */
 void widget::draw() {
     if(flags & FLAG_INVISIBLE) return;
-
+    
     if(!style) {
         //Last attempt at making things right: if there's no style,
         //try using the parent's style now. If not even the parent has it,
@@ -262,13 +262,13 @@ void widget::draw() {
             style = new lafi::style();
         }
     }
-
+    
     int ox, oy;
     get_offset(&ox, &oy);
-
+    
     int ocr_x, ocr_y, ocr_w, ocr_h;  //Original clipping rectangle.
     al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
-
+    
     if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
         int rx1 = x1 + ox;
         int rx2 = x2 + ox;
@@ -285,28 +285,28 @@ void widget::draw() {
     }
     {
         draw_self();
-
+        
         ALLEGRO_TRANSFORM t;
         al_build_transform(
             &t, ox + children_offset_x, oy + children_offset_y, 1, 1, 0
         );
-
+        
         ALLEGRO_TRANSFORM old;
         al_copy_transform(&old, al_get_current_transform());
-
+        
         al_use_transform(&t); {
-
+        
             for(auto w = widgets.begin(); w != widgets.end(); ++w) {
                 if(w->second) w->second->draw();
             }
-
+            
         } al_use_transform(&old);
-
+        
     }
     if((flags & FLAG_NO_CLIPPING_RECTANGLE) == 0) {
         al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
     }
-
+    
 }
 
 
@@ -317,29 +317,29 @@ void widget::draw() {
  */
 void widget::handle_event(ALLEGRO_EVENT ev) {
     if(flags & FLAG_DISABLED) return;
-
+    
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
     ) {
-
+    
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-
+        
             if(!w->second) continue;
-
+            
             if(w->second->flags & FLAG_DISABLED) continue;
-
+            
             if(w->second->mouse_in) {
                 if(!w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
-
+                
                     //Mouse was in but left.
                     w->second->widget_on_mouse_leave();
                     w->second->mouse_in = false;
                     w->second->call_mouse_leave_handler();
                 }
-
+                
                 if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                     w->second->widget_on_mouse_move(ev.mouse.x, ev.mouse.y);
                     w->second->call_mouse_move_handler(ev.mouse.x, ev.mouse.y);
@@ -350,11 +350,11 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
                         ev.mouse.dz, ev.mouse.dw
                     );
                 }
-
+                
             } else {
-
+            
                 if(w->second->is_mouse_in(ev.mouse.x, ev.mouse.y)) {
-
+                
                     //Mouse was out but is now in.
                     w->second->widget_on_mouse_enter();
                     w->second->mouse_in = true;
@@ -362,55 +362,55 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
                 }
             }
         }
-
+        
     }
-
+    
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-
+    
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-
+        
             if(!w->second) continue;
-
+            
             if(w->second->flags & FLAG_DISABLED) continue;
-
+            
             if(w->second->mouse_in) {
-
+            
                 w->second->widget_on_mouse_down(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
                 if(ev.mouse.button == 1) w->second->mouse_clicking = true;
-
+                
                 give_focus(w->second);
-
+                
                 w->second->call_mouse_down_handler(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
-
+                
             } else {
                 if(ev.mouse.button == 1) w->second->mouse_clicking = false;
             }
         }
-
+        
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-
+    
         for(auto w = widgets.begin(); w != widgets.end(); ++w) {
-
+        
             if(!w->second) continue;
-
+            
             if(w->second->flags & FLAG_DISABLED) continue;
-
+            
             if(w->second->mouse_in) {
-
+            
                 w->second->widget_on_mouse_up(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
                 w->second->call_mouse_up_handler(
                     ev.mouse.button, ev.mouse.x, ev.mouse.y
                 );
-
+                
                 if(ev.mouse.button == 1) {
                     if(w->second->mouse_clicking) {
-
+                    
                         //Mouse was clicking, and a button up just happened.
                         //So a full click just happened.
                         w->second->widget_on_left_mouse_click(
@@ -424,7 +424,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
             }
             if(ev.mouse.button == 1) w->second->mouse_clicking = false;
         }
-
+        
     } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(focused_widget) {
             if(!(focused_widget->flags & FLAG_DISABLED)) {
@@ -434,7 +434,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
                 );
             }
         }
-
+        
         for(size_t a = 0; a < accelerators.size(); ++a) {
             accelerator* a_ptr = &accelerators[a];
             if(
@@ -445,7 +445,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
             }
         }
     }
-
+    
     //Now let children widgets handle events.
     for(auto w = widgets.begin(); w != widgets.end(); ++w) {
         if(w->second) w->second->handle_event(ev);
@@ -458,7 +458,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
  */
 void widget::remove(string child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
-
+    
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
@@ -484,7 +484,7 @@ void widget::lose_focus() {
         focused_widget->call_lose_focus_handler();
         focused_widget = NULL;
     }
-
+    
     for(auto cw = widgets.begin(); cw != widgets.end(); ++cw) {
         if(cw->second) cw->second->lose_focus();
     }
@@ -502,7 +502,7 @@ void widget::give_focus(widget* w) {
     widget* p = this;
     while(p->parent) p = p->parent;
     p->lose_focus();
-
+    
     focused_widget = w;
     w->call_get_focus_handler();
 }
@@ -529,19 +529,19 @@ int widget::easy_row(
                 easy_row_widget_padding
             ) - (easy_row_horizontal_padding * 2);
         float prev_x = x1 + easy_row_horizontal_padding;
-
+        
         for(size_t w = 1; w < easy_row_widgets.size(); ++w) {
             if(easy_row_widgets[w].height > tallest_height) {
                 tallest_height = easy_row_widgets[w].height;
             }
         }
-
+        
         easy_row_y2 = easy_row_y1 + tallest_height;
         float y_center = (easy_row_y2 + easy_row_y1) / 2 + y1;
-
+        
         for(size_t w = 0; w < easy_row_widgets.size(); ++w) {
             easy_widget_info* i_ptr = &easy_row_widgets[w];
-
+            
             float width =
                 (
                     (i_ptr->flags & EASY_FLAG_WIDTH_PX) != 0 ?
@@ -551,10 +551,10 @@ int widget::easy_row(
             i_ptr->w->x1 = prev_x;
             i_ptr->w->x2 = prev_x + width;
             prev_x = i_ptr->w->x2 + easy_row_widget_padding;
-
+            
             i_ptr->w->y1 = y_center - i_ptr->height / 2;
             i_ptr->w->y2 = y_center + i_ptr->height / 2;
-
+            
             add(i_ptr->name, i_ptr->w);
         }
     }
@@ -564,7 +564,7 @@ int widget::easy_row(
     easy_row_vertical_padding = vertical_padding;
     easy_row_horizontal_padding = horizontal_padding;
     easy_row_widget_padding = widget_padding;
-
+    
     return easy_row_y1;
 }
 
@@ -610,7 +610,7 @@ easy_widget_info::easy_widget_info(
     width(width),
     height(height),
     flags(flags) {
-
+    
 }
 
 
@@ -650,7 +650,7 @@ void draw_line(
 ) {
     float x1 = w->x1, x2 = w->x2;
     float y1 = w->y1, y2 = w->y2;
-
+    
     if(side == DRAW_LINE_RIGHT || side == DRAW_LINE_LEFT) {
         float line_x =
             (side == DRAW_LINE_RIGHT) ?
@@ -695,7 +695,7 @@ void draw_text_lines(
     int fh = al_get_font_line_height(f);
     size_t n_lines = lines.size();
     float top;
-
+    
     if(va == 0) {
         top = y;
     } else {
@@ -707,7 +707,7 @@ void draw_text_lines(
             top = y - total_height;
         }
     }
-
+    
     for(size_t l = 0; l < n_lines; ++l) {
         float line_y = (fh + 1) * l + top;
         al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
@@ -730,33 +730,33 @@ vector<string> split(
     vector<string> v;
     size_t pos;
     size_t del_size = del.size();
-
+    
     do {
         pos = text.find(del);
         if (pos != string::npos) {  //If it DID find the delimiter.
             //Get the text between the start and the delimiter.
             string sub = text.substr(0, pos);
-
+            
             //Add the text before the delimiter to the vector.
             if(sub != "" || inc_empty)
                 v.push_back(sub);
-
+                
             //Add the delimiter to the vector, but only if requested.
             if(inc_del)
                 v.push_back(del);
-
+                
             //Delete everything before the delimiter, including
             //the delimiter itself, and search again.
             text.erase(text.begin(), text.begin() + pos + del_size);
         }
     } while (pos != string::npos);
-
+    
     //Text after the final delimiter.
     //(If there is one. If not, it's just the whole string.)
     //If it's a blank string, only add it if we want empty strings.
     if (text != "" || inc_empty)
         v.push_back(text);
-
+        
     return v;
 }
 

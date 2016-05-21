@@ -50,7 +50,7 @@ frame::frame(
     top_w(32),
     top_h(32),
     parent_bmp(nullptr) {
-
+    
     calculate_hitbox_span();
 }
 
@@ -88,7 +88,7 @@ frame::frame(
     top_angle(0),
     top_w(32),
     top_h(32) {
-
+    
     calculate_hitbox_span();
 }
 
@@ -117,7 +117,7 @@ frame::frame(const frame &f2) :
     top_h(f2.top_h),
     top_angle(f2.top_angle),
     hitbox_span(f2.hitbox_span) {
-
+    
 }
 
 
@@ -137,7 +137,7 @@ void frame::calculate_hitbox_span() {
     hitbox_span = 0;
     for(size_t hi = 0; hi < hitbox_instances.size(); ++hi) {
         hitbox_instance* hi_ptr = &hitbox_instances[hi];
-
+        
         float d = dist(0, 0, hi_ptr->x, hi_ptr->y).to_float();
         d += hi_ptr->radius;
         hitbox_span = max(hitbox_span, d);
@@ -177,7 +177,7 @@ frame_instance::frame_instance(
     frame_nr(fnr),
     frame_ptr(fp),
     duration(d) {
-
+    
 }
 
 
@@ -194,7 +194,7 @@ animation::animation(
     name(name),
     frame_instances(frame_instances),
     loop_frame(loop_frame) {
-
+    
 }
 
 
@@ -218,7 +218,7 @@ animation_instance::animation_instance(animation_pool* anim_pool) :
     cur_frame_time(0),
     cur_frame_nr(0),
     done_once(false) {
-
+    
 }
 
 
@@ -228,7 +228,7 @@ animation_instance::animation_instance(animation_pool* anim_pool) :
 animation_instance::animation_instance(const animation_instance &ai2) :
     anim(ai2.anim),
     anim_pool(ai2.anim_pool) {
-
+    
     start();
 }
 
@@ -254,9 +254,9 @@ bool animation_instance::tick(const float time) {
     if(n_frames == 0) return false;
     frame_instance* cur_frame = &anim->frame_instances[cur_frame_nr];
     if(cur_frame->duration == 0) { done_once = true; return true; }
-
+    
     cur_frame_time += time;
-
+    
     //This is a while instead of an if because if the framerate is too low
     //and the next frame's duration is too short, it could be that a tick
     //goes over an entire frame, and lands 2 or more frames ahead.
@@ -270,7 +270,7 @@ bool animation_instance::tick(const float time) {
         }
         cur_frame = &anim->frame_instances[cur_frame_nr];
     }
-
+    
     return done_once;
 }
 
@@ -294,7 +294,7 @@ animation_pool::animation_pool(
     animations(a),
     frames(f),
     hitboxes(h) {
-
+    
 }
 
 
@@ -342,7 +342,7 @@ void animation_pool::fix_hitbox_pointers() {
         frame* f_ptr = frames[f];
         for(size_t hi = 0; hi < f_ptr->hitbox_instances.size(); ++hi) {
             hitbox_instance* hi_ptr = &f_ptr->hitbox_instances[hi];
-
+            
             for(size_t h = 0; h < hitboxes.size(); ++h) {
                 hitbox* h_ptr = hitboxes[h];
                 if(h_ptr->name == hi_ptr->hitbox_name) {
@@ -377,17 +377,17 @@ void animation_pool::create_conversions(
     vector<pair<size_t, string> > conversions
 ) {
     pre_named_conversions.clear();
-
+    
     if(conversions.empty()) return;
-
+    
     //First, find the highest number.
     size_t highest = conversions[0].first;
     for(size_t c = 1; c < conversions.size(); ++c) {
         highest = max(highest, conversions[c].first);
     }
-
+    
     pre_named_conversions.assign(highest + 1, INVALID);
-
+    
     for(size_t c = 0; c < conversions.size(); ++c) {
         size_t a_pos = find_animation(conversions[c].second);
         pre_named_conversions[conversions[c].first] = a_pos;
@@ -419,42 +419,42 @@ void animation_pool::destroy() {
  */
 animation_pool load_animation_pool_from_file(data_node* file_node) {
     animation_pool as;
-
+    
     vector<animation*> animations;
     vector<frame*> frames;
     vector<hitbox*> hitboxes;
-
+    
     //Hitboxes.
     data_node* hitboxes_node = file_node->get_child_by_name("hitboxes");
     size_t n_hitboxes = hitboxes_node->get_nr_of_children();
     for(size_t h = 0; h < n_hitboxes; ++h) {
-
+    
         data_node* hitbox_node = hitboxes_node->get_child(h);
-
+        
         hitbox* cur_hitbox = new hitbox(hitbox_node->name);
         hitboxes.push_back(cur_hitbox);
     }
-
+    
     as.hitboxes = hitboxes;
-
+    
     //Frames.
     data_node* frames_node = file_node->get_child_by_name("frames");
     size_t n_frames = frames_node->get_nr_of_children();
     for(size_t f = 0; f < n_frames; ++f) {
-
+    
         data_node* frame_node = frames_node->get_child(f);
         vector<hitbox_instance> hitbox_instances;
-
+        
         data_node* hitbox_instances_node =
             frame_node->get_child_by_name("hitbox_instances");
         size_t n_hitbox_instances = hitbox_instances_node->get_nr_of_children();
-
+        
         for(size_t h = 0; h < n_hitbox_instances; ++h) {
-
+        
             data_node* hitbox_instance_node =
                 hitbox_instances_node->get_child(h);
             hitbox_instance cur_hitbox_instance = hitbox_instance();
-
+            
             vector<string> coords =
                 split(hitbox_instance_node->get_child_by_name("coords")->value);
             if(coords.size() >= 3) {
@@ -490,7 +490,7 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
                         "knockback"
                     )->value
                 );
-
+                
             data_node* hazards_node =
                 hitbox_instance_node->get_child_by_name("hazards");
             cur_hitbox_instance.hazards_str = hazards_node->value;
@@ -509,12 +509,12 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
                     );
                 }
             }
-
-
+            
+            
             hitbox_instances.push_back(cur_hitbox_instance);
-
+            
         }
-
+        
         ALLEGRO_BITMAP* parent =
             bitmaps.get(
                 frame_node->get_child_by_name("file")->value,
@@ -533,7 +533,7 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
             hitbox_instances
         );
         frames.push_back(new_f);
-
+        
         new_f->file = frame_node->get_child_by_name("file")->value;
         new_f->parent_bmp = parent;
         new_f->offs_x = s2f(frame_node->get_child_by_name("offs_x")->value);
@@ -551,22 +551,22 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
                 frame_node->get_child_by_name("top_angle")->value
             );
     }
-
+    
     as.frames = frames;
-
+    
     //Animations.
     data_node* anims_node = file_node->get_child_by_name("animations");
     size_t n_anims = anims_node->get_nr_of_children();
     for(size_t a = 0; a < n_anims; ++a) {
-
+    
         data_node* anim_node = anims_node->get_child(a);
         vector<frame_instance> frame_instances;
-
+        
         data_node* frame_instances_node =
             anim_node->get_child_by_name("frame_instances");
         size_t n_frame_instances =
             frame_instances_node->get_nr_of_children();
-
+            
         for(size_t f = 0; f < n_frame_instances; ++f) {
             data_node* frame_instance_node = frame_instances_node->get_child(f);
             size_t f_pos = as.find_frame(frame_instance_node->name);
@@ -583,7 +583,7 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
                 )
             );
         }
-
+        
         animations.push_back(
             new animation(
                 anim_node->name,
@@ -592,8 +592,8 @@ animation_pool load_animation_pool_from_file(data_node* file_node) {
             )
         );
     }
-
+    
     as.animations = animations;
-
+    
     return as;
 }

@@ -34,7 +34,7 @@ private:
         ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
         ANIMATION_EDITOR_PICKER_HITBOX,
     };
-
+    
     animation_pool       anims;
     bool                 anim_playing;
     animation*           cur_anim;
@@ -74,7 +74,7 @@ private:
     ALLEGRO_BITMAP*      top_bmp[3];
     //Widget under mouse.
     lafi::widget*        wum;
-
+    
     void close_changes_warning();
     void gui_load_animation();
     void gui_load_frame();
@@ -98,19 +98,19 @@ private:
     void show_changes_warning();
     void update_hitboxes();
     void update_stats();
-
+    
 public:
 
     animation_editor();
-
+    
     string auto_load_anim;
-
+    
     virtual void do_logic();
     virtual void do_drawing();
     virtual void handle_controls(ALLEGRO_EVENT ev);
     virtual void load();
     virtual void unload();
-
+    
 };
 
 #endif //ifndef ANIMATION_EDITOR_INCLUDED

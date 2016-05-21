@@ -20,7 +20,7 @@ style::style(
     darker_disabled_bg_color(darken_color(disabled_bg_color)),
     disabled_fg_color(lighten_color(fg_color)),
     disabled_alt_color(darken_color(alt_color)) {
-
+    
 }
 
 
@@ -39,7 +39,7 @@ style::style(style &s2) :
     disabled_fg_color(s2.disabled_fg_color),
     disabled_alt_color(s2.disabled_alt_color),
     text_font(s2.text_font) {
-
+    
 }
 
 
@@ -59,9 +59,9 @@ ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
         static_cast<float>(color.b + COLOR_SHIFT_DELTA),
         color.a
     };
-
+    
     for(unsigned char i = 0; i < 3; ++i) if(indexes[i] > 1) indexes[i] = 1;
-
+    
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }
 
@@ -76,9 +76,9 @@ ALLEGRO_COLOR style::darken_color(ALLEGRO_COLOR color) {
         static_cast<float>(color.b - COLOR_SHIFT_DELTA),
         color.a
     };
-
+    
     for(unsigned char i = 0; i < 3; ++i) if(indexes[i] < 0) indexes[i] = 0;
-
+    
     return al_map_rgba_f(indexes[0], indexes[1], indexes[2], indexes[3]);
 }
 

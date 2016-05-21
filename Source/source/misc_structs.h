@@ -88,7 +88,7 @@ private:
     float distance_squared;
     float normal_distance;
     bool has_normal_distance;
-
+    
 public:
     dist(const float x1, const float y1, const float x2, const float y2);
     dist(const float d = 0.0f);
@@ -125,7 +125,7 @@ struct mob_category_info {
     function<mob_type* ()> type_constructor;
     //Saves a mob from this type onto its corresponding vector.
     function<void (mob_type*)> type_saver;
-
+    
 };
 
 /* ----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ struct mob_category_info {
 struct mob_category_manager {
 private:
     vector<mob_category_info> categories;
-
+    
 public:
     void register_category(
         unsigned char nr,
@@ -156,7 +156,7 @@ public:
     void set_mob_type_ptr(mob_gen* m, const string &type_name);
     mob_type* create_mob_type(const unsigned char cat_nr);
     void save_mob_type(const unsigned char cat_nr, mob_type* mt);
-
+    
 };
 
 
@@ -171,7 +171,7 @@ struct movement_struct {
     float up;
     float left;
     float down;
-
+    
     movement_struct();
     float get_intensity();
     float get_x();
@@ -193,15 +193,15 @@ struct movement_struct {
 struct group_spot_info {
 
     float spot_radius;
-
+    
     vector<vector<float> > x_coords;
     vector<vector<float> > y_coords;
     unsigned n_wheels;
-
+    
     vector<vector<mob*> > mobs_in_spots;
     unsigned current_wheel;
     unsigned n_current_wheel_members;
-
+    
     group_spot_info(const unsigned max_mobs, const float spot_size);
     void add(mob* m);
     void remove(mob* m);
@@ -228,7 +228,7 @@ struct point {
 struct sample_struct {
     ALLEGRO_SAMPLE*          sample;   //Pointer to the sample.
     ALLEGRO_SAMPLE_INSTANCE* instance; //Pointer to the instance.
-
+    
     sample_struct(ALLEGRO_SAMPLE* sample = NULL, ALLEGRO_MIXER* mixer = NULL);
     void play(
         const float max_override_pos, const bool loop,
@@ -250,13 +250,13 @@ struct sample_struct {
 struct sector_types_manager {
 private:
     vector<string> names;
-
+    
 public:
     void register_type(unsigned char nr, string name);
     unsigned char get_nr(const string &name);
     string get_name(const unsigned char nr);
     unsigned char get_nr_of_types();
-
+    
 };
 
 
@@ -268,7 +268,7 @@ struct timer {
     float time_left; //How much time is left until 0.
     float duration;  //When the timer starts, its time is set to this.
     function<void()> on_end;
-
+    
     timer(const float duration, const function<void()> &on_end = nullptr);
     ~timer();
     void start(const bool can_restart = true);
@@ -287,10 +287,10 @@ private:
     float time_left;
     bool fade_in;
     function<void()> on_end;
-
+    
 public:
     static const float FADE_DURATION;
-
+    
     fade_manager();
     void start_fade(const bool fade_in, function<void()> on_end);
     bool is_fade_in();
