@@ -485,18 +485,16 @@ void handle_button(
                     size_t n_ships = ships.size();
                     for(size_t s = 0; s < n_ships; ++s) {
                         if(
+                            ships[s]->shi_type->can_heal &&
                             dist(
                                 cur_leader_ptr->x, cur_leader_ptr->y,
-                                ships[s]->x + ships[s]->type->radius +
-                                SHIP_BEAM_RANGE, ships[s]->y
-                            ) <= SHIP_BEAM_RANGE
+                                ships[s]->beam_final_x, ships[s]->beam_final_y
+                            ) <= ships[s]->shi_type->beam_radius
                         ) {
-                            if(ships[s]->shi_type->can_heal) {
-                                //TODO make the whole process prettier.
-                                cur_leader_ptr->health =
-                                    cur_leader_ptr->type->max_health;
-                                done = true;
-                            }
+                            //TODO make the whole process prettier.
+                            cur_leader_ptr->health =
+                                cur_leader_ptr->type->max_health;
+                            done = true;
                         }
                     }
                 }

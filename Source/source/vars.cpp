@@ -38,7 +38,6 @@ ALLEGRO_BITMAP* bmp_notification = NULL;
 ALLEGRO_BITMAP* bmp_number_bubble = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_spirit = NULL;
 ALLEGRO_BITMAP* bmp_shadow = NULL;
-ALLEGRO_BITMAP* bmp_ship = NULL;
 ALLEGRO_BITMAP* bmp_smack = NULL;
 ALLEGRO_BITMAP* bmp_smoke = NULL;
 ALLEGRO_BITMAP* bmp_sparkle = NULL;

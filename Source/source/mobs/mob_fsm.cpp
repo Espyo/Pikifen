@@ -15,6 +15,7 @@
 #include "mob_fsm.h"
 #include "onion.h"
 #include "pikmin.h"
+#include "ship.h"
 #include "../spray_type.h"
 
 /* ----------------------------------------------------------------------------
@@ -266,10 +267,24 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
             
         } else {
             //Go to the final destination.
+            float target_distance = 3.0f;
+            if(m->carry_info->carry_to_ship) {
+                //Because the ship's beam can be offset, and because
+                //the ship is normally in the way, let's consider a
+                //"reached destination" event if the treasure is
+                //covering the beam, and not necessarily if the treasure
+                //is on the same coordinates as the beam.
+                target_distance =
+                    max(
+                        m->type->radius -
+                        ((ship*) m->carrying_target)->shi_type->beam_radius,
+                        3.0f
+                    );
+            }
             m->chase(
                 m->carry_info->final_destination_x,
                 m->carry_info->final_destination_y,
-                NULL, NULL, false, NULL, true, 3.0f,
+                NULL, NULL, false, NULL, true, target_distance,
                 m->carry_info->get_speed()
             );
             

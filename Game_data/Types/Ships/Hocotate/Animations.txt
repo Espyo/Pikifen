@@ -1,0 +1,25 @@
+animations{
+	idle{
+		loop_frame=0
+		frame_instances{
+			idle{
+				duration=0.00
+			}
+		}
+	}
+}
+frames{
+	idle{
+		file=Hocotate_ship.png
+		file_x=0
+		file_y=0
+		file_w=274
+		file_h=225
+		game_w=138.00
+		game_h=112.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+}
+hitboxes=

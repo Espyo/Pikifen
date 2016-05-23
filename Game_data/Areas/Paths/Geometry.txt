@@ -523,7 +523,7 @@ mobs{
 	}
 	Ship{
 		type=Hocotate ship
-		p=128.00 -320.00
+		p=64.00 -320.00
 	}
 	Enemy{
 		type=Dwarf Red Bulborb
@@ -555,6 +555,7 @@ path_stops{
 		pos=320.00 -128.00
 		links{
 			nr=3
+			nr=18
 		}
 	}
 	s{
@@ -665,6 +666,10 @@ path_stops{
 		links{
 			nr=1
 		}
+	}
+	s{
+		pos=320.00 -320.00
+		links=
 	}
 }
 tree_shadows=

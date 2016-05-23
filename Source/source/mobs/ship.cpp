@@ -18,8 +18,16 @@
  */
 ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
     mob(x, y, type, angle, vars),
-    shi_type(type) {
+    shi_type(type),
+    beam_final_x(0),
+    beam_final_y(0) {
     
+    rotate_point(
+        type->beam_offset_x, type->beam_offset_y,
+        angle, &beam_final_x, &beam_final_y
+    );
+    beam_final_x += x;
+    beam_final_y += y;
 }
 
 
@@ -27,20 +35,18 @@ ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
  * Draws a ship.
  */
 void ship::draw() {
-    draw_sprite(
-        bmp_ship,
-        x, y,
-        138, 112,
-        0, map_gray(get_sprite_brightness(this))
-    );
+    mob::draw();
+    
     unsigned char brightness = get_sprite_brightness(this);
     al_draw_circle(
-        x + type->radius + SHIP_BEAM_RANGE,
-        y, SHIP_BEAM_RANGE,
+        beam_final_x,
+        beam_final_y,
+        shi_type->beam_radius,
         al_map_rgb(
             ship_beam_ring_color[0] * 255 / brightness,
             ship_beam_ring_color[1] * 255 / brightness,
             ship_beam_ring_color[2] * 255 / brightness
-        ), 1
+        ),
+        2
     );
 }

@@ -29,6 +29,8 @@ class ship : public mob {
 public:
 
     ship_type* shi_type;
+    float beam_final_x;
+    float beam_final_y;
     
     ship(float x, float y, ship_type* type, float angle, const string &vars);
     

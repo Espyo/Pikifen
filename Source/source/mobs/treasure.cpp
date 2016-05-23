@@ -71,7 +71,7 @@ void treasure::draw() {
     
     draw_sprite(
         f_ptr->bitmap,
-        draw_x  - (original_radius - radius),
+        draw_x,
         draw_y,
         radius * 2.0, -1,
         angle,
@@ -87,7 +87,7 @@ void treasure::draw() {
         
         draw_sprite(
             f_ptr->bitmap,
-            draw_x - (original_radius - radius),
+            draw_x,
             draw_y,
             radius * 2.0, -1,
             angle,

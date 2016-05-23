@@ -18,6 +18,10 @@
 #include "../misc_structs.h"
 #include "mob_type.h"
 
+enum SHIP_ANIMATIONS {
+    SHIP_ANIM_IDLE,
+};
+
 /* ----------------------------------------------------------------------------
  * A type of ship (Hocotate ship, research pod, golden HS, S.S. Drake, etc.).
  */
@@ -25,6 +29,9 @@ class ship_type : public mob_type {
 public:
 
     bool can_heal;
+    float beam_offset_x;
+    float beam_offset_y;
+    float beam_radius;
     
     ship_type();
     void load_from_file(

@@ -19,7 +19,10 @@
  */
 ship_type::ship_type() :
     mob_type(),
-    can_heal(false) {
+    can_heal(false),
+    beam_offset_x(0.0f),
+    beam_offset_y(0.0f),
+    beam_radius(0.0f) {
     
     ship_fsm::create_fsm(this);
     always_active = true;
@@ -34,4 +37,9 @@ void ship_type::load_from_file(
     vector<pair<size_t, string> >* anim_conversions
 ) {
     can_heal = file->get_child_by_name("can_heal");
+    beam_offset_x = s2f(file->get_child_by_name("beam_offset_x")->value);
+    beam_offset_y = s2f(file->get_child_by_name("beam_offset_y")->value);
+    beam_radius = s2f(file->get_child_by_name("beam_radius")->value);
+    
+    anim_conversions->push_back(make_pair(SHIP_ANIM_IDLE, "idle"));
 }

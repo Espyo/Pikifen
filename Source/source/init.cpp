@@ -343,8 +343,6 @@ void init_misc() {
  */
 void init_misc_graphics() {
     //Graphics.
-    bmp_ship = load_bmp("Ship.png");
-    
     bmp_bubble = load_bmp(          "Bubble.png");
     bmp_checkbox_check = load_bmp(  "Checkbox_check.png");
     bmp_cursor = load_bmp(          "Cursor.png");
@@ -687,7 +685,6 @@ void destroy_resources() {
     al_destroy_font(font_main);
     al_destroy_font(font_value);
     
-    al_destroy_bitmap(bmp_ship);
     al_destroy_bitmap(bmp_bubble);
     al_destroy_bitmap(bmp_checkbox_check);
     al_destroy_bitmap(bmp_cursor);

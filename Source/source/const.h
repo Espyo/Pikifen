@@ -71,8 +71,6 @@ const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,
 //the shadow goes these many units to the side.
 const float MOB_SHADOW_Y_MULT = 0.2f;
-//The center of a ship's beam reaches this far.
-const float SHIP_BEAM_RANGE = 30.0f;
 //Red color's index moves these many units per second.
 //(Green is fast and blue is faster still).
 const unsigned int SHIP_BEAM_RING_COLOR_SPEED = 255;

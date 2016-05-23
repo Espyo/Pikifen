@@ -1575,7 +1575,10 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         
         for(size_t s = 0; s < ships.size(); ++s) {
             ship* s_ptr = ships[s];
-            dist d(x, y, s_ptr->x, s_ptr->y);
+            dist d(
+                x, y,
+                s_ptr->beam_final_x, s_ptr->beam_final_y
+            );
             
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
@@ -1584,10 +1587,8 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         }
         
         if(closest_ship) {
-            carry_info->final_destination_x =
-                closest_ship->x + closest_ship->type->radius + type->radius + 8;
-            carry_info->final_destination_y =
-                closest_ship->y;
+            carry_info->final_destination_x = closest_ship->beam_final_x;
+            carry_info->final_destination_y = closest_ship->beam_final_y;
             carrying_target = closest_ship;
             
         } else {

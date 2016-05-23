@@ -21,6 +21,7 @@ namespace ship_fsm {
 void create_fsm(mob_type* typ);
 
 void receive_mob(mob* m, void* info1, void* info2);
+void set_anim(mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef SHIP_FSM_INCLUDED

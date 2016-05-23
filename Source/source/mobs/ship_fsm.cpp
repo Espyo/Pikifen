@@ -22,6 +22,9 @@ void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
     efc.new_state("idle", SHIP_STATE_IDLE); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(ship_fsm::set_anim);
+        }
         efc.new_event(MOB_EVENT_RECEIVE_DELIVERY); {
             efc.run_function(ship_fsm::receive_mob);
         }
@@ -49,10 +52,18 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     
     random_particle_explosion(
         PARTICLE_TYPE_BITMAP, bmp_smoke,
-        s_ptr->x + s_ptr->type->radius,
-        s_ptr->y,
+        s_ptr->beam_final_x,
+        s_ptr->beam_final_y,
         60, 80, 10, 20,
         1, 2, 24, 24, al_map_rgb(255, 255, 255)
     );
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a ship needs to enter its default "idle" animation.
+ */
+void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
+    m->set_animation(SHIP_ANIM_IDLE);
 }
