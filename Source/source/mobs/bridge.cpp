@@ -69,10 +69,19 @@ void bridge::open(mob* m, void* info1, void* info2) {
     b_ptr->set_animation(BRIDGE_ANIM_NOTHING);
     b_ptr->start_dying();
     b_ptr->finish_dying();
-    random_particle_explosion(
-        PARTICLE_TYPE_BITMAP, bmp_smoke, b_ptr->x, b_ptr->y,
-        60, 90, 10, 12, 2.5, 3, 64, 96, al_map_rgb(238, 204, 170)
-    );
+    
+    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 80, 2.75);
+    p.bitmap = bmp_smoke;
+    p.color = al_map_rgb(238, 204, 170);
+    particle_generator pg(0, p, 11);
+    pg.number_deviation = 1;
+    pg.size_deviation = 16;
+    pg.angle = 0;
+    pg.angle_deviation = M_PI;
+    pg.speed = 75;
+    pg.speed_deviation = 15;
+    pg.duration_deviation = 0.25;
+    pg.emit(particles);
     
     for(size_t s = 0; s < b_ptr->secs.size(); s++) {
         sector* s_ptr = b_ptr->secs[s];

@@ -173,15 +173,8 @@ void do_gameplay_logic() {
         area_time_passed += delta_t;
         
         //Tick all particles.
-        size_t n_particles = particles.size();
-        for(size_t p = 0; p < n_particles; ) {
-            if(!particles[p].tick()) {
-                particles.erase(particles.begin() + p);
-                n_particles--;
-            } else {
-                p++;
-            }
-        }
+        particles.tick_all(delta_t);
+        
         
         /********************
         *              ***  *
@@ -227,7 +220,6 @@ void do_gameplay_logic() {
             
             
         }
-        
         
         
         /*******************
@@ -424,42 +416,6 @@ void do_gameplay_logic() {
         }
         */
         
-        
-        /**********************
-        *                 *   *
-        *   Particles   *   * *
-        *                ***  *
-        **********************/
-        
-        throw_particle_timer.tick(delta_t);
-        if(throw_particle_timer.time_left == 0.0f) {
-            throw_particle_timer.start();
-            
-            size_t n_leaders = leaders.size();
-            for(size_t l = 0; l < n_leaders; ++l) {
-                if(leaders[l]->was_thrown)
-                    particles.push_back(
-                        particle(
-                            PARTICLE_TYPE_CIRCLE, NULL,
-                            leaders[l]->x, leaders[l]->y,
-                            0, 0, 0, 0, 0.6, leaders[l]->type->radius,
-                            change_alpha(leaders[l]->type->main_color, 128)
-                        )
-                    );
-            }
-            
-            for(size_t p = 0; p < pikmin_list.size(); ++p) {
-                if(pikmin_list[p]->was_thrown)
-                    particles.push_back(
-                        particle(
-                            PARTICLE_TYPE_CIRCLE, NULL,
-                            pikmin_list[p]->x, pikmin_list[p]->y,
-                            0, 0, 0, 0, 0.6, pikmin_list[p]->type->radius,
-                            change_alpha(pikmin_list[p]->type->main_color, 128)
-                        )
-                    );
-            }
-        }
         
         /********************
         *             ~ ~ ~ *

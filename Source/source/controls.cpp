@@ -70,11 +70,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->health =
-                        max(
-                            (float) (m->health - m->type->max_health * 0.2),
-                            0.0f
-                        );
+                    m->health = m->health - m->type->max_health * 0.2;
                 }
                 
             } else if(id == DEV_TOOL_MOB_INFO) {

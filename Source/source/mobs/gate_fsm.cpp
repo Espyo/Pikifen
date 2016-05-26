@@ -60,10 +60,19 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     m->set_animation(GATE_ANIM_NOTHING);
     m->start_dying();
     m->finish_dying();
-    random_particle_explosion(
-        PARTICLE_TYPE_BITMAP, bmp_smoke, g_ptr->x, g_ptr->y,
-        60, 90, 10, 12, 2.5, 3, 64, 96, al_map_rgb(238, 204, 170)
-    );
+    
+    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 80, 2.75);
+    p.bitmap = bmp_smoke;
+    p.color = al_map_rgb(238, 204, 170);
+    particle_generator pg(0, p, 11);
+    pg.number_deviation = 1;
+    pg.size_deviation = 16;
+    pg.angle = 0;
+    pg.angle_deviation = M_PI;
+    pg.speed = 75;
+    pg.speed_deviation = 15;
+    pg.duration_deviation = 0.25;
+    pg.emit(particles);
 }
 
 

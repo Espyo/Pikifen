@@ -13,7 +13,7 @@ Ultra-Spicy Spray {
     effects = spicy
     group = true
     angle = 3.14159
-    distance_range = 192
+    distance_range = 128
     angle_range = 1.570795
     color = 255 64 64
     icon = Ultra-spicy_spray.png

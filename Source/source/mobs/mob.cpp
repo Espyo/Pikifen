@@ -197,6 +197,10 @@ void mob::tick_misc_logic() {
             type->max_health * statuses[s].type->health_change_ratio * delta_t;
     }
     delete_old_status_effects();
+    
+    for(size_t g = 0; g < particle_generators.size(); ++g) {
+        particle_generators[g].tick(delta_t, particles);
+    }
 }
 
 
@@ -910,10 +914,17 @@ void mob::set_var(const string &name, const string &value) {
 void mob::start_dying() {
     health = 0;
     if(typeid(*this) == typeid(enemy)) {
-        random_particle_explosion(
-            PARTICLE_TYPE_BITMAP, bmp_sparkle, x, y,
-            100, 140, 20, 40, 1, 2, 64, 64, al_map_rgb(255, 192, 192)
-        );
+        particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5);
+        p.bitmap = bmp_sparkle;
+        p.color = al_map_rgb(255, 192, 192);
+        particle_generator pg(0, p, 25);
+        pg.number_deviation = 5;
+        pg.angle = 0;
+        pg.angle_deviation = M_PI;
+        pg.speed = 100;
+        pg.speed_deviation = 40;
+        pg.duration_deviation = 0.5;
+        pg.emit(particles);
     }
 }
 
@@ -928,12 +939,17 @@ void mob::finish_dying() {
             become_carriable(false);
             e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
-        particles.push_back(
-            particle(
-                PARTICLE_TYPE_ENEMY_SPIRIT, bmp_enemy_spirit, x, y,
-                0, -50, 0.5, 0, 2, 64, al_map_rgb(255, 192, 255)
-            )
+        particle par(
+            PARTICLE_TYPE_ENEMY_SPIRIT, x, y,
+            64, 2
         );
+        par.bitmap = bmp_enemy_spirit;
+        par.speed_x = 0;
+        par.speed_y = -50;
+        par.friction = 0.5;
+        par.gravity = 0;
+        par.color = al_map_rgb(255, 192, 255);
+        particles.add(par);
     }
 }
 

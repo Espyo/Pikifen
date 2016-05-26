@@ -9,6 +9,7 @@
  * Particle class and particle-related functions.
  */
 
+#include "drawing.h"
 #include "functions.h"
 #include "particle.h"
 #include "vars.h"
@@ -16,36 +17,26 @@
 /* ----------------------------------------------------------------------------
  * Creates a particle.
  * type:     The type of particle. Use PARTICLE_TYPE_*.
- * bitmap:   Bitmap to use. NULL if none.
  * x, y:     Starting coordinates.
- * speed_*:  Speed at which it moves, in units per second.
- * friction: Every second, the speed is multiplied by this much.
- * gravity:  Every second, the vertical speed is multiplied by this.
- * duration: How long its lifespan is.
- * size:     Size; diameter.
- * color:    Its color.
  */
 particle::particle(
-    const unsigned char type, ALLEGRO_BITMAP* const bitmap,
-    const float x, const float y, const float speed_x, const float speed_y,
-    const float friction, const float gravity, const float duration,
-    const float size, const ALLEGRO_COLOR &color
+    const unsigned char type, const float x, const float y,
+    const float size, const float duration
 ) :
     type(type),
-    bitmap(bitmap),
+    duration(duration),
+    bitmap(nullptr),
+    friction(1.0f),
+    gravity(1.0f),
+    size_grow_speed(0.0f),
     x(x),
     y(y),
-    starting_x(x),
-    starting_y(y),
-    speed_x(speed_x),
-    speed_y(speed_y),
-    friction(friction),
-    gravity(gravity),
-    time(duration),
-    duration(duration),
     size(size),
-    starting_size(size),
-    color(color) {
+    speed_x(0.0f),
+    speed_y(0.0f),
+    time(duration),
+    color(al_map_rgb(255, 255, 255)),
+    before_mobs(false) {
     
 }
 
@@ -54,199 +45,307 @@ particle::particle(
  * Makes a particle follow a game tick.
  * Returns false if its lifespan is over and it should be deleted.
  */
-bool particle::tick() {
+void particle::tick(const float delta_t) {
     time -= delta_t;
     
-    if(time <= 0) return false;
+    if(time <= 0.0f) {
+        time = 0.0f;
+        return;
+    }
     
     x += delta_t * speed_x;
     y += delta_t * speed_y;
     
-    if(friction != 0) {
-        speed_x *= 1 - (delta_t * friction);
-        speed_y *= 1 - (delta_t * friction);
-    }
+    speed_x *= 1 - (delta_t * friction);
+    speed_y *= 1 - (delta_t * friction);
+    speed_y += delta_t * gravity;
     
-    if(gravity != 0) {
-        speed_y += (delta_t) * gravity;
-    }
-    
-    return true;
+    size += delta_t * size_grow_speed;
+    size = max(0.0f, size);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Generates random particles in an explosion fashion:
- ** they scatter from the center point at random angles,
- ** and drift off until they vanish.
- * type:     Type of particle. Use PARTICLE_TYPE_*.
- * bmp:      Bitmap to use.
- * center_*: Center point of the explosion.
- * speed_*:  Their speed is random within this range, inclusive.
- * min/max:  The number of particles is random within this range, inclusive.
- * time_*:   Their lifetime is random within this range, inclusive.
- * size_*:   Their size is random within this range, inclusive.
- * color:    Particle color.
+ * Draws this particle onto the world.
  */
-void random_particle_explosion(
-    const unsigned char type, ALLEGRO_BITMAP* const bmp,
-    const float center_x, const float center_y,
-    const float speed_min, const float speed_max,
-    const unsigned char min, const unsigned char max,
-    const float time_min, const float time_max,
-    const float size_min, const float size_max,
-    const ALLEGRO_COLOR &color
-) {
-
-    unsigned char n_particles = randomi(min, max);
-    
-    for(unsigned char p = 0; p < n_particles; ++p) {
-        float angle = randomf(0, M_PI * 2);
-        float speed = randomf(speed_min, speed_max);
-        
-        float speed_x = cos(angle) * speed;
-        float speed_y = sin(angle) * speed;
-        
-        particles.push_back(
-            particle(
-                type,
-                bmp,
-                center_x, center_y,
-                speed_x, speed_y,
-                1,
-                0,
-                randomf(time_min, time_max),
-                randomf(size_min, size_max),
-                color
+void particle::draw() {
+    if(type == PARTICLE_TYPE_SQUARE) {
+        al_draw_filled_rectangle(
+            x - size * 0.5,
+            y - size * 0.5,
+            x + size * 0.5,
+            y + size * 0.5,
+            change_alpha(
+                color,
+                (time / duration) *
+                color.a * 255
             )
+        );
+        
+    } else if(type == PARTICLE_TYPE_CIRCLE) {
+        al_draw_filled_circle(
+            x,
+            y,
+            size * 0.5,
+            change_alpha(
+                color,
+                (time / duration) *
+                color.a * 255
+            )
+        );
+        
+    } else if(type == PARTICLE_TYPE_BITMAP) {
+        draw_sprite(
+            bitmap,
+            x,
+            y,
+            size, size,
+            0, change_alpha(
+                color,
+                (time / duration) *
+                color.a * 255
+            )
+        );
+        
+    } else if(type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
+        draw_sprite(
+            bitmap, x, y, size, -1,
+            0, change_alpha(
+                color,
+                fabs(
+                    sin((time / duration) * M_PI)
+                ) * color.a * 255
+            )
+        );
+        
+    } else if(type == PARTICLE_TYPE_ENEMY_SPIRIT) {
+        float s = sin((time / duration) * M_PI);
+        draw_sprite(
+            bitmap, x + s * 16, y,
+            size, -1, s * M_PI,
+            change_alpha(
+                color, fabs(s) * color.a * 255
+            )
+        );
+        
+    } else if(type == PARTICLE_TYPE_SMACK) {
+        float r = time / duration;
+        float size = size;
+        float opacity = 255;
+        if(r <= 0.5) size *= r * 2;
+        else opacity *= (1 - r) * 2;
+        
+        draw_sprite(
+            bitmap, x, y,
+            size, size, 0, change_alpha(color, opacity)
         );
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Generates random particles in a fire fashion:
- ** the particles go up and speed up as time goes by.
- * type:     Type of particle. Use PARTICLE_TYPE_*.
- * bmp:      Bitmap to use.
- * center_*: Center point of the fire.
- * min/max:  The number of particles is random within this range, inclusive.
- * time_*:   Their lifetime is random within this range, inclusive.
- * size_*:   Their size is random within this range, inclusive.
- * color:    Particle color.
+ * Creates a particle manager.
  */
-void random_particle_fire(
-    const unsigned char type, ALLEGRO_BITMAP* const bmp,
-    const float origin_x, const float origin_y,
-    const unsigned char min, const unsigned char max,
-    const float time_min, const float time_max,
-    const float size_min, const float size_max,
-    const ALLEGRO_COLOR &color
-) {
+particle_manager::particle_manager() {
+    clear();
+}
 
-    unsigned char n_particles = randomi(min, max);
+
+/* ----------------------------------------------------------------------------
+ * Removes a particle from the list.
+ */
+void particle_manager::remove(const size_t pos) {
+    if(pos > count) return;
     
-    for(unsigned char p = 0; p < n_particles; ++p) {
-        particles.push_back(
-            particle(
-                type,
-                bmp,
-                origin_x, origin_y,
-                randomf(-6, 6),
-                randomf(-10, -20),
-                0,
-                -1,
-                randomf(time_min, time_max),
-                randomf(size_min, size_max),
-                color
-            )
-        );
+    //To remove a particle, let's simply move its data to the start of
+    //the "dead" particles. A particle is considered dead if its time is 0.
+    particles[pos].time = 0.0f;
+    
+    //Because the first "count" members are alive, we'll swap this dead
+    //particle with the last living one. This means this particle
+    //will represent the new start of the dead ones.
+    
+    //But hey, if we only had one particle, we can just skip this!
+    if(count == 1) {
+        count = 0;
+        return;
+    }
+    
+    //Place the last live particle on this now-unused position.
+    particles[pos] = particles[count - 1];
+    //And this new "dead" particle should be marked as such.
+    particles[count - 1].time = 0.0f;
+    
+    count--;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new particle to the list.
+ */
+void particle_manager::add(particle p) {
+    //The first "count" particles are alive. Add the new one after.
+    //...Unless count already equals the max. That means the list is full.
+    //Time to dump the first one (presumably the oldest).
+    if(count == N_PARTICLES) {
+        remove(0);
+    }
+    
+    particles[count] = p;
+    count++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks all particles in the list.
+ */
+void particle_manager::tick_all(const float delta_t) {
+    for(size_t c = 0; c < count;) {
+        particles[c].tick(delta_t);
+        if(particles[c].time == 0.0f) {
+            remove(c);
+        } else {
+            ++c;
+        }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Generates random particles in a splash fashion:
- ** the particles go up and are scattered horizontally,
- ** and then go down with the effect of gravity.
- * type:     Type of particle. Use PARTICLE_TYPE_*.
- * bmp:      Bitmap to use.
- * center_*: Center point of the splash.
- * min/max:  The number of particles is random within this range, inclusive.
- * time_*:   Their lifetime is random within this range, inclusive.
- * size_*:   Their size is random within this range, inclusive.
- * color:    Particle color.
+ * Draws all particles, if they're meant to be drawn.
+ * before_mobs: If true, we're trying to draw the particles
+   * that are meant to appear BEFORE (under) the mobs.
+   * So, you should call this function before and after drawing all mobs,
+   * and set before_mobs to true before, and false after.
  */
-void random_particle_splash(
-    const unsigned char type, ALLEGRO_BITMAP* const bmp,
-    const float origin_x, const float origin_y,
-    const unsigned char min, const unsigned char max,
-    const float time_min, const float time_max,
-    const float size_min, const float size_max,
-    const ALLEGRO_COLOR &color
-) {
-
-    unsigned char n_particles = randomi(min, max);
-    
-    for(unsigned char p = 0; p < n_particles; ++p) {
-        particles.push_back(
-            particle(
-                type,
-                bmp,
-                origin_x, origin_y,
-                randomf(-2, 2),
-                randomf(-2, -4),
-                0, 0.5,
-                randomf(time_min, time_max),
-                randomf(size_min, size_max),
-                color
-            )
-        );
+void particle_manager::draw_all(const bool before_mobs) {
+    for(size_t c = 0; c < count; ++c) {
+        if(before_mobs == particles[c].before_mobs) {
+            particles[c].draw();
+        }
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Generates random particles in a spray fashion:
- ** the particles go in the pointed direction,
- ** and move gradually slower as they fade into the air.
- ** Used on actual sprays in-game.
- * type:           Type of particle. Use PARTICLE_TYPE_*.
- * bmp:            Bitmap to use.
- * origin_*:       Origin point of the spray.
- * angle:          Angle to shoot at.
- * distance_range: How far they reach.
- * angle_range:    How far they spread.
- * color:          Color of the particles.
+ * Clears the list.
  */
-void random_particle_spray(
-    const unsigned char type, ALLEGRO_BITMAP* const bmp,
-    const float origin_x, const float origin_y,
-    const float angle, const float distance_range,
-    const float angle_range, const ALLEGRO_COLOR &color
-) {
+void particle_manager::clear() {
+    for(size_t p = 0; p < N_PARTICLES; ++p) {
+        particles[p].time = 0.0f;
+    }
+    count = 0;
+}
 
-    unsigned char n_particles = randomi(35, 40);
+
+/* ----------------------------------------------------------------------------
+ * Creates a particle generator.
+ * type:              Type of generator. Use PARTICLE_GENERATOR_*.
+ * emission_interval: Interval to spawn a new set of particles in,
+   * in seconds. 0 means it spawns only one set and that's it.
+ * base_particle:     All particles created will be based on this one.
+   * Their properties will deviate randomly based on the
+   * deviation members of the particle generator object.
+ * number:            Number of particles to spawn.
+   * This number is also deviated by number_deviation.
+ */
+particle_generator::particle_generator(
+    const float emission_interval,
+    particle base_particle, const size_t number
+) :
+    id(0),
+    emission_timer(emission_interval),
+    base_particle(base_particle),
+    number(number),
+    emission_interval(emission_interval),
+    number_deviation(0),
+    duration_deviation(0),
+    friction_deviation(0),
+    gravity_deviation(0),
+    x_deviation(0),
+    y_deviation(0),
+    speed_x_deviation(0),
+    speed_y_deviation(0),
+    size_deviation(0),
+    angle(0),
+    angle_deviation(0),
+    speed(0),
+    speed_deviation(0),
+    follow_x(nullptr),
+    follow_y(nullptr) {
     
-    for(unsigned char p = 0; p < n_particles; ++p) {
-        float angle_offset = randomf(-angle_range * 0.5, angle_range * 0.5);
-        
-        float power = randomf(distance_range * 0.3, distance_range * 1.2);
-        float speed_x = cos(angle + angle_offset) * power;
-        float speed_y = sin(angle + angle_offset) * power;
-        
-        particles.push_back(
-            particle(
-                type,
-                bmp,
-                origin_x, origin_y,
-                speed_x, speed_y,
-                1,
-                0,
-                randomf(3, 4),
-                randomf(48, 56),
-                color
-            )
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one game frame of logic.
+ */
+void particle_generator::tick(const float delta_t, particle_manager &manager) {
+    emission_timer -= delta_t;
+    if(emission_timer <= 0.0f) {
+        emit(manager);
+        emission_timer = emission_interval;
+    }
+    if(follow_x) {
+        base_particle.x = *follow_x;
+    }
+    if(follow_y) {
+        base_particle.y = *follow_y;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Emits the particles, regardless of the timer.
+ * manager: The particle manager to place these particles on.
+ */
+void particle_generator::emit(particle_manager &manager) {
+    size_t final_nr =
+        max(
+            0,
+            (int) number + randomi(-number_deviation, number_deviation)
         );
+        
+    for(size_t p = 0; p < final_nr; ++p) {
+        particle new_p = base_particle;
+        
+        new_p.duration =
+            max(
+                0.0f,
+                new_p.duration +
+                randomf(-duration_deviation, duration_deviation)
+            );
+        new_p.time = new_p.duration;
+        new_p.friction +=
+            randomf(-friction_deviation, friction_deviation);
+        new_p.gravity +=
+            randomf(-gravity_deviation, gravity_deviation);
+        new_p.x +=
+            randomf(-x_deviation, x_deviation);
+        new_p.y +=
+            randomf(-y_deviation, y_deviation);
+        new_p.size =
+            max(
+                0.0f,
+                new_p.size +
+                randomf(-size_deviation, size_deviation)
+            );
+        //For speed, let's decide if we should use
+        //(speed_x and speed_y) or (speed and angle).
+        //We'll use whichever one is not all zeros.
+        if(angle != 0 || speed != 0) {
+            angle_to_coordinates(
+                angle + randomf(-angle_deviation, angle_deviation),
+                speed + randomf(-speed_deviation, speed_deviation),
+                &new_p.speed_x, &new_p.speed_y
+            );
+        } else {
+            new_p.speed_x +=
+                randomf(-speed_x_deviation, speed_x_deviation);
+            new_p.speed_y +=
+                randomf(-speed_y_deviation, speed_y_deviation);
+        }
+        
+        manager.add(new_p);
     }
 }

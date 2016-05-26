@@ -20,6 +20,7 @@
 #include "../animation.h"
 #include "../misc_structs.h"
 #include "../mob_script.h"
+#include "../particle.h"
 #include "pikmin_type.h"
 #include "../sector.h"
 
@@ -57,6 +58,12 @@ enum MOB_STATE_IDS {
     MOB_STATE_BEING_CARRIED,
     MOB_STATE_BEING_DELIVERED, //Into an Onion.
     
+};
+
+enum MOB_PARTICLE_GENERATOR_IDS {
+    MOB_PARTICLE_GENERATOR_NONE,
+    MOB_PARTICLE_GENERATOR_THROW,
+    MOB_PARTICLE_GENERATOR_WAVE_RING,
 };
 
 enum CARRY_SPOT_STATES {
@@ -273,6 +280,8 @@ public:
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.
     unsigned char team;
+    //Particle generators attached to it.
+    vector<particle_generator> particle_generators;
     
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
@@ -302,7 +311,6 @@ public:
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
-    
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();

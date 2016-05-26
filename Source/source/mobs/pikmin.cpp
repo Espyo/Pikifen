@@ -67,16 +67,11 @@ void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
     
     sfx_attack.play(0.06, false, 0.4f);
     sfx_pikmin_attack.play(0.06, false, 0.8f);
-    particles.push_back(
-        particle(
-            PARTICLE_TYPE_SMACK, bmp_smack,
-            x, y,
-            0, 0, 0, 0,
-            SMACK_PARTICLE_DUR,
-            64,
-            al_map_rgb(255, 160, 128)
-        )
-    );
+    
+    particle smack_p(PARTICLE_TYPE_SMACK, x, y, 64, SMACK_PARTICLE_DUR);
+    smack_p.bitmap = bmp_smack;
+    smack_p.color = al_map_rgb(255, 160, 128);
+    particles.add(smack_p);
 }
 
 
@@ -183,12 +178,19 @@ void pikmin::tick_class_specifics() {
     //Is it dead?
     if(dead) {
         to_delete = true;
-        particles.push_back(
-            particle(
-                PARTICLE_TYPE_PIKMIN_SPIRIT, bmp_pikmin_spirit, x, y,
-                0, -50, 0.5, 0, 2, pik_type->radius * 2, pik_type->main_color
-            )
+        
+        particle par(
+            PARTICLE_TYPE_PIKMIN_SPIRIT, x, y,
+            pik_type->radius * 2, 2.0f
         );
+        par.bitmap = bmp_pikmin_spirit;
+        par.speed_x = 0;
+        par.speed_y = -50;
+        par.friction = 0.5;
+        par.gravity = 0;
+        par.color = pik_type->main_color;
+        particles.add(par);
+        
         sfx_pikmin_dying.play(0.03, false);
     }
 }

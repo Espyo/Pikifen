@@ -1014,16 +1014,17 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     float shoot_angle =
         cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
         
-    random_particle_spray(
-        PARTICLE_TYPE_BITMAP,
-        bmp_smoke,
-        m->x,
-        m->y,
-        shoot_angle,
-        spray_types[spray_nr].distance_range,
-        spray_types[spray_nr].angle_range,
-        spray_types[spray_nr].main_color
-    );
+    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 52, 3.5);
+    p.bitmap = bmp_smoke;
+    p.friction = 1;
+    p.color = spray_types[spray_nr].main_color;
+    particle_generator pg(0, p, 32);
+    pg.angle = shoot_angle;
+    pg.angle_deviation = spray_types[spray_nr].angle_range / 2.0f;
+    pg.speed = spray_types[spray_nr].distance_range * 0.8;
+    pg.speed_deviation = spray_types[spray_nr].distance_range * 0.4;
+    pg.size_deviation = 0.5;
+    pg.emit(particles);
     
     spray_amounts[spray_nr]--;
     
@@ -1275,6 +1276,15 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
+    
+    particle throw_p(PARTICLE_TYPE_CIRCLE, m->x, m->y, m->type->radius, 0.6);
+    throw_p.size_grow_speed = -5;
+    throw_p.color = change_alpha(m->type->main_color, 128);
+    particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
+    pg.follow_x = &m->x;
+    pg.follow_y = &m->y;
+    pg.id = MOB_PARTICLE_GENERATOR_THROW;
+    m->particle_generators.push_back(pg);
 }
 
 
@@ -1284,4 +1294,14 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
 void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->speed_x = m->speed_y = 0;
+    
+    //Remove the throw particle generator.
+    for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+        if(
+            m->particle_generators[g].id ==
+            MOB_PARTICLE_GENERATOR_THROW
+        ) {
+            m->particle_generators.erase(m->particle_generators.begin() + g);
+        }
+    }
 }

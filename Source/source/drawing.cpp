@@ -35,7 +35,6 @@ void do_game_drawing(
     if(!paused) {
     
         size_t n_leaders =     leaders.size();
-        size_t n_particles =   particles.size();
         size_t n_spray_types = spray_types.size();
         
         cur_sun_strength = get_sun_strength();
@@ -157,6 +156,16 @@ void do_game_drawing(
         
         
         /* Layer 3
+        *************************************
+        *                               *   *
+        *   Particles (before mobs)   *   * *
+        *                              * *  *
+        ************************************/
+        
+        particles.draw_all(true);
+        
+        
+        /* Layer 4
         ****************
         *          \o/ *
         *   Mobs    |  *
@@ -204,94 +213,17 @@ void do_game_drawing(
         }
         
         
-        /* Layer 4
-        ***********************
-        *                 *   *
-        *   Particles   *   * *
-        *                * *  *
-        **********************/
-        
-        if(particle_quality > 0) {
-            n_particles = particles.size();
-            for(size_t p = 0; p < n_particles; ++p) {
-                particle* p_ptr = &particles[p];
-                
-                if(p_ptr->type == PARTICLE_TYPE_SQUARE) {
-                    al_draw_filled_rectangle(
-                        p_ptr->x - p_ptr->size * 0.5,
-                        p_ptr->y - p_ptr->size * 0.5,
-                        p_ptr->x + p_ptr->size * 0.5,
-                        p_ptr->y + p_ptr->size * 0.5,
-                        change_alpha(
-                            p_ptr->color,
-                            (p_ptr->time / p_ptr->duration) *
-                            p_ptr->color.a * 255
-                        )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_CIRCLE) {
-                    al_draw_filled_circle(
-                        p_ptr->x,
-                        p_ptr->y,
-                        p_ptr->size * 0.5,
-                        change_alpha(
-                            p_ptr->color,
-                            (p_ptr->time / p_ptr->duration) *
-                            p_ptr->color.a * 255
-                        )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_BITMAP) {
-                    draw_sprite(
-                        p_ptr->bitmap,
-                        p_ptr->x,
-                        p_ptr->y,
-                        p_ptr->size, p_ptr->size,
-                        0, change_alpha(
-                            p_ptr->color,
-                            (p_ptr->time / p_ptr->duration) *
-                            p_ptr->color.a * 255
-                        )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
-                    draw_sprite(
-                        p_ptr->bitmap, p_ptr->x, p_ptr->y, p_ptr->size, -1,
-                        0, change_alpha(
-                            p_ptr->color,
-                            abs(
-                                sin((p_ptr->time / p_ptr->duration) * M_PI)
-                            ) * p_ptr->color.a * 255
-                        )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_ENEMY_SPIRIT) {
-                    float s = sin((p_ptr->time / p_ptr->duration) * M_PI);
-                    draw_sprite(
-                        p_ptr->bitmap, p_ptr->x + s * 16, p_ptr->y,
-                        p_ptr->size, -1, s * M_PI,
-                        change_alpha(
-                            p_ptr->color, abs(s) * p_ptr->color.a * 255
-                        )
-                    );
-                    
-                } else if(p_ptr->type == PARTICLE_TYPE_SMACK) {
-                    float r = p_ptr->time / p_ptr->duration;
-                    float size = p_ptr->size;
-                    float opacity = 255;
-                    if(r <= 0.5) size *= r * 2;
-                    else opacity *= (1 - r) * 2;
-                    
-                    draw_sprite(
-                        p_ptr->bitmap, p_ptr->x, p_ptr->y,
-                        size, size, 0, change_alpha(p_ptr->color, opacity)
-                    );
-                }
-            }
-        }
-        
-        
         /* Layer 5
+        ************************************
+        *                              *   *
+        *   Particles (after mobs)   *   * *
+        *                             * *  *
+        ***********************************/
+        
+        particles.draw_all(false);
+        
+        
+        /* Layer 6
         ***************************
         *                   Help  *
         *   In-game text   --  -- *
@@ -373,7 +305,7 @@ void do_game_drawing(
         }
         
         
-        /* Layer 6
+        /* Layer 7
         ***************************
         *                    /  / *
         *   Percipitation     / / *
@@ -394,7 +326,7 @@ void do_game_drawing(
         }
         
         
-        /* Layer 7
+        /* Layer 8
         **************************
         *                  *###* *
         *   Tree shadows   #| |# *
@@ -429,7 +361,7 @@ void do_game_drawing(
         }
         
         
-        /* Layer 8
+        /* Layer 9
         ***********************
         *              --==## *
         *   Daylight   --==## *
@@ -443,7 +375,7 @@ void do_game_drawing(
         }
         
         
-        /* Layer 9
+        /* Layer 10
         *********************
         *             .-.   *
         *   Cursor   ( = )> *
@@ -589,7 +521,7 @@ void do_game_drawing(
         );
         
         
-        /* Layer 10
+        /* Layer 11
         *****************
         *           (1) *
         *   HUD         *
@@ -1076,7 +1008,7 @@ void do_game_drawing(
             
         }
         
-        /* Layer 11
+        /* Layer 12
         ***********************
         *                     *
         *   System stuff   >_ *
