@@ -836,6 +836,7 @@ void mob::eat(const size_t nr) {
     
     for(size_t p = 0; p < total; ++p) {
         chomping_pikmin[p]->health = 0;
+        chomping_pikmin[p]->dead = true;
         chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
     }
     chomping_pikmin.clear();

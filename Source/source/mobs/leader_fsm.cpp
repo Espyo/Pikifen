@@ -684,6 +684,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("thrown", LEADER_STATE_THROWN); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(leader_fsm::stop_being_thrown);
+        }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(leader_fsm::land);
             efc.change_state("idle");
@@ -1145,6 +1148,22 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     m->chase(0, 0, &m->following_group->x, &m->following_group->y, false);
     m->set_animation(LEADER_ANIM_WALK);
     focus_mob(m, m->following_group);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader is no longer in the thrown state.
+ */
+void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
+    //Remove the throw particle generator.
+    for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+        if(
+            m->particle_generators[g].id ==
+            MOB_PARTICLE_GENERATOR_THROW
+        ) {
+            m->particle_generators.erase(m->particle_generators.begin() + g);
+        }
+    }
 }
 
 

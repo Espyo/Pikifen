@@ -1411,7 +1411,7 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                     }
                 }
                 
-                if(v1->y == start->y) {
+                if(v1->y == start->y && v1->x >= start->x) {
                     float ur = (v1->x - start->x) / ray_width;
                     if(!closest_vertex || ur < closest_vertex_ur) {
                         closest_vertex = v1;

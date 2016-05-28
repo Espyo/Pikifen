@@ -52,6 +52,7 @@ void start_flailing(         mob* m, void* info1, void* info2);
 void start_panicking(        mob* m, void* info1, void* info2);
 void stand_still(            mob* m, void* info1, void* info2);
 void stop_being_idle(        mob* m, void* info1, void* info2);
+void stop_being_thrown(      mob* m, void* info1, void* info2);
 void stop_carrying(          mob* m, void* info1, void* info2);
 void stop_in_group(          mob* m, void* info1, void* info2);
 void tick_attacking_grounded(mob* m, void* info1, void* info2);

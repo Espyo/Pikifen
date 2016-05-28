@@ -240,6 +240,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("thrown", PIKMIN_STATE_THROWN); {
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run_function(pikmin_fsm::stop_being_thrown);
+        }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(pikmin_fsm::land);
             efc.change_state("idle");
@@ -774,16 +777,6 @@ void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
 void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     
-    //Remove the throw particle generator.
-    for(size_t g = 0; g < m->particle_generators.size(); ++g) {
-        if(
-            m->particle_generators[g].id ==
-            MOB_PARTICLE_GENERATOR_THROW
-        ) {
-            m->particle_generators.erase(m->particle_generators.begin() + g);
-        }
-    }
-    
     pikmin_fsm::stand_still(m, NULL, NULL);
 }
 
@@ -1256,6 +1249,22 @@ void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
 
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is no longer in the thrown state.
+ */
+void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
+    //Remove the throw particle generator.
+    for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+        if(
+            m->particle_generators[g].id ==
+            MOB_PARTICLE_GENERATOR_THROW
+        ) {
+            m->particle_generators.erase(m->particle_generators.begin() + g);
+        }
+    }
 }
 
 
