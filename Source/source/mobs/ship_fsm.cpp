@@ -51,8 +51,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     ship* s_ptr = (ship*) m;
     
     particle p(
-        PARTICLE_TYPE_BITMAP,
-        s_ptr->beam_final_x, s_ptr->beam_final_y, 24, 1.5
+        PARTICLE_TYPE_BITMAP, s_ptr->beam_final_x, s_ptr->beam_final_y,
+        24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
     particle_generator pg(0, p, 15);

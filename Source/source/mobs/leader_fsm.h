@@ -42,6 +42,7 @@ void inactive_lose_health(mob* m, void* info1, void* info2);
 void inactive_search_seed(mob* m, void* info1, void* info2);
 void join_group(          mob* m, void* info1, void* info2);
 void land(                mob* m, void* info1, void* info2);
+void left_hazard(         mob* m, void* info1, void* info2);
 void lose_health(         mob* m, void* info1, void* info2);
 void move(                mob* m, void* info1, void* info2);
 void release(             mob* m, void* info1, void* info2);

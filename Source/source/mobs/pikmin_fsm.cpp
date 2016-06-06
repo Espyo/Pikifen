@@ -70,6 +70,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -109,6 +112,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -153,6 +159,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -201,6 +210,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -231,6 +243,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -256,6 +271,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -294,6 +312,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -337,6 +358,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -369,6 +393,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -411,6 +438,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -442,6 +472,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -481,6 +514,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -509,6 +545,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
@@ -545,6 +584,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -577,6 +619,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(pikmin_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(pikmin_fsm::touched_spray);
         }
@@ -593,6 +638,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::stand_still);
         }
         efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(pikmin_fsm::left_hazard);
             efc.run_function(pikmin_fsm::check_remove_flailing);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
@@ -752,7 +798,10 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     sfx_pikmin_thrown.play(0, false);
     m->set_animation(PIKMIN_ANIM_THROWN);
     
-    particle throw_p(PARTICLE_TYPE_CIRCLE, m->x, m->y, m->type->radius, 0.6);
+    particle throw_p(
+        PARTICLE_TYPE_CIRCLE, m->x, m->y,
+        m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
+    );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
@@ -1052,6 +1101,29 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * When a Pikmin leaves a hazardous sector.
+ * info1: Points to the hazard.
+ */
+void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
+    hazard* h = (hazard*) info1;
+    if(h->associated_liquid) {
+        for(size_t g = 0; g < m->particle_generators.size();) {
+            if(
+                m->particle_generators[g].id ==
+                MOB_PARTICLE_GENERATOR_WAVE_RING
+            ) {
+                m->particle_generators.erase(
+                    m->particle_generators.begin() + g
+                );
+            } else {
+                ++g;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * When the mob the Pikmin is latched on to disappears.
  */
 void pikmin_fsm::lose_latched_mob(mob* m, void* info1, void* info2) {
@@ -1153,6 +1225,7 @@ void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health = 0;
+    m->dead = true;
 }
 
 
@@ -1214,6 +1287,22 @@ void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
                 m->fsm.set_state(PIKMIN_STATE_IDLE);
                 pikmin_fsm::stand_still(m, NULL, NULL);
                 
+            }
+        }
+    }
+    
+    //Let's piggyback this check to also remove liquid wave ring particles.
+    if(h_ptr->associated_liquid) {
+        for(size_t g = 0; g < m->particle_generators.size();) {
+            if(
+                m->particle_generators[g].id ==
+                MOB_PARTICLE_GENERATOR_WAVE_RING
+            ) {
+                m->particle_generators.erase(
+                    m->particle_generators.begin() + g
+                );
+            } else {
+                ++g;
             }
         }
     }
@@ -1284,6 +1373,30 @@ void pikmin_fsm::stop_in_group(mob* m, void* info1, void* info2) {
 void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     hazard* h = (hazard*) info1;
+    if(h->associated_liquid) {
+        for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+            if(
+                m->particle_generators[g].id ==
+                MOB_PARTICLE_GENERATOR_WAVE_RING
+            ) {
+                return;
+            }
+        }
+        
+        particle p(
+            PARTICLE_TYPE_BITMAP, m->x, m->y,
+            0, 1, PARTICLE_PRIORITY_LOW
+        );
+        p.bitmap = bmp_wave_ring;
+        p.size_grow_speed = m->type->radius * 4;
+        p.before_mobs = true;
+        particle_generator pg(0.3, p, 1);
+        pg.follow_x = &m->x;
+        pg.follow_y = &m->y;
+        pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
+        m->particle_generators.push_back(pg);
+    }
+    
     for(size_t r = 0; r < p->pik_type->resistances.size(); ++r) {
         if(p->pik_type->resistances[r] == h) return; //Immune!
     }

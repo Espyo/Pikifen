@@ -41,6 +41,7 @@ void go_to_carriable_object( mob* m, void* info1, void* info2);
 void go_to_opponent(         mob* m, void* info1, void* info2);
 void land(                   mob* m, void* info1, void* info2);
 void land_on_mob(            mob* m, void* info1, void* info2);
+void left_hazard(            mob* m, void* info1, void* info2);
 void lose_latched_mob(       mob* m, void* info1, void* info2);
 void panic_new_chase(        mob* m, void* info1, void* info2);
 void prepare_to_attack(      mob* m, void* info1, void* info2);

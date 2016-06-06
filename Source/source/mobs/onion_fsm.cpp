@@ -52,7 +52,10 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     }
     o_ptr->spew_queue += seeds;
     
-    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 24, 1.5);
+    particle p(
+        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        24, 1.5, PARTICLE_PRIORITY_MEDIUM
+    );
     p.bitmap = bmp_smoke;
     particle_generator pg(0, p, 15);
     pg.number_deviation = 5;

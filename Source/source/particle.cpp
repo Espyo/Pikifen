@@ -21,7 +21,7 @@
  */
 particle::particle(
     const unsigned char type, const float x, const float y,
-    const float size, const float duration
+    const float size, const float duration, const unsigned char priority
 ) :
     type(type),
     duration(duration),
@@ -36,7 +36,8 @@ particle::particle(
     speed_y(0.0f),
     time(duration),
     color(al_map_rgb(255, 255, 255)),
-    before_mobs(false) {
+    before_mobs(false),
+    priority(priority) {
     
 }
 
@@ -181,16 +182,30 @@ void particle_manager::remove(const size_t pos) {
 
 
 /* ----------------------------------------------------------------------------
- * Adds a new particle to the list.
+ * Adds a new particle to the list. It will fail if there is no slot
+ * where it can be added to.
  */
 void particle_manager::add(particle p) {
     //The first "count" particles are alive. Add the new one after.
     //...Unless count already equals the max. That means the list is full.
-    //Time to dump the first one (presumably the oldest).
+    //Let's try to dump a particle with lower priority.
+    //Starting from 0 will (hopefully) give us the oldest one first.
+    bool success = true;
     if(count == N_PARTICLES) {
-        remove(0);
+        success = false;
+        for(size_t i = 0; i < N_PARTICLES; ++i) {
+            if(particles[i].priority < p.priority) {
+                remove(i);
+                success = true;
+                break;
+            }
+        }
     }
     
+    //No room for this particle.
+    if(!success)
+        return;
+        
     particles[count] = p;
     count++;
 }
@@ -281,16 +296,16 @@ particle_generator::particle_generator(
  * Ticks one game frame of logic.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
-    emission_timer -= delta_t;
-    if(emission_timer <= 0.0f) {
-        emit(manager);
-        emission_timer = emission_interval;
-    }
     if(follow_x) {
         base_particle.x = *follow_x;
     }
     if(follow_y) {
         base_particle.y = *follow_y;
+    }
+    emission_timer -= delta_t;
+    if(emission_timer <= 0.0f) {
+        emit(manager);
+        emission_timer = emission_interval;
     }
 }
 

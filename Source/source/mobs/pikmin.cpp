@@ -68,7 +68,10 @@ void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
     sfx_attack.play(0.06, false, 0.4f);
     sfx_pikmin_attack.play(0.06, false, 0.8f);
     
-    particle smack_p(PARTICLE_TYPE_SMACK, x, y, 64, SMACK_PARTICLE_DUR);
+    particle smack_p(
+        PARTICLE_TYPE_SMACK, x, y,
+        64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
+    );
     smack_p.bitmap = bmp_smack;
     smack_p.color = al_map_rgb(255, 160, 128);
     particles.add(smack_p);

@@ -915,7 +915,7 @@ void mob::set_var(const string &name, const string &value) {
 void mob::start_dying() {
     health = 0;
     if(typeid(*this) == typeid(enemy)) {
-        particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5);
+        particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5, PARTICLE_PRIORITY_LOW);
         p.bitmap = bmp_sparkle;
         p.color = al_map_rgb(255, 192, 192);
         particle_generator pg(0, p, 25);
@@ -942,7 +942,7 @@ void mob::finish_dying() {
         }
         particle par(
             PARTICLE_TYPE_ENEMY_SPIRIT, x, y,
-            64, 2
+            64, 2, PARTICLE_PRIORITY_MEDIUM
         );
         par.bitmap = bmp_enemy_spirit;
         par.speed_x = 0;

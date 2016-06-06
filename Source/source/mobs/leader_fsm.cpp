@@ -50,6 +50,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -105,6 +108,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -141,6 +147,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -175,6 +184,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
@@ -308,6 +320,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -347,6 +362,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -378,6 +396,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
@@ -427,6 +448,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
@@ -483,6 +507,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -537,6 +564,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -578,6 +608,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
@@ -635,6 +668,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -675,6 +711,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
         }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
+        }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
         }
@@ -693,6 +732,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
+        }
+        efc.new_event(MOB_EVENT_LEFT_HAZARD); {
+            efc.run_function(leader_fsm::left_hazard);
         }
         efc.new_event(MOB_EVENT_TOUCHED_SPRAY); {
             efc.run_function(leader_fsm::touched_spray);
@@ -823,6 +865,30 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
         l->apply_status_effect(h->effects[e], false);
+    }
+    
+    if(h->associated_liquid) {
+        for(size_t g = 0; g < m->particle_generators.size(); ++g) {
+            if(
+                m->particle_generators[g].id ==
+                MOB_PARTICLE_GENERATOR_WAVE_RING
+            ) {
+                return;
+            }
+        }
+        
+        particle p(
+            PARTICLE_TYPE_BITMAP, m->x, m->y,
+            0, 1, PARTICLE_PRIORITY_LOW
+        );
+        p.bitmap = bmp_wave_ring;
+        p.size_grow_speed = m->type->radius * 4;
+        p.before_mobs = true;
+        particle_generator pg(0.3, p, 1);
+        pg.follow_x = &m->x;
+        pg.follow_y = &m->y;
+        pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
+        m->particle_generators.push_back(pg);
     }
 }
 
@@ -1017,7 +1083,10 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     float shoot_angle =
         cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
         
-    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 52, 3.5);
+    particle p(
+        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        52, 3.5, PARTICLE_PRIORITY_MEDIUM
+    );
     p.bitmap = bmp_smoke;
     p.friction = 1;
     p.color = spray_types[spray_nr].main_color;
@@ -1032,6 +1101,29 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     spray_amounts[spray_nr]--;
     
     m->set_animation(LEADER_ANIM_SPRAYING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader leaves a hazardous sector.
+ * info1: Points to the hazard.
+ */
+void leader_fsm::left_hazard(mob* m, void* info1, void* info2) {
+    hazard* h = (hazard*) info1;
+    if(h->associated_liquid) {
+        for(size_t g = 0; g < m->particle_generators.size();) {
+            if(
+                m->particle_generators[g].id ==
+                MOB_PARTICLE_GENERATOR_WAVE_RING
+            ) {
+                m->particle_generators.erase(
+                    m->particle_generators.begin() + g
+                );
+            } else {
+                ++g;
+            }
+        }
+    }
 }
 
 
@@ -1296,7 +1388,10 @@ void leader_fsm::be_released(mob* m, void* info1, void* info2) {
 void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     
-    particle throw_p(PARTICLE_TYPE_CIRCLE, m->x, m->y, m->type->radius, 0.6);
+    particle throw_p(
+        PARTICLE_TYPE_CIRCLE, m->x, m->y,
+        m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
+    );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);

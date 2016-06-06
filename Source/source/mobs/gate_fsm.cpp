@@ -61,7 +61,10 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     m->start_dying();
     m->finish_dying();
     
-    particle p(PARTICLE_TYPE_BITMAP, m->x, m->y, 80, 2.75);
+    particle p(
+        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        80, 2.75, PARTICLE_PRIORITY_MEDIUM
+    );
     p.bitmap = bmp_smoke;
     p.color = al_map_rgb(238, 204, 170);
     particle_generator pg(0, p, 11);

@@ -72,11 +72,15 @@ struct particle {
     //Other stuff.
     //If true, this is only drawn if drawing before mobs. Else, after.
     bool before_mobs;
+    //Priority. If we reached the particle limit, only spawn
+    //this particle if it can replace a lower-priority one.
+    unsigned char priority;
     
     particle(
         const unsigned char type = PARTICLE_TYPE_BITMAP,
         const float x = 0.0f, const float y = 0.0f,
-        const float size = 0.0f, const float duration = 0.0f
+        const float size = 0.0f, const float duration = 0.0f,
+        const unsigned char priority = 255
     );
     void tick(const float delta_t);
     void draw();
