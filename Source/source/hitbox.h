@@ -15,7 +15,6 @@
 #include <vector>
 
 #include "const.h"
-#include "hazard.h"
 
 /*
  * You can read more about hitboxes
@@ -27,6 +26,8 @@ enum HITBOX_TYPES {
     HITBOX_TYPE_ATTACK,
     HITBOX_TYPE_DISABLED,
 };
+
+struct hazard;
 
 
 /* ----------------------------------------------------------------------------

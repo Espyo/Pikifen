@@ -1065,6 +1065,24 @@ ALLEGRO_COLOR mob::get_status_tint_color() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the current frame of an animation of one of the status effects
+ * that the mob is under.
+ * bmp_scale: Returns the mob size's scale to apply to the image.
+ */
+ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
+    *bmp_scale = 0.0f;
+    for(size_t s = 0; s < this->statuses.size(); ++s) {
+        status_type* t = this->statuses[s].type;
+        if(t->animation_name.empty()) continue;
+        frame* f = t->anim_instance.get_frame();
+        if(!f) return NULL;
+        *bmp_scale = t->animation_mob_scale;
+        return f->bitmap;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the base speed for this mob.
  * This is overwritten by some child classes.
  */

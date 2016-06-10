@@ -23,6 +23,7 @@
 #include "../particle.h"
 #include "pikmin_type.h"
 #include "../sector.h"
+#include "../status.h"
 
 using namespace std;
 
@@ -326,6 +327,7 @@ public:
     void delete_old_status_effects();
     void remove_particle_generator(const int id);
     ALLEGRO_COLOR get_status_tint_color();
+    ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     virtual bool can_receive_status(status_type* s);
     virtual void receive_flailing_from_status();
     virtual void receive_panic_from_status();

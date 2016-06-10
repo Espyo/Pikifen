@@ -175,6 +175,11 @@ void do_gameplay_logic() {
         //Tick all particles.
         particles.tick_all(delta_t);
         
+        //Ticks all status effect animations.
+        for(auto s = status_types.begin(); s != status_types.end(); ++s) {
+            s->second.anim_instance.tick(delta_t);
+        }
+        
         
         /********************
         *              ***  *

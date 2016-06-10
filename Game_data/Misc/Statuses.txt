@@ -7,6 +7,8 @@ burning {
     causes_panic = true
     speed_multiplier = 2.0
     particle_generator = smoke
+    animation = Fire.txt
+    animation_mob_scale = 0.75
 }
 
 water_drowning {

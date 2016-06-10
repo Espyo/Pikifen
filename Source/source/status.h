@@ -17,6 +17,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "animation.h"
 #include "particle.h"
 
 using namespace std;
@@ -52,6 +53,10 @@ struct status_type {
     
     bool generates_particles;
     particle_generator* particle_gen;
+    string animation_name;
+    float animation_mob_scale;
+    animation_pool anim_pool;
+    animation_instance anim_instance;
     
     status_type();
 };

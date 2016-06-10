@@ -17,11 +17,10 @@
 #include <string>
 #include <vector>
 
-#include "status.h"
-
 using namespace std;
 
 struct liquid;
+struct status_type;
 
 /* ----------------------------------------------------------------------------
  * An hazard is the likes of fire, water, electricty, crushing, etc.

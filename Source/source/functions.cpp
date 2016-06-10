@@ -1694,6 +1694,8 @@ void load_status_types() {
         rs.set("attack_multiplier",      st.attack_multiplier);
         rs.set("defense_multiplier",     st.defense_multiplier);
         rs.set("anim_speed_multiplier",  st.anim_speed_multiplier);
+        rs.set("animation",              st.animation_name);
+        rs.set("animation_mob_scale",    st.animation_mob_scale);
         
         st.affects = 0;
         if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
@@ -1724,6 +1726,17 @@ void load_status_types() {
         }
         
         status_types[st.name] = st;
+    }
+    
+    for(auto s = status_types.begin(); s != status_types.end(); ++s) {
+        if(s->second.animation_name.empty()) continue;
+        data_node anim_file(ANIMATIONS_FOLDER + "/" + s->second.animation_name);
+        s->second.anim_pool = load_animation_pool_from_file(&anim_file);
+        if(!s->second.anim_pool.animations.empty()) {
+            s->second.anim_instance = animation_instance(&s->second.anim_pool);
+            s->second.anim_instance.anim = s->second.anim_pool.animations[0];
+            s->second.anim_instance.start();
+        }
     }
 }
 

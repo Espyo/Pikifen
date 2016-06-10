@@ -280,6 +280,11 @@ void pikmin::draw() {
         );
     }
     
+    float status_bmp_scale;
+    ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
+    if(status_bmp) {
+        draw_sprite(status_bmp, x, y, type->radius * 2 * status_bmp_scale, -1);
+    }
     
 }
 

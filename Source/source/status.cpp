@@ -32,7 +32,8 @@ status_type::status_type() :
     defense_multiplier(1.0f),
     anim_speed_multiplier(1.0f),
     generates_particles(false),
-    particle_gen(nullptr) {
+    particle_gen(nullptr),
+    animation_mob_scale(1.0f) {
     
 }
 
