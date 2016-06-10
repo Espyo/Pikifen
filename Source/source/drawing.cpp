@@ -370,9 +370,7 @@ void do_game_drawing(
         
         al_use_transform(&normal_transform);
         
-        if(daylight_effect) {
-            al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
-        }
+        al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
         
         
         /* Layer 10

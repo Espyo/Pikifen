@@ -64,6 +64,10 @@ enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
     MOB_PARTICLE_GENERATOR_THROW,
     MOB_PARTICLE_GENERATOR_WAVE_RING,
+    
+    //Specific status effects are this + their number.
+    //So make sure this is the last on the enum.
+    MOB_PARTICLE_GENERATOR_STATUS,
 };
 
 enum PARTICLE_PRIORITIES {
@@ -320,6 +324,7 @@ public:
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
+    void remove_particle_generator(const int id);
     ALLEGRO_COLOR get_status_tint_color();
     virtual bool can_receive_status(status_type* s);
     virtual void receive_flailing_from_status();

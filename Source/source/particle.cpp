@@ -147,8 +147,38 @@ void particle::draw() {
 /* ----------------------------------------------------------------------------
  * Creates a particle manager.
  */
-particle_manager::particle_manager() {
+particle_manager::particle_manager(const size_t &max_nr) :
+    particles(nullptr),
+    max_nr(max_nr) {
+    
+    if(max_nr == 0) return;
+    particles = new particle[max_nr];
     clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Copies a particle manager from another one.
+ */
+particle_manager &particle_manager::operator =(const particle_manager &pg) {
+    particles = NULL;
+    max_nr = pg.max_nr;
+    if(max_nr == 0) return *this;
+    count = pg.count;
+    particles = new particle[max_nr];
+    for(size_t p = 0; p < count; ++p) {
+        particles[p] = pg.particles[p];
+    }
+    
+    return *this;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Destroys a particle manager.
+ */
+particle_manager::~particle_manager() {
+    if(particles) delete particles;
 }
 
 
@@ -186,14 +216,16 @@ void particle_manager::remove(const size_t pos) {
  * where it can be added to.
  */
 void particle_manager::add(particle p) {
+    if(max_nr == 0) return;
+    
     //The first "count" particles are alive. Add the new one after.
     //...Unless count already equals the max. That means the list is full.
     //Let's try to dump a particle with lower priority.
     //Starting from 0 will (hopefully) give us the oldest one first.
     bool success = true;
-    if(count == N_PARTICLES) {
+    if(count == max_nr) {
         success = false;
-        for(size_t i = 0; i < N_PARTICLES; ++i) {
+        for(size_t i = 0; i < max_nr; ++i) {
             if(particles[i].priority < p.priority) {
                 remove(i);
                 success = true;
@@ -246,7 +278,7 @@ void particle_manager::draw_all(const bool before_mobs) {
  * Clears the list.
  */
 void particle_manager::clear() {
-    for(size_t p = 0; p < N_PARTICLES; ++p) {
+    for(size_t p = 0; p < max_nr; ++p) {
         particles[p].time = 0.0f;
     }
     count = 0;
@@ -363,4 +395,13 @@ void particle_generator::emit(particle_manager &manager) {
         
         manager.add(new_p);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resets data about the particle generator, to make it ready to
+ * be used. Call this when copying from another generator.
+ */
+void particle_generator::reset() {
+    emission_interval = emission_interval;
 }

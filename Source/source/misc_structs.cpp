@@ -500,6 +500,109 @@ void group_spot_info::remove(mob* m) {
 }
 
 
+
+/* ----------------------------------------------------------------------------
+ * Creates a "reader setter".
+ * dn: Pointer to the base data node.
+ */
+reader_setter::reader_setter(data_node* dn) :
+    node(dn) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is an Allegro color.
+ */
+void reader_setter::set(const string &child, ALLEGRO_COLOR &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2c(s);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is a string.
+ */
+void reader_setter::set(const string &child, string &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is an integer.
+ */
+void reader_setter::set(const string &child, size_t &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2i(s);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is an integer.
+ */
+void reader_setter::set(const string &child, int &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2i(s);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is an unsigned char.
+ */
+void reader_setter::set(const string &child, unsigned char &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2i(s);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is a boolean.
+ */
+void reader_setter::set(const string &child, bool &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2b(s);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is a float.
+ */
+void reader_setter::set(const string &child, float &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2f(s);
+}
+
+
+
 /* ----------------------------------------------------------------------------
  * Creates a structure with sample info.
  */

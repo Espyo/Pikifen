@@ -130,6 +130,7 @@ void load_control(
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL, bool report_error = true
 );
+void load_custom_particle_generators();
 data_node load_data_file(const string &file_name);
 void load_hazards();
 void load_hud_coordinates();
@@ -158,12 +159,6 @@ void rotate_point(
 );
 void save_options();
 vector<string> semicolon_list_to_vector(const string s);
-void set_if_exists(const string &value, string &var);
-void set_if_exists(const string &value, size_t &var);
-void set_if_exists(const string &value, unsigned char &var);
-void set_if_exists(const string &value, bool &var);
-void set_if_exists(const string &value, float &var);
-void set_if_exists(const string &value, ALLEGRO_COLOR &var);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false

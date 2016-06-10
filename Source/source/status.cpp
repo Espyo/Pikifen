@@ -30,7 +30,9 @@ status_type::status_type() :
     speed_multiplier(1.0f),
     attack_multiplier(1.0f),
     defense_multiplier(1.0f),
-    anim_speed_multiplier(1.0f) {
+    anim_speed_multiplier(1.0f),
+    generates_particles(false),
+    particle_gen(nullptr) {
     
 }
 

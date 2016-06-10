@@ -1107,18 +1107,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
 void pikmin_fsm::left_hazard(mob* m, void* info1, void* info2) {
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
-        for(size_t g = 0; g < m->particle_generators.size();) {
-            if(
-                m->particle_generators[g].id ==
-                MOB_PARTICLE_GENERATOR_WAVE_RING
-            ) {
-                m->particle_generators.erase(
-                    m->particle_generators.begin() + g
-                );
-            } else {
-                ++g;
-            }
-        }
+        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
     }
 }
 
@@ -1293,18 +1282,7 @@ void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
     
     //Let's piggyback this check to also remove liquid wave ring particles.
     if(h_ptr->associated_liquid) {
-        for(size_t g = 0; g < m->particle_generators.size();) {
-            if(
-                m->particle_generators[g].id ==
-                MOB_PARTICLE_GENERATOR_WAVE_RING
-            ) {
-                m->particle_generators.erase(
-                    m->particle_generators.begin() + g
-                );
-            } else {
-                ++g;
-            }
-        }
+        m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
     }
     
 }
@@ -1345,15 +1323,7 @@ void pikmin_fsm::stop_being_idle(mob* m, void* info1, void* info2) {
  * When a Pikmin is no longer in the thrown state.
  */
 void pikmin_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
-    //Remove the throw particle generator.
-    for(size_t g = 0; g < m->particle_generators.size(); ++g) {
-        if(
-            m->particle_generators[g].id ==
-            MOB_PARTICLE_GENERATOR_THROW
-        ) {
-            m->particle_generators.erase(m->particle_generators.begin() + g);
-        }
-    }
+    m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
 }
 
 
@@ -1374,27 +1344,31 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     hazard* h = (hazard*) info1;
     if(h->associated_liquid) {
+        bool already_generating = false;
         for(size_t g = 0; g < m->particle_generators.size(); ++g) {
             if(
                 m->particle_generators[g].id ==
                 MOB_PARTICLE_GENERATOR_WAVE_RING
             ) {
-                return;
+                already_generating = true;
+                break;
             }
         }
         
-        particle p(
-            PARTICLE_TYPE_BITMAP, m->x, m->y,
-            0, 1, PARTICLE_PRIORITY_LOW
-        );
-        p.bitmap = bmp_wave_ring;
-        p.size_grow_speed = m->type->radius * 4;
-        p.before_mobs = true;
-        particle_generator pg(0.3, p, 1);
-        pg.follow_x = &m->x;
-        pg.follow_y = &m->y;
-        pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
-        m->particle_generators.push_back(pg);
+        if(!already_generating) {
+            particle p(
+                PARTICLE_TYPE_BITMAP, m->x, m->y,
+                0, 1, PARTICLE_PRIORITY_LOW
+            );
+            p.bitmap = bmp_wave_ring;
+            p.size_grow_speed = m->type->radius * 4;
+            p.before_mobs = true;
+            particle_generator pg(0.3, p, 1);
+            pg.follow_x = &m->x;
+            pg.follow_y = &m->y;
+            pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
+            m->particle_generators.push_back(pg);
+        }
     }
     
     for(size_t r = 0; r < p->pik_type->resistances.size(); ++r) {

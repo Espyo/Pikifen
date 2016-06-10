@@ -853,10 +853,24 @@ void mob::face(const float new_angle) {
 
 
 /* ----------------------------------------------------------------------------
+ * Removes all particle generators with the given ID.
+ */
+void mob::remove_particle_generator(const int id) {
+    for(size_t g = 0; g < particle_generators.size();) {
+        if(particle_generators[g].id == id) {
+            particle_generators.erase(particle_generators.begin() + g);
+        } else {
+            ++g;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the mob's animation.
  * nr: Animation number; it's the animation instance number from the pool.
  */
-void mob::set_animation(const size_t nr, bool pre_named) {
+void mob::set_animation(const size_t nr, const bool pre_named) {
     if(nr >= type->anims.animations.size()) return;
     
     size_t final_nr;
@@ -983,6 +997,13 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
         receive_flailing_from_status();
     }
     change_maturity_amount_from_status(s->maturity_change_amount);
+    if(s->generates_particles) {
+        particle_generator pg = *s->particle_gen;
+        pg.follow_x = &this->x;
+        pg.follow_y = &this->y;
+        pg.reset();
+        particle_generators.push_back(pg);
+    }
 }
 
 
@@ -994,6 +1015,9 @@ void mob::delete_old_status_effects() {
         if(statuses[s].to_delete) {
             if(statuses[s].type->causes_panic) {
                 lose_panic_from_status();
+            }
+            if(statuses[s].type->generates_particles) {
+                remove_particle_generator(statuses[s].type->particle_gen->id);
             }
             this->statuses.erase(this->statuses.begin() + s);
         } else {

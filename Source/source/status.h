@@ -17,6 +17,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
+#include "particle.h"
+
 using namespace std;
 
 /* ----------------------------------------------------------------------------
@@ -47,6 +49,9 @@ struct status_type {
     float attack_multiplier;
     float defense_multiplier;
     float anim_speed_multiplier;
+    
+    bool generates_particles;
+    particle_generator* particle_gen;
     
     status_type();
 };

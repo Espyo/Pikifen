@@ -146,7 +146,7 @@ void init_error_bitmap() {
 void init_event_things(
     ALLEGRO_TIMER* &logic_timer, ALLEGRO_EVENT_QUEUE* &logic_queue
 ) {
-    if(window_pos_hack) al_set_new_window_position(64, 64);
+    if(window_position_hack) al_set_new_window_position(64, 64);
     display = al_create_display(scr_w, scr_h);
     logic_timer = al_create_timer(1.0 / game_fps);
     
@@ -335,6 +335,8 @@ void init_misc() {
             (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
     };
     whistle_next_ring_timer.start();
+    
+    particles = particle_manager(max_particles);
 }
 
 

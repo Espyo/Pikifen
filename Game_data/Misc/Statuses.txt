@@ -6,6 +6,7 @@ burning {
     health_change_ratio = -0.3
     causes_panic = true
     speed_multiplier = 2.0
+    particle_generator = smoke
 }
 
 water_drowning {

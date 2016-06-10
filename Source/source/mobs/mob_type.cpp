@@ -139,31 +139,27 @@ void load_mob_type_from_file(
 
     vector<pair<size_t, string> > anim_conversions;
     
-#define setter(name, var) \
-    set_if_exists(file.get_child_by_name(name)->value, mt->var)
-    
-    setter("name",                name);
-    setter("always_active",       always_active);
-    setter("big_damage_interval", big_damage_interval);
-    setter("main_color",          main_color);
-    setter("max_carriers",        max_carriers);
-    setter("max_health",          max_health);
-    setter("health_regen",        health_regen);
-    setter("move_speed",          move_speed);
-    setter("near_radius",         near_radius);
-    setter("near_angle",          near_angle);
-    setter("rotation_speed",      rotation_speed);
-    setter("sight_radius",        sight_radius);
-    setter("territory_radius",    territory_radius);
-    setter("radius",              radius);
-    setter("height",              height);
-    setter("weight",              weight);
-    setter("pushes",              pushes);
-    setter("pushable",            pushable);
-    setter("show_health",         show_health);
-    setter("casts_shadow",        casts_shadow);
-    
-#undef setter
+    reader_setter rs(&file);
+    rs.set("name",                mt->name);
+    rs.set("always_active",       mt->always_active);
+    rs.set("big_damage_interval", mt->big_damage_interval);
+    rs.set("main_color",          mt->main_color);
+    rs.set("max_carriers",        mt->max_carriers);
+    rs.set("max_health",          mt->max_health);
+    rs.set("health_regen",        mt->health_regen);
+    rs.set("move_speed",          mt->move_speed);
+    rs.set("near_radius",         mt->near_radius);
+    rs.set("near_angle",          mt->near_angle);
+    rs.set("rotation_speed",      mt->rotation_speed);
+    rs.set("sight_radius",        mt->sight_radius);
+    rs.set("territory_radius",    mt->territory_radius);
+    rs.set("radius",              mt->radius);
+    rs.set("height",              mt->height);
+    rs.set("weight",              mt->weight);
+    rs.set("pushes",              mt->pushes);
+    rs.set("pushable",            mt->pushable);
+    rs.set("show_health",         mt->show_health);
+    rs.set("casts_shadow",        mt->casts_shadow);
     
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");

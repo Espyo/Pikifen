@@ -221,6 +221,26 @@ struct point {
 
 
 /* ----------------------------------------------------------------------------
+ * This structure makes reading values in data files
+ * and setting them to variables much easier.
+ * On the set functions, specify the name of the child and the variable.
+ * If the child is empty, the variable will not be set.
+ */
+struct reader_setter {
+    data_node* node;
+    void set(const string &child, string &var);
+    void set(const string &child, size_t &var);
+    void set(const string &child, int &var);
+    void set(const string &child, unsigned char &var);
+    void set(const string &child, bool &var);
+    void set(const string &child, float &var);
+    void set(const string &child, ALLEGRO_COLOR &var);
+    reader_setter(data_node* dn = NULL);
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * Structure that holds informatio about a sample.
  * It also has info about sample instances, which control
  * the sound playing from the sample.

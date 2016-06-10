@@ -32,10 +32,6 @@ enum PARTICLE_GENERATOR_TYPES {
 };
 
 
-//The particle manager can hold up information on these many particles, at most.
-const size_t N_PARTICLES = 100;
-
-
 /* ----------------------------------------------------------------------------
  * A particle is best described with examples:
  * A puff of smoke, a sparkle, a smack.
@@ -99,8 +95,9 @@ private:
     //"dead" particle, to preserve the list's logic.
     //When a particle is added, if the entire list is filled with live ones,
     //delete the one on position 0 (presumably the oldest).
-    particle particles[N_PARTICLES];
+    particle* particles;
     size_t count;
+    size_t max_nr;
     void remove(const size_t pos);
     
 public:
@@ -109,7 +106,9 @@ public:
     void draw_all(const bool before_mobs);
     void clear();
     
-    particle_manager();
+    particle_manager(const size_t &max_nr = 0);
+    particle_manager &operator=(const particle_manager &pg);
+    ~particle_manager();
     
 };
 
@@ -149,11 +148,12 @@ public:
     float* follow_y;
     
     particle_generator(
-        const float emission_interval,
-        particle base_particle, const size_t number
+        const float emission_interval = 0.0f,
+        particle base_particle = particle(), const size_t number = 1
     );
     void tick(const float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);
+    void reset();
     
 };
 

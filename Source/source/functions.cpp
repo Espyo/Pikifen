@@ -1067,6 +1067,74 @@ void load_control(
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the user-made particle generators.
+ */
+void load_custom_particle_generators() {
+    custom_particle_generators.clear();
+    
+    data_node file(PARTICLE_GENERATORS_FILE);
+    
+    size_t n_pg = file.get_nr_of_children();
+    for(size_t pg = 0; pg < n_pg; ++pg) {
+    
+        data_node* pg_node = file.get_child(pg);
+        data_node* p_node = pg_node->get_child_by_name("base");
+        
+        reader_setter grs(pg_node);
+        reader_setter prs(p_node);
+        
+        float emission_interval;
+        size_t number;
+        string bitmap_name;
+        particle base_p;
+        base_p.priority = PARTICLE_PRIORITY_MEDIUM;
+        
+        grs.set("emission_interval", emission_interval);
+        grs.set("number", number);
+        
+        prs.set("bitmap", bitmap_name);
+        base_p.bitmap =
+            bitmaps.get(bitmap_name, p_node->get_child_by_name("bitmap"));
+        if(base_p.bitmap) {
+            base_p.type = PARTICLE_TYPE_BITMAP;
+        } else {
+            base_p.type = PARTICLE_TYPE_CIRCLE;
+        }
+        prs.set("duration",        base_p.duration);
+        prs.set("friction",        base_p.friction);
+        prs.set("gravity",         base_p.gravity);
+        prs.set("size_grow_speed", base_p.size_grow_speed);
+        prs.set("size",            base_p.size);
+        prs.set("speed_x",         base_p.speed_x);
+        prs.set("speed_y",         base_p.speed_y);
+        prs.set("color",           base_p.color);
+        prs.set("before_mobs",     base_p.before_mobs);
+        base_p.time = base_p.duration;
+        
+        particle_generator pg_struct(emission_interval, base_p, number);
+        
+        grs.set("number_deviation",   pg_struct.number_deviation);
+        grs.set("duration_deviation", pg_struct.duration_deviation);
+        grs.set("friction_deviation", pg_struct.friction_deviation);
+        grs.set("gravity_deviation",  pg_struct.gravity_deviation);
+        grs.set("size_deviation",     pg_struct.size_deviation);
+        grs.set("x_deviation",        pg_struct.x_deviation);
+        grs.set("y_deviation",        pg_struct.y_deviation);
+        grs.set("speed_x_deviation",  pg_struct.speed_x_deviation);
+        grs.set("speed_y_deviation",  pg_struct.speed_y_deviation);
+        grs.set("angle",              pg_struct.angle);
+        grs.set("angle_deviation",    pg_struct.angle_deviation);
+        grs.set("speed",              pg_struct.speed);
+        grs.set("speed_deviation",    pg_struct.speed_deviation);
+        
+        pg_struct.id = pg;
+        
+        custom_particle_generators[pg_node->name] = pg_struct;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads a data file from the game's content.
  */
 data_node load_data_file(const string &file_name) {
@@ -1085,43 +1153,40 @@ data_node load_data_file(const string &file_name) {
 void load_game_config() {
     data_node file(CONFIG_FILE);
     
-    game_name = file.get_child_by_name("game_name")->value;
-    game_version = file.get_child_by_name("game_version")->value;
+    reader_setter rs(&file);
     
-#define setter(name, var) \
-    set_if_exists(file.get_child_by_name(name)->value, var)
+    rs.set("game_name", game_name);
+    rs.set("game_version", game_version);
     
-    setter("carrying_color_move", carrying_color_move);
-    setter("carrying_color_stop", carrying_color_stop);
-    setter("carrying_speed_base_mult", carrying_speed_base_mult);
-    setter("carrying_speed_max_mult", carrying_speed_max_mult);
-    setter("carrying_speed_weight_mult", carrying_speed_weight_mult);
+    rs.set("carrying_color_move", carrying_color_move);
+    rs.set("carrying_color_stop", carrying_color_stop);
+    rs.set("carrying_speed_base_mult", carrying_speed_base_mult);
+    rs.set("carrying_speed_max_mult", carrying_speed_max_mult);
+    rs.set("carrying_speed_weight_mult", carrying_speed_weight_mult);
     
-    setter("day_minutes_start", day_minutes_start);
-    setter("day_minutes_end", day_minutes_end);
-    setter("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
+    rs.set("day_minutes_start", day_minutes_start);
+    rs.set("day_minutes_end", day_minutes_end);
+    rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
     
-    setter("idle_task_range", idle_task_range);
-    setter("group_move_task_range", group_move_task_range);
-    setter("max_pikmin_in_field", max_pikmin_in_field);
-    setter("maturity_power_mult", maturity_power_mult);
-    setter("maturity_speed_mult", maturity_speed_mult);
-    setter("nectar_amount", nectar_amount);
+    rs.set("idle_task_range", idle_task_range);
+    rs.set("group_move_task_range", group_move_task_range);
+    rs.set("max_pikmin_in_field", max_pikmin_in_field);
+    rs.set("maturity_power_mult", maturity_power_mult);
+    rs.set("maturity_speed_mult", maturity_speed_mult);
+    rs.set("nectar_amount", nectar_amount);
     
-    setter("cursor_max_dist", cursor_max_dist);
-    setter("cursor_spin_speed", cursor_spin_speed);
-    setter("next_pluck_range", next_pluck_range);
-    setter("onion_open_range", onion_open_range);
-    setter("pikmin_grab_range", pikmin_grab_range);
-    setter("pluck_range", pluck_range);
-    setter("whistle_growth_speed", whistle_growth_speed);
+    rs.set("cursor_max_dist", cursor_max_dist);
+    rs.set("cursor_spin_speed", cursor_spin_speed);
+    rs.set("next_pluck_range", next_pluck_range);
+    rs.set("onion_open_range", onion_open_range);
+    rs.set("pikmin_grab_range", pikmin_grab_range);
+    rs.set("pluck_range", pluck_range);
+    rs.set("whistle_growth_speed", whistle_growth_speed);
     
-    setter("info_spot_trigger_range", info_spot_trigger_range);
-    setter("message_char_interval", message_char_interval);
-    setter("zoom_max_level", zoom_max_level);
-    setter("zoom_min_level", zoom_min_level);
-    
-#undef setter
+    rs.set("info_spot_trigger_range", info_spot_trigger_range);
+    rs.set("message_char_interval", message_char_interval);
+    rs.set("zoom_max_level", zoom_max_level);
+    rs.set("zoom_min_level", zoom_min_level);
     
     al_set_window_title(display, game_name.c_str());
 }
@@ -1131,6 +1196,7 @@ void load_game_config() {
  * Loads all of the game's content.
  */
 void load_game_content() {
+    load_custom_particle_generators();
     load_liquids();
     load_status_types();
     load_spray_types();
@@ -1368,9 +1434,7 @@ void load_hazards() {
             }
         }
         
-        set_if_exists(
-            h_node->get_child_by_name("color")->value, h_struct.main_color
-        );
+        reader_setter(h_node).set("color", h_struct.main_color);
         
         hazards[h_node->name] = h_struct;
     }
@@ -1405,21 +1469,11 @@ void load_liquids() {
         liquid l_struct;
         
         l_struct.name = l_node->name;
-        set_if_exists(
-            l_node->get_child_by_name("color")->value, l_struct.main_color
-        );
-        set_if_exists(
-            l_node->get_child_by_name("surface_1_speed")->value,
-            l_struct.surface_speed[0]
-        );
-        set_if_exists(
-            l_node->get_child_by_name("surface_2_speed")->value,
-            l_struct.surface_speed[0]
-        );
-        set_if_exists(
-            l_node->get_child_by_name("surface_alpha")->value,
-            l_struct.surface_alpha
-        );
+        reader_setter rs(l_node);
+        rs.set("color", l_struct.main_color);
+        rs.set("surface_1_speed", l_struct.surface_speed[0]);
+        rs.set("surface_2_speed", l_struct.surface_speed[0]);
+        rs.set("surface_alpha", l_struct.surface_alpha);
         
         liquids[l_node->name] = l_struct;
         nodes[l_node->name] = l_node;
@@ -1536,58 +1590,20 @@ void load_options() {
     }
     
     //Other options.
-    area_images_scale =
-        s2f(file.get_child_by_name("area_quality")->get_value_or_default("1"));
-    daylight_effect =
-        s2b(
-            file.get_child_by_name(
-                "daylight_effect"
-            )->get_value_or_default("true")
-        );
-    draw_cursor_trail =
-        s2b(
-            file.get_child_by_name(
-                "draw_cursor_trail"
-            )->get_value_or_default("true")
-        );
-    game_fps =
-        s2i(file.get_child_by_name("fps")->get_value_or_default("30"));
-    scr_h =
-        s2i(
-            file.get_child_by_name(
-                "height"
-            )->get_value_or_default(i2s(DEF_SCR_H))
-        );
-    particle_quality =
-        s2i(
-            file.get_child_by_name(
-                "particle_quality"
-            )->get_value_or_default("2")
-        );
-    pretty_whistle =
-        s2b(
-            file.get_child_by_name(
-                "pretty_whistle"
-            )->get_value_or_default("true")
-        );
-    scr_w =
-        s2i(
-            file.get_child_by_name(
-                "width"
-            )->get_value_or_default(i2s(DEF_SCR_W))
-        );
-    smooth_scaling =
-        s2b(
-            file.get_child_by_name(
-                "smooth_scaling"
-            )->get_value_or_default("true")
-        );
-    window_pos_hack =
-        s2b(
-            file.get_child_by_name(
-                "window_pos_hack"
-            )->get_value_or_default("false")
-        );
+    reader_setter rs(&file);
+    rs.set("area_quality", area_images_scale);
+    rs.set("draw_cursor_trail", draw_cursor_trail);
+    rs.set("fps", game_fps);
+    rs.set("height", scr_h);
+    rs.set("max_particles", max_particles);
+    rs.set("pretty_whistle", pretty_whistle);
+    rs.set("smooth_scaling", smooth_scaling);
+    rs.set("width", scr_w);
+    rs.set("window_position_hack", window_position_hack);
+    game_fps = max(1, game_fps);
+    scr_h = max(1, scr_h);
+    scr_w = max(1, scr_w);
+    
 }
 
 
@@ -1636,22 +1652,13 @@ void load_spray_types() {
             }
         }
         
-        set_if_exists(s_node->get_child_by_name("group")->value, st.group);
-        set_if_exists(s_node->get_child_by_name("angle")->value, st.angle);
-        set_if_exists(
-            s_node->get_child_by_name("distance_range")->value,
-            st.distance_range
-        );
-        set_if_exists(
-            s_node->get_child_by_name("angle_range")->value, st.angle_range
-        );
-        set_if_exists(
-            s_node->get_child_by_name("color")->value, st.main_color
-        );
-        set_if_exists(
-            s_node->get_child_by_name("berries_needed")->value,
-            st.berries_needed
-        );
+        reader_setter rs(s_node);
+        rs.set("group", st.group);
+        rs.set("angle", st.angle);
+        rs.set("distance_range", st.distance_range);
+        rs.set("angle_range", st.angle_range);
+        rs.set("color", st.main_color);
+        rs.set("berries_needed", st.berries_needed);
         
         data_node* icon_node = s_node->get_child_by_name("icon");
         st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
@@ -1675,47 +1682,18 @@ void load_status_types() {
         
         st.name = s_node->name;
         
-        set_if_exists(
-            s_node->get_child_by_name("color")->value, st.color
-        );
-        set_if_exists(
-            s_node->get_child_by_name("tint")->value, st.tint
-        );
-        set_if_exists(
-            s_node->get_child_by_name("removable_with_whistle")->value,
-            st.removable_with_whistle
-        );
-        set_if_exists(
-            s_node->get_child_by_name("auto_remove_time")->value,
-            st.auto_remove_time
-        );
-        set_if_exists(
-            s_node->get_child_by_name("health_change_ratio")->value,
-            st.health_change_ratio
-        );
-        set_if_exists(
-            s_node->get_child_by_name("causes_panic")->value, st.causes_panic
-        );
-        set_if_exists(
-            s_node->get_child_by_name("causes_flailing")->value,
-            st.causes_flailing
-        );
-        set_if_exists(
-            s_node->get_child_by_name("speed_multiplier")->value,
-            st.speed_multiplier
-        );
-        set_if_exists(
-            s_node->get_child_by_name("attack_multiplier")->value,
-            st.attack_multiplier
-        );
-        set_if_exists(
-            s_node->get_child_by_name("defense_multiplier")->value,
-            st.defense_multiplier
-        );
-        set_if_exists(
-            s_node->get_child_by_name("anim_speed_multiplier")->value,
-            st.anim_speed_multiplier
-        );
+        reader_setter rs(s_node);
+        rs.set("color",                  st.color);
+        rs.set("tint",                   st.tint);
+        rs.set("removable_with_whistle", st.removable_with_whistle);
+        rs.set("auto_remove_time",       st.auto_remove_time);
+        rs.set("health_change_ratio",    st.health_change_ratio);
+        rs.set("causes_panic",           st.causes_panic);
+        rs.set("causes_flailing",        st.causes_flailing);
+        rs.set("speed_multiplier",       st.speed_multiplier);
+        rs.set("attack_multiplier",      st.attack_multiplier);
+        rs.set("defense_multiplier",     st.defense_multiplier);
+        rs.set("anim_speed_multiplier",  st.anim_speed_multiplier);
         
         st.affects = 0;
         if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
@@ -1726,6 +1704,23 @@ void load_status_types() {
         }
         if(s2b(s_node->get_child_by_name("affects_enemies")->value)) {
             st.affects |= STATUS_AFFECTS_ENEMIES;
+        }
+        
+        data_node* pg_node = s_node->get_child_by_name("particle_generator");
+        string pg_name = pg_node->value;
+        if(!pg_name.empty()) {
+            if(
+                custom_particle_generators.find(pg_name) ==
+                custom_particle_generators.end()
+            ) {
+                log_error(
+                    "Unknown particle generator \"" +
+                    pg_name + "\"!", pg_node
+                );
+            } else {
+                st.generates_particles = true;
+                st.particle_gen = &custom_particle_generators[pg_name];
+            }
         }
         
         status_types[st.name] = st;
@@ -2025,72 +2020,16 @@ void save_options() {
     
     //Other options.
     al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
-    al_fwrite(file, "daylight_effect=" + b2s(daylight_effect) + "\n");
     al_fwrite(file, "draw_cursor_trail=" + b2s(draw_cursor_trail) + "\n");
     al_fwrite(file, "fps=" + i2s(game_fps) + "\n");
     al_fwrite(file, "height=" + i2s(scr_h) + "\n");
-    al_fwrite(file, "particle_quality=" + i2s(particle_quality) + "\n");
+    al_fwrite(file, "max_particles=" + i2s(max_particles) + "\n");
     al_fwrite(file, "pretty_whistle=" + b2s(pretty_whistle) + "\n");
-    al_fwrite(file, "width=" + i2s(scr_w) + "\n");
     al_fwrite(file, "smooth_scaling=" + b2s(smooth_scaling) + "\n");
-    al_fwrite(file, "window_pos_hack=" + b2s(window_pos_hack) + "\n");
+    al_fwrite(file, "width=" + i2s(scr_w) + "\n");
+    al_fwrite(file, "window_position_hack=" + b2s(window_position_hack) + "\n");
     
     al_fclose(file);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is a string.
- */
-void set_if_exists(const string &value, string &var) {
-    if(value.empty()) return;
-    var = value;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is an integer.
- */
-void set_if_exists(const string &value, size_t &var) {
-    if(value.empty()) return;
-    var = s2i(value);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is an unsigned char.
- */
-void set_if_exists(const string &value, unsigned char &var) {
-    if(value.empty()) return;
-    var = s2i(value);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is a boolean.
- */
-void set_if_exists(const string &value, bool &var) {
-    if(value.empty()) return;
-    var = s2b(value);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is a float.
- */
-void set_if_exists(const string &value, float &var) {
-    if(value.empty()) return;
-    var = s2f(value);
 }
 
 
@@ -2103,17 +2042,6 @@ vector<string> semicolon_list_to_vector(const string s) {
         parts[p] = trim_spaces(parts[p]);
     }
     return parts;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets a variable to a value, but only if its string is not-empty
- * value: The string with the value.
- * var:   The var to put it into. This is an Allegro color.
- */
-void set_if_exists(const string &value, ALLEGRO_COLOR &var) {
-    if(value.empty()) return;
-    var = s2c(value);
 }
 
 

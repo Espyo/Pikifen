@@ -109,17 +109,20 @@ const unsigned int DEF_SCR_H = 480;
 
 const string GAME_DATA_FOLDER      = "Game_data";
 const string TYPES_FOLDER          = GAME_DATA_FOLDER + "/Types";
+const string MISC_FOLDER           = GAME_DATA_FOLDER + "/Misc";
 
 const string ANIMATIONS_FOLDER     = GAME_DATA_FOLDER + "/Animations";
-const string AUDIO_FOLDER          = GAME_DATA_FOLDER + "/Audio";
 const string AREA_FOLDER           = GAME_DATA_FOLDER + "/Areas";
+const string AUDIO_FOLDER          = GAME_DATA_FOLDER + "/Audio";
+const string CONFIG_FILE           = MISC_FOLDER + "/Config.txt";
 const string ENEMIES_FOLDER        = TYPES_FOLDER + "/Enemies";
 const string GATES_FOLDER          = TYPES_FOLDER + "/Gates";
 const string GRAPHICS_FOLDER       = GAME_DATA_FOLDER + "/Graphics";
 const string LEADERS_FOLDER        = TYPES_FOLDER + "/Leaders";
-const string MISC_FOLDER           = GAME_DATA_FOLDER + "/Misc";
 const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";
 const string OTHER_TYPES_FOLDER    = TYPES_FOLDER + "/Others";
+const string PARTICLE_GENERATORS_FILE =
+    MISC_FOLDER + "/Particle_generators.txt";
 const string PELLETS_FOLDER        = TYPES_FOLDER + "/Pellets";
 const string PIKMIN_FOLDER         = TYPES_FOLDER + "/Pikmin";
 const string SPECIAL_MOBS_FOLDER   = TYPES_FOLDER + "/Special";
@@ -127,7 +130,6 @@ const string SHIPS_FOLDER          = TYPES_FOLDER + "/Ships";
 const string TEXTURES_FOLDER       = GRAPHICS_FOLDER + "/Textures";
 const string TREASURES_FOLDER      = TYPES_FOLDER + "/Treasures";
 const string WEATHER_FILE          = MISC_FOLDER + "/Weather.txt";
-const string CONFIG_FILE           = MISC_FOLDER + "/Config.txt";
 
 
 enum EDITOR_MODES {

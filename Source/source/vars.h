@@ -167,6 +167,7 @@ extern vector<point> cursor_spots;
 //Leader's cursor.
 extern float cursor_x;
 extern float cursor_y;
+extern map<string, particle_generator> custom_particle_generators;
 extern unsigned int day;
 extern float day_minutes;
 //The day ends when the in-game minutes reach this value.
@@ -175,7 +176,6 @@ extern float day_minutes_end;
 extern float day_minutes_per_irl_sec;
 //The in-game minutes start with this value every day.
 extern float day_minutes_start;
-extern bool daylight_effect;
 //Time between the previous frame and the current.
 extern double delta_t;
 extern string dev_tool_area_image_name;
@@ -201,7 +201,7 @@ extern unsigned int font_main_h;
 extern ALLEGRO_FONT* font_value;
 extern unsigned int framerate_counter;
 extern timer framerate_update_timer;
-extern unsigned short game_fps;
+extern int game_fps;
 extern string game_name;
 extern map<size_t, game_state*> game_states;
 extern string game_version;
@@ -240,6 +240,7 @@ extern map<string, leader_type*> leader_types;
 extern float maturity_power_mult;
 //Every level of maturity, multiply the attack by 1 + this much.
 extern float maturity_speed_mult;
+extern size_t max_particles;
 extern size_t max_pikmin_in_field;
 //These many seconds until a new character of the message is drawn.
 extern float message_char_interval;
@@ -287,8 +288,8 @@ extern float prev_group_move_intensity;
 extern bool ready_for_input;
 //Is delta_t meant to be reset for the next frame?
 extern bool reset_delta_t;
-extern unsigned short scr_h;
-extern unsigned short scr_w;
+extern int scr_h;
+extern int scr_w;
 extern sector_types_manager sector_types;
 extern unsigned int selected_spray;
 extern unsigned char ship_beam_ring_color[3];
@@ -327,7 +328,7 @@ extern vector<float> whistle_rings;
 extern bool whistling;
 //Should we force the window's positioning
 //(on some systems it appears out-of-bounds by default)
-extern bool window_pos_hack;
+extern bool window_position_hack;
 extern float zoom_max_level;
 extern float zoom_min_level;
 
