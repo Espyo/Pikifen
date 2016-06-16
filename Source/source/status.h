@@ -43,8 +43,9 @@ struct status_type {
     float health_change_ratio;
     //Increase/decrease in maturity when the status is gained.
     int maturity_change_amount;
-    bool causes_panic;
+    bool causes_disable;
     bool causes_flailing;
+    bool causes_panic;
     
     float speed_multiplier;
     float attack_multiplier;

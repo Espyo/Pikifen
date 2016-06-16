@@ -75,67 +75,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 
             } else if(id == DEV_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
-                if(m) {
-                
-                    string name_str =
-                        box_string("Mob: " + m->type->name + ".", 30);
-                    string coords_str =
-                        box_string(
-                            "Coords: " +
-                            box_string(f2s(m->x), 6) + " " +
-                            box_string(f2s(m->y), 6) + " " +
-                            box_string(f2s(m->z), 6) + ".",
-                            30
-                        );
-                    string state_str =
-                        box_string(
-                            "State: " +
-                            (
-                                m->fsm.cur_state ? m->fsm.cur_state->name :
-                                "(None!)"
-                            ) +
-                            ".",
-                            30
-                        );
-                    string pstate_str =
-                        box_string(
-                            "Prev. state: " + m->fsm.prev_state_name + ".",
-                            30
-                        );
-                    string anim_str =
-                        box_string(
-                            "Animation: " +
-                            (m->anim.anim ? m->anim.anim->name : "(None!)") +
-                            ".",
-                            30
-                        );
-                    string health_str =
-                        box_string("Health: " + f2s(m->health) + ".", 30);
-                    string timer_str =
-                        box_string(
-                            "Timer: " + f2s(m->script_timer.time_left) + ".",
-                            30
-                        );
-                        
-                    string vars_str = "Vars: ";
-                    if(!m->vars.empty()) {
-                        for(auto v = m->vars.begin(); v != m->vars.end(); ++v) {
-                            vars_str += v->first + "=" + v->second + "; ";
-                        }
-                        vars_str.erase(vars_str.size() - 2, 2);
-                        vars_str += ".";
-                    } else {
-                        vars_str += "(None).";
-                    }
-                    
-                    print_info(
-                        name_str + coords_str + "\n" +
-                        state_str + pstate_str + "\n" +
-                        health_str + timer_str + "\n" +
-                        anim_str + "\n" +
-                        vars_str
-                    );
-                }
+                dev_tool_info_lock = (dev_tool_info_lock == m ? NULL : m);
                 
             } else if(id == DEV_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < max_pikmin_in_field) {

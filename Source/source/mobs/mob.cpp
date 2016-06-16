@@ -198,8 +198,13 @@ void mob::tick_misc_logic() {
     }
     delete_old_status_effects();
     
-    for(size_t g = 0; g < particle_generators.size(); ++g) {
+    for(size_t g = 0; g < particle_generators.size();) {
         particle_generators[g].tick(delta_t, particles);
+        if(particle_generators[g].emission_interval == 0) {
+            particle_generators.erase(particle_generators.begin() + g);
+        } else {
+            ++g;
+        }
     }
 }
 
@@ -990,10 +995,11 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     
     //This status is not already inflicted. Let's do so.
     this->statuses.push_back(status(s));
-    if(s->causes_panic) {
+    if(s->causes_disable) {
+        receive_disable_from_status();
+    } else if(s->causes_panic) {
         receive_panic_from_status();
-    }
-    if(s->causes_flailing) {
+    } else if(s->causes_flailing) {
         receive_flailing_from_status();
     }
     change_maturity_amount_from_status(s->maturity_change_amount);
@@ -1092,6 +1098,7 @@ float mob::get_base_speed() {
 
 
 bool mob::can_receive_status(status_type* s) { return false; };
+void mob::receive_disable_from_status() {}
 void mob::receive_flailing_from_status() {}
 void mob::receive_panic_from_status() {}
 void mob::lose_panic_from_status() {}
@@ -1479,6 +1486,8 @@ void delete_mob(mob* m) {
         );
         
     }
+    
+    if(dev_tool_info_lock == m) dev_tool_info_lock = NULL;
     
     delete m;
 }

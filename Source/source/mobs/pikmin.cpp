@@ -261,7 +261,7 @@ void pikmin::draw() {
             draw_y - s * f_ptr->top_y * h_mult + s * f_ptr->top_x * h_mult,
             f_ptr->top_w * w_mult, f_ptr->top_h * h_mult,
             f_ptr->top_angle + angle,
-            map_gray(get_sprite_brightness(this))
+            tint
         );
     }
     
@@ -294,6 +294,14 @@ void pikmin::draw() {
  */
 bool pikmin::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_PIKMIN;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handler for when a status effect causes "disabled".
+ */
+void pikmin::receive_disable_from_status() {
+    fsm.set_state(PIKMIN_STATE_DISABLED);
 }
 
 

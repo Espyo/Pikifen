@@ -120,7 +120,6 @@ public:
 struct particle_generator {
 private:
     float emission_timer;
-    float emission_interval;
     
 public:
     //Optional ID, if you need to identify it later on.
@@ -129,6 +128,8 @@ public:
     particle base_particle;
     //Number of particles to spawn.
     size_t number;
+    //Interval at which to emit a new one. 0 means once only.
+    float emission_interval;
     
     //Maximum random deviations of...
     size_t number_deviation;

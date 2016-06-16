@@ -1,0 +1,40 @@
+animations{
+	default{
+		loop_frame=0
+		frame_instances{
+			1{
+				duration=0.07
+			}
+			2{
+				duration=0.07
+			}
+		}
+	}
+}
+frames{
+	1{
+		file=Electrocution.png
+		file_x=0
+		file_y=0
+		file_w=40
+		file_h=40
+		game_w=20.00
+		game_h=20.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+	2{
+		file=Electrocution.png
+		file_x=42
+		file_y=0
+		file_w=40
+		file_h=40
+		game_w=20.00
+		game_h=20.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+}
+hitboxes=

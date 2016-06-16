@@ -630,6 +630,19 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
     }
     
+    efc.new_state("disabled", PIKMIN_STATE_DISABLED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(pikmin_fsm::become_disabled);
+        }
+        efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::called);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(pikmin_fsm::fall_down_pit);
+        }
+    }
+    
     efc.new_state("flailing", PIKMIN_STATE_FLAILING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(pikmin_fsm::start_flailing);
@@ -776,6 +789,15 @@ void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
 void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     m->set_animation(PIKMIN_ANIM_IDLE);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin becomes "disabled".
+ */
+void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_IDLE);
+    pikmin_fsm::stand_still(m, NULL, NULL);
 }
 
 

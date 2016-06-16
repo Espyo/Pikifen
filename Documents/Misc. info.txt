@@ -1,5 +1,10 @@
 Misc. useful info
-    A Pikmin's diameter is 0.5 cm (radius is 0.25cm)
+    Dimensions:
+                            Diameter  Radius  Height
+        Pikmin (real):      0.5cm     0.25cm  1.2cm (head to feet, sans stem)
+        Pikmin (engine):    10px      5px     24px  (head to feet, sans stem)
+        Olimar (real):      1.6cm     0.8cm   2.3cm (helmet to feet, sans antenna)
+        Olimar (engine):    32px      16px    46px  (helmet to feet, sans antenna)
     Pikmin throw times in Pikmin 2
         Red, Blue, White: 1.3
         Yellow: 1.6

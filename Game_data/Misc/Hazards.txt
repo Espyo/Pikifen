@@ -3,13 +3,23 @@ fire {
     effects = burning
 }
 
-ink {
-    color = 64 64 64
-    effects = choking_ink
-}
-
 water {
     color = 0 0 255
     effects = water_drowning
     liquid = water
+}
+
+fatal_electricity {
+    color = 255 255 128
+    effects = electrocution
+}
+
+shocking_electricity {
+    color = 255 255 128
+    effects = shock
+}
+
+ink {
+    color = 64 64 64
+    effects = choking_ink
 }

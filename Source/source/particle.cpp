@@ -100,7 +100,7 @@ void particle::draw() {
             bitmap,
             x,
             y,
-            size, size,
+            size, -1,
             0, change_alpha(
                 color,
                 (time / duration) *

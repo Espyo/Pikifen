@@ -118,27 +118,27 @@ vertexes{
 	v=224.00 384.00
 	v=224.00 416.00
 	v=-928.00 -320.00
-	v=-768.00 -320.00
-	v=-928.00 -160.00
-	v=-768.00 -160.00
-	v=-928.00 -384.00
-	v=-896.00 -384.00
-	v=-896.00 -352.00
-	v=-928.00 -352.00
-	v=-704.00 -320.00
-	v=-544.00 -320.00
-	v=-544.00 -160.00
-	v=-704.00 -160.00
-	v=-704.00 -384.00
-	v=-672.00 -384.00
-	v=-672.00 -352.00
-	v=-704.00 -352.00
+	v=-832.00 -320.00
+	v=-928.00 -224.00
+	v=-832.00 -224.00
+	v=-736.00 -320.00
+	v=-640.00 -320.00
+	v=-640.00 -224.00
+	v=-736.00 -224.00
 	v=-352.00 -416.00
 	v=-160.00 -384.00
 	v=-224.00 -224.00
 	v=-384.00 -320.00
 	v=-288.00 -448.00
 	v=-320.00 -224.00
+	v=-928.00 -512.00
+	v=-832.00 -512.00
+	v=-832.00 -416.00
+	v=-928.00 -416.00
+	v=-736.00 -512.00
+	v=-640.00 -512.00
+	v=-640.00 -416.00
+	v=-736.00 -416.00
 }
 edges{
 	e{
@@ -727,7 +727,7 @@ edges{
 	}
 	e{
 		s=0 38
-		v=126 127
+		v=126 130
 	}
 	e{
 		s=0 38
@@ -735,19 +735,19 @@ edges{
 	}
 	e{
 		s=0 38
-		v=128 129
+		v=128 131
 	}
 	e{
 		s=0 38
 		v=129 126
 	}
 	e{
-		s=0 39
-		v=130 131
+		s=0 38
+		v=130 127
 	}
 	e{
-		s=0 39
-		v=131 132
+		s=0 38
+		v=131 129
 	}
 	e{
 		s=0 39
@@ -755,31 +755,31 @@ edges{
 	}
 	e{
 		s=0 39
-		v=133 130
+		v=133 134
+	}
+	e{
+		s=0 39
+		v=134 135
+	}
+	e{
+		s=0 39
+		v=135 132
 	}
 	e{
 		s=0 40
-		v=134 138
+		v=136 137
 	}
 	e{
 		s=0 40
-		v=135 136
+		v=137 138
 	}
 	e{
 		s=0 40
-		v=136 139
+		v=138 139
 	}
 	e{
 		s=0 40
-		v=137 134
-	}
-	e{
-		s=0 40
-		v=138 135
-	}
-	e{
-		s=0 40
-		v=139 137
+		v=139 136
 	}
 }
 sectors{
@@ -949,22 +949,16 @@ sectors{
 		hazards=fire
 		hazards_floor=true
 		texture=Spectrum.jpg
-	}
-	s{
-		z=0.00
-		texture=Spectrum.jpg
-		texture_trans=330.00 0.00
+		texture_scale=20.00 20.00
+		texture_trans=-40.00 0.00
 	}
 	s{
 		z=0.00
 		hazards=ink
 		hazards_floor=true
 		texture=Spectrum.jpg
-	}
-	s{
-		z=0.00
-		brightness=108
-		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=100.00 0.00
 	}
 	s{
 		z=0.00
@@ -972,23 +966,39 @@ sectors{
 		hazards_floor=true
 		texture=Dirt.jpg
 	}
+	s{
+		z=0.00
+		hazards=fatal_electricity
+		hazards_floor=true
+		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=-150.00 0.00
+	}
+	s{
+		z=0.00
+		hazards=shocking_electricity
+		hazards_floor=true
+		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=-180.00 0.00
+	}
 }
 mobs{
 	Special{
 		type=Info spot
-		p=-100.00 100.00
+		p=-64.00 128.00
 	}
 	Leader{
 		type=Olimar
-		p=0.00 0.00
+		p=-800.00 -352.00
 	}
 	Leader{
 		type=Louie
-		p=352.00 608.00
+		p=256.00 320.00
 	}
 	Leader{
 		type=President
-		p=350.00 200.00
+		p=480.00 -448.00
 	}
 	Onion{
 		type=Red Onion

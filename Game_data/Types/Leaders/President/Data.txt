@@ -1,7 +1,7 @@
 name = President
 
 dismiss_sfx = Dismiss.ogg
-height = 32
+height = 46
 main_color = 64 32 192
 max_carriers = 5
 max_health = 10

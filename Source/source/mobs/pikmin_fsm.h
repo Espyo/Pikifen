@@ -21,6 +21,7 @@ namespace pikmin_fsm {
 void create_fsm(mob_type* typ);
 
 void become_buried(          mob* m, void* info1, void* info2);
+void become_disabled(        mob* m, void* info1, void* info2);
 void become_idle(            mob* m, void* info1, void* info2);
 void begin_pluck(            mob* m, void* info1, void* info2);
 void be_dismissed(           mob* m, void* info1, void* info2);

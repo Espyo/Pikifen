@@ -1688,8 +1688,9 @@ void load_status_types() {
         rs.set("removable_with_whistle", st.removable_with_whistle);
         rs.set("auto_remove_time",       st.auto_remove_time);
         rs.set("health_change_ratio",    st.health_change_ratio);
-        rs.set("causes_panic",           st.causes_panic);
+        rs.set("causes_disable",         st.causes_disable);
         rs.set("causes_flailing",        st.causes_flailing);
+        rs.set("causes_panic",           st.causes_panic);
         rs.set("speed_multiplier",       st.speed_multiplier);
         rs.set("attack_multiplier",      st.attack_multiplier);
         rs.set("defense_multiplier",     st.defense_multiplier);

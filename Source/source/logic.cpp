@@ -449,6 +449,73 @@ void do_gameplay_logic() {
         
     }
     
+    if(dev_tool_info_lock) {
+        string name_str =
+            box_string("Mob: " + dev_tool_info_lock->type->name + ".", 30);
+        string coords_str =
+            box_string(
+                "Coords: " +
+                box_string(f2s(dev_tool_info_lock->x), 6) + " " +
+                box_string(f2s(dev_tool_info_lock->y), 6) + " " +
+                box_string(f2s(dev_tool_info_lock->z), 6) + ".",
+                30
+            );
+        string state_str =
+            box_string(
+                "State: " +
+                (
+                    dev_tool_info_lock->fsm.cur_state ?
+                    dev_tool_info_lock->fsm.cur_state->name :
+                    "(None!)"
+                ) +
+                ".",
+                30
+            );
+        string pstate_str =
+            box_string(
+                "Prev. state: " + dev_tool_info_lock->fsm.prev_state_name + ".",
+                30
+            );
+        string anim_str =
+            box_string(
+                "Animation: " +
+                (dev_tool_info_lock->anim.anim ?
+                 dev_tool_info_lock->anim.anim->name :
+                 "(None!)") +
+                ".",
+                30
+            );
+        string health_str =
+            box_string("Health: " + f2s(dev_tool_info_lock->health) + ".", 30);
+        string timer_str =
+            box_string(
+                "Timer: " +
+                f2s(dev_tool_info_lock->script_timer.time_left) + ".",
+                30
+            );
+            
+        string vars_str = "Vars: ";
+        if(!dev_tool_info_lock->vars.empty()) {
+            for(
+                auto v = dev_tool_info_lock->vars.begin();
+                v != dev_tool_info_lock->vars.end(); ++v
+            ) {
+                vars_str += v->first + "=" + v->second + "; ";
+            }
+            vars_str.erase(vars_str.size() - 2, 2);
+            vars_str += ".";
+        } else {
+            vars_str += "(None).";
+        }
+        
+        print_info(
+            name_str + coords_str + "\n" +
+            state_str + pstate_str + "\n" +
+            health_str + timer_str + "\n" +
+            anim_str + "\n" +
+            vars_str
+        );
+    }
     info_print_timer.tick(delta_t);
     
     ready_for_input = true;

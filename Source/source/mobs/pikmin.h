@@ -39,6 +39,7 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_CELEBRATING,
     PIKMIN_STATE_GOING_TO_CARRIABLE_OBJECT,
     PIKMIN_STATE_GOING_TO_OPPONENT,
+    PIKMIN_STATE_DISABLED,
     PIKMIN_STATE_FLAILING,
     PIKMIN_STATE_PANIC,
     
@@ -109,6 +110,7 @@ public:
     void teleport_to_connected_hitbox();
     
     virtual bool can_receive_status(status_type* s);
+    virtual void receive_disable_from_status();
     virtual void receive_flailing_from_status();
     virtual void receive_panic_from_status();
     virtual void lose_panic_from_status();

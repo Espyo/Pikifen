@@ -10,7 +10,7 @@ smoke {
         size_grow_speed = 30
         size = 16
         speed_x = 0
-        speed_y = -20
+        speed_y = -50
         color = 128 64 64 192
         before_mobs = false
     }
