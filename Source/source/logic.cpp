@@ -144,6 +144,9 @@ void do_aesthetic_logic() {
             min(cursor_height_diff_light, 0.33f);
     }
     
+    //Specific animations.
+    spark_animation.instance.tick(delta_t);
+    
     //Area title fade.
     area_title_fade_timer.tick(delta_t);
     

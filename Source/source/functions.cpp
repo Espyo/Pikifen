@@ -1596,6 +1596,7 @@ void load_options() {
     rs.set("fps", game_fps);
     rs.set("height", scr_h);
     rs.set("max_particles", max_particles);
+    rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("pretty_whistle", pretty_whistle);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("width", scr_w);
@@ -2038,6 +2039,7 @@ void save_options() {
     al_fwrite(file, "fps=" + i2s(game_fps) + "\n");
     al_fwrite(file, "height=" + i2s(scr_h) + "\n");
     al_fwrite(file, "max_particles=" + i2s(max_particles) + "\n");
+    al_fwrite(file, "middle_zoom_level=" + f2s(zoom_mid_level) + "\n");
     al_fwrite(file, "pretty_whistle=" + b2s(pretty_whistle) + "\n");
     al_fwrite(file, "smooth_scaling=" + b2s(smooth_scaling) + "\n");
     al_fwrite(file, "width=" + i2s(scr_w) + "\n");

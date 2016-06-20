@@ -281,7 +281,7 @@ void gameplay::load() {
     
     cam_x = cam_final_x = cur_leader_ptr->x;
     cam_y = cam_final_y = cur_leader_ptr->y;
-    cam_zoom = 1.0;
+    cam_zoom = cam_final_zoom = zoom_mid_level;
     
     for(size_t c = 0; c < controls[0].size(); ++c) {
         if(controls[0][c].action == BUTTON_THROW) {

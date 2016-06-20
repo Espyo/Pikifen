@@ -337,6 +337,9 @@ void init_misc() {
     whistle_next_ring_timer.start();
     
     particles = particle_manager(max_particles);
+    
+    zoom_mid_level = max(zoom_min_level, zoom_mid_level);
+    zoom_mid_level = min(zoom_mid_level, zoom_max_level);
 }
 
 
@@ -344,6 +347,10 @@ void init_misc() {
  * Initializes miscellaneous fixed graphics.
  */
 void init_misc_graphics() {
+    //Icon.
+    bmp_icon = load_bmp("Icon.png");
+    al_set_display_icon(display, bmp_icon);
+    
     //Graphics.
     bmp_bubble = load_bmp(          "Bubble.png");
     bmp_checkbox_check = load_bmp(  "Checkbox_check.png");
@@ -351,7 +358,6 @@ void init_misc_graphics() {
     bmp_day_bubble = load_bmp(      "Day_bubble.png");
     bmp_enemy_spirit = load_bmp(    "Enemy_spirit.png");
     bmp_hard_bubble = load_bmp(     "Hard_bubble.png");
-    bmp_icon = load_bmp(            "Icon.png");
     bmp_idle_glow = load_bmp(       "Idle_glow.png");
     bmp_info_spot = load_bmp(       "Info_spot.png");
     bmp_message_box = load_bmp(     "Message_box.png");
@@ -381,7 +387,11 @@ void init_misc_graphics() {
             );
     }
     
-    al_set_display_icon(display, bmp_icon);
+    data_node system_animations_file(SYSTEM_ANIMATIONS_FILE);
+    
+    init_single_animation(
+        &system_animations_file, "leader_damage_sparks", spark_animation
+    );
 }
 
 
@@ -592,6 +602,25 @@ void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_GATE, "Gate");
     sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
     sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads a single animation from the system animations definition file.
+ * anim_def_file: The animation definition file.
+ * name:          Name of the animation on this file.
+ * anim:          The single animation suite structure to fill.
+ */
+void init_single_animation(
+    data_node* anim_def_file, const string name,
+    single_animation_suite &anim
+) {
+    data_node file(
+        ANIMATIONS_FOLDER + "/" + anim_def_file->get_child_by_name(name)->value
+    );
+    anim.pool = load_animation_pool_from_file(&file);
+    anim.instance.anim = anim.pool.animations[0];
+    anim.instance.start();
 }
 
 

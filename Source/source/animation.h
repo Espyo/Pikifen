@@ -208,6 +208,16 @@ public:
 };
 
 
+/* ----------------------------------------------------------------------------
+ * An animation pool and an animation_instance.
+ */
+struct single_animation_suite {
+    animation_pool pool;
+    animation_instance instance;
+};
+
+
+
 animation_pool load_animation_pool_from_file(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

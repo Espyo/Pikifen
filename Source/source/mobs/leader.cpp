@@ -154,44 +154,13 @@ void leader::draw() {
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
     
     if(invuln_period.time_left > 0.0f) {
-        unsigned char anim_part =
-            invuln_period.get_ratio_left() * LEADER_ZAP_ANIM_PARTS;
-        float zap_x[4], zap_y[4];
-        for(unsigned char p = 0; p < 4; ++p) {
-            if(anim_part % 2 == 0) {
-                zap_x[p] =
-                    draw_x + draw_w *
-                    (deterministic_random(anim_part * 3 + p) - 0.5);
-                zap_y[p] =
-                    draw_y + draw_h * 0.5 * ((p % 2 == 0) ? 1 : -1);
-            } else {
-                zap_x[p] =
-                    draw_x + draw_w * 0.5 * ((p % 2 == 0) ? 1 : -1);
-                zap_y[p] =
-                    draw_y + draw_h *
-                    (deterministic_random(anim_part * 3 + p) - 0.5);
-            }
+        frame* spark_f = spark_animation.instance.get_frame();
+        if(spark_f && spark_f->bitmap) {
+            draw_sprite(
+                spark_f->bitmap, draw_x, draw_y,
+                draw_w, draw_h
+            );
         }
-        
-        static const ALLEGRO_COLOR LEADER_ZAP_COLOR =
-            al_map_rgba(128, 255, 255, 128);
-            
-        al_draw_line(
-            zap_x[0], zap_y[0], zap_x[1], zap_y[1],
-            LEADER_ZAP_COLOR,
-            2.0f
-        );
-        al_draw_line(
-            zap_x[1], zap_y[1], zap_x[2], zap_y[2],
-            LEADER_ZAP_COLOR,
-            2.0f
-        );
-        al_draw_line(
-            zap_x[2], zap_y[2], zap_x[3], zap_y[3],
-            LEADER_ZAP_COLOR,
-            2.0f
-        );
-        
     }
     
     float status_bmp_scale;

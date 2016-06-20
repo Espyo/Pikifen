@@ -645,12 +645,16 @@ void handle_button(
             
             if(pos == 0) return;
             
-            if(cam_final_zoom < 1) {
+            if(cam_final_zoom < zoom_mid_level) {
                 cam_final_zoom = zoom_max_level;
-            } else if(cam_final_zoom > 1) {
-                cam_final_zoom = 1;
+            } else if(cam_final_zoom > zoom_mid_level) {
+                cam_final_zoom = zoom_mid_level;
             } else {
-                cam_final_zoom = zoom_min_level;
+                if(zoom_mid_level == zoom_min_level) {
+                    cam_final_zoom = zoom_max_level;
+                } else {
+                    cam_final_zoom = zoom_min_level;
+                }
             }
             
             sfx_camera.play(0, false);

@@ -300,6 +300,7 @@ extern vector<ship*> ships;
 extern bool show_framerate;
 //If false, images that are scaled up and down will look pixelated.
 extern bool smooth_scaling;
+extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
 //How many of each spray the player has.
 extern vector<unsigned long> spray_amounts;
@@ -331,6 +332,7 @@ extern bool whistling;
 //(on some systems it appears out-of-bounds by default)
 extern bool window_position_hack;
 extern float zoom_max_level;
+extern float zoom_mid_level;
 extern float zoom_min_level;
 
 

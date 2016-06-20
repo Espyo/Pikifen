@@ -70,7 +70,6 @@ enum LEADER_ANIMATIONS {
 };
 
 const float LEADER_INVULN_PERIOD = 1.5f;
-const float LEADER_ZAP_ANIM_PARTS = 20;
 
 
 /* ----------------------------------------------------------------------------

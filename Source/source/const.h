@@ -121,14 +121,17 @@ const string GRAPHICS_FOLDER       = GAME_DATA_FOLDER + "/Graphics";
 const string LEADERS_FOLDER        = TYPES_FOLDER + "/Leaders";
 const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";
 const string OTHER_TYPES_FOLDER    = TYPES_FOLDER + "/Others";
-const string PARTICLE_GENERATORS_FILE =
-    MISC_FOLDER + "/Particle_generators.txt";
 const string PELLETS_FOLDER        = TYPES_FOLDER + "/Pellets";
 const string PIKMIN_FOLDER         = TYPES_FOLDER + "/Pikmin";
 const string SPECIAL_MOBS_FOLDER   = TYPES_FOLDER + "/Special";
 const string SHIPS_FOLDER          = TYPES_FOLDER + "/Ships";
 const string TEXTURES_FOLDER       = GRAPHICS_FOLDER + "/Textures";
 const string TREASURES_FOLDER      = TYPES_FOLDER + "/Treasures";
+
+const string PARTICLE_GENERATORS_FILE =
+    MISC_FOLDER + "/Particle_generators.txt";
+const string SYSTEM_ANIMATIONS_FILE =
+    MISC_FOLDER + "/System_animations.txt";
 const string WEATHER_FILE          = MISC_FOLDER + "/Weather.txt";
 
 
