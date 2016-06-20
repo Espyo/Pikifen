@@ -201,7 +201,7 @@ void gameplay::load() {
     size_t n_spray_types = spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) { spray_amounts.push_back(0); }
     
-    load_area(area_to_load, false);
+    load_area(area_to_load, false, false);
     load_area_textures();
     generate_area_images();
     

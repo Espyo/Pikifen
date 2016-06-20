@@ -631,8 +631,14 @@ float interpolate_number(
 
 /* ----------------------------------------------------------------------------
  * Loads an area into memory.
+ * name:            Name of the area's folder.
+ * load_for_editor: If true, skips loading some things that the area editor
+   * won't need.
+ * from_backup:     If true, load from a backup, if any.
  */
-void load_area(const string &name, const bool load_for_editor) {
+void load_area(
+    const string &name, const bool load_for_editor, const bool from_backup
+) {
 
     cur_area_data.clear();
     
@@ -683,7 +689,10 @@ void load_area(const string &name, const bool load_for_editor) {
         
         
     data_node geometry_file =
-        load_data_file(AREA_FOLDER + "/" + name + "/Geometry.txt");
+        load_data_file(
+            AREA_FOLDER + "/" + name +
+            (from_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+        );
         
     //Vertexes.
     size_t n_vertexes =
@@ -1593,6 +1602,7 @@ void load_options() {
     reader_setter rs(&file);
     rs.set("area_quality", area_images_scale);
     rs.set("draw_cursor_trail", draw_cursor_trail);
+    rs.set("editor_backup_interval", editor_backup_interval);
     rs.set("fps", game_fps);
     rs.set("height", scr_h);
     rs.set("max_particles", max_particles);
@@ -2036,6 +2046,9 @@ void save_options() {
     //Other options.
     al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
     al_fwrite(file, "draw_cursor_trail=" + b2s(draw_cursor_trail) + "\n");
+    al_fwrite(
+        file, "editor_backup_interval=" + f2s(editor_backup_interval) + "\n"
+    );
     al_fwrite(file, "fps=" + i2s(game_fps) + "\n");
     al_fwrite(file, "height=" + i2s(scr_h) + "\n");
     al_fwrite(file, "max_particles=" + i2s(max_particles) + "\n");

@@ -121,7 +121,9 @@ float interpolate_number(
     const float p, const float p1, const float p2,
     const float v1, const float v2
 );
-void load_area(const string &name, const bool load_for_editor);
+void load_area(
+    const string &name, const bool load_for_editor, const bool from_backup
+);
 void load_area_textures();
 void load_control(
     unsigned char action, unsigned char player,

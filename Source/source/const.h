@@ -42,6 +42,8 @@ const float CURSOR_INVALID_EFFECT_SPEED = M_PI * 4.0f;
 const float CURSOR_SAVE_INTERVAL = 0.03f;
 //Number of positions of the cursor to keep track of.
 const unsigned char CURSOR_SAVE_N_SPOTS = 10;
+//Default editor auto-backup interval, in seconds.
+const float DEF_EDITOR_BACKUP_INTERVAL = 120.0f;
 //Default leader punch strength.
 const float DEF_PUNCH_STRENGTH = 2.0f;
 //The default rotation speed of a mob type.

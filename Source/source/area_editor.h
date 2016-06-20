@@ -73,6 +73,7 @@ private:
     static const float  VERTEX_MERGE_RADIUS;
     
     string                       area_name;
+    timer                        backup_timer;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
     tree_shadow*                 cur_shadow;
@@ -152,7 +153,8 @@ private:
     bool is_edge_valid(edge* l);
     bool is_new_sector_line_valid(const float x, const float y);
     bool is_polygon_clockwise(vector<vertex*> &vertexes);
-    void load_area();
+    void load_area(const bool from_backup);
+    void load_backup();
     void merge_vertex(
         vertex* v1, vertex* v2,
         const size_t v2_nr, unordered_set<sector*>* affected_sectors
@@ -162,12 +164,14 @@ private:
     void pick(string name, unsigned char type);
     void populate_texture_suggestions();
     void resize_everything();
-    void save_area();
+    void save_area(const bool to_backup);
+    void save_backup();
     void sector_to_gui();
     void shadow_to_gui();
     void show_changes_warning();
     float snap_to_grid(const float c);
     void toggle_duplicate_mob_mode();
+    bool update_backup_status();
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);

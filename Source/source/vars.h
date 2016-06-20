@@ -190,6 +190,7 @@ extern unsigned char dev_tool_keys[10];
 extern pikmin_type* dev_tool_last_pikmin_type;
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
+extern float editor_backup_interval;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
 extern fade_manager fade_mgr;

@@ -53,6 +53,7 @@ area_editor::area_editor() :
     guide_w(1000),
     guide_h(1000),
     guide_a(255),
+    backup_timer(editor_backup_interval),
     cur_mob(NULL),
     cur_sector(NULL),
     cur_shadow(NULL),
@@ -98,6 +99,11 @@ area_editor::area_editor() :
         timer(
             PATH_PREVIEW_TIMEOUT_DUR,
     [this] () {calculate_preview_path();}
+        );
+    backup_timer =
+        timer(
+            editor_backup_interval,
+    [this] () {save_backup();}
         );
 }
 
@@ -296,7 +302,7 @@ void area_editor::create_sector() {
             get_merge_vertex(
                 new_sector_vertexes[v]->x, new_sector_vertexes[v]->y, &merge_nr
             );
-        
+            
         merge_dest_vertexes.push_back(merge_v);
         merge_dest_vertex_nrs.push_back(merge_nr);
     }
@@ -309,7 +315,7 @@ void area_editor::create_sector() {
         get_common_sector(
             new_sector_vertexes, merge_dest_vertexes, &outer_sector
         );
-    
+        
     if(!has_common) {
         //What? The user is trying to create a sector that goes through
         //different sectors! We know, because at least one vertex
@@ -1016,8 +1022,8 @@ void area_editor::do_drawing() {
                     snap_to_grid(mouse_cursor_x),
                     snap_to_grid(mouse_cursor_y),
                     (new_sector_valid_line ?
-                    al_map_rgb(64, 255, 64):
-                    al_map_rgb(255, 0, 0)),
+                     al_map_rgb(64, 255, 64) :
+                     al_map_rgb(255, 0, 0)),
                     3 / cam_zoom
                 );
             }
@@ -1135,6 +1141,8 @@ void area_editor::do_logic() {
     }
     
     path_preview_timeout.tick(delta_t);
+    
+    if(!area_name.empty()) backup_timer.tick(delta_t);
     
     fade_mgr.tick(delta_t);
     
@@ -2725,6 +2733,7 @@ void area_editor::load() {
 
     fade_mgr.start_fade(true, nullptr);
     
+    load_custom_particle_generators();
     load_liquids();
     load_status_types();
     load_hazards();
@@ -3509,6 +3518,11 @@ void area_editor::load() {
     );
     frm_options->easy_row();
     frm_options->easy_add(
+        "but_backup",
+        new lafi::button(0, 0, 0, 0, "Load auto-backup"), 100, 24
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
         "lbl_grid",
         new lafi::label(0, 0, 0, 0, "Grid spacing: "), 70, 24
     );
@@ -3594,6 +3608,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         mode_before_options = mode;
         mode = EDITOR_MODE_OPTIONS;
+        update_backup_status();
         change_to_right_frame();
         update_options_frame();
     };
@@ -3603,7 +3618,14 @@ void area_editor::load() {
     };
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        save_area();
+        save_area(false);
+        cur_sector = NULL;
+        cur_mob = NULL;
+        sector_to_gui();
+        mob_to_gui();
+        mode = EDITOR_MODE_MAIN;
+        change_to_right_frame();
+        made_changes = false;
     };
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -4155,7 +4177,11 @@ void area_editor::load() {
     };
     frm_options->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        this->load_area();
+        this->load_area(false);
+    };
+    frm_options->widgets["but_backup"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        this->load_backup();
     };
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -4173,6 +4199,8 @@ void area_editor::load() {
         "Close the options.";
     frm_options->widgets["but_load"]->description =
         "Discard all changes made and load the area again.";
+    frm_options->widgets["but_backup"]->description =
+        "Discard all changes made and load the auto-backup.";
     frm_options->widgets["but_grid_plus"]->description =
         "Increase the spacing on the grid.";
     frm_options->widgets["but_grid_minus"]->description =
@@ -4210,7 +4238,7 @@ void area_editor::load() {
     
     if(!auto_load_area.empty()) {
         area_name = auto_load_area;
-        load_area();
+        load_area(false);
     }
     
 }
@@ -4218,13 +4246,14 @@ void area_editor::load() {
 
 /* ----------------------------------------------------------------------------
  * Load the area from the disk.
+ * from_backup: If false, load it normally. If true, load from a backup, if any.
  */
-void area_editor::load_area() {
+void area_editor::load_area(const bool from_backup) {
     intersecting_edges.clear();
     non_simples.clear();
     lone_edges.clear();
     
-    ::load_area(area_name, true);
+    ::load_area(area_name, true, from_backup);
     ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text =
         area_name;
     show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
@@ -4275,6 +4304,7 @@ void area_editor::load_area() {
     error_string.clear();
     error_vertex_ptr = NULL;
     
+    backup_timer.start(editor_backup_interval);
     show_path_preview = false;
     (
         (lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"]
@@ -4297,6 +4327,17 @@ void area_editor::load_area() {
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads a backup file.
+ */
+void area_editor::load_backup() {
+    if(!update_backup_status()) return;
+    
+    load_area(true);
+    backup_timer.start(editor_backup_interval);
 }
 
 
@@ -4549,7 +4590,7 @@ void area_editor::pick(string name, unsigned char type) {
     if(type == AREA_EDITOR_PICKER_AREA) {
     
         area_name = name;
-        load_area();
+        load_area(false);
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
@@ -4723,8 +4764,9 @@ void area_editor::resize_everything() {
 
 /* ----------------------------------------------------------------------------
  * Saves the area onto the disk.
+ * to_backup: If false, save normally. If true, save to an auto-backup file.
  */
-void area_editor::save_area() {
+void area_editor::save_area(const bool to_backup) {
     data_node geometry_file = data_node("", "");
     
     //Vertexes.
@@ -4941,16 +4983,21 @@ void area_editor::save_area() {
     geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
     
     
-    geometry_file.save_file(AREA_FOLDER + "/" + area_name + "/Geometry.txt");
+    geometry_file.save_file(
+        AREA_FOLDER + "/" + area_name +
+        (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+    );
     
-    cur_sector = NULL;
-    cur_mob = NULL;
-    sector_to_gui();
-    mob_to_gui();
-    mode = EDITOR_MODE_MAIN;
-    change_to_right_frame();
-    
-    made_changes = false;
+    backup_timer.start(editor_backup_interval);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the area onto a backup file.
+ */
+void area_editor::save_backup() {
+    save_area(true);
+    update_backup_status();
 }
 
 
@@ -5085,6 +5132,24 @@ void area_editor::unload() {
     delete(gui);
     
     unload_hazards();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the area's backup file, and sets the "load backup" button's
+ * availability accordingly.
+ * Returns true if it exists, false if not.
+ */
+bool area_editor::update_backup_status() {
+    disable_widget(gui->widgets["frm_options"]->widgets["but_backup"]);
+    
+    if(area_name.empty()) return false;
+    
+    data_node file(AREA_FOLDER + "/" + area_name + "/Geometry_backup.txt");
+    if(!file.file_was_opened) return false;
+    
+    enable_widget(gui->widgets["frm_options"]->widgets["but_backup"]);
+    return true;
 }
 
 
