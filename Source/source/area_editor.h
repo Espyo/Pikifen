@@ -66,16 +66,21 @@ private:
     static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
     static const float  MIN_GRID_INTERVAL;
-    static const float  STOP_RADIUS;
+    static const float  PATH_LINK_THICKNESS;
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
-    static const float  LINK_THICKNESS;
+    static const float  STOP_RADIUS;
+    static const float  VERTEX_MERGE_RADIUS;
     
     string                       area_name;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
     tree_shadow*                 cur_shadow;
     path_stop*                   cur_stop;
+    bool                         debug_edge_nrs;
+    bool                         debug_sector_nrs;
+    bool                         debug_triangulation;
+    bool                         debug_vertex_nrs;
     float                        double_click_time;
     mob_gen*                     error_mob_ptr;
     path_stop*                   error_path_stop_ptr;
@@ -107,6 +112,8 @@ private:
     float                        moving_thing_x;
     float                        moving_thing_y;
     path_stop*                   new_link_first_stop;
+    vector<vertex*>              new_sector_vertexes;
+    bool                         new_sector_valid_line;
     sector*                      on_sector;
     float                        path_preview_checkpoints_x[2];
     float                        path_preview_checkpoints_y[2];
@@ -124,12 +131,18 @@ private:
     void adv_textures_to_gui();
     void guide_to_gui();
     void calculate_preview_path();
+    void cancel_new_sector();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
     void close_changes_warning();
     void change_guide(string new_file_name);
     void change_to_right_frame(bool hide_all = false);
+    void create_sector();
     void leave();
     void find_errors();
+    bool get_common_sector(
+        vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result
+    );
+    vertex* get_merge_vertex(const float x, const float y, size_t* nr = NULL);
     void goto_error();
     void gui_to_guide();
     void gui_to_mob();
@@ -137,10 +150,12 @@ private:
     void gui_to_shadow();
     void gui_to_adv_textures();
     bool is_edge_valid(edge* l);
+    bool is_new_sector_line_valid(const float x, const float y);
+    bool is_polygon_clockwise(vector<vertex*> &vertexes);
     void load_area();
     void merge_vertex(
         vertex* v1, vertex* v2,
-        const size_t v1_nr, unordered_set<sector*>* affected_sectors
+        const size_t v2_nr, unordered_set<sector*>* affected_sectors
     );
     void mob_to_gui();
     void open_picker(unsigned char type);

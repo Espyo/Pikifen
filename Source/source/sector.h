@@ -327,6 +327,12 @@ struct area_data {
     area_data();
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
+    void remove_vertex(const size_t v_nr);
+    void remove_vertex(const vertex* v_ptr);
+    void remove_edge(const size_t e_nr);
+    void remove_edge(const edge* e_ptr);
+    void remove_sector(const size_t s_nr);
+    void remove_sector(const sector* s_ptr);
     void clear();
 };
 

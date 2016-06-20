@@ -99,7 +99,7 @@ const float WHISTLE_RING_SPEED = 600.0f;
 //Seconds that need to pass before another whistle ring appears.
 const float WHISTLE_RINGS_INTERVAL = 0.1f;
 //Maximum zoom level possible on the area editor.
-const float ZOOM_MAX_LEVEL_EDITOR = 4.0f;
+const float ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible on the area editor.
 const float ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 

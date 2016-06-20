@@ -167,6 +167,129 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
 
 
 /* ----------------------------------------------------------------------------
+ * Removes a vertex from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_vertex(const size_t v_nr) {
+    vertexes.erase(vertexes.begin() + v_nr);
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        for(size_t v = 0; v < 2; ++v) {
+            if(
+                e_ptr->vertex_nrs[v] != INVALID &&
+                e_ptr->vertex_nrs[v] > v_nr
+            ) {
+                e_ptr->vertex_nrs[v]--;
+            } else if(e_ptr->vertex_nrs[v] == v_nr) {
+                //This should never happen.
+                e_ptr->vertex_nrs[v] = INVALID;
+                e_ptr->vertexes[v] = NULL;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes a vertex from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_vertex(const vertex* v_ptr) {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        if(vertexes[v] == v_ptr) {
+            remove_vertex(v);
+            return;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an edge from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_edge(const size_t e_nr) {
+    edges.erase(edges.begin() + e_nr);
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            if(
+                v_ptr->edge_nrs[e] != INVALID &&
+                v_ptr->edge_nrs[e] > e_nr
+            ) {
+                v_ptr->edge_nrs[e]--;
+            } else if(v_ptr->edge_nrs[e] == e_nr) {
+                //This should never happen.
+                v_ptr->edge_nrs[e] = INVALID;
+                v_ptr->edges[e] = NULL;
+            }
+        }
+    }
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            if(
+                s_ptr->edge_nrs[e] != INVALID &&
+                s_ptr->edge_nrs[e] > e_nr
+            ) {
+                s_ptr->edge_nrs[e]--;
+            } else if(s_ptr->edge_nrs[e] == e_nr) {
+                //This should never happen.
+                s_ptr->edge_nrs[e] = INVALID;
+                s_ptr->edges[e] = NULL;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an edge from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_edge(const edge* e_ptr) {
+    for(size_t e = 0; e < edges.size(); ++e) {
+        if(edges[e] == e_ptr) {
+            remove_edge(e);
+            return;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes a sector from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_sector(const size_t s_nr) {
+    sectors.erase(sectors.begin() + s_nr);
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            if(
+                s_ptr->edge_nrs[e] != INVALID &&
+                s_ptr->edge_nrs[e] > s_nr
+            ) {
+                s_ptr->edge_nrs[e]--;
+            } else if(s_ptr->edge_nrs[e] == s_nr) {
+                //This should never happen.
+                s_ptr->edge_nrs[e] = INVALID;
+                s_ptr->edges[e] = NULL;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes a sector from the list, and updates all IDs referencing it.
+ */
+void area_data::remove_sector(const sector* s_ptr) {
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        if(sectors[s] == s_ptr) {
+            remove_sector(s);
+            return;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears the info of an area map.
  */
 void area_data::clear() {
@@ -1265,16 +1388,9 @@ void check_edge_intersections(vertex* v) {
             }
         }
         
-        
-        if(!e_ptr->vertexes[0]) continue; //It had been marked for deletion.
-        
         //For every other edge in the map, check for intersections.
         for(size_t e2 = 0; e2 < cur_area_data.edges.size(); ++e2) {
             edge* e2_ptr = cur_area_data.edges[e2];
-            if(!e2_ptr->vertexes[0]) {
-                //It had been marked for deletion.
-                continue;
-            }
             
             //If the edge is actually on the same vertex, never mind.
             if(e_ptr->vertexes[0] == e2_ptr->vertexes[0]) continue;
@@ -1288,7 +1404,8 @@ void check_edge_intersections(vertex* v) {
                     e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
                     e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y,
                     e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y,
-                    NULL, NULL)
+                    NULL, NULL
+                )
             ) {
                 if(ae) {
                     ae->intersecting_edges.push_back(

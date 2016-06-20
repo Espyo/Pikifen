@@ -35,10 +35,11 @@ const float  area_editor::DEF_GRID_INTERVAL = 32.0f;
 const float  area_editor::MAX_GRID_INTERVAL = 4096;
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 const float  area_editor::MIN_GRID_INTERVAL = 2;
-const float  area_editor::STOP_RADIUS = 16.0f;
+const float  area_editor::PATH_LINK_THICKNESS = 2.0f;
 const float  area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 const float  area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
-const float  area_editor::LINK_THICKNESS = 2.0f;
+const float  area_editor::STOP_RADIUS = 16.0f;
+const float  area_editor::VERTEX_MERGE_RADIUS = 10.0f;
 
 
 /* ----------------------------------------------------------------------------
@@ -55,6 +56,10 @@ area_editor::area_editor() :
     cur_mob(NULL),
     cur_sector(NULL),
     cur_shadow(NULL),
+    debug_edge_nrs(false),
+    debug_sector_nrs(false),
+    debug_triangulation(false),
+    debug_vertex_nrs(false),
     double_click_time(0),
     error_mob_ptr(NULL),
     error_path_stop_ptr(NULL),
@@ -74,6 +79,7 @@ area_editor::area_editor() :
     moving_thing_x(0),
     moving_thing_y(0),
     new_link_first_stop(NULL),
+    new_sector_valid_line(false),
     on_sector(NULL),
     path_preview_timeout(0),
     sec_mode(ESM_NONE),
@@ -150,6 +156,20 @@ void area_editor::calculate_preview_path() {
     
     ((lafi::label*) gui->widgets["frm_paths"]->widgets["lbl_path_dist"])->text =
         "  Total dist.: " + f2s(d);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Cancels the creation of a new sector.
+ * Only use this to cancel, not to finish successfully.
+ */
+void area_editor::cancel_new_sector() {
+    for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
+        if(new_sector_vertexes[v]->edges.empty()) {
+            delete new_sector_vertexes[v];
+        }
+    }
+    new_sector_vertexes.clear();
 }
 
 
@@ -245,28 +265,219 @@ void area_editor::change_to_right_frame(bool hide_all) {
 
 
 /* ----------------------------------------------------------------------------
- * Handles the logic part of the main loop of the area editor.
- */
-void area_editor::do_logic() {
-
-    if(double_click_time > 0) {
-        double_click_time -= delta_t;
-        if(double_click_time < 0) double_click_time = 0;
-    }
-    
-    path_preview_timeout.tick(delta_t);
-    
-    fade_mgr.tick(delta_t);
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Closes the change warning box.
  */
 void area_editor::close_changes_warning() {
     hide_widget(gui->widgets["frm_changes"]);
     show_widget(gui->widgets["frm_bottom"]);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new sector using the previously-drawn vertexes.
+ */
+void area_editor::create_sector() {
+    if(new_sector_vertexes.size() < 3) {
+        cancel_new_sector();
+        return;
+    }
+    
+    //This is the basic idea: create a new sector using the
+    //vertexes provided by the user, as a "child" of an existing sector.
+    //Then, try to merge the new vertexes with existing ones.
+    
+    //Some of the new vertexes may have to be merged. Let's check now,
+    //as this will be important in just a bit.
+    vector<vertex*> merge_dest_vertexes;
+    vector<size_t> merge_dest_vertex_nrs;
+    for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
+        size_t merge_nr = INVALID;
+        vertex* merge_v =
+            get_merge_vertex(
+                new_sector_vertexes[v]->x, new_sector_vertexes[v]->y, &merge_nr
+            );
+        
+        merge_dest_vertexes.push_back(merge_v);
+        merge_dest_vertex_nrs.push_back(merge_nr);
+    }
+    
+    //Get the outer sector, so we can know where to start working in.
+    size_t outer_sector_nr = INVALID;
+    sector* outer_sector = NULL;
+    
+    bool has_common =
+        get_common_sector(
+            new_sector_vertexes, merge_dest_vertexes, &outer_sector
+        );
+    
+    if(!has_common) {
+        //What? The user is trying to create a sector that goes through
+        //different sectors! We know, because at least one vertex
+        //doesn't share sectors with the other vertexes. Abort!
+        cancel_new_sector();
+        return;
+    }
+    
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        if(cur_area_data.sectors[s] != outer_sector) continue;
+        outer_sector_nr = s;
+        break;
+    }
+    
+    //Start creating the new sector.
+    sector* new_sector = new sector();
+    if(outer_sector) outer_sector->clone(new_sector);
+    vector<edge*> new_sector_edges;
+    
+    vector<size_t> new_sector_vertex_nrs;
+    for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
+        new_sector_vertex_nrs.push_back(cur_area_data.vertexes.size());
+        cur_area_data.vertexes.push_back(new_sector_vertexes[v]);
+    }
+    cur_area_data.sectors.push_back(new_sector);
+    size_t new_sector_nr = cur_area_data.sectors.size() - 1;
+    
+    //Create the edges.
+    vector<size_t> new_sector_edge_nrs;
+    for(size_t v = 1; v < new_sector_vertexes.size(); ++v) {
+        size_t v_nr = new_sector_vertex_nrs[v];
+        edge* e_ptr = new edge(v_nr - 1, v_nr);
+        new_sector_edges.push_back(e_ptr);
+    }
+    new_sector_edges.push_back(
+        new edge(
+            new_sector_vertex_nrs[new_sector_vertex_nrs.size() - 1],
+            new_sector_vertex_nrs[0]
+        )
+    );
+    
+    //Populate the edges with the sector's data.
+    bool is_clockwise = is_polygon_clockwise(new_sector_vertexes);
+    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+        edge* e_ptr = new_sector_edges[e];
+        if(is_clockwise) {
+            e_ptr->sector_nrs[0] = outer_sector_nr;
+            e_ptr->sector_nrs[1] = new_sector_nr;
+        } else {
+            e_ptr->sector_nrs[0] = new_sector_nr;
+            e_ptr->sector_nrs[1] = outer_sector_nr;
+        }
+        new_sector_edge_nrs.push_back(cur_area_data.edges.size());
+        cur_area_data.edges.push_back(e_ptr);
+        new_sector->edge_nrs.push_back(
+            cur_area_data.edges.size() - 1
+        );
+    }
+    
+    //Connect the vertexes and edges.
+    for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+        new_sector_edges[e]->fix_pointers(cur_area_data);
+    }
+    
+    for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
+        new_sector_vertexes[v]->connect_edges(
+            cur_area_data, new_sector_vertex_nrs[v]
+        );
+    }
+    
+    new_sector->connect_edges(
+        cur_area_data, cur_area_data.sectors.size() - 1
+    );
+    
+    //Add the edges to the outer sector's list.
+    if(outer_sector) {
+        for(size_t e = 0; e < new_sector_edges.size(); ++e) {
+            outer_sector->edges.push_back(new_sector_edges[e]);
+            outer_sector->edge_nrs.push_back(
+                new_sector_edge_nrs[e]
+            );
+        }
+    }
+    
+    //Triangulate new sector so we can check what's inside.
+    triangulate(new_sector);
+    
+    //All sectors inside the new one need to know that
+    //their outer sector changed.
+    unordered_set<edge*> inner_edges;
+    for(
+        size_t v = 0;
+        v < cur_area_data.vertexes.size() -
+        new_sector_vertexes.size();
+        ++v
+    ) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        
+        //If we're going to merge one of our vertexes with this one,
+        //just never mind.
+        if(
+            find(merge_dest_vertexes.begin(), merge_dest_vertexes.end(), v_ptr)
+            != merge_dest_vertexes.end()
+        ) {
+            continue;
+        }
+        
+        if(
+            is_point_in_sector(v_ptr->x, v_ptr->y, new_sector)
+        ) {
+            inner_edges.insert(
+                v_ptr->edges.begin(),
+                v_ptr->edges.end()
+            );
+        }
+    }
+    for(
+        auto i = inner_edges.begin();
+        i != inner_edges.end(); ++i
+    ) {
+        if((*i)->sector_nrs[0] == outer_sector_nr) {
+            (*i)->sector_nrs[0] = new_sector_nr;
+        } else if((*i)->sector_nrs[1] == outer_sector_nr) {
+            (*i)->sector_nrs[1] = new_sector_nr;
+        }
+        (*i)->fix_pointers(cur_area_data);
+    }
+    new_sector->connect_edges(
+        cur_area_data,
+        cur_area_data.sectors.size() - 1
+    );
+    if(outer_sector) {
+        outer_sector->connect_edges(
+            cur_area_data, outer_sector_nr
+        );
+    }
+    
+    //Merge vertexes that share a spot.
+    unordered_set<sector*> merge_affected_sectors;
+    for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
+        if(!merge_dest_vertexes[v]) continue;
+        merge_vertex(
+            new_sector_vertexes[v],
+            merge_dest_vertexes[v],
+            merge_dest_vertex_nrs[v],
+            &merge_affected_sectors
+        );
+    }
+    
+    //Final triangulations.
+    triangulate(new_sector);
+    if(outer_sector) triangulate(outer_sector);
+    for(
+        auto s = merge_affected_sectors.begin();
+        s != merge_affected_sectors.end(); ++s
+    ) {
+        if(*s) triangulate(*s);
+    }
+    
+    //Check for intersections, so they can get reported.
+    for(size_t e = 0; e < new_sector->edges.size(); ++e) {
+        check_edge_intersections(
+            new_sector->edges[e]->vertexes[0]
+        );
+    }
+    
+    cur_sector = new_sector;
+    new_sector_vertexes.clear();
 }
 
 
@@ -454,40 +665,55 @@ void area_editor::do_drawing() {
                     (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
                 );
                 
-                //Debug: uncomment this to show the sector numbers on each side.
-                /*float mid_x =
-                    (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
-                float mid_y =
-                    (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
-                float angle =
-                    atan2(
-                        e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y,
-                        e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x
+                if(debug_sector_nrs) {
+                    float mid_x =
+                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
+                    float mid_y =
+                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
+                    float angle =
+                        atan2(
+                            e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y,
+                            e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x
+                        );
+                    draw_scaled_text(
+                        font_main, al_map_rgb(192, 255, 192),
+                        mid_x + cos(angle + M_PI_2) * 4,
+                        mid_y + sin(angle + M_PI_2) * 4,
+                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        ALLEGRO_ALIGN_CENTER, 1,
+                        (
+                            e_ptr->sector_nrs[0] == INVALID ?
+                            "--" :
+                            i2s(e_ptr->sector_nrs[0])
+                        )
                     );
-                draw_scaled_text(
-                    font_main, al_map_rgb(192, 255, 192),
-                    mid_x + cos(angle + M_PI_2) * 4,
-                    mid_y + sin(angle + M_PI_2) * 4,
-                    0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, 1,
-                    (
-                        e_ptr->sector_nrs[0] == INVALID ?
-                        "--" :
-                        i2s(e_ptr->sector_nrs[0])
-                    )
-                );
-                draw_scaled_text(
-                    font_main, al_map_rgb(192, 255, 192),
-                    mid_x + cos(angle - M_PI_2) * 4,
-                    mid_y + sin(angle - M_PI_2) * 4,
-                    0.5 / cam_zoom, 0.5 / cam_zoom,
-                    ALLEGRO_ALIGN_CENTER, 1,
-                    (
-                        e_ptr->sector_nrs[1] == INVALID ?
-                        "--" :
-                        i2s(e_ptr->sector_nrs[1])
-                    )
-                );*/
+                    draw_scaled_text(
+                        font_main, al_map_rgb(192, 255, 192),
+                        mid_x + cos(angle - M_PI_2) * 4,
+                        mid_y + sin(angle - M_PI_2) * 4,
+                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        ALLEGRO_ALIGN_CENTER, 1,
+                        (
+                            e_ptr->sector_nrs[1] == INVALID ?
+                            "--" :
+                            i2s(e_ptr->sector_nrs[1])
+                        )
+                    );
+                }
+                
+                if(debug_edge_nrs) {
+                    float mid_x =
+                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
+                    float mid_y =
+                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
+                    draw_scaled_text(
+                        font_main, al_map_rgb(255, 192, 192),
+                        mid_x, mid_y,
+                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        ALLEGRO_ALIGN_CENTER, 1,
+                        i2s(e)
+                    );
+                }
             }
             
             //Vertexes.
@@ -501,6 +727,16 @@ void area_editor::do_drawing() {
                         3.0 / cam_zoom,
                         al_map_rgba(80, 160, 255, sector_opacity)
                     );
+                    
+                    if(debug_vertex_nrs) {
+                        draw_scaled_text(
+                            font_main, al_map_rgb(192, 192, 255),
+                            v_ptr->x, v_ptr->y,
+                            0.5 / cam_zoom, 0.5 / cam_zoom,
+                            ALLEGRO_ALIGN_CENTER, 1,
+                            i2s(v)
+                        );
+                    }
                 }
             }
             
@@ -611,7 +847,7 @@ void area_editor::do_drawing() {
                             one_way ? al_map_rgb(255, 160, 160) :
                             al_map_rgb(255, 255, 160)
                         ),
-                        LINK_THICKNESS / cam_zoom
+                        PATH_LINK_THICKNESS / cam_zoom
                     );
                     
                     if(one_way) {
@@ -622,7 +858,7 @@ void area_editor::do_drawing() {
                             (s_ptr->y + s2_ptr->y) / 2.0f;
                         float angle =
                             atan2(s2_ptr->y - s_ptr->y, s2_ptr->x - s_ptr->x);
-                        const float delta = (LINK_THICKNESS * 4) / cam_zoom;
+                        const float delta = (PATH_LINK_THICKNESS * 4) / cam_zoom;
                         
                         al_draw_filled_triangle(
                             mid_x + cos(angle) * delta,
@@ -761,6 +997,32 @@ void area_editor::do_drawing() {
             }
         }
         
+        //New sector preview.
+        if(sec_mode == ESM_NEW_SECTOR) {
+            for(size_t v = 1; v < new_sector_vertexes.size(); ++v) {
+                al_draw_line(
+                    new_sector_vertexes[v - 1]->x,
+                    new_sector_vertexes[v - 1]->y,
+                    new_sector_vertexes[v]->x,
+                    new_sector_vertexes[v]->y,
+                    al_map_rgb(128, 255, 128),
+                    3 / cam_zoom
+                );
+            }
+            if(!new_sector_vertexes.empty()) {
+                al_draw_line(
+                    new_sector_vertexes.back()->x,
+                    new_sector_vertexes.back()->y,
+                    snap_to_grid(mouse_cursor_x),
+                    snap_to_grid(mouse_cursor_y),
+                    (new_sector_valid_line ?
+                    al_map_rgb(64, 255, 64):
+                    al_map_rgb(255, 0, 0)),
+                    3 / cam_zoom
+                );
+            }
+        }
+        
         //New thing marker.
         if(
             sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT ||
@@ -809,17 +1071,20 @@ void area_editor::do_drawing() {
             if(on_sector && moving_thing == INVALID) {
                 for(size_t t = 0; t < on_sector->triangles.size(); ++t) {
                     triangle* t_ptr = &on_sector->triangles[t];
-                    //Uncomment this to show the triangles.
-                    /*al_draw_triangle(
-                        t_ptr->points[0]->x,
-                        t_ptr->points[0]->y,
-                        t_ptr->points[1]->x,
-                        t_ptr->points[1]->y,
-                        t_ptr->points[2]->x,
-                        t_ptr->points[2]->y,
-                        al_map_rgb(192, 0, 0),
-                        1.0 / cam_zoom
-                    );*/
+                    
+                    if(debug_triangulation) {
+                        al_draw_triangle(
+                            t_ptr->points[0]->x,
+                            t_ptr->points[0]->y,
+                            t_ptr->points[1]->x,
+                            t_ptr->points[1]->y,
+                            t_ptr->points[2]->x,
+                            t_ptr->points[2]->y,
+                            al_map_rgb(192, 0, 0),
+                            1.0 / cam_zoom
+                        );
+                    }
+                    
                     al_draw_filled_triangle(
                         t_ptr->points[0]->x,
                         t_ptr->points[0]->y,
@@ -860,6 +1125,23 @@ void area_editor::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
+ * Handles the logic part of the main loop of the area editor.
+ */
+void area_editor::do_logic() {
+
+    if(double_click_time > 0) {
+        double_click_time -= delta_t;
+        if(double_click_time < 0) double_click_time = 0;
+    }
+    
+    path_preview_timeout.tick(delta_t);
+    
+    fade_mgr.tick(delta_t);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Finds errors with the area.
  * On the first error, it adds it to error_type and stops.
  */
@@ -880,7 +1162,6 @@ void area_editor::find_errors() {
         
         for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
             vertex* v1_ptr = cur_area_data.vertexes[v];
-            if(v1_ptr->x == FLT_MAX) continue;
             
             for(size_t v2 = v + 1; v2 < cur_area_data.vertexes.size(); ++v2) {
                 vertex* v2_ptr = cur_area_data.vertexes[v2];
@@ -1136,6 +1417,106 @@ void area_editor::find_errors() {
     
     
     update_review_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a sector common to all vertexes.
+ * A sector is considered this if a vertex has it as on a neighboring edge,
+ * or if a vertex is inside it.
+ * Use the former for vertexes that will be merged, and the latter
+ * for vertexes that won't.
+ * vertexes: List of vertexes to check.
+ * merges:   For every vertex to check, which vertex it will be merged with.
+ * result:   Returns the common sector here.
+ * Returns false if there is no common sector. True otherwise.
+ */
+bool area_editor::get_common_sector(
+    vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result
+) {
+    vector<unordered_set<sector*> > related_sectors;
+    //Get the related sectors of each vertex.
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        related_sectors.push_back(unordered_set<sector*>());
+        
+        if(merges[v]) {
+            //If this sector is going to be merged, check
+            //the edges of the destination vertex.
+            vertex* mv_ptr = merges[v];
+            for(size_t e = 0; e < mv_ptr->edges.size(); ++e) {
+                for(size_t s = 0; s < 2; ++s) {
+                    related_sectors[v].insert(mv_ptr->edges[e]->sectors[s]);
+                }
+            }
+        } else {
+            //If this is a lone vertex, check which sector it's in.
+            related_sectors[v].insert(
+                get_sector(
+                    vertexes[v]->x,
+                    vertexes[v]->y,
+                    NULL, false
+                )
+            );
+        }
+    }
+    
+    unordered_set<sector*> all_related_sectors;
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        all_related_sectors.insert(
+            related_sectors[v].begin(),
+            related_sectors[v].end()
+        );
+    }
+    
+    bool has_common = false;
+    for(
+        auto s = all_related_sectors.begin();
+        s != all_related_sectors.end(); ++s
+    ) {
+        //Check if this sector is common to ALL vertexes.
+        bool is_common = true;
+        for(size_t v = 0; v < vertexes.size(); ++v) {
+            if(related_sectors[v].find(*s) == related_sectors[v].end()) {
+                is_common = false;
+                break;
+            }
+        }
+        if(!is_common) continue;
+        
+        *result = *s;
+        has_common = true;
+    }
+    
+    return has_common;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the closest vertex that can be merged with the specified point.
+ * Returns NULL if there is no vertex close enough to merge.
+ * x, y: Coordinates of the point.
+ * v_nr: If not NULL, the vertex's number is returned here.
+ */
+vertex* area_editor::get_merge_vertex(
+    const float x, const float y, size_t* v_nr
+) {
+    dist closest_dist = 0;
+    vertex* closest_v = NULL;
+    size_t closest_nr = INVALID;
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        dist d(x, y, v_ptr->x, v_ptr->y);
+        if(d <= VERTEX_MERGE_RADIUS && (d < closest_dist || !closest_v)) {
+            closest_dist = d;
+            closest_v = v_ptr;
+            closest_nr = v;
+        }
+    }
+    
+    if(v_nr) *v_nr = closest_nr;
+    return closest_v;
 }
 
 
@@ -1627,6 +2008,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             cam_zoom = new_zoom;
         }
         
+        if(sec_mode == ESM_NEW_SECTOR) {
+            new_sector_valid_line =
+                is_new_sector_line_valid(
+                    snap_to_grid(mouse_cursor_x),
+                    snap_to_grid(mouse_cursor_y)
+                );
+        }
+        
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
@@ -1756,7 +2145,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
             
             //Find a sector to select.
-            if(moving_thing == INVALID && !clicked_edge_ptr) {
+            if(moving_thing == INVALID) {
                 cur_sector =
                     get_sector(mouse_cursor_x, mouse_cursor_y, NULL, false);
                 sector_to_gui();
@@ -1847,87 +2236,43 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
         }
         
         if(sec_mode == ESM_NEW_SECTOR) {
-            //Place a new sector where the cursor is.
-            
-            sec_mode = ESM_NONE;
+            //Next vertex in a new sector.
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
-            size_t outer_sector_nr;
-            sector* outer_sector =
-                get_sector(hotspot_x, hotspot_y, &outer_sector_nr, false);
+            new_sector_valid_line =
+                is_new_sector_line_valid(
+                    snap_to_grid(mouse_cursor_x),
+                    snap_to_grid(mouse_cursor_y)
+                );
                 
-            sector* new_sector = new sector();
-            if(outer_sector) outer_sector->clone(new_sector);
-            
-            //Create the vertexes.
-            vertex* new_vertexes[4];
-            for(size_t v = 0; v < 4; ++v) new_vertexes[v] = new vertex(0, 0);
-            new_vertexes[0]->x = hotspot_x - DEF_GRID_INTERVAL / 2;
-            new_vertexes[0]->y = hotspot_y - DEF_GRID_INTERVAL / 2;
-            new_vertexes[1]->x = hotspot_x + DEF_GRID_INTERVAL / 2;
-            new_vertexes[1]->y = hotspot_y - DEF_GRID_INTERVAL / 2;
-            new_vertexes[2]->x = hotspot_x + DEF_GRID_INTERVAL / 2;
-            new_vertexes[2]->y = hotspot_y + DEF_GRID_INTERVAL / 2;
-            new_vertexes[3]->x = hotspot_x - DEF_GRID_INTERVAL / 2;
-            new_vertexes[3]->y = hotspot_y + DEF_GRID_INTERVAL / 2;
-            for(size_t v = 0; v < 4; ++v) {
-                cur_area_data.vertexes.push_back(new_vertexes[v]);
-            }
-            
-            //Create the edges.
-            edge* new_edges[4];
-            for(size_t l = 0; l < 4; ++l) {
-                new_edges[l] = new edge(
-                    cur_area_data.vertexes.size() - (4 - l),
-                    cur_area_data.vertexes.size() - (4 - ((l + 1) % 4))
-                );
-                new_edges[l]->sector_nrs[0] = outer_sector_nr;
-                new_edges[l]->sector_nrs[1] = cur_area_data.sectors.size();
-                cur_area_data.edges.push_back(new_edges[l]);
-            }
-            
-            //Add them to the area map.
-            for(size_t e = 0; e < 4; ++e) {
-                new_sector->edge_nrs.push_back(
-                    cur_area_data.edges.size() - (4 - e)
-                );
-            }
-            cur_area_data.sectors.push_back(new_sector);
-            
-            for(size_t e = 0; e < 4; ++e) {
-                new_edges[e]->fix_pointers(cur_area_data);
-            }
-            for(size_t v = 0; v < 4; ++v) {
-                new_vertexes[v]->connect_edges(
-                    cur_area_data, cur_area_data.vertexes.size() - (4 - v)
-                );
-            }
-            new_sector->connect_edges(
-                cur_area_data, cur_area_data.sectors.size() - 1
-            );
-            
-            //Add the edges to the outer sector's list.
-            if(outer_sector) {
-                for(size_t e = 0; e < 4; ++e) {
-                    outer_sector->edges.push_back(new_edges[e]);
-                    outer_sector->edge_nrs.push_back(
-                        cur_area_data.edges.size() - (4 - e)
-                    );
+            if(new_sector_valid_line) {
+                if(
+                    !new_sector_vertexes.empty() &&
+                    dist(
+                        hotspot_x, hotspot_y,
+                        new_sector_vertexes[0]->x,
+                        new_sector_vertexes[0]->y
+                    ) <= VERTEX_MERGE_RADIUS
+                ) {
+                    //Back to the first vertex.
+                    sec_mode = ESM_NONE;
+                    create_sector();
+                    sector_to_gui();
+                    made_changes = true;
+                } else {
+                    //Add a new vertex.
+                    vertex* merge = get_merge_vertex(hotspot_x, hotspot_y);
+                    if(merge) {
+                        new_sector_vertexes.push_back(
+                            new vertex(merge->x, merge->y)
+                        );
+                    } else {
+                        new_sector_vertexes.push_back(
+                            new vertex(hotspot_x, hotspot_y)
+                        );
+                    }
                 }
             }
-            
-            //Check for intersections.
-            for(size_t v = 0; v < 4; v += 2) {
-                check_edge_intersections(new_vertexes[v]);
-            }
-            
-            //Triangulate new sector and the parent one.
-            triangulate(new_sector);
-            if(outer_sector) triangulate(outer_sector);
-            
-            cur_sector = new_sector;
-            sector_to_gui();
-            made_changes = true;
             
             
         } else if(sec_mode == ESM_NEW_OBJECT) {
@@ -2187,7 +2532,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     dist(
                         moved_v_ptr->x, moved_v_ptr->y,
                         dest_v_ptr->x, dest_v_ptr->y
-                    ) <= (10 / cam_zoom)
+                    ) <= (VERTEX_MERGE_RADIUS / cam_zoom)
                 ) {
                     merge_vertex(
                         moved_v_ptr, dest_v_ptr,
@@ -2226,10 +2571,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             
             //Check if the edge's vertexes intersect with any other edges.
             //If so, they're marked with red.
-            if(moved_v_ptr->x != FLT_MAX) {
-                //If it didn't get marked for deletion in the meantime.
-                check_edge_intersections(moved_v_ptr);
-            }
+            check_edge_intersections(moved_v_ptr);
             
             moving_thing = INVALID;
             
@@ -2256,6 +2598,14 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
             ev.keyboard.keycode == ALLEGRO_KEY_RSHIFT
         ) {
             shift_pressed = true;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+            debug_edge_nrs = !debug_edge_nrs;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
+            debug_sector_nrs = !debug_sector_nrs;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F3) {
+            debug_vertex_nrs = !debug_vertex_nrs;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_F4) {
+            debug_triangulation = !debug_triangulation;
         }
         
         
@@ -2281,6 +2631,92 @@ bool area_editor::is_edge_valid(edge* l) {
     if(!l->vertexes[1]) return false;
     return true;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether the next line for a sector's creation is valid.
+ * i.e. it does not cross against other lines.
+ * This is the line between the last chosen vertex of the new sector
+ * and the provided coordinates.
+ */
+bool area_editor::is_new_sector_line_valid(const float x, const float y) {
+    if(new_sector_vertexes.empty()) return true;
+    
+    //Given the last vertex of the new sector,
+    //check if it'll be merged with an existing one.
+    vertex* last_vertex = new_sector_vertexes.back();
+    vertex* merge_vertex_1 = get_merge_vertex(last_vertex->x, last_vertex->y);
+    vertex* merge_vertex_2 = get_merge_vertex(x, y);
+    
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        //If this edge is on the same vertex as the last vertex
+        //of the new sector, never mind.
+        edge* e_ptr = cur_area_data.edges[e];
+        if(!e_ptr->vertexes[0]) continue;
+        if(
+            e_ptr->vertexes[0] == merge_vertex_1 ||
+            e_ptr->vertexes[1] == merge_vertex_1 ||
+            e_ptr->vertexes[0] == merge_vertex_2 ||
+            e_ptr->vertexes[1] == merge_vertex_2
+        ) {
+            continue;
+        }
+        
+        if(
+            lines_intersect(
+                last_vertex->x, last_vertex->y, x, y,
+                e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                NULL, NULL
+            )
+        ) {
+            return false;
+        }
+    }
+    
+    //Check if the line intersects with the new sector's edges.
+    if(new_sector_vertexes.size() >= 2) {
+        for(size_t v = 0; v < new_sector_vertexes.size() - 2; ++v) {
+            vertex* v1_ptr = new_sector_vertexes[v];
+            vertex* v2_ptr = new_sector_vertexes[v + 1];
+            if(
+                lines_intersect(
+                    new_sector_vertexes.back()->x,
+                    new_sector_vertexes.back()->y,
+                    x, y, v1_ptr->x, v1_ptr->y, v2_ptr->x, v2_ptr->y,
+                    NULL, NULL
+                )
+            ) {
+                if(
+                    v == 0 &&
+                    dist(x, y, v1_ptr->x, v1_ptr->y) <= VERTEX_MERGE_RADIUS
+                ) {
+                    //We're trying to close the sector. Never mind this one.
+                    continue;
+                }
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a polygon was created clockwise or anti-clockwise,
+ * given the order of its vertexes.
+ */
+bool area_editor::is_polygon_clockwise(vector<vertex*> &vertexes) {
+    //Solution by http://stackoverflow.com/a/1165943
+    float sum = 0;
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        vertex* v2_ptr = get_next_in_vector(vertexes, v);
+        sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
+    }
+    return sum < 0;
+}
+
 
 /* ----------------------------------------------------------------------------
  * Loads the area editor.
@@ -3205,6 +3641,12 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        cancel_new_sector();
+        new_sector_valid_line =
+            is_new_sector_line_valid(
+                snap_to_grid(mouse_cursor_x),
+                snap_to_grid(mouse_cursor_y)
+            );
         if(sec_mode == ESM_NEW_SECTOR) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_SECTOR;
     };
@@ -3858,9 +4300,16 @@ void area_editor::load_area() {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Merges vertex 1 into vertex 2.
+ * v1:               Vertex that is being moved and will be merged.
+ * v2:               Vertex that is going to absorb v1.
+ * v2_nr:            v2's vertex number.
+ * affected_sectors: List of sectors that will be affected with this merge.
+ */
 void area_editor::merge_vertex(
     vertex* v1, vertex* v2,
-    const size_t v1_nr, unordered_set<sector*>* affected_sectors
+    const size_t v2_nr, unordered_set<sector*>* affected_sectors
 ) {
     //Find out what to do with every edge of the dragged vertex.
     for(size_t e = 0; e < v1->edges.size();) {
@@ -3877,52 +4326,16 @@ void area_editor::merge_vertex(
             affected_sectors->insert(e_ptr->sectors[0]);
             affected_sectors->insert(e_ptr->sectors[1]);
             
-            //Clear it from its vertexes' lists.
-            for(
-                size_t ve = 0; ve < other_vertex->edges.size();
-                ++ve
-            ) {
-                if(other_vertex->edges[ve] == e_ptr) {
-                    other_vertex->edges.erase(
-                        other_vertex->edges.begin() + ve
-                    );
-                    other_vertex->edge_nrs.erase(
-                        other_vertex->edge_nrs.begin() + ve
-                    );
-                    break;
-                }
-            }
-            
-            //Clear it from the sector lists.
-            for(size_t s = 0; s < 2; ++s) {
-                if(!e_ptr->sectors[s]) continue;
-                for(
-                    size_t se = 0;
-                    se < e_ptr->sectors[s]->edges.size();
-                    ++se
-                ) {
-                    if(e_ptr->sectors[s]->edges[se] == e_ptr) {
-                        e_ptr->sectors[s]->edges.erase(
-                            e_ptr->sectors[s]->edges.begin() +
-                            se
-                        );
-                        e_ptr->sectors[s]->edge_nrs.erase(
-                            e_ptr->sectors[s]->edge_nrs.begin() +
-                            se
-                        );
-                        break;
-                    }
-                }
-            }
+            e_ptr->remove_from_vertexes();
+            e_ptr->remove_from_sectors();
             
             //Clear it from the list of lone edges, if there.
             auto it = lone_edges.find(e_ptr);
             if(it != lone_edges.end()) lone_edges.erase(it);
             
-            //Clear its info, so it gets marked for deletion.
-            e_ptr->vertex_nrs[0] = INVALID;
-            e_ptr->vertex_nrs[1] = INVALID;
-            e_ptr->fix_pointers(cur_area_data);
+            //Delete it.
+            cur_area_data.remove_edge(e_ptr);
+            was_deleted = true;
             
         } else {
         
@@ -3978,11 +4391,8 @@ void area_editor::merge_vertex(
                         de_ptr->sectors[s]->edge_nrs.push_back(old_de_nr);
                     }
                     
-                    //Remove the deleted edge's info.
-                    //This'll mark it for deletion.
-                    e_ptr->sector_nrs[0] = e_ptr->sector_nrs[1] = INVALID;
-                    e_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[1] = INVALID;
-                    e_ptr->fix_pointers(cur_area_data);
+                    //Delete it.
+                    cur_area_data.remove_edge(e_ptr);
                     was_deleted = true;
                     
                     break;
@@ -3996,7 +4406,7 @@ void area_editor::merge_vertex(
                 v2->edges.push_back(v1->edges[e]);
                 unsigned char n = (e_ptr->vertexes[0] == v1 ? 0 : 1);
                 e_ptr->vertexes[n] = v2;
-                e_ptr->vertex_nrs[n] = v1_nr;
+                e_ptr->vertex_nrs[n] = v2_nr;
             }
         }
         
@@ -4013,30 +4423,19 @@ void area_editor::merge_vertex(
         if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
             ve_ptr->remove_from_sectors();
             ve_ptr->remove_from_vertexes();
-            for(size_t v = 0; v < 2; ++v) {
-                if(ve_ptr->vertexes[v]->edges.empty()) {
-                    ve_ptr->vertexes[v]->x = ve_ptr->vertexes[v]->y = FLT_MAX;
-                }
-            }
-            ve_ptr->sector_nrs[0] = ve_ptr->sector_nrs[1] = INVALID;
-            ve_ptr->vertex_nrs[0] = ve_ptr->vertex_nrs[1] = INVALID;
-            ve_ptr->fix_pointers(cur_area_data);
+            cur_area_data.remove_edge(v2->edge_nrs[ve]);
         } else {
             ++ve;
         }
     }
     
-    //If this vertex is out of edges, it'll be
-    //deleted eventually. Move it out of the way.
+    //If this vertex is out of edges, delete it.
     if(v2->edges.empty()) {
-        v2->x = v2->y = FLT_MAX;
+        cur_area_data.remove_vertex(v2_nr);
     }
     
-    //Remove the old vertex' info.
-    //This'll mark it for deletion.
-    v1->edge_nrs.clear();
-    v1->edges.clear();
-    v1->x = v1->y = FLT_MAX; //So it's out of the way.
+    //Delete the old vertex.
+    cur_area_data.remove_vertex(v1);
 }
 
 
@@ -4328,100 +4727,6 @@ void area_editor::resize_everything() {
 void area_editor::save_area() {
     data_node geometry_file = data_node("", "");
     
-    //Start by cleaning unused vertex, sector, etc. ids.
-    //Unused vertex ids.
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); ) {
-    
-        vertex* v_ptr = cur_area_data.vertexes[v];
-        if(v_ptr->edge_nrs.empty()) {
-        
-            cur_area_data.vertexes.erase(cur_area_data.vertexes.begin() + v);
-            
-            //Fix numbers in edge lists.
-            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-                edge* e_ptr = cur_area_data.edges[e];
-                for(unsigned char ev = 0; ev < 2; ++ev) {
-                    if(
-                        e_ptr->vertex_nrs[ev] >= v &&
-                        e_ptr->vertex_nrs[ev] != INVALID
-                    ) {
-                        e_ptr->vertex_nrs[ev]--;
-                    }
-                }
-            }
-            
-        } else {
-            ++v;
-        }
-    }
-    
-    //Unused sector ids.
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ) {
-    
-        sector* s_ptr = cur_area_data.sectors[s];
-        if(s_ptr->edge_nrs.empty()) {
-        
-            cur_area_data.sectors.erase(cur_area_data.sectors.begin() + s);
-            
-            //Fix numbers in edge lists.
-            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-                edge* e_ptr = cur_area_data.edges[e];
-                for(unsigned char es = 0; es < 2; ++es) {
-                    if(
-                        e_ptr->sector_nrs[es] >= s &&
-                        e_ptr->sector_nrs[es] != INVALID
-                    ) {
-                        e_ptr->sector_nrs[es]--;
-                    }
-                }
-            }
-            
-        } else {
-            ++s;
-        }
-    }
-    
-    //Unused edge ids.
-    for(size_t e = 0; e < cur_area_data.edges.size(); ) {
-    
-        edge* e_ptr = cur_area_data.edges[e];
-        if(e_ptr->vertex_nrs[0] == INVALID) {
-        
-            cur_area_data.edges.erase(cur_area_data.edges.begin() + e);
-            
-            //Fix numbers in vertex lists.
-            for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-                vertex* v_ptr = cur_area_data.vertexes[v];
-                for(size_t ve = 0; ve < v_ptr->edge_nrs.size(); ++ve) {
-                    if(
-                        v_ptr->edge_nrs[ve] >= e &&
-                        v_ptr->edge_nrs[ve] != INVALID
-                    ) {
-                        --v_ptr->edge_nrs[ve];
-                    }
-                }
-            }
-            
-            //Fix numbers in sector lists.
-            for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                sector* s_ptr = cur_area_data.sectors[s];
-                for(size_t se = 0; se < s_ptr->edge_nrs.size(); ++se) {
-                    if(
-                        s_ptr->edge_nrs[se] >= e &&
-                        s_ptr->edge_nrs[se] != INVALID
-                    ) {
-                        s_ptr->edge_nrs[se]--;
-                    }
-                }
-            }
-            
-        } else {
-            ++e;
-        }
-    }
-    
-    
-    //Save the content now.
     //Vertexes.
     data_node* vertexes_node = new data_node("vertexes", "");
     geometry_file.add(vertexes_node);
