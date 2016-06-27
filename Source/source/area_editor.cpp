@@ -100,11 +100,13 @@ area_editor::area_editor() :
             PATH_PREVIEW_TIMEOUT_DUR,
     [this] () {calculate_preview_path();}
         );
-    backup_timer =
-        timer(
-            editor_backup_interval,
-    [this] () {save_backup();}
-        );
+    if(editor_backup_interval > 0) {
+        backup_timer =
+            timer(
+                editor_backup_interval,
+        [this] () {save_backup();}
+            );
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -1142,7 +1144,9 @@ void area_editor::do_logic() {
     
     path_preview_timeout.tick(delta_t);
     
-    if(!area_name.empty()) backup_timer.tick(delta_t);
+    if(!area_name.empty() && editor_backup_interval > 0) {
+        backup_timer.tick(delta_t);
+    }
     
     fade_mgr.tick(delta_t);
     

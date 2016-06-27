@@ -1014,12 +1014,21 @@ void do_game_drawing(
         ***********************/
         
         if(!info_print_text.empty()) {
+            float alpha_mult = 1;
+            if(
+                info_print_timer.time_left <
+                INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY
+            ) {
+                alpha_mult =
+                    info_print_timer.time_left /
+                    (INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY);
+            }
             al_draw_filled_rectangle(
                 0, 0, scr_w, scr_h * 0.3,
-                al_map_rgba(0, 0, 0, 96)
+                al_map_rgba(0, 0, 0, 96 * alpha_mult)
             );
             draw_text_lines(
-                allegro_font, al_map_rgba(255, 255, 255, 128),
+                allegro_font, al_map_rgba(255, 255, 255, 128 * alpha_mult),
                 8, 8, 0, 0, info_print_text
             );
         }
@@ -1028,20 +1037,6 @@ void do_game_drawing(
         
     } else { //Paused.
     
-    }
-    
-    //Framerate.
-    if(show_framerate) {
-        framerate_update_timer.tick(delta_t);
-        al_draw_text(
-            font_main,
-            (
-                framerate_counter >= (unsigned) (game_fps - 1) ?
-                al_map_rgb(64, 128, 64) : al_map_rgb(128, 64, 64)
-            ),
-            0, 0, 0,
-            (i2s(framerate_counter) + "FPS").c_str()
-        );
     }
     
     if(area_title_fade_timer.time_left > 0) {

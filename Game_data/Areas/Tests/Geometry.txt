@@ -38,12 +38,12 @@ vertexes{
 	v=128.00 -768.00
 	v=256.00 -768.00
 	v=162.63 -564.70
-	v=-896.00 -864.00
-	v=-576.00 -800.00
-	v=-640.00 -672.00
-	v=-896.00 -672.00
-	v=-544.00 -768.00
-	v=-672.00 -704.00
+	v=-928.00 -928.00
+	v=-608.00 -928.00
+	v=-704.00 -768.00
+	v=-928.00 -768.00
+	v=-576.00 -896.00
+	v=-736.00 -800.00
 	v=-160.00 -960.00
 	v=-160.00 -800.00
 	v=-288.00 -960.00
@@ -91,7 +91,7 @@ vertexes{
 	v=672.00 32.00
 	v=534.08 -94.79
 	v=761.54 -32.02
-	v=-672.00 -864.00
+	v=-736.00 -928.00
 	v=608.00 128.00
 	v=736.00 128.00
 	v=608.13 185.54
@@ -139,6 +139,14 @@ vertexes{
 	v=-640.00 -512.00
 	v=-640.00 -416.00
 	v=-736.00 -416.00
+	v=-544.00 -320.00
+	v=-448.00 -320.00
+	v=-448.00 -224.00
+	v=-544.00 -224.00
+	v=-544.00 -416.00
+	v=-544.00 -512.00
+	v=-448.00 -512.00
+	v=-448.00 -416.00
 }
 edges{
 	e{
@@ -781,6 +789,38 @@ edges{
 		s=0 40
 		v=139 136
 	}
+	e{
+		s=0 41
+		v=140 141
+	}
+	e{
+		s=0 41
+		v=141 142
+	}
+	e{
+		s=0 41
+		v=142 143
+	}
+	e{
+		s=0 41
+		v=143 140
+	}
+	e{
+		s=0 42
+		v=144 145
+	}
+	e{
+		s=0 42
+		v=145 146
+	}
+	e{
+		s=0 42
+		v=146 147
+	}
+	e{
+		s=0 42
+		v=147 144
+	}
 }
 sectors{
 	s{
@@ -946,15 +986,15 @@ sectors{
 	}
 	s{
 		z=0.00
-		hazards=fire
+		hazards=ink
 		hazards_floor=true
 		texture=Spectrum.jpg
 		texture_scale=20.00 20.00
-		texture_trans=-40.00 0.00
+		texture_trans=130.00 0.00
 	}
 	s{
 		z=0.00
-		hazards=ink
+		hazards=poison
 		hazards_floor=true
 		texture=Spectrum.jpg
 		texture_scale=20.00 20.00
@@ -968,19 +1008,35 @@ sectors{
 	}
 	s{
 		z=0.00
-		hazards=fatal_electricity
-		hazards_floor=true
-		texture=Spectrum.jpg
-		texture_scale=20.00 20.00
-		texture_trans=-150.00 0.00
-	}
-	s{
-		z=0.00
 		hazards=shocking_electricity
 		hazards_floor=true
 		texture=Spectrum.jpg
 		texture_scale=20.00 20.00
-		texture_trans=-180.00 0.00
+		texture_trans=-170.00 0.00
+	}
+	s{
+		z=0.00
+		hazards=fatal_electricity
+		hazards_floor=true
+		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=-140.00 0.00
+	}
+	s{
+		z=0.00
+		hazards=fire
+		hazards_floor=true
+		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=-40.00 0.00
+	}
+	s{
+		z=0.00
+		hazards=water_bubble
+		hazards_floor=true
+		texture=Spectrum.jpg
+		texture_scale=20.00 20.00
+		texture_trans=280.00 0.00
 	}
 }
 mobs{

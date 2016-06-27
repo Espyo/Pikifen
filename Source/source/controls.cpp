@@ -60,12 +60,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 dev_tool_change_speed = !dev_tool_change_speed;
                 
             } else if(id == DEV_TOOL_COORDINATES) {
-                float mx, my;
-                get_mouse_cursor_coordinates(&mx, &my);
-                print_info(
-                    "Mouse coordinates: " + f2s(mx) +
-                    ", " + f2s(my) + "."
-                );
+                dev_tool_show_mouse_coords = !dev_tool_show_mouse_coords;
                 
             } else if(id == DEV_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();

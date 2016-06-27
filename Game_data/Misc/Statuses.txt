@@ -1,4 +1,4 @@
-burning {
+burned {
     affects_pikmin = true
     animation = Fire.txt
     animation_mob_scale = 0.75
@@ -11,7 +11,7 @@ burning {
     tint = 255 192 192
 }
 
-water_drowning {
+drowning {
     affects_pikmin = true
     causes_flailing = true
     color = 0 0 255
@@ -19,17 +19,30 @@ water_drowning {
     speed_multiplier = 0.2
 }
 
-electrocution {
+bubbled {
+    affects_pikmin = true
+    animation = Bubble.txt
+    animation_mob_scale = 2
+    causes_panic = true
+    color = 0 255 255
+    health_change_ratio = -0.3
+    particle_generator = bubble_hazard
+    removable_with_whistle = true
+    speed_multiplier = 2.0
+}
+
+electrocuted {
     affects_pikmin = true
     animation = Electrocution.txt
     animation_mob_scale = 2.0
+    causes_disable = true
     color = 255 255 128
     health_change_ratio = -1.5
     speed_multiplier = 0
     tint = 0 0 0 0
 }
 
-shock {
+shocked {
     affects_pikmin = true
     animation = Sparks.txt
     animation_mob_scale = 1.5
@@ -39,14 +52,26 @@ shock {
     speed_multiplier = 0
 }
 
-choking_ink {
+poisoned {
     affects_pikmin = true
+    causes_panic = true
+    color = 128 16 112
+    health_change_ratio = -0.3
+    removable_with_whistle = true
+    speed_multiplier = 2.0
+    particle_generator = poison_gas
+}
+
+inked {
+    affects_pikmin = true
+    animation = Ink.txt
+    animation_mob_scale = 1.5
     auto_remove_time = 5
     causes_panic = true
     color = 64 64 64
     removable_with_whistle = true
     speed_multiplier = 2.0
-    tint = 192 192 192
+    tint = 128 128 128
 }
 
 spicy {

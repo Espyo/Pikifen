@@ -206,7 +206,7 @@ void main_menu::do_drawing() {
         0.4, 0.4,
         ALLEGRO_ALIGN_RIGHT, 2,
         game_name + " " + game_version +
-        " is powered by PFE " +
+        ", powered by PFE " +
         i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR)  + "." + i2s(VERSION_REV)
     );
     

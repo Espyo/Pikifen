@@ -841,9 +841,9 @@ void fade_manager::draw() {
         unsigned char alpha = (fade_mgr.get_perc_left()) * 255;
         al_draw_filled_rectangle(
             0, 0, scr_w, scr_h,
-            al_map_rgba(0, 0, 0,
-                        (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
-                       )
+            al_map_rgba(
+                0, 0, 0, (fade_mgr.is_fade_in() ? alpha : 255 - alpha)
+            )
         );
     }
 }

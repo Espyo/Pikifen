@@ -13,6 +13,7 @@
 #include "../functions.h"
 #include "mob.h"
 #include "pikmin.h"
+#include "pikmin_fsm.h"
 #include "../vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -237,7 +238,7 @@ void pikmin::draw() {
         al_get_separate_blender(
             &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
         );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
         draw_sprite(
             f_ptr->bitmap,
             draw_x, draw_y,
@@ -254,12 +255,13 @@ void pikmin::draw() {
     float h_mult = draw_h / f_ptr->game_h;
     
     if(f_ptr->top_visible) {
-        float c = cos(angle), s = sin(angle);
+        float top_x = f_ptr->top_x;
+        float top_y = f_ptr->top_y;
+        rotate_point(f_ptr->top_x, f_ptr->top_y, angle, &top_x, &top_y);
         draw_sprite(
             pik_type->bmp_top[maturity],
-            draw_x + c * f_ptr->top_x * w_mult + c * f_ptr->top_y * w_mult,
-            draw_y - s * f_ptr->top_y * h_mult + s * f_ptr->top_x * h_mult,
-            f_ptr->top_w * w_mult, f_ptr->top_h * h_mult,
+            x + top_x, y + top_y,
+            f_ptr->top_w, f_ptr->top_h,
             f_ptr->top_angle + angle,
             tint
         );
@@ -327,6 +329,7 @@ void pikmin::receive_panic_from_status() {
 void pikmin::lose_panic_from_status() {
     if(fsm.cur_state->id == PIKMIN_STATE_PANIC) {
         fsm.set_state(PIKMIN_STATE_IDLE);
+        pikmin_fsm::stand_still(this, NULL, NULL);
     }
 }
 

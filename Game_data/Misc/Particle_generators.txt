@@ -1,10 +1,10 @@
 smoke {
-    emission_interval = 0.1
+    emission_interval = 0.06
     number = 1
     number_deviation = 0
     base {
         bitmap = Smoke.png
-        duration = 1.5
+        duration = 0.7
         friction = 1
         gravity = 0
         size_grow_speed = 30
@@ -14,7 +14,7 @@ smoke {
         color = 128 64 64 192
         before_mobs = false
     }
-    duration_deviation = 0.5
+    duration_deviation = 0.3
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 2
@@ -22,6 +22,67 @@ smoke {
     y_deviation = 0
     speed_x_deviation = 5
     speed_y_deviation = 5
+    angle = 0
+    angle_deviation = 0
+    speed = 0
+    speed_deviation = 0
+}
+
+bubble_hazard {
+    emission_interval = 0.1
+    number = 1
+    number_deviation = 0
+    base {
+        bitmap = Bubble.png
+        duration = 1
+        friction = 0
+        gravity = 1
+        size_grow_speed = 0
+        size = 16
+        speed_x = 0
+        speed_y = -10
+        color = 128 255 255 255
+        before_mobs = false
+    }
+    duration_deviation = 0.2
+    friction_deviation = 0
+    gravity_deviation = 0
+    size_deviation = 8
+    x_deviation = 0
+    y_deviation = 0
+    speed_x_deviation = 20
+    speed_y_deviation = 0
+    angle = 0
+    angle_deviation = 0
+    speed = 0
+    speed_deviation = 0
+}
+
+
+poison_gas {
+    emission_interval = 0.06
+    number = 1
+    number_deviation = 0
+    base {
+        bitmap = Smoke.png
+        duration = 1.5
+        friction = 0
+        gravity = 0
+        size_grow_speed = 30
+        size = 24
+        speed_x = 0
+        speed_y = -10
+        color = 128 16 112 192
+        before_mobs = false
+    }
+    duration_deviation = 0.5
+    friction_deviation = 0
+    gravity_deviation = 0
+    size_deviation = 2
+    x_deviation = 0
+    y_deviation = 0
+    speed_x_deviation = 0
+    speed_y_deviation = 0
     angle = 0
     angle_deviation = 0
     speed = 0

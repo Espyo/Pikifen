@@ -1,25 +1,35 @@
 fire {
     color = 255 0 0
-    effects = burning
+    effects = burned
 }
 
 water {
     color = 0 0 255
-    effects = water_drowning
+    effects = drowning
     liquid = water
+}
+
+water_bubble {
+    color = 0 255 255
+    effects = bubbled
 }
 
 fatal_electricity {
     color = 255 255 128
-    effects = electrocution
+    effects = electrocuted
 }
 
 shocking_electricity {
     color = 255 255 128
-    effects = shock
+    effects = shocked
+}
+
+poison {
+    color = 128 16 112
+    effects = poisoned
 }
 
 ink {
     color = 64 64 64
-    effects = choking_ink
+    effects = inked
 }

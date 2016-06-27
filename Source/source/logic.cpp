@@ -452,6 +452,17 @@ void do_gameplay_logic() {
         
     }
     
+    //Print framerate.
+    if(show_framerate) {
+        framerate_update_timer.tick(delta_t);
+        print_info(
+            "Average:  " + i2s(framerate_counter) + " FPS\n\n"
+            "Now:      " + f2s(1.0 / delta_t) + " FPS\n"
+            "Intended: " + i2s(game_fps) + " FPS"
+        );
+    }
+    
+    //Print info on a mob.
     if(dev_tool_info_lock) {
         string name_str =
             box_string("Mob: " + dev_tool_info_lock->type->name + ".", 30);
@@ -519,6 +530,14 @@ void do_gameplay_logic() {
             vars_str
         );
     }
+    
+    //Print mouse coordinates.
+    if(dev_tool_show_mouse_coords) {
+        float mx, my;
+        get_mouse_cursor_coordinates(&mx, &my);
+        print_info("Mouse coordinates: " + f2s(mx) + ", " + f2s(my) + ".");
+    }
+    
     info_print_timer.tick(delta_t);
     
     ready_for_input = true;

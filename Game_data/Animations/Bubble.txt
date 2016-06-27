@@ -1,0 +1,25 @@
+animations{
+	default{
+		loop_frame=0
+		frame_instances{
+			1{
+				duration=0.00
+			}
+		}
+	}
+}
+frames{
+	1{
+		file=Bubble.png
+		file_x=0
+		file_y=0
+		file_w=64
+		file_h=64
+		game_w=64.00
+		game_h=64.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+}
+hitboxes=

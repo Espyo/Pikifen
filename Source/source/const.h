@@ -61,7 +61,9 @@ const float GROUP_MOVE_ARROWS_INTERVAL = 0.1f;
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = M_PI_2;
 //How long the on-screen info is printed for.
-const float INFO_PRINT_DURATION = 10.0f;
+const float INFO_PRINT_DURATION = 5.0f;
+//How long to wait before starting to move the on-screen info.
+const float INFO_PRINT_FADE_DELAY = 1.5f;
 //How many pixels the mouse cursor moves, per second,
 //when using an analog stick.
 const float MOUSE_CURSOR_MOVE_SPEED = 500.0f;

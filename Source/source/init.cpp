@@ -282,11 +282,12 @@ void init_hud_coordinates() {
 void init_misc() {
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     al_set_window_title(display, "Pikmin fangame engine");
+    int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(smooth_scaling) {
-        al_set_new_bitmap_flags(
-            ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP
-        );
+        new_bitmap_flags |=
+            ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP;
     }
+    al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);
     
     srand(time(NULL));
