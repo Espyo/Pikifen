@@ -147,8 +147,7 @@ void mob::tick_brain() {
         if(!chase_teleport) {
         
             if(
-                !(fabs(final_target_x - x) < chase_target_dist &&
-                  fabs(final_target_y - y) < chase_target_dist)
+                dist(x, y, final_target_x, final_target_y) > chase_target_dist
             ) {
                 //If it still hasn't reached its target
                 //(or close enough to the target),

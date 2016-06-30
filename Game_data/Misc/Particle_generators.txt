@@ -11,7 +11,7 @@ smoke {
         size = 16
         speed_x = 0
         speed_y = -50
-        color = 128 64 64 192
+        color = 96 64 64 192
         before_mobs = false
     }
     duration_deviation = 0.3

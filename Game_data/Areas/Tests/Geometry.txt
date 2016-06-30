@@ -1199,6 +1199,10 @@ mobs{
 		type=Hazard test
 		p=-320.00 32.00
 	}
+	Gate{
+		type=Electric gate
+		p=-384.00 288.00
+	}
 }
 path_stops{
 	s{

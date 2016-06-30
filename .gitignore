@@ -6,6 +6,7 @@ Source/CL/.codelite/
 Source/CL/Pikmin_fangame_engine.mk
 Error_log.txt
 Options.txt
+Game_data/Areas/*/*_backup.txt
 *allegro.log
 *.lnk
 *.o
