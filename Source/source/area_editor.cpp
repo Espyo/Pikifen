@@ -4474,13 +4474,27 @@ void area_editor::merge_vertex(
         }
     }
     
-    //If this vertex is out of edges, delete it.
-    if(v2->edges.empty()) {
-        cur_area_data.remove_vertex(v2_nr);
-    }
-    
     //Delete the old vertex.
     cur_area_data.remove_vertex(v1);
+    
+    //If any vertex or sector is out of edges, delete it.
+    for(size_t v = 0; v < cur_area_data.vertexes.size();) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        if(v_ptr->edges.empty()) {
+            cur_area_data.remove_vertex(v);
+        } else {
+            ++v;
+        }
+    }
+    for(size_t s = 0; s < cur_area_data.sectors.size();) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) {
+            cur_area_data.remove_sector(s);
+        } else {
+            ++s;
+        }
+    }
+    
 }
 
 

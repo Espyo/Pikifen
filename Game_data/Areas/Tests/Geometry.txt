@@ -286,31 +286,31 @@ edges{
 		v=27 29
 	}
 	e{
-		s=8 9
+		s=9 8
 		v=31 30
 	}
 	e{
-		s=8 0
+		s=0 8
 		v=32 31
 	}
 	e{
-		s=8 10
+		s=10 8
 		v=33 32
 	}
 	e{
-		s=8 0
+		s=0 8
 		v=30 33
 	}
 	e{
-		s=9 0
+		s=0 9
 		v=38 34
 	}
 	e{
-		s=9 0
+		s=0 9
 		v=35 30
 	}
 	e{
-		s=9 0
+		s=0 9
 		v=34 35
 	}
 	e{
@@ -326,7 +326,7 @@ edges{
 		v=36 33
 	}
 	e{
-		s=9 0
+		s=0 9
 		v=31 38
 	}
 	e{
@@ -1198,10 +1198,6 @@ mobs{
 	Enemy{
 		type=Hazard test
 		p=-320.00 32.00
-	}
-	Gate{
-		type=Electric gate
-		p=-384.00 288.00
 	}
 }
 path_stops{

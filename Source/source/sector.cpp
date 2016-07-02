@@ -258,18 +258,18 @@ void area_data::remove_edge(const edge* e_ptr) {
  */
 void area_data::remove_sector(const size_t s_nr) {
     sectors.erase(sectors.begin() + s_nr);
-    for(size_t s = 0; s < sectors.size(); ++s) {
-        sector* s_ptr = sectors[s];
-        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = cur_area_data.edges[e];
+        for(size_t s = 0; s < 2; ++s) {
             if(
-                s_ptr->edge_nrs[e] != INVALID &&
-                s_ptr->edge_nrs[e] > s_nr
+                e_ptr->sector_nrs[s] != INVALID &&
+                e_ptr->sector_nrs[s] > s_nr
             ) {
-                s_ptr->edge_nrs[e]--;
-            } else if(s_ptr->edge_nrs[e] == s_nr) {
+                e_ptr->sector_nrs[s]--;
+            } else if(e_ptr->sector_nrs[s] == s_nr) {
                 //This should never happen.
-                s_ptr->edge_nrs[e] = INVALID;
-                s_ptr->edges[e] = NULL;
+                e_ptr->sector_nrs[s] = INVALID;
+                e_ptr->sectors[s] = NULL;
             }
         }
     }
