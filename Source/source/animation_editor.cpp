@@ -851,6 +851,11 @@ void animation_editor::load() {
     mode = EDITOR_MODE_MAIN;
     file_path.clear();
     
+    load_custom_particle_generators();
+    load_status_types();
+    load_liquids();
+    load_hazards();
+    
     fade_mgr.start_fade(true, nullptr);
     
     lafi::style* s =

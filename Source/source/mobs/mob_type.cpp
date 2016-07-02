@@ -160,6 +160,7 @@ void load_mob_type_from_file(
     rs.set("pushable",            mt->pushable);
     rs.set("show_health",         mt->show_health);
     rs.set("casts_shadow",        mt->casts_shadow);
+    rs.set("is_obstacle",         mt->is_obstacle);
     
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");

@@ -131,14 +131,14 @@ void particle::draw() {
         
     } else if(type == PARTICLE_TYPE_SMACK) {
         float r = time / duration;
-        float size = size;
+        float s = size;
         float opacity = 255;
-        if(r <= 0.5) size *= r * 2;
+        if(r <= 0.5) s *= r * 2;
         else opacity *= (1 - r) * 2;
         
         draw_sprite(
             bitmap, x, y,
-            size, size, 0, change_alpha(color, opacity)
+            s, s, 0, change_alpha(color, opacity)
         );
     }
 }

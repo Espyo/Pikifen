@@ -30,6 +30,7 @@ enum ENEMY_EXTRA_STATES {
 };
 
 enum MOB_CATEGORIES {
+    //Sorted by what types of mobs to load first.
     MOB_CATEGORY_NONE,
     MOB_CATEGORY_PIKMIN,
     MOB_CATEGORY_ONIONS,
@@ -40,21 +41,9 @@ enum MOB_CATEGORIES {
     MOB_CATEGORY_SPECIAL,
     MOB_CATEGORY_SHIPS,
     MOB_CATEGORY_GATES,
+    MOB_CATEGORY_MISC,
     
     N_MOB_CATEGORIES,
-};
-
-const unsigned char MOB_CATEGORY_COLORS[N_MOB_CATEGORIES][3] = {
-    {224, 96,  96 },
-    {64,  255, 64 },
-    {48,  160, 48 },
-    {48,  80,  192},
-    {224, 48,  96 },
-    {255, 240, 64 },
-    {208, 224, 96 },
-    {32,  160, 160},
-    {128, 128, 192},
-    {224, 192, 192}
 };
 
 const size_t ANIM_IDLE = 0;

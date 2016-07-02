@@ -378,7 +378,9 @@ void cause_hitbox_damage(
 void create_mob(mob* m);
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
-hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m);
+hitbox_instance* get_closest_hitbox(
+    const float x, const float y, mob* m, const size_t h_type = INVALID
+);
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
 void remove_from_group(mob* member);
 bool should_attack(mob* m1, mob* m2);

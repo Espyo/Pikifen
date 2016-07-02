@@ -195,6 +195,7 @@ void dist::operator+=(const dist &d2) {
 void mob_category_manager::register_category(
     unsigned char nr,
     string pname, string sname, string folder,
+    ALLEGRO_COLOR editor_color,
     function<void (vector<string> &list)> lister,
     function<mob_type* (const string &name)> type_getter,
     function<mob_type* ()> type_constructor,
@@ -210,6 +211,7 @@ void mob_category_manager::register_category(
     categories[nr].plural_name = pname;
     categories[nr].singular_name = sname;
     categories[nr].folder = folder;
+    categories[nr].editor_color = editor_color;
     categories[nr].lister = lister;
     categories[nr].type_getter = type_getter;
     categories[nr].type_constructor = type_constructor;
@@ -259,6 +261,18 @@ string mob_category_manager::get_pname(const unsigned char cat_nr) {
 string mob_category_manager::get_sname(const unsigned char cat_nr) {
     if(cat_nr < categories.size()) return categories[cat_nr].singular_name;
     return "";
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the color of a category on the area editor.
+ * Returns transparent on error.
+ */
+ALLEGRO_COLOR mob_category_manager::get_editor_color(
+    const unsigned char cat_nr
+) {
+    if(cat_nr < categories.size()) return categories[cat_nr].editor_color;
+    return al_map_rgba(0, 0, 0, 0);
 }
 
 

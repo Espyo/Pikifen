@@ -268,6 +268,13 @@ void gameplay::load() {
                     m_ptr->angle, m_ptr->vars
                 )
             );
+        } else if(m_ptr->category == MOB_CATEGORY_MISC) {
+            create_mob(
+                new mob(
+                    m_ptr->x, m_ptr->y, m_ptr->type,
+                    m_ptr->angle, m_ptr->vars
+                )
+            );
         }
     }
     

@@ -781,13 +781,13 @@ void area_editor::do_drawing() {
                 m_ptr->type ?
                 m_ptr->type->radius == 0 ? 16 :
                 m_ptr->type->radius : 16;
-            const unsigned char* c = MOB_CATEGORY_COLORS[m_ptr->category];
+            ALLEGRO_COLOR c = mob_categories.get_editor_color(m_ptr->category);
             
             al_draw_filled_circle(
                 m_ptr->x, m_ptr->y,
                 radius,
                 (
-                    valid ? al_map_rgba(c[0], c[1], c[2], mob_opacity) :
+                    valid ? change_alpha(c, mob_opacity) :
                     al_map_rgba(224, 96, 96, mob_opacity)
                 )
             );

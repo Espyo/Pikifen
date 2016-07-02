@@ -89,6 +89,8 @@ mob::mob(
     ground_sector = sec;
     center_sector = sec;
     
+    if(type->is_obstacle) team = MOB_TEAM_OBSTACLE;
+    
     fsm.set_state(type->first_state_nr);
 }
 
@@ -932,19 +934,17 @@ void mob::set_var(const string &name, const string &value) {
  */
 void mob::start_dying() {
     health = 0;
-    if(typeid(*this) == typeid(enemy)) {
-        particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5, PARTICLE_PRIORITY_LOW);
-        p.bitmap = bmp_sparkle;
-        p.color = al_map_rgb(255, 192, 192);
-        particle_generator pg(0, p, 25);
-        pg.number_deviation = 5;
-        pg.angle = 0;
-        pg.angle_deviation = M_PI;
-        pg.speed = 100;
-        pg.speed_deviation = 40;
-        pg.duration_deviation = 0.5;
-        pg.emit(particles);
-    }
+    particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5, PARTICLE_PRIORITY_LOW);
+    p.bitmap = bmp_sparkle;
+    p.color = al_map_rgb(255, 192, 192);
+    particle_generator pg(0, p, 25);
+    pg.number_deviation = 5;
+    pg.angle = 0;
+    pg.angle_deviation = M_PI;
+    pg.speed = 100;
+    pg.speed_deviation = 40;
+    pg.duration_deviation = 0.5;
+    pg.emit(particles);
 }
 
 
@@ -1505,10 +1505,13 @@ void focus_mob(mob* m1, mob* m2) {
 /* ----------------------------------------------------------------------------
  * Returns the closest hitbox to a point, belonging to a mob's current frame
  * of animation and position.
- * x, y: Point.
- * m:    The mob.
+ * x, y:   Point.
+ * m:      The mob.
+ * h_type: Type of hitbox. INVALID means any.
  */
-hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
+hitbox_instance* get_closest_hitbox(
+    const float x, const float y, mob* m, const size_t h_type
+) {
     frame* f = m->anim.get_frame();
     if(!f) return NULL;
     hitbox_instance* closest_hitbox = NULL;
@@ -1516,6 +1519,8 @@ hitbox_instance* get_closest_hitbox(const float x, const float y, mob* m) {
     
     for(size_t h = 0; h < f->hitbox_instances.size(); ++h) {
         hitbox_instance* h_ptr = &f->hitbox_instances[h];
+        if(h_type != INVALID && h_ptr->type != h_type) continue;
+        
         float hx, hy;
         rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
         float d = dist(x - m->x, y - m->y, hx, hy).to_float() - h_ptr->radius;

@@ -1,0 +1,56 @@
+first_state = safe
+
+script{
+    safe {
+        on_enter {
+            timer = 3
+            animation = safe
+        }
+        on_timer {
+            state = starting
+        }
+        on_death {
+            state = destroyed
+        }
+    }
+    starting {
+        on_enter {
+            animation = starting
+        }
+        on_animation_end {
+            state = fire
+        }
+        on_death {
+            state = destroyed
+        }
+    }
+    fire {
+        on_enter {
+            timer = 3
+            animation = fire
+        }
+        on_timer {
+            state = stopping
+        }
+        on_death {
+            state = destroyed
+        }
+    }
+    stopping {
+        on_enter {
+            animation = stopping
+        }
+        on_animation_end {
+            state = safe
+        }
+        on_death {
+            state = destroyed
+        }
+    }
+    destroyed {
+        on_enter {
+            animation = destroyed
+            special_function = die_start
+        }
+    }
+}

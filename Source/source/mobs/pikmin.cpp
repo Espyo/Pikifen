@@ -30,7 +30,7 @@ pikmin::pikmin(
     carrying_mob(NULL),
     carrying_spot(0),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
-    connected_hitbox_nr(0),
+    connected_hitbox_nr(INVALID),
     connected_hitbox_dist(0),
     connected_hitbox_angle(0) {
     
@@ -75,6 +75,7 @@ void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
     );
     smack_p.bitmap = bmp_smack;
     smack_p.color = al_map_rgb(255, 160, 128);
+    smack_p.before_mobs = false;
     particles.add(smack_p);
 }
 

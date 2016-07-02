@@ -117,6 +117,7 @@ struct mob_category_info {
     string plural_name;
     string singular_name;
     string folder;
+    ALLEGRO_COLOR editor_color;
     //Dumps the name of all mob types names in the category onto the vector.
     function<void (vector<string> &list)> lister;
     //Returns a pointer to the mob type of the given name.
@@ -141,6 +142,7 @@ public:
     void register_category(
         unsigned char nr,
         string pname, string sname, string folder,
+        ALLEGRO_COLOR editor_color,
         function<void (vector<string> &list)> lister,
         function<mob_type* (const string &name)> type_getter,
         function<mob_type* ()> type_constructor,
@@ -150,6 +152,7 @@ public:
     unsigned char get_nr_from_sname(const string &sname);
     string get_pname(const unsigned char cat_nr);
     string get_sname(const unsigned char cat_nr);
+    ALLEGRO_COLOR get_editor_color(const unsigned char cat_nr);
     unsigned char get_nr_of_categories();
     void get_list(vector<string> &l, unsigned char cat_nr);
     string get_folder(const unsigned char cat_nr);

@@ -442,6 +442,7 @@ void init_mob_categories() {
 
     mob_categories.register_category(
         MOB_CATEGORY_NONE, "None", "None", "",
+        al_map_rgb(224, 96, 96),
     [] (vector<string> &) { },
     [] (const string &) -> mob_type* { return nullptr; },
     [] () -> mob_type* { return nullptr; },
@@ -450,6 +451,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER,
+        al_map_rgb(224, 48, 96),
     [] (vector<string> &li) {
         for(auto e = enemy_types.begin(); e != enemy_types.end(); ++e) {
             li.push_back(e->first);
@@ -466,6 +468,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_LEADERS, "Leaders", "Leader", LEADERS_FOLDER,
+        al_map_rgb(48, 80, 192),
     [] (vector<string> &li) {
         for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
             li.push_back(l->first);
@@ -481,7 +484,25 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
+        MOB_CATEGORY_MISC, "Misc.", "Misc.", MISC_MOB_FOLDER,
+        al_map_rgb(224, 128, 224),
+    [] (vector<string> &li) {
+        for(auto m = misc_mob_types.begin(); m != misc_mob_types.end(); ++m) {
+            li.push_back(m->first);
+        }
+    }, [] (const string & n) -> mob_type* {
+        auto it = misc_mob_types.find(n);
+        if(it == misc_mob_types.end()) return NULL;
+        return it->second;
+    }, [] () -> mob_type* {
+        return new mob_type();
+    }, [] (mob_type * mt) {
+        misc_mob_types[mt->name] = mt;
+    });
+    
+    mob_categories.register_category(
         MOB_CATEGORY_ONIONS, "Onions", "Onion", ONIONS_FOLDER,
+        al_map_rgb(48, 160, 48),
     [] (vector<string> &li) {
         for(auto o = onion_types.begin(); o != onion_types.end(); ++o) {
             li.push_back(o->first);
@@ -498,6 +519,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_PELLETS, "Pellets", "Pellet", PELLETS_FOLDER,
+        al_map_rgb(208, 224, 96),
     [] (vector<string> &li) {
         for(auto p = pellet_types.begin(); p != pellet_types.end(); ++p) {
             li.push_back(p->first);
@@ -514,6 +536,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", PIKMIN_FOLDER,
+        al_map_rgb(64, 255, 64),
     [] (vector<string> &li) {
         for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
             li.push_back(p->first);
@@ -530,6 +553,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_SHIPS, "Ships", "Ship", SHIPS_FOLDER,
+        al_map_rgb(128, 128, 192),
     [] (vector<string> &li) {
         for(auto s = ship_types.begin(); s != ship_types.end(); ++s) {
             li.push_back(s->first);
@@ -546,6 +570,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_SPECIAL, "Special", "Special", "",
+        al_map_rgb(32, 160, 160),
     [] (vector<string> &li) {
         for(auto s = spec_mob_types.begin(); s != spec_mob_types.end(); ++s) {
             li.push_back(s->first);
@@ -561,6 +586,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_TREASURES, "Treasures", "Treasure", TREASURES_FOLDER,
+        al_map_rgb(255, 240, 64),
     [] (vector<string> &li) {
         for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
             li.push_back(t->first);
@@ -577,6 +603,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_GATES, "Gates", "Gate", GATES_FOLDER,
+        al_map_rgb(224, 192, 192),
     [] (vector<string> &li) {
         for(auto g = gate_types.begin(); g != gate_types.end(); ++g) {
             li.push_back(g->first);

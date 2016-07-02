@@ -1,4 +1,5 @@
 Misc. useful info
+    1 pixel on the engine, at 1x zoom level, is 0.05cm
     Dimensions:
                             Diameter  Radius  Height
         Pikmin (real):      0.5cm     0.25cm  1.2cm (head to feet, sans stem)

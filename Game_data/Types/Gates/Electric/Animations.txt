@@ -43,7 +43,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -55,7 +55,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -67,7 +67,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -92,7 +92,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -104,7 +104,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -116,7 +116,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -141,7 +141,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -153,7 +153,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00
@@ -165,7 +165,7 @@ frames{
 				radius=48.00
 				type=0
 				multiplier=1.00
-				can_pikmin_latch=true
+				can_pikmin_latch=false
 				hazards=shocking_electricity
 				outward=true
 				angle=0.00

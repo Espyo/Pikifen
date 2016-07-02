@@ -123,6 +123,7 @@ const string ENEMIES_FOLDER        = TYPES_FOLDER + "/Enemies";
 const string GATES_FOLDER          = TYPES_FOLDER + "/Gates";
 const string GRAPHICS_FOLDER       = GAME_DATA_FOLDER + "/Graphics";
 const string LEADERS_FOLDER        = TYPES_FOLDER + "/Leaders";
+const string MISC_MOB_FOLDER       = TYPES_FOLDER + "/Misc";
 const string ONIONS_FOLDER         = TYPES_FOLDER + "/Onions";
 const string OTHER_TYPES_FOLDER    = TYPES_FOLDER + "/Others";
 const string PELLETS_FOLDER        = TYPES_FOLDER + "/Pellets";

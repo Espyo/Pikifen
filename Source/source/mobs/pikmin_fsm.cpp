@@ -1202,8 +1202,10 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
         ) {
             pik_ptr->do_attack(
                 pik_ptr->focused_mob,
-                get_hitbox_instance(
-                    pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr
+                get_closest_hitbox(
+                    pik_ptr->x, pik_ptr->y,
+                    pik_ptr->focused_mob,
+                    HITBOX_TYPE_NORMAL
                 )
             );
         }
