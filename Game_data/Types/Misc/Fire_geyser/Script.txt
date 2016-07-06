@@ -18,16 +18,16 @@ script{
             animation = starting
         }
         on_animation_end {
-            state = fire
+            state = shooting
         }
         on_death {
             state = destroyed
         }
     }
-    fire {
+    shooting {
         on_enter {
             timer = 3
-            animation = fire
+            animation = shooting
         }
         on_timer {
             state = stopping

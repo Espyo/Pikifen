@@ -7,7 +7,7 @@ animations{
 			}
 		}
 	}
-	fire{
+	shooting{
 		loop_frame=0
 		frame_instances{
 			fire1{

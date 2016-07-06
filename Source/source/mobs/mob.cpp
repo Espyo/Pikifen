@@ -64,7 +64,6 @@ mob::mob(
     cur_path_stop_nr(INVALID),
     focused_mob(nullptr),
     fsm(this),
-    first_state_set(false),
     dead(false),
     big_damage_ev_queued(false),
     following_group(nullptr),
@@ -714,11 +713,6 @@ void mob::tick_physics() {
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {
-    if(!first_state_set) {
-        fsm.set_state(type->first_state_nr);
-        first_state_set = true;
-    }
-    
     //Health regeneration.
     health += type->health_regen * delta_t;
     health = min(health, type->max_health);

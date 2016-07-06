@@ -310,7 +310,19 @@ mob_action::mob_action(
         
     } else if(n == "particle") {
     
-        type = MOB_ACTION_SPAWN_PARTICLE;
+        type = MOB_ACTION_PARTICLE;
+        if(!dn->value.empty()) {
+            if(
+                custom_particle_generators.find(dn->value) ==
+                custom_particle_generators.end()
+            ) {
+                log_error(
+                    "Particle generator \"" + dn->value + "\" not found!", dn
+                );
+            } else {
+                vs.push_back(dn->value);
+            }
+        }
         
         
     } else if(n == "projectile") {
@@ -523,6 +535,25 @@ void mob_action::run(
                 m->chase(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
             }
             
+        }
+        
+        
+    } else if(type == MOB_ACTION_PARTICLE) {
+    
+        if(vs.empty()) {
+            m->remove_particle_generator(MOB_PARTICLE_GENERATOR_SCRIPT);
+        } else {
+            if(
+                custom_particle_generators.find(vs[0]) !=
+                custom_particle_generators.end()
+            ) {
+                particle_generator pg = custom_particle_generators[vs[0]];
+                pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
+                pg.follow_x = &m->x;
+                pg.follow_y = &m->y;
+                pg.reset();
+                m->particle_generators.push_back(pg);
+            }
         }
         
         

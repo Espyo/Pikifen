@@ -58,7 +58,6 @@ bubble_hazard {
     speed_deviation = 0
 }
 
-
 poison_gas {
     emission_interval = 0.06
     number = 1
@@ -86,5 +85,35 @@ poison_gas {
     angle = 0
     angle_deviation = 0
     speed = 0
+    speed_deviation = 0
+}
+
+gas_pipe {
+    emission_interval = 0.3
+    number = 3
+    number_deviation = 1
+    base {
+        bitmap = Smoke.png
+        duration = 1.5
+        friction = 1
+        gravity = 0
+        size_grow_speed = 80
+        size = 32
+        speed_x = 0
+        speed_y = 0
+        color = 128 16 112 192
+        before_mobs = false
+    }
+    duration_deviation = 0.5
+    friction_deviation = 0
+    gravity_deviation = 0
+    size_deviation = 2
+    x_deviation = 0
+    y_deviation = 0
+    speed_x_deviation = 0
+    speed_y_deviation = 0
+    angle = 0
+    angle_deviation = 6.28318
+    speed = 80
     speed_deviation = 0
 }

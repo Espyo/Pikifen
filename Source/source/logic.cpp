@@ -801,6 +801,7 @@ void process_mob(mob* m_ptr, size_t m) {
                     h2 < f2_ptr->hitbox_instances.size(); ++h2
                 ) {
                     hitbox_instance* h2_ptr = &f2_ptr->hitbox_instances[h2];
+                    if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                     
                     //Hazard resistance check.
                     if(!h2_ptr->hazards.empty()) {
@@ -864,7 +865,6 @@ void process_mob(mob* m_ptr, size_t m) {
                             //Collision!
                             if(
                                 hitbox_touch_eat_ev && !reported_eat_ev &&
-                                h2_ptr->type != HITBOX_TYPE_DISABLED &&
                                 m2_ptr->chomping_pikmin.size() <
                                 m2_ptr->chomp_max &&
                                 find(
@@ -982,7 +982,6 @@ void process_mob(mob* m_ptr, size_t m) {
                                     hitbox_touch_eat_ev &&
                                     !reported_eat_ev &&
                                     h1_ptr->type == HITBOX_TYPE_NORMAL &&
-                                    h2_ptr->type != HITBOX_TYPE_DISABLED &&
                                     m2_ptr->chomping_pikmin.size() <
                                     m2_ptr->chomp_max &&
                                     find(

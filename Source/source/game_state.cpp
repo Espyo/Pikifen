@@ -281,7 +281,6 @@ void gameplay::load() {
     cur_leader_nr = 0;
     cur_leader_ptr = leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
-    cur_leader_ptr->first_state_set = true;
     
     day_minutes = day_minutes_start;
     area_time_passed = 0;

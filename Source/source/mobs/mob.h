@@ -63,7 +63,11 @@ enum MOB_STATE_IDS {
 
 enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_NONE,
+    //Custom particle generator issued by the script.
+    MOB_PARTICLE_GENERATOR_SCRIPT,
+    //Trail effect left behind by a throw.
     MOB_PARTICLE_GENERATOR_THROW,
+    //Ring-shaped wave when going in water.
     MOB_PARTICLE_GENERATOR_WAVE_RING,
     
     //Specific status effects are this + their number.
@@ -271,8 +275,6 @@ public:
     //Script.
     //Finite-state machine.
     mob_fsm fsm;
-    //Have we set the mob's starting state yet?
-    bool first_state_set;
     //The mob it has focus on.
     mob* focused_mob;
     //The timer.

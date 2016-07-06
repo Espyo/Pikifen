@@ -37,7 +37,6 @@ pikmin::pikmin(
     team = MOB_TEAM_PLAYER_1; // TODO
     if(s2b(get_var_value(vars, "buried", "0"))) {
         fsm.set_state(PIKMIN_STATE_BURIED);
-        this->first_state_set = true;
     }
 }
 

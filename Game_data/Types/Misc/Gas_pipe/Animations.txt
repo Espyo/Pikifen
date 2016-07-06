@@ -1,0 +1,98 @@
+animations{
+	shooting{
+		loop_frame=0
+		frame_instances{
+			shooting{
+				duration=0.00
+			}
+		}
+	}
+	destroyed{
+		loop_frame=0
+		frame_instances{
+			safe{
+				duration=0.00
+			}
+		}
+	}
+}
+frames{
+	safe{
+		file=Gas_pipe.png
+		file_x=0
+		file_y=0
+		file_w=48
+		file_h=48
+		game_w=48.00
+		game_h=48.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances{
+			tube{
+				coords=0.00 0.00 0.00
+				height=24.00
+				radius=48.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			gas{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=128.00
+				type=2
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=poison
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	shooting{
+		file=Gas_pipe.png
+		file_x=0
+		file_y=0
+		file_w=48
+		file_h=48
+		game_w=48.00
+		game_h=48.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances{
+			tube{
+				coords=0.00 0.00 0.00
+				height=24.00
+				radius=48.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			gas{
+				coords=0.00 0.00 0.00
+				height=64.00
+				radius=96.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=poison
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+}
+hitboxes{
+	tube=
+	gas=
+}
