@@ -48,28 +48,117 @@ void init_allegro() {
  * Initializes the default controls.
  */
 void init_controls() {
+    //Declare the existing buttons.
+    buttons.add(
+        BUTTON_NONE, "---", "", ""
+    );
+    buttons.add(
+        BUTTON_THROW, "Throw", "throw", "mb_1"
+    );
+    buttons.add(
+        BUTTON_WHISTLE, "Whistle", "whistle", "mb_2"
+    );
+    buttons.add(
+        BUTTON_RIGHT, "Right", "right", "k_4"
+    );
+    buttons.add(
+        BUTTON_UP, "Up", "up", "k_23"
+    );
+    buttons.add(
+        BUTTON_LEFT, "Left", "left", "k_1"
+    );
+    buttons.add(
+        BUTTON_DOWN, "Down", "down", "k_19"
+    );
+    buttons.add(
+        BUTTON_CURSOR_RIGHT, "Cursor right", "cursor_right", ""
+    );
+    buttons.add(
+        BUTTON_CURSOR_UP, "Cursor up", "cursor_up", ""
+    );
+    buttons.add(
+        BUTTON_CURSOR_LEFT, "Cursor left", "cursor_left", ""
+    );
+    buttons.add(
+        BUTTON_CURSOR_DOWN, "Cursor down", "cursor_down", ""
+    );
+    buttons.add(
+        BUTTON_GROUP_RIGHT, "Group right", "group_right", ""
+    );
+    buttons.add(
+        BUTTON_GROUP_UP, "Group up", "group_up", ""
+    );
+    buttons.add(
+        BUTTON_GROUP_LEFT, "Group left", "group_left", ""
+    );
+    buttons.add(
+        BUTTON_GROUP_DOWN, "Group down", "group_down", ""
+    );
+    buttons.add(
+        BUTTON_GROUP_CURSOR, "Group cursor", "group_cursor", "k_75"
+    );
+    buttons.add(
+        BUTTON_NEXT_LEADER, "Next leader", "next_leader", "k_64"
+    );
+    buttons.add(
+        BUTTON_PREV_LEADER, "Prev. leader", "prev_leader", ""
+    );
+    buttons.add(
+        BUTTON_DISMISS, "Dismiss", "dismiss", "k_217"
+    );
+    buttons.add(
+        BUTTON_USE_SPRAY_1, "Use spray 1", "use_spray_1", "k_18"
+    );
+    buttons.add(
+        BUTTON_USE_SPRAY_2, "Use spray 2", "use_spray_2", "k_6"
+    );
+    buttons.add(
+        BUTTON_USE_SPRAY, "Use spray", "use_spray", "k_18"
+    );
+    buttons.add(
+        BUTTON_NEXT_SPRAY, "Next spray", "next_spray", "k_5"
+    );
+    buttons.add(
+        BUTTON_PREV_SPRAY, "Prev. spray", "prev_spray", "k_17"
+    );
+    buttons.add(
+        BUTTON_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
+    );
+    buttons.add(
+        BUTTON_ZOOM_IN, "Zoom in", "zoom_in", "mwu"
+    );
+    buttons.add(
+        BUTTON_ZOOM_OUT, "Zoom out", "zoom_out", "mwd"
+    );
+    buttons.add(
+        BUTTON_NEXT_TYPE, "Next Pikmin", "next_type", "mb_2"
+    );
+    buttons.add(
+        BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", ""
+    );
+    buttons.add(
+        BUTTON_NEXT_MATURITY, "Next maturity", "next_maturity", ""
+    );
+    buttons.add(
+        BUTTON_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
+    );
+    buttons.add(
+        BUTTON_LIE_DOWN, "Lie down", "lie_down", "k_26"
+    );
+    buttons.add(
+        BUTTON_PAUSE, "Pause", "pause", "k_59"
+    );
+    
     controls.assign(4, vector<control_info>());
-    //TODO create a manager for this, like the mob category manager and whatnot.
-    controls[0].push_back(control_info(BUTTON_THROW, "mb_1"));
-    controls[0].push_back(control_info(BUTTON_WHISTLE, "mb_2"));
-    controls[0].push_back(control_info(BUTTON_MOVE_RIGHT, "k_4"));
-    controls[0].push_back(control_info(BUTTON_MOVE_UP, "k_23"));
-    controls[0].push_back(control_info(BUTTON_MOVE_LEFT, "k_1"));
-    controls[0].push_back(control_info(BUTTON_MOVE_DOWN, "k_19"));
-    controls[0].push_back(control_info(BUTTON_GROUP_MOVE_GO_TO_CURSOR, "k_75"));
-    controls[0].push_back(control_info(BUTTON_SWITCH_LEADER_RIGHT, "k_64"));
-    controls[0].push_back(control_info(BUTTON_DISMISS, "k_217"));
-    controls[0].push_back(control_info(BUTTON_USE_SPRAY_1, "k_18"));
-    controls[0].push_back(control_info(BUTTON_USE_SPRAY_2, "k_6"));
-    controls[0].push_back(control_info(BUTTON_USE_SPRAY, "k_18"));
-    controls[0].push_back(control_info(BUTTON_SWITCH_SPRAY_RIGHT, "k_5"));
-    controls[0].push_back(control_info(BUTTON_SWITCH_SPRAY_LEFT, "k_17"));
-    controls[0].push_back(control_info(BUTTON_SWITCH_TYPE_RIGHT, "mb_2"));
-    controls[0].push_back(control_info(BUTTON_SWITCH_ZOOM, "k_3"));
-    controls[0].push_back(control_info(BUTTON_ZOOM_IN, "mwu"));
-    controls[0].push_back(control_info(BUTTON_ZOOM_OUT, "mwd"));
-    controls[0].push_back(control_info(BUTTON_LIE_DOWN, "k_26"));
-    controls[0].push_back(control_info(BUTTON_PAUSE, "k_59"));
+    
+    //Populate the controls information with some default controls for player 1.
+    //If the options are loaded successfully, these controls are overwritten.
+    for(size_t b = 0; b < N_BUTTONS; ++b) {
+        string dc = buttons.list[b].default_control_str;
+        if(dc.empty()) continue;
+        
+        controls[0].push_back(control_info(buttons.list[b].id, dc));
+    }
 }
 
 

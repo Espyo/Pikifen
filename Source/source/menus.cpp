@@ -594,44 +594,14 @@ void options_menu::update() {
     ) {
         control_info* c_ptr = &controls[cur_player_nr][control_nr];
         
-#define setter(id, name) \
-    if(c_ptr->action == id) action_name = name
-        
         string action_name;
-        setter(     BUTTON_NONE,                    "---");
-        else setter(BUTTON_THROW,                   "Throw");
-        else setter(BUTTON_WHISTLE,                 "Whistle");
-        else setter(BUTTON_MOVE_RIGHT,              "Right");
-        else setter(BUTTON_MOVE_UP,                 "Up");
-        else setter(BUTTON_MOVE_LEFT,               "Left");
-        else setter(BUTTON_MOVE_DOWN,               "Down");
-        else setter(BUTTON_MOVE_CURSOR_RIGHT,       "Cursor right");
-        else setter(BUTTON_MOVE_CURSOR_UP,          "Cursor up");
-        else setter(BUTTON_MOVE_CURSOR_LEFT,        "Cursor left");
-        else setter(BUTTON_MOVE_CURSOR_DOWN,        "Cursor down");
-        else setter(BUTTON_GROUP_MOVE_RIGHT,        "Group right");
-        else setter(BUTTON_GROUP_MOVE_UP,           "Group up");
-        else setter(BUTTON_GROUP_MOVE_LEFT,         "Group left");
-        else setter(BUTTON_GROUP_MOVE_DOWN,         "Group down");
-        else setter(BUTTON_GROUP_MOVE_GO_TO_CURSOR, "Group to cursor");
-        else setter(BUTTON_SWITCH_LEADER_RIGHT,     "Next leader");
-        else setter(BUTTON_SWITCH_LEADER_LEFT,      "Previous leader");
-        else setter(BUTTON_DISMISS,                 "Dismiss");
-        else setter(BUTTON_USE_SPRAY_1,             "Use spray 1");
-        else setter(BUTTON_USE_SPRAY_2,             "Use spray 2");
-        else setter(BUTTON_USE_SPRAY,               "Use spray");
-        else setter(BUTTON_SWITCH_SPRAY_RIGHT,      "Next spray");
-        else setter(BUTTON_SWITCH_SPRAY_LEFT,       "Previous spray");
-        else setter(BUTTON_SWITCH_ZOOM,             "Switch zoom");
-        else setter(BUTTON_ZOOM_IN,                 "Zoom in");
-        else setter(BUTTON_ZOOM_OUT,                "Zoom out");
-        else setter(BUTTON_SWITCH_TYPE_RIGHT,       "Next Pikmin");
-        else setter(BUTTON_SWITCH_TYPE_LEFT,        "Previous Pikmin");
-        else setter(BUTTON_SWITCH_MATURITY_UP,      "Next maturity");
-        else setter(BUTTON_SWITCH_MATURITY_DOWN,    "Prev. maturity");
-        else setter(BUTTON_LIE_DOWN,                "Lie down");
-        else setter(BUTTON_PAUSE,                   "Pause");
-        
+        for(size_t b = 0; b < N_BUTTONS; ++b) {
+            if(c_ptr->action == buttons.list[b].id) {
+                action_name = buttons.list[b].name;
+                break;
+            }
+        }
+
         for(size_t cw = 0; cw < 5; ++cw) {
             control_widgets[list_nr * 5 + cw]->enabled = true;
         }

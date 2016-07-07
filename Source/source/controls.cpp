@@ -242,10 +242,10 @@ void handle_button(
     if(cur_message.empty()) {
     
         if(
-            button == BUTTON_MOVE_RIGHT ||
-            button == BUTTON_MOVE_UP ||
-            button == BUTTON_MOVE_LEFT ||
-            button == BUTTON_MOVE_DOWN
+            button == BUTTON_RIGHT ||
+            button == BUTTON_UP ||
+            button == BUTTON_LEFT ||
+            button == BUTTON_DOWN
         ) {
         
             /*******************
@@ -256,16 +256,16 @@ void handle_button(
             
             if(pos != 0) active_control();
             
-            if(     button == BUTTON_MOVE_RIGHT) leader_movement.right = pos;
-            else if(button == BUTTON_MOVE_LEFT)  leader_movement.left =  pos;
-            else if(button == BUTTON_MOVE_UP)    leader_movement.up =    pos;
-            else if(button == BUTTON_MOVE_DOWN)  leader_movement.down =  pos;
+            if(     button == BUTTON_RIGHT) leader_movement.right = pos;
+            else if(button == BUTTON_LEFT)  leader_movement.left =  pos;
+            else if(button == BUTTON_UP)    leader_movement.up =    pos;
+            else if(button == BUTTON_DOWN)  leader_movement.down =  pos;
             
         } else if(
-            button == BUTTON_MOVE_CURSOR_RIGHT ||
-            button == BUTTON_MOVE_CURSOR_UP ||
-            button == BUTTON_MOVE_CURSOR_LEFT ||
-            button == BUTTON_MOVE_CURSOR_DOWN
+            button == BUTTON_CURSOR_RIGHT ||
+            button == BUTTON_CURSOR_UP ||
+            button == BUTTON_CURSOR_LEFT ||
+            button == BUTTON_CURSOR_DOWN
         ) {
             /********************
             *             .-.   *
@@ -273,21 +273,21 @@ void handle_button(
             *             '-'   *
             ********************/
             
-            if(button == BUTTON_MOVE_CURSOR_RIGHT) {
+            if(button == BUTTON_CURSOR_RIGHT) {
                 cursor_movement.right = pos;
-            } else if(button == BUTTON_MOVE_CURSOR_LEFT) {
+            } else if(button == BUTTON_CURSOR_LEFT) {
                 cursor_movement.left = pos;
-            } else if(button == BUTTON_MOVE_CURSOR_UP) {
+            } else if(button == BUTTON_CURSOR_UP) {
                 cursor_movement.up = pos;
-            } else if(button == BUTTON_MOVE_CURSOR_DOWN) {
+            } else if(button == BUTTON_CURSOR_DOWN) {
                 cursor_movement.down = pos;
             }
             
         } else if(
-            button == BUTTON_GROUP_MOVE_RIGHT ||
-            button == BUTTON_GROUP_MOVE_UP ||
-            button == BUTTON_GROUP_MOVE_LEFT ||
-            button == BUTTON_GROUP_MOVE_DOWN
+            button == BUTTON_GROUP_RIGHT ||
+            button == BUTTON_GROUP_UP ||
+            button == BUTTON_GROUP_LEFT ||
+            button == BUTTON_GROUP_DOWN
         ) {
             /******************
             *            ***  *
@@ -297,13 +297,13 @@ void handle_button(
             
             active_control();
             
-            if(button == BUTTON_GROUP_MOVE_RIGHT) {
+            if(button == BUTTON_GROUP_RIGHT) {
                 group_movement.right = pos;
-            } else if(button == BUTTON_GROUP_MOVE_LEFT) {
+            } else if(button == BUTTON_GROUP_LEFT) {
                 group_movement.left = pos;
-            } else if(button == BUTTON_GROUP_MOVE_UP) {
+            } else if(button == BUTTON_GROUP_UP) {
                 group_movement.up = pos;
-            } else if(button == BUTTON_GROUP_MOVE_DOWN) {
+            } else if(button == BUTTON_GROUP_DOWN) {
                 group_movement.down = pos;
             }
             
@@ -313,16 +313,16 @@ void handle_button(
                 cur_leader_ptr->signal_group_move_end();
             }
             
-        } else if(button == BUTTON_GROUP_MOVE_GO_TO_CURSOR) {
+        } else if(button == BUTTON_GROUP_CURSOR) {
         
             active_control();
             
             if(pos > 0) {
-                group_move_go_to_cursor = true;
+                group_move_cursor = true;
                 group_move_intensity = 1;
                 cur_leader_ptr->signal_group_move_start();
             } else {
-                group_move_go_to_cursor = false;
+                group_move_cursor = false;
                 group_move_intensity = 0;
                 cur_leader_ptr->signal_group_move_end();
             }
@@ -487,8 +487,8 @@ void handle_button(
             }
             
         } else if(
-            button == BUTTON_SWITCH_LEADER_RIGHT ||
-            button == BUTTON_SWITCH_LEADER_LEFT
+            button == BUTTON_NEXT_LEADER ||
+            button == BUTTON_PREV_LEADER
         ) {
         
             /******************************
@@ -517,9 +517,9 @@ void handle_button(
             size_t original_leader_nr = cur_leader_nr;
             
             while(search_new_leader) {
-                if(button == BUTTON_SWITCH_LEADER_RIGHT)
+                if(button == BUTTON_NEXT_LEADER)
                     new_leader_nr = (new_leader_nr + 1) % leaders.size();
-                else if(button == BUTTON_SWITCH_LEADER_LEFT) {
+                else if(button == BUTTON_PREV_LEADER) {
                     if(new_leader_nr == 0) new_leader_nr = leaders.size() - 1;
                     else new_leader_nr = new_leader_nr - 1;
                 }
@@ -599,14 +599,14 @@ void handle_button(
             }
             
         } else if(
-            button == BUTTON_SWITCH_SPRAY_RIGHT ||
-            button == BUTTON_SWITCH_SPRAY_LEFT
+            button == BUTTON_NEXT_SPRAY ||
+            button == BUTTON_PREV_SPRAY
         ) {
         
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             if(spray_types.size() > 2) {
-                if(button == BUTTON_SWITCH_SPRAY_RIGHT) {
+                if(button == BUTTON_NEXT_SPRAY) {
                     selected_spray = (selected_spray + 1) % spray_types.size();
                 } else {
                     if(selected_spray == 0) {
@@ -630,7 +630,7 @@ void handle_button(
                 );
             }
             
-        } else if(button == BUTTON_SWITCH_ZOOM) {
+        } else if(button == BUTTON_CHANGE_ZOOM) {
         
             /***************
             *           _  *
@@ -696,8 +696,8 @@ void handle_button(
             
             
         } else if(
-            button == BUTTON_SWITCH_TYPE_RIGHT ||
-            button == BUTTON_SWITCH_TYPE_LEFT
+            button == BUTTON_NEXT_TYPE ||
+            button == BUTTON_PREV_TYPE
         ) {
         
             /****************************
@@ -767,7 +767,7 @@ void handle_button(
             //Go one type adjacent to the current member being held.
             for(size_t t = 0; t < n_types; ++t) {
                 if(current_type == types_in_group[t]) {
-                    if(button == BUTTON_SWITCH_TYPE_RIGHT) {
+                    if(button == BUTTON_NEXT_TYPE) {
                         new_type =
                             types_in_group[(t + 1) % n_types];
                     } else {
@@ -826,8 +826,8 @@ void handle_button(
             }
             
         } else if(
-            button == BUTTON_SWITCH_MATURITY_DOWN ||
-            button == BUTTON_SWITCH_MATURITY_UP
+            button == BUTTON_PREV_MATURITY ||
+            button == BUTTON_NEXT_MATURITY
         ) {
         
             if(pos == 0 || !cur_leader_ptr->holding_pikmin) return;
@@ -879,7 +879,7 @@ void handle_button(
             
             new_maturity = current_maturity;
             do {
-                if(button == BUTTON_SWITCH_MATURITY_DOWN) {
+                if(button == BUTTON_PREV_MATURITY) {
                     new_maturity = ((new_maturity - 1) + 3) % 3;
                 } else {
                     new_maturity = (new_maturity + 1) % 3;

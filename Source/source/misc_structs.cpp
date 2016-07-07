@@ -66,6 +66,23 @@ void bmp_manager::detach(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a new button to the list.
+ */
+void button_manager::add(
+    const size_t id, const string name, const string option_name,
+    const string default_control_str
+) {
+    button_manager::button b;
+    b.id = id;
+    b.name = name;
+    b.option_name = option_name;
+    b.default_control_str = default_control_str;
+    
+    list.push_back(b);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes a movement struct with all movements set to 0.
  */
 movement_struct::movement_struct() :

@@ -301,7 +301,7 @@ void do_gameplay_logic() {
         float group_move_x = group_movement.get_x();
         float group_move_y = group_movement.get_y();
         
-        if(group_move_go_to_cursor) {
+        if(group_move_cursor) {
             group_move_angle = cursor_angle;
             dist leader_to_cursor_dis(
                 cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y

@@ -126,7 +126,7 @@ void load_area(
 );
 void load_area_textures();
 void load_control(
-    unsigned char action, unsigned char player,
+    const unsigned char action, const unsigned char player,
     const string &name, data_node &file, const string &def = ""
 );
 ALLEGRO_BITMAP* load_bmp(

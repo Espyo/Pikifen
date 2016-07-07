@@ -1065,12 +1065,11 @@ void load_control(
         file.get_child_by_name(
             "p" + i2s((player + 1)) + "_" + name
         )->get_value_or_default((player == 0) ? def : "");
-    vector<string> possible_controls = split(s, ",");
+    vector<string> possible_controls = split(s, ";");
     size_t n_possible_controls = possible_controls.size();
     
     for(size_t c = 0; c < n_possible_controls; ++c) {
         controls[player].push_back(control_info(action, possible_controls[c]));
-        
     }
 }
 
@@ -1510,7 +1509,7 @@ void load_options() {
     data_node file = data_node("Options.txt");
     if(!file.file_was_opened) return;
     
-    //Load joysticks.
+    //Init joysticks.
     joystick_numbers.clear();
     int n_joysticks = al_get_num_joysticks();
     for(int j = 0; j < n_joysticks; ++j) {
@@ -1531,50 +1530,13 @@ void load_options() {
      * joystick stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
-    for(size_t p = 0; p < 4; p++) {
-        controls[p].clear();
-    }
-    
     for(unsigned char p = 0; p < 4; ++p) {
-    
-#define loader(id, name) \
-    load_control(id, p, name, file)
-    
-        loader(BUTTON_THROW,                   "punch");
-        loader(BUTTON_WHISTLE,                 "whistle");
-        loader(BUTTON_MOVE_RIGHT,              "move_right");
-        loader(BUTTON_MOVE_UP,                 "move_up");
-        loader(BUTTON_MOVE_LEFT,               "move_left");
-        loader(BUTTON_MOVE_DOWN,               "move_down");
-        loader(BUTTON_MOVE_CURSOR_RIGHT,       "move_cursor_right");
-        loader(BUTTON_MOVE_CURSOR_UP,          "move_cursor_up");
-        loader(BUTTON_MOVE_CURSOR_LEFT,        "move_cursor_left");
-        loader(BUTTON_MOVE_CURSOR_DOWN,        "move_cursor_down");
-        loader(BUTTON_GROUP_MOVE_GO_TO_CURSOR, "group_move_go_to_cursor");
-        loader(BUTTON_GROUP_MOVE_RIGHT,        "group_move_right");
-        loader(BUTTON_GROUP_MOVE_UP,           "group_move_up");
-        loader(BUTTON_GROUP_MOVE_LEFT,         "group_move_left");
-        loader(BUTTON_GROUP_MOVE_DOWN,         "group_move_down");
-        loader(BUTTON_SWITCH_LEADER_RIGHT,     "switch_leader_right");
-        loader(BUTTON_SWITCH_LEADER_LEFT,      "switch_leader_left");
-        loader(BUTTON_DISMISS,                 "dismiss");
-        loader(BUTTON_USE_SPRAY_1,             "use_spray_1");
-        loader(BUTTON_USE_SPRAY_2,             "use_spray_2");
-        loader(BUTTON_USE_SPRAY,               "use_spray");
-        loader(BUTTON_SWITCH_SPRAY_RIGHT,      "switch_spray_right");
-        loader(BUTTON_SWITCH_SPRAY_LEFT,       "switch_spray_left");
-        loader(BUTTON_SWITCH_ZOOM,             "switch_zoom");
-        loader(BUTTON_ZOOM_IN,                 "zoom_in");
-        loader(BUTTON_ZOOM_OUT,                "zoom_out");
-        loader(BUTTON_SWITCH_TYPE_RIGHT,       "switch_type_right");
-        loader(BUTTON_SWITCH_TYPE_LEFT,        "switch_type_left");
-        loader(BUTTON_SWITCH_MATURITY_UP,      "switch_maturity_up");
-        loader(BUTTON_SWITCH_MATURITY_DOWN,    "switch_maturity_down");
-        loader(BUTTON_LIE_DOWN,                "lie_down");
-        loader(BUTTON_PAUSE,                   "pause");
-        
-#undef loader
-        
+        controls[p].clear();
+        for(size_t b = 0; b < N_BUTTONS; ++b) {
+            string option_name = buttons.list[b].option_name;
+            if(option_name.empty()) continue;
+            load_control(buttons.list[b].id, p, option_name, file);
+        }
     }
     
     //Weed out controls that didn't parse correctly.
@@ -1600,20 +1562,24 @@ void load_options() {
     
     //Other options.
     reader_setter rs(&file);
+    string resolution_str;
     rs.set("area_quality", area_images_scale);
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_backup_interval", editor_backup_interval);
     rs.set("fps", game_fps);
-    rs.set("height", scr_h);
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("pretty_whistle", pretty_whistle);
+    rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
-    rs.set("width", scr_w);
     rs.set("window_position_hack", window_position_hack);
     game_fps = max(1, game_fps);
-    scr_h = max(1, scr_h);
-    scr_w = max(1, scr_w);
+    
+    vector<string> resolution_parts = split(resolution_str);
+    if(resolution_parts.size() >= 2) {
+        scr_w = max(1, s2i(resolution_parts[0]));
+        scr_h = max(1, s2i(resolution_parts[1]));
+    }
     
 }
 
@@ -1931,134 +1897,70 @@ void rotate_point(
  * Saves the player's options.
  */
 void save_options() {
-    //TODO make this prettier.
-    //Like a list of constants somewhere where it associates
-    //an action with the name on the text file.
-    ALLEGRO_FILE* file = al_fopen("Options.txt", "w");
-    
-    if(!file) return;
+    data_node file("", "");
     
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     
-    //Tell the map what they are.
     for(unsigned char p = 0; p < 4; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
-        grouped_controls[prefix + "punch"].clear();
-        grouped_controls[prefix + "whistle"].clear();
-        grouped_controls[prefix + "move_right"].clear();
-        grouped_controls[prefix + "move_up"].clear();
-        grouped_controls[prefix + "move_left"].clear();
-        grouped_controls[prefix + "move_down"].clear();
-        grouped_controls[prefix + "move_cursor_right"].clear();
-        grouped_controls[prefix + "move_cursor_up"].clear();
-        grouped_controls[prefix + "move_cursor_left"].clear();
-        grouped_controls[prefix + "move_cursor_down"].clear();
-        grouped_controls[prefix + "group_move_right"].clear();
-        grouped_controls[prefix + "group_move_up"].clear();
-        grouped_controls[prefix + "group_move_left"].clear();
-        grouped_controls[prefix + "group_move_down"].clear();
-        grouped_controls[prefix + "group_move_go_to_cursor"].clear();
-        grouped_controls[prefix + "switch_leader_right"].clear();
-        grouped_controls[prefix + "switch_leader_left"].clear();
-        grouped_controls[prefix + "dismiss"].clear();
-        grouped_controls[prefix + "use_spray_1"].clear();
-        grouped_controls[prefix + "use_spray_2"].clear();
-        grouped_controls[prefix + "use_spray"].clear();
-        grouped_controls[prefix + "switch_spray_right"].clear();
-        grouped_controls[prefix + "switch_spray_left"].clear();
-        grouped_controls[prefix + "switch_zoom"].clear();
-        grouped_controls[prefix + "zoom_in"].clear();
-        grouped_controls[prefix + "zoom_out"].clear();
-        grouped_controls[prefix + "switch_type_right"].clear();
-        grouped_controls[prefix + "switch_type_left"].clear();
-        grouped_controls[prefix + "switch_maturity_up"].clear();
-        grouped_controls[prefix + "switch_maturity_down"].clear();
-        grouped_controls[prefix + "lie_down"].clear();
-        grouped_controls[prefix + "pause"].clear();
+        for(size_t b = 0; b < N_BUTTONS; ++b) {
+            string option_name = buttons.list[b].option_name;
+            if(option_name.empty()) continue;
+            grouped_controls[prefix + option_name].clear();
+        }
     }
     
+    //Write down their control strings.
     for(size_t p = 0; p < 4; p++) {
         size_t n_controls = controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
             string name = "p" + i2s(p + 1) + "_";
             
-#define adder(id, name_str) \
-    if(controls[p][c].action == id) name += name_str
+            for(size_t b = 0; b < N_BUTTONS; ++b) {
+                if(buttons.list[b].option_name.empty()) continue;
+                if(controls[p][c].action == buttons.list[b].id) {
+                    name += buttons.list[b].option_name;
+                    break;
+                }
+            }
             
-            adder(     BUTTON_THROW,                   "punch");
-            else adder(BUTTON_WHISTLE,                 "whistle");
-            else adder(BUTTON_MOVE_RIGHT,              "move_right");
-            else adder(BUTTON_MOVE_UP,                 "move_up");
-            else adder(BUTTON_MOVE_LEFT,               "move_left");
-            else adder(BUTTON_MOVE_DOWN,               "move_down");
-            else adder(BUTTON_MOVE_CURSOR_RIGHT,       "move_cursor_right");
-            else adder(BUTTON_MOVE_CURSOR_UP,          "move_cursor_up");
-            else adder(BUTTON_MOVE_CURSOR_LEFT,        "move_cursor_left");
-            else adder(BUTTON_MOVE_CURSOR_DOWN,        "move_cursor_down");
-            else adder(BUTTON_GROUP_MOVE_RIGHT,        "group_move_right");
-            else adder(BUTTON_GROUP_MOVE_UP,           "group_move_up");
-            else adder(BUTTON_GROUP_MOVE_LEFT,         "group_move_left");
-            else adder(BUTTON_GROUP_MOVE_DOWN,         "group_move_down");
-            else adder(
-                    BUTTON_GROUP_MOVE_GO_TO_CURSOR, "group_move_go_to_cursor"
-                );
-            else adder(BUTTON_SWITCH_LEADER_RIGHT,     "switch_leader_right");
-            else adder(BUTTON_SWITCH_LEADER_LEFT,      "switch_leader_left");
-            else adder(BUTTON_DISMISS,                 "dismiss");
-            else adder(BUTTON_USE_SPRAY_1,             "use_spray_1");
-            else adder(BUTTON_USE_SPRAY_2,             "use_spray_2");
-            else adder(BUTTON_USE_SPRAY,               "use_spray");
-            else adder(BUTTON_SWITCH_SPRAY_RIGHT,      "switch_spray_right");
-            else adder(BUTTON_SWITCH_SPRAY_LEFT,       "switch_spray_left");
-            else adder(BUTTON_SWITCH_ZOOM,             "switch_zoom");
-            else adder(BUTTON_ZOOM_IN,                 "zoom_in");
-            else adder(BUTTON_ZOOM_OUT,                "zoom_out");
-            else adder(BUTTON_SWITCH_TYPE_RIGHT,       "switch_type_right");
-            else adder(BUTTON_SWITCH_TYPE_LEFT,        "switch_type_left");
-            else adder(BUTTON_SWITCH_MATURITY_UP,      "switch_maturity_up");
-            else adder(BUTTON_SWITCH_MATURITY_DOWN,    "switch_maturity_down");
-            else adder(BUTTON_LIE_DOWN,                "lie_down");
-            else adder(BUTTON_PAUSE,                   "pause");
-            
-#undef adder
-            
-            grouped_controls[name] += controls[p][c].stringify() + ",";
+            grouped_controls[name] += controls[p][c].stringify() + ";";
         }
     }
     
     //Save controls.
     for(auto c = grouped_controls.begin(); c != grouped_controls.end(); ++c) {
-        //Remove the final character, which is always an extra comma.
+        //Remove the final character, which is always an extra semicolon.
         if(c->second.size()) c->second.erase(c->second.size() - 1);
         
-        al_fwrite(file, c->first + "=" + c->second + "\n");
+        file.add(new data_node(c->first, c->second));
     }
     
     for(unsigned char p = 0; p < 4; ++p) {
-        al_fwrite(
-            file,
-            "p" + i2s((p + 1)) + "_mouse_moves_cursor=" +
-            b2s(mouse_moves_cursor[p]) + "\n"
+        file.add(
+            new data_node(
+                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
+                b2s(mouse_moves_cursor[p])
+            )
         );
     }
     
     //Other options.
-    al_fwrite(file, "area_quality=" + f2s(area_images_scale) + "\n");
-    al_fwrite(file, "draw_cursor_trail=" + b2s(draw_cursor_trail) + "\n");
-    al_fwrite(
-        file, "editor_backup_interval=" + f2s(editor_backup_interval) + "\n"
+    file.add(new data_node("area_quality", f2s(area_images_scale)));
+    file.add(new data_node("draw_cursor_trail", b2s(draw_cursor_trail)));
+    file.add(
+        new data_node("editor_backup_interval", f2s(editor_backup_interval))
     );
-    al_fwrite(file, "fps=" + i2s(game_fps) + "\n");
-    al_fwrite(file, "height=" + i2s(scr_h) + "\n");
-    al_fwrite(file, "max_particles=" + i2s(max_particles) + "\n");
-    al_fwrite(file, "middle_zoom_level=" + f2s(zoom_mid_level) + "\n");
-    al_fwrite(file, "pretty_whistle=" + b2s(pretty_whistle) + "\n");
-    al_fwrite(file, "smooth_scaling=" + b2s(smooth_scaling) + "\n");
-    al_fwrite(file, "width=" + i2s(scr_w) + "\n");
-    al_fwrite(file, "window_position_hack=" + b2s(window_position_hack) + "\n");
+    file.add(new data_node("fps", i2s(game_fps)));
+    file.add(new data_node("max_particles", i2s(max_particles)));
+    file.add(new data_node("middle_zoom_level", f2s(zoom_mid_level)));
+    file.add(new data_node("pretty_whistle", b2s(pretty_whistle)));
+    file.add(new data_node("resolution", i2s(scr_w) + " " + i2s(scr_h)));
+    file.add(new data_node("smooth_scaling", b2s(smooth_scaling)));
+    file.add(new data_node("window_position_hack", b2s(window_position_hack)));
     
-    al_fclose(file);
+    file.save_file("Options.txt");
 }
 
 

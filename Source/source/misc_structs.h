@@ -69,10 +69,29 @@ struct bmp_info {
  * are not the only thing using the bitmap manager.
  */
 struct bmp_manager {
-public:
     map<string, bmp_info> list;
     ALLEGRO_BITMAP* get(const string &name, data_node* node);
     void detach(const string &name);
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Manager for the different gameplay "buttons", associated with the controls.
+ */
+struct button_manager {
+    struct button {
+        size_t id;
+        string name;
+        string option_name;
+        string default_control_str;
+    };
+    
+    vector<button> list;
+    void add(
+        const size_t id, const string name, const string option_name,
+        const string default_control_str
+    );
 };
 
 

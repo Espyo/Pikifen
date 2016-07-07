@@ -123,6 +123,7 @@ extern vector<unsigned int> berries;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern vector<bridge*> bridges;
+extern button_manager buttons;
 extern float cam_final_x;
 extern float cam_final_y;
 extern float cam_final_zoom;
@@ -219,7 +220,7 @@ extern float group_move_intensity;
 //Time remaining until the next arrow on the "move group arrows" appears.
 extern timer group_move_next_arrow_timer;
 //Is the "move group to cursor" button being pressed?
-extern bool group_move_go_to_cursor;
+extern bool group_move_cursor;
 extern float group_move_task_range;
 //Joystick coordinates for the group movement.
 extern movement_struct group_movement;

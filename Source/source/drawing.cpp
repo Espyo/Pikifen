@@ -936,7 +936,7 @@ void do_game_drawing(
                         hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
                     );
                     for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_SWITCH_SPRAY_LEFT) {
+                        if(controls[0][c].action == BUTTON_PREV_SPRAY) {
                             draw_control(
                                 font_main, controls[0][c],
                                 hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
@@ -948,7 +948,7 @@ void do_game_drawing(
                         }
                     }
                     for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_SWITCH_SPRAY_RIGHT) {
+                        if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
                             draw_control(
                                 font_main, controls[0][c],
                                 hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
