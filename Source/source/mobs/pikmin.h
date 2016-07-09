@@ -60,6 +60,7 @@ enum PIKMIN_ANIMATIONS {
 };
 
 const float PIKMIN_GOTO_TIMEOUT = 5.0f;
+const float PIKMIN_INVULN_PERIOD = 2.0f;
 const float PIKMIN_PANIC_CHASE_INTERVAL = 0.2f;
 
 

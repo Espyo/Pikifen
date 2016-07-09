@@ -49,6 +49,7 @@ void prepare_to_attack(      mob* m, void* info1, void* info2);
 void reach_carriable_object( mob* m, void* info1, void* info2);
 void reach_dismiss_spot(     mob* m, void* info1, void* info2);
 void rechase_opponent(       mob* m, void* info1, void* info2);
+void remove_panic(           mob* m, void* info1, void* info2);
 void sigh(                   mob* m, void* info1, void* info2);
 void start_flailing(         mob* m, void* info1, void* info2);
 void start_panicking(        mob* m, void* info1, void* info2);

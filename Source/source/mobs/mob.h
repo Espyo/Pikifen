@@ -70,7 +70,7 @@ enum MOB_PARTICLE_GENERATOR_IDS {
     //Ring-shaped wave when going in water.
     MOB_PARTICLE_GENERATOR_WAVE_RING,
     
-    //Specific status effects are this + their number.
+    //Specific status effects are numbered starting on this.
     //So make sure this is the last on the enum.
     MOB_PARTICLE_GENERATOR_STATUS,
 };

@@ -35,6 +35,42 @@ area_data::area_data() :
 
 
 /* ----------------------------------------------------------------------------
+ * Scans the list of edges and retrieves the number of the specified edge.
+ * Returns INVALID if not found.
+ */
+size_t area_data::find_edge_nr(const edge* e_ptr) {
+    for(size_t e = 0; e < edges.size(); ++e) {
+        if(edges[e] == e_ptr) return e;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Scans the list of sectors and retrieves the number of the specified sector.
+ * Returns INVALID if not found.
+ */
+size_t area_data::find_sector_nr(const sector* s_ptr) {
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        if(sectors[s] == s_ptr) return s;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Scans the list of vertexes and retrieves the number of the specified vertex.
+ * Returns INVALID if not found.
+ */
+size_t area_data::find_vertex_nr(const vertex* v_ptr) {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        if(vertexes[v] == v_ptr) return v;
+    }
+    return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Generates the blockmap for the area, given the current info.
  */
 void area_data::generate_blockmap() {
@@ -534,7 +570,7 @@ void sector::clone(sector* new_sector) {
     new_sector->texture_info.trans_x = texture_info.trans_y;
     new_sector->texture_info.rot = texture_info.rot;
     new_sector->texture_info.file_name = texture_info.file_name;
-    //TODO hazards.
+    new_sector->hazards_str = hazards_str;
 }
 
 
@@ -1333,7 +1369,7 @@ bool is_vertex_ear(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the vertex farthest to the right.
+ * Returns the vertex farthest to the right in a list of edges.
  */
 vertex* get_rightmost_vertex(map<edge*, bool> &edges) {
     vertex* rightmost = NULL;
@@ -1361,6 +1397,25 @@ vertex* get_rightmost_vertex(polygon* p) {
         if(!rightmost) rightmost = v_ptr;
         else {
             rightmost = get_rightmost_vertex(v_ptr, rightmost);
+        }
+    }
+    
+    return rightmost;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vertex farthest to the right in a sector.
+ */
+vertex* get_rightmost_vertex(sector* s) {
+    vertex* rightmost = NULL;
+    
+    for(size_t e = 0; e < s->edges.size(); ++e) {
+        edge* e_ptr = s->edges[e];
+        if(!rightmost) rightmost = e_ptr->vertexes[0];
+        else {
+            rightmost = get_rightmost_vertex(e_ptr->vertexes[0], rightmost);
+            rightmost = get_rightmost_vertex(e_ptr->vertexes[1], rightmost);
         }
     }
     

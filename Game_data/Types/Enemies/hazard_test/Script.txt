@@ -1,9 +1,0 @@
-first_state = idle
-
-script{
-    idle{
-        on_enter{
-            animation = idle
-        }
-    }
-}

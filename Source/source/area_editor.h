@@ -156,8 +156,7 @@ private:
     void load_area(const bool from_backup);
     void load_backup();
     void merge_vertex(
-        vertex* v1, vertex* v2,
-        const size_t v2_nr, unordered_set<sector*>* affected_sectors
+        vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
     void mob_to_gui();
     void open_picker(unsigned char type);

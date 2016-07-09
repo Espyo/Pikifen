@@ -670,6 +670,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::panic_new_chase);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(pikmin_fsm::remove_panic);
             efc.run_function(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
@@ -850,6 +851,14 @@ void pikmin_fsm::land(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLE);
     
     pikmin_fsm::stand_still(m, NULL, NULL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to stop panicking.
+ */
+void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
+    m->invuln_period.start();
 }
 
 
@@ -1399,6 +1408,7 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
     for(size_t r = 0; r < p->pik_type->resistances.size(); ++r) {
         if(p->pik_type->resistances[r] == h) return; //Immune!
     }
+    if(p->invuln_period.time_left > 0) return;
     
     for(size_t e = 0; e < h->effects.size(); ++e) {
         p->apply_status_effect(h->effects[e], false);

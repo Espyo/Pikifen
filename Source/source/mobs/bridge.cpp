@@ -89,7 +89,10 @@ void bridge::open(mob* m, void* info1, void* info2) {
     for(size_t s = 0; s < b_ptr->secs.size(); s++) {
         sector* s_ptr = b_ptr->secs[s];
         
-        s_ptr->z = s2f(s_ptr->tag);
+        if(!s_ptr->tag.empty()) {
+            s_ptr->z = s2f(s_ptr->tag);
+        }
+        s_ptr->hazards.clear();
         
         sector_correction sc(s_ptr);
         //TODO the file name is so static...

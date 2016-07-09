@@ -1135,7 +1135,7 @@ void load_custom_particle_generators() {
         grs.set("speed",              pg_struct.speed);
         grs.set("speed_deviation",    pg_struct.speed_deviation);
         
-        pg_struct.id = pg;
+        pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
         
         custom_particle_generators[pg_node->name] = pg_struct;
     }

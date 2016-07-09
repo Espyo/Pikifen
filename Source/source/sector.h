@@ -325,6 +325,9 @@ struct area_data {
     string weather_name;
     
     area_data();
+    size_t find_edge_nr(const edge* e_ptr);
+    size_t find_sector_nr(const sector* s_ptr);
+    size_t find_vertex_nr(const vertex* v_ptr);
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
     void remove_vertex(const size_t v_nr);
@@ -368,6 +371,7 @@ float get_point_sign(
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
 vertex* get_rightmost_vertex(polygon* p);
+vertex* get_rightmost_vertex(sector* s);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(
     const float x, const float y, size_t* sector_nr, const bool use_blockmap

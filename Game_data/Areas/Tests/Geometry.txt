@@ -126,8 +126,8 @@ vertexes{
 	v=-640.00 -224.00
 	v=-736.00 -224.00
 	v=-352.00 -416.00
-	v=-160.00 -384.00
-	v=-224.00 -224.00
+	v=-160.00 -448.00
+	v=-160.00 -224.00
 	v=-384.00 -320.00
 	v=-288.00 -448.00
 	v=-320.00 -224.00
@@ -147,6 +147,13 @@ vertexes{
 	v=-544.00 -512.00
 	v=-448.00 -512.00
 	v=-448.00 -416.00
+	v=-96.00 -384.00
+	v=-96.00 -256.00
+	v=-288.00 -224.00
+	v=-160.00 -160.00
+	v=-288.00 -160.00
+	v=-288.00 -512.00
+	v=-160.00 -512.00
 }
 edges{
 	e{
@@ -738,19 +745,19 @@ edges{
 		v=126 130
 	}
 	e{
-		s=0 38
-		v=127 128
+		s=0 43
+		v=127 148
 	}
 	e{
-		s=0 38
-		v=128 131
+		s=45 44
+		v=128 150
 	}
 	e{
 		s=0 38
 		v=129 126
 	}
 	e{
-		s=0 38
+		s=46 44
 		v=130 127
 	}
 	e{
@@ -820,6 +827,50 @@ edges{
 	e{
 		s=0 42
 		v=147 144
+	}
+	e{
+		s=0 43
+		v=148 149
+	}
+	e{
+		s=0 43
+		v=149 128
+	}
+	e{
+		s=44 43
+		v=128 127
+	}
+	e{
+		s=0 38
+		v=150 131
+	}
+	e{
+		s=38 44
+		v=150 130
+	}
+	e{
+		s=0 45
+		v=151 152
+	}
+	e{
+		s=0 45
+		v=152 150
+	}
+	e{
+		s=0 45
+		v=128 151
+	}
+	e{
+		s=0 46
+		v=130 153
+	}
+	e{
+		s=0 46
+		v=153 154
+	}
+	e{
+		s=0 46
+		v=154 127
 	}
 }
 sectors{
@@ -1038,6 +1089,31 @@ sectors{
 		texture_scale=20.00 20.00
 		texture_trans=280.00 0.00
 	}
+	s{
+		z=0.00
+		hazards=water
+		hazards_floor=true
+		texture=Dirt.jpg
+	}
+	s{
+		type=Bridge
+		z=0.00
+		tag=0
+		hazards=water
+		hazards_floor=true
+		texture=Dirt.jpg
+	}
+	s{
+		type=Bridge
+		z=0.00
+		tag=0
+		texture=Grass_light.jpg
+	}
+	s{
+		type=Bridge
+		z=0.00
+		texture=Grass_light.jpg
+	}
 }
 mobs{
 	Special{
@@ -1195,9 +1271,10 @@ mobs{
 		type=Red Pikmin
 		p=-224.00 224.00
 	}
-	Enemy{
-		type=Hazard test
-		p=-320.00 32.00
+	Special{
+		type=Bridge
+		p=-224.00 -192.00
+		angle=4.71
 	}
 }
 path_stops{

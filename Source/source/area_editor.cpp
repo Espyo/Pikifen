@@ -462,7 +462,6 @@ void area_editor::create_sector() {
         merge_vertex(
             new_sector_vertexes[v],
             merge_dest_vertexes[v],
-            merge_dest_vertex_nrs[v],
             &merge_affected_sectors
         );
     }
@@ -1481,7 +1480,7 @@ bool area_editor::get_common_sector(
         );
     }
     
-    bool has_common = false;
+    unordered_set<sector*> all_common_sectors;
     for(
         auto s = all_related_sectors.begin();
         s != all_related_sectors.end(); ++s
@@ -1496,11 +1495,39 @@ bool area_editor::get_common_sector(
         }
         if(!is_common) continue;
         
-        *result = *s;
-        has_common = true;
+        all_common_sectors.insert(*s);
     }
     
-    return has_common;
+    if(all_common_sectors.size() == 0) {
+        *result = NULL;
+        return false;
+    } else if(all_common_sectors.size() == 1) {
+        *result = *all_common_sectors.begin();
+        return true;
+    }
+    
+    //Uh-oh...there's no clear answer. We'll have to decide between the
+    //involved sectors. Get the rightmost vertexes of all involved sectors.
+    //The one most to the left wins.
+    //Why? Imagine you're making a triangle inside a square, which is in turn
+    //inside another square. The triangle's points share both the inner and
+    //outer square sectors. The triangle "belongs" to the inner sector,
+    //and we can easily find out which is the inner one with this method.
+    float best_rightmost_x = 0;
+    sector* best_rightmost_sector = NULL;
+    for(
+        auto s = all_common_sectors.begin(); s != all_common_sectors.end(); ++s
+    ) {
+        if(*s == NULL) continue;
+        vertex* v_ptr = get_rightmost_vertex(*s);
+        if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
+            best_rightmost_sector = *s;
+            best_rightmost_x = v_ptr->x;
+        }
+    }
+    
+    *result = best_rightmost_sector;
+    return true;
 }
 
 
@@ -2547,8 +2574,7 @@ void area_editor::handle_controls(ALLEGRO_EVENT ev) {
                     ) <= (VERTEX_MERGE_RADIUS / cam_zoom)
                 ) {
                     merge_vertex(
-                        moved_v_ptr, dest_v_ptr,
-                        v, &affected_sectors
+                        moved_v_ptr, dest_v_ptr, &affected_sectors
                     );
                     final_vertex = dest_v_ptr;
                     break;
@@ -4349,12 +4375,10 @@ void area_editor::load_backup() {
  * Merges vertex 1 into vertex 2.
  * v1:               Vertex that is being moved and will be merged.
  * v2:               Vertex that is going to absorb v1.
- * v2_nr:            v2's vertex number.
  * affected_sectors: List of sectors that will be affected with this merge.
  */
 void area_editor::merge_vertex(
-    vertex* v1, vertex* v2,
-    const size_t v2_nr, unordered_set<sector*>* affected_sectors
+    vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
 ) {
     //Find out what to do with every edge of the dragged vertex.
     for(size_t e = 0; e < v1->edges.size();) {
@@ -4451,7 +4475,8 @@ void area_editor::merge_vertex(
                 v2->edges.push_back(v1->edges[e]);
                 unsigned char n = (e_ptr->vertexes[0] == v1 ? 0 : 1);
                 e_ptr->vertexes[n] = v2;
-                e_ptr->vertex_nrs[n] = v2_nr;
+                e_ptr->vertex_nrs[n] =
+                    cur_area_data.find_vertex_nr(e_ptr->vertexes[n]);
             }
         }
         

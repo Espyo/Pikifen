@@ -113,7 +113,7 @@ void load_mob_types(
     for(size_t t = 0; t < types.size(); ++t) {
     
         data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
-        if(!file.file_was_opened) return;
+        if(!file.file_was_opened) continue;
         
         mob_type* mt;
         mt = mob_categories.create_mob_type(category);
