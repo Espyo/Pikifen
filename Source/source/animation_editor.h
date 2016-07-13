@@ -21,6 +21,7 @@
 #include "hitbox.h"
 #include "LAFI/gui.h"
 #include "LAFI/widget.h"
+#include "misc_structs.h"
 
 using namespace std;
 
@@ -37,6 +38,11 @@ private:
     
     animation_pool       anims;
     bool                 anim_playing;
+    bool                 comparison;
+    frame*               comparison_frame;
+    bool                 comparison_blink;
+    bool                 comparison_blink_show;
+    timer                comparison_blink_timer;
     animation*           cur_anim;
     frame*               cur_frame;
     size_t               cur_frame_instance_nr;
@@ -47,6 +53,7 @@ private:
     size_t               cur_hitbox_nr;
     string               file_path;
     ALLEGRO_FILECHOOSER* file_dialog;
+    bool                 frame_offset_with_mouse;
     //Hitbox being grabbed by the mouse cursor. INVALID = none.
     size_t               grabbing_hitbox;
     bool                 grabbing_hitbox_edge;
@@ -79,12 +86,14 @@ private:
     void gui_load_animation();
     void gui_load_frame();
     void gui_load_frame_instance();
+    void gui_load_frame_offset();
     void gui_load_hitbox();
     void gui_load_hitbox_instance();
     void gui_load_top();
     void gui_save_animation();
     void gui_save_frame();
     void gui_save_frame_instance();
+    void gui_save_frame_offset();
     void gui_save_hitbox();
     void gui_save_hitbox_instance();
     void gui_save_top();

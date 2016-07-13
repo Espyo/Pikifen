@@ -35,6 +35,11 @@
 animation_editor::animation_editor() :
     cur_anim(NULL),
     anim_playing(false),
+    comparison(false),
+    comparison_frame(nullptr),
+    comparison_blink(true),
+    comparison_blink_show(true),
+    comparison_blink_timer(0),
     cur_frame(NULL),
     cur_frame_instance_nr(INVALID),
     cur_frame_time(0),
@@ -42,6 +47,7 @@ animation_editor::animation_editor() :
     cur_hitbox_instance_nr(INVALID),
     cur_hitbox_nr(INVALID),
     file_dialog(NULL),
+    frame_offset_with_mouse(false),
     grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
     grabbing_hitbox_x(0),
@@ -58,10 +64,19 @@ animation_editor::animation_editor() :
     new_hitbox_corner_y(FLT_MAX),
     sec_mode(ESM_NONE),
     wum(NULL) {
+        
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
     top_bmp[2] = NULL;
-    
+    comparison_blink_timer =
+        timer(
+            0.6,
+            [this] () {
+                this->comparison_blink_show = !this->comparison_blink_show;
+                this->comparison_blink_timer.start();
+            }
+        );
+    comparison_blink_timer.start();
 }
 
 
@@ -106,6 +121,12 @@ void animation_editor::do_logic() {
     
     cur_hitbox_alpha += M_PI * 3 * delta_t;
     
+    if(comparison_blink) {
+        comparison_blink_timer.tick(delta_t);
+    } else {
+        comparison_blink_show = true;
+    }
+    
     fade_mgr.tick(delta_t);
     
 }
@@ -144,7 +165,8 @@ void animation_editor::do_drawing() {
             
         } else if(
             mode == EDITOR_MODE_FRAME || mode == EDITOR_MODE_TOP ||
-            mode == EDITOR_MODE_HITBOX_INSTANCES
+            mode == EDITOR_MODE_HITBOX_INSTANCES ||
+            mode == EDITOR_MODE_FRAME_OFFSET
         ) {
             f = cur_frame;
             
@@ -169,13 +191,13 @@ void animation_editor::do_drawing() {
                         63 + 192 * ((sin(cur_hitbox_alpha) / 2.0) + 0.5);
                         
                     if(h_ptr->type == HITBOX_TYPE_NORMAL) {
-                        hitbox_color = al_map_rgba(0, 128, 0, 192);
+                        hitbox_color = al_map_rgba(0, 128, 0, 128);
                         hitbox_outline_color = al_map_rgba(0, 64, 0, 255);
                     } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                        hitbox_color = al_map_rgba(128, 0, 0, 192);
+                        hitbox_color = al_map_rgba(128, 0, 0, 128);
                         hitbox_outline_color = al_map_rgba(64, 0, 0, 255);
                     } else {
-                        hitbox_color = al_map_rgba(128, 128, 0, 192);
+                        hitbox_color = al_map_rgba(128, 128, 0, 128);
                         hitbox_outline_color = al_map_rgba(64, 64, 0, 255);
                     }
                     
@@ -200,8 +222,8 @@ void animation_editor::do_drawing() {
                         ),
                         (
                             cur_hitbox_instance_nr == h ?
-                            2 / cam_zoom :
-                            1 / cam_zoom
+                            3 / cam_zoom :
+                            2 / cam_zoom
                         )
                     );
                 }
@@ -213,6 +235,18 @@ void animation_editor::do_drawing() {
                     f->top_x, f->top_y,
                     f->top_w, f->top_h,
                     f->top_angle
+                );
+            }
+            
+            if(
+                comparison && comparison_blink_show &&
+                comparison_frame && comparison_frame->bitmap
+            ) {
+                draw_sprite(
+                    comparison_frame->bitmap,
+                    comparison_frame->offs_x, comparison_frame->offs_y,
+                    comparison_frame->game_w, comparison_frame->game_h,
+                    0
                 );
             }
         }
@@ -338,6 +372,23 @@ void animation_editor::gui_load_frame_instance() {
         )->text =
             f2s(cur_anim->frame_instances[cur_frame_instance_nr].duration);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the frame offset's data onto the gui.
+ */
+void animation_editor::gui_load_frame_offset() {
+    lafi::widget* f = gui->widgets["frm_offset"];
+    
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_frame->offs_x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_frame->offs_y);
+    ((lafi::checkbox*) f->widgets["chk_compare"])->set(comparison);
+    ((lafi::checkbox*) f->widgets["chk_compare_blink"])->set(
+        comparison_blink
+    );
+    ((lafi::button*) f->widgets["but_compare"])->text =
+        (comparison_frame ? comparison_frame->name : "");
 }
 
 
@@ -560,6 +611,26 @@ void animation_editor::gui_save_frame_instance() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the frame's bitmap offset data data from the gui.
+ */
+void animation_editor::gui_save_frame_offset() {
+    lafi::widget* f = gui->widgets["frm_offset"];
+    
+    cur_frame->offs_x =
+        s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    cur_frame->offs_y =
+        s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    comparison =
+        ((lafi::checkbox*) f->widgets["chk_compare"])->checked;
+    comparison_blink =
+        ((lafi::checkbox*) f->widgets["chk_compare_blink"])->checked;
+    
+    gui_load_frame_offset();
+    made_changes = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the hitbox' data from the gui.
  */
 void animation_editor::gui_save_hitbox() {
@@ -737,15 +808,23 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
             }
         }
         
+        if(holding_m1 && mode == EDITOR_MODE_FRAME_OFFSET) {
+            cur_frame->offs_x += ev.mouse.dx / cam_zoom;
+            cur_frame->offs_y += ev.mouse.dy / cam_zoom;
+            gui_load_frame_offset();
+        }
+        
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
-        if(ev.mouse.button == 2) holding_m2 = true;
-        if(ev.mouse.button == 3) {
+        if(ev.mouse.button == 1) holding_m1 = true;
+        else if(ev.mouse.button == 2) holding_m2 = true;
+        else if(ev.mouse.button == 3) {
             cam_zoom = 1;
             cam_x = cam_y = 0;
         }
         
     } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP) {
-        if(ev.mouse.button == 2) holding_m2 = false;
+        if(ev.mouse.button == 1) holding_m1 = false;
+        else if(ev.mouse.button == 2) holding_m2 = false;
     }
     
     frame* f = NULL;
@@ -1137,8 +1216,8 @@ void animation_editor::load() {
     );
     frm_frame->easy_row();
     frm_frame->easy_add(
-        "lbl_offsxy",
-        new lafi::label(0, 0, 0, 0, "Offset XY:"), 45, 16
+        "but_offsxy",
+        new lafi::button(0, 0, 0, 0, "Offset:"), 45, 16
     );
     frm_frame->easy_add(
         "txt_offsx",
@@ -1506,6 +1585,71 @@ void animation_editor::load() {
     );
     
     
+    //Frame offset frame.
+    lafi::frame* frm_offset =
+        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_offset);
+    gui->add("frm_offset", frm_offset);
+    
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "but_back",
+        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_xy",
+        new lafi::label(0, 0, 0, 0, "X, Y:"), 25, 16
+    );
+    frm_offset->easy_add(
+        "txt_x",
+        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
+    );
+    frm_offset->easy_add(
+        "txt_y",
+        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_mouse1",
+        new lafi::label(0, 0, 0, 0, "Or move it with"), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_mouse2",
+        new lafi::label(0, 0, 0, 0, "the left mouse button."), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lin_1",
+        new lafi::line(0, 0, 0, 0), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "chk_compare",
+        new lafi::checkbox(0, 0, 0, 0, "Comparison frame"), 100, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "dum_1",
+        new lafi::dummy(0, 0, 0, 0), 10, 24
+    );
+    frm_offset->easy_add(
+        "but_compare",
+        new lafi::button(0, 0, 0, 0, ""), 90, 24
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "dum_2",
+        new lafi::dummy(0, 0, 0, 0), 10, 16
+    );
+    frm_offset->easy_add(
+        "chk_compare_blink",
+        new lafi::checkbox(0, 0, 0, 0, "Blink comparison?"), 90, 16
+    );
+    frm_offset->easy_row();
+    
+    
     //Pikmin top frame.
     lafi::frame* frm_top =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1844,6 +1988,14 @@ void animation_editor::load() {
     frm_frames->widgets["but_frame"]->description =
         "Pick a frame to edit.";
     lafi::widget* frm_f = frm_frames->widgets["frm_frame"];
+    frm_f->widgets["but_offsxy"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_offset"]);
+        hide_widget(this->gui->widgets["frm_frames"]);
+        mode = EDITOR_MODE_FRAME_OFFSET;
+        comparison_frame = NULL;
+        gui_load_frame_offset();
+    };
     frm_f->widgets["but_hitbox_is"]->description =
         "Edit this frame's hitboxes.";
     frm_f->widgets["but_hitbox_is"]->left_mouse_click_handler =
@@ -1892,6 +2044,8 @@ void animation_editor::load() {
         lambda_gui_save_frame;
     frm_f->widgets["txt_gameh"]->description =
         "In-game sprite height.";
+    frm_f->widgets["but_offsxy"]->description =
+        "Click this button for an offset wizard tool.";
     frm_f->widgets["txt_offsx"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_f->widgets["txt_offsx"]->description =
@@ -2239,6 +2393,44 @@ void animation_editor::load() {
     };
     
     
+    //Properties -- Frame offset.
+    auto lambda_save_offset =
+    [this] (lafi::widget*) { gui_save_frame_offset(); };
+    auto lambda_save_offset_click =
+    [this] (lafi::widget*, int, int) { gui_save_frame_offset(); };
+    frm_offset->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_frames"]);
+        hide_widget(this->gui->widgets["frm_offset"]);
+        mode = EDITOR_MODE_FRAME;
+        gui_load_frame();
+    };
+    frm_offset->widgets["but_compare"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
+    };
+    frm_offset->widgets["txt_x"]->lose_focus_handler =
+        lambda_save_offset;
+    frm_offset->widgets["txt_y"]->lose_focus_handler =
+        lambda_save_offset;
+    frm_offset->widgets["chk_compare"]->left_mouse_click_handler =
+        lambda_save_offset_click;
+    frm_offset->widgets["chk_compare_blink"]->left_mouse_click_handler =
+        lambda_save_offset_click;
+    frm_offset->widgets["but_back"]->description =
+        "Go back to the frame editor.";
+    frm_offset->widgets["txt_x"]->description =
+        "In-game, offset by this much, horizontally.";
+    frm_offset->widgets["txt_y"]->description =
+        "In-game, offset by this much, vertically.";
+    frm_offset->widgets["chk_compare"]->description =
+        "Overlay a different frame for comparison purposes.";
+    frm_offset->widgets["but_compare"]->description =
+        "Frame to compare with.";
+    frm_offset->widgets["chk_compare_blink"]->description =
+        "Blink the comparison in and out?";
+    
+    
     //Properties -- Pikmin top.
     auto lambda_save_top =
     [this] (lafi::widget*) { gui_save_top(); };
@@ -2267,7 +2459,7 @@ void animation_editor::load() {
         maturity = (maturity + 1) % 3;
     };
     frm_top->widgets["but_back"]->description =
-        "Go back.";
+        "Go back to the frame editor.";
     frm_top->widgets["chk_visible"]->description =
         "Is the top visible in this frame?";
     frm_top->widgets["txt_x"]->description =
@@ -2568,14 +2760,20 @@ void animation_editor::pick(string name, unsigned char type) {
         gui_load_frame_instance();
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
-        cur_frame = anims.frames[anims.find_frame(name)];
-        cur_hitbox_instance_nr = INVALID;
-        if(cur_frame->file.empty()) {
-            //New frame. Suggest file name.
-            cur_frame->file = last_file_used;
+        if(mode == EDITOR_MODE_FRAME_OFFSET) {
+            comparison_frame = anims.frames[anims.find_frame(name)];
+            show_widget(gui->widgets["frm_offset"]);
+            gui_load_frame_offset();
+        } else {
+            cur_frame = anims.frames[anims.find_frame(name)];
+            cur_hitbox_instance_nr = INVALID;
+            if(cur_frame->file.empty()) {
+                //New frame. Suggest file name.
+                cur_frame->file = last_file_used;
+            }
+            show_widget(gui->widgets["frm_frames"]);
+            gui_load_frame();
         }
-        show_widget(gui->widgets["frm_frames"]);
-        gui_load_frame();
         
     }
 }
