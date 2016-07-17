@@ -1,0 +1,20 @@
+name = Munge Dweevil
+
+allow_ground_attacks = false
+big_damage_interval = 120
+drops_corpse = true
+height = 48
+max_carriers = 6
+max_health = 350
+move_speed = 40
+near_angle = 99999
+near_radius = 80
+pikmin_seeds = 5
+pushable = true
+pushes = false
+radius = 16
+rotation_speed = 1
+sight_radius = 200
+territory_radius = 600
+value = 2
+weight = 3

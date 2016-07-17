@@ -1836,9 +1836,8 @@ void mob::draw() {
  */
 void mob::get_sprite_center(mob* m, frame* f, float* x, float* y) {
     float c = cos(m->angle), s = sin(m->angle);
-    *x = m->x + c * f->offs_x + c * f->offs_y;
-    *y = m->y - s * f->offs_y + s * f->offs_x;
-    
+    *x = m->x + c * f->offs_x - s * f->offs_y;
+    *y = m->y + s * f->offs_x + c * f->offs_y;
 }
 
 /* ----------------------------------------------------------------------------

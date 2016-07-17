@@ -787,7 +787,7 @@ void area_editor::do_drawing() {
                 radius,
                 (
                     valid ? change_alpha(c, mob_opacity) :
-                    al_map_rgba(224, 96, 96, mob_opacity)
+                    al_map_rgba(255, 0, 0, mob_opacity)
                 )
             );
             

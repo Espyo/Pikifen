@@ -151,7 +151,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin_fsm::go_to_opponent);
-            efc.change_state("going_to_opponent");
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
@@ -201,7 +200,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin_fsm::go_to_opponent);
-            efc.change_state("going_to_opponent");
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
@@ -222,9 +220,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("grabbed_by_leader", PIKMIN_STATE_GRABBED_BY_LEADER); {
-        efc.new_event(MOB_EVENT_ON_LEAVE); {
-            efc.run_function(pikmin_fsm::be_released);
-        }
         efc.new_event(MOB_EVENT_THROWN); {
             efc.run_function(pikmin_fsm::be_thrown);
             efc.change_state("thrown");
@@ -233,10 +228,12 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(pikmin_fsm::be_released);
             efc.run_function(pikmin_fsm::get_knocked_down);
             efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin_fsm::be_released);
             efc.run_function(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
@@ -296,7 +293,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin_fsm::go_to_opponent);
-            efc.change_state("going_to_opponent");
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
@@ -333,7 +329,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
             efc.run_function(pikmin_fsm::go_to_opponent);
-            efc.change_state("going_to_opponent");
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
             efc.run_function(pikmin_fsm::go_to_carriable_object);
@@ -840,7 +835,7 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
  * When a Pikmin is gently released by a leader.
  */
 void pikmin_fsm::be_released(mob* m, void* info1, void* info2) {
-
+    ((pikmin*) m)->following_group->fsm.run_event(LEADER_EVENT_RELEASE);
 }
 
 
@@ -924,6 +919,11 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
  * info1: Pointer to the opponent.
  */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
+    mob* o_ptr = (mob*) info1;
+    if(typeid(*o_ptr) == typeid(enemy)) {
+        if(!((enemy*) info1)->ene_type->allow_ground_attacks) return;
+    }
+    
     focus_mob(m, (mob*) info1);
     m->stop_chasing();
     m->chase(
@@ -934,6 +934,8 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     );
     m->set_animation(PIKMIN_ANIM_WALK);
     remove_from_group(m);
+    
+    m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
 
 

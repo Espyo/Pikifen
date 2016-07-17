@@ -700,9 +700,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=85.10 -29.02 0.00
+				coords=35.00 0.00 0.00
 				height=128.00
-				radius=32.00
+				radius=6.00
 				type=2
 				multiplier=1.00
 				can_pikmin_latch=false

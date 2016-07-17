@@ -531,7 +531,7 @@ void init_mob_categories() {
 
     mob_categories.register_category(
         MOB_CATEGORY_NONE, "None", "None", "",
-        al_map_rgb(224, 96, 96),
+        al_map_rgb(255, 0, 0),
     [] (vector<string> &) { },
     [] (const string &) -> mob_type* { return nullptr; },
     [] () -> mob_type* { return nullptr; },
@@ -540,7 +540,7 @@ void init_mob_categories() {
     
     mob_categories.register_category(
         MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER,
-        al_map_rgb(224, 48, 96),
+        al_map_rgb(224, 96, 128),
     [] (vector<string> &li) {
         for(auto e = enemy_types.begin(); e != enemy_types.end(); ++e) {
             li.push_back(e->first);

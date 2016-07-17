@@ -32,6 +32,7 @@ public:
     float regenerate_speed;
     bool is_boss;
     bool drops_corpse;
+    bool allow_ground_attacks;
     
     enemy_type();
     

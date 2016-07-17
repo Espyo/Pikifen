@@ -64,17 +64,17 @@ animation_editor::animation_editor() :
     new_hitbox_corner_y(FLT_MAX),
     sec_mode(ESM_NONE),
     wum(NULL) {
-        
+    
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
     top_bmp[2] = NULL;
     comparison_blink_timer =
         timer(
             0.6,
-            [this] () {
-                this->comparison_blink_show = !this->comparison_blink_show;
-                this->comparison_blink_timer.start();
-            }
+    [this] () {
+        this->comparison_blink_show = !this->comparison_blink_show;
+        this->comparison_blink_timer.start();
+    }
         );
     comparison_blink_timer.start();
 }
@@ -624,7 +624,7 @@ void animation_editor::gui_save_frame_offset() {
         ((lafi::checkbox*) f->widgets["chk_compare"])->checked;
     comparison_blink =
         ((lafi::checkbox*) f->widgets["chk_compare_blink"])->checked;
-    
+        
     gui_load_frame_offset();
     made_changes = true;
 }
@@ -814,7 +814,10 @@ void animation_editor::handle_controls(ALLEGRO_EVENT ev) {
             gui_load_frame_offset();
         }
         
-    } else if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+    } else if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        ev.mouse.x <= scr_w - 208 && ev.mouse.y < scr_h - 16
+    ) {
         if(ev.mouse.button == 1) holding_m1 = true;
         else if(ev.mouse.button == 2) holding_m2 = true;
         else if(ev.mouse.button == 3) {
@@ -1829,6 +1832,7 @@ void animation_editor::load() {
     frm_anims->widgets["but_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
+        hide_widget(gui->widgets["frm_anims"]);
         open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
     };
     frm_anims->widgets["but_anim"]->description =
@@ -1930,6 +1934,7 @@ void animation_editor::load() {
     frm_i->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
+        hide_widget(gui->widgets["frm_anims"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME_INSTANCE, false);
     };
     frm_i->widgets["but_frame"]->description =
@@ -1983,6 +1988,7 @@ void animation_editor::load() {
         "Delete the current frame.";
     frm_frames->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        hide_widget(gui->widgets["frm_frames"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME, true);
     };
     frm_frames->widgets["but_frame"]->description =
@@ -2402,11 +2408,13 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_frames"]);
         hide_widget(this->gui->widgets["frm_offset"]);
+        this->comparison_frame = NULL;
         mode = EDITOR_MODE_FRAME;
         gui_load_frame();
     };
     frm_offset->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        hide_widget(gui->widgets["frm_offset"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
     };
     frm_offset->widgets["txt_x"]->lose_focus_handler =
@@ -2429,8 +2437,8 @@ void animation_editor::load() {
         "Frame to compare with.";
     frm_offset->widgets["chk_compare_blink"]->description =
         "Blink the comparison in and out?";
-    
-    
+        
+        
     //Properties -- Pikmin top.
     auto lambda_save_top =
     [this] (lafi::widget*) { gui_save_top(); };
@@ -2703,18 +2711,6 @@ void animation_editor::open_picker(unsigned char type, bool can_make_new) {
         for(size_t f = 0; f < anims.frames.size(); ++f) {
             elements.push_back(anims.frames[f]->name);
         }
-    }
-    
-    if(
-        type == ANIMATION_EDITOR_PICKER_ANIMATION ||
-        type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE
-    ) {
-        hide_widget(gui->widgets["frm_anims"]);
-    } else if(
-        type == ANIMATION_EDITOR_PICKER_FRAME ||
-        type == ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE
-    ) {
-        hide_widget(gui->widgets["frm_frames"]);
     }
     
     f->easy_reset();
