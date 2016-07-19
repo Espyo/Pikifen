@@ -972,6 +972,21 @@ void load_area(
             s_ptr->links[l].calculate_dist(s_ptr);
         }
     }
+    if(!load_for_editor) {
+        //Fade sectors that also fade brightness should be
+        //at midway between the two neighbors.
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+            sector* s_ptr = cur_area_data.sectors[s];
+            if(s_ptr->fade) {
+                sector* n1 = NULL;
+                sector* n2 = NULL;
+                s_ptr->get_texture_merge_sectors(&n1, &n2);
+                if(n1 && n2) {
+                    s_ptr->brightness = (n1->brightness + n2->brightness) / 2;
+                }
+            }
+        }
+    }
     
     
     //Triangulate everything.

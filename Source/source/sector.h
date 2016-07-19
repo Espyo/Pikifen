@@ -187,6 +187,7 @@ struct sector {
     void connect_edges(area_data &a, size_t s_nr);
     void fix_pointers(area_data &a);
     void clone(sector* new_sector);
+    void get_texture_merge_sectors(sector** s1, sector** s2);
     ~sector();
 };
 

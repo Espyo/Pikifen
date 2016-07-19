@@ -575,6 +575,81 @@ void sector::clone(sector* new_sector) {
 
 
 /* ----------------------------------------------------------------------------
+ * If texture merging is required, this returns what two neighboring sectors
+ * will be used for it.
+ */
+void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
+    //Check all edges to find which two textures need merging.
+    edge* e_ptr = NULL;
+    sector* neighbor = NULL;
+    bool valid = true;
+    map<sector*, dist> neighbors;
+    sector* texture_sector[2] = {NULL, NULL};
+    
+    //The two neighboring sectors with the lenghtiest edges are picked.
+    //So save all sector/length pairs.
+    //Sectors with different heights from the current one are also saved,
+    //but they have lower priority compared to same-heigh sectors.
+    for(size_t e = 0; e < edges.size(); ++e) {
+        e_ptr = edges[e];
+        valid = true;
+        
+        if(e_ptr->sectors[0] == this) neighbor = e_ptr->sectors[1];
+        else neighbor = e_ptr->sectors[0];
+        
+        if(neighbor) {
+            if(neighbor->fade) valid = false;
+        }
+        
+        if(valid) {
+            neighbors[neighbor] +=
+                dist(
+                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                );
+        }
+    }
+    
+    //Find the two lengthiest ones.
+    vector<pair<dist, sector*> > neighbors_vec;
+    for(auto n = neighbors.begin(); n != neighbors.end(); ++n) {
+        neighbors_vec.push_back(
+            make_pair(
+                //Yes, we do need these casts, for g++.
+                (dist) (n->second), (sector*) (n->first)
+            )
+        );
+    }
+    sort(
+        neighbors_vec.begin(), neighbors_vec.end(),
+    [this] (pair<dist, sector*> p1, pair<dist, sector*> p2) -> bool {
+        return p1.first < p2.first;
+    }
+    );
+    if(neighbors_vec.size() >= 1) {
+        texture_sector[0] = neighbors_vec.back().second;
+    }
+    if(neighbors_vec.size() >= 2) {
+        texture_sector[1] = neighbors_vec[neighbors_vec.size() - 2].second;
+    }
+    
+    if(!texture_sector[1] && texture_sector[0]) {
+        //0 is always the bottom one. If we're fading into nothingness,
+        //we should swap first.
+        swap(texture_sector[0], texture_sector[1]);
+    } else if(!texture_sector[1]) {
+        //Nothing to draw.
+        return;
+    } else if(texture_sector[1]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+        swap(texture_sector[0], texture_sector[1]);
+    }
+    
+    *s1 = texture_sector[0];
+    *s2 = texture_sector[1];
+}
+
+
+/* ----------------------------------------------------------------------------
  * Destroys a sector.
  */
 sector::~sector() {

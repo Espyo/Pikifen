@@ -220,7 +220,6 @@ void pikmin::draw() {
     tint.r *= brightness;
     tint.g *= brightness;
     tint.b *= brightness;
-    tint.a *= brightness;
     
     draw_sprite(
         f_ptr->bitmap,
