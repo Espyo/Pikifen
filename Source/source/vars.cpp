@@ -70,6 +70,7 @@ sample_struct sfx_pikmin_thrown;
 sample_struct sfx_switch_pikmin;
 sample_struct sfx_throw;
 
+vector<string> animation_editor_history;
 ALLEGRO_FONT* allegro_font = NULL;
 vector<vector<ALLEGRO_BITMAP*> > area_images;
 float area_images_scale = 1.0;

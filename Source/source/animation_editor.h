@@ -83,6 +83,7 @@ private:
     lafi::widget*        wum;
     
     void close_changes_warning();
+    string get_cut_path(const string &p);
     void gui_load_animation();
     void gui_load_frame();
     void gui_load_frame_instance();
@@ -102,6 +103,7 @@ private:
     void open_hitbox_type(unsigned char type);
     void open_picker(unsigned char type, bool can_make_new);
     void pick(string name, unsigned char type);
+    void populate_history();
     void resize_everything();
     void save_animation_pool();
     void show_changes_warning();

@@ -174,6 +174,7 @@ string str_to_lower(string s);
 string str_to_upper(string s);
 void unload_hazards();
 void unload_status_types();
+void update_animation_editor_history(const string &n = "");
 
 
 void al_fwrite(ALLEGRO_FILE* f, string s);

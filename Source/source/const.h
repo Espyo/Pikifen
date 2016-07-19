@@ -34,6 +34,8 @@ const unsigned char VERSION_DAY   = 12;
 const unsigned char VERSION_MONTH = 4;
 const unsigned int  VERSION_YEAR  = 16; //The year is 2000 + this.
 
+//How many entries of the animation editor history to store, at max.
+const size_t ANIMATION_EDITOR_HISTORY_SIZE = 6;
 //How long it takes for the area name to fade away, in-game.
 const float AREA_TITLE_FADE_DURATION = 3.0f;
 //How fast the "invalid cursor" effect goes, per second.
@@ -148,6 +150,7 @@ enum EDITOR_MODES {
     //Animation editor.
     EDITOR_MODE_ANIMATION,
     EDITOR_MODE_FRAME,
+    EDITOR_MODE_HISTORY,
     EDITOR_MODE_HITBOX,
     EDITOR_MODE_HITBOX_INSTANCES,
     EDITOR_MODE_FRAME_OFFSET,

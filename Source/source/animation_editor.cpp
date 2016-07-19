@@ -280,6 +280,29 @@ void animation_editor::do_drawing() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns a file path, but cropped to fit on the GUI's buttons.
+ * This implies cutting it in two lines, and even replacing the start with
+ * ellipsis, if needed.
+ */
+string animation_editor::get_cut_path(const string &p) {
+    if(p.size() <= 22) return p;
+    
+    string result = p;
+    if(p.size() > 44) {
+        result = "..." + p.substr(p.size() - 41, 41);
+    }
+    
+    if(p.size() > 22) {
+        result =
+            result.substr(0, result.size() / 2) + "\n" +
+            result.substr(result.size() / 2, (result.size() / 2) + 1);
+    }
+    
+    return result;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the animation's data onto the gui.
  */
 void animation_editor::gui_load_animation() {
@@ -1007,6 +1030,127 @@ void animation_editor::load() {
     frm_object->easy_row();
     
     
+    //Properties -- main.
+    frm_main->widgets["but_file"]->left_mouse_click_handler =
+    [this, frm_main] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_HISTORY;
+        populate_history();
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_history"]);
+    };
+    frm_main->widgets["but_file"]->description =
+        "Pick a file to load or create.";
+    
+    frm_object->widgets["but_anims"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_hitbox_instance_nr = INVALID;
+        if(cur_anim) {
+            if(cur_anim->frame_instances.size()) cur_frame_instance_nr = 0;
+        }
+        mode = EDITOR_MODE_ANIMATION;
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_anims"]);
+        gui_load_animation();
+    };
+    frm_object->widgets["but_anims"]->description =
+        "Change the way the animations look like.";
+    
+    frm_object->widgets["but_frames"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_FRAME;
+        cur_hitbox_instance_nr = INVALID;
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_frames"]);
+        gui_load_frame();
+    };
+    frm_object->widgets["but_frames"]->description =
+        "Change how each individual frame looks like.";
+    
+    frm_object->widgets["but_hitboxes"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_HITBOX;
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_hitboxes"]);
+        cur_hitbox_nr = 0;
+        gui_load_hitbox();
+    };
+    frm_object->widgets["but_hitboxes"]->description =
+        "Change what hitboxes exist, and their order.";
+    
+    frm_object->widgets["but_tools"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_TOOLS;
+        hide_widget(this->gui->widgets["frm_main"]);
+        show_widget(this->gui->widgets["frm_tools"]);
+    };
+    frm_object->widgets["but_tools"]->description =
+        "Special tools to help with specific tasks.";
+        
+        
+    //History.
+    lafi::frame* frm_history =
+        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_history);
+    gui->add("frm_history", frm_history);
+    
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "but_back",
+        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "but_browse",
+        new lafi::button(0, 0, 0, 0, "Browse"), 100, 24
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "dum_1",
+        new lafi::dummy(0, 0, 0, 0), 100, 16
+    );
+    frm_history->easy_row();
+    frm_history->easy_add(
+        "lbl_hist",
+        new lafi::label(0, 0, 0, 0, "History:"), 100, 16
+    );
+    y = frm_history->easy_row();
+    frm_history->add(
+        "frm_list",
+        new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48)
+    );
+    
+    
+    //Properties -- history.
+    frm_history->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_history"]);
+        show_widget(this->gui->widgets["frm_main"]);
+    };
+    frm_history->widgets["but_back"]->description =
+        "Go back to the main menu.";
+    frm_history->widgets["but_browse"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        al_show_native_file_dialog(display, file_dialog);
+        
+        //Reset the locale, which gets set by Allegro's native dialogs...
+        //and breaks s2f().
+        setlocale(LC_ALL, "C");
+        
+        if(al_get_native_file_dialog_count(file_dialog) == 0) return;
+        
+        file_path = al_get_native_file_dialog_path(file_dialog, 0);
+        load_animation_pool();
+        update_animation_editor_history(file_path);
+        save_options(); //Save the history on the options.
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_history"]);
+        show_widget(this->gui->widgets["frm_main"]);
+    };
+    frm_history->widgets["but_browse"]->description =
+        "Pick a file to load or create.";
+    
+    
     //Animations frame.
     lafi::frame* frm_anims =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1021,7 +1165,7 @@ void animation_editor::load() {
     frm_anims->easy_row();
     frm_anims->easy_add(
         "lbl_anim",
-        new lafi::label( 0, 0, 0, 0, "Animation:"), 85, 16
+        new lafi::label(0, 0, 0, 0, "Animation:"), 85, 16
     );
     frm_anims->easy_add(
         "but_del_anim",
@@ -1040,44 +1184,44 @@ void animation_editor::load() {
     frm_anim->easy_row();
     frm_anim->easy_add(
         "lin_1",
-        new lafi::line(  0, 0, 0, 0), 15, 12
+        new lafi::line(0, 0, 0, 0), 15, 12
     );
     frm_anim->easy_add(
         "lbl_data",
-        new lafi::label( 0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER),
+        new lafi::label(0, 0, 0, 0, "Animation data", ALLEGRO_ALIGN_CENTER),
         70, 12
     );
     frm_anim->easy_add(
         "lin_2",
-        new lafi::line(  0, 0, 0, 0), 15, 12
+        new lafi::line(0, 0, 0, 0), 15, 12
     );
     frm_anim->easy_row();
     frm_anim->easy_add(
         "lbl_loop",
-        new lafi::label( 0, 0, 0, 0, "Loop frame:"), 50, 16
+        new lafi::label(0, 0, 0, 0, "Loop frame:"), 50, 16
     );
     frm_anim->easy_add(
         "txt_loop",
-        new lafi::textbox( 0, 0, 0, 0), 50, 16
+        new lafi::textbox(0, 0, 0, 0), 50, 16
     );
     frm_anim->easy_row();
     frm_anim->easy_add(
         "lin_3",
-        new lafi::line(  0, 0, 0, 0), 25, 12
+        new lafi::line(0, 0, 0, 0), 25, 12
     );
     frm_anim->easy_add(
         "lbl_list",
-        new lafi::label( 0, 0, 0, 0, "Frame list", ALLEGRO_ALIGN_CENTER),
+        new lafi::label(0, 0, 0, 0, "Frame list", ALLEGRO_ALIGN_CENTER),
         50, 12
     );
     frm_anim->easy_add(
         "lin_4",
-        new lafi::line(  0, 0, 0, 0), 25, 12
+        new lafi::line(0, 0, 0, 0), 25, 12
     );
     frm_anim->easy_row();
     frm_anim->easy_add(
         "lbl_f_nr",
-        new lafi::label( 0, 0, 0, 0), 100, 16
+        new lafi::label(0, 0, 0, 0), 100, 16
     );
     frm_anim->easy_row();
     frm_anim->easy_add(
@@ -1105,10 +1249,11 @@ void animation_editor::load() {
     lafi::frame* frm_frame_i =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_anim->add("frm_frame_i", frm_frame_i);
+    
     frm_frame_i->easy_row();
     frm_frame_i->easy_add(
         "lbl_frame",
-        new lafi::label(  0, 0, 0, 0, "Frame:"), 30, 16
+        new lafi::label(0, 0, 0, 0, "Frame:"), 30, 16
     );
     frm_frame_i->easy_add(
         "but_frame",
@@ -1117,13 +1262,206 @@ void animation_editor::load() {
     frm_frame_i->easy_row();
     frm_frame_i->easy_add(
         "lbl_dur",
-        new lafi::label(  0, 0, 0, 0, "Duration:"), 40, 16
+        new lafi::label(0, 0, 0, 0, "Duration:"), 40, 16
     );
     frm_frame_i->easy_add(
         "txt_dur",
         new lafi::textbox(0, 0, 0, 0), 60, 16
     );
     frm_frame_i->easy_row();
+    frm_frame_i->easy_add(
+        "dum_1",
+        new lafi::dummy(0, 0, 0, 0), 100, 16
+    );
+    frm_frame_i->easy_row();
+    frm_frame_i->easy_add(
+        "but_dur_all",
+        new lafi::button(0, 0, 0, 0, "Apply duration to all"), 100, 24
+    );
+    frm_frame_i->easy_row();
+    
+    
+    //Properties -- animations.
+    auto lambda_gui_save_animation =
+    [this] (lafi::widget*) { gui_save_animation(); };
+    auto lambda_gui_save_frame_instance =
+    [this] (lafi::widget*) { gui_save_frame_instance(); };
+    
+    frm_anims->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        anim_playing = false;
+        hide_widget(this->gui->widgets["frm_anims"]);
+        show_widget(this->gui->widgets["frm_main"]);
+        update_stats();
+    };
+    frm_anims->widgets["but_back"]->description =
+        "Go back to the main menu.";
+    
+    frm_anims->widgets["but_del_anim"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_anim) return;
+        anims.animations.erase(
+            anims.animations.begin() +
+            anims.find_animation(cur_anim->name)
+        );
+        anim_playing = false;
+        cur_anim = NULL;
+        cur_frame_instance_nr = INVALID;
+        cur_hitbox_instance_nr = INVALID;
+        gui_load_animation();
+        made_changes = true;
+    };
+    frm_anims->widgets["but_del_anim"]->description =
+        "Delete the current animation.";
+    
+    frm_anims->widgets["but_anim"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        hide_widget(gui->widgets["frm_anims"]);
+        open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
+    };
+    frm_anims->widgets["but_anim"]->description =
+        "Pick an animation to edit.";
+    
+    frm_anim->widgets["txt_loop"]->lose_focus_handler =
+        lambda_gui_save_animation;
+    frm_anim->widgets["txt_loop"]->description =
+        "The animation loops back to this frame when it ends.";
+    
+    frm_anim->widgets["but_play"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(cur_anim->frame_instances.size() < 2) {
+            anim_playing = false;
+        } else {
+            anim_playing = !anim_playing;
+            if(
+                !cur_anim->frame_instances.empty() &&
+                cur_frame_instance_nr == INVALID
+            ) {
+                cur_frame_instance_nr = 0;
+            }
+            cur_frame_time = 0;
+        }
+    };
+    frm_anim->widgets["but_play"]->description =
+        "Play or pause the animation.";
+    
+    frm_anim->widgets["but_prev"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        if(!cur_anim->frame_instances.empty()) {
+            if(cur_frame_instance_nr == INVALID) {
+                cur_frame_instance_nr = 0;
+            } else if(cur_frame_instance_nr == 0) {
+                cur_frame_instance_nr =
+                    cur_anim->frame_instances.size() - 1;
+            } else cur_frame_instance_nr--;
+        }
+        gui_load_frame_instance();
+    };
+    frm_anim->widgets["but_prev"]->description =
+        "Previous frame.";
+    
+    frm_anim->widgets["but_next"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        if(!cur_anim->frame_instances.empty()) {
+            if(
+                cur_frame_instance_nr ==
+                cur_anim->frame_instances.size() - 1 ||
+                cur_frame_instance_nr == INVALID
+            ) {
+                cur_frame_instance_nr = 0;
+            } else {
+                cur_frame_instance_nr++;
+            }
+        }
+        gui_load_frame_instance();
+    };
+    frm_anim->widgets["but_next"]->description =
+        "Next frame.";
+    
+    frm_anim->widgets["but_add"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        if(cur_frame_instance_nr != INVALID) {
+            cur_frame_instance_nr++;
+            cur_anim->frame_instances.insert(
+                cur_anim->frame_instances.begin() + cur_frame_instance_nr,
+                frame_instance(
+                    cur_anim->frame_instances[cur_frame_instance_nr - 1]
+                )
+            );
+        } else {
+            cur_anim->frame_instances.push_back(frame_instance());
+            cur_frame_instance_nr = 0;
+        }
+        gui_load_frame_instance();
+        made_changes = true;
+    };
+    frm_anim->widgets["but_add"]->description =
+        "Add a new frame after the current one (via copy).";
+    
+    frm_anim->widgets["but_rem"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        if(cur_frame_instance_nr != INVALID) {
+            cur_anim->frame_instances.erase(
+                cur_anim->frame_instances.begin() + cur_frame_instance_nr
+            );
+            if(cur_anim->frame_instances.empty()) {
+                cur_frame_instance_nr = INVALID;
+            } else if(
+                cur_frame_instance_nr >=
+                cur_anim->frame_instances.size()
+            ) {
+                cur_frame_instance_nr =
+                    cur_anim->frame_instances.size() - 1;
+            }
+        }
+        gui_load_frame_instance();
+        made_changes = true;
+    };
+    frm_anim->widgets["but_rem"]->description =
+        "Remove the current frame.";
+    
+    frm_frame_i->widgets["but_frame"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        anim_playing = false;
+        hide_widget(gui->widgets["frm_anims"]);
+        open_picker(ANIMATION_EDITOR_PICKER_FRAME_INSTANCE, false);
+    };
+    frm_frame_i->widgets["but_frame"]->description =
+        "Pick the frame to use here.";
+    
+    frm_frame_i->widgets["txt_dur"]->lose_focus_handler =
+        lambda_gui_save_frame_instance;
+    frm_frame_i->widgets["txt_dur"]->mouse_down_handler =
+    [this] (lafi::widget*, int, int, int) {
+        anim_playing = false;
+    };
+    frm_frame_i->widgets["txt_dur"]->description =
+        "How long this frame lasts for, in seconds.";
+    
+    frm_frame_i->widgets["but_dur_all"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        float d = cur_anim->frame_instances[cur_frame_instance_nr].duration;
+        for(size_t i = 0; i < cur_anim->frame_instances.size(); ++i) {
+            cur_anim->frame_instances[i].duration = d;
+        }
+    };
+    frm_frame_i->widgets["but_dur_all"]->description =
+        "Apply this duration to all frames on this animation.";
+    
+    frm_anims->register_accelerator(
+        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
+        frm_anims->widgets["frm_anim"]->widgets["but_next"]
+    );
+    frm_anims->register_accelerator(
+        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL | ALLEGRO_KEYMOD_SHIFT,
+        frm_anims->widgets["frm_anim"]->widgets["but_prev"]
+    );
     
     
     //Frames frame.
@@ -1140,7 +1478,7 @@ void animation_editor::load() {
     frm_frames->easy_row();
     frm_frames->easy_add(
         "lbl_frame",
-        new lafi::label( 0, 0, 0, 0, "Frame:"), 85, 16
+        new lafi::label(0, 0, 0, 0, "Frame:"), 85, 16
     );
     frm_frames->easy_add(
         "but_del_frame",
@@ -1156,10 +1494,11 @@ void animation_editor::load() {
     lafi::frame* frm_frame =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_frames->add("frm_frame", frm_frame);
+    
     frm_frame->easy_row();
     frm_frame->easy_add(
         "lin_1",
-        new lafi::line(  0, 0, 0, 0), 25, 12
+        new lafi::line(0, 0, 0, 0), 25, 12
     );
     frm_frame->easy_add(
         "lbl_f_data",
@@ -1167,7 +1506,7 @@ void animation_editor::load() {
     );
     frm_frame->easy_add(
         "lin_2",
-        new lafi::line(  0, 0, 0, 0), 25, 12
+        new lafi::line(0, 0, 0, 0), 25, 12
     );
     frm_frame->easy_row();
     frm_frame->easy_add(
@@ -1243,6 +1582,230 @@ void animation_editor::load() {
     frm_frame->easy_row();
     
     
+    //Properties -- frames.
+    auto lambda_gui_save_frame = [this] (lafi::widget*) { gui_save_frame(); };
+    
+    frm_frames->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_frames"]);
+        show_widget(this->gui->widgets["frm_main"]);
+        update_stats();
+    };
+    frm_frames->widgets["but_back"]->description =
+        "Go back to the main menu.";
+    
+    frm_frames->widgets["but_del_frame"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_frame) return;
+        anims.frames.erase(
+            anims.frames.begin() + anims.find_frame(cur_frame->name)
+        );
+        cur_frame = NULL;
+        cur_hitbox_instance_nr = INVALID;
+        gui_load_frame();
+        made_changes = true;
+    };
+    frm_frames->widgets["but_del_frame"]->description =
+        "Delete the current frame.";
+    
+    frm_frames->widgets["but_frame"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        hide_widget(gui->widgets["frm_frames"]);
+        open_picker(ANIMATION_EDITOR_PICKER_FRAME, true);
+    };
+    frm_frames->widgets["but_frame"]->description =
+        "Pick a frame to edit.";
+    
+    frm_frame->widgets["txt_file"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_file"]->description =
+        "Name (+extension) of the file with the sprite.";
+    
+    frm_frame->widgets["txt_filex"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_filex"]->description =
+        "X of the top-left corner of the sprite.";
+    
+    frm_frame->widgets["txt_filey"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_filey"]->description =
+        "Y of the top-left corner of the sprite.";
+    
+    frm_frame->widgets["txt_filew"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_filew"]->description =
+        "Width of the sprite, in the file.";
+    
+    frm_frame->widgets["txt_fileh"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_fileh"]->description =
+        "Height of the sprite, in the file.";
+    
+    frm_frame->widgets["txt_gamew"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_gamew"]->description =
+        "In-game sprite width.";
+    
+    frm_frame->widgets["txt_gameh"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_gameh"]->description =
+        "In-game sprite height.";
+    
+    frm_frame->widgets["but_offsxy"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_offset"]);
+        hide_widget(this->gui->widgets["frm_frames"]);
+        mode = EDITOR_MODE_FRAME_OFFSET;
+        comparison_frame = NULL;
+        gui_load_frame_offset();
+    };
+    frm_frame->widgets["but_offsxy"]->description =
+        "Click this button for an offset wizard tool.";
+    
+    frm_frame->widgets["txt_offsx"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_offsx"]->description =
+        "In-game, offset by this much, horizontally.";
+    
+    frm_frame->widgets["txt_offsy"]->lose_focus_handler =
+        lambda_gui_save_frame;
+    frm_frame->widgets["txt_offsy"]->description =
+        "In-game, offset by this much, vertically.";
+    
+    frm_frame->widgets["but_hitbox_is"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_hitbox_is"]);
+        hide_widget(this->gui->widgets["frm_frames"]);
+        mode = EDITOR_MODE_HITBOX_INSTANCES;
+        cur_hitbox_instance_nr = 0;
+        gui_load_hitbox_instance();
+    };
+    frm_frame->widgets["but_hitbox_is"]->description =
+        "Edit this frame's hitboxes.";
+    
+    frm_frame->widgets["but_top"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_top"]);
+        hide_widget(this->gui->widgets["frm_frames"]);
+        mode = EDITOR_MODE_TOP;
+        gui_load_top();
+    };
+    frm_frame->widgets["but_top"]->description =
+        "Edit the Pikmin's top (maturity) for this frame.";
+    
+    
+    //Frame offset frame.
+    lafi::frame* frm_offset =
+        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_offset);
+    gui->add("frm_offset", frm_offset);
+    
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "but_back",
+        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_xy",
+        new lafi::label(0, 0, 0, 0, "X, Y:"), 25, 16
+    );
+    frm_offset->easy_add(
+        "txt_x",
+        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
+    );
+    frm_offset->easy_add(
+        "txt_y",
+        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_mouse1",
+        new lafi::label(0, 0, 0, 0, "Or move it with"), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lbl_mouse2",
+        new lafi::label(0, 0, 0, 0, "the left mouse button."), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "lin_1",
+        new lafi::line(0, 0, 0, 0), 100, 8
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "chk_compare",
+        new lafi::checkbox(0, 0, 0, 0, "Comparison frame"), 100, 16
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "dum_1",
+        new lafi::dummy(0, 0, 0, 0), 10, 24
+    );
+    frm_offset->easy_add(
+        "but_compare",
+        new lafi::button(0, 0, 0, 0, ""), 90, 24
+    );
+    frm_offset->easy_row();
+    frm_offset->easy_add(
+        "dum_2",
+        new lafi::dummy(0, 0, 0, 0), 10, 16
+    );
+    frm_offset->easy_add(
+        "chk_compare_blink",
+        new lafi::checkbox(0, 0, 0, 0, "Blink comparison?"), 90, 16
+    );
+    frm_offset->easy_row();
+    
+    
+    //Properties -- Frame offset.
+    auto lambda_save_offset =
+    [this] (lafi::widget*) { gui_save_frame_offset(); };
+    auto lambda_save_offset_click =
+    [this] (lafi::widget*, int, int) { gui_save_frame_offset(); };
+    
+    frm_offset->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_frames"]);
+        hide_widget(this->gui->widgets["frm_offset"]);
+        this->comparison_frame = NULL;
+        mode = EDITOR_MODE_FRAME;
+        gui_load_frame();
+    };
+    frm_offset->widgets["but_back"]->description =
+        "Go back to the frame editor.";
+    
+    frm_offset->widgets["txt_x"]->lose_focus_handler =
+        lambda_save_offset;
+    frm_offset->widgets["txt_x"]->description =
+        "In-game, offset by this much, horizontally.";
+    
+    frm_offset->widgets["txt_y"]->lose_focus_handler =
+        lambda_save_offset;
+    frm_offset->widgets["txt_y"]->description =
+        "In-game, offset by this much, vertically.";
+    
+    frm_offset->widgets["chk_compare"]->left_mouse_click_handler =
+        lambda_save_offset_click;
+    frm_offset->widgets["chk_compare"]->description =
+        "Overlay a different frame for comparison purposes.";
+    
+    frm_offset->widgets["but_compare"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        hide_widget(gui->widgets["frm_offset"]);
+        open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
+    };
+    frm_offset->widgets["but_compare"]->description =
+        "Frame to compare with.";
+    
+    frm_offset->widgets["chk_compare_blink"]->left_mouse_click_handler =
+        lambda_save_offset_click;
+    frm_offset->widgets["chk_compare_blink"]->description =
+        "Blink the comparison in and out?";
+        
+        
     //Hitboxes instances frame.
     lafi::frame* frm_hitbox_is =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1266,17 +1829,18 @@ void animation_editor::load() {
     frm_hitbox_is->easy_row();
     frm_hitbox_is->easy_add(
         "lbl_n",
-        new lafi::label( 0, 0, 0, 0, "Hitbox:"), 30, 24
+        new lafi::label(0, 0, 0, 0, "Hitbox:"), 30, 24
     );
     frm_hitbox_is->easy_add(
         "lbl_name",
-        new lafi::label( 0, 0, 0, 0), 70, 24
+        new lafi::label(0, 0, 0, 0), 70, 24
     );
     y = frm_hitbox_is->easy_row();
     
     lafi::frame* frm_hitbox_i =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_hitbox_is->add("frm_hitbox_i", frm_hitbox_i);
+    
     frm_hitbox_i->easy_row();
     frm_hitbox_i->easy_add(
         "lbl_xy",
@@ -1415,6 +1979,257 @@ void animation_editor::load() {
     frm_attack->easy_row();
     
     
+    //Properties -- hitbox instances.
+    auto lambda_gui_save_hitbox_instance =
+    [this] (lafi::widget*) { gui_save_hitbox_instance(); };
+    auto lambda_gui_save_hitbox_instance_click =
+    [this] (lafi::widget*, int, int) { gui_save_hitbox_instance(); };
+    
+    frm_hitbox_is->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_FRAME;
+        hide_widget(this->gui->widgets["frm_hitbox_is"]);
+        show_widget(this->gui->widgets["frm_frames"]);
+        cur_hitbox_instance_nr = INVALID;
+        update_stats();
+    };
+    frm_hitbox_is->widgets["but_back"]->description =
+        "Go back to the frame editor.";
+    
+    frm_hitbox_is->widgets["but_prev"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(cur_frame->hitbox_instances.size()) {
+            if(cur_hitbox_instance_nr == INVALID) {
+                cur_hitbox_instance_nr = 0;
+            } else if(cur_hitbox_instance_nr == 0) {
+                cur_hitbox_instance_nr =
+                    cur_frame->hitbox_instances.size() - 1;
+            } else {
+                cur_hitbox_instance_nr--;
+            }
+        }
+        gui_load_hitbox_instance();
+    };
+    frm_hitbox_is->widgets["but_prev"]->description =
+        "Previous hitbox.";
+    
+    frm_hitbox_is->widgets["but_next"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(cur_frame->hitbox_instances.size()) {
+            if(cur_hitbox_instance_nr == INVALID) {
+                cur_hitbox_instance_nr = 0;
+            }
+            cur_hitbox_instance_nr =
+                (cur_hitbox_instance_nr + 1) %
+                cur_frame->hitbox_instances.size();
+        }
+        gui_load_hitbox_instance();
+    };
+    frm_hitbox_is->widgets["but_next"]->description =
+        "Next hitbox.";
+    
+    frm_hitbox_i->register_accelerator(
+        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
+        frm_hitbox_is->widgets["but_next"]
+    );
+    frm_hitbox_i->register_accelerator(
+        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL | ALLEGRO_KEYMOD_SHIFT,
+        frm_hitbox_is->widgets["but_prev"]
+    );
+    
+    frm_hitbox_i->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_hitbox_i->widgets["txt_x"]->description =
+        "X of the hitbox's center.";
+    
+    frm_hitbox_i->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_hitbox_i->widgets["txt_y"]->description =
+        "Y of the hitbox's center.";
+    
+    frm_hitbox_i->widgets["txt_z"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_hitbox_i->widgets["txt_z"]->description =
+        "Altitude of the hitbox's bottom.";
+    
+    frm_hitbox_i->widgets["txt_h"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_hitbox_i->widgets["txt_h"]->description =
+        "Hitbox's height.";
+    
+    frm_hitbox_i->widgets["txt_r"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_hitbox_i->widgets["txt_r"]->description =
+        "Hitbox's radius.";
+    
+    frm_hitbox_i->widgets["rad_normal"]->left_mouse_click_handler =
+        lambda_gui_save_hitbox_instance_click;
+    frm_hitbox_i->widgets["rad_normal"]->description =
+        "Normal hitbox, one that can be damaged.";
+    
+    frm_hitbox_i->widgets["rad_attack"]->left_mouse_click_handler =
+        lambda_gui_save_hitbox_instance_click;
+    frm_hitbox_i->widgets["rad_attack"]->description =
+        "Attack hitbox, one that damages opponents.";
+    
+    frm_hitbox_i->widgets["rad_disabled"]->left_mouse_click_handler =
+        lambda_gui_save_hitbox_instance_click;
+    frm_hitbox_i->widgets["rad_disabled"]->description =
+        "This hitbox will be non-existent.";
+    
+    frm_normal->widgets["txt_mult"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_normal->widgets["txt_mult"]->description =
+        "Defense multiplier. 0 = invulnerable.";
+    
+    frm_normal->widgets["chk_latch"]->left_mouse_click_handler =
+        lambda_gui_save_hitbox_instance_click;
+    frm_normal->widgets["chk_latch"]->description =
+        "Can the Pikmin latch on to this hitbox?";
+    
+    frm_normal->widgets["txt_hazards"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_normal->widgets["txt_hazards"]->description =
+        "List of hazards, semicolon separated.";
+    
+    frm_attack->widgets["txt_mult"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_attack->widgets["txt_mult"]->description =
+        "Attack multiplier.";
+    
+    frm_attack->widgets["txt_hazards"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_attack->widgets["txt_hazards"]->description =
+        "List of hazards, semicolon separated.";
+    
+    frm_attack->widgets["chk_outward"]->left_mouse_click_handler =
+        lambda_gui_save_hitbox_instance_click;
+    frm_attack->widgets["chk_outward"]->description =
+        "Makes Pikmin be knocked away from the center.";
+    
+    frm_attack->widgets["ang_angle"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_attack->widgets["ang_angle"]->description =
+        "Angle the Pikmin are knocked towards.";
+    
+    frm_attack->widgets["txt_knockback"]->lose_focus_handler =
+        lambda_gui_save_hitbox_instance;
+    frm_attack->widgets["txt_knockback"]->description =
+        "Knockback strength.";
+        
+        
+    //Pikmin top frame.
+    lafi::frame* frm_top =
+        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
+    hide_widget(frm_top);
+    gui->add("frm_top", frm_top);
+    
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "but_back",
+        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "chk_visible",
+        new lafi::checkbox(0, 0, 0, 0, "Visible"), 100, 16
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "lbl_xy",
+        new lafi::label(0, 0, 0, 0, "X&Y:"), 20, 16
+    );
+    frm_top->easy_add(
+        "txt_x",
+        new lafi::textbox(0, 0, 0, 0), 40, 16
+    );
+    frm_top->easy_add(
+        "txt_y",
+        new lafi::textbox(0, 0, 0, 0), 40, 16
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "lbl_wh",
+        new lafi::label(0, 0, 0, 0, "W&H:"), 20, 16
+    );
+    frm_top->easy_add(
+        "txt_w",
+        new lafi::textbox(0, 0, 0, 0), 40, 16
+    );
+    frm_top->easy_add(
+        "txt_h",
+        new lafi::textbox(0, 0, 0, 0), 40, 16
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "lbl_angle",
+        new lafi::label(0, 0, 0, 0, "Angle:"), 40, 16
+    );
+    frm_top->easy_add(
+        "ang_angle",
+        new lafi::angle_picker(0, 0, 0, 0), 60, 24
+    );
+    frm_top->easy_row();
+    frm_top->easy_add(
+        "but_maturity",
+        new lafi::button(0, 0, 0, 0, "Change maturity"), 100, 24
+    );
+    frm_top->easy_row();
+    
+    
+    //Properties -- Pikmin top.
+    auto lambda_save_top =
+    [this] (lafi::widget*) { gui_save_top(); };
+    auto lambda_save_top_click =
+    [this] (lafi::widget*, int, int) { gui_save_top(); };
+    
+    frm_top->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        show_widget(this->gui->widgets["frm_frames"]);
+        hide_widget(this->gui->widgets["frm_top"]);
+        mode = EDITOR_MODE_FRAME;
+    };
+    frm_top->widgets["but_back"]->description =
+        "Go back to the frame editor.";
+    
+    frm_top->widgets["chk_visible"]->left_mouse_click_handler =
+        lambda_save_top_click;
+    frm_top->widgets["chk_visible"]->description =
+        "Is the top visible in this frame?";
+    
+    frm_top->widgets["txt_x"]->lose_focus_handler =
+        lambda_save_top;
+    frm_top->widgets["txt_x"]->description =
+        "X position of the top's center.";
+    
+    frm_top->widgets["txt_y"]->lose_focus_handler =
+        lambda_save_top;
+    frm_top->widgets["txt_y"]->description =
+        "Y position of the top's center.";
+    
+    frm_top->widgets["txt_w"]->lose_focus_handler =
+        lambda_save_top;
+    frm_top->widgets["txt_w"]->description =
+        "In-game width of the top.";
+    
+    frm_top->widgets["txt_h"]->lose_focus_handler =
+        lambda_save_top;
+    frm_top->widgets["txt_h"]->description =
+        "In-game height of the top.";
+    
+    frm_top->widgets["ang_angle"]->lose_focus_handler =
+        lambda_save_top;
+    frm_top->widgets["ang_angle"]->description =
+        "Angle of the top.";
+   
+    frm_top->widgets["but_maturity"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        maturity = (maturity + 1) % 3;
+    };
+    frm_top->widgets["but_maturity"]->description =
+        "View a different maturity top.";
+        
+        
     //Hitboxes frame.
     lafi::frame* frm_hitboxes =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1483,6 +2298,7 @@ void animation_editor::load() {
     lafi::frame* frm_hitbox =
         new lafi::frame(scr_w - 208, y, scr_w, scr_h - 48);
     frm_hitboxes->add("frm_hitbox", frm_hitbox);
+    
     frm_hitbox->easy_row();
     frm_hitbox->easy_add(
         "lbl_na",
@@ -1508,6 +2324,141 @@ void animation_editor::load() {
     frm_hitbox->easy_row();
     
     
+    //Properties -- hitboxes.
+    auto lambda_gui_save_hitbox =
+    [this] (lafi::widget*) { gui_save_hitbox(); };
+    auto lambda_gui_save_hitbox_click =
+    [this] (lafi::widget*, int, int) { gui_save_hitbox(); };
+    
+    frm_hitboxes->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_hitboxes"]);
+        show_widget(this->gui->widgets["frm_main"]);
+        update_stats();
+    };
+    frm_hitboxes->widgets["but_back"]->description =
+        "Go back to the main menu.";
+    
+    frm_hitboxes->widgets["txt_add"]->description =
+        "Name of the hitbox you want to create.";
+    
+    frm_hitboxes->widgets["but_add"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        string name =
+            (
+                (lafi::textbox*)
+                this->gui->widgets["frm_hitboxes"]->widgets["txt_add"]
+            )->text;
+        if(name.empty()) return;
+        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
+            if(anims.hitboxes[h]->name == name) {
+                cur_hitbox_nr = h;
+                gui_load_hitbox();
+                return;
+            }
+        }
+        anims.hitboxes.insert(
+            anims.hitboxes.begin() + cur_hitbox_nr +
+            (anims.hitboxes.empty() ? 0 : 1),
+            new hitbox(name)
+        );
+        if(anims.hitboxes.size() == 1) cur_hitbox_nr = 0;
+        else cur_hitbox_nr++;
+        update_hitboxes();
+        gui_load_hitbox();
+        made_changes = true;
+    };
+    frm_hitboxes->widgets["but_add"]->description =
+        "Create a new hitbox (after the current one).";
+    
+    frm_hitboxes->widgets["but_prev"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(anims.hitboxes.empty()) return;
+        if(cur_hitbox_nr == 0) cur_hitbox_nr = anims.hitboxes.size() - 1;
+        else cur_hitbox_nr--;
+        gui_load_hitbox();
+    };
+    frm_hitboxes->widgets["but_prev"]->description =
+        "Previous hitbox.";
+    
+    frm_hitboxes->widgets["but_next"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(anims.hitboxes.empty()) return;
+        cur_hitbox_nr = (cur_hitbox_nr + 1) % anims.hitboxes.size();
+        gui_load_hitbox();
+    };
+    frm_hitboxes->widgets["but_next"]->description =
+        "Next hitbox.";
+    
+    frm_hitbox->widgets["txt_name"]->lose_focus_handler =
+    [this] (lafi::widget * t) {
+        string new_name = ((lafi::textbox*) t)->text;
+        if(new_name.empty()) {
+            gui_load_hitbox();
+            return;
+        }
+        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
+            if(h == cur_hitbox_nr) continue;
+            if(anims.hitboxes[h]->name == new_name) {
+                gui_load_hitbox();
+                return;
+            }
+        }
+        anims.hitboxes[cur_hitbox_nr]->name = new_name;
+        update_hitboxes();
+        gui_load_hitbox();
+        made_changes = true;
+    };
+    frm_hitbox->widgets["txt_name"]->description =
+        "Name of this hitbox.";
+    
+    frm_hitbox->widgets["but_left"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(anims.hitboxes.size() < 2) return;
+        size_t prev_nr =
+            (cur_hitbox_nr == 0) ?
+            anims.hitboxes.size() - 1 :
+            cur_hitbox_nr - 1;
+        hitbox* cur_h = anims.hitboxes[cur_hitbox_nr];
+        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
+        anims.hitboxes.insert(anims.hitboxes.begin() + prev_nr, cur_h);
+        cur_hitbox_nr = prev_nr;
+        update_hitboxes();
+        gui_load_hitbox();
+        made_changes = true;
+    };
+    frm_hitbox->widgets["but_left"]->description =
+        "Move this hitbox to the left on the list.";
+    
+    frm_hitbox->widgets["but_right"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(anims.hitboxes.size() < 2) return;
+        size_t next_nr = (cur_hitbox_nr + 1) % anims.hitboxes.size();
+        hitbox* cur_h = anims.hitboxes[cur_hitbox_nr];
+        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
+        anims.hitboxes.insert(anims.hitboxes.begin() + next_nr, cur_h);
+        cur_hitbox_nr = next_nr;
+        update_hitboxes();
+        gui_load_hitbox();
+        made_changes = true;
+    };
+    frm_hitbox->widgets["but_right"]->description =
+        "Move this hitbox to the right on the list.";
+    
+    frm_hitbox->widgets["but_rem"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        delete anims.hitboxes[cur_hitbox_nr];
+        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
+        if(cur_hitbox_nr > 0) cur_hitbox_nr--;
+        update_hitboxes();
+        gui_load_hitbox();
+        made_changes = true;
+    };
+    frm_hitbox->widgets["but_rem"]->description =
+        "Delete this hitbox.";
+        
+        
     //Tools frame.
     lafi::frame* frm_tools =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1536,30 +2487,28 @@ void animation_editor::load() {
     frm_tools->easy_row();
     
     
-    //Changes warning.
-    lafi::frame* frm_changes =
-        new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
-    gui->add("frm_changes", frm_changes);
-    hide_widget(frm_changes);
-    frm_changes->easy_row();
-    frm_changes->easy_add(
-        "lbl_text1",
-        new lafi::label(0, 0, 0, 0, "Warning: you have", ALLEGRO_ALIGN_LEFT),
-        80, 8
-    );
-    frm_changes->easy_row();
-    frm_changes->easy_add(
-        "lbl_text2",
-        new lafi::label(0, 0, 0, 0, "unsaved changes!", ALLEGRO_ALIGN_LEFT),
-        80, 8
-    );
-    frm_changes->easy_row();
-    frm_changes->add(
-        "but_ok",
-        new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok")
-    );
+    //Properties -- tools.
+    frm_tools->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        mode = EDITOR_MODE_MAIN;
+        hide_widget(this->gui->widgets["frm_tools"]);
+        show_widget(this->gui->widgets["frm_main"]);
+        update_stats();
+    };
+    frm_tools->widgets["but_back"]->description =
+        "Go back to the main menu.";
     
+    frm_tools->widgets["txt_resize"]->description =
+        "Resize multiplier. (0.5 = half, 2 = double)";
     
+    frm_tools->widgets["but_resize"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        resize_everything();
+    };
+    frm_tools->widgets["but_resize"]->description =
+        "Resize all in-game X/Y and W/H by the given amount.";
+        
+        
     //Picker frame.
     lafi::frame* frm_picker =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1588,747 +2537,6 @@ void animation_editor::load() {
     );
     
     
-    //Frame offset frame.
-    lafi::frame* frm_offset =
-        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
-    hide_widget(frm_offset);
-    gui->add("frm_offset", frm_offset);
-    
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "but_back",
-        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "lbl_xy",
-        new lafi::label(0, 0, 0, 0, "X, Y:"), 25, 16
-    );
-    frm_offset->easy_add(
-        "txt_x",
-        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
-    );
-    frm_offset->easy_add(
-        "txt_y",
-        new lafi::textbox(0, 0, 0, 0, ""), 37.5, 16
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "lbl_mouse1",
-        new lafi::label(0, 0, 0, 0, "Or move it with"), 100, 8
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "lbl_mouse2",
-        new lafi::label(0, 0, 0, 0, "the left mouse button."), 100, 8
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "lin_1",
-        new lafi::line(0, 0, 0, 0), 100, 8
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "chk_compare",
-        new lafi::checkbox(0, 0, 0, 0, "Comparison frame"), 100, 16
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "dum_1",
-        new lafi::dummy(0, 0, 0, 0), 10, 24
-    );
-    frm_offset->easy_add(
-        "but_compare",
-        new lafi::button(0, 0, 0, 0, ""), 90, 24
-    );
-    frm_offset->easy_row();
-    frm_offset->easy_add(
-        "dum_2",
-        new lafi::dummy(0, 0, 0, 0), 10, 16
-    );
-    frm_offset->easy_add(
-        "chk_compare_blink",
-        new lafi::checkbox(0, 0, 0, 0, "Blink comparison?"), 90, 16
-    );
-    frm_offset->easy_row();
-    
-    
-    //Pikmin top frame.
-    lafi::frame* frm_top =
-        new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
-    hide_widget(frm_top);
-    gui->add("frm_top", frm_top);
-    
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "but_back",
-        new lafi::button(0, 0, 0, 0, "Back"), 50, 16
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "chk_visible",
-        new lafi::checkbox(0, 0, 0, 0, "Visible"), 100, 16
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "lbl_xy",
-        new lafi::label(0, 0, 0, 0, "X&Y:"), 20, 16
-    );
-    frm_top->easy_add(
-        "txt_x",
-        new lafi::textbox(0, 0, 0, 0), 40, 16
-    );
-    frm_top->easy_add(
-        "txt_y",
-        new lafi::textbox(0, 0, 0, 0), 40, 16
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "lbl_wh",
-        new lafi::label(0, 0, 0, 0, "W&H:"), 20, 16
-    );
-    frm_top->easy_add(
-        "txt_w",
-        new lafi::textbox(0, 0, 0, 0), 40, 16
-    );
-    frm_top->easy_add(
-        "txt_h",
-        new lafi::textbox(0, 0, 0, 0), 40, 16
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "lbl_angle",
-        new lafi::label(0, 0, 0, 0, "Angle:"), 40, 16
-    );
-    frm_top->easy_add(
-        "ang_angle",
-        new lafi::angle_picker(0, 0, 0, 0), 60, 24
-    );
-    frm_top->easy_row();
-    frm_top->easy_add(
-        "but_maturity",
-        new lafi::button(0, 0, 0, 0, "Change maturity"), 100, 24
-    );
-    frm_top->easy_row();
-    
-    
-    //Bottom bar.
-    lafi::frame* frm_bottom =
-        new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
-    gui->add("frm_bottom", frm_bottom);
-    frm_bottom->easy_row();
-    frm_bottom->easy_add(
-        "but_toggle_hitboxes",
-        new lafi::button(0, 0, 0, 0, "HB"), 25, 32
-    );
-    frm_bottom->easy_add(
-        "but_load",
-        new lafi::button(0, 0, 0, 0, "Load"), 25, 32
-    );
-    frm_bottom->easy_add(
-        "but_save",
-        new lafi::button(0, 0, 0, 0, "Save"), 25, 32
-    );
-    frm_bottom->easy_add(
-        "but_quit",
-        new lafi::button(0, 0, 0, 0, "Quit"), 25, 32
-    );
-    frm_bottom->easy_row();
-    
-    
-    //Properties -- main.
-    frm_main->widgets["but_file"]->left_mouse_click_handler =
-    [this, frm_main] (lafi::widget*, int, int) {
-        al_show_native_file_dialog(display, file_dialog);
-        
-        //Reset the locale, which gets set by Allegro's native dialogs...
-        //and breaks s2f().
-        setlocale(LC_ALL, "C");
-        
-        if(al_get_native_file_dialog_count(file_dialog) == 0) return;
-        
-        file_path = al_get_native_file_dialog_path(file_dialog, 0);
-        load_animation_pool();
-        
-    };
-    frm_main->widgets["but_file"]->description =
-        "Pick a file to load or create.";
-    lafi::widget* frm_o = frm_main->widgets["frm_object"];
-    frm_o->widgets["but_anims"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        cur_hitbox_instance_nr = INVALID;
-        if(cur_anim) {
-            if(cur_anim->frame_instances.size()) cur_frame_instance_nr = 0;
-        }
-        mode = EDITOR_MODE_ANIMATION;
-        hide_widget(this->gui->widgets["frm_main"]);
-        show_widget(this->gui->widgets["frm_anims"]);
-        gui_load_animation();
-    };
-    frm_o->widgets["but_anims"]->description =
-        "Change the way the animations look like.";
-    frm_o->widgets["but_frames"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_FRAME;
-        cur_hitbox_instance_nr = INVALID;
-        hide_widget(this->gui->widgets["frm_main"]);
-        show_widget(this->gui->widgets["frm_frames"]);
-        gui_load_frame();
-    };
-    frm_o->widgets["but_frames"]->description =
-        "Change how each individual frame looks like.";
-    frm_o->widgets["but_hitboxes"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_HITBOX;
-        hide_widget(this->gui->widgets["frm_main"]);
-        show_widget(this->gui->widgets["frm_hitboxes"]);
-        cur_hitbox_nr = 0;
-        gui_load_hitbox();
-    };
-    frm_o->widgets["but_hitboxes"]->description =
-        "Change what hitboxes exist, and their order.";
-    frm_o->widgets["but_tools"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_TOOLS;
-        hide_widget(this->gui->widgets["frm_main"]);
-        show_widget(this->gui->widgets["frm_tools"]);
-    };
-    frm_o->widgets["but_tools"]->description =
-        "Special tools to help with specific tasks.";
-        
-        
-    //Properties -- animations.
-    auto lambda_gui_save_animation =
-    [this] (lafi::widget*) { gui_save_animation(); };
-    auto lambda_gui_save_frame_instance =
-    [this] (lafi::widget*) { gui_save_frame_instance(); };
-    
-    frm_anims->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
-        anim_playing = false;
-        hide_widget(this->gui->widgets["frm_anims"]);
-        show_widget(this->gui->widgets["frm_main"]);
-        update_stats();
-    };
-    frm_anims->widgets["but_back"]->description =
-        "Go back to the main menu.";
-    frm_anims->widgets["but_del_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(!cur_anim) return;
-        anims.animations.erase(
-            anims.animations.begin() +
-            anims.find_animation(cur_anim->name)
-        );
-        anim_playing = false;
-        cur_anim = NULL;
-        cur_frame_instance_nr = INVALID;
-        cur_hitbox_instance_nr = INVALID;
-        gui_load_animation();
-        made_changes = true;
-    };
-    frm_anims->widgets["but_del_anim"]->description =
-        "Delete the current animation.";
-    frm_anims->widgets["but_anim"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        hide_widget(gui->widgets["frm_anims"]);
-        open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
-    };
-    frm_anims->widgets["but_anim"]->description =
-        "Pick an animation to edit.";
-    lafi::widget* frm_a = frm_anims->widgets["frm_anim"];
-    frm_a->widgets["but_play"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(cur_anim->frame_instances.size() < 2) {
-            anim_playing = false;
-        } else {
-            anim_playing = !anim_playing;
-            if(
-                !cur_anim->frame_instances.empty() &&
-                cur_frame_instance_nr == INVALID
-            ) {
-                cur_frame_instance_nr = 0;
-            }
-            cur_frame_time = 0;
-        }
-    };
-    frm_a->widgets["but_play"]->description =
-        "Play or pause the animation.";
-    frm_a->widgets["but_prev"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        if(!cur_anim->frame_instances.empty()) {
-            if(cur_frame_instance_nr == INVALID) {
-                cur_frame_instance_nr = 0;
-            } else if(cur_frame_instance_nr == 0) {
-                cur_frame_instance_nr =
-                    cur_anim->frame_instances.size() - 1;
-            } else cur_frame_instance_nr--;
-        }
-        gui_load_frame_instance();
-    };
-    frm_a->widgets["but_prev"]->description =
-        "Previous frame.";
-    frm_a->widgets["but_next"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        if(!cur_anim->frame_instances.empty()) {
-            if(
-                cur_frame_instance_nr ==
-                cur_anim->frame_instances.size() - 1 ||
-                cur_frame_instance_nr == INVALID
-            ) {
-                cur_frame_instance_nr = 0;
-            } else {
-                cur_frame_instance_nr++;
-            }
-        }
-        gui_load_frame_instance();
-    };
-    frm_a->widgets["but_next"]->description =
-        "Next frame.";
-    frm_a->widgets["but_add"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        if(cur_frame_instance_nr != INVALID) {
-            cur_frame_instance_nr++;
-            cur_anim->frame_instances.insert(
-                cur_anim->frame_instances.begin() + cur_frame_instance_nr,
-                frame_instance(
-                    cur_anim->frame_instances[cur_frame_instance_nr - 1]
-                )
-            );
-        } else {
-            cur_anim->frame_instances.push_back(frame_instance());
-            cur_frame_instance_nr = 0;
-        }
-        gui_load_frame_instance();
-        made_changes = true;
-    };
-    frm_a->widgets["but_add"]->description =
-        "Add a new frame after the current one (via copy).";
-    frm_a->widgets["but_rem"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        if(cur_frame_instance_nr != INVALID) {
-            cur_anim->frame_instances.erase(
-                cur_anim->frame_instances.begin() + cur_frame_instance_nr
-            );
-            if(cur_anim->frame_instances.empty()) {
-                cur_frame_instance_nr = INVALID;
-            } else if(
-                cur_frame_instance_nr >=
-                cur_anim->frame_instances.size()
-            ) {
-                cur_frame_instance_nr =
-                    cur_anim->frame_instances.size() - 1;
-            }
-        }
-        gui_load_frame_instance();
-        made_changes = true;
-    };
-    frm_a->widgets["but_rem"]->description =
-        "Remove the current frame.";
-    lafi::widget* frm_i = frm_a->widgets["frm_frame_i"];
-    frm_i->widgets["but_frame"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        anim_playing = false;
-        hide_widget(gui->widgets["frm_anims"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME_INSTANCE, false);
-    };
-    frm_i->widgets["but_frame"]->description =
-        "Pick the frame to use here.";
-    frm_i->widgets["txt_dur"]->lose_focus_handler =
-        lambda_gui_save_frame_instance;
-    frm_i->widgets["txt_dur"]->mouse_down_handler =
-    [this] (lafi::widget*, int, int, int) {
-        anim_playing = false;
-    };
-    frm_i->widgets["txt_dur"]->description =
-        "How long this frame lasts for, in seconds.";
-    frm_anims->widgets["frm_anim"]->widgets["txt_loop"]->lose_focus_handler =
-        lambda_gui_save_animation;
-    frm_anims->widgets["frm_anim"]->widgets["txt_loop"]->description =
-        "The animation loops back to this frame when it ends.";
-    frm_anims->register_accelerator(
-        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
-        frm_anims->widgets["frm_anim"]->widgets["but_next"]
-    );
-    frm_anims->register_accelerator(
-        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL | ALLEGRO_KEYMOD_SHIFT,
-        frm_anims->widgets["frm_anim"]->widgets["but_prev"]
-    );
-    
-    
-    //Properties -- frames.
-    auto lambda_gui_save_frame = [this] (lafi::widget*) { gui_save_frame(); };
-    
-    frm_frames->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
-        hide_widget(this->gui->widgets["frm_frames"]);
-        show_widget(this->gui->widgets["frm_main"]);
-        update_stats();
-    };
-    frm_frames->widgets["but_back"]->description =
-        "Go back to the main menu.";
-    frm_frames->widgets["but_del_frame"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(!cur_frame) return;
-        anims.frames.erase(
-            anims.frames.begin() + anims.find_frame(cur_frame->name)
-        );
-        cur_frame = NULL;
-        cur_hitbox_instance_nr = INVALID;
-        gui_load_frame();
-        made_changes = true;
-    };
-    frm_frames->widgets["but_del_frame"]->description =
-        "Delete the current frame.";
-    frm_frames->widgets["but_frame"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        hide_widget(gui->widgets["frm_frames"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME, true);
-    };
-    frm_frames->widgets["but_frame"]->description =
-        "Pick a frame to edit.";
-    lafi::widget* frm_f = frm_frames->widgets["frm_frame"];
-    frm_f->widgets["but_offsxy"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        show_widget(this->gui->widgets["frm_offset"]);
-        hide_widget(this->gui->widgets["frm_frames"]);
-        mode = EDITOR_MODE_FRAME_OFFSET;
-        comparison_frame = NULL;
-        gui_load_frame_offset();
-    };
-    frm_f->widgets["but_hitbox_is"]->description =
-        "Edit this frame's hitboxes.";
-    frm_f->widgets["but_hitbox_is"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        show_widget(this->gui->widgets["frm_hitbox_is"]);
-        hide_widget(this->gui->widgets["frm_frames"]);
-        mode = EDITOR_MODE_HITBOX_INSTANCES;
-        cur_hitbox_instance_nr = 0;
-        gui_load_hitbox_instance();
-    };
-    frm_f->widgets["but_top"]->description =
-        "Edit the Pikmin's top (maturity) for this frame.";
-    frm_f->widgets["but_top"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        show_widget(this->gui->widgets["frm_top"]);
-        hide_widget(this->gui->widgets["frm_frames"]);
-        mode = EDITOR_MODE_TOP;
-        gui_load_top();
-    };
-    
-    frm_f->widgets["txt_file"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_file"]->description =
-        "Name (+extension) of the file with the sprite.";
-    frm_f->widgets["txt_filex"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_filex"]->description =
-        "X of the top-left corner of the sprite.";
-    frm_f->widgets["txt_filey"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_filey"]->description =
-        "Y of the top-left corner of the sprite.";
-    frm_f->widgets["txt_filew"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_filew"]->description =
-        "Width of the sprite, in the file.";
-    frm_f->widgets["txt_fileh"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_fileh"]->description =
-        "Height of the sprite, in the file.";
-    frm_f->widgets["txt_gamew"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_gamew"]->description =
-        "In-game sprite width.";
-    frm_f->widgets["txt_gameh"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_gameh"]->description =
-        "In-game sprite height.";
-    frm_f->widgets["but_offsxy"]->description =
-        "Click this button for an offset wizard tool.";
-    frm_f->widgets["txt_offsx"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_offsx"]->description =
-        "In-game, offset by this much, horizontally.";
-    frm_f->widgets["txt_offsy"]->lose_focus_handler =
-        lambda_gui_save_frame;
-    frm_f->widgets["txt_offsy"]->description =
-        "In-game, offset by this much, vertically.";
-        
-        
-    //Properties -- hitbox instances.
-    auto lambda_gui_save_hitbox_instance =
-    [this] (lafi::widget*) { gui_save_hitbox_instance(); };
-    auto lambda_gui_save_hitbox_instance_click =
-    [this] (lafi::widget*, int, int) { gui_save_hitbox_instance(); };
-    
-    frm_hitbox_is->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_FRAME;
-        hide_widget(this->gui->widgets["frm_hitbox_is"]);
-        show_widget(this->gui->widgets["frm_frames"]);
-        cur_hitbox_instance_nr = INVALID;
-        update_stats();
-    };
-    frm_hitbox_is->widgets["but_prev"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(cur_frame->hitbox_instances.size()) {
-            if(cur_hitbox_instance_nr == INVALID) {
-                cur_hitbox_instance_nr = 0;
-            } else if(cur_hitbox_instance_nr == 0) {
-                cur_hitbox_instance_nr =
-                    cur_frame->hitbox_instances.size() - 1;
-            } else {
-                cur_hitbox_instance_nr--;
-            }
-        }
-        gui_load_hitbox_instance();
-    };
-    frm_hitbox_is->widgets["but_next"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(cur_frame->hitbox_instances.size()) {
-            if(cur_hitbox_instance_nr == INVALID) {
-                cur_hitbox_instance_nr = 0;
-            }
-            cur_hitbox_instance_nr =
-                (cur_hitbox_instance_nr + 1) %
-                cur_frame->hitbox_instances.size();
-        }
-        gui_load_hitbox_instance();
-    };
-    frm_hitbox_i->register_accelerator(
-        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
-        frm_hitbox_is->widgets["but_next"]
-    );
-    frm_hitbox_i->register_accelerator(
-        ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL | ALLEGRO_KEYMOD_SHIFT,
-        frm_hitbox_is->widgets["but_prev"]
-    );
-    
-    frm_hitbox_is->widgets["but_back"]->description =
-        "Go back to the frame editor.";
-    frm_hitbox_is->widgets["but_prev"]->description =
-        "Previous hitbox.";
-    frm_hitbox_is->widgets["but_next"]->description =
-        "Next hitbox.";
-    frm_hitbox_i->widgets["txt_x"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_hitbox_i->widgets["txt_x"]->description =
-        "X of the hitbox's center.";
-    frm_hitbox_i->widgets["txt_y"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_hitbox_i->widgets["txt_y"]->description =
-        "Y of the hitbox's center.";
-    frm_hitbox_i->widgets["txt_z"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_hitbox_i->widgets["txt_z"]->description =
-        "Altitude of the hitbox's bottom.";
-    frm_hitbox_i->widgets["txt_h"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_hitbox_i->widgets["txt_h"]->description =
-        "Hitbox's height.";
-    frm_hitbox_i->widgets["txt_r"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_hitbox_i->widgets["txt_r"]->description =
-        "Hitbox's radius.";
-    frm_hitbox_i->widgets["rad_normal"]->left_mouse_click_handler =
-        lambda_gui_save_hitbox_instance_click;
-    frm_hitbox_i->widgets["rad_attack"]->left_mouse_click_handler =
-        lambda_gui_save_hitbox_instance_click;
-    frm_hitbox_i->widgets["rad_disabled"]->left_mouse_click_handler =
-        lambda_gui_save_hitbox_instance_click;
-    frm_hitbox_i->widgets["rad_normal"]->description =
-        "Normal hitbox, one that can be damaged.";
-    frm_hitbox_i->widgets["rad_attack"]->description =
-        "Attack hitbox, one that damages opponents.";
-    frm_hitbox_i->widgets["rad_disabled"]->description =
-        "This hitbox will be non-existent.";
-    frm_normal->widgets["txt_mult"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_normal->widgets["chk_latch"]->left_mouse_click_handler =
-        lambda_gui_save_hitbox_instance_click;
-    frm_normal->widgets["txt_hazards"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_attack->widgets["txt_mult"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_attack->widgets["txt_hazards"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_attack->widgets["chk_outward"]->left_mouse_click_handler =
-        lambda_gui_save_hitbox_instance_click;
-    frm_attack->widgets["ang_angle"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_attack->widgets["txt_knockback"]->lose_focus_handler =
-        lambda_gui_save_hitbox_instance;
-    frm_normal->widgets["txt_mult"]->description =
-        "Defense multiplier. 0 = invulnerable.";
-    frm_normal->widgets["chk_latch"]->description =
-        "Can the Pikmin latch on to this hitbox?";
-    frm_normal->widgets["txt_hazards"]->description =
-        "List of hazards, semicolon separated.";
-    frm_attack->widgets["txt_mult"]->description =
-        "Attack multiplier.";
-    frm_attack->widgets["txt_hazards"]->description =
-        "List of hazards, semicolon separated.";
-    frm_attack->widgets["chk_outward"]->description =
-        "Makes Pikmin be knocked away from the center.";
-    frm_attack->widgets["ang_angle"]->description =
-        "Angle the Pikmin are knocked towards.";
-    frm_attack->widgets["txt_knockback"]->description =
-        "Knockback strength.";
-        
-        
-    //Properties -- hitboxes.
-    auto lambda_gui_save_hitbox =
-    [this] (lafi::widget*) { gui_save_hitbox(); };
-    auto lambda_gui_save_hitbox_click =
-    [this] (lafi::widget*, int, int) { gui_save_hitbox(); };
-    frm_hitboxes->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
-        hide_widget(this->gui->widgets["frm_hitboxes"]);
-        show_widget(this->gui->widgets["frm_main"]);
-        update_stats();
-    };
-    frm_hitboxes->widgets["but_prev"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(anims.hitboxes.empty()) return;
-        if(cur_hitbox_nr == 0) cur_hitbox_nr = anims.hitboxes.size() - 1;
-        else cur_hitbox_nr--;
-        gui_load_hitbox();
-    };
-    frm_hitboxes->widgets["but_next"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(anims.hitboxes.empty()) return;
-        cur_hitbox_nr = (cur_hitbox_nr + 1) % anims.hitboxes.size();
-        gui_load_hitbox();
-    };
-    frm_hitboxes->widgets["but_add"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        string name =
-            (
-                (lafi::textbox*)
-                this->gui->widgets["frm_hitboxes"]->widgets["txt_add"]
-            )->text;
-        if(name.empty()) return;
-        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
-            if(anims.hitboxes[h]->name == name) {
-                cur_hitbox_nr = h;
-                gui_load_hitbox();
-                return;
-            }
-        }
-        anims.hitboxes.insert(
-            anims.hitboxes.begin() + cur_hitbox_nr +
-            (anims.hitboxes.empty() ? 0 : 1),
-            new hitbox(name)
-        );
-        if(anims.hitboxes.size() == 1) cur_hitbox_nr = 0;
-        else cur_hitbox_nr++;
-        update_hitboxes();
-        gui_load_hitbox();
-        made_changes = true;
-    };
-    frm_hitbox->widgets["txt_name"]->lose_focus_handler =
-    [this] (lafi::widget * t) {
-        string new_name = ((lafi::textbox*) t)->text;
-        if(new_name.empty()) {
-            gui_load_hitbox();
-            return;
-        }
-        for(size_t h = 0; h < anims.hitboxes.size(); ++h) {
-            if(h == cur_hitbox_nr) continue;
-            if(anims.hitboxes[h]->name == new_name) {
-                gui_load_hitbox();
-                return;
-            }
-        }
-        anims.hitboxes[cur_hitbox_nr]->name = new_name;
-        update_hitboxes();
-        gui_load_hitbox();
-        made_changes = true;
-    };
-    frm_hitbox->widgets["but_left"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(anims.hitboxes.size() < 2) return;
-        size_t prev_nr =
-            (cur_hitbox_nr == 0) ?
-            anims.hitboxes.size() - 1 :
-            cur_hitbox_nr - 1;
-        hitbox* cur_h = anims.hitboxes[cur_hitbox_nr];
-        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
-        anims.hitboxes.insert(anims.hitboxes.begin() + prev_nr, cur_h);
-        cur_hitbox_nr = prev_nr;
-        update_hitboxes();
-        gui_load_hitbox();
-        made_changes = true;
-    };
-    frm_hitbox->widgets["but_right"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        if(anims.hitboxes.size() < 2) return;
-        size_t next_nr = (cur_hitbox_nr + 1) % anims.hitboxes.size();
-        hitbox* cur_h = anims.hitboxes[cur_hitbox_nr];
-        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
-        anims.hitboxes.insert(anims.hitboxes.begin() + next_nr, cur_h);
-        cur_hitbox_nr = next_nr;
-        update_hitboxes();
-        gui_load_hitbox();
-        made_changes = true;
-    };
-    frm_hitbox->widgets["but_rem"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        delete anims.hitboxes[cur_hitbox_nr];
-        anims.hitboxes.erase(anims.hitboxes.begin() + cur_hitbox_nr);
-        if(cur_hitbox_nr > 0) cur_hitbox_nr--;
-        update_hitboxes();
-        gui_load_hitbox();
-        made_changes = true;
-    };
-    frm_hitboxes->widgets["but_back"]->description =
-        "Go back to the main menu.";
-    frm_hitboxes->widgets["but_prev"]->description =
-        "Previous hitbox.";
-    frm_hitboxes->widgets["but_next"]->description =
-        "Next hitbox.";
-    frm_hitboxes->widgets["txt_add"]->description =
-        "Name of the hitbox you want to create.";
-    frm_hitboxes->widgets["but_add"]->description =
-        "Create a new hitbox (after the current one).";
-    frm_hitbox->widgets["txt_name"]->description =
-        "Name of this hitbox.";
-    frm_hitbox->widgets["but_left"]->description =
-        "Move this hitbox to the left on the list.";
-    frm_hitbox->widgets["but_right"]->description =
-        "Move this hitbox to the right on the list.";
-    frm_hitbox->widgets["but_rem"]->description =
-        "Delete this hitbox.";
-        
-        
-    //Properties -- tools.
-    frm_tools->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_MAIN;
-        hide_widget(this->gui->widgets["frm_tools"]);
-        show_widget(this->gui->widgets["frm_main"]);
-        update_stats();
-    };
-    frm_tools->widgets["but_resize"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        resize_everything();
-    };
-    frm_tools->widgets["but_back"]->description =
-        "Go back to the main menu.";
-    frm_tools->widgets["txt_resize"]->description =
-        "Resize multiplier. (0.5 = half, 2 = double)";
-    frm_tools->widgets["but_resize"]->description =
-        "Resize all in-game X/Y and W/H by the given amount.";
-        
-        
     //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2345,14 +2553,16 @@ void animation_editor::load() {
             show_widget(this->gui->widgets["frm_anims"]);
         } else if(mode == EDITOR_MODE_FRAME) {
             show_widget(this->gui->widgets["frm_frames"]);
+        } else if(mode == EDITOR_MODE_FRAME_OFFSET) {
+            show_widget(this->gui->widgets["frm_offset"]);
         }
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
-    (
-        (lafi::textbox*)
-        frm_picker->widgets["txt_new"]
-    )->enter_key_widget = frm_picker->widgets["but_new"];
+    
+    ((lafi::textbox*)frm_picker->widgets["txt_new"])->enter_key_widget =
+        frm_picker->widgets["but_new"];
+    
     frm_picker->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
@@ -2384,6 +2594,7 @@ void animation_editor::load() {
     };
     frm_picker->widgets["but_new"]->description =
         "Create a new one with the name on the textbox.";
+    
     frm_picker->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
         lafi::scrollbar* s =
@@ -2399,91 +2610,35 @@ void animation_editor::load() {
     };
     
     
-    //Properties -- Frame offset.
-    auto lambda_save_offset =
-    [this] (lafi::widget*) { gui_save_frame_offset(); };
-    auto lambda_save_offset_click =
-    [this] (lafi::widget*, int, int) { gui_save_frame_offset(); };
-    frm_offset->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        show_widget(this->gui->widgets["frm_frames"]);
-        hide_widget(this->gui->widgets["frm_offset"]);
-        this->comparison_frame = NULL;
-        mode = EDITOR_MODE_FRAME;
-        gui_load_frame();
-    };
-    frm_offset->widgets["but_compare"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        hide_widget(gui->widgets["frm_offset"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
-    };
-    frm_offset->widgets["txt_x"]->lose_focus_handler =
-        lambda_save_offset;
-    frm_offset->widgets["txt_y"]->lose_focus_handler =
-        lambda_save_offset;
-    frm_offset->widgets["chk_compare"]->left_mouse_click_handler =
-        lambda_save_offset_click;
-    frm_offset->widgets["chk_compare_blink"]->left_mouse_click_handler =
-        lambda_save_offset_click;
-    frm_offset->widgets["but_back"]->description =
-        "Go back to the frame editor.";
-    frm_offset->widgets["txt_x"]->description =
-        "In-game, offset by this much, horizontally.";
-    frm_offset->widgets["txt_y"]->description =
-        "In-game, offset by this much, vertically.";
-    frm_offset->widgets["chk_compare"]->description =
-        "Overlay a different frame for comparison purposes.";
-    frm_offset->widgets["but_compare"]->description =
-        "Frame to compare with.";
-    frm_offset->widgets["chk_compare_blink"]->description =
-        "Blink the comparison in and out?";
-        
-        
-    //Properties -- Pikmin top.
-    auto lambda_save_top =
-    [this] (lafi::widget*) { gui_save_top(); };
-    auto lambda_save_top_click =
-    [this] (lafi::widget*, int, int) { gui_save_top(); };
-    frm_top->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        show_widget(this->gui->widgets["frm_frames"]);
-        hide_widget(this->gui->widgets["frm_top"]);
-        mode = EDITOR_MODE_FRAME;
-    };
-    frm_top->widgets["chk_visible"]->left_mouse_click_handler =
-        lambda_save_top_click;
-    frm_top->widgets["txt_x"]->lose_focus_handler =
-        lambda_save_top;
-    frm_top->widgets["txt_y"]->lose_focus_handler =
-        lambda_save_top;
-    frm_top->widgets["txt_w"]->lose_focus_handler =
-        lambda_save_top;
-    frm_top->widgets["txt_h"]->lose_focus_handler =
-        lambda_save_top;
-    frm_top->widgets["ang_angle"]->lose_focus_handler =
-        lambda_save_top;
-    frm_top->widgets["but_maturity"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        maturity = (maturity + 1) % 3;
-    };
-    frm_top->widgets["but_back"]->description =
-        "Go back to the frame editor.";
-    frm_top->widgets["chk_visible"]->description =
-        "Is the top visible in this frame?";
-    frm_top->widgets["txt_x"]->description =
-        "X position of the top's center.";
-    frm_top->widgets["txt_y"]->description =
-        "Y position of the top's center.";
-    frm_top->widgets["txt_w"]->description =
-        "In-game width of the top.";
-    frm_top->widgets["txt_h"]->description =
-        "In-game height of the top.";
-    frm_top->widgets["ang_angle"]->description =
-        "Angle of the top.";
-    frm_top->widgets["but_maturity"]->description =
-        "View a different maturity top.";
-        
-        
+    //Bottom bar.
+    lafi::frame* frm_bottom =
+        new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
+    gui->add("frm_bottom", frm_bottom);
+    
+    frm_bottom->easy_row();
+    frm_bottom->easy_add(
+        "but_toggle_hitboxes",
+        new lafi::button(0, 0, 0, 0, "HB"), 25, 32
+    );
+    frm_bottom->easy_add(
+        "but_load",
+        new lafi::button(0, 0, 0, 0, "Load"), 25, 32
+    );
+    frm_bottom->easy_add(
+        "but_save",
+        new lafi::button(0, 0, 0, 0, "Save"), 25, 32
+    );
+    frm_bottom->easy_add(
+        "but_quit",
+        new lafi::button(0, 0, 0, 0, "Quit"), 25, 32
+    );
+    frm_bottom->easy_row();
+    
+    lafi::label* gui_status_bar =
+        new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
+    gui->add("lbl_status_bar", gui_status_bar);
+    
+    
     //Properties -- bottom bar.
     frm_bottom->widgets["but_toggle_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2491,6 +2646,7 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_toggle_hitboxes"]->description =
         "Toggle hitbox and center-point grid visibility.";
+    
     frm_bottom->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -2501,12 +2657,14 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_load"]->description =
         "Load the object from the text file.";
+    
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_animation_pool();
     };
     frm_bottom->widgets["but_save"]->description =
         "Save the object to the text file.";
+    
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -2517,10 +2675,31 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_quit"]->description =
         "Quit the animation editor.";
-        
-    lafi::label* gui_status_bar =
-        new lafi::label(0, scr_h - 16, scr_w - 208, scr_h);
-    gui->add("lbl_status_bar", gui_status_bar);
+    
+    
+    //Changes warning.
+    lafi::frame* frm_changes =
+        new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
+    hide_widget(frm_changes);
+    gui->add("frm_changes", frm_changes);
+    
+    frm_changes->easy_row();
+    frm_changes->easy_add(
+        "lbl_text1",
+        new lafi::label(0, 0, 0, 0, "Warning: you have", ALLEGRO_ALIGN_LEFT),
+        80, 8
+    );
+    frm_changes->easy_row();
+    frm_changes->easy_add(
+        "lbl_text2",
+        new lafi::label(0, 0, 0, 0, "unsaved changes!", ALLEGRO_ALIGN_LEFT),
+        80, 8
+    );
+    frm_changes->easy_row();
+    frm_changes->add(
+        "but_ok",
+        new lafi::button(scr_w - 40, scr_h - 40, scr_w - 8, scr_h - 8, "Ok")
+    );
     
     
     //Properties -- changes warning.
@@ -2609,13 +2788,8 @@ void animation_editor::load_animation_pool() {
     }
     
     vector<string> file_path_parts = split(file_path, "/");
-    string name_to_show = file_path;
-    if(file_path.size() > 20) {
-        //Show the last 20 characters.
-        name_to_show = "..." + file_path.substr(file_path.size() - 20, 20);
-    }
     ((lafi::button*) gui->widgets["frm_main"]->widgets["but_file"])->text =
-        name_to_show;
+        get_cut_path(file_path);
         
     //Top bitmap.
     for(unsigned char t = 0; t < 3; ++t) {
@@ -2771,6 +2945,48 @@ void animation_editor::pick(string name, unsigned char type) {
             gui_load_frame();
         }
         
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Populates the history frame with the most recent files.
+ */
+void animation_editor::populate_history() {
+    lafi::frame* f =
+        (lafi::frame*) gui->widgets["frm_history"]->widgets["frm_list"];
+        
+    while(!f->widgets.empty()) {
+        f->remove(f->widgets.begin()->first);
+    }
+    
+    if(animation_editor_history.empty()) return;
+    
+    f->easy_reset();
+    f->easy_row();
+    
+    for(size_t h = 0; h < animation_editor_history.size(); ++h) {
+        
+        string name = animation_editor_history[h];
+        if(name.empty()) continue;
+        
+        lafi::button* b =
+            new lafi::button(0, 0, 0, 0, get_cut_path(name));
+            
+        auto lambda = [name, this] (lafi::widget*, int, int) {
+            file_path = name;
+            load_animation_pool();
+            
+            mode = EDITOR_MODE_MAIN;
+            hide_widget(this->gui->widgets["frm_history"]);
+            show_widget(this->gui->widgets["frm_main"]);
+            
+            update_animation_editor_history(name);
+            save_options(); //Save the history on the options.
+        };
+        b->left_mouse_click_handler = lambda;
+        f->easy_add("but_" + i2s(h), b, 100, 32);
+        f->easy_row();
     }
 }
 

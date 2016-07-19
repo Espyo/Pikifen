@@ -107,6 +107,7 @@ extern sample_struct sfx_throw;
 
 //General globals.
 
+extern vector<string> animation_editor_history;
 extern ALLEGRO_FONT* allegro_font;
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
 extern float area_images_scale;
