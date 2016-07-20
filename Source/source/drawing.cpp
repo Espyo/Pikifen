@@ -1719,11 +1719,12 @@ void draw_sector_texture(
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
-            unsigned char alpha = 255;
+            float alpha_mult = 1;
+            float brightness_mult = texture_sector[t]->brightness / 255.0;
             
             if(t == 1) {
                 if(!draw_sector_0) {
-                    alpha = 0;
+                    alpha_mult = 0;
                     for(
                         size_t e = 0; e < texture_sector[1]->edges.size();
                         ++e
@@ -1732,7 +1733,7 @@ void draw_sector_texture(
                             texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
                             texture_sector[1]->edges[e]->vertexes[1] == v_ptr
                         ) {
-                            alpha = 255;
+                            alpha_mult = 1;
                         }
                     }
                 } else {
@@ -1744,7 +1745,7 @@ void draw_sector_texture(
                             texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
                             texture_sector[0]->edges[e]->vertexes[1] == v_ptr
                         ) {
-                            alpha = 0;
+                            alpha_mult = 0;
                         }
                     }
                 }
@@ -1757,11 +1758,11 @@ void draw_sector_texture(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                al_map_rgba(
-                    texture_sector[t]->brightness,
-                    texture_sector[t]->brightness,
-                    texture_sector[t]->brightness,
-                    alpha
+                al_map_rgba_f(
+                    texture_sector[t]->texture_info.tint.r * brightness_mult,
+                    texture_sector[t]->texture_info.tint.g * brightness_mult,
+                    texture_sector[t]->texture_info.tint.b * brightness_mult,
+                    texture_sector[t]->texture_info.tint.a * alpha_mult
                 );
         }
         

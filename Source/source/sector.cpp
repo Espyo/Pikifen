@@ -670,7 +670,8 @@ sector_texture_info::sector_texture_info() :
     trans_x(0),
     trans_y(0),
     rot(0),
-    bitmap(nullptr) {
+    bitmap(nullptr),
+    tint(al_map_rgb(255, 255, 255)) {
 }
 
 

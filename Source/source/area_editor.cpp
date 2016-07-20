@@ -133,6 +133,9 @@ void area_editor::adv_textures_to_gui() {
     ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(
         cur_sector->texture_info.rot
     );
+    ((lafi::textbox*) f->widgets["txt_tint"])->text =
+        c2s(cur_sector->texture_info.tint);
+    
 }
 
 
@@ -1725,6 +1728,8 @@ void area_editor::gui_to_adv_textures() {
         s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
     cur_sector->texture_info.rot =
         ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
+    cur_sector->texture_info.tint =
+        s2c(((lafi::textbox*) f->widgets["txt_tint"])->text);
         
     adv_textures_to_gui();
     made_changes = true;
@@ -1853,8 +1858,14 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow =
         ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
-    cur_sector->texture_info.file_name =
-        ((lafi::button*) f->widgets["but_texture"])->text;
+    
+    if(cur_sector->fade) {
+        cur_sector->texture_info.file_name.clear();
+    } else {
+        cur_sector->texture_info.file_name =
+            ((lafi::button*) f->widgets["but_texture"])->text;
+    }
+    
     if(called_by_brightness_bar) {
         cur_sector->brightness =
             ((lafi::scrollbar*) f->widgets["bar_brightness"])->low_value;
@@ -1862,6 +1873,7 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
         cur_sector->brightness =
             s2i(((lafi::textbox*) f->widgets["txt_brightness"])->text);
     }
+    
     cur_sector->tag = ((lafi::textbox*) f->widgets["txt_tag"])->text;
     cur_sector->hazards_str =
         ((lafi::textbox*) f->widgets["txt_hazards"])->text;
@@ -3131,7 +3143,7 @@ void area_editor::load() {
         "Special values you may want the sector to know.";
     
     
-    //Advanced sector texture settings frame.
+    //Advanced texture settings frame.
     lafi::frame* frm_adv_textures =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
     hide_widget(frm_adv_textures);
@@ -3191,6 +3203,16 @@ void area_editor::load() {
         new lafi::angle_picker(0, 0, 0, 0), 50, 24
     );
     frm_adv_textures->easy_row();
+    frm_adv_textures->easy_add(
+        "lbl_tint",
+        new lafi::label(0, 0, 0, 0, "Tint color:"), 100, 16
+    );
+    frm_adv_textures->easy_row();
+    frm_adv_textures->easy_add(
+        "txt_tint",
+        new lafi::textbox(0, 0, 0, 0), 100, 16
+    );
+    frm_adv_textures->easy_row();
     
     
     //Properties -- advanced texture settings.
@@ -3231,8 +3253,13 @@ void area_editor::load() {
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["ang_a"]->description =
         "Rotate the texture by this much.";
-        
-        
+    
+    frm_adv_textures->widgets["txt_tint"]->lose_focus_handler =
+        lambda_gui_to_adv_textures;
+    frm_adv_textures->widgets["txt_tint"]->description =
+        "Texture tint color, in the format \"r g b a\".";
+    
+    
     //Texture picker frame.
     lafi::frame* frm_texture =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -4981,12 +5008,15 @@ void area_editor::save_area(const bool to_backup) {
             );
         }
         
-        sector_node->add(
-            new data_node(
-                "texture",
-                s_ptr->texture_info.file_name
-            )
-        );
+        if(!s_ptr->texture_info.file_name.empty()) {
+            sector_node->add(
+                new data_node(
+                    "texture",
+                    s_ptr->texture_info.file_name
+                )
+            );
+        }
+        
         if(s_ptr->texture_info.rot != 0) {
             sector_node->add(
                 new data_node(
@@ -5019,6 +5049,17 @@ void area_editor::save_area(const bool to_backup) {
                 )
             );
         }
+        if(
+            s_ptr->texture_info.tint.r != 1.0 ||
+            s_ptr->texture_info.tint.g != 1.0 ||
+            s_ptr->texture_info.tint.b != 1.0 ||
+            s_ptr->texture_info.tint.a != 1.0
+        ) {
+            sector_node->add(
+                new data_node("texture_tint", c2s(s_ptr->texture_info.tint))
+            );
+        }
+        
     }
     
     //Mobs.

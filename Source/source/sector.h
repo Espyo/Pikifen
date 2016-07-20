@@ -150,6 +150,7 @@ struct sector_texture_info {
     float trans_y; //and Y.
     float rot;     //Rotation.
     ALLEGRO_BITMAP* bitmap;
+    ALLEGRO_COLOR tint;
     string file_name;
     
     sector_texture_info();

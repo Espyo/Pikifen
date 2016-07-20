@@ -786,6 +786,11 @@ void load_area(
             new_sector->texture_info.trans_x = s2f(translations[0]);
             new_sector->texture_info.trans_y = s2f(translations[1]);
         }
+        new_sector->texture_info.tint =
+            s2c(
+                sector_data->get_child_by_name("texture_tint")->
+                get_value_or_default("255 255 255")
+            );
         
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
