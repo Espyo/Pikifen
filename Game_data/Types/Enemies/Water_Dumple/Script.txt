@@ -1,0 +1,131 @@
+first_state = idle
+
+script {
+    idle {
+        on_enter {
+            animation = idle
+            move = stop
+        }
+        on_see_opponent{
+            focus = mob
+            state = chasing
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    chasing {
+        on_enter{
+            animation = walk
+            move = focused_mob
+        }
+        on_face_opponent{
+            state = attacking
+        }
+        on_lose_focused_mob{
+            state = idle
+        }
+        on_far_from_home{
+            state = returning
+        }
+        on_bottomless_pit{
+            state = deleting
+        }
+        on_big_damage{
+            state = shaking
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    attacking {
+        on_enter{
+            move = stop
+            animation = attack
+            chomp = 2 mouth
+        }
+        on_animation_end{
+            state = checking_mouth
+        }
+    }
+    
+    checking_mouth{
+        on_mouth_occupied{
+            state = eating
+        }
+        on_animation_end{
+            state = idle
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    eating{
+        on_enter{
+            chomp =
+            animation = eat
+        }
+        on_animation_end{
+            eat = all
+            state = idle
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    shaking{
+        on_enter{
+            move = stop
+            animation = shake
+        }
+        on_animation_end{
+            state = idle
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    returning{
+        on_enter{
+            move = home
+            animation = walk
+        }
+        on_reach_destination{
+            state = idle
+        }
+        on_bottomless_pit{
+            state = deleting
+        }
+        on_death{
+            state = dying
+        }
+    }
+    
+    dying{
+        on_enter{
+            special_function = die_start
+            animation = die
+            move = stop
+            eat = 
+        }
+        on_animation_end{
+            special_function = die_end
+        }
+    }
+    
+    deleting{
+        on_enter{
+            special_function = die_end
+            special_function = delete
+        }
+    }
+    
+}

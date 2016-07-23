@@ -466,6 +466,25 @@
        fx="29.200005"
        fy="1030.7927"
        r="8" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#top_wings"
+       id="linearGradient4231"
+       x1="-85"
+       y1="1087.3622"
+       x2="-65"
+       y2="1087.3622"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,45.000005)"
+       inkscape:collect="always"
+       xlink:href="#bottom_wings"
+       id="linearGradient4231-3"
+       x1="-85"
+       y1="1087.3622"
+       x2="-65"
+       y2="1087.3622"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -474,9 +493,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9999999"
-     inkscape:cx="20.343153"
-     inkscape:cy="-27.911636"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="-37.888582"
+     inkscape:cy="-113.60932"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -490,9 +509,9 @@
      inkscape:snap-intersection-paths="true"
      inkscape:object-nodes="true"
      inkscape:snap-smooth-nodes="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1031"
-     inkscape:window-x="0"
+     inkscape:window-width="1872"
+     inkscape:window-height="1055"
+     inkscape:window-x="48"
      inkscape:window-y="0"
      inkscape:window-maximized="1">
     <inkscape:grid
@@ -582,6 +601,13 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4221"
+       width="255"
+       height="305"
+       x="-295"
+       y="1057.3622" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -903,5 +929,41 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4231);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4223"
+       width="20"
+       height="20"
+       x="-85"
+       y="1077.3622" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-160"
+       y="1092.3622"
+       id="text4233"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4235"
+         x="-160"
+         y="1092.3622">top wings</tspan></text>
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4231-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4223-2"
+       width="20"
+       height="20"
+       x="-85"
+       y="1122.3622" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-162.72949"
+       y="1130.121"
+       id="text4269"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4271"
+         x="-162.72949"
+         y="1130.121">bottom wings</tspan></text>
   </g>
 </svg>

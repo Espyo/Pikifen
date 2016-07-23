@@ -329,6 +329,85 @@
        y2="839.86218"
        gradientUnits="userSpaceOnUse"
        spreadMethod="reflect" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#ball-shine"
+       id="linearGradient4380"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,40.000003)"
+       inkscape:collect="always"
+       xlink:href="#nectar"
+       id="linearGradient4380-3"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,80.000003)"
+       inkscape:collect="always"
+       xlink:href="#bubble"
+       id="linearGradient4380-6"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,125)"
+       inkscape:collect="always"
+       xlink:href="#pellet-shine"
+       id="linearGradient4380-0"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,160)"
+       inkscape:collect="always"
+       xlink:href="#red-pellet"
+       id="linearGradient4380-2"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,210)"
+       inkscape:collect="always"
+       xlink:href="#tp-dash"
+       id="linearGradient4380-20"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,255)"
+       inkscape:collect="always"
+       xlink:href="#coin-border"
+       id="linearGradient4380-28"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,310)"
+       inkscape:collect="always"
+       xlink:href="#coin-shine"
+       id="linearGradient4380-29"
+       x1="-95"
+       y1="647.36218"
+       x2="-75"
+       y2="647.36218"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -337,9 +416,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142135"
-     inkscape:cx="511.25486"
-     inkscape:cy="186.40491"
+     inkscape:zoom="1.9999999"
+     inkscape:cx="-133.53554"
+     inkscape:cy="103.89105"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -374,11 +453,23 @@
     </rdf:RDF>
   </metadata>
   <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="grid">
+    <rect
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4370"
+       width="410"
+       height="610"
+       x="-450"
+       y="622.36218" />
+  </g>
+  <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#000000;fill-opacity:1;stroke:none"
+       style="fill:#008000;fill-opacity:1;stroke:none"
        id="rect3193"
        width="960"
        height="240"
@@ -1211,5 +1302,149 @@
        inkscape:export-filename="C:\Users\Andre\Desktop\2_Euro.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372"
+       width="20"
+       height="20"
+       x="-95"
+       y="637.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-5"
+       width="20"
+       height="20"
+       x="-95"
+       y="677.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-6);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-7"
+       width="20"
+       height="20"
+       x="-100"
+       y="717.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-0);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-6"
+       width="20"
+       height="20"
+       x="-100"
+       y="762.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-2);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-9"
+       width="20"
+       height="20"
+       x="-95"
+       y="797.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-20);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-92"
+       width="20"
+       height="20"
+       x="-95"
+       y="847.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-28);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-1"
+       width="20"
+       height="20"
+       x="-95"
+       y="892.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4380-29);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4372-78"
+       width="20"
+       height="20"
+       x="-95"
+       y="947.36218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-179.21143"
+       y="651.09021"
+       id="text4488"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4490"
+         x="-179.21143"
+         y="651.09021">ball shine</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-170.9082"
+       y="690.80212"
+       id="text4492"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4494"
+         x="-170.9082"
+         y="690.80212">nectar</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-170"
+       y="727.36218"
+       id="text4496"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4498"
+         x="-170"
+         y="727.36218">bubble</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-165"
+       y="772.36218"
+       id="text4500"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4502"
+         x="-165"
+         y="772.36218">pellet shine</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-170"
+       y="812.36218"
+       id="text4504"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4506"
+         x="-170"
+         y="812.36218">red pellet</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-192.29248"
+       y="860.12097"
+       id="text4508"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4510"
+         x="-192.29248"
+         y="860.12097">toilet paper dash</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-185"
+       y="907.36218"
+       id="text4512"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4514"
+         x="-185"
+         y="907.36218">coin border</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-185"
+       y="957.36218"
+       id="text4516"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4518"
+         x="-185"
+         y="957.36218">coin shine</tspan></text>
   </g>
 </svg>

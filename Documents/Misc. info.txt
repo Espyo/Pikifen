@@ -10,14 +10,16 @@ Misc. useful info
         Red, Blue, White: 1.3
         Yellow: 1.6
         Purple: 1.8
-    
+
+
 To optimize the canon leaf shadow textures for use in the engine, do the following
     1) Convert it to black and white (Pikmin 2's are a bit blueish, but b+w works best for the engine).
     2) Apply an alpha mask of itself (inverted) onto itself. This makes the light areas transparent, and the dark ones opaque.
     3) Set the brightness to 0% (-100 in Paint.NET), and the contrast to 150% (50 in Paint.NET).
     4) Set the opacity of the whole thing to 75% (192 in Paint.NET).
     Ideally, you want the areas fully shrouded in shade to be close to RGBA 0 0 0 128, and the light areas should be fully transparent (0 alpha). Tweak the brightness on step 3 and the opacity on step 4 until you get these values.
-    
+
+
 To add a glow to the cursor on GIMP
     Alpha to selection
     Grow selection by 2

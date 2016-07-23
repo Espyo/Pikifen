@@ -2084,6 +2084,96 @@
        id="radialGradient4397-8-8-9-6"
        xlink:href="#nose"
        inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Louie_shoe"
+       id="linearGradient4893"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5,145)" />
+    <linearGradient
+       gradientTransform="translate(-5,285)"
+       inkscape:collect="always"
+       xlink:href="#helmet"
+       id="linearGradient4893-3"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-15,320)"
+       inkscape:collect="always"
+       xlink:href="#head"
+       id="linearGradient4893-5"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-10,365)"
+       inkscape:collect="always"
+       xlink:href="#nose"
+       id="linearGradient4893-2"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,90)"
+       inkscape:collect="always"
+       xlink:href="#Louie_light"
+       id="linearGradient4893-0"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,235)"
+       inkscape:collect="always"
+       xlink:href="#antenna"
+       id="linearGradient4893-7"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-3.90625e-6,5)"
+       inkscape:collect="always"
+       xlink:href="#Olimar_light"
+       id="linearGradient4893-37"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,190)"
+       inkscape:collect="always"
+       xlink:href="#President_light"
+       id="linearGradient4893-9"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(-5,45)"
+       inkscape:collect="always"
+       xlink:href="#Olimar_shoe"
+       id="linearGradient4893-93"
+       x1="-290"
+       y1="307.36218"
+       x2="-270"
+       y2="307.36218"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2092,15 +2182,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="25.329865"
-     inkscape:cy="979.73647"
+     inkscape:zoom="0.70710679"
+     inkscape:cx="-503.16959"
+     inkscape:cy="421.13452"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1031"
-     inkscape:window-x="0"
+     inkscape:window-width="1872"
+     inkscape:window-height="1055"
+     inkscape:window-x="48"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true"
@@ -6157,5 +6247,174 @@
        cx="46.999996"
        style="display:inline;opacity:0.75;fill:url(#radialGradient5642-8-5);fill-opacity:1;stroke:none"
        id="path3871-2-0-4-7" />
+    <rect
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4883"
+       width="520"
+       height="860"
+       x="-740"
+       y="272.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4893);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885"
+       width="20"
+       height="20"
+       x="-295"
+       y="442.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-3);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-3"
+       width="20"
+       height="20"
+       x="-295"
+       y="582.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-5);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-1"
+       width="20"
+       height="20"
+       x="-305"
+       y="617.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-2);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-36"
+       width="20"
+       height="20"
+       x="-300"
+       y="662.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-0);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-18"
+       width="20"
+       height="20"
+       x="-295"
+       y="387.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-7);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-2"
+       width="20"
+       height="20"
+       x="-295"
+       y="532.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-37);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-28"
+       width="20"
+       height="20"
+       x="-290"
+       y="302.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-9);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-12"
+       width="20"
+       height="20"
+       x="-295"
+       y="487.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4893-93);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4885-7"
+       width="20"
+       height="20"
+       x="-295"
+       y="342.36218" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-391.22559"
+       y="457.22058"
+       id="text5005"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007"
+         x="-391.22559"
+         y="457.22058">Louie's shoe</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-386.22559"
+       y="597.22058"
+       id="text5005-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-4"
+         x="-386.22559"
+         y="597.22058">helmet</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-377.49023"
+       y="631.09021"
+       id="text5005-5"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-0"
+         x="-377.49023"
+         y="631.09021">head</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-373.2959"
+       y="672.96277"
+       id="text5005-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-6"
+         x="-373.2959"
+         y="672.96277">nose</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-381.22559"
+       y="402.22058"
+       id="text5005-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-06"
+         x="-381.22559"
+         y="402.22058">Louie's  light</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-376.22559"
+       y="542.22058"
+       id="text5005-32"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-061"
+         x="-376.22559"
+         y="542.22058">antennae</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-376.22559"
+       y="312.22058"
+       id="text5005-55"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-47"
+         x="-376.22559"
+         y="312.22058">Olimar's light</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-395.36865"
+       y="499.95984"
+       id="text5005-6"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-5"
+         x="-395.36865"
+         y="499.95984">President's light</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-376.22559"
+       y="352.22058"
+       id="text5005-69"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5007-3"
+         x="-376.22559"
+         y="352.22058">Olimar's shoe</tspan></text>
   </g>
 </svg>

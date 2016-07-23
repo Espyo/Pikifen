@@ -35,7 +35,7 @@
 animation_editor::animation_editor() :
     cur_anim(NULL),
     anim_playing(false),
-    comparison(false),
+    comparison(true),
     comparison_frame(nullptr),
     comparison_blink(true),
     comparison_blink_show(true),
@@ -1040,7 +1040,7 @@ void animation_editor::load() {
     };
     frm_main->widgets["but_file"]->description =
         "Pick a file to load or create.";
-    
+        
     frm_object->widgets["but_anims"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_hitbox_instance_nr = INVALID;
@@ -1054,7 +1054,7 @@ void animation_editor::load() {
     };
     frm_object->widgets["but_anims"]->description =
         "Change the way the animations look like.";
-    
+        
     frm_object->widgets["but_frames"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_FRAME;
@@ -1065,7 +1065,7 @@ void animation_editor::load() {
     };
     frm_object->widgets["but_frames"]->description =
         "Change how each individual frame looks like.";
-    
+        
     frm_object->widgets["but_hitboxes"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_HITBOX;
@@ -1076,7 +1076,7 @@ void animation_editor::load() {
     };
     frm_object->widgets["but_hitboxes"]->description =
         "Change what hitboxes exist, and their order.";
-    
+        
     frm_object->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_TOOLS;
@@ -1149,8 +1149,8 @@ void animation_editor::load() {
     };
     frm_history->widgets["but_browse"]->description =
         "Pick a file to load or create.";
-    
-    
+        
+        
     //Animations frame.
     lafi::frame* frm_anims =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1297,7 +1297,7 @@ void animation_editor::load() {
     };
     frm_anims->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_anims->widgets["but_del_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_anim) return;
@@ -1314,7 +1314,7 @@ void animation_editor::load() {
     };
     frm_anims->widgets["but_del_anim"]->description =
         "Delete the current animation.";
-    
+        
     frm_anims->widgets["but_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1323,12 +1323,12 @@ void animation_editor::load() {
     };
     frm_anims->widgets["but_anim"]->description =
         "Pick an animation to edit.";
-    
+        
     frm_anim->widgets["txt_loop"]->lose_focus_handler =
         lambda_gui_save_animation;
     frm_anim->widgets["txt_loop"]->description =
         "The animation loops back to this frame when it ends.";
-    
+        
     frm_anim->widgets["but_play"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(cur_anim->frame_instances.size() < 2) {
@@ -1346,7 +1346,7 @@ void animation_editor::load() {
     };
     frm_anim->widgets["but_play"]->description =
         "Play or pause the animation.";
-    
+        
     frm_anim->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1362,7 +1362,7 @@ void animation_editor::load() {
     };
     frm_anim->widgets["but_prev"]->description =
         "Previous frame.";
-    
+        
     frm_anim->widgets["but_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1381,7 +1381,7 @@ void animation_editor::load() {
     };
     frm_anim->widgets["but_next"]->description =
         "Next frame.";
-    
+        
     frm_anim->widgets["but_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1402,7 +1402,7 @@ void animation_editor::load() {
     };
     frm_anim->widgets["but_add"]->description =
         "Add a new frame after the current one (via copy).";
-    
+        
     frm_anim->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1425,7 +1425,7 @@ void animation_editor::load() {
     };
     frm_anim->widgets["but_rem"]->description =
         "Remove the current frame.";
-    
+        
     frm_frame_i->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
@@ -1434,7 +1434,7 @@ void animation_editor::load() {
     };
     frm_frame_i->widgets["but_frame"]->description =
         "Pick the frame to use here.";
-    
+        
     frm_frame_i->widgets["txt_dur"]->lose_focus_handler =
         lambda_gui_save_frame_instance;
     frm_frame_i->widgets["txt_dur"]->mouse_down_handler =
@@ -1443,7 +1443,7 @@ void animation_editor::load() {
     };
     frm_frame_i->widgets["txt_dur"]->description =
         "How long this frame lasts for, in seconds.";
-    
+        
     frm_frame_i->widgets["but_dur_all"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         float d = cur_anim->frame_instances[cur_frame_instance_nr].duration;
@@ -1453,7 +1453,7 @@ void animation_editor::load() {
     };
     frm_frame_i->widgets["but_dur_all"]->description =
         "Apply this duration to all frames on this animation.";
-    
+        
     frm_anims->register_accelerator(
         ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
         frm_anims->widgets["frm_anim"]->widgets["but_next"]
@@ -1594,7 +1594,7 @@ void animation_editor::load() {
     };
     frm_frames->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_frames->widgets["but_del_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_frame) return;
@@ -1608,7 +1608,7 @@ void animation_editor::load() {
     };
     frm_frames->widgets["but_del_frame"]->description =
         "Delete the current frame.";
-    
+        
     frm_frames->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hide_widget(gui->widgets["frm_frames"]);
@@ -1616,42 +1616,42 @@ void animation_editor::load() {
     };
     frm_frames->widgets["but_frame"]->description =
         "Pick a frame to edit.";
-    
+        
     frm_frame->widgets["txt_file"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_file"]->description =
         "Name (+extension) of the file with the sprite.";
-    
+        
     frm_frame->widgets["txt_filex"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_filex"]->description =
         "X of the top-left corner of the sprite.";
-    
+        
     frm_frame->widgets["txt_filey"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_filey"]->description =
         "Y of the top-left corner of the sprite.";
-    
+        
     frm_frame->widgets["txt_filew"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_filew"]->description =
         "Width of the sprite, in the file.";
-    
+        
     frm_frame->widgets["txt_fileh"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_fileh"]->description =
         "Height of the sprite, in the file.";
-    
+        
     frm_frame->widgets["txt_gamew"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_gamew"]->description =
         "In-game sprite width.";
-    
+        
     frm_frame->widgets["txt_gameh"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_gameh"]->description =
         "In-game sprite height.";
-    
+        
     frm_frame->widgets["but_offsxy"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_offset"]);
@@ -1662,17 +1662,17 @@ void animation_editor::load() {
     };
     frm_frame->widgets["but_offsxy"]->description =
         "Click this button for an offset wizard tool.";
-    
+        
     frm_frame->widgets["txt_offsx"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_offsx"]->description =
         "In-game, offset by this much, horizontally.";
-    
+        
     frm_frame->widgets["txt_offsy"]->lose_focus_handler =
         lambda_gui_save_frame;
     frm_frame->widgets["txt_offsy"]->description =
         "In-game, offset by this much, vertically.";
-    
+        
     frm_frame->widgets["but_hitbox_is"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_hitbox_is"]);
@@ -1683,7 +1683,7 @@ void animation_editor::load() {
     };
     frm_frame->widgets["but_hitbox_is"]->description =
         "Edit this frame's hitboxes.";
-    
+        
     frm_frame->widgets["but_top"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_widget(this->gui->widgets["frm_top"]);
@@ -1693,8 +1693,8 @@ void animation_editor::load() {
     };
     frm_frame->widgets["but_top"]->description =
         "Edit the Pikmin's top (maturity) for this frame.";
-    
-    
+        
+        
     //Frame offset frame.
     lafi::frame* frm_offset =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -1776,22 +1776,22 @@ void animation_editor::load() {
     };
     frm_offset->widgets["but_back"]->description =
         "Go back to the frame editor.";
-    
+        
     frm_offset->widgets["txt_x"]->lose_focus_handler =
         lambda_save_offset;
     frm_offset->widgets["txt_x"]->description =
         "In-game, offset by this much, horizontally.";
-    
+        
     frm_offset->widgets["txt_y"]->lose_focus_handler =
         lambda_save_offset;
     frm_offset->widgets["txt_y"]->description =
         "In-game, offset by this much, vertically.";
-    
+        
     frm_offset->widgets["chk_compare"]->left_mouse_click_handler =
         lambda_save_offset_click;
     frm_offset->widgets["chk_compare"]->description =
         "Overlay a different frame for comparison purposes.";
-    
+        
     frm_offset->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hide_widget(gui->widgets["frm_offset"]);
@@ -1799,7 +1799,7 @@ void animation_editor::load() {
     };
     frm_offset->widgets["but_compare"]->description =
         "Frame to compare with.";
-    
+        
     frm_offset->widgets["chk_compare_blink"]->left_mouse_click_handler =
         lambda_save_offset_click;
     frm_offset->widgets["chk_compare_blink"]->description =
@@ -1995,7 +1995,7 @@ void animation_editor::load() {
     };
     frm_hitbox_is->widgets["but_back"]->description =
         "Go back to the frame editor.";
-    
+        
     frm_hitbox_is->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(cur_frame->hitbox_instances.size()) {
@@ -2012,7 +2012,7 @@ void animation_editor::load() {
     };
     frm_hitbox_is->widgets["but_prev"]->description =
         "Previous hitbox.";
-    
+        
     frm_hitbox_is->widgets["but_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(cur_frame->hitbox_instances.size()) {
@@ -2027,7 +2027,7 @@ void animation_editor::load() {
     };
     frm_hitbox_is->widgets["but_next"]->description =
         "Next hitbox.";
-    
+        
     frm_hitbox_i->register_accelerator(
         ALLEGRO_KEY_TAB, ALLEGRO_KEYMOD_CTRL,
         frm_hitbox_is->widgets["but_next"]
@@ -2041,77 +2041,77 @@ void animation_editor::load() {
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_x"]->description =
         "X of the hitbox's center.";
-    
+        
     frm_hitbox_i->widgets["txt_y"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_y"]->description =
         "Y of the hitbox's center.";
-    
+        
     frm_hitbox_i->widgets["txt_z"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_z"]->description =
         "Altitude of the hitbox's bottom.";
-    
+        
     frm_hitbox_i->widgets["txt_h"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_h"]->description =
         "Hitbox's height.";
-    
+        
     frm_hitbox_i->widgets["txt_r"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_r"]->description =
         "Hitbox's radius.";
-    
+        
     frm_hitbox_i->widgets["rad_normal"]->left_mouse_click_handler =
         lambda_gui_save_hitbox_instance_click;
     frm_hitbox_i->widgets["rad_normal"]->description =
         "Normal hitbox, one that can be damaged.";
-    
+        
     frm_hitbox_i->widgets["rad_attack"]->left_mouse_click_handler =
         lambda_gui_save_hitbox_instance_click;
     frm_hitbox_i->widgets["rad_attack"]->description =
         "Attack hitbox, one that damages opponents.";
-    
+        
     frm_hitbox_i->widgets["rad_disabled"]->left_mouse_click_handler =
         lambda_gui_save_hitbox_instance_click;
     frm_hitbox_i->widgets["rad_disabled"]->description =
         "This hitbox will be non-existent.";
-    
+        
     frm_normal->widgets["txt_mult"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_normal->widgets["txt_mult"]->description =
         "Defense multiplier. 0 = invulnerable.";
-    
+        
     frm_normal->widgets["chk_latch"]->left_mouse_click_handler =
         lambda_gui_save_hitbox_instance_click;
     frm_normal->widgets["chk_latch"]->description =
         "Can the Pikmin latch on to this hitbox?";
-    
+        
     frm_normal->widgets["txt_hazards"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_normal->widgets["txt_hazards"]->description =
         "List of hazards, semicolon separated.";
-    
+        
     frm_attack->widgets["txt_mult"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_attack->widgets["txt_mult"]->description =
         "Attack multiplier.";
-    
+        
     frm_attack->widgets["txt_hazards"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_attack->widgets["txt_hazards"]->description =
         "List of hazards, semicolon separated.";
-    
+        
     frm_attack->widgets["chk_outward"]->left_mouse_click_handler =
         lambda_gui_save_hitbox_instance_click;
     frm_attack->widgets["chk_outward"]->description =
         "Makes Pikmin be knocked away from the center.";
-    
+        
     frm_attack->widgets["ang_angle"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_attack->widgets["ang_angle"]->description =
         "Angle the Pikmin are knocked towards.";
-    
+        
     frm_attack->widgets["txt_knockback"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_attack->widgets["txt_knockback"]->description =
@@ -2191,37 +2191,37 @@ void animation_editor::load() {
     };
     frm_top->widgets["but_back"]->description =
         "Go back to the frame editor.";
-    
+        
     frm_top->widgets["chk_visible"]->left_mouse_click_handler =
         lambda_save_top_click;
     frm_top->widgets["chk_visible"]->description =
         "Is the top visible in this frame?";
-    
+        
     frm_top->widgets["txt_x"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["txt_x"]->description =
         "X position of the top's center.";
-    
+        
     frm_top->widgets["txt_y"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["txt_y"]->description =
         "Y position of the top's center.";
-    
+        
     frm_top->widgets["txt_w"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["txt_w"]->description =
         "In-game width of the top.";
-    
+        
     frm_top->widgets["txt_h"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["txt_h"]->description =
         "In-game height of the top.";
-    
+        
     frm_top->widgets["ang_angle"]->lose_focus_handler =
         lambda_save_top;
     frm_top->widgets["ang_angle"]->description =
         "Angle of the top.";
-   
+        
     frm_top->widgets["but_maturity"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         maturity = (maturity + 1) % 3;
@@ -2339,10 +2339,10 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_hitboxes->widgets["txt_add"]->description =
         "Name of the hitbox you want to create.";
-    
+        
     frm_hitboxes->widgets["but_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
@@ -2371,7 +2371,7 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_add"]->description =
         "Create a new hitbox (after the current one).";
-    
+        
     frm_hitboxes->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.hitboxes.empty()) return;
@@ -2381,7 +2381,7 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_prev"]->description =
         "Previous hitbox.";
-    
+        
     frm_hitboxes->widgets["but_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.hitboxes.empty()) return;
@@ -2390,7 +2390,7 @@ void animation_editor::load() {
     };
     frm_hitboxes->widgets["but_next"]->description =
         "Next hitbox.";
-    
+        
     frm_hitbox->widgets["txt_name"]->lose_focus_handler =
     [this] (lafi::widget * t) {
         string new_name = ((lafi::textbox*) t)->text;
@@ -2412,7 +2412,7 @@ void animation_editor::load() {
     };
     frm_hitbox->widgets["txt_name"]->description =
         "Name of this hitbox.";
-    
+        
     frm_hitbox->widgets["but_left"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.hitboxes.size() < 2) return;
@@ -2430,7 +2430,7 @@ void animation_editor::load() {
     };
     frm_hitbox->widgets["but_left"]->description =
         "Move this hitbox to the left on the list.";
-    
+        
     frm_hitbox->widgets["but_right"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.hitboxes.size() < 2) return;
@@ -2445,7 +2445,7 @@ void animation_editor::load() {
     };
     frm_hitbox->widgets["but_right"]->description =
         "Move this hitbox to the right on the list.";
-    
+        
     frm_hitbox->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         delete anims.hitboxes[cur_hitbox_nr];
@@ -2497,10 +2497,10 @@ void animation_editor::load() {
     };
     frm_tools->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier. (0.5 = half, 2 = double)";
-    
+        
     frm_tools->widgets["but_resize"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         resize_everything();
@@ -2559,10 +2559,10 @@ void animation_editor::load() {
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
-    
+        
     ((lafi::textbox*)frm_picker->widgets["txt_new"])->enter_key_widget =
         frm_picker->widgets["but_new"];
-    
+        
     frm_picker->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string name =
@@ -2594,7 +2594,7 @@ void animation_editor::load() {
     };
     frm_picker->widgets["but_new"]->description =
         "Create a new one with the name on the textbox.";
-    
+        
     frm_picker->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
         lafi::scrollbar* s =
@@ -2646,7 +2646,7 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_toggle_hitboxes"]->description =
         "Toggle hitbox and center-point grid visibility.";
-    
+        
     frm_bottom->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -2657,14 +2657,14 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_load"]->description =
         "Load the object from the text file.";
-    
+        
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_animation_pool();
     };
     frm_bottom->widgets["but_save"]->description =
         "Save the object to the text file.";
-    
+        
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -2675,8 +2675,8 @@ void animation_editor::load() {
     };
     frm_bottom->widgets["but_quit"]->description =
         "Quit the animation editor.";
-    
-    
+        
+        
     //Changes warning.
     lafi::frame* frm_changes =
         new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
@@ -2966,7 +2966,7 @@ void animation_editor::populate_history() {
     f->easy_row();
     
     for(size_t h = 0; h < animation_editor_history.size(); ++h) {
-        
+    
         string name = animation_editor_history[h];
         if(name.empty()) continue;
         

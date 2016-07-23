@@ -276,6 +276,65 @@
          offset="1"
          id="stop4349" />
     </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#gas-pipe-hole-6"
+       id="linearGradient4330"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,50.000005)"
+       inkscape:collect="always"
+       xlink:href="#geyser-dirt-3"
+       id="linearGradient4330-3"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,100)"
+       inkscape:collect="always"
+       xlink:href="#geyser-hole-6"
+       id="linearGradient4330-5"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,145)"
+       inkscape:collect="always"
+       xlink:href="#fire-5"
+       id="linearGradient4330-2"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,190.00002)"
+       inkscape:collect="always"
+       xlink:href="#fire-glow-7"
+       id="linearGradient4330-0"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,230)"
+       inkscape:collect="always"
+       xlink:href="#dirt"
+       id="linearGradient4330-7"
+       x1="-85"
+       y1="937.36218"
+       x2="-65"
+       y2="937.36218"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -284,9 +343,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="531.71379"
-     inkscape:cy="16.630238"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="-194.77766"
+     inkscape:cy="-29.997895"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -420,6 +479,121 @@
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Fire_geyser.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4320"
+       width="350"
+       height="340"
+       x="-390"
+       y="912.36218" />
+    <rect
+       style="opacity:1;fill:url(#linearGradient4330);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322"
+       width="20"
+       height="20"
+       x="-85"
+       y="927.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4330-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322-3"
+       width="20"
+       height="20"
+       x="-85"
+       y="977.36218" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4330-5);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322-1"
+       width="20"
+       height="20"
+       x="-85"
+       y="1027.3622" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4330-2);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322-36"
+       width="20"
+       height="20"
+       x="-85"
+       y="1072.3622" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4330-0);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322-18"
+       width="20"
+       height="20"
+       x="-85"
+       y="1117.3622" />
+    <rect
+       style="display:inline;opacity:1;fill:url(#linearGradient4330-7);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4322-2"
+       width="20"
+       height="20"
+       x="-85"
+       y="1157.3622" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-175"
+       y="942.36218"
+       id="text4406"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4408"
+         x="-175"
+         y="942.36218">gas pipe hole</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-170"
+       y="987.36218"
+       id="text4410"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4412"
+         x="-170"
+         y="987.36218">geyser dirt</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-160"
+       y="1037.3622"
+       id="text4414"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4416"
+         x="-160"
+         y="1037.3622">geyser hole</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-130.83496"
+       y="1086.0902"
+       id="text4418"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4420"
+         x="-130.83496"
+         y="1086.0902">fire</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-145"
+       y="1132.3622"
+       id="text4422"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4424"
+         x="-145"
+         y="1132.3622">fire glow</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-135"
+       y="1172.3622"
+       id="text4426"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4428"
+         x="-135"
+         y="1172.3622">dirt</tspan></text>
   </g>
   <g
      inkscape:label="Camada 1"

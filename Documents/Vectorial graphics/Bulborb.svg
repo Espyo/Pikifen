@@ -1953,6 +1953,86 @@
        x2="330"
        y2="1357.3622"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Eye_shaft"
+       id="linearGradient4660"
+       x1="-80"
+       y1="1062.3622"
+       x2="-60"
+       y2="1062.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,20)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Eye_ball"
+       id="linearGradient4670"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,20)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Body"
+       id="linearGradient4670-3"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,59.999983)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Feet"
+       id="linearGradient4670-35"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,99.999983)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Eye_pupil"
+       id="linearGradient4670-1"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,139.99998)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Nostril"
+       id="linearGradient4670-9"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,179.99998)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Tongue"
+       id="linearGradient4670-2"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,219.99998)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Spot-3"
+       id="linearGradient4670-7"
+       x1="-80"
+       y1="1102.3622"
+       x2="-60"
+       y2="1102.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(40,259.99998)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1961,15 +2041,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="-133.24785"
-     inkscape:cy="-66.542078"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="-41.486207"
+     inkscape:cy="-207.40423"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1031"
-     inkscape:window-x="0"
+     inkscape:window-width="1872"
+     inkscape:window-height="1055"
+     inkscape:window-x="48"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:snap-bbox="true"
@@ -2197,6 +2277,13 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Red_Bulborb.png"
        inkscape:export-xdpi="90.000015"
        inkscape:export-ydpi="90.000015" />
+    <rect
+       style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4751"
+       width="340"
+       height="470"
+       x="-350"
+       y="1062.3622" />
   </g>
   <g
      inkscape:label="Objects"
@@ -5100,41 +5187,196 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:125%;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="-255"
-       y="1047.3622"
+       x="-286.02295"
+       y="1103.8978"
        id="text6068"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan6070"
-         x="-255"
-         y="1047.3622">Snow Bulborb:</tspan><tspan
+         x="-286.02295"
+         y="1103.8978">Snow Bulborb:</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1059.8622"
+         x="-286.02295"
+         y="1116.3978"
          id="tspan9195">* e0e0e0ff white</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1072.3622"
+         x="-286.02295"
+         y="1128.8978"
          id="tspan6074">* 906030ff brown</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1084.8622"
+         x="-286.02295"
+         y="1141.3978"
          id="tspan6080">* b07040ff brown light</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1097.3622"
+         x="-286.02295"
+         y="1153.8978"
          id="tspan9191">* 6080ffff spots</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1109.8622"
+         x="-286.02295"
+         y="1166.3978"
          id="tspan9723">* 3000a0ff pupils</tspan><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1122.3622"
+         x="-286.02295"
+         y="1178.8978"
          id="tspan9193" /><tspan
          sodipodi:role="line"
-         x="-255"
-         y="1134.8622"
+         x="-286.02295"
+         y="1191.3978"
          id="tspan6076" /></text>
+    <rect
+       style="opacity:0.80386741;fill:url(#linearGradient4660);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4652"
+       width="20"
+       height="20"
+       x="-40"
+       y="1072.3622" />
+    <rect
+       style="opacity:0.80386741;fill:url(#linearGradient4670);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662"
+       width="20"
+       height="20"
+       x="-40"
+       y="1112.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-3);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-5"
+       width="20"
+       height="20"
+       x="-40"
+       y="1152.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-35);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-9"
+       width="20"
+       height="20"
+       x="-40"
+       y="1192.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-1);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-0"
+       width="20"
+       height="20"
+       x="-40"
+       y="1232.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-9);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-06"
+       width="20"
+       height="20"
+       x="-40"
+       y="1272.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-2);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-8"
+       width="20"
+       height="20"
+       x="-40"
+       y="1312.3622" />
+    <rect
+       style="display:inline;opacity:0.80386741;fill:url(#linearGradient4670-7);fill-opacity:1.0;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4662-02"
+       width="20"
+       height="20"
+       x="-40"
+       y="1352.3622" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+       x="-115"
+       y="1087.3622"
+       id="text4753"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755"
+         x="-115"
+         y="1087.3622">eye stalk</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-110"
+       y="1127.3622"
+       id="text4757"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4759"
+         x="-110"
+         y="1127.3622"></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-125"
+       y="1122.3622"
+       id="text4753-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755-7"
+         x="-125"
+         y="1122.3622">eye ball</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-110"
+       y="1162.3622"
+       id="text4753-5"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="-110"
+         y="1162.3622"
+         id="tspan4827">body</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-100"
+       y="1202.3622"
+       id="text4753-2"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="-100"
+         y="1202.3622"
+         id="tspan4831">feet</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-100"
+       y="1242.3622"
+       id="text4753-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755-97"
+         x="-100"
+         y="1242.3622">eye pupil</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-110"
+       y="1287.3622"
+       id="text4753-36"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755-1"
+         x="-110"
+         y="1287.3622">nostril</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-110"
+       y="1332.3622"
+       id="text4753-29"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755-3"
+         x="-110"
+         y="1332.3622">tongue</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-105"
+       y="1362.3622"
+       id="text4753-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4755-94"
+         x="-105"
+         y="1362.3622">spots</tspan></text>
   </g>
 </svg>
