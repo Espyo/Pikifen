@@ -28,6 +28,7 @@ status_type::status_type() :
     causes_disable(false),
     causes_flailing(false),
     causes_panic(false),
+    disabled_state_inedible(false),
     speed_multiplier(1.0f),
     attack_multiplier(1.0f),
     defense_multiplier(1.0f),

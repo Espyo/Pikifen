@@ -31,6 +31,7 @@ void be_released(            mob* m, void* info1, void* info2);
 void be_thrown(              mob* m, void* info1, void* info2);
 void called(                 mob* m, void* info1, void* info2);
 void chase_leader(           mob* m, void* info1, void* info2);
+void check_disabled_edible(  mob* m, void* info1, void* info2);
 void check_remove_flailing(  mob* m, void* info1, void* info2);
 void end_pluck(              mob* m, void* info1, void* info2);
 void face_leader(            mob* m, void* info1, void* info2);

@@ -33,7 +33,7 @@ pikmin::pikmin(
     connected_hitbox_nr(INVALID),
     connected_hitbox_dist(0),
     connected_hitbox_angle(0) {
-        
+    
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO
     if(s2b(get_var_value(vars, "buried", "0"))) {
@@ -302,7 +302,8 @@ bool pikmin::can_receive_status(status_type* s) {
 /* ----------------------------------------------------------------------------
  * Handler for when a status effect causes "disabled".
  */
-void pikmin::receive_disable_from_status() {
+void pikmin::receive_disable_from_status(const unsigned char flags) {
+    disabled_state_flags = flags;
     fsm.set_state(PIKMIN_STATE_DISABLED);
 }
 

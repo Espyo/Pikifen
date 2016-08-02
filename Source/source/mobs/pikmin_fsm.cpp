@@ -633,6 +633,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
+        efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
+            efc.run_function(pikmin_fsm::check_disabled_edible);
+        }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(pikmin_fsm::fall_down_pit);
         }
@@ -1291,6 +1294,18 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //before coming to a stop. Otherwise the Pikmin would stop nearly
     //on the edge of the water, and that just looks bad.
     m->set_timer(1.0f);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin touches an enemy's eat hitbox, but first has
+ * to check if it is edible, since it's in the special "disabled" state.
+ * info1: Points to the hitbox.
+ */
+void pikmin_fsm::check_disabled_edible(mob* m, void* info1, void* info2) {
+    if(m->disabled_state_flags & DISABLED_STATE_FLAG_INEDIBLE) return;
+    pikmin_fsm::be_grabbed_by_enemy(m, info1, info2);
+    m->fsm.set_state(PIKMIN_STATE_GRABBED_BY_ENEMY, info1, info2);
 }
 
 

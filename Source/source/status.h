@@ -46,6 +46,7 @@ struct status_type {
     bool causes_disable;
     bool causes_flailing;
     bool causes_panic;
+    bool disabled_state_inedible;
     
     float speed_multiplier;
     float attack_multiplier;

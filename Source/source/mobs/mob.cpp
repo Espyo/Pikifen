@@ -79,6 +79,7 @@ mob::mob(
     on_hazard(nullptr),
     chomp_max(0),
     script_timer(0),
+    disabled_state_flags(0),
     id(next_mob_id) {
     
     next_mob_id++;
@@ -989,7 +990,9 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     //This status is not already inflicted. Let's do so.
     this->statuses.push_back(status(s));
     if(s->causes_disable) {
-        receive_disable_from_status();
+        receive_disable_from_status(
+            (s->disabled_state_inedible ? DISABLED_STATE_FLAG_INEDIBLE : 0)
+        );
     } else if(s->causes_panic) {
         receive_panic_from_status();
     } else if(s->causes_flailing) {
@@ -1091,7 +1094,7 @@ float mob::get_base_speed() {
 
 
 bool mob::can_receive_status(status_type* s) { return false; };
-void mob::receive_disable_from_status() {}
+void mob::receive_disable_from_status(const unsigned char flags) {}
 void mob::receive_flailing_from_status() {}
 void mob::receive_panic_from_status() {}
 void mob::lose_panic_from_status() {}

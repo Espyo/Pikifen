@@ -24,7 +24,9 @@ script {
             move = focused_mob
         }
         on_face_opponent{
+            if = eat true
             state = attacking
+            state = zapping
         }
         on_lose_focused_mob{
             state = returning
@@ -50,6 +52,7 @@ script {
             chomp = 2 mouth
         }
         on_animation_end{
+            var = eat false
             state = checking_mouth
         }
     }
@@ -77,6 +80,17 @@ script {
         }
         on_death{
             state = dying
+        }
+    }
+    
+    zapping {
+        on_enter{
+            move = stop
+            animation = zap
+        }
+        on_animation_end{
+            var = eat true
+            state = idle
         }
     }
     

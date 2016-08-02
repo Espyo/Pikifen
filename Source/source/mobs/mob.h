@@ -75,6 +75,11 @@ enum MOB_PARTICLE_GENERATOR_IDS {
     MOB_PARTICLE_GENERATOR_STATUS,
 };
 
+enum DISABLED_STATE_FLAGS {
+    //The Pikmin can be eaten by enemies.
+    DISABLED_STATE_FLAG_INEDIBLE = 1,
+};
+
 enum PARTICLE_PRIORITIES {
     PARTICLE_PRIORITY_LOW,
     PARTICLE_PRIORITY_MEDIUM,
@@ -330,8 +335,10 @@ public:
     void remove_particle_generator(const int id);
     ALLEGRO_COLOR get_status_tint_color();
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
+    //If the mob is currently "disabled", these flags specify behavior.
+    unsigned char disabled_state_flags;
     virtual bool can_receive_status(status_type* s);
-    virtual void receive_disable_from_status();
+    virtual void receive_disable_from_status(const unsigned char flags);
     virtual void receive_flailing_from_status();
     virtual void receive_panic_from_status();
     virtual void lose_panic_from_status();

@@ -135,7 +135,7 @@ void area_editor::adv_textures_to_gui() {
     );
     ((lafi::textbox*) f->widgets["txt_tint"])->text =
         c2s(cur_sector->texture_info.tint);
-    
+        
 }
 
 
@@ -1858,7 +1858,7 @@ void area_editor::gui_to_sector(bool called_by_brightness_bar) {
     cur_sector->fade = ((lafi::checkbox*) f->widgets["chk_fade"])->checked;
     cur_sector->always_cast_shadow =
         ((lafi::checkbox*) f->widgets["chk_shadow"])->checked;
-    
+        
     if(cur_sector->fade) {
         cur_sector->texture_info.file_name.clear();
     } else {
@@ -2857,7 +2857,7 @@ void area_editor::load() {
     };
     frm_main->widgets["but_area"]->description =
         "Pick the area to edit.";
-    
+        
     frm_area->widgets["but_sectors"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SECTORS;
@@ -2865,7 +2865,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_sectors"]->description =
         "Change sectors (polygons) and their settings.";
-    
+        
     frm_area->widgets["but_objects"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_OBJECTS;
@@ -2873,7 +2873,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_objects"]->description =
         "Change object settings and placements.";
-    
+        
     frm_area->widgets["but_paths"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_PATHS;
@@ -2881,7 +2881,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_paths"]->description =
         "Change movement paths and stops.";
-    
+        
     frm_area->widgets["but_shadows"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SHADOWS;
@@ -2889,7 +2889,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_shadows"]->description =
         "Change the shadows of trees and leaves.";
-    
+        
     frm_area->widgets["but_guide"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_GUIDE;
@@ -2897,7 +2897,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_guide"]->description =
         "Add an image, like a sketch, to guide you.";
-    
+        
     frm_area->widgets["but_review"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_REVIEW;
@@ -2906,7 +2906,7 @@ void area_editor::load() {
     };
     frm_area->widgets["but_review"]->description =
         "Tools to make sure everything is fine in the area.";
-    
+        
     frm_area->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_TOOLS;
@@ -3048,7 +3048,7 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_sectors->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cancel_new_sector();
@@ -3062,7 +3062,7 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_new"]->description =
         "Trace a new sector where you click.";
-    
+        
     frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_sector = NULL;
@@ -3070,29 +3070,29 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_sel_none"]->description =
         "Deselect the current sector.";
-    
+        
     frm_sector->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_SECTOR_TYPE);
     };
     frm_sector->widgets["but_type"]->description =
         "Change the type of sector.";
-    
+        
     frm_sector->widgets["txt_z"]->lose_focus_handler =
         lambda_gui_to_sector;
     frm_sector->widgets["txt_z"]->description =
         "Height of the floor.";
-    
+        
     frm_sector->widgets["txt_hazards"]->lose_focus_handler =
         lambda_gui_to_sector;
     frm_sector->widgets["txt_hazards"]->description =
         "Hazards the sector has. (e.g. \"fire; poison\")";
-    
+        
     frm_sector->widgets["chk_hazards_floor"]->lose_focus_handler =
         lambda_gui_to_sector;
     frm_sector->widgets["chk_hazards_floor"]->description =
         "Trigger hazard on the floor only or in the air too?";
-    
+        
     frm_sector->widgets["but_texture"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_sector) return;
@@ -3102,12 +3102,12 @@ void area_editor::load() {
     };
     frm_sector->widgets["but_texture"]->description =
         "Pick a texture (image) to use for the floor.";
-    
+        
     frm_sector->widgets["chk_fade"]->left_mouse_click_handler =
         lambda_gui_to_sector_click;
     frm_sector->widgets["chk_fade"]->description =
         "Makes the surrounding textures fade into each other.";
-    
+        
     frm_sector->widgets["but_adv"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!cur_sector) return;
@@ -3121,28 +3121,28 @@ void area_editor::load() {
     };
     frm_sector->widgets["but_adv"]->description =
         "Advanced settings for the sector's texture.";
-    
+        
     ((lafi::scrollbar*) frm_sector->widgets["bar_brightness"])->change_handler =
     [this] (lafi::widget*) { gui_to_sector(true); };
     frm_sector->widgets["bar_brightness"]->description =
         "0 = pitch black sector. 255 = normal lighting.";
-    
+        
     frm_sector->widgets["txt_brightness"]->lose_focus_handler =
         lambda_gui_to_sector;
     frm_sector->widgets["txt_brightness"]->description =
         "0 = pitch black sector. 255 = normal lighting.";
-    
+        
     frm_sector->widgets["chk_shadow"]->left_mouse_click_handler =
         lambda_gui_to_sector_click;
     frm_sector->widgets["chk_shadow"]->description =
         "Makes it always cast a shadow onto lower sectors.";
-    
+        
     frm_sector->widgets["txt_tag"]->lose_focus_handler =
         lambda_gui_to_sector;
     frm_sector->widgets["txt_tag"]->description =
         "Special values you may want the sector to know.";
-    
-    
+        
+        
     //Advanced texture settings frame.
     lafi::frame* frm_adv_textures =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -3228,38 +3228,38 @@ void area_editor::load() {
     };
     frm_adv_textures->widgets["but_back"]->description =
         "Go back.";
-    
+        
     frm_adv_textures->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_x"]->description =
         "Scroll the texture horizontally by this much.";
-    
+        
     frm_adv_textures->widgets["txt_y"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_y"]->description =
         "Scroll the texture vertically by this much.";
-    
+        
     frm_adv_textures->widgets["txt_sx"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sx"]->description =
         "Zoom the texture horizontally by this much.";
-    
+        
     frm_adv_textures->widgets["txt_sy"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_sy"]->description =
         "Zoom the texture vertically by this much.";
-    
+        
     frm_adv_textures->widgets["ang_a"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["ang_a"]->description =
         "Rotate the texture by this much.";
-    
+        
     frm_adv_textures->widgets["txt_tint"]->lose_focus_handler =
         lambda_gui_to_adv_textures;
     frm_adv_textures->widgets["txt_tint"]->description =
         "Texture tint color, in the format \"r g b a\".";
-    
-    
+        
+        
     //Texture picker frame.
     lafi::frame* frm_texture =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -3300,7 +3300,7 @@ void area_editor::load() {
     };
     frm_texture->widgets["but_back"]->description =
         "Cancel.";
-    
+        
     frm_texture->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         string n =
@@ -3323,7 +3323,7 @@ void area_editor::load() {
     
     ((lafi::textbox*) frm_texture->widgets["txt_name"])->enter_key_widget =
         frm_texture->widgets["but_ok"];
-    
+        
     frm_texture->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
         lafi::scrollbar* s =
@@ -3337,8 +3337,8 @@ void area_editor::load() {
             );
         }
     };
-        
-        
+    
+    
     //Objects frame.
     lafi::frame* frm_objects =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -3426,7 +3426,7 @@ void area_editor::load() {
     };
     frm_objects->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_objects->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_OBJECT) sec_mode = ESM_NONE;
@@ -3434,7 +3434,7 @@ void area_editor::load() {
     };
     frm_objects->widgets["but_new"]->description =
         "Create a new object wherever you click.";
-    
+        
     frm_objects->widgets["but_sel_none"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_mob = NULL;
@@ -3443,7 +3443,7 @@ void area_editor::load() {
     };
     frm_objects->widgets["but_sel_none"]->description =
         "Deselect the current sector.";
-    
+        
     frm_object->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -3460,38 +3460,38 @@ void area_editor::load() {
     };
     frm_object->widgets["but_rem"]->description =
         "Delete the current object.";
-    
+        
     frm_object->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         toggle_duplicate_mob_mode();
     };
     frm_object->widgets["but_duplicate"]->description =
         "Duplicate the current object (Ctrl+D).";
-    
+        
     frm_object->widgets["but_category"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
     };
     frm_object->widgets["but_category"]->description =
         "Choose the category of types of object.";
-    
+        
     frm_object->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
     };
     frm_object->widgets["but_type"]->description =
         "Choose the type this object is.";
-    
+        
     frm_object->widgets["ang_angle"]->lose_focus_handler =
         lambda_gui_to_mob;
     frm_object->widgets["ang_angle"]->description =
         "Angle the object is facing.";
-    
+        
     frm_object->widgets["txt_vars"]->lose_focus_handler =
         lambda_gui_to_mob;
     frm_object->widgets["txt_vars"]->description =
         "Extra variables (e.g.: sleep=y;jumping=n).";
-    
+        
     frm_object->register_accelerator(
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
         frm_object->widgets["but_duplicate"]
@@ -3567,7 +3567,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_paths->widgets["but_new_stop"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_STOP) sec_mode = ESM_NONE;
@@ -3575,7 +3575,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_new_stop"]->description =
         "Create new stops wherever you click.";
-    
+        
     frm_paths->widgets["but_new_link"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(
@@ -3589,7 +3589,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_new_link"]->description =
         "Click on two stops to connect them with a link.";
-    
+        
     frm_paths->widgets["but_new_1wlink"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(
@@ -3603,7 +3603,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_new_1wlink"]->description =
         "Click stop #1 then #2 for a one-way path link.";
-    
+        
     frm_paths->widgets["but_del_stop"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_DEL_STOP) sec_mode = ESM_NONE;
@@ -3611,7 +3611,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_del_stop"]->description =
         "Click stops to delete them.";
-    
+        
     frm_paths->widgets["but_del_link"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_DEL_LINK) sec_mode = ESM_NONE;
@@ -3619,14 +3619,14 @@ void area_editor::load() {
     };
     frm_paths->widgets["but_del_link"]->description =
         "Click links to delete them.";
-    
+        
     frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_closest_stop = !show_closest_stop;
     };
     frm_paths->widgets["chk_show_closest"]->description =
         "Show the closest stop to the cursor.";
-    
+        
     frm_paths->widgets["chk_show_path"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_path_preview = !show_path_preview;
@@ -3643,7 +3643,7 @@ void area_editor::load() {
     };
     frm_paths->widgets["chk_show_path"]->description =
         "Show path between draggable points A and B.";
-    
+        
     frm_paths->widgets["lbl_path_dist"]->description =
         "Total travel distance between A and B.";
         
@@ -3768,7 +3768,7 @@ void area_editor::load() {
     };
     frm_shadows->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_shadows->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sec_mode == ESM_NEW_SHADOW) sec_mode = ESM_NONE;
@@ -3776,7 +3776,7 @@ void area_editor::load() {
     };
     frm_shadows->widgets["but_new"]->description =
         "Create a new tree shadow wherever you click.";
-    
+        
     frm_shadows->widgets["but_sel_none"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         cur_shadow = NULL;
@@ -3784,7 +3784,7 @@ void area_editor::load() {
     };
     frm_shadows->widgets["but_sel_none"]->description =
         "Deselect the current tree shadow.";
-    
+        
     frm_shadow->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
@@ -3801,53 +3801,53 @@ void area_editor::load() {
     };
     frm_shadow->widgets["but_rem"]->description =
         "Delete the current tree shadow.";
-    
+        
     frm_shadow->widgets["txt_file"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_file"]->description =
         "File name for the shadow's texture.";
-    
+        
     frm_shadow->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_x"]->description =
         "X position of the shadow's center.";
-    
+        
     frm_shadow->widgets["txt_y"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_y"]->description =
         "Y position of the shadow's center.";
-    
+        
     frm_shadow->widgets["txt_w"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_w"]->description =
         "Width of the shadow's image.";
-    
+        
     frm_shadow->widgets["txt_h"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_h"]->description =
         "Height of the shadow's image.";
-    
+        
     frm_shadow->widgets["ang_an"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["ang_an"]->description =
         "Angle of the shadow's image.";
-    
+        
     frm_shadow->widgets["bar_al"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["bar_al"]->description =
         "How opaque the shadow's image is.";
-    
+        
     frm_shadow->widgets["txt_sx"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_sx"]->description =
         "Horizontal sway amount multiplier (0 = no sway).";
-    
+        
     frm_shadow->widgets["txt_sy"]->lose_focus_handler =
         lambda_gui_to_shadow;
     frm_shadow->widgets["txt_sy"]->description =
         "Vertical sway amount multiplier (0 = no sway).";
-    
-    
+        
+        
     //Guide frame.
     lafi::frame* frm_guide =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -3932,47 +3932,47 @@ void area_editor::load() {
     };
     frm_guide->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_guide->widgets["txt_file"]->lose_focus_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["txt_file"]->description =
         "Image file (on the Images folder) for the guide.";
-    
+        
     frm_guide->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["txt_x"]->description =
         "X of the top-left corner for the guide.";
-    
+        
     frm_guide->widgets["txt_y"]->lose_focus_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["txt_y"]->description =
         "Y of the top-left corner for the guide.";
-    
+        
     frm_guide->widgets["txt_w"]->lose_focus_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["txt_w"]->description =
         "Guide total width.";
-    
+        
     frm_guide->widgets["txt_h"]->lose_focus_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["txt_h"]->description =
         "Guide total height.";
-    
+        
     frm_guide->widgets["chk_ratio"]->left_mouse_click_handler =
         lambda_gui_to_guide_click;
     frm_guide->widgets["chk_ratio"]->description =
         "Lock width/height proportion when changing either one.";
-    
+        
     frm_guide->widgets["chk_mouse"]->left_mouse_click_handler =
         lambda_gui_to_guide_click;
     frm_guide->widgets["chk_mouse"]->description =
         "If checked, use mouse buttons to move/stretch.";
-    
+        
     ((lafi::scrollbar*) frm_guide->widgets["bar_alpha"])->change_handler =
         lambda_gui_to_guide;
     frm_guide->widgets["bar_alpha"]->description =
         "How see-through the guide is.";
-    
+        
     guide_to_gui();
     
     
@@ -4057,21 +4057,21 @@ void area_editor::load() {
     };
     frm_review->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_review->widgets["but_find_errors"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         find_errors();
     };
     frm_review->widgets["but_find_errors"]->description =
         "Search for problems with the area.";
-    
+        
     frm_review->widgets["but_goto_error"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         goto_error();
     };
     frm_review->widgets["but_goto_error"]->description =
         "Focus the camera on the problem found, if applicable.";
-    
+        
     frm_review->widgets["chk_see_textures"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
         error_type = EET_NONE_YET;
@@ -4088,7 +4088,7 @@ void area_editor::load() {
     };
     frm_review->widgets["chk_see_textures"]->description =
         "Preview how the textures will look like.";
-    
+        
     frm_review->widgets["chk_shadows"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
         show_shadows = ((lafi::checkbox*) c)->checked;
@@ -4134,10 +4134,10 @@ void area_editor::load() {
     };
     frm_tools->widgets["but_back"]->description =
         "Go back to the main menu.";
-    
+        
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier. (0.5 = half, 2 = double)";
-    
+        
     frm_tools->widgets["but_resize"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         resize_everything();
@@ -4192,21 +4192,21 @@ void area_editor::load() {
     };
     frm_options->widgets["but_back"]->description =
         "Close the options.";
-    
+        
     frm_options->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         this->load_area(false);
     };
     frm_options->widgets["but_load"]->description =
         "Discard all changes made and load the area again.";
-    
+        
     frm_options->widgets["but_backup"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         this->load_backup();
     };
     frm_options->widgets["but_backup"]->description =
         "Discard all changes made and load the auto-backup.";
-    
+        
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(grid_interval == MAX_GRID_INTERVAL) return;
@@ -4215,7 +4215,7 @@ void area_editor::load() {
     };
     frm_options->widgets["but_grid_plus"]->description =
         "Increase the spacing on the grid.";
-    
+        
     frm_options->widgets["but_grid_minus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(grid_interval == MIN_GRID_INTERVAL) return;
@@ -4224,8 +4224,8 @@ void area_editor::load() {
     };
     frm_options->widgets["but_grid_minus"]->description =
         "Decrease the spacing on the grid.";
-    
-    
+        
+        
     //Picker frame.
     lafi::frame* frm_picker =
         new lafi::frame(scr_w - 208, 0, scr_w, scr_h - 48);
@@ -4254,7 +4254,7 @@ void area_editor::load() {
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
-    
+        
     frm_picker->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
         lafi::scrollbar* s =
@@ -4268,8 +4268,8 @@ void area_editor::load() {
             );
         }
     };
-        
-        
+    
+    
     //Bottom bar.
     lafi::frame* frm_bottom =
         new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
@@ -4311,14 +4311,14 @@ void area_editor::load() {
     };
     frm_bottom->widgets["but_options"]->description =
         "Options and misc. tools.";
-    
+        
     frm_bottom->widgets["but_guide"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_guide = !show_guide;
     };
     frm_bottom->widgets["but_guide"]->description =
         "Toggle the visibility of the guide.";
-    
+        
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         save_area(false);
@@ -4332,7 +4332,7 @@ void area_editor::load() {
     };
     frm_bottom->widgets["but_save"]->description =
         "Save the area onto the files.";
-    
+        
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(made_changes) {
@@ -4343,10 +4343,10 @@ void area_editor::load() {
     };
     frm_bottom->widgets["but_quit"]->description =
         "Quit the area editor.";
-    
+        
     disable_widget(frm_bottom->widgets["but_save"]);
-        
-        
+    
+    
     //Changes warning.
     lafi::frame* frm_changes =
         new lafi::frame(scr_w - 208, scr_h - 48, scr_w, scr_h);
@@ -5218,9 +5218,13 @@ void area_editor::sector_to_gui() {
         if(cur_sector->fade || cur_sector->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
             disable_widget(f->widgets["but_texture"]);
             disable_widget(f->widgets["but_adv"]);
+            disable_widget(f->widgets["bar_brightness"]);
+            disable_widget(f->widgets["txt_brightness"]);
         } else {
             enable_widget(f->widgets["but_texture"]);
             enable_widget(f->widgets["but_adv"]);
+            enable_widget(f->widgets["bar_brightness"]);
+            enable_widget(f->widgets["txt_brightness"]);
         }
         
         adv_textures_to_gui();

@@ -25,6 +25,8 @@ class mob_type;
 class mob_state;
 class hitbox_instance;
 
+const unsigned char N_PREV_STATES = 3;
+
 typedef void (*custom_action_code)(mob* m, void* info1, void* info2);
 
 
@@ -320,8 +322,8 @@ public:
     mob_state* cur_state;
     //Conversion between pre-named states and in-file states.
     vector<size_t> pre_named_conversions;
-    //Knowing the previous state's name helps with debugging.
-    string prev_state_name;
+    //Knowing the previous states' names helps with debugging.
+    string prev_state_names[N_PREV_STATES];
     
     mob_event* get_event(const size_t type);
     void run_event(

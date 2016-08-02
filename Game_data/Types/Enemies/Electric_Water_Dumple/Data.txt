@@ -1,0 +1,19 @@
+name = Electric Water Dumple
+
+big_damage_interval = 100
+drops_corpse = true
+height = 56
+max_carriers = 15
+max_health = 500
+move_speed = 70
+near_angle = 0.78
+near_radius = 60
+pikmin_seeds = 7
+pushable = true
+pushes = true
+radius = 50
+rotation_speed = 3
+sight_radius = 300
+territory_radius = 600
+value = 300
+weight = 7

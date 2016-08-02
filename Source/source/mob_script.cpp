@@ -426,6 +426,7 @@ void mob_action::run(
     if(type == MOB_ACTION_CHANGE_STATE) {
     
         m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
+        *action_nr = INVALID; //End the event's actions now.
         
         
     } else if(type == MOB_ACTION_CHOMP_HITBOXES) {
@@ -784,7 +785,10 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
     if(new_state >= m->type->states.size()) return;
     //Run the code to leave the current state.
     if(cur_state) {
-        prev_state_name = cur_state->name;
+        for(unsigned char p = N_PREV_STATES - 1; p > 0; --p) {
+            prev_state_names[p] = prev_state_names[p - 1];
+        }
+        prev_state_names[0] = cur_state->name;
         run_event(MOB_EVENT_ON_LEAVE, info1, info2);
     }
     

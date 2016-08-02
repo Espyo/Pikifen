@@ -791,7 +791,7 @@ void load_area(
                 sector_data->get_child_by_name("texture_tint")->
                 get_value_or_default("255 255 255")
             );
-        
+            
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
@@ -1688,20 +1688,21 @@ void load_status_types() {
         st.name = s_node->name;
         
         reader_setter rs(s_node);
-        rs.set("color",                  st.color);
-        rs.set("tint",                   st.tint);
-        rs.set("removable_with_whistle", st.removable_with_whistle);
-        rs.set("auto_remove_time",       st.auto_remove_time);
-        rs.set("health_change_ratio",    st.health_change_ratio);
-        rs.set("causes_disable",         st.causes_disable);
-        rs.set("causes_flailing",        st.causes_flailing);
-        rs.set("causes_panic",           st.causes_panic);
-        rs.set("speed_multiplier",       st.speed_multiplier);
-        rs.set("attack_multiplier",      st.attack_multiplier);
-        rs.set("defense_multiplier",     st.defense_multiplier);
-        rs.set("anim_speed_multiplier",  st.anim_speed_multiplier);
-        rs.set("animation",              st.animation_name);
-        rs.set("animation_mob_scale",    st.animation_mob_scale);
+        rs.set("color",                   st.color);
+        rs.set("tint",                    st.tint);
+        rs.set("removable_with_whistle",  st.removable_with_whistle);
+        rs.set("auto_remove_time",        st.auto_remove_time);
+        rs.set("health_change_ratio",     st.health_change_ratio);
+        rs.set("causes_disable",          st.causes_disable);
+        rs.set("causes_flailing",         st.causes_flailing);
+        rs.set("causes_panic",            st.causes_panic);
+        rs.set("disabled_state_inedible", st.disabled_state_inedible);
+        rs.set("speed_multiplier",        st.speed_multiplier);
+        rs.set("attack_multiplier",       st.attack_multiplier);
+        rs.set("defense_multiplier",      st.defense_multiplier);
+        rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);
+        rs.set("animation",               st.animation_name);
+        rs.set("animation_mob_scale",     st.animation_mob_scale);
         
         st.affects = 0;
         if(s2b(s_node->get_child_by_name("affects_pikmin")->value)) {
@@ -1863,8 +1864,8 @@ void print_info(string text) {
  * Returns a random float between the provided range, inclusive.
  */
 float randomf(float min, float max) {
-    if(min > max) swap(min, max);
     if(min == max) return min;
+    if(min > max) swap(min, max);
     return (float) rand() / ((float) RAND_MAX / (max - min)) + min;
 }
 
@@ -1873,8 +1874,8 @@ float randomf(float min, float max) {
  * Returns a random integer between the provided range, inclusive.
  */
 int randomi(int min, int max) {
-    if(min > max) swap(min, max);
     if(min == max) return min;
+    if(min > max) swap(min, max);
     return ((rand()) % (max - min + 1)) + min;
 }
 

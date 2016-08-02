@@ -474,22 +474,18 @@ void do_gameplay_logic() {
                 box_string(f2s(dev_tool_info_lock->z), 6) + ".",
                 30
             );
-        string state_str =
-            box_string(
-                "State: " +
-                (
-                    dev_tool_info_lock->fsm.cur_state ?
-                    dev_tool_info_lock->fsm.cur_state->name :
-                    "(None!)"
-                ) +
-                ".",
-                30
+        string stateh_str =
+            "State hist.: " +
+            (
+                dev_tool_info_lock->fsm.cur_state ?
+                dev_tool_info_lock->fsm.cur_state->name :
+                "(None!)"
             );
-        string pstate_str =
-            box_string(
-                "Prev. state: " + dev_tool_info_lock->fsm.prev_state_name + ".",
-                30
-            );
+        for(unsigned char p = 0; p < N_PREV_STATES; ++p) {
+            stateh_str +=
+                ", " + dev_tool_info_lock->fsm.prev_state_names[p];
+        }
+        stateh_str += ".";
         string anim_str =
             box_string(
                 "Animation: " +
@@ -497,7 +493,7 @@ void do_gameplay_logic() {
                  dev_tool_info_lock->anim.anim->name :
                  "(None!)") +
                 ".",
-                30
+                60
             );
         string health_str =
             box_string("Health: " + f2s(dev_tool_info_lock->health) + ".", 30);
@@ -524,7 +520,7 @@ void do_gameplay_logic() {
         
         print_info(
             name_str + coords_str + "\n" +
-            state_str + pstate_str + "\n" +
+            stateh_str + "\n" +
             health_str + timer_str + "\n" +
             anim_str + "\n" +
             vars_str

@@ -26,3 +26,19 @@ To add a glow to the cursor on GIMP
     Selection blur by 5
     Bucket fill the selection in a different layer
     Set that layer's opacity to 75%
+
+
+Checklist for making a new enemy:
+    Script
+        Common events for most states
+            Death
+            Bottomless pit
+            "Big damage"
+            Touched hazard
+    Sprite sheet
+        Add a "palette" of the gradients used to the left of the image
+    Animations
+        Make sure the idle animation is not consisted of solely one boring frame
+        Check if all instances of the standard "body" hitbox are latchable (if they're meant to)
+        Check if all instances of the standard "attack" hitbox are disabled, except when they're needed
+        Check if all hitboxes have the correct Z and height

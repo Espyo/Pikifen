@@ -1138,8 +1138,9 @@ void animation_editor::load() {
         setlocale(LC_ALL, "C");
         
         if(al_get_native_file_dialog_count(file_dialog) == 0) return;
-        
         file_path = al_get_native_file_dialog_path(file_dialog, 0);
+        if(file_path.empty()) return;
+        
         load_animation_pool();
         update_animation_editor_history(file_path);
         save_options(); //Save the history on the options.
