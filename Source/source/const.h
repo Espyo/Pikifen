@@ -30,8 +30,8 @@ using namespace std;
 const unsigned char VERSION_MAJOR = 0;
 const unsigned char VERSION_MINOR = 8;
 const unsigned char VERSION_REV   = 0;
-const unsigned char VERSION_DAY   = 06;
-const unsigned char VERSION_MONTH = 08;
+const unsigned char VERSION_DAY   = 6;
+const unsigned char VERSION_MONTH = 8;
 const unsigned int  VERSION_YEAR  = 16; //The year is 2000 + this.
 
 //How many entries of the animation editor history to store, at max.
