@@ -221,7 +221,6 @@ void mob::tick_physics() {
     
     float new_x = x, new_y = y, new_z = z;
     sector* new_ground_sector = ground_sector;
-    sector* new_center_sector = center_sector;
     float pre_move_ground_z = ground_sector->z;
     
     float move_speed_x = speed_x;
@@ -869,7 +868,9 @@ void mob::remove_particle_generator(const int id) {
 
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
- * nr: Animation number; it's the animation instance number from the pool.
+ * nr:        Animation number.
+   * It's the animation instance number from the pool.
+ * pre_named: If true,
  */
 void mob::set_animation(const size_t nr, const bool pre_named) {
     if(nr >= type->anims.animations.size()) return;
@@ -882,7 +883,18 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
         final_nr = nr;
     }
     
-    if(final_nr == INVALID) return;
+    if(final_nr == INVALID) {
+        log_error(
+            "Mob " + this->type->name + " tried to switch from " +
+            (
+                anim.anim ? "animation \"" + anim.anim->name + "\"" :
+                "no animation"
+            ) +
+            " to a non-existent one (with the internal"
+            " number of " + i2s(nr) + ")!"
+        );
+        return;
+    }
     
     animation* new_anim = anim.anim_pool->animations[final_nr];
     anim.anim = new_anim;
@@ -1081,6 +1093,7 @@ ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
         *bmp_scale = t->animation_mob_scale;
         return f->bitmap;
     }
+    return NULL;
 }
 
 
@@ -1321,6 +1334,7 @@ void cause_hitbox_damage(
     mob* attacker, mob* victim, hitbox_instance* attacker_h,
     hitbox_instance* victim_h, float* total_damage
 ) {
+    //TODO this function is unused.
     float attacker_offense = 0;
     float defense_multiplier = 1;
     float knockback = 0;
@@ -1521,7 +1535,7 @@ hitbox_instance* get_closest_hitbox(
         float hx, hy;
         rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
         float d = dist(x - m->x, y - m->y, hx, hy).to_float() - h_ptr->radius;
-        if(h == 0 || d < closest_hitbox_dist) {
+        if(closest_hitbox == NULL || d < closest_hitbox_dist) {
             closest_hitbox_dist = d;
             closest_hitbox = h_ptr;
         }
@@ -1540,6 +1554,31 @@ hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
     if(!f) return NULL;
     if(f->hitbox_instances.empty()) return NULL;
     return &f->hitbox_instances[nr];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if a mob is resistant to a list of hazards, given the list
+ * of resistances and the list of hazards.
+ */
+bool is_resistant_to_hazards(
+    vector<hazard*> &resistances, vector<hazard*> &hazards
+) {
+    size_t n_matches = 0;
+    for(size_t h = 0; h < hazards.size(); ++h) {
+        for(size_t r = 0; r < resistances.size(); ++r) {
+            if(hazards[h] == resistances[r]) {
+                n_matches++;
+                break;
+            }
+        }
+    }
+    if(n_matches == hazards.size()) {
+        //The mob can resist all
+        //of these hazards!
+        return true;
+    }
+    return false;
 }
 
 
@@ -1614,14 +1653,6 @@ void mob::become_uncarriable() {
     
     delete carry_info;
     carry_info = NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Checks the carrying destination again.
- */
-void mob::recalculate_carrying_destination(mob* m, void* info1, void* info2) {
-    m->calculate_carrying_destination(NULL, NULL);
 }
 
 

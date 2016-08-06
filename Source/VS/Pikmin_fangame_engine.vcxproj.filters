@@ -231,6 +231,9 @@
     <ClInclude Include="..\source\LAFI\image.h">
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\liquid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikmin_fangame_engine.rc">
@@ -437,6 +440,12 @@
     </ClCompile>
     <ClCompile Include="..\source\LAFI\image.cpp">
       <Filter>Source Files\LAFI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\hazard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\liquid.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

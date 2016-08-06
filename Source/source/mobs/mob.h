@@ -352,9 +352,6 @@ public:
         const float angle, const float knockback,
         const float new_invuln_period, const float new_knockdown_period
     );
-    static void recalculate_carrying_destination(
-        mob* m, void* info1, void* info2
-    );
     void calculate_carrying_destination(mob* added, mob* removed);
     mob* carrying_target;
     
@@ -391,6 +388,9 @@ hitbox_instance* get_closest_hitbox(
     const float x, const float y, mob* m, const size_t h_type = INVALID
 );
 hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
+bool is_resistant_to_hazards(
+    vector<hazard*> &resistances, vector<hazard*> &hazards
+);
 void remove_from_group(mob* member);
 bool should_attack(mob* m1, mob* m2);
 void unfocus_mob(mob* m1);

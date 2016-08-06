@@ -24,7 +24,7 @@ pellet::pellet(
     
     become_carriable(false);
     
-    set_animation(ANIM_IDLE);
+    set_animation(ANIM_IDLING);
 }
 
 

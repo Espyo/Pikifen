@@ -89,8 +89,8 @@ struct button_manager {
     
     vector<button> list;
     void add(
-        const size_t id, const string name, const string option_name,
-        const string default_control_str
+        const size_t id, const string &name, const string &option_name,
+        const string &default_control_str
     );
 };
 

@@ -1,83 +1,94 @@
 first_state = resting
 
-script{
-    resting_start{
-        on_enter{
+script {
+    resting_start {
+        on_enter {
             animation = resting
             move = stop
             timer = 1
             gravity = 1
         }
-        on_timer{
+        on_timer {
             state = resting
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = dying
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
+            state = resting
         }
     }
     
-    going_home{
-        on_enter{
+    going_home {
+        on_enter {
             move = home
             timer = 5
         }
-        on_reach_destination{
+        on_reach_destination {
             state = resting_start
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = dying
         }
-        on_death{
+        on_death {
             state = dying
         }
-        on_timer{
+        on_timer {
             state = flying
+        }
+        on_touch_spray {
+            special_function = spray
+            state = resting
         }
     }
     
-    resting{
-        on_enter{
+    resting {
+        on_enter {
             animation = resting
             timer = 5
         }
-        on_timer{
+        on_timer {
             state = flying
         }
-        on_near_opponent{
+        on_near_opponent {
             state = flying
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = dying
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    flying{
-        on_enter{
+    flying {
+        on_enter {
             animation = flapping
             gravity = -2
             timer = 0.3
             move = randomly
             var = flutters 0
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = dying
         }
-        on_death{
+        on_death {
             state = dying
         }
-        on_timer{
+        on_timer {
             timer = 0.3
             move = stop vertically
             gravity = 0
@@ -86,22 +97,26 @@ script{
             if = flutters 10
             state = going_home
         }
+        on_touch_spray {
+            special_function = spray
+            state = resting
+        }
     }
     
-    dying{
-        on_enter{
+    dying {
+        on_enter {
             special_function = die_start
             animation = dying
             move = stop
             gravity = 1
         }
-        on_animation_end{
+        on_animation_end {
             special_function = die_end
         }
     }
     
-    deleting{
-        on_enter{
+    deleting {
+        on_enter {
             special_function = die_end
             special_function = delete
         }

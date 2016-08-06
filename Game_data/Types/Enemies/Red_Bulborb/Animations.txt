@@ -1,120 +1,120 @@
 animations{
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.00
 			}
 		}
 	}
-	walk{
+	moving{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkr1{
+			moving1{
 				duration=0.10
 			}
-			walkr2{
+			moving2{
 				duration=0.10
 			}
-			walkr1{
+			moving1{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkl1{
+			moving3{
 				duration=0.10
 			}
-			walkl2{
+			moving4{
 				duration=0.10
 			}
-			walkl1{
+			moving3{
 				duration=0.10
 			}
 		}
 	}
-	attack{
+	attacking{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			attacking1{
 				duration=0.20
 			}
-			attack2{
+			attacking2{
 				duration=0.20
 			}
-			attack3{
+			attacking3{
 				duration=0.20
 			}
-			attack4{
+			attacking4{
 				duration=0.20
 			}
 		}
 	}
-	fail{
+	failing{
 		loop_frame=2
 		frame_instances{
-			fail{
+			failing1{
 				duration=0.30
 			}
-			attack4nd{
+			failing2{
 				duration=0.10
 			}
-			attack1{
+			attacking1{
 				duration=0.10
 			}
 		}
 	}
-	eat{
+	eating{
 		loop_frame=0
 		frame_instances{
-			chomp1{
+			chomping1{
 				duration=0.25
 			}
-			chomp2{
+			chomping2{
 				duration=0.10
 			}
-			chomp3{
+			chomping3{
 				duration=0.15
 			}
-			chomp2{
+			chomping2{
 				duration=0.10
 			}
-			chomp1{
+			chomping1{
 				duration=0.25
 			}
-			chomp2{
+			chomping2{
 				duration=0.10
 			}
-			chomp3{
+			chomping3{
 				duration=0.15
 			}
-			chomp2{
+			chomping2{
 				duration=0.10
 			}
 		}
 	}
-	die{
+	dying{
 		loop_frame=6
 		frame_instances{
-			chomp1dead{
+			chomping1dead{
 				duration=0.20
 			}
-			chomp2dead{
+			chomping2dead{
 				duration=0.10
 			}
-			chomp3dead{
+			chomping3dead{
 				duration=1.00
 			}
-			chomp2dead{
+			chomping2dead{
 				duration=0.10
 			}
-			chomp1dead{
+			chomping1dead{
 				duration=0.20
 			}
-			idledead{
+			idlingdead{
 				duration=0.10
 			}
 			dead{
@@ -122,145 +122,145 @@ animations{
 			}
 		}
 	}
-	shake{
+	shaking{
 		loop_frame=0
 		frame_instances{
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
-			shaker{
+			shaking2{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shakel{
+			shaking3{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shaker{
+			shaking2{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shakel{
+			shaking3{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.40
 			}
 		}
 	}
-	sleep{
+	sleeping{
 		loop_frame=0
 		frame_instances{
-			sleep1{
+			sleeping1{
 				duration=0.50
 			}
-			sleep2{
+			sleeping2{
 				duration=0.50
 			}
 		}
 	}
-	wake_up{
+	waking_up{
 		loop_frame=0
 		frame_instances{
-			sleep1{
+			sleeping1{
 				duration=0.10
 			}
-			sleep2{
+			sleeping2{
 				duration=0.10
 			}
-			attack4nd{
+			failing2{
 				duration=0.20
 			}
-			walkr1{
+			moving1{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkl1{
+			moving3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	fall_asleep{
+	falling_asleep{
 		loop_frame=0
 		frame_instances{
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			chomp1{
+			chomping1{
 				duration=0.10
 			}
-			chomp3{
+			chomping3{
 				duration=0.80
 			}
-			chomp1{
+			chomping1{
 				duration=0.20
 			}
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.30
 			}
 		}
 	}
-	look{
+	looking{
 		loop_frame=0
 		frame_instances{
-			turn1r{
+			looking1{
 				duration=0.10
 			}
-			turn2r{
+			looking2{
 				duration=0.30
 			}
-			turn1r{
+			looking1{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			turn1l{
+			looking3{
 				duration=0.10
 			}
-			turn2l{
+			looking4{
 				duration=0.30
 			}
-			turn1l{
+			looking3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.30
 			}
 		}
 	}
 }
 frames{
-	idle{
+	idling{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=0
@@ -309,7 +309,7 @@ frames{
 			}
 		}
 	}
-	walkl1{
+	moving3{
 		file=Red_Bulborb.png
 		file_x=154
 		file_y=0
@@ -358,7 +358,7 @@ frames{
 			}
 		}
 	}
-	walkl2{
+	moving4{
 		file=Red_Bulborb.png
 		file_x=308
 		file_y=0
@@ -407,7 +407,7 @@ frames{
 			}
 		}
 	}
-	walkr1{
+	moving1{
 		file=Red_Bulborb.png
 		file_x=154
 		file_y=0
@@ -456,7 +456,7 @@ frames{
 			}
 		}
 	}
-	walkr2{
+	moving2{
 		file=Red_Bulborb.png
 		file_x=308
 		file_y=0
@@ -505,7 +505,7 @@ frames{
 			}
 		}
 	}
-	attack1{
+	attacking1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=116
@@ -554,7 +554,7 @@ frames{
 			}
 		}
 	}
-	attack2{
+	attacking2{
 		file=Red_Bulborb.png
 		file_x=161
 		file_y=116
@@ -603,7 +603,7 @@ frames{
 			}
 		}
 	}
-	attack3{
+	attacking3{
 		file=Red_Bulborb.png
 		file_x=336
 		file_y=116
@@ -652,7 +652,7 @@ frames{
 			}
 		}
 	}
-	attack4{
+	attacking4{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116
@@ -701,7 +701,7 @@ frames{
 			}
 		}
 	}
-	fail{
+	failing1{
 		file=Red_Bulborb.png
 		file_x=677
 		file_y=116
@@ -750,7 +750,7 @@ frames{
 			}
 		}
 	}
-	chomp1{
+	chomping1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=252
@@ -799,7 +799,7 @@ frames{
 			}
 		}
 	}
-	chomp2{
+	chomping2{
 		file=Red_Bulborb.png
 		file_x=125
 		file_y=252
@@ -848,7 +848,7 @@ frames{
 			}
 		}
 	}
-	chomp3{
+	chomping3{
 		file=Red_Bulborb.png
 		file_x=226
 		file_y=252
@@ -946,7 +946,7 @@ frames{
 			}
 		}
 	}
-	shakel{
+	shaking3{
 		file=Red_Bulborb.png
 		file_x=515
 		file_y=252
@@ -995,7 +995,7 @@ frames{
 			}
 		}
 	}
-	shaker{
+	shaking2{
 		file=Red_Bulborb.png
 		file_x=515
 		file_y=252
@@ -1044,7 +1044,7 @@ frames{
 			}
 		}
 	}
-	attack4nd{
+	failing2{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116
@@ -1093,7 +1093,7 @@ frames{
 			}
 		}
 	}
-	chomp1dead{
+	chomping1dead{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=252
@@ -1142,7 +1142,7 @@ frames{
 			}
 		}
 	}
-	chomp2dead{
+	chomping2dead{
 		file=Red_Bulborb.png
 		file_x=125
 		file_y=252
@@ -1191,7 +1191,7 @@ frames{
 			}
 		}
 	}
-	chomp3dead{
+	chomping3dead{
 		file=Red_Bulborb.png
 		file_x=226
 		file_y=252
@@ -1240,7 +1240,7 @@ frames{
 			}
 		}
 	}
-	idledead{
+	idlingdead{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=0
@@ -1289,7 +1289,7 @@ frames{
 			}
 		}
 	}
-	sleep1{
+	sleeping1{
 		file=Red_Bulborb.png
 		file_x=462
 		file_y=0
@@ -1338,7 +1338,7 @@ frames{
 			}
 		}
 	}
-	sleep2{
+	sleeping2{
 		file=Red_Bulborb.png
 		file_x=624
 		file_y=0
@@ -1387,7 +1387,7 @@ frames{
 			}
 		}
 	}
-	idle_shifted{
+	shaking1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=0
@@ -1436,7 +1436,7 @@ frames{
 			}
 		}
 	}
-	turn1r{
+	looking1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=358
@@ -1460,7 +1460,7 @@ frames{
 				knockback=1.00
 			}
 			back{
-				coords=-8.00 -3.00 0.00
+				coords=-9.00 3.00 0.00
 				height=128.00
 				radius=50.00
 				type=0
@@ -1485,7 +1485,7 @@ frames{
 			}
 		}
 	}
-	turn2r{
+	looking2{
 		file=Red_Bulborb.png
 		file_x=158
 		file_y=358
@@ -1534,7 +1534,7 @@ frames{
 			}
 		}
 	}
-	turn1l{
+	looking3{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=358
@@ -1558,7 +1558,7 @@ frames{
 				knockback=1.00
 			}
 			back{
-				coords=-8.00 3.00 0.00
+				coords=-9.00 -3.00 0.00
 				height=128.00
 				radius=50.00
 				type=0
@@ -1583,7 +1583,7 @@ frames{
 			}
 		}
 	}
-	turn2l{
+	looking4{
 		file=Red_Bulborb.png
 		file_x=158
 		file_y=358

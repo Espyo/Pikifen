@@ -22,7 +22,7 @@
  */
 void leader_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-    efc.new_state("idle", LEADER_STATE_IDLE); {
+    efc.new_state("idling", LEADER_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(leader_fsm::enter_idle);
         }
@@ -68,7 +68,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run_function(leader_fsm::stop);
             efc.run_function(leader_fsm::unfocus);
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
         efc.new_event(LEADER_EVENT_MOVE_START); {
             efc.run_function(leader_fsm::move);
@@ -176,6 +176,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::set_stop_anim);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
+            efc.run_function(leader_fsm::notify_pikmin_release);
             efc.run_function(leader_fsm::release);
             efc.run_function(leader_fsm::lose_health);
         }
@@ -192,6 +193,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::touched_spray);
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run_function(leader_fsm::notify_pikmin_release);
+            efc.run_function(leader_fsm::release);
             efc.run_function(leader_fsm::fall_down_pit);
         }
     }
@@ -247,7 +250,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
             efc.run_function(leader_fsm::be_dismissed);
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
     }
     
@@ -270,7 +273,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::get_knocked_back);
         }
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
             efc.run_function(leader_fsm::fall_down_pit);
@@ -298,7 +301,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run_function(leader_fsm::be_dismissed);
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run_function(leader_fsm::be_grabbed_by_friend);
@@ -340,7 +343,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DISMISSED); {
             efc.run_function(leader_fsm::be_dismissed);
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run_function(leader_fsm::be_grabbed_by_friend);
@@ -431,6 +434,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("inactive_plucking");
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader_fsm::join_group);
             efc.run_function(leader_fsm::stop_pluck);
             efc.change_state("in_group_chasing");
         }
@@ -466,6 +470,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::inactive_search_seed);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
+            efc.run_function(leader_fsm::join_group);
             efc.run_function(leader_fsm::stop_pluck);
             efc.change_state("in_group_chasing");
         }
@@ -687,7 +692,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
     }
     
@@ -728,7 +733,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run_function(leader_fsm::land);
-            efc.change_state("idle");
+            efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run_function(leader_fsm::touched_hazard);
@@ -745,7 +750,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idle");
+    typ->first_state_nr = fix_states(typ->states, "idling");
     
     if(typ->states.size() != N_LEADER_STATES) {
         log_error(
@@ -831,10 +836,10 @@ void leader_fsm::focus(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader enters the idle state.
+ * When a leader enters the idling state.
  */
 void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_IDLE);
+    m->set_animation(LEADER_ANIM_IDLING);
 }
 
 
@@ -843,7 +848,7 @@ void leader_fsm::enter_idle(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
     ((leader*) m)->is_in_walking_anim = false;
-    m->set_animation(LEADER_ANIM_IDLE);
+    m->set_animation(LEADER_ANIM_IDLING);
 }
 
 
@@ -940,19 +945,19 @@ void leader_fsm::stop(mob* m, void* info1, void* info2) {
 void leader_fsm::set_walk_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(!l_ptr->is_in_walking_anim) {
-        l_ptr->set_animation(LEADER_ANIM_WALK);
+        l_ptr->set_animation(LEADER_ANIM_WALKING);
         l_ptr->is_in_walking_anim = true;
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * When a leader needs to change to the idle animation.
+ * When a leader needs to change to the idling animation.
  */
 void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     if(l_ptr->is_in_walking_anim) {
-        l_ptr->set_animation(LEADER_ANIM_IDLE);
+        l_ptr->set_animation(LEADER_ANIM_IDLING);
         l_ptr->is_in_walking_anim = false;
     }
 }
@@ -1016,7 +1021,17 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     sfx_throw.stop();
     sfx_throw.play(0, false);
-    leader_ptr->set_animation(LEADER_ANIM_THROW);
+    leader_ptr->set_animation(LEADER_ANIM_THROWING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a leader notifies the mob it's holding that it will be released.
+ */
+void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    if(l_ptr->holding_pikmin != m) return;
+    l_ptr->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
 }
 
 
@@ -1044,11 +1059,11 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     size_t spray_nr = *((size_t*) info1);
     
-    if(spray_amounts[spray_nr] == 0) {
-        m->fsm.set_state(LEADER_STATE_ACTIVE);
-        return;
-    }
+    if(spray_amounts[spray_nr] == 0) return;
     
+    float shoot_angle =
+        cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
+        
     unordered_set<mob*> affected_mobs;
     if(spray_types[spray_nr].group) {
         for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
@@ -1064,12 +1079,16 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             mob* am_ptr = mobs[am];
             if(am_ptr == m) continue;
             
-            dist d = dist(m->x, m->y, am_ptr->x, am_ptr->y);
-            if(d > spray_types[spray_nr].distance_range) continue;
+            if(
+                dist(m->x, m->y, am_ptr->x, am_ptr->y) >
+                spray_types[spray_nr].distance_range + am_ptr->type->radius
+            ) {
+                continue;
+            }
             
             float angle_dif =
                 get_angle_smallest_dif(
-                    m->angle, atan2(am_ptr->y - m->y, am_ptr->x - m->x)
+                    shoot_angle, atan2(am_ptr->y - m->y, am_ptr->x - m->x)
                 );
             if(angle_dif > spray_types[spray_nr].angle_range / 2) continue;
             
@@ -1084,9 +1103,6 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
         );
     }
     
-    float shoot_angle =
-        cursor_angle + ((spray_types[spray_nr].angle) ? M_PI : 0);
-        
     particle p(
         PARTICLE_TYPE_BITMAP, m->x, m->y,
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
@@ -1213,7 +1229,7 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
     
     m->become_carriable(false);
     
-    m->set_animation(LEADER_ANIM_LIE);
+    m->set_animation(LEADER_ANIM_LYING);
 }
 
 
@@ -1222,7 +1238,7 @@ void leader_fsm::fall_asleep(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
     m->become_uncarriable();
-    m->set_animation(LEADER_ANIM_GET_UP);
+    m->set_animation(LEADER_ANIM_GETTING_UP);
 }
 
 
@@ -1231,7 +1247,7 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
     m->chase(0, 0, &m->following_group->x, &m->following_group->y, false);
-    m->set_animation(LEADER_ANIM_WALK);
+    m->set_animation(LEADER_ANIM_WALKING);
     focus_mob(m, m->following_group);
 }
 
@@ -1250,7 +1266,7 @@ void leader_fsm::stop_being_thrown(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    m->set_animation(LEADER_ANIM_IDLE);
+    m->set_animation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1259,7 +1275,7 @@ void leader_fsm::stop_in_group(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    m->set_animation(LEADER_ANIM_IDLE);
+    m->set_animation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1298,7 +1314,7 @@ void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
     l_ptr->auto_pluck_pikmin = nullptr;
-    l_ptr->set_animation(LEADER_ANIM_PLUCK);
+    l_ptr->set_animation(LEADER_ANIM_PLUCKING);
 }
 
 
@@ -1312,7 +1328,7 @@ void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
         l_ptr->auto_pluck_pikmin->pluck_reserved = false;
     }
     l_ptr->auto_pluck_pikmin = NULL;
-    l_ptr->set_animation(LEADER_ANIM_IDLE);
+    l_ptr->set_animation(LEADER_ANIM_IDLING);
 }
 
 
@@ -1331,7 +1347,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
         if(l_ptr->following_group)
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
         else
-            l_ptr->fsm.set_state(LEADER_STATE_IDLE);
+            l_ptr->fsm.set_state(LEADER_STATE_IDLING);
     } else {
         l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
@@ -1356,7 +1372,7 @@ void leader_fsm::inactive_search_seed(mob* m, void* info1, void* info2) {
  * When a leader is grabbed by another leader.
  */
 void leader_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
-    m->set_animation(LEADER_ANIM_IDLE);
+    m->set_animation(LEADER_ANIM_IDLING);
 }
 
 

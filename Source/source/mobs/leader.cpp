@@ -123,7 +123,7 @@ void leader::dismiss() {
     }
     
     lea_type->sfx_dismiss.play(0, false);
-    set_animation(LEADER_ANIM_DISMISS);
+    set_animation(LEADER_ANIM_DISMISSING);
 }
 
 

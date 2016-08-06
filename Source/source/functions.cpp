@@ -219,16 +219,6 @@ float deterministic_random(const unsigned int seed) {
 
 
 /* ----------------------------------------------------------------------------
- * Returns whether or not the string s is inside the vector of strings v.
- */
-bool find_in_vector(const vector<string> &v, const string &s) {
-    size_t v_size = v.size();
-    for(size_t i = 0; i < v_size; ++i) if(v[i] == s) return true;
-    return false;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Stores the names of all files in a folder into a vector.
  * folder_name: Name of the folder.
  * folders:     If true, only read folders. If false, only read files.
@@ -1526,6 +1516,10 @@ void load_liquids() {
  * Loads the player's options.
  */
 void load_options() {
+    for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
+        animation_editor_history.push_back("");
+    }
+    
     data_node file = data_node("Options.txt");
     if(!file.file_was_opened) return;
     
@@ -1602,7 +1596,6 @@ void load_options() {
     }
     
     for(size_t h = 0; h < ANIMATION_EDITOR_HISTORY_SIZE; ++h) {
-        animation_editor_history.push_back("");
         rs.set(
             "animation_editor_history_" + i2s(h + 1),
             animation_editor_history[h]
@@ -2005,7 +1998,7 @@ void save_options() {
 /* ----------------------------------------------------------------------------
  * Returns a vector with all items inside a semicolon-separated list.
  */
-vector<string> semicolon_list_to_vector(const string s) {
+vector<string> semicolon_list_to_vector(const string &s) {
     vector<string> parts = split(s, ";");
     for(size_t p = 0; p < parts.size(); ++p) {
         parts[p] = trim_spaces(parts[p]);

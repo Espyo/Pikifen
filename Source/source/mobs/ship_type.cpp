@@ -41,5 +41,5 @@ void ship_type::load_from_file(
     beam_offset_y = s2f(file->get_child_by_name("beam_offset_y")->value);
     beam_radius = s2f(file->get_child_by_name("beam_radius")->value);
     
-    anim_conversions->push_back(make_pair(SHIP_ANIM_IDLE, "idle"));
+    anim_conversions->push_back(make_pair(SHIP_ANIM_IDLING, "idling"));
 }

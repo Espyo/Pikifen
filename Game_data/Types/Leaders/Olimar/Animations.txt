@@ -1,13 +1,13 @@
 animations{
-	dismiss{
+	dismissing{
 		loop_frame=0
 		frame_instances{
-			duck{
+			ducking{
 				duration=0.50
 			}
 		}
 	}
-	get_up{
+	getting_up{
 		loop_frame=2
 		frame_instances{
 			lying{
@@ -16,20 +16,20 @@ animations{
 			half_lying{
 				duration=0.07
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.00
 			}
 		}
 	}
-	lie{
+	lying{
 		loop_frame=1
 		frame_instances{
 			half_lying{
@@ -40,13 +40,13 @@ animations{
 			}
 		}
 	}
-	pluck{
+	plucking{
 		loop_frame=4
 		frame_instances{
-			duck{
+			ducking{
 				duration=0.50
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 			limbo{
@@ -55,35 +55,35 @@ animations{
 			half_limbo{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	throw{
+	throwing{
 		loop_frame=1
 		frame_instances{
-			duck{
+			ducking{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	walk{
+	walking{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkr{
+			walking2{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkl{
+			walking1{
 				duration=0.10
 			}
 		}
@@ -91,10 +91,10 @@ animations{
 	whistling{
 		loop_frame=0
 		frame_instances{
-			duck{
+			ducking{
 				duration=0.08
 			}
-			duck2{
+			ducking2{
 				duration=0.08
 			}
 		}
@@ -105,13 +105,13 @@ animations{
 			half_limbo{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			duck{
+			ducking{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.30
 			}
 		}
@@ -128,7 +128,7 @@ animations{
 			half_lying{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
@@ -136,19 +136,31 @@ animations{
 	spraying{
 		loop_frame=0
 		frame_instances{
-			duck{
+			ducking{
 				duration=1.00
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
 }
 frames{
-	duck{
+	ducking{
 		file=Olimar.png
 		file_x=0
+		file_y=0
+		file_w=54
+		file_h=64
+		game_w=27.00
+		game_h=32.00
+		offs_x=4.00
+		offs_y=0.00
+		hitbox_instances=
+	}
+	ducking2{
+		file=Olimar.png
+		file_x=56
 		file_y=0
 		file_w=54
 		file_h=64
@@ -182,7 +194,7 @@ frames{
 		offs_y=0.00
 		hitbox_instances=
 	}
-	idle{
+	idling{
 		file=Olimar.png
 		file_x=0
 		file_y=66
@@ -218,7 +230,7 @@ frames{
 		offs_y=0.00
 		hitbox_instances=
 	}
-	walkl{
+	walking1{
 		file=Olimar.png
 		file_x=132
 		file_y=66
@@ -230,7 +242,7 @@ frames{
 		offs_y=0.00
 		hitbox_instances=
 	}
-	walkr{
+	walking2{
 		file=Olimar.png
 		file_x=66
 		file_y=66
@@ -239,18 +251,6 @@ frames{
 		game_w=32.00
 		game_h=32.00
 		offs_x=0.00
-		offs_y=0.00
-		hitbox_instances=
-	}
-	duck2{
-		file=Olimar.png
-		file_x=56
-		file_y=0
-		file_w=54
-		file_h=64
-		game_w=27.00
-		game_h=32.00
-		offs_x=4.00
 		offs_y=0.00
 		hitbox_instances=
 	}

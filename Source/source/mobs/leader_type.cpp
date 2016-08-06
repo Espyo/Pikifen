@@ -73,14 +73,14 @@ void leader_type::load_from_file(
 #define new_conversion(id, name) \
     anim_conversions->push_back(make_pair((id), (name)))
     
-    new_conversion(LEADER_ANIM_IDLE,         "idle");
-    new_conversion(LEADER_ANIM_WALK,         "walk");
-    new_conversion(LEADER_ANIM_PLUCK,        "pluck");
-    new_conversion(LEADER_ANIM_GET_UP,       "get_up");
-    new_conversion(LEADER_ANIM_DISMISS,      "dismiss");
-    new_conversion(LEADER_ANIM_THROW,        "thrown");
+    new_conversion(LEADER_ANIM_IDLING,         "idling");
+    new_conversion(LEADER_ANIM_WALKING,         "walking");
+    new_conversion(LEADER_ANIM_PLUCKING,        "plucking");
+    new_conversion(LEADER_ANIM_GETTING_UP,       "getting_up");
+    new_conversion(LEADER_ANIM_DISMISSING,      "dismissing");
+    new_conversion(LEADER_ANIM_THROWING,        "throwing");
     new_conversion(LEADER_ANIM_WHISTLING,    "whistling");
-    new_conversion(LEADER_ANIM_LIE,          "lie");
+    new_conversion(LEADER_ANIM_LYING,          "lying");
     new_conversion(LEADER_ANIM_PAIN,         "pain");
     new_conversion(LEADER_ANIM_KNOCKED_DOWN, "knocked_down");
     new_conversion(LEADER_ANIM_SPRAYING,     "spraying");

@@ -66,7 +66,7 @@ void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
  */
 void bridge::open(mob* m, void* info1, void* info2) {
     bridge* b_ptr = (bridge*) m;
-    b_ptr->set_animation(BRIDGE_ANIM_NOTHING);
+    b_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
     b_ptr->start_dying();
     b_ptr->finish_dying();
     
@@ -118,10 +118,10 @@ void bridge::take_damage(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Sets the standard "idle" animation.
+ * Sets the standard "idling" animation.
  */
 void bridge::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(BRIDGE_ANIM_IDLE);
+    m->set_animation(BRIDGE_ANIM_IDLING);
 }
 
 
@@ -142,13 +142,17 @@ void init_bridge_mob_type(mob_type* mt) {
             vector<pair<size_t, string> >* anim_conversions
     ) {
         if(load_resources) {
-            anim_conversions->push_back(make_pair(0, "idle"));
-            anim_conversions->push_back(make_pair(1, "nothing"));
+            anim_conversions->push_back(
+                make_pair(BRIDGE_ANIM_IDLING, "idling")
+            );
+            anim_conversions->push_back(
+                make_pair(BRIDGE_ANIM_DESTROYED, "destroyed")
+            );
         }
     };
     
     easy_fsm_creator efc;
-    efc.new_state("idle", 0); {
+    efc.new_state("idling", 0); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(bridge::set_anim);
         }
@@ -157,14 +161,14 @@ void init_bridge_mob_type(mob_type* mt) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(bridge::open);
-            efc.change_state("dead");
+            efc.change_state("destroyed");
         }
     }
-    efc.new_state("dead", 1); {
+    efc.new_state("destroyed", 1); {
     
     }
     
     
     mt->states = efc.finish();
-    mt->first_state_nr = fix_states(mt->states, "idle");
+    mt->first_state_nr = fix_states(mt->states, "idling");
 }

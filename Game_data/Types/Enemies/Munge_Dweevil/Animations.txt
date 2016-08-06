@@ -2,39 +2,39 @@ animations{
 	idling{
 		loop_frame=0
 		frame_instances{
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			idle2{
+			idling12{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			idle3{
+			idling13{
 				duration=0.10
 			}
 		}
 	}
-	walking{
+	moving{
 		loop_frame=0
 		frame_instances{
-			walk1{
+			moving1{
 				duration=0.10
 			}
-			walk2{
+			moving2{
 				duration=0.10
 			}
-			walk3{
+			moving3{
 				duration=0.10
 			}
-			walk4{
+			moving4{
 				duration=0.10
 			}
-			walk5{
+			moving5{
 				duration=0.10
 			}
-			walk6{
+			moving6{
 				duration=0.10
 			}
 		}
@@ -42,22 +42,22 @@ animations{
 	dying{
 		loop_frame=5
 		frame_instances{
-			die1{
+			dying1{
 				duration=0.10
 			}
-			die2{
+			dying2{
 				duration=0.40
 			}
-			die3{
+			dying3{
 				duration=0.10
 			}
-			die4{
+			dying4{
 				duration=0.10
 			}
-			die5{
+			dying5{
 				duration=0.10
 			}
-			die6{
+			dying6{
 				duration=0.10
 			}
 		}
@@ -65,40 +65,40 @@ animations{
 	shaking{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			attacking1{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			attack1{
+			attacking1{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			attack1{
+			attacking1{
 				duration=0.10
 			}
-			idle1{
+			idling11{
 				duration=0.10
 			}
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			shake_kb{
+			shaking_kb{
 				duration=0.10
 			}
 		}
@@ -106,14 +106,14 @@ animations{
 	attacking{
 		loop_frame=0
 		frame_instances{
-			attack_gas{
+			attacking_gas{
 				duration=0.50
 			}
 		}
 	}
 }
 frames{
-	idle1{
+	idling11{
 		file=Munge_Dweevil.png
 		file_x=0
 		file_y=0
@@ -150,7 +150,7 @@ frames{
 			}
 		}
 	}
-	idle2{
+	idling12{
 		file=Munge_Dweevil.png
 		file_x=119
 		file_y=0
@@ -187,7 +187,7 @@ frames{
 			}
 		}
 	}
-	idle3{
+	idling13{
 		file=Munge_Dweevil.png
 		file_x=238
 		file_y=0
@@ -224,7 +224,7 @@ frames{
 			}
 		}
 	}
-	walk1{
+	moving1{
 		file=Munge_Dweevil.png
 		file_x=357
 		file_y=0
@@ -261,7 +261,7 @@ frames{
 			}
 		}
 	}
-	walk2{
+	moving2{
 		file=Munge_Dweevil.png
 		file_x=487
 		file_y=0
@@ -298,7 +298,7 @@ frames{
 			}
 		}
 	}
-	walk3{
+	moving3{
 		file=Munge_Dweevil.png
 		file_x=625
 		file_y=0
@@ -335,7 +335,7 @@ frames{
 			}
 		}
 	}
-	walk4{
+	moving4{
 		file=Munge_Dweevil.png
 		file_x=777
 		file_y=0
@@ -372,7 +372,7 @@ frames{
 			}
 		}
 	}
-	walk5{
+	moving5{
 		file=Munge_Dweevil.png
 		file_x=925
 		file_y=0
@@ -409,7 +409,7 @@ frames{
 			}
 		}
 	}
-	walk6{
+	moving6{
 		file=Munge_Dweevil.png
 		file_x=1053
 		file_y=0
@@ -446,7 +446,7 @@ frames{
 			}
 		}
 	}
-	die1{
+	dying1{
 		file=Munge_Dweevil.png
 		file_x=0
 		file_y=121
@@ -483,7 +483,7 @@ frames{
 			}
 		}
 	}
-	die2{
+	dying2{
 		file=Munge_Dweevil.png
 		file_x=95
 		file_y=121
@@ -520,7 +520,7 @@ frames{
 			}
 		}
 	}
-	die3{
+	dying3{
 		file=Munge_Dweevil.png
 		file_x=172
 		file_y=121
@@ -557,7 +557,7 @@ frames{
 			}
 		}
 	}
-	die4{
+	dying4{
 		file=Munge_Dweevil.png
 		file_x=276
 		file_y=136
@@ -594,7 +594,7 @@ frames{
 			}
 		}
 	}
-	die5{
+	dying5{
 		file=Munge_Dweevil.png
 		file_x=358
 		file_y=136
@@ -631,7 +631,7 @@ frames{
 			}
 		}
 	}
-	die6{
+	dying6{
 		file=Munge_Dweevil.png
 		file_x=429
 		file_y=144
@@ -668,7 +668,7 @@ frames{
 			}
 		}
 	}
-	attack1{
+	attacking1{
 		file=Munge_Dweevil.png
 		file_x=490
 		file_y=144
@@ -705,7 +705,7 @@ frames{
 			}
 		}
 	}
-	attack2{
+	attacking2{
 		file=Munge_Dweevil.png
 		file_x=604
 		file_y=148
@@ -742,7 +742,7 @@ frames{
 			}
 		}
 	}
-	shake_kb{
+	shaking_kb{
 		file=Munge_Dweevil.png
 		file_x=0
 		file_y=0
@@ -779,7 +779,7 @@ frames{
 			}
 		}
 	}
-	attack_gas{
+	attacking_gas{
 		file=Munge_Dweevil.png
 		file_x=0
 		file_y=121

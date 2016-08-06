@@ -19,7 +19,7 @@ fatal_electricity {
     effects = electrocuted
 }
 
-shocking_electricity {
+stunning_electricity {
     color = 255 255 128
     effects = shocked
 }

@@ -19,7 +19,7 @@
  */
 void gate_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
-    efc.new_state("idle", GATE_STATE_IDLE); {
+    efc.new_state("idling", GATE_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(gate_fsm::set_anim);
         }
@@ -28,17 +28,17 @@ void gate_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(gate_fsm::open);
-            efc.change_state("dead");
+            efc.change_state("destroyed");
         }
     }
     
-    efc.new_state("dead", GATE_STATE_DEAD); {
+    efc.new_state("destroyed", GATE_STATE_DESTROYED); {
     
     }
     
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idle");
+    typ->first_state_nr = fix_states(typ->states, "idling");
     
     if(typ->states.size() != N_GATE_STATES) {
         log_error(
@@ -57,7 +57,7 @@ void gate_fsm::create_fsm(mob_type* typ) {
 void gate_fsm::open(mob* m, void* info1, void* info2) {
     gate* g_ptr = (gate*) m;
     g_ptr->sec->type = SECTOR_TYPE_NORMAL;
-    m->set_animation(GATE_ANIM_NOTHING);
+    m->set_animation(GATE_ANIM_DESTROYED);
     m->start_dying();
     m->finish_dying();
     
@@ -90,8 +90,8 @@ void gate_fsm::take_damage(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a gate needs to enter its default "idle" animation.
+ * When a gate needs to enter its default "idling" animation.
  */
 void gate_fsm::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(GATE_ANIM_IDLE);
+    m->set_animation(GATE_ANIM_IDLING);
 }

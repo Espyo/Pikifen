@@ -21,7 +21,7 @@
 void ship_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
-    efc.new_state("idle", SHIP_STATE_IDLE); {
+    efc.new_state("idling", SHIP_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run_function(ship_fsm::set_anim);
         }
@@ -31,7 +31,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idle");
+    typ->first_state_nr = fix_states(typ->states, "idling");
     
     if(typ->states.size() != N_SHIP_STATES) {
         log_error(
@@ -68,8 +68,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a ship needs to enter its default "idle" animation.
+ * When a ship needs to enter its default "idling" animation.
  */
 void ship_fsm::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(SHIP_ANIM_IDLE);
+    m->set_animation(SHIP_ANIM_IDLING);
 }

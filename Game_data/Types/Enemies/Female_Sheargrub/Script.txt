@@ -1,12 +1,12 @@
-first_state = buried
+first_state = hidden
 
-script{
-    buried{
-        on_enter{
-            animation = buried
+script {
+    hidden {
+        on_enter {
+            animation = hidden
             hide = true
         }
-        on_near_opponent{
+        on_near_opponent {
             state = emerging
         }
         on_leave {
@@ -17,124 +17,124 @@ script{
         }
     }
     
-    emerging{
-        on_enter{
+    emerging {
+        on_enter {
             animation = emerging
         }
-        on_animation_end{
+        on_animation_end {
             state = examining
         }
         on_touch_spray {
             special_function = spray
         }
-        on_death{
+        on_death {
             state = dying
         }
     }
     
-    examining{
-        on_enter{
+    examining {
+        on_enter {
             animation = examining
         }
-        on_near_opponent{
+        on_near_opponent {
             focus = mob
             state = chasing
         }
-        on_animation_end{
+        on_animation_end {
             state = going_home
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = crushed
         }
         on_touch_spray {
             special_function = spray
         }
-        on_death{
+        on_death {
             state = dying
         }
     }
     
-    burying{
-        on_enter{
+    burying {
+        on_enter {
             animation = burying
         }
-        on_animation_end{
-            state = buried
+        on_animation_end {
+            state = hidden
         }
         on_touch_spray {
             special_function = spray
         }
-        on_death{
+        on_death {
             state = dying
         }
     }
     
-    chasing{
-        on_enter{
+    chasing {
+        on_enter {
             animation = moving
             move = focused_mob
         }
-        on_lose_focused_mob{
+        on_lose_focused_mob {
             state = going_home
         }
-        on_far_from_home{
+        on_far_from_home {
             state = going_home
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = crushed
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
         on_touch_spray {
             special_function = spray
         }
-        on_death{
+        on_death {
             state = dying
         }
     }
     
-    going_home{
-        on_enter{
+    going_home {
+        on_enter {
             animation = moving
             move = home
         }
-        on_reach_destination{
+        on_reach_destination {
             state = burying
         }
-        on_pikmin_land{
+        on_pikmin_land {
             state = crushed
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
         on_touch_spray {
             special_function = spray
         }
-        on_death{
+        on_death {
             state = dying
         }
     }
     
-    crushed{
-        on_enter{
+    crushed {
+        on_enter {
             state = dying
         }
     }
     
-    dying{
-        on_enter{
+    dying {
+        on_enter {
             special_function = die_start
             animation = dying
             move = stop
         }
-        on_animation_end{
+        on_animation_end {
             special_function = die_end
         }
     }
     
-    deleting{
-        on_enter{
+    deleting {
+        on_enter {
             special_function = die_end
             special_function = delete
         }

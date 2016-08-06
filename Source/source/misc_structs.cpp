@@ -69,8 +69,8 @@ void bmp_manager::detach(const string &name) {
  * Adds a new button to the list.
  */
 void button_manager::add(
-    const size_t id, const string name, const string option_name,
-    const string default_control_str
+    const size_t id, const string &name, const string &option_name,
+    const string &default_control_str
 ) {
     button_manager::button b;
     b.id = id;
@@ -748,10 +748,12 @@ unsigned char sector_types_manager::get_nr_of_types() {
 /* ----------------------------------------------------------------------------
  * Creates a timer.
  */
-timer::timer(float duration, const function<void()> &on_end) {
-    this->duration  = duration;
-    this->time_left = 0;
-    this->on_end    = on_end;
+timer::timer(float duration, const function<void()> &on_end) :
+    duration(duration),
+    time_left(0),
+    on_end(on_end) {
+    
+    
 }
 
 

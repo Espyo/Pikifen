@@ -34,6 +34,6 @@ void gate_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions
 ) {
-    anim_conversions->push_back(make_pair(GATE_ANIM_IDLE, "idle"));
-    anim_conversions->push_back(make_pair(GATE_ANIM_NOTHING, "nothing"));
+    anim_conversions->push_back(make_pair(GATE_ANIM_IDLING, "idling"));
+    anim_conversions->push_back(make_pair(GATE_ANIM_DESTROYED, "destroyed"));
 }

@@ -45,7 +45,7 @@ onion::onion(
         if(spew_queue == 0) return; next_spew_timer.start(); spew();
     };
     
-    set_animation(ANIM_IDLE);
+    set_animation(ANIM_IDLING);
 }
 
 

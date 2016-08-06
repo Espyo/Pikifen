@@ -1,5 +1,5 @@
 animations{
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
 			1{
@@ -16,7 +16,7 @@ animations{
 			}
 		}
 	}
-	nothing{
+	destroyed{
 		loop_frame=0
 		frame_instances{
 			open{
@@ -44,31 +44,67 @@ frames{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			center_zap{
+				coords=0.00 0.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			left{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=shocking_electricity
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			right{
 				coords=0.00 -80.00 0.00
 				height=0.00
 				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left_zap{
+				coords=0.00 -80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=48.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right_zap{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -93,31 +129,67 @@ frames{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			center_zap{
+				coords=0.00 0.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			left{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=shocking_electricity
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			right{
 				coords=0.00 -80.00 0.00
 				height=0.00
 				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left_zap{
+				coords=0.00 -80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=48.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right_zap{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -142,31 +214,67 @@ frames{
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			center_zap{
+				coords=0.00 0.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
 			}
 			left{
-				coords=0.00 80.00 0.00
-				height=0.00
-				radius=48.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=shocking_electricity
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			right{
 				coords=0.00 -80.00 0.00
 				height=0.00
 				radius=48.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left_zap{
+				coords=0.00 -80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=48.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			right_zap{
+				coords=0.00 80.00 0.00
+				height=0.00
+				radius=49.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=stunning_electricity
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -196,7 +304,31 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
+			center_zap{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
 			left{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			left_zap{
 				coords=0.00 0.00 0.00
 				height=128.00
 				radius=32.00
@@ -220,11 +352,26 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
+			right_zap{
+				coords=0.00 0.00 0.00
+				height=128.00
+				radius=32.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
 		}
 	}
 }
 hitboxes{
 	center=
+	center_zap=
 	left=
+	left_zap=
 	right=
+	right_zap=
 }

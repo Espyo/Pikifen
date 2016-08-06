@@ -43,7 +43,7 @@ frames{
 			gas{
 				coords=0.00 0.00 0.00
 				height=64.00
-				radius=128.00
+				radius=48.00
 				type=2
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -68,11 +68,11 @@ frames{
 			tube{
 				coords=0.00 0.00 0.00
 				height=24.00
-				radius=48.00
+				radius=24.00
 				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=
+				hazards=poison
 				outward=true
 				angle=0.00
 				knockback=1.00
@@ -80,7 +80,7 @@ frames{
 			gas{
 				coords=0.00 0.00 0.00
 				height=64.00
-				radius=96.00
+				radius=80.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false

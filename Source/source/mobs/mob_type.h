@@ -46,7 +46,7 @@ enum MOB_CATEGORIES {
     N_MOB_CATEGORIES,
 };
 
-const size_t ANIM_IDLE = 0;
+const size_t ANIM_IDLING = 0;
 
 
 /* ----------------------------------------------------------------------------

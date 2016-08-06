@@ -21,7 +21,7 @@
 #include "onion_type.h"
 
 enum ONION_STATES {
-    ONION_STATE_IDLE,
+    ONION_STATE_IDLING,
     
     N_ONION_STATES,
 };

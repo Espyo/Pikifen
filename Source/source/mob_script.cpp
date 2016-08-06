@@ -505,7 +505,7 @@ void mob_action::run(
             }
             
         } else if(sub_type == MOB_ACTION_MOVE_HOME) {
-            m->chase(m->home_x, m->home_y, 0, 0, false);
+            m->chase(m->home_x, m->home_y, NULL, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
             m->stop_chasing();
@@ -638,6 +638,7 @@ void mob_action::run(
 void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
     for(size_t a = 0; a < actions.size(); ++a) {
         actions[a]->run(m, &a, custom_data_1, custom_data_2);
+        if(a == INVALID) break;
     }
 }
 

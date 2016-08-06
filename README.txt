@@ -60,7 +60,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     (You likely don't need to do this.)
     First, download the source, of course.
     Then, under Linux...
-        Install Allegro 5 (5.0.10) on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
+        Install Allegro 5 on your system using the instructions here https://wiki.allegro.cc/index.php?title=Getting_Started
         On a terminal, go to the source's folder and write "make".
         If you get linker errors, edit the "makefile" file and follow the instructions. Write "make clean" and then "make" once more.
     Or under Windows...

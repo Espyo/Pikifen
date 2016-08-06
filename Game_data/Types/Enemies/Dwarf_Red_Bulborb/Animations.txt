@@ -1,205 +1,205 @@
 animations{
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.00
 			}
 		}
 	}
-	walk{
+	moving{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkr1{
+			moving1{
 				duration=0.10
 			}
-			walkr2{
+			moving2{
 				duration=0.10
 			}
-			walkr1{
+			moving1{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkl1{
+			moving3{
 				duration=0.10
 			}
-			walkl2{
+			moving4{
 				duration=0.10
 			}
-			walkl1{
+			moving3{
 				duration=0.10
 			}
 		}
 	}
-	attack{
+	attacking{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			attacking1{
 				duration=0.20
 			}
-			attack2{
+			attacking2{
 				duration=0.20
 			}
-			attack3{
+			attacking3{
 				duration=0.20
 			}
-			attack4{
+			attacking4{
 				duration=0.50
 			}
 		}
 	}
-	eat{
+	eating{
 		loop_frame=0
 		frame_instances{
-			attack4nd{
+			chomping1{
 				duration=0.30
 			}
-			chomp1{
+			chomping2{
 				duration=0.30
 			}
-			chomp2{
+			chomping3{
 				duration=0.20
 			}
-			chomp3{
+			chomping4{
 				duration=0.30
 			}
-			chomp2{
+			chomping3{
 				duration=0.20
 			}
-			chomp1{
+			chomping2{
 				duration=0.30
 			}
-			chomp2{
+			chomping3{
 				duration=0.20
 			}
-			chomp3{
+			chomping4{
 				duration=0.30
 			}
-			chomp2{
+			chomping3{
 				duration=0.20
 			}
 		}
 	}
-	die{
+	dying{
 		loop_frame=6
 		frame_instances{
-			chomp1dead{
+			dying1{
 				duration=0.20
 			}
-			chomp2dead{
+			dying2{
 				duration=0.10
 			}
-			chomp3dead{
+			dying3{
 				duration=1.00
 			}
-			chomp2dead{
+			dying2{
 				duration=0.10
 			}
-			chomp1dead{
+			dying1{
 				duration=0.20
 			}
-			idledead{
+			dying4{
 				duration=0.10
 			}
-			dead{
+			dying5{
 				duration=0.50
 			}
 		}
 	}
-	shake{
+	shaking{
 		loop_frame=0
 		frame_instances{
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			idle_shifted{
+			shaking1{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
-			shaker{
+			shaking2{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shakel{
+			shaking3{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shaker{
+			shaking2{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.15
 			}
-			shakel{
+			shaking3{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.40
 			}
 		}
 	}
-	look{
+	looking{
 		loop_frame=0
 		frame_instances{
-			turn1r{
+			looking2{
 				duration=0.10
 			}
-			turn2r{
+			looking1{
 				duration=0.30
 			}
-			turn1r{
+			looking2{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			turn1l{
+			looking4{
 				duration=0.10
 			}
-			turn2l{
+			looking3{
 				duration=0.30
 			}
-			turn1l{
+			looking4{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.30
 			}
 		}
 	}
-	graze{
+	grazing{
 		loop_frame=0
 		frame_instances{
-			graze{
+			grazing1{
 				duration=0.40
 			}
-			grazel{
+			grazing2{
 				duration=0.20
 			}
-			graze{
+			grazing1{
 				duration=0.40
 			}
-			grazer{
+			grazing3{
 				duration=0.20
 			}
 		}
@@ -214,7 +214,7 @@ animations{
 	}
 }
 frames{
-	idle{
+	idling{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=0
@@ -251,81 +251,7 @@ frames{
 			}
 		}
 	}
-	walkl1{
-		file=Red_Bulborb.png
-		file_x=154
-		file_y=0
-		file_w=153
-		file_h=104
-		game_w=45.00
-		game_h=31.00
-		offs_x=5.00
-		offs_y=1.00
-		hitbox_instances{
-			body{
-				coords=5.00 1.00 0.00
-				height=32.00
-				radius=22.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=30.00 1.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	walkl2{
-		file=Red_Bulborb.png
-		file_x=308
-		file_y=0
-		file_w=153
-		file_h=115
-		game_w=45.00
-		game_h=34.00
-		offs_x=5.00
-		offs_y=2.00
-		hitbox_instances{
-			body{
-				coords=5.00 2.00 0.00
-				height=32.00
-				radius=22.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=30.00 2.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	walkr1{
+	moving1{
 		file=Red_Bulborb.png
 		file_x=154
 		file_y=0
@@ -362,7 +288,7 @@ frames{
 			}
 		}
 	}
-	walkr2{
+	moving2{
 		file=Red_Bulborb.png
 		file_x=308
 		file_y=0
@@ -399,7 +325,81 @@ frames{
 			}
 		}
 	}
-	attack1{
+	moving3{
+		file=Red_Bulborb.png
+		file_x=154
+		file_y=0
+		file_w=153
+		file_h=104
+		game_w=45.00
+		game_h=31.00
+		offs_x=5.00
+		offs_y=1.00
+		hitbox_instances{
+			body{
+				coords=5.00 1.00 0.00
+				height=32.00
+				radius=22.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=30.00 1.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving4{
+		file=Red_Bulborb.png
+		file_x=308
+		file_y=0
+		file_w=153
+		file_h=115
+		game_w=45.00
+		game_h=34.00
+		offs_x=5.00
+		offs_y=2.00
+		hitbox_instances{
+			body{
+				coords=5.00 2.00 0.00
+				height=32.00
+				radius=22.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=30.00 2.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	attacking1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=116
@@ -436,7 +436,7 @@ frames{
 			}
 		}
 	}
-	attack2{
+	attacking2{
 		file=Red_Bulborb.png
 		file_x=161
 		file_y=116
@@ -473,7 +473,7 @@ frames{
 			}
 		}
 	}
-	attack3{
+	attacking3{
 		file=Red_Bulborb.png
 		file_x=336
 		file_y=116
@@ -510,7 +510,7 @@ frames{
 			}
 		}
 	}
-	attack4{
+	attacking4{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116
@@ -547,229 +547,7 @@ frames{
 			}
 		}
 	}
-	chomp1{
-		file=Red_Bulborb.png
-		file_x=0
-		file_y=252
-		file_w=124
-		file_h=103
-		game_w=37.00
-		game_h=30.00
-		offs_x=0.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=16.00 0.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	chomp2{
-		file=Red_Bulborb.png
-		file_x=125
-		file_y=252
-		file_w=100
-		file_h=103
-		game_w=30.00
-		game_h=30.00
-		offs_x=-3.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=12.00 0.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=false
-				angle=0.00
-				knockback=0.00
-			}
-		}
-	}
-	chomp3{
-		file=Red_Bulborb.png
-		file_x=226
-		file_y=252
-		file_w=115
-		file_h=103
-		game_w=34.00
-		game_h=30.00
-		offs_x=-1.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=0.00 0.00 0.00
-				height=32.00
-				radius=18.00
-				type=0
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=8.00 0.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	dead{
-		file=Red_Bulborb.png
-		file_x=342
-		file_y=252
-		file_w=172
-		file_h=103
-		game_w=51.00
-		game_h=30.00
-		offs_x=4.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	shakel{
-		file=Red_Bulborb.png
-		file_x=515
-		file_y=252
-		file_w=159
-		file_h=105
-		game_w=47.00
-		game_h=-31.00
-		offs_x=4.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=4.00 0.00 0.00
-				height=32.00
-				radius=30.00
-				type=1
-				multiplier=0.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=4.71
-				knockback=1.00
-			}
-			mouth{
-				coords=27.00 -3.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	shaker{
-		file=Red_Bulborb.png
-		file_x=515
-		file_y=252
-		file_w=159
-		file_h=105
-		game_w=47.00
-		game_h=31.00
-		offs_x=4.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=4.00 0.00 0.00
-				height=32.00
-				radius=30.00
-				type=1
-				multiplier=0.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=27.00 3.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	attack4nd{
+	chomping1{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116
@@ -806,7 +584,7 @@ frames{
 			}
 		}
 	}
-	chomp1dead{
+	chomping2{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=252
@@ -821,7 +599,7 @@ frames{
 				coords=0.00 0.00 0.00
 				height=32.00
 				radius=18.00
-				type=2
+				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
@@ -830,7 +608,7 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=14.00 0.00 0.00
+				coords=16.00 0.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -843,7 +621,7 @@ frames{
 			}
 		}
 	}
-	chomp2dead{
+	chomping3{
 		file=Red_Bulborb.png
 		file_x=125
 		file_y=252
@@ -858,7 +636,7 @@ frames{
 				coords=0.00 0.00 0.00
 				height=32.00
 				radius=18.00
-				type=2
+				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
@@ -867,7 +645,7 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=9.00 0.00 0.00
+				coords=12.00 0.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -880,7 +658,7 @@ frames{
 			}
 		}
 	}
-	chomp3dead{
+	chomping4{
 		file=Red_Bulborb.png
 		file_x=226
 		file_y=252
@@ -895,7 +673,7 @@ frames{
 				coords=0.00 0.00 0.00
 				height=32.00
 				radius=18.00
-				type=2
+				type=0
 				multiplier=1.00
 				can_pikmin_latch=false
 				hazards=
@@ -917,44 +695,7 @@ frames{
 			}
 		}
 	}
-	idledead{
-		file=Red_Bulborb.png
-		file_x=0
-		file_y=0
-		file_w=153
-		file_h=103
-		game_w=45.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=0.00
-		hitbox_instances{
-			body{
-				coords=5.00 0.00 0.00
-				height=32.00
-				radius=22.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-			mouth{
-				coords=30.00 0.00 0.00
-				height=32.00
-				radius=6.00
-				type=2
-				multiplier=1.00
-				can_pikmin_latch=false
-				hazards=
-				outward=true
-				angle=0.00
-				knockback=1.00
-			}
-		}
-	}
-	idle_shifted{
+	shaking1{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=0
@@ -991,23 +732,23 @@ frames{
 			}
 		}
 	}
-	turn1r{
+	shaking2{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=358
-		file_w=157
-		file_h=121
+		file_x=515
+		file_y=252
+		file_w=159
+		file_h=105
 		game_w=47.00
-		game_h=36.00
-		offs_x=5.00
-		offs_y=3.00
+		game_h=31.00
+		offs_x=4.00
+		offs_y=0.00
 		hitbox_instances{
 			body{
-				coords=3.00 2.00 0.00
+				coords=4.00 0.00 0.00
 				height=32.00
-				radius=22.00
-				type=0
-				multiplier=1.00
+				radius=30.00
+				type=1
+				multiplier=0.00
 				can_pikmin_latch=false
 				hazards=
 				outward=true
@@ -1015,7 +756,7 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=23.00 10.00 0.00
+				coords=27.00 3.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -1028,7 +769,229 @@ frames{
 			}
 		}
 	}
-	turn2r{
+	shaking3{
+		file=Red_Bulborb.png
+		file_x=515
+		file_y=252
+		file_w=159
+		file_h=105
+		game_w=47.00
+		game_h=-31.00
+		offs_x=4.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=4.00 0.00 0.00
+				height=32.00
+				radius=30.00
+				type=1
+				multiplier=0.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=4.71
+				knockback=1.00
+			}
+			mouth{
+				coords=27.00 -3.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying1{
+		file=Red_Bulborb.png
+		file_x=0
+		file_y=252
+		file_w=124
+		file_h=103
+		game_w=37.00
+		game_h=30.00
+		offs_x=0.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=0.00 0.00 0.00
+				height=32.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=14.00 0.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying2{
+		file=Red_Bulborb.png
+		file_x=125
+		file_y=252
+		file_w=100
+		file_h=103
+		game_w=30.00
+		game_h=30.00
+		offs_x=-3.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=0.00 0.00 0.00
+				height=32.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=9.00 0.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	dying3{
+		file=Red_Bulborb.png
+		file_x=226
+		file_y=252
+		file_w=115
+		file_h=103
+		game_w=34.00
+		game_h=30.00
+		offs_x=-1.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=0.00 0.00 0.00
+				height=32.00
+				radius=18.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=8.00 0.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying4{
+		file=Red_Bulborb.png
+		file_x=0
+		file_y=0
+		file_w=153
+		file_h=103
+		game_w=45.00
+		game_h=30.00
+		offs_x=5.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=5.00 0.00 0.00
+				height=32.00
+				radius=22.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=30.00 0.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying5{
+		file=Red_Bulborb.png
+		file_x=342
+		file_y=252
+		file_w=172
+		file_h=103
+		game_w=51.00
+		game_h=30.00
+		offs_x=4.00
+		offs_y=0.00
+		hitbox_instances{
+			body{
+				coords=5.00 0.00 0.00
+				height=32.00
+				radius=22.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=30.00 0.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	looking1{
 		file=Red_Bulborb.png
 		file_x=158
 		file_y=358
@@ -1065,19 +1028,19 @@ frames{
 			}
 		}
 	}
-	turn1l{
+	looking2{
 		file=Red_Bulborb.png
 		file_x=0
 		file_y=358
 		file_w=157
 		file_h=121
 		game_w=47.00
-		game_h=-36.00
+		game_h=36.00
 		offs_x=5.00
-		offs_y=-3.00
+		offs_y=3.00
 		hitbox_instances{
 			body{
-				coords=3.00 -2.00 0.00
+				coords=3.00 2.00 0.00
 				height=32.00
 				radius=22.00
 				type=0
@@ -1089,7 +1052,7 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=23.00 -10.00 0.00
+				coords=23.00 10.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -1102,7 +1065,7 @@ frames{
 			}
 		}
 	}
-	turn2l{
+	looking3{
 		file=Red_Bulborb.png
 		file_x=158
 		file_y=358
@@ -1127,6 +1090,43 @@ frames{
 			}
 			mouth{
 				coords=14.00 -17.00 0.00
+				height=32.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	looking4{
+		file=Red_Bulborb.png
+		file_x=0
+		file_y=358
+		file_w=157
+		file_h=121
+		game_w=47.00
+		game_h=-36.00
+		offs_x=5.00
+		offs_y=-3.00
+		hitbox_instances{
+			body{
+				coords=3.00 -2.00 0.00
+				height=32.00
+				radius=22.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=23.00 -10.00 0.00
 				height=32.00
 				radius=6.00
 				type=2
@@ -1176,7 +1176,7 @@ frames{
 			}
 		}
 	}
-	graze{
+	grazing1{
 		file=Red_Bulborb.png
 		file_x=675
 		file_y=252
@@ -1213,7 +1213,7 @@ frames{
 			}
 		}
 	}
-	grazel{
+	grazing2{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116
@@ -1250,7 +1250,7 @@ frames{
 			}
 		}
 	}
-	grazer{
+	grazing3{
 		file=Red_Bulborb.png
 		file_x=512
 		file_y=116

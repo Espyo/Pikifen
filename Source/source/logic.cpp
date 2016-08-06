@@ -800,27 +800,13 @@ void process_mob(mob* m_ptr, size_t m) {
                     if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                     
                     //Hazard resistance check.
-                    if(!h2_ptr->hazards.empty()) {
-                        size_t n_resistances = 0;
-                        for(size_t h = 0; h < h2_ptr->hazards.size(); ++h) {
-                            for(
-                                size_t r = 0;
-                                r < m1_resistances.size(); ++r
-                            ) {
-                                if(
-                                    h2_ptr->hazards[h] ==
-                                    m1_resistances[r]
-                                ) {
-                                    n_resistances++;
-                                    break;
-                                }
-                            }
-                        }
-                        if(n_resistances == h2_ptr->hazards.size()) {
-                            //The mob can resist all
-                            //of this hitbox's hazards!
-                            continue;
-                        }
+                    if(
+                        !h2_ptr->hazards.empty() &&
+                        is_resistant_to_hazards(
+                            m1_resistances, h2_ptr->hazards
+                        )
+                    ) {
+                        continue;
                     }
                     
                     //Get mob 2's real hitbox location.
@@ -879,6 +865,7 @@ void process_mob(mob* m_ptr, size_t m) {
                             
                             if(
                                 !reported_haz_ev &&
+                                h2_ptr->type == HITBOX_TYPE_ATTACK &&
                                 hitbox_touch_haz_ev &&
                                 !h2_ptr->hazards.empty()
                             ) {

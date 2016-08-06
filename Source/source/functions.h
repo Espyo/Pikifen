@@ -97,7 +97,6 @@ void coordinates_to_angle(
 );
 float deterministic_random(const unsigned int seed);
 void log_error(string s, data_node* d = NULL);
-bool find_in_vector(const vector<string> &v, const string &s);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
@@ -160,7 +159,7 @@ void rotate_point(
     float* final_x, float* final_y
 );
 void save_options();
-vector<string> semicolon_list_to_vector(const string s);
+vector<string> semicolon_list_to_vector(const string &s);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false

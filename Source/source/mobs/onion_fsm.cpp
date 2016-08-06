@@ -21,14 +21,14 @@
 void onion_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     
-    efc.new_state("idle", ONION_STATE_IDLE); {
+    efc.new_state("idling", ONION_STATE_IDLING); {
         efc.new_event(MOB_EVENT_RECEIVE_DELIVERY); {
             efc.run_function(onion_fsm::receive_mob);
         }
     }
     
     typ->states = efc.finish();
-    typ->first_state_nr = fix_states(typ->states, "idle");
+    typ->first_state_nr = fix_states(typ->states, "idling");
     
     if(typ->states.size() != N_ONION_STATES) {
         log_error(

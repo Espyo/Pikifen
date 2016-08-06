@@ -9,6 +9,8 @@
  * Generic mob finite state machine logic.
  */
 
+#include <algorithm>
+
 #include "../const.h"
 #include "enemy.h"
 #include "mob.h"
@@ -62,7 +64,7 @@ void gen_mob_fsm::handle_delivery(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::lose_health(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    if(!should_attack(m, info->mob2)) return;
+    if(!should_attack(info->mob2, m)) return;
     
     float damage = 0;
     

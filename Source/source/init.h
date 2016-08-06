@@ -33,7 +33,7 @@ void init_misc_sounds();
 void init_mob_categories();
 void init_sector_types();
 void init_single_animation(
-    data_node* anim_def_file, const string name,
+    data_node* anim_def_file, const string &name,
     single_animation_suite &anim
 );
 void init_special_mob_types();

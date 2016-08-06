@@ -1,44 +1,44 @@
 animations{
-	attack{
+	attacking{
 		loop_frame=1
 		frame_instances{
-			grab{
+			grabbing{
 				duration=0.40
 			}
-			grab_far{
+			grabbing_far{
 				duration=0.30
 			}
-			grab{
+			grabbing{
 				duration=0.10
 			}
-			grab_near{
+			grabbing_near{
 				duration=0.30
 			}
-			grab{
+			grabbing{
 				duration=0.10
 			}
 		}
 	}
-	burrowed{
+	buried{
 		loop_frame=0
 		frame_instances{
-			burrowed{
+			buried{
 				duration=0.00
 			}
 		}
 	}
-	grab{
+	grabbing{
 		loop_frame=0
 		frame_instances{
-			grab{
+			grabbing{
 				duration=0.00
 			}
 		}
 	}
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.00
 			}
 		}
@@ -74,19 +74,19 @@ animations{
 			}
 		}
 	}
-	walk{
+	walking{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkr{
+			walking2{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			walkl{
+			walking1{
 				duration=0.10
 			}
 		}
@@ -94,36 +94,36 @@ animations{
 	plucking{
 		loop_frame=0
 		frame_instances{
-			burrowed{
+			buried{
 				duration=0.60
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	carry{
+	carrying{
 		loop_frame=0
 		frame_instances{
-			grab{
+			grabbing{
 				duration=0.00
 			}
 		}
 	}
-	sigh{
+	sighing{
 		loop_frame=0
 		frame_instances{
 			thrown1{
 				duration=1.50
 			}
-			idle{
+			idling{
 				duration=0.50
 			}
 		}
 	}
 }
 frames{
-	burrowed{
+	buried{
 		file=Red_Pikmin.png
 		file_x=98
 		file_y=42
@@ -141,7 +141,7 @@ frames{
 		top_angle=0.00
 		hitbox_instances=
 	}
-	grab{
+	grabbing{
 		file=Red_Pikmin.png
 		file_x=138
 		file_y=2
@@ -159,7 +159,7 @@ frames{
 		top_angle=0.00
 		hitbox_instances=
 	}
-	grab_far{
+	grabbing_far{
 		file=Red_Pikmin.png
 		file_x=168
 		file_y=2
@@ -177,7 +177,7 @@ frames{
 		top_angle=0.00
 		hitbox_instances=
 	}
-	grab_near{
+	grabbing_near{
 		file=Red_Pikmin.png
 		file_x=212
 		file_y=0
@@ -213,7 +213,7 @@ frames{
 		top_angle=0.00
 		hitbox_instances=
 	}
-	idle{
+	idling{
 		file=Red_Pikmin.png
 		file_x=0
 		file_y=34
@@ -321,7 +321,7 @@ frames{
 		top_angle=3.14
 		hitbox_instances=
 	}
-	walkl{
+	walking1{
 		file=Red_Pikmin.png
 		file_x=64
 		file_y=34
@@ -339,7 +339,7 @@ frames{
 		top_angle=-0.08
 		hitbox_instances=
 	}
-	walkr{
+	walking2{
 		file=Red_Pikmin.png
 		file_x=30
 		file_y=34

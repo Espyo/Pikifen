@@ -9,6 +9,8 @@
  * Program initializer and deinitializer functions.
  */
 
+#include <algorithm>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
@@ -729,7 +731,7 @@ void init_sector_types() {
  * anim:          The single animation suite structure to fill.
  */
 void init_single_animation(
-    data_node* anim_def_file, const string name,
+    data_node* anim_def_file, const string &name,
     single_animation_suite &anim
 ) {
     data_node file(

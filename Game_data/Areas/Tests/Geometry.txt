@@ -1108,7 +1108,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		hazards=shocking_electricity
+		hazards=stunning_electricity
 		hazards_floor=true
 		texture=White.png
 		texture_scale=20.00 20.00
@@ -1322,10 +1322,6 @@ mobs{
 	Enemy{
 		type=Electric Water Dumple
 		p=160.00 576.00
-	}
-	Enemy{
-		type=Water Dumple
-		p=-480.00 -352.00
 	}
 }
 path_stops{

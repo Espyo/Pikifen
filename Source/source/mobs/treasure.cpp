@@ -28,7 +28,7 @@ treasure::treasure(
     
     become_carriable(true);
     
-    set_animation(ANIM_IDLE);
+    set_animation(ANIM_IDLING);
     
 }
 
@@ -46,7 +46,6 @@ void treasure::draw() {
     get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h, &scale);
     
     float radius = type->radius * scale;
-    float original_radius = radius;
     bool being_delivered = false;
     ALLEGRO_COLOR extra_color;
     

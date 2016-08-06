@@ -1,142 +1,166 @@
-first_state = idle
+first_state = idling
 
 script {
-    idle {
+    idling {
         on_enter {
-            animation = idle
+            animation = idling
             move = stop
         }
-        on_see_opponent{
+        on_see_opponent {
             focus = mob
             state = chasing
         }
-        on_big_damage{
+        on_big_damage {
             state = shaking
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
     chasing {
-        on_enter{
-            animation = walk
+        on_enter {
+            animation = moving
             move = focused_mob
         }
-        on_face_opponent{
+        on_face_opponent {
             if = eat true
             state = attacking
             state = zapping
         }
-        on_lose_focused_mob{
+        on_lose_focused_mob {
             state = returning
         }
-        on_far_from_home{
+        on_far_from_home {
             state = returning
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_big_damage{
+        on_big_damage {
             state = shaking
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
     attacking {
-        on_enter{
+        on_enter {
             move = stop
-            animation = attack
+            animation = attacking
             chomp = 2 mouth
         }
-        on_animation_end{
+        on_animation_end {
             var = eat false
             state = checking_mouth
         }
+        on_touch_spray {
+            special_function = spray
+        }
     }
     
-    checking_mouth{
-        on_mouth_occupied{
+    checking_mouth {
+        on_mouth_occupied {
             state = eating
         }
-        on_animation_end{
-            state = idle
+        on_animation_end {
+            state = idling
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    eating{
-        on_enter{
+    eating {
+        on_enter {
             chomp =
-            animation = eat
+            animation = eating
         }
-        on_animation_end{
+        on_animation_end {
             eat = all
-            state = idle
+            state = idling
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
     zapping {
-        on_enter{
+        on_enter {
             move = stop
-            animation = zap
+            animation = zapping
         }
-        on_animation_end{
+        on_animation_end {
             var = eat true
-            state = idle
+            state = idling
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    shaking{
-        on_enter{
+    shaking {
+        on_enter {
             move = stop
-            animation = shake
+            animation = shaking
         }
-        on_animation_end{
-            state = idle
+        on_animation_end {
+            state = idling
         }
-        on_death{
+        on_death {
             state = dying
         }
+        on_touch_spray {
+            special_function = spray
+        }
     }
     
-    returning{
-        on_enter{
+    returning {
+        on_enter {
             move = home
-            animation = walk
+            animation = moving
         }
-        on_reach_destination{
-            state = idle
+        on_reach_destination {
+            state = idling
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    dying{
-        on_enter{
+    dying {
+        on_enter {
             special_function = die_start
-            animation = die
+            animation = dying
             move = stop
             eat = 
         }
-        on_animation_end{
+        on_animation_end {
             special_function = die_end
         }
     }
     
-    deleting{
-        on_enter{
+    deleting {
+        on_enter {
             special_function = die_end
             special_function = delete
         }

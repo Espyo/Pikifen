@@ -64,7 +64,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -112,6 +112,7 @@
     <ClInclude Include="..\source\LAFI\style.h" />
     <ClInclude Include="..\source\LAFI\textbox.h" />
     <ClInclude Include="..\source\LAFI\widget.h" />
+    <ClInclude Include="..\source\liquid.h" />
     <ClInclude Include="..\source\logic.h" />
     <ClInclude Include="..\source\menus.h" />
     <ClInclude Include="..\source\menu_widgets.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="..\source\drawing.cpp" />
     <ClCompile Include="..\source\functions.cpp" />
     <ClCompile Include="..\source\game_state.cpp" />
+    <ClCompile Include="..\source\hazard.cpp" />
     <ClCompile Include="..\source\hitbox.cpp" />
     <ClCompile Include="..\source\init.cpp" />
     <ClCompile Include="..\source\interval.cpp" />
@@ -185,6 +187,7 @@
     <ClCompile Include="..\source\LAFI\style.cpp" />
     <ClCompile Include="..\source\LAFI\textbox.cpp" />
     <ClCompile Include="..\source\LAFI\widget.cpp" />
+    <ClCompile Include="..\source\liquid.cpp" />
     <ClCompile Include="..\source\logic.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\menus.cpp" />

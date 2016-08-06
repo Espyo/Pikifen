@@ -1,160 +1,160 @@
 animations{
-	walk{
+	moving{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			walk1{
+			moving1{
 				duration=0.10
 			}
-			walk2{
+			moving2{
 				duration=0.10
 			}
-			walk1{
+			moving1{
 				duration=0.10
 			}
 		}
 	}
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			idle2{
+			idling2{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			idle3{
+			idling3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.90
 			}
-			idle2{
+			idling2{
 				duration=0.10
 			}
-			idle3{
+			idling3{
 				duration=0.10
 			}
 		}
 	}
-	attack{
+	attacking{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			attacking1{
 				duration=0.40
 			}
-			attack2{
+			attacking2{
 				duration=0.10
 			}
-			attack3{
+			attacking3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			attack1{
+			attacking1{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	shake{
+	shaking{
 		loop_frame=0
 		frame_instances{
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake3{
+			shaking3{
 				duration=0.10
 			}
-			shake4{
+			shaking4{
 				duration=0.10
 			}
-			shake3{
+			shaking3{
 				duration=0.10
 			}
 		}
 	}
-	eat{
+	eating{
 		loop_frame=0
 		frame_instances{
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			eat2{
+			eating2{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			eat2{
+			eating2{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
 		}
 	}
-	die{
+	dying{
 		loop_frame=4
 		frame_instances{
-			die2{
+			dying2{
 				duration=0.10
 			}
-			die3{
+			dying3{
 				duration=0.10
 			}
-			die4{
+			dying4{
 				duration=0.10
 			}
-			die5{
+			dying5{
 				duration=0.30
 			}
-			die4{
+			dying4{
 				duration=0.50
 			}
 		}
 	}
 }
 frames{
-	idle{
+	idling{
 		file=Water_Dumple.png
 		file_x=0
 		file_y=0
@@ -191,7 +191,7 @@ frames{
 			}
 		}
 	}
-	walk1{
+	moving1{
 		file=Water_Dumple.png
 		file_x=201
 		file_y=0
@@ -228,7 +228,7 @@ frames{
 			}
 		}
 	}
-	walk2{
+	moving2{
 		file=Water_Dumple.png
 		file_x=274
 		file_y=0
@@ -265,7 +265,7 @@ frames{
 			}
 		}
 	}
-	idle2{
+	idling2{
 		file=Water_Dumple.png
 		file_x=67
 		file_y=0
@@ -302,7 +302,7 @@ frames{
 			}
 		}
 	}
-	idle3{
+	idling3{
 		file=Water_Dumple.png
 		file_x=135
 		file_y=0
@@ -339,7 +339,7 @@ frames{
 			}
 		}
 	}
-	attack1{
+	attacking1{
 		file=Water_Dumple.png
 		file_x=0
 		file_y=51
@@ -376,7 +376,7 @@ frames{
 			}
 		}
 	}
-	attack2{
+	attacking2{
 		file=Water_Dumple.png
 		file_x=61
 		file_y=52
@@ -413,7 +413,7 @@ frames{
 			}
 		}
 	}
-	attack3{
+	attacking3{
 		file=Water_Dumple.png
 		file_x=158
 		file_y=52
@@ -450,7 +450,7 @@ frames{
 			}
 		}
 	}
-	shake1{
+	shaking1{
 		file=Water_Dumple.png
 		file_x=259
 		file_y=51
@@ -487,7 +487,7 @@ frames{
 			}
 		}
 	}
-	shake2{
+	shaking2{
 		file=Water_Dumple.png
 		file_x=259
 		file_y=51
@@ -524,7 +524,7 @@ frames{
 			}
 		}
 	}
-	shake3{
+	shaking3{
 		file=Water_Dumple.png
 		file_x=327
 		file_y=51
@@ -561,7 +561,7 @@ frames{
 			}
 		}
 	}
-	shake4{
+	shaking4{
 		file=Water_Dumple.png
 		file_x=396
 		file_y=51
@@ -598,7 +598,7 @@ frames{
 			}
 		}
 	}
-	eat1{
+	eating1{
 		file=Water_Dumple.png
 		file_x=0
 		file_y=103
@@ -635,7 +635,7 @@ frames{
 			}
 		}
 	}
-	eat2{
+	eating2{
 		file=Water_Dumple.png
 		file_x=67
 		file_y=103
@@ -672,7 +672,7 @@ frames{
 			}
 		}
 	}
-	die1{
+	dying1{
 		file=Water_Dumple.png
 		file_x=135
 		file_y=103
@@ -709,7 +709,7 @@ frames{
 			}
 		}
 	}
-	die2{
+	dying2{
 		file=Water_Dumple.png
 		file_x=202
 		file_y=104
@@ -746,7 +746,7 @@ frames{
 			}
 		}
 	}
-	die3{
+	dying3{
 		file=Water_Dumple.png
 		file_x=269
 		file_y=107
@@ -783,7 +783,7 @@ frames{
 			}
 		}
 	}
-	die4{
+	dying4{
 		file=Water_Dumple.png
 		file_x=336
 		file_y=112
@@ -820,7 +820,7 @@ frames{
 			}
 		}
 	}
-	die5{
+	dying5{
 		file=Water_Dumple.png
 		file_x=269
 		file_y=107

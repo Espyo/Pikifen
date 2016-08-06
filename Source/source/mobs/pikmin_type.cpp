@@ -105,16 +105,16 @@ void pikmin_type::load_from_file(
         bmp_icon[2] =
             bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
     }
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_IDLE,     "idle"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_WALK,     "walk"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,   "thrown"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACK,   "attack"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRAB,     "grab"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_SIGH,     "sigh"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_CARRY,    "carry"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURROWED, "burrowed"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING, "plucking"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,    "lying"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_IDLING,    "idling"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_WALKING,   "walking"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,    "thrown"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACKING, "attacking"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRABBING,  "grabbing"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_SIGHING,   "sighing"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_CARRYING,  "carrying"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURIED,    "buried"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING,  "plucking"));
+    anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,     "lying"));
     
     pikmin_in_onions[this] =
         s2i(file->get_child_by_name("onion_starting_number")->value);

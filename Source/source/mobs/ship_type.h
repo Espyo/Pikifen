@@ -19,7 +19,7 @@
 #include "mob_type.h"
 
 enum SHIP_ANIMATIONS {
-    SHIP_ANIM_IDLE,
+    SHIP_ANIM_IDLING,
 };
 
 /* ----------------------------------------------------------------------------

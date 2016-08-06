@@ -1,210 +1,210 @@
 animations{
-	idle{
+	idling{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=1.00
 			}
-			idle2{
+			idling2{
 				duration=0.10
 			}
-			idle3{
+			idling3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
-			idle4{
+			idling4{
 				duration=0.10
 			}
-			idle5{
-				duration=0.10
-			}
-		}
-	}
-	walk{
-		loop_frame=0
-		frame_instances{
-			walk1{
-				duration=0.10
-			}
-			walk2{
-				duration=0.10
-			}
-			walk1{
-				duration=0.10
-			}
-			idle{
+			idling5{
 				duration=0.10
 			}
 		}
 	}
-	attack{
+	moving{
 		loop_frame=0
 		frame_instances{
-			attack1{
+			moving1{
 				duration=0.10
 			}
-			idle{
+			moving2{
 				duration=0.10
 			}
-			attack2{
+			moving1{
 				duration=0.10
 			}
-			attack3{
+			idling{
 				duration=0.10
 			}
-			idle{
+		}
+	}
+	attacking{
+		loop_frame=0
+		frame_instances{
+			attacking1{
 				duration=0.10
 			}
-			attack1{
+			idling{
 				duration=0.10
 			}
-			idle{
+			attacking2{
+				duration=0.10
+			}
+			attacking3{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			attacking1{
+				duration=0.10
+			}
+			idling{
 				duration=0.50
 			}
 		}
 	}
-	shake{
+	shaking{
 		loop_frame=0
 		frame_instances{
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake1{
+			shaking1{
 				duration=0.10
 			}
-			shake2{
+			shaking2{
 				duration=0.10
 			}
-			shake3{
+			shaking3{
 				duration=0.10
 			}
-			shake4{
+			shaking4{
 				duration=0.10
 			}
-			shake3{
+			shaking3{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
-	eat{
+	eating{
 		loop_frame=0
 		frame_instances{
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			eat2{
+			eating2{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			eat2{
+			eating2{
 				duration=0.20
 			}
-			eat1{
+			eating1{
 				duration=0.20
 			}
-			idle{
+			idling{
 				duration=0.20
 			}
 		}
 	}
-	die{
+	dying{
 		loop_frame=5
 		frame_instances{
-			die1{
+			dying1{
 				duration=0.10
 			}
-			die2{
+			dying2{
 				duration=0.10
 			}
-			die3{
+			dying3{
 				duration=0.10
 			}
-			die4{
+			dying4{
 				duration=0.10
 			}
-			die5{
+			dying5{
 				duration=0.30
 			}
-			die4{
+			dying4{
 				duration=0.50
 			}
 		}
 	}
-	zap{
+	zapping{
 		loop_frame=0
 		frame_instances{
-			zap1{
+			zapping1{
 				duration=0.10
 			}
-			zap2{
+			zapping2{
 				duration=0.10
 			}
-			zap3{
+			zapping3{
 				duration=0.10
 			}
-			zap4{
+			zapping4{
 				duration=0.10
 			}
-			zap5{
+			zapping5{
 				duration=0.10
 			}
-			zap3{
+			zapping3{
 				duration=0.10
 			}
-			zap4{
+			zapping4{
 				duration=0.10
 			}
-			zap5{
+			zapping5{
 				duration=0.10
 			}
-			zap3{
+			zapping3{
 				duration=0.10
 			}
-			zap4{
+			zapping4{
 				duration=0.10
 			}
-			zap5{
+			zapping5{
 				duration=0.10
 			}
-			zap6{
+			zapping6{
 				duration=0.10
 			}
-			idle{
+			idling{
 				duration=0.10
 			}
 		}
 	}
 }
 frames{
-	idle{
+	idling{
 		file=Electric_Water_Dumple.png
 		file_x=0
 		file_y=0
@@ -239,7 +239,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -253,7 +253,7 @@ frames{
 			}
 		}
 	}
-	idle2{
+	idling2{
 		file=Electric_Water_Dumple.png
 		file_x=141
 		file_y=0
@@ -288,7 +288,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -302,7 +302,7 @@ frames{
 			}
 		}
 	}
-	idle3{
+	idling3{
 		file=Electric_Water_Dumple.png
 		file_x=282
 		file_y=0
@@ -337,7 +337,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -351,7 +351,7 @@ frames{
 			}
 		}
 	}
-	idle4{
+	idling4{
 		file=Electric_Water_Dumple.png
 		file_x=423
 		file_y=0
@@ -386,7 +386,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -400,7 +400,7 @@ frames{
 			}
 		}
 	}
-	idle5{
+	idling5{
 		file=Electric_Water_Dumple.png
 		file_x=566
 		file_y=0
@@ -435,7 +435,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -449,7 +449,7 @@ frames{
 			}
 		}
 	}
-	walk1{
+	moving1{
 		file=Electric_Water_Dumple.png
 		file_x=703
 		file_y=0
@@ -484,7 +484,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=78.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -498,7 +498,7 @@ frames{
 			}
 		}
 	}
-	walk2{
+	moving2{
 		file=Electric_Water_Dumple.png
 		file_x=847
 		file_y=0
@@ -533,7 +533,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=89.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -547,7 +547,7 @@ frames{
 			}
 		}
 	}
-	attack1{
+	attacking1{
 		file=Electric_Water_Dumple.png
 		file_x=0
 		file_y=89
@@ -582,7 +582,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -596,7 +596,7 @@ frames{
 			}
 		}
 	}
-	attack2{
+	attacking2{
 		file=Electric_Water_Dumple.png
 		file_x=133
 		file_y=89
@@ -620,9 +620,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=92.00 0.00 0.00
+				coords=80.00 0.00 0.00
 				height=56.00
-				radius=50.00
+				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -631,7 +631,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=115.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -645,7 +645,7 @@ frames{
 			}
 		}
 	}
-	attack3{
+	attacking3{
 		file=Electric_Water_Dumple.png
 		file_x=312
 		file_y=89
@@ -669,9 +669,9 @@ frames{
 				knockback=1.00
 			}
 			mouth{
-				coords=92.00 0.00 0.00
+				coords=80.00 0.00 0.00
 				height=56.00
-				radius=50.00
+				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -680,7 +680,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=115.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -694,7 +694,7 @@ frames{
 			}
 		}
 	}
-	shake1{
+	shaking1{
 		file=Electric_Water_Dumple.png
 		file_x=489
 		file_y=89
@@ -729,7 +729,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=74.00 12.00 0.00
 				height=56.00
 				radius=32.00
@@ -743,7 +743,7 @@ frames{
 			}
 		}
 	}
-	shake2{
+	shaking2{
 		file=Electric_Water_Dumple.png
 		file_x=489
 		file_y=89
@@ -778,7 +778,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=74.00 -12.00 0.00
 				height=56.00
 				radius=32.00
@@ -792,7 +792,7 @@ frames{
 			}
 		}
 	}
-	shake3{
+	shaking3{
 		file=Electric_Water_Dumple.png
 		file_x=635
 		file_y=89
@@ -827,7 +827,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -841,7 +841,7 @@ frames{
 			}
 		}
 	}
-	shake4{
+	shaking4{
 		file=Electric_Water_Dumple.png
 		file_x=778
 		file_y=87
@@ -876,7 +876,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -890,7 +890,7 @@ frames{
 			}
 		}
 	}
-	eat1{
+	eating1{
 		file=Electric_Water_Dumple.png
 		file_x=0
 		file_y=180
@@ -925,7 +925,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -939,7 +939,7 @@ frames{
 			}
 		}
 	}
-	eat2{
+	eating2{
 		file=Electric_Water_Dumple.png
 		file_x=137
 		file_y=179
@@ -974,7 +974,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -988,7 +988,7 @@ frames{
 			}
 		}
 	}
-	die1{
+	dying1{
 		file=Electric_Water_Dumple.png
 		file_x=277
 		file_y=184
@@ -1023,7 +1023,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 15.00 0.00
 				height=56.00
 				radius=32.00
@@ -1037,7 +1037,7 @@ frames{
 			}
 		}
 	}
-	die2{
+	dying2{
 		file=Electric_Water_Dumple.png
 		file_x=418
 		file_y=184
@@ -1072,7 +1072,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 25.00 0.00
 				height=56.00
 				radius=32.00
@@ -1086,7 +1086,7 @@ frames{
 			}
 		}
 	}
-	die3{
+	dying3{
 		file=Electric_Water_Dumple.png
 		file_x=560
 		file_y=187
@@ -1121,7 +1121,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 7.00 0.00
 				height=56.00
 				radius=32.00
@@ -1135,7 +1135,7 @@ frames{
 			}
 		}
 	}
-	die4{
+	dying4{
 		file=Electric_Water_Dumple.png
 		file_x=702
 		file_y=194
@@ -1170,7 +1170,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -1184,7 +1184,7 @@ frames{
 			}
 		}
 	}
-	die5{
+	dying5{
 		file=Electric_Water_Dumple.png
 		file_x=560
 		file_y=187
@@ -1219,7 +1219,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 -7.00 0.00
 				height=56.00
 				radius=32.00
@@ -1233,7 +1233,7 @@ frames{
 			}
 		}
 	}
-	zap1{
+	zapping1{
 		file=Electric_Water_Dumple.png
 		file_x=0
 		file_y=269
@@ -1268,7 +1268,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=54.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -1282,7 +1282,7 @@ frames{
 			}
 		}
 	}
-	zap2{
+	zapping2{
 		file=Electric_Water_Dumple.png
 		file_x=125
 		file_y=269
@@ -1317,7 +1317,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=70.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -1331,7 +1331,7 @@ frames{
 			}
 		}
 	}
-	zap3{
+	zapping3{
 		file=Electric_Water_Dumple.png
 		file_x=271
 		file_y=275
@@ -1366,21 +1366,21 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
-				coords=78.00 0.00 0.00
+			zapping{
+				coords=67.00 0.00 0.00
 				height=56.00
-				radius=50.00
+				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
 				outward=false
 				angle=0.00
 				knockback=1.00
 			}
 		}
 	}
-	zap4{
+	zapping4{
 		file=Electric_Water_Dumple.png
 		file_x=461
 		file_y=271
@@ -1415,21 +1415,21 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
-				coords=78.00 0.00 0.00
+			zapping{
+				coords=67.00 0.00 0.00
 				height=56.00
-				radius=50.00
+				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
 				outward=false
 				angle=0.00
 				knockback=1.00
 			}
 		}
 	}
-	zap5{
+	zapping5{
 		file=Electric_Water_Dumple.png
 		file_x=652
 		file_y=283
@@ -1464,21 +1464,21 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
-				coords=78.00 0.00 0.00
+			zapping{
+				coords=67.00 0.00 0.00
 				height=56.00
-				radius=50.00
+				radius=62.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
-				hazards=shocking_electricity
+				hazards=stunning_electricity
 				outward=false
 				angle=0.00
 				knockback=1.00
 			}
 		}
 	}
-	zap6{
+	zapping6{
 		file=Electric_Water_Dumple.png
 		file_x=843
 		file_y=283
@@ -1513,7 +1513,7 @@ frames{
 				angle=0.00
 				knockback=1.00
 			}
-			zap{
+			zapping{
 				coords=84.00 0.00 0.00
 				height=56.00
 				radius=32.00
@@ -1531,5 +1531,5 @@ frames{
 hitboxes{
 	body=
 	mouth=
-	zap=
+	zapping=
 }

@@ -16,7 +16,7 @@
 #include "ship_type.h"
 
 enum SHIP_STATES {
-    SHIP_STATE_IDLE,
+    SHIP_STATE_IDLING,
     
     N_SHIP_STATES,
 };

@@ -21,8 +21,8 @@
 using namespace std;
 
 enum GATE_STATES {
-    GATE_STATE_IDLE,
-    GATE_STATE_DEAD,
+    GATE_STATE_IDLING,
+    GATE_STATE_DESTROYED,
     
     N_GATE_STATES
 };

@@ -868,8 +868,9 @@ void area_editor::do_drawing() {
                             (s_ptr->y + s2_ptr->y) / 2.0f;
                         float angle =
                             atan2(s2_ptr->y - s_ptr->y, s2_ptr->x - s_ptr->x);
-                        const float delta = (PATH_LINK_THICKNESS * 4) / cam_zoom;
-                        
+                        const float delta =
+                            (PATH_LINK_THICKNESS * 4) / cam_zoom;
+                            
                         al_draw_filled_triangle(
                             mid_x + cos(angle) * delta,
                             mid_y + sin(angle) * delta,
@@ -1467,8 +1468,8 @@ bool area_editor::get_common_sector(
             //If this is a lone vertex, check which sector it's in.
             related_sectors[v].insert(
                 get_sector(
-                    vertexes[v]->x,
-                    vertexes[v]->y,
+                    v_ptr->x,
+                    v_ptr->y,
                     NULL, false
                 )
             );
@@ -5310,6 +5311,7 @@ void area_editor::unload() {
     delete(gui);
     
     unload_hazards();
+    unload_status_types();
 }
 
 

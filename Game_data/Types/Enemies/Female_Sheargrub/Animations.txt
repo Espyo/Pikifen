@@ -1,5 +1,5 @@
 animations{
-	buried{
+	hidden{
 		loop_frame=0
 		frame_instances{
 			nothing{
@@ -10,16 +10,16 @@ animations{
 	moving{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.10
 			}
-			move1{
+			moving1{
 				duration=0.10
 			}
-			move2{
+			moving2{
 				duration=0.10
 			}
-			move1{
+			moving1{
 				duration=0.10
 			}
 		}
@@ -27,19 +27,19 @@ animations{
 	emerging{
 		loop_frame=0
 		frame_instances{
-			emerge1{
+			emerging1{
 				duration=0.15
 			}
-			emerge2{
+			emerging2{
 				duration=0.15
 			}
-			emerge3{
+			emerging3{
 				duration=0.15
 			}
-			emerge4{
+			emerging4{
 				duration=0.15
 			}
-			idle{
+			idling{
 				duration=0.30
 			}
 		}
@@ -47,19 +47,19 @@ animations{
 	burying{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.30
 			}
-			bury1{
+			burying1{
 				duration=0.15
 			}
-			bury2{
+			burying2{
 				duration=0.15
 			}
-			bury3{
+			burying3{
 				duration=0.15
 			}
-			bury4{
+			burying4{
 				duration=0.15
 			}
 			nothing{
@@ -70,7 +70,7 @@ animations{
 	examining{
 		loop_frame=0
 		frame_instances{
-			idle{
+			idling{
 				duration=0.50
 			}
 		}
@@ -78,29 +78,29 @@ animations{
 	dying{
 		loop_frame=5
 		frame_instances{
-			die1{
+			dying1{
 				duration=0.10
 			}
-			die2{
+			dying2{
 				duration=0.10
 			}
-			die3{
+			dying3{
 				duration=0.10
 			}
-			die4{
+			dying4{
 				duration=0.10
 			}
-			die5{
+			dying5{
 				duration=0.40
 			}
-			die4{
+			dying4{
 				duration=0.10
 			}
 		}
 	}
 }
 frames{
-	idle{
+	idling{
 		file=Female_Sheargrub.png
 		file_x=0
 		file_y=32
@@ -125,7 +125,7 @@ frames{
 			}
 		}
 	}
-	move1{
+	moving1{
 		file=Female_Sheargrub.png
 		file_x=39
 		file_y=32
@@ -150,7 +150,7 @@ frames{
 			}
 		}
 	}
-	move2{
+	moving2{
 		file=Female_Sheargrub.png
 		file_x=81
 		file_y=32
@@ -175,7 +175,7 @@ frames{
 			}
 		}
 	}
-	emerge1{
+	emerging1{
 		file=Female_Sheargrub.png
 		file_x=0
 		file_y=4
@@ -200,7 +200,7 @@ frames{
 			}
 		}
 	}
-	emerge2{
+	emerging2{
 		file=Female_Sheargrub.png
 		file_x=0
 		file_y=4
@@ -225,7 +225,7 @@ frames{
 			}
 		}
 	}
-	emerge3{
+	emerging3{
 		file=Female_Sheargrub.png
 		file_x=21
 		file_y=2
@@ -250,7 +250,7 @@ frames{
 			}
 		}
 	}
-	emerge4{
+	emerging4{
 		file=Female_Sheargrub.png
 		file_x=21
 		file_y=2
@@ -275,7 +275,7 @@ frames{
 			}
 		}
 	}
-	bury1{
+	burying1{
 		file=Female_Sheargrub.png
 		file_x=55
 		file_y=0
@@ -300,7 +300,7 @@ frames{
 			}
 		}
 	}
-	bury2{
+	burying2{
 		file=Female_Sheargrub.png
 		file_x=55
 		file_y=0
@@ -325,7 +325,7 @@ frames{
 			}
 		}
 	}
-	bury3{
+	burying3{
 		file=Female_Sheargrub.png
 		file_x=92
 		file_y=3
@@ -350,7 +350,7 @@ frames{
 			}
 		}
 	}
-	bury4{
+	burying4{
 		file=Female_Sheargrub.png
 		file_x=92
 		file_y=3
@@ -400,7 +400,7 @@ frames{
 			}
 		}
 	}
-	die1{
+	dying1{
 		file=Female_Sheargrub.png
 		file_x=0
 		file_y=61
@@ -425,7 +425,7 @@ frames{
 			}
 		}
 	}
-	die2{
+	dying2{
 		file=Female_Sheargrub.png
 		file_x=39
 		file_y=63
@@ -450,7 +450,7 @@ frames{
 			}
 		}
 	}
-	die3{
+	dying3{
 		file=Female_Sheargrub.png
 		file_x=78
 		file_y=63
@@ -475,7 +475,7 @@ frames{
 			}
 		}
 	}
-	die4{
+	dying4{
 		file=Female_Sheargrub.png
 		file_x=117
 		file_y=61
@@ -500,7 +500,7 @@ frames{
 			}
 		}
 	}
-	die5{
+	dying5{
 		file=Female_Sheargrub.png
 		file_x=78
 		file_y=63

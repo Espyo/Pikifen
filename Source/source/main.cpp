@@ -52,6 +52,9 @@ using namespace std;
  * Once that's done, it enters the main loop.
  */
 int main(int argc, char** argv) {
+    //Allegro initializations.
+    init_allegro();
+    
     //Panic check: is there a Game_data folder?
     if(folder_to_vector(GAME_DATA_FOLDER, true).empty()) {
         al_show_native_message_box(
@@ -65,9 +68,6 @@ int main(int argc, char** argv) {
         );
         return -1;
     }
-    
-    //Allegro initializations.
-    init_allegro();
     
     //Controls and options.
     init_controls();

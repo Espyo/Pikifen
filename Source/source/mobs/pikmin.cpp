@@ -9,6 +9,8 @@
  * Pikmin class and Pikmin-related functions.
  */
 
+#include <algorithm>
+
 #include "../drawing.h"
 #include "../functions.h"
 #include "mob.h"
@@ -62,6 +64,19 @@ float pikmin::get_base_speed() {
  */
 void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
     attack_time = pik_type->attack_interval;
+    
+    if(!m || !victim_hitbox_i) return;
+    
+    if(
+        !is_resistant_to_hazards(
+            this->pik_type->resistances, victim_hitbox_i->hazards
+        )
+    ) {
+        //If the hitbox says it has a fire effect, and this
+        //Pikmin is not immune to fire, don't let it be a wise-guy;
+        //it cannot be able to attack the hitbox.
+        return;
+    }
     
     hitbox_touch_info info = hitbox_touch_info(this, victim_hitbox_i, NULL);
     focused_mob->fsm.run_event(MOB_EVENT_HITBOX_TOUCH_N_A, &info);
@@ -230,7 +245,7 @@ void pikmin::draw() {
     );
     
     bool is_idle =
-        fsm.cur_state->id == PIKMIN_STATE_IDLE ||
+        fsm.cur_state->id == PIKMIN_STATE_IDLING ||
         fsm.cur_state->id == PIKMIN_STATE_BURIED;
         
     if(is_idle) {
@@ -320,7 +335,7 @@ void pikmin::receive_flailing_from_status() {
  * Handler for when a status effect causes "panic".
  */
 void pikmin::receive_panic_from_status() {
-    fsm.set_state(PIKMIN_STATE_PANIC);
+    fsm.set_state(PIKMIN_STATE_PANICKING);
 }
 
 
@@ -328,8 +343,8 @@ void pikmin::receive_panic_from_status() {
  * Handler for when a status effect no longer causes "panic".
  */
 void pikmin::lose_panic_from_status() {
-    if(fsm.cur_state->id == PIKMIN_STATE_PANIC) {
-        fsm.set_state(PIKMIN_STATE_IDLE);
+    if(fsm.cur_state->id == PIKMIN_STATE_PANICKING) {
+        fsm.set_state(PIKMIN_STATE_IDLING);
         pikmin_fsm::stand_still(this, NULL, NULL);
     }
 }

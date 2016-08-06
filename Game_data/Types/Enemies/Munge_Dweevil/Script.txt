@@ -1,103 +1,119 @@
-first_state = relaxed
+first_state = relaxing
 
-script{
-    relaxed{
-        on_enter{
+script {
+    relaxing {
+        on_enter {
             animation = idling
             move = stop
         }
-        on_see_opponent{
+        on_see_opponent {
             focus = opponent
-            state = panicked
+            state = panicking
         }
-        on_big_damage{
+        on_big_damage {
             state = shaking
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    panicked{
-        on_enter{
-            animation = walking
+    panicking {
+        on_enter {
+            animation = moving
             timer = 0.3
             move = randomly
         }
-        on_timer{
+        on_timer {
             timer = 0.3
             move = randomly
         }
-        on_lose_focused_mob{
-            state = relaxed
+        on_lose_focused_mob {
+            state = relaxing
         }
-        on_far_from_home{
+        on_far_from_home {
             state = going_home
         }
-        on_big_damage{
+        on_big_damage {
             state = shaking
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    going_home{
-        on_enter{
+    going_home {
+        on_enter {
             move = home
+            animation = moving
         }
-        on_reach_destination{
-            state = relaxed
+        on_reach_destination {
+            state = relaxing
         }
-        on_big_damage{
+        on_big_damage {
             state = shaking
         }
-        on_bottomless_pit{
+        on_bottomless_pit {
             state = deleting
         }
-        on_death{
+        on_death {
             state = dying
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    shaking{
-        on_enter{
+    shaking {
+        on_enter {
             move = stop
             animation = shaking
         }
-        on_animation_end{
+        on_animation_end {
             state = attacking
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    attacking{
-        on_enter{
+    attacking {
+        on_enter {
             animation = attacking
             particle = gas_explosion
         }
-        on_animation_end{
-            state = relaxed
+        on_animation_end {
+            state = relaxing
             particle = 
+        }
+        on_touch_spray {
+            special_function = spray
         }
     }
     
-    dying{
-        on_enter{
+    dying {
+        on_enter {
             special_function = die_start
             animation = dying
             move = stop
             gravity = 1
         }
-        on_animation_end{
+        on_animation_end {
             special_function = die_end
         }
     }
     
-    deleting{
-        on_enter{
+    deleting {
+        on_enter {
             special_function = die_end
             special_function = delete
         }

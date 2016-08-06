@@ -1319,7 +1319,7 @@ void animation_editor::load() {
     frm_anims->widgets["but_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        hide_widget(gui->widgets["frm_anims"]);
+        hide_widget(this->gui->widgets["frm_anims"]);
         open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
     };
     frm_anims->widgets["but_anim"]->description =
@@ -1430,7 +1430,7 @@ void animation_editor::load() {
     frm_frame_i->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        hide_widget(gui->widgets["frm_anims"]);
+        hide_widget(this->gui->widgets["frm_anims"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME_INSTANCE, false);
     };
     frm_frame_i->widgets["but_frame"]->description =
@@ -1612,7 +1612,7 @@ void animation_editor::load() {
         
     frm_frames->widgets["but_frame"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        hide_widget(gui->widgets["frm_frames"]);
+        hide_widget(this->gui->widgets["frm_frames"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME, true);
     };
     frm_frames->widgets["but_frame"]->description =
@@ -1795,7 +1795,7 @@ void animation_editor::load() {
         
     frm_offset->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        hide_widget(gui->widgets["frm_offset"]);
+        hide_widget(this->gui->widgets["frm_offset"]);
         open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
     };
     frm_offset->widgets["but_compare"]->description =
@@ -2056,7 +2056,7 @@ void animation_editor::load() {
     frm_hitbox_i->widgets["txt_h"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
     frm_hitbox_i->widgets["txt_h"]->description =
-        "Hitbox's height.";
+        "Hitbox's height. 0 = spans infinitely vertically.";
         
     frm_hitbox_i->widgets["txt_r"]->lose_focus_handler =
         lambda_gui_save_hitbox_instance;
@@ -3182,6 +3182,9 @@ void animation_editor::unload() {
     delete(gui->style);
     delete(gui);
     al_destroy_native_file_dialog(file_dialog);
+    
+    unload_hazards();
+    unload_status_types();
 }
 
 /* ----------------------------------------------------------------------------

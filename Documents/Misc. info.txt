@@ -38,6 +38,7 @@ Checklist for making a new enemy:
     Sprite sheet
         Add a "palette" of the gradients used to the left of the image
     Animations
+        The attack animations must hit close to the enemy as well
         Make sure the idle animation is not consisted of solely one boring frame
         Check if all instances of the standard "body" hitbox are latchable (if they're meant to)
         Check if all instances of the standard "attack" hitbox are disabled, except when they're needed

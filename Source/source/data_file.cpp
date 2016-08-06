@@ -331,24 +331,28 @@ void getline(ALLEGRO_FILE* file, string &line) {
  * s:         The original string.
  * left_only: If true, only trim the spaces at the left.
  */
-string trim_spaces(string s, const bool left_only) {
+string trim_spaces(const string &s, const bool left_only) {
+    string orig = s;
     //Spaces before.
-    if(s.size()) {
-        while(s[0] == ' ' || s[0] == '\t') {
-            s.erase(0, 1);
-            if(s.empty()) break;
+    if(orig.size()) {
+        while(orig[0] == ' ' || orig[0] == '\t') {
+            orig.erase(0, 1);
+            if(orig.empty()) break;
         }
     }
     
     if(!left_only) {
         //Spaces after.
-        if(s.size()) {
-            while(s[s.size() - 1] == ' ' || s[s.size() - 1] == '\t') {
-                s.erase(s.size() - 1, 1);
-                if(s.empty()) break;
+        if(orig.size()) {
+            while(
+                orig[orig.size() - 1] == ' ' ||
+                orig[orig.size() - 1] == '\t'
+            ) {
+                orig.erase(orig.size() - 1, 1);
+                if(orig.empty()) break;
             }
         }
     }
     
-    return s;
+    return orig;
 }

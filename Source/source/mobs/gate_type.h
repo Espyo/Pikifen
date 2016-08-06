@@ -18,8 +18,8 @@
 #include "mob_type.h"
 
 enum GATE_ANIMATIONS {
-    GATE_ANIM_IDLE,
-    GATE_ANIM_NOTHING,
+    GATE_ANIM_IDLING,
+    GATE_ANIM_DESTROYED,
 };
 
 

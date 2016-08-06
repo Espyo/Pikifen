@@ -9,6 +9,8 @@
  * Particle class and particle-related functions.
  */
 
+#include <algorithm>
+
 #include "drawing.h"
 #include "functions.h"
 #include "particle.h"
@@ -161,13 +163,13 @@ particle_manager::particle_manager(const size_t &max_nr) :
  * Copies a particle manager from another one.
  */
 particle_manager &particle_manager::operator =(const particle_manager &pg) {
-    particles = NULL;
+    this->particles = NULL;
     max_nr = pg.max_nr;
     if(max_nr == 0) return *this;
     count = pg.count;
-    particles = new particle[max_nr];
+    this->particles = new particle[max_nr];
     for(size_t p = 0; p < count; ++p) {
-        particles[p] = pg.particles[p];
+        this->particles[p] = pg.particles[p];
     }
     
     return *this;
@@ -350,7 +352,8 @@ void particle_generator::emit(particle_manager &manager) {
     size_t final_nr =
         max(
             0,
-            (int) number + randomi(-number_deviation, number_deviation)
+            (int) number +
+            randomi((int) (0 - number_deviation), (int) number_deviation)
         );
         
     for(size_t p = 0; p < final_nr; ++p) {
@@ -403,5 +406,5 @@ void particle_generator::emit(particle_manager &manager) {
  * be used. Call this when copying from another generator.
  */
 void particle_generator::reset() {
-    emission_interval = emission_interval;
+    emission_timer = emission_interval;
 }

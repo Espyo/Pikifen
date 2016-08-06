@@ -38,5 +38,5 @@ void treasure_type::load_from_file(
 
     value = s2f(file->get_child_by_name("value")->value);
     
-    anim_conversions->push_back(make_pair(ANIM_IDLE, "idle"));
+    anim_conversions->push_back(make_pair(ANIM_IDLING, "idling"));
 }
