@@ -18,9 +18,9 @@ weather{
         1020 = 255
         1200 = 96
     }
-    //percipitation_type = 1
-    //percipitation_frequency = 0.2
-    //percipitation_speed = 500
+    //precipitation_type = 1
+    //precipitation_frequency = 0.2
+    //precipitation_speed = 500
 }
 
 weather{

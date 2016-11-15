@@ -974,7 +974,7 @@ sectors{
 	s{
 		type=Blocking
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		type=Bridge
@@ -1032,27 +1032,27 @@ sectors{
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=100.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=100.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=100.00
@@ -1068,7 +1068,7 @@ sectors{
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=0.00
@@ -1169,7 +1169,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 		texture_tint=255 0 0
 	}
 	s{
@@ -1178,7 +1178,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 		texture_tint=255 64 255
 	}
 }

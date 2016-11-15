@@ -1558,12 +1558,12 @@ sectors{
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=200.00
 		fade=true
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=0.00
@@ -1602,7 +1602,7 @@ sectors{
 	}
 	s{
 		z=200.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=200.00
@@ -1653,7 +1653,7 @@ sectors{
 	s{
 		z=200.00
 		fade=true
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=50.00
@@ -1670,9 +1670,9 @@ sectors{
 	}
 	s{
 		z=192.00
-		texture=Trunk.jpg
-		texture_scale=0.51 0.51
-		texture_trans=69.00 -53.00
+		texture=Stump.jpg
+		texture_scale=0.24 0.24
+		texture_trans=200.00 80.00
 	}
 	s{
 		z=96.00
@@ -1711,11 +1711,11 @@ sectors{
 	}
 	s{
 		z=300.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=300.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		type=Bridge

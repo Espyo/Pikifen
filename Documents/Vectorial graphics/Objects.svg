@@ -19,6 +19,58 @@
   <defs
      id="defs7877">
     <linearGradient
+       id="spirit-border"
+       inkscape:collect="always">
+      <stop
+         id="stop4395"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#c0c0c0;stop-opacity:0"
+         offset="0.62499624"
+         id="stop4397" />
+      <stop
+         id="stop4405"
+         offset="0.78124785"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         id="stop4399"
+         offset="0.90624911"
+         style="stop-color:#808080;stop-opacity:1" />
+      <stop
+         id="stop4401"
+         offset="1"
+         style="stop-color:#808080;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="spirit-eye">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4350" />
+      <stop
+         id="stop4364"
+         offset="0.5"
+         style="stop-color:#000000;stop-opacity:1" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4352" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="spirit-body">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4322" />
+      <stop
+         id="stop4328"
+         offset="1"
+         style="stop-color:#c0c0c0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
        inkscape:collect="always"
        id="coin-shine">
       <stop
@@ -152,7 +204,11 @@
          offset="0"
          id="stop5469" />
       <stop
-         style="stop-color:#ffff40;stop-opacity:1;"
+         id="stop4349"
+         offset="0.87499988"
+         style="stop-color:#ffff20;stop-opacity:1;" />
+      <stop
+         style="stop-color:#ffffc6;stop-opacity:1"
          offset="1"
          id="stop5472" />
     </linearGradient>
@@ -408,6 +464,94 @@
        x2="-75"
        y2="647.36218"
        gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-eye"
+       id="radialGradient4354"
+       cx="625"
+       cy="1019.3622"
+       fx="625"
+       fy="1019.3622"
+       r="5"
+       gradientTransform="matrix(1.4,0,0,3.64,-253,-2690.1162)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-eye"
+       id="radialGradient4362"
+       cx="644"
+       cy="1019.8622"
+       fx="644"
+       fy="1019.8622"
+       r="4"
+       gradientTransform="matrix(1.5263158,0,0,3.625,-339.9474,-2676.6382)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-border"
+       id="radialGradient4389"
+       cx="632"
+       cy="1020.3622"
+       fx="632"
+       fy="1020.3622"
+       r="32"
+       gradientTransform="matrix(0.9999998,-2.240991e-7,2.1717337e-7,0.99998985,-8.8245959e-5,0.01017565)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-body"
+       id="linearGradient4391"
+       x1="635"
+       y1="1020.3622"
+       x2="635"
+       y2="1054.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.83870967,0,0,0.83870911,101.93548,164.5751)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-body"
+       id="linearGradient4426"
+       x1="785"
+       y1="1004.3622"
+       x2="785"
+       y2="1020.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.95939236,0,0,0.9999945,13.828168,24.327319)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-eye"
+       id="radialGradient4495"
+       cx="784"
+       cy="988.86218"
+       fx="784"
+       fy="988.86218"
+       r="1"
+       gradientTransform="matrix(0.95939236,0,0,3.4999546,13.828168,-2447.7887)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4557"
+       x="-0.11727275"
+       width="1.2345455"
+       y="-0.040312497"
+       height="1.080625">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.0750003"
+         id="feGaussianBlur4559" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#spirit-eye"
+       id="radialGradient4843"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1985237,-8.1514129e-6,8.1514285e-6,1.198526,-173.06239,-171.29545)"
+       cx="779.5"
+       cy="982.86218"
+       fx="779.5"
+       fy="982.86218"
+       r="3.5" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -416,9 +560,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49999998"
-     inkscape:cx="288.84077"
-     inkscape:cy="228.91648"
+     inkscape:zoom="1"
+     inkscape:cx="558.34732"
+     inkscape:cy="53.867912"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -455,7 +599,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="grid">
+     inkscape:label="grid"
+     sodipodi:insensitive="true">
     <rect
        style="opacity:1;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4370"
@@ -463,18 +608,27 @@
        height="610"
        x="-450"
        y="622.36218" />
+    <rect
+       style="fill:#008000;fill-opacity:1;stroke:none"
+       id="rect3193"
+       width="960"
+       height="820"
+       x="0"
+       y="612.36218" />
   </g>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="fill:#008000;fill-opacity:1;stroke:none"
-       id="rect3193"
-       width="960"
-       height="240"
-       x="0"
-       y="612.36218" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#c0c0c0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter4557);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 784,945.53516 -2.43164,10.25 c 0,0 -1.47063,6.19459 -3.94531,13.80468 -0.46962,1.44416 -1.66714,2.70725 -3.1211,4.58985 -1.45395,1.8826 -3.00195,4.54037 -3.00195,8.18164 0,2.20833 0.24117,5.18063 1.30664,8.00781 0.58274,1.54627 1.53924,3.08324 2.8457,4.30664 -0.32887,0.26156 -0.33584,0.23306 -0.67773,0.51953 -0.94747,0.79391 -1.90936,1.65822 -2.71875,2.5625 -0.80939,0.90429 -1.75586,1.61176 -1.75586,3.60349 0,0.25 -0.0151,0.4783 0.0391,0.8985 0.0542,0.4201 0.27772,1.2705 0.97461,1.8711 0.69689,0.6005 1.36522,0.6693 1.73828,0.705 0.37307,0.036 0.61808,0.025 0.90821,0.025 0.57098,0 1.0142,-0.179 1.52929,-0.2656 -0.0823,0.5751 -0.18945,1.1317 -0.18945,1.7656 0,3.5497 1.7659,7.087 3.37891,10.0879 1.613,3.001 3.22461,5.334 3.22461,5.334 l 2.11328,3.0606 2.03515,-3.1133 c 0,0 1.52898,-2.3317 3.05664,-5.3301 1.52767,-2.9984 3.19141,-6.542 3.19141,-10.0391 0,-0.7088 -0.20459,-1.2093 -0.29102,-1.8398 0.63546,0.1379 1.22262,0.3398 1.95118,0.3398 0.20988,0 0.40984,0.016 0.81445,-0.037 0.40461,-0.053 1.25575,-0.2894 1.83594,-0.9804 0.58019,-0.6911 0.63381,-1.3267 0.66601,-1.6719 0.0322,-0.3453 0.0234,-0.5606 0.0234,-0.8106 0,-1.92486 -0.89303,-2.65409 -1.66797,-3.56052 -0.77494,-0.90643 -1.69681,-1.77296 -2.60351,-2.56836 -0.35798,-0.31403 -0.36708,-0.28683 -0.70899,-0.57031 1.25891,-1.23523 2.17202,-2.7822 2.72852,-4.32813 1.01063,-2.80751 1.25195,-5.76432 1.25195,-7.97265 0,-3.64127 -1.548,-6.29904 -3.00195,-8.18164 -1.45396,-1.8826 -2.65148,-3.14569 -3.1211,-4.58985 -2.47467,-7.61009 -3.94531,-13.80468 -3.94531,-13.80468 L 784,945.53516 Z m 0,19.91796 c 0.65674,2.35126 0.60582,2.55349 1.62305,5.68165 0.91336,2.80878 2.71571,4.54545 3.91601,6.09961 1.2003,1.55415 1.96094,2.76818 1.96094,5.12695 0,1.79166 -0.25778,4.3368 -0.95703,6.27929 -0.69925,1.9425 -1.56757,3.00045 -2.88867,3.27344 l -1.99414,0.41211 -1.38086,-1.38086 0.0625,-0.30078 -0.18164,0.18164 -0.29493,-0.29492 0.10743,0.48242 -1.29102,1.29102 -2.04492,-0.39649 c -1.54028,-0.29848 -2.42769,-1.3799 -3.15234,-3.30273 -0.72466,-1.92283 -0.98438,-4.45248 -0.98438,-6.24414 0,-2.35877 0.76064,-3.5728 1.96094,-5.12695 1.2003,-1.55416 3.00265,-3.29083 3.91601,-6.09961 1.01723,-3.12816 0.96632,-3.33039 1.62305,-5.68165 z m 0.12109,26.23633 0.20313,0.91211 -0.0508,0.0117 -0.33203,-0.0645 0.17968,-0.85938 z m 0.0977,2.88867 0.64648,0.47266 0.85352,3.85156 c 0.69744,3.14816 1.78125,5.14456 1.78125,7.45896 0,1.5801 -1.25439,5.0372 -2.64648,7.7696 -0.37466,0.7353 -0.4025,0.6903 -0.75,1.3086 -0.37803,-0.6356 -0.41042,-0.5949 -0.82032,-1.3575 -1.46724,-2.7297 -2.7832,-6.1933 -2.7832,-7.7207 0,-2.0953 1.43102,-4.2743 2.10742,-7.48239 l 0.78516,-3.72266 0.82617,-0.57813 z"
+       id="path4418-2"
+       inkscape:connector-curvature="0"
+       transform="matrix(0.95939236,0,0,0.9999945,13.828168,24.327319)"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="opacity:0.8;fill:url(#radialGradient7873);fill-opacity:1;stroke:none"
@@ -485,7 +639,7 @@
        sodipodi:ry="15"
        d="m 145,1019.8622 a 15,15 0 1 1 -30,0 15,15 0 1 1 30,0 z"
        transform="matrix(1.0666667,0,0,1.0666667,-122.66667,-51.490871)"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Nectar.png"
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <path
@@ -498,7 +652,7 @@
        sodipodi:ry="3.25"
        d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
        transform="matrix(1.4358979,0,0,1.451678,-756.51302,-316.90667)"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Nectar.png"
        inkscape:export-xdpi="180.00014"
        inkscape:export-ydpi="180.00014" />
     <path
@@ -511,7 +665,7 @@
        sodipodi:ry="3.25"
        d="m 538,928.11218 a 3.25,3.25 0 1 1 -6.5,0 3.25,3.25 0 1 1 6.5,0 z"
        transform="matrix(0.82051291,0,0,0.82051315,-420.1026,278.83385)"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Nectar.png"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Nectar.png"
        inkscape:export-xdpi="180.00014"
        inkscape:export-ydpi="180.00014" />
     <path
@@ -1437,5 +1591,151 @@
          id="tspan4518"
          x="-185"
          y="957.36218">coin shine</tspan></text>
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4391);fill-opacity:1;fill-rule:evenodd;stroke:url(#radialGradient4389);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 658,1020.3622 c 0,3.4416 -0.71503,6.9454 -2.04321,10.1204 -1.28222,3.065 -3.2227,5.915 -5.57201,8.2644 -2.34934,2.3493 -5.19935,4.2898 -8.26441,5.572 -3.1749,1.3282 -6.67885,2.0432 -10.12037,2.0432 -3.44152,0 -6.94547,-0.715 -10.12038,-2.0432 -3.06506,-1.2822 -5.91507,-3.2227 -8.2644,-5.572 -2.34932,-2.3494 -4.2898,-5.1994 -5.57202,-8.2644 -1.32818,-3.175 -2.0432,-6.6788 -2.0432,-10.1204 0,-3.4416 0.71502,-6.9454 2.0432,-10.1204 1.28222,-3.065 3.22269,-5.9151 5.57202,-8.2644 2.34933,-2.34932 5.19935,-4.28982 8.2644,-5.57202 3.17491,-1.32817 6.67886,-2.04321 10.12038,-2.04321 3.44152,0 6.94547,0.71504 10.12037,2.04321 3.06505,1.2822 5.91507,3.2227 8.26441,5.57202 2.34932,2.3493 4.28979,5.1994 5.57201,8.2644 1.32818,3.175 2.04321,6.6788 2.04321,10.1204 z"
+       id="path4309"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="aaaaaaaaaaaaaaaaa"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Enemy_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4354);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4344"
+       cx="622"
+       cy="1020.3622"
+       rx="7"
+       ry="18.200001"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Enemy_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4362);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4346"
+       cx="643"
+       cy="1020.3622"
+       rx="6.1052632"
+       ry="14.5"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Enemy_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:url(#linearGradient4426);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:15;stroke-dasharray:none;stroke-opacity:1"
+       d="m 756.39785,1006.6841 c 0,-6 4.42953,-7.74703 5.75635,-11.99996 2.40623,-7.71274 3.83757,-13.99991 3.83757,-13.99991 0,0 1.43135,6.28717 3.83757,13.99991 1.32681,4.25293 5.75635,5.99996 5.75635,11.99996 0,4 -0.9594,10.9999 -5.60239,12 0,0 6.56179,4.9999 6.56179,6.9999 0,1 0,1 -0.80544,1 -3.83757,10e-5 -3.83757,-2 -5.75635,-4 0.58083,2.7328 1.76482,5 1.76482,8 0,5.0771 -5.60238,13.9999 -5.60238,13.9999 0,0 -5.91033,-8.9228 -5.91033,-13.9999 0,-3 1.56229,-5.4764 2.07276,-8 -1.91878,2 -1.91878,4.0001 -5.75636,4 -1.11336,0 -1.11336,0 -1.11336,-1 0,-2 6.86972,-6.9999 6.86972,-6.9999 -4.95094,-1.0001 -5.91032,-8 -5.91032,-12 z"
+       id="path4418"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sscsscsscscscsscs"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <circle
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4843);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4428"
+       cx="761.19482"
+       cy="1006.6841"
+       r="4.1948242"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path4428"
+       id="use4438"
+       transform="translate(9.5939236,2.6755966e-7)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4495);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4486"
+       cx="765.99176"
+       cy="1013.1841"
+       rx="0.95939231"
+       ry="3.4999807"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_spirit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#d00000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4484"
+       width="64"
+       height="64"
+       x="10"
+       y="1113.3622"
+       rx="0"
+       ry="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 34,1129.3622 c 5,0 8,-3 12,-5 l 0,42"
+       id="path4487"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#d00000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4484-2"
+       width="64"
+       height="64"
+       x="80"
+       y="1113.3622"
+       rx="0"
+       ry="0" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 125,1124.3622 -26,0 0,17 11,0 c 8,0 15,2 15,12 0,10 -7,13 -15,13 l -11,0"
+       id="path4504"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccszsc" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#d00000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4484-2-1"
+       width="64"
+       height="64"
+       x="150"
+       y="1113.3622"
+       rx="0"
+       ry="0" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 162,1129.3622 c 5,0 8,-3 12,-5 l 0,42"
+       id="path4487-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4591"
+       width="15"
+       height="42"
+       x="187"
+       y="1124.3622"
+       ry="8"
+       rx="7.4558058" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#d00000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4484-2-1-9"
+       width="64"
+       height="64"
+       x="220"
+       y="1113.3622"
+       rx="0"
+       ry="0" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4591-3"
+       width="15"
+       height="42"
+       x="258"
+       y="1124.3622"
+       ry="8"
+       rx="7.5" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 231,1131.3622 c 0,-6 5,-7 7,-7 2,0 7,1 7,7 0,6 -13,35 -13,35 l 14,0"
+       id="path4611"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czzcc" />
   </g>
 </svg>

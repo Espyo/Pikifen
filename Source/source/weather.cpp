@@ -24,9 +24,9 @@ weather::weather(
     name(n),
     daylight(dl),
     sun_strength(ss),
-    percipitation_type(pt),
-    percipitation_frequency(pf),
-    percipitation_speed(ps),
-    percipitation_angle(pa) {
+    precipitation_type(pt),
+    precipitation_frequency(pf),
+    precipitation_speed(ps),
+    precipitation_angle(pa) {
     
 }

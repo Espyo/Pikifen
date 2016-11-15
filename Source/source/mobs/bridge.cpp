@@ -95,9 +95,14 @@ void bridge::open(mob* m, void* info1, void* info2) {
         s_ptr->hazards.clear();
         
         sector_correction sc(s_ptr);
-        //TODO the file name is so static...
-        //plus, the railing should have its own texture.
-        sc.new_texture.bitmap = bitmaps.get("Textures/Bridge.png", NULL);
+        //TODO the file names are so static...
+        sc.new_texture.bitmap =
+            bitmaps.get(
+                (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
+                "Textures/Bridge.png" :
+                "Textures/Bridge_rail.png",
+                NULL
+            );
         sc.new_texture.rot = m->angle;
         
         cur_area_data.sector_corrections.push_back(sc);

@@ -1,3 +1,7 @@
+The project's code is licensed under the MIT License (MIT), described below.
+For licenses on the various assets, please read README.txt.
+
+
 The MIT License (MIT)
 
 Copyright (c) 2016 André Luís Gomes da Silva

@@ -392,31 +392,31 @@ void do_gameplay_logic() {
         
         /**************************
         *                    /  / *
-        *   Percipitation     / / *
+        *   Precipitation     / / *
         *                   /  /  *
         **************************/
         
         /*
         if(
-            cur_area_data.weather_condition.percipitation_type !=
-            PERCIPITATION_TYPE_NONE
+            cur_area_data.weather_condition.precipitation_type !=
+            PRECIPITATION_TYPE_NONE
         ) {
-            percipitation_timer.tick(delta_t);
-            if(percipitation_timer.ticked) {
-                percipitation_timer = timer(
+            precipitation_timer.tick(delta_t);
+            if(precipitation_timer.ticked) {
+                precipitation_timer = timer(
                     cur_area_data.weather_condition.
-                    percipitation_frequency.get_random_number()
+                    precipitation_frequency.get_random_number()
                 );
-                percipitation_timer.start();
-                percipitation.push_back(point(0, 0));
+                precipitation_timer.start();
+                precipitation.push_back(point(0, 0));
             }
         
-            for(size_t p = 0; p < percipitation.size();) {
-                percipitation[p].y +=
+            for(size_t p = 0; p < precipitation.size();) {
+                precipitation[p].y +=
                     cur_area_data.weather_condition.
-                    percipitation_speed.get_random_number() * delta_t;
-                if(percipitation[p].y > scr_h) {
-                    percipitation.erase(percipitation.begin() + p);
+                    precipitation_speed.get_random_number() * delta_t;
+                if(precipitation[p].y > scr_h) {
+                    precipitation.erase(precipitation.begin() + p);
                 } else {
                     p++;
                 }

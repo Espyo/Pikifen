@@ -20,6 +20,144 @@
   <defs
      id="defs5507">
     <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4665">
+      <stop
+         style="stop-color:#597cff;stop-opacity:0.75294119"
+         offset="0"
+         id="stop4667" />
+      <stop
+         style="stop-color:#a3b6fb;stop-opacity:0.627451"
+         offset="1"
+         id="stop4669" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="poko-bump-1">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop4726" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop4728" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="sun-glow-3">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1"
+         offset="0"
+         id="stop4438" />
+      <stop
+         id="stop4457"
+         offset="0.41177773"
+         style="stop-color:#ff4000;stop-opacity:1" />
+      <stop
+         style="stop-color:#ff8000;stop-opacity:0;"
+         offset="1"
+         id="stop4440" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="sun-back-9">
+      <stop
+         style="stop-color:#ffe000;stop-opacity:1"
+         offset="0"
+         id="stop4428" />
+      <stop
+         style="stop-color:#ffe000;stop-opacity:0.25098041"
+         offset="1"
+         id="stop4430" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="sun-front-7">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop4408" />
+      <stop
+         style="stop-color:#ffff00;stop-opacity:0"
+         offset="1"
+         id="stop4410" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="hard-bubble-effect-7">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0"
+         id="stop4454" />
+      <stop
+         id="stop4466"
+         offset="0.5"
+         style="stop-color:#ffffff;stop-opacity:0.1254902" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.75294119"
+         offset="1"
+         id="stop4456" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="hard-bubble-9">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0"
+         id="stop4392" />
+      <stop
+         id="stop4398"
+         offset="0.81249982"
+         style="stop-color:#ffffff;stop-opacity:0" />
+      <stop
+         style="stop-color:#c0c0c0;stop-opacity:1"
+         offset="0.90624988"
+         id="stop4418" />
+      <stop
+         id="stop4420"
+         offset="0.95312494"
+         style="stop-color:#404040;stop-opacity:1" />
+      <stop
+         style="stop-color:#404040;stop-opacity:1"
+         offset="1"
+         id="stop4394" />
+    </linearGradient>
+    <linearGradient
+       id="big-bubble-28">
+      <stop
+         id="stop4535"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0"
+         offset="0.80000001"
+         id="stop4537" />
+      <stop
+         id="stop4539"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="bubble-7">
+      <stop
+         id="stop4459"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="0.60000002"
+         id="stop4467" />
+      <stop
+         style="stop-color:#808080;stop-opacity:1"
+         offset="0.80000001"
+         id="stop4461" />
+      <stop
+         id="stop4463"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
        id="gold">
       <stop
          style="stop-color:#b7b700;stop-opacity:1"
@@ -338,7 +476,11 @@
          offset="0"
          id="stop5150-3-8-8" />
       <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
+         id="stop4541"
+         offset="0.5"
+         style="stop-color:#ffffff;stop-opacity:1" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
          offset="1"
          id="stop5152-2-5-9" />
     </linearGradient>
@@ -849,6 +991,226 @@
        fx="32"
        fy="692.36218"
        r="0.80000001" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="radialGradient4395"
+       cx="612"
+       cy="1020.3622"
+       fx="612"
+       fy="1020.3622"
+       r="31.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.0317461,0,0,2.0317307,-479.42859,-1084.7386)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bubble-7"
+       id="radialGradient4395-6"
+       cx="612"
+       cy="1012.4874"
+       fx="612"
+       fy="1012.4874"
+       r="31.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8888899,0,0,2.2222104,-1004.0006,-1277.5973)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bubble-shine"
+       id="radialGradient4477"
+       cx="597"
+       cy="1003.8622"
+       fx="597"
+       fy="1003.8622"
+       r="4.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8888889,0,0,2.888867,-990.66669,-1944.6615)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#hard-bubble-9"
+       id="radialGradient4396"
+       cx="732"
+       cy="1120.3622"
+       fx="732"
+       fy="1120.3622"
+       r="32"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.9999988,9.0634707e-6,-9.0635449e-6,1.9999849,-899.98892,-1252.3517)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#hard-bubble-effect-7"
+       id="radialGradient4464"
+       cx="732"
+       cy="1120.3622"
+       fx="732"
+       fy="1120.3622"
+       r="32"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.062499,-1.5937397,0.88330585,1.1430913,-1935.3718,874.30376)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient5012"
+       x1="854.47913"
+       y1="897.20593"
+       x2="909.16663"
+       y2="897.20593"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3714283,0,0,1.4222115,-90.856961,-273.65404)" />
+    <linearGradient
+       gradientTransform="matrix(1.3714283,0,0,1.4222115,-90.856961,-273.65402)"
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient5012-3"
+       x1="842.8125"
+       y1="886.65906"
+       x2="842.8125"
+       y2="842.36218"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="matrix(1.3714283,0,0,1.4222115,-90.856961,-273.65402)"
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient5012-3-1"
+       x1="777.1875"
+       y1="897.20593"
+       x2="722.5"
+       y2="897.20593"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="matrix(1.3714283,0,0,1.4222115,-90.856961,-273.65402)"
+       inkscape:collect="always"
+       xlink:href="#bubble-7"
+       id="linearGradient5012-3-1-6-2"
+       x1="773.54169"
+       y1="851.50281"
+       x2="773.54169"
+       y2="932.36218"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bubble-shine"
+       id="radialGradient4477-9"
+       cx="597"
+       cy="1003.8622"
+       fx="597"
+       fy="1003.8622"
+       r="4.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8888882,0,0,2.888867,-804.66632,-1955.6615)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#sun-front-7"
+       id="radialGradient4412"
+       cx="1480"
+       cy="1002.3622"
+       fx="1480"
+       fy="1002.3622"
+       r="50"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#sun-back-9"
+       id="radialGradient4432"
+       cx="1480"
+       cy="1002.3613"
+       fx="1480"
+       fy="1002.3613"
+       r="80"
+       gradientTransform="matrix(0.4,0,0,0.40000008,740,619.41763)"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#sun-glow-3"
+       id="radialGradient4442"
+       cx="1480"
+       cy="1002.3622"
+       fx="1480"
+       fy="1002.3622"
+       r="57.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.42608158,0,0,0.42608167,701.39925,593.27436)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4452"
+       x="-0.036"
+       width="1.072"
+       y="-0.036"
+       height="1.072">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.5"
+         id="feGaussianBlur4454" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#poko-bump-1"
+       id="linearGradient4730"
+       x1="10"
+       y1="1097.3622"
+       x2="8"
+       y2="1090.3622"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.125,0,-107.23277)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient4517"
+       x1="850"
+       y1="1202.3622"
+       x2="925"
+       y2="1202.3622"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,-1.7382813e-5)"
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient4517-3"
+       x1="375"
+       y1="1202.3622"
+       x2="300"
+       y2="1202.3622"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,-1.7382813e-5)"
+       inkscape:collect="always"
+       xlink:href="#big-bubble-28"
+       id="linearGradient4517-3-6"
+       x1="375"
+       y1="1197.3622"
+       x2="375"
+       y2="1147.3622"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(0,-1.7382813e-5)"
+       inkscape:collect="always"
+       xlink:href="#bubble-7"
+       id="linearGradient4517-3-6-0"
+       x1="375"
+       y1="1177.3622"
+       x2="375"
+       y2="1247.3622"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#bubble-shine"
+       id="radialGradient4477-9-2"
+       cx="597"
+       cy="1003.8622"
+       fx="597"
+       fy="1003.8622"
+       r="4.5"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.8888882,0,0,2.888867,-1396.6663,-1730.1622)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4665"
+       id="linearGradient4671"
+       x1="330"
+       y1="1172.3622"
+       x2="890"
+       y2="1232.3622"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -857,9 +1219,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.99999999"
-     inkscape:cx="41.614777"
-     inkscape:cy="130.02785"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="591.84609"
+     inkscape:cy="-117.36211"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -878,7 +1240,8 @@
      inkscape:snap-intersection-paths="true"
      inkscape:object-nodes="true"
      inkscape:snap-object-midpoints="false"
-     inkscape:snap-center="true">
+     inkscape:snap-center="true"
+     inkscape:snap-smooth-nodes="true">
     <inkscape:grid
        type="xygrid"
        id="grid5513"
@@ -925,6 +1288,67 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4671);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4509-5-7-6-9"
+       width="625"
+       height="105"
+       x="300"
+       y="1147.3622"
+       rx="40"
+       ry="40" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4442);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4434"
+       cx="1332"
+       cy="1020.3625"
+       rx="24.499691"
+       ry="24.499695"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Sun.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4432);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 1332,988.36216 -2.0867,13.13754 a 19,19.000004 0 0 0 -9.7907,4.0383 l -10.75,-7.80314 7.811,10.76094 a 19,19.000004 0 0 0 -4.061,9.782 l -13.1226,2.0844 13.1375,2.0867 a 19,19.000004 0 0 0 4.0383,9.7914 l -7.8032,10.75 10.7618,-7.8117 a 19,19.000004 0 0 0 9.7812,4.061 l 2.0844,13.1226 2.0867,-13.1367 a 19,19.000004 0 0 0 9.7907,-4.0383 l 10.75,7.8031 -7.811,-10.7609 a 19,19.000004 0 0 0 4.061,-9.7828 l 13.1226,-2.0844 -13.1375,-2.0867 a 19,19.000004 0 0 0 -4.0383,-9.7906 l 7.8032,-10.75004 -10.761,7.81174 a 19,19.000004 0 0 0 -9.782,-4.061 L 1332,988.36216 Z"
+       id="path4415"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Sun.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4464);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4388-8"
+       cx="564"
+       cy="988.36267"
+       rx="64"
+       ry="63.999516" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4396);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4388"
+       cx="564"
+       cy="988.36267"
+       rx="64"
+       ry="63.999516" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4395);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4371"
+       cx="764"
+       cy="988.36267"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Bubble.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       rx="64"
+       ry="63.999516" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4395-6);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4371-2"
+       cx="764"
+       cy="988.36267"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Bubble.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       rx="64"
+       ry="63.999516" />
     <rect
        style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
        id="rect4660-4"
@@ -2018,5 +2442,337 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Icon.png"
        inkscape:export-xdpi="172.36"
        inkscape:export-ydpi="172.36" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4477);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4469"
+       cx="734"
+       cy="955.36292"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Bubble.png"
+       inkscape:export-xdpi="180"
+       inkscape:export-ydpi="180"
+       rx="13"
+       ry="12.999902" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient5012);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 924,924.36314 207.9999,0.1112 c 13.296,0.008 24.0001,11.10038 24.0001,24.88869 l 0,77.99937 c 0,4.889 -256,5 -256,0.11 l 0,-78.22157 c 0,-13.78829 10.704,-24.88865 24,-24.88865 z"
+       id="rect5002"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssccssc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient5012-3);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect5002-9"
+       width="255.99994"
+       height="127.99903"
+       x="900"
+       y="924.36316"
+       rx="23.999994"
+       ry="24.888702"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient5012-3-1);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 924,924.36314 207.9999,0.1112 c 13.296,0.008 24.0001,11.10038 24.0001,24.88869 l 0,77.99937 c 0,4.889 -256,5 -256,0.11 l 0,-78.22157 c 0,-13.78829 10.704,-24.88865 24,-24.88865 z"
+       id="rect5002-9-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cssccssc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient5012-3-1-6-2);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:15;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect5002-9-9-9-7"
+       width="255.99994"
+       height="127.99903"
+       x="900"
+       y="924.36316"
+       rx="23.999994"
+       ry="24.888702"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4477-9);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4469-1"
+       cx="919.99994"
+       cy="944.36298"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       rx="12.999997"
+       ry="12.999902" />
+    <path
+       sodipodi:type="star"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4412);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter4452);color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4404"
+       sodipodi:sides="16"
+       sodipodi:cx="1480"
+       sodipodi:cy="1002.3622"
+       sodipodi:r1="50"
+       sodipodi:r2="12.5"
+       sodipodi:arg1="0"
+       sodipodi:arg2="0.19634954"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 1530,1002.3622 -37.7402,2.4386 33.9342,16.6956 -35.8006,-12.1896 24.9619,28.4107 -28.4107,-24.9619 12.1896,35.8006 -16.6956,-33.9342 -2.4386,37.7402 -2.4386,-37.7402 -16.6956,33.9342 12.1896,-35.8006 -28.4107,24.9619 24.9619,-28.4107 -35.8006,12.1896 33.9342,-16.6956 -37.7402,-2.4386 37.7402,-2.43865 -33.9342,-16.69554 35.8006,12.18954 -24.9619,-28.41071 28.4107,24.96197 -12.1896,-35.8006 16.6956,33.93416 2.4386,-37.74019 2.4386,37.74019 16.6956,-33.93416 -12.1896,35.8006 28.4107,-24.96197 -24.9619,28.41071 35.8006,-12.18954 -33.9342,16.69554 z"
+       transform="matrix(0.4,0,0,0.40000008,740,619.41756)"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Sun.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 0,1134.3622 0,17 0,0.5 0,0.5 205,0 0,-0.5 0,-0.5 0,-17 -205,0 z m 1,1 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z"
+       id="path4470"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 20,1143.3622 12,0"
+       id="path4475"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4477"
+       width="10"
+       height="12"
+       x="38"
+       y="1137.3622"
+       rx="5"
+       ry="5.5" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 56.5,1141.8622 4.5,-4.5 0,12"
+       id="path4479"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 72,1140.8622 c 0,-3 2.5,-3.5 5,-3.5 2.5,0 5,0.5 5,3.5 0,3 -10,5 -10,8.5 l 10,0"
+       id="path4495"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czzcc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 89,1140.3622 c 0,-2 2.91167,-3 5,-3 2.08833,0 5,1 5,3 0,2 -4,3 -4,3 0,0 4,1.5 4,3 0,1.5 -2.5,3 -5,3 -2.5,0 -5,-0.5 -5,-2.5"
+       id="path4502"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czzczzc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 116,1143.8622 -10,0 6.5,-6.5 0,12"
+       id="path4509"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 133,1137.3622 -10,0 0,6 c 0,0 2.5,-2 5,-2 2.5,0 4.95504,1.5265 5,4 0.045,2.4735 -2.5,4 -5,4 -2.5,0 -5,-2 -5,-2"
+       id="path4516"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccczzzc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 150,1140.3622 c 0,-2.5 -2.5963,-3 -5,-3 -2.4037,0 -5,1.5 -5,4 l 0,4.5 c 0,2.5 2.5963,3.5 5,3.5 2.4037,0 5,-1.0963 5,-3.5 0,-2.4037 -2.5963,-3.5 -5,-3.5 -2.4037,0 -5,1 -5,3.5"
+       id="path4523"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czcczzzc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 157,1137.3622 10,0 -5,12"
+       id="path4530"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 179,1137.3622 c 1.94365,0 4.5,1.0563 4.5,3 0,1.9436 -4.5,3 -4.5,3 0,0 4.5,1.0563 4.5,3 0,1.9436 -2.55635,3 -4.5,3 -1.94365,0 -4.5,-1.0564 -4.5,-3 0,-1.9437 4.5,-3 4.5,-3 0,0 -4.5,-1.0564 -4.5,-3 0,-1.9437 2.55635,-3 4.5,-3 z"
+       id="path4537"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zzczzzczz" />
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 191,1146.3622 c 0,2.5 2.5963,3 5,3 2.4037,0 5,-1.5 5,-4 l 0,-4.5 c 0,-2.5 -2.5963,-3.5 -5,-3.5 -2.4037,0 -5,1.0963 -5,3.5 0,2.4037 2.5963,3.5 5,3.5 2.4037,0 5,-1 5,-3.5"
+       id="path4523-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="czcczzzc" />
+    <path
+       style="fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 0,1114.3622 0,17 0,0.5 0,0.5 205,0 0,-0.5 0,-0.5 0,-17 -205,0 z m 1,1 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z m 17,0 16,0 0,16 -16,0 0,-16 z"
+       id="path4470-8"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 20,1121.8613 c -2.028484,-0.029 -2.028484,3.0287 0,3 l 12,0 c 2.028484,0.029 2.028484,-3.0287 0,-3 z"
+       id="path4475-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 43,1115.8613 c -3.65556,0 -6.5,3.2212 -6.5,7 l 0,1 c 0,3.7789 2.84444,7 6.5,7 3.65556,0 6.5,-3.2211 6.5,-7 l 0,-1 c 0,-3.7788 -2.84444,-7 -6.5,-7 z m 0,3 c 1.88444,0 3.5,1.6849 3.5,4 l 0,1 c 0,2.3152 -1.61556,4 -3.5,4 -1.88444,0 -3.5,-1.6848 -3.5,-4 l 0,-1 c 0,-2.3151 1.61556,-4 3.5,-4 z"
+       id="rect4477-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssssssssssss"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 60.955078,1115.8633 c -0.381902,0.011 -0.745148,0.1677 -1.015625,0.4375 l -4.5,4.5 c -1.415849,1.4141 0.705761,3.5376 2.121094,2.123 l 1.939453,-1.9394 0,8.3769 c -0.02869,2.0285 3.028688,2.0285 3,0 l 0,-12 c -8.35e-4,-0.8455 -0.699829,-1.5232 -1.544922,-1.498 z"
+       id="path4479-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 77,1115.8613 c -1.35,0 -2.808172,0.091 -4.142578,0.8028 -1.334406,0.7116 -2.357422,2.2806 -2.357422,4.1972 -0.02869,2.0285 3.028688,2.0285 3,0 0,-1.0833 0.226984,-1.2624 0.767578,-1.5508 0.540594,-0.2883 1.582422,-0.4492 2.732422,-0.4492 1.15,0 2.191828,0.1609 2.732422,0.4492 0.540594,0.2884 0.767578,0.4675 0.767578,1.5508 0,-0.083 -0.134072,0.3154 -0.929688,0.8789 -0.795615,0.5636 -2.008902,1.1947 -3.267578,1.8555 -1.258676,0.6608 -2.564328,1.3495 -3.658203,2.1973 -1.093875,0.8477 -2.144531,1.979 -2.144531,3.5683 8.3e-5,0.8284 0.671607,1.4999 1.5,1.5 l 10,0 c 2.028484,0.029 2.028484,-3.0287 0,-3 l -7.009766,0 c 0.759622,-0.5216 1.662373,-1.0609 2.707032,-1.6093 1.241324,-0.6517 2.528037,-1.2999 3.607422,-2.0645 1.079384,-0.7646 2.195312,-1.7428 2.195312,-3.3262 0,-1.9166 -1.023016,-3.4856 -2.357422,-4.1972 C 79.808172,1115.9524 78.35,1115.8613 77,1115.8613 Z"
+       id="path4495-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sccccscccscccccccsscs"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 94,1115.8613 c -1.283591,0 -2.695504,0.2733 -3.958984,0.9121 -1.26348,0.6388 -2.541016,1.86 -2.541016,3.5879 -0.02869,2.0285 3.028688,2.0285 3,0 0,-0.2721 0.180094,-0.5489 0.894531,-0.9101 0.714438,-0.3612 1.80073,-0.5899 2.605469,-0.5899 0.804739,0 1.891031,0.2287 2.605469,0.5899 0.714437,0.3612 0.894531,0.638 0.894531,0.9101 0,0 0.01268,0.054 -0.185547,0.252 -0.198223,0.1982 -0.573818,0.4529 -0.984375,0.6582 -0.821114,0.4105 -1.693359,0.6347 -1.693359,0.6347 -1.431331,0.3547 -1.545467,2.3454 -0.164063,2.8614 0,0 0.915157,0.3472 1.791016,0.8398 0.388093,0.2882 0.820283,0.5119 1.236328,0.7581 0,-0 -0.148688,0.3662 -0.833984,0.7774 -0.685297,0.4111 -1.716016,0.7226 -2.666016,0.7226 -1.15,0 -2.263524,-0.1456 -2.880859,-0.3925 -0.308668,-0.1235 -0.473569,-0.2558 -0.53711,-0.3321 -0.06354,-0.076 -0.08203,-0.088 -0.08203,-0.2754 0.02869,-2.0285 -3.028688,-2.0285 -3,0 0,0.8125 0.29401,1.6153 0.777344,2.1953 0.483334,0.58 1.099683,0.9477 1.728515,1.1993 1.257665,0.503 2.644141,0.6054 3.994141,0.6054 1.55,0 3.019281,-0.4365 4.208984,-1.1504 1.189704,-0.7138 2.291015,-1.7662 2.291015,-3.3496 0,-1.0416 -0.579004,-1.7072 -1.099608,-2.1953 -0.3153,-0.2956 -0.665295,-0.4877 -1.007813,-0.7109 0.35422,-0.2216 0.717033,-0.3928 1.042969,-0.7188 0.551777,-0.5517 1.064452,-1.375 1.064452,-2.375 0,-1.7279 -1.277535,-2.9491 -2.541015,-3.5879 -1.26348,-0.6388 -2.675393,-0.9121 -3.958984,-0.9121 z"
+       id="path4502-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="csccsssccccccccsccccscscscccsscc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 112.45508,1115.8633 c -0.3819,0.011 -0.74515,0.1677 -1.01563,0.4375 l -6.5,6.5 c -0.94426,0.945 -0.27535,2.5599 1.06055,2.5605 l 5,0 0,4 c -0.0287,2.0285 3.02869,2.0285 3,0 l 0,-4 2,0 c 2.02848,0.029 2.02848,-3.0287 0,-3 l -2,0 0,-5 c -8.4e-4,-0.8455 -0.69983,-1.5232 -1.54492,-1.498 z m -1.45508,5.1211 0,1.3769 -1.37695,0 z"
+       id="path4509-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 123,1115.8613 c -0.82839,10e-5 -1.49992,0.6716 -1.5,1.5 l 0,6 c -5.5e-4,1.2583 1.45506,1.9581 2.4375,1.1719 0,0 2.3625,-1.6719 4.0625,-1.6719 0.9447,0 1.89404,0.3079 2.52734,0.7774 0.63331,0.4694 0.95909,1.0036 0.97266,1.75 0.013,0.7169 -0.29036,1.2217 -0.93164,1.6914 -0.64128,0.4697 -1.62366,0.7812 -2.56836,0.7812 -1.7,0 -4.0625,-1.6699 -4.0625,-1.6699 -1.56589,-1.294 -3.48012,1.0968 -1.875,2.3418 0,0 2.6375,2.3281 5.9375,2.3281 1.5553,0 3.09487,-0.4494 4.33984,-1.3613 1.24498,-0.9119 2.19212,-2.4095 2.16016,-4.166 -0.0314,-1.7272 -0.95509,-3.1914 -2.18555,-4.1035 -1.23045,-0.9122 -2.75915,-1.3692 -4.31445,-1.3692 -1.34149,0 -2.51023,0.4104 -3.5,0.8672 l 0,-1.8672 8.5,0 c 2.02848,0.029 2.02848,-3.0287 0,-3 z"
+       id="path4516-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccsccssccssccsccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 145,1115.8613 c -1.51387,0 -3.03508,0.4454 -4.28125,1.3477 -1.24617,0.9023 -2.21875,2.3831 -2.21875,4.1523 l 0,4.5 c 0,1.5009 1.15171,3.2474 2.33398,3.9785 1.27852,0.7574 2.75616,1.0215 4.16602,1.0215 1.42989,0 2.91011,-0.2974 4.17773,-1.0644 1.26763,-0.767 2.32227,-2.1937 2.32227,-3.9356 0,-1.7419 -1.05464,-3.1666 -2.32227,-3.9336 -1.26762,-0.767 -2.74784,-1.0664 -4.17773,-1.0664 -1.17902,0 -2.3823,0.2602 -3.5,0.7637 l 0,-0.2637 c 0,-0.7307 0.32562,-1.248 0.97852,-1.7207 0.6529,-0.4727 1.63165,-0.7793 2.52148,-0.7793 1.09784,0 2.17969,0.1522 2.77344,0.4258 0.59374,0.2736 0.72656,0.3435 0.72656,1.0742 -0.0287,2.0285 3.02869,2.0285 3,0 0,-1.7692 -1.16537,-3.1974 -2.4707,-3.7988 -1.30533,-0.6014 -2.72344,-0.7012 -4.0293,-0.7012 z m 0,8 c 0.97381,0 1.99355,0.2508 2.625,0.6328 0.63145,0.3821 0.875,0.7054 0.875,1.3672 0,0.6618 -0.24355,0.9871 -0.875,1.3692 -0.63145,0.382 -1.65119,0.6308 -2.625,0.6308 -0.99384,0 -2.01616,-0.2339 -2.63672,-0.6015 -0.62056,-0.3676 -0.86328,-0.6677 -0.86328,-1.3985 0,-0.7307 0.24272,-1.0288 0.86328,-1.3965 0.62056,-0.3676 1.64288,-0.6035 2.63672,-0.6035 z"
+       id="path4523-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssccssssscssssccssscscssscs"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 157,1115.8613 c -2.02848,-0.029 -2.02848,3.0287 0,3 l 7.75,0 -4.13477,9.9239 c -0.76953,1.8464 2.00001,3.0007 2.76954,1.1543 l 5,-12 c 0.41275,-0.9885 -0.3136,-2.0785 -1.38477,-2.0782 z"
+       id="path4530-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 179,1115.8613 c -1.24356,0 -2.56184,0.3012 -3.72656,0.9707 -1.16472,0.6696 -2.27344,1.8999 -2.27344,3.5293 0,1.0648 0.60704,1.8811 1.21094,2.4141 0.29962,0.2644 0.63095,0.3961 0.95312,0.5879 -0.32187,0.1917 -0.65377,0.3217 -0.95312,0.5859 -0.60391,0.533 -1.21094,1.3474 -1.21094,2.4121 0,1.6295 1.10873,2.8598 2.27344,3.5293 1.1647,0.6696 2.48298,0.9707 3.72656,0.9707 1.24358,0 2.56186,-0.3011 3.72656,-0.9707 1.16471,-0.6695 2.27344,-1.8998 2.27344,-3.5293 0,-1.0647 -0.60703,-1.8791 -1.21094,-2.4121 -0.29935,-0.2642 -0.63125,-0.3942 -0.95312,-0.5859 0.32217,-0.1918 0.6535,-0.3235 0.95312,-0.5879 0.6039,-0.533 1.21094,-1.3493 1.21094,-2.4141 0,-1.6294 -1.10872,-2.8597 -2.27344,-3.5293 -1.16472,-0.6695 -2.483,-0.9707 -3.72656,-0.9707 z m 0,3 c 0.70009,0 1.6311,0.2278 2.23047,0.5723 0.59937,0.3445 0.76953,0.6135 0.76953,0.9277 0,-0.093 0.0445,-0.048 -0.19531,0.1641 -0.23986,0.2117 -0.6912,0.4806 -1.17188,0.6973 -0.79402,0.3578 -1.36769,0.4915 -1.63281,0.5605 -0.26512,-0.069 -0.83879,-0.2027 -1.63281,-0.5605 -0.48068,-0.2167 -0.93202,-0.4856 -1.17188,-0.6973 -0.23985,-0.2117 -0.19531,-0.257 -0.19531,-0.1641 0,-0.3142 0.17016,-0.5832 0.76953,-0.9277 0.59937,-0.3445 1.53038,-0.5723 2.23047,-0.5723 z m 0,6.0782 c 0.26485,0.069 0.83855,0.2025 1.63281,0.5605 0.48068,0.2166 0.93203,0.4856 1.17188,0.6973 0.23984,0.2117 0.19531,0.2569 0.19531,0.164 0,0.3142 -0.17015,0.5852 -0.76953,0.9297 -0.59938,0.3446 -1.5304,0.5703 -2.23047,0.5703 -0.70007,0 -1.63109,-0.2257 -2.23047,-0.5703 -0.59938,-0.3445 -0.76953,-0.6155 -0.76953,-0.9297 0,0.093 -0.0445,0.048 0.19531,-0.164 0.23985,-0.2117 0.6912,-0.4807 1.17188,-0.6973 0.79426,-0.358 1.36796,-0.4916 1.63281,-0.5605 z"
+       id="path4537-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="scsccsscscssccscssscccccccsscccccsccccc"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;baseline-shift:baseline;text-anchor:start;white-space:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 196,1115.8613 c -1.42989,0 -2.91011,0.2994 -4.17773,1.0664 -1.26763,0.767 -2.32227,2.1917 -2.32227,3.9336 0,1.7419 1.05464,3.1686 2.32227,3.9356 1.26762,0.767 2.74784,1.0644 4.17773,1.0644 1.17902,0 2.3823,-0.2582 3.5,-0.7617 l 0,0.2617 c 0,0.7308 -0.32562,1.25 -0.97852,1.7227 -0.6529,0.4727 -1.63165,0.7773 -2.52148,0.7773 -1.09784,0 -2.17969,-0.1502 -2.77344,-0.4238 -0.59374,-0.2736 -0.72656,-0.3454 -0.72656,-1.0762 0.0287,-2.0285 -3.02869,-2.0285 -3,0 0,1.7693 1.16537,3.1994 2.4707,3.8008 1.30533,0.6014 2.72344,0.6992 4.0293,0.6992 1.51387,0 3.03508,-0.4434 4.28125,-1.3457 1.24617,-0.9023 2.21875,-2.385 2.21875,-4.1543 l 0,-4.5 c 0.003,-0.2973 -0.0815,-0.589 -0.24414,-0.8379 -0.2861,-1.3537 -1.03766,-2.5153 -2.08984,-3.1386 -1.27852,-0.7574 -2.75616,-1.0235 -4.16602,-1.0235 z m 0,3 c 0.99384,0 2.01616,0.2359 2.63672,0.6035 0.62056,0.3677 0.86328,0.6658 0.86328,1.3965 0,0.7308 -0.24272,1.0309 -0.86328,1.3985 -0.62056,0.3676 -1.64288,0.6015 -2.63672,0.6015 -0.97381,0 -1.99355,-0.2488 -2.625,-0.6308 -0.63145,-0.3821 -0.875,-0.7074 -0.875,-1.3692 0,-0.6618 0.24355,-0.9851 0.875,-1.3672 0.63145,-0.382 1.65119,-0.6328 2.625,-0.6328 z"
+       id="path4523-9-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssssscssssccssssccssscssscscs"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4720"
+       width="13"
+       height="15"
+       x="2.5"
+       y="1115.8622"
+       rx="6"
+       ry="6"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient4730);stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4722"
+       width="3"
+       height="9"
+       x="7.5"
+       y="1118.8622"
+       rx="1"
+       ry="1.6875"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Value_font.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4517);fill-opacity:1.0;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4509"
+       width="625"
+       height="105"
+       x="300"
+       y="1147.3622"
+       rx="40"
+       ry="40" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4517-3);fill-opacity:1.0;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4509-5"
+       width="625"
+       height="105"
+       x="300"
+       y="1147.3622"
+       rx="40"
+       ry="40" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4517-3-6);fill-opacity:1.0;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4509-5-7"
+       width="625"
+       height="105"
+       x="300"
+       y="1147.3622"
+       rx="40"
+       ry="40" />
+    <rect
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#linearGradient4517-3-6-0);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="rect4509-5-7-6"
+       width="625"
+       height="105"
+       x="300"
+       y="1147.3622"
+       rx="40"
+       ry="40" />
+    <ellipse
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.5;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4477-9-2);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       id="path4469-1-7"
+       cx="328"
+       cy="1169.8622"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Number_bubble.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       rx="12.999997"
+       ry="12.999902" />
   </g>
 </svg>

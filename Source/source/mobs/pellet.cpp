@@ -78,7 +78,7 @@ void pellet::draw() {
     draw_sprite(
         pel_type->bmp_number,
         draw_x, draw_y,
-        radius * 1.36, -1,
+        radius, -1,
         0, map_gray(get_sprite_brightness(this))
     );
     

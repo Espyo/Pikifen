@@ -308,18 +308,18 @@ void do_game_drawing(
         /* Layer 7
         ***************************
         *                    /  / *
-        *   Percipitation     / / *
+        *   Precipitation     / / *
         *                   /  /  *
         **************************/
         
         if(
-            cur_area_data.weather_condition.percipitation_type !=
-            PERCIPITATION_TYPE_NONE
+            cur_area_data.weather_condition.precipitation_type !=
+            PRECIPITATION_TYPE_NONE
         ) {
-            size_t n_percipitation_particles = percipitation.size();
-            for(size_t p = 0; p < n_percipitation_particles; ++p) {
+            size_t n_precipitation_particles = precipitation.size();
+            for(size_t p = 0; p < n_precipitation_particles; ++p) {
                 al_draw_filled_circle(
-                    percipitation[p].x, percipitation[p].y,
+                    precipitation[p].x, precipitation[p].y,
                     3, al_map_rgb(255, 255, 255)
                 );
             }
@@ -635,9 +635,10 @@ void do_game_drawing(
                 sun_meter_sun_angle
             ); //Spinning sun.
             draw_sprite(
-                bmp_sun_bubble,
+                bmp_hard_bubble,
                 first_dot_x + day_passed_ratio * dots_span, dots_y,
-                sun_radius * 2.0, sun_radius * 2.0
+                sun_radius * 1.5, sun_radius * 1.5, 0,
+                al_map_rgb(255, 192, 128)
             ); //Bubble in front the sun.
             
             //Day number.
@@ -674,11 +675,14 @@ void do_game_drawing(
             
             //Closest group member.
             ALLEGRO_BITMAP* bm = NULL;
+            ALLEGRO_BITMAP* bm_maturity = NULL;
             if(closest_group_member) {
                 if(typeid(*closest_group_member) == typeid(pikmin)) {
                     pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
-                    bm = p_ptr->pik_type->bmp_icon[p_ptr->maturity];
-                    
+                    bm = p_ptr->pik_type->bmp_icon;
+                    bm_maturity =
+                        p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
+                        
                 } else if(typeid(*closest_group_member) == typeid(leader)) {
                     leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
                     bm = l_ptr->lea_type->bmp_icon;
@@ -726,6 +730,29 @@ void do_game_drawing(
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3]
             );
             
+            if(bm_maturity) {
+                float sprite_w =
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2] == -1 ? -1 :
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2] * 0.8;
+                float sprite_h =
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3] == -1 ? -1 :
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3] * 0.8;
+                draw_sprite(
+                    bm_maturity,
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1],
+                    sprite_w, sprite_h
+                );
+                draw_sprite(
+                    bmp_bubble,
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3]
+                );
+            }
+            
+            //Pikmin count "X".
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][0],
@@ -1947,6 +1974,12 @@ void draw_loading_screen(
         0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha)
     );
     
+    int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+    al_get_separate_blender(
+        &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+    );
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
+    
     //Set up the bitmap that will hold the text.
     int text_w = 0, text_h = 0;
     if(!text.empty()) {
@@ -1990,6 +2023,10 @@ void draw_loading_screen(
         subtext_bmp = recreate_bitmap(subtext_bmp);
         
     }
+    
+    al_set_separate_blender(
+        old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+    );
     
     //Draw the text bitmap in its place.
     float text_y = 0;

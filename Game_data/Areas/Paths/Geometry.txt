@@ -387,7 +387,7 @@ sectors{
 	}
 	s{
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=0.00
@@ -411,37 +411,37 @@ sectors{
 	}
 	s{
 		z=50.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=100.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=50.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=100.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		type=Gate
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 	s{
 		type=Gate
 		z=0.00
-		texture=Rock.jpg
+		texture=Stone.jpg
 	}
 }
 mobs{

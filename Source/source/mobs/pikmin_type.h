@@ -47,8 +47,10 @@ public:
     bool can_carry_bomb_rocks;
     //Top (leaf/bud/flower) bitmap for each maturity.
     ALLEGRO_BITMAP* bmp_top[3];
-    //Standby icons for each maturity.
-    ALLEGRO_BITMAP* bmp_icon[3];
+    //Standby icon.
+    ALLEGRO_BITMAP* bmp_icon;
+    //Standby maturity icons.
+    ALLEGRO_BITMAP* bmp_maturity_icon[3];
     
     pikmin_type();
     void load_from_file(

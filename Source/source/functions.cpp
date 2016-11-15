@@ -1318,29 +1318,29 @@ void load_game_content() {
             }
         }
         
-        //Percipitation.
-        unsigned char percipitation_type =
+        //Precipitation.
+        unsigned char precipitation_type =
             s2i(
                 cur_weather->get_child_by_name(
-                    "percipitation_type"
-                )->get_value_or_default(i2s(PERCIPITATION_TYPE_NONE))
+                    "precipitation_type"
+                )->get_value_or_default(i2s(PRECIPITATION_TYPE_NONE))
             );
-        interval percipitation_frequency =
+        interval precipitation_frequency =
             interval(
                 cur_weather->get_child_by_name(
-                    "percipitation_frequency"
+                    "precipitation_frequency"
                 )->value
             );
-        interval percipitation_speed =
+        interval precipitation_speed =
             interval(
                 cur_weather->get_child_by_name(
-                    "percipitation_speed"
+                    "precipitation_speed"
                 )->value
             );
-        interval percipitation_angle =
+        interval precipitation_angle =
             interval(
                 cur_weather->get_child_by_name(
-                    "percipitation_angle"
+                    "precipitation_angle"
                 )->get_value_or_default(f2s((M_PI + M_PI_2)))
             );
             
@@ -1348,8 +1348,8 @@ void load_game_content() {
         weather_conditions[name] =
             weather(
                 name, lighting, sun_strength,
-                percipitation_type, percipitation_frequency,
-                percipitation_speed, percipitation_angle
+                precipitation_type, precipitation_frequency,
+                precipitation_speed, precipitation_angle
             );
     }
 }

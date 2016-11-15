@@ -26,6 +26,7 @@ pikmin_type::pikmin_type() :
     carry_strength(1),
     attack_power(1),
     carry_speed(1),
+    bmp_icon(nullptr),
     attack_interval(0.8),
     throw_height_mult(1.0),
     has_onion(true),
@@ -38,9 +39,9 @@ pikmin_type::pikmin_type() :
     bmp_top[0] = NULL;
     bmp_top[1] = NULL;
     bmp_top[2] = NULL;
-    bmp_icon[0] = NULL;
-    bmp_icon[1] = NULL;
-    bmp_icon[2] = NULL;
+    bmp_maturity_icon[0] = NULL;
+    bmp_maturity_icon[1] = NULL;
+    bmp_maturity_icon[2] = NULL;
     
     weight = 1;
     show_health = false;
@@ -98,11 +99,13 @@ void pikmin_type::load_from_file(
             bitmaps.get(file->get_child_by_name("top_bud")->value, file);
         bmp_top[2] =
             bitmaps.get(file->get_child_by_name("top_flower")->value, file);
-        bmp_icon[0] =
+        bmp_icon =
+            bitmaps.get(file->get_child_by_name("icon")->value, file);
+        bmp_maturity_icon[0] =
             bitmaps.get(file->get_child_by_name("icon_leaf")->value, file);
-        bmp_icon[1] =
+        bmp_maturity_icon[1] =
             bitmaps.get(file->get_child_by_name("icon_bud")->value, file);
-        bmp_icon[2] =
+        bmp_maturity_icon[2] =
             bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
     }
     anim_conversions->push_back(make_pair(PIKMIN_ANIM_IDLING,    "idling"));

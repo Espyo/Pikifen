@@ -72,20 +72,54 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 4) Credits
 ===============
-    Pretty much everything:
-        André 'Espyo' Silva
-    Special thanks:
-        My friends at Pikipedia and Pikmin Fanon
-        My friends at Brawl Snapshots
-        id Software for Doom
-        The developers of Doom Builder
-        stackoverflow and other such websites
+    The project's code is licensed under the MIT License (MIT), described in LICENSE.txt.
+    Various assets may have their own licenses, which are detailed below.
+    Assets whose license is not listed are licensed under the MIT License (MIT).
+    
+    Engine
+        Inspiration
+            Nintendo
+        Support and beta-testing
+            My friends at Pikipedia and Pikmin Fanon
+            My friends at Brawl Snapshots
+        Everything else
+            André 'Espyo' Silva
+        Special thanks
+            Pikipedia and Pikmin Fanon users interested in the project
+            The developers of Allegro
+            The Allegro forums and the users within
+            id Software for Doom
+            The developers of Doom Builder
+            Stackoverflow and other such websites
+    
+    Demo content
+        Graphics
+            Bark texture: Daniel Smith - License: Public domain - Source: http://www.publicdomainpictures.net/view-image.php?image=70997&picture=tree-bark-texture-14
+            Trunk texture: Caroline Steinhauer - License: Public domain - Source: http://www.publicdomainpictures.net/view-image.php?image=14748&picture=slice-of-oak-tree public domain
+            Concrete texture: andreas160578 - License: Public domain - Source: https://pixabay.com/pt/steinplatte-preto-1331975/
+            Light grass texture: SilasCarmago - License: Public domain - Source: https://pixabay.com/pt/grama-textura-fundo-grama-verde-1089984/
+            Bridge texture: PublicDomainPictures - License: Public domain - Source: https://pixabay.com/pt/abstract-%C3%A1sia-fundo-bambu-cacho-71516/
+            Bridge rail texture: Titus Tscharntke - License: Public domain - Source: https://commons.wikimedia.org/wiki/File:Sticks_wood.jpg
+            Dirt texture: tatyana - License: CC BY-SA 4.0 - Source: https://sftextures.com/2014/08/15/dry-cracked-orange-desert-ground-with-yellow-sun-burnt-grass-texture/
+            Dark grass texture: tatyana - License: CC BY-SA 4.0 - Source: https://sftextures.com/2015/09/04/grass-texture-seamless-green-fresh-summer-lawn/
+            Metal texture: tatyana - License: CC BY-SA 4.0 - Source: https://sftextures.com/2014/08/19/rusty-grungy-metal-material-old-weathered-brown-white-grey-painted-surface-texture/
+            Stone texture: Bart K. - License: CC BY-SA 3.0 - Source: http://opengameart.org/content/stone-texture
+            Area name font
+                Original font inspiration: Nintendo
+                Fan clone: Adorable Oshawott - License: Fair use with permission - Source: http://theadorableoshawott.deviantart.com/art/Pikmin-font-526210650
+                Bubble style: The Sneaky Spy
+            Pikmin idle glow texture: hc - License: CC BY-SA 3.0 - Source: http://opengameart.org/node/8279
+            Smoke texture: Crack.com - License: Public domain - Source: http://opengameart.org/node/7691
+            Main menu background: Helen Marshall - License: Public domain - Source: http://www.publicdomainpictures.net/view-image.php?image=1255
+            Leaf shadows: Titus Tscharntke - License: Public domain - Source: https://commons.wikimedia.org/wiki/File:Leaf_branch_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_white_background.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_branch_birch_alpha.jpg
+        Everything else
+            André 'Espyo' Silva
 
 ===============
 5) Disclaimer
 ===============
     The Pikmin fangame engine and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.
-    Pikmin® is a trademark of Nintendo®. The copyrights of all associated characters, names, terms, art, music, and assets belong to Nintendo®.
+    Pikmin® is a trademark of Nintendo®. May contain content taken directly from official sources; said content belongs to Nintendo®.
     
     That said, we highly recommend you buy the official games, as a fangame cannot possibly replace the experience the real games bring!

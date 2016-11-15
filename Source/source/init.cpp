@@ -258,8 +258,8 @@ void init_event_things(
 void init_fonts() {
     int font_ranges[] = {
         0x0020, 0x007E, //ASCII
-        0x00A0, 0x00A1, //Non-breaking space and inverted !
-        0x00BF, 0x00FF, //Inverted ? and European vowels and such
+        /*0x00A0, 0x00A1, //Non-breaking space and inverted !
+        0x00BF, 0x00FF, //Inverted ? and European vowels and such*/
     };
     int counter_font_ranges[] = {
         0x002D, 0x002D, //Dash
@@ -276,14 +276,14 @@ void init_fonts() {
     //So we load into a bitmap first.
     ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
     if(temp_font_bitmap) {
-        font_main = al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
+        font_main = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
     
     temp_font_bitmap = load_bmp("Area_name_font.png");
     if(temp_font_bitmap) {
         font_area_name =
-            al_grab_font_from_bitmap(temp_font_bitmap, 3, font_ranges);
+            al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
     }
     al_destroy_bitmap(temp_font_bitmap);
     
@@ -336,34 +336,35 @@ void init_hud_coordinate(
  * Initializes the default HUD coordinates.
  */
 void init_hud_coordinates() {
-    init_hud_coordinate(HUD_ITEM_TIME,                0.40, 0.10, 0.70, 0.10);
-    init_hud_coordinate(HUD_ITEM_DAY_BUBBLE,          0.88, 0.18, 0.15, 0.00);
-    init_hud_coordinate(HUD_ITEM_DAY_NUMBER,          0.88, 0.19, 0.10, 0.10);
-    init_hud_coordinate(HUD_ITEM_LEADER_1_ICON,       0.07, 0.90, 0.08, 0.00);
-    init_hud_coordinate(HUD_ITEM_LEADER_2_ICON,       0.06, 0.80, 0.05, 0.00);
-    init_hud_coordinate(HUD_ITEM_LEADER_3_ICON,       0.06, 0.72, 0.05, 0.00);
-    init_hud_coordinate(HUD_ITEM_LEADER_1_HEALTH,     0.16, 0.90, 0.08, 0.00);
-    init_hud_coordinate(HUD_ITEM_LEADER_2_HEALTH,     0.12, 0.80, 0.05, 0.00);
-    init_hud_coordinate(HUD_ITEM_LEADER_3_HEALTH,     0.12, 0.72, 0.05, 0.00);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON, 0.30, 0.89, 0.08, 0.00);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,   0.38, 0.91, 0.07, 0.08);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,    2.00, 0.00, 0.01, 0.01);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,     0.50, 0.90, 0.16, 0.10);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,     0.68, 0.91, 0.14, 0.08);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,     0.87, 0.91, 0.19, 0.08);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,      0.59, 0.92, 0.04, 0.08);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_2,      0.76, 0.92, 0.04, 0.08);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_3,      2.00, 0.00, 0.01, 0.01);
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_ICON,        0.06, 0.36, 0.04, 0.07);
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_AMOUNT,      0.10, 0.37, 0.09, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_KEY,         0.10, 0.42, 0.10, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_ICON,        0.06, 0.52, 0.04, 0.07);
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_AMOUNT,      0.10, 0.53, 0.09, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_KEY,         0.10, 0.47, 0.10, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_ICON,     0.06, 0.52, 0.03, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_KEY,      0.06, 0.47, 0.04, 0.04);
-    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_ICON,     0.13, 0.52, 0.03, 0.05);
-    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_KEY,      0.13, 0.47, 0.04, 0.04);
+    init_hud_coordinate(HUD_ITEM_TIME,                  0.40, 0.10, 0.70, 0.10);
+    init_hud_coordinate(HUD_ITEM_DAY_BUBBLE,            0.88, 0.18, 0.15, 0.00);
+    init_hud_coordinate(HUD_ITEM_DAY_NUMBER,            0.88, 0.20, 0.10, 0.10);
+    init_hud_coordinate(HUD_ITEM_LEADER_1_ICON,         0.07, 0.90, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_2_ICON,         0.06, 0.80, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_3_ICON,         0.06, 0.72, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_1_HEALTH,       0.16, 0.90, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_2_HEALTH,       0.12, 0.80, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_LEADER_3_HEALTH,       0.12, 0.72, 0.05, 0.00);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON,   0.30, 0.89, 0.08, 0.00);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 0.35, 0.86, 0.04, 0.00);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,     0.38, 0.91, 0.07, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,      2.00, 0.00, 0.01, 0.01);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,       0.50, 0.90, 0.16, 0.10);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,       0.68, 0.91, 0.14, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,       0.87, 0.91, 0.19, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,        0.59, 0.92, 0.04, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_2,        0.76, 0.92, 0.04, 0.08);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_3,        2.00, 0.00, 0.01, 0.01);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_ICON,          0.06, 0.36, 0.04, 0.07);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_AMOUNT,        0.10, 0.37, 0.09, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_1_KEY,           0.10, 0.42, 0.10, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_ICON,          0.06, 0.52, 0.04, 0.07);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_AMOUNT,        0.10, 0.53, 0.09, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_2_KEY,           0.10, 0.47, 0.10, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_ICON,       0.06, 0.52, 0.03, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_KEY,        0.06, 0.47, 0.04, 0.04);
+    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_ICON,       0.13, 0.52, 0.03, 0.05);
+    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_KEY,        0.13, 0.47, 0.04, 0.04);
 }
 
 
@@ -467,7 +468,6 @@ void init_misc_graphics() {
     bmp_smoke = load_bmp(           "Smoke.png");
     bmp_sparkle = load_bmp(         "Sparkle.png");
     bmp_sun = load_bmp(             "Sun.png");
-    bmp_sun_bubble = load_bmp(      "Sun_bubble.png");
     bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
     bmp_wave_ring = load_bmp(       "Wave_ring.png");
@@ -859,7 +859,6 @@ void destroy_resources() {
     al_destroy_bitmap(bmp_smoke);
     al_destroy_bitmap(bmp_sparkle);
     al_destroy_bitmap(bmp_sun);
-    al_destroy_bitmap(bmp_sun_bubble);
     al_destroy_bitmap(bmp_ub_spray);
     al_destroy_bitmap(bmp_us_spray);
     

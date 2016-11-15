@@ -38,10 +38,10 @@ public:
     vector<pair<size_t, ALLEGRO_COLOR> > daylight;
     //Vector with the sun strength for specific times of day, in minutes.
     vector<pair<size_t, unsigned char> > sun_strength;
-    unsigned char percipitation_type;
-    interval percipitation_frequency;
-    interval percipitation_speed;
-    interval percipitation_angle;
+    unsigned char precipitation_type;
+    interval precipitation_frequency;
+    interval precipitation_speed;
+    interval precipitation_angle;
     
     weather();
     weather(
@@ -53,10 +53,10 @@ public:
 
 
 
-enum PERCIPITATION_TYPES {
-    PERCIPITATION_TYPE_NONE,
-    PERCIPITATION_TYPE_RAIN,
-    PERCIPITATION_TYPE_WIND,
+enum PRECIPITATION_TYPES {
+    PRECIPITATION_TYPE_NONE,
+    PRECIPITATION_TYPE_RAIN,
+    PRECIPITATION_TYPE_WIND,
 };
 
 #endif //ifndef WEATHER_INCLUDED
