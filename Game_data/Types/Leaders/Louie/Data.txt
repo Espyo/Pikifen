@@ -1,6 +1,6 @@
 name = Louie
 
-dismiss_sfx = Dismiss.ogg
+dismiss_sfx = Louie_dismiss.ogg
 height = 46
 main_color = 64 192 255
 max_carriers = 5

@@ -1,6 +1,6 @@
 name = Olimar
 
-dismiss_sfx = Dismiss.ogg
+dismiss_sfx = Olimar_dismiss.ogg
 height = 46
 main_color = 255 64 64
 max_carriers = 5

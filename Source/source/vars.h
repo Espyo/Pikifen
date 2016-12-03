@@ -98,7 +98,7 @@ extern sample_struct sfx_pikmin_caught;
 extern sample_struct sfx_pikmin_dying;
 extern sample_struct sfx_pikmin_held;
 extern sample_struct sfx_pikmin_idle;
-extern sample_struct sfx_pikmin_pluck;
+extern sample_struct sfx_pluck;
 extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_switch_pikmin;

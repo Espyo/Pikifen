@@ -1,11 +1,13 @@
 This file will explain my process behind creating spritesheets. It should also help you navigate my SVG files. Keep in mind that this might not be 100% accurate, especially for older files.
 
 I use Inkscape for my development.
-I have two layers, one for the green (0 128 0 ) "grid", one for the sprites themselves (and sometimes another one for extra things)
+I have two layers, one for the green (#008000) "grid", one for the sprites themselves. (And sometimes another one for extra things.)
 First I place a 32x32 Olimar sprite, so that it looks like it is in-game. This will help with figuring out the size of the creature right from the start so that I don't run into resize and grid problems later on.
 I get screenshots from games and trace on top of them.
     No outlines.
     Shading is minimal.
+        It's very useful to show differences in height, however.
+        When shading is present, it uses a gradient, as opposed to "cel shading".
     Everything uses a gradient, which is always named.
     1:1 scale. 1 pixel on the document matches 1 pixel on the engine at 1.0x zoom level (which is 1 unit in world coordinates).
 For every gradient I use, I create a square with it outside of the spritesheet, to the left, and explain what color it is.

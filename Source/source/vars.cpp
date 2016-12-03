@@ -63,7 +63,7 @@ sample_struct sfx_pikmin_caught;
 sample_struct sfx_pikmin_dying;
 sample_struct sfx_pikmin_held;
 sample_struct sfx_pikmin_idle;
-sample_struct sfx_pikmin_pluck;
+sample_struct sfx_pluck;
 sample_struct sfx_pikmin_plucked;
 sample_struct sfx_pikmin_thrown;
 sample_struct sfx_switch_pikmin;

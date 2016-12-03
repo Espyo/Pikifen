@@ -6,9 +6,13 @@
       <Environment/>
       <Project Name="Pikmin_fangame_engine" ConfigName="Debug"/>
     </WorkspaceConfiguration>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
+    <WorkspaceConfiguration Name="Release" Selected="no">
       <Environment/>
       <Project Name="Pikmin_fangame_engine" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Windows" Selected="no">
+      <Environment/>
+      <Project Name="Pikmin_fangame_engine" ConfigName="Windows"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

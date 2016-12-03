@@ -510,7 +510,6 @@ void init_misc_sounds() {
     sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
     sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
     sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
-    sfx_pikmin_pluck = load_sample(        "Pikmin_pluck.ogg",         mixer);
     sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
     sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
     sfx_dismiss = load_sample(             "Dismiss.ogg",              mixer);
@@ -520,6 +519,7 @@ void init_misc_sounds() {
     sfx_olimar_name_call = load_sample(    "Olimar_name_call.ogg",     mixer);
     sfx_louie_name_call = load_sample(     "Louie_name_call.ogg",      mixer);
     sfx_president_name_call = load_sample( "President_name_call.ogg",  mixer);
+    sfx_pluck = load_sample(               "Pluck.ogg",                mixer);
     sfx_throw = load_sample(               "Throw.ogg",                mixer);
     sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
     sfx_camera = load_sample(              "Camera.ogg",               mixer);
@@ -879,7 +879,7 @@ void destroy_resources() {
     sfx_pikmin_held.destroy();
     sfx_pikmin_idle.destroy();
     sfx_pikmin_thrown.destroy();
-    sfx_pikmin_pluck.destroy();
+    sfx_pluck.destroy();
     sfx_pikmin_plucked.destroy();
     sfx_pikmin_called.destroy();
     sfx_dismiss.destroy();

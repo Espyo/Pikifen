@@ -739,7 +739,7 @@ void pikmin_fsm::end_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
     pik->set_animation(PIKMIN_ANIM_IDLING);
     sfx_pikmin_plucked.play(0, false);
-    sfx_pikmin_pluck.play(0, false);
+    sfx_pluck.play(0, false);
 }
 
 

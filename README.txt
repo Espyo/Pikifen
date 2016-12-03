@@ -74,7 +74,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
     The project's code is licensed under the MIT License (MIT), described in LICENSE.txt.
     Various assets may have their own licenses, which are detailed below.
-    Assets whose license is not listed are licensed under the MIT License (MIT).
+    Assets whose license is not listed are licensed under the MIT License.
     
     Engine
         Inspiration
@@ -84,9 +84,14 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             My friends at Brawl Snapshots
         Everything else
             André 'Espyo' Silva
+        Tools used
+            Allegro
+            Codelite
+            Visual Studio
+            Notepad++
         Special thanks
             Pikipedia and Pikmin Fanon users interested in the project
-            The developers of Allegro
+            The developers of all the tools I used
             The Allegro forums and the users within
             id Software for Doom
             The developers of Doom Builder
@@ -112,6 +117,22 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             Smoke texture: Crack.com - License: Public domain - Source: http://opengameart.org/node/7691
             Main menu background: Helen Marshall - License: Public domain - Source: http://www.publicdomainpictures.net/view-image.php?image=1255
             Leaf shadows: Titus Tscharntke - License: Public domain - Source: https://commons.wikimedia.org/wiki/File:Leaf_branch_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_white_background.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_texture.jpg https://commons.wikimedia.org/wiki/File:Leaf_leaves_branch_birch_alpha.jpg
+            Tools used
+                Inkscape
+                GIMP
+                Paint.NET
+        Sounds
+            Design help: Scruffy
+            Olimar's whistle: Pablo-F - License: CC BY 3.0 - Source: https://freesound.org/people/Pablo-F/sounds/90743/
+            Louie's whistle: timgormly - License: Public domain - Source: https://freesound.org/people/timgormly/sounds/162803/
+            President's whistle: han1 - License: CC BY 3.0 - Source: https://www.freesound.org/people/han1/sounds/19026/
+            Throw: sophiehall3535 - License: Public domain - Source: https://freesound.org/people/sophiehall3535/sounds/245933/
+            Pluck: dreeke - License: CC BY-NC 3.0 - Source: https://freesound.org/people/dreeke/sounds/140705/
+            Attack: Scruffy
+            Tools used
+                Audacity
+                LMMS
+                Chaos Bank V2 soundfont
         Everything else
             André 'Espyo' Silva
 
