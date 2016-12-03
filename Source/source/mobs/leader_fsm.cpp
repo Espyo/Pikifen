@@ -964,7 +964,7 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader grabs onto a mob.
+ * When a leader grabs onto a mob for throwing.
  * info1: Pointer to the mob.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {

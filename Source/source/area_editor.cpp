@@ -1551,7 +1551,10 @@ vertex* area_editor::get_merge_vertex(
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         dist d(x, y, v_ptr->x, v_ptr->y);
-        if(d <= VERTEX_MERGE_RADIUS && (d < closest_dist || !closest_v)) {
+        if(
+            d <= VERTEX_MERGE_RADIUS / cam_zoom &&
+            (d < closest_dist || !closest_v)
+        ) {
             closest_dist = d;
             closest_v = v_ptr;
             closest_nr = v;
@@ -3370,15 +3373,15 @@ void area_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_category",
-        new lafi::label(0, 0, 0, 0, "Category:"), 80, 16
+        new lafi::label(0, 0, 0, 0, "Category:"), 70, 16
     );
     frm_object->easy_add(
         "but_rem",
-        new lafi::button(0, 0, 0, 0, "-"), 10, 16
+        new lafi::button(0, 0, 0, 0, "-"), 15, 16
     );
     frm_object->easy_add(
         "but_duplicate",
-        new lafi::button(0, 0, 0, 0, "D"), 10, 16
+        new lafi::button(0, 0, 0, 0, "x2"), 15, 16
     );
     frm_object->easy_row();
     frm_object->easy_add(

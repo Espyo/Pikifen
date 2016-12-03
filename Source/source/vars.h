@@ -240,6 +240,10 @@ extern vector<leader*> leaders;
 //How hard the joystick is pressed in each direction ([0, 1]);
 extern movement_struct leader_movement;
 extern map<string, leader_type*> leader_types;
+//Loading screen main text buffer.
+extern ALLEGRO_BITMAP* loading_text_bmp;
+//Loading screen subtext buffer.
+extern ALLEGRO_BITMAP* loading_subtext_bmp;
 //Every level of maturity, multiply the power by 1 + this much.
 extern float maturity_power_mult;
 //Every level of maturity, multiply the attack by 1 + this much.

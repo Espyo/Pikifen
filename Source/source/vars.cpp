@@ -182,6 +182,8 @@ map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 vector<leader*> leaders;
 movement_struct leader_movement;
 map<string, leader_type*> leader_types;
+ALLEGRO_BITMAP* loading_text_bmp = NULL;
+ALLEGRO_BITMAP* loading_subtext_bmp = NULL;
 map<string, liquid> liquids;
 float maturity_power_mult = 0.1f;
 float maturity_speed_mult = 0.1f;

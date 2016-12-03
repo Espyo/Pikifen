@@ -1966,9 +1966,6 @@ void draw_loading_screen(
     const float LOADING_SCREEN_SUBTITLE_SCALE = 0.6f;
     const int LOADING_SCREEN_PADDING = 64;
     
-    ALLEGRO_BITMAP* text_bmp = NULL;
-    ALLEGRO_BITMAP* subtext_bmp = NULL;
-    
     unsigned char blackness_alpha = 255.0f * max(0.0f, opacity * 4 - 3);
     al_draw_filled_rectangle(
         0, 0, scr_w, scr_h, al_map_rgba(0, 0, 0, blackness_alpha)
@@ -1983,44 +1980,59 @@ void draw_loading_screen(
     //Set up the bitmap that will hold the text.
     int text_w = 0, text_h = 0;
     if(!text.empty()) {
-    
-        get_multiline_text_dimensions(font_area_name, text, &text_w, &text_h);
-        text_bmp = al_create_bitmap(text_w, text_h);
-        
-        //Draw the main text on its bitmap.
-        al_set_target_bitmap(text_bmp); {
-            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
-            draw_text_lines(
-                font_area_name, al_map_rgba(255, 215, 0, opacity * 255.0),
-                0, 0, ALLEGRO_ALIGN_LEFT, 0,
-                text
+        if(!loading_text_bmp) {
+            //No main text buffer? Create it!
+            
+            get_multiline_text_dimensions(
+                font_area_name, text, &text_w, &text_h
             );
-        } al_set_target_backbuffer(display);
+            loading_text_bmp = al_create_bitmap(text_w, text_h);
+            
+            //Draw the main text on its bitmap.
+            al_set_target_bitmap(loading_text_bmp); {
+                al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+                draw_text_lines(
+                    font_area_name, al_map_rgb(255, 215, 0),
+                    0, 0, ALLEGRO_ALIGN_LEFT, 0,
+                    text
+                );
+            } al_set_target_backbuffer(display);
+            
+        } else {
+            text_w = al_get_bitmap_width(loading_text_bmp);
+            text_h = al_get_bitmap_height(loading_text_bmp);
+        }
         
     }
     
-    //Now, the bitmap for the subtext.
     int subtext_w = 0, subtext_h = 0;
     if(!subtext.empty()) {
     
-        get_multiline_text_dimensions(
-            font_area_name, subtext, &subtext_w, &subtext_h
-        );
-        subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
-        
-        al_set_target_bitmap(subtext_bmp); {
-            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
-            draw_text_lines(
-                font_area_name, al_map_rgba(224, 224, 224, opacity * 255.0),
-                0, 0,
-                ALLEGRO_ALIGN_LEFT, 0,
-                subtext
+        if(!loading_subtext_bmp) {
+            //No subtext buffer? Create it!
+            get_multiline_text_dimensions(
+                font_area_name, subtext, &subtext_w, &subtext_h
             );
+            loading_subtext_bmp = al_create_bitmap(subtext_w, subtext_h);
             
-        } al_set_target_backbuffer(display);
-        
-        //We'll be scaling this, so let's update the mipmap.
-        subtext_bmp = recreate_bitmap(subtext_bmp);
+            al_set_target_bitmap(loading_subtext_bmp); {
+                al_clear_to_color(al_map_rgba(0, 0, 0, 0));
+                draw_text_lines(
+                    font_area_name, al_map_rgb(224, 224, 224),
+                    0, 0,
+                    ALLEGRO_ALIGN_LEFT, 0,
+                    subtext
+                );
+                
+            } al_set_target_backbuffer(display);
+            
+            //We'll be scaling this, so let's update the mipmap.
+            loading_subtext_bmp = recreate_bitmap(loading_subtext_bmp);
+            
+        } else {
+            subtext_w = al_get_bitmap_width(loading_subtext_bmp);
+            subtext_h = al_get_bitmap_height(loading_subtext_bmp);
+        }
         
     }
     
@@ -2036,7 +2048,10 @@ void draw_loading_screen(
             subtext.empty() ?
             (scr_h * 0.5 - text_h * 0.5) :
             (scr_h * 0.5 - LOADING_SCREEN_PADDING * 0.5 - text_h);
-        al_draw_bitmap(text_bmp, scr_w * 0.5 - text_w * 0.5, text_y, 0);
+        al_draw_tinted_bitmap(
+            loading_text_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
+            scr_w * 0.5 - text_w * 0.5, text_y, 0
+        );
         
     }
     
@@ -2044,8 +2059,8 @@ void draw_loading_screen(
     float subtext_y = scr_h * 0.5 + LOADING_SCREEN_PADDING * 0.5;
     if(!subtext.empty()) {
     
-        al_draw_scaled_bitmap(
-            subtext_bmp,
+        al_draw_tinted_scaled_bitmap(
+            loading_subtext_bmp, al_map_rgba(255, 255, 255, 255.0 * opacity),
             0, 0, subtext_w, subtext_h,
             scr_w * 0.5 - (subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5),
             subtext_y,
@@ -2055,6 +2070,8 @@ void draw_loading_screen(
         );
         
     }
+    
+    unsigned char reflection_alpha = 128.0 * opacity;
     
     //Now, draw the polygon that will hold the reflection for the text.
     if(!text.empty()) {
@@ -2068,14 +2085,14 @@ void draw_loading_screen(
         text_vertexes[0].z = 0;
         text_vertexes[0].u = 0;
         text_vertexes[0].v = text_h;
-        text_vertexes[0].color = al_map_rgba(255, 255, 255, 128);
+        text_vertexes[0].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
         text_vertexes[1].x = scr_w * 0.5 + text_w * 0.5;
         text_vertexes[1].y = text_y + text_h;
         text_vertexes[1].z = 0;
         text_vertexes[1].u = text_w;
         text_vertexes[1].v = text_h;
-        text_vertexes[1].color = al_map_rgba(255, 255, 255, 128);
+        text_vertexes[1].color = al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
         text_vertexes[2].x = scr_w * 0.5 + text_w * 0.5;
         text_vertexes[2].y = text_y + text_h + text_reflection_h;
@@ -2092,7 +2109,7 @@ void draw_loading_screen(
         text_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            text_vertexes, NULL, text_bmp,
+            text_vertexes, NULL, loading_text_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -2115,7 +2132,8 @@ void draw_loading_screen(
         subtext_vertexes[0].z = 0;
         subtext_vertexes[0].u = 0;
         subtext_vertexes[0].v = subtext_h;
-        subtext_vertexes[0].color = al_map_rgba(255, 255, 255, 128);
+        subtext_vertexes[0].color =
+            al_map_rgba(255, 255, 255, reflection_alpha);
         //Top-right vertex.
         subtext_vertexes[1].x =
             scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
@@ -2124,7 +2142,8 @@ void draw_loading_screen(
         subtext_vertexes[1].z = 0;
         subtext_vertexes[1].u = subtext_w;
         subtext_vertexes[1].v = subtext_h;
-        subtext_vertexes[1].color = al_map_rgba(255, 255, 255, 128);
+        subtext_vertexes[1].color =
+            al_map_rgba(255, 255, 255, reflection_alpha);
         //Bottom-right vertex.
         subtext_vertexes[2].x =
             scr_w * 0.5 + subtext_w * LOADING_SCREEN_SUBTITLE_SCALE * 0.5;
@@ -2147,7 +2166,7 @@ void draw_loading_screen(
         subtext_vertexes[3].color = al_map_rgba(255, 255, 255, 0);
         
         al_draw_prim(
-            subtext_vertexes, NULL, subtext_bmp,
+            subtext_vertexes, NULL, loading_subtext_bmp,
             0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
         );
         
@@ -2175,9 +2194,6 @@ void draw_loading_screen(
             ALLEGRO_ALIGN_RIGHT, "Loading..."
         );
     }
-    
-    al_destroy_bitmap(text_bmp);
-    al_destroy_bitmap(subtext_bmp);
     
 }
 

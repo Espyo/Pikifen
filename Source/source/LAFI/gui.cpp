@@ -18,8 +18,8 @@ namespace lafi {
  */
 gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
     widget(0, 0, w, h, style, flags),
-    timer(NULL),
-    queue(NULL),
+    loop_timer(NULL),
+    ev_queue(NULL),
     thread(NULL),
     close_button_quits(false),
     autonomous(false) {
@@ -37,7 +37,7 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
     this->close_button_quits = close_button_quits;
 
     display = NULL;
-    timer = NULL;
+    loop_timer = NULL;
 
     al_init();
     al_install_mouse();
@@ -50,13 +50,13 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
 
     display = al_create_display(display_w, display_h);
 
-    timer = al_create_timer(1.0 / 30.0);
+    ev_timer = al_create_timer(1.0 / 30.0);
 
-    queue = al_create_event_queue();
-    al_register_event_source(queue, al_get_mouse_event_source());
-    al_register_event_source(queue, al_get_display_event_source(display));
-    al_register_event_source(queue, al_get_timer_event_source(timer));
-    al_register_event_source(queue, al_get_keyboard_event_source());
+    ev_queue = al_create_event_queue();
+    al_register_event_source(ev_queue, al_get_mouse_event_source());
+    al_register_event_source(ev_queue, al_get_display_event_source(display));
+    al_register_event_source(ev_queue, al_get_timer_event_source(loop_timer));
+    al_register_event_source(ev_queue, al_get_keyboard_event_source());
 
     thread = al_create_thread(thread_code, (void*) this);
     al_start_thread(thread);
@@ -70,16 +70,16 @@ gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
 void* gui::thread_code(ALLEGRO_THREAD*, void* g) {
     gui* gui_ptr = (gui*) g;
     
-    al_start_timer(gui_ptr->timer);
+    al_start_timer(gui_ptr->loop_timer);
     
     while(1) {
         ALLEGRO_EVENT ev;
-        al_wait_for_event(gui_ptr->queue, &ev);
+        al_wait_for_event(gui_ptr->ev_queue, &ev);
         gui_ptr->handle_event(ev);
         
         if(
             ev.type == ALLEGRO_EVENT_TIMER &&
-            al_is_event_queue_empty(gui_ptr->queue)
+            al_is_event_queue_empty(gui_ptr->ev_queue)
         ) {
             gui_ptr->draw();
             al_flip_display();

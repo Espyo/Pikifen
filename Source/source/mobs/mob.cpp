@@ -1114,7 +1114,10 @@ void mob::lose_panic_from_status() {}
 void mob::change_maturity_amount_from_status(const int amount) {}
 
 
-mob::~mob() {}
+mob::~mob() {
+    this->fsm.run_event(MOB_EVENT_DEATH);
+    this->fsm.set_state(INVALID); //Run the current state's "on exit".
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -1611,6 +1614,12 @@ bool should_attack(mob* m1, mob* m2) {
     if(m1->team == m2->team) return false;
     if(m2->team == MOB_TEAM_DECORATION) return false;
     if(m1->team == MOB_TEAM_NONE) return true;
+    if(m1->team == MOB_TEAM_OBSTACLE) {
+        if(m2->team >= MOB_TEAM_PLAYER_1 && m2->team <= MOB_TEAM_PLAYER_4) {
+            return true;
+        }
+        return false;
+    }
     if(m2->team == MOB_TEAM_OBSTACLE) {
         if(typeid(*m1) == typeid(pikmin)) return true;
         return false;

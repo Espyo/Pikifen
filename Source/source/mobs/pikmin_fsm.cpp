@@ -131,6 +131,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run_function(pikmin_fsm::chase_leader);
         }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader");
+        }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("group_move_stopped");
         }
@@ -176,6 +180,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run_function(pikmin_fsm::face_leader);
+        }
+        efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
+            efc.run_function(pikmin_fsm::be_grabbed_by_friend);
+            efc.change_state("grabbed_by_leader");
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("group_move_stopped");

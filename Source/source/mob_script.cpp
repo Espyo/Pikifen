@@ -10,6 +10,8 @@
  * related functions.
  */
 
+//#define DEBUG_FSM
+
 #include <algorithm>
 #include <iostream>
 
@@ -426,7 +428,7 @@ void mob_action::run(
     if(type == MOB_ACTION_CHANGE_STATE) {
     
         m->fsm.set_state(vi[0], custom_data_1, custom_data_2);
-        *action_nr = INVALID; //End the event's actions now.
+        *action_nr = INVALID - 1; //End the event's actions now.
         
         
     } else if(type == MOB_ACTION_CHOMP_HITBOXES) {
@@ -674,7 +676,20 @@ void mob_fsm::run_event(
     const size_t type, void* custom_data_1, void* custom_data_2
 ) {
     mob_event* e = get_event(type);
-    if(e) e->run(m, custom_data_1, custom_data_2);
+    if(e) {
+        e->run(m, custom_data_1, custom_data_2);
+    } else {
+    
+#ifdef DEBUG_FSM
+        cout <<
+             "Missing event on run_event() - Mob " <<
+             m << ", event " << type << ", state " <<
+             (this->cur_state ? this->cur_state->name : "[None]") <<
+             endl;
+#endif
+             
+        return;
+    }
 }
 
 
@@ -783,7 +798,13 @@ mob_state::mob_state(const string &name, const size_t id) :
  */
 void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 
-    if(new_state >= m->type->states.size()) return;
+    if(
+        new_state >= m->type->states.size() &&
+        new_state != INVALID
+    ) {
+        return;
+    }
+    
     //Run the code to leave the current state.
     if(cur_state) {
         for(unsigned char p = N_PREV_STATES - 1; p > 0; --p) {
@@ -799,11 +820,13 @@ void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
         << m->type->states[new_state]->name << "\n";
     }*/
     
-    //Switch states.
-    cur_state = m->type->states[new_state];
-    
-    //Run the code to enter the new state.
-    run_event(MOB_EVENT_ON_ENTER, info1, info2);
+    if(new_state != INVALID) {
+        //Switch states.
+        cur_state = m->type->states[new_state];
+        
+        //Run the code to enter the new state.
+        run_event(MOB_EVENT_ON_ENTER, info1, info2);
+    }
     
 }
 

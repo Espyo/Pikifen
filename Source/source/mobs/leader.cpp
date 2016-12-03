@@ -131,11 +131,16 @@ void leader::dismiss() {
  * Swaps out the currently held Pikmin for a different one.
  */
 void leader::swap_held_pikmin(mob* new_pik) {
-    if(holding_pikmin) {
-        holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
-    }
+    if(!holding_pikmin) return;
+    
+    mob_event* old_pik_ev = holding_pikmin->fsm.get_event(MOB_EVENT_RELEASED);
+    mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
+    
+    if(!old_pik_ev || !new_pik_ev) return;
+    
+    old_pik_ev->run(holding_pikmin);
+    new_pik_ev->run(new_pik);
     holding_pikmin = new_pik;
-    new_pik->fsm.run_event(MOB_EVENT_GRABBED_BY_FRIEND);
     
     sfx_switch_pikmin.play(0, false);
 }
