@@ -1008,7 +1008,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     
     size_t closest_spot = INVALID;
     dist closest_spot_dist;
-    carrier_spot_struct* closest_spot_ptr;
+    carrier_spot_struct* closest_spot_ptr = NULL;
     
     for(size_t s = 0; s < carriable_mob->type->max_carriers; ++s) {
         carrier_spot_struct* s_ptr = &carriable_mob->carry_info->spot_info[s];

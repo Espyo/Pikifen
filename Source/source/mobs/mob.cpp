@@ -855,7 +855,7 @@ void mob::face(const float new_angle) {
 /* ----------------------------------------------------------------------------
  * Removes all particle generators with the given ID.
  */
-void mob::remove_particle_generator(const int id) {
+void mob::remove_particle_generator(const size_t id) {
     for(size_t g = 0; g < particle_generators.size();) {
         if(particle_generators[g].id == id) {
             particle_generators.erase(particle_generators.begin() + g);

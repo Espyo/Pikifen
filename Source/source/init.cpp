@@ -512,7 +512,6 @@ void init_misc_sounds() {
     sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
     sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
     sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
-    sfx_dismiss = load_sample(             "Dismiss.ogg",              mixer);
     sfx_olimar_whistle = load_sample(      "Olimar_whistle.ogg",       mixer);
     sfx_louie_whistle = load_sample(       "Louie_whistle.ogg",        mixer);
     sfx_president_whistle = load_sample(   "President_whistle.ogg",    mixer);
@@ -879,10 +878,8 @@ void destroy_resources() {
     sfx_pikmin_held.destroy();
     sfx_pikmin_idle.destroy();
     sfx_pikmin_thrown.destroy();
-    sfx_pluck.destroy();
     sfx_pikmin_plucked.destroy();
     sfx_pikmin_called.destroy();
-    sfx_dismiss.destroy();
     sfx_olimar_whistle.destroy();
     sfx_louie_whistle.destroy();
     sfx_president_whistle.destroy();

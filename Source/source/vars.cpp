@@ -48,7 +48,6 @@ ALLEGRO_BITMAP* bmp_wave_ring = NULL;
 
 sample_struct sfx_attack;
 sample_struct sfx_camera;
-sample_struct sfx_dismiss;
 sample_struct sfx_louie_whistle;
 sample_struct sfx_louie_name_call;
 sample_struct sfx_olimar_whistle;

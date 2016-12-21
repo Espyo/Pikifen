@@ -417,7 +417,7 @@ mob* get_closest_mob_to_cursor() {
     float mx, my;
     get_mouse_cursor_coordinates(&mx, &my);
     
-    dist closest_mob_to_cursor_dist = FLT_MAX;
+    dist closest_mob_to_cursor_dist = 0;
     mob* closest_mob_to_cursor = NULL;
     
     for(size_t m = 0; m < mobs.size(); ++m) {
@@ -426,7 +426,7 @@ mob* get_closest_mob_to_cursor() {
         if(!m_ptr->fsm.cur_state) continue;
         
         dist d = dist(mx, my, m_ptr->x, m_ptr->y);
-        if(d < closest_mob_to_cursor_dist) {
+        if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
         }

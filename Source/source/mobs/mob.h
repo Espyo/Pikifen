@@ -332,7 +332,7 @@ public:
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
-    void remove_particle_generator(const int id);
+    void remove_particle_generator(const size_t id);
     ALLEGRO_COLOR get_status_tint_color();
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     //If the mob is currently "disabled", these flags specify behavior.

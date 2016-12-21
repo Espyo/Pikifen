@@ -70,6 +70,9 @@ Creating sounds
         1) Grab the original noise, and slow it down to 0.5x speed.
         2) Record an imitation of the noise. Trying to match the voice's timbre and hitting the highest notes the voice hits is important.
         3) Speed up the imitation to 2.0x speed.
+        Tips:
+            Looks like being loud helps.
+            You'll want to make your noise (sans speed up) in the tone of C4.
 
 
 To add a glow to the cursor on GIMP

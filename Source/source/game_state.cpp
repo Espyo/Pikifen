@@ -81,18 +81,13 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
     
     //Selecting a different widget with the arrow keys.
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        bool ok_key = false;
-        
+    
         if(
             ev.keyboard.keycode == ALLEGRO_KEY_RIGHT ||
             ev.keyboard.keycode == ALLEGRO_KEY_UP ||
             ev.keyboard.keycode == ALLEGRO_KEY_LEFT ||
             ev.keyboard.keycode == ALLEGRO_KEY_DOWN
         ) {
-            ok_key = true;
-        }
-        
-        if(ok_key) {
             if(!selected_widget) selected_widget = menu_widgets[0];
             
             menu_widget* closest_widget = NULL;
@@ -142,7 +137,7 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
                     if(selected_widget->x == w_ptr->x) continue;
                     if(cur_pivot_x < w2_pivot_x) w2_pivot_x -= scr_w;
                     
-                } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+                } else {
                     cur_pivot_x =
                         selected_widget->x;
                     cur_pivot_y =

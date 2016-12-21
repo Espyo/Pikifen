@@ -82,7 +82,6 @@ extern ALLEGRO_BITMAP* bmp_wave_ring;
 //Sound effects.
 extern sample_struct sfx_attack;
 extern sample_struct sfx_camera;
-extern sample_struct sfx_dismiss;
 extern sample_struct sfx_louie_whistle;
 extern sample_struct sfx_louie_name_call;
 extern sample_struct sfx_president_name_call;
