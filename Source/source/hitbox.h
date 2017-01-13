@@ -31,27 +31,26 @@ struct hazard;
 
 
 /* ----------------------------------------------------------------------------
- * An actual hitbox. This has the data about its type
- * and reactions to the game world.
+ * A body part.
  */
-class hitbox {
+class body_part {
 public:
     string name;
     
-    hitbox(const string &name = "");
+    body_part(const string &name = "");
 };
 
 
 /* ----------------------------------------------------------------------------
- * An instance of a hitbox in a frame.
+ * A hitbox in a sprite. Despite the name, it is a cilinder.
  */
-class hitbox_instance {
+class hitbox {
 public:
-    string hitbox_name;
-    size_t hitbox_nr;   //Needed for performance.
-    hitbox* hitbox_ptr; //Needed for performance.
-    float x, y;         //Center of the hitbox (relative coordinates).
-    float z;            //Bottom of the hitbox (relative coordinates).
+    string body_part_name;
+    size_t body_part_index;   //Cache for performance.
+    body_part* body_part_ptr; //Cache for performance.
+    float x, y;  //Center of the hitbox (relative coordinates).
+    float z;     //Bottom of the hitbox (relative coordinates).
     float height;
     float radius;
     
@@ -71,8 +70,8 @@ public:
     //Example of a non-latchable hitbox: Goolix' larger core.
     bool can_pikmin_latch;
     
-    hitbox_instance(
-        const string &hn = "", size_t hnr = INVALID, hitbox* hp = NULL,
+    hitbox(
+        const string &bpn = "", size_t bpi = INVALID, body_part* bpp = NULL,
         const float x = 0, const float y = 0,
         const float z = 0, const float height = 128, const float radius = 32
     );

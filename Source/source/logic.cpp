@@ -489,8 +489,8 @@ void do_gameplay_logic() {
         string anim_str =
             box_string(
                 "Animation: " +
-                (dev_tool_info_lock->anim.anim ?
-                 dev_tool_info_lock->anim.anim->name :
+                (dev_tool_info_lock->anim.cur_anim ?
+                 dev_tool_info_lock->anim.cur_anim->name :
                  "(None!)") +
                 ".",
                 60
@@ -752,8 +752,8 @@ void process_mob(mob* m_ptr, size_t m) {
             q_get_event(m_ptr, MOB_EVENT_TOUCHED_HAZARD);
         if(hitbox_touch_an_ev || hitbox_touch_na_ev || hitbox_touch_eat_ev) {
         
-            frame* f1_ptr = m_ptr->anim.get_frame();
-            frame* f2_ptr = m2_ptr->anim.get_frame();
+            sprite* s1_ptr = m_ptr->anim.get_cur_sprite();
+            sprite* s2_ptr = m2_ptr->anim.get_cur_sprite();
             
             bool m1_is_hitbox = false;
             vector<hazard*> m1_resistances;
@@ -766,15 +766,15 @@ void process_mob(mob* m_ptr, size_t m) {
             }
             
             bool m1_has_hitboxes =
-                f1_ptr && (!f1_ptr->hitbox_instances.empty() || m1_is_hitbox);
+                s1_ptr && (!s1_ptr->hitboxes.empty() || m1_is_hitbox);
             bool m2_has_hitboxes =
-                f2_ptr && !f2_ptr->hitbox_instances.empty();
+                s2_ptr && !s2_ptr->hitboxes.empty();
                 
             //If they're so far away the hitboxes can't touch, just skip
             //the check. Also, if neither have hitboxes up, never mind.
             if(
                 m1_has_hitboxes && m2_has_hitboxes &&
-                d < f1_ptr->hitbox_span + f2_ptr->hitbox_span
+                d < s1_ptr->hitbox_span + s2_ptr->hitbox_span
             ) {
             
                 bool reported_an_ev = false;
@@ -794,9 +794,9 @@ void process_mob(mob* m_ptr, size_t m) {
                 //For all of mob 2's hitboxes, check for collisions.
                 for(
                     size_t h2 = 0;
-                    h2 < f2_ptr->hitbox_instances.size(); ++h2
+                    h2 < s2_ptr->hitboxes.size(); ++h2
                 ) {
-                    hitbox_instance* h2_ptr = &f2_ptr->hitbox_instances[h2];
+                    hitbox* h2_ptr = &s2_ptr->hitboxes[h2];
                     if(h2_ptr->type == HITBOX_TYPE_DISABLED) continue;
                     
                     //Hazard resistance check.
@@ -852,7 +852,7 @@ void process_mob(mob* m_ptr, size_t m) {
                                 find(
                                     m2_ptr->chomp_hitboxes.begin(),
                                     m2_ptr->chomp_hitboxes.end(),
-                                    h2_ptr->hitbox_nr
+                                    h2_ptr->body_part_index
                                 ) !=
                                 m2_ptr->chomp_hitboxes.end()
                             ) {
@@ -916,11 +916,11 @@ void process_mob(mob* m_ptr, size_t m) {
                         
                         for(
                             size_t h1 = 0;
-                            h1 < f1_ptr->hitbox_instances.size(); ++h1
+                            h1 < s1_ptr->hitboxes.size(); ++h1
                         ) {
                         
-                            hitbox_instance* h1_ptr =
-                                &f1_ptr->hitbox_instances[h1];
+                            hitbox* h1_ptr =
+                                &s1_ptr->hitboxes[h1];
                             if(h1_ptr->type == HITBOX_TYPE_DISABLED) {
                                 continue;
                             }
@@ -970,7 +970,7 @@ void process_mob(mob* m_ptr, size_t m) {
                                     find(
                                         m2_ptr->chomp_hitboxes.begin(),
                                         m2_ptr->chomp_hitboxes.end(),
-                                        h2_ptr->hitbox_nr
+                                        h2_ptr->body_part_index
                                     ) !=
                                     m2_ptr->chomp_hitboxes.end()
                                 ) {

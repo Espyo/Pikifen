@@ -1,7 +1,7 @@
 animations{
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling11{
 				duration=0.10
 			}
@@ -18,7 +18,7 @@ animations{
 	}
 	moving{
 		loop_frame=0
-		frame_instances{
+		frames{
 			moving1{
 				duration=0.10
 			}
@@ -41,7 +41,7 @@ animations{
 	}
 	dying{
 		loop_frame=5
-		frame_instances{
+		frames{
 			dying1{
 				duration=0.10
 			}
@@ -64,7 +64,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			attacking1{
 				duration=0.10
 			}
@@ -105,14 +105,14 @@ animations{
 	}
 	attacking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			attacking_gas{
 				duration=0.50
 			}
 		}
 	}
 }
-frames{
+sprites{
 	idling11{
 		file=Munge_Dweevil.png
 		file_x=0
@@ -123,7 +123,7 @@ frames{
 		game_h=120.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -160,7 +160,7 @@ frames{
 		game_h=120.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=-1.00 1.00 0.00
 				height=48.00
@@ -197,7 +197,7 @@ frames{
 		game_h=120.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=1.00 -1.00 0.00
 				height=48.00
@@ -234,7 +234,7 @@ frames{
 		game_h=135.00
 		offs_x=0.00
 		offs_y=3.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -271,7 +271,7 @@ frames{
 		game_h=143.00
 		offs_x=2.00
 		offs_y=5.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -308,7 +308,7 @@ frames{
 		game_h=147.00
 		offs_x=-4.00
 		offs_y=8.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -345,7 +345,7 @@ frames{
 		game_h=138.00
 		offs_x=-1.00
 		offs_y=11.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -382,7 +382,7 @@ frames{
 		game_h=128.00
 		offs_x=1.00
 		offs_y=13.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -419,7 +419,7 @@ frames{
 		game_h=121.00
 		offs_x=3.00
 		offs_y=1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -456,7 +456,7 @@ frames{
 		game_h=88.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -493,7 +493,7 @@ frames{
 		game_h=52.00
 		offs_x=13.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -530,7 +530,7 @@ frames{
 		game_h=90.00
 		offs_x=-1.00
 		offs_y=28.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -567,7 +567,7 @@ frames{
 		game_h=74.00
 		offs_x=7.00
 		offs_y=24.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -604,7 +604,7 @@ frames{
 		game_h=54.00
 		offs_x=8.00
 		offs_y=12.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -641,7 +641,7 @@ frames{
 		game_h=52.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -678,7 +678,7 @@ frames{
 		game_h=116.00
 		offs_x=-1.00
 		offs_y=-1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -715,7 +715,7 @@ frames{
 		game_h=115.00
 		offs_x=-1.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -752,7 +752,7 @@ frames{
 		game_h=120.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -789,7 +789,7 @@ frames{
 		game_h=88.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=48.00
@@ -817,7 +817,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	body=
 	gas=
 }

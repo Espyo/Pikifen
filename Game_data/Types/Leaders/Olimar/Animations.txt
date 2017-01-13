@@ -1,7 +1,7 @@
 animations{
 	dismissing{
 		loop_frame=0
-		frame_instances{
+		frames{
 			ducking{
 				duration=0.50
 			}
@@ -9,7 +9,7 @@ animations{
 	}
 	getting_up{
 		loop_frame=2
-		frame_instances{
+		frames{
 			lying{
 				duration=0.10
 			}
@@ -23,7 +23,7 @@ animations{
 	}
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.00
 			}
@@ -31,7 +31,7 @@ animations{
 	}
 	lying{
 		loop_frame=1
-		frame_instances{
+		frames{
 			half_lying{
 				duration=0.07
 			}
@@ -42,7 +42,7 @@ animations{
 	}
 	plucking{
 		loop_frame=4
-		frame_instances{
+		frames{
 			ducking{
 				duration=0.50
 			}
@@ -62,7 +62,7 @@ animations{
 	}
 	throwing{
 		loop_frame=1
-		frame_instances{
+		frames{
 			ducking{
 				duration=0.20
 			}
@@ -73,7 +73,7 @@ animations{
 	}
 	walking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -90,7 +90,7 @@ animations{
 	}
 	whistling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			ducking{
 				duration=0.08
 			}
@@ -101,7 +101,7 @@ animations{
 	}
 	pain{
 		loop_frame=0
-		frame_instances{
+		frames{
 			half_limbo{
 				duration=0.10
 			}
@@ -118,7 +118,7 @@ animations{
 	}
 	knocked_down{
 		loop_frame=0
-		frame_instances{
+		frames{
 			half_lying{
 				duration=0.10
 			}
@@ -135,7 +135,7 @@ animations{
 	}
 	spraying{
 		loop_frame=0
-		frame_instances{
+		frames{
 			ducking{
 				duration=1.00
 			}
@@ -145,7 +145,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	ducking{
 		file=Olimar.png
 		file_x=0
@@ -156,7 +156,7 @@ frames{
 		game_h=32.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	ducking2{
 		file=Olimar.png
@@ -168,7 +168,7 @@ frames{
 		game_h=32.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	half_limbo{
 		file=Olimar.png
@@ -180,7 +180,7 @@ frames{
 		game_h=32.00
 		offs_x=-8.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	half_lying{
 		file=Olimar.png
@@ -192,7 +192,7 @@ frames{
 		game_h=32.00
 		offs_x=-8.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	idling{
 		file=Olimar.png
@@ -204,7 +204,7 @@ frames{
 		game_h=32.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	limbo{
 		file=Olimar.png
@@ -216,7 +216,7 @@ frames{
 		game_h=32.00
 		offs_x=-16.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	lying{
 		file=Olimar.png
@@ -228,7 +228,7 @@ frames{
 		game_h=32.00
 		offs_x=-16.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	walking1{
 		file=Olimar.png
@@ -240,7 +240,7 @@ frames{
 		game_h=32.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	walking2{
 		file=Olimar.png
@@ -252,7 +252,7 @@ frames{
 		game_h=32.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

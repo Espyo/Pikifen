@@ -1,7 +1,7 @@
 animations{
 	flapping{
 		loop_frame=0
-		frame_instances{
+		frames{
 			opened{
 				duration=0.10
 			}
@@ -18,7 +18,7 @@ animations{
 	}
 	resting{
 		loop_frame=0
-		frame_instances{
+		frames{
 			opened{
 				duration=0.80
 			}
@@ -29,7 +29,7 @@ animations{
 	}
 	dying{
 		loop_frame=3
-		frame_instances{
+		frames{
 			closed{
 				duration=0.50
 			}
@@ -45,7 +45,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	opened{
 		file=White_Spectralid.png
 		file_x=0
@@ -56,7 +56,7 @@ frames{
 		game_h=32.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -81,7 +81,7 @@ frames{
 		game_h=22.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -106,7 +106,7 @@ frames{
 		game_h=10.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -131,7 +131,7 @@ frames{
 		game_h=16.00
 		offs_x=0.00
 		offs_y=-1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -156,7 +156,7 @@ frames{
 		game_h=18.00
 		offs_x=0.00
 		offs_y=-4.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -181,7 +181,7 @@ frames{
 		game_h=17.00
 		offs_x=0.00
 		offs_y=-4.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -197,6 +197,6 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	body=
 }

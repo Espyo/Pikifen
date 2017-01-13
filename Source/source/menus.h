@@ -26,7 +26,7 @@ private:
     ALLEGRO_BITMAP* bmp_menu_bg;
     size_t new_game_state;
     float time_spent;
-    animation_pool logo;
+    animation_database logo;
     animation_instance logo_anim;
     
 public:

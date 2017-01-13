@@ -1,14 +1,14 @@
 animations{
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.00
 			}
 		}
 	}
 }
-frames{
+sprites{
 	idling{
 		file=2_Euro.png
 		file_x=0
@@ -19,7 +19,7 @@ frames{
 		game_h=52.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

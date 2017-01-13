@@ -1,7 +1,7 @@
 animations{
 	normal{
 		loop_frame=0
-		frame_instances{
+		frames{
 			1{
                 duration=0.1
 			}
@@ -29,7 +29,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	1{
 		file=Title_screen_logo.png
 		file_x=0

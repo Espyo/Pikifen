@@ -62,7 +62,7 @@ public:
     string name;
     
     //Visual things.
-    animation_pool anims;
+    animation_database anims;
     ALLEGRO_COLOR main_color;
     bool show_health;
     bool casts_shadow;

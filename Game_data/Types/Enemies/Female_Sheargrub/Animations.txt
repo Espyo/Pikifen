@@ -1,7 +1,7 @@
 animations{
 	hidden{
 		loop_frame=0
-		frame_instances{
+		frames{
 			nothing{
 				duration=0.00
 			}
@@ -9,7 +9,7 @@ animations{
 	}
 	moving{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -26,7 +26,7 @@ animations{
 	}
 	emerging{
 		loop_frame=0
-		frame_instances{
+		frames{
 			emerging1{
 				duration=0.15
 			}
@@ -46,7 +46,7 @@ animations{
 	}
 	burying{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.30
 			}
@@ -69,7 +69,7 @@ animations{
 	}
 	examining{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.50
 			}
@@ -77,7 +77,7 @@ animations{
 	}
 	dying{
 		loop_frame=5
-		frame_instances{
+		frames{
 			dying1{
 				duration=0.10
 			}
@@ -99,7 +99,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	idling{
 		file=Female_Sheargrub.png
 		file_x=0
@@ -110,7 +110,7 @@ frames{
 		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -135,7 +135,7 @@ frames{
 		game_h=21.00
 		offs_x=0.75
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -160,7 +160,7 @@ frames{
 		game_h=21.00
 		offs_x=1.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -185,7 +185,7 @@ frames{
 		game_h=20.25
 		offs_x=-9.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -210,7 +210,7 @@ frames{
 		game_h=-20.25
 		offs_x=-9.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -235,7 +235,7 @@ frames{
 		game_h=21.75
 		offs_x=-4.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -260,7 +260,7 @@ frames{
 		game_h=-21.75
 		offs_x=-4.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -285,7 +285,7 @@ frames{
 		game_h=23.25
 		offs_x=4.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -310,7 +310,7 @@ frames{
 		game_h=-23.25
 		offs_x=4.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -335,7 +335,7 @@ frames{
 		game_h=21.00
 		offs_x=9.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -360,7 +360,7 @@ frames{
 		game_h=-21.00
 		offs_x=9.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -385,7 +385,7 @@ frames{
 		game_h=0.75
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -410,7 +410,7 @@ frames{
 		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -435,7 +435,7 @@ frames{
 		game_h=19.50
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -460,7 +460,7 @@ frames{
 		game_h=19.50
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -485,7 +485,7 @@ frames{
 		game_h=21.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -510,7 +510,7 @@ frames{
 		game_h=-19.50
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -526,6 +526,6 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	body=
 }

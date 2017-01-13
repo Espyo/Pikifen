@@ -24,51 +24,42 @@
 
 using namespace std;
 
-class animation_pool;
+class animation_database;
 
 /* ----------------------------------------------------------------------------
  * Animations work as follows:
- * An animation links to frames.
- * A frame links to hitboxes.
+ * An animation is a set of frames.
+ * A frame contains hitboxes.
  *
- * A hitbox (hitbox.h) specifies a spot
- * in which the mob is attacking, or a
- * spot in which it can be attacked.
- * A single hitbox can have several attributes,
- * and a frame refers to INSTANCES of hitboxes.
+ * A hitbox (hitbox.h) is defined by a body part,
+ * a type of hitbox (can be hurt, or hurts other mobs),
+ * and some other parameters, like position.
  *
- * A frame is basically a sprite.
- * It gathers its appearance from an image file,
- * with some tweaks, and the changes of frames
- * in moderately quick succession is what
- * creates an animation, as it's always been,
- * historically.
- * An animation refers to INSTANCES of frames,
- * in whichever order it wants.
+ * A frame in an animation is defined by a sprite
+ * in a spritesheet, as well as its duration.
  *
- * Finally, an animation contains data for
- * the loop frame, which is the frame the
+ * Finally, an animation contains a list of frames,
+ * and the loop frame, which is the one the
  * animation goes back to when it reaches
  * the end.
  *
  * To get a mob to display an animation,
- * you need to create an animation instance.
+ * you need to create an animation INSTANCE.
  * This can be played, rewinded, etc., and
  * every mob may have a different animation
  * instance, with a different progress time and such.
  *
- * In order for the animations, frames and
- * hitboxes to connect, they're referred to using
- * pointers. The animation pool holds all of this data
- * so the animations, frames and hitboxes know
- * where to communicate with one another.
+ * In order for all the different classes
+ * to connect, they're referred to using
+ * pointers. The animation database holds all of
+ * this data so they know where each other is.
  */
 
 
 /* ----------------------------------------------------------------------------
- * A frame of animation; a sprite.
+ * A sprite in a spritesheet.
  */
-class frame {
+class sprite {
 private:
     void calculate_hitbox_span();
     
@@ -76,7 +67,7 @@ public:
     string name;
     //Parent bitmap, normally a spritesheet.
     ALLEGRO_BITMAP* parent_bmp;
-    //File name where the image is at.
+    //File name where the parent bitmap is at.
     string file;
     //Top-left corner of the sprite inside the image file.
     int file_x, file_y;
@@ -93,65 +84,65 @@ public:
     float top_w, top_h;
     //Angle of the Pikmin's top.
     float top_angle;
-    //Does this frame even have a visible Pikmin top?
+    //Does this sprite even have a visible Pikmin top?
     bool top_visible;
-    //Actual bitmap. This is a sub-bitmap of parent_bmp.
+    //The sprite's actual bitmap. This is a sub-bitmap of parent_bmp.
     ALLEGRO_BITMAP* bitmap;
     //List of hitboxes on this frame.
-    vector<hitbox_instance> hitbox_instances;
-    //How far the hitboxes span.
+    vector<hitbox> hitboxes;
+    //How far the hitboxes span from the center.
     float hitbox_span;
     
-    frame(
+    sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
         const float gw = 0, const float gh = 0,
-        const vector<hitbox_instance> &h = vector<hitbox_instance>()
+        const vector<hitbox> &h = vector<hitbox>()
     );
-    frame(
+    sprite(
         const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by,
         const int bw, const int bh, const float gw, const float gh,
-        const vector<hitbox_instance> &h
+        const vector<hitbox> &h
     );
-    frame(const frame &f2);
-    void create_hitbox_instances(animation_pool* const as);
+    sprite(const sprite &s2);
+    void create_hitboxes(animation_database* const adb);
     
-    ~frame();
+    ~sprite();
 };
 
 
 /* ----------------------------------------------------------------------------
- * Instance of a frame inside an animation.
- * A single frame can appear multiple times in the same animation
+ * A frame inside an animation.
+ * A single sprite can appear multiple times in the same animation
  * (imagine an enemy shaking back and forth).
  */
-class frame_instance {
+class frame {
 public:
-    string frame_name;
-    size_t frame_nr;  //Needed for performance.
-    frame* frame_ptr; //Needed for performance.
-    float duration;   //How long this frame lasts for, in seconds.
+    string sprite_name;
+    size_t sprite_index;  //Cache for performance.
+    sprite* sprite_ptr;    //Cache for performance.
+    float duration;    //How long this frame lasts for, in seconds.
     
-    frame_instance(
-        const string &fn = "", const size_t fnr = INVALID,
-        frame* fp = NULL, const float d = 0
+    frame(
+        const string &sn = "", const size_t si = INVALID,
+        sprite* sp = NULL, const float d = 0
     );
 };
 
 
 /* ----------------------------------------------------------------------------
- * A list of frames, basically.
+ * An animation. A list of frames, basically.
  */
 class animation {
 public:
     string name;
     //List of frames.
-    vector<frame_instance> frame_instances;
+    vector<frame> frames;
     //The animation loops back to this frame when it reaches the end.
     size_t loop_frame;
     
     animation(
         const string &name = "",
-        vector<frame_instance> frame_instances = vector<frame_instance>(),
+        vector<frame> frames = vector<frame>(),
         const size_t loop_frame = 0
     );
     animation(const animation &a2);
@@ -159,29 +150,29 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * A set of animations and their necessary data.
+ * A database of animations, sprites, and body parts.
  */
-class animation_pool {
+class animation_database {
 public:
     vector<animation*> animations;
-    vector<frame*> frames;
-    vector<hitbox*> hitboxes;
+    vector<sprite*> sprites;
+    vector<body_part*> body_parts;
     
     //Conversion between pre-named animations and in-file animations.
     vector<size_t> pre_named_conversions;
     
-    animation_pool(
+    animation_database(
         vector<animation*> a = vector<animation*>(),
-        vector<frame*>     f = vector<frame*>(),
-        vector<hitbox*>    h = vector<hitbox*>()
+        vector<sprite*>    s = vector<sprite*>(),
+        vector<body_part*> b = vector<body_part*>()
     );
     
     size_t find_animation(string name);
-    size_t find_frame(    string name);
-    size_t find_hitbox(   string name);
+    size_t find_sprite(   string name);
+    size_t find_body_part(string name);
     
     void create_conversions(vector<pair<size_t, string> > conversions);
-    void fix_hitbox_pointers();
+    void fix_body_part_pointers();
     
     void destroy();
     
@@ -189,35 +180,35 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * Instance of a running animation. This can be played, rewinded, ...
+ * Instance of a running animation. This can be played, rewinded, etc.
  */
 class animation_instance {
 public:
-    animation* anim;
-    animation_pool* anim_pool; //The pool this belongs to.
-    float cur_frame_time;      //Time passed on the current frame.
-    size_t cur_frame_nr;
+    animation* cur_anim;         //The current animation.
+    animation_database* anim_db; //The database this belongs to.
+    float cur_frame_time;        //Time passed on the current frame.
+    size_t cur_frame_index;
     bool done_once;
     
-    animation_instance(animation_pool* anim_pool = NULL);
+    animation_instance(animation_database* anim_db = NULL);
     animation_instance(const animation_instance &ai2);
     
     void start();
     bool tick(const float time);
-    frame* get_frame();
+    sprite* get_cur_sprite();
 };
 
 
 /* ----------------------------------------------------------------------------
- * An animation pool and an animation_instance.
+ * An animation_database and an animation_instance.
  */
 struct single_animation_suite {
-    animation_pool pool;
+    animation_database database;
     animation_instance instance;
 };
 
 
 
-animation_pool load_animation_pool_from_file(data_node* frames_node);
+animation_database load_animation_database_from_file(data_node* frames_node);
 
 #endif //ifndef ANIMATION_INCLUDED

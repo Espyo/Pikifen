@@ -1,7 +1,7 @@
 animations{
 	normal{
 		loop_frame=0
-		frame_instances{
+		frames{
 			1{
 				duration=0.08
 			}
@@ -53,7 +53,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	1{
 		file=Water_1.png
 		file_x=0
@@ -64,7 +64,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	2{
 		file=Water_2.png
@@ -76,7 +76,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	3{
 		file=Water_3.png
@@ -88,7 +88,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	4{
 		file=Water_4.png
@@ -100,7 +100,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	5{
 		file=Water_5.png
@@ -112,7 +112,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	6{
 		file=Water_6.png
@@ -124,7 +124,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	7{
 		file=Water_7.png
@@ -136,7 +136,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	8{
 		file=Water_8.png
@@ -148,7 +148,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	9{
 		file=Water_9.png
@@ -160,7 +160,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	10{
 		file=Water_10.png
@@ -172,7 +172,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	11{
 		file=Water_11.png
@@ -184,7 +184,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	12{
 		file=Water_12.png
@@ -196,7 +196,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	13{
 		file=Water_13.png
@@ -208,7 +208,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	14{
 		file=Water_14.png
@@ -220,7 +220,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	15{
 		file=Water_15.png
@@ -232,7 +232,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	16{
 		file=Water_16.png
@@ -244,7 +244,7 @@ frames{
 		game_h=64
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

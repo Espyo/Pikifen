@@ -12,32 +12,32 @@
 #include "hitbox.h"
 
 /* ----------------------------------------------------------------------------
- * Creates a hitbox.
+ * Creates a body part.
  */
-hitbox::hitbox(const string &name) :
+body_part::body_part(const string &name) :
     name(name) {
     
 }
 
 
 /* ----------------------------------------------------------------------------
- * Creates an instance of a hitbox.
- * hn:     Name of the hitbox.
- * hnr:    Number of the hitbox.
- * hp:     Pointer to the hitbox.
- * x, y:   Instance's coordinates, from the center of the mob.
- * z:      Z coordinate of the bottom point of the instance.
- * height: The hitbox instance's total height.
+ * Creates a hitbox.
+ * bpn:    Name of the body part.
+ * bpi:    Index of the body part in the animation database.
+ * bpp:    Pointer to the body part.
+ * x, y:   Hitbox's coordinates, from the center of the mob.
+ * z:      Z coordinate of the bottom point of the hitbox.
+ * height: The hitbox's total height.
    * 0 means it spans indefinitely across the Z axis.
- * radius: Hitbox radius for X and Y.
+ * radius: Hitbox radius.
  */
-hitbox_instance::hitbox_instance(
-    const string &hn, size_t hnr, hitbox* hp, const float x, const float y,
+hitbox::hitbox(
+    const string &bpn, size_t bpi, body_part* bpp, const float x, const float y,
     const float z, const float height, const float radius
 ) :
-    hitbox_name(hn),
-    hitbox_nr(hnr),
-    hitbox_ptr(hp),
+    body_part_name(bpn),
+    body_part_index(bpi),
+    body_part_ptr(bpp),
     x(x),
     y(y),
     z(z),

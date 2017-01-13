@@ -1,7 +1,7 @@
 animations{
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			1{
 				duration=0.08
 			}
@@ -18,14 +18,14 @@ animations{
 	}
 	destroyed{
 		loop_frame=0
-		frame_instances{
+		frames{
 			open{
 				duration=0.00
 			}
 		}
 	}
 }
-frames{
+sprites{
 	1{
 		file=Electric_gate.png
 		file_x=0
@@ -36,7 +36,7 @@ frames{
 		game_h=288.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
@@ -121,7 +121,7 @@ frames{
 		game_h=288.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
@@ -206,7 +206,7 @@ frames{
 		game_h=288.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=0.00
@@ -291,7 +291,7 @@ frames{
 		game_h=288.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -367,7 +367,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	center=
 	center_zap=
 	left=

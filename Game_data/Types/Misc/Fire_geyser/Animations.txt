@@ -1,7 +1,7 @@
 animations{
 	safe{
 		loop_frame=0
-		frame_instances{
+		frames{
 			safe{
 				duration=0.00
 			}
@@ -9,7 +9,7 @@ animations{
 	}
 	shooting{
 		loop_frame=0
-		frame_instances{
+		frames{
 			fire1{
 				duration=0.10
 			}
@@ -26,7 +26,7 @@ animations{
 	}
 	starting{
 		loop_frame=0
-		frame_instances{
+		frames{
 			low{
 				duration=0.10
 			}
@@ -37,7 +37,7 @@ animations{
 	}
 	stopping{
 		loop_frame=0
-		frame_instances{
+		frames{
 			low{
 				duration=0.10
 			}
@@ -48,14 +48,14 @@ animations{
 	}
 	destroyed{
 		loop_frame=0
-		frame_instances{
+		frames{
 			destroyed{
 				duration=0.00
 			}
 		}
 	}
 }
-frames{
+sprites{
 	safe{
 		file=Fire_geyser.png
 		file_x=0
@@ -66,7 +66,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=24.00
@@ -103,7 +103,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -140,7 +140,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -177,7 +177,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -214,7 +214,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -251,7 +251,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -288,7 +288,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=24.00
@@ -316,7 +316,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	fire=
 	hit=
 }

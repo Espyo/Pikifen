@@ -736,8 +736,8 @@ void init_single_animation(
     data_node file(
         ANIMATIONS_FOLDER + "/" + anim_def_file->get_child_by_name(name)->value
     );
-    anim.pool = load_animation_pool_from_file(&file);
-    anim.instance.anim = anim.pool.animations[0];
+    anim.database = load_animation_database_from_file(&file);
+    anim.instance.cur_anim = anim.database.animations[0];
     anim.instance.start();
 }
 

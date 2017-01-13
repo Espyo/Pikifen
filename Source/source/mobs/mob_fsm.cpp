@@ -68,7 +68,7 @@ void gen_mob_fsm::lose_health(mob* m, void* info1, void* info2) {
     
     float damage = 0;
     
-    damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
+    damage = calculate_damage(info->mob2, m, info->h2, info->h1);
     m->health -= damage;
     
     m->fsm.run_event(MOB_EVENT_DAMAGE, info->mob2);

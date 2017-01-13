@@ -356,9 +356,9 @@ public:
     mob* carrying_target;
     
     //Drawing tools.
-    void get_sprite_center(mob* m, frame* f, float* x, float* y);
+    void get_sprite_center(mob* m, sprite* s, float* x, float* y);
     void get_sprite_dimensions(
-        mob* m, frame* f, float* w, float* h, float* scale = NULL
+        mob* m, sprite* s, float* w, float* h, float* scale = NULL
     );
     float get_sprite_brightness(mob* m);
     
@@ -370,24 +370,24 @@ void apply_knockback(
     mob* m, const float knockback, const float knockback_angle
 );
 float calculate_damage(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h
 );
 void calculate_knockback(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h, float* knockback, float* angle
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h, float* knockback, float* angle
 );
 void cause_hitbox_damage(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h, float* total_damage
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h, float* total_damage
 );
 void create_mob(mob* m);
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
-hitbox_instance* get_closest_hitbox(
+hitbox* get_closest_hitbox(
     const float x, const float y, mob* m, const size_t h_type = INVALID
 );
-hitbox_instance* get_hitbox_instance(mob* m, const size_t nr);
+hitbox* gui_hitbox(mob* m, const size_t nr);
 bool is_resistant_to_hazards(
     vector<hazard*> &resistances, vector<hazard*> &hazards
 );

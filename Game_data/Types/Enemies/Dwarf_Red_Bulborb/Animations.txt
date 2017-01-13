@@ -1,7 +1,7 @@
 animations{
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.00
 			}
@@ -9,7 +9,7 @@ animations{
 	}
 	moving{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -38,7 +38,7 @@ animations{
 	}
 	attacking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			attacking1{
 				duration=0.20
 			}
@@ -55,7 +55,7 @@ animations{
 	}
 	eating{
 		loop_frame=0
-		frame_instances{
+		frames{
 			chomping1{
 				duration=0.30
 			}
@@ -87,7 +87,7 @@ animations{
 	}
 	dying{
 		loop_frame=6
-		frame_instances{
+		frames{
 			dying1{
 				duration=0.20
 			}
@@ -113,7 +113,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			shaking1{
 				duration=0.15
 			}
@@ -160,7 +160,7 @@ animations{
 	}
 	looking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			looking2{
 				duration=0.10
 			}
@@ -189,7 +189,7 @@ animations{
 	}
 	grazing{
 		loop_frame=0
-		frame_instances{
+		frames{
 			grazing1{
 				duration=0.40
 			}
@@ -206,14 +206,14 @@ animations{
 	}
 	crushed{
 		loop_frame=0
-		frame_instances{
+		frames{
 			crushed{
 				duration=1.00
 			}
 		}
 	}
 }
-frames{
+sprites{
 	idling{
 		file=Red_Bulborb.png
 		file_x=0
@@ -224,7 +224,7 @@ frames{
 		game_h=30.00
 		offs_x=5.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -261,7 +261,7 @@ frames{
 		game_h=-31.00
 		offs_x=5.00
 		offs_y=-1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
 				height=32.00
@@ -298,7 +298,7 @@ frames{
 		game_h=-34.00
 		offs_x=5.00
 		offs_y=-2.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 -2.00 0.00
 				height=32.00
@@ -335,7 +335,7 @@ frames{
 		game_h=31.00
 		offs_x=5.00
 		offs_y=1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
 				height=32.00
@@ -372,7 +372,7 @@ frames{
 		game_h=34.00
 		offs_x=5.00
 		offs_y=2.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 2.00 0.00
 				height=32.00
@@ -409,7 +409,7 @@ frames{
 		game_h=30.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -446,7 +446,7 @@ frames{
 		game_h=33.00
 		offs_x=7.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
 				height=32.00
@@ -483,7 +483,7 @@ frames{
 		game_h=30.00
 		offs_x=8.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -520,7 +520,7 @@ frames{
 		game_h=30.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -557,7 +557,7 @@ frames{
 		game_h=30.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -594,7 +594,7 @@ frames{
 		game_h=30.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -631,7 +631,7 @@ frames{
 		game_h=30.00
 		offs_x=-3.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -668,7 +668,7 @@ frames{
 		game_h=30.00
 		offs_x=-1.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -705,7 +705,7 @@ frames{
 		game_h=30.00
 		offs_x=5.00
 		offs_y=1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
 				height=32.00
@@ -742,7 +742,7 @@ frames{
 		game_h=31.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=4.00 0.00 0.00
 				height=32.00
@@ -779,7 +779,7 @@ frames{
 		game_h=-31.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=4.00 0.00 0.00
 				height=32.00
@@ -816,7 +816,7 @@ frames{
 		game_h=30.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -853,7 +853,7 @@ frames{
 		game_h=30.00
 		offs_x=-3.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -890,7 +890,7 @@ frames{
 		game_h=30.00
 		offs_x=-1.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
 				height=32.00
@@ -927,7 +927,7 @@ frames{
 		game_h=30.00
 		offs_x=5.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -964,7 +964,7 @@ frames{
 		game_h=30.00
 		offs_x=4.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
 				height=32.00
@@ -1001,7 +1001,7 @@ frames{
 		game_h=39.00
 		offs_x=2.00
 		offs_y=4.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 3.00 0.00
 				height=32.00
@@ -1038,7 +1038,7 @@ frames{
 		game_h=36.00
 		offs_x=5.00
 		offs_y=3.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 2.00 0.00
 				height=32.00
@@ -1075,7 +1075,7 @@ frames{
 		game_h=-39.00
 		offs_x=2.00
 		offs_y=-4.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 -3.00 0.00
 				height=32.00
@@ -1112,7 +1112,7 @@ frames{
 		game_h=-36.00
 		offs_x=5.00
 		offs_y=-3.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 -2.00 0.00
 				height=32.00
@@ -1149,7 +1149,7 @@ frames{
 		game_h=48.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=6.00 0.00 0.00
 				height=32.00
@@ -1186,7 +1186,7 @@ frames{
 		game_h=30.00
 		offs_x=5.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -1223,7 +1223,7 @@ frames{
 		game_h=30.00
 		offs_x=5.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -1260,7 +1260,7 @@ frames{
 		game_h=-30.00
 		offs_x=5.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -1288,7 +1288,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	body=
 	mouth=
 }

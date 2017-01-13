@@ -60,16 +60,16 @@ float pikmin::get_base_speed() {
 /* ----------------------------------------------------------------------------
  * Actually makes the Pikmin attack connect - the process that makes
  * the victim lose health, the sound, the sparks, etc.
- * victim_hitbox_i: Hitbox instance of the victim.
+ * victim_hitbox: Hitbox of the victim.
  */
-void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
+void pikmin::do_attack(mob* m, hitbox* victim_hitbox) {
     attack_time = pik_type->attack_interval;
     
-    if(!m || !victim_hitbox_i) return;
+    if(!m || !victim_hitbox) return;
     
     if(
         !is_resistant_to_hazards(
-            this->pik_type->resistances, victim_hitbox_i->hazards
+            this->pik_type->resistances, victim_hitbox->hazards
         )
     ) {
         //If the hitbox says it has a fire effect, and this
@@ -78,7 +78,7 @@ void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
         return;
     }
     
-    hitbox_touch_info info = hitbox_touch_info(this, victim_hitbox_i, NULL);
+    hitbox_touch_info info = hitbox_touch_info(this, victim_hitbox, NULL);
     focused_mob->fsm.run_event(MOB_EVENT_HITBOX_TOUCH_N_A, &info);
     
     sfx_attack.play(0.06, false, 0.4f);
@@ -98,14 +98,14 @@ void pikmin::do_attack(mob* m, hitbox_instance* victim_hitbox_i) {
 /* ----------------------------------------------------------------------------
  * Sets the info for when a Pikmin is connected to a hitbox
  * (e.g. latching on, being carried by a mouth, ...)
- * hi_ptr: Hitbox instance of the other mob.
- * m:      The other mob.
+ * h_ptr: Hitbox of the other mob.
+ * m:     The other mob.
  */
-void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
-    if(!hi_ptr) return;
+void pikmin::set_connected_hitbox_info(hitbox* h_ptr, mob* mob_ptr) {
+    if(!h_ptr) return;
     
     float actual_hx, actual_hy;
-    rotate_point(hi_ptr->x, hi_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
+    rotate_point(h_ptr->x, h_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
     actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
     
     float x_dif = x - actual_hx;
@@ -117,8 +117,8 @@ void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
     //Relative to 0 degrees.
     connected_hitbox_angle -= mob_ptr->angle;
     //Distance in units to distance in percentage.
-    connected_hitbox_dist /= hi_ptr->radius;
-    connected_hitbox_nr = hi_ptr->hitbox_nr;
+    connected_hitbox_dist /= h_ptr->radius;
+    connected_hitbox_nr = h_ptr->body_part_index;
 }
 
 
@@ -128,8 +128,8 @@ void pikmin::set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr) {
 void pikmin::teleport_to_connected_hitbox() {
     speed_x = speed_y = speed_z = 0;
     
-    hitbox_instance* h_ptr =
-        get_hitbox_instance(focused_mob, connected_hitbox_nr);
+    hitbox* h_ptr =
+        gui_hitbox(focused_mob, connected_hitbox_nr);
     if(h_ptr) {
         float actual_hx, actual_hy;
         rotate_point(
@@ -221,14 +221,14 @@ void pikmin::tick_class_specifics() {
  */
 void pikmin::draw() {
 
-    frame* f_ptr = anim.get_frame();
+    sprite* s_ptr = anim.get_cur_sprite();
     
-    if(!f_ptr) return;
+    if(!s_ptr) return;
     
     float draw_x, draw_y;
     float draw_w, draw_h;
-    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
     ALLEGRO_COLOR tint = get_status_tint_color();
     float brightness = get_sprite_brightness(this) / 255.0;
@@ -237,7 +237,7 @@ void pikmin::draw() {
     tint.b *= brightness;
     
     draw_sprite(
-        f_ptr->bitmap,
+        s_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
@@ -255,7 +255,7 @@ void pikmin::draw() {
         );
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
         draw_sprite(
-            f_ptr->bitmap,
+            s_ptr->bitmap,
             draw_x, draw_y,
             draw_w, draw_h,
             angle,
@@ -266,18 +266,18 @@ void pikmin::draw() {
         );
     }
     
-    float w_mult = draw_w / f_ptr->game_w;
-    float h_mult = draw_h / f_ptr->game_h;
+    float w_mult = draw_w / s_ptr->game_w;
+    float h_mult = draw_h / s_ptr->game_h;
     
-    if(f_ptr->top_visible) {
-        float top_x = f_ptr->top_x;
-        float top_y = f_ptr->top_y;
-        rotate_point(f_ptr->top_x, f_ptr->top_y, angle, &top_x, &top_y);
+    if(s_ptr->top_visible) {
+        float top_x = s_ptr->top_x;
+        float top_y = s_ptr->top_y;
+        rotate_point(s_ptr->top_x, s_ptr->top_y, angle, &top_x, &top_y);
         draw_sprite(
             pik_type->bmp_top[maturity],
             x + top_x, y + top_y,
-            f_ptr->top_w, f_ptr->top_h,
-            f_ptr->top_angle + angle,
+            s_ptr->top_w, s_ptr->top_h,
+            s_ptr->top_angle + angle,
             tint
         );
     }

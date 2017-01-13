@@ -1502,10 +1502,10 @@ void load_liquids() {
             ANIMATIONS_FOLDER + "/" +
             nodes[l->first]->get_child_by_name("animation")->value
         );
-        l->second.anim_pool = load_animation_pool_from_file(&anim_file);
+        l->second.anim_pool = load_animation_database_from_file(&anim_file);
         if(!l->second.anim_pool.animations.empty()) {
             l->second.anim_instance = animation_instance(&l->second.anim_pool);
-            l->second.anim_instance.anim = l->second.anim_pool.animations[0];
+            l->second.anim_instance.cur_anim = l->second.anim_pool.animations[0];
             l->second.anim_instance.start();
         }
     }
@@ -1731,10 +1731,10 @@ void load_status_types() {
     for(auto s = status_types.begin(); s != status_types.end(); ++s) {
         if(s->second.animation_name.empty()) continue;
         data_node anim_file(ANIMATIONS_FOLDER + "/" + s->second.animation_name);
-        s->second.anim_pool = load_animation_pool_from_file(&anim_file);
+        s->second.anim_pool = load_animation_database_from_file(&anim_file);
         if(!s->second.anim_pool.animations.empty()) {
             s->second.anim_instance = animation_instance(&s->second.anim_pool);
-            s->second.anim_instance.anim = s->second.anim_pool.animations[0];
+            s->second.anim_instance.cur_anim = s->second.anim_pool.animations[0];
             s->second.anim_instance.start();
         }
     }

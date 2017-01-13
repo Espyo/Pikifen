@@ -164,8 +164,8 @@ void load_mob_type_from_file(
     
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");
-        mt->anims = load_animation_pool_from_file(&anim_file);
-        mt->anims.fix_hitbox_pointers();
+        mt->anims = load_animation_database_from_file(&anim_file);
+        mt->anims.fix_body_part_pointers();
         
         data_node script_file = data_node(folder + "/Script.txt");
         size_t old_n_states = mt->states.size();

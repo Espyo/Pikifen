@@ -1,7 +1,7 @@
 animations{
 	normal{
 		loop_frame=0
-		frame_instances{
+		frames{
 			1{
 				duration=0.08
 			}
@@ -20,7 +20,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	1{
 		file=Fire.png
 		file_x=0
@@ -31,7 +31,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=-9.00
-		hitbox_instances=
+		hitboxes=
 	}
 	2{
 		file=Fire.png
@@ -43,7 +43,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=-9.00
-		hitbox_instances=
+		hitboxes=
 	}
 	3{
 		file=Fire.png
@@ -55,7 +55,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=-9.00
-		hitbox_instances=
+		hitboxes=
 	}
 	4{
 		file=Fire.png
@@ -67,7 +67,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=-9.00
-		hitbox_instances=
+		hitboxes=
 	}
 	5{
 		file=Fire.png
@@ -79,7 +79,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=-9.00
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

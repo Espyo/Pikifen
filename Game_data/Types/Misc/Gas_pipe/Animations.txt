@@ -1,7 +1,7 @@
 animations{
 	shooting{
 		loop_frame=0
-		frame_instances{
+		frames{
 			shooting{
 				duration=0.00
 			}
@@ -9,14 +9,14 @@ animations{
 	}
 	destroyed{
 		loop_frame=0
-		frame_instances{
+		frames{
 			safe{
 				duration=0.00
 			}
 		}
 	}
 }
-frames{
+sprites{
 	safe{
 		file=Gas_pipe.png
 		file_x=0
@@ -27,7 +27,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00
 				height=24.00
@@ -64,7 +64,7 @@ frames{
 		game_h=48.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00
 				height=24.00
@@ -92,7 +92,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	tube=
 	gas=
 }

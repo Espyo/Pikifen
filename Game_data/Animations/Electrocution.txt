@@ -1,7 +1,7 @@
 animations{
 	default{
 		loop_frame=0
-		frame_instances{
+		frames{
 			1{
 				duration=0.07
 			}
@@ -11,7 +11,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	1{
 		file=Electrocution.png
 		file_x=0
@@ -22,7 +22,7 @@ frames{
 		game_h=20.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	2{
 		file=Electrocution.png
@@ -34,7 +34,7 @@ frames{
 		game_h=20.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

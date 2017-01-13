@@ -57,7 +57,7 @@ struct status_type {
     particle_generator* particle_gen;
     string animation_name;
     float animation_mob_scale;
-    animation_pool anim_pool;
+    animation_database anim_pool;
     animation_instance anim_instance;
     
     status_type();

@@ -36,24 +36,26 @@ private:
         ANIMATION_EDITOR_PICKER_HITBOX,
     };
     
-    animation_pool       anims;
+    animation_database   anims;
     bool                 anim_playing;
     bool                 comparison;
-    frame*               comparison_frame;
+    sprite*              comparison_sprite;
     bool                 comparison_blink;
     bool                 comparison_blink_show;
     timer                comparison_blink_timer;
     animation*           cur_anim;
-    frame*               cur_frame;
-    size_t               cur_frame_instance_nr;
+    size_t               cur_body_part_nr;
+    size_t               cur_frame_nr;
     float                cur_frame_time;
     //The alpha is calculated using the sine of this value.
     float                cur_hitbox_alpha;
-    size_t               cur_hitbox_instance_nr;
     size_t               cur_hitbox_nr;
+    //Current maturity of the Pikmin,
+    //used to check the visuals of different Pikmin tops.
+    unsigned char        cur_maturity;
+    sprite*              cur_sprite;
     string               file_path;
     ALLEGRO_FILECHOOSER* file_dialog;
-    bool                 frame_offset_with_mouse;
     //Hitbox being grabbed by the mouse cursor. INVALID = none.
     size_t               grabbing_hitbox;
     bool                 grabbing_hitbox_edge;
@@ -68,9 +70,6 @@ private:
     bool                 is_pikmin;
     string               last_file_used;
     bool                 made_changes;
-    //Current maturity of the Pikmin,
-    //used to check the visuals of different Pikmin tops.
-    unsigned char        maturity;
     unsigned char        mode;
     //Hitbox corner coordinates. FLT_MAX = none.
     float                new_hitbox_corner_x;
@@ -79,33 +78,31 @@ private:
     unsigned char        sec_mode;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*      top_bmp[3];
-    //Widget under mouse.
-    lafi::widget*        wum;
     
     void close_changes_warning();
     string get_cut_path(const string &p);
     void gui_load_animation();
+    void gui_load_sprite();
     void gui_load_frame();
-    void gui_load_frame_instance();
-    void gui_load_frame_offset();
+    void gui_load_sprite_offset();
+    void gui_load_body_part();
     void gui_load_hitbox();
-    void gui_load_hitbox_instance();
     void gui_load_top();
     void gui_save_animation();
+    void gui_save_sprite();
     void gui_save_frame();
-    void gui_save_frame_instance();
-    void gui_save_frame_offset();
+    void gui_save_sprite_offset();
+    void gui_save_body_part();
     void gui_save_hitbox();
-    void gui_save_hitbox_instance();
     void gui_save_top();
     void leave();
-    void load_animation_pool();
+    void load_animation_database();
     void open_hitbox_type(unsigned char type);
     void open_picker(unsigned char type, bool can_make_new);
     void pick(string name, unsigned char type);
     void populate_history();
     void resize_everything();
-    void save_animation_pool();
+    void save_animation_database();
     void show_changes_warning();
     void update_hitboxes();
     void update_stats();

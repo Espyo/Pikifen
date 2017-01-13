@@ -33,13 +33,13 @@ pellet::pellet(
  */
 void pellet::draw() {
 
-    frame* f_ptr = anim.get_frame();
-    if(!f_ptr) return;
+    sprite* s_ptr = anim.get_cur_sprite();
+    if(!s_ptr) return;
     
     float draw_x, draw_y;
     float draw_w, draw_h, scale;
-    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h, &scale);
+    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h, &scale);
     
     float radius = type->radius * scale;
     bool being_delivered = false;
@@ -68,7 +68,7 @@ void pellet::draw() {
     }
     
     draw_sprite(
-        f_ptr->bitmap,
+        s_ptr->bitmap,
         draw_x, draw_y,
         radius * 2.0, -1,
         angle,
@@ -90,7 +90,7 @@ void pellet::draw() {
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
         
         draw_sprite(
-            f_ptr->bitmap,
+            s_ptr->bitmap,
             draw_x, draw_y,
             radius * 2.0, -1,
             angle,

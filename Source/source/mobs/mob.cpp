@@ -869,7 +869,7 @@ void mob::remove_particle_generator(const size_t id) {
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
  * nr:        Animation number.
-   * It's the animation instance number from the pool.
+   * It's the animation instance number from the database.
  * pre_named: If true,
  */
 void mob::set_animation(const size_t nr, const bool pre_named) {
@@ -877,8 +877,8 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
     
     size_t final_nr;
     if(pre_named) {
-        if(anim.anim_pool->pre_named_conversions.size() <= nr) return;
-        final_nr = anim.anim_pool->pre_named_conversions[nr];
+        if(anim.anim_db->pre_named_conversions.size() <= nr) return;
+        final_nr = anim.anim_db->pre_named_conversions[nr];
     } else {
         final_nr = nr;
     }
@@ -887,7 +887,7 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
         log_error(
             "Mob " + this->type->name + " tried to switch from " +
             (
-                anim.anim ? "animation \"" + anim.anim->name + "\"" :
+                anim.cur_anim ? "animation \"" + anim.cur_anim->name + "\"" :
                 "no animation"
             ) +
             " to a non-existent one (with the internal"
@@ -896,8 +896,8 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
         return;
     }
     
-    animation* new_anim = anim.anim_pool->animations[final_nr];
-    anim.anim = new_anim;
+    animation* new_anim = anim.anim_db->animations[final_nr];
+    anim.cur_anim = new_anim;
     anim.start();
 }
 
@@ -1079,19 +1079,19 @@ ALLEGRO_COLOR mob::get_status_tint_color() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the current frame of an animation of one of the status effects
+ * Returns the current sprite of one of the status effects
  * that the mob is under.
  * bmp_scale: Returns the mob size's scale to apply to the image.
  */
 ALLEGRO_BITMAP* mob::get_status_bitmap(float* bmp_scale) {
     *bmp_scale = 0.0f;
-    for(size_t s = 0; s < this->statuses.size(); ++s) {
-        status_type* t = this->statuses[s].type;
+    for(size_t st = 0; st < this->statuses.size(); ++st) {
+        status_type* t = this->statuses[st].type;
         if(t->animation_name.empty()) continue;
-        frame* f = t->anim_instance.get_frame();
-        if(!f) return NULL;
+        sprite* sp = t->anim_instance.get_cur_sprite();
+        if(!sp) return NULL;
         *bmp_scale = t->animation_mob_scale;
-        return f->bitmap;
+        return sp->bitmap;
     }
     return NULL;
 }
@@ -1262,8 +1262,8 @@ void apply_knockback(
  * victim_h:     the hitbox of the victim mob, if any.
  */
 float calculate_damage(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h
 ) {
     float attacker_offense = 0;
     float defense_multiplier = 1;
@@ -1311,8 +1311,8 @@ float calculate_damage(
  * angle:      the variable to return the angle of the knockback to.
  */
 void calculate_knockback(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h, float* knockback, float* angle
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h, float* knockback, float* angle
 ) {
     if(attacker_h) {
         *knockback = attacker_h->knockback;
@@ -1334,8 +1334,8 @@ void calculate_knockback(
  * total_damage: the variable to return the total caused damage to, if any.
  */
 void cause_hitbox_damage(
-    mob* attacker, mob* victim, hitbox_instance* attacker_h,
-    hitbox_instance* victim_h, float* total_damage
+    mob* attacker, mob* victim, hitbox* attacker_h,
+    hitbox* victim_h, float* total_damage
 ) {
     //TODO this function is unused.
     float attacker_offense = 0;
@@ -1523,16 +1523,16 @@ void focus_mob(mob* m1, mob* m2) {
  * m:      The mob.
  * h_type: Type of hitbox. INVALID means any.
  */
-hitbox_instance* get_closest_hitbox(
+hitbox* get_closest_hitbox(
     const float x, const float y, mob* m, const size_t h_type
 ) {
-    frame* f = m->anim.get_frame();
-    if(!f) return NULL;
-    hitbox_instance* closest_hitbox = NULL;
+    sprite* s = m->anim.get_cur_sprite();
+    if(!s) return NULL;
+    hitbox* closest_hitbox = NULL;
     float closest_hitbox_dist = 0;
     
-    for(size_t h = 0; h < f->hitbox_instances.size(); ++h) {
-        hitbox_instance* h_ptr = &f->hitbox_instances[h];
+    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+        hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
         float hx, hy;
@@ -1549,14 +1549,14 @@ hitbox_instance* get_closest_hitbox(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the hitbox instance in the current animation with
+ * Returns the hitbox in the current animation with
  * the specified number.
  */
-hitbox_instance* get_hitbox_instance(mob* m, const size_t nr) {
-    frame* f = m->anim.get_frame();
-    if(!f) return NULL;
-    if(f->hitbox_instances.empty()) return NULL;
-    return &f->hitbox_instances[nr];
+hitbox* gui_hitbox(mob* m, const size_t nr) {
+    sprite* s = m->anim.get_cur_sprite();
+    if(!s) return NULL;
+    if(s->hitboxes.empty()) return NULL;
+    return &s->hitboxes[nr];
 }
 
 
@@ -1848,14 +1848,14 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
  */
 void mob::draw() {
 
-    frame* f_ptr = anim.get_frame();
+    sprite* s_ptr = anim.get_cur_sprite();
     
-    if(!f_ptr) return;
+    if(!s_ptr) return;
     
     float draw_x, draw_y;
     float draw_w, draw_h;
-    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
     ALLEGRO_COLOR tint = get_status_tint_color();
     float brightness = get_sprite_brightness(this) / 255.0;
@@ -1864,7 +1864,7 @@ void mob::draw() {
     tint.b *= brightness;
     
     draw_sprite(
-        f_ptr->bitmap,
+        s_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
         angle,
@@ -1876,26 +1876,26 @@ void mob::draw() {
 /* ----------------------------------------------------------------------------
  * Returns where a sprite's center should be, for normal mob drawing routines.
  */
-void mob::get_sprite_center(mob* m, frame* f, float* x, float* y) {
-    float c = cos(m->angle), s = sin(m->angle);
-    *x = m->x + c * f->offs_x - s * f->offs_y;
-    *y = m->y + s * f->offs_x + c * f->offs_y;
+void mob::get_sprite_center(mob* m, sprite* s, float* x, float* y) {
+    float co = cos(m->angle), si = sin(m->angle);
+    *x = m->x + co * s->offs_x - si * s->offs_y;
+    *y = m->y + si * s->offs_x + co * s->offs_y;
 }
 
 /* ----------------------------------------------------------------------------
  * Returns what a sprite's dimensions should be,
  * for normal mob drawing routines.
  * m: the mob.
- * f: the frame.
+ * s: the sprite.
  * w: variable to return the width to.
  * h: variable to return the height to.
  * scale: variable to return the scale used to. Optional.
  */
 void mob::get_sprite_dimensions(
-    mob* m, frame* f, float* w, float* h, float* scale
+    mob* m, sprite* s, float* w, float* h, float* scale
 ) {
-    *w = f->game_w;
-    *h = f->game_h;
+    *w = s->game_w;
+    *h = s->game_h;
     float sucking_mult = 1.0;
     float height_mult = 1 + m->z * 0.0001;
     

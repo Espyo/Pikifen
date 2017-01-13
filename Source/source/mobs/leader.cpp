@@ -152,17 +152,17 @@ void leader::swap_held_pikmin(mob* new_pik) {
 void leader::draw() {
     mob::draw();
     
-    frame* f_ptr = anim.get_frame();
+    sprite* s_ptr = anim.get_cur_sprite();
     float draw_x, draw_y;
     float draw_w, draw_h;
-    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
     if(invuln_period.time_left > 0.0f) {
-        frame* spark_f = spark_animation.instance.get_frame();
-        if(spark_f && spark_f->bitmap) {
+        sprite* spark_s = spark_animation.instance.get_cur_sprite();
+        if(spark_s && spark_s->bitmap) {
             draw_sprite(
-                spark_f->bitmap, draw_x, draw_y,
+                spark_s->bitmap, draw_x, draw_y,
                 draw_w, draw_h
             );
         }

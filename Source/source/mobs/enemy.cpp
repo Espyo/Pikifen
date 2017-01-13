@@ -39,13 +39,13 @@ enemy::enemy(
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
 void enemy::draw() {
-    frame* f_ptr = anim.get_frame();
-    if(!f_ptr) return;
+    sprite* s_ptr = anim.get_cur_sprite();
+    if(!s_ptr) return;
     
     float draw_x, draw_y;
     float draw_w, draw_h;
-    get_sprite_center(this, f_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, f_ptr, &draw_w, &draw_h);
+    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
+    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
     float radius_scale = 1.0f;
     
@@ -80,7 +80,7 @@ void enemy::draw() {
     tint.b *= brightness;
     
     draw_sprite(
-        f_ptr->bitmap,
+        s_ptr->bitmap,
         draw_x, draw_y,
         draw_w * radius_scale,
         draw_h * radius_scale,
@@ -96,7 +96,7 @@ void enemy::draw() {
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
         
         draw_sprite(
-            f_ptr->bitmap,
+            s_ptr->bitmap,
             draw_x, draw_y,
             draw_w * radius_scale,
             draw_h * radius_scale,

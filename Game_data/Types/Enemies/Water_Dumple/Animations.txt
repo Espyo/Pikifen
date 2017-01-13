@@ -1,7 +1,7 @@
 animations{
 	moving{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -18,7 +18,7 @@ animations{
 	}
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -44,7 +44,7 @@ animations{
 	}
 	attacking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			attacking1{
 				duration=0.40
 			}
@@ -67,7 +67,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			shaking1{
 				duration=0.10
 			}
@@ -105,7 +105,7 @@ animations{
 	}
 	eating{
 		loop_frame=0
-		frame_instances{
+		frames{
 			eating1{
 				duration=0.20
 			}
@@ -134,7 +134,7 @@ animations{
 	}
 	dying{
 		loop_frame=4
-		frame_instances{
+		frames{
 			dying2{
 				duration=0.10
 			}
@@ -153,7 +153,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	idling{
 		file=Water_Dumple.png
 		file_x=0
@@ -164,7 +164,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -201,7 +201,7 @@ frames{
 		game_h=50.00
 		offs_x=3.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=6.00 0.00 0.00
 				height=32.00
@@ -238,7 +238,7 @@ frames{
 		game_h=50.00
 		offs_x=6.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=11.20 -0.18 0.00
 				height=32.00
@@ -275,7 +275,7 @@ frames{
 		game_h=51.00
 		offs_x=0.50
 		offs_y=0.50
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -312,7 +312,7 @@ frames{
 		game_h=51.00
 		offs_x=-0.50
 		offs_y=-0.50
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -349,7 +349,7 @@ frames{
 		game_h=51.00
 		offs_x=-3.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -386,7 +386,7 @@ frames{
 		game_h=50.00
 		offs_x=15.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=18.00 0.00 0.00
 				height=32.00
@@ -423,7 +423,7 @@ frames{
 		game_h=50.00
 		offs_x=17.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=22.00 0.00 0.00
 				height=32.00
@@ -460,7 +460,7 @@ frames{
 		game_h=52.00
 		offs_x=-1.00
 		offs_y=-1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -497,7 +497,7 @@ frames{
 		game_h=-52.00
 		offs_x=-1.00
 		offs_y=-1.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -534,7 +534,7 @@ frames{
 		game_h=55.00
 		offs_x=-1.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
 				height=32.00
@@ -571,7 +571,7 @@ frames{
 		game_h=60.00
 		offs_x=-2.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
 				height=32.00
@@ -608,7 +608,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -645,7 +645,7 @@ frames{
 		game_h=50.00
 		offs_x=1.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -682,7 +682,7 @@ frames{
 		game_h=51.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -719,7 +719,7 @@ frames{
 		game_h=36.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -756,7 +756,7 @@ frames{
 		game_h=47.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -793,7 +793,7 @@ frames{
 		game_h=50.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -830,7 +830,7 @@ frames{
 		game_h=-47.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
 				height=32.00
@@ -858,7 +858,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	body=
 	mouth=
 }

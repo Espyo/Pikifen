@@ -1,7 +1,7 @@
 animations{
 	attacking{
 		loop_frame=1
-		frame_instances{
+		frames{
 			grabbing{
 				duration=0.40
 			}
@@ -21,7 +21,7 @@ animations{
 	}
 	buried{
 		loop_frame=0
-		frame_instances{
+		frames{
 			buried{
 				duration=0.00
 			}
@@ -29,7 +29,7 @@ animations{
 	}
 	grabbing{
 		loop_frame=0
-		frame_instances{
+		frames{
 			grabbing{
 				duration=0.00
 			}
@@ -37,7 +37,7 @@ animations{
 	}
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.00
 			}
@@ -45,7 +45,7 @@ animations{
 	}
 	lying{
 		loop_frame=0
-		frame_instances{
+		frames{
 			half_lying{
 				duration=0.10
 			}
@@ -59,7 +59,7 @@ animations{
 	}
 	thrown{
 		loop_frame=0
-		frame_instances{
+		frames{
 			thrown1{
 				duration=0.08
 			}
@@ -76,7 +76,7 @@ animations{
 	}
 	walking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -93,7 +93,7 @@ animations{
 	}
 	plucking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			buried{
 				duration=0.60
 			}
@@ -104,7 +104,7 @@ animations{
 	}
 	carrying{
 		loop_frame=0
-		frame_instances{
+		frames{
 			grabbing{
 				duration=0.00
 			}
@@ -112,7 +112,7 @@ animations{
 	}
 	sighing{
 		loop_frame=0
-		frame_instances{
+		frames{
 			thrown1{
 				duration=1.50
 			}
@@ -122,7 +122,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	buried{
 		file=White_Pikmin.png
 		file_x=62
@@ -139,7 +139,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	grabbing{
 		file=White_Pikmin.png
@@ -157,7 +157,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	grabbing_far{
 		file=White_Pikmin.png
@@ -175,7 +175,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	grabbing_near{
 		file=White_Pikmin.png
@@ -193,7 +193,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=3.14
-		hitbox_instances=
+		hitboxes=
 	}
 	half_lying{
 		file=White_Pikmin.png
@@ -211,7 +211,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	idling{
 		file=White_Pikmin.png
@@ -229,7 +229,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	lying{
 		file=White_Pikmin.png
@@ -247,7 +247,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	thrown1{
 		file=White_Pikmin.png
@@ -265,7 +265,7 @@ frames{
 		top_w=1.00
 		top_h=1.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	thrown2{
 		file=White_Pikmin.png
@@ -283,7 +283,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.00
-		hitbox_instances=
+		hitboxes=
 	}
 	thrown3{
 		file=White_Pikmin.png
@@ -301,7 +301,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=3.14
-		hitbox_instances=
+		hitboxes=
 	}
 	thrown4{
 		file=White_Pikmin.png
@@ -319,7 +319,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=3.14
-		hitbox_instances=
+		hitboxes=
 	}
 	walking1{
 		file=White_Pikmin.png
@@ -337,7 +337,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=-0.08
-		hitbox_instances=
+		hitboxes=
 	}
 	walking2{
 		file=White_Pikmin.png
@@ -355,7 +355,7 @@ frames{
 		top_w=5.50
 		top_h=10.00
 		top_angle=0.08
-		hitbox_instances=
+		hitboxes=
 	}
 }
-hitboxes=
+body_parts=

@@ -1902,19 +1902,19 @@ void draw_liquid(
     //Layers 3 and 4 - Water surface texture.
     for(unsigned char l = 0; l < 2; ++l) {
     
-        frame* anim_frame = NULL;
+        sprite* anim_sprite = NULL;
         float layer_2_dy = 0;
         float layer_speed[2];
         layer_speed[0] = s_ptr->associated_liquid->surface_speed[0];
         layer_speed[1] = s_ptr->associated_liquid->surface_speed[1];
         float alpha = s_ptr->associated_liquid->surface_alpha;
         
-        if(s_ptr->associated_liquid->anim_instance.get_frame()) {
-            anim_frame = s_ptr->associated_liquid->anim_instance.get_frame();
-            if(anim_frame->bitmap) {
+        if(s_ptr->associated_liquid->anim_instance.get_cur_sprite()) {
+            anim_sprite = s_ptr->associated_liquid->anim_instance.get_cur_sprite();
+            if(anim_sprite->bitmap) {
                 layer_2_dy =
-                    (anim_frame->file_h * 0.5) *
-                    (anim_frame->game_w / anim_frame->file_w);
+                    (anim_sprite->file_h * 0.5) *
+                    (anim_sprite->game_w / anim_sprite->file_w);
             }
         }
         
@@ -1938,12 +1938,12 @@ void draw_liquid(
                 );
             av[v].x *= scale;
             av[v].y *= scale;
-            av[v].u *= (anim_frame->file_w / anim_frame->game_w);
-            av[v].v *= (anim_frame->file_w / anim_frame->game_w);
+            av[v].u *= (anim_sprite->file_w / anim_sprite->game_w);
+            av[v].v *= (anim_sprite->file_w / anim_sprite->game_w);
         }
         
         al_draw_prim(
-            av, NULL, anim_frame->bitmap,
+            av, NULL, anim_sprite->bitmap,
             0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
         );
     }

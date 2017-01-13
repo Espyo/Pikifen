@@ -1,7 +1,7 @@
 animations{
 	attacking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			attacking1{
 				duration=0.08
 			}
@@ -63,7 +63,7 @@ animations{
 	}
 	hiding{
 		loop_frame=0
-		frame_instances{
+		frames{
 			emerging5{
 				duration=0.10
 			}
@@ -89,7 +89,7 @@ animations{
 	}
 	hidden{
 		loop_frame=0
-		frame_instances{
+		frames{
 			emerging1{
 				duration=0.00
 			}
@@ -97,7 +97,7 @@ animations{
 	}
 	dying{
 		loop_frame=16
-		frame_instances{
+		frames{
 			dying1{
 				duration=0.10
 			}
@@ -153,7 +153,7 @@ animations{
 	}
 	idling{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.00
 			}
@@ -161,7 +161,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			shaking1{
 				duration=0.10
 			}
@@ -232,7 +232,7 @@ animations{
 	}
 	eating{
 		loop_frame=0
-		frame_instances{
+		frames{
 			eating1{
 				duration=0.20
 			}
@@ -255,7 +255,7 @@ animations{
 	}
 	emerging{
 		loop_frame=0
-		frame_instances{
+		frames{
 			emerging1{
 				duration=0.20
 			}
@@ -293,7 +293,7 @@ animations{
 	}
 	moving{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.10
 			}
@@ -310,7 +310,7 @@ animations{
 	}
 	looking{
 		loop_frame=0
-		frame_instances{
+		frames{
 			idling{
 				duration=0.30
 			}
@@ -320,7 +320,7 @@ animations{
 		}
 	}
 }
-frames{
+sprites{
 	attacking1{
 		file=CB.png
 		file_x=0
@@ -331,7 +331,7 @@ frames{
 		game_h=56.00
 		offs_x=-5.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
 				height=128.00
@@ -380,7 +380,7 @@ frames{
 		game_h=56.00
 		offs_x=-8.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
 				height=128.00
@@ -429,7 +429,7 @@ frames{
 		game_h=56.00
 		offs_x=-8.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
 				height=128.00
@@ -478,7 +478,7 @@ frames{
 		game_h=56.00
 		offs_x=12.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=24.00 0.00 0.00
 				height=128.00
@@ -527,7 +527,7 @@ frames{
 		game_h=56.00
 		offs_x=40.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=44.00 0.00 0.00
 				height=128.00
@@ -576,7 +576,7 @@ frames{
 		game_h=56.00
 		offs_x=0.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -625,7 +625,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -674,7 +674,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -723,7 +723,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -772,7 +772,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -821,7 +821,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -870,7 +870,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -919,7 +919,7 @@ frames{
 		game_h=56.00
 		offs_x=-3.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -968,7 +968,7 @@ frames{
 		game_h=56.00
 		offs_x=8.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=22.00 0.00 0.00
 				height=128.00
@@ -1017,7 +1017,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1066,7 +1066,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1115,7 +1115,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1164,7 +1164,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1213,7 +1213,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1262,7 +1262,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1311,7 +1311,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1360,7 +1360,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1409,7 +1409,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1458,7 +1458,7 @@ frames{
 		game_h=56.00
 		offs_x=0.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1507,7 +1507,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -1556,7 +1556,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -1605,7 +1605,7 @@ frames{
 		game_h=56.00
 		offs_x=0.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -1654,7 +1654,7 @@ frames{
 		game_h=56.00
 		offs_x=-4.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -1703,7 +1703,7 @@ frames{
 		game_h=56.00
 		offs_x=-8.00
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
 				height=128.00
@@ -1752,7 +1752,7 @@ frames{
 		game_h=56.00
 		offs_x=0.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1801,7 +1801,7 @@ frames{
 		game_h=56.00
 		offs_x=0.50
 		offs_y=0.00
-		hitbox_instances{
+		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
 				height=128.00
@@ -1841,7 +1841,7 @@ frames{
 		}
 	}
 }
-hitboxes{
+body_parts{
 	face=
 	hide=
 	mouth=

@@ -117,7 +117,7 @@ void bridge::open(mob* m, void* info1, void* info2) {
  */
 void bridge::take_damage(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float damage = calculate_damage(info->mob2, m, info->hi2, info->hi1);
+    float damage = calculate_damage(info->mob2, m, info->h2, info->h1);
     m->health -= damage;
 }
 

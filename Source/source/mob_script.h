@@ -23,7 +23,7 @@ using namespace std;
 class mob;
 class mob_type;
 class mob_state;
-class hitbox_instance;
+class hitbox;
 
 const unsigned char N_PREV_STATES = 3;
 
@@ -368,12 +368,12 @@ public:
 };
 
 struct hitbox_touch_info {
-    mob* mob2; //Mob that touched our mob.
-    hitbox_instance* hi1; //Hitbox of our mob that got touched.
-    hitbox_instance* hi2; //Hitbox of the other mob.
+    mob* mob2;  //Mob that touched our mob.
+    hitbox* h1; //Hitbox of our mob that got touched.
+    hitbox* h2; //Hitbox of the other mob.
     hitbox_touch_info(
         mob* mob2 = NULL,
-        hitbox_instance* hi1 = NULL, hitbox_instance* hi2 = NULL
+        hitbox* h1 = NULL, hitbox* h2 = NULL
     );
 };
 

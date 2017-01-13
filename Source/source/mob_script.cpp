@@ -52,7 +52,7 @@ mob_action::mob_action(
         }
         
         for(size_t hn = 0; hn < hitbox_names.size(); ++hn) {
-            size_t h_pos = mt->anims.find_hitbox(hitbox_names[hn]);
+            size_t h_pos = mt->anims.find_body_part(hitbox_names[hn]);
             
             if(h_pos == INVALID) {
                 log_error("Unknown hitbox \"" + hitbox_names[hn] + "\"!", dn);
@@ -1044,13 +1044,13 @@ vector<mob_state*> easy_fsm_creator::finish() {
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about an event where two hitboxes touch.
  * mob2: the other mob.
- * hi1:  the current mob's hitbox.
- * hi2:  the other mob's hitbox.
+ * h1:   the current mob's hitbox.
+ * h2:   the other mob's hitbox.
  */
 hitbox_touch_info::hitbox_touch_info(
-    mob* mob2, hitbox_instance* hi1, hitbox_instance* hi2
+    mob* mob2, hitbox* h1, hitbox* h2
 ) {
     this->mob2 = mob2;
-    this->hi1  = hi1;
-    this->hi2  = hi2;
+    this->h1   = h1;
+    this->h2   = h2;
 }

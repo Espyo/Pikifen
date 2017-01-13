@@ -105,8 +105,8 @@ public:
     //This is to let other leaders know that they should pick a different one.
     bool pluck_reserved;
     
-    void do_attack(mob* m, hitbox_instance* victim_hitbox_i);
-    void set_connected_hitbox_info(hitbox_instance* hi_ptr, mob* mob_ptr);
+    void do_attack(mob* m, hitbox* victim_hitbox_i);
+    void set_connected_hitbox_info(hitbox* i_ptr, mob* mob_ptr);
     void teleport_to_connected_hitbox();
     
     virtual bool can_receive_status(status_type* s);

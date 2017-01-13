@@ -763,14 +763,14 @@ void pikmin_fsm::be_grabbed_by_friend(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a Pikmin is grabbed by an enemy.
  * info1: Pointer to the mob.
- * info2: Pointer to the hitbox instance that grabbed.
+ * info2: Pointer to the hitbox that grabbed.
  */
 void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     pikmin* pik_ptr = (pikmin*) m;
     mob* mob_ptr = (mob*) info1;
-    hitbox_instance* hi_ptr = (hitbox_instance*) info2;
+    hitbox* h_ptr = (hitbox*) info2;
     
-    pik_ptr->set_connected_hitbox_info(hi_ptr, mob_ptr);
+    pik_ptr->set_connected_hitbox_info(h_ptr, mob_ptr);
     
     pik_ptr->focused_mob = mob_ptr;
     
@@ -942,7 +942,7 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     float knockback_angle = 0;
     
     calculate_knockback(
-        info->mob2, m, info->hi2, info->hi1, &knockback, &knockback_angle
+        info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
     );
     apply_knockback(m, knockback, knockback_angle);
     
@@ -1151,19 +1151,19 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
     
     mob* mob_ptr = info->mob2;
-    hitbox_instance* hi_ptr = info->hi2;
+    hitbox* h_ptr = info->h2;
     
-    if(!hi_ptr || !hi_ptr->can_pikmin_latch) {
+    if(!h_ptr || !h_ptr->can_pikmin_latch) {
         //No good for latching on. Make it act like it landed on the ground.
         m->fsm.run_event(MOB_EVENT_LANDED);
         return;
     }
     
-    pik_ptr->connected_hitbox_nr = hi_ptr->hitbox_nr;
+    pik_ptr->connected_hitbox_nr = h_ptr->body_part_index;
     pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
     
     pik_ptr->focused_mob = mob_ptr;
-    pik_ptr->set_connected_hitbox_info(hi_ptr, mob_ptr);
+    pik_ptr->set_connected_hitbox_info(h_ptr, mob_ptr);
     
     pik_ptr->was_thrown = false;
     
@@ -1217,7 +1217,7 @@ void pikmin_fsm::tick_latched(mob* m, void* info1, void* info2) {
     if(pik_ptr->attack_time <= 0) {
         pik_ptr->do_attack(
             pik_ptr->focused_mob,
-            get_hitbox_instance(
+            gui_hitbox(
                 pik_ptr->focused_mob, pik_ptr->connected_hitbox_nr
             )
         );

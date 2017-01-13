@@ -49,10 +49,10 @@ void main_menu::load() {
     data_node title_screen_logo_file(
         ANIMATIONS_FOLDER + "/Title_screen_logo.txt"
     );
-    logo = load_animation_pool_from_file(&title_screen_logo_file);
+    logo = load_animation_database_from_file(&title_screen_logo_file);
     if(!logo.animations.empty()) {
         logo_anim = animation_instance(&logo);
-        logo_anim.anim = logo.animations[0];
+        logo_anim.cur_anim = logo.animations[0];
         logo_anim.start();
     }
     
@@ -178,14 +178,14 @@ void main_menu::do_drawing() {
         scr_w, scr_h
     );
     
-    frame* logo_anim_f = logo_anim.get_frame();
-    if(logo_anim_f) {
+    sprite* logo_anim_s = logo_anim.get_cur_sprite();
+    if(logo_anim_s) {
         draw_sprite(
-            logo_anim_f->bitmap,
+            logo_anim_s->bitmap,
             scr_w * 0.5,
             scr_h * 0.25,
-            logo_anim_f->game_w,
-            logo_anim_f->game_h
+            logo_anim_s->game_w,
+            logo_anim_s->game_h
         );
     }
     
@@ -601,7 +601,7 @@ void options_menu::update() {
                 break;
             }
         }
-
+        
         for(size_t cw = 0; cw < 5; ++cw) {
             control_widgets[list_nr * 5 + cw]->enabled = true;
         }
