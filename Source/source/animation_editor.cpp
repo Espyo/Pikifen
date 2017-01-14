@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2016.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2017.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included
  * README and LICENSE files for more information.
@@ -670,7 +670,7 @@ void animation_editor::gui_save_hitbox() {
     
     lafi::widget* f = gui->widgets["frm_hitboxes"]->widgets["frm_hitbox"];
     
-    hitbox* h = &cur_sprite->htboxes[cur_htbox_nr];
+    hitbox* h = &cur_sprite->hitboxes[cur_hitbox_nr];
     
     h->x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
     h->y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
@@ -680,18 +680,18 @@ void animation_editor::gui_save_hitbox() {
     h->radius = s2f(((lafi::textbox*) f->widgets["txt_r"])->text);
     if(h->radius <= 0) h->radius = 16;
     
-    htbox* cur_h =
-        &cur_sprite->htboxes[cur_htbox_nr];
+    hitbox* cur_h =
+        &cur_sprite->hitboxes[cur_hitbox_nr];
         
     if(((lafi::radio_button*) f->widgets["rad_normal"])->selected) {
-        cur_h->type = hTBOX_TYPE_NORMAL;
+        cur_h->type = HITBOX_TYPE_NORMAL;
     } else if(((lafi::radio_button*) f->widgets["rad_attack"])->selected) {
-        cur_h->type = hTBOX_TYPE_ATTACK;
+        cur_h->type = HITBOX_TYPE_ATTACK;
     } else {
-        cur_h->type = hTBOX_TYPE_DISABLED;
+        cur_h->type = HITBOX_TYPE_DISABLED;
     }
     
-    if(cur_h->type == hTBOX_TYPE_NORMAL) {
+    if(cur_h->type == HITBOX_TYPE_NORMAL) {
         cur_h->multiplier =
             s2f(
                 (
@@ -710,7 +710,7 @@ void animation_editor::gui_save_hitbox() {
                 f->widgets["frm_normal"]->widgets["txt_hazards"]
             )->text;
             
-    } else if(cur_h->type == hTBOX_TYPE_ATTACK) {
+    } else if(cur_h->type == HITBOX_TYPE_ATTACK) {
         cur_h->multiplier =
             s2f(
                 (
@@ -743,7 +743,7 @@ void animation_editor::gui_save_hitbox() {
             
     }
     
-    gui_load_htbox();
+    gui_load_hitbox();
     made_changes = true;
 }
 

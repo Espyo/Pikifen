@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Andre 'Espyo' Silva 2013-2016.
+ * Copyright (c) Andre 'Espyo' Silva 2013-2017.
  * The following source file belongs to the open-source project
  * Pikmin fangame engine. Please read the included
  * README and LICENSE files for more information.
@@ -1437,8 +1437,8 @@ void area_editor::find_errors() {
 
 /* ----------------------------------------------------------------------------
  * Returns a sector common to all vertexes.
- * A sector is considered this if a vertex has it as on a neighboring edge,
- * or if a vertex is inside it.
+ * A sector is considered this if a vertex has it as a secotr of
+ * a neighboring edge, or if a vertex is inside it.
  * Use the former for vertexes that will be merged, and the latter
  * for vertexes that won't.
  * vertexes: List of vertexes to check.
