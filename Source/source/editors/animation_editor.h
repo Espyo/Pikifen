@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the animation editor-related functions.
+ * Header for the general animation editor-related functions.
  */
 
 #ifndef ANIMATION_EDITOR_INCLUDED
@@ -16,18 +16,31 @@
 
 #include <allegro5/allegro_native_dialog.h>
 
-#include "animation.h"
-#include "game_state.h"
-#include "hitbox.h"
-#include "LAFI/gui.h"
-#include "LAFI/widget.h"
-#include "misc_structs.h"
+#include "editor.h"
+#include "../animation.h"
+#include "../game_state.h"
+#include "../hitbox.h"
+#include "../LAFI/gui.h"
+#include "../LAFI/widget.h"
+#include "../misc_structs.h"
 
 using namespace std;
 
-class animation_editor : public game_state {
+class animation_editor : public editor {
 private:
 
+    enum EDITOR_MODES {
+        EDITOR_MODE_MAIN,
+        EDITOR_MODE_ANIMATION,
+        EDITOR_MODE_SPRITE,
+        EDITOR_MODE_BODY_PART,
+        EDITOR_MODE_HITBOXES,
+        EDITOR_MODE_SPRITE_OFFSET,
+        EDITOR_MODE_TOP,
+        EDITOR_MODE_HISTORY,
+        EDITOR_MODE_TOOLS,
+    };
+    
     enum ANIMATION_EDITOR_PICKER_TYPES {
         ANIMATION_EDITOR_PICKER_ANIMATION,
         ANIMATION_EDITOR_PICKER_FRAME_INSTANCE,
@@ -35,6 +48,10 @@ private:
         ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
         ANIMATION_EDITOR_PICKER_HITBOX,
     };
+    
+    static const float  ZOOM_MAX_LEVEL_EDITOR;
+    static const float  ZOOM_MIN_LEVEL_EDITOR;
+    
     
     animation_database   anims;
     bool                 anim_playing;
@@ -63,49 +80,43 @@ private:
     //or the anchor, when in resize mode.
     float                grabbing_hitbox_x;
     float                grabbing_hitbox_y;
-    lafi::gui*           gui;
     bool                 hitboxes_visible;
-    bool                 holding_m1;
-    bool                 holding_m2;
     bool                 is_pikmin;
     string               last_file_used;
-    bool                 made_changes;
-    unsigned char        mode;
     //Hitbox corner coordinates. FLT_MAX = none.
     float                new_hitbox_corner_x;
     float                new_hitbox_corner_y;
-    //Secondary/sub mode.
-    unsigned char        sec_mode;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*      top_bmp[3];
     
-    void close_changes_warning();
     string get_cut_path(const string &p);
-    void gui_load_animation();
-    void gui_load_sprite();
-    void gui_load_frame();
-    void gui_load_sprite_offset();
-    void gui_load_body_part();
-    void gui_load_hitbox();
-    void gui_load_top();
-    void gui_save_animation();
-    void gui_save_sprite();
-    void gui_save_frame();
-    void gui_save_sprite_offset();
-    void gui_save_body_part();
-    void gui_save_hitbox();
-    void gui_save_top();
-    void leave();
+    void animation_to_gui();
+    void body_part_to_gui();
+    void frame_to_gui();
+    void hitbox_to_gui();
+    void sprite_to_gui();
+    void sprite_offset_to_gui();
+    void top_to_gui();
+    void gui_to_body_part();
+    void gui_to_animation();
+    void gui_to_frame();
+    void gui_to_hitbox();
+    void gui_to_sprite();
+    void gui_to_sprite_offset();
+    void gui_to_top();
     void load_animation_database();
     void open_hitbox_type(unsigned char type);
-    void open_picker(unsigned char type, bool can_make_new);
-    void pick(string name, unsigned char type);
+    void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
     void resize_everything();
     void save_animation_database();
-    void show_changes_warning();
     void update_hitboxes();
     void update_stats();
+    
+    virtual void hide_all_frames();
+    virtual void change_to_right_frame();
+    virtual void create_new_from_picker(const string &name);
+    virtual void pick(const string &name, const unsigned char type);
     
 public:
 
@@ -115,7 +126,7 @@ public:
     
     virtual void do_logic();
     virtual void do_drawing();
-    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
     

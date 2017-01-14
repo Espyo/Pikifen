@@ -6,15 +6,25 @@ namespace lafi {
  * Creates a button given some parameters.
  */
 button::button(
-    int x1, int y1, int x2, int y2,
-    string text, string description, ALLEGRO_BITMAP* icon,
-    lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    const string &text, const string &description, ALLEGRO_BITMAP* icon,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     text(text),
     icon(icon) {
     
     this->description = description;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates a button given some parameters.
+ */
+button::button(
+    const string &text, const string &description, ALLEGRO_BITMAP* icon
+) :
+    button(0, 0, 0, 0, text, description, icon) {
+    
 }
 
 

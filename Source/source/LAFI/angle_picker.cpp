@@ -11,14 +11,22 @@ namespace lafi {
  * Creates an angle picker.
  */
 angle_picker::angle_picker(
-    int x1, int y1, int x2, int y2,
-    float angle, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    const float angle, lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     angle(angle),
     dragging_pointer(false) {
     
     needs_init = true;
+}
+
+/* ----------------------------------------------------------------------------
+ * Creates an angle picker.
+ */
+angle_picker::angle_picker(const float angle) :
+    angle_picker(0, 0, 0, 0, angle) {
+    
 }
 
 //Destroys an angle picker.
@@ -47,7 +55,9 @@ float angle_picker::str_to_angle(const string &s) {
  * position of the click in comparison to the center of
  * the circle.
  */
-void angle_picker::widget_on_mouse_down(int button, int x, int y) {
+void angle_picker::widget_on_mouse_down(
+    const int button, const int x, const int y
+) {
     if(button != 1) return;
     
     float circle_r = (y2 - y1) / 2;
@@ -65,7 +75,7 @@ void angle_picker::widget_on_mouse_down(int button, int x, int y) {
  * On mouse up, just mark the fact that the user is not
  * dragging the pointer around.
  */
-void angle_picker::widget_on_mouse_up(int, int, int) {
+void angle_picker::widget_on_mouse_up(const int, const int, const int) {
     dragging_pointer = false;
 }
 
@@ -74,7 +84,7 @@ void angle_picker::widget_on_mouse_up(int, int, int) {
  * If the mouse moves while the button is held on it,
  * move the pointer about.
  */
-void angle_picker::widget_on_mouse_move(int x, int y) {
+void angle_picker::widget_on_mouse_move(const int x, const int y) {
     if(!dragging_pointer) return;
     
     float circle_r = (y2 - y1) / 2;
@@ -139,9 +149,8 @@ void angle_picker::draw_self() {
  * Sets the widget's angle to a value (in radians), updating both
  * the textbox and the circle's pointer.
  */
-void angle_picker::set_angle_rads(float a) {
-    a = normalize_angle(a);
-    angle = a;
+void angle_picker::set_angle_rads(const float a) {
+    angle = normalize_angle(a);
     ((textbox*) widgets["txt_angle"])->text = angle_to_str(a);
 }
 
@@ -169,10 +178,11 @@ void angle_picker::textbox_lose_focus_handler(widget* w) {
 /* ----------------------------------------------------------------------------
  * Normalizes an angle so that it's between 0 and M_PI * 2.
  */
-float normalize_angle(float a) {
-    a = fmod((double) a, M_PI * 2);
-    if(a < 0) a += M_PI * 2;
-    return a;
+float normalize_angle(const float a) {
+    float new_angle = a;
+    new_angle = fmod((double) new_angle, M_PI * 2);
+    if(new_angle < 0) new_angle += M_PI * 2;
+    return new_angle;
 }
 
 }

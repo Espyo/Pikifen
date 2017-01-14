@@ -328,7 +328,7 @@ void gameplay::unload() {
 /* ----------------------------------------------------------------------------
  * Handle Allegro events.
  */
-void gameplay::handle_controls(ALLEGRO_EVENT ev) {
+void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
     handle_game_controls(ev);
 }
 

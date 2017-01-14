@@ -6,12 +6,22 @@ namespace lafi {
  * Creates a line.
  */
 line::line(
-    int x1, int y1, int x2, int y2, bool horizontal, int thickness,
-    lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    const bool horizontal, const int thickness,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     horizontal(horizontal),
     thickness(thickness) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a line.
+ */
+line::line(const bool horizontal, const int thickness) :
+    line(0, 0, 0, 0, horizontal, thickness) {
     
 }
 
@@ -43,9 +53,18 @@ void line::draw_self() {
  * Creates a dummy widget.
  */
 dummy::dummy(
-    int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags) {
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a dummy widget.
+ */
+dummy::dummy() : dummy(0, 0, 0, 0) {
+
 }
 
 

@@ -14,10 +14,11 @@ public:
     int thickness;
     
     line(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        bool horizontal = true, int thickness = 1,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        const bool horizontal = true, const int thickness = 1,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
+    line(const bool horizontal = true, const int thickness = 1);
     ~line();
     
     void draw_self();
@@ -31,9 +32,10 @@ public:
 class dummy : public widget {
 public:
     dummy(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
+    dummy();
     ~dummy();
     
     void draw_self();

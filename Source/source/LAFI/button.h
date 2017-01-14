@@ -19,9 +19,14 @@ public:
     ALLEGRO_BITMAP* icon;
     
     button(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        string text = "", string description = "", ALLEGRO_BITMAP* icon = NULL,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        const string &text = "", const string &description = "",
+        ALLEGRO_BITMAP* icon = NULL, lafi::style* style = NULL,
+        const unsigned char flags = 0
+    );
+    button(
+        const string &text = "", const string &description = "",
+        ALLEGRO_BITMAP* icon = NULL
     );
     ~button();
     

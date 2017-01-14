@@ -9,9 +9,11 @@ namespace lafi {
  * Creates a scrollbar.
  */
 scrollbar::scrollbar(
-    int x1, int y1, int x2, int y2, float min_value, float max_value,
-    float low_value, float high_value, bool vertical, lafi::style* style,
-    unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    const float min_value, const float max_value,
+    const float low_value, const float high_value,
+    const bool vertical, lafi::style* style,
+    const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     attached_widget(NULL),
@@ -23,6 +25,20 @@ scrollbar::scrollbar(
     change_handler(nullptr) {
     
     needs_init = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a scrollbar.
+ */
+scrollbar::scrollbar(
+    const float min_value, const float max_value,
+    const float low_value, const float high_value, const bool vertical
+) :
+    scrollbar(
+        0, 0, 0, 0, min_value, max_value, low_value, high_value, vertical
+    ) {
+    
 }
 
 
@@ -39,7 +55,9 @@ void scrollbar::init() {
  * When the mouse is held down, the scrollbar button
  * is moved to that location.
  */
-void scrollbar::widget_on_mouse_down(int button, int x, int y) {
+void scrollbar::widget_on_mouse_down(
+    const int button, const int x, const int y
+) {
     if(button != 1) return;
     
     move_button(x, y);
@@ -50,7 +68,7 @@ void scrollbar::widget_on_mouse_down(int button, int x, int y) {
  * When the mouse is moved, if the mouse button is held
  * down, the scrollbar button is moved with the mouse.
  */
-void scrollbar::widget_on_mouse_move(int x, int y) {
+void scrollbar::widget_on_mouse_move(const int x, const int y) {
     if(!mouse_clicking) return;
     
     move_button(x, y);
@@ -106,7 +124,7 @@ void scrollbar::create_button() {
  * Moves the scrollbar's button to the desired coordinates.
  * The coordinates specify the center.
  */
-void scrollbar::move_button(int x, int y) {
+void scrollbar::move_button(const int x, const int y) {
     if(low_value == high_value) return;
     
     button* but = (button*) widgets["but_bar"];
@@ -153,7 +171,7 @@ void scrollbar::move_button(int x, int y) {
 /* ----------------------------------------------------------------------------
  * Sets the scrollbar's current value.
  */
-void scrollbar::set_value(float new_low, bool call_handler) {
+void scrollbar::set_value(const float new_low, const bool call_handler) {
     float dif = high_value - low_value;
     if(new_low < min_value || new_low + dif > max_value) return;
     

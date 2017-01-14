@@ -19,12 +19,17 @@ public:
     void init();
     
     radio_button(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, string text = "",
-        int group = 0, bool selected = false, lafi::style* style = NULL,
-        unsigned char flags = 0
+        const int x1, const int y1, const int x, const int y2,
+        const string &text = "", const int group = 0,
+        const bool selected = false, lafi::style* style = NULL,
+        const unsigned char flags = 0
+    );
+    radio_button(
+        const string &text = "", const int group = 0,
+        const bool selected = false
     );
     ~radio_button();
-    void widget_on_left_mouse_click(int x, int y);
+    void widget_on_left_mouse_click(const int x, const int y);
     
     void select();
     void unselect();
@@ -43,8 +48,8 @@ public:
     bool selected;
     
     radio_button_button(
-        int x1 = 0, int y1 = 0, bool selected = false,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1 = 0, const int y1 = 0, const bool selected = false,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
     ~radio_button_button();
     

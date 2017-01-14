@@ -16,6 +16,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "geometry_utils.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------

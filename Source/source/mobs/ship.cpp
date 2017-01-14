@@ -10,6 +10,7 @@
  */
 
 #include "../drawing.h"
+#include "../geometry_utils.h"
 #include "ship.h"
 #include "../vars.h"
 

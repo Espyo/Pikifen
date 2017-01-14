@@ -21,12 +21,13 @@ public:
     void init();
     
     checkbox(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1, string text = "",
-        bool checked = false, lafi::style* style = NULL,
-        unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        const string &text = "", const bool checked = false,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
+    checkbox(const string &text = "", const bool checked = false);
     ~checkbox();
-    void widget_on_left_mouse_click(int x, int y);
+    void widget_on_left_mouse_click(const int x, const int y);
     
     void draw_self();
 };
@@ -44,8 +45,8 @@ public:
     bool checked;
     
     checkbox_box(
-        int x1 = 0, int y1 = 0, bool checked = false,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1 = 0, const int y1 = 0, const bool checked = false,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
     ~checkbox_box();
     

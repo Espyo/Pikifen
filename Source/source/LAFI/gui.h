@@ -27,8 +27,8 @@ public:
     bool close_button_quits;
     
     gui(
-        int w, int h,
-        lafi::style* style = new lafi::style(), unsigned char flags = 0
+        const int w, const int h,
+        lafi::style* style = new lafi::style(), const unsigned char flags = 0
     );
     /*gui(
         unsigned int display_w, unsigned int display_h,

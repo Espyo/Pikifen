@@ -6,10 +6,19 @@ namespace lafi {
  * Creates a frame.
  */
 frame::frame(
-    int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2, lafi::style* style,
+    const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a frame.
+ */
+frame::frame() : frame(0, 0, 0, 0) {
+
 }
 
 

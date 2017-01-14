@@ -14,6 +14,7 @@
 #include "../const.h"
 #include "../drawing.h"
 #include "../functions.h"
+#include "../geometry_utils.h"
 #include "mob.h"
 #include "pikmin.h"
 #include "ship.h"
@@ -184,7 +185,7 @@ void mob::tick_misc_logic() {
             x, y,
             type->move_speed,
             get_leader_to_group_center_dist(this),
-            &group_center_mx, &group_center_my, NULL, NULL
+            &group_center_mx, &group_center_my, NULL, NULL, delta_t
         );
         group->group_center_x += group_center_mx * delta_t;
         group->group_center_y += group_center_my * delta_t;

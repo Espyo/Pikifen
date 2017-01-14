@@ -17,8 +17,9 @@
 #include <queue>
 #include <unordered_set>
 
-#include "area_editor.h"
+#include "editors/area_editor.h"
 #include "functions.h"
+#include "geometry_utils.h"
 #include "sector.h"
 #include "vars.h"
 

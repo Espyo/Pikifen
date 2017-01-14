@@ -12,8 +12,9 @@ namespace lafi {
  * Creates a radio button.
  */
 radio_button::radio_button(
-    int x1, int y1, int x2, int y2, string text, int group, bool selected,
-    lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2, const string &text,
+    const int group, const bool selected,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     selected(selected),
@@ -21,6 +22,17 @@ radio_button::radio_button(
     group(group) {
     
     needs_init = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a radio button.
+ */
+radio_button::radio_button(
+    const string &text, const int group, const bool selected
+) :
+    radio_button(0, 0, 0, 0, text, group, selected) {
+    
 }
 
 
@@ -75,7 +87,7 @@ radio_button::~radio_button() {
 /* ----------------------------------------------------------------------------
  * When the user clicks, this radio button is selected.
  */
-void radio_button::widget_on_left_mouse_click(int, int) {
+void radio_button::widget_on_left_mouse_click(const int, const int) {
     select();
 }
 
@@ -122,7 +134,8 @@ void radio_button::draw_self() { }
  * Creates a radio button button.
  */
 radio_button_button::radio_button_button(
-    int x1, int y1, bool selected, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const bool selected,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(
         x1, y1, x1 + RADIO_BUTTON_BUTTON_SIZE,

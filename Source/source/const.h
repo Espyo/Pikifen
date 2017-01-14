@@ -104,10 +104,6 @@ const float WHISTLE_FADE_TIME = 0.1f;
 const float WHISTLE_RING_SPEED = 600.0f;
 //Seconds that need to pass before another whistle ring appears.
 const float WHISTLE_RINGS_INTERVAL = 0.1f;
-//Maximum zoom level possible on the area editor.
-const float ZOOM_MAX_LEVEL_EDITOR = 8.0f;
-//Minimum zoom level possible on the area editor.
-const float ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
 const unsigned int DEF_FPS   = 60;
 const unsigned int DEF_SCR_W = 640;
@@ -140,48 +136,6 @@ const string PARTICLE_GENERATORS_FILE =
 const string SYSTEM_ANIMATIONS_FILE =
     MISC_FOLDER + "/System_animations.txt";
 const string WEATHER_FILE          = MISC_FOLDER + "/Weather.txt";
-
-
-enum EDITOR_MODES {
-    //Common.
-    EDITOR_MODE_MAIN,
-    EDITOR_MODE_TOOLS,
-    EDITOR_MODE_OPTIONS,
-    //Animation editor.
-    EDITOR_MODE_ANIMATION,
-    EDITOR_MODE_SPRITE,
-    EDITOR_MODE_HISTORY,
-    EDITOR_MODE_BODY_PART,
-    EDITOR_MODE_HITBOXES,
-    EDITOR_MODE_SPRITE_OFFSET,
-    EDITOR_MODE_TOP,
-    //Area editor
-    EDITOR_MODE_SECTORS,
-    EDITOR_MODE_ADV_TEXTURE_SETTINGS,
-    EDITOR_MODE_TEXTURE,
-    EDITOR_MODE_OBJECTS,
-    EDITOR_MODE_PATHS,
-    EDITOR_MODE_SHADOWS,
-    EDITOR_MODE_GUIDE,
-    EDITOR_MODE_REVIEW,
-};
-
-enum EDITOR_SEC_MODES {
-    ESM_NONE,
-    ESM_NEW_SECTOR,
-    ESM_NEW_OBJECT,
-    ESM_DUPLICATE_OBJECT,
-    ESM_NEW_STOP,
-    ESM_NEW_LINK1,  //Click #1.
-    ESM_NEW_LINK2,  //Click #2.
-    ESM_NEW_1WLINK1, //One-way link, click #1.
-    ESM_NEW_1WLINK2, //One-way link, click #2.
-    ESM_DEL_STOP,
-    ESM_DEL_LINK,
-    ESM_NEW_SHADOW,
-    ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
-    ESM_TEXTURE_VIEW,
-};
 
 enum DEV_TOOL_IDS {
     DEV_TOOL_NONE,

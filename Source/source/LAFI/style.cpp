@@ -6,8 +6,8 @@ namespace lafi {
  * Creates a style given some parameters.
  */
 style::style(
-    ALLEGRO_COLOR bg_color, ALLEGRO_COLOR fg_color,
-    ALLEGRO_COLOR alt_color, ALLEGRO_FONT* text_font
+    const ALLEGRO_COLOR bg_color, const ALLEGRO_COLOR fg_color,
+    const ALLEGRO_COLOR alt_color, ALLEGRO_FONT* text_font
 ) :
     bg_color(bg_color),
     fg_color(fg_color),
@@ -27,7 +27,7 @@ style::style(
 /* ----------------------------------------------------------------------------
  * Creates a style by copying the info from another style.
  */
-style::style(style &s2) :
+style::style(const style &s2) :
     bg_color(s2.bg_color),
     lighter_bg_color(s2.lighter_bg_color),
     darker_bg_color(s2.darker_bg_color),
@@ -52,7 +52,7 @@ style::~style() { }
 /* ----------------------------------------------------------------------------
  * Returns a color that's ligther than the given color.
  */
-ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
+ALLEGRO_COLOR style::lighten_color(const ALLEGRO_COLOR color) {
     float indexes[4] = {
         static_cast<float>(color.r + COLOR_SHIFT_DELTA),
         static_cast<float>(color.g + COLOR_SHIFT_DELTA),
@@ -69,7 +69,7 @@ ALLEGRO_COLOR style::lighten_color(ALLEGRO_COLOR color) {
 /* ----------------------------------------------------------------------------
  * Returns a color that's darker than the given color.
  */
-ALLEGRO_COLOR style::darken_color(ALLEGRO_COLOR color) {
+ALLEGRO_COLOR style::darken_color(const ALLEGRO_COLOR color) {
     float indexes[4] = {
         static_cast<float>(color.r - COLOR_SHIFT_DELTA),
         static_cast<float>(color.g - COLOR_SHIFT_DELTA),

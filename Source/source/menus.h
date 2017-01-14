@@ -33,7 +33,7 @@ public:
     main_menu();
     virtual void load();
     virtual void unload();
-    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
 };
@@ -64,7 +64,7 @@ public:
     options_menu();
     virtual void load();
     virtual void unload();
-    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
 };
@@ -87,7 +87,7 @@ public:
     area_menu();
     virtual void load();
     virtual void unload();
-    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
 };

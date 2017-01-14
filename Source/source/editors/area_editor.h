@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the area editor-related functions.
+ * Header for the general area editor-related functions.
  */
 
 #ifndef AREA_EDITOR_INCLUDED
@@ -18,11 +18,12 @@
 
 #include <allegro5/allegro.h>
 
-#include "game_state.h"
-#include "LAFI/gui.h"
-#include "LAFI/widget.h"
-#include "misc_structs.h"
-#include "sector.h"
+#include "editor.h"
+#include "../game_state.h"
+#include "../LAFI/gui.h"
+#include "../LAFI/widget.h"
+#include "../misc_structs.h"
+#include "../sector.h"
 
 using namespace std;
 
@@ -33,8 +34,39 @@ struct texture_suggestion {
     ~texture_suggestion();
 };
 
-class area_editor : public game_state {
+class area_editor : public editor {
 private:
+    enum EDITOR_MODES {
+        EDITOR_MODE_MAIN,
+        EDITOR_MODE_TOOLS,
+        EDITOR_MODE_OPTIONS,
+        EDITOR_MODE_SECTORS,
+        EDITOR_MODE_ADV_TEXTURE_SETTINGS,
+        EDITOR_MODE_TEXTURE,
+        EDITOR_MODE_OBJECTS,
+        EDITOR_MODE_PATHS,
+        EDITOR_MODE_SHADOWS,
+        EDITOR_MODE_GUIDE,
+        EDITOR_MODE_REVIEW,
+    };
+    
+    enum EDITOR_SEC_MODES {
+        ESM_NONE,
+        ESM_NEW_SECTOR,
+        ESM_NEW_OBJECT,
+        ESM_DUPLICATE_OBJECT,
+        ESM_NEW_STOP,
+        ESM_NEW_LINK1,   //Click #1.
+        ESM_NEW_LINK2,   //Click #2.
+        ESM_NEW_1WLINK1, //One-way link, click #1.
+        ESM_NEW_1WLINK2, //One-way link, click #2.
+        ESM_DEL_STOP,
+        ESM_DEL_LINK,
+        ESM_NEW_SHADOW,
+        ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
+        ESM_TEXTURE_VIEW,
+    };
+    
     enum AREA_EDITOR_PICKER_TYPES {
         AREA_EDITOR_PICKER_AREA,
         AREA_EDITOR_PICKER_SECTOR_TYPE,
@@ -71,6 +103,8 @@ private:
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
     static const float  STOP_RADIUS;
     static const float  VERTEX_MERGE_RADIUS;
+    static const float  ZOOM_MAX_LEVEL_EDITOR;
+    static const float  ZOOM_MIN_LEVEL_EDITOR;
     
     string                       area_name;
     timer                        backup_timer;
@@ -91,7 +125,6 @@ private:
     unsigned char                error_type;
     vertex*                      error_vertex_ptr;
     float                        grid_interval;
-    lafi::gui*                   gui;
     bool                         guide_aspect_ratio;
     ALLEGRO_BITMAP*              guide_bitmap;
     string                       guide_file_name;
@@ -100,10 +133,6 @@ private:
     float                        guide_w;
     float                        guide_h;
     unsigned char                guide_a;
-    bool                         holding_m1;
-    bool                         holding_m2;
-    bool                         made_changes;
-    unsigned char                mode;
     unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
     //Current vertex, object or shadow being moved.
@@ -120,7 +149,6 @@ private:
     float                        path_preview_checkpoints_y[2];
     vector<path_stop*>           path_preview;
     timer                        path_preview_timeout;
-    unsigned char                sec_mode; //Secondary/sub mode.
     bool                         shift_pressed;
     bool                         show_closest_stop;
     bool                         show_path_preview;
@@ -129,51 +157,49 @@ private:
     vector<texture_suggestion>   texture_suggestions;
     lafi::widget*                wum; //Widget under mouse.
     
-    void adv_textures_to_gui();
-    void guide_to_gui();
     void calculate_preview_path();
     void cancel_new_sector();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
-    void close_changes_warning();
     void change_guide(string new_file_name);
-    void change_to_right_frame(bool hide_all = false);
     void create_sector();
-    void leave();
     void find_errors();
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result
     );
-    vertex* get_merge_vertex(const float x, const float y, size_t* nr = NULL);
     void goto_error();
-    void gui_to_guide();
-    void gui_to_mob();
-    void gui_to_sector(bool called_by_brightness_bar = false);
-    void gui_to_shadow();
-    void gui_to_adv_textures();
-    bool is_edge_valid(edge* l);
     bool is_new_sector_line_valid(const float x, const float y);
-    bool is_polygon_clockwise(vector<vertex*> &vertexes);
     void load_area(const bool from_backup);
     void load_backup();
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
-    void mob_to_gui();
-    void open_picker(unsigned char type);
-    void pick(string name, unsigned char type);
+    void open_picker(const unsigned char content_type);
     void populate_texture_suggestions();
     void resize_everything();
     void save_area(const bool to_backup);
     void save_backup();
-    void sector_to_gui();
-    void shadow_to_gui();
-    void show_changes_warning();
     float snap_to_grid(const float c);
     void toggle_duplicate_mob_mode();
     bool update_backup_status();
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);
+    
+    void adv_textures_to_gui();
+    void guide_to_gui();
+    void mob_to_gui();
+    void sector_to_gui();
+    void shadow_to_gui();
+    void gui_to_adv_textures();
+    void gui_to_guide();
+    void gui_to_mob();
+    void gui_to_sector(bool called_by_brightness_bar = false);
+    void gui_to_shadow();
+    
+    virtual void hide_all_frames();
+    virtual void change_to_right_frame();
+    virtual void create_new_from_picker(const string &name);
+    virtual void pick(const string &name, const unsigned char type);
     
 public:
 
@@ -187,7 +213,7 @@ public:
     
     virtual void do_logic();
     virtual void do_drawing();
-    virtual void handle_controls(ALLEGRO_EVENT ev);
+    virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
     

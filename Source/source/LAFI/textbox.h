@@ -34,21 +34,25 @@ public:
     
     function<void(widget* w)> change_handler;
     
-    void widget_on_key_char(int keycode, int unichar, unsigned int modifiers);
-    void widget_on_mouse_down(int button, int x, int y);
-    void widget_on_mouse_move(int x, int y);
+    void widget_on_key_char(
+        const int keycode, const int unichar, const unsigned int modifiers
+    );
+    void widget_on_mouse_down(const int button, const int x, const int y);
+    void widget_on_mouse_move(const int x, const int y);
     void call_change_handler();
     
     textbox(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        string text = "", lafi::style* style = NULL, unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        const string &text = "",
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
+    textbox(const string &text = "");
     textbox(textbox &b2);
     ~textbox();
     
     void draw_self();
     
-    unsigned int mouse_to_char(int mouse_x);
+    unsigned int mouse_to_char(const int mouse_x);
 };
 
 }

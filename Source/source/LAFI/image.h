@@ -19,10 +19,11 @@ private:
     
 public:
     image(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
+        const int x1, const int y1, const int x2, const int y2,
         ALLEGRO_BITMAP* bmp = NULL, lafi::style* style = NULL,
-        unsigned char flags = 0
+        const unsigned char flags = 0
     );
+    image(ALLEGRO_BITMAP* bmp = NULL);
     image(image &i2);
     ~image();
     

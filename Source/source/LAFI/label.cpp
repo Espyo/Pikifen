@@ -6,12 +6,21 @@ namespace lafi {
  * Creates a label.
  */
 label::label(
-    int x1, int y1, int x2, int y2, string text,
-    int text_flags, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2, const string &text,
+    const int text_flags, lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     text(text),
     text_flags(text_flags) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a label.
+ */
+label::label(const string &text, const int text_flags) :
+    label(0, 0, 0, 0, text, text_flags) {
     
 }
 

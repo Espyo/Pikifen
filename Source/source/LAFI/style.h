@@ -35,16 +35,16 @@ public:
     ALLEGRO_FONT* text_font;
     
     style(
-        ALLEGRO_COLOR bg_color =
+        const ALLEGRO_COLOR bg_color =
             al_map_rgb(DEF_STYLE_BG_R, DEF_STYLE_BG_G, DEF_STYLE_BG_B),
-        ALLEGRO_COLOR fg_color =
+        const ALLEGRO_COLOR fg_color =
             al_map_rgb(DEF_STYLE_FG_R, DEF_STYLE_FG_G, DEF_STYLE_FG_B),
-        ALLEGRO_COLOR alt_color =
+        const ALLEGRO_COLOR alt_color =
             al_map_rgb(DEF_STYLE_ALT_R, DEF_STYLE_ALT_G, DEF_STYLE_ALT_B),
         ALLEGRO_FONT* text_font =
             al_create_builtin_font()
     );
-    style(style &s2);
+    style(const style &s2);
     ~style();
     
     static ALLEGRO_COLOR lighten_color(ALLEGRO_COLOR color);

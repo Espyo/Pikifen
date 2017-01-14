@@ -13,6 +13,7 @@
 
 #include "../drawing.h"
 #include "../functions.h"
+#include "../geometry_utils.h"
 #include "onion.h"
 #include "../vars.h"
 

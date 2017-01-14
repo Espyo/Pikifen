@@ -8,7 +8,8 @@ namespace lafi {
  * Creates a widget given some parameters.
  */
 widget::widget(
-    int x1, int y1, int x2, int y2, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    lafi::style* style, const unsigned char flags
 ) :
     x1(x1),
     y1(y1),
@@ -77,27 +78,29 @@ widget::~widget() {
 
 
 //Calls the function that handles a mouse move.
-void widget::call_mouse_move_handler(int x, int y) {
+void widget::call_mouse_move_handler(const int x, const int y) {
     if(mouse_move_handler) mouse_move_handler(this, x, y);
 }
 
 //Calls the function that handles a left mouse click.
-void widget::call_left_mouse_click_handler(int x, int y) {
+void widget::call_left_mouse_click_handler(const int x, const int y) {
     if(left_mouse_click_handler) left_mouse_click_handler(this, x, y);
 }
 
 //Calls the function that handles a mouse button down.
-void widget::call_mouse_down_handler(int button, int x, int y) {
+void widget::call_mouse_down_handler(
+    const int button, const int x, const int y
+) {
     if(mouse_down_handler) mouse_down_handler(this, button, x, y);
 }
 
 //Calls the function that handles a mouse button up.
-void widget::call_mouse_up_handler(int button, int x, int y) {
+void widget::call_mouse_up_handler(const int button, const int x, const int y) {
     if(mouse_up_handler) mouse_up_handler(this, button, x, y);
 }
 
 //Calls the function that handles a mouse wheel move.
-void widget::call_mouse_wheel_handler(int dy, int dx) {
+void widget::call_mouse_wheel_handler(const int dy, const int dx) {
     if(mouse_wheel_handler) mouse_wheel_handler(this, dy, dx);
 }
 
@@ -166,7 +169,7 @@ ALLEGRO_COLOR widget::get_alt_color() {
 //It searches for the deepmost child widget, and if none has it,
 //it returns either itself, or none.
 //Disabled widgets are ignored.
-widget* widget::get_widget_under_mouse(int mx, int my) {
+widget* widget::get_widget_under_mouse(const int mx, const int my) {
     if(!(flags & FLAG_DISABLED)) {
         if(!(flags & FLAG_WUM_NO_CHILDREN)) {
             for(auto c = widgets.begin(); c != widgets.end(); ++c) {
@@ -197,7 +200,7 @@ bool widget::is_disabled() {
 /* ----------------------------------------------------------------------------
  * Checks if the mouse cursor is inside the widget, given its coordinates.
  */
-bool widget::is_mouse_in(int mx, int my) {
+bool widget::is_mouse_in(const int mx, const int my) {
     int ox, oy;
     get_offset(&ox, &oy);
     bool in_current_widget =
@@ -226,7 +229,7 @@ void widget::get_offset(int* ox, int* oy) {
 /* ----------------------------------------------------------------------------
  * Adds a widget as a child to the current one.
  */
-void widget::add(string name, widget* w) {
+void widget::add(const string &name, widget* w) {
     widgets[name] = w;
     w->parent = this;
     if(!w->style) w->style = style;
@@ -237,7 +240,9 @@ void widget::add(string name, widget* w) {
 /* ----------------------------------------------------------------------------
  * Registers a key accelerator.
  */
-void widget::register_accelerator(int key, unsigned int modifiers, widget* w) {
+void widget::register_accelerator(
+    const int key, const unsigned int modifiers, widget* w
+) {
     accelerators.push_back(accelerator(key, modifiers, w));
 }
 
@@ -456,7 +461,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
 /* ----------------------------------------------------------------------------
  * Removes a child widget from the list.
  */
-void widget::remove(string child_name) {
+void widget::remove(const string &child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
     
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
@@ -517,7 +522,8 @@ void widget::give_focus(widget* w) {
  * Returns the y of the next row.
  */
 int widget::easy_row(
-    float vertical_padding, float horizontal_padding, float widget_padding
+    const float vertical_padding, const float horizontal_padding,
+    const float widget_padding
 ) {
     if(easy_row_widgets.size()) {
         //Find the tallest widget.
@@ -578,7 +584,8 @@ int widget::easy_row(
  * flags:  Use EASY_FLAG_*.
  */
 void widget::easy_add(
-    string name, widget* w, float width, float height, unsigned char flags
+    const string &name, widget* w, const float width, const float height,
+    const unsigned char flags
 ) {
     easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
@@ -602,8 +609,8 @@ void widget::easy_reset() {
  * Creates an "easy add" widget info structure.
  */
 easy_widget_info::easy_widget_info(
-    string name, lafi::widget* w, float width, float height,
-    unsigned char flags
+    const string &name, lafi::widget* w, const float width, const float height,
+    const unsigned char flags
 ) :
     name(name),
     w(w),
@@ -617,7 +624,9 @@ easy_widget_info::easy_widget_info(
 /* ----------------------------------------------------------------------------
  * Creates an accelerator.
  */
-accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
+accelerator::accelerator(
+    const int key, const unsigned int modifiers, lafi::widget* w
+) {
     this->key = key;
     this->modifiers = modifiers;
     this->w = w;
@@ -645,8 +654,9 @@ accelerator::accelerator(int key, unsigned int modifiers, lafi::widget* w) {
  * color:           Color.
  */
 void draw_line(
-    widget* w, unsigned char side, int start_offset, int end_offset,
-    int location_offset, ALLEGRO_COLOR color
+    widget* w, const unsigned char side,
+    const int start_offset, const int end_offset,
+    const int location_offset, ALLEGRO_COLOR color
 ) {
     float x1 = w->x1, x2 = w->x2;
     float y1 = w->y1, y2 = w->y2;
@@ -691,7 +701,8 @@ void draw_text_lines(
     const float x, const float y, const int fl,
     const unsigned char va, const string &text
 ) {
-    vector<string> lines = split(text, "\n", true);
+    string final_text = text;
+    vector<string> lines = split(final_text, "\n", true);
     int fh = al_get_font_line_height(f);
     size_t n_lines = lines.size();
     float top;
@@ -725,17 +736,19 @@ void draw_text_lines(
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
 vector<string> split(
-    string text, const string &del, const bool inc_empty, const bool inc_del
+    const string &text, const string &del,
+    const bool inc_empty, const bool inc_del
 ) {
     vector<string> v;
+    string new_text = text;
     size_t pos;
     size_t del_size = del.size();
     
     do {
-        pos = text.find(del);
+        pos = new_text.find(del);
         if (pos != string::npos) {  //If it DID find the delimiter.
             //Get the text between the start and the delimiter.
-            string sub = text.substr(0, pos);
+            string sub = new_text.substr(0, pos);
             
             //Add the text before the delimiter to the vector.
             if(sub != "" || inc_empty)
@@ -747,15 +760,15 @@ vector<string> split(
                 
             //Delete everything before the delimiter, including
             //the delimiter itself, and search again.
-            text.erase(text.begin(), text.begin() + pos + del_size);
+            new_text.erase(new_text.begin(), new_text.begin() + pos + del_size);
         }
     } while (pos != string::npos);
     
     //Text after the final delimiter.
     //(If there is one. If not, it's just the whole string.)
     //If it's a blank string, only add it if we want empty strings.
-    if (text != "" || inc_empty)
-        v.push_back(text);
+    if (new_text != "" || inc_empty)
+        v.push_back(new_text);
         
     return v;
 }

@@ -30,8 +30,8 @@ struct easy_widget_info {
     float width, height;
     unsigned char flags;
     easy_widget_info(
-        string name, lafi::widget* w, float width,
-        float height, unsigned char flags
+        const string &name, lafi::widget* w, const float width,
+        const float height, const unsigned char flags
     );
 };
 
@@ -46,7 +46,7 @@ struct accelerator {
     int key;
     unsigned int modifiers;
     widget* w;
-    accelerator(int key, unsigned int modifiers, lafi::widget* w);
+    accelerator(const int key, const unsigned int modifiers, lafi::widget* w);
 };
 
 
@@ -86,16 +86,16 @@ public:
     map<string, widget*> widgets;
     widget* focused_widget;
     
-    void add(string name, widget* w);
-    void remove(string name);
+    void add(const string &name, widget* w);
+    void remove(const string &name);
     
     int easy_row(
-        float vertical_padding = 8, float horizontal_padding = 8,
-        float widget_padding = 8
+        const float vertical_padding = 8, const float horizontal_padding = 8,
+        const float widget_padding = 8
     );
     void easy_add(
-        string name, widget* w, float width, float height,
-        unsigned char flags = 0
+        const string &name, widget* w, const float width, const float height,
+        const unsigned char flags = 0
     );
     void easy_reset();
     //Widgets currently in the row buffer.
@@ -109,40 +109,61 @@ public:
     //Padding between widgets on the current row.
     float easy_row_widget_padding;
     
-    void register_accelerator(int key, unsigned int modifiers, widget* w);
+    void register_accelerator(
+        const int key, const unsigned int modifiers, widget* w
+    );
     vector<accelerator> accelerators;
     
-    widget* get_widget_under_mouse(int mx, int my);
-    bool is_mouse_in(int mx, int my);
+    widget* get_widget_under_mouse(const int mx, const int my);
+    bool is_mouse_in(const int mx, const int my);
     void get_offset(int* ox, int* oy);
     
-    function<void(widget* w, int x, int y)> mouse_move_handler;
-    function<void(widget* w, int x, int y)> left_mouse_click_handler;
-    function<void(widget* w, int button, int x, int y)> mouse_down_handler;
-    function<void(widget* w, int button, int x, int y)> mouse_up_handler;
-    function<void(widget* w, int dy, int dx)> mouse_wheel_handler;
-    function<void(widget* w)> mouse_enter_handler;
-    function<void(widget* w)> mouse_leave_handler;
-    function<void(widget* w)> get_focus_handler;
-    function<void(widget* w)> lose_focus_handler;
+    function<void(widget* w, const int x, const int y)>
+    mouse_move_handler;
+    function<void(widget* w, const int x, const int y)>
+    left_mouse_click_handler;
+    function<void(widget* w, const int button, const int x, const int y)>
+    mouse_down_handler;
+    function<void(widget* w, const int button, const int x, const int y)>
+    mouse_up_handler;
+    function<void(widget* w, const int dy, const int dx)>
+    mouse_wheel_handler;
+    function<void(widget* w)>
+    mouse_enter_handler;
+    function<void(widget* w)>
+    mouse_leave_handler;
+    function<void(widget* w)>
+    get_focus_handler;
+    function<void(widget* w)>
+    lose_focus_handler;
     
     //Functions for the widget classes to handle, if they want to.
-    virtual void widget_on_mouse_move(int x, int y);
-    virtual void widget_on_left_mouse_click(int x, int y);
-    virtual void widget_on_mouse_down(int button, int x, int y);
-    virtual void widget_on_mouse_up(int button, int x, int y);
-    virtual void widget_on_mouse_wheel(int dy, int dx);
+    virtual void widget_on_mouse_move(
+        const int x, const int y
+    );
+    virtual void widget_on_left_mouse_click(
+        const int x, const int y
+    );
+    virtual void widget_on_mouse_down(
+        const int button, const int x, const int y
+    );
+    virtual void widget_on_mouse_up(
+        const int button, const int x, const int y
+    );
+    virtual void widget_on_mouse_wheel(
+        const int dy, const int dx
+    );
     virtual void widget_on_mouse_enter();
     virtual void widget_on_mouse_leave();
     virtual void widget_on_key_char(
-        int keycode, int unichar, unsigned int modifiers
+        const int keycode, const int unichar, const unsigned int modifiers
     );
     
-    void call_mouse_move_handler(int x, int y);
-    void call_left_mouse_click_handler(int x, int y);
-    void call_mouse_down_handler(int button, int x, int y);
-    void call_mouse_up_handler(int button, int x, int y);
-    void call_mouse_wheel_handler(int dy, int dx);
+    void call_mouse_move_handler(const int x, const int y);
+    void call_left_mouse_click_handler(const int x, const int y);
+    void call_mouse_down_handler(const int button, const int x, const int y);
+    void call_mouse_up_handler(const int button, const int x, const int y);
+    void call_mouse_wheel_handler(const int dy, const int dx);
     void call_mouse_enter_handler();
     void call_mouse_leave_handler();
     void call_get_focus_handler();
@@ -159,8 +180,8 @@ public:
     virtual void draw_self() = 0;    //Draws just the widget itself.
     
     widget(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        lafi::style* style = NULL, unsigned char flags = 0
+        const int x1 = 0, const int y1 = 0, const int x2 = 1, const int y2 = 1,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
     widget(widget &w2);
     ~widget();
@@ -169,8 +190,9 @@ public:
 
 
 void draw_line(
-    widget* w, unsigned char side, int start_offset, int end_offset,
-    int location_offset, ALLEGRO_COLOR color
+    widget* w, const unsigned char side,
+    const int start_offset, const int end_offset,
+    const int location_offset, const ALLEGRO_COLOR color
 );
 void draw_text_lines(
     const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c,
@@ -178,7 +200,7 @@ void draw_text_lines(
     const string &text
 );
 vector<string> split(
-    string text, const string &del = " ", const bool inc_empty = false,
+    const string &text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false
 );
 

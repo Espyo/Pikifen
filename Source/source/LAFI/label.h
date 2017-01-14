@@ -19,10 +19,11 @@ public:
     string text;
     
     label(
-        int x1 = 0, int y1 = 0, int x2 = 1, int y2 = 1,
-        string text = "", int text_flags = 0, lafi::style* style = NULL,
-        unsigned char flags = 0
+        const int x1, const int y1, const int x2, const int y2,
+        const string &text = "", const int text_flags = 0,
+        lafi::style* style = NULL, const unsigned char flags = 0
     );
+    label(const string &text = "", const int text_flags = 0);
     ~label();
     
     void draw_self();

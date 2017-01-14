@@ -75,22 +75,10 @@
 
 
 
-void angle_to_coordinates(
-    const float angle, const float magnitude, float* x_coord, float* y_coord
-);
-bool bbox_check(
-    const float cx1, const float cy1, const float cx2, const float cy2,
-    const float r
-);
 string box_string(const string &s, const size_t size);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
-bool circle_intersects_line(
-    const float cx, const float cy, const float cr,
-    const float x1, const float y1, const float x2, const float y2,
-    float* lix = NULL, float* liy = NULL
-);
 void clear_area_textures();
 void coordinates_to_angle(
     const float x_coord, const float y_coord, float* angle, float* magnitude
@@ -143,30 +131,16 @@ void load_game_config();
 void load_game_content();
 void load_spray_types();
 void load_status_types();
-void move_point(
-    const float x, const float y, const float tx, const float ty,
-    const float speed, const float reach_radius, float* mx, float* my,
-    float* angle, bool* reached
-);
-float normalize_angle(float a);
 void print_info(string t);
 float randomf(float min, float max);
 int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 string replace_all(string s, string search, string replacement);
-void rotate_point(
-    const float x, const float y, const float angle,
-    float* final_x, float* final_y
-);
 void save_options();
 vector<string> semicolon_list_to_vector(const string &s);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false
-);
-bool square_intersects_line(
-    const float sx1, const float sy1, const float sx2, const float sy2,
-    const float lx1, const float ly1, const float lx2, const float ly2
 );
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string str_to_lower(string s);

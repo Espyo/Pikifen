@@ -6,12 +6,20 @@ namespace lafi {
  * Creates an image.
  */
 image::image(
-    int x1, int y1, int x2, int y2, ALLEGRO_BITMAP* bmp,
-    lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2, ALLEGRO_BITMAP* bmp,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     bmp(bmp) {
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates an image.
+ */
+image::image(ALLEGRO_BITMAP* bmp) : image(0, 0, 0, 0, bmp) {
+
 }
 
 

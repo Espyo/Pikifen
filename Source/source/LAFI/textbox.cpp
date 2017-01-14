@@ -11,8 +11,8 @@ size_t textbox::cur_tab_index = 0;
  * Creates a textbox given some parameters.
  */
 textbox::textbox(
-    int x1, int y1, int x2, int y2, string text,
-    lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2, const string &text,
+    lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     text(text),
@@ -26,6 +26,14 @@ textbox::textbox(
     enter_key_widget(nullptr) {
     
     tab_index = cur_tab_index++;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a textbox given some parameters.
+ */
+textbox::textbox(const string &text) : textbox(0, 0, 0, 0, text) {
+
 }
 
 
@@ -122,7 +130,7 @@ void textbox::call_change_handler() { if(change_handler) change_handler(this); }
  * It updates the textbox accordingly.
  */
 void textbox::widget_on_key_char(
-    int keycode, int unichar, unsigned int modifiers
+    const int keycode, const int unichar, const unsigned int modifiers
 ) {
     bool ctrl =
         (modifiers & ALLEGRO_KEYMOD_CTRL) ||
@@ -283,6 +291,8 @@ void textbox::widget_on_key_char(
         unichar > 0 && keycode != ALLEGRO_KEY_ESCAPE &&
         keycode != ALLEGRO_KEY_TAB
     ) {
+    
+        int char_to_enter = unichar;
         //Other key - insert the character.
         if(keycode == ALLEGRO_KEY_ENTER || keycode == ALLEGRO_KEY_PAD_ENTER) {
             if(enter_key_widget) {
@@ -290,7 +300,7 @@ void textbox::widget_on_key_char(
                 return;
             } else {
                 if(!multi_line) return;
-                else unichar = '\n';
+                else char_to_enter = '\n';
             }
         }
         
@@ -325,7 +335,7 @@ void textbox::widget_on_key_char(
  * Handles the mouse being clicked. Places the caret on the
  * correct place.
  */
-void textbox::widget_on_mouse_down(int button, int x, int) {
+void textbox::widget_on_mouse_down(const int button, const int x, const int) {
     if(button != 1) return;
     
     cursor = mouse_to_char(x);
@@ -338,7 +348,7 @@ void textbox::widget_on_mouse_down(int button, int x, int) {
  * Handles the mouse being moved.
  * If the mouse button is clicked, it changes the selection.
  */
-void textbox::widget_on_mouse_move(int x, int) {
+void textbox::widget_on_mouse_move(const int x, const int) {
     if(!mouse_clicking) return;
     
     sel_end = mouse_to_char(x);
@@ -350,7 +360,7 @@ void textbox::widget_on_mouse_move(int x, int) {
  * when the mouse is clicked on the given X coordinate.
  * Takes into account text scroll, widget position, etc.
  */
-unsigned int textbox::mouse_to_char(int mouse_x) {
+unsigned int textbox::mouse_to_char(const int mouse_x) {
     //Get the relative X, from the start of the text.
     int rel_x = mouse_x - x1 + scroll_x;
     for(size_t c = 0; c < text.size(); ++c) {

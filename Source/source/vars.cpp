@@ -11,7 +11,7 @@
 
 #include <limits.h>
 
-#include "area_editor.h"
+#include "editors/area_editor.h"
 #include "vars.h"
 #include "const.h"
 

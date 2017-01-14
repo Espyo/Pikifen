@@ -16,7 +16,10 @@ namespace lafi {
  * style: the widget style.
  * flags: widget flags. Use FLAG_*.
  */
-gui::gui(int w, int h, lafi::style* style, unsigned char flags) :
+gui::gui(
+    const int w, const int h, lafi::style* style,
+    const unsigned char flags
+) :
     widget(0, 0, w, h, style, flags),
     loop_timer(NULL),
     ev_queue(NULL),

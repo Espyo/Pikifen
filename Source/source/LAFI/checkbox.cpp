@@ -8,14 +8,24 @@ namespace lafi {
  * Creates a checkbox.
  */
 checkbox::checkbox(
-    int x1, int y1, int x2, int y2,
-    string text, bool checked, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const int x2, const int y2,
+    const string &text, const bool checked, lafi::style* style,
+    const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
     checked(checked),
     text(text) {
     
     needs_init = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a checkbox.
+ */
+checkbox::checkbox(const string &text, const bool checked) :
+    checkbox(0, 0, 0, 0, text, checked) {
+    
 }
 
 /* ----------------------------------------------------------------------------
@@ -55,7 +65,7 @@ checkbox::~checkbox() { }
 /* ----------------------------------------------------------------------------
  * When the mouse is clicked, toggle the state.
  */
-void checkbox::widget_on_left_mouse_click(int, int) {
+void checkbox::widget_on_left_mouse_click(const int, const int) {
     if(checked) uncheck(); else check();
 }
 
@@ -102,7 +112,8 @@ void checkbox::draw_self() { }
  * Creates a checkbox box.
  */
 checkbox_box::checkbox_box(
-    int x1, int y1, bool checked, lafi::style* style, unsigned char flags
+    const int x1, const int y1, const bool checked, lafi::style* style,
+    const unsigned char flags
 ) :
     widget(
         x1, y1, x1 + CHECKBOX_BOX_SIZE,

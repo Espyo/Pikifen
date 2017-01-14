@@ -47,18 +47,14 @@
     <File Name="../source/resource.h"/>
     <File Name="../source/misc_structs.h"/>
     <File Name="../source/menu_widgets.h"/>
-    <File Name="../source/area_editor.h"/>
     <File Name="../source/init.cpp"/>
-    <File Name="../source/area_editor.cpp"/>
     <File Name="../source/menus.cpp"/>
     <File Name="../source/controls.cpp"/>
     <File Name="../source/animation.h"/>
     <File Name="../source/game_state.h"/>
     <File Name="../source/sector.h"/>
-    <File Name="../source/animation_editor.h"/>
     <File Name="../source/logic.cpp"/>
     <File Name="../source/animation.cpp"/>
-    <File Name="../source/animation_editor.cpp"/>
     <File Name="../source/drawing.h"/>
     <File Name="../source/status.h"/>
     <File Name="../source/controls.h"/>
@@ -72,6 +68,8 @@
     <File Name="../source/hazard.cpp"/>
     <File Name="../source/liquid.cpp"/>
     <File Name="../source/liquid.h"/>
+    <File Name="../source/geometry_utils.h"/>
+    <File Name="../source/geometry_utils.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>
@@ -295,4 +293,17 @@
       </Completion>
     </Configuration>
   </Settings>
+  <VirtualDirectory Name="editors">
+    <File Name="../source/editors/editor.h"/>
+    <File Name="../source/editors/editor.cpp"/>
+    <File Name="../source/editors/animation_editor.h"/>
+    <File Name="../source/editors/animation_editor.cpp"/>
+    <File Name="../source/editors/animation_editor_loading.cpp"/>
+    <File Name="../source/editors/animation_editor_event_handler.cpp"/>
+    <File Name="../source/editors/area_editor.h"/>
+    <File Name="../source/editors/area_editor.cpp"/>
+    <File Name="../source/editors/area_editor_loading.cpp"/>
+    <File Name="../source/editors/area_editor_event_handler.cpp"/>
+    <File Name="../source/editors/area_editor_drawing.cpp"/>
+  </VirtualDirectory>
 </CodeLite_Project>
