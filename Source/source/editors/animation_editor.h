@@ -35,7 +35,7 @@ private:
         EDITOR_MODE_SPRITE,
         EDITOR_MODE_BODY_PART,
         EDITOR_MODE_HITBOXES,
-        EDITOR_MODE_SPRITE_OFFSET,
+        EDITOR_MODE_SPRITE_TRANSFORM,
         EDITOR_MODE_TOP,
         EDITOR_MODE_HISTORY,
         EDITOR_MODE_TOOLS,
@@ -47,6 +47,13 @@ private:
         ANIMATION_EDITOR_PICKER_FRAME,
         ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
         ANIMATION_EDITOR_PICKER_HITBOX,
+    };
+    
+    enum LMB_ACTION {
+        LMB_ACTION_NONE,
+        LMB_ACTION_MOVE,
+        LMB_ACTION_RESIZE,
+        LMB_ACTION_ROTATE,
     };
     
     static const float  ZOOM_MAX_LEVEL_EDITOR;
@@ -88,6 +95,8 @@ private:
     float                new_hitbox_corner_y;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*      top_bmp[3];
+    unsigned char        sprite_tra_lmb_action;
+    unsigned char        top_lmb_action;
     
     string get_cut_path(const string &p);
     void animation_to_gui();
@@ -95,20 +104,21 @@ private:
     void frame_to_gui();
     void hitbox_to_gui();
     void sprite_to_gui();
-    void sprite_offset_to_gui();
+    void sprite_transform_to_gui();
     void top_to_gui();
     void gui_to_body_part();
     void gui_to_animation();
     void gui_to_frame();
     void gui_to_hitbox();
     void gui_to_sprite();
-    void gui_to_sprite_offset();
+    void gui_to_sprite_transform();
     void gui_to_top();
     void load_animation_database();
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
     void resize_everything();
+    void resize_by_resolution();
     void save_animation_database();
     void update_hitboxes();
     void update_stats();

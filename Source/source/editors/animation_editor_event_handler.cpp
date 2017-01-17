@@ -70,10 +70,35 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             }
         }
         
-        if(holding_m1 && mode == EDITOR_MODE_SPRITE_OFFSET) {
-            cur_sprite->offs_x += ev.mouse.dx / cam_zoom;
-            cur_sprite->offs_y += ev.mouse.dy / cam_zoom;
-            sprite_offset_to_gui();
+        if(holding_m1 && mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+            if(sprite_tra_lmb_action == LMB_ACTION_MOVE) {
+                cur_sprite->offs_x += ev.mouse.dx / cam_zoom;
+                cur_sprite->offs_y += ev.mouse.dy / cam_zoom;
+                sprite_transform_to_gui();
+            } else if(sprite_tra_lmb_action == LMB_ACTION_RESIZE) {
+                float new_w = cur_sprite->game_w + ev.mouse.dx / cam_zoom;
+                float ratio = cur_sprite->game_h / cur_sprite->game_w;
+                cur_sprite->game_w = new_w;
+                cur_sprite->game_h = new_w * ratio;
+                sprite_transform_to_gui();
+            }
+            
+        } else if(holding_m1 && mode == EDITOR_MODE_TOP) {
+            if(top_lmb_action == LMB_ACTION_MOVE) {
+                cur_sprite->top_x += ev.mouse.dx / cam_zoom;
+                cur_sprite->top_y += ev.mouse.dy / cam_zoom;
+                top_to_gui();
+            } else if(top_lmb_action == LMB_ACTION_RESIZE) {
+                float new_w = cur_sprite->top_w + ev.mouse.dx / cam_zoom;
+                float ratio = cur_sprite->top_h / cur_sprite->top_w;
+                cur_sprite->top_w = new_w;
+                cur_sprite->top_h = new_w * ratio;
+                top_to_gui();
+            } else if(top_lmb_action == LMB_ACTION_ROTATE) {
+                cur_sprite->top_angle += ev.mouse.dx / cam_zoom;
+                top_to_gui();
+            }
+            
         }
         
     } else if(

@@ -30,7 +30,7 @@
 
 
 //Maximum zoom level possible in the editor.
-const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
+const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
@@ -62,7 +62,9 @@ animation_editor::animation_editor() :
     hitboxes_visible(true),
     is_pikmin(false),
     new_hitbox_corner_x(FLT_MAX),
-    new_hitbox_corner_y(FLT_MAX) {
+    new_hitbox_corner_y(FLT_MAX),
+    sprite_tra_lmb_action(LMB_ACTION_MOVE),
+    top_lmb_action(LMB_ACTION_MOVE) {
     
     top_bmp[0] = NULL;
     top_bmp[1] = NULL;
@@ -158,7 +160,7 @@ void animation_editor::do_drawing() {
         } else if(
             mode == EDITOR_MODE_SPRITE || mode == EDITOR_MODE_TOP ||
             mode == EDITOR_MODE_HITBOXES ||
-            mode == EDITOR_MODE_SPRITE_OFFSET
+            mode == EDITOR_MODE_SPRITE_TRANSFORM
         ) {
             s = cur_sprite;
             
@@ -486,13 +488,15 @@ void animation_editor::sprite_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the sprite offset's data from memory to the gui.
+ * Loads the sprite transformation's data from memory to the gui.
  */
-void animation_editor::sprite_offset_to_gui() {
-    lafi::widget* f = gui->widgets["frm_offset"];
+void animation_editor::sprite_transform_to_gui() {
+    lafi::widget* f = gui->widgets["frm_sprite_tra"];
     
     ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_sprite->offs_x);
     ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_sprite->offs_y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(cur_sprite->game_w);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_sprite->game_h);
     ((lafi::checkbox*) f->widgets["chk_compare"])->set(comparison);
     ((lafi::checkbox*) f->widgets["chk_compare_blink"])->set(
         comparison_blink
@@ -723,21 +727,32 @@ void animation_editor::gui_to_sprite() {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the sprite's bitmap offset data to memory using info on the gui.
+ * Saves the sprite's transform data to memory using info on the gui.
  */
-void animation_editor::gui_to_sprite_offset() {
-    lafi::widget* f = gui->widgets["frm_offset"];
+void animation_editor::gui_to_sprite_transform() {
+    lafi::widget* f = gui->widgets["frm_sprite_tra"];
     
     cur_sprite->offs_x =
         s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
     cur_sprite->offs_y =
         s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    cur_sprite->game_w =
+        s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
+    cur_sprite->game_h =
+        s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     comparison =
         ((lafi::checkbox*) f->widgets["chk_compare"])->checked;
     comparison_blink =
         ((lafi::checkbox*) f->widgets["chk_compare_blink"])->checked;
         
-    sprite_offset_to_gui();
+    sprite_tra_lmb_action = LMB_ACTION_NONE;
+    if(((lafi::checkbox*) f->widgets["chk_mousexy"])->checked) {
+        sprite_tra_lmb_action = LMB_ACTION_MOVE;
+    } else if(((lafi::checkbox*) f->widgets["chk_mousewh"])->checked) {
+        sprite_tra_lmb_action = LMB_ACTION_RESIZE;
+    }
+    
+    sprite_transform_to_gui();
     made_changes = true;
 }
 
@@ -761,6 +776,15 @@ void animation_editor::gui_to_top() {
     cur_sprite->top_angle =
         ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
         
+    top_lmb_action = LMB_ACTION_NONE;
+    if(((lafi::checkbox*) f->widgets["chk_mousexy"])->checked) {
+        top_lmb_action = LMB_ACTION_MOVE;
+    } else if(((lafi::checkbox*) f->widgets["chk_mousewh"])->checked) {
+        top_lmb_action = LMB_ACTION_RESIZE;
+    } else if(((lafi::checkbox*) f->widgets["chk_mousea"])->checked) {
+        top_lmb_action = LMB_ACTION_ROTATE;
+    }
+    
     top_to_gui();
     made_changes = true;
 }
@@ -929,9 +953,9 @@ void animation_editor::pick(const string &name, const unsigned char type) {
         frame_to_gui();
         
     } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
-        if(mode == EDITOR_MODE_SPRITE_OFFSET) {
+        if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
-            sprite_offset_to_gui();
+            sprite_transform_to_gui();
         } else {
             cur_sprite = anims.sprites[anims.find_sprite(name)];
             cur_hitbox_nr = INVALID;
@@ -988,6 +1012,26 @@ void animation_editor::populate_history() {
         f->easy_add("but_" + i2s(h), b, 100, 32);
         f->easy_row();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resizes all sprite game-width/height by a factor compared
+ * to the respective file-width/height.
+ */
+void animation_editor::resize_by_resolution() {
+    lafi::textbox* txt_resize =
+        (lafi::textbox*) gui->widgets["frm_tools"]->widgets["txt_resolution"];
+    float mult = s2f(txt_resize->text);
+    if(mult == 0) return;
+    mult = 1.0 / mult;
+    
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        sprite* s_ptr = anims.sprites[s];
+        s_ptr->game_w = s_ptr->file_w * mult;
+        s_ptr->game_h = s_ptr->file_h * mult;
+    }
+    
 }
 
 
@@ -1284,7 +1328,7 @@ void animation_editor::hide_all_frames() {
     hide_widget(gui->widgets["frm_history"]);
     hide_widget(gui->widgets["frm_anims"]);
     hide_widget(gui->widgets["frm_sprites"]);
-    hide_widget(gui->widgets["frm_offset"]);
+    hide_widget(gui->widgets["frm_sprite_tra"]);
     hide_widget(gui->widgets["frm_hitboxes"]);
     hide_widget(gui->widgets["frm_top"]);
     hide_widget(gui->widgets["frm_body_parts"]);
@@ -1308,8 +1352,8 @@ void animation_editor::change_to_right_frame() {
         show_widget(gui->widgets["frm_body_parts"]);
     } else if(mode == EDITOR_MODE_HITBOXES) {
         show_widget(gui->widgets["frm_hitboxes"]);
-    } else if(mode == EDITOR_MODE_SPRITE_OFFSET) {
-        show_widget(gui->widgets["frm_offset"]);
+    } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+        show_widget(gui->widgets["frm_sprite_tra"]);
     } else if(mode == EDITOR_MODE_TOP) {
         show_widget(gui->widgets["frm_top"]);
     } else if(mode == EDITOR_MODE_HISTORY) {
