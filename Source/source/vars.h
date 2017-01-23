@@ -106,7 +106,6 @@ extern sample_struct sfx_throw;
 //General globals.
 
 extern vector<string> animation_editor_history;
-extern ALLEGRO_FONT* allegro_font;
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
 extern float area_images_scale;
 extern int area_image_size;
@@ -195,9 +194,10 @@ extern float editor_backup_interval;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
 extern fade_manager fade_mgr;
-extern ALLEGRO_FONT* font_main;
 extern ALLEGRO_FONT* font_area_name;
+extern ALLEGRO_FONT* font_builtin;
 extern ALLEGRO_FONT* font_counter;
+extern ALLEGRO_FONT* font_main;
 extern unsigned int font_counter_h;
 extern unsigned int font_main_h;
 //Font for the carrying / money values.

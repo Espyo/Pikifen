@@ -564,6 +564,11 @@ void load_area(
     cur_area_data.subtitle =
         data_file.get_child_by_name("subtitle")->value;
         
+    if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
+    if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
+    loading_text_bmp = NULL;
+    loading_subtext_bmp = NULL;
+    
     draw_loading_screen(cur_area_data.name, cur_area_data.subtitle, 1.0);
     al_flip_display();
     

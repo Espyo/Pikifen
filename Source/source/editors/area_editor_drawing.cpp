@@ -211,10 +211,11 @@ void area_editor::do_drawing() {
                             e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x
                         );
                     draw_scaled_text(
-                        font_main, al_map_rgb(192, 255, 192),
+                        font_builtin, al_map_rgb(192, 255, 192),
                         mid_x + cos(angle + M_PI_2) * 4,
                         mid_y + sin(angle + M_PI_2) * 4,
-                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
                         (
                             e_ptr->sector_nrs[0] == INVALID ?
@@ -223,10 +224,11 @@ void area_editor::do_drawing() {
                         )
                     );
                     draw_scaled_text(
-                        font_main, al_map_rgb(192, 255, 192),
+                        font_builtin, al_map_rgb(192, 255, 192),
                         mid_x + cos(angle - M_PI_2) * 4,
                         mid_y + sin(angle - M_PI_2) * 4,
-                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
                         (
                             e_ptr->sector_nrs[1] == INVALID ?
@@ -242,9 +244,10 @@ void area_editor::do_drawing() {
                     float mid_y =
                         (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
                     draw_scaled_text(
-                        font_main, al_map_rgb(255, 192, 192),
+                        font_builtin, al_map_rgb(255, 192, 192),
                         mid_x, mid_y,
-                        0.5 / cam_zoom, 0.5 / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
                         i2s(e)
                     );
@@ -265,9 +268,10 @@ void area_editor::do_drawing() {
                     
                     if(debug_vertex_nrs) {
                         draw_scaled_text(
-                            font_main, al_map_rgb(192, 192, 255),
+                            font_builtin, al_map_rgb(192, 192, 255),
                             v_ptr->x, v_ptr->y,
-                            0.5 / cam_zoom, 0.5 / cam_zoom,
+                            DEBUG_TEXT_SCALE / cam_zoom,
+                            DEBUG_TEXT_SCALE / cam_zoom,
                             ALLEGRO_ALIGN_CENTER, 1,
                             i2s(v)
                         );
@@ -454,10 +458,11 @@ void area_editor::do_drawing() {
                         al_map_rgb(255, 255, 32)
                     );
                     draw_scaled_text(
-                        allegro_font, al_map_rgb(0, 64, 64),
+                        font_builtin, al_map_rgb(0, 64, 64),
                         path_preview_checkpoints_x[c],
                         path_preview_checkpoints_y[c],
-                        1.0 / cam_zoom, 1.0 / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
+                        DEBUG_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
                         letter
                     );

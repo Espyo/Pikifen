@@ -43,10 +43,7 @@ private:
     
     enum ANIMATION_EDITOR_PICKER_TYPES {
         ANIMATION_EDITOR_PICKER_ANIMATION,
-        ANIMATION_EDITOR_PICKER_FRAME_INSTANCE,
-        ANIMATION_EDITOR_PICKER_FRAME,
-        ANIMATION_EDITOR_PICKER_HITBOX_INSTANCE,
-        ANIMATION_EDITOR_PICKER_HITBOX,
+        ANIMATION_EDITOR_PICKER_SPRITE,
     };
     
     enum LMB_ACTION {
@@ -117,8 +114,10 @@ private:
     void open_hitbox_type(unsigned char type);
     void open_picker(const unsigned char type, const bool can_make_new);
     void populate_history();
-    void resize_everything();
+    void rename_animation();
+    void rename_sprite();
     void resize_by_resolution();
+    void resize_everything();
     void save_animation_database();
     void update_hitboxes();
     void update_stats();

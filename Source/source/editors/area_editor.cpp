@@ -32,6 +32,8 @@
 #include "../vars.h"
 
 
+//Scale the debug text by this much.
+const float  area_editor::DEBUG_TEXT_SCALE = 1.5f;
 //Default grid interval.
 const float  area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Maximum grid interval.
@@ -620,6 +622,82 @@ void area_editor::change_to_right_frame() {
     } else if(mode == EDITOR_MODE_OPTIONS) {
         show_widget(gui->widgets["frm_options"]);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the currently loaded area data.
+ */
+void area_editor::clear_current_area() {
+    intersecting_edges.clear();
+    non_simples.clear();
+    lone_edges.clear();
+    
+    error_type = EET_NONE_YET;
+    error_sector_ptr = NULL;
+    error_string.clear();
+    error_vertex_ptr = NULL;
+    
+    ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text =
+        area_name;
+    show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
+    enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
+    hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
+    (
+        (lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"]
+    )->uncheck();
+    
+    
+    cur_sector = NULL;
+    cur_mob = NULL;
+    cur_shadow = NULL;
+    clear_area_textures();
+    sector_to_gui();
+    mob_to_gui();
+    guide_to_gui();
+    
+    cam_x = cam_y = 0;
+    cam_zoom = 1;
+    show_path_preview = false;
+    path_preview.clear();
+    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
+    path_preview_checkpoints_y[0] = 0;
+    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
+    path_preview_checkpoints_y[1] = 0;
+    
+    cur_area_data.clear();
+    
+    made_changes = false;
+    backup_timer.start(editor_backup_interval);
+    
+    mode = EDITOR_MODE_MAIN;
+    change_to_right_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new item from the picker frame, given its name.
+ */
+void area_editor::create_new_from_picker(const string &name) {
+    string new_area_path =
+        AREA_FOLDER + "/" + name;
+    ALLEGRO_FS_ENTRY* new_area_folder_entry =
+        al_create_fs_entry(new_area_path.c_str());
+        
+    if(al_fs_entry_exists(new_area_folder_entry)) {
+        //Already exists, just load it.
+        area_name = name;
+        area_editor::load_area(false);
+    } else {
+        al_make_directory(new_area_path.c_str());
+        area_name = name;
+        clear_current_area();
+    }
+    
+    al_destroy_fs_entry(new_area_folder_entry);
+    
+    show_bottom_frame();
+    change_to_right_frame();
 }
 
 
@@ -1460,17 +1538,9 @@ bool area_editor::is_new_sector_line_valid(const float x, const float y) {
  * from_backup: If false, load it normally. If true, load from a backup, if any.
  */
 void area_editor::load_area(const bool from_backup) {
-    intersecting_edges.clear();
-    non_simples.clear();
-    lone_edges.clear();
+    clear_current_area();
     
     ::load_area(area_name, true, from_backup);
-    ((lafi::button*) gui->widgets["frm_main"]->widgets["but_area"])->text =
-        area_name;
-    show_widget(gui->widgets["frm_main"]->widgets["frm_area"]);
-    enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
-    
-    clear_area_textures();
     
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         check_edge_intersections(cur_area_data.vertexes[v]);
@@ -1506,38 +1576,6 @@ void area_editor::load_area(const bool from_backup) {
     }
     
     change_guide(guide_file_name);
-    
-    cam_x = cam_y = 0;
-    cam_zoom = 1;
-    
-    error_type = EET_NONE_YET;
-    error_sector_ptr = NULL;
-    error_string.clear();
-    error_vertex_ptr = NULL;
-    
-    backup_timer.start(editor_backup_interval);
-    show_path_preview = false;
-    (
-        (lafi::checkbox*) gui->widgets["frm_paths"]->widgets["chk_show_path"]
-    )->uncheck();
-    hide_widget(gui->widgets["frm_paths"]->widgets["lbl_path_dist"]);
-    path_preview.clear();
-    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[1] = 0;
-    
-    cur_sector = NULL;
-    cur_mob = NULL;
-    cur_shadow = NULL;
-    sector_to_gui();
-    mob_to_gui();
-    guide_to_gui();
-    
-    made_changes = false;
-    
-    mode = EDITOR_MODE_MAIN;
-    change_to_right_frame();
 }
 
 
@@ -1744,7 +1782,7 @@ void area_editor::open_picker(const unsigned char type) {
         
     }
     
-    generate_and_open_picker(elements, type);
+    generate_and_open_picker(elements, type, type == AREA_EDITOR_PICKER_AREA);
 }
 
 
@@ -2513,6 +2551,3 @@ texture_suggestion::texture_suggestion(const string &n) :
 texture_suggestion::~texture_suggestion() {
     bitmaps.detach(name);
 }
-
-
-void area_editor::create_new_from_picker(const string &) { }

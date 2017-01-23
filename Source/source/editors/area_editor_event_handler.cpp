@@ -390,6 +390,22 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             //Next vertex in a new sector.
             float hotspot_x = snap_to_grid(mouse_cursor_x);
             float hotspot_y = snap_to_grid(mouse_cursor_y);
+            
+            //First, check if the user is trying to undo the previous vertex.
+            if(
+                !new_sector_vertexes.empty() &&
+                dist(
+                    hotspot_x, hotspot_y,
+                    new_sector_vertexes.back()->x,
+                    new_sector_vertexes.back()->y
+                ) <= cam_zoom / VERTEX_MERGE_RADIUS
+            ) {
+                new_sector_vertexes.erase(
+                    new_sector_vertexes.begin() + new_sector_vertexes.size() - 1
+                );
+                return;
+            }
+            
             new_sector_valid_line =
                 is_new_sector_line_valid(
                     snap_to_grid(mouse_cursor_x),
@@ -403,7 +419,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                         hotspot_x, hotspot_y,
                         new_sector_vertexes[0]->x,
                         new_sector_vertexes[0]->y
-                    ) <= VERTEX_MERGE_RADIUS
+                    ) <= cam_zoom / VERTEX_MERGE_RADIUS
                 ) {
                     //Back to the first vertex.
                     sec_mode = ESM_NONE;

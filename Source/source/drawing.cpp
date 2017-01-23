@@ -1056,7 +1056,7 @@ void do_game_drawing(
                 al_map_rgba(0, 0, 0, 96 * alpha_mult)
             );
             draw_text_lines(
-                allegro_font, al_map_rgba(255, 255, 255, 128 * alpha_mult),
+                font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
                 8, 8, 0, 0, info_print_text
             );
         }

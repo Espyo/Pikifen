@@ -304,7 +304,7 @@ void init_fonts() {
     if(font_main) font_main_h = al_get_font_line_height(font_main);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
     
-    allegro_font = al_create_builtin_font();
+    font_builtin = al_create_builtin_font();
 }
 
 

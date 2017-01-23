@@ -921,10 +921,7 @@ void animation_editor::open_picker(
         for(size_t a = 0; a < anims.animations.size(); ++a) {
             elements.push_back(anims.animations[a]->name);
         }
-    } else if(
-        type == ANIMATION_EDITOR_PICKER_FRAME ||
-        type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE
-    ) {
+    } else if(type == ANIMATION_EDITOR_PICKER_SPRITE) {
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
             elements.push_back(anims.sprites[s]->name);
         }
@@ -939,23 +936,34 @@ void animation_editor::open_picker(
  */
 void animation_editor::pick(const string &name, const unsigned char type) {
     if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
-        cur_anim = anims.animations[anims.find_animation(name)];
-        cur_frame_nr =
-            (cur_anim->frames.size()) ? 0 : INVALID;
-        cur_hitbox_nr = INVALID;
-        animation_to_gui();
+        if(mode == EDITOR_MODE_TOOLS) {
+            (
+                (lafi::button*)
+                gui->widgets["frm_tools"]->widgets["but_rename_anim_name"]
+            )->text = name;
+        } else {
+            cur_anim = anims.animations[anims.find_animation(name)];
+            cur_frame_nr =
+                (cur_anim->frames.size()) ? 0 : INVALID;
+            cur_hitbox_nr = INVALID;
+            animation_to_gui();
+        }
         
-    } else if(type == ANIMATION_EDITOR_PICKER_FRAME_INSTANCE) {
-        cur_anim->frames[cur_frame_nr].sprite_name =
-            name;
-        cur_anim->frames[cur_frame_nr].sprite_ptr =
-            anims.sprites[anims.find_sprite(name)];
-        frame_to_gui();
-        
-    } else if(type == ANIMATION_EDITOR_PICKER_FRAME) {
-        if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
+    } else if(type == ANIMATION_EDITOR_PICKER_SPRITE) {
+        if(mode == EDITOR_MODE_ANIMATION) {
+            cur_anim->frames[cur_frame_nr].sprite_name =
+                name;
+            cur_anim->frames[cur_frame_nr].sprite_ptr =
+                anims.sprites[anims.find_sprite(name)];
+            frame_to_gui();
+        } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             comparison_sprite = anims.sprites[anims.find_sprite(name)];
             sprite_transform_to_gui();
+        } else if(mode == EDITOR_MODE_TOOLS) {
+            (
+                (lafi::button*)
+                gui->widgets["frm_tools"]->widgets["but_rename_sprite_name"]
+            )->text = name;
         } else {
             cur_sprite = anims.sprites[anims.find_sprite(name)];
             cur_hitbox_nr = INVALID;
@@ -1012,6 +1020,86 @@ void animation_editor::populate_history() {
         f->easy_add("but_" + i2s(h), b, 100, 32);
         f->easy_row();
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Renames the chosen animation to the chosen name, in the "tools" menu.
+ */
+void animation_editor::rename_animation() {
+    lafi::button* but_ptr =
+        (
+            (lafi::button*)
+            gui->widgets["frm_tools"]->widgets["but_rename_anim_name"]
+        );
+    lafi::textbox* txt_ptr =
+        (
+            (lafi::textbox*)
+            gui->widgets["frm_tools"]->widgets["txt_rename_anim"]
+        );
+    size_t old_anim_id = INVALID;
+    string old_name = but_ptr->text;
+    string new_name = txt_ptr->text;
+    
+    if(new_name.empty()) return;
+    
+    //Check if the name already exists.
+    for(size_t a = 0; a < anims.animations.size(); ++a) {
+        if(anims.animations[a]->name == old_name) old_anim_id = a;
+        if(anims.animations[a]->name == new_name) return;
+    }
+    
+    if(old_anim_id == INVALID) return;
+    
+    anims.animations[old_anim_id]->name = new_name;
+    
+    but_ptr->text = "";
+    txt_ptr->text = "";
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Renames the chosen sprite to the chosen name, in the "tools" menu.
+ */
+void animation_editor::rename_sprite() {
+    lafi::button* but_ptr =
+        (
+            (lafi::button*)
+            gui->widgets["frm_tools"]->widgets["but_rename_sprite_name"]
+        );
+    lafi::textbox* txt_ptr =
+        (
+            (lafi::textbox*)
+            gui->widgets["frm_tools"]->widgets["txt_rename_sprite"]
+        );
+    size_t old_sprite_id = INVALID;
+    string old_name = but_ptr->text;
+    string new_name = txt_ptr->text;
+    
+    if(new_name.empty()) return;
+    
+    //Check if the name already exists.
+    for(size_t s = 0; s < anims.sprites.size(); ++s) {
+        if(anims.sprites[s]->name == old_name) old_sprite_id = s;
+        if(anims.sprites[s]->name == new_name) return;
+    }
+    
+    if(old_sprite_id == INVALID) return;
+    
+    anims.sprites[old_sprite_id]->name = new_name;
+    for(size_t a = 0; a < anims.animations.size(); ++a) {
+        animation* a_ptr = anims.animations[a];
+        for(size_t f = 0; f < a_ptr->frames.size(); ++f) {
+            if(a_ptr->frames[f].sprite_name == old_name) {
+                a_ptr->frames[f].sprite_name = new_name;
+            }
+        }
+    }
+    
+    but_ptr->text = "";
+    txt_ptr->text = "";
+    
 }
 
 
@@ -1313,7 +1401,7 @@ void animation_editor::create_new_from_picker(const string &name) {
         if(anims.find_sprite(name) != INVALID) return;
         anims.sprites.push_back(new sprite(name));
         anims.sprites.back()->create_hitboxes(&anims);
-        pick(name, ANIMATION_EDITOR_PICKER_FRAME);
+        pick(name, ANIMATION_EDITOR_PICKER_SPRITE);
         
     }
 }

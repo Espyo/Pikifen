@@ -40,7 +40,8 @@ void animation_editor::load() {
         new lafi::style(
         al_map_rgb(192, 192, 208),
         al_map_rgb(0, 0, 32),
-        al_map_rgb(96, 128, 160)
+        al_map_rgb(96, 128, 160),
+        font_builtin
     );
     gui = new lafi::gui(scr_w, scr_h, s);
     
@@ -499,7 +500,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
         hide_widget(this->gui->widgets["frm_anims"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME_INSTANCE, false);
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
     frm_frame->widgets["but_sprite"]->description =
         "Pick the sprite to use for this frame.";
@@ -686,7 +687,7 @@ void animation_editor::load() {
     frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hide_widget(this->gui->widgets["frm_sprites"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME, true);
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, true);
     };
     frm_sprites->widgets["but_sprite"]->description =
         "Pick a sprite to edit.";
@@ -918,7 +919,7 @@ void animation_editor::load() {
     frm_sprite_tra->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         hide_widget(this->gui->widgets["frm_sprite_tra"]);
-        open_picker(ANIMATION_EDITOR_PICKER_FRAME, false);
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
     frm_sprite_tra->widgets["but_compare"]->description =
         "Sprite to compare with.";
@@ -1678,11 +1679,6 @@ void animation_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "lin_1",
-        new lafi::line(), 100, 8
-    );
-    frm_tools->easy_row();
-    frm_tools->easy_add(
         "lbl_resolution_1",
         new lafi::label("Set all sprite in-game"), 100, 8
     );
@@ -1698,6 +1694,52 @@ void animation_editor::load() {
     );
     frm_tools->easy_add(
         "but_resolution",
+        new lafi::button("Ok"), 20, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "lbl_rename_anim_1",
+        new lafi::label("Rename animation:"), 100, 12
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "but_rename_anim_name",
+        new lafi::button(""), 100, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "lbl_rename_anim_2",
+        new lafi::label("To:"), 15, 16
+    );
+    frm_tools->easy_add(
+        "txt_rename_anim",
+        new lafi::textbox(), 65, 16
+    );
+    frm_tools->easy_add(
+        "but_rename_anim_ok",
+        new lafi::button("Ok"), 20, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "lbl_rename_sprite_1",
+        new lafi::label("Rename sprite:"), 100, 12
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "but_rename_sprite_name",
+        new lafi::button(""), 100, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "lbl_rename_sprite_2",
+        new lafi::label("To:"), 15, 16
+    );
+    frm_tools->easy_add(
+        "txt_rename_sprite",
+        new lafi::textbox(), 65, 16
+    );
+    frm_tools->easy_add(
+        "but_rename_sprite_ok",
         new lafi::button("Ok"), 20, 24
     );
     frm_tools->easy_row();
@@ -1732,6 +1774,40 @@ void animation_editor::load() {
     };
     frm_tools->widgets["but_resolution"]->description =
         "Resize all in-game W/H with the given resolution.";
+        
+    frm_tools->widgets["but_rename_anim_name"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, false);
+    };
+    frm_tools->widgets["but_rename_anim_name"]->description =
+        "Pick an animation to rename.";
+        
+    frm_tools->widgets["txt_rename_anim"]->description =
+        "Insert the animation's new name here.";
+        
+    frm_tools->widgets["but_rename_anim_ok"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        rename_animation();
+    };
+    frm_tools->widgets["but_rename_anim_ok"]->description =
+        "Do the rename, if the new name is valid.";
+        
+    frm_tools->widgets["but_rename_sprite_name"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
+    };
+    frm_tools->widgets["but_rename_sprite_name"]->description =
+        "Pick a sprite to rename.";
+        
+    frm_tools->widgets["txt_rename_sprite"]->description =
+        "Insert the sprite's new name here.";
+        
+    frm_tools->widgets["but_rename_sprite_ok"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        rename_sprite();
+    };
+    frm_tools->widgets["but_rename_sprite_ok"]->description =
+        "Do the rename, if the new name is valid.";
         
         
     //Bottom bar -- declarations.

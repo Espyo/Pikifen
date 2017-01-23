@@ -183,11 +183,6 @@ gameplay::gameplay() :
 void gameplay::load() {
     ready_for_input = false;
     
-    if(loading_text_bmp) al_destroy_bitmap(loading_text_bmp);
-    if(loading_subtext_bmp) al_destroy_bitmap(loading_subtext_bmp);
-    loading_text_bmp = NULL;
-    loading_subtext_bmp = NULL;
-    
     draw_loading_screen("", "", 1.0f);
     al_flip_display();
     

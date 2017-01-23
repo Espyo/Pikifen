@@ -41,7 +41,8 @@ void area_editor::load() {
         new lafi::style(
         al_map_rgb(192, 192, 208),
         al_map_rgb(0, 0, 32),
-        al_map_rgb(96, 128, 160)
+        al_map_rgb(96, 128, 160),
+        font_builtin
     );
     gui = new lafi::gui(scr_w, scr_h, s);
     
@@ -1556,7 +1557,7 @@ void area_editor::load() {
         "Quit the area editor.";
         
     create_changes_warning_frame();
-    create_picker_frame(false);
+    create_picker_frame(true);
     
     disable_widget(frm_bottom->widgets["but_save"]);
     

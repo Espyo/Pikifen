@@ -94,6 +94,7 @@ private:
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
+    static const float  DEBUG_TEXT_SCALE;
     static const float  DEF_GRID_INTERVAL;
     static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
@@ -161,6 +162,7 @@ private:
     void cancel_new_sector();
     void center_camera(float min_x, float min_y, float max_x, float max_y);
     void change_guide(string new_file_name);
+    void clear_current_area();
     void create_sector();
     void find_errors();
     bool get_common_sector(
