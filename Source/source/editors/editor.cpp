@@ -18,6 +18,9 @@
 #include "../vars.h"
 
 
+const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
+
+
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
  */

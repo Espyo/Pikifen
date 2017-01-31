@@ -56,6 +56,18 @@ private:
     static const float  ZOOM_MAX_LEVEL_EDITOR;
     static const float  ZOOM_MIN_LEVEL_EDITOR;
     
+    static const string DELETE_ICON;
+    static const string EXIT_ICON;
+    static const string HITBOXES_ICON;
+    static const string LOAD_ICON;
+    static const string MOVE_LEFT_ICON;
+    static const string MOVE_RIGHT_ICON;
+    static const string NEW_ICON;
+    static const string NEXT_ICON;
+    static const string PLAY_PAUSE_ICON;
+    static const string PREVIOUS_ICON;
+    static const string SAVE_ICON;
+    
     
     animation_database   anims;
     bool                 anim_playing;

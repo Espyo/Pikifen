@@ -44,7 +44,7 @@ private:
         EDITOR_MODE_ADV_TEXTURE_SETTINGS,
         EDITOR_MODE_TEXTURE,
         EDITOR_MODE_OBJECTS,
-        EDITOR_MODE_PATHS,
+        EDITOR_MODE_FOLDER_PATHS,
         EDITOR_MODE_SHADOWS,
         EDITOR_MODE_GUIDE,
         EDITOR_MODE_REVIEW,
@@ -87,10 +87,10 @@ private:
         EET_TYPELESS_MOB,         //Mob with no type.
         EET_MOB_OOB,              //Mob out of bounds.
         EET_MOB_IN_WALL,          //Mob stuck in a wall.
-        EET_LONE_PATH_STOP,       //A path stop is all by itself.
-        EET_PATH_STOP_OOB,        //A path stop is out of bounds.
-        EET_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
-        EET_PATHS_UNCONNECTED,    //The path graph is unconnected.
+        EET_LONE_FOLDER_PATH_STOP,       //A path stop is all by itself.
+        EET_FOLDER_PATH_STOP_OOB,        //A path stop is out of bounds.
+        EET_FOLDER_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
+        EET_FOLDER_PATHS_UNCONNECTED,    //The path graph is unconnected.
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
@@ -106,6 +106,22 @@ private:
     static const float  VERTEX_MERGE_RADIUS;
     static const float  ZOOM_MAX_LEVEL_EDITOR;
     static const float  ZOOM_MIN_LEVEL_EDITOR;
+    
+    static const string DELETE_ICON;
+    static const string DELETE_LINK_ICON;
+    static const string DELETE_STOP_ICON;
+    static const string DUPLICATE_ICON;
+    static const string EXIT_ICON;
+    static const string GUIDE_ICON;
+    static const string NEW_1WLINK_ICON;
+    static const string NEW_ICON;
+    static const string NEW_LINK_ICON;
+    static const string NEW_STOP_ICON;
+    static const string NEXT_ICON;
+    static const string OPTIONS_ICON;
+    static const string PREVIOUS_ICON;
+    static const string SAVE_ICON;
+    static const string SELECT_NONE_ICON;
     
     string                       area_name;
     timer                        backup_timer;

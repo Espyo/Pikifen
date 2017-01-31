@@ -102,7 +102,7 @@ void area_editor::do_drawing() {
             bool show_vertices = true;
             if(
                 mode == EDITOR_MODE_OBJECTS ||
-                mode == EDITOR_MODE_PATHS ||
+                mode == EDITOR_MODE_FOLDER_PATHS ||
                 mode == EDITOR_MODE_SHADOWS
             ) {
                 sector_opacity = 128;
@@ -297,7 +297,7 @@ void area_editor::do_drawing() {
             mode == EDITOR_MODE_SECTORS ||
             mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS ||
             mode == EDITOR_MODE_TEXTURE ||
-            mode == EDITOR_MODE_PATHS ||
+            mode == EDITOR_MODE_FOLDER_PATHS ||
             mode == EDITOR_MODE_SHADOWS
         ) {
             mob_opacity = 32;
@@ -362,7 +362,7 @@ void area_editor::do_drawing() {
         }
         
         //Paths.
-        if(mode == EDITOR_MODE_PATHS) {
+        if(mode == EDITOR_MODE_FOLDER_PATHS) {
         
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];

@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
     init_allegro();
     
     //Panic check: is there a Game_data folder?
-    if(folder_to_vector(GAME_DATA_FOLDER, true).empty()) {
+    if(folder_to_vector(GAME_DATA_FOLDER_PATH, true).empty()) {
         al_show_native_message_box(
             NULL, "Game_data folder not found!",
             "Game_data folder not found!",

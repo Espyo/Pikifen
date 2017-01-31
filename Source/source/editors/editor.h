@@ -17,6 +17,7 @@
 
 #include "../LAFI/gui.h"
 #include "../game_state.h"
+#include "../misc_structs.h"
 
 using namespace std;
 
@@ -31,10 +32,13 @@ private:
     
 protected:
 
+    static const string EDITOR_ICONS_FOLDER_NAME;
+    
     lafi::gui*    gui;
     int           gui_x;
     bool          holding_m1;
     bool          holding_m2;
+    bmp_manager   icons;
     bool          made_changes;
     unsigned char mode;
     //Secondary/sub mode.

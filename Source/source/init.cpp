@@ -168,7 +168,7 @@ void init_controls() {
  * Initializes the development tools from the Tools.txt file.
  */
 void init_dev_tools() {
-    data_node file(MISC_FOLDER + "/Tools.txt");
+    data_node file(MISC_FOLDER_PATH + "/Tools.txt");
     
     if(!s2b(file.get_child_by_name("enabled")->value)) return;
     
@@ -540,7 +540,7 @@ void init_mob_categories() {
     );
     
     mob_categories.register_category(
-        MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER,
+        MOB_CATEGORY_ENEMIES, "Enemies", "Enemy", ENEMIES_FOLDER_PATH,
         al_map_rgb(224, 96, 128),
     [] (vector<string> &li) {
         for(auto e = enemy_types.begin(); e != enemy_types.end(); ++e) {
@@ -557,7 +557,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_LEADERS, "Leaders", "Leader", LEADERS_FOLDER,
+        MOB_CATEGORY_LEADERS, "Leaders", "Leader", LEADERS_FOLDER_PATH,
         al_map_rgb(48, 80, 192),
     [] (vector<string> &li) {
         for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
@@ -574,7 +574,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_MISC, "Misc.", "Misc.", MISC_MOB_FOLDER,
+        MOB_CATEGORY_MISC, "Misc.", "Misc.", MISC_MOB_FOLDER_PATH,
         al_map_rgb(224, 128, 224),
     [] (vector<string> &li) {
         for(auto m = misc_mob_types.begin(); m != misc_mob_types.end(); ++m) {
@@ -591,7 +591,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_ONIONS, "Onions", "Onion", ONIONS_FOLDER,
+        MOB_CATEGORY_ONIONS, "Onions", "Onion", ONIONS_FOLDER_PATH,
         al_map_rgb(48, 160, 48),
     [] (vector<string> &li) {
         for(auto o = onion_types.begin(); o != onion_types.end(); ++o) {
@@ -608,7 +608,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_PELLETS, "Pellets", "Pellet", PELLETS_FOLDER,
+        MOB_CATEGORY_PELLETS, "Pellets", "Pellet", PELLETS_FOLDER_PATH,
         al_map_rgb(208, 224, 96),
     [] (vector<string> &li) {
         for(auto p = pellet_types.begin(); p != pellet_types.end(); ++p) {
@@ -625,7 +625,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", PIKMIN_FOLDER,
+        MOB_CATEGORY_PIKMIN, "Pikmin", "Pikmin", PIKMIN_FOLDER_PATH,
         al_map_rgb(64, 255, 64),
     [] (vector<string> &li) {
         for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
@@ -642,7 +642,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_SHIPS, "Ships", "Ship", SHIPS_FOLDER,
+        MOB_CATEGORY_SHIPS, "Ships", "Ship", SHIPS_FOLDER_PATH,
         al_map_rgb(128, 128, 192),
     [] (vector<string> &li) {
         for(auto s = ship_types.begin(); s != ship_types.end(); ++s) {
@@ -675,7 +675,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_TREASURES, "Treasures", "Treasure", TREASURES_FOLDER,
+        MOB_CATEGORY_TREASURES, "Treasures", "Treasure", TREASURES_FOLDER_PATH,
         al_map_rgb(255, 240, 64),
     [] (vector<string> &li) {
         for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
@@ -692,7 +692,7 @@ void init_mob_categories() {
     });
     
     mob_categories.register_category(
-        MOB_CATEGORY_GATES, "Gates", "Gate", GATES_FOLDER,
+        MOB_CATEGORY_GATES, "Gates", "Gate", GATES_FOLDER_PATH,
         al_map_rgb(224, 192, 192),
     [] (vector<string> &li) {
         for(auto g = gate_types.begin(); g != gate_types.end(); ++g) {
@@ -734,7 +734,7 @@ void init_single_animation(
     single_animation_suite &anim
 ) {
     data_node file(
-        ANIMATIONS_FOLDER + "/" + anim_def_file->get_child_by_name(name)->value
+        ANIMATIONS_FOLDER_PATH + "/" + anim_def_file->get_child_by_name(name)->value
     );
     anim.database = load_animation_database_from_file(&file);
     anim.instance.cur_anim = anim.database.animations[0];

@@ -40,7 +40,7 @@ void area_editor::load() {
     lafi::style* s =
         new lafi::style(
         al_map_rgb(192, 192, 208),
-        al_map_rgb(0, 0, 32),
+        al_map_rgb(32, 32, 64),
         al_map_rgb(96, 128, 160),
         font_builtin
     );
@@ -132,7 +132,7 @@ void area_editor::load() {
         
     frm_area->widgets["but_paths"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_PATHS;
+        mode = EDITOR_MODE_FOLDER_PATHS;
         change_to_right_frame();
     };
     frm_area->widgets["but_paths"]->description =
@@ -186,11 +186,11 @@ void area_editor::load() {
     frm_sectors->easy_row();
     frm_sectors->easy_add(
         "but_new",
-        new lafi::button("+"), 20, 32
+        new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
     );
     frm_sectors->easy_add(
         "but_sel_none",
-        new lafi::button("None"), 20, 32
+        new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
     y = frm_sectors->easy_row();
     
@@ -609,11 +609,11 @@ void area_editor::load() {
     frm_objects->easy_row();
     frm_objects->easy_add(
         "but_new",
-        new lafi::button("+"), 20, 32
+        new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
     );
     frm_objects->easy_add(
         "but_sel_none",
-        new lafi::button("None"), 20, 32
+        new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
     y = frm_objects->easy_row();
     
@@ -629,11 +629,11 @@ void area_editor::load() {
     );
     frm_object->easy_add(
         "but_rem",
-        new lafi::button("-"), 15, 16
+        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
     );
     frm_object->easy_add(
         "but_duplicate",
-        new lafi::button("x2"), 15, 16
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 15, 24
     );
     frm_object->easy_row();
     frm_object->easy_add(
@@ -698,7 +698,7 @@ void area_editor::load() {
         if(sec_mode == ESM_DUPLICATE_OBJECT) sec_mode = ESM_NONE;
     };
     frm_objects->widgets["but_sel_none"]->description =
-        "Deselect the current sector.";
+        "Deselect the current object.";
         
     frm_object->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -773,15 +773,15 @@ void area_editor::load() {
     frm_paths->easy_row();
     frm_paths->easy_add(
         "but_new_stop",
-        new lafi::button("Stop"), 33, 32
+        new lafi::button("", "", icons.get(NEW_STOP_ICON)), 33, 32
     );
     frm_paths->easy_add(
         "but_new_link",
-        new lafi::button("Link"), 33, 32
+        new lafi::button("", "", icons.get(NEW_LINK_ICON)), 33, 32
     );
     frm_paths->easy_add(
         "but_new_1wlink",
-        new lafi::button("1WLink"), 33, 32
+        new lafi::button("", "", icons.get(NEW_1WLINK_ICON)), 33, 32
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -791,11 +791,11 @@ void area_editor::load() {
     frm_paths->easy_row();
     frm_paths->easy_add(
         "but_del_stop",
-        new lafi::button("Stop"), 33, 32
+        new lafi::button("", "", icons.get(DELETE_STOP_ICON)), 33, 32
     );
     frm_paths->easy_add(
         "but_del_link",
-        new lafi::button("Link"), 33, 32
+        new lafi::button("", "", icons.get(DELETE_LINK_ICON)), 33, 32
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -920,11 +920,11 @@ void area_editor::load() {
     frm_shadows->easy_row();
     frm_shadows->easy_add(
         "but_new",
-        new lafi::button("+"), 20, 32
+        new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
     );
     frm_shadows->easy_add(
         "but_sel_none",
-        new lafi::button("None"), 20, 32
+        new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
     y = frm_shadows->easy_row();
     
@@ -936,11 +936,11 @@ void area_editor::load() {
     frm_shadow->easy_row();
     frm_shadow->easy_add(
         "dum_1",
-        new lafi::dummy(), 90, 16
+        new lafi::dummy(), 85, 16
     );
     frm_shadow->easy_add(
         "but_rem",
-        new lafi::button("-"), 10, 16
+        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
     );
     frm_shadow->easy_row();
     frm_shadow->easy_add(
@@ -1490,19 +1490,19 @@ void area_editor::load() {
     frm_bottom->easy_row();
     frm_bottom->easy_add(
         "but_options",
-        new lafi::button("Opt"), 25, 32
+        new lafi::button("", "", icons.get(OPTIONS_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_guide",
-        new lafi::button("G"), 25, 32
+        new lafi::button("", "", icons.get(GUIDE_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_save",
-        new lafi::button("Save"), 25, 32
+        new lafi::button("", "", icons.get(SAVE_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_quit",
-        new lafi::button("Quit"), 25, 32
+        new lafi::button("", "", icons.get(EXIT_ICON)), 25, 32
     );
     frm_bottom->easy_row();
     

@@ -84,7 +84,7 @@ void load_mob_types(bool load_resources) {
     
     //Load the special mob types.
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
-        string folder = SPECIAL_MOBS_FOLDER + "/" + mt->first;
+        string folder = SPECIAL_MOBS_FOLDER_PATH + "/" + mt->first;
         data_node file = data_node(folder + "/Data.txt");
         if(!file.file_was_opened) return;
         

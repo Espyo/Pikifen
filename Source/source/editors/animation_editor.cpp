@@ -34,6 +34,29 @@ const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
+const string animation_editor::DELETE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
+const string animation_editor::EXIT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
+const string animation_editor::HITBOXES_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Hitboxes.png";
+const string animation_editor::LOAD_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Load.png";
+const string animation_editor::MOVE_LEFT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Move_left.png";
+const string animation_editor::MOVE_RIGHT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Move_right.png";
+const string animation_editor::NEW_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New.png";
+const string animation_editor::NEXT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Next.png";
+const string animation_editor::PLAY_PAUSE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Play_pause.png";
+const string animation_editor::PREVIOUS_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Previous.png";
+const string animation_editor::SAVE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Save.png";
+
 
 /* ----------------------------------------------------------------------------
  * Initializes animation editor class stuff.
@@ -860,11 +883,11 @@ void animation_editor::load_animation_database() {
         }
     }
     
-    if(file_path.find(PIKMIN_FOLDER) != string::npos) {
+    if(file_path.find(PIKMIN_FOLDER_PATH) != string::npos) {
         is_pikmin = true;
         data_node data =
             data_node(
-                PIKMIN_FOLDER + "/" +
+                PIKMIN_FOLDER_PATH + "/" +
                 file_path_parts[file_path_parts.size() - 2] +
                 "/Data.txt"
             );

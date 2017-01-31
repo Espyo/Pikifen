@@ -70,7 +70,7 @@ struct bmp_info {
  */
 struct bmp_manager {
     map<string, bmp_info> list;
-    ALLEGRO_BITMAP* get(const string &name, data_node* node);
+    ALLEGRO_BITMAP* get(const string &name, data_node* node = NULL);
     void detach(const string &name);
 };
 

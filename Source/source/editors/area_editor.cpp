@@ -57,6 +57,36 @@ const float  area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
 const float  area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
+const string area_editor::DELETE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
+const string area_editor::DELETE_LINK_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete_link.png";
+const string area_editor::DELETE_STOP_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete_stop.png";
+const string area_editor::DUPLICATE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Duplicate.png";
+const string area_editor::EXIT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
+const string area_editor::GUIDE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Guide.png";
+const string area_editor::NEW_1WLINK_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New_1wlink.png";
+const string area_editor::NEW_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New.png";
+const string area_editor::NEW_LINK_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New_link.png";
+const string area_editor::NEW_STOP_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New_stop.png";
+const string area_editor::NEXT_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Next.png";
+const string area_editor::OPTIONS_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Options.png";
+const string area_editor::PREVIOUS_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Previous.png";
+const string area_editor::SAVE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Save.png";
+const string area_editor::SELECT_NONE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Select_none.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -609,7 +639,7 @@ void area_editor::change_to_right_frame() {
         show_widget(gui->widgets["frm_texture"]);
     } else if(mode == EDITOR_MODE_OBJECTS) {
         show_widget(gui->widgets["frm_objects"]);
-    } else if(mode == EDITOR_MODE_PATHS) {
+    } else if(mode == EDITOR_MODE_FOLDER_PATHS) {
         show_widget(gui->widgets["frm_paths"]);
     } else if(mode == EDITOR_MODE_SHADOWS) {
         show_widget(gui->widgets["frm_shadows"]);
@@ -680,7 +710,7 @@ void area_editor::clear_current_area() {
  */
 void area_editor::create_new_from_picker(const string &name) {
     string new_area_path =
-        AREA_FOLDER + "/" + name;
+        AREAS_FOLDER_PATH + "/" + name;
     ALLEGRO_FS_ENTRY* new_area_folder_entry =
         al_create_fs_entry(new_area_path.c_str());
         
@@ -1018,7 +1048,7 @@ void area_editor::find_errors() {
     //Check for unknown textures.
     if(error_type == EET_NONE) {
         vector<string> texture_file_names =
-            folder_to_vector(TEXTURES_FOLDER, false);
+            folder_to_vector(TEXTURES_FOLDER_PATH, false);
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         
             sector* s_ptr = cur_area_data.sectors[s];
@@ -1084,7 +1114,7 @@ void area_editor::find_errors() {
             }
             
             if(!has_link) {
-                error_type = EET_LONE_PATH_STOP;
+                error_type = EET_LONE_FOLDER_PATH_STOP;
                 error_path_stop_ptr = s_ptr;
                 break;
             }
@@ -1096,7 +1126,7 @@ void area_editor::find_errors() {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = cur_area_data.path_stops[s];
             if(!get_sector(s_ptr->x, s_ptr->y, NULL, false)) {
-                error_type = EET_PATH_STOP_OOB;
+                error_type = EET_FOLDER_PATH_STOP_OOB;
                 error_path_stop_ptr = s_ptr;
                 break;
             }
@@ -1112,7 +1142,7 @@ void area_editor::find_errors() {
                 if(s2_ptr == s_ptr) continue;
                 
                 if(dist(s_ptr->x, s_ptr->y, s2_ptr->x, s2_ptr->y) <= 3.0) {
-                    error_type = EET_PATH_STOPS_TOGETHER;
+                    error_type = EET_FOLDER_PATH_STOPS_TOGETHER;
                     error_path_stop_ptr = s_ptr;
                     break;
                 }
@@ -1128,7 +1158,7 @@ void area_editor::find_errors() {
                 cur_area_data.path_stops, visited, cur_area_data.path_stops[0]
             );
             if(visited.size() != cur_area_data.path_stops.size()) {
-                error_type = EET_PATHS_UNCONNECTED;
+                error_type = EET_FOLDER_PATHS_UNCONNECTED;
             }
         }
     }
@@ -1432,9 +1462,9 @@ void area_editor::goto_error() {
         );
         
     } else if(
-        error_type == EET_LONE_PATH_STOP ||
-        error_type == EET_PATH_STOPS_TOGETHER ||
-        error_type == EET_PATH_STOP_OOB
+        error_type == EET_LONE_FOLDER_PATH_STOP ||
+        error_type == EET_FOLDER_PATH_STOPS_TOGETHER ||
+        error_type == EET_FOLDER_PATH_STOP_OOB
     ) {
     
         if(!error_path_stop_ptr) {
@@ -1749,7 +1779,7 @@ void area_editor::merge_vertex(
 void area_editor::open_picker(const unsigned char type) {
     vector<string> elements;
     if(type == AREA_EDITOR_PICKER_AREA) {
-        elements = folder_to_vector(AREA_FOLDER, true);
+        elements = folder_to_vector(AREAS_FOLDER_PATH, true);
         for(size_t e = 0; e < elements.size(); ++e) {
             size_t pos = elements[e].find(".txt");
             if(pos != string::npos) {
@@ -2200,7 +2230,7 @@ void area_editor::save_area(const bool to_backup) {
     
     
     geometry_file.save_file(
-        AREA_FOLDER + "/" + area_name +
+        AREAS_FOLDER_PATH + "/" + area_name +
         (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
     );
     
@@ -2251,7 +2281,7 @@ bool area_editor::update_backup_status() {
     
     if(area_name.empty()) return false;
     
-    data_node file(AREA_FOLDER + "/" + area_name + "/Geometry_backup.txt");
+    data_node file(AREAS_FOLDER_PATH + "/" + area_name + "/Geometry_backup.txt");
     if(!file.file_was_opened) return false;
     
     enable_widget(gui->widgets["frm_options"]->widgets["but_backup"]);
@@ -2439,7 +2469,7 @@ void area_editor::update_review_frame() {
         lbl_error_2->text = "in wall found!";
         
         
-    } else if(error_type == EET_LONE_PATH_STOP) {
+    } else if(error_type == EET_LONE_FOLDER_PATH_STOP) {
     
         if(!error_path_stop_ptr) {
             find_errors(); return;
@@ -2448,7 +2478,7 @@ void area_editor::update_review_frame() {
         lbl_error_1->text = "Lone path stop";
         lbl_error_2->text = "found!";
         
-    } else if(error_type == EET_PATHS_UNCONNECTED) {
+    } else if(error_type == EET_FOLDER_PATHS_UNCONNECTED) {
     
         disable_widget(but_goto_error);
         lbl_error_1->text = "The path is";
@@ -2456,14 +2486,14 @@ void area_editor::update_review_frame() {
         lbl_error_3->text = "or more parts!";
         lbl_error_4->text = "Connect them.";
         
-    } else if(error_type == EET_PATH_STOPS_TOGETHER) {
+    } else if(error_type == EET_FOLDER_PATH_STOPS_TOGETHER) {
     
         lbl_error_1->text = "Two path stops";
         lbl_error_2->text = "found close";
         lbl_error_3->text = "together!";
         lbl_error_4->text = "Separate them.";
         
-    } else if(error_type == EET_PATH_STOP_OOB) {
+    } else if(error_type == EET_FOLDER_PATH_STOP_OOB) {
     
         lbl_error_1->text = "Path stop out";
         lbl_error_2->text = "of bounds found!";

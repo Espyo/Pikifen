@@ -117,7 +117,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 mob_gen* m_ptr = cur_area_data.mob_generators[moving_thing];
                 m_ptr->x = snap_to_grid(mouse_cursor_x);
                 m_ptr->y = snap_to_grid(mouse_cursor_y);
-            } else if(mode == EDITOR_MODE_PATHS) {
+            } else if(mode == EDITOR_MODE_FOLDER_PATHS) {
                 path_stop* s_ptr = cur_area_data.path_stops[moving_thing];
                 s_ptr->x = snap_to_grid(mouse_cursor_x);
                 s_ptr->y = snap_to_grid(mouse_cursor_y);
@@ -325,7 +325,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             }
             mob_to_gui();
             
-        } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_PATHS) {
+        } else if(sec_mode == ESM_NONE && mode == EDITOR_MODE_FOLDER_PATHS) {
             //Path-related clicking.
             
             cur_stop = NULL;

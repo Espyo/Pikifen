@@ -47,7 +47,7 @@ void main_menu::load() {
     bmp_menu_bg = load_bmp("Main_menu.jpg");
     
     data_node title_screen_logo_file(
-        ANIMATIONS_FOLDER + "/Title_screen_logo.txt"
+        ANIMATIONS_FOLDER_PATH + "/Title_screen_logo.txt"
     );
     logo = load_animation_database_from_file(&title_screen_logo_file);
     if(!logo.animations.empty()) {
@@ -692,7 +692,7 @@ void area_menu::load() {
     cur_page_nr = 0;
     
     //Areas.
-    areas_to_pick = folder_to_vector(AREA_FOLDER, true);
+    areas_to_pick = folder_to_vector(AREAS_FOLDER_PATH, true);
     
     //If there's only one area, go there right away.
     if(areas_to_pick.size() == 1) {

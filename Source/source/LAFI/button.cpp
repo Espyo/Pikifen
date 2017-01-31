@@ -94,8 +94,9 @@ void button::draw_self() {
     }
     
     if(icon) {
-        al_draw_bitmap(
+        al_draw_tinted_bitmap(
             icon,
+            get_fg_color(),
             x1 + (w / 2 - al_get_bitmap_width(icon) / 2),
             y1 + final_icon_y,
             0);

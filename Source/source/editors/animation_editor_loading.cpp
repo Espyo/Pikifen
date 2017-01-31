@@ -39,7 +39,7 @@ void animation_editor::load() {
     lafi::style* s =
         new lafi::style(
         al_map_rgb(192, 192, 208),
-        al_map_rgb(0, 0, 32),
+        al_map_rgb(32, 32, 64),
         al_map_rgb(96, 128, 160),
         font_builtin
     );
@@ -240,7 +240,7 @@ void animation_editor::load() {
     );
     frm_anims->easy_add(
         "but_del_anim",
-        new lafi::button("-"), 15, 16
+        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
     );
     frm_anims->easy_row();
     frm_anims->easy_add(
@@ -297,23 +297,23 @@ void animation_editor::load() {
     frm_anim->easy_row();
     frm_anim->easy_add(
         "but_play",
-        new lafi::button("P"), 20, 32
+        new lafi::button("", "", icons.get(PLAY_PAUSE_ICON)), 20, 32
     );
     frm_anim->easy_add(
         "but_prev",
-        new lafi::button("<"), 20, 32
+        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 32
     );
     frm_anim->easy_add(
         "but_next",
-        new lafi::button(">"), 20, 32
+        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 32
     );
     frm_anim->easy_add(
         "but_add",
-        new lafi::button("+"), 20, 32
+        new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
     );
     frm_anim->easy_add(
         "but_rem",
-        new lafi::button("-"), 20, 32
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 32
     );
     y += frm_anim->easy_row();
     
@@ -552,7 +552,7 @@ void animation_editor::load() {
     );
     frm_sprites->easy_add(
         "but_del_sprite",
-        new lafi::button("-"), 15, 16
+        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 32
     );
     frm_sprites->easy_row();
     frm_sprites->easy_add(
@@ -944,11 +944,11 @@ void animation_editor::load() {
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
         "but_prev",
-        new lafi::button("<"), 20, 24
+        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 24
     );
     frm_hitboxes->easy_add(
         "but_next",
-        new lafi::button(">"), 20, 24
+        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
     );
     frm_hitboxes->easy_row();
     frm_hitboxes->easy_add(
@@ -1467,16 +1467,16 @@ void animation_editor::load() {
     );
     frm_body_parts->easy_add(
         "but_add",
-        new lafi::button("+"), 20, 24
+        new lafi::button("", "", icons.get(NEW_ICON)), 20, 24
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
         "but_prev",
-        new lafi::button("<"), 20, 24
+        new lafi::button("", "", icons.get(PREVIOUS_ICON)), 20, 24
     );
     frm_body_parts->easy_add(
         "but_next",
-        new lafi::button(">"), 20, 24
+        new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
     );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
@@ -1505,15 +1505,15 @@ void animation_editor::load() {
     frm_body_part->easy_row();
     frm_body_part->easy_add(
         "but_left",
-        new lafi::button("<="), 20, 24
+        new lafi::button("", "", icons.get(MOVE_LEFT_ICON)), 20, 24
     );
     frm_body_part->easy_add(
         "but_right",
-        new lafi::button("=>"), 20, 24
+        new lafi::button("", "", icons.get(MOVE_RIGHT_ICON)), 20, 24
     );
     frm_body_part->easy_add(
         "but_rem",
-        new lafi::button("-"), 20, 24
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 24
     );
     frm_body_part->easy_row();
     
@@ -1818,19 +1818,19 @@ void animation_editor::load() {
     frm_bottom->easy_row();
     frm_bottom->easy_add(
         "but_toggle_hitboxes",
-        new lafi::button("HB"), 25, 32
+        new lafi::button("", "", icons.get(HITBOXES_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_load",
-        new lafi::button("Load"), 25, 32
+        new lafi::button("", "", icons.get(LOAD_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_save",
-        new lafi::button("Save"), 25, 32
+        new lafi::button("", "", icons.get(SAVE_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_quit",
-        new lafi::button("Quit"), 25, 32
+        new lafi::button("", "", icons.get(EXIT_ICON)), 25, 32
     );
     frm_bottom->easy_row();
     

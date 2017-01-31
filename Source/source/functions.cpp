@@ -557,7 +557,7 @@ void load_area(
     cur_area_data.clear();
     
     data_node data_file =
-        load_data_file(AREA_FOLDER + "/" + name + "/Data.txt");
+        load_data_file(AREAS_FOLDER_PATH + "/" + name + "/Data.txt");
         
     cur_area_data.name =
         data_file.get_child_by_name("name")->get_value_or_default(name);
@@ -609,7 +609,7 @@ void load_area(
         
     data_node geometry_file =
         load_data_file(
-            AREA_FOLDER + "/" + name +
+            AREAS_FOLDER_PATH + "/" + name +
             (from_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
         );
         
@@ -982,7 +982,7 @@ ALLEGRO_BITMAP* load_bmp(
 ) {
     if(file_name.empty()) return NULL;
     ALLEGRO_BITMAP* b =
-        al_load_bitmap((GRAPHICS_FOLDER + "/" + file_name).c_str());
+        al_load_bitmap((GRAPHICS_FOLDER_PATH + "/" + file_name).c_str());
         
     if(!b && report_error) {
         log_error("Could not open image " + file_name + "!", node);
@@ -1098,7 +1098,7 @@ data_node load_data_file(const string &file_name) {
  * Loads the game's configuration file.
  */
 void load_game_config() {
-    data_node file(CONFIG_FILE);
+    data_node file(CONFIG_FOLDER_PATH);
     
     reader_setter rs(&file);
     
@@ -1288,7 +1288,7 @@ void load_game_content() {
  *  Loads HUD coordinates from a file.
  */
 void load_hud_coordinates() {
-    data_node file = data_node(MISC_FOLDER + "/HUD.txt");
+    data_node file = data_node(MISC_FOLDER_PATH + "/HUD.txt");
     if(!file.file_was_opened) return;
     
 #define loader(id, name) \
@@ -1345,7 +1345,7 @@ void load_hud_coordinates() {
  * Loads the hazards from the game data.
  */
 void load_hazards() {
-    data_node file = data_node(MISC_FOLDER + "/Hazards.txt");
+    data_node file = data_node(MISC_FOLDER_PATH + "/Hazards.txt");
     if(!file.file_was_opened) return;
     
     size_t n_hazards = file.get_nr_of_children();
@@ -1405,7 +1405,7 @@ void load_hud_coordinates(const int item, string data) {
  * Loads the liquids from the game data.
  */
 void load_liquids() {
-    data_node file = data_node(MISC_FOLDER + "/Liquids.txt");
+    data_node file = data_node(MISC_FOLDER_PATH + "/Liquids.txt");
     if(!file.file_was_opened) return;
     
     map<string, data_node*> nodes;
@@ -1428,7 +1428,7 @@ void load_liquids() {
     
     for(auto l = liquids.begin(); l != liquids.end(); ++l) {
         data_node anim_file(
-            ANIMATIONS_FOLDER + "/" +
+            ANIMATIONS_FOLDER_PATH + "/" +
             nodes[l->first]->get_child_by_name("animation")->value
         );
         l->second.anim_pool = load_animation_database_from_file(&anim_file);
@@ -1541,7 +1541,7 @@ sample_struct load_sample(
     const string &file_name, ALLEGRO_MIXER* const mixer
 ) {
     ALLEGRO_SAMPLE* sample =
-        al_load_sample((AUDIO_FOLDER + "/" + file_name).c_str());
+        al_load_sample((AUDIO_FOLDER_PATH + "/" + file_name).c_str());
     if(!sample) {
         log_error("Could not open audio sample " + file_name + "!");
     }
@@ -1554,7 +1554,7 @@ sample_struct load_sample(
  * Loads spray types from the game data.
  */
 void load_spray_types() {
-    data_node file = data_node(MISC_FOLDER + "/Sprays.txt");
+    data_node file = data_node(MISC_FOLDER_PATH + "/Sprays.txt");
     if(!file.file_was_opened) return;
     
     size_t n_sprays = file.get_nr_of_children();
@@ -1599,7 +1599,7 @@ void load_spray_types() {
  * Loads status effect types from the game data.
  */
 void load_status_types() {
-    data_node file = data_node(MISC_FOLDER + "/Statuses.txt");
+    data_node file = data_node(MISC_FOLDER_PATH + "/Statuses.txt");
     if(!file.file_was_opened) return;
     
     size_t n_statuses = file.get_nr_of_children();
@@ -1659,7 +1659,7 @@ void load_status_types() {
     
     for(auto s = status_types.begin(); s != status_types.end(); ++s) {
         if(s->second.animation_name.empty()) continue;
-        data_node anim_file(ANIMATIONS_FOLDER + "/" + s->second.animation_name);
+        data_node anim_file(ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name);
         s->second.anim_pool = load_animation_database_from_file(&anim_file);
         if(!s->second.anim_pool.animations.empty()) {
             s->second.anim_instance = animation_instance(&s->second.anim_pool);
