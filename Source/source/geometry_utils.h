@@ -32,7 +32,7 @@ bool circle_intersects_line(
 );
 point get_closest_point_in_line(
     const point l1, const point l2, const point p,
-    float* segment_ratio
+    float* segment_ratio = NULL
 );
 vertex* get_merge_vertex(
     const float x, const float y,

@@ -194,6 +194,9 @@ private:
         const float start_ratio, const float end_ratio, const float proportion,
         const float lowest_z, sector* sector_ptr
     );
+    void draw_debug_text(
+        const ALLEGRO_COLOR color, const int x, const int y, const string text
+    );
     void find_errors();
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result

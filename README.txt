@@ -47,6 +47,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     Why can't I see the game window?
         Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    Is it possible to add Winged Pikmin?
+        No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic. Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
     Why are some textures black, but not HUD elements?
         I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images. So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
     Why is it so slow?

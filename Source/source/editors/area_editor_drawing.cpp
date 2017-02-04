@@ -215,26 +215,21 @@ void area_editor::do_drawing() {
                             e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y,
                             e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x
                         );
-                    draw_scaled_text(
-                        font_builtin, al_map_rgb(192, 255, 192),
+                    draw_debug_text(
+                        al_map_rgb(192, 255, 192),
                         mid_x + cos(angle + M_PI_2) * 4,
                         mid_y + sin(angle + M_PI_2) * 4,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        ALLEGRO_ALIGN_CENTER, 1,
                         (
                             e_ptr->sector_nrs[0] == INVALID ?
                             "--" :
                             i2s(e_ptr->sector_nrs[0])
                         )
                     );
-                    draw_scaled_text(
-                        font_builtin, al_map_rgb(192, 255, 192),
+                    
+                    draw_debug_text(
+                        al_map_rgb(192, 255, 192),
                         mid_x + cos(angle - M_PI_2) * 4,
                         mid_y + sin(angle - M_PI_2) * 4,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        ALLEGRO_ALIGN_CENTER, 1,
                         (
                             e_ptr->sector_nrs[1] == INVALID ?
                             "--" :
@@ -248,13 +243,9 @@ void area_editor::do_drawing() {
                         (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
                     float mid_y =
                         (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
-                    draw_scaled_text(
-                        font_builtin, al_map_rgb(255, 192, 192),
-                        mid_x, mid_y,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        ALLEGRO_ALIGN_CENTER, 1,
-                        i2s(e)
+                    draw_debug_text(
+                        al_map_rgb(255, 192, 192),
+                        mid_x, mid_y, i2s(e)
                     );
                 }
             }
@@ -272,13 +263,9 @@ void area_editor::do_drawing() {
                     );
                     
                     if(debug_vertex_nrs) {
-                        draw_scaled_text(
-                            font_builtin, al_map_rgb(192, 192, 255),
-                            v_ptr->x, v_ptr->y,
-                            DEBUG_TEXT_SCALE / cam_zoom,
-                            DEBUG_TEXT_SCALE / cam_zoom,
-                            ALLEGRO_ALIGN_CENTER, 1,
-                            i2s(v)
+                        draw_debug_text(
+                            al_map_rgb(192, 192, 255),
+                            v_ptr->x, v_ptr->y, i2s(v)
                         );
                     }
                 }
@@ -938,4 +925,40 @@ void area_editor::draw_cross_section_sector(
         al_map_rgb(192, 192, 192), 1
     );
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws debug text, used to identify edges, sectors, or vertexes.
+ * color: Text color.
+ * x, y:  World coordinates.
+ * text:  Text to show.
+ */
+void area_editor::draw_debug_text(
+    const ALLEGRO_COLOR color, const int x, const int y, const string text
+) {
+    int dw = 0;
+    int dh = 0;
+    al_get_text_dimensions(
+        font_builtin, text.c_str(),
+        NULL, NULL, &dw, &dh
+    );
+    
+    float bbox_w = (dw * DEBUG_TEXT_SCALE) / cam_zoom;
+    float bbox_h = (dh * DEBUG_TEXT_SCALE) / cam_zoom;
+    
+    al_draw_filled_rectangle(
+        x - bbox_w * 0.5, y - bbox_h * 0.5,
+        x + bbox_w * 0.5, y + bbox_h * 0.5,
+        al_map_rgba(0, 0, 0, 128)
+    );
+    
+    draw_scaled_text(
+        font_builtin, color,
+        x, y,
+        DEBUG_TEXT_SCALE / cam_zoom,
+        DEBUG_TEXT_SCALE / cam_zoom,
+        ALLEGRO_ALIGN_CENTER, 1,
+        text
+    );
 }

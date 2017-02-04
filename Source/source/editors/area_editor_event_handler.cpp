@@ -231,8 +231,21 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 double_click_time = 0;
                 
                 //New vertex, on the split point.
-                //TODO create it on the edge, not on the cursor.
-                vertex* new_v_ptr = new vertex(mouse_cursor_x, mouse_cursor_y);
+                point new_vertex_pos =
+                    get_closest_point_in_line(
+                        point(
+                            clicked_edge_ptr->vertexes[0]->x,
+                            clicked_edge_ptr->vertexes[0]->y
+                        ),
+                        point(
+                            clicked_edge_ptr->vertexes[1]->x,
+                            clicked_edge_ptr->vertexes[1]->y
+                        ),
+                        point(mouse_cursor_x, mouse_cursor_y)
+                    );
+                    
+                vertex* new_v_ptr =
+                    new vertex(new_vertex_pos.x, new_vertex_pos.y);
                 cur_area_data.vertexes.push_back(new_v_ptr);
                 
                 //New edge, copied from the original one.
