@@ -1299,6 +1299,20 @@ void area_editor::load() {
         new lafi::checkbox("See tree shadows"), 90, 16
     );
     frm_review->easy_row();
+    frm_review->easy_add(
+        "chk_cross_section",
+        new lafi::checkbox("Show cross-section"), 100, 16
+    );
+    frm_review->easy_row();
+    frm_review->easy_add(
+        "dum_2",
+        new lafi::dummy(), 10, 16
+    );
+    frm_review->easy_add(
+        "chk_cross_section_grid",
+        new lafi::checkbox("See height grid"), 90, 16
+    );
+    frm_review->easy_row();
     update_review_frame();
     
     
@@ -1352,6 +1366,21 @@ void area_editor::load() {
     };
     frm_review->widgets["chk_shadows"]->description =
         "Show tree shadows?";
+    frm_review->widgets["chk_cross_section"]->left_mouse_click_handler =
+    [this] (lafi::widget * c, int, int) {
+        show_cross_section = ((lafi::checkbox*) c)->checked;
+        update_review_frame();
+    };
+    frm_review->widgets["chk_cross_section"]->description =
+        "Show a 2D cross section between points A and B.";
+        
+    frm_review->widgets["chk_cross_section_grid"]->left_mouse_click_handler =
+    [this] (lafi::widget * c, int, int) {
+        show_cross_section_grid = ((lafi::checkbox*) c)->checked;
+        update_review_frame();
+    };
+    frm_review->widgets["chk_cross_section_grid"]->description =
+        "Show a height grid in the cross-section window.";
         
         
     //Tools -- declarations.
@@ -1572,4 +1601,11 @@ void area_editor::load() {
         load_area(false);
     }
     
+    cross_section_window_start = point(0.0f, 0.0f);
+    cross_section_window_end = point(gui_x * 0.5, status_bar_y * 0.5);
+    cross_section_z_window_start =
+        point(cross_section_window_end.x, cross_section_window_start.y);
+    cross_section_z_window_end =
+        point(cross_section_window_end.x + 48, cross_section_window_end.y);
+        
 }

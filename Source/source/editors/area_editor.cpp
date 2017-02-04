@@ -32,6 +32,8 @@
 #include "../vars.h"
 
 
+//Radius to use when drawing a cross-section point.
+const float  area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //Scale the debug text by this much.
 const float  area_editor::DEBUG_TEXT_SCALE = 1.5f;
 //Default grid interval.
@@ -48,6 +50,8 @@ const float  area_editor::PATH_LINK_THICKNESS = 2.0f;
 const float  area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
 //Only fetch the path these many seconds after the player stops the checkpoints.
 const float  area_editor::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
+//Scale the letters on the "points" of various features by this much.
+const float  area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Radius to use when drawing a path stop circle.
 const float  area_editor::STOP_RADIUS = 16.0f;
 //Minimum distance between two sectors for them to merge.
@@ -117,6 +121,7 @@ area_editor::area_editor() :
     error_vertex_ptr(NULL),
     grid_interval(DEF_GRID_INTERVAL),
     mode_before_options(EDITOR_MODE_MAIN),
+    moving_cross_section_point(-1),
     moving_path_preview_checkpoint(-1),
     moving_thing(INVALID),
     moving_thing_x(0),
@@ -127,6 +132,8 @@ area_editor::area_editor() :
     path_preview_timeout(0),
     shift_pressed(false),
     show_closest_stop(false),
+    show_cross_section(false),
+    show_cross_section_grid(false),
     show_guide(false),
     show_path_preview(false),
     show_shadows(true),
@@ -148,6 +155,9 @@ area_editor::area_editor() :
         [this] () {save_backup();}
             );
     }
+    
+    cross_section_points[0].x = -DEF_GRID_INTERVAL;
+    cross_section_points[1].x = DEF_GRID_INTERVAL;
 }
 
 /* ----------------------------------------------------------------------------
@@ -688,6 +698,8 @@ void area_editor::clear_current_area() {
     
     cam_x = cam_y = 0;
     cam_zoom = 1;
+    show_cross_section = false;
+    show_cross_section_grid = false;
     show_path_preview = false;
     path_preview.clear();
     path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
@@ -2513,6 +2525,15 @@ void area_editor::update_review_frame() {
         (lafi::checkbox*)
         gui->widgets["frm_review"]->widgets["chk_shadows"]
     )->set(show_shadows);
+    (
+        (lafi::checkbox*)
+        gui->widgets["frm_review"]->widgets["chk_cross_section"]
+    )->set(show_cross_section);
+    (
+        (lafi::checkbox*)
+        gui->widgets["frm_review"]->widgets["chk_cross_section_grid"]
+    )->set(show_cross_section_grid);
+    
 }
 
 

@@ -237,7 +237,10 @@ struct group_spot_info {
 struct point {
     float x, y;
     point(const float x = 0, const float y = 0) { this->x = x; this->y = y; }
-    bool operator!=(const point &p2) { return x != p2.x || y != p2.y; }
+    bool operator !=(const point &p2) { return x != p2.x || y != p2.y; }
+    const point operator -(const point &p) {
+        return point(x - p.x, y - p.y);
+    }
 };
 
 

@@ -94,6 +94,7 @@ private:
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     
+    static const float  CROSS_SECTION_POINT_RADIUS;
     static const float  DEBUG_TEXT_SCALE;
     static const float  DEF_GRID_INTERVAL;
     static const float  MAX_GRID_INTERVAL;
@@ -102,6 +103,7 @@ private:
     static const float  PATH_LINK_THICKNESS;
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
+    static const float  POINT_LETTER_TEXT_SCALE;
     static const float  STOP_RADIUS;
     static const float  VERTEX_MERGE_RADIUS;
     static const float  ZOOM_MAX_LEVEL_EDITOR;
@@ -125,6 +127,11 @@ private:
     
     string                       area_name;
     timer                        backup_timer;
+    point                        cross_section_points[2];
+    point                        cross_section_window_start;
+    point                        cross_section_window_end;
+    point                        cross_section_z_window_start;
+    point                        cross_section_z_window_end;
     mob_gen*                     cur_mob;
     sector*                      cur_sector;
     tree_shadow*                 cur_shadow;
@@ -152,6 +159,7 @@ private:
     unsigned char                guide_a;
     unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
+    signed char                  moving_cross_section_point;
     //Current vertex, object or shadow being moved.
     size_t                       moving_thing;
     //Relative X/Y coordinate of the point where the vertex,
@@ -168,8 +176,10 @@ private:
     timer                        path_preview_timeout;
     bool                         shift_pressed;
     bool                         show_closest_stop;
-    bool                         show_path_preview;
+    bool                         show_cross_section;
+    bool                         show_cross_section_grid;
     bool                         show_guide;
+    bool                         show_path_preview;
     bool                         show_shadows;
     vector<texture_suggestion>   texture_suggestions;
     lafi::widget*                wum; //Widget under mouse.
@@ -180,6 +190,10 @@ private:
     void change_guide(string new_file_name);
     void clear_current_area();
     void create_sector();
+    void draw_cross_section_sector(
+        const float start_ratio, const float end_ratio, const float proportion,
+        const float lowest_z, sector* sector_ptr
+    );
     void find_errors();
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result

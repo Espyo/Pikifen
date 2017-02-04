@@ -15,6 +15,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "misc_structs.h"
 #include "sector.h"
 
 void angle_to_coordinates(
@@ -28,6 +29,10 @@ bool circle_intersects_line(
     const float cx, const float cy, const float cr,
     const float x1, const float y1, const float x2, const float y2,
     float* lix = NULL, float* liy = NULL
+);
+point get_closest_point_in_line(
+    const point l1, const point l2, const point p,
+    float* segment_ratio
 );
 vertex* get_merge_vertex(
     const float x, const float y,

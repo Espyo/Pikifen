@@ -55,8 +55,8 @@ bool circle_intersects_line(
 ) {
 
     //Code by
-    //  http://www.melloland.com/scripts-and-tutos/
-    //  collision-detection-between-circles-and-lines
+    //http://www.melloland.com/scripts-and-tutos/
+    //collision-detection-between-circles-and-lines
     
     float vx = x2 - x1;
     float vy = y2 - y1;
@@ -86,6 +86,38 @@ bool circle_intersects_line(
         }
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the closest point in a line to a given point.
+ * l1, l2:        Points of the line.
+ * p:             Reference point.
+ * segment_ratio: If not NULL, the ratio from l1 to l2 is returned here.
+   * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
+ */
+point get_closest_point_in_line(
+    const point l1, const point l2, const point p, float* segment_ratio
+) {
+
+    //Code by http://stackoverflow.com/a/3122532
+    
+    point l1_to_p(p.x - l1.x, p.y - l1.y);
+    point l1_to_l2(l2.x - l1.x, l2.y - l1.y);
+    
+    float l1_to_l2_squared =
+        l1_to_l2.x * l1_to_l2.x +
+        l1_to_l2.y * l1_to_l2.y;
+        
+    float l1_to_p_dot_l1_to_l2 =
+        l1_to_p.x * l1_to_l2.x +
+        l1_to_p.y * l1_to_l2.y;
+        
+    float r = l1_to_p_dot_l1_to_l2 / l1_to_l2_squared;
+    
+    if(segment_ratio) *segment_ratio = r;
+    
+    return point(l1.x + l1_to_l2.x * r, l1.y + l1_to_l2.y * r);
 }
 
 

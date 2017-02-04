@@ -9,11 +9,16 @@
  * Area editor drawing function.
  */
 
+#include <allegro5/allegro_font.h>
+#include <algorithm>
+
 #include "area_editor.h"
 #include "../drawing.h"
 #include "../functions.h"
 #include "../geometry_utils.h"
 #include "../vars.h"
+
+using namespace std;
 
 
 /* ----------------------------------------------------------------------------
@@ -461,8 +466,8 @@ void area_editor::do_drawing() {
                         font_builtin, al_map_rgb(0, 64, 64),
                         path_preview_checkpoints_x[c],
                         path_preview_checkpoints_y[c],
-                        DEBUG_TEXT_SCALE / cam_zoom,
-                        DEBUG_TEXT_SCALE / cam_zoom,
+                        POINT_LETTER_TEXT_SCALE / cam_zoom,
+                        POINT_LETTER_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
                         letter
                     );
@@ -475,7 +480,7 @@ void area_editor::do_drawing() {
                         path_preview_checkpoints_y[0],
                         path_preview_checkpoints_x[1],
                         path_preview_checkpoints_y[1],
-                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                 } else {
                     al_draw_line(
@@ -483,7 +488,7 @@ void area_editor::do_drawing() {
                         path_preview_checkpoints_y[0],
                         path_preview[0]->x,
                         path_preview[0]->y,
-                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                     for(size_t s = 0; s < path_preview.size() - 1; ++s) {
                         al_draw_line(
@@ -491,7 +496,7 @@ void area_editor::do_drawing() {
                             path_preview[s]->y,
                             path_preview[s + 1]->x,
                             path_preview[s + 1]->y,
-                            al_map_rgb(255, 0, 0), 3 / cam_zoom
+                            al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                         );
                     }
                     
@@ -500,7 +505,7 @@ void area_editor::do_drawing() {
                         path_preview.back()->y,
                         path_preview_checkpoints_x[1],
                         path_preview_checkpoints_y[1],
-                        al_map_rgb(255, 0, 0), 3 / cam_zoom
+                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                 }
             }
@@ -607,6 +612,41 @@ void area_editor::do_drawing() {
             );
         }
         
+        //Cross-section points and line.
+        if(mode == EDITOR_MODE_REVIEW && show_cross_section) {
+            for(unsigned char p = 0; p < 2; ++p) {
+                string letter = (p == 0 ? "A" : "B");
+                
+                al_draw_filled_rectangle(
+                    cross_section_points[p].x -
+                    (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                    cross_section_points[p].y -
+                    (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                    cross_section_points[p].x +
+                    (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                    cross_section_points[p].y +
+                    (CROSS_SECTION_POINT_RADIUS / cam_zoom),
+                    al_map_rgb(255, 255, 32)
+                );
+                draw_scaled_text(
+                    font_builtin, al_map_rgb(0, 64, 64),
+                    cross_section_points[p].x,
+                    cross_section_points[p].y,
+                    POINT_LETTER_TEXT_SCALE / cam_zoom,
+                    POINT_LETTER_TEXT_SCALE / cam_zoom,
+                    ALLEGRO_ALIGN_CENTER, 1,
+                    letter
+                );
+            }
+            al_draw_line(
+                cross_section_points[0].x,
+                cross_section_points[0].y,
+                cross_section_points[1].x,
+                cross_section_points[1].y,
+                al_map_rgb(255, 0, 0), 3.0 / cam_zoom
+            );
+        }
+        
         //Lightly glow the sector under the mouse.
         if(mode == EDITOR_MODE_SECTORS) {
             if(on_sector && moving_thing == INVALID) {
@@ -659,7 +699,243 @@ void area_editor::do_drawing() {
     al_identity_transform(&id_transform);
     al_use_transform(&id_transform);
     
+    //Cross-section graph.
+    if(mode == EDITOR_MODE_REVIEW && show_cross_section) {
+    
+        dist cross_section_world_length(
+            cross_section_points[0].x, cross_section_points[0].y,
+            cross_section_points[1].x, cross_section_points[1].y
+        );
+        float proportion =
+            (cross_section_window_end.x - cross_section_window_start.x) /
+            cross_section_world_length.to_float();
+            
+        al_draw_filled_rectangle(
+            cross_section_window_start.x, cross_section_window_start.y,
+            cross_section_window_end.x, cross_section_window_end.y,
+            al_map_rgb(0, 0, 64)
+        );
+        
+        if(show_cross_section_grid) {
+            al_draw_filled_rectangle(
+                cross_section_z_window_start.x, cross_section_z_window_start.y,
+                cross_section_z_window_end.x, cross_section_z_window_end.y,
+                al_map_rgb(0, 0, 0)
+            );
+        }
+        
+        sector* cs_left_sector =
+            get_sector(
+                cross_section_points[0].x, cross_section_points[0].y,
+                NULL, false
+            );
+        sector* cs_right_sector =
+            get_sector(
+                cross_section_points[1].x, cross_section_points[1].y,
+                NULL, false
+            );
+        struct split_info {
+            sector* sector_ptrs[2];
+            float ur;
+            float ul;
+            split_info(
+                sector* s1, sector* s2, const float ur, const float ul
+            ) {
+                sector_ptrs[0] = s1;
+                sector_ptrs[1] = s2;
+                this->ur = ur;
+                this->ul = ul;
+            }
+        };
+        vector<split_info> splits;
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = cur_area_data.edges[e];
+            float ur = 0;
+            float ul = 0;
+            if(
+                lines_intersect(
+                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                    cross_section_points[0].x, cross_section_points[0].y,
+                    cross_section_points[1].x, cross_section_points[1].y,
+                    &ur, &ul
+                )
+            ) {
+                splits.push_back(
+                    split_info(e_ptr->sectors[0], e_ptr->sectors[1], ur, ul)
+                );
+            }
+        }
+        
+        if(!splits.empty()) {
+            sort(
+                splits.begin(), splits.end(),
+            [] (split_info & i1, split_info & i2) {
+                return i1.ur < i2.ur;
+            }
+            );
+            
+            splits.insert(
+                splits.begin(),
+                split_info(cs_left_sector, cs_left_sector, 0, 0)
+            );
+            splits.push_back(
+                split_info(cs_right_sector, cs_right_sector, 1, 1)
+            );
+            
+            for(size_t s = 1; s < splits.size(); ++s) {
+                if(splits[s].sector_ptrs[0] != splits[s - 1].sector_ptrs[1]) {
+                    swap(splits[s].sector_ptrs[0], splits[s].sector_ptrs[1]);
+                }
+            }
+            
+            float lowest_z = 0;
+            bool got_lowest_z = false;
+            for(size_t sp = 1; sp < splits.size(); ++sp) {
+                for(size_t se = 0; se < 2; ++se) {
+                    if(
+                        splits[sp].sector_ptrs[se] &&
+                        (
+                            splits[sp].sector_ptrs[se]->z < lowest_z ||
+                            !got_lowest_z
+                        )
+                    ) {
+                        lowest_z = splits[sp].sector_ptrs[se]->z;
+                        got_lowest_z = true;
+                    }
+                }
+            }
+            
+            for(size_t s = 1; s < splits.size(); ++s) {
+                if(!splits[s].sector_ptrs[0]) continue;
+                draw_cross_section_sector(
+                    splits[s - 1].ur, splits[s].ur, proportion,
+                    lowest_z, splits[s].sector_ptrs[0]
+                );
+            }
+            
+            float highest_z =
+                lowest_z + cross_section_window_end.y / proportion;
+                
+            if(show_cross_section_grid) {
+                for(float z = lowest_z; z <= highest_z; z += 50) {
+                    float line_y =
+                        cross_section_window_end.y - 8 -
+                        ((z - lowest_z) * proportion);
+                    al_draw_line(
+                        cross_section_window_start.x, line_y,
+                        cross_section_z_window_start.x + 6, line_y,
+                        al_map_rgb(255, 255, 255), 1
+                    );
+                    
+                    draw_scaled_text(
+                        font_builtin, al_map_rgb(255, 255, 255),
+                        (int) (cross_section_z_window_start.x + 8),
+                        (int) line_y, 1, 1,
+                        ALLEGRO_ALIGN_LEFT, 1, i2s(z)
+                    );
+                }
+            }
+            
+        } else {
+        
+            draw_scaled_text(
+                font_builtin, al_map_rgb(255, 255, 255),
+                (cross_section_window_start.x + cross_section_window_end.x) *
+                0.5,
+                (cross_section_window_start.y + cross_section_window_end.y) *
+                0.5,
+                1, 1, ALLEGRO_ALIGN_CENTER, 1,
+                "Please cross\nsome edges."
+            );
+            
+        }
+        
+        float cursor_segment_ratio = 0;
+        point cursor_line_point =
+            get_closest_point_in_line(
+                cross_section_points[0], cross_section_points[1],
+                point(mouse_cursor_x, mouse_cursor_y),
+                &cursor_segment_ratio
+            );
+        if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {
+            al_draw_line(
+                cross_section_window_start.x +
+                (cross_section_window_end.x - cross_section_window_start.x) *
+                cursor_segment_ratio,
+                cross_section_window_start.y,
+                cross_section_window_start.x +
+                (cross_section_window_end.x - cross_section_window_start.x) *
+                cursor_segment_ratio,
+                cross_section_window_end.y,
+                al_map_rgba(255, 255, 255, 128), 1
+            );
+        }
+        
+        float cross_section_x2 =
+            show_cross_section_grid ? cross_section_z_window_end.x :
+            cross_section_window_end.x;
+        al_draw_line(
+            cross_section_window_start.x, cross_section_window_end.y + 1,
+            cross_section_x2 + 2, cross_section_window_end.y + 1,
+            al_map_rgb(160, 96, 96), 2
+        );
+        al_draw_line(
+            cross_section_x2 + 1, cross_section_window_start.y,
+            cross_section_x2 + 1, cross_section_window_end.y + 2,
+            al_map_rgb(160, 96, 96), 2
+        );
+    }
+    
+    
     fade_mgr.draw();
     
     al_flip_display();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sector on the cross-section view.
+ * *_ratio:    Where the sector starts/ends on the graph ([0, 1]).
+ * proportion: Ratio of how much to resize the heights.
+ * lowest_z:   What z coordinate represents the bottom of the graph.
+ * sector_ptr: Pointer to the sector to draw.
+ */
+void area_editor::draw_cross_section_sector(
+    const float start_ratio, const float end_ratio, const float proportion,
+    const float lowest_z, sector* sector_ptr
+) {
+    float rectangle_x1 =
+        cross_section_window_start.x +
+        (cross_section_window_end.x - cross_section_window_start.x) *
+        start_ratio;
+    float rectangle_x2 =
+        cross_section_window_start.x +
+        (cross_section_window_end.x - cross_section_window_start.x) *
+        end_ratio;
+    float rectangle_y =
+        cross_section_window_end.y - 8 -
+        ((sector_ptr->z - lowest_z) * proportion);
+        
+    al_draw_filled_rectangle(
+        rectangle_x1, rectangle_y,
+        rectangle_x2 + 1, cross_section_window_end.y + 1,
+        al_map_rgb(0, 64, 0)
+    );
+    al_draw_line(
+        rectangle_x1 + 0.5, rectangle_y,
+        rectangle_x1 + 0.5, cross_section_window_end.y,
+        al_map_rgb(192, 192, 192), 1
+    );
+    al_draw_line(
+        rectangle_x2 + 0.5, rectangle_y,
+        rectangle_x2 + 0.5, cross_section_window_end.y,
+        al_map_rgb(192, 192, 192), 1
+    );
+    al_draw_line(
+        rectangle_x1, rectangle_y + 0.5,
+        rectangle_x2, rectangle_y + 0.5,
+        al_map_rgb(192, 192, 192), 1
+    );
+    
 }

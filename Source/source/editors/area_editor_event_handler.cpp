@@ -142,6 +142,14 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             path_preview_timeout.start(false);
         }
         
+        //Move cross-section points.
+        if(moving_cross_section_point != -1) {
+            cross_section_points[moving_cross_section_point].x =
+                snap_to_grid(mouse_cursor_x);
+            cross_section_points[moving_cross_section_point].y =
+                snap_to_grid(mouse_cursor_y);
+        }
+        
         
         if(ev.mouse.dz != 0 && !is_mouse_in_gui(ev.mouse.x, ev.mouse.y)) {
             //Zoom.
@@ -674,6 +682,22 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             shadow_to_gui();
             made_changes = true;
             
+        } else if(mode == EDITOR_MODE_REVIEW && show_cross_section) {
+            moving_cross_section_point = -1;
+            for(unsigned char p = 0; p < 2; ++p) {
+                if(
+                    bbox_check(
+                        cross_section_points[p].x,
+                        cross_section_points[p].y,
+                        mouse_cursor_x, mouse_cursor_y,
+                        CROSS_SECTION_POINT_RADIUS / cam_zoom
+                    )
+                ) {
+                    moving_cross_section_point = p;
+                    break;
+                }
+            }
+            
         }
         
         
@@ -759,6 +783,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         }
         
         moving_path_preview_checkpoint = -1;
+        moving_cross_section_point = -1;
         
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
