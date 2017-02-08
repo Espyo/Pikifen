@@ -34,7 +34,7 @@ public:
     
     ship(float x, float y, ship_type* type, float angle, const string &vars);
     
-    virtual void draw();
+    virtual void draw(sprite_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef SHIP_INCLUDED

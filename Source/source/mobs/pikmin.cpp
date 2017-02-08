@@ -220,7 +220,7 @@ void pikmin::tick_class_specifics() {
 /* ----------------------------------------------------------------------------
  * Draws a Pikmin, including its leaf/bud/flower, idle glow, etc.
  */
-void pikmin::draw() {
+void pikmin::draw(sprite_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     
@@ -231,41 +231,28 @@ void pikmin::draw() {
     get_sprite_center(this, s_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
-    ALLEGRO_COLOR tint = get_status_tint_color();
-    float brightness = get_sprite_brightness(this) / 255.0;
-    tint.r *= brightness;
-    tint.g *= brightness;
-    tint.b *= brightness;
-    
-    draw_sprite(
-        s_ptr->bitmap,
-        draw_x, draw_y,
-        draw_w, draw_h,
-        angle,
-        tint
-    );
-    
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
         fsm.cur_state->id == PIKMIN_STATE_BURIED;
         
+    sprite_effect_manager effects;
+    add_brightness_sprite_effect(&effects);
+    add_status_sprite_effects(&effects);
+    
     if(is_idle) {
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
-        al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
-        );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        draw_sprite(
-            s_ptr->bitmap,
-            draw_x, draw_y,
-            draw_w, draw_h,
-            angle,
-            map_gray(get_sprite_brightness(this))
-        );
-        al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
-        );
+        sprite_effect idle_effect;
+        sprite_effect_props idle_effect_props;
+        idle_effect_props.glow_color = pik_type->main_color;
+        idle_effect.add_keyframe(0, idle_effect_props);
+        effects.add_effect(idle_effect);
     }
+    
+    draw_sprite_with_effects(
+        s_ptr->bitmap,
+        draw_x, draw_y,
+        draw_w, draw_h,
+        angle, &effects
+    );
     
     float w_mult = draw_w / s_ptr->game_w;
     float h_mult = draw_h / s_ptr->game_h;
@@ -274,12 +261,12 @@ void pikmin::draw() {
         float top_x = s_ptr->top_x;
         float top_y = s_ptr->top_y;
         rotate_point(s_ptr->top_x, s_ptr->top_y, angle, &top_x, &top_y);
-        draw_sprite(
+        draw_sprite_with_effects(
             pik_type->bmp_top[maturity],
             x + top_x, y + top_y,
             s_ptr->top_w, s_ptr->top_h,
             s_ptr->top_angle + angle,
-            tint
+            &effects
         );
     }
     
@@ -289,12 +276,7 @@ void pikmin::draw() {
             x, y,
             30 * w_mult, 30 * h_mult,
             area_time_passed * IDLE_GLOW_SPIN_SPEED,
-            al_map_rgba_f(
-                type->main_color.r * get_sprite_brightness(this) / 255,
-                type->main_color.g * get_sprite_brightness(this) / 255,
-                type->main_color.b * get_sprite_brightness(this) / 255,
-                1
-            )
+            type->main_color
         );
     }
     

@@ -880,3 +880,165 @@ void fade_manager::draw() {
         );
     }
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a sprite effect properties struct.
+ */
+sprite_effect_props::sprite_effect_props() :
+    translation(0, 0),
+    rotation(0),
+    scale(1, 1),
+    tint_color(al_map_rgb(255, 255, 255)),
+    glow_color(al_map_rgb(0, 0, 0)) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a sprite effect struct.
+ */
+sprite_effect::sprite_effect() :
+    cur_time(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a keyframe to the effect.
+ * i.e. What the properties should be at a given point in time.
+ */
+void sprite_effect::add_keyframe(const float time, sprite_effect_props props) {
+    keyframes[time] = props;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the current life time on the effect.
+ */
+void sprite_effect::set_cur_time(const float cur_time) {
+    this->cur_time = cur_time;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns what the properties should be at the specified time.
+ * These values are interpolated using the keyframes.
+ */
+sprite_effect_props sprite_effect::get_final_properties() {
+    if(keyframes.empty()) {
+        log_error("ENGINE WARNING: Sprite effect has no keyframes!");
+        return sprite_effect_props();
+        
+    } else if(keyframes.size() == 1) {
+        return keyframes[0];
+        
+    } else {
+        //Find the previous and next keyframes.
+        float prev_time = 0;
+        float next_time = 0;
+        sprite_effect_props* prev_keyframe = &keyframes[0];
+        sprite_effect_props* next_keyframe = NULL;
+        for(auto k = keyframes.begin(); k != keyframes.end(); ++k) {
+            if(k->first > cur_time) {
+                next_keyframe = &k->second;
+                next_time = k->first;
+                break;
+            } else {
+                prev_keyframe = &k->second;
+                prev_time = k->first;
+            }
+        }
+        if(!next_keyframe) next_keyframe = prev_keyframe;
+        
+        sprite_effect_props final_props;
+        final_props.translation.x =
+            interpolate_number(
+                cur_time, prev_time, next_time,
+                prev_keyframe->translation.x, next_keyframe->translation.x
+            );
+        final_props.translation.y =
+            interpolate_number(
+                cur_time, prev_time, next_time,
+                prev_keyframe->translation.y, next_keyframe->translation.y
+            );
+        final_props.rotation =
+            interpolate_number(
+                cur_time, prev_time, next_time,
+                prev_keyframe->rotation, next_keyframe->rotation
+            );
+        final_props.scale.x =
+            interpolate_number(
+                cur_time, prev_time, next_time,
+                prev_keyframe->scale.x, next_keyframe->scale.x
+            );
+        final_props.scale.y =
+            interpolate_number(
+                cur_time, prev_time, next_time,
+                prev_keyframe->scale.y, next_keyframe->scale.y
+            );
+        final_props.tint_color =
+            interpolate_color(
+                cur_time, prev_time, next_time,
+                prev_keyframe->tint_color, next_keyframe->tint_color
+            );
+        final_props.glow_color =
+            interpolate_color(
+                cur_time, prev_time, next_time,
+                prev_keyframe->glow_color, next_keyframe->glow_color
+            );
+            
+        return final_props;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds an effect to the manager.
+ */
+void sprite_effect_manager::add_effect(sprite_effect effect) {
+    effects.push_back(effect);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the final sprite effect properties, at the current time.
+ * This is a combination of all current effects.
+ */
+sprite_effect_props sprite_effect_manager::get_final_properties() {
+    sprite_effect_props final_props;
+    ALLEGRO_COLOR glow_color_sum;
+    glow_color_sum = al_map_rgba(0, 0, 0, 0);
+    size_t n_glow_colors = 0;
+    
+    for(size_t e = 0; e < effects.size(); ++e) {
+        sprite_effect_props props = effects[e].get_final_properties();
+        
+        final_props.translation = final_props.translation + props.translation;
+        final_props.rotation += props.rotation;
+        final_props.scale = final_props.scale * props.scale;
+        final_props.tint_color.r *= props.tint_color.r;
+        final_props.tint_color.g *= props.tint_color.g;
+        final_props.tint_color.b *= props.tint_color.b;
+        final_props.tint_color.a *= props.tint_color.a;
+        
+        if(props.glow_color.a > 0) {
+            glow_color_sum.r += props.glow_color.r;
+            glow_color_sum.g += props.glow_color.g;
+            glow_color_sum.b += props.glow_color.b;
+            glow_color_sum.a += props.glow_color.a;
+            n_glow_colors++;
+        }
+        
+    }
+    
+    if(n_glow_colors > 0) {
+        final_props.glow_color.r = glow_color_sum.r / n_glow_colors;
+        final_props.glow_color.g = glow_color_sum.g / n_glow_colors;
+        final_props.glow_color.b = glow_color_sum.b / n_glow_colors;
+        final_props.glow_color.a = glow_color_sum.a / n_glow_colors;
+    }
+    
+    return final_props;
+    
+}

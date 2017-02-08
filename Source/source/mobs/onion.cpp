@@ -137,7 +137,7 @@ void onion::tick_class_specifics() {
 /* ----------------------------------------------------------------------------
  * Draws an Onion.
  */
-void onion::draw() {
+void onion::draw(sprite_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     
     if(!s_ptr) return;
@@ -147,16 +147,19 @@ void onion::draw() {
     get_sprite_center(this, s_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
-    draw_sprite(
+    sprite_effect_manager effects;
+    add_brightness_sprite_effect(&effects);
+    
+    sprite_effect seethrough_effect;
+    sprite_effect_props seethrough_effect_props;
+    seethrough_effect_props.tint_color = al_map_rgba(255, 255, 255, seethrough);
+    seethrough_effect.add_keyframe(0, seethrough_effect_props);
+    effects.add_effect(seethrough_effect);
+    
+    draw_sprite_with_effects(
         s_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
-        angle,
-        al_map_rgba(
-            get_sprite_brightness(this),
-            get_sprite_brightness(this),
-            get_sprite_brightness(this),
-            seethrough
-        )
+        angle, &effects
     );
 }

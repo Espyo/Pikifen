@@ -2269,7 +2269,70 @@ void draw_sprite(
         (w == -1) ? y_scale : x_scale,
         (h == -1) ? x_scale : y_scale,
         angle,
-        0);
+        0
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sprite, applying sprite effects.
+ * bmp:      The bitmap.
+ * c*:       Center coordinates.
+ * w/h:      Final width and height.
+ ** Make this -1 on one of them to keep the aspect ratio from the other.
+ * angle:    Angle to rotate the sprite by.
+ * effects:  Sprite effect manager with the effects.
+ */
+void draw_sprite_with_effects(
+    ALLEGRO_BITMAP* bmp, const float cx, const float cy,
+    const float w, const float h, const float angle,
+    sprite_effect_manager* effects
+) {
+
+    if(!bmp) {
+        bmp = bmp_error;
+    }
+    
+    sprite_effect_props final_props = effects->get_final_properties();
+    
+    float bmp_w = al_get_bitmap_width(bmp);
+    float bmp_h = al_get_bitmap_height(bmp);
+    float x_scale = (w / bmp_w) * final_props.scale.x;
+    float y_scale = (h / bmp_h) * final_props.scale.y;
+    float final_x = cx + final_props.translation.x;
+    float final_y = cy + final_props.translation.y;
+    float final_angle = angle + final_props.rotation;
+    al_draw_tinted_scaled_rotated_bitmap(
+        bmp,
+        final_props.tint_color,
+        bmp_w / 2, bmp_h / 2,
+        final_x, final_y,
+        (w == -1) ? y_scale : x_scale,
+        (h == -1) ? x_scale : y_scale,
+        final_angle,
+        0
+    );
+    
+    if(final_props.glow_color.a > 0) {
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(
+            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+        );
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
+        al_draw_tinted_scaled_rotated_bitmap(
+            bmp,
+            final_props.glow_color,
+            bmp_w / 2, bmp_h / 2,
+            final_x, final_y,
+            (w == -1) ? y_scale : x_scale,
+            (h == -1) ? x_scale : y_scale,
+            final_angle,
+            0
+        );
+        al_set_separate_blender(
+            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+        );
+    }
 }
 
 
@@ -2315,6 +2378,23 @@ ALLEGRO_BITMAP* draw_to_bitmap() {
     do_game_drawing(bmp, &t);
     
     return bmp;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a status effect's bitmap.
+ */
+void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
+    float status_bmp_scale;
+    ALLEGRO_BITMAP* status_bmp = m->get_status_bitmap(&status_bmp_scale);
+    if(status_bmp) {
+        draw_sprite_with_effects(
+            status_bmp,
+            m->x, m->y,
+            m->type->radius * 2 * status_bmp_scale, -1,
+            0, effects
+        );
+    }
 }
 
 

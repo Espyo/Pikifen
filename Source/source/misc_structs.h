@@ -331,4 +331,55 @@ public:
     void draw();
 };
 
+
+
+/* ----------------------------------------------------------------------------
+ * Holds information about how a sprite should be resized, colored, etc.,
+ * over time, right before it is drawn to the screen.
+ */
+struct sprite_effect_props {
+    point translation;
+    float rotation;
+    point scale;
+    ALLEGRO_COLOR tint_color;
+    ALLEGRO_COLOR glow_color;
+    
+    sprite_effect_props();
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * A full sprite effect. It is made of several properties, and has the
+ * information necessary to interpolate the properties' values over time.
+ * If an effect only has one keyframe, no interpolations are made.
+ */
+struct sprite_effect {
+private:
+    map<float, sprite_effect_props> keyframes;
+    float cur_time;
+    
+public:
+    void add_keyframe(const float time, sprite_effect_props props);
+    void set_cur_time(const float cur_time);
+    sprite_effect_props get_final_properties();
+    
+    sprite_effect();
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Holds several sprite effect structs.
+ */
+struct sprite_effect_manager {
+private:
+    vector<sprite_effect> effects;
+    
+public:
+    void add_effect(sprite_effect e);
+    sprite_effect_props get_final_properties();
+};
+
+
 #endif //ifndef MISC_STRUCTS_INCLUDED

@@ -35,18 +35,18 @@ ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws a ship.
  */
-void ship::draw() {
+void ship::draw(sprite_effect_manager* effect_manager) {
+
     mob::draw();
     
-    unsigned char brightness = get_sprite_brightness(this);
     al_draw_circle(
         beam_final_x,
         beam_final_y,
         shi_type->beam_radius,
         al_map_rgb(
-            ship_beam_ring_color[0] * 255 / brightness,
-            ship_beam_ring_color[1] * 255 / brightness,
-            ship_beam_ring_color[2] * 255 / brightness
+            ship_beam_ring_color[0],
+            ship_beam_ring_color[1],
+            ship_beam_ring_color[2]
         ),
         2
     );

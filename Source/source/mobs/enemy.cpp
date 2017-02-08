@@ -38,7 +38,7 @@ enemy::enemy(
 /* ----------------------------------------------------------------------------
  * Draws an enemy, tinting it if necessary (for Onion delivery).
  */
-void enemy::draw() {
+void enemy::draw(sprite_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
@@ -47,73 +47,27 @@ void enemy::draw() {
     get_sprite_center(this, s_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
-    float radius_scale = 1.0f;
-    
-    bool being_delivered = false;
-    ALLEGRO_COLOR extra_color;
+    sprite_effect_manager effects;
     
     if(fsm.cur_state->id == ENEMY_EXTRA_STATE_BEING_DELIVERED) {
-        //If it's being delivered, do some changes to the scale and coloring.
-        being_delivered = true;
-        
-        if(script_timer.get_ratio_left() >= 0.5) {
-            //First half of the sucking in process = interpolated coloring.
-            extra_color =
-                interpolate_color(
-                    script_timer.get_ratio_left(),
-                    0.5, 1.0,
-                    ((onion*) carrying_target)->oni_type->pik_type->main_color,
-                    al_map_rgb(0, 0, 0)
-                );
-        } else {
-            //Second half of the sucking in process = interpolated scaling.
-            extra_color =
-                ((onion*) carrying_target)->oni_type->pik_type->main_color;
-            radius_scale = (script_timer.get_ratio_left() * 2.0);
-        }
+        add_delivery_sprite_effect(
+            &effects, script_timer.get_ratio_left(),
+            ((onion*) carrying_target)->oni_type->pik_type->main_color
+        );
     }
     
-    ALLEGRO_COLOR tint = get_status_tint_color();
-    float brightness = get_sprite_brightness(this) / 255.0;
-    tint.r *= brightness;
-    tint.g *= brightness;
-    tint.b *= brightness;
+    add_status_sprite_effects(&effects);
+    add_brightness_sprite_effect(&effects);
     
-    draw_sprite(
+    draw_sprite_with_effects(
         s_ptr->bitmap,
         draw_x, draw_y,
-        draw_w * radius_scale,
-        draw_h * radius_scale,
-        angle,
-        tint
+        draw_w, draw_h,
+        angle, &effects
     );
     
-    if(being_delivered) {
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
-        al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
-        );
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
-        
-        draw_sprite(
-            s_ptr->bitmap,
-            draw_x, draw_y,
-            draw_w * radius_scale,
-            draw_h * radius_scale,
-            angle,
-            extra_color
-        );
-        
-        al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
-        );
-    }
+    draw_status_effect_bmp(this, &effects);
     
-    float status_bmp_scale;
-    ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
-    if(status_bmp) {
-        draw_sprite(status_bmp, x, y, type->radius * 2 * status_bmp_scale, -1);
-    }
 }
 
 

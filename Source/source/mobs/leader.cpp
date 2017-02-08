@@ -149,8 +149,10 @@ void leader::swap_held_pikmin(mob* new_pik) {
 /* ----------------------------------------------------------------------------
  * Draw a leader mob.
  */
-void leader::draw() {
-    mob::draw();
+void leader::draw(sprite_effect_manager* effect_manager) {
+    sprite_effect_manager effects;
+    
+    mob::draw(&effects);
     
     sprite* s_ptr = anim.get_cur_sprite();
     float draw_x, draw_y;
@@ -168,11 +170,7 @@ void leader::draw() {
         }
     }
     
-    float status_bmp_scale;
-    ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
-    if(status_bmp) {
-        draw_sprite(status_bmp, x, y, type->radius * 2 * status_bmp_scale, -1);
-    }
+    draw_status_effect_bmp(this, &effects);
 }
 
 

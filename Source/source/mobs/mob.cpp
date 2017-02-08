@@ -1043,13 +1043,10 @@ void mob::delete_old_status_effects() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the average tint color for all non-white-tint status effects.
+ * Adds the sprite effects caused by the status effects to the manager.
  */
-ALLEGRO_COLOR mob::get_status_tint_color() {
-    size_t n_tints = 0;
-    ALLEGRO_COLOR ret = al_map_rgba(0, 0, 0, 0);
-    size_t n_statuses = this->statuses.size();
-    for(size_t s = 0; s < n_statuses; ++s) {
+void mob::add_status_sprite_effects(sprite_effect_manager* manager) {
+    for(size_t s = 0; s < statuses.size(); ++s) {
         status_type* t = this->statuses[s].type;
         if(
             t->tint.r == 1.0f &&
@@ -1060,21 +1057,12 @@ ALLEGRO_COLOR mob::get_status_tint_color() {
             continue;
         }
         
-        ret.r += t->tint.r;
-        ret.g += t->tint.g;
-        ret.b += t->tint.b;
-        ret.a += t->tint.a;
-        n_tints++;
-    }
-    
-    if(n_tints == 0) {
-        return al_map_rgb(255, 255, 255);
-    } else {
-        ret.r /= n_statuses;
-        ret.g /= n_statuses;
-        ret.b /= n_statuses;
-        ret.a /= n_statuses;
-        return ret;
+        sprite_effect se;
+        sprite_effect_props props;
+        props.tint_color = t->tint;
+        
+        se.add_keyframe(0, props);
+        manager->add_effect(se);
     }
 }
 
@@ -1846,32 +1834,40 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
 
 /* ----------------------------------------------------------------------------
  * Draws the mob. This can be overwritten by child classes.
+ * effect_manager: Use this effect manager.
+   * If NULL, an effect manager is created inside exclusively for the function.
  */
-void mob::draw() {
+void mob::draw(sprite_effect_manager* effect_manager) {
 
     sprite* s_ptr = anim.get_cur_sprite();
     
     if(!s_ptr) return;
+    
+    bool internal_effect_manager = false;
+    
+    if(!effect_manager) {
+        effect_manager = new sprite_effect_manager();
+        internal_effect_manager = true;
+    }
     
     float draw_x, draw_y;
     float draw_w, draw_h;
     get_sprite_center(this, s_ptr, &draw_x, &draw_y);
     get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
     
-    ALLEGRO_COLOR tint = get_status_tint_color();
-    float brightness = get_sprite_brightness(this) / 255.0;
-    tint.r *= brightness;
-    tint.g *= brightness;
-    tint.b *= brightness;
+    add_status_sprite_effects(effect_manager);
+    add_brightness_sprite_effect(effect_manager);
     
-    draw_sprite(
+    draw_sprite_with_effects(
         s_ptr->bitmap,
         draw_x, draw_y,
         draw_w, draw_h,
-        angle,
-        tint
+        angle, effect_manager
     );
     
+    if(internal_effect_manager) {
+        delete effect_manager;
+    }
 }
 
 /* ----------------------------------------------------------------------------
@@ -1908,8 +1904,44 @@ void mob::get_sprite_dimensions(
 }
 
 /* ----------------------------------------------------------------------------
- * Returns what a sprite's lighting should be, for normal mob drawing routines.
+ * Adds a sprite effect to the manager, responsible for shading the
+ * mob when it is in a shaded sector.
  */
-float mob::get_sprite_brightness(mob* m) {
-    return m->center_sector->brightness;
+void mob::add_brightness_sprite_effect(sprite_effect_manager* manager) {
+    if(center_sector->brightness == 255) return;
+    
+    sprite_effect se;
+    sprite_effect_props props;
+    
+    props.tint_color = map_gray(center_sector->brightness);
+    
+    se.add_keyframe(0, props);
+    manager->add_effect(se);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a sprite effect to the manager, responsible for color
+ * and scaling the mob when it is being delivered to an Onion.
+ */
+void mob::add_delivery_sprite_effect(
+    sprite_effect_manager* manager, const float delivery_time_ratio_left,
+    const ALLEGRO_COLOR &onion_color
+) {
+
+    sprite_effect se;
+    sprite_effect_props props_half;
+    sprite_effect_props props_end;
+    
+    se.add_keyframe(0, sprite_effect_props());
+    
+    props_half.glow_color = onion_color;
+    se.add_keyframe(0.5, props_half);
+    
+    props_end.glow_color = onion_color;
+    props_end.scale = point(0, 0);
+    se.add_keyframe(1.0, props_end);
+    
+    se.set_cur_time(1.0f - delivery_time_ratio_left);
+    manager->add_effect(se);
 }

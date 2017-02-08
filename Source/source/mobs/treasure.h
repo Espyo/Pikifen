@@ -54,7 +54,7 @@ public:
         const float x, const float y, treasure_type* type,
         const float angle, const string &vars
     );
-    void draw();
+    void draw(sprite_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef TREASURE_INCLUDED

@@ -30,7 +30,7 @@ public:
     
     nectar(float x, float y, const string &vars);
     
-    virtual void draw();
+    virtual void draw(sprite_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef NECTAR_INCLUDED

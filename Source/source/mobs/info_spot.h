@@ -38,7 +38,7 @@ public:
     info_spot(
         const float x, const float y, const float angle, const string &vars
     );
-    virtual void draw();
+    virtual void draw(sprite_effect_manager* effect_manager = NULL);
 };
 
 #endif //ifndef INFO_SPOT_INCLUDED

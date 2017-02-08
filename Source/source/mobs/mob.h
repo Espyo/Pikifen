@@ -333,7 +333,7 @@ public:
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
-    ALLEGRO_COLOR get_status_tint_color();
+    void add_status_sprite_effects(sprite_effect_manager* manager);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
     //If the mob is currently "disabled", these flags specify behavior.
     unsigned char disabled_state_flags;
@@ -345,7 +345,7 @@ public:
     virtual void change_maturity_amount_from_status(const int amount);
     
     void tick();
-    virtual void draw();
+    virtual void draw(sprite_effect_manager* effect_manager = NULL);
     
     static void attack(
         mob* m1, mob* m2, const bool m1_is_pikmin, const float damage,
@@ -360,7 +360,11 @@ public:
     void get_sprite_dimensions(
         mob* m, sprite* s, float* w, float* h, float* scale = NULL
     );
-    float get_sprite_brightness(mob* m);
+    void add_brightness_sprite_effect(sprite_effect_manager* manager);
+    void add_delivery_sprite_effect(
+        sprite_effect_manager* manager, const float delivery_time_ratio_left,
+        const ALLEGRO_COLOR &onion_color
+    );
     
 };
 

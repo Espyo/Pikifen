@@ -28,13 +28,17 @@ nectar::nectar(float x, float y, const string &vars) :
 /* ----------------------------------------------------------------------------
  * Draws the nectar mob.
  */
-void nectar::draw() {
+void nectar::draw(sprite_effect_manager* effect_manager) {
     float radius =
         type->radius * (amount_left + nectar_amount) / (nectar_amount * 2) * 2;
-    draw_sprite(
+        
+    sprite_effect_manager effects;
+    add_brightness_sprite_effect(&effects);
+    
+    draw_sprite_with_effects(
         bmp_nectar,
         x, y,
-        radius * 2, radius * 2, 0,
-        map_gray(get_sprite_brightness(this))
+        radius * 2, radius * 2,
+        0, &effects
     );
 }

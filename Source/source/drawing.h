@@ -95,6 +95,12 @@ void draw_sprite(
     const float w, const float h, const float angle = 0,
     const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
 );
+void draw_sprite_with_effects(
+    ALLEGRO_BITMAP* bmp, const float cx, const float cy,
+    const float w, const float h, const float angle,
+    sprite_effect_manager* effects
+);
+void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects);
 ALLEGRO_BITMAP* draw_to_bitmap();
 void draw_text_lines(
     const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c,

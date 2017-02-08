@@ -40,11 +40,14 @@ info_spot::info_spot(
 /* ----------------------------------------------------------------------------
  * Draw the info spot.
  */
-void info_spot::draw() {
-    draw_sprite(
+void info_spot::draw(sprite_effect_manager* effect_manager) {
+    sprite_effect_manager effects;
+    add_brightness_sprite_effect(&effects);
+    
+    draw_sprite_with_effects(
         bmp_info_spot,
         x, y,
         type->radius * 2, type->radius * 2,
-        0, map_gray(get_sprite_brightness(this))
+        0, &effects
     );
 }

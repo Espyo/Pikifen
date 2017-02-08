@@ -38,7 +38,7 @@ public:
         const float x, const float y, enemy_type* type,
         const float angle, const string &vars
     );
-    void draw();
+    void draw(sprite_effect_manager* effect_manager = NULL);
     
     virtual bool can_receive_status(status_type* s);
     
