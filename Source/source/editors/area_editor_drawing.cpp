@@ -439,20 +439,20 @@ void area_editor::do_drawing() {
                     string letter = (c == 0 ? "A" : "B");
                     
                     al_draw_filled_rectangle(
-                        path_preview_checkpoints_x[c] -
+                        path_preview_checkpoints[c].x -
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
-                        path_preview_checkpoints_y[c] -
+                        path_preview_checkpoints[c].y -
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
-                        path_preview_checkpoints_x[c] +
+                        path_preview_checkpoints[c].x +
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
-                        path_preview_checkpoints_y[c] +
+                        path_preview_checkpoints[c].y +
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
                         al_map_rgb(255, 255, 32)
                     );
                     draw_scaled_text(
                         font_builtin, al_map_rgb(0, 64, 64),
-                        path_preview_checkpoints_x[c],
-                        path_preview_checkpoints_y[c],
+                        path_preview_checkpoints[c].x,
+                        path_preview_checkpoints[c].y,
                         POINT_LETTER_TEXT_SCALE / cam_zoom,
                         POINT_LETTER_TEXT_SCALE / cam_zoom,
                         ALLEGRO_ALIGN_CENTER, 1,
@@ -463,16 +463,16 @@ void area_editor::do_drawing() {
                 //Draw the lines of the path.
                 if(path_preview.empty()) {
                     al_draw_line(
-                        path_preview_checkpoints_x[0],
-                        path_preview_checkpoints_y[0],
-                        path_preview_checkpoints_x[1],
-                        path_preview_checkpoints_y[1],
+                        path_preview_checkpoints[0].x,
+                        path_preview_checkpoints[0].y,
+                        path_preview_checkpoints[1].x,
+                        path_preview_checkpoints[1].y,
                         al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                 } else {
                     al_draw_line(
-                        path_preview_checkpoints_x[0],
-                        path_preview_checkpoints_y[0],
+                        path_preview_checkpoints[0].x,
+                        path_preview_checkpoints[0].y,
                         path_preview[0]->x,
                         path_preview[0]->y,
                         al_map_rgb(255, 0, 0), 3.0 / cam_zoom
@@ -490,8 +490,8 @@ void area_editor::do_drawing() {
                     al_draw_line(
                         path_preview.back()->x,
                         path_preview.back()->y,
-                        path_preview_checkpoints_x[1],
-                        path_preview_checkpoints_y[1],
+                        path_preview_checkpoints[1].x,
+                        path_preview_checkpoints[1].y,
                         al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                 }

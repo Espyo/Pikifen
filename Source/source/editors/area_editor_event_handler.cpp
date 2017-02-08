@@ -135,9 +135,9 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         //Move path checkpoints.
         if(moving_path_preview_checkpoint != -1) {
-            path_preview_checkpoints_x[moving_path_preview_checkpoint] =
+            path_preview_checkpoints[moving_path_preview_checkpoint].x =
                 snap_to_grid(mouse_cursor_x);
-            path_preview_checkpoints_y[moving_path_preview_checkpoint] =
+            path_preview_checkpoints[moving_path_preview_checkpoint].y =
                 snap_to_grid(mouse_cursor_y);
             path_preview_timeout.start(false);
         }
@@ -369,8 +369,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 for(unsigned char c = 0; c < 2; ++c) {
                     if(
                         bbox_check(
-                            path_preview_checkpoints_x[c],
-                            path_preview_checkpoints_y[c],
+                            path_preview_checkpoints[c].x,
+                            path_preview_checkpoints[c].y,
                             mouse_cursor_x, mouse_cursor_y,
                             PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
                         )

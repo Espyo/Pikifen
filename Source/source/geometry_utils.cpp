@@ -14,6 +14,75 @@
 
 
 /* ----------------------------------------------------------------------------
+ * Constructs a point, given its coordinates.
+ */
+point::point(const float x, const float y) :
+    x(x),
+    y(y) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds the coordinates of two points.
+ */
+const point point::operator +(const point &p) const {
+    return point(x + p.x, y + p.y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Subtracts the coordinates of two points.
+ */
+const point point::operator -(const point &p) const {
+    return point(x - p.x, y - p.y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Multiplies the coordinates of two points.
+ */
+const point point::operator *(const point &p) const {
+    return point(x * p.x, y * p.y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds the coordinates of another point to this one's.
+ */
+point point::operator +=(const point &p) {
+    x += p.x;
+    y += p.y;
+    return point(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Compares if two points are the same.
+ */
+const bool point::operator ==(const point &p) const {
+    return x == p.x && y == p.y;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Compares if two points are different.
+ */
+const bool point::operator !=(const point &p) const {
+    return x != p.x || y != p.y;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Multiplies the coordinates by a number.
+ */
+const point point::operator *(const float m) const {
+    return point(x * m, y * m);
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Returns the vector coordinates of an angle.
  * angle:     The angle.
  * magnitude: Its magnitude.
@@ -91,7 +160,7 @@ bool circle_intersects_line(
 
 /* ----------------------------------------------------------------------------
  * Returns the closest point in a line to a given point.
- * l1, l2:        Points of the line.
+    * l1, l2:        Points of the line.
  * p:             Reference point.
  * segment_ratio: If not NULL, the ratio from l1 to l2 is returned here.
    * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
@@ -102,8 +171,8 @@ point get_closest_point_in_line(
 
     //Code by http://stackoverflow.com/a/3122532
     
-    point l1_to_p(p.x - l1.x, p.y - l1.y);
-    point l1_to_l2(l2.x - l1.x, l2.y - l1.y);
+    point l1_to_p = p - l1;
+    point l1_to_l2 = l2 - l1;
     
     float l1_to_l2_squared =
         l1_to_l2.x * l1_to_l2.x +

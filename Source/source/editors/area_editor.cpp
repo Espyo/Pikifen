@@ -139,10 +139,8 @@ area_editor::area_editor() :
     show_shadows(true),
     wum(NULL) {
     
-    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[1] = 0;
+    path_preview_checkpoints[0].x = -DEF_GRID_INTERVAL;
+    path_preview_checkpoints[1].x = DEF_GRID_INTERVAL;
     path_preview_timeout =
         timer(
             PATH_PREVIEW_TIMEOUT_DUR,
@@ -531,20 +529,20 @@ void area_editor::calculate_preview_path() {
     float d = 0;
     path_preview =
         get_path(
-            path_preview_checkpoints_x[0],
-            path_preview_checkpoints_y[0],
-            path_preview_checkpoints_x[1],
-            path_preview_checkpoints_y[1],
+            path_preview_checkpoints[0].x,
+            path_preview_checkpoints[0].y,
+            path_preview_checkpoints[1].x,
+            path_preview_checkpoints[1].y,
             NULL, NULL, &d
         );
         
     if(path_preview.empty() && d == 0) {
         d =
             dist(
-                path_preview_checkpoints_x[0],
-                path_preview_checkpoints_y[0],
-                path_preview_checkpoints_x[1],
-                path_preview_checkpoints_y[1]
+                path_preview_checkpoints[0].x,
+                path_preview_checkpoints[0].y,
+                path_preview_checkpoints[1].x,
+                path_preview_checkpoints[1].y
             ).to_float();
     }
     
@@ -702,10 +700,10 @@ void area_editor::clear_current_area() {
     show_cross_section_grid = false;
     show_path_preview = false;
     path_preview.clear();
-    path_preview_checkpoints_x[0] = -DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[0] = 0;
-    path_preview_checkpoints_x[1] = DEF_GRID_INTERVAL;
-    path_preview_checkpoints_y[1] = 0;
+    path_preview_checkpoints[0] = point(-DEF_GRID_INTERVAL, 0);
+    path_preview_checkpoints[1] = point(DEF_GRID_INTERVAL, 0);
+    cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
+    cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
     
     cur_area_data.clear();
     

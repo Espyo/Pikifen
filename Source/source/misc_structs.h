@@ -19,6 +19,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 
+#include "geometry_utils.h"
 #include "mobs/mob_type.h"
 
 class mob;
@@ -228,21 +229,6 @@ struct group_spot_info {
     void add(mob* m);
     void remove(mob* m);
 };
-
-
-
-/* ----------------------------------------------------------------------------
- * Simple 2D point.
- */
-struct point {
-    float x, y;
-    point(const float x = 0, const float y = 0) { this->x = x; this->y = y; }
-    bool operator !=(const point &p2) { return x != p2.x || y != p2.y; }
-    const point operator -(const point &p) {
-        return point(x - p.x, y - p.y);
-    }
-};
-
 
 
 /* ----------------------------------------------------------------------------

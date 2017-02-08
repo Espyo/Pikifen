@@ -95,7 +95,7 @@ animations{
 		loop_frame=0
 		frames{
 			buried{
-				duration=0.60
+				duration=0.20
 			}
 			idling{
 				duration=0.10

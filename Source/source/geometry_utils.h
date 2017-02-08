@@ -15,8 +15,24 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "misc_structs.h"
 #include "sector.h"
+
+/* ----------------------------------------------------------------------------
+ * Simple 2D point.
+ */
+struct point {
+    float x, y;
+    
+    point(const float x = 0, const float y = 0);
+    const point operator +(const point &p) const;
+    const point operator -(const point &p) const;
+    const point operator *(const point &p) const;
+    point operator +=(const point &p);
+    const bool operator ==(const point &p) const;
+    const bool operator !=(const point &p) const;
+    const point operator *(const float m) const;
+};
+
 
 void angle_to_coordinates(
     const float angle, const float magnitude, float* x_coord, float* y_coord

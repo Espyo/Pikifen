@@ -44,13 +44,13 @@ animations{
 		loop_frame=4
 		frames{
 			ducking{
-				duration=0.50
+				duration=0.20
 			}
 			idling{
 				duration=0.10
 			}
 			limbo{
-				duration=0.40
+				duration=0.10
 			}
 			half_limbo{
 				duration=0.10

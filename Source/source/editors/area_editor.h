@@ -20,9 +20,9 @@
 
 #include "editor.h"
 #include "../game_state.h"
+#include "../geometry_utils.h"
 #include "../LAFI/gui.h"
 #include "../LAFI/widget.h"
-#include "../misc_structs.h"
 #include "../sector.h"
 
 using namespace std;
@@ -170,8 +170,7 @@ private:
     vector<vertex*>              new_sector_vertexes;
     bool                         new_sector_valid_line;
     sector*                      on_sector;
-    float                        path_preview_checkpoints_x[2];
-    float                        path_preview_checkpoints_y[2];
+    point                        path_preview_checkpoints[2];
     vector<path_stop*>           path_preview;
     timer                        path_preview_timeout;
     bool                         shift_pressed;
