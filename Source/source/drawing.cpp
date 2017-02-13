@@ -692,18 +692,15 @@ void do_game_drawing(
             }
             
             size_t n_standby_pikmin = 0;
-            if(closest_group_member) {
+            if(cur_leader_ptr->group->cur_standby_type) {
                 for(
                     size_t m = 0; m < cur_leader_ptr->group->members.size();
                     ++m
                 ) {
                     mob* m_ptr = cur_leader_ptr->group->members[m];
                     if(
-                        (
-                            typeid(*m_ptr) == typeid(leader) &&
-                            typeid(*closest_group_member) == typeid(leader)
-                        ) ||
-                        (m_ptr->type == closest_group_member->type)
+                        m_ptr->subgroup_type_ptr ==
+                        cur_leader_ptr->group->cur_standby_type
                     ) {
                         n_standby_pikmin++;
                     }
@@ -723,6 +720,14 @@ void do_game_drawing(
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
                 sprite_w, sprite_h
             );
+            if(closest_group_member_distant) {
+                draw_sprite(
+                    bmp_pikmin_distant,
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
+                    sprite_w, sprite_h
+                );
+            }
             draw_sprite(
                 bmp_bubble,
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],

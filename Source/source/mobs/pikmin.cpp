@@ -42,6 +42,8 @@ pikmin::pikmin(
     if(s2b(get_var_value(vars, "buried", "0"))) {
         fsm.set_state(PIKMIN_STATE_BURIED);
     }
+    subgroup_type_ptr =
+        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
 }
 
 

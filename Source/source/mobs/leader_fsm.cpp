@@ -121,6 +121,8 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("whistling", LEADER_STATE_WHISTLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run_function(leader_fsm::notify_pikmin_release);
+            efc.run_function(leader_fsm::release);
             efc.run_function(leader_fsm::whistle);
         }
         efc.new_event(MOB_EVENT_ON_LEAVE); {
@@ -164,6 +166,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("active");
         }
         efc.new_event(LEADER_EVENT_RELEASE); {
+            efc.run_function(leader_fsm::notify_pikmin_release);
             efc.run_function(leader_fsm::release);
             efc.change_state("active");
         }
@@ -174,6 +177,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(LEADER_EVENT_MOVE_END); {
             efc.run_function(leader_fsm::stop);
             efc.run_function(leader_fsm::set_stop_anim);
+        }
+        efc.new_event(LEADER_EVENT_START_WHISTLE); {
+            efc.change_state("whistling");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader_fsm::notify_pikmin_release);
@@ -1030,7 +1036,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    if(l_ptr->holding_pikmin != m) return;
+    if(!l_ptr->holding_pikmin) return;
     l_ptr->holding_pikmin->fsm.run_event(MOB_EVENT_RELEASED);
 }
 

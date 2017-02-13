@@ -33,6 +33,8 @@ leader::leader(
     
     group_spot_info* ps = new group_spot_info(max_pikmin_in_field, 12);
     group = new group_info(ps, x, y);
+    subgroup_type_ptr =
+        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
 
 
@@ -234,4 +236,80 @@ void switch_to_leader(leader* new_leader_ptr) {
  */
 bool leader::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_LEADERS;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Makes the current leader grab the closest group member of the standby type.
+ * Returns true on success, false on failure.
+ */
+bool grab_closest_group_member() {
+    if(closest_group_member) {
+        mob_event* grabbed_ev =
+            closest_group_member->fsm.get_event(
+                MOB_EVENT_GRABBED_BY_FRIEND
+            );
+        mob_event* grabber_ev =
+            cur_leader_ptr->fsm.get_event(
+                LEADER_EVENT_HOLDING
+            );
+        if(grabber_ev && grabbed_ev) {
+            cur_leader_ptr->fsm.run_event(
+                LEADER_EVENT_HOLDING,
+                (void*) closest_group_member
+            );
+            grabbed_ev->run(
+                closest_group_member,
+                (void*) closest_group_member
+            );
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the variable that indicates what the closest group member
+ * of the standby type is.
+ */
+void update_closest_group_member() {
+    dist closest_distance = 0;
+    closest_group_member = NULL;
+    size_t n_members = cur_leader_ptr->group->members.size();
+    unsigned char subgroup_highest_maturity = 0;
+    
+    for(size_t m = 0; m < n_members; ++m) {
+        mob* member_ptr = cur_leader_ptr->group->members[m];
+        if(
+            member_ptr->subgroup_type_ptr !=
+            cur_leader_ptr->group->cur_standby_type
+        ) {
+            continue;
+        }
+        
+        unsigned char maturity = 0;
+        if(typeid(*member_ptr) == typeid(pikmin)) {
+            maturity = ((pikmin*) member_ptr)->maturity;
+        }
+        
+        if(maturity > subgroup_highest_maturity) {
+            subgroup_highest_maturity = maturity;
+            closest_distance = 0;
+            closest_group_member = NULL;
+        }
+        
+        if(maturity == subgroup_highest_maturity) {
+            dist d(
+                cur_leader_ptr->x, cur_leader_ptr->y,
+                member_ptr->x, member_ptr->y
+            );
+            if(!closest_group_member || d < closest_distance) {
+                closest_distance = d;
+                closest_group_member = member_ptr;
+            }
+        }
+    }
+    
+    closest_group_member_distant = closest_distance > pikmin_grab_range;
 }

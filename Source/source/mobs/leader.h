@@ -103,7 +103,9 @@ public:
 };
 
 
+bool grab_closest_group_member();
 float get_leader_to_group_center_dist(mob* l);
 void switch_to_leader(leader* new_leader_ptr);
+void update_closest_group_member();
 
 #endif //ifndef LEADER_INCLUDED

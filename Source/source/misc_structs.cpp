@@ -1042,3 +1042,90 @@ sprite_effect_props sprite_effect_manager::get_final_properties() {
     return final_props;
     
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Registers a new type of subgroup.
+ * category: The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * pik_type: Type of Pikmin. Only necessary for Pikmin category.
+ */
+void subgroup_type_manager::register_type(
+    const SUBGROUP_TYPE_CATEGORIES category,
+    pikmin_type* pik_type
+) {
+    subgroup_type* new_sg_type = new subgroup_type();
+    
+    new_sg_type->category = category;
+    new_sg_type->pik_type = pik_type;
+    
+    types.push_back(new_sg_type);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the type of subgroup corresponding to the parameters.
+ * Returns NULL if not found.
+ * category: The category of subgroup type. Pikmin, leader, bomb-rock, etc.
+ * pik_type: Type of Pikmin. Only necessary for Pikmin category.
+ */
+subgroup_type* subgroup_type_manager::get_type(
+    const SUBGROUP_TYPE_CATEGORIES category,
+    pikmin_type* pik_type
+) {
+    for(size_t t = 0; t < types.size(); ++t) {
+        subgroup_type* t_ptr = types[t];
+        if(t_ptr->category == category && t_ptr->pik_type == pik_type) {
+            return t_ptr;
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the first registered subgroup type.
+ */
+subgroup_type* subgroup_type_manager::get_first_type() {
+    return types.front();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the subgroup type that comes before the given type.
+ */
+subgroup_type* subgroup_type_manager::get_prev_type(
+    subgroup_type* sgt
+) {
+    for(size_t t = 0; t < types.size(); ++t) {
+        if(types[t] == sgt) {
+            return get_prev_in_vector(types, t);
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the subgroup type that comes after the given type.
+ */
+subgroup_type* subgroup_type_manager::get_next_type(
+    subgroup_type* sgt
+) {
+    for(size_t t = 0; t < types.size(); ++t) {
+        if(types[t] == sgt) {
+            return get_next_in_vector(types, t);
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered subgroup types.
+ */
+void subgroup_type_manager::clear() {
+    for(size_t t = 0; t < types.size(); ++t) {
+        delete types[t];
+    }
+    types.clear();
+}

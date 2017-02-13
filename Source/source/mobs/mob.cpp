@@ -68,6 +68,7 @@ mob::mob(
     dead(false),
     big_damage_ev_queued(false),
     following_group(nullptr),
+    subgroup_type_ptr(nullptr),
     was_thrown(false),
     group(nullptr),
     group_spot_x(0),
@@ -1225,6 +1226,11 @@ void add_to_group(mob* group_leader, mob* new_member) {
             group_leader->group->group_spots->add(new_member);
         }
     }
+    
+    if(!group_leader->group->cur_standby_type) {
+        group_leader->group->cur_standby_type =
+            new_member->subgroup_type_ptr;
+    }
 }
 
 
@@ -1580,16 +1586,34 @@ bool is_resistant_to_hazards(
 void remove_from_group(mob* member) {
     if(!member->following_group) return;
     
-    member->following_group->group->members.erase(
+    mob* group_leader = member->following_group;
+    
+    group_leader->group->members.erase(
         find(
-            member->following_group->group->members.begin(),
-            member->following_group->group->members.end(),
+            group_leader->group->members.begin(),
+            group_leader->group->members.end(),
             member
         )
     );
     
-    if(member->following_group->group->group_spots) {
-        member->following_group->group->group_spots->remove(member);
+    if(group_leader->group->group_spots) {
+        group_leader->group->group_spots->remove(member);
+    }
+    
+    //Check if there are no more members of the same type.
+    //If not, choose a new type!
+    bool last_of_its_type = true;
+    for(size_t m = 0; m < group_leader->group->members.size(); ++m) {
+        if(
+            group_leader->group->members[m]->subgroup_type_ptr ==
+            member->subgroup_type_ptr
+        ) {
+            last_of_its_type = false;
+            break;
+        }
+    }
+    if(last_of_its_type) {
+        group_leader->group->set_next_cur_standby_type(false);
     }
     
     member->following_group = NULL;
@@ -1944,4 +1968,55 @@ void mob::add_delivery_sprite_effect(
     
     se.set_cur_time(1.0f - delivery_time_ratio_left);
     manager->add_effect(se);
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the standby group member type to the next available one,
+ * or NULL if none.
+ * Returns true on success, false on failure.
+ * move_backwards: If true, go through the list backwards.
+ */
+bool group_info::set_next_cur_standby_type(const bool move_backwards) {
+
+    bool success = false;
+    subgroup_type* starting_type = cur_standby_type;
+    subgroup_type* final_type = cur_standby_type;
+    if(!starting_type) starting_type = subgroup_types.get_first_type();
+    subgroup_type* scanning_type = starting_type;
+    subgroup_type* leader_subgroup_type =
+        subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+        
+    if(move_backwards) {
+        scanning_type = subgroup_types.get_prev_type(scanning_type);
+    } else {
+        scanning_type = subgroup_types.get_next_type(scanning_type);
+    }
+    while(scanning_type != starting_type && !success) {
+        //For each type, let's check if there's any group member that matches.
+        if(
+            scanning_type == leader_subgroup_type &&
+            !can_throw_leaders
+        ) {
+            //If this is a leader, and leaders cannot be thrown, skip.
+        } else {
+            for(size_t m = 0; m < members.size(); ++m) {
+                if(members[m]->subgroup_type_ptr == scanning_type) {
+                    final_type = scanning_type;
+                    success = true;
+                    break;
+                }
+            }
+        }
+        
+        if(move_backwards) {
+            scanning_type = subgroup_types.get_prev_type(scanning_type);
+        } else {
+            scanning_type = subgroup_types.get_next_type(scanning_type);
+        }
+    }
+    
+    cur_standby_type = final_type;
+    return success;
 }

@@ -127,22 +127,16 @@ void init_controls() {
         BUTTON_CHANGE_ZOOM, "Change zoom", "change_zoom", "k_3"
     );
     buttons.add(
-        BUTTON_ZOOM_IN, "Zoom in", "zoom_in", "mwu"
+        BUTTON_ZOOM_IN, "Zoom in", "zoom_in", ""
     );
     buttons.add(
-        BUTTON_ZOOM_OUT, "Zoom out", "zoom_out", "mwd"
+        BUTTON_ZOOM_OUT, "Zoom out", "zoom_out", ""
     );
     buttons.add(
-        BUTTON_NEXT_TYPE, "Next Pikmin", "next_type", "mb_2"
+        BUTTON_NEXT_TYPE, "Next Pikmin", "next_type", "mwd"
     );
     buttons.add(
-        BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", ""
-    );
-    buttons.add(
-        BUTTON_NEXT_MATURITY, "Next maturity", "next_maturity", ""
-    );
-    buttons.add(
-        BUTTON_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
+        BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
     );
     buttons.add(
         BUTTON_LIE_DOWN, "Lie down", "lie_down", "k_26"
@@ -462,6 +456,7 @@ void init_misc_graphics() {
     bmp_nectar = load_bmp(          "Nectar.png");
     bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
     bmp_number_bubble = load_bmp(   "Number_bubble.png");
+    bmp_pikmin_distant = load_bmp(  "Pikmin_distant.png");
     bmp_pikmin_spirit = load_bmp(   "Pikmin_spirit.png");
     bmp_shadow = load_bmp(          "Shadow.png");
     bmp_smack = load_bmp(           "Smack.png");
@@ -852,6 +847,7 @@ void destroy_resources() {
     al_destroy_bitmap(bmp_nectar);
     al_destroy_bitmap(bmp_no_pikmin);
     al_destroy_bitmap(bmp_number_bubble);
+    al_destroy_bitmap(bmp_pikmin_distant);
     al_destroy_bitmap(bmp_pikmin_spirit);
     al_destroy_bitmap(bmp_shadow);
     al_destroy_bitmap(bmp_smack);

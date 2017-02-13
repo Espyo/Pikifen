@@ -15,7 +15,7 @@
    height="1052.3622047"
    id="svg5505"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.0 unknown"
    sodipodi:docname="HUD.svg">
   <defs
      id="defs5507">
@@ -1219,11 +1219,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="591.84609"
-     inkscape:cy="-117.36211"
+     inkscape:zoom="2.8284272"
+     inkscape:cx="173.21263"
+     inkscape:cy="173.38371"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -1249,8 +1249,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
      id="metadata5510">
@@ -1260,7 +1262,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1283,6 +1285,30 @@
        height="67.5"
        x="-7.5"
        y="994.86218" />
+    <rect
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="rect4660-4"
+       width="90"
+       height="85"
+       x="440"
+       y="679.86218" />
+    <rect
+       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+       id="rect4660"
+       width="90"
+       height="85"
+       x="192.5"
+       y="679.86218" />
+    <rect
+       style="display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1"
+       id="rect4269-3"
+       width="64"
+       height="64"
+       x="150"
+       y="838.36218"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Pikmin_distant.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -1349,13 +1375,6 @@
        inkscape:export-ydpi="180"
        rx="64"
        ry="63.999516" />
-    <rect
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
-       id="rect4660-4"
-       width="90"
-       height="85"
-       x="440"
-       y="679.86218" />
     <path
        style="fill:url(#linearGradient4792);fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="M 477.5 702.36133 L 462.5 714.86133 L 467.5 737.36133 L 487.5 742.36133 L 502.5 729.86133 L 500 709.86133 L 477.5 702.36133 z M 484 719.86133 A 2.5 2.5 0 0 1 486.5 722.36133 A 2.5 2.5 0 0 1 484 724.86133 A 2.5 2.5 0 0 1 481.5 722.36133 A 2.5 2.5 0 0 1 484 719.86133 z "
@@ -1363,13 +1382,6 @@
        inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Icon.png"
        inkscape:export-xdpi="172.36"
        inkscape:export-ydpi="172.36" />
-    <rect
-       style="color:#000000;display:inline;overflow:visible;visibility:visible;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
-       id="rect4660"
-       width="90"
-       height="85"
-       x="192.5"
-       y="679.86218" />
     <path
        style="fill:url(#linearGradient4880);fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="M 335 702.36133 L 322.5 707.36133 L 315 719.86133 L 317.5 734.86133 L 330 742.36133 L 345 742.36133 L 352.5 727.36133 L 352.5 712.36133 L 335 702.36133 z M 334.5 719.36133 A 3 3 0 0 1 337.5 722.36133 A 3 3 0 0 1 334.5 725.36133 A 3 3 0 0 1 331.5 722.36133 A 3 3 0 0 1 334.5 719.36133 z "
@@ -2774,5 +2786,9 @@
        inkscape:export-ydpi="90"
        rx="12.999997"
        ry="12.999902" />
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#ffffff;fill-opacity:0.50196081;fill-rule:evenodd;stroke:none;stroke-width:20;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="M 160.67773 838.76562 A 10.001 10.001 0 0 0 153.41211 855.93359 L 167.84961 870.37109 L 153.42969 884.79102 A 10.001 10.001 0 1 0 167.57031 898.93359 L 181.99219 884.51172 L 196.41211 898.93359 A 10.001 10.001 0 1 0 210.55273 884.79102 L 196.13281 870.37109 L 210.57031 855.93359 A 10.001 10.001 0 0 0 203.30273 838.76562 A 10.001 10.001 0 0 0 196.42969 841.79102 L 181.99219 856.23047 L 167.55273 841.79102 A 10.001 10.001 0 0 0 160.67969 838.76562 A 10.001 10.001 0 0 1 160.67773 838.76562 z "
+       id="path1175" />
   </g>
 </svg>

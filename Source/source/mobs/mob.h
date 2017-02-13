@@ -103,14 +103,17 @@ struct group_info {
     vector<mob*> members;
     group_spot_info* group_spots;
     float group_center_x, group_center_y;
+    subgroup_type* cur_standby_type;
     
     group_info(
         group_spot_info* ps, const float center_x, const float center_y
     ) {
+        cur_standby_type = NULL;
         group_spots = ps;
         group_center_x = center_x;
         group_center_y = center_y;
     }
+    bool set_next_cur_standby_type(const bool move_backwards);
 };
 
 
@@ -270,6 +273,8 @@ public:
     //Group things.
     //The current mob is following this mob's group.
     mob* following_group;
+    //The current subgroup type.
+    subgroup_type* subgroup_type_ptr;
     //Is the mob airborne because it was thrown?
     bool was_thrown;
     //Info on the group this mob is a leader of.

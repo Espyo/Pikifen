@@ -11,6 +11,8 @@ day_minutes_start = 420
 day_minutes_end = 1140
 day_minutes_per_irl_sec = 2
 
+pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin
+
 idle_task_range = 50
 group_move_task_range = 0
 max_pikmin_in_field = 100
@@ -18,11 +20,12 @@ maturity_power_mult = 0.1
 maturity_speed_mult = 0.1
 nectar_amount = 5
 
+can_throw_leaders = true
 cursor_max_dist = 200
 cursor_spin_speed = 3.1416
 next_pluck_range = 160
 onion_open_range = 64
-pikmin_grab_range = 64
+pikmin_grab_range = 128
 pluck_range = 32
 whistle_growth_speed = 180
 

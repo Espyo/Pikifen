@@ -275,27 +275,13 @@ void do_gameplay_logic() {
         *                             ***  *
         ************************************/
         
-        dist closest_distance = 0;
         size_t n_members = cur_leader_ptr->group->members.size();
         closest_group_member = cur_leader_ptr->holding_pikmin;
+        closest_group_member_distant = false;
         
         if(n_members > 0 && !closest_group_member) {
         
-            for(size_t m = 0; m < n_members; ++m) {
-                dist d(
-                    cur_leader_ptr->x, cur_leader_ptr->y,
-                    cur_leader_ptr->group->members[m]->x,
-                    cur_leader_ptr->group->members[m]->y
-                );
-                if(m == 0 || d < closest_distance) {
-                    closest_distance = d;
-                    closest_group_member = cur_leader_ptr->group->members[m];
-                }
-            }
-            
-            if(closest_distance > pikmin_grab_range) {
-                closest_group_member = NULL;
-            }
+            update_closest_group_member();
         }
         
         float group_move_x = group_movement.get_x();

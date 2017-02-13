@@ -1101,6 +1101,7 @@ void load_game_config() {
     data_node file(CONFIG_FOLDER_PATH);
     
     reader_setter rs(&file);
+    string pikmin_order_string;
     
     rs.set("game_name", game_name);
     rs.set("game_version", game_version);
@@ -1115,6 +1116,8 @@ void load_game_config() {
     rs.set("day_minutes_end", day_minutes_end);
     rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
     
+    rs.set("pikmin_order", pikmin_order_string);
+    
     rs.set("idle_task_range", idle_task_range);
     rs.set("group_move_task_range", group_move_task_range);
     rs.set("max_pikmin_in_field", max_pikmin_in_field);
@@ -1122,6 +1125,7 @@ void load_game_config() {
     rs.set("maturity_speed_mult", maturity_speed_mult);
     rs.set("nectar_amount", nectar_amount);
     
+    rs.set("can_throw_leaders", can_throw_leaders);
     rs.set("cursor_max_dist", cursor_max_dist);
     rs.set("cursor_spin_speed", cursor_spin_speed);
     rs.set("next_pluck_range", next_pluck_range);
@@ -1136,6 +1140,8 @@ void load_game_config() {
     rs.set("zoom_min_level", zoom_min_level);
     
     al_set_window_title(display, game_name.c_str());
+    
+    pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
 }
 
 
@@ -1151,6 +1157,38 @@ void load_game_content() {
     
     //Mob types.
     load_mob_types(true);
+    for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
+        if(
+            find(
+                pikmin_order_strings.begin(), pikmin_order_strings.end(),
+                p->first
+            ) == pikmin_order_strings.end()
+        ) {
+            log_error(
+                "Pikmin type \"" + p->first + "\" was not found "
+                "in the Pikmin order list in the config file!"
+            );
+            pikmin_order_strings.push_back(p->first);
+        }
+    }
+    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
+        string s = pikmin_order_strings[o];
+        if(pikmin_types.find(s) != pikmin_types.end()) {
+            pikmin_order.push_back(pikmin_types[s]);
+        } else {
+            log_error(
+                "Unknown Pikmin type \"" + s + "\" found "
+                "in the Pikmin order list in the config file!"
+            );
+        }
+    }
+    for(size_t p = 0; p < pikmin_order.size(); ++p) {
+        subgroup_types.register_type(
+            SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p]
+        );
+    }
+    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
+    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_BOMB);
     
     //Weather.
     weather_conditions.clear();

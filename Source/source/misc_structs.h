@@ -21,6 +21,7 @@
 
 #include "geometry_utils.h"
 #include "mobs/mob_type.h"
+#include "mobs/pikmin_type.h"
 
 class mob;
 struct mob_gen;
@@ -379,6 +380,48 @@ private:
 public:
     void add_effect(sprite_effect e);
     sprite_effect_props get_final_properties();
+};
+
+
+
+enum SUBGROUP_TYPE_CATEGORIES {
+    SUBGROUP_TYPE_CATEGORY_PIKMIN,
+    SUBGROUP_TYPE_CATEGORY_LEADER,
+    SUBGROUP_TYPE_CATEGORY_BOMB,
+};
+struct subgroup_type_manager;
+
+/* ----------------------------------------------------------------------------
+ * Represents a leader subgroup type;
+ * a Red Pikmin, a Yellow Pikmin, a leader, etc.
+ */
+struct subgroup_type {
+private:
+    friend subgroup_type_manager;
+    SUBGROUP_TYPE_CATEGORIES category;
+    pikmin_type* pik_type;
+};
+
+
+/* ----------------------------------------------------------------------------
+ * Manages what types of subgroups exist.
+ */
+struct subgroup_type_manager {
+private:
+    vector<subgroup_type*> types;
+public:
+    void register_type(
+        const SUBGROUP_TYPE_CATEGORIES category,
+        pikmin_type* pik_type = NULL
+    );
+    subgroup_type* get_type(
+        const SUBGROUP_TYPE_CATEGORIES category,
+        pikmin_type* pik_type = NULL
+    );
+    subgroup_type* get_first_type();
+    subgroup_type* get_prev_type(subgroup_type* sgt);
+    subgroup_type* get_next_type(subgroup_type* sgt);
+    void clear();
 };
 
 

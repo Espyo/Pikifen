@@ -29,13 +29,13 @@ public:
     string name;
     //What the spray does.
     vector<status_type*> effects;
-    //True: applied to the entire party. False: applied in a specified range.
+    //True: applied to the entire group. False: applied in a specified range.
     bool group;
-    //If applied outside of the party, this is the angle of shooting.
+    //If applied outside of the group, this is the angle of shooting.
     float angle;
-    //If applied outside of the party, this is the distance range.
+    //If applied outside of the group, this is the distance range.
     float distance_range;
-    //If applied outside of the party, this is the angle range.
+    //If applied outside of the group, this is the angle range.
     float angle_range;
     
     ALLEGRO_COLOR main_color;
