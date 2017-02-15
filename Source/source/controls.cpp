@@ -697,19 +697,58 @@ void handle_button(
             
             active_control();
             
-            bool switch_successful =
-                cur_leader_ptr->group->set_next_cur_standby_type(
-                    button == BUTTON_PREV_TYPE
-                );
+            subgroup_type* starting_subgroup_type =
+                cur_leader_ptr->group->cur_standby_type;
                 
-            if(switch_successful) {
-                if(cur_leader_ptr->holding_pikmin) {
-                    //Check for the closest Pikmin of the new type.
-                    update_closest_group_member();
+            bool switch_successful;
+            
+            if(!cur_leader_ptr->holding_pikmin) {
+                //If the leader isn't holding anybody.
+                switch_successful =
+                    cur_leader_ptr->group->set_next_cur_standby_type(
+                        button == BUTTON_PREV_TYPE
+                    );
+                    
+            } else {
+                //If the leader is holding a Pikmin, we can't let it
+                //swap to a Pikmin that's far away.
+                //So, every time that happens, skip that subgroup and
+                //try the next. Also, make sure to cancel everything if
+                //the loop already went through all types.
+                
+                bool finish = false;
+                do {
+                    switch_successful =
+                        cur_leader_ptr->group->set_next_cur_standby_type(
+                            button == BUTTON_PREV_TYPE
+                        );
+                        
+                    if(
+                        !switch_successful ||
+                        cur_leader_ptr->group->cur_standby_type ==
+                        starting_subgroup_type
+                    ) {
+                        //Reached around back to the first subgroup...
+                        switch_successful = false;
+                        finish = true;
+                        
+                    } else {
+                        //Switched to a new subgroup.
+                        update_closest_group_member();
+                        if(!closest_group_member_distant) {
+                            finish = true;
+                        }
+                        
+                    }
+                    
+                } while(!finish);
+                
+                if(switch_successful) {
                     cur_leader_ptr->swap_held_pikmin(closest_group_member);
                 }
-                
-            } else {
+            }
+            
+            if(switch_successful) {
                 sfx_switch_pikmin.play(0, false);
             }
             

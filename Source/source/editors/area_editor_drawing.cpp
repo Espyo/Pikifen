@@ -793,6 +793,14 @@ void area_editor::do_drawing() {
                 }
             }
             
+            int ocr_x, ocr_y, ocr_w, ocr_h;
+            al_get_clipping_rectangle(&ocr_x, &ocr_y, &ocr_w, &ocr_h);
+            al_set_clipping_rectangle(
+                cross_section_window_start.x, cross_section_window_start.y,
+                cross_section_window_end.x - cross_section_window_start.x,
+                cross_section_window_end.y - cross_section_window_start.y
+            );
+            
             for(size_t s = 1; s < splits.size(); ++s) {
                 if(!splits[s].sector_ptrs[0]) continue;
                 draw_cross_section_sector(
@@ -800,6 +808,42 @@ void area_editor::do_drawing() {
                     lowest_z, splits[s].sector_ptrs[0]
                 );
             }
+            
+            sector* central_sector = NULL;
+            for(size_t s = 1; s < splits.size(); ++s) {
+                if(splits[s].ur > 0.5) {
+                    central_sector = splits[s].sector_ptrs[0];
+                    break;
+                }
+            }
+            
+            if(central_sector) {
+                float pikmin_silhouette_w =
+                    standard_pikmin_radius * 2.0 * proportion;
+                float pikmin_silhouette_h =
+                    standard_pikmin_height * proportion;
+                float pikmin_silhouette_pivot_x =
+                    (
+                        cross_section_window_start.x +
+                        cross_section_window_end.x
+                    ) / 2.0;
+                float pikmin_silhouette_pivot_y =
+                    cross_section_window_end.y - 8 -
+                    ((central_sector->z - lowest_z) * proportion);
+                al_draw_tinted_scaled_bitmap(
+                    bmp_pikmin_silhouette,
+                    al_map_rgba(255, 255, 255, 128),
+                    0, 0,
+                    al_get_bitmap_width(bmp_pikmin_silhouette),
+                    al_get_bitmap_height(bmp_pikmin_silhouette),
+                    pikmin_silhouette_pivot_x - pikmin_silhouette_w / 2.0,
+                    pikmin_silhouette_pivot_y - pikmin_silhouette_h,
+                    pikmin_silhouette_w, pikmin_silhouette_h,
+                    0
+                );
+            }
+            
+            al_set_clipping_rectangle(ocr_x, ocr_y, ocr_w, ocr_h);
             
             float highest_z =
                 lowest_z + cross_section_window_end.y / proportion;

@@ -270,16 +270,27 @@ bool grab_closest_group_member() {
 
 
 /* ----------------------------------------------------------------------------
- * Updates the variable that indicates what the closest group member
- * of the standby type is.
+ * Updates the variable that indicates what the closest
+ * group member of the standby subgroup is.
+ * In the case all candidate members are out of reach,
+ * this gets set to the closest. Otherwise, it gets set to the closest
+ * and more mature one.
+ * NULL if there is no member of that subgroup available.
  */
 void update_closest_group_member() {
-    dist closest_distance = 0;
-    closest_group_member = NULL;
-    size_t n_members = cur_leader_ptr->group->members.size();
-    unsigned char subgroup_highest_maturity = 0;
+    //Closest members so far for each maturity.
+    dist closest_dists[3];
+    mob* closest_ptrs[3];
+    for(unsigned char m = 0; m < 3; ++m) {
+        closest_ptrs[m] = NULL;
+    }
     
+    closest_group_member = NULL;
+    
+    //Fetch the closest, for each maturity.
+    size_t n_members = cur_leader_ptr->group->members.size();
     for(size_t m = 0; m < n_members; ++m) {
+    
         mob* member_ptr = cur_leader_ptr->group->members[m];
         if(
             member_ptr->subgroup_type_ptr !=
@@ -293,23 +304,39 @@ void update_closest_group_member() {
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         
-        if(maturity > subgroup_highest_maturity) {
-            subgroup_highest_maturity = maturity;
-            closest_distance = 0;
-            closest_group_member = NULL;
-        }
+        dist d(
+            cur_leader_ptr->x, cur_leader_ptr->y,
+            member_ptr->x, member_ptr->y
+        );
         
-        if(maturity == subgroup_highest_maturity) {
-            dist d(
-                cur_leader_ptr->x, cur_leader_ptr->y,
-                member_ptr->x, member_ptr->y
-            );
-            if(!closest_group_member || d < closest_distance) {
-                closest_distance = d;
-                closest_group_member = member_ptr;
+        if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
+            closest_dists[maturity] = d;
+            closest_ptrs[maturity] = member_ptr;
+        }
+    }
+    
+    //Now, try to get the one with the highest maturity within reach.
+    dist closest_dist;
+    for(unsigned char m = 0; m < 3; ++m) {
+        if(!closest_ptrs[2 - m]) continue;
+        if(closest_dists[2 - m] > pikmin_grab_range) continue;
+        closest_group_member = closest_ptrs[2 - m];
+        closest_dist = closest_dists[2 - m];
+        break;
+    }
+    
+    if(!closest_group_member) {
+        //Couldn't find any within reach? Then just set it to the closest one.
+        //Maturity is irrelevant for this case.
+        for(unsigned char m = 0; m < 3; ++m) {
+            if(!closest_ptrs[m]) continue;
+            
+            if(!closest_group_member || closest_dists[m] < closest_dist) {
+                closest_group_member = closest_ptrs[m];
+                closest_dist = closest_dists[m];
             }
         }
     }
     
-    closest_group_member_distant = closest_distance > pikmin_grab_range;
+    closest_group_member_distant = closest_dist > pikmin_grab_range;
 }

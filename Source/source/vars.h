@@ -69,6 +69,7 @@ extern ALLEGRO_BITMAP* bmp_no_pikmin;
 extern ALLEGRO_BITMAP* bmp_notification;
 extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_pikmin_distant;
+extern ALLEGRO_BITMAP* bmp_pikmin_silhouette;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_red[3];
 extern ALLEGRO_BITMAP* bmp_shadow;
@@ -318,6 +319,8 @@ extern map<string, mob_type*> spec_mob_types;
 //How many of each spray the player has.
 extern vector<unsigned long> spray_amounts;
 extern vector<spray_type> spray_types;
+extern float standard_pikmin_height;
+extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
 extern float transition_time;
 extern bool transition_fade_in;

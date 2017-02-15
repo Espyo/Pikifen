@@ -439,33 +439,34 @@ void init_misc_graphics() {
     al_set_display_icon(display, bmp_icon);
     
     //Graphics.
-    bmp_bubble = load_bmp(          "Bubble.png");
-    bmp_checkbox_check = load_bmp(  "Checkbox_check.png");
-    bmp_cursor = load_bmp(          "Cursor.png");
-    bmp_day_bubble = load_bmp(      "Day_bubble.png");
-    bmp_enemy_spirit = load_bmp(    "Enemy_spirit.png");
-    bmp_hard_bubble = load_bmp(     "Hard_bubble.png");
-    bmp_idle_glow = load_bmp(       "Idle_glow.png");
-    bmp_info_spot = load_bmp(       "Info_spot.png");
-    bmp_message_box = load_bmp(     "Message_box.png");
-    bmp_mouse_cursor = load_bmp(    "Mouse_cursor.png");
-    bmp_mouse_wd_icon = load_bmp(   "Mouse_wheel_down_icon.png");
-    bmp_mouse_wu_icon = load_bmp(   "Mouse_wheel_up_icon.png");
-    bmp_notification = load_bmp(    "Notification.png");
-    bmp_group_move_arrow = load_bmp("Group_move_arrow.png");
-    bmp_nectar = load_bmp(          "Nectar.png");
-    bmp_no_pikmin = load_bmp(       "No_Pikmin.png");
-    bmp_number_bubble = load_bmp(   "Number_bubble.png");
-    bmp_pikmin_distant = load_bmp(  "Pikmin_distant.png");
-    bmp_pikmin_spirit = load_bmp(   "Pikmin_spirit.png");
-    bmp_shadow = load_bmp(          "Shadow.png");
-    bmp_smack = load_bmp(           "Smack.png");
-    bmp_smoke = load_bmp(           "Smoke.png");
-    bmp_sparkle = load_bmp(         "Sparkle.png");
-    bmp_sun = load_bmp(             "Sun.png");
-    bmp_ub_spray = load_bmp(        "Ultra-bitter_spray.png");
-    bmp_us_spray = load_bmp(        "Ultra-spicy_spray.png");
-    bmp_wave_ring = load_bmp(       "Wave_ring.png");
+    bmp_bubble = load_bmp(           "Bubble.png");
+    bmp_checkbox_check = load_bmp(   "Checkbox_check.png");
+    bmp_cursor = load_bmp(           "Cursor.png");
+    bmp_day_bubble = load_bmp(       "Day_bubble.png");
+    bmp_enemy_spirit = load_bmp(     "Enemy_spirit.png");
+    bmp_hard_bubble = load_bmp(      "Hard_bubble.png");
+    bmp_idle_glow = load_bmp(        "Idle_glow.png");
+    bmp_info_spot = load_bmp(        "Info_spot.png");
+    bmp_message_box = load_bmp(      "Message_box.png");
+    bmp_mouse_cursor = load_bmp(     "Mouse_cursor.png");
+    bmp_mouse_wd_icon = load_bmp(    "Mouse_wheel_down_icon.png");
+    bmp_mouse_wu_icon = load_bmp(    "Mouse_wheel_up_icon.png");
+    bmp_notification = load_bmp(     "Notification.png");
+    bmp_group_move_arrow = load_bmp( "Group_move_arrow.png");
+    bmp_nectar = load_bmp(           "Nectar.png");
+    bmp_no_pikmin = load_bmp(        "No_Pikmin.png");
+    bmp_number_bubble = load_bmp(    "Number_bubble.png");
+    bmp_pikmin_distant = load_bmp(   "Pikmin_distant.png");
+    bmp_pikmin_silhouette = load_bmp("Pikmin_silhouette.png");
+    bmp_pikmin_spirit = load_bmp(    "Pikmin_spirit.png");
+    bmp_shadow = load_bmp(           "Shadow.png");
+    bmp_smack = load_bmp(            "Smack.png");
+    bmp_smoke = load_bmp(            "Smoke.png");
+    bmp_sparkle = load_bmp(          "Sparkle.png");
+    bmp_sun = load_bmp(              "Sun.png");
+    bmp_ub_spray = load_bmp(         "Ultra-bitter_spray.png");
+    bmp_us_spray = load_bmp(         "Ultra-spicy_spray.png");
+    bmp_wave_ring = load_bmp(        "Wave_ring.png");
     
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] =
@@ -712,7 +713,6 @@ void init_sector_types() {
     sector_types.register_type(SECTOR_TYPE_NORMAL, "Normal");
     sector_types.register_type(SECTOR_TYPE_BOTTOMLESS_PIT, "Bottomless pit");
     sector_types.register_type(SECTOR_TYPE_BLOCKING, "Blocking");
-    sector_types.register_type(SECTOR_TYPE_GATE, "Gate");
     sector_types.register_type(SECTOR_TYPE_BRIDGE, "Bridge");
     sector_types.register_type(SECTOR_TYPE_BRIDGE_RAIL, "Bridge rail");
 }

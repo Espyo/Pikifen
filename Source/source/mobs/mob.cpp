@@ -1140,16 +1140,10 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     stuck_state(0),
     is_moving(false) {
     
-    float pikmin_radius = 16;
-    //Let's assume all Pikmin are the same radius. Or at least very close.
-    if(!pikmin_types.empty()) {
-        pikmin_radius = pikmin_types.begin()->second->radius;
-    }
-    
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = (M_PI * 2) / m->type->max_carriers * c;
-        float x = cos(angle) * (m->type->radius + pikmin_radius);
-        float y = sin(angle) * (m->type->radius + pikmin_radius);
+        float x = cos(angle) * (m->type->radius + standard_pikmin_radius);
+        float y = sin(angle) * (m->type->radius + standard_pikmin_radius);
         spot_info.push_back(carrier_spot_struct(x, y));
     }
 }
@@ -1980,6 +1974,11 @@ void mob::add_delivery_sprite_effect(
  */
 bool group_info::set_next_cur_standby_type(const bool move_backwards) {
 
+    if(members.empty()) {
+        cur_standby_type = NULL;
+        return true;
+    }
+    
     bool success = false;
     subgroup_type* starting_type = cur_standby_type;
     subgroup_type* final_type = cur_standby_type;

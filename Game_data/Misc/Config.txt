@@ -12,6 +12,8 @@ day_minutes_end = 1140
 day_minutes_per_irl_sec = 2
 
 pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin
+standard_pikmin_height = 24
+standard_pikmin_radius = 5
 
 idle_task_range = 50
 group_move_task_range = 0

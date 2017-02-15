@@ -544,7 +544,7 @@ void area_editor::load() {
     );
     frm_texture->add(
         "bar_scroll",
-        new lafi::scrollbar(gui_x + 8, 96, scr_w - 8, scr_h - 56)
+        new lafi::scrollbar(scr_w - 24, 96, scr_w - 8, scr_h - 56)
     );
     
     

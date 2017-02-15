@@ -179,8 +179,6 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                         //If there's no change in height, why bother?
                         if(
                             (e_ptr->sectors[0]->z == e_ptr->sectors[1]->z) &&
-                            e_ptr->sectors[0]->type != SECTOR_TYPE_GATE &&
-                            e_ptr->sectors[1]->type != SECTOR_TYPE_GATE &&
                             e_ptr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                             e_ptr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {

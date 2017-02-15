@@ -705,6 +705,8 @@ void area_editor::clear_current_area() {
     cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
     cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
     
+    texture_suggestions.clear();
+    
     cur_area_data.clear();
     
     made_changes = false;

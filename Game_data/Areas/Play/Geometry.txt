@@ -1687,10 +1687,9 @@ sectors{
 		texture=Bark.jpg
 	}
 	s{
-		type=Gate
+		type=Blocking
 		z=0.00
 		fade=true
-		texture=Grass_light.jpg
 	}
 	s{
 		z=0.00
@@ -1801,7 +1800,7 @@ sectors{
 		texture=Dirt.jpg
 	}
 	s{
-		type=Gate
+		type=Blocking
 		z=0.00
 		texture=Grass_light.jpg
 	}

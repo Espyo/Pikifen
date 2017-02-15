@@ -1117,6 +1117,8 @@ void load_game_config() {
     rs.set("day_minutes_per_irl_sec", day_minutes_per_irl_sec);
     
     rs.set("pikmin_order", pikmin_order_string);
+    rs.set("standard_pikmin_height", standard_pikmin_height);
+    rs.set("standard_pikmin_radius", standard_pikmin_radius);
     
     rs.set("idle_task_range", idle_task_range);
     rs.set("group_move_task_range", group_move_task_range);
@@ -1187,8 +1189,8 @@ void load_game_content() {
             SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p]
         );
     }
-    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_BOMB);
+    subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     
     //Weather.
     weather_conditions.clear();
