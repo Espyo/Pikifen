@@ -174,6 +174,25 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                     snap_to_grid(mouse_cursor_x),
                     snap_to_grid(mouse_cursor_y)
                 );
+                
+        } else if(sec_mode == ESM_NEW_CIRCLE_SECTOR) {
+            if(new_circle_sector_step == 0) {
+                new_circle_sector_center.x =
+                    snap_to_grid(mouse_cursor_x);
+                new_circle_sector_center.y =
+                    snap_to_grid(mouse_cursor_y);
+                    
+            } else if(new_circle_sector_step == 1) {
+                new_circle_sector_anchor.x =
+                    snap_to_grid(mouse_cursor_x);
+                new_circle_sector_anchor.y =
+                    snap_to_grid(mouse_cursor_y);
+                    
+            } else {
+                set_new_circle_sector_points();
+                
+            }
+            
         }
         
         
@@ -421,6 +440,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                     new_sector_vertexes.back()->y
                 ) <= cam_zoom / VERTEX_MERGE_RADIUS
             ) {
+                delete new_sector_vertexes.back();
                 new_sector_vertexes.erase(
                     new_sector_vertexes.begin() + new_sector_vertexes.size() - 1
                 );
@@ -467,6 +487,50 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 }
             }
             
+            
+        } else if(sec_mode == ESM_NEW_CIRCLE_SECTOR) {
+            //Create a new circular sector.
+            
+            if(new_circle_sector_step == 0) {
+                new_circle_sector_anchor = new_circle_sector_center;
+                new_circle_sector_step++;
+                
+            } else if(new_circle_sector_step == 1) {
+                set_new_circle_sector_points();
+                new_circle_sector_step++;
+                
+            } else {
+                //TODO
+                for(
+                    size_t p = 0;
+                    p < new_circle_sector_valid_edges.size(); ++p
+                ) {
+                    if(!new_circle_sector_valid_edges[p]) {
+                        return;
+                    }
+                }
+                
+                new_sector_valid_line = true;
+                
+                for(
+                    size_t p = 0;
+                    p < new_circle_sector_valid_edges.size(); ++p
+                ) {
+                    new_sector_vertexes.push_back(
+                        new vertex(
+                            new_circle_sector_points[p].x,
+                            new_circle_sector_points[p].y
+                        )
+                    );
+                }
+                create_sector();
+                
+                sec_mode = ESM_NONE;
+                new_circle_sector_step = 0;
+                new_circle_sector_points.clear();
+                new_circle_sector_valid_edges.clear();
+                
+            }
             
         } else if(sec_mode == ESM_NEW_OBJECT) {
             //Create a mob where the cursor is.

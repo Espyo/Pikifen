@@ -556,10 +556,57 @@ void area_editor::do_drawing() {
             }
         }
         
+        //New circular sector preview.
+        if(sec_mode == ESM_NEW_CIRCLE_SECTOR) {
+            if(new_circle_sector_step == 1) {
+                float circle_radius =
+                    dist(
+                        new_circle_sector_center.x,
+                        new_circle_sector_center.y,
+                        new_circle_sector_anchor.x,
+                        new_circle_sector_anchor.y
+                    ).to_float();
+                al_draw_circle(
+                    new_circle_sector_center.x,
+                    new_circle_sector_center.y,
+                    circle_radius,
+                    al_map_rgb(64, 255, 64),
+                    3 / cam_zoom
+                );
+                
+            } else if(new_circle_sector_step == 2) {
+                for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+                    point cur_point = new_circle_sector_points[p];
+                    point next_point =
+                        get_next_in_vector(new_circle_sector_points, p);
+                    ALLEGRO_COLOR color =
+                        new_circle_sector_valid_edges[p] ?
+                        al_map_rgb(64, 255, 64) :
+                        al_map_rgb(255, 0, 0);
+                        
+                    al_draw_line(
+                        cur_point.x, cur_point.y,
+                        next_point.x, next_point.y,
+                        color, 3.0 / cam_zoom
+                    );
+                }
+                
+                for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+                    al_draw_filled_circle(
+                        new_circle_sector_points[p].x,
+                        new_circle_sector_points[p].y,
+                        3.0 / cam_zoom, al_map_rgb(192, 255, 192)
+                    );
+                }
+                
+            }
+        }
+        
         //New thing marker.
         if(
-            sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_OBJECT ||
-            sec_mode == ESM_DUPLICATE_OBJECT || sec_mode == ESM_NEW_SHADOW ||
+            sec_mode == ESM_NEW_SECTOR || sec_mode == ESM_NEW_CIRCLE_SECTOR ||
+            sec_mode == ESM_NEW_OBJECT || sec_mode == ESM_DUPLICATE_OBJECT ||
+            sec_mode == ESM_NEW_SHADOW ||
             sec_mode == ESM_NEW_STOP || sec_mode == ESM_NEW_LINK1 ||
             sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK1 ||
             sec_mode == ESM_NEW_1WLINK2
@@ -568,7 +615,8 @@ void area_editor::do_drawing() {
             float y = mouse_cursor_y;
             if(
                 sec_mode != ESM_NEW_1WLINK1 && sec_mode != ESM_NEW_1WLINK2 &&
-                sec_mode != ESM_NEW_LINK1 && sec_mode != ESM_NEW_LINK2
+                sec_mode != ESM_NEW_LINK1 && sec_mode != ESM_NEW_LINK2 &&
+                new_circle_sector_step != 2
             ) {
                 x = snap_to_grid(mouse_cursor_x);
                 y = snap_to_grid(mouse_cursor_y);

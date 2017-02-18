@@ -40,8 +40,12 @@ const float  area_editor::DEBUG_TEXT_SCALE = 1.5f;
 const float  area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Maximum grid interval.
 const float  area_editor::MAX_GRID_INTERVAL = 4096;
+//Maximum number of points that a circle sector can be created with.
+const size_t area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum number of texture suggestions.
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+//Minimum number of points that a circle sector can be created with.
+const size_t area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
 //Minimum grid interval.
 const float  area_editor::MIN_GRID_INTERVAL = 2;
 //Thickness to use when drawing a path link line.
@@ -73,6 +77,8 @@ const string area_editor::EXIT_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
 const string area_editor::GUIDE_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Guide.png";
+const string area_editor::NEW_CIRCLE_SECTOR_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/New_circle_sector.png";
 const string area_editor::NEW_1WLINK_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/New_1wlink.png";
 const string area_editor::NEW_ICON =
@@ -127,6 +133,7 @@ area_editor::area_editor() :
     moving_thing_x(0),
     moving_thing_y(0),
     new_link_first_stop(NULL),
+    new_circle_sector_step(0),
     new_sector_valid_line(false),
     on_sector(NULL),
     path_preview_timeout(0),
@@ -562,6 +569,10 @@ void area_editor::cancel_new_sector() {
         }
     }
     new_sector_vertexes.clear();
+    
+    new_circle_sector_step = 0;
+    new_circle_sector_points.clear();
+    new_circle_sector_valid_edges.clear();
 }
 
 
@@ -948,6 +959,7 @@ void area_editor::create_sector() {
     }
     
     cur_sector = new_sector;
+    sector_to_gui();
     new_sector_vertexes.clear();
 }
 
@@ -1249,6 +1261,77 @@ void area_editor::find_errors() {
     
     
     update_review_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the vector of points that make up a new circle sector.
+ */
+void area_editor::set_new_circle_sector_points() {
+    float anchor_angle =
+        atan2(
+            new_circle_sector_anchor.y - new_circle_sector_center.y,
+            new_circle_sector_anchor.x - new_circle_sector_center.x
+        );
+    float cursor_angle =
+        atan2(
+            mouse_cursor_y - new_circle_sector_center.y,
+            mouse_cursor_x - new_circle_sector_center.x
+        );
+    float radius =
+        dist(
+            new_circle_sector_center.x, new_circle_sector_center.y,
+            new_circle_sector_anchor.x, new_circle_sector_anchor.y
+        ).to_float();
+    float angle_dif =
+        get_angle_smallest_dif(cursor_angle, anchor_angle);
+        
+    size_t n_points = MAX_CIRCLE_SECTOR_POINTS;
+    if(angle_dif > 0) {
+        n_points = round((M_PI * 2) / angle_dif);
+    }
+    n_points =
+        min(n_points, MAX_CIRCLE_SECTOR_POINTS);
+    n_points =
+        max(MIN_CIRCLE_SECTOR_POINTS, n_points);
+        
+    new_circle_sector_points.clear();
+    for(size_t p = 0; p < n_points; ++p) {
+        float delta_a = ((M_PI * 2) / n_points) * p;
+        new_circle_sector_points.push_back(
+            point(
+                new_circle_sector_center.x +
+                radius * cos(anchor_angle + delta_a),
+                new_circle_sector_center.y +
+                radius * sin(anchor_angle + delta_a)
+            )
+        );
+    }
+    
+    new_circle_sector_valid_edges.clear();
+    for(size_t p = 0; p < n_points; ++p) {
+        point next = get_next_in_vector(new_circle_sector_points, p);
+        bool valid = true;
+        
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = cur_area_data.edges[e];
+            
+            if(
+                lines_intersect(
+                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
+                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                    new_circle_sector_points[p].x,
+                    new_circle_sector_points[p].y,
+                    next.x, next.y, NULL, NULL
+                )
+            ) {
+                valid = false;
+                break;
+            }
+        }
+        
+        new_circle_sector_valid_edges.push_back(valid);
+    }
 }
 
 

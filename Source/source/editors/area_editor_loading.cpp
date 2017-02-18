@@ -189,6 +189,10 @@ void area_editor::load() {
         new lafi::button("", "", icons.get(NEW_ICON)), 20, 32
     );
     frm_sectors->easy_add(
+        "but_circle",
+        new lafi::button("", "", icons.get(NEW_CIRCLE_SECTOR_ICON)), 20, 32
+    );
+    frm_sectors->easy_add(
         "but_sel_none",
         new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
@@ -318,6 +322,18 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_new"]->description =
         "Trace a new sector where you click.";
+        
+    frm_sectors->widgets["but_circle"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cancel_new_sector();
+        if(sec_mode == ESM_NEW_CIRCLE_SECTOR) {
+            sec_mode = ESM_NONE;
+        } else {
+            sec_mode = ESM_NEW_CIRCLE_SECTOR;
+        }
+    };
+    frm_sectors->widgets["but_circle"]->description =
+        "Create a new circular sector in three steps.";
         
     frm_sectors->widgets["but_sel_none"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {

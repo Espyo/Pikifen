@@ -53,6 +53,7 @@ private:
     enum EDITOR_SEC_MODES {
         ESM_NONE,
         ESM_NEW_SECTOR,
+        ESM_NEW_CIRCLE_SECTOR,
         ESM_NEW_OBJECT,
         ESM_DUPLICATE_OBJECT,
         ESM_NEW_STOP,
@@ -97,8 +98,10 @@ private:
     static const float  CROSS_SECTION_POINT_RADIUS;
     static const float  DEBUG_TEXT_SCALE;
     static const float  DEF_GRID_INTERVAL;
+    static const size_t MAX_CIRCLE_SECTOR_POINTS;
     static const float  MAX_GRID_INTERVAL;
     static const size_t MAX_TEXTURE_SUGGESTIONS;
+    static const size_t MIN_CIRCLE_SECTOR_POINTS;
     static const float  MIN_GRID_INTERVAL;
     static const float  PATH_LINK_THICKNESS;
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
@@ -115,6 +118,7 @@ private:
     static const string DUPLICATE_ICON;
     static const string EXIT_ICON;
     static const string GUIDE_ICON;
+    static const string NEW_CIRCLE_SECTOR_ICON;
     static const string NEW_1WLINK_ICON;
     static const string NEW_ICON;
     static const string NEW_LINK_ICON;
@@ -166,6 +170,11 @@ private:
     //object or shadow was grabbed.
     float                        moving_thing_x;
     float                        moving_thing_y;
+    point                        new_circle_sector_anchor;
+    point                        new_circle_sector_center;
+    vector<bool>                 new_circle_sector_valid_edges;
+    vector<point>                new_circle_sector_points;
+    unsigned char                new_circle_sector_step;
     path_stop*                   new_link_first_stop;
     vector<vertex*>              new_sector_vertexes;
     bool                         new_sector_valid_line;
@@ -200,6 +209,7 @@ private:
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<vertex*> &merges, sector** result
     );
+    void set_new_circle_sector_points();
     void goto_error();
     bool is_new_sector_line_valid(const float x, const float y);
     void load_area(const bool from_backup);
