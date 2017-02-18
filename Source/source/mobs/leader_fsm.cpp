@@ -394,6 +394,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run_function(leader_fsm::stop_pluck);
             efc.run_function(leader_fsm::lose_health);
+            efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_DEATH); {
             efc.run_function(leader_fsm::stop_pluck);
@@ -423,8 +424,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run_function(leader_fsm::search_seed);
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
-            efc.run_function(leader_fsm::stop_pluck);
-            efc.change_state("active");
+            efc.run_function(leader_fsm::queue_pluck_cancel);
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run_function(leader_fsm::unfocus);
@@ -1042,6 +1042,14 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
+ * Queues the stopping of the plucking session, for after this pluck ends.
+ */
+void leader_fsm::queue_pluck_cancel(mob* m, void* info1, void* info2) {
+    ((leader*) m)->queued_pluck_cancel = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * When a leader gently releases the held mob.
  */
 void leader_fsm::release(mob* m, void* info1, void* info2) {
@@ -1294,6 +1302,8 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     leader* lea_ptr = (leader*) m;
     pikmin* pik_ptr = (pikmin*) info1;
     
+    lea_ptr->queued_pluck_cancel = false;
+    
     lea_ptr->auto_pluck_pikmin = pik_ptr;
     lea_ptr->chase(
         pik_ptr->x, pik_ptr->y,
@@ -1345,10 +1355,14 @@ void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
+    
     dist d;
-    pikmin* new_pikmin =
-        get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, false);
-        
+    pikmin* new_pikmin = NULL;
+    if(!l_ptr->queued_pluck_cancel) {
+        new_pikmin =
+            get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, false);
+    }
+    
     if(info1) {
         if(l_ptr->following_group)
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);

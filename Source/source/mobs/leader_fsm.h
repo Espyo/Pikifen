@@ -46,6 +46,7 @@ void left_hazard(          mob* m, void* info1, void* info2);
 void lose_health(          mob* m, void* info1, void* info2);
 void move(                 mob* m, void* info1, void* info2);
 void notify_pikmin_release(mob* m, void* info1, void* info2);
+void queue_pluck_cancel(   mob* m, void* info1, void* info2);
 void release(              mob* m, void* info1, void* info2);
 void search_seed(          mob* m, void* info1, void* info2);
 void set_stop_anim(        mob* m, void* info1, void* info2);

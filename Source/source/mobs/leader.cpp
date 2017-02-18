@@ -26,6 +26,7 @@ leader::leader(
     lea_type(type),
     holding_pikmin(nullptr),
     auto_pluck_pikmin(nullptr),
+    queued_pluck_cancel(false),
     is_in_walking_anim(false) {
     
     team = MOB_TEAM_PLAYER_1; //TODO.

@@ -745,6 +745,21 @@ void area_editor::create_new_from_picker(const string &name) {
         al_make_directory(new_area_path.c_str());
         area_name = name;
         clear_current_area();
+        
+        new_sector_valid_line = true;
+        new_sector_vertexes.push_back(new vertex(-500, -500));
+        new_sector_vertexes.push_back(new vertex(500,  -500));
+        new_sector_vertexes.push_back(new vertex(500,  500));
+        new_sector_vertexes.push_back(new vertex(-500, 500));
+        
+        create_sector();
+        
+        cur_area_data.mob_generators.push_back(
+            new mob_gen(
+                0, 0, MOB_CATEGORY_LEADERS,
+                leader_types.begin()->second
+            )
+        );
     }
     
     al_destroy_fs_entry(new_area_folder_entry);
@@ -1194,7 +1209,7 @@ void area_editor::find_errors() {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
             
-            if(error_mob_ptr) break;
+            if(m_ptr->category == MOB_CATEGORY_GATES) continue;
             
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
@@ -1246,6 +1261,9 @@ void area_editor::find_errors() {
                     
                 }
             }
+            
+            if(error_mob_ptr) break;
+            
         }
     }
     
@@ -1701,6 +1719,7 @@ void area_editor::load_area(const bool from_backup) {
     }
     
     change_guide(guide_file_name);
+    made_changes = false;
 }
 
 
