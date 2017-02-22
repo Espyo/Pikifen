@@ -280,9 +280,9 @@ bool grab_closest_group_member() {
  */
 void update_closest_group_member() {
     //Closest members so far for each maturity.
-    dist closest_dists[3];
-    mob* closest_ptrs[3];
-    for(unsigned char m = 0; m < 3; ++m) {
+    dist closest_dists[N_MATURITIES];
+    mob* closest_ptrs[N_MATURITIES];
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         closest_ptrs[m] = NULL;
     }
     
@@ -318,7 +318,7 @@ void update_closest_group_member() {
     
     //Now, try to get the one with the highest maturity within reach.
     dist closest_dist;
-    for(unsigned char m = 0; m < 3; ++m) {
+    for(unsigned char m = 0; m < N_MATURITIES; ++m) {
         if(!closest_ptrs[2 - m]) continue;
         if(closest_dists[2 - m] > pikmin_grab_range) continue;
         closest_group_member = closest_ptrs[2 - m];
@@ -329,7 +329,7 @@ void update_closest_group_member() {
     if(!closest_group_member) {
         //Couldn't find any within reach? Then just set it to the closest one.
         //Maturity is irrelevant for this case.
-        for(unsigned char m = 0; m < 3; ++m) {
+        for(unsigned char m = 0; m < N_MATURITIES; ++m) {
             if(!closest_ptrs[m]) continue;
             
             if(!closest_group_member || closest_dists[m] < closest_dist) {

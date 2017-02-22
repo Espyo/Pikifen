@@ -243,6 +243,8 @@ extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
 //How hard the joystick is pressed in each direction ([0, 1]);
 extern movement_struct leader_movement;
+extern vector<leader_type*> leader_order;
+extern vector<string> leader_order_strings;
 extern map<string, leader_type*> leader_types;
 //Loading screen main text buffer.
 extern ALLEGRO_BITMAP* loading_text_bmp;
@@ -264,7 +266,7 @@ extern vector<mob*> mobs;
 extern float mouse_cursor_x;
 extern float mouse_cursor_y;
 extern bool mouse_cursor_valid;
-extern bool mouse_moves_cursor[4];
+extern bool mouse_moves_cursor[MAX_PLAYERS];
 //A drop of nectar starts with this amount.
 extern size_t nectar_amount;
 extern vector<nectar*> nectars;

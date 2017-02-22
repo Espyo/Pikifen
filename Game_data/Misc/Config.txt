@@ -15,6 +15,8 @@ pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin
 standard_pikmin_height = 24
 standard_pikmin_radius = 5
 
+leader_order = Olimar;Louie;President
+
 idle_task_range = 50
 group_move_task_range = 0
 max_pikmin_in_field = 100

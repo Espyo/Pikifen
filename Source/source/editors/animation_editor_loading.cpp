@@ -1124,11 +1124,11 @@ void animation_editor::load() {
         if(cur_sprite->hitboxes.size()) {
             if(cur_hitbox_nr == INVALID) {
                 cur_hitbox_nr = 0;
-            } else if(cur_hitbox_nr == 0) {
-                cur_hitbox_nr =
-                    cur_sprite->hitboxes.size() - 1;
             } else {
-                cur_hitbox_nr--;
+                cur_hitbox_nr =
+                    sum_and_wrap(
+                        cur_hitbox_nr, -1, cur_sprite->hitboxes.size()
+                    );
             }
         }
         hitbox_to_gui();
@@ -1141,10 +1141,10 @@ void animation_editor::load() {
         if(cur_sprite->hitboxes.size()) {
             if(cur_hitbox_nr == INVALID) {
                 cur_hitbox_nr = 0;
+            } else {
+                cur_hitbox_nr =
+                    sum_and_wrap(cur_hitbox_nr, 1, cur_sprite->hitboxes.size());
             }
-            cur_hitbox_nr =
-                (cur_hitbox_nr + 1) %
-                cur_sprite->hitboxes.size();
         }
         hitbox_to_gui();
     };
@@ -1418,7 +1418,7 @@ void animation_editor::load() {
     
     frm_top->widgets["but_maturity"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        cur_maturity = (cur_maturity + 1) % 3;
+        cur_maturity = sum_and_wrap(cur_maturity, 1, N_MATURITIES);
     };
     frm_top->widgets["but_maturity"]->description =
         "View a different maturity top.";
@@ -1568,8 +1568,8 @@ void animation_editor::load() {
     frm_body_parts->widgets["but_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.body_parts.empty()) return;
-        if(cur_body_part_nr == 0) cur_body_part_nr = anims.body_parts.size() - 1;
-        else cur_body_part_nr--;
+        cur_body_part_nr =
+            sum_and_wrap(cur_body_part_nr, -1, anims.body_parts.size());
         body_part_to_gui();
     };
     frm_body_parts->widgets["but_prev"]->description =
@@ -1578,7 +1578,8 @@ void animation_editor::load() {
     frm_body_parts->widgets["but_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.body_parts.empty()) return;
-        cur_body_part_nr = (cur_body_part_nr + 1) % anims.body_parts.size();
+        cur_body_part_nr =
+            sum_and_wrap(cur_body_part_nr, 1, anims.body_parts.size());
         body_part_to_gui();
     };
     frm_body_parts->widgets["but_next"]->description =
@@ -1610,9 +1611,7 @@ void animation_editor::load() {
     [this] (lafi::widget*, int, int) {
         if(anims.body_parts.size() < 2) return;
         size_t prev_nr =
-            (cur_body_part_nr == 0) ?
-            anims.body_parts.size() - 1 :
-            cur_body_part_nr - 1;
+            sum_and_wrap(cur_body_part_nr, -1, anims.body_parts.size());
         body_part* cur_bp = anims.body_parts[cur_body_part_nr];
         anims.body_parts.erase(anims.body_parts.begin() + cur_body_part_nr);
         anims.body_parts.insert(anims.body_parts.begin() + prev_nr, cur_bp);
@@ -1627,7 +1626,8 @@ void animation_editor::load() {
     frm_body_part->widgets["but_right"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(anims.body_parts.size() < 2) return;
-        size_t next_nr = (cur_body_part_nr + 1) % anims.body_parts.size();
+        size_t next_nr =
+            sum_and_wrap(cur_body_part_nr, 1, anims.body_parts.size());
         body_part* cur_bp = anims.body_parts[cur_body_part_nr];
         anims.body_parts.erase(anims.body_parts.begin() + cur_body_part_nr);
         anims.body_parts.insert(anims.body_parts.begin() + next_nr, cur_bp);

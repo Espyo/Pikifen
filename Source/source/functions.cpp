@@ -1102,6 +1102,7 @@ void load_game_config() {
     
     reader_setter rs(&file);
     string pikmin_order_string;
+    string leader_order_string;
     
     rs.set("game_name", game_name);
     rs.set("game_version", game_version);
@@ -1119,6 +1120,8 @@ void load_game_config() {
     rs.set("pikmin_order", pikmin_order_string);
     rs.set("standard_pikmin_height", standard_pikmin_height);
     rs.set("standard_pikmin_radius", standard_pikmin_radius);
+    
+    rs.set("leader_order", leader_order_string);
     
     rs.set("idle_task_range", idle_task_range);
     rs.set("group_move_task_range", group_move_task_range);
@@ -1144,6 +1147,7 @@ void load_game_config() {
     al_set_window_title(display, game_name.c_str());
     
     pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
+    leader_order_strings = semicolon_list_to_vector(leader_order_string);
 }
 
 
@@ -1159,6 +1163,7 @@ void load_game_content() {
     
     //Mob types.
     load_mob_types(true);
+    
     for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
         if(
             find(
@@ -1184,6 +1189,33 @@ void load_game_content() {
             );
         }
     }
+    
+    for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
+        if(
+            find(
+                leader_order_strings.begin(), leader_order_strings.end(),
+                l->first
+            ) == leader_order_strings.end()
+        ) {
+            log_error(
+                "Leader type \"" + l->first + "\" was not found "
+                "in the leader order list in the config file!"
+            );
+            leader_order_strings.push_back(l->first);
+        }
+    }
+    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
+        string s = leader_order_strings[o];
+        if(leader_types.find(s) != leader_types.end()) {
+            leader_order.push_back(leader_types[s]);
+        } else {
+            log_error(
+                "Unknown leader type \"" + s + "\" found "
+                "in the leader order list in the config file!"
+            );
+        }
+    }
+    
     for(size_t p = 0; p < pikmin_order.size(); ++p) {
         subgroup_types.register_type(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p]
@@ -1513,7 +1545,7 @@ void load_options() {
      * joystick stick and axis, etc.
      * Check the constructor of control_info for more information.
      */
-    for(unsigned char p = 0; p < 4; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         controls[p].clear();
         for(size_t b = 0; b < N_BUTTONS; ++b) {
             string option_name = buttons.list[b].option_name;
@@ -1523,7 +1555,7 @@ void load_options() {
     }
     
     //Weed out controls that didn't parse correctly.
-    for(size_t p = 0; p < 4; p++) {
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
         size_t n_controls = controls[p].size();
         for(size_t c = 0; c < n_controls; ) {
             if(controls[p][c].action == BUTTON_NONE) {
@@ -1534,7 +1566,7 @@ void load_options() {
         }
     }
     
-    for(unsigned char p = 0; p < 4; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         mouse_moves_cursor[p] =
             s2b(
                 file.get_child_by_name(
@@ -1827,7 +1859,7 @@ void save_options() {
     //First, group the controls by action and player.
     map<string, string> grouped_controls;
     
-    for(unsigned char p = 0; p < 4; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         string prefix = "p" + i2s((p + 1)) + "_";
         for(size_t b = 0; b < N_BUTTONS; ++b) {
             string option_name = buttons.list[b].option_name;
@@ -1837,7 +1869,7 @@ void save_options() {
     }
     
     //Write down their control strings.
-    for(size_t p = 0; p < 4; p++) {
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
         size_t n_controls = controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
             string name = "p" + i2s(p + 1) + "_";
@@ -1862,7 +1894,7 @@ void save_options() {
         file.add(new data_node(c->first, c->second));
     }
     
-    for(unsigned char p = 0; p < 4; ++p) {
+    for(unsigned char p = 0; p < MAX_PLAYERS; ++p) {
         file.add(
             new data_node(
                 "p" + i2s((p + 1)) + "_mouse_moves_cursor",
@@ -2014,6 +2046,22 @@ string str_to_upper(string s) {
         s[c] = toupper(s[c]);
     }
     return s;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sums a number to another (even if negative), and then
+ * wraps that number across a limit, applying a modulus operation.
+ * nr:         Base number.
+ * sum:        Number to add (or subtract).
+ * wrap_limit: Wrap between [0 - wrap_limit[.
+ */
+int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
+    int final_nr = nr + sum;
+    while(final_nr < 0) {
+        final_nr += wrap_limit;
+    }
+    return final_nr % wrap_limit;
 }
 
 

@@ -876,7 +876,7 @@ void animation_editor::load_animation_database() {
         get_cut_path(file_path);
         
     //Top bitmap.
-    for(unsigned char t = 0; t < 3; ++t) {
+    for(unsigned char t = 0; t < N_MATURITIES; ++t) {
         if(top_bmp[t] && top_bmp[t] != bmp_error) {
             al_destroy_bitmap(top_bmp[t]);
             top_bmp[t] = NULL;

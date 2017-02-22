@@ -259,7 +259,7 @@ void options_menu::load() {
             scr_w * 0.3, scr_h * 0.1, scr_w * 0.15, scr_h * 0.1,
     [this] () {
         cur_page_nr = 0;
-        cur_player_nr = cur_player_nr == 0 ? 3 : cur_player_nr - 1;
+        cur_player_nr = sum_and_wrap(cur_player_nr, -1, MAX_PLAYERS);
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
@@ -278,7 +278,7 @@ void options_menu::load() {
             scr_w * 0.5, scr_h * 0.1, scr_w * 0.15, scr_h * 0.1,
     [this] () {
         cur_page_nr = 0;
-        cur_player_nr = (cur_player_nr + 1) % 4;
+        cur_player_nr = sum_and_wrap(cur_player_nr, 1, MAX_PLAYERS);
         cur_player_nr_widget->start_juicy_grow();
         update();
     },
@@ -374,11 +374,10 @@ void options_menu::load() {
         new menu_button(
             scr_w * 0.3, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
     [this] () {
-        if(cur_page_nr == 0) {
-            cur_page_nr = ceil(controls[cur_player_nr].size() / 8.0) - 1;
-        } else {
-            cur_page_nr--;
-        }
+        cur_page_nr =
+            sum_and_wrap(
+                cur_page_nr, -1, ceil(controls[cur_player_nr].size() / 8.0)
+            );
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
@@ -399,8 +398,10 @@ void options_menu::load() {
             scr_w * 0.5, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
     [this] () {
         cur_page_nr =
-            (cur_page_nr + 1) %
-            (size_t) ceil(controls[cur_player_nr].size() / 8.0);
+            sum_and_wrap(
+                cur_page_nr, 1,
+                (size_t) ceil(controls[cur_player_nr].size() / 8.0)
+            );
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
@@ -616,8 +617,7 @@ void options_menu::update() {
         //Previous action.
         ((menu_button*) control_widgets[list_nr * 5 + 1])->click_handler =
         [this, c_ptr, list_nr] () {
-            c_ptr->action =
-                c_ptr->action == 0 ? N_BUTTONS - 1 : c_ptr->action - 1;
+            c_ptr->action = sum_and_wrap(c_ptr->action, -1, N_BUTTONS);
             control_widgets[list_nr * 5 + 2]->start_juicy_grow();
             update();
         };
@@ -626,7 +626,7 @@ void options_menu::update() {
         //Next action.
         ((menu_button*) control_widgets[list_nr * 5 + 3])->click_handler =
         [this, c_ptr, list_nr] () {
-            c_ptr->action = (c_ptr->action + 1) % N_BUTTONS;
+            c_ptr->action = sum_and_wrap(c_ptr->action, 1, N_BUTTONS);
             control_widgets[list_nr * 5 + 2]->start_juicy_grow();
             update();
         };
@@ -748,8 +748,10 @@ void area_menu::load() {
         new menu_button(
             scr_w * 0.3, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
     [this] () {
-        if(cur_page_nr == 0) cur_page_nr = ceil(areas_to_pick.size() / 8.0) - 1;
-        else cur_page_nr--;
+        cur_page_nr =
+            sum_and_wrap(
+                cur_page_nr, -1, ceil(areas_to_pick.size() / 8.0)
+            );
         cur_page_nr_widget->start_juicy_grow();
         update();
     },
@@ -768,7 +770,9 @@ void area_menu::load() {
             scr_w * 0.5, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
     [this] () {
         cur_page_nr =
-            (cur_page_nr + 1) % (size_t) ceil(areas_to_pick.size() / 8.0);
+            sum_and_wrap(
+                cur_page_nr, 1, ceil(areas_to_pick.size() / 8.0)
+            );
         cur_page_nr_widget->start_juicy_grow();
         update();
     },

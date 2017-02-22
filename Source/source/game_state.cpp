@@ -10,6 +10,8 @@
  * game state-related functions.
  */
 
+#include <algorithm>
+
 #include "drawing.h"
 #include "functions.h"
 #include "game_state.h"
@@ -272,6 +274,20 @@ void gameplay::load() {
             );
         }
     }
+    
+    //Sort leaders.
+    sort(
+        leaders.begin(), leaders.end(),
+    [] (leader * l1, leader * l2) -> bool {
+        size_t priority_l1 =
+        find(leader_order.begin(), leader_order.end(), l1->lea_type) -
+        leader_order.begin();
+        size_t priority_l2 =
+        find(leader_order.begin(), leader_order.end(), l2->lea_type) -
+        leader_order.begin();
+        return priority_l1 < priority_l2;
+    }
+    );
     
     cur_leader_nr = 0;
     cur_leader_ptr = leaders[cur_leader_nr];

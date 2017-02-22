@@ -103,7 +103,7 @@ private:
     float                new_hitbox_corner_x;
     float                new_hitbox_corner_y;
     //Top bitmaps for the current Pikmin type.
-    ALLEGRO_BITMAP*      top_bmp[3];
+    ALLEGRO_BITMAP*      top_bmp[N_MATURITIES];
     unsigned char        sprite_tra_lmb_action;
     unsigned char        top_lmb_action;
     

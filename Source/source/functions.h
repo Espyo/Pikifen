@@ -145,6 +145,7 @@ vector<string> split(
 void start_message(string text, ALLEGRO_BITMAP* speaker_bmp);
 string str_to_lower(string s);
 string str_to_upper(string s);
+int sum_and_wrap(const int nr, const int sum, const int wrap_limit);
 void unload_hazards();
 void unload_status_types();
 void update_animation_editor_history(const string &n = "");

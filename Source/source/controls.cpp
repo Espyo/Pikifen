@@ -108,7 +108,7 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
     }
     
     
-    for(size_t p = 0; p < 4; p++) {
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
         size_t n_controls = controls[p].size();
         for(size_t c = 0; c < n_controls; ++c) {
         
@@ -504,12 +504,12 @@ void handle_button(
             size_t original_leader_nr = cur_leader_nr;
             
             while(search_new_leader) {
-                if(button == BUTTON_NEXT_LEADER)
-                    new_leader_nr = (new_leader_nr + 1) % leaders.size();
-                else if(button == BUTTON_PREV_LEADER) {
-                    if(new_leader_nr == 0) new_leader_nr = leaders.size() - 1;
-                    else new_leader_nr = new_leader_nr - 1;
-                }
+                new_leader_nr =
+                    sum_and_wrap(
+                        new_leader_nr,
+                        (button == BUTTON_NEXT_LEADER ? 1 : -1),
+                        leaders.size()
+                    );
                 new_leader_ptr = leaders[new_leader_nr];
                 
                 if(new_leader_nr == original_leader_nr) {
@@ -677,7 +677,7 @@ void handle_button(
             *                     *
             ***********************/
             
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(pos == 0) return;
             
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_LIE_DOWN);
             
@@ -750,6 +750,79 @@ void handle_button(
             
             if(switch_successful) {
                 sfx_switch_pikmin.play(0, false);
+            }
+            
+        } else if(
+            button == BUTTON_NEXT_MATURITY ||
+            button == BUTTON_PREV_MATURITY
+        ) {
+        
+            /**********************************
+            *                      V  -->  *  *
+            *   Switch maturity    |       |  *
+            *                     ( )     ( ) *
+            **********************************/
+            
+            if(
+                pos == 0 ||
+                !cur_leader_ptr->holding_pikmin ||
+                typeid(*cur_leader_ptr->holding_pikmin) != typeid(pikmin)
+            ) {
+                return;
+            }
+            
+            pikmin* held_p_ptr = (pikmin*) cur_leader_ptr->holding_pikmin;
+            
+            pikmin* closest_members[N_MATURITIES];
+            dist closest_dists[N_MATURITIES];
+            for(size_t m = 0; m < N_MATURITIES; ++m) {
+                closest_members[m] = NULL;
+            }
+            
+            for(size_t m = 0; m < cur_leader_ptr->group->members.size(); ++m) {
+                mob* m_ptr = cur_leader_ptr->group->members[m];
+                if(m_ptr->type != held_p_ptr->type) continue;
+                
+                pikmin* p_ptr = (pikmin*) m_ptr;
+                if(p_ptr->maturity == held_p_ptr->maturity) continue;
+                
+                dist d(
+                    cur_leader_ptr->x, cur_leader_ptr->y,
+                    p_ptr->x, p_ptr->y
+                );
+                if(
+                    !closest_members[p_ptr->maturity] ||
+                    d < closest_dists[p_ptr->maturity]
+                ) {
+                    closest_members[p_ptr->maturity] = p_ptr;
+                    closest_dists[p_ptr->maturity] = d;
+                }
+                
+            }
+            
+            size_t next_maturity = held_p_ptr->maturity;
+            mob* new_pikmin = NULL;
+            bool finished = false;
+            do {
+                next_maturity =
+                    sum_and_wrap(
+                        next_maturity,
+                        (button == BUTTON_NEXT_MATURITY ? 1 : -1),
+                        N_MATURITIES
+                    );
+                    
+                //Back to the start?
+                if(next_maturity == held_p_ptr->maturity) break;
+                
+                if(!closest_members[next_maturity]) continue;
+                
+                new_pikmin = closest_members[next_maturity];
+                finished = true;
+                
+            } while(!finished);
+            
+            if(new_pikmin) {
+                cur_leader_ptr->swap_held_pikmin(new_pikmin);
             }
             
         }

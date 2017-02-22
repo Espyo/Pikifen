@@ -535,7 +535,7 @@ void do_game_drawing(
             for(size_t l = 0; l < 3; ++l) {
                 if(n_leaders < l + 1) continue;
                 
-                size_t l_nr = (cur_leader_nr + l) % n_leaders;
+                size_t l_nr = sum_and_wrap(cur_leader_nr, l, n_leaders);
                 int icon_id = HUD_ITEM_LEADER_1_ICON + l;
                 int health_id = HUD_ITEM_LEADER_1_HEALTH + l;
                 
@@ -948,11 +948,7 @@ void do_game_drawing(
                 } else if(n_spray_types > 2) {
                     draw_sprite(
                         spray_types[
-                            (
-                                selected_spray == 0 ?
-                                spray_types.size() - 1 :
-                                selected_spray - 1
-                            )
+                            sum_and_wrap(selected_spray, -1, spray_types.size())
                         ].bmp_spray,
                         hud_coords[HUD_ITEM_SPRAY_PREV_ICON][0],
                         hud_coords[HUD_ITEM_SPRAY_PREV_ICON][1],
@@ -961,7 +957,7 @@ void do_game_drawing(
                     );
                     draw_sprite(
                         spray_types[
-                            (selected_spray + 1) % spray_types.size()
+                            sum_and_wrap(selected_spray, 1, spray_types.size())
                         ].bmp_spray,
                         hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][0],
                         hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][1],

@@ -139,13 +139,19 @@ void init_controls() {
         BUTTON_PREV_TYPE, "Prev. Pikmin", "prev_type", "mwu"
     );
     buttons.add(
+        BUTTON_NEXT_MATURITY, "Next maturity", "next_maturity", ""
+    );
+    buttons.add(
+        BUTTON_PREV_MATURITY, "Prev. maturity", "prev_maturity", ""
+    );
+    buttons.add(
         BUTTON_LIE_DOWN, "Lie down", "lie_down", "k_26"
     );
     buttons.add(
         BUTTON_PAUSE, "Pause", "pause", "k_59"
     );
     
-    controls.assign(4, vector<control_info>());
+    controls.assign(MAX_PLAYERS, vector<control_info>());
     
     //Populate the controls information with some default controls for player 1.
     //If the options are loaded successfully, these controls are overwritten.
@@ -419,7 +425,7 @@ void init_misc() {
         whistle_rings.push_back(0);
         whistle_ring_colors.push_back(whistle_ring_prev_color);
         whistle_ring_prev_color =
-            (whistle_ring_prev_color + 1) % N_WHISTLE_RING_COLORS;
+            sum_and_wrap(whistle_ring_prev_color, 1, N_WHISTLE_RING_COLORS);
     };
     whistle_next_ring_timer.start();
     
