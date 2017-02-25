@@ -382,6 +382,8 @@ void init_misc() {
     al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);
     
+    al_identity_transform(&identity_transform);
+    
     srand(time(NULL));
     
     //TODO the function is always returning 0.
@@ -390,7 +392,7 @@ void init_misc() {
     
     cursor_save_timer.on_end = [] () {
         cursor_save_timer.start();
-        cursor_spots.push_back(point(mouse_cursor_x, mouse_cursor_y));
+        cursor_spots.push_back(mouse_cursor_s);
         if(cursor_spots.size() > CURSOR_SAVE_N_SPOTS) {
             cursor_spots.erase(cursor_spots.begin());
         }

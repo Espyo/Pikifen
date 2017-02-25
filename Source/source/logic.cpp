@@ -14,7 +14,6 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
-#include "logic.h"
 #include "mobs/pikmin.h"
 #include "vars.h"
 
@@ -24,7 +23,7 @@ const float CAMERA_SMOOTHNESS_MULT = 4.5f;
  * Ticks the logic of aesthetic things. If the game is paused, these can
  * be frozen in place without any negative impact.
  */
-void do_aesthetic_logic() {
+void gameplay::do_aesthetic_logic() {
 
     /*************************************
     *                               .-.  *
@@ -33,8 +32,8 @@ void do_aesthetic_logic() {
     **************************************/
     
     //Camera movement.
-    cam_x += (cam_final_x - cam_x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    cam_y += (cam_final_y - cam_y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_pos.x += (cam_final_x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_pos.y += (cam_final_y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
     cam_zoom +=
         (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
         
@@ -43,8 +42,9 @@ void do_aesthetic_logic() {
         group_move_next_arrow_timer.tick(delta_t);
     }
     
-    dist leader_to_cursor_dis(
-        cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y
+    dist leader_to_cursor_dist(
+        cur_leader_ptr->x, cur_leader_ptr->y,
+        leader_cursor_w.x, leader_cursor_w.y
     );
     for(size_t a = 0; a < group_move_arrows.size(); ) {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
@@ -52,7 +52,7 @@ void do_aesthetic_logic() {
         dist max_dist =
             (group_move_intensity > 0) ?
             cursor_max_dist * group_move_intensity :
-            leader_to_cursor_dis;
+            leader_to_cursor_dist;
             
         if(max_dist < group_move_arrows[a]) {
             group_move_arrows.erase(group_move_arrows.begin() + a);
@@ -93,7 +93,7 @@ void do_aesthetic_logic() {
     for(size_t r = 0; r < whistle_rings.size(); ) {
         //Erase rings that go beyond the cursor.
         whistle_rings[r] += WHISTLE_RING_SPEED * delta_t;
-        if(leader_to_cursor_dis < whistle_rings[r]) {
+        if(leader_to_cursor_dist < whistle_rings[r]) {
             whistle_rings.erase(whistle_rings.begin() + r);
             whistle_ring_colors.erase(whistle_ring_colors.begin() + r);
         } else {
@@ -134,7 +134,8 @@ void do_aesthetic_logic() {
     //Cursor being above or below the leader.
     //TODO check this only one out of every three frames or something.
     cursor_height_diff_light = 0;
-    sector* cursor_sector = get_sector(cursor_x, cursor_y, NULL, true);
+    sector* cursor_sector =
+        get_sector(leader_cursor_w.x, leader_cursor_w.y, NULL, true);
     if(cursor_sector) {
         cursor_height_diff_light =
             (cursor_sector->z - cur_leader_ptr->z) * 0.0033;
@@ -160,8 +161,10 @@ void do_aesthetic_logic() {
 /* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
  */
-void do_gameplay_logic() {
+void gameplay::do_gameplay_logic() {
 
+    game_states[cur_game_state_nr]->update_transformations();
+    
     if(cur_message.empty()) {
     
         /************************************
@@ -289,11 +292,13 @@ void do_gameplay_logic() {
         
         if(group_move_cursor) {
             group_move_angle = cursor_angle;
-            dist leader_to_cursor_dis(
-                cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y
-            );
+            float leader_to_cursor_dist =
+                dist(
+                    cur_leader_ptr->x, cur_leader_ptr->y,
+                    leader_cursor_w.x, leader_cursor_w.y
+                ).to_float();
             group_move_intensity =
-                leader_to_cursor_dis.to_float() / cursor_max_dist;
+                leader_to_cursor_dist / cursor_max_dist;
         } else if(group_move_x != 0 || group_move_y != 0) {
             coordinates_to_angle(
                 group_move_x, group_move_y,
@@ -327,53 +332,62 @@ void do_gameplay_logic() {
         *             `-´   *
         ********************/
         
-        float mouse_cursor_speed_x =
-            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x();
-        float mouse_cursor_speed_y =
-            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y();
-            
-        mouse_cursor_x += mouse_cursor_speed_x;
-        mouse_cursor_y += mouse_cursor_speed_y;
+        point mouse_cursor_speed(
+            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x(),
+            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y()
+        );
         
-        float mcx = mouse_cursor_x, mcy = mouse_cursor_y;
-        ALLEGRO_TRANSFORM world_to_screen_transform =
-            get_world_to_screen_transform();
-        ALLEGRO_TRANSFORM screen_to_world_transform =
-            world_to_screen_transform;
-        al_invert_transform(&screen_to_world_transform);
-        al_transform_coordinates(&screen_to_world_transform, &mcx, &mcy);
-        cursor_x = mcx;
-        cursor_y = mcy;
+        mouse_cursor_s += mouse_cursor_speed;
+        
+        mouse_cursor_w = mouse_cursor_s;
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &mouse_cursor_w.x, &mouse_cursor_w.y
+        );
+        leader_cursor_w = mouse_cursor_w;
         
         cursor_angle =
-            atan2(cursor_y - cur_leader_ptr->y, cursor_x - cur_leader_ptr->x);
+            atan2(
+                leader_cursor_w.y - cur_leader_ptr->y,
+                leader_cursor_w.x - cur_leader_ptr->x
+            );
         if(cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE) {
+            //TODO move this to the FSM.
             cur_leader_ptr->face(cursor_angle);
         }
         
-        dist leader_to_cursor_dis =
-            dist(cur_leader_ptr->x, cur_leader_ptr->y, cursor_x, cursor_y);
-        if(leader_to_cursor_dis > cursor_max_dist) {
+        dist leader_to_cursor_dist(
+            cur_leader_ptr->x, cur_leader_ptr->y,
+            leader_cursor_w.x, leader_cursor_w.y
+        );
+        if(leader_to_cursor_dist > cursor_max_dist) {
             //TODO with an analog stick, if the cursor is being moved,
             //it's considered off-limit a lot more than it should.
             
             //Cursor goes beyond the range limit.
-            cursor_x =
+            leader_cursor_w.x =
                 cur_leader_ptr->x + (cos(cursor_angle) * cursor_max_dist);
-            cursor_y =
+            leader_cursor_w.y =
                 cur_leader_ptr->y + (sin(cursor_angle) * cursor_max_dist);
                 
-            if(mouse_cursor_speed_x != 0 || mouse_cursor_speed_y != 0) {
+            if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
                 //If we're speeding the mouse cursor (via analog stick),
                 //don't let it go beyond the edges.
-                mouse_cursor_x = cursor_x;
-                mouse_cursor_y = cursor_y;
+                mouse_cursor_w = leader_cursor_w;
+                mouse_cursor_s = mouse_cursor_w;
                 al_transform_coordinates(
                     &world_to_screen_transform,
-                    &mouse_cursor_x, &mouse_cursor_y
+                    &mouse_cursor_s.x, &mouse_cursor_s.y
                 );
             }
         }
+        
+        leader_cursor_s = leader_cursor_w;
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &leader_cursor_s.x, &leader_cursor_s.y
+        );
+        
         
         
         /**************************
@@ -515,9 +529,10 @@ void do_gameplay_logic() {
     
     //Print mouse coordinates.
     if(dev_tool_show_mouse_coords) {
-        float mx, my;
-        get_mouse_cursor_coordinates(&mx, &my);
-        print_info("Mouse coordinates: " + f2s(mx) + ", " + f2s(my) + ".");
+        print_info(
+            "Mouse coordinates: " + f2s(mouse_cursor_w.x) +
+            ", " + f2s(mouse_cursor_w.y) + "."
+        );
     }
     
     info_print_timer.tick(delta_t);
@@ -531,7 +546,7 @@ void do_gameplay_logic() {
  * Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  */
-void process_mob(mob* m_ptr, size_t m) {
+void gameplay::process_mob(mob* m_ptr, size_t m) {
     /********************************
      *                              *
      *   Mob interactions   () - () *
@@ -1029,7 +1044,10 @@ void process_mob(mob* m_ptr, size_t m) {
     //Check if it got whistled.
     mob_event* whistled_ev = q_get_event(m_ptr, MOB_EVENT_WHISTLED);
     if(whistling && whistled_ev) {
-        if(dist(m_ptr->x, m_ptr->y, cursor_x, cursor_y) <= whistle_radius) {
+        if(
+            dist(m_ptr->x, m_ptr->y, leader_cursor_w.x, leader_cursor_w.y) <=
+            whistle_radius
+        ) {
             whistled_ev->run(m_ptr);
         }
     }

@@ -91,7 +91,6 @@ vector<string> folder_to_vector(
 void generate_area_images();
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
-void get_mouse_cursor_coordinates(float* x, float* y);
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
@@ -99,7 +98,6 @@ float get_sun_strength();
 string get_var_value(
     const string &vars_string, const string &var, const string &def
 );
-ALLEGRO_TRANSFORM get_world_to_screen_transform();
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2

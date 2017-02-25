@@ -23,8 +23,11 @@ button::button(
 button::button(
     const string &text, const string &description, ALLEGRO_BITMAP* icon
 ) :
-    button(0, 0, 0, 0, text, description, icon) {
+    widget(),
+    text(text),
+    icon(icon) {
     
+    this->description = description;
 }
 
 

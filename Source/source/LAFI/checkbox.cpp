@@ -13,8 +13,8 @@ checkbox::checkbox(
     const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
-    checked(checked),
-    text(text) {
+    text(text),
+    checked(checked) {
     
     needs_init = true;
 }
@@ -24,8 +24,11 @@ checkbox::checkbox(
  * Creates a checkbox.
  */
 checkbox::checkbox(const string &text, const bool checked) :
-    checkbox(0, 0, 0, 0, text, checked) {
+    widget(),
+    text(text),
+    checked(checked) {
     
+    needs_init = true;
 }
 
 /* ----------------------------------------------------------------------------

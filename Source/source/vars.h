@@ -71,7 +71,6 @@ extern ALLEGRO_BITMAP* bmp_number_bubble;
 extern ALLEGRO_BITMAP* bmp_pikmin_distant;
 extern ALLEGRO_BITMAP* bmp_pikmin_silhouette;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
-extern ALLEGRO_BITMAP* bmp_red[3];
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
@@ -127,8 +126,7 @@ extern button_manager buttons;
 extern float cam_final_x;
 extern float cam_final_y;
 extern float cam_final_zoom;
-extern float cam_x;
-extern float cam_y;
+extern point cam_pos;
 extern float cam_zoom;
 extern bool can_throw_leaders;
 extern ALLEGRO_COLOR carrying_color_move;
@@ -167,9 +165,6 @@ extern timer cursor_save_timer;
 extern float cursor_spin_speed;
 //Spots the cursor has been through. Used for the faint trail left behind it.
 extern vector<point> cursor_spots;
-//Leader's cursor.
-extern float cursor_x;
-extern float cursor_y;
 extern map<string, particle_generator> custom_particle_generators;
 extern unsigned int day;
 extern float day_minutes;
@@ -232,6 +227,7 @@ extern vector<vector<float> > group_spots_x;
 extern vector<vector<float> > group_spots_y;
 extern map<string, hazard> hazards;
 extern float hud_coords[N_HUD_ITEMS][4];
+extern ALLEGRO_TRANSFORM identity_transform;
 extern float idle_task_range;
 extern string info_print_text;
 extern timer info_print_timer;
@@ -241,6 +237,10 @@ extern bool is_game_running;
 extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 extern map<string, liquid> liquids;
 extern vector<leader*> leaders;
+//Leader's cursor, in screen coordinates.
+extern point leader_cursor_s;
+//Leader's cursor, in world coordinates.
+extern point leader_cursor_w;
 //How hard the joystick is pressed in each direction ([0, 1]);
 extern movement_struct leader_movement;
 extern vector<leader_type*> leader_order;
@@ -262,9 +262,10 @@ extern map<string, mob_type*> misc_mob_types;
 extern ALLEGRO_MIXER* mixer;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
-//The physical mouse's cursor.
-extern float mouse_cursor_x;
-extern float mouse_cursor_y;
+//The physical mouse's cursor, in screen coordinates.
+extern point mouse_cursor_s;
+//The physical mouse's cursor, in world coordinates.
+extern point mouse_cursor_w;
 extern bool mouse_cursor_valid;
 extern bool mouse_moves_cursor[MAX_PLAYERS];
 //A drop of nectar starts with this amount.
@@ -307,6 +308,7 @@ extern bool ready_for_input;
 extern bool reset_delta_t;
 extern int scr_h;
 extern int scr_w;
+extern ALLEGRO_TRANSFORM screen_to_world_transform;
 extern sector_types_manager sector_types;
 extern unsigned int selected_spray;
 extern unsigned char ship_beam_ring_color[3];
@@ -349,6 +351,7 @@ extern bool whistling;
 //Should we force the window's positioning
 //(on some systems it appears out-of-bounds by default)
 extern bool window_position_hack;
+extern ALLEGRO_TRANSFORM world_to_screen_transform;
 extern float zoom_max_level;
 extern float zoom_mid_level;
 extern float zoom_min_level;

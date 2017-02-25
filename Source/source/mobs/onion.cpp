@@ -107,7 +107,7 @@ void onion::tick_class_specifics() {
         
         if(
             bbox_check(
-                cursor_x, cursor_y,
+                leader_cursor_w.x, leader_cursor_w.y,
                 o_ptr->x, o_ptr->y,
                 cur_leader_ptr->type->radius + o_ptr->type->radius * 3
             )

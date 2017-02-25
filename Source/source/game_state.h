@@ -17,6 +17,7 @@
 
 #include <allegro5/allegro.h>
 
+#include "mobs/mob.h"
 #include "menu_widgets.h"
 
 using namespace std;
@@ -51,6 +52,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev) = 0;
     virtual void do_logic() = 0;
     virtual void do_drawing() = 0;
+    virtual void update_transformations();
 };
 
 
@@ -58,6 +60,11 @@ public:
  * Standard gameplay state. This is where the action happens.
  */
 class gameplay : public game_state {
+private:
+    void do_aesthetic_logic();
+    void do_gameplay_logic();
+    void process_mob(mob* m_ptr, size_t m);
+    
 public:
     gameplay();
     virtual void load();
@@ -65,6 +72,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void do_logic();
     virtual void do_drawing();
+    virtual void update_transformations();
 };
 
 #endif //ifndef GAME_STATE_INCLUDED

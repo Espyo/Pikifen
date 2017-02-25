@@ -74,8 +74,6 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                 
             } else if(id == DEV_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < max_pikmin_in_field) {
-                    float mx, my;
-                    get_mouse_cursor_coordinates(&mx, &my);
                     pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
                     
                     auto p = pikmin_types.begin();
@@ -92,15 +90,17 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                     
                     create_mob(
                         new pikmin(
-                            mx, my, new_pikmin_type, 0, "maturity=flower"
+                            mouse_cursor_w.x, mouse_cursor_w.y,
+                            new_pikmin_type, 0, "maturity=flower"
                         )
                     );
                 }
                 
             } else if(id == DEV_TOOL_TELEPORT) {
-                float mx, my;
-                get_mouse_cursor_coordinates(&mx, &my);
-                cur_leader_ptr->chase(mx, my, NULL, NULL, true);
+                cur_leader_ptr->chase(
+                    mouse_cursor_w.x, mouse_cursor_w.y,
+                    NULL, NULL, true
+                );
                 
             }
             
@@ -217,8 +217,14 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
         }
         
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
-            mouse_cursor_x = ev.mouse.x;
-            mouse_cursor_y = ev.mouse.y;
+            mouse_cursor_s.x = ev.mouse.x;
+            mouse_cursor_s.y = ev.mouse.y;
+            mouse_cursor_w = mouse_cursor_s;
+            
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &mouse_cursor_w.x, &mouse_cursor_w.y
+            );
         }
     }
     
@@ -561,6 +567,7 @@ void handle_button(
             *   Sprays   (   ) *
             *             '-'  *
             *******************/
+            
             if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
@@ -675,7 +682,7 @@ void handle_button(
             *                     *
             *   Lie down  -()/__/ *
             *                     *
-            ***********************/
+            **********************/
             
             if(pos == 0) return;
             
@@ -691,7 +698,7 @@ void handle_button(
             *                     -->   *
             *   Switch type   <( )> (o) *
             *                           *
-            *****************************/
+            ****************************/
             
             if(pos == 0) return;
             

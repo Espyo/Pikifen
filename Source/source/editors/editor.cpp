@@ -18,8 +18,6 @@
 #include "../vars.h"
 
 
-const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
-
 
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
@@ -212,7 +210,7 @@ void editor::generate_and_open_picker(
         string name = elements[e];
         b->left_mouse_click_handler =
         [name, type, this] (lafi::widget*, int, int) {
-            hide_widget(gui->widgets["frm_picker"]);
+            hide_widget(this->gui->widgets["frm_picker"]);
             pick(name, type);
         };
         f->easy_add("but_" + i2s(e), b, 100, 24);

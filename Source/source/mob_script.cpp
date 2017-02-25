@@ -1033,7 +1033,7 @@ vector<mob_state*> easy_fsm_creator::finish() {
     commit_state();
     sort(
         states.begin(), states.end(),
-    [] (const mob_state * ms1, const mob_state * ms2) {
+    [] (mob_state * ms1, mob_state * ms2) -> bool {
         return ms1->id < ms2->id;
     }
     );

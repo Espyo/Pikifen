@@ -21,13 +21,18 @@ angle_picker::angle_picker(
     needs_init = true;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Creates an angle picker.
  */
 angle_picker::angle_picker(const float angle) :
-    angle_picker(0, 0, 0, 0, angle) {
+    widget(),
+    angle(angle),
+    dragging_pointer(false) {
     
+    needs_init = true;
 }
+
 
 //Destroys an angle picker.
 angle_picker::~angle_picker() {}

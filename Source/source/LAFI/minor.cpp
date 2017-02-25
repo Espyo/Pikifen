@@ -21,7 +21,9 @@ line::line(
  * Creates a line.
  */
 line::line(const bool horizontal, const int thickness) :
-    line(0, 0, 0, 0, horizontal, thickness) {
+    widget(),
+    horizontal(horizontal),
+    thickness(thickness) {
     
 }
 
@@ -63,7 +65,7 @@ dummy::dummy(
 /* ----------------------------------------------------------------------------
  * Creates a dummy widget.
  */
-dummy::dummy() : dummy(0, 0, 0, 0) {
+dummy::dummy() : widget() {
 
 }
 

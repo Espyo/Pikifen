@@ -112,6 +112,7 @@ private:
     static const float  ZOOM_MAX_LEVEL_EDITOR;
     static const float  ZOOM_MIN_LEVEL_EDITOR;
     
+    static const string EDITOR_ICONS_FOLDER_NAME;
     static const string DELETE_ICON;
     static const string DELETE_LINK_ICON;
     static const string DELETE_STOP_ICON;
@@ -260,6 +261,7 @@ public:
     virtual void handle_controls(const ALLEGRO_EVENT &ev);
     virtual void load();
     virtual void unload();
+    virtual void update_transformations();
     
     void set_guide_file_name(string n);
     void set_guide_x(float x);

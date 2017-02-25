@@ -28,27 +28,26 @@ void area_editor::do_drawing() {
 
     gui->draw();
     
-    ALLEGRO_TRANSFORM transform;
-    al_identity_transform(&transform);
-    al_translate_transform(
-        &transform, cam_x + (gui_x / 2 / cam_zoom),
-        cam_y + (scr_h / 2 / cam_zoom)
-    );
-    al_scale_transform(&transform, cam_zoom, cam_zoom);
-    al_use_transform(&transform);
+    al_use_transform(&world_to_screen_transform);
     
     al_set_clipping_rectangle(0, 0, gui_x, status_bar_y); {
         al_clear_to_color(al_map_rgb(0, 0, 0));
         
         //Grid.
         if(sec_mode != ESM_TEXTURE_VIEW) {
-            float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
-            float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
-            float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
-            float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
+            point cam_top_left_corner(0, 0);
+            point cam_bottom_right_corner(gui_x, status_bar_y);
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &cam_top_left_corner.x, &cam_top_left_corner.y
+            );
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+            );
             
-            float x = floor(cam_leftmost / grid_interval) * grid_interval;
-            while(x < cam_rightmost + grid_interval) {
+            float x = floor(cam_top_left_corner.x / grid_interval) * grid_interval;
+            while(x < cam_bottom_right_corner.x + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
                 
@@ -61,15 +60,15 @@ void area_editor::do_drawing() {
                 
                 if(draw_line) {
                     al_draw_line(
-                        x, cam_topmost, x, cam_bottommost + grid_interval,
+                        x, cam_top_left_corner.y, x, cam_bottom_right_corner.y + grid_interval,
                         c, 1.0 / cam_zoom
                     );
                 }
                 x += grid_interval;
             }
             
-            float y = floor(cam_topmost / grid_interval) * grid_interval;
-            while(y < cam_bottommost + grid_interval) {
+            float y = floor(cam_top_left_corner.y / grid_interval) * grid_interval;
+            while(y < cam_bottom_right_corner.y + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
                 
@@ -82,7 +81,7 @@ void area_editor::do_drawing() {
                 
                 if(draw_line) {
                     al_draw_line(
-                        cam_leftmost, y, cam_rightmost + grid_interval, y,
+                        cam_top_left_corner.x, y, cam_bottom_right_corner.x + grid_interval, y,
                         c, 1.0 / cam_zoom
                     );
                 }
@@ -408,7 +407,7 @@ void area_editor::do_drawing() {
             if(sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
                 al_draw_line(
                     new_link_first_stop->x, new_link_first_stop->y,
-                    mouse_cursor_x, mouse_cursor_y,
+                    mouse_cursor_w.x, mouse_cursor_w.y,
                     al_map_rgb(255, 255, 255), 2 / cam_zoom
                 );
             }
@@ -418,7 +417,7 @@ void area_editor::do_drawing() {
                 dist closest_dist;
                 for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                     path_stop* s_ptr = cur_area_data.path_stops[s];
-                    dist d(mouse_cursor_x, mouse_cursor_y, s_ptr->x, s_ptr->y);
+                    dist d(mouse_cursor_w.x, mouse_cursor_w.y, s_ptr->x, s_ptr->y);
                     
                     if(!closest || d < closest_dist) {
                         closest = s_ptr;
@@ -427,7 +426,7 @@ void area_editor::do_drawing() {
                 }
                 
                 al_draw_line(
-                    mouse_cursor_x, mouse_cursor_y,
+                    mouse_cursor_w.x, mouse_cursor_w.y,
                     closest->x, closest->y,
                     al_map_rgb(96, 224, 32), 2 / cam_zoom
                 );
@@ -546,8 +545,8 @@ void area_editor::do_drawing() {
                 al_draw_line(
                     new_sector_vertexes.back()->x,
                     new_sector_vertexes.back()->y,
-                    snap_to_grid(mouse_cursor_x),
-                    snap_to_grid(mouse_cursor_y),
+                    snap_to_grid(mouse_cursor_w.x),
+                    snap_to_grid(mouse_cursor_w.y),
                     (new_sector_valid_line ?
                      al_map_rgb(64, 255, 64) :
                      al_map_rgb(255, 0, 0)),
@@ -611,22 +610,21 @@ void area_editor::do_drawing() {
             sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK1 ||
             sec_mode == ESM_NEW_1WLINK2
         ) {
-            float x = mouse_cursor_x;
-            float y = mouse_cursor_y;
+            point marker = mouse_cursor_w;
             if(
                 sec_mode != ESM_NEW_1WLINK1 && sec_mode != ESM_NEW_1WLINK2 &&
                 sec_mode != ESM_NEW_LINK1 && sec_mode != ESM_NEW_LINK2 &&
                 new_circle_sector_step != 2
             ) {
-                x = snap_to_grid(mouse_cursor_x);
-                y = snap_to_grid(mouse_cursor_y);
+                marker.x = snap_to_grid(marker.x);
+                marker.y = snap_to_grid(marker.y);
             }
             al_draw_line(
-                x - 16, y, x + 16, y,
+                marker.x - 16, marker.y, marker.x + 16, marker.y,
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
             al_draw_line(
-                x, y - 16, x, y + 16,
+                marker.x, marker.y - 16, marker.x, marker.y + 16,
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
         }
@@ -636,13 +634,13 @@ void area_editor::do_drawing() {
             sec_mode == ESM_DEL_STOP || sec_mode == ESM_DEL_LINK
         ) {
             al_draw_line(
-                mouse_cursor_x - 16, mouse_cursor_y - 16,
-                mouse_cursor_x + 16, mouse_cursor_y + 16,
+                mouse_cursor_w.x - 16, mouse_cursor_w.y - 16,
+                mouse_cursor_w.x + 16, mouse_cursor_w.y + 16,
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
             al_draw_line(
-                mouse_cursor_x + 16, mouse_cursor_y - 16,
-                mouse_cursor_x - 16, mouse_cursor_y + 16,
+                mouse_cursor_w.x + 16, mouse_cursor_w.y - 16,
+                mouse_cursor_w.x - 16, mouse_cursor_w.y + 16,
                 al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
         }
@@ -715,7 +713,7 @@ void area_editor::do_drawing() {
         }
         
         //Guide.
-        if(guide_bitmap && show_guide) {
+        if(guide_bitmap && (show_guide || mode == EDITOR_MODE_GUIDE)) {
             al_draw_tinted_scaled_bitmap(
                 guide_bitmap,
                 map_alpha(guide_a),
@@ -730,9 +728,7 @@ void area_editor::do_drawing() {
         
     } al_reset_clipping_rectangle();
     
-    ALLEGRO_TRANSFORM id_transform;
-    al_identity_transform(&id_transform);
-    al_use_transform(&id_transform);
+    al_use_transform(&identity_transform);
     
     //Cross-section graph.
     if(mode == EDITOR_MODE_REVIEW && show_cross_section) {
@@ -805,7 +801,7 @@ void area_editor::do_drawing() {
         if(!splits.empty()) {
             sort(
                 splits.begin(), splits.end(),
-            [] (split_info & i1, split_info & i2) {
+            [] (split_info i1, split_info i2) -> bool {
                 return i1.ur < i2.ur;
             }
             );
@@ -934,7 +930,7 @@ void area_editor::do_drawing() {
         point cursor_line_point =
             get_closest_point_in_line(
                 cross_section_points[0], cross_section_points[1],
-                point(mouse_cursor_x, mouse_cursor_y),
+                point(mouse_cursor_w.x, mouse_cursor_w.y),
                 &cursor_segment_ratio
             );
         if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {

@@ -65,6 +65,7 @@ const float  area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
 const float  area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
+const string area_editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 const string area_editor::DELETE_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
 const string area_editor::DELETE_LINK_ICON =
@@ -588,8 +589,8 @@ void area_editor::center_camera(
     float width = max_x - min_x;
     float height = max_y - min_y;
     
-    cam_x = -floor(min_x + width  / 2);
-    cam_y = -floor(min_y + height / 2);
+    cam_pos.x = -floor(min_x + width  / 2);
+    cam_pos.y = -floor(min_y + height / 2);
     
     if(width > height) cam_zoom = gui_x / width;
     else cam_zoom = status_bar_y / height;
@@ -705,7 +706,7 @@ void area_editor::clear_current_area() {
     mob_to_gui();
     guide_to_gui();
     
-    cam_x = cam_y = 0;
+    cam_pos.x = cam_pos.y = 0;
     cam_zoom = 1;
     show_cross_section = false;
     show_cross_section_grid = false;
@@ -984,6 +985,8 @@ void area_editor::create_sector() {
  */
 void area_editor::do_logic() {
 
+    update_transformations();
+    
     if(double_click_time > 0) {
         double_click_time -= delta_t;
         if(double_click_time < 0) double_click_time = 0;
@@ -1293,8 +1296,8 @@ void area_editor::set_new_circle_sector_points() {
         );
     float cursor_angle =
         atan2(
-            mouse_cursor_y - new_circle_sector_center.y,
-            mouse_cursor_x - new_circle_sector_center.x
+            mouse_cursor_w.y - new_circle_sector_center.y,
+            mouse_cursor_w.x - new_circle_sector_center.x
         );
     float radius =
         dist(
@@ -2636,6 +2639,25 @@ void area_editor::update_review_frame() {
         gui->widgets["frm_review"]->widgets["chk_cross_section_grid"]
     )->set(show_cross_section_grid);
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the transformations, with the current camera coordinates, zoom, etc.
+ */
+void area_editor::update_transformations() {
+    //World coordinates to screen coordinates.
+    world_to_screen_transform = identity_transform;
+    al_translate_transform(
+        &world_to_screen_transform,
+        -cam_pos.x + gui_x / 2.0 / cam_zoom,
+        -cam_pos.y + status_bar_y / 2.0 / cam_zoom
+    );
+    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    
+    //Screen coordinates to world coordinates.
+    screen_to_world_transform = world_to_screen_transform;
+    al_invert_transform(&screen_to_world_transform);
 }
 
 

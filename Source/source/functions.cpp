@@ -338,9 +338,6 @@ void generate_area_images() {
  * Returns the mob that is closest to the mouse cursor.
  */
 mob* get_closest_mob_to_cursor() {
-    float mx, my;
-    get_mouse_cursor_coordinates(&mx, &my);
-    
     dist closest_mob_to_cursor_dist = 0;
     mob* closest_mob_to_cursor = NULL;
     
@@ -349,7 +346,7 @@ mob* get_closest_mob_to_cursor() {
         
         if(!m_ptr->fsm.cur_state) continue;
         
-        dist d = dist(mx, my, m_ptr->x, m_ptr->y);
+        dist d = dist(mouse_cursor_w.x, mouse_cursor_w.y, m_ptr->x, m_ptr->y);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -366,7 +363,9 @@ mob* get_closest_mob_to_cursor() {
 ALLEGRO_COLOR get_daylight_color() {
     size_t n_points = cur_area_data.weather_condition.daylight.size();
     
-    if(n_points == 1) {
+    if(n_points == 0) {
+        return al_map_rgba(255, 255, 255, 0);
+    } else if(n_points == 1) {
         return cur_area_data.weather_condition.daylight[0].second;
     }
     
@@ -388,18 +387,6 @@ ALLEGRO_COLOR get_daylight_color() {
     
     //If anything goes wrong, return a failsafe.
     return al_map_rgba(255, 255, 255, 0);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the in-world coordinates of the mouse cursor.
- */
-void get_mouse_cursor_coordinates(float* x, float* y) {
-    *x = mouse_cursor_x;
-    *y = mouse_cursor_y;
-    ALLEGRO_TRANSFORM t = get_world_to_screen_transform();
-    al_invert_transform(&t);
-    al_transform_coordinates(&t, x, y);
 }
 
 
@@ -442,7 +429,9 @@ void get_multiline_text_dimensions(
 float get_sun_strength() {
     size_t n_points = cur_area_data.weather_condition.sun_strength.size();
     
-    if(n_points == 1) {
+    if(n_points == 0) {
+        return 1.0;
+    } else if(n_points == 1) {
         return cur_area_data.weather_condition.sun_strength[0].second;
     }
     
@@ -452,13 +441,14 @@ float get_sun_strength() {
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
-            return interpolate_number(
-                       day_minutes,
-                       cur_ptr->first,
-                       next_ptr->first,
-                       cur_ptr->second,
-                       next_ptr->second
-                   ) / 255.0f;
+            return
+                interpolate_number(
+                    day_minutes,
+                    cur_ptr->first,
+                    next_ptr->first,
+                    cur_ptr->second,
+                    next_ptr->second
+                ) / 255.0f;
         }
     }
     
@@ -491,23 +481,6 @@ string get_var_value(
     }
     
     return def;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns an ALLEGRO_TRANSFORM that transforms world coordinates
- * into screen coordinates.
- */
-ALLEGRO_TRANSFORM get_world_to_screen_transform() {
-    ALLEGRO_TRANSFORM t;
-    al_identity_transform(&t);
-    al_translate_transform(
-        &t,
-        -cam_x + scr_w / 2 * 1 / (cam_zoom),
-        -cam_y + scr_h / 2 * 1 / (cam_zoom)
-    );
-    al_scale_transform(&t, cam_zoom, cam_zoom);
-    return t;
 }
 
 

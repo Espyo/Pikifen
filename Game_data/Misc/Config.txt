@@ -9,7 +9,7 @@ carrying_speed_weight_mult = 0.0004
 
 day_minutes_start = 420
 day_minutes_end = 1140
-day_minutes_per_irl_sec = 2
+day_minutes_per_irl_sec = 0.8
 
 pikmin_order = Red Pikmin;Yellow Pikmin;Blue Pikmin;Purple Pikmin;White Pikmin
 standard_pikmin_height = 24

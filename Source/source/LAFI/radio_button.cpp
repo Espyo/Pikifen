@@ -31,8 +31,12 @@ radio_button::radio_button(
 radio_button::radio_button(
     const string &text, const int group, const bool selected
 ) :
-    radio_button(0, 0, 0, 0, text, group, selected) {
+    widget(),
+    selected(selected),
+    text(text),
+    group(group) {
     
+    needs_init = true;
 }
 
 

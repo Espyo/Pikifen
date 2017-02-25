@@ -34,6 +34,7 @@ const float animation_editor::ZOOM_MAX_LEVEL_EDITOR = 32.0f;
 //Minimum zoom level possible in the editor.
 const float animation_editor::ZOOM_MIN_LEVEL_EDITOR = 0.05f;
 
+const string animation_editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
 const string animation_editor::DELETE_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
 const string animation_editor::EXIT_ICON =
@@ -108,6 +109,9 @@ animation_editor::animation_editor() :
  * Handles the logic part of the main loop of the animation editor.
  */
 void animation_editor::do_logic() {
+
+    update_transformations();
+    
     if(
         anim_playing && mode == EDITOR_MODE_ANIMATION &&
         cur_anim && cur_frame_nr != INVALID
@@ -154,15 +158,7 @@ void animation_editor::do_drawing() {
 
     gui->draw();
     
-    ALLEGRO_TRANSFORM transform;
-    al_identity_transform(&transform);
-    al_translate_transform(
-        &transform,
-        cam_x + (gui_x / 2.0 / cam_zoom),
-        cam_y + (scr_h / 2.0 / cam_zoom)
-    );
-    al_scale_transform(&transform, cam_zoom, cam_zoom);
-    al_use_transform(&transform);
+    al_use_transform(&world_to_screen_transform);
     
     al_set_clipping_rectangle(
         0, 0, gui_x, status_bar_y
@@ -269,26 +265,30 @@ void animation_editor::do_drawing() {
         }
         
         if(hitboxes_visible) {
-            float cam_leftmost = -cam_x - (scr_w / 2 / cam_zoom);
-            float cam_topmost = -cam_y - (scr_h / 2 / cam_zoom);
-            float cam_rightmost = cam_leftmost + (scr_w / cam_zoom);
-            float cam_bottommost = cam_topmost + (scr_h / cam_zoom);
+            point cam_top_left_corner(0, 0);
+            point cam_bottom_right_corner(gui_x, status_bar_y);
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &cam_top_left_corner.x, &cam_top_left_corner.y
+            );
+            al_transform_coordinates(
+                &screen_to_world_transform,
+                &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
+            );
             
             al_draw_line(
-                0, cam_topmost, 0, cam_bottommost,
+                0, cam_top_left_corner.y, 0, cam_bottom_right_corner.y,
                 al_map_rgb(240, 240, 240), 1 / cam_zoom
             );
             al_draw_line(
-                cam_leftmost, 0, cam_rightmost, 0,
+                cam_top_left_corner.x, 0, cam_bottom_right_corner.x, 0,
                 al_map_rgb(240, 240, 240), 1 / cam_zoom
             );
         }
         
     } al_reset_clipping_rectangle();
     
-    ALLEGRO_TRANSFORM id_transform;
-    al_identity_transform(&id_transform);
-    al_use_transform(&id_transform);
+    al_use_transform(&identity_transform);
     
     fade_mgr.draw();
     
@@ -846,7 +846,7 @@ void animation_editor::load_animation_database() {
     hide_widget(gui->widgets["frm_hitboxes"]);
     hide_widget(gui->widgets["frm_top"]);
     
-    cam_x = cam_y = 0;
+    cam_pos.x = cam_pos.y = 0;
     cam_zoom = 1;
     
     //Find the most popular file name to suggest for new sprites.
@@ -1472,4 +1472,23 @@ void animation_editor::change_to_right_frame() {
     } else if(mode == EDITOR_MODE_TOOLS) {
         show_widget(gui->widgets["frm_tools"]);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the transformations, with the current camera coordinates, zoom, etc.
+ */
+void animation_editor::update_transformations() {
+    //World coordinates to screen coordinates.
+    world_to_screen_transform = identity_transform;
+    al_translate_transform(
+        &world_to_screen_transform,
+        -cam_pos.x + gui_x / 2.0 / cam_zoom,
+        -cam_pos.y + status_bar_y / 2.0 / cam_zoom
+    );
+    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    
+    //Screen coordinates to world coordinates.
+    screen_to_world_transform = world_to_screen_transform;
+    al_invert_transform(&screen_to_world_transform);
 }

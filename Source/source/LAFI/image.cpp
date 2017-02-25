@@ -18,8 +18,10 @@ image::image(
 /* ----------------------------------------------------------------------------
  * Creates an image.
  */
-image::image(ALLEGRO_BITMAP* bmp) : image(0, 0, 0, 0, bmp) {
-
+image::image(ALLEGRO_BITMAP* bmp) :
+    widget(),
+    bmp(bmp) {
+    
 }
 
 

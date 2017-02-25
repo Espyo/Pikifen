@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="Pikmin_fangame_engine" InternalType="Console">
+<CodeLite_Project Name="Pikmin_fangame_engine" InternalType="Console" Version="10.0.0">
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00020001N0005Debug0000000000000001N0007Windows000000000000]]>
@@ -64,7 +64,6 @@
     <File Name="../source/vars.h"/>
     <File Name="../source/sector.cpp"/>
     <File Name="../source/init.h"/>
-    <File Name="../source/logic.h"/>
     <File Name="../source/hazard.cpp"/>
     <File Name="../source/liquid.cpp"/>
     <File Name="../source/liquid.h"/>

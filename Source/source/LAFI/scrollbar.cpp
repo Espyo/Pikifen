@@ -35,10 +35,16 @@ scrollbar::scrollbar(
     const float min_value, const float max_value,
     const float low_value, const float high_value, const bool vertical
 ) :
-    scrollbar(
-        0, 0, 0, 0, min_value, max_value, low_value, high_value, vertical
-    ) {
+    widget(),
+    attached_widget(NULL),
+    min_value(min_value),
+    max_value(max_value),
+    low_value(low_value),
+    high_value(high_value),
+    vertical(vertical),
+    change_handler(nullptr) {
     
+    needs_init = true;
 }
 
 

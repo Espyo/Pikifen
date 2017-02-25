@@ -32,8 +32,6 @@ private:
     
 protected:
 
-    static const string EDITOR_ICONS_FOLDER_NAME;
-    
     lafi::gui*    gui;
     int           gui_x;
     bool          holding_m1;

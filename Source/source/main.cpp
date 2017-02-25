@@ -37,7 +37,6 @@
 #include "LAFI/radio_button.h"
 #include "LAFI/scrollbar.h"
 #include "LAFI/textbox.h"
-#include "logic.h"
 #include "menus.h"
 #include "sector.h"
 #include "vars.h"

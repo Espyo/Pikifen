@@ -60,6 +60,9 @@ const float DISMISS_DISTANCE = 64.0f;
 const float GROUP_MOVE_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another "move group" arrow appears.
 const float GROUP_MOVE_ARROWS_INTERVAL = 0.1f;
+//Pikmin must be at least these many units away from one another;
+//used when calculating group spots.
+const float GROUP_SPOT_INTERVAL = 1.0f;
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = M_PI_2;
 //How long the on-screen info is printed for.
@@ -71,9 +74,6 @@ const size_t MAX_PLAYERS = 4;
 //How many pixels the mouse cursor moves, per second,
 //when using an analog stick.
 const float MOUSE_CURSOR_MOVE_SPEED = 500.0f;
-//Pikmin must be at least these many units away from one another;
-//used when calculating group spots.
-const float GROUP_SPOT_INTERVAL = 1.0f;
 //Multiply the stretch of the shadow by this much.
 const float MOB_SHADOW_STRETCH_MULT = 0.5f;
 //For every unit above the ground that the mob is on,

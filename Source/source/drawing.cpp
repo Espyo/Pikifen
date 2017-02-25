@@ -40,14 +40,10 @@ void do_game_drawing(
         
         cur_sun_strength = get_sun_strength();
         
-        
-        ALLEGRO_TRANSFORM normal_transform;
-        al_identity_transform(&normal_transform);
-        
-        ALLEGRO_TRANSFORM world_to_screen_transform;
+        ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
         
         if(bmp_output) {
-            world_to_screen_transform = *bmp_transform;
+            world_to_screen_drawing_transform = *bmp_transform;
             al_set_target_bitmap(bmp_output);
             al_set_separate_blender(
                 ALLEGRO_ADD, ALLEGRO_ALPHA,
@@ -55,7 +51,7 @@ void do_game_drawing(
                 ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
             );
         } else {
-            world_to_screen_transform = get_world_to_screen_transform();
+            world_to_screen_drawing_transform = world_to_screen_transform;
         }
         
         
@@ -81,25 +77,27 @@ void do_game_drawing(
             int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : scr_w;
             int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
             float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
-            float zoom_x = bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use;
-            float zoom_y = bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use;
+            point final_zoom(
+                bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use,
+                bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use
+            );
             
             bg_v[0].x = 0;
             bg_v[0].y = 0;
-            bg_v[0].u = (cam_x - zoom_x) / cur_area_data.bg_bmp_zoom;
-            bg_v[0].v = (cam_y - zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[0].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
+            bg_v[0].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
             bg_v[1].x = bmp_w;
             bg_v[1].y = 0;
-            bg_v[1].u = (cam_x + zoom_x) / cur_area_data.bg_bmp_zoom;
-            bg_v[1].v = (cam_y - zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[1].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
+            bg_v[1].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
             bg_v[2].x = bmp_w;
             bg_v[2].y = bmp_h;
-            bg_v[2].u = (cam_x + zoom_x) / cur_area_data.bg_bmp_zoom;
-            bg_v[2].v = (cam_y + zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[2].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
+            bg_v[2].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
             bg_v[3].x = 0;
             bg_v[3].y = bmp_h;
-            bg_v[3].u = (cam_x - zoom_x) / cur_area_data.bg_bmp_zoom;
-            bg_v[3].v = (cam_y + zoom_y) / cur_area_data.bg_bmp_zoom;
+            bg_v[3].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
+            bg_v[3].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
             
             al_draw_prim(
                 bg_v, NULL, cur_area_data.bg_bmp,
@@ -116,7 +114,7 @@ void do_game_drawing(
         ******************/
         
         //Pre-rendered geometry.
-        al_use_transform(&world_to_screen_transform);
+        al_use_transform(&world_to_screen_drawing_transform);
         size_t area_image_cols = area_images.size();
         for(size_t x = 0; x < area_image_cols; ++x) {
         
@@ -176,8 +174,7 @@ void do_game_drawing(
         vector<mob*> sorted_mobs;
         sorted_mobs = mobs;
         sort(
-            sorted_mobs.begin(),
-            sorted_mobs.end(),
+            sorted_mobs.begin(), sorted_mobs.end(),
         [] (mob * m1, mob * m2) -> bool {
             if(m1->z == m2->z) {
                 if(m1->type->height == m2->type->height) {
@@ -369,7 +366,7 @@ void do_game_drawing(
         *              --==## *
         **********************/
         
-        al_use_transform(&normal_transform);
+        al_use_transform(&identity_transform);
         
         al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
         
@@ -381,7 +378,7 @@ void do_game_drawing(
         *             '-'   *
         ********************/
         
-        al_use_transform(&world_to_screen_transform);
+        al_use_transform(&world_to_screen_drawing_transform);
         
         size_t n_arrows = group_move_arrows.size();
         for(size_t a = 0; a < n_arrows; ++a) {
@@ -430,8 +427,12 @@ void do_game_drawing(
                             current_dot -
                             WHISTLE_DOT_SPIN_SPEED * area_time_passed;
                             
-                        float x = cursor_x + cos(angle) * whistle_dot_radius[d];
-                        float y = cursor_y + sin(angle) * whistle_dot_radius[d];
+                        point dot_pos(
+                            leader_cursor_w.x +
+                            cos(angle) * whistle_dot_radius[d],
+                            leader_cursor_w.y +
+                            sin(angle) * whistle_dot_radius[d]
+                        );
                         
                         ALLEGRO_COLOR c;
                         float alpha_mult;
@@ -454,7 +455,7 @@ void do_game_drawing(
                             c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
                         }
                         
-                        al_draw_filled_circle(x, y, 2, c);
+                        al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
                     }
                 }
             } else {
@@ -465,14 +466,14 @@ void do_game_drawing(
                     radius = whistle_radius;
                 }
                 al_draw_circle(
-                    cursor_x, cursor_y, radius,
+                    leader_cursor_w.x, leader_cursor_w.y, radius,
                     al_map_rgba(192, 192, 0, alpha), 2
                 );
             }
         }
         
         //Cursor trail
-        al_use_transform(&normal_transform);
+        al_use_transform(&identity_transform);
         if(draw_cursor_trail) {
             for(size_t p = 1; p < cursor_spots.size(); ++p) {
                 point* p_ptr = &cursor_spots[p];
@@ -494,10 +495,10 @@ void do_game_drawing(
             }
         }
         
-        //The actual cursor and mouse cursor
+        //Mouse cursor.
         draw_sprite(
             bmp_mouse_cursor,
-            mouse_cursor_x, mouse_cursor_y,
+            mouse_cursor_s.x, mouse_cursor_s.y,
             cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
             cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5,
             -(area_time_passed * cursor_spin_speed),
@@ -506,10 +507,12 @@ void do_game_drawing(
                 cursor_height_diff_light
             )
         );
-        al_use_transform(&world_to_screen_transform);
+        
+        //Leader cursor.
+        al_use_transform(&world_to_screen_drawing_transform);
         draw_sprite(
             bmp_cursor,
-            cursor_x, cursor_y,
+            leader_cursor_w.x, leader_cursor_w.y,
             al_get_bitmap_width(bmp_cursor) * 0.5,
             al_get_bitmap_height(bmp_cursor) * 0.5,
             cursor_angle,
@@ -527,7 +530,7 @@ void do_game_drawing(
         *         1/2/3 *
         ****************/
         
-        al_use_transform(&normal_transform);
+        al_use_transform(&identity_transform);
         
         if(cur_message.empty()) {
         

@@ -992,9 +992,11 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->y = leader_ptr->y;
     holding_ptr->z = leader_ptr->z;
     
-    float angle, d;
+    float angle, mag;
     coordinates_to_angle(
-        cursor_x - leader_ptr->x, cursor_y - leader_ptr->y, &angle, &d
+        leader_cursor_w.x - leader_ptr->x,
+        leader_cursor_w.y - leader_ptr->y,
+        &angle, &mag
     );
     
     float throw_height_mult = 1.0;
@@ -1009,10 +1011,10 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     //This results in a 1.3 second throw, just like in Pikmin 2.
     //Regular Pikmin are thrown about 288.88 units high.
     holding_ptr->speed_x =
-        cos(angle) * d * THROW_DISTANCE_MULTIPLIER *
+        cos(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
     holding_ptr->speed_y =
-        sin(angle) * d * THROW_DISTANCE_MULTIPLIER *
+        sin(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
     holding_ptr->speed_z =
         -(GRAVITY_ADDER) * (THROW_STRENGTH_MULTIPLIER * throw_height_mult);

@@ -32,8 +32,19 @@ textbox::textbox(
 /* ----------------------------------------------------------------------------
  * Creates a textbox given some parameters.
  */
-textbox::textbox(const string &text) : textbox(0, 0, 0, 0, text) {
-
+textbox::textbox(const string &text) :
+    widget(),
+    text(text),
+    editable(true),
+    cursor(0),
+    sel_start(0),
+    sel_end(0),
+    multi_line(false),
+    change_handler(nullptr),
+    scroll_x(0),
+    enter_key_widget(nullptr) {
+    
+    tab_index = cur_tab_index++;
 }
 
 

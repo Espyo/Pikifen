@@ -15,7 +15,6 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game_state.h"
-#include "logic.h"
 #include "misc_structs.h"
 #include "vars.h"
 
@@ -168,6 +167,9 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
 }
 
 
+void game_state::update_transformations() { }
+
+
 
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
@@ -293,12 +295,24 @@ void gameplay::load() {
     cur_leader_ptr = leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     
+    cam_pos.x = cam_final_x = cur_leader_ptr->x;
+    cam_pos.y = cam_final_y = cur_leader_ptr->y;
+    cam_zoom = cam_final_zoom = zoom_mid_level;
+    update_transformations();
+    
+    leader_cursor_w.x = cur_leader_ptr->x + cursor_max_dist / 2.0;
+    leader_cursor_w.y = cur_leader_ptr->y;
+    leader_cursor_s = leader_cursor_w;
+    al_transform_coordinates(
+        &world_to_screen_transform,
+        &leader_cursor_s.x, &leader_cursor_s.y
+    );
+    mouse_cursor_w = leader_cursor_w;
+    mouse_cursor_s = leader_cursor_s;
+    al_set_mouse_xy(display, mouse_cursor_s.x, mouse_cursor_s.y);
+    
     day_minutes = day_minutes_start;
     area_time_passed = 0;
-    
-    cam_x = cam_final_x = cur_leader_ptr->x;
-    cam_y = cam_final_y = cur_leader_ptr->y;
-    cam_zoom = cam_final_zoom = zoom_mid_level;
     
     for(size_t c = 0; c < controls[0].size(); ++c) {
         if(controls[0][c].action == BUTTON_THROW) {
@@ -333,6 +347,25 @@ void gameplay::load() {
  */
 void gameplay::unload() {
     //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the transformations, with the current camera coordinates, zoom, etc.
+ */
+void gameplay::update_transformations() {
+    //World coordinates to screen coordinates.
+    world_to_screen_transform = identity_transform;
+    al_translate_transform(
+        &world_to_screen_transform,
+        -cam_pos.x + scr_w / 2.0 / cam_zoom,
+        -cam_pos.y + scr_h / 2.0 / cam_zoom
+    );
+    al_scale_transform(&world_to_screen_transform, cam_zoom, cam_zoom);
+    
+    //Screen coordinates to world coordinates.
+    screen_to_world_transform = world_to_screen_transform;
+    al_invert_transform(&screen_to_world_transform);
 }
 
 

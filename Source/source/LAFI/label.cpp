@@ -20,7 +20,9 @@ label::label(
  * Creates a label.
  */
 label::label(const string &text, const int text_flags) :
-    label(0, 0, 0, 0, text, text_flags) {
+    widget(),
+    text(text),
+    text_flags(text_flags) {
     
 }
 

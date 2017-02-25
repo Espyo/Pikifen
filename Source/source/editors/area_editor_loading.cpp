@@ -314,8 +314,8 @@ void area_editor::load() {
         cancel_new_sector();
         new_sector_valid_line =
             is_new_sector_line_valid(
-                snap_to_grid(mouse_cursor_x),
-                snap_to_grid(mouse_cursor_y)
+                snap_to_grid(mouse_cursor_w.x),
+                snap_to_grid(mouse_cursor_w.y)
             );
         if(sec_mode == ESM_NEW_SECTOR) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_SECTOR;
@@ -1607,7 +1607,7 @@ void area_editor::load() {
     disable_widget(frm_bottom->widgets["but_save"]);
     
     cam_zoom = 1.0;
-    cam_x = cam_y = 0.0;
+    cam_pos.x = cam_pos.y = 0.0;
     grid_interval = DEF_GRID_INTERVAL;
     show_closest_stop = false;
     area_name.clear();
