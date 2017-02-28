@@ -54,7 +54,7 @@ public:
     unsigned char seethrough;
     
     onion(
-        float x, float y, onion_type* type,
+        const point pos, onion_type* type,
         const float angle, const string &vars
     );
     virtual void draw(sprite_effect_manager* effect_manager = NULL);

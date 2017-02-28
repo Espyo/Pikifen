@@ -34,14 +34,14 @@ protected:
     
     
 public:
-    int x, y;
-    int w, h;
+    point pos;
+    point size;
     function<void()> click_handler;
     bool selected;
     bool enabled;
     
     menu_widget(
-        const int x = 0, const int y = 0, const int w = 0, const int h = 0,
+        const point pos = point(), const point size = point(),
         function<void()> click_handler = nullptr
     );
     virtual void tick(const float time);
@@ -51,7 +51,7 @@ public:
     
     void click();
     
-    bool mouse_on(const int mx, const int my);
+    bool mouse_on(const point mc);
 };
 
 class menu_button : public menu_widget {
@@ -65,7 +65,7 @@ public:
     int text_align;
     
     menu_button(
-        const int x = 0, const int y = 0, const int w = 0, const int h = 0,
+        const point pos = point(), const point size = point(),
         function<void()> click_handler = nullptr, string text = "",
         ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
@@ -87,7 +87,7 @@ public:
     int text_align;
     
     menu_checkbox(
-        const int x = 0, const int y = 0, const int w = 0, const int h = 0,
+        const point pos = point(), const point size = point(),
         function<void()> click_handler = nullptr, string text = "",
         ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
@@ -108,7 +108,7 @@ public:
     int text_align;
     
     menu_text(
-        const int x = 0, const int y = 0, const int w = 0, const int h = 0,
+        const point pos = point(), const point size = point(),
         string text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER

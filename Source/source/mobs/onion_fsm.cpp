@@ -53,7 +53,7 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     o_ptr->spew_queue += seeds;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        PARTICLE_TYPE_BITMAP, m->pos,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -61,8 +61,8 @@ void onion_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = M_PI;
-    pg.speed = 70;
-    pg.speed_deviation = 10;
+    pg.total_speed = 70;
+    pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
     pg.emit(particles);
     

@@ -59,7 +59,7 @@ void main_menu::load() {
     //Menu widgets.
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.55, scr_w * 0.8, scr_h * 0.08,
+            point(scr_w * 0.5, scr_h * 0.55), point(scr_w * 0.8, scr_h * 0.08),
     [this] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_AREA_MENU);
@@ -69,7 +69,7 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.63, scr_w * 0.8, scr_h * 0.08,
+            point(scr_w * 0.5, scr_h * 0.63), point(scr_w * 0.8, scr_h * 0.08),
     [this] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_OPTIONS_MENU);
@@ -79,7 +79,7 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.71, scr_w * 0.8, scr_h * 0.08,
+            point(scr_w * 0.5, scr_h * 0.71), point(scr_w * 0.8, scr_h * 0.08),
     [this] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_ANIMATION_EDITOR);
@@ -89,7 +89,7 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.79, scr_w * 0.8, scr_h * 0.08,
+            point(scr_w * 0.5, scr_h * 0.79), point(scr_w * 0.8, scr_h * 0.08),
     [this] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_AREA_EDITOR);
@@ -99,7 +99,7 @@ void main_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.87, scr_w * 0.8, scr_h * 0.08,
+            point(scr_w * 0.5, scr_h * 0.87), point(scr_w * 0.8, scr_h * 0.08),
     [] () {
         is_game_running = false;
     }, "Exit", font_area_name
@@ -174,18 +174,16 @@ void main_menu::do_logic() {
 void main_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
-        bmp_menu_bg, scr_w * 0.5, scr_h * 0.5,
-        scr_w, scr_h
+        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
+        point(scr_w, scr_h)
     );
     
     sprite* logo_anim_s = logo_anim.get_cur_sprite();
     if(logo_anim_s) {
         draw_sprite(
             logo_anim_s->bitmap,
-            scr_w * 0.5,
-            scr_h * 0.25,
-            logo_anim_s->game_w,
-            logo_anim_s->game_h
+            point(scr_w * 0.5, scr_h * 0.25),
+            logo_anim_s->game_size
         );
     }
     
@@ -195,15 +193,15 @@ void main_menu::do_drawing() {
     
     draw_scaled_text(
         font_main, al_map_rgb(255, 255, 255),
-        8, scr_h  - 8,
-        0.4, 0.4,
+        point(8, scr_h  - 8),
+        point(0.4, 0.4),
         ALLEGRO_ALIGN_LEFT, 2,
         "Pikmin (c) Nintendo"
     );
     draw_scaled_text(
         font_main, al_map_rgb(255, 255, 255),
-        scr_w - 8, scr_h  - 8,
-        0.4, 0.4,
+        point(scr_w - 8, scr_h  - 8),
+        point(0.4, 0.4),
         ALLEGRO_ALIGN_RIGHT, 2,
         game_name + " " + game_version +
         ", powered by PFE " +
@@ -250,13 +248,13 @@ void options_menu::load() {
     //Menu widgets.
     menu_widgets.push_back(
         new menu_text(
-            scr_w * 0.15, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.15, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
             "Player:", font_main
         )
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.3, scr_h * 0.1, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.3, scr_h * 0.1), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr = 0;
         cur_player_nr = sum_and_wrap(cur_player_nr, -1, MAX_PLAYERS);
@@ -268,14 +266,14 @@ void options_menu::load() {
     );
     cur_player_nr_widget =
         new menu_text(
-        scr_w * 0.4, scr_h * 0.1, scr_w * 0.1, scr_h * 0.1,
+        point(scr_w * 0.4, scr_h * 0.1), point(scr_w * 0.1, scr_h * 0.1),
         "", font_main
     )
     ;
     menu_widgets.push_back(cur_player_nr_widget);
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.1, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.5, scr_h * 0.1), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr = 0;
         cur_player_nr = sum_and_wrap(cur_player_nr, 1, MAX_PLAYERS);
@@ -287,7 +285,7 @@ void options_menu::load() {
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.9, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.9, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
     [this] () {
         leave();
     },
@@ -298,40 +296,41 @@ void options_menu::load() {
     for(size_t c = 0; c < 8; c++) {
         control_widgets.push_back(
             new menu_button(
-                scr_w * 0.1, scr_h * (0.2 + 0.08 * c),
-                scr_w * 0.15, scr_h * 0.1,
+                point(scr_w * 0.1, scr_h * (0.2 + 0.08 * c)),
+                point(scr_w * 0.15, scr_h * 0.1),
         [] () { }, "-", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                scr_w * 0.2, scr_h * (0.2 + 0.08 * c),
-                scr_w * 0.15, scr_h * 0.1,
+                point(scr_w * 0.2, scr_h * (0.2 + 0.08 * c)),
+                point(scr_w * 0.15, scr_h * 0.1),
         [] () { }, "<", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_text(
-                scr_w * 0.43, scr_h * (0.2 + 0.08 * c), scr_w * 0.50,
-                scr_h * 0.1, "", font_main, al_map_rgb(255, 255, 255),
+                point(scr_w * 0.43, scr_h * (0.2 + 0.08 * c)),
+                point(scr_w * 0.50, scr_h * 0.1),
+                "", font_main, al_map_rgb(255, 255, 255),
                 ALLEGRO_ALIGN_LEFT
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                scr_w * 0.7, scr_h * (0.2 + 0.08 * c),
-                scr_w * 0.15, scr_h * 0.1,
+                point(scr_w * 0.7, scr_h * (0.2 + 0.08 * c)),
+                point(scr_w * 0.15, scr_h * 0.1),
         [] () { }, ">", font_main
             )
         );
         menu_widgets.push_back(control_widgets.back());
         control_widgets.push_back(
             new menu_button(
-                scr_w * 0.85, scr_h * (0.2 + 0.08 * c),
-                scr_w * 0.3, scr_h * 0.1,
+                point(scr_w * 0.85, scr_h * (0.2 + 0.08 * c)),
+                point(scr_w * 0.3, scr_h * 0.1),
         [] () { }, "", font_main
             )
         );
@@ -341,7 +340,7 @@ void options_menu::load() {
     
     bottom_widgets.push_back(
         new menu_button(
-            scr_w * 0.9, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.9, scr_h * 0.9), point(scr_w * 0.2, scr_h * 0.1),
     [this] () {
         if(controls[cur_player_nr].size()) {
             controls[cur_player_nr].push_back(
@@ -365,14 +364,14 @@ void options_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_text(
-            scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.15, scr_h * 0.9), point(scr_w * 0.2, scr_h * 0.1),
             "Page:", font_main
         )
     );
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_button(
-            scr_w * 0.3, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.3, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -387,15 +386,14 @@ void options_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     cur_page_nr_widget =
         new menu_text(
-        scr_w * 0.4, scr_h * 0.9, scr_w * 0.1, scr_h * 0.1,
+        point(scr_w * 0.4, scr_h * 0.9), point(scr_w * 0.1, scr_h * 0.1),
         "", font_main
-    )
-    ;
+    );
     bottom_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(bottom_widgets.back());
     bottom_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.5, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -411,10 +409,9 @@ void options_menu::load() {
     menu_widgets.push_back(bottom_widgets.back());
     input_capture_msg_widget =
         new menu_text(
-        scr_w * 0.5, scr_h * 0.9, scr_w, scr_h * 0.1,
+        point(scr_w * 0.5, scr_h * 0.9), point(scr_w, scr_h * 0.1),
         "Waiting for any input...", font_main
-    )
-    ;
+    );
     menu_widgets.push_back(input_capture_msg_widget);
     
     //Finishing touches.
@@ -542,8 +539,8 @@ void options_menu::do_logic() {
 void options_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
-        bmp_menu_bg, scr_w * 0.5, scr_h * 0.5,
-        scr_w, scr_h, 0, map_gray(128)
+        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
+        point(scr_w, scr_h), 0, map_gray(128)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);
@@ -559,8 +556,9 @@ void options_menu::do_drawing() {
         control_info* c_ptr = &controls[cur_player_nr][control_nr];
         
         draw_control(
-            font_main, *c_ptr, scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr),
-            scr_w * 0.2, scr_h * 0.1
+            font_main, *c_ptr,
+            point(scr_w * 0.85, scr_h * (0.2 + 0.08 * list_nr)),
+            point(scr_w * 0.2, scr_h * 0.1)
         );
     }
     
@@ -707,7 +705,7 @@ void area_menu::load() {
     //Menu widgets.
     menu_widgets.push_back(
         new menu_text(
-            scr_w * 0.3, scr_h * 0.1, scr_w * 0.5, scr_h * 0.1,
+            point(scr_w * 0.3, scr_h * 0.1), point(scr_w * 0.5, scr_h * 0.1),
             "Pick an area:",
             font_main, al_map_rgb(255, 255, 255), ALLEGRO_ALIGN_LEFT
         )
@@ -715,7 +713,7 @@ void area_menu::load() {
     
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.8, scr_h * 0.1, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.8, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
     [] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_MAIN_MENU);
@@ -728,7 +726,8 @@ void area_menu::load() {
     for(size_t a = 0; a < 8; ++a) {
         menu_widgets.push_back(
             new menu_button(
-                scr_w * 0.5, scr_h * (0.2 + 0.08 * a), scr_w * 0.8, scr_h * 0.1,
+                point(scr_w * 0.5, scr_h * (0.2 + 0.08 * a)),
+                point(scr_w * 0.8, scr_h * 0.1),
         [] () {
         
         },
@@ -740,13 +739,13 @@ void area_menu::load() {
     
     menu_widgets.push_back(
         new menu_text(
-            scr_w * 0.15, scr_h * 0.9, scr_w * 0.2, scr_h * 0.1,
+            point(scr_w * 0.15, scr_h * 0.9), point(scr_w * 0.2, scr_h * 0.1),
             "Page:", font_main
         )
     );
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.3, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.3, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -760,14 +759,13 @@ void area_menu::load() {
     );
     cur_page_nr_widget =
         new menu_text(
-        scr_w * 0.4, scr_h * 0.9, scr_w * 0.1, scr_h * 0.1,
+        point(scr_w * 0.4, scr_h * 0.9), point(scr_w * 0.1, scr_h * 0.1),
         "", font_main
-    )
-    ;
+    );
     menu_widgets.push_back(cur_page_nr_widget);
     menu_widgets.push_back(
         new menu_button(
-            scr_w * 0.5, scr_h * 0.9, scr_w * 0.15, scr_h * 0.1,
+            point(scr_w * 0.5, scr_h * 0.9), point(scr_w * 0.15, scr_h * 0.1),
     [this] () {
         cur_page_nr =
             sum_and_wrap(
@@ -846,8 +844,8 @@ void area_menu::do_logic() {
 void area_menu::do_drawing() {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     draw_sprite(
-        bmp_menu_bg, scr_w * 0.5, scr_h * 0.5,
-        scr_w, scr_h, 0, map_gray(128)
+        bmp_menu_bg, point(scr_w * 0.5, scr_h * 0.5),
+        point(scr_w, scr_h), 0, map_gray(128)
     );
     for(size_t w = 0; w < menu_widgets.size(); w++) {
         menu_widgets[w]->draw(time_spent);

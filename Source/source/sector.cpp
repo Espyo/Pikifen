@@ -80,23 +80,23 @@ void area_data::generate_blockmap() {
     if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
-    float min_x, max_x, min_y, max_y;
-    min_x = max_x = vertexes[0]->x;
-    min_y = max_y = vertexes[0]->y;
+    point min_coords, max_coords;
+    min_coords.x = max_coords.x = vertexes[0]->x;
+    min_coords.y = max_coords.y = vertexes[0]->y;
     
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
-        min_x = min(v_ptr->x, min_x);
-        max_x = max(v_ptr->x, max_x);
-        min_y = min(v_ptr->y, min_y);
-        max_y = max(v_ptr->y, max_y);
+        min_coords.x = min(v_ptr->x, min_coords.x);
+        max_coords.x = max(v_ptr->x, max_coords.x);
+        min_coords.y = min(v_ptr->y, min_coords.y);
+        max_coords.y = max(v_ptr->y, max_coords.y);
     }
     
-    bmap.x1 = min_x; bmap.y1 = min_y;
+    bmap.top_left_corner = min_coords;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
-    bmap.n_cols = ceil((max_x - min_x) / BLOCKMAP_BLOCK_SIZE) + 1;
-    bmap.n_rows = ceil((max_y - min_y) / BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_cols = ceil((max_coords.x - min_coords.x) / BLOCKMAP_BLOCK_SIZE) + 1;
+    bmap.n_rows = ceil((max_coords.y - min_coords.y) / BLOCKMAP_BLOCK_SIZE) + 1;
     
     bmap.edges.assign(
         bmap.n_cols, vector<vector<edge*> >(bmap.n_rows, vector<edge*>())
@@ -121,12 +121,10 @@ void area_data::generate_blockmap() {
         
             if(bmap.sectors[bx][by].empty()) {
             
+                point corner = bmap.get_top_left_corner(bx, by);
+                corner += BLOCKMAP_BLOCK_SIZE * 0.5;
                 bmap.sectors[bx][by].insert(
-                    get_sector(
-                        bmap.get_x1(bx) + BLOCKMAP_BLOCK_SIZE * 0.5,
-                        bmap.get_y1(by) + BLOCKMAP_BLOCK_SIZE * 0.5,
-                        NULL, false
-                    )
+                    get_sector(corner, NULL, false)
                 );
             }
         }
@@ -160,16 +158,15 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
             for(size_t by = b_min_y; by <= b_max_y; ++by) {
             
                 //Get the block's coordinates.
-                float bx1 = bmap.get_x1(bx);
-                float by1 = bmap.get_y1(by);
+                point corner = bmap.get_top_left_corner(bx, by);
                 
                 //Check if the edge is inside this blockmap.
                 if(
-                    square_intersects_line(
-                        bx1, by1,
-                        bx1 + BLOCKMAP_BLOCK_SIZE, by1 + BLOCKMAP_BLOCK_SIZE,
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    rectangle_intersects_line(
+                        corner,
+                        corner + BLOCKMAP_BLOCK_SIZE,
+                        point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                        point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
                     )
                 ) {
                 
@@ -385,8 +382,6 @@ void area_data::clear() {
  * Creates a blockmap.
  */
 blockmap::blockmap() :
-    x1(0),
-    y1(0),
     n_cols(0),
     n_rows(0) {
     
@@ -397,7 +392,7 @@ blockmap::blockmap() :
  * Clears the info of the blockmap.
  */
 void blockmap::clear() {
-    x1 = y1 = 0;
+    top_left_corner = point();
     edges.clear();
     sectors.clear();
 }
@@ -408,8 +403,8 @@ void blockmap::clear() {
  * Returns INVALID on error.
  */
 size_t blockmap::get_col(const float x) {
-    if(x < x1) return INVALID;
-    float final_x = (x - x1) / BLOCKMAP_BLOCK_SIZE;
+    if(x < top_left_corner.x) return INVALID;
+    float final_x = (x - top_left_corner.x) / BLOCKMAP_BLOCK_SIZE;
     if(final_x >= n_cols) return INVALID;
     return final_x;
 }
@@ -420,26 +415,22 @@ size_t blockmap::get_col(const float x) {
  * Returns INVALID on error.
  */
 size_t blockmap::get_row(const float y) {
-    if(y < y1) return INVALID;
-    float final_y = (y - y1) / BLOCKMAP_BLOCK_SIZE;
+    if(y < top_left_corner.y) return INVALID;
+    float final_y = (y - top_left_corner.y) / BLOCKMAP_BLOCK_SIZE;
     if(final_y >= n_rows) return INVALID;
     return final_y;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the top-left X coordinate for the specified column.
+ * Returns the top-left coordinates for the specified column and row.
  */
-float blockmap::get_x1(const size_t col) {
-    return col * BLOCKMAP_BLOCK_SIZE + x1;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the top-left Y coordinate for the specified row.
- */
-float blockmap::get_y1(const size_t row) {
-    return row * BLOCKMAP_BLOCK_SIZE + y1;
+point blockmap::get_top_left_corner(const size_t col, const size_t row) {
+    return
+        point(
+            col * BLOCKMAP_BLOCK_SIZE + top_left_corner.x,
+            row * BLOCKMAP_BLOCK_SIZE + top_left_corner.y
+        );
 }
 
 
@@ -525,13 +516,12 @@ size_t edge::remove_from_vertexes() {
  * Creates a mob generation structure.
  */
 mob_gen::mob_gen(
-    float x, float y, unsigned char category,
-    mob_type* type, float angle, string vars
+    const point pos, const unsigned char category,
+    mob_type* type, const float angle, const string &vars
 ) :
     category(category),
     type(type),
-    x(x),
-    y(y),
+    pos(pos),
     angle(angle),
     vars(vars) {
     
@@ -564,9 +554,8 @@ void sector::clone(sector* new_sector) {
     new_sector->tag = tag;
     new_sector->brightness = brightness;
     new_sector->fade = fade;
-    new_sector->texture_info.scale_x = texture_info.scale_x;
-    new_sector->texture_info.scale_y = texture_info.scale_y;
-    new_sector->texture_info.trans_x = texture_info.trans_y;
+    new_sector->texture_info.scale = texture_info.scale;
+    new_sector->texture_info.translation = texture_info.translation;
     new_sector->texture_info.rot = texture_info.rot;
     new_sector->texture_info.file_name = texture_info.file_name;
     new_sector->hazards_str = hazards_str;
@@ -603,8 +592,8 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
         if(valid) {
             neighbors[neighbor] +=
                 dist(
-                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
                 );
         }
     }
@@ -664,10 +653,7 @@ sector::~sector() {
  * Creates a sector texture's info struct.
  */
 sector_texture_info::sector_texture_info() :
-    scale_x(1),
-    scale_y(1),
-    trans_x(0),
-    trans_y(0),
+    scale(1.0, 1.0),
     rot(0),
     bitmap(nullptr),
     tint(al_map_rgb(255, 255, 255)) {
@@ -695,9 +681,8 @@ bool edge_intersection::contains(edge* e) {
 /* ----------------------------------------------------------------------------
  * Creates a new path stop.
  */
-path_stop::path_stop(float x, float y, vector<path_link> links) :
-    x(x),
-    y(y),
+path_stop::path_stop(const point pos, vector<path_link> links) :
+    pos(pos),
     links(links) {
     
 }
@@ -753,11 +738,7 @@ path_link::path_link(path_stop* end_ptr, size_t end_nr) :
  * you need to provide it as a parameter when calling the function.
  */
 void path_link::calculate_dist(path_stop* start_ptr) {
-    distance =
-        dist(
-            start_ptr->x, start_ptr->y,
-            end_ptr->x, end_ptr->y
-        ).to_float();
+    distance = dist(start_ptr->pos, end_ptr->pos).to_float();
 }
 
 
@@ -847,18 +828,15 @@ vertex::vertex(float x, float y) :
  * Creates a tree shadow.
  */
 tree_shadow::tree_shadow(
-    float x, float y, float w, float h,
-    float an, unsigned char al, string f, float sx, float sy
+    const point center, const point size, const float angle,
+    const unsigned char alpha, const string &file_name, const point sway
 ) :
-    x(x),
-    y(y),
-    w(w),
-    h(h),
-    angle(an),
-    alpha(al),
-    sway_x(sx),
-    sway_y(sy),
-    file_name(f),
+    center(center),
+    size(size),
+    angle(angle),
+    alpha(alpha),
+    sway(sway),
+    file_name(file_name),
     bitmap(nullptr) {
     
 }
@@ -902,18 +880,51 @@ void vertex::fix_pointers(area_data &a) {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the closest vertex that can be merged with the specified point.
+ * Returns NULL if there is no vertex close enough to merge.
+ * point:        Coordinates of the point.
+ * all_vertexes: Vector with all of the vertexes in the area.
+ * merge_radius: Minimum radius to merge.
+ * v_nr:         If not NULL, the vertex's number is returned here.
+ */
+vertex* get_merge_vertex(
+    const point pos, vector<vertex*> &all_vertexes,
+    const float merge_radius, size_t* v_nr
+) {
+    dist closest_dist = 0;
+    vertex* closest_v = NULL;
+    size_t closest_nr = INVALID;
+    
+    for(size_t v = 0; v < all_vertexes.size(); ++v) {
+        vertex* v_ptr = all_vertexes[v];
+        dist d(pos, point(v_ptr->x, v_ptr->y));
+        if(
+            d <= merge_radius &&
+            (d < closest_dist || !closest_v)
+        ) {
+            closest_dist = d;
+            closest_v = v_ptr;
+            closest_nr = v;
+        }
+    }
+    
+    if(v_nr) *v_nr = closest_nr;
+    return closest_v;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the shortest available path between two points, following
  * the area's path graph.
- * start_*:        Start coordinates.
- * end_*:          End coordinates.
+ * start:          Start coordinates.
+ * end:            End coordinates.
  * obstacle_found: If an obstacle was found in the only path, this points to it.
  * go_straight:    This is set according to whether it's better
    * to go straight to the end point.
  * total_dist:     If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
-    const float start_x, const float start_y,
-    const float end_x, const float end_y,
+    const point start, const point end,
     mob** obstacle_found, bool* go_straight,
     float* total_dist
 ) {
@@ -932,8 +943,8 @@ vector<path_stop*> get_path(
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
         
-        dist dist_to_start(start_x, start_y, s_ptr->x, s_ptr->y);
-        dist dist_to_end(end_x, end_y, s_ptr->x, s_ptr->y);
+        dist dist_to_start(start, s_ptr->pos);
+        dist dist_to_end(end, s_ptr->pos);
         
         if(!closest_to_start || dist_to_start < closest_to_start_dist) {
             closest_to_start_dist = dist_to_start;
@@ -948,7 +959,7 @@ vector<path_stop*> get_path(
     //Let's just check something real quick:
     //if the destination is closer than any stop,
     //just go there right away!
-    dist start_to_end_dist = dist(start_x, start_y, end_x, end_y);
+    dist start_to_end_dist = dist(start, end);
     if(start_to_end_dist <= closest_to_start_dist) {
         if(go_straight) *go_straight = true;
         if(total_dist) {
@@ -977,16 +988,9 @@ vector<path_stop*> get_path(
         
     if(total_dist && !full_path.empty()) {
         *total_dist +=
-            dist(
-                start_x, start_y,
-                full_path[0]->x, full_path[0]->y
-            ).to_float();
+            dist(start, full_path[0]->pos).to_float();
         *total_dist +=
-            dist(
-                full_path[full_path.size() - 1]->x,
-                full_path[full_path.size() - 1]->y,
-                end_x, end_y
-            ).to_float();
+            dist(full_path[full_path.size() - 1]->pos, end).to_float();
     }
     
     return full_path;
@@ -1004,10 +1008,9 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
         if(
             m_ptr->health != 0 &&
             circle_intersects_line(
-                m_ptr->x, m_ptr->y,
+                m_ptr->pos,
                 m_ptr->type->radius,
-                s1->x, s1->y,
-                s2->x, s2->y
+                s1->pos, s2->pos
             )
         ) {
             return m_ptr;
@@ -1021,10 +1024,8 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
  * Returns a point's sign on a line segment,
  * used for detecting if it's inside a triangle.
  */
-float get_point_sign(
-    float x, float y, float lx1, float ly1, float lx2, float ly2
-) {
-    return (x - lx2) * (ly1 - ly2) - (lx1 - lx2) * (y - ly2);
+float get_point_sign(const point p, const point lp1, const point lp2) {
+    return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
 }
 
 
@@ -1097,9 +1098,9 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 
                 //Find the angle between our vertex and this vertex.
                 float angle =
-                    atan2(
-                        other_vertex->y - cur_vertex->y,
-                        other_vertex->x - cur_vertex->x
+                    get_angle(
+                        point(cur_vertex->x, cur_vertex->y),
+                        point(other_vertex->x, other_vertex->y)
                     );
                 float angle_dif = get_angle_cw_dif(angle, base_angle);
                 
@@ -1201,23 +1202,25 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
  * Places the bounding box coordinates of a sector on the specified floats.
  */
 void get_sector_bounding_box(
-    sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+    sector* s_ptr, point* min_coords, point* max_coords
 ) {
-    if(!min_x || !min_y || !max_x || !max_y) return;
-    *min_x = s_ptr->edges[0]->vertexes[0]->x;
-    *max_x = *min_x;
-    *min_y = s_ptr->edges[0]->vertexes[0]->y;
-    *max_y = *min_y;
+    if(!min_coords || !max_coords) return;
+    min_coords->x = s_ptr->edges[0]->vertexes[0]->x;
+    max_coords->x = min_coords->x;
+    min_coords->y = s_ptr->edges[0]->vertexes[0]->y;
+    max_coords->y = min_coords->y;
     
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         for(unsigned char v = 0; v < 2; ++v) {
-            float x = s_ptr->edges[e]->vertexes[v]->x;
-            float y = s_ptr->edges[e]->vertexes[v]->y;
+            point coords(
+                s_ptr->edges[e]->vertexes[v]->x,
+                s_ptr->edges[e]->vertexes[v]->y
+            );
             
-            *min_x = min(*min_x, x);
-            *max_x = max(*max_x, x);
-            *min_y = min(*min_y, y);
-            *max_y = max(*max_y, y);
+            min_coords->x = min(min_coords->x, coords.x);
+            max_coords->x = max(max_coords->x, coords.x);
+            min_coords->y = min(min_coords->y, coords.y);
+            max_coords->y = max(max_coords->y, coords.y);
         }
     }
 }
@@ -1225,7 +1228,7 @@ void get_sector_bounding_box(
 
 /* ----------------------------------------------------------------------------
  * Returns which sector the specified point belongs to.
- * x, y:         Coordinates of the point.
+ * p:            Coordinates of the point.
  * sector_nr:    If not NULL, the number of the sector
    * on the area map is placed here.
    * The number will not be set if the search is using the blockmap.
@@ -1233,13 +1236,13 @@ void get_sector_bounding_box(
    * This provides faster results, but the blockmap must be built.
  */
 sector* get_sector(
-    const float x, const float y, size_t* sector_nr, const bool use_blockmap
+    const point p, size_t* sector_nr, const bool use_blockmap
 ) {
 
     if(use_blockmap) {
     
-        size_t col = cur_area_data.bmap.get_col(x);
-        size_t row = cur_area_data.bmap.get_row(y);
+        size_t col = cur_area_data.bmap.get_col(p.x);
+        size_t row = cur_area_data.bmap.get_row(p.y);
         if(col == INVALID || row == INVALID) return NULL;
         
         unordered_set<sector*>* sectors = &cur_area_data.bmap.sectors[col][row];
@@ -1248,7 +1251,7 @@ sector* get_sector(
         
         for(auto s = sectors->begin(); s != sectors->end(); ++s) {
         
-            if(is_point_in_sector(x, y, *s)) {
+            if(is_point_in_sector(p, *s)) {
                 return *s;
             }
         }
@@ -1261,7 +1264,7 @@ sector* get_sector(
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = cur_area_data.sectors[s];
             
-            if(is_point_in_sector(x, y, s_ptr)) {
+            if(is_point_in_sector(p, s_ptr)) {
                 if(sector_nr) *sector_nr = s;
                 return s_ptr;
             }
@@ -1276,46 +1279,45 @@ sector* get_sector(
 
 
 /* ----------------------------------------------------------------------------
- * Places the bounding box coordinates of a shadow on the specified floats.
+ * Places the bounding box coordinates of a shadow
+ * on the specified point structs.
  */
 void get_shadow_bounding_box(
-    tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+    tree_shadow* s_ptr, point* min_coords, point* max_coords
 ) {
 
-    if(!min_x || !min_y || !max_x || !max_y) return;
+    if(!min_coords || !max_coords) return;
     bool got_min_x = false;
     bool got_max_x = false;
     bool got_min_y = false;
     bool got_max_y = false;
     
     for(unsigned char p = 0; p < 4; ++p) {
-        float x, y, final_x, final_y;
+        point corner, final_corner;
         
-        if(p == 0 || p == 1) x = s_ptr->x - (s_ptr->w * 0.5);
-        else                 x = s_ptr->x + (s_ptr->w * 0.5);
-        if(p == 0 || p == 2) y = s_ptr->y - (s_ptr->h * 0.5);
-        else                 y = s_ptr->y + (s_ptr->h * 0.5);
+        if(p == 0 || p == 1) corner.x = s_ptr->center.x - (s_ptr->size.x * 0.5);
+        else                 corner.x = s_ptr->center.x + (s_ptr->size.x * 0.5);
+        if(p == 0 || p == 2) corner.y = s_ptr->center.y - (s_ptr->size.y * 0.5);
+        else                 corner.y = s_ptr->center.y + (s_ptr->size.y * 0.5);
         
-        x -= s_ptr->x;
-        y -= s_ptr->y;
-        rotate_point(x, y, s_ptr->angle, &final_x, &final_y);
-        final_x += s_ptr->x;
-        final_y += s_ptr->y;
+        corner -= s_ptr->center;
+        final_corner = rotate_point(corner, s_ptr->angle);
+        final_corner += s_ptr->center;
         
-        if(final_x < *min_x || !got_min_x) {
-            *min_x = final_x;
+        if(final_corner.x < min_coords->x || !got_min_x) {
+            min_coords->x = final_corner.x;
             got_min_x = true;
         }
-        if(final_y < *min_y || !got_min_y) {
-            *min_y = final_y;
+        if(final_corner.y < min_coords->y || !got_min_y) {
+            min_coords->y = final_corner.y;
             got_min_y = true;
         }
-        if(final_x > *max_x || !got_max_x) {
-            *max_x = final_x;
+        if(final_corner.x > max_coords->x || !got_max_x) {
+            max_coords->x = final_corner.x;
             got_max_x = true;
         }
-        if(final_y > *max_y || !got_max_y) {
-            *max_y = final_y;
+        if(final_corner.y > max_coords->y || !got_max_y) {
+            max_coords->y = final_corner.y;
             got_max_y = true;
         }
     }
@@ -1323,17 +1325,28 @@ void get_shadow_bounding_box(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether or not an edge is valid.
+ * An edge is valid if it has non-NULL vertexes.
+ */
+bool is_edge_valid(edge* l) {
+    if(!l->vertexes[0]) return false;
+    if(!l->vertexes[1]) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a point is inside a sector by checking its triangles.
  */
-bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
+bool is_point_in_sector(const point p, sector* s_ptr) {
     for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
         triangle* t_ptr = &s_ptr->triangles[t];
         if(
             is_point_in_triangle(
-                x, y,
-                t_ptr->points[0]->x, t_ptr->points[0]->y,
-                t_ptr->points[1]->x, t_ptr->points[1]->y,
-                t_ptr->points[2]->x, t_ptr->points[2]->y,
+                p,
+                point(t_ptr->points[0]->x, t_ptr->points[0]->y),
+                point(t_ptr->points[1]->x, t_ptr->points[1]->y),
+                point(t_ptr->points[2]->x, t_ptr->points[2]->y),
                 false
             )
         ) {
@@ -1347,8 +1360,8 @@ bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
 
 /* ----------------------------------------------------------------------------
  * Returns whether a point is inside a triangle or not.
- * px, py: Coordinates of the point to check.
- * t**:    Coordinates of the triangle's points.
+ * p:      The point to check.
+ * tp*:    Coordinates of the triangle's points.
  * loq:    Less or equal.
    * Different code requires different precision for on-line cases.
    * Just...don't overthink this, I added this based on what worked and didn't.
@@ -1357,18 +1370,17 @@ bool is_point_in_sector(const float x, const float y, sector* s_ptr) {
    * how-to-determine-a-point-in-a-triangle
  */
 bool is_point_in_triangle(
-    float px, float py,
-    float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
-    bool loq
+    const point p, const point tp1, const point tp2, const point tp3,
+    const bool loq
 ) {
 
     bool b1, b2, b3;
     
     float f1, f2, f3;
     
-    f1 = get_point_sign(px, py, tx1, ty1, tx2, ty2);
-    f2 = get_point_sign(px, py, tx2, ty2, tx3, ty3);
-    f3 = get_point_sign(px, py, tx3, ty3, tx1, ty1);
+    f1 = get_point_sign(p, tp1, tp2);
+    f2 = get_point_sign(p, tp2, tp3);
+    f3 = get_point_sign(p, tp3, tp1);
     
     if(loq) {
         b1 = f1 <= 0.0f;
@@ -1381,20 +1393,22 @@ bool is_point_in_triangle(
     }
     
     return ((b1 == b2) && (b2 == b3));
-    
-    //Old code.
-    /*float dx = px - tx1;
-    float dy = py - ty1;
-    
-    bool s_ab = (tx2 - tx1) * dy - (ty2 - ty1) * dx > 0;
-    
-    if((tx3 - tx1) * dy - (ty3 - ty1) * dx > 0 == s_ab) return false;
-    
-    if((tx3 - tx2) * (py - ty2) - (ty3 - ty2) * (px - tx2) > 0 != s_ab) {
-        return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a polygon was created clockwise or anti-clockwise,
+ * given the order of its vertexes.
+ */
+bool is_polygon_clockwise(vector<vertex*> &vertexes) {
+    //Solution by http://stackoverflow.com/a/1165943
+    float sum = 0;
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        vertex* v2_ptr = get_next_in_vector(vertexes, v);
+        sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
     }
-    
-    return true;*/
+    return sum < 0;
 }
 
 
@@ -1405,9 +1419,17 @@ bool is_vertex_convex(const vector<vertex*> &vec, const size_t nr) {
     const vertex* cur_v = vec[nr];
     const vertex* prev_v = get_prev_in_vector(vec, nr);
     const vertex* next_v = get_next_in_vector(vec, nr);
-    float angle_prev = atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x);
-    float angle_next = atan2(next_v->y - cur_v->y, next_v->x - cur_v->x);
-    
+    float angle_prev =
+        get_angle(
+            point(cur_v->x, cur_v->y),
+            point(prev_v->x, prev_v->y)
+        );
+    float angle_next =
+        get_angle(
+            point(cur_v->x, cur_v->y),
+            point(next_v->x, next_v->y)
+        );
+        
     return get_angle_cw_dif(angle_prev, angle_next) < M_PI;
 }
 
@@ -1430,10 +1452,10 @@ bool is_vertex_ear(
         if(v_to_check == v || v_to_check == pv || v_to_check == nv) continue;
         if(
             is_point_in_triangle(
-                v_to_check->x, v_to_check->y,
-                pv->x, pv->y,
-                v->x, v->y,
-                nv->x, nv->y,
+                point(v_to_check->x, v_to_check->y),
+                point(pv->x, pv->y),
+                point(v->x, v->y),
+                point(nv->x, nv->y),
                 true
             )
         ) return false;
@@ -1550,10 +1572,10 @@ void check_edge_intersections(vertex* v) {
             
             if(
                 lines_intersect(
-                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
-                    e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y,
-                    e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y,
+                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                    point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
+                    point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
                     NULL, NULL
                 )
             ) {
@@ -1592,8 +1614,14 @@ void clean_poly(polygon* p) {
         //this is just a redundant point in the edge prev - next. Delete it.
         if(
             fabs(
-                atan2(prev_v->y - cur_v->y, prev_v->x - cur_v->x) -
-                atan2(cur_v->y - next_v->y, cur_v->x - next_v->x)
+                get_angle(
+                    point(cur_v->x, cur_v->y),
+                    point(prev_v->x, prev_v->y)
+                ) -
+                get_angle(
+                    point(next_v->x, next_v->y),
+                    point(cur_v->x, cur_v->y)
+                )
             ) < 0.000001
         ) {
             should_delete = true;
@@ -1666,8 +1694,9 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 float ur;
                 if(
                     lines_intersect(
-                        v1->x, v1->y, v2->x, v2->y,
-                        start->x, start->y, outer_rightmost->x, start->y,
+                        point(v1->x, v1->y), point(v2->x, v2->y),
+                        point(start->x, start->y),
+                        point(outer_rightmost->x, start->y),
                         &ur, NULL
                     )
                 ) {
@@ -1717,10 +1746,10 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 vertex* v_ptr = outer->at(v);
                 if(
                     is_point_in_triangle(
-                        v_ptr->x, v_ptr->y,
-                        start->x, start->y,
-                        start->x + closest_edge_ur * ray_width, start->y,
-                        vertex_to_compare->x, vertex_to_compare->y,
+                        point(v_ptr->x, v_ptr->y),
+                        point(start->x, start->y),
+                        point(start->x + closest_edge_ur * ray_width, start->y),
+                        point(vertex_to_compare->x, vertex_to_compare->y),
                         true) &&
                     v_ptr != vertex_to_compare
                 ) {
@@ -1734,7 +1763,11 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             
             for(size_t v = 0; v < inside_triangle.size(); ++v) {
                 vertex* v_ptr = inside_triangle[v];
-                float angle = atan2(v_ptr->y - start->y, v_ptr->x - start->x);
+                float angle =
+                    get_angle(
+                        point(start->x, start->y),
+                        point(v_ptr->x, v_ptr->y)
+                    );
                 if(fabs(angle) < closest_angle) {
                     closest_angle = fabs(angle);
                     best_vertex = v_ptr;
@@ -1767,10 +1800,11 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
             insertion_vertex_nr = bridges.back();
             float new_bridge_angle =
                 get_angle_cw_dif(
-                    atan2(
-                        start->y - best_vertex->y,
-                        start->x - best_vertex->x
-                    ), 0.0f
+                    get_angle(
+                        point(best_vertex->x, best_vertex->y),
+                        point(start->x, start->y)
+                    ),
+                    0.0f
                 );
                 
             for(size_t v = 0; v < bridges.size(); ++v) {
@@ -1778,7 +1812,10 @@ void cut_poly(polygon* outer, vector<polygon>* inners) {
                 vertex* nv_ptr = get_next_in_vector(*outer, bridges[v]);
                 float a =
                     get_angle_cw_dif(
-                        atan2(nv_ptr->y - v_ptr->y, nv_ptr->x - v_ptr->x),
+                        get_angle(
+                            point(v_ptr->x, v_ptr->y),
+                            point(nv_ptr->x, nv_ptr->y)
+                        ),
                         0.0f
                     );
                 if(a < new_bridge_angle) {
@@ -1971,11 +2008,7 @@ vector<path_stop*> dijkstra(
         mob* closest_obstacle_mob = NULL;
         dist closest_obstacle_d;
         for(size_t o = 0; o < obstacles_found.size(); ++o) {
-            dist d(
-                start_node->x, start_node->y,
-                obstacles_found[o].first->x,
-                obstacles_found[o].first->y
-            );
+            dist d(start_node->pos, obstacles_found[o].first->pos);
             if(d < closest_obstacle_d || !closest_obstacle_node) {
                 closest_obstacle_d = d;
                 closest_obstacle_node = obstacles_found[o].first;
@@ -2062,12 +2095,11 @@ void get_cce(
  * ul: Same as ur, but for line 1.
  */
 bool lines_intersect(
-    float l1x1, float l1y1, float l1x2, float l1y2,
-    float l2x1, float l2y1, float l2x2, float l2y2,
+    const point l1p1, const point l1p2, const point l2p1, const point l2p2,
     float* ur, float* ul
 ) {
 
-    float div = (l2y2 - l2y1) * (l1x2 - l1x1) - (l2x2 - l2x1) * (l1y2 - l1y1);
+    float div = (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) - (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
     
     if(div != 0) {
     
@@ -2075,13 +2107,13 @@ bool lines_intersect(
         
         //Calculate the intersection distance from the line.
         local_ul =
-            ((l2x2 - l2x1) * (l1y1 - l2y1) - (l2y2 - l2y1) * (l1x1 - l2x1)) /
+            ((l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) - (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)) /
             div;
         if(ul) *ul = local_ul;
         
         //Calculate the intersection distance from the ray.
         local_ur =
-            ((l1x2 - l1x1) * (l1y1 - l2y1) - (l1y2 - l1y1) * (l1x1 - l2x1)) /
+            ((l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) - (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)) /
             div;
         if(ur) *ur = local_ur;
         

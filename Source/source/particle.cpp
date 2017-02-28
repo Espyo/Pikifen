@@ -20,11 +20,14 @@
 /* ----------------------------------------------------------------------------
  * Creates a particle.
  * type:     The type of particle. Use PARTICLE_TYPE_*.
- * x, y:     Starting coordinates.
+ * pos:      Starting coordinates.
+ * size:     Diameter.
+ * duration: Total lifespan.
+ * priority: Lower priority particles will be removed in favor of higher ones.
  */
 particle::particle(
-    const unsigned char type, const float x, const float y,
-    const float size, const float duration, const unsigned char priority
+    const unsigned char type, const point pos, const float size,
+    const float duration, const unsigned char priority
 ) :
     type(type),
     duration(duration),
@@ -32,11 +35,8 @@ particle::particle(
     friction(1.0f),
     gravity(1.0f),
     size_grow_speed(0.0f),
-    x(x),
-    y(y),
+    pos(pos),
     size(size),
-    speed_x(0.0f),
-    speed_y(0.0f),
     time(duration),
     color(al_map_rgb(255, 255, 255)),
     before_mobs(false),
@@ -57,12 +57,11 @@ void particle::tick(const float delta_t) {
         return;
     }
     
-    x += delta_t * speed_x;
-    y += delta_t * speed_y;
+    pos += speed * delta_t;
     
-    speed_x *= 1 - (delta_t * friction);
-    speed_y *= 1 - (delta_t * friction);
-    speed_y += delta_t * gravity;
+    speed.x *= 1 - (delta_t * friction);
+    speed.y *= 1 - (delta_t * friction);
+    speed.y += delta_t * gravity;
     
     size += delta_t * size_grow_speed;
     size = max(0.0f, size);
@@ -75,10 +74,10 @@ void particle::tick(const float delta_t) {
 void particle::draw() {
     if(type == PARTICLE_TYPE_SQUARE) {
         al_draw_filled_rectangle(
-            x - size * 0.5,
-            y - size * 0.5,
-            x + size * 0.5,
-            y + size * 0.5,
+            pos.x - size * 0.5,
+            pos.y - size * 0.5,
+            pos.x + size * 0.5,
+            pos.y + size * 0.5,
             change_alpha(
                 color,
                 (time / duration) *
@@ -88,8 +87,7 @@ void particle::draw() {
         
     } else if(type == PARTICLE_TYPE_CIRCLE) {
         al_draw_filled_circle(
-            x,
-            y,
+            pos.x, pos.y,
             size * 0.5,
             change_alpha(
                 color,
@@ -100,10 +98,7 @@ void particle::draw() {
         
     } else if(type == PARTICLE_TYPE_BITMAP) {
         draw_sprite(
-            bitmap,
-            x,
-            y,
-            size, -1,
+            bitmap, pos, point(size, -1),
             0, change_alpha(
                 color,
                 (time / duration) *
@@ -113,7 +108,7 @@ void particle::draw() {
         
     } else if(type == PARTICLE_TYPE_PIKMIN_SPIRIT) {
         draw_sprite(
-            bitmap, x, y, size, -1,
+            bitmap, pos, point(size, -1),
             0, change_alpha(
                 color,
                 fabs(
@@ -125,8 +120,9 @@ void particle::draw() {
     } else if(type == PARTICLE_TYPE_ENEMY_SPIRIT) {
         float s = sin((time / duration) * M_PI);
         draw_sprite(
-            bitmap, x + s * 16, y,
-            size, -1, s * M_PI,
+            bitmap,
+            point(pos.x + s * 16, pos.y),
+            point(size, -1), s * M_PI,
             change_alpha(
                 color, fabs(s) * color.a * 255
             )
@@ -140,8 +136,8 @@ void particle::draw() {
         else opacity *= (1 - r) * 2;
         
         draw_sprite(
-            bitmap, x, y,
-            s, s, 0, change_alpha(color, opacity)
+            bitmap, pos, point(s, s),
+            0, change_alpha(color, opacity)
         );
     }
 }
@@ -312,17 +308,12 @@ particle_generator::particle_generator(
     duration_deviation(0),
     friction_deviation(0),
     gravity_deviation(0),
-    x_deviation(0),
-    y_deviation(0),
-    speed_x_deviation(0),
-    speed_y_deviation(0),
     size_deviation(0),
     angle(0),
     angle_deviation(0),
-    speed(0),
-    speed_deviation(0),
-    follow_x(nullptr),
-    follow_y(nullptr) {
+    total_speed(0),
+    total_speed_deviation(0),
+    follow(nullptr) {
     
 }
 
@@ -331,11 +322,8 @@ particle_generator::particle_generator(
  * Ticks one game frame of logic.
  */
 void particle_generator::tick(const float delta_t, particle_manager &manager) {
-    if(follow_x) {
-        base_particle.x = *follow_x;
-    }
-    if(follow_y) {
-        base_particle.y = *follow_y;
+    if(follow) {
+        base_particle.pos = *follow;
     }
     emission_timer -= delta_t;
     if(emission_timer <= 0.0f) {
@@ -371,10 +359,10 @@ void particle_generator::emit(particle_manager &manager) {
             randomf(-friction_deviation, friction_deviation);
         new_p.gravity +=
             randomf(-gravity_deviation, gravity_deviation);
-        new_p.x +=
-            randomf(-x_deviation, x_deviation);
-        new_p.y +=
-            randomf(-y_deviation, y_deviation);
+        new_p.pos.x +=
+            randomf(-pos_deviation.x, pos_deviation.x);
+        new_p.pos.y +=
+            randomf(-pos_deviation.y, pos_deviation.y);
         new_p.size =
             max(
                 0.0f,
@@ -382,19 +370,20 @@ void particle_generator::emit(particle_manager &manager) {
                 randomf(-size_deviation, size_deviation)
             );
         //For speed, let's decide if we should use
-        //(speed_x and speed_y) or (speed and angle).
+        //(speed.x and speed.y) or (speed and angle).
         //We'll use whichever one is not all zeros.
-        if(angle != 0 || speed != 0) {
-            angle_to_coordinates(
-                angle + randomf(-angle_deviation, angle_deviation),
-                speed + randomf(-speed_deviation, speed_deviation),
-                &new_p.speed_x, &new_p.speed_y
-            );
+        if(angle != 0 || total_speed != 0) {
+            new_p.speed =
+                angle_to_coordinates(
+                    angle + randomf(-angle_deviation, angle_deviation),
+                    total_speed +
+                    randomf(-total_speed_deviation, total_speed_deviation)
+                );
         } else {
-            new_p.speed_x +=
-                randomf(-speed_x_deviation, speed_x_deviation);
-            new_p.speed_y +=
-                randomf(-speed_y_deviation, speed_y_deviation);
+            new_p.speed.x +=
+                randomf(-speed_deviation.x, speed_deviation.x);
+            new_p.speed.y +=
+                randomf(-speed_deviation.y, speed_deviation.y);
         }
         
         manager.add(new_p);

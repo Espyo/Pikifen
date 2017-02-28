@@ -20,9 +20,9 @@
  * Creates an info spot mob.
  */
 info_spot::info_spot(
-    const float x, const float y, const float angle, const string &vars
+    const point pos, const float angle, const string &vars
 ) :
-    mob(x, y, spec_mob_types["Info spot"], angle, vars),
+    mob(pos, spec_mob_types["Info spot"], angle, vars),
     text(get_var_value(vars, "text", "")),
     opens_box(s2b(get_var_value(vars, "opens_box", "0"))),
     text_w(0) {
@@ -46,8 +46,7 @@ void info_spot::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         bmp_info_spot,
-        x, y,
-        type->radius * 2, type->radius * 2,
+        pos, point(type->radius * 2, type->radius * 2),
         0, &effects
     );
 }

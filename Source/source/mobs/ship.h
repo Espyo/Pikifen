@@ -29,10 +29,9 @@ class ship : public mob {
 public:
 
     ship_type* shi_type;
-    float beam_final_x;
-    float beam_final_y;
+    point beam_final_pos;
     
-    ship(float x, float y, ship_type* type, float angle, const string &vars);
+    ship(const point pos, ship_type* type, float angle, const string &vars);
     
     virtual void draw(sprite_effect_manager* effect_manager = NULL);
 };

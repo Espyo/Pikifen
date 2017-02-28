@@ -19,10 +19,10 @@
  * Creates a leader mob.
  */
 leader::leader(
-    const float x, const float y, leader_type* type,
+    const point pos, leader_type* type,
     const float angle, const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     lea_type(type),
     holding_pikmin(nullptr),
     auto_pluck_pikmin(nullptr),
@@ -33,7 +33,7 @@ leader::leader(
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
     group_spot_info* ps = new group_spot_info(max_pikmin_in_field, 12);
-    group = new group_info(ps, x, y);
+    group = new group_info(ps, pos);
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
@@ -61,22 +61,26 @@ void leader::dismiss() {
         base_angle = group_move_angle + M_PI;
     } else {
         //Leftmost member coordinate, rightmost, etc.
-        float min_x = 0, min_y = 0, max_x = 0, max_y = 0;
+        point min_coords, max_coords;
         
         for(size_t m = 0; m < n_group_members; ++m) {
             mob* member_ptr = group->members[m];
             
-            if(member_ptr->x < min_x || m == 0) min_x = member_ptr->x;
-            if(member_ptr->x > max_x || m == 0) max_x = member_ptr->x;
-            if(member_ptr->y < min_y || m == 0) min_y = member_ptr->y;
-            if(member_ptr->y > max_y || m == 0) max_y = member_ptr->y;
+            if(member_ptr->pos.x < min_coords.x || m == 0)
+                min_coords.x = member_ptr->pos.x;
+            if(member_ptr->pos.x > max_coords.x || m == 0)
+                max_coords.x = member_ptr->pos.x;
+            if(member_ptr->pos.y < min_coords.y || m == 0)
+                min_coords.y = member_ptr->pos.y;
+            if(member_ptr->pos.y > max_coords.y || m == 0)
+                max_coords.y = member_ptr->pos.y;
         }
         
-        base_angle =
-            atan2(
-                ((min_y + max_y) / 2) - y,
-                ((min_x + max_x) / 2) - x
-            ) + M_PI;
+        point group_center(
+            (min_coords.x + max_coords.x) / 2,
+            (min_coords.y + max_coords.y) / 2
+        );
+        base_angle = get_angle(pos, group_center) + M_PI;
     }
     
     //Then, calculate how many Pikmin types there are in the group.
@@ -119,10 +123,12 @@ void leader::dismiss() {
                 M_PI_4 + M_PI;
         }
         
-        float x = cur_leader_ptr->x + cos(angle) * DISMISS_DISTANCE;
-        float y = cur_leader_ptr->y + sin(angle) * DISMISS_DISTANCE;
+        point destination(
+            pos.x + cos(angle) * DISMISS_DISTANCE,
+            pos.y + sin(angle) * DISMISS_DISTANCE
+        );
         
-        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &x, (void*) &y);
+        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &destination);
     }
     
     lea_type->sfx_dismiss.play(0, false);
@@ -158,17 +164,15 @@ void leader::draw(sprite_effect_manager* effect_manager) {
     mob::draw(&effects);
     
     sprite* s_ptr = anim.get_cur_sprite();
-    float draw_x, draw_y;
-    float draw_w, draw_h;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    point draw_size = get_sprite_dimensions(this, s_ptr);
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s = spark_animation.instance.get_cur_sprite();
         if(spark_s && spark_s->bitmap) {
             draw_sprite(
-                spark_s->bitmap, draw_x, draw_y,
-                draw_w, draw_h
+                spark_s->bitmap, draw_pos,
+                draw_size
             );
         }
     }
@@ -305,10 +309,7 @@ void update_closest_group_member() {
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         
-        dist d(
-            cur_leader_ptr->x, cur_leader_ptr->y,
-            member_ptr->x, member_ptr->y
-        );
+        dist d(cur_leader_ptr->pos, member_ptr->pos);
         
         if(!closest_ptrs[maturity] || d < closest_dists[maturity]) {
             closest_dists[maturity] = d;

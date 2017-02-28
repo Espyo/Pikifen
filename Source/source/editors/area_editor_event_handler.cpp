@@ -40,7 +40,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         );
         
         lafi::widget* widget_under_mouse;
-        if(!is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)) {
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
             widget_under_mouse = NULL;
         } else {
             widget_under_mouse =
@@ -59,11 +59,11 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
     if(ev.type == ALLEGRO_EVENT_MOUSE_AXES) {
     
         if(
-            !is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)
+            !is_mouse_in_gui(mouse_cursor_s)
             && moving_thing == INVALID && sec_mode != ESM_TEXTURE_VIEW &&
             mode != EDITOR_MODE_OBJECTS
         ) {
-            on_sector = get_sector(mouse_cursor_w.x, mouse_cursor_w.y, NULL, false);
+            on_sector = get_sector(mouse_cursor_w, NULL, false);
         } else {
             on_sector = NULL;
         }
@@ -72,13 +72,15 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         if(sec_mode == ESM_GUIDE_MOUSE) {
         
             if(holding_m1) {
-                guide_x += ev.mouse.dx / cam_zoom;
-                guide_y += ev.mouse.dy / cam_zoom;
+                guide_pos.x += ev.mouse.dx / cam_zoom;
+                guide_pos.y += ev.mouse.dy / cam_zoom;
                 
             } else if(holding_m2) {
             
-                float new_w = guide_w + ev.mouse.dx / cam_zoom;
-                float new_h = guide_h + ev.mouse.dy / cam_zoom;
+                point new_size(
+                    guide_size.x + ev.mouse.dx / cam_zoom,
+                    guide_size.y + ev.mouse.dy / cam_zoom
+                );
                 
                 if(guide_aspect_ratio) {
                     //Find the most significant change.
@@ -88,18 +90,17 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                             fabs((double) ev.mouse.dy);
                             
                         if(most_is_width) {
-                            float ratio = guide_h / guide_w;
-                            guide_w = new_w;
-                            guide_h = new_w * ratio;
+                            float ratio = guide_size.y / guide_size.x;
+                            guide_size.x = new_size.x;
+                            guide_size.y = new_size.x * ratio;
                         } else {
-                            float ratio = guide_w / guide_h;
-                            guide_h = new_h;
-                            guide_w = new_h * ratio;
+                            float ratio = guide_size.x / guide_size.y;
+                            guide_size.y = new_size.y;
+                            guide_size.x = new_size.y * ratio;
                         }
                     }
                 } else {
-                    guide_w = new_w;
-                    guide_h = new_h;
+                    guide_size = new_size;
                 }
                 
             }
@@ -114,24 +115,23 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         //Move thing.
         if(moving_thing != INVALID) {
+            point hotspot = snap_to_grid(mouse_cursor_w);
             if(mode == EDITOR_MODE_SECTORS) {
                 vertex* v_ptr = cur_area_data.vertexes[moving_thing];
-                v_ptr->x = snap_to_grid(mouse_cursor_w.x);
-                v_ptr->y = snap_to_grid(mouse_cursor_w.y);
+                v_ptr->x = hotspot.x;
+                v_ptr->y = hotspot.y;
             } else if(mode == EDITOR_MODE_OBJECTS) {
                 mob_gen* m_ptr = cur_area_data.mob_generators[moving_thing];
-                m_ptr->x = snap_to_grid(mouse_cursor_w.x);
-                m_ptr->y = snap_to_grid(mouse_cursor_w.y);
+                m_ptr->pos = hotspot;
             } else if(mode == EDITOR_MODE_FOLDER_PATHS) {
                 path_stop* s_ptr = cur_area_data.path_stops[moving_thing];
-                s_ptr->x = snap_to_grid(mouse_cursor_w.x);
-                s_ptr->y = snap_to_grid(mouse_cursor_w.y);
+                s_ptr->pos = hotspot;
                 s_ptr->calculate_dists();
                 path_preview_timeout.start(false);
             } else if(mode == EDITOR_MODE_SHADOWS) {
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[moving_thing];
-                s_ptr->x = snap_to_grid(mouse_cursor_w.x - moving_thing_x);
-                s_ptr->y = snap_to_grid(mouse_cursor_w.y - moving_thing_y);
+                hotspot -= moving_thing_pos;
+                s_ptr->center = hotspot;
                 shadow_to_gui();
             }
             
@@ -140,23 +140,19 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         //Move path checkpoints.
         if(moving_path_preview_checkpoint != -1) {
-            path_preview_checkpoints[moving_path_preview_checkpoint].x =
-                snap_to_grid(mouse_cursor_w.x);
-            path_preview_checkpoints[moving_path_preview_checkpoint].y =
-                snap_to_grid(mouse_cursor_w.y);
+            path_preview_checkpoints[moving_path_preview_checkpoint] =
+                snap_to_grid(mouse_cursor_w);
             path_preview_timeout.start(false);
         }
         
         //Move cross-section points.
         if(moving_cross_section_point != -1) {
-            cross_section_points[moving_cross_section_point].x =
-                snap_to_grid(mouse_cursor_w.x);
-            cross_section_points[moving_cross_section_point].y =
-                snap_to_grid(mouse_cursor_w.y);
+            cross_section_points[moving_cross_section_point] =
+                snap_to_grid(mouse_cursor_w);
         }
         
         
-        if(ev.mouse.dz != 0 && !is_mouse_in_gui(ev.mouse.x, ev.mouse.y)) {
+        if(ev.mouse.dz != 0 && !is_mouse_in_gui(mouse_cursor_s)) {
             //Zoom.
             cam_zoom += (cam_zoom * ev.mouse.dz * 0.1);
             cam_zoom = max(ZOOM_MIN_LEVEL_EDITOR, cam_zoom);
@@ -183,24 +179,16 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         if(sec_mode == ESM_NEW_SECTOR) {
             new_sector_valid_line =
-                is_new_sector_line_valid(
-                    snap_to_grid(mouse_cursor_w.x),
-                    snap_to_grid(mouse_cursor_w.y)
-                );
+                is_new_sector_line_valid(snap_to_grid(mouse_cursor_w));
                 
         } else if(sec_mode == ESM_NEW_CIRCLE_SECTOR) {
+            point hotspot = snap_to_grid(mouse_cursor_w);
             if(new_circle_sector_step == 0) {
-                new_circle_sector_center.x =
-                    snap_to_grid(mouse_cursor_w.x);
-                new_circle_sector_center.y =
-                    snap_to_grid(mouse_cursor_w.y);
-                    
+                new_circle_sector_center = hotspot;
+                
             } else if(new_circle_sector_step == 1) {
-                new_circle_sector_anchor.x =
-                    snap_to_grid(mouse_cursor_w.x);
-                new_circle_sector_anchor.y =
-                    snap_to_grid(mouse_cursor_w.y);
-                    
+                new_circle_sector_anchor = hotspot;
+                
             } else {
                 set_new_circle_sector_points();
                 
@@ -211,7 +199,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)
+        !is_mouse_in_gui(mouse_cursor_s)
     ) {
         //Clicking.
         
@@ -246,9 +234,13 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     circle_intersects_line(
-                        mouse_cursor_w.x, mouse_cursor_w.y, 8 / cam_zoom,
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                        mouse_cursor_w, 8 / cam_zoom,
+                        point(
+                            e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                        ),
+                        point(
+                            e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                        )
                     )
                 ) {
                     clicked_edge_ptr = e_ptr;
@@ -337,9 +329,11 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                     if(
                         dist(
-                            mouse_cursor_w.x, mouse_cursor_w.y,
-                            cur_area_data.vertexes[v]->x,
-                            cur_area_data.vertexes[v]->y
+                            mouse_cursor_w,
+                            point(
+                                cur_area_data.vertexes[v]->x,
+                                cur_area_data.vertexes[v]->y
+                            )
                         ) <= 6.0 / cam_zoom
                     ) {
                         moving_thing = v;
@@ -351,7 +345,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             //Find a sector to select.
             if(moving_thing == INVALID) {
                 cur_sector =
-                    get_sector(mouse_cursor_w.x, mouse_cursor_w.y, NULL, false);
+                    get_sector(mouse_cursor_w, NULL, false);
                 sector_to_gui();
             }
             
@@ -366,11 +360,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 float radius =
                     m_ptr->type ? m_ptr->type->radius == 0 ? 16 :
                     m_ptr->type->radius : 16;
-                if(
-                    dist(m_ptr->x, m_ptr->y, mouse_cursor_w.x, mouse_cursor_w.y) <=
-                    radius
-                ) {
-                
+                    
+                if(dist(m_ptr->pos, mouse_cursor_w) <= radius) {
                     cur_mob = m_ptr;
                     moving_thing = m;
                     break;
@@ -385,11 +376,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             moving_thing = INVALID;
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-                if(
-                    dist(s_ptr->x, s_ptr->y, mouse_cursor_w.x, mouse_cursor_w.y)
-                    <= STOP_RADIUS
-                ) {
                 
+                if(dist(s_ptr->pos, mouse_cursor_w) <= STOP_RADIUS) {
                     cur_stop = s_ptr;
                     moving_thing = s;
                     break;
@@ -401,9 +389,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 for(unsigned char c = 0; c < 2; ++c) {
                     if(
                         bbox_check(
-                            path_preview_checkpoints[c].x,
-                            path_preview_checkpoints[c].y,
-                            mouse_cursor_w.x, mouse_cursor_w.y,
+                            path_preview_checkpoints[c],
+                            mouse_cursor_w,
                             PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
                         )
                     ) {
@@ -421,17 +408,19 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
-                float min_x, min_y, max_x, max_y;
-                get_shadow_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
+                point min_coords, max_coords;
+                get_shadow_bounding_box(s_ptr, &min_coords, &max_coords);
                 
                 if(
-                    mouse_cursor_w.x >= min_x && mouse_cursor_w.x <= max_x &&
-                    mouse_cursor_w.y >= min_y && mouse_cursor_w.y <= max_y
+                    mouse_cursor_w.x >= min_coords.x &&
+                    mouse_cursor_w.x <= max_coords.x &&
+                    mouse_cursor_w.y >= min_coords.y &&
+                    mouse_cursor_w.y <= max_coords.y
                 ) {
                     cur_shadow = s_ptr;
                     moving_thing = s;
-                    moving_thing_x = mouse_cursor_w.x - s_ptr->x;
-                    moving_thing_y = mouse_cursor_w.y - s_ptr->y;
+                    moving_thing_pos.x = mouse_cursor_w.x - s_ptr->center.x;
+                    moving_thing_pos.y = mouse_cursor_w.y - s_ptr->center.y;
                     break;
                 }
             }
@@ -441,16 +430,17 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         if(sec_mode == ESM_NEW_SECTOR) {
             //Next vertex in a new sector.
-            float hotspot_x = snap_to_grid(mouse_cursor_w.x);
-            float hotspot_y = snap_to_grid(mouse_cursor_w.y);
+            point hotspot = snap_to_grid(mouse_cursor_w);
             
             //First, check if the user is trying to undo the previous vertex.
             if(
                 !new_sector_vertexes.empty() &&
                 dist(
-                    hotspot_x, hotspot_y,
-                    new_sector_vertexes.back()->x,
-                    new_sector_vertexes.back()->y
+                    hotspot,
+                    point(
+                        new_sector_vertexes.back()->x,
+                        new_sector_vertexes.back()->y
+                    )
                 ) <= cam_zoom / VERTEX_MERGE_RADIUS
             ) {
                 delete new_sector_vertexes.back();
@@ -461,18 +451,17 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             }
             
             new_sector_valid_line =
-                is_new_sector_line_valid(
-                    snap_to_grid(mouse_cursor_w.x),
-                    snap_to_grid(mouse_cursor_w.y)
-                );
+                is_new_sector_line_valid(snap_to_grid(mouse_cursor_w));
                 
             if(new_sector_valid_line) {
                 if(
                     !new_sector_vertexes.empty() &&
                     dist(
-                        hotspot_x, hotspot_y,
-                        new_sector_vertexes[0]->x,
-                        new_sector_vertexes[0]->y
+                        hotspot,
+                        point(
+                            new_sector_vertexes[0]->x,
+                            new_sector_vertexes[0]->y
+                        )
                     ) <= cam_zoom / VERTEX_MERGE_RADIUS
                 ) {
                     //Back to the first vertex.
@@ -484,7 +473,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                     //Add a new vertex.
                     vertex* merge =
                         get_merge_vertex(
-                            hotspot_x, hotspot_y,
+                            hotspot,
                             cur_area_data.vertexes,
                             VERTEX_MERGE_RADIUS / cam_zoom
                         );
@@ -494,7 +483,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                         );
                     } else {
                         new_sector_vertexes.push_back(
-                            new vertex(hotspot_x, hotspot_y)
+                            new vertex(hotspot.x, hotspot.y)
                         );
                     }
                 }
@@ -549,11 +538,10 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             //Create a mob where the cursor is.
             
             sec_mode = ESM_NONE;
-            float hotspot_x = snap_to_grid(mouse_cursor_w.x);
-            float hotspot_y = snap_to_grid(mouse_cursor_w.y);
+            point hotspot = snap_to_grid(mouse_cursor_w);
             
             cur_area_data.mob_generators.push_back(
-                new mob_gen(hotspot_x, hotspot_y)
+                new mob_gen(hotspot)
             );
             
             cur_mob = cur_area_data.mob_generators.back();
@@ -566,12 +554,10 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             sec_mode = ESM_NONE;
             
             if(cur_mob) {
-                float hotspot_x = snap_to_grid(mouse_cursor_w.x);
-                float hotspot_y = snap_to_grid(mouse_cursor_w.y);
+                point hotspot = snap_to_grid(mouse_cursor_w);
                 
                 mob_gen* new_mg = new mob_gen(*cur_mob);
-                new_mg->x = hotspot_x;
-                new_mg->y = hotspot_y;
+                new_mg->pos = hotspot;
                 cur_area_data.mob_generators.push_back(
                     new_mg
                 );
@@ -584,11 +570,10 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         } else if(sec_mode == ESM_NEW_STOP) {
             //Create a new stop where the cursor is.
             
-            float hotspot_x = snap_to_grid(mouse_cursor_w.x);
-            float hotspot_y = snap_to_grid(mouse_cursor_w.y);
+            point hotspot = snap_to_grid(mouse_cursor_w);
             
             cur_area_data.path_stops.push_back(
-                new path_stop(hotspot_x, hotspot_y, vector<path_link>())
+                new path_stop(hotspot, vector<path_link>())
             );
             
             cur_stop = cur_area_data.path_stops.back();
@@ -602,7 +587,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
                 if(
-                    dist(mouse_cursor_w.x, mouse_cursor_w.y, s_ptr->x, s_ptr->y) <=
+                    dist(mouse_cursor_w, s_ptr->pos) <=
                     STOP_RADIUS
                 ) {
                     new_link_first_stop = s_ptr;
@@ -623,7 +608,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
                 if(
-                    dist(mouse_cursor_w.x, mouse_cursor_w.y, s_ptr->x, s_ptr->y) <=
+                    dist(mouse_cursor_w, s_ptr->pos) <=
                     STOP_RADIUS
                 ) {
                 
@@ -680,7 +665,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
                 if(
-                    dist(mouse_cursor_w.x, mouse_cursor_w.y, s_ptr->x, s_ptr->y) <=
+                    dist(mouse_cursor_w, s_ptr->pos) <=
                     STOP_RADIUS
                 ) {
                 
@@ -727,9 +712,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                     path_stop* s2_ptr = s_ptr->links[s2].end_ptr;
                     if(
                         circle_intersects_line(
-                            mouse_cursor_w.x, mouse_cursor_w.y, 8 / cam_zoom,
-                            s_ptr->x, s_ptr->y,
-                            s2_ptr->x, s2_ptr->y
+                            mouse_cursor_w, 8 / cam_zoom,
+                            s_ptr->pos, s2_ptr->pos
                         )
                     ) {
                     
@@ -760,10 +744,9 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             //Create a new shadow where the cursor is.
             
             sec_mode = ESM_NONE;
-            float hotspot_x = snap_to_grid(mouse_cursor_w.x);
-            float hotspot_y = snap_to_grid(mouse_cursor_w.y);
+            point hotspot = snap_to_grid(mouse_cursor_w);
             
-            tree_shadow* new_shadow = new tree_shadow(hotspot_x, hotspot_y);
+            tree_shadow* new_shadow = new tree_shadow(hotspot);
             new_shadow->bitmap = bmp_error;
             
             cur_area_data.tree_shadows.push_back(new_shadow);
@@ -777,9 +760,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             for(unsigned char p = 0; p < 2; ++p) {
                 if(
                     bbox_check(
-                        cross_section_points[p].x,
-                        cross_section_points[p].y,
-                        mouse_cursor_w.x, mouse_cursor_w.y,
+                        cross_section_points[p], mouse_cursor_w,
                         CROSS_SECTION_POINT_RADIUS / cam_zoom
                     )
                 ) {
@@ -816,8 +797,8 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     dist(
-                        moved_v_ptr->x, moved_v_ptr->y,
-                        dest_v_ptr->x, dest_v_ptr->y
+                        point(moved_v_ptr->x, moved_v_ptr->y),
+                        point(dest_v_ptr->x, dest_v_ptr->y)
                     ) <= (VERTEX_MERGE_RADIUS / cam_zoom)
                 ) {
                     merge_vertex(

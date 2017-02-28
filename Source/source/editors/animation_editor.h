@@ -95,14 +95,10 @@ private:
     bool                 grabbing_hitbox_edge;
     //X world coordinate of the point we're grabbing,
     //or the anchor, when in resize mode.
-    float                grabbing_hitbox_x;
-    float                grabbing_hitbox_y;
+    point                grabbing_hitbox_point;
     bool                 hitboxes_visible;
     bool                 is_pikmin;
     string               last_file_used;
-    //Hitbox corner coordinates. FLT_MAX = none.
-    float                new_hitbox_corner_x;
-    float                new_hitbox_corner_y;
     //Top bitmaps for the current Pikmin type.
     ALLEGRO_BITMAP*      top_bmp[N_MATURITIES];
     unsigned char        sprite_tra_lmb_action;

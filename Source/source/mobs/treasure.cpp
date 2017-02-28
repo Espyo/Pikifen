@@ -19,10 +19,10 @@
  * Creates a treasure.
  */
 treasure::treasure(
-    const float x, const float y, treasure_type* type,
+    const point pos, treasure_type* type,
     const float angle, const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     tre_type(type),
     buried(s2f(get_var_value(vars, "buried", "0"))) {
     
@@ -40,10 +40,9 @@ void treasure::draw(sprite_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    float draw_x, draw_y;
-    float draw_w, draw_h, scale;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h, &scale);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    float scale;
+    point draw_size = get_sprite_dimensions(this, s_ptr, &scale);
     
     sprite_effect_manager effects;
     add_brightness_sprite_effect(&effects);
@@ -57,8 +56,8 @@ void treasure::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         s_ptr->bitmap,
-        draw_x, draw_y,
-        type->radius * 2.0, -1,
+        draw_pos,
+        point(type->radius * 2.0, -1),
         angle, &effects
     );
 }

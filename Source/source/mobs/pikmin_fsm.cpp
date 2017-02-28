@@ -782,14 +782,11 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * When a Pikmin is dismissed by its leader.
- * info1: Pointer to the world X coordinate to go to.
- * info2: Pointer to the world Y coordinate to go to.
+ * info1: Pointer to the world coordinates to go to.
  */
 void pikmin_fsm::be_dismissed(mob* m, void* info1, void* info2) {
     m->chase(
-        *(float*) info1,
-        *(float*) info2,
-        NULL,
+        *((point*) info1),
         NULL,
         false
     );
@@ -838,14 +835,13 @@ void pikmin_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_THROWN);
     
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->x, m->y,
+        PARTICLE_TYPE_CIRCLE, m->pos,
         m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_x = &m->x;
-    pg.follow_y = &m->y;
+    pg.follow = &m->pos;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }
@@ -908,7 +904,7 @@ void pikmin_fsm::sigh(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::stand_still(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    m->speed_x = m->speed_y = 0;
+    m->speed.x = m->speed.y = 0;
 }
 
 
@@ -965,8 +961,8 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     focus_mob(m, (mob*) info1);
     m->stop_chasing();
     m->chase(
-        0, 0,
-        &m->focused_mob->x, &m->focused_mob->y,
+        point(),
+        &m->focused_mob->pos,
         false, nullptr, false,
         m->focused_mob->type->radius + m->type->radius
     );
@@ -985,7 +981,7 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
     if(
         m->focused_mob &&
         m->focused_mob->health > 0 &&
-        dist(m->x, m->y, m->focused_mob->x, m->focused_mob->y) <=
+        dist(m->pos, m->focused_mob->pos) <=
         (m->type->radius + m->focused_mob->type->radius)
     ) {
         return;
@@ -1015,10 +1011,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         if(s_ptr->state != CARRY_SPOT_FREE) continue;
         
         dist d(
-            pik_ptr->x,
-            pik_ptr->y,
-            carriable_mob->x + s_ptr->x,
-            carriable_mob->y + s_ptr->y
+            pik_ptr->pos, carriable_mob->pos + s_ptr->pos
         );
         if(closest_spot == INVALID || d < closest_spot_dist) {
             closest_spot = s;
@@ -1034,10 +1027,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_WAIT_UP);
     
     pik_ptr->chase(
-        closest_spot_ptr->x,
-        closest_spot_ptr->y,
-        &carriable_mob->x,
-        &carriable_mob->y,
+        closest_spot_ptr->pos, &carriable_mob->pos,
         false, nullptr, false,
         pik_ptr->type->radius * 1.2
     );
@@ -1057,23 +1047,17 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     
     pik_ptr->set_animation(PIKMIN_ANIM_GRABBING, true);
     
-    float final_x =
-        carriable_mob->x +
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].x;
-    float final_y =
-        carriable_mob->y +
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].y;
+    point final_pos =
+        carriable_mob->pos +
+        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].pos;
         
     pik_ptr->chase(
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].x,
-        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].y,
-        &carriable_mob->x, &carriable_mob->y,
+        carriable_mob->carry_info->spot_info[pik_ptr->carrying_spot].pos,
+        &carriable_mob->pos,
         true, &carriable_mob->z
     );
     
-    pik_ptr->face(
-        atan2(carriable_mob->y - final_y, carriable_mob->x - final_x)
-    );
+    pik_ptr->face(get_angle(final_pos, carriable_mob->pos));
     
     pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
     
@@ -1125,8 +1109,11 @@ void pikmin_fsm::stop_carrying(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::panic_new_chase(mob* m, void* info1, void* info2) {
     m->chase(
-        m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000),
-        NULL, NULL, false
+        point(
+            m->pos.x + randomf(-1000, 1000),
+            m->pos.y + randomf(-1000, 1000)
+        ),
+        NULL, false
     );
     m->set_timer(PIKMIN_PANIC_CHASE_INTERVAL);
 }
@@ -1160,7 +1147,7 @@ void pikmin_fsm::land_on_mob(mob* m, void* info1, void* info2) {
     }
     
     pik_ptr->connected_hitbox_nr = h_ptr->body_part_index;
-    pik_ptr->speed_x = pik_ptr->speed_y = pik_ptr->speed_z = 0;
+    pik_ptr->speed.x = pik_ptr->speed.y = pik_ptr->speed_z = 0;
     
     pik_ptr->focused_mob = mob_ptr;
     pik_ptr->set_connected_hitbox_info(h_ptr, mob_ptr);
@@ -1252,7 +1239,7 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
             pik_ptr->do_attack(
                 pik_ptr->focused_mob,
                 get_closest_hitbox(
-                    pik_ptr->x, pik_ptr->y,
+                    pik_ptr->pos,
                     pik_ptr->focused_mob,
                     HITBOX_TYPE_NORMAL
                 )
@@ -1261,12 +1248,7 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
         pik_ptr->attack_time = pik_ptr->pik_type->attack_interval;
     }
     
-    pik_ptr->face(
-        atan2(
-            pik_ptr->focused_mob->y - pik_ptr->y,
-            pik_ptr->focused_mob->x - pik_ptr->x
-        )
-    );
+    pik_ptr->face(get_angle(pik_ptr->pos, pik_ptr->focused_mob->pos));
 }
 
 
@@ -1274,12 +1256,7 @@ void pikmin_fsm::tick_attacking_grounded(mob* m, void* info1, void* info2) {
  * When a Pikmin needs to turn towards its leader.
  */
 void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
-    m->face(
-        atan2(
-            m->following_group->y - m->y,
-            m->following_group->x - m->x
-        )
-    );
+    m->face(get_angle(m->pos, m->following_group->pos));
 }
 
 
@@ -1298,9 +1275,8 @@ void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     m->chase(
-        m->group_spot_x, m->group_spot_y,
-        &m->following_group->group->group_center_x,
-        &m->following_group->group->group_center_y,
+        m->group_spot,
+        &m->following_group->group->group_center,
         false
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
@@ -1315,13 +1291,8 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     //If the Pikmin is following a moveable point, let's change it to
     //a static point. This will make the Pikmin continue to move
     //forward into the water in a straight line.
-    float final_x, final_y;
-    m->get_chase_target(&final_x, &final_y);
-    m->chase(
-        final_x, final_y,
-        NULL, NULL,
-        false
-    );
+    point final_pos = m->get_chase_target();
+    m->chase(final_pos, NULL, false);
     
     remove_from_group(m);
     
@@ -1378,13 +1349,7 @@ void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
  * When the Pikmin must move towards the whistle.
  */
 void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
-    m->chase(
-        cur_leader_ptr->x,
-        cur_leader_ptr->y,
-        NULL, NULL,
-        false,
-        NULL, true
-    );
+    m->chase(cur_leader_ptr->pos, NULL, false, NULL, true);
 }
 
 
@@ -1443,15 +1408,14 @@ void pikmin_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->x, m->y,
+                PARTICLE_TYPE_BITMAP, m->pos,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = bmp_wave_ring;
             p.size_grow_speed = m->type->radius * 4;
             p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow_x = &m->x;
-            pg.follow_y = &m->y;
+            pg.follow = &m->pos;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }

@@ -16,12 +16,12 @@
  * Creates a gate mob.
  */
 gate::gate(
-    const float x, const float y, gate_type* type,
+    const point pos, gate_type* type,
     const float angle, const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     gat_type(type),
-    sec(get_sector(x, y, nullptr, true)) {
+    sec(get_sector(pos, nullptr, true)) {
     
     team = MOB_TEAM_OBSTACLE;
 }

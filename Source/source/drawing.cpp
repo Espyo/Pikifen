@@ -126,8 +126,10 @@ void do_game_drawing(
                 al_draw_scaled_bitmap(
                     x_ptr->operator[](y),
                     0, 0, area_image_size, area_image_size,
-                    (x * area_image_size + area_images_x1) / area_images_scale,
-                    (y * area_image_size + area_images_y1) / area_images_scale,
+                    (x * area_image_size + area_images_top_left_corner.x) /
+                    area_images_scale,
+                    (y * area_image_size + area_images_top_left_corner.y) /
+                    area_images_scale,
                     area_image_size / area_images_scale,
                     area_image_size / area_images_scale,
                     0
@@ -141,7 +143,7 @@ void do_game_drawing(
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = cur_area_data.sectors[s];
             if(s_ptr->associated_liquid) {
-                draw_liquid(s_ptr, 0, 0, 1.0f);
+                draw_liquid(s_ptr, point(), 1.0f);
             }
         }
         
@@ -149,7 +151,7 @@ void do_game_drawing(
         for(size_t c = 0; c < cur_area_data.sector_corrections.size(); ++c) {
             sector_correction* c_ptr = &cur_area_data.sector_corrections[c];
             if(c_ptr->new_texture.bitmap) {
-                draw_sector(c_ptr->sec, 0, 0, 1.0f, &c_ptr->new_texture);
+                draw_sector(c_ptr->sec, point(), 1.0f, &c_ptr->new_texture);
             }
         }
         
@@ -201,7 +203,7 @@ void do_game_drawing(
             mob_ptr = sorted_mobs[m];
             if(mob_ptr->type->casts_shadow && !mob_ptr->hide) {
                 draw_mob_shadow(
-                    mob_ptr->x, mob_ptr->y,
+                    mob_ptr->pos,
                     mob_ptr->type->radius * 2,
                     mob_ptr->z - mob_ptr->ground_sector->z,
                     shadow_stretch
@@ -253,8 +255,11 @@ void do_game_drawing(
                         color = carrying_color_stop;
                     }
                     draw_fraction(
-                        mob_ptr->x,
-                        mob_ptr->y - mob_ptr->type->radius - font_main_h * 1.25,
+                        point(
+                            mob_ptr->pos.x,
+                            mob_ptr->pos.y - mob_ptr->type->radius -
+                            font_main_h * 1.25
+                        ),
                         mob_ptr->carry_info->cur_carrying_strength,
                         mob_ptr->type->weight,
                         color
@@ -269,9 +274,11 @@ void do_game_drawing(
                 mob_ptr->health > 0
             ) {
                 draw_health(
-                    mob_ptr->x,
-                    mob_ptr->y - mob_ptr->type->radius -
-                    DEF_HEALTH_WHEEL_RADIUS - 4,
+                    point(
+                        mob_ptr->pos.x,
+                        mob_ptr->pos.y - mob_ptr->type->radius -
+                        DEF_HEALTH_WHEEL_RADIUS - 4
+                    ),
                     mob_ptr->health, mob_ptr->type->max_health
                 );
             }
@@ -281,21 +288,21 @@ void do_game_drawing(
         size_t n_info_spots = info_spots.size();
         for(size_t i = 0; i < n_info_spots; ++i) {
             if(
-                dist(
-                    cur_leader_ptr->x, cur_leader_ptr->y,
-                    info_spots[i]->x, info_spots[i]->y
-                ) <= info_spot_trigger_range
+                dist(cur_leader_ptr->pos, info_spots[i]->pos) <=
+                info_spot_trigger_range
             ) {
-                float pivot_y = info_spots[i]->y - info_spots[i]->type->radius;
+                float pivot_y =
+                    info_spots[i]->pos.y - info_spots[i]->type->radius;
                 if(!info_spots[i]->opens_box) {
                     draw_notification(
-                        info_spots[i]->x, pivot_y, info_spots[i]->text, NULL
+                        point(info_spots[i]->pos.x, pivot_y),
+                        info_spots[i]->text, NULL
                     );
                     
                 } else if(click_control_id != INVALID) {
                     draw_notification(
-                        info_spots[i]->x, pivot_y, "Read",
-                        &controls[0][click_control_id]
+                        point(info_spots[i]->pos.x, pivot_y),
+                        "Read", &controls[0][click_control_id]
                     );
                     
                 }
@@ -341,13 +348,15 @@ void do_game_drawing(
                     
                 draw_sprite(
                     s_ptr->bitmap,
-                    s_ptr->x + TREE_SHADOW_SWAY_AMOUNT *
-                    sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
-                    s_ptr->sway_x,
-                    s_ptr->y + TREE_SHADOW_SWAY_AMOUNT *
-                    sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
-                    s_ptr->sway_y,
-                    s_ptr->w, s_ptr->h,
+                    point(
+                        s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT *
+                        sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                        s_ptr->sway.x,
+                        s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT *
+                        sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                        s_ptr->sway.y
+                    ),
+                    s_ptr->size,
                     s_ptr->angle, map_alpha(alpha)
                 );
             }
@@ -382,8 +391,10 @@ void do_game_drawing(
         
         size_t n_arrows = group_move_arrows.size();
         for(size_t a = 0; a < n_arrows; ++a) {
-            float x = cos(group_move_angle) * group_move_arrows[a];
-            float y = sin(group_move_angle) * group_move_arrows[a];
+            point pos(
+                cos(group_move_angle) * group_move_arrows[a],
+                sin(group_move_angle) * group_move_arrows[a]
+            );
             float alpha =
                 64 + min(
                     191,
@@ -393,8 +404,8 @@ void do_game_drawing(
                 );
             draw_sprite(
                 bmp_group_move_arrow,
-                cur_leader_ptr->x + x, cur_leader_ptr->y + y,
-                16 * (1 + group_move_arrows[a] / cursor_max_dist), -1,
+                cur_leader_ptr->pos + pos,
+                point(16 * (1 + group_move_arrows[a] / cursor_max_dist), -1),
                 group_move_angle,
                 map_alpha(alpha)
             );
@@ -402,11 +413,13 @@ void do_game_drawing(
         
         size_t n_rings = whistle_rings.size();
         for(size_t r = 0; r < n_rings; ++r) {
-            float x = cur_leader_ptr->x + cos(cursor_angle) * whistle_rings[r];
-            float y = cur_leader_ptr->y + sin(cursor_angle) * whistle_rings[r];
+            point pos(
+                cur_leader_ptr->pos.x + cos(cursor_angle) * whistle_rings[r],
+                cur_leader_ptr->pos.y + sin(cursor_angle) * whistle_rings[r]
+            );
             unsigned char n = whistle_ring_colors[r];
             al_draw_circle(
-                x, y, 8,
+                pos.x, pos.y, 8,
                 al_map_rgba(
                     WHISTLE_RING_COLORS[n][0],
                     WHISTLE_RING_COLORS[n][1],
@@ -480,7 +493,7 @@ void do_game_drawing(
                 point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
                 if(
                     (*p_ptr) != (*pp_ptr) &&
-                    dist(p_ptr->x, p_ptr->y, pp_ptr->x, pp_ptr->y) > 4
+                    dist(*p_ptr, *pp_ptr) > 4
                 ) {
                     al_draw_line(
                         p_ptr->x, p_ptr->y,
@@ -498,9 +511,11 @@ void do_game_drawing(
         //Mouse cursor.
         draw_sprite(
             bmp_mouse_cursor,
-            mouse_cursor_s.x, mouse_cursor_s.y,
-            cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
-            cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5,
+            mouse_cursor_s,
+            point(
+                cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
+                cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
+            ),
             -(area_time_passed * cursor_spin_speed),
             change_color_lighting(
                 cur_leader_ptr->lea_type->main_color,
@@ -512,9 +527,11 @@ void do_game_drawing(
         al_use_transform(&world_to_screen_drawing_transform);
         draw_sprite(
             bmp_cursor,
-            leader_cursor_w.x, leader_cursor_w.y,
-            al_get_bitmap_width(bmp_cursor) * 0.5,
-            al_get_bitmap_height(bmp_cursor) * 0.5,
+            leader_cursor_w,
+            point(
+                al_get_bitmap_width(bmp_cursor) * 0.5,
+                al_get_bitmap_height(bmp_cursor) * 0.5
+            ),
             cursor_angle,
             change_color_lighting(
                 cur_leader_ptr->lea_type->main_color,
@@ -550,22 +567,17 @@ void do_game_drawing(
                 );
                 draw_sprite(
                     leaders[l_nr]->lea_type->bmp_icon,
-                    hud_coords[icon_id][0],
-                    hud_coords[icon_id][1],
-                    hud_coords[icon_id][2],
-                    hud_coords[icon_id][3]
+                    point(hud_coords[icon_id][0], hud_coords[icon_id][1]),
+                    point(hud_coords[icon_id][2], hud_coords[icon_id][3])
                 );
                 draw_sprite(
                     bmp_bubble,
-                    hud_coords[icon_id][0],
-                    hud_coords[icon_id][1],
-                    hud_coords[icon_id][2],
-                    hud_coords[icon_id][3]
+                    point(hud_coords[icon_id][0], hud_coords[icon_id][1]),
+                    point(hud_coords[icon_id][2], hud_coords[icon_id][3])
                 );
                 
                 draw_health(
-                    hud_coords[health_id][0],
-                    hud_coords[health_id][1],
+                    point(hud_coords[health_id][0], hud_coords[health_id][1]),
                     leaders[l_nr]->health, leaders[l_nr]->type->max_health,
                     max(
                         hud_coords[health_id][2],
@@ -575,10 +587,8 @@ void do_game_drawing(
                 );
                 draw_sprite(
                     bmp_hard_bubble,
-                    hud_coords[health_id][0],
-                    hud_coords[health_id][1],
-                    hud_coords[health_id][2],
-                    hud_coords[health_id][3]
+                    point(hud_coords[health_id][0], hud_coords[health_id][1]),
+                    point(hud_coords[health_id][2], hud_coords[health_id][3])
                 );
             }
             
@@ -608,59 +618,68 @@ void do_game_drawing(
                 
             //Larger bubbles at the start, middle and end of the meter.
             draw_sprite(
-                bmp_hard_bubble, first_dot_x + dots_span * 0.0, dots_y,
-                sun_radius * 0.9, sun_radius * 0.9
+                bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
+                point(sun_radius * 0.9, sun_radius * 0.9)
             );
             draw_sprite(
-                bmp_hard_bubble, first_dot_x + dots_span * 0.5, dots_y,
-                sun_radius * 0.9, sun_radius * 0.9
+                bmp_hard_bubble, point(first_dot_x + dots_span * 0.5, dots_y),
+                point(sun_radius * 0.9, sun_radius * 0.9)
             );
             draw_sprite(
-                bmp_hard_bubble, first_dot_x + dots_span * 1.0, dots_y,
-                sun_radius * 0.9, sun_radius * 0.9
+                bmp_hard_bubble, point(first_dot_x + dots_span * 1.0, dots_y),
+                point(sun_radius * 0.9, sun_radius * 0.9)
             );
             
             for(unsigned char h = 0; h < n_hours + 1; ++h) {
                 draw_sprite(
                     bmp_hard_bubble,
-                    first_dot_x + h * dot_interval, dots_y,
-                    sun_radius * 0.6, sun_radius * 0.6);
+                    point(first_dot_x + h * dot_interval, dots_y),
+                    point(sun_radius * 0.6, sun_radius * 0.6)
+                );
             }
             
             draw_sprite(
                 bmp_sun,
-                first_dot_x + day_passed_ratio * dots_span, dots_y,
-                sun_radius * 1.5, sun_radius * 1.5
+                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+                point(sun_radius * 1.5, sun_radius * 1.5)
             ); //Static sun.
             draw_sprite(
                 bmp_sun,
-                first_dot_x + day_passed_ratio * dots_span, dots_y,
-                sun_radius * 1.5, sun_radius * 1.5,
+                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+                point(sun_radius * 1.5, sun_radius * 1.5),
                 sun_meter_sun_angle
             ); //Spinning sun.
             draw_sprite(
                 bmp_hard_bubble,
-                first_dot_x + day_passed_ratio * dots_span, dots_y,
-                sun_radius * 1.5, sun_radius * 1.5, 0,
-                al_map_rgb(255, 192, 128)
+                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+                point(sun_radius * 1.5, sun_radius * 1.5),
+                0, al_map_rgb(255, 192, 128)
             ); //Bubble in front the sun.
             
             //Day number.
             draw_sprite(
                 bmp_day_bubble,
-                hud_coords[HUD_ITEM_DAY_BUBBLE][0],
-                hud_coords[HUD_ITEM_DAY_BUBBLE][1],
-                hud_coords[HUD_ITEM_DAY_BUBBLE][2],
-                hud_coords[HUD_ITEM_DAY_BUBBLE][3]
+                point(
+                    hud_coords[HUD_ITEM_DAY_BUBBLE][0],
+                    hud_coords[HUD_ITEM_DAY_BUBBLE][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_DAY_BUBBLE][2],
+                    hud_coords[HUD_ITEM_DAY_BUBBLE][3]
+                )
             );
             
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_DAY_NUMBER][0],
-                hud_coords[HUD_ITEM_DAY_NUMBER][1],
+                point(
+                    hud_coords[HUD_ITEM_DAY_NUMBER][0],
+                    hud_coords[HUD_ITEM_DAY_NUMBER][1]
+                ),
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_DAY_NUMBER][2],
-                hud_coords[HUD_ITEM_DAY_NUMBER][3],
+                point(
+                    hud_coords[HUD_ITEM_DAY_NUMBER][2],
+                    hud_coords[HUD_ITEM_DAY_NUMBER][3]
+                ),
                 i2s(day)
             );
             
@@ -719,24 +738,32 @@ void do_game_drawing(
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3] * 0.8;
             draw_sprite(
                 bm,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
-                sprite_w, sprite_h
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
+                ),
+                point(sprite_w, sprite_h)
             );
             if(closest_group_member_distant) {
                 draw_sprite(
                     bmp_pikmin_distant,
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
-                    sprite_w, sprite_h
+                    point(
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
+                    ),
+                    point(sprite_w, sprite_h)
                 );
             }
             draw_sprite(
                 bmp_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3]
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3]
+                )
             );
             
             if(bm_maturity) {
@@ -748,27 +775,37 @@ void do_game_drawing(
                     hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3] * 0.8;
                 draw_sprite(
                     bm_maturity,
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1],
-                    sprite_w, sprite_h
+                    point(
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1]
+                    ),
+                    point(sprite_w, sprite_h)
                 );
                 draw_sprite(
                     bmp_bubble,
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3]
+                    point(
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1]
+                    ),
+                    point(
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2],
+                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3]
+                    )
                 );
             }
             
             //Pikmin count "X".
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][0],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][1]
+                ),
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][2],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][3],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][2],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][3]
+                ),
                 "x"
             );
             
@@ -783,97 +820,141 @@ void do_game_drawing(
             
             draw_sprite(
                 bmp_number_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2],
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3]
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2],
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3]
+                )
             );
             draw_sprite(
                 bmp_number_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1],
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2],
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3]
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2],
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3]
+                )
             );
             draw_sprite(
                 bmp_number_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0],
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1],
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2],
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3]
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0],
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2],
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3]
+                )
             );
             draw_sprite(
                 bmp_number_bubble,
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0],
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1],
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2],
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3]
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0],
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1]
+                ),
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2],
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3]
+                )
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][1]
+                ),
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0]
+                ),
                 "/"
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][1]
+                ),
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0]
+                ),
                 "/"
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][1]
+                ),
                 ALLEGRO_ALIGN_CENTER, 1,
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
-                hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
+                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0]
+                ),
                 "/"
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0] +
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.4,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0] +
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.4,
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1]
+                ),
                 ALLEGRO_ALIGN_RIGHT, 1,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.7,
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3] * 0.7,
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.7,
+                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3] * 0.7
+                ),
                 i2s(n_standby_pikmin)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0] +
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.4,
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0] +
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.4,
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1]
+                ),
                 ALLEGRO_ALIGN_RIGHT, 1,
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.7,
-                hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3] * 0.7,
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.7,
+                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3] * 0.7
+                ),
                 i2s(pikmin_in_group)
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0] +
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.4,
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0] +
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.4,
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1]
+                ),
                 ALLEGRO_ALIGN_RIGHT, 1,
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.7,
-                hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3] * 0.7,
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.7,
+                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3] * 0.7
+                ),
                 i2s(pikmin_list.size())
             );
             draw_compressed_text(
                 font_counter, al_map_rgb(255, 255, 255),
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0] +
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.4,
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1],
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0] +
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.4,
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1]
+                ),
                 ALLEGRO_ALIGN_RIGHT, 1,
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.7,
-                hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3] * 0.7,
+                point(
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.7,
+                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3] * 0.7
+                ),
                 i2s(total_pikmin)
             );
             
@@ -887,18 +968,26 @@ void do_game_drawing(
                 
                 draw_sprite(
                     spray_types[top_spray_nr].bmp_spray,
-                    hud_coords[HUD_ITEM_SPRAY_1_ICON][0],
-                    hud_coords[HUD_ITEM_SPRAY_1_ICON][1],
-                    hud_coords[HUD_ITEM_SPRAY_1_ICON][2],
-                    hud_coords[HUD_ITEM_SPRAY_1_ICON][3]
+                    point(
+                        hud_coords[HUD_ITEM_SPRAY_1_ICON][0],
+                        hud_coords[HUD_ITEM_SPRAY_1_ICON][1]
+                    ),
+                    point(
+                        hud_coords[HUD_ITEM_SPRAY_1_ICON][2],
+                        hud_coords[HUD_ITEM_SPRAY_1_ICON][3]
+                    )
                 );
                 draw_compressed_text(
                     font_counter, al_map_rgb(255, 255, 255),
-                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][0],
-                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][1],
+                    point(
+                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][0],
+                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][1]
+                    ),
                     ALLEGRO_ALIGN_LEFT, 1,
-                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][2],
-                    hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][3],
+                    point(
+                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][2],
+                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][3]
+                    ),
                     "x" + i2s(spray_amounts[top_spray_nr])
                 );
                 
@@ -909,10 +998,14 @@ void do_game_drawing(
                     ) {
                         draw_control(
                             font_main, controls[0][c],
-                            hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
-                            hud_coords[HUD_ITEM_SPRAY_1_KEY][1],
-                            hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
-                            hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
+                            point(
+                                hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
+                                hud_coords[HUD_ITEM_SPRAY_1_KEY][1]
+                            ),
+                            point(
+                                hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
+                                hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
+                            )
                         );
                         break;
                     }
@@ -921,28 +1014,40 @@ void do_game_drawing(
                 if(n_spray_types == 2) {
                     draw_sprite(
                         spray_types[1].bmp_spray,
-                        hud_coords[HUD_ITEM_SPRAY_2_ICON][0],
-                        hud_coords[HUD_ITEM_SPRAY_2_ICON][1],
-                        hud_coords[HUD_ITEM_SPRAY_2_ICON][2],
-                        hud_coords[HUD_ITEM_SPRAY_2_ICON][3]
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_2_ICON][0],
+                            hud_coords[HUD_ITEM_SPRAY_2_ICON][1]
+                        ),
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_2_ICON][2],
+                            hud_coords[HUD_ITEM_SPRAY_2_ICON][3]
+                        )
                     );
                     draw_compressed_text(
                         font_counter, al_map_rgb(255, 255, 255),
-                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][0],
-                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][1],
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][0],
+                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][1]
+                        ),
                         ALLEGRO_ALIGN_LEFT, 1,
-                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][2],
-                        hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][3],
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][2],
+                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][3]
+                        ),
                         "x" + i2s(spray_amounts[1])
                     );
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
                             draw_control(
                                 font_main, controls[0][c],
-                                hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
-                                hud_coords[HUD_ITEM_SPRAY_2_KEY][1],
-                                hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
-                                hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
+                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][1]
+                                ),
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
+                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
+                                )
                             );
                             break;
                         }
@@ -953,28 +1058,40 @@ void do_game_drawing(
                         spray_types[
                             sum_and_wrap(selected_spray, -1, spray_types.size())
                         ].bmp_spray,
-                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][0],
-                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][1],
-                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][2],
-                        hud_coords[HUD_ITEM_SPRAY_PREV_ICON][3]
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][0],
+                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][1]
+                        ),
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][2],
+                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][3]
+                        )
                     );
                     draw_sprite(
                         spray_types[
                             sum_and_wrap(selected_spray, 1, spray_types.size())
                         ].bmp_spray,
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][0],
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][1],
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][2],
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][0],
+                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][1]
+                        ),
+                        point(
+                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][2],
+                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
+                        )
                     );
                     for(size_t c = 0; c < controls[0].size(); ++c) {
                         if(controls[0][c].action == BUTTON_PREV_SPRAY) {
                             draw_control(
                                 font_main, controls[0][c],
-                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
-                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1],
-                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
-                                hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
+                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1]
+                                ),
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
+                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
+                                )
                             );
                             break;
                         }
@@ -983,10 +1100,14 @@ void do_game_drawing(
                         if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
                             draw_control(
                                 font_main, controls[0][c],
-                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
-                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1],
-                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
-                                hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
+                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1]
+                                ),
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
+                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
+                                )
                             );
                             break;
                         }
@@ -998,19 +1119,21 @@ void do_game_drawing(
         
             draw_sprite(
                 bmp_message_box,
-                scr_w / 2, scr_h - font_main_h * 2 - 4,
-                scr_w - 16, font_main_h * 4
+                point(scr_w / 2, scr_h - font_main_h * 2 - 4),
+                point(scr_w - 16, font_main_h * 4)
             );
             
             if(cur_message_speaker) {
                 draw_sprite(
                     cur_message_speaker,
-                    40, scr_h - font_main_h * 4 - 16,
-                    48, 48);
+                    point(40, scr_h - font_main_h * 4 - 16),
+                    point(48, 48)
+                );
                 draw_sprite(
                     bmp_bubble,
-                    40, scr_h - font_main_h * 4 - 16,
-                    64, 64);
+                    point(40, scr_h - font_main_h * 4 - 16),
+                    point(64, 64)
+                );
             }
             
             string text =
@@ -1027,8 +1150,8 @@ void do_game_drawing(
             
                 draw_compressed_text(
                     font_main, al_map_rgb(255, 255, 255),
-                    24, scr_h - font_main_h * (4 - l) + 8,
-                    ALLEGRO_ALIGN_LEFT, 0, scr_w - 64, 0,
+                    point(24, scr_h - font_main_h * (4 - l) + 8),
+                    ALLEGRO_ALIGN_LEFT, 0, point(scr_w - 64, 0),
                     lines[l]
                 );
                 
@@ -1061,7 +1184,7 @@ void do_game_drawing(
             );
             draw_text_lines(
                 font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-                8, 8, 0, 0, info_print_text
+                point(8, 8), 0, 0, info_print_text
             );
         }
         
@@ -1087,29 +1210,32 @@ void do_game_drawing(
 
 /* ----------------------------------------------------------------------------
  * Draws a key or button on the screen.
- * font:  Font to use for the name.
- * c:     Info on the control.
- * x, y:  Center of the place to draw at.
- * max_*: Max width or height. Used to compress it if needed.
+ * font:     Font to use for the name.
+ * c:        Info on the control.
+ * where:    Center of the place to draw at.
+ * max_size: Max width or height. Used to compress it if needed.
+   * 0 = unlimited.
  */
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
-    const float x, const float y, const float max_w, const float max_h
+    const point where, const point max_size
 ) {
 
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {
         
-            int bmp_w =
-                al_get_bitmap_width(bmp_mouse_button_icon[c.button - 1]);
-            int bmp_h =
-                al_get_bitmap_height(bmp_mouse_button_icon[c.button - 1]);
+            point bmp_size(
+                al_get_bitmap_width(bmp_mouse_button_icon[c.button - 1]),
+                al_get_bitmap_height(bmp_mouse_button_icon[c.button - 1])
+            );
             draw_sprite(
                 bmp_mouse_button_icon[c.button - 1],
-                x, y,
-                min((float) bmp_w, max_w),
-                min((float) bmp_h, max_h)
+                where,
+                point(
+                    min((float) bmp_size.x, max_size.x),
+                    min((float) bmp_size.y, max_size.y)
+                )
             );
             return;
             
@@ -1129,9 +1255,11 @@ void draw_control(
         int bmp_w = al_get_bitmap_width(b);
         int bmp_h = al_get_bitmap_height(b);
         draw_sprite(
-            b, x, y,
-            min((float) bmp_w, max_w),
-            min((float) bmp_h, max_h)
+            b, where,
+            point(
+                min((float) bmp_w, max_size.x),
+                min((float) bmp_h, max_size.y)
+            )
         );
         return;
     }
@@ -1158,34 +1286,38 @@ void draw_control(
     int x1, y1, x2, y2;
     al_get_text_dimensions(font, name.c_str(), &x1, &y1, &x2, &y2);
     float total_width =
-        min((float) (x2 - x1 + 4), (max_w == 0 ? FLT_MAX : max_w));
+        min((float) (x2 - x1 + 4), (max_size.x == 0 ? FLT_MAX : max_size.x));
     float total_height =
-        min((float) (y2 - y1 + 4), (max_h == 0 ? FLT_MAX : max_h));
+        min((float) (y2 - y1 + 4), (max_size.y == 0 ? FLT_MAX : max_size.y));
     total_width = max(total_width, total_height);
     
     if(c.type == CONTROL_TYPE_KEYBOARD_KEY) {
         al_draw_filled_rectangle(
-            x - total_width * 0.5, y - total_height * 0.5,
-            x + total_width * 0.5, y + total_height * 0.5,
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
             map_alpha(192)
         );
         al_draw_rectangle(
-            x - total_width * 0.5, y - total_height * 0.5,
-            x + total_width * 0.5, y + total_height * 0.5,
+            where.x - total_width * 0.5, where.y - total_height * 0.5,
+            where.x + total_width * 0.5, where.y + total_height * 0.5,
             al_map_rgba(160, 160, 160, 192), 2
         );
     } else {
         al_draw_filled_ellipse(
-            x, y, total_width * 0.5, total_height * 0.5, map_alpha(192)
+            where.x, where.y, total_width * 0.5, total_height * 0.5,
+            map_alpha(192)
         );
         al_draw_ellipse(
-            x, y, total_width * 0.5, total_height * 0.5,
+            where.x, where.y, total_width * 0.5, total_height * 0.5,
             al_map_rgba(160, 160, 160, 192), 2
         );
     }
     draw_compressed_text(
-        font, map_alpha(192), x, y, ALLEGRO_ALIGN_CENTER, 1,
-        (max_w == 0 ? 0 : max_w - 2), (max_h == 0 ? 0 : max_h - 2), name
+        font, map_alpha(192), where, ALLEGRO_ALIGN_CENTER, 1,
+        point(
+            (max_size.x == 0 ? 0 : max_size.x - 2),
+            (max_size.y == 0 ? 0 : max_size.y - 2)
+        ), name
     );
 }
 
@@ -1208,36 +1340,38 @@ bool casts_shadow(sector* s1, sector* s2) {
  * to fit within the specified range.
  * font - flags: The parameters you'd use for al_draw_text.
  * valign:       Vertical align: 0 = top, 1 = middle, 2 = bottom.
- * max_w, max_h: The maximum width and height. Use <= 0 to have no limit.
+ * max_size:     The maximum width and height. Use <= 0 to have no limit.
  * text:         Text to draw.
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const float x, const float y, const int flags, const unsigned char valign,
-    const float max_w, const float max_h, const string &text
+    const point where, const int flags, const unsigned char valign,
+    const point max_size, const string &text
 ) {
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     int text_width = x2 - x1, text_height = y2 - y1;
-    float scale_x = 1, scale_y = 1;
+    point scale(1.0, 1.0);
     float final_text_height = text_height;
     
-    if(text_width > max_w && max_w > 0) scale_x = max_w / text_width;
-    if(text_height > max_h && max_h > 0) {
-        scale_y = max_h / text_height;
-        final_text_height = max_h;
+    if(text_width > max_size.x && max_size.x > 0) {
+        scale.x = max_size.x / text_width;
+    }
+    if(text_height > max_size.y && max_size.y > 0) {
+        scale.y = max_size.y / text_height;
+        final_text_height = max_size.y;
     }
     
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, scale_x, scale_y);
+    al_scale_transform(&scale_transform, scale.x, scale.y);
     al_translate_transform(
-        &scale_transform, x,
+        &scale_transform, where.x,
         (
             (valign == 1) ?
-            y - final_text_height * 0.5 :
-            ((valign == 2) ? y - final_text_height : y)
+            where.y - final_text_height * 0.5 :
+            ((valign == 2) ? where.y - final_text_height : where.y)
         )
     );
     al_compose_transform(&scale_transform, &old_transform);
@@ -1251,34 +1385,38 @@ void draw_compressed_text(
 /* ----------------------------------------------------------------------------
  * Draws a strength/weight fraction, in the style of Pikmin 2.
  * The strength is above the weight.
- * c*:      Center of the text.
+ * center:  Center of the text.
  * current: Current strength.
  * needed:  Needed strength to lift the object (weight).
  * color:   Color of the fraction's text.
  */
 void draw_fraction(
-    const float cx, const float cy, const unsigned int current,
+    const point center, const unsigned int current,
     const unsigned int needed, const ALLEGRO_COLOR &color
 ) {
-    float first_y = cy - (font_main_h * 3) / 2;
+    float first_y = center.y - (font_main_h * 3) / 2;
     float font_h = al_get_font_line_height(font_value);
     
     draw_scaled_text(
-        font_value, color, cx, first_y,
-        (current >= needed ? 1.2 : 1.0),
-        (current >= needed ? 1.2 : 1.0),
+        font_value, color, point(center.x, first_y),
+        point(
+            (current >= needed ? 1.2 : 1.0),
+            (current >= needed ? 1.2 : 1.0)
+        ),
         ALLEGRO_ALIGN_CENTER, 0, (i2s(current).c_str())
     );
     
     al_draw_text(
-        font_value, color, cx, first_y + font_h * 0.75,
+        font_value, color, center.x, first_y + font_h * 0.75,
         ALLEGRO_ALIGN_CENTER, "-"
     );
     
     draw_scaled_text(
-        font_value, color, cx, first_y + font_h * 1.5,
-        (needed > current ? 1.2 : 1.0),
-        (needed > current ? 1.2 : 1.0),
+        font_value, color, point(center.x, first_y + font_h * 1.5),
+        point(
+            (needed > current ? 1.2 : 1.0),
+            (needed > current ? 1.2 : 1.0)
+        ),
         ALLEGRO_ALIGN_CENTER, 0, (i2s(needed).c_str())
     );
 }
@@ -1286,7 +1424,7 @@ void draw_fraction(
 
 /* ----------------------------------------------------------------------------
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
- * c*:         Center of the wheel.
+ * center:     Center of the wheel.
  * health:     Current amount of health of the mob
    * whose health we're representing.
  * max_health: Maximum amount of health of the mob;
@@ -1296,7 +1434,7 @@ void draw_fraction(
    * Used for leader HP on the HUD.
  */
 void draw_health(
-    const float cx, const float cy,
+    const point center,
     const unsigned int health, const unsigned int max_health,
     const float radius, const bool just_chart
 ) {
@@ -1309,11 +1447,17 @@ void draw_health(
     }
     
     if(!just_chart) {
-        al_draw_filled_circle(cx, cy, radius, al_map_rgba(0, 0, 0, 128));
+        al_draw_filled_circle(
+            center.x, center.y, radius, al_map_rgba(0, 0, 0, 128)
+        );
     }
-    al_draw_filled_pieslice(cx, cy, radius, -M_PI_2, -ratio * M_PI * 2, c);
+    al_draw_filled_pieslice(
+        center.x, center.y, radius, -M_PI_2, -ratio * M_PI * 2, c
+    );
     if(!just_chart) {
-        al_draw_circle(cx, cy, radius + 1, al_map_rgb(0, 0, 0), 2);
+        al_draw_circle(
+            center.x, center.y, radius + 1, al_map_rgb(0, 0, 0), 2
+        );
     }
 }
 
@@ -1321,17 +1465,17 @@ void draw_health(
 /* ----------------------------------------------------------------------------
  * Draws a notification, like a note saying that the player can press
  * a certain button to pluck.
- * x, y:    Spot that the notification is pointing at.
+ * target:  Spot that the notification is pointing at.
  * text:    Text to say.
  * control: If not NULL, draw the control's button/key/etc. before the text.
  */
 void draw_notification(
-    const float x, const float y, const string &text, control_info* control
+    const point target, const string &text, control_info* control
 ) {
 
     ALLEGRO_TRANSFORM tra, old;
     al_identity_transform(&tra);
-    al_translate_transform(&tra, x * cam_zoom, y * cam_zoom);
+    al_translate_transform(&tra, target.x * cam_zoom, target.y * cam_zoom);
     al_scale_transform(&tra, 1.0 / cam_zoom, 1.0 / cam_zoom);
     al_copy_transform(&old, al_get_current_transform());
     al_compose_transform(&tra, &old);
@@ -1347,9 +1491,8 @@ void draw_notification(
     
     draw_sprite(
         bmp_notification,
-        0,
-        -bmp_h * 0.5,
-        bmp_w, bmp_h,
+        point(0, -bmp_h * 0.5),
+        point(bmp_w, bmp_h),
         0,
         map_alpha(NOTIFICATION_ALPHA)
     );
@@ -1358,22 +1501,30 @@ void draw_notification(
         text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
         draw_control(
             font_main, *control,
-            -bmp_w * 0.5 + NOTIFICATION_PADDING +
-            NOTIFICATION_CONTROL_SIZE * 0.5,
-            -bmp_h * 0.5,
-            NOTIFICATION_CONTROL_SIZE,
-            NOTIFICATION_CONTROL_SIZE
+            point(
+                -bmp_w * 0.5 + NOTIFICATION_PADDING +
+                NOTIFICATION_CONTROL_SIZE * 0.5,
+                -bmp_h * 0.5
+            ),
+            point(
+                NOTIFICATION_CONTROL_SIZE,
+                NOTIFICATION_CONTROL_SIZE
+            )
         );
     }
     
     draw_compressed_text(
         font_main, map_alpha(NOTIFICATION_ALPHA),
-        (text_box_x1 + text_box_x2) * 0.5,
-        (text_box_y1 + text_box_y2) * 0.5,
+        point(
+            (text_box_x1 + text_box_x2) * 0.5,
+            (text_box_y1 + text_box_y2) * 0.5
+        ),
         ALLEGRO_ALIGN_CENTER,
         1,
-        text_box_x2 - text_box_x1,
-        text_box_y2 - text_box_y1,
+        point(
+            text_box_x2 - text_box_x1,
+            text_box_y2 - text_box_y1
+        ),
         text
     );
     
@@ -1383,27 +1534,28 @@ void draw_notification(
 
 /* ----------------------------------------------------------------------------
  * Draws text, scaled
- * font - y: The parameters you'd use for al_draw_text.
- * scale_*:  Horizontal or vertical scale.
- * flags:    Same flags you'd use for al_draw_text.
- * valign:   Vertical align. 0: top, 1: center, 2: bottom.
- * text:     Text to draw.
+ * font - color: The parameters you'd use for al_draw_text.
+ * where:        Coordinates to draw in.
+ * scale:        Horizontal or vertical scale.
+ * flags:        Same flags you'd use for al_draw_text.
+ * valign:       Vertical align. 0: top, 1: center, 2: bottom.
+ * text:         Text to draw.
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const float x, const float y, const float scale_x, const float scale_y,
+    const point where, const point scale,
     const int flags, const unsigned char valign, const string &text
 ) {
 
     ALLEGRO_TRANSFORM scale_transform, old_transform;
     al_copy_transform(&old_transform, al_get_current_transform());
     al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, scale_x, scale_y);
-    al_translate_transform(&scale_transform, x, y);
+    al_scale_transform(&scale_transform, scale.x, scale.y);
+    al_translate_transform(&scale_transform, where.x, where.y);
     al_compose_transform(&scale_transform, &old_transform);
     
     al_use_transform(&scale_transform); {
-        draw_text_lines(font, color, 0, 0, flags, valign, text);
+        draw_text_lines(font, color, point(), flags, valign, text);
     }; al_use_transform(&old_transform);
 }
 
@@ -1411,18 +1563,18 @@ void draw_scaled_text(
 /* ----------------------------------------------------------------------------
  * Draws a sector on the current bitmap.
  * s:        The sector to draw.
- * x, y:     Top-left coordinates.
+ * where:    Top-left coordinates.
  * scale:    Drawing scale.
  * texture:  Custom texture. If NULL, uses the normal one.
  */
 void draw_sector(
-    sector* s_ptr, const float x, const float y, const float scale,
+    sector* s_ptr, const point where, const float scale,
     sector_texture_info* texture
 ) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    draw_sector_texture(s_ptr, x, y, scale, texture);
+    draw_sector_texture(s_ptr, where, scale, texture);
     
     
     //Wall shadows.
@@ -1452,8 +1604,13 @@ void draw_sector(
             ev[1] = e_ptr->vertexes[0];
         }
         
-        float e_angle = atan2(ev[1]->y - ev[0]->y, ev[1]->x - ev[0]->x);
-        float e_dist = dist(ev[0]->x, ev[0]->y, ev[1]->x, ev[1]->y).to_float();
+        float e_angle =
+            get_angle(point(ev[0]->x, ev[0]->y), point(ev[1]->x, ev[1]->y));
+        float e_dist =
+            dist(
+                point(ev[0]->x, ev[0]->y),
+                point(ev[1]->x, ev[1]->y)
+            ).to_float();
         float e_cos_front = cos(e_angle - M_PI_2);
         float e_sin_front = sin(e_angle - M_PI_2);
         
@@ -1503,9 +1660,9 @@ void draw_sector(
                         (ve_ptr->vertexes[0] == cur_vertex ? 1 : 0)
                     ];
                 float ve_angle =
-                    atan2(
-                        other_vertex->y - cur_vertex->y,
-                        other_vertex->x - cur_vertex->x
+                    get_angle(
+                        point(cur_vertex->x, cur_vertex->y),
+                        point(other_vertex->x, other_vertex->y)
                     );
                     
                 float d;
@@ -1555,18 +1712,30 @@ void draw_sector(
                 
                 float ul;
                 lines_intersect(
-                    av[0].x + e_cos_front * WALL_SHADOW_LENGTH, av[0].y +
-                    e_sin_front * WALL_SHADOW_LENGTH,
-                    av[1].x + e_cos_front * WALL_SHADOW_LENGTH, av[1].y +
-                    e_sin_front * WALL_SHADOW_LENGTH,
-                    av[v].x,
-                    av[v].y,
-                    av[v].x + cos(
-                        neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]
-                    ) * e_dist,
-                    av[v].y + sin(
-                        neighbor_shadow[v] ? mid_angles[v] : neighbor_angles[v]
-                    ) * e_dist,
+                    point(
+                        av[0].x + e_cos_front * WALL_SHADOW_LENGTH, av[0].y +
+                        e_sin_front * WALL_SHADOW_LENGTH
+                    ),
+                    point(
+                        av[1].x + e_cos_front * WALL_SHADOW_LENGTH, av[1].y +
+                        e_sin_front * WALL_SHADOW_LENGTH
+                    ),
+                    point(
+                        av[v].x,
+                        av[v].y
+                    ),
+                    point(
+                        av[v].x + cos(
+                            neighbor_shadow[v] ?
+                            mid_angles[v] :
+                            neighbor_angles[v]
+                        ) * e_dist,
+                        av[v].y + sin(
+                            neighbor_shadow[v] ?
+                            mid_angles[v] :
+                            neighbor_angles[v]
+                        ) * e_dist
+                    ),
                     NULL, &ul
                 );
                 shadow_point[v].x =
@@ -1651,12 +1820,12 @@ void draw_sector(
         
         //Before drawing, let's offset according to the area image.
         for(unsigned char a = 0; a < 4; ++a) {
-            av[a].x -= x;
-            av[a].y -= y;
+            av[a].x -= where.x;
+            av[a].y -= where.y;
         }
         for(unsigned char a = 0; a < 8; ++a) {
-            extra_av[a].x -= x;
-            extra_av[a].y -= y;
+            extra_av[a].x -= where.x;
+            extra_av[a].y -= where.y;
         }
         
         //Do the scaling.
@@ -1689,12 +1858,12 @@ void draw_sector(
 /* ----------------------------------------------------------------------------
  * Draws a sector, but only the texture (no wall shadows).
  * s_ptr:   Pointer to the sector.
- * x, y:    X and Y offset.
+ * where:   X and Y offset.
  * scale:   Scale the sector by this much.
  * texture: Custom texture. If NULL, uses the normal one.
  */
 void draw_sector_texture(
-    sector* s_ptr, const float x, const float y, const float scale,
+    sector* s_ptr, const point where, const float scale,
     sector_texture_info* texture
 ) {
     unsigned char n_textures = 1;
@@ -1736,10 +1905,10 @@ void draw_sector_texture(
         if(texture_sector[t]) {
             al_build_transform(
                 &tra,
-                -texture_info_to_use->trans_x,
-                -texture_info_to_use->trans_y,
-                1.0 / texture_info_to_use->scale_x,
-                1.0 / texture_info_to_use->scale_y,
+                -texture_info_to_use->translation.x,
+                -texture_info_to_use->translation.y,
+                1.0 / texture_info_to_use->scale.x,
+                1.0 / texture_info_to_use->scale.y,
                 -texture_info_to_use->rot
             );
         }
@@ -1783,8 +1952,8 @@ void draw_sector_texture(
                 }
             }
             
-            av[v].x = vx - x;
-            av[v].y = vy - y;
+            av[v].x = vx - where.x;
+            av[v].y = vy - where.y;
             if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx;
             av[v].v = vy;
@@ -1821,11 +1990,11 @@ void draw_sector_texture(
 
 /* ----------------------------------------------------------------------------
  * Draws a liquid sector.
- * x, y:    X and Y offset.
+ * where:   X and Y offset.
  * scale:   Scale the sector by this much.
  */
 void draw_liquid(
-    sector* s_ptr, const float x, const float y, const float scale
+    sector* s_ptr, const point where, const float scale
 ) {
 
     size_t n_vertexes = s_ptr->triangles.size() * 3;
@@ -1840,10 +2009,10 @@ void draw_liquid(
         ALLEGRO_TRANSFORM tra;
         al_build_transform(
             &tra,
-            -s_ptr->texture_info.trans_x,
-            -s_ptr->texture_info.trans_y,
-            1.0 / s_ptr->texture_info.scale_x,
-            1.0 / s_ptr->texture_info.scale_y,
+            -s_ptr->texture_info.translation.x,
+            -s_ptr->texture_info.translation.y,
+            1.0 / s_ptr->texture_info.scale.x,
+            1.0 / s_ptr->texture_info.scale.y,
             -s_ptr->texture_info.rot
         );
         
@@ -1860,8 +2029,8 @@ void draw_liquid(
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
-            av[v].x = vx - x;
-            av[v].y = vy - y;
+            av[v].x = vx - where.x;
+            av[v].y = vy - where.y;
             al_transform_coordinates(&tra, &vx, &vy);
             av[v].u = vx + ground_wobble;
             av[v].v = vy + ground_texture_dy;
@@ -1892,8 +2061,8 @@ void draw_liquid(
         float vx = v_ptr->x;
         float vy = v_ptr->y;
         
-        av[v].x = vx - x;
-        av[v].y = vy - y;
+        av[v].x = vx - where.x;
+        av[v].y = vy - where.y;
         av[v].color = tint_color;
         av[v].x *= scale;
         av[v].y *= scale;
@@ -1918,8 +2087,8 @@ void draw_liquid(
             anim_sprite = s_ptr->associated_liquid->anim_instance.get_cur_sprite();
             if(anim_sprite->bitmap) {
                 layer_2_dy =
-                    (anim_sprite->file_h * 0.5) *
-                    (anim_sprite->game_w / anim_sprite->file_w);
+                    (anim_sprite->file_size.y * 0.5) *
+                    (anim_sprite->game_size.x / anim_sprite->file_size.x);
             }
         }
         
@@ -1930,8 +2099,8 @@ void draw_liquid(
             float vx = v_ptr->x;
             float vy = v_ptr->y;
             
-            av[v].x = vx - x;
-            av[v].y = vy - y;
+            av[v].x = vx - where.x;
+            av[v].y = vy - where.y;
             av[v].u = vx + (area_time_passed * layer_speed[l]);
             av[v].v = vy + (layer_2_dy * l);
             av[v].color =
@@ -1943,8 +2112,8 @@ void draw_liquid(
                 );
             av[v].x *= scale;
             av[v].y *= scale;
-            av[v].u *= (anim_sprite->file_w / anim_sprite->game_w);
-            av[v].v *= (anim_sprite->file_w / anim_sprite->game_w);
+            av[v].u *= (anim_sprite->file_size.x / anim_sprite->game_size.x);
+            av[v].v *= (anim_sprite->file_size.x / anim_sprite->game_size.x);
         }
         
         al_draw_prim(
@@ -1998,7 +2167,7 @@ void draw_loading_screen(
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
                     font_area_name, al_map_rgb(255, 215, 0),
-                    0, 0, ALLEGRO_ALIGN_LEFT, 0,
+                    point(), ALLEGRO_ALIGN_LEFT, 0,
                     text
                 );
             } al_set_target_backbuffer(display);
@@ -2024,7 +2193,7 @@ void draw_loading_screen(
                 al_clear_to_color(al_map_rgba(0, 0, 0, 0));
                 draw_text_lines(
                     font_area_name, al_map_rgb(224, 224, 224),
-                    0, 0,
+                    point(),
                     ALLEGRO_ALIGN_LEFT, 0,
                     subtext
                 );
@@ -2179,15 +2348,16 @@ void draw_loading_screen(
     
     //Draw the game's logo to the left of the "Loading..." text.
     if(opacity == 1.0f) {
-        float icon_x =
+        point icon_pos(
             scr_w - 8 - al_get_text_width(font_main, "Loading...") -
-            8 - font_main_h * 0.5;
-        float icon_y = scr_h - 8 - font_main_h * 0.5;
+            8 - font_main_h * 0.5,
+            scr_h - 8 - font_main_h * 0.5
+        );
         
         if(bmp_icon && bmp_icon != bmp_error) {
             draw_sprite(
-                bmp_icon, icon_x, icon_y,
-                -1, font_main_h, 0, al_map_rgba(255, 255, 255, opacity * 255.0)
+                bmp_icon, icon_pos, point(-1, font_main_h),
+                0, al_map_rgba(255, 255, 255, opacity * 255.0)
             );
         }
         
@@ -2205,38 +2375,39 @@ void draw_loading_screen(
 
 /* ----------------------------------------------------------------------------
  * Draws a mob's shadow.
- * c*:             Center of the mob.
- * size:           Size of the mob.
+ * center:         Center of the mob.
+ * diameter:       Diameter of the mob.
  * delta_z:        The mob is these many units above the floor
    * directly below it.
  * shadow_stretch: How much to stretch the shadow by
    * (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
-    const float cx, const float cy, const float size,
+    const point center, const float diameter,
     const float delta_z, const float shadow_stretch
 ) {
 
     if(shadow_stretch <= 0) return;
     
     float shadow_x = 0;
-    float shadow_w = size + (size * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
-    
+    float shadow_w =
+        diameter + (diameter * shadow_stretch * MOB_SHADOW_STRETCH_MULT);
+        
     if(day_minutes < 60 * 12) {
         //Shadows point to the West.
-        shadow_x = -shadow_w + size * 0.5;
+        shadow_x = -shadow_w + diameter * 0.5;
         shadow_x -= shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     } else {
         //Shadows point to the East.
-        shadow_x = -(size * 0.5);
+        shadow_x = -(diameter * 0.5);
         shadow_x += shadow_stretch * delta_z * MOB_SHADOW_Y_MULT;
     }
     
     
     draw_sprite(
         bmp_shadow,
-        cx + shadow_x + shadow_w / 2, cy,
-        shadow_w, size,
+        point(center.x + shadow_x + shadow_w / 2, center.y),
+        point(shadow_w, diameter),
         0,
         map_alpha(255 * (1 - shadow_stretch))
     );
@@ -2245,33 +2416,31 @@ void draw_mob_shadow(
 
 /* ----------------------------------------------------------------------------
  * Draws a sprite.
- * bmp:   The bitmap.
- * c*:    Center coordinates.
- * w/h:   Final width and height.
- ** Make this -1 on one of them to keep the aspect ratio from the other.
- * angle: Angle to rotate the sprite by.
- * tint:  Tint the sprite with this color.
+ * bmp:    The bitmap.
+ * center: Center coordinates.
+ * size:   Final width and height.
+   * Make this -1 on one of them to keep the aspect ratio from the other.
+ * angle:  Angle to rotate the sprite by.
+ * tint:   Tint the sprite with this color.
  */
 void draw_sprite(
-    ALLEGRO_BITMAP* bmp, const float cx, const float cy,
-    const float w, const float h, const float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const point center,
+    const point size, const float angle, const ALLEGRO_COLOR &tint
 ) {
 
     if(!bmp) {
         bmp = bmp_error;
     }
     
-    float bmp_w = al_get_bitmap_width(bmp);
-    float bmp_h = al_get_bitmap_height(bmp);
-    float x_scale = (w / bmp_w);
-    float y_scale = (h / bmp_h);
+    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point scale = size / bmp_size;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         tint,
-        bmp_w / 2, bmp_h / 2,
-        cx, cy,
-        (w == -1) ? y_scale : x_scale,
-        (h == -1) ? x_scale : y_scale,
+        bmp_size.x / 2.0, bmp_size.y / 2.0,
+        center.x, center.y,
+        (size.x == -1) ? scale.y : scale.x,
+        (size.y == -1) ? scale.x : scale.y,
         angle,
         0
     );
@@ -2281,15 +2450,15 @@ void draw_sprite(
 /* ----------------------------------------------------------------------------
  * Draws a sprite, applying sprite effects.
  * bmp:      The bitmap.
- * c*:       Center coordinates.
- * w/h:      Final width and height.
- ** Make this -1 on one of them to keep the aspect ratio from the other.
+ * center:   Center coordinates.
+ * size:     Final width and height.
+   * Make this -1 on one of them to keep the aspect ratio from the other.
  * angle:    Angle to rotate the sprite by.
  * effects:  Sprite effect manager with the effects.
  */
 void draw_sprite_with_effects(
-    ALLEGRO_BITMAP* bmp, const float cx, const float cy,
-    const float w, const float h, const float angle,
+    ALLEGRO_BITMAP* bmp, const point center,
+    const point size, const float angle,
     sprite_effect_manager* effects
 ) {
 
@@ -2299,20 +2468,20 @@ void draw_sprite_with_effects(
     
     sprite_effect_props final_props = effects->get_final_properties();
     
-    float bmp_w = al_get_bitmap_width(bmp);
-    float bmp_h = al_get_bitmap_height(bmp);
-    float x_scale = (w / bmp_w) * final_props.scale.x;
-    float y_scale = (h / bmp_h) * final_props.scale.y;
-    float final_x = cx + final_props.translation.x;
-    float final_y = cy + final_props.translation.y;
+    point bmp_size(al_get_bitmap_width(bmp), al_get_bitmap_height(bmp));
+    point scale(
+        (size.x / bmp_size.x) * final_props.scale.x,
+        (size.y / bmp_size.y) * final_props.scale.y
+    );
+    point final_pos = center + final_props.translation;
     float final_angle = angle + final_props.rotation;
     al_draw_tinted_scaled_rotated_bitmap(
         bmp,
         final_props.tint_color,
-        bmp_w / 2, bmp_h / 2,
-        final_x, final_y,
-        (w == -1) ? y_scale : x_scale,
-        (h == -1) ? x_scale : y_scale,
+        bmp_size.x / 2, bmp_size.y / 2,
+        final_pos.x, final_pos.y,
+        (size.x == -1) ? scale.y : scale.x,
+        (size.y == -1) ? scale.x : scale.y,
         final_angle,
         0
     );
@@ -2326,10 +2495,10 @@ void draw_sprite_with_effects(
         al_draw_tinted_scaled_rotated_bitmap(
             bmp,
             final_props.glow_color,
-            bmp_w / 2, bmp_h / 2,
-            final_x, final_y,
-            (w == -1) ? y_scale : x_scale,
-            (h == -1) ? x_scale : y_scale,
+            bmp_size.x / 2, bmp_size.y / 2,
+            final_pos.x, final_pos.y,
+            (size.x == -1) ? scale.y : scale.x,
+            (size.y == -1) ? scale.x : scale.y,
             final_angle,
             0
         );
@@ -2394,8 +2563,8 @@ void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
     if(status_bmp) {
         draw_sprite_with_effects(
             status_bmp,
-            m->x, m->y,
-            m->type->radius * 2 * status_bmp_scale, -1,
+            m->pos,
+            point(m->type->radius * 2 * status_bmp_scale, -1),
             0, effects
         );
     }
@@ -2406,38 +2575,38 @@ void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
  * Draws text, but if there are line breaks,
  * it'll draw every line one under the other.
  * It basically calls Allegro's text drawing functions, but for each line.
- * f:    Font to use.
- * c:    Color.
- * x/y:  Coordinates of the text.
- * fl:   Flags, just like the ones you'd pass to al_draw_text.
- * va:   Vertical align: 0 for top, 1 for center, 2 for bottom.
- * text: Text to write, line breaks included ('\n').
+ * font:   Font to use.
+ * color:  Color.
+ * where:  Coordinates of the text.
+ * flags:  Flags, just like the ones you'd pass to al_draw_text.
+ * valign: Vertical align: 0 for top, 1 for center, 2 for bottom.
+ * text:   Text to write, line breaks included ('\n').
  */
 void draw_text_lines(
-    const ALLEGRO_FONT* const f, const ALLEGRO_COLOR &c,
-    const float x, const float y, const int fl,
-    const unsigned char va, const string &text
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const point where, const int flags,
+    const unsigned char valign, const string &text
 ) {
     vector<string> lines = split(text, "\n", true);
-    int fh = al_get_font_line_height(f);
+    int fh = al_get_font_line_height(font);
     size_t n_lines = lines.size();
     float top;
     
-    if(va == 0) {
-        top = y;
+    if(valign == 0) {
+        top = where.y;
     } else {
         //We add n_lines - 1 because there is a 1px gap between each line.
         int total_height = n_lines * fh + (n_lines - 1);
-        if(va == 1) {
-            top = y - total_height / 2;
+        if(valign == 1) {
+            top = where.y - total_height / 2;
         } else {
-            top = y - total_height;
+            top = where.y - total_height;
         }
     }
     
     for(size_t l = 0; l < n_lines; ++l) {
         float line_y = (fh + 1) * l + top;
-        al_draw_text(f, c, x, line_y, fl, lines[l].c_str());
+        al_draw_text(font, color, where.x, line_y, flags, lines[l].c_str());
     }
 }
 

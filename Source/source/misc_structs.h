@@ -111,7 +111,7 @@ private:
     bool has_normal_distance;
     
 public:
-    dist(const float x1, const float y1, const float x2, const float y2);
+    dist(const point p1, const point p2);
     dist(const float d = 0.0f);
     float to_float();
     bool operator <(const float d2);
@@ -198,8 +198,7 @@ struct movement_struct {
     
     movement_struct();
     float get_intensity();
-    float get_x();
-    float get_y();
+    point get_coords();
 };
 
 
@@ -218,8 +217,7 @@ struct group_spot_info {
 
     float spot_radius;
     
-    vector<vector<float> > x_coords;
-    vector<vector<float> > y_coords;
+    vector<vector<point> > coords;
     unsigned n_wheels;
     
     vector<vector<mob*> > mobs_in_spots;

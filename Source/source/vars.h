@@ -107,12 +107,11 @@ extern sample_struct sfx_throw;
 //General globals.
 
 extern vector<string> animation_editor_history;
+extern int area_image_size;
 extern vector<vector<ALLEGRO_BITMAP*> > area_images;
 extern float area_images_scale;
-extern int area_image_size;
 //Top-left corner of the area, in world coordinates.
-extern float area_images_x1;
-extern float area_images_y1;
+extern point area_images_top_left_corner;
 //How much real time has passed since the area was loaded.
 extern float area_time_passed;
 extern timer area_title_fade_timer;
@@ -123,8 +122,7 @@ extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern vector<bridge*> bridges;
 extern button_manager buttons;
-extern float cam_final_x;
-extern float cam_final_y;
+extern point cam_final_pos;
 extern float cam_final_zoom;
 extern point cam_pos;
 extern float cam_zoom;
@@ -223,8 +221,6 @@ extern bool group_move_cursor;
 extern float group_move_task_range;
 //Joystick coordinates for the group movement.
 extern movement_struct group_movement;
-extern vector<vector<float> > group_spots_x;
-extern vector<vector<float> > group_spots_y;
 extern map<string, hazard> hazards;
 extern float hud_coords[N_HUD_ITEMS][4];
 extern ALLEGRO_TRANSFORM identity_transform;

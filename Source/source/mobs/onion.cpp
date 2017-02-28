@@ -23,9 +23,9 @@ using namespace std;
  * Creates an Onion mob.
  */
 onion::onion(
-    float x, float y, onion_type* type, const float angle, const string &vars
+    const point pos, onion_type* type, const float angle, const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     oni_type(type),
     full_spew_timer(ONION_FULL_SPEW_DELAY),
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
@@ -64,11 +64,11 @@ void onion::spew() {
         return;
     }
     
-    pikmin* new_pikmin = new pikmin(x, y, oni_type->pik_type, 0, "");
+    pikmin* new_pikmin = new pikmin(pos, oni_type->pik_type, 0, "");
     //TODO the shooting strength shouldn't be a magic number.
     new_pikmin->z = 320;
-    new_pikmin->speed_x = cos(next_spew_angle) * 60;
-    new_pikmin->speed_y = sin(next_spew_angle) * 60;
+    new_pikmin->speed.x = cos(next_spew_angle) * 60;
+    new_pikmin->speed.y = sin(next_spew_angle) * 60;
     new_pikmin->speed_z = 200;
     new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
     new_pikmin->maturity = 0;
@@ -97,8 +97,7 @@ void onion::tick_class_specifics() {
         
         if(
             bbox_check(
-                cur_leader_ptr->x, cur_leader_ptr->y,
-                o_ptr->x, o_ptr->y,
+                cur_leader_ptr->pos, o_ptr->pos,
                 cur_leader_ptr->type->radius + o_ptr->type->radius * 3
             )
         ) {
@@ -107,8 +106,7 @@ void onion::tick_class_specifics() {
         
         if(
             bbox_check(
-                leader_cursor_w.x, leader_cursor_w.y,
-                o_ptr->x, o_ptr->y,
+                leader_cursor_w, o_ptr->pos,
                 cur_leader_ptr->type->radius + o_ptr->type->radius * 3
             )
         ) {
@@ -142,10 +140,8 @@ void onion::draw(sprite_effect_manager* effect_manager) {
     
     if(!s_ptr) return;
     
-    float draw_x, draw_y;
-    float draw_w, draw_h;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    point draw_size = get_sprite_dimensions(this, s_ptr);
     
     sprite_effect_manager effects;
     add_brightness_sprite_effect(&effects);
@@ -158,8 +154,7 @@ void onion::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         s_ptr->bitmap,
-        draw_x, draw_y,
-        draw_w, draw_h,
+        draw_pos, draw_size,
         angle, &effects
     );
 }

@@ -70,18 +70,18 @@ public:
     //File name where the parent bitmap is at.
     string file;
     //Top-left corner of the sprite inside the image file.
-    int file_x, file_y;
+    point file_pos;
     //Size of the sprite inside the image file.
-    int file_w, file_h;
+    point file_size;
     //In-game size of the sprite.
-    float game_w, game_h;
+    point game_size;
     //Offset. Move the sprite left/right/up/down to align with
     //the previous frames and such.
-    float offs_x, offs_y;
+    point offset;
     //X&Y of the Pikmin's top (left/bud/flower).
-    float top_x, top_y;
+    point top_pos;
     //W&H of the Pikmin's top.
-    float top_w, top_h;
+    point top_size;
     //Angle of the Pikmin's top.
     float top_angle;
     //Does this sprite even have a visible Pikmin top?
@@ -95,12 +95,12 @@ public:
     
     sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
-        const float gw = 0, const float gh = 0,
+        const point g_size = point(),
         const vector<hitbox> &h = vector<hitbox>()
     );
     sprite(
-        const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by,
-        const int bw, const int bh, const float gw, const float gh,
+        const string &name, ALLEGRO_BITMAP* const b, const point b_pos,
+        const point b_size, const point g_size,
         const vector<hitbox> &h
     );
     sprite(const sprite &s2);
@@ -119,7 +119,7 @@ class frame {
 public:
     string sprite_name;
     size_t sprite_index;  //Cache for performance.
-    sprite* sprite_ptr;    //Cache for performance.
+    sprite* sprite_ptr;   //Cache for performance.
     float duration;    //How long this frame lasts for, in seconds.
     
     frame(

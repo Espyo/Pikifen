@@ -114,15 +114,19 @@ void clear_area_textures() {
 
 /* ----------------------------------------------------------------------------
  * Returns the angle and magnitude of vector coordinates.
- * *_coord:   The coordinates.
- * angle:     Variable to return the angle to.
- * magnitude: Variable to return the magnitude to.
+ * coordinates: The coordinates.
+ * angle:       Variable to return the angle to.
+ * magnitude:   Variable to return the magnitude to.
  */
 void coordinates_to_angle(
-    const float x_coord, const float y_coord, float* angle, float* magnitude
+    const point coordinates, float* angle, float* magnitude
 ) {
-    *angle = atan2(y_coord, x_coord);
-    *magnitude = dist(0, 0, x_coord, y_coord).to_float();
+    if(angle) {
+        *angle = atan2(coordinates.y, coordinates.x);
+    }
+    if(magnitude) {
+        *magnitude = dist(point(0, 0), coordinates).to_float();
+    }
 }
 
 
@@ -247,7 +251,7 @@ void generate_area_images() {
     max_x *= area_images_scale;
     min_y *= area_images_scale;
     max_y *= area_images_scale;
-    area_images_x1 = min_x; area_images_y1 = min_y;
+    area_images_top_left_corner = point(min_x, min_y);
     
     //Create the new bitmaps on the vectors.
     float area_width = max_x - min_x;
@@ -275,24 +279,22 @@ void generate_area_images() {
         size_t n_edges = s_ptr->edges.size();
         if(n_edges == 0) continue;
         
-        float s_min_x, s_max_x, s_min_y, s_max_y;
+        point min_coords, max_coords;
         unsigned int sector_start_col, sector_end_col;
         unsigned int sector_start_row, sector_end_row;
-        get_sector_bounding_box(s_ptr, &s_min_x, &s_min_y, &s_max_x, &s_max_y);
+        get_sector_bounding_box(s_ptr, &min_coords, &max_coords);
         
-        s_min_x *= area_images_scale;
-        s_max_x *= area_images_scale;
-        s_min_y *= area_images_scale;
-        s_max_y *= area_images_scale;
+        min_coords *= area_images_scale;
+        max_coords *= area_images_scale;
         
         sector_start_col =
-            (s_min_x - area_images_x1) / area_image_size;
+            (min_coords.x - area_images_top_left_corner.x) / area_image_size;
         sector_end_col =
-            ceil((s_max_x - area_images_x1) / area_image_size) - 1;
+            ceil((max_coords.x - area_images_top_left_corner.x) / area_image_size) - 1;
         sector_start_row =
-            (s_min_y - area_images_y1) / area_image_size;
+            (min_coords.y - area_images_top_left_corner.y) / area_image_size;
         sector_end_row =
-            ceil((s_max_y - area_images_y1) / area_image_size) - 1;
+            ceil((max_coords.y - area_images_top_left_corner.y) / area_image_size) - 1;
             
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
@@ -307,10 +309,12 @@ void generate_area_images() {
                 
                     draw_sector(
                         cur_area_data.sectors[s],
-                        (x * area_image_size + area_images_x1) /
-                        area_images_scale,
-                        (y * area_image_size + area_images_y1) /
-                        area_images_scale,
+                        point(
+                            (x * area_image_size + area_images_top_left_corner.x) /
+                            area_images_scale,
+                            (y * area_image_size + area_images_top_left_corner.y) /
+                            area_images_scale
+                        ),
                         area_images_scale
                     );
                     
@@ -346,7 +350,7 @@ mob* get_closest_mob_to_cursor() {
         
         if(!m_ptr->fsm.cur_state) continue;
         
-        dist d = dist(mouse_cursor_w.x, mouse_cursor_w.y, m_ptr->x, m_ptr->y);
+        dist d = dist(mouse_cursor_w, m_ptr->pos);
         if(!closest_mob_to_cursor || d < closest_mob_to_cursor_dist) {
             closest_mob_to_cursor = m_ptr;
             closest_mob_to_cursor_dist = d;
@@ -669,14 +673,14 @@ void load_area(
         vector<string> scales =
             split(sector_data->get_child_by_name("texture_scale")->value);
         if(scales.size() >= 2) {
-            new_sector->texture_info.scale_x = s2f(scales[0]);
-            new_sector->texture_info.scale_y = s2f(scales[0]);
+            new_sector->texture_info.scale.x = s2f(scales[0]);
+            new_sector->texture_info.scale.y = s2f(scales[0]);
         }
         vector<string> translations =
             split(sector_data->get_child_by_name("texture_trans")->value);
         if(translations.size() >= 2) {
-            new_sector->texture_info.trans_x = s2f(translations[0]);
-            new_sector->texture_info.trans_y = s2f(translations[1]);
+            new_sector->texture_info.translation.x = s2f(translations[0]);
+            new_sector->texture_info.translation.y = s2f(translations[1]);
         }
         new_sector->texture_info.tint =
             s2c(
@@ -724,8 +728,8 @@ void load_area(
         mob_gen* mob_ptr = new mob_gen();
         
         vector<string> coords = split(mob_node->get_child_by_name("p")->value);
-        mob_ptr->x = (coords.size() >= 1 ? s2f(coords[0]) : 0);
-        mob_ptr->y = (coords.size() >= 2 ? s2f(coords[1]) : 0);
+        mob_ptr->pos.x = (coords.size() >= 1 ? s2f(coords[0]) : 0);
+        mob_ptr->pos.y = (coords.size() >= 2 ? s2f(coords[1]) : 0);
         mob_ptr->angle =
             s2f(
                 mob_node->get_child_by_name("angle")->get_value_or_default("0")
@@ -779,8 +783,8 @@ void load_area(
         
         vector<string> words =
             split(path_stop_node->get_child_by_name("pos")->value);
-        s_ptr->x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        s_ptr->pos.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->pos.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         data_node* links_node = path_stop_node->get_child_by_name("links");
         size_t n_links = links_node->get_nr_of_children();
@@ -812,12 +816,12 @@ void load_area(
         
         vector<string> words =
             split(shadow_node->get_child_by_name("pos")->value);
-        s_ptr->x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        s_ptr->center.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->center.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         words = split(shadow_node->get_child_by_name("size")->value);
-        s_ptr->w = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->h = (words.size() >= 2 ? s2f(words[1]) : 0);
+        s_ptr->size.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->size.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         s_ptr->angle =
             s2f(
@@ -835,8 +839,8 @@ void load_area(
         s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
-        s_ptr->sway_x = (words.size() >= 1 ? s2f(words[0]) : 0);
-        s_ptr->sway_y = (words.size() >= 2 ? s2f(words[1]) : 0);
+        s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
+        s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
         
         if(s_ptr->bitmap == bmp_error && !load_for_editor) {
             log_error(
@@ -1025,8 +1029,8 @@ void load_custom_particle_generators() {
         prs.set("gravity",         base_p.gravity);
         prs.set("size_grow_speed", base_p.size_grow_speed);
         prs.set("size",            base_p.size);
-        prs.set("speed_x",         base_p.speed_x);
-        prs.set("speed_y",         base_p.speed_y);
+        prs.set("speed_x",         base_p.speed.x);
+        prs.set("speed_y",         base_p.speed.y);
         prs.set("color",           base_p.color);
         prs.set("before_mobs",     base_p.before_mobs);
         base_p.time = base_p.duration;
@@ -1038,14 +1042,14 @@ void load_custom_particle_generators() {
         grs.set("friction_deviation", pg_struct.friction_deviation);
         grs.set("gravity_deviation",  pg_struct.gravity_deviation);
         grs.set("size_deviation",     pg_struct.size_deviation);
-        grs.set("x_deviation",        pg_struct.x_deviation);
-        grs.set("y_deviation",        pg_struct.y_deviation);
-        grs.set("speed_x_deviation",  pg_struct.speed_x_deviation);
-        grs.set("speed_y_deviation",  pg_struct.speed_y_deviation);
+        grs.set("x_deviation",        pg_struct.pos_deviation.x);
+        grs.set("y_deviation",        pg_struct.pos_deviation.y);
+        grs.set("speed_x_deviation",  pg_struct.speed_deviation.x);
+        grs.set("speed_y_deviation",  pg_struct.speed_deviation.y);
         grs.set("angle",              pg_struct.angle);
         grs.set("angle_deviation",    pg_struct.angle_deviation);
-        grs.set("speed",              pg_struct.speed);
-        grs.set("speed_deviation",    pg_struct.speed_deviation);
+        grs.set("speed",              pg_struct.total_speed);
+        grs.set("speed_deviation",    pg_struct.total_speed_deviation);
         
         pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
         

@@ -29,8 +29,7 @@ class ship_type : public mob_type {
 public:
 
     bool can_heal;
-    float beam_offset_x;
-    float beam_offset_y;
+    point beam_offset;
     float beam_radius;
     
     ship_type();

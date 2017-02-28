@@ -51,7 +51,7 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     ship* s_ptr = (ship*) m;
     
     particle p(
-        PARTICLE_TYPE_BITMAP, s_ptr->beam_final_x, s_ptr->beam_final_y,
+        PARTICLE_TYPE_BITMAP, s_ptr->beam_final_pos,
         24, 1.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -59,8 +59,8 @@ void ship_fsm::receive_mob(mob* m, void* info1, void* info2) {
     pg.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = M_PI;
-    pg.speed = 70;
-    pg.speed_deviation = 10;
+    pg.total_speed = 70;
+    pg.total_speed_deviation = 10;
     pg.duration_deviation = 0.5;
     pg.emit(particles);
     

@@ -62,7 +62,7 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     m->finish_dying();
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        PARTICLE_TYPE_BITMAP, m->pos,
         80, 2.75, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -72,8 +72,8 @@ void gate_fsm::open(mob* m, void* info1, void* info2) {
     pg.size_deviation = 16;
     pg.angle = 0;
     pg.angle_deviation = M_PI;
-    pg.speed = 75;
-    pg.speed_deviation = 15;
+    pg.total_speed = 75;
+    pg.total_speed_deviation = 15;
     pg.duration_deviation = 0.25;
     pg.emit(particles);
 }

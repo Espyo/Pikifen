@@ -32,8 +32,10 @@ void gameplay::do_aesthetic_logic() {
     **************************************/
     
     //Camera movement.
-    cam_pos.x += (cam_final_x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    cam_pos.y += (cam_final_y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_pos.x +=
+        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_pos.y +=
+        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
     cam_zoom +=
         (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
         
@@ -42,10 +44,7 @@ void gameplay::do_aesthetic_logic() {
         group_move_next_arrow_timer.tick(delta_t);
     }
     
-    dist leader_to_cursor_dist(
-        cur_leader_ptr->x, cur_leader_ptr->y,
-        leader_cursor_w.x, leader_cursor_w.y
-    );
+    dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
     for(size_t a = 0; a < group_move_arrows.size(); ) {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
@@ -135,7 +134,7 @@ void gameplay::do_aesthetic_logic() {
     //TODO check this only one out of every three frames or something.
     cursor_height_diff_light = 0;
     sector* cursor_sector =
-        get_sector(leader_cursor_w.x, leader_cursor_w.y, NULL, true);
+        get_sector(leader_cursor_w, NULL, true);
     if(cursor_sector) {
         cursor_height_diff_light =
             (cursor_sector->z - cur_leader_ptr->z) * 0.0033;
@@ -240,12 +239,12 @@ void gameplay::do_gameplay_logic() {
         *******************/
         
         if(cur_leader_ptr->holding_pikmin) {
-            cur_leader_ptr->holding_pikmin->x =
-                cur_leader_ptr->x +
+            cur_leader_ptr->holding_pikmin->pos.x =
+                cur_leader_ptr->pos.x +
                 cos(cur_leader_ptr->angle + M_PI) *
                 cur_leader_ptr->type->radius;
-            cur_leader_ptr->holding_pikmin->y =
-                cur_leader_ptr->y +
+            cur_leader_ptr->holding_pikmin->pos.y =
+                cur_leader_ptr->pos.y +
                 sin(cur_leader_ptr->angle + M_PI) *
                 cur_leader_ptr->type->radius;
             cur_leader_ptr->holding_pikmin->z =
@@ -268,8 +267,7 @@ void gameplay::do_gameplay_logic() {
             );
         }
         
-        cam_final_x = cur_leader_ptr->x;
-        cam_final_y = cur_leader_ptr->y;
+        cam_final_pos = cur_leader_ptr->pos;
         
         
         /***********************************
@@ -287,21 +285,17 @@ void gameplay::do_gameplay_logic() {
             update_closest_group_member();
         }
         
-        float group_move_x = group_movement.get_x();
-        float group_move_y = group_movement.get_y();
+        point group_move_coords = group_movement.get_coords();
         
         if(group_move_cursor) {
             group_move_angle = cursor_angle;
             float leader_to_cursor_dist =
-                dist(
-                    cur_leader_ptr->x, cur_leader_ptr->y,
-                    leader_cursor_w.x, leader_cursor_w.y
-                ).to_float();
+                dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
             group_move_intensity =
                 leader_to_cursor_dist / cursor_max_dist;
-        } else if(group_move_x != 0 || group_move_y != 0) {
+        } else if(group_move_coords.x != 0 || group_move_coords.y != 0) {
             coordinates_to_angle(
-                group_move_x, group_move_y,
+                group_move_coords,
                 &group_move_angle, &group_move_intensity
             );
             if(group_move_intensity > 1) group_move_intensity = 1;
@@ -310,18 +304,18 @@ void gameplay::do_gameplay_logic() {
         }
         
         if(group_move_intensity) {
-            cur_leader_ptr->group->group_center_x =
-                cur_leader_ptr->x + cos(group_move_angle) *
+            cur_leader_ptr->group->group_center.x =
+                cur_leader_ptr->pos.x + cos(group_move_angle) *
                 group_move_intensity * cursor_max_dist;
-            cur_leader_ptr->group->group_center_y =
-                cur_leader_ptr->y + sin(group_move_angle) *
+            cur_leader_ptr->group->group_center.y =
+                cur_leader_ptr->pos.y + sin(group_move_angle) *
                 group_move_intensity * cursor_max_dist;
         } else if(prev_group_move_intensity != 0) {
             float d = get_leader_to_group_center_dist(cur_leader_ptr);
-            cur_leader_ptr->group->group_center_x =
-                cur_leader_ptr->x + cos(group_move_angle) * d;
-            cur_leader_ptr->group->group_center_y =
-                cur_leader_ptr->y + sin(group_move_angle) * d;
+            cur_leader_ptr->group->group_center.x =
+                cur_leader_ptr->pos.x + cos(group_move_angle) * d;
+            cur_leader_ptr->group->group_center.y =
+                cur_leader_ptr->pos.y + sin(group_move_angle) * d;
         }
         prev_group_move_intensity = group_move_intensity;
         
@@ -332,11 +326,9 @@ void gameplay::do_gameplay_logic() {
         *             `-´   *
         ********************/
         
-        point mouse_cursor_speed(
-            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_x(),
-            delta_t * MOUSE_CURSOR_MOVE_SPEED * cursor_movement.get_y()
-        );
-        
+        point mouse_cursor_speed =
+            cursor_movement.get_coords() * delta_t * MOUSE_CURSOR_MOVE_SPEED;
+            
         mouse_cursor_s += mouse_cursor_speed;
         
         mouse_cursor_w = mouse_cursor_s;
@@ -347,28 +339,22 @@ void gameplay::do_gameplay_logic() {
         leader_cursor_w = mouse_cursor_w;
         
         cursor_angle =
-            atan2(
-                leader_cursor_w.y - cur_leader_ptr->y,
-                leader_cursor_w.x - cur_leader_ptr->x
-            );
+            get_angle(cur_leader_ptr->pos, leader_cursor_w);
         if(cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE) {
             //TODO move this to the FSM.
             cur_leader_ptr->face(cursor_angle);
         }
         
-        dist leader_to_cursor_dist(
-            cur_leader_ptr->x, cur_leader_ptr->y,
-            leader_cursor_w.x, leader_cursor_w.y
-        );
+        dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
         if(leader_to_cursor_dist > cursor_max_dist) {
             //TODO with an analog stick, if the cursor is being moved,
             //it's considered off-limit a lot more than it should.
             
             //Cursor goes beyond the range limit.
             leader_cursor_w.x =
-                cur_leader_ptr->x + (cos(cursor_angle) * cursor_max_dist);
+                cur_leader_ptr->pos.x + (cos(cursor_angle) * cursor_max_dist);
             leader_cursor_w.y =
-                cur_leader_ptr->y + (sin(cursor_angle) * cursor_max_dist);
+                cur_leader_ptr->pos.y + (sin(cursor_angle) * cursor_max_dist);
                 
             if(mouse_cursor_speed.x != 0 || mouse_cursor_speed.y != 0) {
                 //If we're speeding the mouse cursor (via analog stick),
@@ -469,8 +455,8 @@ void gameplay::do_gameplay_logic() {
         string coords_str =
             box_string(
                 "Coords: " +
-                box_string(f2s(dev_tool_info_lock->x), 6) + " " +
-                box_string(f2s(dev_tool_info_lock->y), 6) + " " +
+                box_string(f2s(dev_tool_info_lock->pos.x), 6) + " " +
+                box_string(f2s(dev_tool_info_lock->pos.y), 6) + " " +
                 box_string(f2s(dev_tool_info_lock->z), 6) + ".",
                 30
             );
@@ -558,7 +544,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         if(m == m2) continue;
         
         mob* m2_ptr = mobs[m2];
-        dist d(m_ptr->x, m_ptr->y, m2_ptr->x, m2_ptr->y);
+        dist d(m_ptr->pos, m2_ptr->pos);
         
         //Check if mob 1 should be pushed by mob 2.
         if(
@@ -578,11 +564,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
             //it needs to be pushed out.
             if(d_amount > m_ptr->push_amount) {
                 m_ptr->push_amount = d_amount / delta_t;
-                m_ptr->push_angle =
-                    atan2(
-                        m_ptr->y - m2_ptr->y,
-                        m_ptr->x - m2_ptr->x
-                    );
+                m_ptr->push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
             }
         }
         
@@ -648,10 +630,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                 float angle_dif =
                     get_angle_smallest_dif(
                         m_ptr->angle,
-                        atan2(
-                            m2_ptr->y - m_ptr->y,
-                            m2_ptr->x - m_ptr->x
-                        )
+                        get_angle(m_ptr->pos, m2_ptr->pos)
                     );
                 if(
                     d <=
@@ -811,16 +790,16 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                     }
                     
                     //Get mob 2's real hitbox location.
-                    float m2_h_x =
-                        m2_ptr->x + (
-                            h2_ptr->x * m2_angle_cos -
-                            h2_ptr->y * m2_angle_sin
-                        );
-                    float m2_h_y =
-                        m2_ptr->y + (
-                            h2_ptr->x * m2_angle_sin +
-                            h2_ptr->y * m2_angle_cos
-                        );
+                    point m2_h_pos(
+                        m2_ptr->pos.x + (
+                            h2_ptr->pos.x * m2_angle_cos -
+                            h2_ptr->pos.y * m2_angle_sin
+                        ),
+                        m2_ptr->pos.y + (
+                            h2_ptr->pos.x * m2_angle_sin +
+                            h2_ptr->pos.y * m2_angle_cos
+                        )
+                    );
                     float m2_h_z = m2_ptr->z + h2_ptr->z;
                     
                     if(m1_is_hitbox) {
@@ -842,7 +821,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                         
                         if(
                             z_collision &&
-                            dist(m_ptr->x, m_ptr->y, m2_h_x, m2_h_y) <
+                            dist(m_ptr->pos, m2_h_pos) <
                             (m_ptr->type->radius + h2_ptr->radius)
                         ) {
                             //Collision!
@@ -927,16 +906,16 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                             }
                             
                             //Get mob 1's real hitbox location.
-                            float m1_h_x =
-                                m_ptr->x + (
-                                    h1_ptr->x * m1_angle_cos -
-                                    h1_ptr->y * m1_angle_sin
-                                );
-                            float m1_h_y =
-                                m_ptr->y + (
-                                    h1_ptr->x * m1_angle_sin +
-                                    h1_ptr->y * m1_angle_cos
-                                );
+                            point m1_h_pos(
+                                m_ptr->pos.x + (
+                                    h1_ptr->pos.x * m1_angle_cos -
+                                    h1_ptr->pos.y * m1_angle_sin
+                                ),
+                                m_ptr->pos.y + (
+                                    h1_ptr->pos.x * m1_angle_sin +
+                                    h1_ptr->pos.y * m1_angle_cos
+                                )
+                            );
                             float m1_h_z =
                                 m_ptr->z + h1_ptr->z;
                                 
@@ -958,7 +937,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                             
                             if(
                                 z_collision &&
-                                dist(m1_h_x, m1_h_y, m2_h_x, m2_h_y) <
+                                dist(m1_h_pos, m2_h_pos) <
                                 (h1_ptr->radius + h2_ptr->radius)
                             ) {
                                 //Collision!
@@ -1045,7 +1024,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
     mob_event* whistled_ev = q_get_event(m_ptr, MOB_EVENT_WHISTLED);
     if(whistling && whistled_ev) {
         if(
-            dist(m_ptr->x, m_ptr->y, leader_cursor_w.x, leader_cursor_w.y) <=
+            dist(m_ptr->pos, leader_cursor_w) <=
             whistle_radius
         ) {
             whistled_ev->run(m_ptr);
@@ -1059,11 +1038,8 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         
         if(spot_near_ev || spot_far_ev) {
             dist d(
-                m_ptr->x, m_ptr->y,
-                m_ptr->following_group->group->group_center_x +
-                m_ptr->group_spot_x,
-                m_ptr->following_group->group->group_center_y +
-                m_ptr->group_spot_y
+                m_ptr->pos,
+                m_ptr->following_group->group->group_center + m_ptr->group_spot
             );
             if(spot_far_ev && d >= 5) {
                 spot_far_ev->run(m_ptr);
@@ -1076,9 +1052,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
     //Focused on a mob.
     if(m_ptr->focused_mob) {
     
-        dist d(
-            m_ptr->x, m_ptr->y, m_ptr->focused_mob->x, m_ptr->focused_mob->y
-        );
+        dist d(m_ptr->pos, m_ptr->focused_mob->pos);
         if(m_ptr->focused_mob->dead) {
             m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_DIED);
         }
@@ -1102,7 +1076,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
     //Far away from home.
     mob_event* far_from_home_ev = q_get_event(m_ptr, MOB_EVENT_FAR_FROM_HOME);
     if(far_from_home_ev) {
-        dist d(m_ptr->x, m_ptr->y, m_ptr->home_x, m_ptr->home_y);
+        dist d(m_ptr->pos, m_ptr->home);
         if(d >= m_ptr->type->territory_radius) {
             far_from_home_ev->run(m_ptr);
         }

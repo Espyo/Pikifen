@@ -27,13 +27,11 @@ const float menu_widget::JUICY_GROW_DURATION = 0.3f;
  * Creates a menu widget.
  */
 menu_widget::menu_widget(
-    const int x, const int y, const int w, const int h,
+    const point pos, const point size,
     function<void()> click_handler
 ) :
-    x(x),
-    y(y),
-    w(w),
-    h(h),
+    pos(pos),
+    size(size),
     click_handler(click_handler),
     selected(false),
     enabled(true),
@@ -46,13 +44,14 @@ menu_widget::menu_widget(
 /* ----------------------------------------------------------------------------
  * Returns whether or not the mouse cursor is on top of this widget.
  */
-bool menu_widget::mouse_on(const int mx, const int my) {
-    return (
-               mx >= x - w * 0.5 &&
-               mx <= x + w * 0.5 &&
-               my >= y - h * 0.5 &&
-               my <= y + h * 0.5
-           );
+bool menu_widget::mouse_on(const point mc) {
+    return
+        (
+            mc.x >= pos.x - size.x * 0.5 &&
+            mc.x <= pos.x + size.x * 0.5 &&
+            mc.y >= pos.y - size.y * 0.5 &&
+            mc.y <= pos.y + size.y * 0.5
+        );
 }
 
 
@@ -89,11 +88,11 @@ void menu_widget::start_juicy_grow() {
  * Creates a clickable button widget.
  */
 menu_button::menu_button(
-    const int x, const int y, const int w, const int h,
+    const point pos, const point size,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color, const int align
 ) :
-    menu_widget(x, y, w, h, click_handler),
+    menu_widget(pos, size, click_handler),
     text(text),
     font(font),
     text_color(color),
@@ -109,25 +108,27 @@ void menu_button::draw(const float time_spent) {
     if(!font || !enabled) return;
     if(selected) {
         draw_sprite(
-            bmp_icon, x - w * 0.5 + 16, y,
-            16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
+            bmp_icon, point(pos.x - size.x * 0.5 + 16, pos.y),
+            point(16, 16),
+            sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_sprite(
-            bmp_icon, x + w * 0.5 - 16, y,
-            16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
+            bmp_icon, point(pos.x + size.x * 0.5 - 16, pos.y),
+            point(16, 16),
+            sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
     
-    int text_x = x;
+    int text_x = pos.x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
-        text_x = x - w * 0.5 + 32;
+        text_x = pos.x - size.x * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
-        text_x = x + w * 0.5 - 32;
+        text_x = pos.x + size.x * 0.5 - 32;
     }
     
     draw_text_lines(
         font, text_color,
-        text_x, y,
+        point(text_x, pos.y),
         text_align, 1, text
     );
 }
@@ -141,11 +142,11 @@ bool menu_button::is_clickable() { return enabled; }
  * Creates a checkbox widget.
  */
 menu_checkbox::menu_checkbox(
-    const int x, const int y, const int w, const int h,
+    const point pos, const point size,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color, const int align
 ) :
-    menu_widget(x, y, w, h, click_handler),
+    menu_widget(pos, size, click_handler),
     text(text),
     font(font),
     text_color(color),
@@ -163,31 +164,34 @@ void menu_checkbox::draw(const float time_spent) {
     if(!font || !enabled) return;
     if(selected) {
         draw_sprite(
-            bmp_icon, x - w * 0.5 + 16, y,
-            16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
+            bmp_icon, point(pos.x - size.x * 0.5 + 16, pos.y),
+            point(16, 16),
+            sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
         draw_sprite(
-            bmp_icon, x + w * 0.5 - 16, y,
-            16, 16, sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
+            bmp_icon, point(pos.x + size.x * 0.5 - 16, pos.y),
+            point(16, 16),
+            sin(time_spent * ICON_SWAY_TIME_SCALE) * ICON_SWAY_DELTA
         );
     }
     
-    int text_x = x;
+    int text_x = pos.x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
-        text_x = x - w * 0.5 + 32;
+        text_x = pos.x - size.x * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
-        text_x = x + w * 0.5 - 32;
+        text_x = pos.x + size.x * 0.5 - 32;
     }
     
     draw_text_lines(
         font, text_color,
-        text_x, y,
+        point(text_x, pos.y),
         text_align, 1, text
     );
     if(checked) {
         draw_sprite(
-            bmp_checkbox_check, x + w * 0.5 - 40, y,
-            32, -1
+            bmp_checkbox_check,
+            point(pos.x + size.x * 0.5 - 40, pos.y),
+            point(32, -1)
         );
     }
 }
@@ -201,10 +205,10 @@ bool menu_checkbox::is_clickable() { return enabled; }
  * Creates a text widget.
  */
 menu_text::menu_text(
-    const int x, const int y, const int w, const int h, string text,
+    const point pos, const point size, string text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
-    menu_widget(x, y, w, h, nullptr),
+    menu_widget(pos, size, nullptr),
     text(text),
     font(font),
     text_color(color),
@@ -220,11 +224,11 @@ menu_text::menu_text(
 void menu_text::draw(const float time_spent) {
     if(!font || !enabled) return;
     
-    int text_x = x;
+    int text_x = pos.x;
     if(text_align == ALLEGRO_ALIGN_LEFT) {
-        text_x = x - w * 0.5 + 32;
+        text_x = pos.x - size.x * 0.5 + 32;
     } else if(text_align == ALLEGRO_ALIGN_RIGHT) {
-        text_x = x + w * 0.5 - 32;
+        text_x = pos.x + size.x * 0.5 - 32;
     }
     
     float juicy_grow_amount =
@@ -235,9 +239,8 @@ void menu_text::draw(const float time_spent) {
         
     draw_scaled_text(
         font, text_color,
-        text_x, y,
-        1.0 + juicy_grow_amount,
-        1.0 + juicy_grow_amount,
+        point(text_x, pos.y),
+        point(1.0 + juicy_grow_amount, 1.0 + juicy_grow_amount),
         text_align, 1, text
     );
 }

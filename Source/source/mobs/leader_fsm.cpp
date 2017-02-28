@@ -825,9 +825,8 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health -= m->type->max_health * 0.2;
-    m->x = m->home_x;
-    m->y = m->home_y;
-    m->center_sector = get_sector(m->x, m->y, NULL, true);
+    m->pos = m->home;
+    m->center_sector = get_sector(m->pos, NULL, true);
     m->ground_sector = m->center_sector;
     m->z = m->center_sector->z + 100;
 }
@@ -892,15 +891,14 @@ void leader_fsm::touched_hazard(mob* m, void* info1, void* info2) {
         
         if(!already_generating) {
             particle p(
-                PARTICLE_TYPE_BITMAP, m->x, m->y,
+                PARTICLE_TYPE_BITMAP, m->pos,
                 0, 1, PARTICLE_PRIORITY_LOW
             );
             p.bitmap = bmp_wave_ring;
             p.size_grow_speed = m->type->radius * 4;
             p.before_mobs = true;
             particle_generator pg(0.3, p, 1);
-            pg.follow_x = &m->x;
-            pg.follow_y = &m->y;
+            pg.follow = &m->pos;
             pg.id = MOB_PARTICLE_GENERATOR_WAVE_RING;
             m->particle_generators.push_back(pg);
         }
@@ -930,9 +928,11 @@ void leader_fsm::move(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
     l_ptr->chase(
-        l_ptr->x + mov->get_x() * l_ptr->type->move_speed,
-        l_ptr->y + mov->get_y() * l_ptr->type->move_speed,
-        NULL, NULL, false, NULL, true
+        point(
+            l_ptr->pos.x + mov->get_coords().x * l_ptr->type->move_speed,
+            l_ptr->pos.y + mov->get_coords().y * l_ptr->type->move_speed
+        ),
+        NULL, false, NULL, true
     );
 }
 
@@ -988,14 +988,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->fsm.run_event(MOB_EVENT_THROWN);
     
-    holding_ptr->x = leader_ptr->x;
-    holding_ptr->y = leader_ptr->y;
+    holding_ptr->pos = leader_ptr->pos;
     holding_ptr->z = leader_ptr->z;
     
     float angle, mag;
     coordinates_to_angle(
-        leader_cursor_w.x - leader_ptr->x,
-        leader_cursor_w.y - leader_ptr->y,
+        leader_cursor_w - leader_ptr->pos,
         &angle, &mag
     );
     
@@ -1010,10 +1008,10 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     //This results in a 1.3 second throw, just like in Pikmin 2.
     //Regular Pikmin are thrown about 288.88 units high.
-    holding_ptr->speed_x =
+    holding_ptr->speed.x =
         cos(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    holding_ptr->speed_y =
+    holding_ptr->speed.y =
         sin(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
     holding_ptr->speed_z =
@@ -1096,7 +1094,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             if(am_ptr == m) continue;
             
             if(
-                dist(m->x, m->y, am_ptr->x, am_ptr->y) >
+                dist(m->pos, am_ptr->pos) >
                 spray_types[spray_nr].distance_range + am_ptr->type->radius
             ) {
                 continue;
@@ -1104,7 +1102,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
             
             float angle_dif =
                 get_angle_smallest_dif(
-                    shoot_angle, atan2(am_ptr->y - m->y, am_ptr->x - m->x)
+                    shoot_angle,
+                    get_angle(m->pos, am_ptr->pos)
                 );
             if(angle_dif > spray_types[spray_nr].angle_range / 2) continue;
             
@@ -1120,7 +1119,7 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     }
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        PARTICLE_TYPE_BITMAP, m->pos,
         52, 3.5, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -1129,8 +1128,8 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     particle_generator pg(0, p, 32);
     pg.angle = shoot_angle;
     pg.angle_deviation = spray_types[spray_nr].angle_range / 2.0f;
-    pg.speed = spray_types[spray_nr].distance_range * 0.8;
-    pg.speed_deviation = spray_types[spray_nr].distance_range * 0.4;
+    pg.total_speed = spray_types[spray_nr].distance_range * 0.8;
+    pg.total_speed_deviation = spray_types[spray_nr].distance_range * 0.4;
     pg.size_deviation = 0.5;
     pg.emit(particles);
     
@@ -1262,7 +1261,7 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  * When a leader must chase another.
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    m->chase(0, 0, &m->following_group->x, &m->following_group->y, false);
+    m->chase(point(), &m->following_group->pos, false);
     m->set_animation(LEADER_ANIM_WALKING);
     focus_mob(m, m->following_group);
 }
@@ -1308,8 +1307,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     
     lea_ptr->auto_pluck_pikmin = pik_ptr;
     lea_ptr->chase(
-        pik_ptr->x, pik_ptr->y,
-        NULL, NULL,
+        pik_ptr->pos, NULL,
         false, nullptr, true,
         pik_ptr->type->radius + lea_ptr->type->radius
     );
@@ -1362,7 +1360,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     pikmin* new_pikmin = NULL;
     if(!l_ptr->queued_pluck_cancel) {
         new_pikmin =
-            get_closest_buried_pikmin(l_ptr->x, l_ptr->y, &d, false);
+            get_closest_buried_pikmin(l_ptr->pos, &d, false);
     }
     
     if(info1) {
@@ -1413,14 +1411,13 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
     m->stop_chasing();
     
     particle throw_p(
-        PARTICLE_TYPE_CIRCLE, m->x, m->y,
+        PARTICLE_TYPE_CIRCLE, m->pos,
         m->type->radius, 0.6, PARTICLE_PRIORITY_LOW
     );
     throw_p.size_grow_speed = -5;
     throw_p.color = change_alpha(m->type->main_color, 128);
     particle_generator pg(THROW_PARTICLE_INTERVAL, throw_p, 1);
-    pg.follow_x = &m->x;
-    pg.follow_y = &m->y;
+    pg.follow = &m->pos;
     pg.id = MOB_PARTICLE_GENERATOR_THROW;
     m->particle_generators.push_back(pg);
 }
@@ -1431,7 +1428,7 @@ void leader_fsm::be_thrown(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::land(mob* m, void* info1, void* info2) {
     m->stop_chasing();
-    m->speed_x = m->speed_y = 0;
+    m->speed.x = m->speed.y = 0;
     
     m->remove_particle_generator(MOB_PARTICLE_GENERATOR_THROW);
 }

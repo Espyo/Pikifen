@@ -205,19 +205,21 @@ void area_editor::do_drawing() {
                 );
                 
                 if(debug_sector_nrs) {
-                    float mid_x =
-                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
-                    float mid_y =
-                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
+                    point middle(
+                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
+                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
+                    );
                     float angle =
-                        atan2(
-                            e_ptr->vertexes[0]->y - e_ptr->vertexes[1]->y,
-                            e_ptr->vertexes[0]->x - e_ptr->vertexes[1]->x
+                        get_angle(
+                            point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                            point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y)
                         );
                     draw_debug_text(
                         al_map_rgb(192, 255, 192),
-                        mid_x + cos(angle + M_PI_2) * 4,
-                        mid_y + sin(angle + M_PI_2) * 4,
+                        point(
+                            middle.x + cos(angle + M_PI_2) * 4,
+                            middle.y + sin(angle + M_PI_2) * 4
+                        ),
                         (
                             e_ptr->sector_nrs[0] == INVALID ?
                             "--" :
@@ -227,8 +229,10 @@ void area_editor::do_drawing() {
                     
                     draw_debug_text(
                         al_map_rgb(192, 255, 192),
-                        mid_x + cos(angle - M_PI_2) * 4,
-                        mid_y + sin(angle - M_PI_2) * 4,
+                        point(
+                            middle.x + cos(angle - M_PI_2) * 4,
+                            middle.y + sin(angle - M_PI_2) * 4
+                        ),
                         (
                             e_ptr->sector_nrs[1] == INVALID ?
                             "--" :
@@ -238,14 +242,11 @@ void area_editor::do_drawing() {
                 }
                 
                 if(debug_edge_nrs) {
-                    float mid_x =
-                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f;
-                    float mid_y =
-                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f;
-                    draw_debug_text(
-                        al_map_rgb(255, 192, 192),
-                        mid_x, mid_y, i2s(e)
+                    point middle(
+                        (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
+                        (e_ptr->vertexes[0]->y + e_ptr->vertexes[1]->y) / 2.0f
                     );
+                    draw_debug_text(al_map_rgb(255, 192, 192), middle, i2s(e));
                 }
             }
             
@@ -264,21 +265,21 @@ void area_editor::do_drawing() {
                     if(debug_vertex_nrs) {
                         draw_debug_text(
                             al_map_rgb(192, 192, 255),
-                            v_ptr->x, v_ptr->y, i2s(v)
+                            point(v_ptr->x, v_ptr->y), i2s(v)
                         );
                     }
                 }
             }
             
             if(mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS && cur_sector) {
-                draw_sector_texture(cur_sector, 0, 0, 1);
+                draw_sector_texture(cur_sector, point(), 1.0);
             }
             
         } else {
         
             //Draw textures.
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                draw_sector(cur_area_data.sectors[s], 0, 0, 1.0);
+                draw_sector(cur_area_data.sectors[s], point(), 1.0);
             }
         }
         
@@ -306,7 +307,7 @@ void area_editor::do_drawing() {
             ALLEGRO_COLOR c = mob_categories.get_editor_color(m_ptr->category);
             
             al_draw_filled_circle(
-                m_ptr->x, m_ptr->y,
+                m_ptr->pos.x, m_ptr->pos.y,
                 radius,
                 (
                     valid ? change_alpha(c, mob_opacity) :
@@ -319,13 +320,13 @@ void area_editor::do_drawing() {
             float lt = radius / 8.0;
             
             al_draw_line(
-                m_ptr->x - lrw * 0.8, m_ptr->y - lrh * 0.8,
-                m_ptr->x + lrw * 0.8, m_ptr->y + lrh * 0.8,
+                m_ptr->pos.x - lrw * 0.8, m_ptr->pos.y - lrh * 0.8,
+                m_ptr->pos.x + lrw * 0.8, m_ptr->pos.y + lrh * 0.8,
                 al_map_rgba(0, 0, 0, mob_opacity), lt
             );
             
-            float tx1 = m_ptr->x + lrw;
-            float ty1 = m_ptr->y + lrh;
+            float tx1 = m_ptr->pos.x + lrw;
+            float ty1 = m_ptr->pos.y + lrh;
             float tx2 =
                 tx1 + cos(m_ptr->angle - (M_PI_2 + M_PI_4)) * radius * 0.5;
             float ty2 =
@@ -344,7 +345,7 @@ void area_editor::do_drawing() {
             
             if(m_ptr == cur_mob && mode == EDITOR_MODE_OBJECTS) {
                 al_draw_circle(
-                    m_ptr->x, m_ptr->y,
+                    m_ptr->pos.x, m_ptr->pos.y,
                     radius,
                     al_map_rgba(255, 255, 255, mob_opacity), 2 / cam_zoom
                 );
@@ -358,7 +359,7 @@ void area_editor::do_drawing() {
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 al_draw_filled_circle(
-                    s_ptr->x, s_ptr->y,
+                    s_ptr->pos.x, s_ptr->pos.y,
                     STOP_RADIUS,
                     al_map_rgb(224, 192, 160)
                 );
@@ -371,8 +372,8 @@ void area_editor::do_drawing() {
                     bool one_way = !(s_ptr->links[l].end_ptr->has_link(s_ptr));
                     
                     al_draw_line(
-                        s_ptr->x, s_ptr->y,
-                        s2_ptr->x, s2_ptr->y,
+                        s_ptr->pos.x, s_ptr->pos.y,
+                        s2_ptr->pos.x, s2_ptr->pos.y,
                         (
                             one_way ? al_map_rgb(255, 160, 160) :
                             al_map_rgb(255, 255, 160)
@@ -383,11 +384,11 @@ void area_editor::do_drawing() {
                     if(one_way) {
                         //Draw a triangle down the middle.
                         float mid_x =
-                            (s_ptr->x + s2_ptr->x) / 2.0f;
+                            (s_ptr->pos.x + s2_ptr->pos.x) / 2.0f;
                         float mid_y =
-                            (s_ptr->y + s2_ptr->y) / 2.0f;
+                            (s_ptr->pos.y + s2_ptr->pos.y) / 2.0f;
                         float angle =
-                            atan2(s2_ptr->y - s_ptr->y, s2_ptr->x - s_ptr->x);
+                            get_angle(s_ptr->pos, s2_ptr->pos);
                         const float delta =
                             (PATH_LINK_THICKNESS * 4) / cam_zoom;
                             
@@ -406,7 +407,7 @@ void area_editor::do_drawing() {
             
             if(sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
                 al_draw_line(
-                    new_link_first_stop->x, new_link_first_stop->y,
+                    new_link_first_stop->pos.x, new_link_first_stop->pos.y,
                     mouse_cursor_w.x, mouse_cursor_w.y,
                     al_map_rgb(255, 255, 255), 2 / cam_zoom
                 );
@@ -417,7 +418,7 @@ void area_editor::do_drawing() {
                 dist closest_dist;
                 for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                     path_stop* s_ptr = cur_area_data.path_stops[s];
-                    dist d(mouse_cursor_w.x, mouse_cursor_w.y, s_ptr->x, s_ptr->y);
+                    dist d(mouse_cursor_w, s_ptr->pos);
                     
                     if(!closest || d < closest_dist) {
                         closest = s_ptr;
@@ -427,7 +428,7 @@ void area_editor::do_drawing() {
                 
                 al_draw_line(
                     mouse_cursor_w.x, mouse_cursor_w.y,
-                    closest->x, closest->y,
+                    closest->pos.x, closest->pos.y,
                     al_map_rgb(96, 224, 32), 2 / cam_zoom
                 );
             }
@@ -450,10 +451,11 @@ void area_editor::do_drawing() {
                     );
                     draw_scaled_text(
                         font_builtin, al_map_rgb(0, 64, 64),
-                        path_preview_checkpoints[c].x,
-                        path_preview_checkpoints[c].y,
-                        POINT_LETTER_TEXT_SCALE / cam_zoom,
-                        POINT_LETTER_TEXT_SCALE / cam_zoom,
+                        path_preview_checkpoints[c],
+                        point(
+                            POINT_LETTER_TEXT_SCALE / cam_zoom,
+                            POINT_LETTER_TEXT_SCALE / cam_zoom
+                        ),
                         ALLEGRO_ALIGN_CENTER, 1,
                         letter
                     );
@@ -472,23 +474,23 @@ void area_editor::do_drawing() {
                     al_draw_line(
                         path_preview_checkpoints[0].x,
                         path_preview_checkpoints[0].y,
-                        path_preview[0]->x,
-                        path_preview[0]->y,
+                        path_preview[0]->pos.x,
+                        path_preview[0]->pos.y,
                         al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                     );
                     for(size_t s = 0; s < path_preview.size() - 1; ++s) {
                         al_draw_line(
-                            path_preview[s]->x,
-                            path_preview[s]->y,
-                            path_preview[s + 1]->x,
-                            path_preview[s + 1]->y,
+                            path_preview[s]->pos.x,
+                            path_preview[s]->pos.y,
+                            path_preview[s + 1]->pos.x,
+                            path_preview[s + 1]->pos.y,
                             al_map_rgb(255, 0, 0), 3.0 / cam_zoom
                         );
                     }
                     
                     al_draw_line(
-                        path_preview.back()->x,
-                        path_preview.back()->y,
+                        path_preview.back()->pos.x,
+                        path_preview.back()->pos.y,
                         path_preview_checkpoints[1].x,
                         path_preview_checkpoints[1].y,
                         al_map_rgb(255, 0, 0), 3.0 / cam_zoom
@@ -506,18 +508,18 @@ void area_editor::do_drawing() {
             
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
                 draw_sprite(
-                    s_ptr->bitmap, s_ptr->x, s_ptr->y, s_ptr->w, s_ptr->h,
+                    s_ptr->bitmap, s_ptr->center, s_ptr->size,
                     s_ptr->angle, map_alpha(s_ptr->alpha)
                 );
                 
                 if(mode == EDITOR_MODE_SHADOWS) {
-                    float min_x, min_y, max_x, max_y;
+                    point min_coords, max_coords;
                     get_shadow_bounding_box(
-                        s_ptr, &min_x, &min_y, &max_x, &max_y
+                        s_ptr, &min_coords, &max_coords
                     );
                     
                     al_draw_rectangle(
-                        min_x, min_y, max_x, max_y,
+                        min_coords.x, min_coords.y, max_coords.x, max_coords.y,
                         (
                             s_ptr == cur_shadow ?
                             al_map_rgb(224, 224, 64) :
@@ -542,11 +544,12 @@ void area_editor::do_drawing() {
                 );
             }
             if(!new_sector_vertexes.empty()) {
+                point hotspot = snap_to_grid(mouse_cursor_w);
                 al_draw_line(
                     new_sector_vertexes.back()->x,
                     new_sector_vertexes.back()->y,
-                    snap_to_grid(mouse_cursor_w.x),
-                    snap_to_grid(mouse_cursor_w.y),
+                    hotspot.x,
+                    hotspot.y,
                     (new_sector_valid_line ?
                      al_map_rgb(64, 255, 64) :
                      al_map_rgb(255, 0, 0)),
@@ -560,10 +563,7 @@ void area_editor::do_drawing() {
             if(new_circle_sector_step == 1) {
                 float circle_radius =
                     dist(
-                        new_circle_sector_center.x,
-                        new_circle_sector_center.y,
-                        new_circle_sector_anchor.x,
-                        new_circle_sector_anchor.y
+                        new_circle_sector_center, new_circle_sector_anchor
                     ).to_float();
                 al_draw_circle(
                     new_circle_sector_center.x,
@@ -616,8 +616,7 @@ void area_editor::do_drawing() {
                 sec_mode != ESM_NEW_LINK1 && sec_mode != ESM_NEW_LINK2 &&
                 new_circle_sector_step != 2
             ) {
-                marker.x = snap_to_grid(marker.x);
-                marker.y = snap_to_grid(marker.y);
+                marker = snap_to_grid(marker);
             }
             al_draw_line(
                 marker.x - 16, marker.y, marker.x + 16, marker.y,
@@ -663,10 +662,11 @@ void area_editor::do_drawing() {
                 );
                 draw_scaled_text(
                     font_builtin, al_map_rgb(0, 64, 64),
-                    cross_section_points[p].x,
-                    cross_section_points[p].y,
-                    POINT_LETTER_TEXT_SCALE / cam_zoom,
-                    POINT_LETTER_TEXT_SCALE / cam_zoom,
+                    cross_section_points[p],
+                    point(
+                        POINT_LETTER_TEXT_SCALE / cam_zoom,
+                        POINT_LETTER_TEXT_SCALE / cam_zoom
+                    ),
                     ALLEGRO_ALIGN_CENTER, 1,
                     letter
                 );
@@ -720,8 +720,8 @@ void area_editor::do_drawing() {
                 0, 0,
                 al_get_bitmap_width(guide_bitmap),
                 al_get_bitmap_height(guide_bitmap),
-                guide_x, guide_y,
-                guide_w, guide_h,
+                guide_pos.x, guide_pos.y,
+                guide_size.x, guide_size.y,
                 0
             );
         }
@@ -734,8 +734,7 @@ void area_editor::do_drawing() {
     if(mode == EDITOR_MODE_REVIEW && show_cross_section) {
     
         dist cross_section_world_length(
-            cross_section_points[0].x, cross_section_points[0].y,
-            cross_section_points[1].x, cross_section_points[1].y
+            cross_section_points[0], cross_section_points[1]
         );
         float proportion =
             (cross_section_window_end.x - cross_section_window_start.x) /
@@ -756,15 +755,9 @@ void area_editor::do_drawing() {
         }
         
         sector* cs_left_sector =
-            get_sector(
-                cross_section_points[0].x, cross_section_points[0].y,
-                NULL, false
-            );
+            get_sector(cross_section_points[0], NULL, false);
         sector* cs_right_sector =
-            get_sector(
-                cross_section_points[1].x, cross_section_points[1].y,
-                NULL, false
-            );
+            get_sector(cross_section_points[1], NULL, false);
         struct split_info {
             sector* sector_ptrs[2];
             float ur;
@@ -785,10 +778,18 @@ void area_editor::do_drawing() {
             float ul = 0;
             if(
                 lines_intersect(
-                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
-                    cross_section_points[0].x, cross_section_points[0].y,
-                    cross_section_points[1].x, cross_section_points[1].y,
+                    point(
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                    ),
+                    point(
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    ),
+                    point(
+                        cross_section_points[0].x, cross_section_points[0].y
+                    ),
+                    point(
+                        cross_section_points[1].x, cross_section_points[1].y
+                    ),
                     &ur, &ul
                 )
             ) {
@@ -905,8 +906,11 @@ void area_editor::do_drawing() {
                     
                     draw_scaled_text(
                         font_builtin, al_map_rgb(255, 255, 255),
-                        (int) (cross_section_z_window_start.x + 8),
-                        (int) line_y, 1, 1,
+                        point(
+                            (cross_section_z_window_start.x + 8),
+                            line_y
+                        ),
+                        point(1, 1),
                         ALLEGRO_ALIGN_LEFT, 1, i2s(z)
                     );
                 }
@@ -916,11 +920,13 @@ void area_editor::do_drawing() {
         
             draw_scaled_text(
                 font_builtin, al_map_rgb(255, 255, 255),
-                (cross_section_window_start.x + cross_section_window_end.x) *
-                0.5,
-                (cross_section_window_start.y + cross_section_window_end.y) *
-                0.5,
-                1, 1, ALLEGRO_ALIGN_CENTER, 1,
+                point(
+                    (cross_section_window_start.x + cross_section_window_end.x) *
+                    0.5,
+                    (cross_section_window_start.y + cross_section_window_end.y) *
+                    0.5
+                ),
+                point(1, 1), ALLEGRO_ALIGN_CENTER, 1,
                 "Please cross\nsome edges."
             );
             
@@ -1019,11 +1025,11 @@ void area_editor::draw_cross_section_sector(
 /* ----------------------------------------------------------------------------
  * Draws debug text, used to identify edges, sectors, or vertexes.
  * color: Text color.
- * x, y:  World coordinates.
+ * where: Where to draw, in world coordinates.
  * text:  Text to show.
  */
 void area_editor::draw_debug_text(
-    const ALLEGRO_COLOR color, const int x, const int y, const string text
+    const ALLEGRO_COLOR color, const point where, const string text
 ) {
     int dw = 0;
     int dh = 0;
@@ -1036,16 +1042,18 @@ void area_editor::draw_debug_text(
     float bbox_h = (dh * DEBUG_TEXT_SCALE) / cam_zoom;
     
     al_draw_filled_rectangle(
-        x - bbox_w * 0.5, y - bbox_h * 0.5,
-        x + bbox_w * 0.5, y + bbox_h * 0.5,
+        where.x - bbox_w * 0.5, where.y - bbox_h * 0.5,
+        where.x + bbox_w * 0.5, where.y + bbox_h * 0.5,
         al_map_rgba(0, 0, 0, 128)
     );
     
     draw_scaled_text(
         font_builtin, color,
-        x, y,
-        DEBUG_TEXT_SCALE / cam_zoom,
-        DEBUG_TEXT_SCALE / cam_zoom,
+        where,
+        point(
+            DEBUG_TEXT_SCALE / cam_zoom,
+            DEBUG_TEXT_SCALE / cam_zoom
+        ),
         ALLEGRO_ALIGN_CENTER, 1,
         text
     );

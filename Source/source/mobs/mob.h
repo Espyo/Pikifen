@@ -102,16 +102,15 @@ enum CARRY_SPOT_STATES {
 struct group_info {
     vector<mob*> members;
     group_spot_info* group_spots;
-    float group_center_x, group_center_y;
+    point group_center;
     subgroup_type* cur_standby_type;
     
     group_info(
-        group_spot_info* ps, const float center_x, const float center_y
+        group_spot_info* ps, const point center
     ) {
         cur_standby_type = NULL;
         group_spots = ps;
-        group_center_x = center_x;
-        group_center_y = center_y;
+        group_center = center;
     }
     bool set_next_cur_standby_type(const bool move_backwards);
 };
@@ -124,10 +123,9 @@ struct carrier_spot_struct {
     unsigned char state;
     //Relative coordinates of each spot.
     //They avoid calculating several sines and cosines over and over.
-    float x;
-    float y;
+    point pos;
     mob* pik_ptr;
-    carrier_spot_struct(const float x = 0, const float y = 0);
+    carrier_spot_struct(const point pos);
 };
 
 
@@ -151,8 +149,7 @@ struct carry_info_struct {
     //of spaces reserved. A Pikmin could be on its way to its spot,
     //not necessarily there already.
     size_t cur_n_carriers;
-    float final_destination_x;
-    float final_destination_y;
+    point final_destination;
     //If the path has an obstacle, this is the pointer to it.
     //This not being NULL also means the last stop in the path is
     //the stop before the obstacle.
@@ -190,7 +187,7 @@ protected:
     
 public:
     mob(
-        const float x, const float y, mob_type* type,
+        const point pos, mob_type* type,
         const float angle, const string &vars
     );
     virtual ~mob(); //Needed so that typeid works.
@@ -204,16 +201,19 @@ public:
     bool reached_destination;
     
     //Actual moving and other physics.
-    //Coordinates. Z is height, the higher the value, the higher in the sky.
-    float x, y, z;
+    //Coordinates.
+    point pos;
+    //Z coordinate. This is height; the higher the value, the higher in the sky.
+    float z;
     //Speed variables for physics only. Don't touch.
-    float speed_x, speed_y, speed_z;
+    point speed;
+    float speed_z;
     //Starting coordinates; what the mob calls "home".
-    float home_x, home_y;
+    point home;
     //Speed multiplies by this much each second. //TODO use this.
     float acceleration;
     //Speed moving forward. //TODO is this used?
-    float speed;
+    float forward_speed;
     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float angle;
     //Angle the mob wants to be facing.
@@ -236,7 +236,7 @@ public:
     //Makes the mob face an angle, but it'll turn at its own pace.
     void face(const float new_angle);
     //Returns the final coordinates of the chasing target.
-    void get_chase_target(float* x, float* y);
+    point get_chase_target();
     //Returns the normal speed of this mob.
     //Subclasses are meant to override this.
     virtual float get_base_speed();
@@ -245,9 +245,9 @@ public:
     //If true, the mob is trying to go to a certain spot.
     bool chasing;
     //Chase after these coordinates, relative to the "origin" coordinates.
-    float chase_offs_x, chase_offs_y;
-    //Pointers to the origin of the coordinates, or NULL for the world origin.
-    float* chase_orig_x, *chase_orig_y;
+    point chase_offset;
+    //Pointer to the origin of the coordinates, or NULL for the world origin.
+    point* chase_orig_coords;
     //When chasing something in teleport mode, also change the z accordingly.
     float* chase_teleport_z;
     //If true, teleport instantly.
@@ -262,8 +262,7 @@ public:
     size_t cur_path_stop_nr;
     
     void chase(
-        const float offs_x, const float offs_y,
-        float* orig_x, float* orig_y,
+        const point offset, point* orig_coords,
         const bool teleport, float* teleport_z = NULL,
         const bool free_move = false, const float target_distance = 3,
         const float speed = -1
@@ -279,8 +278,7 @@ public:
     bool was_thrown;
     //Info on the group this mob is a leader of.
     group_info* group;
-    float group_spot_x;
-    float group_spot_y;
+    point group_spot;
     
     //Script.
     //Finite-state machine.
@@ -361,10 +359,8 @@ public:
     mob* carrying_target;
     
     //Drawing tools.
-    void get_sprite_center(mob* m, sprite* s, float* x, float* y);
-    void get_sprite_dimensions(
-        mob* m, sprite* s, float* w, float* h, float* scale = NULL
-    );
+    point get_sprite_center(mob* m, sprite* s);
+    point get_sprite_dimensions(mob* m, sprite* s, float* scale = NULL);
     void add_brightness_sprite_effect(sprite_effect_manager* manager);
     void add_delivery_sprite_effect(
         sprite_effect_manager* manager, const float delivery_time_ratio_left,
@@ -394,7 +390,7 @@ void create_mob(mob* m);
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox* get_closest_hitbox(
-    const float x, const float y, mob* m, const size_t h_type = INVALID
+    const point p, mob* m, const size_t h_type = INVALID
 );
 hitbox* gui_hitbox(mob* m, const size_t nr);
 bool is_resistant_to_hazards(

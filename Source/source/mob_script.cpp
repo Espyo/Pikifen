@@ -501,13 +501,13 @@ void mob_action::run(
         //TODO relative values.
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
-                m->chase(0, 0, &m->focused_mob->x, &m->focused_mob->y, false);
+                m->chase(point(), &m->focused_mob->pos, false);
             } else {
                 m->stop_chasing();
             }
             
         } else if(sub_type == MOB_ACTION_MOVE_HOME) {
-            m->chase(m->home_x, m->home_y, NULL, NULL, false);
+            m->chase(m->home, NULL, false);
             
         } else if(sub_type == MOB_ACTION_MOVE_STOP) {
             m->stop_chasing();
@@ -518,7 +518,7 @@ void mob_action::run(
             
         } else if(sub_type == MOB_ACTION_MOVE_COORDS) {
             if(vf.size() >= 2) {
-                m->chase(vf[0], vf[1], NULL, NULL, false);
+                m->chase(point(vf[0], vf[1]), NULL, false);
             }
             
         } else if(sub_type == MOB_ACTION_MOVE_VERTICALLY) {
@@ -529,13 +529,22 @@ void mob_action::run(
             
         } else if(sub_type == MOB_ACTION_MOVE_RANDOMLY) {
             m->chase(
-                m->x + randomf(-1000, 1000), m->y + randomf(-1000, 1000),
-                NULL, NULL, false
+                point(
+                    m->pos.x + randomf(-1000, 1000),
+                    m->pos.y + randomf(-1000, 1000)
+                ),
+                NULL, false
             );
             
         } else if(sub_type == MOB_ACTION_MOVE_REL_COORDS) {
             if(vf.size() >= 2) {
-                m->chase(m->x + vf[0], m->y + vf[1], NULL, NULL, false);
+                m->chase(
+                    point(
+                        m->pos.x + vf[0],
+                        m->pos.y + vf[1]
+                    ),
+                    NULL, false
+                );
             }
             
         }
@@ -552,8 +561,7 @@ void mob_action::run(
             ) {
                 particle_generator pg = custom_particle_generators[vs[0]];
                 pg.id = MOB_PARTICLE_GENERATOR_SCRIPT;
-                pg.follow_x = &m->x;
-                pg.follow_y = &m->y;
+                pg.follow = &m->pos;
                 pg.reset();
                 m->particle_generators.push_back(pg);
             }

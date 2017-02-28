@@ -81,12 +81,8 @@ animation_editor::animation_editor() :
     file_dialog(NULL),
     grabbing_hitbox(INVALID),
     grabbing_hitbox_edge(false),
-    grabbing_hitbox_x(0),
-    grabbing_hitbox_y(0),
     hitboxes_visible(true),
     is_pikmin(false),
-    new_hitbox_corner_x(FLT_MAX),
-    new_hitbox_corner_y(FLT_MAX),
     sprite_tra_lmb_action(LMB_ACTION_MOVE),
     top_lmb_action(LMB_ACTION_MOVE) {
     
@@ -187,11 +183,7 @@ void animation_editor::do_drawing() {
         
         if(s) {
             if(s->bitmap) {
-                draw_sprite(
-                    s->bitmap,
-                    s->offs_x, s->offs_y,
-                    s->game_w, s->game_h
-                );
+                draw_sprite(s->bitmap, s->offset, s->game_size);
             }
             
             if(hitboxes_visible) {
@@ -215,15 +207,15 @@ void animation_editor::do_drawing() {
                     }
                     
                     al_draw_filled_circle(
-                        h_ptr->x,
-                        h_ptr->y,
+                        h_ptr->pos.x,
+                        h_ptr->pos.y,
                         h_ptr->radius,
                         hitbox_color
                     );
                     
                     al_draw_circle(
-                        h_ptr->x,
-                        h_ptr->y,
+                        h_ptr->pos.x,
+                        h_ptr->pos.y,
                         h_ptr->radius,
                         (
                             cur_hitbox_nr == h ?
@@ -245,8 +237,7 @@ void animation_editor::do_drawing() {
             if(s->top_visible && is_pikmin) {
                 draw_sprite(
                     top_bmp[cur_maturity],
-                    s->top_x, s->top_y,
-                    s->top_w, s->top_h,
+                    s->top_pos, s->top_size,
                     s->top_angle
                 );
             }
@@ -257,8 +248,7 @@ void animation_editor::do_drawing() {
             ) {
                 draw_sprite(
                     comparison_sprite->bitmap,
-                    comparison_sprite->offs_x, comparison_sprite->offs_y,
-                    comparison_sprite->game_w, comparison_sprite->game_h,
+                    comparison_sprite->offset, comparison_sprite->game_size,
                     0
                 );
             }
@@ -412,8 +402,8 @@ void animation_editor::hitbox_to_gui() {
             (lafi::label*) gui->widgets["frm_hitboxes"]->widgets["lbl_name"]
         )->text =
             cur_h->body_part_name;
-        ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_h->x);
-        ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_h->y);
+        ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_h->pos.x);
+        ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_h->pos.y);
         ((lafi::textbox*) f->widgets["txt_z"])->text = f2s(cur_h->z);
         ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_h->height);
         ((lafi::textbox*) f->widgets["txt_r"])->text = f2s(cur_h->radius);
@@ -485,21 +475,21 @@ void animation_editor::sprite_to_gui() {
         ((lafi::textbox*) f->widgets["txt_file"])->text =
             cur_sprite->file;
         ((lafi::textbox*) f->widgets["txt_filex"])->text =
-            i2s(cur_sprite->file_x);
+            i2s(cur_sprite->file_pos.x);
         ((lafi::textbox*) f->widgets["txt_filey"])->text =
-            i2s(cur_sprite->file_y);
+            i2s(cur_sprite->file_pos.y);
         ((lafi::textbox*) f->widgets["txt_filew"])->text =
-            i2s(cur_sprite->file_w);
+            i2s(cur_sprite->file_size.x);
         ((lafi::textbox*) f->widgets["txt_fileh"])->text =
-            i2s(cur_sprite->file_h);
+            i2s(cur_sprite->file_size.y);
         ((lafi::textbox*) f->widgets["txt_gamew"])->text =
-            f2s(cur_sprite->game_w);
+            f2s(cur_sprite->game_size.x);
         ((lafi::textbox*) f->widgets["txt_gameh"])->text =
-            f2s(cur_sprite->game_h);
+            f2s(cur_sprite->game_size.y);
         ((lafi::textbox*) f->widgets["txt_offsx"])->text =
-            f2s(cur_sprite->offs_x);
+            f2s(cur_sprite->offset.x);
         ((lafi::textbox*) f->widgets["txt_offsy"])->text =
-            f2s(cur_sprite->offs_y);
+            f2s(cur_sprite->offset.y);
             
         if(is_pikmin) {
             enable_widget(f->widgets["but_top"]);
@@ -516,10 +506,10 @@ void animation_editor::sprite_to_gui() {
 void animation_editor::sprite_transform_to_gui() {
     lafi::widget* f = gui->widgets["frm_sprite_tra"];
     
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_sprite->offs_x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_sprite->offs_y);
-    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(cur_sprite->game_w);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_sprite->game_h);
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_sprite->offset.x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_sprite->offset.y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(cur_sprite->game_size.x);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_sprite->game_size.y);
     ((lafi::checkbox*) f->widgets["chk_compare"])->set(comparison);
     ((lafi::checkbox*) f->widgets["chk_compare_blink"])->set(
         comparison_blink
@@ -539,10 +529,10 @@ void animation_editor::top_to_gui() {
     if(cur_sprite->top_visible) c->check();
     else c->uncheck();
     
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_sprite->top_x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_sprite->top_y);
-    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(cur_sprite->top_w);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_sprite->top_h);
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(cur_sprite->top_pos.x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(cur_sprite->top_pos.y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(cur_sprite->top_size.x);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(cur_sprite->top_size.y);
     (
         (lafi::angle_picker*) f->widgets["ang_angle"]
     )->set_angle_rads(cur_sprite->top_angle);
@@ -616,8 +606,8 @@ void animation_editor::gui_to_hitbox() {
     
     hitbox* h = &cur_sprite->hitboxes[cur_hitbox_nr];
     
-    h->x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    h->y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    h->pos.x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    h->pos.y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     h->z = s2f(((lafi::textbox*) f->widgets["txt_z"])->text);
     
     h->height = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
@@ -701,26 +691,41 @@ void animation_editor::gui_to_sprite() {
     lafi::widget* f = gui->widgets["frm_sprites"]->widgets["frm_sprite"];
     
     string new_file;
-    int new_fx, new_fy, new_fw, new_fh;
+    point new_f_pos, new_f_size;
     
-    new_file =          ((lafi::textbox*) f->widgets["txt_file"])->text;
-    new_fx =            s2i(((lafi::textbox*) f->widgets["txt_filex"])->text);
-    new_fy =            s2i(((lafi::textbox*) f->widgets["txt_filey"])->text);
-    new_fw =            s2i(((lafi::textbox*) f->widgets["txt_filew"])->text);
-    new_fh =            s2i(((lafi::textbox*) f->widgets["txt_fileh"])->text);
-    cur_sprite->game_w = s2f(((lafi::textbox*) f->widgets["txt_gamew"])->text);
-    cur_sprite->game_h = s2f(((lafi::textbox*) f->widgets["txt_gameh"])->text);
-    cur_sprite->offs_x = s2f(((lafi::textbox*) f->widgets["txt_offsx"])->text);
-    cur_sprite->offs_y = s2f(((lafi::textbox*) f->widgets["txt_offsy"])->text);
-    
+    new_file =
+        ((lafi::textbox*) f->widgets["txt_file"])->text;
+    new_f_pos.x =
+        s2i(((lafi::textbox*) f->widgets["txt_filex"])->text);
+    new_f_pos.y =
+        s2i(((lafi::textbox*) f->widgets["txt_filey"])->text);
+    new_f_size.x =
+        s2i(((lafi::textbox*) f->widgets["txt_filew"])->text);
+    new_f_size.y =
+        s2i(((lafi::textbox*) f->widgets["txt_fileh"])->text);
+    cur_sprite->game_size.x =
+        s2f(((lafi::textbox*) f->widgets["txt_gamew"])->text);
+    cur_sprite->game_size.y =
+        s2f(((lafi::textbox*) f->widgets["txt_gameh"])->text);
+    cur_sprite->offset.x =
+        s2f(((lafi::textbox*) f->widgets["txt_offsx"])->text);
+    cur_sprite->offset.y =
+        s2f(((lafi::textbox*) f->widgets["txt_offsy"])->text);
+        
     //Automatically fill in the in-game width/height if it hasn't been set yet.
-    if(cur_sprite->game_w == 0.0f) cur_sprite->game_w = new_fw;
-    if(cur_sprite->game_h == 0.0f) cur_sprite->game_h = new_fh;
+    if(cur_sprite->game_size.x == 0.0f) {
+        cur_sprite->game_size.x = new_f_size.x;
+    }
+    if(cur_sprite->game_size.y == 0.0f) {
+        cur_sprite->game_size.y = new_f_size.y;
+    }
     
     if(
         cur_sprite->file != new_file ||
-        cur_sprite->file_x != new_fx || cur_sprite->file_y != new_fy ||
-        cur_sprite->file_w != new_fw || cur_sprite->file_h != new_fh
+        cur_sprite->file_pos.x != new_f_pos.x ||
+        cur_sprite->file_pos.y != new_f_pos.y ||
+        cur_sprite->file_size.x != new_f_size.x ||
+        cur_sprite->file_size.y != new_f_size.y
     ) {
         //Changed something image-wise. Recreate it.
         if(cur_sprite->parent_bmp) bitmaps.detach(cur_sprite->file);
@@ -730,14 +735,13 @@ void animation_editor::gui_to_sprite() {
         if(cur_sprite->parent_bmp) {
             cur_sprite->bitmap =
                 al_create_sub_bitmap(
-                    cur_sprite->parent_bmp, new_fx, new_fy, new_fw, new_fh
+                    cur_sprite->parent_bmp, new_f_pos.x,
+                    new_f_pos.y, new_f_size.x, new_f_size.y
                 );
         }
         cur_sprite->file = new_file;
-        cur_sprite->file_x = new_fx;
-        cur_sprite->file_y = new_fy;
-        cur_sprite->file_w = new_fw;
-        cur_sprite->file_h = new_fh;
+        cur_sprite->file_pos = new_f_pos;
+        cur_sprite->file_size = new_f_size;
     }
     
     last_file_used = new_file;
@@ -755,13 +759,13 @@ void animation_editor::gui_to_sprite() {
 void animation_editor::gui_to_sprite_transform() {
     lafi::widget* f = gui->widgets["frm_sprite_tra"];
     
-    cur_sprite->offs_x =
+    cur_sprite->offset.x =
         s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    cur_sprite->offs_y =
+    cur_sprite->offset.y =
         s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-    cur_sprite->game_w =
+    cur_sprite->game_size.x =
         s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
-    cur_sprite->game_h =
+    cur_sprite->game_size.y =
         s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     comparison =
         ((lafi::checkbox*) f->widgets["chk_compare"])->checked;
@@ -788,13 +792,13 @@ void animation_editor::gui_to_top() {
     
     cur_sprite->top_visible =
         ((lafi::checkbox*) f->widgets["chk_visible"])->checked;
-    cur_sprite->top_x =
+    cur_sprite->top_pos.x =
         s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    cur_sprite->top_y =
+    cur_sprite->top_pos.y =
         s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-    cur_sprite->top_w =
+    cur_sprite->top_size.x =
         s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
-    cur_sprite->top_h =
+    cur_sprite->top_size.y =
         s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     cur_sprite->top_angle =
         ((lafi::angle_picker*) f->widgets["ang_angle"])->get_angle_rads();
@@ -1139,8 +1143,7 @@ void animation_editor::resize_by_resolution() {
     
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
-        s_ptr->game_w = s_ptr->file_w * mult;
-        s_ptr->game_h = s_ptr->file_h * mult;
+        s_ptr->game_size = s_ptr->file_size * mult;
     }
     
 }
@@ -1157,21 +1160,16 @@ void animation_editor::resize_everything() {
     for(size_t s = 0; s < anims.sprites.size(); ++s) {
         sprite* s_ptr = anims.sprites[s];
         
-        s_ptr->game_w *= mult;
-        s_ptr->game_h *= mult;
-        s_ptr->offs_x *= mult;
-        s_ptr->offs_y *= mult;
-        s_ptr->top_x  *= mult;
-        s_ptr->top_y  *= mult;
-        s_ptr->top_w  *= mult;
-        s_ptr->top_h  *= mult;
+        s_ptr->game_size *= mult;
+        s_ptr->offset    *= mult;
+        s_ptr->top_pos   *= mult;
+        s_ptr->top_size  *= mult;
         
         for(size_t h = 0; h < s_ptr->hitboxes.size(); ++h) {
             hitbox* h_ptr = &s_ptr->hitboxes[h];
             
             h_ptr->radius *= mult;
-            h_ptr->x      *= mult;
-            h_ptr->y      *= mult;
+            h_ptr->pos    *= mult;
         }
     }
     
@@ -1223,30 +1221,30 @@ void animation_editor::save_animation_database() {
         sprites_node->add(sprite_node);
         
         sprite_node->add(new data_node("file", s_ptr->file));
-        sprite_node->add(new data_node("file_x", i2s(s_ptr->file_x)));
-        sprite_node->add(new data_node("file_y", i2s(s_ptr->file_y)));
-        sprite_node->add(new data_node("file_w", i2s(s_ptr->file_w)));
-        sprite_node->add(new data_node("file_h", i2s(s_ptr->file_h)));
-        sprite_node->add(new data_node("game_w", f2s(s_ptr->game_w)));
-        sprite_node->add(new data_node("game_h", f2s(s_ptr->game_h)));
-        sprite_node->add(new data_node("offs_x", f2s(s_ptr->offs_x)));
-        sprite_node->add(new data_node("offs_y", f2s(s_ptr->offs_y)));
+        sprite_node->add(new data_node("file_x", i2s(s_ptr->file_pos.x)));
+        sprite_node->add(new data_node("file_y", i2s(s_ptr->file_pos.y)));
+        sprite_node->add(new data_node("file_w", i2s(s_ptr->file_size.x)));
+        sprite_node->add(new data_node("file_h", i2s(s_ptr->file_size.y)));
+        sprite_node->add(new data_node("game_w", f2s(s_ptr->game_size.x)));
+        sprite_node->add(new data_node("game_h", f2s(s_ptr->game_size.y)));
+        sprite_node->add(new data_node("offs_x", f2s(s_ptr->offset.x)));
+        sprite_node->add(new data_node("offs_y", f2s(s_ptr->offset.y)));
         
         if(is_pikmin) {
             sprite_node->add(
                 new data_node("top_visible", b2s(s_ptr->top_visible))
             );
             sprite_node->add(
-                new data_node("top_x", f2s(s_ptr->top_x))
+                new data_node("top_x", f2s(s_ptr->top_pos.x))
             );
             sprite_node->add(
-                new data_node("top_y", f2s(s_ptr->top_y))
+                new data_node("top_y", f2s(s_ptr->top_pos.y))
             );
             sprite_node->add(
-                new data_node("top_w", f2s(s_ptr->top_w))
+                new data_node("top_w", f2s(s_ptr->top_size.x))
             );
             sprite_node->add(
-                new data_node("top_h", f2s(s_ptr->top_h))
+                new data_node("top_h", f2s(s_ptr->top_size.y))
             );
             sprite_node->add(
                 new data_node("top_angle", f2s(s_ptr->top_angle))
@@ -1267,7 +1265,7 @@ void animation_editor::save_animation_database() {
             hitbox_node->add(
                 new data_node(
                     "coords",
-                    f2s(h_ptr->x) + " " + f2s(h_ptr->y) +
+                    f2s(h_ptr->pos.x) + " " + f2s(h_ptr->pos.y) +
                     " " + f2s(h_ptr->z)
                 )
             );

@@ -754,8 +754,8 @@ void init_special_mob_types() {
     info_spot_mt->name = "Info spot";
     info_spot_mt->radius = 16;
     info_spot_mt->create_mob =
-    [] (float x, float y, float angle, const string & vars) {
-        create_mob(new info_spot(x, y, angle, vars));
+    [] (const point pos, const float angle, const string & vars) {
+        create_mob(new info_spot(pos, angle, vars));
     };
     spec_mob_types["Info spot"] = info_spot_mt;
     
@@ -765,8 +765,8 @@ void init_special_mob_types() {
     nectar_mt->always_active = true;
     nectar_mt->radius = 8;
     nectar_mt->create_mob =
-    [] (float x, float y, float angle, const string & vars) {
-        create_mob(new nectar(x, y, vars));
+    [] (const point pos, const float angle, const string & vars) {
+        create_mob(new nectar(pos, vars));
     };
     spec_mob_types["Nectar"] = nectar_mt;
     

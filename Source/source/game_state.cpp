@@ -53,7 +53,7 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
         for(size_t w = 0; w < menu_widgets.size(); w++) {
             menu_widget* w_ptr = menu_widgets[w];
             if(
-                w_ptr->mouse_on(ev.mouse.x, ev.mouse.y) &&
+                w_ptr->mouse_on(point(ev.mouse.x, ev.mouse.y)) &&
                 w_ptr->is_clickable()
             ) {
                 set_selected_widget(w_ptr);
@@ -93,8 +93,8 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
             
             menu_widget* closest_widget = NULL;
             dist closest_widget_dist;
-            int cur_pivot_x, cur_pivot_y;
-            int w2_pivot_x, w2_pivot_y;
+            point cur_pivot;
+            point w2_pivot;
             
             for(size_t w = 0; w < menu_widgets.size(); w++) {
                 menu_widget* w_ptr = menu_widgets[w];
@@ -106,51 +106,51 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
                 }
                 
                 if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-                    cur_pivot_x =
-                        selected_widget->x + selected_widget->w * 0.25;
-                    cur_pivot_y =
-                        selected_widget->y;
-                    w2_pivot_x = w_ptr->x - w_ptr->w * 0.25;
-                    w2_pivot_y = w_ptr->y;
+                    cur_pivot.x =
+                        selected_widget->pos.x + selected_widget->size.x * 0.25;
+                    cur_pivot.y =
+                        selected_widget->pos.y;
+                    w2_pivot.x = w_ptr->pos.x - w_ptr->size.x * 0.25;
+                    w2_pivot.y = w_ptr->pos.y;
                     
-                    if(selected_widget->x == w_ptr->x) continue;
-                    if(cur_pivot_x > w2_pivot_x) w2_pivot_x += scr_w;
+                    if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                    if(cur_pivot.x > w2_pivot.x) w2_pivot.x += scr_w;
                     
                 } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-                    cur_pivot_x =
-                        selected_widget->x;
-                    cur_pivot_y =
-                        selected_widget->y - selected_widget->h * 0.25;
-                    w2_pivot_x = w_ptr->x;
-                    w2_pivot_y = w_ptr->y + w_ptr->h * 0.25;
+                    cur_pivot.x =
+                        selected_widget->pos.x;
+                    cur_pivot.y =
+                        selected_widget->pos.y - selected_widget->size.y * 0.25;
+                    w2_pivot.x = w_ptr->pos.x;
+                    w2_pivot.y = w_ptr->pos.y + w_ptr->size.y * 0.25;
                     
-                    if(selected_widget->y == w_ptr->y) continue;
-                    if(cur_pivot_y < w2_pivot_y) w2_pivot_y -= scr_h;
+                    if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                    if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= scr_h;
                     
                 } else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-                    cur_pivot_x =
-                        selected_widget->x - selected_widget->w * 0.25;
-                    cur_pivot_y =
-                        selected_widget->y;
-                    w2_pivot_x = w_ptr->x + w_ptr->w * 0.25;
-                    w2_pivot_y = w_ptr->y;
+                    cur_pivot.x =
+                        selected_widget->pos.x - selected_widget->size.x * 0.25;
+                    cur_pivot.y =
+                        selected_widget->pos.y;
+                    w2_pivot.x = w_ptr->pos.x + w_ptr->size.x * 0.25;
+                    w2_pivot.y = w_ptr->pos.y;
                     
-                    if(selected_widget->x == w_ptr->x) continue;
-                    if(cur_pivot_x < w2_pivot_x) w2_pivot_x -= scr_w;
+                    if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                    if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= scr_w;
                     
                 } else {
-                    cur_pivot_x =
-                        selected_widget->x;
-                    cur_pivot_y =
-                        selected_widget->y + selected_widget->h * 0.25;
-                    w2_pivot_x = w_ptr->x;
-                    w2_pivot_y = w_ptr->y - w_ptr->h * 0.25;
+                    cur_pivot.x =
+                        selected_widget->pos.x;
+                    cur_pivot.y =
+                        selected_widget->pos.y + selected_widget->size.y * 0.25;
+                    w2_pivot.x = w_ptr->pos.x;
+                    w2_pivot.y = w_ptr->pos.y - w_ptr->size.y * 0.25;
                     
-                    if(selected_widget->y == w_ptr->y) continue;
-                    if(cur_pivot_y > w2_pivot_y) w2_pivot_y += scr_h;
+                    if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                    if(cur_pivot.y > w2_pivot.y) w2_pivot.y += scr_h;
                 }
                 
-                dist d(cur_pivot_x, cur_pivot_y, w2_pivot_x, w2_pivot_y);
+                dist d(cur_pivot, w2_pivot);
                 
                 if(!closest_widget || d <= closest_widget_dist) {
                     closest_widget = w_ptr;
@@ -210,67 +210,67 @@ void gameplay::load() {
         if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
             create_mob(
                 new enemy(
-                    m_ptr->x, m_ptr->y, (enemy_type*) m_ptr->type,
+                    m_ptr->pos, (enemy_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_LEADERS) {
             create_mob(
                 new leader(
-                    m_ptr->x, m_ptr->y, (leader_type*) m_ptr->type,
+                    m_ptr->pos, (leader_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_ONIONS) {
             create_mob(
                 new onion(
-                    m_ptr->x, m_ptr->y, (onion_type*) m_ptr->type,
+                    m_ptr->pos, (onion_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_PELLETS) {
             create_mob(
                 new pellet(
-                    m_ptr->x, m_ptr->y, (pellet_type*) m_ptr->type,
+                    m_ptr->pos, (pellet_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_PIKMIN) {
             create_mob(
                 new pikmin(
-                    m_ptr->x, m_ptr->y, (pikmin_type*) m_ptr->type,
+                    m_ptr->pos, (pikmin_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_SHIPS) {
             create_mob(
                 new ship(
-                    m_ptr->x, m_ptr->y, (ship_type*) m_ptr->type,
+                    m_ptr->pos, (ship_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_GATES) {
             create_mob(
                 new gate(
-                    m_ptr->x, m_ptr->y, (gate_type*) m_ptr->type,
+                    m_ptr->pos, (gate_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
             m_ptr->type->create_mob(
-                m_ptr->x, m_ptr->y, m_ptr->angle, m_ptr->vars
+                m_ptr->pos, m_ptr->angle, m_ptr->vars
             );
         } else if(m_ptr->category == MOB_CATEGORY_TREASURES) {
             create_mob(
                 new treasure(
-                    m_ptr->x, m_ptr->y, (treasure_type*) m_ptr->type,
+                    m_ptr->pos, (treasure_type*) m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
         } else if(m_ptr->category == MOB_CATEGORY_MISC) {
             create_mob(
                 new mob(
-                    m_ptr->x, m_ptr->y, m_ptr->type,
+                    m_ptr->pos, m_ptr->type,
                     m_ptr->angle, m_ptr->vars
                 )
             );
@@ -295,13 +295,12 @@ void gameplay::load() {
     cur_leader_ptr = leaders[cur_leader_nr];
     cur_leader_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     
-    cam_pos.x = cam_final_x = cur_leader_ptr->x;
-    cam_pos.y = cam_final_y = cur_leader_ptr->y;
+    cam_pos = cam_final_pos = cur_leader_ptr->pos;
     cam_zoom = cam_final_zoom = zoom_mid_level;
     update_transformations();
     
-    leader_cursor_w.x = cur_leader_ptr->x + cursor_max_dist / 2.0;
-    leader_cursor_w.y = cur_leader_ptr->y;
+    leader_cursor_w.x = cur_leader_ptr->pos.x + cursor_max_dist / 2.0;
+    leader_cursor_w.y = cur_leader_ptr->pos.y;
     leader_cursor_s = leader_cursor_w;
     al_transform_coordinates(
         &world_to_screen_transform,

@@ -17,10 +17,10 @@
  * Creates an enemy mob.
  */
 enemy::enemy(
-    const float x, const float y, enemy_type* type, const float angle,
+    const point pos, enemy_type* type, const float angle,
     const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     ene_type(type),
     spawn_delay(s2f(get_var_value(vars, "spawn_delay", "0"))),
     respawn_days_left(0),
@@ -42,10 +42,8 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    float draw_x, draw_y;
-    float draw_w, draw_h;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    point draw_size = get_sprite_dimensions(this, s_ptr);
     
     sprite_effect_manager effects;
     
@@ -61,8 +59,7 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         s_ptr->bitmap,
-        draw_x, draw_y,
-        draw_w, draw_h,
+        draw_pos, draw_size,
         angle, &effects
     );
     

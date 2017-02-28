@@ -53,7 +53,7 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             cam_pos.y -= ev.mouse.dy / cam_zoom;
         }
         
-        if(!is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)) {
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
             if(ev.mouse.dz != 0) {
                 //Zoom.
                 cam_zoom += (cam_zoom * ev.mouse.dz * 0.1);
@@ -81,27 +81,27 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         if(holding_m1 && mode == EDITOR_MODE_SPRITE_TRANSFORM) {
             if(sprite_tra_lmb_action == LMB_ACTION_MOVE) {
-                cur_sprite->offs_x += ev.mouse.dx / cam_zoom;
-                cur_sprite->offs_y += ev.mouse.dy / cam_zoom;
+                cur_sprite->offset.x += (ev.mouse.dx / cam_zoom);
+                cur_sprite->offset.y += (ev.mouse.dy / cam_zoom);
                 sprite_transform_to_gui();
             } else if(sprite_tra_lmb_action == LMB_ACTION_RESIZE) {
-                float new_w = cur_sprite->game_w + ev.mouse.dx / cam_zoom;
-                float ratio = cur_sprite->game_h / cur_sprite->game_w;
-                cur_sprite->game_w = new_w;
-                cur_sprite->game_h = new_w * ratio;
+                float new_w = cur_sprite->game_size.x + ev.mouse.dx / cam_zoom;
+                float ratio = cur_sprite->game_size.y / cur_sprite->game_size.x;
+                cur_sprite->game_size.x = new_w;
+                cur_sprite->game_size.y = new_w * ratio;
                 sprite_transform_to_gui();
             }
             
         } else if(holding_m1 && mode == EDITOR_MODE_TOP) {
             if(top_lmb_action == LMB_ACTION_MOVE) {
-                cur_sprite->top_x += ev.mouse.dx / cam_zoom;
-                cur_sprite->top_y += ev.mouse.dy / cam_zoom;
+                cur_sprite->top_pos.x += (ev.mouse.dx / cam_zoom);
+                cur_sprite->top_pos.y += (ev.mouse.dy / cam_zoom);
                 top_to_gui();
             } else if(top_lmb_action == LMB_ACTION_RESIZE) {
-                float new_w = cur_sprite->top_w + ev.mouse.dx / cam_zoom;
-                float ratio = cur_sprite->top_h / cur_sprite->top_w;
-                cur_sprite->top_w = new_w;
-                cur_sprite->top_h = new_w * ratio;
+                float new_w = cur_sprite->top_size.x + ev.mouse.dx / cam_zoom;
+                float ratio = cur_sprite->top_size.y / cur_sprite->top_size.x;
+                cur_sprite->top_size.x = new_w;
+                cur_sprite->top_size.y = new_w * ratio;
                 top_to_gui();
             } else if(top_lmb_action == LMB_ACTION_ROTATE) {
                 cur_sprite->top_angle += ev.mouse.dx / cam_zoom;
@@ -112,7 +112,7 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
     } else if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-        !is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)
+        !is_mouse_in_gui(mouse_cursor_s)
     ) {
         if(ev.mouse.button == 1) holding_m1 = true;
         else if(ev.mouse.button == 2) holding_m2 = true;
@@ -142,14 +142,12 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1 &&
         mode == EDITOR_MODE_HITBOXES
     ) {
-        if(!is_mouse_in_gui(mouse_cursor_s.x, mouse_cursor_s.y)) {
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
             if(s) {
                 for(size_t h = 0; h < s->hitboxes.size(); ++h) {
                 
                     hitbox* h_ptr = &s->hitboxes[h];
-                    dist d(
-                        mouse_cursor_w.x, mouse_cursor_w.y, h_ptr->x, h_ptr->y
-                    );
+                    dist d(mouse_cursor_w, h_ptr->pos);
                     if(d <= h_ptr->radius) {
                         gui_to_hitbox();
                         cur_hitbox_nr = h;
@@ -163,21 +161,18 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                         //change radius. Else move hitbox.
                         if(grabbing_hitbox_edge) {
                             float anchor_angle =
-                                atan2(
-                                    h_ptr->y - mouse_cursor_w.y,
-                                    h_ptr->x - mouse_cursor_w.x
-                                );
+                                get_angle(mouse_cursor_w, h_ptr->pos);
                             //These variables will actually serve
                             //to store the anchor.
-                            grabbing_hitbox_x =
-                                h_ptr->x + cos(anchor_angle) * h_ptr->radius;
-                            grabbing_hitbox_y =
-                                h_ptr->y + sin(anchor_angle) * h_ptr->radius;
+                            grabbing_hitbox_point.x =
+                                h_ptr->pos.x +
+                                cos(anchor_angle) * h_ptr->radius;
+                            grabbing_hitbox_point.y =
+                                h_ptr->pos.y +
+                                sin(anchor_angle) * h_ptr->radius;
                         } else {
-                            grabbing_hitbox_x =
-                                h_ptr->x - mouse_cursor_w.x;
-                            grabbing_hitbox_y =
-                                h_ptr->y - mouse_cursor_w.y;
+                            grabbing_hitbox_point =
+                                h_ptr->pos - mouse_cursor_w;
                         }
                         
                         made_changes = true;
@@ -197,18 +192,11 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             
             if(grabbing_hitbox_edge) {
                 h_ptr->radius =
-                    dist(
-                        mouse_cursor_w.x,
-                        mouse_cursor_w.y,
-                        grabbing_hitbox_x,
-                        grabbing_hitbox_y
-                    ).to_float() / 2;
-                h_ptr->x = (mouse_cursor_w.x + grabbing_hitbox_x) / 2;
-                h_ptr->y = (mouse_cursor_w.y + grabbing_hitbox_y) / 2;
+                    dist(mouse_cursor_w, grabbing_hitbox_point).to_float() / 2;
+                h_ptr->pos = (mouse_cursor_w + grabbing_hitbox_point) / 2.0;
                 
             } else {
-                h_ptr->x = mouse_cursor_w.x + grabbing_hitbox_x;
-                h_ptr->y = mouse_cursor_w.y + grabbing_hitbox_y;
+                h_ptr->pos = mouse_cursor_w + grabbing_hitbox_point;
             }
             
             hitbox_to_gui();

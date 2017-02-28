@@ -235,8 +235,8 @@ void editor::hide_bottom_frame() {
  * Returns whether the mouse cursor is inside the gui or not.
  * The status bar counts as the gui.
  */
-bool editor::is_mouse_in_gui(const int x, const int y) {
-    return x >= gui_x || y >= status_bar_y;
+bool editor::is_mouse_in_gui(const point mouse_coords) {
+    return mouse_coords.x >= gui_x || mouse_coords.y >= status_bar_y;
 }
 
 

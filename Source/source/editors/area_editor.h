@@ -157,10 +157,8 @@ private:
     bool                         guide_aspect_ratio;
     ALLEGRO_BITMAP*              guide_bitmap;
     string                       guide_file_name;
-    float                        guide_x;
-    float                        guide_y;
-    float                        guide_w;
-    float                        guide_h;
+    point                        guide_pos;
+    point                        guide_size;
     unsigned char                guide_a;
     unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
@@ -169,8 +167,7 @@ private:
     size_t                       moving_thing;
     //Relative X/Y coordinate of the point where the vertex,
     //object or shadow was grabbed.
-    float                        moving_thing_x;
-    float                        moving_thing_y;
+    point                        moving_thing_pos;
     point                        new_circle_sector_anchor;
     point                        new_circle_sector_center;
     vector<bool>                 new_circle_sector_valid_edges;
@@ -195,7 +192,7 @@ private:
     
     void calculate_preview_path();
     void cancel_new_sector();
-    void center_camera(float min_x, float min_y, float max_x, float max_y);
+    void center_camera(const point min_coords, const point max_coords);
     void change_guide(string new_file_name);
     void clear_current_area();
     void create_sector();
@@ -204,7 +201,7 @@ private:
         const float lowest_z, sector* sector_ptr
     );
     void draw_debug_text(
-        const ALLEGRO_COLOR color, const int x, const int y, const string text
+        const ALLEGRO_COLOR color, const point where, const string text
     );
     void find_errors();
     bool get_common_sector(
@@ -212,7 +209,7 @@ private:
     );
     void set_new_circle_sector_points();
     void goto_error();
-    bool is_new_sector_line_valid(const float x, const float y);
+    bool is_new_sector_line_valid(const point pos);
     void load_area(const bool from_backup);
     void load_backup();
     void merge_vertex(
@@ -223,7 +220,7 @@ private:
     void resize_everything();
     void save_area(const bool to_backup);
     void save_backup();
-    float snap_to_grid(const float c);
+    point snap_to_grid(const point p);
     void toggle_duplicate_mob_mode();
     bool update_backup_status();
     void update_options_frame();

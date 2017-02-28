@@ -64,7 +64,7 @@ struct edge_intersection {
  */
 struct blockmap {
     //Top-left corner of the blockmap.
-    float x1, y1;
+    point top_left_corner;
     //Specifies a list of edges in each block.
     vector<vector<vector<edge*> > > edges;
     //Specifies a list of sectors in each block.
@@ -74,8 +74,7 @@ struct blockmap {
     blockmap();
     size_t get_col(const float x);
     size_t get_row(const float y);
-    float get_x1(const size_t col);
-    float get_y1(const size_t row);
+    point get_top_left_corner(const size_t col, const size_t row);
     void clear();
 };
 
@@ -83,7 +82,7 @@ struct blockmap {
 
 
 /* ----------------------------------------------------------------------------
- * An line segment that delimits a sector -- an edge of a polygon.
+ * A line segment that delimits a sector -- an edge of a polygon.
  * In Doom, these are what's known as linedefs.
  */
 struct edge {
@@ -109,11 +108,11 @@ struct edge {
  * reach the final stop and go wherever they need.
  */
 struct path_stop {
-    float x, y;
+    point pos;
     vector<path_link> links;
     
     path_stop(
-        float x = 0, float y = 0, vector<path_link> links = vector<path_link>()
+        const point pos = point(), vector<path_link> links = vector<path_link>()
     );
     bool has_link(path_stop* other_stop);
     void fix_pointers(area_data &a);
@@ -144,11 +143,9 @@ struct path_link {
  * Information about a sector's texture.
  */
 struct sector_texture_info {
-    float scale_x; //Texture scale, X...
-    float scale_y; //and Y.
-    float trans_x; //X translation...
-    float trans_y; //and Y.
-    float rot;     //Rotation.
+    point scale; //Texture scale.
+    point translation; //Translation.
+    float rot; //Rotation.
     ALLEGRO_BITMAP* bitmap;
     ALLEGRO_COLOR tint;
     string file_name;
@@ -257,14 +254,14 @@ struct mob_gen {
     unsigned char category;
     mob_type* type;
     
-    float x, y;
+    point pos;
     float angle;
     string vars;
     
     mob_gen(
-        float x = 0, float y = 0,
-        unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL,
-        float angle = 0, string vars = ""
+        const point pos = point(),
+        const unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL,
+        const float angle = 0, const string &vars = ""
     );
 };
 
@@ -280,17 +277,16 @@ struct tree_shadow {
     string file_name;
     ALLEGRO_BITMAP* bitmap;
     
-    float x, y;  //X and Y of the center.
-    float w, h;  //Width and height.
-    float angle; //Rotation angle.
+    point center; //X and Y of the center.
+    point size;   //Width and height.
+    float angle;  //Rotation angle.
     unsigned char alpha; //Opacity.
-    float sway_x; //Swaying is multiplied by this, horizontally.
-    float sway_y; //And vertically.
+    point sway;   //Swaying is multiplied by this.
     
     tree_shadow(
-        float x = 0, float y = 0, float w = 100, float h = 100,
-        float an = 0, unsigned char al = 255, string f = "",
-        float sx = 1, float sy = 0
+        const point center = point(), const point size = point(100, 100),
+        const float angle = 0, const unsigned char alpha = 255,
+        const string &file_name = "", const point sway = point(1, 1)
     );
 };
 
@@ -361,14 +357,18 @@ void get_cce(
     vector<vertex> &vertexes_left, vector<size_t> &ears,
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
+vertex* get_merge_vertex(
+    const point p,
+    vector<vertex*> &all_vertexes, const float merge_radius,
+    size_t* nr = NULL
+);
 vector<path_stop*> get_path(
-    const float start_x, const float start_y,
-    const float end_x, const float end_y,
+    const point start, const point end,
     mob** obstacle_found, bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(
-    float x, float y, float lx1, float ly1, float lx2, float ly2
+    const point p, const point lp1, const point lp2
 );
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
@@ -376,32 +376,31 @@ vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(sector* s);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(
-    const float x, const float y, size_t* sector_nr, const bool use_blockmap
+    const point p, size_t* sector_nr, const bool use_blockmap
 );
 void get_sector_bounding_box(
-    sector* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+    sector* s_ptr, point* min_coords, point* max_coords
 );
 void get_shadow_bounding_box(
-    tree_shadow* s_ptr, float* min_x, float* min_y, float* max_x, float* max_y
+    tree_shadow* s_ptr, point* min_coords, point* max_coords
 );
+bool is_edge_valid(edge* l);
 bool is_path_link_ok(path_stop* s1, path_stop* s2);
+bool is_polygon_clockwise(vector<vertex*> &vertexes);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr
 );
-bool is_point_in_sector(const float x, const float y, sector* s_ptr);
+bool is_point_in_sector(const point p, sector* s_ptr);
 bool is_point_in_triangle(
-    float px, float py,
-    float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
+    const point p, const point tp1, const point tp2, const point tp3,
     bool loq
 );
 bool lines_intersect(
-    float l1x1, float l1y1, float l1x2, float l1y2,
-    float l2x1, float l2y1, float l2x2, float l2y2,
+    const point l1p1, const point l1p2, const point l2p1, const point l2p2,
     float* ur, float* ul
 );
 void triangulate(sector* s_ptr);
-
 
 
 enum SECTOR_TYPES {

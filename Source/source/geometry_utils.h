@@ -13,9 +13,8 @@
 #define GEOMETRY_UTILS_INCLUDED
 
 #define _USE_MATH_DEFINES
+#include <cstddef>
 #include <math.h>
-
-#include "sector.h"
 
 /* ----------------------------------------------------------------------------
  * Simple 2D point.
@@ -23,53 +22,49 @@
 struct point {
     float x, y;
     
-    point(const float x = 0, const float y = 0);
+    point(const float x, const float y);
+    point();
     const point operator +(const point &p) const;
     const point operator -(const point &p) const;
     const point operator *(const point &p) const;
+    const point operator /(const point &p) const;
+    const point operator +(const float n) const;
+    const point operator -(const float n) const;
+    const point operator /(const float n) const;
     point operator +=(const point &p);
+    point operator -=(const point &p);
+    point operator +=(const float n);
+    point operator *=(const float n);
     const bool operator ==(const point &p) const;
     const bool operator !=(const point &p) const;
     const point operator *(const float m) const;
 };
 
 
-void angle_to_coordinates(
-    const float angle, const float magnitude, float* x_coord, float* y_coord
+point angle_to_coordinates(
+    const float angle, const float magnitude
 );
-bool bbox_check(
-    const float cx1, const float cy1, const float cx2, const float cy2,
-    const float r
-);
+bool bbox_check(const point center1, point center2, const float r);
 bool circle_intersects_line(
-    const float cx, const float cy, const float cr,
-    const float x1, const float y1, const float x2, const float y2,
+    const point circle, const float cr,
+    const point line_p1, const point line_p2,
     float* lix = NULL, float* liy = NULL
 );
+float get_angle(const point center, const point focus);
 point get_closest_point_in_line(
     const point l1, const point l2, const point p,
     float* segment_ratio = NULL
 );
-vertex* get_merge_vertex(
-    const float x, const float y,
-    vector<vertex*> &all_vertexes, const float merge_radius,
-    size_t* nr = NULL
-);
-bool is_edge_valid(edge* l);
-bool is_polygon_clockwise(vector<vertex*> &vertexes);
 void move_point(
-    const float x, const float y, const float tx, const float ty,
-    const float speed, const float reach_radius, float* mx, float* my,
+    const point start, const point target,
+    const float speed, const float reach_radius, point* mov,
     float* angle, bool* reached, const float delta_t
 );
 float normalize_angle(float a);
-void rotate_point(
-    const float x, const float y, const float angle,
-    float* final_x, float* final_y
+bool rectangle_intersects_line(
+    const point r1, const point r2,
+    const point l1, const point l2
 );
-bool square_intersects_line(
-    const float sx1, const float sy1, const float sx2, const float sy2,
-    const float lx1, const float ly1, const float lx2, const float ly2
-);
+point rotate_point(const point coords, const float angle);
 
 #endif //ifndef GEOMETRY_UTILS_INCLUDED

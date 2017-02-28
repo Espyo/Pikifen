@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "const.h"
+#include "geometry_utils.h"
 
 /*
  * You can read more about hitboxes
@@ -49,7 +50,7 @@ public:
     string body_part_name;
     size_t body_part_index;   //Cache for performance.
     body_part* body_part_ptr; //Cache for performance.
-    float x, y;  //Center of the hitbox (relative coordinates).
+    point pos;  //Center of the hitbox (relative coordinates).
     float z;     //Bottom of the hitbox (relative coordinates).
     float height;
     float radius;
@@ -72,8 +73,8 @@ public:
     
     hitbox(
         const string &bpn = "", size_t bpi = INVALID, body_part* bpp = NULL,
-        const float x = 0, const float y = 0,
-        const float z = 0, const float height = 128, const float radius = 32
+        const point pos = point(), const float z = 0,
+        const float height = 128, const float radius = 32
     );
 };
 

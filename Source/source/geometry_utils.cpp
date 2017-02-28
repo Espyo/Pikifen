@@ -24,6 +24,16 @@ point::point(const float x, const float y) :
 
 
 /* ----------------------------------------------------------------------------
+ * Constructs a point, with the coordinates set to 0,0.
+ */
+point::point() :
+    x(0),
+    y(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds the coordinates of two points.
  */
 const point point::operator +(const point &p) const {
@@ -48,11 +58,73 @@ const point point::operator *(const point &p) const {
 
 
 /* ----------------------------------------------------------------------------
+ * Divides the coordinates of two points.
+ */
+const point point::operator /(const point &p) const {
+    return point(x / p.x, y / p.y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a number to the coordinates.
+ */
+const point point::operator +(const float n) const {
+    return point(x + n, y + n);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Subtracts a number from each coordinates.
+ */
+const point point::operator -(const float n) const {
+    return point(x - n, y - n);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Divides the coordinates by a number.
+ */
+const point point::operator /(const float n) const {
+    return point(x / n, y / n);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Adds the coordinates of another point to this one's.
  */
 point point::operator +=(const point &p) {
     x += p.x;
     y += p.y;
+    return point(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Subtracts the coordinates of another point to this one's.
+ */
+point point::operator -=(const point &p) {
+    x -= p.x;
+    y -= p.y;
+    return point(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a given number to the coordinates.
+ */
+point point::operator +=(const float n) {
+    x += n;
+    y += n;
+    return point(x, y);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Multiplies the coordinates by a given number.
+ */
+point point::operator *=(const float n) {
+    x *= n;
+    y *= n;
     return point(x, y);
 }
 
@@ -86,54 +158,53 @@ const point point::operator *(const float m) const {
  * Returns the vector coordinates of an angle.
  * angle:     The angle.
  * magnitude: Its magnitude.
- * *_coord:   Variables to return the coordinates to.
  */
-void angle_to_coordinates(
-    const float angle, const float magnitude, float* x_coord, float* y_coord
+point angle_to_coordinates(
+    const float angle, const float magnitude
 ) {
-    *x_coord = cos(angle) * magnitude;
-    *y_coord = sin(angle) * magnitude;
+    return point(cos(angle) * magnitude, sin(angle) * magnitude);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Checks if two spheres are colliding via a bounding-box check.
- * c*1: Coordinates of the first sphere.
- * c*2: Coordinates of the second sphere.
- * r:   Range of the bounding box.
+ * center1: Coordinates of the first sphere.
+ * center2: Coordinates of the second sphere.
+ * r:       Range of the bounding box.
  */
-bool bbox_check(
-    const float cx1, const float cy1, const float cx2, const float cy2,
-    const float r
-) {
-    return (fabs(cx1 - cx2) <= r && fabs(cy1 - cy2) <= r);
+bool bbox_check(const point center1, const point center2, const float r) {
+    return
+        (
+            fabs(center1.x - center2.x) <= r &&
+            fabs(center1.y - center2.y) <= r
+        );
 }
 
 
 /* ----------------------------------------------------------------------------
  * Returns whether a circle is touching a line segment or not.
- * cx, cy: Coordinates of the circle.
- * cr:     Radius of the circle.
- * x*, y*: Coordinates of the line.
+ * circle: Coordinates of the circle.
+ * radius: Radius of the circle.
+ * line_*: Coordinates of the line.
  * li*:    If not NULL, the line intersection coordinates are returned here.
  */
 bool circle_intersects_line(
-    const float cx, const float cy, const float cr,
-    const float x1, const float y1, const float x2, const float y2,
+    const point circle, const float radius,
+    const point line_p1, const point line_p2,
     float* lix, float* liy
 ) {
 
     //Code by
-    //http://www.melloland.com/scripts-and-tutos/
-    //collision-detection-between-circles-and-lines
+    //  http://www.melloland.com/scripts-and-tutos/
+    //  collision-detection-between-circles-and-lines
     
-    float vx = x2 - x1;
-    float vy = y2 - y1;
-    float xdiff = x1 - cx;
-    float ydiff = y1 - cy;
+    float vx = line_p2.x - line_p1.x;
+    float vy = line_p2.y - line_p1.y;
+    float xdiff = line_p1.x - circle.x;
+    float ydiff = line_p1.y - circle.y;
     float a = vx * vx + vy * vy;
     float b = 2 * ((vx * xdiff) + (vy * ydiff));
-    float c = xdiff * xdiff + ydiff * ydiff - cr * cr;
+    float c = xdiff * xdiff + ydiff * ydiff - radius * radius;
     float quad = b * b - (4 * a * c);
     if (quad >= 0) {
         //An infinite collision is happening, but let's not stop here
@@ -141,12 +212,14 @@ bool circle_intersects_line(
         for (int i = -1; i <= 1; i += 2) {
             //Returns the two coordinates of the intersection points
             float t = (i * -b + quadsqrt) / (2 * a);
-            float x = x1 + (i * vx * t);
-            float y = y1 + (i * vy * t);
+            float x = line_p1.x + (i * vx * t);
+            float y = line_p1.y + (i * vy * t);
             //If one of them is in the boundaries of the segment, it collides
             if (
-                x >= min(x1, x2) && x <= max(x1, x2) &&
-                y >= min(y1, y2) && y <= max(y1, y2)
+                x >= min(line_p1.x, line_p2.x) &&
+                x <= max(line_p1.x, line_p2.x) &&
+                y >= min(line_p1.y, line_p2.y) &&
+                y <= max(line_p1.y, line_p2.y)
             ) {
                 if(lix) *lix = x;
                 if(liy) *liy = y;
@@ -159,8 +232,18 @@ bool circle_intersects_line(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the angle between two points.
+ * In other words, this is the angle "center" is facing when it is looking
+ * at "focus".
+ */
+float get_angle(const point center, const point focus) {
+    return atan2(focus.y - center.y, focus.x - center.x);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the closest point in a line to a given point.
-    * l1, l2:        Points of the line.
+   * l1, l2:      Points of the line.
  * p:             Reference point.
  * segment_ratio: If not NULL, the ratio from l1 to l2 is returned here.
    * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
@@ -191,101 +274,38 @@ point get_closest_point_in_line(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the closest vertex that can be merged with the specified point.
- * Returns NULL if there is no vertex close enough to merge.
- * x, y:         Coordinates of the point.
- * all_vertexes: Vector with all of the vertexes in the area.
- * merge_radius: Minimum radius to merge.
- * v_nr:         If not NULL, the vertex's number is returned here.
- */
-vertex* get_merge_vertex(
-    const float x, const float y, vector<vertex*> &all_vertexes,
-    const float merge_radius, size_t* v_nr
-) {
-    dist closest_dist = 0;
-    vertex* closest_v = NULL;
-    size_t closest_nr = INVALID;
-    
-    for(size_t v = 0; v < all_vertexes.size(); ++v) {
-        vertex* v_ptr = all_vertexes[v];
-        dist d(x, y, v_ptr->x, v_ptr->y);
-        if(
-            d <= merge_radius &&
-            (d < closest_dist || !closest_v)
-        ) {
-            closest_dist = d;
-            closest_v = v_ptr;
-            closest_nr = v;
-        }
-    }
-    
-    if(v_nr) *v_nr = closest_nr;
-    return closest_v;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether or not an edge is valid.
- * An edge is valid if it has non-NULL vertexes.
- */
-bool is_edge_valid(edge* l) {
-    if(!l->vertexes[0]) return false;
-    if(!l->vertexes[1]) return false;
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a polygon was created clockwise or anti-clockwise,
- * given the order of its vertexes.
- */
-bool is_polygon_clockwise(vector<vertex*> &vertexes) {
-    //Solution by http://stackoverflow.com/a/1165943
-    float sum = 0;
-    for(size_t v = 0; v < vertexes.size(); ++v) {
-        vertex* v_ptr = vertexes[v];
-        vertex* v2_ptr = get_next_in_vector(vertexes, v);
-        sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
-    }
-    return sum < 0;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the movement necessary to move a point.
- * x/y:          Coordinates of the initial point.
- * tx/ty:        Coordinates of the target point.
+ * start:        Coordinates of the initial point.
+ * target:       Coordinates of the target point.
  * speed:        Speed at which the point can move.
  * reach_radius: If the point is within this range of the target,
    * consider it as already being there.
- * mx/my:        Variables to return the amount of movement to.
+ * mov:          Variable to return the amount of movement to.
  * angle:        Variable to return the angle the point faces to.
  * reached:      Variable to return whether the point reached the target.
+ * delta_t:      Duration of the current tick.
  */
 void move_point(
-    const float x, const float y, const float tx, const float ty,
-    const float speed, const float reach_radius, float* mx, float* my,
-    float* angle, bool* reached, const float delta_t
+    const point start, const point target,
+    const float speed, const float reach_radius,
+    point* mov, float* angle, bool* reached, const float delta_t
 ) {
-    float dx = tx - x, dy = ty - y;
-    float dist = sqrt(dx * dx + dy * dy);
+    point dif = target - start;
+    float dis = sqrt(dif.x * dif.x + dif.y * dif.y);
     
-    if(dist > reach_radius) {
+    if(dis > reach_radius) {
         float move_amount =
-            min((double) (dist / delta_t / 2.0f), (double) speed);
+            min((double) (dis / delta_t / 2.0f), (double) speed);
             
-        dx *= move_amount / dist;
-        dy *= move_amount / dist;
+        dif *= (move_amount / dis);
         
-        if(mx) *mx = dx;
-        if(my) *my = dy;
-        if(angle) *angle = atan2(dy, dx);
+        if(mov) *mov = dif;
+        if(angle) *angle = atan2(dif.y, dif.x);
         if(reached) *reached = false;
         
     } else {
     
-        if(mx) *mx = 0;
-        if(my) *my = 0;
+        if(mov) *mov = point();
         if(reached) *reached = true;
     }
 }
@@ -302,51 +322,70 @@ float normalize_angle(float a) {
 
 
 /* ----------------------------------------------------------------------------
- * Rotates a point by an angle.
- * The x and y are meant to represent the difference
- * between the point and the center of the rotation.
+ * Returns whether a rectangle intersects with a line segment.
+ * Also returns true if the line is fully inside the rectangle.
+ * r*: Rectangle coordinates.
+ * l*: Line coordinates.
  */
-void rotate_point(
-    const float x, const float y, const float angle,
-    float* final_x, float* final_y
+bool rectangle_intersects_line(
+    const point r1, const point r2,
+    const point l1, const point l2
 ) {
-    float c = cos(angle);
-    float s = sin(angle);
-    if(final_x) *final_x = c * x - s * y;
-    if(final_y) *final_y = s * x + c * y;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns whether a square intersects with a line segment.
- * Also returns true if the line is fully inside the square.
- * s**: Square coordinates.
- * l**: Line coordinates.
- */
-bool square_intersects_line(
-    const float sx1, const float sy1, const float sx2, const float sy2,
-    const float lx1, const float ly1, const float lx2, const float ly2
-) {
+    //Line crosses left side?
     if(
-        //Line crosses left side?
-        lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx1, sy2, NULL, NULL) ||
-        //Line crosses right side?
-        lines_intersect(lx1, ly1, lx2, ly2, sx2, sy1, sx2, sy2, NULL, NULL) ||
-        //Line crosses top side?
-        lines_intersect(lx1, ly1, lx2, ly2, sx1, sy1, sx2, sy1, NULL, NULL) ||
-        //Line crosses bottom side?
-        lines_intersect(lx1, ly1, lx2, ly2, sx1, sy2, sx2, sy2, NULL, NULL)
+        lines_intersect(
+            l1, l2, point(r1.x, r1.y), point(r1.x, r2.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses right side?
+    if(
+        lines_intersect(
+            l1, l2, point(r2.x, r1.y), point(r2.x, r2.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses top side?
+    if(
+        lines_intersect(
+            l1, l2, point(r1.x, r1.y), point(r2.x, r1.y), NULL, NULL
+        )
+    ) {
+        return true;
+    }
+    //Line crosses bottom side?
+    if(
+        lines_intersect(
+            l1, l2, point(r1.x, r2.y), point(r2.x, r2.y), NULL, NULL
+        )
     ) {
         return true;
     }
     
+    //Are both points inside the rectangle?
     if(
-        (lx1 >= sx1 && lx2 >= sx1) &&
-        (lx1 <= sx2 && lx2 <= sx2) &&
-        (ly1 >= sy1 && ly2 >= sy1) &&
-        (ly1 <= sy2 && ly2 <= sy2)
-    ) return true;
+        (l1.x >= r1.x && l2.x >= r1.x) &&
+        (l1.x <= r2.x && l2.x <= r2.x) &&
+        (l1.y >= r1.y && l2.y >= r1.y) &&
+        (l1.y <= r2.y && l2.y <= r2.y)
+    ) {
+        return true;
+    }
     
     return false;
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Rotates a point by an angle.
+ * The x and y are meant to represent the difference
+ * between the point and the center of the rotation.
+ */
+point rotate_point(const point coords, const float angle) {
+    float c = cos(angle);
+    float s = sin(angle);
+    return point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);
 }

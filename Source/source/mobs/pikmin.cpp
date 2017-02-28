@@ -23,10 +23,10 @@
  * Creates a Pikmin mob.
  */
 pikmin::pikmin(
-    const float x, const float y, pikmin_type* type,
+    const point pos, pikmin_type* type,
     const float angle, const string &vars
 ) :
-    mob(x, y, type, angle, vars),
+    mob(pos, type, angle, vars),
     pik_type(type),
     attack_time(0),
     pluck_reserved(false),
@@ -88,7 +88,7 @@ void pikmin::do_attack(mob* m, hitbox* victim_hitbox) {
     sfx_pikmin_attack.play(0.06, false, 0.8f);
     
     particle smack_p(
-        PARTICLE_TYPE_SMACK, x, y,
+        PARTICLE_TYPE_SMACK, pos,
         64, SMACK_PARTICLE_DUR, PARTICLE_PRIORITY_MEDIUM
     );
     smack_p.bitmap = bmp_smack;
@@ -107,14 +107,12 @@ void pikmin::do_attack(mob* m, hitbox* victim_hitbox) {
 void pikmin::set_connected_hitbox_info(hitbox* h_ptr, mob* mob_ptr) {
     if(!h_ptr) return;
     
-    float actual_hx, actual_hy;
-    rotate_point(h_ptr->x, h_ptr->y, mob_ptr->angle, &actual_hx, &actual_hy);
-    actual_hx += mob_ptr->x; actual_hy += mob_ptr->y;
+    point actual_h_pos = rotate_point(h_ptr->pos, mob_ptr->angle);
+    actual_h_pos += mob_ptr->pos;
     
-    float x_dif = x - actual_hx;
-    float y_dif = y - actual_hy;
+    point pos_dif = pos - actual_h_pos;
     coordinates_to_angle(
-        x_dif, y_dif, &connected_hitbox_angle, &connected_hitbox_dist
+        pos_dif, &connected_hitbox_angle, &connected_hitbox_dist
     );
     
     //Relative to 0 degrees.
@@ -129,26 +127,23 @@ void pikmin::set_connected_hitbox_info(hitbox* h_ptr, mob* mob_ptr) {
  * Teleports the Pikmin to the hitbox it is connected to.
  */
 void pikmin::teleport_to_connected_hitbox() {
-    speed_x = speed_y = speed_z = 0;
+    speed.x = speed.y = speed_z = 0;
     
     hitbox* h_ptr =
         gui_hitbox(focused_mob, connected_hitbox_nr);
     if(h_ptr) {
-        float actual_hx, actual_hy;
-        rotate_point(
-            h_ptr->x, h_ptr->y, focused_mob->angle, &actual_hx, &actual_hy
-        );
-        actual_hx += focused_mob->x; actual_hy += focused_mob->y;
+        point actual_h_pos = rotate_point(h_ptr->pos, focused_mob->angle);
+        actual_h_pos += focused_mob->pos;
         
-        float final_px, final_py;
-        angle_to_coordinates(
-            connected_hitbox_angle + focused_mob->angle,
-            connected_hitbox_dist * h_ptr->radius,
-            &final_px, &final_py);
-        final_px += actual_hx; final_py += actual_hy;
+        point final_pos =
+            angle_to_coordinates(
+                connected_hitbox_angle + focused_mob->angle,
+                connected_hitbox_dist * h_ptr->radius
+            );
+        final_pos += actual_h_pos;
         
-        chase(final_px, final_py, NULL, NULL, true);
-        face(atan2(focused_mob->y - y, focused_mob->x - x));
+        chase(final_pos, NULL, true);
+        face(get_angle(pos, focused_mob->pos));
         if(attack_time == 0) attack_time = pik_type->attack_interval;
         
     }
@@ -157,13 +152,13 @@ void pikmin::teleport_to_connected_hitbox() {
 
 /* ----------------------------------------------------------------------------
  * Returns the buried Pikmin closest to a leader. Used when auto-plucking.
- * x/y:             Coordinates of the leader.
+ * pos:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
  * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
    * (i.e. already chosen to be plucked by another leader).
  */
 pikmin* get_closest_buried_pikmin(
-    const float x, const float y, dist* d, const bool ignore_reserved
+    const point pos, dist* d, const bool ignore_reserved
 ) {
     dist closest_distance = 0;
     pikmin* closest_pikmin = NULL;
@@ -172,7 +167,7 @@ pikmin* get_closest_buried_pikmin(
     for(size_t p = 0; p < n_pikmin; ++p) {
         if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_BURIED) continue;
         
-        dist dis(x, y, pikmin_list[p]->x, pikmin_list[p]->y);
+        dist dis(pos, pikmin_list[p]->pos);
         if(closest_pikmin == NULL || dis < closest_distance) {
         
             if(!(ignore_reserved || pikmin_list[p]->pluck_reserved)) {
@@ -203,12 +198,12 @@ void pikmin::tick_class_specifics() {
         to_delete = true;
         
         particle par(
-            PARTICLE_TYPE_PIKMIN_SPIRIT, x, y,
+            PARTICLE_TYPE_PIKMIN_SPIRIT, pos,
             pik_type->radius * 2, 2.0f
         );
         par.bitmap = bmp_pikmin_spirit;
-        par.speed_x = 0;
-        par.speed_y = -50;
+        par.speed.x = 0;
+        par.speed.y = -50;
         par.friction = 0.5;
         par.gravity = 0;
         par.color = pik_type->main_color;
@@ -228,10 +223,8 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     
     if(!s_ptr) return;
     
-    float draw_x, draw_y;
-    float draw_w, draw_h;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    point draw_size = get_sprite_dimensions(this, s_ptr);
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
@@ -251,22 +244,19 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         s_ptr->bitmap,
-        draw_x, draw_y,
-        draw_w, draw_h,
+        draw_pos, draw_size,
         angle, &effects
     );
     
-    float w_mult = draw_w / s_ptr->game_w;
-    float h_mult = draw_h / s_ptr->game_h;
+    point size_mult = draw_size / s_ptr->game_size;
     
     if(s_ptr->top_visible) {
-        float top_x = s_ptr->top_x;
-        float top_y = s_ptr->top_y;
-        rotate_point(s_ptr->top_x, s_ptr->top_y, angle, &top_x, &top_y);
+        point top_pos = s_ptr->top_pos;
+        top_pos = rotate_point(s_ptr->top_pos, angle);
         draw_sprite_with_effects(
             pik_type->bmp_top[maturity],
-            x + top_x, y + top_y,
-            s_ptr->top_w, s_ptr->top_h,
+            pos + top_pos,
+            s_ptr->top_size,
             s_ptr->top_angle + angle,
             &effects
         );
@@ -275,8 +265,8 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     if(is_idle) {
         draw_sprite(
             bmp_idle_glow,
-            x, y,
-            30 * w_mult, 30 * h_mult,
+            pos,
+            size_mult * 30,
             area_time_passed * IDLE_GLOW_SPIN_SPEED,
             type->main_color
         );
@@ -285,7 +275,10 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     float status_bmp_scale;
     ALLEGRO_BITMAP* status_bmp = get_status_bitmap(&status_bmp_scale);
     if(status_bmp) {
-        draw_sprite(status_bmp, x, y, type->radius * 2 * status_bmp_scale, -1);
+        draw_sprite(
+            status_bmp, pos,
+            point(type->radius * 2 * status_bmp_scale, -1)
+        );
     }
     
 }

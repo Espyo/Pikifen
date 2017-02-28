@@ -17,18 +17,12 @@
 /* ----------------------------------------------------------------------------
  * Creates a ship mob.
  */
-ship::ship(float x, float y, ship_type* type, float angle, const string &vars) :
-    mob(x, y, type, angle, vars),
-    shi_type(type),
-    beam_final_x(0),
-    beam_final_y(0) {
+ship::ship(const point pos, ship_type* type, float angle, const string &vars) :
+    mob(pos, type, angle, vars),
+    shi_type(type) {
     
-    rotate_point(
-        type->beam_offset_x, type->beam_offset_y,
-        angle, &beam_final_x, &beam_final_y
-    );
-    beam_final_x += x;
-    beam_final_y += y;
+    beam_final_pos = rotate_point(type->beam_offset, angle);
+    beam_final_pos += pos;
 }
 
 
@@ -40,8 +34,8 @@ void ship::draw(sprite_effect_manager* effect_manager) {
     mob::draw();
     
     al_draw_circle(
-        beam_final_x,
-        beam_final_y,
+        beam_final_pos.x,
+        beam_final_pos.y,
         shi_type->beam_radius,
         al_map_rgb(
             ship_beam_ring_color[0],

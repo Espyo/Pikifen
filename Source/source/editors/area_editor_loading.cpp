@@ -313,10 +313,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         cancel_new_sector();
         new_sector_valid_line =
-            is_new_sector_line_valid(
-                snap_to_grid(mouse_cursor_w.x),
-                snap_to_grid(mouse_cursor_w.y)
-            );
+            is_new_sector_line_valid(snap_to_grid(mouse_cursor_w));
         if(sec_mode == ESM_NEW_SECTOR) sec_mode = ESM_NONE;
         else sec_mode = ESM_NEW_SECTOR;
     };

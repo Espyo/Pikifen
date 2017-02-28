@@ -29,25 +29,14 @@ using namespace std;
  */
 sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b,
-    const float gw, const float gh, const vector<hitbox> &h
+    const point g_size, const vector<hitbox> &h
 ) :
     name(name),
     bitmap(b),
-    game_w(gw),
-    game_h(gh),
+    game_size(g_size),
     hitboxes(h),
-    file_x(0),
-    file_y(0),
-    file_w(0),
-    file_h(0),
-    offs_x(0),
-    offs_y(0),
     top_visible(true),
-    top_x(0),
-    top_y(0),
     top_angle(0),
-    top_w(32),
-    top_h(32),
     parent_bmp(nullptr) {
     
     calculate_hitbox_span();
@@ -58,34 +47,29 @@ sprite::sprite(
  * Creates a sprite using a parent bitmap and the coordinates.
  * name:   Internal name, should be unique.
  * b:      Parent bitmap.
- * bx, by: X and Y of the top-left corner of the sprite, in the parent's bitmap.
- * bw, bh: Width and height of the sprite, in the parent's bitmap.
- * gw, gh: In-game width and height of the sprite.
+ * b_pos:  X and Y of the top-left corner of the sprite, in the parent's bitmap.
+ * b_size: Width and height of the sprite, in the parent's bitmap.
+ * g_size: In-game width and height of the sprite.
  * h:      List of hitboxes.
  */
 sprite::sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const int bx, const int by,
-    const int bw, const int bh, const float gw, const float gh,
+    const string &name, ALLEGRO_BITMAP* const b, const point b_pos,
+    const point b_size, const point g_size,
     const vector<hitbox> &h
 ) :
     name(name),
     parent_bmp(b),
-    bitmap(b ? al_create_sub_bitmap(b, bx, by, bw, bh) : nullptr),
-    game_w(gw),
-    game_h(gh),
+    bitmap(
+        b ?
+        al_create_sub_bitmap(b, b_pos.x, b_pos.y, b_size.x, b_size.y) :
+        nullptr
+    ),
+    game_size(g_size),
     hitboxes(h),
-    file_x(bx),
-    file_y(by),
-    file_w(bw),
-    file_h(bh),
-    offs_x(0),
-    offs_y(0),
+    file_pos(b_pos),
+    file_size(b_size),
     top_visible(true),
-    top_x(0),
-    top_y(0),
-    top_angle(0),
-    top_w(32),
-    top_h(32) {
+    top_angle(0) {
     
     calculate_hitbox_span();
 }
@@ -99,20 +83,14 @@ sprite::sprite(const sprite &s2) :
     parent_bmp(s2.parent_bmp),
     bitmap(s2.bitmap),
     hitboxes(s2.hitboxes),
-    game_w(s2.game_w),
-    game_h(s2.game_h),
+    game_size(s2.game_size),
     file(s2.file),
-    file_x(s2.file_x),
-    file_y(s2.file_y),
-    file_w(s2.file_w),
-    file_h(s2.file_h),
-    offs_x(s2.offs_x),
-    offs_y(s2.offs_y),
+    file_pos(s2.file_pos),
+    file_size(s2.file_size),
+    offset(s2.offset),
     top_visible(s2.top_visible),
-    top_x(s2.top_x),
-    top_y(s2.top_y),
-    top_w(s2.top_w),
-    top_h(s2.top_h),
+    top_pos(s2.top_pos),
+    top_size(s2.top_size),
     top_angle(s2.top_angle),
     hitbox_span(s2.hitbox_span) {
     
@@ -136,7 +114,7 @@ void sprite::calculate_hitbox_span() {
     for(size_t h = 0; h < hitboxes.size(); ++h) {
         hitbox* h_ptr = &hitboxes[h];
         
-        float d = dist(0, 0, h_ptr->x, h_ptr->y).to_float();
+        float d = dist(point(0, 0), h_ptr->pos).to_float();
         d += h_ptr->radius;
         hitbox_span = max(hitbox_span, d);
     }
@@ -453,8 +431,8 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             vector<string> coords =
                 split(hitbox_node->get_child_by_name("coords")->value);
             if(coords.size() >= 3) {
-                cur_hitbox.x = s2f(coords[0]);
-                cur_hitbox.y = s2f(coords[1]);
+                cur_hitbox.pos.x = s2f(coords[0]);
+                cur_hitbox.pos.y = s2f(coords[1]);
                 cur_hitbox.z = s2f(coords[2]);
             }
             cur_hitbox.height =
@@ -519,28 +497,34 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             new sprite(
             sprite_node->name,
             parent,
-            s2i(sprite_node->get_child_by_name("file_x")->value),
-            s2i(sprite_node->get_child_by_name("file_y")->value),
-            s2i(sprite_node->get_child_by_name("file_w")->value),
-            s2i(sprite_node->get_child_by_name("file_h")->value),
-            s2f(sprite_node->get_child_by_name("game_w")->value),
-            s2f(sprite_node->get_child_by_name("game_h")->value),
+            point(
+                s2i(sprite_node->get_child_by_name("file_x")->value),
+                s2i(sprite_node->get_child_by_name("file_y")->value)
+            ),
+            point(
+                s2i(sprite_node->get_child_by_name("file_w")->value),
+                s2i(sprite_node->get_child_by_name("file_h")->value)
+            ),
+            point(
+                s2f(sprite_node->get_child_by_name("game_w")->value),
+                s2f(sprite_node->get_child_by_name("game_h")->value)
+            ),
             hitboxes
         );
         adb.sprites.push_back(new_s);
         
         new_s->file = sprite_node->get_child_by_name("file")->value;
         new_s->parent_bmp = parent;
-        new_s->offs_x = s2f(sprite_node->get_child_by_name("offs_x")->value);
-        new_s->offs_y = s2f(sprite_node->get_child_by_name("offs_y")->value);
+        new_s->offset.x = s2f(sprite_node->get_child_by_name("offs_x")->value);
+        new_s->offset.y = s2f(sprite_node->get_child_by_name("offs_y")->value);
         new_s->top_visible =
             s2b(
                 sprite_node->get_child_by_name("top_visible")->value
             );
-        new_s->top_x = s2f(sprite_node->get_child_by_name("top_x")->value);
-        new_s->top_y = s2f(sprite_node->get_child_by_name("top_y")->value);
-        new_s->top_w = s2f(sprite_node->get_child_by_name("top_w")->value);
-        new_s->top_h = s2f(sprite_node->get_child_by_name("top_h")->value);
+        new_s->top_pos.x = s2f(sprite_node->get_child_by_name("top_x")->value);
+        new_s->top_pos.y = s2f(sprite_node->get_child_by_name("top_y")->value);
+        new_s->top_size.x = s2f(sprite_node->get_child_by_name("top_w")->value);
+        new_s->top_size.y = s2f(sprite_node->get_child_by_name("top_h")->value);
         new_s->top_angle =
             s2f(
                 sprite_node->get_child_by_name("top_angle")->value

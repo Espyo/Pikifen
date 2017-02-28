@@ -17,12 +17,12 @@
  * Creates a bridge mob.
  */
 bridge::bridge(
-    const float x, const float y, const float angle, const string &vars
+    const point pos, const float angle, const string &vars
 ) :
-    mob(x, y, spec_mob_types["Bridge"], angle, vars) {
+    mob(pos, spec_mob_types["Bridge"], angle, vars) {
     
     //Search neighboring sectors.
-    get_neighbor_bridge_sectors(get_sector(x, y, NULL, true));
+    get_neighbor_bridge_sectors(get_sector(pos, NULL, true));
     team = MOB_TEAM_OBSTACLE;
     
 }
@@ -71,7 +71,7 @@ void bridge::open(mob* m, void* info1, void* info2) {
     b_ptr->finish_dying();
     
     particle p(
-        PARTICLE_TYPE_BITMAP, m->x, m->y,
+        PARTICLE_TYPE_BITMAP, m->pos,
         80, 2.75, PARTICLE_PRIORITY_MEDIUM
     );
     p.bitmap = bmp_smoke;
@@ -81,8 +81,8 @@ void bridge::open(mob* m, void* info1, void* info2) {
     pg.size_deviation = 16;
     pg.angle = 0;
     pg.angle_deviation = M_PI;
-    pg.speed = 75;
-    pg.speed_deviation = 15;
+    pg.total_speed = 75;
+    pg.total_speed_deviation = 15;
     pg.duration_deviation = 0.25;
     pg.emit(particles);
     
@@ -138,8 +138,8 @@ void init_bridge_mob_type(mob_type* mt) {
     mt->radius = 32;
     mt->max_health = 2000;
     mt->casts_shadow = false;
-    mt->create_mob = [] (float x, float y, float angle, const string & vars) {
-        create_mob(new bridge(x, y, angle, vars));
+    mt->create_mob = [] (point pos, float angle, const string & vars) {
+        create_mob(new bridge(pos, angle, vars));
     };
     mt->load_from_file_func =
         [] (

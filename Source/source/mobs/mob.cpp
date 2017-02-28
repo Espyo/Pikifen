@@ -29,22 +29,18 @@ size_t next_mob_id = 0;
  * Creates a mob of no particular type.
  */
 mob::mob(
-    const float x, const float y, mob_type* type,
+    const point pos, mob_type* type,
     const float angle, const string &vars
 ) :
-    x(x),
-    y(y),
+    pos(pos),
     type(type),
     angle(angle),
     intended_angle(angle),
     anim(&type->anims),
     to_delete(false),
     reached_destination(false),
-    speed_x(0),
-    speed_y(0),
     speed_z(0),
-    home_x(x),
-    home_y(y),
+    home(pos),
     gravity_mult(1.0f),
     push_amount(0),
     push_angle(0),
@@ -55,11 +51,9 @@ mob::mob(
     team(MOB_TEAM_DECORATION),
     chasing(false),
     chase_teleport(false),
-    chase_offs_x(x),
-    chase_offs_y(y),
+    chase_offset(pos),
     chase_teleport_z(nullptr),
-    chase_orig_x(nullptr),
-    chase_orig_y(nullptr),
+    chase_orig_coords(nullptr),
     chase_speed(-1),
     carrying_target(nullptr),
     cur_path_stop_nr(INVALID),
@@ -71,11 +65,9 @@ mob::mob(
     subgroup_type_ptr(nullptr),
     was_thrown(false),
     group(nullptr),
-    group_spot_x(0),
-    group_spot_y(0),
     carry_info(nullptr),
     acceleration(0),
-    speed(0),
+    forward_speed(0),
     chase_free_move(false),
     chase_target_dist(0),
     on_hazard(nullptr),
@@ -86,7 +78,7 @@ mob::mob(
     
     next_mob_id++;
     
-    sector* sec = get_sector(x, y, nullptr, true);
+    sector* sec = get_sector(pos, nullptr, true);
     z = sec->z;
     ground_sector = sec;
     center_sector = sec;
@@ -145,20 +137,19 @@ void mob::tick_brain() {
     if(chasing && !chase_teleport && speed_z == 0) {
     
         //Calculate where the target is.
-        float final_target_x, final_target_y;
-        get_chase_target(&final_target_x, &final_target_y);
+        point final_target_pos = get_chase_target();
         
         if(!chase_teleport) {
         
             if(
-                dist(x, y, final_target_x, final_target_y) > chase_target_dist
+                dist(pos, final_target_pos) > chase_target_dist
             ) {
                 //If it still hasn't reached its target
                 //(or close enough to the target),
                 //time to make it think about how to get there.
                 
                 //Let the mob think about facing the actual target.
-                face(atan2(final_target_y - y, final_target_x - x));
+                face(get_angle(pos, final_target_pos));
                 
             } else {
                 //Reached the location. The mob should now think
@@ -180,16 +171,15 @@ void mob::tick_brain() {
 void mob::tick_misc_logic() {
     //Other things.
     if(group) {
-        float group_center_mx = 0, group_center_my = 0;
+        point group_center_m;
         move_point(
-            group->group_center_x, group->group_center_y,
-            x, y,
+            group->group_center, pos,
             type->move_speed,
             get_leader_to_group_center_dist(this),
-            &group_center_mx, &group_center_my, NULL, NULL, delta_t
+            &group_center_m, NULL, NULL, delta_t
         );
-        group->group_center_x += group_center_mx * delta_t;
-        group->group_center_y += group_center_my * delta_t;
+        group->group_center.x += group_center_m.x * delta_t;
+        group->group_center.y += group_center_m.y * delta_t;
     }
     
     invuln_period.tick(delta_t);
@@ -221,12 +211,12 @@ void mob::tick_physics() {
     bool finished_moving = false;
     bool doing_slide = false;
     
-    float new_x = x, new_y = y, new_z = z;
+    point new_pos = pos;
+    float new_z = z;
     sector* new_ground_sector = ground_sector;
     float pre_move_ground_z = ground_sector->z;
     
-    float move_speed_x = speed_x;
-    float move_speed_y = speed_y;
+    point move_speed = speed;
     
     float radius_to_use = type->radius;
     
@@ -252,12 +242,11 @@ void mob::tick_physics() {
         );
         
     if(chasing) {
-        float final_target_x, final_target_y;
-        get_chase_target(&final_target_x, &final_target_y);
+        point final_target_pos = get_chase_target();
         
         if(chase_teleport) {
             sector* sec =
-                get_sector(final_target_x, final_target_y, NULL, true);
+                get_sector(final_target_pos, NULL, true);
             if(!sec) {
                 //No sector, invalid teleport. No move.
                 return;
@@ -267,16 +256,15 @@ void mob::tick_physics() {
                     ground_sector = sec;
                     z = *chase_teleport_z;
                 }
-                speed_x = speed_y = speed_z = 0;
-                x = final_target_x;
-                y = final_target_y;
+                speed.x = speed.y = speed_z = 0;
+                pos = final_target_pos;
                 finished_moving = true;
             }
             
         } else {
         
             //Make it go to the direction it wants.
-            float d = dist(x, y, final_target_x, final_target_y).to_float();
+            float d = dist(pos, final_target_pos).to_float();
             
             float move_amount =
                 min(
@@ -288,11 +276,11 @@ void mob::tick_physics() {
             
             float movement_angle =
                 can_free_move ?
-                atan2(final_target_y - y, final_target_x - x) :
+                get_angle(pos, final_target_pos) :
                 angle;
                 
-            move_speed_x = cos(movement_angle) * move_amount;
-            move_speed_y = sin(movement_angle) * move_amount;
+            move_speed.x = cos(movement_angle) * move_amount;
+            move_speed.y = sin(movement_angle) * move_amount;
         }
     }
     
@@ -303,9 +291,9 @@ void mob::tick_physics() {
         //Let's place a cap.
         push_amount =
             min(push_amount, (float) ((type->radius / delta_t) - chase_speed));
-        move_speed_x +=
+        move_speed.x +=
             cos(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
-        move_speed_y +=
+        move_speed.y +=
             sin(push_angle) * (push_amount + MOB_PUSH_EXTRA_AMOUNT);
     }
     
@@ -316,7 +304,7 @@ void mob::tick_physics() {
     //from the movement speed.
     while(!finished_moving) {
     
-        if(move_speed_x == 0 && move_speed_y == 0) break;
+        if(move_speed.x == 0 && move_speed.y == 0) break;
         
         //Start by checking sector collisions.
         //For this, we will only check if the mob is intersecting
@@ -326,14 +314,14 @@ void mob::tick_physics() {
         //It's pretty naive...but it works!
         bool successful_move = true;
         
-        new_x = x + delta_t * move_speed_x;
-        new_y = y + delta_t * move_speed_y;
+        new_pos.x = pos.x + delta_t * move_speed.x;
+        new_pos.y = pos.y + delta_t * move_speed.y;
         new_z = z;
         new_ground_sector = ground_sector;
         set<edge*> intersecting_edges;
         
         //Get the sector the mob will be on.
-        sector* new_center_sector = get_sector(new_x, new_y, NULL, true);
+        sector* new_center_sector = get_sector(new_pos, NULL, true);
         sector* step_sector = new_center_sector;
         
         if(!new_center_sector) {
@@ -352,10 +340,10 @@ void mob::tick_physics() {
         //the edges in the same block the mob is on.
         //This way, we won't check for edges that are really far away.
         //Use the bounding box to know which blockmap blocks the mob will be on.
-        size_t bx1 = cur_area_data.bmap.get_col(new_x - radius_to_use);
-        size_t bx2 = cur_area_data.bmap.get_col(new_x + radius_to_use);
-        size_t by1 = cur_area_data.bmap.get_row(new_y - radius_to_use);
-        size_t by2 = cur_area_data.bmap.get_row(new_y + radius_to_use);
+        size_t bx1 = cur_area_data.bmap.get_col(new_pos.x - radius_to_use);
+        size_t bx2 = cur_area_data.bmap.get_col(new_pos.x + radius_to_use);
+        size_t by1 = cur_area_data.bmap.get_row(new_pos.y - radius_to_use);
+        size_t by2 = cur_area_data.bmap.get_row(new_pos.y + radius_to_use);
         
         if(
             bx1 == INVALID || bx2 == INVALID ||
@@ -366,9 +354,9 @@ void mob::tick_physics() {
         }
         
         float move_angle;
-        float move_speed;
+        float total_move_speed;
         coordinates_to_angle(
-            move_speed_x, move_speed_y, &move_angle, &move_speed
+            move_speed, &move_angle, &total_move_speed
         );
         
         //Angle to slide towards.
@@ -391,9 +379,13 @@ void mob::tick_physics() {
                     
                     if(
                         !circle_intersects_line(
-                            new_x, new_y, radius_to_use,
-                            e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                            e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                            new_pos, radius_to_use,
+                            point(
+                                e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                            ),
+                            point(
+                                e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                            ),
                             NULL, NULL
                         )
                     ) {
@@ -556,9 +548,9 @@ void mob::tick_physics() {
             
                 float wall_normal;
                 float wall_angle =
-                    atan2(
-                        e_ptr->vertexes[1]->y - e_ptr->vertexes[0]->y,
-                        e_ptr->vertexes[1]->x - e_ptr->vertexes[0]->x
+                    get_angle(
+                        point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                        point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y)
                     );
                     
                 if(wall_sector == 0) {
@@ -614,8 +606,7 @@ void mob::tick_physics() {
         
         if(successful_move) {
             //Good news, the mob can move to this new spot freely.
-            x = new_x;
-            y = new_y;
+            pos = new_pos;
             z = new_z;
             ground_sector = new_ground_sector;
             center_sector = new_center_sector;
@@ -627,8 +618,8 @@ void mob::tick_physics() {
             if(doing_slide) {
                 //We already tried sliding, and we still hit something...
                 //Let's just stop completely. This mob can't go forward.
-                speed_x = 0;
-                speed_y = 0;
+                speed.x = 0;
+                speed.y = 0;
                 finished_moving = true;
                 
             } else {
@@ -637,11 +628,11 @@ void mob::tick_physics() {
                 //To limit the speed, we should use a cross-product of the
                 //movement and slide vectors.
                 //But nuts to that, this is just as nice, and a lot simpler!
-                move_speed *= 1 - (slide_angle_dif / M_PI);
-                angle_to_coordinates(
-                    slide_angle, move_speed, &move_speed_x, &move_speed_y
-                );
-                
+                total_move_speed *= 1 - (slide_angle_dif / M_PI);
+                move_speed = angle_to_coordinates(
+                                 slide_angle, total_move_speed
+                             );
+                             
             }
             
         }
@@ -763,11 +754,10 @@ void mob::tick_class_specifics() {
 /* ----------------------------------------------------------------------------
  * Returns the actual location of the movement target.
  */
-void mob::get_chase_target(float* x, float* y) {
-    *x = chase_offs_x;
-    *y = chase_offs_y;
-    if(chase_orig_x) *x += *chase_orig_x;
-    if(chase_orig_y) *y += *chase_orig_y;
+point mob::get_chase_target() {
+    point p = chase_offset;
+    if(chase_orig_coords) p += (*chase_orig_coords);
+    return p;
 }
 
 
@@ -787,14 +777,13 @@ void mob::get_chase_target(float* x, float* y) {
  * speed:           Speed at which to go to the target. -1 uses the mob's speed.
  */
 void mob::chase(
-    const float offs_x, const float offs_y,
-    float* orig_x, float* orig_y,
+    const point offset, point* orig_coords,
     const bool teleport, float* teleport_z,
     const bool free_move, const float target_distance, const float speed
 ) {
 
-    this->chase_offs_x = offs_x; this->chase_offs_y = offs_y;
-    this->chase_orig_x = orig_x; this->chase_orig_y = orig_y;
+    this->chase_offset = offset;
+    this->chase_orig_coords = orig_coords;
     this->chase_teleport = teleport;
     this->chase_teleport_z = teleport_z;
     this->chase_free_move = free_move;
@@ -814,8 +803,7 @@ void mob::stop_chasing() {
     reached_destination = false;
     chase_teleport_z = NULL;
     
-    speed_x = 0;
-    speed_y = 0;
+    speed.x = speed.y = 0;
 }
 
 
@@ -943,15 +931,15 @@ void mob::set_var(const string &name, const string &value) {
  */
 void mob::start_dying() {
     health = 0;
-    particle p(PARTICLE_TYPE_BITMAP, x, y, 64, 1.5, PARTICLE_PRIORITY_LOW);
+    particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
     p.bitmap = bmp_sparkle;
     p.color = al_map_rgb(255, 192, 192);
     particle_generator pg(0, p, 25);
     pg.number_deviation = 5;
     pg.angle = 0;
     pg.angle_deviation = M_PI;
-    pg.speed = 100;
-    pg.speed_deviation = 40;
+    pg.total_speed = 100;
+    pg.total_speed_deviation = 40;
     pg.duration_deviation = 0.5;
     pg.emit(particles);
 }
@@ -968,12 +956,12 @@ void mob::finish_dying() {
             e_ptr->fsm.set_state(ENEMY_EXTRA_STATE_CARRIABLE_WAITING);
         }
         particle par(
-            PARTICLE_TYPE_ENEMY_SPIRIT, x, y,
+            PARTICLE_TYPE_ENEMY_SPIRIT, pos,
             64, 2, PARTICLE_PRIORITY_MEDIUM
         );
         par.bitmap = bmp_enemy_spirit;
-        par.speed_x = 0;
-        par.speed_y = -50;
+        par.speed.x = 0;
+        par.speed.y = -50;
         par.friction = 0.5;
         par.gravity = 0;
         par.color = al_map_rgb(255, 192, 255);
@@ -1015,8 +1003,7 @@ void mob::apply_status_effect(status_type* s, const bool refill) {
     change_maturity_amount_from_status(s->maturity_change_amount);
     if(s->generates_particles) {
         particle_generator pg = *s->particle_gen;
-        pg.follow_x = &this->x;
-        pg.follow_y = &this->y;
+        pg.follow = &this->pos;
         pg.reset();
         particle_generators.push_back(pg);
     }
@@ -1113,10 +1100,9 @@ mob::~mob() {
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about a carrying spot.
  */
-carrier_spot_struct::carrier_spot_struct(const float x, const float y) :
+carrier_spot_struct::carrier_spot_struct(const point pos) :
     state(CARRY_SPOT_FREE),
-    x(x),
-    y(y),
+    pos(pos),
     pik_ptr(NULL) {
     
 }
@@ -1133,8 +1119,6 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     carry_to_ship(carry_to_ship),
     cur_carrying_strength(0),
     cur_n_carriers(0),
-    final_destination_x(0),
-    final_destination_y(0),
     obstacle_ptr(nullptr),
     go_straight(false),
     stuck_state(0),
@@ -1142,9 +1126,11 @@ carry_info_struct::carry_info_struct(mob* m, const bool carry_to_ship) :
     
     for(size_t c = 0; c < m->type->max_carriers; ++c) {
         float angle = (M_PI * 2) / m->type->max_carriers * c;
-        float x = cos(angle) * (m->type->radius + standard_pikmin_radius);
-        float y = sin(angle) * (m->type->radius + standard_pikmin_radius);
-        spot_info.push_back(carrier_spot_struct(x, y));
+        point p(
+            cos(angle) * (m->type->radius + standard_pikmin_radius),
+            sin(angle) * (m->type->radius + standard_pikmin_radius)
+        );
+        spot_info.push_back(carrier_spot_struct(p));
     }
 }
 
@@ -1177,11 +1163,12 @@ float carry_info_struct::get_speed() {
     //the closer to the max speed we get.
     //The speed goes from carrying_speed_base_mult (0 carriers)
     //to max_speed (all carriers).
-    return max_speed * (
-               carrying_speed_base_mult +
-               (cur_n_carriers / (float) spot_info.size()) *
-               (1 - carrying_speed_base_mult)
-           );
+    return
+        max_speed * (
+            carrying_speed_base_mult +
+            (cur_n_carriers / (float) spot_info.size()) *
+            (1 - carrying_speed_base_mult)
+        );
 }
 
 
@@ -1236,8 +1223,8 @@ void apply_knockback(
 ) {
     if(knockback != 0) {
         m->stop_chasing();
-        m->speed_x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        m->speed_y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        m->speed.x = cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
+        m->speed.y = sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         m->speed_z = MOB_KNOCKBACK_V_POWER;
     }
 }
@@ -1306,7 +1293,7 @@ void calculate_knockback(
     if(attacker_h) {
         *knockback = attacker_h->knockback;
         if(attacker_h->knockback_outward) {
-            *angle += atan2(victim->y - attacker->y, victim->x - attacker->x);
+            *angle += get_angle(attacker->pos, victim->pos);
         } else {
             *angle += attacker_h->knockback_angle;
         }
@@ -1336,8 +1323,7 @@ void cause_hitbox_damage(
         attacker_offense = attacker_h->multiplier;
         knockback = attacker_h->knockback;
         if(attacker_h->knockback_outward) {
-            knockback_angle +=
-                atan2(victim->y - attacker->y, victim->x - attacker->x);
+            knockback_angle += get_angle(attacker->pos, victim->pos);
         } else {
             knockback_angle += attacker_h->knockback_angle;
         }
@@ -1363,9 +1349,9 @@ void cause_hitbox_damage(
     victim->health -= damage;
     if(knockback != 0) {
         victim->stop_chasing();
-        victim->speed_x =
+        victim->speed.x =
             cos(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
-        victim->speed_y =
+        victim->speed.y =
             sin(knockback_angle) * knockback * MOB_KNOCKBACK_H_POWER;
         victim->speed_z =
             MOB_KNOCKBACK_V_POWER;
@@ -1483,8 +1469,8 @@ void delete_mob(mob* m) {
     } else {
         log_error(
             "ENGINE WARNING: Ran delete_mob() with a bad mob, of type \"" +
-            m->type->name + "\", x = " + f2s(m->x) +
-            ", y = " + f2s(m->y) + "!"
+            m->type->name + "\", x = " + f2s(m->pos.x) +
+            ", y = " + f2s(m->pos.y) + "!"
         );
         
     }
@@ -1508,12 +1494,12 @@ void focus_mob(mob* m1, mob* m2) {
 /* ----------------------------------------------------------------------------
  * Returns the closest hitbox to a point, belonging to a mob's current frame
  * of animation and position.
- * x, y:   Point.
+ * p:      The point.
  * m:      The mob.
  * h_type: Type of hitbox. INVALID means any.
  */
 hitbox* get_closest_hitbox(
-    const float x, const float y, mob* m, const size_t h_type
+    const point p, mob* m, const size_t h_type
 ) {
     sprite* s = m->anim.get_cur_sprite();
     if(!s) return NULL;
@@ -1524,9 +1510,12 @@ hitbox* get_closest_hitbox(
         hitbox* h_ptr = &s->hitboxes[h];
         if(h_type != INVALID && h_ptr->type != h_type) continue;
         
-        float hx, hy;
-        rotate_point(h_ptr->x, h_ptr->y, m->angle, &hx, &hy);
-        float d = dist(x - m->x, y - m->y, hx, hy).to_float() - h_ptr->radius;
+        point h_pos = rotate_point(h_ptr->pos, m->angle);
+        float d =
+            dist(
+                point(p.x - m->pos.x, p.y - m->pos.y),
+                h_pos
+            ).to_float() - h_ptr->radius;
         if(closest_hitbox == NULL || d < closest_hitbox_dist) {
             closest_hitbox_dist = d;
             closest_hitbox = h_ptr;
@@ -1691,10 +1680,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         
         for(size_t s = 0; s < ships.size(); ++s) {
             ship* s_ptr = ships[s];
-            dist d(
-                x, y,
-                s_ptr->beam_final_x, s_ptr->beam_final_y
-            );
+            dist d(pos, s_ptr->beam_final_pos);
             
             if(!closest_ship || d < closest_ship_dist) {
                 closest_ship = s_ptr;
@@ -1703,8 +1689,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         }
         
         if(closest_ship) {
-            carry_info->final_destination_x = closest_ship->beam_final_x;
-            carry_info->final_destination_y = closest_ship->beam_final_y;
+            carry_info->final_destination = closest_ship->beam_final_pos;
             carrying_target = closest_ship;
             
         } else {
@@ -1844,8 +1829,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
     }
     
     //Finally, set the destination data.
-    carry_info->final_destination_x = onions[onion_nr]->x;
-    carry_info->final_destination_y = onions[onion_nr]->y;
+    carry_info->final_destination = onions[onion_nr]->pos;
     carrying_target = onions[onion_nr];
 }
 
@@ -1868,18 +1852,15 @@ void mob::draw(sprite_effect_manager* effect_manager) {
         internal_effect_manager = true;
     }
     
-    float draw_x, draw_y;
-    float draw_w, draw_h;
-    get_sprite_center(this, s_ptr, &draw_x, &draw_y);
-    get_sprite_dimensions(this, s_ptr, &draw_w, &draw_h);
+    point draw_pos = get_sprite_center(this, s_ptr);
+    point draw_size = get_sprite_dimensions(this, s_ptr);
     
     add_status_sprite_effects(effect_manager);
     add_brightness_sprite_effect(effect_manager);
     
     draw_sprite_with_effects(
         s_ptr->bitmap,
-        draw_x, draw_y,
-        draw_w, draw_h,
+        draw_pos, draw_size,
         angle, effect_manager
     );
     
@@ -1891,10 +1872,12 @@ void mob::draw(sprite_effect_manager* effect_manager) {
 /* ----------------------------------------------------------------------------
  * Returns where a sprite's center should be, for normal mob drawing routines.
  */
-void mob::get_sprite_center(mob* m, sprite* s, float* x, float* y) {
+point mob::get_sprite_center(mob* m, sprite* s) {
+    point p;
     float co = cos(m->angle), si = sin(m->angle);
-    *x = m->x + co * s->offs_x - si * s->offs_y;
-    *y = m->y + si * s->offs_x + co * s->offs_y;
+    p.x = m->pos.x + co * s->offset.x - si * s->offset.y;
+    p.y = m->pos.y + si * s->offset.x + co * s->offset.y;
+    return p;
 }
 
 /* ----------------------------------------------------------------------------
@@ -1902,23 +1885,19 @@ void mob::get_sprite_center(mob* m, sprite* s, float* x, float* y) {
  * for normal mob drawing routines.
  * m: the mob.
  * s: the sprite.
- * w: variable to return the width to.
- * h: variable to return the height to.
  * scale: variable to return the scale used to. Optional.
  */
-void mob::get_sprite_dimensions(
-    mob* m, sprite* s, float* w, float* h, float* scale
-) {
-    *w = s->game_w;
-    *h = s->game_h;
+point mob::get_sprite_dimensions(mob* m, sprite* s, float* scale) {
+    point dim;
+    dim = s->game_size;
     float sucking_mult = 1.0;
     float height_mult = 1 + m->z * 0.0001;
     
     float final_scale = sucking_mult * height_mult;
     if(scale) *scale = final_scale;
     
-    *w = *w * final_scale;
-    *h = *h * final_scale;
+    dim *= final_scale;
+    return dim;
 }
 
 /* ----------------------------------------------------------------------------

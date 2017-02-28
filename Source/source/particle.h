@@ -57,11 +57,11 @@ struct particle {
     //Current time left to live. 0 means it's dead.
     float time;
     //Current coordinates.
-    float x, y;
+    point pos;
     //Current size, in diameter.
     float size;
     //Current movement speed.
-    float speed_x, speed_y;
+    point speed;
     //Current color.
     ALLEGRO_COLOR color;
     
@@ -74,9 +74,8 @@ struct particle {
     
     particle(
         const unsigned char type = PARTICLE_TYPE_BITMAP,
-        const float x = 0.0f, const float y = 0.0f,
-        const float size = 0.0f, const float duration = 0.0f,
-        const unsigned char priority = 255
+        const point pos = point(), const float size = 0.0f,
+        const float duration = 0.0f, const unsigned char priority = 255
     );
     void tick(const float delta_t);
     void draw();
@@ -130,6 +129,8 @@ public:
     size_t number;
     //Interval at which to emit a new one. 0 means once only.
     float emission_interval;
+    //Follow the given coordinates. e.g. a mob's position.
+    point* follow;
     
     //Maximum random deviations of...
     size_t number_deviation;
@@ -137,16 +138,12 @@ public:
     float friction_deviation;
     float gravity_deviation;
     float size_deviation;
-    float x_deviation;
-    float y_deviation;
-    float speed_x_deviation;
-    float speed_y_deviation;
+    point pos_deviation;
+    point speed_deviation;
     float angle;
     float angle_deviation;
-    float speed;
-    float speed_deviation;
-    float* follow_x;
-    float* follow_y;
+    float total_speed;
+    float total_speed_deviation;
     
     particle_generator(
         const float emission_interval = 0.0f,

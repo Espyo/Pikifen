@@ -90,17 +90,14 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                     
                     create_mob(
                         new pikmin(
-                            mouse_cursor_w.x, mouse_cursor_w.y,
+                            mouse_cursor_w,
                             new_pikmin_type, 0, "maturity=flower"
                         )
                     );
                 }
                 
             } else if(id == DEV_TOOL_TELEPORT) {
-                cur_leader_ptr->chase(
-                    mouse_cursor_w.x, mouse_cursor_w.y,
-                    NULL, NULL, true
-                );
+                cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
                 
             }
             
@@ -351,7 +348,7 @@ void handle_button(
                 dist d;
                 pikmin* p =
                     get_closest_buried_pikmin(
-                        cur_leader_ptr->x, cur_leader_ptr->y, &d, false
+                        cur_leader_ptr->pos, &d, false
                     );
                 if(p && d <= pluck_range) {
                     cur_leader_ptr->fsm.run_event(
@@ -367,12 +364,8 @@ void handle_button(
                         info_spot* i_ptr = info_spots[i];
                         if(i_ptr->opens_box) {
                             if(
-                                dist(
-                                    cur_leader_ptr->x,
-                                    cur_leader_ptr->y,
-                                    i_ptr->x,
-                                    i_ptr->y
-                                ) <= info_spot_trigger_range
+                                dist(cur_leader_ptr->pos, i_ptr->pos) <=
+                                info_spot_trigger_range
                             ) {
                                 start_message(i_ptr->text, NULL);
                                 done = true;
@@ -387,12 +380,8 @@ void handle_button(
                     size_t n_onions = onions.size();
                     for(size_t o = 0; o < n_onions; ++o) {
                         if(
-                            dist(
-                                cur_leader_ptr->x,
-                                cur_leader_ptr->y,
-                                onions[o]->x,
-                                onions[o]->y
-                            ) <= onion_open_range
+                            dist(cur_leader_ptr->pos, onions[o]->pos) <=
+                            onion_open_range
                         ) {
                             pikmin_type* pik_type =
                                 onions[o]->oni_type->pik_type;
@@ -403,7 +392,7 @@ void handle_button(
                                 pikmin_in_onions[pik_type]--;
                                 create_mob(
                                     new pikmin(
-                                        onions[o]->x, onions[o]->y,
+                                        onions[o]->pos,
                                         pik_type, 0, ""
                                     )
                                 );
@@ -424,8 +413,7 @@ void handle_button(
                         if(
                             ships[s]->shi_type->can_heal &&
                             dist(
-                                cur_leader_ptr->x, cur_leader_ptr->y,
-                                ships[s]->beam_final_x, ships[s]->beam_final_y
+                                cur_leader_ptr->pos, ships[s]->beam_final_pos
                             ) <= ships[s]->shi_type->beam_radius
                         ) {
                             //TODO make the whole process prettier.
@@ -793,10 +781,7 @@ void handle_button(
                 pikmin* p_ptr = (pikmin*) m_ptr;
                 if(p_ptr->maturity == held_p_ptr->maturity) continue;
                 
-                dist d(
-                    cur_leader_ptr->x, cur_leader_ptr->y,
-                    p_ptr->x, p_ptr->y
-                );
+                dist d(cur_leader_ptr->pos, p_ptr->pos);
                 if(
                     !closest_members[p_ptr->maturity] ||
                     d < closest_dists[p_ptr->maturity]

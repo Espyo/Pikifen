@@ -142,12 +142,11 @@ void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     vector<path_stop*> old_path = m->path;
     
     if(m->carrying_target) {
-        m->path = get_path(
-                      m->x, m->y,
-                      m->carry_info->final_destination_x,
-                      m->carry_info->final_destination_y,
-                      &obs, &go_straight, NULL
-                  );
+        m->path =
+            get_path(
+                m->pos, m->carry_info->final_destination,
+                &obs, &go_straight, NULL
+            );
         m->carry_info->obstacle_ptr = obs;
         m->carry_info->go_straight = go_straight;
         
@@ -242,7 +241,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         
     if(m->carry_info->stuck_state > 0) {
         //Stuck... Let's go back and forth between point A and B.
-        float final_x = m->x;
+        float final_x = m->pos.x;
         if(m->carry_info->stuck_state == 1) {
             m->carry_info->stuck_state = 2;
             final_x += CARRYING_STUCK_SWAY_AMOUNT;
@@ -252,9 +251,8 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         }
         
         m->chase(
-            final_x, m->y,
-            NULL, NULL,
-            false, NULL, true, 3.0f,
+            point(final_x, m->pos.y),
+            NULL, false, NULL, true, 3.0f,
             m->carry_info->get_speed() * CARRYING_STUCK_SPEED_MULT
         );
         
@@ -284,9 +282,7 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
                     );
             }
             m->chase(
-                m->carry_info->final_destination_x,
-                m->carry_info->final_destination_y,
-                NULL, NULL, false, NULL, true, target_distance,
+                m->carry_info->final_destination, NULL, false, NULL, true, target_distance,
                 m->carry_info->get_speed()
             );
             
@@ -302,9 +298,8 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
         //Reached a stop.
         //Go to the next.
         m->chase(
-            m->path[m->cur_path_stop_nr]->x,
-            m->path[m->cur_path_stop_nr]->y,
-            NULL, NULL, false, NULL, true, 3.0f,
+            m->path[m->cur_path_stop_nr]->pos,
+            NULL, false, NULL, true, 3.0f,
             m->carry_info->get_speed()
         );
         

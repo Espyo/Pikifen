@@ -41,7 +41,7 @@ public:
     sector* sec;
     
     gate(
-        const float x, const float y, gate_type* type,
+        const point pos, gate_type* type,
         const float angle, const string &vars
     );
     

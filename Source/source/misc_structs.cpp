@@ -101,31 +101,26 @@ movement_struct::movement_struct() :
  * of joystick), this can return values larger than 1.
  */
 float movement_struct::get_intensity() {
-    return dist(0, 0, get_x(), get_y()).to_float();
+    return dist(point(), get_coords()).to_float();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the horizontal movement, in the range [-1, 1];
+ * Returns the coordinates for the movement, in the range [-1, 1];
  */
-float movement_struct::get_x() {
-    return right - left;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the vertical movement, in the range [-1, 1];
- */
-float movement_struct::get_y() {
-    return down - up;
+point movement_struct::get_coords() {
+    return point(right - left, down - up);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Creates a new distance number, given two points.
  */
-dist::dist(const float x1, const float y1, const float x2, const float y2) :
-    distance_squared((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)),
+dist::dist(const point p1, const point p2) :
+    distance_squared(
+        (p2.x - p1.x) * (p2.x - p1.x) +
+        (p2.y - p1.y) * (p2.y - p1.y)
+    ),
     has_normal_distance(false),
     normal_distance(0) {
     
@@ -358,8 +353,7 @@ group_spot_info::group_spot_info(
     spot_radius(spot_radius) {
     
     //Center spot first.
-    x_coords.push_back(vector<float>(1, 0));
-    y_coords.push_back(vector<float>(1, 0));
+    coords.push_back(vector<point>(1, point()));
     mobs_in_spots.push_back(vector<mob*>(1, NULL));
     
     //Total spots. Starts at 1 because we did the center spot already.
@@ -403,17 +397,16 @@ group_spot_info::group_spot_info(
         //Get a better angle. One that can evenly distribute the spots.
         float angle = M_PI * 2 / n_spots_on_wheel;
         
-        x_coords.push_back(vector<float>());
-        y_coords.push_back(vector<float>());
+        coords.push_back(vector<point>());
         mobs_in_spots.push_back(vector<mob*>());
         for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
-            x_coords.back().push_back(
-                dist_from_center * cos(angle * s) +
-                randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL)
-            );
-            y_coords.back().push_back(
-                dist_from_center * sin(angle * s) +
-                randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL)
+            coords.back().push_back(
+                point(
+                    dist_from_center * cos(angle * s) +
+                    randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL),
+                    dist_from_center * sin(angle * s) +
+                    randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL)
+                )
             );
             mobs_in_spots.back().push_back(NULL);
         }
@@ -454,8 +447,7 @@ void group_spot_info::add(mob* m) {
     
     n_current_wheel_members++;
     
-    m->group_spot_x = x_coords[current_wheel][chosen_spot];
-    m->group_spot_y = y_coords[current_wheel][chosen_spot];
+    m->group_spot = coords[current_wheel][chosen_spot];
 }
 
 
@@ -510,17 +502,16 @@ void group_spot_info::remove(mob* m) {
         
         mobs_in_spots[mob_wheel][mob_spot] =
             mobs_in_spots[current_wheel][replacement_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->group_spot_x =
-            x_coords[mob_wheel][mob_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->group_spot_y =
-            y_coords[mob_wheel][mob_spot];
+        mobs_in_spots[mob_wheel][mob_spot]->group_spot =
+            coords[mob_wheel][mob_spot];
         mobs_in_spots[current_wheel][replacement_spot] = NULL;
         
         //TODO remove this temporary hack:
-        mobs_in_spots[mob_wheel][mob_spot]->chase_offs_x =
-            x_coords[mob_wheel][mob_spot];
-        mobs_in_spots[mob_wheel][mob_spot]->chase_offs_y =
-            y_coords[mob_wheel][mob_spot] + 30;
+        mobs_in_spots[mob_wheel][mob_spot]->chase_offset =
+            point(
+                coords[mob_wheel][mob_spot].x,
+                coords[mob_wheel][mob_spot].y + 30
+            );
             
         n_current_wheel_members--;
         if(n_current_wheel_members == 0) {

@@ -18,8 +18,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a nectar mob.
  */
-nectar::nectar(float x, float y, const string &vars) :
-    mob(x, y, spec_mob_types["Nectar"], 0, vars),
+nectar::nectar(const point pos, const string &vars) :
+    mob(pos, spec_mob_types["Nectar"], 0, vars),
     amount_left(nectar_amount) {
     
 }
@@ -37,8 +37,7 @@ void nectar::draw(sprite_effect_manager* effect_manager) {
     
     draw_sprite_with_effects(
         bmp_nectar,
-        x, y,
-        radius * 2, radius * 2,
+        pos, point(radius * 2, radius * 2),
         0, &effects
     );
 }

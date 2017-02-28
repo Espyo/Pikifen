@@ -106,10 +106,7 @@ const string area_editor::SELECT_NONE_ICON =
 area_editor::area_editor() :
     guide_aspect_ratio(true),
     guide_bitmap(NULL),
-    guide_x(0),
-    guide_y(0),
-    guide_w(1000),
-    guide_h(1000),
+    guide_size(1000, 1000),
     guide_a(255),
     backup_timer(editor_backup_interval),
     cur_mob(NULL),
@@ -131,8 +128,6 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     moving_path_preview_checkpoint(-1),
     moving_thing(INVALID),
-    moving_thing_x(0),
-    moving_thing_y(0),
     new_link_first_stop(NULL),
     new_circle_sector_step(0),
     new_sector_valid_line(false),
@@ -180,13 +175,13 @@ void area_editor::adv_textures_to_gui() {
         (lafi::frame*) gui->widgets["frm_adv_textures"];
         
     ((lafi::textbox*) f->widgets["txt_x"])->text =
-        f2s(cur_sector->texture_info.trans_x);
+        f2s(cur_sector->texture_info.translation.x);
     ((lafi::textbox*) f->widgets["txt_y"])->text =
-        f2s(cur_sector->texture_info.trans_y);
+        f2s(cur_sector->texture_info.translation.y);
     ((lafi::textbox*) f->widgets["txt_sx"])->text =
-        f2s(cur_sector->texture_info.scale_x);
+        f2s(cur_sector->texture_info.scale.x);
     ((lafi::textbox*) f->widgets["txt_sy"])->text =
-        f2s(cur_sector->texture_info.scale_y);
+        f2s(cur_sector->texture_info.scale.y);
     ((lafi::angle_picker*) f->widgets["ang_a"])->set_angle_rads(
         cur_sector->texture_info.rot
     );
@@ -202,10 +197,10 @@ void area_editor::adv_textures_to_gui() {
 void area_editor::guide_to_gui() {
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
     ((lafi::textbox*) f->widgets["txt_file"])->text = guide_file_name;
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(guide_x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(guide_y);
-    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(guide_w);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(guide_h);
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(guide_pos.x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(guide_pos.y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(guide_size.x);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(guide_size.y);
     ((lafi::checkbox*) f->widgets["chk_ratio"])->set(guide_aspect_ratio);
     ((lafi::checkbox*) f->widgets["chk_mouse"])->set(
         sec_mode == ESM_GUIDE_MOUSE
@@ -306,11 +301,15 @@ void area_editor::sector_to_gui() {
 
 
 /* ----------------------------------------------------------------------------
- * Snaps a coordinate to the nearest grid space.
+ * Snaps a point to the nearest grid space.
  */
-float area_editor::snap_to_grid(const float c) {
-    if(shift_pressed) return c;
-    return round(c / grid_interval) * grid_interval;
+point area_editor::snap_to_grid(const point p) {
+    if(shift_pressed) return p;
+    return
+        point(
+            round(p.x / grid_interval) * grid_interval,
+            round(p.y / grid_interval) * grid_interval
+        );
 }
 
 
@@ -324,13 +323,13 @@ void area_editor::shadow_to_gui() {
     
         show_widget(f);
         ((lafi::textbox*) f->widgets["txt_x"])->text =
-            f2s(cur_shadow->x);
+            f2s(cur_shadow->center.x);
         ((lafi::textbox*) f->widgets["txt_y"])->text =
-            f2s(cur_shadow->y);
+            f2s(cur_shadow->center.y);
         ((lafi::textbox*) f->widgets["txt_w"])->text =
-            f2s(cur_shadow->w);
+            f2s(cur_shadow->size.x);
         ((lafi::textbox*) f->widgets["txt_h"])->text =
-            f2s(cur_shadow->h);
+            f2s(cur_shadow->size.y);
         ((lafi::angle_picker*) f->widgets["ang_an"])->set_angle_rads(
             cur_shadow->angle
         );
@@ -340,9 +339,9 @@ void area_editor::shadow_to_gui() {
         ((lafi::textbox*) f->widgets["txt_file"])->text =
             cur_shadow->file_name;
         ((lafi::textbox*) f->widgets["txt_sx"])->text =
-            f2s(cur_shadow->sway_x);
+            f2s(cur_shadow->sway.x);
         ((lafi::textbox*) f->widgets["txt_sy"])->text =
-            f2s(cur_shadow->sway_y);
+            f2s(cur_shadow->sway.y);
             
     } else {
         hide_widget(f);
@@ -357,13 +356,13 @@ void area_editor::gui_to_adv_textures() {
     if(!cur_sector) return;
     lafi::frame* f = (lafi::frame*) gui->widgets["frm_adv_textures"];
     
-    cur_sector->texture_info.trans_x =
+    cur_sector->texture_info.translation.x =
         s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    cur_sector->texture_info.trans_y =
+    cur_sector->texture_info.translation.y =
         s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-    cur_sector->texture_info.scale_x =
+    cur_sector->texture_info.scale.x =
         s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
-    cur_sector->texture_info.scale_y =
+    cur_sector->texture_info.scale.y =
         s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
     cur_sector->texture_info.rot =
         ((lafi::angle_picker*) f->widgets["ang_a"])->get_angle_rads();
@@ -389,38 +388,38 @@ void area_editor::gui_to_guide() {
         change_guide(new_file_name);
         is_file_new = true;
         if(guide_bitmap) {
-            guide_w = al_get_bitmap_width(guide_bitmap);
-            guide_h = al_get_bitmap_height(guide_bitmap);
+            guide_size.x = al_get_bitmap_width(guide_bitmap);
+            guide_size.y = al_get_bitmap_height(guide_bitmap);
         } else {
-            guide_w = 0;
-            guide_h = 0;
+            guide_pos.x = 0;
+            guide_pos.y = 0;
         }
     }
     
-    guide_x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    guide_y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    guide_pos.x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    guide_pos.y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     
     guide_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
-    float new_w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
-    float new_h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
+    point new_size(
+        s2f(((lafi::textbox*) f->widgets["txt_w"])->text),
+        s2f(((lafi::textbox*) f->widgets["txt_h"])->text)
+    );
     
-    if(new_w != 0 && new_h != 0 && !is_file_new) {
+    if(new_size.x != 0 && new_size.y != 0 && !is_file_new) {
         if(guide_aspect_ratio) {
-            if(new_w == guide_w && new_h != guide_h) {
-                float ratio = guide_w / guide_h;
-                guide_h = new_h;
-                guide_w = new_h * ratio;
-            } else if(new_w != guide_w && new_h == guide_h) {
-                float ratio = guide_h / guide_w;
-                guide_w = new_w;
-                guide_h = new_w * ratio;
+            if(new_size.x == guide_size.x && new_size.y != guide_size.y) {
+                float ratio = guide_size.x / guide_size.y;
+                guide_size.y = new_size.y;
+                guide_size.x = new_size.y * ratio;
+            } else if(new_size.x != guide_size.x && new_size.y == guide_size.y) {
+                float ratio = guide_size.y / guide_size.x;
+                guide_size.x = new_size.x;
+                guide_size.y = new_size.x * ratio;
             } else {
-                guide_w = new_w;
-                guide_h = new_h;
+                guide_size = new_size;
             }
         } else {
-            guide_w = new_w;
-            guide_h = new_h;
+            guide_size = new_size;
         }
     }
     
@@ -503,15 +502,15 @@ void area_editor::gui_to_shadow() {
     lafi::frame* f =
         (lafi::frame*) gui->widgets["frm_shadows"]->widgets["frm_shadow"];
         
-    cur_shadow->x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    cur_shadow->y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
-    cur_shadow->w = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
-    cur_shadow->h = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
+    cur_shadow->center.x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    cur_shadow->center.y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    cur_shadow->size.x = s2f(((lafi::textbox*) f->widgets["txt_w"])->text);
+    cur_shadow->size.y = s2f(((lafi::textbox*) f->widgets["txt_h"])->text);
     cur_shadow->angle =
         ((lafi::angle_picker*) f->widgets["ang_an"])->get_angle_rads();
     cur_shadow->alpha = ((lafi::scrollbar*) f->widgets["bar_al"])->low_value;
-    cur_shadow->sway_x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
-    cur_shadow->sway_y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
+    cur_shadow->sway.x = s2f(((lafi::textbox*) f->widgets["txt_sx"])->text);
+    cur_shadow->sway.y = s2f(((lafi::textbox*) f->widgets["txt_sy"])->text);
     
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     
@@ -537,20 +536,16 @@ void area_editor::calculate_preview_path() {
     float d = 0;
     path_preview =
         get_path(
-            path_preview_checkpoints[0].x,
-            path_preview_checkpoints[0].y,
-            path_preview_checkpoints[1].x,
-            path_preview_checkpoints[1].y,
+            path_preview_checkpoints[0],
+            path_preview_checkpoints[1],
             NULL, NULL, &d
         );
         
     if(path_preview.empty() && d == 0) {
         d =
             dist(
-                path_preview_checkpoints[0].x,
-                path_preview_checkpoints[0].y,
-                path_preview_checkpoints[1].x,
-                path_preview_checkpoints[1].y
+                path_preview_checkpoints[0],
+                path_preview_checkpoints[1]
             ).to_float();
     }
     
@@ -584,13 +579,13 @@ void area_editor::cancel_new_sector() {
  * where it's hard to see.
  */
 void area_editor::center_camera(
-    float min_x, float min_y, float max_x, float max_y
+    const point min_coords, const point max_coords
 ) {
-    float width = max_x - min_x;
-    float height = max_y - min_y;
+    float width = max_coords.x - min_coords.x;
+    float height = max_coords.y - min_coords.y;
     
-    cam_pos.x = -floor(min_x + width  / 2);
-    cam_pos.y = -floor(min_y + height / 2);
+    cam_pos.x = -floor(min_coords.x + width  / 2);
+    cam_pos.y = -floor(min_coords.y + height / 2);
     
     if(width > height) cam_zoom = gui_x / width;
     else cam_zoom = status_bar_y / height;
@@ -757,7 +752,7 @@ void area_editor::create_new_from_picker(const string &name) {
         
         cur_area_data.mob_generators.push_back(
             new mob_gen(
-                0, 0, MOB_CATEGORY_LEADERS,
+                point(), MOB_CATEGORY_LEADERS,
                 leader_types.begin()->second
             )
         );
@@ -791,7 +786,10 @@ void area_editor::create_sector() {
         size_t merge_nr = INVALID;
         vertex* merge_v =
             get_merge_vertex(
-                new_sector_vertexes[v]->x, new_sector_vertexes[v]->y,
+                point(
+                    new_sector_vertexes[v]->x,
+                    new_sector_vertexes[v]->y
+                ),
                 cur_area_data.vertexes, VERTEX_MERGE_RADIUS / cam_zoom,
                 &merge_nr
             );
@@ -917,7 +915,7 @@ void area_editor::create_sector() {
         }
         
         if(
-            is_point_in_sector(v_ptr->x, v_ptr->y, new_sector)
+            is_point_in_sector(point(v_ptr->x, v_ptr->y), new_sector)
         ) {
             inner_edges.insert(
                 v_ptr->edges.begin(),
@@ -1127,7 +1125,7 @@ void area_editor::find_errors() {
     if(error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
-            if(!get_sector(m_ptr->x, m_ptr->y, NULL, false)) {
+            if(!get_sector(m_ptr->pos, NULL, false)) {
                 error_type = EET_MOB_OOB;
                 error_mob_ptr = m_ptr;
                 break;
@@ -1167,7 +1165,7 @@ void area_editor::find_errors() {
     if(error_type == EET_NONE) {
         for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
             path_stop* s_ptr = cur_area_data.path_stops[s];
-            if(!get_sector(s_ptr->x, s_ptr->y, NULL, false)) {
+            if(!get_sector(s_ptr->pos, NULL, false)) {
                 error_type = EET_FOLDER_PATH_STOP_OOB;
                 error_path_stop_ptr = s_ptr;
                 break;
@@ -1183,7 +1181,7 @@ void area_editor::find_errors() {
                 path_stop* s2_ptr = cur_area_data.path_stops[s2];
                 if(s2_ptr == s_ptr) continue;
                 
-                if(dist(s_ptr->x, s_ptr->y, s2_ptr->x, s2_ptr->y) <= 3.0) {
+                if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
                     error_type = EET_FOLDER_PATH_STOPS_TOGETHER;
                     error_path_stop_ptr = s_ptr;
                     break;
@@ -1220,10 +1218,14 @@ void area_editor::find_errors() {
                 
                 if(
                     circle_intersects_line(
-                        m_ptr->x, m_ptr->y,
+                        m_ptr->pos,
                         m_ptr->type->radius,
-                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                        point(
+                            e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                        ),
+                        point(
+                            e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                        ),
                         NULL, NULL
                     )
                 ) {
@@ -1290,19 +1292,12 @@ void area_editor::find_errors() {
  */
 void area_editor::set_new_circle_sector_points() {
     float anchor_angle =
-        atan2(
-            new_circle_sector_anchor.y - new_circle_sector_center.y,
-            new_circle_sector_anchor.x - new_circle_sector_center.x
-        );
+        get_angle(new_circle_sector_center, new_circle_sector_anchor);
     float cursor_angle =
-        atan2(
-            mouse_cursor_w.y - new_circle_sector_center.y,
-            mouse_cursor_w.x - new_circle_sector_center.x
-        );
+        get_angle(new_circle_sector_center, mouse_cursor_w);
     float radius =
         dist(
-            new_circle_sector_center.x, new_circle_sector_center.y,
-            new_circle_sector_anchor.x, new_circle_sector_anchor.y
+            new_circle_sector_center, new_circle_sector_anchor
         ).to_float();
     float angle_dif =
         get_angle_smallest_dif(cursor_angle, anchor_angle);
@@ -1339,11 +1334,14 @@ void area_editor::set_new_circle_sector_points() {
             
             if(
                 lines_intersect(
-                    e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                    e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
-                    new_circle_sector_points[p].x,
-                    new_circle_sector_points[p].y,
-                    next.x, next.y, NULL, NULL
+                    point(
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                    ),
+                    point(
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    ),
+                    new_circle_sector_points[p], next,
+                    NULL, NULL
                 )
             ) {
                 valid = false;
@@ -1388,11 +1386,7 @@ bool area_editor::get_common_sector(
         } else {
             //If this is a lone vertex, check which sector it's in.
             related_sectors[v].insert(
-                get_sector(
-                    v_ptr->x,
-                    v_ptr->y,
-                    NULL, false
-                )
+                get_sector(point(v_ptr->x, v_ptr->y), NULL, false)
             );
         }
     }
@@ -1469,28 +1463,28 @@ void area_editor::goto_error() {
         }
         
         edge_intersection* li_ptr = &intersecting_edges[0];
-        float min_x, max_x, min_y, max_y;
-        min_x = max_x = li_ptr->e1->vertexes[0]->x;
-        min_y = max_y = li_ptr->e1->vertexes[0]->y;
+        point min_coords, max_coords;
+        min_coords.x = max_coords.x = li_ptr->e1->vertexes[0]->x;
+        min_coords.y = max_coords.y = li_ptr->e1->vertexes[0]->y;
         
-        min_x = min(min_x, li_ptr->e1->vertexes[0]->x);
-        min_x = min(min_x, li_ptr->e1->vertexes[1]->x);
-        min_x = min(min_x, li_ptr->e2->vertexes[0]->x);
-        min_x = min(min_x, li_ptr->e2->vertexes[1]->x);
-        max_x = max(max_x, li_ptr->e1->vertexes[0]->x);
-        max_x = max(max_x, li_ptr->e1->vertexes[1]->x);
-        max_x = max(max_x, li_ptr->e2->vertexes[0]->x);
-        max_x = max(max_x, li_ptr->e2->vertexes[1]->x);
-        min_y = min(min_y, li_ptr->e1->vertexes[0]->y);
-        min_y = min(min_y, li_ptr->e1->vertexes[1]->y);
-        min_y = min(min_y, li_ptr->e2->vertexes[0]->y);
-        min_y = min(min_y, li_ptr->e2->vertexes[1]->y);
-        max_y = max(max_y, li_ptr->e1->vertexes[0]->y);
-        max_y = max(max_y, li_ptr->e1->vertexes[1]->y);
-        max_y = max(max_y, li_ptr->e2->vertexes[0]->y);
-        max_y = max(max_y, li_ptr->e2->vertexes[1]->y);
+        min_coords.x = min(min_coords.x, li_ptr->e1->vertexes[0]->x);
+        min_coords.x = min(min_coords.x, li_ptr->e1->vertexes[1]->x);
+        min_coords.x = min(min_coords.x, li_ptr->e2->vertexes[0]->x);
+        min_coords.x = min(min_coords.x, li_ptr->e2->vertexes[1]->x);
+        max_coords.x = max(max_coords.x, li_ptr->e1->vertexes[0]->x);
+        max_coords.x = max(max_coords.x, li_ptr->e1->vertexes[1]->x);
+        max_coords.x = max(max_coords.x, li_ptr->e2->vertexes[0]->x);
+        max_coords.x = max(max_coords.x, li_ptr->e2->vertexes[1]->x);
+        min_coords.y = min(min_coords.y, li_ptr->e1->vertexes[0]->y);
+        min_coords.y = min(min_coords.y, li_ptr->e1->vertexes[1]->y);
+        min_coords.y = min(min_coords.y, li_ptr->e2->vertexes[0]->y);
+        min_coords.y = min(min_coords.y, li_ptr->e2->vertexes[1]->y);
+        max_coords.y = max(max_coords.y, li_ptr->e1->vertexes[0]->y);
+        max_coords.y = max(max_coords.y, li_ptr->e1->vertexes[1]->y);
+        max_coords.y = max(max_coords.y, li_ptr->e2->vertexes[0]->y);
+        max_coords.y = max(max_coords.y, li_ptr->e2->vertexes[1]->y);
         
-        center_camera(min_x, min_y, max_x, max_y);
+        center_camera(min_coords, max_coords);
         
     } else if(error_type == EET_BAD_SECTOR) {
     
@@ -1499,10 +1493,10 @@ void area_editor::goto_error() {
         }
         
         sector* s_ptr = *non_simples.begin();
-        float min_x, min_y, max_x, max_y;
-        get_sector_bounding_box(s_ptr, &min_x, &min_y, &max_x, &max_y);
+        point min_coords, max_coords;
+        get_sector_bounding_box(s_ptr, &min_coords, &max_coords);
         
-        center_camera(min_x, min_y, max_x, max_y);
+        center_camera(min_coords, max_coords);
         
     } else if(error_type == EET_LONE_EDGE) {
     
@@ -1511,22 +1505,22 @@ void area_editor::goto_error() {
         }
         
         edge* e_ptr = *lone_edges.begin();
-        float min_x, min_y, max_x, max_y;
-        min_x = e_ptr->vertexes[0]->x;
-        max_x = min_x;
-        min_y = e_ptr->vertexes[0]->y;
-        max_y = min_y;
+        point min_coords, max_coords;
+        min_coords.x = e_ptr->vertexes[0]->x;
+        max_coords.x = min_coords.x;
+        min_coords.y = e_ptr->vertexes[0]->y;
+        max_coords.y = min_coords.y;
         
-        min_x = min(min_x, e_ptr->vertexes[0]->x);
-        min_x = min(min_x, e_ptr->vertexes[1]->x);
-        max_x = max(max_x, e_ptr->vertexes[0]->x);
-        max_x = max(max_x, e_ptr->vertexes[1]->x);
-        min_y = min(min_y, e_ptr->vertexes[0]->y);
-        min_y = min(min_y, e_ptr->vertexes[1]->y);
-        max_y = max(max_y, e_ptr->vertexes[0]->y);
-        max_y = max(max_y, e_ptr->vertexes[1]->y);
+        min_coords.x = min(min_coords.x, e_ptr->vertexes[0]->x);
+        min_coords.x = min(min_coords.x, e_ptr->vertexes[1]->x);
+        max_coords.x = max(max_coords.x, e_ptr->vertexes[0]->x);
+        max_coords.x = max(max_coords.x, e_ptr->vertexes[1]->x);
+        min_coords.y = min(min_coords.y, e_ptr->vertexes[0]->y);
+        min_coords.y = min(min_coords.y, e_ptr->vertexes[1]->y);
+        max_coords.y = max(max_coords.y, e_ptr->vertexes[0]->y);
+        max_coords.y = max(max_coords.y, e_ptr->vertexes[1]->y);
         
-        center_camera(min_x, min_y, max_x, max_y);
+        center_camera(min_coords, max_coords);
         
     } else if(error_type == EET_OVERLAPPING_VERTEXES) {
     
@@ -1535,10 +1529,14 @@ void area_editor::goto_error() {
         }
         
         center_camera(
-            error_vertex_ptr->x - 64,
-            error_vertex_ptr->y - 64,
-            error_vertex_ptr->x + 64,
-            error_vertex_ptr->y + 64
+            point(
+                error_vertex_ptr->x - 64,
+                error_vertex_ptr->y - 64
+            ),
+            point(
+                error_vertex_ptr->x + 64,
+                error_vertex_ptr->y + 64
+            )
         );
         
     } else if(error_type == EET_MISSING_LEADER) {
@@ -1554,11 +1552,9 @@ void area_editor::goto_error() {
             find_errors(); return;
         }
         
-        float min_x, min_y, max_x, max_y;
-        get_sector_bounding_box(
-            error_sector_ptr, &min_x, &min_y, &max_x, &max_y
-        );
-        center_camera(min_x, min_y, max_x, max_y);
+        point min_coords, max_coords;
+        get_sector_bounding_box(error_sector_ptr, &min_coords, &max_coords);
+        center_camera(min_coords, max_coords);
         
     } else if(
         error_type == EET_TYPELESS_MOB ||
@@ -1570,12 +1566,7 @@ void area_editor::goto_error() {
             find_errors(); return;
         }
         
-        center_camera(
-            error_mob_ptr->x - 64,
-            error_mob_ptr->y - 64,
-            error_mob_ptr->x + 64,
-            error_mob_ptr->y + 64
-        );
+        center_camera(error_mob_ptr->pos - 64, error_mob_ptr->pos + 64);
         
     } else if(
         error_type == EET_LONE_FOLDER_PATH_STOP ||
@@ -1588,19 +1579,17 @@ void area_editor::goto_error() {
         }
         
         center_camera(
-            error_path_stop_ptr->x - 64,
-            error_path_stop_ptr->y - 64,
-            error_path_stop_ptr->x + 64,
-            error_path_stop_ptr->y + 64
+            error_path_stop_ptr->pos - 64,
+            error_path_stop_ptr->pos + 64
         );
         
     } else if(error_type == EET_INVALID_SHADOW) {
     
-        float min_x, min_y, max_x, max_y;
+        point min_coords, max_coords;
         get_shadow_bounding_box(
-            error_shadow_ptr, &min_x, &min_y, &max_x, &max_y
+            error_shadow_ptr, &min_coords, &max_coords
         );
-        center_camera(min_x, min_y, max_x, max_y);
+        center_camera(min_coords, max_coords);
     }
 }
 
@@ -1611,20 +1600,22 @@ void area_editor::goto_error() {
  * This is the line between the last chosen vertex of the new sector
  * and the provided coordinates.
  */
-bool area_editor::is_new_sector_line_valid(const float x, const float y) {
+bool area_editor::is_new_sector_line_valid(const point pos) {
     if(new_sector_vertexes.empty()) return true;
     
     //Given the last vertex of the new sector,
     //check if it'll be merged with an existing one.
     vertex* last_vertex = new_sector_vertexes.back();
-    vertex* merge_vertex_1 = get_merge_vertex(
-                                 last_vertex->x, last_vertex->y,
-                                 cur_area_data.vertexes, VERTEX_MERGE_RADIUS / cam_zoom
-                             );
-    vertex* merge_vertex_2 = get_merge_vertex(
-                                 x, y, cur_area_data.vertexes, VERTEX_MERGE_RADIUS / cam_zoom
-                             );
-                             
+    vertex* merge_vertex_1 =
+        get_merge_vertex(
+            point(last_vertex->x, last_vertex->y),
+            cur_area_data.vertexes, VERTEX_MERGE_RADIUS / cam_zoom
+        );
+    vertex* merge_vertex_2 =
+        get_merge_vertex(
+            pos, cur_area_data.vertexes, VERTEX_MERGE_RADIUS / cam_zoom
+        );
+        
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         //If this edge is on the same vertex as the last vertex
         //of the new sector, never mind.
@@ -1641,9 +1632,10 @@ bool area_editor::is_new_sector_line_valid(const float x, const float y) {
         
         if(
             lines_intersect(
-                last_vertex->x, last_vertex->y, x, y,
-                e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y,
-                e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y,
+                point(last_vertex->x, last_vertex->y),
+                pos,
+                point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
                 NULL, NULL
             )
         ) {
@@ -1658,15 +1650,20 @@ bool area_editor::is_new_sector_line_valid(const float x, const float y) {
             vertex* v2_ptr = new_sector_vertexes[v + 1];
             if(
                 lines_intersect(
-                    new_sector_vertexes.back()->x,
-                    new_sector_vertexes.back()->y,
-                    x, y, v1_ptr->x, v1_ptr->y, v2_ptr->x, v2_ptr->y,
+                    point(
+                        new_sector_vertexes.back()->x,
+                        new_sector_vertexes.back()->y
+                    ),
+                    pos,
+                    point(v1_ptr->x, v1_ptr->y),
+                    point(v2_ptr->x, v2_ptr->y),
                     NULL, NULL
                 )
             ) {
                 if(
                     v == 0 &&
-                    dist(x, y, v1_ptr->x, v1_ptr->y) <= VERTEX_MERGE_RADIUS
+                    dist(pos, point(v1_ptr->x, v1_ptr->y)) <=
+                    VERTEX_MERGE_RADIUS
                 ) {
                     //We're trying to close the sector. Never mind this one.
                     continue;
@@ -2074,24 +2071,20 @@ void area_editor::resize_everything() {
     
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
-        s_ptr->texture_info.scale_x *= mult;
-        s_ptr->texture_info.scale_y *= mult;
-        s_ptr->texture_info.trans_x *= mult;
-        s_ptr->texture_info.trans_y *= mult;
+        s_ptr->texture_info.scale *= mult;
+        s_ptr->texture_info.translation *= mult;
         s_ptr->triangles.clear();
         triangulate(s_ptr);
     }
     
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
-        m_ptr->x *= mult;
-        m_ptr->y *= mult;
+        m_ptr->pos *= mult;
     }
     
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];
-        s_ptr->x *= mult;
-        s_ptr->y *= mult;
+        s_ptr->pos *= mult;
     }
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         cur_area_data.path_stops[s]->calculate_dists();
@@ -2099,12 +2092,9 @@ void area_editor::resize_everything() {
     
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
-        s_ptr->x      *= mult;
-        s_ptr->y      *= mult;
-        s_ptr->w      *= mult;
-        s_ptr->h      *= mult;
-        s_ptr->sway_x *= mult;
-        s_ptr->sway_y *= mult;
+        s_ptr->center *= mult;
+        s_ptr->size   *= mult;
+        s_ptr->sway   *= mult;
     }
     
     made_changes = true;
@@ -2215,26 +2205,26 @@ void area_editor::save_area(const bool to_backup) {
             );
         }
         if(
-            s_ptr->texture_info.scale_x != 1 ||
-            s_ptr->texture_info.scale_y != 1
+            s_ptr->texture_info.scale.x != 1 ||
+            s_ptr->texture_info.scale.y != 1
         ) {
             sector_node->add(
                 new data_node(
                     "texture_scale",
-                    f2s(s_ptr->texture_info.scale_x) + " " +
-                    f2s(s_ptr->texture_info.scale_y)
+                    f2s(s_ptr->texture_info.scale.x) + " " +
+                    f2s(s_ptr->texture_info.scale.y)
                 )
             );
         }
         if(
-            s_ptr->texture_info.trans_x != 0 ||
-            s_ptr->texture_info.trans_y != 0
+            s_ptr->texture_info.translation.x != 0 ||
+            s_ptr->texture_info.translation.y != 0
         ) {
             sector_node->add(
                 new data_node(
                     "texture_trans",
-                    f2s(s_ptr->texture_info.trans_x) + " " +
-                    f2s(s_ptr->texture_info.trans_y)
+                    f2s(s_ptr->texture_info.translation.x) + " " +
+                    f2s(s_ptr->texture_info.translation.y)
                 )
             );
         }
@@ -2269,7 +2259,7 @@ void area_editor::save_area(const bool to_backup) {
         mob_node->add(
             new data_node(
                 "p",
-                f2s(m_ptr->x) + " " + f2s(m_ptr->y)
+                f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
             )
         );
         if(m_ptr->angle != 0) {
@@ -2295,7 +2285,7 @@ void area_editor::save_area(const bool to_backup) {
         path_stops_node->add(path_stop_node);
         
         path_stop_node->add(
-            new data_node("pos", f2s(s_ptr->x) + " " + f2s(s_ptr->y))
+            new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
         );
         
         data_node* links_node = new data_node("links", "");
@@ -2319,10 +2309,14 @@ void area_editor::save_area(const bool to_backup) {
         shadows_node->add(shadow_node);
         
         shadow_node->add(
-            new data_node("pos", f2s(s_ptr->x) + " " + f2s(s_ptr->y))
+            new data_node(
+                "pos", f2s(s_ptr->center.x) + " " + f2s(s_ptr->center.y)
+            )
         );
         shadow_node->add(
-            new data_node("size", f2s(s_ptr->w) + " " + f2s(s_ptr->h))
+            new data_node(
+                "size", f2s(s_ptr->size.x) + " " + f2s(s_ptr->size.y)
+            )
         );
         if(s_ptr->angle != 0) {
             shadow_node->add(new data_node("angle", f2s(s_ptr->angle)));
@@ -2332,17 +2326,17 @@ void area_editor::save_area(const bool to_backup) {
         }
         shadow_node->add(new data_node("file", s_ptr->file_name));
         shadow_node->add(
-            new data_node("sway", f2s(s_ptr->sway_x) + " " + f2s(s_ptr->sway_y))
+            new data_node("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
         );
         
     }
     
     //Editor guide.
     geometry_file.add(new data_node("guide_file_name", guide_file_name));
-    geometry_file.add(new data_node("guide_x",         f2s(guide_x)));
-    geometry_file.add(new data_node("guide_y",         f2s(guide_y)));
-    geometry_file.add(new data_node("guide_w",         f2s(guide_w)));
-    geometry_file.add(new data_node("guide_h",         f2s(guide_h)));
+    geometry_file.add(new data_node("guide_x",         f2s(guide_pos.x)));
+    geometry_file.add(new data_node("guide_y",         f2s(guide_pos.y)));
+    geometry_file.add(new data_node("guide_w",         f2s(guide_size.x)));
+    geometry_file.add(new data_node("guide_h",         f2s(guide_size.y)));
     geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
     
     
@@ -2467,21 +2461,21 @@ void area_editor::update_review_frame() {
         float u;
         edge_intersection* ei_ptr = &intersecting_edges[0];
         lines_intersect(
-            ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
-            ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y,
-            ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y,
-            ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y,
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
+            point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
+            point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
             NULL, &u
         );
         
         float a =
-            atan2(
-                ei_ptr->e1->vertexes[1]->y - ei_ptr->e1->vertexes[0]->y,
-                ei_ptr->e1->vertexes[1]->x - ei_ptr->e1->vertexes[0]->x
+            get_angle(
+                point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+                point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
             );
         dist d(
-            ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y,
-            ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
         );
         
         lbl_error_3->text =
@@ -2673,7 +2667,7 @@ void area_editor::set_guide_file_name(string n) {
  * Sets the guide's X coordinate.
  */
 void area_editor::set_guide_x(float x) {
-    guide_x = x;
+    guide_pos.x = x;
 }
 
 
@@ -2681,7 +2675,7 @@ void area_editor::set_guide_x(float x) {
  * Sets the guide's Y coordinate.
  */
 void area_editor::set_guide_y(float y) {
-    guide_y = y;
+    guide_pos.y = y;
 }
 
 
@@ -2689,7 +2683,7 @@ void area_editor::set_guide_y(float y) {
  * Sets the guide's width.
  */
 void area_editor::set_guide_w(float w) {
-    guide_w = w;
+    guide_size.x = w;
 }
 
 
@@ -2697,7 +2691,7 @@ void area_editor::set_guide_w(float w) {
  * Sets the guide's height.
  */
 void area_editor::set_guide_h(float h) {
-    guide_h = h;
+    guide_size.y = h;
 }
 
 
