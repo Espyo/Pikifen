@@ -695,7 +695,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     }
     
     efc.new_state("celebrating", PIKMIN_STATE_CELEBRATING); {
-        //TODO
     }
     
     typ->states = efc.finish();

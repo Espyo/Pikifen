@@ -216,14 +216,10 @@ animations{
 sprites{
 	idling{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=0
-		file_w=153
-		file_h=103
-		game_w=45.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=153 103
+		game_size=45.00 30.00
+		offset=5.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -253,14 +249,10 @@ sprites{
 	}
 	moving1{
 		file=Red_Bulborb.png
-		file_x=154
-		file_y=0
-		file_w=153
-		file_h=104
-		game_w=45.00
-		game_h=-31.00
-		offs_x=5.00
-		offs_y=-1.00
+		file_pos=154 0
+		file_size=153 104
+		game_size=45.00 -31.00
+		offset=5.00 -1.00
 		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
@@ -290,14 +282,10 @@ sprites{
 	}
 	moving2{
 		file=Red_Bulborb.png
-		file_x=308
-		file_y=0
-		file_w=153
-		file_h=115
-		game_w=45.00
-		game_h=-34.00
-		offs_x=5.00
-		offs_y=-2.00
+		file_pos=308 0
+		file_size=153 115
+		game_size=45.00 -34.00
+		offset=5.00 -2.00
 		hitboxes{
 			body{
 				coords=5.00 -2.00 0.00
@@ -327,14 +315,10 @@ sprites{
 	}
 	moving3{
 		file=Red_Bulborb.png
-		file_x=154
-		file_y=0
-		file_w=153
-		file_h=104
-		game_w=45.00
-		game_h=31.00
-		offs_x=5.00
-		offs_y=1.00
+		file_pos=154 0
+		file_size=153 104
+		game_size=45.00 31.00
+		offset=5.00 1.00
 		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
@@ -364,14 +348,10 @@ sprites{
 	}
 	moving4{
 		file=Red_Bulborb.png
-		file_x=308
-		file_y=0
-		file_w=153
-		file_h=115
-		game_w=45.00
-		game_h=34.00
-		offs_x=5.00
-		offs_y=2.00
+		file_pos=308 0
+		file_size=153 115
+		game_size=45.00 34.00
+		offset=5.00 2.00
 		hitboxes{
 			body{
 				coords=5.00 2.00 0.00
@@ -401,14 +381,10 @@ sprites{
 	}
 	attacking1{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=116
-		file_w=160
-		file_h=103
-		game_w=48.00
-		game_h=30.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=0 116
+		file_size=160 103
+		game_size=48.00 30.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -438,14 +414,10 @@ sprites{
 	}
 	attacking2{
 		file=Red_Bulborb.png
-		file_x=161
-		file_y=116
-		file_w=174
-		file_h=110
-		game_w=52.00
-		game_h=33.00
-		offs_x=7.00
-		offs_y=0.00
+		file_pos=161 116
+		file_size=174 110
+		game_size=52.00 33.00
+		offset=7.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 -1.00 0.00
@@ -475,14 +447,10 @@ sprites{
 	}
 	attacking3{
 		file=Red_Bulborb.png
-		file_x=336
-		file_y=116
-		file_w=174
-		file_h=103
-		game_w=52.00
-		game_h=30.00
-		offs_x=8.00
-		offs_y=0.00
+		file_pos=336 116
+		file_size=174 103
+		game_size=52.00 30.00
+		offset=8.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -512,14 +480,10 @@ sprites{
 	}
 	attacking4{
 		file=Red_Bulborb.png
-		file_x=512
-		file_y=116
-		file_w=163
-		file_h=103
-		game_w=49.00
-		game_h=30.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=512 116
+		file_size=163 103
+		game_size=49.00 30.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -549,14 +513,10 @@ sprites{
 	}
 	chomping1{
 		file=Red_Bulborb.png
-		file_x=512
-		file_y=116
-		file_w=163
-		file_h=103
-		game_w=49.00
-		game_h=30.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=512 116
+		file_size=163 103
+		game_size=49.00 30.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -586,14 +546,10 @@ sprites{
 	}
 	chomping2{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=252
-		file_w=124
-		file_h=103
-		game_w=37.00
-		game_h=30.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 252
+		file_size=124 103
+		game_size=37.00 30.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -623,14 +579,10 @@ sprites{
 	}
 	chomping3{
 		file=Red_Bulborb.png
-		file_x=125
-		file_y=252
-		file_w=100
-		file_h=103
-		game_w=30.00
-		game_h=30.00
-		offs_x=-3.00
-		offs_y=0.00
+		file_pos=125 252
+		file_size=100 103
+		game_size=30.00 30.00
+		offset=-3.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -660,14 +612,10 @@ sprites{
 	}
 	chomping4{
 		file=Red_Bulborb.png
-		file_x=226
-		file_y=252
-		file_w=115
-		file_h=103
-		game_w=34.00
-		game_h=30.00
-		offs_x=-1.00
-		offs_y=0.00
+		file_pos=226 252
+		file_size=115 103
+		game_size=34.00 30.00
+		offset=-1.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -697,14 +645,10 @@ sprites{
 	}
 	shaking1{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=0
-		file_w=153
-		file_h=103
-		game_w=45.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=1.00
+		file_pos=0 0
+		file_size=153 103
+		game_size=45.00 30.00
+		offset=5.00 1.00
 		hitboxes{
 			body{
 				coords=5.00 1.00 0.00
@@ -734,14 +678,10 @@ sprites{
 	}
 	shaking2{
 		file=Red_Bulborb.png
-		file_x=515
-		file_y=252
-		file_w=159
-		file_h=105
-		game_w=47.00
-		game_h=31.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=515 252
+		file_size=159 105
+		game_size=47.00 31.00
+		offset=4.00 0.00
 		hitboxes{
 			body{
 				coords=4.00 0.00 0.00
@@ -771,14 +711,10 @@ sprites{
 	}
 	shaking3{
 		file=Red_Bulborb.png
-		file_x=515
-		file_y=252
-		file_w=159
-		file_h=105
-		game_w=47.00
-		game_h=-31.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=515 252
+		file_size=159 105
+		game_size=47.00 -31.00
+		offset=4.00 0.00
 		hitboxes{
 			body{
 				coords=4.00 0.00 0.00
@@ -808,14 +744,10 @@ sprites{
 	}
 	dying1{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=252
-		file_w=124
-		file_h=103
-		game_w=37.00
-		game_h=30.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 252
+		file_size=124 103
+		game_size=37.00 30.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -845,14 +777,10 @@ sprites{
 	}
 	dying2{
 		file=Red_Bulborb.png
-		file_x=125
-		file_y=252
-		file_w=100
-		file_h=103
-		game_w=30.00
-		game_h=30.00
-		offs_x=-3.00
-		offs_y=0.00
+		file_pos=125 252
+		file_size=100 103
+		game_size=30.00 30.00
+		offset=-3.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -882,14 +810,10 @@ sprites{
 	}
 	dying3{
 		file=Red_Bulborb.png
-		file_x=226
-		file_y=252
-		file_w=115
-		file_h=103
-		game_w=34.00
-		game_h=30.00
-		offs_x=-1.00
-		offs_y=0.00
+		file_pos=226 252
+		file_size=115 103
+		game_size=34.00 30.00
+		offset=-1.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -919,14 +843,10 @@ sprites{
 	}
 	dying4{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=0
-		file_w=153
-		file_h=103
-		game_w=45.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=153 103
+		game_size=45.00 30.00
+		offset=5.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -956,14 +876,10 @@ sprites{
 	}
 	dying5{
 		file=Red_Bulborb.png
-		file_x=342
-		file_y=252
-		file_w=172
-		file_h=103
-		game_w=51.00
-		game_h=30.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=342 252
+		file_size=172 103
+		game_size=51.00 30.00
+		offset=4.00 0.00
 		hitboxes{
 			body{
 				coords=5.00 0.00 0.00
@@ -993,14 +909,10 @@ sprites{
 	}
 	looking1{
 		file=Red_Bulborb.png
-		file_x=158
-		file_y=358
-		file_w=135
-		file_h=131
-		game_w=40.00
-		game_h=39.00
-		offs_x=2.00
-		offs_y=4.00
+		file_pos=158 358
+		file_size=135 131
+		game_size=40.00 39.00
+		offset=2.00 4.00
 		hitboxes{
 			body{
 				coords=3.00 3.00 0.00
@@ -1030,14 +942,10 @@ sprites{
 	}
 	looking2{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=358
-		file_w=157
-		file_h=121
-		game_w=47.00
-		game_h=36.00
-		offs_x=5.00
-		offs_y=3.00
+		file_pos=0 358
+		file_size=157 121
+		game_size=47.00 36.00
+		offset=5.00 3.00
 		hitboxes{
 			body{
 				coords=3.00 2.00 0.00
@@ -1067,14 +975,10 @@ sprites{
 	}
 	looking3{
 		file=Red_Bulborb.png
-		file_x=158
-		file_y=358
-		file_w=135
-		file_h=131
-		game_w=40.00
-		game_h=-39.00
-		offs_x=2.00
-		offs_y=-4.00
+		file_pos=158 358
+		file_size=135 131
+		game_size=40.00 -39.00
+		offset=2.00 -4.00
 		hitboxes{
 			body{
 				coords=3.00 -3.00 0.00
@@ -1104,14 +1008,10 @@ sprites{
 	}
 	looking4{
 		file=Red_Bulborb.png
-		file_x=0
-		file_y=358
-		file_w=157
-		file_h=121
-		game_w=47.00
-		game_h=-36.00
-		offs_x=5.00
-		offs_y=-3.00
+		file_pos=0 358
+		file_size=157 121
+		game_size=47.00 -36.00
+		offset=5.00 -3.00
 		hitboxes{
 			body{
 				coords=3.00 -2.00 0.00
@@ -1141,14 +1041,10 @@ sprites{
 	}
 	crushed{
 		file=Red_Bulborb.png
-		file_x=295
-		file_y=358
-		file_w=159
-		file_h=163
-		game_w=47.00
-		game_h=48.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=295 358
+		file_size=159 163
+		game_size=47.00 48.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=6.00 0.00 0.00
@@ -1178,14 +1074,10 @@ sprites{
 	}
 	grazing1{
 		file=Red_Bulborb.png
-		file_x=675
-		file_y=252
-		file_w=164
-		file_h=103
-		game_w=49.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=0.00
+		file_pos=675 252
+		file_size=164 103
+		game_size=49.00 30.00
+		offset=5.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -1215,14 +1107,10 @@ sprites{
 	}
 	grazing2{
 		file=Red_Bulborb.png
-		file_x=512
-		file_y=116
-		file_w=163
-		file_h=103
-		game_w=49.00
-		game_h=30.00
-		offs_x=5.00
-		offs_y=0.00
+		file_pos=512 116
+		file_size=163 103
+		game_size=49.00 30.00
+		offset=5.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -1252,14 +1140,10 @@ sprites{
 	}
 	grazing3{
 		file=Red_Bulborb.png
-		file_x=512
-		file_y=116
-		file_w=163
-		file_h=103
-		game_w=49.00
-		game_h=-30.00
-		offs_x=5.00
-		offs_y=0.00
+		file_pos=512 116
+		file_size=163 103
+		game_size=49.00 -30.00
+		offset=5.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00

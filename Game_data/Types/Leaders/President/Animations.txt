@@ -148,110 +148,74 @@ animations{
 sprites{
 	ducking{
 		file=President.png
-		file_x=0
-		file_y=0
-		file_w=54
-		file_h=64
-		game_w=27.00
-		game_h=32.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=54 64
+		game_size=27.00 32.00
+		offset=4.00 0.00
 		hitboxes=
 	}
 	ducking2{
 		file=President.png
-		file_x=56
-		file_y=0
-		file_w=54
-		file_h=64
-		game_w=27.00
-		game_h=32.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=56 0
+		file_size=54 64
+		game_size=27.00 32.00
+		offset=4.00 0.00
 		hitboxes=
 	}
 	half_limbo{
 		file=President.png
-		file_x=112
-		file_y=0
-		file_w=86
-		file_h=64
-		game_w=43.00
-		game_h=32.00
-		offs_x=-16.00
-		offs_y=0.00
+		file_pos=112 0
+		file_size=86 64
+		game_size=43.00 32.00
+		offset=-16.00 0.00
 		hitboxes=
 	}
 	half_lying{
 		file=President.png
-		file_x=198
-		file_y=66
-		file_w=92
-		file_h=64
-		game_w=46.00
-		game_h=32.00
-		offs_x=-12.00
-		offs_y=0.00
+		file_pos=198 66
+		file_size=92 64
+		game_size=46.00 32.00
+		offset=-12.00 0.00
 		hitboxes=
 	}
 	idling{
 		file=President.png
-		file_x=0
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	limbo{
 		file=President.png
-		file_x=200
-		file_y=0
-		file_w=106
-		file_h=64
-		game_w=53.00
-		game_h=32.00
-		offs_x=-20.00
-		offs_y=0.00
+		file_pos=200 0
+		file_size=106 64
+		game_size=53.00 32.00
+		offset=-20.00 0.00
 		hitboxes=
 	}
 	lying{
 		file=President.png
-		file_x=292
-		file_y=66
-		file_w=114
-		file_h=64
-		game_w=57.00
-		game_h=32.00
-		offs_x=-16.00
-		offs_y=0.00
+		file_pos=292 66
+		file_size=114 64
+		game_size=57.00 32.00
+		offset=-16.00 0.00
 		hitboxes=
 	}
 	walking1{
 		file=President.png
-		file_x=132
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=132 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	walking2{
 		file=President.png
-		file_x=66
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=66 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

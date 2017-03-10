@@ -1347,8 +1347,6 @@ path_stops{
 }
 tree_shadows=
 guide_file_name=
-guide_x=0.00
-guide_y=0.00
-guide_w=0.00
-guide_h=0.00
+guide_pos=0.00 0.00
+guide_size=0.00 0.00
 guide_alpha=255

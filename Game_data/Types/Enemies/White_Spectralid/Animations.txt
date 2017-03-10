@@ -48,14 +48,10 @@ animations{
 sprites{
 	opened{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=0
-		file_w=25
-		file_h=32
-		game_w=25.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=25 32
+		game_size=25.00 32.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -73,14 +69,10 @@ sprites{
 	}
 	mid{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=33
-		file_w=25
-		file_h=22
-		game_w=25.00
-		game_h=22.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 33
+		file_size=25 22
+		game_size=25.00 22.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -98,14 +90,10 @@ sprites{
 	}
 	closed{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=56
-		file_w=25
-		file_h=10
-		game_w=25.00
-		game_h=10.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 56
+		file_size=25 10
+		game_size=25.00 10.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -123,14 +111,10 @@ sprites{
 	}
 	dying1{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=67
-		file_w=25
-		file_h=16
-		game_w=25.00
-		game_h=16.00
-		offs_x=0.00
-		offs_y=-1.00
+		file_pos=0 67
+		file_size=25 16
+		game_size=25.00 16.00
+		offset=0.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -148,14 +132,10 @@ sprites{
 	}
 	dying2{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=84
-		file_w=25
-		file_h=18
-		game_w=25.00
-		game_h=18.00
-		offs_x=0.00
-		offs_y=-4.00
+		file_pos=0 84
+		file_size=25 18
+		game_size=25.00 18.00
+		offset=0.00 -4.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -173,14 +153,10 @@ sprites{
 	}
 	dead{
 		file=White_Spectralid.png
-		file_x=0
-		file_y=103
-		file_w=25
-		file_h=17
-		game_w=25.00
-		game_h=17.00
-		offs_x=0.00
-		offs_y=-4.00
+		file_pos=0 103
+		file_size=25 17
+		game_size=25.00 17.00
+		offset=0.00 -4.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00

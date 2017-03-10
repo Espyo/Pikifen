@@ -1206,7 +1206,6 @@ void leader_fsm::inactive_lose_health(mob* m, void* info1, void* info2) {
  * When a leader dies.
  */
 void leader_fsm::die(mob* m, void* info1, void* info2) {
-    //TODO
 }
 
 
@@ -1214,7 +1213,6 @@ void leader_fsm::die(mob* m, void* info1, void* info2) {
  * When an inactive leader dies.
  */
 void leader_fsm::inactive_die(mob* m, void* info1, void* info2) {
-    //TODO
 }
 
 

@@ -11,14 +11,10 @@ animations{
 sprites{
 	1{
 		file=Bubble.png
-		file_x=0
-		file_y=0
-		file_w=64
-		file_h=64
-		game_w=64.00
-		game_h=64.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=64 64
+		game_size=64.00 64.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

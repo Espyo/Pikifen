@@ -9,8 +9,7 @@ smoke {
         gravity = 0
         size_grow_speed = 30
         size = 16
-        speed_x = 0
-        speed_y = -50
+        speed = 0 -50
         color = 96 64 64 192
         before_mobs = false
     }
@@ -18,14 +17,12 @@ smoke {
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 2
-    x_deviation = 1
-    y_deviation = 0
-    speed_x_deviation = 5
-    speed_y_deviation = 5
+    pos_deviation = 1 0
+    speed_deviation = 5 5
     angle = 0
     angle_deviation = 0
-    speed = 0
-    speed_deviation = 0
+    total_speed = 0
+    total_speed_deviation = 0
 }
 
 bubble_hazard {
@@ -39,8 +36,7 @@ bubble_hazard {
         gravity = 1
         size_grow_speed = 0
         size = 16
-        speed_x = 0
-        speed_y = -10
+        speed = 0 -10
         color = 128 255 255 255
         before_mobs = false
     }
@@ -48,14 +44,12 @@ bubble_hazard {
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 8
-    x_deviation = 0
-    y_deviation = 0
-    speed_x_deviation = 20
-    speed_y_deviation = 0
+    pos_deviation = 0 0
+    speed_deviation = 20 0
     angle = 0
     angle_deviation = 0
-    speed = 0
-    speed_deviation = 0
+    total_speed = 0
+    total_speed_deviation = 0
 }
 
 poison_gas {
@@ -69,8 +63,7 @@ poison_gas {
         gravity = 0
         size_grow_speed = 30
         size = 24
-        speed_x = 0
-        speed_y = -10
+        speed = 0 -10
         color = 128 16 112 192
         before_mobs = false
     }
@@ -78,14 +71,12 @@ poison_gas {
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 2
-    x_deviation = 0
-    y_deviation = 0
-    speed_x_deviation = 0
-    speed_y_deviation = 0
+    pos_deviation = 0 0
+    speed_deviation = 0 0
     angle = 0
     angle_deviation = 0
-    speed = 0
-    speed_deviation = 0
+    total_speed = 0
+    total_speed_deviation = 0
 }
 
 gas_pipe {
@@ -99,8 +90,7 @@ gas_pipe {
         gravity = 0
         size_grow_speed = 80
         size = 32
-        speed_x = 0
-        speed_y = 0
+        speed = 0 0
         color = 128 16 112 192
         before_mobs = false
     }
@@ -108,14 +98,12 @@ gas_pipe {
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 2
-    x_deviation = 0
-    y_deviation = 0
-    speed_x_deviation = 0
-    speed_y_deviation = 0
+    pos_deviation = 0 0
+    speed_deviation = 0 0
     angle = 0
     angle_deviation = 6.28318
-    speed = 80
-    speed_deviation = 0
+    total_speed = 80
+    total_speed_deviation = 0
 }
 
 gas_explosion {
@@ -129,8 +117,7 @@ gas_explosion {
         gravity = 0
         size_grow_speed = 80
         size = 48
-        speed_x = 0
-        speed_y = 0
+        speed = 0 0
         color = 128 16 112 192
         before_mobs = false
     }
@@ -138,12 +125,10 @@ gas_explosion {
     friction_deviation = 0
     gravity_deviation = 0
     size_deviation = 2
-    x_deviation = 0
-    y_deviation = 0
-    speed_x_deviation = 0
-    speed_y_deviation = 0
+    pos_deviation = 0 0
+    speed_deviation = 0 0
     angle = 0
     angle_deviation = 6.28318
-    speed = 80
-    speed_deviation = 0
+    toal_speed = 80
+    toal_speed_deviation = 0
 }

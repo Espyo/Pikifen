@@ -245,6 +245,7 @@ struct reader_setter {
     void set(const string &child, bool &var);
     void set(const string &child, float &var);
     void set(const string &child, ALLEGRO_COLOR &var);
+    void set(const string &child, point &var);
     reader_setter(data_node* dn = NULL);
 };
 

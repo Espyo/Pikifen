@@ -19,14 +19,10 @@ animations{
 sprites{
 	safe{
 		file=Gas_pipe.png
-		file_x=0
-		file_y=0
-		file_w=48
-		file_h=48
-		game_w=48.00
-		game_h=48.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=48 48
+		game_size=48.00 48.00
+		offset=0.00 0.00
 		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00
@@ -56,14 +52,10 @@ sprites{
 	}
 	shooting{
 		file=Gas_pipe.png
-		file_x=0
-		file_y=0
-		file_w=48
-		file_h=48
-		game_w=48.00
-		game_h=48.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=48 48
+		game_size=48.00 48.00
+		offset=0.00 0.00
 		hitboxes{
 			tube{
 				coords=0.00 0.00 0.00

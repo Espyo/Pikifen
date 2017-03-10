@@ -11,14 +11,10 @@ animations{
 sprites{
 	idling{
 		file=Hocotate_ship.png
-		file_x=0
-		file_y=0
-		file_w=274
-		file_h=225
-		game_w=138.00
-		game_h=112.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=274 225
+		game_size=138.00 112.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

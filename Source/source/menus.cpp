@@ -137,8 +137,6 @@ void main_menu::unload() {
  * Handles Allegro events.
  */
 void main_menu::handle_controls(const ALLEGRO_EVENT &ev) {
-    //TODO joystick navigation controls
-    
     if(fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
@@ -449,7 +447,6 @@ void options_menu::unload() {
  * Handles Allegro events.
  */
 void options_menu::handle_controls(const ALLEGRO_EVENT &ev) {
-    //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
     
     if(capturing_input) {
@@ -811,7 +808,6 @@ void area_menu::unload() {
  * Handles Allegro events.
  */
 void area_menu::handle_controls(const ALLEGRO_EVENT &ev) {
-    //TODO joystick navigation controls
     if(fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);

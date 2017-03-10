@@ -23,62 +23,42 @@ animations{
 sprites{
 	1{
 		file=Fire.png
-		file_x=0
-		file_y=0
-		file_w=24
-		file_h=50
-		game_w=24.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=-9.00
+		file_pos=0 0
+		file_size=24 50
+		game_size=24.00 50.00
+		offset=0.00 -9.00
 		hitboxes=
 	}
 	2{
 		file=Fire.png
-		file_x=26
-		file_y=0
-		file_w=24
-		file_h=50
-		game_w=24.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=-9.00
+		file_pos=26 0
+		file_size=24 50
+		game_size=24.00 50.00
+		offset=0.00 -9.00
 		hitboxes=
 	}
 	3{
 		file=Fire.png
-		file_x=52
-		file_y=0
-		file_w=24
-		file_h=50
-		game_w=24.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=-9.00
+		file_pos=52 0
+		file_size=24 50
+		game_size=24.00 50.00
+		offset=0.00 -9.00
 		hitboxes=
 	}
 	4{
 		file=Fire.png
-		file_x=78
-		file_y=0
-		file_w=24
-		file_h=50
-		game_w=24.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=-9.00
+		file_pos=78 0
+		file_size=24 50
+		game_size=24.00 50.00
+		offset=0.00 -9.00
 		hitboxes=
 	}
 	5{
 		file=Fire.png
-		file_x=104
-		file_y=0
-		file_w=24
-		file_h=50
-		game_w=24.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=-9.00
+		file_pos=104 0
+		file_size=24 50
+		game_size=24.00 50.00
+		offset=0.00 -9.00
 		hitboxes=
 	}
 }

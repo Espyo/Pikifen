@@ -498,7 +498,6 @@ void mob_action::run(
         
     } else if(type == MOB_ACTION_MOVE) {
     
-        //TODO relative values.
         if(sub_type == MOB_ACTION_MOVE_FOCUSED_MOB) {
             if(m->focused_mob) {
                 m->chase(point(), &m->focused_mob->pos, false);

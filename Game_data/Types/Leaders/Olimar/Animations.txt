@@ -148,110 +148,74 @@ animations{
 sprites{
 	ducking{
 		file=Olimar.png
-		file_x=0
-		file_y=0
-		file_w=54
-		file_h=64
-		game_w=27.00
-		game_h=32.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=54 64
+		game_size=27.00 32.00
+		offset=4.00 0.00
 		hitboxes=
 	}
 	ducking2{
 		file=Olimar.png
-		file_x=56
-		file_y=0
-		file_w=54
-		file_h=64
-		game_w=27.00
-		game_h=32.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=56 0
+		file_size=54 64
+		game_size=27.00 32.00
+		offset=4.00 0.00
 		hitboxes=
 	}
 	half_limbo{
 		file=Olimar.png
-		file_x=112
-		file_y=0
-		file_w=66
-		file_h=64
-		game_w=33.00
-		game_h=32.00
-		offs_x=-8.00
-		offs_y=0.00
+		file_pos=112 0
+		file_size=66 64
+		game_size=33.00 32.00
+		offset=-8.00 0.00
 		hitboxes=
 	}
 	half_lying{
 		file=Olimar.png
-		file_x=198
-		file_y=66
-		file_w=82
-		file_h=64
-		game_w=41.00
-		game_h=32.00
-		offs_x=-8.00
-		offs_y=0.00
+		file_pos=198 66
+		file_size=82 64
+		game_size=41.00 32.00
+		offset=-8.00 0.00
 		hitboxes=
 	}
 	idling{
 		file=Olimar.png
-		file_x=0
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	limbo{
 		file=Olimar.png
-		file_x=180
-		file_y=0
-		file_w=88
-		file_h=64
-		game_w=44.00
-		game_h=32.00
-		offs_x=-16.00
-		offs_y=0.00
+		file_pos=180 0
+		file_size=88 64
+		game_size=44.00 32.00
+		offset=-16.00 0.00
 		hitboxes=
 	}
 	lying{
 		file=Olimar.png
-		file_x=282
-		file_y=66
-		file_w=100
-		file_h=64
-		game_w=50.00
-		game_h=32.00
-		offs_x=-16.00
-		offs_y=0.00
+		file_pos=282 66
+		file_size=100 64
+		game_size=50.00 32.00
+		offset=-16.00 0.00
 		hitboxes=
 	}
 	walking1{
 		file=Olimar.png
-		file_x=132
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=132 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	walking2{
 		file=Olimar.png
-		file_x=66
-		file_y=66
-		file_w=64
-		file_h=64
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=66 66
+		file_size=64 64
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

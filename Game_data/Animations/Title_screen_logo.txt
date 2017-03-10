@@ -32,57 +32,37 @@ animations{
 sprites{
 	1{
 		file=Title_screen_logo.png
-		file_x=0
-		file_y=0
-		file_w=400
-		file_h=180
-		game_w=400.00
-		game_h=180.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=400 180
+		game_size=400.00 180.00
+		offset=0.00 0.00
 	}
 	2{
 		file=Title_screen_logo.png
-		file_x=0
-		file_y=180
-		file_w=400
-		file_h=180
-		game_w=400.00
-		game_h=180.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 180
+		file_size=400 180
+		game_size=400.00 180.00
+		offset=0.00 0.00
 	}
     3{
 		file=Title_screen_logo.png
-		file_x=0
-		file_y=360
-		file_w=400
-		file_h=180
-		game_w=400.00
-		game_h=180.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 360
+		file_size=400 180
+		game_size=400.00 180.00
+		offset=0.00 0.00
 	}
     4{
 		file=Title_screen_logo.png
-		file_x=0
-		file_y=540
-		file_w=400
-		file_h=180
-		game_w=400.00
-		game_h=180.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 540
+		file_size=400 180
+		game_size=400.00 180.00
+		offset=0.00 0.00
 	}
     5{
 		file=Title_screen_logo.png
-		file_x=0
-		file_y=720
-		file_w=400
-		file_h=180
-		game_w=400.00
-		game_h=180.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 720
+		file_size=400 180
+		game_size=400.00 180.00
+		offset=0.00 0.00
 	}
 }

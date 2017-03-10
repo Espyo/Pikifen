@@ -206,14 +206,10 @@ animations{
 sprites{
 	idling{
 		file=Electric_Water_Dumple.png
-		file_x=0
-		file_y=0
-		file_w=140
-		file_h=87
-		game_w=140.00
-		game_h=87.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=140 87
+		game_size=140.00 87.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -255,14 +251,10 @@ sprites{
 	}
 	idling2{
 		file=Electric_Water_Dumple.png
-		file_x=141
-		file_y=0
-		file_w=140
-		file_h=88
-		game_w=140.00
-		game_h=88.00
-		offs_x=-1.00
-		offs_y=0.50
+		file_pos=141 0
+		file_size=140 88
+		game_size=140.00 88.00
+		offset=-1.00 0.50
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -304,14 +296,10 @@ sprites{
 	}
 	idling3{
 		file=Electric_Water_Dumple.png
-		file_x=282
-		file_y=0
-		file_w=140
-		file_h=88
-		game_w=140.00
-		game_h=88.00
-		offs_x=-0.50
-		offs_y=0.50
+		file_pos=282 0
+		file_size=140 88
+		game_size=140.00 88.00
+		offset=-0.50 0.50
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -353,14 +341,10 @@ sprites{
 	}
 	idling4{
 		file=Electric_Water_Dumple.png
-		file_x=423
-		file_y=0
-		file_w=142
-		file_h=88
-		game_w=142.00
-		game_h=88.00
-		offs_x=1.00
-		offs_y=1.00
+		file_pos=423 0
+		file_size=142 88
+		game_size=142.00 88.00
+		offset=1.00 1.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -402,14 +386,10 @@ sprites{
 	}
 	idling5{
 		file=Electric_Water_Dumple.png
-		file_x=566
-		file_y=0
-		file_w=136
-		file_h=88
-		game_w=136.00
-		game_h=88.00
-		offs_x=-2.00
-		offs_y=0.00
+		file_pos=566 0
+		file_size=136 88
+		game_size=136.00 88.00
+		offset=-2.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -451,14 +431,10 @@ sprites{
 	}
 	moving1{
 		file=Electric_Water_Dumple.png
-		file_x=703
-		file_y=0
-		file_w=143
-		file_h=86
-		game_w=143.00
-		game_h=86.00
-		offs_x=1.00
-		offs_y=1.00
+		file_pos=703 0
+		file_size=143 86
+		game_size=143.00 86.00
+		offset=1.00 1.00
 		hitboxes{
 			body{
 				coords=2.00 0.00 0.00
@@ -500,14 +476,10 @@ sprites{
 	}
 	moving2{
 		file=Electric_Water_Dumple.png
-		file_x=847
-		file_y=0
-		file_w=149
-		file_h=86
-		game_w=149.00
-		game_h=86.00
-		offs_x=4.00
-		offs_y=1.00
+		file_pos=847 0
+		file_size=149 86
+		game_size=149.00 86.00
+		offset=4.00 1.00
 		hitboxes{
 			body{
 				coords=8.00 0.00 0.00
@@ -549,14 +521,10 @@ sprites{
 	}
 	attacking1{
 		file=Electric_Water_Dumple.png
-		file_x=0
-		file_y=89
-		file_w=132
-		file_h=90
-		game_w=132.00
-		game_h=90.00
-		offs_x=-4.00
-		offs_y=0.00
+		file_pos=0 89
+		file_size=132 90
+		game_size=132.00 90.00
+		offset=-4.00 0.00
 		hitboxes{
 			body{
 				coords=-10.00 0.00 0.00
@@ -598,14 +566,10 @@ sprites{
 	}
 	attacking2{
 		file=Electric_Water_Dumple.png
-		file_x=133
-		file_y=89
-		file_w=178
-		file_h=89
-		game_w=178.00
-		game_h=89.00
-		offs_x=18.00
-		offs_y=1.00
+		file_pos=133 89
+		file_size=178 89
+		game_size=178.00 89.00
+		offset=18.00 1.00
 		hitboxes{
 			body{
 				coords=24.00 0.00 0.00
@@ -647,14 +611,10 @@ sprites{
 	}
 	attacking3{
 		file=Electric_Water_Dumple.png
-		file_x=312
-		file_y=89
-		file_w=176
-		file_h=94
-		game_w=176.00
-		game_h=94.00
-		offs_x=18.00
-		offs_y=1.00
+		file_pos=312 89
+		file_size=176 94
+		game_size=176.00 94.00
+		offset=18.00 1.00
 		hitboxes{
 			body{
 				coords=28.00 0.50 0.00
@@ -696,14 +656,10 @@ sprites{
 	}
 	shaking1{
 		file=Electric_Water_Dumple.png
-		file_x=489
-		file_y=89
-		file_w=145
-		file_h=90
-		game_w=145.00
-		game_h=90.00
-		offs_x=1.25
-		offs_y=-1.25
+		file_pos=489 89
+		file_size=145 90
+		game_size=145.00 90.00
+		offset=1.25 -1.25
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -745,14 +701,10 @@ sprites{
 	}
 	shaking2{
 		file=Electric_Water_Dumple.png
-		file_x=489
-		file_y=89
-		file_w=145
-		file_h=90
-		game_w=145.00
-		game_h=-90.00
-		offs_x=1.25
-		offs_y=1.25
+		file_pos=489 89
+		file_size=145 90
+		game_size=145.00 -90.00
+		offset=1.25 1.25
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -794,14 +746,10 @@ sprites{
 	}
 	shaking3{
 		file=Electric_Water_Dumple.png
-		file_x=635
-		file_y=89
-		file_w=142
-		file_h=97
-		game_w=142.00
-		game_h=97.00
-		offs_x=-4.00
-		offs_y=0.00
+		file_pos=635 89
+		file_size=142 97
+		game_size=142.00 97.00
+		offset=-4.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -843,14 +791,10 @@ sprites{
 	}
 	shaking4{
 		file=Electric_Water_Dumple.png
-		file_x=778
-		file_y=87
-		file_w=145
-		file_h=106
-		game_w=145.00
-		game_h=106.00
-		offs_x=-5.00
-		offs_y=-0.25
+		file_pos=778 87
+		file_size=145 106
+		game_size=145.00 106.00
+		offset=-5.00 -0.25
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -892,14 +836,10 @@ sprites{
 	}
 	eating1{
 		file=Electric_Water_Dumple.png
-		file_x=0
-		file_y=180
-		file_w=136
-		file_h=88
-		game_w=136.00
-		game_h=88.00
-		offs_x=-2.00
-		offs_y=-0.25
+		file_pos=0 180
+		file_size=136 88
+		game_size=136.00 88.00
+		offset=-2.00 -0.25
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -941,14 +881,10 @@ sprites{
 	}
 	eating2{
 		file=Electric_Water_Dumple.png
-		file_x=137
-		file_y=179
-		file_w=139
-		file_h=88
-		game_w=139.00
-		game_h=88.00
-		offs_x=-0.75
-		offs_y=0.25
+		file_pos=137 179
+		file_size=139 88
+		game_size=139.00 88.00
+		offset=-0.75 0.25
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -990,14 +926,10 @@ sprites{
 	}
 	dying1{
 		file=Electric_Water_Dumple.png
-		file_x=277
-		file_y=184
-		file_w=140
-		file_h=90
-		game_w=140.00
-		game_h=90.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=277 184
+		file_size=140 90
+		game_size=140.00 90.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1039,14 +971,10 @@ sprites{
 	}
 	dying2{
 		file=Electric_Water_Dumple.png
-		file_x=418
-		file_y=184
-		file_w=141
-		file_h=63
-		game_w=141.00
-		game_h=63.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=418 184
+		file_size=141 63
+		game_size=141.00 63.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1088,14 +1016,10 @@ sprites{
 	}
 	dying3{
 		file=Electric_Water_Dumple.png
-		file_x=560
-		file_y=187
-		file_w=141
-		file_h=83
-		game_w=141.00
-		game_h=83.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=560 187
+		file_size=141 83
+		game_size=141.00 83.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1137,14 +1061,10 @@ sprites{
 	}
 	dying4{
 		file=Electric_Water_Dumple.png
-		file_x=702
-		file_y=194
-		file_w=139
-		file_h=88
-		game_w=139.00
-		game_h=88.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=702 194
+		file_size=139 88
+		game_size=139.00 88.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1186,14 +1106,10 @@ sprites{
 	}
 	dying5{
 		file=Electric_Water_Dumple.png
-		file_x=560
-		file_y=187
-		file_w=141
-		file_h=83
-		game_w=141.00
-		game_h=-83.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=560 187
+		file_size=141 83
+		game_size=141.00 -83.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1235,14 +1151,10 @@ sprites{
 	}
 	zapping1{
 		file=Electric_Water_Dumple.png
-		file_x=0
-		file_y=269
-		file_w=124
-		file_h=89
-		game_w=124.00
-		game_h=89.00
-		offs_x=-7.00
-		offs_y=0.00
+		file_pos=0 269
+		file_size=124 89
+		game_size=124.00 89.00
+		offset=-7.00 0.00
 		hitboxes{
 			body{
 				coords=-5.00 0.00 0.00
@@ -1284,14 +1196,10 @@ sprites{
 	}
 	zapping2{
 		file=Electric_Water_Dumple.png
-		file_x=125
-		file_y=269
-		file_w=145
-		file_h=89
-		game_w=145.00
-		game_h=89.00
-		offs_x=2.00
-		offs_y=1.00
+		file_pos=125 269
+		file_size=145 89
+		game_size=145.00 89.00
+		offset=2.00 1.00
 		hitboxes{
 			body{
 				coords=-2.00 0.00 0.00
@@ -1333,14 +1241,10 @@ sprites{
 	}
 	zapping3{
 		file=Electric_Water_Dumple.png
-		file_x=271
-		file_y=275
-		file_w=189
-		file_h=88
-		game_w=189.00
-		game_h=88.00
-		offs_x=23.00
-		offs_y=0.00
+		file_pos=271 275
+		file_size=189 88
+		game_size=189.00 88.00
+		offset=23.00 0.00
 		hitboxes{
 			body{
 				coords=-2.00 0.00 0.00
@@ -1382,14 +1286,10 @@ sprites{
 	}
 	zapping4{
 		file=Electric_Water_Dumple.png
-		file_x=461
-		file_y=271
-		file_w=190
-		file_h=89
-		game_w=190.00
-		game_h=89.00
-		offs_x=24.00
-		offs_y=0.00
+		file_pos=461 271
+		file_size=190 89
+		game_size=190.00 89.00
+		offset=24.00 0.00
 		hitboxes{
 			body{
 				coords=-2.00 0.00 0.00
@@ -1431,14 +1331,10 @@ sprites{
 	}
 	zapping5{
 		file=Electric_Water_Dumple.png
-		file_x=652
-		file_y=283
-		file_w=190
-		file_h=88
-		game_w=190.00
-		game_h=88.00
-		offs_x=24.00
-		offs_y=0.00
+		file_pos=652 283
+		file_size=190 88
+		game_size=190.00 88.00
+		offset=24.00 0.00
 		hitboxes{
 			body{
 				coords=-2.00 0.00 0.00
@@ -1480,14 +1376,10 @@ sprites{
 	}
 	zapping6{
 		file=Electric_Water_Dumple.png
-		file_x=843
-		file_y=283
-		file_w=161
-		file_h=88
-		game_w=161.00
-		game_h=88.00
-		offs_x=10.00
-		offs_y=0.00
+		file_pos=843 283
+		file_size=161 88
+		game_size=161.00 88.00
+		offset=10.00 0.00
 		hitboxes{
 			body{
 				coords=-2.00 0.00 0.00

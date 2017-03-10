@@ -1816,7 +1816,6 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
         //then it had no impact on the existing ties.
         //Go with the Onion that had been decided before.
         if(new_tie || !decided_type) {
-            //TODO make this cycle instead of being picked randomly.
             decided_type =
                 majority_types[randomi(0, majority_types.size() - 1)];
         }

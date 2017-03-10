@@ -30,8 +30,6 @@ enemy::enemy(
     appears_every_x_days(0) {
     
     team = MOB_TEAM_ENEMY_1; //TODO removeish.
-    
-    //TODO day apperance interval
 }
 
 

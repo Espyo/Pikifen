@@ -11,14 +11,10 @@ animations{
 sprites{
 	idling{
 		file=Red_pellet.png
-		file_x=0
-		file_y=0
-		file_w=128
-		file_h=128
-		game_w=128
-		game_h=128
-		offs_x=0
-		offs_y=0
+		file_pos=0 0
+		file_size=128 128
+		game_size=128 128
+		offset=0 0
 		hitboxes=
 	}
 }

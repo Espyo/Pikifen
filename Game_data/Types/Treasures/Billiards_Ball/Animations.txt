@@ -11,14 +11,10 @@ animations{
 sprites{
 	idling{
 		file=Billiards_Ball.png
-		file_x=0
-		file_y=0
-		file_w=100
-		file_h=100
-		game_w=100.00
-		game_h=100.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=100 100
+		game_size=100.00 100.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

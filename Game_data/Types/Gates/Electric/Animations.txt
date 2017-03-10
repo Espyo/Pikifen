@@ -28,14 +28,10 @@ animations{
 sprites{
 	1{
 		file=Electric_gate.png
-		file_x=0
-		file_y=0
-		file_w=48
-		file_h=288
-		game_w=48.00
-		game_h=288.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=48 288
+		game_size=48.00 288.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -113,14 +109,10 @@ sprites{
 	}
 	2{
 		file=Electric_gate.png
-		file_x=49
-		file_y=0
-		file_w=48
-		file_h=288
-		game_w=48.00
-		game_h=288.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=49 0
+		file_size=48 288
+		game_size=48.00 288.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -198,14 +190,10 @@ sprites{
 	}
 	3{
 		file=Electric_gate.png
-		file_x=98
-		file_y=0
-		file_w=48
-		file_h=288
-		game_w=48.00
-		game_h=288.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=98 0
+		file_size=48 288
+		game_size=48.00 288.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -283,14 +271,10 @@ sprites{
 	}
 	open{
 		file=Electric_gate.png
-		file_x=147
-		file_y=0
-		file_w=48
-		file_h=288
-		game_w=48.00
-		game_h=288.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=147 0
+		file_size=48 288
+		game_size=48.00 288.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00

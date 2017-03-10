@@ -261,12 +261,10 @@ public:
     virtual void unload();
     virtual void update_transformations();
     
-    void set_guide_file_name(string n);
-    void set_guide_x(float x);
-    void set_guide_y(float y);
-    void set_guide_w(float w);
-    void set_guide_h(float h);
-    void set_guide_a(unsigned char a);
+    void set_guide_file_name(const string &n);
+    void set_guide_pos(const point &p);
+    void set_guide_size(const point &p);
+    void set_guide_a(const unsigned char a);
     
 };
 

@@ -156,14 +156,10 @@ animations{
 sprites{
 	idling{
 		file=Water_Dumple.png
-		file_x=0
-		file_y=0
-		file_w=66
-		file_h=50
-		game_w=66.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=66 50
+		game_size=66.00 50.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -193,14 +189,10 @@ sprites{
 	}
 	moving1{
 		file=Water_Dumple.png
-		file_x=201
-		file_y=0
-		file_w=72
-		file_h=50
-		game_w=72.00
-		game_h=50.00
-		offs_x=3.00
-		offs_y=0.00
+		file_pos=201 0
+		file_size=72 50
+		game_size=72.00 50.00
+		offset=3.00 0.00
 		hitboxes{
 			body{
 				coords=6.00 0.00 0.00
@@ -230,14 +222,10 @@ sprites{
 	}
 	moving2{
 		file=Water_Dumple.png
-		file_x=274
-		file_y=0
-		file_w=79
-		file_h=50
-		game_w=79.00
-		game_h=50.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=274 0
+		file_size=79 50
+		game_size=79.00 50.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=11.20 -0.18 0.00
@@ -267,14 +255,10 @@ sprites{
 	}
 	idling2{
 		file=Water_Dumple.png
-		file_x=67
-		file_y=0
-		file_w=67
-		file_h=51
-		game_w=67.00
-		game_h=51.00
-		offs_x=0.50
-		offs_y=0.50
+		file_pos=67 0
+		file_size=67 51
+		game_size=67.00 51.00
+		offset=0.50 0.50
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -304,14 +288,10 @@ sprites{
 	}
 	idling3{
 		file=Water_Dumple.png
-		file_x=135
-		file_y=0
-		file_w=65
-		file_h=51
-		game_w=65.00
-		game_h=51.00
-		offs_x=-0.50
-		offs_y=-0.50
+		file_pos=135 0
+		file_size=65 51
+		game_size=65.00 51.00
+		offset=-0.50 -0.50
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -341,14 +321,10 @@ sprites{
 	}
 	attacking1{
 		file=Water_Dumple.png
-		file_x=0
-		file_y=51
-		file_w=60
-		file_h=51
-		game_w=60.00
-		game_h=51.00
-		offs_x=-3.00
-		offs_y=0.00
+		file_pos=0 51
+		file_size=60 51
+		game_size=60.00 51.00
+		offset=-3.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -378,14 +354,10 @@ sprites{
 	}
 	attacking2{
 		file=Water_Dumple.png
-		file_x=61
-		file_y=52
-		file_w=96
-		file_h=50
-		game_w=96.00
-		game_h=50.00
-		offs_x=15.00
-		offs_y=0.00
+		file_pos=61 52
+		file_size=96 50
+		game_size=96.00 50.00
+		offset=15.00 0.00
 		hitboxes{
 			body{
 				coords=18.00 0.00 0.00
@@ -415,14 +387,10 @@ sprites{
 	}
 	attacking3{
 		file=Water_Dumple.png
-		file_x=158
-		file_y=52
-		file_w=100
-		file_h=50
-		game_w=100.00
-		game_h=50.00
-		offs_x=17.00
-		offs_y=0.00
+		file_pos=158 52
+		file_size=100 50
+		game_size=100.00 50.00
+		offset=17.00 0.00
 		hitboxes{
 			body{
 				coords=22.00 0.00 0.00
@@ -452,14 +420,10 @@ sprites{
 	}
 	shaking1{
 		file=Water_Dumple.png
-		file_x=259
-		file_y=51
-		file_w=67
-		file_h=52
-		game_w=67.00
-		game_h=52.00
-		offs_x=-1.00
-		offs_y=-1.00
+		file_pos=259 51
+		file_size=67 52
+		game_size=67.00 52.00
+		offset=-1.00 -1.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -489,14 +453,10 @@ sprites{
 	}
 	shaking2{
 		file=Water_Dumple.png
-		file_x=259
-		file_y=51
-		file_w=67
-		file_h=52
-		game_w=67.00
-		game_h=-52.00
-		offs_x=-1.00
-		offs_y=-1.00
+		file_pos=259 51
+		file_size=67 52
+		game_size=67.00 -52.00
+		offset=-1.00 -1.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -526,14 +486,10 @@ sprites{
 	}
 	shaking3{
 		file=Water_Dumple.png
-		file_x=327
-		file_y=51
-		file_w=68
-		file_h=55
-		game_w=68.00
-		game_h=55.00
-		offs_x=-1.00
-		offs_y=0.00
+		file_pos=327 51
+		file_size=68 55
+		game_size=68.00 55.00
+		offset=-1.00 0.00
 		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
@@ -563,14 +519,10 @@ sprites{
 	}
 	shaking4{
 		file=Water_Dumple.png
-		file_x=396
-		file_y=51
-		file_w=71
-		file_h=60
-		game_w=71.00
-		game_h=60.00
-		offs_x=-2.00
-		offs_y=0.00
+		file_pos=396 51
+		file_size=71 60
+		game_size=71.00 60.00
+		offset=-2.00 0.00
 		hitboxes{
 			body{
 				coords=1.00 0.00 0.00
@@ -600,14 +552,10 @@ sprites{
 	}
 	eating1{
 		file=Water_Dumple.png
-		file_x=0
-		file_y=103
-		file_w=66
-		file_h=50
-		game_w=66.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 103
+		file_size=66 50
+		game_size=66.00 50.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -637,14 +585,10 @@ sprites{
 	}
 	eating2{
 		file=Water_Dumple.png
-		file_x=67
-		file_y=103
-		file_w=67
-		file_h=50
-		game_w=67.00
-		game_h=50.00
-		offs_x=1.00
-		offs_y=0.00
+		file_pos=67 103
+		file_size=67 50
+		game_size=67.00 50.00
+		offset=1.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -674,14 +618,10 @@ sprites{
 	}
 	dying1{
 		file=Water_Dumple.png
-		file_x=135
-		file_y=103
-		file_w=66
-		file_h=51
-		game_w=66.00
-		game_h=51.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=135 103
+		file_size=66 51
+		game_size=66.00 51.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -711,14 +651,10 @@ sprites{
 	}
 	dying2{
 		file=Water_Dumple.png
-		file_x=202
-		file_y=104
-		file_w=66
-		file_h=36
-		game_w=66.00
-		game_h=36.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=202 104
+		file_size=66 36
+		game_size=66.00 36.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -748,14 +684,10 @@ sprites{
 	}
 	dying3{
 		file=Water_Dumple.png
-		file_x=269
-		file_y=107
-		file_w=66
-		file_h=47
-		game_w=66.00
-		game_h=47.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=269 107
+		file_size=66 47
+		game_size=66.00 47.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -785,14 +717,10 @@ sprites{
 	}
 	dying4{
 		file=Water_Dumple.png
-		file_x=336
-		file_y=112
-		file_w=66
-		file_h=50
-		game_w=66.00
-		game_h=50.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=336 112
+		file_size=66 50
+		game_size=66.00 50.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00
@@ -822,14 +750,10 @@ sprites{
 	}
 	dying5{
 		file=Water_Dumple.png
-		file_x=269
-		file_y=107
-		file_w=66
-		file_h=47
-		game_w=66.00
-		game_h=-47.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=269 107
+		file_size=66 47
+		game_size=66.00 -47.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=3.00 0.00 0.00

@@ -985,17 +985,11 @@ void load_area(
         ae->set_guide_file_name(
             geometry_file.get_child_by_name("guide_file_name")->value
         );
-        ae->set_guide_x(
-            s2f(geometry_file.get_child_by_name("guide_x")->value)
+        ae->set_guide_pos(
+            s2p(geometry_file.get_child_by_name("guide_pos")->value)
         );
-        ae->set_guide_y(
-            s2f(geometry_file.get_child_by_name("guide_y")->value)
-        );
-        ae->set_guide_w(
-            s2f(geometry_file.get_child_by_name("guide_w")->value)
-        );
-        ae->set_guide_h(
-            s2f(geometry_file.get_child_by_name("guide_h")->value)
+        ae->set_guide_size(
+            s2p(geometry_file.get_child_by_name("guide_size")->value)
         );
         ae->set_guide_a(
             s2i(
@@ -1111,27 +1105,24 @@ void load_custom_particle_generators() {
         prs.set("gravity",         base_p.gravity);
         prs.set("size_grow_speed", base_p.size_grow_speed);
         prs.set("size",            base_p.size);
-        prs.set("speed_x",         base_p.speed.x);
-        prs.set("speed_y",         base_p.speed.y);
+        prs.set("speed",           base_p.speed);
         prs.set("color",           base_p.color);
         prs.set("before_mobs",     base_p.before_mobs);
         base_p.time = base_p.duration;
         
         particle_generator pg_struct(emission_interval, base_p, number);
         
-        grs.set("number_deviation",   pg_struct.number_deviation);
-        grs.set("duration_deviation", pg_struct.duration_deviation);
-        grs.set("friction_deviation", pg_struct.friction_deviation);
-        grs.set("gravity_deviation",  pg_struct.gravity_deviation);
-        grs.set("size_deviation",     pg_struct.size_deviation);
-        grs.set("x_deviation",        pg_struct.pos_deviation.x);
-        grs.set("y_deviation",        pg_struct.pos_deviation.y);
-        grs.set("speed_x_deviation",  pg_struct.speed_deviation.x);
-        grs.set("speed_y_deviation",  pg_struct.speed_deviation.y);
-        grs.set("angle",              pg_struct.angle);
-        grs.set("angle_deviation",    pg_struct.angle_deviation);
-        grs.set("speed",              pg_struct.total_speed);
-        grs.set("speed_deviation",    pg_struct.total_speed_deviation);
+        grs.set("number_deviation",      pg_struct.number_deviation);
+        grs.set("duration_deviation",    pg_struct.duration_deviation);
+        grs.set("friction_deviation",    pg_struct.friction_deviation);
+        grs.set("gravity_deviation",     pg_struct.gravity_deviation);
+        grs.set("size_deviation",        pg_struct.size_deviation);
+        grs.set("pos_deviation",         pg_struct.pos_deviation);
+        grs.set("speed_deviation",       pg_struct.speed_deviation);
+        grs.set("angle",                 pg_struct.angle);
+        grs.set("angle_deviation",       pg_struct.angle_deviation);
+        grs.set("total_speed",           pg_struct.total_speed);
+        grs.set("total_speed_deviation", pg_struct.total_speed_deviation);
         
         pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
         
@@ -2164,6 +2155,12 @@ string f2s(const float f) {
 }
 
 
+//Converts a point to a string.
+string p2s(const point &p) {
+    return f2s(p.x) + " " + f2s(p.y);
+}
+
+
 //Converts a string to a boolean, judging by
 //the English language words that represent true and false.
 bool s2b(const string &s) {
@@ -2223,3 +2220,17 @@ double s2f(const string &s) {
 
 //Converts a string to an integer.
 int s2i(const string &s) { return s2f(s); }
+
+
+//Converts a string to a point.
+point s2p(const string &s) {
+    vector<string> words = split(s);
+    point p;
+    if(words.size() >= 1) {
+        p.x = s2f(words[0]);
+    }
+    if(words.size() >= 2) {
+        p.y = s2f(words[1]);
+    }
+    return p;
+}

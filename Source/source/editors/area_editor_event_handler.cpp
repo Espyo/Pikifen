@@ -502,7 +502,6 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                 new_circle_sector_step++;
                 
             } else {
-                //TODO
                 for(
                     size_t p = 0;
                     p < new_circle_sector_valid_edges.size(); ++p

@@ -1220,31 +1220,21 @@ void animation_editor::save_animation_database() {
         data_node* sprite_node = new data_node(anims.sprites[s]->name, "");
         sprites_node->add(sprite_node);
         
-        sprite_node->add(new data_node("file", s_ptr->file));
-        sprite_node->add(new data_node("file_x", i2s(s_ptr->file_pos.x)));
-        sprite_node->add(new data_node("file_y", i2s(s_ptr->file_pos.y)));
-        sprite_node->add(new data_node("file_w", i2s(s_ptr->file_size.x)));
-        sprite_node->add(new data_node("file_h", i2s(s_ptr->file_size.y)));
-        sprite_node->add(new data_node("game_w", f2s(s_ptr->game_size.x)));
-        sprite_node->add(new data_node("game_h", f2s(s_ptr->game_size.y)));
-        sprite_node->add(new data_node("offs_x", f2s(s_ptr->offset.x)));
-        sprite_node->add(new data_node("offs_y", f2s(s_ptr->offset.y)));
+        sprite_node->add(new data_node("file",      s_ptr->file));
+        sprite_node->add(new data_node("file_pos",  p2s(s_ptr->file_pos)));
+        sprite_node->add(new data_node("file_size", p2s(s_ptr->file_size)));
+        sprite_node->add(new data_node("game_size", p2s(s_ptr->game_size)));
+        sprite_node->add(new data_node("offset",    p2s(s_ptr->offset)));
         
         if(is_pikmin) {
             sprite_node->add(
                 new data_node("top_visible", b2s(s_ptr->top_visible))
             );
             sprite_node->add(
-                new data_node("top_x", f2s(s_ptr->top_pos.x))
+                new data_node("top_pos", p2s(s_ptr->top_pos))
             );
             sprite_node->add(
-                new data_node("top_y", f2s(s_ptr->top_pos.y))
-            );
-            sprite_node->add(
-                new data_node("top_w", f2s(s_ptr->top_size.x))
-            );
-            sprite_node->add(
-                new data_node("top_h", f2s(s_ptr->top_size.y))
+                new data_node("top_size", p2s(s_ptr->top_size))
             );
             sprite_node->add(
                 new data_node("top_angle", f2s(s_ptr->top_angle))

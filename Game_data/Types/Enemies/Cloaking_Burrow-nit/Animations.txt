@@ -323,14 +323,10 @@ animations{
 sprites{
 	attacking1{
 		file=CB.png
-		file_x=0
-		file_y=57
-		file_w=56
-		file_h=56
-		game_w=56.00
-		game_h=56.00
-		offs_x=-5.50
-		offs_y=0.00
+		file_pos=0 57
+		file_size=56 56
+		game_size=56.00 56.00
+		offset=-5.50 0.00
 		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
@@ -372,14 +368,10 @@ sprites{
 	}
 	attacking2{
 		file=CB.png
-		file_x=57
-		file_y=57
-		file_w=50
-		file_h=56
-		game_w=50.00
-		game_h=56.00
-		offs_x=-8.50
-		offs_y=0.00
+		file_pos=57 57
+		file_size=50 56
+		game_size=50.00 56.00
+		offset=-8.50 0.00
 		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
@@ -421,14 +413,10 @@ sprites{
 	}
 	attacking3{
 		file=CB.png
-		file_x=108
-		file_y=57
-		file_w=50
-		file_h=56
-		game_w=50.00
-		game_h=56.00
-		offs_x=-8.50
-		offs_y=0.00
+		file_pos=108 57
+		file_size=50 56
+		game_size=50.00 56.00
+		offset=-8.50 0.00
 		hitboxes{
 			face{
 				coords=12.00 0.00 0.00
@@ -470,14 +458,10 @@ sprites{
 	}
 	attacking4{
 		file=CB.png
-		file_x=159
-		file_y=57
-		file_w=92
-		file_h=56
-		game_w=92.00
-		game_h=56.00
-		offs_x=12.50
-		offs_y=0.00
+		file_pos=159 57
+		file_size=92 56
+		game_size=92.00 56.00
+		offset=12.50 0.00
 		hitboxes{
 			face{
 				coords=24.00 0.00 0.00
@@ -519,14 +503,10 @@ sprites{
 	}
 	attacking5{
 		file=CB.png
-		file_x=252
-		file_y=57
-		file_w=148
-		file_h=56
-		game_w=148.00
-		game_h=56.00
-		offs_x=40.50
-		offs_y=0.00
+		file_pos=252 57
+		file_size=148 56
+		game_size=148.00 56.00
+		offset=40.50 0.00
 		hitboxes{
 			face{
 				coords=44.00 0.00 0.00
@@ -568,14 +548,10 @@ sprites{
 	}
 	dying1{
 		file=CB.png
-		file_x=0
-		file_y=171
-		file_w=68
-		file_h=56
-		game_w=68.00
-		game_h=56.00
-		offs_x=0.50
-		offs_y=0.00
+		file_pos=0 171
+		file_size=68 56
+		game_size=68.00 56.00
+		offset=0.50 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -617,14 +593,10 @@ sprites{
 	}
 	dying2{
 		file=CB.png
-		file_x=0
-		file_y=0
-		file_w=67
-		file_h=56
-		game_w=67.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=67 56
+		game_size=67.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -666,14 +638,10 @@ sprites{
 	}
 	dying3{
 		file=CB.png
-		file_x=69
-		file_y=171
-		file_w=68
-		file_h=56
-		game_w=68.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=69 171
+		file_size=68 56
+		game_size=68.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -715,14 +683,10 @@ sprites{
 	}
 	dying4{
 		file=CB.png
-		file_x=138
-		file_y=171
-		file_w=65
-		file_h=56
-		game_w=65.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=138 171
+		file_size=65 56
+		game_size=65.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -764,14 +728,10 @@ sprites{
 	}
 	dying5{
 		file=CB.png
-		file_x=204
-		file_y=171
-		file_w=64
-		file_h=56
-		game_w=64.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=204 171
+		file_size=64 56
+		game_size=64.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -813,14 +773,10 @@ sprites{
 	}
 	dying6{
 		file=CB.png
-		file_x=269
-		file_y=171
-		file_w=64
-		file_h=56
-		game_w=64.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=269 171
+		file_size=64 56
+		game_size=64.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -862,14 +818,10 @@ sprites{
 	}
 	dying7{
 		file=CB.png
-		file_x=334
-		file_y=171
-		file_w=64
-		file_h=56
-		game_w=64.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=334 171
+		file_size=64 56
+		game_size=64.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -911,14 +863,10 @@ sprites{
 	}
 	dying8{
 		file=CB.png
-		file_x=399
-		file_y=171
-		file_w=57
-		file_h=56
-		game_w=57.00
-		game_h=56.00
-		offs_x=-3.50
-		offs_y=0.00
+		file_pos=399 171
+		file_size=57 56
+		game_size=57.00 56.00
+		offset=-3.50 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -960,14 +908,10 @@ sprites{
 	}
 	dying9{
 		file=CB.png
-		file_x=457
-		file_y=171
-		file_w=80
-		file_h=56
-		game_w=80.00
-		game_h=56.00
-		offs_x=8.00
-		offs_y=0.00
+		file_pos=457 171
+		file_size=80 56
+		game_size=80.00 56.00
+		offset=8.00 0.00
 		hitboxes{
 			face{
 				coords=22.00 0.00 0.00
@@ -1009,14 +953,10 @@ sprites{
 	}
 	idling{
 		file=CB.png
-		file_x=0
-		file_y=0
-		file_w=67
-		file_h=56
-		game_w=67.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=67 56
+		game_size=67.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1058,14 +998,10 @@ sprites{
 	}
 	shaking1{
 		file=CB.png
-		file_x=0
-		file_y=114
-		file_w=60
-		file_h=56
-		game_w=60.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 114
+		file_size=60 56
+		game_size=60.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1107,14 +1043,10 @@ sprites{
 	}
 	shaking2{
 		file=CB.png
-		file_x=120
-		file_y=114
-		file_w=58
-		file_h=56
-		game_w=58.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=120 114
+		file_size=58 56
+		game_size=58.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1156,14 +1088,10 @@ sprites{
 	}
 	shaking3{
 		file=CB.png
-		file_x=61
-		file_y=114
-		file_w=58
-		file_h=56
-		game_w=58.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=61 114
+		file_size=58 56
+		game_size=58.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1205,14 +1133,10 @@ sprites{
 	}
 	shaking4{
 		file=CB.png
-		file_x=120
-		file_y=114
-		file_w=58
-		file_h=56
-		game_w=58.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=120 114
+		file_size=58 56
+		game_size=58.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1254,14 +1178,10 @@ sprites{
 	}
 	shaking5{
 		file=CB.png
-		file_x=236
-		file_y=114
-		file_w=56
-		file_h=56
-		game_w=56.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=236 114
+		file_size=56 56
+		game_size=56.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1303,14 +1223,10 @@ sprites{
 	}
 	shaking6{
 		file=CB.png
-		file_x=61
-		file_y=114
-		file_w=58
-		file_h=56
-		game_w=58.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=61 114
+		file_size=58 56
+		game_size=58.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1352,14 +1268,10 @@ sprites{
 	}
 	shaking7{
 		file=CB.png
-		file_x=179
-		file_y=114
-		file_w=56
-		file_h=56
-		game_w=56.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=179 114
+		file_size=56 56
+		game_size=56.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1401,14 +1313,10 @@ sprites{
 	}
 	eating1{
 		file=CB.png
-		file_x=401
-		file_y=57
-		file_w=67
-		file_h=56
-		game_w=67.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=401 57
+		file_size=67 56
+		game_size=67.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1450,14 +1358,10 @@ sprites{
 	}
 	eating2{
 		file=CB.png
-		file_x=469
-		file_y=57
-		file_w=68
-		file_h=56
-		game_w=68.00
-		game_h=56.00
-		offs_x=0.50
-		offs_y=0.00
+		file_pos=469 57
+		file_size=68 56
+		game_size=68.00 56.00
+		offset=0.50 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1499,14 +1403,10 @@ sprites{
 	}
 	emerging1{
 		file=CB.png
-		file_x=206
-		file_y=0
-		file_w=39
-		file_h=56
-		game_w=39.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=206 0
+		file_size=39 56
+		game_size=39.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1548,14 +1448,10 @@ sprites{
 	}
 	emerging2{
 		file=CB.png
-		file_x=246
-		file_y=0
-		file_w=42
-		file_h=56
-		game_w=42.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=246 0
+		file_size=42 56
+		game_size=42.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1597,14 +1493,10 @@ sprites{
 	}
 	emerging3{
 		file=CB.png
-		file_x=289
-		file_y=0
-		file_w=42
-		file_h=56
-		game_w=42.00
-		game_h=56.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=289 0
+		file_size=42 56
+		game_size=42.00 56.00
+		offset=0.00 0.00
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1646,14 +1538,10 @@ sprites{
 	}
 	emerging4{
 		file=CB.png
-		file_x=332
-		file_y=0
-		file_w=39
-		file_h=56
-		game_w=39.00
-		game_h=56.00
-		offs_x=-4.00
-		offs_y=0.00
+		file_pos=332 0
+		file_size=39 56
+		game_size=39.00 56.00
+		offset=-4.00 0.00
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1695,14 +1583,10 @@ sprites{
 	}
 	emerging5{
 		file=CB.png
-		file_x=372
-		file_y=0
-		file_w=46
-		file_h=56
-		game_w=46.00
-		game_h=56.00
-		offs_x=-8.00
-		offs_y=0.00
+		file_pos=372 0
+		file_size=46 56
+		game_size=46.00 56.00
+		offset=-8.00 0.00
 		hitboxes{
 			face{
 				coords=0.00 0.00 0.00
@@ -1744,14 +1628,10 @@ sprites{
 	}
 	moving1{
 		file=CB.png
-		file_x=68
-		file_y=0
-		file_w=68
-		file_h=56
-		game_w=68.00
-		game_h=56.00
-		offs_x=0.50
-		offs_y=0.00
+		file_pos=68 0
+		file_size=68 56
+		game_size=68.00 56.00
+		offset=0.50 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00
@@ -1793,14 +1673,10 @@ sprites{
 	}
 	moving2{
 		file=CB.png
-		file_x=137
-		file_y=0
-		file_w=68
-		file_h=56
-		game_w=68.00
-		game_h=56.00
-		offs_x=0.50
-		offs_y=0.00
+		file_pos=137 0
+		file_size=68 56
+		game_size=68.00 56.00
+		offset=0.50 0.00
 		hitboxes{
 			face{
 				coords=16.00 0.00 0.00

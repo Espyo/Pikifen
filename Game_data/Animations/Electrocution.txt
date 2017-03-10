@@ -14,26 +14,18 @@ animations{
 sprites{
 	1{
 		file=Electrocution.png
-		file_x=0
-		file_y=0
-		file_w=40
-		file_h=40
-		game_w=20.00
-		game_h=20.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=40 40
+		game_size=20.00 20.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	2{
 		file=Electrocution.png
-		file_x=42
-		file_y=0
-		file_w=40
-		file_h=40
-		game_w=20.00
-		game_h=20.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=42 0
+		file_size=40 40
+		game_size=20.00 20.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

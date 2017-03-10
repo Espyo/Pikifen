@@ -624,6 +624,19 @@ void reader_setter::set(const string &child, float &var) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Reads a child node's value, and uses it to set a variable.
+ * Will not do anything if the child's value is empty.
+ * child: Name of the child node.
+ * var:   The var to set. This is a point.
+ */
+void reader_setter::set(const string &child, point &var) {
+    string s = node->get_child_by_name(child)->value;
+    if(s.empty()) return;
+    var = s2p(s);
+}
+
+
 
 /* ----------------------------------------------------------------------------
  * Creates a structure with sample info.

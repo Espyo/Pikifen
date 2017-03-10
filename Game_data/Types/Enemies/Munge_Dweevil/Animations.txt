@@ -115,14 +115,10 @@ animations{
 sprites{
 	idling11{
 		file=Munge_Dweevil.png
-		file_x=0
-		file_y=0
-		file_w=118
-		file_h=120
-		game_w=118.00
-		game_h=120.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=118 120
+		game_size=118.00 120.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -152,14 +148,10 @@ sprites{
 	}
 	idling12{
 		file=Munge_Dweevil.png
-		file_x=119
-		file_y=0
-		file_w=118
-		file_h=120
-		game_w=118.00
-		game_h=120.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=119 0
+		file_size=118 120
+		game_size=118.00 120.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=-1.00 1.00 0.00
@@ -189,14 +181,10 @@ sprites{
 	}
 	idling13{
 		file=Munge_Dweevil.png
-		file_x=238
-		file_y=0
-		file_w=118
-		file_h=120
-		game_w=118.00
-		game_h=120.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=238 0
+		file_size=118 120
+		game_size=118.00 120.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=1.00 -1.00 0.00
@@ -226,14 +214,10 @@ sprites{
 	}
 	moving1{
 		file=Munge_Dweevil.png
-		file_x=357
-		file_y=0
-		file_w=129
-		file_h=135
-		game_w=129.00
-		game_h=135.00
-		offs_x=0.00
-		offs_y=3.00
+		file_pos=357 0
+		file_size=129 135
+		game_size=129.00 135.00
+		offset=0.00 3.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -263,14 +247,10 @@ sprites{
 	}
 	moving2{
 		file=Munge_Dweevil.png
-		file_x=487
-		file_y=0
-		file_w=137
-		file_h=143
-		game_w=137.00
-		game_h=143.00
-		offs_x=2.00
-		offs_y=5.00
+		file_pos=487 0
+		file_size=137 143
+		game_size=137.00 143.00
+		offset=2.00 5.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -300,14 +280,10 @@ sprites{
 	}
 	moving3{
 		file=Munge_Dweevil.png
-		file_x=625
-		file_y=0
-		file_w=151
-		file_h=147
-		game_w=151.00
-		game_h=147.00
-		offs_x=-4.00
-		offs_y=8.00
+		file_pos=625 0
+		file_size=151 147
+		game_size=151.00 147.00
+		offset=-4.00 8.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -337,14 +313,10 @@ sprites{
 	}
 	moving4{
 		file=Munge_Dweevil.png
-		file_x=777
-		file_y=0
-		file_w=147
-		file_h=138
-		game_w=147.00
-		game_h=138.00
-		offs_x=-1.00
-		offs_y=11.00
+		file_pos=777 0
+		file_size=147 138
+		game_size=147.00 138.00
+		offset=-1.00 11.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -374,14 +346,10 @@ sprites{
 	}
 	moving5{
 		file=Munge_Dweevil.png
-		file_x=925
-		file_y=0
-		file_w=127
-		file_h=128
-		game_w=127.00
-		game_h=128.00
-		offs_x=1.00
-		offs_y=13.00
+		file_pos=925 0
+		file_size=127 128
+		game_size=127.00 128.00
+		offset=1.00 13.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -411,14 +379,10 @@ sprites{
 	}
 	moving6{
 		file=Munge_Dweevil.png
-		file_x=1053
-		file_y=0
-		file_w=114
-		file_h=121
-		game_w=114.00
-		game_h=121.00
-		offs_x=3.00
-		offs_y=1.00
+		file_pos=1053 0
+		file_size=114 121
+		game_size=114.00 121.00
+		offset=3.00 1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -448,14 +412,10 @@ sprites{
 	}
 	dying1{
 		file=Munge_Dweevil.png
-		file_x=0
-		file_y=121
-		file_w=94
-		file_h=88
-		game_w=94.00
-		game_h=88.00
-		offs_x=4.00
-		offs_y=0.00
+		file_pos=0 121
+		file_size=94 88
+		game_size=94.00 88.00
+		offset=4.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -485,14 +445,10 @@ sprites{
 	}
 	dying2{
 		file=Munge_Dweevil.png
-		file_x=95
-		file_y=121
-		file_w=76
-		file_h=52
-		game_w=76.00
-		game_h=52.00
-		offs_x=13.00
-		offs_y=0.00
+		file_pos=95 121
+		file_size=76 52
+		game_size=76.00 52.00
+		offset=13.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -522,14 +478,10 @@ sprites{
 	}
 	dying3{
 		file=Munge_Dweevil.png
-		file_x=172
-		file_y=121
-		file_w=103
-		file_h=90
-		game_w=103.00
-		game_h=90.00
-		offs_x=-1.00
-		offs_y=28.00
+		file_pos=172 121
+		file_size=103 90
+		game_size=103.00 90.00
+		offset=-1.00 28.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -559,14 +511,10 @@ sprites{
 	}
 	dying4{
 		file=Munge_Dweevil.png
-		file_x=276
-		file_y=136
-		file_w=81
-		file_h=74
-		game_w=81.00
-		game_h=74.00
-		offs_x=7.00
-		offs_y=24.00
+		file_pos=276 136
+		file_size=81 74
+		game_size=81.00 74.00
+		offset=7.00 24.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -596,14 +544,10 @@ sprites{
 	}
 	dying5{
 		file=Munge_Dweevil.png
-		file_x=358
-		file_y=136
-		file_w=70
-		file_h=54
-		game_w=70.00
-		game_h=54.00
-		offs_x=8.00
-		offs_y=12.00
+		file_pos=358 136
+		file_size=70 54
+		game_size=70.00 54.00
+		offset=8.00 12.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -633,14 +577,10 @@ sprites{
 	}
 	dying6{
 		file=Munge_Dweevil.png
-		file_x=429
-		file_y=144
-		file_w=60
-		file_h=52
-		game_w=60.00
-		game_h=52.00
-		offs_x=6.00
-		offs_y=0.00
+		file_pos=429 144
+		file_size=60 52
+		game_size=60.00 52.00
+		offset=6.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -670,14 +610,10 @@ sprites{
 	}
 	attacking1{
 		file=Munge_Dweevil.png
-		file_x=490
-		file_y=144
-		file_w=113
-		file_h=116
-		game_w=113.00
-		game_h=116.00
-		offs_x=-1.00
-		offs_y=-1.00
+		file_pos=490 144
+		file_size=113 116
+		game_size=113.00 116.00
+		offset=-1.00 -1.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -707,14 +643,10 @@ sprites{
 	}
 	attacking2{
 		file=Munge_Dweevil.png
-		file_x=604
-		file_y=148
-		file_w=113
-		file_h=115
-		game_w=113.00
-		game_h=115.00
-		offs_x=-1.00
-		offs_y=0.00
+		file_pos=604 148
+		file_size=113 115
+		game_size=113.00 115.00
+		offset=-1.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -744,14 +676,10 @@ sprites{
 	}
 	shaking_kb{
 		file=Munge_Dweevil.png
-		file_x=0
-		file_y=0
-		file_w=118
-		file_h=120
-		game_w=118.00
-		game_h=120.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=118 120
+		game_size=118.00 120.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00
@@ -781,14 +709,10 @@ sprites{
 	}
 	attacking_gas{
 		file=Munge_Dweevil.png
-		file_x=0
-		file_y=121
-		file_w=94
-		file_h=88
-		game_w=94.00
-		game_h=88.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 121
+		file_size=94 88
+		game_size=94.00 88.00
+		offset=0.00 0.00
 		hitboxes{
 			body{
 				coords=0.00 0.00 0.00

@@ -497,34 +497,24 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             new sprite(
             sprite_node->name,
             parent,
-            point(
-                s2i(sprite_node->get_child_by_name("file_x")->value),
-                s2i(sprite_node->get_child_by_name("file_y")->value)
-            ),
-            point(
-                s2i(sprite_node->get_child_by_name("file_w")->value),
-                s2i(sprite_node->get_child_by_name("file_h")->value)
-            ),
-            point(
-                s2f(sprite_node->get_child_by_name("game_w")->value),
-                s2f(sprite_node->get_child_by_name("game_h")->value)
-            ),
+            s2p(sprite_node->get_child_by_name("file_pos")->value),
+            s2p(sprite_node->get_child_by_name("file_size")->value),
+            s2p(sprite_node->get_child_by_name("game_size")->value),
             hitboxes
         );
         adb.sprites.push_back(new_s);
         
         new_s->file = sprite_node->get_child_by_name("file")->value;
         new_s->parent_bmp = parent;
-        new_s->offset.x = s2f(sprite_node->get_child_by_name("offs_x")->value);
-        new_s->offset.y = s2f(sprite_node->get_child_by_name("offs_y")->value);
+        new_s->offset = s2p(sprite_node->get_child_by_name("offset")->value);
         new_s->top_visible =
             s2b(
                 sprite_node->get_child_by_name("top_visible")->value
             );
-        new_s->top_pos.x = s2f(sprite_node->get_child_by_name("top_x")->value);
-        new_s->top_pos.y = s2f(sprite_node->get_child_by_name("top_y")->value);
-        new_s->top_size.x = s2f(sprite_node->get_child_by_name("top_w")->value);
-        new_s->top_size.y = s2f(sprite_node->get_child_by_name("top_h")->value);
+        new_s->top_pos =
+            s2p(sprite_node->get_child_by_name("top_pos")->value);
+        new_s->top_size =
+            s2p(sprite_node->get_child_by_name("top_size")->value);
         new_s->top_angle =
             s2f(
                 sprite_node->get_child_by_name("top_angle")->value

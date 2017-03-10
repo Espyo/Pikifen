@@ -20,50 +20,34 @@ animations{
 sprites{
 	1{
 		file=Ink.png
-		file_x=0
-		file_y=0
-		file_w=32
-		file_h=32
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=32 32
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	2{
 		file=Ink.png
-		file_x=33
-		file_y=0
-		file_w=32
-		file_h=32
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=33 0
+		file_size=32 32
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	3{
 		file=Ink.png
-		file_x=66
-		file_y=0
-		file_w=32
-		file_h=32
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=66 0
+		file_size=32 32
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 	4{
 		file=Ink.png
-		file_x=99
-		file_y=0
-		file_w=32
-		file_h=32
-		game_w=32.00
-		game_h=32.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=99 0
+		file_size=32 32
+		game_size=32.00 32.00
+		offset=0.00 0.00
 		hitboxes=
 	}
 }

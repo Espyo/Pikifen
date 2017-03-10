@@ -2387,10 +2387,8 @@ void area_editor::save_area(const bool to_backup) {
     
     //Editor guide.
     geometry_file.add(new data_node("guide_file_name", guide_file_name));
-    geometry_file.add(new data_node("guide_x",         f2s(guide_pos.x)));
-    geometry_file.add(new data_node("guide_y",         f2s(guide_pos.y)));
-    geometry_file.add(new data_node("guide_w",         f2s(guide_size.x)));
-    geometry_file.add(new data_node("guide_h",         f2s(guide_size.y)));
+    geometry_file.add(new data_node("guide_pos",       p2s(guide_pos)));
+    geometry_file.add(new data_node("guide_size",      p2s(guide_size)));
     geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
     
     
@@ -2712,47 +2710,31 @@ void area_editor::update_transformations() {
 /* ----------------------------------------------------------------------------
  * Sets the guide's file name.
  */
-void area_editor::set_guide_file_name(string n) {
+void area_editor::set_guide_file_name(const string &n) {
     guide_file_name = n;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's X coordinate.
+ * Sets the guide's coordinates.
  */
-void area_editor::set_guide_x(float x) {
-    guide_pos.x = x;
+void area_editor::set_guide_pos(const point &p) {
+    guide_pos = p;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's Y coordinate.
+ * Sets the guide's dimensions.
  */
-void area_editor::set_guide_y(float y) {
-    guide_pos.y = y;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the guide's width.
- */
-void area_editor::set_guide_w(float w) {
-    guide_size.x = w;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the guide's height.
- */
-void area_editor::set_guide_h(float h) {
-    guide_size.y = h;
+void area_editor::set_guide_size(const point &p) {
+    guide_size = p;
 }
 
 
 /* ----------------------------------------------------------------------------
  * Sets the guide's alpha.
  */
-void area_editor::set_guide_a(unsigned char a) {
+void area_editor::set_guide_a(const unsigned char a) {
     guide_a = a;
 }
 

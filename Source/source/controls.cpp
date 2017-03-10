@@ -416,7 +416,6 @@ void handle_button(
                                 cur_leader_ptr->pos, ships[s]->beam_final_pos
                             ) <= ships[s]->shi_type->beam_radius
                         ) {
-                            //TODO make the whole process prettier.
                             cur_leader_ptr->health =
                                 cur_leader_ptr->type->max_health;
                             done = true;

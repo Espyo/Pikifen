@@ -19,14 +19,10 @@ animations{
 sprites{
 	idling{
 		file=White_gate.png
-		file_x=0
-		file_y=0
-		file_w=48
-		file_h=192
-		game_w=48.00
-		game_h=192.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=48 192
+		game_size=48.00 192.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
@@ -68,14 +64,10 @@ sprites{
 	}
 	destroyed{
 		file=White_gate.png
-		file_x=0
-		file_y=0
-		file_w=0
-		file_h=0
-		game_w=0.00
-		game_h=0.00
-		offs_x=0.00
-		offs_y=0.00
+		file_pos=0 0
+		file_size=0 0
+		game_size=0.00 0.00
+		offset=0.00 0.00
 		hitboxes{
 			center{
 				coords=0.00 0.00 0.00
