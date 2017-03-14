@@ -75,6 +75,7 @@ extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
+extern ALLEGRO_BITMAP* bmp_spotlight;
 extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
@@ -242,6 +243,7 @@ extern movement_struct leader_movement;
 extern vector<leader_type*> leader_order;
 extern vector<string> leader_order_strings;
 extern map<string, leader_type*> leader_types;
+extern ALLEGRO_BITMAP* lightmap_bmp;
 //Loading screen main text buffer.
 extern ALLEGRO_BITMAP* loading_text_bmp;
 //Loading screen subtext buffer.

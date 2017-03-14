@@ -89,6 +89,7 @@ vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
 void generate_area_images();
+unsigned char get_blackout_strength();
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
 void get_multiline_text_dimensions(
@@ -98,6 +99,7 @@ float get_sun_strength();
 string get_var_value(
     const string &vars_string, const string &var, const string &def
 );
+vector<pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2

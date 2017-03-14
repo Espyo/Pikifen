@@ -339,6 +339,40 @@ void generate_area_images() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the blackout effect's strength
+ * for the current time and weather.
+ */
+unsigned char get_blackout_strength() {
+    size_t n_points = cur_area_data.weather_condition.blackout_strength.size();
+    
+    if(n_points == 0) {
+        return 0;
+    } else if(n_points == 1) {
+        return cur_area_data.weather_condition.blackout_strength[0].second;
+    }
+    
+    for(size_t p = 0; p < n_points - 1; ++p) {
+        auto cur_ptr = &cur_area_data.weather_condition.blackout_strength[p];
+        auto next_ptr =
+            &cur_area_data.weather_condition.blackout_strength[p + 1];
+        
+        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        
+            return
+                interpolate_number(
+                    day_minutes,
+                    cur_ptr->first, next_ptr->first,
+                    cur_ptr->second, next_ptr->second
+                );
+        }
+    }
+    
+    //If anything goes wrong, return a failsafe.
+    return 0;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the mob that is closest to the mouse cursor.
  */
 mob* get_closest_mob_to_cursor() {
@@ -379,13 +413,12 @@ ALLEGRO_COLOR get_daylight_color() {
         
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
-            return interpolate_color(
-                       day_minutes,
-                       cur_ptr->first,
-                       next_ptr->first,
-                       cur_ptr->second,
-                       next_ptr->second
-                   );
+            return
+                interpolate_color(
+                    day_minutes,
+                    cur_ptr->first, next_ptr->first,
+                    cur_ptr->second, next_ptr->second
+                );
         }
     }
     
@@ -448,10 +481,8 @@ float get_sun_strength() {
             return
                 interpolate_number(
                     day_minutes,
-                    cur_ptr->first,
-                    next_ptr->first,
-                    cur_ptr->second,
-                    next_ptr->second
+                    cur_ptr->first, next_ptr->first,
+                    cur_ptr->second, next_ptr->second
                 ) / 255.0f;
         }
     }
@@ -489,6 +520,52 @@ string get_var_value(
 
 
 /* ----------------------------------------------------------------------------
+ * Auxiliary function that returns a table used in the weather configs.
+ */
+vector<pair<size_t, string> > get_weather_table(data_node* node) {
+    vector<pair<size_t, string> > table;
+    size_t n_points = node->get_nr_of_children();
+        
+    bool have_midnight = false;
+    
+    for(size_t p = 0; p < n_points; ++p) {
+        data_node* point_node = node->get_child(p);
+            
+        size_t point_time = s2i(point_node->name);
+        string point_value = point_node->value;
+        
+        table.push_back(make_pair(point_time, point_value));
+        
+        if(point_time == 24 * 60) have_midnight = true;
+    }
+    
+    sort(
+        table.begin(), table.end(),
+        [] (
+            pair<size_t, string> p1,
+            pair<size_t, string> p2
+    ) -> bool {
+        return p1.first < p2.first;
+    }
+    );
+    
+    if(!table.empty()) {
+        if(!have_midnight) {
+            //If there is no data for the last hour,
+            //use the data from the first point
+            //(this is because the day loops after 24:00;
+            //needed for interpolation).
+            table.push_back(
+                make_pair(24 * 60, table[0].second)
+            );
+        }
+    }
+    
+    return table;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the interpolation between two colors, given a number in an interval.
  * n: The number.
  * n1, n2: The interval the number falls on.
@@ -500,12 +577,13 @@ ALLEGRO_COLOR interpolate_color(
     const ALLEGRO_COLOR &c1, const ALLEGRO_COLOR &c2
 ) {
     float progress = (float) (n - n1) / (float) (n2 - n1);
-    return al_map_rgba_f(
-               c1.r + progress * (c2.r - c1.r),
-               c1.g + progress * (c2.g - c1.g),
-               c1.b + progress * (c2.b - c1.b),
-               c1.a + progress * (c2.a - c1.a)
-           );
+    return
+        al_map_rgba_f(
+            c1.r + progress * (c2.r - c1.r),
+            c1.g + progress * (c2.g - c1.g),
+            c1.b + progress * (c2.b - c1.b),
+            c1.a + progress * (c2.a - c1.a)
+        );
 }
 
 
@@ -1214,86 +1292,51 @@ void load_game_content() {
         if(name.empty()) name = "default";
         
         //Lighting.
+        vector<pair<size_t, string> > lighting_table =
+            get_weather_table(cur_weather->get_child_by_name("lighting"));
+        
         vector<pair<size_t, ALLEGRO_COLOR> > lighting;
-        size_t n_lighting_points =
-            cur_weather->get_child_by_name("lighting")->get_nr_of_children();
-            
-        bool have_midnight = false;
-        
-        for(size_t lp = 0; lp < n_lighting_points; ++lp) {
-            data_node* lighting_node =
-                cur_weather->get_child_by_name("lighting")->get_child(lp);
-                
-            size_t point_time = s2i(lighting_node->name);
-            ALLEGRO_COLOR point_color = s2c(lighting_node->value);
-            
-            lighting.push_back(make_pair(point_time, point_color));
-            
-            if(point_time == 24 * 60) have_midnight = true;
+        for(size_t p = 0; p < lighting_table.size(); ++p) {
+            lighting.push_back(
+                make_pair(
+                    lighting_table[p].first,
+                    s2c(lighting_table[p].second)
+                )
+            );
         }
-        
-        sort(
-            lighting.begin(), lighting.end(),
-            [] (
-                pair<size_t, ALLEGRO_COLOR> p1, pair<size_t, ALLEGRO_COLOR> p2
-        ) -> bool {
-            return p1.first < p2.first;
-        }
-        );
         
         if(lighting.empty()) {
             log_error("Weather condition " + name + " has no lighting!");
-        } else {
-            if(!have_midnight) {
-                //If there is no data for the last hour,
-                //use the data from the first point
-                //(this is because the day loops after 24:00;
-                //needed for interpolation).
-                lighting.push_back(make_pair(24 * 60, lighting[0].second));
-            }
         }
         
         //Sun's strength.
+        vector<pair<size_t, string> > sun_strength_table =
+            get_weather_table(cur_weather->get_child_by_name("sun_strength"));
+        
         vector<pair<size_t, unsigned char> > sun_strength;
-        size_t n_sun_strength_points =
-            cur_weather->get_child_by_name(
-                "sun_strength"
-            )->get_nr_of_children();
-            
-        have_midnight = false;
-        
-        for(size_t sp = 0; sp < n_sun_strength_points; ++sp) {
-            data_node* sun_strength_node =
-                cur_weather->get_child_by_name("sun_strength")->get_child(sp);
-                
-            size_t point_time = s2i(sun_strength_node->name);
-            unsigned char point_strength = s2i(sun_strength_node->value);
-            
-            sun_strength.push_back(make_pair(point_time, point_strength));
-            
-            if(point_time == 24 * 60) have_midnight = true;
+        for(size_t p = 0; p < sun_strength_table.size(); ++p) {
+            sun_strength.push_back(
+                make_pair(
+                    sun_strength_table[p].first,
+                    s2i(sun_strength_table[p].second)
+                )
+            );
         }
         
-        sort(
-            sun_strength.begin(), sun_strength.end(),
-            [] (
-                pair<size_t, unsigned char> p1,
-                pair<size_t, unsigned char> p2
-        ) -> bool {
-            return p1.first < p2.first;
-        }
-        );
+        //Blackout effect's strength.
+        vector<pair<size_t, string> > blackout_strength_table =
+            get_weather_table(
+                cur_weather->get_child_by_name("blackout_strength")
+            );
         
-        if(!sun_strength.empty()) {
-            if(!have_midnight) {
-                //If there is no data for the last hour,
-                //use the data from the first point
-                //(this is because the day loops after 24:00;
-                //needed for interpolation).
-                sun_strength.push_back(
-                    make_pair(24 * 60, sun_strength[0].second)
-                );
-            }
+        vector<pair<size_t, unsigned char> > blackout_strength;
+        for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
+            blackout_strength.push_back(
+                make_pair(
+                    blackout_strength_table[p].first,
+                    s2i(blackout_strength_table[p].second)
+                )
+            );
         }
         
         //Precipitation.
@@ -1325,7 +1368,7 @@ void load_game_content() {
         //Save.
         weather_conditions[name] =
             weather(
-                name, lighting, sun_strength,
+                name, lighting, sun_strength, blackout_strength,
                 precipitation_type, precipitation_frequency,
                 precipitation_speed, precipitation_angle
             );

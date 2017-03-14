@@ -471,6 +471,7 @@ void init_misc_graphics() {
     bmp_smack = load_bmp(            "Smack.png");
     bmp_smoke = load_bmp(            "Smoke.png");
     bmp_sparkle = load_bmp(          "Sparkle.png");
+    bmp_spotlight = load_bmp(        "Spotlight.png");
     bmp_sun = load_bmp(              "Sun.png");
     bmp_ub_spray = load_bmp(         "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(         "Ultra-spicy_spray.png");

@@ -18,11 +18,14 @@ weather::weather() {}
  */
 weather::weather(
     const string &n, const vector<pair<size_t, ALLEGRO_COLOR> > &dl,
-    const vector<pair<size_t, unsigned char> > &ss, const unsigned char pt,
+    const vector<pair<size_t, unsigned char> > &ss,
+    const vector<pair<size_t, unsigned char> > &bs,
+    const unsigned char pt,
     const interval &pf, const interval &ps, const interval &pa
 ) :
     name(n),
     daylight(dl),
+    blackout_strength(bs),
     sun_strength(ss),
     precipitation_type(pt),
     precipitation_frequency(pf),

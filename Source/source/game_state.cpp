@@ -204,6 +204,8 @@ void gameplay::load() {
     load_area_textures();
     generate_area_images();
     
+    lightmap_bmp = al_create_bitmap(scr_w, scr_h);
+    
     //Generate mobs.
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
