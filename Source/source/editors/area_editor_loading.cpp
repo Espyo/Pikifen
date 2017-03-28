@@ -196,6 +196,10 @@ void area_editor::load() {
         "but_sel_none",
         new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
+    frm_sectors->easy_add(
+        "but_rem",
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 32
+    );
     y = frm_sectors->easy_row();
     
     lafi::frame* frm_sector =
@@ -339,6 +343,16 @@ void area_editor::load() {
     };
     frm_sectors->widgets["but_sel_none"]->description =
         "Deselect the current sector.";
+        
+    frm_sectors->widgets["but_rem"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        if(!cur_sector) return;
+        if(!remove_isolated_sector(cur_sector)) return;
+        cur_sector = NULL;
+        sector_to_gui();
+    };
+    frm_sectors->widgets["but_rem"]->description =
+        "Removes the selected sector, if it's isolated.";
         
     frm_sector->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -628,6 +642,14 @@ void area_editor::load() {
         "but_sel_none",
         new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
+    frm_objects->easy_add(
+        "but_del",
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 32
+    );
+    frm_objects->easy_add(
+        "but_duplicate",
+        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 20, 32
+    );
     y = frm_objects->easy_row();
     
     lafi::frame* frm_object =
@@ -638,15 +660,7 @@ void area_editor::load() {
     frm_object->easy_row();
     frm_object->easy_add(
         "lbl_category",
-        new lafi::label("Category:"), 70, 16
-    );
-    frm_object->easy_add(
-        "but_rem",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
-    );
-    frm_object->easy_add(
-        "but_duplicate",
-        new lafi::button("", "", icons.get(DUPLICATE_ICON)), 15, 24
+        new lafi::label("Category:"), 100, 16
     );
     frm_object->easy_row();
     frm_object->easy_add(
@@ -713,8 +727,9 @@ void area_editor::load() {
     frm_objects->widgets["but_sel_none"]->description =
         "Deselect the current object.";
         
-    frm_object->widgets["but_rem"]->left_mouse_click_handler =
+    frm_objects->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        if(!cur_mob) return;
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             if(cur_area_data.mob_generators[m] == cur_mob) {
                 cur_area_data.mob_generators.erase(
@@ -727,14 +742,15 @@ void area_editor::load() {
             }
         }
     };
-    frm_object->widgets["but_rem"]->description =
+    frm_objects->widgets["but_del"]->description =
         "Delete the current object.";
         
-    frm_object->widgets["but_duplicate"]->left_mouse_click_handler =
+    frm_objects->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        if(!cur_mob) return;
         toggle_duplicate_mob_mode();
     };
-    frm_object->widgets["but_duplicate"]->description =
+    frm_objects->widgets["but_duplicate"]->description =
         "Duplicate the current object (Ctrl+D).";
         
     frm_object->widgets["but_category"]->left_mouse_click_handler =
@@ -763,7 +779,7 @@ void area_editor::load() {
         
     frm_object->register_accelerator(
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
-        frm_object->widgets["but_duplicate"]
+        frm_objects->widgets["but_duplicate"]
     );
     
     
@@ -939,6 +955,10 @@ void area_editor::load() {
         "but_sel_none",
         new lafi::button("", "", icons.get(SELECT_NONE_ICON)), 20, 32
     );
+    frm_shadows->easy_add(
+        "but_del",
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 32
+    );
     y = frm_shadows->easy_row();
     
     lafi::frame* frm_shadow =
@@ -946,15 +966,6 @@ void area_editor::load() {
     hide_widget(frm_shadow);
     frm_shadows->add("frm_shadow", frm_shadow);
     
-    frm_shadow->easy_row();
-    frm_shadow->easy_add(
-        "dum_1",
-        new lafi::dummy(), 85, 16
-    );
-    frm_shadow->easy_add(
-        "but_rem",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 15, 24
-    );
     frm_shadow->easy_row();
     frm_shadow->easy_add(
         "lbl_file",
@@ -1054,8 +1065,9 @@ void area_editor::load() {
     frm_shadows->widgets["but_sel_none"]->description =
         "Deselect the current tree shadow.";
         
-    frm_shadow->widgets["but_rem"]->left_mouse_click_handler =
+    frm_shadows->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        if(!cur_shadow) return;
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             if(cur_area_data.tree_shadows[s] == cur_shadow) {
                 cur_area_data.tree_shadows.erase(
@@ -1068,7 +1080,7 @@ void area_editor::load() {
             }
         }
     };
-    frm_shadow->widgets["but_rem"]->description =
+    frm_shadows->widgets["but_del"]->description =
         "Delete the current tree shadow.";
         
     frm_shadow->widgets["txt_file"]->lose_focus_handler =

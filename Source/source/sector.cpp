@@ -472,14 +472,15 @@ void edge::fix_pointers(area_data &a) {
 size_t edge::remove_from_sectors() {
     size_t e_nr = INVALID;
     for(unsigned char s = 0; s < 2; ++s) {
-        if(!sectors[s]) continue;
-        for(size_t e = 0; e < sectors[s]->edges.size(); ++e) {
-            edge* e_ptr = sectors[s]->edges[e];
+        sector* s_ptr = sectors[s];
+        if(!s_ptr) continue;
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            edge* e_ptr = s_ptr->edges[e];
             if(e_ptr == this) {
-                sectors[s]->edges.erase(sectors[s]->edges.begin() + e);
-                auto nr_it = sectors[s]->edge_nrs.begin() + e;
+                s_ptr->edges.erase(s_ptr->edges.begin() + e);
+                auto nr_it = s_ptr->edge_nrs.begin() + e;
                 e_nr = *nr_it;
-                sectors[s]->edge_nrs.erase(nr_it);
+                s_ptr->edge_nrs.erase(nr_it);
                 break;
             }
         }
@@ -496,14 +497,15 @@ size_t edge::remove_from_sectors() {
 size_t edge::remove_from_vertexes() {
     size_t e_nr = INVALID;
     for(unsigned char v = 0; v < 2; ++v) {
-        if(!vertexes[v]) continue;
-        for(size_t e = 0; e < vertexes[v]->edges.size(); ++e) {
-            edge* e_ptr = vertexes[v]->edges[e];
+        vertex* v_ptr = vertexes[v];
+        if(!v_ptr) continue;
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            edge* e_ptr = v_ptr->edges[e];
             if(e_ptr == this) {
-                vertexes[v]->edges.erase(vertexes[v]->edges.begin() + e);
-                auto nr_it = vertexes[v]->edge_nrs.begin() + e;
+                v_ptr->edges.erase(v_ptr->edges.begin() + e);
+                auto nr_it = v_ptr->edge_nrs.begin() + e;
                 e_nr = *nr_it;
-                vertexes[v]->edge_nrs.erase(nr_it);
+                v_ptr->edge_nrs.erase(nr_it);
                 break;
             }
         }

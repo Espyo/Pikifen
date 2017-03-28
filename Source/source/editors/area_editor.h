@@ -217,6 +217,7 @@ private:
     );
     void open_picker(const unsigned char content_type);
     void populate_texture_suggestions();
+    bool remove_isolated_sector(sector* s_ptr);
     void resize_everything();
     void save_area(const bool to_backup);
     void save_backup();

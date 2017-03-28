@@ -1853,10 +1853,11 @@ void area_editor::merge_vertex(
     //on both sides. If so, delete them.
     for(size_t ve = 0; ve < v2->edges.size(); ) {
         edge* ve_ptr = v2->edges[ve];
+        size_t ve_nr = v2->edge_nrs[ve];
         if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
             ve_ptr->remove_from_sectors();
             ve_ptr->remove_from_vertexes();
-            cur_area_data.remove_edge(v2->edge_nrs[ve]);
+            cur_area_data.remove_edge(ve_nr);
         } else {
             ++ve;
         }
@@ -2050,6 +2051,53 @@ void area_editor::update_texture_suggestions(const string &n) {
             texture_suggestions.begin() + texture_suggestions.size() - 1
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes a sector, if it's isolated.
+ * Returns true on success.
+ */
+bool area_editor::remove_isolated_sector(sector* s_ptr) {
+    //If around the sector there are two different sectors, then
+    //it's definitely connected.
+    sector* alt_sector = NULL;
+    bool got_an_alt_sector = false;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edge* e_ptr = s_ptr->edges[e];
+        
+        for(size_t s = 0; s < 2; ++s) {
+            if(e_ptr->sectors[s] == s_ptr) {
+                //The main sector; never mind.
+                continue;
+            }
+            
+            if(!got_an_alt_sector) {
+                alt_sector = e_ptr->sectors[s];
+                got_an_alt_sector = true;
+            } else if(e_ptr->sectors[s] != alt_sector) {
+                //Different alternative sector found! No good.
+                return false;
+            }
+        }
+    }
+    
+    //Remove the sector now.
+    vector<edge*> main_sector_edges = s_ptr->edges;
+    for(size_t e = 0; e < main_sector_edges.size(); ++e) {
+        edge* e_ptr = main_sector_edges[e];
+        e_ptr->remove_from_sectors();
+        e_ptr->remove_from_vertexes();
+        cur_area_data.remove_vertex(e_ptr->vertexes[0]);
+        cur_area_data.remove_vertex(e_ptr->vertexes[1]);
+        cur_area_data.remove_edge(e_ptr);
+    }
+    cur_area_data.remove_sector(s_ptr);
+    
+    //Re-triangulate the outer sector.
+    if(alt_sector) triangulate(alt_sector);
+    
+    return true;
 }
 
 

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <assert.h>
 
 #include "widget.h"
 
@@ -230,6 +231,9 @@ void widget::get_offset(int* ox, int* oy) {
  * Adds a widget as a child to the current one.
  */
 void widget::add(const string &name, widget* w) {
+    assert(w != NULL);
+    assert(!name.empty());
+    
     widgets[name] = w;
     w->parent = this;
     if(!w->style) w->style = style;
@@ -243,6 +247,7 @@ void widget::add(const string &name, widget* w) {
 void widget::register_accelerator(
     const int key, const unsigned int modifiers, widget* w
 ) {
+    assert(w != NULL);
     accelerators.push_back(accelerator(key, modifiers, w));
 }
 
@@ -462,6 +467,7 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
  * Removes a child widget from the list.
  */
 void widget::remove(const string &child_name) {
+    assert(!child_name.empty());
     if(widgets.find(child_name) == widgets.end()) return;
     
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
@@ -501,7 +507,7 @@ void widget::lose_focus() {
  * lose focus in the process.
  */
 void widget::give_focus(widget* w) {
-    if(!w) return;
+    assert(w != NULL);
     //Mark focus lost. First go up to the topmost parent,
     //and let it tell everybody to lose their focuses.
     widget* p = this;
@@ -587,6 +593,8 @@ void widget::easy_add(
     const string &name, widget* w, const float width, const float height,
     const unsigned char flags
 ) {
+    assert(w != NULL);
+    assert(!name.empty());
     easy_row_widgets.push_back(easy_widget_info(name, w, width, height, flags));
 }
 
@@ -658,6 +666,8 @@ void draw_line(
     const int start_offset, const int end_offset,
     const int location_offset, ALLEGRO_COLOR color
 ) {
+    assert(w != NULL);
+    
     float x1 = w->x1, x2 = w->x2;
     float y1 = w->y1, y2 = w->y2;
     

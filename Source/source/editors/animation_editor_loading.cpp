@@ -1478,6 +1478,10 @@ void animation_editor::load() {
         "but_next",
         new lafi::button("", "", icons.get(NEXT_ICON)), 20, 24
     );
+    frm_body_parts->easy_add(
+        "but_del",
+        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 24
+    );
     frm_body_parts->easy_row();
     frm_body_parts->easy_add(
         "lbl_n",
@@ -1510,10 +1514,6 @@ void animation_editor::load() {
     frm_body_part->easy_add(
         "but_right",
         new lafi::button("", "", icons.get(MOVE_RIGHT_ICON)), 20, 24
-    );
-    frm_body_part->easy_add(
-        "but_rem",
-        new lafi::button("", "", icons.get(DELETE_ICON)), 20, 24
     );
     frm_body_part->easy_row();
     
@@ -1639,8 +1639,9 @@ void animation_editor::load() {
     frm_body_part->widgets["but_right"]->description =
         "Move this part to the right in the list.";
         
-    frm_body_part->widgets["but_rem"]->left_mouse_click_handler =
+    frm_body_parts->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        if(cur_body_part_nr == INVALID || anims.body_parts.empty()) return;
         delete anims.body_parts[cur_body_part_nr];
         anims.body_parts.erase(anims.body_parts.begin() + cur_body_part_nr);
         if(cur_body_part_nr > 0) cur_body_part_nr--;
@@ -1648,7 +1649,7 @@ void animation_editor::load() {
         body_part_to_gui();
         made_changes = true;
     };
-    frm_body_part->widgets["but_rem"]->description =
+    frm_body_parts->widgets["but_del"]->description =
         "Delete this body part.";
         
         
