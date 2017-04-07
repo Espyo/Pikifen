@@ -105,7 +105,9 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != bmp_error
         ) {
-            bitmaps.detach("Textures/" + s_ptr->texture_info.file_name);
+            bitmaps.detach(
+                TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
+            );
             s_ptr->texture_info.bitmap = NULL;
         }
     }
@@ -914,7 +916,8 @@ void load_area(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap = bitmaps.get("Textures/" + s_ptr->file_name, NULL);
+        s_ptr->bitmap =
+            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + s_ptr->file_name, NULL);
         
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
@@ -1020,7 +1023,8 @@ void load_area_textures() {
             } else {
                 s_ptr->texture_info.bitmap =
                     bitmaps.get(
-                        "Textures/" + s_ptr->texture_info.file_name, NULL
+                        TEXTURES_FOLDER_NAME + "/" +
+                        s_ptr->texture_info.file_name, NULL
                     );
             }
         }

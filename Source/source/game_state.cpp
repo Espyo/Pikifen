@@ -258,6 +258,13 @@ void gameplay::load() {
                     m_ptr->angle, m_ptr->vars
                 )
             );
+        } else if(m_ptr->category == MOB_CATEGORY_BRIDGES) {
+            create_mob(
+                new bridge(
+                    m_ptr->pos, (bridge_type*) m_ptr->type,
+                    m_ptr->angle, m_ptr->vars
+                )
+            );
         } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
             m_ptr->type->create_mob(
                 m_ptr->pos, m_ptr->angle, m_ptr->vars

@@ -122,6 +122,7 @@ extern vector<unsigned int> berries;
 extern bmp_manager bitmaps;
 extern ALLEGRO_BITMAP* bmp_error;
 extern vector<bridge*> bridges;
+extern map<string, bridge_type*> bridge_types;
 extern button_manager buttons;
 extern point cam_final_pos;
 extern float cam_final_zoom;

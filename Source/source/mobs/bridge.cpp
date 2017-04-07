@@ -17,9 +17,10 @@
  * Creates a bridge mob.
  */
 bridge::bridge(
-    const point pos, const float angle, const string &vars
+    const point pos, bridge_type* bri_type, const float angle, const string &vars
 ) :
-    mob(pos, spec_mob_types["Bridge"], angle, vars) {
+    mob(pos, bri_type, angle, vars),
+    bri_type(bri_type) {
     
     //Search neighboring sectors.
     get_neighbor_bridge_sectors(get_sector(pos, NULL, true));
@@ -57,123 +58,4 @@ void bridge::get_neighbor_bridge_sectors(sector* s_ptr) {
             e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)]
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Opens up the bridge. Updates all relevant sectors,
- * does the particle explosion, etc.
- */
-void bridge::open(mob* m, void* info1, void* info2) {
-    bridge* b_ptr = (bridge*) m;
-    b_ptr->set_animation(BRIDGE_ANIM_DESTROYED);
-    b_ptr->start_dying();
-    b_ptr->finish_dying();
-    
-    particle p(
-        PARTICLE_TYPE_BITMAP, m->pos,
-        80, 2.75, PARTICLE_PRIORITY_MEDIUM
-    );
-    p.bitmap = bmp_smoke;
-    p.color = al_map_rgb(238, 204, 170);
-    particle_generator pg(0, p, 11);
-    pg.number_deviation = 1;
-    pg.size_deviation = 16;
-    pg.angle = 0;
-    pg.angle_deviation = M_PI;
-    pg.total_speed = 75;
-    pg.total_speed_deviation = 15;
-    pg.duration_deviation = 0.25;
-    pg.emit(particles);
-    
-    for(size_t s = 0; s < b_ptr->secs.size(); s++) {
-        sector* s_ptr = b_ptr->secs[s];
-        
-        if(!s_ptr->tag.empty()) {
-            s_ptr->z = s2f(s_ptr->tag);
-        }
-        s_ptr->hazards.clear();
-        
-        sector_correction sc(s_ptr);
-        //TODO the file names are so static...
-        sc.new_texture.bitmap =
-            bitmaps.get(
-                (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
-                "Textures/Bridge.png" :
-                "Textures/Bridge_rail.png",
-                NULL
-            );
-        sc.new_texture.rot = m->angle;
-        
-        cur_area_data.sector_corrections.push_back(sc);
-        cur_area_data.generate_edges_blockmap(s_ptr->edges);
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Damage the bridge, depending on the Pikmin, hitbox, etc.
- */
-void bridge::take_damage(mob* m, void* info1, void* info2) {
-    hitbox_touch_info* info = (hitbox_touch_info*) info1;
-    float damage = calculate_damage(info->mob2, m, info->h2, info->h1);
-    m->health -= damage;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Sets the standard "idling" animation.
- */
-void bridge::set_anim(mob* m, void* info1, void* info2) {
-    m->set_animation(BRIDGE_ANIM_IDLING);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes the bridge mob type.
- */
-void init_bridge_mob_type(mob_type* mt) {
-    mt->always_active = true;
-    mt->radius = 32;
-    mt->max_health = 2000;
-    mt->casts_shadow = false;
-    mt->create_mob = [] (point pos, float angle, const string & vars) {
-        create_mob(new bridge(pos, angle, vars));
-    };
-    mt->load_from_file_func =
-        [] (
-            data_node * file, const bool load_resources,
-            vector<pair<size_t, string> >* anim_conversions
-    ) {
-        if(load_resources) {
-            anim_conversions->push_back(
-                make_pair(BRIDGE_ANIM_IDLING, "idling")
-            );
-            anim_conversions->push_back(
-                make_pair(BRIDGE_ANIM_DESTROYED, "destroyed")
-            );
-        }
-    };
-    
-    easy_fsm_creator efc;
-    efc.new_state("idling", 0); {
-        efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(bridge::set_anim);
-        }
-        efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(bridge::take_damage);
-        }
-        efc.new_event(MOB_EVENT_DEATH); {
-            efc.run_function(bridge::open);
-            efc.change_state("destroyed");
-        }
-    }
-    efc.new_state("destroyed", 1); {
-    
-    }
-    
-    
-    mt->states = efc.finish();
-    mt->first_state_nr = fix_states(mt->states, "idling");
 }

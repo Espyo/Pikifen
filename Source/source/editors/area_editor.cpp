@@ -519,7 +519,8 @@ void area_editor::gui_to_shadow() {
         if(cur_shadow->bitmap != bmp_error) {
             bitmaps.detach(cur_shadow->file_name);
         }
-        cur_shadow->bitmap = bitmaps.get("Textures/" + new_file_name, NULL);
+        cur_shadow->bitmap =
+            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + new_file_name, NULL);
         cur_shadow->file_name = new_file_name;
     }
     
@@ -1210,7 +1211,12 @@ void area_editor::find_errors() {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
             
-            if(m_ptr->category == MOB_CATEGORY_GATES) continue;
+            if(
+                m_ptr->category == MOB_CATEGORY_GATES ||
+                m_ptr->category == MOB_CATEGORY_BRIDGES
+            ) {
+                continue;
+            }
             
             for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
                 edge* e_ptr = cur_area_data.edges[e];
@@ -2758,7 +2764,7 @@ texture_suggestion::texture_suggestion(const string &n) :
     bmp(NULL),
     name(n) {
     
-    bmp = bitmaps.get("Textures/" + name, NULL);
+    bmp = bitmaps.get(TEXTURES_FOLDER_NAME + "/" + name, NULL);
 }
 
 

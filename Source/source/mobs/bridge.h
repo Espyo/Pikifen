@@ -12,11 +12,14 @@
 #ifndef BRIDGE_INCLUDED
 #define BRIDGE_INCLUDED
 
+#include "bridge_type.h"
 #include "mob.h"
 
-enum BRIDGE_ANIMATIONS {
-    BRIDGE_ANIM_IDLING,
-    BRIDGE_ANIM_DESTROYED,
+enum BRIDGE_STATES {
+    BRIDGE_STATE_IDLING,
+    BRIDGE_STATE_DESTROYED,
+    
+    N_BRIDGE_STATES,
 };
 
 
@@ -33,17 +36,14 @@ private:
     void get_neighbor_bridge_sectors(sector* s_ptr);
     
 public:
+    bridge_type* bri_type;
     vector<sector*> secs;
     
-    bridge(const point pos, const float angle, const string &vars);
-    
-    static void open(mob* m, void* info1, void* info2);
-    static void take_damage(mob* m, void* info1, void* info2);
-    static void set_anim(mob* m, void* info1, void* info2);
+    bridge(
+        const point pos, bridge_type* bri_type,
+        const float angle, const string &vars
+    );
     
 };
-
-
-void init_bridge_mob_type(mob_type* mt);
 
 #endif //ifndef BRIDGE_INCLUDED

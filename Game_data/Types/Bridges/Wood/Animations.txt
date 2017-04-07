@@ -18,7 +18,7 @@ animations{
 }
 sprites{
 	idling{
-		file=Bridge.png
+		file=Wood_bridge.png
 		file_x=0
 		file_y=0
 		file_w=41

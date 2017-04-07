@@ -712,6 +712,23 @@ void init_mob_categories() {
     }, [] (mob_type * gt) {
         gate_types[gt->name] = (gate_type*) gt;
     });
+    
+    mob_categories.register_category(
+        MOB_CATEGORY_BRIDGES, "Bridges", "Bridge", BRIDGES_FOLDER_PATH,
+        al_map_rgb(224, 200, 180),
+    [] (vector<string> &li) {
+        for(auto b = bridge_types.begin(); b != bridge_types.end(); ++b) {
+            li.push_back(b->first);
+        }
+    }, [] (const string & n) -> mob_type* {
+        auto it = bridge_types.find(n);
+        if(it == bridge_types.end()) return NULL;
+        return it->second;
+    }, [] () -> mob_type* {
+        return new bridge_type();
+    }, [] (mob_type * bt) {
+        bridge_types[bt->name] = (bridge_type*) bt;
+    });
 }
 
 
@@ -770,14 +787,6 @@ void init_special_mob_types() {
         create_mob(new nectar(pos, vars));
     };
     spec_mob_types["Nectar"] = nectar_mt;
-    
-    //Bridge.
-    mob_type* bridge_mt = new mob_type();
-    bridge_mt->name = "Bridge";
-    bridge_mt->is_obstacle = true;
-    init_bridge_mob_type(bridge_mt);
-    spec_mob_types["Bridge"] = bridge_mt;
-    
 }
 
 

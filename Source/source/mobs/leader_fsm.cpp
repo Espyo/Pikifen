@@ -762,7 +762,7 @@ void leader_fsm::create_fsm(mob_type* typ) {
         log_error(
             "ENGINE WARNING: Number of leader states on the FSM (" +
             i2s(typ->states.size()) +
-            ") and the enum (" + i2s(N_LEADER_STATES) + ") do not match."
+            ") and the enum (" + i2s(N_LEADER_STATES) + ") does not match."
         );
     }
 }

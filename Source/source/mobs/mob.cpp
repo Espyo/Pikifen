@@ -1466,6 +1466,9 @@ void delete_mob(mob* m) {
     } else if(typeid(*m) == typeid(gate)) {
         gates.erase(find(gates.begin(), gates.end(), (gate*) m));
         
+    } else if(typeid(*m) == typeid(bridge)) {
+        bridges.erase(find(bridges.begin(), bridges.end(), (bridge*) m));
+        
     } else {
         log_error(
             "ENGINE WARNING: Ran delete_mob() with a bad mob, of type \"" +

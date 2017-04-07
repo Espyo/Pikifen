@@ -396,7 +396,10 @@ void area_editor::load() {
         if(!cur_sector) return;
         
         cur_sector->texture_info.bitmap =
-            bitmaps.get("Textures/" + cur_sector->texture_info.file_name, NULL);
+            bitmaps.get(
+                TEXTURES_FOLDER_NAME + "/" +
+                cur_sector->texture_info.file_name, NULL
+            );
             
         mode = EDITOR_MODE_ADV_TEXTURE_SETTINGS;
         change_to_right_frame();

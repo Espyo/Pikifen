@@ -37,7 +37,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
         log_error(
             "ENGINE WARNING: Number of ship states on the FSM (" +
             i2s(typ->states.size()) +
-            ") and the enum (" + i2s(N_SHIP_STATES) + ") do not match."
+            ") and the enum (" + i2s(N_SHIP_STATES) + ") does not match."
         );
     }
 }
