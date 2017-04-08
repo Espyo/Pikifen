@@ -1882,8 +1882,8 @@ mobs{
 		p=128.00 -320.00
 		angle=4.71
 	}
-	Special{
-		type=Bridge
+	Bridge{
+		type=Wood bridge
 		p=800.00 608.00
 		angle=4.71
 	}

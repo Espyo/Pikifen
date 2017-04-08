@@ -357,7 +357,7 @@ unsigned char get_blackout_strength() {
         auto cur_ptr = &cur_area_data.weather_condition.blackout_strength[p];
         auto next_ptr =
             &cur_area_data.weather_condition.blackout_strength[p + 1];
-        
+            
         if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
         
             return
@@ -527,12 +527,12 @@ string get_var_value(
 vector<pair<size_t, string> > get_weather_table(data_node* node) {
     vector<pair<size_t, string> > table;
     size_t n_points = node->get_nr_of_children();
-        
+    
     bool have_midnight = false;
     
     for(size_t p = 0; p < n_points; ++p) {
         data_node* point_node = node->get_child(p);
-            
+        
         size_t point_time = s2i(point_node->name);
         string point_value = point_node->value;
         
@@ -918,7 +918,7 @@ void load_area(
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
         s_ptr->bitmap =
             bitmaps.get(TEXTURES_FOLDER_NAME + "/" + s_ptr->file_name, NULL);
-        
+            
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
@@ -1289,7 +1289,7 @@ void load_game_content() {
         //Lighting.
         vector<pair<size_t, string> > lighting_table =
             get_weather_table(cur_weather->get_child_by_name("lighting"));
-        
+            
         vector<pair<size_t, ALLEGRO_COLOR> > lighting;
         for(size_t p = 0; p < lighting_table.size(); ++p) {
             lighting.push_back(
@@ -1307,7 +1307,7 @@ void load_game_content() {
         //Sun's strength.
         vector<pair<size_t, string> > sun_strength_table =
             get_weather_table(cur_weather->get_child_by_name("sun_strength"));
-        
+            
         vector<pair<size_t, unsigned char> > sun_strength;
         for(size_t p = 0; p < sun_strength_table.size(); ++p) {
             sun_strength.push_back(
@@ -1323,7 +1323,7 @@ void load_game_content() {
             get_weather_table(
                 cur_weather->get_child_by_name("blackout_strength")
             );
-        
+            
         vector<pair<size_t, unsigned char> > blackout_strength;
         for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
             blackout_strength.push_back(
@@ -1412,17 +1412,28 @@ void load_hud_coordinates() {
     
 #undef loader
     
+    //On the HUD file, coordinates range from 0 to 100,
+    //and 0 width or height means "keep aspect ratio with the other component".
+    //Let's pre-bake these values, such that all widths and heights at 0
+    //get set to -1 (draw_sprite and stuff like that expect -1 for these cases),
+    //and all other coordinates transform from percentages
+    //to screen coordinates.
+    //Widths AND heights that are both set to 0 should stay that way though.
+    
     for(int i = 0; i < N_HUD_ITEMS; ++i) {
-        for(unsigned char c = 0; c < 4; ++c) {
-            if(hud_coords[i][c] == 0) {
-                hud_coords[i][c] = -1;
-            } else {
-                if(c % 2 == 0) {
-                    hud_coords[i][c] *= scr_w;
-                } else {
-                    hud_coords[i][c] *= scr_h;
-                }
-            }
+        if(hud_coords[i][2] == 0 && hud_coords[i][3] != 0) {
+            hud_coords[i][2] = -1;
+        } else if(hud_coords[i][3] == 0 && hud_coords[i][2] != 0) {
+            hud_coords[i][3] = -1;
+        }
+        
+        hud_coords[i][0] *= scr_w;
+        hud_coords[i][1] *= scr_h;
+        if(hud_coords[i][2] != -1) {
+            hud_coords[i][2] *= scr_w;
+        }
+        if(hud_coords[i][3] != -1) {
+            hud_coords[i][3] *= scr_h;
         }
     }
 }

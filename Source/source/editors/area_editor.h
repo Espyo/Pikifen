@@ -88,10 +88,10 @@ private:
         EET_TYPELESS_MOB,         //Mob with no type.
         EET_MOB_OOB,              //Mob out of bounds.
         EET_MOB_IN_WALL,          //Mob stuck in a wall.
-        EET_LONE_FOLDER_PATH_STOP,       //A path stop is all by itself.
-        EET_FOLDER_PATH_STOP_OOB,        //A path stop is out of bounds.
-        EET_FOLDER_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
-        EET_FOLDER_PATHS_UNCONNECTED,    //The path graph is unconnected.
+        EET_LONE_PATH_STOP,       //A path stop is all by itself.
+        EET_PATH_STOP_OOB,        //A path stop is out of bounds.
+        EET_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
+        EET_PATHS_UNCONNECTED,    //The path graph is unconnected.
         EET_INVALID_SHADOW,       //Invalid tree shadow image.
     };
     

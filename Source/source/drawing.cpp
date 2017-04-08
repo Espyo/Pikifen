@@ -558,38 +558,44 @@ void do_game_drawing(
                 size_t l_nr = sum_and_wrap(cur_leader_nr, l, n_leaders);
                 int icon_id = HUD_ITEM_LEADER_1_ICON + l;
                 int health_id = HUD_ITEM_LEADER_1_HEALTH + l;
+                point icon_size(
+                    hud_coords[icon_id][2],
+                    hud_coords[icon_id][3]
+                );
+                if(icon_size.x == icon_size.y == 0) continue;
+                point health_size(
+                    hud_coords[health_id][2],
+                    hud_coords[health_id][3]
+                );
+                if(health_size.x == health_size.y == 0) continue;
+                point icon_pos(
+                    hud_coords[icon_id][0],
+                    hud_coords[icon_id][1]
+                );
+                point health_pos(
+                    hud_coords[health_id][0],
+                    hud_coords[health_id][1]
+                );
+                
                 
                 al_draw_filled_circle(
-                    hud_coords[icon_id][0],
-                    hud_coords[icon_id][1],
-                    max(hud_coords[icon_id][2], hud_coords[icon_id][3]) / 2.0f,
+                    icon_pos.x, icon_pos.y,
+                    max(icon_size.x, icon_size.y) / 2.0f,
                     change_alpha(leaders[l_nr]->type->main_color, 128)
                 );
                 draw_sprite(
                     leaders[l_nr]->lea_type->bmp_icon,
-                    point(hud_coords[icon_id][0], hud_coords[icon_id][1]),
-                    point(hud_coords[icon_id][2], hud_coords[icon_id][3])
+                    icon_pos, icon_size
                 );
-                draw_sprite(
-                    bmp_bubble,
-                    point(hud_coords[icon_id][0], hud_coords[icon_id][1]),
-                    point(hud_coords[icon_id][2], hud_coords[icon_id][3])
-                );
+                draw_sprite(bmp_bubble, icon_pos, icon_size);
                 
                 draw_health(
-                    point(hud_coords[health_id][0], hud_coords[health_id][1]),
+                    health_pos,
                     leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                    max(
-                        hud_coords[health_id][2],
-                        hud_coords[health_id][3]
-                    ) * 0.4f,
+                    max(health_size.x, health_size.y) * 0.4f,
                     true
                 );
-                draw_sprite(
-                    bmp_hard_bubble,
-                    point(hud_coords[health_id][0], hud_coords[health_id][1]),
-                    point(hud_coords[health_id][2], hud_coords[health_id][3])
-                );
+                draw_sprite(bmp_hard_bubble, health_pos, health_size);
             }
             
             //Sun Meter.
@@ -1220,7 +1226,8 @@ void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point where, const point max_size
 ) {
-
+    if(max_size.x == 0 && max_size.y == 0) return;
+    
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {
@@ -1348,6 +1355,8 @@ void draw_compressed_text(
     const point where, const int flags, const unsigned char valign,
     const point max_size, const string &text
 ) {
+    if(max_size.x == 0 && max_size.y == 0) return;
+    
     int x1, x2, y1, y2;
     al_get_text_dimensions(font, text.c_str(), &x1, &y1, &x2, &y2);
     int text_width = x2 - x1, text_height = y2 - y1;
@@ -2479,6 +2488,8 @@ void draw_sprite(
     const point size, const float angle, const ALLEGRO_COLOR &tint
 ) {
 
+    if(size.x == 0 && size.y == 0) return;
+    
     if(!bmp) {
         bmp = bmp_error;
     }

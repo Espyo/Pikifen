@@ -585,8 +585,8 @@ void area_editor::center_camera(
     float width = max_coords.x - min_coords.x;
     float height = max_coords.y - min_coords.y;
     
-    cam_pos.x = -floor(min_coords.x + width  / 2);
-    cam_pos.y = -floor(min_coords.y + height / 2);
+    cam_pos.x = floor(min_coords.x + width  / 2);
+    cam_pos.y = floor(min_coords.y + height / 2);
     
     if(width > height) cam_zoom = gui_x / width;
     else cam_zoom = status_bar_y / height;
@@ -1069,48 +1069,6 @@ void area_editor::find_errors() {
         }
     }
     
-    //Check for missing textures.
-    if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        
-            sector* s_ptr = cur_area_data.sectors[s];
-            if(s_ptr->edges.empty()) continue;
-            if(
-                s_ptr->texture_info.file_name.empty() &&
-                s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade
-            ) {
-                error_type = EET_MISSING_TEXTURE;
-                error_sector_ptr = s_ptr;
-                break;
-            }
-        }
-    }
-    
-    //Check for unknown textures.
-    if(error_type == EET_NONE) {
-        vector<string> texture_file_names =
-            folder_to_vector(TEXTURES_FOLDER_PATH, false);
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        
-            sector* s_ptr = cur_area_data.sectors[s];
-            if(s_ptr->edges.empty()) continue;
-            
-            if(s_ptr->texture_info.file_name.empty()) continue;
-            
-            if(
-                find(
-                    texture_file_names.begin(), texture_file_names.end(),
-                    s_ptr->texture_info.file_name
-                ) == texture_file_names.end()
-            ) {
-                error_type = EET_UNKNOWN_TEXTURE;
-                error_string = s_ptr->texture_info.file_name;
-                error_sector_ptr = s_ptr;
-                break;
-            }
-        }
-    }
-    
     //Objects with no type.
     if(error_type == EET_NONE) {
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -1130,76 +1088,6 @@ void area_editor::find_errors() {
                 error_type = EET_MOB_OOB;
                 error_mob_ptr = m_ptr;
                 break;
-            }
-        }
-    }
-    
-    //Lone path stops.
-    if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
-            bool has_link = false;
-            
-            if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
-            
-            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
-                path_stop* s2_ptr = cur_area_data.path_stops[s2];
-                if(s2_ptr == s_ptr) continue;
-                
-                if(s2_ptr->has_link(s_ptr)) {
-                    has_link = true;
-                    break;
-                }
-                
-                if(has_link) break;
-            }
-            
-            if(!has_link) {
-                error_type = EET_LONE_FOLDER_PATH_STOP;
-                error_path_stop_ptr = s_ptr;
-                break;
-            }
-        }
-    }
-    
-    //Path stops out of bounds.
-    if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
-            if(!get_sector(s_ptr->pos, NULL, false)) {
-                error_type = EET_FOLDER_PATH_STOP_OOB;
-                error_path_stop_ptr = s_ptr;
-                break;
-            }
-        }
-    }
-    
-    //Two stops intersecting.
-    if(error_type == EET_NONE) {
-        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-            path_stop* s_ptr = cur_area_data.path_stops[s];
-            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
-                path_stop* s2_ptr = cur_area_data.path_stops[s2];
-                if(s2_ptr == s_ptr) continue;
-                
-                if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
-                    error_type = EET_FOLDER_PATH_STOPS_TOGETHER;
-                    error_path_stop_ptr = s_ptr;
-                    break;
-                }
-            }
-        }
-    }
-    
-    //Path graph is not connected.
-    if(error_type == EET_NONE) {
-        if(!cur_area_data.path_stops.empty()) {
-            unordered_set<path_stop*> visited;
-            depth_first_search(
-                cur_area_data.path_stops, visited, cur_area_data.path_stops[0]
-            );
-            if(visited.size() != cur_area_data.path_stops.size()) {
-                error_type = EET_FOLDER_PATHS_UNCONNECTED;
             }
         }
     }
@@ -1275,6 +1163,118 @@ void area_editor::find_errors() {
             
             if(error_mob_ptr) break;
             
+        }
+    }
+    
+    //Path stops out of bounds.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            if(!get_sector(s_ptr->pos, NULL, false)) {
+                error_type = EET_PATH_STOP_OOB;
+                error_path_stop_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Path graph is not connected.
+    if(error_type == EET_NONE) {
+        if(!cur_area_data.path_stops.empty()) {
+            unordered_set<path_stop*> visited;
+            depth_first_search(
+                cur_area_data.path_stops, visited, cur_area_data.path_stops[0]
+            );
+            if(visited.size() != cur_area_data.path_stops.size()) {
+                error_type = EET_PATHS_UNCONNECTED;
+            }
+        }
+    }
+    
+    //Check for missing textures.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        
+            sector* s_ptr = cur_area_data.sectors[s];
+            if(s_ptr->edges.empty()) continue;
+            if(
+                s_ptr->texture_info.file_name.empty() &&
+                s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade
+            ) {
+                error_type = EET_MISSING_TEXTURE;
+                error_sector_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Check for unknown textures.
+    if(error_type == EET_NONE) {
+        vector<string> texture_file_names =
+            folder_to_vector(TEXTURES_FOLDER_PATH, false);
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        
+            sector* s_ptr = cur_area_data.sectors[s];
+            if(s_ptr->edges.empty()) continue;
+            
+            if(s_ptr->texture_info.file_name.empty()) continue;
+            
+            if(
+                find(
+                    texture_file_names.begin(), texture_file_names.end(),
+                    s_ptr->texture_info.file_name
+                ) == texture_file_names.end()
+            ) {
+                error_type = EET_UNKNOWN_TEXTURE;
+                error_string = s_ptr->texture_info.file_name;
+                error_sector_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Lone path stops.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            bool has_link = false;
+            
+            if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
+            
+            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+                path_stop* s2_ptr = cur_area_data.path_stops[s2];
+                if(s2_ptr == s_ptr) continue;
+                
+                if(s2_ptr->has_link(s_ptr)) {
+                    has_link = true;
+                    break;
+                }
+                
+                if(has_link) break;
+            }
+            
+            if(!has_link) {
+                error_type = EET_LONE_PATH_STOP;
+                error_path_stop_ptr = s_ptr;
+                break;
+            }
+        }
+    }
+    
+    //Two stops intersecting.
+    if(error_type == EET_NONE) {
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+                path_stop* s2_ptr = cur_area_data.path_stops[s2];
+                if(s2_ptr == s_ptr) continue;
+                
+                if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
+                    error_type = EET_PATH_STOPS_TOGETHER;
+                    error_path_stop_ptr = s_ptr;
+                    break;
+                }
+            }
         }
     }
     
@@ -1575,9 +1575,9 @@ void area_editor::goto_error() {
         center_camera(error_mob_ptr->pos - 64, error_mob_ptr->pos + 64);
         
     } else if(
-        error_type == EET_LONE_FOLDER_PATH_STOP ||
-        error_type == EET_FOLDER_PATH_STOPS_TOGETHER ||
-        error_type == EET_FOLDER_PATH_STOP_OOB
+        error_type == EET_LONE_PATH_STOP ||
+        error_type == EET_PATH_STOPS_TOGETHER ||
+        error_type == EET_PATH_STOP_OOB
     ) {
     
         if(!error_path_stop_ptr) {
@@ -2632,7 +2632,7 @@ void area_editor::update_review_frame() {
         lbl_error_2->text = "in wall found!";
         
         
-    } else if(error_type == EET_LONE_FOLDER_PATH_STOP) {
+    } else if(error_type == EET_LONE_PATH_STOP) {
     
         if(!error_path_stop_ptr) {
             find_errors(); return;
@@ -2641,7 +2641,7 @@ void area_editor::update_review_frame() {
         lbl_error_1->text = "Lone path stop";
         lbl_error_2->text = "found!";
         
-    } else if(error_type == EET_FOLDER_PATHS_UNCONNECTED) {
+    } else if(error_type == EET_PATHS_UNCONNECTED) {
     
         disable_widget(but_goto_error);
         lbl_error_1->text = "The path is";
@@ -2649,14 +2649,14 @@ void area_editor::update_review_frame() {
         lbl_error_3->text = "or more parts!";
         lbl_error_4->text = "Connect them.";
         
-    } else if(error_type == EET_FOLDER_PATH_STOPS_TOGETHER) {
+    } else if(error_type == EET_PATH_STOPS_TOGETHER) {
     
         lbl_error_1->text = "Two path stops";
         lbl_error_2->text = "found close";
         lbl_error_3->text = "together!";
         lbl_error_4->text = "Separate them.";
         
-    } else if(error_type == EET_FOLDER_PATH_STOP_OOB) {
+    } else if(error_type == EET_PATH_STOP_OOB) {
     
         lbl_error_1->text = "Path stop out";
         lbl_error_2->text = "of bounds found!";

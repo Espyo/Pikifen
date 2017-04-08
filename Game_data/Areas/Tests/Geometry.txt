@@ -1270,8 +1270,8 @@ mobs{
 		p=-832.00 0.00
 		vars=buried=true
 	}
-	Special{
-		type=Bridge
+	Bridge{
+		type=Wood bridge
 		p=192.00 -288.00
 	}
 	Pellet{
@@ -1314,8 +1314,8 @@ mobs{
 		type=Red Pikmin
 		p=-224.00 224.00
 	}
-	Special{
-		type=Bridge
+	Bridge{
+		type=Wood bridge
 		p=-224.00 -192.00
 		angle=4.71
 	}

@@ -158,6 +158,10 @@
     <File Name="../source/mobs/treasure.cpp"/>
     <File Name="../source/mobs/pellet_type.cpp"/>
     <File Name="../source/mobs/bridge.h"/>
+    <File Name="../source/mobs/bridge_fsm.cpp"/>
+    <File Name="../source/mobs/bridge_fsm.h"/>
+    <File Name="../source/mobs/bridge_type.cpp"/>
+    <File Name="../source/mobs/bridge_type.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
