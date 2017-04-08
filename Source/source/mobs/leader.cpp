@@ -32,8 +32,7 @@ leader::leader(
     team = MOB_TEAM_PLAYER_1; //TODO.
     invuln_period = timer(LEADER_INVULN_PERIOD);
     
-    group_spot_info* ps = new group_spot_info(max_pikmin_in_field, 12);
-    group = new group_info(ps, pos);
+    group = new group_info(this);
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER);
 }
@@ -145,6 +144,8 @@ void leader::swap_held_pikmin(mob* new_pik) {
     mob_event* old_pik_ev = holding_pikmin->fsm.get_event(MOB_EVENT_RELEASED);
     mob_event* new_pik_ev = new_pik->fsm.get_event(MOB_EVENT_GRABBED_BY_FRIEND);
     
+    group->sort(new_pik->subgroup_type_ptr);
+    
     if(!old_pik_ev || !new_pik_ev) return;
     
     old_pik_ev->run(holding_pikmin);
@@ -202,18 +203,6 @@ void leader::signal_group_move_start() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the distance between a leader and the center of its group.
- */
-float get_leader_to_group_center_dist(mob* l) {
-    return
-        (l->group->group_spots->current_wheel + 1) *
-        l->group->group_spots->spot_radius +
-        (l->group->group_spots->current_wheel + 1) *
-        GROUP_SPOT_INTERVAL;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Switch active leader.
  */
 void switch_to_leader(leader* new_leader_ptr) {
@@ -241,6 +230,92 @@ void switch_to_leader(leader* new_leader_ptr) {
  */
 bool leader::can_receive_status(status_type* s) {
     return s->affects & STATUS_AFFECTS_LEADERS;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks leader-related logic for this frame.
+ */
+void leader::tick_class_specifics() {
+    if(group && group->members.size()) {
+    
+        bool must_reassign_spots = false;
+        
+        bool is_moving_group =
+            (group_move_intensity && cur_leader_ptr == this);
+            
+        if(
+            dist(group->get_average_member_pos(), pos) >
+            GROUP_SHUFFLE_DIST + (group->radius + type->radius)
+        ) {
+            if(!group->follow_mode) {
+                must_reassign_spots = true;
+            }
+            group->follow_mode = true;
+            
+        } else if(is_moving_group || holding_pikmin) {
+            group->follow_mode = true;
+            
+        } else {
+            group->follow_mode = false;
+            
+        }
+        
+        group->transform = identity_transform;
+        
+        if(group->follow_mode) {
+            //Follow mode. Try to stay on the leader's back.
+            
+            if(is_moving_group) {
+            
+                point move_anchor_offset =
+                    rotate_point(
+                        point(
+                            -(type->radius + GROUP_SPOT_INTERVAL * 2),
+                            0
+                        ), group_move_angle + M_PI
+                    );
+                group->anchor = pos + move_anchor_offset;
+                
+                float intensity_dist = cursor_max_dist * group_move_intensity;
+                al_scale_transform(
+                    &group->transform,
+                    intensity_dist / (group->radius * 2),
+                    1 - (GROUP_MOVE_VERTICAL_SCALE * group_move_intensity)
+                );
+                al_rotate_transform(&group->transform, group_move_angle + M_PI);
+                
+            } else {
+            
+                point leader_back_offset =
+                    rotate_point(
+                        point(
+                            -(type->radius + GROUP_SPOT_INTERVAL * 2),
+                            0
+                        ), angle
+                    );
+                group->anchor = pos + leader_back_offset;
+                
+                al_rotate_transform(&group->transform, angle);
+                
+            }
+            
+            if(must_reassign_spots) group->reassing_spots();
+            
+        } else {
+            //Shuffle mode. Keep formation, but shuffle with the leader,
+            //if needed.
+            point mov;
+            move_point(
+                group->anchor - point(group->radius, 0),
+                pos,
+                type->move_speed,
+                group->radius + type->radius + GROUP_SPOT_INTERVAL * 2,
+                &mov, NULL, NULL, delta_t
+            );
+            group->anchor += mov * delta_t;
+        }
+    }
 }
 
 

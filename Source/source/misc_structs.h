@@ -204,33 +204,6 @@ struct movement_struct {
 
 
 /* ----------------------------------------------------------------------------
- * Group spots. The way this works is that a Pikmin group
- * surrounds a central point. There are several wheels surrounding
- * the original spot, starting from the center and growing in size,
- * each with several spots of their own.
- * A Pikmin occupies the central spot first.
- * Then other Pikmin come by, and occupy spots at random on the next wheel.
- * When that wheel has all of its spots full,
- * the next wheel will be used, and so on.
- */
-struct group_spot_info {
-
-    float spot_radius;
-    
-    vector<vector<point> > coords;
-    unsigned n_wheels;
-    
-    vector<vector<mob*> > mobs_in_spots;
-    unsigned current_wheel;
-    unsigned n_current_wheel_members;
-    
-    group_spot_info(const unsigned max_mobs, const float spot_size);
-    void add(mob* m);
-    void remove(mob* m);
-};
-
-
-/* ----------------------------------------------------------------------------
  * This structure makes reading values in data files
  * and setting them to variables much easier.
  * On the set functions, specify the name of the child and the variable.

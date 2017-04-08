@@ -100,12 +100,12 @@ public:
     void swap_held_pikmin(mob* new_pik);
     
     virtual bool can_receive_status(status_type* s);
+    virtual void tick_class_specifics();
     
 };
 
 
 bool grab_closest_group_member();
-float get_leader_to_group_center_dist(mob* l);
 void switch_to_leader(leader* new_leader_ptr);
 void update_closest_group_member();
 

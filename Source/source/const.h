@@ -60,9 +60,15 @@ const float DISMISS_DISTANCE = 64.0f;
 const float GROUP_MOVE_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another "move group" arrow appears.
 const float GROUP_MOVE_ARROWS_INTERVAL = 0.1f;
+//When group moving, the group can scale this much vertically.
+//Basically, the tube shape's girth can reach this scale.
+const float GROUP_MOVE_VERTICAL_SCALE = 0.5f;
+//If there's less than this much gap between the leader and group,
+//then the group's Pikmin should shuffle a bit to keep up with the leader.
+const float GROUP_SHUFFLE_DIST = 40.0f;
 //Pikmin must be at least these many units away from one another;
 //used when calculating group spots.
-const float GROUP_SPOT_INTERVAL = 1.0f;
+const float GROUP_SPOT_INTERVAL = 2.0f;
 //The idle glow spins these many radians per second.
 const float IDLE_GLOW_SPIN_SPEED = M_PI_2;
 //How long the on-screen info is printed for.

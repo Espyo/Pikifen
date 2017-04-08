@@ -297,10 +297,6 @@ extern bool pretty_whistle;
 //Time since start, on the previous frame.
 //Used to calculate the time difference between the current and last frames.
 extern double prev_frame_time;
-//The group move intensity on the previous frame.
-//Used to figure out if, on 0-intensity,
-//we should put the group's center near the leader or let it go there by itself.
-extern float prev_group_move_intensity;
 //Ready for gameplay-related input?
 extern bool ready_for_input;
 //Is delta_t meant to be reset for the next frame?

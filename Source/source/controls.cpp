@@ -691,6 +691,8 @@ void handle_button(
             
             active_control();
             
+            if(cur_leader_ptr->group->members.empty()) return;
+            
             subgroup_type* starting_subgroup_type =
                 cur_leader_ptr->group->cur_standby_type;
                 

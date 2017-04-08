@@ -974,8 +974,9 @@ void leader_fsm::set_stop_anim(mob* m, void* info1, void* info2) {
  * info1: Pointer to the mob.
  */
 void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
-    ((leader*) m)->holding_pikmin = (mob*) info1;
-    
+    leader* l_ptr = (leader*) m;
+    l_ptr->holding_pikmin = (mob*) info1;
+    l_ptr->group->sort(l_ptr->holding_pikmin->subgroup_type_ptr);
 }
 
 
@@ -1259,7 +1260,27 @@ void leader_fsm::start_waking_up(mob* m, void* info1, void* info2) {
  * When a leader must chase another.
  */
 void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    m->chase(point(), &m->following_group->pos, false);
+    group_info* leader_group_ptr = m->following_group->group;
+    float distance =
+        m->following_group->type->radius +
+        m->type->radius + standard_pikmin_radius;
+        
+    for(size_t me = 0; me < leader_group_ptr->members.size(); ++me) {
+        mob* member_ptr = leader_group_ptr->members[me];
+        if(member_ptr == m) {
+            break;
+        } else if(member_ptr->subgroup_type_ptr == m->subgroup_type_ptr) {
+            //If this member is also a leader,
+            //then that means the current leader should stick behind.
+            distance +=
+                member_ptr->type->radius * 2 + GROUP_SPOT_INTERVAL;
+        }
+    }
+    
+    m->chase(
+        point(), &m->following_group->pos, false, NULL,
+        true, distance
+    );
     m->set_animation(LEADER_ANIM_WALKING);
     focus_mob(m, m->following_group);
 }

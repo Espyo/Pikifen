@@ -94,6 +94,17 @@ enum CARRY_SPOT_STATES {
 
 
 /* ----------------------------------------------------------------------------
+ * Information about a spot in a group.
+ */
+struct group_spot {
+    point pos; //Relative to the anchor.
+    mob* mob_ptr;
+    group_spot(const point &p = point(), mob* m = NULL) :
+        pos(p), mob_ptr(m) {}
+};
+
+
+/* ----------------------------------------------------------------------------
  * Information on a mob's group.
  * This includes a list of its members,
  * and the location and info of the spots in the
@@ -101,18 +112,20 @@ enum CARRY_SPOT_STATES {
  */
 struct group_info {
     vector<mob*> members;
-    group_spot_info* group_spots;
-    point group_center;
+    vector<group_spot> spots;
+    float radius;
+    point anchor; //Position of element 0 of the group (frontmost member).
+    ALLEGRO_TRANSFORM transform;
     subgroup_type* cur_standby_type;
+    bool follow_mode;
     
-    group_info(
-        group_spot_info* ps, const point center
-    ) {
-        cur_standby_type = NULL;
-        group_spots = ps;
-        group_center = center;
-    }
+    void init_spots(mob* affected_mob_ptr = NULL);
+    void sort(subgroup_type* leading_type);
+    point get_average_member_pos();
+    point get_spot_offset(const size_t spot_index);
+    void reassing_spots();
     bool set_next_cur_standby_type(const bool move_backwards);
+    group_info(mob* leader_ptr);
 };
 
 
@@ -278,7 +291,8 @@ public:
     bool was_thrown;
     //Info on the group this mob is a leader of.
     group_info* group;
-    point group_spot;
+    //Index of this mob's spot in the leader's group spots.
+    size_t group_spot_index;
     
     //Script.
     //Finite-state machine.

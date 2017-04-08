@@ -170,18 +170,6 @@ void mob::tick_brain() {
  */
 void mob::tick_misc_logic() {
     //Other things.
-    if(group) {
-        point group_center_m;
-        move_point(
-            group->group_center, pos,
-            type->move_speed,
-            get_leader_to_group_center_dist(this),
-            &group_center_m, NULL, NULL, delta_t
-        );
-        group->group_center.x += group_center_m.x * delta_t;
-        group->group_center.y += group_center_m.y * delta_t;
-    }
-    
     invuln_period.tick(delta_t);
     
     for(size_t s = 0; s < this->statuses.size(); ++s) {
@@ -1202,11 +1190,8 @@ void add_to_group(mob* group_leader, mob* new_member) {
     group_leader->group->members.push_back(new_member);
     
     //Find a spot.
-    if(group_leader->group) {
-        if(group_leader->group->group_spots) {
-            group_leader->group->group_spots->add(new_member);
-        }
-    }
+    group_leader->group->init_spots(new_member);
+    new_member->group_spot_index = group_leader->group->spots.size() - 1;
     
     if(!group_leader->group->cur_standby_type) {
         group_leader->group->cur_standby_type =
@@ -1582,12 +1567,10 @@ void remove_from_group(mob* member) {
         )
     );
     
-    if(group_leader->group->group_spots) {
-        group_leader->group->group_spots->remove(member);
-    }
+    group_leader->group->init_spots(member);
     
     //Check if there are no more members of the same type.
-    //If not, choose a new type!
+    //If not, choose a new type as the standby!
     bool last_of_its_type = true;
     for(size_t m = 0; m < group_leader->group->members.size(); ++m) {
         if(
@@ -1948,6 +1931,18 @@ void mob::add_delivery_sprite_effect(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new group information struct.
+ */
+group_info::group_info(mob* leader_ptr) :
+    radius(0),
+    anchor(leader_ptr->pos),
+    transform(identity_transform),
+    cur_standby_type(nullptr),
+    follow_mode(false) {
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets the standby group member type to the next available one,
  * or NULL if none.
  * Returns true on success, false on failure.
@@ -1999,4 +1994,252 @@ bool group_info::set_next_cur_standby_type(const bool move_backwards) {
     
     cur_standby_type = final_type;
     return success;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * (Re-)Initializes the group spots. This resizes it to the current number
+ * of group members. Any old group members are moved to the appropriate
+ * new spot.
+ * new_mob_ptr: If this initialization is because a new mob entered
+   * or left the group, this should point to said mob.
+ */
+void group_info::init_spots(mob* affected_mob_ptr) {
+    if(members.empty()) {
+        spots.clear();
+        radius = 0;
+        return;
+    }
+    
+    //First, backup the old mob indexes.
+    vector<mob*> old_mobs;
+    old_mobs.resize(spots.size());
+    for(size_t m = 0; m < spots.size(); ++m) {
+        old_mobs[m] = spots[m].mob_ptr;
+    }
+    
+    //Now, rebuild the spots. Let's draw wheels from the center, for now.
+    struct alpha_spot {
+        point pos;
+        dist distance_to_rightmost;
+        alpha_spot(const point &p) :
+            pos(p) { }
+    };
+    
+    vector<alpha_spot> alpha_spots;
+    size_t current_wheel = 1;
+    radius = 0;
+    
+    //Center spot first.
+    alpha_spots.push_back(alpha_spot(point()));
+    
+    while(alpha_spots.size() < members.size()) {
+    
+        //First, calculate how far the center
+        //of these spots are from the central spot.
+        float dist_from_center =
+            standard_pikmin_radius * current_wheel + //Spots.
+            GROUP_SPOT_INTERVAL * current_wheel; //Interval between spots.
+            
+        /* Now we need to figure out what's the angular distance
+         * between each spot. For that, we need the actual diameter
+         * (distance from one point to the other),
+         * and the central distance, which is distance between the center
+         * and the middle of two spots.
+         */
+        
+        /* We can get the middle distance because we know the actual diameter,
+         * which should be the size of a Pikmin and one interval unit,
+         * and we know the distance from one spot to the center.
+         */
+        float actual_diameter =
+            standard_pikmin_radius * 2.0 + GROUP_SPOT_INTERVAL;
+            
+        //Just calculate the remaining side of the triangle, now that we know
+        //the hypotenuse and the actual diameter (one side of the triangle).
+        float middle_distance =
+            sqrt(
+                (dist_from_center * dist_from_center) -
+                (actual_diameter * 0.5 * actual_diameter * 0.5)
+            );
+            
+        //Now, get the angular distance.
+        float angular_dist =
+            atan2(actual_diameter, middle_distance * 2.0) * 2.0;
+            
+        //Finally, we can calculate where the other spots are.
+        size_t n_spots_on_wheel = floor(M_PI * 2 / angular_dist);
+        //Get a better angle. One that can evenly distribute the spots.
+        float angle = M_PI * 2.0 / n_spots_on_wheel;
+        
+        for(unsigned s = 0; s < n_spots_on_wheel; ++s) {
+            alpha_spots.push_back(
+                alpha_spot(
+                    point(
+                        dist_from_center * cos(angle * s) +
+                        randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL),
+                        dist_from_center * sin(angle * s) +
+                        randomf(-GROUP_SPOT_INTERVAL, GROUP_SPOT_INTERVAL)
+                    )
+                )
+            );
+        }
+        
+        current_wheel++;
+        radius = dist_from_center;
+    }
+    
+    //Now, given all of these points, create our final spot vector,
+    //with the rightmost points coming first.
+    
+    //Start by sorting the points.
+    for(size_t a = 0; a < alpha_spots.size(); ++a) {
+        alpha_spots[a].distance_to_rightmost =
+            dist(
+                alpha_spots[a].pos,
+                point(radius, 0)
+            );
+    }
+    
+    std::sort(
+        alpha_spots.begin(), alpha_spots.end(),
+    [] (alpha_spot a1, alpha_spot a2) -> bool {
+        return a1.distance_to_rightmost < a2.distance_to_rightmost;
+    }
+    );
+    
+    //Finally, create the group spots.
+    spots.clear();
+    spots.resize(members.size(), group_spot());
+    for(size_t s = 0; s < members.size(); ++s) {
+        spots[s] =
+            group_spot(
+                point(
+                    alpha_spots[s].pos.x - radius,
+                    alpha_spots[s].pos.y
+                ),
+                NULL
+            );
+    }
+    
+    //Pass the old mobs over.
+    if(old_mobs.size() < spots.size()) {
+        for(size_t m = 0; m < old_mobs.size(); ++m) {
+            spots[m].mob_ptr = old_mobs[m];
+        }
+        spots[old_mobs.size()].mob_ptr = affected_mob_ptr;
+        
+    } else if(old_mobs.size() > spots.size()) {
+        for(size_t m = 0; m < old_mobs.size(); ++m) {
+            if(old_mobs[m] == affected_mob_ptr) continue;
+            spots[m].mob_ptr = old_mobs[m];
+        }
+        
+    } else {
+        for(size_t m = 0; m < old_mobs.size(); ++m) {
+            spots[m].mob_ptr = old_mobs[m];
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the average position of the members.
+ */
+point group_info::get_average_member_pos() {
+    point avg;
+    for(size_t m = 0; m < members.size(); ++m) {
+        avg += members[m]->pos;
+    }
+    return avg / members.size();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sorts the group with the specified type at the front, and the other types
+ * (in order) behind.
+ */
+void group_info::sort(subgroup_type* leading_type) {
+
+    for(size_t m = 0; m < members.size(); ++m) {
+        members[m]->group_spot_index = INVALID;
+    }
+    
+    subgroup_type* cur_type = leading_type;
+    size_t cur_spot = 0;
+    
+    while(cur_spot != spots.size()) {
+        point spot_pos = anchor + get_spot_offset(cur_spot);
+        
+        //Find the member closest to this spot.
+        mob* closest_member = NULL;
+        dist closest_dist;
+        for(size_t m = 0; m < members.size(); ++m) {
+            mob* m_ptr = members[m];
+            if(m_ptr->subgroup_type_ptr != cur_type) continue;
+            if(m_ptr->group_spot_index != INVALID) continue;
+            
+            dist d(m_ptr->pos, spot_pos);
+            
+            if(!closest_member || d < closest_dist) {
+                closest_member = m_ptr;
+                closest_dist = d;
+            }
+            
+        }
+        
+        if(!closest_member) {
+            //There are no more members of the current type left!
+            //Next type.
+            cur_type = subgroup_types.get_next_type(cur_type);
+        } else {
+            spots[cur_spot].mob_ptr = closest_member;
+            closest_member->group_spot_index = cur_spot;
+            cur_spot++;
+        }
+        
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns a point's offset from the anchor,
+ * given the current group transformation.
+ */
+point group_info::get_spot_offset(const size_t spot_index) {
+    point res = spots[spot_index].pos;
+    al_transform_coordinates(&transform, &res.x, &res.y);
+    return res;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Assigns each mob a new spot, given how close each one of them is to
+ * each spot.
+ */
+void group_info::reassing_spots() {
+    for(size_t m = 0; m < members.size(); ++m) {
+        members[m]->group_spot_index = INVALID;
+    }
+    
+    for(size_t s = 0; s < spots.size(); ++s) {
+        point spot_pos = anchor + get_spot_offset(s);
+        mob* closest_mob = NULL;
+        dist closest_dist;
+        
+        for(size_t m = 0; m < members.size(); ++m) {
+            mob* m_ptr = members[m];
+            if(m_ptr->group_spot_index != INVALID) continue;
+            
+            dist d(m_ptr->pos, spot_pos);
+            
+            if(!closest_mob || d < closest_dist) {
+                closest_mob = m_ptr;
+                closest_dist = d;
+            }
+        }
+        
+        closest_mob->group_spot_index = s;
+    }
 }

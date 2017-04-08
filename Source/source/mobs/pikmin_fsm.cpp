@@ -49,6 +49,9 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run_function(pikmin_fsm::be_grabbed_by_friend);
             efc.change_state("grabbed_by_leader");
         }
+        efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
+            efc.change_state("in_group_chasing");
+        }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
         }
@@ -1271,15 +1274,23 @@ void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
 /* ----------------------------------------------------------------------------
  * When a Pikmin needs to chase after its leader (or the group spot
  * belonging to the leader).
+ * info1: Points to the position struct with the final destination.
+   * If NULL, the final destination is calculated here.
  */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    m->chase(
-        m->group_spot,
-        &m->following_group->group->group_center,
-        false
-    );
-    m->set_animation(PIKMIN_ANIM_WALKING);
+    point pos;
+    
+    if(!info1) {
+        pos =
+            m->following_group->group->anchor +
+            m->following_group->group->get_spot_offset(m->group_spot_index);
+    } else {
+        pos = *((point*) info1);
+    }
+    
+    m->chase(pos, NULL, false);
     focus_mob(m, m->following_group);
+    m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
 

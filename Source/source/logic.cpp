@@ -303,22 +303,6 @@ void gameplay::do_gameplay_logic() {
             group_move_intensity = 0;
         }
         
-        if(group_move_intensity) {
-            cur_leader_ptr->group->group_center.x =
-                cur_leader_ptr->pos.x + cos(group_move_angle) *
-                group_move_intensity * cursor_max_dist;
-            cur_leader_ptr->group->group_center.y =
-                cur_leader_ptr->pos.y + sin(group_move_angle) *
-                group_move_intensity * cursor_max_dist;
-        } else if(prev_group_move_intensity != 0) {
-            float d = get_leader_to_group_center_dist(cur_leader_ptr);
-            cur_leader_ptr->group->group_center.x =
-                cur_leader_ptr->pos.x + cos(group_move_angle) * d;
-            cur_leader_ptr->group->group_center.y =
-                cur_leader_ptr->pos.y + sin(group_move_angle) * d;
-        }
-        prev_group_move_intensity = group_move_intensity;
-        
         
         /********************
         *             .-.   *
@@ -1037,12 +1021,14 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         mob_event* spot_far_ev =  q_get_event(m_ptr, MOB_EVENT_SPOT_IS_FAR);
         
         if(spot_near_ev || spot_far_ev) {
-            dist d(
-                m_ptr->pos,
-                m_ptr->following_group->group->group_center + m_ptr->group_spot
-            );
+            point final_pos =
+                m_ptr->following_group->group->anchor +
+                m_ptr->following_group->group->get_spot_offset(
+                    m_ptr->group_spot_index
+                );
+            dist d(m_ptr->pos, final_pos);
             if(spot_far_ev && d >= 5) {
-                spot_far_ev->run(m_ptr);
+                spot_far_ev->run(m_ptr, (void*) &final_pos);
             } else if(spot_near_ev && d < 5) {
                 spot_near_ev->run(m_ptr);
             }
