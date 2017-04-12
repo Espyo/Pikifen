@@ -706,13 +706,19 @@ void do_game_drawing(
             ALLEGRO_BITMAP* bm = NULL;
             ALLEGRO_BITMAP* bm_maturity = NULL;
             if(closest_group_member) {
-                if(typeid(*closest_group_member) == typeid(pikmin)) {
+                if(
+                    closest_group_member->type->category->id ==
+                    MOB_CATEGORY_PIKMIN
+                ) {
                     pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
                     bm = p_ptr->pik_type->bmp_icon;
                     bm_maturity =
                         p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
                         
-                } else if(typeid(*closest_group_member) == typeid(leader)) {
+                } else if(
+                    closest_group_member->type->category->id ==
+                    MOB_CATEGORY_LEADERS
+                ) {
                     leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
                     bm = l_ptr->lea_type->bmp_icon;
                 }

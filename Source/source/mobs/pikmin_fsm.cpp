@@ -730,11 +730,9 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     mob* lea = (mob*) info1;
     
     if(lea->following_group) {
-        if(typeid(*lea->following_group) == typeid(leader)) {
-            //If this leader is following another one,
-            //then the new Pikmin should be in the group of that top leader.
-            lea = lea->following_group;
-        }
+        //If this leader is following another one,
+        //then the new Pikmin should be in the group of that top leader.
+        lea = lea->following_group;
     }
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
@@ -956,7 +954,7 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
     mob* o_ptr = (mob*) info1;
-    if(typeid(*o_ptr) == typeid(enemy)) {
+    if(o_ptr->type->category->id == MOB_CATEGORY_ENEMIES) {
         if(!((enemy*) info1)->ene_type->allow_ground_attacks) return;
     }
     

@@ -380,7 +380,7 @@ void update_closest_group_member() {
         }
         
         unsigned char maturity = 0;
-        if(typeid(*member_ptr) == typeid(pikmin)) {
+        if(member_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((pikmin*) member_ptr)->maturity;
         }
         

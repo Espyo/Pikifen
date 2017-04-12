@@ -540,7 +540,10 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             point hotspot = snap_to_grid(mouse_cursor_w);
             
             cur_area_data.mob_generators.push_back(
-                new mob_gen(hotspot)
+                new mob_gen(
+                    mob_categories.get(MOB_CATEGORY_NONE),
+                    hotspot, NULL, 0, ""
+                )
             );
             
             cur_mob = cur_area_data.mob_generators.back();

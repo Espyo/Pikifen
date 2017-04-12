@@ -816,16 +816,16 @@ void load_area(
             );
         mob_ptr->vars = mob_node->get_child_by_name("vars")->value;
         
-        mob_ptr->category = mob_categories.get_nr_from_sname(mob_node->name);
+        mob_ptr->category = mob_categories.get_from_name(mob_node->name);
         string mt = mob_node->get_child_by_name("type")->value;
-        mob_categories.set_mob_type_ptr(mob_ptr, mt);
+        mob_ptr->type = mob_ptr->category->get_type(mt);
         
         bool problem = false;
         
         if(!mob_ptr->type && !load_for_editor) {
             //Error.
             log_error(
-                "Unknown \"" + mob_categories.get_sname(mob_ptr->category) +
+                "Unknown \"" + mob_ptr->category->name +
                 "\" mob type \"" +
                 mt + "\"!",
                 mob_node
@@ -835,15 +835,15 @@ void load_area(
         
         if(
             (
-                mob_ptr->category == MOB_CATEGORY_NONE ||
-                mob_ptr->category == 255
+                mob_ptr->category->id == MOB_CATEGORY_NONE ||
+                mob_ptr->category->id == INVALID
             ) && !load_for_editor
         ) {
         
             log_error(
                 "Unknown mob category \"" + mob_node->name + "\"!", mob_node
             );
-            mob_ptr->category = MOB_CATEGORY_NONE;
+            mob_ptr->category = mob_categories.get(MOB_CATEGORY_NONE);
             problem = true;
             
         }

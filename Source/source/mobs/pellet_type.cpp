@@ -19,7 +19,7 @@
  * Creates a type of pellet.
  */
 pellet_type::pellet_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_PELLETS),
     pik_type(nullptr),
     number(0),
     match_seeds(0),

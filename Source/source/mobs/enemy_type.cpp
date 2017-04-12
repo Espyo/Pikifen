@@ -16,7 +16,7 @@
  * Creates a type of enemy.
  */
 enemy_type::enemy_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_ENEMIES),
     pikmin_seeds(0),
     value(0),
     revive_speed(0),

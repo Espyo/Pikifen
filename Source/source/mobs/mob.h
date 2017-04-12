@@ -400,7 +400,10 @@ void cause_hitbox_damage(
     mob* attacker, mob* victim, hitbox* attacker_h,
     hitbox* victim_h, float* total_damage
 );
-void create_mob(mob* m);
+mob* create_mob(
+    mob_category* category, const point pos, mob_type* type,
+    const float angle, const string &vars
+);
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox* get_closest_hitbox(

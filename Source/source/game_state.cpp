@@ -209,81 +209,10 @@ void gameplay::load() {
     //Generate mobs.
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
-        if(m_ptr->category == MOB_CATEGORY_ENEMIES) {
-            create_mob(
-                new enemy(
-                    m_ptr->pos, (enemy_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_LEADERS) {
-            create_mob(
-                new leader(
-                    m_ptr->pos, (leader_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_ONIONS) {
-            create_mob(
-                new onion(
-                    m_ptr->pos, (onion_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_PELLETS) {
-            create_mob(
-                new pellet(
-                    m_ptr->pos, (pellet_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_PIKMIN) {
-            create_mob(
-                new pikmin(
-                    m_ptr->pos, (pikmin_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_SHIPS) {
-            create_mob(
-                new ship(
-                    m_ptr->pos, (ship_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_GATES) {
-            create_mob(
-                new gate(
-                    m_ptr->pos, (gate_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_BRIDGES) {
-            create_mob(
-                new bridge(
-                    m_ptr->pos, (bridge_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_SPECIAL) {
-            m_ptr->type->create_mob(
-                m_ptr->pos, m_ptr->angle, m_ptr->vars
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_TREASURES) {
-            create_mob(
-                new treasure(
-                    m_ptr->pos, (treasure_type*) m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        } else if(m_ptr->category == MOB_CATEGORY_MISC) {
-            create_mob(
-                new mob(
-                    m_ptr->pos, m_ptr->type,
-                    m_ptr->angle, m_ptr->vars
-                )
-            );
-        }
+        
+        create_mob(
+            m_ptr->category, m_ptr->pos, m_ptr->type, m_ptr->angle, m_ptr->vars
+        );
     }
     
     //Sort leaders.

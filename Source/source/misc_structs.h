@@ -20,6 +20,7 @@
 #include <allegro5/allegro_audio.h>
 
 #include "geometry_utils.h"
+#include "mobs/mob_category.h"
 #include "mobs/mob_type.h"
 #include "mobs/pikmin_type.h"
 
@@ -127,60 +128,6 @@ public:
     bool operator !=(const float d2);
     bool operator !=(const dist &d2);
     void operator +=(const dist &d2);
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * Info about a mob category.
- */
-struct mob_category_info {
-    string plural_name;
-    string singular_name;
-    string folder;
-    ALLEGRO_COLOR editor_color;
-    //Dumps the name of all mob types names in the category onto the vector.
-    function<void (vector<string> &list)> lister;
-    //Returns a pointer to the mob type of the given name.
-    function<mob_type* (const string &name)> type_getter;
-    //Creates a new mob type of this category.
-    function<mob_type* ()> type_constructor;
-    //Saves a mob from this type onto its corresponding vector.
-    function<void (mob_type*)> type_saver;
-    
-};
-
-/* ----------------------------------------------------------------------------
- * A list of the different mob categories.
- * The MOB_CATEGORY_* constants are meant to be used here.
- * Read the sector type manager's comments for more info.
- */
-struct mob_category_manager {
-private:
-    vector<mob_category_info> categories;
-    
-public:
-    void register_category(
-        unsigned char nr,
-        string pname, string sname, string folder,
-        ALLEGRO_COLOR editor_color,
-        function<void (vector<string> &list)> lister,
-        function<mob_type* (const string &name)> type_getter,
-        function<mob_type* ()> type_constructor,
-        function<void (mob_type*)> type_saver
-    );
-    unsigned char get_nr_from_pname(const string &pname);
-    unsigned char get_nr_from_sname(const string &sname);
-    string get_pname(const unsigned char cat_nr);
-    string get_sname(const unsigned char cat_nr);
-    ALLEGRO_COLOR get_editor_color(const unsigned char cat_nr);
-    unsigned char get_nr_of_categories();
-    void get_list(vector<string> &l, unsigned char cat_nr);
-    string get_folder(const unsigned char cat_nr);
-    void set_mob_type_ptr(mob_gen* m, const string &type_name);
-    mob_type* create_mob_type(const unsigned char cat_nr);
-    void save_mob_type(const unsigned char cat_nr, mob_type* mt);
-    
 };
 
 

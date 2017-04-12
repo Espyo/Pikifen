@@ -937,7 +937,8 @@ void mob::start_dying() {
  * Sets up stuff for the end of the mob's dying process.
  */
 void mob::finish_dying() {
-    if(typeid(*this) == typeid(enemy)) {
+    if(type->category->id == MOB_CATEGORY_ENEMIES) {
+        //TODO move this to the enemy class.
         enemy* e_ptr = (enemy*) this;
         if(e_ptr->ene_type->drops_corpse) {
             become_carriable(false);
@@ -1238,7 +1239,7 @@ float calculate_damage(
         attacker_offense = attacker_h->multiplier;
         
     } else {
-        if(typeid(*attacker) == typeid(pikmin)) {
+        if(attacker->type->category->id == MOB_CATEGORY_PIKMIN) {
             pikmin* pik_ptr = (pikmin*) attacker;
             attacker_offense =
                 pik_ptr->pik_type->attack_power *
@@ -1314,7 +1315,7 @@ void cause_hitbox_damage(
         }
         
     } else {
-        if(typeid(*attacker) == typeid(pikmin)) {
+        if(attacker->type->category->id == MOB_CATEGORY_PIKMIN) {
             attacker_offense =
                 ((pikmin*) attacker)->maturity *
                 ((pikmin*) attacker)->pik_type->attack_power *
@@ -1364,44 +1365,20 @@ void cause_hitbox_damage(
 
 /* ----------------------------------------------------------------------------
  * Creates a mob, adding it to the corresponding vectors.
+ * Returns the new mob.
  */
-void create_mob(mob* m) {
-    mobs.push_back(m);
-    
-    if(typeid(*m) == typeid(pikmin)) {
-        pikmin_list.push_back((pikmin*) m);
-        
-    } else if(typeid(*m) == typeid(leader)) {
-        leaders.push_back((leader*) m);
-        
-    } else if(typeid(*m) == typeid(onion)) {
-        onions.push_back((onion*) m);
-        
-    } else if(typeid(*m) == typeid(nectar)) {
-        nectars.push_back((nectar*) m);
-        
-    } else if(typeid(*m) == typeid(pellet)) {
-        pellets.push_back((pellet*) m);
-        
-    } else if(typeid(*m) == typeid(ship)) {
-        ships.push_back((ship*) m);
-        
-    } else if(typeid(*m) == typeid(treasure)) {
-        treasures.push_back((treasure*) m);
-        
-    } else if(typeid(*m) == typeid(info_spot)) {
-        info_spots.push_back((info_spot*) m);
-        
-    } else if(typeid(*m) == typeid(enemy)) {
-        enemies.push_back((enemy*) m);
-        
-    } else if(typeid(*m) == typeid(gate)) {
-        gates.push_back((gate*) m);
-        
-    } else if(typeid(*m) == typeid(bridge)) {
-        bridges.push_back((bridge*) m);
-        
+mob* create_mob(
+    mob_category* category, const point pos, mob_type* type,
+    const float angle, const string &vars
+) {
+    mob* m_ptr = NULL;
+    if(type->create_mob) {
+        m_ptr = type->create_mob(pos, angle, vars);
+    } else {
+        m_ptr = category->create_mob(pos, type, angle, vars);
     }
+    mobs.push_back(m_ptr);
+    return m_ptr;
 }
 
 
@@ -1413,57 +1390,10 @@ void create_mob(mob* m) {
  */
 void delete_mob(mob* m) {
     remove_from_group(m);
-    
-    mobs.erase(find(mobs.begin(), mobs.end(), m));
-    
-    if(typeid(*m) == typeid(pikmin)) {
-        pikmin* p_ptr = (pikmin*) m;
-        pikmin_list.erase(find(pikmin_list.begin(), pikmin_list.end(), p_ptr));
-        
-    } else if(typeid(*m) == typeid(leader)) {
-        leaders.erase(find(leaders.begin(), leaders.end(), (leader*) m));
-        
-    } else if(typeid(*m) == typeid(onion)) {
-        onions.erase(find(onions.begin(), onions.end(), (onion*) m));
-        
-    } else if(typeid(*m) == typeid(nectar)) {
-        nectars.erase(find(nectars.begin(), nectars.end(), (nectar*) m));
-        
-    } else if(typeid(*m) == typeid(pellet)) {
-        pellets.erase(find(pellets.begin(), pellets.end(), (pellet*) m));
-        
-    } else if(typeid(*m) == typeid(ship)) {
-        ships.erase(find(ships.begin(), ships.end(), (ship*) m));
-        
-    } else if(typeid(*m) == typeid(treasure)) {
-        treasures.erase(
-            find(treasures.begin(), treasures.end(), (treasure*) m)
-        );
-        
-    } else if(typeid(*m) == typeid(info_spot)) {
-        info_spots.erase(
-            find(info_spots.begin(), info_spots.end(), (info_spot*) m)
-        );
-        
-    } else if(typeid(*m) == typeid(enemy)) {
-        enemies.erase(find(enemies.begin(), enemies.end(), (enemy*) m));
-        
-    } else if(typeid(*m) == typeid(gate)) {
-        gates.erase(find(gates.begin(), gates.end(), (gate*) m));
-        
-    } else if(typeid(*m) == typeid(bridge)) {
-        bridges.erase(find(bridges.begin(), bridges.end(), (bridge*) m));
-        
-    } else {
-        log_error(
-            "ENGINE WARNING: Ran delete_mob() with a bad mob, of type \"" +
-            m->type->name + "\", x = " + f2s(m->pos.x) +
-            ", y = " + f2s(m->pos.y) + "!"
-        );
-        
-    }
-    
     if(dev_tool_info_lock == m) dev_tool_info_lock = NULL;
+    
+    m->type->category->erase_mob(m);
+    mobs.erase(find(mobs.begin(), mobs.end(), m));
     
     delete m;
 }
@@ -1603,7 +1533,9 @@ bool should_attack(mob* m1, mob* m2) {
         return false;
     }
     if(m2->team == MOB_TEAM_OBSTACLE) {
-        if(typeid(*m1) == typeid(pikmin)) return true;
+        if(m1->type->category->id == MOB_CATEGORY_PIKMIN) {
+            return true;
+        }
         return false;
     }
     return true;

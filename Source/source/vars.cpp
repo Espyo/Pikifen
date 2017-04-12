@@ -195,7 +195,7 @@ float maturity_speed_mult = 0.1f;
 size_t max_particles = 200;
 size_t max_pikmin_in_field = 100;
 float message_char_interval = 0.02f;
-map<string, mob_type*> misc_mob_types;
+map<string, mob_type*> custom_mob_types;
 ALLEGRO_MIXER* mixer = NULL;
 mob_category_manager mob_categories;
 vector<mob*> mobs;

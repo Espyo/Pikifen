@@ -304,7 +304,7 @@ void area_editor::do_drawing() {
                 m_ptr->type ?
                 m_ptr->type->radius == 0 ? 16 :
                 m_ptr->type->radius : 16;
-            ALLEGRO_COLOR c = mob_categories.get_editor_color(m_ptr->category);
+            ALLEGRO_COLOR c = m_ptr->category->editor_color;
             
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y,

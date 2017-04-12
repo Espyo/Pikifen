@@ -24,7 +24,8 @@
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
  */
-mob_type::mob_type() :
+mob_type::mob_type(size_t category_id) :
+    category(mob_categories.get(category_id)),
     radius(0),
     height(0),
     move_speed(0),
@@ -79,7 +80,8 @@ void mob_type::load_from_file(
 void load_mob_types(bool load_resources) {
     //Load the categorized mob types.
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        load_mob_types(mob_categories.get_folder(c), c, load_resources);
+        mob_category* category = mob_categories.get(c);
+        load_mob_types(category, load_resources);
     }
     
     //Load the special mob types.
@@ -94,35 +96,36 @@ void load_mob_types(bool load_resources) {
 
 
 /* ----------------------------------------------------------------------------
- * Loads the mob types from a folder.
- * folder: Name of the folder on the hard drive.
- * category: Use MOB_CATEGORY_* for this.
+ * Loads the mob types from a category's folder.
+ * category:       Pointer to the mob category.
  * load_resources: False if you don't need the images and sounds,
    * so it loads faster.
  */
 void load_mob_types(
-    const string &folder, const unsigned char category, bool load_resources
+    mob_category* category, bool load_resources
 ) {
-    if(folder.empty()) return;
+    if(category->folder.empty()) return;
     bool folder_found;
-    vector<string> types = folder_to_vector(folder, true, &folder_found);
+    vector<string> types =
+        folder_to_vector(category->folder, true, &folder_found);
     if(!folder_found) {
-        log_error("Folder \"" + folder + "\" not found!");
+        log_error("Folder \"" + category->folder + "\" not found!");
     }
     
     for(size_t t = 0; t < types.size(); ++t) {
     
-        data_node file = data_node(folder + "/" + types[t] + "/Data.txt");
+        data_node file =
+            data_node(category->folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) continue;
         
         mob_type* mt;
-        mt = mob_categories.create_mob_type(category);
+        mt = category->create_type();
         
         load_mob_type_from_file(
-            mt, file, load_resources, folder + "/" + types[t]
+            mt, file, load_resources, category->folder + "/" + types[t]
         );
         
-        mob_categories.save_mob_type(category, mt);
+        category->register_type(mt);
         
     }
     

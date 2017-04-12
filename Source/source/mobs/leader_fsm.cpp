@@ -999,10 +999,10 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     );
     
     float throw_height_mult = 1.0;
-    if(typeid(*holding_ptr) == typeid(pikmin)) {
+    if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
         throw_height_mult =
             ((pikmin*) holding_ptr)->pik_type->throw_height_mult;
-    } else if(typeid(*holding_ptr) == typeid(leader)) {
+    } else if(holding_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
         throw_height_mult =
             ((leader*) holding_ptr)->lea_type->throw_height_mult;
     }
@@ -1082,7 +1082,10 @@ void leader_fsm::spray(mob* m, void* info1, void* info2) {
     unordered_set<mob*> affected_mobs;
     if(spray_types[spray_nr].group) {
         for(size_t gm = 0; gm < m->group->members.size(); ++gm) {
-            if(typeid(*m->group->members[gm]) == typeid(pikmin)) {
+            if(
+                m->group->members[gm]->type->category->id ==
+                MOB_CATEGORY_PIKMIN
+            ) {
                 affected_mobs.insert(m->group->members[gm]);
             }
         }
@@ -1335,7 +1338,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     //Now for the leaders in the group.
     for(size_t m = 0; m < lea_ptr->group->members.size(); ++m) {
         mob* member_ptr = lea_ptr->group->members[m];
-        if(typeid(*member_ptr) == typeid(leader)) {
+        if(member_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
             member_ptr->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
         }
     }

@@ -19,7 +19,7 @@
  * Creates a type of bridge.
  */
 bridge_type::bridge_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_BRIDGES),
     bmp_main_texture(nullptr),
     bmp_rail_texture(nullptr) {
     

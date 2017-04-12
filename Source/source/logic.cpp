@@ -688,7 +688,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                 if(
                     pik_land_ev &&
                     m2_ptr->was_thrown &&
-                    typeid(*m2_ptr) == typeid(pikmin)
+                    m2_ptr->type->category->id == MOB_CATEGORY_PIKMIN
                 ) {
                     pik_land_ev->run(m_ptr, (void*) m2_ptr);
                 }
@@ -722,10 +722,10 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
             bool m1_is_hitbox = false;
             vector<hazard*> m1_resistances;
             
-            if(typeid(*m_ptr) == typeid(pikmin)) {
+            if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
                 m1_is_hitbox = true;
                 m1_resistances = ((pikmin*) m_ptr)->pik_type->resistances;
-            } else if(typeid(*m_ptr) == typeid(leader)) {
+            } else if(m_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
                 m1_is_hitbox = true;
             }
             

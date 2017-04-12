@@ -22,7 +22,7 @@
  * Creates a type of Pikmin.
  */
 pikmin_type::pikmin_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_PIKMIN),
     carry_strength(1),
     attack_power(1),
     carry_speed(1),

@@ -19,7 +19,7 @@
  * Creates a type of Onion.
  */
 onion_type::onion_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_ONIONS),
     pik_type(NULL) {
     
     onion_fsm::create_fsm(this);

@@ -162,6 +162,8 @@
     <File Name="../source/mobs/bridge_fsm.h"/>
     <File Name="../source/mobs/bridge_type.cpp"/>
     <File Name="../source/mobs/bridge_type.h"/>
+    <File Name="../source/mobs/mob_category.cpp"/>
+    <File Name="../source/mobs/mob_category.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>

@@ -2121,23 +2121,23 @@ mobs{
 		p=736.00 -1024.00
 		angle=3.14
 	}
-	Misc.{
+	Custom{
 		type=Fire geyser
 		p=192.00 -1088.00
 	}
-	Misc.{
+	Custom{
 		type=Fire geyser
 		p=256.00 -1088.00
 	}
-	Misc.{
+	Custom{
 		type=Fire geyser
 		p=160.00 -1024.00
 	}
-	Misc.{
+	Custom{
 		type=Fire geyser
 		p=224.00 -1024.00
 	}
-	Misc.{
+	Custom{
 		type=Fire geyser
 		p=288.00 -1024.00
 	}
@@ -2146,7 +2146,7 @@ mobs{
 		p=736.00 -736.00
 		angle=5.59
 	}
-	Misc.{
+	Custom{
 		type=Gas pipe
 		p=704.00 -608.00
 	}
@@ -2155,7 +2155,7 @@ mobs{
 		p=-320.00 -896.00
 		angle=0.98
 	}
-	Misc.{
+	Custom{
 		type=Gas pipe
 		p=608.00 -736.00
 	}

@@ -518,7 +518,7 @@ size_t edge::remove_from_vertexes() {
  * Creates a mob generation structure.
  */
 mob_gen::mob_gen(
-    const point pos, const unsigned char category,
+    mob_category* category, const point pos,
     mob_type* type, const float angle, const string &vars
 ) :
     category(category),

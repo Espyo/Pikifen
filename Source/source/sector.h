@@ -22,6 +22,7 @@
 
 #include "const.h"
 #include "hazard.h"
+#include "mobs/mob_category.h"
 #include "mobs/mob_type.h"
 #include "weather.h"
 
@@ -251,7 +252,7 @@ struct vertex {
  * tiny things.
  */
 struct mob_gen {
-    unsigned char category;
+    mob_category* category;
     mob_type* type;
     
     point pos;
@@ -259,9 +260,8 @@ struct mob_gen {
     string vars;
     
     mob_gen(
-        const point pos = point(),
-        const unsigned char category = MOB_CATEGORY_NONE, mob_type* type = NULL,
-        const float angle = 0, const string &vars = ""
+        mob_category* category = NULL, const point pos = point(),
+        mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
 };
 

@@ -89,10 +89,8 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
                     dev_tool_last_pikmin_type = new_pikmin_type;
                     
                     create_mob(
-                        new pikmin(
-                            mouse_cursor_w,
-                            new_pikmin_type, 0, "maturity=flower"
-                        )
+                        mob_categories.get(MOB_CATEGORY_PIKMIN),
+                        mouse_cursor_w, new_pikmin_type, 0, "maturity=flower"
                     );
                 }
                 
@@ -390,16 +388,12 @@ void handle_button(
                                 pikmin_in_onions[pik_type] > 0
                             ) {
                                 pikmin_in_onions[pik_type]--;
-                                create_mob(
-                                    new pikmin(
-                                        onions[o]->pos,
-                                        pik_type, 0, ""
-                                    )
-                                );
-                                add_to_group(
-                                    cur_leader_ptr,
-                                    pikmin_list[pikmin_list.size() - 1]
-                                );
+                                mob* new_pik =
+                                    create_mob(
+                                        mob_categories.get(MOB_CATEGORY_PIKMIN),
+                                        onions[o]->pos, pik_type, 0, ""
+                                    );
+                                add_to_group(cur_leader_ptr, new_pik);
                             }
                             done = true;
                         }
@@ -762,7 +756,8 @@ void handle_button(
             if(
                 pos == 0 ||
                 !cur_leader_ptr->holding_pikmin ||
-                typeid(*cur_leader_ptr->holding_pikmin) != typeid(pikmin)
+                cur_leader_ptr->holding_pikmin->type->category->id !=
+                MOB_CATEGORY_PIKMIN
             ) {
                 return;
             }

@@ -19,6 +19,7 @@
 
 #include "../animation.h"
 #include "../data_file.h"
+#include "mob_category.h"
 #include "../mob_script.h"
 
 using namespace std;
@@ -27,24 +28,6 @@ enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_CARRIABLE_WAITING,
     ENEMY_EXTRA_STATE_CARRIABLE_MOVING,
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
-};
-
-enum MOB_CATEGORIES {
-    //Sorted by what types of mobs to load first.
-    MOB_CATEGORY_NONE,
-    MOB_CATEGORY_PIKMIN,
-    MOB_CATEGORY_ONIONS,
-    MOB_CATEGORY_LEADERS,
-    MOB_CATEGORY_ENEMIES,
-    MOB_CATEGORY_TREASURES,
-    MOB_CATEGORY_PELLETS,
-    MOB_CATEGORY_SPECIAL,
-    MOB_CATEGORY_SHIPS,
-    MOB_CATEGORY_GATES,
-    MOB_CATEGORY_BRIDGES,
-    MOB_CATEGORY_MISC,
-    
-    N_MOB_CATEGORIES,
 };
 
 const size_t ANIM_IDLING = 0;
@@ -61,6 +44,7 @@ class mob_type {
 public:
     //Technical things.
     string name;
+    mob_category* category;
     
     //Visual things.
     animation_database anims;
@@ -98,7 +82,7 @@ public:
     
     //Used by the special mob types, as it is not possible to control
     //which type of mob to create without a list.
-    function < void(
+    function < mob*(
         const point pos, const float angle, const string &vars
     ) > create_mob;
     function < void(
@@ -106,7 +90,7 @@ public:
         vector<pair<size_t, string> >* anim_conversions
     ) > load_from_file_func;
     
-    mob_type();
+    mob_type(size_t category_id);
     ~mob_type();
     virtual void load_from_file(
         data_node* file, const bool load_resources,
@@ -116,9 +100,7 @@ public:
 };
 
 
-void load_mob_types(
-    const string &folder, const unsigned char category, bool load_resources
-);
+void load_mob_types(mob_category* category, bool load_resources);
 void load_mob_types(bool load_resources);
 void load_mob_type_from_file(
     mob_type* mt, data_node &file, const bool load_resources,

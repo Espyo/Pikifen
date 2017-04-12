@@ -18,7 +18,7 @@
  * Creates a type of ship.
  */
 ship_type::ship_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_SHIPS),
     can_heal(false),
     beam_radius(0.0f) {
     

@@ -20,7 +20,7 @@
  * Creates a type of leader.
  */
 leader_type::leader_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(DEF_WHISTLE_RANGE),
     punch_strength(DEF_PUNCH_STRENGTH),
     throw_height_mult(1.0),

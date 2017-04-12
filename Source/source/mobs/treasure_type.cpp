@@ -21,7 +21,7 @@
  * Creates a type of treasure.
  */
 treasure_type::treasure_type() :
-    mob_type(),
+    mob_type(MOB_CATEGORY_TREASURES),
     value(0) {
     
     treasure_fsm::create_fsm(this);

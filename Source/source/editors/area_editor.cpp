@@ -227,10 +227,10 @@ void area_editor::mob_to_gui() {
         ((lafi::textbox*) f->widgets["txt_vars"])->text = cur_mob->vars;
         
         ((lafi::button*) f->widgets["but_category"])->text =
-            mob_categories.get_pname(cur_mob->category);
+            cur_mob->category->plural_name;
             
         lafi::button* but_type = (lafi::button*) f->widgets["but_type"];
-        if(cur_mob->category == MOB_CATEGORY_NONE) {
+        if(cur_mob->category->id == MOB_CATEGORY_NONE) {
             disable_widget(but_type);
         } else {
             enable_widget(but_type);
@@ -753,8 +753,8 @@ void area_editor::create_new_from_picker(const string &name) {
         
         cur_area_data.mob_generators.push_back(
             new mob_gen(
-                point(), MOB_CATEGORY_LEADERS,
-                leader_types.begin()->second
+                mob_categories.get(MOB_CATEGORY_LEADERS), point(),
+                leader_types.begin()->second, 0, ""
             )
         );
     }
@@ -1056,7 +1056,7 @@ void area_editor::find_errors() {
         bool has_leader = false;
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             if(
-                cur_area_data.mob_generators[m]->category ==
+                cur_area_data.mob_generators[m]->category->id ==
                 MOB_CATEGORY_LEADERS &&
                 cur_area_data.mob_generators[m]->type != NULL
             ) {
@@ -1100,8 +1100,8 @@ void area_editor::find_errors() {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
             
             if(
-                m_ptr->category == MOB_CATEGORY_GATES ||
-                m_ptr->category == MOB_CATEGORY_BRIDGES
+                m_ptr->category->id == MOB_CATEGORY_GATES ||
+                m_ptr->category->id == MOB_CATEGORY_BRIDGES
             ) {
                 continue;
             }
@@ -1916,19 +1916,16 @@ void area_editor::open_picker(const unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
-        for(
-            unsigned char f = 0; f < mob_categories.get_nr_of_categories();
-            ++f
-        ) {
+        for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
             //0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
-            elements.push_back(mob_categories.get_pname(f));
+            elements.push_back(mob_categories.get(f)->plural_name);
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
-        if(cur_mob->category != MOB_CATEGORY_NONE) {
-            mob_categories.get_list(elements, cur_mob->category);
+        if(cur_mob->category->id != MOB_CATEGORY_NONE) {
+            cur_mob->category->get_type_names(elements);
         }
         
     }
@@ -1953,14 +1950,14 @@ void area_editor::pick(const string &name, const unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
         if(cur_mob) {
-            cur_mob->category = mob_categories.get_nr_from_pname(name);
+            cur_mob->category = mob_categories.get_from_pname(name);
             cur_mob->type = NULL;
             mob_to_gui();
         }
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
         if(cur_mob) {
-            mob_categories.set_mob_type_ptr(cur_mob, name);
+            cur_mob->type = cur_mob->category->get_type(name);
         }
         
         mob_to_gui();
@@ -2302,7 +2299,7 @@ void area_editor::save_area(const bool to_backup) {
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
         data_node* mob_node =
-            new data_node(mob_categories.get_sname(m_ptr->category), "");
+            new data_node(m_ptr->category->name, "");
         mobs_node->add(mob_node);
         
         if(m_ptr->type) {

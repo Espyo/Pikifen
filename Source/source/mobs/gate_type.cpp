@@ -18,7 +18,7 @@
  * Creates a type of gate.
  */
 gate_type::gate_type() :
-    mob_type() {
+    mob_type(MOB_CATEGORY_GATES) {
     
     casts_shadow = false;
     is_obstacle = true;

@@ -64,7 +64,14 @@ void onion::spew() {
         return;
     }
     
-    pikmin* new_pikmin = new pikmin(pos, oni_type->pik_type, 0, "");
+    pikmin* new_pikmin =
+        (
+            (pikmin*)
+            create_mob(
+                mob_categories.get(MOB_CATEGORY_PIKMIN),
+                pos, oni_type->pik_type, 0, ""
+            )
+        );
     //TODO the shooting strength shouldn't be a magic number.
     new_pikmin->z = 320;
     new_pikmin->speed.x = cos(next_spew_angle) * 60;
@@ -72,7 +79,6 @@ void onion::spew() {
     new_pikmin->speed_z = 200;
     new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
     new_pikmin->maturity = 0;
-    create_mob(new_pikmin);
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;
     
