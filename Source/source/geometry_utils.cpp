@@ -243,10 +243,10 @@ float get_angle(const point center, const point focus) {
 
 /* ----------------------------------------------------------------------------
  * Returns the closest point in a line to a given point.
-   * l1, l2:      Points of the line.
+ *   l1, l2:      Points of the line.
  * p:             Reference point.
  * segment_ratio: If not NULL, the ratio from l1 to l2 is returned here.
-   * Between 0 and 1, it belongs to the line segment. If not, it doesn't.
+ *   Between 0 and 1, it belongs to the line segment. If not, it doesn't.
  */
 point get_closest_point_in_line(
     const point l1, const point l2, const point p, float* segment_ratio
@@ -279,7 +279,7 @@ point get_closest_point_in_line(
  * target:       Coordinates of the target point.
  * speed:        Speed at which the point can move.
  * reach_radius: If the point is within this range of the target,
-   * consider it as already being there.
+ *   consider it as already being there.
  * mov:          Variable to return the amount of movement to.
  * angle:        Variable to return the angle the point faces to.
  * reached:      Variable to return whether the point reached the target.

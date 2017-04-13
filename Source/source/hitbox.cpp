@@ -28,7 +28,7 @@ body_part::body_part(const string &name) :
  * pos:    Hitbox's coordinates, from the center of the mob.
  * z:      Z coordinate of the bottom point of the hitbox.
  * height: The hitbox's total height.
-   * 0 means it spans indefinitely across the Z axis.
+ *   0 means it spans indefinitely across the Z axis.
  * radius: Hitbox radius.
  */
 hitbox::hitbox(

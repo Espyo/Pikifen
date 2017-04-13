@@ -39,7 +39,7 @@ void bridge_fsm::create_fsm(mob_type* typ) {
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idling");
     
-    if(typ->states.size() != N_GATE_STATES) {
+    if(typ->states.size() != N_BRIDGE_STATES) {
         log_error(
             "ENGINE WARNING: Number of bridge states on the FSM (" +
             i2s(typ->states.size()) +

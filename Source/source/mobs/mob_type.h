@@ -53,7 +53,7 @@ public:
     bool casts_shadow;
     
     //Space-related things.
-    float radius;         //Diameter.
+    float radius;
     float height;
     float move_speed;
     float rotation_speed;

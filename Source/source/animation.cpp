@@ -349,8 +349,8 @@ void animation_database::fix_body_part_pointers() {
  * This is where this comes in.
  *
  * conversions: A vector of size_t and strings.
-   * The size_t is the hardcoded ID (probably in some constant or enum).
-   * The string is the name of the animation in the animation file.
+ *   The size_t is the hardcoded ID (probably in some constant or enum).
+ *   The string is the name of the animation in the animation file.
  */
 void animation_database::create_conversions(
     vector<pair<size_t, string> > conversions

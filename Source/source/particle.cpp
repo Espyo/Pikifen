@@ -260,9 +260,9 @@ void particle_manager::tick_all(const float delta_t) {
 /* ----------------------------------------------------------------------------
  * Draws all particles, if they're meant to be drawn.
  * before_mobs: If true, we're trying to draw the particles
-   * that are meant to appear BEFORE (under) the mobs.
-   * So, you should call this function before and after drawing all mobs,
-   * and set before_mobs to true before, and false after.
+ *   that are meant to appear BEFORE (under) the mobs.
+ *   So, you should call this function before and after drawing all mobs,
+ *   and set before_mobs to true before, and false after.
  */
 void particle_manager::draw_all(const bool before_mobs) {
     for(size_t c = 0; c < count; ++c) {
@@ -288,12 +288,12 @@ void particle_manager::clear() {
  * Creates a particle generator.
  * type:              Type of generator. Use PARTICLE_GENERATOR_*.
  * emission_interval: Interval to spawn a new set of particles in,
-   * in seconds. 0 means it spawns only one set and that's it.
+ *   in seconds. 0 means it spawns only one set and that's it.
  * base_particle:     All particles created will be based on this one.
-   * Their properties will deviate randomly based on the
-   * deviation members of the particle generator object.
+ *   Their properties will deviate randomly based on the
+ *   deviation members of the particle generator object.
  * number:            Number of particles to spawn.
-   * This number is also deviated by number_deviation.
+ *   This number is also deviated by number_deviation.
  */
 particle_generator::particle_generator(
     const float emission_interval,

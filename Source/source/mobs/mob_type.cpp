@@ -99,7 +99,7 @@ void load_mob_types(bool load_resources) {
  * Loads the mob types from a category's folder.
  * category:       Pointer to the mob category.
  * load_resources: False if you don't need the images and sounds,
-   * so it loads faster.
+ *   so it loads faster.
  */
 void load_mob_types(
     mob_category* category, bool load_resources

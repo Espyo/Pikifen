@@ -922,7 +922,7 @@ vertex* get_merge_vertex(
  * end:            End coordinates.
  * obstacle_found: If an obstacle was found in the only path, this points to it.
  * go_straight:    This is set according to whether it's better
-   * to go straight to the end point.
+ *   to go straight to the end point.
  * total_dist:     If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
@@ -1232,10 +1232,10 @@ void get_sector_bounding_box(
  * Returns which sector the specified point belongs to.
  * p:            Coordinates of the point.
  * sector_nr:    If not NULL, the number of the sector
-   * on the area map is placed here.
-   * The number will not be set if the search is using the blockmap.
+ *   on the area map is placed here.
+ *   The number will not be set if the search is using the blockmap.
  * use_blockmap: If true, use the blockmap to search.
-   * This provides faster results, but the blockmap must be built.
+ *   This provides faster results, but the blockmap must be built.
  */
 sector* get_sector(
     const point p, size_t* sector_nr, const bool use_blockmap
@@ -1365,11 +1365,11 @@ bool is_point_in_sector(const point p, sector* s_ptr) {
  * p:      The point to check.
  * tp*:    Coordinates of the triangle's points.
  * loq:    Less or equal.
-   * Different code requires different precision for on-line cases.
-   * Just...don't overthink this, I added this based on what worked and didn't.
+ *   Different code requires different precision for on-line cases.
+ *   Just...don't overthink this, I added this based on what worked and didn't.
  * Thanks go to
-   * http://stackoverflow.com/questions/2049582/
-   * how-to-determine-a-point-in-a-triangle
+ *   http://stackoverflow.com/questions/2049582/
+ *   how-to-determine-a-point-in-a-triangle
  */
 bool is_point_in_triangle(
     const point p, const point tp1, const point tp2, const point tp3,
@@ -2091,9 +2091,9 @@ void get_cce(
 /* ----------------------------------------------------------------------------
  * Returns whether the two line segments intersect.
  * ur: Returns the distance from the start of line 2 in which
-   * the intersection happens.
-   * This is a ratio, so 0 is the start, 1 is the end of the line.
-   * Oh, and the r stands for ray.
+ *   the intersection happens.
+ *   This is a ratio, so 0 is the start, 1 is the end of the line.
+ *   Oh, and the r stands for ray.
  * ul: Same as ur, but for line 1.
  */
 bool lines_intersect(

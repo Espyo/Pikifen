@@ -739,18 +739,52 @@ void area_editor::create_new_from_picker(const string &name) {
         area_name = name;
         area_editor::load_area(false);
     } else {
-        al_make_directory(new_area_path.c_str());
+        //Create a new area.
         area_name = name;
         clear_current_area();
         
+        //Create a sector for it.
         new_sector_valid_line = true;
         new_sector_vertexes.push_back(new vertex(-500, -500));
         new_sector_vertexes.push_back(new vertex(500,  -500));
         new_sector_vertexes.push_back(new vertex(500,  500));
         new_sector_vertexes.push_back(new vertex(-500, 500));
-        
         create_sector();
+        cur_sector = NULL;
+        sector_to_gui();
         
+        //Find a texture to give to this sector.
+        vector<string> textures = folder_to_vector(TEXTURES_FOLDER_PATH, false);
+        size_t texture_to_use = INVALID;
+        //First, if there's any "grass" texture, use that.
+        for(size_t t = 0; t < textures.size(); ++t) {
+            string lc_name = str_to_lower(textures[t]);
+            if(lc_name.find("grass") != string::npos) {
+                texture_to_use = t;
+                break;
+            }
+        }
+        //No grass texture? Try one with "dirt".
+        if(texture_to_use == INVALID) {
+            for(size_t t = 0; t < textures.size(); ++t) {
+                string lc_name = str_to_lower(textures[t]);
+                if(lc_name.find("dirt") != string::npos) {
+                    texture_to_use = t;
+                    break;
+                }
+            }
+        }
+        //If there's no good texture, just pick the first one.
+        if(texture_to_use == INVALID) {
+            if(!textures.empty()) texture_to_use = 0;
+        }
+        //Apply the texture.
+        if(texture_to_use != INVALID) {
+            cur_area_data.sectors[0]->texture_info.file_name =
+                textures[texture_to_use];
+        }
+        
+        //Now add a leader. The first available.
         cur_area_data.mob_generators.push_back(
             new mob_gen(
                 mob_categories.get(MOB_CATEGORY_LEADERS), point(),
@@ -2157,6 +2191,7 @@ void area_editor::resize_everything() {
  * to_backup: If false, save normally. If true, save to an auto-backup file.
  */
 void area_editor::save_area(const bool to_backup) {
+    
     data_node geometry_file = data_node("", "");
     
     //Vertexes.
@@ -2389,6 +2424,29 @@ void area_editor::save_area(const bool to_backup) {
     geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
     
     
+    //Check if the folder exists before saving. If not, create it.
+    ALLEGRO_FS_ENTRY* folder_fs_entry =
+        al_create_fs_entry((AREAS_FOLDER_PATH + "/" + area_name).c_str());
+    if(!al_open_directory(folder_fs_entry)) {
+        al_make_directory((AREAS_FOLDER_PATH + "/" + area_name).c_str());
+    }
+    al_close_directory(folder_fs_entry);
+    al_destroy_fs_entry(folder_fs_entry);
+    
+    //Also, check if the data file exists. Create it if not.
+    if(
+        !al_filename_exists(
+            (AREAS_FOLDER_PATH + "/" + area_name + "/Data.txt").c_str()
+        )
+    ) {
+        data_node data_file;
+        data_file.save_file(
+            (AREAS_FOLDER_PATH + "/" + area_name + "/Data.txt").c_str()
+        );
+    }
+    
+    
+    //Finally, save.
     geometry_file.save_file(
         AREAS_FOLDER_PATH + "/" + area_name +
         (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")

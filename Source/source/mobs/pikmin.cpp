@@ -155,7 +155,7 @@ void pikmin::teleport_to_connected_hitbox() {
  * pos:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
  * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
-   * (i.e. already chosen to be plucked by another leader).
+ *   (i.e. already chosen to be plucked by another leader).
  */
 pikmin* get_closest_buried_pikmin(
     const point pos, dist* d, const bool ignore_reserved

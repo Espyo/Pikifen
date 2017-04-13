@@ -752,16 +752,16 @@ point mob::get_chase_target() {
 /* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
  * offs_*:          Coordinates of the target, relative to either the
-   * world origin, or another point, specified in the next parameters.
+ *   world origin, or another point, specified in the next parameters.
  * orig_*:          Pointers to changing coordinates. If NULL, it is
-   * the world origin. Use this to make the mob follow another mob
-   * wherever they go, for instance.
+ *   the world origin. Use this to make the mob follow another mob
+ *   wherever they go, for instance.
  * teleport:        If true, the mob teleports to that spot,
-   * instead of walking to it.
+ *   instead of walking to it.
  * teleport_z:      Teleports to this Z coordinate, too.
  * free_move:       If true, the mob can go to a direction they're not facing.
  * target_distance: Distance from the target in which the mob is
-   * considered as being there.
+ *   considered as being there.
  * speed:           Speed at which to go to the target. -1 uses the mob's speed.
  */
 void mob::chase(
@@ -798,7 +798,7 @@ void mob::stop_chasing() {
 /* ----------------------------------------------------------------------------
  * Makes the mob eat some of the enemies it has chomped on.
  * nr: Number of captured enemies to swallow.
-   * 0:       Release all of them.
+ *   0:       Release all of them.
  */
 void mob::eat(const size_t nr) {
 
@@ -847,7 +847,7 @@ void mob::remove_particle_generator(const size_t id) {
 /* ----------------------------------------------------------------------------
  * Sets the mob's animation.
  * nr:        Animation number.
-   * It's the animation instance number from the database.
+ *   It's the animation instance number from the database.
  * pre_named: If true,
  */
 void mob::set_animation(const size_t nr, const bool pre_named) {
@@ -883,7 +883,7 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
 /* ----------------------------------------------------------------------------
  * Changes a mob's health, relatively or absolutely.
  * rel:    Change is relative to the current value
-   * (i.e. add or subtract from current health)
+ *   (i.e. add or subtract from current health)
  * amount: Health amount.
  */
 void mob::set_health(const bool rel, const float amount) {
@@ -1754,7 +1754,7 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
 /* ----------------------------------------------------------------------------
  * Draws the mob. This can be overwritten by child classes.
  * effect_manager: Use this effect manager.
-   * If NULL, an effect manager is created inside exclusively for the function.
+ *   If NULL, an effect manager is created inside exclusively for the function.
  */
 void mob::draw(sprite_effect_manager* effect_manager) {
 
@@ -1934,7 +1934,7 @@ bool group_info::set_next_cur_standby_type(const bool move_backwards) {
  * of group members. Any old group members are moved to the appropriate
  * new spot.
  * new_mob_ptr: If this initialization is because a new mob entered
-   * or left the group, this should point to said mob.
+ *   or left the group, this should point to said mob.
  */
 void group_info::init_spots(mob* affected_mob_ptr) {
     if(members.empty()) {

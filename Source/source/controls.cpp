@@ -230,9 +230,9 @@ void handle_game_controls(const ALLEGRO_EVENT &ev) {
  * Handles a button "press". Technically, it could also be a button release.
  * button: The button's ID. Use BUTTON_*.
  * pos:    The position of the button, i.e., how much it's "held".
-   * 0 means it was released. 1 means it was fully pressed.
-   * For controls with more sensibility, values between 0 and 1 are important.
-   * Like a 0.5 for the group movement makes it move at half distance.
+ *   0 means it was released. 1 means it was fully pressed.
+ *   For controls with more sensibility, values between 0 and 1 are important.
+ *   Like a 0.5 for the group movement makes it move at half distance.
  */
 void handle_button(
     const unsigned int button, const unsigned char player, float pos

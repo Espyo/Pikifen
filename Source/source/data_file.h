@@ -5,36 +5,36 @@
  * A data file is composed of nodes, that can either have
  * a value, or children nodes.
  * In the text file, each line represents something.
-   * A line starting with "//" is a comment, and is ignored.
-   * A line like "option = value" is a node with a value.
-   * A line like "option {" is a node with children nodes.
-     * The children of this node are declared in the following lines,
-     * until a matching "}" is found.
+ *   A line starting with "//" is a comment, and is ignored.
+ *   A line like "option = value" is a node with a value.
+ *   A line like "option {" is a node with children nodes.
+ *     The children of this node are declared in the following lines,
+ *     until a matching "}" is found.
  *
  * Example of a data text file, imagine a file that houses
  * the data for all levels:
-   * level {
-   *     gems_needed = 10
-   *     objects {
-   *         blue_monster {
-   *             coords = 20 10
-   *             size = 20
-   *         }
-   *     }
-   * }
+ *   level {
+ *       gems_needed = 10
+ *       objects {
+ *           blue_monster {
+ *               coords = 20 10
+ *               size = 20
+ *           }
+ *       }
+ *   }
  *
  * To get the type and size of the third object of every level,
  * you would do something like:
-   * data_node file("levels.txt");
-   * for(size_t l = 0; l < file.get_nr_of_children_by_name("level"); ++l) {
-   *     data_node* level_objects =
-   *         file.get_child_by_name("level", l)->get_child_by_name("objects");
-   *     for(size_t o = 0; o < level_objects->get_nr_of_children(); ++o){
-   *         string type = level_objects->get_child(o)->name;
-   *         string size =
-   *            level_objects->get_child(o)->get_child_by_name("size")->value;
-   *     }
-   * }
+ *   data_node file("levels.txt");
+ *   for(size_t l = 0; l < file.get_nr_of_children_by_name("level"); ++l) {
+ *       data_node* level_objects =
+ *           file.get_child_by_name("level", l)->get_child_by_name("objects");
+ *       for(size_t o = 0; o < level_objects->get_nr_of_children(); ++o){
+ *           string type = level_objects->get_child(o)->name;
+ *           string size =
+ *              level_objects->get_child(o)->get_child_by_name("size")->value;
+ *       }
+ *   }
  */
 
 #ifndef DATA_FILE_INCLUDED

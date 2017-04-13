@@ -723,7 +723,7 @@ void pikmin_fsm::become_buried(mob* m, void* info1, void* info2) {
 
 /* ----------------------------------------------------------------------------
  * Makes a Pikmin begin its plucking process.
- * info1: Pointer to the leader that plucking.
+ * info1: Pointer to the leader that is plucking.
  */
 void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     pikmin* pik = (pikmin*) m;
@@ -1273,7 +1273,7 @@ void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
  * When a Pikmin needs to chase after its leader (or the group spot
  * belonging to the leader).
  * info1: Points to the position struct with the final destination.
-   * If NULL, the final destination is calculated here.
+ *   If NULL, the final destination is calculated here.
  */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     point pos;

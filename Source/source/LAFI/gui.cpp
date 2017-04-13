@@ -5,12 +5,12 @@ namespace lafi {
 /* ----------------------------------------------------------------------------
  * Creates a gui.
  * autonomous: if true, the gui will work without there being a need
-   * to create a display, feed it events, etc.
+ *   to create a display, feed it events, etc.
  * display: if the gui is not autonomous, this is the display
-   * it should be drawn on.
+ *   it should be drawn on.
  * close_button_quits: if the gui is autonomous,
-   * this specifies whether the close button
-   * on the window makes the application stop or not.
+ *   this specifies whether the close button
+ *   on the window makes the application stop or not.
  * display_w: if the gui is autonomous, it'll create a display with this width.
  * display_h: if the gui is autonomous, it'll create a display with this height.
  * style: the widget style.

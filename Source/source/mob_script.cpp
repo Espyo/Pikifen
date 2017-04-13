@@ -27,7 +27,7 @@
  * Creates a new mob action, given a data node.
  * dn:     the data node.
  * states: if this action messes with states, this points to the external
-   * vector containing the states.
+ *   vector containing the states.
  * mt:     mob type this action's fsm belongs to.
  */
 mob_action::mob_action(
@@ -411,7 +411,7 @@ mob_action::mob_action(custom_action_code code) :
  * Runs an action.
  * m:             the mob.
  * action_nr:     pointer to an external int that controls
-   * the current action number.
+ *   the current action number.
  * custom_data_1: custom argument #1 to pass to the code.
  * custom_data_2: custom argument #2 to pass to the code.
  */
@@ -654,7 +654,7 @@ void mob_event::run(mob* m, void* custom_data_1, void* custom_data_2) {
 
 /* ----------------------------------------------------------------------------
  * Returns a pointer to an event of the given type in the state,
-   * if it exists.
+ * if it exists.
  * type: the event's type.
  */
 mob_event* mob_state::get_event(const size_t type) {
@@ -664,7 +664,7 @@ mob_event* mob_state::get_event(const size_t type) {
 
 /* ----------------------------------------------------------------------------
  * Returns a pointer to an event of the given type in the current state,
-   * if it exists.
+ * if it exists.
  * type: the event's type.
  */
 mob_event* mob_fsm::get_event(const size_t type) {
@@ -801,7 +801,7 @@ mob_state::mob_state(const string &name, const size_t id) :
 /* ----------------------------------------------------------------------------
  * Changes the fsm to use a different state.
  * info*: data to pass on to the code after the state change.
-   * This data comes from the event that started all of this.
+ *   This data comes from the event that started all of this.
  */
 void mob_fsm::set_state(const size_t new_state, void* info1, void* info2) {
 

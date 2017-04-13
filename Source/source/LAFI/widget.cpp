@@ -522,7 +522,7 @@ void widget::give_focus(widget* w) {
 /* ----------------------------------------------------------------------------
  * Creates an "easy add" row and commits the previous one.
  * vertical_padding:   Padding between this new row and the previous one,
-   * in pixels.
+ *   in pixels.
  * horizontal_padding: Padding between the left and right sides, in pixels.
  * widget_padding:     Padding between added widgets, in pixels.
  * Returns the y of the next row.
@@ -653,12 +653,12 @@ accelerator::accelerator(
  * widget:          Widget, used to get the coordinates.
  * side:            Side of the rectangle to draw. Use DRAW_LINE_*.
  * start_offset:    Start these many points to the right (horizontal lines)
-   * or down (vertical). 0 means the exact corner.
+ *   or down (vertical). 0 means the exact corner.
  * end_offset:      End these many pixels to the left (horizontal lines)
-   * or above (vertical). 0 means the exact corner.
+ *   or above (vertical). 0 means the exact corner.
  * location_offset: Place the lines these many pixels closer to the center.
-   * e.g. if the line is BOTTOM-side, setting this to 1 makes it draw on the
-   * 2nd to last row of pixels.
+ *   e.g. if the line is BOTTOM-side, setting this to 1 makes it draw on the
+ *   2nd to last row of pixels.
  * color:           Color.
  */
 void draw_line(
@@ -741,8 +741,8 @@ void draw_text_lines(
  * text:        The string to split.
  * del:         The delimiter. Default is space.
  * inc_empty:   If true, include empty substrings on the vector.
-   * i.e. if two delimiters come together in a row,
-   * keep an empty substring between.
+ *   i.e. if two delimiters come together in a row,
+ *   keep an empty substring between.
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
 vector<string> split(

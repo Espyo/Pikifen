@@ -26,4 +26,4 @@ void take_damage(mob* m, void* info1, void* info2);
 void set_anim(mob* m, void* info1, void* info2);
 };
 
-#endif //ifndef GATE_FSM_INCLUDED
+#endif //ifndef BRIDGE_FSM_INCLUDED

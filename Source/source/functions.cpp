@@ -571,7 +571,7 @@ vector<pair<size_t, string> > get_weather_table(data_node* node) {
  * Returns the interpolation between two colors, given a number in an interval.
  * n: The number.
  * n1, n2: The interval the number falls on.
- ** The closer to n1, the closer the final color is to c1.
+ * * The closer to n1, the closer the final color is to c1.
  * c1, c2: Colors.
  */
 ALLEGRO_COLOR interpolate_color(
@@ -604,7 +604,7 @@ float interpolate_number(
  * Loads an area into memory.
  * name:            Name of the area's folder.
  * load_for_editor: If true, skips loading some things that the area editor
-   * won't need.
+ *   won't need.
  * from_backup:     If true, load from a backup, if any.
  */
 void load_area(
@@ -631,7 +631,11 @@ void load_area(
     
     cur_area_data.weather_name = data_file.get_child_by_name("weather")->value;
     if(!load_for_editor) {
-        if(
+        
+        if(cur_area_data.weather_name.empty()) {
+            cur_area_data.weather_condition = weather();
+            
+        } else if(
             weather_conditions.find(cur_area_data.weather_name) ==
             weather_conditions.end()
         ) {
@@ -641,12 +645,12 @@ void load_area(
                 cur_area_data.weather_name + "\"!",
                 &data_file
             );
-            cur_area_data.weather_condition =
-                weather();
-                
+            cur_area_data.weather_condition = weather();
+            
         } else {
             cur_area_data.weather_condition =
                 weather_conditions[cur_area_data.weather_name];
+            
         }
     }
     
@@ -1772,7 +1776,7 @@ void load_status_types() {
  * Prints something onto the error log.
  * s: String that represents the error.
  * d: If not null, this will be used to obtain the file name
-   * and line that caused the error.
+ *   and line that caused the error.
  */
 void log_error(string s, data_node* d) {
     if(d) {
@@ -1973,8 +1977,8 @@ vector<string> semicolon_list_to_vector(const string &s) {
  * text:        The string to split.
  * del:         The delimiter. Default is space.
  * inc_empty:   If true, include empty substrings on the vector.
-   * i.e. if two delimiters come together in a row,
-   * keep an empty substring between.
+ *   i.e. if two delimiters come together in a row,
+ *   keep an empty substring between.
  * inc_del:     If true, include the delimiters on the vector as a substring.
  */
 vector<string> split(

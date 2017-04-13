@@ -441,7 +441,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                         new_sector_vertexes.back()->x,
                         new_sector_vertexes.back()->y
                     )
-                ) <= cam_zoom / VERTEX_MERGE_RADIUS
+                ) <= VERTEX_MERGE_RADIUS / cam_zoom
             ) {
                 delete new_sector_vertexes.back();
                 new_sector_vertexes.erase(
@@ -462,7 +462,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                             new_sector_vertexes[0]->x,
                             new_sector_vertexes[0]->y
                         )
-                    ) <= cam_zoom / VERTEX_MERGE_RADIUS
+                    ) <= VERTEX_MERGE_RADIUS / cam_zoom
                 ) {
                     //Back to the first vertex.
                     sec_mode = ESM_NONE;

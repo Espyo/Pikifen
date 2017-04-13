@@ -333,8 +333,8 @@ sample_struct::sample_struct(ALLEGRO_SAMPLE* s, ALLEGRO_MIXER* mixer) :
 /* ----------------------------------------------------------------------------
  * Play the sample.
  * max_override_pos: Override the currently playing sound
-   * only if it's already in this position, or beyond.
-   * This is in seconds. 0 means always override. -1 means never override.
+ *   only if it's already in this position, or beyond.
+ *   This is in seconds. 0 means always override. -1 means never override.
  * loop: Loop the sound?
  * gain: Volume, 0 - 1.
  * pan: Panning, 0 - 1 (0.5 is centered).
@@ -451,7 +451,7 @@ timer::~timer() {
 /* ----------------------------------------------------------------------------
  * Starts a timer.
  * can_restart: If false, calling this while the timer is still ticking down
-   * will not do anything.
+ *   will not do anything.
  */
 void timer::start(const bool can_restart) {
     if(!can_restart && time_left > 0) return;

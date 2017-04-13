@@ -562,12 +562,12 @@ void do_game_drawing(
                     hud_coords[icon_id][2],
                     hud_coords[icon_id][3]
                 );
-                if(icon_size.x == icon_size.y == 0) continue;
+                if(icon_size.x == 0 && icon_size.y == 0) continue;
                 point health_size(
                     hud_coords[health_id][2],
                     hud_coords[health_id][3]
                 );
-                if(health_size.x == health_size.y == 0) continue;
+                if(health_size.x == 0 && health_size.y == 0) continue;
                 point icon_pos(
                     hud_coords[icon_id][0],
                     hud_coords[icon_id][1]
@@ -1226,13 +1226,12 @@ void do_game_drawing(
  * c:        Info on the control.
  * where:    Center of the place to draw at.
  * max_size: Max width or height. Used to compress it if needed.
-   * 0 = unlimited.
+ *   0 = unlimited.
  */
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point where, const point max_size
 ) {
-    if(max_size.x == 0 && max_size.y == 0) return;
     
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         //If it's a mouse click, just draw the icon and be done with it.
@@ -1441,12 +1440,12 @@ void draw_fraction(
  * Draws a health wheel, with a pieslice that's fuller the more HP is full.
  * center:     Center of the wheel.
  * health:     Current amount of health of the mob
-   * whose health we're representing.
+ *   whose health we're representing.
  * max_health: Maximum amount of health of the mob;
-   * health for when it's fully healed.
+ *   health for when it's fully healed.
  * radius:     Radius of the wheel (the whole wheel, not just the pieslice).
  * just_chart: If true, only draw the actual pieslice (pie-chart).
-   * Used for leader HP on the HUD.
+ *   Used for leader HP on the HUD.
  */
 void draw_health(
     const point center,
@@ -2444,9 +2443,9 @@ void draw_loading_screen(
  * center:         Center of the mob.
  * diameter:       Diameter of the mob.
  * delta_z:        The mob is these many units above the floor
-   * directly below it.
+ *   directly below it.
  * shadow_stretch: How much to stretch the shadow by
-   * (used to simulate sun shadow direction casting).
+ *   (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
     const point center, const float diameter,
@@ -2485,7 +2484,7 @@ void draw_mob_shadow(
  * bmp:    The bitmap.
  * center: Center coordinates.
  * size:   Final width and height.
-   * Make this -1 on one of them to keep the aspect ratio from the other.
+ *   Make this -1 on one of them to keep the aspect ratio from the other.
  * angle:  Angle to rotate the sprite by.
  * tint:   Tint the sprite with this color.
  */
@@ -2520,7 +2519,7 @@ void draw_sprite(
  * bmp:      The bitmap.
  * center:   Center coordinates.
  * size:     Final width and height.
-   * Make this -1 on one of them to keep the aspect ratio from the other.
+ *   Make this -1 on one of them to keep the aspect ratio from the other.
  * angle:    Angle to rotate the sprite by.
  * effects:  Sprite effect manager with the effects.
  */
