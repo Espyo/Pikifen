@@ -167,6 +167,14 @@ point angle_to_coordinates(
 
 
 /* ----------------------------------------------------------------------------
+ * Converts angular distance to linear distance.
+ */
+float angular_dist_to_linear(const float angular_dist, const float radius) {
+    return 2 * radius * tan(angular_dist / 2);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Checks if two spheres are colliding via a bounding-box check.
  * center1: Coordinates of the first sphere.
  * center2: Coordinates of the second sphere.
@@ -270,6 +278,14 @@ point get_closest_point_in_line(
     if(segment_ratio) *segment_ratio = r;
     
     return point(l1.x + l1_to_l2.x * r, l1.y + l1_to_l2.y * r);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts linear distance to angular distance.
+ */
+float linear_dist_to_angular(const float linear_dist, const float radius) {
+    return 2 * atan(linear_dist / (2 * radius));
 }
 
 

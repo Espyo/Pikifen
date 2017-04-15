@@ -77,6 +77,9 @@ const float LEADER_INVULN_PERIOD = 1.5f;
  * is controlled by the player.
  */
 class leader : public mob {
+private:
+    size_t get_dismiss_rows(const size_t n_members);
+    
 public:
     leader_type* lea_type;
     

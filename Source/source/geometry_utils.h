@@ -44,6 +44,7 @@ struct point {
 point angle_to_coordinates(
     const float angle, const float magnitude
 );
+float angular_dist_to_linear(const float angular_dist, const float radius);
 bool bbox_check(const point center1, point center2, const float r);
 bool circle_intersects_line(
     const point circle, const float cr,
@@ -55,6 +56,7 @@ point get_closest_point_in_line(
     const point l1, const point l2, const point p,
     float* segment_ratio = NULL
 );
+float linear_dist_to_angular(const float linear_dist, const float radius);
 void move_point(
     const point start, const point target,
     const float speed, const float reach_radius, point* mov,

@@ -38,26 +38,30 @@ leader::leader(
 }
 
 
+//Members cannot go past this range from the angle of dismissal.
+const float DISMISS_ANGLE_RANGE = M_PI;
+//Multiply the space members take up by this. Lower = more compact subgroups.
+const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
+//Dismissed groups must have this much distance between them/the leader.
+const float DISMISS_SUBGROUP_DISTANCE = 48.0f;
 /* ----------------------------------------------------------------------------
  * Makes a leader dismiss their group.
  * The group is then organized in groups, by type,
  * and is dismissed close to the leader.
  */
 void leader::dismiss() {
-    //TODO what if there are a lot of Pikmin types?
     size_t n_group_members = group->members.size();
     if(n_group_members == 0) return;
     
     //They are dismissed towards this angle.
-    //This is then offset a bit depending on the Pikmin type,
-    //so they spread out.
+    //This is then offset a bit for each subgroup, depending on a few factors.
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
     if(group_move_intensity > 0) {
         //If the leader's moving the group,
-        //they should be dismissed towards the cursor.
-        base_angle = group_move_angle + M_PI;
+        //they should be dismissed in that direction.
+        base_angle = group_move_angle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
         point min_coords, max_coords;
@@ -79,57 +83,261 @@ void leader::dismiss() {
             (min_coords.x + max_coords.x) / 2,
             (min_coords.y + max_coords.y) / 2
         );
-        base_angle = get_angle(pos, group_center) + M_PI;
+        base_angle = get_angle(pos, group_center);
     }
     
-    //Then, calculate how many Pikmin types there are in the group.
-    map<pikmin_type*, float> type_angle_map;
-    for(size_t m = 0; m < n_group_members; ++m) {
     
-        if(typeid(*group->members[m]) == typeid(pikmin)) {
-            pikmin* pikmin_ptr = dynamic_cast<pikmin*>(group->members[m]);
+    struct subgroup_dismiss_info {
+        subgroup_type* type;
+        mob_type* m_type;
+        float radius;
+        vector<mob*> members;
+        size_t row;
+        float start_angle;
+        point center;
+    };
+    vector<subgroup_dismiss_info> subgroups_info;
+    
+    //Go through all subgroups and populate the vector of data.
+    subgroup_type* first_type = subgroup_types.get_first_type();
+    subgroup_type* cur_type = first_type;
+    
+    do {
+    
+        if(
+            cur_type !=
+            subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_LEADER)
+        ) {
+        
+            bool subgroup_exists = false;
             
-            type_angle_map[pikmin_ptr->pik_type] = 0;
+            for(size_t m = 0; m < group->members.size(); ++m) {
+                mob* m_ptr = group->members[m];
+                if(m_ptr->subgroup_type_ptr != cur_type) continue;
+                
+                if(!subgroup_exists) {
+                    subgroups_info.push_back(subgroup_dismiss_info());
+                    subgroups_info.back().m_type = m_ptr->type;
+                    subgroup_exists = true;
+                }
+                
+                subgroups_info.back().members.push_back(m_ptr);
+            }
+            
+        }
+        
+        cur_type = subgroup_types.get_next_type(cur_type);
+        
+    } while(cur_type != first_type);
+    
+    //Let's figure out each subgroup's size.
+    //Subgroups will be made by placing the members in
+    //rows of circles surrounding a central point.
+    //The first row is just one spot.
+    //The second row is 6 spots around that one.
+    //The third is 12 spots around those 6.
+    //And so on. Each row fits an additional 6.
+    for(size_t s = 0; s < subgroups_info.size(); ++s) {
+        size_t n_rows = get_dismiss_rows(subgroups_info[s].members.size());
+        
+        //Since each row loops all around,
+        //it appears to the left and right of the center.
+        //So count each one twice. Except for the central one.
+        subgroups_info[s].radius =
+            standard_pikmin_radius +
+            standard_pikmin_radius * 2 *
+            DISMISS_MEMBER_SIZE_MULTIPLIER * (n_rows - 1);
+    }
+    
+    //We'll need to place the subgroups inside arched rows.
+    //Like stripes on a rainbow.
+    //For each row, we must fit as many Pikmin subgroups as possible.
+    //Each row can have a different thickness,
+    //based on the size of the subgroups within.
+    //Starts off on the row closest to the leader.
+    //We place the first subgroup, then some padding, then the next group,
+    //etc. For every subgroup we place, we must update the thickness.
+    struct row_info {
+        vector<size_t> subgroups;
+        float dist_between_center;
+        float thickness;
+        float angle_occupation; //How much is taken up by Pikmin and padding.
+        
+        row_info() {
+            dist_between_center = 0;
+            thickness = 0;
+            angle_occupation = 0;
+        }
+        
+        float get_angle_occupation() {
+        
+        }
+    };
+    
+    bool done = false;
+    vector<row_info> rows;
+    row_info cur_row;
+    cur_row.dist_between_center = DISMISS_SUBGROUP_DISTANCE;
+    size_t cur_row_nr = 0;
+    size_t cur_subgroup_nr = 0;
+    
+    while(!done) {
+        float new_thickness =
+            max(cur_row.thickness, subgroups_info[cur_subgroup_nr].radius * 2);
+            
+        float new_angle_occupation = 0;
+        for(size_t s = 0; s < cur_row.subgroups.size(); ++s) {
+            new_angle_occupation +=
+                linear_dist_to_angular(
+                    subgroups_info[cur_row.subgroups[s]].radius * 2.0,
+                    cur_row.dist_between_center +
+                    cur_row.thickness / 2.0f
+                );
+            if(s < cur_row.subgroups.size() - 1) {
+                new_angle_occupation +=
+                    linear_dist_to_angular(
+                        DISMISS_SUBGROUP_DISTANCE,
+                        cur_row.dist_between_center +
+                        cur_row.thickness / 2.0f
+                    );
+            }
+        }
+        if(!cur_row.subgroups.empty()) {
+            new_angle_occupation +=
+                linear_dist_to_angular(
+                    DISMISS_SUBGROUP_DISTANCE,
+                    cur_row.dist_between_center +
+                    new_thickness / 2.0f
+                );
+        }
+        new_angle_occupation +=
+            linear_dist_to_angular(
+                subgroups_info[cur_subgroup_nr].radius * 2.0,
+                cur_row.dist_between_center +
+                new_thickness / 2.0f
+            );
+            
+        //Will this group fit?
+        if(new_angle_occupation <= DISMISS_ANGLE_RANGE) {
+            //This subgroup still fits. Next!
+            cur_row.thickness = new_thickness;
+            cur_row.angle_occupation = new_angle_occupation;
+            
+            cur_row.subgroups.push_back(cur_subgroup_nr);
+            subgroups_info[cur_subgroup_nr].row = cur_row_nr;
+            cur_subgroup_nr++;
+        }
+        
+        if(
+            new_angle_occupation > DISMISS_ANGLE_RANGE ||
+            cur_subgroup_nr == subgroups_info.size()
+        ) {
+            //This subgroup doesn't fit. It'll have to be put in the next row.
+            //Or this is the last subgroup, and the row needs to be committed.
+            
+            rows.push_back(cur_row);
+            cur_row_nr++;
+            cur_row.dist_between_center +=
+                cur_row.thickness + DISMISS_SUBGROUP_DISTANCE;
+            cur_row.subgroups.clear();
+            cur_row.thickness = 0;
+            cur_row.angle_occupation = 0;
+        }
+        
+        if(cur_subgroup_nr == subgroups_info.size()) done = true;
+    }
+    
+    //Now that we know which subgroups go into which row,
+    //simply decide the positioning.
+    for(size_t r = 0; r < rows.size(); ++r) {
+        float start_angle = -(rows[r].angle_occupation / 2.0f);
+        float cur_angle = start_angle;
+        
+        for(size_t s = 0; s < rows[r].subgroups.size(); ++s) {
+            size_t s_nr = rows[r].subgroups[s];
+            float subgroup_angle = cur_angle;
+            
+            cur_angle +=
+                linear_dist_to_angular(
+                    subgroups_info[s_nr].radius * 2.0,
+                    rows[r].dist_between_center + rows[r].thickness / 2.0
+                );
+            if(s < rows[r].subgroups.size() - 1) {
+                cur_angle +=
+                    linear_dist_to_angular(
+                        DISMISS_SUBGROUP_DISTANCE,
+                        rows[r].dist_between_center + rows[r].thickness / 2.0
+                    );
+            }
+            
+            //Center the subgroup's angle.
+            subgroup_angle +=
+                linear_dist_to_angular(
+                    subgroups_info[s_nr].radius,
+                    rows[r].dist_between_center + rows[r].thickness / 2.0
+                );
+                
+            subgroups_info[s_nr].center =
+                angle_to_coordinates(
+                    base_angle + subgroup_angle,
+                    rows[r].dist_between_center + rows[r].thickness / 2.0f
+                );
+                
         }
     }
     
-    //For each type, calculate the angle;
-    size_t n_types = type_angle_map.size();
-    if(n_types == 1) {
-        //Small hack. If there's only one Pikmin type,
-        //dismiss them directly towards the base angle.
-        type_angle_map.begin()->second = M_PI_4;
+    //Now, dismiss!
+    for(size_t s = 0; s < subgroups_info.size(); ++s) {
+        size_t cur_row_nr = 0;
+        size_t cur_row_spot_nr = 0;
+        size_t cur_row_spots = 1;
         
-    } else {
-        unsigned current_type_nr = 0;
-        for(auto t = type_angle_map.begin(); t != type_angle_map.end(); ++t) {
-            t->second = current_type_nr * (M_PI_2 / (n_types - 1));
-            current_type_nr++;
+        for(size_t m = 0; m < subgroups_info[s].members.size(); ++m) {
+        
+            point destination;
+            
+            if(cur_row_nr == 0) {
+                destination = subgroups_info[s].center;
+            } else {
+                float member_angle =
+                    ((float) cur_row_spot_nr / cur_row_spots) * M_PI * 2;
+                destination =
+                    subgroups_info[s].center +
+                    angle_to_coordinates(
+                        member_angle,
+                        cur_row_nr * standard_pikmin_radius * 2 *
+                        DISMISS_MEMBER_SIZE_MULTIPLIER
+                    );
+            }
+            
+            destination +=
+                point(
+                    randomf(-5.0, 5.0),
+                    randomf(-5.0, 5.0)
+                );
+                
+            cur_row_spot_nr++;
+            if(cur_row_spot_nr == cur_row_spots) {
+                cur_row_nr++;
+                cur_row_spot_nr = 0;
+                if(cur_row_nr == 1) {
+                    cur_row_spots = 6;
+                } else {
+                    cur_row_spots += 6;
+                }
+            }
+            
+            destination += this->pos;
+            
+            remove_from_group(subgroups_info[s].members[m]);
+            subgroups_info[s].members[m]->fsm.run_event(
+                MOB_EVENT_DISMISSED, (void*) &destination
+            );
+            
         }
     }
     
-    //Now, dismiss them.
-    for(size_t m = 0; m < n_group_members; ++m) {
-        mob* member_ptr = group->members[0];
-        remove_from_group(member_ptr);
-        
-        float angle = 0;
-        
-        if(typeid(*member_ptr) == typeid(pikmin)) {
-            angle =
-                base_angle +
-                type_angle_map[((pikmin*) member_ptr)->pik_type] -
-                M_PI_4 + M_PI;
-        }
-        
-        point destination(
-            pos.x + cos(angle) * DISMISS_DISTANCE,
-            pos.y + sin(angle) * DISMISS_DISTANCE
-        );
-        
-        member_ptr->fsm.run_event(MOB_EVENT_DISMISSED, (void*) &destination);
-    }
-    
+    //Final things.
     lea_type->sfx_dismiss.play(0, false);
     set_animation(LEADER_ANIM_DISMISSING);
 }
@@ -180,6 +388,22 @@ void leader::draw(sprite_effect_manager* effect_manager) {
     
     draw_status_effect_bmp(this, &effects);
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Returns how many rows will be needed to fit all of the members.
+ * Used to calculate how subgroup members will be placed when dismissing.
+ */
+size_t leader::get_dismiss_rows(const size_t n_members) {
+    size_t members_that_fit = 1;
+    size_t rows_needed = 1;
+    while(members_that_fit < n_members) {
+        rows_needed++;
+        members_that_fit += 6 * (rows_needed - 1);
+    }
+    return rows_needed;
+}
+
 
 
 /* ----------------------------------------------------------------------------
