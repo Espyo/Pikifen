@@ -1128,6 +1128,9 @@ void load_custom_particle_generators() {
         grs.set("total_speed",           pg_struct.total_speed);
         grs.set("total_speed_deviation", pg_struct.total_speed_deviation);
         
+        pg_struct.angle = deg_to_rad(pg_struct.angle);
+        pg_struct.angle_deviation = deg_to_rad(pg_struct.angle_deviation);
+        
         pg_struct.id = MOB_PARTICLE_GENERATOR_STATUS + pg;
         
         custom_particle_generators[pg_node->name] = pg_struct;
@@ -1202,6 +1205,7 @@ void load_game_config() {
     
     pikmin_order_strings = semicolon_list_to_vector(pikmin_order_string);
     leader_order_strings = semicolon_list_to_vector(leader_order_string);
+    cursor_spin_speed = deg_to_rad(cursor_spin_speed);
 }
 
 
@@ -1688,6 +1692,8 @@ void load_spray_types() {
         rs.set("angle_range", st.angle_range);
         rs.set("color", st.main_color);
         rs.set("berries_needed", st.berries_needed);
+        
+        st.angle_range = deg_to_rad(st.angle_range);
         
         data_node* icon_node = s_node->get_child_by_name("icon");
         st.bmp_spray = bitmaps.get(icon_node->value, icon_node);

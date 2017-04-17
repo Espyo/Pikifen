@@ -3,7 +3,7 @@ Ultra-Bitter Spray {
     group = false
     angle = 0
     distance_range = 128
-    angle_range = 2.3561925
+    angle_range = 135
     color = 128 0 255
     icon = Ultra-bitter_spray.png
     berries = 10
@@ -14,7 +14,7 @@ Ultra-Spicy Spray {
     group = true
     angle = 3.14159
     distance_range = 128
-    angle_range = 1.570795
+    angle_range = 90
     color = 255 64 64
     icon = Ultra-spicy_spray.png
     berries = 10

@@ -165,6 +165,9 @@ void load_mob_type_from_file(
     rs.set("casts_shadow",        mt->casts_shadow);
     rs.set("is_obstacle",         mt->is_obstacle);
     
+    mt->rotation_speed = deg_to_rad(mt->rotation_speed);
+    mt->near_angle = deg_to_rad(mt->near_angle);
+    
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");
         mt->anims = load_animation_database_from_file(&anim_file);

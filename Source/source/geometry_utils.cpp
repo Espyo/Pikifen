@@ -240,6 +240,14 @@ bool circle_intersects_line(
 
 
 /* ----------------------------------------------------------------------------
+ * Converts an angle from degrees to radians.
+ */
+float deg_to_rad(const float deg) {
+    return (M_PI / 180.0f) * deg;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the angle between two points.
  * In other words, this is the angle "center" is facing when it is looking
  * at "focus".
@@ -392,6 +400,14 @@ bool rectangle_intersects_line(
     
     return false;
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Converts an angle from radians to degrees.
+ */
+float rad_to_deg(const float rad) {
+    return (180.0f / M_PI) * rad;
 }
 
 

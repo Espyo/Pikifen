@@ -101,7 +101,7 @@ gas_pipe {
     pos_deviation = 0 0
     speed_deviation = 0 0
     angle = 0
-    angle_deviation = 6.28318
+    angle_deviation = 360
     total_speed = 80
     total_speed_deviation = 0
 }
@@ -128,7 +128,7 @@ gas_explosion {
     pos_deviation = 0 0
     speed_deviation = 0 0
     angle = 0
-    angle_deviation = 6.28318
+    angle_deviation = 360
     toal_speed = 80
     toal_speed_deviation = 0
 }

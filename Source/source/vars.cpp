@@ -116,7 +116,7 @@ float cursor_invalid_effect = 0;
 float cursor_max_dist = 200.0;
 movement_struct cursor_movement;
 timer cursor_save_timer(CURSOR_SAVE_INTERVAL);
-float cursor_spin_speed = M_PI * 4.0f;
+float cursor_spin_speed = 180;
 vector<point> cursor_spots;
 map<string, particle_generator> custom_particle_generators;
 unsigned int day = 1;

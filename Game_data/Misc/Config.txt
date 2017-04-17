@@ -26,7 +26,7 @@ nectar_amount = 5
 
 can_throw_leaders = true
 cursor_max_dist = 200
-cursor_spin_speed = 3.1416
+cursor_spin_speed = 180
 next_pluck_range = 160
 onion_open_range = 64
 pikmin_grab_range = 128
