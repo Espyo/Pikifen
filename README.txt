@@ -41,21 +41,43 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 2) FAQ and troubleshooting
 ===============
+    Why did it crash?
+        Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
+        Other than that, check the file Error_log.txt on the same folder as the game. It should tell you what went wrong. If you think the crash is not your fault, please let me know of the problem.
+    
+    Why can't I see the game window?
+        Because windows sometimes break under Windows.
+        Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    
+    Why is it so slow?
+        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
+        Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.
+    
+    Why are some textures black, but not HUD elements?
+        I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images.
+        So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
+    
     Why are some parts of the logic and physics so broken?
         Because their code is still under construction.
+    
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
-    Why can't I see the game window?
-        Because windows sometimes break under Windows. Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
+    
+    Why 2D?
+        3D would be MUCH harder for everyone.
+        You can get something convincing with 2D alone. A 3D engine would be much harder to create, and the game developers would have a much harder time creating models, areas, etc. that look good in 3D.
+    
+    Will you ever add X?
+        Depends. If it's an area or enemy or something, the game developers are meant to do that, not me. Other than that, ask me!
+    
     Is it possible to add Winged Pikmin?
-        No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic. Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
-    Why are some textures black, but not HUD elements?
-        I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images. So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
-    Why is it so slow?
-        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural. Check the Options.txt file and use the wiki page for settings that you can change in order to sacrifice appearance for performance.
-    Why did it crash?
-        Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play. Other than that, check the file Error_log.txt on the same folder as the game. It should tell you what went wrong. If you think the crash is not your fault, please let me know of the problem.
-
+        No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.
+        Secondly, it's very difficult to convey height in a top-down game as-is, so creating a Pikmin type that has height as its main mechanic wouldn't work well at all.
+    
+    I'm having a hard time understanding X.
+        Please let me know. I try to make the interface, mechanics, and tutorials be as easy to understand as possible.
+        If you contact me, I can help you with your problem, as well as change stuff to make it easier to follow in the future.
+    
 ===============
 3) Compiling
 ===============
@@ -84,6 +106,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         Support and beta-testing
             My friends at Pikipedia and Pikmin Fanon
             My friends at Brawl Snapshots
+            Pretty much everyone over on the Pikmin subreddit
         Everything else
             André 'Espyo' Silva
         Tools used

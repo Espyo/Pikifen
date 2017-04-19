@@ -111,7 +111,7 @@ void leader::dismiss() {
         
             bool subgroup_exists = false;
             
-            for(size_t m = 0; m < group->members.size(); ++m) {
+            for(size_t m = 0; m < n_group_members; ++m) {
                 mob* m_ptr = group->members[m];
                 if(m_ptr->subgroup_type_ptr != cur_type) continue;
                 
@@ -181,7 +181,7 @@ void leader::dismiss() {
     size_t cur_row_nr = 0;
     size_t cur_subgroup_nr = 0;
     
-    while(!done) {
+    while(!done && !subgroups_info.empty()) {
         float new_thickness =
             max(cur_row.thickness, subgroups_info[cur_subgroup_nr].radius * 2);
             
@@ -335,6 +335,12 @@ void leader::dismiss() {
             );
             
         }
+    }
+    
+    //Dismiss leaders now.
+    while(!group->members.empty()) {
+        group->members[0]->fsm.run_event(MOB_EVENT_DISMISSED, NULL);
+        remove_from_group(group->members[0]);
     }
     
     //Final things.

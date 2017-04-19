@@ -1003,23 +1003,28 @@ void do_game_drawing(
                     "x" + i2s(spray_amounts[top_spray_nr])
                 );
                 
-                for(size_t c = 0; c < controls[0].size(); ++c) {
-                    if(
-                        controls[0][c].action == BUTTON_USE_SPRAY_1 ||
-                        controls[0][c].action == BUTTON_USE_SPRAY
-                    ) {
-                        draw_control(
-                            font_main, controls[0][c],
-                            point(
-                                hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
-                                hud_coords[HUD_ITEM_SPRAY_1_KEY][1]
-                            ),
-                            point(
-                                hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
-                                hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
-                            )
-                        );
-                        break;
+                if(
+                    hud_coords[HUD_ITEM_SPRAY_1_KEY][2] != 0 ||
+                    hud_coords[HUD_ITEM_SPRAY_1_KEY][3] != 0
+                ) {
+                    for(size_t c = 0; c < controls[0].size(); ++c) {
+                        if(
+                            controls[0][c].action == BUTTON_USE_SPRAY_1 ||
+                            controls[0][c].action == BUTTON_USE_SPRAY
+                        ) {
+                            draw_control(
+                                font_main, controls[0][c],
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
+                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][1]
+                                ),
+                                point(
+                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
+                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
+                                )
+                            );
+                            break;
+                        }
                     }
                 }
                 
@@ -1048,20 +1053,25 @@ void do_game_drawing(
                         ),
                         "x" + i2s(spray_amounts[1])
                     );
-                    for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
-                            draw_control(
-                                font_main, controls[0][c],
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
-                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][1]
-                                ),
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
-                                    hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
-                                )
-                            );
-                            break;
+                    if(
+                        hud_coords[HUD_ITEM_SPRAY_2_KEY][2] != 0 ||
+                        hud_coords[HUD_ITEM_SPRAY_2_KEY][3] != 0
+                    ) {
+                        for(size_t c = 0; c < controls[0].size(); ++c) {
+                            if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
+                                draw_control(
+                                    font_main, controls[0][c],
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
+                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][1]
+                                    ),
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
+                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
+                                    )
+                                );
+                                break;
+                            }
                         }
                     }
                     
@@ -1092,36 +1102,48 @@ void do_game_drawing(
                             hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
                         )
                     );
-                    for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_PREV_SPRAY) {
-                            draw_control(
-                                font_main, controls[0][c],
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
-                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1]
-                                ),
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
-                                    hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
-                                )
-                            );
-                            break;
+                    
+                    if(
+                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2] != 0 ||
+                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3] != 0
+                    ) {
+                        for(size_t c = 0; c < controls[0].size(); ++c) {
+                            if(controls[0][c].action == BUTTON_PREV_SPRAY) {
+                                draw_control(
+                                    font_main, controls[0][c],
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
+                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1]
+                                    ),
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
+                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
+                                    )
+                                );
+                                break;
+                            }
                         }
                     }
-                    for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
-                            draw_control(
-                                font_main, controls[0][c],
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
-                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1]
-                                ),
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
-                                    hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
-                                )
-                            );
-                            break;
+                    
+                    if(
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2] != 0 ||
+                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3] != 0
+                    ) {
+                        for(size_t c = 0; c < controls[0].size(); ++c) {
+                            if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
+                                draw_control(
+                                    font_main, controls[0][c],
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
+                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1]
+                                    ),
+                                    point(
+                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
+                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
+                                    )
+                                );
+                                break;
+                            }
                         }
                     }
                 }
@@ -1232,7 +1254,7 @@ void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point where, const point max_size
 ) {
-    
+
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {

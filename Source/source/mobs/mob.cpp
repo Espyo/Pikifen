@@ -1960,7 +1960,7 @@ void group_info::init_spots(mob* affected_mob_ptr) {
     
     vector<alpha_spot> alpha_spots;
     size_t current_wheel = 1;
-    radius = 0;
+    radius = standard_pikmin_radius;
     
     //Center spot first.
     alpha_spots.push_back(alpha_spot(point()));

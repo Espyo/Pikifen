@@ -1396,7 +1396,7 @@ void area_editor::set_new_circle_sector_points() {
 
 /* ----------------------------------------------------------------------------
  * Returns a sector common to all vertexes.
- * A sector is considered this if a vertex has it as a secotr of
+ * A sector is considered this if a vertex has it as a sector of
  * a neighboring edge, or if a vertex is inside it.
  * Use the former for vertexes that will be merged, and the latter
  * for vertexes that won't.
@@ -2121,14 +2121,20 @@ bool area_editor::remove_isolated_sector(sector* s_ptr) {
     
     //Remove the sector now.
     vector<edge*> main_sector_edges = s_ptr->edges;
+    unordered_set<vertex*> main_vertexes;
     for(size_t e = 0; e < main_sector_edges.size(); ++e) {
         edge* e_ptr = main_sector_edges[e];
+        main_vertexes.insert(e_ptr->vertexes[0]);
+        main_vertexes.insert(e_ptr->vertexes[1]);
         e_ptr->remove_from_sectors();
         e_ptr->remove_from_vertexes();
-        cur_area_data.remove_vertex(e_ptr->vertexes[0]);
-        cur_area_data.remove_vertex(e_ptr->vertexes[1]);
         cur_area_data.remove_edge(e_ptr);
     }
+    
+    for(auto v = main_vertexes.begin(); v != main_vertexes.end(); ++v) {
+        cur_area_data.remove_vertex(*v);
+    }
+    
     cur_area_data.remove_sector(s_ptr);
     
     //Re-triangulate the outer sector.
@@ -2191,7 +2197,7 @@ void area_editor::resize_everything() {
  * to_backup: If false, save normally. If true, save to an auto-backup file.
  */
 void area_editor::save_area(const bool to_backup) {
-    
+
     data_node geometry_file = data_node("", "");
     
     //Vertexes.
@@ -2460,6 +2466,25 @@ void area_editor::save_area(const bool to_backup) {
  * Saves the area onto a backup file.
  */
 void area_editor::save_backup() {
+
+    backup_timer.start(editor_backup_interval);
+    
+    //First, check if the folder even exists.
+    //If not, chances are this is a new area.
+    //We should probably create a backup anyway, but if the area is
+    //just for testing, the backups are pointless.
+    //Plus, creating the backup will create the area's folder on the disk,
+    //which will basically mean the area exists, even though this might not be
+    //what the user wants, since they haven't saved proper yet.
+    
+    ALLEGRO_FS_ENTRY* folder_fs_entry =
+        al_create_fs_entry((AREAS_FOLDER_PATH + "/" + area_name).c_str());
+    bool folder_exists = al_open_directory(folder_fs_entry);
+    al_close_directory(folder_fs_entry);
+    al_destroy_fs_entry(folder_fs_entry);
+    
+    if(!folder_exists) return;
+    
     save_area(true);
     update_backup_status();
 }
