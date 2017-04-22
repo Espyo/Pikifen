@@ -370,19 +370,28 @@ void animation_editor::frame_to_gui() {
         (valid ? i2s((cur_frame_nr + 1)) : "--") +
         " / " + i2s(cur_anim->frames.size());
         
+    f = f->widgets["frm_frame"];
     if(!valid) {
-        hide_widget(f->widgets["frm_frame"]);
+        hide_widget(f);
     } else {
-        show_widget(f->widgets["frm_frame"]);
+        show_widget(f);
         
-        (
-            (lafi::button*) f->widgets["frm_frame"]->widgets["but_sprite"]
-        )->text =
+        ((lafi::button*) f->widgets["but_sprite"])->text =
             cur_anim->frames[cur_frame_nr].sprite_name;
-        (
-            (lafi::textbox*) f->widgets["frm_frame"]->widgets["txt_dur"]
-        )->text =
+        ((lafi::textbox*) f->widgets["txt_dur"])->text =
             f2s(cur_anim->frames[cur_frame_nr].duration);
+            
+        if(cur_anim->frames[cur_frame_nr].signal != INVALID) {
+            ((lafi::checkbox*) f->widgets["chk_signal"])->check();
+            show_widget(f->widgets["txt_signal"]);
+            ((lafi::textbox*) f->widgets["txt_signal"])->text =
+                i2s(cur_anim->frames[cur_frame_nr].signal);
+        } else {
+            ((lafi::checkbox*) f->widgets["chk_signal"])->uncheck();
+            hide_widget(f->widgets["txt_signal"]);
+            ((lafi::textbox*) f->widgets["txt_signal"])->text = "0";
+        }
+        
     }
 }
 
@@ -578,16 +587,23 @@ void animation_editor::gui_to_frame() {
     if(!valid) return;
     
     lafi::widget* fw = gui->widgets["frm_anims"]->widgets["frm_anim"];
+    fw = fw->widgets["frm_frame"];
     
     frame* f = &cur_anim->frames[cur_frame_nr];
     f->duration =
         s2f(
             (
                 (lafi::textbox*)
-                fw->widgets["frm_frame"]->widgets["txt_dur"]
+                fw->widgets["txt_dur"]
             )->text
         );
     if(f->duration < 0) f->duration = 0;
+    
+    if(((lafi::checkbox*) fw->widgets["chk_signal"])->checked) {
+        f->signal = s2i(((lafi::textbox*) fw->widgets["txt_signal"])->text);
+    } else {
+        f->signal = INVALID;
+    }
     
     frame_to_gui();
     
@@ -1209,6 +1225,11 @@ void animation_editor::save_animation_database() {
             frame_node->add(
                 new data_node("duration", f2s(f_ptr->duration))
             );
+            if(f_ptr->signal != INVALID) {
+                frame_node->add(
+                    new data_node("signal", i2s(f_ptr->signal))
+                );
+            }
         }
     }
     

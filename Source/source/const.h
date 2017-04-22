@@ -54,6 +54,8 @@ const float DEF_ROTATION_SPEED = 630.0f;
 const float DEF_WHISTLE_RANGE = 80.0f;
 //How long to suck a mob in for, when being delivered to an Onion/ship.
 const float DELIVERY_SUCK_TIME = 1.5f;
+//If the Pikmin is within this distance of the mob, it can ground attack.
+const float GROUNDED_ATTACK_DIST = 5.0f;
 //"Move group" arrows move these many units per second.
 const float GROUP_MOVE_ARROW_SPEED = 400.0f;
 //Seconds that need to pass before another "move group" arrow appears.

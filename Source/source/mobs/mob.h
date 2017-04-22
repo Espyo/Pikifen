@@ -407,9 +407,9 @@ mob* create_mob(
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox* get_closest_hitbox(
-    const point p, mob* m, const size_t h_type = INVALID
+    const point p, mob* m, const size_t h_type = INVALID, dist* d = NULL
 );
-hitbox* gui_hitbox(mob* m, const size_t nr);
+hitbox* get_hitbox(mob* m, const size_t nr);
 bool is_resistant_to_hazards(
     vector<hazard*> &resistances, vector<hazard*> &hazards
 );

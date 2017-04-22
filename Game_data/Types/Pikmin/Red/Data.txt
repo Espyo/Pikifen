@@ -1,6 +1,5 @@
 name = Red Pikmin
 
-attack_interval = 0.8
 attack_power = 12
 can_carry_bomb_rocks = no
 can_dig = no

@@ -90,6 +90,8 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_FACING_OBJECT,
     //When the mob it was focused on died.
     MOB_EVENT_FOCUSED_MOB_DIED,
+    //When a frame of animation sends a signal.
+    MOB_EVENT_FRAME_SIGNAL,
     //When it can no longer see the focused mob.
     MOB_EVENT_LOST_FOCUSED_MOB,
     //When its mouth has a Pikmin in it.
@@ -362,7 +364,7 @@ public:
     void new_state(const string &name, const size_t id);
     void new_event(const unsigned char type);
     void change_state(const string &new_state);
-    void run_function(custom_action_code code);
+    void run(custom_action_code code);
     vector<mob_state*> finish();
     easy_fsm_creator();
 };

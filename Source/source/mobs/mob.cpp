@@ -118,10 +118,14 @@ void mob::tick_animation() {
         mult *= this->statuses[s].type->anim_speed_multiplier;
     }
     
-    bool finished_anim = anim.tick(delta_t * mult);
+    vector<size_t> frame_signals;
+    bool finished_anim = anim.tick(delta_t * mult, &frame_signals);
     
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
+    }
+    for(size_t s = 0; s < frame_signals.size(); ++s) {
+        fsm.run_event(MOB_EVENT_FRAME_SIGNAL, &frame_signals[s]);
     }
 }
 
@@ -1415,9 +1419,10 @@ void focus_mob(mob* m1, mob* m2) {
  * p:      The point.
  * m:      The mob.
  * h_type: Type of hitbox. INVALID means any.
+ * d:      Return the distance here, optionally.
  */
 hitbox* get_closest_hitbox(
-    const point p, mob* m, const size_t h_type
+    const point p, mob* m, const size_t h_type, dist* d
 ) {
     sprite* s = m->anim.get_cur_sprite();
     if(!s) return NULL;
@@ -1440,6 +1445,8 @@ hitbox* get_closest_hitbox(
         }
     }
     
+    if(d) *d = closest_hitbox_dist;
+    
     return closest_hitbox;
 }
 
@@ -1448,7 +1455,7 @@ hitbox* get_closest_hitbox(
  * Returns the hitbox in the current animation with
  * the specified number.
  */
-hitbox* gui_hitbox(mob* m, const size_t nr) {
+hitbox* get_hitbox(mob* m, const size_t nr) {
     sprite* s = m->anim.get_cur_sprite();
     if(!s) return NULL;
     if(s->hitboxes.empty()) return NULL;

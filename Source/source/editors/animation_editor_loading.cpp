@@ -341,6 +341,15 @@ void animation_editor::load() {
     );
     frm_frame->easy_row();
     frm_frame->easy_add(
+        "chk_signal",
+        new lafi::checkbox("Signal"), 50, 16
+    );
+    frm_frame->easy_add(
+        "txt_signal",
+        new lafi::textbox(), 50, 16
+    );
+    frm_frame->easy_row();
+    frm_frame->easy_add(
         "dum_1",
         new lafi::dummy(), 100, 16
     );
@@ -355,7 +364,7 @@ void animation_editor::load() {
     //Animations -- properties.
     auto lambda_gui_to_animation =
     [this] (lafi::widget*) { gui_to_animation(); };
-    auto lambda_gui_to_frame_instance =
+    auto lambda_gui_to_frame =
     [this] (lafi::widget*) { gui_to_frame(); };
     
     frm_anims->widgets["but_back"]->left_mouse_click_handler =
@@ -506,13 +515,26 @@ void animation_editor::load() {
         "Pick the sprite to use for this frame.";
         
     frm_frame->widgets["txt_dur"]->lose_focus_handler =
-        lambda_gui_to_frame_instance;
+        lambda_gui_to_frame;
     frm_frame->widgets["txt_dur"]->mouse_down_handler =
     [this] (lafi::widget*, int, int, int) {
         anim_playing = false;
     };
     frm_frame->widgets["txt_dur"]->description =
         "How long this frame lasts for, in seconds.";
+        
+    frm_frame->widgets["chk_signal"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        gui_to_frame();
+    };
+    
+    frm_frame->widgets["chk_signal"]->description =
+        "Does this frame send a signal to the script?";
+        
+    frm_frame->widgets["txt_signal"]->lose_focus_handler =
+        lambda_gui_to_frame;
+    frm_frame->widgets["txt_signal"]->description =
+        "Number of the signal.";
         
     frm_frame->widgets["but_dur_all"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -653,7 +675,7 @@ void animation_editor::load() {
     
     
     //Sprites -- properties.
-    auto lambda_gui_to_frame = [this] (lafi::widget*) { gui_to_sprite(); };
+    auto lambda_gui_to_sprite = [this] (lafi::widget*) { gui_to_sprite(); };
     auto lambda_sprite_transform = [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_SPRITE_TRANSFORM;
         change_to_right_frame();
@@ -693,27 +715,27 @@ void animation_editor::load() {
         "Pick a sprite to edit.";
         
     frm_sprite->widgets["txt_file"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_file"]->description =
         "Name (+extension) of the file with the sprite.";
         
     frm_sprite->widgets["txt_filex"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_filex"]->description =
         "X of the top-left corner of the sprite.";
         
     frm_sprite->widgets["txt_filey"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_filey"]->description =
         "Y of the top-left corner of the sprite.";
         
     frm_sprite->widgets["txt_filew"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_filew"]->description =
         "Width of the sprite, in the file.";
         
     frm_sprite->widgets["txt_fileh"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_fileh"]->description =
         "Height of the sprite, in the file.";
         
@@ -723,12 +745,12 @@ void animation_editor::load() {
         "Click this button for an offset helper tool.";
         
     frm_sprite->widgets["txt_offsx"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_offsx"]->description =
         "In-game, offset by this much, horizontally.";
         
     frm_sprite->widgets["txt_offsy"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_offsy"]->description =
         "In-game, offset by this much, vertically.";
         
@@ -738,12 +760,12 @@ void animation_editor::load() {
         "Click this button for a resize helper tool.";
         
     frm_sprite->widgets["txt_gamew"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_gamew"]->description =
         "In-game sprite width.";
         
     frm_sprite->widgets["txt_gameh"]->lose_focus_handler =
-        lambda_gui_to_frame;
+        lambda_gui_to_sprite;
     frm_sprite->widgets["txt_gameh"]->description =
         "In-game sprite height.";
         

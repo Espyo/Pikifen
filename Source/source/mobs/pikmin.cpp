@@ -28,7 +28,6 @@ pikmin::pikmin(
 ) :
     mob(pos, type, angle, vars),
     pik_type(type),
-    attack_time(0),
     pluck_reserved(false),
     carrying_mob(NULL),
     carrying_spot(0),
@@ -66,8 +65,6 @@ float pikmin::get_base_speed() {
  * victim_hitbox: Hitbox of the victim.
  */
 void pikmin::do_attack(mob* m, hitbox* victim_hitbox) {
-    attack_time = pik_type->attack_interval;
-    
     if(!m || !victim_hitbox) return;
     
     if(
@@ -130,7 +127,7 @@ void pikmin::teleport_to_connected_hitbox() {
     speed.x = speed.y = speed_z = 0;
     
     hitbox* h_ptr =
-        gui_hitbox(focused_mob, connected_hitbox_nr);
+        get_hitbox(focused_mob, connected_hitbox_nr);
     if(h_ptr) {
         point actual_h_pos = rotate_point(h_ptr->pos, focused_mob->angle);
         actual_h_pos += focused_mob->pos;
@@ -144,7 +141,6 @@ void pikmin::teleport_to_connected_hitbox() {
         
         chase(final_pos, NULL, true);
         face(get_angle(pos, focused_mob->pos));
-        if(attack_time == 0) attack_time = pik_type->attack_interval;
         
     }
 }

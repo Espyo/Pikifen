@@ -21,13 +21,13 @@ void bridge_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", 0); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(bridge_fsm::set_anim);
+            efc.run(bridge_fsm::set_anim);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(bridge_fsm::take_damage);
+            efc.run(bridge_fsm::take_damage);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.run_function(bridge_fsm::open);
+            efc.run(bridge_fsm::open);
             efc.change_state("destroyed");
         }
     }

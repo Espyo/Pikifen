@@ -91,8 +91,6 @@ public:
     //Angle the Pikmin makes with the center of the hitbox
     //(with the hitbox' owner at 0 degrees).
     float connected_hitbox_angle;
-    //Time left until the strike.
-    float attack_time;
     
     //Mob that it is carrying.
     mob* carrying_mob;

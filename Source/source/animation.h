@@ -121,10 +121,11 @@ public:
     size_t sprite_index;  //Cache for performance.
     sprite* sprite_ptr;   //Cache for performance.
     float duration;    //How long this frame lasts for, in seconds.
+    size_t signal;     //Signal to send, if any. INVALID = none.
     
     frame(
         const string &sn = "", const size_t si = INVALID,
-        sprite* sp = NULL, const float d = 0
+        sprite* sp = NULL, const float d = 0, const size_t s = INVALID
     );
 };
 
@@ -194,7 +195,7 @@ public:
     animation_instance(const animation_instance &ai2);
     
     void start();
-    bool tick(const float time);
+    bool tick(const float time, vector<size_t>* signals = NULL);
     sprite* get_cur_sprite();
 };
 

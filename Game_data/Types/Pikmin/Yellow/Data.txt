@@ -1,6 +1,5 @@
 name = Yellow Pikmin
 
-attack_interval = 0.8
 attack_power = 10
 can_carry_bomb_rocks = no
 can_dig = no

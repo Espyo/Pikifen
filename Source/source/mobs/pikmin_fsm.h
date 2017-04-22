@@ -33,6 +33,8 @@ void called(                 mob* m, void* info1, void* info2);
 void chase_leader(           mob* m, void* info1, void* info2);
 void check_disabled_edible(  mob* m, void* info1, void* info2);
 void check_remove_flailing(  mob* m, void* info1, void* info2);
+void do_grounded_attack(     mob* m, void* info1, void* info2);
+void do_latched_attack(      mob* m, void* info1, void* info2);
 void end_pluck(              mob* m, void* info1, void* info2);
 void face_leader(            mob* m, void* info1, void* info2);
 void fall_down_pit(          mob* m, void* info1, void* info2);
@@ -66,6 +68,7 @@ void tick_grabbed_by_enemy(  mob* m, void* info1, void* info2);
 void tick_latched(           mob* m, void* info1, void* info2);
 void touched_hazard(         mob* m, void* info1, void* info2);
 void touched_spray(          mob* m, void* info1, void* info2);
+void try_latching(           mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef PIKMIN_FSM_INCLUDED

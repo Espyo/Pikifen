@@ -23,7 +23,7 @@ void onion_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("idling", ONION_STATE_IDLING); {
         efc.new_event(MOB_EVENT_RECEIVE_DELIVERY); {
-            efc.run_function(onion_fsm::receive_mob);
+            efc.run(onion_fsm::receive_mob);
         }
     }
     

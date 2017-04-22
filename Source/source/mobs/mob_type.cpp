@@ -205,17 +205,17 @@ void mob_type::add_carrying_states() {
     
     efc.new_state("carriable_waiting", ENEMY_EXTRA_STATE_CARRIABLE_WAITING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(gen_mob_fsm::carry_stop_move);
+            efc.run(gen_mob_fsm::carry_stop_move);
         }
         efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
-            efc.run_function(gen_mob_fsm::check_carry_begin);
+            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
-            efc.run_function(gen_mob_fsm::handle_carrier_added);
-            efc.run_function(gen_mob_fsm::check_carry_begin);
+            efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
-            efc.run_function(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::handle_carrier_removed);
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
             efc.change_state("carriable_moving");
@@ -224,12 +224,12 @@ void mob_type::add_carrying_states() {
     
     efc.new_state("carriable_moving", ENEMY_EXTRA_STATE_CARRIABLE_MOVING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(gen_mob_fsm::carry_begin_move);
-            efc.run_function(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::carry_begin_move);
+            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
-            efc.run_function(gen_mob_fsm::handle_carrier_removed);
-            efc.run_function(gen_mob_fsm::check_carry_stop);
+            efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
             efc.change_state("carriable_waiting");
@@ -238,11 +238,11 @@ void mob_type::add_carrying_states() {
             efc.change_state("carriable_waiting");
         }
         efc.new_event(MOB_EVENT_CARRY_BEGIN_MOVE); {
-            efc.run_function(gen_mob_fsm::carry_begin_move);
-            efc.run_function(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::carry_begin_move);
+            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
-            efc.run_function(gen_mob_fsm::set_next_target);
+            efc.run(gen_mob_fsm::set_next_target);
         }
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
@@ -251,10 +251,10 @@ void mob_type::add_carrying_states() {
     
     efc.new_state("being_delivered", ENEMY_EXTRA_STATE_BEING_DELIVERED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(gen_mob_fsm::start_being_delivered);
+            efc.run(gen_mob_fsm::start_being_delivered);
         }
         efc.new_event(MOB_EVENT_TIMER); {
-            efc.run_function(gen_mob_fsm::handle_delivery);
+            efc.run(gen_mob_fsm::handle_delivery);
         }
     }
     

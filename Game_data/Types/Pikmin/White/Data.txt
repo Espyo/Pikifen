@@ -1,6 +1,5 @@
 name = White Pikmin
 
-attack_interval = 0.8
 attack_power = 9
 can_carry_bomb_rocks = no
 can_dig = yes

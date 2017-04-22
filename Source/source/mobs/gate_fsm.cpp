@@ -21,13 +21,13 @@ void gate_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("idling", GATE_STATE_IDLING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run_function(gate_fsm::set_anim);
+            efc.run(gate_fsm::set_anim);
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run_function(gate_fsm::take_damage);
+            efc.run(gate_fsm::take_damage);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.run_function(gate_fsm::open);
+            efc.run(gate_fsm::open);
             efc.change_state("destroyed");
         }
     }

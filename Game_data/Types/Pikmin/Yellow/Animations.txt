@@ -1,21 +1,22 @@
 animations{
 	attacking{
-		loop_frame=1
+		loop_frame=0
 		frames{
-			grabbing{
-				duration=0.40
-			}
 			grabbing_far{
-				duration=0.30
+				duration=0.10
 			}
 			grabbing{
 				duration=0.10
 			}
 			grabbing_near{
 				duration=0.30
+				signal=0
 			}
 			grabbing{
 				duration=0.10
+			}
+			grabbing_far{
+				duration=0.20
 			}
 		}
 	}
@@ -125,8 +126,8 @@ animations{
 sprites{
 	buried{
 		file=Yellow_Pikmin.png
-		file_pos=74 62
-		file_size=12 12
+		file_pos=74.00 62.00
+		file_size=12.00 12.00
 		game_size=6.00 6.00
 		offset=0.00 0.00
 		top_visible=true
@@ -137,8 +138,8 @@ sprites{
 	}
 	grabbing{
 		file=Yellow_Pikmin.png
-		file_pos=138 0
-		file_size=28 36
+		file_pos=138.00 0.00
+		file_size=28.00 36.00
 		game_size=14.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -149,8 +150,8 @@ sprites{
 	}
 	grabbing_far{
 		file=Yellow_Pikmin.png
-		file_pos=168 0
-		file_size=42 36
+		file_pos=168.00 0.00
+		file_size=42.00 36.00
 		game_size=21.00 18.00
 		offset=-3.50 0.00
 		top_visible=true
@@ -161,8 +162,8 @@ sprites{
 	}
 	grabbing_near{
 		file=Yellow_Pikmin.png
-		file_pos=212 0
-		file_size=26 36
+		file_pos=212.00 0.00
+		file_size=26.00 36.00
 		game_size=13.00 18.00
 		offset=3.50 0.00
 		top_visible=true
@@ -173,8 +174,8 @@ sprites{
 	}
 	half_lying{
 		file=Yellow_Pikmin.png
-		file_pos=88 38
-		file_size=48 36
+		file_pos=88.00 38.00
+		file_size=48.00 36.00
 		game_size=24.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -185,8 +186,8 @@ sprites{
 	}
 	idling{
 		file=Yellow_Pikmin.png
-		file_pos=0 38
-		file_size=20 36
+		file_pos=0.00 38.00
+		file_size=20.00 36.00
 		game_size=10.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -197,8 +198,8 @@ sprites{
 	}
 	lying{
 		file=Yellow_Pikmin.png
-		file_pos=138 38
-		file_size=82 36
+		file_pos=138.00 38.00
+		file_size=82.00 36.00
 		game_size=41.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -209,8 +210,8 @@ sprites{
 	}
 	thrown1{
 		file=Yellow_Pikmin.png
-		file_pos=0 0
-		file_size=32 36
+		file_pos=0.00 0.00
+		file_size=32.00 36.00
 		game_size=14.00 18.00
 		offset=0.00 0.00
 		top_visible=false
@@ -221,8 +222,8 @@ sprites{
 	}
 	thrown2{
 		file=Yellow_Pikmin.png
-		file_pos=30 0
-		file_size=34 36
+		file_pos=30.00 0.00
+		file_size=34.00 36.00
 		game_size=17.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -233,8 +234,8 @@ sprites{
 	}
 	thrown3{
 		file=Yellow_Pikmin.png
-		file_pos=66 0
-		file_size=32 36
+		file_pos=66.00 0.00
+		file_size=32.00 36.00
 		game_size=16.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -245,8 +246,8 @@ sprites{
 	}
 	thrown4{
 		file=Yellow_Pikmin.png
-		file_pos=100 0
-		file_size=36 36
+		file_pos=100.00 0.00
+		file_size=36.00 36.00
 		game_size=18.00 18.00
 		offset=0.00 0.00
 		top_visible=true
@@ -257,8 +258,8 @@ sprites{
 	}
 	walking1{
 		file=Yellow_Pikmin.png
-		file_pos=48 38
-		file_size=24 36
+		file_pos=48.00 38.00
+		file_size=24.00 36.00
 		game_size=12.00 18.00
 		offset=-0.50 0.00
 		top_visible=true
@@ -269,8 +270,8 @@ sprites{
 	}
 	walking2{
 		file=Yellow_Pikmin.png
-		file_pos=22 38
-		file_size=24 36
+		file_pos=22.00 38.00
+		file_size=24.00 36.00
 		game_size=12.00 18.00
 		offset=-0.50 0.00
 		top_visible=true

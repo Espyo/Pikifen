@@ -1026,7 +1026,7 @@ void easy_fsm_creator::change_state(const string &new_state) {
  * Creates a new action for the current event, one that
  * runs some custom code.
  */
-void easy_fsm_creator::run_function(custom_action_code code) {
+void easy_fsm_creator::run(custom_action_code code) {
     cur_event->actions.push_back(new mob_action(code));
 }
 

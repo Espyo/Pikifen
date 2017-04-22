@@ -145,14 +145,16 @@ void sprite::create_hitboxes(animation_database* const adb) {
  * si: Index of the sprite in the animation database.
  * sp: Pointer to the sprite.
  * d:  Duration.
+ * s:  Signal.
  */
 frame::frame(
-    const string &sn, const size_t si, sprite* sp, const float d
+    const string &sn, const size_t si, sprite* sp, const float d, const size_t s
 ) :
     sprite_name(sn),
     sprite_index(si),
     sprite_ptr(sp),
-    duration(d) {
+    duration(d),
+    signal(s) {
     
 }
 
@@ -222,9 +224,11 @@ void animation_instance::start() {
 
 /* ----------------------------------------------------------------------------
  * Ticks the animation with the given amount of time.
+ * time:    How many seconds to tick.
+ * signals: Any frame that sends a signal adds it here.
  * Returns whether or not the animation ended its final frame.
  */
-bool animation_instance::tick(const float time) {
+bool animation_instance::tick(const float time, vector<size_t>* signals) {
     if(!cur_anim) return false;
     size_t n_frames = cur_anim->frames.size();
     if(n_frames == 0) return false;
@@ -248,6 +252,9 @@ bool animation_instance::tick(const float time) {
                 (cur_anim->loop_frame >= n_frames) ? 0 : cur_anim->loop_frame;
         }
         cur_frame = &cur_anim->frames[cur_frame_index];
+        if(cur_frame->signal != INVALID && signals) {
+            signals->push_back(cur_frame->signal);
+        }
     }
     
     return done_once;
@@ -537,12 +544,15 @@ animation_database load_animation_database_from_file(data_node* file_node) {
         for(size_t f = 0; f < n_frames; ++f) {
             data_node* frame_node = frames_node->get_child(f);
             size_t s_pos = adb.find_sprite(frame_node->name);
+            string signal_str =
+                frame_node->get_child_by_name("signal")->value;
             frames.push_back(
                 frame(
                     frame_node->name,
                     s_pos,
                     (s_pos == INVALID) ? NULL : adb.sprites[s_pos],
-                    s2f(frame_node->get_child_by_name("duration")->value)
+                    s2f(frame_node->get_child_by_name("duration")->value),
+                    (signal_str.empty() ? INVALID : s2i(signal_str))
                 )
             );
         }
