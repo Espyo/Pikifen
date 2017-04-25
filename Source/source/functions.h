@@ -122,13 +122,10 @@ ALLEGRO_BITMAP* load_bmp(
 void load_custom_particle_generators();
 data_node load_data_file(const string &file_name);
 void load_hazards();
-void load_hud_coordinates();
-void load_hud_coordinates(const int item, string data);
 void load_liquids();
 void load_options();
 sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
 void load_game_config();
-void load_game_content();
 void load_spray_types();
 void load_status_types();
 void print_info(string t);

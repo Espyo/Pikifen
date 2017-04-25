@@ -44,7 +44,6 @@ struct control_info {
 
 
 
-void handle_game_controls(const ALLEGRO_EVENT &ev);
 void handle_button(
     const unsigned int button, const unsigned char player, float pos
 );

@@ -101,7 +101,6 @@ int main(int argc, char** argv) {
     init_dev_tools();
     init_hud_coordinates();
     load_game_config();
-    load_hud_coordinates();
     
     if(
         dev_tool_auto_start_mode == "play" &&

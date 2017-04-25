@@ -348,9 +348,9 @@ void init_hud_coordinates() {
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 89, 8,  0 );
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 86, 4,  0 );
     init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 14, 8 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 14, 8 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,       92, 91, 14, 8 );
+    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
+    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
     init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
     init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
     init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
@@ -447,24 +447,17 @@ void init_misc_graphics() {
     al_set_display_icon(display, bmp_icon);
     
     //Graphics.
-    bmp_bubble = load_bmp(           "Bubble.png");
     bmp_checkbox_check = load_bmp(   "Checkbox_check.png");
     bmp_cursor = load_bmp(           "Cursor.png");
-    bmp_day_bubble = load_bmp(       "Day_bubble.png");
     bmp_enemy_spirit = load_bmp(     "Enemy_spirit.png");
-    bmp_hard_bubble = load_bmp(      "Hard_bubble.png");
     bmp_idle_glow = load_bmp(        "Idle_glow.png");
     bmp_info_spot = load_bmp(        "Info_spot.png");
-    bmp_message_box = load_bmp(      "Message_box.png");
     bmp_mouse_cursor = load_bmp(     "Mouse_cursor.png");
     bmp_mouse_wd_icon = load_bmp(    "Mouse_wheel_down_icon.png");
     bmp_mouse_wu_icon = load_bmp(    "Mouse_wheel_up_icon.png");
     bmp_notification = load_bmp(     "Notification.png");
     bmp_group_move_arrow = load_bmp( "Group_move_arrow.png");
     bmp_nectar = load_bmp(           "Nectar.png");
-    bmp_no_pikmin = load_bmp(        "No_Pikmin.png");
-    bmp_number_bubble = load_bmp(    "Number_bubble.png");
-    bmp_pikmin_distant = load_bmp(   "Pikmin_distant.png");
     bmp_pikmin_silhouette = load_bmp("Pikmin_silhouette.png");
     bmp_pikmin_spirit = load_bmp(    "Pikmin_spirit.png");
     bmp_shadow = load_bmp(           "Shadow.png");
@@ -472,11 +465,9 @@ void init_misc_graphics() {
     bmp_smoke = load_bmp(            "Smoke.png");
     bmp_sparkle = load_bmp(          "Sparkle.png");
     bmp_spotlight = load_bmp(        "Spotlight.png");
-    bmp_sun = load_bmp(              "Sun.png");
     bmp_ub_spray = load_bmp(         "Ultra-bitter_spray.png");
     bmp_us_spray = load_bmp(         "Ultra-spicy_spray.png");
     bmp_wave_ring = load_bmp(        "Wave_ring.png");
-    
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] =
             load_bmp(
@@ -695,36 +686,27 @@ void destroy_resources() {
     al_destroy_font(font_main);
     al_destroy_font(font_value);
     
-    al_destroy_bitmap(bmp_bubble);
     al_destroy_bitmap(bmp_checkbox_check);
     al_destroy_bitmap(bmp_cursor);
-    al_destroy_bitmap(bmp_day_bubble);
     al_destroy_bitmap(bmp_enemy_spirit);
-    al_destroy_bitmap(bmp_hard_bubble);
     al_destroy_bitmap(bmp_icon);
     al_destroy_bitmap(bmp_idle_glow);
     al_destroy_bitmap(bmp_info_spot);
-    al_destroy_bitmap(bmp_message_box);
-    al_destroy_bitmap(bmp_mouse_cursor);
     al_destroy_bitmap(bmp_mouse_wd_icon);
     al_destroy_bitmap(bmp_mouse_wu_icon);
+    al_destroy_bitmap(bmp_mouse_cursor);
     al_destroy_bitmap(bmp_notification);
     al_destroy_bitmap(bmp_group_move_arrow);
     al_destroy_bitmap(bmp_nectar);
-    al_destroy_bitmap(bmp_no_pikmin);
-    al_destroy_bitmap(bmp_number_bubble);
-    al_destroy_bitmap(bmp_pikmin_distant);
     al_destroy_bitmap(bmp_pikmin_spirit);
     al_destroy_bitmap(bmp_shadow);
     al_destroy_bitmap(bmp_smack);
     al_destroy_bitmap(bmp_smoke);
     al_destroy_bitmap(bmp_sparkle);
-    al_destroy_bitmap(bmp_sun);
     al_destroy_bitmap(bmp_ub_spray);
     al_destroy_bitmap(bmp_us_spray);
-    
     for(unsigned char i = 0; i < 3; ++i) {
-        al_destroy_bitmap(bmp_mouse_button_icon[i]);
+        bitmaps.detach(bmp_mouse_button_icon[i]);
     }
     
     al_detach_voice(voice);

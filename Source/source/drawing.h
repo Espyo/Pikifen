@@ -38,10 +38,6 @@ enum EASING_METHODS {
 };
 
 
-void do_game_drawing(
-    ALLEGRO_BITMAP* bmp_output = NULL, ALLEGRO_TRANSFORM* bmp_transform = NULL
-);
-
 bool casts_shadow(
     sector* s1, sector* s2
 );
@@ -102,7 +98,6 @@ void draw_sprite_with_effects(
     sprite_effect_manager* effects
 );
 void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects);
-ALLEGRO_BITMAP* draw_to_bitmap();
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
     const point where, const int flags, const unsigned char valign,

@@ -23,7 +23,7 @@
  * Does the drawing for the main game loop.
  * bmp_output: if not NULL, draw the area onto this.
  */
-void do_game_drawing(
+void gameplay::do_game_drawing(
     ALLEGRO_BITMAP* bmp_output, ALLEGRO_TRANSFORM* bmp_transform
 ) {
 
@@ -741,7 +741,7 @@ void do_game_drawing(
                 }
             }
             
-            if(!bm) bm = bmp_no_pikmin;
+            if(!bm) bm = bmp_no_pikmin_bubble;
             float sprite_w =
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] == -1 ? -1 :
                 hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] * 0.8;
@@ -758,7 +758,7 @@ void do_game_drawing(
             );
             if(closest_group_member_distant) {
                 draw_sprite(
-                    bmp_pikmin_distant,
+                    bmp_distant_pikmin_marker,
                     point(
                         hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
                         hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
@@ -831,7 +831,7 @@ void do_game_drawing(
             }
             
             draw_sprite(
-                bmp_number_bubble,
+                bmp_counter_bubble_standby,
                 point(
                     hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0],
                     hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1]
@@ -842,7 +842,7 @@ void do_game_drawing(
                 )
             );
             draw_sprite(
-                bmp_number_bubble,
+                bmp_counter_bubble_group,
                 point(
                     hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
                     hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1]
@@ -853,7 +853,7 @@ void do_game_drawing(
                 )
             );
             draw_sprite(
-                bmp_number_bubble,
+                bmp_counter_bubble_field,
                 point(
                     hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0],
                     hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1]
@@ -864,7 +864,7 @@ void do_game_drawing(
                 )
             );
             draw_sprite(
-                bmp_number_bubble,
+                bmp_counter_bubble_total,
                 point(
                     hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0],
                     hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1]
@@ -2601,7 +2601,7 @@ void draw_sprite_with_effects(
 /* ----------------------------------------------------------------------------
  * Draws the current area and mobs to a bitmap and returns it.
  */
-ALLEGRO_BITMAP* draw_to_bitmap() {
+ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     //First, get the full dimensions of the map.
     float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
     

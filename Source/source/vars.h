@@ -49,26 +49,19 @@
 using namespace std;
 
 //Bitmaps.
-extern ALLEGRO_BITMAP* bmp_bubble;
 extern ALLEGRO_BITMAP* bmp_checkbox_check;
 extern ALLEGRO_BITMAP* bmp_cursor;
-extern ALLEGRO_BITMAP* bmp_day_bubble;
 extern ALLEGRO_BITMAP* bmp_enemy_spirit;
 extern ALLEGRO_BITMAP* bmp_group_move_arrow;
-extern ALLEGRO_BITMAP* bmp_hard_bubble;
 extern ALLEGRO_BITMAP* bmp_icon;
 extern ALLEGRO_BITMAP* bmp_idle_glow;
 extern ALLEGRO_BITMAP* bmp_info_spot;
-extern ALLEGRO_BITMAP* bmp_message_box;
-extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_mouse_button_icon[3];
+extern ALLEGRO_BITMAP* bmp_mouse_cursor;
 extern ALLEGRO_BITMAP* bmp_mouse_wd_icon;
 extern ALLEGRO_BITMAP* bmp_mouse_wu_icon;
 extern ALLEGRO_BITMAP* bmp_nectar;
-extern ALLEGRO_BITMAP* bmp_no_pikmin;
 extern ALLEGRO_BITMAP* bmp_notification;
-extern ALLEGRO_BITMAP* bmp_number_bubble;
-extern ALLEGRO_BITMAP* bmp_pikmin_distant;
 extern ALLEGRO_BITMAP* bmp_pikmin_silhouette;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
 extern ALLEGRO_BITMAP* bmp_shadow;
@@ -76,7 +69,6 @@ extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
 extern ALLEGRO_BITMAP* bmp_spotlight;
-extern ALLEGRO_BITMAP* bmp_sun;
 extern ALLEGRO_BITMAP* bmp_ub_spray;
 extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_wave_ring;

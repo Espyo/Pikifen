@@ -21,7 +21,7 @@
 /* ----------------------------------------------------------------------------
  * Creates a structure with information about a bitmap, for the manager.
  */
-bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
+bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
     b(b),
     calls(1) {
     
@@ -49,10 +49,7 @@ ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
  * Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
  */
-void bmp_manager::detach(const string &name) {
-    if(name.empty()) return;
-    
-    auto it = list.find(name);
+void bmp_manager::detach(map<string, bmp_info>::iterator it) {
     if(it == list.end()) return;
     
     it->second.calls--;
@@ -63,6 +60,33 @@ void bmp_manager::detach(const string &name) {
         list.erase(it);
     }
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Marks a bitmap to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ */
+void bmp_manager::detach(const string &name) {
+    if(name.empty()) return;
+    detach(list.find(name));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Marks a bitmap to have one less call.
+ * If it has 0 calls, it's automatically cleared.
+ */
+void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
+    if(!bmp || bmp == bmp_error) return;
+    
+    auto it = list.begin();
+    for(; it != list.end(); ++it) {
+        if(it->second.b == bmp) break;
+    }
+    
+    detach(it);
+}
+
 
 
 /* ----------------------------------------------------------------------------

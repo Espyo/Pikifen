@@ -30,17 +30,6 @@ struct mob_gen;
 using namespace std;
 
 /* ----------------------------------------------------------------------------
- * Structure with info for the bitmap manager.
- */
-struct bmp_info {
-    ALLEGRO_BITMAP* b;
-    size_t calls;
-    bmp_info(ALLEGRO_BITMAP* b = NULL);
-};
-
-
-
-/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same
@@ -72,8 +61,18 @@ struct bmp_info {
  * are not the only thing using the bitmap manager.
  */
 struct bmp_manager {
+private:
+    struct bmp_info {
+        ALLEGRO_BITMAP* b;
+        size_t calls;
+        bmp_info(ALLEGRO_BITMAP* b = NULL);
+    };
+    void detach(map<string, bmp_info>::iterator it);
+    
+public:
     map<string, bmp_info> list;
     ALLEGRO_BITMAP* get(const string &name, data_node* node = NULL);
+    void detach(ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
 };
 

@@ -17,13 +17,10 @@
 
 using namespace std;
 
-ALLEGRO_BITMAP* bmp_bubble = NULL;
 ALLEGRO_BITMAP* bmp_checkbox_check = NULL;
 ALLEGRO_BITMAP* bmp_cursor = NULL;
-ALLEGRO_BITMAP* bmp_day_bubble = NULL;
 ALLEGRO_BITMAP* bmp_enemy_spirit = NULL;
 ALLEGRO_BITMAP* bmp_group_move_arrow = NULL;
-ALLEGRO_BITMAP* bmp_hard_bubble = NULL;
 ALLEGRO_BITMAP* bmp_icon = NULL;
 ALLEGRO_BITMAP* bmp_idle_glow = NULL;
 ALLEGRO_BITMAP* bmp_info_spot = NULL;
@@ -33,10 +30,7 @@ ALLEGRO_BITMAP* bmp_mouse_button_icon[3] = {NULL, NULL, NULL};
 ALLEGRO_BITMAP* bmp_mouse_wd_icon = NULL;
 ALLEGRO_BITMAP* bmp_mouse_wu_icon = NULL;
 ALLEGRO_BITMAP* bmp_nectar = NULL;
-ALLEGRO_BITMAP* bmp_no_pikmin = NULL;
 ALLEGRO_BITMAP* bmp_notification = NULL;
-ALLEGRO_BITMAP* bmp_number_bubble = NULL;
-ALLEGRO_BITMAP* bmp_pikmin_distant = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_silhouette = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_spirit = NULL;
 ALLEGRO_BITMAP* bmp_shadow = NULL;
@@ -44,7 +38,6 @@ ALLEGRO_BITMAP* bmp_smack = NULL;
 ALLEGRO_BITMAP* bmp_smoke = NULL;
 ALLEGRO_BITMAP* bmp_sparkle = NULL;
 ALLEGRO_BITMAP* bmp_spotlight = NULL;
-ALLEGRO_BITMAP* bmp_sun = NULL;
 ALLEGRO_BITMAP* bmp_ub_spray = NULL;
 ALLEGRO_BITMAP* bmp_us_spray = NULL;
 ALLEGRO_BITMAP* bmp_wave_ring = NULL;
