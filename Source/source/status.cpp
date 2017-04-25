@@ -34,6 +34,7 @@ status_type::status_type() :
     attack_multiplier(1.0f),
     defense_multiplier(1.0f),
     anim_speed_multiplier(1.0f),
+    disables_attack(false),
     generates_particles(false),
     particle_gen(nullptr),
     animation_mob_scale(1.0f) {

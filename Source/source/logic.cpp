@@ -534,7 +534,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         if(
             m2_ptr->type->pushes &&
             m2_ptr->tangible &&
-            m_ptr->type->pushable &&
+            m_ptr->type->pushable && !m_ptr->unpushable &&
             m2_ptr->z < m_ptr->z + m_ptr->type->height &&
             m2_ptr->z + m2_ptr->type->height > m_ptr->z &&
             d <= m_ptr->type->radius + m2_ptr->type->radius
@@ -845,6 +845,16 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                                 reported_haz_ev = true;
                             }
                             
+                            //Check if m2 is under any status effect
+                            //that disables attacks.
+                            bool disable_attack_status = false;
+                            for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
+                                if(m2_ptr->statuses[s].type->disables_attack) {
+                                    disable_attack_status = true;
+                                    break;
+                                }
+                            }
+                            
                             if(
                                 h2_ptr->type == HITBOX_TYPE_ATTACK &&
                                 hitbox_touch_na_ev && !reported_na_ev &&
@@ -852,7 +862,8 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                                 //already. This way, Pikmin aren't
                                 //knocked back AND eaten.
                                 !reported_eat_ev &&
-                                !reported_haz_ev
+                                !reported_haz_ev &&
+                                !disable_attack_status
                             ) {
                                 hitbox_touch_info ev_info =
                                     hitbox_touch_info(m2_ptr, NULL, h2_ptr);
@@ -949,10 +960,21 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                                     reported_eat_ev = true;
                                 }
                                 
+                                //Check if m2 is under any status effect
+                                //that disables attacks.
+                                bool disable_attack_status = false;
+                                for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
+                                    if(m2_ptr->statuses[s].type->disables_attack) {
+                                        disable_attack_status = true;
+                                        break;
+                                    }
+                                }
+                                
                                 if(
                                     h1_ptr->type == HITBOX_TYPE_NORMAL &&
                                     h2_ptr->type == HITBOX_TYPE_ATTACK &&
-                                    hitbox_touch_na_ev && !reported_na_ev
+                                    hitbox_touch_na_ev && !reported_na_ev &&
+                                    !disable_attack_status
                                 ) {
                                     hitbox_touch_info ev_info =
                                         hitbox_touch_info(

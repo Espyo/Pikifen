@@ -1,5 +1,5 @@
 Ultra-Bitter Spray {
-    effects = bitter
+    effects = petrified
     group = false
     angle = 0
     distance_range = 128

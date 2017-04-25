@@ -98,12 +98,8 @@ const float SUN_METER_SUN_SPIN_SPEED = 0.5f;
 const float TREE_SHADOW_SWAY_AMOUNT = 8.0f;
 //Tree shadows sway this much per second (M_PI * 2 = full back-and-forth cycle).
 const float TREE_SHADOW_SWAY_SPEED = M_PI_4;
-//When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
-const float THROW_DISTANCE_MULTIPLIER = 0.49f;
 //A new "mob thrown" particle is spawned every X seconds.
 const float THROW_PARTICLE_INTERVAL = 0.02f;
-//When a leader throws a Pikmin, multiply the strength by this.
-const float THROW_STRENGTH_MULTIPLIER = 0.65f;
 //Seconds that need to pass before another dot is added.
 const float WHISTLE_DOT_INTERVAL = 0.03;
 //A whistle dot spins these many radians a second.

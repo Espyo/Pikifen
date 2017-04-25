@@ -26,6 +26,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(leader_fsm::enter_idle);
         }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(leader_fsm::inactive_search_seed);
+        }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(leader_fsm::join_group);
             efc.change_state("in_group_chasing");
@@ -979,6 +982,11 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
     l_ptr->group->sort(l_ptr->holding_pikmin->subgroup_type_ptr);
 }
 
+
+//When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
+const float THROW_DISTANCE_MULTIPLIER = 0.49f;
+//When a leader throws a Pikmin, multiply the strength by this.
+const float THROW_STRENGTH_MULTIPLIER = 0.457f;
 
 /* ----------------------------------------------------------------------------
  * When a leader throws the grabbed mob.

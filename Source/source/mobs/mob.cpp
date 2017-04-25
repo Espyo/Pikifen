@@ -42,6 +42,7 @@ mob::mob(
     speed_z(0),
     home(pos),
     gravity_mult(1.0f),
+    unpushable(false),
     push_amount(0),
     push_angle(0),
     tangible(true),

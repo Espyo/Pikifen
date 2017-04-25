@@ -724,6 +724,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
  */
 void pikmin_fsm::become_buried(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_BURIED);
+    m->unpushable = true;
 }
 
 
@@ -740,9 +741,10 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
         //then the new Pikmin should be in the group of that top leader.
         lea = lea->following_group;
     }
+    add_to_group(lea, pik);
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
-    add_to_group(lea, pik);
+    m->unpushable = false;
 }
 
 

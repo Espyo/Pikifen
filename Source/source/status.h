@@ -52,6 +52,7 @@ struct status_type {
     float attack_multiplier;
     float defense_multiplier;
     float anim_speed_multiplier;
+    bool disables_attack;
     
     bool generates_particles;
     particle_generator* particle_gen;

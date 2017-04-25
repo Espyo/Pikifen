@@ -1479,6 +1479,7 @@ void load_status_types() {
         rs.set("speed_multiplier",        st.speed_multiplier);
         rs.set("attack_multiplier",       st.attack_multiplier);
         rs.set("defense_multiplier",      st.defense_multiplier);
+        rs.set("disables_attack",         st.disables_attack);
         rs.set("anim_speed_multiplier",   st.anim_speed_multiplier);
         rs.set("animation",               st.animation_name);
         rs.set("animation_mob_scale",     st.animation_mob_scale);

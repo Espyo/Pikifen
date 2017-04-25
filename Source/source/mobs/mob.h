@@ -34,10 +34,10 @@ class mob;
 extern size_t next_mob_id;
 
 //Accelerate the Z speed of mobs affected by gravity by this amount per second.
-const float GRAVITY_ADDER = -1300.0f;
-const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
+const float GRAVITY_ADDER = -2600.0f;
 const float MOB_KNOCKBACK_H_POWER = 130.0f;
 const float MOB_KNOCKBACK_V_POWER = 200.0f;
+const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
 
 enum MOB_TEAMS {
     //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
@@ -76,7 +76,7 @@ enum MOB_PARTICLE_GENERATOR_IDS {
 };
 
 enum DISABLED_STATE_FLAGS {
-    //The Pikmin can be eaten by enemies.
+    //The Pikmin cannot be eaten by enemies.
     DISABLED_STATE_FLAG_INEDIBLE = 1,
 };
 
@@ -237,6 +237,8 @@ public:
     sector* center_sector;
     //Multiply the mob's gravity by this.
     float gravity_mult;
+    //Is it currently in a state where it cannot be pushed?
+    bool unpushable;
     //Amount it's being pushed by another mob.
     float push_amount;
     //Angle that another mob is pushing it to.
