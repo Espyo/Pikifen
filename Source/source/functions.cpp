@@ -983,22 +983,22 @@ void load_area(
     }
     
     
-    //Editor guide.
+    //Editor reference.
     if(load_for_editor) {
         area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
-        ae->set_guide_file_name(
-            geometry_file.get_child_by_name("guide_file_name")->value
+        ae->set_reference_file_name(
+            geometry_file.get_child_by_name("reference_file_name")->value
         );
-        ae->set_guide_pos(
-            s2p(geometry_file.get_child_by_name("guide_pos")->value)
+        ae->set_reference_pos(
+            s2p(geometry_file.get_child_by_name("reference_pos")->value)
         );
-        ae->set_guide_size(
-            s2p(geometry_file.get_child_by_name("guide_size")->value)
+        ae->set_reference_size(
+            s2p(geometry_file.get_child_by_name("reference_size")->value)
         );
-        ae->set_guide_a(
+        ae->set_reference_a(
             s2i(
                 geometry_file.get_child_by_name(
-                    "guide_alpha"
+                    "reference_alpha"
                 )->get_value_or_default("255")
             )
         );

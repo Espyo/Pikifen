@@ -60,8 +60,17 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     Why are some parts of the logic and physics so broken?
         Because their code is still under construction.
     
+    What is there left to do?
+        It's hard to say, but the Pikmin Fanon page has a rough roadmap.
+    
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
+    
+    Why didn't you use textures and sounds from the Pikmin games?
+        1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
+        2. Should something happen to the engine, I can rebrand it, and release the assets as they are.
+        3. If somebody wants to add a sound effect from the series, depending on the game, at best, it can be a bit cumbersome to obtain, at worst, it can be downright impossible; if all sounds are custom-made, this isn't really a problem. This applies to a lesser degree to textures and such as well.
+        4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
     
     Why 2D?
         3D would be MUCH harder for everyone.

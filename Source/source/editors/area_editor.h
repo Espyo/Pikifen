@@ -46,7 +46,7 @@ private:
         EDITOR_MODE_OBJECTS,
         EDITOR_MODE_FOLDER_PATHS,
         EDITOR_MODE_SHADOWS,
-        EDITOR_MODE_GUIDE,
+        EDITOR_MODE_REFERENCE,
         EDITOR_MODE_REVIEW,
     };
     
@@ -64,7 +64,7 @@ private:
         ESM_DEL_STOP,
         ESM_DEL_LINK,
         ESM_NEW_SHADOW,
-        ESM_GUIDE_MOUSE,   //Guide transformation being controlled by mouse.
+        ESM_REFERENCE_MOUSE, //Reference transformation being controlled by mouse.
         ESM_TEXTURE_VIEW,
     };
     
@@ -118,7 +118,6 @@ private:
     static const string DELETE_STOP_ICON;
     static const string DUPLICATE_ICON;
     static const string EXIT_ICON;
-    static const string GUIDE_ICON;
     static const string NEW_CIRCLE_SECTOR_ICON;
     static const string NEW_1WLINK_ICON;
     static const string NEW_ICON;
@@ -127,6 +126,7 @@ private:
     static const string NEXT_ICON;
     static const string OPTIONS_ICON;
     static const string PREVIOUS_ICON;
+    static const string REFERENCE_ICON;
     static const string SAVE_ICON;
     static const string SELECT_NONE_ICON;
     
@@ -154,12 +154,6 @@ private:
     unsigned char                error_type;
     vertex*                      error_vertex_ptr;
     float                        grid_interval;
-    bool                         guide_aspect_ratio;
-    ALLEGRO_BITMAP*              guide_bitmap;
-    string                       guide_file_name;
-    point                        guide_pos;
-    point                        guide_size;
-    unsigned char                guide_a;
     unsigned char                mode_before_options;
     signed char                  moving_path_preview_checkpoint;
     signed char                  moving_cross_section_point;
@@ -180,11 +174,17 @@ private:
     point                        path_preview_checkpoints[2];
     vector<path_stop*>           path_preview;
     timer                        path_preview_timeout;
+    bool                         reference_aspect_ratio;
+    ALLEGRO_BITMAP*              reference_bitmap;
+    string                       reference_file_name;
+    point                        reference_pos;
+    point                        reference_size;
+    unsigned char                reference_a;
     bool                         shift_pressed;
     bool                         show_closest_stop;
     bool                         show_cross_section;
     bool                         show_cross_section_grid;
-    bool                         show_guide;
+    bool                         show_reference;
     bool                         show_path_preview;
     bool                         show_shadows;
     vector<texture_suggestion>   texture_suggestions;
@@ -193,7 +193,7 @@ private:
     void calculate_preview_path();
     void cancel_new_sector();
     void center_camera(const point min_coords, const point max_coords);
-    void change_guide(string new_file_name);
+    void change_reference(string new_file_name);
     void clear_current_area();
     void create_sector();
     void draw_cross_section_sector(
@@ -229,12 +229,12 @@ private:
     void update_texture_suggestions(const string &n);
     
     void adv_textures_to_gui();
-    void guide_to_gui();
     void mob_to_gui();
+    void reference_to_gui();
     void sector_to_gui();
     void shadow_to_gui();
     void gui_to_adv_textures();
-    void gui_to_guide();
+    void gui_to_reference();
     void gui_to_mob();
     void gui_to_sector(bool called_by_brightness_bar = false);
     void gui_to_shadow();
@@ -261,10 +261,10 @@ public:
     virtual void unload();
     virtual void update_transformations();
     
-    void set_guide_file_name(const string &n);
-    void set_guide_pos(const point &p);
-    void set_guide_size(const point &p);
-    void set_guide_a(const unsigned char a);
+    void set_reference_file_name(const string &n);
+    void set_reference_pos(const point &p);
+    void set_reference_size(const point &p);
+    void set_reference_a(const unsigned char a);
     
 };
 

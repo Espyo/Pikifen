@@ -712,16 +712,16 @@ void area_editor::do_drawing() {
             }
         }
         
-        //Guide.
-        if(guide_bitmap && (show_guide || mode == EDITOR_MODE_GUIDE)) {
+        //Reference.
+        if(reference_bitmap && (show_reference || mode == EDITOR_MODE_REFERENCE)) {
             al_draw_tinted_scaled_bitmap(
-                guide_bitmap,
-                map_alpha(guide_a),
+                reference_bitmap,
+                map_alpha(reference_a),
                 0, 0,
-                al_get_bitmap_width(guide_bitmap),
-                al_get_bitmap_height(guide_bitmap),
-                guide_pos.x, guide_pos.y,
-                guide_size.x, guide_size.y,
+                al_get_bitmap_width(reference_bitmap),
+                al_get_bitmap_height(reference_bitmap),
+                reference_pos.x, reference_pos.y,
+                reference_size.x, reference_size.y,
                 0
             );
         }

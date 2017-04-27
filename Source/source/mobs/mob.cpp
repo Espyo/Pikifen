@@ -853,7 +853,7 @@ void mob::remove_particle_generator(const size_t id) {
  * Sets the mob's animation.
  * nr:        Animation number.
  *   It's the animation instance number from the database.
- * pre_named: If true,
+ * pre_named: If true, the animation has already been named in-engine.
  */
 void mob::set_animation(const size_t nr, const bool pre_named) {
     if(nr >= type->anims.animations.size()) return;

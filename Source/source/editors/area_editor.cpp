@@ -76,8 +76,6 @@ const string area_editor::DUPLICATE_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Duplicate.png";
 const string area_editor::EXIT_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
-const string area_editor::GUIDE_ICON =
-    EDITOR_ICONS_FOLDER_NAME + "/Guide.png";
 const string area_editor::NEW_CIRCLE_SECTOR_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/New_circle_sector.png";
 const string area_editor::NEW_1WLINK_ICON =
@@ -86,6 +84,8 @@ const string area_editor::NEW_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/New.png";
 const string area_editor::NEW_LINK_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/New_link.png";
+const string area_editor::REFERENCE_ICON =
+    EDITOR_ICONS_FOLDER_NAME + "/Reference.png";
 const string area_editor::NEW_STOP_ICON =
     EDITOR_ICONS_FOLDER_NAME + "/New_stop.png";
 const string area_editor::NEXT_ICON =
@@ -104,10 +104,10 @@ const string area_editor::SELECT_NONE_ICON =
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
-    guide_aspect_ratio(true),
-    guide_bitmap(NULL),
-    guide_size(1000, 1000),
-    guide_a(255),
+    reference_aspect_ratio(true),
+    reference_bitmap(NULL),
+    reference_size(1000, 1000),
+    reference_a(255),
     backup_timer(editor_backup_interval),
     cur_mob(NULL),
     cur_sector(NULL),
@@ -137,7 +137,7 @@ area_editor::area_editor() :
     show_closest_stop(false),
     show_cross_section(false),
     show_cross_section_grid(false),
-    show_guide(false),
+    show_reference(false),
     show_path_preview(false),
     show_shadows(true),
     wum(NULL) {
@@ -188,24 +188,6 @@ void area_editor::adv_textures_to_gui() {
     ((lafi::textbox*) f->widgets["txt_tint"])->text =
         c2s(cur_sector->texture_info.tint);
         
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the guide's data from the memory to the gui.
- */
-void area_editor::guide_to_gui() {
-    lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
-    ((lafi::textbox*) f->widgets["txt_file"])->text = guide_file_name;
-    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(guide_pos.x);
-    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(guide_pos.y);
-    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(guide_size.x);
-    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(guide_size.y);
-    ((lafi::checkbox*) f->widgets["chk_ratio"])->set(guide_aspect_ratio);
-    ((lafi::checkbox*) f->widgets["chk_mouse"])->set(
-        sec_mode == ESM_GUIDE_MOUSE
-    );
-    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(guide_a, false);
 }
 
 
@@ -375,60 +357,61 @@ void area_editor::gui_to_adv_textures() {
 
 
 /* ----------------------------------------------------------------------------
- * Saves the guide's data to memory using info on the gui.
+ * Saves the reference's data to memory using info on the gui.
  */
-void area_editor::gui_to_guide() {
-    lafi::frame* f = (lafi::frame*) gui->widgets["frm_guide"];
+void area_editor::gui_to_reference() {
+    lafi::frame* f = (lafi::frame*) gui->widgets["frm_reference"];
     
     string new_file_name = ((lafi::textbox*) f->widgets["txt_file"])->text;
     bool is_file_new = false;
     
-    if(new_file_name != guide_file_name) {
-        //New guide image, delete the old one.
-        change_guide(new_file_name);
+    if(new_file_name != reference_file_name) {
+        //New reference image, delete the old one.
+        change_reference(new_file_name);
         is_file_new = true;
-        if(guide_bitmap) {
-            guide_size.x = al_get_bitmap_width(guide_bitmap);
-            guide_size.y = al_get_bitmap_height(guide_bitmap);
+        if(reference_bitmap) {
+            reference_size.x = al_get_bitmap_width(reference_bitmap);
+            reference_size.y = al_get_bitmap_height(reference_bitmap);
         } else {
-            guide_pos.x = 0;
-            guide_pos.y = 0;
+            reference_pos.x = 0;
+            reference_pos.y = 0;
         }
     }
     
-    guide_pos.x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
-    guide_pos.y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
+    reference_pos.x = s2f(((lafi::textbox*) f->widgets["txt_x"])->text);
+    reference_pos.y = s2f(((lafi::textbox*) f->widgets["txt_y"])->text);
     
-    guide_aspect_ratio = ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
+    reference_aspect_ratio =
+        ((lafi::checkbox*) f->widgets["chk_ratio"])->checked;
     point new_size(
         s2f(((lafi::textbox*) f->widgets["txt_w"])->text),
         s2f(((lafi::textbox*) f->widgets["txt_h"])->text)
     );
     
     if(new_size.x != 0 && new_size.y != 0 && !is_file_new) {
-        if(guide_aspect_ratio) {
-            if(new_size.x == guide_size.x && new_size.y != guide_size.y) {
-                float ratio = guide_size.x / guide_size.y;
-                guide_size.y = new_size.y;
-                guide_size.x = new_size.y * ratio;
-            } else if(new_size.x != guide_size.x && new_size.y == guide_size.y) {
-                float ratio = guide_size.y / guide_size.x;
-                guide_size.x = new_size.x;
-                guide_size.y = new_size.x * ratio;
+        if(reference_aspect_ratio) {
+            if(new_size.x == reference_size.x && new_size.y != reference_size.y) {
+                float ratio = reference_size.x / reference_size.y;
+                reference_size.y = new_size.y;
+                reference_size.x = new_size.y * ratio;
+            } else if(new_size.x != reference_size.x && new_size.y == reference_size.y) {
+                float ratio = reference_size.y / reference_size.x;
+                reference_size.x = new_size.x;
+                reference_size.y = new_size.x * ratio;
             } else {
-                guide_size = new_size;
+                reference_size = new_size;
             }
         } else {
-            guide_size = new_size;
+            reference_size = new_size;
         }
     }
     
     sec_mode =
         ((lafi::checkbox*) f->widgets["chk_mouse"])->checked ?
-        ESM_GUIDE_MOUSE : ESM_NONE;
-    guide_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
+        ESM_REFERENCE_MOUSE : ESM_NONE;
+    reference_a = ((lafi::scrollbar*) f->widgets["bar_alpha"])->low_value;
     
-    guide_to_gui();
+    reference_to_gui();
     made_changes = true;
 }
 
@@ -600,18 +583,18 @@ void area_editor::center_camera(
 
 
 /* ----------------------------------------------------------------------------
- * Changes the guide image.
+ * Changes the reference image.
  */
-void area_editor::change_guide(string new_file_name) {
-    if(guide_bitmap && guide_bitmap != bmp_error) {
-        al_destroy_bitmap(guide_bitmap);
+void area_editor::change_reference(string new_file_name) {
+    if(reference_bitmap && reference_bitmap != bmp_error) {
+        al_destroy_bitmap(reference_bitmap);
     }
-    guide_bitmap = NULL;
+    reference_bitmap = NULL;
     
     if(new_file_name.size()) {
-        guide_bitmap = load_bmp(new_file_name, NULL, false);
+        reference_bitmap = load_bmp(new_file_name, NULL, false);
     }
-    guide_file_name = new_file_name;
+    reference_file_name = new_file_name;
     
     made_changes = true;
 }
@@ -629,7 +612,7 @@ void area_editor::hide_all_frames() {
     hide_widget(gui->widgets["frm_texture"]);
     hide_widget(gui->widgets["frm_objects"]);
     hide_widget(gui->widgets["frm_shadows"]);
-    hide_widget(gui->widgets["frm_guide"]);
+    hide_widget(gui->widgets["frm_reference"]);
     hide_widget(gui->widgets["frm_review"]);
     hide_widget(gui->widgets["frm_tools"]);
     hide_widget(gui->widgets["frm_options"]);
@@ -659,8 +642,8 @@ void area_editor::change_to_right_frame() {
         show_widget(gui->widgets["frm_paths"]);
     } else if(mode == EDITOR_MODE_SHADOWS) {
         show_widget(gui->widgets["frm_shadows"]);
-    } else if(mode == EDITOR_MODE_GUIDE) {
-        show_widget(gui->widgets["frm_guide"]);
+    } else if(mode == EDITOR_MODE_REFERENCE) {
+        show_widget(gui->widgets["frm_reference"]);
     } else if(mode == EDITOR_MODE_REVIEW) {
         show_widget(gui->widgets["frm_review"]);
     } else if(mode == EDITOR_MODE_TOOLS) {
@@ -694,13 +677,17 @@ void area_editor::clear_current_area() {
     )->uncheck();
     
     
+    change_reference("");
+    reference_aspect_ratio = true;
+    reference_size = point(1000, 1000);
+    reference_a = 255;
     cur_sector = NULL;
     cur_mob = NULL;
     cur_shadow = NULL;
     clear_area_textures();
     sector_to_gui();
     mob_to_gui();
-    guide_to_gui();
+    reference_to_gui();
     
     cam_pos.x = cam_pos.y = 0;
     cam_zoom = 1;
@@ -742,6 +729,7 @@ void area_editor::create_new_from_picker(const string &name) {
         //Create a new area.
         area_name = name;
         clear_current_area();
+        disable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
         
         //Create a sector for it.
         new_sector_valid_line = true;
@@ -1758,7 +1746,8 @@ void area_editor::load_area(const bool from_backup) {
         );
     }
     
-    change_guide(guide_file_name);
+    change_reference(reference_file_name);
+    enable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
     made_changes = false;
 }
 
@@ -2088,6 +2077,24 @@ void area_editor::update_texture_suggestions(const string &n) {
             texture_suggestions.begin() + texture_suggestions.size() - 1
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the reference's data from the memory to the gui.
+ */
+void area_editor::reference_to_gui() {
+    lafi::frame* f = (lafi::frame*) gui->widgets["frm_reference"];
+    ((lafi::textbox*) f->widgets["txt_file"])->text = reference_file_name;
+    ((lafi::textbox*) f->widgets["txt_x"])->text = f2s(reference_pos.x);
+    ((lafi::textbox*) f->widgets["txt_y"])->text = f2s(reference_pos.y);
+    ((lafi::textbox*) f->widgets["txt_w"])->text = f2s(reference_size.x);
+    ((lafi::textbox*) f->widgets["txt_h"])->text = f2s(reference_size.y);
+    ((lafi::checkbox*) f->widgets["chk_ratio"])->set(reference_aspect_ratio);
+    ((lafi::checkbox*) f->widgets["chk_mouse"])->set(
+        sec_mode == ESM_REFERENCE_MOUSE
+    );
+    ((lafi::scrollbar*) f->widgets["bar_alpha"])->set_value(reference_a, false);
 }
 
 
@@ -2423,11 +2430,11 @@ void area_editor::save_area(const bool to_backup) {
         
     }
     
-    //Editor guide.
-    geometry_file.add(new data_node("guide_file_name", guide_file_name));
-    geometry_file.add(new data_node("guide_pos",       p2s(guide_pos)));
-    geometry_file.add(new data_node("guide_size",      p2s(guide_size)));
-    geometry_file.add(new data_node("guide_alpha",     i2s(guide_a)));
+    //Editor reference.
+    geometry_file.add(new data_node("reference_file_name", reference_file_name));
+    geometry_file.add(new data_node("reference_pos",       p2s(reference_pos)));
+    geometry_file.add(new data_node("reference_size",      p2s(reference_size)));
+    geometry_file.add(new data_node("reference_alpha",     i2s(reference_a)));
     
     
     //Check if the folder exists before saving. If not, create it.
@@ -2459,6 +2466,7 @@ void area_editor::save_area(const bool to_backup) {
     );
     
     backup_timer.start(editor_backup_interval);
+    enable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
 }
 
 
@@ -2538,12 +2546,6 @@ bool area_editor::update_backup_status() {
 void area_editor::update_options_frame() {
     ((lafi::label*) gui->widgets["frm_options"]->widgets["lbl_grid"])->text =
         "Grid: " + i2s(grid_interval);
-    lafi::widget* but_load = gui->widgets["frm_options"]->widgets["but_load"];
-    if(area_name.empty()) {
-        disable_widget(but_load);
-    } else {
-        enable_widget(but_load);
-    }
 }
 
 
@@ -2788,34 +2790,34 @@ void area_editor::update_transformations() {
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's file name.
+ * Sets the reference's file name.
  */
-void area_editor::set_guide_file_name(const string &n) {
-    guide_file_name = n;
+void area_editor::set_reference_file_name(const string &n) {
+    reference_file_name = n;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's coordinates.
+ * Sets the reference's coordinates.
  */
-void area_editor::set_guide_pos(const point &p) {
-    guide_pos = p;
+void area_editor::set_reference_pos(const point &p) {
+    reference_pos = p;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's dimensions.
+ * Sets the reference's dimensions.
  */
-void area_editor::set_guide_size(const point &p) {
-    guide_size = p;
+void area_editor::set_reference_size(const point &p) {
+    reference_size = p;
 }
 
 
 /* ----------------------------------------------------------------------------
- * Sets the guide's alpha.
+ * Sets the reference's alpha.
  */
-void area_editor::set_guide_a(const unsigned char a) {
-    guide_a = a;
+void area_editor::set_reference_a(const unsigned char a) {
+    reference_a = a;
 }
 
 

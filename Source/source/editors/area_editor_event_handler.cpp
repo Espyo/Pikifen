@@ -68,21 +68,21 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             on_sector = NULL;
         }
         
-        //Move guide.
-        if(sec_mode == ESM_GUIDE_MOUSE) {
+        //Move reference.
+        if(sec_mode == ESM_REFERENCE_MOUSE) {
         
             if(holding_m1) {
-                guide_pos.x += ev.mouse.dx / cam_zoom;
-                guide_pos.y += ev.mouse.dy / cam_zoom;
+                reference_pos.x += ev.mouse.dx / cam_zoom;
+                reference_pos.y += ev.mouse.dy / cam_zoom;
                 
             } else if(holding_m2) {
             
                 point new_size(
-                    guide_size.x + ev.mouse.dx / cam_zoom,
-                    guide_size.y + ev.mouse.dy / cam_zoom
+                    reference_size.x + ev.mouse.dx / cam_zoom,
+                    reference_size.y + ev.mouse.dy / cam_zoom
                 );
                 
-                if(guide_aspect_ratio) {
+                if(reference_aspect_ratio) {
                     //Find the most significant change.
                     if(ev.mouse.dx != 0 || ev.mouse.dy != 0) {
                         bool most_is_width =
@@ -90,22 +90,22 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
                             fabs((double) ev.mouse.dy);
                             
                         if(most_is_width) {
-                            float ratio = guide_size.y / guide_size.x;
-                            guide_size.x = new_size.x;
-                            guide_size.y = new_size.x * ratio;
+                            float ratio = reference_size.y / reference_size.x;
+                            reference_size.x = new_size.x;
+                            reference_size.y = new_size.x * ratio;
                         } else {
-                            float ratio = guide_size.x / guide_size.y;
-                            guide_size.y = new_size.y;
-                            guide_size.x = new_size.y * ratio;
+                            float ratio = reference_size.x / reference_size.y;
+                            reference_size.y = new_size.y;
+                            reference_size.x = new_size.y * ratio;
                         }
                     }
                 } else {
-                    guide_size = new_size;
+                    reference_size = new_size;
                 }
                 
             }
             
-            guide_to_gui();
+            reference_to_gui();
             
         } else if(holding_m2) {
             //Move camera.

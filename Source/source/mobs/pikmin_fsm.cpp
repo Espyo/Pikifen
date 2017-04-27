@@ -50,7 +50,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("grabbed_by_leader");
         }
         efc.new_event(MOB_EVENT_SPOT_IS_FAR); {
-            efc.change_state("in_group_chasing");
+            efc.run(pikmin_fsm::update_in_group_chasing);
         }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
             efc.change_state("in_group_stopped");
@@ -1291,17 +1291,7 @@ void pikmin_fsm::do_latched_attack(mob* m, void* info1, void* info2) {
  *   If NULL, the final destination is calculated here.
  */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
-    point pos;
-    
-    if(!info1) {
-        pos =
-            m->following_group->group->anchor +
-            m->following_group->group->get_spot_offset(m->group_spot_index);
-    } else {
-        pos = *((point*) info1);
-    }
-    
-    m->chase(pos, NULL, false);
+    pikmin_fsm::update_in_group_chasing(m, info1, info2);
     focus_mob(m, m->following_group);
     m->set_animation(PIKMIN_ANIM_WALKING);
 }
@@ -1500,4 +1490,25 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
         pikmin_fsm::land_on_mob(m, &hti, NULL);
         
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the Pikmin should update its destination when chasing the leader.
+ * info1: Points to the position struct with the final destination.
+ *   If NULL, the final destination is calculated here.
+ */
+void pikmin_fsm::update_in_group_chasing(mob* m, void* info1, void* info2) {
+    point pos;
+    
+    if(!info1) {
+        pos =
+            m->following_group->group->anchor +
+            m->following_group->group->get_spot_offset(m->group_spot_index);
+    } else {
+        pos = *((point*) info1);
+    }
+    
+    m->chase(pos, NULL, false);
+    
 }

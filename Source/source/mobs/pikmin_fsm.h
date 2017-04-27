@@ -69,6 +69,7 @@ void tick_latched(           mob* m, void* info1, void* info2);
 void touched_hazard(         mob* m, void* info1, void* info2);
 void touched_spray(          mob* m, void* info1, void* info2);
 void try_latching(           mob* m, void* info1, void* info2);
+void update_in_group_chasing(mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef PIKMIN_FSM_INCLUDED

@@ -90,8 +90,8 @@ void area_editor::load() {
     );
     frm_area->easy_row();
     frm_area->easy_add(
-        "but_guide",
-        new lafi::button("Edit guide"), 100, 32
+        "but_reference",
+        new lafi::button("Edit reference"), 100, 32
     );
     frm_area->easy_row();
     frm_area->easy_add(
@@ -146,13 +146,13 @@ void area_editor::load() {
     frm_area->widgets["but_shadows"]->description =
         "Change the shadows of trees and leaves.";
         
-    frm_area->widgets["but_guide"]->left_mouse_click_handler =
+    frm_area->widgets["but_reference"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        mode = EDITOR_MODE_GUIDE;
+        mode = EDITOR_MODE_REFERENCE;
         change_to_right_frame();
     };
-    frm_area->widgets["but_guide"]->description =
-        "Add an image, like a sketch, to guide you.";
+    frm_area->widgets["but_reference"]->description =
+        "Add a reference image, like a sketch, to guide you.";
         
     frm_area->widgets["but_review"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1132,132 +1132,132 @@ void area_editor::load() {
         "Vertical sway amount multiplier (0 = no sway).";
         
         
-    //Guide -- declarations.
-    lafi::frame* frm_guide =
+    //Reference -- declarations.
+    lafi::frame* frm_reference =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_guide);
-    gui->add("frm_guide", frm_guide);
+    hide_widget(frm_reference);
+    gui->add("frm_reference", frm_reference);
     
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "lbl_file",
         new lafi::label("File:"), 30, 16
     );
-    frm_guide->easy_add(
+    frm_reference->easy_add(
         "txt_file",
         new lafi::textbox(), 70, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "lbl_xy",
         new lafi::label("X&Y:"), 30, 16
     );
-    frm_guide->easy_add(
+    frm_reference->easy_add(
         "txt_x",
         new lafi::textbox(), 35, 16
     );
-    frm_guide->easy_add(
+    frm_reference->easy_add(
         "txt_y",
         new lafi::textbox(), 35, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "lbl_wh",
         new lafi::label("W&H:"), 30, 16
     );
-    frm_guide->easy_add(
+    frm_reference->easy_add(
         "txt_w",
         new lafi::textbox(), 35, 16
     );
-    frm_guide->easy_add(
+    frm_reference->easy_add(
         "txt_h",
         new lafi::textbox(), 35, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "chk_ratio",
         new lafi::checkbox("Keep aspect ratio"), 100, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "chk_mouse",
         new lafi::checkbox("Transform with mouse"), 100, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "lbl_alpha",
         new lafi::label("Opacity:"), 100, 16
     );
-    frm_guide->easy_row();
-    frm_guide->easy_add(
+    frm_reference->easy_row();
+    frm_reference->easy_add(
         "bar_alpha",
         new lafi::scrollbar(0, 0, 0, 0, 0, 285, 0, 30, false), 100, 24
     );
-    frm_guide->easy_row();
+    frm_reference->easy_row();
     
     
-    //Guide -- properties.
-    auto lambda_gui_to_guide =
-    [this] (lafi::widget*) { gui_to_guide(); };
-    auto lambda_gui_to_guide_click =
-    [this] (lafi::widget*, int, int) { gui_to_guide(); };
+    //Reference -- properties.
+    auto lambda_gui_to_reference =
+    [this] (lafi::widget*) { gui_to_reference(); };
+    auto lambda_gui_to_reference_click =
+    [this] (lafi::widget*, int, int) { gui_to_reference(); };
     
-    frm_guide->widgets["but_back"]->left_mouse_click_handler =
+    frm_reference->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         sec_mode = ESM_NONE;
-        guide_to_gui();
+        reference_to_gui();
         mode = EDITOR_MODE_MAIN;
         change_to_right_frame();
     };
-    frm_guide->widgets["but_back"]->description =
+    frm_reference->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_guide->widgets["txt_file"]->lose_focus_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["txt_file"]->description =
-        "Image file (on the Images folder) for the guide.";
+    frm_reference->widgets["txt_file"]->lose_focus_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["txt_file"]->description =
+        "Image file (on the Images folder) for the reference.";
         
-    frm_guide->widgets["txt_x"]->lose_focus_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["txt_x"]->description =
-        "X of the top-left corner for the guide.";
+    frm_reference->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["txt_x"]->description =
+        "X of the top-left corner for the reference.";
         
-    frm_guide->widgets["txt_y"]->lose_focus_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["txt_y"]->description =
-        "Y of the top-left corner for the guide.";
+    frm_reference->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["txt_y"]->description =
+        "Y of the top-left corner for the reference.";
         
-    frm_guide->widgets["txt_w"]->lose_focus_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["txt_w"]->description =
-        "Guide total width.";
+    frm_reference->widgets["txt_w"]->lose_focus_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["txt_w"]->description =
+        "Reference total width.";
         
-    frm_guide->widgets["txt_h"]->lose_focus_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["txt_h"]->description =
-        "Guide total height.";
+    frm_reference->widgets["txt_h"]->lose_focus_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["txt_h"]->description =
+        "Reference total height.";
         
-    frm_guide->widgets["chk_ratio"]->left_mouse_click_handler =
-        lambda_gui_to_guide_click;
-    frm_guide->widgets["chk_ratio"]->description =
+    frm_reference->widgets["chk_ratio"]->left_mouse_click_handler =
+        lambda_gui_to_reference_click;
+    frm_reference->widgets["chk_ratio"]->description =
         "Lock width/height proportion when changing either one.";
         
-    frm_guide->widgets["chk_mouse"]->left_mouse_click_handler =
-        lambda_gui_to_guide_click;
-    frm_guide->widgets["chk_mouse"]->description =
+    frm_reference->widgets["chk_mouse"]->left_mouse_click_handler =
+        lambda_gui_to_reference_click;
+    frm_reference->widgets["chk_mouse"]->description =
         "If checked, use mouse buttons to move/stretch.";
         
-    ((lafi::scrollbar*) frm_guide->widgets["bar_alpha"])->change_handler =
-        lambda_gui_to_guide;
-    frm_guide->widgets["bar_alpha"]->description =
-        "How see-through the guide is.";
+    ((lafi::scrollbar*) frm_reference->widgets["bar_alpha"])->change_handler =
+        lambda_gui_to_reference;
+    frm_reference->widgets["bar_alpha"]->description =
+        "How see-through the reference is.";
         
-    guide_to_gui();
+    reference_to_gui();
     
     
     //Review -- declarations.
@@ -1550,8 +1550,8 @@ void area_editor::load() {
         new lafi::button("", "", icons.get(OPTIONS_ICON)), 25, 32
     );
     frm_bottom->easy_add(
-        "but_guide",
-        new lafi::button("", "", icons.get(GUIDE_ICON)), 25, 32
+        "but_reference",
+        new lafi::button("", "", icons.get(REFERENCE_ICON)), 25, 32
     );
     frm_bottom->easy_add(
         "but_save",
@@ -1581,12 +1581,12 @@ void area_editor::load() {
     frm_bottom->widgets["but_options"]->description =
         "Options and misc. tools.";
         
-    frm_bottom->widgets["but_guide"]->left_mouse_click_handler =
+    frm_bottom->widgets["but_reference"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        show_guide = !show_guide;
+        show_reference = !show_reference;
     };
-    frm_bottom->widgets["but_guide"]->description =
-        "Toggle the visibility of the guide.";
+    frm_bottom->widgets["but_reference"]->description =
+        "Toggle the visibility of the reference.";
         
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1616,6 +1616,7 @@ void area_editor::load() {
     create_changes_warning_frame();
     create_picker_frame(true);
     
+    disable_widget(frm_options->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);
     
     cam_zoom = 1.0;

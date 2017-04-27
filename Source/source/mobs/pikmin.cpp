@@ -262,7 +262,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
         draw_sprite(
             bmp_idle_glow,
             pos,
-            size_mult * 30,
+            size_mult * 35,
             area_time_passed * IDLE_GLOW_SPIN_SPEED,
             type->main_color
         );
