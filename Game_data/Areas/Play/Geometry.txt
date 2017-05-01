@@ -2521,7 +2521,7 @@ tree_shadows{
 		sway=1.00 0.00
 	}
 }
-guide_file_name=
-guide_pos=0.00 0.00
-guide_size=0.00 0.00
-guide_alpha=255
+reference_file_name=
+reference_pos=0.00 0.00
+reference_size=0.00 0.00
+reference_alpha=255

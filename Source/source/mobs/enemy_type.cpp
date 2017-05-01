@@ -20,7 +20,6 @@ enemy_type::enemy_type() :
     pikmin_seeds(0),
     value(0),
     revive_speed(0),
-    regenerate_speed(0),
     is_boss(false),
     drops_corpse(true),
     allow_ground_attacks(true) {
@@ -42,7 +41,6 @@ void enemy_type::load_from_file(
         );
     is_boss = s2b(file->get_child_by_name("is_boss")->value);
     pikmin_seeds = s2i(file->get_child_by_name("pikmin_seeds")->value);
-    regenerate_speed = s2b(file->get_child_by_name("regenerate_speed")->value);
     revive_speed = s2f(file->get_child_by_name("revive_speed")->value);
     value = s2f(file->get_child_by_name("value")->value);
     allow_ground_attacks =

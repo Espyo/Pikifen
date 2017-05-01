@@ -3,6 +3,7 @@ first_state = sleeping
 script {
     sleeping {
         on_enter {
+            var = ignoring false
             animation = sleeping
         }
         on_near_opponent {
@@ -34,7 +35,9 @@ script {
             move = stop
         }
         on_see_opponent {
+            if = ignoring false
             focus = mob
+            if = ignoring false
             state = chasing
         }
         on_big_damage {
@@ -51,25 +54,6 @@ script {
         }
     }
     
-    examining_ignoring {
-        on_enter {
-            animation = looking
-            move = stop
-        }
-        on_big_damage {
-            state = shaking
-        }
-        on_death {
-            state = dying
-        }
-        on_animation_end {
-            state = returning_ignoring
-        }
-        on_touch_spray {
-            special_function = spray
-        }
-    }
-    
     chasing {
         on_enter {
             animation = moving
@@ -79,10 +63,11 @@ script {
             state = attacking
         }
         on_lose_focused_mob {
-            state = examining_ignoring
+            state = examining
         }
         on_far_from_home {
-            state = examining_ignoring
+            var = ignoring true
+            state = examining
         }
         on_big_damage {
             state = shaking
@@ -177,33 +162,22 @@ script {
     
     returning {
         on_enter {
+            timer = 2
             move = home
             animation = moving
+        }
+        on_leave {
+            timer = 0
+        }
+        on_timer {
+            var = ignoring false
         }
         on_reach_destination {
             state = falling_asleep
         }
         on_see_opponent {
+            if = ignoring false
             state = chasing
-        }
-        on_bottomless_pit {
-            state = deleting
-        }
-        on_death {
-            state = dying
-        }
-        on_touch_spray {
-            special_function = spray
-        }
-    }
-    
-    returning_ignoring {
-        on_enter {
-            move = home
-            animation = moving
-        }
-        on_reach_destination {
-            state = falling_asleep
         }
         on_bottomless_pit {
             state = deleting

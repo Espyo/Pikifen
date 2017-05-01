@@ -758,7 +758,7 @@ void load_area(
             split(sector_data->get_child_by_name("texture_scale")->value);
         if(scales.size() >= 2) {
             new_sector->texture_info.scale.x = s2f(scales[0]);
-            new_sector->texture_info.scale.y = s2f(scales[0]);
+            new_sector->texture_info.scale.y = s2f(scales[1]);
         }
         vector<string> translations =
             split(sector_data->get_child_by_name("texture_trans")->value);

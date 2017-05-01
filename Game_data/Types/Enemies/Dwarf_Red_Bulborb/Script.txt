@@ -1,13 +1,22 @@
-first_state = examining
+first_state = init
 
 script {
+    init {
+        on_enter {
+            var = ignoring false
+            state = examining
+        }
+    }
+    
     examining {
         on_enter {
             animation = looking
             move = stop
         }
         on_see_opponent {
+            if = ignoring false
             focus = mob
+            if = ignoring false
             state = chasing
         }
         on_big_damage {
@@ -79,31 +88,6 @@ script {
         }
     }
     
-    examining_returning {
-        on_enter {
-            animation = looking
-            move = stop
-        }
-        on_big_damage {
-            state = shaking
-        }
-        on_pikmin_land {
-            state = crushed
-        }
-        on_animation_end {
-            state = returning_ignoring
-        }
-        on_bottomless_pit {
-            state = deleting
-        }
-        on_death {
-            state = dying
-        }
-        on_touch_spray {
-            special_function = spray
-        }
-    }
-    
     chasing {
         on_enter {
             animation = moving
@@ -116,7 +100,8 @@ script {
             state = examining
         }
         on_far_from_home {
-            state = examining_returning
+            var = ignoring true
+            state = returning
         }
         on_big_damage {
             state = shaking
@@ -210,36 +195,22 @@ script {
     
     returning {
         on_enter {
+            timer = 2
             move = home
             animation = moving
+        }
+        on_leave {
+            timer = 0
+        }
+        on_timer {
+            var = ignoring false
         }
         on_reach_destination {
             state = examining
         }
         on_see_opponent {
+            if = ignoring false
             state = chasing
-        }
-        on_bottomless_pit {
-            state = deleting
-        }
-        on_death {
-            state = dying
-        }
-        on_touch_spray {
-            special_function = spray
-        }
-    }
-    
-    returning_ignoring {
-        on_enter {
-            move = home
-            animation = moving
-        }
-        on_reach_destination {
-            state = examining
-        }
-        on_pikmin_land {
-            state = crushed
         }
         on_bottomless_pit {
             state = deleting

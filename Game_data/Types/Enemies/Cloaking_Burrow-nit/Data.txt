@@ -2,9 +2,10 @@ name = Cloaking Burrow-nit
 
 big_damage_interval = 20
 drops_corpse = true
+health_regen = 1
 height = 64
 max_carriers = 16
-max_health = 500
+max_health = 300
 move_speed = 50
 near_angle = 45
 near_radius = 40
