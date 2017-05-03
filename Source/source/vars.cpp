@@ -128,7 +128,7 @@ float dev_tool_change_speed_mult = 2.0;
 mob* dev_tool_info_lock = NULL;
 pikmin_type* dev_tool_last_pikmin_type = NULL;
 bool dev_tool_show_mouse_coords = false;
-unsigned char dev_tool_keys[10];
+unsigned char dev_tool_keys[20];
 ALLEGRO_DISPLAY* display = NULL;
 bool draw_cursor_trail = true;
 float editor_backup_interval = DEF_EDITOR_BACKUP_INTERVAL;

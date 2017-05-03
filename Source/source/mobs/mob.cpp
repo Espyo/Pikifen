@@ -699,10 +699,6 @@ void mob::tick_physics() {
  * Checks general events in the mob's script for this frame.
  */
 void mob::tick_script() {
-    //Health regeneration.
-    health += type->health_regen * delta_t;
-    health = min(health, type->max_health);
-    
     if(!fsm.cur_state) return;
     
     //Timer events.
@@ -733,6 +729,12 @@ void mob::tick_script() {
     if(big_damage_ev && big_damage_ev_queued) {
         big_damage_ev->run(this);
         big_damage_ev_queued = false;
+    }
+    
+    //Health regeneration.
+    if(!dead) {
+        health += type->health_regen * delta_t;
+        health = min(health, type->max_health);
     }
 }
 

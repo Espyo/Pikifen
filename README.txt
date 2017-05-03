@@ -3,7 +3,7 @@
 An engine that allows users to create their Pikmin fangames easily.
 
 This project is still under construction, so expect weird things to happen.
-You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me via IRC, on DarkMyst's #pikipedia.
+You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame_engine or by contacting me, Espyo, via IRC, on DarkMyst's #pikipedia.
 
 ===============
 1) Controls
@@ -16,21 +16,19 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
 1) Controls
 ===============
-    Most of these can be changed on the options menu.
+    Most of these can be changed in the options menu.
     Quit:                      Esc
     Move:                      WASD
     Move cursor:               Mouse
     Whistle:                   Right mouse button
     Punch/Pluck/Throw:         Left mouse button
     
+    Switch active Pikmin type: Mouse wheel
     Move group towards cursor: Space
     Switch leader:             Tab
     Dismiss:                   Left Ctrl
     Switch zoom level:         C
 
-    Zoom in:                   Mouse wheel up
-    Zoom out:                  Mouse wheel down
-    Switch held Pikmin type:   Right mouse button
     Use top spray:             R
     Use bottom spray:          F
     Lie down:                  Z
@@ -107,7 +105,7 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 ===============
     The project's code is licensed under the MIT License (MIT), described in LICENSE.txt.
     Various assets may have their own licenses, which are detailed below.
-    Assets whose license is not listed are licensed under the MIT License.
+    Assets whose license and credit are not listed are made by Espyo, and licensed under the MIT License.
     
     Engine
         Inspiration

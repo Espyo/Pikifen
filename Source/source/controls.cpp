@@ -39,13 +39,27 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             show_framerate = !show_framerate;
             
         } else if(
-            ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
-            ev.keyboard.keycode <= ALLEGRO_KEY_F11
+            (
+                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
+                ev.keyboard.keycode <= ALLEGRO_KEY_F11
+            ) || (
+                ev.keyboard.keycode >= ALLEGRO_KEY_0 &&
+                ev.keyboard.keycode <= ALLEGRO_KEY_9
+            )
         ) {
         
-            unsigned char id =
-                dev_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
-                
+            unsigned char id;
+            if(
+                ev.keyboard.keycode >= ALLEGRO_KEY_F2 &&
+                ev.keyboard.keycode <= ALLEGRO_KEY_F11
+            ) {
+                //The first ten indexes are the F2 - F11 keys.
+                id = dev_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
+            } else {
+                //The last ten indexes are the 0 - 9 keys.
+                id = dev_tool_keys[10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)];
+            }
+            
             if(id == DEV_TOOL_AREA_IMAGE) {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
                 if(!al_save_bitmap(dev_tool_area_image_name.c_str(), bmp)) {

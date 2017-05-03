@@ -172,8 +172,16 @@ void init_dev_tools() {
     
     if(!s2b(file.get_child_by_name("enabled")->value)) return;
     
-    for(unsigned char k = 0; k < 10; k++) {
-        string tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+    for(unsigned char k = 0; k < 20; k++) {
+        string tool_name;
+        if(k < 10) {
+            //The first ten indexes are the F2 - F11 keys.
+            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+        } else {
+            //The first ten indexes are the 0 - 9 keys.
+            tool_name = file.get_child_by_name(i2s(k - 10))->value;
+        }
+        
         if(tool_name == "area_image") {
             dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;
         } else if(tool_name == "coordinates") {

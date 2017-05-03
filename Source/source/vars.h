@@ -178,7 +178,8 @@ extern float dev_tool_change_speed_mult;
 extern mob* dev_tool_info_lock;
 extern pikmin_type* dev_tool_last_pikmin_type;
 extern bool dev_tool_show_mouse_coords;
-extern unsigned char dev_tool_keys[10];
+//For each key (F2 - F11, 0 - 9), what tool is bound to it?
+extern unsigned char dev_tool_keys[20];
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
 extern float editor_backup_interval;
