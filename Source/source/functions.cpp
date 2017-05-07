@@ -1182,6 +1182,7 @@ void load_game_config() {
     
     rs.set("idle_task_range", idle_task_range);
     rs.set("group_move_task_range", group_move_task_range);
+    rs.set("pikmin_chase_range", pikmin_chase_range);
     rs.set("max_pikmin_in_field", max_pikmin_in_field);
     rs.set("maturity_power_mult", maturity_power_mult);
     rs.set("maturity_speed_mult", maturity_speed_mult);

@@ -45,6 +45,19 @@ pikmin_type::pikmin_type() :
     weight = 1;
     show_health = false;
     
+    mob_type::reach_struct idle_attack_reach;
+    idle_attack_reach.angle_1 = M_PI;
+    idle_attack_reach.radius_1 = idle_task_range;
+    reaches.push_back(idle_attack_reach);
+    mob_type::reach_struct group_move_attack_reach;
+    group_move_attack_reach.angle_1 = M_PI;
+    group_move_attack_reach.radius_1 = group_move_task_range;
+    reaches.push_back(group_move_attack_reach);
+    mob_type::reach_struct chase_reach;
+    chase_reach.angle_1 = M_PI;
+    chase_reach.radius_1 = pikmin_chase_range;
+    reaches.push_back(chase_reach);
+    
     pikmin_fsm::create_fsm(this);
 }
 

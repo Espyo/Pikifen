@@ -129,7 +129,11 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("group_move_chasing", PIKMIN_STATE_GROUP_MOVE_CHASING); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::set_group_move_reach);
             efc.run(pikmin_fsm::chase_leader);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::set_idle_task_reach);
         }
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run(pikmin_fsm::chase_leader);
@@ -179,10 +183,14 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("group_move_stopped", PIKMIN_STATE_GROUP_MOVE_STOPPED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::set_group_move_reach);
             efc.run(pikmin_fsm::stop_in_group);
         }
         efc.new_event(MOB_EVENT_ON_TICK); {
             efc.run(pikmin_fsm::face_leader);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::set_idle_task_reach);
         }
         efc.new_event(MOB_EVENT_GRABBED_BY_FRIEND); {
             efc.run(pikmin_fsm::be_grabbed_by_friend);
@@ -897,6 +905,22 @@ void pikmin_fsm::remove_disabled(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
     m->invuln_period.start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to to change "reach" to the group move reach.
+ */
+void pikmin_fsm::set_group_move_reach(mob* m, void* info1, void* info2) {
+    m->near_reach = 1;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin is meant to to change "reach" to the idle task reach.
+ */
+void pikmin_fsm::set_idle_task_reach(mob* m, void* info1, void* info2) {
+    m->near_reach = 0;
 }
 
 

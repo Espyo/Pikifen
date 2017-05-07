@@ -210,6 +210,7 @@ map<string, pellet_type*> pellet_types;
 vector<pellet*> pellets;
 vector<point> precipitation;
 timer precipitation_timer(0);
+float pikmin_chase_range = 200.0f;
 float pikmin_grab_range = 64.0f;
 map<pikmin_type*, unsigned long> pikmin_in_onions;
 vector<pikmin*> pikmin_list;

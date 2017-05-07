@@ -54,16 +54,19 @@ animations{
 		}
 	}
 	failing{
-		loop_frame=2
+		loop_frame=3
 		frames{
 			failing1{
-				duration=0.30
+				duration=0.40
 			}
 			failing2{
-				duration=0.10
+				duration=0.20
 			}
 			attacking1{
 				duration=0.10
+			}
+			idling{
+				duration=0.15
 			}
 		}
 	}
@@ -71,28 +74,34 @@ animations{
 		loop_frame=0
 		frames{
 			chomping1{
-				duration=0.25
+				duration=0.30
 			}
 			chomping2{
-				duration=0.10
+				duration=0.15
 			}
 			chomping3{
 				duration=0.15
 			}
 			chomping2{
-				duration=0.10
+				duration=0.15
 			}
 			chomping1{
-				duration=0.25
+				duration=0.20
 			}
 			chomping2{
-				duration=0.10
+				duration=0.15
 			}
 			chomping3{
 				duration=0.15
 			}
 			chomping2{
-				duration=0.10
+				duration=0.15
+			}
+			chomping1{
+				duration=0.15
+			}
+			idling{
+				duration=0.30
 			}
 		}
 	}
@@ -126,19 +135,19 @@ animations{
 		loop_frame=0
 		frames{
 			shaking1{
-				duration=0.15
+				duration=0.10
 			}
 			idling{
-				duration=0.15
+				duration=0.10
 			}
 			shaking1{
-				duration=0.15
+				duration=0.10
 			}
 			idling{
-				duration=0.15
+				duration=0.10
 			}
 			shaking1{
-				duration=0.15
+				duration=0.10
 			}
 			idling{
 				duration=0.20
@@ -165,7 +174,7 @@ animations{
 				duration=0.15
 			}
 			idling{
-				duration=0.40
+				duration=0.30
 			}
 		}
 	}
@@ -187,22 +196,22 @@ animations{
 				duration=0.10
 			}
 			sleeping2{
-				duration=0.10
+				duration=0.30
 			}
 			failing2{
-				duration=0.20
+				duration=0.30
 			}
 			moving1{
 				duration=0.20
 			}
 			idling{
-				duration=0.10
+				duration=0.15
 			}
 			moving3{
-				duration=0.10
+				duration=0.15
 			}
 			idling{
-				duration=0.10
+				duration=0.15
 			}
 		}
 	}
@@ -262,8 +271,8 @@ animations{
 sprites{
 	idling{
 		file=Red_Bulborb.png
-		file_pos=0 0
-		file_size=153 103
+		file_pos=0.00 0.00
+		file_size=153.00 103.00
 		game_size=153.00 103.00
 		offset=16.00 0.00
 		hitboxes{
@@ -307,8 +316,8 @@ sprites{
 	}
 	moving3{
 		file=Red_Bulborb.png
-		file_pos=154 0
-		file_size=153 104
+		file_pos=154.00 0.00
+		file_size=153.00 104.00
 		game_size=153.00 104.00
 		offset=16.00 2.00
 		hitboxes{
@@ -352,8 +361,8 @@ sprites{
 	}
 	moving4{
 		file=Red_Bulborb.png
-		file_pos=308 0
-		file_size=153 115
+		file_pos=308.00 0.00
+		file_size=153.00 115.00
 		game_size=153.00 115.00
 		offset=16.00 4.00
 		hitboxes{
@@ -397,8 +406,8 @@ sprites{
 	}
 	moving1{
 		file=Red_Bulborb.png
-		file_pos=154 0
-		file_size=153 104
+		file_pos=154.00 0.00
+		file_size=153.00 104.00
 		game_size=153.00 -104.00
 		offset=16.00 -2.00
 		hitboxes{
@@ -442,8 +451,8 @@ sprites{
 	}
 	moving2{
 		file=Red_Bulborb.png
-		file_pos=308 0
-		file_size=153 115
+		file_pos=308.00 0.00
+		file_size=153.00 115.00
 		game_size=153.00 -115.00
 		offset=16.00 -4.00
 		hitboxes{
@@ -487,8 +496,8 @@ sprites{
 	}
 	attacking1{
 		file=Red_Bulborb.png
-		file_pos=0 116
-		file_size=160 103
+		file_pos=0.00 116.00
+		file_size=160.00 103.00
 		game_size=160.00 103.00
 		offset=20.00 0.00
 		hitboxes{
@@ -532,8 +541,8 @@ sprites{
 	}
 	attacking2{
 		file=Red_Bulborb.png
-		file_pos=161 116
-		file_size=174 110
+		file_pos=161.00 116.00
+		file_size=174.00 110.00
 		game_size=174.00 110.00
 		offset=26.00 0.00
 		hitboxes{
@@ -577,8 +586,8 @@ sprites{
 	}
 	attacking3{
 		file=Red_Bulborb.png
-		file_pos=336 116
-		file_size=174 103
+		file_pos=336.00 116.00
+		file_size=174.00 103.00
 		game_size=174.00 103.00
 		offset=28.00 0.00
 		hitboxes{
@@ -622,8 +631,8 @@ sprites{
 	}
 	attacking4{
 		file=Red_Bulborb.png
-		file_pos=512 116
-		file_size=163 103
+		file_pos=512.00 116.00
+		file_size=163.00 103.00
 		game_size=163.00 103.00
 		offset=20.00 0.00
 		hitboxes{
@@ -667,8 +676,8 @@ sprites{
 	}
 	failing1{
 		file=Red_Bulborb.png
-		file_pos=677 116
-		file_size=193 135
+		file_pos=677.00 116.00
+		file_size=193.00 135.00
 		game_size=193.00 135.00
 		offset=32.00 0.00
 		hitboxes{
@@ -712,8 +721,8 @@ sprites{
 	}
 	chomping1{
 		file=Red_Bulborb.png
-		file_pos=0 252
-		file_size=124 103
+		file_pos=0.00 252.00
+		file_size=124.00 103.00
 		game_size=124.00 103.00
 		offset=0.00 0.00
 		hitboxes{
@@ -757,8 +766,8 @@ sprites{
 	}
 	chomping2{
 		file=Red_Bulborb.png
-		file_pos=125 252
-		file_size=100 103
+		file_pos=125.00 252.00
+		file_size=100.00 103.00
 		game_size=100.00 103.00
 		offset=-11.50 0.00
 		hitboxes{
@@ -802,8 +811,8 @@ sprites{
 	}
 	chomping3{
 		file=Red_Bulborb.png
-		file_pos=226 252
-		file_size=115 103
+		file_pos=226.00 252.00
+		file_size=115.00 103.00
 		game_size=115.00 103.00
 		offset=-4.00 0.00
 		hitboxes{
@@ -847,8 +856,8 @@ sprites{
 	}
 	dead{
 		file=Red_Bulborb.png
-		file_pos=342 252
-		file_size=172 103
+		file_pos=342.00 252.00
+		file_size=172.00 103.00
 		game_size=172.00 103.00
 		offset=16.00 0.00
 		hitboxes{
@@ -892,8 +901,8 @@ sprites{
 	}
 	shaking3{
 		file=Red_Bulborb.png
-		file_pos=515 252
-		file_size=159 105
+		file_pos=515.00 252.00
+		file_size=159.00 105.00
 		game_size=159.00 -105.00
 		offset=16.00 0.00
 		hitboxes{
@@ -912,7 +921,7 @@ sprites{
 			back{
 				coords=-13.00 0.00 0.00
 				height=128.00
-				radius=60.00
+				radius=64.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -937,8 +946,8 @@ sprites{
 	}
 	shaking2{
 		file=Red_Bulborb.png
-		file_pos=515 252
-		file_size=159 105
+		file_pos=515.00 252.00
+		file_size=159.00 105.00
 		game_size=159.00 105.00
 		offset=16.00 0.00
 		hitboxes{
@@ -957,7 +966,7 @@ sprites{
 			back{
 				coords=-13.00 0.00 0.00
 				height=128.00
-				radius=60.00
+				radius=64.00
 				type=1
 				multiplier=0.00
 				can_pikmin_latch=false
@@ -982,8 +991,8 @@ sprites{
 	}
 	failing2{
 		file=Red_Bulborb.png
-		file_pos=512 116
-		file_size=163 103
+		file_pos=512.00 116.00
+		file_size=163.00 103.00
 		game_size=163.00 103.00
 		offset=20.00 0.00
 		hitboxes{
@@ -1027,8 +1036,8 @@ sprites{
 	}
 	chomping1dead{
 		file=Red_Bulborb.png
-		file_pos=0 252
-		file_size=124 103
+		file_pos=0.00 252.00
+		file_size=124.00 103.00
 		game_size=124.00 103.00
 		offset=0.00 0.00
 		hitboxes{
@@ -1072,8 +1081,8 @@ sprites{
 	}
 	chomping2dead{
 		file=Red_Bulborb.png
-		file_pos=125 252
-		file_size=100 103
+		file_pos=125.00 252.00
+		file_size=100.00 103.00
 		game_size=100.00 103.00
 		offset=-11.50 0.00
 		hitboxes{
@@ -1117,8 +1126,8 @@ sprites{
 	}
 	chomping3dead{
 		file=Red_Bulborb.png
-		file_pos=226 252
-		file_size=115 103
+		file_pos=226.00 252.00
+		file_size=115.00 103.00
 		game_size=115.00 103.00
 		offset=-4.00 0.00
 		hitboxes{
@@ -1162,8 +1171,8 @@ sprites{
 	}
 	idlingdead{
 		file=Red_Bulborb.png
-		file_pos=0 0
-		file_size=153 103
+		file_pos=0.00 0.00
+		file_size=153.00 103.00
 		game_size=153.00 103.00
 		offset=16.00 0.00
 		hitboxes{
@@ -1207,8 +1216,8 @@ sprites{
 	}
 	sleeping1{
 		file=Red_Bulborb.png
-		file_pos=462 0
-		file_size=161 103
+		file_pos=462.00 0.00
+		file_size=161.00 103.00
 		game_size=161.00 103.00
 		offset=16.00 0.00
 		hitboxes{
@@ -1252,8 +1261,8 @@ sprites{
 	}
 	sleeping2{
 		file=Red_Bulborb.png
-		file_pos=624 0
-		file_size=157 103
+		file_pos=624.00 0.00
+		file_size=157.00 103.00
 		game_size=157.00 103.00
 		offset=14.00 0.00
 		hitboxes{
@@ -1297,8 +1306,8 @@ sprites{
 	}
 	shaking1{
 		file=Red_Bulborb.png
-		file_pos=0 0
-		file_size=153 103
+		file_pos=0.00 0.00
+		file_size=153.00 103.00
 		game_size=153.00 103.00
 		offset=16.00 2.00
 		hitboxes{
@@ -1342,8 +1351,8 @@ sprites{
 	}
 	looking1{
 		file=Red_Bulborb.png
-		file_pos=0 358
-		file_size=157 121
+		file_pos=0.00 358.00
+		file_size=157.00 121.00
 		game_size=157.00 121.00
 		offset=16.00 12.00
 		hitboxes{
@@ -1387,8 +1396,8 @@ sprites{
 	}
 	looking2{
 		file=Red_Bulborb.png
-		file_pos=158 358
-		file_size=135 131
+		file_pos=158.00 358.00
+		file_size=135.00 131.00
 		game_size=135.00 131.00
 		offset=6.00 16.00
 		hitboxes{
@@ -1432,8 +1441,8 @@ sprites{
 	}
 	looking3{
 		file=Red_Bulborb.png
-		file_pos=0 358
-		file_size=157 121
+		file_pos=0.00 358.00
+		file_size=157.00 121.00
 		game_size=157.00 -121.00
 		offset=16.00 -12.00
 		hitboxes{
@@ -1477,8 +1486,8 @@ sprites{
 	}
 	looking4{
 		file=Red_Bulborb.png
-		file_pos=158 358
-		file_size=135 131
+		file_pos=158.00 358.00
+		file_size=135.00 131.00
 		game_size=135.00 -131.00
 		offset=6.00 -16.00
 		hitboxes{

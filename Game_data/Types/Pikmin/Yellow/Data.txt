@@ -18,10 +18,6 @@ onion_starting_number = 10
 pushable = true
 pushes = false
 radius = 5
-reaches {
-    1 = 50 360
-    2 = 200 360
-}
 resistances = fatal_electricity; stunning_electricity
 throw_height_mult = 1.5
 top_leaf = Leaf_top.png

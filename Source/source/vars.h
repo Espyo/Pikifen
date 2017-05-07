@@ -277,6 +277,7 @@ extern map<string, pellet_type*> pellet_types;
 extern vector<pellet*> pellets;
 extern vector<point> precipitation;
 extern timer precipitation_timer;
+extern float pikmin_chase_range;
 extern float pikmin_grab_range;
 extern map<pikmin_type*, unsigned long> pikmin_in_onions;
 extern vector<pikmin*> pikmin_list;

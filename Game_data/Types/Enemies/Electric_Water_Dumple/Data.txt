@@ -11,8 +11,8 @@ pushable = true
 pushes = true
 radius = 50
 reaches {
-    search = 250 120 20 360
-    attack = 60 45
+    search = 250 120 30 360
+    attack = 60 30
     chase = 250 360
     
 }

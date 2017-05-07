@@ -44,7 +44,7 @@ pikmin::pikmin(
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
     near_reach = 0;
-    far_reach = 1;
+    far_reach = 2;
 }
 
 

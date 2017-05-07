@@ -18,10 +18,6 @@ onion_starting_number = 0
 pushable = true
 pushes = false
 radius = 5
-reaches {
-    1 = 50 360
-    2 = 200 360
-}
 resistances = poison
 top_leaf = Leaf_top.png
 top_bud = Pink_bud_top.png
