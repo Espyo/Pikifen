@@ -36,14 +36,11 @@ mob_type::mob_type(size_t category_id) :
     weight(0),
     pushes(false),
     pushable(false),
-    sight_radius(0),
-    near_radius(0),
     rotation_speed(DEF_ROTATION_SPEED),
     big_damage_interval(0),
     create_mob(nullptr),
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
-    near_angle(0),
     first_state_nr(INVALID),
     is_obstacle(false),
     show_health(true),
@@ -151,10 +148,7 @@ void load_mob_type_from_file(
     rs.set("max_health",          mt->max_health);
     rs.set("health_regen",        mt->health_regen);
     rs.set("move_speed",          mt->move_speed);
-    rs.set("near_radius",         mt->near_radius);
-    rs.set("near_angle",          mt->near_angle);
     rs.set("rotation_speed",      mt->rotation_speed);
-    rs.set("sight_radius",        mt->sight_radius);
     rs.set("territory_radius",    mt->territory_radius);
     rs.set("radius",              mt->radius);
     rs.set("height",              mt->height);
@@ -166,7 +160,32 @@ void load_mob_type_from_file(
     rs.set("is_obstacle",         mt->is_obstacle);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
-    mt->near_angle = deg_to_rad(mt->near_angle);
+    
+    data_node* reaches_node = file.get_child_by_name("reaches");
+    size_t n_reaches = reaches_node->get_nr_of_children();
+    for(size_t r = 0; r < n_reaches; ++r) {
+    
+        mob_type::reach_struct new_reach;
+        new_reach.name = reaches_node->get_child(r)->name;
+        vector<string> r_strings = split(reaches_node->get_child(r)->value);
+        
+        if(r_strings.size() != 2 && r_strings.size() != 4) {
+            log_error(
+                "Reach \"" + new_reach.name +
+                "\" isn't made up of 2 or 4 words!",
+                reaches_node->get_child(r)
+            );
+            continue;
+        }
+        
+        new_reach.radius_1 = s2f(r_strings[0]);
+        new_reach.angle_1 = deg_to_rad(s2f(r_strings[1]));
+        if(r_strings.size() == 4) {
+            new_reach.radius_2 = s2f(r_strings[2]);
+            new_reach.angle_2 = deg_to_rad(s2f(r_strings[3]));
+        }
+        mt->reaches.push_back(new_reach);
+    }
     
     if(load_resources) {
         data_node anim_file = data_node(folder + "/Animations.txt");

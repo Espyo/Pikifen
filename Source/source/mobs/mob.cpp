@@ -62,6 +62,8 @@ mob::mob(
     fsm(this),
     dead(false),
     big_damage_ev_queued(false),
+    near_reach(INVALID),
+    far_reach(INVALID),
     following_group(nullptr),
     subgroup_type_ptr(nullptr),
     was_thrown(false),
@@ -1351,7 +1353,7 @@ void cause_hitbox_damage(
     }
     
     //Script stuff.
-    victim->fsm.run_event(MOB_EVENT_DAMAGE, victim);
+    victim->fsm.run_event(MOB_EVENT_DAMAGE, attacker);
     
     //If before taking damage, the interval was dividable X times,
     //and after it's only dividable by Y (X>Y), an interval was crossed.

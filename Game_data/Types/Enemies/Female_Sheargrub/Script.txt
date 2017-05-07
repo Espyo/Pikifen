@@ -5,8 +5,10 @@ script {
         on_enter {
             animation = hidden
             hide = true
+            near_reach = chase
+            far_reach = chase
         }
-        on_near_opponent {
+        on_opponent_in_reach {
             state = emerging
         }
         on_leave {
@@ -36,7 +38,7 @@ script {
         on_enter {
             animation = examining
         }
-        on_near_opponent {
+        on_opponent_in_reach {
             focus = mob
             state = chasing
         }
@@ -74,7 +76,7 @@ script {
             animation = moving
             move = focused_mob
         }
-        on_lose_focused_mob {
+        on_focus_off_reach {
             state = going_home
         }
         on_far_from_home {

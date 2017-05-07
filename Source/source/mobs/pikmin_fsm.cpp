@@ -156,7 +156,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
-        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+        efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
@@ -209,7 +209,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
             efc.change_state("grabbed_by_enemy");
         }
-        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+        efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
@@ -306,7 +306,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::reach_dismiss_spot);
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+        efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
@@ -342,7 +342,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_LEAVE); {
             efc.run(pikmin_fsm::stop_being_idle);
         }
-        efc.new_event(MOB_EVENT_NEAR_OPPONENT); {
+        efc.new_event(MOB_EVENT_OPPONENT_IN_REACH); {
             efc.run(pikmin_fsm::go_to_opponent);
         }
         efc.new_event(MOB_EVENT_NEAR_CARRIABLE_OBJECT); {
@@ -353,7 +353,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_TOUCHED_LEADER); {
+        efc.new_event(MOB_EVENT_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
@@ -387,10 +387,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
+        efc.new_event(MOB_EVENT_FOCUS_OFF_REACH); {
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_DIED); {
+        efc.new_event(MOB_EVENT_FOCUS_DIED); {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
@@ -472,7 +472,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_TOUCHED_LEADER); {
+        efc.new_event(MOB_EVENT_TOUCHED_ACTIVE_LEADER); {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
@@ -507,7 +507,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_LOST_FOCUSED_MOB); {
+        efc.new_event(MOB_EVENT_FOCUS_OFF_REACH); {
             efc.change_state("idling");
         }
         efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
@@ -585,7 +585,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
-        efc.new_event(MOB_EVENT_FOCUSED_MOB_DIED); {
+        efc.new_event(MOB_EVENT_FOCUS_DIED); {
             efc.run(pikmin_fsm::lose_latched_mob);
             efc.change_state("idling");
         }
@@ -827,6 +827,7 @@ void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
  * When a Pikmin becomes idling.
  */
 void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
+    pikmin_fsm::stand_still(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_IDLING);
     unfocus_mob(m);
 }

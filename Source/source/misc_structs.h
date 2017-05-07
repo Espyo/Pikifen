@@ -14,6 +14,7 @@
 #define MISC_STRUCTS_INCLUDED
 
 #include <functional>
+#include <map>
 #include <vector>
 
 #include <allegro5/allegro.h>
@@ -21,10 +22,9 @@
 
 #include "geometry_utils.h"
 #include "mobs/mob_category.h"
-#include "mobs/mob_type.h"
-#include "mobs/pikmin_type.h"
 
 class mob;
+class pikmin_type;
 struct mob_gen;
 
 using namespace std;

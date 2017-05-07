@@ -6,14 +6,16 @@ height = 32
 max_carriers = 6
 max_health = 200
 move_speed = 40
-near_angle = 45
-near_radius = 15
 pikmin_seeds = 4
 pushable = true
 pushes = true
 radius = 20
+reaches {
+    search = 100 90 20 360
+    attack = 15 45
+    chase = 100 360
+}
 rotation_speed = 114
-sight_radius = 100
 territory_radius = 300
 value = 15
 weight = 3

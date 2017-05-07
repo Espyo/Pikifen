@@ -307,6 +307,10 @@ public:
     map<string, string> vars;
     //Are we waiting to report the big damage event?
     bool big_damage_ev_queued;
+    //Index of the reach to use for "X in reach" events.
+    size_t far_reach;
+    //Index or the reach to use for "focused mob out of reach" events.
+    size_t near_reach;
     
     //Other properties.
     //Incremental ID. Used for minor things.

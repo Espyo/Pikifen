@@ -5,15 +5,18 @@ drops_corpse = true
 height = 128
 max_carriers = 20
 max_health = 750
-move_speed = 80
-near_angle = 45
-near_radius = 40
+move_speed = 70
 pikmin_seeds = 12
 pushable = true
 pushes = true
 radius = 60
+reaches {
+    wake_up = 10 360
+    search = 250 90 10 360
+    attack = 40 45
+    chase = 250 360
+}
 rotation_speed = 114
-sight_radius = 300
 territory_radius = 500
 value = 50
 weight = 10

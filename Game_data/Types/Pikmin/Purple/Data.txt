@@ -14,12 +14,14 @@ icon = Purple_Pikmin_icon.png
 main_color = 128 0 255
 max_health = 10
 move_speed = 70
-near_radius = 50
 onion_starting_number = 0
 pushable = true
 pushes = false
 radius = 5
-sight_radius = 200
+reaches {
+    1 = 50 360
+    2 = 200 360
+}
 throw_height_mult = 0.8
 top_leaf = Leaf_top.png
 top_bud = Pink_bud_top.png

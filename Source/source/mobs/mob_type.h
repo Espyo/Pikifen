@@ -42,6 +42,17 @@ const size_t ANIM_IDLING = 0;
  */
 class mob_type {
 public:
+    struct reach_struct {
+        string name;
+        float radius_1;
+        float angle_1;
+        float radius_2;
+        float angle_2;
+        reach_struct() :
+            radius_1(-1), angle_1(-1),
+            radius_2(-1), angle_2(-1) { }
+    };
+    
     //Technical things.
     string name;
     mob_category* category;
@@ -65,10 +76,8 @@ public:
     //Behavior things.
     float max_health;
     float health_regen; //Health points per second.
-    float sight_radius;
     float territory_radius;
-    float near_radius;
-    float near_angle;
+    vector<reach_struct> reaches;
     size_t max_carriers;
     float weight;          //Pikmin strength needed to carry it.
     float big_damage_interval;
@@ -82,7 +91,7 @@ public:
     
     //Used by the special mob types, as it is not possible to control
     //which type of mob to create without a list.
-    function < mob*(
+    function < mob* (
         const point pos, const float angle, const string &vars
     ) > create_mob;
     function < void(

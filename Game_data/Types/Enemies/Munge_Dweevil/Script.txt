@@ -5,8 +5,10 @@ script {
         on_enter {
             animation = idling
             move = stop
+            near_reach = fear
+            far_reach = fear
         }
-        on_see_opponent {
+        on_opponent_in_reach {
             focus = opponent
             state = panicking
         }
@@ -31,7 +33,7 @@ script {
             timer = 0.3
             move = randomly
         }
-        on_lose_focused_mob {
+        on_focus_off_reach {
             state = relaxing
         }
         on_far_from_home {

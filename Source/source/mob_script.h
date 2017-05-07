@@ -44,16 +44,18 @@ enum MOB_ACTION_TYPES {
     MOB_ACTION_IF_NOT,
     MOB_ACTION_INC_VAR,
     MOB_ACTION_MOVE,
-    MOB_ACTION_SET_SPEED,
-    MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_PARTICLE,
     MOB_ACTION_PLAY_SOUND,
-    MOB_ACTION_SET_VAR,
     MOB_ACTION_SET_ANIMATION,
-    MOB_ACTION_SPECIAL_FUNCTION,
-    MOB_ACTION_SPAWN_PROJECTILE,
-    MOB_ACTION_SET_TIMER,
+    MOB_ACTION_SET_NEAR_REACH,
+    MOB_ACTION_SET_FAR_REACH,
+    MOB_ACTION_SET_GRAVITY,
     MOB_ACTION_SET_HEALTH,
+    MOB_ACTION_SET_SPEED,
+    MOB_ACTION_SET_TIMER,
+    MOB_ACTION_SET_VAR,
+    MOB_ACTION_SPAWN_PROJECTILE,
+    MOB_ACTION_SPECIAL_FUNCTION,
     MOB_ACTION_TURN,
     MOB_ACTION_WAIT,
 };
@@ -84,24 +86,22 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_DEATH,
     //When the mob is far away from its home.
     MOB_EVENT_FAR_FROM_HOME,
-    //When it faces and is near its opponent.
-    MOB_EVENT_FACING_OPPONENT,
-    //When it faces and is near its target object.
-    MOB_EVENT_FACING_OBJECT,
     //When the mob it was focused on died.
-    MOB_EVENT_FOCUSED_MOB_DIED,
+    MOB_EVENT_FOCUS_DIED,
+    //When the mob it was focused on went past the "far" reach.
+    MOB_EVENT_FOCUS_OFF_REACH,
     //When a frame of animation sends a signal.
     MOB_EVENT_FRAME_SIGNAL,
-    //When it can no longer see the focused mob.
-    MOB_EVENT_LOST_FOCUSED_MOB,
-    //When its mouth has a Pikmin in it.
+    //When it leaves a hazard in a sector.
+    MOB_EVENT_LEFT_HAZARD,
+    //When its mouth has Pikmin in it.
     MOB_EVENT_MOUTH_OCCUPIED,
     //When its mouth is empty.
     MOB_EVENT_MOUTH_EMPTY,
-    //When it gets near its target object.
-    MOB_EVENT_NEAR_OBJECT,
-    //When it gets near its opponent.
-    MOB_EVENT_NEAR_OPPONENT,
+    //When an object is within the "near" reach.
+    MOB_EVENT_OBJECT_IN_REACH,
+    //When an opponent is within the "near" reach.
+    MOB_EVENT_OPPONENT_IN_REACH,
     //When a Pikmin lands on it.
     MOB_EVENT_PIKMIN_LANDED,
     //When a Pikmin latches on to it.
@@ -112,18 +112,12 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_REACHED_DESTINATION,
     //When it revives from being dead.
     MOB_EVENT_REVIVED,
-    //When it sees an object.
-    MOB_EVENT_SEEN_OBJECT,
-    //When it sees an opponent.
-    MOB_EVENT_SEEN_OPPONENT,
     //When it gets touched by a leader.
-    MOB_EVENT_TOUCHED_LEADER,
+    MOB_EVENT_TOUCHED_ACTIVE_LEADER,
     //When it touches a hazard (sector or hitbox).
     MOB_EVENT_TOUCHED_HAZARD,
     //When it touches a sprayed spray.
     MOB_EVENT_TOUCHED_SPRAY,
-    //When it leaves a hazard in a sector.
-    MOB_EVENT_LEFT_HAZARD,
     //When it gets touched by an object.
     MOB_EVENT_TOUCHED_OBJECT,
     //When it gets touched by an opponent.

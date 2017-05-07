@@ -529,7 +529,12 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         
         mob* m2_ptr = mobs[m2];
         dist d(m_ptr->pos, m2_ptr->pos);
-        
+        float face_diff =
+            get_angle_smallest_dif(
+                m_ptr->angle,
+                get_angle(m_ptr->pos, m2_ptr->pos)
+            );
+            
         //Check if mob 1 should be pushed by mob 2.
         if(
             m2_ptr->type->pushes &&
@@ -553,91 +558,37 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         }
         
         if(!m2_ptr->dead) {
-            //Check "see"s.
-            mob_event* see_op_ev =
-                q_get_event(
-                    m_ptr, MOB_EVENT_SEEN_OPPONENT
-                );
-            mob_event* see_ob_ev =
-                q_get_event(
-                    m_ptr, MOB_EVENT_SEEN_OBJECT
-                );
-            if(see_op_ev || see_ob_ev) {
+            //Check reaches.
             
-                if(d <= m_ptr->type->sight_radius) {
-                    if(see_ob_ev) {
-                        see_ob_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                    if(see_op_ev && should_attack(m_ptr, m2_ptr)) {
-                        see_op_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                }
+            mob_event* obir_ev =
+                q_get_event(m_ptr, MOB_EVENT_OBJECT_IN_REACH);
+            mob_event* opir_ev =
+                q_get_event(m_ptr, MOB_EVENT_OPPONENT_IN_REACH);
                 
-            }
-            
-            //Check "near"s.
-            mob_event* near_op_ev =
-                q_get_event(m_ptr, MOB_EVENT_NEAR_OPPONENT);
-            mob_event* near_ob_ev =
-                q_get_event(m_ptr, MOB_EVENT_NEAR_OBJECT);
-            if(near_op_ev || near_ob_ev) {
-            
+            if(m_ptr->near_reach != INVALID && (obir_ev || opir_ev)) {
+                mob_type::reach_struct* r_ptr =
+                    &m_ptr->type->reaches[m_ptr->near_reach];
                 if(
-                    d <=
                     (
-                        m_ptr->type->radius +
-                        m2_ptr->type->radius +
-                        m_ptr->type->near_radius
+                        d <= r_ptr->radius_1 +
+                        (m_ptr->type->radius + m2_ptr->type->radius) &&
+                        face_diff <= r_ptr->angle_1 / 2.0
+                    ) || (
+                        d <= r_ptr->radius_2 +
+                        (m_ptr->type->radius + m2_ptr->type->radius) &&
+                        face_diff <= r_ptr->angle_2 / 2.0
                     )
+                    
                 ) {
-                    if(near_ob_ev) {
-                        near_ob_ev->run(m_ptr, (void*) m2_ptr);
+                    if(obir_ev) {
+                        obir_ev->run(m_ptr, (void*) m2_ptr);
                     }
-                    if(
-                        near_op_ev &&
-                        should_attack(m_ptr, m2_ptr) &&
-                        !m2_ptr->dead
-                    ) {
-                        near_op_ev->run(m_ptr, (void*) m2_ptr);
+                    if(opir_ev && should_attack(m_ptr, m2_ptr)) {
+                        opir_ev->run(m_ptr, (void*) m2_ptr);
                     }
                 }
-                
             }
             
-            //Check if it's facing.
-            mob_event* facing_op_ev =
-                q_get_event(m_ptr, MOB_EVENT_FACING_OPPONENT);
-            mob_event* facing_ob_ev =
-                q_get_event(m_ptr, MOB_EVENT_FACING_OBJECT);
-            if(facing_op_ev || facing_ob_ev) {
-            
-                float angle_dif =
-                    get_angle_smallest_dif(
-                        m_ptr->angle,
-                        get_angle(m_ptr->pos, m2_ptr->pos)
-                    );
-                if(
-                    d <=
-                    (
-                        m_ptr->type->radius +
-                        m2_ptr->type->radius +
-                        m_ptr->type->near_radius
-                    ) &&
-                    angle_dif <= (m_ptr->type->near_angle / 2.0)
-                ) {
-                
-                    if(facing_ob_ev) {
-                        facing_ob_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                    if(
-                        facing_op_ev &&
-                        should_attack(m_ptr, m2_ptr)
-                    ) {
-                        facing_op_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                }
-                
-            }
         }
         
         //Check touches. This does not use hitboxes,
@@ -645,7 +596,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         mob_event* touch_op_ev =
             q_get_event(m_ptr, MOB_EVENT_TOUCHED_OPPONENT);
         mob_event* touch_le_ev =
-            q_get_event(m_ptr, MOB_EVENT_TOUCHED_LEADER);
+            q_get_event(m_ptr, MOB_EVENT_TOUCHED_ACTIVE_LEADER);
         mob_event* touch_ob_ev =
             q_get_event(m_ptr, MOB_EVENT_TOUCHED_OBJECT);
         mob_event* pik_land_ev =
@@ -1060,16 +1011,45 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
     //Focused on a mob.
     if(m_ptr->focused_mob) {
     
-        dist d(m_ptr->pos, m_ptr->focused_mob->pos);
         if(m_ptr->focused_mob->dead) {
-            m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_DIED);
+            m_ptr->fsm.run_event(MOB_EVENT_FOCUS_DIED);
+            m_ptr->fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
         }
         
         //We have to recheck if the focused mob is not NULL, because
-        //sending MOB_EVENT_FOCUSED_MOB_DIED could've set this to NULL.
+        //sending MOB_EVENT_FOCUS_DIED could've set this to NULL.
         if(m_ptr->focused_mob) {
-            if(d > (m_ptr->type->sight_radius * 1.1f)) {
-                m_ptr->fsm.run_event(MOB_EVENT_LOST_FOCUSED_MOB);
+        
+            mob* focus = m_ptr->focused_mob;
+            
+            mob_event* for_ev =
+                q_get_event(m_ptr, MOB_EVENT_FOCUS_OFF_REACH);
+                
+            if(m_ptr->far_reach != INVALID && for_ev) {
+                dist d(m_ptr->pos, focus->pos);
+                float face_diff =
+                    get_angle_smallest_dif(
+                        m_ptr->angle,
+                        get_angle(m_ptr->pos, focus->pos)
+                    );
+                    
+                mob_type::reach_struct* r_ptr =
+                    &m_ptr->type->reaches[m_ptr->far_reach];
+                if(
+                    (
+                        d > r_ptr->radius_1 +
+                        (m_ptr->type->radius + focus->type->radius) ||
+                        face_diff > r_ptr->angle_1 / 2.0f
+                    ) && (
+                        d > r_ptr->radius_2 +
+                        (m_ptr->type->radius + focus->type->radius) ||
+                        face_diff > r_ptr->angle_2 / 2.0f
+                    )
+                    
+                ) {
+                    for_ev->run(m_ptr);
+                }
+                
             }
         }
         

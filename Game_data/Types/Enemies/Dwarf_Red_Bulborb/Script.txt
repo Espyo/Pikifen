@@ -12,8 +12,9 @@ script {
         on_enter {
             animation = looking
             move = stop
+            near_reach = search
         }
-        on_see_opponent {
+        on_opponent_in_reach {
             if = ignoring false
             focus = mob
             if = ignoring false
@@ -57,11 +58,11 @@ script {
     
     exploring {
         on_enter {
-            timer = 2
             move = randomly
             animation = moving
+            timer = 2
         }
-        on_see_opponent {
+        on_opponent_in_reach {
             focus = mob
             state = chasing
         }
@@ -92,11 +93,13 @@ script {
         on_enter {
             animation = moving
             move = focused_mob
+            near_reach = attack
+            far_reach = chase
         }
-        on_face_opponent {
+        on_opponent_in_reach {
             state = attacking
         }
-        on_lose_focused_mob {
+        on_focus_off_reach {
             state = examining
         }
         on_far_from_home {
@@ -195,9 +198,10 @@ script {
     
     returning {
         on_enter {
-            timer = 2
             move = home
             animation = moving
+            timer = 2
+            near_reach = search
         }
         on_leave {
             timer = 0
@@ -208,7 +212,9 @@ script {
         on_reach_destination {
             state = examining
         }
-        on_see_opponent {
+        on_opponent_in_reach {
+            if = ignoring false
+            focus = mob
             if = ignoring false
             state = chasing
         }

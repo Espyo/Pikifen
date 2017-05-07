@@ -284,6 +284,33 @@ mob_action::mob_action(
         vf.push_back(s2f(dn->value));
         
         
+    } else if(n == "far_reach" || n == "near_reach") {
+    
+        if(n == "far_reach") {
+            type = MOB_ACTION_SET_FAR_REACH;
+        } else {
+            type = MOB_ACTION_SET_NEAR_REACH;
+        }
+        
+        if(dn->value.empty()) {
+            vi.push_back(INVALID);
+            return;
+        }
+        
+        for(size_t r = 0; r < mt->reaches.size(); ++r) {
+            if(mt->reaches[r].name == dn->value) {
+                vi.push_back(r);
+                return;
+            }
+        }
+        
+        log_error(
+            "Reach-setting action refers to non-existent reach \"" +
+            dn->value + "\"!", dn
+        );
+        valid = false;
+        
+        
     } else if(n == "var") {
     
         type = MOB_ACTION_SET_VAR;
@@ -594,6 +621,14 @@ void mob_action::run(
         m->set_timer(t);
         
         
+    } else if(type == MOB_ACTION_SET_FAR_REACH) {
+    
+        m->far_reach = vi[0];
+        
+    } else if(type == MOB_ACTION_SET_NEAR_REACH) {
+    
+        m->near_reach = vi[0];
+        
     } else if(type == MOB_ACTION_SET_VAR) {
     
         if(vs.size() >= 2) {
@@ -708,34 +743,33 @@ void mob_fsm::run_event(
 mob_event::mob_event(data_node* d, vector<mob_action*> a) :
     actions(a) {
     
+#define r(name, number) \
+    else if(n == (name)) type = (number)
+    
     string n = d->name;
-    if(n == "on_enter")                  type = MOB_EVENT_ON_ENTER;
-    else if(n == "on_leave")             type = MOB_EVENT_ON_LEAVE;
-    else if(n == "on_animation_end")     type = MOB_EVENT_ANIMATION_END;
-    else if(n == "on_big_damage")        type = MOB_EVENT_BIG_DAMAGE;
-    else if(n == "on_bottomless_pit")    type = MOB_EVENT_BOTTOMLESS_PIT;
-    else if(n == "on_damage")            type = MOB_EVENT_DAMAGE;
-    else if(n == "on_death")             type = MOB_EVENT_DEATH;
-    else if(n == "on_face_opponent")     type = MOB_EVENT_FACING_OPPONENT;
-    else if(n == "on_face_object")       type = MOB_EVENT_FACING_OBJECT;
-    else if(n == "on_far_from_home")     type = MOB_EVENT_FAR_FROM_HOME;
-    else if(n == "on_lose_focused_mob")  type = MOB_EVENT_LOST_FOCUSED_MOB;
-    else if(n == "on_mouth_empty")       type = MOB_EVENT_MOUTH_EMPTY;
-    else if(n == "on_mouth_occupied")    type = MOB_EVENT_MOUTH_OCCUPIED;
-    else if(n == "on_near_object")       type = MOB_EVENT_NEAR_OBJECT;
-    else if(n == "on_near_opponent")     type = MOB_EVENT_NEAR_OPPONENT;
-    else if(n == "on_pikmin_land")       type = MOB_EVENT_PIKMIN_LANDED;
-    else if(n == "on_pikmin_latch")      type = MOB_EVENT_PIKMIN_LATCHED;
-    else if(n == "on_pikmin_touch")      type = MOB_EVENT_PIKMIN_TOUCHED;
-    else if(n == "on_reach_destination") type = MOB_EVENT_REACHED_DESTINATION;
-    else if(n == "on_revival")           type = MOB_EVENT_REVIVED;
-    else if(n == "on_see_object")        type = MOB_EVENT_SEEN_OBJECT;
-    else if(n == "on_see_opponent")      type = MOB_EVENT_SEEN_OPPONENT;
-    else if(n == "on_touch_hazard")      type = MOB_EVENT_TOUCHED_HAZARD;
-    else if(n == "on_touch_opponent")    type = MOB_EVENT_TOUCHED_OPPONENT;
-    else if(n == "on_touch_spray")       type = MOB_EVENT_TOUCHED_SPRAY;
-    else if(n == "on_timer")             type = MOB_EVENT_TIMER;
-    else if(n == "on_wall")              type = MOB_EVENT_TOUCHED_WALL;
+    if(n == "on_enter")  type = MOB_EVENT_ON_ENTER;
+    r("on_leave",               MOB_EVENT_ON_LEAVE);
+    r("on_animation_end",       MOB_EVENT_ANIMATION_END);
+    r("on_big_damage",          MOB_EVENT_BIG_DAMAGE);
+    r("on_bottomless_pit",      MOB_EVENT_BOTTOMLESS_PIT);
+    r("on_damage",              MOB_EVENT_DAMAGE);
+    r("on_death",               MOB_EVENT_DEATH);
+    r("on_far_from_home",       MOB_EVENT_FAR_FROM_HOME);
+    r("on_focus_off_reach",     MOB_EVENT_FOCUS_OFF_REACH);
+    r("on_mouth_empty",         MOB_EVENT_MOUTH_EMPTY);
+    r("on_mouth_occupied",      MOB_EVENT_MOUTH_OCCUPIED);
+    r("on_object_in_reach",     MOB_EVENT_OBJECT_IN_REACH);
+    r("on_opponent_in_reach",   MOB_EVENT_OPPONENT_IN_REACH);
+    r("on_pikmin_land",         MOB_EVENT_PIKMIN_LANDED);
+    r("on_pikmin_latch",        MOB_EVENT_PIKMIN_LATCHED);
+    r("on_pikmin_touch",        MOB_EVENT_PIKMIN_TOUCHED);
+    r("on_reach_destination",   MOB_EVENT_REACHED_DESTINATION);
+    r("on_revival",             MOB_EVENT_REVIVED);
+    r("on_touch_hazard",        MOB_EVENT_TOUCHED_HAZARD);
+    r("on_touch_opponent",      MOB_EVENT_TOUCHED_OPPONENT);
+    r("on_touch_spray",         MOB_EVENT_TOUCHED_SPRAY);
+    r("on_timer",               MOB_EVENT_TIMER);
+    r("on_wall",                MOB_EVENT_TOUCHED_WALL);
     else {
         type = MOB_EVENT_UNKNOWN;
         log_error("Unknown script event name \"" + n + "\"!", d);

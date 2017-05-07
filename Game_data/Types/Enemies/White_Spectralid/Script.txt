@@ -53,11 +53,16 @@ script {
         on_enter {
             animation = resting
             timer = 5
+            near_reach = fear
+            far_reach = fear
         }
         on_timer {
             state = flying
         }
-        on_near_opponent {
+        on_opponent_in_reach {
+            state = flying
+        }
+        on_touch_opponent {
             state = flying
         }
         on_pikmin_land {
