@@ -40,6 +40,7 @@ mob::mob(
     to_delete(false),
     reached_destination(false),
     speed_z(0),
+    z_cap(FLT_MAX),
     home(pos),
     gravity_mult(1.0f),
     unpushable(false),
@@ -326,9 +327,9 @@ void mob::tick_physics() {
             new_ground_sector = new_center_sector;
         }
         
-        //Quick panic handler: if it's under the ground, pop it out.
         if(z < new_center_sector->z) {
-            z = new_center_sector->z;
+            //If it'd end up under the ground, refuse the move.
+            break;
         }
         
         //Before checking the edges, let's consult the blockmap and look at
@@ -444,6 +445,7 @@ void mob::tick_physics() {
                         //and if this step is larger than any step
                         //encountered of all edges crossed.
                         if(
+                            !was_thrown &&
                             tallest_sector->z <= z + SECTOR_STEP &&
                             tallest_sector->z > step_sector->z
                         ) {
@@ -624,10 +626,11 @@ void mob::tick_physics() {
                 //movement and slide vectors.
                 //But nuts to that, this is just as nice, and a lot simpler!
                 total_move_speed *= 1 - (slide_angle_dif / M_PI);
-                move_speed = angle_to_coordinates(
-                                 slide_angle, total_move_speed
-                             );
-                             
+                move_speed =
+                    angle_to_coordinates(
+                        slide_angle, total_move_speed
+                    );
+                    
             }
             
         }
@@ -667,16 +670,26 @@ void mob::tick_physics() {
         }
     }
     
+    //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
+    //than intended. z_cap forces a cap. FLT_MAX = no cap.
+    if(speed_z <= 0) {
+        z_cap = FLT_MAX;
+    } else if(z_cap < FLT_MAX) {
+        z = min(z, z_cap);
+    }
+    
     //Gravity.
     if(gravity_mult > 0) {
         if(z > ground_sector->z) {
             speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
+        } else {
+            speed_z = 0;
         }
     } else {
         speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
     }
     
-    //On a sector that has a hazard, not on the floor.
+    //On a sector that has a hazard that is not on the floor.
     if(z > ground_sector->z && !ground_sector->hazard_floor) {
         for(size_t h = 0; h < ground_sector->hazards.size(); ++h) {
             fsm.run_event(
@@ -694,6 +707,9 @@ void mob::tick_physics() {
         );
     }
     on_hazard = new_on_hazard;
+    
+    //Quick panic check: if it's somehow inside the ground, pop it out.
+    z = max(z, ground_sector->z);
 }
 
 

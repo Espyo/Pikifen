@@ -539,6 +539,22 @@ void gameplay::do_game_drawing(
             )
         );
         
+        if(!throw_can_reach_cursor) {
+            unsigned char alpha =
+                0 + (sin(cursor_invalid_effect) + 1) * 127.0;
+                
+            draw_sprite(
+                bmp_cursor_invalid,
+                leader_cursor_w,
+                point(
+                    al_get_bitmap_width(bmp_cursor) * 0.5,
+                    al_get_bitmap_height(bmp_cursor) * 0.5
+                ),
+                0,
+                change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
+            );
+        }
+        
         
         /* Layer 11
         *****************

@@ -37,7 +37,8 @@ public:
     float attack_power;
     float carry_strength;
     float carry_speed;
-    float throw_height_mult;
+    float throw_strength_mult;
+    float max_throw_height;
     bool has_onion;
     bool can_dig;
     bool can_fly;

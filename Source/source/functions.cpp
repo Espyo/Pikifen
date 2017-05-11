@@ -430,6 +430,20 @@ ALLEGRO_COLOR get_daylight_color() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the highest height a thrown mob can reach, given the Z speed
+ * of the throw. This is only the theoritical max; framerate may tamper
+ * with the exact value.
+ */
+float get_max_throw_height(const float throw_strength) {
+    /* Formula from
+     * http://www.dummies.com/education/science/physics/
+     * how-to-calculate-the-maximum-height-of-a-projectile/
+     */
+    return (-pow(throw_strength, 2)) / (2 * GRAVITY_ADDER);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the width and height of a block of multi-line text.
  * Lines are split by a single "\n" character.
  * These are the dimensions of a bitmap
@@ -491,6 +505,13 @@ float get_sun_strength() {
     
     //If anything goes wrong, return a failsafe.
     return 1.0f;
+}
+
+/* ----------------------------------------------------------------------------
+ * Returns the Z speed for a mob throw, given a height strength multiplier.
+ */
+float get_throw_z_speed(const float strength_multiplier) {
+    return -(GRAVITY_ADDER) * (THROW_STRENGTH_MULTIPLIER * strength_multiplier);
 }
 
 

@@ -33,8 +33,9 @@ public:
     unsigned int punch_strength;
     //Time until the Pikmin is actually popped out of the ground.
     float pluck_delay;
-    //When this leader is thrown, multiply the height by this.
-    float throw_height_mult;
+    //When this leader is thrown, multiply the vertical throw strength by this.
+    float throw_strength_mult;
+    float max_throw_height;
     
     sample_struct sfx_whistle;
     sample_struct sfx_dismiss;

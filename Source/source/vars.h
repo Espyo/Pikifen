@@ -51,6 +51,7 @@ using namespace std;
 //Bitmaps.
 extern ALLEGRO_BITMAP* bmp_checkbox_check;
 extern ALLEGRO_BITMAP* bmp_cursor;
+extern ALLEGRO_BITMAP* bmp_cursor_invalid;
 extern ALLEGRO_BITMAP* bmp_enemy_spirit;
 extern ALLEGRO_BITMAP* bmp_group_move_arrow;
 extern ALLEGRO_BITMAP* bmp_icon;
@@ -315,6 +316,7 @@ extern vector<spray_type> spray_types;
 extern float standard_pikmin_height;
 extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
+extern bool throw_can_reach_cursor;
 extern float transition_time;
 extern bool transition_fade_in;
 extern map<string, treasure_type*> treasure_types;

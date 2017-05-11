@@ -144,6 +144,32 @@ void gameplay::do_aesthetic_logic() {
             min(cursor_height_diff_light, 0.33f);
     }
     
+    //Whether the held Pikmin can reach the cursor.
+    throw_can_reach_cursor = true;
+    if(cur_leader_ptr->holding_pikmin) {
+    
+        if(!cursor_sector || cursor_sector->type == SECTOR_TYPE_BLOCKING) {
+            throw_can_reach_cursor = false;
+            
+        } else {
+            float max_throw_z = 0;
+            size_t cat = cur_leader_ptr->holding_pikmin->type->category->id;
+            if(cat == MOB_CATEGORY_PIKMIN) {
+                max_throw_z =
+                    ((pikmin*) cur_leader_ptr->holding_pikmin)->pik_type->max_throw_height;
+            } else if(cat == MOB_CATEGORY_LEADERS) {
+                max_throw_z =
+                    ((leader*) cur_leader_ptr->holding_pikmin)->lea_type->max_throw_height;
+            }
+            
+            if(max_throw_z > 0) {
+                throw_can_reach_cursor =
+                    cursor_sector->z < cur_leader_ptr->z + max_throw_z;
+            }
+        }
+    }
+    
+    
     //Specific animations.
     spark_animation.instance.tick(delta_t);
     

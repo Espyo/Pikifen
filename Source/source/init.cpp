@@ -457,6 +457,7 @@ void init_misc_graphics() {
     //Graphics.
     bmp_checkbox_check = load_bmp(   "Checkbox_check.png");
     bmp_cursor = load_bmp(           "Cursor.png");
+    bmp_cursor_invalid = load_bmp(   "Cursor_invalid.png");
     bmp_enemy_spirit = load_bmp(     "Enemy_spirit.png");
     bmp_idle_glow = load_bmp(        "Idle_glow.png");
     bmp_info_spot = load_bmp(        "Info_spot.png");
@@ -696,6 +697,7 @@ void destroy_resources() {
     
     al_destroy_bitmap(bmp_checkbox_check);
     al_destroy_bitmap(bmp_cursor);
+    al_destroy_bitmap(bmp_cursor_invalid);
     al_destroy_bitmap(bmp_enemy_spirit);
     al_destroy_bitmap(bmp_icon);
     al_destroy_bitmap(bmp_idle_glow);

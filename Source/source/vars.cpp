@@ -19,6 +19,7 @@ using namespace std;
 
 ALLEGRO_BITMAP* bmp_checkbox_check = NULL;
 ALLEGRO_BITMAP* bmp_cursor = NULL;
+ALLEGRO_BITMAP* bmp_cursor_invalid = NULL;
 ALLEGRO_BITMAP* bmp_enemy_spirit = NULL;
 ALLEGRO_BITMAP* bmp_group_move_arrow = NULL;
 ALLEGRO_BITMAP* bmp_icon = NULL;
@@ -240,6 +241,7 @@ vector<spray_type> spray_types;
 float standard_pikmin_height = 24;
 float standard_pikmin_radius = 5;
 map<string, status_type> status_types;
+bool throw_can_reach_cursor = true;
 map<string, treasure_type*> treasure_types;
 vector<treasure*> treasures;
 ALLEGRO_VOICE* voice = NULL;

@@ -23,7 +23,7 @@ leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(DEF_WHISTLE_RANGE),
     punch_strength(DEF_PUNCH_STRENGTH),
-    throw_height_mult(1.0),
+    throw_strength_mult(1.0),
     pluck_delay(0.6),
     bmp_icon(nullptr) {
     
@@ -51,11 +51,11 @@ void leader_type::load_from_file(
         );
     punch_strength =
         s2i(file->get_child_by_name("punch_strength")->value); //TODO default.
-    throw_height_mult =
+    throw_strength_mult =
         s2f(
-            file->get_child_by_name("throw_height_mult")->get_value_or_default(
-                "1"
-            )
+            file->get_child_by_name(
+                "throw_strength_mult"
+            )->get_value_or_default("1")
         );
         
     if(load_resources) {
@@ -87,4 +87,7 @@ void leader_type::load_from_file(
     
 #undef new_conversion
     
+    max_throw_height =
+        get_max_throw_height(get_throw_z_speed(throw_strength_mult));
+        
 }

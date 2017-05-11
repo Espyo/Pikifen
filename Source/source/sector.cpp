@@ -185,10 +185,8 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
                     
                     if(add_edge) bmap.edges[bx][by].push_back(e_ptr);
                     
-                    if(e_ptr->sectors[0]) {
+                    if(e_ptr->sectors[0] || e_ptr->sectors[1]) {
                         bmap.sectors[bx][by].insert(e_ptr->sectors[0]);
-                    }
-                    if(e_ptr->sectors[1]) {
                         bmap.sectors[bx][by].insert(e_ptr->sectors[1]);
                     }
                 }
@@ -1253,12 +1251,14 @@ sector* get_sector(
         
         for(auto s = sectors->begin(); s != sectors->end(); ++s) {
         
+            if(!(*s)) {
+                continue;
+            }
             if(is_point_in_sector(p, *s)) {
                 return *s;
             }
         }
         
-        if(sector_nr) *sector_nr = INVALID;
         return NULL;
         
     } else {

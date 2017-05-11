@@ -92,10 +92,12 @@ void generate_area_images();
 unsigned char get_blackout_strength();
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
+float get_max_throw_height(const float throw_strength);
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
 );
 float get_sun_strength();
+float get_throw_z_speed(const float strength_multiplier);
 string get_var_value(
     const string &vars_string, const string &var, const string &def
 );

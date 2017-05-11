@@ -38,6 +38,10 @@ const float GRAVITY_ADDER = -2600.0f;
 const float MOB_KNOCKBACK_H_POWER = 130.0f;
 const float MOB_KNOCKBACK_V_POWER = 200.0f;
 const float MOB_PUSH_EXTRA_AMOUNT = 50.0f;
+//When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
+const float THROW_DISTANCE_MULTIPLIER = 0.49f;
+//When a leader throws a Pikmin, multiply the strength by this.
+const float THROW_STRENGTH_MULTIPLIER = 0.457f;
 
 enum MOB_TEAMS {
     //Can hurt/target anyone and be hurt/targeted by anyone, on any team.
@@ -221,6 +225,9 @@ public:
     //Speed variables for physics only. Don't touch.
     point speed;
     float speed_z;
+    //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
+    //than intended. z_cap forces a cap. FLT_MAX = no cap.
+    float z_cap;
     //Starting coordinates; what the mob calls "home".
     point home;
     //Speed multiplies by this much each second. //TODO use this.

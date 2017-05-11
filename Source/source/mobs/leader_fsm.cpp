@@ -983,11 +983,6 @@ void leader_fsm::grab_mob(mob* m, void* info1, void* info2) {
 }
 
 
-//When a leader throws a Pikmin, multiply the horizontal distance by 1/this.
-const float THROW_DISTANCE_MULTIPLIER = 0.49f;
-//When a leader throws a Pikmin, multiply the strength by this.
-const float THROW_STRENGTH_MULTIPLIER = 0.457f;
-
 /* ----------------------------------------------------------------------------
  * When a leader throws the grabbed mob.
  */
@@ -1009,13 +1004,12 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     float throw_height_mult = 1.0;
     if(holding_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
         throw_height_mult =
-            ((pikmin*) holding_ptr)->pik_type->throw_height_mult;
+            ((pikmin*) holding_ptr)->pik_type->throw_strength_mult;
     } else if(holding_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
         throw_height_mult =
-            ((leader*) holding_ptr)->lea_type->throw_height_mult;
+            ((leader*) holding_ptr)->lea_type->throw_strength_mult;
     }
     
-    //This results in a 1.3 second throw, just like in Pikmin 2.
     //Regular Pikmin are thrown about 288.88 units high.
     holding_ptr->speed.x =
         cos(angle) * mag * THROW_DISTANCE_MULTIPLIER *
@@ -1023,8 +1017,10 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     holding_ptr->speed.y =
         sin(angle) * mag * THROW_DISTANCE_MULTIPLIER *
         (1.0 / (THROW_STRENGTH_MULTIPLIER * throw_height_mult));
-    holding_ptr->speed_z =
-        -(GRAVITY_ADDER) * (THROW_STRENGTH_MULTIPLIER * throw_height_mult);
+    holding_ptr->speed_z = get_throw_z_speed(throw_height_mult);
+    
+    holding_ptr->z_cap =
+        m->z + get_max_throw_height(holding_ptr->speed_z);
         
     holding_ptr->angle = angle;
     holding_ptr->face(angle);

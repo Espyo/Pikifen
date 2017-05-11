@@ -27,7 +27,7 @@ pikmin_type::pikmin_type() :
     attack_power(1),
     carry_speed(1),
     bmp_icon(nullptr),
-    throw_height_mult(1.0),
+    throw_strength_mult(1.0),
     has_onion(true),
     can_dig(false),
     can_fly(false),
@@ -70,10 +70,10 @@ void pikmin_type::load_from_file(
     vector<pair<size_t, string> >* anim_conversions
 ) {
     attack_power = s2f(file->get_child_by_name("attack_power")->value);
-    throw_height_mult =
+    throw_strength_mult =
         s2f(
             file->get_child_by_name(
-                "throw_height_mult"
+                "throw_strength_mult"
             )->get_value_or_default("1")
         );
     can_carry_bomb_rocks =
@@ -127,4 +127,7 @@ void pikmin_type::load_from_file(
     
     pikmin_in_onions[this] =
         s2i(file->get_child_by_name("onion_starting_number")->value);
+        
+    max_throw_height =
+        get_max_throw_height(get_throw_z_speed(throw_strength_mult));
 }
