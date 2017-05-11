@@ -176,9 +176,9 @@ extern string dev_tool_auto_start_option;
 extern string dev_tool_auto_start_mode;
 extern bool dev_tool_change_speed;
 extern float dev_tool_change_speed_mult;
+extern bool dev_tool_geometry_info;
 extern mob* dev_tool_info_lock;
 extern pikmin_type* dev_tool_last_pikmin_type;
-extern bool dev_tool_show_mouse_coords;
 //For each key (F2 - F11, 0 - 9), what tool is bound to it?
 extern unsigned char dev_tool_keys[20];
 extern ALLEGRO_DISPLAY* display;

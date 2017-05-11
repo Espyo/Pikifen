@@ -184,16 +184,16 @@ void init_dev_tools() {
         
         if(tool_name == "area_image") {
             dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;
-        } else if(tool_name == "coordinates") {
-            dev_tool_keys[k] = DEV_TOOL_COORDINATES;
+        } else if(tool_name == "change_speed") {
+            dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
+        } else if(tool_name == "geometry_info") {
+            dev_tool_keys[k] = DEV_TOOL_GEOMETRY_INFO;
         } else if(tool_name == "hurt_mob") {
             dev_tool_keys[k] = DEV_TOOL_HURT_MOB;
         } else if(tool_name == "mob_info") {
             dev_tool_keys[k] = DEV_TOOL_MOB_INFO;
         } else if(tool_name == "new_pikmin") {
             dev_tool_keys[k] = DEV_TOOL_NEW_PIKMIN;
-        } else if(tool_name == "change_speed") {
-            dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
         } else if(tool_name == "teleport") {
             dev_tool_keys[k] = DEV_TOOL_TELEPORT;
         } else {

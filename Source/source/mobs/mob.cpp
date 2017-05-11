@@ -249,9 +249,9 @@ void mob::tick_physics() {
                 
             } else {
                 if(chase_teleport_z) {
-                    ground_sector = sec;
                     z = *chase_teleport_z;
                 }
+                ground_sector = sec;
                 speed.x = speed.y = speed_z = 0;
                 pos = final_target_pos;
                 finished_moving = true;

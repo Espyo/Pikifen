@@ -35,8 +35,13 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             &mouse_cursor_w.x, &mouse_cursor_w.y
         );
         
-        lafi::widget* widget_under_mouse =
-            gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+        lafi::widget* widget_under_mouse;
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
+            widget_under_mouse = NULL;
+        } else {
+            widget_under_mouse =
+                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+        }
         (
             (lafi::label*) gui->widgets["lbl_status_bar"]
         )->text =

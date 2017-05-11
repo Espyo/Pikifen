@@ -73,8 +73,8 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_CHANGE_SPEED) {
                 dev_tool_change_speed = !dev_tool_change_speed;
                 
-            } else if(id == DEV_TOOL_COORDINATES) {
-                dev_tool_show_mouse_coords = !dev_tool_show_mouse_coords;
+            } else if(id == DEV_TOOL_GEOMETRY_INFO) {
+                dev_tool_geometry_info = !dev_tool_geometry_info;
                 
             } else if(id == DEV_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
@@ -407,7 +407,6 @@ void handle_button(
                                         mob_categories.get(MOB_CATEGORY_PIKMIN),
                                         onions[o]->pos, pik_type, 0, ""
                                     );
-                                add_to_group(cur_leader_ptr, new_pik);
                             }
                             done = true;
                         }

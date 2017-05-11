@@ -79,7 +79,7 @@ To add a glow to the cursor on GIMP
     Alpha to selection.
     Grow selection by 2.
     Selection blur by 5.
-    Bucket fill the selection in a different layer.
+    Bucket fill the selection with white, in a layer under the cursor.
     Set that layer's opacity to 75%.
 
 

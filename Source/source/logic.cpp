@@ -524,11 +524,21 @@ void gameplay::do_gameplay_logic() {
     }
     
     //Print mouse coordinates.
-    if(dev_tool_show_mouse_coords) {
-        print_info(
+    if(dev_tool_geometry_info) {
+        sector* mouse_sector =
+            get_sector(mouse_cursor_w, NULL, true);
+        string str =
             "Mouse coordinates: " + f2s(mouse_cursor_w.x) +
-            ", " + f2s(mouse_cursor_w.y) + "."
-        );
+            ", " + f2s(mouse_cursor_w.y) + ".\n"
+            "Sector under mouse: " +
+            (mouse_sector ? "" : "None.") + "\n";
+        if(mouse_sector) {
+            str +=
+                "  Z: " + f2s(mouse_sector->z) + ".\n"
+                "  Texture: " +
+                mouse_sector->texture_info.file_name + ".";
+        }
+        print_info(str);
     }
     
     info_print_timer.tick(delta_t);
