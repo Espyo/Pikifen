@@ -42,16 +42,18 @@ void bridge_type::load_from_file(
     data_node* file, const bool load_resources,
     vector<pair<size_t, string> >* anim_conversions
 ) {
-    string main_texture_name = file->get_child_by_name("main_texture")->value;
-    if(!main_texture_name.empty()) {
-        bmp_main_texture =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_name);
-    }
-    
-    string rail_texture_name = file->get_child_by_name("rail_texture")->value;
-    if(!rail_texture_name.empty()) {
-        bmp_rail_texture =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_name);
+    if(load_resources) {
+        string main_texture_name = file->get_child_by_name("main_texture")->value;
+        if(!main_texture_name.empty()) {
+            bmp_main_texture =
+                bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_name);
+        }
+        
+        string rail_texture_name = file->get_child_by_name("rail_texture")->value;
+        if(!rail_texture_name.empty()) {
+            bmp_rail_texture =
+                bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_name);
+        }
     }
     
     anim_conversions->push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));

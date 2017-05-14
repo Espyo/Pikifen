@@ -209,15 +209,9 @@ void area_data::remove_vertex(const size_t v_nr) {
                 e_ptr->vertex_nrs[v] > v_nr
             ) {
                 e_ptr->vertex_nrs[v]--;
-            } else if(e_ptr->vertex_nrs[v] == v_nr) {
+            } else {
                 //This should never happen.
-                log_error(
-                    "ENGINE WARNING: Deleting vertex #" +
-                    i2s(v_nr) + " although it is in use by edge #" +
-                    i2s(e) + "!"
-                );
-                e_ptr->vertex_nrs[v] = INVALID;
-                e_ptr->vertexes[v] = NULL;
+                assert(e_ptr->vertex_nrs[v] != v_nr);
             }
         }
     }
@@ -250,15 +244,9 @@ void area_data::remove_edge(const size_t e_nr) {
                 v_ptr->edge_nrs[e] > e_nr
             ) {
                 v_ptr->edge_nrs[e]--;
-            } else if(v_ptr->edge_nrs[e] == e_nr) {
+            } else {
                 //This should never happen.
-                log_error(
-                    "ENGINE WARNING: Deleting edge #" +
-                    i2s(e_nr) + " although it is in use by vertex #" +
-                    i2s(v) + "!"
-                );
-                v_ptr->edge_nrs[e] = INVALID;
-                v_ptr->edges[e] = NULL;
+                assert(v_ptr->edge_nrs[e] != e_nr);
             }
         }
     }
@@ -270,15 +258,9 @@ void area_data::remove_edge(const size_t e_nr) {
                 s_ptr->edge_nrs[e] > e_nr
             ) {
                 s_ptr->edge_nrs[e]--;
-            } else if(s_ptr->edge_nrs[e] == e_nr) {
+            } else {
                 //This should never happen.
-                log_error(
-                    "ENGINE WARNING: Deleting edge #" +
-                    i2s(e_nr) + " although it is in use by sector #" +
-                    i2s(s) + "!"
-                );
-                s_ptr->edge_nrs[e] = INVALID;
-                s_ptr->edges[e] = NULL;
+                assert(s_ptr->edge_nrs[e] != e_nr);
             }
         }
     }
@@ -311,15 +293,9 @@ void area_data::remove_sector(const size_t s_nr) {
                 e_ptr->sector_nrs[s] > s_nr
             ) {
                 e_ptr->sector_nrs[s]--;
-            } else if(e_ptr->sector_nrs[s] == s_nr) {
+            } else {
                 //This should never happen.
-                log_error(
-                    "ENGINE WARNING: Deleting sector #" +
-                    i2s(s_nr) + " although it is in use by edge #" +
-                    i2s(e) + "!"
-                );
-                e_ptr->sector_nrs[s] = INVALID;
-                e_ptr->sectors[s] = NULL;
+                assert(e_ptr->sector_nrs[s] != s_nr);
             }
         }
     }

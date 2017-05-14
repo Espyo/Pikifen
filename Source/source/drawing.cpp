@@ -1693,7 +1693,7 @@ void draw_sector(
         //Midway angle.
         float mid_angles[2] = {M_PI_2, M_PI_2};
         //Is this neighbor casting a shadow to the same sector?
-        float neighbor_shadow[2] = {false, false};
+        bool neighbor_shadow[2] = {false, false};
         //Do we have an edge for this vertex?
         bool got_first[2] = {false, false};
         

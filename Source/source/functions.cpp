@@ -1094,7 +1094,7 @@ void load_control(
 /* ----------------------------------------------------------------------------
  * Loads the user-made particle generators.
  */
-void load_custom_particle_generators() {
+void load_custom_particle_generators(const bool load_resources) {
     custom_particle_generators.clear();
     
     data_node file(PARTICLE_GENERATORS_FILE);
@@ -1118,8 +1118,11 @@ void load_custom_particle_generators() {
         grs.set("number", number);
         
         prs.set("bitmap", bitmap_name);
-        base_p.bitmap =
-            bitmaps.get(bitmap_name, p_node->get_child_by_name("bitmap"));
+        if(load_resources) {
+            base_p.bitmap =
+                bitmaps.get(bitmap_name, p_node->get_child_by_name("bitmap"));
+        }
+        
         if(base_p.bitmap) {
             base_p.type = PARTICLE_TYPE_BITMAP;
         } else {
@@ -1281,7 +1284,7 @@ void load_hazards() {
 /* ----------------------------------------------------------------------------
  * Loads the liquids from the game data.
  */
-void load_liquids() {
+void load_liquids(const bool load_resources) {
     data_node file = data_node(MISC_FOLDER_PATH + "/Liquids.txt");
     if(!file.file_was_opened) return;
     
@@ -1303,16 +1306,18 @@ void load_liquids() {
         nodes[l_node->name] = l_node;
     }
     
-    for(auto l = liquids.begin(); l != liquids.end(); ++l) {
-        data_node anim_file(
-            ANIMATIONS_FOLDER_PATH + "/" +
-            nodes[l->first]->get_child_by_name("animation")->value
-        );
-        l->second.anim_pool = load_animation_database_from_file(&anim_file);
-        if(!l->second.anim_pool.animations.empty()) {
-            l->second.anim_instance = animation_instance(&l->second.anim_pool);
-            l->second.anim_instance.cur_anim = l->second.anim_pool.animations[0];
-            l->second.anim_instance.start();
+    if(load_resources) {
+        for(auto l = liquids.begin(); l != liquids.end(); ++l) {
+            data_node anim_file(
+                ANIMATIONS_FOLDER_PATH + "/" +
+                nodes[l->first]->get_child_by_name("animation")->value
+            );
+            l->second.anim_pool = load_animation_database_from_file(&anim_file);
+            if(!l->second.anim_pool.animations.empty()) {
+                l->second.anim_instance = animation_instance(&l->second.anim_pool);
+                l->second.anim_instance.cur_anim = l->second.anim_pool.animations[0];
+                l->second.anim_instance.start();
+            }
         }
     }
 }
@@ -1477,7 +1482,7 @@ void load_spray_types() {
 /* ----------------------------------------------------------------------------
  * Loads status effect types from the game data.
  */
-void load_status_types() {
+void load_status_types(const bool load_resources) {
     data_node file = data_node(MISC_FOLDER_PATH + "/Statuses.txt");
     if(!file.file_was_opened) return;
     
@@ -1537,14 +1542,16 @@ void load_status_types() {
         status_types[st.name] = st;
     }
     
-    for(auto s = status_types.begin(); s != status_types.end(); ++s) {
-        if(s->second.animation_name.empty()) continue;
-        data_node anim_file(ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name);
-        s->second.anim_pool = load_animation_database_from_file(&anim_file);
-        if(!s->second.anim_pool.animations.empty()) {
-            s->second.anim_instance = animation_instance(&s->second.anim_pool);
-            s->second.anim_instance.cur_anim = s->second.anim_pool.animations[0];
-            s->second.anim_instance.start();
+    if(load_resources) {
+        for(auto s = status_types.begin(); s != status_types.end(); ++s) {
+            if(s->second.animation_name.empty()) continue;
+            data_node anim_file(ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name);
+            s->second.anim_pool = load_animation_database_from_file(&anim_file);
+            if(!s->second.anim_pool.animations.empty()) {
+                s->second.anim_instance = animation_instance(&s->second.anim_pool);
+                s->second.anim_instance.cur_anim = s->second.anim_pool.animations[0];
+                s->second.anim_instance.start();
+            }
         }
     }
 }

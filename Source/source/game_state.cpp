@@ -292,9 +292,9 @@ void gameplay::load() {
  * Loads all of the game's content.
  */
 void gameplay::load_game_content() {
-    load_custom_particle_generators();
-    load_liquids();
-    load_status_types();
+    load_custom_particle_generators(true);
+    load_liquids(true);
+    load_status_types(true);
     load_spray_types();
     load_hazards();
     load_hud_info();

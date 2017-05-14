@@ -31,7 +31,7 @@ struct texture_suggestion {
     ALLEGRO_BITMAP* bmp;
     string name;
     texture_suggestion(const string &n);
-    ~texture_suggestion();
+    void destroy();
 };
 
 class area_editor : public editor {

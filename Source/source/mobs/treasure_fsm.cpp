@@ -80,13 +80,8 @@ void treasure_fsm::create_fsm(mob_type* typ) {
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idle_waiting");
     
-    if(typ->states.size() != N_TREASURE_STATES) {
-        log_error(
-            "ENGINE WARNING: Number of treasure states on the FSM (" +
-            i2s(typ->states.size()) +
-            ") and the enum (" + i2s(N_TREASURE_STATES) + ") does not match."
-        );
-    }
+    //Check if the number in the enum and the total match up.
+    if(typ->states.size() == N_TREASURE_STATES);
 }
 
 

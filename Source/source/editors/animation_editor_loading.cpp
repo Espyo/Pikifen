@@ -31,9 +31,9 @@ void animation_editor::load() {
     mode = EDITOR_MODE_MAIN;
     file_path.clear();
     
-    load_custom_particle_generators();
-    load_status_types();
-    load_liquids();
+    load_custom_particle_generators(false);
+    load_status_types(false);
+    load_liquids(false);
     load_hazards();
     
     lafi::style* s =

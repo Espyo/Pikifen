@@ -39,13 +39,8 @@ void bridge_fsm::create_fsm(mob_type* typ) {
     typ->states = efc.finish();
     typ->first_state_nr = fix_states(typ->states, "idling");
     
-    if(typ->states.size() != N_BRIDGE_STATES) {
-        log_error(
-            "ENGINE WARNING: Number of bridge states on the FSM (" +
-            i2s(typ->states.size()) +
-            ") and the enum (" + i2s(N_BRIDGE_STATES) + ") does not match."
-        );
-    }
+    //Check if the number in the enum and the total match up.
+    assert(typ->states.size() == N_BRIDGE_STATES);
 }
 
 
@@ -113,5 +108,3 @@ void bridge_fsm::take_damage(mob* m, void* info1, void* info2) {
 void bridge_fsm::set_anim(mob* m, void* info1, void* info2) {
     m->set_animation(BRIDGE_ANIM_IDLING);
 }
-
-

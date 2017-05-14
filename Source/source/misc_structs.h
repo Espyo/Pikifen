@@ -74,6 +74,7 @@ public:
     ALLEGRO_BITMAP* get(const string &name, data_node* node = NULL);
     void detach(ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
+    void clear();
 };
 
 

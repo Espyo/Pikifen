@@ -30,9 +30,9 @@ void area_editor::load() {
     update_gui_coordinates();
     mode = EDITOR_MODE_MAIN;
     
-    load_custom_particle_generators();
-    load_liquids();
-    load_status_types();
+    load_custom_particle_generators(false);
+    load_liquids(false);
+    load_status_types(false);
     load_hazards();
     load_mob_types(false);
     

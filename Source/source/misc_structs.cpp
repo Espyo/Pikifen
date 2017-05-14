@@ -73,6 +73,19 @@ void bmp_manager::detach(const string &name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Deletes all bitmaps loaded and clears the list.
+ */
+void bmp_manager::clear() {
+    for(auto b = list.begin(); b != list.end(); ++b) {
+        if(b->second.b != bmp_error) {
+            al_destroy_bitmap(b->second.b);
+        }
+    }
+    list.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Marks a bitmap to have one less call.
  * If it has 0 calls, it's automatically cleared.
  */
@@ -633,11 +646,9 @@ void sprite_effect::set_cur_time(const float cur_time) {
  * These values are interpolated using the keyframes.
  */
 sprite_effect_props sprite_effect::get_final_properties() {
-    if(keyframes.empty()) {
-        log_error("ENGINE WARNING: Sprite effect has no keyframes!");
-        return sprite_effect_props();
-        
-    } else if(keyframes.size() == 1) {
+    assert(!keyframes.empty());
+    
+    if(keyframes.size() == 1) {
         return keyframes[0];
         
     } else {

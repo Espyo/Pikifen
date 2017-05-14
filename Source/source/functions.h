@@ -121,15 +121,15 @@ void load_control(
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node = NULL, bool report_error = true
 );
-void load_custom_particle_generators();
+void load_custom_particle_generators(const bool load_resources);
 data_node load_data_file(const string &file_name);
 void load_hazards();
-void load_liquids();
+void load_liquids(const bool load_resources);
 void load_options();
 sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
 void load_game_config();
 void load_spray_types();
-void load_status_types();
+void load_status_types(const bool load_resources);
 void print_info(string t);
 float randomf(float min, float max);
 int randomi(int min, int max);

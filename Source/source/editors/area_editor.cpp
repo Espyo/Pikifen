@@ -2073,6 +2073,7 @@ void area_editor::update_texture_suggestions(const string &n) {
     }
     
     if(texture_suggestions.size() > MAX_TEXTURE_SUGGESTIONS) {
+        texture_suggestions[texture_suggestions.size() - 1].destroy();
         texture_suggestions.erase(
             texture_suggestions.begin() + texture_suggestions.size() - 1
         );
@@ -2519,6 +2520,8 @@ void area_editor::unload() {
     
     unload_hazards();
     unload_status_types();
+    
+    icons.clear();
 }
 
 
@@ -2835,6 +2838,6 @@ texture_suggestion::texture_suggestion(const string &n) :
 /* ----------------------------------------------------------------------------
  * Destroys a texture suggestion.
  */
-texture_suggestion::~texture_suggestion() {
-    bitmaps.detach(name);
+void texture_suggestion::destroy() {
+    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + name);
 }

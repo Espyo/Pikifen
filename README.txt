@@ -61,6 +61,10 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     What is there left to do?
         It's hard to say, but the Pikmin Fanon page has a rough roadmap.
     
+    If the engine is just meant to be the game's logic, why does it come with so many enemies, graphics, etc.?
+        1. Having some content to play with means people can try out the engine and its features without having to download or create content.
+        2. The existing content serves as a basis for new content. If you're having trouble placing a bridge, just see how the included areas do it. If you want to create an Orange Bulborb, just copy the Red bulborb and recolor it.
+    
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     

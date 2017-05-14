@@ -1335,6 +1335,8 @@ void animation_editor::unload() {
     
     unload_hazards();
     unload_status_types();
+    
+    icons.clear();
 }
 
 /* ----------------------------------------------------------------------------
