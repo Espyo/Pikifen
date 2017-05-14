@@ -25,7 +25,8 @@ leader::leader(
     mob(pos, type, angle, vars),
     lea_type(type),
     holding_pikmin(nullptr),
-    auto_pluck_pikmin(nullptr),
+    auto_plucking(false),
+    pluck_target(nullptr),
     queued_pluck_cancel(false),
     is_in_walking_anim(false) {
     

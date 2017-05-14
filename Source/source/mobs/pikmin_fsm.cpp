@@ -515,9 +515,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_FINISHED_CARRYING); {
             efc.change_state("idling");
         }
-        efc.new_event(MOB_EVENT_FOCUS_OFF_REACH); {
-            efc.change_state("idling");
-        }
         efc.new_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE); {
             efc.change_state("idling");
         }

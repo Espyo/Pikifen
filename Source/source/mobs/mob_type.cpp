@@ -245,9 +245,11 @@ void mob_type::add_carrying_states() {
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_begin);
             efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {

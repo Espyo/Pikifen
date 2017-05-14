@@ -85,7 +85,8 @@ public:
     
     mob* holding_pikmin;
     
-    pikmin* auto_pluck_pikmin;
+    bool auto_plucking;
+    pikmin* pluck_target;
     bool queued_pluck_cancel;
     
     bool is_in_walking_anim;

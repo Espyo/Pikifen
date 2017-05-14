@@ -391,16 +391,17 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.change_state("plucking");
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.run(leader_fsm::signal_stop_auto_pluck);
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::lose_health);
             efc.change_state("active");
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("dying");
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
@@ -423,11 +424,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("plucking", LEADER_STATE_PLUCKING); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::finish_current_pluck);
             efc.run(leader_fsm::search_seed);
         }
         efc.new_event(LEADER_EVENT_CANCEL); {
-            efc.run(leader_fsm::queue_pluck_cancel);
+            efc.run(leader_fsm::queue_stop_auto_pluck);
+            efc.run(leader_fsm::signal_stop_auto_pluck);
         }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run(leader_fsm::unfocus);
@@ -444,15 +446,19 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(leader_fsm::join_group);
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
+            efc.change_state("in_group_chasing");
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
             efc.run(leader_fsm::lose_health);
         }
         efc.new_event(MOB_EVENT_DEATH); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::stop_auto_pluck);
             efc.change_state("inactive_dying");
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
@@ -475,13 +481,15 @@ void leader_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("inactive_plucking", LEADER_STATE_INACTIVE_PLUCKING); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run(leader_fsm::stop_pluck);
+            efc.run(leader_fsm::finish_current_pluck);
             efc.run(leader_fsm::inactive_search_seed);
         }
         efc.new_event(MOB_EVENT_WHISTLED); {
             efc.run(leader_fsm::join_group);
-            efc.run(leader_fsm::stop_pluck);
-            efc.change_state("in_group_chasing");
+            efc.run(leader_fsm::queue_stop_auto_pluck);
+        }
+        efc.new_event(LEADER_EVENT_CANCEL); {
+            efc.run(leader_fsm::queue_stop_auto_pluck);
         }
         efc.new_event(LEADER_EVENT_FOCUSED); {
             efc.run(leader_fsm::focus);
@@ -537,9 +545,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_begin);
             efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
@@ -638,9 +648,11 @@ void leader_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
+            efc.run(gen_mob_fsm::check_carry_begin);
         }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
+            efc.run(gen_mob_fsm::check_carry_begin);
             efc.run(gen_mob_fsm::check_carry_stop);
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
@@ -1036,10 +1048,11 @@ void leader_fsm::notify_pikmin_release(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Queues the stopping of the plucking session, for after this pluck ends.
+ * Queues the stopping of the plucking session, for after this pluck's end.
  */
-void leader_fsm::queue_pluck_cancel(mob* m, void* info1, void* info2) {
-    ((leader*) m)->queued_pluck_cancel = true;
+void leader_fsm::queue_stop_auto_pluck(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    l_ptr->queued_pluck_cancel = true;
 }
 
 
@@ -1320,7 +1333,8 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     
     lea_ptr->queued_pluck_cancel = false;
     
-    lea_ptr->auto_pluck_pikmin = pik_ptr;
+    lea_ptr->auto_plucking = true;
+    lea_ptr->pluck_target = pik_ptr;
     lea_ptr->chase(
         pik_ptr->pos, NULL,
         false, nullptr, true,
@@ -1329,10 +1343,10 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
     pik_ptr->pluck_reserved = true;
     
     //Now for the leaders in the group.
-    for(size_t m = 0; m < lea_ptr->group->members.size(); ++m) {
-        mob* member_ptr = lea_ptr->group->members[m];
-        if(member_ptr->type->category->id == MOB_CATEGORY_LEADERS) {
-            member_ptr->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l]->following_group == lea_ptr) {
+            leaders[l]->auto_plucking = true;
+            leaders[l]->fsm.run_event(LEADER_EVENT_INACTIVE_SEARCH_SEED);
         }
     }
 }
@@ -1343,25 +1357,50 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    l_ptr->auto_pluck_pikmin->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
-    l_ptr->auto_pluck_pikmin = nullptr;
+    l_ptr->pluck_target->fsm.run_event(MOB_EVENT_PLUCKED, (void*) l_ptr);
+    l_ptr->pluck_target->pluck_reserved = false;
+    l_ptr->pluck_target = nullptr;
     l_ptr->set_animation(LEADER_ANIM_PLUCKING);
 }
 
 
 /* ----------------------------------------------------------------------------
- * When a leader quits the plucking mindset.
+ * When a leader quits the auto-plucking mindset.
  */
-void leader_fsm::stop_pluck(mob* m, void* info1, void* info2) {
+void leader_fsm::stop_auto_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
-    if(l_ptr->auto_pluck_pikmin) {
+    if(l_ptr->pluck_target) {
         l_ptr->stop_chasing();
-        l_ptr->auto_pluck_pikmin->pluck_reserved = false;
+        l_ptr->pluck_target->pluck_reserved = false;
     }
-    l_ptr->auto_pluck_pikmin = NULL;
+    l_ptr->auto_plucking = false;
+    l_ptr->queued_pluck_cancel = false;
+    l_ptr->pluck_target = NULL;
     l_ptr->set_animation(LEADER_ANIM_IDLING);
 }
 
+
+/* ----------------------------------------------------------------------------
+ * When the leader must signal to their follower leaders to stop plucking.
+ */
+void leader_fsm::signal_stop_auto_pluck(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    for(size_t l = 0; l < leaders.size(); ++l) {
+        if(leaders[l]->following_group == l_ptr) {
+            leaders[l]->fsm.run_event(LEADER_EVENT_CANCEL);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When the leader finishes the animation of the current pluck.
+ */
+void leader_fsm::finish_current_pluck(mob* m, void* info1, void* info2) {
+    leader* l_ptr = (leader*) m;
+    l_ptr->stop_chasing();
+    l_ptr->set_animation(LEADER_ANIM_IDLING);
+}
 
 /* ----------------------------------------------------------------------------
  * When a leader searches for a seed next to them.
@@ -1376,19 +1415,24 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     if(!l_ptr->queued_pluck_cancel) {
         new_pikmin =
             get_closest_buried_pikmin(l_ptr->pos, &d, false);
+    } else {
+        leader_fsm::stop_auto_pluck(m, NULL, NULL);
     }
     
-    if(info1) {
+    if(!info1) {
+        //Active leader.
+        l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
+    } else {
+        //Inactive leader.
         if(l_ptr->following_group)
             l_ptr->fsm.set_state(LEADER_STATE_IN_GROUP_CHASING);
         else
             l_ptr->fsm.set_state(LEADER_STATE_IDLING);
-    } else {
-        l_ptr->fsm.set_state(LEADER_STATE_ACTIVE);
     }
     
     if(new_pikmin && d <= next_pluck_range) {
         l_ptr->fsm.run_event(LEADER_EVENT_GO_PLUCK, (void*) new_pikmin);
+        l_ptr->queued_pluck_cancel = false;
     }
 }
 

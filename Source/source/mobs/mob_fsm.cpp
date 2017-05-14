@@ -134,7 +134,8 @@ void gen_mob_fsm::handle_carrier_removed(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a carried object begins moving.
+ * When it's time to check if a carried object should begin moving,
+ * or update its path.
  */
 void gen_mob_fsm::carry_begin_move(mob* m, void* info1, void* info2) {
     mob* obs = NULL;
