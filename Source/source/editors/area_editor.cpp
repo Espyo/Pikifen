@@ -751,11 +751,12 @@ void area_editor::create_new_from_picker(const string &name) {
         disable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
         
         //Create a sector for it.
+        float r = DEF_GRID_INTERVAL * 10;
         new_sector_valid_line = true;
-        new_sector_vertexes.push_back(new vertex(-500, -500));
-        new_sector_vertexes.push_back(new vertex(500,  -500));
-        new_sector_vertexes.push_back(new vertex(500,  500));
-        new_sector_vertexes.push_back(new vertex(-500, 500));
+        new_sector_vertexes.push_back(new vertex(-r, -r));
+        new_sector_vertexes.push_back(new vertex(r,  -r));
+        new_sector_vertexes.push_back(new vertex(r,  r));
+        new_sector_vertexes.push_back(new vertex(-r, r));
         create_sector();
         cur_sector = NULL;
         sector_to_gui();

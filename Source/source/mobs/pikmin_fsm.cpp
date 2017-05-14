@@ -1047,11 +1047,10 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         }
     }
     
+    pik_ptr->focused_mob = carriable_mob;
     pik_ptr->carrying_spot = closest_spot;
     closest_spot_ptr->state = CARRY_SPOT_RESERVED;
     closest_spot_ptr->pik_ptr = pik_ptr;
-    
-    pik_ptr->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_WAIT_UP);
     
     pik_ptr->chase(
         closest_spot_ptr->pos, &carriable_mob->pos,
@@ -1089,7 +1088,6 @@ void pikmin_fsm::reach_carriable_object(mob* m, void* info1, void* info2) {
     pik_ptr->set_animation(PIKMIN_ANIM_CARRYING);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
-    pik_ptr->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
     pik_ptr->carrying_mob->fsm.run_event(
         MOB_EVENT_CARRIER_ADDED, (void*) pik_ptr
     );
@@ -1109,8 +1107,6 @@ void pikmin_fsm::forget_carriable_object(mob* m, void* info1, void* info2) {
     p->carrying_mob->carry_info->spot_info[p->carrying_spot].pik_ptr =
         NULL;
         
-    p->carrying_mob->fsm.run_event(MOB_EVENT_CARRY_KEEP_GOING);
-    
     p->carrying_mob = NULL;
     p->set_timer(0);
 }

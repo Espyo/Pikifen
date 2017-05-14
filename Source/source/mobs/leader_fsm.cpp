@@ -493,9 +493,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_stop_move);
         }
-        efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
-            efc.run(gen_mob_fsm::check_carry_begin);
-        }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
             efc.run(gen_mob_fsm::check_carry_begin);
@@ -538,12 +535,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::carry_begin_move);
             efc.run(gen_mob_fsm::set_next_target);
         }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
             efc.run(gen_mob_fsm::check_carry_stop);
-        }
-        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
-            efc.change_state("sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
             efc.change_state("sleeping_waiting");
@@ -595,9 +592,6 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(gen_mob_fsm::carry_stop_move);
         }
-        efc.new_event(MOB_EVENT_CARRY_KEEP_GOING); {
-            efc.run(gen_mob_fsm::check_carry_begin);
-        }
         efc.new_event(MOB_EVENT_CARRIER_ADDED); {
             efc.run(gen_mob_fsm::handle_carrier_added);
             efc.run(gen_mob_fsm::check_carry_begin);
@@ -642,12 +636,12 @@ void leader_fsm::create_fsm(mob_type* typ) {
             efc.run(gen_mob_fsm::carry_begin_move);
             efc.run(gen_mob_fsm::set_next_target);
         }
+        efc.new_event(MOB_EVENT_CARRIER_ADDED); {
+            efc.run(gen_mob_fsm::handle_carrier_added);
+        }
         efc.new_event(MOB_EVENT_CARRIER_REMOVED); {
             efc.run(gen_mob_fsm::handle_carrier_removed);
             efc.run(gen_mob_fsm::check_carry_stop);
-        }
-        efc.new_event(MOB_EVENT_CARRY_WAIT_UP); {
-            efc.change_state("inactive_sleeping_waiting");
         }
         efc.new_event(MOB_EVENT_CARRY_STOP_MOVE); {
             efc.change_state("inactive_sleeping_waiting");

@@ -173,10 +173,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_CARRIER_ADDED,
     //When a Pikmin was removed from the list of Pikmin carrying this mob.
     MOB_EVENT_CARRIER_REMOVED,
-    //When the mob has to wait for a new carrier to arrive.
-    MOB_EVENT_CARRY_WAIT_UP,
-    //When the mob can continue going, as the new carrier gave up.
-    MOB_EVENT_CARRY_KEEP_GOING,
     //When the mob needs to begin moving, as it's being carried.
     MOB_EVENT_CARRY_BEGIN_MOVE,
     //When the mob needs to stop moving, as it's no longer being carried.

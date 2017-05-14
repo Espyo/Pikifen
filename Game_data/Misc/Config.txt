@@ -3,7 +3,7 @@ game_version = X.X.X
 
 carrying_color_move = 255 255 255
 carrying_color_stop = 96 192 192
-carrying_speed_base_mult = 0.5
+carrying_speed_base_mult = 0.3
 carrying_speed_max_mult = 0.8
 carrying_speed_weight_mult = 0.0004
 

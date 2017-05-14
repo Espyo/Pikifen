@@ -189,13 +189,6 @@ void gen_mob_fsm::carry_stop_move(mob* m, void* info1, void* info2) {
  */
 void gen_mob_fsm::check_carry_begin(mob* m, void* info1, void* info2) {
 
-    for(size_t s = 0; s < m->carry_info->spot_info.size(); ++s) {
-        if(m->carry_info->spot_info[s].state == CARRY_SPOT_RESERVED) {
-            //If a Pikmin is coming, no, we can't move yet.
-            return;
-        }
-    }
-    
     if(m->carry_info->cur_carrying_strength >= m->type->weight) {
         m->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
     }
