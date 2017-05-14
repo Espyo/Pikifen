@@ -84,7 +84,6 @@ void coordinates_to_angle(
     const point coordinates, float* angle, float* magnitude
 );
 float deterministic_random(const unsigned int seed);
-void log_error(string s, data_node* d = NULL);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
@@ -130,6 +129,8 @@ sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
 void load_game_config();
 void load_spray_types();
 void load_status_types(const bool load_resources);
+void load_system_animations();
+void log_error(string s, data_node* d = NULL);
 void print_info(string t);
 float randomf(float min, float max);
 int randomi(int min, int max);

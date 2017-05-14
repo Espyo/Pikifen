@@ -67,10 +67,12 @@ private:
         size_t calls;
         bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
+    map<string, bmp_info> list;
+    long total_calls; //Useful for debugging.
     void detach(map<string, bmp_info>::iterator it);
     
 public:
-    map<string, bmp_info> list;
+    bmp_manager();
     ALLEGRO_BITMAP* get(const string &name, data_node* node = NULL);
     void detach(ALLEGRO_BITMAP* bmp);
     void detach(const string &name);

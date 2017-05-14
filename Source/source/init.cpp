@@ -484,11 +484,7 @@ void init_misc_graphics() {
             );
     }
     
-    data_node system_animations_file(SYSTEM_ANIMATIONS_FILE);
-    
-    init_single_animation(
-        &system_animations_file, "leader_damage_sparks", spark_animation
-    );
+    load_system_animations(); //TODO move this out of here.
 }
 
 

@@ -685,6 +685,14 @@ void area_editor::clear_current_area() {
     cur_mob = NULL;
     cur_shadow = NULL;
     clear_area_textures();
+    
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        bitmaps.detach(
+            TEXTURES_FOLDER_NAME + "/" +
+            cur_area_data.tree_shadows[s]->file_name
+        );
+    }
+    
     sector_to_gui();
     mob_to_gui();
     reference_to_gui();
@@ -700,7 +708,7 @@ void area_editor::clear_current_area() {
     cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
     cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
     
-    texture_suggestions.clear();
+    clear_texture_suggestions();
     
     cur_area_data.clear();
     
@@ -709,6 +717,17 @@ void area_editor::clear_current_area() {
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of texture suggestions. This frees up the bitmaps.
+ */
+void area_editor::clear_texture_suggestions() {
+    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+        texture_suggestions[s].destroy();
+    }
+    texture_suggestions.clear();
 }
 
 
@@ -1735,7 +1754,6 @@ void area_editor::load_area(const bool from_backup) {
         return u1.second > u2.second;
     }
     );
-    texture_suggestions.clear();
     for(
         size_t u = 0;
         u < texture_uses_vector.size() && u < MAX_TEXTURE_SUGGESTIONS;
@@ -2514,7 +2532,8 @@ void area_editor::toggle_duplicate_mob_mode() {
 void area_editor::unload() {
     //TODO
     cur_mob = NULL;
-    cur_area_data.clear();
+    clear_current_area();
+    
     delete(gui->style);
     delete(gui);
     

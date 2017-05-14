@@ -12,7 +12,7 @@ pushes = true
 radius = 60
 reaches {
     wake_up = 10 360
-    search = 250 90 30 360
+    search = 250 180 30 360
     attack = 40 30
     chase = 250 360
 }

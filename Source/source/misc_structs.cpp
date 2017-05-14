@@ -29,6 +29,15 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a bitmap manager.
+ */
+bmp_manager::bmp_manager() :
+    total_calls(0) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
  */
 ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
@@ -37,9 +46,11 @@ ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
     if(list.find(name) == list.end()) {
         ALLEGRO_BITMAP* b = load_bmp(name, node);
         list[name] = bmp_info(b);
+        total_calls++;
         return b;
     } else {
         list[name].calls++;
+        total_calls++;
         return list[name].b;
     }
 };
@@ -53,6 +64,7 @@ void bmp_manager::detach(map<string, bmp_info>::iterator it) {
     if(it == list.end()) return;
     
     it->second.calls--;
+    total_calls--;
     if(it->second.calls == 0) {
         if(it->second.b != bmp_error) {
             al_destroy_bitmap(it->second.b);
@@ -82,6 +94,7 @@ void bmp_manager::clear() {
         }
     }
     list.clear();
+    total_calls = 0;
 }
 
 

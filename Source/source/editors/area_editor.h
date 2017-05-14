@@ -195,6 +195,7 @@ private:
     void center_camera(const point min_coords, const point max_coords);
     void change_reference(string new_file_name);
     void clear_current_area();
+    void clear_texture_suggestions();
     void create_sector();
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,

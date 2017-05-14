@@ -31,6 +31,7 @@
 #include "data_file.h"
 #include "drawing.h"
 #include "functions.h"
+#include "init.h"
 #include "menus.h"
 #include "vars.h"
 
@@ -1036,16 +1037,14 @@ void load_area_textures() {
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         
-        for(unsigned char t = 0; t < ((s_ptr->fade) ? 2 : 1); ++t) {
-            if(s_ptr->texture_info.file_name.empty()) {
-                s_ptr->texture_info.bitmap = NULL;
-            } else {
-                s_ptr->texture_info.bitmap =
-                    bitmaps.get(
-                        TEXTURES_FOLDER_NAME + "/" +
-                        s_ptr->texture_info.file_name, NULL
-                    );
-            }
+        if(s_ptr->texture_info.file_name.empty()) {
+            s_ptr->texture_info.bitmap = NULL;
+        } else {
+            s_ptr->texture_info.bitmap =
+                bitmaps.get(
+                    TEXTURES_FOLDER_NAME + "/" +
+                    s_ptr->texture_info.file_name, NULL
+                );
         }
     }
 }
@@ -1554,6 +1553,18 @@ void load_status_types(const bool load_resources) {
             }
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the animations that are used system-wide.
+ */
+void load_system_animations() {
+    data_node system_animations_file(SYSTEM_ANIMATIONS_FILE);
+    
+    init_single_animation(
+        &system_animations_file, "leader_damage_sparks", spark_animation
+    );
 }
 
 
