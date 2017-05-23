@@ -210,6 +210,28 @@ void gameplay::do_game_drawing(
                 );
             }
             mob_ptr->draw();
+            
+            //Development tool -- draw hitboxes.
+            if(dev_tool_hitboxes) {
+                sprite* s = mob_ptr->anim.get_cur_sprite();
+                if(s) {
+                    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                        hitbox* h_ptr = &s->hitboxes[h];
+                        ALLEGRO_COLOR hc;
+                        if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                            hc = al_map_rgba(0, 128, 0, 192);
+                        } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                            hc = al_map_rgba(128, 0, 0, 192);
+                        } else {
+                            hc = al_map_rgba(128, 128, 0, 192);
+                        }
+                        point p =
+                            mob_ptr->pos +
+                            rotate_point(h_ptr->pos, mob_ptr->angle);
+                        al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
+                    }
+                }
+            }
         }
         
         

@@ -41,6 +41,7 @@ void fall_down_pit(          mob* m, void* info1, void* info2);
 void flail_to_whistle(       mob* m, void* info1, void* info2);
 void forget_carriable_object(mob* m, void* info1, void* info2);
 void get_knocked_down(       mob* m, void* info1, void* info2);
+void get_up(                 mob* m, void* info1, void* info2);
 void go_to_carriable_object( mob* m, void* info1, void* info2);
 void go_to_opponent(         mob* m, void* info1, void* info2);
 void land(                   mob* m, void* info1, void* info2);

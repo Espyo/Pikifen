@@ -188,6 +188,8 @@ void init_dev_tools() {
             dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
         } else if(tool_name == "geometry_info") {
             dev_tool_keys[k] = DEV_TOOL_GEOMETRY_INFO;
+        } else if(tool_name == "hitboxes") {
+            dev_tool_keys[k] = DEV_TOOL_HITBOXES;
         } else if(tool_name == "hurt_mob") {
             dev_tool_keys[k] = DEV_TOOL_HURT_MOB;
         } else if(tool_name == "mob_info") {

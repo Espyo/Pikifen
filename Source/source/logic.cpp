@@ -777,24 +777,45 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                         //Just check if the entire Pikmin/leader
                         //touched mob 2's hitbox.
                         
-                        bool z_collision;
-                        if(h2_ptr->height == 0) {
-                            //Always hits vertically.
-                            //Imagine the hitbox is infinitely high.
-                            z_collision = true;
-                        } else {
-                            z_collision =
-                                !(
-                                    (m2_h_z > m_ptr->z) ||
-                                    (m2_h_z + h2_ptr->height < m_ptr->z)
-                                );
+                        bool collided = false;
+                        
+                        //TODO improve this "connected hitbox" logic
+                        //in the future, so that it's not so magically
+                        //Pikmin-dependant...
+                        if(m_ptr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                            pikmin* p_ptr = (pikmin*) m_ptr;
+                            if(
+                                m_ptr->focused_mob == m2_ptr &&
+                                p_ptr->connected_hitbox_nr == h2
+                            ) {
+                                collided = true;
+                            }
+                        };
+                        
+                        if(!collided) {
+                            bool z_collision;
+                            if(h2_ptr->height == 0) {
+                                //Always hits vertically.
+                                //Imagine the hitbox is infinitely high.
+                                z_collision = true;
+                            } else {
+                                z_collision =
+                                    !(
+                                        (m2_h_z > m_ptr->z) ||
+                                        (m2_h_z + h2_ptr->height < m_ptr->z)
+                                    );
+                            }
+                            
+                            if(
+                                z_collision &&
+                                dist(m_ptr->pos, m2_h_pos) <
+                                (m_ptr->type->radius + h2_ptr->radius)
+                            ) {
+                                collided = true;
+                            }
                         }
                         
-                        if(
-                            z_collision &&
-                            dist(m_ptr->pos, m2_h_pos) <
-                            (m_ptr->type->radius + h2_ptr->radius)
-                        ) {
+                        if(collided) {
                             //Collision!
                             if(
                                 hitbox_touch_eat_ev && !reported_eat_ev &&

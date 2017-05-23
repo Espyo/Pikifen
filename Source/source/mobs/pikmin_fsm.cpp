@@ -627,8 +627,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     
     efc.new_state("knocked_back", PIKMIN_STATE_KNOCKED_BACK); {
         efc.new_event(MOB_EVENT_ANIMATION_END); {
-            efc.run(pikmin_fsm::stand_still);
-            efc.change_state("idling");
+            efc.run(pikmin_fsm::get_up);
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(pikmin_fsm::stand_still);
@@ -1012,6 +1011,23 @@ void pikmin_fsm::rechase_opponent(mob* m, void* info1, void* info2) {
     }
     
     m->fsm.set_state(PIKMIN_STATE_IDLING);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin gets up from being knocked down.
+ */
+void pikmin_fsm::get_up(mob* m, void* info1, void* info2) {
+    mob* prev_focused_mob = m->focused_mob;
+    m->fsm.set_state(PIKMIN_STATE_IDLING);
+    if(
+        prev_focused_mob &&
+        should_attack(m, prev_focused_mob)
+    ) {
+        m->fsm.run_event(
+            MOB_EVENT_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
+        );
+    }
 }
 
 

@@ -76,6 +76,9 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == DEV_TOOL_GEOMETRY_INFO) {
                 dev_tool_geometry_info = !dev_tool_geometry_info;
                 
+            } else if(id == DEV_TOOL_HITBOXES) {
+                dev_tool_hitboxes = !dev_tool_hitboxes;
+                
             } else if(id == DEV_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {

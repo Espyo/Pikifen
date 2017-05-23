@@ -127,6 +127,7 @@ string dev_tool_auto_start_mode;
 bool dev_tool_change_speed = false;
 float dev_tool_change_speed_mult = 2.0;
 bool dev_tool_geometry_info = false;
+bool dev_tool_hitboxes = false;
 mob* dev_tool_info_lock = NULL;
 pikmin_type* dev_tool_last_pikmin_type = NULL;
 unsigned char dev_tool_keys[20];
