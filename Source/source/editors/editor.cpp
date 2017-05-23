@@ -115,7 +115,6 @@ void editor::create_picker_frame(const bool can_create_new) {
     );
     
     
-    //Properties -- picker.
     frm_picker->widgets["but_back"]->left_mouse_click_handler =
     [this, can_create_new] (lafi::widget*, int, int) {
         if(can_create_new) {
@@ -133,7 +132,7 @@ void editor::create_picker_frame(const bool can_create_new) {
         "Cancel.";
         
     if(can_create_new) {
-        ((lafi::textbox*)frm_picker->widgets["txt_new"])->enter_key_widget =
+        ((lafi::textbox*) frm_picker->widgets["txt_new"])->enter_key_widget =
             frm_picker->widgets["but_new"];
             
         frm_picker->widgets["but_new"]->left_mouse_click_handler =

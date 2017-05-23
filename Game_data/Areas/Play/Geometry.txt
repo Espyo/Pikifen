@@ -2186,10 +2186,11 @@ path_stops{
 		links{
 			nr=28
 			nr=11
-			nr=10
-			nr=18
 			nr=26
 			nr=2
+			nr=42
+			nr=45
+			nr=46
 		}
 	}
 	s{
@@ -2264,13 +2265,15 @@ path_stops{
 	s{
 		pos=192.00 -640.00
 		links{
-			nr=18
 			nr=12
 			nr=22
 			nr=14
 			nr=11
-			nr=1
 			nr=41
+			nr=42
+			nr=43
+			nr=44
+			nr=46
 		}
 	}
 	s{
@@ -2280,6 +2283,7 @@ path_stops{
 			nr=14
 			nr=28
 			nr=1
+			nr=42
 		}
 	}
 	s{
@@ -2289,6 +2293,8 @@ path_stops{
 			nr=18
 			nr=10
 			nr=13
+			nr=43
+			nr=44
 		}
 	}
 	s{
@@ -2336,9 +2342,9 @@ path_stops{
 			nr=17
 			nr=27
 			nr=12
-			nr=10
-			nr=1
 			nr=26
+			nr=43
+			nr=45
 		}
 	}
 	s{
@@ -2396,6 +2402,7 @@ path_stops{
 		links{
 			nr=18
 			nr=1
+			nr=45
 		}
 	}
 	s{
@@ -2510,6 +2517,56 @@ path_stops{
 		links{
 			nr=10
 			nr=22
+			nr=44
+		}
+	}
+	s{
+		pos=384.00 -512.00
+		links{
+			nr=11
+			nr=10
+			nr=1
+			nr=46
+		}
+	}
+	s{
+		pos=-32.00 -480.00
+		links{
+			nr=10
+			nr=18
+			nr=12
+			nr=44
+			nr=45
+			nr=46
+		}
+	}
+	s{
+		pos=-128.00 -768.00
+		links{
+			nr=41
+			nr=12
+			nr=10
+			nr=43
+		}
+	}
+	s{
+		pos=-128.00 -352.00
+		links{
+			nr=43
+			nr=18
+			nr=1
+			nr=26
+			nr=46
+		}
+	}
+	s{
+		pos=192.00 -352.00
+		links{
+			nr=43
+			nr=42
+			nr=1
+			nr=45
+			nr=10
 		}
 	}
 }

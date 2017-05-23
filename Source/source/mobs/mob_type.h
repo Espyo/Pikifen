@@ -115,5 +115,6 @@ void load_mob_type_from_file(
     mob_type* mt, data_node &file, const bool load_resources,
     const string &folder
 );
+void unload_mob_types(const bool unload_resources);
 
 #endif //ifndef MOB_TYPE_INCLUDED

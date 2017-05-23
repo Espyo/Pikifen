@@ -58,8 +58,8 @@ animations{
 sprites{
 	safe{
 		file=Fire_geyser.png
-		file_pos=0 0
-		file_size=48 48
+		file_pos=0.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
@@ -91,15 +91,15 @@ sprites{
 	}
 	fire1{
 		file=Fire_geyser.png
-		file_pos=98 0
-		file_size=48 48
+		file_pos=98.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
 			fire{
 				coords=0.00 0.00 0.00
 				height=128.00
-				radius=28.00
+				radius=32.00
 				type=1
 				multiplier=1.00
 				can_pikmin_latch=false
@@ -124,8 +124,8 @@ sprites{
 	}
 	fire2{
 		file=Fire_geyser.png
-		file_pos=147 0
-		file_size=48 48
+		file_pos=147.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
@@ -157,8 +157,8 @@ sprites{
 	}
 	fire3{
 		file=Fire_geyser.png
-		file_pos=196 0
-		file_size=48 48
+		file_pos=196.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
@@ -190,8 +190,8 @@ sprites{
 	}
 	fire4{
 		file=Fire_geyser.png
-		file_pos=245 0
-		file_size=48 48
+		file_pos=245.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
@@ -223,8 +223,8 @@ sprites{
 	}
 	low{
 		file=Fire_geyser.png
-		file_pos=49 0
-		file_size=48 48
+		file_pos=49.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{
@@ -256,8 +256,8 @@ sprites{
 	}
 	destroyed{
 		file=Fire_geyser.png
-		file_pos=294 0
-		file_size=48 48
+		file_pos=294.00 0.00
+		file_size=48.00 48.00
 		game_size=48.00 48.00
 		offset=0.00 0.00
 		hitboxes{

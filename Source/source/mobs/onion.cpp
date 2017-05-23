@@ -73,10 +73,12 @@ void onion::spew() {
             )
         );
     //TODO the shooting strength shouldn't be a magic number.
-    new_pikmin->z = 320;
-    new_pikmin->speed.x = cos(next_spew_angle) * 60;
-    new_pikmin->speed.y = sin(next_spew_angle) * 60;
-    new_pikmin->speed_z = 200;
+    float horizontal_strength =
+        80 + randomf(-10, 10);
+    new_pikmin->z = z + 320;
+    new_pikmin->speed.x = cos(next_spew_angle) * horizontal_strength;
+    new_pikmin->speed.y = sin(next_spew_angle) * horizontal_strength;
+    new_pikmin->speed_z = 600;
     new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
     new_pikmin->maturity = 0;
     

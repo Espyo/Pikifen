@@ -196,6 +196,7 @@ private:
     void change_reference(string new_file_name);
     void clear_current_area();
     void clear_texture_suggestions();
+    void create_area();
     void create_sector();
     void draw_cross_section_sector(
         const float start_ratio, const float end_ratio, const float proportion,

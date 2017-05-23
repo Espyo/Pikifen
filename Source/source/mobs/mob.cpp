@@ -107,8 +107,8 @@ void mob::tick() {
     tick_brain();
     tick_physics();
     tick_misc_logic();
-    tick_script();
     tick_animation();
+    tick_script();
     tick_class_specifics();
 }
 
@@ -1304,9 +1304,9 @@ void calculate_knockback(
     if(attacker_h) {
         *knockback = attacker_h->knockback;
         if(attacker_h->knockback_outward) {
-            *angle += get_angle(attacker->pos, victim->pos);
+            *angle = get_angle(attacker->pos, victim->pos);
         } else {
-            *angle += attacker_h->knockback_angle;
+            *angle = attacker->angle + attacker_h->knockback_angle;
         }
     }
 }

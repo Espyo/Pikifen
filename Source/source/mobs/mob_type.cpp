@@ -9,6 +9,8 @@
  * Mob type class and mob type-related functions.
  */
 
+#include <algorithm>
+
 #include "../const.h"
 #include "../functions.h"
 #include "enemy_type.h"
@@ -20,6 +22,8 @@
 #include "pikmin_type.h"
 #include "treasure_type.h"
 #include "../vars.h"
+
+using namespace std;
 
 /* ----------------------------------------------------------------------------
  * Creates a non-specific mob type.
@@ -85,9 +89,63 @@ void load_mob_types(bool load_resources) {
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
         string folder = SPECIAL_MOBS_FOLDER_PATH + "/" + mt->first;
         data_node file = data_node(folder + "/Data.txt");
-        if(!file.file_was_opened) return;
+        if(!file.file_was_opened) continue;
         
         load_mob_type_from_file(mt->second, file, load_resources, folder);
+    }
+    
+    //Pikmin type order.
+    for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
+        if(
+            find(
+                pikmin_order_strings.begin(), pikmin_order_strings.end(),
+                p->first
+            ) == pikmin_order_strings.end()
+        ) {
+            log_error(
+                "Pikmin type \"" + p->first + "\" was not found "
+                "in the Pikmin order list in the config file!"
+            );
+            pikmin_order_strings.push_back(p->first);
+        }
+    }
+    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
+        string s = pikmin_order_strings[o];
+        if(pikmin_types.find(s) != pikmin_types.end()) {
+            pikmin_order.push_back(pikmin_types[s]);
+        } else {
+            log_error(
+                "Unknown Pikmin type \"" + s + "\" found "
+                "in the Pikmin order list in the config file!"
+            );
+        }
+    }
+    
+    //Leader type order.
+    for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
+        if(
+            find(
+                leader_order_strings.begin(), leader_order_strings.end(),
+                l->first
+            ) == leader_order_strings.end()
+        ) {
+            log_error(
+                "Leader type \"" + l->first + "\" was not found "
+                "in the leader order list in the config file!"
+            );
+            leader_order_strings.push_back(l->first);
+        }
+    }
+    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
+        string s = leader_order_strings[o];
+        if(leader_types.find(s) != leader_types.end()) {
+            leader_order.push_back(leader_types[s]);
+        } else {
+            log_error(
+                "Unknown leader type \"" + s + "\" found "
+                "in the leader order list in the config file!"
+            );
+        }
     }
 }
 
@@ -212,6 +270,16 @@ void load_mob_type_from_file(
     if(load_resources) {
         mt->anims.create_conversions(anim_conversions);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads all loaded types of mob.
+ */
+void unload_mob_types(const bool unload_resources) {
+    //TODO
+    leader_order.clear();
+    pikmin_order.clear();
 }
 
 

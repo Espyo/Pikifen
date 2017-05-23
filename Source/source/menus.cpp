@@ -341,8 +341,15 @@ void options_menu::load() {
             point(scr_w * 0.9, scr_h * 0.9), point(scr_w * 0.2, scr_h * 0.1),
     [this] () {
         if(controls[cur_player_nr].size()) {
+            size_t last_action =
+                controls[cur_player_nr].back().action;
             controls[cur_player_nr].push_back(
-                control_info(controls[cur_player_nr].back())
+                control_info(
+                    last_action == N_BUTTONS - 1 ?
+                    1 : //The "None" action is 0, so go to 1.
+                    last_action + 1,
+                    ""
+                )
             );
         } else {
             controls[cur_player_nr].push_back(

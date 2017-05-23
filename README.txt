@@ -68,6 +68,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     Why are the animations so clunky and the graphics so simple?
         I'm not an artist. Since nobody else is doing the graphics, I did the best I could.
     
+    Why are the textures and HUD all shiny and realistic, but the objects are simplistic?
+        Pikmin games have always looked fairly realistic. The engine can achieve pretty environments too, so making the textures simplistic would steal quite a lot of beauty.
+        The objects are simple, and based off of vector graphics, so it's easier to edit their graphics. If they were screenshots of 3D models, that would require content creators to have or create models for their new enemies, just so they could take screenshots and put them in-game.
+        An alternative style that could work all around is pixel art for everything. Game creators can create their graphics in this style if they so choose.
+    
     Why didn't you use textures and sounds from the Pikmin games?
         1. The less copyrighted content I use, the safer I am, even if minimally. There's a difference between "code some fan made from scratch" and "a repository of Nintendo's copyrighted assets right there for the taking".
         2. Should something happen to the engine, I can rebrand it, and release the assets as they are.
@@ -75,11 +80,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         4. It doesn't really matter anyway because what is included with the engine is demo content; users are meant to use whatever assets they please.
     
     Why 2D?
-        3D would be MUCH harder for everyone.
-        You can get something convincing with 2D alone. A 3D engine would be much harder to create, and the game developers would have a much harder time creating models, areas, etc. that look good in 3D.
+        3D would be MUCH harder for everyone. You can get something convincing with 2D alone.
+        A 3D engine would be much harder to create, and the game developers would have a much harder time creating models, areas, etc. that look good in 3D.
     
     Will you ever add X?
-        Depends. If it's an area or enemy or something, the game developers are meant to do that, not me. Other than that, ask me!
+        Depends. If it's an area or enemy or something, the game developers are meant to do that, not me. Though I might still add it for the sake of demonstration. Other than that, ask me!
     
     Is it possible to add Winged Pikmin?
         No. First, their airborne state would be a nightmare to code in with the currently existing finite-state-machine logic.

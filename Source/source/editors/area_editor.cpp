@@ -732,6 +732,65 @@ void area_editor::clear_texture_suggestions() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new area to work on.
+ */
+void area_editor::create_area() {
+    clear_current_area();
+    disable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
+    
+    //Create a sector for it.
+    float r = DEF_GRID_INTERVAL * 10;
+    new_sector_valid_line = true;
+    new_sector_vertexes.push_back(new vertex(-r, -r));
+    new_sector_vertexes.push_back(new vertex(r,  -r));
+    new_sector_vertexes.push_back(new vertex(r,  r));
+    new_sector_vertexes.push_back(new vertex(-r, r));
+    create_sector();
+    cur_sector = NULL;
+    sector_to_gui();
+    
+    //Find a texture to give to this sector.
+    vector<string> textures = folder_to_vector(TEXTURES_FOLDER_PATH, false);
+    size_t texture_to_use = INVALID;
+    //First, if there's any "grass" texture, use that.
+    for(size_t t = 0; t < textures.size(); ++t) {
+        string lc_name = str_to_lower(textures[t]);
+        if(lc_name.find("grass") != string::npos) {
+            texture_to_use = t;
+            break;
+        }
+    }
+    //No grass texture? Try one with "dirt".
+    if(texture_to_use == INVALID) {
+        for(size_t t = 0; t < textures.size(); ++t) {
+            string lc_name = str_to_lower(textures[t]);
+            if(lc_name.find("dirt") != string::npos) {
+                texture_to_use = t;
+                break;
+            }
+        }
+    }
+    //If there's no good texture, just pick the first one.
+    if(texture_to_use == INVALID) {
+        if(!textures.empty()) texture_to_use = 0;
+    }
+    //Apply the texture.
+    if(texture_to_use != INVALID) {
+        cur_area_data.sectors[0]->texture_info.file_name =
+            textures[texture_to_use];
+    }
+    
+    //Now add a leader. The first available.
+    cur_area_data.mob_generators.push_back(
+        new mob_gen(
+            mob_categories.get(MOB_CATEGORY_LEADERS), point(),
+            leader_order[0], 0, ""
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given its name.
  */
 void area_editor::create_new_from_picker(const string &name) {
@@ -747,58 +806,7 @@ void area_editor::create_new_from_picker(const string &name) {
     } else {
         //Create a new area.
         area_name = name;
-        clear_current_area();
-        disable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
-        
-        //Create a sector for it.
-        float r = DEF_GRID_INTERVAL * 10;
-        new_sector_valid_line = true;
-        new_sector_vertexes.push_back(new vertex(-r, -r));
-        new_sector_vertexes.push_back(new vertex(r,  -r));
-        new_sector_vertexes.push_back(new vertex(r,  r));
-        new_sector_vertexes.push_back(new vertex(-r, r));
-        create_sector();
-        cur_sector = NULL;
-        sector_to_gui();
-        
-        //Find a texture to give to this sector.
-        vector<string> textures = folder_to_vector(TEXTURES_FOLDER_PATH, false);
-        size_t texture_to_use = INVALID;
-        //First, if there's any "grass" texture, use that.
-        for(size_t t = 0; t < textures.size(); ++t) {
-            string lc_name = str_to_lower(textures[t]);
-            if(lc_name.find("grass") != string::npos) {
-                texture_to_use = t;
-                break;
-            }
-        }
-        //No grass texture? Try one with "dirt".
-        if(texture_to_use == INVALID) {
-            for(size_t t = 0; t < textures.size(); ++t) {
-                string lc_name = str_to_lower(textures[t]);
-                if(lc_name.find("dirt") != string::npos) {
-                    texture_to_use = t;
-                    break;
-                }
-            }
-        }
-        //If there's no good texture, just pick the first one.
-        if(texture_to_use == INVALID) {
-            if(!textures.empty()) texture_to_use = 0;
-        }
-        //Apply the texture.
-        if(texture_to_use != INVALID) {
-            cur_area_data.sectors[0]->texture_info.file_name =
-                textures[texture_to_use];
-        }
-        
-        //Now add a leader. The first available.
-        cur_area_data.mob_generators.push_back(
-            new mob_gen(
-                mob_categories.get(MOB_CATEGORY_LEADERS), point(),
-                leader_types.begin()->second, 0, ""
-            )
-        );
+        create_area();
     }
     
     al_destroy_fs_entry(new_area_folder_entry);
@@ -2539,6 +2547,7 @@ void area_editor::unload() {
     delete(gui);
     
     unload_hazards();
+    unload_mob_types(false);
     unload_status_types();
     
     icons.clear();

@@ -302,58 +302,6 @@ void gameplay::load_game_content() {
     //Mob types.
     load_mob_types(true);
     
-    for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
-        if(
-            find(
-                pikmin_order_strings.begin(), pikmin_order_strings.end(),
-                p->first
-            ) == pikmin_order_strings.end()
-        ) {
-            log_error(
-                "Pikmin type \"" + p->first + "\" was not found "
-                "in the Pikmin order list in the config file!"
-            );
-            pikmin_order_strings.push_back(p->first);
-        }
-    }
-    for(size_t o = 0; o < pikmin_order_strings.size(); ++o) {
-        string s = pikmin_order_strings[o];
-        if(pikmin_types.find(s) != pikmin_types.end()) {
-            pikmin_order.push_back(pikmin_types[s]);
-        } else {
-            log_error(
-                "Unknown Pikmin type \"" + s + "\" found "
-                "in the Pikmin order list in the config file!"
-            );
-        }
-    }
-    
-    for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
-        if(
-            find(
-                leader_order_strings.begin(), leader_order_strings.end(),
-                l->first
-            ) == leader_order_strings.end()
-        ) {
-            log_error(
-                "Leader type \"" + l->first + "\" was not found "
-                "in the leader order list in the config file!"
-            );
-            leader_order_strings.push_back(l->first);
-        }
-    }
-    for(size_t o = 0; o < leader_order_strings.size(); ++o) {
-        string s = leader_order_strings[o];
-        if(leader_types.find(s) != leader_types.end()) {
-            leader_order.push_back(leader_types[s]);
-        } else {
-            log_error(
-                "Unknown leader type \"" + s + "\" found "
-                "in the leader order list in the config file!"
-            );
-        }
-    }
-    
     for(size_t p = 0; p < pikmin_order.size(); ++p) {
         subgroup_types.register_type(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, pikmin_order[p]

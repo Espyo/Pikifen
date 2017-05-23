@@ -741,6 +741,7 @@ void area_editor::load() {
                 delete cur_mob;
                 cur_mob = NULL;
                 mob_to_gui();
+                made_changes = true;
                 break;
             }
         }

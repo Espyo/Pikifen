@@ -322,7 +322,7 @@ animations{
 }
 sprites{
 	attacking1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=0.00 57.00
 		file_size=56.00 56.00
 		game_size=56.00 56.00
@@ -367,7 +367,7 @@ sprites{
 		}
 	}
 	attacking2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=57.00 57.00
 		file_size=50.00 56.00
 		game_size=50.00 56.00
@@ -412,7 +412,7 @@ sprites{
 		}
 	}
 	attacking3{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=108.00 57.00
 		file_size=50.00 56.00
 		game_size=50.00 56.00
@@ -457,7 +457,7 @@ sprites{
 		}
 	}
 	attacking4{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=159.00 57.00
 		file_size=92.00 56.00
 		game_size=92.00 56.00
@@ -502,7 +502,7 @@ sprites{
 		}
 	}
 	attacking5{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=252.00 57.00
 		file_size=148.00 56.00
 		game_size=148.00 56.00
@@ -547,7 +547,7 @@ sprites{
 		}
 	}
 	dying1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=0.00 171.00
 		file_size=68.00 56.00
 		game_size=68.00 56.00
@@ -592,7 +592,7 @@ sprites{
 		}
 	}
 	dying2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=0.00 0.00
 		file_size=67.00 56.00
 		game_size=67.00 56.00
@@ -637,7 +637,7 @@ sprites{
 		}
 	}
 	dying3{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=69.00 171.00
 		file_size=68.00 56.00
 		game_size=68.00 56.00
@@ -682,7 +682,7 @@ sprites{
 		}
 	}
 	dying4{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=138.00 171.00
 		file_size=65.00 56.00
 		game_size=65.00 56.00
@@ -727,7 +727,7 @@ sprites{
 		}
 	}
 	dying5{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=204.00 171.00
 		file_size=64.00 56.00
 		game_size=64.00 56.00
@@ -772,7 +772,7 @@ sprites{
 		}
 	}
 	dying6{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=269.00 171.00
 		file_size=64.00 56.00
 		game_size=64.00 56.00
@@ -817,7 +817,7 @@ sprites{
 		}
 	}
 	dying7{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=334.00 171.00
 		file_size=64.00 56.00
 		game_size=64.00 56.00
@@ -862,7 +862,7 @@ sprites{
 		}
 	}
 	dying8{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=399.00 171.00
 		file_size=57.00 56.00
 		game_size=57.00 56.00
@@ -907,7 +907,7 @@ sprites{
 		}
 	}
 	dying9{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=457.00 171.00
 		file_size=80.00 56.00
 		game_size=80.00 56.00
@@ -952,7 +952,7 @@ sprites{
 		}
 	}
 	idling{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=0.00 0.00
 		file_size=67.00 56.00
 		game_size=67.00 56.00
@@ -997,7 +997,7 @@ sprites{
 		}
 	}
 	shaking1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=0.00 114.00
 		file_size=60.00 56.00
 		game_size=60.00 56.00
@@ -1042,7 +1042,7 @@ sprites{
 		}
 	}
 	shaking2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=120.00 114.00
 		file_size=58.00 56.00
 		game_size=58.00 56.00
@@ -1087,7 +1087,7 @@ sprites{
 		}
 	}
 	shaking3{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=61.00 114.00
 		file_size=58.00 56.00
 		game_size=58.00 56.00
@@ -1132,7 +1132,7 @@ sprites{
 		}
 	}
 	shaking4{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=120.00 114.00
 		file_size=58.00 56.00
 		game_size=58.00 56.00
@@ -1177,7 +1177,7 @@ sprites{
 		}
 	}
 	shaking5{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=236.00 114.00
 		file_size=56.00 56.00
 		game_size=56.00 56.00
@@ -1222,7 +1222,7 @@ sprites{
 		}
 	}
 	shaking6{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=61.00 114.00
 		file_size=58.00 56.00
 		game_size=58.00 56.00
@@ -1267,7 +1267,7 @@ sprites{
 		}
 	}
 	shaking7{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=179.00 114.00
 		file_size=56.00 56.00
 		game_size=56.00 56.00
@@ -1312,7 +1312,7 @@ sprites{
 		}
 	}
 	eating1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=401.00 57.00
 		file_size=67.00 56.00
 		game_size=67.00 56.00
@@ -1357,7 +1357,7 @@ sprites{
 		}
 	}
 	eating2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=469.00 57.00
 		file_size=68.00 56.00
 		game_size=68.00 56.00
@@ -1402,7 +1402,7 @@ sprites{
 		}
 	}
 	emerging1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=206.00 0.00
 		file_size=39.00 56.00
 		game_size=39.00 56.00
@@ -1447,7 +1447,7 @@ sprites{
 		}
 	}
 	emerging2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=246.00 0.00
 		file_size=42.00 56.00
 		game_size=42.00 56.00
@@ -1492,7 +1492,7 @@ sprites{
 		}
 	}
 	emerging3{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=289.00 0.00
 		file_size=42.00 56.00
 		game_size=42.00 56.00
@@ -1537,7 +1537,7 @@ sprites{
 		}
 	}
 	emerging4{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=332.00 0.00
 		file_size=39.00 56.00
 		game_size=39.00 56.00
@@ -1582,7 +1582,7 @@ sprites{
 		}
 	}
 	emerging5{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=372.00 0.00
 		file_size=46.00 56.00
 		game_size=46.00 56.00
@@ -1627,7 +1627,7 @@ sprites{
 		}
 	}
 	moving1{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=68.00 0.00
 		file_size=68.00 56.00
 		game_size=68.00 56.00
@@ -1672,7 +1672,7 @@ sprites{
 		}
 	}
 	moving2{
-		file=CB.png
+		file=Cloaking_Burrow-nit.png
 		file_pos=137.00 0.00
 		file_size=68.00 56.00
 		game_size=68.00 56.00

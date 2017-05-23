@@ -1555,6 +1555,8 @@ void animation_editor::load() {
     frm_body_parts->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    ((lafi::textbox*) frm_body_parts->widgets["txt_add"])->enter_key_widget =
+        frm_body_parts->widgets["but_add"];
     frm_body_parts->widgets["txt_add"]->description =
         "Name of the body part you want to create.";
         
