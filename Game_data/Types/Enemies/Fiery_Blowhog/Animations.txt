@@ -1,0 +1,1997 @@
+animations{
+	idling{
+		loop_frame=0
+		frames{
+			idling{
+				duration=1.00
+			}
+			lookingr1{
+				duration=0.10
+			}
+			lookingr2{
+				duration=0.10
+			}
+			lookingr3{
+				duration=0.20
+			}
+			lookingr4{
+				duration=0.10
+			}
+			lookingl1{
+				duration=0.10
+			}
+			lookingl2{
+				duration=0.10
+			}
+			lookingl3{
+				duration=0.20
+			}
+			lookingl4{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	moving{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			moving1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			moving2{
+				duration=0.10
+			}
+		}
+	}
+	attacking{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			puffing1{
+				duration=0.30
+			}
+			puffing2{
+				duration=0.30
+			}
+			puffing1{
+				duration=0.10
+			}
+			attacking1{
+				duration=0.10
+			}
+			attacking2{
+				duration=0.10
+			}
+			attacking3{
+				duration=0.10
+			}
+			attacking4{
+				duration=0.10
+			}
+			attacking5{
+				duration=0.10
+			}
+			attacking2{
+				duration=0.10
+			}
+			attacking3{
+				duration=0.10
+			}
+			attacking4{
+				duration=0.10
+			}
+			attacking5{
+				duration=0.10
+			}
+			attacking6{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	bucking{
+		loop_frame=0
+		frames{
+			bucking1{
+				duration=0.10
+			}
+			bucking2{
+				duration=0.10
+			}
+			bucking3{
+				duration=0.30
+			}
+			bucking2{
+				duration=0.10
+			}
+			bucking5{
+				duration=0.10
+			}
+			bucking4{
+				duration=0.40
+			}
+			bucking5{
+				duration=0.10
+			}
+			idling{
+				duration=0.30
+			}
+		}
+	}
+	dying{
+		loop_frame=8
+		frames{
+			dying1{
+				duration=0.10
+			}
+			dying2{
+				duration=0.10
+			}
+			dying3{
+				duration=0.50
+			}
+			dying2{
+				duration=0.20
+			}
+			dying1{
+				duration=0.20
+			}
+			dying4{
+				duration=0.10
+			}
+			dying5{
+				duration=0.10
+			}
+			dying6{
+				duration=0.10
+			}
+			dying7{
+				duration=1.00
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingr1{
+		file=Fiery_Blowhog.png
+		file_pos=111.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 8.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 8.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 8.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingr2{
+		file=Fiery_Blowhog.png
+		file_pos=222.00 0.00
+		file_size=109.00 58.00
+		game_size=109.00 58.00
+		offset=20.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=68.95 10.87 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=68.95 10.87 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=68.95 9.81 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingr3{
+		file=Fiery_Blowhog.png
+		file_pos=332.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=69.32 12.47 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=69.30 12.97 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=68.95 13.32 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingr4{
+		file=Fiery_Blowhog.png
+		file_pos=443.00 0.00
+		file_size=111.00 58.00
+		game_size=111.00 58.00
+		offset=21.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=67.90 16.47 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=67.90 15.42 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=67.90 14.72 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingl1{
+		file=Fiery_Blowhog.png
+		file_pos=111.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 -58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 -8.76 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.70 -8.41 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.35 -8.76 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingl2{
+		file=Fiery_Blowhog.png
+		file_pos=222.00 0.00
+		file_size=109.00 58.00
+		game_size=109.00 -58.00
+		offset=20.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.11 -10.99 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=69.30 -12.97 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=69.30 -12.27 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingl3{
+		file=Fiery_Blowhog.png
+		file_pos=332.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 -58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=68.95 -15.07 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=68.25 -16.47 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=68.95 -16.47 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	lookingl4{
+		file=Fiery_Blowhog.png
+		file_pos=443.00 0.00
+		file_size=111.00 58.00
+		game_size=111.00 -58.00
+		offset=21.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=68.25 -14.72 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=67.55 -14.37 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=67.90 -14.72 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving1{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 59.00
+		file_size=109.00 58.00
+		game_size=109.00 58.00
+		offset=22.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=72.10 -3.15 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=72.11 -2.81 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=72.80 -2.80 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving2{
+		file=Fiery_Blowhog.png
+		file_pos=110.00 59.00
+		file_size=113.00 58.00
+		game_size=113.00 58.00
+		offset=20.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=72.10 2.46 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=71.77 2.74 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=71.75 2.80 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	puffing1{
+		file=Fiery_Blowhog.png
+		file_pos=224.00 59.00
+		file_size=110.00 61.00
+		game_size=110.00 61.00
+		offset=19.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	puffing2{
+		file=Fiery_Blowhog.png
+		file_pos=335.00 59.00
+		file_size=108.00 62.00
+		game_size=108.00 62.00
+		offset=17.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	attacking1{
+		file=Fiery_Blowhog.png
+		file_pos=444.00 59.00
+		file_size=204.00 58.00
+		game_size=204.00 58.00
+		offset=67.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=88.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=112.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=142.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	attacking2{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 121.00
+		file_size=298.00 58.00
+		game_size=298.00 58.00
+		offset=115.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=100.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=158.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=216.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	attacking3{
+		file=Fiery_Blowhog.png
+		file_pos=299.00 122.00
+		file_size=298.00 60.00
+		game_size=298.00 60.00
+		offset=114.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=100.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=158.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=216.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	attacking4{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 180.00
+		file_size=298.00 58.00
+		game_size=298.00 58.00
+		offset=114.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=100.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=158.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=216.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	attacking5{
+		file=Fiery_Blowhog.png
+		file_pos=299.00 183.00
+		file_size=298.00 56.00
+		game_size=298.00 56.00
+		offset=114.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=100.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=158.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=216.00 0.00 0.00
+				height=128.00
+				radius=30.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	attacking6{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 239.00
+		file_size=298.00 58.00
+		game_size=298.00 58.00
+		offset=114.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=180.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire2{
+				coords=206.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+			fire3{
+				coords=232.00 0.00 0.00
+				height=128.00
+				radius=18.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=fire
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	bucking1{
+		file=Fiery_Blowhog.png
+		file_pos=299.00 240.00
+		file_size=107.00 58.00
+		game_size=107.00 58.00
+		offset=19.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bucking2{
+		file=Fiery_Blowhog.png
+		file_pos=407.00 240.00
+		file_size=95.00 58.00
+		game_size=95.00 58.00
+		offset=8.00 0.00
+		hitboxes{
+			body{
+				coords=-6.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=52.56 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=51.17 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=52.00 -0.83 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bucking3{
+		file=Fiery_Blowhog.png
+		file_pos=503.00 240.00
+		file_size=66.00 58.00
+		game_size=66.00 58.00
+		offset=-8.00 0.00
+		hitboxes{
+			body{
+				coords=-9.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=6.87 0.83 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=6.04 0.83 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=6.87 0.55 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bucking4{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 298.00
+		file_size=98.00 58.00
+		game_size=98.00 58.00
+		offset=19.00 0.00
+		hitboxes{
+			body{
+				coords=12.00 0.00 0.00
+				height=100.00
+				radius=50.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=false
+				angle=0.00
+				knockback=7.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	bucking5{
+		file=Fiery_Blowhog.png
+		file_pos=99.00 298.00
+		file_size=98.00 58.00
+		game_size=98.00 58.00
+		offset=15.00 0.00
+		hitboxes{
+			body{
+				coords=8.00 0.00 0.00
+				height=100.00
+				radius=50.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=false
+				angle=0.00
+				knockback=7.00
+			}
+			fire1{
+				coords=60.31 -1.11 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=60.03 -1.11 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=60.03 -0.83 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying1{
+		file=Fiery_Blowhog.png
+		file_pos=0.00 0.00
+		file_size=110.00 58.00
+		game_size=110.00 58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying2{
+		file=Fiery_Blowhog.png
+		file_pos=299.00 240.00
+		file_size=107.00 58.00
+		game_size=107.00 58.00
+		offset=19.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying3{
+		file=Fiery_Blowhog.png
+		file_pos=407.00 240.00
+		file_size=95.00 58.00
+		game_size=95.00 58.00
+		offset=8.00 0.00
+		hitboxes{
+			body{
+				coords=-6.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=52.56 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=51.17 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=52.00 -0.83 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying4{
+		file=Fiery_Blowhog.png
+		file_pos=198.00 299.00
+		file_size=111.00 61.00
+		game_size=111.00 61.00
+		offset=21.00 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying5{
+		file=Fiery_Blowhog.png
+		file_pos=310.00 299.00
+		file_size=110.00 64.00
+		game_size=110.00 64.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying6{
+		file=Fiery_Blowhog.png
+		file_pos=421.00 299.00
+		file_size=111.00 65.00
+		game_size=111.00 65.00
+		offset=21.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying7{
+		file=Fiery_Blowhog.png
+		file_pos=533.00 299.00
+		file_size=110.00 58.00
+		game_size=110.00 58.00
+		offset=20.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying8{
+		file=Fiery_Blowhog.png
+		file_pos=421.00 299.00
+		file_size=111.00 65.00
+		game_size=111.00 -65.00
+		offset=21.50 0.00
+		hitboxes{
+			body{
+				coords=0.00 0.00 0.00
+				height=70.00
+				radius=35.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=true
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire1{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire2{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			fire3{
+				coords=70.00 0.00 0.00
+				height=128.00
+				radius=6.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+}
+body_parts{
+	body=
+	fire1=
+	fire2=
+	fire3=
+}

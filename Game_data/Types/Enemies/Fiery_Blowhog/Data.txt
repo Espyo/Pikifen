@@ -1,0 +1,21 @@
+name = Fiery Blowhog
+
+big_damage_interval = 50
+drops_corpse = true
+height = 70
+max_carriers = 15
+max_health = 1000
+move_speed = 45
+pikmin_seeds = 8
+pushable = true
+pushes = true
+radius = 35
+reaches {
+    search = 250 90 30 360
+    attack = 150 10
+    chase = 250 360
+}
+rotation_speed = 114
+territory_radius = 300
+value = 30
+weight = 7
