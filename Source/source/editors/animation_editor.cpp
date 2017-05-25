@@ -342,7 +342,10 @@ void animation_editor::body_part_to_gui() {
         (
             anims.body_parts.empty() ?
             "--/0" :
-            (string) (i2s(cur_body_part_nr + 1) + "/" + i2s(anims.body_parts.size()))
+            (string) (
+                i2s(cur_body_part_nr + 1) + "/" +
+                i2s(anims.body_parts.size())
+            )
         );
         
     if(anims.body_parts.empty()) {
@@ -1314,7 +1317,8 @@ void animation_editor::save_animation_database() {
     file_node.add(body_parts_node);
     
     for(size_t b = 0; b < anims.body_parts.size(); ++b) {
-        data_node* body_part_node = new data_node(anims.body_parts[b]->name, "");
+        data_node* body_part_node =
+            new data_node(anims.body_parts[b]->name, "");
         body_parts_node->add(body_part_node);
         
     }

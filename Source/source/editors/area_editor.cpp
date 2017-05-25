@@ -285,7 +285,7 @@ void area_editor::sector_to_gui() {
 /* ----------------------------------------------------------------------------
  * Snaps a point to the nearest grid space.
  */
-point area_editor::snap_to_grid(const point p) {
+point area_editor::snap_to_grid(const point &p) {
     if(shift_pressed) return p;
     return
         point(
@@ -390,16 +390,25 @@ void area_editor::gui_to_reference() {
     
     if(new_size.x != 0 && new_size.y != 0 && !is_file_new) {
         if(reference_aspect_ratio) {
-            if(new_size.x == reference_size.x && new_size.y != reference_size.y) {
+            if(
+                new_size.x == reference_size.x &&
+                new_size.y != reference_size.y
+            ) {
                 float ratio = reference_size.x / reference_size.y;
                 reference_size.y = new_size.y;
                 reference_size.x = new_size.y * ratio;
-            } else if(new_size.x != reference_size.x && new_size.y == reference_size.y) {
+                
+            } else if(
+                new_size.x != reference_size.x &&
+                new_size.y == reference_size.y
+            ) {
                 float ratio = reference_size.y / reference_size.x;
                 reference_size.x = new_size.x;
                 reference_size.y = new_size.x * ratio;
+                
             } else {
                 reference_size = new_size;
+                
             }
         } else {
             reference_size = new_size;
@@ -563,7 +572,7 @@ void area_editor::cancel_new_sector() {
  * where it's hard to see.
  */
 void area_editor::center_camera(
-    const point min_coords, const point max_coords
+    const point &min_coords, const point &max_coords
 ) {
     float width = max_coords.x - min_coords.x;
     float height = max_coords.y - min_coords.y;
@@ -1473,7 +1482,7 @@ bool area_editor::get_common_sector(
         all_common_sectors.insert(*s);
     }
     
-    if(all_common_sectors.size() == 0) {
+    if(all_common_sectors.empty()) {
         *result = NULL;
         return false;
     } else if(all_common_sectors.size() == 1) {
@@ -1656,7 +1665,7 @@ void area_editor::goto_error() {
  * This is the line between the last chosen vertex of the new sector
  * and the provided coordinates.
  */
-bool area_editor::is_new_sector_line_valid(const point pos) {
+bool area_editor::is_new_sector_line_valid(const point &pos) {
     if(new_sector_vertexes.empty()) return true;
     
     //Given the last vertex of the new sector,
@@ -2459,10 +2468,18 @@ void area_editor::save_area(const bool to_backup) {
     }
     
     //Editor reference.
-    geometry_file.add(new data_node("reference_file_name", reference_file_name));
-    geometry_file.add(new data_node("reference_pos",       p2s(reference_pos)));
-    geometry_file.add(new data_node("reference_size",      p2s(reference_size)));
-    geometry_file.add(new data_node("reference_alpha",     i2s(reference_a)));
+    geometry_file.add(
+        new data_node("reference_file_name", reference_file_name)
+    );
+    geometry_file.add(
+        new data_node("reference_pos", p2s(reference_pos))
+    );
+    geometry_file.add(
+        new data_node("reference_size", p2s(reference_size))
+    );
+    geometry_file.add(
+        new data_node("reference_alpha", i2s(reference_a))
+    );
     
     
     //Check if the folder exists before saving. If not, create it.
@@ -2564,7 +2581,9 @@ bool area_editor::update_backup_status() {
     
     if(area_name.empty()) return false;
     
-    data_node file(AREAS_FOLDER_PATH + "/" + area_name + "/Geometry_backup.txt");
+    data_node file(
+        AREAS_FOLDER_PATH + "/" + area_name + "/Geometry_backup.txt"
+    );
     if(!file.file_was_opened) return false;
     
     enable_widget(gui->widgets["frm_options"]->widgets["but_backup"]);

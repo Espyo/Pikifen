@@ -595,7 +595,8 @@ void init_single_animation(
     single_animation_suite &anim
 ) {
     data_node file(
-        ANIMATIONS_FOLDER_PATH + "/" + anim_def_file->get_child_by_name(name)->value
+        ANIMATIONS_FOLDER_PATH + "/" +
+        anim_def_file->get_child_by_name(name)->value
     );
     anim.database = load_animation_database_from_file(&file);
     anim.instance.cur_anim = anim.database.animations[0];

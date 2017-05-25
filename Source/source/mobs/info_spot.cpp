@@ -20,7 +20,7 @@
  * Creates an info spot mob.
  */
 info_spot::info_spot(
-    const point pos, const float angle, const string &vars
+    const point &pos, const float angle, const string &vars
 ) :
     mob(pos, spec_mob_types["Info spot"], angle, vars),
     text(get_var_value(vars, "text", "")),

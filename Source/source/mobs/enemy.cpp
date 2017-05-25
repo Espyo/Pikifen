@@ -17,7 +17,7 @@
  * Creates an enemy mob.
  */
 enemy::enemy(
-    const point pos, enemy_type* type, const float angle,
+    const point &pos, enemy_type* type, const float angle,
     const string &vars
 ) :
     mob(pos, type, angle, vars),

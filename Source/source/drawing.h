@@ -43,64 +43,64 @@ bool casts_shadow(
 );
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
-    const point where, const point max_size
+    const point &where, const point &max_size
 );
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const int flags, const unsigned char valign,
-    const point max_size, const string &text
+    const point &where, const int flags, const unsigned char valign,
+    const point &max_size, const string &text
 );
 void draw_fraction(
-    const point center, const unsigned int current,
+    const point &center, const unsigned int current,
     const unsigned int needed, const ALLEGRO_COLOR &color
 );
 void draw_health(
-    const point center, const unsigned int health,
+    const point &center, const unsigned int health,
     const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS,
     const bool just_chart = false
 );
 void draw_lighting_filter();
 void draw_liquid(
-    sector* s_ptr, const point where, const float scale
+    sector* s_ptr, const point &where, const float scale
 );
 void draw_loading_screen(
     const string &area_name, const string &subtitle, const float opacity
 );
 void draw_notification(
-    const point where, const string &text,
+    const point &where, const string &text,
     control_info* control = NULL
 );
 void draw_sector(
-    sector* s_ptr, const point where,
+    sector* s_ptr, const point &where,
     const float scale, sector_texture_info* texture = NULL
 );
 void draw_sector_texture(
-    sector* s_ptr, const point where,
+    sector* s_ptr, const point &where,
     const float scale, sector_texture_info* texture = NULL
 );
 void draw_mob_shadow(
-    const point where, const float size,
+    const point &where, const float size,
     const float delta_z, const float shadow_stretch
 );
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const point scale,
+    const point &where, const point &scale,
     const int flags, const unsigned char valign, const string &text
 );
 void draw_sprite(
-    ALLEGRO_BITMAP* bmp, const point center,
-    const point size, const float angle = 0,
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle = 0,
     const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
 );
 void draw_sprite_with_effects(
-    ALLEGRO_BITMAP* bmp, const point center,
-    const point size, const float angle,
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle,
     sprite_effect_manager* effects
 );
 void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects);
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const int flags, const unsigned char valign,
+    const point &where, const int flags, const unsigned char valign,
     const string &text
 );
 float ease(

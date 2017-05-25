@@ -73,7 +73,7 @@ protected:
     
 public:
     pikmin(
-        const point pos, pikmin_type* type,
+        const point &pos, pikmin_type* type,
         const float angle, const string &vars
     );
     ~pikmin();
@@ -117,7 +117,7 @@ public:
 
 
 pikmin* get_closest_buried_pikmin(
-    const point pos, dist* d, const bool ignore_reserved
+    const point &pos, dist* d, const bool ignore_reserved
 );
 
 #endif //ifndef PIKMIN_INCLUDED

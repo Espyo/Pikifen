@@ -15,68 +15,10 @@
    viewBox="0 0 793.70081 1122.5197"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.0 unknown"
+   inkscape:version="0.92.1 unknown"
    sodipodi:docname="Menu_icons.svg">
   <defs
-     id="defs4">
-    <marker
-       inkscape:stockid="Torso"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Torso"
-       style="overflow:visible"
-       inkscape:isstock="true">
-      <g
-         id="g4895"
-         transform="scale(0.7)"
-         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1">
-        <path
-           id="path4897"
-           d="m -4.7792281,-3.239542 c 2.350374,0.3659393 5.30026732,1.9375477 5.03715532,3.62748546 C -0.00518779,2.0778819 -2.2126741,2.6176539 -4.5630471,2.2517169 -6.9134221,1.8857769 -8.521035,0.75201414 -8.257922,-0.93792336 -7.994809,-2.6278615 -7.1296041,-3.6054813 -4.7792281,-3.239542 Z"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path4899"
-           d="M 4.4598789,0.08866574 C -2.5564571,-4.378332 5.2248769,-3.9061806 -0.84829578,-8.7197331"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path4901"
-           d="M 4.9298719,0.05752074 C -1.3872731,1.7494689 1.8027579,5.4782079 -4.9448731,7.5462725"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-        <rect
-           id="rect4903"
-           transform="matrix(0.527536,-0.849533,0.887668,0.460484,0,0)"
-           y="-1.7408575"
-           x="-10.391706"
-           height="2.7608147"
-           width="2.6366582"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" />
-        <rect
-           id="rect4905"
-           transform="matrix(0.671205,-0.741272,0.790802,0.612072,0,0)"
-           y="-7.9629307"
-           x="4.9587269"
-           height="2.8614161"
-           width="2.7327356"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1" />
-        <path
-           id="path4907"
-           transform="matrix(0,-1.109517,1.109517,0,25.96648,19.71619)"
-           d="m 16.779951,-28.685045 a 0.60731727,0.60731727 0 1 0 -1.214634,0 0.60731727,0.60731727 0 1 0 1.214634,0 z"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path4909"
-           transform="matrix(0,-1.109517,1.109517,0,26.8245,16.99126)"
-           d="m 16.779951,-28.685045 a 0.60731727,0.60731727 0 1 0 -1.214634,0 0.60731727,0.60731727 0 1 0 1.214634,0 z"
-           style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
-           inkscape:connector-curvature="0" />
-      </g>
-    </marker>
-  </defs>
+     id="defs4" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -84,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.627417"
-     inkscape:cx="1012.9794"
-     inkscape:cy="7.9545876"
+     inkscape:zoom="1"
+     inkscape:cx="407.56301"
+     inkscape:cy="-27.054298"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"

@@ -51,7 +51,7 @@ public:
     float buried; //0: fully unburried. 1: fully buried.
     
     treasure(
-        const point pos, treasure_type* type,
+        const point &pos, treasure_type* type,
         const float angle, const string &vars
     );
     void draw(sprite_effect_manager* effect_manager = NULL);

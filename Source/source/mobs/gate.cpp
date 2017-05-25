@@ -16,7 +16,7 @@
  * Creates a gate mob.
  */
 gate::gate(
-    const point pos, gate_type* type,
+    const point &pos, gate_type* type,
     const float angle, const string &vars
 ) :
     mob(pos, type, angle, vars),

@@ -156,10 +156,14 @@ void gameplay::do_aesthetic_logic() {
             size_t cat = cur_leader_ptr->holding_pikmin->type->category->id;
             if(cat == MOB_CATEGORY_PIKMIN) {
                 max_throw_z =
-                    ((pikmin*) cur_leader_ptr->holding_pikmin)->pik_type->max_throw_height;
+                    (
+                        (pikmin*) cur_leader_ptr->holding_pikmin
+                    )->pik_type->max_throw_height;
             } else if(cat == MOB_CATEGORY_LEADERS) {
                 max_throw_z =
-                    ((leader*) cur_leader_ptr->holding_pikmin)->lea_type->max_throw_height;
+                    (
+                        (leader*) cur_leader_ptr->holding_pikmin
+                    )->lea_type->max_throw_height;
             }
             
             if(max_throw_z > 0) {
@@ -856,7 +860,9 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                             //Check if m2 is under any status effect
                             //that disables attacks.
                             bool disable_attack_status = false;
-                            for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
+                            for(
+                                size_t s = 0; s < m2_ptr->statuses.size(); ++s
+                            ) {
                                 if(m2_ptr->statuses[s].type->disables_attack) {
                                     disable_attack_status = true;
                                     break;
@@ -971,8 +977,15 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                                 //Check if m2 is under any status effect
                                 //that disables attacks.
                                 bool disable_attack_status = false;
-                                for(size_t s = 0; s < m2_ptr->statuses.size(); ++s) {
-                                    if(m2_ptr->statuses[s].type->disables_attack) {
+                                for(
+                                    size_t s = 0;
+                                    s < m2_ptr->statuses.size(); ++s
+                                ) {
+                                    if(
+                                        m2_ptr->statuses[
+                                            s
+                                        ].type->disables_attack
+                                    ) {
                                         disable_attack_status = true;
                                         break;
                                     }

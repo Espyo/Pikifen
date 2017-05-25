@@ -32,7 +32,7 @@ body_part::body_part(const string &name) :
  * radius: Hitbox radius.
  */
 hitbox::hitbox(
-    const string &bpn, size_t bpi, body_part* bpp, const point pos,
+    const string &bpn, size_t bpi, body_part* bpp, const point &pos,
     const float z, const float height, const float radius
 ) :
     body_part_name(bpn),

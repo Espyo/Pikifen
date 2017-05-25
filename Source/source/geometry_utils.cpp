@@ -180,7 +180,7 @@ float angular_dist_to_linear(const float angular_dist, const float radius) {
  * center2: Coordinates of the second sphere.
  * r:       Range of the bounding box.
  */
-bool bbox_check(const point center1, const point center2, const float r) {
+bool bbox_check(const point &center1, const point &center2, const float r) {
     return
         (
             fabs(center1.x - center2.x) <= r &&
@@ -197,8 +197,8 @@ bool bbox_check(const point center1, const point center2, const float r) {
  * li*:    If not NULL, the line intersection coordinates are returned here.
  */
 bool circle_intersects_line(
-    const point circle, const float radius,
-    const point line_p1, const point line_p2,
+    const point &circle, const float radius,
+    const point &line_p1, const point &line_p2,
     float* lix, float* liy
 ) {
 
@@ -252,7 +252,7 @@ float deg_to_rad(const float deg) {
  * In other words, this is the angle "center" is facing when it is looking
  * at "focus".
  */
-float get_angle(const point center, const point focus) {
+float get_angle(const point &center, const point &focus) {
     return atan2(focus.y - center.y, focus.x - center.x);
 }
 
@@ -265,7 +265,7 @@ float get_angle(const point center, const point focus) {
  *   Between 0 and 1, it belongs to the line segment. If not, it doesn't.
  */
 point get_closest_point_in_line(
-    const point l1, const point l2, const point p, float* segment_ratio
+    const point &l1, const point &l2, const point &p, float* segment_ratio
 ) {
 
     //Code by http://stackoverflow.com/a/3122532
@@ -310,7 +310,7 @@ float linear_dist_to_angular(const float linear_dist, const float radius) {
  * delta_t:      Duration of the current tick.
  */
 void move_point(
-    const point start, const point target,
+    const point &start, const point &target,
     const float speed, const float reach_radius,
     point* mov, float* angle, bool* reached, const float delta_t
 ) {
@@ -352,8 +352,8 @@ float normalize_angle(float a) {
  * l*: Line coordinates.
  */
 bool rectangle_intersects_line(
-    const point r1, const point r2,
-    const point l1, const point l2
+    const point &r1, const point &r2,
+    const point &l1, const point &l2
 ) {
     //Line crosses left side?
     if(
@@ -416,7 +416,7 @@ float rad_to_deg(const float rad) {
  * The x and y are meant to represent the difference
  * between the point and the center of the rotation.
  */
-point rotate_point(const point coords, const float angle) {
+point rotate_point(const point &coords, const float angle) {
     float c = cos(angle);
     float s = sin(angle);
     return point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);

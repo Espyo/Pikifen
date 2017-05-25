@@ -51,7 +51,7 @@ protected:
         const bool can_make_new = false
     );
     void hide_bottom_frame();
-    bool is_mouse_in_gui(const point mouse_coords);
+    bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
     void show_bottom_frame();
     void show_changes_warning();

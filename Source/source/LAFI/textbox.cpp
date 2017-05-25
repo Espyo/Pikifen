@@ -311,7 +311,7 @@ void textbox::widget_on_key_char(
                 return;
             } else {
                 if(!multi_line) return;
-                else char_to_enter = '\n';
+                char_to_enter = '\n';
             }
         }
         
@@ -321,7 +321,7 @@ void textbox::widget_on_key_char(
             sel_start = sel_end = cursor;
         }
         if(!ctrl) {
-            text.insert(cursor, 1, unichar);
+            text.insert(cursor, 1, char_to_enter);
             cursor++;
             call_change_handler();
         }

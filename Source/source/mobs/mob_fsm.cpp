@@ -276,7 +276,8 @@ void gen_mob_fsm::set_next_target(mob* m, void* info1, void* info2) {
                     );
             }
             m->chase(
-                m->carry_info->final_destination, NULL, false, NULL, true, target_distance,
+                m->carry_info->final_destination,
+                NULL, false, NULL, true, target_distance,
                 m->carry_info->get_speed()
             );
             

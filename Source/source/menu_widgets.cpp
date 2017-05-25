@@ -27,7 +27,7 @@ const float menu_widget::JUICY_GROW_DURATION = 0.3f;
  * Creates a menu widget.
  */
 menu_widget::menu_widget(
-    const point pos, const point size,
+    const point &pos, const point &size,
     function<void()> click_handler
 ) :
     pos(pos),
@@ -44,7 +44,7 @@ menu_widget::menu_widget(
 /* ----------------------------------------------------------------------------
  * Returns whether or not the mouse cursor is on top of this widget.
  */
-bool menu_widget::mouse_on(const point mc) {
+bool menu_widget::mouse_on(const point &mc) {
     return
         (
             mc.x >= pos.x - size.x * 0.5 &&
@@ -88,7 +88,7 @@ void menu_widget::start_juicy_grow() {
  * Creates a clickable button widget.
  */
 menu_button::menu_button(
-    const point pos, const point size,
+    const point &pos, const point &size,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color, const int align
 ) :
@@ -142,7 +142,7 @@ bool menu_button::is_clickable() { return enabled; }
  * Creates a checkbox widget.
  */
 menu_checkbox::menu_checkbox(
-    const point pos, const point size,
+    const point &pos, const point &size,
     function<void()> click_handler, string text, ALLEGRO_FONT* font,
     const ALLEGRO_COLOR &color, const int align
 ) :
@@ -205,7 +205,7 @@ bool menu_checkbox::is_clickable() { return enabled; }
  * Creates a text widget.
  */
 menu_text::menu_text(
-    const point pos, const point size, string text,
+    const point &pos, const point &size, string text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(pos, size, nullptr),

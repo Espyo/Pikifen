@@ -36,7 +36,7 @@ public:
     pellet_type* pel_type;
     
     pellet(
-        const point pos, pellet_type* type,
+        const point &pos, pellet_type* type,
         const float angle, const string &vars
     );
     virtual void draw(sprite_effect_manager* effect_manager = NULL);

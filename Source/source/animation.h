@@ -95,12 +95,12 @@ public:
     
     sprite(
         const string &name = "", ALLEGRO_BITMAP* const b = NULL,
-        const point g_size = point(),
+        const point &g_size = point(),
         const vector<hitbox> &h = vector<hitbox>()
     );
     sprite(
-        const string &name, ALLEGRO_BITMAP* const b, const point b_pos,
-        const point b_size, const point g_size,
+        const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
+        const point &b_size, const point &g_size,
         const vector<hitbox> &h
     );
     sprite(const sprite &s2);

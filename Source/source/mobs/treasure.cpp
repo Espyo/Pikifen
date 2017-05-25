@@ -19,7 +19,7 @@
  * Creates a treasure.
  */
 treasure::treasure(
-    const point pos, treasure_type* type,
+    const point &pos, treasure_type* type,
     const float angle, const string &vars
 ) :
     mob(pos, type, angle, vars),

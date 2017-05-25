@@ -405,11 +405,10 @@ void handle_button(
                                 pikmin_in_onions[pik_type] > 0
                             ) {
                                 pikmin_in_onions[pik_type]--;
-                                mob* new_pik =
-                                    create_mob(
-                                        mob_categories.get(MOB_CATEGORY_PIKMIN),
-                                        onions[o]->pos, pik_type, 0, ""
-                                    );
+                                create_mob(
+                                    mob_categories.get(MOB_CATEGORY_PIKMIN),
+                                    onions[o]->pos, pik_type, 0, ""
+                                );
                             }
                             done = true;
                         }

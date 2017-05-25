@@ -23,7 +23,7 @@ using namespace std;
  * Creates an Onion mob.
  */
 onion::onion(
-    const point pos, onion_type* type, const float angle, const string &vars
+    const point &pos, onion_type* type, const float angle, const string &vars
 ) :
     mob(pos, type, angle, vars),
     oni_type(type),

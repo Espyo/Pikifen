@@ -35,7 +35,7 @@ public:
     unsigned int appears_every_x_days;
     
     enemy(
-        const point pos, enemy_type* type,
+        const point &pos, enemy_type* type,
         const float angle, const string &vars
     );
     void draw(sprite_effect_manager* effect_manager = NULL);

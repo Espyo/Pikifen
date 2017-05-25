@@ -479,7 +479,12 @@ void gameplay::load_hud_info() {
     //Bitmaps.
     data_node* bitmaps_node = file.get_child_by_name("files");
     
-#define loader(var, name) var = bitmaps.get(bitmaps_node->get_child_by_name(name)->value, bitmaps_node->get_child_by_name(name));
+#define loader(var, name) \
+    var = \
+          bitmaps.get( \
+                       bitmaps_node->get_child_by_name(name)->value, \
+                       bitmaps_node->get_child_by_name(name) \
+                     );
     
     loader(bmp_bubble,                 "bubble");
     loader(bmp_counter_bubble_field,   "counter_bubble_field");

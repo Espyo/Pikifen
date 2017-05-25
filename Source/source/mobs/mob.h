@@ -142,7 +142,7 @@ struct carrier_spot_struct {
     //They avoid calculating several sines and cosines over and over.
     point pos;
     mob* pik_ptr;
-    carrier_spot_struct(const point pos);
+    carrier_spot_struct(const point &pos);
 };
 
 
@@ -204,7 +204,7 @@ protected:
     
 public:
     mob(
-        const point pos, mob_type* type,
+        const point &pos, mob_type* type,
         const float angle, const string &vars
     );
     virtual ~mob(); //Needed so that typeid works.
@@ -284,7 +284,7 @@ public:
     size_t cur_path_stop_nr;
     
     void chase(
-        const point offset, point* orig_coords,
+        const point &offset, point* orig_coords,
         const bool teleport, float* teleport_z = NULL,
         const bool free_move = false, const float target_distance = 3,
         const float speed = -1
@@ -414,13 +414,13 @@ void cause_hitbox_damage(
     hitbox* victim_h, float* total_damage
 );
 mob* create_mob(
-    mob_category* category, const point pos, mob_type* type,
+    mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars
 );
 void delete_mob(mob* m);
 void focus_mob(mob* m1, mob* m2);
 hitbox* get_closest_hitbox(
-    const point p, mob* m, const size_t h_type = INVALID, dist* d = NULL
+    const point &p, mob* m, const size_t h_type = INVALID, dist* d = NULL
 );
 hitbox* get_hitbox(mob* m, const size_t nr);
 bool is_resistant_to_hazards(

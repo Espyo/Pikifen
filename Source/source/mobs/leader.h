@@ -92,7 +92,7 @@ public:
     bool is_in_walking_anim;
     
     leader(
-        const point pos, leader_type* type,
+        const point &pos, leader_type* type,
         const float angle, const string &vars
     );
     

@@ -26,7 +26,7 @@
  * priority: Lower priority particles will be removed in favor of higher ones.
  */
 particle::particle(
-    const unsigned char type, const point pos, const float size,
+    const unsigned char type, const point &pos, const float size,
     const float duration, const unsigned char priority
 ) :
     type(type),
@@ -160,13 +160,16 @@ particle_manager::particle_manager(const size_t &max_nr) :
  * Copies a particle manager from another one.
  */
 particle_manager &particle_manager::operator =(const particle_manager &pg) {
-    this->particles = NULL;
-    max_nr = pg.max_nr;
-    if(max_nr == 0) return *this;
-    count = pg.count;
-    this->particles = new particle[max_nr];
-    for(size_t p = 0; p < count; ++p) {
-        this->particles[p] = pg.particles[p];
+
+    if(this != &pg) {
+        this->particles = NULL;
+        max_nr = pg.max_nr;
+        if(max_nr == 0) return *this;
+        count = pg.count;
+        this->particles = new particle[max_nr];
+        for(size_t p = 0; p < count; ++p) {
+            this->particles[p] = pg.particles[p];
+        }
     }
     
     return *this;

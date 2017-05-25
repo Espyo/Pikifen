@@ -34,7 +34,7 @@ void ship_fsm::create_fsm(mob_type* typ) {
     typ->first_state_nr = fix_states(typ->states, "idling");
     
     //Check if the number in the enum and the total match up.
-    if(typ->states.size() == N_SHIP_STATES);
+    assert(typ->states.size() == N_SHIP_STATES);
 }
 
 

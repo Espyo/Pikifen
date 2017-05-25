@@ -114,7 +114,7 @@ private:
     bool has_normal_distance;
     
 public:
-    dist(const point p1, const point p2);
+    dist(const point &p1, const point &p2);
     dist(const float d = 0.0f);
     float to_float();
     bool operator <(const float d2);
@@ -321,6 +321,7 @@ private:
     friend subgroup_type_manager;
     SUBGROUP_TYPE_CATEGORIES category;
     pikmin_type* pik_type;
+    subgroup_type() : pik_type(nullptr) { }
 };
 
 

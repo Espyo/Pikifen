@@ -46,7 +46,8 @@ void area_editor::do_drawing() {
                 &cam_bottom_right_corner.x, &cam_bottom_right_corner.y
             );
             
-            float x = floor(cam_top_left_corner.x / grid_interval) * grid_interval;
+            float x =
+                floor(cam_top_left_corner.x / grid_interval) * grid_interval;
             while(x < cam_bottom_right_corner.x + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
@@ -60,14 +61,16 @@ void area_editor::do_drawing() {
                 
                 if(draw_line) {
                     al_draw_line(
-                        x, cam_top_left_corner.y, x, cam_bottom_right_corner.y + grid_interval,
+                        x, cam_top_left_corner.y,
+                        x, cam_bottom_right_corner.y + grid_interval,
                         c, 1.0 / cam_zoom
                     );
                 }
                 x += grid_interval;
             }
             
-            float y = floor(cam_top_left_corner.y / grid_interval) * grid_interval;
+            float y =
+                floor(cam_top_left_corner.y / grid_interval) * grid_interval;
             while(y < cam_bottom_right_corner.y + grid_interval) {
                 ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
                 bool draw_line = true;
@@ -81,7 +84,8 @@ void area_editor::do_drawing() {
                 
                 if(draw_line) {
                     al_draw_line(
-                        cam_top_left_corner.x, y, cam_bottom_right_corner.x + grid_interval, y,
+                        cam_top_left_corner.x, y,
+                        cam_bottom_right_corner.x + grid_interval, y,
                         c, 1.0 / cam_zoom
                     );
                 }
@@ -713,7 +717,10 @@ void area_editor::do_drawing() {
         }
         
         //Reference.
-        if(reference_bitmap && (show_reference || mode == EDITOR_MODE_REFERENCE)) {
+        if(
+            reference_bitmap &&
+            (show_reference || mode == EDITOR_MODE_REFERENCE)
+        ) {
             al_draw_tinted_scaled_bitmap(
                 reference_bitmap,
                 map_alpha(reference_a),
@@ -921,10 +928,14 @@ void area_editor::do_drawing() {
             draw_scaled_text(
                 font_builtin, al_map_rgb(255, 255, 255),
                 point(
-                    (cross_section_window_start.x + cross_section_window_end.x) *
-                    0.5,
-                    (cross_section_window_start.y + cross_section_window_end.y) *
-                    0.5
+                    (
+                        cross_section_window_start.x +
+                        cross_section_window_end.x
+                    ) * 0.5,
+                    (
+                        cross_section_window_start.y +
+                        cross_section_window_end.y
+                    ) * 0.5
                 ),
                 point(1, 1), ALLEGRO_ALIGN_CENTER, 1,
                 "Please cross\nsome edges."
@@ -1029,7 +1040,7 @@ void area_editor::draw_cross_section_sector(
  * text:  Text to show.
  */
 void area_editor::draw_debug_text(
-    const ALLEGRO_COLOR color, const point where, const string text
+    const ALLEGRO_COLOR color, const point &where, const string &text
 ) {
     int dw = 0;
     int dh = 0;

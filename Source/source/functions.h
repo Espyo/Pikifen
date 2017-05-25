@@ -81,7 +81,7 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
 void clear_area_textures();
 void coordinates_to_angle(
-    const point coordinates, float* angle, float* magnitude
+    const point &coordinates, float* angle, float* magnitude
 );
 float deterministic_random(const unsigned int seed);
 vector<string> folder_to_vector(

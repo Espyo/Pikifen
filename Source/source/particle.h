@@ -74,7 +74,7 @@ struct particle {
     
     particle(
         const unsigned char type = PARTICLE_TYPE_BITMAP,
-        const point pos = point(), const float size = 0.0f,
+        const point &pos = point(), const float size = 0.0f,
         const float duration = 0.0f, const unsigned char priority = 255
     );
     void tick(const float delta_t);

@@ -113,7 +113,8 @@ struct path_stop {
     vector<path_link> links;
     
     path_stop(
-        const point pos = point(), vector<path_link> links = vector<path_link>()
+        const point &pos = point(),
+        vector<path_link> links = vector<path_link>()
     );
     bool has_link(path_stop* other_stop);
     void fix_pointers(area_data &a);
@@ -260,7 +261,7 @@ struct mob_gen {
     string vars;
     
     mob_gen(
-        mob_category* category = NULL, const point pos = point(),
+        mob_category* category = NULL, const point &pos = point(),
         mob_type* type = NULL, const float angle = 0, const string &vars = ""
     );
 };
@@ -284,9 +285,9 @@ struct tree_shadow {
     point sway;   //Swaying is multiplied by this.
     
     tree_shadow(
-        const point center = point(), const point size = point(100, 100),
+        const point &center = point(), const point &size = point(100, 100),
         const float angle = 0, const unsigned char alpha = 255,
-        const string &file_name = "", const point sway = point(1, 1)
+        const string &file_name = "", const point &sway = point(1, 1)
     );
 };
 
@@ -358,17 +359,17 @@ void get_cce(
     vector<size_t> &convex_vertexes, vector<size_t> &concave_vertexes
 );
 vertex* get_merge_vertex(
-    const point p,
+    const point &p,
     vector<vertex*> &all_vertexes, const float merge_radius,
     size_t* nr = NULL
 );
 vector<path_stop*> get_path(
-    const point start, const point end,
+    const point &start, const point &end,
     mob** obstacle_found, bool* go_straight, float* get_dist
 );
 mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(
-    const point p, const point lp1, const point lp2
+    const point &p, const point &lp1, const point &lp2
 );
 void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
@@ -376,7 +377,7 @@ vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(sector* s);
 vertex* get_rightmost_vertex(vertex* v1, vertex* v2);
 sector* get_sector(
-    const point p, size_t* sector_nr, const bool use_blockmap
+    const point &p, size_t* sector_nr, const bool use_blockmap
 );
 void get_sector_bounding_box(
     sector* s_ptr, point* min_coords, point* max_coords
@@ -391,13 +392,13 @@ bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr
 );
-bool is_point_in_sector(const point p, sector* s_ptr);
+bool is_point_in_sector(const point &p, sector* s_ptr);
 bool is_point_in_triangle(
-    const point p, const point tp1, const point tp2, const point tp3,
+    const point &p, const point &tp1, const point &tp2, const point &tp3,
     bool loq
 );
 bool lines_intersect(
-    const point l1p1, const point l1p2, const point l2p1, const point l2p2,
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* ur, float* ul
 );
 void triangulate(sector* s_ptr);

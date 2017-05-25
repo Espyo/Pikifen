@@ -1290,7 +1290,7 @@ void gameplay::do_game_drawing(
  */
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
-    const point where, const point max_size
+    const point &where, const point &max_size
 ) {
 
     if(c.type == CONTROL_TYPE_MOUSE_BUTTON) {
@@ -1417,8 +1417,8 @@ bool casts_shadow(sector* s1, sector* s2) {
  */
 void draw_compressed_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const int flags, const unsigned char valign,
-    const point max_size, const string &text
+    const point &where, const int flags, const unsigned char valign,
+    const point &max_size, const string &text
 ) {
     if(max_size.x == 0 && max_size.y == 0) return;
     
@@ -1465,7 +1465,7 @@ void draw_compressed_text(
  * color:   Color of the fraction's text.
  */
 void draw_fraction(
-    const point center, const unsigned int current,
+    const point &center, const unsigned int current,
     const unsigned int needed, const ALLEGRO_COLOR &color
 ) {
     float first_y = center.y - (font_main_h * 3) / 2;
@@ -1508,7 +1508,7 @@ void draw_fraction(
  *   Used for leader HP on the HUD.
  */
 void draw_health(
-    const point center,
+    const point &center,
     const unsigned int health, const unsigned int max_health,
     const float radius, const bool just_chart
 ) {
@@ -1544,7 +1544,7 @@ void draw_health(
  * control: If not NULL, draw the control's button/key/etc. before the text.
  */
 void draw_notification(
-    const point target, const string &text, control_info* control
+    const point &target, const string &text, control_info* control
 ) {
 
     ALLEGRO_TRANSFORM tra, old;
@@ -1617,7 +1617,7 @@ void draw_notification(
  */
 void draw_scaled_text(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const point scale,
+    const point &where, const point &scale,
     const int flags, const unsigned char valign, const string &text
 ) {
 
@@ -1642,7 +1642,7 @@ void draw_scaled_text(
  * texture:  Custom texture. If NULL, uses the normal one.
  */
 void draw_sector(
-    sector* s_ptr, const point where, const float scale,
+    sector* s_ptr, const point &where, const float scale,
     sector_texture_info* texture
 ) {
 
@@ -1937,7 +1937,7 @@ void draw_sector(
  * texture: Custom texture. If NULL, uses the normal one.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point where, const float scale,
+    sector* s_ptr, const point &where, const float scale,
     sector_texture_info* texture
 ) {
     unsigned char n_textures = 1;
@@ -2119,7 +2119,7 @@ void draw_lighting_filter() {
  * scale:   Scale the sector by this much.
  */
 void draw_liquid(
-    sector* s_ptr, const point where, const float scale
+    sector* s_ptr, const point &where, const float scale
 ) {
 
     size_t n_vertexes = s_ptr->triangles.size() * 3;
@@ -2209,7 +2209,8 @@ void draw_liquid(
         float alpha = s_ptr->associated_liquid->surface_alpha;
         
         if(s_ptr->associated_liquid->anim_instance.get_cur_sprite()) {
-            anim_sprite = s_ptr->associated_liquid->anim_instance.get_cur_sprite();
+            anim_sprite =
+                s_ptr->associated_liquid->anim_instance.get_cur_sprite();
             if(anim_sprite->bitmap) {
                 layer_2_dy =
                     (anim_sprite->file_size.y * 0.5) *
@@ -2508,7 +2509,7 @@ void draw_loading_screen(
  *   (used to simulate sun shadow direction casting).
  */
 void draw_mob_shadow(
-    const point center, const float diameter,
+    const point &center, const float diameter,
     const float delta_z, const float shadow_stretch
 ) {
 
@@ -2549,8 +2550,8 @@ void draw_mob_shadow(
  * tint:   Tint the sprite with this color.
  */
 void draw_sprite(
-    ALLEGRO_BITMAP* bmp, const point center,
-    const point size, const float angle, const ALLEGRO_COLOR &tint
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle, const ALLEGRO_COLOR &tint
 ) {
 
     if(size.x == 0 && size.y == 0) return;
@@ -2584,8 +2585,8 @@ void draw_sprite(
  * effects:  Sprite effect manager with the effects.
  */
 void draw_sprite_with_effects(
-    ALLEGRO_BITMAP* bmp, const point center,
-    const point size, const float angle,
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &size, const float angle,
     sprite_effect_manager* effects
 ) {
 
@@ -2711,7 +2712,7 @@ void draw_status_effect_bmp(mob* m, sprite_effect_manager* effects) {
  */
 void draw_text_lines(
     const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point where, const int flags,
+    const point &where, const int flags,
     const unsigned char valign, const string &text
 ) {
     vector<string> lines = split(text, "\n", true);

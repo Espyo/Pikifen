@@ -25,6 +25,12 @@
     <Filter Include="Source Files\mobs">
       <UniqueIdentifier>{fb19c277-469b-48c6-848b-2ad5f2afa26d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\editors">
+      <UniqueIdentifier>{c9e22b5b-342f-4326-9043-6c2094734852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editors">
+      <UniqueIdentifier>{91f31192-c25c-4ee8-a0c4-3d29b28fb1c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\LAFI\angle_picker.h">
@@ -132,12 +138,6 @@
     <ClInclude Include="..\source\animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\animation_editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\area_editor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -232,6 +232,27 @@
       <Filter>Header Files\LAFI</Filter>
     </ClInclude>
     <ClInclude Include="..\source\liquid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\animation_editor.h">
+      <Filter>Header Files\editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\area_editor.h">
+      <Filter>Header Files\editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\editors\editor.h">
+      <Filter>Header Files\editors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\mob_category.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\bridge_fsm.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\mobs\bridge_type.h">
+      <Filter>Header Files\mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\geometry_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -348,12 +369,6 @@
     <ClCompile Include="..\source\animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\animation_editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\area_editor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\controls.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -445,6 +460,42 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\liquid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor_event_handler.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\animation_editor_loading.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor_drawing.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor_event_handler.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\area_editor_loading.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\editors\editor.cpp">
+      <Filter>Source Files\editors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\mob_category.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\bridge_fsm.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\mobs\bridge_type.cpp">
+      <Filter>Source Files\mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\geometry_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

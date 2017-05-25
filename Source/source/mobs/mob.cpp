@@ -29,7 +29,7 @@ size_t next_mob_id = 0;
  * Creates a mob of no particular type.
  */
 mob::mob(
-    const point pos, mob_type* type,
+    const point &pos, mob_type* type,
     const float angle, const string &vars
 ) :
     pos(pos),
@@ -790,7 +790,7 @@ point mob::get_chase_target() {
  * speed:           Speed at which to go to the target. -1 uses the mob's speed.
  */
 void mob::chase(
-    const point offset, point* orig_coords,
+    const point &offset, point* orig_coords,
     const bool teleport, float* teleport_z,
     const bool free_move, const float target_distance, const float speed
 ) {
@@ -1114,7 +1114,7 @@ mob::~mob() {
 /* ----------------------------------------------------------------------------
  * Creates a structure with info about a carrying spot.
  */
-carrier_spot_struct::carrier_spot_struct(const point pos) :
+carrier_spot_struct::carrier_spot_struct(const point &pos) :
     state(CARRY_SPOT_FREE),
     pos(pos),
     pik_ptr(NULL) {
@@ -1393,7 +1393,7 @@ void cause_hitbox_damage(
  * Returns the new mob.
  */
 mob* create_mob(
-    mob_category* category, const point pos, mob_type* type,
+    mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars
 ) {
     mob* m_ptr = NULL;
@@ -1443,7 +1443,7 @@ void focus_mob(mob* m1, mob* m2) {
  * d:      Return the distance here, optionally.
  */
 hitbox* get_closest_hitbox(
-    const point p, mob* m, const size_t h_type, dist* d
+    const point &p, mob* m, const size_t h_type, dist* d
 ) {
     sprite* s = m->anim.get_cur_sprite();
     if(!s) return NULL;
@@ -2025,7 +2025,7 @@ void group_info::init_spots(mob* affected_mob_ptr) {
             
         //Now, get the angular distance.
         float angular_dist =
-            atan2(actual_diameter, middle_distance * 2.0) * 2.0;
+            atan2(actual_diameter, middle_distance * 2.0f) * 2.0;
             
         //Finally, we can calculate where the other spots are.
         size_t n_spots_on_wheel = floor(M_PI * 2 / angular_dist);

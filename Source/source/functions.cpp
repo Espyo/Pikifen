@@ -122,7 +122,7 @@ void clear_area_textures() {
  * magnitude:   Variable to return the magnitude to.
  */
 void coordinates_to_angle(
-    const point coordinates, float* angle, float* magnitude
+    const point &coordinates, float* angle, float* magnitude
 ) {
     if(angle) {
         *angle = atan2(coordinates.y, coordinates.x);
@@ -293,11 +293,17 @@ void generate_area_images() {
         sector_start_col =
             (min_coords.x - area_images_top_left_corner.x) / area_image_size;
         sector_end_col =
-            ceil((max_coords.x - area_images_top_left_corner.x) / area_image_size) - 1;
+            ceil(
+                (max_coords.x - area_images_top_left_corner.x) /
+                area_image_size
+            ) - 1;
         sector_start_row =
             (min_coords.y - area_images_top_left_corner.y) / area_image_size;
         sector_end_row =
-            ceil((max_coords.y - area_images_top_left_corner.y) / area_image_size) - 1;
+            ceil(
+                (max_coords.y - area_images_top_left_corner.y) /
+                area_image_size
+            ) - 1;
             
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
@@ -313,10 +319,14 @@ void generate_area_images() {
                     draw_sector(
                         cur_area_data.sectors[s],
                         point(
-                            (x * area_image_size + area_images_top_left_corner.x) /
-                            area_images_scale,
-                            (y * area_image_size + area_images_top_left_corner.y) /
-                            area_images_scale
+                            (
+                                x * area_image_size +
+                                area_images_top_left_corner.x
+                            ) / area_images_scale,
+                            (
+                                y * area_image_size +
+                                area_images_top_left_corner.y
+                            ) / area_images_scale
                         ),
                         area_images_scale
                     );
@@ -1311,10 +1321,13 @@ void load_liquids(const bool load_resources) {
                 ANIMATIONS_FOLDER_PATH + "/" +
                 nodes[l->first]->get_child_by_name("animation")->value
             );
-            l->second.anim_pool = load_animation_database_from_file(&anim_file);
+            l->second.anim_pool =
+                load_animation_database_from_file(&anim_file);
             if(!l->second.anim_pool.animations.empty()) {
-                l->second.anim_instance = animation_instance(&l->second.anim_pool);
-                l->second.anim_instance.cur_anim = l->second.anim_pool.animations[0];
+                l->second.anim_instance =
+                    animation_instance(&l->second.anim_pool);
+                l->second.anim_instance.cur_anim =
+                    l->second.anim_pool.animations[0];
                 l->second.anim_instance.start();
             }
         }
@@ -1468,6 +1481,7 @@ void load_spray_types() {
         rs.set("color", st.main_color);
         rs.set("berries_needed", st.berries_needed);
         
+        st.angle = deg_to_rad(st.angle);
         st.angle_range = deg_to_rad(st.angle_range);
         
         data_node* icon_node = s_node->get_child_by_name("icon");
@@ -1544,11 +1558,15 @@ void load_status_types(const bool load_resources) {
     if(load_resources) {
         for(auto s = status_types.begin(); s != status_types.end(); ++s) {
             if(s->second.animation_name.empty()) continue;
-            data_node anim_file(ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name);
+            data_node anim_file(
+                ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name
+            );
             s->second.anim_pool = load_animation_database_from_file(&anim_file);
             if(!s->second.anim_pool.animations.empty()) {
-                s->second.anim_instance = animation_instance(&s->second.anim_pool);
-                s->second.anim_instance.cur_anim = s->second.anim_pool.animations[0];
+                s->second.anim_instance =
+                    animation_instance(&s->second.anim_pool);
+                s->second.anim_instance.cur_anim =
+                    s->second.anim_pool.animations[0];
                 s->second.anim_instance.start();
             }
         }

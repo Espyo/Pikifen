@@ -29,7 +29,7 @@ using namespace std;
  */
 sprite::sprite(
     const string &name, ALLEGRO_BITMAP* const b,
-    const point g_size, const vector<hitbox> &h
+    const point &g_size, const vector<hitbox> &h
 ) :
     name(name),
     bitmap(b),
@@ -53,8 +53,8 @@ sprite::sprite(
  * h:      List of hitboxes.
  */
 sprite::sprite(
-    const string &name, ALLEGRO_BITMAP* const b, const point b_pos,
-    const point b_size, const point g_size,
+    const string &name, ALLEGRO_BITMAP* const b, const point &b_pos,
+    const point &b_size, const point &g_size,
     const vector<hitbox> &h
 ) :
     name(name),

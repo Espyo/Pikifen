@@ -43,13 +43,15 @@ void bridge_type::load_from_file(
     vector<pair<size_t, string> >* anim_conversions
 ) {
     if(load_resources) {
-        string main_texture_name = file->get_child_by_name("main_texture")->value;
+        string main_texture_name =
+            file->get_child_by_name("main_texture")->value;
         if(!main_texture_name.empty()) {
             bmp_main_texture =
                 bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_name);
         }
         
-        string rail_texture_name = file->get_child_by_name("rail_texture")->value;
+        string rail_texture_name =
+            file->get_child_by_name("rail_texture")->value;
         if(!rail_texture_name.empty()) {
             bmp_rail_texture =
                 bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_name);

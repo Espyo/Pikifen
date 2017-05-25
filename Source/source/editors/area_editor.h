@@ -192,7 +192,7 @@ private:
     
     void calculate_preview_path();
     void cancel_new_sector();
-    void center_camera(const point min_coords, const point max_coords);
+    void center_camera(const point &min_coords, const point &max_coords);
     void change_reference(string new_file_name);
     void clear_current_area();
     void clear_texture_suggestions();
@@ -203,7 +203,7 @@ private:
         const float lowest_z, sector* sector_ptr
     );
     void draw_debug_text(
-        const ALLEGRO_COLOR color, const point where, const string text
+        const ALLEGRO_COLOR color, const point &where, const string &text
     );
     void find_errors();
     bool get_common_sector(
@@ -211,7 +211,7 @@ private:
     );
     void set_new_circle_sector_points();
     void goto_error();
-    bool is_new_sector_line_valid(const point pos);
+    bool is_new_sector_line_valid(const point &pos);
     void load_area(const bool from_backup);
     void load_backup();
     void merge_vertex(
@@ -223,7 +223,7 @@ private:
     void resize_everything();
     void save_area(const bool to_backup);
     void save_backup();
-    point snap_to_grid(const point p);
+    point snap_to_grid(const point &p);
     void toggle_duplicate_mob_mode();
     bool update_backup_status();
     void update_options_frame();

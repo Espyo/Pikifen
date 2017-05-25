@@ -23,7 +23,7 @@
  * Creates a Pikmin mob.
  */
 pikmin::pikmin(
-    const point pos, pikmin_type* type,
+    const point &pos, pikmin_type* type,
     const float angle, const string &vars
 ) :
     mob(pos, type, angle, vars),
@@ -159,7 +159,7 @@ void pikmin::teleport_to_connected_hitbox() {
  *   (i.e. already chosen to be plucked by another leader).
  */
 pikmin* get_closest_buried_pikmin(
-    const point pos, dist* d, const bool ignore_reserved
+    const point &pos, dist* d, const bool ignore_reserved
 ) {
     dist closest_distance = 0;
     pikmin* closest_pikmin = NULL;
@@ -252,7 +252,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     point size_mult = draw_size / s_ptr->game_size;
     
     if(s_ptr->top_visible) {
-        point top_pos = s_ptr->top_pos;
+        point top_pos;
         top_pos = rotate_point(s_ptr->top_pos, angle);
         draw_sprite_with_effects(
             pik_type->bmp_top[maturity],

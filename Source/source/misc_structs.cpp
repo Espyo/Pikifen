@@ -166,7 +166,7 @@ point movement_struct::get_coords() {
 /* ----------------------------------------------------------------------------
  * Creates a new distance number, given two points.
  */
-dist::dist(const point p1, const point p2) :
+dist::dist(const point &p1, const point &p2) :
     distance_squared(
         (p2.x - p1.x) * (p2.x - p1.x) +
         (p2.y - p1.y) * (p2.y - p1.y)

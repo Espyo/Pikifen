@@ -19,7 +19,7 @@
  * Creates a leader mob.
  */
 leader::leader(
-    const point pos, leader_type* type,
+    const point &pos, leader_type* type,
     const float angle, const string &vars
 ) :
     mob(pos, type, angle, vars),
@@ -94,7 +94,6 @@ void leader::dismiss() {
         float radius;
         vector<mob*> members;
         size_t row;
-        float start_angle;
         point center;
     };
     vector<subgroup_dismiss_info> subgroups_info;
@@ -168,10 +167,6 @@ void leader::dismiss() {
             dist_between_center = 0;
             thickness = 0;
             angle_occupation = 0;
-        }
-        
-        float get_angle_occupation() {
-        
         }
     };
     

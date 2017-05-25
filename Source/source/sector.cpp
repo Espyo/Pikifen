@@ -492,7 +492,7 @@ size_t edge::remove_from_vertexes() {
  * Creates a mob generation structure.
  */
 mob_gen::mob_gen(
-    mob_category* category, const point pos,
+    mob_category* category, const point &pos,
     mob_type* type, const float angle, const string &vars
 ) :
     category(category),
@@ -657,7 +657,7 @@ bool edge_intersection::contains(edge* e) {
 /* ----------------------------------------------------------------------------
  * Creates a new path stop.
  */
-path_stop::path_stop(const point pos, vector<path_link> links) :
+path_stop::path_stop(const point &pos, vector<path_link> links) :
     pos(pos),
     links(links) {
     
@@ -804,8 +804,8 @@ vertex::vertex(float x, float y) :
  * Creates a tree shadow.
  */
 tree_shadow::tree_shadow(
-    const point center, const point size, const float angle,
-    const unsigned char alpha, const string &file_name, const point sway
+    const point &center, const point &size, const float angle,
+    const unsigned char alpha, const string &file_name, const point &sway
 ) :
     center(center),
     size(size),
@@ -864,7 +864,7 @@ void vertex::fix_pointers(area_data &a) {
  * v_nr:         If not NULL, the vertex's number is returned here.
  */
 vertex* get_merge_vertex(
-    const point pos, vector<vertex*> &all_vertexes,
+    const point &pos, vector<vertex*> &all_vertexes,
     const float merge_radius, size_t* v_nr
 ) {
     dist closest_dist = 0;
@@ -900,7 +900,7 @@ vertex* get_merge_vertex(
  * total_dist:     If not NULL, place the total path distance here.
  */
 vector<path_stop*> get_path(
-    const point start, const point end,
+    const point &start, const point &end,
     mob** obstacle_found, bool* go_straight,
     float* total_dist
 ) {
@@ -1000,7 +1000,7 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2) {
  * Returns a point's sign on a line segment,
  * used for detecting if it's inside a triangle.
  */
-float get_point_sign(const point p, const point lp1, const point lp2) {
+float get_point_sign(const point &p, const point &lp1, const point &lp2) {
     return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
 }
 
@@ -1212,7 +1212,7 @@ void get_sector_bounding_box(
  *   This provides faster results, but the blockmap must be built.
  */
 sector* get_sector(
-    const point p, size_t* sector_nr, const bool use_blockmap
+    const point &p, size_t* sector_nr, const bool use_blockmap
 ) {
 
     if(use_blockmap) {
@@ -1316,7 +1316,7 @@ bool is_edge_valid(edge* l) {
 /* ----------------------------------------------------------------------------
  * Returns whether a point is inside a sector by checking its triangles.
  */
-bool is_point_in_sector(const point p, sector* s_ptr) {
+bool is_point_in_sector(const point &p, sector* s_ptr) {
     for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
         triangle* t_ptr = &s_ptr->triangles[t];
         if(
@@ -1348,7 +1348,7 @@ bool is_point_in_sector(const point p, sector* s_ptr) {
  *   how-to-determine-a-point-in-a-triangle
  */
 bool is_point_in_triangle(
-    const point p, const point tp1, const point tp2, const point tp3,
+    const point &p, const point &tp1, const point &tp2, const point &tp3,
     const bool loq
 ) {
 
@@ -2073,26 +2073,32 @@ void get_cce(
  * ul: Same as ur, but for line 1.
  */
 bool lines_intersect(
-    const point l1p1, const point l1p2, const point l2p1, const point l2p2,
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* ur, float* ul
 ) {
 
-    float div = (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) - (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
-    
+    float div =
+        (l2p2.y - l2p1.y) * (l1p2.x - l1p1.x) -
+        (l2p2.x - l2p1.x) * (l1p2.y - l1p1.y);
+        
     if(div != 0) {
     
         float local_ul, local_ur;
         
         //Calculate the intersection distance from the line.
         local_ul =
-            ((l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) - (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)) /
-            div;
+            (
+                (l2p2.x - l2p1.x) * (l1p1.y - l2p1.y) -
+                (l2p2.y - l2p1.y) * (l1p1.x - l2p1.x)
+            ) / div;
         if(ul) *ul = local_ul;
         
         //Calculate the intersection distance from the ray.
         local_ur =
-            ((l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) - (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)) /
-            div;
+            (
+                (l1p2.x - l1p1.x) * (l1p1.y - l2p1.y) -
+                (l1p2.y - l1p1.y) * (l1p1.x - l2p1.x)
+            ) / div;
         if(ur) *ur = local_ur;
         
         //Return whether they intersect.

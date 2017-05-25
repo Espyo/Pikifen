@@ -40,7 +40,7 @@ public:
     vector<sector*> secs;
     
     bridge(
-        const point pos, bridge_type* bri_type,
+        const point &pos, bridge_type* bri_type,
         const float angle, const string &vars
     );
     

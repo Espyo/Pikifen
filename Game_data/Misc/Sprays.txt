@@ -12,7 +12,7 @@ Ultra-Bitter Spray {
 Ultra-Spicy Spray {
     effects = spicy
     group = true
-    angle = 3.14159
+    angle = 180
     distance_range = 128
     angle_range = 90
     color = 255 64 64
