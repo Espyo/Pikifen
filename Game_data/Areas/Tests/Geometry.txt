@@ -1170,6 +1170,9 @@ sectors{
 	s{
 		z=0.00
 		texture=Stone.jpg
+		texture_rotate=1.19
+		texture_scale=0.20 1.10
+		texture_trans=200.00 0.00
 		texture_tint=255 0 0
 	}
 	s{

@@ -174,6 +174,8 @@ void gameplay::do_game_drawing(
         }
         
         mob* mob_ptr = NULL;
+        //Draw the mob shadows.
+        al_hold_bitmap_drawing(true);
         for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
             if(mob_ptr->type->casts_shadow && !mob_ptr->hide) {
@@ -184,6 +186,13 @@ void gameplay::do_game_drawing(
                     shadow_stretch
                 );
             }
+        }
+        al_hold_bitmap_drawing(false);
+        
+        //And now the mobs themselves.
+        for(size_t m = 0; m < sorted_mobs.size(); ++m) {
+            mob_ptr = sorted_mobs[m];
+            
             mob_ptr->draw();
             
             //Development tool -- draw hitboxes.
@@ -636,6 +645,7 @@ void gameplay::do_game_drawing(
                 area_time_passed * SUN_METER_SUN_SPIN_SPEED;
                 
             //Larger bubbles at the start, middle and end of the meter.
+            al_hold_bitmap_drawing(true);
             draw_sprite(
                 bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
                 point(sun_radius * 0.9, sun_radius * 0.9)
@@ -656,6 +666,7 @@ void gameplay::do_game_drawing(
                     point(sun_radius * 0.6, sun_radius * 0.6)
                 );
             }
+            al_hold_bitmap_drawing(false);
             
             draw_sprite(
                 bmp_sun,
@@ -1191,8 +1202,6 @@ void gameplay::do_game_drawing(
                 );
             vector<string> lines = split(text, "\n");
             
-            al_hold_bitmap_drawing(true);
-            
             for(size_t l = 0; l < lines.size(); ++l) {
             
                 draw_compressed_text(
@@ -1203,8 +1212,6 @@ void gameplay::do_game_drawing(
                 );
                 
             }
-            
-            al_hold_bitmap_drawing(false);
             
         }
         
@@ -1957,6 +1964,8 @@ void draw_sector_texture(
             );
         }
         
+        al_hold_bitmap_drawing(true);
+        
         for(size_t v = 0; v < n_vertexes; ++v) {
         
             const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
@@ -2011,6 +2020,8 @@ void draw_sector_texture(
                 );
         }
         
+        al_hold_bitmap_drawing(false);
+        
         for(size_t v = 0; v < n_vertexes; ++v) {
             av[v].x *= scale;
             av[v].y *= scale;
@@ -2058,6 +2069,7 @@ void draw_lighting_filter() {
     );
     
     //Then, find out spotlights, and draw their lights on the map (as black).
+    al_hold_bitmap_drawing(true);
     for(size_t m = 0; m < mobs.size(); ++m) {
         point pos = mobs[m]->pos;
         al_transform_coordinates(&world_to_screen_transform, &pos.x, &pos.y);
@@ -2070,6 +2082,7 @@ void draw_lighting_filter() {
             0
         );
     }
+    al_hold_bitmap_drawing(false);
     
     //Now, simply darken the screen using the map.
     al_set_target_backbuffer(display);
