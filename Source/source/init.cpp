@@ -396,10 +396,6 @@ void init_misc() {
     
     srand(time(NULL));
     
-    //TODO the function is always returning 0.
-    // = al_get_new_display_option(ALLEGRO_MAX_BITMAP_SIZE, NULL);
-    area_image_size = 800;
-    
     cursor_save_timer.on_end = [] () {
         cursor_save_timer.start();
         cursor_spots.push_back(mouse_cursor_s);

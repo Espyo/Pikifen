@@ -66,10 +66,6 @@ sample_struct sfx_switch_pikmin;
 sample_struct sfx_throw;
 
 vector<string> animation_editor_history;
-int area_image_size = 0;
-vector<vector<ALLEGRO_BITMAP*> > area_images;
-float area_images_scale = 1.0;
-point area_images_top_left_corner;
 timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);
 float area_time_passed = 0;
 string area_to_load;

@@ -782,15 +782,6 @@ void sector::fix_pointers(area_data &a) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a sector correction specification.
- */
-sector_correction::sector_correction(sector* sec) :
-    sec(sec) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a vertex.
  */
 vertex::vertex(float x, float y) :

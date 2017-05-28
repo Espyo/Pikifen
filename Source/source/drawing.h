@@ -71,12 +71,10 @@ void draw_notification(
     control_info* control = NULL
 );
 void draw_sector(
-    sector* s_ptr, const point &where,
-    const float scale, sector_texture_info* texture = NULL
+    sector* s_ptr, const point &where, const float scale
 );
 void draw_sector_texture(
-    sector* s_ptr, const point &where,
-    const float scale, sector_texture_info* texture = NULL
+    sector* s_ptr, const point &where, const float scale
 );
 void draw_mob_shadow(
     const point &where, const float size,

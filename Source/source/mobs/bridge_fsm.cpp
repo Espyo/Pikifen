@@ -76,16 +76,23 @@ void bridge_fsm::open(mob* m, void* info1, void* info2) {
         if(!s_ptr->tag.empty()) {
             s_ptr->z = s2f(s_ptr->tag);
         }
-        s_ptr->hazards.clear();
         
-        sector_correction sc(s_ptr);
-        sc.new_texture.bitmap =
+        s_ptr->hazards.clear();
+        s_ptr->associated_liquid = NULL;
+        
+        s_ptr->texture_info.bitmap =
             (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
             b_ptr->bri_type->bmp_main_texture :
             b_ptr->bri_type->bmp_rail_texture;
-        sc.new_texture.rot = m->angle;
+        s_ptr->texture_info.file_name =
+            (s_ptr->type == SECTOR_TYPE_BRIDGE) ?
+            b_ptr->bri_type->main_texture_file_name :
+            b_ptr->bri_type->rail_texture_file_name;
+        s_ptr->texture_info.rot = m->angle;
+        s_ptr->texture_info.scale = point(1.0, 1.0);
+        s_ptr->texture_info.tint = al_map_rgb(255, 255, 255);
+        s_ptr->texture_info.translation = point();
         
-        cur_area_data.sector_corrections.push_back(sc);
         cur_area_data.generate_edges_blockmap(s_ptr->edges);
         
     }

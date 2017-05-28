@@ -101,11 +101,6 @@ extern sample_struct sfx_throw;
 //General globals.
 
 extern vector<string> animation_editor_history;
-extern int area_image_size;
-extern vector<vector<ALLEGRO_BITMAP*> > area_images;
-extern float area_images_scale;
-//Top-left corner of the area, in world coordinates.
-extern point area_images_top_left_corner;
 //How much real time has passed since the area was loaded.
 extern float area_time_passed;
 extern timer area_title_fade_timer;

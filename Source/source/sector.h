@@ -35,7 +35,6 @@ struct edge;
 struct path_stop;
 struct path_link;
 struct sector;
-struct sector_correction;
 struct triangle;
 struct vertex;
 typedef vector<vertex*> polygon;
@@ -195,26 +194,6 @@ struct sector {
 
 
 /* ----------------------------------------------------------------------------
- * List of visual corrections to be done on a sector, AFTER the area
- * buffer images have been created. This is used for sectors that
- * can change appearance after the area is done loading.
- * These changes are drawn on top of the normal area.
- * So for instance, if you want a gate to begone, have the normal
- * area show no gate, and then if the gate is alive, specify a
- * "correction" to its sector, saying that it should be drawing
- * a gate.
- */
-struct sector_correction {
-    sector* sec;
-    sector_texture_info new_texture;
-    
-    sector_correction(sector* sec);
-};
-
-
-
-
-/* ----------------------------------------------------------------------------
  * A triangle. Sectors (polygons) are made out of triangles.
  * These are used to detect whether a point is inside a sector,
  * and to draw, seeing as OpenGL cannot draw concave polygons.
@@ -310,7 +289,6 @@ struct area_data {
     vector<mob_gen*> mob_generators;
     vector<path_stop*> path_stops;
     vector<tree_shadow*> tree_shadows;
-    vector<sector_correction> sector_corrections;
     
     ALLEGRO_BITMAP* bg_bmp;
     string bg_bmp_file_name;

@@ -211,7 +211,6 @@ void gameplay::load() {
     
     load_area(area_to_load, false, false);
     load_area_textures();
-    generate_area_images();
     
     lightmap_bmp = al_create_bitmap(scr_w, scr_h);
     

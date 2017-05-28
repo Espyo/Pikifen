@@ -46,13 +46,16 @@ void bridge_type::load_from_file(
         string main_texture_name =
             file->get_child_by_name("main_texture")->value;
         if(!main_texture_name.empty()) {
+            main_texture_file_name = main_texture_name;
             bmp_main_texture =
                 bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_name);
+                
         }
         
         string rail_texture_name =
             file->get_child_by_name("rail_texture")->value;
         if(!rail_texture_name.empty()) {
+            rail_texture_file_name = rail_texture_name;
             bmp_rail_texture =
                 bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_name);
         }

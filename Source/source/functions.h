@@ -87,7 +87,6 @@ float deterministic_random(const unsigned int seed);
 vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
-void generate_area_images();
 unsigned char get_blackout_strength();
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();

@@ -221,137 +221,6 @@ vector<string> folder_to_vector(
 
 
 /* ----------------------------------------------------------------------------
- * Generates the images that make up the area.
- */
-void generate_area_images() {
-    //First, clear all existing area images.
-    for(size_t x = 0; x < area_images.size(); ++x) {
-        for(size_t y = 0; y < area_images[x].size(); ++y) {
-            al_destroy_bitmap(area_images[x][y]);
-        }
-        area_images[x].clear();
-    }
-    area_images.clear();
-    
-    //Now, figure out how big our area is.
-    size_t n_sectors = cur_area_data.sectors.size();
-    if(n_sectors == 0) return;
-    
-    float min_x, max_x, min_y, max_y;
-    size_t n_vertexes = cur_area_data.vertexes.size();
-    min_x = max_x = cur_area_data.vertexes[0]->x;
-    min_y = max_y = cur_area_data.vertexes[0]->y;
-    
-    for(size_t v = 0; v < n_vertexes; ++v) {
-        vertex* v_ptr = cur_area_data.vertexes[v];
-        min_x = min(v_ptr->x, min_x);
-        max_x = max(v_ptr->x, max_x);
-        min_y = min(v_ptr->y, min_y);
-        max_y = max(v_ptr->y, max_y);
-    }
-    
-    min_x *= area_images_scale;
-    max_x *= area_images_scale;
-    min_y *= area_images_scale;
-    max_y *= area_images_scale;
-    area_images_top_left_corner = point(min_x, min_y);
-    
-    //Create the new bitmaps on the vectors.
-    float area_width = max_x - min_x;
-    float area_height = max_y - min_y;
-    unsigned area_image_cols = ceil(area_width / area_image_size);
-    unsigned area_image_rows = ceil(area_height / area_image_size);
-    
-    for(size_t x = 0; x < area_image_cols; ++x) {
-        area_images.push_back(vector<ALLEGRO_BITMAP*>());
-        
-        for(size_t y = 0; y < area_image_rows; ++y) {
-            area_images[x].push_back(
-                al_create_bitmap(area_image_size, area_image_size)
-            );
-            ALLEGRO_BITMAP* old_bitmap = al_get_target_bitmap();
-            al_set_target_bitmap(area_images[x].back());
-            al_clear_to_color(al_map_rgba(0, 0, 0, 0));
-            al_set_target_bitmap(old_bitmap);
-        }
-    }
-    
-    //For every sector, draw it on the area images it belongs on.
-    for(size_t s = 0; s < n_sectors; ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
-        size_t n_edges = s_ptr->edges.size();
-        if(n_edges == 0) continue;
-        
-        point min_coords, max_coords;
-        unsigned int sector_start_col, sector_end_col;
-        unsigned int sector_start_row, sector_end_row;
-        get_sector_bounding_box(s_ptr, &min_coords, &max_coords);
-        
-        min_coords *= area_images_scale;
-        max_coords *= area_images_scale;
-        
-        sector_start_col =
-            (min_coords.x - area_images_top_left_corner.x) / area_image_size;
-        sector_end_col =
-            ceil(
-                (max_coords.x - area_images_top_left_corner.x) /
-                area_image_size
-            ) - 1;
-        sector_start_row =
-            (min_coords.y - area_images_top_left_corner.y) / area_image_size;
-        sector_end_row =
-            ceil(
-                (max_coords.y - area_images_top_left_corner.y) /
-                area_image_size
-            ) - 1;
-            
-        al_set_separate_blender(
-            ALLEGRO_ADD, ALLEGRO_ALPHA,
-            ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
-            ALLEGRO_ONE, ALLEGRO_INVERSE_ALPHA
-        );
-        
-        for(size_t x = sector_start_col; x <= sector_end_col; ++x) {
-            for(size_t y = sector_start_row; y <= sector_end_row; ++y) {
-                ALLEGRO_BITMAP* prev_target_bmp = al_get_target_bitmap();
-                al_set_target_bitmap(area_images[x][y]); {
-                
-                    draw_sector(
-                        cur_area_data.sectors[s],
-                        point(
-                            (
-                                x * area_image_size +
-                                area_images_top_left_corner.x
-                            ) / area_images_scale,
-                            (
-                                y * area_image_size +
-                                area_images_top_left_corner.y
-                            ) / area_images_scale
-                        ),
-                        area_images_scale
-                    );
-                    
-                } al_set_target_bitmap(prev_target_bmp);
-            }
-        }
-        
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-        
-    }
-    
-    for(size_t x = 0; x < area_image_cols; ++x) {
-        for(size_t y = 0; y < area_image_rows; ++y) {
-            //We need to "rebuild" the images, so that the mipmaps get updated.
-            //Not doing this caused a month-old bug under OpenGL,
-            //where zooming out = fade to black.
-            area_images[x][y] = recreate_bitmap(area_images[x][y]);
-        }
-    }
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns the blackout effect's strength
  * for the current time and weather.
  */
@@ -1400,7 +1269,6 @@ void load_options() {
     //Other options.
     reader_setter rs(&file);
     string resolution_str;
-    rs.set("area_quality", area_images_scale);
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_backup_interval", editor_backup_interval);
     rs.set("fps", game_fps);
@@ -1748,7 +1616,6 @@ void save_options() {
     }
     
     //Other options.
-    file.add(new data_node("area_quality", f2s(area_images_scale)));
     file.add(new data_node("draw_cursor_trail", b2s(draw_cursor_trail)));
     file.add(
         new data_node("editor_backup_interval", f2s(editor_backup_interval))

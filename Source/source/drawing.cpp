@@ -113,30 +113,13 @@ void gameplay::do_game_drawing(
         *          ^^^^^^ *
         ******************/
         
-        //Pre-rendered geometry.
+        //Sectors.
         al_use_transform(&world_to_screen_drawing_transform);
-        size_t area_image_cols = area_images.size();
-        for(size_t x = 0; x < area_image_cols; ++x) {
-        
-            auto x_ptr = &area_images[x];
-            size_t area_image_rows = x_ptr->size();
-            
-            for(size_t y = 0; y < area_image_rows; ++y) {
-            
-                al_draw_scaled_bitmap(
-                    x_ptr->operator[](y),
-                    0, 0, area_image_size, area_image_size,
-                    (x * area_image_size + area_images_top_left_corner.x) /
-                    area_images_scale,
-                    (y * area_image_size + area_images_top_left_corner.y) /
-                    area_images_scale,
-                    area_image_size / area_images_scale,
-                    area_image_size / area_images_scale,
-                    0
-                );
-                
-            }
-            
+        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+            draw_sector(
+                cur_area_data.sectors[s],
+                point(), 1.0
+            );
         }
         
         //Liquids.
@@ -144,14 +127,6 @@ void gameplay::do_game_drawing(
             sector* s_ptr = cur_area_data.sectors[s];
             if(s_ptr->associated_liquid) {
                 draw_liquid(s_ptr, point(), 1.0f);
-            }
-        }
-        
-        //Sector corrections.
-        for(size_t c = 0; c < cur_area_data.sector_corrections.size(); ++c) {
-            sector_correction* c_ptr = &cur_area_data.sector_corrections[c];
-            if(c_ptr->new_texture.bitmap) {
-                draw_sector(c_ptr->sec, point(), 1.0f, &c_ptr->new_texture);
             }
         }
         
@@ -1639,16 +1614,14 @@ void draw_scaled_text(
  * s:        The sector to draw.
  * where:    Top-left coordinates.
  * scale:    Drawing scale.
- * texture:  Custom texture. If NULL, uses the normal one.
  */
 void draw_sector(
-    sector* s_ptr, const point &where, const float scale,
-    sector_texture_info* texture
+    sector* s_ptr, const point &where, const float scale
 ) {
 
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    draw_sector_texture(s_ptr, where, scale, texture);
+    draw_sector_texture(s_ptr, where, scale);
     
     
     //Wall shadows.
@@ -1934,11 +1907,9 @@ void draw_sector(
  * s_ptr:   Pointer to the sector.
  * where:   X and Y offset.
  * scale:   Scale the sector by this much.
- * texture: Custom texture. If NULL, uses the normal one.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale,
-    sector_texture_info* texture
+    sector* s_ptr, const point &where, const float scale
 ) {
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
@@ -1970,10 +1941,9 @@ void draw_sector_texture(
         size_t n_vertexes = s_ptr->triangles.size() * 3;
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
         
-        sector_texture_info* texture_info_to_use;
-        if(texture) texture_info_to_use = texture;
-        else texture_info_to_use = &texture_sector[t]->texture_info;
-        
+        sector_texture_info* texture_info_to_use =
+            &texture_sector[t]->texture_info;
+            
         //Texture transformations.
         ALLEGRO_TRANSFORM tra;
         if(texture_sector[t]) {
@@ -2050,8 +2020,7 @@ void draw_sector_texture(
             texture_sector[t] ?
             texture_sector[t]->texture_info.bitmap :
             texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
-        if(texture) tex = texture->bitmap;
-        
+            
         al_draw_prim(
             av, NULL, tex,
             0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST

@@ -30,6 +30,8 @@ class bridge_type : public mob_type {
 public:
     ALLEGRO_BITMAP* bmp_main_texture;
     ALLEGRO_BITMAP* bmp_rail_texture;
+    string main_texture_file_name;
+    string rail_texture_file_name;
     
     bridge_type();
     void load_from_file(
