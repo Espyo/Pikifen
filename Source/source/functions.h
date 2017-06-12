@@ -76,6 +76,7 @@
 
 
 string box_string(const string &s, const size_t size);
+bool casts_shadow(sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
@@ -99,6 +100,7 @@ float get_throw_z_speed(const float strength_multiplier);
 string get_var_value(
     const string &vars_string, const string &var, const string &def
 );
+float get_wall_shadow_length(const float height_difference);
 vector<pair<size_t, string> > get_weather_table(data_node* node);
 ALLEGRO_COLOR interpolate_color(
     const float n, const float n1, const float n2,

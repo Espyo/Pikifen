@@ -24,10 +24,8 @@ const float LIQUID_WOBBLE_DELTA_X = 3.0f;
 const float NOTIFICATION_PADDING = 8.0f;
 const float NOTIFICATION_CONTROL_SIZE = 24.0f;
 const unsigned char NOTIFICATION_ALPHA = 160;
-//The shadows of walls spread this much outwards.
-const float WALL_SHADOW_LENGTH  = 32;
 //The shadows of walls start with this opacity and fade to 0.
-const float WALL_SHADOW_OPACITY = 192;
+const float WALL_SHADOW_OPACITY = 208;
 //A water wave ring lasts this long.
 const float WAVE_RING_DURATION = 1.0f;
 
@@ -38,9 +36,6 @@ enum EASING_METHODS {
 };
 
 
-bool casts_shadow(
-    sector* s1, sector* s2
-);
 void draw_control(
     const ALLEGRO_FONT* const font, const control_info &c,
     const point &where, const point &max_size

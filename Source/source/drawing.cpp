@@ -1377,19 +1377,6 @@ void draw_control(
 
 
 /* ----------------------------------------------------------------------------
- * Does sector s1 cast a shadow onto sector s2?
- */
-bool casts_shadow(sector* s1, sector* s2) {
-    if(!s1 || !s2) return false;
-    if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
-    if(s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
-    if(s1->z > s2->z && s1->always_cast_shadow) return true;
-    if(s1->z <= s2->z + SECTOR_STEP) return false;
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Draws text on the screen, but compresses (scales) it
  * to fit within the specified range.
  * font - flags: The parameters you'd use for al_draw_text.
@@ -1641,6 +1628,9 @@ void draw_sector(
             
         if(!casts_shadow(other_sector, s_ptr)) continue;
         
+        float shadow_length =
+            get_wall_shadow_length(other_sector->z - s_ptr->z);
+            
         /*
          * We need to record the two vertexes of the edge as
          * the two starting points of the procedure.
@@ -1696,6 +1686,8 @@ void draw_sector(
         float mid_angles[2] = {M_PI_2, M_PI_2};
         //Is this neighbor casting a shadow to the same sector?
         bool neighbor_shadow[2] = {false, false};
+        //Length of the neighbor's shadow.
+        float neighbor_shadow_length[2] = {0.0f, 0.0f};
         //Do we have an edge for this vertex?
         bool got_first[2] = {false, false};
         
@@ -1736,6 +1728,14 @@ void draw_sector(
                         ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
                     neighbor_shadow[v] =
                         casts_shadow(other_sector, s_ptr);
+                        
+                    //Get the shadow length.
+                    //Defaulting to the current sector's length
+                    //makes it easier to calculate things later on.
+                    neighbor_shadow_length[v] =
+                        neighbor_shadow[v] ?
+                        get_wall_shadow_length(other_sector->z - s_ptr->z) :
+                        shadow_length;
                 }
             }
         }
@@ -1765,14 +1765,16 @@ void draw_sector(
                 //The neighbor's shadow will do the same when we get to it.
                 
                 float ul;
+                float shadow_length_mid =
+                    (shadow_length + neighbor_shadow_length[v]) / 2.0f;
                 lines_intersect(
                     point(
-                        av[0].x + e_cos_front * WALL_SHADOW_LENGTH, av[0].y +
-                        e_sin_front * WALL_SHADOW_LENGTH
+                        av[0].x + e_cos_front * shadow_length_mid,
+                        av[0].y + e_sin_front * shadow_length_mid
                     ),
                     point(
-                        av[1].x + e_cos_front * WALL_SHADOW_LENGTH, av[1].y +
-                        e_sin_front * WALL_SHADOW_LENGTH
+                        av[1].x + e_cos_front * shadow_length_mid,
+                        av[1].y + e_sin_front * shadow_length_mid
                     ),
                     point(
                         av[v].x,
@@ -1793,10 +1795,10 @@ void draw_sector(
                     NULL, &ul
                 );
                 shadow_point[v].x =
-                    av[0].x + e_cos_front * WALL_SHADOW_LENGTH +
+                    av[0].x + e_cos_front * shadow_length_mid +
                     cos(e_angle) * e_dist * ul;
                 shadow_point[v].y =
-                    av[0].y + e_sin_front * WALL_SHADOW_LENGTH +
+                    av[0].y + e_sin_front * shadow_length_mid +
                     sin(e_angle) * e_dist * ul;
                     
             } else {
@@ -1808,9 +1810,9 @@ void draw_sector(
                 
                 if(neighbor_angle_difs[v] > M_PI_2) {
                     shadow_point[v].x =
-                        av[v].x + e_cos_front * WALL_SHADOW_LENGTH;
+                        av[v].x + e_cos_front * shadow_length;
                     shadow_point[v].y =
-                        av[v].y + e_sin_front * WALL_SHADOW_LENGTH;
+                        av[v].y + e_sin_front * shadow_length;
                         
                     extra_av[v * 4 + 0].x = av[v].x;
                     extra_av[v * 4 + 0].y = av[v].y;
@@ -1821,11 +1823,14 @@ void draw_sector(
                     extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
                     
                     if(neighbor_angle_difs[v] > M_PI) {
+                        float shadow_length_mid =
+                            (shadow_length + neighbor_shadow_length[v]) / 2.0f;
+                            
                         //Draw the "kneecap".
                         extra_av[v * 4 + 2].x =
-                            av[v].x + cos(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                            av[v].x + cos(mid_angles[v]) * shadow_length_mid;
                         extra_av[v * 4 + 2].y =
-                            av[v].y + sin(mid_angles[v]) * WALL_SHADOW_LENGTH;
+                            av[v].y + sin(mid_angles[v]) * shadow_length_mid;
                         extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, 0);
                         
                         draw_extra[v] = 3;
@@ -1841,10 +1846,10 @@ void draw_sector(
                             
                         extra_av[index].x =
                             ev[v]->x + cos(neighbor_angles[v]) *
-                            WALL_SHADOW_LENGTH;
+                            shadow_length;
                         extra_av[index].y =
                             ev[v]->y + sin(neighbor_angles[v]) *
-                            WALL_SHADOW_LENGTH;
+                            shadow_length;
                         extra_av[index].color = al_map_rgba(0, 0, 0, 0);
                         
                         draw_extra[v] = (draw_extra[v] == 3) ? 4 : 3;
@@ -1853,9 +1858,9 @@ void draw_sector(
                 } else {
                 
                     shadow_point[v].x =
-                        ev[v]->x + cos(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        ev[v]->x + cos(neighbor_angles[v]) * shadow_length;
                     shadow_point[v].y =
-                        ev[v]->y + sin(neighbor_angles[v]) * WALL_SHADOW_LENGTH;
+                        ev[v]->y + sin(neighbor_angles[v]) * shadow_length;
                         
                 }
                 

@@ -46,6 +46,19 @@ string box_string(const string &s, const size_t size) {
 
 
 /* ----------------------------------------------------------------------------
+ * Does sector s1 cast a shadow onto sector s2?
+ */
+bool casts_shadow(sector* s1, sector* s2) {
+    if(!s1 || !s2) return false;
+    if(s1->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
+    if(s2->type == SECTOR_TYPE_BOTTOMLESS_PIT) return false;
+    if(s1->z > s2->z && s1->always_cast_shadow) return true;
+    if(s1->z <= s2->z + SECTOR_STEP) return false;
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the color that was provided, but with the alpha changed.
  * color: The color to change the alpha on.
  * a:     The new alpha, [0-255].
@@ -419,6 +432,30 @@ string get_var_value(
     }
     
     return def;
+}
+
+
+//Maximum length a wall shadow can be.
+const float MAX_WALL_SHADOW_LENGTH = 50.0f;
+//Minimum length a wall shadow can be.
+const float MIN_WALL_SHADOW_LENGTH = 8.0f;
+//Wall shadow lengths are the sector height difference multiplied by this.
+const float WALL_SHADOW_LENGTH_MULT = 0.2f;
+
+/* ----------------------------------------------------------------------------
+ * Returns the length a wall's shadow should be.
+ * height_difference: Difference in height between the sector casting the shadow
+ * * and the one the shadow is being cast on.
+ */
+float get_wall_shadow_length(const float height_difference) {
+    return
+        max(
+            min(
+                height_difference * WALL_SHADOW_LENGTH_MULT,
+                MAX_WALL_SHADOW_LENGTH
+            ),
+            MIN_WALL_SHADOW_LENGTH
+        );
 }
 
 
