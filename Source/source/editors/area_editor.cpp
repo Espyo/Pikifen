@@ -2164,6 +2164,18 @@ bool area_editor::remove_isolated_sector(sector* s_ptr) {
         }
     }
     
+    //If any of the sector's vertexes have more than two edges, then
+    //surely these vertexes are connected to other sectors.
+    //Meaning our sector is not alone.
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edge* e_ptr = s_ptr->edges[e];
+        for(size_t v = 0; v < 2; ++v) {
+            if(e_ptr->vertexes[v]->edges.size() != 2) {
+                return false;
+            }
+        }
+    }
+    
     //Remove the sector now.
     vector<edge*> main_sector_edges = s_ptr->edges;
     unordered_set<vertex*> main_vertexes;

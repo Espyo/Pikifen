@@ -83,7 +83,11 @@ mob::mob(
     next_mob_id++;
     
     sector* sec = get_sector(pos, nullptr, true);
-    z = sec->z;
+    if(sec) {
+        z = sec->z;
+    } else {
+        to_delete = true;
+    }
     ground_sector = sec;
     center_sector = sec;
     
@@ -203,6 +207,11 @@ void mob::tick_misc_logic() {
  * falling because of gravity, moving forward, etc.
  */
 void mob::tick_physics() {
+    if(!ground_sector) {
+        //Object is placed out of bounds.
+        return;
+    }
+    
     //Movement.
     bool finished_moving = false;
     bool doing_slide = false;

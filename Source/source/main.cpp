@@ -161,8 +161,13 @@ int main(int argc, char** argv) {
             //Anti speed-burst cap.
             delta_t = min(cur_time - prev_frame_time, 0.2);
             
+            size_t prev_game_state_nr = cur_game_state_nr;
+            
             game_states[cur_game_state_nr]->do_logic();
-            game_states[cur_game_state_nr]->do_drawing();
+            if(cur_game_state_nr == prev_game_state_nr) {
+                //Only draw if we didn't change states in the meantime.
+                game_states[cur_game_state_nr]->do_drawing();
+            }
             
             prev_frame_time = cur_time;
             

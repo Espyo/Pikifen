@@ -57,6 +57,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images.
         So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
     
+    Why are my textures showing up as red "ERROR" text?
+        1. Remember that file names are case sensitive. Lowercase and uppercase matter.
+        2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
+        3. Remember that the engine only finds textures if they're in the Game_data/Graphics/Textures folder.
+    
     Why are some parts of the logic and physics so broken?
         Because their code is still under construction.
     
