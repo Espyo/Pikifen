@@ -37,6 +37,7 @@
 #include "LAFI/radio_button.h"
 #include "LAFI/scrollbar.h"
 #include "LAFI/textbox.h"
+#include "load.h"
 #include "menus.h"
 #include "sector.h"
 #include "vars.h"
@@ -79,13 +80,14 @@ int main(int argc, char** argv) {
     ALLEGRO_EVENT ev;
     init_event_things(logic_timer, logic_queue);
     
-    //Other fundamental initializations.
+    //Other fundamental initializations and loadings.
     init_misc();
     init_game_states();
     init_error_bitmap();
-    init_fonts();
-    init_misc_graphics();
-    init_misc_sounds();
+    load_fonts();
+    load_misc_graphics();
+    load_system_animations();
+    load_misc_sounds();
     
     //The icon is used a lot, so load it here.
     bmp_icon = load_bmp("Icon.png");
@@ -94,12 +96,12 @@ int main(int argc, char** argv) {
     draw_loading_screen("", "", 1.0);
     al_flip_display();
     
-    //Init some other things.
+    //Init and load some other things.
     init_mob_categories();
     init_special_mob_types();
     init_sector_types();
-    init_dev_tools();
     init_hud_coordinates();
+    load_dev_tools();
     load_game_config();
     
     if(
@@ -176,9 +178,10 @@ int main(int argc, char** argv) {
     if(cur_game_state_nr != INVALID) {
         game_states[cur_game_state_nr]->unload();
     }
+    unload_resources();
     destroy_special_mob_types();
     destroy_game_states();
-    destroy_resources();
+    destroy_misc();
     destroy_event_things(logic_timer, logic_queue);
     destroy_allegro();
     

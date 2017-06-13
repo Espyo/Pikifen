@@ -15,6 +15,7 @@
 
 #include "const.h"
 #include "functions.h"
+#include "load.h"
 #include "misc_structs.h"
 #include "vars.h"
 

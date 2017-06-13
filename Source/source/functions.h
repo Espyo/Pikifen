@@ -110,27 +110,6 @@ float interpolate_number(
     const float p, const float p1, const float p2,
     const float v1, const float v2
 );
-void load_area(
-    const string &name, const bool load_for_editor, const bool from_backup
-);
-void load_area_textures();
-void load_control(
-    const unsigned char action, const unsigned char player,
-    const string &name, data_node &file, const string &def = ""
-);
-ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node = NULL, bool report_error = true
-);
-void load_custom_particle_generators(const bool load_resources);
-data_node load_data_file(const string &file_name);
-void load_hazards();
-void load_liquids(const bool load_resources);
-void load_options();
-sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
-void load_game_config();
-void load_spray_types();
-void load_status_types(const bool load_resources);
-void load_system_animations();
 void log_error(string s, data_node* d = NULL);
 void print_info(string t);
 float randomf(float min, float max);

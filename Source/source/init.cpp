@@ -165,62 +165,6 @@ void init_controls() {
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the development tools from the Tools.txt file.
- */
-void init_dev_tools() {
-    data_node file(MISC_FOLDER_PATH + "/Tools.txt");
-    
-    if(!s2b(file.get_child_by_name("enabled")->value)) return;
-    
-    for(unsigned char k = 0; k < 20; k++) {
-        string tool_name;
-        if(k < 10) {
-            //The first ten indexes are the F2 - F11 keys.
-            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
-        } else {
-            //The first ten indexes are the 0 - 9 keys.
-            tool_name = file.get_child_by_name(i2s(k - 10))->value;
-        }
-        
-        if(tool_name == "area_image") {
-            dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;
-        } else if(tool_name == "change_speed") {
-            dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
-        } else if(tool_name == "geometry_info") {
-            dev_tool_keys[k] = DEV_TOOL_GEOMETRY_INFO;
-        } else if(tool_name == "hitboxes") {
-            dev_tool_keys[k] = DEV_TOOL_HITBOXES;
-        } else if(tool_name == "hurt_mob") {
-            dev_tool_keys[k] = DEV_TOOL_HURT_MOB;
-        } else if(tool_name == "mob_info") {
-            dev_tool_keys[k] = DEV_TOOL_MOB_INFO;
-        } else if(tool_name == "new_pikmin") {
-            dev_tool_keys[k] = DEV_TOOL_NEW_PIKMIN;
-        } else if(tool_name == "teleport") {
-            dev_tool_keys[k] = DEV_TOOL_TELEPORT;
-        } else {
-            dev_tool_keys[k] = DEV_TOOL_NONE;
-        }
-    }
-    
-    dev_tool_area_image_size =
-        s2i(file.get_child_by_name("area_image_size")->value);
-    dev_tool_area_image_name =
-        file.get_child_by_name("area_image_file_name")->value;
-    dev_tool_area_image_shadows =
-        s2b(file.get_child_by_name("area_image_shadows")->value);
-    dev_tool_change_speed_mult =
-        s2f(file.get_child_by_name("change_speed_multiplier")->value);
-        
-    dev_tool_auto_start_option =
-        file.get_child_by_name("auto_start_option")->value;
-    dev_tool_auto_start_mode =
-        file.get_child_by_name("auto_start_mode")->value;
-        
-}
-
-
-/* ----------------------------------------------------------------------------
  * Initializes the error bitmap.
  */
 void init_error_bitmap() {
@@ -259,62 +203,6 @@ void init_event_things(
     al_register_event_source(
         logic_queue, al_get_timer_event_source(logic_timer)
     );
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes and loads the game's fonts.
- */
-void init_fonts() {
-    int font_ranges[] = {
-        0x0020, 0x007E, //ASCII
-        /*0x00A0, 0x00A1, //Non-breaking space and inverted !
-        0x00BF, 0x00FF, //Inverted ? and European vowels and such*/
-    };
-    int counter_font_ranges[] = {
-        0x002D, 0x002D, //Dash
-        0x002F, 0x0039, //Slash and numbers
-        0x0078, 0x0078, //x
-    };
-    int value_font_ranges[] = {
-        0x0024, 0x0024, //Dollar sign
-        0x002D, 0x002D, //Dash
-        0x0030, 0x0039, //Numbers
-    };
-    
-    //We can't load the font directly because we want to set the ranges.
-    //So we load into a bitmap first.
-    ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
-    if(temp_font_bitmap) {
-        font_main = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
-    }
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Area_name_font.png");
-    if(temp_font_bitmap) {
-        font_area_name =
-            al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
-    }
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Counter_font.png");
-    if(temp_font_bitmap) {
-        font_counter =
-            al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
-    }
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    temp_font_bitmap = load_bmp("Value_font.png");
-    if(temp_font_bitmap) {
-        font_value =
-            al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
-    }
-    al_destroy_bitmap(temp_font_bitmap);
-    
-    if(font_main) font_main_h = al_get_font_line_height(font_main);
-    if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
-    
-    font_builtin = al_create_builtin_font();
 }
 
 
@@ -441,86 +329,6 @@ void init_misc() {
     
     zoom_mid_level = max(zoom_min_level, zoom_mid_level);
     zoom_mid_level = min(zoom_mid_level, zoom_max_level);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes miscellaneous fixed graphics.
- */
-void init_misc_graphics() {
-    //Icon.
-    bmp_icon = load_bmp("Icon.png");
-    al_set_display_icon(display, bmp_icon);
-    
-    //Graphics.
-    bmp_checkbox_check = load_bmp(   "Checkbox_check.png");
-    bmp_cursor = load_bmp(           "Cursor.png");
-    bmp_cursor_invalid = load_bmp(   "Cursor_invalid.png");
-    bmp_enemy_spirit = load_bmp(     "Enemy_spirit.png");
-    bmp_idle_glow = load_bmp(        "Idle_glow.png");
-    bmp_info_spot = load_bmp(        "Info_spot.png");
-    bmp_mouse_cursor = load_bmp(     "Mouse_cursor.png");
-    bmp_mouse_wd_icon = load_bmp(    "Mouse_wheel_down_icon.png");
-    bmp_mouse_wu_icon = load_bmp(    "Mouse_wheel_up_icon.png");
-    bmp_notification = load_bmp(     "Notification.png");
-    bmp_group_move_arrow = load_bmp( "Group_move_arrow.png");
-    bmp_nectar = load_bmp(           "Nectar.png");
-    bmp_pikmin_silhouette = load_bmp("Pikmin_silhouette.png");
-    bmp_pikmin_spirit = load_bmp(    "Pikmin_spirit.png");
-    bmp_shadow = load_bmp(           "Shadow.png");
-    bmp_smack = load_bmp(            "Smack.png");
-    bmp_smoke = load_bmp(            "Smoke.png");
-    bmp_sparkle = load_bmp(          "Sparkle.png");
-    bmp_spotlight = load_bmp(        "Spotlight.png");
-    bmp_ub_spray = load_bmp(         "Ultra-bitter_spray.png");
-    bmp_us_spray = load_bmp(         "Ultra-spicy_spray.png");
-    bmp_wave_ring = load_bmp(        "Wave_ring.png");
-    for(unsigned char i = 0; i < 3; ++i) {
-        bmp_mouse_button_icon[i] =
-            load_bmp(
-                "Mouse_button_" + i2s(i + 1) + "_icon.png"
-            );
-    }
-    
-    load_system_animations(); //TODO move this out of here.
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes miscellaneous fixed sound effects.
- */
-void init_misc_sounds() {
-    //Sound effects.
-    voice =
-        al_create_voice(
-            44100, ALLEGRO_AUDIO_DEPTH_INT16,   ALLEGRO_CHANNEL_CONF_2
-        );
-    mixer =
-        al_create_mixer(
-            44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2
-        );
-    al_attach_mixer_to_voice(mixer, voice);
-    sfx_attack = load_sample(              "Attack.ogg",               mixer);
-    sfx_pikmin_attack = load_sample(       "Pikmin_attack.ogg",        mixer);
-    sfx_pikmin_carrying = load_sample(     "Pikmin_carrying.ogg",      mixer);
-    sfx_pikmin_carrying_grab = load_sample("Pikmin_carrying_grab.ogg", mixer);
-    sfx_pikmin_caught = load_sample(       "Pikmin_caught.ogg",        mixer);
-    sfx_pikmin_dying = load_sample(        "Pikmin_dying.ogg",         mixer);
-    sfx_pikmin_held = load_sample(         "Pikmin_held.ogg",          mixer);
-    sfx_pikmin_idle = load_sample(         "Pikmin_idle.ogg",          mixer);
-    sfx_pikmin_thrown = load_sample(       "Pikmin_thrown.ogg",        mixer);
-    sfx_pikmin_plucked = load_sample(      "Pikmin_plucked.ogg",       mixer);
-    sfx_pikmin_called = load_sample(       "Pikmin_called.ogg",        mixer);
-    sfx_olimar_whistle = load_sample(      "Olimar_whistle.ogg",       mixer);
-    sfx_louie_whistle = load_sample(       "Louie_whistle.ogg",        mixer);
-    sfx_president_whistle = load_sample(   "President_whistle.ogg",    mixer);
-    sfx_olimar_name_call = load_sample(    "Olimar_name_call.ogg",     mixer);
-    sfx_louie_name_call = load_sample(     "Louie_name_call.ogg",      mixer);
-    sfx_president_name_call = load_sample( "President_name_call.ogg",  mixer);
-    sfx_pluck = load_sample(               "Pluck.ogg",                mixer);
-    sfx_throw = load_sample(               "Throw.ogg",                mixer);
-    sfx_switch_pikmin = load_sample(       "Switch_Pikmin.ogg",        mixer);
-    sfx_camera = load_sample(              "Camera.ogg",               mixer);
 }
 
 
@@ -669,6 +477,22 @@ void destroy_game_states() {
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys miscellaneous things.
+ */
+void destroy_misc() {
+    al_destroy_bitmap(bmp_error);
+    al_destroy_font(font_area_name);
+    al_destroy_font(font_counter);
+    al_destroy_font(font_main);
+    al_destroy_font(font_value);
+    
+    al_detach_voice(voice);
+    al_destroy_mixer(mixer);
+    al_destroy_voice(voice);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Destroys the list of mob types.
  */
 void destroy_special_mob_types() {
@@ -677,65 +501,4 @@ void destroy_special_mob_types() {
     }
     
     spec_mob_types.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys miscellaneous graphics, sounds, and other resources.
- */
-void destroy_resources() {
-    al_destroy_bitmap(bmp_error);
-    al_destroy_font(font_area_name);
-    al_destroy_font(font_counter);
-    al_destroy_font(font_main);
-    al_destroy_font(font_value);
-    
-    al_destroy_bitmap(bmp_checkbox_check);
-    al_destroy_bitmap(bmp_cursor);
-    al_destroy_bitmap(bmp_cursor_invalid);
-    al_destroy_bitmap(bmp_enemy_spirit);
-    al_destroy_bitmap(bmp_icon);
-    al_destroy_bitmap(bmp_idle_glow);
-    al_destroy_bitmap(bmp_info_spot);
-    al_destroy_bitmap(bmp_mouse_wd_icon);
-    al_destroy_bitmap(bmp_mouse_wu_icon);
-    al_destroy_bitmap(bmp_mouse_cursor);
-    al_destroy_bitmap(bmp_notification);
-    al_destroy_bitmap(bmp_group_move_arrow);
-    al_destroy_bitmap(bmp_nectar);
-    al_destroy_bitmap(bmp_pikmin_spirit);
-    al_destroy_bitmap(bmp_shadow);
-    al_destroy_bitmap(bmp_smack);
-    al_destroy_bitmap(bmp_smoke);
-    al_destroy_bitmap(bmp_sparkle);
-    al_destroy_bitmap(bmp_ub_spray);
-    al_destroy_bitmap(bmp_us_spray);
-    for(unsigned char i = 0; i < 3; ++i) {
-        bitmaps.detach(bmp_mouse_button_icon[i]);
-    }
-    
-    al_detach_voice(voice);
-    al_destroy_mixer(mixer);
-    al_destroy_voice(voice);
-    
-    sfx_attack.destroy();
-    sfx_pikmin_attack.destroy();
-    sfx_pikmin_carrying.destroy();
-    sfx_pikmin_carrying_grab.destroy();
-    sfx_pikmin_caught.destroy();
-    sfx_pikmin_dying.destroy();
-    sfx_pikmin_held.destroy();
-    sfx_pikmin_idle.destroy();
-    sfx_pikmin_thrown.destroy();
-    sfx_pikmin_plucked.destroy();
-    sfx_pikmin_called.destroy();
-    sfx_olimar_whistle.destroy();
-    sfx_louie_whistle.destroy();
-    sfx_president_whistle.destroy();
-    sfx_olimar_name_call.destroy();
-    sfx_louie_name_call.destroy();
-    sfx_president_name_call.destroy();
-    sfx_throw.destroy();
-    sfx_switch_pikmin.destroy();
-    sfx_camera.destroy();
 }

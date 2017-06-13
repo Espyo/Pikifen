@@ -123,7 +123,6 @@ const string ANIMATIONS_FOLDER_PATH   = GAME_DATA_FOLDER_PATH + "/Animations";
 const string AREAS_FOLDER_PATH        = GAME_DATA_FOLDER_PATH + "/Areas";
 const string AUDIO_FOLDER_PATH        = GAME_DATA_FOLDER_PATH + "/Audio";
 const string BRIDGES_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Bridges";
-const string CONFIG_FOLDER_PATH       = MISC_FOLDER_PATH + "/Config.txt";
 const string ENEMIES_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Enemies";
 const string GATES_FOLDER_PATH        = TYPES_FOLDER_PATH + "/Gates";
 const string GRAPHICS_FOLDER_PATH     = GAME_DATA_FOLDER_PATH + "/Graphics";
@@ -140,6 +139,7 @@ const string TEXTURES_FOLDER_PATH     =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
 const string TREASURES_FOLDER_PATH    = TYPES_FOLDER_PATH + "/Treasures";
 
+const string CONFIG_FILE              = MISC_FOLDER_PATH + "/Config.txt";
 const string PARTICLE_GENERATORS_FILE =
     MISC_FOLDER_PATH + "/Particle_generators.txt";
 const string SYSTEM_ANIMATIONS_FILE =

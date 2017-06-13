@@ -69,6 +69,8 @@
     <File Name="../source/liquid.h"/>
     <File Name="../source/geometry_utils.h"/>
     <File Name="../source/geometry_utils.cpp"/>
+    <File Name="../source/load.h"/>
+    <File Name="../source/load.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>

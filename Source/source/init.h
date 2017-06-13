@@ -6,8 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for functions that initialize and deinitialize
- * the game data and content.
+ * Header for program initializer and deinitializer functions.
  */
 
 #ifndef INIT_INCLUDED
@@ -18,18 +17,14 @@
 
 void init_allegro();
 void init_controls();
-void init_dev_tools();
 void init_error_bitmap();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
-void init_fonts();
 void init_game_states();
 void init_hud_coordinate(
     const int n, const float x, const float y, const float w, const float h
 );
 void init_hud_coordinates();
 void init_misc();
-void init_misc_graphics();
-void init_misc_sounds();
 void init_mob_categories();
 void init_sector_types();
 void init_single_animation(
@@ -41,7 +36,7 @@ void init_special_mob_types();
 void destroy_allegro();
 void destroy_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void destroy_game_states();
+void destroy_misc();
 void destroy_special_mob_types();
-void destroy_resources();
 
 #endif //ifndef INIT_INCLUDED

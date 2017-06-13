@@ -25,6 +25,7 @@
 #include "../LAFI/radio_button.h"
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/textbox.h"
+#include "../load.h"
 #include "../misc_structs.h"
 #include "../vars.h"
 
@@ -909,7 +910,7 @@ void animation_editor::load_animation_database() {
     if(file_path.find(PIKMIN_FOLDER_PATH) != string::npos) {
         is_pikmin = true;
         data_node data =
-            data_node(
+            load_data_file(
                 PIKMIN_FOLDER_PATH + "/" +
                 file_path_parts[file_path_parts.size() - 2] +
                 "/Data.txt"

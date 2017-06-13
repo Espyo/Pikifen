@@ -15,6 +15,7 @@
 #include "drawing.h"
 #include "functions.h"
 #include "game_state.h"
+#include "load.h"
 #include "misc_structs.h"
 #include "vars.h"
 

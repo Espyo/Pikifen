@@ -16,6 +16,7 @@
 
 #include "drawing.h"
 #include "functions.h"
+#include "load.h"
 #include "menus.h"
 #include "vars.h"
 
@@ -46,7 +47,8 @@ void main_menu::load() {
     //Resources.
     bmp_menu_bg = load_bmp("Main_menu.jpg");
     
-    data_node title_screen_logo_file(
+    data_node title_screen_logo_file =
+    load_data_file(
         ANIMATIONS_FOLDER_PATH + "/Title_screen_logo.txt"
     );
     logo = load_animation_database_from_file(&title_screen_logo_file);

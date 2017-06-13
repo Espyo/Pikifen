@@ -15,6 +15,7 @@
 #include "../functions.h"
 #include "enemy_type.h"
 #include "leader_type.h"
+#include "../load.h"
 #include "mob_fsm.h"
 #include "mob_type.h"
 #include "onion_type.h"
@@ -88,7 +89,7 @@ void load_mob_types(bool load_resources) {
     //Load the special mob types.
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
         string folder = SPECIAL_MOBS_FOLDER_PATH + "/" + mt->first;
-        data_node file = data_node(folder + "/Data.txt");
+        data_node file(folder + "/Data.txt");
         if(!file.file_was_opened) continue;
         
         load_mob_type_from_file(mt->second, file, load_resources, folder);
@@ -169,8 +170,7 @@ void load_mob_types(
     
     for(size_t t = 0; t < types.size(); ++t) {
     
-        data_node file =
-            data_node(category->folder + "/" + types[t] + "/Data.txt");
+        data_node file(category->folder + "/" + types[t] + "/Data.txt");
         if(!file.file_was_opened) continue;
         
         mob_type* mt;
@@ -246,11 +246,11 @@ void load_mob_type_from_file(
     }
     
     if(load_resources) {
-        data_node anim_file = data_node(folder + "/Animations.txt");
+        data_node anim_file = load_data_file(folder + "/Animations.txt");
         mt->anims = load_animation_database_from_file(&anim_file);
         mt->anims.fix_body_part_pointers();
         
-        data_node script_file = data_node(folder + "/Script.txt");
+        data_node script_file(folder + "/Script.txt");
         size_t old_n_states = mt->states.size();
         load_script(mt, script_file.get_child_by_name("script"), &mt->states);
         if(mt->states.size() > old_n_states) {

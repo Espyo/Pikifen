@@ -18,6 +18,7 @@
 #include "../LAFI/radio_button.h"
 #include "../LAFI/textbox.h"
 #include "../functions.h"
+#include "../load.h"
 #include "../vars.h"
 
 

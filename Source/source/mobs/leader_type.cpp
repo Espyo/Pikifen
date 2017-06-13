@@ -12,6 +12,7 @@
 #include "../functions.h"
 #include "leader_fsm.h"
 #include "leader_type.h"
+#include "../load.h"
 #include "mob_fsm.h"
 #include "../const.h"
 #include "../vars.h"

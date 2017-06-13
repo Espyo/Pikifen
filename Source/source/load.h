@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) Andre 'Espyo' Silva 2013-2017.
+ * The following source file belongs to the open-source project
+ * Pikmin fangame engine. Please read the included
+ * README and LICENSE files for more information.
+ * Pikmin is copyright (c) Nintendo.
+ *
+ * === FILE DESCRIPTION ===
+ * Header for data loading and unloading functions.
+ */
+
+#ifndef LOAD_INCLUDED
+#define LOAD_INCLUDED
+
+#include <string>
+
+#include <allegro5/allegro.h>
+
+#include "data_file.h"
+#include "misc_structs.h"
+
+using namespace std;
+
+
+void load_area(
+    const string &name, const bool load_for_editor, const bool from_backup
+);
+void load_area_textures();
+ALLEGRO_BITMAP* load_bmp(
+    const string &file_name, data_node* node = NULL, bool report_error = true
+);
+void load_control(
+    const unsigned char action, const unsigned char player,
+    const string &name, data_node &file, const string &def = ""
+);
+void load_custom_particle_generators(const bool load_resources);
+data_node load_data_file(const string &file_name);
+void load_dev_tools();
+void load_fonts();
+void load_game_config();
+void load_hazards();
+void load_liquids(const bool load_resources);
+void load_misc_graphics();
+void load_misc_sounds();
+void load_options();
+sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
+void load_spray_types();
+void load_status_types(const bool load_resources);
+void load_system_animations();
+
+void unload_resources();
+
+
+#endif //ifndef LOAD_INCLUDED
