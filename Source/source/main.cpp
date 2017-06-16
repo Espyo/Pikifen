@@ -101,26 +101,26 @@ int main(int argc, char** argv) {
     init_special_mob_types();
     init_sector_types();
     init_hud_coordinates();
-    load_dev_tools();
+    load_creator_tools();
     load_game_config();
     
     if(
-        dev_tool_auto_start_mode == "play" &&
-        !dev_tool_auto_start_option.empty()
+        creator_tool_auto_start_mode == "play" &&
+        !creator_tool_auto_start_option.empty()
     ) {
-        area_to_load = dev_tool_auto_start_option;
+        area_to_load = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_GAME);
-    } else if(dev_tool_auto_start_mode == "animation_editor") {
+    } else if(creator_tool_auto_start_mode == "animation_editor") {
         (
             (animation_editor*)
             game_states[GAME_STATE_ANIMATION_EDITOR]
-        )->auto_load_anim = dev_tool_auto_start_option;
+        )->auto_load_anim = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_ANIMATION_EDITOR);
-    } else if(dev_tool_auto_start_mode == "area_editor") {
+    } else if(creator_tool_auto_start_mode == "area_editor") {
         (
             (area_editor*)
             game_states[GAME_STATE_AREA_EDITOR]
-        )->auto_load_area = dev_tool_auto_start_option;
+        )->auto_load_area = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_AREA_EDITOR);
     } else {
         change_game_state(GAME_STATE_MAIN_MENU);

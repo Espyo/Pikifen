@@ -555,8 +555,8 @@ void gameplay::update_transformations() {
  * Tick the gameplay logic by one frame.
  */
 void gameplay::do_logic() {
-    if(dev_tool_change_speed) {
-        delta_t *= dev_tool_change_speed_mult;
+    if(creator_tool_change_speed) {
+        delta_t *= creator_tool_change_speed_mult;
     }
     
     do_gameplay_logic();

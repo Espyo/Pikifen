@@ -463,52 +463,52 @@ void gameplay::do_gameplay_logic() {
     }
     
     //Print info on a mob.
-    if(dev_tool_info_lock) {
+    if(creator_tool_info_lock) {
         string name_str =
-            box_string("Mob: " + dev_tool_info_lock->type->name + ".", 30);
+            box_string("Mob: " + creator_tool_info_lock->type->name + ".", 30);
         string coords_str =
             box_string(
                 "Coords: " +
-                box_string(f2s(dev_tool_info_lock->pos.x), 6) + " " +
-                box_string(f2s(dev_tool_info_lock->pos.y), 6) + " " +
-                box_string(f2s(dev_tool_info_lock->z), 6) + ".",
+                box_string(f2s(creator_tool_info_lock->pos.x), 6) + " " +
+                box_string(f2s(creator_tool_info_lock->pos.y), 6) + " " +
+                box_string(f2s(creator_tool_info_lock->z), 6) + ".",
                 30
             );
         string stateh_str =
             "State hist.: " +
             (
-                dev_tool_info_lock->fsm.cur_state ?
-                dev_tool_info_lock->fsm.cur_state->name :
+                creator_tool_info_lock->fsm.cur_state ?
+                creator_tool_info_lock->fsm.cur_state->name :
                 "(None!)"
             );
         for(unsigned char p = 0; p < N_PREV_STATES; ++p) {
             stateh_str +=
-                ", " + dev_tool_info_lock->fsm.prev_state_names[p];
+                ", " + creator_tool_info_lock->fsm.prev_state_names[p];
         }
         stateh_str += ".";
         string anim_str =
             box_string(
                 "Animation: " +
-                (dev_tool_info_lock->anim.cur_anim ?
-                 dev_tool_info_lock->anim.cur_anim->name :
+                (creator_tool_info_lock->anim.cur_anim ?
+                 creator_tool_info_lock->anim.cur_anim->name :
                  "(None!)") +
                 ".",
                 60
             );
         string health_str =
-            box_string("Health: " + f2s(dev_tool_info_lock->health) + ".", 30);
+            box_string("Health: " + f2s(creator_tool_info_lock->health) + ".", 30);
         string timer_str =
             box_string(
                 "Timer: " +
-                f2s(dev_tool_info_lock->script_timer.time_left) + ".",
+                f2s(creator_tool_info_lock->script_timer.time_left) + ".",
                 30
             );
             
         string vars_str = "Vars: ";
-        if(!dev_tool_info_lock->vars.empty()) {
+        if(!creator_tool_info_lock->vars.empty()) {
             for(
-                auto v = dev_tool_info_lock->vars.begin();
-                v != dev_tool_info_lock->vars.end(); ++v
+                auto v = creator_tool_info_lock->vars.begin();
+                v != creator_tool_info_lock->vars.end(); ++v
             ) {
                 vars_str += v->first + "=" + v->second + "; ";
             }
@@ -528,7 +528,7 @@ void gameplay::do_gameplay_logic() {
     }
     
     //Print mouse coordinates.
-    if(dev_tool_geometry_info) {
+    if(creator_tool_geometry_info) {
         sector* mouse_sector =
             get_sector(mouse_cursor_w, NULL, true);
         string str =

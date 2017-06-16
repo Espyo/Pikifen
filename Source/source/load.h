@@ -35,7 +35,7 @@ void load_control(
 );
 void load_custom_particle_generators(const bool load_resources);
 data_node load_data_file(const string &file_name);
-void load_dev_tools();
+void load_creator_tools();
 void load_fonts();
 void load_game_config();
 void load_hazards();

@@ -1424,7 +1424,7 @@ mob* create_mob(
  */
 void delete_mob(mob* m) {
     remove_from_group(m);
-    if(dev_tool_info_lock == m) dev_tool_info_lock = NULL;
+    if(creator_tool_info_lock == m) creator_tool_info_lock = NULL;
     
     m->type->category->erase_mob(m);
     mobs.erase(find(mobs.begin(), mobs.end(), m));

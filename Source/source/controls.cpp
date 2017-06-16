@@ -54,48 +54,48 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 ev.keyboard.keycode <= ALLEGRO_KEY_F11
             ) {
                 //The first ten indexes are the F2 - F11 keys.
-                id = dev_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
+                id = creator_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
             } else {
                 //The last ten indexes are the 0 - 9 keys.
-                id = dev_tool_keys[10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)];
+                id = creator_tool_keys[10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)];
             }
             
-            if(id == DEV_TOOL_AREA_IMAGE) {
+            if(id == CREATOR_TOOL_AREA_IMAGE) {
                 ALLEGRO_BITMAP* bmp = draw_to_bitmap();
-                if(!al_save_bitmap(dev_tool_area_image_name.c_str(), bmp)) {
+                if(!al_save_bitmap(creator_tool_area_image_name.c_str(), bmp)) {
                     log_error(
                         "Could not save the area onto an image,"
                         " with the name \"" +
-                        dev_tool_area_image_name + "\"!"
+                        creator_tool_area_image_name + "\"!"
                     );
                 }
                 
-            } else if(id == DEV_TOOL_CHANGE_SPEED) {
-                dev_tool_change_speed = !dev_tool_change_speed;
+            } else if(id == CREATOR_TOOL_CHANGE_SPEED) {
+                creator_tool_change_speed = !creator_tool_change_speed;
                 
-            } else if(id == DEV_TOOL_GEOMETRY_INFO) {
-                dev_tool_geometry_info = !dev_tool_geometry_info;
+            } else if(id == CREATOR_TOOL_GEOMETRY_INFO) {
+                creator_tool_geometry_info = !creator_tool_geometry_info;
                 
-            } else if(id == DEV_TOOL_HITBOXES) {
-                dev_tool_hitboxes = !dev_tool_hitboxes;
+            } else if(id == CREATOR_TOOL_HITBOXES) {
+                creator_tool_hitboxes = !creator_tool_hitboxes;
                 
-            } else if(id == DEV_TOOL_HURT_MOB) {
+            } else if(id == CREATOR_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
                     m->health = m->health - m->type->max_health * 0.2;
                 }
                 
-            } else if(id == DEV_TOOL_MOB_INFO) {
+            } else if(id == CREATOR_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
-                dev_tool_info_lock = (dev_tool_info_lock == m ? NULL : m);
+                creator_tool_info_lock = (creator_tool_info_lock == m ? NULL : m);
                 
-            } else if(id == DEV_TOOL_NEW_PIKMIN) {
+            } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < max_pikmin_in_field) {
                     pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
                     
                     auto p = pikmin_types.begin();
                     for(; p != pikmin_types.end(); ++p) {
-                        if(p->second == dev_tool_last_pikmin_type) {
+                        if(p->second == creator_tool_last_pikmin_type) {
                             ++p;
                             if(p != pikmin_types.end()) {
                                 new_pikmin_type = p->second;
@@ -103,7 +103,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                             break;
                         }
                     }
-                    dev_tool_last_pikmin_type = new_pikmin_type;
+                    creator_tool_last_pikmin_type = new_pikmin_type;
                     
                     create_mob(
                         mob_categories.get(MOB_CATEGORY_PIKMIN),
@@ -111,7 +111,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                     );
                 }
                 
-            } else if(id == DEV_TOOL_TELEPORT) {
+            } else if(id == CREATOR_TOOL_TELEPORT) {
                 cur_leader_ptr->chase(mouse_cursor_w, NULL, true);
                 
             }

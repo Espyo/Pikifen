@@ -74,6 +74,7 @@
       <AdditionalIncludeDirectories>C:\Allegro\allegro-5.0.10-msvc-10.0\include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)/</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,6 +116,7 @@
     <ClInclude Include="..\source\LAFI\textbox.h" />
     <ClInclude Include="..\source\LAFI\widget.h" />
     <ClInclude Include="..\source\liquid.h" />
+    <ClInclude Include="..\source\load.h" />
     <ClInclude Include="..\source\logic.h" />
     <ClInclude Include="..\source\menus.h" />
     <ClInclude Include="..\source\menu_widgets.h" />
@@ -200,6 +202,7 @@
     <ClCompile Include="..\source\LAFI\textbox.cpp" />
     <ClCompile Include="..\source\LAFI\widget.cpp" />
     <ClCompile Include="..\source\liquid.cpp" />
+    <ClCompile Include="..\source\load.cpp" />
     <ClCompile Include="..\source\logic.cpp" />
     <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\menus.cpp" />

@@ -488,6 +488,62 @@ void load_control(
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the creator tools from the tool config file.
+ */
+void load_creator_tools() {
+    data_node file(MISC_FOLDER_PATH + "/Tools.txt");
+    
+    if(!s2b(file.get_child_by_name("enabled")->value)) return;
+    
+    for(unsigned char k = 0; k < 20; k++) {
+        string tool_name;
+        if(k < 10) {
+            //The first ten indexes are the F2 - F11 keys.
+            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
+        } else {
+            //The first ten indexes are the 0 - 9 keys.
+            tool_name = file.get_child_by_name(i2s(k - 10))->value;
+        }
+        
+        if(tool_name == "area_image") {
+            creator_tool_keys[k] = CREATOR_TOOL_AREA_IMAGE;
+        } else if(tool_name == "change_speed") {
+            creator_tool_keys[k] = CREATOR_TOOL_CHANGE_SPEED;
+        } else if(tool_name == "geometry_info") {
+            creator_tool_keys[k] = CREATOR_TOOL_GEOMETRY_INFO;
+        } else if(tool_name == "hitboxes") {
+            creator_tool_keys[k] = CREATOR_TOOL_HITBOXES;
+        } else if(tool_name == "hurt_mob") {
+            creator_tool_keys[k] = CREATOR_TOOL_HURT_MOB;
+        } else if(tool_name == "mob_info") {
+            creator_tool_keys[k] = CREATOR_TOOL_MOB_INFO;
+        } else if(tool_name == "new_pikmin") {
+            creator_tool_keys[k] = CREATOR_TOOL_NEW_PIKMIN;
+        } else if(tool_name == "teleport") {
+            creator_tool_keys[k] = CREATOR_TOOL_TELEPORT;
+        } else {
+            creator_tool_keys[k] = CREATOR_TOOL_NONE;
+        }
+    }
+    
+    creator_tool_area_image_size =
+        s2i(file.get_child_by_name("area_image_size")->value);
+    creator_tool_area_image_name =
+        file.get_child_by_name("area_image_file_name")->value;
+    creator_tool_area_image_shadows =
+        s2b(file.get_child_by_name("area_image_shadows")->value);
+    creator_tool_change_speed_mult =
+        s2f(file.get_child_by_name("change_speed_multiplier")->value);
+        
+    creator_tool_auto_start_option =
+        file.get_child_by_name("auto_start_option")->value;
+    creator_tool_auto_start_mode =
+        file.get_child_by_name("auto_start_mode")->value;
+        
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads the user-made particle generators.
  */
 void load_custom_particle_generators(const bool load_resources) {
@@ -568,62 +624,6 @@ data_node load_data_file(const string &file_name) {
     }
     
     return n;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the development tools from the tool config file.
- */
-void load_dev_tools() {
-    data_node file(MISC_FOLDER_PATH + "/Tools.txt");
-    
-    if(!s2b(file.get_child_by_name("enabled")->value)) return;
-    
-    for(unsigned char k = 0; k < 20; k++) {
-        string tool_name;
-        if(k < 10) {
-            //The first ten indexes are the F2 - F11 keys.
-            tool_name = file.get_child_by_name("f" + i2s(k + 2))->value;
-        } else {
-            //The first ten indexes are the 0 - 9 keys.
-            tool_name = file.get_child_by_name(i2s(k - 10))->value;
-        }
-        
-        if(tool_name == "area_image") {
-            dev_tool_keys[k] = DEV_TOOL_AREA_IMAGE;
-        } else if(tool_name == "change_speed") {
-            dev_tool_keys[k] = DEV_TOOL_CHANGE_SPEED;
-        } else if(tool_name == "geometry_info") {
-            dev_tool_keys[k] = DEV_TOOL_GEOMETRY_INFO;
-        } else if(tool_name == "hitboxes") {
-            dev_tool_keys[k] = DEV_TOOL_HITBOXES;
-        } else if(tool_name == "hurt_mob") {
-            dev_tool_keys[k] = DEV_TOOL_HURT_MOB;
-        } else if(tool_name == "mob_info") {
-            dev_tool_keys[k] = DEV_TOOL_MOB_INFO;
-        } else if(tool_name == "new_pikmin") {
-            dev_tool_keys[k] = DEV_TOOL_NEW_PIKMIN;
-        } else if(tool_name == "teleport") {
-            dev_tool_keys[k] = DEV_TOOL_TELEPORT;
-        } else {
-            dev_tool_keys[k] = DEV_TOOL_NONE;
-        }
-    }
-    
-    dev_tool_area_image_size =
-        s2i(file.get_child_by_name("area_image_size")->value);
-    dev_tool_area_image_name =
-        file.get_child_by_name("area_image_file_name")->value;
-    dev_tool_area_image_shadows =
-        s2b(file.get_child_by_name("area_image_shadows")->value);
-    dev_tool_change_speed_mult =
-        s2f(file.get_child_by_name("change_speed_multiplier")->value);
-        
-    dev_tool_auto_start_option =
-        file.get_child_by_name("auto_start_option")->value;
-    dev_tool_auto_start_mode =
-        file.get_child_by_name("auto_start_mode")->value;
-        
 }
 
 
@@ -817,10 +817,10 @@ void load_liquids(const bool load_resources) {
     if(load_resources) {
         for(auto l = liquids.begin(); l != liquids.end(); ++l) {
             data_node anim_file =
-            load_data_file(
-                ANIMATIONS_FOLDER_PATH + "/" +
-                nodes[l->first]->get_child_by_name("animation")->value
-            );
+                load_data_file(
+                    ANIMATIONS_FOLDER_PATH + "/" +
+                    nodes[l->first]->get_child_by_name("animation")->value
+                );
             l->second.anim_pool =
                 load_animation_database_from_file(&anim_file);
             if(!l->second.anim_pool.animations.empty()) {
@@ -1136,9 +1136,9 @@ void load_status_types(const bool load_resources) {
         for(auto s = status_types.begin(); s != status_types.end(); ++s) {
             if(s->second.animation_name.empty()) continue;
             data_node anim_file =
-            load_data_file(
-                ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name
-            );
+                load_data_file(
+                    ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name
+                );
             s->second.anim_pool = load_animation_database_from_file(&anim_file);
             if(!s->second.anim_pool.animations.empty()) {
                 s->second.anim_instance =

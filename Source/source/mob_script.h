@@ -331,7 +331,7 @@ public:
 
 /* ----------------------------------------------------------------------------
  * The easy fsm creator makes it easy to create mob FSMs in C++ code.
- * For mobs created by the game-dev, the state machine is simpler,
+ * For mobs created by the game creator, the state machine is simpler,
  * and written in plain text using a text file. But for the engine and
  * some preset FSMs, like the Pikmin and leader logic, there's no good way
  * to create a finite state machine with something as simple as plain text

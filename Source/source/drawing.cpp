@@ -195,8 +195,8 @@ void gameplay::do_game_drawing(
             
             mob_ptr->draw();
             
-            //Development tool -- draw hitboxes.
-            if(dev_tool_hitboxes) {
+            //Creator tool -- draw hitboxes.
+            if(creator_tool_hitboxes) {
                 sprite* s = mob_ptr->anim.get_cur_sprite();
                 if(s) {
                     for(size_t h = 0; h < s->hitboxes.size(); ++h) {
@@ -344,7 +344,7 @@ void gameplay::do_game_drawing(
         *                   |_|  *
         *************************/
         
-        if(!(bmp_output && !dev_tool_area_image_shadows)) {
+        if(!(bmp_output && !creator_tool_area_image_shadows)) {
         
             for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
                 tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
@@ -2651,14 +2651,14 @@ ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
     float area_w = max_x - min_x;
     float area_h = max_y - min_y;
     float scale = 1.0f;
-    float final_bmp_w = dev_tool_area_image_size;
-    float final_bmp_h = dev_tool_area_image_size;
+    float final_bmp_w = creator_tool_area_image_size;
+    float final_bmp_h = creator_tool_area_image_size;
     
     if(area_w > area_h) {
-        scale = dev_tool_area_image_size / area_w;
+        scale = creator_tool_area_image_size / area_w;
         final_bmp_h *= area_h / area_w;
     } else {
-        scale = dev_tool_area_image_size / area_h;
+        scale = creator_tool_area_image_size / area_h;
         final_bmp_w *= area_w / area_h;
     }
     

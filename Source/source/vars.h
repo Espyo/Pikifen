@@ -126,6 +126,19 @@ extern vector<vector<control_info> > controls;
 extern size_t click_control_id;
 extern mob* closest_group_member;
 extern bool closest_group_member_distant;
+extern string creator_tool_area_image_name;
+extern bool creator_tool_area_image_shadows;
+extern int creator_tool_area_image_size;
+extern string creator_tool_auto_start_option;
+extern string creator_tool_auto_start_mode;
+extern bool creator_tool_change_speed;
+extern float creator_tool_change_speed_mult;
+extern bool creator_tool_geometry_info;
+extern bool creator_tool_hitboxes;
+extern mob* creator_tool_info_lock;
+extern pikmin_type* creator_tool_last_pikmin_type;
+//For each key (F2 - F11, 0 - 9), what tool is bound to it?
+extern unsigned char creator_tool_keys[20];
 extern area_data cur_area_data;
 extern size_t cur_leader_nr;
 extern leader* cur_leader_ptr;
@@ -153,6 +166,7 @@ extern timer cursor_save_timer;
 extern float cursor_spin_speed;
 //Spots the cursor has been through. Used for the faint trail left behind it.
 extern vector<point> cursor_spots;
+extern map<string, mob_type*> custom_mob_types;
 extern map<string, particle_generator> custom_particle_generators;
 extern unsigned int day;
 extern float day_minutes;
@@ -164,19 +178,6 @@ extern float day_minutes_per_irl_sec;
 extern float day_minutes_start;
 //Time between the previous frame and the current.
 extern double delta_t;
-extern string dev_tool_area_image_name;
-extern bool dev_tool_area_image_shadows;
-extern int dev_tool_area_image_size;
-extern string dev_tool_auto_start_option;
-extern string dev_tool_auto_start_mode;
-extern bool dev_tool_change_speed;
-extern float dev_tool_change_speed_mult;
-extern bool dev_tool_geometry_info;
-extern bool dev_tool_hitboxes;
-extern mob* dev_tool_info_lock;
-extern pikmin_type* dev_tool_last_pikmin_type;
-//For each key (F2 - F11, 0 - 9), what tool is bound to it?
-extern unsigned char dev_tool_keys[20];
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
 extern float editor_backup_interval;
@@ -247,7 +248,6 @@ extern size_t max_particles;
 extern size_t max_pikmin_in_field;
 //These many seconds until a new character of the message is drawn.
 extern float message_char_interval;
-extern map<string, mob_type*> custom_mob_types;
 extern ALLEGRO_MIXER* mixer;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;
