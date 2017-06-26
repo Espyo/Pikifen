@@ -71,7 +71,6 @@ mob::mob(
     group(nullptr),
     carry_info(nullptr),
     acceleration(0),
-    forward_speed(0),
     chase_free_move(false),
     chase_target_dist(0),
     on_hazard(nullptr),
@@ -875,6 +874,17 @@ void mob::remove_particle_generator(const size_t id) {
             ++g;
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Respawns an object back to its home.
+ */
+void mob::respawn() {
+    pos = home;
+    center_sector = get_sector(pos, NULL, true);
+    ground_sector = center_sector;
+    z = center_sector->z + 100;
 }
 
 

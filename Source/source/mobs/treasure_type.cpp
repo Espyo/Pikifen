@@ -15,8 +15,6 @@
 #include "treasure_fsm.h"
 #include "treasure_type.h"
 
-//TODO bottomless pits.
-
 /* ----------------------------------------------------------------------------
  * Creates a type of treasure.
  */

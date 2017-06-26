@@ -122,7 +122,6 @@ void gameplay::do_aesthetic_logic() {
     }
     
     //Cursor spin angle and invalidness effect.
-    //TODO this goes unused.
     cursor_invalid_effect += CURSOR_INVALID_EFFECT_SPEED * delta_t;
     
     //Cursor trail.
@@ -354,10 +353,6 @@ void gameplay::do_gameplay_logic() {
         
         cursor_angle =
             get_angle(cur_leader_ptr->pos, leader_cursor_w);
-        if(cur_leader_ptr->fsm.cur_state->id == LEADER_STATE_ACTIVE) {
-            //TODO move this to the FSM.
-            cur_leader_ptr->face(cursor_angle);
-        }
         
         dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
         if(leader_to_cursor_dist > cursor_max_dist) {

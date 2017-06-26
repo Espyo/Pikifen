@@ -64,6 +64,9 @@ void treasure_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_CARRY_DELIVERED); {
             efc.change_state("being_delivered");
         }
+        efc.new_event(MOB_EVENT_BOTTOMLESS_PIT); {
+            efc.run(treasure_fsm::respawn);
+        }
     }
     
     efc.new_state("being_delivered", TREASURE_STATE_BEING_DELIVERED); {
@@ -95,4 +98,14 @@ void treasure_fsm::handle_delivery(mob* m, void* info1, void* info2) {
     s_ptr->fsm.run_event(MOB_EVENT_RECEIVE_DELIVERY, (void*) &value);
     
     t_ptr->to_delete = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a treasure falls into a bottomless pit and should respawn.
+ */
+void treasure_fsm::respawn(mob* m, void* info1, void* info2) {
+    m->become_uncarriable(); //Force all Pikmin to let go.
+    m->become_carriable(true);
+    m->respawn();
 }

@@ -995,8 +995,6 @@ void gameplay::do_game_drawing(
             );
             
             //Sprays.
-            //TODO optimize this by saving the controls somewhere,
-            //instead of searching for them every time.
             if(n_spray_types > 0) {
                 size_t top_spray_nr;
                 if(n_spray_types < 3) top_spray_nr = 0;

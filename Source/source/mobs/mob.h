@@ -232,8 +232,6 @@ public:
     point home;
     //Speed multiplies by this much each second. //TODO use this.
     float acceleration;
-    //Speed moving forward. //TODO is this used?
-    float forward_speed;
     //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
     float angle;
     //Angle the mob wants to be facing.
@@ -359,6 +357,7 @@ public:
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
+    void respawn();
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();

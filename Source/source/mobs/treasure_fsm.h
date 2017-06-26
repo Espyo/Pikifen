@@ -21,6 +21,7 @@ namespace treasure_fsm {
 void create_fsm(mob_type* typ);
 
 void handle_delivery(mob* m, void* info1, void* info2);
+void respawn(        mob* m, void* info1, void* info2);
 }
 
 #endif //ifndef TREASURE_FSM_INCLUDED

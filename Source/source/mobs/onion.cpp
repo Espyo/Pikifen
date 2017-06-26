@@ -50,6 +50,15 @@ onion::onion(
 }
 
 
+//An Onion-spat seed is this quick, horizontally.
+const float ONION_SPEW_H_SPEED = 80.0f;
+//Deviate the seed's horizontal speed by this much, more or less.
+const float ONION_SPEW_H_SPEED_DEVIATION = 10.0f;
+//An Onion-spat seed is this quick, vertically.
+const float ONION_SPEW_V_SPEED = 600.0f;
+//An Onion-spat seed starts with this Z offset from the Onion.
+const float NEW_SEED_Z_OFFSET = 320.0f;
+
 /* ----------------------------------------------------------------------------
  * Spew a Pikmin seed in the queue or add it to the Onion's storage.
  */
@@ -72,13 +81,13 @@ void onion::spew() {
                 pos, oni_type->pik_type, 0, ""
             )
         );
-    //TODO the shooting strength shouldn't be a magic number.
     float horizontal_strength =
-        80 + randomf(-10, 10);
-    new_pikmin->z = z + 320;
+        ONION_SPEW_H_SPEED +
+        randomf(-ONION_SPEW_H_SPEED_DEVIATION, ONION_SPEW_H_SPEED_DEVIATION);
+    new_pikmin->z = z + NEW_SEED_Z_OFFSET;
     new_pikmin->speed.x = cos(next_spew_angle) * horizontal_strength;
     new_pikmin->speed.y = sin(next_spew_angle) * horizontal_strength;
-    new_pikmin->speed_z = 600;
+    new_pikmin->speed_z = ONION_SPEW_V_SPEED;
     new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
     new_pikmin->maturity = 0;
     

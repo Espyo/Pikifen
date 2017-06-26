@@ -68,6 +68,9 @@ void leader_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(leader_fsm::enter_active);
         }
+        efc.new_event(MOB_EVENT_ON_TICK); {
+            efc.run(leader_fsm::tick_active_state);
+        }
         efc.new_event(LEADER_EVENT_UNFOCUSED); {
             efc.run(leader_fsm::stop);
             efc.run(leader_fsm::unfocus);
@@ -829,10 +832,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
     m->health -= m->type->max_health * 0.2;
-    m->pos = m->home;
-    m->center_sector = get_sector(m->pos, NULL, true);
-    m->ground_sector = m->center_sector;
-    m->z = m->center_sector->z + 100;
+    m->respawn();
 }
 
 
@@ -866,6 +866,14 @@ void leader_fsm::enter_active(mob* m, void* info1, void* info2) {
  */
 void leader_fsm::unfocus(mob* m, void* info1, void* info2) {
 
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Every tick in the active state.
+ */
+void leader_fsm::tick_active_state(mob* m, void* info1, void* info2) {
+    m->face(cursor_angle);
 }
 
 

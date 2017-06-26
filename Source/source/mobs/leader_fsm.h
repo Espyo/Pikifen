@@ -62,6 +62,7 @@ void stop_in_group(         mob* m, void* info1, void* info2);
 void stop_auto_pluck(       mob* m, void* info1, void* info2);
 void stop_whistle(          mob* m, void* info1, void* info2);
 void suffer_pain(           mob* m, void* info1, void* info2);
+void tick_active_state(     mob* m, void* info1, void* info2);
 void touched_hazard(        mob* m, void* info1, void* info2);
 void touched_spray(         mob* m, void* info1, void* info2);
 void unfocus(               mob* m, void* info1, void* info2);
