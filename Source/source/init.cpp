@@ -274,8 +274,10 @@ void init_misc() {
     al_set_window_title(display, "Pikmin fangame engine");
     int new_bitmap_flags = ALLEGRO_NO_PREMULTIPLIED_ALPHA;
     if(smooth_scaling) {
-        new_bitmap_flags |=
-            ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR | ALLEGRO_MIPMAP;
+        new_bitmap_flags |= ALLEGRO_MAG_LINEAR | ALLEGRO_MIN_LINEAR;
+    }
+    if(mipmaps_enabled) {
+        new_bitmap_flags |= ALLEGRO_MIPMAP;
     }
     al_set_new_bitmap_flags(new_bitmap_flags);
     al_reserve_samples(16);

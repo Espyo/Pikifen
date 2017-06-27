@@ -1292,6 +1292,10 @@ float calculate_damage(
     }
     
     if(victim_h) {
+        if(victim_h->multiplier == 0.0f) {
+            //Hah, this hitbox is invulnerable!
+            return 0;
+        }
         defense_multiplier = victim_h->multiplier;
     }
     

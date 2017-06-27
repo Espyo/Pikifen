@@ -248,6 +248,7 @@ extern size_t max_particles;
 extern size_t max_pikmin_in_field;
 //These many seconds until a new character of the message is drawn.
 extern float message_char_interval;
+extern bool mipmaps_enabled;
 extern ALLEGRO_MIXER* mixer;
 extern mob_category_manager mob_categories;
 extern vector<mob*> mobs;

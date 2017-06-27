@@ -748,7 +748,7 @@ void area_editor::load() {
         }
     };
     frm_objects->widgets["but_del"]->description =
-        "Delete the current object.";
+        "Delete the current object (Ctrl+Minus).";
         
     frm_objects->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -785,6 +785,10 @@ void area_editor::load() {
     frm_object->register_accelerator(
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
         frm_objects->widgets["but_duplicate"]
+    );
+    frm_object->register_accelerator(
+        ALLEGRO_KEY_MINUS, ALLEGRO_KEYMOD_CTRL,
+        frm_objects->widgets["but_del"]
     );
     
     

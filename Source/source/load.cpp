@@ -983,6 +983,7 @@ void load_options() {
     rs.set("fps", game_fps);
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
+    rs.set("mipmaps", mipmaps_enabled);
     rs.set("pretty_whistle", pretty_whistle);
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
