@@ -154,26 +154,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         if(ev.mouse.dz != 0 && !is_mouse_in_gui(mouse_cursor_s)) {
             //Zoom.
-            cam_zoom += (cam_zoom * ev.mouse.dz * 0.1);
-            cam_zoom = max(ZOOM_MIN_LEVEL_EDITOR, cam_zoom);
-            cam_zoom = min(ZOOM_MAX_LEVEL_EDITOR, cam_zoom);
-            
-            //Keep a backup of the old mouse coordinates.
-            point old_mouse_pos = mouse_cursor_w;
-            
-            //Figure out where the mouse will be after the zoom.
-            update_transformations();
-            mouse_cursor_w = mouse_cursor_s;
-            al_transform_coordinates(
-                &screen_to_world_transform,
-                &mouse_cursor_w.x, &mouse_cursor_w.y
-            );
-            
-            //Readjust the transformation by shifting the camera
-            //so that the cursor ends up where it was before.
-            cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
-            cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
-            update_transformations();
+            zoom(cam_zoom + (cam_zoom * ev.mouse.dz * 0.1));
             
         }
         
@@ -205,7 +186,7 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         
         if(ev.mouse.button == 1) holding_m1 = true;
         else if(ev.mouse.button == 2) holding_m2 = true;
-        else if(ev.mouse.button == 3) cam_zoom = 1.0;
+        else if(ev.mouse.button == 3) zoom(1.0f);
         
         if(ev.mouse.button != 1) return;
         

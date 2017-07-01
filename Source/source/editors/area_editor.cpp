@@ -586,8 +586,7 @@ void area_editor::center_camera(
     
     cam_zoom -= cam_zoom * 0.1;
     
-    cam_zoom = max(cam_zoom, ZOOM_MIN_LEVEL_EDITOR);
-    cam_zoom = min(cam_zoom, ZOOM_MAX_LEVEL_EDITOR);
+    cam_zoom = clamp(cam_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
     
 }
 
@@ -601,10 +600,11 @@ void area_editor::change_reference(string new_file_name) {
     }
     reference_bitmap = NULL;
     
-    if(new_file_name.size()) {
+    if(!new_file_name.empty()) {
         reference_bitmap = load_bmp(new_file_name, NULL, false);
     }
     reference_file_name = new_file_name;
+    reference_to_gui();
     
     made_changes = true;
 }
@@ -1373,9 +1373,7 @@ void area_editor::set_new_circle_sector_points() {
         n_points = round((M_PI * 2) / angle_dif);
     }
     n_points =
-        min(n_points, MAX_CIRCLE_SECTOR_POINTS);
-    n_points =
-        max(MIN_CIRCLE_SECTOR_POINTS, n_points);
+        clamp(n_points, MIN_CIRCLE_SECTOR_POINTS, MAX_CIRCLE_SECTOR_POINTS);
         
     new_circle_sector_points.clear();
     for(size_t p = 0; p < n_points; ++p) {
@@ -2850,6 +2848,33 @@ void area_editor::update_transformations() {
     //Screen coordinates to world coordinates.
     screen_to_world_transform = world_to_screen_transform;
     al_invert_transform(&screen_to_world_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Zooms in or out to a specific amount, keeping the mouse cursor
+ * in the same spot.
+ */
+void area_editor::zoom(const float new_zoom) {
+    cam_zoom =
+        clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
+    
+    //Keep a backup of the old mouse coordinates.
+    point old_mouse_pos = mouse_cursor_w;
+    
+    //Figure out where the mouse will be after the zoom.
+    update_transformations();
+    mouse_cursor_w = mouse_cursor_s;
+    al_transform_coordinates(
+        &screen_to_world_transform,
+        &mouse_cursor_w.x, &mouse_cursor_w.y
+    );
+    
+    //Readjust the transformation by shifting the camera
+    //so that the cursor ends up where it was before.
+    cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
+    cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
+    update_transformations();
 }
 
 

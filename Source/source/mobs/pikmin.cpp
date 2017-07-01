@@ -334,7 +334,6 @@ void pikmin::lose_panic_from_status() {
  */
 void pikmin::change_maturity_amount_from_status(const int amount) {
     int new_maturity = maturity + amount;
-    new_maturity = max(0, new_maturity);
-    new_maturity = min(new_maturity, 2);
+    new_maturity = clamp(new_maturity, 0, 2);
     maturity = new_maturity;
 }

@@ -4,6 +4,7 @@ Source/CL/Debug/
 Source/CL/Release/
 Source/CL/.codelite/
 Source/CL/Pikmin_fangame_engine.mk
+Source/CL/Pikmin_fangame_engine.txt
 Error_log.txt
 Options.txt
 Game_data/Areas/*/*_backup.txt

@@ -62,9 +62,12 @@ void animation_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             if(ev.mouse.dz != 0) {
                 //Zoom.
                 cam_zoom += (cam_zoom * ev.mouse.dz * 0.1);
-                cam_zoom = max(ZOOM_MIN_LEVEL_EDITOR, cam_zoom);
-                cam_zoom = min(ZOOM_MAX_LEVEL_EDITOR, cam_zoom);
-                
+                cam_zoom =
+                    clamp(
+                        cam_zoom,
+                        ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR
+                    );
+                    
                 //Keep a backup of the old mouse coordinates.
                 point old_mouse_pos = mouse_cursor_w;
                 

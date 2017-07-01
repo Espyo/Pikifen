@@ -229,6 +229,7 @@ private:
     void update_options_frame();
     void update_review_frame();
     void update_texture_suggestions(const string &n);
+    void zoom(const float new_zoom);
     
     void adv_textures_to_gui();
     void mob_to_gui();

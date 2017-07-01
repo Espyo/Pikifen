@@ -934,7 +934,7 @@ void mob::set_health(const bool rel, const float amount) {
     unsigned short base_nr = 0;
     if(rel) base_nr = health;
     
-    health = max(0.0f, (float) (base_nr + amount));
+    health = clamp(base_nr + amount, 0.0f, type->max_health);
 }
 
 

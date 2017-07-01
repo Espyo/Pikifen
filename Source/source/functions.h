@@ -80,6 +80,7 @@ bool casts_shadow(sector* s1, sector* s2);
 ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a);
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l);
 void change_game_state(unsigned int new_state);
+float clamp(const float number, const float minimum, const float maximum);
 void clear_area_textures();
 void coordinates_to_angle(
     const point &coordinates, float* angle, float* magnitude

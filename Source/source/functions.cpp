@@ -78,15 +78,9 @@ ALLEGRO_COLOR change_alpha(const ALLEGRO_COLOR &c, const unsigned char a) {
  */
 ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
     ALLEGRO_COLOR c2;
-    c2.r = c.r + l;
-    c2.r = min(1.0f, c2.r);
-    c2.r = max(0.0f, c2.r);
-    c2.g = c.g + l;
-    c2.g = min(1.0f, c2.g);
-    c2.g = max(0.0f, c2.g);
-    c2.b = c.b + l;
-    c2.b = min(1.0f, c2.b);
-    c2.b = max(0.0f, c2.b);
+    c2.r = clamp(c.r + l, 0.0f, 1.0f);
+    c2.g = clamp(c.g + l, 0.0f, 1.0f);
+    c2.b = clamp(c.b + l, 0.0f, 1.0f);
     c2.a = c.a;
     return c2;
 }
@@ -106,6 +100,14 @@ void change_game_state(unsigned int new_state) {
     //Let's reset the delta_t, then.
     reset_delta_t = true;
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Limits the given number to the given range, inclusive.
+ */
+float clamp(const float number, const float minimum, const float maximum) {
+    return min(maximum, max(minimum, number));
 }
 
 
@@ -449,12 +451,10 @@ const float WALL_SHADOW_LENGTH_MULT = 0.2f;
  */
 float get_wall_shadow_length(const float height_difference) {
     return
-        max(
-            min(
-                height_difference * WALL_SHADOW_LENGTH_MULT,
-                MAX_WALL_SHADOW_LENGTH
-            ),
-            MIN_WALL_SHADOW_LENGTH
+        clamp(
+            height_difference * WALL_SHADOW_LENGTH_MULT,
+            MIN_WALL_SHADOW_LENGTH,
+            MAX_WALL_SHADOW_LENGTH
         );
 }
 

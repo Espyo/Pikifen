@@ -329,8 +329,7 @@ void init_misc() {
     
     particles = particle_manager(max_particles);
     
-    zoom_mid_level = max(zoom_min_level, zoom_mid_level);
-    zoom_mid_level = min(zoom_mid_level, zoom_max_level);
+    zoom_mid_level = clamp(zoom_mid_level, zoom_min_level, zoom_max_level);
 }
 
 
