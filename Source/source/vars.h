@@ -206,7 +206,7 @@ extern float group_move_angle;
 //when the "move group to cursor" button is held.
 extern vector<float> group_move_arrows;
 //General intensity of the group move in the specified angle.
-extern float group_move_intensity;
+extern float group_move_magnitude;
 //Time remaining until the next arrow on the "move group arrows" appears.
 extern timer group_move_next_arrow_timer;
 //Is the "move group to cursor" button being pressed?
@@ -223,6 +223,8 @@ extern timer info_print_timer;
 extern float info_spot_trigger_range;
 extern vector<info_spot*> info_spots;
 extern bool is_game_running;
+extern float joystick_min_deadzone;
+extern float joystick_max_deadzone;
 extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 extern map<string, liquid> liquids;
 extern vector<leader*> leaders;

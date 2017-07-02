@@ -210,9 +210,15 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 if(
                     con->device_nr == joystick_numbers[ev.joystick.id] &&
                     con->stick == ev.joystick.stick &&
-                    con->axis == ev.joystick.axis && ev.joystick.pos >= 0
+                    con->axis == ev.joystick.axis
                 ) {
-                    handle_button(con->action, p, ev.joystick.pos);
+                    if(ev.joystick.pos >= 0) {
+                        handle_button(con->action, p, ev.joystick.pos);
+                    } else {
+                        //Makes it so that, for instance, quickly tilting the
+                        //stick left will also send a "tilt right" event of 0.
+                        handle_button(con->action, p, 0);
+                    }
                 }
                 
             } else if(
@@ -222,8 +228,15 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 if(
                     con->device_nr == joystick_numbers[ev.joystick.id] &&
                     con->stick == ev.joystick.stick &&
-                    con->axis == ev.joystick.axis && ev.joystick.pos <= 0) {
-                    handle_button(con->action, p, -ev.joystick.pos);
+                    con->axis == ev.joystick.axis
+                ) {
+                    if(ev.joystick.pos <= 0) {
+                        handle_button(con->action, p, -ev.joystick.pos);
+                    } else {
+                        //Makes it so that, for instance, quickly tilting the
+                        //stick left will also send a "tilt right" event of 0.
+                        handle_button(con->action, p, 0);
+                    }
                 }
             }
         }
@@ -274,10 +287,15 @@ void handle_button(
             
             if(pos != 0) active_control();
             
-            if(     button == BUTTON_RIGHT) leader_movement.right = pos;
-            else if(button == BUTTON_LEFT)  leader_movement.left =  pos;
-            else if(button == BUTTON_UP)    leader_movement.up =    pos;
-            else if(button == BUTTON_DOWN)  leader_movement.down =  pos;
+            if(button == BUTTON_RIGHT) {
+                leader_movement.right = pos;
+            } else if(button == BUTTON_LEFT) {
+                leader_movement.left = pos;
+            } else if(button == BUTTON_UP) {
+                leader_movement.up = pos;
+            } else if(button == BUTTON_DOWN) {
+                leader_movement.down = pos;
+            }
             
         } else if(
             button == BUTTON_CURSOR_RIGHT ||
@@ -325,25 +343,11 @@ void handle_button(
                 group_movement.down = pos;
             }
             
-            if(group_movement.get_intensity() != 0) {
-                cur_leader_ptr->signal_group_move_start();
-            } else {
-                cur_leader_ptr->signal_group_move_end();
-            }
-            
         } else if(button == BUTTON_GROUP_CURSOR) {
         
             active_control();
             
-            if(pos > 0) {
-                group_move_cursor = true;
-                group_move_intensity = 1;
-                cur_leader_ptr->signal_group_move_start();
-            } else {
-                group_move_cursor = false;
-                group_move_intensity = 0;
-                cur_leader_ptr->signal_group_move_end();
-            }
+            group_move_cursor = (pos > 0);
             
         } else if(button == BUTTON_THROW) {
         

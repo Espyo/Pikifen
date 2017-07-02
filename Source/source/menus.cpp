@@ -426,6 +426,8 @@ void options_menu::load() {
     set_selected_widget(menu_widgets[1]);
     update();
     
+    al_reconfigure_joysticks();
+    
 }
 
 

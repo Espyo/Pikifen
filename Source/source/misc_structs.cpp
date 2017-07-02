@@ -146,21 +146,37 @@ movement_struct::movement_struct() :
 
 
 /* ----------------------------------------------------------------------------
- * Assuming the movement as a joystick, this returns how far away
- * from the center the joystick is tilted [0, 1].
- * Because the movement is not necessarily cirular (e.g. keyboard instead
- * of joystick), this can return values larger than 1.
+ * Returns the values of the coordinates, magnitude, and angle,
+ * exactly as they are right now, without being "cleaned".
+ * Don't use this one for normal gameplay, please.
+ * All parameters are mandatory.
  */
-float movement_struct::get_intensity() {
-    return dist(point(), get_coords()).to_float();
+void movement_struct::get_raw_info(
+    point* coords, float* angle, float* magnitude
+) {
+    *coords = point(right - left, down - up);
+    coordinates_to_angle(*coords, angle, magnitude);
 }
 
 
 /* ----------------------------------------------------------------------------
- * Returns the coordinates for the movement, in the range [-1, 1];
+ * Returns the values of the coordinates, magnitude, and angle,
+ * but "cleaned" up.
+ * All parameters are mandatory.
  */
-point movement_struct::get_coords() {
-    return point(right - left, down - up);
+void movement_struct::get_clean_info(
+    point* coords, float* angle, float* magnitude
+) {
+    get_raw_info(coords, angle, magnitude);
+    *magnitude =
+        clamp(*magnitude, joystick_min_deadzone, joystick_max_deadzone);
+    *magnitude =
+        interpolate_number(
+            *magnitude,
+            joystick_min_deadzone, joystick_max_deadzone,
+            0.0f, 1.0f
+        );
+    *coords = angle_to_coordinates(*angle, *magnitude);
 }
 
 

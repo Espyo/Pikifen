@@ -135,9 +135,20 @@ public:
 
 
 /* ----------------------------------------------------------------------------
- * This structure holds information about how to move something
- * that is user-controlled. It contains the amount of movement
- * on each of the four main directions, ranging from 0 to 1.
+ * This structure holds information about where the player wants a leader
+ * (or something else) to go, based on the player's inputs
+ * (analog stick tilts, D-pad presses, keyboard key presses, etc.).
+ *
+ * It can also churn out "clean" information based on this.
+ * For D-pads or keyboard presses, the "clean" result is basically the same
+ * direction and magnitude, but for joysticks, deadzones are taken into account.
+ *
+ * A loose joystick that's not being touched can send signals we don't want,
+ * since they're not player input, but the "clean" information filters out
+ * these minimal stick tilts. Similarly, some controllers might not
+ * send 1.0 when the player holds fully right, for instance. So there should
+ * also be a top deadzone, like 90%, where if the player is beyond that, we'll
+ * just consider it as 100%.
  */
 struct movement_struct {
     float right;
@@ -145,9 +156,9 @@ struct movement_struct {
     float left;
     float down;
     
+    void get_raw_info(point* coords, float* angle, float* magnitude);
+    void get_clean_info(point* coords, float* angle, float* magnitude);
     movement_struct();
-    float get_intensity();
-    point get_coords();
 };
 
 

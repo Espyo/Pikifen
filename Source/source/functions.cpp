@@ -717,6 +717,12 @@ void save_options() {
         new data_node("editor_backup_interval", f2s(editor_backup_interval))
     );
     file.add(new data_node("fps", i2s(game_fps)));
+    file.add(
+        new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))
+    );
+    file.add(
+        new data_node("joystick_max_deadzone", f2s(joystick_max_deadzone))
+    );
     file.add(new data_node("max_particles", i2s(max_particles)));
     file.add(new data_node("middle_zoom_level", f2s(zoom_mid_level)));
     file.add(new data_node("mipmaps", b2s(mipmaps_enabled)));

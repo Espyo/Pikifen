@@ -144,6 +144,9 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             id Software for Doom
             The developers of Doom Builder
             Stackoverflow and other such websites
+            http://www.gamasutra.com/blogs/JoshSutphin/20130416/190541/Doing_Thumbstick_Dead_Zones_Right.php
+            http://blog.hypersect.com/interpreting-analog-sticks/
+            https://gamedev.stackexchange.com/questions/59491/gamepad-thumbsticks-active-range
     
     Demo content
         Graphics

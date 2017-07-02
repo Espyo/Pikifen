@@ -59,7 +59,7 @@ void leader::dismiss() {
     float base_angle;
     
     //First, calculate what direction the group should be dismissed to.
-    if(group_move_intensity > 0) {
+    if(group_move_magnitude > 0) {
         //If the leader's moving the group,
         //they should be dismissed in that direction.
         base_angle = group_move_angle;
@@ -468,7 +468,7 @@ void leader::tick_class_specifics() {
         bool must_reassign_spots = false;
         
         bool is_moving_group =
-            (group_move_intensity && cur_leader_ptr == this);
+            (group_move_magnitude && cur_leader_ptr == this);
             
         if(
             dist(group->get_average_member_pos(), pos) >
@@ -503,11 +503,11 @@ void leader::tick_class_specifics() {
                     );
                 group->anchor = pos + move_anchor_offset;
                 
-                float intensity_dist = cursor_max_dist * group_move_intensity;
+                float intensity_dist = cursor_max_dist * group_move_magnitude;
                 al_scale_transform(
                     &group->transform,
                     intensity_dist / (group->radius * 2),
-                    1 - (GROUP_MOVE_VERTICAL_SCALE * group_move_intensity)
+                    1 - (GROUP_MOVE_VERTICAL_SCALE * group_move_magnitude)
                 );
                 al_rotate_transform(&group->transform, group_move_angle + M_PI);
                 

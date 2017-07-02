@@ -939,13 +939,15 @@ void leader_fsm::touched_spray(mob* m, void* info1, void* info2) {
 void leader_fsm::move(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     movement_struct* mov = (movement_struct*) info1;
-    l_ptr->chase(
-        point(
-            l_ptr->pos.x + mov->get_coords().x * l_ptr->type->move_speed,
-            l_ptr->pos.y + mov->get_coords().y * l_ptr->type->move_speed
-        ),
-        NULL, false, NULL, true
+    point final_coords;
+    float dummy_angle;
+    float dummy_magnitude;
+    mov->get_clean_info(
+        &final_coords, &dummy_angle, &dummy_magnitude
     );
+    final_coords *= l_ptr->type->move_speed;
+    final_coords += l_ptr->pos;
+    l_ptr->chase(final_coords, NULL, false, NULL, true);
 }
 
 

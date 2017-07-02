@@ -61,16 +61,16 @@ void init_controls() {
         BUTTON_WHISTLE, "Whistle", "whistle", "mb_2"
     );
     buttons.add(
-        BUTTON_RIGHT, "Right", "right", "k_4"
+        BUTTON_RIGHT, "Right", "move_right", "k_4"
     );
     buttons.add(
-        BUTTON_UP, "Up", "up", "k_23"
+        BUTTON_UP, "Up", "move_up", "k_23"
     );
     buttons.add(
-        BUTTON_LEFT, "Left", "left", "k_1"
+        BUTTON_LEFT, "Left", "move_left", "k_1"
     );
     buttons.add(
-        BUTTON_DOWN, "Down", "down", "k_19"
+        BUTTON_DOWN, "Down", "move_down", "k_19"
     );
     buttons.add(
         BUTTON_CURSOR_RIGHT, "Cursor right", "cursor_right", ""

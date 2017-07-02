@@ -40,7 +40,7 @@ void gameplay::do_aesthetic_logic() {
         (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
         
     //"Move group" arrows.
-    if(group_move_intensity) {
+    if(group_move_magnitude) {
         group_move_next_arrow_timer.tick(delta_t);
     }
     
@@ -49,8 +49,8 @@ void gameplay::do_aesthetic_logic() {
         group_move_arrows[a] += GROUP_MOVE_ARROW_SPEED * delta_t;
         
         dist max_dist =
-            (group_move_intensity > 0) ?
-            cursor_max_dist * group_move_intensity :
+            (group_move_magnitude > 0) ?
+            cursor_max_dist * group_move_magnitude :
             leader_to_cursor_dist;
             
         if(max_dist < group_move_arrows[a]) {
@@ -281,10 +281,14 @@ void gameplay::do_gameplay_logic() {
         }
         
         //Current leader movement.
-        float leader_move_intensity = leader_movement.get_intensity();
-        if(leader_move_intensity < 0.75) leader_move_intensity = 0;
-        if(leader_move_intensity > 1) leader_move_intensity = 1;
-        if(leader_move_intensity == 0) {
+        point dummy_coords;
+        float dummy_angle;
+        float leader_move_magnitude;
+        leader_movement.get_clean_info(
+            &dummy_coords, &dummy_angle, &leader_move_magnitude
+        );
+        if(leader_move_magnitude < 0.75) leader_move_magnitude = 0;
+        if(leader_move_magnitude == 0) {
             cur_leader_ptr->fsm.run_event(
                 LEADER_EVENT_MOVE_END, (void*) &leader_movement
             );
@@ -312,22 +316,32 @@ void gameplay::do_gameplay_logic() {
             update_closest_group_member();
         }
         
-        point group_move_coords = group_movement.get_coords();
+        float old_group_move_magnitude = group_move_magnitude;
+        point group_move_coords;
+        float new_group_move_angle;
+        group_movement.get_clean_info(
+            &group_move_coords, &new_group_move_angle, &group_move_magnitude
+        );
+        if(group_move_magnitude > 0) {
+            //This stops arrows that were fading away to the left from
+            //turning to angle 0 because the magnitude reached 0.
+            group_move_angle = new_group_move_angle;
+        }
         
         if(group_move_cursor) {
             group_move_angle = cursor_angle;
             float leader_to_cursor_dist =
                 dist(cur_leader_ptr->pos, leader_cursor_w).to_float();
-            group_move_intensity =
+            group_move_magnitude =
                 leader_to_cursor_dist / cursor_max_dist;
-        } else if(group_move_coords.x != 0 || group_move_coords.y != 0) {
-            coordinates_to_angle(
-                group_move_coords,
-                &group_move_angle, &group_move_intensity
-            );
-            if(group_move_intensity > 1) group_move_intensity = 1;
-        } else {
-            group_move_intensity = 0;
+        }
+        
+        if(old_group_move_magnitude != group_move_magnitude) {
+            if(group_move_magnitude != 0) {
+                cur_leader_ptr->signal_group_move_start();
+            } else {
+                cur_leader_ptr->signal_group_move_end();
+            }
         }
         
         
@@ -337,8 +351,13 @@ void gameplay::do_gameplay_logic() {
         *             `-´   *
         ********************/
         
-        point mouse_cursor_speed =
-            cursor_movement.get_coords() * delta_t * MOUSE_CURSOR_MOVE_SPEED;
+        point mouse_cursor_speed;
+        float dummy_magnitude;
+        cursor_movement.get_clean_info(
+            &mouse_cursor_speed, &dummy_angle, &dummy_magnitude
+        );
+        mouse_cursor_speed =
+            mouse_cursor_speed * delta_t * MOUSE_CURSOR_MOVE_SPEED;
             
         mouse_cursor_s += mouse_cursor_speed;
         
@@ -351,7 +370,7 @@ void gameplay::do_gameplay_logic() {
         
         cursor_angle =
             get_angle(cur_leader_ptr->pos, leader_cursor_w);
-        
+            
         dist leader_to_cursor_dist(cur_leader_ptr->pos, leader_cursor_w);
         if(leader_to_cursor_dist > cursor_max_dist) {
             //TODO with an analog stick, if the cursor is being moved,

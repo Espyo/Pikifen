@@ -981,6 +981,8 @@ void load_options() {
     rs.set("draw_cursor_trail", draw_cursor_trail);
     rs.set("editor_backup_interval", editor_backup_interval);
     rs.set("fps", game_fps);
+    rs.set("joystick_min_deadzone", joystick_min_deadzone);
+    rs.set("joystick_max_deadzone", joystick_max_deadzone);
     rs.set("max_particles", max_particles);
     rs.set("middle_zoom_level", zoom_mid_level);
     rs.set("mipmaps", mipmaps_enabled);
@@ -988,7 +990,13 @@ void load_options() {
     rs.set("resolution", resolution_str);
     rs.set("smooth_scaling", smooth_scaling);
     rs.set("window_position_hack", window_position_hack);
+    
     game_fps = max(1, game_fps);
+    joystick_min_deadzone = clamp(joystick_min_deadzone, 0.0f, 1.0f);
+    joystick_max_deadzone = clamp(joystick_max_deadzone, 0.0f, 1.0f);
+    if(joystick_min_deadzone > joystick_max_deadzone) {
+        swap(joystick_min_deadzone, joystick_max_deadzone);
+    }
     
     vector<string> resolution_parts = split(resolution_str);
     if(resolution_parts.size() >= 2) {

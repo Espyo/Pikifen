@@ -152,7 +152,7 @@ map<string, gate_type*> gate_types;
 subgroup_type_manager subgroup_types;
 float group_move_angle = 0;
 vector<float> group_move_arrows;
-float group_move_intensity = 0;
+float group_move_magnitude = 0;
 timer group_move_next_arrow_timer(GROUP_MOVE_ARROWS_INTERVAL);
 bool group_move_cursor = false;
 float group_move_task_range = 0;
@@ -170,6 +170,8 @@ timer info_print_timer =
 float info_spot_trigger_range = 64.0f;
 vector<info_spot*> info_spots;
 bool is_game_running = true;
+float joystick_min_deadzone = 0.2f;
+float joystick_max_deadzone = 0.9f;
 map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
 vector<leader*> leaders;
 point leader_cursor_s;
