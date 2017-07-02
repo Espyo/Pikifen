@@ -175,7 +175,7 @@ int main(int argc, char** argv) {
             ev.type == ALLEGRO_EVENT_KEY_DOWN &&
             ev.keyboard.keycode == ALLEGRO_KEY_F12
         ) {
-            al_save_bitmap("Screenshot.png", al_get_backbuffer(display));
+            save_screenshot();
             
         }
     }

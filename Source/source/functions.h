@@ -90,6 +90,7 @@ vector<string> folder_to_vector(
     string folder_name, const bool folders, bool* folder_found = NULL
 );
 unsigned char get_blackout_strength();
+string get_current_time(const bool slashes_for_day);
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
 float get_max_throw_height(const float throw_strength);
@@ -118,6 +119,7 @@ int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);
 string replace_all(string s, string search, string replacement);
 void save_options();
+void save_screenshot();
 vector<string> semicolon_list_to_vector(const string &s);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,

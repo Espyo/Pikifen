@@ -292,6 +292,22 @@ mob* get_closest_mob_to_cursor() {
 }
 
 
+string get_current_time(const bool slashes_for_day) {
+    time_t tt;
+    time(&tt);
+    struct tm t = *localtime(&tt);
+    return
+        i2s(t.tm_year + 1900) +
+        (slashes_for_day ? "/" : "-") +
+        leading_zero(t.tm_mon + 1) +
+        (slashes_for_day ? "/" : "-") +
+        leading_zero(t.tm_mday) + " " +
+        leading_zero(t.tm_hour) + ":" +
+        leading_zero(t.tm_min) + ":" +
+        leading_zero(t.tm_sec);
+}
+
+
 /* ----------------------------------------------------------------------------
  * Returns the daylight effect color for the current time and weather.
  */
@@ -561,12 +577,8 @@ void log_error(string s, data_node* d) {
         struct tm t = *localtime(&tt);
         s =
             "\n" +
-            i2s(t.tm_year + 1900) + "/" +
-            leading_zero(t.tm_mon + 1) + "/" +
-            leading_zero(t.tm_mday) + " " +
-            leading_zero(t.tm_hour) + ":" +
-            leading_zero(t.tm_min) + ":" +
-            leading_zero(t.tm_sec) + "; Pikmin fangame engine version " +
+            get_current_time(true) +
+            "; Pikmin fangame engine version " +
             i2s(VERSION_MAJOR) + "." + i2s(VERSION_MINOR) +
             "." + i2s(VERSION_REV) + "\n" + s;
     }
@@ -723,6 +735,42 @@ void save_options() {
     }
     
     file.save_file("Options.txt");
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the current backbuffer onto a file.
+ * In other words, dumps a screenshot.
+ */
+void save_screenshot() {
+    string base_file_name = "Screenshot " + get_current_time(false);
+    
+    //Check if a file with this name already exists.
+    vector<string> files = folder_to_vector(".", false);
+    size_t variant_nr = 1;
+    string final_file_name = base_file_name;
+    bool valid_name = false;
+    
+    do {
+    
+        if(
+            find(files.begin(), files.end(), final_file_name + ".png")
+            == files.end()
+        ) {
+            //File name not found.
+            //Go ahead and create a screenshot with this name.
+            valid_name = true;
+        } else {
+            variant_nr++;
+            final_file_name = base_file_name + " " + i2s(variant_nr);
+        }
+        
+    } while(!valid_name);
+    
+    al_save_bitmap(
+        (final_file_name + ".png").c_str(),
+        al_get_backbuffer(display)
+    );
 }
 
 

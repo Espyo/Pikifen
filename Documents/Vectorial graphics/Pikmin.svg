@@ -14,7 +14,7 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 unknown"
    sodipodi:docname="Pikmin.svg">
   <defs
      id="defs4">
@@ -1987,7 +1987,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="16"
-     inkscape:cx="154.73576"
+     inkscape:cx="138.73576"
      inkscape:cy="-42.843925"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -2017,8 +2017,10 @@
        visible="true"
        enabled="true"
        snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
+       spacingx="0.5"
+       spacingy="0.5"
+       originx="0"
+       originy="0" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -2746,15 +2748,15 @@
        y="909.86218" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-190"
        y="922.36218"
-       id="text4979"
-       sodipodi:linespacing="125%"><tspan
+       id="text4979"><tspan
          sodipodi:role="line"
          id="tspan4981"
          x="-190"
-         y="922.36218">Red Pikmin</tspan></text>
+         y="922.36218"
+         style="font-size:10px;line-height:1.25">Red Pikmin</tspan></text>
     <rect
        style="display:inline;opacity:1;fill:url(#linearGradient4977-3);fill-opacity:1;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4969-5"
@@ -2834,125 +2836,125 @@
        y="1322.3622" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-208.17383"
        y="991.09021"
-       id="text5117"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117"><tspan
          sodipodi:role="line"
          id="tspan5119"
          x="-208.17383"
-         y="991.09021">Yellow Pikmin</tspan></text>
+         y="991.09021"
+         style="font-size:10px;line-height:1.25">Yellow Pikmin</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-210.98877"
        y="956.09021"
-       id="text5121"
-       sodipodi:linespacing="125%"><tspan
+       id="text5121"><tspan
          sodipodi:role="line"
          id="tspan5123"
          x="-210.98877"
-         y="956.09021">Red Pikmin dark</tspan></text>
+         y="956.09021"
+         style="font-size:10px;line-height:1.25">Red Pikmin dark</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-221.37695"
        y="1026.0902"
-       id="text5117-6"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-6"><tspan
          sodipodi:role="line"
          id="tspan5119-3"
          x="-221.37695"
-         y="1026.0902">Yellow Pikmin dark</tspan></text>
+         y="1026.0902"
+         style="font-size:10px;line-height:1.25">Yellow Pikmin dark</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-208.17383"
        y="1061.0902"
-       id="text5117-2"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-2"><tspan
          sodipodi:role="line"
          id="tspan5119-0"
          x="-208.17383"
-         y="1061.0902">Blue Pikmin</tspan></text>
+         y="1061.0902"
+         style="font-size:10px;line-height:1.25">Blue Pikmin</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-217.55127"
        y="1101.0902"
-       id="text5117-61"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-61"><tspan
          sodipodi:role="line"
          id="tspan5119-5"
          x="-217.55127"
-         y="1101.0902">Blue Pikmin dark</tspan></text>
+         y="1101.0902"
+         style="font-size:10px;line-height:1.25">Blue Pikmin dark</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-203.17383"
        y="1141.0902"
-       id="text5117-5"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-5"><tspan
          sodipodi:role="line"
          id="tspan5119-4"
          x="-203.17383"
-         y="1141.0902">Purple Pikmin</tspan></text>
+         y="1141.0902"
+         style="font-size:10px;line-height:1.25">Purple Pikmin</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-227.2876"
        y="1165.121"
-       id="text5117-7"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-7"><tspan
          sodipodi:role="line"
          x="-227.2876"
          y="1165.121"
-         id="tspan5207">Purple Pikmin dark</tspan></text>
+         id="tspan5207"
+         style="font-size:10px;line-height:1.25">Purple Pikmin dark</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-203.17383"
        y="1211.0902"
-       id="text5117-56"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-56"><tspan
          sodipodi:role="line"
          id="tspan5119-9"
          x="-203.17383"
-         y="1211.0902">White Pikmin</tspan></text>
+         y="1211.0902"
+         style="font-size:10px;line-height:1.25">White Pikmin</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-220.70312"
        y="1251.0902"
-       id="text5117-3"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-3"><tspan
          sodipodi:role="line"
          id="tspan5119-7"
          x="-220.70312"
-         y="1251.0902">White Pikmin dark</tspan></text>
+         y="1251.0902"
+         style="font-size:10px;line-height:1.25">White Pikmin dark</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-226.59668"
        y="1305.121"
-       id="text5117-4"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-4"><tspan
          sodipodi:role="line"
          id="tspan5119-52"
          x="-226.59668"
-         y="1305.121">Flower petal shadow</tspan></text>
+         y="1305.121"
+         style="font-size:10px;line-height:1.25">Flower petal shadow</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-232.49512"
        y="1336.0902"
-       id="text5117-54"
-       sodipodi:linespacing="125%"><tspan
+       id="text5117-54"><tspan
          sodipodi:role="line"
          id="tspan5119-74"
          x="-232.49512"
-         y="1336.0902">Flower circle shadow</tspan></text>
+         y="1336.0902"
+         style="font-size:10px;line-height:1.25">Flower circle shadow</tspan></text>
     <rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#008000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect5016"
