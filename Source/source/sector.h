@@ -182,6 +182,8 @@ struct sector {
     vector<edge*> edges;
     vector<triangle> triangles;
     
+    point bbox[2];
+    
     sector();
     void connect_edges(area_data &a, size_t s_nr);
     void fix_pointers(area_data &a);

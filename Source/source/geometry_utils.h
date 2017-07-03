@@ -46,6 +46,10 @@ point angle_to_coordinates(
 );
 float angular_dist_to_linear(const float angular_dist, const float radius);
 bool bbox_check(const point &center1, const point &center2, const float r);
+bool bbox_check(
+    const point &tl1, const point &br1,
+    const point &center2, const float r
+);
 bool circle_intersects_line(
     const point &circle, const float cr,
     const point &line_p1, const point &line_p2,
@@ -64,11 +68,15 @@ void move_point(
     float* angle, bool* reached, const float delta_t
 );
 float normalize_angle(float a);
+float rad_to_deg(const float deg);
 bool rectangle_intersects_line(
     const point &r1, const point &r2,
     const point &l1, const point &l2
 );
-float rad_to_deg(const float deg);
+bool rectangles_intersect(
+    const point &tl1, const point &br1,
+    const point &tl2, const point &br2
+);
 point rotate_point(const point &coords, const float angle);
 
 #endif //ifndef GEOMETRY_UTILS_INCLUDED

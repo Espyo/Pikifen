@@ -394,11 +394,13 @@ void load_area(
     }
     
     
-    //Triangulate everything.
+    //Triangulate everything and save bounding boxes.
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         s_ptr->triangles.clear();
         triangulate(s_ptr);
+        
+        get_sector_bounding_box(s_ptr, &s_ptr->bbox[0], &s_ptr->bbox[1]);
     }
     
     

@@ -102,7 +102,10 @@ private:
 public:
     void add(particle p);
     void tick_all(const float delta_t);
-    void draw_all(const bool before_mobs);
+    void draw_all(
+        const bool before_mobs,
+        const point cam_tl = point(), const point cam_br = point()
+    );
     void clear();
     
     particle_manager(const size_t &max_nr = 0);

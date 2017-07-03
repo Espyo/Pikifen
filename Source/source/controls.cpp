@@ -20,6 +20,7 @@
 #include "controls.h"
 #include "drawing.h"
 #include "functions.h"
+#include "gameplay.h"
 #include "vars.h"
 
 /* ----------------------------------------------------------------------------
@@ -650,16 +651,11 @@ void handle_button(
             
         } else if(button == BUTTON_ZOOM_IN || button == BUTTON_ZOOM_OUT) {
         
-            if(
-                (
-                    cam_final_zoom >= zoom_max_level &&
-                    button == BUTTON_ZOOM_IN
-                ) ||
-                (
-                    cam_final_zoom <= zoom_min_level &&
-                    button == BUTTON_ZOOM_OUT
-                )
-            ) {
+            if(cam_final_zoom >= zoom_max_level && button == BUTTON_ZOOM_IN) {
+                return;
+            }
+            
+            if(cam_final_zoom <= zoom_min_level && button == BUTTON_ZOOM_OUT) {
                 return;
             }
             

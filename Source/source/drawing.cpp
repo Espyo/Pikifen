@@ -16,6 +16,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "gameplay.h"
 #include "geometry_utils.h"
 #include "vars.h"
 
@@ -116,15 +117,38 @@ void gameplay::do_game_drawing(
         //Sectors.
         al_use_transform(&world_to_screen_drawing_transform);
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            draw_sector(
-                cur_area_data.sectors[s],
-                point(), 1.0
-            );
+            sector* s_ptr = cur_area_data.sectors[s];
+            
+            if(
+                !bmp_output &&
+                !rectangles_intersect(
+                    s_ptr->bbox[0], s_ptr->bbox[1],
+                    cam_box[0], cam_box[1]
+                )
+            ) {
+                //Off-camera.
+                continue;
+            }
+            
+            draw_sector(s_ptr, point(), 1.0);
         }
         
         //Liquids.
         for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
             sector* s_ptr = cur_area_data.sectors[s];
+            
+            if(
+                !bmp_output &&
+                !rectangles_intersect(
+                    s_ptr->bbox[0], s_ptr->bbox[1],
+                    cam_box[0], cam_box[1]
+                )
+            ) {
+                //Off-camera.
+                continue;
+            }
+            
+            
             if(s_ptr->associated_liquid) {
                 draw_liquid(s_ptr, point(), 1.0f);
             }
@@ -138,7 +162,11 @@ void gameplay::do_game_drawing(
         *                              * *  *
         ************************************/
         
-        particles.draw_all(true);
+        if(!bmp_output) {
+            particles.draw_all(true, cam_box[0], cam_box[1]);
+        } else {
+            particles.draw_all(true);
+        }
         
         
         /* Layer 4
@@ -178,20 +206,45 @@ void gameplay::do_game_drawing(
         al_hold_bitmap_drawing(true);
         for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
-            if(mob_ptr->type->casts_shadow && !mob_ptr->hide) {
-                draw_mob_shadow(
-                    mob_ptr->pos,
-                    mob_ptr->type->radius * 2,
-                    mob_ptr->z - mob_ptr->ground_sector->z,
-                    shadow_stretch
-                );
+            
+            if(!mob_ptr->type->casts_shadow || mob_ptr->hide) {
+                continue;
             }
+            
+            if(
+                !bmp_output &&
+                !bbox_check(
+                    cam_box[0], cam_box[1],
+                    mob_ptr->pos, mob_ptr->type->radius
+                )
+            ) {
+                //Off-camera.
+                continue;
+            }
+            
+            draw_mob_shadow(
+                mob_ptr->pos,
+                mob_ptr->type->radius * 2,
+                mob_ptr->z - mob_ptr->ground_sector->z,
+                shadow_stretch
+            );
         }
         al_hold_bitmap_drawing(false);
         
         //And now the mobs themselves.
         for(size_t m = 0; m < sorted_mobs.size(); ++m) {
             mob_ptr = sorted_mobs[m];
+            
+            if(
+                !bmp_output &&
+                !bbox_check(
+                    cam_box[0], cam_box[1],
+                    mob_ptr->pos, mob_ptr->type->radius
+                )
+            ) {
+                //Off-camera.
+                continue;
+            }
             
             mob_ptr->draw();
             
@@ -203,11 +256,11 @@ void gameplay::do_game_drawing(
                         hitbox* h_ptr = &s->hitboxes[h];
                         ALLEGRO_COLOR hc;
                         if(h_ptr->type == HITBOX_TYPE_NORMAL) {
-                            hc = al_map_rgba(0, 128, 0, 192);
+                            hc = al_map_rgba(0, 128, 0, 192); //Green.
                         } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                            hc = al_map_rgba(128, 0, 0, 192);
+                            hc = al_map_rgba(128, 0, 0, 192); //Red.
                         } else {
-                            hc = al_map_rgba(128, 128, 0, 192);
+                            hc = al_map_rgba(128, 128, 0, 192); //Yellow.
                         }
                         point p =
                             mob_ptr->pos +
@@ -226,7 +279,11 @@ void gameplay::do_game_drawing(
         *                             * *  *
         ***********************************/
         
-        particles.draw_all(false);
+        if(!bmp_output) {
+            particles.draw_all(false, cam_box[0], cam_box[1]);
+        } else {
+            particles.draw_all(false);
+        }
         
         
         /* Layer 6
@@ -461,16 +518,22 @@ void gameplay::do_game_drawing(
                             alpha_mult = 1;
                             
                         if(d == 0) {
+                            //Red.
                             c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
                         } else if(d == 1) {
+                            //Orange.
                             c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
                         } else if(d == 2) {
+                            //Lime.
                             c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
                         } else if(d == 3) {
+                            //Cyan.
                             c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
                         } else if(d == 4) {
+                            //Blue.
                             c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
                         } else {
+                            //Purple.
                             c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
                         }
                         

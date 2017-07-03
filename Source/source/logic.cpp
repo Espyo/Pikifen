@@ -14,6 +14,7 @@
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
+#include "gameplay.h"
 #include "mobs/pikmin.h"
 #include "vars.h"
 
@@ -184,12 +185,30 @@ void gameplay::do_aesthetic_logic() {
 }
 
 
+const float CAMERA_BOX_MARGIN = 128.0f;
+
 /* ----------------------------------------------------------------------------
  * Ticks the logic of gameplay-related things.
  */
 void gameplay::do_gameplay_logic() {
 
     game_states[cur_game_state_nr]->update_transformations();
+    
+    //Set the camera bounding box.
+    cam_box[0] =
+        point(-CAMERA_BOX_MARGIN, -CAMERA_BOX_MARGIN);
+    cam_box[1] =
+        point(scr_w + CAMERA_BOX_MARGIN, scr_h + CAMERA_BOX_MARGIN);
+    al_transform_coordinates(
+        &screen_to_world_transform,
+        &cam_box[0].x,
+        &cam_box[0].y
+    );
+    al_transform_coordinates(
+        &screen_to_world_transform,
+        &cam_box[1].x,
+        &cam_box[1].y
+    );
     
     if(cur_message.empty()) {
     

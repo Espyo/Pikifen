@@ -266,9 +266,27 @@ void particle_manager::tick_all(const float delta_t) {
  *   that are meant to appear BEFORE (under) the mobs.
  *   So, you should call this function before and after drawing all mobs,
  *   and set before_mobs to true before, and false after.
+ * cam_box:     Only draw particles inside this frame.
  */
-void particle_manager::draw_all(const bool before_mobs) {
+void particle_manager::draw_all(
+    const bool before_mobs,
+    const point cam_tl, const point cam_br
+) {
     for(size_t c = 0; c < count; ++c) {
+        
+        particle* p_ptr = &particles[c];
+        
+        if(
+            cam_tl != cam_br &&
+            !rectangles_intersect(
+                p_ptr->pos - p_ptr->size, p_ptr->pos + p_ptr->size,
+                cam_tl, cam_br
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
         if(before_mobs == particles[c].before_mobs) {
             particles[c].draw();
         }

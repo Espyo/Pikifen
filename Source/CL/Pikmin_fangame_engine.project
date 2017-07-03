@@ -71,6 +71,8 @@
     <File Name="../source/geometry_utils.cpp"/>
     <File Name="../source/load.h"/>
     <File Name="../source/load.cpp"/>
+    <File Name="../source/gameplay.h"/>
+    <File Name="../source/gameplay.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>

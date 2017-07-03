@@ -190,6 +190,25 @@ bool bbox_check(const point &center1, const point &center2, const float r) {
 
 
 /* ----------------------------------------------------------------------------
+ * Checks if a rectangle and a sphere are colliding via a bounding-box check.
+ * tl1:     Top-left coordinates of the rectangle.
+ * br1:     Bottom-right coordinates of the rectangle.
+ * center2: Coordinates of the sphere.
+ * r:       Radius of the sphere.
+ */
+bool bbox_check(
+    const point &tl1, const point &br1,
+    const point &center2, const float r
+) {
+    return
+        rectangles_intersect(
+            tl1, br1,
+            center2 - r, center2 + r
+        );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a circle is touching a line segment or not.
  * circle: Coordinates of the circle.
  * radius: Radius of the circle.
@@ -346,6 +365,14 @@ float normalize_angle(float a) {
 
 
 /* ----------------------------------------------------------------------------
+ * Converts an angle from radians to degrees.
+ */
+float rad_to_deg(const float rad) {
+    return (180.0f / M_PI) * rad;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether a rectangle intersects with a line segment.
  * Also returns true if the line is fully inside the rectangle.
  * r*: Rectangle coordinates.
@@ -404,10 +431,21 @@ bool rectangle_intersects_line(
 
 
 /* ----------------------------------------------------------------------------
- * Converts an angle from radians to degrees.
+ * Checks if two rectangles are colliding.
+ * tl1: Coordinates of the first box's top-left.
+ * br1: Coordinates of the first box's bottom-right.
+ * tl2: Coordinates of the second box's top-left.
+ * br2: Coordinates of the second box's bottom-right.
  */
-float rad_to_deg(const float rad) {
-    return (180.0f / M_PI) * rad;
+bool rectangles_intersect(
+    const point &tl1, const point &br1,
+    const point &tl2, const point &br2
+) {
+    if(tl1.x > br2.x) return false;
+    if(br1.x < tl2.x) return false;
+    if(tl1.y > br2.y) return false;
+    if(br1.y < tl2.y) return false;
+    return true;
 }
 
 

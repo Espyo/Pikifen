@@ -26,6 +26,7 @@
 #include "data_file.h"
 #include "functions.h"
 #include "game_state.h"
+#include "gameplay.h"
 #include "menus.h"
 #include "mob_script.h"
 #include "vars.h"
