@@ -65,7 +65,7 @@ void draw_notification(
     const point &where, const string &text,
     control_info* control = NULL
 );
-void draw_sector(
+void draw_sector_shadows(
     sector* s_ptr, const point &where, const float scale
 );
 void draw_sector_texture(

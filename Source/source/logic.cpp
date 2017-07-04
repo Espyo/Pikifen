@@ -594,6 +594,24 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
      *                              *
      ********************************/
     //Interactions between this mob and the others.
+    
+    //We want the mob to follow inter-mob events from the closest mob to
+    //the one farthest away. As such, let's catch all viable mobs and their
+    //distances, save it in a vector, and then go through it in order.
+    struct pending_intermob_event {
+        dist d;
+        mob_event* event_ptr;
+        mob* mob_ptr;
+        pending_intermob_event(
+            const dist &d, mob_event* event_ptr, mob* mob_ptr
+        ) :
+        d(d),
+        event_ptr(event_ptr),
+        mob_ptr(mob_ptr) { }
+    };
+    
+    vector<pending_intermob_event> pending_intermob_events;
+    
     size_t n_mobs = mobs.size();
     for(size_t m2 = 0; m2 < n_mobs; ++m2) {
         if(m == m2) continue;
@@ -626,40 +644,6 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                 m_ptr->push_amount = d_amount / delta_t;
                 m_ptr->push_angle = get_angle(m2_ptr->pos, m_ptr->pos);
             }
-        }
-        
-        if(!m2_ptr->dead) {
-            //Check reaches.
-            
-            mob_event* obir_ev =
-                q_get_event(m_ptr, MOB_EVENT_OBJECT_IN_REACH);
-            mob_event* opir_ev =
-                q_get_event(m_ptr, MOB_EVENT_OPPONENT_IN_REACH);
-                
-            if(m_ptr->near_reach != INVALID && (obir_ev || opir_ev)) {
-                mob_type::reach_struct* r_ptr =
-                    &m_ptr->type->reaches[m_ptr->near_reach];
-                if(
-                    (
-                        d <= r_ptr->radius_1 +
-                        (m_ptr->type->radius + m2_ptr->type->radius) &&
-                        face_diff <= r_ptr->angle_1 / 2.0
-                    ) || (
-                        d <= r_ptr->radius_2 +
-                        (m_ptr->type->radius + m2_ptr->type->radius) &&
-                        face_diff <= r_ptr->angle_2 / 2.0
-                    )
-                    
-                ) {
-                    if(obir_ev) {
-                        obir_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                    if(opir_ev && should_attack(m_ptr, m2_ptr)) {
-                        opir_ev->run(m_ptr, (void*) m2_ptr);
-                    }
-                }
-            }
-            
         }
         
         //Check touches. This does not use hitboxes,
@@ -1059,23 +1043,92 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
             }
         }
         
-        //Find a carriable mob to grab.
-        mob_event* near_carriable_object_ev =
-            q_get_event(m_ptr, MOB_EVENT_NEAR_CARRIABLE_OBJECT);
-        if(near_carriable_object_ev) {
-        
-            if(
-                m2_ptr->carry_info &&
-                !m2_ptr->carry_info->is_full() &&
-                d <=
-                m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
-            ) {
+        if(!m2_ptr->dead && m_ptr->near_reach != INVALID) {
+            //Check reaches.
             
-                near_carriable_object_ev->run(m_ptr, (void*) m2_ptr);
-                
+            mob_event* obir_ev =
+                q_get_event(m_ptr, MOB_EVENT_OBJECT_IN_REACH);
+            mob_event* opir_ev =
+                q_get_event(m_ptr, MOB_EVENT_OPPONENT_IN_REACH);
+            
+            mob_type::reach_struct* r_ptr =
+                &m_ptr->type->reaches[m_ptr->near_reach];
+            if(obir_ev || opir_ev) {
+                if(
+                    (
+                        d <= r_ptr->radius_1 +
+                        (m_ptr->type->radius + m2_ptr->type->radius) &&
+                        face_diff <= r_ptr->angle_1 / 2.0
+                    ) || (
+                        d <= r_ptr->radius_2 +
+                        (m_ptr->type->radius + m2_ptr->type->radius) &&
+                        face_diff <= r_ptr->angle_2 / 2.0
+                    )
+                    
+                ) {
+                    if(obir_ev) {
+                        pending_intermob_events.push_back(
+                            pending_intermob_event(
+                                d, obir_ev, m2_ptr
+                            )
+                        );
+                    }
+                    if(opir_ev && should_attack(m_ptr, m2_ptr)) {
+                        pending_intermob_events.push_back(
+                            pending_intermob_event(
+                                d, opir_ev, m2_ptr
+                            )
+                        );
+                    }
+                }
             }
             
         }
+        
+        //Find a carriable mob to grab.
+        mob_event* nco_event =
+            q_get_event(m_ptr, MOB_EVENT_NEAR_CARRIABLE_OBJECT);
+        if(
+            nco_event &&
+            m2_ptr->carry_info &&
+            !m2_ptr->carry_info->is_full() &&
+            d <=
+            m_ptr->type->radius + m2_ptr->type->radius + task_range(m_ptr)
+        ) {
+        
+            pending_intermob_events.push_back(
+                pending_intermob_event(
+                    d, nco_event, m2_ptr
+                )
+            );
+            
+        }
+    }
+    
+    //Check the pending inter-mob events.
+    sort(
+        pending_intermob_events.begin(), pending_intermob_events.end(),
+        [m_ptr] (pending_intermob_event e1, pending_intermob_event e2) -> bool {
+            return
+                (
+                    e1.d.to_float() -
+                    (m_ptr->type->radius + e1.mob_ptr->type->radius)
+                ) < (
+                    e2.d.to_float() -
+                    (m_ptr->type->radius + e2.mob_ptr->type->radius)
+                );
+        }
+    );
+    
+    for(size_t e = 0; e < pending_intermob_events.size(); ++e) {
+        if(!pending_intermob_events[e].event_ptr) continue;
+        pending_intermob_events[e].event_ptr->run(
+            m_ptr, (void*) pending_intermob_events[e].mob_ptr
+        );
+        
+        //If it successfully ran the event, let's not go through the rest,
+        //since the state, reaches, etc. could've changed.
+        break;
     }
     
     //Check if it got whistled.

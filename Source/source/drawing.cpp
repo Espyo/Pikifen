@@ -130,28 +130,13 @@ void gameplay::do_game_drawing(
                 continue;
             }
             
-            draw_sector(s_ptr, point(), 1.0);
-        }
-        
-        //Liquids.
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
-            
-            if(
-                !bmp_output &&
-                !rectangles_intersect(
-                    s_ptr->bbox[0], s_ptr->bbox[1],
-                    cam_box[0], cam_box[1]
-                )
-            ) {
-                //Off-camera.
-                continue;
-            }
-            
+            draw_sector_texture(s_ptr, point(), 1.0);
             
             if(s_ptr->associated_liquid) {
                 draw_liquid(s_ptr, point(), 1.0f);
             }
+            
+            draw_sector_shadows(s_ptr, point(), 1.0f);
         }
         
         
@@ -1665,21 +1650,14 @@ void draw_scaled_text(
 
 
 /* ----------------------------------------------------------------------------
- * Draws a sector on the current bitmap.
+ * Draws the wall shadows that are being cast on top of this sector.
  * s:        The sector to draw.
  * where:    Top-left coordinates.
  * scale:    Drawing scale.
  */
-void draw_sector(
-    sector* s_ptr, const point &where, const float scale
-) {
-
+void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
-    draw_sector_texture(s_ptr, where, scale);
-    
-    
-    //Wall shadows.
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         edge* e_ptr = s_ptr->edges[e];
         ALLEGRO_VERTEX av[4];
@@ -1984,6 +1962,8 @@ void draw_sector(
 void draw_sector_texture(
     sector* s_ptr, const point &where, const float scale
 ) {
+    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
+    
     unsigned char n_textures = 1;
     sector* texture_sector[2] = {NULL, NULL};
     

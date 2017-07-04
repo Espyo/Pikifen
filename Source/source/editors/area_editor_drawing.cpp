@@ -283,7 +283,8 @@ void area_editor::do_drawing() {
         
             //Draw textures.
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                draw_sector(cur_area_data.sectors[s], point(), 1.0);
+                draw_sector_texture(cur_area_data.sectors[s], point(), 1.0);
+                draw_sector_shadows(cur_area_data.sectors[s], point(), 1.0);
             }
         }
         
