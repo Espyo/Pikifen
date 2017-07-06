@@ -115,6 +115,17 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered categories, freeing memory.
+ */
+void mob_category_manager::clear() {
+    for(size_t c = 0; c < categories.size(); ++c) {
+        delete categories[c];
+    }
+    categories.clear();
+}
+
+
 
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin category.

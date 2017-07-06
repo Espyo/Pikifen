@@ -1124,10 +1124,7 @@ void mob::lose_panic_from_status() {}
 void mob::change_maturity_amount_from_status(const int amount) {}
 
 
-mob::~mob() {
-    this->fsm.run_event(MOB_EVENT_DEATH);
-    this->fsm.set_state(INVALID); //Run the current state's "on exit".
-}
+mob::~mob() { }
 
 
 /* ----------------------------------------------------------------------------

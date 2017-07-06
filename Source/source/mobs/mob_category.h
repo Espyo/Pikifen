@@ -87,6 +87,7 @@ public:
     mob_category* get(const size_t id);
     mob_category* get_from_name(const string &name);
     mob_category* get_from_pname(const string &pname);
+    void clear();
 };
 
 

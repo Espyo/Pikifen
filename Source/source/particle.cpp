@@ -180,7 +180,7 @@ particle_manager &particle_manager::operator =(const particle_manager &pg) {
  * Destroys a particle manager.
  */
 particle_manager::~particle_manager() {
-    if(particles) delete particles;
+    if(particles) delete[] particles;
 }
 
 

@@ -1035,7 +1035,7 @@ sample_struct load_sample(
 /* ----------------------------------------------------------------------------
  * Loads spray types from the game data.
  */
-void load_spray_types() {
+void load_spray_types(const bool load_resources) {
     data_node file = data_node(MISC_FOLDER_PATH + "/Sprays.txt");
     if(!file.file_was_opened) return;
     
@@ -1072,8 +1072,10 @@ void load_spray_types() {
         st.angle = deg_to_rad(st.angle);
         st.angle_range = deg_to_rad(st.angle_range);
         
-        data_node* icon_node = s_node->get_child_by_name("icon");
-        st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
+        if(load_resources) {
+            data_node* icon_node = s_node->get_child_by_name("icon");
+            st.bmp_spray = bitmaps.get(icon_node->value, icon_node);
+        }
         
         spray_types.push_back(st);
     }
@@ -1176,6 +1178,32 @@ void load_system_animations() {
 
 
 /* ----------------------------------------------------------------------------
+ * Unloads custom particle generators loaded from memory.
+ */
+void unload_custom_particle_generators() {
+    for(
+        auto g = custom_particle_generators.begin();
+        g != custom_particle_generators.end();
+        ++g
+    ) {
+        bitmaps.detach(g->second.base_particle.bitmap);
+    }
+    custom_particle_generators.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded liquids from memory.
+ */
+void unload_liquids() {
+    for(auto l = liquids.begin(); l != liquids.end(); ++l) {
+        l->second.anim_pool.destroy();
+    }
+    liquids.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads miscellaneous graphics, sounds, and other resources.
  */
 void unload_resources() {
@@ -1223,4 +1251,15 @@ void unload_resources() {
     sfx_throw.destroy();
     sfx_switch_pikmin.destroy();
     sfx_camera.destroy();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded spray types from memory.
+ */
+void unload_spray_types() {
+    for(size_t s = 0; s < spray_types.size(); ++s) {
+        bitmaps.detach(spray_types[s].bmp_spray);
+    }
+    spray_types.clear();
 }

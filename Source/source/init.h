@@ -37,6 +37,7 @@ void destroy_allegro();
 void destroy_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void destroy_game_states();
 void destroy_misc();
+void destroy_mob_categories();
 void destroy_special_mob_types();
 
 #endif //ifndef INIT_INCLUDED

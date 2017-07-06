@@ -185,6 +185,7 @@ int main(int argc, char** argv) {
     }
     unload_resources();
     destroy_special_mob_types();
+    destroy_mob_categories();
     destroy_game_states();
     destroy_misc();
     destroy_event_things(logic_timer, logic_queue);

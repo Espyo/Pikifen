@@ -33,6 +33,7 @@ gameplay::gameplay() :
     bmp_day_bubble(nullptr),
     bmp_distant_pikmin_marker(nullptr),
     bmp_hard_bubble(nullptr),
+    bmp_message_box(nullptr),
     bmp_no_pikmin_bubble(nullptr),
     bmp_sun(nullptr) {
     
@@ -48,13 +49,10 @@ void gameplay::load() {
     draw_loading_screen("", "", 1.0f);
     al_flip_display();
     
-    al_set_display_icon(display, bmp_icon);
-    
     //Game content.
     load_game_content();
     
     //Initializing game things.
-    spray_amounts.clear();
     size_t n_spray_types = spray_types.size();
     for(size_t s = 0; s < n_spray_types; ++s) { spray_amounts.push_back(0); }
     
@@ -124,9 +122,11 @@ void gameplay::load() {
     //Aesthetic stuff.
     cur_message_char_timer =
         timer(
-    message_char_interval, [] () {
-        cur_message_char_timer.start(); cur_message_char++;
-    }
+            message_char_interval,
+            [] () {
+                cur_message_char_timer.start();
+                cur_message_char++;
+            }
         );
         
     //Debug stuff for convenience.
@@ -145,7 +145,7 @@ void gameplay::load_game_content() {
     load_custom_particle_generators(true);
     load_liquids(true);
     load_status_types(true);
-    load_spray_types();
+    load_spray_types(true);
     load_hazards();
     load_hud_info();
     
@@ -161,7 +161,6 @@ void gameplay::load_game_content() {
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     
     //Weather.
-    weather_conditions.clear();
     data_node weather_file = load_data_file(WEATHER_FILE);
     size_t n_weather_conditions =
         weather_file.get_nr_of_children_by_name("weather");
@@ -370,15 +369,81 @@ void gameplay::load_hud_coordinates(const int item, string data) {
  * Unloads the "gameplay" state from memory.
  */
 void gameplay::unload() {
-    //TODO
+    al_show_mouse_cursor(display);
+    
+    cur_leader_ptr = NULL;
+    cam_pos = cam_final_pos = point();
+    cam_zoom = cam_final_zoom = 1.0f;
+    
+    while(!mobs.empty()) {
+        delete_mob(*mobs.begin());
+    }
+    
+    if(lightmap_bmp) {
+        al_destroy_bitmap(lightmap_bmp);
+        lightmap_bmp = NULL;
+    }
+    
+    unload_area_textures();
+    unload_area();
+    
+    spray_amounts.clear();
+    
+    unload_game_content();
     
     bitmaps.detach(bmp_bubble);
+    bitmaps.detach(bmp_counter_bubble_field);
+    bitmaps.detach(bmp_counter_bubble_group);
+    bitmaps.detach(bmp_counter_bubble_standby);
+    bitmaps.detach(bmp_counter_bubble_total);
     bitmaps.detach(bmp_day_bubble);
+    bitmaps.detach(bmp_distant_pikmin_marker);
     bitmaps.detach(bmp_hard_bubble);
     bitmaps.detach(bmp_message_box);
     bitmaps.detach(bmp_no_pikmin_bubble);
-    bitmaps.detach(bmp_distant_pikmin_marker);
     bitmaps.detach(bmp_sun);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the loaded area from memory.
+ */
+void gameplay::unload_area() {
+    cur_area_data.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the loaded area's sector textures from memory.
+ */
+void gameplay::unload_area_textures() {
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        
+        if(s_ptr->texture_info.file_name.empty()) continue;
+        
+        bitmaps.detach(s_ptr->texture_info.file_name);
+        s_ptr->texture_info.file_name.clear();
+        s_ptr->texture_info.bitmap = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded game content.
+ */
+void gameplay::unload_game_content() {
+    weather_conditions.clear();
+    
+    subgroup_types.clear();
+    
+    unload_mob_types(true);
+    
+    unload_hazards();
+    unload_spray_types();
+    unload_status_types();
+    unload_liquids();
+    unload_custom_particle_generators();
 }
 
 

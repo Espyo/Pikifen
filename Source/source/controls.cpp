@@ -558,7 +558,14 @@ void handle_button(
             
             if(pos == 0) return;
             
-            is_game_running = false;
+            ready_for_input = false;
+            fade_mgr.start_fade(
+                false,
+                [] () {
+                    change_game_state(GAME_STATE_MAIN_MENU);
+                }
+            );
+            
             //paused = true;
             
         } else if(button == BUTTON_USE_SPRAY_1) {

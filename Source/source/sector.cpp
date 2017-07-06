@@ -344,11 +344,19 @@ void area_data::clear() {
     mob_generators.clear();
     path_stops.clear();
     tree_shadows.clear();
+    bmap.clear();
     
     if(!bg_bmp_file_name.empty()) {
         bitmaps.detach(bg_bmp_file_name);
     }
+    
+    name.clear();
+    subtitle.clear();
+    weather_name.clear();
     bg_bmp_file_name.clear();
+    bg_color = al_map_rgb(0, 0, 0);
+    bg_dist = 2.0f;
+    bg_bmp_zoom = 1.0f;
 }
 
 

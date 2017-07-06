@@ -495,6 +495,14 @@ void destroy_misc() {
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys registered mob categories.
+ */
+void destroy_mob_categories() {
+    mob_categories.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Destroys the list of mob types.
  */
 void destroy_special_mob_types() {
