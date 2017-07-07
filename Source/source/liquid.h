@@ -32,7 +32,7 @@ using namespace std;
 struct liquid {
     string name;
     ALLEGRO_COLOR main_color;
-    animation_database anim_pool;
+    animation_database anim_db;
     animation_instance anim_instance;
     float surface_speed[2];
     unsigned char surface_alpha;

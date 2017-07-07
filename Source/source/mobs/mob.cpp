@@ -1417,8 +1417,8 @@ mob* create_mob(
     const float angle, const string &vars
 ) {
     mob* m_ptr = NULL;
-    if(type->create_mob) {
-        m_ptr = type->create_mob(pos, angle, vars);
+    if(type->create_mob_func) {
+        m_ptr = type->create_mob_func(pos, angle, vars);
     } else {
         m_ptr = category->create_mob(pos, type, angle, vars);
     }

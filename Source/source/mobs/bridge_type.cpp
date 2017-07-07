@@ -36,31 +36,41 @@ bridge_type::bridge_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the bridge type from a data file.
+ * Loads resources into memory.
  */
-void bridge_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
-    if(load_resources) {
-        string main_texture_name =
-            file->get_child_by_name("main_texture")->value;
-        if(!main_texture_name.empty()) {
-            main_texture_file_name = main_texture_name;
-            bmp_main_texture =
-                bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_name);
-                
-        }
-        
-        string rail_texture_name =
-            file->get_child_by_name("rail_texture")->value;
-        if(!rail_texture_name.empty()) {
-            rail_texture_file_name = rail_texture_name;
-            bmp_rail_texture =
-                bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_name);
-        }
+void bridge_type::load_resources(data_node* file) {
+    main_texture_file_name =
+        file->get_child_by_name("main_texture")->value;
+    if(!main_texture_file_name.empty()) {
+        bmp_main_texture =
+            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_file_name);
+            
     }
     
-    anim_conversions->push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));
-    anim_conversions->push_back(make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
+    rail_texture_file_name =
+        file->get_child_by_name("rail_texture")->value;
+    if(!rail_texture_file_name.empty()) {
+        bmp_rail_texture =
+            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_file_name);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector bridge_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(BRIDGE_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(BRIDGE_ANIM_DESTROYED, "destroyed"));
+    return v;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads resources from memory.
+ */
+void bridge_type::unload_resources() {
+    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + main_texture_file_name);
+    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + rail_texture_file_name);
 }

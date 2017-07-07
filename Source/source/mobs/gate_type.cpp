@@ -28,12 +28,11 @@ gate_type::gate_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the gate type from a data file.
+ * Returns the vector of animation conversions.
  */
-void gate_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
-    anim_conversions->push_back(make_pair(GATE_ANIM_IDLING, "idling"));
-    anim_conversions->push_back(make_pair(GATE_ANIM_DESTROYED, "destroyed"));
+anim_conversion_vector gate_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(GATE_ANIM_IDLING, "idling"));
+    v.push_back(make_pair(GATE_ANIM_DESTROYED, "destroyed"));
+    return v;
 }

@@ -1339,7 +1339,7 @@ void animation_editor::unload() {
     al_destroy_native_file_dialog(file_dialog);
     
     unload_hazards();
-    unload_status_types();
+    unload_status_types(false);
     
     icons.clear();
 }

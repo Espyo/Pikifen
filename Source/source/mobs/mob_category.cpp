@@ -59,6 +59,7 @@ mob* none_category::create_mob(
     const float angle, const string &vars
 ) { return NULL; }
 void none_category::erase_mob(mob* m) { }
+void none_category::clear_types() { }
 
 
 
@@ -199,6 +200,14 @@ void pikmin_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of registered types of Pikmin.
+ */
+void pikmin_category::clear_types() {
+    pikmin_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an enemy category.
  */
 enemy_category::enemy_category() :
@@ -266,6 +275,14 @@ void enemy_category::erase_mob(mob* m) {
     enemies.erase(
         find(enemies.begin(), enemies.end(), (enemy*) m)
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered types of enemy.
+ */
+void enemy_category::clear_types() {
+    enemy_types.clear();
 }
 
 
@@ -341,6 +358,14 @@ void leader_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of registered types of leader.
+ */
+void leader_category::clear_types() {
+    leader_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates an Onion category.
  */
 onion_category::onion_category() :
@@ -408,6 +433,14 @@ void onion_category::erase_mob(mob* m) {
     onions.erase(
         find(onions.begin(), onions.end(), (onion*) m)
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered types of Onion.
+ */
+void onion_category::clear_types() {
+    onion_types.clear();
 }
 
 
@@ -483,6 +516,14 @@ void pellet_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of registered types of pellet.
+ */
+void pellet_category::clear_types() {
+    pellet_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a ship category.
  */
 ship_category::ship_category() :
@@ -550,6 +591,14 @@ void ship_category::erase_mob(mob* m) {
     ships.erase(
         find(ships.begin(), ships.end(), (ship*) m)
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered types of ship.
+ */
+void ship_category::clear_types() {
+    ship_types.clear();
 }
 
 
@@ -625,6 +674,14 @@ void treasure_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of registered types of treasure.
+ */
+void treasure_category::clear_types() {
+    treasure_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a gate category.
  */
 gate_category::gate_category() :
@@ -692,6 +749,14 @@ void gate_category::erase_mob(mob* m) {
     gates.erase(
         find(gates.begin(), gates.end(), (gate*) m)
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered types of gates.
+ */
+void gate_category::clear_types() {
+    gate_types.clear();
 }
 
 
@@ -767,6 +832,14 @@ void bridge_category::erase_mob(mob* m) {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of registered types of bridges.
+ */
+void bridge_category::clear_types() {
+    bridge_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a category for the special mob types.
  */
 special_category::special_category() :
@@ -833,6 +906,14 @@ void special_category::erase_mob(mob* m) { }
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the list of special mob types.
+ */
+void special_category::clear_types() {
+    spec_mob_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a category for the custom mob types.
  */
 custom_category::custom_category() :
@@ -896,3 +977,11 @@ mob* custom_category::create_mob(
  * Clears a custom mob from the list of custom mobs.
  */
 void custom_category::erase_mob(mob* m) { }
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of registered types of custom mob.
+ */
+void custom_category::clear_types() {
+    custom_mob_types.clear();
+}

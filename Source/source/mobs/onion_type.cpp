@@ -27,12 +27,9 @@ onion_type::onion_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the Onion type from a data file.
+ * Loads parameters from a data file.
  */
-void onion_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
+void onion_type::load_parameters(data_node* file) {
     data_node* pik_type_node = file->get_child_by_name("pikmin_type");
     if(pikmin_types.find(pik_type_node->value) == pikmin_types.end()) {
         log_error(
@@ -41,6 +38,14 @@ void onion_type::load_from_file(
         );
     }
     pik_type = pikmin_types[pik_type_node->value];
-    
-    anim_conversions->push_back(make_pair(ANIM_IDLING, "idling"));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector onion_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(ANIM_IDLING, "idling"));
+    return v;
 }

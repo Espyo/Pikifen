@@ -30,6 +30,8 @@ enum ENEMY_EXTRA_STATES {
     ENEMY_EXTRA_STATE_BEING_DELIVERED,
 };
 
+typedef vector<pair<size_t, string> > anim_conversion_vector;
+
 const size_t ANIM_IDLING = 0;
 
 
@@ -93,18 +95,19 @@ public:
     //which type of mob to create without a list.
     function < mob* (
         const point pos, const float angle, const string &vars
-    ) > create_mob;
-    function < void(
-        data_node* file, const bool load_resources,
-        vector<pair<size_t, string> >* anim_conversions
-    ) > load_from_file_func;
+    ) > create_mob_func;
+    function < void(data_node* file) > load_parameters_func;
+    function < void(data_node* file) > load_resources_func;
+    function < anim_conversion_vector() > get_anim_conversions_func;
+    function < void() > unload_resources_func;
     
+    //General functions.
     mob_type(size_t category_id);
     ~mob_type();
-    virtual void load_from_file(
-        data_node* file, const bool load_resources,
-        vector<pair<size_t, string> >* anim_conversions
-    );
+    virtual void load_parameters(data_node* file);
+    virtual void load_resources(data_node* file);
+    virtual anim_conversion_vector get_anim_conversions();
+    virtual void unload_resources();
     void add_carrying_states();
 };
 
@@ -116,5 +119,6 @@ void load_mob_type_from_file(
     const string &folder
 );
 void unload_mob_types(const bool unload_resources);
+void unload_mob_types(mob_category* category, const bool unload_resources);
 
 #endif //ifndef MOB_TYPE_INCLUDED

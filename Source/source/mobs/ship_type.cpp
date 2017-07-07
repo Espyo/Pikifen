@@ -28,16 +28,21 @@ ship_type::ship_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the ship type from a data file.
+ * Loads parametes from a data file.
  */
-void ship_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
+void ship_type::load_parameters(data_node* file) {
     can_heal = file->get_child_by_name("can_heal");
     beam_offset.x = s2f(file->get_child_by_name("beam_offset_x")->value);
     beam_offset.y = s2f(file->get_child_by_name("beam_offset_y")->value);
     beam_radius = s2f(file->get_child_by_name("beam_radius")->value);
-    
-    anim_conversions->push_back(make_pair(SHIP_ANIM_IDLING, "idling"));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector ship_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(SHIP_ANIM_IDLING, "idling"));
+    return v;
 }

@@ -2576,7 +2576,7 @@ void area_editor::unload() {
     
     unload_hazards();
     unload_mob_types(false);
-    unload_status_types();
+    unload_status_types(false);
     
     icons.clear();
 }
@@ -2858,7 +2858,7 @@ void area_editor::update_transformations() {
 void area_editor::zoom(const float new_zoom) {
     cam_zoom =
         clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
-    
+        
     //Keep a backup of the old mouse coordinates.
     point old_mouse_pos = mouse_cursor_w;
     

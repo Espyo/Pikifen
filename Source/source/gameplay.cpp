@@ -406,30 +406,6 @@ void gameplay::unload() {
 
 
 /* ----------------------------------------------------------------------------
- * Unloads the loaded area from memory.
- */
-void gameplay::unload_area() {
-    cur_area_data.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Unloads the loaded area's sector textures from memory.
- */
-void gameplay::unload_area_textures() {
-    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        sector* s_ptr = cur_area_data.sectors[s];
-        
-        if(s_ptr->texture_info.file_name.empty()) continue;
-        
-        bitmaps.detach(s_ptr->texture_info.file_name);
-        s_ptr->texture_info.file_name.clear();
-        s_ptr->texture_info.bitmap = NULL;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Unloads loaded game content.
  */
 void gameplay::unload_game_content() {
@@ -441,7 +417,7 @@ void gameplay::unload_game_content() {
     
     unload_hazards();
     unload_spray_types();
-    unload_status_types();
+    unload_status_types(true);
     unload_liquids();
     unload_custom_particle_generators();
 }

@@ -369,8 +369,9 @@ struct hitbox_touch_info {
     );
 };
 
-void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
-
 size_t fix_states(vector<mob_state*> &states, const string &starting_state);
+void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states);
+void unload_script(mob_type* mt);
+
 
 #endif //ifndef MOB_EVENT_INCLUDED

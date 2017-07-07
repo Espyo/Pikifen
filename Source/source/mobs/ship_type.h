@@ -33,10 +33,8 @@ public:
     float beam_radius;
     
     ship_type();
-    void load_from_file(
-        data_node* file, const bool load_resources,
-        vector<pair<size_t, string> >* anim_conversions
-    );
+    void load_parameters(data_node* file);
+    anim_conversion_vector get_anim_conversions();
 };
 
 #endif //ifndef SHIP_TYPE_INCLUDED

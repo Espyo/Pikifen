@@ -916,22 +916,6 @@ int sum_and_wrap(const int nr, const int sum, const int wrap_limit) {
 
 
 /* ----------------------------------------------------------------------------
- * Unloads hazards loaded in memory.
- */
-void unload_hazards() {
-    hazards.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Unloads status types loaded in memory.
- */
-void unload_status_types() {
-    status_types.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
  * Updates the history list for the animation editor,
  * adding a new entry or bumping it up.
  */

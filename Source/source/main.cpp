@@ -183,7 +183,7 @@ int main(int argc, char** argv) {
     if(cur_game_state_nr != INVALID) {
         game_states[cur_game_state_nr]->unload();
     }
-    unload_resources();
+    unload_misc_resources();
     destroy_special_mob_types();
     destroy_mob_categories();
     destroy_game_states();

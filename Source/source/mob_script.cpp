@@ -884,59 +884,6 @@ mob_fsm::mob_fsm(mob* m) :
 
 
 /* ----------------------------------------------------------------------------
- * Loads the states off of a data node.
- * mt:     the type of mob the states are going to.
- * node:   the data node.
- * states: vector of states to place the new states on.
- */
-void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
-    size_t n_new_states = node->get_nr_of_children();
-    size_t old_n_states = states->size();
-    
-    for(size_t s = 0; s < n_new_states; ++s) {
-    
-        data_node* state_node = node->get_child(s);
-        //Let's save the state now, so that the state switching events
-        //can now what numbers the events they need correspond to.
-        states->push_back(new mob_state(state_node->name));
-    }
-    
-    for(size_t s = 0; s < n_new_states; ++s) {
-        data_node* state_node = node->get_child(s);
-        vector<mob_event*> events;
-        size_t n_events = state_node->get_nr_of_children();
-        
-        for(size_t e = 0; e < n_events; ++e) {
-        
-            data_node* event_node = state_node->get_child(e);
-            vector<mob_action*> actions;
-            
-            for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
-                data_node* action_node = event_node->get_child(a);
-                actions.push_back(new mob_action(action_node, states, mt));
-            }
-            
-            events.push_back(new mob_event(event_node, actions));
-            
-        }
-        
-        //Inject a damage event.
-        vector<mob_action*> actions;
-        actions.push_back(new mob_action(gen_mob_fsm::lose_health));
-        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, actions));
-        
-        for(size_t e = 0; e < events.size(); ++e) {
-            size_t ev_type = events[e]->type;
-            states->at(s + old_n_states)->events[ev_type] = events[e];
-        }
-        
-        states->at(s + old_n_states)->id = s + old_n_states;
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Fixes some things in the list of states.
  * For instance, state-switching actions that use
  * a name instead of a number.
@@ -992,6 +939,87 @@ size_t fix_states(vector<mob_state*> &states, const string &starting_state) {
         }
     }
     return starting_state_nr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the states off of a data node.
+ * mt:     the type of mob the states are going to.
+ * node:   the data node.
+ * states: vector of states to place the new states on.
+ */
+void load_script(mob_type* mt, data_node* node, vector<mob_state*>* states) {
+    size_t n_new_states = node->get_nr_of_children();
+    size_t old_n_states = states->size();
+    
+    for(size_t s = 0; s < n_new_states; ++s) {
+    
+        data_node* state_node = node->get_child(s);
+        //Let's save the state now, so that the state switching events
+        //can now what numbers the events they need correspond to.
+        states->push_back(new mob_state(state_node->name));
+    }
+    
+    for(size_t s = 0; s < n_new_states; ++s) {
+        data_node* state_node = node->get_child(s);
+        vector<mob_event*> events;
+        size_t n_events = state_node->get_nr_of_children();
+        
+        for(size_t e = 0; e < n_events; ++e) {
+        
+            data_node* event_node = state_node->get_child(e);
+            vector<mob_action*> actions;
+            
+            for(size_t a = 0; a < event_node->get_nr_of_children(); ++a) {
+                data_node* action_node = event_node->get_child(a);
+                actions.push_back(new mob_action(action_node, states, mt));
+            }
+            
+            events.push_back(new mob_event(event_node, actions));
+            
+        }
+        
+        //Inject a damage event.
+        vector<mob_action*> actions;
+        actions.push_back(new mob_action(gen_mob_fsm::lose_health));
+        events.push_back(new mob_event(MOB_EVENT_HITBOX_TOUCH_N_A, actions));
+        
+        for(size_t e = 0; e < events.size(); ++e) {
+            size_t ev_type = events[e]->type;
+            states->at(s + old_n_states)->events[ev_type] = events[e];
+        }
+        
+        states->at(s + old_n_states)->id = s + old_n_states;
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the states from memory.
+ * mt: the type of mob.
+ */
+void unload_script(mob_type* mt) {
+    for(size_t s = 0; s < mt->states.size(); ++s) {
+        mob_state* s_ptr = mt->states[s];
+        
+        for(size_t e = 0; e < N_MOB_EVENTS; ++e) {
+            mob_event* e_ptr = s_ptr->events[e];
+            if(!e_ptr) continue;
+            
+            for(size_t a = 0; a < e_ptr->actions.size(); ++a) {
+                delete e_ptr->actions[a];
+            }
+            
+            e_ptr->actions.clear();
+            delete e_ptr;
+            
+        }
+        
+        delete s_ptr;
+        
+    }
+    mt->states.clear();
 }
 
 

@@ -818,6 +818,14 @@ tree_shadow::tree_shadow(
 
 
 /* ----------------------------------------------------------------------------
+ * Destroys a tree shadow.
+ */
+tree_shadow::~tree_shadow() {
+    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + file_name);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a triangle.
  */
 triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {

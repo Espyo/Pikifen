@@ -270,6 +270,7 @@ struct tree_shadow {
         const float angle = 0, const unsigned char alpha = 255,
         const string &file_name = "", const point &sway = point(1, 1)
     );
+    ~tree_shadow();
 };
 
 

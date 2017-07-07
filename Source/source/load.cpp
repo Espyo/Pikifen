@@ -823,13 +823,13 @@ void load_liquids(const bool load_resources) {
                     ANIMATIONS_FOLDER_PATH + "/" +
                     nodes[l->first]->get_child_by_name("animation")->value
                 );
-            l->second.anim_pool =
+            l->second.anim_db =
                 load_animation_database_from_file(&anim_file);
-            if(!l->second.anim_pool.animations.empty()) {
+            if(!l->second.anim_db.animations.empty()) {
                 l->second.anim_instance =
-                    animation_instance(&l->second.anim_pool);
+                    animation_instance(&l->second.anim_db);
                 l->second.anim_instance.cur_anim =
-                    l->second.anim_pool.animations[0];
+                    l->second.anim_db.animations[0];
                 l->second.anim_instance.start();
             }
         }
@@ -1152,12 +1152,12 @@ void load_status_types(const bool load_resources) {
                 load_data_file(
                     ANIMATIONS_FOLDER_PATH + "/" + s->second.animation_name
                 );
-            s->second.anim_pool = load_animation_database_from_file(&anim_file);
-            if(!s->second.anim_pool.animations.empty()) {
+            s->second.anim_db = load_animation_database_from_file(&anim_file);
+            if(!s->second.anim_db.animations.empty()) {
                 s->second.anim_instance =
-                    animation_instance(&s->second.anim_pool);
+                    animation_instance(&s->second.anim_db);
                 s->second.anim_instance.cur_anim =
-                    s->second.anim_pool.animations[0];
+                    s->second.anim_db.animations[0];
                 s->second.anim_instance.start();
             }
         }
@@ -1178,6 +1178,33 @@ void load_system_animations() {
 
 
 /* ----------------------------------------------------------------------------
+ * Unloads the loaded area from memory.
+ */
+void unload_area() {
+    cur_area_data.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads the loaded area's sector textures from memory.
+ */
+void unload_area_textures() {
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        
+        if(s_ptr->texture_info.file_name.empty()) continue;
+        
+        bitmaps.detach(
+            TEXTURES_FOLDER_NAME + "/" +
+            s_ptr->texture_info.file_name
+        );
+        s_ptr->texture_info.file_name.clear();
+        s_ptr->texture_info.bitmap = NULL;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads custom particle generators loaded from memory.
  */
 void unload_custom_particle_generators() {
@@ -1193,11 +1220,19 @@ void unload_custom_particle_generators() {
 
 
 /* ----------------------------------------------------------------------------
+ * Unloads hazards loaded in memory.
+ */
+void unload_hazards() {
+    hazards.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads loaded liquids from memory.
  */
 void unload_liquids() {
     for(auto l = liquids.begin(); l != liquids.end(); ++l) {
-        l->second.anim_pool.destroy();
+        l->second.anim_db.destroy();
     }
     liquids.clear();
 }
@@ -1206,7 +1241,7 @@ void unload_liquids() {
 /* ----------------------------------------------------------------------------
  * Unloads miscellaneous graphics, sounds, and other resources.
  */
-void unload_resources() {
+void unload_misc_resources() {
     al_destroy_bitmap(bmp_checkbox_check);
     al_destroy_bitmap(bmp_cursor);
     al_destroy_bitmap(bmp_cursor_invalid);
@@ -1262,4 +1297,18 @@ void unload_spray_types() {
         bitmaps.detach(spray_types[s].bmp_spray);
     }
     spray_types.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded status effect types from memory.
+ */
+void unload_status_types(const bool unload_resources) {
+
+    if(unload_resources) {
+        for(auto s = status_types.begin(); s != status_types.end(); ++s) {
+            s->second.anim_db.destroy();
+        }
+    }
+    status_types.clear();
 }

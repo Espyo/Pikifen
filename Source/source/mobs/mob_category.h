@@ -63,6 +63,7 @@ public:
         const float angle, const string &vars
     ) = 0;
     virtual void erase_mob(mob* m) = 0;
+    virtual void clear_types() = 0;
     
     mob_category(
         const size_t id, const string &name, const string &plural_name,
@@ -106,6 +107,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     none_category();
 };
@@ -125,6 +127,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     pikmin_category();
 };
@@ -144,6 +147,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     enemy_category();
 };
@@ -163,6 +167,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     leader_category();
 };
@@ -182,6 +187,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     onion_category();
 };
@@ -201,6 +207,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     pellet_category();
 };
@@ -220,6 +227,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     ship_category();
 };
@@ -239,6 +247,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     treasure_category();
 };
@@ -258,6 +267,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     gate_category();
 };
@@ -277,6 +287,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     bridge_category();
 };
@@ -296,6 +307,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     special_category();
 };
@@ -315,6 +327,7 @@ public:
         const float angle, const string &vars
     );
     virtual void erase_mob(mob* m);
+    virtual void clear_types();
     
     custom_category();
 };

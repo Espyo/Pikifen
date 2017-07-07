@@ -63,12 +63,9 @@ pikmin_type::pikmin_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the Pikmin type from a data file.
+ * Loads parameters from a data file.
  */
-void pikmin_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
+void pikmin_type::load_parameters(data_node* file) {
     attack_power = s2f(file->get_child_by_name("attack_power")->value);
     throw_strength_mult =
         s2f(
@@ -98,36 +95,63 @@ void pikmin_type::load_from_file(
         }
     }
     
-    if(load_resources) {
-        bmp_top[0] =
-            bitmaps.get(file->get_child_by_name("top_leaf")->value, file);
-        bmp_top[1] =
-            bitmaps.get(file->get_child_by_name("top_bud")->value, file);
-        bmp_top[2] =
-            bitmaps.get(file->get_child_by_name("top_flower")->value, file);
-        bmp_icon =
-            bitmaps.get(file->get_child_by_name("icon")->value, file);
-        bmp_maturity_icon[0] =
-            bitmaps.get(file->get_child_by_name("icon_leaf")->value, file);
-        bmp_maturity_icon[1] =
-            bitmaps.get(file->get_child_by_name("icon_bud")->value, file);
-        bmp_maturity_icon[2] =
-            bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
-    }
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_IDLING,    "idling"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_WALKING,   "walking"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_THROWN,    "thrown"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_ATTACKING, "attacking"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_GRABBING,  "grabbing"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_SIGHING,   "sighing"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_CARRYING,  "carrying"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_BURIED,    "buried"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_PLUCKING,  "plucking"));
-    anim_conversions->push_back(make_pair(PIKMIN_ANIM_LYING,     "lying"));
-    
     pikmin_in_onions[this] =
         s2i(file->get_child_by_name("onion_starting_number")->value);
         
     max_throw_height =
         get_max_throw_height(get_throw_z_speed(throw_strength_mult));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads resources into memory.
+ */
+void pikmin_type::load_resources(data_node* file) {
+    bmp_top[0] =
+        bitmaps.get(file->get_child_by_name("top_leaf")->value, file);
+    bmp_top[1] =
+        bitmaps.get(file->get_child_by_name("top_bud")->value, file);
+    bmp_top[2] =
+        bitmaps.get(file->get_child_by_name("top_flower")->value, file);
+    bmp_icon =
+        bitmaps.get(file->get_child_by_name("icon")->value, file);
+    bmp_maturity_icon[0] =
+        bitmaps.get(file->get_child_by_name("icon_leaf")->value, file);
+    bmp_maturity_icon[1] =
+        bitmaps.get(file->get_child_by_name("icon_bud")->value, file);
+    bmp_maturity_icon[2] =
+        bitmaps.get(file->get_child_by_name("icon_flower")->value, file);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the vector of animation conversions.
+ */
+anim_conversion_vector pikmin_type::get_anim_conversions() {
+    anim_conversion_vector v;
+    v.push_back(make_pair(PIKMIN_ANIM_IDLING,    "idling"));
+    v.push_back(make_pair(PIKMIN_ANIM_WALKING,   "walking"));
+    v.push_back(make_pair(PIKMIN_ANIM_THROWN,    "thrown"));
+    v.push_back(make_pair(PIKMIN_ANIM_ATTACKING, "attacking"));
+    v.push_back(make_pair(PIKMIN_ANIM_GRABBING,  "grabbing"));
+    v.push_back(make_pair(PIKMIN_ANIM_SIGHING,   "sighing"));
+    v.push_back(make_pair(PIKMIN_ANIM_CARRYING,  "carrying"));
+    v.push_back(make_pair(PIKMIN_ANIM_BURIED,    "buried"));
+    v.push_back(make_pair(PIKMIN_ANIM_PLUCKING,  "plucking"));
+    v.push_back(make_pair(PIKMIN_ANIM_LYING,     "lying"));
+    return v;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads resources from memory.
+ */
+void pikmin_type::unload_resources() {
+    bitmaps.detach(bmp_top[0]);
+    bitmaps.detach(bmp_top[1]);
+    bitmaps.detach(bmp_top[2]);
+    bitmaps.detach(bmp_icon);
+    bitmaps.detach(bmp_maturity_icon[0]);
+    bitmaps.detach(bmp_maturity_icon[1]);
+    bitmaps.detach(bmp_maturity_icon[2]);
 }

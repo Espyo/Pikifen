@@ -45,8 +45,6 @@ private:
     void load_hud_info();
     void load_hud_coordinates(const int item, string data);
     void process_mob(mob* m_ptr, size_t m);
-    void unload_area();
-    void unload_area_textures();
     void unload_game_content();
     
 public:

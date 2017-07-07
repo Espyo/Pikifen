@@ -48,10 +48,13 @@ void load_spray_types(const bool load_resources);
 void load_status_types(const bool load_resources);
 void load_system_animations();
 
+void unload_area();
+void unload_area_textures();
 void unload_custom_particle_generators();
 void unload_liquids();
-void unload_resources();
+void unload_misc_resources();
 void unload_spray_types();
+void unload_status_types(const bool unload_resources);
 
 
 #endif //ifndef LOAD_INCLUDED

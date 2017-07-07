@@ -29,12 +29,9 @@ enemy_type::enemy_type() :
 
 
 /* ----------------------------------------------------------------------------
- * Loads data about the enemy type from a data file.
+ * Loads parameters from a data file.
  */
-void enemy_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
+void enemy_type::load_parameters(data_node* file) {
     drops_corpse =
         s2b(
             file->get_child_by_name("drops_corpse")->get_value_or_default("yes")

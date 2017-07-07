@@ -43,7 +43,7 @@ mob_type::mob_type(size_t category_id) :
     pushable(false),
     rotation_speed(DEF_ROTATION_SPEED),
     big_damage_interval(0),
-    create_mob(nullptr),
+    create_mob_func(nullptr),
     main_color(al_map_rgb(128, 128, 128)),
     territory_radius(0),
     first_state_nr(INVALID),
@@ -64,14 +64,42 @@ mob_type::~mob_type() {
 
 
 /* ----------------------------------------------------------------------------
- * Fills class members from a data file.
+ * Loads parameters from a data file, if any.
  */
-void mob_type::load_from_file(
-    data_node* file, const bool load_resources,
-    vector<pair<size_t, string> >* anim_conversions
-) {
-    if(load_from_file_func) {
-        load_from_file_func(file, load_resources, anim_conversions);
+void mob_type::load_parameters(data_node* file) {
+    if(load_parameters_func) {
+        load_parameters_func(file);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads any resources into memory, if any.
+ */
+void mob_type::load_resources(data_node* file) {
+    if(load_resources_func) {
+        load_resources_func(file);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Specifies what animation conversions there are, if any.
+ */
+anim_conversion_vector mob_type::get_anim_conversions() {
+    if(get_anim_conversions_func) {
+        return get_anim_conversions_func();
+    }
+    return anim_conversion_vector();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads loaded resources from memory.
+ */
+void mob_type::unload_resources() {
+    if(unload_resources_func) {
+        unload_resources_func();
     }
 }
 
@@ -157,9 +185,7 @@ void load_mob_types(bool load_resources) {
  * load_resources: False if you don't need the images and sounds,
  *   so it loads faster.
  */
-void load_mob_types(
-    mob_category* category, bool load_resources
-) {
+void load_mob_types(mob_category* category, bool load_resources) {
     if(category->folder.empty()) return;
     bool folder_found;
     vector<string> types =
@@ -195,8 +221,6 @@ void load_mob_type_from_file(
     const bool load_resources, const string &folder
 ) {
 
-    vector<pair<size_t, string> > anim_conversions;
-    
     reader_setter rs(&file);
     rs.set("name",                mt->name);
     rs.set("always_active",       mt->always_active);
@@ -265,21 +289,63 @@ void load_mob_type_from_file(
         }
     }
     
-    mt->load_from_file(&file, load_resources, &anim_conversions);
+    mt->load_parameters(&file);
     
     if(load_resources) {
-        mt->anims.create_conversions(anim_conversions);
+        mt->load_resources(&file);
+        mt->anims.create_conversions(mt->get_anim_conversions());
     }
 }
 
 
 /* ----------------------------------------------------------------------------
- * Unloads all loaded types of mob.
+ * Unloads a type of mob.
+ */
+void unload_mob_type(mob_type* mt, const bool unload_resources) {
+    if(unload_resources) {
+        mt->anims.destroy();
+        unload_script(mt);
+        
+        mt->unload_resources();
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads all loaded types of mob from memory.
  */
 void unload_mob_types(const bool unload_resources) {
-    //TODO
     leader_order.clear();
     pikmin_order.clear();
+    
+    for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
+        unload_mob_type(mt->second, unload_resources);
+    }
+    
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        mob_category* category = mob_categories.get(c);
+        unload_mob_types(category, unload_resources);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads all loaded types of mob from a category.
+ * category:         Pointer to the mob category.
+ * unload_resources: False if you don't need to unload images or sounds,
+ *   since they never got loaded in the first place.
+ */
+void unload_mob_types(mob_category* category, bool unload_resources) {
+
+    vector<string> type_names;
+    category->get_type_names(type_names);
+    
+    for(size_t t = 0; t < type_names.size(); ++t) {
+        mob_type* mt = category->get_type(type_names[t]);
+        unload_mob_type(mt, unload_resources);
+    }
+    
+    category->clear_types();
 }
 
 
