@@ -767,7 +767,8 @@
        y1="869.36218"
        x2="11"
        y2="869.36218"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.5,5.2343748e-6)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#metal2-9"
@@ -1211,6 +1212,29 @@
        x2="890"
        y2="1232.3622"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#metal2-9"
+       id="linearGradient4210-3"
+       x1="0.5"
+       y1="868.36218"
+       x2="10"
+       y2="868.36218"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1,0.50001782)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4856"
+       x="-0.114"
+       width="1.228"
+       y="-0.052615385"
+       height="1.1052308">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.57"
+         id="feGaussianBlur4858" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1219,11 +1243,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="317.69991"
-     inkscape:cy="-41.71085"
+     inkscape:zoom="12.783323"
+     inkscape:cx="0.12267655"
+     inkscape:cy="177.4986"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1872"
      inkscape:window-height="1055"
@@ -1241,7 +1265,9 @@
      inkscape:object-nodes="true"
      inkscape:snap-object-midpoints="false"
      inkscape:snap-center="true"
-     inkscape:snap-smooth-nodes="true">
+     inkscape:snap-smooth-nodes="true"
+     inkscape:measure-start="1.5,171"
+     inkscape:measure-end="1.5,195">
     <inkscape:grid
        type="xygrid"
        id="grid5513"
@@ -1515,14 +1541,14 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csscccccccsccsccccccccsc" />
     <path
-       style="fill:url(#linearGradient4210);fill-opacity:1;stroke:#404040;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:0.80000000000000004"
-       d="m 0.5,881.86218 5,0 6,-12.5 -6,-12.5 -5,0 6,12.5 z"
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:0.8;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#404040;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;filter:url(#filter4856)"
+       d="m 0,856.36218 0.5,1 5.5,12 -5.5,12 -0.5,1 h 6 l 0.5,-1 5.5,-12 -5.5,-12 -0.5,-1 z"
        id="path5645"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc"
-       inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\Move_group_arrow.png"
-       inkscape:export-xdpi="180"
-       inkscape:export-ydpi="180" />
+       sodipodi:nodetypes="ccccccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Group_move_arrow.png"
+       inkscape:export-xdpi="167.0379"
+       inkscape:export-ydpi="167.0379" />
     <path
        sodipodi:type="arc"
        style="fill:url(#linearGradient5739);fill-opacity:1;stroke:none"
@@ -2824,5 +2850,14 @@
        inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Cursor_invalid.png"
        inkscape:export-xdpi="192"
        inkscape:export-ydpi="192" />
+    <path
+       style="opacity:1;fill:url(#linearGradient4210-3);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1.5,881.36218 h 4 l 5.5,-12 -5.5,-12 h -4 l 5.5,12 z"
+       id="path5645-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccc"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikmin_fangame_engine/Game_data/Graphics/Group_move_arrow.png"
+       inkscape:export-xdpi="167.0379"
+       inkscape:export-ydpi="167.0379" />
   </g>
 </svg>

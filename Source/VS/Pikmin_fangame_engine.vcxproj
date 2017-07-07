@@ -95,6 +95,7 @@
     <ClInclude Include="..\source\editors\area_editor.h" />
     <ClInclude Include="..\source\editors\editor.h" />
     <ClInclude Include="..\source\functions.h" />
+    <ClInclude Include="..\source\gameplay.h" />
     <ClInclude Include="..\source\game_state.h" />
     <ClInclude Include="..\source\geometry_utils.h" />
     <ClInclude Include="..\source\hazard.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="..\source\editors\area_editor_loading.cpp" />
     <ClCompile Include="..\source\editors\editor.cpp" />
     <ClCompile Include="..\source\functions.cpp" />
+    <ClCompile Include="..\source\gameplay.cpp" />
     <ClCompile Include="..\source\game_state.cpp" />
     <ClCompile Include="..\source\geometry_utils.cpp" />
     <ClCompile Include="..\source\hazard.cpp" />

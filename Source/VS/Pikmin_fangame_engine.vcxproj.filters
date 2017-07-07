@@ -258,6 +258,9 @@
     <ClInclude Include="..\source\load.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\gameplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikmin_fangame_engine.rc">
@@ -502,6 +505,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\load.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

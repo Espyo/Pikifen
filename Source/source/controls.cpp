@@ -271,6 +271,8 @@ void handle_button(
 
     if(!ready_for_input) return;
     
+    bool is_down = (pos >= 0.5);
+    
     if(cur_message.empty()) {
     
         if(
@@ -286,7 +288,7 @@ void handle_button(
             *              V > *
             *******************/
             
-            if(pos != 0) active_control();
+            if(is_down) active_control();
             
             if(button == BUTTON_RIGHT) {
                 leader_movement.right = pos;
@@ -348,7 +350,7 @@ void handle_button(
         
             active_control();
             
-            group_move_cursor = (pos > 0);
+            group_move_cursor = is_down;
             
         } else if(button == BUTTON_THROW) {
         
@@ -358,7 +360,7 @@ void handle_button(
             *           &      *
             *******************/
             
-            if(pos > 0) { //Button press.
+            if(is_down) { //Button press.
             
                 active_control();
                 
@@ -470,7 +472,7 @@ void handle_button(
             
             active_control();
             
-            if(pos > 0) {
+            if(is_down) {
                 //Button pressed.
                 cur_leader_ptr->fsm.run_event(LEADER_EVENT_START_WHISTLE);
                 
@@ -491,7 +493,7 @@ void handle_button(
             *                    / \  / \ *
             ******************************/
             
-            if(pos == 0 || leaders.size() == 1) return;
+            if(!is_down || leaders.size() == 1) return;
             
             size_t new_leader_nr = cur_leader_nr;
             leader* new_leader_ptr = nullptr;
@@ -542,7 +544,7 @@ void handle_button(
             *             / \ \ *  *
             ***********************/
             
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
             
@@ -556,7 +558,7 @@ void handle_button(
             *           +-+ +-+ *
             ********************/
             
-            if(pos == 0) return;
+            if(!is_down) return;
             
             ready_for_input = false;
             fade_mgr.start_fade(
@@ -576,7 +578,7 @@ void handle_button(
             *             '-'  *
             *******************/
             
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
             
@@ -589,7 +591,7 @@ void handle_button(
             
         } else if(button == BUTTON_USE_SPRAY_2) {
         
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
             
@@ -605,7 +607,7 @@ void handle_button(
             button == BUTTON_PREV_SPRAY
         ) {
         
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down || cur_leader_ptr->holding_pikmin) return;
             
             if(spray_types.size() > 2) {
                 if(button == BUTTON_NEXT_SPRAY) {
@@ -621,7 +623,7 @@ void handle_button(
             
         } else if(button == BUTTON_USE_SPRAY) {
         
-            if(pos == 0 || cur_leader_ptr->holding_pikmin) return;
+            if(!is_down || cur_leader_ptr->holding_pikmin) return;
             
             active_control();
             
@@ -640,7 +642,7 @@ void handle_button(
             *          /   *
             ***************/
             
-            if(pos == 0) return;
+            if(!is_down) return;
             
             if(cam_final_zoom < zoom_mid_level) {
                 cam_final_zoom = zoom_max_level;
@@ -687,7 +689,7 @@ void handle_button(
             *                     *
             **********************/
             
-            if(pos == 0) return;
+            if(!is_down) return;
             
             cur_leader_ptr->fsm.run_event(LEADER_EVENT_LIE_DOWN);
             
@@ -703,7 +705,7 @@ void handle_button(
             *                           *
             ****************************/
             
-            if(pos == 0) return;
+            if(!is_down) return;
             
             active_control();
             
@@ -776,7 +778,7 @@ void handle_button(
             **********************************/
             
             if(
-                pos == 0 ||
+                !is_down ||
                 !cur_leader_ptr->holding_pikmin ||
                 cur_leader_ptr->holding_pikmin->type->category->id !=
                 MOB_CATEGORY_PIKMIN
@@ -839,7 +841,7 @@ void handle_button(
         
     } else { //Displaying a message.
     
-        if((button == BUTTON_THROW || button == BUTTON_PAUSE) && pos == 1) {
+        if((button == BUTTON_THROW || button == BUTTON_PAUSE) && is_down) {
             size_t stopping_char =
                 cur_message_stopping_chars[cur_message_section + 1];
             if(cur_message_char == stopping_char) {

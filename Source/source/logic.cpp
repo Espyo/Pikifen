@@ -306,8 +306,7 @@ void gameplay::do_gameplay_logic() {
         leader_movement.get_clean_info(
             &dummy_coords, &dummy_angle, &leader_move_magnitude
         );
-        if(leader_move_magnitude < 0.75) leader_move_magnitude = 0;
-        if(leader_move_magnitude == 0) {
+        if(leader_move_magnitude < 0.75) {
             cur_leader_ptr->fsm.run_event(
                 LEADER_EVENT_MOVE_END, (void*) &leader_movement
             );

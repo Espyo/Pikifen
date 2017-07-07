@@ -49,10 +49,6 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         Because windows sometimes break under Windows.
         Open Options.txt, go to the line with "window_pos_hack=false", and change it to "window_pos_hack=true".
     
-    Why is it so slow?
-        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
-        Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.
-    
     Why are some textures black, but not HUD elements?
         I'm not quite sure, but I can tell that this only happens if a) you're using Wine, b) with JPG images.
         So you can either try compiling the engine for your native platform to get rid of the problem, or change the JPG images on the Game_data folder to PNG, but remember to update files for areas, enemies, etc. to point to the new files.
@@ -61,6 +57,13 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
         1. Remember that file names are case sensitive. Lowercase and uppercase matter.
         2. Remember that you need to include the extension. This is the ".jpg" or ".png" part of the file name.
         3. Remember that the engine only finds textures if they're in the Game_data/Graphics/Textures folder.
+    
+    Why is Olimar moving when I'm not touching the analog stick?
+        You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if you only wiggle it a bit.
+    
+    Why is it so slow?
+        It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
+        Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.
     
     Why are some parts of the logic and physics so broken?
         Because their code is still under construction.

@@ -123,10 +123,10 @@ void gameplay::load() {
     cur_message_char_timer =
         timer(
             message_char_interval,
-            [] () {
-                cur_message_char_timer.start();
-                cur_message_char++;
-            }
+    [] () {
+        cur_message_char_timer.start();
+        cur_message_char++;
+    }
         );
         
     //Debug stuff for convenience.

@@ -1239,6 +1239,11 @@ void add_to_group(mob* group_leader, mob* new_member) {
         group_leader->group->cur_standby_type =
             new_member->subgroup_type_ptr;
     }
+    
+    if(group_leader->group->members.size() == 1) {
+        //If this is the first member, update the anchor position.
+        group_leader->group->anchor = group_leader->pos;
+    }
 }
 
 
