@@ -150,6 +150,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             http://www.gamasutra.com/blogs/JoshSutphin/20130416/190541/Doing_Thumbstick_Dead_Zones_Right.php
             http://blog.hypersect.com/interpreting-analog-sticks/
             https://gamedev.stackexchange.com/questions/59491/gamepad-thumbsticks-active-range
+            http://wyw.dcweb.cn/leakage.htm
+            http://www.dummies.com/education/science/physics/how-to-calculate-the-maximum-height-of-a-projectile/
+            http://www.melloland.com/scripts-and-tutos/collision-detection-between-circles-and-lines
+            http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+            http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
     Demo content
         Graphics

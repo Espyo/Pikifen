@@ -73,6 +73,8 @@
     <File Name="../source/load.cpp"/>
     <File Name="../source/gameplay.h"/>
     <File Name="../source/gameplay.cpp"/>
+    <File Name="../source/code_debug.h"/>
+    <File Name="../source/code_debug.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="LAFI">
     <File Name="../source/LAFI/frame.cpp"/>
