@@ -108,19 +108,20 @@ void mob_type::unload_resources() {
  * Loads all mob types.
  */
 void load_mob_types(bool load_resources) {
-    //Load the categorized mob types.
-    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
-        mob_category* category = mob_categories.get(c);
-        load_mob_types(category, load_resources);
-    }
-    
-    //Load the special mob types.
+    //Special mob types.
+    create_special_mob_types();
     for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
         string folder = SPECIAL_MOBS_FOLDER_PATH + "/" + mt->first;
         data_node file(folder + "/Data.txt");
         if(!file.file_was_opened) continue;
         
         load_mob_type_from_file(mt->second, file, load_resources, folder);
+    }
+    
+    //Load the categorized mob types.
+    for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
+        mob_category* category = mob_categories.get(c);
+        load_mob_types(category, load_resources);
     }
     
     //Pikmin type order.
@@ -210,6 +211,51 @@ void load_mob_types(mob_category* category, bool load_resources) {
         
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates the special mob types.
+ */
+void create_special_mob_types() {
+    mob_category* cat = mob_categories.get(MOB_CATEGORY_SPECIAL);
+    
+    //Info spot.
+    mob_type* info_spot_mt = new mob_type(MOB_CATEGORY_SPECIAL);
+    info_spot_mt->name = "Info spot";
+    info_spot_mt->radius = 16;
+    info_spot_mt->create_mob_func =
+    [] (const point pos, const float angle, const string & vars) -> mob* {
+        info_spot* m = new info_spot(pos, angle, vars);
+        info_spots.push_back(m);
+        return m;
+    };
+    info_spot_mt->erase_mob_func =
+    [] (mob * m) {
+        info_spots.erase(
+            find(info_spots.begin(), info_spots.end(), (info_spot*) m)
+        );
+    };
+    cat->register_type(info_spot_mt);
+    
+    //Nectar.
+    mob_type* nectar_mt = new mob_type(MOB_CATEGORY_SPECIAL);
+    nectar_mt->name = "Nectar";
+    nectar_mt->always_active = true;
+    nectar_mt->radius = 8;
+    nectar_mt->create_mob_func =
+    [] (const point pos, const float angle, const string & vars) -> mob* {
+        nectar* m = new nectar(pos, vars);
+        nectars.push_back(m);
+        return m;
+    };
+    nectar_mt->erase_mob_func =
+    [] (mob * m) {
+        nectars.erase(
+            find(nectars.begin(), nectars.end(), (nectar*) m)
+        );
+    };
+    cat->register_type(nectar_mt);
 }
 
 
@@ -317,10 +363,6 @@ void unload_mob_type(mob_type* mt, const bool unload_resources) {
 void unload_mob_types(const bool unload_resources) {
     leader_order.clear();
     pikmin_order.clear();
-    
-    for(auto mt = spec_mob_types.begin(); mt != spec_mob_types.end(); ++mt) {
-        unload_mob_type(mt->second, unload_resources);
-    }
     
     for(size_t c = 0; c < N_MOB_CATEGORIES; ++c) {
         mob_category* category = mob_categories.get(c);

@@ -411,39 +411,6 @@ void init_single_animation(
 
 
 /* ----------------------------------------------------------------------------
- * Initializes the special mob types.
- */
-void init_special_mob_types() {
-    mob_category* cat = mob_categories.get(MOB_CATEGORY_SPECIAL);
-    
-    //Info spot.
-    mob_type* info_spot_mt = new mob_type(MOB_CATEGORY_SPECIAL);
-    info_spot_mt->name = "Info spot";
-    info_spot_mt->radius = 16;
-    info_spot_mt->create_mob_func =
-    [] (const point pos, const float angle, const string & vars) -> mob* {
-        info_spot* m = new info_spot(pos, angle, vars);
-        info_spots.push_back(m);
-        return m;
-    };
-    cat->register_type(info_spot_mt);
-    
-    //Nectar.
-    mob_type* nectar_mt = new mob_type(MOB_CATEGORY_SPECIAL);
-    nectar_mt->name = "Nectar";
-    nectar_mt->always_active = true;
-    nectar_mt->radius = 8;
-    nectar_mt->create_mob_func =
-    [] (const point pos, const float angle, const string & vars) -> mob* {
-        nectar* m = new nectar(pos, vars);
-        nectars.push_back(m);
-        return m;
-    };
-    cat->register_type(nectar_mt);
-}
-
-
-/* ----------------------------------------------------------------------------
  * Destroys Allegro and modules.
  */
 void destroy_allegro() {
@@ -499,16 +466,4 @@ void destroy_misc() {
  */
 void destroy_mob_categories() {
     mob_categories.clear();
-}
-
-
-/* ----------------------------------------------------------------------------
- * Destroys the list of mob types.
- */
-void destroy_special_mob_types() {
-    for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
-        delete t->second;
-    }
-    
-    spec_mob_types.clear();
 }

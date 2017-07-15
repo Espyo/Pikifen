@@ -90,7 +90,9 @@ ALLEGRO_COLOR change_color_lighting(const ALLEGRO_COLOR &c, const float l) {
  * Changes the game's state.
  */
 void change_game_state(unsigned int new_state) {
-    game_states[cur_game_state_nr]->unload();
+    if(cur_game_state_nr != INVALID) {
+        game_states[cur_game_state_nr]->unload();
+    }
     cur_game_state_nr = new_state;
     game_states[cur_game_state_nr]->load();
     

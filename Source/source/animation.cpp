@@ -385,14 +385,14 @@ void animation_database::create_conversions(
  * Destroys an animation database and all of its content.
  */
 void animation_database::destroy() {
-    for(auto a = animations.begin(); a != animations.end(); ++a) {
-        delete *a;
+    for(size_t a = 0; a < animations.size(); ++a) {
+        delete animations[a];
     }
-    for(auto s = sprites.begin(); s != sprites.end(); ++s) {
-        delete *s;
+    for(size_t s = 0; s < sprites.size(); ++s) {
+        delete sprites[s];
     }
-    for(auto b = body_parts.begin(); b != body_parts.end(); ++b) {
-        delete *b;
+    for(size_t b = 0; b < body_parts.size(); ++b) {
+        delete body_parts[b];
     }
     animations.clear();
     sprites.clear();

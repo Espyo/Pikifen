@@ -110,7 +110,7 @@ timer cur_message_char_timer(0);
 size_t cur_message_section = 0;
 ALLEGRO_BITMAP* cur_message_speaker = NULL;
 vector<size_t> cur_message_stopping_chars;
-unsigned char cur_game_state_nr = GAME_STATE_GAME;
+size_t cur_game_state_nr = INVALID;
 float cur_sun_strength = 1;
 float cursor_angle = 0;
 float cursor_height_diff_light = 0;

@@ -203,6 +203,9 @@ void pikmin_category::erase_mob(mob* m) {
  * Clears the list of registered types of Pikmin.
  */
 void pikmin_category::clear_types() {
+    for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
+        delete t->second;
+    }
     pikmin_types.clear();
 }
 
@@ -282,6 +285,9 @@ void enemy_category::erase_mob(mob* m) {
  * Clears the list of registered types of enemy.
  */
 void enemy_category::clear_types() {
+    for(auto t = enemy_types.begin(); t != enemy_types.end(); ++t) {
+        delete t->second;
+    }
     enemy_types.clear();
 }
 
@@ -361,6 +367,9 @@ void leader_category::erase_mob(mob* m) {
  * Clears the list of registered types of leader.
  */
 void leader_category::clear_types() {
+    for(auto t = leader_types.begin(); t != leader_types.end(); ++t) {
+        delete t->second;
+    }
     leader_types.clear();
 }
 
@@ -440,6 +449,9 @@ void onion_category::erase_mob(mob* m) {
  * Clears the list of registered types of Onion.
  */
 void onion_category::clear_types() {
+    for(auto t = onion_types.begin(); t != onion_types.end(); ++t) {
+        delete t->second;
+    }
     onion_types.clear();
 }
 
@@ -519,6 +531,9 @@ void pellet_category::erase_mob(mob* m) {
  * Clears the list of registered types of pellet.
  */
 void pellet_category::clear_types() {
+    for(auto t = pellet_types.begin(); t != pellet_types.end(); ++t) {
+        delete t->second;
+    }
     pellet_types.clear();
 }
 
@@ -598,6 +613,9 @@ void ship_category::erase_mob(mob* m) {
  * Clears the list of registered types of ship.
  */
 void ship_category::clear_types() {
+    for(auto t = ship_types.begin(); t != ship_types.end(); ++t) {
+        delete t->second;
+    }
     ship_types.clear();
 }
 
@@ -677,6 +695,9 @@ void treasure_category::erase_mob(mob* m) {
  * Clears the list of registered types of treasure.
  */
 void treasure_category::clear_types() {
+    for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
+        delete t->second;
+    }
     treasure_types.clear();
 }
 
@@ -756,6 +777,9 @@ void gate_category::erase_mob(mob* m) {
  * Clears the list of registered types of gates.
  */
 void gate_category::clear_types() {
+    for(auto t = gate_types.begin(); t != gate_types.end(); ++t) {
+        delete t->second;
+    }
     gate_types.clear();
 }
 
@@ -835,6 +859,9 @@ void bridge_category::erase_mob(mob* m) {
  * Clears the list of registered types of bridges.
  */
 void bridge_category::clear_types() {
+    for(auto t = bridge_types.begin(); t != bridge_types.end(); ++t) {
+        delete t->second;
+    }
     bridge_types.clear();
 }
 
@@ -909,6 +936,9 @@ void special_category::erase_mob(mob* m) { }
  * Clears the list of special mob types.
  */
 void special_category::clear_types() {
+    for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
+        delete t->second;
+    }
     spec_mob_types.clear();
 }
 
@@ -983,5 +1013,8 @@ void custom_category::erase_mob(mob* m) { }
  * Clears the list of registered types of custom mob.
  */
 void custom_category::clear_types() {
+    for(auto t = custom_mob_types.begin(); t != custom_mob_types.end(); ++t) {
+        delete t->second;
+    }
     custom_mob_types.clear();
 }

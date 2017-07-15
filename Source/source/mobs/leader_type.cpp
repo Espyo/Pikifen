@@ -103,4 +103,10 @@ anim_conversion_vector leader_type::get_anim_conversions() {
  */
 void leader_type::unload_resources() {
     bitmaps.detach(bmp_icon);
+    //TODO these samples are only being destroyed here because
+    //they're being created in load_resource() with load_samples.
+    //When the loading changes, update this unload accordingly.
+    sfx_dismiss.destroy();
+    sfx_name_call.destroy();
+    sfx_whistle.destroy();
 }

@@ -96,6 +96,7 @@ public:
     function < mob* (
         const point pos, const float angle, const string &vars
     ) > create_mob_func;
+    function < void(mob*) > erase_mob_func;
     function < void(data_node* file) > load_parameters_func;
     function < void(data_node* file) > load_resources_func;
     function < anim_conversion_vector() > get_anim_conversions_func;
@@ -112,6 +113,7 @@ public:
 };
 
 
+void create_special_mob_types();
 void load_mob_types(mob_category* category, bool load_resources);
 void load_mob_types(bool load_resources);
 void load_mob_type_from_file(

@@ -1124,7 +1124,10 @@ void mob::lose_panic_from_status() {}
 void mob::change_maturity_amount_from_status(const int amount) {}
 
 
-mob::~mob() { }
+mob::~mob() {
+    if(carry_info) delete carry_info;
+    if(group) delete group;
+}
 
 
 /* ----------------------------------------------------------------------------
@@ -1442,7 +1445,11 @@ void delete_mob(mob* m) {
     remove_from_group(m);
     if(creator_tool_info_lock == m) creator_tool_info_lock = NULL;
     
-    m->type->category->erase_mob(m);
+    if(m->type->erase_mob_func) {
+        m->type->erase_mob_func(m);
+    } else {
+        m->type->category->erase_mob(m);
+    }
     mobs.erase(find(mobs.begin(), mobs.end(), m));
     
     delete m;

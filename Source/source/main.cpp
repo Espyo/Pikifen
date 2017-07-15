@@ -98,7 +98,6 @@ int main(int argc, char** argv) {
     
     //Init and load some other things.
     init_mob_categories();
-    init_special_mob_types();
     init_sector_types();
     init_hud_coordinates();
     load_creator_tools();
@@ -184,7 +183,6 @@ int main(int argc, char** argv) {
         game_states[cur_game_state_nr]->unload();
     }
     unload_misc_resources();
-    destroy_special_mob_types();
     destroy_mob_categories();
     destroy_game_states();
     destroy_misc();

@@ -402,6 +402,8 @@ void gameplay::unload() {
     bitmaps.detach(bmp_message_box);
     bitmaps.detach(bmp_no_pikmin_bubble);
     bitmaps.detach(bmp_sun);
+    
+    cur_message.clear();
 }
 
 

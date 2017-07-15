@@ -149,7 +149,7 @@ extern size_t cur_message_section;
 extern ALLEGRO_BITMAP* cur_message_speaker;
 //The message stops scrolling when it reaches one of these characters.
 extern vector<size_t> cur_message_stopping_chars;
-extern unsigned char cur_game_state_nr;
+extern size_t cur_game_state_nr;
 extern float cur_sun_strength;
 extern float cursor_angle;
 extern float cursor_height_diff_light;

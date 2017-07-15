@@ -271,7 +271,11 @@ void load_area(
             
         }
         
-        if(!problem) cur_area_data.mob_generators.push_back(mob_ptr);
+        if(!problem) {
+            cur_area_data.mob_generators.push_back(mob_ptr);
+        } else {
+            delete mob_ptr;
+        }
     }
     
     //Path stops.
