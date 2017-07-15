@@ -1971,7 +1971,7 @@ void draw_sector_texture(
         s_ptr->get_texture_merge_sectors(
             &texture_sector[0], &texture_sector[1]
         );
-        if(!texture_sector[0] || !texture_sector[1]) {
+        if(!texture_sector[0] && !texture_sector[1]) {
             //Can't draw this sector.
             return;
         }

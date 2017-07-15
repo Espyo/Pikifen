@@ -9,6 +9,8 @@
  * Data loading and unloading functions.
  */
 
+#include <algorithm>
+
 #include "load.h"
 
 #include "editors/area_editor.h"
@@ -458,15 +460,20 @@ void load_area_textures() {
  * If the node is present, it'll be used to report errors.
  */
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node, bool report_error
+    const string &file_name, data_node* node,
+    const bool report_error, const bool error_bmp_on_error
 ) {
     if(file_name.empty()) return NULL;
     ALLEGRO_BITMAP* b =
         al_load_bitmap((GRAPHICS_FOLDER_PATH + "/" + file_name).c_str());
         
-    if(!b && report_error) {
-        log_error("Could not open image " + file_name + "!", node);
-        b = bmp_error;
+    if(!b) {
+        if(report_error) {
+            log_error("Could not open image " + file_name + "!", node);
+        }
+        if(error_bmp_on_error) {
+            b = bmp_error;
+        }
     }
     
     return b;

@@ -48,9 +48,9 @@ void main_menu::load() {
     bmp_menu_bg = load_bmp("Main_menu.jpg");
     
     data_node title_screen_logo_file =
-    load_data_file(
-        ANIMATIONS_FOLDER_PATH + "/Title_screen_logo.txt"
-    );
+        load_data_file(
+            ANIMATIONS_FOLDER_PATH + "/Title_screen_logo.txt"
+        );
     logo = load_animation_database_from_file(&title_screen_logo_file);
     if(!logo.animations.empty()) {
         logo_anim = animation_instance(&logo);

@@ -27,7 +27,8 @@ void load_area(
 );
 void load_area_textures();
 ALLEGRO_BITMAP* load_bmp(
-    const string &file_name, data_node* node = NULL, bool report_error = true
+    const string &file_name, data_node* node = NULL,
+    const bool report_error = true, const bool error_bmp_on_error = true
 );
 void load_control(
     const unsigned char action, const unsigned char player,

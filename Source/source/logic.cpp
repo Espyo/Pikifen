@@ -526,7 +526,14 @@ void gameplay::do_gameplay_logic() {
                 60
             );
         string health_str =
-            box_string("Health: " + f2s(creator_tool_info_lock->health) + ".", 30);
+            box_string(
+                "Health: " +
+                f2s(creator_tool_info_lock->health) +
+                " / " +
+                f2s(creator_tool_info_lock->type->max_health) +
+                ".",
+                30
+            );
         string timer_str =
             box_string(
                 "Timer: " +
@@ -577,7 +584,10 @@ void gameplay::do_gameplay_logic() {
     
     info_print_timer.tick(delta_t);
     
-    ready_for_input = true;
+    if(!ready_for_input) {
+        ready_for_input = true;
+        is_input_allowed = true;
+    }
     
 }
 
@@ -604,9 +614,9 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         pending_intermob_event(
             const dist &d, mob_event* event_ptr, mob* mob_ptr
         ) :
-        d(d),
-        event_ptr(event_ptr),
-        mob_ptr(mob_ptr) { }
+            d(d),
+            event_ptr(event_ptr),
+            mob_ptr(mob_ptr) { }
     };
     
     vector<pending_intermob_event> pending_intermob_events;
@@ -1049,7 +1059,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                 q_get_event(m_ptr, MOB_EVENT_OBJECT_IN_REACH);
             mob_event* opir_ev =
                 q_get_event(m_ptr, MOB_EVENT_OPPONENT_IN_REACH);
-            
+                
             mob_type::reach_struct* r_ptr =
                 &m_ptr->type->reaches[m_ptr->near_reach];
             if(obir_ev || opir_ev) {
@@ -1107,16 +1117,16 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
     //Check the pending inter-mob events.
     sort(
         pending_intermob_events.begin(), pending_intermob_events.end(),
-        [m_ptr] (pending_intermob_event e1, pending_intermob_event e2) -> bool {
-            return
-                (
-                    e1.d.to_float() -
-                    (m_ptr->type->radius + e1.mob_ptr->type->radius)
-                ) < (
-                    e2.d.to_float() -
-                    (m_ptr->type->radius + e2.mob_ptr->type->radius)
-                );
-        }
+    [m_ptr] (pending_intermob_event e1, pending_intermob_event e2) -> bool {
+        return
+        (
+            e1.d.to_float() -
+            (m_ptr->type->radius + e1.mob_ptr->type->radius)
+        ) < (
+            e2.d.to_float() -
+            (m_ptr->type->radius + e2.mob_ptr->type->radius)
+        );
+    }
     );
     
     for(size_t e = 0; e < pending_intermob_events.size(); ++e) {

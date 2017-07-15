@@ -73,7 +73,10 @@ private:
     
 public:
     bmp_manager();
-    ALLEGRO_BITMAP* get(const string &name, data_node* node = NULL);
+    ALLEGRO_BITMAP* get(
+        const string &name, data_node* node = NULL,
+        const bool report_errors = true
+    );
     void detach(ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
     void clear();

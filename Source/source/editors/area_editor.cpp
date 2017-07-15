@@ -601,7 +601,7 @@ void area_editor::change_reference(string new_file_name) {
     reference_bitmap = NULL;
     
     if(!new_file_name.empty()) {
-        reference_bitmap = load_bmp(new_file_name, NULL, false);
+        reference_bitmap = load_bmp(new_file_name, NULL, false, false);
     }
     reference_file_name = new_file_name;
     reference_to_gui();
@@ -2917,7 +2917,7 @@ texture_suggestion::texture_suggestion(const string &n) :
     bmp(NULL),
     name(n) {
     
-    bmp = bitmaps.get(TEXTURES_FOLDER_NAME + "/" + name, NULL);
+    bmp = bitmaps.get(TEXTURES_FOLDER_NAME + "/" + name, NULL, false);
 }
 
 

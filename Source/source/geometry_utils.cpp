@@ -9,6 +9,8 @@
  * Geometry-related utility functions.
  */
 
+#include <algorithm>
+
 #include "geometry_utils.h"
 #include "functions.h"
 

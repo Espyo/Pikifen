@@ -170,6 +170,7 @@ timer info_print_timer =
 float info_spot_trigger_range = 64.0f;
 vector<info_spot*> info_spots;
 bool is_game_running = true;
+bool is_input_allowed = false;
 float joystick_min_deadzone = 0.2f;
 float joystick_max_deadzone = 0.9f;
 map<ALLEGRO_JOYSTICK*, int> joystick_numbers;

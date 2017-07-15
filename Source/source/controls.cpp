@@ -262,14 +262,14 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
  * button: The button's ID. Use BUTTON_*.
  * pos:    The position of the button, i.e., how much it's "held".
  *   0 means it was released. 1 means it was fully pressed.
- *   For controls with more sensibility, values between 0 and 1 are important.
+ *   For controls with more sensitivity, values between 0 and 1 are important.
  *   Like a 0.5 for the group movement makes it move at half distance.
  */
 void handle_button(
     const unsigned int button, const unsigned char player, float pos
 ) {
 
-    if(!ready_for_input) return;
+    if(!ready_for_input || !is_input_allowed) return;
     
     bool is_down = (pos >= 0.5);
     
@@ -560,12 +560,12 @@ void handle_button(
             
             if(!is_down) return;
             
-            ready_for_input = false;
+            is_input_allowed = false;
             fade_mgr.start_fade(
                 false,
-                [] () {
-                    change_game_state(GAME_STATE_MAIN_MENU);
-                }
+            [] () {
+                change_game_state(GAME_STATE_MAIN_MENU);
+            }
             );
             
             //paused = true;

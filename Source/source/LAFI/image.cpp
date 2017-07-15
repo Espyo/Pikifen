@@ -35,6 +35,7 @@ image::~image() {}
  * Draws the actual image.
  */
 void image::draw_self() {
+    if(!bmp) return;
     float bmp_w = al_get_bitmap_width(bmp);
     float bmp_h = al_get_bitmap_height(bmp);
     al_draw_scaled_bitmap(

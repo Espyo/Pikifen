@@ -41,11 +41,14 @@ bmp_manager::bmp_manager() :
 /* ----------------------------------------------------------------------------
  * Returns the specified bitmap, by name.
  */
-ALLEGRO_BITMAP* bmp_manager::get(const string &name, data_node* node) {
-    if(name.empty()) return load_bmp("", node);
+ALLEGRO_BITMAP* bmp_manager::get(
+    const string &name, data_node* node,
+    const bool report_errors
+) {
+    if(name.empty()) return load_bmp("", node, report_errors);
     
     if(list.find(name) == list.end()) {
-        ALLEGRO_BITMAP* b = load_bmp(name, node);
+        ALLEGRO_BITMAP* b = load_bmp(name, node, report_errors);
         list[name] = bmp_info(b);
         total_calls++;
         return b;

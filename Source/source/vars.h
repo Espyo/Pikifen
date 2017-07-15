@@ -223,6 +223,8 @@ extern timer info_print_timer;
 extern float info_spot_trigger_range;
 extern vector<info_spot*> info_spots;
 extern bool is_game_running;
+//Is input enabled in general, for reasons outside the ready_for_input variable?
+extern bool is_input_allowed;
 extern float joystick_min_deadzone;
 extern float joystick_max_deadzone;
 extern map<ALLEGRO_JOYSTICK*, int> joystick_numbers;
@@ -291,7 +293,9 @@ extern bool pretty_whistle;
 //Time since start, on the previous frame.
 //Used to calculate the time difference between the current and last frames.
 extern double prev_frame_time;
-//Ready for gameplay-related input?
+//The first frame shouldn't allow for input just yet, because
+//some things are still being set up within the first logic loop.
+//So forbid input until the second frame.
 extern bool ready_for_input;
 //Is delta_t meant to be reset for the next frame?
 extern bool reset_delta_t;
