@@ -1568,6 +1568,10 @@ void animation_editor::load() {
                 (lafi::textbox*)
                 this->gui->widgets["frm_body_parts"]->widgets["txt_add"]
             )->text;
+        (
+            (lafi::textbox*)
+            this->gui->widgets["frm_body_parts"]->widgets["txt_add"]
+        )->text.clear();
         if(name.empty()) return;
         for(size_t b = 0; b < anims.body_parts.size(); ++b) {
             if(anims.body_parts[b]->name == name) {

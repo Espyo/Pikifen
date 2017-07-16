@@ -1440,9 +1440,15 @@ mob* create_mob(
  * It's always removed from the vector of mobs, but it's
  * also removed from the vector of Pikmin if it's a Pikmin,
  * leaders if it's a leader, etc.
+ * m:                    The mob to delete.
+ * complete_destruction: If true, don't bother removing it from groups and such,
+ *   since everything is going to be destroyed.
  */
-void delete_mob(mob* m) {
-    remove_from_group(m);
+void delete_mob(mob* m, const bool complete_destruction) {
+    if(!complete_destruction) {
+        remove_from_group(m);
+    }
+    
     if(creator_tool_info_lock == m) creator_tool_info_lock = NULL;
     
     if(m->type->erase_mob_func) {

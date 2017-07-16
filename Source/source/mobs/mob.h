@@ -416,7 +416,7 @@ mob* create_mob(
     mob_category* category, const point &pos, mob_type* type,
     const float angle, const string &vars
 );
-void delete_mob(mob* m);
+void delete_mob(mob* m, const bool complete_destruction = false);
 void focus_mob(mob* m1, mob* m2);
 hitbox* get_closest_hitbox(
     const point &p, mob* m, const size_t h_type = INVALID, dist* d = NULL

@@ -177,6 +177,22 @@ void load_mob_types(bool load_resources) {
             );
         }
     }
+    
+    //The hitbox span of all Pikmin and leader sprites
+    //should be the size of the Pikmin/leader, since the entire
+    //Pikmin/leader IS the hitbox.
+    for(auto p = pikmin_types.begin(); p != pikmin_types.end(); ++p) {
+        for(size_t s = 0; s < p->second->anims.sprites.size(); ++s) {
+            sprite* s_ptr = p->second->anims.sprites[s];
+            s_ptr->hitbox_span = p->second->radius;
+        }
+    }
+    for(auto l = leader_types.begin(); l != leader_types.end(); ++l) {
+        for(size_t s = 0; s < l->second->anims.sprites.size(); ++s) {
+            sprite* s_ptr = l->second->anims.sprites[s];
+            s_ptr->hitbox_span = l->second->radius;
+        }
+    }
 }
 
 

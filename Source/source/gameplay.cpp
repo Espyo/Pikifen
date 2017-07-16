@@ -376,7 +376,7 @@ void gameplay::unload() {
     cam_zoom = cam_final_zoom = 1.0f;
     
     while(!mobs.empty()) {
-        delete_mob(*mobs.begin());
+        delete_mob(*mobs.begin(), true);
     }
     
     if(lightmap_bmp) {
@@ -404,6 +404,7 @@ void gameplay::unload() {
     bitmaps.detach(bmp_sun);
     
     cur_message.clear();
+    info_print_text.clear();
 }
 
 
