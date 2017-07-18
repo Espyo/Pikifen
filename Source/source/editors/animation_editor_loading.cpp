@@ -278,6 +278,28 @@ void animation_editor::load() {
     );
     frm_anim->easy_row();
     frm_anim->easy_add(
+        "chk_missable",
+        new lafi::checkbox("Missable attack"), 100, 16
+    );
+    frm_anim->easy_row();
+    frm_anim->easy_add(
+        "dum_1",
+        new lafi::dummy(), 10, 16
+    );
+    frm_anim->easy_add(
+        "lbl_hit_rate",
+        new lafi::label("Hit rate:"), 50, 16
+    );
+    frm_anim->easy_add(
+        "txt_hit_rate",
+        new lafi::textbox(), 30, 16
+    );
+    frm_anim->easy_add(
+        "lbl_hit_rate_p",
+        new lafi::label("%"), 10, 16
+    );
+    frm_anim->easy_row();
+    frm_anim->easy_add(
         "lin_3",
         new lafi::line(), 25, 12
     );
@@ -365,6 +387,8 @@ void animation_editor::load() {
     //Animations -- properties.
     auto lambda_gui_to_animation =
     [this] (lafi::widget*) { gui_to_animation(); };
+    auto lambda_gui_to_animation_click =
+    [this] (lafi::widget*, int, int) { gui_to_animation(); };
     auto lambda_gui_to_frame =
     [this] (lafi::widget*) { gui_to_frame(); };
     
@@ -408,7 +432,22 @@ void animation_editor::load() {
         lambda_gui_to_animation;
     frm_anim->widgets["txt_loop"]->description =
         "The animation loops back to this frame when it ends.";
+    
+    frm_anim->widgets["chk_missable"]->left_mouse_click_handler =
+    [this, frm_anim] (lafi::widget* c, int, int) {
+        if(((lafi::checkbox*) c)->checked) {
+            ((lafi::textbox*) frm_anim->widgets["txt_hit_rate"])->text = "50";
+        }
+        gui_to_animation();
+    };
+    frm_anim->widgets["chk_missable"]->description =
+        "Is it an attack that can knock back Pikmin, but miss?";
         
+    frm_anim->widgets["txt_hit_rate"]->lose_focus_handler =
+        lambda_gui_to_animation;
+    frm_anim->widgets["txt_hit_rate"]->description =
+        "Chance that a Pikmin will actually be knocked back.";
+    
     frm_anim->widgets["but_play"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(cur_anim->frames.size() < 2) {

@@ -325,8 +325,26 @@ void animation_editor::animation_to_gui() {
         show_widget(f->widgets["frm_anim"]);
         
         ((lafi::button*) f->widgets["but_anim"])->text = cur_anim->name;
-        ((lafi::textbox*) f->widgets["frm_anim"]->widgets["txt_loop"])->text =
+        f = f->widgets["frm_anim"];
+        ((lafi::textbox*) f->widgets["txt_loop"])->text =
             i2s(cur_anim->loop_frame + 1);
+        
+        if(cur_anim->hit_rate == 100) {
+            ((lafi::checkbox*) f->widgets["chk_missable"])->uncheck();
+            hide_widget(f->widgets["lbl_hit_rate"]);
+            hide_widget(f->widgets["txt_hit_rate"]);
+            hide_widget(f->widgets["lbl_hit_rate_p"]);
+            ((lafi::textbox*) f->widgets["txt_hit_rate"])->text = "100";
+            
+        } else {
+            ((lafi::checkbox*) f->widgets["chk_missable"])->check();
+            show_widget(f->widgets["lbl_hit_rate"]);
+            show_widget(f->widgets["txt_hit_rate"]);
+            show_widget(f->widgets["lbl_hit_rate_p"]);
+            ((lafi::textbox*) f->widgets["txt_hit_rate"])->text =
+                i2s(cur_anim->hit_rate);
+            
+        }
             
         frame_to_gui();
     }
@@ -564,6 +582,13 @@ void animation_editor::gui_to_animation() {
         s2i(((lafi::textbox*) f->widgets["txt_loop"])->text) - 1;
     if(cur_anim->loop_frame >= cur_anim->frames.size()) {
         cur_anim->loop_frame = 0;
+    }
+    if(((lafi::checkbox*) f->widgets["chk_missable"])->checked) {
+        cur_anim->hit_rate =
+            s2i(((lafi::textbox*) f->widgets["txt_hit_rate"])->text);
+        cur_anim->hit_rate = clamp(cur_anim->hit_rate, 0, 100);
+    } else {
+        cur_anim->hit_rate = 100;
     }
     
     gui_to_frame();
@@ -1213,6 +1238,11 @@ void animation_editor::save_animation_database() {
         anim_node->add(
             new data_node("loop_frame", i2s(anims.animations[a]->loop_frame))
         );
+        if(anims.animations[a]->hit_rate != 100) {
+            anim_node->add(
+                new data_node("hit_rate", i2s(anims.animations[a]->hit_rate))
+            );
+        }
         data_node* frames_node = new data_node("frames", "");
         anim_node->add(frames_node);
         

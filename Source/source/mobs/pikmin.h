@@ -96,6 +96,10 @@ public:
     mob* carrying_mob;
     //Carrying spot reserved for it.
     size_t carrying_spot;
+    //The Pikmin is considering this attack animation as having "missed".
+    animation* missed_attack_ptr;
+    //The Pikmin will consider the miss for this long.
+    timer missed_attack_timer;
     
     //0: leaf. 1: bud. 2: flower.
     unsigned char maturity;

@@ -103,6 +103,7 @@ animations{
 	}
 	bucking{
 		loop_frame=0
+		hit_rate=95
 		frames{
 			bucking1{
 				duration=0.10

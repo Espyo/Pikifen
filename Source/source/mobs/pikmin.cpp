@@ -19,6 +19,8 @@
 #include "pikmin_fsm.h"
 #include "../vars.h"
 
+static const float PIKMIN_MISSED_ATTACK_DURATION = 1.5f;
+
 /* ----------------------------------------------------------------------------
  * Creates a Pikmin mob.
  */
@@ -32,6 +34,13 @@ pikmin::pikmin(
     carrying_mob(NULL),
     carrying_spot(0),
     maturity(s2i(get_var_value(vars, "maturity", "2"))),
+    missed_attack_ptr(nullptr),
+    missed_attack_timer(
+        PIKMIN_MISSED_ATTACK_DURATION,
+        [this] () {
+            this->missed_attack_ptr = NULL;
+        }
+    ),
     connected_hitbox_nr(INVALID),
     connected_hitbox_dist(0),
     connected_hitbox_angle(0) {
@@ -212,6 +221,10 @@ void pikmin::tick_class_specifics() {
         
         sfx_pikmin_dying.play(0.03, false);
     }
+    
+    //Tick the timer for the "missed" attack animation.
+    missed_attack_timer.tick(delta_t);
+    
 }
 
 

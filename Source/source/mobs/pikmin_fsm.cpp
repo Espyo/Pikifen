@@ -64,7 +64,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -107,7 +106,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -154,7 +152,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -211,7 +208,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -247,10 +243,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.change_state("in_group_chasing");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
-            efc.run(pikmin_fsm::notify_leader_release);
-            efc.run(pikmin_fsm::be_released);
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::notify_leader_release);
@@ -323,7 +316,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -367,7 +359,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -403,7 +394,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -446,7 +436,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::forget_carriable_object);
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::forget_carriable_object);
@@ -486,7 +475,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -520,7 +508,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -559,7 +546,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_TOUCHED_HAZARD); {
             efc.run(pikmin_fsm::touched_hazard);
@@ -596,7 +582,6 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_N_A); {
             efc.run(pikmin_fsm::get_knocked_down);
-            efc.change_state("knocked_back");
         }
         efc.new_event(MOB_EVENT_HITBOX_TOUCH_EAT); {
             efc.run(pikmin_fsm::be_grabbed_by_enemy);
@@ -957,6 +942,25 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     hitbox_touch_info* info = (hitbox_touch_info*) info1;
+    pikmin* p_ptr = (pikmin*) m;
+    
+    if(info->mob2->anim.cur_anim == p_ptr->missed_attack_ptr) {
+        //In a previous frame, we had already considered this animation a miss.
+        return;
+    }
+    
+    unsigned char hit_rate = info->mob2->anim.cur_anim->hit_rate;
+    if(hit_rate == 0) return;
+    
+    float hit_roll = randomi(0, 100);
+    if(hit_roll > hit_rate) {
+        //This attack was randomly decided to be a miss.
+        //Record this animation so it won't be considered a hit next frame.
+        p_ptr->missed_attack_ptr = info->mob2->anim.cur_anim;
+        p_ptr->missed_attack_timer.start();
+        return;
+    }
+    
     float knockback = 0;
     float knockback_angle = 0;
     
@@ -968,6 +972,10 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_LYING);
     
     remove_from_group(m);
+    
+    pikmin_fsm::be_released(m, info1, info2);
+    pikmin_fsm::notify_leader_release(m, info1, info2);
+    m->fsm.set_state(PIKMIN_STATE_KNOCKED_BACK);
 }
 
 

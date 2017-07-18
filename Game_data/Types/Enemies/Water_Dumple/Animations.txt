@@ -44,6 +44,7 @@ animations{
 	}
 	attacking{
 		loop_frame=0
+		hit_rate=50
 		frames{
 			attacking1{
 				duration=0.40
@@ -67,6 +68,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
+		hit_rate=50
 		frames{
 			shaking1{
 				duration=0.10

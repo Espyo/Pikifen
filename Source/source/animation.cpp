@@ -167,11 +167,12 @@ frame::frame(
  */
 animation::animation(
     const string &name, vector<frame> frames,
-    const size_t loop_frame
+    const size_t loop_frame, const unsigned char hit_rate
 ) :
     name(name),
     frames(frames),
-    loop_frame(loop_frame) {
+    loop_frame(loop_frame),
+    hit_rate(hit_rate) {
     
 }
 
@@ -182,7 +183,8 @@ animation::animation(
 animation::animation(const animation &a2) :
     name(a2.name),
     frames(a2.frames),
-    loop_frame(a2.loop_frame) {
+    loop_frame(a2.loop_frame),
+    hit_rate(a2.hit_rate) {
 }
 
 
@@ -561,7 +563,10 @@ animation_database load_animation_database_from_file(data_node* file_node) {
             new animation(
                 anim_node->name,
                 frames,
-                s2i(anim_node->get_child_by_name("loop_frame")->value)
+                s2i(anim_node->get_child_by_name("loop_frame")->value),
+                s2i(anim_node->get_child_by_name(
+                    "hit_rate"
+                )->get_value_or_default("100"))
             )
         );
     }

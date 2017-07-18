@@ -64,6 +64,7 @@ animations{
 	}
 	shaking{
 		loop_frame=0
+		hit_rate=90
 		frames{
 			attacking1{
 				duration=0.10
@@ -105,6 +106,7 @@ animations{
 	}
 	attacking{
 		loop_frame=0
+		hit_rate=20
 		frames{
 			attacking_gas{
 				duration=0.50

@@ -140,11 +140,15 @@ public:
     vector<frame> frames;
     //The animation loops back to this frame when it reaches the end.
     size_t loop_frame;
+    //If this animation represents an attack that can miss,
+    //this represents the successful hit rate.
+    //100 means it cannot miss and/or is a normal animation.
+    unsigned char hit_rate;
     
     animation(
         const string &name = "",
         vector<frame> frames = vector<frame>(),
-        const size_t loop_frame = 0
+        const size_t loop_frame = 0, const unsigned char hit_rate = 100
     );
     animation(const animation &a2);
 };
