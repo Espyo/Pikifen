@@ -120,127 +120,13 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
         }
     }
     
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_button(actions[a].button, actions[a].pos, actions[a].player);
+    }
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
         size_t n_controls = controls[p].size();
-        for(size_t c = 0; c < n_controls; ++c) {
-        
-            control_info* con = &controls[p][c];
-            
-            if(
-                con->type == CONTROL_TYPE_KEYBOARD_KEY &&
-                (
-                    ev.type == ALLEGRO_EVENT_KEY_DOWN ||
-                    ev.type == ALLEGRO_EVENT_KEY_UP
-                )
-            ) {
-                if(con->button == ev.keyboard.keycode) {
-                    handle_button(
-                        con->action, p,
-                        (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0
-                    );
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_MOUSE_BUTTON &&
-                (
-                    ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
-                    ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
-                )
-            ) {
-                if(con->button == (signed) ev.mouse.button) {
-                    handle_button(
-                        con->action, p,
-                        (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ? 1 : 0
-                    );
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_MOUSE_WHEEL_UP &&
-                ev.type == ALLEGRO_EVENT_MOUSE_AXES
-            ) {
-                if(ev.mouse.dz > 0) {
-                    handle_button(con->action, p, ev.mouse.dz);
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN &&
-                ev.type == ALLEGRO_EVENT_MOUSE_AXES
-            ) {
-                if(ev.mouse.dz < 0) {
-                    handle_button(con->action, p, -ev.mouse.dz);
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_MOUSE_WHEEL_LEFT &&
-                ev.type == ALLEGRO_EVENT_MOUSE_AXES
-            ) {
-                if(ev.mouse.dw < 0) {
-                    handle_button(con->action, p, -ev.mouse.dw);
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT &&
-                ev.type == ALLEGRO_EVENT_MOUSE_AXES
-            ) {
-                if(ev.mouse.dw > 0) {
-                    handle_button(con->action, p, ev.mouse.dw);
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_JOYSTICK_BUTTON &&
-                (
-                    ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN ||
-                    ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP
-                )
-            ) {
-                if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
-                    (signed) con->button == ev.joystick.button
-                ) {
-                    handle_button(
-                        con->action, p,
-                        (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ? 1 : 0
-                    );
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_JOYSTICK_AXIS_POS &&
-                ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
-            ) {
-                if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
-                    con->stick == ev.joystick.stick &&
-                    con->axis == ev.joystick.axis
-                ) {
-                    if(ev.joystick.pos >= 0) {
-                        handle_button(con->action, p, ev.joystick.pos);
-                    } else {
-                        //Makes it so that, for instance, quickly tilting the
-                        //stick left will also send a "tilt right" event of 0.
-                        handle_button(con->action, p, 0);
-                    }
-                }
-                
-            } else if(
-                con->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG &&
-                ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
-            ) {
-                if(
-                    con->device_nr == joystick_numbers[ev.joystick.id] &&
-                    con->stick == ev.joystick.stick &&
-                    con->axis == ev.joystick.axis
-                ) {
-                    if(ev.joystick.pos <= 0) {
-                        handle_button(con->action, p, -ev.joystick.pos);
-                    } else {
-                        //Makes it so that, for instance, quickly tilting the
-                        //stick left will also send a "tilt right" event of 0.
-                        handle_button(con->action, p, 0);
-                    }
-                }
-            }
-        }
         
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
             mouse_cursor_s.x = ev.mouse.x;
@@ -264,9 +150,10 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
  *   0 means it was released. 1 means it was fully pressed.
  *   For controls with more sensitivity, values between 0 and 1 are important.
  *   Like a 0.5 for the group movement makes it move at half distance.
+ * player: Number of the player that pressed.
  */
-void handle_button(
-    const unsigned int button, const unsigned char player, float pos
+void gameplay::handle_button(
+    const size_t button, const float pos, const size_t player
 ) {
 
     if(!ready_for_input || !is_input_allowed) return;
@@ -668,12 +555,12 @@ void handle_button(
                 return;
             }
             
-            pos = floor(pos);
+            float floored_pos = floor(pos);
             
             if(button == BUTTON_ZOOM_IN) {
-                cam_final_zoom = cam_final_zoom + 0.1 * pos;
+                cam_final_zoom = cam_final_zoom + 0.1 * floored_pos;
             } else {
-                cam_final_zoom = cam_final_zoom - 0.1 * pos;
+                cam_final_zoom = cam_final_zoom - 0.1 * floored_pos;
             }
             
             if(cam_final_zoom > zoom_max_level) cam_final_zoom = zoom_max_level;
@@ -866,8 +753,174 @@ void handle_button(
  * This function makes the leader wake up from lying down,
  * stop auto-plucking, etc.
  */
-void active_control() {
+void gameplay::active_control() {
     cur_leader_ptr->fsm.run_event(LEADER_EVENT_CANCEL);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Grabs an ALLEGRO_EVENT and checks all available controls.
+ * For every control that matches, it adds its input information to a vector,
+ * which it then returns.
+ * ev:   Pointer to the event.
+ * func: Pointer to the function to run.
+ */
+vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
+
+    vector<action_from_event> actions;
+    
+    for(size_t p = 0; p < MAX_PLAYERS; p++) {
+        size_t n_controls = controls[p].size();
+        for(size_t c = 0; c < n_controls; ++c) {
+        
+            control_info* con = &controls[p][c];
+            
+            if(
+                con->type == CONTROL_TYPE_KEYBOARD_KEY &&
+                (
+                    ev.type == ALLEGRO_EVENT_KEY_DOWN ||
+                    ev.type == ALLEGRO_EVENT_KEY_UP
+                )
+            ) {
+                if(con->button == ev.keyboard.keycode) {
+                    actions.push_back(
+                        action_from_event(
+                            con->action,
+                            (ev.type == ALLEGRO_EVENT_KEY_DOWN) ? 1 : 0,
+                            p
+                        )
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_MOUSE_BUTTON &&
+                (
+                    ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN ||
+                    ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP
+                )
+            ) {
+                if(con->button == (signed) ev.mouse.button) {
+                    actions.push_back(
+                        action_from_event(
+                            con->action,
+                            (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) ?
+                            1 : 0,
+                            p
+                        )
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_MOUSE_WHEEL_UP &&
+                ev.type == ALLEGRO_EVENT_MOUSE_AXES
+            ) {
+                if(ev.mouse.dz > 0) {
+                    actions.push_back(
+                        action_from_event(con->action, ev.mouse.dz, p)
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_MOUSE_WHEEL_DOWN &&
+                ev.type == ALLEGRO_EVENT_MOUSE_AXES
+            ) {
+                if(ev.mouse.dz < 0) {
+                    actions.push_back(
+                        action_from_event(con->action, -ev.mouse.dz, p)
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_MOUSE_WHEEL_LEFT &&
+                ev.type == ALLEGRO_EVENT_MOUSE_AXES
+            ) {
+                if(ev.mouse.dw < 0) {
+                    actions.push_back(
+                        action_from_event(con->action, -ev.mouse.dw, p)
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_MOUSE_WHEEL_RIGHT &&
+                ev.type == ALLEGRO_EVENT_MOUSE_AXES
+            ) {
+                if(ev.mouse.dw > 0) {
+                    actions.push_back(
+                        action_from_event(con->action, ev.mouse.dw, p)
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_JOYSTICK_BUTTON &&
+                (
+                    ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN ||
+                    ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP
+                )
+            ) {
+                if(
+                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    (signed) con->button == ev.joystick.button
+                ) {
+                    actions.push_back(
+                        action_from_event(
+                            con->action,
+                            (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) ?
+                            1 : 0,
+                            p
+                        )
+                    );
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_JOYSTICK_AXIS_POS &&
+                ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
+            ) {
+                if(
+                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    con->stick == ev.joystick.stick &&
+                    con->axis == ev.joystick.axis
+                ) {
+                    if(ev.joystick.pos >= 0) {
+                        actions.push_back(
+                            action_from_event(con->action, ev.joystick.pos, p)
+                        );
+                    } else {
+                        //Makes it so that, for instance, quickly tilting the
+                        //stick left will also send a "tilt right" event of 0.
+                        actions.push_back(
+                            action_from_event(con->action, 0, p)
+                        );
+                    }
+                }
+                
+            } else if(
+                con->type == CONTROL_TYPE_JOYSTICK_AXIS_NEG &&
+                ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS
+            ) {
+                if(
+                    con->device_nr == joystick_numbers[ev.joystick.id] &&
+                    con->stick == ev.joystick.stick &&
+                    con->axis == ev.joystick.axis
+                ) {
+                    if(ev.joystick.pos <= 0) {
+                        actions.push_back(
+                            action_from_event(con->action, -ev.joystick.pos, p)
+                        );
+                    } else {
+                        //Makes it so that, for instance, quickly tilting the
+                        //stick left will also send a "tilt right" event of 0.
+                        actions.push_back(
+                            action_from_event(con->action, 0, p)
+                        );
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    return actions;
+    
 }
 
 

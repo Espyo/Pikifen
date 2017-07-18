@@ -14,7 +14,9 @@
 #ifndef CONTROLS_INCLUDED
 #define CONTROLS_INCLUDED
 
+#include <functional>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -43,12 +45,19 @@ struct control_info {
 };
 
 
+struct action_from_event {
+    size_t button;
+    float pos;
+    size_t player;
+    action_from_event(
+        const size_t button, const float pos, const size_t player
+    ) :
+        button(button),
+        pos(pos),
+        player(player) { }
+};
 
-void handle_button(
-    const unsigned int button, const unsigned char player, float pos
-);
-void active_control();
-
+vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev);
 
 
 enum BUTTONS {
@@ -85,6 +94,12 @@ enum BUTTONS {
     BUTTON_PREV_MATURITY,
     BUTTON_LIE_DOWN,
     BUTTON_PAUSE,
+    BUTTON_MENU_RIGHT,
+    BUTTON_MENU_UP,
+    BUTTON_MENU_LEFT,
+    BUTTON_MENU_DOWN,
+    BUTTON_MENU_OK,
+    BUTTON_MENU_BACK,
     
     N_BUTTONS,
 };

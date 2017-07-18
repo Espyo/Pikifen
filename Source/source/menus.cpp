@@ -99,14 +99,14 @@ void main_menu::load() {
     }, "Area editor", font_area_name
         )
     );
-    menu_widgets.push_back(
+    back_widget =
         new menu_button(
-            point(scr_w * 0.5, scr_h * 0.87), point(scr_w * 0.8, scr_h * 0.08),
+        point(scr_w * 0.5, scr_h * 0.87), point(scr_w * 0.8, scr_h * 0.08),
     [] () {
         is_game_running = false;
     }, "Exit", font_area_name
-        )
     );
+    menu_widgets.push_back(back_widget);
     
     
     //Finishing touches.
@@ -142,13 +142,6 @@ void main_menu::handle_controls(const ALLEGRO_EVENT &ev) {
     if(fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
-    
-    if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            is_game_running = false;
-        }
-    }
-    
 }
 
 
@@ -283,15 +276,15 @@ void options_menu::load() {
     ">", font_main
         )
     );
-    menu_widgets.push_back(
+    back_widget =
         new menu_button(
-            point(scr_w * 0.9, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
+        point(scr_w * 0.9, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
     [this] () {
         leave();
     },
     "Exit", font_main
-        )
     );
+    menu_widgets.push_back(back_widget);
     
     for(size_t c = 0; c < 8; c++) {
         control_widgets.push_back(
@@ -517,12 +510,6 @@ void options_menu::handle_controls(const ALLEGRO_EVENT &ev) {
     
         handle_widget_events(ev);
         
-        if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-            if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-                leave();
-            }
-        }
-        
     }
     
 }
@@ -719,17 +706,18 @@ void area_menu::load() {
         )
     );
     
-    menu_widgets.push_back(
+    back_widget =
         new menu_button(
-            point(scr_w * 0.8, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
+        point(scr_w * 0.8, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
     [] () {
         fade_mgr.start_fade(false, [] () {
             change_game_state(GAME_STATE_MAIN_MENU);
         });
     },
     "Back", font_main
-        )
     );
+    
+    menu_widgets.push_back(back_widget);
     
     for(size_t a = 0; a < 8; ++a) {
         menu_widgets.push_back(
@@ -788,8 +776,12 @@ void area_menu::load() {
     
     //Finishing touches.
     fade_mgr.start_fade(true, nullptr);
-    set_selected_widget(menu_widgets[0]);
     update();
+    if(menu_widgets.size() >= 3) {
+        set_selected_widget(menu_widgets[2]);
+    } else {
+        set_selected_widget(menu_widgets[1]);
+    }
     
 }
 
@@ -822,12 +814,6 @@ void area_menu::handle_controls(const ALLEGRO_EVENT &ev) {
     if(fade_mgr.is_fading()) return;
     
     handle_widget_events(ev);
-    
-    if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
-            leave();
-        }
-    }
     
 }
 

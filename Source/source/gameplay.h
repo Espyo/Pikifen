@@ -34,6 +34,7 @@ private:
     
     point cam_box[2];
     
+    void active_control();
     void do_aesthetic_logic();
     void do_game_drawing(
         ALLEGRO_BITMAP* bmp_output = NULL,
@@ -41,6 +42,9 @@ private:
     );
     void do_gameplay_logic();
     ALLEGRO_BITMAP* draw_to_bitmap();
+    void handle_button(
+        const size_t button, const float pos, const size_t player
+    );
     void load_game_content();
     void load_hud_info();
     void load_hud_coordinates(const int item, string data);

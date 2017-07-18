@@ -151,6 +151,24 @@ void init_controls() {
     buttons.add(
         BUTTON_PAUSE, "Pause", "pause", "k_59"
     );
+    buttons.add(
+        BUTTON_MENU_RIGHT, "Menu right", "menu_right", "k_83"
+    );
+    buttons.add(
+        BUTTON_MENU_UP, "Menu up", "menu_up", "k_84"
+    );
+    buttons.add(
+        BUTTON_MENU_LEFT, "Menu left", "menu_left", "k_82"
+    );
+    buttons.add(
+        BUTTON_MENU_DOWN, "Menu down", "menu_down", "k_85"
+    );
+    buttons.add(
+        BUTTON_MENU_OK, "Menu OK", "menu_ok", "k_67"
+    );
+    buttons.add(
+        BUTTON_MENU_BACK, "Menu back", "menu_back", "k_59"
+    );
     
     controls.assign(MAX_PLAYERS, vector<control_info>());
     

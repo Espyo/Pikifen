@@ -18,7 +18,14 @@
  * Creates a game state.
  */
 game_state::game_state() :
-    selected_widget(NULL) {
+    selected_widget(NULL),
+    back_widget(NULL),
+    right_pressed(false),
+    up_pressed(false),
+    left_pressed(false),
+    down_pressed(false),
+    ok_pressed(false),
+    back_pressed(false) {
     
 }
 
@@ -57,108 +64,155 @@ void game_state::handle_widget_events(ALLEGRO_EVENT ev) {
         }
     }
     
-    if(
-        (
-            ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
-            ev.mouse.button == 1
-        ) || (
-            ev.type == ALLEGRO_EVENT_KEY_DOWN &&
-            (
-                ev.keyboard.keycode == ALLEGRO_KEY_SPACE ||
-                ev.keyboard.keycode == ALLEGRO_KEY_ENTER
-            )
-        )
-    ) {
-    
-        if(selected_widget)
-            selected_widget->click();
-            
+    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
+        if(selected_widget) selected_widget->click();
     }
+    
+    vector<action_from_event> actions = get_actions_from_event(ev);
+    for(size_t a = 0; a < actions.size(); ++a) {
+        handle_menu_button(
+            actions[a].button, actions[a].pos, actions[a].player
+        );
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a button "press" in a menu. Technically, it could also be
+ * a button release.
+ * button: The button's ID. Use BUTTON_*.
+ * pos:    The position of the button, i.e., how much it's "held".
+ *   0 means it was released. 1 means it was fully pressed.
+ *   For controls with more sensitivity, values between 0 and 1 are important.
+ *   Like a 0.5 for the group movement makes it move at half distance.
+ * player: Number of the player that pressed.
+ */
+void game_state::handle_menu_button(
+    const size_t action, const float pos, const size_t player
+) {
+
+    bool is_down = (pos >= 0.5);
     
     //Selecting a different widget with the arrow keys.
-    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+    if(
+        action == BUTTON_MENU_RIGHT ||
+        action == BUTTON_MENU_UP ||
+        action == BUTTON_MENU_LEFT ||
+        action == BUTTON_MENU_DOWN
+    ) {
     
-        if(
-            ev.keyboard.keycode == ALLEGRO_KEY_RIGHT ||
-            ev.keyboard.keycode == ALLEGRO_KEY_UP ||
-            ev.keyboard.keycode == ALLEGRO_KEY_LEFT ||
-            ev.keyboard.keycode == ALLEGRO_KEY_DOWN
-        ) {
-            if(!selected_widget) selected_widget = menu_widgets[0];
+        size_t pressed = BUTTON_NONE;
+        if(action == BUTTON_MENU_RIGHT) {
+            if(!right_pressed && is_down) {
+                pressed = BUTTON_MENU_RIGHT;
+            }
+            right_pressed = is_down;
             
-            menu_widget* closest_widget = NULL;
-            dist closest_widget_dist;
-            point cur_pivot;
-            point w2_pivot;
+        } else if(action == BUTTON_MENU_UP) {
+            if(!up_pressed && is_down) {
+                pressed = BUTTON_MENU_UP;
+            }
+            up_pressed = is_down;
             
-            for(size_t w = 0; w < menu_widgets.size(); w++) {
-                menu_widget* w_ptr = menu_widgets[w];
-                if(
-                    w_ptr == selected_widget ||
-                    !w_ptr->is_clickable()
-                ) {
-                    continue;
-                }
-                
-                if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-                    cur_pivot.x =
-                        selected_widget->pos.x + selected_widget->size.x * 0.25;
-                    cur_pivot.y =
-                        selected_widget->pos.y;
-                    w2_pivot.x = w_ptr->pos.x - w_ptr->size.x * 0.25;
-                    w2_pivot.y = w_ptr->pos.y;
-                    
-                    if(selected_widget->pos.x == w_ptr->pos.x) continue;
-                    if(cur_pivot.x > w2_pivot.x) w2_pivot.x += scr_w;
-                    
-                } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-                    cur_pivot.x =
-                        selected_widget->pos.x;
-                    cur_pivot.y =
-                        selected_widget->pos.y - selected_widget->size.y * 0.25;
-                    w2_pivot.x = w_ptr->pos.x;
-                    w2_pivot.y = w_ptr->pos.y + w_ptr->size.y * 0.25;
-                    
-                    if(selected_widget->pos.y == w_ptr->pos.y) continue;
-                    if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= scr_h;
-                    
-                } else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-                    cur_pivot.x =
-                        selected_widget->pos.x - selected_widget->size.x * 0.25;
-                    cur_pivot.y =
-                        selected_widget->pos.y;
-                    w2_pivot.x = w_ptr->pos.x + w_ptr->size.x * 0.25;
-                    w2_pivot.y = w_ptr->pos.y;
-                    
-                    if(selected_widget->pos.x == w_ptr->pos.x) continue;
-                    if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= scr_w;
-                    
-                } else {
-                    cur_pivot.x =
-                        selected_widget->pos.x;
-                    cur_pivot.y =
-                        selected_widget->pos.y + selected_widget->size.y * 0.25;
-                    w2_pivot.x = w_ptr->pos.x;
-                    w2_pivot.y = w_ptr->pos.y - w_ptr->size.y * 0.25;
-                    
-                    if(selected_widget->pos.y == w_ptr->pos.y) continue;
-                    if(cur_pivot.y > w2_pivot.y) w2_pivot.y += scr_h;
-                }
-                
-                dist d(cur_pivot, w2_pivot);
-                
-                if(!closest_widget || d <= closest_widget_dist) {
-                    closest_widget = w_ptr;
-                    closest_widget_dist = d;
-                }
+        } else if(action == BUTTON_MENU_LEFT) {
+            if(!left_pressed && is_down) {
+                pressed = BUTTON_MENU_LEFT;
+            }
+            left_pressed = is_down;
+            
+        } else if(action == BUTTON_MENU_DOWN) {
+            if(!down_pressed && is_down) {
+                pressed = BUTTON_MENU_DOWN;
+            }
+            down_pressed = is_down;
+            
+        }
+        
+        if(pressed == BUTTON_NONE) return;
+        
+        if(!selected_widget) selected_widget = menu_widgets[0];
+        
+        menu_widget* closest_widget = NULL;
+        dist closest_widget_dist;
+        point cur_pivot;
+        point w2_pivot;
+        
+        for(size_t w = 0; w < menu_widgets.size(); w++) {
+            menu_widget* w_ptr = menu_widgets[w];
+            if(
+                w_ptr == selected_widget ||
+                !w_ptr->is_clickable()
+            ) {
+                continue;
             }
             
-            if(closest_widget) {
-                set_selected_widget(closest_widget);
+            if(pressed == BUTTON_MENU_RIGHT) {
+                cur_pivot.x =
+                    selected_widget->pos.x + selected_widget->size.x * 0.25;
+                cur_pivot.y =
+                    selected_widget->pos.y;
+                w2_pivot.x = w_ptr->pos.x - w_ptr->size.x * 0.25;
+                w2_pivot.y = w_ptr->pos.y;
+                
+                if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                if(cur_pivot.x > w2_pivot.x) w2_pivot.x += scr_w;
+                
+            } else if(pressed == BUTTON_MENU_UP) {
+                cur_pivot.x =
+                    selected_widget->pos.x;
+                cur_pivot.y =
+                    selected_widget->pos.y - selected_widget->size.y * 0.25;
+                w2_pivot.x = w_ptr->pos.x;
+                w2_pivot.y = w_ptr->pos.y + w_ptr->size.y * 0.25;
+                
+                if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                if(cur_pivot.y < w2_pivot.y) w2_pivot.y -= scr_h;
+                
+            } else if(pressed == BUTTON_MENU_LEFT) {
+                cur_pivot.x =
+                    selected_widget->pos.x - selected_widget->size.x * 0.25;
+                cur_pivot.y =
+                    selected_widget->pos.y;
+                w2_pivot.x = w_ptr->pos.x + w_ptr->size.x * 0.25;
+                w2_pivot.y = w_ptr->pos.y;
+                
+                if(selected_widget->pos.x == w_ptr->pos.x) continue;
+                if(cur_pivot.x < w2_pivot.x) w2_pivot.x -= scr_w;
+                
+            } else {
+                cur_pivot.x =
+                    selected_widget->pos.x;
+                cur_pivot.y =
+                    selected_widget->pos.y + selected_widget->size.y * 0.25;
+                w2_pivot.x = w_ptr->pos.x;
+                w2_pivot.y = w_ptr->pos.y - w_ptr->size.y * 0.25;
+                
+                if(selected_widget->pos.y == w_ptr->pos.y) continue;
+                if(cur_pivot.y > w2_pivot.y) w2_pivot.y += scr_h;
+            }
+            
+            dist d(cur_pivot, w2_pivot);
+            
+            if(!closest_widget || d <= closest_widget_dist) {
+                closest_widget = w_ptr;
+                closest_widget_dist = d;
             }
         }
-    }
+        
+        if(closest_widget) {
+            set_selected_widget(closest_widget);
+        }
+        
+    } else if(action == BUTTON_MENU_OK && is_down) {
     
+        if(selected_widget) selected_widget->click();
+        
+    } else if(action == BUTTON_MENU_BACK && is_down) {
+    
+        if(back_widget) back_widget->click();
+        
+    }
 }
 
 
