@@ -2100,59 +2100,9 @@ void draw_sector_texture(
  * Draws the full-screen effects that will represent lighting.
  */
 void gameplay::draw_lighting_filter() {
-    //Draw the daylight.
-    al_draw_filled_rectangle(0, 0, scr_w, scr_h, get_daylight_color());
-    
-    unsigned char blackout_s = get_blackout_strength();
-    if(blackout_s > 0) {
-        //Draw the blackout effect.
-        //First, we'll create the lightmap.
-        //This is inverted (white = darkness, black = light), because we'll
-        //apply it to the screen using a subtraction operation.
-        al_set_target_bitmap(lightmap_bmp);
-        
-        //For starters, the whole screen is dark (white in the map).
-        al_clear_to_color(map_gray(blackout_s));
-        
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
-        al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
-        );
-        al_set_separate_blender(
-            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
-            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
-        );
-        
-        //Then, find out spotlights, and draw their lights on the map (as black).
-        al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            point pos = mobs[m]->pos;
-            al_transform_coordinates(&world_to_screen_transform, &pos.x, &pos.y);
-            float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
-            al_draw_scaled_bitmap(
-                bmp_spotlight,
-                0, 0, 64, 64,
-                pos.x - radius, pos.y - radius,
-                radius * 2.0, radius * 2.0,
-                0
-            );
-        }
-        al_hold_bitmap_drawing(false);
-        
-        //Now, simply darken the screen using the map.
-        al_set_target_backbuffer(display);
-        
-        al_draw_bitmap(lightmap_bmp, 0, 0, 0);
-        
-        al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
-        );
-    
-    }
-    
+    //Draw the fog effect.
     ALLEGRO_COLOR fog_c = get_fog_color();
     if(fog_c.a > 0) {
-        //Draw fog.
         //Start by drawing the central fog fade out effect.
         
         point fog_top_left =
@@ -2212,6 +2162,64 @@ void gameplay::draw_lighting_filter() {
         );
         
     }
+    
+    //Draw the daylight.
+    ALLEGRO_COLOR daylight_c = get_daylight_color();
+    if(daylight_c.a > 0) {
+        al_draw_filled_rectangle(0, 0, scr_w, scr_h, daylight_c);
+    }
+    
+    //Draw the blackout effect.
+    unsigned char blackout_s = get_blackout_strength();
+    if(blackout_s > 0) {
+        //First, we'll create the lightmap.
+        //This is inverted (white = darkness, black = light), because we'll
+        //apply it to the screen using a subtraction operation.
+        al_set_target_bitmap(lightmap_bmp);
+        
+        //For starters, the whole screen is dark (white in the map).
+        al_clear_to_color(map_gray(blackout_s));
+        
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(
+            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+        );
+        al_set_separate_blender(
+            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
+            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
+        );
+        
+        //Then, find out spotlights, and draw
+        //their lights on the map (as black).
+        al_hold_bitmap_drawing(true);
+        for(size_t m = 0; m < mobs.size(); ++m) {
+            point pos = mobs[m]->pos;
+            al_transform_coordinates(
+                &world_to_screen_transform,
+                &pos.x, &pos.y
+            );
+            float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
+            al_draw_scaled_bitmap(
+                bmp_spotlight,
+                0, 0, 64, 64,
+                pos.x - radius, pos.y - radius,
+                radius * 2.0, radius * 2.0,
+                0
+            );
+        }
+        al_hold_bitmap_drawing(false);
+        
+        //Now, simply darken the screen using the map.
+        al_set_target_backbuffer(display);
+        
+        al_draw_bitmap(lightmap_bmp, 0, 0, 0);
+        
+        al_set_separate_blender(
+            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+        );
+    
+    }
+    
 }
 
 

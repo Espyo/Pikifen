@@ -48,6 +48,7 @@ sample_struct load_sample(const string &file_name, ALLEGRO_MIXER* const mixer);
 void load_spray_types(const bool load_resources);
 void load_status_types(const bool load_resources);
 void load_system_animations();
+void load_weather();
 
 void unload_area();
 void unload_area_textures();

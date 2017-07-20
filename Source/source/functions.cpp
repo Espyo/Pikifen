@@ -428,7 +428,7 @@ float get_sun_strength() {
     size_t n_points = cur_area_data.weather_condition.sun_strength.size();
     
     if(n_points == 0) {
-        return 1.0;
+        return 1.0f;
     } else if(n_points == 1) {
         return cur_area_data.weather_condition.sun_strength[0].second;
     }

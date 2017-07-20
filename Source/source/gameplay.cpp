@@ -229,6 +229,7 @@ void gameplay::load_game_content() {
     load_spray_types(true);
     load_hazards();
     load_hud_info();
+    load_weather();
     
     //Mob types.
     load_mob_types(true);
@@ -241,120 +242,6 @@ void gameplay::load_game_content() {
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_BOMB);
     subgroup_types.register_type(SUBGROUP_TYPE_CATEGORY_LEADER);
     
-    //Weather.
-    data_node weather_file = load_data_file(WEATHER_FILE);
-    size_t n_weather_conditions =
-        weather_file.get_nr_of_children_by_name("weather");
-        
-    for(size_t wc = 0; wc < n_weather_conditions; ++wc) {
-        data_node* weather_node = weather_file.get_child_by_name("weather", wc);
-        weather weather_struct;
-        
-        weather_struct.name = weather_node->get_child_by_name("name")->value;
-        if(weather_struct.name.empty()) {
-            weather_struct.name = "default";
-        }
-        
-        //Lighting.
-        vector<pair<size_t, string> > lighting_table =
-            get_weather_table(weather_node->get_child_by_name("lighting"));
-            
-        for(size_t p = 0; p < lighting_table.size(); ++p) {
-            weather_struct.daylight.push_back(
-                make_pair(
-                    lighting_table[p].first,
-                    s2c(lighting_table[p].second)
-                )
-            );
-        }
-        
-        if(weather_struct.daylight.empty()) {
-            log_error(
-                "Weather condition " +
-                weather_struct.name +
-                " has no lighting!"
-            );
-        }
-        
-        //Sun's strength.
-        vector<pair<size_t, string> > sun_strength_table =
-            get_weather_table(weather_node->get_child_by_name("sun_strength"));
-            
-        for(size_t p = 0; p < sun_strength_table.size(); ++p) {
-            weather_struct.sun_strength.push_back(
-                make_pair(
-                    sun_strength_table[p].first,
-                    s2i(sun_strength_table[p].second)
-                )
-            );
-        }
-        
-        //Blackout effect's strength.
-        vector<pair<size_t, string> > blackout_strength_table =
-            get_weather_table(
-                weather_node->get_child_by_name("blackout_strength")
-            );
-            
-        for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
-            weather_struct.blackout_strength.push_back(
-                make_pair(
-                    blackout_strength_table[p].first,
-                    s2i(blackout_strength_table[p].second)
-                )
-            );
-        }
-        
-        //Fog.
-        weather_struct.fog_near =
-            s2f(weather_node->get_child_by_name("fog_near")->value);
-        weather_struct.fog_far =
-            s2f(weather_node->get_child_by_name("fog_far")->value);
-        weather_struct.fog_near = max(weather_struct.fog_near, 0.0f);
-        weather_struct.fog_far =
-            max(weather_struct.fog_far, weather_struct.fog_near);
-        
-        vector<pair<size_t, string> > fog_color_table =
-            get_weather_table(
-                weather_node->get_child_by_name("fog_color")
-            );
-        for(size_t p = 0; p < fog_color_table.size(); ++p) {
-            weather_struct.fog_color.push_back(
-                make_pair(
-                    fog_color_table[p].first,
-                    s2c(fog_color_table[p].second)
-                )
-            );
-        }
-        
-        //Precipitation.
-        weather_struct.precipitation_type =
-            s2i(
-                weather_node->get_child_by_name(
-                    "precipitation_type"
-                )->get_value_or_default(i2s(PRECIPITATION_TYPE_NONE))
-            );
-        weather_struct.precipitation_frequency =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_frequency"
-                )->value
-            );
-        weather_struct.precipitation_speed =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_speed"
-                )->value
-            );
-        weather_struct.precipitation_angle =
-            interval(
-                weather_node->get_child_by_name(
-                    "precipitation_angle"
-                )->get_value_or_default(f2s((M_PI + M_PI_2)))
-            );
-            
-        //Save.
-        weather_conditions[weather_struct.name] = weather_struct;
-    }
 }
 
 
@@ -506,6 +393,7 @@ void gameplay::unload() {
     bitmaps.detach(bmp_sun);
     if(bmp_fog) {
         al_destroy_bitmap(bmp_fog);
+        bmp_fog = NULL;
     }
     
     cur_message.clear();
