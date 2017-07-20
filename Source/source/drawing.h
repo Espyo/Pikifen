@@ -54,7 +54,6 @@ void draw_health(
     const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS,
     const bool just_chart = false
 );
-void draw_lighting_filter();
 void draw_liquid(
     sector* s_ptr, const point &where, const float scale
 );

@@ -343,6 +343,38 @@ ALLEGRO_COLOR get_daylight_color() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the fog color for the current time and weather.
+ */
+ALLEGRO_COLOR get_fog_color() {
+    size_t n_points = cur_area_data.weather_condition.fog_color.size();
+    
+    if(n_points == 0) {
+        return al_map_rgba(255, 255, 255, 0);
+    } else if(n_points == 1) {
+        return cur_area_data.weather_condition.fog_color[0].second;
+    }
+    
+    for(size_t p = 0; p < n_points - 1; ++p) {
+        auto cur_ptr = &cur_area_data.weather_condition.fog_color[p];
+        auto next_ptr = &cur_area_data.weather_condition.fog_color[p + 1];
+        
+        if(day_minutes >= cur_ptr->first && day_minutes < next_ptr->first) {
+        
+            return
+                interpolate_color(
+                    day_minutes,
+                    cur_ptr->first, next_ptr->first,
+                    cur_ptr->second, next_ptr->second
+                );
+        }
+    }
+    
+    //If anything goes wrong, return a failsafe.
+    return al_map_rgba(255, 255, 255, 0);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the highest height a thrown mob can reach, given the Z speed
  * of the throw. This is only the theoritical max; framerate may tamper
  * with the exact value.

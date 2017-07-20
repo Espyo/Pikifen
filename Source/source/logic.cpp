@@ -32,14 +32,6 @@ void gameplay::do_aesthetic_logic() {
     *                               `-´  *
     **************************************/
     
-    //Camera movement.
-    cam_pos.x +=
-        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    cam_pos.y +=
-        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-    cam_zoom +=
-        (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
-        
     //"Move group" arrows.
     if(group_move_magnitude) {
         group_move_next_arrow_timer.tick(delta_t);
@@ -192,6 +184,14 @@ const float CAMERA_BOX_MARGIN = 128.0f;
  */
 void gameplay::do_gameplay_logic() {
 
+    //Camera movement.
+    cam_pos.x +=
+        (cam_final_pos.x - cam_pos.x) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_pos.y +=
+        (cam_final_pos.y - cam_pos.y) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+    cam_zoom +=
+        (cam_final_zoom - cam_zoom) * (CAMERA_SMOOTHNESS_MULT * delta_t);
+        
     game_states[cur_game_state_nr]->update_transformations();
     
     //Set the camera bounding box.

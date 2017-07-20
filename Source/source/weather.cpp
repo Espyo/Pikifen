@@ -27,6 +27,8 @@ weather::weather(
     daylight(dl),
     blackout_strength(bs),
     sun_strength(ss),
+    fog_near(0),
+    fog_far(0),
     precipitation_type(pt),
     precipitation_frequency(pf),
     precipitation_speed(ps),

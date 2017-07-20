@@ -27,6 +27,7 @@ private:
     ALLEGRO_BITMAP* bmp_counter_bubble_total;
     ALLEGRO_BITMAP* bmp_day_bubble;
     ALLEGRO_BITMAP* bmp_distant_pikmin_marker;
+    ALLEGRO_BITMAP* bmp_fog;
     ALLEGRO_BITMAP* bmp_hard_bubble;
     ALLEGRO_BITMAP* bmp_message_box;
     ALLEGRO_BITMAP* bmp_no_pikmin_bubble;
@@ -41,7 +42,11 @@ private:
         ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
     void do_gameplay_logic();
+    void draw_lighting_filter();
     ALLEGRO_BITMAP* draw_to_bitmap();
+    ALLEGRO_BITMAP* generate_fog_bitmap(
+        const float near, const float far
+    );
     void handle_button(
         const size_t button, const float pos, const size_t player
     );

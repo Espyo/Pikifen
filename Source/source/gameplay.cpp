@@ -32,11 +32,86 @@ gameplay::gameplay() :
     bmp_counter_bubble_total(nullptr),
     bmp_day_bubble(nullptr),
     bmp_distant_pikmin_marker(nullptr),
+    bmp_fog(nullptr),
     bmp_hard_bubble(nullptr),
     bmp_message_box(nullptr),
     bmp_no_pikmin_bubble(nullptr),
     bmp_sun(nullptr) {
     
+}
+
+const int FOG_BITMAP_SIZE = 128;
+
+/* ----------------------------------------------------------------------------
+ * Generates the bitmap that'll draw the fog fade effect.
+ */
+ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
+    const float near, const float far
+) {
+    if(far == 0) return NULL;
+    
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(FOG_BITMAP_SIZE, FOG_BITMAP_SIZE);
+    
+    ALLEGRO_LOCKED_REGION* region =
+        al_lock_bitmap(
+            bmp, ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_WRITEONLY
+        );
+    unsigned char* row = (unsigned char*) region->data;
+    
+    //We need to draw a radial gradient to represent the fog.
+    //Between the center and the "near" radius, the opacity is 0%.
+    //From there to the edge, the opacity fades to 100%.
+    //Because the every quadrant of the image is the same, just mirrored,
+    //we only need to process the pixels on the top-left quadrant and then
+    //apply them to the respective pixels on the other quadrants as well.
+    
+    //How close to the edge is the current pixel? 0 = center, 1 = edge.
+    float cur_ratio = 0;
+    //Alpha to use for this pixel.
+    unsigned char cur_a = 0;
+    //This is where the "near" section of the fog is.
+    float near_ratio = near / far;
+    //Memory location of the opposite row's pixels.
+    unsigned char* opposite_row;
+    
+#define fill_pixel(x, row) \
+    row[(x) * 4 + 0] = 255; \
+    row[(x) * 4 + 1] = 255; \
+    row[(x) * 4 + 2] = 255; \
+    row[(x) * 4 + 3] = cur_a; \
+    
+    for(int y = 0; y < ceil(FOG_BITMAP_SIZE / 2.0); ++y) {
+        for(int x = 0; x < ceil(FOG_BITMAP_SIZE / 2.0); ++x) {
+            //First, get how far this pixel is from the center.
+            //Center = 0, radius or beyond = 1.
+            cur_ratio =
+                dist(
+                    point(x, y),
+                    point(FOG_BITMAP_SIZE / 2.0, FOG_BITMAP_SIZE / 2.0)
+                ).to_float() / (FOG_BITMAP_SIZE / 2.0);
+            cur_ratio = min(cur_ratio, 1.0f);
+            //Then, map that ratio to a different ratio that considers
+            //the start of the "near" section as 0.
+            cur_ratio =
+                interpolate_number(cur_ratio, near_ratio, 1.0f, 0.0f, 1.0f);
+            //Finally, clamp the value and get the alpha.
+            cur_ratio = clamp(cur_ratio, 0.0f, 1.0f);
+            cur_a = 255 * cur_ratio;
+            
+            opposite_row = row + region->pitch * (FOG_BITMAP_SIZE - y - y - 1);
+            fill_pixel(x, row);
+            fill_pixel(FOG_BITMAP_SIZE - x - 1, row);
+            fill_pixel(x, opposite_row);
+            fill_pixel(FOG_BITMAP_SIZE - x - 1, opposite_row);
+        }
+        row += region->pitch;
+    }
+
+#undef fill_pixel
+    
+    al_unlock_bitmap(bmp);
+    bmp = recreate_bitmap(bmp);
+    return bmp;
 }
 
 
@@ -61,6 +136,12 @@ void gameplay::load() {
     
     if(!cur_area_data.weather_condition.blackout_strength.empty()) {
         lightmap_bmp = al_create_bitmap(scr_w, scr_h);
+    }
+    if(!cur_area_data.weather_condition.fog_color.empty()) {
+        bmp_fog = generate_fog_bitmap(
+            cur_area_data.weather_condition.fog_near,
+            cur_area_data.weather_condition.fog_far
+        );
     }
     
     //Generate mobs.
@@ -166,18 +247,20 @@ void gameplay::load_game_content() {
         weather_file.get_nr_of_children_by_name("weather");
         
     for(size_t wc = 0; wc < n_weather_conditions; ++wc) {
-        data_node* cur_weather = weather_file.get_child_by_name("weather", wc);
+        data_node* weather_node = weather_file.get_child_by_name("weather", wc);
+        weather weather_struct;
         
-        string name = cur_weather->get_child_by_name("name")->value;
-        if(name.empty()) name = "default";
+        weather_struct.name = weather_node->get_child_by_name("name")->value;
+        if(weather_struct.name.empty()) {
+            weather_struct.name = "default";
+        }
         
         //Lighting.
         vector<pair<size_t, string> > lighting_table =
-            get_weather_table(cur_weather->get_child_by_name("lighting"));
+            get_weather_table(weather_node->get_child_by_name("lighting"));
             
-        vector<pair<size_t, ALLEGRO_COLOR> > lighting;
         for(size_t p = 0; p < lighting_table.size(); ++p) {
-            lighting.push_back(
+            weather_struct.daylight.push_back(
                 make_pair(
                     lighting_table[p].first,
                     s2c(lighting_table[p].second)
@@ -185,17 +268,20 @@ void gameplay::load_game_content() {
             );
         }
         
-        if(lighting.empty()) {
-            log_error("Weather condition " + name + " has no lighting!");
+        if(weather_struct.daylight.empty()) {
+            log_error(
+                "Weather condition " +
+                weather_struct.name +
+                " has no lighting!"
+            );
         }
         
         //Sun's strength.
         vector<pair<size_t, string> > sun_strength_table =
-            get_weather_table(cur_weather->get_child_by_name("sun_strength"));
+            get_weather_table(weather_node->get_child_by_name("sun_strength"));
             
-        vector<pair<size_t, unsigned char> > sun_strength;
         for(size_t p = 0; p < sun_strength_table.size(); ++p) {
-            sun_strength.push_back(
+            weather_struct.sun_strength.push_back(
                 make_pair(
                     sun_strength_table[p].first,
                     s2i(sun_strength_table[p].second)
@@ -206,12 +292,11 @@ void gameplay::load_game_content() {
         //Blackout effect's strength.
         vector<pair<size_t, string> > blackout_strength_table =
             get_weather_table(
-                cur_weather->get_child_by_name("blackout_strength")
+                weather_node->get_child_by_name("blackout_strength")
             );
             
-        vector<pair<size_t, unsigned char> > blackout_strength;
         for(size_t p = 0; p < blackout_strength_table.size(); ++p) {
-            blackout_strength.push_back(
+            weather_struct.blackout_strength.push_back(
                 make_pair(
                     blackout_strength_table[p].first,
                     s2i(blackout_strength_table[p].second)
@@ -219,39 +304,56 @@ void gameplay::load_game_content() {
             );
         }
         
+        //Fog.
+        weather_struct.fog_near =
+            s2f(weather_node->get_child_by_name("fog_near")->value);
+        weather_struct.fog_far =
+            s2f(weather_node->get_child_by_name("fog_far")->value);
+        weather_struct.fog_near = max(weather_struct.fog_near, 0.0f);
+        weather_struct.fog_far =
+            max(weather_struct.fog_far, weather_struct.fog_near);
+        
+        vector<pair<size_t, string> > fog_color_table =
+            get_weather_table(
+                weather_node->get_child_by_name("fog_color")
+            );
+        for(size_t p = 0; p < fog_color_table.size(); ++p) {
+            weather_struct.fog_color.push_back(
+                make_pair(
+                    fog_color_table[p].first,
+                    s2c(fog_color_table[p].second)
+                )
+            );
+        }
+        
         //Precipitation.
-        unsigned char precipitation_type =
+        weather_struct.precipitation_type =
             s2i(
-                cur_weather->get_child_by_name(
+                weather_node->get_child_by_name(
                     "precipitation_type"
                 )->get_value_or_default(i2s(PRECIPITATION_TYPE_NONE))
             );
-        interval precipitation_frequency =
+        weather_struct.precipitation_frequency =
             interval(
-                cur_weather->get_child_by_name(
+                weather_node->get_child_by_name(
                     "precipitation_frequency"
                 )->value
             );
-        interval precipitation_speed =
+        weather_struct.precipitation_speed =
             interval(
-                cur_weather->get_child_by_name(
+                weather_node->get_child_by_name(
                     "precipitation_speed"
                 )->value
             );
-        interval precipitation_angle =
+        weather_struct.precipitation_angle =
             interval(
-                cur_weather->get_child_by_name(
+                weather_node->get_child_by_name(
                     "precipitation_angle"
                 )->get_value_or_default(f2s((M_PI + M_PI_2)))
             );
             
         //Save.
-        weather_conditions[name] =
-            weather(
-                name, lighting, sun_strength, blackout_strength,
-                precipitation_type, precipitation_frequency,
-                precipitation_speed, precipitation_angle
-            );
+        weather_conditions[weather_struct.name] = weather_struct;
     }
 }
 
@@ -402,6 +504,9 @@ void gameplay::unload() {
     bitmaps.detach(bmp_message_box);
     bitmaps.detach(bmp_no_pikmin_bubble);
     bitmaps.detach(bmp_sun);
+    if(bmp_fog) {
+        al_destroy_bitmap(bmp_fog);
+    }
     
     cur_message.clear();
     info_print_text.clear();

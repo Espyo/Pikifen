@@ -93,6 +93,7 @@ unsigned char get_blackout_strength();
 string get_current_time(const bool slashes_for_day);
 mob* get_closest_mob_to_cursor();
 ALLEGRO_COLOR get_daylight_color();
+ALLEGRO_COLOR get_fog_color();
 float get_max_throw_height(const float throw_strength);
 void get_multiline_text_dimensions(
     const ALLEGRO_FONT* const font, const string &text, int* ret_w, int* ret_h
