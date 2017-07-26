@@ -46,9 +46,9 @@ const int FOG_BITMAP_SIZE = 128;
  * Generates the bitmap that'll draw the fog fade effect.
  */
 ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
-    const float near, const float far
+    const float near_radius, const float far_radius
 ) {
-    if(far == 0) return NULL;
+    if(far_radius == 0) return NULL;
     
     ALLEGRO_BITMAP* bmp = al_create_bitmap(FOG_BITMAP_SIZE, FOG_BITMAP_SIZE);
     
@@ -70,7 +70,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
     //Alpha to use for this pixel.
     unsigned char cur_a = 0;
     //This is where the "near" section of the fog is.
-    float near_ratio = near / far;
+    float near_ratio = near_radius / far_radius;
     //Memory location of the opposite row's pixels.
     unsigned char* opposite_row;
     
@@ -79,7 +79,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
     row[(x) * 4 + 1] = 255; \
     row[(x) * 4 + 2] = 255; \
     row[(x) * 4 + 3] = cur_a; \
-    
+     
     for(int y = 0; y < ceil(FOG_BITMAP_SIZE / 2.0); ++y) {
         for(int x = 0; x < ceil(FOG_BITMAP_SIZE / 2.0); ++x) {
             //First, get how far this pixel is from the center.
@@ -106,7 +106,7 @@ ALLEGRO_BITMAP* gameplay::generate_fog_bitmap(
         }
         row += region->pitch;
     }
-
+    
 #undef fill_pixel
     
     al_unlock_bitmap(bmp);
@@ -138,10 +138,11 @@ void gameplay::load() {
         lightmap_bmp = al_create_bitmap(scr_w, scr_h);
     }
     if(!cur_area_data.weather_condition.fog_color.empty()) {
-        bmp_fog = generate_fog_bitmap(
-            cur_area_data.weather_condition.fog_near,
-            cur_area_data.weather_condition.fog_far
-        );
+        bmp_fog =
+            generate_fog_bitmap(
+                cur_area_data.weather_condition.fog_near,
+                cur_area_data.weather_condition.fog_far
+            );
     }
     
     //Generate mobs.

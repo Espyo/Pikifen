@@ -9,6 +9,8 @@
  * Leader class and leader-related functions.
  */
 
+#include <algorithm>
+
 #include "../const.h"
 #include "../functions.h"
 #include "../drawing.h"

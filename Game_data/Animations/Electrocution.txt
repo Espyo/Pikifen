@@ -14,17 +14,17 @@ animations{
 sprites{
 	1{
 		file=Electrocution.png
-		file_pos=0 0
-		file_size=40 40
-		game_size=20.00 20.00
+		file_pos=0.00 0.00
+		file_size=60.00 60.00
+		game_size=30.00 30.00
 		offset=0.00 0.00
 		hitboxes=
 	}
 	2{
 		file=Electrocution.png
-		file_pos=42 0
-		file_size=40 40
-		game_size=20.00 20.00
+		file_pos=61.00 0.00
+		file_size=60.00 60.00
+		game_size=30.00 30.00
 		offset=0.00 0.00
 		hitboxes=
 	}

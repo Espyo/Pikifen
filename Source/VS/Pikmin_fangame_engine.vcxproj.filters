@@ -261,6 +261,9 @@
     <ClInclude Include="..\source\gameplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\backtrace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\source\Pikmin_fangame_engine.rc">

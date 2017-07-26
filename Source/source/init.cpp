@@ -213,9 +213,7 @@ void init_essentials() {
     signal(SIGFPE,  signal_handler);
     signal(SIGILL,  signal_handler);
     signal(SIGSEGV, signal_handler);
-    signal(SIGBUS,  signal_handler);
     signal(SIGABRT, signal_handler);
-    signal(SIGSYS,  signal_handler);
 }
 
 

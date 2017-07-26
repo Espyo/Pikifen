@@ -45,7 +45,7 @@ private:
     void draw_lighting_filter();
     ALLEGRO_BITMAP* draw_to_bitmap();
     ALLEGRO_BITMAP* generate_fog_bitmap(
-        const float near, const float far
+        const float near_radius, const float far_radius
     );
     void handle_button(
         const size_t button, const float pos, const size_t player

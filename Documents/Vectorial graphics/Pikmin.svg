@@ -1978,6 +1978,32 @@
        x2="158"
        y2="1102.3622"
        gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5601"
+       x="-0.096"
+       width="1.192"
+       y="-0.096"
+       height="1.192">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1"
+         id="feGaussianBlur5603" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5601-7"
+       x="-0.096000001"
+       width="1.192"
+       y="-0.096000001"
+       height="1.192">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1"
+         id="feGaussianBlur5603-5" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1986,9 +2012,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="138.73576"
-     inkscape:cy="-42.843925"
+     inkscape:zoom="11.313708"
+     inkscape:cx="22.698435"
+     inkscape:cy="-194.56304"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -2713,22 +2739,22 @@
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <rect
-       style="display:inline;fill:#008000;fill-opacity:1;stroke:none"
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
        id="rect7134-3-15"
-       width="20"
-       height="20"
-       x="-5"
-       y="1237.3622"
+       width="30"
+       height="30"
+       x="-10"
+       y="1232.3622"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electrocution.png"
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
     <rect
-       style="display:inline;fill:#008000;fill-opacity:1;stroke:none"
+       style="display:inline;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1"
        id="rect7134-3-15-3"
-       width="20"
-       height="20"
-       x="16"
-       y="1237.3622"
+       width="30"
+       height="30"
+       x="20.5"
+       y="1232.3622"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electrocution.png"
        inkscape:export-xdpi="180"
        inkscape:export-ydpi="180" />
@@ -3071,6 +3097,36 @@
      id="layer1"
      style="display:inline">
     <path
+       sodipodi:type="star"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1;filter:url(#filter5601-7)"
+       id="path5812-3-3"
+       sodipodi:sides="12"
+       sodipodi:cx="35.5"
+       sodipodi:cy="1247.3622"
+       sodipodi:r1="12.5"
+       sodipodi:r2="7.25"
+       sodipodi:arg1="0"
+       sodipodi:arg2="0.26179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 48,1247.3622 -5.497038,1.8764 3.822356,4.3736 -5.698794,-1.1235 1.123476,5.6988 -4.373562,-3.8224 -1.876438,5.4971 -1.876438,-5.4971 -4.373562,3.8224 1.123476,-5.6988 -5.698794,1.1235 3.822356,-4.3736 L 23,1247.3622 l 5.497038,-1.8765 -3.822356,-4.3735 5.698794,1.1235 -1.123476,-5.6988 4.373562,3.8223 1.876438,-5.497 1.876438,5.497 4.373562,-3.8223 -1.123476,5.6988 5.698794,-1.1235 -3.822356,4.3735 z" />
+    <path
+       sodipodi:type="star"
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1;filter:url(#filter5601)"
+       id="path5812-3"
+       sodipodi:sides="12"
+       sodipodi:cx="5"
+       sodipodi:cy="1247.3622"
+       sodipodi:r1="12.5"
+       sodipodi:r2="7.25"
+       sodipodi:arg1="0"
+       sodipodi:arg2="0.26179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 17.5,1247.3622 -5.497038,1.8764 3.822356,4.3736 -5.698794,-1.1235 1.123476,5.6988 -4.3735619,-3.8224 L 5,1259.8622 3.1235619,1254.3651 -1.25,1258.1875 l 1.12347583,-5.6988 -5.69879333,1.1235 3.8223553,-4.3736 -5.4970378,-1.8764 5.4970378,-1.8765 -3.8223553,-4.3735 5.69879335,1.1235 L -1.25,1236.5369 3.1235619,1240.3592 5,1234.8622 l 1.8764381,5.497 4.3735619,-3.8223 -1.123476,5.6988 5.698794,-1.1235 -3.822356,4.3735 z" />
+    <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        inkscape:transform-center-y="-0.34553813"
        d="m 254.99996,1142.3622 c 2.65786,0 1.50334,3.1513 1.50334,3.1513 0,0 2.53196,-2.1361 3.36156,0.5053 0.82959,2.6414 -2.43245,2.453 -2.43245,2.453 0,0 2.64165,1.9097 0.57422,3.4636 -2.06743,1.5539 -3.00667,-1.6353 -3.00667,-1.6353 0,0 -0.96649,3.1687 -3.00667,1.6353 -2.04017,-1.5334 0.57422,-3.4636 0.57422,-3.4636 0,0 -3.26204,0.1884 -2.43244,-2.453 0.82959,-2.6414 3.36156,-0.5053 3.36156,-0.5053 0,0 -1.15453,-3.1513 1.50333,-3.1513 z"
@@ -3125,7 +3181,7 @@
        style="display:inline;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
        id="path5812-4"
        sodipodi:sides="12"
-       sodipodi:cx="26"
+       sodipodi:cx="35.5"
        sodipodi:cy="1247.3622"
        sodipodi:r1="10"
        sodipodi:r2="5.8000002"
@@ -3134,7 +3190,7 @@
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 36,1247.3622 -4.39763,1.5011 3.057884,3.4989 -4.559035,-0.8988 L 31,1256.0224 27.50115,1252.9646 26,1257.3622 24.498849,1252.9646 21,1256.0224 l 0.898781,-4.559 -4.559035,0.8988 3.057884,-3.4989 -4.39763,-1.5011 4.39763,-1.5012 -3.057884,-3.4988 4.559035,0.8988 L 21,1238.7019 l 3.49885,3.0579 1.50115,-4.3976 1.501151,4.3976 3.498849,-3.0579 -0.898781,4.5591 4.559035,-0.8988 -3.057884,3.4988 z" />
+       d="m 45.5,1247.3622 -4.39763,1.5011 3.057884,3.4989 -4.559035,-0.8988 0.898781,4.559 -3.49885,-3.0578 -1.50115,4.3976 -1.501151,-4.3976 -3.498849,3.0578 0.898781,-4.559 -4.559035,0.8988 3.057884,-3.4989 -4.39763,-1.5011 4.39763,-1.5012 -3.057884,-3.4988 4.559035,0.8988 -0.898781,-4.5591 3.49885,3.0579 1.50115,-4.3976 1.501151,4.3976 3.498849,-3.0579 -0.898781,4.5591 4.559035,-0.8988 -3.057884,3.4988 z" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-opacity:1"
@@ -8162,7 +8218,7 @@
        inkscape:export-ydpi="180" />
     <ellipse
        cy="1247.3622"
-       cx="26"
+       cx="35.5"
        style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none"
        id="path4256-1-6"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electrocution.png"
@@ -8172,7 +8228,7 @@
        ry="5" />
     <g
        style="display:inline;fill:#000000;fill-opacity:1"
-       transform="matrix(1.5000304,0,0,-1.2000024,13.499701,2503.9993)"
+       transform="matrix(1.5000304,0,0,-1.2000024,22.999701,2503.9993)"
        id="g5366-4-1-2"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electrocution.png"
        inkscape:export-xdpi="180"
@@ -8191,7 +8247,7 @@
        inkscape:export-xdpi="180"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Electrocution.png"
        id="g5046-8"
-       transform="matrix(1.5000304,0,0,1.2000024,13.499704,-9.2750174)"
+       transform="matrix(1.5000304,0,0,1.2000024,22.999704,-9.2750174)"
        style="display:inline;fill:#000000;fill-opacity:1">
       <ellipse
          style="fill:#000000;fill-opacity:1;stroke:none"
@@ -8204,7 +8260,7 @@
     </g>
     <path
        style="display:inline;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 24,1246.8622 2,-4.5 -0.5,4.5 3,-2 -3,2.5 3,2.5 -3,-2 0.5,4.5 -2,-4.5 z"
+       d="m 33.5,1246.8622 2,-4.5 -0.5,4.5 3,-2 -3,2.5 3,2.5 -3,-2 0.5,4.5 -2,-4.5 z"
        id="path5050-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccc"

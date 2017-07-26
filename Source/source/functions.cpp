@@ -848,8 +848,7 @@ void signal_handler(const int signum) {
     string error_str =
         "Program crash!\n"
         "  Time: " + get_current_time(true) + ". "
-        "Signal: " + string(strsignal(signum)) + " "
-        "(" + i2s(signum) + "). Backtrace:\n";
+        "Signal: " + i2s(signum) + ". Backtrace:\n";
     vector<string> bt = get_backtrace();
     for(size_t s = 0; s < bt.size(); ++s) {
         error_str += "    " + bt[s] + "\n";
@@ -863,7 +862,7 @@ void signal_handler(const int signum) {
         f2s(1 / delta_t) + " FPS)";
         
     log_error(error_str);
-        
+    
     al_show_native_message_box(
         NULL, "Program crash!",
         "The Pikmin fangame engine has crashed!",
