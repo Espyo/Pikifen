@@ -25,6 +25,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
+#include "backtrace.h"
 #include "editors/animation_editor.h"
 #include "editors/area_editor.h"
 #include "const.h"
@@ -823,6 +824,56 @@ vector<string> semicolon_list_to_vector(const string &s) {
         parts[p] = trim_spaces(parts[p]);
     }
     return parts;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a system signal.
+ */
+void signal_handler(const int signum) {
+    volatile static bool already_handling_signal = false;
+    
+    if(already_handling_signal) {
+        //This stops an infinite loop if there's a signal raise
+        //inside this function. It shouldn't happen, but better be safe.
+        exit(signum);
+    }
+    already_handling_signal = true;
+    
+    al_save_bitmap(
+        ("Crash " + get_current_time(false) + ".png").c_str(),
+        al_get_backbuffer(display)
+    );
+    
+    string error_str =
+        "Program crash!\n"
+        "  Time: " + get_current_time(true) + ". "
+        "Signal: " + string(strsignal(signum)) + " "
+        "(" + i2s(signum) + "). Backtrace:\n";
+    vector<string> bt = get_backtrace();
+    for(size_t s = 0; s < bt.size(); ++s) {
+        error_str += "    " + bt[s] + "\n";
+    }
+    error_str +=
+        "  Game state number: " + i2s(cur_game_state_nr) + "\n"
+        "  Number of mobs: " + i2s(mobs.size()) + "\n"
+        "  Bitmaps loaded: " + i2s(bitmaps.get_list_size()) + " (" +
+        i2s(bitmaps.get_total_calls()) + " total calls)" + "\n"
+        "  Delta_t: " + f2s(delta_t) + " (" +
+        f2s(1 / delta_t) + " FPS)";
+        
+    log_error(error_str);
+        
+    al_show_native_message_box(
+        NULL, "Program crash!",
+        "The Pikmin fangame engine has crashed!",
+        "Sorry about that! Please read the readme file to know what you "
+        "can do to help me fix it. Thanks!",
+        NULL,
+        ALLEGRO_MESSAGEBOX_ERROR
+    );
+    
+    exit(signum);
 }
 
 

@@ -122,6 +122,7 @@ string replace_all(string s, string search, string replacement);
 void save_options();
 void save_screenshot();
 vector<string> semicolon_list_to_vector(const string &s);
+void signal_handler(const int signum);
 vector<string> split(
     string text, const string &del = " ", const bool inc_empty = false,
     const bool inc_del = false

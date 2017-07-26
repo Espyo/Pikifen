@@ -80,6 +80,9 @@ public:
     void detach(ALLEGRO_BITMAP* bmp);
     void detach(const string &name);
     void clear();
+    
+    long get_total_calls();
+    size_t get_list_size();
 };
 
 

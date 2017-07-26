@@ -69,6 +69,9 @@ int main(int argc, char** argv) {
         return -1;
     }
     
+    //Essentials.
+    init_essentials();
+    
     //Controls and options.
     init_controls();
     load_options();

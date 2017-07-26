@@ -10,6 +10,7 @@
  */
 
 #include <algorithm>
+#include <csignal>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
@@ -201,6 +202,20 @@ void init_error_bitmap() {
         );
     } al_set_target_backbuffer(display);
     bmp_error = recreate_bitmap(bmp_error);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes some essential things.
+ */
+void init_essentials() {
+    //Signal handlers.
+    signal(SIGFPE,  signal_handler);
+    signal(SIGILL,  signal_handler);
+    signal(SIGSEGV, signal_handler);
+    signal(SIGBUS,  signal_handler);
+    signal(SIGABRT, signal_handler);
+    signal(SIGSYS,  signal_handler);
 }
 
 

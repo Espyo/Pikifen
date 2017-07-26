@@ -118,6 +118,22 @@ void bmp_manager::detach(ALLEGRO_BITMAP* bmp) {
 }
 
 
+/* ----------------------------------------------------------------------------
+ * Returns the total number of calls. Used for debugging.
+ */
+long bmp_manager::get_total_calls() {
+    return total_calls;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the size of the list. Used for debugging.
+ */
+size_t bmp_manager::get_list_size() {
+    return list.size();
+}
+
+
 
 /* ----------------------------------------------------------------------------
  * Adds a new button to the list.

@@ -18,6 +18,7 @@
 void init_allegro();
 void init_controls();
 void init_error_bitmap();
+void init_essentials();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_game_states();
 void init_hud_coordinate(
