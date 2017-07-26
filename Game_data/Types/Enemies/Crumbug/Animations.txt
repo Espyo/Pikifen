@@ -1,0 +1,520 @@
+animations{
+	moving{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			moving1{
+				duration=0.10
+			}
+			moving2{
+				duration=0.10
+			}
+			moving1{
+				duration=0.10
+			}
+			idling{
+				duration=0.10
+			}
+			moving3{
+				duration=0.10
+			}
+			moving4{
+				duration=0.10
+			}
+			moving3{
+				duration=0.10
+			}
+		}
+	}
+	attacking{
+		loop_frame=0
+		frames{
+			attacking1{
+				duration=0.10
+			}
+			attacking2{
+				duration=0.10
+			}
+			attacking1{
+				duration=0.10
+			}
+		}
+	}
+	eating{
+		loop_frame=0
+		frames{
+			idling{
+				duration=0.10
+			}
+			eating1{
+				duration=0.15
+			}
+			eating2{
+				duration=0.15
+			}
+			eating1{
+				duration=0.15
+			}
+			idling{
+				duration=0.10
+			}
+		}
+	}
+	dying{
+		loop_frame=4
+		frames{
+			dying1{
+				duration=0.10
+			}
+			dying2{
+				duration=0.20
+			}
+			dying1{
+				duration=0.10
+			}
+			dying3{
+				duration=0.10
+			}
+			dying4{
+				duration=0.50
+			}
+		}
+	}
+}
+sprites{
+	idling{
+		file=Crumbug.png
+		file_pos=0.00 0.00
+		file_size=32.00 32.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving1{
+		file=Crumbug.png
+		file_pos=33.00 0.00
+		file_size=32.00 32.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 -2.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving2{
+		file=Crumbug.png
+		file_pos=66.00 0.00
+		file_size=32.00 32.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=12.00 -3.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving3{
+		file=Crumbug.png
+		file_pos=99.00 0.00
+		file_size=33.00 32.00
+		game_size=33.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 1.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	moving4{
+		file=Crumbug.png
+		file_pos=133.00 0.00
+		file_size=34.00 32.00
+		game_size=34.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 3.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	attacking1{
+		file=Crumbug.png
+		file_pos=0.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	attacking2{
+		file=Crumbug.png
+		file_pos=31.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=1
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=false
+				angle=0.00
+				knockback=0.00
+			}
+		}
+	}
+	eating1{
+		file=Crumbug.png
+		file_pos=0.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	eating2{
+		file=Crumbug.png
+		file_pos=31.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=0
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying1{
+		file=Crumbug.png
+		file_pos=0.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying2{
+		file=Crumbug.png
+		file_pos=31.00 33.00
+		file_size=30.00 32.00
+		game_size=30.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 0.00 0.00
+				height=24.00
+				radius=7.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying3{
+		file=Crumbug.png
+		file_pos=62.00 33.00
+		file_size=32.00 32.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 2.00 0.00
+				height=24.00
+				radius=7.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+	dying4{
+		file=Crumbug.png
+		file_pos=95.00 33.00
+		file_size=32.00 32.00
+		game_size=32.00 32.00
+		offset=0.00 0.00
+		hitboxes{
+			body{
+				coords=-3.00 0.00 0.00
+				height=24.00
+				radius=14.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+			mouth{
+				coords=13.00 4.00 0.00
+				height=24.00
+				radius=7.00
+				type=2
+				multiplier=1.00
+				can_pikmin_latch=false
+				hazards=
+				outward=true
+				angle=0.00
+				knockback=1.00
+			}
+		}
+	}
+}
+body_parts{
+	body=
+	mouth=
+}

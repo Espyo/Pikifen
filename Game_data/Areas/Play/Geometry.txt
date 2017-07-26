@@ -2397,6 +2397,18 @@ mobs{
 		p=896.00 -1248.00
 		angle=1.57
 	}
+	Enemy{
+		type=Crumbug
+		p=800.00 -1632.00
+	}
+	Enemy{
+		type=Crumbug
+		p=768.00 -1600.00
+	}
+	Enemy{
+		type=Crumbug
+		p=832.00 -1600.00
+	}
 }
 path_stops{
 	s{

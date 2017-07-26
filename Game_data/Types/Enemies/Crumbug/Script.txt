@@ -1,0 +1,173 @@
+first_state = init
+
+script {
+    init {
+        on_enter {
+            var = ignoring false
+            state = exploring
+        }
+    }
+    exploring {
+        on_enter {
+            animation = moving
+            timer = 1
+            near_reach = search
+            move = randomly
+        }
+        on_leave {
+            timer = 0
+        }
+        on_timer {
+            move = randomly
+            timer = 1
+        }
+        on_opponent_in_reach {
+            focus = mob
+            state = chasing
+        }
+        on_far_from_home {
+            state = returning
+        }
+        on_death {
+            state = dying
+        }
+        on_pikmin_land {
+            state = dying
+        }
+        on_bottomless_pit {
+            state = deleting
+        }
+        on_touch_spray {
+            special_function = spray
+        }
+    }
+    
+    chasing {
+        on_enter {
+            move = focused_mob
+            near_reach = attack
+            far_reach = chase
+        }
+        on_opponent_in_reach {
+            state = attacking
+        }
+        on_focus_off_reach {
+            state = exploring
+        }
+        on_far_from_home {
+            state = returning
+        }
+        on_death {
+            state = dying
+        }
+        on_pikmin_land {
+            state = dying
+        }
+        on_bottomless_pit {
+            state = deleting
+        }
+        on_touch_spray {
+            special_function = spray
+        }
+    }
+    
+    attacking {
+        on_enter {
+            move = stop
+            animation = attacking
+            chomp = 1 mouth
+        }
+        on_animation_end {
+            state = checking_mouth
+        }
+        on_touch_spray {
+            special_function = spray
+        }
+    }
+    
+    checking_mouth {
+        on_leave {
+            chomp =
+        }
+        on_mouth_occupied {
+            state = eating
+        }
+        on_mouth_empty {
+            state = exploring
+        }
+    }
+    
+    eating {
+        on_enter {
+            animation = eating
+        }
+        on_animation_end {
+            eat = all
+            state = exploring
+        }
+        on_pikmin_land {
+            state = dying
+        }
+        on_death {
+            state = dying
+        }
+        on_touch_spray {
+            special_function = spray
+        }
+    }
+    
+    returning {
+        on_enter {
+            move = home
+            timer = 2
+            near_reach = search
+        }
+        on_leave {
+            timer = 0
+        }
+        on_timer {
+            var = ignoring false
+        }
+        on_reach_destination {
+            state = exploring
+        }
+        on_opponent_in_reach {
+            if = ignoring false
+            focus = mob
+            if = ignoring false
+            state = chasing
+        }
+        on_death {
+            state = dying
+        }
+        on_pikmin_land {
+            state = dying
+        }
+        on_bottomless_pit {
+            state = deleting
+        }
+        on_touch_spray {
+            special_function = spray
+        }
+    }
+    
+    dying {
+        on_enter {
+            special_function = die_start
+            animation = dying
+            move = stop
+            eat = 
+        }
+        on_animation_end {
+            special_function = die_end
+        }
+    }
+    
+    deleting {
+        on_enter {
+            special_function = die_end
+            special_function = delete
+        }
+    }
+    
+}

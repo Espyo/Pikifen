@@ -1,0 +1,20 @@
+name = Crumbug
+
+drops_corpse = true
+height = 24
+max_carriers = 3
+max_health = 5
+move_speed = 40
+pikmin_seeds = 2
+pushable = true
+pushes = true
+radius = 16
+reaches {
+    search = 50 360
+    attack = 2 40
+    chase = 60 360
+}
+rotation_speed = 200
+territory_radius = 300
+value = 10
+weight = 2
