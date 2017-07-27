@@ -72,12 +72,12 @@ vector<string> get_backtrace() {
         CaptureStackBackTrace(0, BACKTRACE_MAX_FRAMES, stack, NULL);
 
     for(size_t s = 0; s < n_symbols; ++s) {
-        SymFromAddr(process, (DWORD64) stack[n], NULL, symbol);
+        SymFromAddr(process, (DWORD64) stack[s], NULL, symbol);
 
         stringstream str;
         if(
             SymGetLineFromAddr64(
-                process, (DWORD64) stack[n],
+                process, (DWORD64) stack[s],
                 &dummy_displacement, line
             )
         ) {

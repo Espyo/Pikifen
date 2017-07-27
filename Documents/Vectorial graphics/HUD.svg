@@ -212,17 +212,6 @@
          style="stop-color:#e0e0e0;stop-opacity:1" />
     </linearGradient>
     <linearGradient
-       id="arrow">
-      <stop
-         style="stop-color:#c0c0c0;stop-opacity:1;"
-         offset="0"
-         id="stop4206" />
-      <stop
-         style="stop-color:#e0e0e0;stop-opacity:1;"
-         offset="1"
-         id="stop4208" />
-    </linearGradient>
-    <linearGradient
        id="black-bolt">
       <stop
          style="stop-color:#a0a0a0;stop-opacity:1;"
@@ -761,16 +750,6 @@
        y2="743.20398" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#arrow"
-       id="linearGradient4210"
-       x1="1.5"
-       y1="869.36218"
-       x2="11"
-       y2="869.36218"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(0.5,5.2343748e-6)" />
-    <linearGradient
-       inkscape:collect="always"
        xlink:href="#metal2-9"
        id="linearGradient5103"
        x1="105"
@@ -1243,9 +1222,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="12.783323"
-     inkscape:cx="0.12267655"
-     inkscape:cy="177.4986"
+     inkscape:zoom="0.79895769"
+     inkscape:cx="480.9763"
+     inkscape:cy="6.4783248"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"

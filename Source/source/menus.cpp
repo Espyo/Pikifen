@@ -709,10 +709,8 @@ void area_menu::load() {
     back_widget =
         new menu_button(
         point(scr_w * 0.8, scr_h * 0.1), point(scr_w * 0.2, scr_h * 0.1),
-    [] () {
-        fade_mgr.start_fade(false, [] () {
-            change_game_state(GAME_STATE_MAIN_MENU);
-        });
+    [this] () {
+        leave();
     },
     "Back", font_main
     );

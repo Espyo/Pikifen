@@ -55,10 +55,16 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 ev.keyboard.keycode <= ALLEGRO_KEY_F11
             ) {
                 //The first ten indexes are the F2 - F11 keys.
-                id = creator_tool_keys[ev.keyboard.keycode - ALLEGRO_KEY_F2];
+                id =
+                    creator_tool_keys[
+                        ev.keyboard.keycode - ALLEGRO_KEY_F2
+                    ];
             } else {
                 //The last ten indexes are the 0 - 9 keys.
-                id = creator_tool_keys[10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)];
+                id =
+                    creator_tool_keys[
+                        10 + (ev.keyboard.keycode - ALLEGRO_KEY_0)
+                    ];
             }
             
             if(id == CREATOR_TOOL_AREA_IMAGE) {
@@ -88,8 +94,9 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
                 
             } else if(id == CREATOR_TOOL_MOB_INFO) {
                 mob* m = get_closest_mob_to_cursor();
-                creator_tool_info_lock = (creator_tool_info_lock == m ? NULL : m);
-                
+                creator_tool_info_lock =
+                    (creator_tool_info_lock == m ? NULL : m);
+                    
             } else if(id == CREATOR_TOOL_NEW_PIKMIN) {
                 if(pikmin_list.size() < max_pikmin_in_field) {
                     pikmin_type* new_pikmin_type = pikmin_types.begin()->second;
@@ -126,8 +133,6 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
     }
     
     for(size_t p = 0; p < MAX_PLAYERS; p++) {
-        size_t n_controls = controls[p].size();
-        
         if(ev.type == ALLEGRO_EVENT_MOUSE_AXES && mouse_moves_cursor[p]) {
             mouse_cursor_s.x = ev.mouse.x;
             mouse_cursor_s.y = ev.mouse.y;

@@ -270,10 +270,10 @@ void particle_manager::tick_all(const float delta_t) {
  */
 void particle_manager::draw_all(
     const bool before_mobs,
-    const point cam_tl, const point cam_br
+    const point &cam_tl, const point &cam_br
 ) {
     for(size_t c = 0; c < count; ++c) {
-        
+    
         particle* p_ptr = &particles[c];
         
         if(

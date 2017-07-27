@@ -104,7 +104,7 @@ public:
     void tick_all(const float delta_t);
     void draw_all(
         const bool before_mobs,
-        const point cam_tl = point(), const point cam_br = point()
+        const point &cam_tl = point(), const point &cam_br = point()
     );
     void clear();
     
