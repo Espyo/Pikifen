@@ -160,6 +160,8 @@ extern float cursor_invalid_effect;
 extern float cursor_max_dist;
 //Movement of the cursor via non-mouse.
 extern movement_struct cursor_movement;
+//Is the cursor in the window, and is the window active?
+extern bool cursor_ready;
 //Time left until the position of the cursor is saved on the vector.
 extern timer cursor_save_timer;
 //How much the cursor spins per second.

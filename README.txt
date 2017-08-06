@@ -63,6 +63,9 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
     Why is Olimar moving when I'm not touching the analog stick?
         You can open Options.txt and set joystick_min_deadzone to a higher value. This way, a loose analog stick won't be accounted for if you only wiggle it a bit.
     
+    Why do I see everything in a single line when I open a text file with Notepad?
+        Don't use Notepad. It has a hard time doing LF-only line breaks, which most of the engine's files use. Install Notepad++ and start using that instead, since it's better in every way.
+    
     Why is it so slow?
         It IS a complex engine running the flexible logic behind several dozens of entities, so it's only natural.
         Check the Options.txt file and use the Pikmin Fanon page for settings that you can change in order to sacrifice appearance for performance.

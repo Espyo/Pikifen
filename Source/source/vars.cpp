@@ -117,6 +117,7 @@ float cursor_height_diff_light = 0;
 float cursor_invalid_effect = 0;
 float cursor_max_dist = 200.0;
 movement_struct cursor_movement;
+bool cursor_ready = false;
 timer cursor_save_timer(CURSOR_SAVE_INTERVAL);
 float cursor_spin_speed = 180;
 vector<point> cursor_spots;

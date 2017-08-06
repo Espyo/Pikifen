@@ -128,6 +128,10 @@ int main(int argc, char** argv) {
         change_game_state(GAME_STATE_MAIN_MENU);
     }
     
+    bool cursor_in_window = true;
+    bool window_found = true;
+    bool window_focused = true;
+    
     //Main loop.
     al_start_timer(logic_timer);
     while(is_game_running) {
@@ -142,14 +146,7 @@ int main(int argc, char** argv) {
         
         game_states[cur_game_state_nr]->handle_controls(ev);
         
-        if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-            is_game_running = false;
-            
-        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
-            //scr_w = ev.display.width;
-            //scr_h = ev.display.height;
-            
-        } else if(
+        if(
             ev.type == ALLEGRO_EVENT_TIMER &&
             al_is_event_queue_empty(logic_queue)
         ) {
@@ -173,13 +170,40 @@ int main(int argc, char** argv) {
             
             prev_frame_time = cur_time;
             
-        } else if (
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+            is_game_running = false;
+            
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
+            //scr_w = ev.display.width;
+            //scr_h = ev.display.height;
+            
+        } else if(
             ev.type == ALLEGRO_EVENT_KEY_DOWN &&
             ev.keyboard.keycode == ALLEGRO_KEY_F12
         ) {
             save_screenshot();
             
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_LOST) {
+            window_found = false;
+            
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_FOUND) {
+            window_found = true;
+            
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_OUT) {
+            window_focused = false;
+            
+        } else if(ev.type == ALLEGRO_EVENT_DISPLAY_SWITCH_IN) {
+            window_focused = true;
+            
+        } else if(ev.type == ALLEGRO_EVENT_MOUSE_LEAVE_DISPLAY) {
+            cursor_in_window = false;
+            
+        } else if(ev.type == ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY) {
+            cursor_in_window = true;
+            
         }
+        
+        cursor_ready = (window_found && window_focused && cursor_in_window);
     }
     
     if(cur_game_state_nr != INVALID) {

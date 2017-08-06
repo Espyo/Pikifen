@@ -1,3 +1,4 @@
+//Normal, clear day.
 Normal {
     lighting {
         0    = 0   0   32  160
@@ -19,6 +20,7 @@ Normal {
     }
 }
 
+//Bright sunny day. Lighting is clearer than normal.
 Bright {
     lighting {
         0    = 0   0   32  160
@@ -40,6 +42,7 @@ Bright {
     }
 }
 
+//Cloudy day. Lighting is a bit darker.
 Cloudy {
     lighting {
         0    = 0   0   32  176
@@ -61,6 +64,7 @@ Cloudy {
     }
 }
 
+//Very light rain. Lighting is a bit darker.
 Dripping {
     lighting {
         0    = 0   0   32  176
@@ -83,6 +87,30 @@ Dripping {
     //TODO add rain
 }
 
+//Standard rain. Lighting is darker.
+Rain {
+    lighting {
+        0    = 0   0   32  176
+        300  = 0   0   32  176
+        360  = 8   8   24  128
+        420  = 16  8   24  112
+        480  = 0   0   0   112
+        1020 = 0   0   0   112
+        1080 = 24  16  0   112
+        1140 = 0   0   32  112
+        1200 = 0   0   32  176
+    }
+    sun_strength {
+        0    = 96
+        360  = 96
+        480  = 128
+        1020 = 128
+        1140 = 96
+    }
+    //TODO add rain
+}
+
+//Heavy rain. Lighting is darker.
 Rainstorm {
     lighting {
         0    = 0   0   32  176
@@ -105,6 +133,7 @@ Rainstorm {
     //TODO add rain
 }
 
+//Heavy rain and random thunder. Lighting is darker.
 Thunderstorm {
     lighting {
         0    = 0   0   32  176
@@ -127,6 +156,7 @@ Thunderstorm {
     //TODO add rain and thunder
 }
 
+//Standard fog effect.
 Foggy {
     lighting {
         0    = 0   0   32  160
@@ -157,6 +187,7 @@ Foggy {
     fog_far = 512
 }
 
+//Very dense fog. It also starts quite near.
 Very foggy {
     lighting {
         0    = 0   0   32  160
@@ -183,6 +214,7 @@ Very foggy {
     fog_far = 160
 }
 
+//A bit like cloudy weather, but with wind.
 Windy {
     name = Windy
     lighting {
@@ -206,6 +238,7 @@ Windy {
     //TODO add wind
 }
 
+//Light snow, and a light winter-blue lighting tint.
 Snowing {
     name = Snowing
     lighting {
@@ -229,6 +262,7 @@ Snowing {
     //TODO add snow
 }
 
+//Heavy snow and wind.
 Blizzard {
     name = Blizzard
     lighting {
@@ -252,6 +286,7 @@ Blizzard {
     //TODO add snow
 }
 
+//Sand and dust floating about, wind, and a yellow fog.
 Sandstorm {
     lighting {
         0    = 32  24  8  192
@@ -279,6 +314,7 @@ Sandstorm {
     //TODO add sand
 }
 
+//Normal weather but with leafs floating around.
 Dead leafs {
     lighting {
         0    = 0   0   32  160
@@ -301,6 +337,7 @@ Dead leafs {
     //TODO add leafs
 }
 
+//Normal weather but with petals floating around.
 Petals {
     lighting {
         0    = 0   0   32  160
@@ -323,6 +360,7 @@ Petals {
     //TODO add petals
 }
 
+//A slight blackout effect, and slightly darker lighting.
 Slight blackout {
     lighting {
         0    = 0   0   0   64
@@ -332,6 +370,7 @@ Slight blackout {
     }
 }
 
+//A blackout effect with maximum darkness, and slightly darker lighting.
 Pure blackout {
     lighting {
         0    = 0   0   0   64
