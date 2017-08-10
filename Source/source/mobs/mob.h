@@ -344,7 +344,7 @@ public:
     virtual void draw(sprite_effect_manager* effect_manager = NULL);
     
     void set_animation(const size_t nr, const bool pre_named = true);
-    void set_health(const bool rel, const float amount);
+    void set_health(const bool add, const bool ratio, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
     

@@ -89,7 +89,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == CREATOR_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->health = m->health - m->type->max_health * 0.2;
+                    m->set_health(true, true, -0.2);
                 }
                 
             } else if(id == CREATOR_TOOL_MOB_INFO) {
@@ -324,8 +324,7 @@ void gameplay::handle_button(
                                 cur_leader_ptr->pos, ships[s]->beam_final_pos
                             ) <= ships[s]->shi_type->beam_radius
                         ) {
-                            cur_leader_ptr->health =
-                                cur_leader_ptr->type->max_health;
+                            cur_leader_ptr->set_health(false, true, 1.0);
                             done = true;
                         }
                     }

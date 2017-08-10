@@ -831,7 +831,7 @@ void leader_fsm::join_group(mob* m, void* info1, void* info2) {
  * This damages and respawns them.
  */
 void leader_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
-    m->health -= m->type->max_health * 0.2;
+    m->set_health(true, true, -0.2);
     m->respawn();
 }
 
@@ -1192,7 +1192,7 @@ void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
         info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
     );
     
-    m->health -= damage;
+    m->set_health(true, false, -damage);
     m->apply_knockback(knockback, knockback_angle);
     
     //If info2 has a value, then this leader is inactive.

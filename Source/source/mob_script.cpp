@@ -253,7 +253,7 @@ mob_action::mob_action(
         }
         
         if(!valid) {
-            log_error("Invalid health amount \"" + dn->value + "\"!", dn);
+            log_error("Invalid health data \"" + dn->value + "\"!", dn);
         }
         
         
@@ -609,7 +609,11 @@ void mob_action::run(
     } else if(type == MOB_ACTION_SET_HEALTH) {
     
         if(!vf.empty()) {
-            m->set_health(sub_type == MOB_ACTION_SET_HEALTH_RELATIVE, vf[0]);
+            m->set_health(
+                sub_type == MOB_ACTION_SET_HEALTH_RELATIVE,
+                false,
+                vf[0]
+            );
         }
         
         

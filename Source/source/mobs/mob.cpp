@@ -553,7 +553,7 @@ void mob::eat(const size_t nr) {
     size_t total = min(nr, chomping_pikmin.size());
     
     for(size_t p = 0; p < total; ++p) {
-        chomping_pikmin[p]->health = 0;
+        chomping_pikmin[p]->set_health(false, false, 0.0f);
         chomping_pikmin[p]->dead = true;
         chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
     }
@@ -823,15 +823,20 @@ void mob::set_animation(const size_t nr, const bool pre_named) {
 
 /* ----------------------------------------------------------------------------
  * Changes a mob's health, relatively or absolutely.
- * rel:    Change is relative to the current value
- *   (i.e. add or subtract from current health)
+ * add:    If true, change is relative to the current value
+ *   (i.e. add or subtract from current health).
+ *   If false, simply set to that number.
+ * ratio:  If true, the specified value represents the max health ratio.
+ *   If false, it's the number in HP.
  * amount: Health amount.
  */
-void mob::set_health(const bool rel, const float amount) {
-    unsigned short base_nr = 0;
-    if(rel) base_nr = health;
+void mob::set_health(const bool add, const bool ratio, const float amount) {
+    float change = amount;
+    if(ratio) change = type->max_health * amount;
+    float base_nr = 0;
+    if(add) base_nr = health;
     
-    health = clamp(base_nr + amount, 0.0f, type->max_health);
+    health = clamp(base_nr + change, 0.0f, type->max_health);
 }
 
 
@@ -882,7 +887,7 @@ bool mob::should_attack(mob* m) {
  * Sets up stuff for the beginning of the mob's death process.
  */
 void mob::start_dying() {
-    health = 0;
+    set_health(false, false, 0.0f);
     particle p(PARTICLE_TYPE_BITMAP, pos, 64, 1.5, PARTICLE_PRIORITY_LOW);
     p.bitmap = bmp_sparkle;
     p.color = al_map_rgb(255, 192, 192);
@@ -1004,8 +1009,10 @@ void mob::tick_misc_logic() {
     
     for(size_t s = 0; s < this->statuses.size(); ++s) {
         statuses[s].tick(delta_t);
-        health +=
-            type->max_health * statuses[s].type->health_change_ratio * delta_t;
+        set_health(
+            true, true,
+            statuses[s].type->health_change_ratio * delta_t
+        );
     }
     delete_old_status_effects();
     
@@ -1578,8 +1585,7 @@ void mob::tick_script() {
     
     //Health regeneration.
     if(!dead) {
-        health += type->health_regen * delta_t;
-        health = min(health, type->max_health);
+        set_health(true, false, type->health_regen * delta_t);
     }
     
     //Check if it got whistled.
@@ -2247,7 +2253,7 @@ void cause_hitbox_damage(
     if(total_damage) *total_damage = damage;
     
     //Cause the damage and the knockback.
-    victim->health -= damage;
+    victim->set_health(true, false, damage);
     if(knockback != 0) {
         victim->stop_chasing();
         victim->speed.x =

@@ -1270,7 +1270,7 @@ void pikmin_fsm::face_leader(mob* m, void* info1, void* info2) {
  * When a Pikmin falls down a bottomless pit.
  */
 void pikmin_fsm::fall_down_pit(mob* m, void* info1, void* info2) {
-    m->health = 0;
+    m->set_health(false, false, 0);
     m->dead = true;
 }
 
