@@ -127,7 +127,7 @@ struct group_info {
     void sort(subgroup_type* leading_type);
     point get_average_member_pos();
     point get_spot_offset(const size_t spot_index);
-    void reassing_spots();
+    void reassign_spots();
     bool set_next_cur_standby_type(const bool move_backwards);
     group_info(mob* leader_ptr);
 };
@@ -209,22 +209,43 @@ public:
     );
     virtual ~mob(); //Needed so that typeid works.
     
+    //Basic information.
+    //The type of mob -- Olimar, Red Bulborb, etc.
     mob_type* type;
+    //Schedule this mob to be deleted from memory at the end of the frame.
+    bool to_delete;
     
+    //Script and animation.
+    //Current animation instance.
     animation_instance anim;
+    //Finite-state machine.
+    mob_fsm fsm;
+    //The timer.
+    timer script_timer;
+    //Variables.
+    map<string, string> vars;
+    //The mob it has focus on.
+    mob* focused_mob;
+    //Are we waiting to report the big damage event?
+    bool big_damage_ev_queued;
+    //Index of the reach to use for "X in reach" events.
+    size_t far_reach;
+    //Index or the reach to use for "focused mob out of reach" events.
+    size_t near_reach;
     
-    //Flags.
-    bool to_delete; //If true, this mob should be deleted.
-    bool reached_destination;
-    
-    //Actual moving and other physics.
+    //Movement and other physics.
     //Coordinates.
     point pos;
     //Z coordinate. This is height; the higher the value, the higher in the sky.
     float z;
-    //Speed variables for physics only. Don't touch.
+    //Speed at which it's moving in X/Y...
     point speed;
+    //...and Z.
     float speed_z;
+    //Current facing angle. 0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
+    float angle;
+    //Angle the mob wants to be facing.
+    float intended_angle;
     //Due to framerate imperfections, thrown Pikmin/leaders can reach higher
     //than intended. z_cap forces a cap. FLT_MAX = no cap.
     float z_cap;
@@ -232,34 +253,22 @@ public:
     point home;
     //Speed multiplies by this much each second. //TODO use this.
     float acceleration;
-    //0: Right. PI*0.5: Up. PI: Left. PI*1.5: Down.
-    float angle;
-    //Angle the mob wants to be facing.
-    float intended_angle;
     //The highest ground below the entire mob.
     sector* ground_sector;
     //Sector that the mob's center is on.
     sector* center_sector;
     //Multiply the mob's gravity by this.
     float gravity_mult;
-    //Is it currently in a state where it cannot be pushed?
-    bool unpushable;
-    //Amount it's being pushed by another mob.
+    //How much it's being pushed by another mob.
     float push_amount;
     //Angle that another mob is pushing it to.
     float push_angle;
-    //If it can be touched by other mobs.
+    //Is it currently in a state where it cannot be pushed?
+    bool unpushable;
+    //Can it be touched by other mobs?
     bool tangible;
-    //If it should be hidden (no shadow, no health).
-    bool hide;
-    
-    //Makes the mob face an angle, but it'll turn at its own pace.
-    void face(const float new_angle);
-    //Returns the final coordinates of the chasing target.
-    point get_chase_target();
-    //Returns the normal speed of this mob.
-    //Subclasses are meant to override this.
-    virtual float get_base_speed();
+    //Is the mob airborne because it was thrown?
+    bool was_thrown;
     
     //Target things.
     //If true, the mob is trying to go to a certain spot.
@@ -278,44 +287,29 @@ public:
     float chase_target_dist;
     //Speed to move towards the target at.
     float chase_speed;
-    vector<path_stop*> path;
-    size_t cur_path_stop_nr;
-    
-    void chase(
-        const point &offset, point* orig_coords,
-        const bool teleport, float* teleport_z = NULL,
-        const bool free_move = false, const float target_distance = 3,
-        const float speed = -1
-    );
-    void stop_chasing();
+    //If true, the mob successfully reached its intended destination.
+    bool reached_destination;
     
     //Group things.
     //The current mob is following this mob's group.
     mob* following_group;
     //The current subgroup type.
     subgroup_type* subgroup_type_ptr;
-    //Is the mob airborne because it was thrown?
-    bool was_thrown;
     //Info on the group this mob is a leader of.
     group_info* group;
     //Index of this mob's spot in the leader's group spots.
     size_t group_spot_index;
     
-    //Script.
-    //Finite-state machine.
-    mob_fsm fsm;
-    //The mob it has focus on.
-    mob* focused_mob;
-    //The timer.
-    timer script_timer;
-    //Variables.
-    map<string, string> vars;
-    //Are we waiting to report the big damage event?
-    bool big_damage_ev_queued;
-    //Index of the reach to use for "X in reach" events.
-    size_t far_reach;
-    //Index or the reach to use for "focused mob out of reach" events.
-    size_t near_reach;
+    //Carrying.
+    //Structure holding information on how this mob should be carried.
+    //If NULL, it cannot be carried.
+    carry_info_struct* carry_info;
+    //Where to deliver this mob to, if it's being carried.
+    mob* carrying_target;
+    //Path to take the mob to while being carried.
+    vector<path_stop*> path;
+    //Index of the current stop in the projected carrying path.
+    size_t cur_path_stop_nr;
     
     //Other properties.
     //Incremental ID. Used for minor things.
@@ -326,9 +320,10 @@ public:
     timer invuln_period;
     //Mob's team (who it can damage); use MOB_TEAM_*.
     unsigned char team;
+    //If it should be hidden (no shadow, no health).
+    bool hide;
     //Particle generators attached to it.
     vector<particle_generator> particle_generators;
-    
     //Status effects currently inflicted on the mob.
     vector<status> statuses;
     //Hazard of the sector the mob is currently on.
@@ -341,31 +336,53 @@ public:
     vector<mob*> chomping_pikmin;
     //Max mobs it can chomp in the current attack.
     size_t chomp_max;
+    //If the mob is currently "disabled", these flags specify behavior.
+    unsigned char disabled_state_flags;
     
-    //Carrying.
-    //Structure holding information on how this mob should be carried.
-    //If NULL, it cannot be carried.
-    carry_info_struct* carry_info;
-    void become_carriable(const bool to_ship);
-    void become_uncarriable();
+    
+    void tick();
+    virtual void draw(sprite_effect_manager* effect_manager = NULL);
     
     void set_animation(const size_t nr, const bool pre_named = true);
     void set_health(const bool rel, const float amount);
     void set_timer(const float time);
     void set_var(const string &name, const string &value);
     
+    void become_carriable(const bool to_ship);
+    void become_uncarriable();
+    
+    void add_to_group(mob* new_member);
+    void apply_knockback(const float knockback, const float knockback_angle);
+    void calculate_carrying_destination(mob* added, mob* removed);
+    void focus_on_mob(mob* m);
+    void unfocus_from_mob();
+    void remove_from_group();
+    bool should_attack(mob* m);
     void eat(size_t nr);
     void start_dying();
     void finish_dying();
     void respawn();
+    hitbox* get_hitbox(const size_t nr);
+    hitbox* get_closest_hitbox(
+        const point &p, const size_t h_type = INVALID, dist* d = NULL
+    );
+    
+    void chase(
+        const point &offset, point* orig_coords,
+        const bool teleport, float* teleport_z = NULL,
+        const bool free_move = false, const float target_distance = 3,
+        const float speed = -1
+    );
+    void stop_chasing();
+    void face(const float new_angle);
+    point get_chase_target();
+    virtual float get_base_speed();
     
     void apply_status_effect(status_type* s, const bool refill);
     void delete_old_status_effects();
     void remove_particle_generator(const size_t id);
     void add_status_sprite_effects(sprite_effect_manager* manager);
     ALLEGRO_BITMAP* get_status_bitmap(float* bmp_scale);
-    //If the mob is currently "disabled", these flags specify behavior.
-    unsigned char disabled_state_flags;
     virtual bool can_receive_status(status_type* s);
     virtual void receive_disable_from_status(const unsigned char flags);
     virtual void receive_flailing_from_status();
@@ -373,21 +390,10 @@ public:
     virtual void lose_panic_from_status();
     virtual void change_maturity_amount_from_status(const int amount);
     
-    void tick();
-    virtual void draw(sprite_effect_manager* effect_manager = NULL);
-    
-    static void attack(
-        mob* m1, mob* m2, const bool m1_is_pikmin, const float damage,
-        const float angle, const float knockback,
-        const float new_invuln_period, const float new_knockdown_period
-    );
-    void calculate_carrying_destination(mob* added, mob* removed);
-    mob* carrying_target;
-    
     //Drawing tools.
-    point get_sprite_center(mob* m, sprite* s);
-    point get_sprite_dimensions(mob* m, sprite* s, float* scale = NULL);
-    void add_brightness_sprite_effect(sprite_effect_manager* manager);
+    point get_sprite_center(sprite* s);
+    point get_sprite_dimensions(sprite* s, float* scale = NULL);
+    void add_sector_brightness_sprite_effect(sprite_effect_manager* manager);
     void add_delivery_sprite_effect(
         sprite_effect_manager* manager, const float delivery_time_ratio_left,
         const ALLEGRO_COLOR &onion_color
@@ -396,10 +402,6 @@ public:
 };
 
 
-void add_to_group(mob* group_leader, mob* new_member);
-void apply_knockback(
-    mob* m, const float knockback, const float knockback_angle
-);
 float calculate_damage(
     mob* attacker, mob* victim, hitbox* attacker_h,
     hitbox* victim_h
@@ -417,16 +419,8 @@ mob* create_mob(
     const float angle, const string &vars
 );
 void delete_mob(mob* m, const bool complete_destruction = false);
-void focus_mob(mob* m1, mob* m2);
-hitbox* get_closest_hitbox(
-    const point &p, mob* m, const size_t h_type = INVALID, dist* d = NULL
-);
-hitbox* get_hitbox(mob* m, const size_t nr);
 bool is_resistant_to_hazards(
     vector<hazard*> &resistances, vector<hazard*> &hazards
 );
-void remove_from_group(mob* member);
-bool should_attack(mob* m1, mob* m2);
-void unfocus_mob(mob* m1);
 
 #endif //ifndef MOB_INCLUDED

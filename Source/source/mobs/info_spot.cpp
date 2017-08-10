@@ -42,7 +42,7 @@ info_spot::info_spot(
  */
 void info_spot::draw(sprite_effect_manager* effect_manager) {
     sprite_effect_manager effects;
-    add_brightness_sprite_effect(&effects);
+    add_sector_brightness_sprite_effect(&effects);
     
     draw_sprite_with_effects(
         bmp_info_spot,

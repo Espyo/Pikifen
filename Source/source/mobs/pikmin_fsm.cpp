@@ -725,7 +725,7 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
         //then the new Pikmin should be in the group of that top leader.
         lea = lea->following_group;
     }
-    add_to_group(lea, pik);
+    lea->add_to_group(pik);
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->unpushable = false;
@@ -768,7 +768,7 @@ void pikmin_fsm::be_grabbed_by_enemy(mob* m, void* info1, void* info2) {
     
     sfx_pikmin_caught.play(0.2, 0);
     pik_ptr->set_animation(PIKMIN_ANIM_IDLING);
-    remove_from_group(pik_ptr);
+    pik_ptr->remove_from_group();
 }
 
 
@@ -803,7 +803,7 @@ void pikmin_fsm::reach_dismiss_spot(mob* m, void* info1, void* info2) {
 void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_IDLING);
     pikmin_fsm::stand_still(m, NULL, NULL);
-    remove_from_group(m);
+    m->remove_from_group();
 }
 
 
@@ -813,7 +813,7 @@ void pikmin_fsm::become_disabled(mob* m, void* info1, void* info2) {
 void pikmin_fsm::become_idle(mob* m, void* info1, void* info2) {
     pikmin_fsm::stand_still(m, info1, info2);
     m->set_animation(PIKMIN_ANIM_IDLING);
-    unfocus_mob(m);
+    m->unfocus_from_mob();
 }
 
 
@@ -931,7 +931,7 @@ void pikmin_fsm::called(mob* m, void* info1, void* info2) {
     }
     m->delete_old_status_effects();
     
-    add_to_group(cur_leader_ptr, pik);
+    cur_leader_ptr->add_to_group(pik);
     sfx_pikmin_called.play(0.03, false);
 }
 
@@ -967,11 +967,11 @@ void pikmin_fsm::get_knocked_down(mob* m, void* info1, void* info2) {
     calculate_knockback(
         info->mob2, m, info->h2, info->h1, &knockback, &knockback_angle
     );
-    apply_knockback(m, knockback, knockback_angle);
+    m->apply_knockback(knockback, knockback_angle);
     
     m->set_animation(PIKMIN_ANIM_LYING);
     
-    remove_from_group(m);
+    m->remove_from_group();
     
     pikmin_fsm::be_released(m, info1, info2);
     pikmin_fsm::notify_leader_release(m, info1, info2);
@@ -989,7 +989,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         if(!((enemy*) info1)->ene_type->allow_ground_attacks) return;
     }
     
-    focus_mob(m, (mob*) info1);
+    m->focus_on_mob((mob*) info1);
     m->stop_chasing();
     m->chase(
         point(),
@@ -998,7 +998,7 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
         m->focused_mob->type->radius + m->type->radius + GROUNDED_ATTACK_DIST
     );
     m->set_animation(PIKMIN_ANIM_WALKING);
-    remove_from_group(m);
+    m->remove_from_group();
     
     m->fsm.set_state(PIKMIN_STATE_GOING_TO_OPPONENT);
 }
@@ -1030,7 +1030,7 @@ void pikmin_fsm::get_up(mob* m, void* info1, void* info2) {
     m->fsm.set_state(PIKMIN_STATE_IDLING);
     if(
         prev_focused_mob &&
-        should_attack(m, prev_focused_mob)
+        m->should_attack(prev_focused_mob)
     ) {
         m->fsm.run_event(
             MOB_EVENT_OPPONENT_IN_REACH, (void*) prev_focused_mob, NULL
@@ -1079,7 +1079,7 @@ void pikmin_fsm::go_to_carriable_object(mob* m, void* info1, void* info2) {
         pik_ptr->type->radius * 1.2
     );
     pik_ptr->set_animation(PIKMIN_ANIM_WALKING);
-    remove_from_group(pik_ptr);
+    pik_ptr->remove_from_group();
     
     pik_ptr->set_timer(PIKMIN_GOTO_TIMEOUT);
 }
@@ -1295,9 +1295,8 @@ void pikmin_fsm::do_grounded_attack(mob* m, void* info1, void* info2) {
     ) {
         p->do_attack(
             p->focused_mob,
-            get_closest_hitbox(
+            p->focused_mob->get_closest_hitbox(
                 p->pos,
-                p->focused_mob,
                 HITBOX_TYPE_NORMAL
             )
         );
@@ -1314,9 +1313,7 @@ void pikmin_fsm::do_latched_attack(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     p->do_attack(
         p->focused_mob,
-        get_hitbox(
-            p->focused_mob, p->connected_hitbox_nr
-        )
+        p->focused_mob->get_hitbox(p->connected_hitbox_nr)
     );
 }
 
@@ -1329,7 +1326,7 @@ void pikmin_fsm::do_latched_attack(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::chase_leader(mob* m, void* info1, void* info2) {
     pikmin_fsm::update_in_group_chasing(m, info1, info2);
-    focus_mob(m, m->following_group);
+    m->focus_on_mob(m->following_group);
     m->set_animation(PIKMIN_ANIM_WALKING);
 }
 
@@ -1344,7 +1341,7 @@ void pikmin_fsm::start_flailing(mob* m, void* info1, void* info2) {
     point final_pos = m->get_chase_target();
     m->chase(final_pos, NULL, false);
     
-    remove_from_group(m);
+    m->remove_from_group();
     
     //Let the Pikmin continue to swim into the water for a bit
     //before coming to a stop. Otherwise the Pikmin would stop nearly
@@ -1407,7 +1404,7 @@ void pikmin_fsm::flail_to_whistle(mob* m, void* info1, void* info2) {
  * When a Pikmin starts panicking.
  */
 void pikmin_fsm::start_panicking(mob* m, void* info1, void* info2) {
-    remove_from_group(m);
+    m->remove_from_group();
     pikmin_fsm::panic_new_chase(m, info1, info2);
 }
 
@@ -1508,9 +1505,8 @@ void pikmin_fsm::try_latching(mob* m, void* info1, void* info2) {
     
     if(!p_ptr->focused_mob->type->is_obstacle) {
         closest_h =
-            get_closest_hitbox(
-                p_ptr->pos, p_ptr->focused_mob,
-                HITBOX_TYPE_NORMAL, &d
+            p_ptr->focused_mob->get_closest_hitbox(
+                p_ptr->pos, HITBOX_TYPE_NORMAL, &d
             );
     }
     

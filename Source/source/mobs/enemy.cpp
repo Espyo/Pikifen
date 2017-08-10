@@ -40,8 +40,8 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     sprite* s_ptr = anim.get_cur_sprite();
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(this, s_ptr);
-    point draw_size = get_sprite_dimensions(this, s_ptr);
+    point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     sprite_effect_manager effects;
     
@@ -53,7 +53,7 @@ void enemy::draw(sprite_effect_manager* effect_manager) {
     }
     
     add_status_sprite_effects(&effects);
-    add_brightness_sprite_effect(&effects);
+    add_sector_brightness_sprite_effect(&effects);
     
     draw_sprite_with_effects(
         s_ptr->bitmap,

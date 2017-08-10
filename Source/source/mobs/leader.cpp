@@ -327,7 +327,7 @@ void leader::dismiss() {
             
             destination += this->pos;
             
-            remove_from_group(subgroups_info[s].members[m]);
+            subgroups_info[s].members[m]->remove_from_group();
             subgroups_info[s].members[m]->fsm.run_event(
                 MOB_EVENT_DISMISSED, (void*) &destination
             );
@@ -338,7 +338,7 @@ void leader::dismiss() {
     //Dismiss leaders now.
     while(!group->members.empty()) {
         group->members[0]->fsm.run_event(MOB_EVENT_DISMISSED, NULL);
-        remove_from_group(group->members[0]);
+        group->members[0]->remove_from_group();
     }
     
     //Final things.
@@ -377,8 +377,8 @@ void leader::draw(sprite_effect_manager* effect_manager) {
     mob::draw(&effects);
     
     sprite* s_ptr = anim.get_cur_sprite();
-    point draw_pos = get_sprite_center(this, s_ptr);
-    point draw_size = get_sprite_dimensions(this, s_ptr);
+    point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     if(invuln_period.time_left > 0.0f) {
         sprite* spark_s = spark_animation.instance.get_cur_sprite();
@@ -528,7 +528,7 @@ void leader::tick_class_specifics() {
                 
             }
             
-            if(must_reassign_spots) group->reassing_spots();
+            if(must_reassign_spots) group->reassign_spots();
             
         } else {
             //Shuffle mode. Keep formation, but shuffle with the leader,
@@ -544,6 +544,15 @@ void leader::tick_class_specifics() {
             group->anchor += mov * delta_t;
         }
     }
+    
+    if(holding_pikmin) {
+        holding_pikmin->pos.x = pos.x + cos(angle + M_PI) * type->radius;
+        holding_pikmin->pos.y = pos.y + sin(angle + M_PI) * type->radius;
+        holding_pikmin->z = z;
+        holding_pikmin->angle = angle;
+    }
+        
+        
 }
 
 

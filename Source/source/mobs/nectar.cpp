@@ -33,7 +33,7 @@ void nectar::draw(sprite_effect_manager* effect_manager) {
         type->radius * (amount_left + nectar_amount) / (nectar_amount * 2) * 2;
         
     sprite_effect_manager effects;
-    add_brightness_sprite_effect(&effects);
+    add_sector_brightness_sprite_effect(&effects);
     
     draw_sprite_with_effects(
         bmp_nectar,

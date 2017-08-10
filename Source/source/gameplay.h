@@ -53,7 +53,7 @@ private:
     void load_game_content();
     void load_hud_info();
     void load_hud_coordinates(const int item, string data);
-    void process_mob(mob* m_ptr, size_t m);
+    void process_mob_interactions(mob* m_ptr, size_t m);
     void unload_game_content();
     
 public:

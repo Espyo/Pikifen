@@ -157,11 +157,11 @@ void onion::draw(sprite_effect_manager* effect_manager) {
     
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(this, s_ptr);
-    point draw_size = get_sprite_dimensions(this, s_ptr);
+    point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     sprite_effect_manager effects;
-    add_brightness_sprite_effect(&effects);
+    add_sector_brightness_sprite_effect(&effects);
     
     sprite_effect seethrough_effect;
     sprite_effect_props seethrough_effect_props;

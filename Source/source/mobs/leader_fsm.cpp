@@ -816,12 +816,12 @@ void leader_fsm::stop_whistle(mob* m, void* info1, void* info2) {
 void leader_fsm::join_group(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
     
-    add_to_group(cur_leader_ptr, l_ptr);
+    cur_leader_ptr->add_to_group(l_ptr);
     size_t n_group_members = l_ptr->group->members.size();
     for(size_t m = 0; m < n_group_members; ++m) {
         mob* member = l_ptr->group->members[0];
-        remove_from_group(member);
-        add_to_group(cur_leader_ptr, member);
+        member->remove_from_group();
+        cur_leader_ptr->add_to_group(member);
     }
 }
 
@@ -1038,7 +1038,7 @@ void leader_fsm::do_throw(mob* m, void* info1, void* info2) {
     
     holding_ptr->was_thrown = true;
     
-    remove_from_group(holding_ptr);
+    holding_ptr->remove_from_group();
     leader_ptr->holding_pikmin = NULL;
     
     sfx_throw.stop();
@@ -1193,7 +1193,7 @@ void leader_fsm::lose_health(mob* m, void* info1, void* info2) {
     );
     
     m->health -= damage;
-    apply_knockback(m, knockback, knockback_angle);
+    m->apply_knockback(knockback, knockback_angle);
     
     //If info2 has a value, then this leader is inactive.
     if(knockback > 0 && damage == 0) {
@@ -1301,7 +1301,7 @@ void leader_fsm::chase_leader(mob* m, void* info1, void* info2) {
         true, distance
     );
     m->set_animation(LEADER_ANIM_WALKING);
-    focus_mob(m, m->following_group);
+    m->focus_on_mob(m->following_group);
 }
 
 

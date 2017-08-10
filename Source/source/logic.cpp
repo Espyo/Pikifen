@@ -256,25 +256,25 @@ void gameplay::do_gameplay_logic() {
         ******************/
         
         size_t n_mobs = mobs.size();
-        for(size_t m = 0; m < n_mobs;) {
-        
+        for(size_t m = 0; m < n_mobs; ++m) {
             //Tick the mob.
             mob* m_ptr = mobs[m];
             m_ptr->tick();
             
             if(m_ptr->fsm.cur_state) {
-                process_mob(m_ptr, m);
+                process_mob_interactions(m_ptr, m);
             }
-            
+        }
+        
+        for(size_t m = 0; m < n_mobs;) {
             //Mob deletion.
+            mob* m_ptr = mobs[m];
             if(m_ptr->to_delete) {
                 delete_mob(m_ptr);
                 n_mobs--;
                 continue;
             }
             m++;
-            
-            
         }
         
         
@@ -283,21 +283,8 @@ void gameplay::do_gameplay_logic() {
         *   Leader   (*:O) *
         *             `-´  *
         *******************/
-        
-        if(cur_leader_ptr->holding_pikmin) {
-            cur_leader_ptr->holding_pikmin->pos.x =
-                cur_leader_ptr->pos.x +
-                cos(cur_leader_ptr->angle + M_PI) *
-                cur_leader_ptr->type->radius;
-            cur_leader_ptr->holding_pikmin->pos.y =
-                cur_leader_ptr->pos.y +
-                sin(cur_leader_ptr->angle + M_PI) *
-                cur_leader_ptr->type->radius;
-            cur_leader_ptr->holding_pikmin->z =
-                cur_leader_ptr->z;
-            cur_leader_ptr->holding_pikmin->angle =
-                cur_leader_ptr->angle;
-        }
+        //TODO move this logic to the leader class once
+        //multiplayer logic is implemented.
         
         //Current leader movement.
         point dummy_coords;
@@ -596,7 +583,7 @@ void gameplay::do_gameplay_logic() {
  * Handles the logic required to tick a specific mob and its interactions
  * with other mobs.
  */
-void gameplay::process_mob(mob* m_ptr, size_t m) {
+void gameplay::process_mob_interactions(mob* m_ptr, size_t m) {
     /********************************
      *                              *
      *   Mob interactions   () - () *
@@ -697,7 +684,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                 if(touch_ob_ev) {
                     touch_ob_ev->run(m_ptr, (void*) m2_ptr);
                 }
-                if(touch_op_ev && should_attack(m_ptr, m2_ptr)) {
+                if(touch_op_ev && m_ptr->should_attack(m2_ptr)) {
                     touch_op_ev->run(m_ptr, (void*) m2_ptr);
                 }
                 if(
@@ -1082,7 +1069,7 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
                             )
                         );
                     }
-                    if(opir_ev && should_attack(m_ptr, m2_ptr)) {
+                    if(opir_ev && m_ptr->should_attack(m2_ptr)) {
                         pending_intermob_events.push_back(
                             pending_intermob_event(
                                 d, opir_ev, m2_ptr
@@ -1140,115 +1127,4 @@ void gameplay::process_mob(mob* m_ptr, size_t m) {
         break;
     }
     
-    //Check if it got whistled.
-    mob_event* whistled_ev = q_get_event(m_ptr, MOB_EVENT_WHISTLED);
-    if(whistling && whistled_ev) {
-        if(
-            dist(m_ptr->pos, leader_cursor_w) <=
-            whistle_radius
-        ) {
-            whistled_ev->run(m_ptr);
-        }
-    }
-    
-    //Following a leader.
-    if(m_ptr->following_group) {
-        mob_event* spot_near_ev = q_get_event(m_ptr, MOB_EVENT_SPOT_IS_NEAR);
-        mob_event* spot_far_ev =  q_get_event(m_ptr, MOB_EVENT_SPOT_IS_FAR);
-        
-        if(spot_near_ev || spot_far_ev) {
-            point final_pos =
-                m_ptr->following_group->group->anchor +
-                m_ptr->following_group->group->get_spot_offset(
-                    m_ptr->group_spot_index
-                );
-            dist d(m_ptr->pos, final_pos);
-            if(spot_far_ev && d >= 5) {
-                spot_far_ev->run(m_ptr, (void*) &final_pos);
-            } else if(spot_near_ev && d < 5) {
-                spot_near_ev->run(m_ptr);
-            }
-        }
-    }
-    
-    //Focused on a mob.
-    if(m_ptr->focused_mob) {
-    
-        if(m_ptr->focused_mob->dead) {
-            m_ptr->fsm.run_event(MOB_EVENT_FOCUS_DIED);
-            m_ptr->fsm.run_event(MOB_EVENT_FOCUS_OFF_REACH);
-        }
-        
-        //We have to recheck if the focused mob is not NULL, because
-        //sending MOB_EVENT_FOCUS_DIED could've set this to NULL.
-        if(m_ptr->focused_mob) {
-        
-            mob* focus = m_ptr->focused_mob;
-            
-            mob_event* for_ev =
-                q_get_event(m_ptr, MOB_EVENT_FOCUS_OFF_REACH);
-                
-            if(m_ptr->far_reach != INVALID && for_ev) {
-                dist d(m_ptr->pos, focus->pos);
-                float face_diff =
-                    get_angle_smallest_dif(
-                        m_ptr->angle,
-                        get_angle(m_ptr->pos, focus->pos)
-                    );
-                    
-                mob_type::reach_struct* r_ptr =
-                    &m_ptr->type->reaches[m_ptr->far_reach];
-                if(
-                    (
-                        d > r_ptr->radius_1 +
-                        (m_ptr->type->radius + focus->type->radius) ||
-                        face_diff > r_ptr->angle_1 / 2.0f
-                    ) && (
-                        d > r_ptr->radius_2 +
-                        (m_ptr->type->radius + focus->type->radius) ||
-                        face_diff > r_ptr->angle_2 / 2.0f
-                    )
-                    
-                ) {
-                    for_ev->run(m_ptr);
-                }
-                
-            }
-        }
-        
-        if(m_ptr->focused_mob) {
-            if(!m_ptr->focused_mob->carry_info) {
-                m_ptr->fsm.run_event(MOB_EVENT_FOCUSED_MOB_UNCARRIABLE);
-            }
-        }
-        
-    }
-    
-    //Far away from home.
-    mob_event* far_from_home_ev = q_get_event(m_ptr, MOB_EVENT_FAR_FROM_HOME);
-    if(far_from_home_ev) {
-        dist d(m_ptr->pos, m_ptr->home);
-        if(d >= m_ptr->type->territory_radius) {
-            far_from_home_ev->run(m_ptr);
-        }
-    }
-    
-    //Check its mouth.
-    if(m_ptr->chomping_pikmin.empty()) {
-        m_ptr->fsm.run_event(MOB_EVENT_MOUTH_EMPTY);
-    } else {
-        m_ptr->fsm.run_event(MOB_EVENT_MOUTH_OCCUPIED);
-    }
-    
-    //Being carried, but has an obstacle.
-    if(m_ptr->carry_info) {
-        if(m_ptr->carry_info->obstacle_ptr) {
-            if(m_ptr->carry_info->obstacle_ptr->health == 0) {
-                m_ptr->fsm.run_event(MOB_EVENT_CARRY_BEGIN_MOVE);
-            }
-        }
-    }
-    
-    //Tick event.
-    m_ptr->fsm.run_event(MOB_EVENT_ON_TICK);
 }

@@ -138,7 +138,7 @@ void pikmin::teleport_to_connected_hitbox() {
     speed.x = speed.y = speed_z = 0;
     
     hitbox* h_ptr =
-        get_hitbox(focused_mob, connected_hitbox_nr);
+        focused_mob->get_hitbox(connected_hitbox_nr);
     if(h_ptr) {
         point actual_h_pos = rotate_point(h_ptr->pos, focused_mob->angle);
         actual_h_pos += focused_mob->pos;
@@ -237,15 +237,15 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     
     if(!s_ptr) return;
     
-    point draw_pos = get_sprite_center(this, s_ptr);
-    point draw_size = get_sprite_dimensions(this, s_ptr);
+    point draw_pos = get_sprite_center(s_ptr);
+    point draw_size = get_sprite_dimensions(s_ptr);
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
         fsm.cur_state->id == PIKMIN_STATE_BURIED;
         
     sprite_effect_manager effects;
-    add_brightness_sprite_effect(&effects);
+    add_sector_brightness_sprite_effect(&effects);
     add_status_sprite_effects(&effects);
     
     if(is_idle) {
