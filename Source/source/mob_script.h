@@ -167,8 +167,6 @@ enum MOB_EVENT_TYPES {
     MOB_EVENT_HITBOX_TOUCH_N_A,
     //When one of its normal hitboxes touches another mob's eating hitbox.
     MOB_EVENT_HITBOX_TOUCH_EAT,
-    //When the Pikmin is eaten from being grabbed by an enemy's jaws.
-    MOB_EVENT_EATEN,
     //When a Pikmin was added to the list of Pikmin carrying this mob.
     MOB_EVENT_CARRIER_ADDED,
     //When a Pikmin was removed from the list of Pikmin carrying this mob.

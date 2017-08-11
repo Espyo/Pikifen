@@ -54,6 +54,7 @@ struct status_type {
     float anim_speed_multiplier;
     bool disables_attack;
     
+    //We need to know this in order to remove the particle generator later.
     bool generates_particles;
     particle_generator* particle_gen;
     string animation_name;

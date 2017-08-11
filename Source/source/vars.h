@@ -315,6 +315,7 @@ extern bool show_framerate;
 extern bool smooth_scaling;
 extern single_animation_suite spark_animation;
 extern map<string, mob_type*> spec_mob_types;
+extern map<string, spike_damage_type> spike_damage_types;
 //How many of each spray the player has.
 extern vector<unsigned long> spray_amounts;
 extern vector<spray_type> spray_types;

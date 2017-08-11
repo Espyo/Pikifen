@@ -19,6 +19,7 @@ pushable = true
 pushes = false
 radius = 5
 resistances = poison
+spike_damage = poison
 top_leaf = Leaf_top.png
 top_bud = Pink_bud_top.png
 top_flower = Pink_flower_top.png

@@ -22,6 +22,7 @@
 
 #include "geometry_utils.h"
 #include "mobs/mob_category.h"
+#include "particle.h"
 
 class mob;
 class pikmin_type;
@@ -268,6 +269,34 @@ public:
     float get_perc_left();
     void tick(const float time);
     void draw();
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Type of spike damage.
+ * When a mob is attacked, it can instantly deal some damage to the mob
+ * that attacked it.
+ */
+struct spike_damage_type {
+    //Name of the type. "Poison", "Ice", etc.
+    string name;
+    //Amount of damage to cause, either in absolute HP or max HP ratio.
+    float damage;
+    //If true, damage is only dealt if the victim is eaten. e.g. White Pikmin.
+    bool ingestion_only;
+    //If true, the damage var represents max HP ratio. If false, absolute HP.
+    bool is_damage_ratio;
+    //Particle generator to use to generate particles, if any.
+    particle_generator* particle_gen;
+    
+    spike_damage_type() :
+        damage(0),
+        ingestion_only(false),
+        is_damage_ratio(false),
+        particle_gen(nullptr) {
+            
+    }
 };
 
 

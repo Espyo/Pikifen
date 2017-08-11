@@ -23,6 +23,7 @@
 /* ----------------------------------------------------------------------------
  * Generic handler for a mob touching a hazard.
  */
+class cause_spike_damage;
 void gen_mob_fsm::touch_hazard(mob* m, void* info1, void* info2) {
     hazard* h = (hazard*) info1;
     
@@ -72,6 +73,8 @@ void gen_mob_fsm::lose_health(mob* m, void* info1, void* info2) {
     m->set_health(true, false, -damage);
     
     m->fsm.run_event(MOB_EVENT_DAMAGE, info->mob2);
+    
+    m->cause_spike_damage(info->mob2, false);
     
     //If before taking damage, the interval was dividable X times,
     //and after it's only dividable by Y (X>Y), an interval was crossed.

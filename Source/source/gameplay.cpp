@@ -234,6 +234,7 @@ void gameplay::load_game_content() {
     load_hazards();
     load_hud_info();
     load_weather();
+    load_spike_damage_types();
     
     //Mob types.
     load_mob_types(true);
@@ -416,6 +417,7 @@ void gameplay::unload_game_content() {
     
     unload_mob_types(true);
     
+    unload_spike_damage_types();
     unload_hazards();
     unload_spray_types();
     unload_status_types(true);

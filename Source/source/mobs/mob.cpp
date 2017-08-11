@@ -446,6 +446,40 @@ void mob::calculate_carrying_destination(mob* added, mob* removed) {
 
 
 /* ----------------------------------------------------------------------------
+ * Makes the mob cause spike damage to another mob.
+ * victim:       The mob that will be damaged.
+ * is_ingestion: If true, the attacker just got eaten.
+ *   If false, it merely got hurt.
+ */
+void mob::cause_spike_damage(mob* victim, const bool is_ingestion) {
+    if(!type->spike_damage) return;
+    
+    if(type->spike_damage->ingestion_only != is_ingestion) return;
+    
+    float damage;
+    if(type->spike_damage->is_damage_ratio) {
+        damage = victim->type->max_health * type->spike_damage->damage;
+    } else {
+        damage = type->spike_damage->damage;
+    }
+    
+    auto v =
+        victim->type->spike_damage_vulnerabilities.find(type->spike_damage);
+    if(v != victim->type->spike_damage_vulnerabilities.end()) {
+        damage *= v->second;
+    }
+    
+    victim->set_health(true, false, -damage);
+    
+    if(type->spike_damage->particle_gen) {
+        particle_generator pg = *(type->spike_damage->particle_gen);
+        pg.base_particle.pos = victim->pos;
+        pg.emit(particles);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Sets a target for the mob to follow.
  * offs_*:          Coordinates of the target, relative to either the
  *   world origin, or another point, specified in the next parameters.
@@ -555,7 +589,7 @@ void mob::eat(const size_t nr) {
     for(size_t p = 0; p < total; ++p) {
         chomping_pikmin[p]->set_health(false, false, 0.0f);
         chomping_pikmin[p]->dead = true;
-        chomping_pikmin[p]->fsm.run_event(MOB_EVENT_EATEN);
+        chomping_pikmin[p]->cause_spike_damage(this, true);
     }
     chomping_pikmin.clear();
 }

@@ -1044,6 +1044,55 @@ sample_struct load_sample(
 
 
 /* ----------------------------------------------------------------------------
+ * Loads the spike damage types available.
+ */
+void load_spike_damage_types() {
+    data_node types_file = load_data_file(SPIKE_DAMAGE_TYPES_FILE);
+    size_t n_types =
+        types_file.get_nr_of_children();
+        
+    for(size_t t = 0; t < n_types; ++t) {
+        data_node* type_node = types_file.get_child(t);
+        spike_damage_type s_type;
+        
+        s_type.name = type_node->name;
+        s_type.damage =
+            s2f(type_node->get_child_by_name("damage")->value);
+        s_type.ingestion_only =
+            s2b(type_node->get_child_by_name("ingestion_only")->value);
+        s_type.is_damage_ratio =
+            s2b(type_node->get_child_by_name("is_damage_ratio")->value);
+        
+        data_node* pg_node = type_node->get_child_by_name("particle_generator");
+        string pg_name = pg_node->value;
+        if(!pg_name.empty()) {
+            if(
+                custom_particle_generators.find(pg_name) ==
+                custom_particle_generators.end()
+            ) {
+                log_error(
+                    "Unknown particle generator \"" +
+                    pg_name + "\"!", pg_node
+                );
+            } else {
+                s_type.particle_gen = &custom_particle_generators[pg_name];
+            }
+        }
+        
+        if(s_type.damage == 0) {
+            log_error(
+                "Spike damage type \"" + s_type.name +
+                "\" needs a damage number!",
+                type_node
+            );
+        }
+        
+        spike_damage_types[s_type.name] = s_type;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads spray types from the game data.
  */
 void load_spray_types(const bool load_resources) {
@@ -1406,6 +1455,14 @@ void unload_misc_resources() {
     sfx_throw.destroy();
     sfx_switch_pikmin.destroy();
     sfx_camera.destroy();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Unloads spike damage types loaded in memory.
+ */
+void unload_spike_damage_types() {
+    spike_damage_types.clear();
 }
 
 

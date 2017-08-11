@@ -133,6 +133,7 @@ const string OTHER_TYPES_FOLDER_PATH  = TYPES_FOLDER_PATH + "/Others";
 const string PELLETS_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Pellets";
 const string PIKMIN_FOLDER_PATH       = TYPES_FOLDER_PATH + "/Pikmin";
 const string SPECIAL_MOBS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Special";
+const string SPIKE_DAMAGE_TYPES_FILE  = MISC_FOLDER_PATH + "/Spike_damage.txt";
 const string SHIPS_FOLDER_PATH        = TYPES_FOLDER_PATH + "/Ships";
 const string TEXTURES_FOLDER_NAME     = "Textures";
 const string TEXTURES_FOLDER_PATH     =

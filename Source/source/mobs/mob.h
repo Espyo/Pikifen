@@ -354,6 +354,7 @@ public:
     void add_to_group(mob* new_member);
     void apply_knockback(const float knockback, const float knockback_angle);
     void calculate_carrying_destination(mob* added, mob* removed);
+    void cause_spike_damage(mob* victim, const bool is_ingestion);
     void focus_on_mob(mob* m);
     void unfocus_from_mob();
     void remove_from_group();

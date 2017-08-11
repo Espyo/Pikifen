@@ -19,6 +19,7 @@
 
 #include "../animation.h"
 #include "../data_file.h"
+#include "../misc_structs.h"
 #include "mob_category.h"
 #include "../mob_script.h"
 
@@ -90,6 +91,8 @@ public:
     
     //Misc.
     bool is_obstacle;
+    spike_damage_type* spike_damage;
+    map<spike_damage_type*, float> spike_damage_vulnerabilities;
     
     //Used by the special mob types, as it is not possible to control
     //which type of mob to create without a list.

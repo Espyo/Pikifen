@@ -238,6 +238,7 @@ bool show_framerate = false;
 bool smooth_scaling = true;
 single_animation_suite spark_animation;
 map<string, mob_type*> spec_mob_types;
+map<string, spike_damage_type> spike_damage_types;
 vector<unsigned long> spray_amounts;
 vector<spray_type> spray_types;
 float standard_pikmin_height = 24;

@@ -48,6 +48,7 @@ mob_type::mob_type(size_t category_id) :
     territory_radius(0),
     first_state_nr(INVALID),
     is_obstacle(false),
+    spike_damage(nullptr),
     show_health(true),
     casts_shadow(true) {
     
@@ -282,7 +283,9 @@ void load_mob_type_from_file(
     mob_type* mt, data_node &file,
     const bool load_resources, const string &folder
 ) {
-
+    
+    string spike_damage_name;
+    
     reader_setter rs(&file);
     rs.set("name",                mt->name);
     rs.set("always_active",       mt->always_active);
@@ -302,8 +305,42 @@ void load_mob_type_from_file(
     rs.set("show_health",         mt->show_health);
     rs.set("casts_shadow",        mt->casts_shadow);
     rs.set("is_obstacle",         mt->is_obstacle);
+    rs.set("spike_damage",        spike_damage_name);
     
     mt->rotation_speed = deg_to_rad(mt->rotation_speed);
+    
+    auto sd_it = spike_damage_types.find(spike_damage_name);
+    if(!spike_damage_name.empty()) {
+        if(sd_it == spike_damage_types.end()) {
+            log_error(
+                "Spike damage type \"" + spike_damage_name + "\" not found!",
+                file.get_child_by_name("spike_damage")
+            );
+        } else {
+            mt->spike_damage = &(sd_it->second);
+        }
+    }
+    
+    data_node* spike_damage_vuln_node =
+        file.get_child_by_name("spike_damage_vulnerabilities");
+    size_t n_sd_vuln =
+        spike_damage_vuln_node->get_nr_of_children();
+    for(size_t v = 0; v < n_sd_vuln; ++v) {
+        
+        data_node* vul_node =
+            spike_damage_vuln_node->get_child(v);
+        
+        auto sdv_it = spike_damage_types.find(vul_node->name);
+        if(sdv_it == spike_damage_types.end()) {
+            log_error(
+                "Spike damage type \"" + vul_node->name + "\" not found!",
+                vul_node
+            );
+        } else {
+            mt->spike_damage_vulnerabilities[&(sdv_it->second)] =
+                s2f(vul_node->value) / 100;
+        }
+    }
     
     data_node* reaches_node = file.get_child_by_name("reaches");
     size_t n_reaches = reaches_node->get_nr_of_children();
