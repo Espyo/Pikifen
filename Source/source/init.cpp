@@ -49,6 +49,42 @@ void init_allegro() {
 
 
 /* ----------------------------------------------------------------------------
+ * Initializes the default asset file names.
+ */
+void init_asset_file_names() {
+    asset_file_names.area_name_font =    "Area_name_font.png";
+    asset_file_names.checkbox_check =    "Checkbox_check.png";
+    asset_file_names.cursor =            "Cursor.png";
+    asset_file_names.cursor_invalid =    "Cursor_invalid.png";
+    asset_file_names.counter_font =      "Counter_font.png";
+    asset_file_names.enemy_spirit =      "Enemy_spirit.png";
+    asset_file_names.group_move_arrow =  "Group_move_arrow.png";
+    asset_file_names.icon =              "Icon.png";
+    asset_file_names.idle_glow =         "Idle_glow.png";
+    asset_file_names.main_font =         "Font.png";
+    asset_file_names.main_menu =         "Main_menu.jpg";
+    asset_file_names.mouse_cursor =      "Mouse_cursor.png";
+    asset_file_names.mouse_wd_icon =     "Mouse_wheel_down_icon.png";
+    asset_file_names.mouse_wu_icon =     "Mouse_wheel_up_icon.png";
+    asset_file_names.notification =      "Notification.png";
+    asset_file_names.pikmin_silhouette = "Pikmin_silhouette.png";
+    asset_file_names.pikmin_spirit =     "Pikmin_spirit.png";
+    asset_file_names.shadow =            "Shadow.png";
+    asset_file_names.smack =             "Smack.png";
+    asset_file_names.smoke =             "Smoke.png";
+    asset_file_names.sparkle =           "Sparkle.png";
+    asset_file_names.spotlight =         "Spotlight.png";
+    asset_file_names.value_font =        "Value_font.png";
+    asset_file_names.wave_ring =         "Wave_ring.png";
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        asset_file_names.mouse_button_icon[i] =
+            "Mouse_button_" + i2s(i + 1) + "_icon.png";
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes the default controls.
  */
 void init_controls() {

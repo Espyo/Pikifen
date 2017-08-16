@@ -115,37 +115,63 @@ const unsigned int DEF_FPS   = 60;
 const unsigned int DEF_SCR_W = 640;
 const unsigned int DEF_SCR_H = 480;
 
-const string GAME_DATA_FOLDER_PATH    = "Game_data";
-const string TYPES_FOLDER_PATH        = GAME_DATA_FOLDER_PATH + "/Types";
-const string MISC_FOLDER_PATH         = GAME_DATA_FOLDER_PATH + "/Misc";
+const string GAME_DATA_FOLDER_PATH = "Game_data";
+const string TYPES_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Types";
+const string MISC_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Misc";
+const string TEXTURES_FOLDER_NAME =
+    "Textures";
 
-const string ANIMATIONS_FOLDER_PATH   = GAME_DATA_FOLDER_PATH + "/Animations";
-const string AREAS_FOLDER_PATH        = GAME_DATA_FOLDER_PATH + "/Areas";
-const string AUDIO_FOLDER_PATH        = GAME_DATA_FOLDER_PATH + "/Audio";
-const string BRIDGES_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Bridges";
-const string ENEMIES_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Enemies";
-const string GATES_FOLDER_PATH        = TYPES_FOLDER_PATH + "/Gates";
-const string GRAPHICS_FOLDER_PATH     = GAME_DATA_FOLDER_PATH + "/Graphics";
-const string LEADERS_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Leaders";
-const string CUSTOM_MOB_FOLDER_PATH   = TYPES_FOLDER_PATH + "/Custom";
-const string ONIONS_FOLDER_PATH       = TYPES_FOLDER_PATH + "/Onions";
-const string OTHER_TYPES_FOLDER_PATH  = TYPES_FOLDER_PATH + "/Others";
-const string PELLETS_FOLDER_PATH      = TYPES_FOLDER_PATH + "/Pellets";
-const string PIKMIN_FOLDER_PATH       = TYPES_FOLDER_PATH + "/Pikmin";
-const string SPECIAL_MOBS_FOLDER_PATH = TYPES_FOLDER_PATH + "/Special";
-const string SPIKE_DAMAGE_TYPES_FILE  = MISC_FOLDER_PATH + "/Spike_damage.txt";
-const string SHIPS_FOLDER_PATH        = TYPES_FOLDER_PATH + "/Ships";
-const string TEXTURES_FOLDER_NAME     = "Textures";
-const string TEXTURES_FOLDER_PATH     =
+const string ANIMATIONS_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Animations";
+const string AREAS_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Areas";
+const string AUDIO_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Audio";
+const string BRIDGES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Bridges";
+const string ENEMIES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Enemies";
+const string GATES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Gates";
+const string GRAPHICS_FOLDER_PATH =
+    GAME_DATA_FOLDER_PATH + "/Graphics";
+const string LEADERS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Leaders";
+const string CUSTOM_MOB_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Custom";
+const string ONIONS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Onions";
+const string OTHER_TYPES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Others";
+const string PELLETS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Pellets";
+const string PIKMIN_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Pikmin";
+const string SPECIAL_MOBS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Special";
+const string SHIPS_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Ships";
+const string TEXTURES_FOLDER_PATH =
     GRAPHICS_FOLDER_PATH + "/" + TEXTURES_FOLDER_NAME;
-const string TREASURES_FOLDER_PATH    = TYPES_FOLDER_PATH + "/Treasures";
+const string TREASURES_FOLDER_PATH =
+    TYPES_FOLDER_PATH + "/Treasures";
 
-const string CONFIG_FILE              = MISC_FOLDER_PATH + "/Config.txt";
+const string CONFIG_FILE =
+    MISC_FOLDER_PATH + "/Config.txt";
+const string CREATOR_TOOLS_FILE =
+    MISC_FOLDER_PATH + "/Tools.txt";
 const string PARTICLE_GENERATORS_FILE =
     MISC_FOLDER_PATH + "/Particle_generators.txt";
+const string SPIKE_DAMAGE_TYPES_FILE =
+    MISC_FOLDER_PATH + "/Spike_damage.txt";
 const string SYSTEM_ANIMATIONS_FILE =
     MISC_FOLDER_PATH + "/System_animations.txt";
-const string WEATHER_FILE          = MISC_FOLDER_PATH + "/Weather.txt";
+const string SYSTEM_ASSET_FILE_NAMES_FILE =
+    MISC_FOLDER_PATH + "/System_asset_file_names.txt";
+const string WEATHER_FILE =
+    MISC_FOLDER_PATH + "/Weather.txt";
 
 enum CREATOR_TOOL_IDS {
     CREATOR_TOOL_NONE,

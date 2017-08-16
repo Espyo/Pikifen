@@ -39,8 +39,6 @@ ALLEGRO_BITMAP* bmp_smack = NULL;
 ALLEGRO_BITMAP* bmp_smoke = NULL;
 ALLEGRO_BITMAP* bmp_sparkle = NULL;
 ALLEGRO_BITMAP* bmp_spotlight = NULL;
-ALLEGRO_BITMAP* bmp_ub_spray = NULL;
-ALLEGRO_BITMAP* bmp_us_spray = NULL;
 ALLEGRO_BITMAP* bmp_wave_ring = NULL;
 
 sample_struct sfx_attack;
@@ -64,6 +62,8 @@ sample_struct sfx_pikmin_plucked;
 sample_struct sfx_pikmin_thrown;
 sample_struct sfx_switch_pikmin;
 sample_struct sfx_throw;
+
+asset_file_names_struct asset_file_names;
 
 vector<string> animation_editor_history;
 timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);

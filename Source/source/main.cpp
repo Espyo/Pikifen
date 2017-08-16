@@ -84,16 +84,15 @@ int main(int argc, char** argv) {
     init_event_things(logic_timer, logic_queue);
     
     //Other fundamental initializations and loadings.
+    init_asset_file_names();
     init_misc();
     init_game_states();
     init_error_bitmap();
+    load_asset_file_names();
     load_fonts();
     load_misc_graphics();
     load_system_animations();
     load_misc_sounds();
-    
-    //The icon is used a lot, so load it here.
-    bmp_icon = load_bmp("Icon.png");
     
     //Draw the basic loading screen.
     draw_loading_screen("", "", 1.0);

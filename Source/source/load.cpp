@@ -456,6 +456,49 @@ void load_area_textures() {
 
 
 /* ----------------------------------------------------------------------------
+ * Loads asset file names.
+ */
+void load_asset_file_names() {
+    data_node file(SYSTEM_ASSET_FILE_NAMES_FILE);
+    
+    reader_setter rs(&file);
+    
+    rs.set("area_name_font", asset_file_names.area_name_font);
+    rs.set("checkbox_check", asset_file_names.checkbox_check);
+    rs.set("cursor", asset_file_names.cursor);
+    rs.set("cursor_invalid", asset_file_names.cursor_invalid);
+    rs.set("counter_font", asset_file_names.counter_font);
+    rs.set("enemy_spirit", asset_file_names.enemy_spirit);
+    rs.set("group_move_arrow", asset_file_names.group_move_arrow);
+    rs.set("icon", asset_file_names.icon);
+    rs.set("idle_glow", asset_file_names.idle_glow);
+    rs.set("main_font", asset_file_names.main_font);
+    rs.set("main_menu", asset_file_names.main_menu);
+    rs.set("mouse_cursor", asset_file_names.mouse_cursor);
+    rs.set("mouse_wheel_down_icon", asset_file_names.mouse_wd_icon);
+    rs.set("mouse_wheel_up_icon", asset_file_names.mouse_wu_icon);
+    rs.set("notification", asset_file_names.notification);
+    rs.set("pikmin_silhouette", asset_file_names.pikmin_silhouette);
+    rs.set("pikmin_spirit", asset_file_names.pikmin_spirit);
+    rs.set("shadow", asset_file_names.shadow);
+    rs.set("smack", asset_file_names.smack);
+    rs.set("smoke", asset_file_names.smoke);
+    rs.set("sparkle", asset_file_names.sparkle);
+    rs.set("spotlight", asset_file_names.spotlight);
+    rs.set("value_font", asset_file_names.value_font);
+    rs.set("wave_ring", asset_file_names.wave_ring);
+    
+    for(unsigned char i = 0; i < 3; ++i) {
+        rs.set(
+            "mouse_button_" + i2s(i + 1) + "_icon",
+            asset_file_names.mouse_button_icon[3]
+        );
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Loads a bitmap from the game's content.
  * If the node is present, it'll be used to report errors.
  */
@@ -504,7 +547,7 @@ void load_control(
  * Loads the creator tools from the tool config file.
  */
 void load_creator_tools() {
-    data_node file(MISC_FOLDER_PATH + "/Tools.txt");
+    data_node file(CREATOR_TOOLS_FILE);
     
     if(!s2b(file.get_child_by_name("enabled")->value)) return;
     
@@ -644,50 +687,73 @@ data_node load_data_file(const string &file_name) {
  * Loads the game's fonts.
  */
 void load_fonts() {
-    int font_ranges[] = {
+    const int STANDARD_FONT_RANGES_SIZE = 2;
+    int standard_font_ranges[STANDARD_FONT_RANGES_SIZE] = {
         0x0020, 0x007E, //ASCII
         /*0x00A0, 0x00A1, //Non-breaking space and inverted !
         0x00BF, 0x00FF, //Inverted ? and European vowels and such*/
     };
-    int counter_font_ranges[] = {
+    
+    const int COUNTER_FONT_RANGES_SIZE = 6;
+    int counter_font_ranges[COUNTER_FONT_RANGES_SIZE] = {
         0x002D, 0x002D, //Dash
         0x002F, 0x0039, //Slash and numbers
         0x0078, 0x0078, //x
     };
-    int value_font_ranges[] = {
+    
+    const int VALUE_FONT_RANGES_SIZE = 6;
+    int value_font_ranges[VALUE_FONT_RANGES_SIZE] = {
         0x0024, 0x0024, //Dollar sign
         0x002D, 0x002D, //Dash
         0x0030, 0x0039, //Numbers
     };
     
-    //We can't load the font directly because we want to set the ranges.
-    //So we load into a bitmap first.
-    ALLEGRO_BITMAP* temp_font_bitmap = load_bmp("Font.png");
-    if(temp_font_bitmap) {
-        font_main = al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
-    }
-    al_destroy_bitmap(temp_font_bitmap);
+    //We can't load the fonts directly because we want to set the ranges.
+    //So we load them into bitmaps first.
     
-    temp_font_bitmap = load_bmp("Area_name_font.png");
-    if(temp_font_bitmap) {
+    //Main font.
+    ALLEGRO_BITMAP* temp_font_bmp = load_bmp(asset_file_names.main_font);
+    if(temp_font_bmp) {
+        font_main =
+            al_grab_font_from_bitmap(
+                temp_font_bmp,
+                STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
+            );
+    }
+    al_destroy_bitmap(temp_font_bmp);
+    
+    //Area name font.
+    temp_font_bmp = load_bmp(asset_file_names.area_name_font);
+    if(temp_font_bmp) {
         font_area_name =
-            al_grab_font_from_bitmap(temp_font_bitmap, 1, font_ranges);
+            al_grab_font_from_bitmap(
+                temp_font_bmp,
+                STANDARD_FONT_RANGES_SIZE / 2, standard_font_ranges
+            );
     }
-    al_destroy_bitmap(temp_font_bitmap);
+    al_destroy_bitmap(temp_font_bmp);
     
-    temp_font_bitmap = load_bmp("Counter_font.png");
-    if(temp_font_bitmap) {
+    //Counter font.
+    temp_font_bmp = load_bmp(asset_file_names.counter_font);
+    if(temp_font_bmp) {
         font_counter =
-            al_grab_font_from_bitmap(temp_font_bitmap, 3, counter_font_ranges);
+            al_grab_font_from_bitmap(
+                temp_font_bmp,
+                COUNTER_FONT_RANGES_SIZE / 2, counter_font_ranges
+            );
     }
-    al_destroy_bitmap(temp_font_bitmap);
+    al_destroy_bitmap(temp_font_bmp);
     
-    temp_font_bitmap = load_bmp("Value_font.png");
-    if(temp_font_bitmap) {
+    //Value font.
+    temp_font_bmp = load_bmp(asset_file_names.value_font);
+    if(temp_font_bmp) {
         font_value =
-            al_grab_font_from_bitmap(temp_font_bitmap, 3, value_font_ranges);
+            al_grab_font_from_bitmap(
+                temp_font_bmp,
+                VALUE_FONT_RANGES_SIZE / 2, value_font_ranges
+            );
     }
-    al_destroy_bitmap(temp_font_bitmap);
+    al_destroy_bitmap(temp_font_bmp);
     
     if(font_main) font_main_h = al_get_font_line_height(font_main);
     if(font_counter) font_counter_h = al_get_font_line_height(font_counter);
@@ -853,37 +919,33 @@ void load_liquids(const bool load_resources) {
  */
 void load_misc_graphics() {
     //Icon.
-    bmp_icon = load_bmp("Icon.png");
+    bmp_icon = load_bmp(asset_file_names.icon);
     al_set_display_icon(display, bmp_icon);
     
     //Graphics.
-    bmp_checkbox_check = load_bmp(   "Checkbox_check.png");
-    bmp_cursor = load_bmp(           "Cursor.png");
-    bmp_cursor_invalid = load_bmp(   "Cursor_invalid.png");
-    bmp_enemy_spirit = load_bmp(     "Enemy_spirit.png");
-    bmp_idle_glow = load_bmp(        "Idle_glow.png");
-    bmp_info_spot = load_bmp(        "Info_spot.png");
-    bmp_mouse_cursor = load_bmp(     "Mouse_cursor.png");
-    bmp_mouse_wd_icon = load_bmp(    "Mouse_wheel_down_icon.png");
-    bmp_mouse_wu_icon = load_bmp(    "Mouse_wheel_up_icon.png");
-    bmp_notification = load_bmp(     "Notification.png");
-    bmp_group_move_arrow = load_bmp( "Group_move_arrow.png");
-    bmp_nectar = load_bmp(           "Nectar.png");
-    bmp_pikmin_silhouette = load_bmp("Pikmin_silhouette.png");
-    bmp_pikmin_spirit = load_bmp(    "Pikmin_spirit.png");
-    bmp_shadow = load_bmp(           "Shadow.png");
-    bmp_smack = load_bmp(            "Smack.png");
-    bmp_smoke = load_bmp(            "Smoke.png");
-    bmp_sparkle = load_bmp(          "Sparkle.png");
-    bmp_spotlight = load_bmp(        "Spotlight.png");
-    bmp_ub_spray = load_bmp(         "Ultra-bitter_spray.png");
-    bmp_us_spray = load_bmp(         "Ultra-spicy_spray.png");
-    bmp_wave_ring = load_bmp(        "Wave_ring.png");
+    bmp_checkbox_check = load_bmp(   asset_file_names.checkbox_check);
+    bmp_cursor = load_bmp(           asset_file_names.cursor);
+    bmp_cursor_invalid = load_bmp(   asset_file_names.cursor_invalid);
+    bmp_enemy_spirit = load_bmp(     asset_file_names.enemy_spirit);
+    bmp_idle_glow = load_bmp(        asset_file_names.idle_glow);
+    bmp_info_spot = load_bmp(        "Info_spot.png"); //TODO
+    bmp_mouse_cursor = load_bmp(     asset_file_names.mouse_cursor);
+    bmp_mouse_wd_icon = load_bmp(    asset_file_names.mouse_wd_icon);
+    bmp_mouse_wu_icon = load_bmp(    asset_file_names.mouse_wu_icon);
+    bmp_notification = load_bmp(     asset_file_names.notification);
+    bmp_group_move_arrow = load_bmp( asset_file_names.group_move_arrow);
+    bmp_nectar = load_bmp(           "Nectar.png"); //TODO
+    bmp_pikmin_silhouette = load_bmp(asset_file_names.pikmin_silhouette);
+    bmp_pikmin_spirit = load_bmp(    asset_file_names.pikmin_spirit);
+    bmp_shadow = load_bmp(           asset_file_names.shadow);
+    bmp_smack = load_bmp(            asset_file_names.smack);
+    bmp_smoke = load_bmp(            asset_file_names.smoke);
+    bmp_sparkle = load_bmp(          asset_file_names.sparkle);
+    bmp_spotlight = load_bmp(        asset_file_names.spotlight);
+    bmp_wave_ring = load_bmp(        asset_file_names.wave_ring);
     for(unsigned char i = 0; i < 3; ++i) {
         bmp_mouse_button_icon[i] =
-            load_bmp(
-                "Mouse_button_" + i2s(i + 1) + "_icon.png"
-            );
+            load_bmp(asset_file_names.mouse_button_icon[i]);
     }
 }
 
@@ -1429,8 +1491,6 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_smack);
     al_destroy_bitmap(bmp_smoke);
     al_destroy_bitmap(bmp_sparkle);
-    al_destroy_bitmap(bmp_ub_spray);
-    al_destroy_bitmap(bmp_us_spray);
     for(unsigned char i = 0; i < 3; ++i) {
         bitmaps.detach(bmp_mouse_button_icon[i]);
     }

@@ -70,8 +70,6 @@ extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
 extern ALLEGRO_BITMAP* bmp_sparkle;
 extern ALLEGRO_BITMAP* bmp_spotlight;
-extern ALLEGRO_BITMAP* bmp_ub_spray;
-extern ALLEGRO_BITMAP* bmp_us_spray;
 extern ALLEGRO_BITMAP* bmp_wave_ring;
 
 //Sound effects.
@@ -97,6 +95,35 @@ extern sample_struct sfx_pikmin_plucked;
 extern sample_struct sfx_pikmin_thrown;
 extern sample_struct sfx_switch_pikmin;
 extern sample_struct sfx_throw;
+
+struct asset_file_names_struct {
+    string area_name_font;
+    string checkbox_check;
+    string cursor;
+    string cursor_invalid;
+    string counter_font;
+    string enemy_spirit;
+    string group_move_arrow;
+    string icon;
+    string idle_glow;
+    string main_font;
+    string main_menu;
+    string mouse_button_icon[3];
+    string mouse_cursor;
+    string mouse_wd_icon;
+    string mouse_wu_icon;
+    string notification;
+    string pikmin_silhouette;
+    string pikmin_spirit;
+    string shadow;
+    string smack;
+    string smoke;
+    string sparkle;
+    string spotlight;
+    string value_font;
+    string wave_ring;
+};
+extern asset_file_names_struct asset_file_names;
 
 //General globals.
 

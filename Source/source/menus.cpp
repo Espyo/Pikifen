@@ -45,7 +45,7 @@ void main_menu::load() {
     al_flip_display();
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.jpg");
+    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
     
     data_node title_screen_logo_file =
         load_data_file(
@@ -236,7 +236,7 @@ void options_menu::load() {
     capturing_input = false;
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.jpg");
+    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
     
     //Menu widgets.
     menu_widgets.push_back(
@@ -695,7 +695,7 @@ void area_menu::load() {
     }
     
     //Resources.
-    bmp_menu_bg = load_bmp("Main_menu.jpg");
+    bmp_menu_bg = load_bmp(asset_file_names.main_menu);
     
     //Menu widgets.
     menu_widgets.push_back(
