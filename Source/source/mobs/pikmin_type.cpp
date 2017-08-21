@@ -18,6 +18,9 @@
 #include "pikmin_fsm.h"
 #include "../vars.h"
 
+const float DEFAULT_BURIED_EVOLUTION_TIME[N_MATURITIES] =
+    { 2 * 60, 2 * 60, 3 * 60 };
+
 /* ----------------------------------------------------------------------------
  * Creates a type of Pikmin.
  */
@@ -35,12 +38,11 @@ pikmin_type::pikmin_type() :
     can_latch(true),
     can_carry_bomb_rocks(false) {
     
-    bmp_top[0] = NULL;
-    bmp_top[1] = NULL;
-    bmp_top[2] = NULL;
-    bmp_maturity_icon[0] = NULL;
-    bmp_maturity_icon[1] = NULL;
-    bmp_maturity_icon[2] = NULL;
+    for(size_t m = 0; m < N_MATURITIES; ++m) {
+        buried_evolution_time[m] = DEFAULT_BURIED_EVOLUTION_TIME[m];
+        bmp_top[m] = NULL;
+        bmp_maturity_icon[m] = NULL;
+    }
     
     weight = 1;
     show_health = false;
@@ -66,23 +68,22 @@ pikmin_type::pikmin_type() :
  * Loads parameters from a data file.
  */
 void pikmin_type::load_parameters(data_node* file) {
-    attack_power = s2f(file->get_child_by_name("attack_power")->value);
-    throw_strength_mult =
-        s2f(
-            file->get_child_by_name(
-                "throw_strength_mult"
-            )->get_value_or_default("1")
-        );
-    can_carry_bomb_rocks =
-        s2b(
-            file->get_child_by_name("can_carry_bomb_rocks")->value
-        );
-    can_dig = s2b(file->get_child_by_name("can_dig")->value);
-    can_latch = s2b(file->get_child_by_name("can_latch")->value);
-    can_swim = s2b(file->get_child_by_name("can_swim")->value);
-    carry_speed = s2f(file->get_child_by_name("carry_speed")->value);
-    carry_strength = s2f(file->get_child_by_name("carry_strength")->value);
-    has_onion = s2b(file->get_child_by_name("has_onion")->value);
+    
+    reader_setter rs(file);
+    
+    rs.set("attack_power", attack_power);
+    rs.set("throw_strength_mult", throw_strength_mult);
+    rs.set("can_carry_bomb_rocks", can_carry_bomb_rocks);
+    rs.set("can_dig", can_dig);
+    rs.set("can_latch", can_latch);
+    rs.set("can_swim", can_swim);
+    rs.set("carry_speed", carry_speed);
+    rs.set("carry_strength", carry_strength);
+    rs.set("has_onion", has_onion);
+    
+    for(size_t m = 0; m < N_MATURITIES; ++m) {
+        rs.set("buried_evolution_time_" + i2s(m + 1), buried_evolution_time[m]);
+    }
     
     data_node* hazards_node = file->get_child_by_name("resistances");
     vector<string> hazards_strs = semicolon_list_to_vector(hazards_node->value);

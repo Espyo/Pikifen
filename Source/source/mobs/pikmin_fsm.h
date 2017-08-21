@@ -20,15 +20,17 @@
 namespace pikmin_fsm {
 void create_fsm(mob_type* typ);
 
-void become_buried(          mob* m, void* info1, void* info2);
-void become_disabled(        mob* m, void* info1, void* info2);
-void become_idle(            mob* m, void* info1, void* info2);
-void begin_pluck(            mob* m, void* info1, void* info2);
 void be_dismissed(           mob* m, void* info1, void* info2);
 void be_grabbed_by_enemy(    mob* m, void* info1, void* info2);
 void be_grabbed_by_friend(   mob* m, void* info1, void* info2);
 void be_released(            mob* m, void* info1, void* info2);
 void be_thrown(              mob* m, void* info1, void* info2);
+void become_buried(          mob* m, void* info1, void* info2);
+void become_disabled(        mob* m, void* info1, void* info2);
+void become_idle(            mob* m, void* info1, void* info2);
+void begin_pluck(            mob* m, void* info1, void* info2);
+void buried_evolve(          mob* m, void* info1, void* info2);
+void buried_schedule_evol(   mob* m, void* info1, void* info2);
 void called(                 mob* m, void* info1, void* info2);
 void chase_leader(           mob* m, void* info1, void* info2);
 void check_disabled_edible(  mob* m, void* info1, void* info2);
@@ -56,6 +58,7 @@ void reach_dismiss_spot(     mob* m, void* info1, void* info2);
 void rechase_opponent(       mob* m, void* info1, void* info2);
 void remove_disabled(        mob* m, void* info1, void* info2);
 void remove_panic(           mob* m, void* info1, void* info2);
+void seed_landed(            mob* m, void* info1, void* info2);
 void set_group_move_reach(   mob* m, void* info1, void* info2);
 void set_idle_task_reach(    mob* m, void* info1, void* info2);
 void sigh(                   mob* m, void* info1, void* info2);

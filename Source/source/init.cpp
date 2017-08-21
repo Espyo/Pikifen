@@ -69,6 +69,7 @@ void init_asset_file_names() {
     asset_file_names.notification =      "Notification.png";
     asset_file_names.pikmin_silhouette = "Pikmin_silhouette.png";
     asset_file_names.pikmin_spirit =     "Pikmin_spirit.png";
+    asset_file_names.rock =              "Rock.png";
     asset_file_names.shadow =            "Shadow.png";
     asset_file_names.smack =             "Smack.png";
     asset_file_names.smoke =             "Smoke.png";

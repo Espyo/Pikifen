@@ -78,7 +78,7 @@ void onion::spew() {
             (pikmin*)
             create_mob(
                 mob_categories.get(MOB_CATEGORY_PIKMIN),
-                pos, oni_type->pik_type, 0, ""
+                pos, oni_type->pik_type, next_spew_angle, ""
             )
         );
     float horizontal_strength =
@@ -88,7 +88,7 @@ void onion::spew() {
     new_pikmin->speed.x = cos(next_spew_angle) * horizontal_strength;
     new_pikmin->speed.y = sin(next_spew_angle) * horizontal_strength;
     new_pikmin->speed_z = ONION_SPEW_V_SPEED;
-    new_pikmin->fsm.set_state(PIKMIN_STATE_BURIED);
+    new_pikmin->fsm.set_state(PIKMIN_STATE_SEED);
     new_pikmin->maturity = 0;
     
     next_spew_angle += ONION_SPEW_ANGLE_SHIFT;

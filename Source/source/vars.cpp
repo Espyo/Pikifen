@@ -34,6 +34,7 @@ ALLEGRO_BITMAP* bmp_nectar = NULL;
 ALLEGRO_BITMAP* bmp_notification = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_silhouette = NULL;
 ALLEGRO_BITMAP* bmp_pikmin_spirit = NULL;
+ALLEGRO_BITMAP* bmp_rock = NULL;
 ALLEGRO_BITMAP* bmp_shadow = NULL;
 ALLEGRO_BITMAP* bmp_smack = NULL;
 ALLEGRO_BITMAP* bmp_smoke = NULL;

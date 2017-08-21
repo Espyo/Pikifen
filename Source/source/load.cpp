@@ -937,6 +937,7 @@ void load_misc_graphics() {
     bmp_nectar = load_bmp(           "Nectar.png"); //TODO
     bmp_pikmin_silhouette = load_bmp(asset_file_names.pikmin_silhouette);
     bmp_pikmin_spirit = load_bmp(    asset_file_names.pikmin_spirit);
+    bmp_rock = load_bmp(             asset_file_names.rock);
     bmp_shadow = load_bmp(           asset_file_names.shadow);
     bmp_smack = load_bmp(            asset_file_names.smack);
     bmp_smoke = load_bmp(            asset_file_names.smoke);
@@ -1487,6 +1488,7 @@ void unload_misc_resources() {
     al_destroy_bitmap(bmp_group_move_arrow);
     al_destroy_bitmap(bmp_nectar);
     al_destroy_bitmap(bmp_pikmin_spirit);
+    al_destroy_bitmap(bmp_rock);
     al_destroy_bitmap(bmp_shadow);
     al_destroy_bitmap(bmp_smack);
     al_destroy_bitmap(bmp_smoke);

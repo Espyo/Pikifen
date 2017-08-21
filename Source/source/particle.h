@@ -23,14 +23,6 @@ enum PARTICLE_TYPES {
     PARTICLE_TYPE_SMACK,
 };
 
-enum PARTICLE_GENERATOR_TYPES {
-    PARTICLE_GENERATOR_PLAIN,
-    PARTICLE_GENERATOR_EXPLOSION,
-    PARTICLE_GENERATOR_FIRE,
-    PARTICLE_GENERATOR_SPLASH,
-    PARTICLE_GENERATOR_SPRAY,
-};
-
 
 /* ----------------------------------------------------------------------------
  * A particle is best described with examples:

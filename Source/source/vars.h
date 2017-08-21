@@ -65,6 +65,7 @@ extern ALLEGRO_BITMAP* bmp_nectar;
 extern ALLEGRO_BITMAP* bmp_notification;
 extern ALLEGRO_BITMAP* bmp_pikmin_silhouette;
 extern ALLEGRO_BITMAP* bmp_pikmin_spirit;
+extern ALLEGRO_BITMAP* bmp_rock;
 extern ALLEGRO_BITMAP* bmp_shadow;
 extern ALLEGRO_BITMAP* bmp_smack;
 extern ALLEGRO_BITMAP* bmp_smoke;
@@ -115,6 +116,7 @@ struct asset_file_names_struct {
     string notification;
     string pikmin_silhouette;
     string pikmin_spirit;
+    string rock;
     string shadow;
     string smack;
     string smoke;

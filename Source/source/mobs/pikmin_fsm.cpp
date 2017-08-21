@@ -21,16 +21,29 @@
  */
 void pikmin_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
+    efc.new_state("seed", PIKMIN_STATE_SEED); {
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::become_buried);
+        }
+        efc.new_event(MOB_EVENT_LANDED); {
+            efc.run(pikmin_fsm::seed_landed);
+            efc.run(pikmin_fsm::stand_still);
+            efc.change_state("buried");
+        }
+    }
+    
     efc.new_state("buried", PIKMIN_STATE_BURIED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
             efc.run(pikmin_fsm::become_buried);
+            efc.run(pikmin_fsm::buried_schedule_evol);
         }
         efc.new_event(MOB_EVENT_PLUCKED); {
             efc.run(pikmin_fsm::begin_pluck);
             efc.change_state("plucking");
         }
-        efc.new_event(MOB_EVENT_LANDED); {
-            efc.run(pikmin_fsm::stand_still);
+        efc.new_event(MOB_EVENT_TIMER); {
+            efc.run(pikmin_fsm::buried_evolve);
+            efc.run(pikmin_fsm::buried_schedule_evol);
         }
     }
     
@@ -704,7 +717,7 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin becomes buried.
+ * When a Pikmin becomes buried or a seed.
  */
 void pikmin_fsm::become_buried(mob* m, void* info1, void* info2) {
     m->set_animation(PIKMIN_ANIM_BURIED);
@@ -729,6 +742,71 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
     
     pik->set_animation(PIKMIN_ANIM_PLUCKING);
     m->unpushable = false;
+    m->set_timer(0);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Causes a buried Pikmin to evolve.
+ */
+void pikmin_fsm::buried_evolve(mob* m, void* info1, void* info2) {
+    pikmin* p = (pikmin*) m;
+    if(p->maturity == 0 || p->maturity == 1) {
+        //Leaf to bud, or bud to flower.
+        
+        p->maturity++;
+        
+        //Generate a burst of particles to symbolize the maturation.
+        particle pa(
+            PARTICLE_TYPE_BITMAP, m->pos,
+            16, 1, PARTICLE_PRIORITY_LOW
+        );
+        pa.bitmap = bmp_sparkle;
+        pa.color = al_map_rgb(255, 255, 255);
+        particle_generator pg(0, pa, 8);
+        pg.number_deviation = 1;
+        pg.size_deviation = 8;
+        pg.angle = 0;
+        pg.angle_deviation = M_PI;
+        pg.total_speed = 40;
+        pg.total_speed_deviation = 10;
+        pg.duration_deviation = 0.25;
+        pg.emit(particles);
+        //TODO play a sound.
+        
+    } else {
+        //Flower to leaf.
+        
+        p->maturity = 0;
+        
+        //Generate a dribble of particles to symbolize the regression.
+        particle pa(
+            PARTICLE_TYPE_BITMAP, m->pos,
+            16, 1, PARTICLE_PRIORITY_LOW
+        );
+        pa.bitmap = bmp_sparkle;
+        pa.color = al_map_rgb(255, 224, 224);
+        pa.gravity = 300;
+        particle_generator pg(0, pa, 8);
+        pg.number_deviation = 1;
+        pg.size_deviation = 8;
+        pg.angle = 0;
+        pg.angle_deviation = M_PI;
+        pg.total_speed = 50;
+        pg.total_speed_deviation = 10;
+        pg.duration_deviation = 0.25;
+        pg.emit(particles);
+        //TODO play a sound.
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Schedules the next evolution for a buried Pikmin.
+ */
+void pikmin_fsm::buried_schedule_evol(mob* m, void* info1, void* info2) {
+    pikmin* p = (pikmin*) m;
+    m->set_timer(p->pik_type->buried_evolution_time[p->maturity]);
 }
 
 
@@ -881,6 +959,31 @@ void pikmin_fsm::remove_disabled(mob* m, void* info1, void* info2) {
  */
 void pikmin_fsm::remove_panic(mob* m, void* info1, void* info2) {
     m->invuln_period.start();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin seed lands on the ground.
+ */
+void pikmin_fsm::seed_landed(mob* m, void* info1, void* info2) {
+    //Generate a dribble of particles to symbolize the regression.
+    particle pa(
+        PARTICLE_TYPE_BITMAP, m->pos,
+        8, 1, PARTICLE_PRIORITY_LOW
+    );
+    pa.bitmap = bmp_rock;
+    pa.color = al_map_rgb(160, 80, 32);
+    pa.gravity = 100;
+    particle_generator pg(0, pa, 8);
+    pg.number_deviation = 1;
+    pg.size_deviation = 4;
+    pg.angle = 0;
+    pg.angle_deviation = M_PI;
+    pg.total_speed = 50;
+    pg.total_speed_deviation = 10;
+    pg.duration_deviation = 0.25;
+    pg.emit(particles);
+    //TODO play a sound.
 }
 
 

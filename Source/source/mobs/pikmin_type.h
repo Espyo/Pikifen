@@ -45,6 +45,7 @@ public:
     bool can_swim;
     bool can_latch;
     bool can_carry_bomb_rocks;
+    float buried_evolution_time[N_MATURITIES];
     //Top (leaf/bud/flower) bitmap for each maturity.
     ALLEGRO_BITMAP* bmp_top[N_MATURITIES];
     //Standby icon.
