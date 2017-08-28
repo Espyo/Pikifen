@@ -13,7 +13,7 @@
 
 #include "load.h"
 
-#include "editors/area_editor.h"
+#include "editors/area_editor_old.h"
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
@@ -412,7 +412,7 @@ void load_area(
     
     //Editor reference.
     if(load_for_editor) {
-        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
+        area_editor_old* ae = (area_editor_old*) game_states[cur_game_state_nr];
         ae->set_reference_file_name(
             geometry_file.get_child_by_name("reference_file_name")->value
         );
