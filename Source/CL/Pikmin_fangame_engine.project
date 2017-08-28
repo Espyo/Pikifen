@@ -309,8 +309,13 @@
     <File Name="../source/editors/animation_editor.cpp"/>
     <File Name="../source/editors/animation_editor_loading.cpp"/>
     <File Name="../source/editors/animation_editor_event_handler.cpp"/>
+    <File Name="../source/editors/area_editor_old.cpp"/>
+    <File Name="../source/editors/area_editor_old.h"/>
     <File Name="../source/editors/area_editor.h"/>
     <File Name="../source/editors/area_editor.cpp"/>
+    <File Name="../source/editors/area_editor_drawing_old.cpp"/>
+    <File Name="../source/editors/area_editor_event_handler_old.cpp"/>
+    <File Name="../source/editors/area_editor_loading_old.cpp"/>
     <File Name="../source/editors/area_editor_loading.cpp"/>
     <File Name="../source/editors/area_editor_event_handler.cpp"/>
     <File Name="../source/editors/area_editor_drawing.cpp"/>

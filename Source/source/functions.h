@@ -38,9 +38,6 @@
 //but if it's the last, it retrieves the first.
 #define get_next_in_vector(v, nr) (v)[((nr) == (v).size() - 1 ? 0 : ((nr) + 1))]
 
-//Sets a lafi widget to invisible and disabled.
-#define hide_widget(w) (w)->flags |= lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED;
-
 //Converts an integer (or long) to a string.
 #define i2s(n) to_string((long long) (n))
 
@@ -60,10 +57,6 @@
 
 //Rounds a number. Ugh, why do I even have to create this.
 #define round(n) (((n) > 0) ? floor((n) + 0.5) : ceil((n) - 0.5))
-
-//Sets a lafi widget to visible and enabled.
-#define show_widget(w) \
-    (w)->flags &= ~(lafi::FLAG_INVISIBLE | lafi::FLAG_DISABLED);
 
 //Returns the sign (1 or -1) of a number.
 #define sign(n) (((n) >= 0) ? 1 : -1)

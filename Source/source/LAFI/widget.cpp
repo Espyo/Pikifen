@@ -464,6 +464,14 @@ void widget::handle_event(ALLEGRO_EVENT ev) {
 
 
 /* ----------------------------------------------------------------------------
+ * Sets a widget to invisible and disabled.
+ */
+void widget::hide() {
+    flags |= FLAG_INVISIBLE | FLAG_DISABLED;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes a child widget from the list.
  */
 void widget::remove(const string &child_name) {
@@ -474,6 +482,17 @@ void widget::remove(const string &child_name) {
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a widget to visible and enabled.
+ */
+void widget::show() {
+    flags &= ~(FLAG_INVISIBLE | FLAG_DISABLED);
+}
+
+
+
 
 
 void widget::widget_on_mouse_move(int, int) { }

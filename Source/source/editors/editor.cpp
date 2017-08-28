@@ -40,7 +40,7 @@ editor::editor() :
  * Closes the change warning box.
  */
 void editor::close_changes_warning() {
-    hide_widget(gui->widgets["frm_changes"]);
+    gui->widgets["frm_changes"]->hide();
     show_bottom_frame();
 }
 
@@ -51,7 +51,7 @@ void editor::close_changes_warning() {
 void editor::create_changes_warning_frame() {
     lafi::frame* frm_changes =
         new lafi::frame(gui_x, scr_h - 48, scr_w, scr_h);
-    hide_widget(frm_changes);
+    frm_changes->hide();
     gui->add("frm_changes", frm_changes);
     
     frm_changes->easy_row();
@@ -88,7 +88,7 @@ void editor::create_picker_frame(const bool can_create_new) {
     
     lafi::frame* frm_picker =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_picker);
+    frm_picker->hide();
     gui->add("frm_picker", frm_picker);
     
     frm_picker->add(
@@ -124,7 +124,7 @@ void editor::create_picker_frame(const bool can_create_new) {
             )->text.clear();
         }
         
-        hide_widget(this->gui->widgets["frm_picker"]);
+        this->gui->widgets["frm_picker"]->hide();
         show_bottom_frame();
         change_to_right_frame();
     };
@@ -183,7 +183,7 @@ void editor::generate_and_open_picker(
 ) {
 
     hide_all_frames();
-    show_widget(gui->widgets["frm_picker"]);
+    gui->widgets["frm_picker"]->show();
     hide_bottom_frame();
     
     if(picker_allows_new) {
@@ -209,7 +209,7 @@ void editor::generate_and_open_picker(
         string name = elements[e];
         b->left_mouse_click_handler =
         [name, type, this] (lafi::widget*, int, int) {
-            hide_widget(this->gui->widgets["frm_picker"]);
+            this->gui->widgets["frm_picker"]->hide();
             pick(name, type);
         };
         f->easy_add("but_" + i2s(e), b, 100, 24);
@@ -226,7 +226,7 @@ void editor::generate_and_open_picker(
  * Hides the bottom tools frame.
  */
 void editor::hide_bottom_frame() {
-    hide_widget(gui->widgets["frm_bottom"]);
+    gui->widgets["frm_bottom"]->hide();
 }
 
 
@@ -253,7 +253,7 @@ void editor::leave() {
  * Shows the bottom tools frame.
  */
 void editor::show_bottom_frame() {
-    show_widget(gui->widgets["frm_bottom"]);
+    gui->widgets["frm_bottom"]->show();
 }
 
 
@@ -261,7 +261,7 @@ void editor::show_bottom_frame() {
  * Shows the "unsaved changes" warning.
  */
 void editor::show_changes_warning() {
-    show_widget(gui->widgets["frm_changes"]);
+    gui->widgets["frm_changes"]->show();
     hide_bottom_frame();
     
     made_changes = false;

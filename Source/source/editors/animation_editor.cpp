@@ -320,32 +320,32 @@ void animation_editor::animation_to_gui() {
         cur_anim ? cur_anim->name : "";
         
     if(!cur_anim) {
-        hide_widget(f->widgets["frm_anim"]);
+        f->widgets["frm_anim"]->hide();
     } else {
-        show_widget(f->widgets["frm_anim"]);
+        f->widgets["frm_anim"]->show();
         
         ((lafi::button*) f->widgets["but_anim"])->text = cur_anim->name;
         f = f->widgets["frm_anim"];
         ((lafi::textbox*) f->widgets["txt_loop"])->text =
             i2s(cur_anim->loop_frame + 1);
-        
+            
         if(cur_anim->hit_rate == 100) {
             ((lafi::checkbox*) f->widgets["chk_missable"])->uncheck();
-            hide_widget(f->widgets["lbl_hit_rate"]);
-            hide_widget(f->widgets["txt_hit_rate"]);
-            hide_widget(f->widgets["lbl_hit_rate_p"]);
+            f->widgets["lbl_hit_rate"]->hide();
+            f->widgets["txt_hit_rate"]->hide();
+            f->widgets["lbl_hit_rate_p"]->hide();
             ((lafi::textbox*) f->widgets["txt_hit_rate"])->text = "100";
             
         } else {
             ((lafi::checkbox*) f->widgets["chk_missable"])->check();
-            show_widget(f->widgets["lbl_hit_rate"]);
-            show_widget(f->widgets["txt_hit_rate"]);
-            show_widget(f->widgets["lbl_hit_rate_p"]);
+            f->widgets["lbl_hit_rate"]->show();
+            f->widgets["txt_hit_rate"]->show();
+            f->widgets["lbl_hit_rate_p"]->show();
             ((lafi::textbox*) f->widgets["txt_hit_rate"])->text =
                 i2s(cur_anim->hit_rate);
-            
+                
         }
-            
+        
         frame_to_gui();
     }
 }
@@ -368,12 +368,12 @@ void animation_editor::body_part_to_gui() {
         );
         
     if(anims.body_parts.empty()) {
-        hide_widget(f->widgets["frm_body_part"]);
+        f->widgets["frm_body_part"]->hide();
         return;
     }
     
     f = (lafi::frame*) f->widgets["frm_body_part"];
-    show_widget(f);
+    f->show();
     
     ((lafi::textbox*) f->widgets["txt_name"])->text =
         anims.body_parts[cur_body_part_nr]->name;
@@ -394,9 +394,9 @@ void animation_editor::frame_to_gui() {
         
     f = f->widgets["frm_frame"];
     if(!valid) {
-        hide_widget(f);
+        f->hide();
     } else {
-        show_widget(f);
+        f->show();
         
         ((lafi::button*) f->widgets["but_sprite"])->text =
             cur_anim->frames[cur_frame_nr].sprite_name;
@@ -405,12 +405,12 @@ void animation_editor::frame_to_gui() {
             
         if(cur_anim->frames[cur_frame_nr].signal != INVALID) {
             ((lafi::checkbox*) f->widgets["chk_signal"])->check();
-            show_widget(f->widgets["txt_signal"]);
+            f->widgets["txt_signal"]->show();
             ((lafi::textbox*) f->widgets["txt_signal"])->text =
                 i2s(cur_anim->frames[cur_frame_nr].signal);
         } else {
             ((lafi::checkbox*) f->widgets["chk_signal"])->uncheck();
-            hide_widget(f->widgets["txt_signal"]);
+            f->widgets["txt_signal"]->hide();
             ((lafi::textbox*) f->widgets["txt_signal"])->text = "0";
         }
         
@@ -443,7 +443,7 @@ void animation_editor::hitbox_to_gui() {
     open_hitbox_type(cur_h ? cur_h->type : 255);
     
     if(cur_h) {
-        show_widget(f);
+        f->show();
         if(cur_h->type == HITBOX_TYPE_NORMAL) {
             f = f->widgets["frm_normal"];
             ((lafi::textbox*) f->widgets["txt_mult"])->text =
@@ -482,7 +482,7 @@ void animation_editor::hitbox_to_gui() {
             
         }
     } else {
-        hide_widget(f);
+        f->hide();
     }
 }
 
@@ -497,9 +497,9 @@ void animation_editor::sprite_to_gui() {
         cur_sprite ? cur_sprite->name : "";
         
     if(!cur_sprite) {
-        hide_widget(f->widgets["frm_sprite"]);
+        f->widgets["frm_sprite"]->hide();
     } else {
-        show_widget(f->widgets["frm_sprite"]);
+        f->widgets["frm_sprite"]->show();
         
         f = f->widgets["frm_sprite"];
         
@@ -892,8 +892,8 @@ void animation_editor::load_animation_database() {
     
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_load"]);
     enable_widget(gui->widgets["frm_bottom"]->widgets["but_save"]);
-    hide_widget(gui->widgets["frm_hitboxes"]);
-    hide_widget(gui->widgets["frm_top"]);
+    gui->widgets["frm_hitboxes"]->hide();
+    gui->widgets["frm_top"]->hide();
     
     cam_pos.x = cam_pos.y = 0;
     cam_zoom = 1;
@@ -966,15 +966,15 @@ void animation_editor::open_hitbox_type(unsigned char type) {
     ((lafi::radio_button*) f->widgets["rad_attack"])->unselect();
     ((lafi::radio_button*) f->widgets["rad_disabled"])->unselect();
     
-    hide_widget(f->widgets["frm_normal"]);
-    hide_widget(f->widgets["frm_attack"]);
+    f->widgets["frm_normal"]->hide();
+    f->widgets["frm_attack"]->hide();
     
     if(type == HITBOX_TYPE_NORMAL) {
         ((lafi::radio_button*) f->widgets["rad_normal"])->select();
-        show_widget(f->widgets["frm_normal"]);
+        f->widgets["frm_normal"]->show();
     } else if(type == HITBOX_TYPE_ATTACK) {
         ((lafi::radio_button*) f->widgets["rad_attack"])->select();
-        show_widget(f->widgets["frm_attack"]);
+        f->widgets["frm_attack"]->show();
     } else {
         ((lafi::radio_button*) f->widgets["rad_disabled"])->select();
     }
@@ -1443,9 +1443,9 @@ void animation_editor::update_hitboxes() {
 void animation_editor::update_stats() {
     lafi::widget* f = gui->widgets["frm_main"]->widgets["frm_object"];
     if(file_path.empty()) {
-        hide_widget(f);
+        f->hide();
     } else {
-        show_widget(f);
+        f->show();
     }
     
     ((lafi::label*) f->widgets["lbl_n_anims"])->text =
@@ -1480,16 +1480,16 @@ void animation_editor::create_new_from_picker(const string &name) {
  * Hides all menu frames.
  */
 void animation_editor::hide_all_frames() {
-    hide_widget(gui->widgets["frm_main"]);
-    hide_widget(gui->widgets["frm_picker"]);
-    hide_widget(gui->widgets["frm_history"]);
-    hide_widget(gui->widgets["frm_anims"]);
-    hide_widget(gui->widgets["frm_sprites"]);
-    hide_widget(gui->widgets["frm_sprite_tra"]);
-    hide_widget(gui->widgets["frm_hitboxes"]);
-    hide_widget(gui->widgets["frm_top"]);
-    hide_widget(gui->widgets["frm_body_parts"]);
-    hide_widget(gui->widgets["frm_tools"]);
+    gui->widgets["frm_main"]->hide();
+    gui->widgets["frm_picker"]->hide();
+    gui->widgets["frm_history"]->hide();
+    gui->widgets["frm_anims"]->hide();
+    gui->widgets["frm_sprites"]->hide();
+    gui->widgets["frm_sprite_tra"]->hide();
+    gui->widgets["frm_hitboxes"]->hide();
+    gui->widgets["frm_top"]->hide();
+    gui->widgets["frm_body_parts"]->hide();
+    gui->widgets["frm_tools"]->hide();
 }
 
 
@@ -1500,23 +1500,23 @@ void animation_editor::change_to_right_frame() {
     hide_all_frames();
     
     if(mode == EDITOR_MODE_MAIN) {
-        show_widget(gui->widgets["frm_main"]);
+        gui->widgets["frm_main"]->show();
     } else if(mode == EDITOR_MODE_ANIMATION) {
-        show_widget(gui->widgets["frm_anims"]);
+        gui->widgets["frm_anims"]->show();
     } else if(mode == EDITOR_MODE_SPRITE) {
-        show_widget(gui->widgets["frm_sprites"]);
+        gui->widgets["frm_sprites"]->show();
     } else if(mode == EDITOR_MODE_BODY_PART) {
-        show_widget(gui->widgets["frm_body_parts"]);
+        gui->widgets["frm_body_parts"]->show();
     } else if(mode == EDITOR_MODE_HITBOXES) {
-        show_widget(gui->widgets["frm_hitboxes"]);
+        gui->widgets["frm_hitboxes"]->show();
     } else if(mode == EDITOR_MODE_SPRITE_TRANSFORM) {
-        show_widget(gui->widgets["frm_sprite_tra"]);
+        gui->widgets["frm_sprite_tra"]->show();
     } else if(mode == EDITOR_MODE_TOP) {
-        show_widget(gui->widgets["frm_top"]);
+        gui->widgets["frm_top"]->show();
     } else if(mode == EDITOR_MODE_HISTORY) {
-        show_widget(gui->widgets["frm_history"]);
+        gui->widgets["frm_history"]->show();
     } else if(mode == EDITOR_MODE_TOOLS) {
-        show_widget(gui->widgets["frm_tools"]);
+        gui->widgets["frm_tools"]->show();
     }
 }
 

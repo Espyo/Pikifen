@@ -24,7 +24,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "editors/animation_editor.h"
-#include "editors/area_editor.h"
+#include "editors/area_editor_old.h"
 #include "const.h"
 #include "controls.h"
 #include "drawing.h"
@@ -117,9 +117,9 @@ int main(int argc, char** argv) {
             game_states[GAME_STATE_ANIMATION_EDITOR]
         )->auto_load_anim = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_ANIMATION_EDITOR);
-    } else if(creator_tool_auto_start_mode == "area_editor") {
+    } else if(creator_tool_auto_start_mode == "area_editor_old") {
         (
-            (area_editor*)
+            (area_editor_old*)
             game_states[GAME_STATE_AREA_EDITOR]
         )->auto_load_area = creator_tool_auto_start_option;
         change_game_state(GAME_STATE_AREA_EDITOR);

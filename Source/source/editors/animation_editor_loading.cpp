@@ -161,7 +161,7 @@ void animation_editor::load() {
     //History -- declarations.
     lafi::frame* frm_history =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_history);
+    frm_history->hide();
     gui->add("frm_history", frm_history);
     
     frm_history->easy_row();
@@ -226,7 +226,7 @@ void animation_editor::load() {
     //Animations -- declarations.
     lafi::frame* frm_anims =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_anims);
+    frm_anims->hide();
     gui->add("frm_anims", frm_anims);
     
     frm_anims->easy_row();
@@ -422,7 +422,7 @@ void animation_editor::load() {
     frm_anims->widgets["but_anim"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        hide_widget(this->gui->widgets["frm_anims"]);
+        this->gui->widgets["frm_anims"]->hide();
         open_picker(ANIMATION_EDITOR_PICKER_ANIMATION, true);
     };
     frm_anims->widgets["but_anim"]->description =
@@ -432,9 +432,9 @@ void animation_editor::load() {
         lambda_gui_to_animation;
     frm_anim->widgets["txt_loop"]->description =
         "The animation loops back to this frame when it ends.";
-    
+        
     frm_anim->widgets["chk_missable"]->left_mouse_click_handler =
-    [this, frm_anim] (lafi::widget* c, int, int) {
+    [this, frm_anim] (lafi::widget * c, int, int) {
         if(((lafi::checkbox*) c)->checked) {
             ((lafi::textbox*) frm_anim->widgets["txt_hit_rate"])->text = "50";
         }
@@ -447,7 +447,7 @@ void animation_editor::load() {
         lambda_gui_to_animation;
     frm_anim->widgets["txt_hit_rate"]->description =
         "Chance that a Pikmin will actually be knocked back.";
-    
+        
     frm_anim->widgets["but_play"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(cur_anim->frames.size() < 2) {
@@ -548,7 +548,7 @@ void animation_editor::load() {
     frm_frame->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         anim_playing = false;
-        hide_widget(this->gui->widgets["frm_anims"]);
+        this->gui->widgets["frm_anims"]->hide();
         open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
     frm_frame->widgets["but_sprite"]->description =
@@ -599,7 +599,7 @@ void animation_editor::load() {
     //Sprites -- declarations.
     lafi::frame* frm_sprites =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_sprites);
+    frm_sprites->hide();
     gui->add("frm_sprites", frm_sprites);
     
     frm_sprites->easy_row();
@@ -748,7 +748,7 @@ void animation_editor::load() {
         
     frm_sprites->widgets["but_sprite"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        hide_widget(this->gui->widgets["frm_sprites"]);
+        this->gui->widgets["frm_sprites"]->hide();
         open_picker(ANIMATION_EDITOR_PICKER_SPRITE, true);
     };
     frm_sprites->widgets["but_sprite"]->description =
@@ -832,7 +832,7 @@ void animation_editor::load() {
     //Sprite transform -- declarations.
     lafi::frame* frm_sprite_tra =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_sprite_tra);
+    frm_sprite_tra->hide();
     gui->add("frm_sprite_tra", frm_sprite_tra);
     
     frm_sprite_tra->easy_row();
@@ -980,7 +980,7 @@ void animation_editor::load() {
         
     frm_sprite_tra->widgets["but_compare"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        hide_widget(this->gui->widgets["frm_sprite_tra"]);
+        this->gui->widgets["frm_sprite_tra"]->hide();
         open_picker(ANIMATION_EDITOR_PICKER_SPRITE, false);
     };
     frm_sprite_tra->widgets["but_compare"]->description =
@@ -995,7 +995,7 @@ void animation_editor::load() {
     //Hitboxes -- declarations.
     lafi::frame* frm_hitboxes =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_hitboxes);
+    frm_hitboxes->hide();
     gui->add("frm_hitboxes", frm_hitboxes);
     
     frm_hitboxes->easy_row();
@@ -1086,7 +1086,7 @@ void animation_editor::load() {
     
     lafi::frame* frm_normal =
         new lafi::frame(gui_x, y, scr_w, scr_h - 48);
-    hide_widget(frm_normal);
+    frm_normal->hide();
     frm_hitbox->add("frm_normal", frm_normal);
     
     frm_normal->easy_row();
@@ -1117,7 +1117,7 @@ void animation_editor::load() {
     
     lafi::frame* frm_attack =
         new lafi::frame(gui_x, y, scr_w, scr_h - 48);
-    hide_widget(frm_attack);
+    frm_attack->hide();
     frm_hitbox->add("frm_attack", frm_attack);
     
     frm_attack->easy_row();
@@ -1306,7 +1306,7 @@ void animation_editor::load() {
     //Pikmin top -- declarations.
     lafi::frame* frm_top =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_top);
+    frm_top->hide();
     gui->add("frm_top", frm_top);
     
     frm_top->easy_row();
@@ -1489,7 +1489,7 @@ void animation_editor::load() {
     //Body parts -- declarations.
     lafi::frame* frm_body_parts =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_body_parts);
+    frm_body_parts->hide();
     gui->add("frm_body_parts", frm_body_parts);
     
     frm_body_parts->easy_row();
@@ -1724,7 +1724,7 @@ void animation_editor::load() {
     //Tools -- declarations.
     lafi::frame* frm_tools =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    hide_widget(frm_tools);
+    frm_tools->hide();
     gui->add("frm_tools", frm_tools);
     
     frm_tools->easy_row();

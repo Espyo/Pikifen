@@ -17,7 +17,7 @@
 #include <queue>
 #include <unordered_set>
 
-#include "editors/area_editor.h"
+#include "editors/area_editor_old.h"
 #include "functions.h"
 #include "geometry_utils.h"
 #include "sector.h"
@@ -1033,9 +1033,9 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
         edges_done[s_ptr->edges[e]] = false;
     }
     
-    area_editor* ae = NULL;
+    area_editor_old* ae = NULL;
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
+        ae = (area_editor_old*) game_states[cur_game_state_nr];
     }
     
     //Now travel along the edges, vertex by vertex, until we have no more left.
@@ -1527,9 +1527,9 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
  */
 void check_edge_intersections(vertex* v) {
 
-    area_editor* ae = NULL;
+    area_editor_old* ae = NULL;
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
+        ae = (area_editor_old*) game_states[cur_game_state_nr];
     }
     
     for(size_t e = 0; e < v->edges.size(); ++e) {
@@ -2130,9 +2130,9 @@ bool lines_intersect(
  */
 void triangulate(sector* s_ptr) {
 
-    area_editor* ae = NULL;
+    area_editor_old* ae = NULL;
     if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
+        ae = (area_editor_old*) game_states[cur_game_state_nr];
     }
     
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.

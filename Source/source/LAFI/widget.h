@@ -173,6 +173,8 @@ public:
     void lose_focus();
     void give_focus(widget* w);
     bool is_disabled();
+    void show();
+    void hide();
     
     virtual void handle_event(ALLEGRO_EVENT ev);
     void draw();
