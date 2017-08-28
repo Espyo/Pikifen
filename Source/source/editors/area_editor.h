@@ -14,6 +14,7 @@
 
 #include "editor.h"
 #include "../LAFI/frame.h"
+#include "../LAFI/label.h"
 
 using namespace std;
 
@@ -29,16 +30,65 @@ private:
     
     enum EDITOR_STATES {
         EDITOR_STATE_MAIN,
+        EDITOR_STATE_LAYOUT,
+        EDITOR_STATE_ASB,
+        EDITOR_STATE_TEXTURE,
+        EDITOR_STATE_ASA,
+        EDITOR_STATE_OBJECTS,
+        EDITOR_STATE_PATHS,
+        EDITOR_STATE_DETAILS,
+        EDITOR_STATE_REVIEW,
+        EDITOR_STATE_TOOLS,
+        EDITOR_STATE_OPTIONS,
     };
     
     enum EDITOR_SUB_STATES {
         EDITOR_SUB_STATE_NONE,
     };
     
+    enum AREA_EDITOR_PICKER_TYPES {
+        AREA_EDITOR_PICKER_AREA,
+        AREA_EDITOR_PICKER_SECTOR_TYPE,
+        AREA_EDITOR_PICKER_MOB_CATEGORY,
+        AREA_EDITOR_PICKER_MOB_TYPE,
+    };
     
-    //GUI frames.
+    static const string EDITOR_ICONS_FOLDER_NAME;
+    static const string ICON_DELETE;
+    static const string ICON_DELETE_LINK;
+    static const string ICON_DELETE_STOP;
+    static const string ICON_DUPLICATE;
+    static const string ICON_EXIT;
+    static const string ICON_NEW;
+    static const string ICON_NEW_1WAY_LINK;
+    static const string ICON_NEW_CIRCLE_SECTOR;
+    static const string ICON_NEW_LINK;
+    static const string ICON_NEW_STOP;
+    static const string ICON_NEXT;
+    static const string ICON_OPTIONS;
+    static const string ICON_PREVIOUS;
+    static const string ICON_REFERENCE;
+    static const string ICON_SAVE;
+    
+    
+    //GUI widgets.
     lafi::frame* frm_main;
     lafi::frame* frm_area;
+    lafi::frame* frm_layout;
+    lafi::frame* frm_sector;
+    lafi::frame* frm_asb;
+    lafi::frame* frm_texture;
+    lafi::frame* frm_asa;
+    lafi::frame* frm_objects;
+    lafi::frame* frm_object;
+    lafi::frame* frm_paths;
+    lafi::frame* frm_details;
+    lafi::frame* frm_shadow;
+    lafi::frame* frm_review;
+    lafi::frame* frm_tools;
+    lafi::frame* frm_options;
+    lafi::frame* frm_bottom;
+    lafi::label* lbl_status_bar;
     
     //Current state.
     size_t state;
@@ -51,12 +101,18 @@ private:
     float double_click_time;
     //Only preview the path when this time is up.
     timer path_preview_timer;
+    //Render the reference image?
+    bool show_reference;
+    //State the editor was in before entering the options.
+    size_t state_before_options;
     
     void clear_current_area();
     
     void hide_all_frames();
     void change_to_right_frame();
     void create_new_from_picker(const string &name);
+    void handle_mouse_update(const ALLEGRO_EVENT &ev);
+    void open_picker(const unsigned char type);
     void pick(const string &name, const unsigned char type);
     
     

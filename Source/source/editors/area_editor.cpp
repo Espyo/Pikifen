@@ -14,6 +14,39 @@
 #include "../load.h"
 #include "../vars.h"
 
+const string area_editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
+const string area_editor::ICON_DELETE =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
+const string area_editor::ICON_DELETE_LINK =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete_link.png";
+const string area_editor::ICON_DELETE_STOP =
+    EDITOR_ICONS_FOLDER_NAME + "/Delete_stop.png";
+const string area_editor::ICON_DUPLICATE =
+    EDITOR_ICONS_FOLDER_NAME + "/Duplicate.png";
+const string area_editor::ICON_EXIT =
+    EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
+const string area_editor::ICON_NEW =
+    EDITOR_ICONS_FOLDER_NAME + "/New.png";
+const string area_editor::ICON_NEW_1WAY_LINK =
+    EDITOR_ICONS_FOLDER_NAME + "/New_1wlink.png";
+const string area_editor::ICON_NEW_CIRCLE_SECTOR =
+    EDITOR_ICONS_FOLDER_NAME + "/New_circle_sector.png";
+const string area_editor::ICON_NEW_LINK =
+    EDITOR_ICONS_FOLDER_NAME + "/New_link.png";
+const string area_editor::ICON_NEW_STOP =
+    EDITOR_ICONS_FOLDER_NAME + "/New_stop.png";
+const string area_editor::ICON_NEXT =
+    EDITOR_ICONS_FOLDER_NAME + "/Next.png";
+const string area_editor::ICON_OPTIONS =
+    EDITOR_ICONS_FOLDER_NAME + "/Options.png";
+const string area_editor::ICON_PREVIOUS =
+    EDITOR_ICONS_FOLDER_NAME + "/Previous.png";
+const string area_editor::ICON_REFERENCE =
+    EDITOR_ICONS_FOLDER_NAME + "/Reference.png";
+const string area_editor::ICON_SAVE =
+    EDITOR_ICONS_FOLDER_NAME + "/Save.png";
+
+
 /* ----------------------------------------------------------------------------
  * Initializes area editor class stuff.
  */
@@ -21,7 +54,8 @@ area_editor::area_editor() :
     state(EDITOR_STATE_MAIN),
     backup_timer(editor_backup_interval),
     double_click_time(0),
-    path_preview_timer(0) {
+    path_preview_timer(0),
+    show_reference(false) {
     
 }
 
@@ -30,11 +64,32 @@ area_editor::area_editor() :
  * Switches to the correct frame, depending on the current editor mode.
  */
 void area_editor::change_to_right_frame() {
+    //TODO
     sub_state = EDITOR_SUB_STATE_NONE;
     
     hide_all_frames();
     
-    //TODO
+    if(state == EDITOR_STATE_MAIN) {
+        frm_main->show();
+    } else if(state == EDITOR_STATE_LAYOUT) {
+        frm_layout->show();
+    } else if(state == EDITOR_STATE_ASB) {
+        frm_asb->show();
+    } else if(state == EDITOR_STATE_TEXTURE) {
+        frm_texture->show();
+    } else if(state == EDITOR_STATE_OBJECTS) {
+        frm_objects->show();
+    } else if(state == EDITOR_STATE_PATHS) {
+        frm_paths->show();
+    } else if(state == EDITOR_STATE_DETAILS) {
+        frm_details->show();
+    } else if(state == EDITOR_STATE_REVIEW) {
+        frm_review->show();
+    } else if(state == EDITOR_STATE_TOOLS) {
+        frm_tools->show();
+    } else if(state == EDITOR_STATE_OPTIONS) {
+        frm_options->show();
+    }
 }
 
 
@@ -82,6 +137,26 @@ void area_editor::do_logic() {
  */
 void area_editor::hide_all_frames() {
     //TODO
+    frm_main->hide();
+    frm_layout->hide();
+    frm_asb->hide();
+    frm_texture->hide();
+    frm_asa->hide();
+    frm_objects->hide();
+    frm_paths->hide();
+    frm_details->hide();
+    frm_review->hide();
+    frm_tools->hide();
+    frm_options->hide();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Opens the frame where you pick from a list.
+ * For the type of content, use area_editor_old::AREA_EDITOR_PICKER_*.
+ */
+void area_editor::open_picker(const unsigned char type) {
+    //TODO.
 }
 
 
