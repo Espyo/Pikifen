@@ -36,6 +36,7 @@ protected:
     int           gui_x;
     bool          holding_m1;
     bool          holding_m2;
+    bool          holding_m3;
     bmp_manager   icons;
     bool          made_changes;
     unsigned char mode;

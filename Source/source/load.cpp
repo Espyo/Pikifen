@@ -13,7 +13,7 @@
 
 #include "load.h"
 
-#include "editors/area_editor_old.h"
+#include "editors/area_editor.h"
 #include "const.h"
 #include "drawing.h"
 #include "functions.h"
@@ -193,6 +193,16 @@ void load_area(
                 get_value_or_default("255 255 255")
             );
             
+        if(new_sector->texture_info.file_name.empty()) {
+            new_sector->texture_info.bitmap = NULL;
+        } else {
+            new_sector->texture_info.bitmap =
+                bitmaps.get(
+                    TEXTURES_FOLDER_NAME + "/" +
+                    new_sector->texture_info.file_name, NULL
+                );
+        }
+        
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
@@ -412,7 +422,9 @@ void load_area(
     
     //Editor reference.
     if(load_for_editor) {
-        area_editor_old* ae = (area_editor_old*) game_states[cur_game_state_nr];
+        //TODO
+        /*
+        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
         ae->set_reference_file_name(
             geometry_file.get_child_by_name("reference_file_name")->value
         );
@@ -428,7 +440,7 @@ void load_area(
                     "reference_alpha"
                 )->get_value_or_default("255")
             )
-        );
+        );*/
     }
     
     if(!load_for_editor) cur_area_data.generate_blockmap();
@@ -439,6 +451,7 @@ void load_area(
  * Loads the area's sector textures.
  */
 void load_area_textures() {
+    //TODO will this still be needed after area editor v2?
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
         sector* s_ptr = cur_area_data.sectors[s];
         
@@ -1125,7 +1138,7 @@ void load_spike_damage_types() {
             s2b(type_node->get_child_by_name("ingestion_only")->value);
         s_type.is_damage_ratio =
             s2b(type_node->get_child_by_name("is_damage_ratio")->value);
-        
+            
         data_node* pg_node = type_node->get_child_by_name("particle_generator");
         string pg_name = pg_node->value;
         if(!pg_name.empty()) {
@@ -1363,7 +1376,7 @@ void load_weather() {
         weather_struct.fog_near = max(weather_struct.fog_near, 0.0f);
         weather_struct.fog_far =
             max(weather_struct.fog_far, weather_struct.fog_near);
-        
+            
         vector<pair<size_t, string> > fog_color_table =
             get_weather_table(
                 weather_node->get_child_by_name("fog_color")

@@ -276,14 +276,16 @@ void area_editor_old::do_drawing() {
             }
             
             if(mode == EDITOR_MODE_ADV_TEXTURE_SETTINGS && cur_sector) {
-                draw_sector_texture(cur_sector, point(), 1.0);
+                draw_sector_texture(cur_sector, point(), 1.0f, 1.0f);
             }
             
         } else {
         
             //Draw textures.
             for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                draw_sector_texture(cur_area_data.sectors[s], point(), 1.0);
+                draw_sector_texture(
+                    cur_area_data.sectors[s], point(), 1.0f, 1.0f
+                );
                 draw_sector_shadows(cur_area_data.sectors[s], point(), 1.0);
             }
         }

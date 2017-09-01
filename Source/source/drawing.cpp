@@ -130,7 +130,7 @@ void gameplay::do_game_drawing(
                 continue;
             }
             
-            draw_sector_texture(s_ptr, point(), 1.0);
+            draw_sector_texture(s_ptr, point(), 1.0f, 1.0f);
             
             if(s_ptr->associated_liquid) {
                 draw_liquid(s_ptr, point(), 1.0f);
@@ -1958,9 +1958,10 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
  * s_ptr:   Pointer to the sector.
  * where:   X and Y offset.
  * scale:   Scale the sector by this much.
+ * opacity: Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale
+    sector* s_ptr, const point &where, const float scale, const float opacity
 ) {
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
@@ -2070,7 +2071,8 @@ void draw_sector_texture(
                     texture_sector[t]->texture_info.tint.r * brightness_mult,
                     texture_sector[t]->texture_info.tint.g * brightness_mult,
                     texture_sector[t]->texture_info.tint.b * brightness_mult,
-                    texture_sector[t]->texture_info.tint.a * alpha_mult
+                    texture_sector[t]->texture_info.tint.a * alpha_mult *
+                    opacity
                 );
         }
         
@@ -2217,7 +2219,7 @@ void gameplay::draw_lighting_filter() {
         al_set_separate_blender(
             old_op, old_src, old_dst, old_aop, old_asrc, old_adst
         );
-    
+        
     }
     
 }

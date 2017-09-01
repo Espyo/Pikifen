@@ -68,7 +68,7 @@ void draw_sector_shadows(
     sector* s_ptr, const point &where, const float scale
 );
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale
+    sector* s_ptr, const point &where, const float scale, const float opacity
 );
 void draw_mob_shadow(
     const point &where, const float size,
