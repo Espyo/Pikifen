@@ -248,6 +248,7 @@ void init_error_bitmap() {
  */
 void init_essentials() {
     //Signal handlers.
+    return; //TODO TEMP, REMOVE
     signal(SIGFPE,  signal_handler);
     signal(SIGILL,  signal_handler);
     signal(SIGSEGV, signal_handler);

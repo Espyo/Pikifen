@@ -75,7 +75,7 @@ void area_editor::asb_to_gui() {
         sector_types.get_name(s_ptr->type);
         
     if(s_ptr->hazards_str.empty()) {
-        ((lafi::button*) frm_asb->widgets["lbl_hazard"])->text = "(No hazards)";
+        ((lafi::label*) frm_asb->widgets["lbl_hazard"])->text = "(No hazards)";
         disable_widget(frm_asb->widgets["but_h_del"]);
         disable_widget(frm_asb->widgets["but_h_prev"]);
         disable_widget(frm_asb->widgets["but_h_next"]);
@@ -125,9 +125,9 @@ void area_editor::change_to_right_frame() {
     } else if(state == EDITOR_STATE_ASA) {
         frm_asa->show();
         asa_to_gui();
-    } else if(state == EDITOR_STATE_OBJECTS) {
-        frm_objects->show();
-        object_to_gui();
+    } else if(state == EDITOR_STATE_MOBS) {
+        frm_mobs->show();
+        mob_to_gui();
     } else if(state == EDITOR_STATE_PATHS) {
         frm_paths->show();
         path_to_gui();
@@ -137,23 +137,15 @@ void area_editor::change_to_right_frame() {
     } else if(state == EDITOR_STATE_REVIEW) {
         frm_review->show();
         review_to_gui();
-    } else if(state == EDITOR_STATE_DATA) {
-        frm_data->show();
-        data_to_gui();
+    } else if(state == EDITOR_STATE_INFO) {
+        frm_info->show();
+        info_to_gui();
     } else if(state == EDITOR_STATE_TOOLS) {
         frm_tools->show();
         tools_to_gui();
     } else if(state == EDITOR_STATE_OPTIONS) {
         frm_options->show();
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Loads the current metadata data onto the GUI.
- */
-void area_editor::data_to_gui() {
-    //TODO
 }
 
 
@@ -223,6 +215,20 @@ void area_editor::gui_to_asb() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the mob data to memory using info on the gui.
+ */
+void area_editor::gui_to_mob() {
+    mob_gen* m_ptr = get_lone_selected_mob();
+    m_ptr->angle =
+        (
+            (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
+        )->get_angle_rads();
+    m_ptr->vars =
+        ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the sector data to memory using info on the gui.
  */
 void area_editor::gui_to_sector() {
@@ -257,21 +263,57 @@ void area_editor::hide_all_frames() {
     frm_asb->hide();
     frm_texture->hide();
     frm_asa->hide();
-    frm_objects->hide();
+    frm_mobs->hide();
     frm_paths->hide();
     frm_details->hide();
     frm_review->hide();
-    frm_data->hide();
+    frm_info->hide();
     frm_tools->hide();
     frm_options->hide();
 }
 
 
 /* ----------------------------------------------------------------------------
- * Loads the current object data onto the GUI.
+ * Loads the current area metadata onto the GUI.
  */
-void area_editor::object_to_gui() {
+void area_editor::info_to_gui() {
     //TODO
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the current mob data onto the GUI.
+ */
+void area_editor::mob_to_gui() {
+    mob_gen* m_ptr = get_lone_selected_mob();
+    
+    if(m_ptr) {
+    
+        frm_mob->show();
+        
+        (
+            (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
+        )->set_angle_rads(m_ptr->angle);
+        ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text = m_ptr->vars;
+        
+        ((lafi::button*) frm_mob->widgets["but_category"])->text =
+            m_ptr->category->plural_name;
+            
+        lafi::button* but_type =
+            (lafi::button*) frm_mob->widgets["but_type"];
+        if(m_ptr->category->id == MOB_CATEGORY_NONE) {
+            disable_widget(but_type);
+        } else {
+            enable_widget(but_type);
+        }
+        but_type->text = m_ptr->type ? m_ptr->type->name : "";
+        
+    } else {
+    
+        frm_mob->hide();
+        
+    }
+    
 }
 
 
@@ -309,12 +351,10 @@ void area_editor::open_picker(const unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
-        //TODO
-        /*
-        if(cur_mob->category->id != MOB_CATEGORY_NONE) {
-            cur_mob->category->get_type_names(elements);
+        mob_gen* m_ptr = get_lone_selected_mob();
+        if(m_ptr->category->id != MOB_CATEGORY_NONE) {
+            m_ptr->category->get_type_names(elements);
         }
-        */
         
     }
     
@@ -396,22 +436,18 @@ void area_editor::pick(const string &name, const unsigned char type) {
         s_ptr->type = sector_types.get_nr(name);
         asb_to_gui();
         
-    } //TODO
-    /*else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
-        if(cur_mob) {
-            cur_mob->category = mob_categories.get_from_pname(name);
-            cur_mob->type = NULL;
-            mob_to_gui();
-        }
-    
-    } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
-        if(cur_mob) {
-            cur_mob->type = cur_mob->category->get_type(name);
-        }
-    
+    } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
+        mob_gen* m_ptr = get_lone_selected_mob();
+        m_ptr->category = mob_categories.get_from_pname(name);
+        m_ptr->type = NULL;
         mob_to_gui();
-    
-    }*/
+        
+    } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
+        mob_gen* m_ptr = get_lone_selected_mob();
+        m_ptr->type = m_ptr->category->get_type(name);
+        mob_to_gui();
+        
+    }
     
     show_bottom_frame();
     change_to_right_frame();

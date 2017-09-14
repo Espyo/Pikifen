@@ -211,21 +211,26 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             vertex* clicked_vertex = get_vertex_under_mouse();
             edge* clicked_edge = NULL;
             sector* clicked_sector = NULL;
+            bool selected_something = false;
+            
             if(clicked_vertex) {
                 selected_vertexes.insert(clicked_vertex);
+                selected_something = true;
             }
             
-            if(!clicked_vertex) {
+            if(!selected_something) {
                 clicked_edge = get_edge_under_mouse();
                 if(clicked_edge) {
                     selected_edges.insert(clicked_edge);
+                    selected_something = true;
                 }
             }
             
-            if(!clicked_edge) {
+            if(!selected_something) {
                 clicked_sector = get_sector_under_mouse();
                 if(clicked_sector) {
                     selected_sectors.insert(clicked_sector);
+                    selected_something = true;
                 }
             }
             
@@ -245,6 +250,54 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         asa_to_gui();
         asb_to_gui();
         
+    } else if(state == EDITOR_STATE_MOBS) {
+    
+        selected_mobs.clear();
+        selecting = false;
+        bool start_new_selection = true;
+        
+        if(!is_shift_pressed) {
+        
+            mob_gen* clicked_mob = get_mob_under_mouse();
+            if(clicked_mob) {
+                selected_mobs.insert(clicked_mob);
+                start_new_selection = false;
+            }
+            
+        }
+        
+        if(start_new_selection) {
+            selecting = true;
+            selection_start = mouse_cursor_w;
+            selection_end = mouse_cursor_w;
+        }
+        
+        mob_to_gui();
+        
+    } else if(state == EDITOR_STATE_PATHS) {
+    
+        selected_path_stops.clear();
+        selecting = false;
+        bool start_new_selection = true;
+        
+        if(!is_shift_pressed) {
+        
+            path_stop* clicked_stop = get_path_stop_under_mouse();
+            if(clicked_stop) {
+                selected_path_stops.insert(clicked_stop);
+                start_new_selection = false;
+            }
+            
+        }
+        
+        if(start_new_selection) {
+            selecting = true;
+            selection_start = mouse_cursor_w;
+            selection_end = mouse_cursor_w;
+        }
+        
+        path_to_gui();
+        
     }
 }
 
@@ -255,76 +308,125 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     //TODO
     if(selecting) {
-        selection_end = mouse_cursor_w;
-        
-        selected_vertexes.clear();
-        selected_edges.clear();
-        selected_sectors.clear();
-        
+    
         float selection_x1 = min(selection_start.x, selection_end.x);
         float selection_x2 = max(selection_start.x, selection_end.x);
         float selection_y1 = min(selection_start.y, selection_end.y);
         float selection_y2 = max(selection_start.y, selection_end.y);
+        selection_end = mouse_cursor_w;
         
-        for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-            vertex* v_ptr = cur_area_data.vertexes[v];
-            
-            if(
-                v_ptr->x >= selection_x1 &&
-                v_ptr->x <= selection_x2 &&
-                v_ptr->y >= selection_y1 &&
-                v_ptr->y <= selection_y2
-            ) {
-                selected_vertexes.insert(v_ptr);
-            }
-        }
+        if(
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        ) {
         
-        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-            edge* e_ptr = cur_area_data.edges[e];
+            selected_vertexes.clear();
+            selected_edges.clear();
+            selected_sectors.clear();
             
-            if(
-                e_ptr->vertexes[0]->x >= selection_x1 &&
-                e_ptr->vertexes[0]->x <= selection_x2 &&
-                e_ptr->vertexes[0]->y >= selection_y1 &&
-                e_ptr->vertexes[0]->y <= selection_y2 &&
-                e_ptr->vertexes[1]->x >= selection_x1 &&
-                e_ptr->vertexes[1]->x <= selection_x2 &&
-                e_ptr->vertexes[1]->y >= selection_y1 &&
-                e_ptr->vertexes[1]->y <= selection_y2
-            ) {
-                selected_edges.insert(e_ptr);
-            }
-        }
-        
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
-            bool valid_sector = true;
-            
-            for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-                edge* e_ptr = s_ptr->edges[e];
+            for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+                vertex* v_ptr = cur_area_data.vertexes[v];
                 
                 if(
-                    e_ptr->vertexes[0]->x < selection_x1 ||
-                    e_ptr->vertexes[0]->x > selection_x2 ||
-                    e_ptr->vertexes[0]->y < selection_y1 ||
-                    e_ptr->vertexes[0]->y > selection_y2 ||
-                    e_ptr->vertexes[1]->x < selection_x1 ||
-                    e_ptr->vertexes[1]->x > selection_x2 ||
-                    e_ptr->vertexes[1]->y < selection_y1 ||
-                    e_ptr->vertexes[1]->y > selection_y2
+                    v_ptr->x >= selection_x1 &&
+                    v_ptr->x <= selection_x2 &&
+                    v_ptr->y >= selection_y1 &&
+                    v_ptr->y <= selection_y2
                 ) {
-                    valid_sector = false;
-                    break;
+                    selected_vertexes.insert(v_ptr);
                 }
             }
             
-            if(valid_sector) {
-                selected_sectors.insert(s_ptr);
+            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                edge* e_ptr = cur_area_data.edges[e];
+                
+                if(
+                    e_ptr->vertexes[0]->x >= selection_x1 &&
+                    e_ptr->vertexes[0]->x <= selection_x2 &&
+                    e_ptr->vertexes[0]->y >= selection_y1 &&
+                    e_ptr->vertexes[0]->y <= selection_y2 &&
+                    e_ptr->vertexes[1]->x >= selection_x1 &&
+                    e_ptr->vertexes[1]->x <= selection_x2 &&
+                    e_ptr->vertexes[1]->y >= selection_y1 &&
+                    e_ptr->vertexes[1]->y <= selection_y2
+                ) {
+                    selected_edges.insert(e_ptr);
+                }
             }
+            
+            for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+                sector* s_ptr = cur_area_data.sectors[s];
+                bool valid_sector = true;
+                
+                for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                    edge* e_ptr = s_ptr->edges[e];
+                    
+                    if(
+                        e_ptr->vertexes[0]->x < selection_x1 ||
+                        e_ptr->vertexes[0]->x > selection_x2 ||
+                        e_ptr->vertexes[0]->y < selection_y1 ||
+                        e_ptr->vertexes[0]->y > selection_y2 ||
+                        e_ptr->vertexes[1]->x < selection_x1 ||
+                        e_ptr->vertexes[1]->x > selection_x2 ||
+                        e_ptr->vertexes[1]->y < selection_y1 ||
+                        e_ptr->vertexes[1]->y > selection_y2
+                    ) {
+                        valid_sector = false;
+                        break;
+                    }
+                }
+                
+                if(valid_sector) {
+                    selected_sectors.insert(s_ptr);
+                }
+            }
+            
+            sector_to_gui();
+            asa_to_gui();
+            asb_to_gui();
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+        
+            selected_mobs.clear();
+            
+            for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+                mob_gen* m_ptr = cur_area_data.mob_generators[m];
+                float radius = get_mob_gen_radius(m_ptr);
+                
+                if(
+                    m_ptr->pos.x - radius >= selection_x1 &&
+                    m_ptr->pos.x + radius <= selection_x2 &&
+                    m_ptr->pos.y - radius >= selection_y1 &&
+                    m_ptr->pos.y + radius <= selection_y2
+                ) {
+                    selected_mobs.insert(m_ptr);
+                }
+            }
+            
+            mob_to_gui();
+            
+        } else if(state == EDITOR_STATE_PATHS) {
+        
+            selected_path_stops.clear();
+            
+            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = cur_area_data.path_stops[s];
+                
+                if(
+                    s_ptr->pos.x - PATH_STOP_RADIUS >= selection_x1 &&
+                    s_ptr->pos.x + PATH_STOP_RADIUS <= selection_x2 &&
+                    s_ptr->pos.y - PATH_STOP_RADIUS >= selection_y1 &&
+                    s_ptr->pos.y + PATH_STOP_RADIUS <= selection_y2
+                ) {
+                    selected_path_stops.insert(s_ptr);
+                }
+            }
+            
+            path_to_gui();
+            
         }
     }
-    
-    sector_to_gui();
 }
 
 
@@ -384,10 +486,11 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         lbl_status_bar->text =
             "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
     } else {
-        lbl_status_bar->text =
-            gui->get_widget_under_mouse(
-                mouse_cursor_s.x, mouse_cursor_s.y
-            )->description;
+        lafi::widget* wum =
+            gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+        if(wum) {
+            lbl_status_bar->text = wum->description;
+        }
     }
 }
 

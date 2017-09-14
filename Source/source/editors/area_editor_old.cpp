@@ -58,7 +58,7 @@ const float  area_editor_old::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
 //Scale the letters on the "points" of various features by this much.
 const float  area_editor_old::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Radius to use when drawing a path stop circle.
-const float  area_editor_old::STOP_RADIUS = 16.0f;
+const float  area_editor_old::PATH_STOP_RADIUS = 16.0f;
 //Minimum distance between two sectors for them to merge.
 const float  area_editor_old::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.

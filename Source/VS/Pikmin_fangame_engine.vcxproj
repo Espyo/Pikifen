@@ -180,8 +180,13 @@
     <ClCompile Include="..\source\editors\animation_editor_loading.cpp" />
     <ClCompile Include="..\source\editors\area_editor.cpp" />
     <ClCompile Include="..\source\editors\area_editor_drawing.cpp" />
+    <ClCompile Include="..\source\editors\area_editor_drawing_old.cpp" />
     <ClCompile Include="..\source\editors\area_editor_event_handler.cpp" />
+    <ClCompile Include="..\source\editors\area_editor_event_handler_old.cpp" />
+    <ClCompile Include="..\source\editors\area_editor_gui_functions.cpp" />
     <ClCompile Include="..\source\editors\area_editor_loading.cpp" />
+    <ClCompile Include="..\source\editors\area_editor_loading_old.cpp" />
+    <ClCompile Include="..\source\editors\area_editor_old.cpp" />
     <ClCompile Include="..\source\editors\editor.cpp" />
     <ClCompile Include="..\source\functions.cpp" />
     <ClCompile Include="..\source\gameplay.cpp" />

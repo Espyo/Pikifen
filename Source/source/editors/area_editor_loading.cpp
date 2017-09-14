@@ -65,12 +65,17 @@ void area_editor::load() {
     
     frm_area->easy_row();
     frm_area->easy_add(
+        "but_info",
+        new lafi::button("Info"), 100, 32
+    );
+    frm_area->easy_row();
+    frm_area->easy_add(
         "but_layout",
         new lafi::button("Layout"), 100, 32
     );
     frm_area->easy_row();
     frm_area->easy_add(
-        "but_objects",
+        "but_mobs",
         new lafi::button("Objects"), 100, 32
     );
     frm_area->easy_row();
@@ -90,11 +95,6 @@ void area_editor::load() {
     );
     frm_area->easy_row();
     frm_area->easy_add(
-        "but_data",
-        new lafi::button("Data"), 100, 32
-    );
-    frm_area->easy_row();
-    frm_area->easy_add(
         "but_tools",
         new lafi::button("Tools"), 100, 32
     );
@@ -109,6 +109,14 @@ void area_editor::load() {
     frm_main->widgets["but_area"]->description =
         "Pick which area you want to edit.";
         
+    frm_area->widgets["but_info"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_INFO;
+        change_to_right_frame();
+    };
+    frm_area->widgets["but_info"]->description =
+        "Set the area's name, weather, etc.";
+        
     frm_area->widgets["but_layout"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_LAYOUT;
@@ -117,12 +125,12 @@ void area_editor::load() {
     frm_area->widgets["but_layout"]->description =
         "Draw sectors (polygons) to create the layout.";
         
-    frm_area->widgets["but_objects"]->left_mouse_click_handler =
+    frm_area->widgets["but_mobs"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        state = EDITOR_STATE_OBJECTS;
+        state = EDITOR_STATE_MOBS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_objects"]->description =
+    frm_area->widgets["but_mobs"]->description =
         "Change object settings and placements.";
         
     frm_area->widgets["but_paths"]->left_mouse_click_handler =
@@ -149,14 +157,6 @@ void area_editor::load() {
     frm_area->widgets["but_review"]->description =
         "Use this to make sure everything is okay in the area.";
         
-    frm_area->widgets["but_data"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        state = EDITOR_STATE_DATA;
-        change_to_right_frame();
-    };
-    frm_area->widgets["but_data"]->description =
-        "Set the area's name, weather, etc.";
-        
     frm_area->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_TOOLS;
@@ -166,6 +166,149 @@ void area_editor::load() {
         "Special tools to help you develop the area.";
         
         
+    //Info -- declarations.
+    frm_info =
+        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+    gui->add("frm_info", frm_info);
+    
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "but_back",
+        new lafi::button("Back"), 50, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lin_1",
+        new lafi::line(), 30, 16
+    );
+    frm_info->easy_add(
+        "lbl_general",
+        new lafi::label("General", ALLEGRO_ALIGN_CENTER), 40, 16
+    );
+    frm_info->easy_add(
+        "lin_2",
+        new lafi::line(), 30, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_name",
+        new lafi::label("Name:"), 30, 16
+    );
+    frm_info->easy_add(
+        "txt_name",
+        new lafi::textbox(), 70, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_subtitle",
+        new lafi::label("Subtitle:"), 40, 16
+    );
+    frm_info->easy_add(
+        "txt_subtitle",
+        new lafi::textbox(), 60, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "chk_weather",
+        new lafi::checkbox("Use weather?"), 100, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "dum_1",
+        new lafi::dummy(), 15, 24
+    );
+    frm_info->easy_add(
+        "but_weather",
+        new lafi::button(), 85, 24
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lin_3",
+        new lafi::line(), 20, 24
+    );
+    frm_info->easy_add(
+        "lbl_bg",
+        new lafi::label("Background", ALLEGRO_ALIGN_CENTER), 60, 16
+    );
+    frm_info->easy_add(
+        "lin_4",
+        new lafi::line(), 20, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_bg_bitmap",
+        new lafi::label("Bitmap:"), 40, 16
+    );
+    frm_info->easy_add(
+        "txt_bg_bitmap",
+        new lafi::textbox(), 60, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_bg_color",
+        new lafi::label("Color:"), 40, 16
+    );
+    frm_info->easy_add(
+        "txt_bg_color",
+        new lafi::textbox(), 60, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_bg_dist",
+        new lafi::label("Distance:"), 40, 16
+    );
+    frm_info->easy_add(
+        "txt_bg_dist",
+        new lafi::textbox(), 60, 16
+    );
+    frm_info->easy_row();
+    frm_info->easy_add(
+        "lbl_bg_zoom",
+        new lafi::label("Zoom:"), 40, 16
+    );
+    frm_info->easy_add(
+        "txt_bg_zoom",
+        new lafi::textbox(), 60, 16
+    );
+    frm_info->easy_row();
+    
+    
+    //Info -- properties.
+    frm_info->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_MAIN;
+        change_to_right_frame();
+    };
+    frm_info->widgets["but_back"]->description =
+        "Go back to the main menu.";
+        
+    frm_info->widgets["txt_name"]->description =
+        "The area's name.";
+        
+    frm_info->widgets["txt_subtitle"]->description =
+        "Subtitle, if any. Appears on the loading screen.";
+        
+    frm_info->widgets["chk_weather"]->description =
+        "Does this area use a weather condition?";
+        
+    frm_info->widgets["but_weather"]->description =
+        "The weather condition to use.";
+        
+    frm_info->widgets["txt_bg_bitmap"]->description =
+        "File name of the texture to use as a background, extension included."
+        " e.g. \"Kitchen_floor.jpg\"";
+        
+    frm_info->widgets["txt_bg_color"]->description =
+        "Color of the background, in the format \"r g b a\".";
+        
+    frm_info->widgets["txt_bg_dist"]->description =
+        "How far away the background is. 2 is a good value.";
+        
+    frm_info->widgets["txt_bg_zoom"]->description =
+        "Scale the texture by this amount.";
+    //TODO the rest of the info frame properties.
+    
+    
     //Layout -- declarations.
     frm_layout =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
@@ -777,138 +920,142 @@ void area_editor::load() {
         "Makes it always cast a shadow onto lower sectors.";
         
         
-    //Objects -- declarations.
-    frm_objects =
+    //Mobs -- declarations.
+    frm_mobs =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    gui->add("frm_objects", frm_objects);
+    gui->add("frm_mobs", frm_mobs);
     
-    frm_objects->easy_row();
-    frm_objects->easy_add(
+    frm_mobs->easy_row();
+    frm_mobs->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
     );
-    frm_objects->easy_row();
-    frm_objects->easy_add(
+    frm_mobs->easy_row();
+    frm_mobs->easy_add(
         "but_new",
         new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
     );
-    frm_objects->easy_add(
+    frm_mobs->easy_add(
         "but_del",
         new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
     );
-    frm_objects->easy_add(
+    frm_mobs->easy_add(
         "but_duplicate",
         new lafi::button("", "", icons.get(ICON_DUPLICATE)), 20, 32
     );
-    y = frm_objects->easy_row();
+    y = frm_mobs->easy_row();
     
-    frm_object =
+    frm_mob =
         new lafi::frame(gui_x, y, scr_w, scr_h - 48);
-    frm_objects->add("frm_object", frm_object);
+    frm_mobs->add("frm_mob", frm_mob);
     
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "lbl_category",
         new lafi::label("Category:"), 100, 16
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "but_category",
         new lafi::button(), 100, 24
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "lbl_type",
         new lafi::label("Type:"), 100, 16
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "but_type",
         new lafi::button(), 100, 24
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "lbl_angle",
         new lafi::label("Angle:"), 50, 16
     );
-    frm_object->easy_add(
+    frm_mob->easy_add(
         "ang_angle",
         new lafi::angle_picker(), 50, 24
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "lbl_vars",
         new lafi::label("Script variables:"), 100, 16
     );
-    frm_object->easy_row();
-    frm_object->easy_add(
+    frm_mob->easy_row();
+    frm_mob->easy_add(
         "txt_vars",
         new lafi::textbox(), 100, 16
     );
-    frm_object->easy_row();
+    frm_mob->easy_row();
     
     
-    //Objects -- properties.
-    frm_objects->widgets["but_back"]->left_mouse_click_handler =
+    //Mobs -- properties.
+    auto lambda_gui_to_mob =
+    [this] (lafi::widget*) { gui_to_mob(); };
+    
+    frm_mobs->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        selected_mobs.clear();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
-    frm_objects->widgets["but_back"]->description =
+    frm_mobs->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_objects->widgets["but_new"]->left_mouse_click_handler =
+    frm_mobs->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO
     };
-    frm_objects->widgets["but_new"]->description =
+    frm_mobs->widgets["but_new"]->description =
         "Create a new object wherever you click.";
         
-    frm_objects->widgets["but_del"]->left_mouse_click_handler =
+    frm_mobs->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO
     };
-    frm_objects->widgets["but_del"]->description =
+    frm_mobs->widgets["but_del"]->description =
         "Delete the current object (Ctrl+Minus).";
         
-    frm_objects->widgets["but_duplicate"]->left_mouse_click_handler =
+    frm_mobs->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO
     };
-    frm_objects->widgets["but_duplicate"]->description =
+    frm_mobs->widgets["but_duplicate"]->description =
         "Duplicate the current object (Ctrl+D).";
         
-    frm_object->widgets["but_category"]->left_mouse_click_handler =
+    frm_mob->widgets["but_category"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
     };
-    frm_object->widgets["but_category"]->description =
+    frm_mob->widgets["but_category"]->description =
         "Choose the category of types of object.";
         
-    frm_object->widgets["but_type"]->left_mouse_click_handler =
+    frm_mob->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
     };
-    frm_object->widgets["but_type"]->description =
+    frm_mob->widgets["but_type"]->description =
         "Choose the type this object is.";
         
-    //TODO frm_object->widgets["ang_angle"]->lose_focus_handler =
-    //lambda_gui_to_mob;
-    frm_object->widgets["ang_angle"]->description =
+    frm_mob->widgets["ang_angle"]->lose_focus_handler =
+        lambda_gui_to_mob;
+    frm_mob->widgets["ang_angle"]->description =
         "Angle the object is facing.";
         
-    //TODO frm_object->widgets["txt_vars"]->lose_focus_handler =
-    //lambda_gui_to_mob;
-    frm_object->widgets["txt_vars"]->description =
+    frm_mob->widgets["txt_vars"]->lose_focus_handler =
+        lambda_gui_to_mob;
+    frm_mob->widgets["txt_vars"]->description =
         "Extra variables (e.g.: \"sleep=y;jumping=n\").";
         
-    frm_object->register_accelerator(
+    frm_mob->register_accelerator(
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
-        frm_objects->widgets["but_duplicate"]
+        frm_mobs->widgets["but_duplicate"]
     );
-    frm_object->register_accelerator(
+    frm_mob->register_accelerator(
         ALLEGRO_KEY_MINUS, ALLEGRO_KEYMOD_CTRL,
-        frm_objects->widgets["but_del"]
+        frm_mobs->widgets["but_del"]
     );
     
     
@@ -1346,149 +1493,6 @@ void area_editor::load() {
         "Show a height grid in the cross-section window.";
         
         
-    //Data -- declarations.
-    frm_data =
-        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
-    gui->add("frm_data", frm_data);
-    
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "but_back",
-        new lafi::button("Back"), 50, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lin_1",
-        new lafi::line(), 30, 16
-    );
-    frm_data->easy_add(
-        "lbl_general",
-        new lafi::label("General", ALLEGRO_ALIGN_CENTER), 40, 16
-    );
-    frm_data->easy_add(
-        "lin_2",
-        new lafi::line(), 30, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_name",
-        new lafi::label("Name:"), 30, 16
-    );
-    frm_data->easy_add(
-        "txt_name",
-        new lafi::textbox(), 70, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_subtitle",
-        new lafi::label("Subtitle:"), 40, 16
-    );
-    frm_data->easy_add(
-        "txt_subtitle",
-        new lafi::textbox(), 60, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "chk_weather",
-        new lafi::label("Use weather?"), 100, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "dum_1",
-        new lafi::dummy(), 20, 24
-    );
-    frm_data->easy_add(
-        "but_weather",
-        new lafi::button(), 80, 24
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lin_3",
-        new lafi::line(), 20, 24
-    );
-    frm_data->easy_add(
-        "lbl_bg",
-        new lafi::label("Background", ALLEGRO_ALIGN_CENTER), 60, 16
-    );
-    frm_data->easy_add(
-        "lin_4",
-        new lafi::line(), 20, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_bg_bitmap",
-        new lafi::label("Bitmap:"), 40, 16
-    );
-    frm_data->easy_add(
-        "txt_bg_bitmap",
-        new lafi::textbox(), 60, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_bg_color",
-        new lafi::label("Color:"), 40, 16
-    );
-    frm_data->easy_add(
-        "txt_bg_color",
-        new lafi::textbox(), 60, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_bg_dist",
-        new lafi::label("Distance:"), 40, 16
-    );
-    frm_data->easy_add(
-        "txt_bg_dist",
-        new lafi::textbox(), 60, 16
-    );
-    frm_data->easy_row();
-    frm_data->easy_add(
-        "lbl_bg_zoom",
-        new lafi::label("Zoom:"), 40, 16
-    );
-    frm_data->easy_add(
-        "txt_bg_zoom",
-        new lafi::textbox(), 60, 16
-    );
-    frm_data->easy_row();
-    
-    
-    //Data -- properties.
-    frm_data->widgets["but_back"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        state = EDITOR_STATE_MAIN;
-        change_to_right_frame();
-    };
-    frm_data->widgets["but_back"]->description =
-        "Go back to the main menu.";
-        
-    frm_data->widgets["txt_name"]->description =
-        "The area's name.";
-        
-    frm_data->widgets["txt_subtitle"]->description =
-        "Subtitle, if any. Appears on the loading screen.";
-        
-    frm_data->widgets["chk_weather"]->description =
-        "Does this area use a weather condition?";
-        
-    frm_data->widgets["but_weather"]->description =
-        "The weather condition to use.";
-        
-    frm_data->widgets["txt_bg_bitmap"]->description =
-        "File name of the texture to use as a background, extension included."
-        " e.g. \"Kitchen_floor.jpg\"";
-        
-    frm_data->widgets["txt_bg_color"]->description =
-        "Color of the background, in the format \"r g b a\".";
-        
-    frm_data->widgets["txt_bg_dist"]->description =
-        "How far away the background is. 2 is a good value.";
-        
-    frm_data->widgets["txt_bg_zoom"]->description =
-        "Scale the texture by this amount.";
-    //TODO the rest of the data frame properties.
-    
-    
     //Tools -- declarations.
     frm_tools =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);

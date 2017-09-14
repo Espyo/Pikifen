@@ -367,7 +367,7 @@ void area_editor_old::do_drawing() {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 al_draw_filled_circle(
                     s_ptr->pos.x, s_ptr->pos.y,
-                    STOP_RADIUS,
+                    PATH_STOP_RADIUS,
                     al_map_rgb(224, 192, 160)
                 );
             }

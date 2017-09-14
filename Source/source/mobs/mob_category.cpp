@@ -462,7 +462,7 @@ void onion_category::clear_types() {
 pellet_category::pellet_category() :
     mob_category(
         MOB_CATEGORY_PELLETS, "Pellet", "Pellets",
-        PELLETS_FOLDER_PATH, al_map_rgb(208, 224, 96)
+        PELLETS_FOLDER_PATH, al_map_rgb(224, 255, 112)
     ) {
     
 }
@@ -626,7 +626,7 @@ void ship_category::clear_types() {
 treasure_category::treasure_category() :
     mob_category(
         MOB_CATEGORY_TREASURES, "Treasure", "Treasures",
-        TREASURES_FOLDER_PATH, al_map_rgb(255, 240, 64)
+        TREASURES_FOLDER_PATH, al_map_rgb(255, 240, 128)
     ) {
     
 }
