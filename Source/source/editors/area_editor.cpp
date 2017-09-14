@@ -26,8 +26,14 @@ const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //Maximum number of texture suggestions.
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+//Thickness to use when drawing a path link line.
+const float area_editor::PATH_LINK_THICKNESS = 2.0f;
+//Radius to use when drawing a path stop circle.
+const float area_editor::PATH_STOP_RADIUS = 16.0f;
+//Color of a selected element, or the selection box.
+const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
-const float area_editor::SELECTION_EFFECT_SPEED = M_PI;
+const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
 //Maximum zoom level possible in the editor.
 const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
@@ -160,6 +166,18 @@ edge* area_editor::get_edge_under_mouse() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the selected mob, if any, and if there is only one.
+ * NULL otherwise.
+ */
+mob_gen* area_editor::get_lone_selected_mob() {
+    if(selected_mobs.size() == 1) {
+        return *selected_mobs.begin();
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the selected sector, if any, and if there is only one.
  * NULL otherwise.
  */
@@ -172,10 +190,53 @@ sector* area_editor::get_lone_selected_sector() {
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the radius of the specific mob generator. Normally, this returns the
+ * type's radius, but if the type/radius is invalid, it returns a default.
+ */
+float area_editor::get_mob_gen_radius(mob_gen* m) {
+    return m->type ? m->type->radius == 0 ? 16 : m->type->radius : 16;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the mob currently under the mouse, or NULL if none.
+ */
+mob_gen* area_editor::get_mob_under_mouse() {
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        
+        if(
+            dist(m_ptr->pos, mouse_cursor_w) <= get_mob_gen_radius(m_ptr)
+        ) {
+            return m_ptr;
+        }
+    }
+    
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the path stop currently under the mouse, or NULL if none.
+ */
+path_stop* area_editor::get_path_stop_under_mouse() {
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        
+        if(dist(s_ptr->pos, mouse_cursor_w) <= PATH_STOP_RADIUS) {
+            return s_ptr;
+        }
+    }
+    
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the sector currently under the mouse, or NULL if none.
  */
 sector* area_editor::get_sector_under_mouse() {
-    get_sector(mouse_cursor_w, NULL, false);
+    return get_sector(mouse_cursor_w, NULL, false);
 }
 
 

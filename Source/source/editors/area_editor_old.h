@@ -106,8 +106,8 @@ private:
     static const float  PATH_LINK_THICKNESS;
     static const float  PATH_PREVIEW_CHECKPOINT_RADIUS;
     static const float  PATH_PREVIEW_TIMEOUT_DUR;
+    static const float  PATH_STOP_RADIUS;
     static const float  POINT_LETTER_TEXT_SCALE;
-    static const float  STOP_RADIUS;
     static const float  VERTEX_MERGE_RADIUS;
     static const float  ZOOM_MAX_LEVEL_EDITOR;
     static const float  ZOOM_MIN_LEVEL_EDITOR;

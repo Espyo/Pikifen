@@ -358,7 +358,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
                 
-                if(dist(s_ptr->pos, mouse_cursor_w) <= STOP_RADIUS) {
+                if(dist(s_ptr->pos, mouse_cursor_w) <= PATH_STOP_RADIUS) {
                     cur_stop = s_ptr;
                     moving_thing = s;
                     break;
@@ -571,7 +571,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     dist(mouse_cursor_w, s_ptr->pos) <=
-                    STOP_RADIUS
+                    PATH_STOP_RADIUS
                 ) {
                     new_link_first_stop = s_ptr;
                     sec_mode =
@@ -592,7 +592,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     dist(mouse_cursor_w, s_ptr->pos) <=
-                    STOP_RADIUS
+                    PATH_STOP_RADIUS
                 ) {
                 
                     if(new_link_first_stop == s_ptr) continue;
@@ -649,7 +649,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
                 
                 if(
                     dist(mouse_cursor_w, s_ptr->pos) <=
-                    STOP_RADIUS
+                    PATH_STOP_RADIUS
                 ) {
                 
                     //Check all links to this stop.

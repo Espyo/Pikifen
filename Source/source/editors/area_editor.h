@@ -29,16 +29,16 @@ private:
     
     
     enum EDITOR_STATES {
+        EDITOR_STATE_INFO,
         EDITOR_STATE_MAIN,
         EDITOR_STATE_LAYOUT,
         EDITOR_STATE_ASB,
         EDITOR_STATE_TEXTURE,
         EDITOR_STATE_ASA,
-        EDITOR_STATE_OBJECTS,
+        EDITOR_STATE_MOBS,
         EDITOR_STATE_PATHS,
         EDITOR_STATE_DETAILS,
         EDITOR_STATE_REVIEW,
-        EDITOR_STATE_DATA,
         EDITOR_STATE_TOOLS,
         EDITOR_STATE_OPTIONS,
     };
@@ -56,13 +56,16 @@ private:
         AREA_EDITOR_PICKER_MOB_TYPE,
     };
     
-    static const float  DEBUG_TEXT_SCALE;
-    static const float  DEF_GRID_INTERVAL;
-    static const float  DOUBLE_CLICK_TIMEOUT;
-    static const size_t MAX_TEXTURE_SUGGESTIONS;
-    static const float  SELECTION_EFFECT_SPEED;
-    static const float  ZOOM_MAX_LEVEL_EDITOR;
-    static const float  ZOOM_MIN_LEVEL_EDITOR;
+    static const float         DEBUG_TEXT_SCALE;
+    static const float         DEF_GRID_INTERVAL;
+    static const float         DOUBLE_CLICK_TIMEOUT;
+    static const size_t        MAX_TEXTURE_SUGGESTIONS;
+    static const float         PATH_LINK_THICKNESS;
+    static const float         PATH_STOP_RADIUS;
+    static const unsigned char SELECTION_COLOR[3];
+    static const float         SELECTION_EFFECT_SPEED;
+    static const float         ZOOM_MAX_LEVEL_EDITOR;
+    static const float         ZOOM_MIN_LEVEL_EDITOR;
     
     static const string EDITOR_ICONS_FOLDER_NAME;
     static const string ICON_DELETE;
@@ -90,13 +93,13 @@ private:
     lafi::frame* frm_asb;
     lafi::frame* frm_texture;
     lafi::frame* frm_asa;
-    lafi::frame* frm_objects;
-    lafi::frame* frm_object;
+    lafi::frame* frm_mobs;
+    lafi::frame* frm_mob;
     lafi::frame* frm_paths;
     lafi::frame* frm_details;
     lafi::frame* frm_shadow;
     lafi::frame* frm_review;
-    lafi::frame* frm_data;
+    lafi::frame* frm_info;
     lafi::frame* frm_tools;
     lafi::frame* frm_options;
     lafi::frame* frm_bottom;
@@ -136,11 +139,15 @@ private:
     //Only preview the path when this time is up.
     timer path_preview_timer;
     //Currently selected edges.
-    unordered_set<edge*> selected_edges;
+    set<edge*> selected_edges;
+    //Currently selected mobs.
+    set<mob_gen*> selected_mobs;
+    //Currently selected path stops.
+    set<path_stop*> selected_path_stops;
     //Currently selected sectors.
-    unordered_set<sector*> selected_sectors;
+    set<sector*> selected_sectors;
     //Currently selected vertexes.
-    unordered_set<vertex*> selected_vertexes;
+    set<vertex*> selected_vertexes;
     //Is the user currently performing a rectangle box?
     bool selecting;
     //The selection's alpha depends on this value.
@@ -163,7 +170,11 @@ private:
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
     edge* get_edge_under_mouse();
+    mob_gen* get_lone_selected_mob();
     sector* get_lone_selected_sector();
+    float get_mob_gen_radius(mob_gen* m);
+    mob_gen* get_mob_under_mouse();
+    path_stop* get_path_stop_under_mouse();
     sector* get_sector_under_mouse();
     vertex* get_vertex_under_mouse();
     void load_area(const bool from_backup);
@@ -196,13 +207,14 @@ private:
     void asa_to_gui();
     void asb_to_gui();
     void change_to_right_frame();
-    void data_to_gui();
+    void info_to_gui();
     void details_to_gui();
     void gui_to_asa();
     void gui_to_asb();
+    void gui_to_mob();
     void gui_to_sector();
     void hide_all_frames();
-    void object_to_gui();
+    void mob_to_gui();
     void path_to_gui();
     void review_to_gui();
     void sector_to_gui();
