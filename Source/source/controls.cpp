@@ -89,7 +89,7 @@ void gameplay::handle_controls(const ALLEGRO_EVENT &ev) {
             } else if(id == CREATOR_TOOL_HURT_MOB) {
                 mob* m = get_closest_mob_to_cursor();
                 if(m) {
-                    m->set_health(true, true, -0.2);
+                    m->set_health(true, true, -creator_tool_mob_hurting_ratio);
                 }
                 
             } else if(id == CREATOR_TOOL_MOB_INFO) {
@@ -316,15 +316,15 @@ void gameplay::handle_button(
                 
                 //Now check if the leader should heal themselves on the ship.
                 if(!done) {
-                    size_t n_ships = ships.size();
-                    for(size_t s = 0; s < n_ships; ++s) {
+                    for(size_t s = 0; s < ships.size(); ++s) {
+                        ship* s_ptr = ships[s];
                         if(
-                            ships[s]->shi_type->can_heal &&
-                            dist(
-                                cur_leader_ptr->pos, ships[s]->beam_final_pos
-                            ) <= ships[s]->shi_type->beam_radius
+                            cur_leader_ptr->health !=
+                            cur_leader_ptr->type->max_health &&
+                            s_ptr->shi_type->can_heal &&
+                            s_ptr->is_leader_under_ring(cur_leader_ptr)
                         ) {
-                            cur_leader_ptr->set_health(false, true, 1.0);
+                            ships[s]->heal_leader(cur_leader_ptr);
                             done = true;
                         }
                     }

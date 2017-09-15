@@ -604,6 +604,13 @@ void mob::face(const float new_angle) {
 }
 
 
+//Normally, the spirit's diameter is the enemy's. Multiply the spirit by this.
+const float ENEMY_SPIRIT_SIZE_MULT = 0.7;
+//Maximum diameter an enemy's spirit can be.
+const float ENEMY_SPIRIT_MAX_SIZE = 128;
+//Minimum diameter an enemy's spirit can be.
+const float ENEMY_SPIRIT_MIN_SIZE = 16;
+
 /* ----------------------------------------------------------------------------
  * Sets up stuff for the end of the mob's dying process.
  */
@@ -617,7 +624,11 @@ void mob::finish_dying() {
         }
         particle par(
             PARTICLE_TYPE_ENEMY_SPIRIT, pos,
-            64, 2, PARTICLE_PRIORITY_MEDIUM
+            clamp(
+                type->radius * 2 * ENEMY_SPIRIT_SIZE_MULT,
+                ENEMY_SPIRIT_MIN_SIZE, ENEMY_SPIRIT_MAX_SIZE
+            ),
+            2, PARTICLE_PRIORITY_MEDIUM
         );
         par.bitmap = bmp_enemy_spirit;
         par.speed.x = 0;

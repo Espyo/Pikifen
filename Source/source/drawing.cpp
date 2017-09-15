@@ -36,9 +36,6 @@ void gameplay::do_game_drawing(
     
     if(!paused) {
     
-        size_t n_leaders =     leaders.size();
-        size_t n_spray_types = spray_types.size();
-        
         cur_sun_strength = get_sun_strength();
         
         ALLEGRO_TRANSFORM world_to_screen_drawing_transform;
@@ -55,577 +52,331 @@ void gameplay::do_game_drawing(
             world_to_screen_drawing_transform = world_to_screen_transform;
         }
         
-        
-        /* Layer 1
-        ************************
-        *                +---+ *
-        *   Background   |###| *
-        *                +---+ *
-        ***********************/
-        
         al_clear_to_color(cur_area_data.bg_color);
         
-        if(cur_area_data.bg_bmp) {
-            ALLEGRO_VERTEX bg_v[4];
-            for(unsigned char v = 0; v < 4; ++v) {
-                bg_v[v].color = map_gray(255);
-                bg_v[v].z = 0;
+        //Layer 1 -- Background.
+        draw_background(bmp_output);
+        
+        //Layer 2 -- Area layout.
+        draw_layout(bmp_output, world_to_screen_drawing_transform);
+        
+        //Layer 3 -- Particles before mobs.
+        if(!(bmp_output && !creator_tool_area_image_mobs)) {
+            if(!bmp_output) {
+                particles.draw_all(true, cam_box[0], cam_box[1]);
+            } else {
+                particles.draw_all(true);
             }
-            
-            //Not gonna lie, this uses some fancy-shmancy numbers.
-            //I mostly got here via trial and error.
-            //I apologize if you're trying to understand what it means.
-            int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : scr_w;
-            int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
-            float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
-            point final_zoom(
-                bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use,
-                bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use
-            );
-            
-            bg_v[0].x = 0;
-            bg_v[0].y = 0;
-            bg_v[0].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
-            bg_v[0].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
-            bg_v[1].x = bmp_w;
-            bg_v[1].y = 0;
-            bg_v[1].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
-            bg_v[1].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
-            bg_v[2].x = bmp_w;
-            bg_v[2].y = bmp_h;
-            bg_v[2].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
-            bg_v[2].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
-            bg_v[3].x = 0;
-            bg_v[3].y = bmp_h;
-            bg_v[3].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
-            bg_v[3].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
-            
-            al_draw_prim(
-                bg_v, NULL, cur_area_data.bg_bmp,
-                0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
-            );
         }
         
-        
-        /* Layer 2
-        *******************
-        *          ^^^^^^ *
-        *   Area   ^^^^^^ *
-        *          ^^^^^^ *
-        ******************/
-        
-        //Sectors.
-        al_use_transform(&world_to_screen_drawing_transform);
-        for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
-            
-            if(
-                !bmp_output &&
-                !rectangles_intersect(
-                    s_ptr->bbox[0], s_ptr->bbox[1],
-                    cam_box[0], cam_box[1]
-                )
-            ) {
-                //Off-camera.
-                continue;
-            }
-            
-            draw_sector_texture(s_ptr, point(), 1.0);
-            
-            if(s_ptr->associated_liquid) {
-                draw_liquid(s_ptr, point(), 1.0f);
-            }
-            
-            draw_sector_shadows(s_ptr, point(), 1.0f);
+        //Layer 4 -- Mobs.
+        if(!(bmp_output && !creator_tool_area_image_mobs)) {
+            draw_mobs(bmp_output);
         }
         
+        //Layer 5 -- Particles after mobs.
+        if(!(bmp_output && !creator_tool_area_image_mobs)) {
+            if(!bmp_output) {
+                particles.draw_all(false, cam_box[0], cam_box[1]);
+            } else {
+                particles.draw_all(false);
+            }
+        }
         
-        /* Layer 3
-        *************************************
-        *                               *   *
-        *   Particles (before mobs)   *   * *
-        *                              * *  *
-        ************************************/
-        
+        //Layer 6 -- In-game text.
         if(!bmp_output) {
-            particles.draw_all(true, cam_box[0], cam_box[1]);
-        } else {
-            particles.draw_all(true);
+            draw_ingame_text();
         }
         
-        
-        /* Layer 4
-        ****************
-        *          \o/ *
-        *   Mobs    |  *
-        *          / \ *
-        ***************/
-        
-        vector<mob*> sorted_mobs;
-        sorted_mobs = mobs;
-        sort(
-            sorted_mobs.begin(), sorted_mobs.end(),
-        [] (mob * m1, mob * m2) -> bool {
-            if(m1->z == m2->z) {
-                if(m1->type->height == m2->type->height) {
-                    return m1->id < m2->id;
-                }
-                return m1->type->height < m2->type->height;
-            }
-            return m1->z < m2->z;
-        }
-        );
-        
-        float shadow_stretch = 0;
-        
-        if(day_minutes < 60 * 5 || day_minutes > 60 * 20) {
-            shadow_stretch = 1;
-        } else if(day_minutes < 60 * 12) {
-            shadow_stretch = 1 - ((day_minutes - 60 * 5) / (60 * 12 - 60 * 5));
-        } else {
-            shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
-        }
-        
-        mob* mob_ptr = NULL;
-        //Draw the mob shadows.
-        al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < sorted_mobs.size(); ++m) {
-            mob_ptr = sorted_mobs[m];
-            
-            if(!mob_ptr->type->casts_shadow || mob_ptr->hide) {
-                continue;
-            }
-            
-            if(
-                !bmp_output &&
-                !bbox_check(
-                    cam_box[0], cam_box[1],
-                    mob_ptr->pos, mob_ptr->type->radius
-                )
-            ) {
-                //Off-camera.
-                continue;
-            }
-            
-            draw_mob_shadow(
-                mob_ptr->pos,
-                mob_ptr->type->radius * 2,
-                mob_ptr->z - mob_ptr->ground_sector->z,
-                shadow_stretch
-            );
-        }
-        al_hold_bitmap_drawing(false);
-        
-        //And now the mobs themselves.
-        for(size_t m = 0; m < sorted_mobs.size(); ++m) {
-            mob_ptr = sorted_mobs[m];
-            
-            if(
-                !bmp_output &&
-                !bbox_check(
-                    cam_box[0], cam_box[1],
-                    mob_ptr->pos, mob_ptr->type->radius
-                )
-            ) {
-                //Off-camera.
-                continue;
-            }
-            
-            mob_ptr->draw();
-            
-            //Creator tool -- draw hitboxes.
-            if(creator_tool_hitboxes) {
-                sprite* s = mob_ptr->anim.get_cur_sprite();
-                if(s) {
-                    for(size_t h = 0; h < s->hitboxes.size(); ++h) {
-                        hitbox* h_ptr = &s->hitboxes[h];
-                        ALLEGRO_COLOR hc;
-                        if(h_ptr->type == HITBOX_TYPE_NORMAL) {
-                            hc = al_map_rgba(0, 128, 0, 192); //Green.
-                        } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
-                            hc = al_map_rgba(128, 0, 0, 192); //Red.
-                        } else {
-                            hc = al_map_rgba(128, 128, 0, 192); //Yellow.
-                        }
-                        point p =
-                            mob_ptr->pos +
-                            rotate_point(h_ptr->pos, mob_ptr->angle);
-                        al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
-                    }
-                }
-            }
-        }
-        
-        
-        /* Layer 5
-        ************************************
-        *                              *   *
-        *   Particles (after mobs)   *   * *
-        *                             * *  *
-        ***********************************/
-        
+        //Layer 7 -- Precipitation.
         if(!bmp_output) {
-            particles.draw_all(false, cam_box[0], cam_box[1]);
-        } else {
-            particles.draw_all(false);
+            draw_precipitation();
         }
         
-        
-        /* Layer 6
-        ***************************
-        *                   Help  *
-        *   In-game text   --  -- *
-        *                    \/   *
-        **************************/
-        
-        //Fractions and health.
-        size_t n_mobs = mobs.size();
-        for(size_t m = 0; m < n_mobs; ++m) {
-            mob* mob_ptr = mobs[m];
-            
-            if(mob_ptr->carry_info) {
-                if(mob_ptr->carry_info->cur_carrying_strength > 0) {
-                    ALLEGRO_COLOR color;
-                    bool valid = false;
-                    if(mob_ptr->carry_info->is_moving) {
-                        if(mob_ptr->carry_info->carry_to_ship) {
-                            color = carrying_color_move;
-                            valid = true;
-                        } else if(mob_ptr->carrying_target) {
-                            color =
-                                (
-                                    (onion*) (mob_ptr->carrying_target)
-                                )->oni_type->pik_type->main_color;
-                            valid = true;
-                        }
-                    }
-                    if(!valid) {
-                        color = carrying_color_stop;
-                    }
-                    draw_fraction(
-                        point(
-                            mob_ptr->pos.x,
-                            mob_ptr->pos.y - mob_ptr->type->radius -
-                            font_main_h * 1.25
-                        ),
-                        mob_ptr->carry_info->cur_carrying_strength,
-                        mob_ptr->type->weight,
-                        color
-                    );
-                }
-            }
-            
-            if(
-                mob_ptr->type->show_health &&
-                !mob_ptr->hide &&
-                mob_ptr->health < mob_ptr->type->max_health &&
-                mob_ptr->health > 0
-            ) {
-                draw_health(
-                    point(
-                        mob_ptr->pos.x,
-                        mob_ptr->pos.y - mob_ptr->type->radius -
-                        DEF_HEALTH_WHEEL_RADIUS - 4
-                    ),
-                    mob_ptr->health, mob_ptr->type->max_health
-                );
-            }
-        }
-        
-        //Info spots.
-        size_t n_info_spots = info_spots.size();
-        for(size_t i = 0; i < n_info_spots; ++i) {
-            if(
-                dist(cur_leader_ptr->pos, info_spots[i]->pos) <=
-                info_spot_trigger_range
-            ) {
-                float pivot_y =
-                    info_spots[i]->pos.y - info_spots[i]->type->radius;
-                if(!info_spots[i]->opens_box) {
-                    draw_notification(
-                        point(info_spots[i]->pos.x, pivot_y),
-                        info_spots[i]->text, NULL
-                    );
-                    
-                } else if(click_control_id != INVALID) {
-                    draw_notification(
-                        point(info_spots[i]->pos.x, pivot_y),
-                        "Read", &controls[0][click_control_id]
-                    );
-                    
-                }
-            }
-        }
-        
-        
-        /* Layer 7
-        ***************************
-        *                    /  / *
-        *   Precipitation     / / *
-        *                   /  /  *
-        **************************/
-        
-        if(
-            cur_area_data.weather_condition.precipitation_type !=
-            PRECIPITATION_TYPE_NONE
-        ) {
-            size_t n_precipitation_particles = precipitation.size();
-            for(size_t p = 0; p < n_precipitation_particles; ++p) {
-                al_draw_filled_circle(
-                    precipitation[p].x, precipitation[p].y,
-                    3, al_map_rgb(255, 255, 255)
-                );
-            }
-        }
-        
-        
-        /* Layer 8
-        **************************
-        *                  *###* *
-        *   Tree shadows   #| |# *
-        *                   |_|  *
-        *************************/
-        
+        //Layer 8 -- Tree shadows.
         if(!(bmp_output && !creator_tool_area_image_shadows)) {
-        
-            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
-                
-                unsigned char alpha =
-                    ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
-                    
-                draw_sprite(
-                    s_ptr->bitmap,
-                    point(
-                        s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT *
-                        sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
-                        s_ptr->sway.x,
-                        s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT *
-                        sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
-                        s_ptr->sway.y
-                    ),
-                    s_ptr->size,
-                    s_ptr->angle, map_alpha(alpha)
-                );
-            }
-            
+            draw_tree_shadows();
         }
+        
+        //Finish dumping to a bitmap image here.
         if(bmp_output) {
             al_set_target_backbuffer(display);
             return;
         }
         
-        
-        /* Layer 9
-        ***********************
-        *              --==## *
-        *   Daylight   --==## *
-        *              --==## *
-        **********************/
-        
-        al_use_transform(&identity_transform);
-        
+        //Layer 9 -- Lighting filter.
         draw_lighting_filter();
         
+        //Layer 10 -- Cursor.
+        draw_cursor(world_to_screen_drawing_transform);
         
-        /* Layer 10
-        *********************
-        *             .-.   *
-        *   Cursor   ( = )> *
-        *             '-'   *
-        ********************/
+        //Layer 11 -- HUD
+        draw_hud();
         
-        al_use_transform(&world_to_screen_drawing_transform);
+        //Layer 12 -- System stuff.
+        draw_system_stuff();
         
-        size_t n_arrows = group_move_arrows.size();
-        for(size_t a = 0; a < n_arrows; ++a) {
-            point pos(
-                cos(group_move_angle) * group_move_arrows[a],
-                sin(group_move_angle) * group_move_arrows[a]
-            );
-            float alpha =
-                64 + min(
-                    191,
-                    (int) (
-                        191 * (group_move_arrows[a] / (cursor_max_dist * 0.4))
-                    )
-                );
-            draw_sprite(
-                bmp_group_move_arrow,
-                cur_leader_ptr->pos + pos,
-                point(16 * (1 + group_move_arrows[a] / cursor_max_dist), -1),
-                group_move_angle,
-                map_alpha(alpha)
-            );
-        }
-        
-        size_t n_rings = whistle_rings.size();
-        for(size_t r = 0; r < n_rings; ++r) {
-            point pos(
-                cur_leader_ptr->pos.x + cos(cursor_angle) * whistle_rings[r],
-                cur_leader_ptr->pos.y + sin(cursor_angle) * whistle_rings[r]
-            );
-            unsigned char n = whistle_ring_colors[r];
-            al_draw_circle(
-                pos.x, pos.y, 8,
-                al_map_rgba(
-                    WHISTLE_RING_COLORS[n][0],
-                    WHISTLE_RING_COLORS[n][1],
-                    WHISTLE_RING_COLORS[n][2],
-                    192
-                ), 3
-            );
-        }
-        
-        if(whistle_radius > 0 || whistle_fade_timer.time_left > 0.0f) {
-            if(pretty_whistle) {
-                unsigned char n_dots = 16 * 6;
-                for(unsigned char d = 0; d < 6; ++d) {
-                    for(unsigned char d2 = 0; d2 < 16; ++d2) {
-                        unsigned char current_dot = d2 * 6 + d;
-                        float angle =
-                            M_PI * 2 / n_dots *
-                            current_dot -
-                            WHISTLE_DOT_SPIN_SPEED * area_time_passed;
-                            
-                        point dot_pos(
-                            leader_cursor_w.x +
-                            cos(angle) * whistle_dot_radius[d],
-                            leader_cursor_w.y +
-                            sin(angle) * whistle_dot_radius[d]
-                        );
-                        
-                        ALLEGRO_COLOR c;
-                        float alpha_mult;
-                        if(whistle_fade_timer.time_left > 0.0f)
-                            alpha_mult = whistle_fade_timer.get_ratio_left();
-                        else
-                            alpha_mult = 1;
-                            
-                        if(d == 0) {
-                            //Red.
-                            c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
-                        } else if(d == 1) {
-                            //Orange.
-                            c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
-                        } else if(d == 2) {
-                            //Lime.
-                            c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
-                        } else if(d == 3) {
-                            //Cyan.
-                            c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
-                        } else if(d == 4) {
-                            //Blue.
-                            c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
-                        } else {
-                            //Purple.
-                            c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
-                        }
-                        
-                        al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
-                    }
-                }
-            } else {
-                unsigned char alpha = whistle_fade_timer.get_ratio_left() * 255;
-                float radius = whistle_fade_radius;
-                if(whistle_radius > 0) {
-                    alpha = 255;
-                    radius = whistle_radius;
-                }
-                al_draw_circle(
-                    leader_cursor_w.x, leader_cursor_w.y, radius,
-                    al_map_rgba(192, 192, 0, alpha), 2
-                );
-            }
-        }
-        
-        //Cursor trail
-        al_use_transform(&identity_transform);
-        if(draw_cursor_trail) {
-            for(size_t p = 1; p < cursor_spots.size(); ++p) {
-                point* p_ptr = &cursor_spots[p];
-                point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
-                if(
-                    (*p_ptr) != (*pp_ptr) &&
-                    dist(*p_ptr, *pp_ptr) > 4
-                ) {
-                    al_draw_line(
-                        p_ptr->x, p_ptr->y,
-                        pp_ptr->x, pp_ptr->y,
-                        change_alpha(
-                            cur_leader_ptr->lea_type->main_color,
-                            (p / (float) cursor_spots.size()) * 64
-                        ),
-                        p * 3
-                    );
-                }
-            }
-        }
-        
-        //Mouse cursor.
-        draw_sprite(
-            bmp_mouse_cursor,
-            mouse_cursor_s,
-            point(
-                cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
-                cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
-            ),
-            -(area_time_passed * cursor_spin_speed),
-            change_color_lighting(
-                cur_leader_ptr->lea_type->main_color,
-                cursor_height_diff_light
-            )
+    } else { //Paused.
+    
+    }
+    
+    if(area_title_fade_timer.time_left > 0) {
+        draw_loading_screen(
+            cur_area_data.name,
+            cur_area_data.subtitle,
+            area_title_fade_timer.get_ratio_left()
         );
+    }
+    
+    fade_mgr.draw();
+    
+    al_flip_display();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the area background.
+ */
+void gameplay::draw_background(ALLEGRO_BITMAP* bmp_output) {
+    if(!cur_area_data.bg_bmp) return;
+    
+    ALLEGRO_VERTEX bg_v[4];
+    for(unsigned char v = 0; v < 4; ++v) {
+        bg_v[v].color = map_gray(255);
+        bg_v[v].z = 0;
+    }
+    
+    //Not gonna lie, this uses some fancy-shmancy numbers.
+    //I mostly got here via trial and error.
+    //I apologize if you're trying to understand what it means.
+    int bmp_w = bmp_output ? al_get_bitmap_width(bmp_output) : scr_w;
+    int bmp_h = bmp_output ? al_get_bitmap_height(bmp_output) : scr_h;
+    float zoom_to_use = bmp_output ? 0.5 : cam_zoom;
+    point final_zoom(
+        bmp_w * 0.5 * cur_area_data.bg_dist / zoom_to_use,
+        bmp_h * 0.5 * cur_area_data.bg_dist / zoom_to_use
+    );
+    
+    bg_v[0].x = 0;
+    bg_v[0].y = 0;
+    bg_v[0].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
+    bg_v[0].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[1].x = bmp_w;
+    bg_v[1].y = 0;
+    bg_v[1].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
+    bg_v[1].v = (cam_pos.y - final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[2].x = bmp_w;
+    bg_v[2].y = bmp_h;
+    bg_v[2].u = (cam_pos.x + final_zoom.x) / cur_area_data.bg_bmp_zoom;
+    bg_v[2].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    bg_v[3].x = 0;
+    bg_v[3].y = bmp_h;
+    bg_v[3].u = (cam_pos.x - final_zoom.x) / cur_area_data.bg_bmp_zoom;
+    bg_v[3].v = (cam_pos.y + final_zoom.y) / cur_area_data.bg_bmp_zoom;
+    
+    al_draw_prim(
+        bg_v, NULL, cur_area_data.bg_bmp,
+        0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the cursor.
+ */
+void gameplay::draw_cursor(
+    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
+) {
+
+    al_use_transform(&world_to_screen_drawing_transform);
         
-        //Leader cursor.
-        al_use_transform(&world_to_screen_drawing_transform);
+    size_t n_arrows = group_move_arrows.size();
+    for(size_t a = 0; a < n_arrows; ++a) {
+        point pos(
+            cos(group_move_angle) * group_move_arrows[a],
+            sin(group_move_angle) * group_move_arrows[a]
+        );
+        float alpha =
+            64 + min(
+                191,
+                (int) (
+                    191 * (group_move_arrows[a] / (cursor_max_dist * 0.4))
+                )
+            );
         draw_sprite(
-            bmp_cursor,
+            bmp_group_move_arrow,
+            cur_leader_ptr->pos + pos,
+            point(16 * (1 + group_move_arrows[a] / cursor_max_dist), -1),
+            group_move_angle,
+            map_alpha(alpha)
+        );
+    }
+    
+    size_t n_rings = whistle_rings.size();
+    for(size_t r = 0; r < n_rings; ++r) {
+        point pos(
+            cur_leader_ptr->pos.x + cos(cursor_angle) * whistle_rings[r],
+            cur_leader_ptr->pos.y + sin(cursor_angle) * whistle_rings[r]
+        );
+        unsigned char n = whistle_ring_colors[r];
+        al_draw_circle(
+            pos.x, pos.y, 8,
+            al_map_rgba(
+                WHISTLE_RING_COLORS[n][0],
+                WHISTLE_RING_COLORS[n][1],
+                WHISTLE_RING_COLORS[n][2],
+                192
+            ), 3
+        );
+    }
+    
+    if(whistle_radius > 0 || whistle_fade_timer.time_left > 0.0f) {
+        if(pretty_whistle) {
+            unsigned char n_dots = 16 * 6;
+            for(unsigned char d = 0; d < 6; ++d) {
+                for(unsigned char d2 = 0; d2 < 16; ++d2) {
+                    unsigned char current_dot = d2 * 6 + d;
+                    float angle =
+                        M_PI * 2 / n_dots *
+                        current_dot -
+                        WHISTLE_DOT_SPIN_SPEED * area_time_passed;
+                        
+                    point dot_pos(
+                        leader_cursor_w.x +
+                        cos(angle) * whistle_dot_radius[d],
+                        leader_cursor_w.y +
+                        sin(angle) * whistle_dot_radius[d]
+                    );
+                    
+                    ALLEGRO_COLOR c;
+                    float alpha_mult;
+                    if(whistle_fade_timer.time_left > 0.0f)
+                        alpha_mult = whistle_fade_timer.get_ratio_left();
+                    else
+                        alpha_mult = 1;
+                        
+                    if(d == 0) {
+                        //Red.
+                        c = al_map_rgba(255, 0,   0,   255 * alpha_mult);
+                    } else if(d == 1) {
+                        //Orange.
+                        c = al_map_rgba(255, 128, 0,   210 * alpha_mult);
+                    } else if(d == 2) {
+                        //Lime.
+                        c = al_map_rgba(128, 255, 0,   165 * alpha_mult);
+                    } else if(d == 3) {
+                        //Cyan.
+                        c = al_map_rgba(0,   255, 255, 120 * alpha_mult);
+                    } else if(d == 4) {
+                        //Blue.
+                        c = al_map_rgba(0,   0,   255, 75  * alpha_mult);
+                    } else {
+                        //Purple.
+                        c = al_map_rgba(128, 0,   255, 30  * alpha_mult);
+                    }
+                    
+                    al_draw_filled_circle(dot_pos.x, dot_pos.y, 2, c);
+                }
+            }
+        } else {
+            unsigned char alpha = whistle_fade_timer.get_ratio_left() * 255;
+            float radius = whistle_fade_radius;
+            if(whistle_radius > 0) {
+                alpha = 255;
+                radius = whistle_radius;
+            }
+            al_draw_circle(
+                leader_cursor_w.x, leader_cursor_w.y, radius,
+                al_map_rgba(192, 192, 0, alpha), 2
+            );
+        }
+    }
+    
+    //Cursor trail
+    al_use_transform(&identity_transform);
+    if(draw_cursor_trail) {
+        for(size_t p = 1; p < cursor_spots.size(); ++p) {
+            point* p_ptr = &cursor_spots[p];
+            point* pp_ptr = &cursor_spots[p - 1]; //Previous point.
+            if(
+                (*p_ptr) != (*pp_ptr) &&
+                dist(*p_ptr, *pp_ptr) > 4
+            ) {
+                al_draw_line(
+                    p_ptr->x, p_ptr->y,
+                    pp_ptr->x, pp_ptr->y,
+                    change_alpha(
+                        cur_leader_ptr->lea_type->main_color,
+                        (p / (float) cursor_spots.size()) * 64
+                    ),
+                    p * 3
+                );
+            }
+        }
+    }
+    
+    //Mouse cursor.
+    draw_sprite(
+        bmp_mouse_cursor,
+        mouse_cursor_s,
+        point(
+            cam_zoom * al_get_bitmap_width(bmp_mouse_cursor) * 0.5,
+            cam_zoom * al_get_bitmap_height(bmp_mouse_cursor) * 0.5
+        ),
+        -(area_time_passed * cursor_spin_speed),
+        change_color_lighting(
+            cur_leader_ptr->lea_type->main_color,
+            cursor_height_diff_light
+        )
+    );
+    
+    //Leader cursor.
+    al_use_transform(&world_to_screen_drawing_transform);
+    draw_sprite(
+        bmp_cursor,
+        leader_cursor_w,
+        point(
+            al_get_bitmap_width(bmp_cursor) * 0.5,
+            al_get_bitmap_height(bmp_cursor) * 0.5
+        ),
+        cursor_angle,
+        change_color_lighting(
+            cur_leader_ptr->lea_type->main_color,
+            cursor_height_diff_light
+        )
+    );
+    
+    if(!throw_can_reach_cursor) {
+        unsigned char alpha =
+            0 + (sin(cursor_invalid_effect) + 1) * 127.0;
+            
+        draw_sprite(
+            bmp_cursor_invalid,
             leader_cursor_w,
             point(
                 al_get_bitmap_width(bmp_cursor) * 0.5,
                 al_get_bitmap_height(bmp_cursor) * 0.5
             ),
-            cursor_angle,
-            change_color_lighting(
-                cur_leader_ptr->lea_type->main_color,
-                cursor_height_diff_light
-            )
+            0,
+            change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
         );
-        
-        if(!throw_can_reach_cursor) {
-            unsigned char alpha =
-                0 + (sin(cursor_invalid_effect) + 1) * 127.0;
-                
-            draw_sprite(
-                bmp_cursor_invalid,
-                leader_cursor_w,
-                point(
-                    al_get_bitmap_width(bmp_cursor) * 0.5,
-                    al_get_bitmap_height(bmp_cursor) * 0.5
-                ),
-                0,
-                change_alpha(cur_leader_ptr->lea_type->main_color, alpha)
-            );
-        }
-        
-        
-        /* Layer 11
-        *****************
-        *           (1) *
-        *   HUD         *
-        *         1/2/3 *
-        ****************/
-        
-        al_use_transform(&identity_transform);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the HUD.
+ */
+void gameplay::draw_hud() {
+    al_use_transform(&identity_transform);
         
         if(cur_message.empty()) {
         
             //Leader health.
             for(size_t l = 0; l < 3; ++l) {
-                if(n_leaders < l + 1) continue;
+                if(leaders.size() < l + 1) continue;
                 
-                size_t l_nr = sum_and_wrap(cur_leader_nr, l, n_leaders);
+                size_t l_nr = sum_and_wrap(cur_leader_nr, l, leaders.size());
                 int icon_id = HUD_ITEM_LEADER_1_ICON + l;
                 int health_id = HUD_ITEM_LEADER_1_HEALTH + l;
                 point icon_size(
@@ -763,9 +514,8 @@ void gameplay::do_game_drawing(
             
             //Pikmin count.
             //Count how many Pikmin only.
-            n_leaders = leaders.size();
             size_t pikmin_in_group = cur_leader_ptr->group->members.size();
-            for(size_t l = 0; l < n_leaders; ++l) {
+            for(size_t l = 0; l < leaders.size(); ++l) {
                 //If this leader is following the current one,
                 //then they're not a Pikmin.
                 //Subtract them from the group count total.
@@ -1043,9 +793,9 @@ void gameplay::do_game_drawing(
             );
             
             //Sprays.
-            if(n_spray_types > 0) {
+            if(spray_types.size() > 0) {
                 size_t top_spray_nr;
-                if(n_spray_types < 3) top_spray_nr = 0;
+                if(spray_types.size() < 3) top_spray_nr = 0;
                 else top_spray_nr = selected_spray;
                 
                 draw_sprite(
@@ -1098,7 +848,7 @@ void gameplay::do_game_drawing(
                     }
                 }
                 
-                if(n_spray_types == 2) {
+                if(spray_types.size() == 2) {
                     draw_sprite(
                         spray_types[1].bmp_spray,
                         point(
@@ -1145,7 +895,7 @@ void gameplay::do_game_drawing(
                         }
                     }
                     
-                } else if(n_spray_types > 2) {
+                } else if(spray_types.size() > 2) {
                     draw_sprite(
                         spray_types[
                             sum_and_wrap(selected_spray, -1, spray_types.size())
@@ -1218,6 +968,7 @@ void gameplay::do_game_drawing(
                     }
                 }
             }
+        
             
         } else { //Show a message.
         
@@ -1260,51 +1011,493 @@ void gameplay::do_game_drawing(
             }
             
         }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the in-game text.
+ */
+void gameplay::draw_ingame_text() {
+    //Fractions and health.
+    size_t n_mobs = mobs.size();
+    for(size_t m = 0; m < n_mobs; ++m) {
+        mob* mob_ptr = mobs[m];
         
-        /* Layer 12
-        ***********************
-        *                     *
-        *   System stuff   >_ *
-        *                     *
-        ***********************/
-        
-        if(!info_print_text.empty()) {
-            float alpha_mult = 1;
-            if(
-                info_print_timer.time_left <
-                INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY
-            ) {
-                alpha_mult =
-                    info_print_timer.time_left /
-                    (INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY);
+        if(mob_ptr->carry_info) {
+            if(mob_ptr->carry_info->cur_carrying_strength > 0) {
+                ALLEGRO_COLOR color;
+                bool valid = false;
+                if(mob_ptr->carry_info->is_moving) {
+                    if(mob_ptr->carry_info->carry_to_ship) {
+                        color = carrying_color_move;
+                        valid = true;
+                    } else if(mob_ptr->carrying_target) {
+                        color =
+                            (
+                                (onion*) (mob_ptr->carrying_target)
+                            )->oni_type->pik_type->main_color;
+                        valid = true;
+                    }
+                }
+                if(!valid) {
+                    color = carrying_color_stop;
+                }
+                draw_fraction(
+                    point(
+                        mob_ptr->pos.x,
+                        mob_ptr->pos.y - mob_ptr->type->radius -
+                        font_main_h * 1.25
+                    ),
+                    mob_ptr->carry_info->cur_carrying_strength,
+                    mob_ptr->type->weight,
+                    color
+                );
             }
-            al_draw_filled_rectangle(
-                0, 0, scr_w, scr_h * 0.3,
-                al_map_rgba(0, 0, 0, 96 * alpha_mult)
+        }
+        
+        if(
+            mob_ptr->type->show_health &&
+            !mob_ptr->hide &&
+            mob_ptr->health < mob_ptr->type->max_health &&
+            mob_ptr->health > 0
+        ) {
+            draw_health(
+                point(
+                    mob_ptr->pos.x,
+                    mob_ptr->pos.y - mob_ptr->type->radius -
+                    DEF_HEALTH_WHEEL_RADIUS - 4
+                ),
+                mob_ptr->health, mob_ptr->type->max_health
             );
-            draw_text_lines(
-                font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
-                point(8, 8), 0, 0, info_print_text
+        }
+    }
+    
+    //Info spot notifications.
+    size_t n_info_spots = info_spots.size();
+    for(size_t i = 0; i < n_info_spots; ++i) {
+        if(
+            dist(cur_leader_ptr->pos, info_spots[i]->pos) <=
+            info_spot_trigger_range
+        ) {
+            float pivot_y =
+                info_spots[i]->pos.y - info_spots[i]->type->radius;
+            if(!info_spots[i]->opens_box) {
+                draw_notification(
+                    point(info_spots[i]->pos.x, pivot_y),
+                    info_spots[i]->text, NULL
+                );
+                
+            } else if(click_control_id != INVALID) {
+                draw_notification(
+                    point(info_spots[i]->pos.x, pivot_y),
+                    "Read", &controls[0][click_control_id]
+                );
+                
+            }
+        }
+    }
+    
+    //Ship healing notifications.
+    if(click_control_id != INVALID) {
+        for(size_t s = 0; s < ships.size(); ++s) {
+            ship* s_ptr = ships[s];
+            if(
+                cur_leader_ptr->health !=
+                cur_leader_ptr->type->max_health &&
+                s_ptr->shi_type->can_heal &&
+                s_ptr->is_leader_under_ring(cur_leader_ptr)
+            ) {
+                draw_notification(
+                    point(
+                        cur_leader_ptr->pos.x,
+                        cur_leader_ptr->pos.y - cur_leader_ptr->type->radius
+                    ),
+                    "Repair suit", &controls[0][click_control_id]
+                );
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the area layout: sectors, wall shadows, etc.
+ */
+void gameplay::draw_layout(
+    ALLEGRO_BITMAP* bmp_output,
+    ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
+) {
+    al_use_transform(&world_to_screen_drawing_transform);
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        
+        if(
+            !bmp_output &&
+            !rectangles_intersect(
+                s_ptr->bbox[0], s_ptr->bbox[1],
+                cam_box[0], cam_box[1]
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
+        draw_sector_texture(s_ptr, point(), 1.0);
+        
+        if(s_ptr->associated_liquid) {
+            draw_liquid(s_ptr, point(), 1.0f);
+        }
+        
+        draw_sector_shadows(s_ptr, point(), 1.0f);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the full-screen effects that will represent lighting.
+ */
+void gameplay::draw_lighting_filter() {
+    al_use_transform(&identity_transform);
+    
+    //Draw the fog effect.
+    ALLEGRO_COLOR fog_c = get_fog_color();
+    if(fog_c.a > 0) {
+        //Start by drawing the central fog fade out effect.
+        
+        point fog_top_left =
+            cam_pos -
+            point(
+                cur_area_data.weather_condition.fog_far,
+                cur_area_data.weather_condition.fog_far
+            );
+        point fog_bottom_right =
+            cam_pos +
+            point(
+                cur_area_data.weather_condition.fog_far,
+                cur_area_data.weather_condition.fog_far
+            );
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &fog_top_left.x, &fog_top_left.y
+        );
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &fog_bottom_right.x, &fog_bottom_right.y
+        );
+        
+        if(bmp_fog) {
+            draw_sprite(
+                bmp_fog,
+                (fog_top_left + fog_bottom_right) / 2,
+                (fog_bottom_right - fog_top_left),
+                0, fog_c
             );
         }
         
+        //Now draw the fully opaque fog around the central fade.
+        //Top-left and top-center.
+        al_draw_filled_rectangle(
+            0, 0,
+            fog_bottom_right.x, fog_top_left.y,
+            fog_c
+        );
+        //Top-right and center-right.
+        al_draw_filled_rectangle(
+            fog_bottom_right.x, 0,
+            scr_w, fog_bottom_right.y,
+            fog_c
+        );
+        //Bottom-right and bottom-center.
+        al_draw_filled_rectangle(
+            fog_top_left.x, fog_bottom_right.y,
+            scr_w, scr_h,
+            fog_c
+        );
+        //Bottom-left and center-left.
+        al_draw_filled_rectangle(
+            0, fog_top_left.y,
+            fog_top_left.x, scr_h,
+            fog_c
+        );
         
+    }
+    
+    //Draw the daylight.
+    ALLEGRO_COLOR daylight_c = get_daylight_color();
+    if(daylight_c.a > 0) {
+        al_draw_filled_rectangle(0, 0, scr_w, scr_h, daylight_c);
+    }
+    
+    //Draw the blackout effect.
+    unsigned char blackout_s = get_blackout_strength();
+    if(blackout_s > 0) {
+        //First, we'll create the lightmap.
+        //This is inverted (white = darkness, black = light), because we'll
+        //apply it to the screen using a subtraction operation.
+        al_set_target_bitmap(lightmap_bmp);
         
-    } else { //Paused.
+        //For starters, the whole screen is dark (white in the map).
+        al_clear_to_color(map_gray(blackout_s));
+        
+        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
+        al_get_separate_blender(
+            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
+        );
+        al_set_separate_blender(
+            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
+            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
+        );
+        
+        //Then, find out spotlights, and draw
+        //their lights on the map (as black).
+        al_hold_bitmap_drawing(true);
+        for(size_t m = 0; m < mobs.size(); ++m) {
+            point pos = mobs[m]->pos;
+            al_transform_coordinates(
+                &world_to_screen_transform,
+                &pos.x, &pos.y
+            );
+            float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
+            al_draw_scaled_bitmap(
+                bmp_spotlight,
+                0, 0, 64, 64,
+                pos.x - radius, pos.y - radius,
+                radius * 2.0, radius * 2.0,
+                0
+            );
+        }
+        al_hold_bitmap_drawing(false);
+        
+        //Now, simply darken the screen using the map.
+        al_set_target_backbuffer(display);
+        
+        al_draw_bitmap(lightmap_bmp, 0, 0, 0);
+        
+        al_set_separate_blender(
+            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
+        );
     
     }
     
-    if(area_title_fade_timer.time_left > 0) {
-        draw_loading_screen(
-            cur_area_data.name,
-            cur_area_data.subtitle,
-            area_title_fade_timer.get_ratio_left()
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the mobs.
+ */
+void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
+    vector<mob*> sorted_mobs;
+    sorted_mobs = mobs;
+    sort(
+        sorted_mobs.begin(), sorted_mobs.end(),
+    [] (mob * m1, mob * m2) -> bool {
+        if(m1->z == m2->z) {
+            if(m1->type->height == m2->type->height) {
+                return m1->id < m2->id;
+            }
+            return m1->type->height < m2->type->height;
+        }
+        return m1->z < m2->z;
+    }
+    );
+    
+    float shadow_stretch = 0;
+    
+    if(day_minutes < 60 * 5 || day_minutes > 60 * 20) {
+        shadow_stretch = 1;
+    } else if(day_minutes < 60 * 12) {
+        shadow_stretch = 1 - ((day_minutes - 60 * 5) / (60 * 12 - 60 * 5));
+    } else {
+        shadow_stretch = (day_minutes - 60 * 12) / (60 * 20 - 60 * 12);
+    }
+    
+    mob* mob_ptr = NULL;
+    //Draw the mob shadows.
+    al_hold_bitmap_drawing(true);
+    for(size_t m = 0; m < sorted_mobs.size(); ++m) {
+        mob_ptr = sorted_mobs[m];
+        
+        if(!mob_ptr->type->casts_shadow || mob_ptr->hide) {
+            continue;
+        }
+        
+        if(
+            !bmp_output &&
+            !bbox_check(
+                cam_box[0], cam_box[1],
+                mob_ptr->pos, mob_ptr->type->radius
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
+        draw_mob_shadow(
+            mob_ptr->pos,
+            mob_ptr->type->radius * 2,
+            mob_ptr->z - mob_ptr->ground_sector->z,
+            shadow_stretch
         );
     }
+    al_hold_bitmap_drawing(false);
     
-    fade_mgr.draw();
+    //And now the mobs themselves.
+    for(size_t m = 0; m < sorted_mobs.size(); ++m) {
+        mob_ptr = sorted_mobs[m];
+        
+        if(
+            !bmp_output &&
+            !bbox_check(
+                cam_box[0], cam_box[1],
+                mob_ptr->pos, mob_ptr->type->radius
+            )
+        ) {
+            //Off-camera.
+            continue;
+        }
+        
+        mob_ptr->draw();
+        
+        //Creator tool -- draw hitboxes.
+        if(creator_tool_hitboxes) {
+            sprite* s = mob_ptr->anim.get_cur_sprite();
+            if(s) {
+                for(size_t h = 0; h < s->hitboxes.size(); ++h) {
+                    hitbox* h_ptr = &s->hitboxes[h];
+                    ALLEGRO_COLOR hc;
+                    if(h_ptr->type == HITBOX_TYPE_NORMAL) {
+                        hc = al_map_rgba(0, 128, 0, 192); //Green.
+                    } else if(h_ptr->type == HITBOX_TYPE_ATTACK) {
+                        hc = al_map_rgba(128, 0, 0, 192); //Red.
+                    } else {
+                        hc = al_map_rgba(128, 128, 0, 192); //Yellow.
+                    }
+                    point p =
+                        mob_ptr->pos +
+                        rotate_point(h_ptr->pos, mob_ptr->angle);
+                    al_draw_filled_circle(p.x, p.y, h_ptr->radius, hc);
+                }
+            }
+        }
+    }
     
-    al_flip_display();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the precipitation.
+ */
+void gameplay::draw_precipitation() {
+    if(
+        cur_area_data.weather_condition.precipitation_type !=
+        PRECIPITATION_TYPE_NONE
+    ) {
+        size_t n_precipitation_particles = precipitation.size();
+        for(size_t p = 0; p < n_precipitation_particles; ++p) {
+            al_draw_filled_circle(
+                precipitation[p].x, precipitation[p].y,
+                3, al_map_rgb(255, 255, 255)
+            );
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws system stuff.
+ */
+void gameplay::draw_system_stuff() {
+    if(!info_print_text.empty()) {
+        float alpha_mult = 1;
+        if(
+            info_print_timer.time_left <
+            INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY
+        ) {
+            alpha_mult =
+                info_print_timer.time_left /
+                (INFO_PRINT_DURATION - INFO_PRINT_FADE_DELAY);
+        }
+        al_draw_filled_rectangle(
+            0, 0, scr_w, scr_h * 0.3,
+            al_map_rgba(0, 0, 0, 96 * alpha_mult)
+        );
+        draw_text_lines(
+            font_builtin, al_map_rgba(255, 255, 255, 128 * alpha_mult),
+            point(8, 8), 0, 0, info_print_text
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws tree shadows.
+ */
+void gameplay::draw_tree_shadows() {
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+        
+        unsigned char alpha =
+            ((s_ptr->alpha / 255.0) * cur_sun_strength) * 255;
+            
+        draw_sprite(
+            s_ptr->bitmap,
+            point(
+                s_ptr->center.x + TREE_SHADOW_SWAY_AMOUNT *
+                sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                s_ptr->sway.x,
+                s_ptr->center.y + TREE_SHADOW_SWAY_AMOUNT *
+                sin(TREE_SHADOW_SWAY_SPEED * area_time_passed) *
+                s_ptr->sway.y
+            ),
+            s_ptr->size,
+            s_ptr->angle, map_alpha(alpha)
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the current area and mobs to a bitmap and returns it.
+ */
+ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
+    //First, get the full dimensions of the map.
+    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        min_x = min(v_ptr->x, min_x);
+        min_y = min(v_ptr->y, min_y);
+        max_x = max(v_ptr->x, max_x);
+        max_y = max(v_ptr->y, max_y);
+    }
+    
+    //Figure out the scale that will fit on the image.
+    float area_w = max_x - min_x;
+    float area_h = max_y - min_y;
+    float scale = 1.0f;
+    float final_bmp_w = creator_tool_area_image_size;
+    float final_bmp_h = creator_tool_area_image_size;
+    
+    if(area_w > area_h) {
+        scale = creator_tool_area_image_size / area_w;
+        final_bmp_h *= area_h / area_w;
+    } else {
+        scale = creator_tool_area_image_size / area_h;
+        final_bmp_w *= area_w / area_h;
+    }
+    
+    //Create the bitmap.
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
+    
+    ALLEGRO_TRANSFORM t;
+    al_identity_transform(&t);
+    al_translate_transform(&t, -min_x, -min_y);
+    al_scale_transform(&t, scale, scale);
+    
+    //Begin drawing!
+    do_game_drawing(bmp, &t);
+    
+    return bmp;
 }
 
 
@@ -1524,10 +1717,10 @@ void draw_fraction(
  */
 void draw_health(
     const point &center,
-    const unsigned int health, const unsigned int max_health,
+    const float health, const float max_health,
     const float radius, const bool just_chart
 ) {
-    float ratio = (float) health / (float) max_health;
+    float ratio = health / max_health;
     ALLEGRO_COLOR c;
     if(ratio >= 0.5) {
         c = al_map_rgb_f(1 - (ratio - 0.5) * 2, 1, 0);
@@ -1548,678 +1741,6 @@ void draw_health(
             center.x, center.y, radius + 1, al_map_rgb(0, 0, 0), 2
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a notification, like a note saying that the player can press
- * a certain button to pluck.
- * target:  Spot that the notification is pointing at.
- * text:    Text to say.
- * control: If not NULL, draw the control's button/key/etc. before the text.
- */
-void draw_notification(
-    const point &target, const string &text, control_info* control
-) {
-
-    ALLEGRO_TRANSFORM tra, old;
-    al_identity_transform(&tra);
-    al_translate_transform(&tra, target.x * cam_zoom, target.y * cam_zoom);
-    al_scale_transform(&tra, 1.0 / cam_zoom, 1.0 / cam_zoom);
-    al_copy_transform(&old, al_get_current_transform());
-    al_compose_transform(&tra, &old);
-    al_use_transform(&tra);
-    
-    int bmp_w = al_get_bitmap_width(bmp_notification);
-    int bmp_h = al_get_bitmap_height(bmp_notification);
-    
-    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
-    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
-    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
-    float text_box_y2 = NOTIFICATION_PADDING;
-    
-    draw_sprite(
-        bmp_notification,
-        point(0, -bmp_h * 0.5),
-        point(bmp_w, bmp_h),
-        0,
-        map_alpha(NOTIFICATION_ALPHA)
-    );
-    
-    if(control) {
-        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
-        draw_control(
-            font_main, *control,
-            point(
-                -bmp_w * 0.5 + NOTIFICATION_PADDING +
-                NOTIFICATION_CONTROL_SIZE * 0.5,
-                -bmp_h * 0.5
-            ),
-            point(
-                NOTIFICATION_CONTROL_SIZE,
-                NOTIFICATION_CONTROL_SIZE
-            )
-        );
-    }
-    
-    draw_compressed_text(
-        font_main, map_alpha(NOTIFICATION_ALPHA),
-        point(
-            (text_box_x1 + text_box_x2) * 0.5,
-            (text_box_y1 + text_box_y2) * 0.5
-        ),
-        ALLEGRO_ALIGN_CENTER,
-        1,
-        point(
-            text_box_x2 - text_box_x1,
-            text_box_y2 - text_box_y1
-        ),
-        text
-    );
-    
-    al_use_transform(&old);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws text, scaled
- * font - color: The parameters you'd use for al_draw_text.
- * where:        Coordinates to draw in.
- * scale:        Horizontal or vertical scale.
- * flags:        Same flags you'd use for al_draw_text.
- * valign:       Vertical align. 0: top, 1: center, 2: bottom.
- * text:         Text to draw.
- */
-void draw_scaled_text(
-    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
-    const point &where, const point &scale,
-    const int flags, const unsigned char valign, const string &text
-) {
-
-    ALLEGRO_TRANSFORM scale_transform, old_transform;
-    al_copy_transform(&old_transform, al_get_current_transform());
-    al_identity_transform(&scale_transform);
-    al_scale_transform(&scale_transform, scale.x, scale.y);
-    al_translate_transform(&scale_transform, where.x, where.y);
-    al_compose_transform(&scale_transform, &old_transform);
-    
-    al_use_transform(&scale_transform); {
-        draw_text_lines(font, color, point(), flags, valign, text);
-    }; al_use_transform(&old_transform);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the wall shadows that are being cast on top of this sector.
- * s:        The sector to draw.
- * where:    Top-left coordinates.
- * scale:    Drawing scale.
- */
-void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
-    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
-    
-    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-        edge* e_ptr = s_ptr->edges[e];
-        ALLEGRO_VERTEX av[4];
-        
-        sector* other_sector =
-            e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)];
-            
-        if(!casts_shadow(other_sector, s_ptr)) continue;
-        
-        float shadow_length =
-            get_wall_shadow_length(other_sector->z - s_ptr->z);
-            
-        /*
-         * We need to record the two vertexes of the edge as
-         * the two starting points of the procedure.
-         * Starting from vertex 0, if our sector is to the "left"
-         * then vertex 0 of the shadow is vertex of the edge.
-         * Otherwise, swap it around.
-         */
-        vertex* ev[2];
-        
-        if(e_ptr->sectors[0] == s_ptr) {
-            ev[0] = e_ptr->vertexes[0];
-            ev[1] = e_ptr->vertexes[1];
-        } else {
-            ev[0] = e_ptr->vertexes[1];
-            ev[1] = e_ptr->vertexes[0];
-        }
-        
-        float e_angle =
-            get_angle(point(ev[0]->x, ev[0]->y), point(ev[1]->x, ev[1]->y));
-        float e_dist =
-            dist(
-                point(ev[0]->x, ev[0]->y),
-                point(ev[1]->x, ev[1]->y)
-            ).to_float();
-        float e_cos_front = cos(e_angle - M_PI_2);
-        float e_sin_front = sin(e_angle - M_PI_2);
-        
-        //Record the first two vertexes of the shadow.
-        for(size_t v = 0; v < 2; ++v) {
-            av[v].x = ev[v]->x;
-            av[v].y = ev[v]->y;
-            av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
-            av[v].z = 0;
-        }
-        
-        
-        /*
-         * Now, check the neighbor edges.
-         * Record which angle this edge makes against
-         * them. The shadow of the current edge
-         * spreads outward from the edge, but the edges must
-         * be tilted so that the shadow from this edge
-         * meets up with the shadow from the next, on a middle
-         * angle. For 90 degrees, at least. Less or more degrees
-         * requires specific treatment.
-         */
-        
-        //Angle of the neighbors, from the common vertex to the other.
-        float neighbor_angles[2] = {M_PI_2, M_PI_2};
-        //Difference between angle of current edge and neighbors.
-        float neighbor_angle_difs[2] = {0, 0};
-        //Midway angle.
-        float mid_angles[2] = {M_PI_2, M_PI_2};
-        //Is this neighbor casting a shadow to the same sector?
-        bool neighbor_shadow[2] = {false, false};
-        //Length of the neighbor's shadow.
-        float neighbor_shadow_length[2] = {0.0f, 0.0f};
-        //Do we have an edge for this vertex?
-        bool got_first[2] = {false, false};
-        
-        //For both neighbors.
-        for(unsigned char v = 0; v < 2; ++v) {
-        
-            vertex* cur_vertex = ev[v];
-            for(size_t ve = 0; ve < cur_vertex->edges.size(); ++ve) {
-            
-                edge* ve_ptr = cur_vertex->edges[ve];
-                
-                if(ve_ptr == e_ptr) continue;
-                
-                vertex* other_vertex =
-                    ve_ptr->vertexes[
-                        (ve_ptr->vertexes[0] == cur_vertex ? 1 : 0)
-                    ];
-                float ve_angle =
-                    get_angle(
-                        point(cur_vertex->x, cur_vertex->y),
-                        point(other_vertex->x, other_vertex->y)
-                    );
-                    
-                float d;
-                if(v == 0) d = get_angle_cw_dif(ve_angle, e_angle);
-                else d = get_angle_cw_dif(e_angle + M_PI, ve_angle);
-                
-                if(
-                    d < neighbor_angle_difs[v] ||
-                    !got_first[v]
-                ) {
-                    //Save this as the next edge.
-                    neighbor_angles[v] = ve_angle;
-                    neighbor_angle_difs[v] = d;
-                    got_first[v] = true;
-                    
-                    sector* other_sector =
-                        ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
-                    neighbor_shadow[v] =
-                        casts_shadow(other_sector, s_ptr);
-                        
-                    //Get the shadow length.
-                    //Defaulting to the current sector's length
-                    //makes it easier to calculate things later on.
-                    neighbor_shadow_length[v] =
-                        neighbor_shadow[v] ?
-                        get_wall_shadow_length(other_sector->z - s_ptr->z) :
-                        shadow_length;
-                }
-            }
-        }
-        
-        e_angle = normalize_angle(e_angle);
-        for(unsigned char n = 0; n < 2; ++n) {
-            neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
-            mid_angles[n] =
-                (n == 0 ? neighbor_angles[n] : e_angle + M_PI) +
-                neighbor_angle_difs[n] / 2;
-        }
-        
-        point shadow_point[2];
-        ALLEGRO_VERTEX extra_av[8];
-        for(unsigned char e = 0; e < 8; ++e) { extra_av[e].z = 0;}
-        //How many vertexes of the extra polygon to draw.
-        unsigned char draw_extra[2] = {0, 0};
-        
-        for(unsigned char v = 0; v < 2; ++v) {
-        
-            if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
-                //If the shadow of the current and neighbor edges
-                //meet at less than 180 degrees, and the neighbor casts
-                //a shadow, then both this shadow and the neighbor's
-                //must blend in with one another. This shadow's final
-                //point should be where they both intersect.
-                //The neighbor's shadow will do the same when we get to it.
-                
-                float ul;
-                float shadow_length_mid =
-                    (shadow_length + neighbor_shadow_length[v]) / 2.0f;
-                lines_intersect(
-                    point(
-                        av[0].x + e_cos_front * shadow_length_mid,
-                        av[0].y + e_sin_front * shadow_length_mid
-                    ),
-                    point(
-                        av[1].x + e_cos_front * shadow_length_mid,
-                        av[1].y + e_sin_front * shadow_length_mid
-                    ),
-                    point(
-                        av[v].x,
-                        av[v].y
-                    ),
-                    point(
-                        av[v].x + cos(
-                            neighbor_shadow[v] ?
-                            mid_angles[v] :
-                            neighbor_angles[v]
-                        ) * e_dist,
-                        av[v].y + sin(
-                            neighbor_shadow[v] ?
-                            mid_angles[v] :
-                            neighbor_angles[v]
-                        ) * e_dist
-                    ),
-                    NULL, &ul
-                );
-                shadow_point[v].x =
-                    av[0].x + e_cos_front * shadow_length_mid +
-                    cos(e_angle) * e_dist * ul;
-                shadow_point[v].y =
-                    av[0].y + e_sin_front * shadow_length_mid +
-                    sin(e_angle) * e_dist * ul;
-                    
-            } else {
-                //Otherwise, just draw the
-                //shadows as a rectangle, away
-                //from the edge. Then, if the angle is greater
-                //than 180, draw a "join" between both
-                //edge's shadows. Like a kneecap.
-                
-                if(neighbor_angle_difs[v] > M_PI_2) {
-                    shadow_point[v].x =
-                        av[v].x + e_cos_front * shadow_length;
-                    shadow_point[v].y =
-                        av[v].y + e_sin_front * shadow_length;
-                        
-                    extra_av[v * 4 + 0].x = av[v].x;
-                    extra_av[v * 4 + 0].y = av[v].y;
-                    extra_av[v * 4 + 0].color =
-                        al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
-                    extra_av[v * 4 + 1].x = shadow_point[v].x;
-                    extra_av[v * 4 + 1].y = shadow_point[v].y;
-                    extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
-                    
-                    if(neighbor_angle_difs[v] > M_PI) {
-                        float shadow_length_mid =
-                            (shadow_length + neighbor_shadow_length[v]) / 2.0f;
-                            
-                        //Draw the "kneecap".
-                        extra_av[v * 4 + 2].x =
-                            av[v].x + cos(mid_angles[v]) * shadow_length_mid;
-                        extra_av[v * 4 + 2].y =
-                            av[v].y + sin(mid_angles[v]) * shadow_length_mid;
-                        extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, 0);
-                        
-                        draw_extra[v] = 3;
-                    }
-                    
-                    if(!neighbor_shadow[v]) {
-                        //If the neighbor casts no shadow,
-                        //add an extra polygon vertex;
-                        //this glues the current edge's shadow to the neighbor.
-                        
-                        unsigned char index =
-                            (draw_extra[v] == 3) ? (v * 4 + 3) : (v * 4 + 2);
-                            
-                        extra_av[index].x =
-                            ev[v]->x + cos(neighbor_angles[v]) *
-                            shadow_length;
-                        extra_av[index].y =
-                            ev[v]->y + sin(neighbor_angles[v]) *
-                            shadow_length;
-                        extra_av[index].color = al_map_rgba(0, 0, 0, 0);
-                        
-                        draw_extra[v] = (draw_extra[v] == 3) ? 4 : 3;
-                    }
-                    
-                } else {
-                
-                    shadow_point[v].x =
-                        ev[v]->x + cos(neighbor_angles[v]) * shadow_length;
-                    shadow_point[v].y =
-                        ev[v]->y + sin(neighbor_angles[v]) * shadow_length;
-                        
-                }
-                
-            }
-            
-        }
-        
-        av[2].x = shadow_point[1].x;
-        av[2].y = shadow_point[1].y;
-        av[2].color = al_map_rgba(0, 0, 0, 0);
-        av[2].z = 0;
-        av[3].x = shadow_point[0].x;
-        av[3].y = shadow_point[0].y;
-        av[3].color = al_map_rgba(0, 0, 0, 0);
-        av[3].z = 0;
-        
-        //Before drawing, let's offset according to the area image.
-        for(unsigned char a = 0; a < 4; ++a) {
-            av[a].x -= where.x;
-            av[a].y -= where.y;
-        }
-        for(unsigned char a = 0; a < 8; ++a) {
-            extra_av[a].x -= where.x;
-            extra_av[a].y -= where.y;
-        }
-        
-        //Do the scaling.
-        for(size_t v = 0; v < 4; ++v) {
-            av[v].x *= scale;
-            av[v].y *= scale;
-        }
-        for(size_t v = 0; v < 8; ++v) {
-            extra_av[v].x *= scale;
-            extra_av[v].y *= scale;
-        }
-        
-        //Draw!
-        al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
-        
-        for(size_t v = 0; v < 2; ++v) {
-            if(draw_extra[v] > 0) {
-                al_draw_prim(
-                    extra_av, NULL, NULL, v * 4,
-                    v * 4 + draw_extra[v],
-                    ALLEGRO_PRIM_TRIANGLE_FAN
-                );
-            }
-        }
-        
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws a sector, but only the texture (no wall shadows).
- * s_ptr:   Pointer to the sector.
- * where:   X and Y offset.
- * scale:   Scale the sector by this much.
- */
-void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale
-) {
-    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
-    
-    unsigned char n_textures = 1;
-    sector* texture_sector[2] = {NULL, NULL};
-    
-    if(s_ptr->fade) {
-        s_ptr->get_texture_merge_sectors(
-            &texture_sector[0], &texture_sector[1]
-        );
-        if(!texture_sector[0] && !texture_sector[1]) {
-            //Can't draw this sector.
-            return;
-        }
-        n_textures = 2;
-        
-    } else {
-        texture_sector[0] = s_ptr;
-        if(!texture_sector[0]) {
-            //Can't draw this sector.
-            return;
-        }
-        
-    }
-    
-    for(unsigned char t = 0; t < n_textures; ++t) {
-    
-        bool draw_sector_0 = true;
-        if(!texture_sector[0]) draw_sector_0 = false;
-        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
-            draw_sector_0 = false;
-        }
-        
-        if(n_textures == 2 && !draw_sector_0 && t == 0) {
-            //Allows fading into the void.
-            continue;
-        }
-        
-        size_t n_vertexes = s_ptr->triangles.size() * 3;
-        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
-        
-        sector_texture_info* texture_info_to_use =
-            &texture_sector[t]->texture_info;
-            
-        //Texture transformations.
-        ALLEGRO_TRANSFORM tra;
-        if(texture_sector[t]) {
-            al_build_transform(
-                &tra,
-                -texture_info_to_use->translation.x,
-                -texture_info_to_use->translation.y,
-                1.0 / texture_info_to_use->scale.x,
-                1.0 / texture_info_to_use->scale.y,
-                -texture_info_to_use->rot
-            );
-        }
-        
-        al_hold_bitmap_drawing(true);
-        
-        for(size_t v = 0; v < n_vertexes; ++v) {
-        
-            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
-            vertex* v_ptr = t_ptr->points[v % 3];
-            float vx = v_ptr->x;
-            float vy = v_ptr->y;
-            
-            float alpha_mult = 1;
-            float brightness_mult = texture_sector[t]->brightness / 255.0;
-            
-            if(t == 1) {
-                if(!draw_sector_0) {
-                    alpha_mult = 0;
-                    for(
-                        size_t e = 0; e < texture_sector[1]->edges.size();
-                        ++e
-                    ) {
-                        if(
-                            texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[1]->edges[e]->vertexes[1] == v_ptr
-                        ) {
-                            alpha_mult = 1;
-                        }
-                    }
-                } else {
-                    for(
-                        size_t e = 0; e < texture_sector[0]->edges.size();
-                        ++e
-                    ) {
-                        if(
-                            texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
-                            texture_sector[0]->edges[e]->vertexes[1] == v_ptr
-                        ) {
-                            alpha_mult = 0;
-                        }
-                    }
-                }
-            }
-            
-            av[v].x = vx - where.x;
-            av[v].y = vy - where.y;
-            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
-            av[v].u = vx;
-            av[v].v = vy;
-            av[v].z = 0;
-            av[v].color =
-                al_map_rgba_f(
-                    texture_sector[t]->texture_info.tint.r * brightness_mult,
-                    texture_sector[t]->texture_info.tint.g * brightness_mult,
-                    texture_sector[t]->texture_info.tint.b * brightness_mult,
-                    texture_sector[t]->texture_info.tint.a * alpha_mult
-                );
-        }
-        
-        al_hold_bitmap_drawing(false);
-        
-        for(size_t v = 0; v < n_vertexes; ++v) {
-            av[v].x *= scale;
-            av[v].y *= scale;
-        }
-        
-        ALLEGRO_BITMAP* tex =
-            texture_sector[t] ?
-            texture_sector[t]->texture_info.bitmap :
-            texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
-            
-        al_draw_prim(
-            av, NULL, tex,
-            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
-        );
-        
-        delete[] av;
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the full-screen effects that will represent lighting.
- */
-void gameplay::draw_lighting_filter() {
-    //Draw the fog effect.
-    ALLEGRO_COLOR fog_c = get_fog_color();
-    if(fog_c.a > 0) {
-        //Start by drawing the central fog fade out effect.
-        
-        point fog_top_left =
-            cam_pos -
-            point(
-                cur_area_data.weather_condition.fog_far,
-                cur_area_data.weather_condition.fog_far
-            );
-        point fog_bottom_right =
-            cam_pos +
-            point(
-                cur_area_data.weather_condition.fog_far,
-                cur_area_data.weather_condition.fog_far
-            );
-        al_transform_coordinates(
-            &world_to_screen_transform,
-            &fog_top_left.x, &fog_top_left.y
-        );
-        al_transform_coordinates(
-            &world_to_screen_transform,
-            &fog_bottom_right.x, &fog_bottom_right.y
-        );
-        
-        if(bmp_fog) {
-            draw_sprite(
-                bmp_fog,
-                (fog_top_left + fog_bottom_right) / 2,
-                (fog_bottom_right - fog_top_left),
-                0, fog_c
-            );
-        }
-        
-        //Now draw the fully opaque fog around the central fade.
-        //Top-left and top-center.
-        al_draw_filled_rectangle(
-            0, 0,
-            fog_bottom_right.x, fog_top_left.y,
-            fog_c
-        );
-        //Top-right and center-right.
-        al_draw_filled_rectangle(
-            fog_bottom_right.x, 0,
-            scr_w, fog_bottom_right.y,
-            fog_c
-        );
-        //Bottom-right and bottom-center.
-        al_draw_filled_rectangle(
-            fog_top_left.x, fog_bottom_right.y,
-            scr_w, scr_h,
-            fog_c
-        );
-        //Bottom-left and center-left.
-        al_draw_filled_rectangle(
-            0, fog_top_left.y,
-            fog_top_left.x, scr_h,
-            fog_c
-        );
-        
-    }
-    
-    //Draw the daylight.
-    ALLEGRO_COLOR daylight_c = get_daylight_color();
-    if(daylight_c.a > 0) {
-        al_draw_filled_rectangle(0, 0, scr_w, scr_h, daylight_c);
-    }
-    
-    //Draw the blackout effect.
-    unsigned char blackout_s = get_blackout_strength();
-    if(blackout_s > 0) {
-        //First, we'll create the lightmap.
-        //This is inverted (white = darkness, black = light), because we'll
-        //apply it to the screen using a subtraction operation.
-        al_set_target_bitmap(lightmap_bmp);
-        
-        //For starters, the whole screen is dark (white in the map).
-        al_clear_to_color(map_gray(blackout_s));
-        
-        int old_op, old_src, old_dst, old_aop, old_asrc, old_adst;
-        al_get_separate_blender(
-            &old_op, &old_src, &old_dst, &old_aop, &old_asrc, &old_adst
-        );
-        al_set_separate_blender(
-            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
-            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
-        );
-        
-        //Then, find out spotlights, and draw
-        //their lights on the map (as black).
-        al_hold_bitmap_drawing(true);
-        for(size_t m = 0; m < mobs.size(); ++m) {
-            point pos = mobs[m]->pos;
-            al_transform_coordinates(
-                &world_to_screen_transform,
-                &pos.x, &pos.y
-            );
-            float radius = mobs[m]->type->radius * 4.0 * cam_zoom;
-            al_draw_scaled_bitmap(
-                bmp_spotlight,
-                0, 0, 64, 64,
-                pos.x - radius, pos.y - radius,
-                radius * 2.0, radius * 2.0,
-                0
-            );
-        }
-        al_hold_bitmap_drawing(false);
-        
-        //Now, simply darken the screen using the map.
-        al_set_target_backbuffer(display);
-        
-        al_draw_bitmap(lightmap_bmp, 0, 0, 0);
-        
-        al_set_separate_blender(
-            old_op, old_src, old_dst, old_aop, old_asrc, old_adst
-        );
-    
-    }
-    
 }
 
 
@@ -2610,6 +2131,76 @@ void draw_loading_screen(
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a notification, like a note saying that the player can press
+ * a certain button to pluck.
+ * target:  Spot that the notification is pointing at.
+ * text:    Text to say.
+ * control: If not NULL, draw the control's button/key/etc. before the text.
+ */
+void draw_notification(
+    const point &target, const string &text, control_info* control
+) {
+
+    ALLEGRO_TRANSFORM tra, old;
+    al_identity_transform(&tra);
+    al_translate_transform(&tra, target.x * cam_zoom, target.y * cam_zoom);
+    al_scale_transform(&tra, 1.0 / cam_zoom, 1.0 / cam_zoom);
+    al_copy_transform(&old, al_get_current_transform());
+    al_compose_transform(&tra, &old);
+    al_use_transform(&tra);
+    
+    int bmp_w = al_get_bitmap_width(bmp_notification);
+    int bmp_h = al_get_bitmap_height(bmp_notification);
+    
+    float text_box_x1 = -bmp_w * 0.5 + NOTIFICATION_PADDING;
+    float text_box_x2 = bmp_w * 0.5 - NOTIFICATION_PADDING;
+    float text_box_y1 = -bmp_h - NOTIFICATION_PADDING;
+    float text_box_y2 = NOTIFICATION_PADDING;
+    
+    draw_sprite(
+        bmp_notification,
+        point(0, -bmp_h * 0.5),
+        point(bmp_w, bmp_h),
+        0,
+        map_alpha(NOTIFICATION_ALPHA)
+    );
+    
+    if(control) {
+        text_box_x1 += NOTIFICATION_CONTROL_SIZE + NOTIFICATION_PADDING;
+        draw_control(
+            font_main, *control,
+            point(
+                -bmp_w * 0.5 + NOTIFICATION_PADDING +
+                NOTIFICATION_CONTROL_SIZE * 0.5,
+                -bmp_h * 0.5
+            ),
+            point(
+                NOTIFICATION_CONTROL_SIZE,
+                NOTIFICATION_CONTROL_SIZE
+            )
+        );
+    }
+    
+    draw_compressed_text(
+        font_main, map_alpha(NOTIFICATION_ALPHA),
+        point(
+            (text_box_x1 + text_box_x2) * 0.5,
+            (text_box_y1 + text_box_y2) * 0.5
+        ),
+        ALLEGRO_ALIGN_CENTER,
+        1,
+        point(
+            text_box_x2 - text_box_x1,
+            text_box_y2 - text_box_y1
+        ),
+        text
+    );
+    
+    al_use_transform(&old);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws a mob's shadow.
  * center:         Center of the mob.
  * diameter:       Diameter of the mob.
@@ -2647,6 +2238,486 @@ void draw_mob_shadow(
         0,
         map_alpha(255 * (1 - shadow_stretch))
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws text, scaled
+ * font - color: The parameters you'd use for al_draw_text.
+ * where:        Coordinates to draw in.
+ * scale:        Horizontal or vertical scale.
+ * flags:        Same flags you'd use for al_draw_text.
+ * valign:       Vertical align. 0: top, 1: center, 2: bottom.
+ * text:         Text to draw.
+ */
+void draw_scaled_text(
+    const ALLEGRO_FONT* const font, const ALLEGRO_COLOR &color,
+    const point &where, const point &scale,
+    const int flags, const unsigned char valign, const string &text
+) {
+
+    ALLEGRO_TRANSFORM scale_transform, old_transform;
+    al_copy_transform(&old_transform, al_get_current_transform());
+    al_identity_transform(&scale_transform);
+    al_scale_transform(&scale_transform, scale.x, scale.y);
+    al_translate_transform(&scale_transform, where.x, where.y);
+    al_compose_transform(&scale_transform, &old_transform);
+    
+    al_use_transform(&scale_transform); {
+        draw_text_lines(font, color, point(), flags, valign, text);
+    }; al_use_transform(&old_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the wall shadows that are being cast on top of this sector.
+ * s:        The sector to draw.
+ * where:    Top-left coordinates.
+ * scale:    Drawing scale.
+ */
+void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
+    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
+    
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        edge* e_ptr = s_ptr->edges[e];
+        ALLEGRO_VERTEX av[4];
+        
+        sector* other_sector =
+            e_ptr->sectors[(e_ptr->sectors[0] == s_ptr ? 1 : 0)];
+            
+        if(!casts_shadow(other_sector, s_ptr)) continue;
+        
+        float shadow_length =
+            get_wall_shadow_length(other_sector->z - s_ptr->z);
+            
+        /*
+         * We need to record the two vertexes of the edge as
+         * the two starting points of the procedure.
+         * Starting from vertex 0, if our sector is to the "left"
+         * then vertex 0 of the shadow is vertex of the edge.
+         * Otherwise, swap it around.
+         */
+        vertex* ev[2];
+        
+        if(e_ptr->sectors[0] == s_ptr) {
+            ev[0] = e_ptr->vertexes[0];
+            ev[1] = e_ptr->vertexes[1];
+        } else {
+            ev[0] = e_ptr->vertexes[1];
+            ev[1] = e_ptr->vertexes[0];
+        }
+        
+        float e_angle =
+            get_angle(point(ev[0]->x, ev[0]->y), point(ev[1]->x, ev[1]->y));
+        float e_dist =
+            dist(
+                point(ev[0]->x, ev[0]->y),
+                point(ev[1]->x, ev[1]->y)
+            ).to_float();
+        float e_cos_front = cos(e_angle - M_PI_2);
+        float e_sin_front = sin(e_angle - M_PI_2);
+        
+        //Record the first two vertexes of the shadow.
+        for(size_t v = 0; v < 2; ++v) {
+            av[v].x = ev[v]->x;
+            av[v].y = ev[v]->y;
+            av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
+            av[v].z = 0;
+        }
+        
+        
+        /*
+         * Now, check the neighbor edges.
+         * Record which angle this edge makes against
+         * them. The shadow of the current edge
+         * spreads outward from the edge, but the edges must
+         * be tilted so that the shadow from this edge
+         * meets up with the shadow from the next, on a middle
+         * angle. For 90 degrees, at least. Less or more degrees
+         * requires specific treatment.
+         */
+        
+        //Angle of the neighbors, from the common vertex to the other.
+        float neighbor_angles[2] = {M_PI_2, M_PI_2};
+        //Difference between angle of current edge and neighbors.
+        float neighbor_angle_difs[2] = {0, 0};
+        //Midway angle.
+        float mid_angles[2] = {M_PI_2, M_PI_2};
+        //Is this neighbor casting a shadow to the same sector?
+        bool neighbor_shadow[2] = {false, false};
+        //Length of the neighbor's shadow.
+        float neighbor_shadow_length[2] = {0.0f, 0.0f};
+        //Do we have an edge for this vertex?
+        bool got_first[2] = {false, false};
+        
+        //For both neighbors.
+        for(unsigned char v = 0; v < 2; ++v) {
+        
+            vertex* cur_vertex = ev[v];
+            for(size_t ve = 0; ve < cur_vertex->edges.size(); ++ve) {
+            
+                edge* ve_ptr = cur_vertex->edges[ve];
+                
+                if(ve_ptr == e_ptr) continue;
+                
+                vertex* other_vertex =
+                    ve_ptr->vertexes[
+                        (ve_ptr->vertexes[0] == cur_vertex ? 1 : 0)
+                    ];
+                float ve_angle =
+                    get_angle(
+                        point(cur_vertex->x, cur_vertex->y),
+                        point(other_vertex->x, other_vertex->y)
+                    );
+                    
+                float d;
+                if(v == 0) d = get_angle_cw_dif(ve_angle, e_angle);
+                else d = get_angle_cw_dif(e_angle + M_PI, ve_angle);
+                
+                if(
+                    d < neighbor_angle_difs[v] ||
+                    !got_first[v]
+                ) {
+                    //Save this as the next edge.
+                    neighbor_angles[v] = ve_angle;
+                    neighbor_angle_difs[v] = d;
+                    got_first[v] = true;
+                    
+                    sector* other_sector =
+                        ve_ptr->sectors[(ve_ptr->sectors[0] == s_ptr ? 1 : 0)];
+                    neighbor_shadow[v] =
+                        casts_shadow(other_sector, s_ptr);
+                        
+                    //Get the shadow length.
+                    //Defaulting to the current sector's length
+                    //makes it easier to calculate things later on.
+                    neighbor_shadow_length[v] =
+                        neighbor_shadow[v] ?
+                        get_wall_shadow_length(other_sector->z - s_ptr->z) :
+                        shadow_length;
+                }
+            }
+        }
+        
+        e_angle = normalize_angle(e_angle);
+        for(unsigned char n = 0; n < 2; ++n) {
+            neighbor_angles[n] = normalize_angle(neighbor_angles[n]);
+            mid_angles[n] =
+                (n == 0 ? neighbor_angles[n] : e_angle + M_PI) +
+                neighbor_angle_difs[n] / 2;
+        }
+        
+        point shadow_point[2];
+        ALLEGRO_VERTEX extra_av[8];
+        for(unsigned char e = 0; e < 8; ++e) { extra_av[e].z = 0;}
+        //How many vertexes of the extra polygon to draw.
+        unsigned char draw_extra[2] = {0, 0};
+        
+        for(unsigned char v = 0; v < 2; ++v) {
+        
+            if(neighbor_angle_difs[v] < M_PI && neighbor_shadow[v]) {
+                //If the shadow of the current and neighbor edges
+                //meet at less than 180 degrees, and the neighbor casts
+                //a shadow, then both this shadow and the neighbor's
+                //must blend in with one another. This shadow's final
+                //point should be where they both intersect.
+                //The neighbor's shadow will do the same when we get to it.
+                
+                float ul;
+                float shadow_length_mid =
+                    (shadow_length + neighbor_shadow_length[v]) / 2.0f;
+                lines_intersect(
+                    point(
+                        av[0].x + e_cos_front * shadow_length_mid,
+                        av[0].y + e_sin_front * shadow_length_mid
+                    ),
+                    point(
+                        av[1].x + e_cos_front * shadow_length_mid,
+                        av[1].y + e_sin_front * shadow_length_mid
+                    ),
+                    point(
+                        av[v].x,
+                        av[v].y
+                    ),
+                    point(
+                        av[v].x + cos(
+                            neighbor_shadow[v] ?
+                            mid_angles[v] :
+                            neighbor_angles[v]
+                        ) * e_dist,
+                        av[v].y + sin(
+                            neighbor_shadow[v] ?
+                            mid_angles[v] :
+                            neighbor_angles[v]
+                        ) * e_dist
+                    ),
+                    NULL, &ul
+                );
+                
+                //Clamp ul to prevent long, close walls from
+                //creating jagged shadows outside the wall.
+                ul = clamp(ul, 0.0f, 1.0f);
+                
+                shadow_point[v].x =
+                    av[0].x + e_cos_front * shadow_length_mid +
+                    cos(e_angle) * e_dist * ul;
+                shadow_point[v].y =
+                    av[0].y + e_sin_front * shadow_length_mid +
+                    sin(e_angle) * e_dist * ul;
+                    
+            } else {
+                //Otherwise, just draw the
+                //shadows as a rectangle, away
+                //from the edge. Then, if the angle is greater
+                //than 180, draw a "join" between both
+                //edge's shadows. Like a kneecap.
+                
+                if(neighbor_angle_difs[v] > M_PI_2) {
+                    shadow_point[v].x =
+                        av[v].x + e_cos_front * shadow_length;
+                    shadow_point[v].y =
+                        av[v].y + e_sin_front * shadow_length;
+                        
+                    extra_av[v * 4 + 0].x = av[v].x;
+                    extra_av[v * 4 + 0].y = av[v].y;
+                    extra_av[v * 4 + 0].color =
+                        al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
+                    extra_av[v * 4 + 1].x = shadow_point[v].x;
+                    extra_av[v * 4 + 1].y = shadow_point[v].y;
+                    extra_av[v * 4 + 1].color = al_map_rgba(0, 0, 0, 0);
+                    
+                    if(neighbor_angle_difs[v] > M_PI) {
+                        float shadow_length_mid =
+                            (shadow_length + neighbor_shadow_length[v]) / 2.0f;
+                            
+                        //Draw the "kneecap".
+                        extra_av[v * 4 + 2].x =
+                            av[v].x + cos(mid_angles[v]) * shadow_length_mid;
+                        extra_av[v * 4 + 2].y =
+                            av[v].y + sin(mid_angles[v]) * shadow_length_mid;
+                        extra_av[v * 4 + 2].color = al_map_rgba(0, 0, 0, 0);
+                        
+                        draw_extra[v] = 3;
+                    }
+                    
+                    if(!neighbor_shadow[v]) {
+                        //If the neighbor casts no shadow,
+                        //add an extra polygon vertex;
+                        //this glues the current edge's shadow to the neighbor.
+                        
+                        unsigned char index =
+                            (draw_extra[v] == 3) ? (v * 4 + 3) : (v * 4 + 2);
+                            
+                        extra_av[index].x =
+                            ev[v]->x + cos(neighbor_angles[v]) *
+                            shadow_length;
+                        extra_av[index].y =
+                            ev[v]->y + sin(neighbor_angles[v]) *
+                            shadow_length;
+                        extra_av[index].color = al_map_rgba(0, 0, 0, 0);
+                        
+                        draw_extra[v] = (draw_extra[v] == 3) ? 4 : 3;
+                    }
+                    
+                } else {
+                
+                    shadow_point[v].x =
+                        ev[v]->x + cos(neighbor_angles[v]) * shadow_length;
+                    shadow_point[v].y =
+                        ev[v]->y + sin(neighbor_angles[v]) * shadow_length;
+                        
+                }
+                
+            }
+            
+        }
+        
+        av[2].x = shadow_point[1].x;
+        av[2].y = shadow_point[1].y;
+        av[2].color = al_map_rgba(0, 0, 0, 0);
+        av[2].z = 0;
+        av[3].x = shadow_point[0].x;
+        av[3].y = shadow_point[0].y;
+        av[3].color = al_map_rgba(0, 0, 0, 0);
+        av[3].z = 0;
+        
+        //Before drawing, let's offset according to the area image.
+        for(unsigned char a = 0; a < 4; ++a) {
+            av[a].x -= where.x;
+            av[a].y -= where.y;
+        }
+        for(unsigned char a = 0; a < 8; ++a) {
+            extra_av[a].x -= where.x;
+            extra_av[a].y -= where.y;
+        }
+        
+        //Do the scaling.
+        for(size_t v = 0; v < 4; ++v) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        for(size_t v = 0; v < 8; ++v) {
+            extra_av[v].x *= scale;
+            extra_av[v].y *= scale;
+        }
+        
+        //Draw!
+        al_draw_prim(av, NULL, NULL, 0, 4, ALLEGRO_PRIM_TRIANGLE_FAN);
+        
+        for(size_t v = 0; v < 2; ++v) {
+            if(draw_extra[v] > 0) {
+                al_draw_prim(
+                    extra_av, NULL, NULL, v * 4,
+                    v * 4 + draw_extra[v],
+                    ALLEGRO_PRIM_TRIANGLE_FAN
+                );
+            }
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sector, but only the texture (no wall shadows).
+ * s_ptr:   Pointer to the sector.
+ * where:   X and Y offset.
+ * scale:   Scale the sector by this much.
+ */
+void draw_sector_texture(
+    sector* s_ptr, const point &where, const float scale
+) {
+    if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
+    
+    unsigned char n_textures = 1;
+    sector* texture_sector[2] = {NULL, NULL};
+    
+    if(s_ptr->fade) {
+        s_ptr->get_texture_merge_sectors(
+            &texture_sector[0], &texture_sector[1]
+        );
+        if(!texture_sector[0] && !texture_sector[1]) {
+            //Can't draw this sector.
+            return;
+        }
+        n_textures = 2;
+        
+    } else {
+        texture_sector[0] = s_ptr;
+        if(!texture_sector[0]) {
+            //Can't draw this sector.
+            return;
+        }
+        
+    }
+    
+    for(unsigned char t = 0; t < n_textures; ++t) {
+    
+        bool draw_sector_0 = true;
+        if(!texture_sector[0]) draw_sector_0 = false;
+        else if(texture_sector[0]->type == SECTOR_TYPE_BOTTOMLESS_PIT) {
+            draw_sector_0 = false;
+        }
+        
+        if(n_textures == 2 && !draw_sector_0 && t == 0) {
+            //Allows fading into the void.
+            continue;
+        }
+        
+        size_t n_vertexes = s_ptr->triangles.size() * 3;
+        ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[n_vertexes];
+        
+        sector_texture_info* texture_info_to_use =
+            &texture_sector[t]->texture_info;
+            
+        //Texture transformations.
+        ALLEGRO_TRANSFORM tra;
+        if(texture_sector[t]) {
+            al_build_transform(
+                &tra,
+                -texture_info_to_use->translation.x,
+                -texture_info_to_use->translation.y,
+                1.0 / texture_info_to_use->scale.x,
+                1.0 / texture_info_to_use->scale.y,
+                -texture_info_to_use->rot
+            );
+        }
+        
+        al_hold_bitmap_drawing(true);
+        
+        for(size_t v = 0; v < n_vertexes; ++v) {
+        
+            const triangle* t_ptr = &s_ptr->triangles[floor(v / 3.0)];
+            vertex* v_ptr = t_ptr->points[v % 3];
+            float vx = v_ptr->x;
+            float vy = v_ptr->y;
+            
+            float alpha_mult = 1;
+            float brightness_mult = texture_sector[t]->brightness / 255.0;
+            
+            if(t == 1) {
+                if(!draw_sector_0) {
+                    alpha_mult = 0;
+                    for(
+                        size_t e = 0; e < texture_sector[1]->edges.size();
+                        ++e
+                    ) {
+                        if(
+                            texture_sector[1]->edges[e]->vertexes[0] == v_ptr ||
+                            texture_sector[1]->edges[e]->vertexes[1] == v_ptr
+                        ) {
+                            alpha_mult = 1;
+                        }
+                    }
+                } else {
+                    for(
+                        size_t e = 0; e < texture_sector[0]->edges.size();
+                        ++e
+                    ) {
+                        if(
+                            texture_sector[0]->edges[e]->vertexes[0] == v_ptr ||
+                            texture_sector[0]->edges[e]->vertexes[1] == v_ptr
+                        ) {
+                            alpha_mult = 0;
+                        }
+                    }
+                }
+            }
+            
+            av[v].x = vx - where.x;
+            av[v].y = vy - where.y;
+            if(texture_sector[t]) al_transform_coordinates(&tra, &vx, &vy);
+            av[v].u = vx;
+            av[v].v = vy;
+            av[v].z = 0;
+            av[v].color =
+                al_map_rgba_f(
+                    texture_sector[t]->texture_info.tint.r * brightness_mult,
+                    texture_sector[t]->texture_info.tint.g * brightness_mult,
+                    texture_sector[t]->texture_info.tint.b * brightness_mult,
+                    texture_sector[t]->texture_info.tint.a * alpha_mult
+                );
+        }
+        
+        al_hold_bitmap_drawing(false);
+        
+        for(size_t v = 0; v < n_vertexes; ++v) {
+            av[v].x *= scale;
+            av[v].y *= scale;
+        }
+        
+        ALLEGRO_BITMAP* tex =
+            texture_sector[t] ?
+            texture_sector[t]->texture_info.bitmap :
+            texture_sector[t == 0 ? 1 : 0]->texture_info.bitmap;
+            
+        al_draw_prim(
+            av, NULL, tex,
+            0, n_vertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+        );
+        
+        delete[] av;
+    }
 }
 
 
@@ -2744,51 +2815,6 @@ void draw_sprite_with_effects(
             old_op, old_src, old_dst, old_aop, old_asrc, old_adst
         );
     }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Draws the current area and mobs to a bitmap and returns it.
- */
-ALLEGRO_BITMAP* gameplay::draw_to_bitmap() {
-    //First, get the full dimensions of the map.
-    float min_x = FLT_MAX, min_y = FLT_MAX, max_x = FLT_MIN, max_y = FLT_MIN;
-    
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); v++) {
-        vertex* v_ptr = cur_area_data.vertexes[v];
-        min_x = min(v_ptr->x, min_x);
-        min_y = min(v_ptr->y, min_y);
-        max_x = max(v_ptr->x, max_x);
-        max_y = max(v_ptr->y, max_y);
-    }
-    
-    //Figure out the scale that will fit on the image.
-    float area_w = max_x - min_x;
-    float area_h = max_y - min_y;
-    float scale = 1.0f;
-    float final_bmp_w = creator_tool_area_image_size;
-    float final_bmp_h = creator_tool_area_image_size;
-    
-    if(area_w > area_h) {
-        scale = creator_tool_area_image_size / area_w;
-        final_bmp_h *= area_h / area_w;
-    } else {
-        scale = creator_tool_area_image_size / area_h;
-        final_bmp_w *= area_w / area_h;
-    }
-    
-    //Create the bitmap.
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(final_bmp_w, final_bmp_h);
-    
-    ALLEGRO_TRANSFORM t;
-    al_identity_transform(&t);
-    al_translate_transform(&t, -min_x, -min_y);
-    al_scale_transform(&t, scale, scale);
-    
-    //Begin drawing!
-    do_game_drawing(bmp, &t);
-    
-    return bmp;
 }
 
 

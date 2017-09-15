@@ -50,8 +50,8 @@ void draw_fraction(
     const unsigned int needed, const ALLEGRO_COLOR &color
 );
 void draw_health(
-    const point &center, const unsigned int health,
-    const unsigned int max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS,
+    const point &center, const float health,
+    const float max_health, const float radius = DEF_HEALTH_WHEEL_RADIUS,
     const bool just_chart = false
 );
 void draw_liquid(

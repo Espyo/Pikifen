@@ -21,10 +21,12 @@ f11 =
 9   = 
 0   = area_image
 
-area_image_size = 2048
 area_image_file_name = Area.jpg
+area_image_mobs = true
 area_image_shadows = true
+area_image_size = 2048
 change_speed_multiplier = 4.0
+mob_hurting_percentage = 50
 
 auto_start_mode = 
 auto_start_option = 

@@ -34,6 +34,9 @@ public:
     ship(const point &pos, ship_type* type, float angle, const string &vars);
     
     virtual void draw(sprite_effect_manager* effect_manager = NULL);
+    
+    void heal_leader(leader* l);
+    bool is_leader_under_ring(leader* l);
 };
 
 #endif //ifndef SHIP_INCLUDED

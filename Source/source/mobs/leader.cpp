@@ -506,6 +506,9 @@ void leader::tick_class_specifics() {
                 group->anchor = pos + move_anchor_offset;
                 
                 float intensity_dist = cursor_max_dist * group_move_magnitude;
+                al_translate_transform(
+                    &group->transform, -GROUP_MOVE_MARGIN, 0
+                );
                 al_scale_transform(
                     &group->transform,
                     intensity_dist / (group->radius * 2),

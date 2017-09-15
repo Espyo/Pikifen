@@ -316,7 +316,17 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
             efc.run(pikmin_fsm::called);
             efc.change_state("in_group_chasing");
         }
+        efc.new_event(MOB_EVENT_ON_ENTER); {
+            efc.run(pikmin_fsm::going_to_dismiss_spot);
+        }
+        efc.new_event(MOB_EVENT_ON_LEAVE); {
+            efc.run(pikmin_fsm::clear_timer);
+        }
         efc.new_event(MOB_EVENT_REACHED_DESTINATION); {
+            efc.run(pikmin_fsm::reach_dismiss_spot);
+            efc.change_state("idling");
+        }
+        efc.new_event(MOB_EVENT_TIMER); {
             efc.run(pikmin_fsm::reach_dismiss_spot);
             efc.change_state("idling");
         }
@@ -1107,6 +1117,16 @@ void pikmin_fsm::go_to_opponent(mob* m, void* info1, void* info2) {
 }
 
 
+const float PIKMIN_DISMISS_TIMEOUT = 4.0f;
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin needs to get going to its dismiss spot.
+ */
+void pikmin_fsm::going_to_dismiss_spot(mob* m, void* info1, void* info2) {
+    m->set_timer(PIKMIN_DISMISS_TIMEOUT);
+}
+
+
 /* ----------------------------------------------------------------------------
  * When a Pikmin that just attacked an opponent needs to walk
  * towards it again.
@@ -1492,6 +1512,14 @@ void pikmin_fsm::check_remove_flailing(mob* m, void* info1, void* info2) {
         m->remove_particle_generator(MOB_PARTICLE_GENERATOR_WAVE_RING);
     }
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * When a Pikmin has to clear any timer set.
+ */
+void pikmin_fsm::clear_timer(mob* m, void* info1, void* info2) {
+    m->set_timer(0);
 }
 
 

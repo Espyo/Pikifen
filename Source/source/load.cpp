@@ -582,14 +582,18 @@ void load_creator_tools() {
         }
     }
     
-    creator_tool_area_image_size =
-        s2i(file.get_child_by_name("area_image_size")->value);
     creator_tool_area_image_name =
         file.get_child_by_name("area_image_file_name")->value;
+    creator_tool_area_image_mobs =
+        s2b(file.get_child_by_name("area_image_mobs")->value);
     creator_tool_area_image_shadows =
         s2b(file.get_child_by_name("area_image_shadows")->value);
+    creator_tool_area_image_size =
+        s2i(file.get_child_by_name("area_image_size")->value);
     creator_tool_change_speed_mult =
         s2f(file.get_child_by_name("change_speed_multiplier")->value);
+    creator_tool_mob_hurting_ratio =
+        s2f(file.get_child_by_name("mob_hurting_percentage")->value) / 100;
         
     creator_tool_auto_start_option =
         file.get_child_by_name("auto_start_option")->value;

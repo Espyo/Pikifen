@@ -158,6 +158,7 @@ extern bool closest_group_member_distant;
 extern string creator_tool_area_image_name;
 extern bool creator_tool_area_image_shadows;
 extern int creator_tool_area_image_size;
+extern bool creator_tool_area_image_mobs;
 extern string creator_tool_auto_start_option;
 extern string creator_tool_auto_start_mode;
 extern bool creator_tool_change_speed;
@@ -166,6 +167,7 @@ extern bool creator_tool_geometry_info;
 extern bool creator_tool_hitboxes;
 extern mob* creator_tool_info_lock;
 extern pikmin_type* creator_tool_last_pikmin_type;
+extern float creator_tool_mob_hurting_ratio;
 //For each key (F2 - F11, 0 - 9), what tool is bound to it?
 extern unsigned char creator_tool_keys[20];
 extern area_data cur_area_data;

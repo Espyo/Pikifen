@@ -42,7 +42,19 @@ private:
         ALLEGRO_TRANSFORM* bmp_transform = NULL
     );
     void do_gameplay_logic();
+    void draw_background(ALLEGRO_BITMAP* bmp_output);
+    void draw_cursor(ALLEGRO_TRANSFORM &world_to_screen_drawing_transform);
+    void draw_hud();
+    void draw_ingame_text();
+    void draw_layout(
+        ALLEGRO_BITMAP* bmp_output,
+        ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
+    );
     void draw_lighting_filter();
+    void draw_mobs(ALLEGRO_BITMAP* bmp_output);
+    void draw_precipitation();
+    void draw_system_stuff();
+    void draw_tree_shadows();
     ALLEGRO_BITMAP* draw_to_bitmap();
     ALLEGRO_BITMAP* generate_fog_bitmap(
         const float near_radius, const float far_radius
