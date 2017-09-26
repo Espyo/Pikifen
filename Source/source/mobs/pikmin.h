@@ -26,7 +26,7 @@ enum PIKMIN_STATES {
     PIKMIN_STATE_GROUP_MOVE_STOPPED,
     PIKMIN_STATE_IDLING,
     PIKMIN_STATE_SEED,
-    PIKMIN_STATE_BURIED,
+    PIKMIN_STATE_SPROUT,
     PIKMIN_STATE_PLUCKING,
     PIKMIN_STATE_GRABBED_BY_LEADER,
     PIKMIN_STATE_GRABBED_BY_ENEMY,
@@ -55,7 +55,7 @@ enum PIKMIN_ANIMATIONS {
     PIKMIN_ANIM_GRABBING,
     PIKMIN_ANIM_CARRYING,
     PIKMIN_ANIM_SIGHING,
-    PIKMIN_ANIM_BURIED,
+    PIKMIN_ANIM_SPROUT,
     PIKMIN_ANIM_PLUCKING,
     PIKMIN_ANIM_LYING,
 };
@@ -121,7 +121,7 @@ public:
 };
 
 
-pikmin* get_closest_buried_pikmin(
+pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved
 );
 

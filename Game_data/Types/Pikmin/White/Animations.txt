@@ -20,10 +20,10 @@ animations{
 			}
 		}
 	}
-	buried{
+	sprout{
 		loop_frame=0
 		frames{
-			buried{
+			sprout{
 				duration=0.00
 			}
 		}
@@ -95,7 +95,7 @@ animations{
 	plucking{
 		loop_frame=0
 		frames{
-			buried{
+			sprout{
 				duration=0.20
 			}
 			idling{
@@ -124,7 +124,7 @@ animations{
 	}
 }
 sprites{
-	buried{
+	sprout{
 		file=White_Pikmin.png
 		file_pos=62.00 40.00
 		file_size=12.00 12.00

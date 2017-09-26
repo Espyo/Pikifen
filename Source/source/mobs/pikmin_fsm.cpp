@@ -23,27 +23,27 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
     easy_fsm_creator efc;
     efc.new_state("seed", PIKMIN_STATE_SEED); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::become_buried);
+            efc.run(pikmin_fsm::become_sprout);
         }
         efc.new_event(MOB_EVENT_LANDED); {
             efc.run(pikmin_fsm::seed_landed);
             efc.run(pikmin_fsm::stand_still);
-            efc.change_state("buried");
+            efc.change_state("sprout");
         }
     }
     
-    efc.new_state("buried", PIKMIN_STATE_BURIED); {
+    efc.new_state("sprout", PIKMIN_STATE_SPROUT); {
         efc.new_event(MOB_EVENT_ON_ENTER); {
-            efc.run(pikmin_fsm::become_buried);
-            efc.run(pikmin_fsm::buried_schedule_evol);
+            efc.run(pikmin_fsm::become_sprout);
+            efc.run(pikmin_fsm::sprout_schedule_evol);
         }
         efc.new_event(MOB_EVENT_PLUCKED); {
             efc.run(pikmin_fsm::begin_pluck);
             efc.change_state("plucking");
         }
         efc.new_event(MOB_EVENT_TIMER); {
-            efc.run(pikmin_fsm::buried_evolve);
-            efc.run(pikmin_fsm::buried_schedule_evol);
+            efc.run(pikmin_fsm::sprout_evolve);
+            efc.run(pikmin_fsm::sprout_schedule_evol);
         }
     }
     
@@ -727,10 +727,10 @@ void pikmin_fsm::create_fsm(mob_type* typ) {
 
 
 /* ----------------------------------------------------------------------------
- * When a Pikmin becomes buried or a seed.
+ * When a Pikmin becomes a seed or a sprout.
  */
-void pikmin_fsm::become_buried(mob* m, void* info1, void* info2) {
-    m->set_animation(PIKMIN_ANIM_BURIED);
+void pikmin_fsm::become_sprout(mob* m, void* info1, void* info2) {
+    m->set_animation(PIKMIN_ANIM_SPROUT);
     m->unpushable = true;
 }
 
@@ -757,9 +757,9 @@ void pikmin_fsm::begin_pluck(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Causes a buried Pikmin to evolve.
+ * Causes a sprout to evolve.
  */
-void pikmin_fsm::buried_evolve(mob* m, void* info1, void* info2) {
+void pikmin_fsm::sprout_evolve(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
     if(p->maturity == 0 || p->maturity == 1) {
         //Leaf to bud, or bud to flower.
@@ -812,11 +812,11 @@ void pikmin_fsm::buried_evolve(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * Schedules the next evolution for a buried Pikmin.
+ * Schedules the next evolution for a sprout.
  */
-void pikmin_fsm::buried_schedule_evol(mob* m, void* info1, void* info2) {
+void pikmin_fsm::sprout_schedule_evol(mob* m, void* info1, void* info2) {
     pikmin* p = (pikmin*) m;
-    m->set_timer(p->pik_type->buried_evolution_time[p->maturity]);
+    m->set_timer(p->pik_type->sprout_evolution_time[p->maturity]);
 }
 
 

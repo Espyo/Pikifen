@@ -18,7 +18,7 @@
 #include "pikmin_fsm.h"
 #include "../vars.h"
 
-const float DEFAULT_BURIED_EVOLUTION_TIME[N_MATURITIES] =
+const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
     { 2 * 60, 2 * 60, 3 * 60 };
 
 /* ----------------------------------------------------------------------------
@@ -39,7 +39,7 @@ pikmin_type::pikmin_type() :
     can_carry_bomb_rocks(false) {
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
-        buried_evolution_time[m] = DEFAULT_BURIED_EVOLUTION_TIME[m];
+        sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];
         bmp_top[m] = NULL;
         bmp_maturity_icon[m] = NULL;
     }
@@ -82,7 +82,7 @@ void pikmin_type::load_parameters(data_node* file) {
     rs.set("has_onion", has_onion);
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
-        rs.set("buried_evolution_time_" + i2s(m + 1), buried_evolution_time[m]);
+        rs.set("sprout_evolution_time_" + i2s(m + 1), sprout_evolution_time[m]);
     }
     
     data_node* hazards_node = file->get_child_by_name("resistances");
@@ -137,7 +137,7 @@ anim_conversion_vector pikmin_type::get_anim_conversions() {
     v.push_back(make_pair(PIKMIN_ANIM_GRABBING,  "grabbing"));
     v.push_back(make_pair(PIKMIN_ANIM_SIGHING,   "sighing"));
     v.push_back(make_pair(PIKMIN_ANIM_CARRYING,  "carrying"));
-    v.push_back(make_pair(PIKMIN_ANIM_BURIED,    "buried"));
+    v.push_back(make_pair(PIKMIN_ANIM_SPROUT,    "sprout"));
     v.push_back(make_pair(PIKMIN_ANIM_PLUCKING,  "plucking"));
     v.push_back(make_pair(PIKMIN_ANIM_LYING,     "lying"));
     return v;

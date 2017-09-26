@@ -1363,7 +1363,7 @@ void leader_fsm::go_pluck(mob* m, void* info1, void* info2) {
 
 
 /* ----------------------------------------------------------------------------
- * When a leader grab on to a buried Pikmin and begin plucking it out.
+ * When a leader grabs on to a sprout and begins plucking it out.
  */
 void leader_fsm::start_pluck(mob* m, void* info1, void* info2) {
     leader* l_ptr = (leader*) m;
@@ -1424,7 +1424,7 @@ void leader_fsm::search_seed(mob* m, void* info1, void* info2) {
     pikmin* new_pikmin = NULL;
     if(!l_ptr->queued_pluck_cancel) {
         new_pikmin =
-            get_closest_buried_pikmin(l_ptr->pos, &d, false);
+            get_closest_sprout(l_ptr->pos, &d, false);
     } else {
         leader_fsm::stop_auto_pluck(m, NULL, NULL);
     }

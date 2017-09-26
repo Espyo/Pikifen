@@ -261,7 +261,7 @@ void gameplay::handle_button(
                 //First check if the leader should pluck a Pikmin.
                 dist d;
                 pikmin* p =
-                    get_closest_buried_pikmin(
+                    get_closest_sprout(
                         cur_leader_ptr->pos, &d, false
                     );
                 if(p && d <= pluck_range) {

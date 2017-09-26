@@ -47,8 +47,8 @@ pikmin::pikmin(
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO
-    if(s2b(get_var_value(vars, "buried", "0"))) {
-        fsm.set_state(PIKMIN_STATE_BURIED);
+    if(s2b(get_var_value(vars, "sprout", "0"))) {
+        fsm.set_state(PIKMIN_STATE_SPROUT);
     }
     subgroup_type_ptr =
         subgroup_types.get_type(SUBGROUP_TYPE_CATEGORY_PIKMIN, pik_type);
@@ -161,13 +161,13 @@ void pikmin::teleport_to_connected_hitbox() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns the buried Pikmin closest to a leader. Used when auto-plucking.
+ * Returns the sprout closest to a leader. Used when auto-plucking.
  * pos:             Coordinates of the leader.
  * d:               Variable to return the distance to. NULL for none.
- * ignore_reserved: If true, ignore any buried Pikmin that are "reserved"
+ * ignore_reserved: If true, ignore any sprouts that are "reserved"
  *   (i.e. already chosen to be plucked by another leader).
  */
-pikmin* get_closest_buried_pikmin(
+pikmin* get_closest_sprout(
     const point &pos, dist* d, const bool ignore_reserved
 ) {
     dist closest_distance = 0;
@@ -175,7 +175,7 @@ pikmin* get_closest_buried_pikmin(
     
     size_t n_pikmin = pikmin_list.size();
     for(size_t p = 0; p < n_pikmin; ++p) {
-        if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_BURIED) continue;
+        if(pikmin_list[p]->fsm.cur_state->id != PIKMIN_STATE_SPROUT) continue;
         
         dist dis(pos, pikmin_list[p]->pos);
         if(closest_pikmin == NULL || dis < closest_distance) {
@@ -242,7 +242,7 @@ void pikmin::draw(sprite_effect_manager* effect_manager) {
     
     bool is_idle =
         fsm.cur_state->id == PIKMIN_STATE_IDLING ||
-        fsm.cur_state->id == PIKMIN_STATE_BURIED;
+        fsm.cur_state->id == PIKMIN_STATE_SPROUT;
         
     sprite_effect_manager effects;
     add_sector_brightness_sprite_effect(&effects);
