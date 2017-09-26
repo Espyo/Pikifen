@@ -14,6 +14,7 @@
 #include <climits>
 
 #include "const.h"
+#include "drawing.h"
 #include "functions.h"
 #include "load.h"
 #include "misc_structs.h"
@@ -149,6 +150,139 @@ void button_manager::add(
     b.default_control_str = default_control_str;
     
     list.push_back(b);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a new HUD item.
+ * center: Center coordinates, in screen dimension ratio.
+ * size:   Dimensions, in screen dimension ratio.
+ */
+hud_item::hud_item(const point center, const point size) :
+    center(center),
+    size(size) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Initializes a HUD item manager.
+ */
+hud_item_manager::hud_item_manager(const size_t item_total) :
+    move_in(false),
+    move_timer(0),
+    offscreen(false) {
+    
+    items.assign(item_total, hud_item());
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets a HUD item's data.
+ * id:     ID of the HUD item.
+ * center: Center coordinates, in screen dimension percentage.
+ * size:   Dimensions, in screen dimension percentage.
+ */
+void hud_item_manager::set_item(
+    const size_t id,
+    const float x, const float y, const float w, const float h
+) {
+    items[id] =
+        hud_item(point(x / 100.0f, y / 100.0f), point(w / 100.0f, h / 100.0f));
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Retrieves the data necessary for the drawing routine.
+ * Returns false if this element shouldn't be drawn.
+ * id:     ID of the HUD item.
+ * center: Pointer to place the final center coordinates in, if any.
+ * size:   Pointer to place the final dimensions in, if any.
+ */
+bool hud_item_manager::get_draw_data(
+    const size_t id, point* center, point* size
+) {
+    hud_item* h = &items[id];
+    if(offscreen) return false;
+    if(h->size.x <= 0 || h->size.y <= 0) return false;
+    if(h->center.x + h->size.x / 2.0f < 0)    return false;
+    if(h->center.x - h->size.x / 2.0f > 1.0f) return false;
+    if(h->center.y + h->size.y / 2.0f < 0)    return false;
+    if(h->center.y - h->size.y / 2.0f > 1.0f) return false;
+    
+    point normal_coords, final_coords;
+    normal_coords.x = h->center.x * scr_w;
+    normal_coords.y = h->center.y * scr_h;
+    
+    if(move_timer.time_left == 0.0f) {
+        final_coords = normal_coords;
+        
+    } else {
+        point start_coords, end_coords;
+        unsigned char ease_method;
+        point offscreen_coords;
+        
+        float angle = get_angle(point(0.5, 0.5), h->center);
+        offscreen_coords.x = h->center.x + cos(angle);
+        offscreen_coords.y = h->center.y + sin(angle);
+        offscreen_coords.x *= scr_w;
+        offscreen_coords.y *= scr_h;
+        
+        if(move_in) {
+            start_coords = offscreen_coords;
+            end_coords = normal_coords;
+            ease_method = EASE_OUT;
+        } else {
+            start_coords = normal_coords;
+            end_coords = offscreen_coords;
+            ease_method = EASE_IN;
+        }
+        
+        final_coords.x =
+            interpolate_number(
+                ease(ease_method, 1 - move_timer.get_ratio_left()),
+                0, 1, start_coords.x, end_coords.x
+            );
+        final_coords.y =
+            interpolate_number(
+                ease(ease_method, 1 - move_timer.get_ratio_left()),
+                0, 1, start_coords.y, end_coords.y
+            );
+    }
+    
+    if(center) {
+        *center = final_coords;
+    }
+    if(size) {
+        size->x = h->size.x * scr_w;
+        size->y = h->size.y * scr_h;
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Starts a movement animation.
+ * in:       Are the items moving into view, or out of view?
+ * duration: How long this animation lasts for.
+ */
+void hud_item_manager::start_move(const bool in, const float duration) {
+    move_in = in;
+    move_timer.start(duration);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks the manager one frame in time.
+ */
+void hud_item_manager::tick(const float time) {
+    move_timer.tick(time);
+    if(!move_in && move_timer.time_left == 0.0f) {
+        offscreen = true;
+    } else {
+        offscreen = false;
+    }
 }
 
 

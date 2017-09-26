@@ -20,6 +20,9 @@
  */
 class gameplay : public game_state {
 private:
+    
+    static const float AREA_INTRO_HUD_MOVE_TIME;
+    
     ALLEGRO_BITMAP* bmp_bubble;
     ALLEGRO_BITMAP* bmp_counter_bubble_group;
     ALLEGRO_BITMAP* bmp_counter_bubble_field;
@@ -51,6 +54,7 @@ private:
         ALLEGRO_TRANSFORM &world_to_screen_drawing_transform
     );
     void draw_lighting_filter();
+    void draw_message_box();
     void draw_mobs(ALLEGRO_BITMAP* bmp_output);
     void draw_precipitation();
     void draw_system_stuff();

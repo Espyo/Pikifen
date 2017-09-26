@@ -289,49 +289,38 @@ void init_game_states() {
 
 
 /* ----------------------------------------------------------------------------
- * Helper function to initialize a HUD coordinate.
+ * Initializes the HUD items, along with their default coordinates.
  */
-void init_hud_coordinate(
-    const int n, const float x, const float y, const float w, const float h
-) {
-    hud_coords[n][0] = x / 100; hud_coords[n][1] = y / 100;
-    hud_coords[n][2] = w / 100; hud_coords[n][3] = h / 100;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Initializes the default HUD coordinates.
- */
-void init_hud_coordinates() {
-    init_hud_coordinate(HUD_ITEM_TIME,                  40, 10, 70, 10);
-    init_hud_coordinate(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 0 );
-    init_hud_coordinate(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
-    init_hud_coordinate(HUD_ITEM_LEADER_1_ICON,         7,  90, 8,  0 );
-    init_hud_coordinate(HUD_ITEM_LEADER_2_ICON,         6,  80, 5,  0 );
-    init_hud_coordinate(HUD_ITEM_LEADER_3_ICON,         6,  72, 5,  0 );
-    init_hud_coordinate(HUD_ITEM_LEADER_1_HEALTH,       16, 90, 8,  0 );
-    init_hud_coordinate(HUD_ITEM_LEADER_2_HEALTH,       12, 80, 5,  0 );
-    init_hud_coordinate(HUD_ITEM_LEADER_3_HEALTH,       12, 72, 5,  0 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 89, 8,  0 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 86, 4,  0 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
-    init_hud_coordinate(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
-    init_hud_coordinate(HUD_ITEM_PIKMIN_SLASH_3,        0,  0,  0,  0 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_ICON,          6,  36, 4,  7 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_AMOUNT,        10, 37, 9,  5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_1_KEY,           10, 42, 10, 5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_ICON,          6,  52, 4,  7 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_AMOUNT,        10, 53, 9,  5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_2_KEY,           10, 47, 10, 5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_ICON,       6,  52, 3,  5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_PREV_KEY,        6,  47, 4,  4 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52, 3,  5 );
-    init_hud_coordinate(HUD_ITEM_SPRAY_NEXT_KEY,        13, 47, 4,  4 );
+void init_hud_items() {
+    hud_items.set_item(HUD_ITEM_TIME,                  40, 10, 70, 10);
+    hud_items.set_item(HUD_ITEM_DAY_BUBBLE,            88, 18, 15, 25);
+    hud_items.set_item(HUD_ITEM_DAY_NUMBER,            88, 20, 10, 10);
+    hud_items.set_item(HUD_ITEM_LEADER_1_ICON,         7,  90, 8,  10);
+    hud_items.set_item(HUD_ITEM_LEADER_2_ICON,         6,  80, 5,  9 );
+    hud_items.set_item(HUD_ITEM_LEADER_3_ICON,         6,  72, 5,  9 );
+    hud_items.set_item(HUD_ITEM_LEADER_1_HEALTH,       16, 90, 8,  10);
+    hud_items.set_item(HUD_ITEM_LEADER_2_HEALTH,       12, 80, 5,  9 );
+    hud_items.set_item(HUD_ITEM_LEADER_3_HEALTH,       12, 72, 5,  9 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_ICON,   30, 91, 8,  10);
+    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_M_ICON, 35, 88, 4,  8 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_NR,     38, 91, 7,  8 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_STANDBY_X,      50, 91, 15, 10);
+    hud_items.set_item(HUD_ITEM_PIKMIN_GROUP_NR,       73, 91, 15, 14);
+    hud_items.set_item(HUD_ITEM_PIKMIN_FIELD_NR,       91, 91, 15, 14);
+    hud_items.set_item(HUD_ITEM_PIKMIN_TOTAL_NR,       0,  0,  0,  0 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_1,        82, 91, 4,  8 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_2,        0,  0,  0,  0 );
+    hud_items.set_item(HUD_ITEM_PIKMIN_SLASH_3,        0,  0,  0,  0 );
+    hud_items.set_item(HUD_ITEM_SPRAY_1_ICON,          6,  36, 4,  7 );
+    hud_items.set_item(HUD_ITEM_SPRAY_1_AMOUNT,        13, 37, 10, 5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_1_BUTTON,        10, 42, 10, 5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_2_ICON,          6,  52, 4,  7 );
+    hud_items.set_item(HUD_ITEM_SPRAY_2_AMOUNT,        13, 53, 10, 5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_2_BUTTON,        10, 47, 10, 5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_PREV_ICON,       6,  52, 3,  5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_PREV_BUTTON,     6,  47, 4,  4 );
+    hud_items.set_item(HUD_ITEM_SPRAY_NEXT_ICON,       13, 52, 3,  5 );
+    hud_items.set_item(HUD_ITEM_SPRAY_NEXT_BUTTON,     13, 47, 4,  4 );
 }
 
 

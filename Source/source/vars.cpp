@@ -162,6 +162,7 @@ bool group_move_cursor = false;
 float group_move_task_range = 0;
 movement_struct group_movement;
 map<string, hazard> hazards;
+hud_item_manager hud_items(N_HUD_ITEMS);
 float hud_coords[N_HUD_ITEMS][4];
 ALLEGRO_TRANSFORM identity_transform;
 float idle_task_range = 50;

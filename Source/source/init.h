@@ -22,10 +22,7 @@ void init_error_bitmap();
 void init_essentials();
 void init_event_things(ALLEGRO_TIMER* &timer, ALLEGRO_EVENT_QUEUE* &queue);
 void init_game_states();
-void init_hud_coordinate(
-    const int n, const float x, const float y, const float w, const float h
-);
-void init_hud_coordinates();
+void init_hud_items();
 void init_misc();
 void init_mob_categories();
 void init_sector_types();

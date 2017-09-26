@@ -20,6 +20,10 @@
 #include "misc_structs.h"
 #include "vars.h"
 
+//How long the HUD moves for when the area is entered.
+const float gameplay::AREA_INTRO_HUD_MOVE_TIME = 3.0f;
+
+
 /* ----------------------------------------------------------------------------
  * Creates the "gameplay" state.
  */
@@ -203,6 +207,7 @@ void gameplay::load() {
     al_hide_mouse_cursor(display);
     
     area_title_fade_timer.start();
+    hud_items.start_move(true, AREA_INTRO_HUD_MOVE_TIME);
     
     //Aesthetic stuff.
     cur_message_char_timer =
@@ -263,61 +268,37 @@ void gameplay::load_hud_info() {
 #define loader(id, name) \
     load_hud_coordinates(id, positions_node->get_child_by_name(name)->value)
     
-    loader(HUD_ITEM_TIME,                "time");
-    loader(HUD_ITEM_DAY_BUBBLE,          "day_bubble");
-    loader(HUD_ITEM_DAY_NUMBER,          "day_number");
-    loader(HUD_ITEM_LEADER_1_ICON,       "leader_1_icon");
-    loader(HUD_ITEM_LEADER_2_ICON,       "leader_2_icon");
-    loader(HUD_ITEM_LEADER_3_ICON,       "leader_3_icon");
-    loader(HUD_ITEM_LEADER_1_HEALTH,     "leader_1_health");
-    loader(HUD_ITEM_LEADER_2_HEALTH,     "leader_2_health");
-    loader(HUD_ITEM_LEADER_3_HEALTH,     "leader_3_health");
-    loader(HUD_ITEM_PIKMIN_STANDBY_ICON, "pikmin_standby_icon");
-    loader(HUD_ITEM_PIKMIN_STANDBY_NR,   "pikmin_standby_nr");
-    loader(HUD_ITEM_PIKMIN_STANDBY_X,    "pikmin_standby_x");
-    loader(HUD_ITEM_PIKMIN_GROUP_NR,     "pikmin_group_nr");
-    loader(HUD_ITEM_PIKMIN_FIELD_NR,     "pikmin_field_nr");
-    loader(HUD_ITEM_PIKMIN_TOTAL_NR,     "pikmin_total_nr");
-    loader(HUD_ITEM_PIKMIN_SLASH_1,      "pikmin_slash_1");
-    loader(HUD_ITEM_PIKMIN_SLASH_2,      "pikmin_slash_2");
-    loader(HUD_ITEM_PIKMIN_SLASH_3,      "pikmin_slash_3");
-    loader(HUD_ITEM_SPRAY_1_ICON,        "spray_1_icon");
-    loader(HUD_ITEM_SPRAY_1_AMOUNT,      "spray_1_amount");
-    loader(HUD_ITEM_SPRAY_1_KEY,         "spray_1_key");
-    loader(HUD_ITEM_SPRAY_2_ICON,        "spray_2_icon");
-    loader(HUD_ITEM_SPRAY_2_AMOUNT,      "spray_2_amount");
-    loader(HUD_ITEM_SPRAY_2_KEY,         "spray_2_key");
-    loader(HUD_ITEM_SPRAY_PREV_ICON,     "spray_prev_icon");
-    loader(HUD_ITEM_SPRAY_PREV_KEY,      "spray_prev_key");
-    loader(HUD_ITEM_SPRAY_NEXT_ICON,     "spray_next_icon");
-    loader(HUD_ITEM_SPRAY_NEXT_KEY,      "spray_next_key");
+    loader(HUD_ITEM_TIME,                  "time");
+    loader(HUD_ITEM_DAY_BUBBLE,            "day_bubble");
+    loader(HUD_ITEM_DAY_NUMBER,            "day_number");
+    loader(HUD_ITEM_LEADER_1_ICON,         "leader_1_icon");
+    loader(HUD_ITEM_LEADER_2_ICON,         "leader_2_icon");
+    loader(HUD_ITEM_LEADER_3_ICON,         "leader_3_icon");
+    loader(HUD_ITEM_LEADER_1_HEALTH,       "leader_1_health");
+    loader(HUD_ITEM_LEADER_2_HEALTH,       "leader_2_health");
+    loader(HUD_ITEM_LEADER_3_HEALTH,       "leader_3_health");
+    loader(HUD_ITEM_PIKMIN_STANDBY_ICON,   "pikmin_standby_icon");
+    loader(HUD_ITEM_PIKMIN_STANDBY_M_ICON, "pikmin_standby_m_icon");
+    loader(HUD_ITEM_PIKMIN_STANDBY_NR,     "pikmin_standby_nr");
+    loader(HUD_ITEM_PIKMIN_STANDBY_X,      "pikmin_standby_x");
+    loader(HUD_ITEM_PIKMIN_GROUP_NR,       "pikmin_group_nr");
+    loader(HUD_ITEM_PIKMIN_FIELD_NR,       "pikmin_field_nr");
+    loader(HUD_ITEM_PIKMIN_TOTAL_NR,       "pikmin_total_nr");
+    loader(HUD_ITEM_PIKMIN_SLASH_1,        "pikmin_slash_1");
+    loader(HUD_ITEM_PIKMIN_SLASH_2,        "pikmin_slash_2");
+    loader(HUD_ITEM_PIKMIN_SLASH_3,        "pikmin_slash_3");
+    loader(HUD_ITEM_SPRAY_1_ICON,          "spray_1_icon");
+    loader(HUD_ITEM_SPRAY_1_AMOUNT,        "spray_1_amount");
+    loader(HUD_ITEM_SPRAY_1_BUTTON,        "spray_1_key");
+    loader(HUD_ITEM_SPRAY_2_ICON,          "spray_2_icon");
+    loader(HUD_ITEM_SPRAY_2_AMOUNT,        "spray_2_amount");
+    loader(HUD_ITEM_SPRAY_2_BUTTON,        "spray_2_key");
+    loader(HUD_ITEM_SPRAY_PREV_ICON,       "spray_prev_icon");
+    loader(HUD_ITEM_SPRAY_PREV_BUTTON,     "spray_prev_key");
+    loader(HUD_ITEM_SPRAY_NEXT_ICON,       "spray_next_icon");
+    loader(HUD_ITEM_SPRAY_NEXT_BUTTON,     "spray_next_key");
     
 #undef loader
-    
-    //On the HUD file, coordinates range from 0 to 100,
-    //and 0 width or height means "keep aspect ratio with the other component".
-    //Let's pre-bake these values, such that all widths and heights at 0
-    //get set to -1 (draw_sprite and stuff like that expect -1 for these cases),
-    //and all other coordinates transform from percentages
-    //to screen coordinates.
-    //Widths AND heights that are both set to 0 should stay that way though.
-    
-    for(int i = 0; i < N_HUD_ITEMS; ++i) {
-        if(hud_coords[i][2] == 0 && hud_coords[i][3] != 0) {
-            hud_coords[i][2] = -1;
-        } else if(hud_coords[i][3] == 0 && hud_coords[i][2] != 0) {
-            hud_coords[i][3] = -1;
-        }
-        
-        hud_coords[i][0] *= scr_w;
-        hud_coords[i][1] *= scr_h;
-        if(hud_coords[i][2] != -1) {
-            hud_coords[i][2] *= scr_w;
-        }
-        if(hud_coords[i][3] != -1) {
-            hud_coords[i][3] *= scr_h;
-        }
-    }
     
     //Bitmaps.
     data_node* bitmaps_node = file.get_child_by_name("files");
@@ -353,9 +334,9 @@ void gameplay::load_hud_coordinates(const int item, string data) {
     vector<string> words = split(data);
     if(data.size() < 4) return;
     
-    for(unsigned char c = 0; c < 4; ++c) {
-        hud_coords[item][c] = s2f(words[c]) / 100.0f;
-    }
+    hud_items.set_item(
+        item, s2f(words[0]), s2f(words[1]), s2f(words[2]), s2f(words[3])
+    );
 }
 
 

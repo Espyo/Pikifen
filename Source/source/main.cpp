@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     //Init and load some other things.
     init_mob_categories();
     init_sector_types();
-    init_hud_coordinates();
+    init_hud_items();
     load_creator_tools();
     load_game_config();
     

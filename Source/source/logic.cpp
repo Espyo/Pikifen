@@ -469,6 +469,8 @@ void gameplay::do_gameplay_logic() {
         
     }
     
+    hud_items.tick(delta_t);
+    
     //Print framerate.
     if(show_framerate) {
         framerate_update_timer.tick(delta_t);

@@ -31,6 +31,24 @@ struct mob_gen;
 using namespace std;
 
 /* ----------------------------------------------------------------------------
+ * A timer. You can set it to start at a pre-determined time, to tick, etc.
+ */
+struct timer {
+    float time_left; //How much time is left until 0.
+    float duration;  //When the timer starts, its time is set to this.
+    function<void()> on_end;
+    
+    timer(const float duration, const function<void()> &on_end = nullptr);
+    ~timer();
+    void start(const bool can_restart = true);
+    void start(const float new_duration);
+    void tick(const float amount);
+    float get_ratio_left();
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * Bitmap manager.
  * When you have the likes of an animation, every
  * frame in it is normally a sub-bitmap of the same
@@ -142,6 +160,42 @@ public:
 
 
 /* ----------------------------------------------------------------------------
+ * Represents a HUD item. It contains data about where it should be placed,
+ * where it should be drawn, etc.
+ */
+struct hud_item {
+    point center; //In screen ratio.
+    point size;   //In screen ratio.
+    hud_item(const point center = point(), const point size = point());
+};
+
+
+
+/* ----------------------------------------------------------------------------
+ * Manages the HUD items.
+ */
+struct hud_item_manager {
+private:
+    vector<hud_item> items;
+    bool move_in;
+    timer move_timer;
+    bool offscreen;
+    void update_offscreen();
+    
+public:
+    void set_item(
+        const size_t id,
+        const float x, const float y, const float w, const float h
+    );
+    bool get_draw_data(const size_t id, point* center, point* size);
+    void start_move(const bool in, const float duration);
+    void tick(const float time);
+    hud_item_manager(const size_t item_total);
+};
+
+
+
+/* ----------------------------------------------------------------------------
  * This structure holds information about where the player wants a leader
  * (or something else) to go, based on the player's inputs
  * (analog stick tilts, D-pad presses, keyboard key presses, etc.).
@@ -228,24 +282,6 @@ public:
     string get_name(const unsigned char nr);
     unsigned char get_nr_of_types();
     
-};
-
-
-
-/* ----------------------------------------------------------------------------
- * A timer. You can set it to start at a pre-determined time, to tick, etc.
- */
-struct timer {
-    float time_left; //How much time is left until 0.
-    float duration;  //When the timer starts, its time is set to this.
-    function<void()> on_end;
-    
-    timer(const float duration, const function<void()> &on_end = nullptr);
-    ~timer();
-    void start(const bool can_restart = true);
-    void start(const float new_duration);
-    void tick(const float amount);
-    float get_ratio_left();
 };
 
 

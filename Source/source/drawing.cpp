@@ -111,7 +111,11 @@ void gameplay::do_game_drawing(
         draw_cursor(world_to_screen_drawing_transform);
         
         //Layer 11 -- HUD
-        draw_hud();
+        if(cur_message.empty()) {
+            draw_hud();
+        } else {
+            draw_message_box();
+        }
         
         //Layer 12 -- System stuff.
         draw_system_stuff();
@@ -369,648 +373,434 @@ void gameplay::draw_cursor(
  */
 void gameplay::draw_hud() {
     al_use_transform(&identity_transform);
+    point i_center, i_size;
+    
+    //Leader health.
+    for(size_t l = 0; l < 3; ++l) {
+        if(leaders.size() < l + 1) continue;
         
-        if(cur_message.empty()) {
+        size_t l_nr = sum_and_wrap(cur_leader_nr, l, leaders.size());
+        size_t icon_id = HUD_ITEM_LEADER_1_ICON + l;
+        size_t health_id = HUD_ITEM_LEADER_1_HEALTH + l;
         
-            //Leader health.
-            for(size_t l = 0; l < 3; ++l) {
-                if(leaders.size() < l + 1) continue;
-                
-                size_t l_nr = sum_and_wrap(cur_leader_nr, l, leaders.size());
-                int icon_id = HUD_ITEM_LEADER_1_ICON + l;
-                int health_id = HUD_ITEM_LEADER_1_HEALTH + l;
-                point icon_size(
-                    hud_coords[icon_id][2],
-                    hud_coords[icon_id][3]
-                );
-                if(icon_size.x == 0 && icon_size.y == 0) continue;
-                point health_size(
-                    hud_coords[health_id][2],
-                    hud_coords[health_id][3]
-                );
-                if(health_size.x == 0 && health_size.y == 0) continue;
-                point icon_pos(
-                    hud_coords[icon_id][0],
-                    hud_coords[icon_id][1]
-                );
-                point health_pos(
-                    hud_coords[health_id][0],
-                    hud_coords[health_id][1]
-                );
-                
-                
-                al_draw_filled_circle(
-                    icon_pos.x, icon_pos.y,
-                    max(icon_size.x, icon_size.y) / 2.0f,
-                    change_alpha(leaders[l_nr]->type->main_color, 128)
-                );
-                draw_sprite(
-                    leaders[l_nr]->lea_type->bmp_icon,
-                    icon_pos, icon_size
-                );
-                draw_sprite(bmp_bubble, icon_pos, icon_size);
-                
-                draw_health(
-                    health_pos,
-                    leaders[l_nr]->health, leaders[l_nr]->type->max_health,
-                    max(health_size.x, health_size.y) * 0.4f,
-                    true
-                );
-                draw_sprite(bmp_hard_bubble, health_pos, health_size);
-            }
-            
-            //Sun Meter.
-            unsigned char n_hours =
-                (day_minutes_end - day_minutes_start) / 60.0f;
-            float day_passed_ratio =
-                (float) (day_minutes - day_minutes_start) /
-                (float) (day_minutes_end - day_minutes_start);
-            float sun_radius =
-                hud_coords[HUD_ITEM_TIME][3] / 2.0;
-            float first_dot_x =
-                hud_coords[HUD_ITEM_TIME][0] -
-                hud_coords[HUD_ITEM_TIME][2] * 0.5 + sun_radius;
-            float last_dot_x =
-                hud_coords[HUD_ITEM_TIME][0] +
-                hud_coords[HUD_ITEM_TIME][2] * 0.5 - sun_radius;
-            float dots_y =
-                hud_coords[HUD_ITEM_TIME][1];
-            //Width, from the center of the first dot to the center of the last.
-            float dots_span =
-                last_dot_x - first_dot_x;
-            float dot_interval =
-                dots_span / (float) n_hours;
-            float sun_meter_sun_angle =
-                area_time_passed * SUN_METER_SUN_SPIN_SPEED;
-                
-            //Larger bubbles at the start, middle and end of the meter.
-            al_hold_bitmap_drawing(true);
-            draw_sprite(
-                bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
-                point(sun_radius * 0.9, sun_radius * 0.9)
+        //Leader's icon.
+        if(hud_items.get_draw_data(icon_id, &i_center, &i_size)) {
+            al_draw_filled_circle(
+                i_center.x, i_center.y,
+                min(i_size.x, i_size.y) / 2.0f,
+                change_alpha(leaders[l_nr]->type->main_color, 128)
             );
-            draw_sprite(
-                bmp_hard_bubble, point(first_dot_x + dots_span * 0.5, dots_y),
-                point(sun_radius * 0.9, sun_radius * 0.9)
+            draw_sprite_in_box(
+                leaders[l_nr]->lea_type->bmp_icon,
+                i_center, i_size
             );
-            draw_sprite(
-                bmp_hard_bubble, point(first_dot_x + dots_span * 1.0, dots_y),
-                point(sun_radius * 0.9, sun_radius * 0.9)
-            );
-            
-            for(unsigned char h = 0; h < n_hours + 1; ++h) {
-                draw_sprite(
-                    bmp_hard_bubble,
-                    point(first_dot_x + h * dot_interval, dots_y),
-                    point(sun_radius * 0.6, sun_radius * 0.6)
-                );
-            }
-            al_hold_bitmap_drawing(false);
-            
-            draw_sprite(
-                bmp_sun,
-                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-                point(sun_radius * 1.5, sun_radius * 1.5)
-            ); //Static sun.
-            draw_sprite(
-                bmp_sun,
-                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-                point(sun_radius * 1.5, sun_radius * 1.5),
-                sun_meter_sun_angle
-            ); //Spinning sun.
-            draw_sprite(
-                bmp_hard_bubble,
-                point(first_dot_x + day_passed_ratio * dots_span, dots_y),
-                point(sun_radius * 1.5, sun_radius * 1.5),
-                0, al_map_rgb(255, 192, 128)
-            ); //Bubble in front the sun.
-            
-            //Day number.
-            draw_sprite(
-                bmp_day_bubble,
-                point(
-                    hud_coords[HUD_ITEM_DAY_BUBBLE][0],
-                    hud_coords[HUD_ITEM_DAY_BUBBLE][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_DAY_BUBBLE][2],
-                    hud_coords[HUD_ITEM_DAY_BUBBLE][3]
-                )
-            );
-            
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_DAY_NUMBER][0],
-                    hud_coords[HUD_ITEM_DAY_NUMBER][1]
-                ),
-                ALLEGRO_ALIGN_CENTER, 1,
-                point(
-                    hud_coords[HUD_ITEM_DAY_NUMBER][2],
-                    hud_coords[HUD_ITEM_DAY_NUMBER][3]
-                ),
-                i2s(day)
-            );
-            
-            //Pikmin count.
-            //Count how many Pikmin only.
-            size_t pikmin_in_group = cur_leader_ptr->group->members.size();
-            for(size_t l = 0; l < leaders.size(); ++l) {
-                //If this leader is following the current one,
-                //then they're not a Pikmin.
-                //Subtract them from the group count total.
-                if(leaders[l]->following_group == cur_leader_ptr) {
-                    pikmin_in_group--;
-                }
-            }
-            
-            //Closest group member.
-            ALLEGRO_BITMAP* bm = NULL;
-            ALLEGRO_BITMAP* bm_maturity = NULL;
-            if(closest_group_member) {
-                if(
-                    closest_group_member->type->category->id ==
-                    MOB_CATEGORY_PIKMIN
-                ) {
-                    pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
-                    bm = p_ptr->pik_type->bmp_icon;
-                    bm_maturity =
-                        p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
-                        
-                } else if(
-                    closest_group_member->type->category->id ==
-                    MOB_CATEGORY_LEADERS
-                ) {
-                    leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
-                    bm = l_ptr->lea_type->bmp_icon;
-                }
-                
-            }
-            
-            size_t n_standby_pikmin = 0;
-            if(cur_leader_ptr->group->cur_standby_type) {
-                for(
-                    size_t m = 0; m < cur_leader_ptr->group->members.size();
-                    ++m
-                ) {
-                    mob* m_ptr = cur_leader_ptr->group->members[m];
-                    if(
-                        m_ptr->subgroup_type_ptr ==
-                        cur_leader_ptr->group->cur_standby_type
-                    ) {
-                        n_standby_pikmin++;
-                    }
-                }
-            }
-            
-            if(!bm) bm = bmp_no_pikmin_bubble;
-            float sprite_w =
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] == -1 ? -1 :
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2] * 0.8;
-            float sprite_h =
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3] == -1 ? -1 :
-                hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3] * 0.8;
-            draw_sprite(
-                bm,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
-                ),
-                point(sprite_w, sprite_h)
-            );
-            if(closest_group_member_distant) {
-                draw_sprite(
-                    bmp_distant_pikmin_marker,
-                    point(
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
-                    ),
-                    point(sprite_w, sprite_h)
-                );
-            }
-            draw_sprite(
-                bmp_bubble,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][2],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_ICON][3]
-                )
-            );
-            
-            if(bm_maturity) {
-                float sprite_w =
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2] == -1 ? -1 :
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2] * 0.8;
-                float sprite_h =
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3] == -1 ? -1 :
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3] * 0.8;
-                draw_sprite(
-                    bm_maturity,
-                    point(
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1]
-                    ),
-                    point(sprite_w, sprite_h)
-                );
-                draw_sprite(
-                    bmp_bubble,
-                    point(
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][0],
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][1]
-                    ),
-                    point(
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][2],
-                        hud_coords[HUD_ITEM_PIKMIN_STANDBY_M_ICON][3]
-                    )
-                );
-            }
-            
-            //Pikmin count "X".
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][1]
-                ),
-                ALLEGRO_ALIGN_CENTER, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][2],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_X][3]
-                ),
-                "x"
-            );
-            
-            //Pikmin count numbers.
-            unsigned long total_pikmin = pikmin_list.size();
-            for(
-                auto o = pikmin_in_onions.begin();
-                o != pikmin_in_onions.end(); ++o
-            ) {
-                total_pikmin += o->second;
-            }
-            
-            draw_sprite(
-                bmp_counter_bubble_standby,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2],
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3]
-                )
-            );
-            draw_sprite(
-                bmp_counter_bubble_group,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0],
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2],
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3]
-                )
-            );
-            draw_sprite(
-                bmp_counter_bubble_field,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0],
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2],
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3]
-                )
-            );
-            draw_sprite(
-                bmp_counter_bubble_total,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0],
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1]
-                ),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2],
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3]
-                )
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][1]
-                ),
-                ALLEGRO_ALIGN_CENTER, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_1][0]
-                ),
-                "/"
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][1]
-                ),
-                ALLEGRO_ALIGN_CENTER, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_2][0]
-                ),
-                "/"
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][1]
-                ),
-                ALLEGRO_ALIGN_CENTER, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0],
-                    hud_coords[HUD_ITEM_PIKMIN_SLASH_3][0]
-                ),
-                "/"
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][0] +
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.4,
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][1]
-                ),
-                ALLEGRO_ALIGN_RIGHT, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][2] * 0.7,
-                    hud_coords[HUD_ITEM_PIKMIN_STANDBY_NR][3] * 0.7
-                ),
-                i2s(n_standby_pikmin)
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][0] +
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.4,
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][1]
-                ),
-                ALLEGRO_ALIGN_RIGHT, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][2] * 0.7,
-                    hud_coords[HUD_ITEM_PIKMIN_GROUP_NR][3] * 0.7
-                ),
-                i2s(pikmin_in_group)
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][0] +
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.4,
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][1]
-                ),
-                ALLEGRO_ALIGN_RIGHT, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][2] * 0.7,
-                    hud_coords[HUD_ITEM_PIKMIN_FIELD_NR][3] * 0.7
-                ),
-                i2s(pikmin_list.size())
-            );
-            draw_compressed_text(
-                font_counter, al_map_rgb(255, 255, 255),
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][0] +
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.4,
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][1]
-                ),
-                ALLEGRO_ALIGN_RIGHT, 1,
-                point(
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][2] * 0.7,
-                    hud_coords[HUD_ITEM_PIKMIN_TOTAL_NR][3] * 0.7
-                ),
-                i2s(total_pikmin)
-            );
-            
-            //Sprays.
-            if(spray_types.size() > 0) {
-                size_t top_spray_nr;
-                if(spray_types.size() < 3) top_spray_nr = 0;
-                else top_spray_nr = selected_spray;
-                
-                draw_sprite(
-                    spray_types[top_spray_nr].bmp_spray,
-                    point(
-                        hud_coords[HUD_ITEM_SPRAY_1_ICON][0],
-                        hud_coords[HUD_ITEM_SPRAY_1_ICON][1]
-                    ),
-                    point(
-                        hud_coords[HUD_ITEM_SPRAY_1_ICON][2],
-                        hud_coords[HUD_ITEM_SPRAY_1_ICON][3]
-                    )
-                );
-                draw_compressed_text(
-                    font_counter, al_map_rgb(255, 255, 255),
-                    point(
-                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][0],
-                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][1]
-                    ),
-                    ALLEGRO_ALIGN_LEFT, 1,
-                    point(
-                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][2],
-                        hud_coords[HUD_ITEM_SPRAY_1_AMOUNT][3]
-                    ),
-                    "x" + i2s(spray_amounts[top_spray_nr])
-                );
-                
-                if(
-                    hud_coords[HUD_ITEM_SPRAY_1_KEY][2] != 0 ||
-                    hud_coords[HUD_ITEM_SPRAY_1_KEY][3] != 0
-                ) {
-                    for(size_t c = 0; c < controls[0].size(); ++c) {
-                        if(
-                            controls[0][c].action == BUTTON_USE_SPRAY_1 ||
-                            controls[0][c].action == BUTTON_USE_SPRAY
-                        ) {
-                            draw_control(
-                                font_main, controls[0][c],
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][0],
-                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][1]
-                                ),
-                                point(
-                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][2],
-                                    hud_coords[HUD_ITEM_SPRAY_1_KEY][3]
-                                )
-                            );
-                            break;
-                        }
-                    }
-                }
-                
-                if(spray_types.size() == 2) {
-                    draw_sprite(
-                        spray_types[1].bmp_spray,
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_2_ICON][0],
-                            hud_coords[HUD_ITEM_SPRAY_2_ICON][1]
-                        ),
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_2_ICON][2],
-                            hud_coords[HUD_ITEM_SPRAY_2_ICON][3]
-                        )
-                    );
-                    draw_compressed_text(
-                        font_counter, al_map_rgb(255, 255, 255),
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][0],
-                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][1]
-                        ),
-                        ALLEGRO_ALIGN_LEFT, 1,
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][2],
-                            hud_coords[HUD_ITEM_SPRAY_2_AMOUNT][3]
-                        ),
-                        "x" + i2s(spray_amounts[1])
-                    );
-                    if(
-                        hud_coords[HUD_ITEM_SPRAY_2_KEY][2] != 0 ||
-                        hud_coords[HUD_ITEM_SPRAY_2_KEY][3] != 0
-                    ) {
-                        for(size_t c = 0; c < controls[0].size(); ++c) {
-                            if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
-                                draw_control(
-                                    font_main, controls[0][c],
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][0],
-                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][1]
-                                    ),
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][2],
-                                        hud_coords[HUD_ITEM_SPRAY_2_KEY][3]
-                                    )
-                                );
-                                break;
-                            }
-                        }
-                    }
-                    
-                } else if(spray_types.size() > 2) {
-                    draw_sprite(
-                        spray_types[
-                            sum_and_wrap(selected_spray, -1, spray_types.size())
-                        ].bmp_spray,
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][0],
-                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][1]
-                        ),
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][2],
-                            hud_coords[HUD_ITEM_SPRAY_PREV_ICON][3]
-                        )
-                    );
-                    draw_sprite(
-                        spray_types[
-                            sum_and_wrap(selected_spray, 1, spray_types.size())
-                        ].bmp_spray,
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][0],
-                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][1]
-                        ),
-                        point(
-                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][2],
-                            hud_coords[HUD_ITEM_SPRAY_NEXT_ICON][3]
-                        )
-                    );
-                    
-                    if(
-                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2] != 0 ||
-                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3] != 0
-                    ) {
-                        for(size_t c = 0; c < controls[0].size(); ++c) {
-                            if(controls[0][c].action == BUTTON_PREV_SPRAY) {
-                                draw_control(
-                                    font_main, controls[0][c],
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][0],
-                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][1]
-                                    ),
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][2],
-                                        hud_coords[HUD_ITEM_SPRAY_PREV_KEY][3]
-                                    )
-                                );
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if(
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2] != 0 ||
-                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3] != 0
-                    ) {
-                        for(size_t c = 0; c < controls[0].size(); ++c) {
-                            if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
-                                draw_control(
-                                    font_main, controls[0][c],
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][0],
-                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][1]
-                                    ),
-                                    point(
-                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][2],
-                                        hud_coords[HUD_ITEM_SPRAY_NEXT_KEY][3]
-                                    )
-                                );
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        
-            
-        } else { //Show a message.
-        
-            draw_sprite(
-                bmp_message_box,
-                point(scr_w / 2, scr_h - font_main_h * 2 - 4),
-                point(scr_w - 16, font_main_h * 4)
-            );
-            
-            if(cur_message_speaker) {
-                draw_sprite(
-                    cur_message_speaker,
-                    point(40, scr_h - font_main_h * 4 - 16),
-                    point(48, 48)
-                );
-                draw_sprite(
-                    bmp_bubble,
-                    point(40, scr_h - font_main_h * 4 - 16),
-                    point(64, 64)
-                );
-            }
-            
-            string text =
-                cur_message.substr(
-                    cur_message_stopping_chars[cur_message_section],
-                    cur_message_char -
-                    cur_message_stopping_chars[cur_message_section]
-                );
-            vector<string> lines = split(text, "\n");
-            
-            for(size_t l = 0; l < lines.size(); ++l) {
-            
-                draw_compressed_text(
-                    font_main, al_map_rgb(255, 255, 255),
-                    point(24, scr_h - font_main_h * (4 - l) + 8),
-                    ALLEGRO_ALIGN_LEFT, 0, point(scr_w - 64, 0),
-                    lines[l]
-                );
-                
-            }
+            draw_sprite_in_box(bmp_bubble, i_center, i_size);
             
         }
+        
+        //Health wheel.
+        if(hud_items.get_draw_data(health_id, &i_center, &i_size)) {
+            draw_health(
+                i_center,
+                leaders[l_nr]->health, leaders[l_nr]->type->max_health,
+                min(i_size.x, i_size.y) * 0.4f,
+                true
+            );
+            draw_sprite_in_box(bmp_hard_bubble, i_center, i_size);
+        }
+        
+    }
+    
+    //Sun Meter.
+    if(hud_items.get_draw_data(HUD_ITEM_TIME, &i_center, &i_size)) {
+        unsigned char n_hours =
+            (day_minutes_end - day_minutes_start) / 60.0f;
+        float day_passed_ratio =
+            (float) (day_minutes - day_minutes_start) /
+            (float) (day_minutes_end - day_minutes_start);
+        float sun_radius = i_size.y / 2.0;
+        float first_dot_x = (i_center.x - i_size.x / 2.0) + sun_radius;
+        float last_dot_x = (i_center.x + i_size.x / 2.0) - sun_radius;
+        float dots_y = i_center.y;
+        //Width, from the center of the first dot to the center of the last.
+        float dots_span = last_dot_x - first_dot_x;
+        float dot_interval = dots_span / (float) n_hours;
+        float sun_meter_sun_angle = area_time_passed * SUN_METER_SUN_SPIN_SPEED;
+            
+        //Larger bubbles at the start, middle and end of the meter.
+        al_hold_bitmap_drawing(true);
+        draw_sprite(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 0.0, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        draw_sprite(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 0.5, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        draw_sprite(
+            bmp_hard_bubble, point(first_dot_x + dots_span * 1.0, dots_y),
+            point(sun_radius * 0.9, sun_radius * 0.9)
+        );
+        
+        for(unsigned char h = 0; h < n_hours + 1; ++h) {
+            draw_sprite(
+                bmp_hard_bubble,
+                point(first_dot_x + h * dot_interval, dots_y),
+                point(sun_radius * 0.6, sun_radius * 0.6)
+            );
+        }
+        al_hold_bitmap_drawing(false);
+        
+        //Static sun.
+        draw_sprite(
+            bmp_sun,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5)
+        );
+        //Spinning sun.
+        draw_sprite(
+            bmp_sun,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5),
+            sun_meter_sun_angle
+        );
+        //Bubble in front the sun.
+        draw_sprite(
+            bmp_hard_bubble,
+            point(first_dot_x + day_passed_ratio * dots_span, dots_y),
+            point(sun_radius * 1.5, sun_radius * 1.5),
+            0, al_map_rgb(255, 192, 128)
+        );
+    }
+    
+    //Day number bubble.
+    if(hud_items.get_draw_data(HUD_ITEM_DAY_BUBBLE, &i_center, &i_size)) {
+        draw_sprite_in_box(bmp_day_bubble, i_center, i_size);
+    }
+    
+    //Day number text.
+    if(hud_items.get_draw_data(HUD_ITEM_DAY_NUMBER, &i_center, &i_size)) {
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            i_center, ALLEGRO_ALIGN_CENTER, 1,
+            i_size, i2s(day)
+        );
+    }
+    
+    //Standby group member.
+    ALLEGRO_BITMAP* standby_bmp = NULL;
+    ALLEGRO_BITMAP* standby_mat_bmp = NULL;
+    if(closest_group_member) {
+        if(
+            closest_group_member->type->category->id ==
+            MOB_CATEGORY_PIKMIN
+        ) {
+            pikmin* p_ptr = dynamic_cast<pikmin*>(closest_group_member);
+            standby_bmp = p_ptr->pik_type->bmp_icon;
+            standby_mat_bmp =
+                p_ptr->pik_type->bmp_maturity_icon[p_ptr->maturity];
+                
+        } else if(
+            closest_group_member->type->category->id ==
+            MOB_CATEGORY_LEADERS
+        ) {
+            leader* l_ptr = dynamic_cast<leader*>(closest_group_member);
+            standby_bmp = l_ptr->lea_type->bmp_icon;
+        }
+        
+    }
+    if(!standby_bmp) standby_bmp = bmp_no_pikmin_bubble;
+    
+    //Standby group member icon.
+    if(
+        hud_items.get_draw_data(
+            HUD_ITEM_PIKMIN_STANDBY_ICON, &i_center, &i_size
+        )
+    ) {
+        draw_sprite_in_box(standby_bmp, i_center, i_size * 0.8);
+        if(closest_group_member_distant) {
+            draw_sprite_in_box(
+                bmp_distant_pikmin_marker, i_center, i_size * 0.8
+            );
+        }
+        draw_sprite_in_box(bmp_bubble, i_center, i_size);
+    }
+    
+    //Standby group member maturity.
+    if(
+        hud_items.get_draw_data(
+            HUD_ITEM_PIKMIN_STANDBY_M_ICON, &i_center, &i_size
+        )
+    ) {
+        if(standby_mat_bmp) {
+            draw_sprite_in_box(standby_mat_bmp, i_center, i_size * 0.8);
+            draw_sprite_in_box(bmp_bubble, i_center, i_size);
+        }
+    }
+    
+    //Pikmin count "x".
+    if(hud_items.get_draw_data(HUD_ITEM_PIKMIN_STANDBY_X, &i_center, &i_size)) {
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "x"
+        );
+    }
+    
+    //Standby group member count.
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_STANDBY_NR, &i_center, &i_size)
+    ) {
+        size_t n_standby_pikmin = 0;
+        if(cur_leader_ptr->group->cur_standby_type) {
+            for(
+                size_t m = 0; m < cur_leader_ptr->group->members.size();
+                ++m
+            ) {
+                mob* m_ptr = cur_leader_ptr->group->members[m];
+                if(
+                    m_ptr->subgroup_type_ptr ==
+                    cur_leader_ptr->group->cur_standby_type
+                ) {
+                    n_standby_pikmin++;
+                }
+            }
+        }
+        
+        draw_sprite(bmp_counter_bubble_standby, i_center, i_size);
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            point(i_center.x + i_size.x * 0.4, i_center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(n_standby_pikmin)
+        );
+    }
+    
+    //Group Pikmin count.
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_GROUP_NR, &i_center, &i_size)
+    ) {
+        size_t pikmin_in_group = cur_leader_ptr->group->members.size();
+        for(size_t l = 0; l < leaders.size(); ++l) {
+            //If this leader is following the current one,
+            //then they're not a Pikmin.
+            //Subtract them from the group count total.
+            if(leaders[l]->following_group == cur_leader_ptr) {
+                pikmin_in_group--;
+            }
+        }
+        
+        draw_sprite(bmp_counter_bubble_group, i_center, i_size);
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            point(i_center.x + i_size.x * 0.4, i_center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(pikmin_in_group)
+        );
+    }
+    
+    //Field Pikmin count.
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_FIELD_NR, &i_center, &i_size)
+    ) {
+        draw_sprite(bmp_counter_bubble_field, i_center, i_size);
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            point(i_center.x + i_size.x * 0.4, i_center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(pikmin_list.size())
+        );
+    }
+    
+    //Total Pikmin count.
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_TOTAL_NR, &i_center, &i_size)
+    ) {
+        unsigned long total_pikmin = pikmin_list.size();
+        for(
+            auto o = pikmin_in_onions.begin();
+            o != pikmin_in_onions.end(); ++o
+        ) {
+            total_pikmin += o->second;
+        }
+        
+        draw_sprite(bmp_counter_bubble_total, i_center, i_size);
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            point(i_center.x + i_size.x * 0.4, i_center.y),
+            ALLEGRO_ALIGN_RIGHT, 1, i_size * 0.7, i2s(total_pikmin)
+        );
+    }
+    
+    //Pikmin counter slashes.
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_1, &i_center, &i_size)
+    ) {
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
+        );
+    }
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_2, &i_center, &i_size)
+    ) {
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
+        );
+    }
+    if(
+        hud_items.get_draw_data(HUD_ITEM_PIKMIN_SLASH_3, &i_center, &i_size)
+    ) {
+        draw_compressed_text(
+            font_counter, al_map_rgb(255, 255, 255),
+            i_center, ALLEGRO_ALIGN_CENTER, 1, i_size, "/"
+        );
+    }
+    
+    
+    //Sprays.
+    if(spray_types.size() > 0) {
+        size_t top_spray_nr;
+        if(spray_types.size() <= 2) top_spray_nr = 0;
+        else top_spray_nr = selected_spray;
+        
+        //Top or current spray.
+        if(
+            hud_items.get_draw_data(HUD_ITEM_SPRAY_1_ICON, &i_center, &i_size)
+        ) {
+            draw_sprite_in_box(
+                spray_types[top_spray_nr].bmp_spray, i_center, i_size
+            );
+        }
+        
+        if(
+            hud_items.get_draw_data(HUD_ITEM_SPRAY_1_AMOUNT, &i_center, &i_size)
+        ) {
+            draw_compressed_text(
+                font_counter, al_map_rgb(255, 255, 255),
+                point(i_center.x - i_size.x / 2.0, i_center.y),
+                ALLEGRO_ALIGN_LEFT, 1, i_size,
+                "x" + i2s(spray_amounts[top_spray_nr])
+            );
+        }
+        
+        if(
+            hud_items.get_draw_data(HUD_ITEM_SPRAY_1_BUTTON, &i_center, &i_size)
+        ) {
+            for(size_t c = 0; c < controls[0].size(); ++c) {
+                if(
+                    (
+                        controls[0][c].action == BUTTON_USE_SPRAY_1 &&
+                        spray_types.size() <= 2
+                    ) || (
+                        controls[0][c].action == BUTTON_USE_SPRAY &&
+                        spray_types.size() >= 3
+                    )
+                ) {
+                    draw_control(font_main, controls[0][c], i_center, i_size);
+                    break;
+                }
+            }
+        }
+        
+        if(spray_types.size() == 2) {
+            
+            //Secondary spray, when there're only two types.
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_2_ICON, &i_center, &i_size
+                )
+            ) {
+                draw_sprite_in_box(spray_types[1].bmp_spray, i_center, i_size);
+            }
+            
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_2_AMOUNT, &i_center, &i_size
+                )
+            ) {
+            
+                draw_compressed_text(
+                    font_counter, al_map_rgb(255, 255, 255),
+                    point(i_center.x - i_size.x / 2.0, i_center.y),
+                    ALLEGRO_ALIGN_LEFT, 1, i_size,
+                    "x" + i2s(spray_amounts[1])
+                );
+            }
+            
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_2_BUTTON, &i_center, &i_size
+                )
+            ) {
+                for(size_t c = 0; c < controls[0].size(); ++c) {
+                    if(controls[0][c].action == BUTTON_USE_SPRAY_2) {
+                        draw_control(
+                            font_main, controls[0][c], i_center, i_size
+                        );
+                        break;
+                    }
+                }
+            }
+            
+        } else if(spray_types.size() >= 3) {
+            
+            //Previous spray info.
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_PREV_ICON, &i_center, &i_size
+                )
+            ) {
+                draw_sprite_in_box(
+                    spray_types[
+                        sum_and_wrap(selected_spray, -1, spray_types.size())
+                    ].bmp_spray,
+                    i_center, i_size
+                );
+            }
+            
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_PREV_BUTTON, &i_center, &i_size
+                )
+            ) {
+                for(size_t c = 0; c < controls[0].size(); ++c) {
+                    if(controls[0][c].action == BUTTON_PREV_SPRAY) {
+                        draw_control(
+                            font_main, controls[0][c], i_center, i_size
+                        );
+                        break;
+                    }
+                }
+            }
+            
+            //Next spray info.
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_NEXT_ICON, &i_center, &i_size
+                )
+            ) {
+                draw_sprite_in_box(
+                    spray_types[
+                        sum_and_wrap(selected_spray, 1, spray_types.size())
+                    ].bmp_spray,
+                    i_center, i_size
+                );
+            }
+            
+            if(
+                hud_items.get_draw_data(
+                    HUD_ITEM_SPRAY_NEXT_BUTTON, &i_center, &i_size
+                )
+            ) {
+                for(size_t c = 0; c < controls[0].size(); ++c) {
+                    if(controls[0][c].action == BUTTON_NEXT_SPRAY) {
+                        draw_control(
+                            font_main, controls[0][c], i_center, i_size
+                        );
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -1283,6 +1073,52 @@ void gameplay::draw_lighting_filter() {
 
 
 /* ----------------------------------------------------------------------------
+ * Draws a message box.
+ */
+void gameplay::draw_message_box() {
+    al_use_transform(&identity_transform);
+    
+    draw_sprite(
+        bmp_message_box,
+        point(scr_w / 2, scr_h - font_main_h * 2 - 4),
+        point(scr_w - 16, font_main_h * 4)
+    );
+    
+    if(cur_message_speaker) {
+        draw_sprite(
+            cur_message_speaker,
+            point(40, scr_h - font_main_h * 4 - 16),
+            point(48, 48)
+        );
+        draw_sprite(
+            bmp_bubble,
+            point(40, scr_h - font_main_h * 4 - 16),
+            point(64, 64)
+        );
+    }
+    
+    string text =
+        cur_message.substr(
+            cur_message_stopping_chars[cur_message_section],
+            cur_message_char -
+            cur_message_stopping_chars[cur_message_section]
+        );
+    vector<string> lines = split(text, "\n");
+    
+    for(size_t l = 0; l < lines.size(); ++l) {
+    
+        draw_compressed_text(
+            font_main, al_map_rgb(255, 255, 255),
+            point(24, scr_h - font_main_h * (4 - l) + 8),
+            ALLEGRO_ALIGN_LEFT, 0, point(scr_w - 64, 0),
+            lines[l]
+        );
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Draws the mobs.
  */
 void gameplay::draw_mobs(ALLEGRO_BITMAP* bmp_output) {
@@ -1518,17 +1354,8 @@ void draw_control(
         //If it's a mouse click, just draw the icon and be done with it.
         if(c.button >= 1 && c.button <= 3) {
         
-            point bmp_size(
-                al_get_bitmap_width(bmp_mouse_button_icon[c.button - 1]),
-                al_get_bitmap_height(bmp_mouse_button_icon[c.button - 1])
-            );
-            draw_sprite(
-                bmp_mouse_button_icon[c.button - 1],
-                where,
-                point(
-                    min((float) bmp_size.x, max_size.x),
-                    min((float) bmp_size.y, max_size.y)
-                )
+            draw_sprite_in_box(
+                bmp_mouse_button_icon[c.button - 1], where, max_size
             );
             return;
             
@@ -1545,15 +1372,7 @@ void draw_control(
             b = bmp_mouse_wd_icon;
         }
         
-        int bmp_w = al_get_bitmap_width(b);
-        int bmp_h = al_get_bitmap_height(b);
-        draw_sprite(
-            b, where,
-            point(
-                min((float) bmp_w, max_size.x),
-                min((float) bmp_h, max_size.y)
-            )
-        );
+        draw_sprite_in_box(b, where, max_size);
         return;
     }
     
@@ -2753,6 +2572,32 @@ void draw_sprite(
         angle,
         0
     );
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a sprite, but keeps its aspect ratio,
+ * and scales it to fit in an imaginary box.
+ * bmp:      The bitmap.
+ * center:   Center coordinates.
+ * box_size: Width and height of the box.
+ * angle:    Angle to rotate the sprite by.
+ *   The box does not take angling into account.
+ * tint:     Tint the sprite with this color.
+ */
+void draw_sprite_in_box(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &box_size, const float angle, const ALLEGRO_COLOR &tint
+) {
+    if(box_size.x == 0 || box_size.y == 0) return;
+    float w_diff = al_get_bitmap_width(bmp) / box_size.x;
+    float h_diff = al_get_bitmap_height(bmp) / box_size.y;
+    
+    if(w_diff > h_diff) {
+        draw_sprite(bmp, center, point(box_size.x, -1), angle, tint);
+    } else {
+        draw_sprite(bmp, center, point(-1, box_size.y), angle, tint);
+    }
 }
 
 

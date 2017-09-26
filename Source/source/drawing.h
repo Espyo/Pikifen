@@ -84,6 +84,11 @@ void draw_sprite(
     const point &size, const float angle = 0,
     const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
 );
+void draw_sprite_in_box(
+    ALLEGRO_BITMAP* bmp, const point &center,
+    const point &box_size, const float angle = 0,
+    const ALLEGRO_COLOR &tint = al_map_rgb(255, 255, 255)
+);
 void draw_sprite_with_effects(
     ALLEGRO_BITMAP* bmp, const point &center,
     const point &size, const float angle,
