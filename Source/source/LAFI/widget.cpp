@@ -321,6 +321,19 @@ void widget::draw() {
 
 
 /* ----------------------------------------------------------------------------
+ * Ticks one frame worth of time. This updates all child widgets, so don't
+ * call the child tick() functions too.
+ */
+void widget::tick(const float time) {
+    widget_on_tick(time);
+    
+    for(auto w = widgets.begin(); w != widgets.end(); ++w) {
+        if(w->second) w->second->tick(time);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Handles an Allegro event. The most important part of this
  * is handling the mouse and keyboard events, so that each
  * sub-class of widget can do whatever with them.
@@ -495,14 +508,15 @@ void widget::show() {
 
 
 
-void widget::widget_on_mouse_move(int, int) { }
-void widget::widget_on_left_mouse_click(int, int) { }
-void widget::widget_on_mouse_down(int, int, int) { }
-void widget::widget_on_mouse_up(int, int, int) { }
-void widget::widget_on_mouse_wheel(int, int) { }
+void widget::widget_on_mouse_move(const int, const int) { }
+void widget::widget_on_left_mouse_click(const int, const int) { }
+void widget::widget_on_mouse_down(const int, const int, const int) { }
+void widget::widget_on_mouse_up(const int, const int, const int) { }
+void widget::widget_on_mouse_wheel(const int, const int) { }
 void widget::widget_on_mouse_enter() { }
 void widget::widget_on_mouse_leave() { }
-void widget::widget_on_key_char(int, int, unsigned int) { }
+void widget::widget_on_key_char(const int, const int, const unsigned int) { }
+void widget::widget_on_tick(const float) { }
 void widget::init() { }
 
 

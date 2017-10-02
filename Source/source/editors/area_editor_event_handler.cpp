@@ -155,6 +155,37 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             handle_key_up(ev);
         }
         
+    } else if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(!is_gui_focused) {
+            handle_key_char(ev);
+        }
+        
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a key being "char"-typed.
+ */
+void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
+    if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+        cam_pos.x -= DEF_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+        cam_pos.x += DEF_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
+        cam_pos.y -= DEF_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
+        cam_pos.y += DEF_GRID_INTERVAL / cam_zoom;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
+        zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
+        zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
+        
     }
 }
 
@@ -163,11 +194,120 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down.
  */
 void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
-    //TODO.
     if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE && !selecting) {
         selected_edges.clear();
         selected_sectors.clear();
         selected_vertexes.clear();
+        selected_mobs.clear();
+        selected_path_stops.clear();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
+    
+        if(
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        ) {
+            selected_edges.insert(
+                cur_area_data.edges.begin(), cur_area_data.edges.end()
+            );
+            selected_sectors.insert(
+                cur_area_data.sectors.begin(), cur_area_data.sectors.end()
+            );
+            selected_vertexes.insert(
+                cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
+            );
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+            selected_mobs.insert(
+                cur_area_data.mob_generators.begin(),
+                cur_area_data.mob_generators.end()
+            );
+            
+        } else if(state == EDITOR_STATE_PATHS) {
+            selected_path_stops.insert(
+                cur_area_data.path_stops.begin(),
+                cur_area_data.path_stops.end()
+            );
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+        bool got_something = false;
+        point min_coords, max_coords;
+        
+        for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+            vertex* v_ptr = cur_area_data.vertexes[v];
+            if(v_ptr->x < min_coords.x || !got_something) {
+                min_coords.x = v_ptr->x;
+            }
+            if(v_ptr->y < min_coords.y || !got_something) {
+                min_coords.y = v_ptr->y;
+            }
+            if(v_ptr->x > max_coords.x || !got_something) {
+                max_coords.x = v_ptr->x;
+            }
+            if(v_ptr->y > max_coords.y || !got_something) {
+                max_coords.y = v_ptr->y;
+            }
+            got_something = true;
+        }
+        
+        for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+            mob_gen* m_ptr = cur_area_data.mob_generators[m];
+            if(m_ptr->pos.x < min_coords.x || !got_something) {
+                min_coords.x = m_ptr->pos.x;
+            }
+            if(m_ptr->pos.y < min_coords.y || !got_something) {
+                min_coords.y = m_ptr->pos.y;
+            }
+            if(m_ptr->pos.x > max_coords.x || !got_something) {
+                max_coords.x = m_ptr->pos.x;
+            }
+            if(m_ptr->pos.y > max_coords.y || !got_something) {
+                max_coords.y = m_ptr->pos.y;
+            }
+            got_something = true;
+        }
+        
+        for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+            path_stop* s_ptr = cur_area_data.path_stops[s];
+            if(s_ptr->pos.x < min_coords.x || !got_something) {
+                min_coords.x = s_ptr->pos.x;
+            }
+            if(s_ptr->pos.y < min_coords.y || !got_something) {
+                min_coords.y = s_ptr->pos.y;
+            }
+            if(s_ptr->pos.x > max_coords.x || !got_something) {
+                max_coords.x = s_ptr->pos.x;
+            }
+            if(s_ptr->pos.y > max_coords.y || !got_something) {
+                max_coords.y = s_ptr->pos.y;
+            }
+            got_something = true;
+        }
+        
+        if(!got_something) return;
+        
+        //Place the camera in the center.
+        cam_pos = (min_coords + max_coords) / 2.0f;
+        
+        //Reset the transformations, first.
+        zoom(1.0, false);
+        
+        //Transform the points so we can know, at 1.0 zoom, where in the screen
+        //the points would be, so we can know how much to scale by such that
+        //they would align with the actual screen space.
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &min_coords.x, &min_coords.y
+        );
+        al_transform_coordinates(
+            &world_to_screen_transform,
+            &max_coords.x, &max_coords.y
+        );
+        float w_ratio = (gui_x - 8) / (max_coords.x - min_coords.x);
+        float h_ratio = (scr_h - 48 - 8) / (max_coords.y - min_coords.y);
+        zoom(min(w_ratio, h_ratio), false);
     }
 }
 
@@ -185,6 +325,7 @@ void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     //TODO
+    handle_lmb_down(ev);
 }
 
 
@@ -193,7 +334,6 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     //TODO
-    
     if(
         state == EDITOR_STATE_LAYOUT ||
         state == EDITOR_STATE_ASA ||
@@ -246,6 +386,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             selection_end = mouse_cursor_w;
         }
         
+        selection_homogenized = false;
         sector_to_gui();
         asa_to_gui();
         asb_to_gui();
@@ -272,6 +413,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             selection_end = mouse_cursor_w;
         }
         
+        selection_homogenized = false;
         mob_to_gui();
         
     } else if(state == EDITOR_STATE_PATHS) {
@@ -382,6 +524,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
+            selection_homogenized = false;
             sector_to_gui();
             asa_to_gui();
             asb_to_gui();
@@ -404,6 +547,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
+            selection_homogenized = false;
             mob_to_gui();
             
         } else if(state == EDITOR_STATE_PATHS) {

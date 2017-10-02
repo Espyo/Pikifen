@@ -23,12 +23,14 @@ void area_editor::do_drawing() {
     
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
-    float selection_opacity = 0.25 + (sin(selection_effect) + 1) * 0.25;
-    
     if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
     
+        float selection_min_opacity = 0.25f;
+        float selection_max_opacity = 0.75f;
         float textures_opacity = 0.4f;
         float edges_opacity = 0.25f;
+        float grid_opacity = 1.0f;
+        float mob_opacity = 0.15f;
         if(
             state == EDITOR_STATE_LAYOUT ||
             state == EDITOR_STATE_ASB ||
@@ -36,11 +38,28 @@ void area_editor::do_drawing() {
         ) {
             textures_opacity = 0.5f;
             edges_opacity = 1.0f;
+            
+        } else if(state == EDITOR_STATE_MOBS) {
+            mob_opacity = 1.0f;
+            
+        } else if(state == EDITOR_STATE_MAIN) {
+            textures_opacity = 0.6f;
+            edges_opacity = 0.5f;
+            grid_opacity = 0.3f;
+            mob_opacity = 0.6f;
+            
         }
-        if(state == EDITOR_STATE_MAIN) {
-            textures_opacity = 0.5f;
+        if(state == EDITOR_STATE_ASA) {
+            selection_min_opacity = 0.0f;
+            selection_max_opacity = 0.0f;
+            textures_opacity = 1.0f;
         }
         
+        float selection_opacity =
+            selection_min_opacity +
+            (sin(selection_effect) + 1) *
+            (selection_max_opacity - selection_min_opacity) / 2.0;
+            
         //Sectors.
         size_t n_sectors = cur_area_data.sectors.size();
         for(size_t s = 0; s < n_sectors; ++s) {
@@ -93,11 +112,11 @@ void area_editor::do_drawing() {
         float x =
             floor(cam_top_left_corner.x / grid_interval) * grid_interval;
         while(x < cam_bottom_right_corner.x + grid_interval) {
-            ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
+            ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
             bool draw_line = true;
             
             if(fmod(x, grid_interval * 2) == 0) {
-                c = al_map_rgb(64, 64, 64);
+                c = al_map_rgba(64, 64, 64, grid_opacity * 255);
                 if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
             } else {
                 if(grid_interval * cam_zoom <= 6) draw_line = false;
@@ -116,11 +135,11 @@ void area_editor::do_drawing() {
         float y =
             floor(cam_top_left_corner.y / grid_interval) * grid_interval;
         while(y < cam_bottom_right_corner.y + grid_interval) {
-            ALLEGRO_COLOR c = al_map_rgb(48, 48, 48);
+            ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
             bool draw_line = true;
             
             if(fmod(y, grid_interval * 2) == 0) {
-                c = al_map_rgb(64, 64, 64);
+                c = al_map_rgba(64, 64, 64, grid_opacity * 255);
                 if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
             } else {
                 if(grid_interval * cam_zoom <= 6) draw_line = false;
@@ -139,11 +158,13 @@ void area_editor::do_drawing() {
         //0,0 marker.
         al_draw_line(
             -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0,
-            al_map_rgb(128, 128, 255), 1.0 / cam_zoom
+            al_map_rgba(128, 128, 255, grid_opacity * 255),
+            1.0 / cam_zoom
         );
         al_draw_line(
             0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2,
-            al_map_rgb(128, 128, 255), 1.0 / cam_zoom
+            al_map_rgba(128, 128, 255, grid_opacity * 255),
+            1.0 / cam_zoom
         );
         
         //Edges.
@@ -318,11 +339,6 @@ void area_editor::do_drawing() {
         }
         
         //Mobs.
-        float mob_opacity = 0.15f;
-        if(state == EDITOR_STATE_MOBS) {
-            mob_opacity = 1.0f;
-        }
-        
         for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
             mob_gen* m_ptr = cur_area_data.mob_generators[m];
             bool valid = m_ptr->type != NULL;

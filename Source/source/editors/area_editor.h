@@ -27,6 +27,17 @@ private:
         void destroy();
     };
     
+    //This struct represents the selected sectors, mobs, etc.
+    struct selection_representation {
+        //How many sectors, mobs, etc. are currently selected.
+        size_t nr_selections;
+        //Has the user confirmed that all of the selected sectors, mobs, etc.
+        //should use the same properties?
+        bool homogenous;
+        //Sector, mob, etc. that represents the homogenous selection.
+        void* representative;
+    };
+    
     
     enum EDITOR_STATES {
         EDITOR_STATE_INFO,
@@ -60,6 +71,7 @@ private:
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
+    static const float         KEYBOARD_CAM_ZOOM;
     static const float         PATH_LINK_THICKNESS;
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
@@ -90,11 +102,13 @@ private:
     lafi::frame* frm_area;
     lafi::frame* frm_layout;
     lafi::frame* frm_sector;
+    lafi::frame* frm_sector_multi;
     lafi::frame* frm_asb;
     lafi::frame* frm_texture;
     lafi::frame* frm_asa;
     lafi::frame* frm_mobs;
     lafi::frame* frm_mob;
+    lafi::frame* frm_mob_multi;
     lafi::frame* frm_paths;
     lafi::frame* frm_details;
     lafi::frame* frm_shadow;
@@ -148,6 +162,8 @@ private:
     set<sector*> selected_sectors;
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
+    //Has the user agreed to homogenize the selection?
+    bool selection_homogenized;
     //Is the user currently performing a rectangle box?
     bool selecting;
     //The selection's alpha depends on this value.
@@ -170,22 +186,24 @@ private:
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
     edge* get_edge_under_mouse();
-    mob_gen* get_lone_selected_mob();
-    sector* get_lone_selected_sector();
     float get_mob_gen_radius(mob_gen* m);
     mob_gen* get_mob_under_mouse();
     path_stop* get_path_stop_under_mouse();
     sector* get_sector_under_mouse();
     vertex* get_vertex_under_mouse();
+    void homogenize_selected_mobs();
+    void homogenize_selected_sectors();
     void load_area(const bool from_backup);
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
     void select_different_hazard(const bool next);
+    void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);
-    void zoom(const float new_zoom);
+    void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     //Input handler functions.
+    void handle_key_char(const ALLEGRO_EVENT &ev);
     void handle_key_down(const ALLEGRO_EVENT &ev);
     void handle_key_up(const ALLEGRO_EVENT &ev);
     void handle_lmb_double_click(const ALLEGRO_EVENT &ev);

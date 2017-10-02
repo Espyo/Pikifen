@@ -26,6 +26,8 @@ const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //Maximum number of texture suggestions.
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+//How much to zoom in/out with the keyboard keys.
+const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //Thickness to use when drawing a path link line.
 const float area_editor::PATH_LINK_THICKNESS = 2.0f;
 //Radius to use when drawing a path stop circle.
@@ -117,6 +119,8 @@ void area_editor::create_new_from_picker(const string &name) {
  */
 void area_editor::do_logic() {
 
+    gui->tick(delta_t);
+    
     update_transformations();
     
     if(double_click_time > 0) {
@@ -161,30 +165,6 @@ edge* area_editor::get_edge_under_mouse() {
         }
     }
     
-    return NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the selected mob, if any, and if there is only one.
- * NULL otherwise.
- */
-mob_gen* area_editor::get_lone_selected_mob() {
-    if(selected_mobs.size() == 1) {
-        return *selected_mobs.begin();
-    }
-    return NULL;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns the selected sector, if any, and if there is only one.
- * NULL otherwise.
- */
-sector* area_editor::get_lone_selected_sector() {
-    if(selected_sectors.size() == 1) {
-        return *selected_sectors.begin();
-    }
     return NULL;
 }
 
@@ -270,6 +250,49 @@ vertex* area_editor::get_vertex_under_mouse() {
 
 
 /* ----------------------------------------------------------------------------
+ * Homogenizes all selected mobs,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_mobs() {
+    mob_gen* base = *selected_mobs.begin();
+    for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+        if(m == selected_mobs.begin()) continue;
+        mob_gen* m_ptr = *m;
+        m_ptr->category = base->category;
+        m_ptr->type = base->type;
+        m_ptr->angle = base->angle;
+        m_ptr->vars = base->vars;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Homogenizes all selected sectors,
+ * based on the one at the head of the selection.
+ */
+void area_editor::homogenize_selected_sectors() {
+    sector* base = *selected_sectors.begin();
+    for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
+        if(s == selected_sectors.begin()) continue;
+        sector* s_ptr = *s;
+        s_ptr->type = base->type;
+        s_ptr->z = base->z;
+        s_ptr->tag = base->tag;
+        s_ptr->hazard_floor = base->hazard_floor;
+        s_ptr->hazards_str = base->hazards_str;
+        s_ptr->brightness = base->brightness;
+        update_sector_texture(s_ptr, base->texture_info.file_name);
+        s_ptr->texture_info.rot = base->texture_info.rot;
+        s_ptr->texture_info.scale = base->texture_info.scale;
+        s_ptr->texture_info.tint = base->texture_info.tint;
+        s_ptr->texture_info.translation = base->texture_info.translation;
+        s_ptr->always_cast_shadow = base->always_cast_shadow;
+        s_ptr->fade = base->fade;
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Load the area from the disk.
  * from_backup: If false, load it normally. If true, load from a backup, if any.
  */
@@ -337,6 +360,19 @@ void area_editor::unload() {
 
 
 /* ----------------------------------------------------------------------------
+ * Updates a sector's texture.
+ */
+void area_editor::update_sector_texture(sector* s_ptr, const string file_name) {
+    bitmaps.detach(
+        TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
+    );
+    s_ptr->texture_info.file_name = file_name;
+    s_ptr->texture_info.bitmap =
+        bitmaps.get(TEXTURES_FOLDER_NAME + "/" + file_name);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Updates the list of texture suggestions, adding a new one or bumping it up.
  */
 void area_editor::update_texture_suggestions(const string &n) {
@@ -395,28 +431,31 @@ void area_editor::update_transformations() {
 
 
 /* ----------------------------------------------------------------------------
- * Zooms in or out to a specific amount, keeping the mouse cursor
+ * Zooms in or out to a specific amount, optionally keeping the mouse cursor
  * in the same spot.
  */
-void area_editor::zoom(const float new_zoom) {
+void area_editor::zoom(const float new_zoom, const bool anchor_cursor) {
     cam_zoom =
         clamp(new_zoom, ZOOM_MIN_LEVEL_EDITOR, ZOOM_MAX_LEVEL_EDITOR);
         
-    //Keep a backup of the old mouse coordinates.
-    point old_mouse_pos = mouse_cursor_w;
+    if(anchor_cursor) {
+        //Keep a backup of the old mouse coordinates.
+        point old_mouse_pos = mouse_cursor_w;
+        
+        //Figure out where the mouse will be after the zoom.
+        update_transformations();
+        mouse_cursor_w = mouse_cursor_s;
+        al_transform_coordinates(
+            &screen_to_world_transform,
+            &mouse_cursor_w.x, &mouse_cursor_w.y
+        );
+        
+        //Readjust the transformation by shifting the camera
+        //so that the cursor ends up where it was before.
+        cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
+        cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
+    }
     
-    //Figure out where the mouse will be after the zoom.
-    update_transformations();
-    mouse_cursor_w = mouse_cursor_s;
-    al_transform_coordinates(
-        &screen_to_world_transform,
-        &mouse_cursor_w.x, &mouse_cursor_w.y
-    );
-    
-    //Readjust the transformation by shifting the camera
-    //so that the cursor ends up where it was before.
-    cam_pos.x += (old_mouse_pos.x - mouse_cursor_w.x);
-    cam_pos.y += (old_mouse_pos.y - mouse_cursor_w.y);
     update_transformations();
 }
 
