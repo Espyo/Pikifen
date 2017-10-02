@@ -158,6 +158,7 @@ public:
     virtual void widget_on_key_char(
         const int keycode, const int unichar, const unsigned int modifiers
     );
+    virtual void widget_on_tick(const float time);
     
     void call_mouse_move_handler(const int x, const int y);
     void call_left_mouse_click_handler(const int x, const int y);
@@ -178,6 +179,7 @@ public:
     
     virtual void handle_event(ALLEGRO_EVENT ev);
     void draw();
+    void tick(const float time);
     virtual void init();
     virtual void draw_self() = 0;    //Draws just the widget itself.
     

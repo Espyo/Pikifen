@@ -24,14 +24,14 @@
  * Loads the current advanced sector appearance data onto the GUI.
  */
 void area_editor::asa_to_gui() {
-    sector* s_ptr = get_lone_selected_sector();
-    
-    if(!s_ptr) {
+    if(selected_sectors.empty()) {
         sector_to_gui();
         state = EDITOR_STATE_LAYOUT;
         change_to_right_frame();
         return;
     }
+    
+    sector* s_ptr = *selected_sectors.begin();
     
     ((lafi::textbox*) frm_asa->widgets["txt_x"])->text =
         f2s(s_ptr->texture_info.translation.x);
@@ -62,14 +62,14 @@ void area_editor::asa_to_gui() {
  * Loads the current advanced sector behavior data onto the GUI.
  */
 void area_editor::asb_to_gui() {
-    sector* s_ptr = get_lone_selected_sector();
-    
-    if(!s_ptr) {
+    if(selected_sectors.empty()) {
         sector_to_gui();
         state = EDITOR_STATE_LAYOUT;
         change_to_right_frame();
         return;
     }
+    
+    sector* s_ptr = *selected_sectors.begin();
     
     ((lafi::button*) frm_asb->widgets["but_sector_type"])->text =
         sector_types.get_name(s_ptr->type);
@@ -85,7 +85,7 @@ void area_editor::asb_to_gui() {
         if(cur_hazard_nr >= list.size()) {
             cur_hazard_nr = list.size() - 1;
         }
-        ((lafi::button*) frm_asb->widgets["lbl_hazard"])->text =
+        ((lafi::label*) frm_asb->widgets["lbl_hazard"])->text =
             i2s(cur_hazard_nr + 1) + "/" + i2s(list.size()) + ": " +
             list[cur_hazard_nr];
             
@@ -153,7 +153,8 @@ void area_editor::change_to_right_frame() {
  * Deletes the currently selected hazard from the list.
  */
 void area_editor::delete_current_hazard() {
-    sector* s_ptr = get_lone_selected_sector();
+    sector* s_ptr = *selected_sectors.begin();
+    
     vector<string> list = split(s_ptr->hazards_str, ";");
     s_ptr->hazards_str.clear();
     for(size_t h = 0; h < list.size(); ++h) {
@@ -164,6 +165,8 @@ void area_editor::delete_current_hazard() {
         s_ptr->hazards_str.pop_back(); //Remove the trailing semicolon.
     }
     cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
+    
+    homogenize_selected_sectors();
     asb_to_gui();
 }
 
@@ -180,7 +183,7 @@ void area_editor::details_to_gui() {
  * Saves the advanced sector appearance data to memory using info on the gui.
  */
 void area_editor::gui_to_asa() {
-    sector* s_ptr = get_lone_selected_sector();
+    sector* s_ptr = *selected_sectors.begin();
     
     s_ptr->texture_info.translation.x =
         s2f(((lafi::textbox*) frm_asa->widgets["txt_x"])->text);
@@ -199,6 +202,9 @@ void area_editor::gui_to_asa() {
         s2i(((lafi::textbox*) frm_asa->widgets["txt_brightness"])->text);
     s_ptr->always_cast_shadow =
         ((lafi::checkbox*) frm_asa->widgets["chk_shadow"])->checked;
+        
+    homogenize_selected_sectors();
+    asa_to_gui();
 }
 
 
@@ -206,11 +212,14 @@ void area_editor::gui_to_asa() {
  * Saves the advanced sector behavior data to memory using info on the gui.
  */
 void area_editor::gui_to_asb() {
-    sector* s_ptr = get_lone_selected_sector();
+    sector* s_ptr = *selected_sectors.begin();
     s_ptr->hazard_floor =
         !((lafi::checkbox*) frm_asb->widgets["chk_h_air"])->checked;
     s_ptr->tag =
         ((lafi::textbox*) frm_asb->widgets["txt_tag"])->text;
+        
+    homogenize_selected_sectors();
+    asb_to_gui();
 }
 
 
@@ -218,13 +227,14 @@ void area_editor::gui_to_asb() {
  * Saves the mob data to memory using info on the gui.
  */
 void area_editor::gui_to_mob() {
-    mob_gen* m_ptr = get_lone_selected_mob();
+    mob_gen* m_ptr = *selected_mobs.begin();
     m_ptr->angle =
         (
             (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
         )->get_angle_rads();
     m_ptr->vars =
         ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text;
+    homogenize_selected_mobs();
 }
 
 
@@ -232,23 +242,19 @@ void area_editor::gui_to_mob() {
  * Saves the sector data to memory using info on the gui.
  */
 void area_editor::gui_to_sector() {
-    sector* s_ptr = get_lone_selected_sector();
+    sector* s_ptr = *selected_sectors.begin();
     s_ptr->z =
         s2f(((lafi::textbox*) frm_sector->widgets["txt_z"])->text);
         
     s_ptr->fade =
         ((lafi::radio_button*) frm_sector->widgets["rad_fade"])->selected;
         
-    bitmaps.detach(
-        TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
+    update_sector_texture(
+        s_ptr,
+        ((lafi::button*) frm_sector->widgets["but_texture"])->text
     );
-    s_ptr->texture_info.file_name =
-        ((lafi::button*) frm_sector->widgets["but_texture"])->text;
-    s_ptr->texture_info.bitmap =
-        bitmaps.get(
-            TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
-        );
-        
+    
+    homogenize_selected_sectors();
     sector_to_gui();
 }
 
@@ -285,11 +291,13 @@ void area_editor::info_to_gui() {
  * Loads the current mob data onto the GUI.
  */
 void area_editor::mob_to_gui() {
-    mob_gen* m_ptr = get_lone_selected_mob();
+    frm_mob->hide();
+    frm_mob_multi->hide();
     
-    if(m_ptr) {
-    
+    if(selected_mobs.size() == 1 || selection_homogenized) {
         frm_mob->show();
+        
+        mob_gen* m_ptr = *selected_mobs.begin();
         
         (
             (lafi::angle_picker*) frm_mob->widgets["ang_angle"]
@@ -308,9 +316,8 @@ void area_editor::mob_to_gui() {
         }
         but_type->text = m_ptr->type ? m_ptr->type->name : "";
         
-    } else {
-    
-        frm_mob->hide();
+    } else if(selected_mobs.size() > 1 && !selection_homogenized) {
+        frm_mob_multi->show();
         
     }
     
@@ -351,7 +358,7 @@ void area_editor::open_picker(const unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
-        mob_gen* m_ptr = get_lone_selected_mob();
+        mob_gen* m_ptr = *selected_mobs.begin();
         if(m_ptr->category->id != MOB_CATEGORY_NONE) {
             m_ptr->category->get_type_names(elements);
         }
@@ -424,27 +431,33 @@ void area_editor::pick(const string &name, const unsigned char type) {
         update_main_frame();
         
     } else if(type == AREA_EDITOR_PICKER_HAZARD) {
-        sector* s_ptr = get_lone_selected_sector();
+        sector* s_ptr = *selected_sectors.begin();
         vector<string> list = split(s_ptr->hazards_str, ";");
-        s_ptr->hazards_str += ";" + name;
+        if(!s_ptr->hazards_str.empty()) {
+            s_ptr->hazards_str += ";";
+        }
+        s_ptr->hazards_str += name;
+        homogenize_selected_sectors();
         asb_to_gui();
         cur_hazard_nr = list.size();
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
-        sector* s_ptr = get_lone_selected_sector();
-        
+        sector* s_ptr = *selected_sectors.begin();
         s_ptr->type = sector_types.get_nr(name);
+        homogenize_selected_sectors();
         asb_to_gui();
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
-        mob_gen* m_ptr = get_lone_selected_mob();
+        mob_gen* m_ptr = *selected_mobs.begin();
         m_ptr->category = mob_categories.get_from_pname(name);
         m_ptr->type = NULL;
+        homogenize_selected_mobs();
         mob_to_gui();
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
-        mob_gen* m_ptr = get_lone_selected_mob();
+        mob_gen* m_ptr = *selected_mobs.begin();
         m_ptr->type = m_ptr->category->get_type(name);
+        homogenize_selected_mobs();
         mob_to_gui();
         
     }
@@ -466,11 +479,14 @@ void area_editor::review_to_gui() {
  * Loads the current sector data onto the GUI.
  */
 void area_editor::sector_to_gui() {
-
-    sector* s_ptr = get_lone_selected_sector();
+    frm_sector->hide();
+    frm_sector_multi->hide();
     
-    if(s_ptr) {
+    if(selected_sectors.size() == 1 || selection_homogenized) {
         frm_sector->show();
+        
+        sector* s_ptr = *selected_sectors.begin();
+        
         ((lafi::textbox*) frm_sector->widgets["txt_z"])->text =
             f2s(s_ptr->z);
             
@@ -489,8 +505,8 @@ void area_editor::sector_to_gui() {
             
         }
         
-    } else {
-        frm_sector->hide();
+    } else if(selected_sectors.size() > 1 && !selection_homogenized) {
+        frm_sector_multi->show();
         
     }
 }
@@ -500,7 +516,7 @@ void area_editor::sector_to_gui() {
  * Selects either the previous or the next hazard on the list.
  */
 void area_editor::select_different_hazard(const bool next) {
-    sector* s_ptr = get_lone_selected_sector();
+    sector* s_ptr = *selected_sectors.begin();
     vector<string> list = split(s_ptr->hazards_str, ";");
     cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
     cur_hazard_nr = sum_and_wrap(cur_hazard_nr, next ? 1 : -1, list.size());

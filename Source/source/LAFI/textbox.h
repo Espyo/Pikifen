@@ -17,6 +17,12 @@ class textbox : public widget {
 private:
     //Scroll the text by this much. Used to keep track of the cursor.
     int scroll_x;
+    //Is the cursor currently visible?
+    bool cursor_visible;
+    //Time left until the cursor swaps states.
+    float cursor_change_time_left;
+    
+    static const float CURSOR_CHANGE_INTERVAL;
     
 public:
 
@@ -39,6 +45,7 @@ public:
     );
     void widget_on_mouse_down(const int button, const int x, const int y);
     void widget_on_mouse_move(const int x, const int y);
+    void widget_on_tick(const float time);
     void call_change_handler();
     
     textbox(

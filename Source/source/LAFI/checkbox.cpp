@@ -52,6 +52,7 @@ void checkbox::init() {
             y2,
             text,
             ALLEGRO_ALIGN_LEFT,
+            true,
             style,
             flags
         ));

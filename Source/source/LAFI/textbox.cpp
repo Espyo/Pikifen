@@ -7,6 +7,8 @@ namespace lafi {
 
 size_t textbox::cur_tab_index = 0;
 
+const float textbox::CURSOR_CHANGE_INTERVAL = 0.5f;
+
 /* ----------------------------------------------------------------------------
  * Creates a textbox given some parameters.
  */
@@ -15,6 +17,8 @@ textbox::textbox(
     lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
+    cursor_visible(true),
+    cursor_change_time_left(0),
     text(text),
     editable(true),
     cursor(0),
@@ -34,6 +38,8 @@ textbox::textbox(
  */
 textbox::textbox(const string &text) :
     widget(),
+    cursor_visible(true),
+    cursor_change_time_left(0),
     text(text),
     editable(true),
     cursor(0),
@@ -53,6 +59,8 @@ textbox::textbox(const string &text) :
  */
 textbox::textbox(textbox &t2) :
     widget(t2),
+    cursor_visible(true),
+    cursor_change_time_left(0),
     text(t2.text),
     editable(t2.editable),
     cursor(0),
@@ -114,10 +122,12 @@ void textbox::draw_self() {
             text.c_str()
         );
         
-        unsigned int cursor_x =
-            al_get_text_width(style->text_font, text.substr(0, cursor).c_str());
-            
-        if(parent->focused_widget == this) {
+        if(parent->focused_widget == this && cursor_visible) {
+            unsigned int cursor_x =
+                al_get_text_width(
+                    style->text_font, text.substr(0, cursor).c_str()
+                );
+                
             al_draw_line(
                 x1 + cursor_x + 1.5 - scroll_x,
                 y1 + 2,
@@ -363,6 +373,18 @@ void textbox::widget_on_mouse_move(const int x, const int) {
     if(!mouse_clicking) return;
     
     sel_end = mouse_to_char(x);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Ticks one frame worth of time. Used to control the cursor blinking.
+ */
+void textbox::widget_on_tick(const float time) {
+    cursor_change_time_left -= time;
+    if(cursor_change_time_left <= 0.0f) {
+        cursor_change_time_left = CURSOR_CHANGE_INTERVAL;
+        cursor_visible = !cursor_visible;
+    }
 }
 
 

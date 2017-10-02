@@ -61,6 +61,7 @@ void radio_button::init() {
             y2,
             text,
             ALLEGRO_ALIGN_LEFT,
+            true,
             style,
             flags
         ));

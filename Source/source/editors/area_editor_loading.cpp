@@ -440,6 +440,47 @@ void area_editor::load() {
     );
     frm_sector->easy_row();
     
+    frm_sector_multi =
+        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+    frm_layout->add("frm_sector_multi", frm_sector_multi);
+    
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_1",
+        new lafi::label("Multiple different", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_2",
+        new lafi::label("sectors selected. To", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_3",
+        new lafi::label("make all their", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_4",
+        new lafi::label("properties the same", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_5",
+        new lafi::label("and edit them all", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "lbl_multi_6",
+        new lafi::label("together, click here:", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_sector_multi->easy_row();
+    frm_sector_multi->easy_add(
+        "but_ok",
+        new lafi::button("Edit all together"), 100, 24
+    );
+    frm_sector_multi->easy_row();
+    
     
     //Layout -- properties.
     frm_layout->widgets["but_back"]->left_mouse_click_handler =
@@ -472,7 +513,7 @@ void area_editor::load() {
         //TODO.
     };
     frm_layout->widgets["but_rem"]->description =
-        "Remove the selected geometry elements.";
+        "Remove the selected geometry elements. (Ctrl+Minus)";
         
     frm_layout->widgets["but_sel_mode"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -491,32 +532,36 @@ void area_editor::load() {
         
     frm_sector->widgets["but_z_m50"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        get_lone_selected_sector()->z -= 50;
-        sector_to_gui();
+        lafi::textbox* t = (lafi::textbox*) this->frm_sector->widgets["txt_z"];
+        t->text = f2s(s2f(t->text) - 50);
+        gui_to_sector();
     };
     frm_sector->widgets["but_z_m50"]->description =
         "Decrease the height number by 50.";
         
     frm_sector->widgets["but_z_m10"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        get_lone_selected_sector()->z -= 10;
-        sector_to_gui();
+        lafi::textbox* t = (lafi::textbox*) this->frm_sector->widgets["txt_z"];
+        t->text = f2s(s2f(t->text) - 10);
+        gui_to_sector();
     };
     frm_sector->widgets["but_z_m10"]->description =
         "Decrease the height number by 10.";
         
     frm_sector->widgets["but_z_p10"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        get_lone_selected_sector()->z += 10;
-        sector_to_gui();
+        lafi::textbox* t = (lafi::textbox*) this->frm_sector->widgets["txt_z"];
+        t->text = f2s(s2f(t->text) + 10);
+        gui_to_sector();
     };
     frm_sector->widgets["but_z_p10"]->description =
         "Increase the height number by 10.";
         
     frm_sector->widgets["but_z_p50"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        get_lone_selected_sector()->z += 50;
-        sector_to_gui();
+        lafi::textbox* t = (lafi::textbox*) this->frm_sector->widgets["txt_z"];
+        t->text = f2s(s2f(t->text) + 50);
+        gui_to_sector();
     };
     frm_sector->widgets["but_z_p50"]->description =
         "Increase the height number by 50.";
@@ -558,7 +603,21 @@ void area_editor::load() {
     frm_sector->widgets["but_adv_appearance"]->description =
         "Open more advanced sector appearance settings.";
         
-        
+    frm_sector_multi->widgets["but_ok"]->description =
+        "Confirm that you want all selected sectors to be similar.";
+    frm_sector_multi->widgets["but_ok"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        selection_homogenized = true;
+        homogenize_selected_sectors();
+        sector_to_gui();
+    };
+    
+    frm_layout->register_accelerator(
+        ALLEGRO_KEY_MINUS, ALLEGRO_KEYMOD_CTRL,
+        frm_layout->widgets["but_rem"]
+    );
+    
+    
     //Advanced sector behavior -- declarations.
     frm_asb =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
@@ -608,7 +667,7 @@ void area_editor::load() {
     );
     frm_asb->easy_add(
         "lbl_hazard",
-        new lafi::label(), 90, 16
+        new lafi::label("", 0, true), 90, 16
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
@@ -646,7 +705,6 @@ void area_editor::load() {
         
     frm_asb->widgets["but_h_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        sector* s_ptr = get_lone_selected_sector();
         open_picker(AREA_EDITOR_PICKER_HAZARD);
     };
     frm_asb->widgets["but_h_add"]->description =
@@ -871,12 +929,12 @@ void area_editor::load() {
     frm_asa->widgets["txt_x"]->lose_focus_handler =
         lambda_gui_to_asa;
     frm_asa->widgets["txt_x"]->description =
-        "Scroll the texture horizontally by this much.";
+        "Offset the texture horizontally by this much.";
         
     frm_asa->widgets["txt_y"]->lose_focus_handler =
         lambda_gui_to_asa;
     frm_asa->widgets["txt_y"]->description =
-        "Scroll the texture vertically by this much.";
+        "Offset the texture vertically by this much.";
         
     frm_asa->widgets["txt_sx"]->lose_focus_handler =
         lambda_gui_to_asa;
@@ -910,7 +968,7 @@ void area_editor::load() {
     frm_asa->widgets["txt_brightness"]->lose_focus_handler =
         lambda_gui_to_asa;
     frm_asa->widgets["txt_brightness"]->description =
-        "0 = pitch black sector. 255 = normal lighting.";
+        frm_asa->widgets["bar_brightness"]->description;
         
     frm_asa->widgets["chk_shadow"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -990,6 +1048,47 @@ void area_editor::load() {
     );
     frm_mob->easy_row();
     
+    frm_mob_multi =
+        new lafi::frame(gui_x, y, scr_w, scr_h - 48);
+    frm_mobs->add("frm_mob_multi", frm_mob_multi);
+    
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_1",
+        new lafi::label("Multiple different", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_2",
+        new lafi::label("objects selected. To", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_3",
+        new lafi::label("make all their", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_4",
+        new lafi::label("properties the same", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_5",
+        new lafi::label("and edit them all", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "lbl_multi_6",
+        new lafi::label("together, click here:", ALLEGRO_ALIGN_CENTER), 100, 12
+    );
+    frm_mob_multi->easy_row();
+    frm_mob_multi->easy_add(
+        "but_ok",
+        new lafi::button("Edit all together"), 100, 24
+    );
+    frm_mob_multi->easy_row();
+    
     
     //Mobs -- properties.
     auto lambda_gui_to_mob =
@@ -1016,14 +1115,14 @@ void area_editor::load() {
         //TODO
     };
     frm_mobs->widgets["but_del"]->description =
-        "Delete the current object (Ctrl+Minus).";
+        "Delete the current object. (Ctrl+Minus)";
         
     frm_mobs->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO
     };
     frm_mobs->widgets["but_duplicate"]->description =
-        "Duplicate the current object (Ctrl+D).";
+        "Duplicate the current object. (Ctrl+D)";
         
     frm_mob->widgets["but_category"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1037,7 +1136,7 @@ void area_editor::load() {
         open_picker(AREA_EDITOR_PICKER_MOB_TYPE);
     };
     frm_mob->widgets["but_type"]->description =
-        "Choose the type this object is.";
+        "Choose this object's type.";
         
     frm_mob->widgets["ang_angle"]->lose_focus_handler =
         lambda_gui_to_mob;
@@ -1049,6 +1148,15 @@ void area_editor::load() {
     frm_mob->widgets["txt_vars"]->description =
         "Extra variables (e.g.: \"sleep=y;jumping=n\").";
         
+    frm_mob_multi->widgets["but_ok"]->description =
+        "Confirm that you want all selected objects to be similar.";
+    frm_mob_multi->widgets["but_ok"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        selection_homogenized = true;
+        homogenize_selected_mobs();
+        mob_to_gui();
+    };
+    
     frm_mob->register_accelerator(
         ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
         frm_mobs->widgets["but_duplicate"]
@@ -1175,7 +1283,7 @@ void area_editor::load() {
         //TODO
     };
     frm_paths->widgets["chk_show_path"]->description =
-        "Show path between draggable points A and B.";
+        "Show path between the draggable points A and B.";
         
     frm_paths->widgets["lbl_path_dist"]->description =
         "Total travel distance between A and B.";
@@ -1612,7 +1720,7 @@ void area_editor::load() {
     //TODO frm_tools->widgets["txt_file"]->lose_focus_handler =
     //TODO lambda_gui_to_reference;
     frm_tools->widgets["txt_file"]->description =
-        "Image file (on the Images folder) for the reference.";
+        "Image file (in the Images folder) for the reference.";
         
     //TODO frm_tools->widgets["txt_x"]->lose_focus_handler =
     //TODO lambda_gui_to_reference;
@@ -1795,7 +1903,7 @@ void area_editor::load() {
         
     //Status bar.
     lbl_status_bar =
-        new lafi::label(0, status_bar_y, gui_x, scr_h);
+        new lafi::label(0, status_bar_y, gui_x, scr_h, "", 0, true);
     gui->add("lbl_status_bar", lbl_status_bar);
     
     
