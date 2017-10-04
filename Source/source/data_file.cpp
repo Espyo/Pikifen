@@ -136,35 +136,39 @@ size_t data_node::load_node(
     
     if(start_line > lines.size()) return start_line;
     
+    bool returning_from_sub_node = false;
+    
     for(size_t l = start_line; l < lines.size(); ++l) {
         string line = lines[l];
         
-        line = trim_spaces(line, true);     //Removes the leftmost spaces.
+        line = trim_spaces(line, true); //Removes the leftmost spaces.
+        
+        if(line.empty()) continue;
         
         if(line.size() >= 2) {
-            //A comment; ignore this line.
-            if(line[0] == '/' && line[1] == '/') continue;
+            if(line[0] == '/' && line[1] == '/') {
+                //A comment; ignore this line.
+                continue;
+            }
         }
         
-        //Option=value
-        size_t pos = line.find('=');
-        if(pos != string::npos && pos > 0 && line.size() >= 2) {
-        
-            string v = line.substr(pos + 1, line.size() - (pos + 1));
-            if(trim_values) v = trim_spaces(v);
-            
-            data_node* new_child = new data_node();
-            new_child->name = trim_spaces(line.substr(0, pos));
-            new_child->value = v;
-            new_child->file_was_opened = file_was_opened;
-            new_child->file_name = file_name;
-            new_child->line_nr = l + 1;
-            children.push_back(new_child);
-            
-            continue;
+        //Sub-node end.
+        size_t pos = line.find('}');
+        if(pos != string::npos) {
+            if(returning_from_sub_node) {
+                //The sub-node just ended.
+                //Let's leave what's after the bracket, and let the rest
+                //of the code make use of it.
+                returning_from_sub_node = false;
+                line = line.substr(pos + 1, line.size() - (pos + 1));
+                line = trim_spaces(line, true);
+                if(line.empty()) continue;
+            } else {
+                return l;
+            }
         }
         
-        //Sub-node start
+        //Sub-node start.
         pos = line.find('{');
         if(pos != string::npos) {
         
@@ -175,16 +179,32 @@ size_t data_node::load_node(
             new_child->file_name = file_name;
             new_child->line_nr = l + 1;
             l = new_child->load_node(lines, trim_values, l + 1);
+            l--; //So the block-ending line gets re-examined.
             children.push_back(new_child);
             
+            returning_from_sub_node = true;
             continue;
         }
-        
-        //Sub-node end
-        pos = line.find('}');
-        if(pos != string::npos) {
-            return l;
+                
+        //Option=value.
+        pos = line.find('=');
+        string n, v;
+        if(pos != string::npos && pos > 0 && line.size() > 2) {
+            n = line.substr(0, pos);
+            v = line.substr(pos + 1, line.size() - (pos + 1));
+        } else {
+            n = line;
         }
+        if(trim_values) v = trim_spaces(v);
+        
+        data_node* new_child = new data_node();
+        new_child->name = trim_spaces(n);
+        new_child->value = v;
+        new_child->file_was_opened = file_was_opened;
+        new_child->file_name = file_name;
+        new_child->line_nr = l + 1;
+        children.push_back(new_child);
+        
     }
     
     return lines.size() - 1;
@@ -227,13 +247,13 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
             children[c]->save_node(file, level + 1);
         }
         al_fwrite(file, tabs.c_str(), tabs.size());
-        al_fwrite(file, "}\n", 2);
+        al_fwrite(file, "}", 1);
         
-    } else {
+    } else if(!value.empty()) {
         al_fwrite(file, "=", 1);
         al_fwrite(file, value.c_str(), value.size());
-        al_fwrite(file, "\n", 1);
     }
+    al_fwrite(file, "\n", 1);
     
 }
 

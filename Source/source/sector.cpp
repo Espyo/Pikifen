@@ -913,9 +913,13 @@ vector<path_stop*> get_path(
 ) {
 
     vector<path_stop*> full_path;
-    if(go_straight) *go_straight = false;
     
-    if(cur_area_data.path_stops.empty()) return full_path;
+    if(cur_area_data.path_stops.empty()) {
+        if(go_straight) *go_straight = true;
+        return full_path;
+    } else {
+        if(go_straight) *go_straight = false;
+    }
     
     //Start by finding the closest stops to the start and finish.
     path_stop* closest_to_start = NULL;

@@ -190,10 +190,6 @@ void gameplay::load() {
     mouse_cursor_w = leader_cursor_w;
     mouse_cursor_s = leader_cursor_s;
     
-    if(cursor_ready) {
-        al_set_mouse_xy(display, mouse_cursor_s.x, mouse_cursor_s.y);
-    }
-    
     day_minutes = day_minutes_start;
     area_time_passed = 0;
     
