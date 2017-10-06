@@ -47,6 +47,9 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
             holding_m3 = true;
         }
         
+        mouse_drag_start = point(ev.mouse.x, ev.mouse.y);
+        mouse_drag_confirmed = false;
+        
         gui->lose_focus();
         is_gui_focused = false;
         
@@ -100,19 +103,28 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
         ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
         if(
+            fabs(ev.mouse.x - mouse_drag_start.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
+            fabs(ev.mouse.y - mouse_drag_start.y) >= MOUSE_DRAG_CONFIRM_RANGE
+        ) {
+            mouse_drag_confirmed = true;
+        }
+        
+        if(mouse_drag_confirmed) {
+            if(holding_m1) {
+                handle_lmb_drag(ev);
+            }
+            if(holding_m2) {
+                handle_rmb_drag(ev);
+            }
+            if(holding_m3) {
+                handle_mmb_drag(ev);
+            }
+        }
+        if(
             (ev.mouse.dz != 0 || ev.mouse.dw != 0) &&
             !is_mouse_in_gui(mouse_cursor_s)
         ) {
             handle_mouse_wheel(ev);
-        }
-        if(holding_m1) {
-            handle_lmb_drag(ev);
-        }
-        if(holding_m2) {
-            handle_rmb_drag(ev);
-        }
-        if(holding_m3) {
-            handle_mmb_drag(ev);
         }
         
     } else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {

@@ -382,6 +382,10 @@ bool lines_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     float* ur, float* ul
 );
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+);
 void triangulate(sector* s_ptr);
 
 

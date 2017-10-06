@@ -70,8 +70,9 @@ private:
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
-    static const size_t        MAX_TEXTURE_SUGGESTIONS;
     static const float         KEYBOARD_CAM_ZOOM;
+    static const size_t        MAX_TEXTURE_SUGGESTIONS;
+    static const float         MOUSE_DRAG_CONFIRM_RANGE;
     static const float         PATH_LINK_THICKNESS;
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
@@ -150,6 +151,10 @@ private:
     bool is_shift_pressed;
     //Number of the mouse button pressed.
     size_t last_mouse_click;
+    //Is this a mouse drag, or just a shaky click?
+    bool mouse_drag_confirmed;
+    //Starting coordinates of a raw mouse drag.
+    point mouse_drag_start;
     //Only preview the path when this time is up.
     timer path_preview_timer;
     //Currently selected edges.
