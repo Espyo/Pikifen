@@ -2121,6 +2121,28 @@ bool lines_intersect(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns whether the two line segments intersect.
+ * insersection: Return the intersection point here, if not NULL.
+ */
+bool lines_intersect(
+    const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
+    point* intersection
+) {
+    float ur;
+    if(intersection) {
+        intersection->x = 0.0f;
+        intersection->y = 0.0f;
+    }
+    if(!lines_intersect(l1p1, l1p2, l2p1, l2p2, &ur, NULL)) return NULL;
+    if(intersection) {
+        intersection->x = l2p1.x + (l2p2.x - l2p1.x) * ur;
+        intersection->y = l2p1.y + (l2p2.y - l2p1.y) * ur;
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector.
  * This is because drawing concave polygons is not possible.
  */

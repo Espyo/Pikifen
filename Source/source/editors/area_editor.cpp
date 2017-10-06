@@ -24,10 +24,12 @@ const float area_editor::DEBUG_TEXT_SCALE = 1.5f;
 const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Time until the next click is no longer considered a double-click.
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
-//Maximum number of texture suggestions.
-const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 //How much to zoom in/out with the keyboard keys.
 const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
+//Maximum number of texture suggestions.
+const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+//If the mouse is dragged outside of this range, that's a real drag.
+const float area_editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //Thickness to use when drawing a path link line.
 const float area_editor::PATH_LINK_THICKNESS = 2.0f;
 //Radius to use when drawing a path stop circle.
@@ -90,6 +92,7 @@ area_editor::area_editor() :
     is_shift_pressed(false),
     is_gui_focused(false),
     last_mouse_click(INVALID),
+    mouse_drag_confirmed(false),
     path_preview_timer(0),
     selecting(false),
     selection_effect(0),
