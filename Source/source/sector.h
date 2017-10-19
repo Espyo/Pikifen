@@ -91,8 +91,9 @@ struct edge {
     sector* sectors[2];
     size_t sector_nrs[2];
     
-    edge(size_t v1 = INVALID, size_t v2 = INVALID);
-    void fix_pointers(area_data &a);
+    edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
+    vertex* get_other_vertex(vertex* v_ptr);
+    size_t get_side_with_sector(sector* s_ptr);
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
 };
@@ -116,8 +117,6 @@ struct path_stop {
         vector<path_link> links = vector<path_link>()
     );
     bool has_link(path_stop* other_stop);
-    void fix_pointers(area_data &a);
-    void fix_nrs(area_data &a);
     void calculate_dists();
 };
 
@@ -185,8 +184,6 @@ struct sector {
     point bbox[2];
     
     sector();
-    void connect_edges(area_data &a, size_t s_nr);
-    void fix_pointers(area_data &a);
     void clone(sector* new_sector);
     void get_texture_merge_sectors(sector** s1, sector** s2);
     ~sector();
@@ -218,8 +215,7 @@ struct vertex {
     vector<edge*> edges;
     
     vertex(float x, float y);
-    void connect_edges(area_data &a, size_t v_nr);
-    void fix_pointers(area_data &a);
+    edge* get_edge_by_neighbor(vertex* neighbor);
 };
 
 
@@ -305,9 +301,20 @@ struct area_data {
     string weather_name;
     
     area_data();
+    void check_matches();
+    void connect_sector_edges(sector* s_ptr);
+    void connect_vertex_edges(vertex* v_ptr);
     size_t find_edge_nr(const edge* e_ptr);
     size_t find_sector_nr(const sector* s_ptr);
     size_t find_vertex_nr(const vertex* v_ptr);
+    void fix_edge_nrs(edge* e_ptr);
+    void fix_edge_pointers(edge* e_ptr);
+    void fix_path_stop_nrs(path_stop* s_ptr);
+    void fix_path_stop_pointers(path_stop* s_ptr);
+    void fix_sector_nrs(sector* s_ptr);
+    void fix_sector_pointers(sector* s_ptr);
+    void fix_vertex_nrs(vertex* v_ptr);
+    void fix_vertex_pointers(vertex* v_ptr);
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
     void remove_vertex(const size_t v_nr);

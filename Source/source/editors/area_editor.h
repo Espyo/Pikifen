@@ -38,6 +38,28 @@ private:
         void* representative;
     };
     
+    struct layout_drawing_node {
+        //Raw coordinates of the mouse click.
+        point raw_spot;
+        //Final spot of the node, after snapping to an existing vertex/edge.
+        point snapped_spot;
+        //Is this node on top of an existing vertex? This points to it if so.
+        vertex* on_vertex;
+        //on_vertex's vertex number.
+        size_t on_vertex_nr;
+        //Is this node on top of an existing edge? This points to it if so.
+        edge* on_edge;
+        //on_edge's edge number.
+        size_t on_edge_nr;
+        //Is this node just on top of a sector? This points to it if so.
+        sector* on_sector;
+        //on_sector's sector number.
+        size_t on_sector_nr;
+        //Is on_vertex a new vertex, created during the sector creation?
+        bool is_new_vertex;
+        layout_drawing_node(area_editor* ae_ptr, const point &mouse_click);
+    };
+    
     
     enum EDITOR_STATES {
         EDITOR_STATE_INFO,
@@ -56,6 +78,7 @@ private:
     
     enum EDITOR_SUB_STATES {
         EDITOR_SUB_STATE_NONE,
+        EDITOR_SUB_STATE_DRAWING,
         EDITOR_SUB_STATE_TEXTURE_VIEW,
     };
     
@@ -77,6 +100,7 @@ private:
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
+    static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
     
@@ -141,6 +165,10 @@ private:
     bool debug_vertex_nrs;
     //If the next click is within this time, it's a double-click.
     float double_click_time;
+    //Nodes of the drawing.
+    vector<layout_drawing_node> drawing_nodes;
+    //List of sectors that the drawing can be connected to.
+    set<sector*> drawing_connected_sectors;
     //Current grid interval.
     float grid_interval;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?
@@ -184,18 +212,30 @@ private:
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     
+    void cancel_layout_drawing();
+    void center_camera(
+        const point &min_coords, const point &max_coords
+    );
     void clear_current_area();
+    void clear_selection();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
-    edge* get_edge_under_mouse();
+    void finish_layout_drawing();
+    bool get_common_sector(vector<vertex*> &vertexes, sector** result);
+    edge* get_closest_edge_to_angle(
+        vertex* v_ptr, const float angle, const bool clockwise,
+        float* closest_edge_angle
+    );
+    bool get_drawing_outer_sector(sector** result);
+    edge* get_edge_under_point(const point &p);
     float get_mob_gen_radius(mob_gen* m);
-    mob_gen* get_mob_under_mouse();
-    path_stop* get_path_stop_under_mouse();
-    sector* get_sector_under_mouse();
-    vertex* get_vertex_under_mouse();
+    mob_gen* get_mob_under_point(const point &p);
+    path_stop* get_path_stop_under_point(const point &p);
+    sector* get_sector_under_point(const point &p);
+    vertex* get_vertex_under_point(const point &p);
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
@@ -203,6 +243,8 @@ private:
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
     void select_different_hazard(const bool next);
+    point snap_to_grid(const point &p);
+    vertex* split_edge(edge* e_ptr, const point &where);
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);
     void zoom(const float new_zoom, const bool anchor_cursor = true);

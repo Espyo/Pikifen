@@ -376,16 +376,16 @@ void load_area(
     
     //Set up stuff.
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-        cur_area_data.edges[e]->fix_pointers(cur_area_data);
+        cur_area_data.fix_edge_pointers(cur_area_data.edges[e]);
     }
     for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-        cur_area_data.sectors[s]->connect_edges(cur_area_data, s);
+        cur_area_data.connect_sector_edges(cur_area_data.sectors[s]);
     }
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-        cur_area_data.vertexes[v]->connect_edges(cur_area_data, v);
+        cur_area_data.connect_vertex_edges(cur_area_data.vertexes[v]);
     }
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-        cur_area_data.path_stops[s]->fix_pointers(cur_area_data);
+        cur_area_data.fix_path_stop_pointers(cur_area_data.path_stops[s]);
     }
     for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
         path_stop* s_ptr = cur_area_data.path_stops[s];

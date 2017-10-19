@@ -262,6 +262,23 @@ void area_editor::do_drawing() {
                 (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
             );
             
+            if(debug_triangulation && !selected_sectors.empty()) {
+                sector* s_ptr = *selected_sectors.begin();
+                for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+                    triangle* t_ptr = &s_ptr->triangles[t];
+                    al_draw_triangle(
+                        t_ptr->points[0]->x,
+                        t_ptr->points[0]->y,
+                        t_ptr->points[1]->x,
+                        t_ptr->points[1]->y,
+                        t_ptr->points[2]->x,
+                        t_ptr->points[2]->y,
+                        al_map_rgb(192, 0, 0),
+                        1.0 / cam_zoom
+                    );
+                }
+            }
+            
             if(debug_sector_nrs) {
                 point middle(
                     (e_ptr->vertexes[0]->x + e_ptr->vertexes[1]->x) / 2.0f,
@@ -553,6 +570,31 @@ void area_editor::do_drawing() {
             }*/
         }
         
+        //Edge drawing preview.
+        if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+            for(size_t n = 1; n < drawing_nodes.size(); ++n) {
+                al_draw_line(
+                    drawing_nodes[n - 1].snapped_spot.x,
+                    drawing_nodes[n - 1].snapped_spot.y,
+                    drawing_nodes[n].snapped_spot.x,
+                    drawing_nodes[n].snapped_spot.y,
+                    al_map_rgb(128, 255, 128),
+                    3.0 / cam_zoom
+                );
+            }
+            if(!drawing_nodes.empty()) {
+                point hotspot = snap_to_grid(mouse_cursor_w);
+                al_draw_line(
+                    drawing_nodes.back().snapped_spot.x,
+                    drawing_nodes.back().snapped_spot.y,
+                    hotspot.x,
+                    hotspot.y,
+                    al_map_rgb(64, 255, 64),
+                    3.0 / cam_zoom
+                );
+            }
+        }
+        
         //Selection box.
         if(selecting) {
             al_draw_rectangle(
@@ -567,6 +609,22 @@ void area_editor::do_drawing() {
                 ),
                 2.0 / cam_zoom
                 
+            );
+        }
+        
+        //New thing marker.
+        if(
+            sub_state == EDITOR_SUB_STATE_DRAWING
+        ) {
+            point marker = mouse_cursor_w;
+            marker = snap_to_grid(marker);
+            al_draw_line(
+                marker.x - 16, marker.y, marker.x + 16, marker.y,
+                al_map_rgb(255, 255, 255), 1.0 / cam_zoom
+            );
+            al_draw_line(
+                marker.x, marker.y - 16, marker.x, marker.y + 16,
+                al_map_rgb(255, 255, 255), 1.0 / cam_zoom
             );
         }
     }

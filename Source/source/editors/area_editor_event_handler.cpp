@@ -198,6 +198,18 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_EQUALS) {
         zoom(cam_zoom + (cam_zoom * KEYBOARD_CAM_ZOOM), false);
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
+        debug_edge_nrs = !debug_edge_nrs;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
+        debug_sector_nrs = !debug_sector_nrs;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F3) {
+        debug_vertex_nrs = !debug_vertex_nrs;
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F4) {
+        debug_triangulation = !debug_triangulation;
+        
     }
 }
 
@@ -207,11 +219,7 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE && !selecting) {
-        selected_edges.clear();
-        selected_sectors.clear();
-        selected_vertexes.clear();
-        selected_mobs.clear();
-        selected_path_stops.clear();
+        clear_selection();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
     
@@ -300,26 +308,7 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         
         if(!got_something) return;
         
-        //Place the camera in the center.
-        cam_pos = (min_coords + max_coords) / 2.0f;
-        
-        //Reset the transformations, first.
-        zoom(1.0, false);
-        
-        //Transform the points so we can know, at 1.0 zoom, where in the screen
-        //the points would be, so we can know how much to scale by such that
-        //they would align with the actual screen space.
-        al_transform_coordinates(
-            &world_to_screen_transform,
-            &min_coords.x, &min_coords.y
-        );
-        al_transform_coordinates(
-            &world_to_screen_transform,
-            &max_coords.x, &max_coords.y
-        );
-        float w_ratio = (gui_x - 8) / (max_coords.x - min_coords.x);
-        float h_ratio = (scr_h - 48 - 8) / (max_coords.y - min_coords.y);
-        zoom(min(w_ratio, h_ratio), false);
+        center_camera(min_coords, max_coords);
     }
 }
 
@@ -345,22 +334,78 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
-    //TODO
-    if(
+    if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        
+        //First, check if the user is trying to undo the previous node.
+        if(
+            !drawing_nodes.empty() &&
+            dist(
+                hotspot,
+                point(
+                    drawing_nodes.back().snapped_spot.x,
+                    drawing_nodes.back().snapped_spot.y
+                )
+            ) <= VERTEX_MERGE_RADIUS / cam_zoom
+        ) {
+            drawing_nodes.erase(
+                drawing_nodes.begin() + drawing_nodes.size() - 1
+            );
+            return;
+        }
+        
+        if(drawing_nodes.empty()) {
+            //First node.
+            layout_drawing_node n(this, hotspot);
+            drawing_nodes.push_back(n);
+            
+            if(n.on_vertex) {
+                for(size_t e = 0; e < n.on_vertex->edges.size(); ++e) {
+                    edge* e_ptr = n.on_vertex->edges[e];
+                    for(size_t s = 0; s < 2; ++s) {
+                        drawing_connected_sectors.insert(e_ptr->sectors[s]);
+                    }
+                }
+            } else if(n.on_edge) {
+                for(size_t s = 0; s < 2; ++s) {
+                    drawing_connected_sectors.insert(n.on_edge->sectors[s]);
+                }
+            } else {
+                drawing_connected_sectors.insert(
+                    get_sector(n.snapped_spot, NULL, false)
+                );
+            }
+            
+        } else {
+        
+            if(
+                dist(hotspot, drawing_nodes.begin()->snapped_spot) <=
+                VERTEX_MERGE_RADIUS / cam_zoom
+            ) {
+                //Back to the first vertex. Finish the drawing.
+                finish_layout_drawing();
+                
+            } else {
+                //Add a new node.
+                drawing_nodes.push_back(
+                    layout_drawing_node(this, hotspot)
+                );
+            }
+        }
+        
+        
+    } else if(
         state == EDITOR_STATE_LAYOUT ||
         state == EDITOR_STATE_ASA ||
         state == EDITOR_STATE_ASB
     ) {
     
-        selected_vertexes.clear();
-        selected_edges.clear();
-        selected_sectors.clear();
-        selecting = false;
+        clear_selection();
         bool start_new_selection = true;
         
         if(!is_shift_pressed) {
         
-            vertex* clicked_vertex = get_vertex_under_mouse();
+            vertex* clicked_vertex = get_vertex_under_point(mouse_cursor_w);
             edge* clicked_edge = NULL;
             sector* clicked_sector = NULL;
             bool selected_something = false;
@@ -371,7 +416,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(!selected_something) {
-                clicked_edge = get_edge_under_mouse();
+                clicked_edge = get_edge_under_point(mouse_cursor_w);
                 if(clicked_edge) {
                     selected_edges.insert(clicked_edge);
                     selected_something = true;
@@ -379,7 +424,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             
             if(!selected_something) {
-                clicked_sector = get_sector_under_mouse();
+                clicked_sector = get_sector_under_point(mouse_cursor_w);
                 if(clicked_sector) {
                     selected_sectors.insert(clicked_sector);
                     selected_something = true;
@@ -405,13 +450,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_MOBS) {
     
-        selected_mobs.clear();
-        selecting = false;
+        clear_selection();
         bool start_new_selection = true;
         
         if(!is_shift_pressed) {
         
-            mob_gen* clicked_mob = get_mob_under_mouse();
+            mob_gen* clicked_mob = get_mob_under_point(mouse_cursor_w);
             if(clicked_mob) {
                 selected_mobs.insert(clicked_mob);
                 start_new_selection = false;
@@ -430,13 +474,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_PATHS) {
     
-        selected_path_stops.clear();
-        selecting = false;
+        clear_selection();
         bool start_new_selection = true;
         
         if(!is_shift_pressed) {
         
-            path_stop* clicked_stop = get_path_stop_under_mouse();
+            path_stop* clicked_stop = get_path_stop_under_point(mouse_cursor_w);
             if(clicked_stop) {
                 selected_path_stops.insert(clicked_stop);
                 start_new_selection = false;
@@ -475,9 +518,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             state == EDITOR_STATE_ASB
         ) {
         
-            selected_vertexes.clear();
-            selected_edges.clear();
-            selected_sectors.clear();
+            clear_selection();
             
             for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
                 vertex* v_ptr = cur_area_data.vertexes[v];
@@ -543,7 +584,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
         } else if(state == EDITOR_STATE_MOBS) {
         
-            selected_mobs.clear();
+            clear_selection();
             
             for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
                 mob_gen* m_ptr = cur_area_data.mob_generators[m];
@@ -564,7 +605,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
         } else if(state == EDITOR_STATE_PATHS) {
         
-            selected_path_stops.clear();
+            clear_selection();
             
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
