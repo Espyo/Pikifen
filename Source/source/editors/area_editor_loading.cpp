@@ -485,9 +485,7 @@ void area_editor::load() {
     //Layout -- properties.
     frm_layout->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        selected_vertexes.clear();
-        selected_edges.clear();
-        selected_sectors.clear();
+        clear_selection();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
@@ -496,7 +494,10 @@ void area_editor::load() {
         
     frm_layout->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        cancel_layout_drawing();
+        if(sub_state != EDITOR_SUB_STATE_DRAWING) {
+            sub_state = EDITOR_SUB_STATE_DRAWING;
+        }
     };
     frm_layout->widgets["but_new"]->description =
         "Trace a new sector where you click.";
@@ -1096,7 +1097,7 @@ void area_editor::load() {
     
     frm_mobs->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        selected_mobs.clear();
+        clear_selection();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
@@ -1915,6 +1916,8 @@ void area_editor::load() {
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
     
+    clear_selection();
+    selection_homogenized = false;
     cam_zoom = 1.0;
     cam_pos.x = cam_pos.y = 0.0;
     selection_effect = 0.0;

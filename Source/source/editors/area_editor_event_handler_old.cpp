@@ -626,7 +626,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
                         s_ptr->links.push_back(
                             path_link(new_link_first_stop, INVALID)
                         );
-                        s_ptr->fix_nrs(cur_area_data);
+                        cur_area_data.fix_path_stop_nrs(s_ptr);
                     }
                     
                     new_link_first_stop->calculate_dists();
@@ -676,7 +676,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
             }
             
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-                cur_area_data.path_stops[s]->fix_nrs(cur_area_data);
+                cur_area_data.fix_path_stop_nrs(cur_area_data.path_stops[s]);
             }
             
             path_preview.clear();

@@ -36,6 +36,36 @@ area_data::area_data() :
 
 
 /* ----------------------------------------------------------------------------
+ * Connects the edges of a sector that link to it into the edge_nrs vector.
+ */
+void area_data::connect_sector_edges(sector* s_ptr) {
+    s_ptr->edge_nrs.clear();
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        if(e_ptr->sectors[0] == s_ptr || e_ptr->sectors[1] == s_ptr) {
+            s_ptr->edge_nrs.push_back(e);
+        }
+    }
+    fix_sector_pointers(s_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Connects the edges that link to it into the edge_nrs vector.
+ */
+void area_data::connect_vertex_edges(vertex* v_ptr) {
+    v_ptr->edge_nrs.clear();
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        if(e_ptr->vertexes[0] == v_ptr || e_ptr->vertexes[1] == v_ptr) {
+            v_ptr->edge_nrs.push_back(e);
+        }
+    }
+    fix_vertex_pointers(v_ptr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Scans the list of edges and retrieves the number of the specified edge.
  * Returns INVALID if not found.
  */
@@ -68,6 +98,142 @@ size_t area_data::find_vertex_nr(const vertex* v_ptr) {
         if(vertexes[v] == v_ptr) return v;
     }
     return INVALID;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the sector and vertex numbers in an edge,
+ * making them match the correct sectors and vertexes,
+ * based on the existing sector and vertex pointers.
+ */
+void area_data::fix_edge_nrs(edge* e_ptr) {
+    for(size_t s = 0; s < 2; ++s) {
+        if(!e_ptr->sectors[s]) {
+            e_ptr->sector_nrs[s] = INVALID;
+        } else {
+            e_ptr->sector_nrs[s] = find_sector_nr(e_ptr->sectors[s]);
+        }
+    }
+    
+    for(size_t v = 0; v < 2; ++v) {
+        if(!e_ptr->vertexes[v]) {
+            e_ptr->vertex_nrs[v] = INVALID;
+        } else {
+            e_ptr->vertex_nrs[v] = find_vertex_nr(e_ptr->vertexes[v]);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the sector and vertex pointers of an edge,
+ * making them point to the correct sectors and vertexes,
+ * based on the existing sector and vertex numbers.
+ */
+void area_data::fix_edge_pointers(edge* e_ptr) {
+    e_ptr->sectors[0] = NULL;
+    e_ptr->sectors[1] = NULL;
+    for(size_t s = 0; s < 2; ++s) {
+        size_t s_nr = e_ptr->sector_nrs[s];
+        e_ptr->sectors[s] = (s_nr == INVALID ? NULL : sectors[s_nr]);
+    }
+    
+    e_ptr->vertexes[0] = NULL;
+    e_ptr->vertexes[1] = NULL;
+    for(size_t v = 0; v < 2; ++v) {
+        size_t v_nr = e_ptr->vertex_nrs[v];
+        e_ptr->vertexes[v] = (v_nr == INVALID ? NULL : vertexes[v_nr]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the path stop numbers in a path stop's links,
+ * making them match the correct path stops,
+ * based on the existing path stop pointers.
+ */
+void area_data::fix_path_stop_nrs(path_stop* s_ptr) {
+    for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        path_link* l_ptr = &s_ptr->links[l];
+        l_ptr->end_nr = INVALID;
+        
+        if(!l_ptr->end_ptr) continue;
+        
+        for(size_t s = 0; s < path_stops.size(); ++s) {
+            if(l_ptr->end_ptr == path_stops[s]) {
+                l_ptr->end_nr = s;
+                break;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the path stop pointers in a path stop's links,
+ * making them point to the correct path stops,
+ * based on the existing path stop numbers.
+ */
+void area_data::fix_path_stop_pointers(path_stop* s_ptr) {
+    for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+        path_link* l_ptr = &s_ptr->links[l];
+        l_ptr->end_ptr = NULL;
+        
+        if(l_ptr->end_nr == INVALID) continue;
+        if(l_ptr->end_nr >= path_stops.size()) continue;
+        
+        l_ptr->end_ptr = path_stops[l_ptr->end_nr];
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the edge numbers in a sector, making them match the correct edges,
+ * based on the existing edge pointers.
+ */
+void area_data::fix_sector_nrs(sector* s_ptr) {
+    s_ptr->edge_nrs.clear();
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        s_ptr->edge_nrs.push_back(find_edge_nr(s_ptr->edges[e]));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the edge pointers in a sector, making them point to the correct edges,
+ * based on the existing edge numbers.
+ */
+void area_data::fix_sector_pointers(sector* s_ptr) {
+    s_ptr->edges.clear();
+    for(size_t e = 0; e < s_ptr->edge_nrs.size(); ++e) {
+        size_t e_nr = s_ptr->edge_nrs[e];
+        s_ptr->edges.push_back(e_nr == INVALID ? NULL : edges[e_nr]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the edge numbers in a vertex, making them match the correct edges,
+ * based on the existing edge pointers.
+ */
+void area_data::fix_vertex_nrs(vertex* v_ptr) {
+    v_ptr->edge_nrs.clear();
+    for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+        v_ptr->edge_nrs.push_back(find_edge_nr(v_ptr->edges[e]));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Fixes the edge pointers in a vertex, making them point to the correct edges,
+ * based on the existing edge numbers.
+ */
+void area_data::fix_vertex_pointers(vertex* v_ptr) {
+    v_ptr->edges.clear();
+    for(size_t e = 0; e < v_ptr->edge_nrs.size(); ++e) {
+        size_t e_nr = v_ptr->edge_nrs[e];
+        v_ptr->edges.push_back(e_nr == INVALID ? NULL : edges[e_nr]);
+    }
 }
 
 
@@ -316,6 +482,46 @@ void area_data::remove_sector(const sector* s_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * A debugging tool. This checks to see if all numbers match their pointers,
+ * for the various edges, vertexes, etc. Aborts execution if any doesn't.
+ */
+void area_data::check_matches() {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]]);
+        }
+    }
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        for(size_t v = 0; v < 2; ++v) {
+            vertex* v_ptr = e_ptr->vertexes[v];
+            assert(e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]]);
+        }
+        
+        for(size_t s = 0; s < 2; ++s) {
+            sector* s_ptr = e_ptr->sectors[s];
+            if(
+                e_ptr->sectors[s] == NULL &&
+                e_ptr->sector_nrs[s] == INVALID
+            ) {
+                continue;
+            }
+            assert(e_ptr->sectors[s] == sectors[e_ptr->sector_nrs[s]]);
+        }
+    }
+    
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]]);
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears the info of an area map.
  */
 void area_data::clear() {
@@ -429,20 +635,22 @@ edge::edge(size_t v1, size_t v2) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the pointers to point to the correct sectors and vertexes.
+ * Returns the vertex that ISN'T the specified one.
  */
-void edge::fix_pointers(area_data &a) {
-    sectors[0] = sectors[1] = NULL;
-    for(size_t s = 0; s < 2; ++s) {
-        size_t s_nr = sector_nrs[s];
-        sectors[s] = (s_nr == INVALID ? NULL : a.sectors[s_nr]);
+vertex* edge::get_other_vertex(vertex* v_ptr) {
+    if(vertexes[0] == v_ptr) return vertexes[1];
+    return vertexes[0];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which side has the specified sector, or INVALID if neither.
+ */
+size_t edge::get_side_with_sector(sector* s_ptr) {
+    for(unsigned char s = 0; s < 2; ++s) {
+        if(sectors[s] == s_ptr) return s;
     }
-    
-    vertexes[0] = vertexes[1] = NULL;
-    for(size_t v = 0; v < 2; ++v) {
-        size_t v_nr = vertex_nrs[v];
-        vertexes[v] = (v_nr == INVALID ? NULL : a.vertexes[v_nr]);
-    }
+    return INVALID;
 }
 
 
@@ -536,13 +744,15 @@ void sector::clone(sector* new_sector) {
     new_sector->type = type;
     new_sector->z = z;
     new_sector->tag = tag;
+    new_sector->hazard_floor = hazard_floor;
+    new_sector->hazards_str = hazards_str;
     new_sector->brightness = brightness;
-    new_sector->fade = fade;
     new_sector->texture_info.scale = texture_info.scale;
     new_sector->texture_info.translation = texture_info.translation;
     new_sector->texture_info.rot = texture_info.rot;
-    new_sector->texture_info.file_name = texture_info.file_name;
-    new_sector->hazards_str = hazards_str;
+    new_sector->texture_info.tint = texture_info.tint;
+    new_sector->always_cast_shadow = always_cast_shadow;
+    new_sector->fade = fade;
 }
 
 
@@ -727,69 +937,6 @@ void path_link::calculate_dist(path_stop* start_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * Fixes the link pointers to point them to the correct stops.
- */
-void path_stop::fix_pointers(area_data &a) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        path_link* l_ptr = &links[l];
-        l_ptr->end_ptr = NULL;
-        
-        if(l_ptr->end_nr == INVALID) continue;
-        if(l_ptr->end_nr >= a.path_stops.size()) continue;
-        
-        l_ptr->end_ptr = a.path_stops[l_ptr->end_nr];
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fixes the link numbers to match them to the correct stop pointer.
- */
-void path_stop::fix_nrs(area_data &a) {
-    for(size_t l = 0; l < links.size(); ++l) {
-        path_link* l_ptr = &links[l];
-        l_ptr->end_nr = INVALID;
-        
-        if(!l_ptr->end_ptr) continue;
-        
-        for(size_t s = 0; s < a.path_stops.size(); ++s) {
-            if(a.path_stops[s] == l_ptr->end_ptr) {
-                l_ptr->end_nr = s;
-                break;
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
- * Connects the edges that link to it into the edge_nrs vector.
- */
-void sector::connect_edges(area_data &a, size_t s_nr) {
-    edge_nrs.clear();
-    for(size_t e = 0; e < a.edges.size(); ++e) {
-        edge* e_ptr = a.edges[e];
-        if(e_ptr->sector_nrs[0] == s_nr || e_ptr->sector_nrs[1] == s_nr) {
-            edge_nrs.push_back(e);
-        }
-    }
-    fix_pointers(a);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fixes the pointers to point them to the correct edges.
- */
-void sector::fix_pointers(area_data &a) {
-    edges.clear();
-    for(size_t e = 0; e < edge_nrs.size(); ++e) {
-        size_t e_nr = edge_nrs[e];
-        edges.push_back(e_nr == INVALID ? NULL : a.edges[e_nr]);
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a vertex.
  */
 vertex::vertex(float x, float y) :
@@ -836,29 +983,16 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 
 
 /* ----------------------------------------------------------------------------
- * Connects the edges that link to it into the edge_nrs vector.
+ * Returns the edge that has the specified vertex as a neighbor of this vertex.
+ * Returns NULL if not found.
  */
-void vertex::connect_edges(area_data &a, size_t v_nr) {
-    edge_nrs.clear();
-    for(size_t e = 0; e < a.edges.size(); ++e) {
-        edge* e_ptr = a.edges[e];
-        if(e_ptr->vertex_nrs[0] == v_nr || e_ptr->vertex_nrs[1] == v_nr) {
-            edge_nrs.push_back(e);
+edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
+    for(size_t e = 0; e < edges.size(); ++e) {
+        if(edges[e]->get_other_vertex(this) == neighbor) {
+            return edges[e];
         }
     }
-    fix_pointers(a);
-}
-
-
-/* ----------------------------------------------------------------------------
- * Fixes the pointers to point to the correct edges.
- */
-void vertex::fix_pointers(area_data &a) {
-    edges.clear();
-    for(size_t e = 0; e < edge_nrs.size(); ++e) {
-        size_t e_nr = edge_nrs[e];
-        edges.push_back(e_nr == INVALID ? NULL : a.edges[e_nr]);
-    }
+    return NULL;
 }
 
 
@@ -2202,7 +2336,7 @@ void triangulate(sector* s_ptr) {
      */
     get_polys(s_ptr, &outer_poly, &inner_polys);
     
-    //Get rid of 0-length vertexes and 180-degree vertexes,
+    //Get rid of 0-length edges and 180-degree vertexes,
     //as they're redundant.
     clean_poly(&outer_poly);
     for(size_t i = 0; i < inner_polys.size(); ++i) clean_poly(&inner_polys[i]);

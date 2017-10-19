@@ -59,7 +59,7 @@ const float  area_editor_old::PATH_PREVIEW_TIMEOUT_DUR = 0.1f;
 const float  area_editor_old::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Radius to use when drawing a path stop circle.
 const float  area_editor_old::PATH_STOP_RADIUS = 16.0f;
-//Minimum distance between two sectors for them to merge.
+//Minimum distance between two vertexes for them to merge.
 const float  area_editor_old::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
 const float  area_editor_old::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
@@ -920,18 +920,14 @@ void area_editor_old::create_sector() {
     
     //Connect the vertexes and edges.
     for(size_t e = 0; e < new_sector_edges.size(); ++e) {
-        new_sector_edges[e]->fix_pointers(cur_area_data);
+        cur_area_data.fix_edge_pointers(new_sector_edges[e]);
     }
     
     for(size_t v = 0; v < new_sector_vertexes.size(); ++v) {
-        new_sector_vertexes[v]->connect_edges(
-            cur_area_data, new_sector_vertex_nrs[v]
-        );
+        cur_area_data.fix_vertex_pointers(new_sector_vertexes[v]);
     }
     
-    new_sector->connect_edges(
-        cur_area_data, cur_area_data.sectors.size() - 1
-    );
+    cur_area_data.connect_sector_edges(new_sector);
     
     //Add the edges to the outer sector's list.
     if(outer_sector) {
@@ -984,16 +980,11 @@ void area_editor_old::create_sector() {
         } else if((*i)->sector_nrs[1] == outer_sector_nr) {
             (*i)->sector_nrs[1] = new_sector_nr;
         }
-        (*i)->fix_pointers(cur_area_data);
+        cur_area_data.fix_edge_pointers(*i);
     }
-    new_sector->connect_edges(
-        cur_area_data,
-        cur_area_data.sectors.size() - 1
-    );
+    cur_area_data.connect_sector_edges(new_sector);
     if(outer_sector) {
-        outer_sector->connect_edges(
-            cur_area_data, outer_sector_nr
-        );
+        cur_area_data.connect_sector_edges(outer_sector);
     }
     
     //Merge vertexes that share a spot.
@@ -1863,7 +1854,7 @@ void area_editor_old::merge_vertex(
                         de_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
                     else if(e_ptr->sector_nrs[1] == de_ptr->sector_nrs[1])
                         de_ptr->sector_nrs[1] = e_ptr->sector_nrs[0];
-                    de_ptr->fix_pointers(cur_area_data);
+                    cur_area_data.fix_edge_pointers(de_ptr);
                     
                     //Go to the edge's old vertexes,
                     //and tell them that it no longer exists.
@@ -1903,7 +1894,7 @@ void area_editor_old::merge_vertex(
         
     }
     
-    v2->fix_pointers(cur_area_data);
+    cur_area_data.fix_vertex_pointers(v2);
     
     //Check if any of the final edges have the same sector
     //on both sides. If so, delete them.
