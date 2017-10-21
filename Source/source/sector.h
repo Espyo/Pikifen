@@ -184,6 +184,8 @@ struct sector {
     point bbox[2];
     
     sector();
+    void add_edge(edge* e_ptr, const size_t e_nr);
+    void remove_edge(edge* e_ptr);
     void clone(sector* new_sector);
     void get_texture_merge_sectors(sector** s1, sector** s2);
     ~sector();
@@ -214,7 +216,9 @@ struct vertex {
     vector<size_t> edge_nrs;
     vector<edge*> edges;
     
-    vertex(float x, float y);
+    vertex(float x = 0.0f, float y = 0.0f);
+    void add_edge(edge* e_ptr, const size_t e_nr);
+    void remove_edge(edge* e_ptr);
     edge* get_edge_by_neighbor(vertex* neighbor);
 };
 
@@ -302,6 +306,8 @@ struct area_data {
     
     area_data();
     void check_matches();
+    void connect_edge_to_sector(edge* e_ptr, sector* s_ptr, size_t side);
+    void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
     void connect_sector_edges(sector* s_ptr);
     void connect_vertex_edges(vertex* v_ptr);
     size_t find_edge_nr(const edge* e_ptr);
@@ -317,6 +323,9 @@ struct area_data {
     void fix_vertex_pointers(vertex* v_ptr);
     void generate_blockmap();
     void generate_edges_blockmap(vector<edge*> &edges);
+    edge* new_edge();
+    sector* new_sector();
+    vertex* new_vertex();
     void remove_vertex(const size_t v_nr);
     void remove_vertex(const vertex* v_ptr);
     void remove_edge(const size_t e_nr);

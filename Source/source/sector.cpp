@@ -36,6 +36,41 @@ area_data::area_data() :
 
 
 /* ----------------------------------------------------------------------------
+ * Connects an edge to a sector, adding the sector and its number to the edge's
+ * lists, and adding the edge and its number to the sector's.
+ */
+void area_data::connect_edge_to_sector(
+    edge* e_ptr, sector* s_ptr, size_t side
+) {
+    if(e_ptr->sectors[side]) {
+        e_ptr->sectors[side]->remove_edge(e_ptr);
+    }
+    e_ptr->sectors[side] = s_ptr;
+    e_ptr->sector_nrs[side] = find_sector_nr(s_ptr);
+    if(s_ptr) {
+        s_ptr->add_edge(e_ptr, find_edge_nr(e_ptr));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Connects an edge to a vertex, adding the vertex and its number to the edge's
+ * lists, and adding the edge and its number to the vertex's.
+ */
+void area_data::connect_edge_to_vertex(
+    edge* e_ptr, vertex* v_ptr, size_t endpoint
+) {
+    if(e_ptr->vertexes[endpoint]) {
+        e_ptr->vertexes[endpoint]->remove_edge(e_ptr);
+    }
+    e_ptr->vertexes[endpoint] = v_ptr;
+    e_ptr->vertex_nrs[endpoint] = find_vertex_nr(v_ptr);
+    v_ptr->add_edge(e_ptr, find_edge_nr(e_ptr));
+}
+
+
+
+/* ----------------------------------------------------------------------------
  * Connects the edges of a sector that link to it into the edge_nrs vector.
  */
 void area_data::connect_sector_edges(sector* s_ptr) {
@@ -359,6 +394,36 @@ void area_data::generate_edges_blockmap(vector<edge*> &edges) {
             }
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new edge to the list and returns its pointer.
+ */
+edge* area_data::new_edge() {
+    edge* e_ptr = new edge();
+    edges.push_back(e_ptr);
+    return e_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new sector to the list and returns its pointer.
+ */
+sector* area_data::new_sector() {
+    sector* s_ptr = new sector();
+    sectors.push_back(s_ptr);
+    return s_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds a new vertex to the list and returns its pointer.
+ */
+vertex* area_data::new_vertex() {
+    vertex* v_ptr = new vertex();
+    vertexes.push_back(v_ptr);
+    return v_ptr;
 }
 
 
@@ -736,6 +801,20 @@ sector::sector() :
 
 
 /* ----------------------------------------------------------------------------
+ * Adds an edge to the sector's list of edges, if it's not there already.
+ */
+void sector::add_edge(edge* e_ptr, const size_t e_nr) {
+    for(size_t i = 0; i < edges.size(); ++i) {
+        if(edges[i] == e_ptr) {
+            return;
+        }
+    }
+    edges.push_back(e_ptr);
+    edge_nrs.push_back(e_nr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clones a sector's properties onto another,
  * not counting the list of edges or bitmap
  * (the file name is cloned too, though).
@@ -828,6 +907,22 @@ void sector::get_texture_merge_sectors(sector** s1, sector** s2) {
     
     *s1 = texture_sector[0];
     *s2 = texture_sector[1];
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an edge from a sector's list of edges, if it is there.
+ */
+void sector::remove_edge(edge* e_ptr) {
+    size_t i = 0;
+    for(; i < edges.size(); ++i) {
+        if(edges[i] == e_ptr) {
+            edges.erase(edges.begin() + i);
+            break;
+        }
+    }
+    if(i == edges.size()) return;
+    edge_nrs.erase(edge_nrs.begin() + i);
 }
 
 
@@ -937,16 +1032,6 @@ void path_link::calculate_dist(path_stop* start_ptr) {
 
 
 /* ----------------------------------------------------------------------------
- * Creates a vertex.
- */
-vertex::vertex(float x, float y) :
-    x(x),
-    y(y) {
-    
-}
-
-
-/* ----------------------------------------------------------------------------
  * Creates a tree shadow.
  */
 tree_shadow::tree_shadow(
@@ -983,6 +1068,30 @@ triangle::triangle(vertex* v1, vertex* v2, vertex* v3) {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a vertex.
+ */
+vertex::vertex(float x, float y) :
+    x(x),
+    y(y) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Adds an edge to the vertex's list of edges, if it's not there already.
+ */
+void vertex::add_edge(edge* e_ptr, const size_t e_nr) {
+    for(size_t i = 0; i < edges.size(); ++i) {
+        if(edges[i] == e_ptr) {
+            return;
+        }
+    }
+    edges.push_back(e_ptr);
+    edge_nrs.push_back(e_nr);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the edge that has the specified vertex as a neighbor of this vertex.
  * Returns NULL if not found.
  */
@@ -993,6 +1102,22 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
         }
     }
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes an edge from a vertex's list of edges, if it is there.
+ */
+void vertex::remove_edge(edge* e_ptr) {
+    size_t i = 0;
+    for(; i < edges.size(); ++i) {
+        if(edges[i] == e_ptr) {
+            edges.erase(edges.begin() + i);
+            break;
+        }
+    }
+    if(i == edges.size()) return;
+    edge_nrs.erase(edge_nrs.begin() + i);
 }
 
 
