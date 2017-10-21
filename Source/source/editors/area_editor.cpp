@@ -24,6 +24,8 @@ const float area_editor::DEBUG_TEXT_SCALE = 1.5f;
 const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Time until the next click is no longer considered a double-click.
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
+//How long to tint the drawing line red for.
+const float area_editor::DRAWING_LINE_ERROR_TINT_DURATION = 1.5f;
 //How much to zoom in/out with the keyboard keys.
 const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //Maximum number of texture suggestions.
@@ -135,6 +137,8 @@ area_editor::area_editor() :
     debug_triangulation(false),
     debug_vertex_nrs(false),
     double_click_time(0),
+    drawing_line_error(DRAWING_LINE_NO_ERROR),
+    drawing_line_error_tint_timer(DRAWING_LINE_ERROR_TINT_DURATION),
     grid_interval(DEF_GRID_INTERVAL),
     is_ctrl_pressed(false),
     is_shift_pressed(false),
@@ -155,6 +159,7 @@ area_editor::area_editor() :
 void area_editor::cancel_layout_drawing() {
     sub_state = EDITOR_SUB_STATE_NONE;
     drawing_nodes.clear();
+    drawing_line_error = DRAWING_LINE_NO_ERROR;
     
     //TODO
     /*
@@ -187,6 +192,170 @@ void area_editor::center_camera(
     z -= z * 0.1;
     
     zoom(z);
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the line the user is trying to draw is okay. Sets the line's status
+ * to drawing_line_error.
+ */
+void area_editor::check_drawing_line(const point &pos) {
+    drawing_line_error = DRAWING_LINE_NO_ERROR;
+    
+    if(drawing_nodes.empty()) {
+        return;
+    }
+    
+    layout_drawing_node* prev_node = &drawing_nodes.back();
+    layout_drawing_node tentative_node(this, pos);
+    
+    //Check for edge collisions.
+    if(!tentative_node.on_vertex) {
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            //If this edge is the same or a neighbor of the previous node,
+            //then never mind.
+            edge* e_ptr = cur_area_data.edges[e];
+            if(
+                prev_node->on_edge == e_ptr ||
+                tentative_node.on_edge == e_ptr
+            ) {
+                continue;
+            }
+            if(prev_node->on_vertex) {
+                if(
+                    e_ptr->vertexes[0] == prev_node->on_vertex ||
+                    e_ptr->vertexes[1] == prev_node->on_vertex
+                ) {
+                    continue;
+                }
+            }
+            
+            if(
+                lines_intersect(
+                    prev_node->snapped_spot, pos,
+                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
+                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
+                    NULL, NULL
+                )
+            ) {
+                drawing_line_error = DRAWING_LINE_CROSSES_EDGES;
+                return;
+            }
+        }
+    }
+    
+    //Check if the line intersects with the drawing's lines.
+    if(drawing_nodes.size() >= 2) {
+        for(size_t n = 0; n < drawing_nodes.size() - 2; ++n) {
+            layout_drawing_node* n1_ptr = &drawing_nodes[n];
+            layout_drawing_node* n2_ptr = &drawing_nodes[n + 1];
+            if(
+                lines_intersect(
+                    prev_node->snapped_spot, pos,
+                    n1_ptr->snapped_spot, n2_ptr->snapped_spot,
+                    NULL, NULL
+                )
+            ) {
+                drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
+                return;
+            }
+        }
+        
+        if(
+            circle_intersects_line(
+                pos, 8.0 / cam_zoom,
+                prev_node->snapped_spot,
+                drawing_nodes[drawing_nodes.size() - 2].snapped_spot
+            )
+        ) {
+            drawing_line_error = DRAWING_LINE_CROSSES_DRAWING;
+            return;
+        }
+    }
+    
+    //Check if this line is entering a sector different from the one the
+    //rest of the drawing is on.
+    unordered_set<sector*> common_sectors;
+    if(drawing_nodes[0].on_edge) {
+        common_sectors.insert(drawing_nodes[0].on_edge->sectors[0]);
+        common_sectors.insert(drawing_nodes[0].on_edge->sectors[1]);
+    } else if(drawing_nodes[0].on_vertex) {
+        for(size_t e = 0; e < drawing_nodes[0].on_vertex->edges.size(); ++e) {
+            edge* e_ptr = drawing_nodes[0].on_vertex->edges[e];
+            common_sectors.insert(e_ptr->sectors[0]);
+            common_sectors.insert(e_ptr->sectors[1]);
+        }
+    } else {
+        //It's all right if this includes the "NULL" sector.
+        common_sectors.insert(drawing_nodes[0].on_sector);
+    }
+    for(size_t n = 1; n < drawing_nodes.size(); ++n) {
+        layout_drawing_node* n_ptr = &drawing_nodes[n];
+        unordered_set<sector*> node_sectors;
+        if(n_ptr->on_edge) {
+            node_sectors.insert(n_ptr->on_edge->sectors[0]);
+            node_sectors.insert(n_ptr->on_edge->sectors[1]);
+        } else if(n_ptr->on_vertex) {
+            for(size_t e = 0; e < n_ptr->on_vertex->edges.size(); ++e) {
+                edge* e_ptr = n_ptr->on_vertex->edges[e];
+                node_sectors.insert(e_ptr->sectors[0]);
+                node_sectors.insert(e_ptr->sectors[1]);
+            }
+        } else {
+            //Again, it's all right if this includes the "NULL" sector.
+            node_sectors.insert(n_ptr->on_sector);
+        }
+        
+        for(auto s = common_sectors.begin(); s != common_sectors.end();) {
+            if(node_sectors.find(*s) == node_sectors.end()) {
+                common_sectors.erase(s++);
+            } else {
+                ++s;
+            }
+        }
+    }
+    
+    if(tentative_node.on_edge) {
+        if(
+            common_sectors.find(tentative_node.on_edge->sectors[0]) ==
+            common_sectors.end() &&
+            common_sectors.find(tentative_node.on_edge->sectors[1]) ==
+            common_sectors.end()
+        ) {
+            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
+        }
+    } else if(tentative_node.on_vertex) {
+        bool vertex_ok = false;
+        for(size_t e = 0; e < tentative_node.on_vertex->edges.size(); ++e) {
+            edge* e_ptr = tentative_node.on_vertex->edges[e];
+            if(
+                common_sectors.find(e_ptr->sectors[0]) !=
+                common_sectors.end() ||
+                common_sectors.find(e_ptr->sectors[1]) !=
+                common_sectors.end()
+            ) {
+                vertex_ok = true;
+                break;
+            }
+        }
+        if(!vertex_ok) {
+            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
+        }
+    } else {
+        if(
+            common_sectors.find(tentative_node.on_sector) ==
+            common_sectors.end()
+        ) {
+            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
+        }
+    }
+    
+    //Check if this drawing would leave any gaps.
+    //TODO
     
 }
 
@@ -235,6 +404,7 @@ void area_editor::do_logic() {
     }
     
     path_preview_timer.tick(delta_t);
+    drawing_line_error_tint_timer.tick(delta_t);
     
     if(!cur_area_name.empty() && editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
@@ -244,6 +414,55 @@ void area_editor::do_logic() {
     
     selection_effect += SELECTION_EFFECT_SPEED * delta_t;
     
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Checks if the drawing would create a neighbor-child hybrid sector inside.
+ */
+bool area_editor::drawing_creates_neighbor_child_hybrid() {
+    unordered_set<sector*> neighbor_sectors;
+    point drawing_tl = drawing_nodes[0].snapped_spot;
+    point drawing_br = drawing_nodes[0].snapped_spot;
+    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+        layout_drawing_node* n_ptr = &drawing_nodes[n];
+        if(n_ptr->on_edge) {
+            neighbor_sectors.insert(n_ptr->on_edge->sectors[0]);
+            neighbor_sectors.insert(n_ptr->on_edge->sectors[1]);
+        }
+        if(n_ptr->snapped_spot.x < drawing_tl.x) {
+            drawing_tl.x = n_ptr->snapped_spot.x;
+        }
+        if(n_ptr->snapped_spot.x > drawing_br.x) {
+            drawing_br.x = n_ptr->snapped_spot.x;
+        }
+        if(n_ptr->snapped_spot.y < drawing_tl.y) {
+            drawing_tl.y = n_ptr->snapped_spot.y;
+        }
+        if(n_ptr->snapped_spot.y > drawing_br.y) {
+            drawing_br.y = n_ptr->snapped_spot.y;
+        }
+    }
+    
+    if(neighbor_sectors.empty()) return false;
+    
+    for(auto s = neighbor_sectors.begin(); s != neighbor_sectors.end(); ++s) {
+        for(size_t e = 0; e < (*s)->edges.size(); ++e) {
+            edge* e_ptr = (*s)->edges[e];
+            for(size_t v = 0; v < 2; ++v) {
+                if(
+                    e_ptr->vertexes[v]->x < drawing_tl.x ||
+                    e_ptr->vertexes[v]->x > drawing_br.x ||
+                    e_ptr->vertexes[v]->y < drawing_tl.y ||
+                    e_ptr->vertexes[v]->y > drawing_br.y
+                ) {
+                    return false;
+                }
+            }
+        }
+    }
+    
+    return true;
 }
 
 
@@ -261,6 +480,13 @@ void area_editor::finish_layout_drawing() {
     
     //Let's just save this, since we'll need it later.
     size_t orig_n_vertexes = cur_area_data.vertexes.size();
+    
+    //Quick check -- if all of a neighbor's vertexes are inside the drawing
+    //then that would create a neighbor-child hybrid! Can't have that! Abort.
+    if(drawing_creates_neighbor_child_hybrid()) {
+        cancel_layout_drawing();
+        return;
+    }
     
     //Get the outer sector, so we can know where to start working in.
     sector* outer_sector = NULL;
@@ -311,39 +537,34 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Now that all nodes have a vertex, create the necessary edges.
+    vector<vertex*> drawing_vertexes;
+    vector<edge*> drawing_edges;
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         layout_drawing_node* prev_node =
             &drawing_nodes[sum_and_wrap(n, -1, drawing_nodes.size())];
             
-        if(!n_ptr->is_new_vertex && !prev_node->is_new_vertex) continue;
-        
-        edge* prev_node_edge = cur_area_data.new_edge();
-        
-        cur_area_data.connect_edge_to_vertex(
-            prev_node_edge, prev_node->on_vertex, 0
-        );
-        cur_area_data.connect_edge_to_vertex(
-            prev_node_edge, n_ptr->on_vertex, 1
-        );
-    }
-    
-    //Check which direction the new sector is traveling in.
-    vector<vertex*> drawing_vertexes;
-    vector<edge*> drawing_edges;
-    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
-        layout_drawing_node* n_ptr = &drawing_nodes[n];
-        layout_drawing_node* next_node =
-            &drawing_nodes[sum_and_wrap(n, 1, drawing_nodes.size())];
-            
         drawing_vertexes.push_back(n_ptr->on_vertex);
-        drawing_edges.push_back(
-            n_ptr->on_vertex->get_edge_by_neighbor(next_node->on_vertex)
-        );
+        
+        edge* prev_node_edge =
+            n_ptr->on_vertex->get_edge_by_neighbor(prev_node->on_vertex);
+            
+        if(!prev_node_edge) {
+            prev_node_edge = cur_area_data.new_edge();
+            
+            cur_area_data.connect_edge_to_vertex(
+                prev_node_edge, prev_node->on_vertex, 0
+            );
+            cur_area_data.connect_edge_to_vertex(
+                prev_node_edge, n_ptr->on_vertex, 1
+            );
+        }
+        
+        drawing_edges.push_back(prev_node_edge);
     }
-    bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
     
     //Connect the edges to the sectors.
+    bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
         edge* e_ptr = drawing_edges[e];
         if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {

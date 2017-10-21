@@ -387,9 +387,12 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 
             } else {
                 //Add a new node.
-                drawing_nodes.push_back(
-                    layout_drawing_node(this, hotspot)
-                );
+                check_drawing_line(hotspot);
+                if(drawing_line_error == DRAWING_LINE_NO_ERROR) {
+                    drawing_nodes.push_back(layout_drawing_node(this, hotspot));
+                } else {
+                    drawing_line_error_tint_timer.start();
+                }
             }
         }
         

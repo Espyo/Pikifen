@@ -570,7 +570,7 @@ void area_editor::do_drawing() {
             }*/
         }
         
-        //Edge drawing preview.
+        //Sector drawing.
         if(sub_state == EDITOR_SUB_STATE_DRAWING) {
             for(size_t n = 1; n < drawing_nodes.size(); ++n) {
                 al_draw_line(
@@ -582,6 +582,13 @@ void area_editor::do_drawing() {
                     3.0 / cam_zoom
                 );
             }
+            ALLEGRO_COLOR new_line_color =
+                interpolate_color(
+                    drawing_line_error_tint_timer.get_ratio_left(),
+                    1, 0,
+                    al_map_rgb(255, 0, 0),
+                    al_map_rgb(64, 255, 64)
+                );
             if(!drawing_nodes.empty()) {
                 point hotspot = snap_to_grid(mouse_cursor_w);
                 al_draw_line(
@@ -589,7 +596,7 @@ void area_editor::do_drawing() {
                     drawing_nodes.back().snapped_spot.y,
                     hotspot.x,
                     hotspot.y,
-                    al_map_rgb(64, 255, 64),
+                    new_line_color,
                     3.0 / cam_zoom
                 );
             }
