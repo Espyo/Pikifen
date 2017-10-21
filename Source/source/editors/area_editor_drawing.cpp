@@ -295,9 +295,9 @@ void area_editor::do_drawing() {
                         middle.x + cos(angle + M_PI_2) * 4,
                         middle.y + sin(angle + M_PI_2) * 4
                     ),
-                    (
+                    "." + (
                         e_ptr->sector_nrs[0] == INVALID ?
-                        "--" :
+                        "-" :
                         i2s(e_ptr->sector_nrs[0])
                     )
                 );
@@ -308,7 +308,7 @@ void area_editor::do_drawing() {
                         middle.x + cos(angle - M_PI_2) * 4,
                         middle.y + sin(angle - M_PI_2) * 4
                     ),
-                    (
+                    ":" + (
                         e_ptr->sector_nrs[1] == INVALID ?
                         "--" :
                         i2s(e_ptr->sector_nrs[1])

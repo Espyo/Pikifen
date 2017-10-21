@@ -271,8 +271,7 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Start creating the new sector.
-    sector* new_sector = new sector();
-    cur_area_data.sectors.push_back(new_sector);
+    sector* new_sector = cur_area_data.new_sector();
     
     if(outer_sector) {
         outer_sector->clone(new_sector);
@@ -292,10 +291,19 @@ void area_editor::finish_layout_drawing() {
         
         if(n_ptr->on_edge) {
             new_vertex = split_edge(n_ptr->on_edge, n_ptr->snapped_spot);
+            
+            //The split created new edges, so let's check future nodes
+            //and update them, since they could've landed on new edges.
+            for(size_t n2 = n; n2 < drawing_nodes.size(); ++n2) {
+                if(drawing_nodes[n2].on_edge == n_ptr->on_edge) {
+                    drawing_nodes[n2].on_edge =
+                        get_edge_under_point(drawing_nodes[n2].snapped_spot);
+                }
+            }
         } else {
-            new_vertex =
-                new vertex(n_ptr->snapped_spot.x, n_ptr->snapped_spot.y);
-            cur_area_data.vertexes.push_back(new_vertex);
+            new_vertex = cur_area_data.new_vertex();
+            new_vertex->x = n_ptr->snapped_spot.x;
+            new_vertex->y = n_ptr->snapped_spot.y;
             n_ptr->is_new_vertex = true;
         }
         
@@ -310,13 +318,14 @@ void area_editor::finish_layout_drawing() {
             
         if(!n_ptr->is_new_vertex && !prev_node->is_new_vertex) continue;
         
-        edge* prev_node_edge = new edge();
-        cur_area_data.edges.push_back(prev_node_edge);
+        edge* prev_node_edge = cur_area_data.new_edge();
         
-        prev_node->on_vertex->edges.push_back(prev_node_edge);
-        n_ptr->on_vertex->edges.push_back(prev_node_edge);
-        prev_node_edge->vertexes[0] = prev_node->on_vertex;
-        prev_node_edge->vertexes[1] = n_ptr->on_vertex;
+        cur_area_data.connect_edge_to_vertex(
+            prev_node_edge, prev_node->on_vertex, 0
+        );
+        cur_area_data.connect_edge_to_vertex(
+            prev_node_edge, n_ptr->on_vertex, 1
+        );
     }
     
     //Check which direction the new sector is traveling in.
@@ -334,32 +343,40 @@ void area_editor::finish_layout_drawing() {
     }
     bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
     
-    //Populate the edges with the sector's data.
+    //Connect the edges to the sectors.
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
-        if(is_clockwise) {
-            drawing_edges[e]->sectors[0] = outer_sector;
-            drawing_edges[e]->sectors[1] = new_sector;
+        edge* e_ptr = drawing_edges[e];
+        if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
+            if(is_clockwise) {
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, outer_sector, 0
+                );
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, new_sector, 1
+                );
+            } else {
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, new_sector, 0
+                );
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, outer_sector, 1
+                );
+            }
+            
         } else {
-            drawing_edges[e]->sectors[0] = new_sector;
-            drawing_edges[e]->sectors[1] = outer_sector;
+            if(e_ptr->sectors[0] == outer_sector) {
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, new_sector, 0
+                );
+            } else {
+                cur_area_data.connect_edge_to_sector(
+                    e_ptr, new_sector, 1
+                );
+            }
         }
     }
     
-    //Add the edges to the new and the outer sectors's lists.
-    for(size_t e = 0; e < drawing_edges.size(); ++e) {
-        new_sector->edges.push_back(drawing_edges[e]);
-        if(outer_sector) outer_sector->edges.push_back(drawing_edges[e]);
-    }
-    
     //Triangulate new sector so we can check what's inside.
-    for(size_t e = 0; e < drawing_edges.size(); ++e) {
-        cur_area_data.fix_edge_nrs(drawing_edges[e]);
-    }
-    for(size_t v = 0; v < drawing_vertexes.size(); ++v) {
-        cur_area_data.fix_vertex_nrs(drawing_vertexes[v]);
-    }
-    cur_area_data.fix_sector_nrs(new_sector);
-    cur_area_data.connect_sector_edges(new_sector);
     triangulate(new_sector);
     
     //All sectors inside the new one need to know that
@@ -368,31 +385,26 @@ void area_editor::finish_layout_drawing() {
     for(size_t v = 0; v < orig_n_vertexes; ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         
+        if(
+            find(drawing_vertexes.begin(), drawing_vertexes.end(), v_ptr) !=
+            drawing_vertexes.end()
+        ) {
+            //This vertex is part of the drawing; nothing to do here.
+            continue;
+        }
+        
         if(is_point_in_sector(point(v_ptr->x, v_ptr->y), new_sector)) {
             inner_edges.insert(v_ptr->edges.begin(), v_ptr->edges.end());
         }
     }
     
     for(auto i = inner_edges.begin(); i != inner_edges.end(); ++i) {
-        if((*i)->sectors[0] == outer_sector) {
-            (*i)->sectors[0] = new_sector;
-        } else if((*i)->sectors[1] == outer_sector) {
-            (*i)->sectors[1] = new_sector;
+        for(size_t s = 0; s < 2; ++s) {
+            if((*i)->sectors[s] == outer_sector) {
+                cur_area_data.connect_edge_to_sector(*i, new_sector, s);
+            }
         }
-        cur_area_data.fix_edge_nrs(*i);
     }
-    
-    //Cleanup.
-    for(size_t e = 0; e < drawing_edges.size(); ++e) {
-        cur_area_data.fix_edge_nrs(drawing_edges[e]);
-    }
-    for(size_t v = 0; v < drawing_vertexes.size(); ++v) {
-        cur_area_data.fix_vertex_nrs(drawing_vertexes[v]);
-    }
-    cur_area_data.fix_sector_nrs(new_sector);
-    if(outer_sector) cur_area_data.fix_sector_nrs(outer_sector);
-    cur_area_data.connect_sector_edges(new_sector);
-    if(outer_sector) cur_area_data.connect_sector_edges(outer_sector);
     
     //Final triangulations.
     triangulate(new_sector);
@@ -777,53 +789,23 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
             where
         );
         
-    vertex* new_v_ptr =
-        new vertex(new_v_pos.x, new_v_pos.y);
-    cur_area_data.vertexes.push_back(new_v_ptr);
+    //Create the new vertex and the new edge.
+    vertex* new_v_ptr = cur_area_data.new_vertex();
+    new_v_ptr->x = new_v_pos.x;
+    new_v_ptr->y = new_v_pos.y;
+    edge* new_e_ptr = cur_area_data.new_edge();
     
-    //New edge, copied from the original one.
-    edge* new_e_ptr = new edge(*e_ptr);
-    cur_area_data.edges.push_back(new_e_ptr);
+    //Connect the vertexes and edges.
+    cur_area_data.connect_edge_to_vertex(new_e_ptr, new_v_ptr, 0);
+    cur_area_data.connect_edge_to_vertex(new_e_ptr, e_ptr->vertexes[1], 1);
+    cur_area_data.connect_edge_to_vertex(e_ptr, new_v_ptr, 1);
     
-    //Save the original end vertex for later.
-    vertex* end_v_ptr = e_ptr->vertexes[1];
-    
-    //Set vertexes on the new and original edges.
-    new_e_ptr->vertex_nrs[0] = cur_area_data.vertexes.size() - 1;
-    new_e_ptr->vertexes[0] = new_v_ptr;
-    e_ptr->vertex_nrs[1] = new_e_ptr->vertex_nrs[0];
-    e_ptr->vertexes[1] = new_v_ptr;
-    
-    //Set sectors on the new edge.
-    if(new_e_ptr->sectors[0]) {
-        new_e_ptr->sectors[0]->edge_nrs.push_back(
-            cur_area_data.edges.size() - 1
-        );
-        new_e_ptr->sectors[0]->edges.push_back(new_e_ptr);
+    //Connect the sectors and new edge.
+    if(e_ptr->sectors[0]) {
+        cur_area_data.connect_edge_to_sector(new_e_ptr, e_ptr->sectors[0], 0);
     }
-    if(new_e_ptr->sectors[1]) {
-        new_e_ptr->sectors[1]->edge_nrs.push_back(
-            cur_area_data.edges.size() - 1
-        );
-        new_e_ptr->sectors[1]->edges.push_back(new_e_ptr);
-    }
-    
-    //Set edges of the new vertex.
-    new_v_ptr->edge_nrs.push_back(cur_area_data.edges.size() - 1);
-    new_v_ptr->edge_nrs.push_back(cur_area_data.find_edge_nr(e_ptr));
-    new_v_ptr->edges.push_back(new_e_ptr);
-    new_v_ptr->edges.push_back(e_ptr);
-    
-    //Update edge data on the end vertex of the original edge
-    //(it now links to the new edge, not the old).
-    for(size_t ve = 0; ve < end_v_ptr->edges.size(); ++ve) {
-        if(end_v_ptr->edges[ve] == e_ptr) {
-            end_v_ptr->edges[ve] =
-                new_e_ptr;
-            end_v_ptr->edge_nrs[ve] =
-                cur_area_data.edges.size() - 1;
-            break;
-        }
+    if(e_ptr->sectors[1]) {
+        cur_area_data.connect_edge_to_sector(new_e_ptr, e_ptr->sectors[1], 1);
     }
     
     return new_v_ptr;
