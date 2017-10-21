@@ -90,9 +90,18 @@ private:
         AREA_EDITOR_PICKER_MOB_TYPE,
     };
     
+    enum DRAWING_LINE_ERRORS {
+        DRAWING_LINE_NO_ERROR,
+        DRAWING_LINE_WAYWARD_SECTOR,
+        DRAWING_LINE_CROSSES_EDGES,
+        DRAWING_LINE_CROSSES_DRAWING,
+        DRAWING_LINE_LEAVES_GAP,
+    };
+    
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
+    static const float         DRAWING_LINE_ERROR_TINT_DURATION;
     static const float         KEYBOARD_CAM_ZOOM;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
     static const float         MOUSE_DRAG_CONFIRM_RANGE;
@@ -169,6 +178,10 @@ private:
     vector<layout_drawing_node> drawing_nodes;
     //List of sectors that the drawing can be connected to.
     set<sector*> drawing_connected_sectors;
+    //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
+    unsigned char drawing_line_error;
+    //Time left to keep the error-redness of the new line for.
+    timer drawing_line_error_tint_timer;
     //Current grid interval.
     float grid_interval;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?
@@ -216,6 +229,7 @@ private:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
+    void check_drawing_line(const point &pos);
     void clear_current_area();
     void clear_selection();
     void create_new_from_picker(const string &name);
@@ -223,6 +237,7 @@ private:
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
+    bool drawing_creates_neighbor_child_hybrid();
     void finish_layout_drawing();
     bool get_common_sector(vector<vertex*> &vertexes, sector** result);
     edge* get_closest_edge_to_angle(
