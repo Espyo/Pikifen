@@ -918,11 +918,10 @@ void sector::remove_edge(edge* e_ptr) {
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            break;
+            edge_nrs.erase(edge_nrs.begin() + i);
+            return;
         }
     }
-    if(i == edges.size()) return;
-    edge_nrs.erase(edge_nrs.begin() + i);
 }
 
 
@@ -1113,11 +1112,10 @@ void vertex::remove_edge(edge* e_ptr) {
     for(; i < edges.size(); ++i) {
         if(edges[i] == e_ptr) {
             edges.erase(edges.begin() + i);
-            break;
+            edge_nrs.erase(edge_nrs.begin() + i);
+            return;
         }
     }
-    if(i == edges.size()) return;
-    edge_nrs.erase(edge_nrs.begin() + i);
 }
 
 

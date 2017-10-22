@@ -154,6 +154,44 @@ area_editor::area_editor() :
 
 
 /* ----------------------------------------------------------------------------
+ * Checks whether it's possible to traverse from drawing node n1 to n2
+ * with the existing edges and vertexes. In other words, if you draw a line
+ * between n1 and n2, it will not go inside a sector.
+ */
+bool area_editor::are_nodes_traversable(
+    const layout_drawing_node &n1, const layout_drawing_node &n2
+) {
+    if(n1.on_sector || n2.on_sector) return false;
+    
+    if(n1.on_edge && n2.on_edge) {
+        if(n1.on_edge != n2.on_edge) return false;
+        
+    } else if(n1.on_edge && n2.on_vertex) {
+        if(
+            n1.on_edge->vertexes[0] != n2.on_vertex &&
+            n1.on_edge->vertexes[1] != n2.on_vertex
+        ) {
+            return false;
+        }
+        
+    } else if(n1.on_vertex && n2.on_vertex) {
+        if(!n1.on_vertex->get_edge_by_neighbor(n2.on_vertex)) {
+            return false;
+        }
+        
+    } else if(n1.on_vertex && n2.on_edge) {
+        if(
+            n2.on_edge->vertexes[0] != n1.on_vertex &&
+            n2.on_edge->vertexes[1] != n1.on_vertex
+        ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Cancels the edge drawing operation.
  */
 void area_editor::cancel_layout_drawing() {
@@ -355,8 +393,61 @@ void area_editor::check_drawing_line(const point &pos) {
     }
     
     //Check if this drawing would leave any gaps.
-    //TODO
+    //Type 0: Sector to existing geometry,
+    //Type 1: Existing geometry to sector,
+    //Type 2: Existing geometry to different existing geometry.
+    unsigned char part_type[2] = { 0, 0 };
+    unsigned char cur_part = 0;
     
+    for(size_t n = 1; n < drawing_nodes.size(); ++n) {
+        layout_drawing_node* prev_node = &drawing_nodes[n - 1];
+        layout_drawing_node* cur_node = &drawing_nodes[n];
+        bool prev_on_sector = (!prev_node->on_edge && !prev_node->on_vertex);
+        bool cur_on_sector = (!cur_node->on_edge && !cur_node->on_vertex);
+        
+        if(
+            prev_on_sector && !cur_on_sector
+        ) {
+            part_type[cur_part] = 0;
+            cur_part++;
+            
+        } else if(
+            !prev_on_sector && cur_on_sector
+        ) {
+            part_type[cur_part] = 1;
+            cur_part++;
+            
+        } else if(
+            !prev_on_sector && !cur_on_sector &&
+            !are_nodes_traversable(*prev_node, *cur_node)
+        ) {
+            part_type[cur_part] = 2;
+            cur_part++;
+        }
+    }
+    
+    if(cur_part == 2) {
+        unsigned char line_type = 0;
+        bool prev_on_sector = (!prev_node->on_edge && !prev_node->on_vertex);
+        bool line_on_sector =
+            (!tentative_node.on_edge && !tentative_node.on_vertex);
+        bool continuing = false;
+        
+        if(prev_on_sector && line_on_sector) {
+            continuing = true;
+            
+        } else if(
+            !prev_on_sector && !line_on_sector &&
+            are_nodes_traversable(*prev_node, tentative_node)
+        ) {
+            continuing = true;
+        }
+        
+        if(!continuing) {
+            drawing_line_error = DRAWING_LINE_LEAVES_GAP;
+            return;
+        }
+    }
 }
 
 
@@ -427,8 +518,12 @@ bool area_editor::drawing_creates_neighbor_child_hybrid() {
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         layout_drawing_node* n_ptr = &drawing_nodes[n];
         if(n_ptr->on_edge) {
-            neighbor_sectors.insert(n_ptr->on_edge->sectors[0]);
-            neighbor_sectors.insert(n_ptr->on_edge->sectors[1]);
+            if(n_ptr->on_edge->sectors[0]) {
+                neighbor_sectors.insert(n_ptr->on_edge->sectors[0]);
+            }
+            if(n_ptr->on_edge->sectors[1]) {
+                neighbor_sectors.insert(n_ptr->on_edge->sectors[1]);
+            }
         }
         if(n_ptr->snapped_spot.x < drawing_tl.x) {
             drawing_tl.x = n_ptr->snapped_spot.x;
