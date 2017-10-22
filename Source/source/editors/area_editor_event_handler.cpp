@@ -391,7 +391,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 if(drawing_line_error == DRAWING_LINE_NO_ERROR) {
                     drawing_nodes.push_back(layout_drawing_node(this, hotspot));
                 } else {
-                    drawing_line_error_tint_timer.start();
+                    handle_line_error();
                 }
             }
         }
@@ -682,14 +682,19 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &mouse_cursor_w.x, &mouse_cursor_w.y
     );
     
-    if(!is_mouse_in_gui(mouse_cursor_s)) {
-        lbl_status_bar->text =
-            "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
+    if(status_override_timer.time_left > 0.0f) {
+        lbl_status_bar->text = status_override_text;
+        
     } else {
-        lafi::widget* wum =
-            gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
-        if(wum) {
-            lbl_status_bar->text = wum->description;
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
+            lbl_status_bar->text =
+                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
+        } else {
+            lafi::widget* wum =
+                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+            if(wum) {
+                lbl_status_bar->text = wum->description;
+            }
         }
     }
 }

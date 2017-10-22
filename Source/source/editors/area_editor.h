@@ -109,6 +109,7 @@ private:
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
+    static const float         STATUS_OVERRIDE_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
@@ -222,6 +223,10 @@ private:
     bool show_reference;
     //State the editor was in before entering the options.
     size_t state_before_options;
+    //Status bar override text.
+    string status_override_text;
+    //Time left to show the status bar override text for.
+    timer status_override_timer;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     
@@ -242,6 +247,7 @@ private:
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
     bool drawing_creates_neighbor_child_hybrid();
+    void emit_status_bar_message(const string &text);
     void finish_layout_drawing();
     bool get_common_sector(vector<vertex*> &vertexes, sector** result);
     edge* get_closest_edge_to_angle(
@@ -255,6 +261,7 @@ private:
     path_stop* get_path_stop_under_point(const point &p);
     sector* get_sector_under_point(const point &p);
     vertex* get_vertex_under_point(const point &p);
+    void handle_line_error();
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);

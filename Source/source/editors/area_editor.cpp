@@ -40,6 +40,8 @@ const float area_editor::PATH_STOP_RADIUS = 16.0f;
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
+//How long to override the status bar text for.
+const float area_editor::STATUS_OVERRIDE_DURATION = 6.0f;
 //Minimum distance between two vertexes for them to merge.
 const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
@@ -148,6 +150,7 @@ area_editor::area_editor() :
     path_preview_timer(0),
     selecting(false),
     selection_effect(0),
+    status_override_timer(STATUS_OVERRIDE_DURATION),
     show_reference(false) {
     
 }
@@ -226,11 +229,9 @@ void area_editor::center_camera(
     float z;
     if(width > height) z = gui_x / width;
     else z = status_bar_y / height;
-    
     z -= z * 0.1;
     
-    zoom(z);
-    
+    zoom(z, false);
 }
 
 
@@ -496,6 +497,7 @@ void area_editor::do_logic() {
     
     path_preview_timer.tick(delta_t);
     drawing_line_error_tint_timer.tick(delta_t);
+    status_override_timer.tick(delta_t);
     
     if(!cur_area_name.empty() && editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
@@ -562,6 +564,15 @@ bool area_editor::drawing_creates_neighbor_child_hybrid() {
 
 
 /* ----------------------------------------------------------------------------
+ * Emits a message onto the status bar, and keeps it there for some seconds.
+ */
+void area_editor::emit_status_bar_message(const string &text) {
+    status_override_text = text;
+    status_override_timer.start();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Finishes the layout drawing operation, and tries to create whatever sectors.
  */
 void area_editor::finish_layout_drawing() {
@@ -579,6 +590,9 @@ void area_editor::finish_layout_drawing() {
     //Quick check -- if all of a neighbor's vertexes are inside the drawing
     //then that would create a neighbor-child hybrid! Can't have that! Abort.
     if(drawing_creates_neighbor_child_hybrid()) {
+        emit_status_bar_message(
+            "That drawing would creature a neighbor-child hybrid sector!"
+        );
         cancel_layout_drawing();
         return;
     }
@@ -994,6 +1008,31 @@ vertex* area_editor::get_vertex_under_point(const point &p) {
     }
     
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles an error in the line the user is trying to draw.
+ */
+void area_editor::handle_line_error() {
+    drawing_line_error_tint_timer.start();
+    if(drawing_line_error == DRAWING_LINE_CROSSES_DRAWING) {
+        emit_status_bar_message(
+            "That line crosses other lines in the drawing!"
+        );
+    } else if(drawing_line_error == DRAWING_LINE_CROSSES_EDGES) {
+        emit_status_bar_message(
+            "That line crosses existing edges!"
+        );
+    } else if(drawing_line_error == DRAWING_LINE_LEAVES_GAP) {
+        emit_status_bar_message(
+            "That drawing would leave a gap in the sector!"
+        );
+    } else if(drawing_line_error == DRAWING_LINE_WAYWARD_SECTOR) {
+        emit_status_bar_message(
+            "That line goes out of the sector you're drawing on!"
+        );
+    }
 }
 
 
