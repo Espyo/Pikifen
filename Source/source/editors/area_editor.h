@@ -225,6 +225,10 @@ private:
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     
+    bool are_nodes_traversable(
+        const layout_drawing_node &n1,
+        const layout_drawing_node &n2
+    );
     void cancel_layout_drawing();
     void center_camera(
         const point &min_coords, const point &max_coords
