@@ -254,6 +254,9 @@ private:
         vertex* v_ptr, const float angle, const bool clockwise,
         float* closest_edge_angle
     );
+    vector<unsigned char> get_drawing_node_events(
+        const layout_drawing_node &n1, const layout_drawing_node &n2
+    );
     bool get_drawing_outer_sector(sector** result);
     edge* get_edge_under_point(const point &p);
     float get_mob_gen_radius(mob_gen* m);

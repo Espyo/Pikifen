@@ -315,6 +315,7 @@ void area_editor::check_drawing_line(const point &pos) {
     
     //Check if this line is entering a sector different from the one the
     //rest of the drawing is on.
+    
     unordered_set<sector*> common_sectors;
     if(drawing_nodes[0].on_edge) {
         common_sectors.insert(drawing_nodes[0].on_edge->sectors[0]);
@@ -352,6 +353,30 @@ void area_editor::check_drawing_line(const point &pos) {
             } else {
                 ++s;
             }
+        }
+    }
+    
+    bool prev_node_on_sector =
+        (!prev_node->on_edge && !prev_node->on_vertex);
+    bool tent_node_on_sector =
+        (!tentative_node.on_edge && !tentative_node.on_vertex);
+        
+    if(
+        !prev_node_on_sector && !tent_node_on_sector &&
+        !are_nodes_traversable(*prev_node, tentative_node)
+    ) {
+        //Useful check if, for instance, you have a square in the middle
+        //of your working sector, you draw a node to the left of the square,
+        //a node on the square's left line, and then a node on the square's
+        //right line. Technically, these last two nodes are related to the
+        //outer sector, but shouldn't be allowed because the line between them
+        //goes through a different sector.
+        point center =
+            (prev_node->snapped_spot + tentative_node.snapped_spot) / 2;
+        sector* crossing_sector = get_sector(center, NULL, false);
+        if(common_sectors.find(crossing_sector) == common_sectors.end()) {
+            drawing_line_error = DRAWING_LINE_WAYWARD_SECTOR;
+            return;
         }
     }
     
@@ -394,60 +419,21 @@ void area_editor::check_drawing_line(const point &pos) {
     }
     
     //Check if this drawing would leave any gaps.
-    //Type 0: Sector to existing geometry,
-    //Type 1: Existing geometry to sector,
-    //Type 2: Existing geometry to different existing geometry.
-    unsigned char part_type[2] = { 0, 0 };
-    unsigned char cur_part = 0;
+    vector<unsigned char> evs;
     
     for(size_t n = 1; n < drawing_nodes.size(); ++n) {
-        layout_drawing_node* prev_node = &drawing_nodes[n - 1];
-        layout_drawing_node* cur_node = &drawing_nodes[n];
-        bool prev_on_sector = (!prev_node->on_edge && !prev_node->on_vertex);
-        bool cur_on_sector = (!cur_node->on_edge && !cur_node->on_vertex);
-        
-        if(
-            prev_on_sector && !cur_on_sector
-        ) {
-            part_type[cur_part] = 0;
-            cur_part++;
-            
-        } else if(
-            !prev_on_sector && cur_on_sector
-        ) {
-            part_type[cur_part] = 1;
-            cur_part++;
-            
-        } else if(
-            !prev_on_sector && !cur_on_sector &&
-            !are_nodes_traversable(*prev_node, *cur_node)
-        ) {
-            part_type[cur_part] = 2;
-            cur_part++;
-        }
+        vector<unsigned char> new_evs =
+            get_drawing_node_events(drawing_nodes[n - 1], drawing_nodes[n]);
+        evs.insert(evs.end(), new_evs.begin(), new_evs.end());
     }
     
-    if(cur_part == 2) {
-        unsigned char line_type = 0;
-        bool prev_on_sector = (!prev_node->on_edge && !prev_node->on_vertex);
-        bool line_on_sector =
-            (!tentative_node.on_edge && !tentative_node.on_vertex);
-        bool continuing = false;
-        
-        if(prev_on_sector && line_on_sector) {
-            continuing = true;
-            
-        } else if(
-            !prev_on_sector && !line_on_sector &&
-            are_nodes_traversable(*prev_node, tentative_node)
-        ) {
-            continuing = true;
-        }
-        
-        if(!continuing) {
-            drawing_line_error = DRAWING_LINE_LEAVES_GAP;
-            return;
-        }
+    vector<unsigned char> new_evs =
+        get_drawing_node_events(*prev_node, tentative_node);
+    evs.insert(evs.end(), new_evs.begin(), new_evs.end());
+    
+    if(evs.size() > 2) {
+        drawing_line_error = DRAWING_LINE_LEAVES_GAP;
+        return;
     }
 }
 
@@ -829,6 +815,40 @@ bool area_editor::get_common_sector(
     
     *result = best_rightmost_sector;
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the "events" that happened between n1 and n2, if any.
+ *   0: n2 went into existing geometry.
+ *   1: n1 came from existing geometry.
+ */
+vector<unsigned char> area_editor::get_drawing_node_events(
+    const layout_drawing_node &n1, const layout_drawing_node &n2
+) {
+    bool n1_on_sector = (!n1.on_edge && !n1.on_vertex);
+    bool n2_on_sector = (!n2.on_edge && !n2.on_vertex);
+    vector<unsigned char> evs;
+    
+    if(
+        n1_on_sector && !n2_on_sector
+    ) {
+        evs.push_back(0);
+        
+    } else if(
+        !n1_on_sector && n2_on_sector
+    ) {
+        evs.push_back(1);
+        
+    } else if(
+        !n1_on_sector && !n2_on_sector &&
+        !are_nodes_traversable(n1, n2)
+    ) {
+        evs.push_back(0);
+        evs.push_back(1);
+    }
+    
+    return evs;
 }
 
 
