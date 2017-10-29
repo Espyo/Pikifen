@@ -497,59 +497,6 @@ void area_editor::do_logic() {
 
 
 /* ----------------------------------------------------------------------------
- * Checks if the drawing would create a neighbor-child hybrid sector inside.
- */
-bool area_editor::drawing_creates_neighbor_child_hybrid() {
-    unordered_set<sector*> neighbor_sectors;
-    point drawing_tl = drawing_nodes[0].snapped_spot;
-    point drawing_br = drawing_nodes[0].snapped_spot;
-    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
-        layout_drawing_node* n_ptr = &drawing_nodes[n];
-        if(n_ptr->on_edge) {
-            if(n_ptr->on_edge->sectors[0]) {
-                neighbor_sectors.insert(n_ptr->on_edge->sectors[0]);
-            }
-            if(n_ptr->on_edge->sectors[1]) {
-                neighbor_sectors.insert(n_ptr->on_edge->sectors[1]);
-            }
-        }
-        if(n_ptr->snapped_spot.x < drawing_tl.x) {
-            drawing_tl.x = n_ptr->snapped_spot.x;
-        }
-        if(n_ptr->snapped_spot.x > drawing_br.x) {
-            drawing_br.x = n_ptr->snapped_spot.x;
-        }
-        if(n_ptr->snapped_spot.y < drawing_tl.y) {
-            drawing_tl.y = n_ptr->snapped_spot.y;
-        }
-        if(n_ptr->snapped_spot.y > drawing_br.y) {
-            drawing_br.y = n_ptr->snapped_spot.y;
-        }
-    }
-    
-    if(neighbor_sectors.empty()) return false;
-    
-    for(auto s = neighbor_sectors.begin(); s != neighbor_sectors.end(); ++s) {
-        for(size_t e = 0; e < (*s)->edges.size(); ++e) {
-            edge* e_ptr = (*s)->edges[e];
-            for(size_t v = 0; v < 2; ++v) {
-                if(
-                    e_ptr->vertexes[v]->x < drawing_tl.x ||
-                    e_ptr->vertexes[v]->x > drawing_br.x ||
-                    e_ptr->vertexes[v]->y < drawing_tl.y ||
-                    e_ptr->vertexes[v]->y > drawing_br.y
-                ) {
-                    return false;
-                }
-            }
-        }
-    }
-    
-    return true;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Emits a message onto the status bar, and keeps it there for some seconds.
  */
 void area_editor::emit_status_bar_message(const string &text) {
@@ -569,19 +516,6 @@ void area_editor::finish_layout_drawing() {
     
     //This is the basic idea: create a new sector using the
     //vertexes provided by the user, as a "child" of an existing sector.
-    
-    //Let's just save this, since we'll need it later.
-    size_t orig_n_vertexes = cur_area_data.vertexes.size();
-    
-    //Quick check -- if all of a neighbor's vertexes are inside the drawing
-    //then that would create a neighbor-child hybrid! Can't have that! Abort.
-    if(drawing_creates_neighbor_child_hybrid()) {
-        emit_status_bar_message(
-            "That drawing would creature a neighbor-child hybrid sector!"
-        );
-        cancel_layout_drawing();
-        return;
-    }
     
     //Get the outer sector, so we can know where to start working in.
     sector* outer_sector = NULL;
@@ -658,28 +592,41 @@ void area_editor::finish_layout_drawing() {
         drawing_edges.push_back(prev_node_edge);
     }
     
-    //Connect the edges to the sectors.
     bool is_clockwise = is_polygon_clockwise(drawing_vertexes);
+    
+    //Organize all edges such that their vertexes v1 and v2 are also in the same
+    //order as the vertex order in the drawing.
+    for(size_t e = 0; e < drawing_edges.size(); ++e) {
+        if(drawing_edges[e]->vertexes[1] != drawing_vertexes[e]) {
+            drawing_edges[e]->swap_vertexes();
+        }
+    }
+    
+    //Connect the edges to the sectors.
+    unsigned char inner_sector_side = (is_clockwise ? 1 : 0);
+    unsigned char outer_sector_side = (is_clockwise ? 0 : 1);
+    
+    map<edge*, sector*[2]> edge_sector_backups;
+    
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
         edge* e_ptr = drawing_edges[e];
+        
         if(!e_ptr->sectors[0] && !e_ptr->sectors[1]) {
-            if(is_clockwise) {
-                cur_area_data.connect_edge_to_sector(
-                    e_ptr, outer_sector, 0
-                );
-                cur_area_data.connect_edge_to_sector(
-                    e_ptr, new_sector, 1
-                );
-            } else {
-                cur_area_data.connect_edge_to_sector(
-                    e_ptr, new_sector, 0
-                );
-                cur_area_data.connect_edge_to_sector(
-                    e_ptr, outer_sector, 1
-                );
-            }
+            //If it's a new edge, set it up properly.
+            cur_area_data.connect_edge_to_sector(
+                e_ptr, outer_sector, outer_sector_side
+            );
+            cur_area_data.connect_edge_to_sector(
+                e_ptr, new_sector, inner_sector_side
+            );
             
         } else {
+            //If not, let's just add the info for the new sector,
+            //and keep the information from the previous sector it was
+            //pointing to. This will be cleaned up later on.
+            edge_sector_backups[e_ptr][0] = e_ptr->sectors[0];
+            edge_sector_backups[e_ptr][1] = e_ptr->sectors[1];
+            
             if(e_ptr->sectors[0] == outer_sector) {
                 cur_area_data.connect_edge_to_sector(
                     e_ptr, new_sector, 0
@@ -698,27 +645,47 @@ void area_editor::finish_layout_drawing() {
     //All sectors inside the new one need to know that
     //their outer sector changed.
     unordered_set<edge*> inner_edges;
-    for(size_t v = 0; v < orig_n_vertexes; ++v) {
-        vertex* v_ptr = cur_area_data.vertexes[v];
-        
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        vertex* v1_ptr = cur_area_data.edges[e]->vertexes[0];
+        vertex* v2_ptr = cur_area_data.edges[e]->vertexes[1];
         if(
-            find(drawing_vertexes.begin(), drawing_vertexes.end(), v_ptr) !=
-            drawing_vertexes.end()
+            is_point_in_sector(point(v1_ptr->x, v1_ptr->y), new_sector) &&
+            is_point_in_sector(point(v2_ptr->x, v2_ptr->y), new_sector)
         ) {
-            //This vertex is part of the drawing; nothing to do here.
-            continue;
-        }
-        
-        if(is_point_in_sector(point(v_ptr->x, v_ptr->y), new_sector)) {
-            inner_edges.insert(v_ptr->edges.begin(), v_ptr->edges.end());
+            inner_edges.insert(cur_area_data.edges[e]);
         }
     }
     
     for(auto i = inner_edges.begin(); i != inner_edges.end(); ++i) {
-        for(size_t s = 0; s < 2; ++s) {
-            if((*i)->sectors[s] == outer_sector) {
-                cur_area_data.connect_edge_to_sector(*i, new_sector, s);
+        auto de_it = find(drawing_edges.begin(), drawing_edges.end(), *i);
+        
+        if(de_it != drawing_edges.end()) {
+            //If this edge is a part of the drawing, then we know
+            //that it's already set correctly from previous parts of
+            //the algorithm. However, in the case where the new sector
+            //is on the outside (i.e. this edge is both inside AND a neighbor)
+            //then let's simplify the procedure and remove this edge from
+            //the new sector, letting it keep its old data.
+            //The new sector will still be closed using other edges; that's
+            //guaranteed.
+            if((*i)->sectors[outer_sector_side] == new_sector) {
+                new_sector->remove_edge(*i);
+                cur_area_data.connect_edge_to_sector(
+                    *i, edge_sector_backups[*i][0], 0
+                );
+                cur_area_data.connect_edge_to_sector(
+                    *i, edge_sector_backups[*i][1], 1
+                );
+                drawing_edges.erase(de_it);
             }
+            
+        } else {
+            for(size_t s = 0; s < 2; ++s) {
+                if((*i)->sectors[s] == outer_sector) {
+                    cur_area_data.connect_edge_to_sector(*i, new_sector, s);
+                }
+            }
+            
         }
     }
     

@@ -246,7 +246,6 @@ private:
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text
     );
-    bool drawing_creates_neighbor_child_hybrid();
     void emit_status_bar_message(const string &text);
     void finish_layout_drawing();
     bool get_common_sector(vector<vertex*> &vertexes, sector** result);

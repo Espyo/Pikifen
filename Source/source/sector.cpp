@@ -770,6 +770,18 @@ size_t edge::remove_from_vertexes() {
 
 
 /* ----------------------------------------------------------------------------
+ * Swaps the two vertexes of the edge around. It also swaps the sectors,
+ * so that they still point in the right direction.
+ */
+void edge::swap_vertexes() {
+    swap(vertexes[0], vertexes[1]);
+    swap(vertex_nrs[0], vertex_nrs[1]);
+    swap(sectors[0], sectors[1]);
+    swap(sector_nrs[0], sector_nrs[1]);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a mob generation structure.
  */
 mob_gen::mob_gen(
