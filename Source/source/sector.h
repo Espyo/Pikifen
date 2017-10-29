@@ -96,6 +96,7 @@ struct edge {
     size_t get_side_with_sector(sector* s_ptr);
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
+    void swap_vertexes();
 };
 
 
