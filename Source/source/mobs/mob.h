@@ -251,8 +251,6 @@ public:
     float z_cap;
     //Starting coordinates; what the mob calls "home".
     point home;
-    //Speed multiplies by this much each second. //TODO use this.
-    float acceleration;
     //The highest ground below the entire mob.
     sector* ground_sector;
     //Sector that the mob's center is on.

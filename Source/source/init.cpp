@@ -136,7 +136,7 @@ void init_controls() {
         BUTTON_GROUP_DOWN, "Group down", "group_down", ""
     );
     buttons.add(
-        BUTTON_GROUP_CURSOR, "Group cursor", "group_cursor", "k_75"
+        BUTTON_GROUP_CURSOR, "Group to cursor", "group_cursor", "k_75"
     );
     buttons.add(
         BUTTON_NEXT_LEADER, "Next leader", "next_leader", "k_64"

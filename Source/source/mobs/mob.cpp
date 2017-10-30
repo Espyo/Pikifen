@@ -70,7 +70,6 @@ mob::mob(
     was_thrown(false),
     group(nullptr),
     carry_info(nullptr),
-    acceleration(0),
     chase_free_move(false),
     chase_target_dist(0),
     on_hazard(nullptr),

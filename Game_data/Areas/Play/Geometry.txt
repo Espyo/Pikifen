@@ -2655,7 +2655,6 @@ path_stops{
 		links{
 			nr=11
 			nr=1
-			nr=50
 		}
 	}
 	s{

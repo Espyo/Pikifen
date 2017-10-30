@@ -10,7 +10,8 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 2) FAQ and troubleshooting
 3) Compiling
 4) Credits
-5) Disclaimer
+5) Tips
+6) Disclaimer
 ===============
 
 ===============
@@ -40,12 +41,11 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
 2) FAQ and troubleshooting
 ===============
     Why did it crash?
-        Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
-        If the engine showed you a message telling you to read the readme, please open the file Error_log.txt in the engine's folder.
-            Check the latest session written in the file, and you should find some technical diagnostic information about the crash. Right before that, check if the engine reported any problem. For instance, the engine could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
-            If you believe the crash is due to a problem with the engine itself, then please let me know. I may ask you to show me the diagnostic information and/or the screenshot that got dumped in the engine's main folder. These will help me debug the problem.
+        If you got a message telling you to read the readme, then please open the file Error_log.txt in the engine's folder.
+            Check the latest session written in the file, and you should find some technical information about the crash. Right before that, check if the engine reported any problem. For instance, it could've crashed because you forgot to write some value, or misnamed some file. Fix the problems and try again.
+            If you think the crash is due to a problem with the engine itself, then please let me know. When you tell me about it, please also tell me what you were doing when it happened. I may also ask you to show me the crash information and/or the screenshot that got dumped in the engine's main folder. These will help me fix the problem.
         Other than that, here are some possible solutions and workarounds:
-            If you get a crash right after a large area finishes loading, and you have a weak machine, it is possible that the engine failed to render the area's geometry buffers. Please turn down the value of the "area_quality" option in Options.txt. 0.3 or lower might work.
+            Remember that when you download the engine's zip file, you need to unzip everything inside of it before you're able to play.
     
     Why can't I see the game window?
         Because windows sometimes break under Windows.
@@ -201,7 +201,12 @@ You can find more info on Pikmin Fanon http://www.pikminfanon.com/Pikmin_fangame
             André 'Espyo' Silva
 
 ===============
-5) Disclaimer
+5) Tips
+===============
+    * If you dismiss while ordering the group to go in a certain direction, they will be dismissed in that direction.
+
+===============
+6) Disclaimer
 ===============
     The Pikmin fangame engine and any fan content run within it are NOT affiliated with Nintendo® and should NOT be sold.
     They are NON-PROFIT projects created by fans of the Pikmin® franchise, and do not intend to infringe on the copyrights or registered trademarks of Nintendo®.

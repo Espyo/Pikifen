@@ -26,7 +26,7 @@ using namespace std;
  */
 class enemy_type : public mob_type {
 public:
-    unsigned char pikmin_seeds;
+    size_t pikmin_seeds;
     float value;
     float revive_speed;
     bool is_boss;
