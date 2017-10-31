@@ -147,6 +147,7 @@ area_editor::area_editor() :
     is_gui_focused(false),
     last_mouse_click(INVALID),
     mouse_drag_confirmed(false),
+    moving(false),
     path_preview_timer(0),
     selecting(false),
     selection_effect(0),
@@ -208,6 +209,20 @@ void area_editor::cancel_layout_drawing() {
     new_circle_sector_points.clear();
     new_circle_sector_valid_edges.clear();
     */
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Cancels the vertex moving operation.
+ */
+void area_editor::cancel_layout_moving() {
+    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
+        (*v)->x = pre_move_vertex_coords[*v].x;
+        (*v)->y = pre_move_vertex_coords[*v].y;
+    }
+    pre_move_vertex_coords.clear();
+    pre_move_sector_directions.clear();
+    moving = false;
 }
 
 
@@ -502,6 +517,7 @@ void area_editor::do_logic() {
 void area_editor::emit_status_bar_message(const string &text) {
     status_override_text = text;
     status_override_timer.start();
+    lbl_status_bar->text = status_override_text;
 }
 
 
@@ -705,6 +721,70 @@ void area_editor::finish_layout_drawing() {
 
 
 /* ----------------------------------------------------------------------------
+ * Finishes a vertex moving procedure.
+ */
+void area_editor::finish_layout_moving() {
+    vector<edge*> crosses = get_crossing_edges();
+    if(!crosses.empty()) {
+        emit_status_bar_message("That move would cause edges to intersect!");
+        cancel_layout_moving();
+        return;
+    }
+    
+    unordered_set<sector*> affected_sectors =
+        get_affected_sectors(selected_vertexes);
+    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
+        if(!(*s)) continue;
+        if(pre_move_sector_directions[*s] != is_sector_clockwise(*s)) {
+            emit_status_bar_message(
+                "That move would turn a sector inside-out!"
+            );
+            cancel_layout_moving();
+            return;
+        }
+    }
+    
+    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
+        if(!(*s)) continue;
+        triangulate(*s);
+    }
+    
+    pre_move_vertex_coords.clear();
+    pre_move_sector_directions.clear();
+    moving = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which edges are crossing against other edges, if any.
+ */
+vector<edge*> area_editor::get_crossing_edges() {
+    vector<edge*> intersections;
+    
+    for(size_t e1 = 0; e1 < cur_area_data.edges.size(); ++e1) {
+        edge* e1_ptr = cur_area_data.edges[e1];
+        for(size_t e2 = e1 + 1; e2 < cur_area_data.edges.size(); ++e2) {
+            edge* e2_ptr = cur_area_data.edges[e2];
+            if(e1_ptr->has_neighbor(e2_ptr)) continue;
+            if(
+                lines_intersect(
+                    point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
+                    point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
+                    point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
+                    point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
+                    NULL, NULL
+                )
+            ) {
+                intersections.push_back(e1_ptr);
+                intersections.push_back(e2_ptr);
+            }
+        }
+    }
+    return intersections;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns a sector common to all vertexes.
  * A sector is considered this if a vertex has it as a sector of
  * a neighboring edge, or if a vertex is inside it.
@@ -896,6 +976,44 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
     }
     
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns all sectors affected by the specified vertexes.
+ * This includes the NULL sector.
+ */
+unordered_set<sector*> area_editor::get_affected_sectors(
+    set<vertex*> &vertexes
+) {
+    unordered_set<sector*> affected_sectors;
+    for(auto v = vertexes.begin(); v != vertexes.end(); ++v) {
+        for(size_t e = 0; e < (*v)->edges.size(); ++e) {
+            affected_sectors.insert((*v)->edges[e]->sectors[0]);
+            affected_sectors.insert((*v)->edges[e]->sectors[1]);
+        }
+    }
+    return affected_sectors;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which layout element got clicked, if any.
+ */
+void area_editor::get_clicked_layout_element(
+    vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
+) {
+    *clicked_vertex = get_vertex_under_point(mouse_cursor_w);
+    *clicked_edge = NULL;
+    *clicked_sector = NULL;
+    
+    if(*clicked_vertex) return;
+    
+    *clicked_edge = get_edge_under_point(mouse_cursor_w);
+    
+    if(*clicked_edge) return;
+    
+    *clicked_sector = get_sector_under_point(mouse_cursor_w);
 }
 
 
@@ -1107,6 +1225,36 @@ void area_editor::load_area(const bool from_backup) {
 
 
 /* ----------------------------------------------------------------------------
+ * Selects an edge and its vertexes.
+ */
+void area_editor::select_edge(edge* e) {
+    selected_edges.insert(e);
+    for(size_t v = 0; v < 2; ++v) {
+        select_vertex(e->vertexes[v]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Selects a sector and its edges and vertexes.
+ */
+void area_editor::select_sector(sector* s) {
+    selected_sectors.insert(s);
+    for(size_t e = 0; e < s->edges.size(); ++e) {
+        select_edge(s->edges[e]);
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Selects a vertex.
+ */
+void area_editor::select_vertex(vertex* v) {
+    selected_vertexes.insert(v);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Snaps a point to the nearest grid space.
  */
 point area_editor::snap_to_grid(const point &p) {
@@ -1151,6 +1299,27 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
     }
     
     return new_v_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Procedure to start moving the selected sectors.
+ */
+void area_editor::start_vertex_move() {
+    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
+        pre_move_vertex_coords[*v] = point((*v)->x, (*v)->y);
+    }
+    
+    unordered_set<sector*> affected_sectors =
+        get_affected_sectors(selected_vertexes);
+        
+    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
+        if(!(*s)) continue;
+        pre_move_sector_directions[*s] = is_sector_clockwise(*s);
+    }
+    
+    move_start_pos = mouse_cursor_w;
+    moving = true;
 }
 
 

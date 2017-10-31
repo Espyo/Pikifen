@@ -494,8 +494,10 @@ void area_editor::load() {
         
     frm_layout->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        cancel_layout_drawing();
-        if(sub_state != EDITOR_SUB_STATE_DRAWING) {
+        if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+            cancel_layout_drawing();
+        } else {
+            cancel_layout_drawing();
             sub_state = EDITOR_SUB_STATE_DRAWING;
         }
     };

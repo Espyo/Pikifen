@@ -94,6 +94,7 @@ struct edge {
     edge(size_t v1_nr = INVALID, size_t v2_nr = INVALID);
     vertex* get_other_vertex(vertex* v_ptr);
     size_t get_side_with_sector(sector* s_ptr);
+    vertex* has_neighbor(edge* other);
     size_t remove_from_sectors();
     size_t remove_from_vertexes();
     void swap_vertexes();
@@ -186,9 +187,9 @@ struct sector {
     
     sector();
     void add_edge(edge* e_ptr, const size_t e_nr);
-    void remove_edge(edge* e_ptr);
     void clone(sector* new_sector);
     void get_texture_merge_sectors(sector** s1, sector** s2);
+    void remove_edge(edge* e_ptr);
     ~sector();
 };
 
@@ -219,8 +220,9 @@ struct vertex {
     
     vertex(float x = 0.0f, float y = 0.0f);
     void add_edge(edge* e_ptr, const size_t e_nr);
-    void remove_edge(edge* e_ptr);
     edge* get_edge_by_neighbor(vertex* neighbor);
+    bool has_edge(edge* e_ptr);
+    void remove_edge(edge* e_ptr);
 };
 
 
@@ -386,6 +388,7 @@ void get_shadow_bounding_box(
 bool is_edge_valid(edge* l);
 bool is_path_link_ok(path_stop* s1, path_stop* s2);
 bool is_polygon_clockwise(vector<vertex*> &vertexes);
+bool is_sector_clockwise(sector* s_ptr);
 bool is_vertex_convex(const vector<vertex> &vec, const size_t nr);
 bool is_vertex_ear(
     const vector<vertex> &vec, const vector<size_t> &concaves, const size_t nr

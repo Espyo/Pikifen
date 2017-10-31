@@ -720,6 +720,22 @@ size_t edge::get_side_with_sector(sector* s_ptr) {
 
 
 /* ----------------------------------------------------------------------------
+ * If the specified edge and this one are not neighbors, returns NULL.
+ * Otherwise, returns the vertex that binds them.
+ */
+vertex* edge::has_neighbor(edge* other) {
+    for(size_t v1 = 0; v1 < 2; ++v1) {
+        for(size_t v2 = 0; v2 < 2; ++v2) {
+            if(vertexes[v1] == other->vertexes[v2]) {
+                return vertexes[v1];
+            }
+        }
+    }
+    return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes the edge from its sectors, but doesn't mark
  * the sectors as "none".
  * Returns the edge number.
@@ -1113,6 +1129,17 @@ edge* vertex::get_edge_by_neighbor(vertex* neighbor) {
         }
     }
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether or not this vertex has the specified edge in its list.
+ */
+bool vertex::has_edge(edge* e_ptr) {
+    for(size_t e = 0; e < edges.size(); ++e) {
+        if(edges[e] == e_ptr) return true;
+    }
+    return false;
 }
 
 
@@ -1663,6 +1690,18 @@ bool is_polygon_clockwise(vector<vertex*> &vertexes) {
         sum += (v2_ptr->x - v_ptr->x) * (v2_ptr->y + v_ptr->y);
     }
     return sum < 0;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns whether a sector's vertexes are ordered clockwise or not.
+ */
+bool is_sector_clockwise(sector* s_ptr) {
+    vector<vertex*> vertexes;
+    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+        vertexes.push_back(s_ptr->edges[e]->vertexes[0]);
+    }
+    return is_polygon_clockwise(vertexes);
 }
 
 
