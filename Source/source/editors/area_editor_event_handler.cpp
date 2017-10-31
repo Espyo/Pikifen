@@ -403,37 +403,16 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         state == EDITOR_STATE_ASB
     ) {
     
-        clear_selection();
         bool start_new_selection = true;
         
-        if(!is_shift_pressed) {
+        vertex* clicked_vertex = NULL;
+        edge* clicked_edge = NULL;
+        sector* clicked_sector = NULL;
+        get_clicked_layout_element(
+            &clicked_vertex, &clicked_edge, &clicked_sector
+        );
         
-            vertex* clicked_vertex = get_vertex_under_point(mouse_cursor_w);
-            edge* clicked_edge = NULL;
-            sector* clicked_sector = NULL;
-            bool selected_something = false;
-            
-            if(clicked_vertex) {
-                selected_vertexes.insert(clicked_vertex);
-                selected_something = true;
-            }
-            
-            if(!selected_something) {
-                clicked_edge = get_edge_under_point(mouse_cursor_w);
-                if(clicked_edge) {
-                    selected_edges.insert(clicked_edge);
-                    selected_something = true;
-                }
-            }
-            
-            if(!selected_something) {
-                clicked_sector = get_sector_under_point(mouse_cursor_w);
-                if(clicked_sector) {
-                    selected_sectors.insert(clicked_sector);
-                    selected_something = true;
-                }
-            }
-            
+        if(!is_shift_pressed) {
             if(clicked_vertex || clicked_edge || clicked_sector) {
                 start_new_selection = false;
             }
@@ -441,9 +420,41 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
         if(start_new_selection) {
+            clear_selection();
             selecting = true;
             selection_start = mouse_cursor_w;
             selection_end = mouse_cursor_w;
+            
+        } else {
+        
+            if(clicked_vertex) {
+                if(
+                    selected_vertexes.find(clicked_vertex) ==
+                    selected_vertexes.end()
+                ) {
+                    clear_selection();
+                    select_vertex(clicked_vertex);
+                }
+            } else if(clicked_edge) {
+                if(
+                    selected_edges.find(clicked_edge) ==
+                    selected_edges.end()
+                ) {
+                    clear_selection();
+                    select_edge(clicked_edge);
+                }
+            } else {
+                if(
+                    selected_sectors.find(clicked_sector) ==
+                    selected_sectors.end()
+                ) {
+                    clear_selection();
+                    select_sector(clicked_sector);
+                }
+            }
+            
+            start_vertex_move();
+            
         }
         
         selection_homogenized = false;
@@ -626,6 +637,20 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             path_to_gui();
             
         }
+        
+    } else if(moving) {
+    
+        point offset =
+            snap_to_grid(mouse_cursor_w) - snap_to_grid(move_start_pos);
+        for(
+            auto v = selected_vertexes.begin();
+            v != selected_vertexes.end(); ++v
+        ) {
+            point orig = pre_move_vertex_coords[*v];
+            (*v)->x = orig.x + offset.x;
+            (*v)->y = orig.y + offset.y;
+        }
+        
     }
 }
 
@@ -636,6 +661,9 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     //TODO
     selecting = false;
+    if(moving) {
+        finish_layout_moving();
+    }
 }
 
 

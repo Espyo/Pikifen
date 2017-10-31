@@ -197,8 +197,16 @@ private:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
+    //The mouse cursor was here when the move started (world coords).
+    point move_start_pos;
+    //Currently moving the selected vertexes, objects, etc.?
+    bool moving;
     //Only preview the path when this time is up.
     timer path_preview_timer;
+    //List of coordinates of each vertex before moving started.
+    map<vertex*, point> pre_move_vertex_coords;
+    //List of directions (is clockwise?) of each sector before moving started.
+    map<sector*, bool> pre_move_sector_directions;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -235,6 +243,7 @@ private:
         const layout_drawing_node &n2
     );
     void cancel_layout_drawing();
+    void cancel_layout_moving();
     void center_camera(
         const point &min_coords, const point &max_coords
     );
@@ -248,11 +257,17 @@ private:
     );
     void emit_status_bar_message(const string &text);
     void finish_layout_drawing();
-    bool get_common_sector(vector<vertex*> &vertexes, sector** result);
+    void finish_layout_moving();
+    unordered_set<sector*> get_affected_sectors(set<vertex*> &vertexes);
+    void get_clicked_layout_element(
+        vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
+    );
     edge* get_closest_edge_to_angle(
         vertex* v_ptr, const float angle, const bool clockwise,
         float* closest_edge_angle
     );
+    bool get_common_sector(vector<vertex*> &vertexes, sector** result);
+    vector<edge*> get_crossing_edges();
     vector<unsigned char> get_drawing_node_events(
         const layout_drawing_node &n1, const layout_drawing_node &n2
     );
@@ -271,8 +286,12 @@ private:
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
     void select_different_hazard(const bool next);
+    void select_edge(edge* e);
+    void select_sector(sector* s);
+    void select_vertex(vertex* v);
     point snap_to_grid(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
+    void start_vertex_move();
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);
     void zoom(const float new_zoom, const bool anchor_cursor = true);
