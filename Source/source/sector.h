@@ -309,6 +309,7 @@ struct area_data {
     
     area_data();
     void check_matches();
+    void clone(area_data &other);
     void connect_edge_to_sector(edge* e_ptr, sector* s_ptr, size_t side);
     void connect_edge_to_vertex(edge* e_ptr, vertex* v_ptr, size_t endpoint);
     void connect_sector_edges(sector* s_ptr);

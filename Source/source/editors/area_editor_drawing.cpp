@@ -63,11 +63,10 @@ void area_editor::do_drawing() {
         //Sectors.
         size_t n_sectors = cur_area_data.sectors.size();
         for(size_t s = 0; s < n_sectors; ++s) {
-            sector* s_ptr = cur_area_data.sectors[s];
-            draw_sector_texture(
-                s_ptr, point(),
-                1.0, textures_opacity
-            );
+            sector* s_ptr;
+            if(moving) s_ptr = pre_move_area_data.sectors[s];
+            else s_ptr = cur_area_data.sectors[s];
+            draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
             if(selected_sectors.find(s_ptr) != selected_sectors.end()) {
                 for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
