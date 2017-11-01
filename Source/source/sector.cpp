@@ -632,6 +632,156 @@ void area_data::clear() {
 
 
 /* ----------------------------------------------------------------------------
+ * Clones this area data into another area_data object.
+ */
+void area_data::clone(area_data &other) {
+    other.clear();
+    
+    other.bg_bmp_file_name = bg_bmp_file_name;
+    other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
+    other.bg_bmp_zoom = bg_bmp_zoom;
+    other.bg_color = bg_color;
+    other.bg_dist = bg_dist;
+    other.bmap = bmap;
+    
+    other.vertexes.reserve(vertexes.size());
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        other.vertexes.push_back(new vertex());
+    }
+    other.edges.reserve(edges.size());
+    for(size_t e = 0; e < edges.size(); ++e) {
+        other.edges.push_back(new edge());
+    }
+    other.sectors.reserve(sectors.size());
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        other.sectors.push_back(new sector());
+    }
+    other.mob_generators.reserve(mob_generators.size());
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        other.mob_generators.push_back(new mob_gen());
+    }
+    other.path_stops.reserve(path_stops.size());
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        other.path_stops.push_back(new path_stop());
+    }
+    other.tree_shadows.reserve(tree_shadows.size());
+    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+        other.tree_shadows.push_back(new tree_shadow());
+    }
+    
+    for(size_t v = 0; v < vertexes.size(); ++v) {
+        vertex* v_ptr = vertexes[v];
+        vertex* ov_ptr = other.vertexes[v];
+        ov_ptr->x = v_ptr->x;
+        ov_ptr->y = v_ptr->y;
+        ov_ptr->edges.reserve(v_ptr->edges.size());
+        ov_ptr->edge_nrs.reserve(v_ptr->edge_nrs.size());
+        for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
+            size_t nr = v_ptr->edge_nrs[e];
+            ov_ptr->edges.push_back(other.edges[nr]);
+            ov_ptr->edge_nrs.push_back(nr);
+        }
+    }
+    
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        edge* oe_ptr = other.edges[e];
+        oe_ptr->vertexes[0] = other.vertexes[e_ptr->vertex_nrs[0]];
+        oe_ptr->vertexes[1] = other.vertexes[e_ptr->vertex_nrs[1]];
+        oe_ptr->vertex_nrs[0] = e_ptr->vertex_nrs[0];
+        oe_ptr->vertex_nrs[1] = e_ptr->vertex_nrs[1];
+        if(e_ptr->sector_nrs[0] == INVALID) {
+            oe_ptr->sectors[0] = NULL;
+        } else {
+            oe_ptr->sectors[0] = other.sectors[e_ptr->sector_nrs[0]];
+        }
+        if(e_ptr->sector_nrs[1] == INVALID) {
+            oe_ptr->sectors[1] = NULL;
+        } else {
+            oe_ptr->sectors[1] = other.sectors[e_ptr->sector_nrs[1]];
+        }
+        oe_ptr->sector_nrs[0] = e_ptr->sector_nrs[0];
+        oe_ptr->sector_nrs[1] = e_ptr->sector_nrs[1];
+    }
+    
+    for(size_t s = 0; s < sectors.size(); ++s) {
+        sector* s_ptr = sectors[s];
+        sector* os_ptr = other.sectors[s];
+        s_ptr->clone(os_ptr);
+        os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
+        os_ptr->texture_info.bitmap =
+            bitmaps.get(
+                TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name,
+                NULL, false
+            );
+        os_ptr->edges.reserve(s_ptr->edges.size());
+        os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            size_t nr = s_ptr->edge_nrs[e];
+            os_ptr->edges.push_back(other.edges[nr]);
+            os_ptr->edge_nrs.push_back(nr);
+        }
+        os_ptr->triangles.reserve(s_ptr->triangles.size());
+        for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
+            triangle* t_ptr = &s_ptr->triangles[t];
+            os_ptr->triangles.push_back(
+                triangle(
+                    other.vertexes[find_vertex_nr(t_ptr->points[0])],
+                    other.vertexes[find_vertex_nr(t_ptr->points[1])],
+                    other.vertexes[find_vertex_nr(t_ptr->points[2])]
+                )
+            );
+        }
+    }
+    
+    for(size_t m = 0; m < mob_generators.size(); ++m) {
+        mob_gen* m_ptr = mob_generators[m];
+        mob_gen* om_ptr = other.mob_generators[m];
+        om_ptr->angle = m_ptr->angle;
+        om_ptr->category = m_ptr->category;
+        om_ptr->pos = m_ptr->pos;
+        om_ptr->type = m_ptr->type;
+        om_ptr->vars = m_ptr->vars;
+    }
+    
+    for(size_t s = 0; s < path_stops.size(); ++s) {
+        path_stop* s_ptr = path_stops[s];
+        path_stop* os_ptr = other.path_stops[s];
+        os_ptr->links.reserve(s_ptr->links.size());
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            os_ptr->links.push_back(
+                path_link(
+                    other.path_stops[s_ptr->links[l].end_nr],
+                    s_ptr->links[l].end_nr
+                )
+            );
+            os_ptr->links.back().distance = s_ptr->links[l].distance;
+        }
+    }
+    
+    for(size_t t = 0; t < tree_shadows.size(); ++t) {
+        tree_shadow* t_ptr = tree_shadows[t];
+        tree_shadow* ot_ptr = other.tree_shadows[t];
+        ot_ptr->alpha = t_ptr->alpha;
+        ot_ptr->angle = t_ptr->angle;
+        ot_ptr->center = t_ptr->center;
+        ot_ptr->file_name = t_ptr->file_name;
+        ot_ptr->size = t_ptr->size;
+        ot_ptr->sway = t_ptr->sway;
+        ot_ptr->bitmap =
+            bitmaps.get(
+                TEXTURES_FOLDER_NAME + "/" + t_ptr->file_name, NULL, false
+            );
+    }
+    
+    other.name = name;
+    other.subtitle = subtitle;
+    other.weather_name = weather_name;
+    other.weather_condition = weather_condition;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a blockmap.
  */
 blockmap::blockmap() :

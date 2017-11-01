@@ -203,10 +203,12 @@ private:
     bool moving;
     //Only preview the path when this time is up.
     timer path_preview_timer;
-    //List of coordinates of each vertex before moving started.
-    map<vertex*, point> pre_move_vertex_coords;
-    //List of directions (is clockwise?) of each sector before moving started.
+    //Area data before vertex movement.
+    area_data pre_move_area_data;
+    //Direction (is clockwise?) of each sector before movement.
     map<sector*, bool> pre_move_sector_directions;
+    //Position of the selected vertexes before movement.
+    map<vertex*, point> pre_move_vertex_coords;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.

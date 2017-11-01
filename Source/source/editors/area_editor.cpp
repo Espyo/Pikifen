@@ -222,6 +222,7 @@ void area_editor::cancel_layout_moving() {
     }
     pre_move_vertex_coords.clear();
     pre_move_sector_directions.clear();
+    pre_move_area_data.clear();
     moving = false;
 }
 
@@ -1317,6 +1318,8 @@ void area_editor::start_vertex_move() {
         if(!(*s)) continue;
         pre_move_sector_directions[*s] = is_sector_clockwise(*s);
     }
+    
+    cur_area_data.clone(pre_move_area_data);
     
     move_start_pos = mouse_cursor_w;
     moving = true;
