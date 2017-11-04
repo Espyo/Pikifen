@@ -640,8 +640,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } else if(moving) {
     
-        point offset =
-            snap_to_grid(mouse_cursor_w) - snap_to_grid(move_start_pos);
+        point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
+        point closest_vertex_new_p =
+            snap_to_grid(move_closest_vertex_start_pos + mouse_offset);
+        point offset = closest_vertex_new_p - move_closest_vertex_start_pos;
         for(
             auto v = selected_vertexes.begin();
             v != selected_vertexes.end(); ++v
@@ -661,8 +663,20 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     //TODO
     selecting = false;
+    
     if(moving) {
-        finish_layout_moving();
+        point closest_vertex_p(move_closest_vertex->x, move_closest_vertex->y);
+        point move_offset =
+            snap_to_grid(closest_vertex_p) -
+            snap_to_grid(move_closest_vertex_start_pos);
+        bool move_traveled =
+            fabs(move_offset.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
+            fabs(move_offset.y) >= MOUSE_DRAG_CONFIRM_RANGE;
+            
+        if(move_traveled) {
+            finish_layout_moving();
+        }
+        moving = false;
     }
 }
 

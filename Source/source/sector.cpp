@@ -1315,10 +1315,11 @@ void vertex::remove_edge(edge* e_ptr) {
  * all_vertexes: Vector with all of the vertexes in the area.
  * merge_radius: Minimum radius to merge.
  * v_nr:         If not NULL, the vertex's number is returned here.
+ * ignore:       Ignore this vertex when checking, if not NULL.
  */
 vertex* get_merge_vertex(
     const point &pos, vector<vertex*> &all_vertexes,
-    const float merge_radius, size_t* v_nr
+    const float merge_radius, size_t* v_nr, vertex* ignore
 ) {
     dist closest_dist = 0;
     vertex* closest_v = NULL;
@@ -1326,6 +1327,7 @@ vertex* get_merge_vertex(
     
     for(size_t v = 0; v < all_vertexes.size(); ++v) {
         vertex* v_ptr = all_vertexes[v];
+        if(v_ptr == ignore) continue;
         dist d(pos, point(v_ptr->x, v_ptr->y));
         if(
             d <= merge_radius &&

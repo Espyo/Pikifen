@@ -197,8 +197,12 @@ private:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
+    //Closest vertex to the mouse when moving.
+    vertex* move_closest_vertex;
+    //Closest vertex was here when the move started (world coords).
+    point move_closest_vertex_start_pos;
     //The mouse cursor was here when the move started (world coords).
-    point move_start_pos;
+    point move_mouse_start_pos;
     //Currently moving the selected vertexes, objects, etc.?
     bool moving;
     //Only preview the path when this time is up.
@@ -269,12 +273,12 @@ private:
         float* closest_edge_angle
     );
     bool get_common_sector(vector<vertex*> &vertexes, sector** result);
-    vector<edge*> get_crossing_edges();
     vector<unsigned char> get_drawing_node_events(
         const layout_drawing_node &n1, const layout_drawing_node &n2
     );
     bool get_drawing_outer_sector(sector** result);
-    edge* get_edge_under_point(const point &p);
+    edge* get_edge_under_point(const point &p, edge* after = NULL);
+    vector<edge*> get_intersecting_edges();
     float get_mob_gen_radius(mob_gen* m);
     mob_gen* get_mob_under_point(const point &p);
     path_stop* get_path_stop_under_point(const point &p);
@@ -284,6 +288,9 @@ private:
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
+    void merge_vertex(
+        vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+    );
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
