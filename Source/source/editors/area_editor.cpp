@@ -725,13 +725,16 @@ void area_editor::finish_layout_drawing() {
  * Finishes a vertex moving procedure.
  */
 void area_editor::finish_layout_moving() {
-    vector<edge*> crosses = get_crossing_edges();
-    if(!crosses.empty()) {
+    //Check if any edges intersect.
+    vector<edge*> crosses = get_intersecting_edges();
+    //TODO if(!crosses.empty()) {
+    if(false) {
         emit_status_bar_message("That move would cause edges to intersect!");
         cancel_layout_moving();
         return;
     }
     
+    //Check if any sector got turned inside-out.
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
     for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
@@ -745,6 +748,45 @@ void area_editor::finish_layout_moving() {
         }
     }
     
+    map<vertex*, vertex*> merges;
+    
+    //Split edges where vertexes landed, if any.
+    //Also, find merge vertexes.
+    for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
+        point p((*v)->x, (*v)->y);
+        vertex* merge_v =
+            get_merge_vertex(
+                p, cur_area_data.vertexes,
+                cam_zoom / VERTEX_MERGE_RADIUS, NULL, *v
+            );
+            
+        if(merge_v) {
+            merges[*v] = merge_v;
+            
+        } else {
+            edge* e_ptr = NULL;
+            
+            do {
+                e_ptr = get_edge_under_point(p, e_ptr);
+            } while(e_ptr != NULL && (*v)->has_edge(e_ptr));
+            
+            if(e_ptr) {
+                merges[*v] = split_edge(e_ptr, p);
+            }
+        }
+    }
+    
+    //Merge vertexes when needed.
+    unordered_set<sector*> merge_affected_sectors;
+    for(auto m = merges.begin(); m != merges.end(); ++m) {
+        merge_vertex(m->second, m->first, &merge_affected_sectors);
+    }
+    
+    affected_sectors.insert(
+        merge_affected_sectors.begin(), merge_affected_sectors.end()
+    );
+    
+    //Triangulate all affected sectors.
     for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
         if(!(*s)) continue;
         triangulate(*s);
@@ -752,36 +794,8 @@ void area_editor::finish_layout_moving() {
     
     pre_move_vertex_coords.clear();
     pre_move_sector_directions.clear();
+    clear_selection();
     moving = false;
-}
-
-
-/* ----------------------------------------------------------------------------
- * Returns which edges are crossing against other edges, if any.
- */
-vector<edge*> area_editor::get_crossing_edges() {
-    vector<edge*> intersections;
-    
-    for(size_t e1 = 0; e1 < cur_area_data.edges.size(); ++e1) {
-        edge* e1_ptr = cur_area_data.edges[e1];
-        for(size_t e2 = e1 + 1; e2 < cur_area_data.edges.size(); ++e2) {
-            edge* e2_ptr = cur_area_data.edges[e2];
-            if(e1_ptr->has_neighbor(e2_ptr)) continue;
-            if(
-                lines_intersect(
-                    point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
-                    point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
-                    point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
-                    point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
-                    NULL, NULL
-                )
-            ) {
-                intersections.push_back(e1_ptr);
-                intersections.push_back(e2_ptr);
-            }
-        }
-    }
-    return intersections;
 }
 
 
@@ -927,10 +941,20 @@ bool area_editor::get_drawing_outer_sector(sector** result) {
 
 /* ----------------------------------------------------------------------------
  * Returns the edge currently under the specified point, or NULL if none.
+ * p:     The point.
+ * after: Only check edges that come after this one.
  */
-edge* area_editor::get_edge_under_point(const point &p) {
+edge* area_editor::get_edge_under_point(const point &p, edge* after) {
+    bool found_after = (!after ? true : false);
+    
     for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
         edge* e_ptr = cur_area_data.edges[e];
+        if(e_ptr == after) {
+            found_after = true;
+            continue;
+        } else if(!found_after) {
+            continue;
+        }
         
         if(!is_edge_valid(e_ptr)) continue;
         
@@ -950,6 +974,35 @@ edge* area_editor::get_edge_under_point(const point &p) {
     }
     
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns which edges are crossing against other edges, if any.
+ */
+vector<edge*> area_editor::get_intersecting_edges() {
+    vector<edge*> intersections;
+    
+    for(size_t e1 = 0; e1 < cur_area_data.edges.size(); ++e1) {
+        edge* e1_ptr = cur_area_data.edges[e1];
+        for(size_t e2 = e1 + 1; e2 < cur_area_data.edges.size(); ++e2) {
+            edge* e2_ptr = cur_area_data.edges[e2];
+            if(e1_ptr->has_neighbor(e2_ptr)) continue;
+            if(
+                lines_intersect(
+                    point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
+                    point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
+                    point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
+                    point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
+                    NULL, NULL
+                )
+            ) {
+                intersections.push_back(e1_ptr);
+                intersections.push_back(e2_ptr);
+            }
+        }
+    }
+    return intersections;
 }
 
 
@@ -1226,6 +1279,139 @@ void area_editor::load_area(const bool from_backup) {
 
 
 /* ----------------------------------------------------------------------------
+ * Merges vertex 1 into vertex 2.
+ * v1:               Vertex that is being moved and will be merged.
+ * v2:               Vertex that is going to absorb v1.
+ * affected_sectors: List of sectors that will be affected by this merge.
+ */
+void area_editor::merge_vertex(
+    vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
+) {
+    vector<edge*> edges = v1->edges;
+    //Find out what to do with every edge of the dragged vertex.
+    for(size_t e = 0; e < edges.size(); ++e) {
+    
+        bool was_deleted = false;
+        edge* e_ptr = edges[e];
+        vertex* other_vertex = e_ptr->get_other_vertex(v1);
+        
+        if(other_vertex == v2) {
+        
+            //Squashed into non-existence.
+            affected_sectors->insert(e_ptr->sectors[0]);
+            affected_sectors->insert(e_ptr->sectors[1]);
+            
+            e_ptr->remove_from_vertexes();
+            e_ptr->remove_from_sectors();
+            
+            //Delete it.
+            cur_area_data.remove_edge(e_ptr);
+            was_deleted = true;
+            
+        } else {
+        
+            bool has_merged = false;
+            //Check if the edge will be merged with another one.
+            //These are edges that share a common vertex,
+            //plus the moved/destination vertex.
+            for(size_t de = 0; de < v2->edges.size(); ++de) {
+            
+                edge* de_ptr = v2->edges[de];
+                vertex* d_other_vertex = de_ptr->get_other_vertex(v2);
+                
+                if(d_other_vertex == other_vertex) {
+                    //The edge will be merged with this one.
+                    has_merged = true;
+                    affected_sectors->insert(e_ptr->sectors[0]);
+                    affected_sectors->insert(e_ptr->sectors[1]);
+                    affected_sectors->insert(de_ptr->sectors[0]);
+                    affected_sectors->insert(de_ptr->sectors[1]);
+                    
+                    //Set the new sectors.
+                    if(e_ptr->sectors[0] == de_ptr->sectors[0]) {
+                        cur_area_data.connect_edge_to_sector(
+                            de_ptr, e_ptr->sectors[1], 0
+                        );
+                    } else if(e_ptr->sectors[0] == de_ptr->sectors[1]) {
+                        cur_area_data.connect_edge_to_sector(
+                            de_ptr, e_ptr->sectors[1], 1
+                        );
+                    } else if(e_ptr->sectors[1] == de_ptr->sectors[0]) {
+                        cur_area_data.connect_edge_to_sector(
+                            de_ptr, e_ptr->sectors[0], 0
+                        );
+                    } else if(e_ptr->sectors[1] == de_ptr->sectors[1]) {
+                        cur_area_data.connect_edge_to_sector(
+                            de_ptr, e_ptr->sectors[0], 1
+                        );
+                    }
+                    
+                    //Go to the edge's old vertexes and sextors
+                    //and tell them that it no longer exists.
+                    e_ptr->remove_from_vertexes();
+                    e_ptr->remove_from_sectors();
+                    
+                    //Delete it.
+                    cur_area_data.remove_edge(e_ptr);
+                    was_deleted = true;
+                    
+                    break;
+                }
+            }
+            
+            //If it's matchless, that means it'll just be joined to
+            //the group of edges on the destination vertex.
+            if(!has_merged) {
+                cur_area_data.connect_edge_to_vertex(
+                    e_ptr, v2, (e_ptr->vertexes[0] == v1 ? 0 : 1)
+                );
+                for(size_t v2e = 0; v2e < v2->edges.size(); ++v2e) {
+                    affected_sectors->insert(v2->edges[v2e]->sectors[0]);
+                    affected_sectors->insert(v2->edges[v2e]->sectors[1]);
+                }
+            }
+        }
+        
+    }
+    
+    //Check if any of the final edges have the same sector
+    //on both sides. If so, delete them.
+    for(size_t ve = 0; ve < v2->edges.size(); ) {
+        edge* ve_ptr = v2->edges[ve];
+        if(ve_ptr->sectors[0] == ve_ptr->sectors[1]) {
+            ve_ptr->remove_from_sectors();
+            ve_ptr->remove_from_vertexes();
+            cur_area_data.remove_edge(ve_ptr);
+        } else {
+            ++ve;
+        }
+    }
+    
+    //Delete the old vertex.
+    cur_area_data.remove_vertex(v1);
+    
+    //If any vertex or sector is out of edges, delete it.
+    for(size_t v = 0; v < cur_area_data.vertexes.size();) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        if(v_ptr->edges.empty()) {
+            cur_area_data.remove_vertex(v);
+        } else {
+            ++v;
+        }
+    }
+    for(size_t s = 0; s < cur_area_data.sectors.size();) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) {
+            cur_area_data.remove_sector(s);
+        } else {
+            ++s;
+        }
+    }
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Selects an edge and its vertexes.
  */
 void area_editor::select_edge(edge* e) {
@@ -1307,8 +1493,18 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  * Procedure to start moving the selected sectors.
  */
 void area_editor::start_vertex_move() {
+    move_closest_vertex = NULL;
+    dist move_closest_vertex_dist;
     for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
-        pre_move_vertex_coords[*v] = point((*v)->x, (*v)->y);
+        point p((*v)->x, (*v)->y);
+        pre_move_vertex_coords[*v] = p;
+        
+        dist d(mouse_cursor_w, p);
+        if(!move_closest_vertex || d < move_closest_vertex_dist) {
+            move_closest_vertex = *v;
+            move_closest_vertex_dist = d;
+            move_closest_vertex_start_pos = p;
+        }
     }
     
     unordered_set<sector*> affected_sectors =
@@ -1321,7 +1517,7 @@ void area_editor::start_vertex_move() {
     
     cur_area_data.clone(pre_move_area_data);
     
-    move_start_pos = mouse_cursor_w;
+    move_mouse_start_pos = mouse_cursor_w;
     moving = true;
 }
 

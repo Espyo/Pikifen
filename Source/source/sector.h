@@ -362,7 +362,7 @@ void get_cce(
 vertex* get_merge_vertex(
     const point &p,
     vector<vertex*> &all_vertexes, const float merge_radius,
-    size_t* nr = NULL
+    size_t* nr = NULL, vertex* ignore = NULL
 );
 vector<path_stop*> get_path(
     const point &start, const point &end,
