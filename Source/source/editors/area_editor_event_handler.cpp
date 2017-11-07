@@ -326,6 +326,19 @@ void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     //TODO
+    if(
+        state == EDITOR_STATE_LAYOUT ||
+        state == EDITOR_STATE_ASA ||
+        state == EDITOR_STATE_ASB
+    ) {
+        edge* clicked_edge = get_edge_under_point(mouse_cursor_w);
+        if(clicked_edge) {
+            vertex* new_vertex = split_edge(clicked_edge, mouse_cursor_w);
+            clear_selection();
+            selected_vertexes.insert(new_vertex);
+        }
+    }
+    
     handle_lmb_down(ev);
 }
 
