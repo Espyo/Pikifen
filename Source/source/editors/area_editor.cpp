@@ -714,7 +714,7 @@ void area_editor::finish_layout_drawing() {
     
     //Select the new sector, ready for editing.
     clear_selection();
-    selected_sectors.insert(new_sector);
+    select_sector(new_sector);
     sector_to_gui();
     
     cancel_layout_drawing();
@@ -725,15 +725,6 @@ void area_editor::finish_layout_drawing() {
  * Finishes a vertex moving procedure.
  */
 void area_editor::finish_layout_moving() {
-    //Check if any edges intersect.
-    vector<edge*> crosses = get_intersecting_edges();
-    //TODO if(!crosses.empty()) {
-    if(false) {
-        emit_status_bar_message("That move would cause edges to intersect!");
-        cancel_layout_moving();
-        return;
-    }
-    
     //Check if any sector got turned inside-out.
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
@@ -749,9 +740,10 @@ void area_editor::finish_layout_moving() {
     }
     
     map<vertex*, vertex*> merges;
+    map<vertex*, edge*> edges_to_split;
+    unordered_set<sector*> merge_affected_sectors;
     
-    //Split edges where vertexes landed, if any.
-    //Also, find merge vertexes.
+    //Find merge vertexes and edges to split, if any.
     for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
         point p((*v)->x, (*v)->y);
         vertex* merge_v =
@@ -771,13 +763,117 @@ void area_editor::finish_layout_moving() {
             } while(e_ptr != NULL && (*v)->has_edge(e_ptr));
             
             if(e_ptr) {
-                merges[*v] = split_edge(e_ptr, p);
+                edges_to_split[*v] = e_ptr;
             }
         }
     }
     
-    //Merge vertexes when needed.
-    unordered_set<sector*> merge_affected_sectors;
+    set<edge*> moved_edges;
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = cur_area_data.edges[e];
+        bool both_selected = true;
+        for(size_t v = 0; v < 2; ++v) {
+            if(
+                selected_vertexes.find(e_ptr->vertexes[v]) ==
+                selected_vertexes.end()
+            ) {
+                both_selected = false;
+                break;
+            }
+        }
+        if(both_selected) {
+            moved_edges.insert(e_ptr);
+        }
+    }
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        point p(v_ptr->x, v_ptr->y);
+        
+        if(selected_vertexes.find(v_ptr) != selected_vertexes.end()) {
+            continue;
+        }
+        bool is_merge_target = false;
+        for(auto m = merges.begin(); m != merges.end(); ++m) {
+            if(m->second == v_ptr) {
+                //This vertex will have some other vertex merge into it; skip.
+                is_merge_target = true;
+                break;
+            }
+        }
+        if(is_merge_target) continue;
+        
+        edge* e_ptr = NULL;
+        do {
+            e_ptr = get_edge_under_point(p, e_ptr);
+        } while(
+            e_ptr != NULL &&
+            moved_edges.find(e_ptr) == moved_edges.end()
+        );
+        if(e_ptr) {
+            edges_to_split[v_ptr] = e_ptr;
+        }
+    }
+    
+    //Before moving on and making changes, let's check for crossing edges,
+    //but removing all of the ones that come from edge splits or vertex merges.
+    vector<pair<edge*, edge*> > intersections =
+        get_intersecting_edges();
+    for(auto m = merges.begin(); m != merges.end(); ++m) {
+        for(size_t e1 = 0; e1 < m->first->edges.size(); ++e1) {
+            for(size_t e2 = 0; e2 < m->second->edges.size(); ++e2) {
+                auto i1 =
+                    find(
+                        intersections.begin(), intersections.end(),
+                        make_pair(m->first->edges[e1], m->second->edges[e2])
+                    );
+                if(i1 != intersections.end()) {
+                    intersections.erase(i1);
+                }
+                auto i2 =
+                    find(
+                        intersections.begin(), intersections.end(),
+                        make_pair(m->second->edges[e2], m->first->edges[e1])
+                    );
+                if(i2 != intersections.end()) {
+                    intersections.erase(i2);
+                }
+            }
+        }
+    }
+    for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
+        for(size_t e = 0; e < v->first->edges.size(); ++e) {
+            auto i1 =
+                find(
+                    intersections.begin(), intersections.end(),
+                    make_pair(v->first->edges[e], v->second)
+                );
+            if(i1 != intersections.end()) {
+                intersections.erase(i1);
+            }
+            auto i2 =
+                find(
+                    intersections.begin(), intersections.end(),
+                    make_pair(v->second, v->first->edges[e])
+                );
+            if(i2 != intersections.end()) {
+                intersections.erase(i2);
+            }
+        }
+    }
+    
+    //If we ended up with any intersection still, abort!
+    if(!intersections.empty()) {
+        emit_status_bar_message("That move would cause edges to intersect!");
+        cancel_layout_moving();
+        return;
+    }
+    
+    //Merge vertexes and split edges now.
+    for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
+        merges[v->first] =
+            split_edge(v->second, point((v->first)->x, v->first->y));
+    }
     for(auto m = merges.begin(); m != merges.end(); ++m) {
         merge_vertex(m->second, m->first, &merge_affected_sectors);
     }
@@ -800,31 +896,37 @@ void area_editor::finish_layout_moving() {
 
 
 /* ----------------------------------------------------------------------------
- * Returns a sector common to all vertexes.
+ * Returns a sector common to all vertexes and edges.
  * A sector is considered this if a vertex has it as a sector of
  * a neighboring edge, or if a vertex is inside it.
  * Use the former for vertexes that will be merged, and the latter
  * for vertexes that won't.
  * vertexes: List of vertexes to check.
+ * edges:    List of edges to check.
  * result:   Returns the common sector here.
  * Returns false if there is no common sector. True otherwise.
  */
 bool area_editor::get_common_sector(
-    vector<vertex*> &vertexes, sector** result
+    vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
 ) {
     unordered_set<sector*> sectors;
     
     //First, populate the list of common sectors with a sample.
-    //Let's use the first vertex's sectors.
-    for(size_t e = 0; e < vertexes[0]->edges.size(); ++e) {
-        sectors.insert(vertexes[0]->edges[e]->sectors[0]);
-        sectors.insert(vertexes[0]->edges[e]->sectors[1]);
+    //Let's use the first vertex or edge's sectors.
+    if(!vertexes.empty()) {
+        for(size_t e = 0; e < vertexes[0]->edges.size(); ++e) {
+            sectors.insert(vertexes[0]->edges[e]->sectors[0]);
+            sectors.insert(vertexes[0]->edges[e]->sectors[1]);
+        }
+    } else {
+        sectors.insert(edges[0]->sectors[0]);
+        sectors.insert(edges[0]->sectors[1]);
     }
     
     //Then, check each vertex, and if a sector isn't present in that
     //vertex's list, then it's not a common one, so delete the sector
     //from the list of commons.
-    for(size_t v = 1; v < vertexes.size(); ++v) {
+    for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
         for(auto s = sectors.begin(); s != sectors.end();) {
             bool found_s = false;
@@ -840,6 +942,18 @@ bool area_editor::get_common_sector(
             }
             
             if(!found_s) {
+                sectors.erase(s++);
+            } else {
+                ++s;
+            }
+        }
+    }
+    
+    //Now repeat for each edge.
+    for(size_t e = 0; e < edges.size(); ++e) {
+        edge* e_ptr = edges[e];
+        for(auto s = sectors.begin(); s != sectors.end();) {
+            if(e_ptr->sectors[0] != *s && e_ptr->sectors[1] != *s) {
                 sectors.erase(s++);
             } else {
                 ++s;
@@ -864,9 +978,7 @@ bool area_editor::get_common_sector(
     //and we can easily find out which is the inner one with this method.
     float best_rightmost_x = 0;
     sector* best_rightmost_sector = NULL;
-    for(
-        auto s = sectors.begin(); s != sectors.end(); ++s
-    ) {
+    for(auto s = sectors.begin(); s != sectors.end(); ++s) {
         if(*s == NULL) continue;
         vertex* v_ptr = get_rightmost_vertex(*s);
         if(!best_rightmost_sector || v_ptr->x < best_rightmost_x) {
@@ -929,13 +1041,17 @@ bool area_editor::get_drawing_outer_sector(sector** result) {
     
     //If we couldn't find the outer sector that easily,
     //let's try a different approach: check which sector is common
-    //to all vertexes.
+    //to all vertexes and edges.
     vector<vertex*> v;
+    vector<edge*> e;
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
-        if(!drawing_nodes[n].on_vertex) continue;
-        v.push_back(drawing_nodes[n].on_vertex);
+        if(drawing_nodes[n].on_vertex) {
+            v.push_back(drawing_nodes[n].on_vertex);
+        } else if(drawing_nodes[n].on_edge) {
+            e.push_back(drawing_nodes[n].on_edge);
+        }
     }
-    return get_common_sector(v, result);
+    return get_common_sector(v, e, result);
 }
 
 
@@ -980,8 +1096,8 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) {
 /* ----------------------------------------------------------------------------
  * Returns which edges are crossing against other edges, if any.
  */
-vector<edge*> area_editor::get_intersecting_edges() {
-    vector<edge*> intersections;
+vector<pair<edge*, edge*> > area_editor::get_intersecting_edges() {
+    vector<pair<edge*, edge*> > intersections;
     
     for(size_t e1 = 0; e1 < cur_area_data.edges.size(); ++e1) {
         edge* e1_ptr = cur_area_data.edges[e1];
@@ -997,8 +1113,7 @@ vector<edge*> area_editor::get_intersecting_edges() {
                     NULL, NULL
                 )
             ) {
-                intersections.push_back(e1_ptr);
-                intersections.push_back(e2_ptr);
+                intersections.push_back(make_pair(e1_ptr, e2_ptr));
             }
         }
     }
@@ -1455,7 +1570,7 @@ point area_editor::snap_to_grid(const point &p) {
 
 
 /* ----------------------------------------------------------------------------
- * Splits an edge into two, at the specified point, and returns the
+ * Splits an edge into two, near the specified point, and returns the
  * newly-created vertex. The new vertex gets added to the current area.
  */
 vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
