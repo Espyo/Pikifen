@@ -19,19 +19,23 @@
 using namespace std;
 
 //Scale the debug text by this much.
-const float area_editor::DEBUG_TEXT_SCALE = 1.5f;
+const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default grid interval.
 const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Time until the next click is no longer considered a double-click.
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
-//How long to tint the drawing line red for.
-const float area_editor::DRAWING_LINE_ERROR_TINT_DURATION = 1.5f;
 //How much to zoom in/out with the keyboard keys.
 const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
+//Maximum number of points that a circle sector can be created with.
+const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
 //Maximum number of texture suggestions.
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
+//Minimum number of points that a circle sector can be created with.
+const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
 //If the mouse is dragged outside of this range, that's a real drag.
 const float area_editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
+//How long to tint the new sector's line(s) red for.
+const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
 const float area_editor::PATH_LINK_THICKNESS = 2.0f;
 //Radius to use when drawing a path stop circle.
@@ -80,6 +84,8 @@ const string area_editor::ICON_REFERENCE =
     EDITOR_ICONS_FOLDER_NAME + "/Reference.png";
 const string area_editor::ICON_SAVE =
     EDITOR_ICONS_FOLDER_NAME + "/Save.png";
+const string area_editor::ICON_SELECT_NONE =
+    EDITOR_ICONS_FOLDER_NAME + "/Select_none.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -129,6 +135,21 @@ area_editor::layout_drawing_node::layout_drawing_node(
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a layout drawing node with no info.
+ */
+area_editor::layout_drawing_node::layout_drawing_node() :
+    on_vertex(nullptr),
+    on_vertex_nr(INVALID),
+    on_edge(nullptr),
+    on_edge_nr(INVALID),
+    on_sector(nullptr),
+    on_sector_nr(INVALID),
+    is_new_vertex(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
  * Initializes area editor class stuff.
  */
 area_editor::area_editor() :
@@ -140,7 +161,6 @@ area_editor::area_editor() :
     debug_vertex_nrs(false),
     double_click_time(0),
     drawing_line_error(DRAWING_LINE_NO_ERROR),
-    drawing_line_error_tint_timer(DRAWING_LINE_ERROR_TINT_DURATION),
     grid_interval(DEF_GRID_INTERVAL),
     is_ctrl_pressed(false),
     is_shift_pressed(false),
@@ -148,6 +168,7 @@ area_editor::area_editor() :
     last_mouse_click(INVALID),
     mouse_drag_confirmed(false),
     moving(false),
+    new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_preview_timer(0),
     selecting(false),
     selection_effect(0),
@@ -196,12 +217,20 @@ bool area_editor::are_nodes_traversable(
 
 
 /* ----------------------------------------------------------------------------
- * Cancels the edge drawing operation.
+ * Cancels the circular sector creation operation and returns to normal.
+ */
+void area_editor::cancel_circle_sector() {
+    clear_circle_sector();
+    sub_state = EDITOR_SUB_STATE_NONE;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Cancels the edge drawing operation and returns to normal.
  */
 void area_editor::cancel_layout_drawing() {
+    clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
-    drawing_nodes.clear();
-    drawing_line_error = DRAWING_LINE_NO_ERROR;
     
     //TODO
     /*
@@ -220,10 +249,7 @@ void area_editor::cancel_layout_moving() {
         (*v)->x = pre_move_vertex_coords[*v].x;
         (*v)->y = pre_move_vertex_coords[*v].y;
     }
-    pre_move_vertex_coords.clear();
-    pre_move_sector_directions.clear();
-    pre_move_area_data.clear();
-    moving = false;
+    clear_layout_moving();
 }
 
 
@@ -433,24 +459,15 @@ void area_editor::check_drawing_line(const point &pos) {
             return;
         }
     }
-    
-    //Check if this drawing would leave any gaps.
-    vector<unsigned char> evs;
-    
-    for(size_t n = 1; n < drawing_nodes.size(); ++n) {
-        vector<unsigned char> new_evs =
-            get_drawing_node_events(drawing_nodes[n - 1], drawing_nodes[n]);
-        evs.insert(evs.end(), new_evs.begin(), new_evs.end());
-    }
-    
-    vector<unsigned char> new_evs =
-        get_drawing_node_events(*prev_node, tentative_node);
-    evs.insert(evs.end(), new_evs.begin(), new_evs.end());
-    
-    if(evs.size() > 2) {
-        drawing_line_error = DRAWING_LINE_LEAVES_GAP;
-        return;
-    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the data about the circular sector creation.
+ */
+void area_editor::clear_circle_sector() {
+    new_circle_sector_step = 0;
+    new_circle_sector_points.clear();
 }
 
 
@@ -463,7 +480,28 @@ void area_editor::clear_current_area() {
 
 
 /* ----------------------------------------------------------------------------
- *
+ * Clears the data about the layout drawing.
+ */
+void area_editor::clear_layout_drawing() {
+    drawing_nodes.clear();
+    drawing_line_error = DRAWING_LINE_NO_ERROR;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the data about the layout moving.
+ */
+void area_editor::clear_layout_moving() {
+    pre_move_vertex_coords.clear();
+    pre_move_sector_directions.clear();
+    pre_move_area_data.clear();
+    clear_selection();
+    moving = false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
     selected_vertexes.clear();
@@ -472,6 +510,12 @@ void area_editor::clear_selection() {
     selected_mobs.clear();
     selected_path_stops.clear();
     selection_homogenized = false;
+    
+    asa_to_gui();
+    asb_to_gui();
+    sector_to_gui();
+    mob_to_gui();
+    path_to_gui();
 }
 
 
@@ -498,7 +542,7 @@ void area_editor::do_logic() {
     }
     
     path_preview_timer.tick(delta_t);
-    drawing_line_error_tint_timer.tick(delta_t);
+    new_sector_error_tint_timer.tick(delta_t);
     status_override_timer.tick(delta_t);
     
     if(!cur_area_name.empty() && editor_backup_interval > 0) {
@@ -523,6 +567,43 @@ void area_editor::emit_status_bar_message(const string &text) {
 
 
 /* ----------------------------------------------------------------------------
+ * Emits a message onto the status bar, based on the given triangulation error.
+ */
+void area_editor::emit_triangulation_error_status_bar_message(
+    const TRIANGULATION_ERRORS error
+) {
+    if(error == TRIANGULATION_ERROR_LONE_EDGES) {
+        emit_status_bar_message("Some sectors ended up with lone edges!");
+    } else if(error == TRIANGULATION_ERROR_NO_EARS) {
+        emit_status_bar_message("Some sectors could not be triangulated!");
+    } else if(error == TRIANGULATION_ERROR_VERTEXES_REUSED) {
+        emit_status_bar_message(
+            "Some sectors reuse vertexes -- there are likely gaps!"
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Finishes drawing a circular sector.
+ */
+void area_editor::finish_circle_sector() {
+    clear_layout_drawing();
+    for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+        layout_drawing_node n;
+        n.raw_spot = new_circle_sector_points[p];
+        n.snapped_spot = n.raw_spot;
+        n.on_sector = get_sector(n.raw_spot, NULL, false);
+        drawing_nodes.push_back(n);
+    }
+    finish_layout_drawing();
+    
+    clear_circle_sector();
+    sub_state = EDITOR_SUB_STATE_NONE;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Finishes the layout drawing operation, and tries to create whatever sectors.
  */
 void area_editor::finish_layout_drawing() {
@@ -530,6 +611,8 @@ void area_editor::finish_layout_drawing() {
         cancel_layout_drawing();
         return;
     }
+    
+    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
     
     //This is the basic idea: create a new sector using the
     //vertexes provided by the user, as a "child" of an existing sector.
@@ -657,7 +740,23 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Triangulate new sector so we can check what's inside.
-    triangulate(new_sector);
+    set<edge*> triangulation_lone_edges;
+    TRIANGULATION_ERRORS triangulation_error =
+        triangulate(new_sector, &triangulation_lone_edges, true, false);
+        
+    if(triangulation_error == TRIANGULATION_NO_ERROR) {
+        auto it = non_simples.find(new_sector);
+        if(it != non_simples.end()) {
+            non_simples.erase(it);
+        }
+    } else {
+        non_simples[new_sector] = triangulation_error;
+        last_triangulation_error = triangulation_error;
+    }
+    lone_edges.insert(
+        triangulation_lone_edges.begin(),
+        triangulation_lone_edges.end()
+    );
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
@@ -707,17 +806,56 @@ void area_editor::finish_layout_drawing() {
     }
     
     //Final triangulations.
-    triangulate(new_sector);
-    if(outer_sector) triangulate(outer_sector);
+    triangulation_lone_edges.clear();
+    triangulation_error =
+        triangulate(new_sector, &triangulation_lone_edges, true, true);
+        
+    if(triangulation_error == TRIANGULATION_NO_ERROR) {
+        auto it = non_simples.find(new_sector);
+        if(it != non_simples.end()) {
+            non_simples.erase(it);
+        }
+    } else {
+        non_simples[new_sector] = triangulation_error;
+        last_triangulation_error = triangulation_error;
+    }
+    lone_edges.insert(
+        triangulation_lone_edges.begin(),
+        triangulation_lone_edges.end()
+    );
+    
+    if(outer_sector) {
+        triangulation_error =
+            triangulate(outer_sector, &triangulation_lone_edges, true, true);
+            
+        if(triangulation_error == TRIANGULATION_NO_ERROR) {
+            auto it = non_simples.find(outer_sector);
+            if(it != non_simples.end()) {
+                non_simples.erase(it);
+            }
+        } else {
+            non_simples[outer_sector] = triangulation_error;
+            last_triangulation_error = triangulation_error;
+        }
+        lone_edges.insert(
+            triangulation_lone_edges.begin(),
+            triangulation_lone_edges.end()
+        );
+    }
+    
+    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
+    }
     
     cur_area_data.check_matches(); //TODO
     
-    //Select the new sector, ready for editing.
+    //Select the new sector, making it ready for editing.
     clear_selection();
     select_sector(new_sector);
     sector_to_gui();
     
-    cancel_layout_drawing();
+    clear_layout_drawing();
+    sub_state = EDITOR_SUB_STATE_NONE;
 }
 
 
@@ -725,9 +863,13 @@ void area_editor::finish_layout_drawing() {
  * Finishes a vertex moving procedure.
  */
 void area_editor::finish_layout_moving() {
+    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
+    
     //Check if any sector got turned inside-out.
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
+    //TODO this is probably going to be removed soon; remove the code that ADDS to the list too
+    /*
     for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
         if(!(*s)) continue;
         if(pre_move_sector_directions[*s] != is_sector_clockwise(*s)) {
@@ -737,7 +879,7 @@ void area_editor::finish_layout_moving() {
             cancel_layout_moving();
             return;
         }
-    }
+    }*/
     
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
@@ -817,47 +959,35 @@ void area_editor::finish_layout_moving() {
     
     //Before moving on and making changes, let's check for crossing edges,
     //but removing all of the ones that come from edge splits or vertex merges.
-    vector<pair<edge*, edge*> > intersections =
+    vector<edge_intersection> intersections =
         get_intersecting_edges();
     for(auto m = merges.begin(); m != merges.end(); ++m) {
         for(size_t e1 = 0; e1 < m->first->edges.size(); ++e1) {
             for(size_t e2 = 0; e2 < m->second->edges.size(); ++e2) {
-                auto i1 =
-                    find(
-                        intersections.begin(), intersections.end(),
-                        make_pair(m->first->edges[e1], m->second->edges[e2])
-                    );
-                if(i1 != intersections.end()) {
-                    intersections.erase(i1);
-                }
-                auto i2 =
-                    find(
-                        intersections.begin(), intersections.end(),
-                        make_pair(m->second->edges[e2], m->first->edges[e1])
-                    );
-                if(i2 != intersections.end()) {
-                    intersections.erase(i2);
+                for(size_t i = 0; i < intersections.size();) {
+                    if(
+                        intersections[i].contains(m->first->edges[e1]) &&
+                        intersections[i].contains(m->second->edges[e2])
+                    ) {
+                        intersections.erase(intersections.begin() + i);
+                    } else {
+                        ++i;
+                    }
                 }
             }
         }
     }
     for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
         for(size_t e = 0; e < v->first->edges.size(); ++e) {
-            auto i1 =
-                find(
-                    intersections.begin(), intersections.end(),
-                    make_pair(v->first->edges[e], v->second)
-                );
-            if(i1 != intersections.end()) {
-                intersections.erase(i1);
-            }
-            auto i2 =
-                find(
-                    intersections.begin(), intersections.end(),
-                    make_pair(v->second, v->first->edges[e])
-                );
-            if(i2 != intersections.end()) {
-                intersections.erase(i2);
+            for(size_t i = 0; i < intersections.size();) {
+                if(
+                    intersections[i].contains(v->first->edges[e]) &&
+                    intersections[i].contains(v->second)
+                ) {
+                    intersections.erase(intersections.begin() + i);
+                } else {
+                    ++i;
+                }
             }
         }
     }
@@ -885,13 +1015,26 @@ void area_editor::finish_layout_moving() {
     //Triangulate all affected sectors.
     for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
         if(!(*s)) continue;
-        triangulate(*s);
+        
+        set<edge*> triangulation_lone_edges;
+        TRIANGULATION_ERRORS triangulation_error =
+            triangulate(*s, &triangulation_lone_edges, true, true);
+        if(triangulation_error == TRIANGULATION_NO_ERROR) {
+            auto it = non_simples.find(*s);
+            if(it != non_simples.end()) {
+                non_simples.erase(it);
+            }
+        } else {
+            non_simples[*s] = triangulation_error;
+            last_triangulation_error = triangulation_error;
+        }
     }
     
-    pre_move_vertex_coords.clear();
-    pre_move_sector_directions.clear();
-    clear_selection();
-    moving = false;
+    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
+    }
+    
+    clear_layout_moving();
 }
 
 
@@ -993,48 +1136,31 @@ bool area_editor::get_common_sector(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the "events" that happened between n1 and n2, if any.
- *   0: n2 went into existing geometry.
- *   1: n1 came from existing geometry.
- */
-vector<unsigned char> area_editor::get_drawing_node_events(
-    const layout_drawing_node &n1, const layout_drawing_node &n2
-) {
-    bool n1_on_sector = (!n1.on_edge && !n1.on_vertex);
-    bool n2_on_sector = (!n2.on_edge && !n2.on_vertex);
-    vector<unsigned char> evs;
-    
-    if(
-        n1_on_sector && !n2_on_sector
-    ) {
-        evs.push_back(0);
-        
-    } else if(
-        !n1_on_sector && n2_on_sector
-    ) {
-        evs.push_back(1);
-        
-    } else if(
-        !n1_on_sector && !n2_on_sector &&
-        !are_nodes_traversable(n1, n2)
-    ) {
-        evs.push_back(0);
-        evs.push_back(1);
-    }
-    
-    return evs;
-}
-
-
-/* ----------------------------------------------------------------------------
  * Returns true if the drawing has an outer sector it belongs to,
  * even if the sector is the void, or false if something's gone wrong.
  * The outer sector is returned to result.
  */
 bool area_editor::get_drawing_outer_sector(sector** result) {
+    //Start by checking if there's a node on a sector. If so, that's it!
     for(size_t n = 0; n < drawing_nodes.size(); ++n) {
         if(!drawing_nodes[n].on_vertex && !drawing_nodes[n].on_edge) {
             (*result) = drawing_nodes[n].on_sector;
+            return true;
+        }
+    }
+    
+    //If none are on sectors, let's try the following:
+    //Grab the first line that is not on top of an existing one,
+    //and find the sector that line is on by checking its center.
+    for(size_t n = 0; n < drawing_nodes.size(); ++n) {
+        layout_drawing_node* n1 = &drawing_nodes[n];
+        layout_drawing_node* n2 = &(get_next_in_vector(drawing_nodes, n));
+        if(!are_nodes_traversable(*n1, *n2)) {
+            *result =
+                get_sector(
+                    (n1->snapped_spot + n2->snapped_spot) / 2,
+                    NULL, false
+                );
             return true;
         }
     }
@@ -1096,8 +1222,8 @@ edge* area_editor::get_edge_under_point(const point &p, edge* after) {
 /* ----------------------------------------------------------------------------
  * Returns which edges are crossing against other edges, if any.
  */
-vector<pair<edge*, edge*> > area_editor::get_intersecting_edges() {
-    vector<pair<edge*, edge*> > intersections;
+vector<edge_intersection> area_editor::get_intersecting_edges() {
+    vector<edge_intersection> intersections;
     
     for(size_t e1 = 0; e1 < cur_area_data.edges.size(); ++e1) {
         edge* e1_ptr = cur_area_data.edges[e1];
@@ -1113,7 +1239,7 @@ vector<pair<edge*, edge*> > area_editor::get_intersecting_edges() {
                     NULL, NULL
                 )
             ) {
-                intersections.push_back(make_pair(e1_ptr, e2_ptr));
+                intersections.push_back(edge_intersection(e1_ptr, e2_ptr));
             }
         }
     }
@@ -1289,7 +1415,7 @@ vertex* area_editor::get_vertex_under_point(const point &p) {
  * Handles an error in the line the user is trying to draw.
  */
 void area_editor::handle_line_error() {
-    drawing_line_error_tint_timer.start();
+    new_sector_error_tint_timer.start();
     if(drawing_line_error == DRAWING_LINE_CROSSES_DRAWING) {
         emit_status_bar_message(
             "That line crosses other lines in the drawing!"
@@ -1297,10 +1423,6 @@ void area_editor::handle_line_error() {
     } else if(drawing_line_error == DRAWING_LINE_CROSSES_EDGES) {
         emit_status_bar_message(
             "That line crosses existing edges!"
-        );
-    } else if(drawing_line_error == DRAWING_LINE_LEAVES_GAP) {
-        emit_status_bar_message(
-            "That drawing would leave a gap in the sector!"
         );
     } else if(drawing_line_error == DRAWING_LINE_WAYWARD_SECTOR) {
         emit_status_bar_message(
@@ -1390,6 +1512,8 @@ void area_editor::load_area(const bool from_backup) {
     
     cam_zoom = 1.0f;
     cam_pos = point();
+    
+    emit_status_bar_message("Loaded successfully.");
 }
 
 
@@ -1527,6 +1651,108 @@ void area_editor::merge_vertex(
 
 
 /* ----------------------------------------------------------------------------
+ * Removes the selected sectors, if they are isolated.
+ * Returns true on success.
+ */
+bool area_editor::remove_isolated_sectors() {
+    map<sector*, sector*> alt_sectors;
+    
+    for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
+        sector* s_ptr = *s;
+        
+        //If around the sector there are two different sectors, then
+        //it's definitely connected.
+        sector* alt_sector = NULL;
+        bool got_an_alt_sector = false;
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            edge* e_ptr = s_ptr->edges[e];
+            
+            for(size_t s = 0; s < 2; ++s) {
+                if(e_ptr->sectors[s] == s_ptr) {
+                    //The main sector; never mind.
+                    continue;
+                }
+                
+                if(!got_an_alt_sector) {
+                    alt_sector = e_ptr->sectors[s];
+                    got_an_alt_sector = true;
+                } else if(e_ptr->sectors[s] != alt_sector) {
+                    //Different alternative sector found! No good.
+                    return false;
+                }
+            }
+        }
+        
+        alt_sectors[s_ptr] = alt_sector;
+        
+        //If any of the sector's vertexes have more than two edges, then
+        //surely these vertexes are connected to other sectors.
+        //Meaning our sector is not alone.
+        for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+            edge* e_ptr = s_ptr->edges[e];
+            for(size_t v = 0; v < 2; ++v) {
+                if(e_ptr->vertexes[v]->edges.size() != 2) {
+                    return false;
+                }
+            }
+        }
+    }
+    
+    TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
+    
+    //Remove the sectors now.
+    for(auto s = selected_sectors.begin(); s != selected_sectors.end(); ++s) {
+        sector* s_ptr = *s;
+        
+        vector<edge*> main_sector_edges = s_ptr->edges;
+        unordered_set<vertex*> main_vertexes;
+        for(size_t e = 0; e < main_sector_edges.size(); ++e) {
+            edge* e_ptr = main_sector_edges[e];
+            main_vertexes.insert(e_ptr->vertexes[0]);
+            main_vertexes.insert(e_ptr->vertexes[1]);
+            e_ptr->remove_from_sectors();
+            e_ptr->remove_from_vertexes();
+            cur_area_data.remove_edge(e_ptr);
+        }
+        
+        for(auto v = main_vertexes.begin(); v != main_vertexes.end(); ++v) {
+            cur_area_data.remove_vertex(*v);
+        }
+        
+        cur_area_data.remove_sector(s_ptr);
+        
+        //Re-triangulate the outer sector.
+        sector* alt_sector = alt_sectors[s_ptr];
+        if(alt_sector) {
+            set<edge*> triangulation_lone_edges;
+            TRIANGULATION_ERRORS triangulation_error =
+                triangulate(alt_sector, &triangulation_lone_edges, true, true);
+                
+            if(triangulation_error == TRIANGULATION_NO_ERROR) {
+                auto it = non_simples.find(alt_sector);
+                if(it != non_simples.end()) {
+                    non_simples.erase(it);
+                }
+            } else {
+                non_simples[alt_sector] = triangulation_error;
+                last_triangulation_error = triangulation_error;
+            }
+            lone_edges.insert(
+                triangulation_lone_edges.begin(),
+                triangulation_lone_edges.end()
+            );
+        }
+    }
+    
+    if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
+        emit_triangulation_error_status_bar_message(last_triangulation_error);
+    }
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Selects an edge and its vertexes.
  */
 void area_editor::select_edge(edge* e) {
@@ -1553,6 +1779,71 @@ void area_editor::select_sector(sector* s) {
  */
 void area_editor::select_vertex(vertex* v) {
     selected_vertexes.insert(v);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the vector of points that make up a new circle sector.
+ */
+void area_editor::set_new_circle_sector_points() {
+    float anchor_angle =
+        get_angle(new_circle_sector_center, new_circle_sector_anchor);
+    float cursor_angle =
+        get_angle(new_circle_sector_center, mouse_cursor_w);
+    float radius =
+        dist(
+            new_circle_sector_center, new_circle_sector_anchor
+        ).to_float();
+    float angle_dif =
+        get_angle_smallest_dif(cursor_angle, anchor_angle);
+        
+    size_t n_points = MAX_CIRCLE_SECTOR_POINTS;
+    if(angle_dif > 0) {
+        n_points = round((M_PI * 2) / angle_dif);
+    }
+    n_points =
+        clamp(n_points, MIN_CIRCLE_SECTOR_POINTS, MAX_CIRCLE_SECTOR_POINTS);
+        
+    new_circle_sector_points.clear();
+    for(size_t p = 0; p < n_points; ++p) {
+        float delta_a = ((M_PI * 2) / n_points) * p;
+        new_circle_sector_points.push_back(
+            point(
+                new_circle_sector_center.x +
+                radius * cos(anchor_angle + delta_a),
+                new_circle_sector_center.y +
+                radius * sin(anchor_angle + delta_a)
+            )
+        );
+    }
+    
+    new_circle_sector_valid_edges.clear();
+    for(size_t p = 0; p < n_points; ++p) {
+        point next = get_next_in_vector(new_circle_sector_points, p);
+        bool valid = true;
+        
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = cur_area_data.edges[e];
+            
+            if(
+                lines_intersect(
+                    point(
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                    ),
+                    point(
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    ),
+                    new_circle_sector_points[p], next,
+                    NULL, NULL
+                )
+            ) {
+                valid = false;
+                break;
+            }
+        }
+        
+        new_circle_sector_valid_edges.push_back(valid);
+    }
 }
 
 

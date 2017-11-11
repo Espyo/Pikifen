@@ -39,6 +39,19 @@ struct triangle;
 struct vertex;
 typedef vector<vertex*> polygon;
 
+enum TRIANGULATION_ERRORS {
+    //No error occured.
+    TRIANGULATION_NO_ERROR,
+    //Invalid arguments provided.
+    TRIANGULATION_ERROR_INVALID_ARGS,
+    //Non-simple sector: Lone edges break the sector.
+    TRIANGULATION_ERROR_LONE_EDGES,
+    //Non-simple sector: Vertexes are used multiple times.
+    TRIANGULATION_ERROR_VERTEXES_REUSED,
+    //Non-simple sector: Ran out of ears while triangulating.
+    TRIANGULATION_ERROR_NO_EARS,
+};
+
 
 /* ----------------------------------------------------------------------------
  * Intersection between two edges. Used to mark
@@ -372,7 +385,10 @@ mob* get_path_link_obstacle(path_stop* s1, path_stop* s2);
 float get_point_sign(
     const point &p, const point &lp1, const point &lp2
 );
-void get_polys(sector* s, polygon* outer, vector<polygon>* inners);
+TRIANGULATION_ERRORS get_polys(
+    sector* s, polygon* outer, vector<polygon>* inners,
+    set<edge*>* lone_edges, const bool check_vertex_reuse
+);
 vertex* get_rightmost_vertex(map<edge*, bool> &edges);
 vertex* get_rightmost_vertex(polygon* p);
 vertex* get_rightmost_vertex(sector* s);
@@ -407,7 +423,10 @@ bool lines_intersect(
     const point &l1p1, const point &l1p2, const point &l2p1, const point &l2p2,
     point* intersection
 );
-void triangulate(sector* s_ptr);
+TRIANGULATION_ERRORS triangulate(
+    sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
+    const bool clear_lone_edges
+);
 
 
 enum SECTOR_TYPES {

@@ -940,7 +940,7 @@ void area_editor_old::create_sector() {
     }
     
     //Triangulate new sector so we can check what's inside.
-    triangulate(new_sector);
+    triangulate(new_sector, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
     
     //All sectors inside the new one need to know that
     //their outer sector changed.
@@ -999,13 +999,13 @@ void area_editor_old::create_sector() {
     }
     
     //Final triangulations.
-    triangulate(new_sector);
-    if(outer_sector) triangulate(outer_sector);
+    triangulate(new_sector, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
+    if(outer_sector) triangulate(outer_sector, NULL, false, false ); //this isn't accurately using the most updated call of triangulate()
     for(
         auto s = merge_affected_sectors.begin();
         s != merge_affected_sectors.end(); ++s
     ) {
-        if(*s) triangulate(*s);
+        if(*s) triangulate(*s, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
     }
     
     //Check for intersections, so they can get reported.
@@ -2176,8 +2176,9 @@ bool area_editor_old::remove_isolated_sector(sector* s_ptr) {
     cur_area_data.remove_sector(s_ptr);
     
     //Re-triangulate the outer sector.
-    if(alt_sector) triangulate(alt_sector);
-    
+    if(alt_sector)
+        triangulate(alt_sector, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
+        
     return true;
 }
 
@@ -2203,7 +2204,7 @@ void area_editor_old::resize_everything() {
         s_ptr->texture_info.scale *= mult;
         s_ptr->texture_info.translation *= mult;
         s_ptr->triangles.clear();
-        triangulate(s_ptr);
+        triangulate(s_ptr, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
     }
     
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {

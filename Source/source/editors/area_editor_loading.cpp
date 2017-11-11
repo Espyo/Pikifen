@@ -255,20 +255,19 @@ void area_editor::load() {
     frm_info->easy_row();
     frm_info->easy_add(
         "lbl_bg_dist",
-        new lafi::label("Distance:"), 40, 16
+        new lafi::label("Dist.:"), 30, 16
     );
     frm_info->easy_add(
         "txt_bg_dist",
-        new lafi::textbox(), 60, 16
+        new lafi::textbox(), 20, 16
     );
-    frm_info->easy_row();
     frm_info->easy_add(
         "lbl_bg_zoom",
-        new lafi::label("Zoom:"), 40, 16
+        new lafi::label("Zoom:"), 30, 16
     );
     frm_info->easy_add(
         "txt_bg_zoom",
-        new lafi::textbox(), 60, 16
+        new lafi::textbox(), 20, 16
     );
     frm_info->easy_row();
     
@@ -322,19 +321,23 @@ void area_editor::load() {
     frm_layout->easy_row();
     frm_layout->easy_add(
         "but_new",
-        new lafi::button("", "", icons.get(ICON_NEW)), 25, 32
+        new lafi::button("", "", icons.get(ICON_NEW)), 20, 32
     );
     frm_layout->easy_add(
         "but_circle",
-        new lafi::button("", "", icons.get(ICON_NEW_CIRCLE_SECTOR)), 25, 32
+        new lafi::button("", "", icons.get(ICON_NEW_CIRCLE_SECTOR)), 20, 32
     );
     frm_layout->easy_add(
         "but_rem",
-        new lafi::button("", "", icons.get(ICON_DELETE)), 25, 32
+        new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
     );
     frm_layout->easy_add(
         "but_sel_mode",
-        new lafi::button(), 25, 32
+        new lafi::button(), 20, 32
+    );
+    frm_layout->easy_add(
+        "but_sel_none",
+        new lafi::button("", "", icons.get(ICON_SELECT_NONE)), 20, 32
     );
     y = frm_layout->easy_row();
     
@@ -494,10 +497,10 @@ void area_editor::load() {
         
     frm_layout->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        clear_layout_drawing();
         if(sub_state == EDITOR_SUB_STATE_DRAWING) {
             cancel_layout_drawing();
         } else {
-            cancel_layout_drawing();
             sub_state = EDITOR_SUB_STATE_DRAWING;
         }
     };
@@ -506,23 +509,40 @@ void area_editor::load() {
         
     frm_layout->widgets["but_circle"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        clear_circle_sector();
+        if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+            cancel_circle_sector();
+        } else {
+            sub_state = EDITOR_SUB_STATE_CIRCLE_SECTOR;
+        }
     };
     frm_layout->widgets["but_circle"]->description =
         "Create a new circular sector in three steps.";
         
     frm_layout->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        if(selected_sectors.empty()) return;
+        if(!remove_isolated_sectors()) {
+            emit_status_bar_message("Some of the sectors are not isolated!");
+            return;
+        }
+        clear_selection();
     };
     frm_layout->widgets["but_rem"]->description =
-        "Remove the selected geometry elements. (Ctrl+Minus)";
+        "Removes the selected sectors, if they're isolated. (Ctrl+Minus)";
         
     frm_layout->widgets["but_sel_mode"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO.
     };
     
+    frm_layout->widgets["but_sel_none"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        clear_selection();
+    };
+    frm_layout->widgets["but_sel_none"]->description =
+        "Clear the selection. (Esc)";
+        
     auto lambda_gui_to_sector =
     [this] (lafi::widget*) { gui_to_sector(); };
     auto lambda_gui_to_sector_click =
@@ -1915,9 +1935,6 @@ void area_editor::load() {
     
     fade_mgr.start_fade(true, nullptr);
     
-    state = EDITOR_STATE_MAIN;
-    change_to_right_frame();
-    
     clear_selection();
     selection_homogenized = false;
     cam_zoom = 1.0;
@@ -1927,6 +1944,9 @@ void area_editor::load() {
     is_shift_pressed = false;
     is_gui_focused = false;
     gui->lose_focus();
+    
+    state = EDITOR_STATE_MAIN;
+    change_to_right_frame();
     
     load_custom_particle_generators(false);
     load_spike_damage_types();
