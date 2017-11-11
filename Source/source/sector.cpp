@@ -1468,9 +1468,20 @@ float get_point_sign(const point &p, const point &lp1, const point &lp2) {
  * Returns the outer polygon and inner polygons of a sector,
  * with the vertexes ordered counter-clockwise for the outer,
  * and clockwise for the inner.
+ * s_ptr:              Pointer to the sector.
+ * outer:              Return the outer polygon here.
+ * inners:             Return the inner polygons here.
+ * lone_edges:         Return any lone edges found here.
+ * check_vertex_reuse: True if the algorithm is meant to check for vertexes
+ *   that get reused.
+ * Returns a number based on what happened. See TRIANGULATION_ERRORS.
  */
-void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
-    if(!s_ptr || !outer || !inners) return;
+TRIANGULATION_ERRORS get_polys(
+    sector* s_ptr, polygon* outer, vector<polygon>* inners,
+    set<edge*>* lone_edges, const bool check_vertex_reuse
+) {
+    if(!s_ptr || !outer || !inners) return TRIANGULATION_ERROR_INVALID_ARGS;
+    TRIANGULATION_ERRORS result = TRIANGULATION_NO_ERROR;
     
     bool doing_outer = true;
     
@@ -1479,11 +1490,6 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     
     for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
         edges_done[s_ptr->edges[e]] = false;
-    }
-    
-    area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
     }
     
     //Now travel along the edges, vertex by vertex, until we have no more left.
@@ -1564,14 +1570,12 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 //a non-simple sector.
                 poly_done = true;
                 if(!doing_outer && inners->back().size() == 1) {
-                    if(ae) {
-                        ae->lone_edges.insert(inners->back()[0]->edges[0]);
+                    if(lone_edges) {
+                        lone_edges->insert(inners->back()[0]->edges[0]);
                     }
                     inners->erase(inners->begin() + inners->size() - 1);
                 } else {
-                    if(ae) {
-                        ae->non_simples.insert(s_ptr);
-                    }
+                    result = TRIANGULATION_ERROR_LONE_EDGES;
                 }
                 
             } else if(edges_done[best_edge]) {
@@ -1610,7 +1614,7 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
     
     //Before we quit, let's just check if the sector
     //uses a vertex more than twice.
-    if(ae) {
+    if(check_vertex_reuse) {
         map<vertex*, size_t> vertex_count;
         edge* e_ptr = NULL;
         for(size_t e = 0; e < s_ptr->edges.size(); e++) {
@@ -1625,11 +1629,13 @@ void get_polys(sector* s_ptr, polygon* outer, vector<polygon>* inners) {
                 //That means it's a non-simple sector.
                 //This likely caused an incorrect triangulation,
                 //so let's report it.
-                ae->non_simples.insert(s_ptr);
+                result = TRIANGULATION_ERROR_VERTEXES_REUSED;
                 break;
             }
         }
     }
+    
+    return result;
 }
 
 
@@ -2609,36 +2615,31 @@ bool lines_intersect(
 /* ----------------------------------------------------------------------------
  * Triangulates (turns into triangles) a sector.
  * This is because drawing concave polygons is not possible.
+ * s_ptr:              Pointer to the sector.
+ * lone_edges:         Return lone edges found here.
+ * check_vertex_reuse: True if the algorithm is meant to check for vertexes
+ *   that get reused.
+ * clear_lone_edges:   Clear this sector's edges from the list of lone edges,
+ *   if they are there.
+ * Returns a number based on what happened. See TRIANGULATION_ERRORS.
  */
-void triangulate(sector* s_ptr) {
+TRIANGULATION_ERRORS triangulate(
+    sector* s_ptr, set<edge*>* lone_edges, const bool check_vertex_reuse,
+    const bool clear_lone_edges
+) {
 
-    area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
-    }
-    
     //We'll triangulate with the Triangulation by Ear Clipping algorithm.
     //http://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
     
     polygon outer_poly;
     vector<polygon> inner_polys;
     
-    //Before we start, let's just remove it from the
-    //vector of non-simple sectors.
-    if(ae) {
-        auto it = ae->non_simples.find(s_ptr);
-        if(it != ae->non_simples.end()) {
-            ae->non_simples.erase(it);
-        }
-    }
-    
-    //And let's clear any "lone" edges here.
-    if(ae) {
+    //Let's clear any "lone" edges here.
+    if(clear_lone_edges) {
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-            edge* e_ptr = s_ptr->edges[e];
-            auto it = ae->lone_edges.find(e_ptr);
-            if(it != ae->lone_edges.end()) {
-                ae->lone_edges.erase(it);
+            auto it = lone_edges->find(s_ptr->edges[e]);
+            if(it != lone_edges->end()) {
+                lone_edges->erase(it);
             }
         }
     }
@@ -2660,8 +2661,12 @@ void triangulate(sector* s_ptr) {
      *     | +---------+ |
      *     +-------------+
      */
-    get_polys(s_ptr, &outer_poly, &inner_polys);
     
+    TRIANGULATION_ERRORS result =
+        get_polys(
+            s_ptr, &outer_poly, &inner_polys, lone_edges, check_vertex_reuse
+        );
+        
     //Get rid of 0-length edges and 180-degree vertexes,
     //as they're redundant.
     clean_poly(&outer_poly);
@@ -2686,9 +2691,7 @@ void triangulate(sector* s_ptr) {
     
         if(ears.empty()) {
             //Something went wrong, the polygon mightn't be simple.
-            if(ae) {
-                ae->non_simples.insert(s_ptr);
-            }
+            result = TRIANGULATION_ERROR_NO_EARS;
             break;
             
         } else {
@@ -2717,4 +2720,6 @@ void triangulate(sector* s_ptr) {
             )
         );
     }
+    
+    return result;
 }

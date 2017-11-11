@@ -58,6 +58,7 @@ private:
         //Is on_vertex a new vertex, created during the sector creation?
         bool is_new_vertex;
         layout_drawing_node(area_editor* ae_ptr, const point &mouse_click);
+        layout_drawing_node();
     };
     
     
@@ -79,6 +80,7 @@ private:
     enum EDITOR_SUB_STATES {
         EDITOR_SUB_STATE_NONE,
         EDITOR_SUB_STATE_DRAWING,
+        EDITOR_SUB_STATE_CIRCLE_SECTOR,
         EDITOR_SUB_STATE_TEXTURE_VIEW,
     };
     
@@ -95,16 +97,17 @@ private:
         DRAWING_LINE_WAYWARD_SECTOR,
         DRAWING_LINE_CROSSES_EDGES,
         DRAWING_LINE_CROSSES_DRAWING,
-        DRAWING_LINE_LEAVES_GAP,
     };
     
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
-    static const float         DRAWING_LINE_ERROR_TINT_DURATION;
     static const float         KEYBOARD_CAM_ZOOM;
+    static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
+    static const unsigned char MIN_CIRCLE_SECTOR_POINTS;
     static const float         MOUSE_DRAG_CONFIRM_RANGE;
+    static const float         NEW_SECTOR_ERROR_TINT_DURATION;
     static const float         PATH_LINK_THICKNESS;
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
@@ -130,6 +133,7 @@ private:
     static const string ICON_PREVIOUS;
     static const string ICON_REFERENCE;
     static const string ICON_SAVE;
+    static const string ICON_SELECT_NONE;
     
     
     //GUI widgets.
@@ -161,6 +165,16 @@ private:
     
     //Time left until a backup is generated.
     timer backup_timer;
+    //New circle sector's second point.
+    point new_circle_sector_anchor;
+    //New circle sector's center.
+    point new_circle_sector_center;
+    //Points where the new circle sector's vertexes will end up.
+    vector<point> new_circle_sector_points;
+    //What step of the circular sector building process are we in?
+    unsigned char new_circle_sector_step;
+    //For each edge of the new circle sector, is it valid?
+    vector<bool> new_circle_sector_valid_edges;
     //Name of the area currently loaded.
     string cur_area_name;
     //When showing a hazard in the list, this is the index of the current one.
@@ -177,12 +191,8 @@ private:
     float double_click_time;
     //Nodes of the drawing.
     vector<layout_drawing_node> drawing_nodes;
-    //List of sectors that the drawing can be connected to.
-    set<sector*> drawing_connected_sectors;
     //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
     unsigned char drawing_line_error;
-    //Time left to keep the error-redness of the new line for.
-    timer drawing_line_error_tint_timer;
     //Current grid interval.
     float grid_interval;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?
@@ -193,6 +203,8 @@ private:
     bool is_shift_pressed;
     //Number of the mouse button pressed.
     size_t last_mouse_click;
+    //List of lone edges found.
+    unordered_set<edge*> lone_edges;
     //Is this a mouse drag, or just a shaky click?
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
@@ -205,6 +217,10 @@ private:
     point move_mouse_start_pos;
     //Currently moving the selected vertexes, objects, etc.?
     bool moving;
+    //Time left to keep the error-redness of the new sector's line(s) for.
+    timer new_sector_error_tint_timer;
+    //Non-simple sectors found, and their reason for being broken.
+    map<sector*, TRIANGULATION_ERRORS> non_simples;
     //Only preview the path when this time is up.
     timer path_preview_timer;
     //Area data before vertex movement.
@@ -248,20 +264,29 @@ private:
         const layout_drawing_node &n1,
         const layout_drawing_node &n2
     );
+    void cancel_circle_sector();
     void cancel_layout_drawing();
     void cancel_layout_moving();
     void center_camera(
         const point &min_coords, const point &max_coords
     );
     void check_drawing_line(const point &pos);
+    void clear_circle_sector();
     void clear_current_area();
+    void clear_layout_drawing();
+    void clear_layout_moving();
     void clear_selection();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
     void draw_debug_text(
-        const ALLEGRO_COLOR color, const point &where, const string &text
+        const ALLEGRO_COLOR color, const point &where, const string &text,
+        const unsigned char dots = 0
     );
     void emit_status_bar_message(const string &text);
+    void emit_triangulation_error_status_bar_message(
+        const TRIANGULATION_ERRORS error
+    );
+    void finish_circle_sector();
     void finish_layout_drawing();
     void finish_layout_moving();
     unordered_set<sector*> get_affected_sectors(set<vertex*> &vertexes);
@@ -275,12 +300,9 @@ private:
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
     );
-    vector<unsigned char> get_drawing_node_events(
-        const layout_drawing_node &n1, const layout_drawing_node &n2
-    );
     bool get_drawing_outer_sector(sector** result);
     edge* get_edge_under_point(const point &p, edge* after = NULL);
-    vector<pair<edge*, edge*> > get_intersecting_edges();
+    vector<edge_intersection> get_intersecting_edges();
     float get_mob_gen_radius(mob_gen* m);
     mob_gen* get_mob_under_point(const point &p);
     path_stop* get_path_stop_under_point(const point &p);
@@ -296,10 +318,12 @@ private:
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
+    bool remove_isolated_sectors();
     void select_different_hazard(const bool next);
     void select_edge(edge* e);
     void select_sector(sector* s);
     void select_vertex(vertex* v);
+    void set_new_circle_sector_points();
     point snap_to_grid(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
     void start_vertex_move();
@@ -352,10 +376,8 @@ public:
     virtual void unload();
     virtual void update_transformations();
     
-    //TODO do I need these?
+    //TODO do I need this?
     vector<edge_intersection> intersecting_edges;
-    unordered_set<sector*>    non_simples;
-    unordered_set<edge*>      lone_edges;
     
     
     area_editor();

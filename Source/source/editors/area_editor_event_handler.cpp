@@ -200,15 +200,35 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         debug_edge_nrs = !debug_edge_nrs;
+        if(debug_edge_nrs) {
+            emit_status_bar_message("Enabled debug edge number display.");
+        } else {
+            emit_status_bar_message("Disabled debug edge number display.");
+        }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
         debug_sector_nrs = !debug_sector_nrs;
+        if(debug_sector_nrs) {
+            emit_status_bar_message("Enabled debug sector number display.");
+        } else {
+            emit_status_bar_message("Disabled debug sector number display.");
+        }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F3) {
         debug_vertex_nrs = !debug_vertex_nrs;
+        if(debug_vertex_nrs) {
+            emit_status_bar_message("Enabled debug vertex number display.");
+        } else {
+            emit_status_bar_message("Disabled debug vertex number display.");
+        }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F4) {
         debug_triangulation = !debug_triangulation;
+        if(debug_triangulation) {
+            emit_status_bar_message("Enabled debug triangulation display.");
+        } else {
+            emit_status_bar_message("Disabled debug triangulation display.");
+        }
         
     }
 }
@@ -327,15 +347,21 @@ void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
     //TODO
     if(
-        state == EDITOR_STATE_LAYOUT ||
-        state == EDITOR_STATE_ASA ||
-        state == EDITOR_STATE_ASB
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        (
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        )
     ) {
-        edge* clicked_edge = get_edge_under_point(mouse_cursor_w);
-        if(clicked_edge) {
-            vertex* new_vertex = split_edge(clicked_edge, mouse_cursor_w);
-            clear_selection();
-            selected_vertexes.insert(new_vertex);
+        vertex* clicked_vertex = get_vertex_under_point(mouse_cursor_w);
+        if(!clicked_vertex) {
+            edge* clicked_edge = get_edge_under_point(mouse_cursor_w);
+            if(clicked_edge) {
+                vertex* new_vertex = split_edge(clicked_edge, mouse_cursor_w);
+                clear_selection();
+                selected_vertexes.insert(new_vertex);
+            }
         }
     }
     
@@ -369,25 +395,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         if(drawing_nodes.empty()) {
             //First node.
-            layout_drawing_node n(this, hotspot);
-            drawing_nodes.push_back(n);
-            
-            if(n.on_vertex) {
-                for(size_t e = 0; e < n.on_vertex->edges.size(); ++e) {
-                    edge* e_ptr = n.on_vertex->edges[e];
-                    for(size_t s = 0; s < 2; ++s) {
-                        drawing_connected_sectors.insert(e_ptr->sectors[s]);
-                    }
-                }
-            } else if(n.on_edge) {
-                for(size_t s = 0; s < 2; ++s) {
-                    drawing_connected_sectors.insert(n.on_edge->sectors[s]);
-                }
-            } else {
-                drawing_connected_sectors.insert(
-                    get_sector(n.snapped_spot, NULL, false)
-                );
-            }
+            drawing_nodes.push_back(layout_drawing_node(this, hotspot));
             
         } else {
         
@@ -410,10 +418,47 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
         
+    } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+        //Create a new circular sector.
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        
+        if(new_circle_sector_step == 0) {
+            new_circle_sector_center = hotspot;
+            new_circle_sector_anchor = new_circle_sector_center;
+            new_circle_sector_step++;
+            
+        } else if(new_circle_sector_step == 1) {
+            new_circle_sector_anchor = hotspot;
+            set_new_circle_sector_points();
+            new_circle_sector_step++;
+            
+        } else {
+            set_new_circle_sector_points();
+            
+            bool all_valid = true;
+            for(size_t e = 0; e < new_circle_sector_valid_edges.size(); ++e) {
+                if(!new_circle_sector_valid_edges[e]) {
+                    all_valid = false;
+                    break;
+                }
+            }
+            if(!all_valid) {
+                emit_status_bar_message(
+                    "Some lines touch existing edges!"
+                );
+            } else {
+                finish_circle_sector();
+            }
+            
+        }
+        
     } else if(
-        state == EDITOR_STATE_LAYOUT ||
-        state == EDITOR_STATE_ASA ||
-        state == EDITOR_STATE_ASB
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        (
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        )
     ) {
     
         bool start_new_selection = true;
@@ -466,8 +511,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            start_vertex_move();
-            
         }
         
         selection_homogenized = false;
@@ -475,7 +518,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         asa_to_gui();
         asb_to_gui();
         
-    } else if(state == EDITOR_STATE_MOBS) {
+    } else if(
+        state == EDITOR_STATE_MOBS &&
+        sub_state == EDITOR_SUB_STATE_NONE
+    ) {
     
         clear_selection();
         bool start_new_selection = true;
@@ -499,7 +545,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         selection_homogenized = false;
         mob_to_gui();
         
-    } else if(state == EDITOR_STATE_PATHS) {
+    } else if(
+        state == EDITOR_STATE_PATHS &&
+        sub_state == EDITOR_SUB_STATE_NONE
+    ) {
     
         clear_selection();
         bool start_new_selection = true;
@@ -651,8 +700,20 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
         }
         
-    } else if(moving) {
+    } else if(
+        !selected_vertexes.empty() &&
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        (
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        )
+    ) {
     
+        if(!moving) {
+            start_vertex_move();
+        }
+        
         point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
         point closest_vertex_new_p =
             snap_to_grid(move_closest_vertex_start_pos + mouse_offset);
@@ -678,6 +739,8 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
     
     if(moving) {
+        //TODO temporary commented code -- if something goes wrong with moving, I may need this back. If not, delete it.
+        /*
         point closest_vertex_p(move_closest_vertex->x, move_closest_vertex->y);
         point move_offset =
             snap_to_grid(closest_vertex_p) -
@@ -685,10 +748,13 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         bool move_traveled =
             fabs(move_offset.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
             fabs(move_offset.y) >= MOUSE_DRAG_CONFIRM_RANGE;
-            
+        
         if(move_traveled) {
             finish_layout_moving();
         }
+        moving = false;*/
+        
+        finish_layout_moving();
         moving = false;
     }
 }
@@ -751,6 +817,18 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
                 lbl_status_bar->text = wum->description;
             }
         }
+    }
+    
+    if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        if(new_circle_sector_step == 1) {
+            new_circle_sector_anchor = hotspot;
+            
+        } else {
+            set_new_circle_sector_points();
+            
+        }
+        
     }
 }
 

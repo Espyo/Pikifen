@@ -66,20 +66,30 @@ void area_editor::do_drawing() {
             sector* s_ptr;
             if(moving) s_ptr = pre_move_area_data.sectors[s];
             else s_ptr = cur_area_data.sectors[s];
+            
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
-            if(selected_sectors.find(s_ptr) != selected_sectors.end()) {
+            bool selected =
+                selected_sectors.find(s_ptr) != selected_sectors.end();
+            bool valid =
+                non_simples.find(s_ptr) == non_simples.end();
+                
+            if(selected || !valid) {
                 for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
                 
                     ALLEGRO_VERTEX av[3];
                     for(size_t v = 0; v < 3; ++v) {
-                        av[v].color =
-                            al_map_rgba(
-                                SELECTION_COLOR[0],
-                                SELECTION_COLOR[1],
-                                SELECTION_COLOR[2],
-                                selection_opacity * 0.5 * 255
-                            );
+                        if(!valid) {
+                            av[v].color = al_map_rgba(160, 16, 16, 192);
+                        } else {
+                            av[v].color =
+                                al_map_rgba(
+                                    SELECTION_COLOR[0],
+                                    SELECTION_COLOR[1],
+                                    SELECTION_COLOR[2],
+                                    selection_opacity * 0.5 * 255
+                                );
+                        }
                         av[v].u = 0;
                         av[v].v = 0;
                         av[v].x = s_ptr->triangles[t].points[v]->x;
@@ -177,7 +187,6 @@ void area_editor::do_drawing() {
             bool same_z = false;
             bool error_highlight = false;
             bool valid = true;
-            bool mouse_on = false;
             bool selected = false;
             
             //TODO
@@ -213,6 +222,13 @@ void area_editor::do_drawing() {
                     valid = false;
                 }
             }*/
+            
+            if(
+                non_simples.find(e_ptr->sectors[0]) != non_simples.end() ||
+                non_simples.find(e_ptr->sectors[1]) != non_simples.end()
+            ) {
+                valid = false;
+            }
             
             if(e_ptr->sectors[0] && e_ptr->sectors[1]) one_sided = false;
             
@@ -258,7 +274,7 @@ void area_editor::do_drawing() {
                     al_map_rgba(128, 128, 128, edges_opacity * 255) :
                     al_map_rgba(192, 192, 192, edges_opacity * 255)
                 ),
-                (mouse_on || selected ? 3.0 : 2.0) / cam_zoom
+                (selected ? 3.0 : 2.0) / cam_zoom
             );
             
             if(debug_triangulation && !selected_sectors.empty()) {
@@ -272,7 +288,7 @@ void area_editor::do_drawing() {
                         t_ptr->points[1]->y,
                         t_ptr->points[2]->x,
                         t_ptr->points[2]->y,
-                        al_map_rgb(192, 0, 0),
+                        al_map_rgb(192, 0, 160),
                         1.0 / cam_zoom
                     );
                 }
@@ -294,11 +310,12 @@ void area_editor::do_drawing() {
                         middle.x + cos(angle + M_PI_2) * 4,
                         middle.y + sin(angle + M_PI_2) * 4
                     ),
-                    "." + (
+                    (
                         e_ptr->sector_nrs[0] == INVALID ?
                         "-" :
                         i2s(e_ptr->sector_nrs[0])
-                    )
+                    ),
+                    1
                 );
                 
                 draw_debug_text(
@@ -307,11 +324,12 @@ void area_editor::do_drawing() {
                         middle.x + cos(angle - M_PI_2) * 4,
                         middle.y + sin(angle - M_PI_2) * 4
                     ),
-                    ":" + (
+                    (
                         e_ptr->sector_nrs[1] == INVALID ?
-                        "--" :
+                        "-" :
                         i2s(e_ptr->sector_nrs[1])
-                    )
+                    ),
+                    2
                 );
             }
             
@@ -583,7 +601,7 @@ void area_editor::do_drawing() {
             }
             ALLEGRO_COLOR new_line_color =
                 interpolate_color(
-                    drawing_line_error_tint_timer.get_ratio_left(),
+                    new_sector_error_tint_timer.get_ratio_left(),
                     1, 0,
                     al_map_rgb(255, 0, 0),
                     al_map_rgb(64, 255, 64)
@@ -598,6 +616,49 @@ void area_editor::do_drawing() {
                     new_line_color,
                     3.0 / cam_zoom
                 );
+            }
+        }
+        
+        //New circular sector drawing.
+        if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+            if(new_circle_sector_step == 1) {
+                float circle_radius =
+                    dist(
+                        new_circle_sector_center, new_circle_sector_anchor
+                    ).to_float();
+                al_draw_circle(
+                    new_circle_sector_center.x,
+                    new_circle_sector_center.y,
+                    circle_radius,
+                    al_map_rgb(64, 255, 64),
+                    3.0 / cam_zoom
+                );
+                
+            } else if(new_circle_sector_step == 2) {
+                for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+                    point cur_point = new_circle_sector_points[p];
+                    point next_point =
+                        get_next_in_vector(new_circle_sector_points, p);
+                    ALLEGRO_COLOR color =
+                        new_circle_sector_valid_edges[p] ?
+                        al_map_rgb(64, 255, 64) :
+                        al_map_rgb(255, 0, 0);
+                        
+                    al_draw_line(
+                        cur_point.x, cur_point.y,
+                        next_point.x, next_point.y,
+                        color, 3.0 / cam_zoom
+                    );
+                }
+                
+                for(size_t p = 0; p < new_circle_sector_points.size(); ++p) {
+                    al_draw_filled_circle(
+                        new_circle_sector_points[p].x,
+                        new_circle_sector_points[p].y,
+                        3.0 / cam_zoom, al_map_rgb(192, 255, 192)
+                    );
+                }
+                
             }
         }
         
@@ -620,7 +681,8 @@ void area_editor::do_drawing() {
         
         //New thing marker.
         if(
-            sub_state == EDITOR_SUB_STATE_DRAWING
+            sub_state == EDITOR_SUB_STATE_DRAWING ||
+            sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
         ) {
             point marker = mouse_cursor_w;
             marker = snap_to_grid(marker);
@@ -649,9 +711,11 @@ void area_editor::do_drawing() {
  * color: Text color.
  * where: Where to draw, in world coordinates.
  * text:  Text to show.
+ * dots:  How many dots to draw above the text. 0, 1, or 2.
  */
 void area_editor::draw_debug_text(
-    const ALLEGRO_COLOR color, const point &where, const string &text
+    const ALLEGRO_COLOR color, const point &where, const string &text,
+    const unsigned char dots
 ) {
     int dw = 0;
     int dh = 0;
@@ -679,4 +743,39 @@ void area_editor::draw_debug_text(
         ALLEGRO_ALIGN_CENTER, 1,
         text
     );
+    
+    if(dots > 0) {
+        al_draw_filled_rectangle(
+            where.x - 3.0 / cam_zoom,
+            where.y + bbox_h * 0.5,
+            where.x + 3.0 / cam_zoom,
+            where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+            al_map_rgba(0, 0, 0, 128)
+        );
+        
+        if(dots == 1) {
+            al_draw_filled_rectangle(
+                where.x - 1.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
+                where.x + 1.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                color
+            );
+        } else {
+            al_draw_filled_rectangle(
+                where.x - 3.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
+                where.x - 1.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                color
+            );
+            al_draw_filled_rectangle(
+                where.x + 1.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 1.0 / cam_zoom,
+                where.x + 3.0 / cam_zoom,
+                where.y + bbox_h * 0.5 + 3.0 / cam_zoom,
+                color
+            );
+        }
+    }
 }

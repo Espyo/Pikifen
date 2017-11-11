@@ -806,7 +806,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
                 s != affected_sectors.end(); ++s
             ) {
                 if(!(*s)) continue;
-                triangulate(*s);
+                triangulate(*s, NULL, false, false); //this isn't accurately using the most updated call of triangulate()
             }
             
             //If somewhere along the line, the current sector
