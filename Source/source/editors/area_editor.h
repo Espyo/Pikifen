@@ -82,6 +82,9 @@ private:
         EDITOR_SUB_STATE_DRAWING,
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
         EDITOR_SUB_STATE_TEXTURE_VIEW,
+        EDITOR_SUB_STATE_NEW_MOB,
+        EDITOR_SUB_STATE_DUPLICATE_MOB,
+        EDITOR_SUB_STATE_NEW_SHADOW,
     };
     
     enum AREA_EDITOR_PICKER_TYPES {
@@ -99,6 +102,13 @@ private:
         DRAWING_LINE_CROSSES_DRAWING,
     };
     
+    enum SELECTION_FILTERS {
+        SELECTION_FILTER_SECTORS,
+        SELECTION_FILTER_EDGES,
+        SELECTION_FILTER_VERTEXES,
+        N_SELECTION_FILTERS,
+    };
+    
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
@@ -112,7 +122,8 @@ private:
     static const float         PATH_STOP_RADIUS;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
-    static const float         STATUS_OVERRIDE_DURATION;
+    static const float         STATUS_OVERRIDE_IMPORTANT_DURATION;
+    static const float         STATUS_OVERRIDE_UNIMPORTANT_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
@@ -134,6 +145,9 @@ private:
     static const string ICON_REFERENCE;
     static const string ICON_SAVE;
     static const string ICON_SELECT_NONE;
+    static const string ICON_SELECT_EDGES;
+    static const string ICON_SELECT_SECTORS;
+    static const string ICON_SELECT_VERTEXES;
     
     
     //GUI widgets.
@@ -209,6 +223,10 @@ private:
     bool mouse_drag_confirmed;
     //Starting coordinates of a raw mouse drag.
     point mouse_drag_start;
+    //Closest mob to the mouse when moving.
+    mob_gen* move_closest_mob;
+    //Closest mob was here when the move started (world coords).
+    point move_closest_mob_start_pos;
     //Closest vertex to the mouse when moving.
     vertex* move_closest_vertex;
     //Closest vertex was here when the move started (world coords).
@@ -223,10 +241,12 @@ private:
     map<sector*, TRIANGULATION_ERRORS> non_simples;
     //Only preview the path when this time is up.
     timer path_preview_timer;
-    //Area data before vertex movement.
+    //Area data before vertex, mob, etc. movement.
     area_data pre_move_area_data;
-    //Direction (is clockwise?) of each sector before movement.
-    map<sector*, bool> pre_move_sector_directions;
+    //Position of the selected mobs before movement.
+    map<mob_gen*, point> pre_move_mob_coords;
+    //Position of the selected tree shadow before movement.
+    point pre_move_shadow_coords;
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
     //Currently selected edges.
@@ -237,8 +257,12 @@ private:
     set<path_stop*> selected_path_stops;
     //Currently selected sectors.
     set<sector*> selected_sectors;
+    //Currently selected tree shadow.
+    tree_shadow* selected_shadow;
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
+    //Current selection filter.
+    unsigned char selection_filter;
     //Has the user agreed to homogenize the selection?
     bool selection_homogenized;
     //Is the user currently performing a rectangle box?
@@ -251,6 +275,8 @@ private:
     point selection_start;
     //Render the reference image?
     bool show_reference;
+    //Render the tree shadows?
+    bool show_shadows;
     //State the editor was in before entering the options.
     size_t state_before_options;
     //Status bar override text.
@@ -276,13 +302,14 @@ private:
     void clear_layout_drawing();
     void clear_layout_moving();
     void clear_selection();
+    void clear_texture_suggestions();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
     );
-    void emit_status_bar_message(const string &text);
+    void emit_status_bar_message(const string &text, const bool important);
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
@@ -326,7 +353,10 @@ private:
     void set_new_circle_sector_points();
     point snap_to_grid(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
+    void start_mob_move();
+    void start_shadow_move();
     void start_vertex_move();
+    void toggle_duplicate_mob_mode();
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);
     void zoom(const float new_zoom, const bool anchor_cursor = true);
@@ -354,10 +384,12 @@ private:
     void asa_to_gui();
     void asb_to_gui();
     void change_to_right_frame();
+    void clear_current_area_gui();
     void info_to_gui();
     void details_to_gui();
     void gui_to_asa();
     void gui_to_asb();
+    void gui_to_details();
     void gui_to_mob();
     void gui_to_sector();
     void hide_all_frames();

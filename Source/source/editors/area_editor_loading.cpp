@@ -332,7 +332,7 @@ void area_editor::load() {
         new lafi::button("", "", icons.get(ICON_DELETE)), 20, 32
     );
     frm_layout->easy_add(
-        "but_sel_mode",
+        "but_sel_filter",
         new lafi::button(), 20, 32
     );
     frm_layout->easy_add(
@@ -523,17 +523,25 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         if(selected_sectors.empty()) return;
         if(!remove_isolated_sectors()) {
-            emit_status_bar_message("Some of the sectors are not isolated!");
-            return;
+            emit_status_bar_message(
+                "Some of the sectors are not isolated!", true
+            );
+        } else {
+            emit_status_bar_message(
+                "Deleted sectors.", false
+            );
+            clear_selection();
         }
-        clear_selection();
     };
     frm_layout->widgets["but_rem"]->description =
         "Removes the selected sectors, if they're isolated. (Ctrl+Minus)";
         
-    frm_layout->widgets["but_sel_mode"]->left_mouse_click_handler =
+    frm_layout->widgets["but_sel_filter"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        clear_selection();
+        selection_filter =
+            sum_and_wrap(selection_filter, 1, N_SELECTION_FILTERS);
+        sector_to_gui();
     };
     
     frm_layout->widgets["but_sel_none"]->left_mouse_click_handler =
@@ -830,7 +838,16 @@ void area_editor::load() {
         
     frm_texture->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
-        //TODO
+        lafi::scrollbar* s =
+            (lafi::scrollbar*)
+            this->frm_texture->widgets["bar_scroll"];
+        if(s->widgets.find("but_bar") != s->widgets.end()) {
+            s->move_button(
+                0,
+                (s->widgets["but_bar"]->y1 + s->widgets["but_bar"]->y2) /
+                2 - 30 * dy
+            );
+        }
     };
     
     
@@ -1128,24 +1145,47 @@ void area_editor::load() {
         
     frm_mobs->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            clear_selection();
+            sub_state = EDITOR_SUB_STATE_NEW_MOB;
+        }
     };
     frm_mobs->widgets["but_new"]->description =
         "Create a new object wherever you click.";
         
     frm_mobs->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        if(selected_mobs.empty()) return;
+        for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
+            for(size_t mg = 0; mg < cur_area_data.mob_generators.size(); ++mg) {
+                if(cur_area_data.mob_generators[mg] == *sm) {
+                    cur_area_data.mob_generators.erase(
+                        cur_area_data.mob_generators.begin() + mg
+                    );
+                    delete *sm;
+                    break;
+                }
+            }
+        }
+        clear_selection();
+        made_changes = true;
     };
     frm_mobs->widgets["but_del"]->description =
         "Delete the current object. (Ctrl+Minus)";
         
     frm_mobs->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        if(selected_mobs.empty()) return;
+        if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            sub_state = EDITOR_SUB_STATE_DUPLICATE_MOB;
+        }
     };
     frm_mobs->widgets["but_duplicate"]->description =
-        "Duplicate the current object. (Ctrl+D)";
+        "Duplicate the current objects. (Ctrl+D)";
         
     frm_mob->widgets["but_category"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1431,60 +1471,79 @@ void area_editor::load() {
         
     frm_details->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            sub_state = EDITOR_SUB_STATE_NEW_SHADOW;
+        }
     };
     frm_details->widgets["but_new"]->description =
         "Create a new tree shadow wherever you click.";
         
     frm_details->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        if(!selected_shadow) return;
+        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            if(cur_area_data.tree_shadows[s] == selected_shadow) {
+                cur_area_data.tree_shadows.erase(
+                    cur_area_data.tree_shadows.begin() + s
+                );
+                delete selected_shadow;
+                selected_shadow = NULL;
+                details_to_gui();
+                break;
+            }
+        }
     };
     frm_details->widgets["but_del"]->description =
         "Delete the current tree shadow.";
         
-    //TODO frm_shadow->widgets["txt_file"]->lose_focus_handler =
-    //lambda_gui_to_shadow;
+    auto lambda_gui_to_details =
+    [this] (lafi::widget*) {
+        gui_to_details();
+    };
+    frm_shadow->widgets["txt_file"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_file"]->description =
         "File name for the shadow's texture.";
         
-    //TODO frm_shadow->widgets["txt_x"]->lose_focus_handler =
-    //lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_x"]->description =
         "X position of the shadow's center.";
         
-    //TODO frm_shadow->widgets["txt_y"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_y"]->description =
         "Y position of the shadow's center.";
         
-    //TODO frm_shadow->widgets["txt_w"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_w"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_w"]->description =
         "Width of the shadow's image.";
         
-    //TODO frm_shadow->widgets["txt_h"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_h"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_h"]->description =
         "Height of the shadow's image.";
         
-    //TODO frm_shadow->widgets["ang_an"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["ang_an"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["ang_an"]->description =
         "Angle of the shadow's image.";
         
-    //TODO frm_shadow->widgets["bar_al"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    ((lafi::scrollbar*) frm_shadow->widgets["bar_al"])->change_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["bar_al"]->description =
         "How opaque the shadow's image is.";
         
-    //TODO frm_shadow->widgets["txt_sx"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_sx"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_sx"]->description =
         "Horizontal sway amount multiplier (0 = no sway).";
         
-    //TODO frm_shadow->widgets["txt_sy"]->lose_focus_handler =
-    //TODO lambda_gui_to_shadow;
+    frm_shadow->widgets["txt_sy"]->lose_focus_handler =
+        lambda_gui_to_details;
     frm_shadow->widgets["txt_sy"]->description =
         "Vertical sway amount multiplier (0 = no sway).";
         
@@ -1936,6 +1995,7 @@ void area_editor::load() {
     fade_mgr.start_fade(true, nullptr);
     
     clear_selection();
+    selected_shadow = NULL;
     selection_homogenized = false;
     cam_zoom = 1.0;
     cam_pos.x = cam_pos.y = 0.0;

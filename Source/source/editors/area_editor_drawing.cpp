@@ -587,6 +587,45 @@ void area_editor::do_drawing() {
             }*/
         }
         
+        //Tree shadows.
+        if(
+            state == EDITOR_STATE_DETAILS ||
+            (sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW && show_shadows)
+        ) {
+            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+                al_draw_filled_rectangle(
+                    s_ptr->center.x - s_ptr->size.x * 0.5,
+                    s_ptr->center.y - s_ptr->size.y * 0.5,
+                    s_ptr->center.x + s_ptr->size.x * 0.5,
+                    s_ptr->center.y + s_ptr->size.y * 0.5,
+                    al_map_rgba(255, 255, 255, 96 * (s_ptr->alpha / 255.0))
+                );
+                draw_sprite(
+                    s_ptr->bitmap, s_ptr->center, s_ptr->size,
+                    s_ptr->angle, map_alpha(s_ptr->alpha)
+                );
+                
+                if(state == EDITOR_STATE_DETAILS) {
+                    point min_coords, max_coords;
+                    get_shadow_bounding_box(
+                        s_ptr, &min_coords, &max_coords
+                    );
+                    
+                    al_draw_rectangle(
+                        min_coords.x, min_coords.y, max_coords.x, max_coords.y,
+                        (
+                            s_ptr == selected_shadow ?
+                            al_map_rgb(224, 224, 64) :
+                            al_map_rgb(128, 128, 64)
+                        ),
+                        2.0 / cam_zoom
+                    );
+                }
+            }
+        }
+        
         //Sector drawing.
         if(sub_state == EDITOR_SUB_STATE_DRAWING) {
             for(size_t n = 1; n < drawing_nodes.size(); ++n) {
@@ -682,7 +721,10 @@ void area_editor::do_drawing() {
         //New thing marker.
         if(
             sub_state == EDITOR_SUB_STATE_DRAWING ||
-            sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR
+            sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR ||
+            sub_state == EDITOR_SUB_STATE_NEW_MOB ||
+            sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+            sub_state == EDITOR_SUB_STATE_NEW_SHADOW
         ) {
             point marker = mouse_cursor_w;
             marker = snap_to_grid(marker);

@@ -201,33 +201,49 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F1) {
         debug_edge_nrs = !debug_edge_nrs;
         if(debug_edge_nrs) {
-            emit_status_bar_message("Enabled debug edge number display.");
+            emit_status_bar_message(
+                "Enabled debug edge number display.", false
+            );
         } else {
-            emit_status_bar_message("Disabled debug edge number display.");
+            emit_status_bar_message(
+                "Disabled debug edge number display.", false
+            );
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F2) {
         debug_sector_nrs = !debug_sector_nrs;
         if(debug_sector_nrs) {
-            emit_status_bar_message("Enabled debug sector number display.");
+            emit_status_bar_message(
+                "Enabled debug sector number display.", false
+            );
         } else {
-            emit_status_bar_message("Disabled debug sector number display.");
+            emit_status_bar_message(
+                "Disabled debug sector number display.", false
+            );
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F3) {
         debug_vertex_nrs = !debug_vertex_nrs;
         if(debug_vertex_nrs) {
-            emit_status_bar_message("Enabled debug vertex number display.");
+            emit_status_bar_message(
+                "Enabled debug vertex number display.", false
+            );
         } else {
-            emit_status_bar_message("Disabled debug vertex number display.");
+            emit_status_bar_message(
+                "Disabled debug vertex number display.", false
+            );
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_F4) {
         debug_triangulation = !debug_triangulation;
         if(debug_triangulation) {
-            emit_status_bar_message("Enabled debug triangulation display.");
+            emit_status_bar_message(
+                "Enabled debug triangulation display.", false
+            );
         } else {
-            emit_status_bar_message("Disabled debug triangulation display.");
+            emit_status_bar_message(
+                "Disabled debug triangulation display.", false
+            );
         }
         
     }
@@ -444,13 +460,83 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             }
             if(!all_valid) {
                 emit_status_bar_message(
-                    "Some lines touch existing edges!"
+                    "Some lines touch existing edges!", true
                 );
             } else {
                 finish_circle_sector();
             }
             
         }
+        
+    } else if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
+    
+        //Create a mob where the cursor is.
+        sub_state = EDITOR_SUB_STATE_NONE;
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        
+        cur_area_data.mob_generators.push_back(
+            new mob_gen(
+                mob_categories.get(MOB_CATEGORY_NONE),
+                hotspot, NULL, 0, ""
+            )
+        );
+        
+        selected_mobs.insert(cur_area_data.mob_generators.back());
+        mob_to_gui();
+        made_changes = true;
+        
+    } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
+    
+        //Duplicate the current mobs to where the cursor is.
+        sub_state = EDITOR_SUB_STATE_NONE;
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        
+        point selection_tl = (*selected_mobs.begin())->pos;
+        point selection_br = selection_tl;
+        for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+            if(m == selected_mobs.begin()) continue;
+            if((*m)->pos.x < selection_tl.x) {
+                selection_tl.x = (*m)->pos.x;
+            }
+            if((*m)->pos.x > selection_br.x) {
+                selection_br.x = (*m)->pos.x;
+            }
+            if((*m)->pos.y < selection_tl.y) {
+                selection_tl.y = (*m)->pos.y;
+            }
+            if((*m)->pos.y > selection_br.y) {
+                selection_br.y = (*m)->pos.y;
+            }
+        }
+        point selection_center = (selection_br + selection_tl) / 2.0;
+        set<mob_gen*> mobs_to_select;
+        
+        for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+            mob_gen* new_mg = new mob_gen(*(*m));
+            new_mg->pos = point(hotspot + ((*m)->pos) - selection_center);
+            cur_area_data.mob_generators.push_back(new_mg);
+            mobs_to_select.insert(new_mg);
+        }
+        
+        clear_selection();
+        selected_mobs = mobs_to_select;
+        mob_to_gui();
+        made_changes = true;
+        
+    } else if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+        //Create a new shadow where the cursor is.
+        
+        sub_state = EDITOR_SUB_STATE_NONE;
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        
+        tree_shadow* new_shadow = new tree_shadow(hotspot);
+        new_shadow->bitmap = bmp_error;
+        
+        cur_area_data.tree_shadows.push_back(new_shadow);
+        
+        selected_shadow = new_shadow;
+        details_to_gui();
+        made_changes = true;
         
     } else if(
         sub_state == EDITOR_SUB_STATE_NONE &&
@@ -523,23 +609,27 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state == EDITOR_SUB_STATE_NONE
     ) {
     
-        clear_selection();
         bool start_new_selection = true;
+        mob_gen* clicked_mob = get_mob_under_point(mouse_cursor_w);
         
         if(!is_shift_pressed) {
-        
-            mob_gen* clicked_mob = get_mob_under_point(mouse_cursor_w);
             if(clicked_mob) {
-                selected_mobs.insert(clicked_mob);
                 start_new_selection = false;
             }
-            
         }
         
         if(start_new_selection) {
+            clear_selection();
             selecting = true;
             selection_start = mouse_cursor_w;
             selection_end = mouse_cursor_w;
+            
+        } else {
+            if(selected_mobs.find(clicked_mob) == selected_mobs.end()) {
+                clear_selection();
+                selected_mobs.insert(clicked_mob);
+            }
+            
         }
         
         selection_homogenized = false;
@@ -570,6 +660,30 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         
         path_to_gui();
+        
+    } else if(
+        state == EDITOR_STATE_DETAILS &&
+        sub_state == EDITOR_SUB_STATE_NONE
+    ) {
+    
+        selected_shadow = NULL;
+        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        
+            tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+            point min_coords, max_coords;
+            get_shadow_bounding_box(s_ptr, &min_coords, &max_coords);
+            
+            if(
+                mouse_cursor_w.x >= min_coords.x &&
+                mouse_cursor_w.x <= max_coords.x &&
+                mouse_cursor_w.y >= min_coords.y &&
+                mouse_cursor_w.y <= max_coords.y
+            ) {
+                selected_shadow = s_ptr;
+                break;
+            }
+        }
+        details_to_gui();
         
     }
 }
@@ -609,47 +723,51 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                 }
             }
             
-            for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
-                edge* e_ptr = cur_area_data.edges[e];
-                
-                if(
-                    e_ptr->vertexes[0]->x >= selection_x1 &&
-                    e_ptr->vertexes[0]->x <= selection_x2 &&
-                    e_ptr->vertexes[0]->y >= selection_y1 &&
-                    e_ptr->vertexes[0]->y <= selection_y2 &&
-                    e_ptr->vertexes[1]->x >= selection_x1 &&
-                    e_ptr->vertexes[1]->x <= selection_x2 &&
-                    e_ptr->vertexes[1]->y >= selection_y1 &&
-                    e_ptr->vertexes[1]->y <= selection_y2
-                ) {
-                    selected_edges.insert(e_ptr);
+            if(selection_filter != SELECTION_FILTER_VERTEXES) {
+                for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+                    edge* e_ptr = cur_area_data.edges[e];
+                    
+                    if(
+                        e_ptr->vertexes[0]->x >= selection_x1 &&
+                        e_ptr->vertexes[0]->x <= selection_x2 &&
+                        e_ptr->vertexes[0]->y >= selection_y1 &&
+                        e_ptr->vertexes[0]->y <= selection_y2 &&
+                        e_ptr->vertexes[1]->x >= selection_x1 &&
+                        e_ptr->vertexes[1]->x <= selection_x2 &&
+                        e_ptr->vertexes[1]->y >= selection_y1 &&
+                        e_ptr->vertexes[1]->y <= selection_y2
+                    ) {
+                        selected_edges.insert(e_ptr);
+                    }
                 }
             }
             
-            for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
-                sector* s_ptr = cur_area_data.sectors[s];
-                bool valid_sector = true;
-                
-                for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
-                    edge* e_ptr = s_ptr->edges[e];
+            if(selection_filter == SELECTION_FILTER_SECTORS) {
+                for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+                    sector* s_ptr = cur_area_data.sectors[s];
+                    bool valid_sector = true;
                     
-                    if(
-                        e_ptr->vertexes[0]->x < selection_x1 ||
-                        e_ptr->vertexes[0]->x > selection_x2 ||
-                        e_ptr->vertexes[0]->y < selection_y1 ||
-                        e_ptr->vertexes[0]->y > selection_y2 ||
-                        e_ptr->vertexes[1]->x < selection_x1 ||
-                        e_ptr->vertexes[1]->x > selection_x2 ||
-                        e_ptr->vertexes[1]->y < selection_y1 ||
-                        e_ptr->vertexes[1]->y > selection_y2
-                    ) {
-                        valid_sector = false;
-                        break;
+                    for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
+                        edge* e_ptr = s_ptr->edges[e];
+                        
+                        if(
+                            e_ptr->vertexes[0]->x < selection_x1 ||
+                            e_ptr->vertexes[0]->x > selection_x2 ||
+                            e_ptr->vertexes[0]->y < selection_y1 ||
+                            e_ptr->vertexes[0]->y > selection_y2 ||
+                            e_ptr->vertexes[1]->x < selection_x1 ||
+                            e_ptr->vertexes[1]->x > selection_x2 ||
+                            e_ptr->vertexes[1]->y < selection_y1 ||
+                            e_ptr->vertexes[1]->y > selection_y2
+                        ) {
+                            valid_sector = false;
+                            break;
+                        }
                     }
-                }
-                
-                if(valid_sector) {
-                    selected_sectors.insert(s_ptr);
+                    
+                    if(valid_sector) {
+                        selected_sectors.insert(s_ptr);
+                    }
                 }
             }
             
@@ -727,6 +845,42 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             (*v)->y = orig.y + offset.y;
         }
         
+    } else if(
+        !selected_mobs.empty() &&
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        state == EDITOR_STATE_MOBS
+    ) {
+    
+        if(!moving) {
+            start_mob_move();
+        }
+        
+        point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
+        point closest_mob_new_p =
+            snap_to_grid(move_closest_mob_start_pos + mouse_offset);
+        point offset = closest_mob_new_p - move_closest_mob_start_pos;
+        for(
+            auto m = selected_mobs.begin();
+            m != selected_mobs.end(); ++m
+        ) {
+            point orig = pre_move_mob_coords[*m];
+            (*m)->pos = orig + offset;
+        }
+        
+    } else if(
+        selected_shadow &&
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        state == EDITOR_STATE_DETAILS
+    ) {
+    
+        if(!moving) {
+            start_shadow_move();
+        }
+        
+        point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
+        selected_shadow->center = pre_move_shadow_coords + mouse_offset;
+        details_to_gui();
+        
     }
 }
 
@@ -739,22 +893,13 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     selecting = false;
     
     if(moving) {
-        //TODO temporary commented code -- if something goes wrong with moving, I may need this back. If not, delete it.
-        /*
-        point closest_vertex_p(move_closest_vertex->x, move_closest_vertex->y);
-        point move_offset =
-            snap_to_grid(closest_vertex_p) -
-            snap_to_grid(move_closest_vertex_start_pos);
-        bool move_traveled =
-            fabs(move_offset.x) >= MOUSE_DRAG_CONFIRM_RANGE ||
-            fabs(move_offset.y) >= MOUSE_DRAG_CONFIRM_RANGE;
-        
-        if(move_traveled) {
+        if(
+            state == EDITOR_STATE_LAYOUT ||
+            state == EDITOR_STATE_ASA ||
+            state == EDITOR_STATE_ASB
+        ) {
             finish_layout_moving();
         }
-        moving = false;*/
-        
-        finish_layout_moving();
         moving = false;
     }
 }

@@ -25,9 +25,11 @@
  */
 void area_editor::asa_to_gui() {
     if(selected_sectors.empty()) {
-        sector_to_gui();
-        state = EDITOR_STATE_LAYOUT;
-        change_to_right_frame();
+        if(state == EDITOR_STATE_ASA) {
+            sector_to_gui();
+            state = EDITOR_STATE_LAYOUT;
+            change_to_right_frame();
+        }
         return;
     }
     
@@ -63,9 +65,11 @@ void area_editor::asa_to_gui() {
  */
 void area_editor::asb_to_gui() {
     if(selected_sectors.empty()) {
-        sector_to_gui();
-        state = EDITOR_STATE_LAYOUT;
-        change_to_right_frame();
+        if(state == EDITOR_STATE_ASB) {
+            sector_to_gui();
+            state = EDITOR_STATE_LAYOUT;
+            change_to_right_frame();
+        }
         return;
     }
     
@@ -150,6 +154,18 @@ void area_editor::change_to_right_frame() {
 
 
 /* ----------------------------------------------------------------------------
+ * GUI functions for clearing the data for the current area.
+ */
+void area_editor::clear_current_area_gui() {
+    ((lafi::button*) frm_main->widgets["but_area"])->text = cur_area_name;
+    frm_area->show();
+    enable_widget(frm_bottom->widgets["but_save"]);
+    frm_paths->widgets["lbl_path_dist"]->hide();
+    ((lafi::checkbox*) frm_paths->widgets["chk_show_path"])->uncheck();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Deletes the currently selected hazard from the list.
  */
 void area_editor::delete_current_hazard() {
@@ -175,7 +191,33 @@ void area_editor::delete_current_hazard() {
  * Loads the current details data onto the GUI.
  */
 void area_editor::details_to_gui() {
-    //TODO
+    if(selected_shadow) {
+    
+        frm_shadow->show();
+        ((lafi::textbox*) frm_shadow->widgets["txt_x"])->text =
+            f2s(selected_shadow->center.x);
+        ((lafi::textbox*) frm_shadow->widgets["txt_y"])->text =
+            f2s(selected_shadow->center.y);
+        ((lafi::textbox*) frm_shadow->widgets["txt_w"])->text =
+            f2s(selected_shadow->size.x);
+        ((lafi::textbox*) frm_shadow->widgets["txt_h"])->text =
+            f2s(selected_shadow->size.y);
+        ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->set_angle_rads(
+            selected_shadow->angle
+        );
+        ((lafi::scrollbar*) frm_shadow->widgets["bar_al"])->set_value(
+            selected_shadow->alpha, false
+        );
+        ((lafi::textbox*) frm_shadow->widgets["txt_file"])->text =
+            selected_shadow->file_name;
+        ((lafi::textbox*) frm_shadow->widgets["txt_sx"])->text =
+            f2s(selected_shadow->sway.x);
+        ((lafi::textbox*) frm_shadow->widgets["txt_sy"])->text =
+            f2s(selected_shadow->sway.y);
+            
+    } else {
+        frm_shadow->hide();
+    }
 }
 
 
@@ -220,6 +262,46 @@ void area_editor::gui_to_asb() {
         
     homogenize_selected_sectors();
     asb_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the details data to memory using info on the gui.
+ */
+void area_editor::gui_to_details() {
+    if(!selected_shadow) return;
+    
+    selected_shadow->center.x =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_x"])->text);
+    selected_shadow->center.y =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_y"])->text);
+    selected_shadow->size.x =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_w"])->text);
+    selected_shadow->size.y =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_h"])->text);
+    selected_shadow->angle =
+        ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->get_angle_rads();
+    selected_shadow->alpha =
+        ((lafi::scrollbar*) frm_shadow->widgets["bar_al"])->low_value;
+    selected_shadow->sway.x =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_sx"])->text);
+    selected_shadow->sway.y =
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_sy"])->text);
+        
+    string new_file_name =
+        ((lafi::textbox*) frm_shadow->widgets["txt_file"])->text;
+        
+    if(new_file_name != selected_shadow->file_name) {
+        //New image, delete the old one.
+        if(selected_shadow->bitmap != bmp_error) {
+            bitmaps.detach(selected_shadow->file_name);
+        }
+        selected_shadow->bitmap =
+            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + new_file_name, NULL);
+        selected_shadow->file_name = new_file_name;
+    }
+    
+    made_changes = true;
 }
 
 
@@ -479,6 +561,22 @@ void area_editor::review_to_gui() {
  * Loads the current sector data onto the GUI.
  */
 void area_editor::sector_to_gui() {
+    lafi::button* but_sel_filter =
+        ((lafi::button*) frm_layout->widgets["but_sel_filter"]);
+    if(selection_filter == SELECTION_FILTER_SECTORS) {
+        but_sel_filter->icon = icons.get(ICON_SELECT_SECTORS);
+        but_sel_filter->description =
+            "Current selection filter: Sectors + edges + vertexes.";
+    } else if(selection_filter == SELECTION_FILTER_EDGES) {
+        but_sel_filter->icon = icons.get(ICON_SELECT_EDGES);
+        but_sel_filter->description =
+            "Current selection filter: Edges + vertexes.";
+    } else {
+        but_sel_filter->icon = icons.get(ICON_SELECT_VERTEXES);
+        but_sel_filter->description =
+            "Current selection filter: Vertexes only.";
+    }
+    
     frm_sector->hide();
     frm_sector_multi->hide();
     
