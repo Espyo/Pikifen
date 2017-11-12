@@ -306,6 +306,29 @@ void area_editor::gui_to_details() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the area info data to memory using info on the gui.
+ */
+void area_editor::gui_to_info() {
+    cur_area_data.name =
+        ((lafi::textbox*) frm_info->widgets["txt_name"])->text;
+    cur_area_data.subtitle =
+        ((lafi::textbox*) frm_info->widgets["txt_subtitle"])->text;
+    cur_area_data.weather_name =
+        ((lafi::button*) frm_info->widgets["but_weather"])->text;
+    cur_area_data.bg_bmp_file_name =
+        ((lafi::textbox*) frm_info->widgets["txt_bg_bitmap"])->text;
+    cur_area_data.bg_color =
+        s2c(((lafi::textbox*) frm_info->widgets["txt_bg_color"])->text);
+    cur_area_data.bg_dist =
+        s2f(((lafi::textbox*) frm_info->widgets["txt_bg_dist"])->text);
+    cur_area_data.bg_bmp_zoom =
+        s2f(((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text);
+        
+    info_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the mob data to memory using info on the gui.
  */
 void area_editor::gui_to_mob() {
@@ -365,7 +388,21 @@ void area_editor::hide_all_frames() {
  * Loads the current area metadata onto the GUI.
  */
 void area_editor::info_to_gui() {
-    //TODO
+    ((lafi::textbox*) frm_info->widgets["txt_name"])->text =
+        cur_area_data.name;
+    ((lafi::textbox*) frm_info->widgets["txt_subtitle"])->text =
+        cur_area_data.subtitle;
+    ((lafi::button*) frm_info->widgets["but_weather"])->text =
+        cur_area_data.weather_name;
+    ((lafi::textbox*) frm_info->widgets["txt_bg_bitmap"])->text =
+        cur_area_data.bg_bmp_file_name;
+    ((lafi::textbox*) frm_info->widgets["txt_bg_color"])->text =
+        c2s(cur_area_data.bg_color);
+    ((lafi::textbox*) frm_info->widgets["txt_bg_dist"])->text =
+        f2s(cur_area_data.bg_dist);
+    ((lafi::textbox*) frm_info->widgets["txt_bg_zoom"])->text =
+        f2s(cur_area_data.bg_bmp_zoom);
+        
 }
 
 
@@ -443,6 +480,15 @@ void area_editor::open_picker(const unsigned char type) {
         mob_gen* m_ptr = *selected_mobs.begin();
         if(m_ptr->category->id != MOB_CATEGORY_NONE) {
             m_ptr->category->get_type_names(elements);
+        }
+        
+    } else if(type == AREA_EDITOR_PICKER_WEATHER) {
+    
+        for(
+            auto w = weather_conditions.begin();
+            w != weather_conditions.end(); ++w
+        ) {
+            elements.push_back(w->first);
         }
         
     }
@@ -541,6 +587,10 @@ void area_editor::pick(const string &name, const unsigned char type) {
         m_ptr->type = m_ptr->category->get_type(name);
         homogenize_selected_mobs();
         mob_to_gui();
+        
+    } else if(type == AREA_EDITOR_PICKER_WEATHER) {
+        cur_area_data.weather_name = name;
+        info_to_gui();
         
     }
     

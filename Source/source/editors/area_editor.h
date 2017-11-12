@@ -93,6 +93,7 @@ private:
         AREA_EDITOR_PICKER_HAZARD,
         AREA_EDITOR_PICKER_MOB_CATEGORY,
         AREA_EDITOR_PICKER_MOB_TYPE,
+        AREA_EDITOR_PICKER_WEATHER,
     };
     
     enum DRAWING_LINE_ERRORS {
@@ -385,14 +386,15 @@ private:
     void asb_to_gui();
     void change_to_right_frame();
     void clear_current_area_gui();
-    void info_to_gui();
     void details_to_gui();
     void gui_to_asa();
     void gui_to_asb();
     void gui_to_details();
+    void gui_to_info();
     void gui_to_mob();
     void gui_to_sector();
     void hide_all_frames();
+    void info_to_gui();
     void mob_to_gui();
     void path_to_gui();
     void review_to_gui();

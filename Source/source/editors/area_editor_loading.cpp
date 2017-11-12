@@ -209,8 +209,12 @@ void area_editor::load() {
     );
     frm_info->easy_row();
     frm_info->easy_add(
-        "chk_weather",
-        new lafi::checkbox("Use weather?"), 100, 16
+        "lbl_weather",
+        new lafi::label("Weather:"), 50, 16
+    );
+    frm_info->easy_add(
+        "but_no_weather",
+        new lafi::button("None"), 50, 16
     );
     frm_info->easy_row();
     frm_info->easy_add(
@@ -281,33 +285,55 @@ void area_editor::load() {
     frm_info->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    auto lambda_gui_to_info =
+    [this] (lafi::widget*) {
+        gui_to_info();
+    };
+    auto lambda_gui_to_info_click =
+    [this] (lafi::widget*, int, int) {
+        gui_to_info();
+    };
+    frm_info->widgets["txt_name"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_name"]->description =
         "The area's name.";
         
+    frm_info->widgets["txt_subtitle"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_subtitle"]->description =
         "Subtitle, if any. Appears on the loading screen.";
         
-    frm_info->widgets["chk_weather"]->description =
-        "Does this area use a weather condition?";
+    frm_info->widgets["but_no_weather"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        cur_area_data.weather_name.clear();
+        info_to_gui();
+    };
+    frm_info->widgets["but_no_weather"]->description =
+        "Sets the weather to none.";
         
+    frm_info->widgets["but_weather"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        open_picker(AREA_EDITOR_PICKER_WEATHER);
+    };
     frm_info->widgets["but_weather"]->description =
         "The weather condition to use.";
         
+    frm_info->widgets["txt_bg_bitmap"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_bitmap"]->description =
         "File name of the texture to use as a background, extension included."
         " e.g. \"Kitchen_floor.jpg\"";
         
+    frm_info->widgets["txt_bg_color"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_color"]->description =
         "Color of the background, in the format \"r g b a\".";
         
+    frm_info->widgets["txt_bg_dist"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_dist"]->description =
         "How far away the background is. 2 is a good value.";
         
+    frm_info->widgets["txt_bg_zoom"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_bg_zoom"]->description =
         "Scale the texture by this amount.";
-    //TODO the rest of the info frame properties.
-    
-    
+        
+        
     //Layout -- declarations.
     frm_layout =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
@@ -2014,5 +2040,6 @@ void area_editor::load() {
     load_status_types(false);
     load_hazards();
     load_mob_types(false);
+    load_weather();
     
 }
