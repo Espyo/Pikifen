@@ -44,8 +44,10 @@ const float area_editor::PATH_STOP_RADIUS = 16.0f;
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
 const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
-//How long to override the status bar text for.
-const float area_editor::STATUS_OVERRIDE_DURATION = 6.0f;
+//How long to override the status bar text for, for important messages.
+const float area_editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
+//How long to override the status bar text for, for unimportant messages.
+const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 2.0f;
 //Minimum distance between two vertexes for them to merge.
 const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
@@ -86,6 +88,12 @@ const string area_editor::ICON_SAVE =
     EDITOR_ICONS_FOLDER_NAME + "/Save.png";
 const string area_editor::ICON_SELECT_NONE =
     EDITOR_ICONS_FOLDER_NAME + "/Select_none.png";
+const string area_editor::ICON_SELECT_EDGES =
+    EDITOR_ICONS_FOLDER_NAME + "/Select_edges.png";
+const string area_editor::ICON_SELECT_SECTORS =
+    EDITOR_ICONS_FOLDER_NAME + "/Select_sectors.png";
+const string area_editor::ICON_SELECT_VERTEXES =
+    EDITOR_ICONS_FOLDER_NAME + "/Select_vertexes.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -170,9 +178,11 @@ area_editor::area_editor() :
     moving(false),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_preview_timer(0),
+    selected_shadow(nullptr),
     selecting(false),
     selection_effect(0),
-    status_override_timer(STATUS_OVERRIDE_DURATION),
+    selection_filter(SELECTION_FILTER_SECTORS),
+    status_override_timer(STATUS_OVERRIDE_IMPORTANT_DURATION),
     show_reference(false) {
     
 }
@@ -231,13 +241,6 @@ void area_editor::cancel_circle_sector() {
 void area_editor::cancel_layout_drawing() {
     clear_layout_drawing();
     sub_state = EDITOR_SUB_STATE_NONE;
-    
-    //TODO
-    /*
-    new_circle_sector_step = 0;
-    new_circle_sector_points.clear();
-    new_circle_sector_valid_edges.clear();
-    */
 }
 
 
@@ -475,7 +478,55 @@ void area_editor::clear_circle_sector() {
  * Clears the currently loaded area data.
  */
 void area_editor::clear_current_area() {
+    clear_current_area_gui();
+    
     //TODO
+    /*
+    change_reference("");
+    reference_aspect_ratio = true;
+    reference_size = point(1000, 1000);
+    reference_a = 255;
+    cur_sector = NULL;
+    cur_mob = NULL;
+    cur_shadow = NULL;
+    */
+    clear_area_textures();
+    
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        bitmaps.detach(
+            TEXTURES_FOLDER_NAME + "/" +
+            cur_area_data.tree_shadows[s]->file_name
+        );
+    }
+    
+    sector_to_gui();
+    mob_to_gui();
+    //TODO
+    //reference_to_gui();
+    
+    cam_pos.x = cam_pos.y = 0;
+    cam_zoom = 1;
+    //TODO
+    /*
+    show_cross_section = false;
+    show_cross_section_grid = false;
+    show_path_preview = false;
+    path_preview.clear();
+    path_preview_checkpoints[0] = point(-DEF_GRID_INTERVAL, 0);
+    path_preview_checkpoints[1] = point(DEF_GRID_INTERVAL, 0);
+    cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
+    cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
+    */
+    
+    clear_texture_suggestions();
+    
+    cur_area_data.clear();
+    
+    made_changes = false;
+    backup_timer.start(editor_backup_interval);
+    
+    state = EDITOR_STATE_MAIN;
+    change_to_right_frame();
 }
 
 
@@ -493,7 +544,6 @@ void area_editor::clear_layout_drawing() {
  */
 void area_editor::clear_layout_moving() {
     pre_move_vertex_coords.clear();
-    pre_move_sector_directions.clear();
     pre_move_area_data.clear();
     clear_selection();
     moving = false;
@@ -516,6 +566,17 @@ void area_editor::clear_selection() {
     sector_to_gui();
     mob_to_gui();
     path_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Clears the list of texture suggestions. This frees up the bitmaps.
+ */
+void area_editor::clear_texture_suggestions() {
+    for(size_t s = 0; s < texture_suggestions.size(); ++s) {
+        texture_suggestions[s].destroy();
+    }
+    texture_suggestions.clear();
 }
 
 
@@ -558,10 +619,18 @@ void area_editor::do_logic() {
 
 /* ----------------------------------------------------------------------------
  * Emits a message onto the status bar, and keeps it there for some seconds.
+ * text:      Message text.
+ * important: If true, the message stays for a few more seconds than normal.
  */
-void area_editor::emit_status_bar_message(const string &text) {
+void area_editor::emit_status_bar_message(
+    const string &text, const bool important
+) {
     status_override_text = text;
-    status_override_timer.start();
+    status_override_timer.start(
+        important ?
+        STATUS_OVERRIDE_IMPORTANT_DURATION :
+        STATUS_OVERRIDE_UNIMPORTANT_DURATION
+    );
     lbl_status_bar->text = status_override_text;
 }
 
@@ -573,12 +642,16 @@ void area_editor::emit_triangulation_error_status_bar_message(
     const TRIANGULATION_ERRORS error
 ) {
     if(error == TRIANGULATION_ERROR_LONE_EDGES) {
-        emit_status_bar_message("Some sectors ended up with lone edges!");
+        emit_status_bar_message(
+            "Some sectors ended up with lone edges!", true
+        );
     } else if(error == TRIANGULATION_ERROR_NO_EARS) {
-        emit_status_bar_message("Some sectors could not be triangulated!");
+        emit_status_bar_message(
+            "Some sectors could not be triangulated!", true
+        );
     } else if(error == TRIANGULATION_ERROR_VERTEXES_REUSED) {
         emit_status_bar_message(
-            "Some sectors reuse vertexes -- there are likely gaps!"
+            "Some sectors reuse vertexes -- there are likely gaps!", true
         );
     }
 }
@@ -865,22 +938,8 @@ void area_editor::finish_layout_drawing() {
 void area_editor::finish_layout_moving() {
     TRIANGULATION_ERRORS last_triangulation_error = TRIANGULATION_NO_ERROR;
     
-    //Check if any sector got turned inside-out.
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
-    //TODO this is probably going to be removed soon; remove the code that ADDS to the list too
-    /*
-    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
-        if(!(*s)) continue;
-        if(pre_move_sector_directions[*s] != is_sector_clockwise(*s)) {
-            emit_status_bar_message(
-                "That move would turn a sector inside-out!"
-            );
-            cancel_layout_moving();
-            return;
-        }
-    }*/
-    
     map<vertex*, vertex*> merges;
     map<vertex*, edge*> edges_to_split;
     unordered_set<sector*> merge_affected_sectors;
@@ -994,7 +1053,9 @@ void area_editor::finish_layout_moving() {
     
     //If we ended up with any intersection still, abort!
     if(!intersections.empty()) {
-        emit_status_bar_message("That move would cause edges to intersect!");
+        emit_status_bar_message(
+            "That move would cause edges to intersect!", true
+        );
         cancel_layout_moving();
         return;
     }
@@ -1304,11 +1365,15 @@ void area_editor::get_clicked_layout_element(
     
     if(*clicked_vertex) return;
     
-    *clicked_edge = get_edge_under_point(mouse_cursor_w);
+    if(selection_filter != SELECTION_FILTER_VERTEXES) {
+        *clicked_edge = get_edge_under_point(mouse_cursor_w);
+    }
     
     if(*clicked_edge) return;
     
-    *clicked_sector = get_sector_under_point(mouse_cursor_w);
+    if(selection_filter == SELECTION_FILTER_SECTORS) {
+        *clicked_sector = get_sector_under_point(mouse_cursor_w);
+    }
 }
 
 
@@ -1418,15 +1483,15 @@ void area_editor::handle_line_error() {
     new_sector_error_tint_timer.start();
     if(drawing_line_error == DRAWING_LINE_CROSSES_DRAWING) {
         emit_status_bar_message(
-            "That line crosses other lines in the drawing!"
+            "That line crosses other lines in the drawing!", true
         );
     } else if(drawing_line_error == DRAWING_LINE_CROSSES_EDGES) {
         emit_status_bar_message(
-            "That line crosses existing edges!"
+            "That line crosses existing edges!", true
         );
     } else if(drawing_line_error == DRAWING_LINE_WAYWARD_SECTOR) {
         emit_status_bar_message(
-            "That line goes out of the sector you're drawing on!"
+            "That line goes out of the sector you're drawing on!", true
         );
     }
 }
@@ -1513,7 +1578,7 @@ void area_editor::load_area(const bool from_backup) {
     cam_zoom = 1.0f;
     cam_pos = point();
     
-    emit_status_bar_message("Loaded successfully.");
+    emit_status_bar_message("Loaded successfully.", false);
 }
 
 
@@ -1756,6 +1821,7 @@ bool area_editor::remove_isolated_sectors() {
  * Selects an edge and its vertexes.
  */
 void area_editor::select_edge(edge* e) {
+    if(selection_filter == SELECTION_FILTER_VERTEXES) return;
     selected_edges.insert(e);
     for(size_t v = 0; v < 2; ++v) {
         select_vertex(e->vertexes[v]);
@@ -1767,6 +1833,7 @@ void area_editor::select_edge(edge* e) {
  * Selects a sector and its edges and vertexes.
  */
 void area_editor::select_sector(sector* s) {
+    if(selection_filter != SELECTION_FILTER_SECTORS) return;
     selected_sectors.insert(s);
     for(size_t e = 0; e < s->edges.size(); ++e) {
         select_edge(s->edges[e]);
@@ -1896,7 +1963,44 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
 
 
 /* ----------------------------------------------------------------------------
- * Procedure to start moving the selected sectors.
+ * Procedure to start moving the selected mobs.
+ */
+void area_editor::start_mob_move() {
+    move_closest_mob = NULL;
+    dist move_closest_mob_dist;
+    for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
+        pre_move_mob_coords[*m] = (*m)->pos;
+        
+        dist d(mouse_cursor_w, (*m)->pos);
+        if(!move_closest_mob || d < move_closest_mob_dist) {
+            move_closest_mob = *m;
+            move_closest_mob_dist = d;
+            move_closest_mob_start_pos = (*m)->pos;
+        }
+    }
+    
+    cur_area_data.clone(pre_move_area_data);
+    
+    move_mouse_start_pos = mouse_cursor_w;
+    moving = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Procedure to start moving the selected tree shadow.
+ */
+void area_editor::start_shadow_move() {
+    cur_area_data.clone(pre_move_area_data);
+    
+    pre_move_shadow_coords = selected_shadow->center;
+    
+    move_mouse_start_pos = mouse_cursor_w;
+    moving = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Procedure to start moving the selected vertexes.
  */
 void area_editor::start_vertex_move() {
     move_closest_vertex = NULL;
@@ -1916,11 +2020,6 @@ void area_editor::start_vertex_move() {
     unordered_set<sector*> affected_sectors =
         get_affected_sectors(selected_vertexes);
         
-    for(auto s = affected_sectors.begin(); s != affected_sectors.end(); ++s) {
-        if(!(*s)) continue;
-        pre_move_sector_directions[*s] = is_sector_clockwise(*s);
-    }
-    
     cur_area_data.clone(pre_move_area_data);
     
     move_mouse_start_pos = mouse_cursor_w;

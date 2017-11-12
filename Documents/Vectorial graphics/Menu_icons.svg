@@ -15,7 +15,7 @@
    viewBox="0 0 793.70081 1122.5197"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.2 (unknown)"
    sodipodi:docname="Menu_icons.svg">
   <defs
      id="defs4" />
@@ -26,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="407.56301"
-     inkscape:cy="-27.054298"
+     inkscape:zoom="11.313708"
+     inkscape:cx="1145.8408"
+     inkscape:cy="15.63819"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -302,6 +302,42 @@
        xlink:href="#use4673"
        id="use4675-6-5-8-3"
        transform="translate(350,5.1865318e-6)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Editor_icons/Delete_link.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="display:inline"
+       x="0"
+       y="0"
+       xlink:href="#use4673"
+       id="use4675-6-5-8-3-3"
+       transform="translate(400,5.1865318e-6)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Editor_icons/Delete_link.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="display:inline"
+       x="0"
+       y="0"
+       xlink:href="#use4673"
+       id="use4675-6-5-8-3-6"
+       transform="translate(450,5.3465319e-6)"
+       width="100%"
+       height="100%"
+       inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Editor_icons/Delete_link.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <use
+       style="display:inline"
+       x="0"
+       y="0"
+       xlink:href="#use4673"
+       id="use4675-6-5-8-3-7"
+       transform="translate(500,5.3465319e-6)"
        width="100%"
        height="100%"
        inkscape:export-filename="/home/andre/Dropbox/Programacao/C++/Pikmin_fangame_engine/Game_data/Graphics/Editor_icons/Delete_link.png"
@@ -814,5 +850,70 @@
          d="M 761,1108.5197 H 751"
          style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
+    <path
+       style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 1060,1108.5197 4,4 -4,4 -4,-4 z"
+       id="path945"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1104,1109.5197 -3,3 3,3 3,-3 z"
+       id="path956"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1116,1109.5197 -3,3 3,3 3,-3 z"
+       id="path956-3"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1116,1112.5197 h -12"
+       id="path973"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1154,1103.5197 -3,3 3,3 3,-3 z"
+       id="path956-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1166,1103.5197 -3,3 3,3 3,-3 z"
+       id="path956-3-6"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1166,1106.5197 h -12"
+       id="path973-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1154,1115.5197 -3,3 3,3 3,-3 z"
+       id="path956-9"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1166,1115.5197 -3,3 3,3 3,-3 z"
+       id="path956-3-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1166,1118.5197 h -12"
+       id="path973-27"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1166,1118.5197 v -12"
+       id="path973-27-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1154,1118.5197 v -12"
+       id="path973-27-0-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>
