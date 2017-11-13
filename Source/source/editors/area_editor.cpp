@@ -38,8 +38,14 @@ const float area_editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 const float area_editor::NEW_SECTOR_ERROR_TINT_DURATION = 1.5f;
 //Thickness to use when drawing a path link line.
 const float area_editor::PATH_LINK_THICKNESS = 2.0f;
+//Radius to use when drawing a path preview checkpoint.
+const float area_editor::PATH_PREVIEW_CHECKPOINT_RADIUS = 8.0f;
+//Only fetch the path these many seconds after the player stops the checkpoints.
+const float area_editor::PATH_PREVIEW_TIMER_DUR = 0.1f;
 //Radius to use when drawing a path stop circle.
 const float area_editor::PATH_STOP_RADIUS = 16.0f;
+//Scale the letters on the "points" of various features by this much.
+const float area_editor::POINT_LETTER_TEXT_SCALE = 1.5f;
 //Color of a selected element, or the selection box.
 const unsigned char area_editor::SELECTION_COLOR[3] = {255, 215, 0};
 //Speed at which the selection effect's "wheel" spins, in radians per second.
@@ -176,15 +182,22 @@ area_editor::area_editor() :
     last_mouse_click(INVALID),
     mouse_drag_confirmed(false),
     moving(false),
+    moving_path_preview_checkpoint(-1),
+    moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
+    path_drawing_normals(true),
     path_preview_timer(0),
     selected_shadow(nullptr),
     selecting(false),
     selection_effect(0),
     selection_filter(SELECTION_FILTER_SECTORS),
+    show_closest_stop(false),
+    show_path_preview(false),
     status_override_timer(STATUS_OVERRIDE_IMPORTANT_DURATION),
     show_reference(false) {
     
+    path_preview_timer =
+    timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
 }
 
 
@@ -223,6 +236,33 @@ bool area_editor::are_nodes_traversable(
         }
     }
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Calculates the preview path.
+ */
+void area_editor::calculate_preview_path() {
+    if(!show_path_preview) return;
+    
+    float d = 0;
+    path_preview =
+        get_path(
+            path_preview_checkpoints[0],
+            path_preview_checkpoints[1],
+            NULL, NULL, &d
+        );
+        
+    if(path_preview.empty() && d == 0) {
+        d =
+            dist(
+                path_preview_checkpoints[0],
+                path_preview_checkpoints[1]
+            ).to_float();
+    }
+    
+    ((lafi::label*) gui->widgets["frm_paths"]->widgets["lbl_path_dist"])->text =
+        "  Total dist.: " + f2s(d);
 }
 
 
@@ -559,6 +599,7 @@ void area_editor::clear_selection() {
     selected_sectors.clear();
     selected_mobs.clear();
     selected_path_stops.clear();
+    selected_path_links.clear();
     selection_homogenized = false;
     
     asa_to_gui();
@@ -585,6 +626,51 @@ void area_editor::clear_texture_suggestions() {
  */
 void area_editor::create_new_from_picker(const string &name) {
     //TODO;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Deletes the selected path links and/or stops.
+ */
+void area_editor::delete_selected_path_elements() {
+    for(
+        auto l = selected_path_links.begin();
+        l != selected_path_links.end(); ++l
+    ) {
+        (*l).first->remove_link((*l).second);
+    }
+    selected_path_links.clear();
+    
+    for(
+        auto s = selected_path_stops.begin();
+        s != selected_path_stops.end(); ++s
+    ) {
+        //Check all links to this stop.
+        for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+            path_stop* s2_ptr = cur_area_data.path_stops[s2];
+            for(size_t l = 0; l < s2_ptr->links.size(); ++l) {
+                if(s2_ptr->links[l].end_ptr == *s) {
+                    s2_ptr->links.erase(s2_ptr->links.begin() + l);
+                    break;
+                }
+            }
+        }
+        
+        //Finally, delete the stop.
+        delete *s;
+        for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+            if(cur_area_data.path_stops[s2] == *s) {
+                cur_area_data.path_stops.erase(
+                    cur_area_data.path_stops.begin() + s2
+                );
+                break;
+            }
+        }
+    }
+    selected_path_stops.clear();
+    
+    path_preview.clear(); //Clear so it doesn't reference deleted stops.
+    path_preview_timer.start(false);
 }
 
 
@@ -1424,6 +1510,35 @@ edge* area_editor::get_closest_edge_to_angle(
 
 
 /* ----------------------------------------------------------------------------
+ * Returns the path link currently under the specified point, or NULL if none.
+ */
+bool area_editor::get_path_link_under_point(
+    const point &p,
+    pair<path_stop*, path_stop*>* data1, pair<path_stop*, path_stop*>* data2
+) {
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+            path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+            if(
+                circle_intersects_line(p, 8 / cam_zoom, s_ptr->pos, s2_ptr->pos)
+            ) {
+                *data1 = make_pair(s_ptr, s2_ptr);
+                if(s2_ptr->has_link(s_ptr)) {
+                    *data2 = make_pair(s2_ptr, s_ptr);
+                } else {
+                    *data2 = make_pair((path_stop*) NULL, (path_stop*) NULL);
+                }
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns the path stop currently under the specified point, or NULL if none.
  */
 path_stop* area_editor::get_path_stop_under_point(const point &p) {
@@ -1976,6 +2091,33 @@ void area_editor::start_mob_move() {
             move_closest_mob = *m;
             move_closest_mob_dist = d;
             move_closest_mob_start_pos = (*m)->pos;
+        }
+    }
+    
+    cur_area_data.clone(pre_move_area_data);
+    
+    move_mouse_start_pos = mouse_cursor_w;
+    moving = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Procedure to start moving the selected path stops.
+ */
+void area_editor::start_path_stop_move() {
+    move_closest_stop = NULL;
+    dist move_closest_stop_dist;
+    for(
+        auto s = selected_path_stops.begin();
+        s != selected_path_stops.end(); ++s
+    ) {
+        pre_move_stop_coords[*s] = (*s)->pos;
+        
+        dist d(mouse_cursor_w, (*s)->pos);
+        if(!move_closest_stop || d < move_closest_stop_dist) {
+            move_closest_stop = *s;
+            move_closest_stop_dist = d;
+            move_closest_stop_start_pos = (*s)->pos;
         }
     }
     

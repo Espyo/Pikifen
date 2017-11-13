@@ -1155,6 +1155,26 @@ path_stop::path_stop(const point &pos, vector<path_link> links) :
 
 
 /* ----------------------------------------------------------------------------
+ * Adds a link between this stop and another, whether it's one-way or not.
+ * Also adds the link to the other stop, if applicable.
+ * If these two stops already had some link, it gets removed.
+ * other_stop: Pointer to the other stop.
+ * normal:     Normal link? False means one-way link.
+ */
+void path_stop::add_link(path_stop* other_stop, const bool normal) {
+    remove_link(other_stop);
+    if(other_stop->has_link(this)) {
+        other_stop->remove_link(this);
+    }
+    
+    links.push_back(path_link(other_stop, INVALID));
+    if(normal) {
+        other_stop->links.push_back(path_link(this, INVALID));
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Returns whether this stop links to another stop or not.
  * The link is one-way, meaning that if the only link is from the other stop
  * to this one, it will not count.
@@ -1164,6 +1184,19 @@ bool path_stop::has_link(path_stop* other_stop) {
         if(links[l].end_ptr == other_stop) return true;
     }
     return false;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Removes the link between this stop and the specified one.
+ */
+void path_stop::remove_link(path_stop* other_stop) {
+    for(size_t l = 0; l < links.size(); ++l) {
+        if(links[l].end_ptr == other_stop) {
+            links.erase(links.begin() + l);
+            return;
+        }
+    }
 }
 
 

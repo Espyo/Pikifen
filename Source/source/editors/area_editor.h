@@ -81,10 +81,11 @@ private:
         EDITOR_SUB_STATE_NONE,
         EDITOR_SUB_STATE_DRAWING,
         EDITOR_SUB_STATE_CIRCLE_SECTOR,
-        EDITOR_SUB_STATE_TEXTURE_VIEW,
         EDITOR_SUB_STATE_NEW_MOB,
         EDITOR_SUB_STATE_DUPLICATE_MOB,
+        EDITOR_SUB_STATE_PATH_DRAWING,
         EDITOR_SUB_STATE_NEW_SHADOW,
+        EDITOR_SUB_STATE_TEXTURE_VIEW,
     };
     
     enum AREA_EDITOR_PICKER_TYPES {
@@ -120,7 +121,10 @@ private:
     static const float         MOUSE_DRAG_CONFIRM_RANGE;
     static const float         NEW_SECTOR_ERROR_TINT_DURATION;
     static const float         PATH_LINK_THICKNESS;
+    static const float         PATH_PREVIEW_CHECKPOINT_RADIUS;
+    static const float         PATH_PREVIEW_TIMER_DUR;
     static const float         PATH_STOP_RADIUS;
+    static const float         POINT_LETTER_TEXT_SCALE;
     static const unsigned char SELECTION_COLOR[3];
     static const float         SELECTION_EFFECT_SPEED;
     static const float         STATUS_OVERRIDE_IMPORTANT_DURATION;
@@ -228,6 +232,10 @@ private:
     mob_gen* move_closest_mob;
     //Closest mob was here when the move started (world coords).
     point move_closest_mob_start_pos;
+    //Closest path stop to the mouse when moving.
+    path_stop* move_closest_stop;
+    //Closest path stop was here when the move started (world coords).
+    point move_closest_stop_start_pos;
     //Closest vertex to the mouse when moving.
     vertex* move_closest_vertex;
     //Closest vertex was here when the move started (world coords).
@@ -236,11 +244,23 @@ private:
     point move_mouse_start_pos;
     //Currently moving the selected vertexes, objects, etc.?
     bool moving;
+    //Path preview checkpoint that is currently being moved, or -1 for none.
+    signed char moving_path_preview_checkpoint;
+    //Cross-section point that is currently being moved, or -1 for none.
+    signed char moving_cross_section_point;
     //Time left to keep the error-redness of the new sector's line(s) for.
     timer new_sector_error_tint_timer;
     //Non-simple sectors found, and their reason for being broken.
     map<sector*, TRIANGULATION_ERRORS> non_simples;
-    //Only preview the path when this time is up.
+    //When drawing a path, create normal links. False for one-way links.
+    bool path_drawing_normals;
+    //First stop of the next link when drawing a path.
+    path_stop* path_drawing_stop_1;
+    //Path stops that make up the current path preview.
+    vector<path_stop*> path_preview;
+    //Location of the two path preview checkpoints.
+    point path_preview_checkpoints[2];
+    //Only calculate the preview path when this time is up.
     timer path_preview_timer;
     //Area data before vertex, mob, etc. movement.
     area_data pre_move_area_data;
@@ -248,12 +268,16 @@ private:
     map<mob_gen*, point> pre_move_mob_coords;
     //Position of the selected tree shadow before movement.
     point pre_move_shadow_coords;
+    //Position of the selected path stops before movement.
+    map<path_stop*, point> pre_move_stop_coords;
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
     set<mob_gen*> selected_mobs;
+    //Currently selected path links.
+    set<pair<path_stop*, path_stop*> > selected_path_links;
     //Currently selected path stops.
     set<path_stop*> selected_path_stops;
     //Currently selected sectors.
@@ -274,6 +298,10 @@ private:
     point selection_end;
     //Point where the selection started.
     point selection_start;
+    //Show the path stop closest to the cursor?
+    bool show_closest_stop;
+    //Show the path preview and the checkpoints?
+    bool show_path_preview;
     //Render the reference image?
     bool show_reference;
     //Render the tree shadows?
@@ -294,6 +322,7 @@ private:
     void cancel_circle_sector();
     void cancel_layout_drawing();
     void cancel_layout_moving();
+    void calculate_preview_path();
     void center_camera(
         const point &min_coords, const point &max_coords
     );
@@ -306,6 +335,7 @@ private:
     void clear_texture_suggestions();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
+    void delete_selected_path_elements();
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
@@ -333,6 +363,10 @@ private:
     vector<edge_intersection> get_intersecting_edges();
     float get_mob_gen_radius(mob_gen* m);
     mob_gen* get_mob_under_point(const point &p);
+    bool get_path_link_under_point(
+        const point &p,
+        pair<path_stop*, path_stop*>* data1, pair<path_stop*, path_stop*>* data2
+    );
     path_stop* get_path_stop_under_point(const point &p);
     sector* get_sector_under_point(const point &p);
     vertex* get_vertex_under_point(const point &p);
@@ -355,6 +389,7 @@ private:
     point snap_to_grid(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
     void start_mob_move();
+    void start_path_stop_move();
     void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();

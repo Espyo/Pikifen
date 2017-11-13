@@ -1268,35 +1268,48 @@ void area_editor::load() {
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
-        "lbl_create",
-        new lafi::label("Create:"), 100, 16
+        "but_draw",
+        new lafi::button("", "", icons.get(ICON_NEW)), 25, 32
+    );
+    frm_paths->easy_add(
+        "but_del",
+        new lafi::button("", "", icons.get(ICON_DELETE)), 25, 32
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
-        "but_new_stop",
-        new lafi::button("", "", icons.get(ICON_NEW_STOP)), 33, 32
-    );
-    frm_paths->easy_add(
-        "but_new_link",
-        new lafi::button("", "", icons.get(ICON_NEW_LINK)), 33, 32
-    );
-    frm_paths->easy_add(
-        "but_new_1wlink",
-        new lafi::button("", "", icons.get(ICON_NEW_1WAY_LINK)), 33, 32
+        "lbl_drawing",
+        new lafi::label("Drawing mode:"), 100, 16
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
-        "lbl_delete",
-        new lafi::label("Delete:"), 100, 16
+        "dum_drawing_1",
+        new lafi::dummy(), 10, 16
+    );
+    frm_paths->easy_add(
+        "rad_normal",
+        new lafi::radio_button("Normal links"), 90, 16
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
-        "but_del_stop",
-        new lafi::button("", "", icons.get(ICON_DELETE_STOP)), 33, 32
+        "dum_drawing_2",
+        new lafi::dummy(), 10, 16
     );
     frm_paths->easy_add(
-        "but_del_link",
-        new lafi::button("", "", icons.get(ICON_DELETE_LINK)), 33, 32
+        "rad_one_way",
+        new lafi::radio_button("One-way links"), 90, 16
+    );
+    frm_paths->easy_row();
+    frm_paths->easy_add(
+        "lin_tools_1",
+        new lafi::line(), 35, 16
+    );
+    frm_paths->easy_add(
+        "lbl_tools",
+        new lafi::label("Tools", ALLEGRO_ALIGN_CENTER), 30, 16
+    );
+    frm_paths->easy_add(
+        "lin_tools_2",
+        new lafi::line(), 35, 16
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -1325,51 +1338,58 @@ void area_editor::load() {
     frm_paths->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_paths->widgets["but_new_stop"]->left_mouse_click_handler =
+    frm_paths->widgets["but_draw"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+            sub_state = EDITOR_SUB_STATE_NONE;
+        } else {
+            path_drawing_stop_1 = NULL;
+            sub_state = EDITOR_SUB_STATE_PATH_DRAWING;
+        }
     };
-    frm_paths->widgets["but_new_stop"]->description =
-        "Create new stops wherever you click.";
+    frm_paths->widgets["but_draw"]->description =
+        "Draw path stops and their links.";
         
-    frm_paths->widgets["but_new_link"]->left_mouse_click_handler =
+    frm_paths->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        delete_selected_path_elements();
     };
-    frm_paths->widgets["but_new_link"]->description =
-        "Click on two stops to connect them with a link.";
+    frm_paths->widgets["but_del"]->description =
+        "Delete the selected stops and/or links.";
         
-    frm_paths->widgets["but_new_1wlink"]->left_mouse_click_handler =
+    frm_paths->widgets["rad_normal"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        path_drawing_normals = true;
+        path_to_gui();
     };
-    frm_paths->widgets["but_new_1wlink"]->description =
-        "Click stop #1 then #2 for a one-way path link.";
+    frm_paths->widgets["rad_normal"]->description =
+        "New links drawn will be normal (two-way) links.";
         
-    frm_paths->widgets["but_del_stop"]->left_mouse_click_handler =
+    frm_paths->widgets["rad_one_way"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        path_drawing_normals = false;
+        path_to_gui();
     };
-    frm_paths->widgets["but_del_stop"]->description =
-        "Click stops to delete them.";
-        
-    frm_paths->widgets["but_del_link"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        //TODO
-    };
-    frm_paths->widgets["but_del_link"]->description =
-        "Click links to delete them.";
+    frm_paths->widgets["rad_one_way"]->description =
+        "New links drawn will be one-way links.";
         
     frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        show_closest_stop = !show_closest_stop;
     };
     frm_paths->widgets["chk_show_closest"]->description =
-        "Show the closest stop to the cursor.";
+        "Show the closest stop to the cursor. Useful to know which stop "
+        "Pikmin will go to when starting to carry.";
         
     frm_paths->widgets["chk_show_path"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        show_path_preview = !show_path_preview;
+        if(show_path_preview) {
+            calculate_preview_path();
+            this->frm_paths->widgets["lbl_path_dist"]->show();
+        } else {
+            this->frm_paths->widgets["lbl_path_dist"]->hide();
+        }
     };
     frm_paths->widgets["chk_show_path"]->description =
         "Show path between the draggable points A and B.";
@@ -2020,6 +2040,10 @@ void area_editor::load() {
     
     fade_mgr.start_fade(true, nullptr);
     
+    show_closest_stop = false;
+    show_path_preview = false;
+    path_preview_checkpoints[0] = point(-DEF_GRID_INTERVAL, 0);
+    path_preview_checkpoints[1] = point(+DEF_GRID_INTERVAL, 0);
     clear_selection();
     selected_shadow = NULL;
     selection_homogenized = false;

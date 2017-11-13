@@ -379,6 +379,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
                 selected_vertexes.insert(new_vertex);
             }
         }
+        
     }
     
     handle_lmb_down(ev);
@@ -390,6 +391,8 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+    
+        //Drawing the layout.
         point hotspot = snap_to_grid(mouse_cursor_w);
         
         //First, check if the user is trying to undo the previous node.
@@ -435,6 +438,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         
     } else if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+    
         //Create a new circular sector.
         point hotspot = snap_to_grid(mouse_cursor_w);
         
@@ -523,9 +527,50 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         mob_to_gui();
         made_changes = true;
         
-    } else if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
-        //Create a new shadow where the cursor is.
+    } else if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+    
+        //Drawing a path.
+        point hotspot = snap_to_grid(mouse_cursor_w);
+        path_stop* clicked_stop = get_path_stop_under_point(hotspot);
         
+        if(path_drawing_stop_1) {
+            path_stop* next_stop = NULL;
+            if(clicked_stop) {
+                if(clicked_stop == path_drawing_stop_1) {
+                    path_drawing_stop_1 = NULL;
+                } else {
+                    next_stop = clicked_stop;
+                }
+            } else {
+                next_stop = new path_stop(hotspot);
+                cur_area_data.path_stops.push_back(next_stop);
+            }
+            
+            if(next_stop) {
+                path_drawing_stop_1->add_link(
+                    next_stop, path_drawing_normals
+                );
+                cur_area_data.fix_path_stop_nrs(path_drawing_stop_1);
+                cur_area_data.fix_path_stop_nrs(next_stop);
+                path_drawing_stop_1 = next_stop;
+            }
+            
+        } else {
+            if(clicked_stop) {
+                path_drawing_stop_1 = clicked_stop;
+            } else {
+                path_drawing_stop_1 = new path_stop(hotspot);
+                cur_area_data.path_stops.push_back(path_drawing_stop_1);
+            }
+            
+        }
+        
+        path_preview.clear(); //Clear so it doesn't reference deleted stops.
+        path_preview_timer.start(false);
+        
+    } else if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+    
+        //Create a new shadow where the cursor is.
         sub_state = EDITOR_SUB_STATE_NONE;
         point hotspot = snap_to_grid(mouse_cursor_w);
         
@@ -547,6 +592,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         )
     ) {
     
+        //Start a new layout selection or select something.
         bool start_new_selection = true;
         
         vertex* clicked_vertex = NULL;
@@ -609,6 +655,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state == EDITOR_SUB_STATE_NONE
     ) {
     
+        //Start a new mob selection or select something.
         bool start_new_selection = true;
         mob_gen* clicked_mob = get_mob_under_point(mouse_cursor_w);
         
@@ -640,23 +687,71 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state == EDITOR_SUB_STATE_NONE
     ) {
     
-        clear_selection();
+        //First, check if the user clicked on a path preview checkpoint.
+        if(show_path_preview) {
+            for(unsigned char c = 0; c < 2; ++c) {
+                if(
+                    bbox_check(
+                        path_preview_checkpoints[c],
+                        mouse_cursor_w,
+                        PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom
+                    )
+                ) {
+                    clear_selection();
+                    moving_path_preview_checkpoint = c;
+                    return;
+                }
+            }
+        }
+        
+        //Start a new path selection or select something.
         bool start_new_selection = true;
         
+        path_stop* clicked_stop =
+            get_path_stop_under_point(mouse_cursor_w);
+        pair<path_stop*, path_stop*> clicked_link_data_1;
+        pair<path_stop*, path_stop*> clicked_link_data_2;
+        bool clicked_link =
+            get_path_link_under_point(
+                mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
+            );
+            
         if(!is_shift_pressed) {
-        
-            path_stop* clicked_stop = get_path_stop_under_point(mouse_cursor_w);
-            if(clicked_stop) {
-                selected_path_stops.insert(clicked_stop);
+            if(clicked_stop || clicked_link) {
                 start_new_selection = false;
             }
             
         }
         
         if(start_new_selection) {
+            clear_selection();
             selecting = true;
             selection_start = mouse_cursor_w;
             selection_end = mouse_cursor_w;
+            
+        } else {
+        
+            if(clicked_stop) {
+                if(
+                    selected_path_stops.find(clicked_stop) ==
+                    selected_path_stops.end()
+                ) {
+                    clear_selection();
+                    selected_path_stops.insert(clicked_stop);
+                }
+            } else {
+                if(
+                    selected_path_links.find(clicked_link_data_1) ==
+                    selected_path_links.end()
+                ) {
+                    clear_selection();
+                    selected_path_links.insert(clicked_link_data_1);
+                    if(clicked_link_data_2.first != NULL) {
+                        selected_path_links.insert(clicked_link_data_2);
+                    }
+                }
+            }
+            
         }
         
         path_to_gui();
@@ -666,6 +761,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state == EDITOR_SUB_STATE_NONE
     ) {
     
+        //Select a tree shadow.
         selected_shadow = NULL;
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         
@@ -693,7 +789,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
-    //TODO
     if(selecting) {
     
         float selection_x1 = min(selection_start.x, selection_end.x);
@@ -708,6 +803,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             state == EDITOR_STATE_ASB
         ) {
         
+            //Selection box around the layout.
             clear_selection();
             
             for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
@@ -778,6 +874,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
         } else if(state == EDITOR_STATE_MOBS) {
         
+            //Selection box around mobs.
             clear_selection();
             
             for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
@@ -799,6 +896,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
             
         } else if(state == EDITOR_STATE_PATHS) {
         
+            //Selection box around path stops.
             clear_selection();
             
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
@@ -811,6 +909,26 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
                     s_ptr->pos.y + PATH_STOP_RADIUS <= selection_y2
                 ) {
                     selected_path_stops.insert(s_ptr);
+                }
+            }
+            
+            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = cur_area_data.path_stops[s];
+                for(size_t l = 0; l < s_ptr->links.size(); ++l) {
+                    path_stop* s2_ptr = s_ptr->links[l].end_ptr;
+                    
+                    if(
+                        s_ptr->pos.x >= selection_x1 &&
+                        s_ptr->pos.x <= selection_x2 &&
+                        s_ptr->pos.y >= selection_y1 &&
+                        s_ptr->pos.y <= selection_y2 &&
+                        s2_ptr->pos.x >= selection_x1 &&
+                        s2_ptr->pos.x <= selection_x2 &&
+                        s2_ptr->pos.y >= selection_y1 &&
+                        s2_ptr->pos.y <= selection_y2
+                    ) {
+                        selected_path_links.insert(make_pair(s_ptr, s2_ptr));
+                    }
                 }
             }
             
@@ -828,6 +946,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         )
     ) {
     
+        //Move vertexes.
         if(!moving) {
             start_vertex_move();
         }
@@ -851,6 +970,7 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         state == EDITOR_STATE_MOBS
     ) {
     
+        //Move mobs.
         if(!moving) {
             start_mob_move();
         }
@@ -868,11 +988,38 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         }
         
     } else if(
+        !selected_path_stops.empty() &&
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        state == EDITOR_STATE_PATHS
+    ) {
+    
+        //Move path stops.
+        if(!moving) {
+            start_path_stop_move();
+        }
+        
+        point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
+        point closest_stop_new_p =
+            snap_to_grid(move_closest_stop_start_pos + mouse_offset);
+        point offset = closest_stop_new_p - move_closest_stop_start_pos;
+        for(
+            auto s = selected_path_stops.begin();
+            s != selected_path_stops.end(); ++s
+        ) {
+            point orig = pre_move_stop_coords[*s];
+            (*s)->pos.x = orig.x + offset.x;
+            (*s)->pos.y = orig.y + offset.y;
+        }
+        path_preview_timer.start(false);
+        
+        
+    } else if(
         selected_shadow &&
         sub_state == EDITOR_SUB_STATE_NONE &&
         state == EDITOR_STATE_DETAILS
     ) {
     
+        //Move tree shadows.
         if(!moving) {
             start_shadow_move();
         }
@@ -881,6 +1028,16 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         selected_shadow->center = pre_move_shadow_coords + mouse_offset;
         details_to_gui();
         
+    } else if(
+        moving_path_preview_checkpoint != -1 &&
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        state == EDITOR_STATE_PATHS
+    ) {
+    
+        //Move path preview checkpoints.
+        path_preview_checkpoints[moving_path_preview_checkpoint] =
+            snap_to_grid(mouse_cursor_w);
+        path_preview_timer.start(false);
     }
 }
 
@@ -902,6 +1059,8 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         }
         moving = false;
     }
+    
+    moving_path_preview_checkpoint = -1;
 }
 
 
