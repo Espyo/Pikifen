@@ -64,8 +64,18 @@ void area_editor::do_drawing() {
         size_t n_sectors = cur_area_data.sectors.size();
         for(size_t s = 0; s < n_sectors; ++s) {
             sector* s_ptr;
-            if(moving) s_ptr = pre_move_area_data.sectors[s];
-            else s_ptr = cur_area_data.sectors[s];
+            if(
+                moving &&
+                (
+                    state == EDITOR_STATE_ASA ||
+                    state == EDITOR_STATE_ASB ||
+                    state == EDITOR_STATE_LAYOUT
+                )
+            ) {
+                s_ptr = pre_move_area_data.sectors[s];
+            } else {
+                s_ptr = cur_area_data.sectors[s];
+            }
             
             draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
             
@@ -239,13 +249,6 @@ void area_editor::do_drawing() {
             ) {
                 same_z = true;
             }
-            
-            //TODO
-            /*
-            if(on_sector && mode == EDITOR_MODE_SECTORS) {
-                if(e_ptr->sectors[0] == on_sector) mouse_on = true;
-                if(e_ptr->sectors[1] == on_sector) mouse_on = true;
-            }*/
             
             if(selected_edges.find(e_ptr) != selected_edges.end()) {
                 selected = true;
@@ -432,25 +435,26 @@ void area_editor::do_drawing() {
         if(state == EDITOR_STATE_PATHS) {
             for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                 path_stop* s_ptr = cur_area_data.path_stops[s];
-                al_draw_filled_circle(
-                    s_ptr->pos.x, s_ptr->pos.y,
-                    PATH_STOP_RADIUS,
-                    al_map_rgb(96, 208, 240)
-                );
-            }
-            
-            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
-                path_stop* s_ptr = cur_area_data.path_stops[s];
                 for(size_t l = 0; l < s_ptr->links.size(); l++) {
                     path_stop* s2_ptr = s_ptr->links[l].end_ptr;
                     bool one_way = !(s_ptr->links[l].end_ptr->has_link(s_ptr));
-                    
+                    bool selected =
+                        selected_path_links.find(make_pair(s_ptr, s2_ptr)) !=
+                        selected_path_links.end();
+                        
                     al_draw_line(
                         s_ptr->pos.x, s_ptr->pos.y,
                         s2_ptr->pos.x, s2_ptr->pos.y,
                         (
-                            one_way ? al_map_rgb(112, 64, 192) :
-                            al_map_rgb(64, 128, 192)
+                            selected ?
+                            al_map_rgba(
+                                SELECTION_COLOR[0],
+                                SELECTION_COLOR[1],
+                                SELECTION_COLOR[2],
+                                selection_opacity * 255
+                            ) :
+                            one_way ? al_map_rgb(192, 128, 224) :
+                            al_map_rgb(0, 80, 224)
                         ),
                         PATH_LINK_THICKNESS / cam_zoom
                     );
@@ -473,12 +477,24 @@ void area_editor::do_drawing() {
                             mid_y + sin(angle + M_PI_2) * delta,
                             mid_x + cos(angle - M_PI_2) * delta,
                             mid_y + sin(angle - M_PI_2) * delta,
-                            al_map_rgb(112, 64, 192)
+                            al_map_rgb(192, 128, 224)
                         );
                     }
                 }
+            }
+            
+            for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+                path_stop* s_ptr = cur_area_data.path_stops[s];
+                al_draw_filled_circle(
+                    s_ptr->pos.x, s_ptr->pos.y,
+                    PATH_STOP_RADIUS,
+                    al_map_rgb(80, 192, 192)
+                );
                 
-                if(selected_path_stops.find(s_ptr) != selected_path_stops.end()) {
+                if(
+                    selected_path_stops.find(s_ptr) !=
+                    selected_path_stops.end()
+                ) {
                     al_draw_filled_circle(
                         s_ptr->pos.x, s_ptr->pos.y, PATH_STOP_RADIUS,
                         al_map_rgba(
@@ -491,41 +507,67 @@ void area_editor::do_drawing() {
                 }
             }
             
-            //TODO
-            /*
-            if(sec_mode == ESM_NEW_LINK2 || sec_mode == ESM_NEW_1WLINK2) {
-                al_draw_line(
-                    new_link_first_stop->pos.x, new_link_first_stop->pos.y,
-                    mouse_cursor_w.x, mouse_cursor_w.y,
-                    al_map_rgb(255, 255, 255), 2 / cam_zoom
-                );
-            }
-            
             if(show_closest_stop) {
                 path_stop* closest = NULL;
                 dist closest_dist;
                 for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
                     path_stop* s_ptr = cur_area_data.path_stops[s];
                     dist d(mouse_cursor_w, s_ptr->pos);
-            
+                    
                     if(!closest || d < closest_dist) {
                         closest = s_ptr;
                         closest_dist = d;
                     }
                 }
-            
+                
                 al_draw_line(
                     mouse_cursor_w.x, mouse_cursor_w.y,
                     closest->pos.x, closest->pos.y,
-                    al_map_rgb(96, 224, 32), 2 / cam_zoom
+                    al_map_rgb(192, 128, 32), 2.0 / cam_zoom
                 );
             }
             
             if(show_path_preview) {
+                //Draw the lines of the path.
+                if(path_preview.empty()) {
+                    al_draw_line(
+                        path_preview_checkpoints[0].x,
+                        path_preview_checkpoints[0].y,
+                        path_preview_checkpoints[1].x,
+                        path_preview_checkpoints[1].y,
+                        al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    );
+                } else {
+                    al_draw_line(
+                        path_preview_checkpoints[0].x,
+                        path_preview_checkpoints[0].y,
+                        path_preview[0]->pos.x,
+                        path_preview[0]->pos.y,
+                        al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    );
+                    for(size_t s = 0; s < path_preview.size() - 1; ++s) {
+                        al_draw_line(
+                            path_preview[s]->pos.x,
+                            path_preview[s]->pos.y,
+                            path_preview[s + 1]->pos.x,
+                            path_preview[s + 1]->pos.y,
+                            al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                        );
+                    }
+                    
+                    al_draw_line(
+                        path_preview.back()->pos.x,
+                        path_preview.back()->pos.y,
+                        path_preview_checkpoints[1].x,
+                        path_preview_checkpoints[1].y,
+                        al_map_rgb(240, 128, 128), 3.0 / cam_zoom
+                    );
+                }
+                
                 //Draw the checkpoints.
                 for(unsigned char c = 0; c < 2; ++c) {
                     string letter = (c == 0 ? "A" : "B");
-            
+                    
                     al_draw_filled_rectangle(
                         path_preview_checkpoints[c].x -
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
@@ -535,7 +577,7 @@ void area_editor::do_drawing() {
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
                         path_preview_checkpoints[c].y +
                         (PATH_PREVIEW_CHECKPOINT_RADIUS / cam_zoom),
-                        al_map_rgb(255, 255, 32)
+                        al_map_rgb(240, 224, 160)
                     );
                     draw_scaled_text(
                         font_builtin, al_map_rgb(0, 64, 64),
@@ -548,43 +590,7 @@ void area_editor::do_drawing() {
                         letter
                     );
                 }
-            
-                //Draw the lines of the path.
-                if(path_preview.empty()) {
-                    al_draw_line(
-                        path_preview_checkpoints[0].x,
-                        path_preview_checkpoints[0].y,
-                        path_preview_checkpoints[1].x,
-                        path_preview_checkpoints[1].y,
-                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
-                    );
-                } else {
-                    al_draw_line(
-                        path_preview_checkpoints[0].x,
-                        path_preview_checkpoints[0].y,
-                        path_preview[0]->pos.x,
-                        path_preview[0]->pos.y,
-                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
-                    );
-                    for(size_t s = 0; s < path_preview.size() - 1; ++s) {
-                        al_draw_line(
-                            path_preview[s]->pos.x,
-                            path_preview[s]->pos.y,
-                            path_preview[s + 1]->pos.x,
-                            path_preview[s + 1]->pos.y,
-                            al_map_rgb(255, 0, 0), 3.0 / cam_zoom
-                        );
-                    }
-            
-                    al_draw_line(
-                        path_preview.back()->pos.x,
-                        path_preview.back()->pos.y,
-                        path_preview_checkpoints[1].x,
-                        path_preview_checkpoints[1].y,
-                        al_map_rgb(255, 0, 0), 3.0 / cam_zoom
-                    );
-                }
-            }*/
+            }
         }
         
         //Tree shadows.
@@ -701,6 +707,21 @@ void area_editor::do_drawing() {
             }
         }
         
+        //Path drawing.
+        if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+            if(path_drawing_stop_1) {
+                point hotspot = snap_to_grid(mouse_cursor_w);
+                al_draw_line(
+                    path_drawing_stop_1->pos.x,
+                    path_drawing_stop_1->pos.y,
+                    hotspot.x,
+                    hotspot.y,
+                    al_map_rgb(64, 255, 64),
+                    3.0 / cam_zoom
+                );
+            }
+        }
+        
         //Selection box.
         if(selecting) {
             al_draw_rectangle(
@@ -724,6 +745,7 @@ void area_editor::do_drawing() {
             sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR ||
             sub_state == EDITOR_SUB_STATE_NEW_MOB ||
             sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+            sub_state == EDITOR_SUB_STATE_PATH_DRAWING ||
             sub_state == EDITOR_SUB_STATE_NEW_SHADOW
         ) {
             point marker = mouse_cursor_w;

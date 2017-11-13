@@ -502,6 +502,11 @@ void area_editor::open_picker(const unsigned char type) {
  */
 void area_editor::path_to_gui() {
     //TODO
+    if(path_drawing_normals) {
+        ((lafi::radio_button*) frm_paths->widgets["rad_normal"])->select();
+    } else {
+        ((lafi::radio_button*) frm_paths->widgets["rad_one_way"])->select();
+    }
 }
 
 
