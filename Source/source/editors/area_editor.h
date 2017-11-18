@@ -97,6 +97,25 @@ private:
         AREA_EDITOR_PICKER_WEATHER,
     };
     
+    enum EDITOR_PROBLEM_TYPES {
+        EPT_NONE_YET,
+        EPT_NONE,
+        EPT_INTERSECTING_EDGES,   //Two edges intersect.
+        EPT_LONE_EDGE,            //An edge is all by itself.
+        EPT_OVERLAPPING_VERTEXES, //Two vertexes in the same spot.
+        EPT_BAD_SECTOR,           //A sector is corrupted.
+        EPT_MISSING_LEADER,       //No leader mob found.
+        EPT_UNKNOWN_TEXTURE,      //A texture is not found in the game files.
+        EPT_TYPELESS_MOB,         //Mob with no type.
+        EPT_MOB_OOB,              //Mob out of bounds.
+        EPT_MOB_IN_WALL,          //Mob stuck in a wall.
+        EPT_LONE_PATH_STOP,       //A path stop is all by itself.
+        EPT_PATH_STOP_OOB,        //A path stop is out of bounds.
+        EPT_PATH_STOPS_TOGETHER,  //Two path stops are in the same place.
+        EPT_PATHS_UNCONNECTED,    //The path graph is unconnected.
+        EPT_INVALID_SHADOW,       //Invalid tree shadow image.
+    };
+    
     enum DRAWING_LINE_ERRORS {
         DRAWING_LINE_NO_ERROR,
         DRAWING_LINE_WAYWARD_SECTOR,
@@ -181,19 +200,8 @@ private:
     size_t state;
     //Current sub-state.
     size_t sub_state;
-    
     //Time left until a backup is generated.
     timer backup_timer;
-    //New circle sector's second point.
-    point new_circle_sector_anchor;
-    //New circle sector's center.
-    point new_circle_sector_center;
-    //Points where the new circle sector's vertexes will end up.
-    vector<point> new_circle_sector_points;
-    //What step of the circular sector building process are we in?
-    unsigned char new_circle_sector_step;
-    //For each edge of the new circle sector, is it valid?
-    vector<bool> new_circle_sector_valid_edges;
     //Name of the area currently loaded.
     string cur_area_name;
     //When showing a hazard in the list, this is the index of the current one.
@@ -248,6 +256,16 @@ private:
     signed char moving_path_preview_checkpoint;
     //Cross-section point that is currently being moved, or -1 for none.
     signed char moving_cross_section_point;
+    //New circle sector's second point.
+    point new_circle_sector_anchor;
+    //New circle sector's center.
+    point new_circle_sector_center;
+    //Points where the new circle sector's vertexes will end up.
+    vector<point> new_circle_sector_points;
+    //What step of the circular sector building process are we in?
+    unsigned char new_circle_sector_step;
+    //For each edge of the new circle sector, is it valid?
+    vector<bool> new_circle_sector_valid_edges;
     //Time left to keep the error-redness of the new sector's line(s) for.
     timer new_sector_error_tint_timer;
     //Non-simple sectors found, and their reason for being broken.
@@ -272,6 +290,22 @@ private:
     map<path_stop*, point> pre_move_stop_coords;
     //Position of the selected vertexes before movement.
     map<vertex*, point> pre_move_vertex_coords;
+    //Information about the problematic intersecting edges, if any.
+    edge_intersection problem_edge_intersection;
+    //Pointer to the problematic mob, if any.
+    mob_gen* problem_mob_ptr;
+    //Pointer to the problematic path stop, if any.
+    path_stop* problem_path_stop_ptr;
+    //Type of the current problem found in the review panel.
+    unsigned char problem_type;
+    //Pointer to the problematic sector, if any.
+    sector* problem_sector_ptr;
+    //Pointer to the problematic tree shadow, if any.
+    tree_shadow* problem_shadow_ptr;
+    //String with extra information about the current problem, if any.
+    string problem_string;
+    //Pointer to the problematic vertex, if any.
+    vertex* problem_vertex_ptr;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -300,6 +334,10 @@ private:
     point selection_start;
     //Show the path stop closest to the cursor?
     bool show_closest_stop;
+    //Use the cross-section view tool?
+    bool show_cross_section;
+    //When using the cross-section view tool, render the grid?
+    bool show_cross_section_grid;
     //Show the path preview and the checkpoints?
     bool show_path_preview;
     //Render the reference image?
@@ -331,6 +369,7 @@ private:
     void clear_current_area();
     void clear_layout_drawing();
     void clear_layout_moving();
+    void clear_problems();
     void clear_selection();
     void clear_texture_suggestions();
     void create_new_from_picker(const string &name);
@@ -344,6 +383,7 @@ private:
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
     );
+    unsigned char find_problems();
     void finish_circle_sector();
     void finish_layout_drawing();
     void finish_layout_moving();
@@ -370,6 +410,7 @@ private:
     path_stop* get_path_stop_under_point(const point &p);
     sector* get_sector_under_point(const point &p);
     vertex* get_vertex_under_point(const point &p);
+    void goto_problem();
     void handle_line_error();
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
