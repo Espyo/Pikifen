@@ -175,6 +175,7 @@ area_editor::area_editor() :
     debug_vertex_nrs(false),
     double_click_time(0),
     drawing_line_error(DRAWING_LINE_NO_ERROR),
+    problem_edge_intersection(NULL, NULL),
     grid_interval(DEF_GRID_INTERVAL),
     is_ctrl_pressed(false),
     is_shift_pressed(false),
@@ -591,6 +592,22 @@ void area_editor::clear_layout_moving() {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the data about the current problems, if any.
+ */
+void area_editor::clear_problems() {
+    problem_type = EPT_NONE_YET;
+    problem_edge_intersection.e1 = NULL;
+    problem_edge_intersection.e2 = NULL;
+    problem_mob_ptr = NULL;
+    problem_path_stop_ptr = NULL;
+    problem_sector_ptr = NULL;
+    problem_shadow_ptr = NULL;
+    problem_vertex_ptr = NULL;
+    problem_string.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Clears the data about the current selection.
  */
 void area_editor::clear_selection() {
@@ -740,6 +757,257 @@ void area_editor::emit_triangulation_error_status_bar_message(
             "Some sectors reuse vertexes -- there are likely gaps!", true
         );
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Tries to find problems with the area. Returns the first one found,
+ * or EPT_NONE if none found.
+ */
+unsigned char area_editor::find_problems() {
+    problem_sector_ptr = NULL;
+    problem_vertex_ptr = NULL;
+    problem_shadow_ptr = NULL;
+    problem_string.clear();
+    
+    //Check intersecting edges.
+    vector<edge_intersection> intersections = get_intersecting_edges();
+    if(!intersections.empty()) {
+        problem_edge_intersection = *intersections.begin();
+        return EPT_INTERSECTING_EDGES;
+    }
+    
+    //Check overlapping vertexes.
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v1_ptr = cur_area_data.vertexes[v];
+        
+        for(size_t v2 = v + 1; v2 < cur_area_data.vertexes.size(); ++v2) {
+            vertex* v2_ptr = cur_area_data.vertexes[v2];
+            
+            if(v1_ptr->x == v2_ptr->x && v1_ptr->y == v2_ptr->y) {
+                problem_vertex_ptr = v1_ptr;
+                return EPT_OVERLAPPING_VERTEXES;
+            }
+        }
+    }
+    
+    //Check non-simple sectors.
+    if(!non_simples.empty()) {
+        return EPT_BAD_SECTOR;
+    }
+    
+    //Check lone edges.
+    if(!lone_edges.empty()) {
+        return EPT_LONE_EDGE;
+    }
+    
+    //Check for the existence of a leader object.
+    bool has_leader = false;
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        if(
+            cur_area_data.mob_generators[m]->category->id ==
+            MOB_CATEGORY_LEADERS &&
+            cur_area_data.mob_generators[m]->type != NULL
+        ) {
+            has_leader = true;
+            break;
+        }
+    }
+    if(!has_leader) {
+        return EPT_MISSING_LEADER;
+    }
+    
+    //Objects with no type.
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        if(!cur_area_data.mob_generators[m]->type) {
+            problem_mob_ptr = cur_area_data.mob_generators[m];
+            return EPT_TYPELESS_MOB;
+        }
+    }
+    
+    //Objects out of bounds.
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        if(!get_sector(m_ptr->pos, NULL, false)) {
+            problem_mob_ptr = m_ptr;
+            return EPT_MOB_OOB;
+        }
+    }
+    
+    //Objects inside walls.
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        
+        if(
+            m_ptr->category->id == MOB_CATEGORY_GATES ||
+            m_ptr->category->id == MOB_CATEGORY_BRIDGES
+        ) {
+            continue;
+        }
+        
+        for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+            edge* e_ptr = cur_area_data.edges[e];
+            if(!is_edge_valid(e_ptr)) continue;
+            
+            if(
+                circle_intersects_line(
+                    m_ptr->pos,
+                    m_ptr->type->radius,
+                    point(
+                        e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y
+                    ),
+                    point(
+                        e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y
+                    ),
+                    NULL, NULL
+                )
+            ) {
+            
+                bool in_wall = false;
+                
+                if(!e_ptr->sectors[0] || !e_ptr->sectors[1]) in_wall = true;
+                else {
+                    if(
+                        e_ptr->sectors[0]->z >
+                        e_ptr->sectors[1]->z + SECTOR_STEP
+                    ) {
+                        in_wall = true;
+                    }
+                    if(
+                        e_ptr->sectors[1]->z >
+                        e_ptr->sectors[0]->z + SECTOR_STEP
+                    ) {
+                        in_wall = true;
+                    }
+                    if(
+                        e_ptr->sectors[0]->type == SECTOR_TYPE_BLOCKING
+                    ) {
+                        in_wall = true;
+                    }
+                    if(
+                        e_ptr->sectors[1]->type == SECTOR_TYPE_BLOCKING
+                    ) {
+                        in_wall = true;
+                    }
+                }
+                
+                if(in_wall) {
+                    problem_mob_ptr = m_ptr;
+                    return EPT_MOB_IN_WALL;
+                }
+                
+            }
+        }
+        
+    }
+    
+    //Path stops out of bounds.
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        if(!get_sector(s_ptr->pos, NULL, false)) {
+            problem_path_stop_ptr = s_ptr;
+            return EPT_PATH_STOP_OOB;
+        }
+    }
+    
+    //Path graph is not connected.
+    if(!cur_area_data.path_stops.empty()) {
+        unordered_set<path_stop*> visited;
+        depth_first_search(
+            cur_area_data.path_stops, visited, cur_area_data.path_stops[0]
+        );
+        if(visited.size() != cur_area_data.path_stops.size()) {
+            return EPT_PATHS_UNCONNECTED;
+        }
+    }
+    
+    //Check for missing textures.
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+    
+        sector* s_ptr = cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) continue;
+        if(
+            s_ptr->texture_info.file_name.empty() &&
+            s_ptr->type != SECTOR_TYPE_BOTTOMLESS_PIT && !s_ptr->fade
+        ) {
+            problem_string = "";
+            problem_sector_ptr = s_ptr;
+            return EPT_UNKNOWN_TEXTURE;
+        }
+    }
+    
+    //Check for unknown textures.
+    vector<string> texture_file_names =
+        folder_to_vector(TEXTURES_FOLDER_PATH, false);
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+    
+        sector* s_ptr = cur_area_data.sectors[s];
+        if(s_ptr->edges.empty()) continue;
+        
+        if(s_ptr->texture_info.file_name.empty()) continue;
+        
+        if(
+            find(
+                texture_file_names.begin(), texture_file_names.end(),
+                s_ptr->texture_info.file_name
+            ) == texture_file_names.end()
+        ) {
+            problem_string = s_ptr->texture_info.file_name;
+            problem_sector_ptr = s_ptr;
+            return EPT_UNKNOWN_TEXTURE;
+        }
+    }
+    
+    //Lone path stops.
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        bool has_link = false;
+        
+        if(!s_ptr->links.empty()) continue; //Duh, this means it has links.
+        
+        for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+            path_stop* s2_ptr = cur_area_data.path_stops[s2];
+            if(s2_ptr == s_ptr) continue;
+            
+            if(s2_ptr->has_link(s_ptr)) {
+                has_link = true;
+                break;
+            }
+            
+            if(has_link) break;
+        }
+        
+        if(!has_link) {
+            problem_path_stop_ptr = s_ptr;
+            return EPT_LONE_PATH_STOP;
+        }
+    }
+    
+    //Two stops intersecting.
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        for(size_t s2 = 0; s2 < cur_area_data.path_stops.size(); ++s2) {
+            path_stop* s2_ptr = cur_area_data.path_stops[s2];
+            if(s2_ptr == s_ptr) continue;
+            
+            if(dist(s_ptr->pos, s2_ptr->pos) <= 3.0) {
+                problem_path_stop_ptr = s_ptr;
+                return EPT_PATH_STOPS_TOGETHER;
+            }
+        }
+    }
+    
+    //Check if there are tree shadows with invalid images.
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        if(cur_area_data.tree_shadows[s]->bitmap == bmp_error) {
+            problem_shadow_ptr = cur_area_data.tree_shadows[s];
+            problem_string = cur_area_data.tree_shadows[s]->file_name;
+            return EPT_INVALID_SHADOW;
+        }
+    }
+    
+    //All good!
+    return EPT_NONE;
 }
 
 
@@ -1589,6 +1857,177 @@ vertex* area_editor::get_vertex_under_point(const point &p) {
     
     return NULL;
 }
+
+
+/* ----------------------------------------------------------------------------
+ * Focuses the camera on the problem found, if any.
+ */
+void area_editor::goto_problem() {
+    if(problem_type == EPT_NONE || problem_type == EPT_NONE_YET) return;
+    
+    if(problem_type == EPT_INTERSECTING_EDGES) {
+    
+        if(
+            !problem_edge_intersection.e1 || !problem_edge_intersection.e2
+        ) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        point min_coords, max_coords;
+        min_coords.x = problem_edge_intersection.e1->vertexes[0]->x;
+        max_coords.x = min_coords.x;
+        min_coords.y = problem_edge_intersection.e1->vertexes[0]->y;
+        max_coords.y = min_coords.y;
+        
+        min_coords.x =
+            min(min_coords.x, problem_edge_intersection.e1->vertexes[0]->x);
+        min_coords.x =
+            min(min_coords.x, problem_edge_intersection.e1->vertexes[1]->x);
+        min_coords.x =
+            min(min_coords.x, problem_edge_intersection.e2->vertexes[0]->x);
+        min_coords.x =
+            min(min_coords.x, problem_edge_intersection.e2->vertexes[1]->x);
+        max_coords.x =
+            max(max_coords.x, problem_edge_intersection.e1->vertexes[0]->x);
+        max_coords.x =
+            max(max_coords.x, problem_edge_intersection.e1->vertexes[1]->x);
+        max_coords.x =
+            max(max_coords.x, problem_edge_intersection.e2->vertexes[0]->x);
+        max_coords.x =
+            max(max_coords.x, problem_edge_intersection.e2->vertexes[1]->x);
+        min_coords.y =
+            min(min_coords.y, problem_edge_intersection.e1->vertexes[0]->y);
+        min_coords.y =
+            min(min_coords.y, problem_edge_intersection.e1->vertexes[1]->y);
+        min_coords.y =
+            min(min_coords.y, problem_edge_intersection.e2->vertexes[0]->y);
+        min_coords.y =
+            min(min_coords.y, problem_edge_intersection.e2->vertexes[1]->y);
+        max_coords.y =
+            max(max_coords.y, problem_edge_intersection.e1->vertexes[0]->y);
+        max_coords.y =
+            max(max_coords.y, problem_edge_intersection.e1->vertexes[1]->y);
+        max_coords.y =
+            max(max_coords.y, problem_edge_intersection.e2->vertexes[0]->y);
+        max_coords.y =
+            max(max_coords.y, problem_edge_intersection.e2->vertexes[1]->y);
+            
+        center_camera(min_coords, max_coords);
+        
+    } else if(problem_type == EPT_BAD_SECTOR) {
+    
+        if(non_simples.empty()) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        sector* s_ptr = non_simples.begin()->first;
+        point min_coords, max_coords;
+        get_sector_bounding_box(s_ptr, &min_coords, &max_coords);
+        
+        center_camera(min_coords, max_coords);
+        
+    } else if(problem_type == EPT_LONE_EDGE) {
+    
+        if(lone_edges.empty()) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        edge* e_ptr = *lone_edges.begin();
+        point min_coords, max_coords;
+        min_coords.x = e_ptr->vertexes[0]->x;
+        max_coords.x = min_coords.x;
+        min_coords.y = e_ptr->vertexes[0]->y;
+        max_coords.y = min_coords.y;
+        
+        min_coords.x = min(min_coords.x, e_ptr->vertexes[0]->x);
+        min_coords.x = min(min_coords.x, e_ptr->vertexes[1]->x);
+        max_coords.x = max(max_coords.x, e_ptr->vertexes[0]->x);
+        max_coords.x = max(max_coords.x, e_ptr->vertexes[1]->x);
+        min_coords.y = min(min_coords.y, e_ptr->vertexes[0]->y);
+        min_coords.y = min(min_coords.y, e_ptr->vertexes[1]->y);
+        max_coords.y = max(max_coords.y, e_ptr->vertexes[0]->y);
+        max_coords.y = max(max_coords.y, e_ptr->vertexes[1]->y);
+        
+        center_camera(min_coords, max_coords);
+        
+    } else if(problem_type == EPT_OVERLAPPING_VERTEXES) {
+    
+        if(!problem_vertex_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        center_camera(
+            point(
+                problem_vertex_ptr->x - 64,
+                problem_vertex_ptr->y - 64
+            ),
+            point(
+                problem_vertex_ptr->x + 64,
+                problem_vertex_ptr->y + 64
+            )
+        );
+        
+    } else if(problem_type == EPT_UNKNOWN_TEXTURE) {
+    
+        if(!problem_sector_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        point min_coords, max_coords;
+        get_sector_bounding_box(problem_sector_ptr, &min_coords, &max_coords);
+        center_camera(min_coords, max_coords);
+        
+    } else if(
+        problem_type == EPT_TYPELESS_MOB ||
+        problem_type == EPT_MOB_OOB ||
+        problem_type == EPT_MOB_IN_WALL
+    ) {
+    
+        if(!problem_mob_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        center_camera(problem_mob_ptr->pos - 64, problem_mob_ptr->pos + 64);
+        
+    } else if(
+        problem_type == EPT_LONE_PATH_STOP ||
+        problem_type == EPT_PATH_STOPS_TOGETHER ||
+        problem_type == EPT_PATH_STOP_OOB
+    ) {
+    
+        if(!problem_path_stop_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        center_camera(
+            problem_path_stop_ptr->pos - 64,
+            problem_path_stop_ptr->pos + 64
+        );
+        
+    } else if(problem_type == EPT_INVALID_SHADOW) {
+    
+        point min_coords, max_coords;
+        get_shadow_bounding_box(
+            problem_shadow_ptr, &min_coords, &max_coords
+        );
+        center_camera(min_coords, max_coords);
+    }
+}
+
 
 
 /* ----------------------------------------------------------------------------

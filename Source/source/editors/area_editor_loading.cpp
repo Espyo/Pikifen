@@ -1041,7 +1041,8 @@ void area_editor::load() {
         gui_to_asa();
     };
     frm_asa->widgets["chk_shadow"]->description =
-        "Makes it always cast a shadow onto lower sectors.";
+        "Always cast a shadow onto lower sectors, "
+        "even if they're just a step below.";
         
         
     //Mobs -- declarations.
@@ -1606,39 +1607,39 @@ void area_editor::load() {
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "but_find_errors",
-        new lafi::button("Find errors"), 100, 24
+        "but_find_prob",
+        new lafi::button("Find problems"), 100, 24
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "lbl_error_lbl",
-        new lafi::label("Error found:", ALLEGRO_ALIGN_CENTER),
-        100, 16
+        "lbl_prob_lbl",
+        new lafi::label("Problem found:", ALLEGRO_ALIGN_CENTER),
+        100, 8
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "lbl_error_1",
-        new lafi::label(), 100, 12
+        "lbl_prob_title_1",
+        new lafi::label("", ALLEGRO_ALIGN_CENTER), 100, 8
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "lbl_error_2",
-        new lafi::label(), 100, 12
+        "lbl_prob_title_2",
+        new lafi::label("", ALLEGRO_ALIGN_CENTER), 100, 8
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "lbl_error_3",
-        new lafi::label(), 100, 12
+        "dum_1",
+        new lafi::dummy(), 100, 2
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "lbl_error_4",
-        new lafi::label(), 100, 12
+        "lbl_prob_desc",
+        new lafi::label("", 0, true), 100, 8
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "but_goto_error",
-        new lafi::button("Go to error"), 100, 24
+        "but_goto_prob",
+        new lafi::button("Go to problem"), 100, 24
     );
     frm_review->easy_row();
     frm_review->easy_add(
@@ -1652,7 +1653,7 @@ void area_editor::load() {
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "dum_1",
+        "dum_2",
         new lafi::dummy(), 10, 16
     );
     frm_review->easy_add(
@@ -1666,7 +1667,7 @@ void area_editor::load() {
     );
     frm_review->easy_row();
     frm_review->easy_add(
-        "dum_2",
+        "dum_3",
         new lafi::dummy(), 10, 16
     );
     frm_review->easy_add(
@@ -1679,51 +1680,63 @@ void area_editor::load() {
     //Review -- properties.
     frm_review->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        clear_problems();
+        review_to_gui();
         state = EDITOR_STATE_MAIN;
-        //TODO error_type = EET_NONE_YET;
-        //TODO update_review_frame();
         change_to_right_frame();
     };
     frm_review->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    frm_review->widgets["but_find_errors"]->left_mouse_click_handler =
+    frm_review->widgets["but_find_prob"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        problem_type = find_problems();
+        review_to_gui();
     };
-    frm_review->widgets["but_find_errors"]->description =
+    frm_review->widgets["but_find_prob"]->description =
         "Search for problems with the area.";
         
-    frm_review->widgets["but_goto_error"]->left_mouse_click_handler =
+    frm_review->widgets["but_goto_prob"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        goto_problem();
     };
-    frm_review->widgets["but_goto_error"]->description =
+    frm_review->widgets["but_goto_prob"]->description =
         "Focus the camera on the problem found, if applicable.";
         
     frm_review->widgets["chk_see_textures"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
-        //TODO
+        problem_type = EPT_NONE_YET;
+        if(((lafi::checkbox*) c)->checked) {
+            sub_state = EDITOR_SUB_STATE_TEXTURE_VIEW;
+            review_to_gui();
+            
+        } else {
+            sub_state = EDITOR_SUB_STATE_NONE;
+            review_to_gui();
+        }
     };
     frm_review->widgets["chk_see_textures"]->description =
         "Preview how the textures will look like.";
         
     frm_review->widgets["chk_shadows"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
-        //TODO
+        show_shadows = ((lafi::checkbox*) c)->checked;
+        review_to_gui();
     };
     frm_review->widgets["chk_shadows"]->description =
         "Show tree shadows?";
     frm_review->widgets["chk_cross_section"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
-        //TODO
+        show_cross_section = ((lafi::checkbox*) c)->checked;
+        review_to_gui();
     };
     frm_review->widgets["chk_cross_section"]->description =
         "Show a 2D cross section between points A and B.";
         
     frm_review->widgets["chk_cross_section_grid"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
-        //TODO
+        show_cross_section_grid = ((lafi::checkbox*) c)->checked;
+        review_to_gui();
     };
     frm_review->widgets["chk_cross_section_grid"]->description =
         "Show a height grid in the cross-section window.";

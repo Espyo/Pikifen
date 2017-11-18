@@ -42,11 +42,11 @@ void area_editor::do_drawing() {
         } else if(state == EDITOR_STATE_MOBS) {
             mob_opacity = 1.0f;
             
-        } else if(state == EDITOR_STATE_MAIN) {
+        } else if(state == EDITOR_STATE_MAIN || state == EDITOR_STATE_REVIEW) {
             textures_opacity = 0.6f;
             edges_opacity = 0.5f;
             grid_opacity = 0.3f;
-            mob_opacity = 0.6f;
+            mob_opacity = 0.75f;
             
         }
         if(state == EDITOR_STATE_ASA) {
@@ -81,16 +81,22 @@ void area_editor::do_drawing() {
             
             bool selected =
                 selected_sectors.find(s_ptr) != selected_sectors.end();
-            bool valid =
-                non_simples.find(s_ptr) == non_simples.end();
-                
+            bool valid = true;
+            
+            if(non_simples.find(s_ptr) != non_simples.end()) {
+                valid = false;
+            }
+            if(s_ptr == problem_sector_ptr) {
+                valid = false;
+            }
+            
             if(selected || !valid) {
                 for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
                 
                     ALLEGRO_VERTEX av[3];
                     for(size_t v = 0; v < 3; ++v) {
                         if(!valid) {
-                            av[v].color = al_map_rgba(160, 16, 16, 192);
+                            av[v].color = al_map_rgba(160, 16, 16, 224);
                         } else {
                             av[v].color =
                                 al_map_rgba(
@@ -177,12 +183,12 @@ void area_editor::do_drawing() {
         //0,0 marker.
         al_draw_line(
             -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0,
-            al_map_rgba(128, 128, 255, grid_opacity * 255),
+            al_map_rgba(192, 192, 224, grid_opacity * 255),
             1.0 / cam_zoom
         );
         al_draw_line(
             0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2,
-            al_map_rgba(128, 128, 255, grid_opacity * 255),
+            al_map_rgba(192, 192, 224, grid_opacity * 255),
             1.0 / cam_zoom
         );
         
@@ -195,43 +201,28 @@ void area_editor::do_drawing() {
             
             bool one_sided = true;
             bool same_z = false;
-            bool error_highlight = false;
             bool valid = true;
             bool selected = false;
             
-            //TODO
-            /*if(error_sector_ptr) {
+            if(problem_sector_ptr) {
                 if(
-                    e_ptr->sectors[0] == error_sector_ptr ||
-                    e_ptr->sectors[1] == error_sector_ptr
+                    e_ptr->sectors[0] == problem_sector_ptr ||
+                    e_ptr->sectors[1] == problem_sector_ptr
                 ) {
-                    error_highlight = true;
+                    valid = false;
                 }
+                
+            }
+            if(
+                problem_edge_intersection.e1 == e_ptr ||
+                problem_edge_intersection.e2 == e_ptr
+            ) {
+                valid = false;
+            }
             
-            } else {
-                for(size_t ie = 0; ie < intersecting_edges.size(); ++ie) {
-                    if(intersecting_edges[ie].contains(e_ptr)) {
-                        valid = false;
-                        break;
-                    }
-                }
-            
-                if(
-                    non_simples.find(e_ptr->sectors[0]) !=
-                    non_simples.end()
-                ) {
-                    valid = false;
-                }
-                if(
-                    non_simples.find(e_ptr->sectors[1]) !=
-                    non_simples.end()
-                ) {
-                    valid = false;
-                }
-                if(lone_edges.find(e_ptr) != lone_edges.end()) {
-                    valid = false;
-                }
-            }*/
+            if(lone_edges.find(e_ptr) != lone_edges.end()) {
+                valid = false;
+            }
             
             if(
                 non_simples.find(e_ptr->sectors[0]) != non_simples.end() ||
@@ -267,8 +258,6 @@ void area_editor::do_drawing() {
                         SELECTION_COLOR[2],
                         selection_opacity * 255
                     ) :
-                    error_highlight ?
-                    al_map_rgba(192, 80,  0,   edges_opacity * 255) :
                     !valid ?
                     al_map_rgba(192, 32,  32,  edges_opacity * 255) :
                     one_sided ?
@@ -352,6 +341,8 @@ void area_editor::do_drawing() {
                 vertex* v_ptr = cur_area_data.vertexes[v];
                 bool selected =
                     (selected_vertexes.find(v_ptr) != selected_vertexes.end());
+                bool valid =
+                    v_ptr != problem_vertex_ptr;
                 al_draw_filled_circle(
                     v_ptr->x,
                     v_ptr->y,
@@ -363,6 +354,8 @@ void area_editor::do_drawing() {
                         SELECTION_COLOR[2],
                         selection_opacity * 255
                     ) :
+                    !valid ?
+                    al_map_rgb(192, 32, 32) :
                     al_map_rgba(80, 160, 255, edges_opacity * 255)
                 );
                 
@@ -383,7 +376,10 @@ void area_editor::do_drawing() {
             float radius = get_mob_gen_radius(m_ptr);
             ALLEGRO_COLOR c =
                 change_alpha(m_ptr->category->editor_color, mob_opacity * 255);
-                
+            if(m_ptr == problem_mob_ptr) {
+                c = al_map_rgb(192, 32, 32);
+            }
+            
             al_draw_filled_circle(
                 m_ptr->pos.x, m_ptr->pos.y,
                 radius, c

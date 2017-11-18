@@ -608,7 +608,242 @@ void area_editor::pick(const string &name, const unsigned char type) {
  * Loads the current review data onto the GUI.
  */
 void area_editor::review_to_gui() {
-    //TODO
+    lafi::button* but_find_prob =
+        (lafi::button*) frm_review->widgets["but_find_prob"];
+    lafi::button* but_goto_prob =
+        (lafi::button*) frm_review->widgets["but_goto_prob"];
+    lafi::label* lbl_prob_title_1 =
+        (lafi::label*) frm_review->widgets["lbl_prob_title_1"];
+    lafi::label* lbl_prob_title_2 =
+        (lafi::label*) frm_review->widgets["lbl_prob_title_2"];
+    lafi::label* lbl_prob_desc =
+        (lafi::label*) frm_review->widgets["lbl_prob_desc"];
+        
+    lbl_prob_title_1->text.clear();
+    lbl_prob_title_2->text.clear();
+    lbl_prob_desc->text.clear();
+    
+    ((lafi::checkbox*) frm_review->widgets["chk_see_textures"])->set(
+        sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW
+    );
+    ((lafi::checkbox*) frm_review->widgets["chk_shadows"])->set(
+        show_shadows
+    );
+    ((lafi::checkbox*) frm_review->widgets["chk_cross_section"])->set(
+        show_cross_section
+    );
+    ((lafi::checkbox*) frm_review->widgets["chk_cross_section_grid"])->set(
+        show_cross_section_grid
+    );
+    
+    if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+        disable_widget(but_find_prob);
+        disable_widget(but_goto_prob);
+    } else {
+        enable_widget(but_find_prob);
+        enable_widget(but_goto_prob);
+    }
+    
+    if(problem_type == EPT_NONE_YET) {
+    
+        disable_widget(but_goto_prob);
+        lbl_prob_title_1->text = "---";
+        
+    } else if(problem_type == EPT_NONE) {
+    
+        disable_widget(but_goto_prob);
+        lbl_prob_title_1->text = "No problems found.";
+        
+    } else if(problem_type == EPT_INTERSECTING_EDGES) {
+    
+        if(intersecting_edges.empty()) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Two edges cross";
+        lbl_prob_title_2->text = "each other!";
+        float u;
+        edge_intersection* ei_ptr = &intersecting_edges[0];
+        lines_intersect(
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
+            point(ei_ptr->e2->vertexes[0]->x, ei_ptr->e2->vertexes[0]->y),
+            point(ei_ptr->e2->vertexes[1]->x, ei_ptr->e2->vertexes[1]->y),
+            NULL, &u
+        );
+        
+        float a =
+            get_angle(
+                point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+                point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+            );
+        dist d(
+            point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
+            point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y)
+        );
+        
+        lbl_prob_desc->text =
+            "They cross at (" +
+            f2s(
+                floor(ei_ptr->e1->vertexes[0]->x + cos(a) * u *
+                      d.to_float())
+            ) + "," + f2s(
+                floor(ei_ptr->e1->vertexes[0]->y + sin(a) * u *
+                      d.to_float())
+            ) + "). Edges should never cross each other.";
+            
+    } else if(problem_type == EPT_BAD_SECTOR) {
+    
+        if(non_simples.empty()) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        sector* s_ptr = non_simples.begin()->first;
+        TRIANGULATION_ERRORS tri_error = non_simples.begin()->second;
+        
+        lbl_prob_title_1->text = "Non-simple sector!";
+        
+        if(tri_error == TRIANGULATION_ERROR_LONE_EDGES) {
+            lbl_prob_desc->text =
+                "It contains lone edges. Try clearing them up.";
+        } else if(tri_error == TRIANGULATION_ERROR_NO_EARS) {
+            lbl_prob_desc->text =
+                "There's been a triangulation error. Try undoing or "
+                "deleting the sector, and then rebuild it. Make sure there "
+                "are no gaps, and keep it simple.";
+        } else if(tri_error == TRIANGULATION_ERROR_VERTEXES_REUSED) {
+            lbl_prob_desc->text =
+                "Some vertexes are re-used. Make sure the sector "
+                "has no loops or that the same vertex is not re-used "
+                "by multiple edges of the sector. Split popular vertexes "
+                "if you must.";
+        }
+        
+    } else if(problem_type == EPT_LONE_EDGE) {
+    
+        if(lone_edges.empty()) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Lone edge!";
+        lbl_prob_desc->text =
+            "Likely leftover of something that went wrong. "
+            "You probably want to drag one vertex into the other.";
+            
+    } else if(problem_type == EPT_OVERLAPPING_VERTEXES) {
+    
+        if(!problem_vertex_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Overlapping vertexes!";
+        lbl_prob_desc->text =
+            "They are very close together at (" +
+            f2s(problem_vertex_ptr->x) + "," +
+            f2s(problem_vertex_ptr->y) + "), and should likely be merged "
+            "together.";
+            
+    } else if(problem_type == EPT_UNKNOWN_TEXTURE) {
+    
+        if(!problem_sector_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Sector with unknown";
+        lbl_prob_title_2->text = "texture!";
+        lbl_prob_desc->text = "Texture name: \"" + problem_string + "\".";
+        
+    } else if(problem_type == EPT_MISSING_LEADER) {
+    
+        disable_widget(gui->widgets["frm_review"]->widgets["but_goto_prob"]);
+        lbl_prob_title_1->text = "No leader!";
+        lbl_prob_desc->text =
+            "You need at least one leader to play.";
+            
+    } else if(problem_type == EPT_TYPELESS_MOB) {
+    
+        if(!problem_mob_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Mob with no";
+        lbl_prob_title_2->text = "type!";
+        
+        
+    } else if(problem_type == EPT_MOB_OOB) {
+    
+        if(!problem_mob_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Mob out of";
+        lbl_prob_title_2->text = "bounds!";
+        
+        
+    } else if(problem_type == EPT_MOB_IN_WALL) {
+    
+        if(!problem_mob_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Mob stuck";
+        lbl_prob_title_2->text = "in wall!";
+        
+        
+    } else if(problem_type == EPT_LONE_PATH_STOP) {
+    
+        if(!problem_path_stop_ptr) {
+            //Uh, old information. Try searching for problems again.
+            find_problems();
+            return;
+        }
+        
+        lbl_prob_title_1->text = "Lone path stop!";
+        
+    } else if(problem_type == EPT_PATHS_UNCONNECTED) {
+    
+        disable_widget(but_goto_prob);
+        lbl_prob_title_1->text = "Path split into";
+        lbl_prob_title_2->text = "multiple parts!";
+        lbl_prob_desc->text =
+            "The path graph is split into two or more parts. Connect them.";
+            
+    } else if(problem_type == EPT_PATH_STOPS_TOGETHER) {
+    
+        lbl_prob_title_1->text = "Two close path";
+        lbl_prob_title_2->text = "stops!";
+        lbl_prob_desc->text =
+            "These two are very close together. Separate them.";
+            
+    } else if(problem_type == EPT_PATH_STOP_OOB) {
+    
+        lbl_prob_title_1->text = "Path stop out";
+        lbl_prob_title_2->text = "of bounds!";
+        
+    } else if(problem_type == EPT_INVALID_SHADOW) {
+    
+        lbl_prob_title_1->text = "Tree shadow with";
+        lbl_prob_title_2->text = "invalid texture!";
+        lbl_prob_desc->text = "Texture name: \"" + problem_string + "\".";
+        
+    }
+    
 }
 
 
