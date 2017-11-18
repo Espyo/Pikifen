@@ -149,6 +149,7 @@ void area_editor::change_to_right_frame() {
         tools_to_gui();
     } else if(state == EDITOR_STATE_OPTIONS) {
         frm_options->show();
+        options_to_gui();
     }
 }
 
@@ -576,6 +577,15 @@ void area_editor::open_picker(const unsigned char type) {
     }
     
     generate_and_open_picker(elements, type, can_create_new);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the options data onto the GUI.
+ */
+void area_editor::options_to_gui() {
+    ((lafi::label*) frm_options->widgets["lbl_grid"])->text =
+        "Grid: " + i2s(grid_interval);
 }
 
 
@@ -1014,6 +1024,7 @@ void area_editor::tools_to_gui() {
     ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
         reference_a, false
     );
+    update_backup_status();
 }
 
 

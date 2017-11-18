@@ -135,8 +135,10 @@ private:
     static const float         DOUBLE_CLICK_TIMEOUT;
     static const float         KEYBOARD_CAM_ZOOM;
     static const unsigned char MAX_CIRCLE_SECTOR_POINTS;
+    static const float         MAX_GRID_INTERVAL;
     static const size_t        MAX_TEXTURE_SUGGESTIONS;
     static const unsigned char MIN_CIRCLE_SECTOR_POINTS;
+    static const float         MIN_GRID_INTERVAL;
     static const float         MOUSE_DRAG_CONFIRM_RANGE;
     static const float         NEW_SECTOR_ERROR_TINT_DURATION;
     static const float         PATH_LINK_THICKNESS;
@@ -352,8 +354,6 @@ private:
     bool show_reference;
     //Render the tree shadows?
     bool show_shadows;
-    //State the editor was in before entering the options.
-    size_t state_before_options;
     //Status bar override text.
     string status_override_text;
     //Time left to show the status bar override text for.
@@ -428,6 +428,7 @@ private:
     void homogenize_selected_mobs();
     void homogenize_selected_sectors();
     void load_area(const bool from_backup);
+    void load_backup();
     void merge_vertex(
         vertex* v1, vertex* v2, unordered_set<sector*>* affected_sectors
     );
@@ -448,6 +449,7 @@ private:
     void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();
+    bool update_backup_status();
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);
     void zoom(const float new_zoom, const bool anchor_cursor = true);
@@ -487,6 +489,7 @@ private:
     void hide_all_frames();
     void info_to_gui();
     void mob_to_gui();
+    void options_to_gui();
     void path_to_gui();
     void review_to_gui();
     void sector_to_gui();
