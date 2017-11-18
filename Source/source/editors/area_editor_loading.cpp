@@ -99,6 +99,11 @@ void area_editor::load() {
         new lafi::button("Tools"), 100, 32
     );
     frm_area->easy_row();
+    frm_area->easy_add(
+        "but_options",
+        new lafi::button("Options"), 100, 32
+    );
+    frm_area->easy_row();
     
     
     //Main -- properties.
@@ -164,6 +169,14 @@ void area_editor::load() {
     };
     frm_area->widgets["but_tools"]->description =
         "Special tools to help you develop the area.";
+        
+    frm_area->widgets["but_options"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_OPTIONS;
+        change_to_right_frame();
+    };
+    frm_area->widgets["but_tools"]->description =
+        "Options and misc. tools.";
         
         
     //Info -- declarations.
@@ -1829,6 +1842,16 @@ void area_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
+        "but_load",
+        new lafi::button("Reload area"), 100, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
+        "but_backup",
+        new lafi::button("Load auto-backup"), 100, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
         "lbl_resize",
         new lafi::label("Resize everything:"), 100, 16
     );
@@ -1896,6 +1919,20 @@ void area_editor::load() {
     frm_tools->widgets["bar_alpha"]->description =
         "How see-through the reference is.";
         
+    frm_tools->widgets["but_load"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        this->load_area(false);
+    };
+    frm_tools->widgets["but_load"]->description =
+        "Discard all changes made and load the area again.";
+        
+    frm_tools->widgets["but_backup"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        this->load_backup();
+    };
+    frm_tools->widgets["but_backup"]->description =
+        "Discard all changes made and load the auto-backup.";
+        
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier. (0.5 = half, 2 = double)";
         
@@ -1922,16 +1959,6 @@ void area_editor::load() {
     );
     frm_options->easy_row();
     frm_options->easy_add(
-        "but_load",
-        new lafi::button("Reload area"), 100, 24
-    );
-    frm_options->easy_row();
-    frm_options->easy_add(
-        "but_backup",
-        new lafi::button("Load auto-backup"), 100, 24
-    );
-    frm_options->easy_row();
-    frm_options->easy_add(
         "lbl_grid",
         new lafi::label("Grid spacing: "), 70, 24
     );
@@ -1949,36 +1976,26 @@ void area_editor::load() {
     //Options -- properties.
     frm_options->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        state = state_before_options;
+        state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
     frm_options->widgets["but_back"]->description =
         "Close the options.";
         
-    frm_options->widgets["but_load"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        //TODO
-    };
-    frm_options->widgets["but_load"]->description =
-        "Discard all changes made and load the area again.";
-        
-    frm_options->widgets["but_backup"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        //TODO
-    };
-    frm_options->widgets["but_backup"]->description =
-        "Discard all changes made and load the auto-backup.";
-        
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        grid_interval *= 2;
+        grid_interval = min(grid_interval, MAX_GRID_INTERVAL);
+        options_to_gui();
     };
     frm_options->widgets["but_grid_plus"]->description =
         "Increase the spacing on the grid.";
         
     frm_options->widgets["but_grid_minus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        grid_interval *= 0.5;
+        grid_interval = max(grid_interval, MIN_GRID_INTERVAL);
+        options_to_gui();
     };
     frm_options->widgets["but_grid_minus"]->description =
         "Decrease the spacing on the grid.";
@@ -1991,7 +2008,7 @@ void area_editor::load() {
     
     frm_bottom->easy_row();
     frm_bottom->easy_add(
-        "but_options",
+        "but_undo",
         new lafi::button("", "", icons.get(ICON_OPTIONS)), 25, 32
     );
     frm_bottom->easy_add(
@@ -2010,12 +2027,12 @@ void area_editor::load() {
     
     
     //Bottom bar -- properties.
-    frm_bottom->widgets["but_options"]->left_mouse_click_handler =
+    frm_bottom->widgets["but_undo"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         //TODO
     };
-    frm_bottom->widgets["but_options"]->description =
-        "Options and other tools.";
+    frm_bottom->widgets["but_undo"]->description =
+        "Undo the last move.";
         
     frm_bottom->widgets["but_reference"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {

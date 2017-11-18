@@ -28,10 +28,14 @@ const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 const float area_editor::KEYBOARD_CAM_ZOOM = 0.25f;
 //Maximum number of points that a circle sector can be created with.
 const unsigned char area_editor::MAX_CIRCLE_SECTOR_POINTS = 32;
+//Maximum grid interval.
+const float area_editor::MAX_GRID_INTERVAL = 4096;
 //Maximum number of texture suggestions.
 const size_t area_editor::MAX_TEXTURE_SUGGESTIONS = 20;
 //Minimum number of points that a circle sector can be created with.
 const unsigned char area_editor::MIN_CIRCLE_SECTOR_POINTS = 3;
+//Minimum grid interval.
+const float area_editor::MIN_GRID_INTERVAL = 2.0;
 //If the mouse is dragged outside of this range, that's a real drag.
 const float area_editor::MOUSE_DRAG_CONFIRM_RANGE = 4.0f;
 //How long to tint the new sector's line(s) red for.
@@ -2147,13 +2151,24 @@ void area_editor::load_area(const bool from_backup) {
     
     //TODO change_reference(reference_file_name);
     
-    enable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
+    enable_widget(frm_tools->widgets["but_load"]);
     made_changes = false;
     
     cam_zoom = 1.0f;
     cam_pos = point();
     
     emit_status_bar_message("Loaded successfully.", false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads a backup file.
+ */
+void area_editor::load_backup() {
+    if(!update_backup_status()) return;
+    
+    load_area(true);
+    backup_timer.start(editor_backup_interval);
 }
 
 
@@ -2693,6 +2708,26 @@ void area_editor::unload() {
     unload_status_types(false);
     
     icons.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Reads the area's backup file, and sets the "load backup" button's
+ * availability accordingly.
+ * Returns true if it exists, false if not.
+ */
+bool area_editor::update_backup_status() {
+    disable_widget(frm_tools->widgets["but_backup"]);
+    
+    if(cur_area_name.empty()) return false;
+    
+    data_node file(
+        AREAS_FOLDER_PATH + "/" + cur_area_name + "/Geometry_backup.txt"
+    );
+    if(!file.file_was_opened) return false;
+    
+    enable_widget(frm_tools->widgets["but_backup"]);
+    return true;
 }
 
 
