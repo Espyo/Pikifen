@@ -820,7 +820,7 @@ void area_editor_old::handle_controls(const ALLEGRO_EVENT &ev) {
             
             //Check if the edge's vertexes intersect with any other edges.
             //If so, they're marked with red.
-            check_edge_intersections(moved_v_ptr);
+            //check_edge_intersections(moved_v_ptr);
             
             moving_thing = INVALID;
             

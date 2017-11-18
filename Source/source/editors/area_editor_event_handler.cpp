@@ -19,8 +19,6 @@
  * Handles an Allegro event for control-related things.
  */
 void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
-    //TODO
-    
     if(fade_mgr.is_fading()) return;
     
     gui->handle_event(ev);
@@ -353,7 +351,7 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
  * Handles a key being released.
  */
 void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
-    //TODO
+
 }
 
 
@@ -361,7 +359,6 @@ void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
-    //TODO
     if(
         sub_state == EDITOR_SUB_STATE_NONE &&
         (
@@ -785,6 +782,20 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         reference_transformation.handle_mouse_down(mouse_cursor_w);
         tools_to_gui();
         
+    } else if(state == EDITOR_STATE_REVIEW && show_cross_section) {
+        moving_cross_section_point = -1;
+        for(unsigned char p = 0; p < 2; ++p) {
+            if(
+                bbox_check(
+                    cross_section_points[p], mouse_cursor_w,
+                    CROSS_SECTION_POINT_RADIUS / cam_zoom
+                )
+            ) {
+                moving_cross_section_point = p;
+                break;
+            }
+        }
+        
     }
 }
 
@@ -1050,6 +1061,13 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         );
         tools_to_gui();
         
+    } else if(state == EDITOR_STATE_REVIEW) {
+        //Move cross-section points.
+        if(moving_cross_section_point != -1) {
+            cross_section_points[moving_cross_section_point] =
+                snap_to_grid(mouse_cursor_w);
+        }
+        
     }
 }
 
@@ -1077,6 +1095,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     }
     
     moving_path_preview_checkpoint = -1;
+    moving_cross_section_point = -1;
 }
 
 
@@ -1165,7 +1184,6 @@ void area_editor::handle_mouse_wheel(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being double-clicked.
  */
 void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
-    //TODO
 }
 
 
@@ -1173,7 +1191,6 @@ void area_editor::handle_rmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being pressed down.
  */
 void area_editor::handle_rmb_down(const ALLEGRO_EVENT &ev) {
-    //TODO
 }
 
 
@@ -1190,5 +1207,4 @@ void area_editor::handle_rmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the right mouse button being released.
  */
 void area_editor::handle_rmb_up(const ALLEGRO_EVENT &ev) {
-    //TODO
 }

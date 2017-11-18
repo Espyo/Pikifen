@@ -193,16 +193,12 @@ void load_area(
                 get_value_or_default("255 255 255")
             );
             
-        if(new_sector->texture_info.file_name.empty()) {
-            new_sector->texture_info.bitmap = NULL;
-        } else {
-            new_sector->texture_info.bitmap =
-                bitmaps.get(
-                    TEXTURES_FOLDER_NAME + "/" +
-                    new_sector->texture_info.file_name, NULL
-                );
-        }
-        
+        new_sector->texture_info.bitmap =
+            bitmaps.get(
+                TEXTURES_FOLDER_NAME + "/" +
+                new_sector->texture_info.file_name, NULL
+            );
+            
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
