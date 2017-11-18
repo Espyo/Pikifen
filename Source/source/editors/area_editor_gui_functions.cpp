@@ -365,6 +365,88 @@ void area_editor::gui_to_sector() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the tool data to memory using info on the gui.
+ */
+void area_editor::gui_to_tools() {
+    string new_file_name =
+        ((lafi::textbox*) frm_tools->widgets["txt_file"])->text;
+    bool is_file_new = false;
+    
+    if(new_file_name != reference_file_name) {
+        //New reference image, delete the old one.
+        change_reference(new_file_name);
+        is_file_new = true;
+        if(reference_bitmap) {
+            reference_transformation.size.x =
+                al_get_bitmap_width(reference_bitmap);
+            reference_transformation.size.y =
+                al_get_bitmap_height(reference_bitmap);
+        } else {
+            reference_transformation.center.x = 0;
+            reference_transformation.center.y = 0;
+        }
+    }
+    
+    reference_transformation.center.x =
+        s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text);
+    reference_transformation.center.y =
+        s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text);
+        
+    reference_transformation.keep_aspect_ratio =
+        ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->checked;
+    point new_size(
+        s2f(((lafi::textbox*) frm_tools->widgets["txt_w"])->text),
+        s2f(((lafi::textbox*) frm_tools->widgets["txt_h"])->text)
+    );
+    
+    if(!is_file_new) {
+        if(reference_transformation.keep_aspect_ratio) {
+            if(
+                new_size.x == reference_transformation.size.x &&
+                new_size.y != reference_transformation.size.y
+            ) {
+                if(reference_transformation.size.y == 0.0f) {
+                    reference_transformation.size.y = new_size.y;
+                } else {
+                    float ratio =
+                        reference_transformation.size.x /
+                        reference_transformation.size.y;
+                    reference_transformation.size.y = new_size.y;
+                    reference_transformation.size.x = new_size.y * ratio;
+                }
+                
+            } else if(
+                new_size.x != reference_transformation.size.x &&
+                new_size.y == reference_transformation.size.y
+            ) {
+                if(reference_transformation.size.x == 0.0f) {
+                    reference_transformation.size.x = new_size.x;
+                } else {
+                    float ratio =
+                        reference_transformation.size.y /
+                        reference_transformation.size.x;
+                    reference_transformation.size.x = new_size.x;
+                    reference_transformation.size.y = new_size.x * ratio;
+                }
+                
+            } else {
+                reference_transformation.size = new_size;
+                
+            }
+        } else {
+            reference_transformation.size = new_size;
+        }
+    }
+    
+    reference_a =
+        ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->low_value;
+        
+    tools_to_gui();
+    made_changes = true;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Hides all menu frames.
  */
 void area_editor::hide_all_frames() {
@@ -916,7 +998,22 @@ void area_editor::select_different_hazard(const bool next) {
  * Loads the current tools data onto the GUI.
  */
 void area_editor::tools_to_gui() {
-    //TODO
+    ((lafi::textbox*) frm_tools->widgets["txt_file"])->text =
+        reference_file_name;
+    ((lafi::textbox*) frm_tools->widgets["txt_x"])->text =
+        f2s(reference_transformation.center.x);
+    ((lafi::textbox*) frm_tools->widgets["txt_y"])->text =
+        f2s(reference_transformation.center.y);
+    ((lafi::textbox*) frm_tools->widgets["txt_w"])->text =
+        f2s(reference_transformation.size.x);
+    ((lafi::textbox*) frm_tools->widgets["txt_h"])->text =
+        f2s(reference_transformation.size.y);
+    ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->set(
+        reference_transformation.keep_aspect_ratio
+    );
+    ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
+        reference_a, false
+    );
 }
 
 

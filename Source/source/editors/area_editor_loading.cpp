@@ -1807,11 +1807,6 @@ void area_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
-        "chk_mouse",
-        new lafi::checkbox("Transform with mouse"), 100, 16
-    );
-    frm_tools->easy_row();
-    frm_tools->easy_add(
         "lbl_alpha",
         new lafi::label("Opacity:"), 40, 16
     );
@@ -1858,43 +1853,46 @@ void area_editor::load() {
     frm_tools->widgets["but_back"]->description =
         "Go back to the main menu.";
         
-    //TODO frm_tools->widgets["txt_file"]->lose_focus_handler =
-    //TODO lambda_gui_to_reference;
+    auto lambda_gui_to_tools =
+    [this] (lafi::widget*) {
+        gui_to_tools();
+    };
+    auto lambda_gui_to_tools_click =
+    [this] (lafi::widget*, int, int) {
+        gui_to_tools();
+    };
+    frm_tools->widgets["txt_file"]->lose_focus_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["txt_file"]->description =
         "Image file (in the Images folder) for the reference.";
         
-    //TODO frm_tools->widgets["txt_x"]->lose_focus_handler =
-    //TODO lambda_gui_to_reference;
+    frm_tools->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["txt_x"]->description =
         "X of the top-left corner for the reference.";
         
-    //TODO frm_tools->widgets["txt_y"]->lose_focus_handler =
-    //TODO lambda_gui_to_reference;
+    frm_tools->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["txt_y"]->description =
         "Y of the top-left corner for the reference.";
         
-    //TODO frm_tools->widgets["txt_w"]->lose_focus_handler =
-    //TODO lambda_gui_to_reference;
+    frm_tools->widgets["txt_w"]->lose_focus_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["txt_w"]->description =
         "Reference total width.";
         
-    //TODO frm_tools->widgets["txt_h"]->lose_focus_handler =
-    //TODO lambda_gui_to_reference;
+    frm_tools->widgets["txt_h"]->lose_focus_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["txt_h"]->description =
         "Reference total height.";
         
-    //TODO frm_tools->widgets["chk_ratio"]->left_mouse_click_handler =
-    //TODO lambda_gui_to_reference_click;
+    frm_tools->widgets["chk_ratio"]->left_mouse_click_handler =
+        lambda_gui_to_tools_click;
     frm_tools->widgets["chk_ratio"]->description =
         "Lock width/height proportion when changing either one.";
         
-    //TODO frm_tools->widgets["chk_mouse"]->left_mouse_click_handler =
-    //TODO lambda_gui_to_reference_click;
-    frm_tools->widgets["chk_mouse"]->description =
-        "If checked, use mouse buttons to move/stretch.";
-        
-    //TODO ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->change_handler =
-    //TODO lambda_gui_to_reference;
+    ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->change_handler =
+        lambda_gui_to_tools;
     frm_tools->widgets["bar_alpha"]->description =
         "How see-through the reference is.";
         
@@ -1903,7 +1901,10 @@ void area_editor::load() {
         
     frm_tools->widgets["but_resize"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        lafi::textbox* txt_resize =
+            (lafi::textbox*) frm_tools->widgets["txt_resize"];
+        float mult = s2f(txt_resize->text);
+        resize_everything(mult);
     };
     frm_tools->widgets["but_resize"]->description =
         "Resize all X/Y coordinates by the given amount.";

@@ -781,6 +781,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         }
         details_to_gui();
         
+    } else if(state == EDITOR_STATE_TOOLS) {
+        reference_transformation.handle_mouse_down(mouse_cursor_w);
+        tools_to_gui();
+        
     }
 }
 
@@ -1038,6 +1042,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         path_preview_checkpoints[moving_path_preview_checkpoint] =
             snap_to_grid(mouse_cursor_w);
         path_preview_timer.start(false);
+        
+    } else if(state == EDITOR_STATE_TOOLS) {
+        //Move reference handle.
+        reference_transformation.handle_mouse_move(
+            snap_to_grid(mouse_cursor_w)
+        );
+        tools_to_gui();
+        
     }
 }
 
@@ -1046,7 +1058,6 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
-    //TODO
     selecting = false;
     
     if(moving) {
@@ -1058,6 +1069,11 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
             finish_layout_moving();
         }
         moving = false;
+    }
+    
+    if(state == EDITOR_STATE_TOOLS) {
+        reference_transformation.handle_mouse_up();
+        tools_to_gui();
     }
     
     moving_path_preview_checkpoint = -1;
