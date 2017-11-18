@@ -1010,9 +1010,9 @@ void area_editor_old::create_sector() {
     
     //Check for intersections, so they can get reported.
     for(size_t e = 0; e < new_sector->edges.size(); ++e) {
-        check_edge_intersections(
-            new_sector->edges[e]->vertexes[0]
-        );
+        //check_edge_intersections(
+        //    new_sector->edges[e]->vertexes[0]
+        //);
     }
     
     cur_sector = new_sector;
@@ -1733,7 +1733,7 @@ void area_editor_old::load_area(const bool from_backup) {
     ::load_area(area_name, true, from_backup);
     
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-        check_edge_intersections(cur_area_data.vertexes[v]);
+        //check_edge_intersections(cur_area_data.vertexes[v]);
     }
     
     //Calculate texture suggestions.

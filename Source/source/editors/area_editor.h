@@ -130,6 +130,7 @@ private:
         N_SELECTION_FILTERS,
     };
     
+    static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
     static const float         DOUBLE_CLICK_TIMEOUT;
@@ -204,6 +205,16 @@ private:
     size_t sub_state;
     //Time left until a backup is generated.
     timer backup_timer;
+    //Where the cross-section tool points are.
+    point cross_section_points[2];
+    //Cross-section window's start coordinates.
+    point cross_section_window_start;
+    //Cross-section window's end coordinates.
+    point cross_section_window_end;
+    //Cross-section Z legend window's start coordinates.
+    point cross_section_z_window_start;
+    //Cross-section Z legend window's end coordinates.
+    point cross_section_z_window_end;
     //Name of the area currently loaded.
     string cur_area_name;
     //When showing a hazard in the list, this is the index of the current one.
@@ -381,9 +392,14 @@ private:
     void clear_problems();
     void clear_selection();
     void clear_texture_suggestions();
+    void create_area();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
     void delete_selected_path_elements();
+    void draw_cross_section_sector(
+        const float start_ratio, const float end_ratio, const float proportion,
+        const float lowest_z, sector* sector_ptr
+    );
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
@@ -437,6 +453,8 @@ private:
     void pick(const string &name, const unsigned char type);
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
+    void save_area(const bool to_backup);
+    void save_backup();
     void select_different_hazard(const bool next);
     void select_edge(edge* e);
     void select_sector(sector* s);
@@ -503,10 +521,6 @@ public:
     virtual void load();
     virtual void unload();
     virtual void update_transformations();
-    
-    //TODO do I need this?
-    vector<edge_intersection> intersecting_edges;
-    
     
     area_editor();
 };

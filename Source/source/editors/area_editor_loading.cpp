@@ -175,8 +175,8 @@ void area_editor::load() {
         state = EDITOR_STATE_OPTIONS;
         change_to_right_frame();
     };
-    frm_area->widgets["but_tools"]->description =
-        "Options and misc. tools.";
+    frm_area->widgets["but_options"]->description =
+        "Options for the area editor.";
         
         
     //Info -- declarations.
@@ -1729,7 +1729,7 @@ void area_editor::load() {
         }
     };
     frm_review->widgets["chk_see_textures"]->description =
-        "Preview how the textures will look like.";
+        "Preview how the textures and shadows will look like.";
         
     frm_review->widgets["chk_shadows"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
@@ -1744,7 +1744,7 @@ void area_editor::load() {
         review_to_gui();
     };
     frm_review->widgets["chk_cross_section"]->description =
-        "Show a 2D cross section between points A and B.";
+        "Show a 2D cross-section between points A and B.";
         
     frm_review->widgets["chk_cross_section_grid"]->left_mouse_click_handler =
     [this] (lafi::widget * c, int, int) {
@@ -2043,7 +2043,11 @@ void area_editor::load() {
         
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        save_area(false);
+        clear_selection();
+        state = EDITOR_STATE_MAIN;
+        change_to_right_frame();
+        made_changes = false;
     };
     frm_bottom->widgets["but_save"]->description =
         "Save the area onto the files.";
@@ -2085,7 +2089,13 @@ void area_editor::load() {
     is_shift_pressed = false;
     is_gui_focused = false;
     gui->lose_focus();
-    
+    cross_section_window_start = point(0.0f, 0.0f);
+    cross_section_window_end = point(gui_x * 0.5, status_bar_y * 0.5);
+    cross_section_z_window_start =
+        point(cross_section_window_end.x, cross_section_window_start.y);
+    cross_section_z_window_end =
+        point(cross_section_window_end.x + 48, cross_section_window_end.y);
+        
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
     

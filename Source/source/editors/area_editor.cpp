@@ -18,6 +18,8 @@
 
 using namespace std;
 
+//Radius to use when drawing a cross-section point.
+const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //Scale the debug text by this much.
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
 //Default grid interval.
@@ -205,6 +207,11 @@ area_editor::area_editor() :
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
+    
+    if(editor_backup_interval > 0) {
+        backup_timer =
+        timer(editor_backup_interval, [this] () {save_backup();});
+    }
 }
 
 
@@ -546,16 +553,12 @@ void area_editor::clear_circle_sector() {
 void area_editor::clear_current_area() {
     clear_current_area_gui();
     
-    //TODO
-    /*
     change_reference("");
-    reference_aspect_ratio = true;
-    reference_size = point(1000, 1000);
+    reference_transformation.keep_aspect_ratio = true;
+    reference_transformation.center = point();
+    reference_transformation.size = point(1000, 1000);
     reference_a = 255;
-    cur_sector = NULL;
-    cur_mob = NULL;
-    cur_shadow = NULL;
-    */
+    clear_selection();
     clear_area_textures();
     
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
@@ -567,13 +570,10 @@ void area_editor::clear_current_area() {
     
     sector_to_gui();
     mob_to_gui();
-    //TODO
-    //reference_to_gui();
+    tools_to_gui();
     
-    cam_pos.x = cam_pos.y = 0;
-    cam_zoom = 1;
-    //TODO
-    /*
+    cam_pos = point();
+    cam_zoom = 1.0f;
     show_cross_section = false;
     show_cross_section_grid = false;
     show_path_preview = false;
@@ -582,7 +582,6 @@ void area_editor::clear_current_area() {
     path_preview_checkpoints[1] = point(DEF_GRID_INTERVAL, 0);
     cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
     cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
-    */
     
     clear_texture_suggestions();
     
@@ -664,10 +663,104 @@ void area_editor::clear_texture_suggestions() {
 
 
 /* ----------------------------------------------------------------------------
+ * Creates a new area to work on.
+ */
+void area_editor::create_area() {
+    clear_current_area();
+    disable_widget(frm_tools->widgets["but_load"]);
+    
+    //Create a sector for it.
+    clear_layout_drawing();
+    float r = DEF_GRID_INTERVAL * 10;
+    
+    layout_drawing_node n;
+    n.raw_spot = point(-r, -r);
+    n.snapped_spot = n.raw_spot;
+    drawing_nodes.push_back(n);
+    
+    n.raw_spot = point(r, -r);
+    n.snapped_spot = n.raw_spot;
+    drawing_nodes.push_back(n);
+    
+    n.raw_spot = point(r, r);
+    n.snapped_spot = n.raw_spot;
+    drawing_nodes.push_back(n);
+    
+    n.raw_spot = point(-r, r);
+    n.snapped_spot = n.raw_spot;
+    drawing_nodes.push_back(n);
+    
+    finish_layout_drawing();
+    
+    clear_selection();
+    
+    //Find a texture to give to this sector.
+    vector<string> textures = folder_to_vector(TEXTURES_FOLDER_PATH, false);
+    size_t texture_to_use = INVALID;
+    //First, if there's any "grass" texture, use that.
+    for(size_t t = 0; t < textures.size(); ++t) {
+        string lc_name = str_to_lower(textures[t]);
+        if(lc_name.find("grass") != string::npos) {
+            texture_to_use = t;
+            break;
+        }
+    }
+    //No grass texture? Try one with "dirt".
+    if(texture_to_use == INVALID) {
+        for(size_t t = 0; t < textures.size(); ++t) {
+            string lc_name = str_to_lower(textures[t]);
+            if(lc_name.find("dirt") != string::npos) {
+                texture_to_use = t;
+                break;
+            }
+        }
+    }
+    //If there's no good texture, just pick the first one.
+    if(texture_to_use == INVALID) {
+        if(!textures.empty()) texture_to_use = 0;
+    }
+    //Apply the texture.
+    if(texture_to_use != INVALID) {
+        update_sector_texture(
+            cur_area_data.sectors[0], textures[texture_to_use]
+        );
+    }
+    
+    //Now add a leader. The first available.
+    cur_area_data.mob_generators.push_back(
+        new mob_gen(
+            mob_categories.get(MOB_CATEGORY_LEADERS), point(),
+            leader_order[0], 0, ""
+        )
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new item from the picker frame, given its name.
  */
 void area_editor::create_new_from_picker(const string &name) {
-    //TODO;
+    string new_area_path =
+        AREAS_FOLDER_PATH + "/" + name;
+    ALLEGRO_FS_ENTRY* new_area_folder_entry =
+        al_create_fs_entry(new_area_path.c_str());
+        
+    if(al_fs_entry_exists(new_area_folder_entry)) {
+        //Already exists, just load it.
+        cur_area_name = name;
+        area_editor::load_area(false);
+    } else {
+        //Create a new area.
+        cur_area_name = name;
+        create_area();
+    }
+    
+    al_destroy_fs_entry(new_area_folder_entry);
+    
+    state = EDITOR_STATE_MAIN;
+    emit_status_bar_message("Created new area successfully.", false);
+    show_bottom_frame();
+    change_to_right_frame();
 }
 
 
@@ -1298,8 +1391,6 @@ void area_editor::finish_layout_drawing() {
     if(last_triangulation_error != TRIANGULATION_NO_ERROR) {
         emit_triangulation_error_status_bar_message(last_triangulation_error);
     }
-    
-    cur_area_data.check_matches(); //TODO
     
     //Select the new sector, making it ready for editing.
     clear_selection();
@@ -2116,10 +2207,6 @@ void area_editor::load_area(const bool from_backup) {
     
     ::load_area(cur_area_name, true, from_backup);
     
-    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
-        check_edge_intersections(cur_area_data.vertexes[v]);
-    }
-    
     //Calculate texture suggestions.
     map<string, size_t> texture_uses_map;
     vector<pair<string, size_t> > texture_uses_vector;
@@ -2149,7 +2236,7 @@ void area_editor::load_area(const bool from_backup) {
         );
     }
     
-    //TODO change_reference(reference_file_name);
+    change_reference(reference_file_name);
     
     enable_widget(frm_tools->widgets["but_load"]);
     made_changes = false;
@@ -2453,6 +2540,315 @@ void area_editor::resize_everything(const float mult) {
     emit_status_bar_message("Resized successfully.", false);
     
     made_changes = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the area onto the disk.
+ * to_backup: If false, save normally. If true, save to an auto-backup file.
+ */
+void area_editor::save_area(const bool to_backup) {
+
+    data_node geometry_file = data_node("", "");
+    
+    //Vertexes.
+    data_node* vertexes_node = new data_node("vertexes", "");
+    geometry_file.add(vertexes_node);
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        data_node* vertex_node =
+            new data_node("v", f2s(v_ptr->x) + " " + f2s(v_ptr->y));
+        vertexes_node->add(vertex_node);
+    }
+    
+    //Edges.
+    data_node* edges_node = new data_node("edges", "");
+    geometry_file.add(edges_node);
+    
+    for(size_t e = 0; e < cur_area_data.edges.size(); ++e) {
+        edge* e_ptr = cur_area_data.edges[e];
+        data_node* edge_node = new data_node("e", "");
+        edges_node->add(edge_node);
+        string s_str;
+        for(size_t s = 0; s < 2; ++s) {
+            if(e_ptr->sector_nrs[s] == INVALID) s_str += "-1";
+            else s_str += i2s(e_ptr->sector_nrs[s]);
+            s_str += " ";
+        }
+        s_str.erase(s_str.size() - 1);
+        edge_node->add(new data_node("s", s_str));
+        edge_node->add(
+            new data_node(
+                "v",
+                i2s(e_ptr->vertex_nrs[0]) + " " + i2s(e_ptr->vertex_nrs[1])
+            )
+        );
+    }
+    
+    //Sectors.
+    data_node* sectors_node = new data_node("sectors", "");
+    geometry_file.add(sectors_node);
+    
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        data_node* sector_node = new data_node("s", "");
+        sectors_node->add(sector_node);
+        
+        if(s_ptr->type != SECTOR_TYPE_NORMAL) {
+            sector_node->add(
+                new data_node("type", sector_types.get_name(s_ptr->type))
+            );
+        }
+        sector_node->add(new data_node("z", f2s(s_ptr->z)));
+        if(s_ptr->brightness != DEF_SECTOR_BRIGHTNESS) {
+            sector_node->add(
+                new data_node("brightness", i2s(s_ptr->brightness))
+            );
+        }
+        if(!s_ptr->tag.empty()) {
+            sector_node->add(new data_node("tag", s_ptr->tag));
+        }
+        if(s_ptr->fade) {
+            sector_node->add(new data_node("fade", b2s(s_ptr->fade)));
+        }
+        if(s_ptr->always_cast_shadow) {
+            sector_node->add(
+                new data_node(
+                    "always_cast_shadow",
+                    b2s(s_ptr->always_cast_shadow)
+                )
+            );
+        }
+        if(!s_ptr->hazards_str.empty()) {
+            sector_node->add(new data_node("hazards", s_ptr->hazards_str));
+            sector_node->add(
+                new data_node(
+                    "hazards_floor",
+                    b2s(s_ptr->hazard_floor)
+                )
+            );
+        }
+        
+        if(!s_ptr->texture_info.file_name.empty()) {
+            sector_node->add(
+                new data_node(
+                    "texture",
+                    s_ptr->texture_info.file_name
+                )
+            );
+        }
+        
+        if(s_ptr->texture_info.rot != 0) {
+            sector_node->add(
+                new data_node(
+                    "texture_rotate",
+                    f2s(s_ptr->texture_info.rot)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.scale.x != 1 ||
+            s_ptr->texture_info.scale.y != 1
+        ) {
+            sector_node->add(
+                new data_node(
+                    "texture_scale",
+                    f2s(s_ptr->texture_info.scale.x) + " " +
+                    f2s(s_ptr->texture_info.scale.y)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.translation.x != 0 ||
+            s_ptr->texture_info.translation.y != 0
+        ) {
+            sector_node->add(
+                new data_node(
+                    "texture_trans",
+                    f2s(s_ptr->texture_info.translation.x) + " " +
+                    f2s(s_ptr->texture_info.translation.y)
+                )
+            );
+        }
+        if(
+            s_ptr->texture_info.tint.r != 1.0 ||
+            s_ptr->texture_info.tint.g != 1.0 ||
+            s_ptr->texture_info.tint.b != 1.0 ||
+            s_ptr->texture_info.tint.a != 1.0
+        ) {
+            sector_node->add(
+                new data_node("texture_tint", c2s(s_ptr->texture_info.tint))
+            );
+        }
+        
+    }
+    
+    //Mobs.
+    data_node* mobs_node = new data_node("mobs", "");
+    geometry_file.add(mobs_node);
+    
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        data_node* mob_node =
+            new data_node(m_ptr->category->name, "");
+        mobs_node->add(mob_node);
+        
+        if(m_ptr->type) {
+            mob_node->add(
+                new data_node("type", m_ptr->type->name)
+            );
+        }
+        mob_node->add(
+            new data_node(
+                "p",
+                f2s(m_ptr->pos.x) + " " + f2s(m_ptr->pos.y)
+            )
+        );
+        if(m_ptr->angle != 0) {
+            mob_node->add(
+                new data_node("angle", f2s(m_ptr->angle))
+            );
+        }
+        if(m_ptr->vars.size()) {
+            mob_node->add(
+                new data_node("vars", m_ptr->vars)
+            );
+        }
+        
+    }
+    
+    //Path stops.
+    data_node* path_stops_node = new data_node("path_stops", "");
+    geometry_file.add(path_stops_node);
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        data_node* path_stop_node = new data_node("s", "");
+        path_stops_node->add(path_stop_node);
+        
+        path_stop_node->add(
+            new data_node("pos", f2s(s_ptr->pos.x) + " " + f2s(s_ptr->pos.y))
+        );
+        
+        data_node* links_node = new data_node("links", "");
+        path_stop_node->add(links_node);
+        
+        for(size_t l = 0; l < s_ptr->links.size(); l++) {
+            path_link* l_ptr = &s_ptr->links[l];
+            data_node* link_node = new data_node("nr", i2s(l_ptr->end_nr));
+            links_node->add(link_node);
+        }
+        
+    }
+    
+    //Tree shadows.
+    data_node* shadows_node = new data_node("tree_shadows", "");
+    geometry_file.add(shadows_node);
+    
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+        data_node* shadow_node = new data_node("shadow", "");
+        shadows_node->add(shadow_node);
+        
+        shadow_node->add(
+            new data_node(
+                "pos", f2s(s_ptr->center.x) + " " + f2s(s_ptr->center.y)
+            )
+        );
+        shadow_node->add(
+            new data_node(
+                "size", f2s(s_ptr->size.x) + " " + f2s(s_ptr->size.y)
+            )
+        );
+        if(s_ptr->angle != 0) {
+            shadow_node->add(new data_node("angle", f2s(s_ptr->angle)));
+        }
+        if(s_ptr->alpha != 255) {
+            shadow_node->add(new data_node("alpha", i2s(s_ptr->alpha)));
+        }
+        shadow_node->add(new data_node("file", s_ptr->file_name));
+        shadow_node->add(
+            new data_node("sway", f2s(s_ptr->sway.x) + " " + f2s(s_ptr->sway.y))
+        );
+        
+    }
+    
+    //Editor reference.
+    geometry_file.add(
+        new data_node("reference_file_name", reference_file_name)
+    );
+    geometry_file.add(
+        new data_node("reference_center", p2s(reference_transformation.center))
+    );
+    geometry_file.add(
+        new data_node("reference_size", p2s(reference_transformation.size))
+    );
+    geometry_file.add(
+        new data_node("reference_alpha", i2s(reference_a))
+    );
+    
+    
+    //Check if the folder exists before saving. If not, create it.
+    ALLEGRO_FS_ENTRY* folder_fs_entry =
+        al_create_fs_entry((AREAS_FOLDER_PATH + "/" + cur_area_name).c_str());
+    if(!al_open_directory(folder_fs_entry)) {
+        al_make_directory((AREAS_FOLDER_PATH + "/" + cur_area_name).c_str());
+    }
+    al_close_directory(folder_fs_entry);
+    al_destroy_fs_entry(folder_fs_entry);
+    
+    //Also, check if the data file exists. Create it if not.
+    if(
+        !al_filename_exists(
+            (AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt").c_str()
+        )
+    ) {
+        data_node data_file;
+        data_file.save_file(
+            (AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt").c_str()
+        );
+    }
+    
+    
+    //Finally, save.
+    geometry_file.save_file(
+        AREAS_FOLDER_PATH + "/" + cur_area_name +
+        (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+    );
+    
+    backup_timer.start(editor_backup_interval);
+    enable_widget(frm_tools->widgets["but_load"]);
+    
+    emit_status_bar_message("Saved successfully.", false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Saves the area onto a backup file.
+ */
+void area_editor::save_backup() {
+
+    backup_timer.start(editor_backup_interval);
+    
+    //First, check if the folder even exists.
+    //If not, chances are this is a new area.
+    //We should probably create a backup anyway, but if the area is
+    //just for testing, the backups are pointless.
+    //Plus, creating the backup will create the area's folder on the disk,
+    //which will basically mean the area exists, even though this might not be
+    //what the user wants, since they haven't saved proper yet.
+    
+    ALLEGRO_FS_ENTRY* folder_fs_entry =
+        al_create_fs_entry((AREAS_FOLDER_PATH + "/" + cur_area_name).c_str());
+    bool folder_exists = al_open_directory(folder_fs_entry);
+    al_close_directory(folder_fs_entry);
+    al_destroy_fs_entry(folder_fs_entry);
+    
+    if(!folder_exists) return;
+    
+    save_area(true);
+    update_backup_status();
 }
 
 

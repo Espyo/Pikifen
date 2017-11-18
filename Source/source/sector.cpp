@@ -2018,63 +2018,6 @@ vertex* get_rightmost_vertex(vertex* v1, vertex* v2) {
 
 
 /* ----------------------------------------------------------------------------
- * Checks intersecting edges, and adds them to intersecting_edges;
- */
-void check_edge_intersections(vertex* v) {
-
-    area_editor* ae = NULL;
-    if(cur_game_state_nr == GAME_STATE_AREA_EDITOR) {
-        ae = (area_editor*) game_states[cur_game_state_nr];
-    }
-    
-    for(size_t e = 0; e < v->edges.size(); ++e) {
-        edge* e_ptr = v->edges[e];
-        
-        if(ae) {
-            //Check if it's on the list of intersecting edges, and remove it,
-            //so it can be recalculated now.
-            for(size_t ie = 0; ie < ae->intersecting_edges.size();) {
-                if(ae->intersecting_edges[ie].contains(e_ptr)) {
-                    ae->intersecting_edges.erase(
-                        ae->intersecting_edges.begin() + ie
-                    );
-                } else {
-                    ++ie;
-                }
-            }
-        }
-        
-        //For every other edge in the map, check for intersections.
-        for(size_t e2 = 0; e2 < cur_area_data.edges.size(); ++e2) {
-            edge* e2_ptr = cur_area_data.edges[e2];
-            
-            //If the edge is actually on the same vertex, never mind.
-            if(e_ptr->vertexes[0] == e2_ptr->vertexes[0]) continue;
-            if(e_ptr->vertexes[0] == e2_ptr->vertexes[1]) continue;
-            if(e_ptr->vertexes[1] == e2_ptr->vertexes[0]) continue;
-            if(e_ptr->vertexes[1] == e2_ptr->vertexes[1]) continue;
-            
-            if(
-                lines_intersect(
-                    point(e_ptr->vertexes[0]->x, e_ptr->vertexes[0]->y),
-                    point(e_ptr->vertexes[1]->x, e_ptr->vertexes[1]->y),
-                    point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
-                    point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
-                    NULL, NULL
-                )
-            ) {
-                if(ae) {
-                    ae->intersecting_edges.push_back(
-                        edge_intersection(e_ptr, e2_ptr)
-                    );
-                }
-            }
-        }
-    }
-}
-
-
-/* ----------------------------------------------------------------------------
  * Cleans a polygon's vertexes.
  * This deletes 0-length edges, and 180-degree vertexes.
  */

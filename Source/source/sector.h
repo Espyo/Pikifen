@@ -357,7 +357,6 @@ struct area_data {
 
 
 
-void check_edge_intersections(vertex* v);
 void clean_poly(polygon* p);
 void cut_poly(polygon* outer, vector<polygon>* inners);
 void depth_first_search(

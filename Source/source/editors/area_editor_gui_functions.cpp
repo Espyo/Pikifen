@@ -451,7 +451,8 @@ void area_editor::gui_to_tools() {
  * Hides all menu frames.
  */
 void area_editor::hide_all_frames() {
-    //TODO
+    gui->widgets["frm_picker"]->hide();
+    
     frm_main->hide();
     frm_layout->hide();
     frm_asb->hide();
@@ -748,7 +749,9 @@ void area_editor::review_to_gui() {
         
     } else if(problem_type == EPT_INTERSECTING_EDGES) {
     
-        if(intersecting_edges.empty()) {
+        if(
+            !problem_edge_intersection.e1 || !problem_edge_intersection.e2
+        ) {
             //Uh, old information. Try searching for problems again.
             find_problems();
             return;
@@ -757,7 +760,7 @@ void area_editor::review_to_gui() {
         lbl_prob_title_1->text = "Two edges cross";
         lbl_prob_title_2->text = "each other!";
         float u;
-        edge_intersection* ei_ptr = &intersecting_edges[0];
+        edge_intersection* ei_ptr = &problem_edge_intersection;
         lines_intersect(
             point(ei_ptr->e1->vertexes[0]->x, ei_ptr->e1->vertexes[0]->y),
             point(ei_ptr->e1->vertexes[1]->x, ei_ptr->e1->vertexes[1]->y),
