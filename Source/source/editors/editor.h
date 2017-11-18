@@ -32,6 +32,28 @@ private:
     
 protected:
 
+    struct transformation_controller {
+    private:
+        static const float HANDLE_RADIUS;
+        signed char moving_handle;
+        point pre_move_size;
+        point get_handle_pos(const unsigned char handle);
+        
+    public:
+        point center;
+        point size;
+        float angle;
+        
+        bool keep_aspect_ratio;
+        bool allow_angle_transformations;
+        
+        void draw_handles();
+        void handle_mouse_down(const point pos);
+        void handle_mouse_up();
+        void handle_mouse_move(const point pos);
+        transformation_controller();
+    };
+    
     lafi::gui*    gui;
     int           gui_x;
     bool          holding_m1;

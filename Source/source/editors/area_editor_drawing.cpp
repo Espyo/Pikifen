@@ -14,8 +14,6 @@
 #include "../vars.h"
 
 void area_editor::do_drawing() {
-    //TODO
-    
     gui->draw();
     
     al_use_transform(&world_to_screen_transform);
@@ -625,6 +623,31 @@ void area_editor::do_drawing() {
                         2.0 / cam_zoom
                     );
                 }
+            }
+        }
+        
+        //Reference image.
+        if(
+            reference_bitmap &&
+            (show_reference || state == EDITOR_STATE_TOOLS)
+        ) {
+            al_draw_tinted_scaled_bitmap(
+                reference_bitmap,
+                map_alpha(reference_a),
+                0, 0,
+                al_get_bitmap_width(reference_bitmap),
+                al_get_bitmap_height(reference_bitmap),
+                reference_transformation.center.x -
+                reference_transformation.size.x / 2.0,
+                reference_transformation.center.y -
+                reference_transformation.size.y / 2.0,
+                reference_transformation.size.x,
+                reference_transformation.size.y,
+                0
+            );
+            
+            if(state == EDITOR_STATE_TOOLS) {
+                reference_transformation.draw_handles();
             }
         }
         

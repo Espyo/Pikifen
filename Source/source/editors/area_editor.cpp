@@ -188,6 +188,8 @@ area_editor::area_editor() :
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
     path_preview_timer(0),
+    reference_a(255),
+    reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
     selection_effect(0),
@@ -318,6 +320,25 @@ void area_editor::center_camera(
     z -= z * 0.1;
     
     zoom(z, false);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Changes the reference image.
+ */
+void area_editor::change_reference(string new_file_name) {
+    if(reference_bitmap && reference_bitmap != bmp_error) {
+        al_destroy_bitmap(reference_bitmap);
+    }
+    reference_bitmap = NULL;
+    
+    if(!new_file_name.empty()) {
+        reference_bitmap = load_bmp(new_file_name, NULL, false, false);
+    }
+    reference_file_name = new_file_name;
+    tools_to_gui();
+    
+    made_changes = true;
 }
 
 
@@ -2368,6 +2389,55 @@ bool area_editor::remove_isolated_sectors() {
     }
     
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Resizes all X and Y coordinates by the specified multiplier.
+ */
+void area_editor::resize_everything(const float mult) {
+    if(mult == 0) {
+        emit_status_bar_message("Can't resize everything to size 0!", true);
+        return;
+    }
+    
+    for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
+        vertex* v_ptr = cur_area_data.vertexes[v];
+        v_ptr->x *= mult;
+        v_ptr->y *= mult;
+    }
+    
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ++s) {
+        sector* s_ptr = cur_area_data.sectors[s];
+        s_ptr->texture_info.scale *= mult;
+        s_ptr->texture_info.translation *= mult;
+        s_ptr->triangles.clear();
+        triangulate(s_ptr, NULL, false, false);
+    }
+    
+    for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
+        mob_gen* m_ptr = cur_area_data.mob_generators[m];
+        m_ptr->pos *= mult;
+    }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        path_stop* s_ptr = cur_area_data.path_stops[s];
+        s_ptr->pos *= mult;
+    }
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        cur_area_data.path_stops[s]->calculate_dists();
+    }
+    
+    for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+        tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+        s_ptr->center *= mult;
+        s_ptr->size   *= mult;
+        s_ptr->sway   *= mult;
+    }
+    
+    emit_status_bar_message("Resized successfully.", false);
+    
+    made_changes = true;
 }
 
 

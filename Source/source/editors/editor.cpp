@@ -276,3 +276,148 @@ void editor::update_gui_coordinates() {
     gui_x = scr_w * 0.675;
     status_bar_y = scr_h - 16;
 }
+
+
+const float editor::transformation_controller::HANDLE_RADIUS = 6.0;
+
+
+/* ----------------------------------------------------------------------------
+ * Creates a transformation controller.
+ */
+editor::transformation_controller::transformation_controller() :
+    moving_handle(-1),
+    angle(0),
+    keep_aspect_ratio(true),
+    allow_angle_transformations(false) {
+    
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws the transformation (move, scale, rotate) handles.
+ */
+void editor::transformation_controller::draw_handles() {
+    al_draw_rectangle(
+        center.x - size.x / 2.0, center.y - size.y / 2.0,
+        center.x + size.x / 2.0, center.y + size.y / 2.0,
+        al_map_rgb(32, 32, 160), 2.0 / cam_zoom
+    );
+    
+    for(unsigned char h = 0; h < 9; ++h) {
+        point p = get_handle_pos(h);
+        al_draw_filled_circle(
+            p.x, p.y, HANDLE_RADIUS / cam_zoom, al_map_rgb(96, 96, 224)
+        );
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a mouse press, allowing a handle to be grabbed.
+ */
+void editor::transformation_controller::handle_mouse_down(const point pos) {
+    for(unsigned char h = 0; h < 9; ++h) {
+        point handle_pos = get_handle_pos(h);
+        if(dist(handle_pos, pos) <= HANDLE_RADIUS / cam_zoom) {
+            moving_handle = h;
+            pre_move_size = size;
+            break;
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a mouse release, allowing a handle to be released.
+ */
+void editor::transformation_controller::handle_mouse_up() {
+    moving_handle = -1;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Handles a mouse move, allowing a handle to be moved.
+ */
+#include <iostream> //TODO
+void editor::transformation_controller::handle_mouse_move(const point pos) {
+    if(moving_handle == -1) {
+        return;
+    }
+    
+    if(moving_handle == 4) {
+        center = pos;
+        return;
+    }
+    
+    point new_size = pre_move_size;
+    point new_center = center;
+    
+    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+        new_size.x = (center.x + size.x / 2.0) - pos.x;
+    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        new_size.x = pos.x - (center.x - size.x / 2.0);
+    }
+    
+    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+        new_size.y = (center.y + size.y / 2.0) - pos.y;
+    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        new_size.y = pos.y - (center.y - size.y / 2.0);
+    }
+    
+    if(keep_aspect_ratio) {
+        if(
+            fabs(pre_move_size.x - new_size.x) >
+            fabs(pre_move_size.y - new_size.y)
+        ) {
+            //Most significant change is width.
+            if(pre_move_size.x != 0) {
+                float ratio = pre_move_size.y / pre_move_size.x;
+                new_size.y = new_size.x * ratio;
+            }
+            
+        } else {
+            //Most significant change is height.
+            if(pre_move_size.y != 0) {
+                float ratio = pre_move_size.x / pre_move_size.y;
+                new_size.x = new_size.y * ratio;
+            }
+            
+        }
+    }
+    
+    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+        new_center.x = (center.x + size.x / 2.0) - new_size.x / 2.0;
+    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        new_center.x = (center.x - size.x / 2.0) + new_size.x / 2.0;
+    }
+    
+    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+        new_center.y = (center.y + size.y / 2.0) - new_size.y / 2.0;
+    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        new_center.y = (center.y - size.y / 2.0) + new_size.y / 2.0;
+    }
+    
+    center = new_center;
+    size = new_size;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the position at which a handle is.
+ */
+point editor::transformation_controller::get_handle_pos(
+    const unsigned char handle
+) {
+    point result = center;
+    if(handle == 0 || handle == 3 || handle == 6) {
+        result.x -= size.x / 2.0;
+    } else if(handle == 2 || handle == 5 || handle == 8) {
+        result.x += size.x / 2.0;
+    }
+    if(handle == 0 || handle == 1 || handle == 2) {
+        result.y -= size.y / 2.0;
+    } else if(handle == 6 || handle == 7 || handle == 8) {
+        result.y += size.y / 2.0;
+    }
+    return result;
+}

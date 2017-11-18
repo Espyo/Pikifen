@@ -306,6 +306,14 @@ private:
     string problem_string;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
+    //Alpha of the reference image.
+    unsigned char reference_a;
+    //Bitmap of the reference image.
+    ALLEGRO_BITMAP* reference_bitmap;
+    //File name of the reference image.
+    string reference_file_name;
+    //Current transformations on the reference image.
+    transformation_controller reference_transformation;
     //Currently selected edges.
     set<edge*> selected_edges;
     //Currently selected mobs.
@@ -364,6 +372,7 @@ private:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
+    void change_reference(const string new_file_name);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -378,6 +387,10 @@ private:
     void draw_debug_text(
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
+    );
+    void draw_transformation_handles(
+        const point center, const point size, const float angle,
+        const bool draw_angle_handles
     );
     void emit_status_bar_message(const string &text, const bool important);
     void emit_triangulation_error_status_bar_message(
@@ -422,6 +435,7 @@ private:
     void populate_texture_suggestions();
     void pick(const string &name, const unsigned char type);
     bool remove_isolated_sectors();
+    void resize_everything(const float mult);
     void select_different_hazard(const bool next);
     void select_edge(edge* e);
     void select_sector(sector* s);
@@ -469,6 +483,7 @@ private:
     void gui_to_info();
     void gui_to_mob();
     void gui_to_sector();
+    void gui_to_tools();
     void hide_all_frames();
     void info_to_gui();
     void mob_to_gui();
