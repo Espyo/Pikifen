@@ -244,6 +244,9 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
             );
         }
         
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+        undo_layout_drawing_node();
+        
     }
 }
 
@@ -252,38 +255,104 @@ void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
  * Handles a key being pressed down.
  */
 void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
-    if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE && !selecting) {
-        clear_selection();
-        
-    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
     
+    if(ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE) {
         if(
             state == EDITOR_STATE_LAYOUT ||
             state == EDITOR_STATE_ASA ||
             state == EDITOR_STATE_ASB
         ) {
-            selected_edges.insert(
-                cur_area_data.edges.begin(), cur_area_data.edges.end()
-            );
-            selected_sectors.insert(
-                cur_area_data.sectors.begin(), cur_area_data.sectors.end()
-            );
-            selected_vertexes.insert(
-                cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
-            );
+            if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
+                cancel_circle_sector();
+            } else if(sub_state == EDITOR_SUB_STATE_DRAWING) {
+                cancel_layout_drawing();
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE && moving) {
+                cancel_layout_moving();
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
             
         } else if(state == EDITOR_STATE_MOBS) {
-            selected_mobs.insert(
-                cur_area_data.mob_generators.begin(),
-                cur_area_data.mob_generators.end()
-            );
+            if(
+                sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB ||
+                sub_state == EDITOR_SUB_STATE_NEW_MOB
+            ) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
             
         } else if(state == EDITOR_STATE_PATHS) {
-            selected_path_stops.insert(
-                cur_area_data.path_stops.begin(),
-                cur_area_data.path_stops.end()
-            );
+            if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                clear_selection();
+                selecting = false;
+            }
+        } else if(state == EDITOR_STATE_DETAILS) {
+            if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
+                sub_state = EDITOR_SUB_STATE_NONE;
+            }
         }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
+    
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            if(
+                state == EDITOR_STATE_LAYOUT ||
+                state == EDITOR_STATE_ASA ||
+                state == EDITOR_STATE_ASB
+            ) {
+                selected_edges.insert(
+                    cur_area_data.edges.begin(), cur_area_data.edges.end()
+                );
+                selected_sectors.insert(
+                    cur_area_data.sectors.begin(), cur_area_data.sectors.end()
+                );
+                selected_vertexes.insert(
+                    cur_area_data.vertexes.begin(), cur_area_data.vertexes.end()
+                );
+                
+            } else if(state == EDITOR_STATE_MOBS) {
+                selected_mobs.insert(
+                    cur_area_data.mob_generators.begin(),
+                    cur_area_data.mob_generators.end()
+                );
+                
+            } else if(state == EDITOR_STATE_PATHS) {
+                selected_path_stops.insert(
+                    cur_area_data.path_stops.begin(),
+                    cur_area_data.path_stops.end()
+                );
+            }
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Z && is_ctrl_pressed) {
+    
+        if(sub_state == EDITOR_SUB_STATE_NONE && !selecting && !moving) {
+            frm_bottom->widgets["but_undo"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_S && is_ctrl_pressed) {
+    
+        frm_bottom->widgets["but_save"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_Q && is_ctrl_pressed) {
+    
+        frm_bottom->widgets["but_quit"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_R && is_ctrl_pressed) {
+    
+        frm_bottom->widgets["but_reference"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
         bool got_something = false;
@@ -343,6 +412,49 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
         if(!got_something) return;
         
         center_camera(min_coords, max_coords);
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_N) {
+    
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_new"]->simulate_click();
+            frm_mobs->widgets["but_new"]->simulate_click();
+            frm_paths->widgets["but_draw"]->simulate_click();
+            frm_details->widgets["but_new"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_C) {
+    
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_circle"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_D) {
+    
+        if(!moving && !selecting) {
+            frm_mobs->widgets["but_duplicate"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
+    
+        if(!moving && !selecting) {
+            frm_layout->widgets["but_rem"]->simulate_click();
+            frm_mobs->widgets["but_del"]->simulate_click();
+            frm_paths->widgets["but_del"]->simulate_click();
+            frm_details->widgets["but_del"]->simulate_click();
+        }
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_F) {
+    
+        frm_layout->widgets["but_sel_filter"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
+    
+        frm_paths->widgets["rad_one_way"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_2) {
+    
+        frm_paths->widgets["rad_normal"]->simulate_click();
+        
     }
 }
 
@@ -359,6 +471,10 @@ void area_editor::handle_key_up(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being double-clicked.
  */
 void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
     if(
         sub_state == EDITOR_SUB_STATE_NONE &&
         (
@@ -387,6 +503,10 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being pressed down.
  */
 void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
     if(sub_state == EDITOR_SUB_STATE_DRAWING) {
     
         //Drawing the layout.
@@ -403,9 +523,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                 )
             ) <= VERTEX_MERGE_RADIUS / cam_zoom
         ) {
-            drawing_nodes.erase(
-                drawing_nodes.begin() + drawing_nodes.size() - 1
-            );
+            undo_layout_drawing_node();
             return;
         }
         
@@ -804,6 +922,10 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being dragged.
  */
 void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
     if(selecting) {
     
         float selection_x1 = min(selection_start.x, selection_end.x);
@@ -1076,6 +1198,10 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
  * Handles the left mouse button being released.
  */
 void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
+    if(!(frm_picker->flags & lafi::FLAG_INVISIBLE)) {
+        return;
+    }
+    
     selecting = false;
     
     if(moving) {

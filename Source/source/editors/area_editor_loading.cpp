@@ -544,7 +544,7 @@ void area_editor::load() {
         }
     };
     frm_layout->widgets["but_new"]->description =
-        "Trace a new sector where you click.";
+        "Trace a new sector where you click. (N)";
         
     frm_layout->widgets["but_circle"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -556,7 +556,7 @@ void area_editor::load() {
         }
     };
     frm_layout->widgets["but_circle"]->description =
-        "Create a new circular sector in three steps.";
+        "Create a new circular sector in three steps. (C)";
         
     frm_layout->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -573,7 +573,7 @@ void area_editor::load() {
         }
     };
     frm_layout->widgets["but_rem"]->description =
-        "Removes the selected sectors, if they're isolated. (Ctrl+Minus)";
+        "Removes the selected sectors, if they're isolated. (Delete)";
         
     frm_layout->widgets["but_sel_filter"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1188,11 +1188,16 @@ void area_editor::load() {
         }
     };
     frm_mobs->widgets["but_new"]->description =
-        "Create a new object wherever you click.";
+        "Create a new object wherever you click. (N)";
         
     frm_mobs->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(selected_mobs.empty()) return;
+        if(selected_mobs.empty()) {
+            emit_status_bar_message(
+                "You have to select mobs before you can delete them!", false
+            );
+            return;
+        }
         for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
             for(size_t mg = 0; mg < cur_area_data.mob_generators.size(); ++mg) {
                 if(cur_area_data.mob_generators[mg] == *sm) {
@@ -1208,11 +1213,16 @@ void area_editor::load() {
         made_changes = true;
     };
     frm_mobs->widgets["but_del"]->description =
-        "Delete the current object. (Ctrl+Minus)";
+        "Delete the selected objects. (Delete)";
         
     frm_mobs->widgets["but_duplicate"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(selected_mobs.empty()) return;
+        if(selected_mobs.empty()) {
+            emit_status_bar_message(
+                "You have to select mobs before you can duplicate them!", false
+            );
+            return;
+        }
         if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
             sub_state = EDITOR_SUB_STATE_NONE;
         } else {
@@ -1220,7 +1230,7 @@ void area_editor::load() {
         }
     };
     frm_mobs->widgets["but_duplicate"]->description =
-        "Duplicate the current objects. (Ctrl+D)";
+        "Duplicate the current objects. (D)";
         
     frm_mob->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1350,14 +1360,14 @@ void area_editor::load() {
         }
     };
     frm_paths->widgets["but_draw"]->description =
-        "Draw path stops and their links.";
+        "Draw path stops and their links. (N)";
         
     frm_paths->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         delete_selected_path_elements();
     };
     frm_paths->widgets["but_del"]->description =
-        "Delete the selected stops and/or links.";
+        "Delete the selected stops and/or links. (Delete)";
         
     frm_paths->widgets["rad_normal"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1365,7 +1375,7 @@ void area_editor::load() {
         path_to_gui();
     };
     frm_paths->widgets["rad_normal"]->description =
-        "New links drawn will be normal (two-way) links.";
+        "New links drawn will be normal (two-way) links. (2)";
         
     frm_paths->widgets["rad_one_way"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1373,7 +1383,7 @@ void area_editor::load() {
         path_to_gui();
     };
     frm_paths->widgets["rad_one_way"]->description =
-        "New links drawn will be one-way links.";
+        "New links drawn will be one-way links. (1)";
         
     frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1526,7 +1536,7 @@ void area_editor::load() {
         }
     };
     frm_details->widgets["but_new"]->description =
-        "Create a new tree shadow wherever you click.";
+        "Create a new tree shadow wherever you click. (N)";
         
     frm_details->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1544,7 +1554,7 @@ void area_editor::load() {
         }
     };
     frm_details->widgets["but_del"]->description =
-        "Delete the current tree shadow.";
+        "Delete the current tree shadow. (Delete)";
         
     auto lambda_gui_to_details =
     [this] (lafi::widget*) {
@@ -1922,7 +1932,7 @@ void area_editor::load() {
         "Discard all changes made and load the auto-backup.";
         
     frm_tools->widgets["txt_resize"]->description =
-        "Resize multiplier. (0.5 = half, 2 = double)";
+        "Resize multiplier (0.5 = half, 2 = double).";
         
     frm_tools->widgets["but_resize"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2020,14 +2030,14 @@ void area_editor::load() {
         //TODO
     };
     frm_bottom->widgets["but_undo"]->description =
-        "Undo the last move.";
+        "Undo the last move. (Ctrl+Z)";
         
     frm_bottom->widgets["but_reference"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         show_reference = !show_reference;
     };
     frm_bottom->widgets["but_reference"]->description =
-        "Toggle the visibility of the reference.";
+        "Toggle the visibility of the reference. (Ctrl+R)";
         
     frm_bottom->widgets["but_save"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2038,7 +2048,7 @@ void area_editor::load() {
         made_changes = false;
     };
     frm_bottom->widgets["but_save"]->description =
-        "Save the area onto the files.";
+        "Save the area onto the files. (Ctrl+S)";
         
     frm_bottom->widgets["but_quit"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2049,7 +2059,7 @@ void area_editor::load() {
         }
     };
     frm_bottom->widgets["but_quit"]->description =
-        "Quit the area editor.";
+        "Quit the area editor. (Ctrl+Q)";
         
         
     //Status bar.

@@ -952,15 +952,15 @@ void area_editor::sector_to_gui() {
     if(selection_filter == SELECTION_FILTER_SECTORS) {
         but_sel_filter->icon = icons.get(ICON_SELECT_SECTORS);
         but_sel_filter->description =
-            "Current selection filter: Sectors + edges + vertexes.";
+            "Current selection filter: Sectors + edges + vertexes. (F)";
     } else if(selection_filter == SELECTION_FILTER_EDGES) {
         but_sel_filter->icon = icons.get(ICON_SELECT_EDGES);
         but_sel_filter->description =
-            "Current selection filter: Edges + vertexes.";
+            "Current selection filter: Edges + vertexes. (F)";
     } else {
         but_sel_filter->icon = icons.get(ICON_SELECT_VERTEXES);
         but_sel_filter->description =
-            "Current selection filter: Vertexes only.";
+            "Current selection filter: Vertexes only. (F)";
     }
     
     frm_sector->hide();

@@ -169,6 +169,7 @@ public:
     void call_mouse_leave_handler();
     void call_get_focus_handler();
     void call_lose_focus_handler();
+    void simulate_click();
     
     bool needs_init;
     void lose_focus();
