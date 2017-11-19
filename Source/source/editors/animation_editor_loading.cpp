@@ -1955,7 +1955,7 @@ void animation_editor::load() {
         );
         
     create_changes_warning_frame();
-    create_picker_frame(true);
+    create_picker_frame();
     
     disable_widget(frm_bottom->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);

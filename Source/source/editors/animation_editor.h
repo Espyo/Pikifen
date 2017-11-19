@@ -134,7 +134,7 @@ private:
     virtual void hide_all_frames();
     virtual void change_to_right_frame();
     virtual void create_new_from_picker(const string &name);
-    virtual void pick(const string &name, const unsigned char type);
+    virtual void pick(const string &name, const string &category);
     
 public:
 

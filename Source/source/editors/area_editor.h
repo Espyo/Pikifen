@@ -92,7 +92,6 @@ private:
         AREA_EDITOR_PICKER_AREA,
         AREA_EDITOR_PICKER_SECTOR_TYPE,
         AREA_EDITOR_PICKER_HAZARD,
-        AREA_EDITOR_PICKER_MOB_CATEGORY,
         AREA_EDITOR_PICKER_MOB_TYPE,
         AREA_EDITOR_PICKER_WEATHER,
     };
@@ -450,7 +449,7 @@ private:
     );
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
-    void pick(const string &name, const unsigned char type);
+    void pick(const string &name, const string &category);
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
     void save_area(const bool to_backup);

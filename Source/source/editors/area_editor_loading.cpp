@@ -1089,13 +1089,8 @@ void area_editor::load() {
     
     frm_mob->easy_row();
     frm_mob->easy_add(
-        "lbl_category",
-        new lafi::label("Category:"), 100, 16
-    );
-    frm_mob->easy_row();
-    frm_mob->easy_add(
-        "but_category",
-        new lafi::button(), 100, 24
+        "lbl_cat",
+        new lafi::label(""), 100, 16
     );
     frm_mob->easy_row();
     frm_mob->easy_add(
@@ -1226,13 +1221,6 @@ void area_editor::load() {
     };
     frm_mobs->widgets["but_duplicate"]->description =
         "Duplicate the current objects. (Ctrl+D)";
-        
-    frm_mob->widgets["but_category"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_MOB_CATEGORY);
-    };
-    frm_mob->widgets["but_category"]->description =
-        "Choose the category of types of object.";
         
     frm_mob->widgets["but_type"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -2071,7 +2059,7 @@ void area_editor::load() {
     
     
     create_changes_warning_frame();
-    create_picker_frame(true);
+    create_picker_frame();
     
     fade_mgr.start_fade(true, nullptr);
     
@@ -2098,6 +2086,7 @@ void area_editor::load() {
         
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
+    open_picker(AREA_EDITOR_PICKER_AREA);
     
     load_custom_particle_generators(false);
     load_spike_damage_types();

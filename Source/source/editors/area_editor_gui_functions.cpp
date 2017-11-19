@@ -451,7 +451,7 @@ void area_editor::gui_to_tools() {
  * Hides all menu frames.
  */
 void area_editor::hide_all_frames() {
-    gui->widgets["frm_picker"]->hide();
+    frm_picker->hide();
     
     frm_main->hide();
     frm_layout->hide();
@@ -507,18 +507,12 @@ void area_editor::mob_to_gui() {
         )->set_angle_rads(m_ptr->angle);
         ((lafi::textbox*) frm_mob->widgets["txt_vars"])->text = m_ptr->vars;
         
-        ((lafi::button*) frm_mob->widgets["but_category"])->text =
-            m_ptr->category->plural_name;
+        ((lafi::label*) frm_mob->widgets["lbl_cat"])->text =
+            "Category: " +
+            (m_ptr->category ? m_ptr->category->plural_name : "");
+        ((lafi::button*) frm_mob->widgets["but_type"])->text =
+            m_ptr->type ? m_ptr->type->name : "";
             
-        lafi::button* but_type =
-            (lafi::button*) frm_mob->widgets["but_type"];
-        if(m_ptr->category->id == MOB_CATEGORY_NONE) {
-            disable_widget(but_type);
-        } else {
-            enable_widget(but_type);
-        }
-        but_type->text = m_ptr->type ? m_ptr->type->name : "";
-        
     } else if(selected_mobs.size() > 1 && !selection_homogenized) {
         frm_mob_multi->show();
         
@@ -532,39 +526,51 @@ void area_editor::mob_to_gui() {
  * For the type of content, use area_editor_old::AREA_EDITOR_PICKER_*.
  */
 void area_editor::open_picker(const unsigned char type) {
-    vector<string> elements;
+    vector<pair<string, string> > elements;
     bool can_create_new = false;
+    string title;
+    picker_type = type;
     
     if(type == AREA_EDITOR_PICKER_AREA) {
-        elements = folder_to_vector(AREAS_FOLDER_PATH, true);
+        vector<string> folders = folder_to_vector(AREAS_FOLDER_PATH, true);
+        for(size_t f = 0; f < folders.size(); ++f) {
+            elements.push_back(make_pair("", folders[f]));
+        }
+        title = "Create/load an area.";
         can_create_new = true;
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
         for(size_t t = 0; t < sector_types.get_nr_of_types(); ++t) {
-            elements.push_back(sector_types.get_name(t));
+            elements.push_back(make_pair("", sector_types.get_name(t)));
         }
+        title = "Choose a sector type.";
         
     } else if(type == AREA_EDITOR_PICKER_HAZARD) {
     
         for(auto h = hazards.begin(); h != hazards.end(); ++h) {
-            elements.push_back(h->first);
+            elements.push_back(make_pair("", h->first));
         }
-        
-    } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
-    
-        for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
-            //0 is none.
-            if(f == MOB_CATEGORY_NONE) continue;
-            elements.push_back(mob_categories.get(f)->plural_name);
-        }
+        title = "Choose a hazard.";
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
         mob_gen* m_ptr = *selected_mobs.begin();
-        if(m_ptr->category->id != MOB_CATEGORY_NONE) {
-            m_ptr->category->get_type_names(elements);
+        
+        for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
+            //0 is none.
+            if(f == MOB_CATEGORY_NONE) continue;
+            
+            vector<string> names;
+            mob_categories.get(f)->get_type_names(names);
+            string cat_name = mob_categories.get(f)->plural_name;
+            
+            for(size_t n = 0; n < names.size(); ++n) {
+                elements.push_back(make_pair(cat_name, names[n]));
+            }
         }
+        
+        title = "Choose a mob type.";
         
     } else if(type == AREA_EDITOR_PICKER_WEATHER) {
     
@@ -572,12 +578,13 @@ void area_editor::open_picker(const unsigned char type) {
             auto w = weather_conditions.begin();
             w != weather_conditions.end(); ++w
         ) {
-            elements.push_back(w->first);
+            elements.push_back(make_pair("", w->first));
         }
+        title = "Choose a weather type.";
         
     }
     
-    generate_and_open_picker(elements, type, can_create_new);
+    generate_and_open_picker(elements, title, can_create_new);
 }
 
 
@@ -650,13 +657,13 @@ void area_editor::populate_texture_suggestions() {
 /* ----------------------------------------------------------------------------
  * Picks an item and closes the list picker frame.
  */
-void area_editor::pick(const string &name, const unsigned char type) {
-    if(type == AREA_EDITOR_PICKER_AREA) {
+void area_editor::pick(const string &name, const string &category) {
+    if(picker_type == AREA_EDITOR_PICKER_AREA) {
         cur_area_name = name;
         area_editor::load_area(false);
         update_main_frame();
         
-    } else if(type == AREA_EDITOR_PICKER_HAZARD) {
+    } else if(picker_type == AREA_EDITOR_PICKER_HAZARD) {
         sector* s_ptr = *selected_sectors.begin();
         vector<string> list = split(s_ptr->hazards_str, ";");
         if(!s_ptr->hazards_str.empty()) {
@@ -667,26 +674,20 @@ void area_editor::pick(const string &name, const unsigned char type) {
         asb_to_gui();
         cur_hazard_nr = list.size();
         
-    } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
+    } else if(picker_type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
         sector* s_ptr = *selected_sectors.begin();
         s_ptr->type = sector_types.get_nr(name);
         homogenize_selected_sectors();
         asb_to_gui();
         
-    } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
+    } else if(picker_type == AREA_EDITOR_PICKER_MOB_TYPE) {
         mob_gen* m_ptr = *selected_mobs.begin();
-        m_ptr->category = mob_categories.get_from_pname(name);
-        m_ptr->type = NULL;
-        homogenize_selected_mobs();
-        mob_to_gui();
-        
-    } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
-        mob_gen* m_ptr = *selected_mobs.begin();
+        m_ptr->category = mob_categories.get_from_pname(category);
         m_ptr->type = m_ptr->category->get_type(name);
         homogenize_selected_mobs();
         mob_to_gui();
         
-    } else if(type == AREA_EDITOR_PICKER_WEATHER) {
+    } else if(picker_type == AREA_EDITOR_PICKER_WEATHER) {
         cur_area_data.weather_name = name;
         info_to_gui();
         
