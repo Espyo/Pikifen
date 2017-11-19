@@ -466,6 +466,7 @@ private:
     void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();
+    void undo_layout_drawing_node();
     bool update_backup_status();
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_texture_suggestions(const string &n);

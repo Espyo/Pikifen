@@ -3090,6 +3090,16 @@ void area_editor::start_vertex_move() {
 
 
 /* ----------------------------------------------------------------------------
+ * Undoes the last placed layout drawing node.
+ */
+void area_editor::undo_layout_drawing_node() {
+    drawing_nodes.erase(
+        drawing_nodes.begin() + drawing_nodes.size() - 1
+    );
+}
+
+
+/* ----------------------------------------------------------------------------
  * Unloads the editor from memory.
  */
 void area_editor::unload() {

@@ -321,6 +321,15 @@ void widget::draw() {
 
 
 /* ----------------------------------------------------------------------------
+ * Simulates a left mouse-button click, if the widget is enabled.
+ */
+void widget::simulate_click() {
+    if(is_disabled()) return;
+    call_left_mouse_click_handler(0, 0);
+}
+
+
+/* ----------------------------------------------------------------------------
  * Ticks one frame worth of time. This updates all child widgets, so don't
  * call the child tick() functions too.
  */
