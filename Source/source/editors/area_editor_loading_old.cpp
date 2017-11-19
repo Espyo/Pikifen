@@ -1616,7 +1616,7 @@ void area_editor_old::load() {
         "Quit the area editor.";
         
     create_changes_warning_frame();
-    create_picker_frame(true);
+    create_picker_frame();
     
     disable_widget(frm_options->widgets["but_load"]);
     disable_widget(frm_bottom->widgets["but_save"]);

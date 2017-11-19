@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include "../LAFI/frame.h"
 #include "../LAFI/gui.h"
 #include "../game_state.h"
 #include "../misc_structs.h"
@@ -28,7 +29,7 @@ using namespace std;
  */
 class editor : public game_state {
 private:
-    bool picker_allows_new;
+    vector<pair<string, string> > picker_elements;
     
 protected:
 
@@ -54,6 +55,7 @@ protected:
         transformation_controller();
     };
     
+    lafi::frame*  frm_picker;
     lafi::gui*    gui;
     int           gui_x;
     bool          holding_m1;
@@ -62,20 +64,22 @@ protected:
     bmp_manager   icons;
     bool          made_changes;
     unsigned char mode;
+    size_t        picker_type;
     //Secondary/sub mode.
     unsigned char sec_mode;
     int           status_bar_y;
     
     void close_changes_warning();
     void create_changes_warning_frame();
-    void create_picker_frame(const bool can_create_new);
+    void create_picker_frame();
     void generate_and_open_picker(
-        const vector<string> &elements, const unsigned char type,
-        const bool can_make_new = false
+        const vector<pair<string, string> > &elements, const string &title,
+        const bool can_make_new
     );
     void hide_bottom_frame();
     bool is_mouse_in_gui(const point &mouse_coords);
     void leave();
+    void populate_picker(const string &filter);
     void show_bottom_frame();
     void show_changes_warning();
     void update_gui_coordinates();
@@ -83,7 +87,7 @@ protected:
     virtual void hide_all_frames() = 0;
     virtual void change_to_right_frame() = 0;
     virtual void create_new_from_picker(const string &name) = 0;
-    virtual void pick(const string &name, const unsigned char type) = 0;
+    virtual void pick(const string &name, const string &category) = 0;
     
 public:
 

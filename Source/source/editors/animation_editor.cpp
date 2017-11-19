@@ -988,26 +988,32 @@ void animation_editor::open_hitbox_type(unsigned char type) {
 void animation_editor::open_picker(
     const unsigned char type, const bool can_make_new
 ) {
-    vector<string> elements;
+    vector<pair<string, string> > elements;
+    string title;
+    
+    picker_type = type;
+    
     if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         for(size_t a = 0; a < anims.animations.size(); ++a) {
-            elements.push_back(anims.animations[a]->name);
+            elements.push_back(make_pair("", anims.animations[a]->name));
         }
+        title = "Choose an animation.";
     } else if(type == ANIMATION_EDITOR_PICKER_SPRITE) {
         for(size_t s = 0; s < anims.sprites.size(); ++s) {
-            elements.push_back(anims.sprites[s]->name);
+            elements.push_back(make_pair("", anims.sprites[s]->name));
         }
+        title = "Choose a sprite.";
     }
     
-    generate_and_open_picker(elements, type, can_make_new);
+    generate_and_open_picker(elements, "", can_make_new);
 }
 
 
 /* ----------------------------------------------------------------------------
  * Picks an item and closes the list picker frame.
  */
-void animation_editor::pick(const string &name, const unsigned char type) {
-    if(type == ANIMATION_EDITOR_PICKER_ANIMATION) {
+void animation_editor::pick(const string &name, const string &category) {
+    if(picker_type == ANIMATION_EDITOR_PICKER_ANIMATION) {
         if(mode == EDITOR_MODE_TOOLS) {
             (
                 (lafi::button*)
@@ -1021,7 +1027,7 @@ void animation_editor::pick(const string &name, const unsigned char type) {
             animation_to_gui();
         }
         
-    } else if(type == ANIMATION_EDITOR_PICKER_SPRITE) {
+    } else if(picker_type == ANIMATION_EDITOR_PICKER_SPRITE) {
         if(mode == EDITOR_MODE_ANIMATION) {
             cur_anim->frames[cur_frame_nr].sprite_name =
                 name;
@@ -1464,13 +1470,13 @@ void animation_editor::create_new_from_picker(const string &name) {
     if(mode == EDITOR_MODE_ANIMATION) {
         if(anims.find_animation(name) != INVALID) return;
         anims.animations.push_back(new animation(name));
-        pick(name, ANIMATION_EDITOR_PICKER_ANIMATION);
+        pick(name, "");
         
     } else if(mode == EDITOR_MODE_SPRITE) {
         if(anims.find_sprite(name) != INVALID) return;
         anims.sprites.push_back(new sprite(name));
         anims.sprites.back()->create_hitboxes(&anims);
-        pick(name, ANIMATION_EDITOR_PICKER_SPRITE);
+        pick(name, "");
         
     }
 }

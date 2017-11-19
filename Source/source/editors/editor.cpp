@@ -23,7 +23,6 @@
  * Initializes editor class stuff.
  */
 editor::editor() :
-    picker_allows_new(false),
     gui(nullptr),
     gui_x(0),
     holding_m1(false),
@@ -83,11 +82,9 @@ void editor::create_changes_warning_frame() {
  * Creates a "picker" frame in the gui, used for picking objects
  * from a list.
  */
-void editor::create_picker_frame(const bool can_create_new) {
+void editor::create_picker_frame() {
 
-    picker_allows_new = can_create_new;
-    
-    lafi::frame* frm_picker =
+    frm_picker =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
     frm_picker->hide();
     gui->add("frm_picker", frm_picker);
@@ -96,73 +93,73 @@ void editor::create_picker_frame(const bool can_create_new) {
         "but_back",
         new lafi::button(gui_x + 8, 8, gui_x + 96, 24, "Back")
     );
-    if(can_create_new) {
-        frm_picker->add(
-            "txt_new",
-            new lafi::textbox(gui_x + 8, 40, scr_w - 48, 56)
-        );
-        frm_picker->add(
-            "but_new",
-            new lafi::button(scr_w - 40,  32, scr_w - 8,  64, "+")
-        );
-    }
+    frm_picker->add(
+        "lbl_title",
+        new lafi::label(gui_x + 8, 32, scr_w - 8, 44)
+    );
+    frm_picker->add(
+        "txt_text",
+        new lafi::textbox(gui_x + 8, 52, scr_w - 48, 68)
+    );
+    frm_picker->add(
+        "but_new",
+        new lafi::button(scr_w - 40, 44, scr_w - 8, 76, "+")
+    );
+    
     frm_picker->add(
         "frm_list",
-        new lafi::frame(gui_x + 8, 72, scr_w - 32, scr_h - 56)
+        new lafi::frame(gui_x + 8, 84, scr_w - 32, scr_h - 56)
     );
     frm_picker->add(
         "bar_scroll",
-        new lafi::scrollbar(scr_w - 24,  72, scr_w - 8,  scr_h - 56)
+        new lafi::scrollbar(scr_w - 24, 84, scr_w - 8, scr_h - 56)
     );
     
     
     frm_picker->widgets["but_back"]->left_mouse_click_handler =
-    [this, can_create_new] (lafi::widget*, int, int) {
-        if(can_create_new) {
-            (
-                (lafi::textbox*)
-                this->gui->widgets["frm_picker"]->widgets["txt_new"]
-            )->text.clear();
-        }
-        
-        this->gui->widgets["frm_picker"]->hide();
+    [this] (lafi::widget*, int, int) {
+        this->frm_picker->hide();
         show_bottom_frame();
         change_to_right_frame();
     };
     frm_picker->widgets["but_back"]->description =
         "Cancel.";
         
-    if(can_create_new) {
-        ((lafi::textbox*) frm_picker->widgets["txt_new"])->enter_key_widget =
-            frm_picker->widgets["but_new"];
-            
-        frm_picker->widgets["but_new"]->left_mouse_click_handler =
-        [this] (lafi::widget*, int, int) {
-            string name =
-                (
-                    (lafi::textbox*)
-                    this->gui->widgets["frm_picker"]->widgets["txt_new"]
-                )->text;
-            if(name.empty()) return;
-            
-            this->create_new_from_picker(name);
-            
-            made_changes = true;
-            
+    ((lafi::textbox*) frm_picker->widgets["txt_text"])->enter_key_widget =
+        frm_picker->widgets["but_new"];
+    ((lafi::textbox*) frm_picker->widgets["txt_text"])->change_handler =
+    [this] (lafi::widget * t) {
+        populate_picker(((lafi::textbox*) t)->text);
+    };
+    frm_picker->widgets["txt_text"]->description =
+        "Name of the element to create (if possible), or search filter.";
+        
+    frm_picker->widgets["but_new"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        string name =
             (
                 (lafi::textbox*)
-                this->gui->widgets["frm_picker"]->widgets["txt_new"]
-            )->text.clear();
-        };
-        frm_picker->widgets["but_new"]->description =
-            "Create a new one with the name on the textbox.";
-    }
-    
+                this->frm_picker->widgets["txt_text"]
+            )->text;
+        if(name.empty()) return;
+        
+        this->create_new_from_picker(name);
+        
+        made_changes = true;
+        
+        (
+            (lafi::textbox*)
+            this->frm_picker->widgets["txt_text"]
+        )->text.clear();
+    };
+    frm_picker->widgets["but_new"]->description =
+        "Create a new one with the name on the textbox.";
+        
     frm_picker->widgets["frm_list"]->mouse_wheel_handler =
     [this] (lafi::widget*, int dy, int) {
         lafi::scrollbar* s =
             (lafi::scrollbar*)
-            this->gui->widgets["frm_picker"]->widgets["bar_scroll"];
+            this->frm_picker->widgets["bar_scroll"];
         if(s->widgets.find("but_bar") != s->widgets.end()) {
             s->move_button(
                 0,
@@ -179,47 +176,26 @@ void editor::create_picker_frame(const bool can_create_new) {
  * Populates and opens the frame where you pick from a list.
  */
 void editor::generate_and_open_picker(
-    const vector<string> &elements, const unsigned char type,
-    const bool can_make_new
+    const vector<pair<string, string> > &elements,
+    const string &title, const bool can_make_new
 ) {
 
     hide_all_frames();
-    gui->widgets["frm_picker"]->show();
+    frm_picker->show();
     hide_bottom_frame();
     
-    if(picker_allows_new) {
-        if(can_make_new) {
-            enable_widget(gui->widgets["frm_picker"]->widgets["txt_new"]);
-            enable_widget(gui->widgets["frm_picker"]->widgets["but_new"]);
-        } else {
-            disable_widget(gui->widgets["frm_picker"]->widgets["txt_new"]);
-            disable_widget(gui->widgets["frm_picker"]->widgets["but_new"]);
-        }
+    ((lafi::label*) frm_picker->widgets["lbl_title"])->text = title;
+    
+    ((lafi::textbox*) frm_picker->widgets["txt_text"])->text.clear();
+    
+    if(can_make_new) {
+        enable_widget(frm_picker->widgets["but_new"]);
+    } else {
+        disable_widget(frm_picker->widgets["but_new"]);
     }
     
-    lafi::widget* f = gui->widgets["frm_picker"]->widgets["frm_list"];
-    
-    while(!f->widgets.empty()) {
-        f->remove(f->widgets.begin()->first);
-    }
-    
-    f->easy_reset();
-    f->easy_row();
-    for(size_t e = 0; e < elements.size(); ++e) {
-        lafi::button* b = new lafi::button(0, 0, 0, 0, elements[e]);
-        string name = elements[e];
-        b->left_mouse_click_handler =
-        [name, type, this] (lafi::widget*, int, int) {
-            this->gui->widgets["frm_picker"]->hide();
-            pick(name, type);
-        };
-        f->easy_add("but_" + i2s(e), b, 100, 24);
-        f->easy_row(0);
-    }
-    
-    (
-        (lafi::scrollbar*) gui->widgets["frm_picker"]->widgets["bar_scroll"]
-    )->make_widget_scroll(f);
+    picker_elements = elements;
+    populate_picker("");
 }
 
 
@@ -247,6 +223,62 @@ void editor::leave() {
     fade_mgr.start_fade(false, [] () {
         change_game_state(GAME_STATE_MAIN_MENU);
     });
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Populates the picker frame with the elements of the list that match
+ * the specified filter.
+ */
+void editor::populate_picker(const string &filter) {
+    lafi::widget* f = frm_picker->widgets["frm_list"];
+    string prev_category = "";
+    string filter_lc = str_to_lower(filter);
+    
+    //Remove everything in the list so it can be re-populated.
+    while(!f->widgets.empty()) {
+        f->remove(f->widgets.begin()->first);
+    }
+    
+    f->easy_reset();
+    f->easy_row();
+    
+    for(size_t e = 0; e < picker_elements.size(); ++e) {
+        string name = picker_elements[e].second;
+        string lc_name = str_to_lower(name);
+        string category = picker_elements[e].first;
+        
+        if(!filter.empty() && lc_name.find(filter_lc) == string::npos) {
+            //Doesn't match the filter. Skip.
+            continue;
+        }
+        
+        if(category != prev_category) {
+            //New category. Create its label.
+            prev_category = category;
+            lafi::label* c =
+                new lafi::label("- " + category + " -", ALLEGRO_ALIGN_CENTER);
+            f->easy_add("lbl_" + i2s(e), c, 100, 16);
+            f->easy_row(0);
+        }
+        
+        //Create the element's button.
+        lafi::button* b = new lafi::button(name);
+        
+        b->left_mouse_click_handler =
+        [name, category, this] (lafi::widget*, int, int) {
+            this->frm_picker->hide();
+            pick(name, category);
+        };
+        
+        f->easy_add("but_" + i2s(e), b, 100, 24);
+        f->easy_row(0);
+    }
+    
+    //Make the scrollbar match the new list.
+    (
+        (lafi::scrollbar*) frm_picker->widgets["bar_scroll"]
+    )->make_widget_scroll(f);
 }
 
 

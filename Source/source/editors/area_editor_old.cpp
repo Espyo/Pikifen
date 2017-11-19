@@ -1939,39 +1939,54 @@ void area_editor_old::merge_vertex(
  * For the type of content, use area_editor_old::AREA_EDITOR_PICKER_*.
  */
 void area_editor_old::open_picker(const unsigned char type) {
-    vector<string> elements;
+    vector<pair<string, string> > elements;
+    string title;
+    bool can_create_new = false;
+    
     if(type == AREA_EDITOR_PICKER_AREA) {
-        elements = folder_to_vector(AREAS_FOLDER_PATH, true);
-        for(size_t e = 0; e < elements.size(); ++e) {
-            size_t pos = elements[e].find(".txt");
+        vector<string> folders = folder_to_vector(AREAS_FOLDER_PATH, true);
+        for(size_t e = 0; e < folders.size(); ++e) {
+            size_t pos = folders[e].find(".txt");
             if(pos != string::npos) {
-                elements[e].erase(pos, 4);
+                folders[e].erase(pos, 4);
             }
+            elements.push_back(make_pair("", folders[e]));
         }
+        title = "Create/load an area.";
+        can_create_new = true;
         
     } else if(type == AREA_EDITOR_PICKER_SECTOR_TYPE) {
     
         for(size_t t = 0; t < sector_types.get_nr_of_types(); ++t) {
-            elements.push_back(sector_types.get_name(t));
+            elements.push_back(make_pair("", sector_types.get_name(t)));
         }
+        title = "Choose a sector type.";
         
     } else if(type == AREA_EDITOR_PICKER_MOB_CATEGORY) {
     
         for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
             //0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
-            elements.push_back(mob_categories.get(f)->plural_name);
+            elements.push_back(
+                make_pair("", mob_categories.get(f)->plural_name)
+            );
         }
+        title = "Choose a mob category.";
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
         if(cur_mob->category->id != MOB_CATEGORY_NONE) {
-            cur_mob->category->get_type_names(elements);
+            vector<string> names;
+            cur_mob->category->get_type_names(names);
+            for(size_t n = 0; n < names.size(); ++n) {
+                elements.push_back(make_pair("", names[n]));
+            }
         }
+        title = "Choose a mob type.";
         
     }
     
-    generate_and_open_picker(elements, type, type == AREA_EDITOR_PICKER_AREA);
+    generate_and_open_picker(elements, title, can_create_new);
 }
 
 
