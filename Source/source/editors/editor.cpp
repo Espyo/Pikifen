@@ -311,6 +311,7 @@ void editor::update_gui_coordinates() {
 
 
 const float editor::transformation_controller::HANDLE_RADIUS = 6.0;
+const float editor::transformation_controller::ROTATION_HANDLE_THICKNESS = 8.0;
 
 
 /* ----------------------------------------------------------------------------
@@ -320,7 +321,7 @@ editor::transformation_controller::transformation_controller() :
     moving_handle(-1),
     angle(0),
     keep_aspect_ratio(true),
-    allow_angle_transformations(false) {
+    allow_rotation(false) {
     
 }
 
@@ -329,16 +330,40 @@ editor::transformation_controller::transformation_controller() :
  * Draws the transformation (move, scale, rotate) handles.
  */
 void editor::transformation_controller::draw_handles() {
-    al_draw_rectangle(
-        center.x - size.x / 2.0, center.y - size.y / 2.0,
-        center.x + size.x / 2.0, center.y + size.y / 2.0,
-        al_map_rgb(32, 32, 160), 2.0 / cam_zoom
-    );
+    //Rotation handle.
+    if(allow_rotation) {
+        al_draw_circle(
+            center.x, center.y, radius,
+            al_map_rgb(64, 64, 192), ROTATION_HANDLE_THICKNESS / cam_zoom
+        );
+    }
     
+    //Outline.
+    point corners[4];
+    corners[0] = point(-1, -1);
+    corners[1] = point(1, -1);
+    corners[2] = point(1, 1);
+    corners[3] = point(-1, 1);
+    for(unsigned char c = 0; c < 4; ++c) {
+        al_transform_coordinates(
+            &align_transform, &corners[c].x, &corners[c].y
+        );
+    }
+    for(unsigned char c = 0; c < 4; ++c) {
+        size_t c2 = sum_and_wrap(c, 1, 4);
+        al_draw_line(
+            corners[c].x, corners[c].y,
+            corners[c2].x, corners[c2].y,
+            al_map_rgb(32, 32, 160), 2.0 / cam_zoom
+        );
+    }
+    
+    //Translation and scale handles.
     for(unsigned char h = 0; h < 9; ++h) {
-        point p = get_handle_pos(h);
+        point handle_pos = get_handle_pos(h);
         al_draw_filled_circle(
-            p.x, p.y, HANDLE_RADIUS / cam_zoom, al_map_rgb(96, 96, 224)
+            handle_pos.x, handle_pos.y,
+            HANDLE_RADIUS / cam_zoom, al_map_rgb(96, 96, 224)
         );
     }
 }
@@ -346,16 +371,28 @@ void editor::transformation_controller::draw_handles() {
 
 /* ----------------------------------------------------------------------------
  * Handles a mouse press, allowing a handle to be grabbed.
+ * Returns true if handled, false if nothing was done.
  */
-void editor::transformation_controller::handle_mouse_down(const point pos) {
+bool editor::transformation_controller::handle_mouse_down(const point pos) {
     for(unsigned char h = 0; h < 9; ++h) {
         point handle_pos = get_handle_pos(h);
         if(dist(handle_pos, pos) <= HANDLE_RADIUS / cam_zoom) {
             moving_handle = h;
             pre_move_size = size;
-            break;
+            return true;
         }
     }
+    dist d(center, pos);
+    if(
+        d >= radius - ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0 &&
+        d <= radius + ROTATION_HANDLE_THICKNESS / cam_zoom / 2.0
+    ) {
+        moving_handle = 9;
+        pre_rotation_angle = angle;
+        pre_rotation_mouse_angle = ::get_angle(center, pos);
+        return true;
+    }
+    return false;
 }
 
 
@@ -369,18 +406,99 @@ void editor::transformation_controller::handle_mouse_up() {
 
 /* ----------------------------------------------------------------------------
  * Handles a mouse move, allowing a handle to be moved.
+ * Returns true if handled, false if nothing was done.
  */
-#include <iostream> //TODO
-void editor::transformation_controller::handle_mouse_move(const point pos) {
+bool editor::transformation_controller::handle_mouse_move(const point pos) {
     if(moving_handle == -1) {
-        return;
+        return false;
     }
     
     if(moving_handle == 4) {
-        center = pos;
-        return;
+        set_center(pos);
+        return true;
     }
     
+    if(moving_handle == 9) {
+        set_angle(
+            pre_rotation_angle +
+            (::get_angle(center, pos) - pre_rotation_mouse_angle)
+        );
+        return true;
+    }
+    
+    point aligned_handle_pos = get_handle_pos(moving_handle);
+    al_transform_coordinates(
+        &align_transform,
+        &aligned_handle_pos.x, &aligned_handle_pos.y
+    );
+    point aligned_cursor_pos = pos;
+    al_transform_coordinates(
+        &align_transform,
+        &aligned_cursor_pos.x, &aligned_cursor_pos.y
+    );
+    point new_size = pre_move_size;
+    point aligned_new_center = center;
+    al_transform_coordinates(
+        &align_transform,
+        &aligned_new_center.x, &aligned_new_center.y
+    );
+    
+    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+        new_size.x = size.x / 2.0 - aligned_cursor_pos.x;
+    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        new_size.x = aligned_cursor_pos.x - (-size.x / 2.0);
+    }
+    
+    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+        new_size.y = (size.y / 2.0) - aligned_cursor_pos.y;
+    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        new_size.y = aligned_cursor_pos.y - (-size.y / 2.0);
+    }
+    
+    if(keep_aspect_ratio) {
+        if(
+            fabs(pre_move_size.x - new_size.x) >
+            fabs(pre_move_size.y - new_size.y)
+        ) {
+            //Most significant change is width.
+            if(pre_move_size.x != 0) {
+                float ratio = pre_move_size.y / pre_move_size.x;
+                new_size.y = new_size.x * ratio;
+            }
+            
+        } else {
+            //Most significant change is height.
+            if(pre_move_size.y != 0) {
+                float ratio = pre_move_size.x / pre_move_size.y;
+                new_size.x = new_size.y * ratio;
+            }
+            
+        }
+    }
+    
+    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
+        aligned_new_center.x = (size.x / 2.0) - new_size.x / 2.0;
+    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
+        aligned_new_center.x = (-size.x / 2.0) + new_size.x / 2.0;
+    }
+    
+    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
+        aligned_new_center.y = (size.y / 2.0) - new_size.y / 2.0;
+    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
+        aligned_new_center.y = (-size.y / 2.0) + new_size.y / 2.0;
+    }
+    
+    point new_center = aligned_new_center;
+    al_transform_coordinates(
+        &disalign_transform,
+        &new_center.x, &new_center.y
+    );
+    
+    set_center(new_center);
+    set_size(new_size);
+    
+    //TODO old code.
+    /*
     point new_size = pre_move_size;
     point new_center = center;
     
@@ -406,14 +524,14 @@ void editor::transformation_controller::handle_mouse_move(const point pos) {
                 float ratio = pre_move_size.y / pre_move_size.x;
                 new_size.y = new_size.x * ratio;
             }
-            
+    
         } else {
             //Most significant change is height.
             if(pre_move_size.y != 0) {
                 float ratio = pre_move_size.x / pre_move_size.y;
                 new_size.x = new_size.y * ratio;
             }
-            
+    
         }
     }
     
@@ -429,8 +547,62 @@ void editor::transformation_controller::handle_mouse_move(const point pos) {
         new_center.y = (center.y - size.y / 2.0) + new_size.y / 2.0;
     }
     
-    center = new_center;
-    size = new_size;
+    set_center(new_center);
+    set_size(new_size);
+    */
+    
+    return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the center.
+ */
+point editor::transformation_controller::get_center() {
+    return center;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the size.
+ */
+point editor::transformation_controller::get_size() {
+    return size;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Returns the angle.
+ */
+float editor::transformation_controller::get_angle() {
+    return angle;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the center.
+ */
+void editor::transformation_controller::set_center(const point &center) {
+    this->center = center;
+    update();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the size.
+ */
+void editor::transformation_controller::set_size(const point &size) {
+    this->size = size;
+    update();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Sets the angle.
+ */
+void editor::transformation_controller::set_angle(const float angle) {
+    this->angle = angle;
+    update();
 }
 
 
@@ -440,16 +612,33 @@ void editor::transformation_controller::handle_mouse_move(const point pos) {
 point editor::transformation_controller::get_handle_pos(
     const unsigned char handle
 ) {
-    point result = center;
+    point result;
     if(handle == 0 || handle == 3 || handle == 6) {
-        result.x -= size.x / 2.0;
+        result.x = -size.x / 2.0;
     } else if(handle == 2 || handle == 5 || handle == 8) {
-        result.x += size.x / 2.0;
+        result.x = size.x / 2.0;
     }
     if(handle == 0 || handle == 1 || handle == 2) {
-        result.y -= size.y / 2.0;
+        result.y = -size.y / 2.0;
     } else if(handle == 6 || handle == 7 || handle == 8) {
-        result.y += size.y / 2.0;
+        result.y = size.y / 2.0;
     }
+    al_transform_coordinates(&disalign_transform, &result.x, &result.y);
     return result;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the transformations to match the new data, as well as
+ * some caches.
+ */
+void editor::transformation_controller::update() {
+    al_identity_transform(&align_transform);
+    al_translate_transform(&align_transform, -center.x, -center.y);
+    al_rotate_transform(&align_transform, -angle);
+    
+    al_copy_transform(&disalign_transform, &align_transform);
+    al_invert_transform(&disalign_transform);
+    
+    radius = dist(center, center + (size / 2)).to_float();
 }

@@ -338,6 +338,8 @@ private:
     set<sector*> selected_sectors;
     //Currently selected tree shadow.
     tree_shadow* selected_shadow;
+    //Transformation controller of the selected tree shadow.
+    transformation_controller selected_shadow_transformation;
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
     //Current selection filter.
@@ -457,6 +459,7 @@ private:
     void select_different_hazard(const bool next);
     void select_edge(edge* e);
     void select_sector(sector* s);
+    void select_tree_shadow(tree_shadow* v);
     void select_vertex(vertex* v);
     void set_new_circle_sector_points();
     point snap_to_grid(const point &p);

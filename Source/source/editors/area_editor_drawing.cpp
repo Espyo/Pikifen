@@ -604,14 +604,30 @@ void area_editor::do_drawing() {
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
         
             tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
-            if(sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW) {
+            if(
+                sub_state != EDITOR_SUB_STATE_TEXTURE_VIEW &&
+                s_ptr == selected_shadow
+            ) {
+                //Draw a white rectangle to contrast the shadow better.
+                ALLEGRO_TRANSFORM tra, current;
+                al_identity_transform(&tra);
+                al_rotate_transform(&tra, s_ptr->angle);
+                al_translate_transform(
+                    &tra, s_ptr->center.x, s_ptr->center.y
+                );
+                al_copy_transform(&current, al_get_current_transform());
+                al_compose_transform(&tra, &current);
+                al_use_transform(&tra);
+                
                 al_draw_filled_rectangle(
-                    s_ptr->center.x - s_ptr->size.x * 0.5,
-                    s_ptr->center.y - s_ptr->size.y * 0.5,
-                    s_ptr->center.x + s_ptr->size.x * 0.5,
-                    s_ptr->center.y + s_ptr->size.y * 0.5,
+                    -s_ptr->size.x / 2.0,
+                    -s_ptr->size.y / 2.0,
+                    s_ptr->size.x / 2.0,
+                    s_ptr->size.y / 2.0,
                     al_map_rgba(255, 255, 255, 96 * (s_ptr->alpha / 255.0))
                 );
+                
+                al_use_transform(&current);
             }
             
             draw_sprite(
@@ -625,16 +641,21 @@ void area_editor::do_drawing() {
                     s_ptr, &min_coords, &max_coords
                 );
                 
-                al_draw_rectangle(
-                    min_coords.x, min_coords.y, max_coords.x, max_coords.y,
-                    (
-                        s_ptr == selected_shadow ?
-                        al_map_rgb(224, 224, 64) :
-                        al_map_rgb(128, 128, 64)
-                    ),
-                    2.0 / cam_zoom
-                );
+                if(selected_shadow != s_ptr) {
+                    al_draw_rectangle(
+                        min_coords.x, min_coords.y, max_coords.x, max_coords.y,
+                        (
+                            s_ptr == selected_shadow ?
+                            al_map_rgb(224, 224, 64) :
+                            al_map_rgb(128, 128, 64)
+                        ),
+                        2.0 / cam_zoom
+                    );
+                }
             }
+        }
+        if(selected_shadow) {
+            selected_shadow_transformation.draw_handles();
         }
     }
     
@@ -685,12 +706,12 @@ void area_editor::do_drawing() {
             0, 0,
             al_get_bitmap_width(reference_bitmap),
             al_get_bitmap_height(reference_bitmap),
-            reference_transformation.center.x -
-            reference_transformation.size.x / 2.0,
-            reference_transformation.center.y -
-            reference_transformation.size.y / 2.0,
-            reference_transformation.size.x,
-            reference_transformation.size.y,
+            reference_transformation.get_center().x -
+            reference_transformation.get_size().x / 2.0,
+            reference_transformation.get_center().y -
+            reference_transformation.get_size().y / 2.0,
+            reference_transformation.get_size().x,
+            reference_transformation.get_size().y,
             0
         );
         

@@ -1485,6 +1485,11 @@ void area_editor::load() {
     );
     frm_shadow->easy_row();
     frm_shadow->easy_add(
+        "chk_ratio",
+        new lafi::checkbox("Keep aspect ratio"), 100, 16
+    );
+    frm_shadow->easy_row();
+    frm_shadow->easy_add(
         "lbl_an",
         new lafi::label("Angle:"), 40, 16
     );
@@ -1560,6 +1565,10 @@ void area_editor::load() {
     [this] (lafi::widget*) {
         gui_to_details();
     };
+    auto lambda_gui_to_details_click =
+    [this] (lafi::widget*, int, int) {
+        gui_to_details();
+    };
     frm_shadow->widgets["txt_file"]->lose_focus_handler =
         lambda_gui_to_details;
     frm_shadow->widgets["txt_file"]->description =
@@ -1584,6 +1593,11 @@ void area_editor::load() {
         lambda_gui_to_details;
     frm_shadow->widgets["txt_h"]->description =
         "Height of the shadow's image.";
+        
+    frm_shadow->widgets["chk_ratio"]->left_mouse_click_handler =
+        lambda_gui_to_details_click;
+    frm_shadow->widgets["chk_ratio"]->description =
+        "Lock width/height proportion when changing either one.";
         
     frm_shadow->widgets["ang_an"]->lose_focus_handler =
         lambda_gui_to_details;

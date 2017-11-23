@@ -203,6 +203,9 @@ void area_editor::details_to_gui() {
             f2s(selected_shadow->size.x);
         ((lafi::textbox*) frm_shadow->widgets["txt_h"])->text =
             f2s(selected_shadow->size.y);
+        ((lafi::checkbox*) frm_shadow->widgets["chk_ratio"])->set(
+            selected_shadow_transformation.keep_aspect_ratio
+        );
         ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->set_angle_rads(
             selected_shadow->angle
         );
@@ -276,10 +279,41 @@ void area_editor::gui_to_details() {
         s2f(((lafi::textbox*) frm_shadow->widgets["txt_x"])->text);
     selected_shadow->center.y =
         s2f(((lafi::textbox*) frm_shadow->widgets["txt_y"])->text);
-    selected_shadow->size.x =
-        s2f(((lafi::textbox*) frm_shadow->widgets["txt_w"])->text);
-    selected_shadow->size.y =
-        s2f(((lafi::textbox*) frm_shadow->widgets["txt_h"])->text);
+        
+    selected_shadow_transformation.keep_aspect_ratio =
+        ((lafi::checkbox*) frm_shadow->widgets["chk_ratio"])->checked;
+    point new_size(
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_w"])->text),
+        s2f(((lafi::textbox*) frm_shadow->widgets["txt_h"])->text)
+    );
+    
+    if(selected_shadow_transformation.keep_aspect_ratio) {
+        if(
+            new_size.x == selected_shadow->size.x &&
+            new_size.y != selected_shadow->size.y
+        ) {
+            if(selected_shadow->size.y != 0.0f) {
+                float ratio =
+                    selected_shadow->size.x / selected_shadow->size.y;
+                new_size.x = new_size.y * ratio;
+            }
+            
+        } else if(
+            new_size.x != selected_shadow->size.x &&
+            new_size.y == selected_shadow->size.y
+        ) {
+            if(selected_shadow->size.x != 0.0f) {
+                float ratio =
+                    selected_shadow->size.y / selected_shadow->size.x;
+                new_size.y = new_size.x * ratio;
+            }
+            
+        }
+    }
+    
+    selected_shadow->size = new_size;
+    selected_shadow_transformation.set_size(new_size);
+    
     selected_shadow->angle =
         ((lafi::angle_picker*) frm_shadow->widgets["ang_an"])->get_angle_rads();
     selected_shadow->alpha =
@@ -301,6 +335,8 @@ void area_editor::gui_to_details() {
             bitmaps.get(TEXTURES_FOLDER_NAME + "/" + new_file_name, NULL);
         selected_shadow->file_name = new_file_name;
     }
+    
+    select_tree_shadow(selected_shadow); //Update transformation controller.
     
     made_changes = true;
 }
@@ -378,21 +414,24 @@ void area_editor::gui_to_tools() {
         change_reference(new_file_name);
         is_file_new = true;
         if(reference_bitmap) {
-            reference_transformation.size.x =
-                al_get_bitmap_width(reference_bitmap);
-            reference_transformation.size.y =
-                al_get_bitmap_height(reference_bitmap);
+            reference_transformation.set_size(
+                point(
+                    al_get_bitmap_width(reference_bitmap),
+                    al_get_bitmap_height(reference_bitmap)
+                )
+            );
         } else {
-            reference_transformation.center.x = 0;
-            reference_transformation.center.y = 0;
+            reference_transformation.set_center(point());
         }
     }
     
-    reference_transformation.center.x =
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text);
-    reference_transformation.center.y =
-        s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text);
-        
+    reference_transformation.set_center(
+        point(
+            s2f(((lafi::textbox*) frm_tools->widgets["txt_x"])->text),
+            s2f(((lafi::textbox*) frm_tools->widgets["txt_y"])->text)
+        )
+    );
+    
     reference_transformation.keep_aspect_ratio =
         ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->checked;
     point new_size(
@@ -403,39 +442,45 @@ void area_editor::gui_to_tools() {
     if(!is_file_new) {
         if(reference_transformation.keep_aspect_ratio) {
             if(
-                new_size.x == reference_transformation.size.x &&
-                new_size.y != reference_transformation.size.y
+                new_size.x == reference_transformation.get_size().x &&
+                new_size.y != reference_transformation.get_size().y
             ) {
-                if(reference_transformation.size.y == 0.0f) {
-                    reference_transformation.size.y = new_size.y;
+                if(reference_transformation.get_size().y == 0.0f) {
+                    reference_transformation.set_size(
+                        point(reference_transformation.get_size().x, new_size.y)
+                    );
                 } else {
                     float ratio =
-                        reference_transformation.size.x /
-                        reference_transformation.size.y;
-                    reference_transformation.size.y = new_size.y;
-                    reference_transformation.size.x = new_size.y * ratio;
+                        reference_transformation.get_size().x /
+                        reference_transformation.get_size().y;
+                    reference_transformation.set_size(
+                        point(new_size.y * ratio, new_size.y)
+                    );
                 }
                 
             } else if(
-                new_size.x != reference_transformation.size.x &&
-                new_size.y == reference_transformation.size.y
+                new_size.x != reference_transformation.get_size().x &&
+                new_size.y == reference_transformation.get_size().y
             ) {
-                if(reference_transformation.size.x == 0.0f) {
-                    reference_transformation.size.x = new_size.x;
+                if(reference_transformation.get_size().x == 0.0f) {
+                    reference_transformation.set_size(
+                        point(new_size.x, reference_transformation.get_size().y)
+                    );
                 } else {
                     float ratio =
-                        reference_transformation.size.y /
-                        reference_transformation.size.x;
-                    reference_transformation.size.x = new_size.x;
-                    reference_transformation.size.y = new_size.x * ratio;
+                        reference_transformation.get_size().y /
+                        reference_transformation.get_size().x;
+                    reference_transformation.set_size(
+                        point(new_size.x, new_size.x * ratio)
+                    );
                 }
                 
             } else {
-                reference_transformation.size = new_size;
+                reference_transformation.set_size(new_size);
                 
             }
         } else {
-            reference_transformation.size = new_size;
+            reference_transformation.set_size(new_size);
         }
     }
     
@@ -1015,13 +1060,13 @@ void area_editor::tools_to_gui() {
     ((lafi::textbox*) frm_tools->widgets["txt_file"])->text =
         reference_file_name;
     ((lafi::textbox*) frm_tools->widgets["txt_x"])->text =
-        f2s(reference_transformation.center.x);
+        f2s(reference_transformation.get_center().x);
     ((lafi::textbox*) frm_tools->widgets["txt_y"])->text =
-        f2s(reference_transformation.center.y);
+        f2s(reference_transformation.get_center().y);
     ((lafi::textbox*) frm_tools->widgets["txt_w"])->text =
-        f2s(reference_transformation.size.x);
+        f2s(reference_transformation.get_size().x);
     ((lafi::textbox*) frm_tools->widgets["txt_h"])->text =
-        f2s(reference_transformation.size.y);
+        f2s(reference_transformation.get_size().y);
     ((lafi::checkbox*) frm_tools->widgets["chk_ratio"])->set(
         reference_transformation.keep_aspect_ratio
     );

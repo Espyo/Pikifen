@@ -212,6 +212,8 @@ area_editor::area_editor() :
         backup_timer =
         timer(editor_backup_interval, [this] () {save_backup();});
     }
+    
+    selected_shadow_transformation.allow_rotation = true;
 }
 
 
@@ -555,8 +557,8 @@ void area_editor::clear_current_area() {
     
     change_reference("");
     reference_transformation.keep_aspect_ratio = true;
-    reference_transformation.center = point();
-    reference_transformation.size = point(1000, 1000);
+    reference_transformation.set_center(point());
+    reference_transformation.set_size(point(1000, 1000));
     reference_a = 255;
     clear_selection();
     clear_area_textures();
@@ -2776,16 +2778,28 @@ void area_editor::save_area(const bool to_backup) {
     
     //Editor reference.
     geometry_file.add(
-        new data_node("reference_file_name", reference_file_name)
+        new data_node(
+            "reference_file_name",
+            reference_file_name
+        )
     );
     geometry_file.add(
-        new data_node("reference_center", p2s(reference_transformation.center))
+        new data_node(
+            "reference_center",
+            p2s(reference_transformation.get_center())
+        )
     );
     geometry_file.add(
-        new data_node("reference_size", p2s(reference_transformation.size))
+        new data_node(
+            "reference_size",
+            p2s(reference_transformation.get_size())
+        )
     );
     geometry_file.add(
-        new data_node("reference_alpha", i2s(reference_a))
+        new data_node(
+            "reference_alpha",
+            i2s(reference_a)
+        )
     );
     
     
@@ -2873,6 +2887,17 @@ void area_editor::select_sector(sector* s) {
     for(size_t e = 0; e < s->edges.size(); ++e) {
         select_edge(s->edges[e]);
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Selects a tree shadow.
+ */
+void area_editor::select_tree_shadow(tree_shadow* s_ptr) {
+    selected_shadow = s_ptr;
+    selected_shadow_transformation.set_angle(s_ptr->angle);
+    selected_shadow_transformation.set_center(s_ptr->center);
+    selected_shadow_transformation.set_size(s_ptr->size);
 }
 
 

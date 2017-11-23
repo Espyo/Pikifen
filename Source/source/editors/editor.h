@@ -36,22 +36,34 @@ protected:
     struct transformation_controller {
     private:
         static const float HANDLE_RADIUS;
+        static const float ROTATION_HANDLE_THICKNESS;
         signed char moving_handle;
-        point pre_move_size;
-        point get_handle_pos(const unsigned char handle);
-        
-    public:
         point center;
         point size;
         float angle;
+        ALLEGRO_TRANSFORM align_transform;
+        ALLEGRO_TRANSFORM disalign_transform;
+        float radius;
+        point pre_move_size;
+        float pre_rotation_angle;
+        float pre_rotation_mouse_angle;
+        point get_handle_pos(const unsigned char handle);
+        void update();
         
+    public:
         bool keep_aspect_ratio;
-        bool allow_angle_transformations;
+        bool allow_rotation;
         
         void draw_handles();
-        void handle_mouse_down(const point pos);
+        bool handle_mouse_down(const point pos);
         void handle_mouse_up();
-        void handle_mouse_move(const point pos);
+        bool handle_mouse_move(const point pos);
+        point get_center();
+        point get_size();
+        float get_angle();
+        void set_center(const point &center);
+        void set_size(const point &size);
+        void set_angle(const float angle);
         transformation_controller();
     };
     

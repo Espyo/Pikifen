@@ -302,6 +302,9 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
             if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
                 sub_state = EDITOR_SUB_STATE_NONE;
             }
+            if(sub_state == EDITOR_SUB_STATE_NONE) {
+                selected_shadow = NULL;
+            }
         }
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_A && is_ctrl_pressed) {
@@ -694,7 +697,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         cur_area_data.tree_shadows.push_back(new_shadow);
         
-        selected_shadow = new_shadow;
+        select_tree_shadow(new_shadow);
         details_to_gui();
         made_changes = true;
         
@@ -876,24 +879,44 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         sub_state == EDITOR_SUB_STATE_NONE
     ) {
     
-        //Select a tree shadow.
-        selected_shadow = NULL;
-        for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-        
-            tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
-            point min_coords, max_coords;
-            get_shadow_bounding_box(s_ptr, &min_coords, &max_coords);
-            
-            if(
-                mouse_cursor_w.x >= min_coords.x &&
-                mouse_cursor_w.x <= max_coords.x &&
-                mouse_cursor_w.y >= min_coords.y &&
-                mouse_cursor_w.y <= max_coords.y
-            ) {
-                selected_shadow = s_ptr;
-                break;
+        bool transformation_handled = false;
+        if(selected_shadow) {
+            transformation_handled =
+                selected_shadow_transformation.handle_mouse_down(
+                    mouse_cursor_w
+                );
+            if(transformation_handled) {
+                selected_shadow->angle =
+                    selected_shadow_transformation.get_angle();
+                selected_shadow->center =
+                    selected_shadow_transformation.get_center();
+                selected_shadow->size =
+                    selected_shadow_transformation.get_size();
+                details_to_gui();
             }
         }
+        
+        if(!transformation_handled) {
+            //Select a tree shadow.
+            selected_shadow = NULL;
+            for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
+            
+                tree_shadow* s_ptr = cur_area_data.tree_shadows[s];
+                point min_coords, max_coords;
+                get_shadow_bounding_box(s_ptr, &min_coords, &max_coords);
+                
+                if(
+                    mouse_cursor_w.x >= min_coords.x &&
+                    mouse_cursor_w.x <= max_coords.x &&
+                    mouse_cursor_w.y >= min_coords.y &&
+                    mouse_cursor_w.y <= max_coords.y
+                ) {
+                    select_tree_shadow(s_ptr);
+                    break;
+                }
+            }
+        }
+        
         details_to_gui();
         
     } else if(state == EDITOR_STATE_TOOLS) {
@@ -1156,14 +1179,18 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         state == EDITOR_STATE_DETAILS
     ) {
     
-        //Move tree shadows.
-        if(!moving) {
-            start_shadow_move();
+        if(selected_shadow) {
+            selected_shadow_transformation.handle_mouse_move(
+                snap_to_grid(mouse_cursor_w)
+            );
+            selected_shadow->angle =
+                selected_shadow_transformation.get_angle();
+            selected_shadow->center =
+                selected_shadow_transformation.get_center();
+            selected_shadow->size =
+                selected_shadow_transformation.get_size();
+            details_to_gui();
         }
-        
-        point mouse_offset = mouse_cursor_w - move_mouse_start_pos;
-        selected_shadow->center = pre_move_shadow_coords + mouse_offset;
-        details_to_gui();
         
     } else if(
         moving_path_preview_checkpoint != -1 &&
@@ -1215,7 +1242,10 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
         moving = false;
     }
     
-    if(state == EDITOR_STATE_TOOLS) {
+    if(state == EDITOR_STATE_DETAILS && selected_shadow) {
+        selected_shadow_transformation.handle_mouse_up();
+        
+    } else if(state == EDITOR_STATE_TOOLS) {
         reference_transformation.handle_mouse_up();
         tools_to_gui();
     }
