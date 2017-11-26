@@ -419,25 +419,18 @@ void load_area(
     
     //Editor reference.
     if(load_for_editor) {
-        //TODO
-        /*
-        area_editor* ae = (area_editor*) game_states[cur_game_state_nr];
-        ae->set_reference_file_name(
-            geometry_file.get_child_by_name("reference_file_name")->value
-        );
-        ae->set_reference_pos(
-            s2p(geometry_file.get_child_by_name("reference_pos")->value)
-        );
-        ae->set_reference_size(
-            s2p(geometry_file.get_child_by_name("reference_size")->value)
-        );
-        ae->set_reference_a(
+        cur_area_data.reference_alpha =
             s2i(
                 geometry_file.get_child_by_name(
                     "reference_alpha"
                 )->get_value_or_default("255")
-            )
-        );*/
+            );
+        cur_area_data.reference_center =
+            s2p(geometry_file.get_child_by_name("reference_center")->value);
+        cur_area_data.reference_file_name =
+            geometry_file.get_child_by_name("reference_file_name")->value;
+        cur_area_data.reference_size =
+            s2p(geometry_file.get_child_by_name("reference_size")->value);
     }
     
     if(!load_for_editor) cur_area_data.generate_blockmap();

@@ -86,12 +86,13 @@ private:
         size_t calls;
         bmp_info(ALLEGRO_BITMAP* b = NULL);
     };
+    string base_dir;
     map<string, bmp_info> list;
     long total_calls; //Useful for debugging.
     void detach(map<string, bmp_info>::iterator it);
     
 public:
-    bmp_manager();
+    bmp_manager(const string &base_dir);
     ALLEGRO_BITMAP* get(
         const string &name, data_node* node = NULL,
         const bool report_errors = true
@@ -331,7 +332,7 @@ struct spike_damage_type {
         ingestion_only(false),
         is_damage_ratio(false),
         particle_gen(nullptr) {
-            
+        
     }
 };
 

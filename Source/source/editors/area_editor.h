@@ -23,7 +23,8 @@ private:
     struct texture_suggestion {
         ALLEGRO_BITMAP* bmp;
         string name;
-        texture_suggestion(const string &n);
+        bmp_manager* bm;
+        texture_suggestion(const string &n, bmp_manager* bm);
         void destroy();
     };
     
@@ -154,7 +155,6 @@ private:
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
     
-    static const string EDITOR_ICONS_FOLDER_NAME;
     static const string ICON_DELETE;
     static const string ICON_DELETE_LINK;
     static const string ICON_DELETE_STOP;
@@ -318,12 +318,8 @@ private:
     string problem_string;
     //Pointer to the problematic vertex, if any.
     vertex* problem_vertex_ptr;
-    //Alpha of the reference image.
-    unsigned char reference_a;
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* reference_bitmap;
-    //File name of the reference image.
-    string reference_file_name;
     //Current transformations on the reference image.
     transformation_controller reference_transformation;
     //Currently selected edges.
@@ -372,6 +368,8 @@ private:
     timer status_override_timer;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
+    //Loaded textures.
+    bmp_manager textures;
     
     bool are_nodes_traversable(
         const layout_drawing_node &n1,

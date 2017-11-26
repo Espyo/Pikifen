@@ -71,7 +71,7 @@ timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);
 float area_time_passed = 0;
 string area_to_load;
 vector<unsigned int> berries;
-bmp_manager bitmaps;
+bmp_manager bitmaps("");
 ALLEGRO_BITMAP* bmp_error = NULL;
 vector<bridge*> bridges;
 map<string, bridge_type*> bridge_types;

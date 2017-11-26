@@ -19,6 +19,9 @@
 
 
 
+const string editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
+
+
 /* ----------------------------------------------------------------------------
  * Initializes editor class stuff.
  */
@@ -28,6 +31,7 @@ editor::editor() :
     holding_m1(false),
     holding_m2(false),
     holding_m3(false),
+    icons(EDITOR_ICONS_FOLDER_NAME),
     made_changes(false),
     mode(0),
     sec_mode(0),
@@ -340,13 +344,13 @@ void editor::transformation_controller::draw_handles() {
     
     //Outline.
     point corners[4];
-    corners[0] = point(-1, -1);
-    corners[1] = point(1, -1);
-    corners[2] = point(1, 1);
-    corners[3] = point(-1, 1);
+    corners[0] = point(-size.x / 2.0, -size.y / 2.0);
+    corners[1] = point(size.x / 2.0, -size.y / 2.0);
+    corners[2] = point(size.x / 2.0, size.y / 2.0);
+    corners[3] = point(-size.x / 2.0, size.y / 2.0);
     for(unsigned char c = 0; c < 4; ++c) {
         al_transform_coordinates(
-            &align_transform, &corners[c].x, &corners[c].y
+            &disalign_transform, &corners[c].x, &corners[c].y
         );
     }
     for(unsigned char c = 0; c < 4; ++c) {
@@ -496,60 +500,6 @@ bool editor::transformation_controller::handle_mouse_move(const point pos) {
     
     set_center(new_center);
     set_size(new_size);
-    
-    //TODO old code.
-    /*
-    point new_size = pre_move_size;
-    point new_center = center;
-    
-    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
-        new_size.x = (center.x + size.x / 2.0) - pos.x;
-    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
-        new_size.x = pos.x - (center.x - size.x / 2.0);
-    }
-    
-    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
-        new_size.y = (center.y + size.y / 2.0) - pos.y;
-    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
-        new_size.y = pos.y - (center.y - size.y / 2.0);
-    }
-    
-    if(keep_aspect_ratio) {
-        if(
-            fabs(pre_move_size.x - new_size.x) >
-            fabs(pre_move_size.y - new_size.y)
-        ) {
-            //Most significant change is width.
-            if(pre_move_size.x != 0) {
-                float ratio = pre_move_size.y / pre_move_size.x;
-                new_size.y = new_size.x * ratio;
-            }
-    
-        } else {
-            //Most significant change is height.
-            if(pre_move_size.y != 0) {
-                float ratio = pre_move_size.x / pre_move_size.y;
-                new_size.x = new_size.y * ratio;
-            }
-    
-        }
-    }
-    
-    if(moving_handle == 0 || moving_handle == 3 || moving_handle == 6) {
-        new_center.x = (center.x + size.x / 2.0) - new_size.x / 2.0;
-    } else if(moving_handle == 2 || moving_handle == 5 || moving_handle == 8) {
-        new_center.x = (center.x - size.x / 2.0) + new_size.x / 2.0;
-    }
-    
-    if(moving_handle == 0 || moving_handle == 1 || moving_handle == 2) {
-        new_center.y = (center.y + size.y / 2.0) - new_size.y / 2.0;
-    } else if(moving_handle == 6 || moving_handle == 7 || moving_handle == 8) {
-        new_center.y = (center.y - size.y / 2.0) + new_size.y / 2.0;
-    }
-    
-    set_center(new_center);
-    set_size(new_size);
-    */
     
     return true;
 }

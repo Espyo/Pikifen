@@ -702,7 +702,7 @@ void area_editor::do_drawing() {
     ) {
         al_draw_tinted_scaled_bitmap(
             reference_bitmap,
-            map_alpha(reference_a),
+            map_alpha(cur_area_data.reference_alpha),
             0, 0,
             al_get_bitmap_width(reference_bitmap),
             al_get_bitmap_height(reference_bitmap),

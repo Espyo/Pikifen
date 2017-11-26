@@ -329,10 +329,10 @@ void area_editor::gui_to_details() {
     if(new_file_name != selected_shadow->file_name) {
         //New image, delete the old one.
         if(selected_shadow->bitmap != bmp_error) {
-            bitmaps.detach(selected_shadow->file_name);
+            textures.detach(selected_shadow->file_name);
         }
         selected_shadow->bitmap =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + new_file_name, NULL);
+            textures.get(new_file_name, NULL);
         selected_shadow->file_name = new_file_name;
     }
     
@@ -409,7 +409,7 @@ void area_editor::gui_to_tools() {
         ((lafi::textbox*) frm_tools->widgets["txt_file"])->text;
     bool is_file_new = false;
     
-    if(new_file_name != reference_file_name) {
+    if(new_file_name != cur_area_data.reference_file_name) {
         //New reference image, delete the old one.
         change_reference(new_file_name);
         is_file_new = true;
@@ -484,7 +484,7 @@ void area_editor::gui_to_tools() {
         }
     }
     
-    reference_a =
+    cur_area_data.reference_alpha =
         ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->low_value;
         
     tools_to_gui();
@@ -646,7 +646,6 @@ void area_editor::options_to_gui() {
  * Loads the current path data onto the GUI.
  */
 void area_editor::path_to_gui() {
-    //TODO
     if(path_drawing_normals) {
         ((lafi::radio_button*) frm_paths->widgets["rad_normal"])->select();
     } else {
@@ -1058,7 +1057,7 @@ void area_editor::select_different_hazard(const bool next) {
  */
 void area_editor::tools_to_gui() {
     ((lafi::textbox*) frm_tools->widgets["txt_file"])->text =
-        reference_file_name;
+        cur_area_data.reference_file_name;
     ((lafi::textbox*) frm_tools->widgets["txt_x"])->text =
         f2s(reference_transformation.get_center().x);
     ((lafi::textbox*) frm_tools->widgets["txt_y"])->text =
@@ -1071,7 +1070,7 @@ void area_editor::tools_to_gui() {
         reference_transformation.keep_aspect_ratio
     );
     ((lafi::scrollbar*) frm_tools->widgets["bar_alpha"])->set_value(
-        reference_a, false
+        cur_area_data.reference_alpha, false
     );
     update_backup_status();
 }
