@@ -56,7 +56,6 @@ private:
     static const float  ZOOM_MAX_LEVEL_EDITOR;
     static const float  ZOOM_MIN_LEVEL_EDITOR;
     
-    static const string EDITOR_ICONS_FOLDER_NAME;
     static const string DELETE_ICON;
     static const string EXIT_ICON;
     static const string HITBOXES_ICON;

@@ -33,6 +33,8 @@ private:
     
 protected:
 
+    static const string EDITOR_ICONS_FOLDER_NAME;
+    
     struct transformation_controller {
     private:
         static const float HANDLE_RADIUS;

@@ -32,8 +32,9 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
 /* ----------------------------------------------------------------------------
  * Creates a bitmap manager.
  */
-bmp_manager::bmp_manager() :
-    total_calls(0) {
+bmp_manager::bmp_manager(const string &base_dir) :
+    total_calls(0),
+    base_dir(base_dir) {
     
 }
 
@@ -48,7 +49,8 @@ ALLEGRO_BITMAP* bmp_manager::get(
     if(name.empty()) return load_bmp("", node, report_errors);
     
     if(list.find(name) == list.end()) {
-        ALLEGRO_BITMAP* b = load_bmp(name, node, report_errors);
+        ALLEGRO_BITMAP* b =
+            load_bmp(base_dir + "/" + name, node, report_errors);
         list[name] = bmp_info(b);
         total_calls++;
         return b;
@@ -217,7 +219,7 @@ dist::dist(const point &p1, const point &p2) :
  * Creates a new distance number, given a non-squared distance.
  */
 dist::dist(const float d) :
-    distance_squared(d* d),
+    distance_squared(d * d),
     has_normal_distance(true),
     normal_distance(d) {
     

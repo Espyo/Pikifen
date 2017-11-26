@@ -740,7 +740,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selected_vertexes.find(clicked_vertex) ==
                     selected_vertexes.end()
                 ) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
                     select_vertex(clicked_vertex);
                 }
             } else if(clicked_edge) {
@@ -748,7 +750,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selected_edges.find(clicked_edge) ==
                     selected_edges.end()
                 ) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
                     select_edge(clicked_edge);
                 }
             } else {
@@ -756,7 +760,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selected_sectors.find(clicked_sector) ==
                     selected_sectors.end()
                 ) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
                     select_sector(clicked_sector);
                 }
             }
@@ -791,7 +797,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             
         } else {
             if(selected_mobs.find(clicked_mob) == selected_mobs.end()) {
-                clear_selection();
+                if(!is_ctrl_pressed) {
+                    clear_selection();
+                }
                 selected_mobs.insert(clicked_mob);
             }
             
@@ -854,7 +862,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selected_path_stops.find(clicked_stop) ==
                     selected_path_stops.end()
                 ) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
                     selected_path_stops.insert(clicked_stop);
                 }
             } else {
@@ -862,7 +872,9 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     selected_path_links.find(clicked_link_data_1) ==
                     selected_path_links.end()
                 ) {
-                    clear_selection();
+                    if(!is_ctrl_pressed) {
+                        clear_selection();
+                    }
                     selected_path_links.insert(clicked_link_data_1);
                     if(clicked_link_data_2.first != NULL) {
                         selected_path_links.insert(clicked_link_data_2);

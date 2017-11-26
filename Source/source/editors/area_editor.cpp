@@ -67,45 +67,25 @@ const float area_editor::ZOOM_MAX_LEVEL_EDITOR = 8.0f;
 //Minimum zoom level possible in the editor.
 const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 
-const string area_editor::EDITOR_ICONS_FOLDER_NAME = "Editor_icons";
-const string area_editor::ICON_DELETE =
-    EDITOR_ICONS_FOLDER_NAME + "/Delete.png";
-const string area_editor::ICON_DELETE_LINK =
-    EDITOR_ICONS_FOLDER_NAME + "/Delete_link.png";
-const string area_editor::ICON_DELETE_STOP =
-    EDITOR_ICONS_FOLDER_NAME + "/Delete_stop.png";
-const string area_editor::ICON_DUPLICATE =
-    EDITOR_ICONS_FOLDER_NAME + "/Duplicate.png";
-const string area_editor::ICON_EXIT =
-    EDITOR_ICONS_FOLDER_NAME + "/Exit.png";
-const string area_editor::ICON_NEW =
-    EDITOR_ICONS_FOLDER_NAME + "/New.png";
-const string area_editor::ICON_NEW_1WAY_LINK =
-    EDITOR_ICONS_FOLDER_NAME + "/New_1wlink.png";
-const string area_editor::ICON_NEW_CIRCLE_SECTOR =
-    EDITOR_ICONS_FOLDER_NAME + "/New_circle_sector.png";
-const string area_editor::ICON_NEW_LINK =
-    EDITOR_ICONS_FOLDER_NAME + "/New_link.png";
-const string area_editor::ICON_NEW_STOP =
-    EDITOR_ICONS_FOLDER_NAME + "/New_stop.png";
-const string area_editor::ICON_NEXT =
-    EDITOR_ICONS_FOLDER_NAME + "/Next.png";
-const string area_editor::ICON_OPTIONS =
-    EDITOR_ICONS_FOLDER_NAME + "/Options.png";
-const string area_editor::ICON_PREVIOUS =
-    EDITOR_ICONS_FOLDER_NAME + "/Previous.png";
-const string area_editor::ICON_REFERENCE =
-    EDITOR_ICONS_FOLDER_NAME + "/Reference.png";
-const string area_editor::ICON_SAVE =
-    EDITOR_ICONS_FOLDER_NAME + "/Save.png";
-const string area_editor::ICON_SELECT_NONE =
-    EDITOR_ICONS_FOLDER_NAME + "/Select_none.png";
-const string area_editor::ICON_SELECT_EDGES =
-    EDITOR_ICONS_FOLDER_NAME + "/Select_edges.png";
-const string area_editor::ICON_SELECT_SECTORS =
-    EDITOR_ICONS_FOLDER_NAME + "/Select_sectors.png";
-const string area_editor::ICON_SELECT_VERTEXES =
-    EDITOR_ICONS_FOLDER_NAME + "/Select_vertexes.png";
+const string area_editor::ICON_DELETE = "Delete.png";
+const string area_editor::ICON_DELETE_LINK = "Delete_link.png";
+const string area_editor::ICON_DELETE_STOP = "Delete_stop.png";
+const string area_editor::ICON_DUPLICATE = "Duplicate.png";
+const string area_editor::ICON_EXIT = "Exit.png";
+const string area_editor::ICON_NEW = "New.png";
+const string area_editor::ICON_NEW_1WAY_LINK = "New_1wlink.png";
+const string area_editor::ICON_NEW_CIRCLE_SECTOR = "New_circle_sector.png";
+const string area_editor::ICON_NEW_LINK = "New_link.png";
+const string area_editor::ICON_NEW_STOP = "New_stop.png";
+const string area_editor::ICON_NEXT = "Next.png";
+const string area_editor::ICON_OPTIONS = "Options.png";
+const string area_editor::ICON_PREVIOUS = "Previous.png";
+const string area_editor::ICON_REFERENCE = "Reference.png";
+const string area_editor::ICON_SAVE = "Save.png";
+const string area_editor::ICON_SELECT_NONE = "Select_none.png";
+const string area_editor::ICON_SELECT_EDGES = "Select_edges.png";
+const string area_editor::ICON_SELECT_SECTORS = "Select_sectors.png";
+const string area_editor::ICON_SELECT_VERTEXES = "Select_vertexes.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -194,7 +174,6 @@ area_editor::area_editor() :
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
     path_preview_timer(0),
-    reference_a(255),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
@@ -203,7 +182,8 @@ area_editor::area_editor() :
     show_closest_stop(false),
     show_path_preview(false),
     status_override_timer(STATUS_OVERRIDE_IMPORTANT_DURATION),
-    show_reference(false) {
+    show_reference(false),
+    textures(TEXTURES_FOLDER_NAME) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
@@ -348,7 +328,7 @@ void area_editor::change_reference(string new_file_name) {
     if(!new_file_name.empty()) {
         reference_bitmap = load_bmp(new_file_name, NULL, false, false);
     }
-    reference_file_name = new_file_name;
+    cur_area_data.reference_file_name = new_file_name;
     tools_to_gui();
     
     made_changes = true;
@@ -559,15 +539,11 @@ void area_editor::clear_current_area() {
     reference_transformation.keep_aspect_ratio = true;
     reference_transformation.set_center(point());
     reference_transformation.set_size(point(1000, 1000));
-    reference_a = 255;
     clear_selection();
     clear_area_textures();
     
     for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
-        bitmaps.detach(
-            TEXTURES_FOLDER_NAME + "/" +
-            cur_area_data.tree_shadows[s]->file_name
-        );
+        textures.detach(cur_area_data.tree_shadows[s]->file_name);
     }
     
     sector_to_gui();
@@ -2234,11 +2210,13 @@ void area_editor::load_area(const bool from_backup) {
         ++u
     ) {
         texture_suggestions.push_back(
-            texture_suggestion(texture_uses_vector[u].first)
+            texture_suggestion(texture_uses_vector[u].first, &textures)
         );
     }
     
-    change_reference(reference_file_name);
+    reference_transformation.set_center(cur_area_data.reference_center);
+    reference_transformation.set_size(cur_area_data.reference_size);
+    change_reference(cur_area_data.reference_file_name);
     
     enable_widget(frm_tools->widgets["but_load"]);
     made_changes = false;
@@ -2551,7 +2529,8 @@ void area_editor::resize_everything(const float mult) {
  */
 void area_editor::save_area(const bool to_backup) {
 
-    data_node geometry_file = data_node("", "");
+    //First, the geometry file.
+    data_node geometry_file("", "");
     
     //Vertexes.
     data_node* vertexes_node = new data_node("vertexes", "");
@@ -2777,29 +2756,57 @@ void area_editor::save_area(const bool to_backup) {
     }
     
     //Editor reference.
+    cur_area_data.reference_center = reference_transformation.get_center();
+    cur_area_data.reference_size = reference_transformation.get_size();
     geometry_file.add(
         new data_node(
             "reference_file_name",
-            reference_file_name
+            cur_area_data.reference_file_name
         )
     );
     geometry_file.add(
         new data_node(
             "reference_center",
-            p2s(reference_transformation.get_center())
+            p2s(cur_area_data.reference_center)
         )
     );
     geometry_file.add(
         new data_node(
             "reference_size",
-            p2s(reference_transformation.get_size())
+            p2s(cur_area_data.reference_size)
         )
     );
     geometry_file.add(
         new data_node(
             "reference_alpha",
-            i2s(reference_a)
+            i2s(cur_area_data.reference_alpha)
         )
+    );
+    
+    
+    //Now, the data file.
+    data_node data_file("", "");
+    
+    data_file.add(
+        new data_node("name", cur_area_data.name)
+    );
+    data_file.add(
+        new data_node("subtitle", cur_area_data.subtitle)
+    );
+    data_file.add(
+        new data_node("bg_bmp", cur_area_data.bg_bmp_file_name)
+    );
+    data_file.add(
+        new data_node("bg_color", c2s(cur_area_data.bg_color))
+    );
+    data_file.add(
+        new data_node("bg_dist", f2s(cur_area_data.bg_dist))
+    );
+    data_file.add(
+        new data_node("bg_zoom", f2s(cur_area_data.bg_bmp_zoom))
+    );
+    data_file.add(
+        new data_node("weather", cur_area_data.weather_name)
     );
     
     
@@ -2829,6 +2836,9 @@ void area_editor::save_area(const bool to_backup) {
     geometry_file.save_file(
         AREAS_FOLDER_PATH + "/" + cur_area_name +
         (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+    );
+    data_file.save_file(
+        AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt"
     );
     
     backup_timer.start(editor_backup_interval);
@@ -3166,12 +3176,9 @@ bool area_editor::update_backup_status() {
  * Updates a sector's texture.
  */
 void area_editor::update_sector_texture(sector* s_ptr, const string file_name) {
-    bitmaps.detach(
-        TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
-    );
+    textures.detach(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
-    s_ptr->texture_info.bitmap =
-        bitmaps.get(TEXTURES_FOLDER_NAME + "/" + file_name);
+    s_ptr->texture_info.bitmap = textures.get(file_name);
 }
 
 
@@ -3196,7 +3203,7 @@ void area_editor::update_texture_suggestions(const string &n) {
         //If it doesn't exist, create it and add it to the top.
         texture_suggestions.insert(
             texture_suggestions.begin(),
-            texture_suggestion(n)
+            texture_suggestion(n, &textures)
         );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
@@ -3266,11 +3273,14 @@ void area_editor::zoom(const float new_zoom, const bool anchor_cursor) {
 /* ----------------------------------------------------------------------------
  * Creates a texture suggestion.
  */
-area_editor::texture_suggestion::texture_suggestion(const string &n) :
+area_editor::texture_suggestion::texture_suggestion(
+    const string &n, bmp_manager* bm
+) :
     bmp(NULL),
-    name(n) {
+    name(n),
+    bm(bm) {
     
-    bmp = bitmaps.get(TEXTURES_FOLDER_NAME + "/" + name, NULL, false);
+    bmp = bm->get(name, NULL, false);
 }
 
 
@@ -3278,5 +3288,5 @@ area_editor::texture_suggestion::texture_suggestion(const string &n) :
  * Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + name);
+    bm->detach(name);
 }
