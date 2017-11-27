@@ -109,7 +109,7 @@ area_editor_old::area_editor_old() :
     reference_bitmap(NULL),
     reference_size(1000, 1000),
     reference_a(255),
-    backup_timer(editor_backup_interval),
+    backup_timer(area_editor_backup_interval),
     cur_mob(NULL),
     cur_sector(NULL),
     cur_shadow(NULL),
@@ -150,10 +150,10 @@ area_editor_old::area_editor_old() :
             PATH_PREVIEW_TIMEOUT_DUR,
     [this] () {calculate_preview_path();}
         );
-    if(editor_backup_interval > 0) {
+    if(area_editor_backup_interval > 0) {
         backup_timer =
             timer(
-                editor_backup_interval,
+                area_editor_backup_interval,
         [this] () {save_backup();}
             );
     }
@@ -714,7 +714,7 @@ void area_editor_old::clear_current_area() {
     cur_area_data.clear();
     
     made_changes = false;
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     
     mode = EDITOR_MODE_MAIN;
     change_to_right_frame();
@@ -1035,7 +1035,7 @@ void area_editor_old::do_logic() {
     
     path_preview_timeout.tick(delta_t);
     
-    if(!area_name.empty() && editor_backup_interval > 0) {
+    if(!area_name.empty() && area_editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
     }
     
@@ -1777,7 +1777,7 @@ void area_editor_old::load_backup() {
     if(!update_backup_status()) return;
     
     load_area(true);
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
 }
 
 
@@ -2520,7 +2520,7 @@ void area_editor_old::save_area(const bool to_backup) {
         (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
     );
     
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     enable_widget(gui->widgets["frm_options"]->widgets["but_load"]);
 }
 
@@ -2530,7 +2530,7 @@ void area_editor_old::save_area(const bool to_backup) {
  */
 void area_editor_old::save_backup() {
 
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     
     //First, check if the folder even exists.
     //If not, chances are this is a new area.

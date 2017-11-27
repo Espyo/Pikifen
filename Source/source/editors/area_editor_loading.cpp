@@ -32,14 +32,21 @@ void area_editor::load() {
 
     update_gui_coordinates();
     
-    lafi::style* s =
+    gui_style =
         new lafi::style(
         al_map_rgb(192, 192, 208),
         al_map_rgb(32, 32, 64),
         al_map_rgb(96, 128, 160),
         font_builtin
     );
-    gui = new lafi::gui(scr_w, scr_h, s);
+    faded_style =
+        new lafi::style(
+        al_map_rgb(192, 192, 208),
+        al_map_rgb(128, 128, 160),
+        al_map_rgb(96, 128, 160),
+        font_builtin
+    );
+    gui = new lafi::gui(scr_w, scr_h, gui_style);
     
     
     //Main -- declarations.
@@ -66,42 +73,38 @@ void area_editor::load() {
     frm_area->easy_row();
     frm_area->easy_add(
         "but_info",
-        new lafi::button("Info"), 100, 32
+        new lafi::button("Info", "", icons.get(ICON_INFO)), 50, 48
     );
-    frm_area->easy_row();
     frm_area->easy_add(
         "but_layout",
-        new lafi::button("Layout"), 100, 32
+        new lafi::button("Layout", "", icons.get(ICON_LAYOUT)), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_mobs",
-        new lafi::button("Objects"), 100, 32
+        new lafi::button("Objects", "", icons.get(ICON_MOBS)), 50, 48
     );
-    frm_area->easy_row();
     frm_area->easy_add(
         "but_paths",
-        new lafi::button("Paths"), 100, 32
+        new lafi::button("Paths", "", icons.get(ICON_PATHS)), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_details",
-        new lafi::button("Details"), 100, 32
+        new lafi::button("Details", "", icons.get(ICON_DETAILS)), 50, 48
     );
-    frm_area->easy_row();
     frm_area->easy_add(
         "but_review",
-        new lafi::button("Review"), 100, 32
+        new lafi::button("Review", "", icons.get(ICON_REVIEW)), 50, 48
     );
     frm_area->easy_row();
     frm_area->easy_add(
         "but_tools",
-        new lafi::button("Tools"), 100, 32
+        new lafi::button("Tools", "", icons.get(ICON_TOOLS)), 50, 48
     );
-    frm_area->easy_row();
     frm_area->easy_add(
         "but_options",
-        new lafi::button("Options"), 100, 32
+        new lafi::button("Options", "", icons.get(ICON_OPTIONS)), 50, 48
     );
     frm_area->easy_row();
     
@@ -188,6 +191,10 @@ void area_editor::load() {
     frm_info->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_info->easy_add(
+        "lbl_panel_name",
+        new lafi::label("INFO", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_info->easy_row();
     frm_info->easy_add(
@@ -298,6 +305,8 @@ void area_editor::load() {
     frm_info->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_info->widgets["lbl_panel_name"]->style = faded_style;
+    
     auto lambda_gui_to_info =
     [this] (lafi::widget*) {
         gui_to_info();
@@ -356,6 +365,10 @@ void area_editor::load() {
     frm_layout->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_layout->easy_add(
+        "lbl_panel_name",
+        new lafi::label("LAYOUT", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_layout->easy_row();
     frm_layout->easy_add(
@@ -534,6 +547,8 @@ void area_editor::load() {
     frm_layout->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_layout->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_layout->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         clear_layout_drawing();
@@ -1068,6 +1083,10 @@ void area_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_mobs->easy_add(
+        "lbl_panel_name",
+        new lafi::label("OBJECTS", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_mobs->easy_row();
     frm_mobs->easy_add(
         "but_new",
@@ -1178,6 +1197,8 @@ void area_editor::load() {
     frm_mobs->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_mobs->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_mobs->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
@@ -1278,6 +1299,10 @@ void area_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_paths->easy_add(
+        "lbl_panel_name",
+        new lafi::label("PATHS", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_paths->easy_row();
     frm_paths->easy_add(
         "but_draw",
@@ -1350,6 +1375,8 @@ void area_editor::load() {
     frm_paths->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_paths->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_paths->widgets["but_draw"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
@@ -1419,6 +1446,10 @@ void area_editor::load() {
     frm_details->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_details->easy_add(
+        "lbl_panel_name",
+        new lafi::label("DETAILS", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_details->easy_row();
     frm_details->easy_add(
@@ -1532,6 +1563,8 @@ void area_editor::load() {
     frm_details->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_details->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_details->widgets["but_new"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
@@ -1630,6 +1663,10 @@ void area_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_review->easy_add(
+        "lbl_panel_name",
+        new lafi::label("REVIEW", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_review->easy_row();
     frm_review->easy_add(
         "but_find_prob",
@@ -1713,6 +1750,8 @@ void area_editor::load() {
     frm_review->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_review->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_review->widgets["but_find_prob"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         problem_type = find_problems();
@@ -1776,6 +1815,10 @@ void area_editor::load() {
     frm_tools->easy_add(
         "but_back",
         new lafi::button("Back"), 50, 16
+    );
+    frm_tools->easy_add(
+        "lbl_panel_name",
+        new lafi::label("TOOLS", ALLEGRO_ALIGN_RIGHT), 50, 16
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
@@ -1888,6 +1931,8 @@ void area_editor::load() {
     frm_tools->widgets["but_back"]->description =
         "Go back to the main menu.";
         
+    frm_tools->widgets["lbl_panel_name"]->style = faded_style;
+    
     auto lambda_gui_to_tools =
     [this] (lafi::widget*) {
         gui_to_tools();
@@ -1969,6 +2014,10 @@ void area_editor::load() {
         "but_back",
         new lafi::button("Back"), 50, 16
     );
+    frm_options->easy_add(
+        "lbl_panel_name",
+        new lafi::label("OPTIONS", ALLEGRO_ALIGN_RIGHT), 50, 16
+    );
     frm_options->easy_row();
     frm_options->easy_add(
         "lbl_grid",
@@ -1983,9 +2032,57 @@ void area_editor::load() {
         new lafi::button("-"), 15, 24
     );
     frm_options->easy_row();
+    frm_options->easy_add(
+        "chk_edge_length",
+        new lafi::checkbox("Show edge length"), 100, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_backup_1",
+        new lafi::label("Auto-backup time:"), 80, 12
+    );
+    frm_options->easy_add(
+        "txt_backup",
+        new lafi::textbox(), 20, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_view_mode",
+        new lafi::label("View mode:"), 100, 12
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "rad_view_textures",
+        new lafi::radio_button("Textures"), 100, 12
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "rad_view_wireframe",
+        new lafi::radio_button("Wireframe"), 100, 12
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "rad_view_heightmap",
+        new lafi::radio_button("Heightmap"), 100, 12
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "rad_view_brightness",
+        new lafi::radio_button("Brightness"), 100, 12
+    );
+    frm_options->easy_row();
     
     
     //Options -- properties.
+    auto lambda_gui_to_options =
+    [this] (lafi::widget*) {
+        gui_to_options();
+    };
+    auto lambda_gui_to_options_click =
+    [this] (lafi::widget*, int, int) {
+        gui_to_options();
+    };
+    
     frm_options->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_MAIN;
@@ -1994,10 +2091,13 @@ void area_editor::load() {
     frm_options->widgets["but_back"]->description =
         "Close the options.";
         
+    frm_options->widgets["lbl_panel_name"]->style = faded_style;
+    
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        grid_interval *= 2;
-        grid_interval = min(grid_interval, MAX_GRID_INTERVAL);
+        area_editor_grid_interval *= 2;
+        area_editor_grid_interval = min(area_editor_grid_interval, MAX_GRID_INTERVAL);
+        save_options();
         options_to_gui();
     };
     frm_options->widgets["but_grid_plus"]->description =
@@ -2005,12 +2105,43 @@ void area_editor::load() {
         
     frm_options->widgets["but_grid_minus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        grid_interval *= 0.5;
-        grid_interval = max(grid_interval, MIN_GRID_INTERVAL);
+        area_editor_grid_interval *= 0.5;
+        area_editor_grid_interval = max(area_editor_grid_interval, MIN_GRID_INTERVAL);
+        save_options();
         options_to_gui();
     };
     frm_options->widgets["but_grid_minus"]->description =
         "Decrease the spacing on the grid.";
+        
+    frm_options->widgets["txt_backup"]->lose_focus_handler =
+        lambda_gui_to_options;
+    frm_options->widgets["txt_backup"]->description =
+        "Interval between auto-backup saves, in seconds. 0 = off.";
+        
+    frm_options->widgets["chk_edge_length"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["chk_edge_length"]->description =
+        "Show the length of nearby edges when drawing or moving vertexes.";
+        
+    frm_options->widgets["rad_view_textures"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["rad_view_textures"]->description =
+        "Draw textures on the sectors.";
+        
+    frm_options->widgets["rad_view_wireframe"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["rad_view_wireframe"]->description =
+        "Do not draw sectors, only edges and vertexes.";
+        
+    frm_options->widgets["rad_view_heightmap"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["rad_view_heightmap"]->description =
+        "Draw sectors as heightmaps. Lighter = taller.";
+        
+    frm_options->widgets["rad_view_brightness"]->left_mouse_click_handler =
+        lambda_gui_to_options_click;
+    frm_options->widgets["rad_view_brightness"]->description =
+        "Draw sectors as solid grays based on their brightness.";
         
         
     //Bottom bar -- declarations.
@@ -2089,8 +2220,8 @@ void area_editor::load() {
     
     show_closest_stop = false;
     show_path_preview = false;
-    path_preview_checkpoints[0] = point(-DEF_GRID_INTERVAL, 0);
-    path_preview_checkpoints[1] = point(+DEF_GRID_INTERVAL, 0);
+    path_preview_checkpoints[0] = point(-DEF_area_editor_grid_interval, 0);
+    path_preview_checkpoints[1] = point(+DEF_area_editor_grid_interval, 0);
     clear_selection();
     selected_shadow = NULL;
     selection_homogenized = false;

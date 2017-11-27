@@ -179,16 +179,16 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        cam_pos.x -= DEF_GRID_INTERVAL / cam_zoom;
+        cam_pos.x -= DEF_area_editor_grid_interval / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        cam_pos.x += DEF_GRID_INTERVAL / cam_zoom;
+        cam_pos.x += DEF_area_editor_grid_interval / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-        cam_pos.y -= DEF_GRID_INTERVAL / cam_zoom;
+        cam_pos.y -= DEF_area_editor_grid_interval / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        cam_pos.y += DEF_GRID_INTERVAL / cam_zoom;
+        cam_pos.y += DEF_area_editor_grid_interval / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
         zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);

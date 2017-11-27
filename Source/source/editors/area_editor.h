@@ -23,8 +23,7 @@ private:
     struct texture_suggestion {
         ALLEGRO_BITMAP* bmp;
         string name;
-        bmp_manager* bm;
-        texture_suggestion(const string &n, bmp_manager* bm);
+        texture_suggestion(const string &n);
         void destroy();
     };
     
@@ -130,6 +129,14 @@ private:
         N_SELECTION_FILTERS,
     };
     
+    enum VIEW_MODES {
+        VIEW_MODE_TEXTURES,
+        VIEW_MODE_WIREFRAME,
+        VIEW_MODE_HEIGHTMAP,
+        VIEW_MODE_BRIGHTNESS,
+        N_VIEW_MODES,
+    };
+    
     static const float         CROSS_SECTION_POINT_RADIUS;
     static const float         DEBUG_TEXT_SCALE;
     static const float         DEF_GRID_INTERVAL;
@@ -158,8 +165,12 @@ private:
     static const string ICON_DELETE;
     static const string ICON_DELETE_LINK;
     static const string ICON_DELETE_STOP;
+    static const string ICON_DETAILS;
     static const string ICON_DUPLICATE;
     static const string ICON_EXIT;
+    static const string ICON_INFO;
+    static const string ICON_LAYOUT;
+    static const string ICON_MOBS;
     static const string ICON_NEW;
     static const string ICON_NEW_1WAY_LINK;
     static const string ICON_NEW_CIRCLE_SECTOR;
@@ -167,13 +178,16 @@ private:
     static const string ICON_NEW_STOP;
     static const string ICON_NEXT;
     static const string ICON_OPTIONS;
+    static const string ICON_PATHS;
     static const string ICON_PREVIOUS;
     static const string ICON_REFERENCE;
+    static const string ICON_REVIEW;
     static const string ICON_SAVE;
     static const string ICON_SELECT_NONE;
     static const string ICON_SELECT_EDGES;
     static const string ICON_SELECT_SECTORS;
     static const string ICON_SELECT_VERTEXES;
+    static const string ICON_TOOLS;
     
     
     //GUI widgets.
@@ -197,6 +211,8 @@ private:
     lafi::frame* frm_options;
     lafi::frame* frm_bottom;
     lafi::label* lbl_status_bar;
+    lafi::style* gui_style;
+    lafi::style* faded_style;
     
     //Current state.
     size_t state;
@@ -232,8 +248,6 @@ private:
     vector<layout_drawing_node> drawing_nodes;
     //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
     unsigned char drawing_line_error;
-    //Current grid interval.
-    float grid_interval;
     //Is the GUI currently what's in focus, i.e. the last thing clicked?
     bool is_gui_focused;
     //Is Ctrl pressed down?
@@ -368,8 +382,6 @@ private:
     timer status_override_timer;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
-    //Loaded textures.
-    bmp_manager textures;
     
     bool are_nodes_traversable(
         const layout_drawing_node &n1,
@@ -403,10 +415,7 @@ private:
         const ALLEGRO_COLOR color, const point &where, const string &text,
         const unsigned char dots = 0
     );
-    void draw_transformation_handles(
-        const point center, const point size, const float angle,
-        const bool draw_angle_handles
-    );
+    void draw_line_dist(const point &focus, const point &other);
     void emit_status_bar_message(const string &text, const bool important);
     void emit_triangulation_error_status_bar_message(
         const TRIANGULATION_ERRORS error
@@ -503,6 +512,7 @@ private:
     void gui_to_details();
     void gui_to_info();
     void gui_to_mob();
+    void gui_to_options();
     void gui_to_sector();
     void gui_to_tools();
     void hide_all_frames();

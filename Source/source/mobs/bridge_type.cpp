@@ -42,16 +42,14 @@ void bridge_type::load_resources(data_node* file) {
     main_texture_file_name =
         file->get_child_by_name("main_texture")->value;
     if(!main_texture_file_name.empty()) {
-        bmp_main_texture =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + main_texture_file_name);
+        bmp_main_texture = textures.get(main_texture_file_name);
             
     }
     
     rail_texture_file_name =
         file->get_child_by_name("rail_texture")->value;
     if(!rail_texture_file_name.empty()) {
-        bmp_rail_texture =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + rail_texture_file_name);
+        bmp_rail_texture = textures.get(rail_texture_file_name);
     }
 }
 
@@ -71,6 +69,6 @@ anim_conversion_vector bridge_type::get_anim_conversions() {
  * Unloads resources from memory.
  */
 void bridge_type::unload_resources() {
-    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + main_texture_file_name);
-    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + rail_texture_file_name);
+    textures.detach(main_texture_file_name);
+    textures.detach(rail_texture_file_name);
 }

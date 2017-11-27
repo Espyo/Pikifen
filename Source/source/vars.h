@@ -130,6 +130,10 @@ extern asset_file_names_struct asset_file_names;
 //General globals.
 
 extern vector<string> animation_editor_history;
+extern float area_editor_backup_interval;
+extern float area_editor_grid_interval;
+extern bool area_editor_show_edge_length;
+extern unsigned char area_editor_view_mode;
 //How much real time has passed since the area was loaded.
 extern float area_time_passed;
 extern timer area_title_fade_timer;
@@ -213,7 +217,6 @@ extern float day_minutes_start;
 extern double delta_t;
 extern ALLEGRO_DISPLAY* display;
 extern bool draw_cursor_trail;
-extern float editor_backup_interval;
 extern map<string, enemy_type*> enemy_types;
 extern vector<enemy*> enemies;
 extern fade_manager fade_mgr;
@@ -354,6 +357,7 @@ extern vector<spray_type> spray_types;
 extern float standard_pikmin_height;
 extern float standard_pikmin_radius;
 extern map<string, status_type> status_types;
+extern bmp_manager textures;
 extern bool throw_can_reach_cursor;
 extern float transition_time;
 extern bool transition_fade_in;

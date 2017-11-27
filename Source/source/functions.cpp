@@ -124,9 +124,7 @@ void clear_area_textures() {
             s_ptr->texture_info.bitmap &&
             s_ptr->texture_info.bitmap != bmp_error
         ) {
-            bitmaps.detach(
-                TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name
-            );
+            textures.detach(s_ptr->texture_info.file_name);
             s_ptr->texture_info.bitmap = NULL;
         }
     }
@@ -747,11 +745,37 @@ void save_options() {
     }
     
     //Other options.
-    file.add(new data_node("draw_cursor_trail", b2s(draw_cursor_trail)));
     file.add(
-        new data_node("editor_backup_interval", f2s(editor_backup_interval))
+        new data_node(
+            "draw_cursor_trail", b2s(draw_cursor_trail)
+        )
     );
-    file.add(new data_node("fps", i2s(game_fps)));
+    file.add(
+        new data_node(
+            "area_editor_backup_interval", f2s(area_editor_backup_interval)
+        )
+    );
+    file.add(
+        new data_node(
+            "area_editor_grid_interval", i2s(area_editor_grid_interval
+                                            )
+        )
+    );
+    file.add(
+        new data_node(
+            "area_editor_show_edge_length", b2s(area_editor_show_edge_length)
+        )
+    );
+    file.add(
+        new data_node(
+            "area_editor_view_mode", i2s(area_editor_view_mode)
+        )
+    );
+    file.add(
+        new data_node(
+            "fps", i2s(game_fps)
+        )
+    );
     file.add(
         new data_node("joystick_min_deadzone", f2s(joystick_min_deadzone))
     );

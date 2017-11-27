@@ -193,12 +193,11 @@ void load_area(
                 get_value_or_default("255 255 255")
             );
             
-        new_sector->texture_info.bitmap =
-            bitmaps.get(
-                TEXTURES_FOLDER_NAME + "/" +
-                new_sector->texture_info.file_name, NULL
-            );
-            
+        if(!new_sector->fade) {
+            new_sector->texture_info.bitmap =
+                textures.get(new_sector->texture_info.file_name, NULL);
+        }
+        
         data_node* hazards_node = sector_data->get_child_by_name("hazards");
         vector<string> hazards_strs =
             semicolon_list_to_vector(hazards_node->value);
@@ -351,9 +350,8 @@ void load_area(
                 )->get_value_or_default("255")
             );
         s_ptr->file_name = shadow_node->get_child_by_name("file")->value;
-        s_ptr->bitmap =
-            bitmaps.get(TEXTURES_FOLDER_NAME + "/" + s_ptr->file_name, NULL);
-            
+        s_ptr->bitmap = textures.get(s_ptr->file_name, NULL);
+        
         words = split(shadow_node->get_child_by_name("sway")->value);
         s_ptr->sway.x = (words.size() >= 1 ? s2f(words[0]) : 0);
         s_ptr->sway.y = (words.size() >= 2 ? s2f(words[1]) : 0);
@@ -449,10 +447,7 @@ void load_area_textures() {
             s_ptr->texture_info.bitmap = NULL;
         } else {
             s_ptr->texture_info.bitmap =
-                bitmaps.get(
-                    TEXTURES_FOLDER_NAME + "/" +
-                    s_ptr->texture_info.file_name, NULL
-                );
+                textures.get(s_ptr->texture_info.file_name, NULL);
         }
     }
 }
@@ -507,9 +502,16 @@ void load_asset_file_names() {
  */
 ALLEGRO_BITMAP* load_bmp(
     const string &file_name, data_node* node,
-    const bool report_error, const bool error_bmp_on_error
+    const bool report_error, const bool error_bmp_on_error,
+    const bool error_bmp_on_empty
 ) {
-    if(file_name.empty()) return NULL;
+    if(file_name.empty()) {
+        if(error_bmp_on_empty) {
+            return bmp_error;
+        } else {
+            return NULL;
+        }
+    }
     ALLEGRO_BITMAP* b =
         al_load_bitmap((GRAPHICS_FOLDER_PATH + "/" + file_name).c_str());
         
@@ -1062,7 +1064,10 @@ void load_options() {
     reader_setter rs(&file);
     string resolution_str;
     rs.set("draw_cursor_trail", draw_cursor_trail);
-    rs.set("editor_backup_interval", editor_backup_interval);
+    rs.set("area_editor_backup_interval", area_editor_backup_interval);
+    rs.set("area_editor_grid_interval", area_editor_grid_interval);
+    rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
+    rs.set("area_editor_view_mode", area_editor_view_mode);
     rs.set("fps", game_fps);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);
     rs.set("joystick_max_deadzone", joystick_max_deadzone);
@@ -1433,10 +1438,7 @@ void unload_area_textures() {
         
         if(s_ptr->texture_info.file_name.empty()) continue;
         
-        bitmaps.detach(
-            TEXTURES_FOLDER_NAME + "/" +
-            s_ptr->texture_info.file_name
-        );
+        textures.detach(s_ptr->texture_info.file_name);
         s_ptr->texture_info.file_name.clear();
         s_ptr->texture_info.bitmap = NULL;
     }
