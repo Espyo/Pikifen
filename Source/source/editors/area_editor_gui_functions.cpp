@@ -381,6 +381,50 @@ void area_editor::gui_to_mob() {
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the options data to memory using info on the gui.
+ */
+void area_editor::gui_to_options() {
+    area_editor_backup_interval =
+        s2i(((lafi::textbox*) frm_options->widgets["txt_backup"])->text);
+    area_editor_show_edge_length =
+        ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->checked;
+        
+    if(
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_textures"]
+        )->selected
+    ) {
+        area_editor_view_mode = VIEW_MODE_TEXTURES;
+        
+    } else if(
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_wireframe"]
+        )->selected
+    ) {
+        area_editor_view_mode = VIEW_MODE_WIREFRAME;
+        
+    } else if(
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_heightmap"]
+        )->selected
+    ) {
+        area_editor_view_mode = VIEW_MODE_HEIGHTMAP;
+        
+    } else if(
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_brightness"]
+        )->selected
+    ) {
+        area_editor_view_mode = VIEW_MODE_BRIGHTNESS;
+        
+    }
+    
+    save_options();
+    options_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Saves the sector data to memory using info on the gui.
  */
 void area_editor::gui_to_sector() {
@@ -638,7 +682,31 @@ void area_editor::open_picker(const unsigned char type) {
  */
 void area_editor::options_to_gui() {
     ((lafi::label*) frm_options->widgets["lbl_grid"])->text =
-        "Grid: " + i2s(grid_interval);
+        "Grid: " + i2s(area_editor_grid_interval);
+    ((lafi::textbox*) frm_options->widgets["txt_backup"])->text =
+        i2s(area_editor_backup_interval);
+    ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->set(
+        area_editor_show_edge_length
+    );
+    
+    if(area_editor_view_mode == VIEW_MODE_TEXTURES) {
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_textures"]
+        )->select();
+        
+    } else if(area_editor_view_mode == VIEW_MODE_WIREFRAME) {
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_wireframe"]
+        )->select();
+    } else if(area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_heightmap"]
+        )->select();
+    } else if(area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+        (
+            (lafi::radio_button*) frm_options->widgets["rad_view_brightness"]
+        )->select();
+    }
 }
 
 

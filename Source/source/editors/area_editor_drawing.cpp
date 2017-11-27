@@ -23,6 +23,23 @@ void area_editor::do_drawing() {
     
     al_clear_to_color(al_map_rgb(0, 0, 0));
     
+    float lowest_sector_z = 0.0f;
+    float highest_sector_z = 0.0f;
+    if(
+        area_editor_view_mode == VIEW_MODE_HEIGHTMAP &&
+        !cur_area_data.sectors.empty()
+    ) {
+        lowest_sector_z = cur_area_data.sectors[0]->z;
+        highest_sector_z = lowest_sector_z;
+        
+        for(size_t s = 1; s < cur_area_data.sectors.size(); ++s) {
+            lowest_sector_z =
+                min(lowest_sector_z, cur_area_data.sectors[s]->z);
+            highest_sector_z =
+                max(highest_sector_z, cur_area_data.sectors[s]->z);
+        }
+    }
+    
     float selection_min_opacity = 0.25f;
     float selection_max_opacity = 0.75f;
     float textures_opacity = 0.4f;
@@ -81,9 +98,25 @@ void area_editor::do_drawing() {
             s_ptr = cur_area_data.sectors[s];
         }
         
-        draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
-        if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
-            draw_sector_shadows(s_ptr, point(), 1.0);
+        bool view_heightmap = false;
+        bool view_brightness = false;
+        
+        if(
+            area_editor_view_mode == VIEW_MODE_TEXTURES ||
+            sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW
+        ) {
+            draw_sector_texture(s_ptr, point(), 1.0, textures_opacity);
+            
+            if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
+                draw_sector_shadows(s_ptr, point(), 1.0);
+            }
+            
+        } else if(area_editor_view_mode == VIEW_MODE_HEIGHTMAP) {
+            view_heightmap = true;
+            
+        } else if(area_editor_view_mode == VIEW_MODE_BRIGHTNESS) {
+            view_brightness = true;
+            
         }
         
         bool selected =
@@ -97,13 +130,29 @@ void area_editor::do_drawing() {
             valid = false;
         }
         
-        if(selected || !valid) {
+        if(selected || !valid || view_heightmap || view_brightness) {
             for(size_t t = 0; t < s_ptr->triangles.size(); ++t) {
             
                 ALLEGRO_VERTEX av[3];
                 for(size_t v = 0; v < 3; ++v) {
                     if(!valid) {
                         av[v].color = al_map_rgba(160, 16, 16, 224);
+                    } else if(view_brightness) {
+                        av[v].color =
+                            al_map_rgba(
+                                s_ptr->brightness * 0.7,
+                                s_ptr->brightness * 0.8,
+                                s_ptr->brightness * 0.7,
+                                255
+                            );
+                    } else if(view_heightmap) {
+                        unsigned char g =
+                            interpolate_number(
+                                s_ptr->z, lowest_sector_z, highest_sector_z,
+                                0, 224
+                            );
+                        av[v].color =
+                            al_map_rgba(g, g + 31, g, 255);
                     } else {
                         av[v].color =
                             al_map_rgba(
@@ -142,59 +191,59 @@ void area_editor::do_drawing() {
     );
     
     float x =
-        floor(cam_top_left_corner.x / grid_interval) * grid_interval;
-    while(x < cam_bottom_right_corner.x + grid_interval) {
+        floor(cam_top_left_corner.x / area_editor_grid_interval) * area_editor_grid_interval;
+    while(x < cam_bottom_right_corner.x + area_editor_grid_interval) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
-        if(fmod(x, grid_interval * 2) == 0) {
+        if(fmod(x, area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+            if((area_editor_grid_interval * 2) * cam_zoom <= 6) draw_line = false;
         } else {
-            if(grid_interval * cam_zoom <= 6) draw_line = false;
+            if(area_editor_grid_interval * cam_zoom <= 6) draw_line = false;
         }
         
         if(draw_line) {
             al_draw_line(
                 x, cam_top_left_corner.y,
-                x, cam_bottom_right_corner.y + grid_interval,
+                x, cam_bottom_right_corner.y + area_editor_grid_interval,
                 c, 1.0 / cam_zoom
             );
         }
-        x += grid_interval;
+        x += area_editor_grid_interval;
     }
     
     float y =
-        floor(cam_top_left_corner.y / grid_interval) * grid_interval;
-    while(y < cam_bottom_right_corner.y + grid_interval) {
+        floor(cam_top_left_corner.y / area_editor_grid_interval) * area_editor_grid_interval;
+    while(y < cam_bottom_right_corner.y + area_editor_grid_interval) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
-        if(fmod(y, grid_interval * 2) == 0) {
+        if(fmod(y, area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+            if((area_editor_grid_interval * 2) * cam_zoom <= 6) draw_line = false;
         } else {
-            if(grid_interval * cam_zoom <= 6) draw_line = false;
+            if(area_editor_grid_interval * cam_zoom <= 6) draw_line = false;
         }
         
         if(draw_line) {
             al_draw_line(
                 cam_top_left_corner.x, y,
-                cam_bottom_right_corner.x + grid_interval, y,
+                cam_bottom_right_corner.x + area_editor_grid_interval, y,
                 c, 1.0 / cam_zoom
             );
         }
-        y += grid_interval;
+        y += area_editor_grid_interval;
     }
     
     //0,0 marker.
     al_draw_line(
-        -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2, 0,
+        -(DEF_area_editor_grid_interval * 2), 0, DEF_area_editor_grid_interval * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
     al_draw_line(
-        0, -(DEF_GRID_INTERVAL * 2), 0, DEF_GRID_INTERVAL * 2,
+        0, -(DEF_area_editor_grid_interval * 2), 0, DEF_area_editor_grid_interval * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
@@ -275,6 +324,35 @@ void area_editor::do_drawing() {
             ),
             (selected ? 3.0 : 2.0) / cam_zoom
         );
+        
+        if(moving && area_editor_show_edge_length) {
+            bool draw_dist = false;
+            point other_point;
+            if(
+                e_ptr->vertexes[0] == move_closest_vertex &&
+                selected_vertexes.find(e_ptr->vertexes[1]) ==
+                selected_vertexes.end()
+            ) {
+                other_point.x = e_ptr->vertexes[1]->x;
+                other_point.y = e_ptr->vertexes[1]->y;
+                draw_dist = true;
+            } else if(
+                e_ptr->vertexes[1] == move_closest_vertex &&
+                selected_vertexes.find(e_ptr->vertexes[0]) ==
+                selected_vertexes.end()
+            ) {
+                other_point.x = e_ptr->vertexes[0]->x;
+                other_point.y = e_ptr->vertexes[0]->y;
+                draw_dist = true;
+            }
+            
+            if(draw_dist) {
+                draw_line_dist(
+                    point(move_closest_vertex->x, move_closest_vertex->y),
+                    other_point
+                );
+            }
+        }
         
         if(debug_triangulation && !selected_sectors.empty()) {
             sector* s_ptr = *selected_sectors.begin();
@@ -732,15 +810,16 @@ void area_editor::do_drawing() {
                 3.0 / cam_zoom
             );
         }
-        ALLEGRO_COLOR new_line_color =
-            interpolate_color(
-                new_sector_error_tint_timer.get_ratio_left(),
-                1, 0,
-                al_map_rgb(255, 0, 0),
-                al_map_rgb(64, 255, 64)
-            );
         if(!drawing_nodes.empty()) {
+            ALLEGRO_COLOR new_line_color =
+                interpolate_color(
+                    new_sector_error_tint_timer.get_ratio_left(),
+                    1, 0,
+                    al_map_rgb(255, 0, 0),
+                    al_map_rgb(64, 255, 64)
+                );
             point hotspot = snap_to_grid(mouse_cursor_w);
+            
             al_draw_line(
                 drawing_nodes.back().snapped_spot.x,
                 drawing_nodes.back().snapped_spot.y,
@@ -749,6 +828,10 @@ void area_editor::do_drawing() {
                 new_line_color,
                 3.0 / cam_zoom
             );
+            
+            if(area_editor_show_edge_length) {
+                draw_line_dist(hotspot, drawing_nodes.back().snapped_spot);
+            }
         }
     }
     
@@ -1220,4 +1303,22 @@ void area_editor::draw_debug_text(
             );
         }
     }
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Draws a number signifying the distance between two points next to the
+ * main one.
+ */
+void area_editor::draw_line_dist(const point &focus, const point &other) {
+    float d = dist(other, focus).to_float();
+    if(d < 64) return;
+    
+    float angle = get_angle(focus, other);
+    point length_nr_pos;
+    length_nr_pos.x = focus.x + cos(angle) * 64.0;
+    length_nr_pos.y = focus.y + sin(angle) * 64.0;
+    length_nr_pos.y -= 12;
+    
+    draw_debug_text(al_map_rgb(64, 255, 64), length_nr_pos, i2s(d));
 }

@@ -715,10 +715,7 @@ void area_data::clone(area_data &other) {
         s_ptr->clone(os_ptr);
         os_ptr->texture_info.file_name = s_ptr->texture_info.file_name;
         os_ptr->texture_info.bitmap =
-            bitmaps.get(
-                TEXTURES_FOLDER_NAME + "/" + s_ptr->texture_info.file_name,
-                NULL, false
-            );
+            textures.get(s_ptr->texture_info.file_name, NULL, false);
         os_ptr->edges.reserve(s_ptr->edges.size());
         os_ptr->edge_nrs.reserve(s_ptr->edge_nrs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
@@ -773,10 +770,7 @@ void area_data::clone(area_data &other) {
         ot_ptr->file_name = t_ptr->file_name;
         ot_ptr->size = t_ptr->size;
         ot_ptr->sway = t_ptr->sway;
-        ot_ptr->bitmap =
-            bitmaps.get(
-                TEXTURES_FOLDER_NAME + "/" + t_ptr->file_name, NULL, false
-            );
+        ot_ptr->bitmap = textures.get(t_ptr->file_name, NULL, false);
     }
     
     other.name = name;
@@ -1273,7 +1267,7 @@ tree_shadow::tree_shadow(
  * Destroys a tree shadow.
  */
 tree_shadow::~tree_shadow() {
-    bitmaps.detach(TEXTURES_FOLDER_NAME + "/" + file_name);
+    textures.detach(file_name);
 }
 
 
@@ -1358,19 +1352,27 @@ void vertex::remove_edge(edge* e_ptr) {
  * all_vertexes: Vector with all of the vertexes in the area.
  * merge_radius: Minimum radius to merge.
  * v_nr:         If not NULL, the vertex's number is returned here.
- * ignore:       Ignore this vertex when checking, if not NULL.
+ * after:        Only check vertexes that come after this one.
  */
 vertex* get_merge_vertex(
     const point &pos, vector<vertex*> &all_vertexes,
-    const float merge_radius, size_t* v_nr, vertex* ignore
+    const float merge_radius, size_t* v_nr, vertex* after
 ) {
+    bool found_after = (!after ? true : false);
     dist closest_dist = 0;
     vertex* closest_v = NULL;
     size_t closest_nr = INVALID;
     
     for(size_t v = 0; v < all_vertexes.size(); ++v) {
         vertex* v_ptr = all_vertexes[v];
-        if(v_ptr == ignore) continue;
+        
+        if(v_ptr == after) {
+            found_after = true;
+            continue;
+        } else if(!found_after) {
+            continue;
+        }
+        
         dist d(pos, point(v_ptr->x, v_ptr->y));
         if(
             d <= merge_radius &&

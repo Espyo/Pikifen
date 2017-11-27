@@ -22,8 +22,6 @@ using namespace std;
 const float area_editor::CROSS_SECTION_POINT_RADIUS = 8.0f;
 //Scale the debug text by this much.
 const float area_editor::DEBUG_TEXT_SCALE = 1.3f;
-//Default grid interval.
-const float area_editor::DEF_GRID_INTERVAL = 32.0f;
 //Time until the next click is no longer considered a double-click.
 const float area_editor::DOUBLE_CLICK_TIMEOUT = 0.5f;
 //How much to zoom in/out with the keyboard keys.
@@ -70,8 +68,12 @@ const float area_editor::ZOOM_MIN_LEVEL_EDITOR = 0.01f;
 const string area_editor::ICON_DELETE = "Delete.png";
 const string area_editor::ICON_DELETE_LINK = "Delete_link.png";
 const string area_editor::ICON_DELETE_STOP = "Delete_stop.png";
+const string area_editor::ICON_DETAILS = "Details.png";
 const string area_editor::ICON_DUPLICATE = "Duplicate.png";
 const string area_editor::ICON_EXIT = "Exit.png";
+const string area_editor::ICON_INFO = "Info.png";
+const string area_editor::ICON_LAYOUT = "Layout.png";
+const string area_editor::ICON_MOBS = "Mobs.png";
 const string area_editor::ICON_NEW = "New.png";
 const string area_editor::ICON_NEW_1WAY_LINK = "New_1wlink.png";
 const string area_editor::ICON_NEW_CIRCLE_SECTOR = "New_circle_sector.png";
@@ -79,13 +81,16 @@ const string area_editor::ICON_NEW_LINK = "New_link.png";
 const string area_editor::ICON_NEW_STOP = "New_stop.png";
 const string area_editor::ICON_NEXT = "Next.png";
 const string area_editor::ICON_OPTIONS = "Options.png";
+const string area_editor::ICON_PATHS = "Paths.png";
 const string area_editor::ICON_PREVIOUS = "Previous.png";
 const string area_editor::ICON_REFERENCE = "Reference.png";
+const string area_editor::ICON_REVIEW = "Review.png";
 const string area_editor::ICON_SAVE = "Save.png";
 const string area_editor::ICON_SELECT_NONE = "Select_none.png";
 const string area_editor::ICON_SELECT_EDGES = "Select_edges.png";
 const string area_editor::ICON_SELECT_SECTORS = "Select_sectors.png";
 const string area_editor::ICON_SELECT_VERTEXES = "Select_vertexes.png";
+const string area_editor::ICON_TOOLS = "Tools.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -154,7 +159,7 @@ area_editor::layout_drawing_node::layout_drawing_node() :
  */
 area_editor::area_editor() :
     state(EDITOR_STATE_MAIN),
-    backup_timer(editor_backup_interval),
+    backup_timer(area_editor_backup_interval),
     debug_edge_nrs(false),
     debug_sector_nrs(false),
     debug_triangulation(false),
@@ -162,7 +167,6 @@ area_editor::area_editor() :
     double_click_time(0),
     drawing_line_error(DRAWING_LINE_NO_ERROR),
     problem_edge_intersection(NULL, NULL),
-    grid_interval(DEF_GRID_INTERVAL),
     is_ctrl_pressed(false),
     is_shift_pressed(false),
     is_gui_focused(false),
@@ -182,15 +186,14 @@ area_editor::area_editor() :
     show_closest_stop(false),
     show_path_preview(false),
     status_override_timer(STATUS_OVERRIDE_IMPORTANT_DURATION),
-    show_reference(false),
-    textures(TEXTURES_FOLDER_NAME) {
+    show_reference(false) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
     
-    if(editor_backup_interval > 0) {
+    if(area_editor_backup_interval > 0) {
         backup_timer =
-        timer(editor_backup_interval, [this] () {save_backup();});
+        timer(area_editor_backup_interval, [this] () {save_backup();});
     }
     
     selected_shadow_transformation.allow_rotation = true;
@@ -556,17 +559,17 @@ void area_editor::clear_current_area() {
     show_cross_section_grid = false;
     show_path_preview = false;
     path_preview.clear();
-    path_preview_checkpoints[0] = point(-DEF_GRID_INTERVAL, 0);
-    path_preview_checkpoints[1] = point(DEF_GRID_INTERVAL, 0);
-    cross_section_points[0] = point(-DEF_GRID_INTERVAL, 0);
-    cross_section_points[1] = point(DEF_GRID_INTERVAL, 0);
+    path_preview_checkpoints[0] = point(-DEF_area_editor_grid_interval, 0);
+    path_preview_checkpoints[1] = point(DEF_area_editor_grid_interval, 0);
+    cross_section_points[0] = point(-DEF_area_editor_grid_interval, 0);
+    cross_section_points[1] = point(DEF_area_editor_grid_interval, 0);
     
     clear_texture_suggestions();
     
     cur_area_data.clear();
     
     made_changes = false;
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     
     state = EDITOR_STATE_MAIN;
     change_to_right_frame();
@@ -649,7 +652,7 @@ void area_editor::create_area() {
     
     //Create a sector for it.
     clear_layout_drawing();
-    float r = DEF_GRID_INTERVAL * 10;
+    float r = DEF_area_editor_grid_interval * 10;
     
     layout_drawing_node n;
     n.raw_spot = point(-r, -r);
@@ -805,7 +808,7 @@ void area_editor::do_logic() {
     new_sector_error_tint_timer.tick(delta_t);
     status_override_timer.tick(delta_t);
     
-    if(!cur_area_name.empty() && editor_backup_interval > 0) {
+    if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
     }
     
@@ -1158,7 +1161,11 @@ void area_editor::finish_layout_drawing() {
             outer_sector->texture_info.file_name
         );
     } else {
-        update_sector_texture(new_sector, "");
+        if(!texture_suggestions.empty()) {
+            update_sector_texture(new_sector, texture_suggestions[0].name);
+        } else {
+            update_sector_texture(new_sector, "");
+        }
     }
     
     //First, create vertexes wherever necessary.
@@ -1395,12 +1402,18 @@ void area_editor::finish_layout_moving() {
     //Find merge vertexes and edges to split, if any.
     for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
         point p((*v)->x, (*v)->y);
-        vertex* merge_v =
-            get_merge_vertex(
-                p, cur_area_data.vertexes,
-                cam_zoom / VERTEX_MERGE_RADIUS, NULL, *v
-            );
-            
+        vertex* merge_v = NULL;
+        do {
+            merge_v =
+                get_merge_vertex(
+                    p, cur_area_data.vertexes,
+                    cam_zoom / VERTEX_MERGE_RADIUS, NULL, merge_v
+                );
+        } while(
+            merge_v == *v ||
+            selected_vertexes.find(merge_v) != selected_vertexes.end()
+        );
+        
         if(merge_v) {
             merges[*v] = merge_v;
             
@@ -1435,6 +1448,8 @@ void area_editor::finish_layout_moving() {
         }
     }
     
+    //If an edge is moving into a stationary vertex, it needs to be split.
+    //Let's find such edges.
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         point p(v_ptr->x, v_ptr->y);
@@ -1457,6 +1472,7 @@ void area_editor::finish_layout_moving() {
             e_ptr = get_edge_under_point(p, e_ptr);
         } while(
             e_ptr != NULL &&
+            v_ptr->has_edge(e_ptr) &&
             moved_edges.find(e_ptr) == moved_edges.end()
         );
         if(e_ptr) {
@@ -2210,7 +2226,7 @@ void area_editor::load_area(const bool from_backup) {
         ++u
     ) {
         texture_suggestions.push_back(
-            texture_suggestion(texture_uses_vector[u].first, &textures)
+            texture_suggestion(texture_uses_vector[u].first)
         );
     }
     
@@ -2235,7 +2251,7 @@ void area_editor::load_backup() {
     if(!update_backup_status()) return;
     
     load_area(true);
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
 }
 
 
@@ -2841,7 +2857,7 @@ void area_editor::save_area(const bool to_backup) {
         AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt"
     );
     
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     enable_widget(frm_tools->widgets["but_load"]);
     
     emit_status_bar_message("Saved successfully.", false);
@@ -2853,7 +2869,7 @@ void area_editor::save_area(const bool to_backup) {
  */
 void area_editor::save_backup() {
 
-    backup_timer.start(editor_backup_interval);
+    backup_timer.start(area_editor_backup_interval);
     
     //First, check if the folder even exists.
     //If not, chances are this is a new area.
@@ -2991,8 +3007,8 @@ point area_editor::snap_to_grid(const point &p) {
     if(is_shift_pressed) return p;
     return
         point(
-            round(p.x / grid_interval) * grid_interval,
-            round(p.y / grid_interval) * grid_interval
+            round(p.x / area_editor_grid_interval) * area_editor_grid_interval,
+            round(p.y / area_editor_grid_interval) * area_editor_grid_interval
         );
 }
 
@@ -3141,7 +3157,8 @@ void area_editor::unload() {
     //TODO
     clear_current_area();
     
-    delete(gui->style);
+    delete(gui_style);
+    delete(faded_style);
     delete(gui);
     
     unload_hazards();
@@ -3203,7 +3220,7 @@ void area_editor::update_texture_suggestions(const string &n) {
         //If it doesn't exist, create it and add it to the top.
         texture_suggestions.insert(
             texture_suggestions.begin(),
-            texture_suggestion(n, &textures)
+            texture_suggestion(n)
         );
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
@@ -3274,13 +3291,12 @@ void area_editor::zoom(const float new_zoom, const bool anchor_cursor) {
  * Creates a texture suggestion.
  */
 area_editor::texture_suggestion::texture_suggestion(
-    const string &n, bmp_manager* bm
+    const string &n
 ) :
     bmp(NULL),
-    name(n),
-    bm(bm) {
+    name(n) {
     
-    bmp = bm->get(name, NULL, false);
+    bmp = textures.get(name, NULL, false);
 }
 
 
@@ -3288,5 +3304,5 @@ area_editor::texture_suggestion::texture_suggestion(
  * Destroys a texture suggestion.
  */
 void area_editor::texture_suggestion::destroy() {
-    bm->detach(name);
+    textures.detach(name);
 }
