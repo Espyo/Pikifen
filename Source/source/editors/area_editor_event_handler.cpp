@@ -179,16 +179,16 @@ void area_editor::handle_controls(const ALLEGRO_EVENT &ev) {
  */
 void area_editor::handle_key_char(const ALLEGRO_EVENT &ev) {
     if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
-        cam_pos.x -= DEF_area_editor_grid_interval / cam_zoom;
+        cam_pos.x -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
-        cam_pos.x += DEF_area_editor_grid_interval / cam_zoom;
+        cam_pos.x += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_UP) {
-        cam_pos.y -= DEF_area_editor_grid_interval / cam_zoom;
+        cam_pos.y -= DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_DOWN) {
-        cam_pos.y += DEF_area_editor_grid_interval / cam_zoom;
+        cam_pos.y += DEF_AREA_EDITOR_GRID_INTERVAL / cam_zoom;
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_MINUS) {
         zoom(cam_zoom - (cam_zoom * KEYBOARD_CAM_ZOOM), false);
@@ -490,6 +490,7 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
         if(!clicked_vertex) {
             edge* clicked_edge = get_edge_under_point(mouse_cursor_w);
             if(clicked_edge) {
+                register_change("edge split");
                 vertex* new_vertex = split_edge(clicked_edge, mouse_cursor_w);
                 clear_selection();
                 selected_vertexes.insert(new_vertex);
@@ -593,6 +594,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(sub_state == EDITOR_SUB_STATE_NEW_MOB) {
     
         //Create a mob where the cursor is.
+        register_change("object creation");
         sub_state = EDITOR_SUB_STATE_NONE;
         point hotspot = snap_to_grid(mouse_cursor_w);
         
@@ -605,11 +607,11 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         selected_mobs.insert(cur_area_data.mob_generators.back());
         mob_to_gui();
-        made_changes = true;
         
     } else if(sub_state == EDITOR_SUB_STATE_DUPLICATE_MOB) {
     
         //Duplicate the current mobs to where the cursor is.
+        register_change("object duplication");
         sub_state = EDITOR_SUB_STATE_NONE;
         point hotspot = snap_to_grid(mouse_cursor_w);
         
@@ -643,7 +645,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         clear_selection();
         selected_mobs = mobs_to_select;
         mob_to_gui();
-        made_changes = true;
         
     } else if(sub_state == EDITOR_SUB_STATE_PATH_DRAWING) {
     
@@ -660,11 +661,13 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
                     next_stop = clicked_stop;
                 }
             } else {
+                register_change("path stop creation");
                 next_stop = new path_stop(hotspot);
                 cur_area_data.path_stops.push_back(next_stop);
             }
             
             if(next_stop) {
+                register_change("path stop link");
                 path_drawing_stop_1->add_link(
                     next_stop, path_drawing_normals
                 );
@@ -677,6 +680,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
             if(clicked_stop) {
                 path_drawing_stop_1 = clicked_stop;
             } else {
+                register_change("path stop creation");
                 path_drawing_stop_1 = new path_stop(hotspot);
                 cur_area_data.path_stops.push_back(path_drawing_stop_1);
             }
@@ -689,6 +693,7 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
     } else if(sub_state == EDITOR_SUB_STATE_NEW_SHADOW) {
     
         //Create a new shadow where the cursor is.
+        register_change("tree shadow creation");
         sub_state = EDITOR_SUB_STATE_NONE;
         point hotspot = snap_to_grid(mouse_cursor_w);
         
@@ -699,7 +704,6 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         
         select_tree_shadow(new_shadow);
         details_to_gui();
-        made_changes = true;
         
     } else if(
         sub_state == EDITOR_SUB_STATE_NONE &&
@@ -1192,9 +1196,14 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
     ) {
     
         if(selected_shadow) {
-            selected_shadow_transformation.handle_mouse_move(
-                snap_to_grid(mouse_cursor_w)
-            );
+            register_change("tree shadow transformation");
+            if(
+                !selected_shadow_transformation.handle_mouse_move(
+                    snap_to_grid(mouse_cursor_w)
+                )
+            ) {
+                forget_change();
+            }
             selected_shadow->angle =
                 selected_shadow_transformation.get_angle();
             selected_shadow->center =
@@ -1217,9 +1226,19 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         
     } else if(state == EDITOR_STATE_TOOLS) {
         //Move reference handle.
-        reference_transformation.handle_mouse_move(
-            snap_to_grid(mouse_cursor_w)
-        );
+        register_change("tools change");
+        if(
+            reference_transformation.handle_mouse_move(
+                snap_to_grid(mouse_cursor_w)
+            )
+        ) {
+            cur_area_data.reference_center =
+                reference_transformation.get_center();
+            cur_area_data.reference_size =
+                reference_transformation.get_size();
+        } else {
+            forget_change();
+        }
         tools_to_gui();
         
     } else if(state == EDITOR_STATE_REVIEW) {
@@ -1310,32 +1329,15 @@ void area_editor::handle_mouse_update(const ALLEGRO_EVENT &ev) {
         &mouse_cursor_w.x, &mouse_cursor_w.y
     );
     
-    if(status_override_timer.time_left > 0.0f) {
-        lbl_status_bar->text = status_override_text;
-        
-    } else {
-        if(!is_mouse_in_gui(mouse_cursor_s)) {
-            lbl_status_bar->text =
-                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
-        } else {
-            lafi::widget* wum =
-                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
-            if(wum) {
-                lbl_status_bar->text = wum->description;
-            }
-        }
-    }
+    update_status_bar();
     
     if(sub_state == EDITOR_SUB_STATE_CIRCLE_SECTOR) {
         point hotspot = snap_to_grid(mouse_cursor_w);
         if(new_circle_sector_step == 1) {
             new_circle_sector_anchor = hotspot;
-            
         } else {
             set_new_circle_sector_points();
-            
         }
-        
     }
 }
 

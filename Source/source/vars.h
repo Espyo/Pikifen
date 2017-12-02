@@ -133,6 +133,7 @@ extern vector<string> animation_editor_history;
 extern float area_editor_backup_interval;
 extern float area_editor_grid_interval;
 extern bool area_editor_show_edge_length;
+extern size_t area_editor_undo_limit;
 extern unsigned char area_editor_view_mode;
 //How much real time has passed since the area was loaded.
 extern float area_time_passed;

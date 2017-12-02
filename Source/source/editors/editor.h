@@ -69,6 +69,38 @@ protected:
         transformation_controller();
     };
     
+    /*
+     * Makes setting variables from LAFI widgets easier.
+     */
+    struct gui_to_var_helper {
+    private:
+        map<bool*, bool> bools;
+        map<int*, int> ints;
+        map<float*, float> floats;
+        map<unsigned char*, unsigned char> uchars;
+        map<string*, string> strings;
+        map<ALLEGRO_COLOR*, ALLEGRO_COLOR> colors;
+        map<point*, point> points;
+    public:
+        void register_bool(bool* var, const bool gui_value);
+        void register_int(int* var, const int gui_value);
+        void register_float(float* var, const float gui_value);
+        void register_uchar(
+            unsigned char* var, const unsigned char gui_value
+        );
+        void register_string(
+            string* var, const string &gui_value
+        );
+        void register_color(
+            ALLEGRO_COLOR* var, const ALLEGRO_COLOR &gui_value
+        );
+        void register_point(
+            point* var, const point &gui_value
+        );
+        bool all_equal();
+        void set_all();
+    };
+    
     lafi::frame*  frm_picker;
     lafi::gui*    gui;
     int           gui_x;

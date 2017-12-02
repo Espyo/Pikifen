@@ -241,7 +241,7 @@ struct timer {
     float duration;  //When the timer starts, its time is set to this.
     function<void()> on_end;
     
-    timer(const float duration, const function<void()> &on_end = nullptr);
+    timer(const float duration = 0, const function<void()> &on_end = nullptr);
     ~timer();
     void start(const bool can_restart = true);
     void start(const float new_duration);

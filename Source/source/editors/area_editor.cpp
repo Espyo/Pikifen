@@ -11,6 +11,8 @@
 
 #include <algorithm>
 
+#include <allegro5/allegro_native_dialog.h>
+
 #include "area_editor.h"
 #include "../functions.h"
 #include "../load.h"
@@ -57,7 +59,9 @@ const float area_editor::SELECTION_EFFECT_SPEED = M_PI * 4;
 //How long to override the status bar text for, for important messages.
 const float area_editor::STATUS_OVERRIDE_IMPORTANT_DURATION = 6.0f;
 //How long to override the status bar text for, for unimportant messages.
-const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 2.0f;
+const float area_editor::STATUS_OVERRIDE_UNIMPORTANT_DURATION = 1.5f;
+//Wait this long before letting a new repeat undo operation be saved.
+const float area_editor::UNDO_SAVE_LOCK_DURATION = 1.0f;
 //Minimum distance between two vertexes for them to merge.
 const float area_editor::VERTEX_MERGE_RADIUS = 10.0f;
 //Maximum zoom level possible in the editor.
@@ -91,6 +95,7 @@ const string area_editor::ICON_SELECT_EDGES = "Select_edges.png";
 const string area_editor::ICON_SELECT_SECTORS = "Select_sectors.png";
 const string area_editor::ICON_SELECT_VERTEXES = "Select_vertexes.png";
 const string area_editor::ICON_TOOLS = "Tools.png";
+const string area_editor::ICON_UNDO = "Undo.png";
 
 
 /* ----------------------------------------------------------------------------
@@ -177,7 +182,6 @@ area_editor::area_editor() :
     moving_cross_section_point(-1),
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
-    path_preview_timer(0),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
@@ -185,11 +189,19 @@ area_editor::area_editor() :
     selection_filter(SELECTION_FILTER_SECTORS),
     show_closest_stop(false),
     show_path_preview(false),
-    status_override_timer(STATUS_OVERRIDE_IMPORTANT_DURATION),
     show_reference(false) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});
+    
+    undo_save_lock_timer =
+        timer(
+            UNDO_SAVE_LOCK_DURATION,
+    [this] () {undo_save_lock_operation.clear();}
+        );
+        
+    status_override_timer =
+    timer(STATUS_OVERRIDE_IMPORTANT_DURATION, [this] () {update_status_bar();});
     
     if(area_editor_backup_interval > 0) {
         backup_timer =
@@ -323,6 +335,10 @@ void area_editor::center_camera(
  * Changes the reference image.
  */
 void area_editor::change_reference(string new_file_name) {
+    if(cur_area_data.reference_file_name == new_file_name) {
+        return;
+    }
+    
     if(reference_bitmap && reference_bitmap != bmp_error) {
         al_destroy_bitmap(reference_bitmap);
     }
@@ -333,8 +349,6 @@ void area_editor::change_reference(string new_file_name) {
     }
     cur_area_data.reference_file_name = new_file_name;
     tools_to_gui();
-    
-    made_changes = true;
 }
 
 
@@ -540,8 +554,6 @@ void area_editor::clear_current_area() {
     
     change_reference("");
     reference_transformation.keep_aspect_ratio = true;
-    reference_transformation.set_center(point());
-    reference_transformation.set_size(point(1000, 1000));
     clear_selection();
     clear_area_textures();
     
@@ -559,10 +571,10 @@ void area_editor::clear_current_area() {
     show_cross_section_grid = false;
     show_path_preview = false;
     path_preview.clear();
-    path_preview_checkpoints[0] = point(-DEF_area_editor_grid_interval, 0);
-    path_preview_checkpoints[1] = point(DEF_area_editor_grid_interval, 0);
-    cross_section_points[0] = point(-DEF_area_editor_grid_interval, 0);
-    cross_section_points[1] = point(DEF_area_editor_grid_interval, 0);
+    path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    path_preview_checkpoints[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    cross_section_points[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    cross_section_points[1] = point(DEF_AREA_EDITOR_GRID_INTERVAL, 0);
     
     clear_texture_suggestions();
     
@@ -622,6 +634,7 @@ void area_editor::clear_selection() {
     selected_mobs.clear();
     selected_path_stops.clear();
     selected_path_links.clear();
+    selected_shadow = NULL;
     selection_homogenized = false;
     
     asa_to_gui();
@@ -644,6 +657,17 @@ void area_editor::clear_texture_suggestions() {
 
 
 /* ----------------------------------------------------------------------------
+ * Clears the undo history, deleting the memory allocated for them.
+ */
+void area_editor::clear_undo_history() {
+    for(size_t h = 0; h < undo_history.size(); ++h) {
+        delete undo_history[h].first;
+    }
+    undo_history.clear();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Creates a new area to work on.
  */
 void area_editor::create_area() {
@@ -652,7 +676,7 @@ void area_editor::create_area() {
     
     //Create a sector for it.
     clear_layout_drawing();
-    float r = DEF_area_editor_grid_interval * 10;
+    float r = DEF_AREA_EDITOR_GRID_INTERVAL * 10;
     
     layout_drawing_node n;
     n.raw_spot = point(-r, -r);
@@ -749,6 +773,9 @@ void area_editor::create_new_from_picker(const string &name) {
  * Deletes the selected path links and/or stops.
  */
 void area_editor::delete_selected_path_elements() {
+    if(selected_path_links.empty() && selected_path_stops.empty()) return;
+    
+    register_change("path deletion");
     for(
         auto l = selected_path_links.begin();
         l != selected_path_links.end(); ++l
@@ -807,6 +834,7 @@ void area_editor::do_logic() {
     path_preview_timer.tick(delta_t);
     new_sector_error_tint_timer.tick(delta_t);
     status_override_timer.tick(delta_t);
+    undo_save_lock_timer.tick(delta_t);
     
     if(!cur_area_name.empty() && area_editor_backup_interval > 0) {
         backup_timer.tick(delta_t);
@@ -1151,6 +1179,8 @@ void area_editor::finish_layout_drawing() {
         return;
     }
     
+    register_change("sector creation");
+    
     //Start creating the new sector.
     sector* new_sector = cur_area_data.new_sector();
     
@@ -1419,10 +1449,26 @@ void area_editor::finish_layout_moving() {
             
         } else {
             edge* e_ptr = NULL;
+            bool e_ptr_v1_selected = false;
+            bool e_ptr_v2_selected = false;
             
             do {
                 e_ptr = get_edge_under_point(p, e_ptr);
-            } while(e_ptr != NULL && (*v)->has_edge(e_ptr));
+                if(e_ptr) {
+                    e_ptr_v1_selected =
+                        selected_vertexes.find(e_ptr->vertexes[0]) !=
+                        selected_vertexes.end();
+                    e_ptr_v2_selected =
+                        selected_vertexes.find(e_ptr->vertexes[1]) !=
+                        selected_vertexes.end();
+                }
+            } while(
+                e_ptr != NULL &&
+                (
+                    (*v)->has_edge(e_ptr) ||
+                    e_ptr_v1_selected || e_ptr_v2_selected
+                )
+            );
             
             if(e_ptr) {
                 edges_to_split[*v] = e_ptr;
@@ -1796,6 +1842,16 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
     }
     
     return NULL;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Forgets the last undo save.
+ */
+void area_editor::forget_change() {
+    delete undo_history[0].first;
+    undo_history.pop_front();
+    update_undo_button();
 }
 
 
@@ -2230,12 +2286,13 @@ void area_editor::load_area(const bool from_backup) {
         );
     }
     
-    reference_transformation.set_center(cur_area_data.reference_center);
-    reference_transformation.set_size(cur_area_data.reference_size);
     change_reference(cur_area_data.reference_file_name);
     
-    enable_widget(frm_tools->widgets["but_load"]);
     made_changes = false;
+    
+    clear_undo_history();
+    update_undo_button();
+    enable_widget(frm_tools->widgets["but_load"]);
     
     cam_zoom = 1.0f;
     cam_pos = point();
@@ -2389,6 +2446,39 @@ void area_editor::merge_vertex(
 
 
 /* ----------------------------------------------------------------------------
+ * Saves the state of the area in the undo history.
+ * When this happens, a timer is set. During this timer, if the next change's
+ * operation is the same as the previous one's, then it is ignored.
+ * This is useful to stop, for instance, a slider
+ * drag from saving several dozen operations in the undo history.
+ */
+void area_editor::register_change(const string operation_name) {
+    if(area_editor_undo_limit == 0) return;
+    
+    if(!undo_save_lock_operation.empty()) {
+        if(undo_save_lock_operation == operation_name) {
+            undo_save_lock_timer.start();
+            return;
+        }
+    }
+    
+    area_data* new_state = new area_data();
+    cur_area_data.clone(*new_state);
+    undo_history.push_front(make_pair(new_state, operation_name));
+    
+    made_changes = true;
+    undo_save_lock_operation = operation_name;
+    undo_save_lock_timer.start();
+    
+    if(undo_history.size() > area_editor_undo_limit) {
+        undo_history.pop_back();
+    }
+    
+    update_undo_button();
+}
+
+
+/* ----------------------------------------------------------------------------
  * Removes the selected sectors, if they are isolated.
  * Returns true on success.
  */
@@ -2499,6 +2589,8 @@ void area_editor::resize_everything(const float mult) {
         return;
     }
     
+    register_change("global resize");
+    
     for(size_t v = 0; v < cur_area_data.vertexes.size(); ++v) {
         vertex* v_ptr = cur_area_data.vertexes[v];
         v_ptr->x *= mult;
@@ -2534,8 +2626,6 @@ void area_editor::resize_everything(const float mult) {
     }
     
     emit_status_bar_message("Resized successfully.", false);
-    
-    made_changes = true;
 }
 
 
@@ -2545,6 +2635,15 @@ void area_editor::resize_everything(const float mult) {
  */
 void area_editor::save_area(const bool to_backup) {
 
+    //Before we start, let's get rid of unused sectors.
+    for(size_t s = 0; s < cur_area_data.sectors.size(); ) {
+        if(cur_area_data.sectors[s]->edges.empty()) {
+            cur_area_data.remove_sector(s);
+        } else {
+            ++s;
+        }
+    }
+    
     //First, the geometry file.
     data_node geometry_file("", "");
     
@@ -2772,8 +2871,6 @@ void area_editor::save_area(const bool to_backup) {
     }
     
     //Editor reference.
-    cur_area_data.reference_center = reference_transformation.get_center();
-    cur_area_data.reference_size = reference_transformation.get_size();
     geometry_file.add(
         new data_node(
             "reference_file_name",
@@ -2849,18 +2946,43 @@ void area_editor::save_area(const bool to_backup) {
     
     
     //Finally, save.
-    geometry_file.save_file(
-        AREAS_FOLDER_PATH + "/" + cur_area_name +
-        (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
-    );
-    data_file.save_file(
-        AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt"
-    );
+    bool geo_save_ok =
+        geometry_file.save_file(
+            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            (to_backup ? "/Geometry_backup.txt" : "/Geometry.txt")
+        );
+    bool data_save_ok =
+        data_file.save_file(
+            AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt"
+        );
+        
+    if(!geo_save_ok || !data_save_ok) {
+        al_show_native_message_box(
+            NULL, "Save failed!",
+            "Could not save the area!",
+            (
+                "An error occured while saving the area to the folder \"" +
+                AREAS_FOLDER_PATH + "/" + cur_area_name + "\". Make sure that "
+                "the folder exists and it is not read-only, and try again."
+            ).c_str(),
+            NULL,
+            ALLEGRO_MESSAGEBOX_WARN
+        );
+        //Reset the locale, which gets set by Allegro's native dialogs...
+        //and breaks s2f().
+        setlocale(LC_ALL, "C");
+        
+        emit_status_bar_message("Could not save the area!", true);
+        
+    } else {
+        if(!to_backup) {
+            emit_status_bar_message("Saved successfully.", false);
+        }
+    }
     
     backup_timer.start(area_editor_backup_interval);
     enable_widget(frm_tools->widgets["but_load"]);
     
-    emit_status_bar_message("Saved successfully.", false);
 }
 
 
@@ -3052,6 +3174,8 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
  * Procedure to start moving the selected mobs.
  */
 void area_editor::start_mob_move() {
+    register_change("object movement");
+    
     move_closest_mob = NULL;
     dist move_closest_mob_dist;
     for(auto m = selected_mobs.begin(); m != selected_mobs.end(); ++m) {
@@ -3076,6 +3200,8 @@ void area_editor::start_mob_move() {
  * Procedure to start moving the selected path stops.
  */
 void area_editor::start_path_stop_move() {
+    register_change("path stop movement");
+    
     move_closest_stop = NULL;
     dist move_closest_stop_dist;
     for(
@@ -3116,6 +3242,8 @@ void area_editor::start_shadow_move() {
  * Procedure to start moving the selected vertexes.
  */
 void area_editor::start_vertex_move() {
+    register_change("vertex movement");
+    
     move_closest_vertex = NULL;
     dist move_closest_vertex_dist;
     for(auto v = selected_vertexes.begin(); v != selected_vertexes.end(); ++v) {
@@ -3137,6 +3265,46 @@ void area_editor::start_vertex_move() {
     
     move_mouse_start_pos = mouse_cursor_w;
     moving = true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Undoes the last change to the area using the undo history, if available.
+ */
+void area_editor::undo() {
+    if(undo_history.empty()) {
+        emit_status_bar_message("Nothing to undo.", false);
+        return;
+    }
+    if(
+        sub_state != EDITOR_SUB_STATE_NONE || moving || selecting
+    ) {
+        emit_status_bar_message(
+            "Can't undo in the middle of an operation.", false
+        );
+        return;
+    }
+    
+    string reference_fn_before = cur_area_data.reference_file_name;
+    
+    undo_history[0].first->clone(cur_area_data);
+    delete undo_history[0].first;
+    undo_history.pop_front();
+    
+    undo_save_lock_timer.time_left = 0;
+    update_undo_button();
+    
+    //Lets revert the reference filename so we can change it properly.
+    string new_reference_fn = cur_area_data.reference_file_name;
+    cur_area_data.reference_file_name = reference_fn_before;
+    change_reference(new_reference_fn);
+    
+    clear_selection();
+    clear_circle_sector();
+    clear_layout_drawing();
+    clear_layout_moving();
+    clear_problems();
+    change_to_right_frame();
 }
 
 
@@ -3200,6 +3368,28 @@ void area_editor::update_sector_texture(sector* s_ptr, const string file_name) {
 
 
 /* ----------------------------------------------------------------------------
+ * Updates the status bar.
+ */
+void area_editor::update_status_bar() {
+    if(status_override_timer.time_left > 0.0f) {
+        lbl_status_bar->text = status_override_text;
+        
+    } else {
+        if(!is_mouse_in_gui(mouse_cursor_s)) {
+            lbl_status_bar->text =
+                "(" + i2s(mouse_cursor_w.x) + "," + i2s(mouse_cursor_w.y) + ")";
+        } else {
+            lafi::widget* wum =
+                gui->get_widget_under_mouse(mouse_cursor_s.x, mouse_cursor_s.y);
+            if(wum) {
+                lbl_status_bar->text = wum->description;
+            }
+        }
+    }
+}
+
+
+/* ----------------------------------------------------------------------------
  * Updates the list of texture suggestions, adding a new one or bumping it up.
  */
 void area_editor::update_texture_suggestions(const string &n) {
@@ -3254,6 +3444,22 @@ void area_editor::update_transformations() {
     //Screen coordinates to world coordinates.
     screen_to_world_transform = world_to_screen_transform;
     al_invert_transform(&screen_to_world_transform);
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Updates the state and description of the undo button based on
+ * the undo history.
+ */
+void area_editor::update_undo_button() {
+    lafi::widget* b = frm_bottom->widgets["but_undo"];
+    if(undo_history.empty()) {
+        disable_widget(b);
+    } else {
+        enable_widget(b);
+        b->description = "Undo: " + undo_history[0].second + ".";
+        update_status_bar();
+    }
 }
 
 
