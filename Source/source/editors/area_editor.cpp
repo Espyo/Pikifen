@@ -189,7 +189,9 @@ area_editor::area_editor() :
     selection_filter(SELECTION_FILTER_SECTORS),
     show_closest_stop(false),
     show_path_preview(false),
-    show_reference(false) {
+    show_reference(false),
+    stt_mode(0),
+    stt_sector(nullptr) {
     
     path_preview_timer =
     timer(PATH_PREVIEW_TIMER_DUR, [this] () {calculate_preview_path();});

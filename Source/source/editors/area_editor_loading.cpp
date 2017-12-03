@@ -1320,8 +1320,8 @@ void area_editor::load() {
         new lafi::dummy(), 10, 16
     );
     frm_paths->easy_add(
-        "rad_normal",
-        new lafi::radio_button("Normal links"), 90, 16
+        "rad_one_way",
+        new lafi::radio_button("One-way links"), 90, 16
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -1329,8 +1329,8 @@ void area_editor::load() {
         new lafi::dummy(), 10, 16
     );
     frm_paths->easy_add(
-        "rad_one_way",
-        new lafi::radio_button("One-way links"), 90, 16
+        "rad_normal",
+        new lafi::radio_button("Normal links"), 90, 16
     );
     frm_paths->easy_row();
     frm_paths->easy_add(
@@ -1393,14 +1393,6 @@ void area_editor::load() {
     frm_paths->widgets["but_del"]->description =
         "Delete the selected stops and/or links. (Delete)";
         
-    frm_paths->widgets["rad_normal"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        path_drawing_normals = true;
-        path_to_gui();
-    };
-    frm_paths->widgets["rad_normal"]->description =
-        "New links drawn will be normal (two-way) links. (2)";
-        
     frm_paths->widgets["rad_one_way"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         path_drawing_normals = false;
@@ -1408,6 +1400,14 @@ void area_editor::load() {
     };
     frm_paths->widgets["rad_one_way"]->description =
         "New links drawn will be one-way links. (1)";
+        
+    frm_paths->widgets["rad_normal"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        path_drawing_normals = true;
+        path_to_gui();
+    };
+    frm_paths->widgets["rad_normal"]->description =
+        "New links drawn will be normal (two-way) links. (2)";
         
     frm_paths->widgets["chk_show_closest"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -1905,6 +1905,11 @@ void area_editor::load() {
     );
     frm_tools->easy_row();
     frm_tools->easy_add(
+        "but_stt",
+        new lafi::button("Texture transformer"), 100, 24
+    );
+    frm_tools->easy_row();
+    frm_tools->easy_add(
         "lbl_resize",
         new lafi::label("Resize everything:"), 100, 16
     );
@@ -1998,6 +2003,14 @@ void area_editor::load() {
     frm_tools->widgets["but_backup"]->description =
         "Discard all changes made and load the auto-backup.";
         
+    frm_tools->widgets["but_stt"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_STT;
+        change_to_right_frame();
+    };
+    frm_tools->widgets["but_stt"]->description =
+        "Allows you to transform the sectors's textures with the mouse.";
+        
     frm_tools->widgets["txt_resize"]->description =
         "Resize multiplier (0.5 = half, 2 = double).";
         
@@ -2010,6 +2023,83 @@ void area_editor::load() {
     };
     frm_tools->widgets["but_resize"]->description =
         "Resize all X/Y coordinates by the given amount.";
+        
+        
+    //Sector texture transformer -- declarations.
+    frm_stt =
+        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+    gui->add("frm_stt", frm_stt);
+    
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "but_back",
+        new lafi::button("Back"), 50, 16
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "lbl_1",
+        new lafi::label("Drag the mouse on"), 100, 12
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "lbl_2",
+        new lafi::label("a texture to change"), 100, 12
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "lbl_3",
+        new lafi::label("its properties."), 100, 12
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "rad_offset",
+        new lafi::radio_button("Offset", 0, true), 100, 16
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "rad_scale",
+        new lafi::radio_button("Scale"), 100, 16
+    );
+    frm_stt->easy_row();
+    frm_stt->easy_add(
+        "rad_angle",
+        new lafi::radio_button("Angle"), 100, 16
+    );
+    frm_stt->easy_row();
+    
+    
+    //Sector texture transformer -- properties.
+    frm_stt->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_TOOLS;
+        change_to_right_frame();
+    };
+    frm_stt->widgets["but_back"]->description =
+        "Go back to the tools menu.";
+        
+    frm_stt->widgets["rad_offset"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        stt_mode = 0;
+        stt_to_gui();
+    };
+    frm_stt->widgets["rad_offset"]->description =
+        "Mouse drags offset the texture. (1)";
+        
+    frm_stt->widgets["rad_scale"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        stt_mode = 1;
+        stt_to_gui();
+    };
+    frm_stt->widgets["rad_scale"]->description =
+        "Mouse drags change the texture's scale. (2)";
+        
+    frm_stt->widgets["rad_angle"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        stt_mode = 2;
+        stt_to_gui();
+    };
+    frm_stt->widgets["rad_angle"]->description =
+        "Mouse drags rotate the texture. (3)";
         
         
     //Options -- declarations.

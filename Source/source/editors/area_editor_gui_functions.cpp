@@ -147,6 +147,9 @@ void area_editor::change_to_right_frame() {
     } else if(state == EDITOR_STATE_TOOLS) {
         frm_tools->show();
         tools_to_gui();
+    } else if(state == EDITOR_STATE_STT) {
+        frm_stt->show();
+        stt_to_gui();
     } else if(state == EDITOR_STATE_OPTIONS) {
         frm_options->show();
         options_to_gui();
@@ -677,6 +680,7 @@ void area_editor::hide_all_frames() {
     frm_details->hide();
     frm_review->hide();
     frm_info->hide();
+    frm_stt->hide();
     frm_tools->hide();
     frm_options->hide();
 }
@@ -1249,6 +1253,20 @@ void area_editor::select_different_hazard(const bool next) {
     cur_hazard_nr = min(cur_hazard_nr, list.size() - 1);
     cur_hazard_nr = sum_and_wrap(cur_hazard_nr, next ? 1 : -1, list.size());
     asb_to_gui();
+}
+
+
+/* ----------------------------------------------------------------------------
+ * Loads the current sector texture transformer data onto the GUI.
+ */
+void area_editor::stt_to_gui() {
+    if(stt_mode == 0) {
+        ((lafi::radio_button*) frm_stt->widgets["rad_offset"])->select();
+    } else if(stt_mode == 1) {
+        ((lafi::radio_button*) frm_stt->widgets["rad_scale"])->select();
+    } else {
+        ((lafi::radio_button*) frm_stt->widgets["rad_angle"])->select();
+    }
 }
 
 

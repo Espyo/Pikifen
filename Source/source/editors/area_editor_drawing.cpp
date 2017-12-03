@@ -69,6 +69,11 @@ void area_editor::do_drawing() {
         selection_max_opacity = 0.0f;
         textures_opacity = 1.0f;
     }
+    if(state == EDITOR_STATE_STT) {
+        textures_opacity = 1.0f;
+        edges_opacity = 0.8f;
+        grid_opacity = 0.0f;
+    }
     if(sub_state == EDITOR_SUB_STATE_TEXTURE_VIEW) {
         textures_opacity = 1.0f;
         edges_opacity = 0.0f;
@@ -325,7 +330,11 @@ void area_editor::do_drawing() {
             (selected ? 3.0 : 2.0) / cam_zoom
         );
         
-        if(moving && area_editor_show_edge_length) {
+        if(
+            state == EDITOR_STATE_LAYOUT &&
+            moving &&
+            area_editor_show_edge_length
+        ) {
             bool draw_dist = false;
             point other_point;
             if(

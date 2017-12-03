@@ -76,6 +76,7 @@ private:
         EDITOR_STATE_DETAILS,
         EDITOR_STATE_REVIEW,
         EDITOR_STATE_TOOLS,
+        EDITOR_STATE_STT,
         EDITOR_STATE_OPTIONS,
     };
     
@@ -212,6 +213,7 @@ private:
     lafi::frame* frm_review;
     lafi::frame* frm_info;
     lafi::frame* frm_tools;
+    lafi::frame* frm_stt;
     lafi::frame* frm_options;
     lafi::frame* frm_bottom;
     lafi::label* lbl_status_bar;
@@ -384,6 +386,18 @@ private:
     string status_override_text;
     //Time left to show the status bar override text for.
     timer status_override_timer;
+    //Starting coordinates of a sector texture transformer drag.
+    point stt_drag_start;
+    //Original angle of the sector in the sector texture transformer.
+    float stt_orig_angle;
+    //Original offset of the sector in the sector texture transformer.
+    point stt_orig_offset;
+    //Original scale of the sector in the sector texture transformer.
+    point stt_orig_scale;
+    //Current mode for the sector texture transformer.
+    unsigned char stt_mode;
+    //Sector currently being edited in the sector texture transformer.
+    sector* stt_sector;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
     //Undo history, with the state of the area at each point.
@@ -530,6 +544,7 @@ private:
     void gui_to_mob();
     void gui_to_options();
     void gui_to_sector();
+    void gui_to_stt();
     void gui_to_tools();
     void hide_all_frames();
     void info_to_gui();
@@ -539,6 +554,7 @@ private:
     void review_to_gui();
     void sector_to_gui();
     void tools_to_gui();
+    void stt_to_gui();
     void update_main_frame();
     
 public:
