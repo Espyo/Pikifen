@@ -112,7 +112,12 @@ void area_editor::load() {
     //Main -- properties.
     frm_main->widgets["but_area"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        open_picker(AREA_EDITOR_PICKER_AREA);
+        if(made_changes) {
+            this->show_changes_warning();
+        } else {
+            close_changes_warning();
+            open_picker(AREA_EDITOR_PICKER_AREA);
+        }
     };
     frm_main->widgets["but_area"]->description =
         "Pick which area you want to edit.";
@@ -1971,14 +1976,24 @@ void area_editor::load() {
         
     frm_tools->widgets["but_load"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        this->load_area(false);
+        if(made_changes) {
+            this->show_changes_warning();
+        } else {
+            close_changes_warning();
+            this->load_area(false);
+        }
     };
     frm_tools->widgets["but_load"]->description =
         "Discard all changes made and load the area again.";
         
     frm_tools->widgets["but_backup"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        this->load_backup();
+        if(made_changes) {
+            this->show_changes_warning();
+        } else {
+            this->close_changes_warning();
+            this->load_backup();
+        }
     };
     frm_tools->widgets["but_backup"]->description =
         "Discard all changes made and load the auto-backup.";
@@ -2031,15 +2046,6 @@ void area_editor::load() {
     );
     frm_options->easy_row();
     frm_options->easy_add(
-        "lbl_backup_1",
-        new lafi::label("Auto-backup time:"), 80, 12
-    );
-    frm_options->easy_add(
-        "txt_backup",
-        new lafi::textbox(), 20, 16
-    );
-    frm_options->easy_row();
-    frm_options->easy_add(
         "lbl_view_mode",
         new lafi::label("View mode:"), 100, 12
     );
@@ -2062,6 +2068,24 @@ void area_editor::load() {
     frm_options->easy_add(
         "rad_view_brightness",
         new lafi::radio_button("Brightness"), 100, 12
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_backup",
+        new lafi::label("Auto-backup time:"), 80, 12
+    );
+    frm_options->easy_add(
+        "txt_backup",
+        new lafi::textbox(), 20, 16
+    );
+    frm_options->easy_row();
+    frm_options->easy_add(
+        "lbl_undo_limit",
+        new lafi::label("Undo limit:"), 80, 12
+    );
+    frm_options->easy_add(
+        "txt_undo_limit",
+        new lafi::textbox(), 20, 16
     );
     frm_options->easy_row();
     
@@ -2106,11 +2130,6 @@ void area_editor::load() {
     frm_options->widgets["but_grid_minus"]->description =
         "Decrease the spacing on the grid.";
         
-    frm_options->widgets["txt_backup"]->lose_focus_handler =
-        lambda_gui_to_options;
-    frm_options->widgets["txt_backup"]->description =
-        "Interval between auto-backup saves, in seconds. 0 = off.";
-        
     frm_options->widgets["chk_edge_length"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["chk_edge_length"]->description =
@@ -2135,6 +2154,16 @@ void area_editor::load() {
         lambda_gui_to_options_click;
     frm_options->widgets["rad_view_brightness"]->description =
         "Draw sectors as solid grays based on their brightness.";
+        
+    frm_options->widgets["txt_backup"]->lose_focus_handler =
+        lambda_gui_to_options;
+    frm_options->widgets["txt_backup"]->description =
+        "Interval between auto-backup saves, in seconds. 0 = off.";
+        
+    frm_options->widgets["txt_undo_limit"]->lose_focus_handler =
+        lambda_gui_to_options;
+    frm_options->widgets["txt_undo_limit"]->description =
+        "Maximum number of operations that can be undone. 0 = off.";
         
         
     //Bottom bar -- declarations.

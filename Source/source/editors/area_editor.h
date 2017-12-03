@@ -495,7 +495,7 @@ private:
     void update_sector_texture(sector* s_ptr, const string file_name);
     void update_status_bar();
     void update_texture_suggestions(const string &n);
-    void update_undo_button();
+    void update_undo_history();
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     //Input handler functions.

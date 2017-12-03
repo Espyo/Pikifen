@@ -1067,6 +1067,7 @@ void load_options() {
     rs.set("area_editor_backup_interval", area_editor_backup_interval);
     rs.set("area_editor_grid_interval", area_editor_grid_interval);
     rs.set("area_editor_show_edge_length", area_editor_show_edge_length);
+    rs.set("area_editor_undo_limit", area_editor_undo_limit);
     rs.set("area_editor_view_mode", area_editor_view_mode);
     rs.set("fps", game_fps);
     rs.set("joystick_min_deadzone", joystick_min_deadzone);

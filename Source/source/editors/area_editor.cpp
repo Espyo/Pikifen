@@ -1851,7 +1851,7 @@ mob_gen* area_editor::get_mob_under_point(const point &p) {
 void area_editor::forget_change() {
     delete undo_history[0].first;
     undo_history.pop_front();
-    update_undo_button();
+    update_undo_history();
 }
 
 
@@ -2291,7 +2291,7 @@ void area_editor::load_area(const bool from_backup) {
     made_changes = false;
     
     clear_undo_history();
-    update_undo_button();
+    update_undo_history();
     enable_widget(frm_tools->widgets["but_load"]);
     
     cam_zoom = 1.0f;
@@ -2470,11 +2470,7 @@ void area_editor::register_change(const string operation_name) {
     undo_save_lock_operation = operation_name;
     undo_save_lock_timer.start();
     
-    if(undo_history.size() > area_editor_undo_limit) {
-        undo_history.pop_back();
-    }
-    
-    update_undo_button();
+    update_undo_history();
 }
 
 
@@ -3292,7 +3288,7 @@ void area_editor::undo() {
     undo_history.pop_front();
     
     undo_save_lock_timer.time_left = 0;
-    update_undo_button();
+    update_undo_history();
     
     //Lets revert the reference filename so we can change it properly.
     string new_reference_fn = cur_area_data.reference_file_name;
@@ -3451,8 +3447,13 @@ void area_editor::update_transformations() {
  * Updates the state and description of the undo button based on
  * the undo history.
  */
-void area_editor::update_undo_button() {
+void area_editor::update_undo_history() {
     lafi::widget* b = frm_bottom->widgets["but_undo"];
+    
+    while(undo_history.size() > area_editor_undo_limit) {
+        undo_history.pop_back();
+    };
+    
     if(undo_history.empty()) {
         disable_widget(b);
     } else {

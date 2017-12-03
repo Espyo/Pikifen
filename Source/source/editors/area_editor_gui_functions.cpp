@@ -472,8 +472,6 @@ void area_editor::gui_to_mob() {
  * Saves the options data to memory using info on the gui.
  */
 void area_editor::gui_to_options() {
-    area_editor_backup_interval =
-        s2i(((lafi::textbox*) frm_options->widgets["txt_backup"])->text);
     area_editor_show_edge_length =
         ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->checked;
         
@@ -506,6 +504,13 @@ void area_editor::gui_to_options() {
         area_editor_view_mode = VIEW_MODE_BRIGHTNESS;
         
     }
+    
+    area_editor_backup_interval =
+        s2i(((lafi::textbox*) frm_options->widgets["txt_backup"])->text);
+    area_editor_undo_limit =
+        s2i(((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text);
+        
+    update_undo_history();
     
     save_options();
     options_to_gui();
@@ -803,8 +808,6 @@ void area_editor::open_picker(const unsigned char type) {
 void area_editor::options_to_gui() {
     ((lafi::label*) frm_options->widgets["lbl_grid"])->text =
         "Grid: " + i2s(area_editor_grid_interval);
-    ((lafi::textbox*) frm_options->widgets["txt_backup"])->text =
-        i2s(area_editor_backup_interval);
     ((lafi::checkbox*) frm_options->widgets["chk_edge_length"])->set(
         area_editor_show_edge_length
     );
@@ -827,6 +830,11 @@ void area_editor::options_to_gui() {
             (lafi::radio_button*) frm_options->widgets["rad_view_brightness"]
         )->select();
     }
+    
+    ((lafi::textbox*) frm_options->widgets["txt_backup"])->text =
+        i2s(area_editor_backup_interval);
+    ((lafi::textbox*) frm_options->widgets["txt_undo_limit"])->text =
+        i2s(area_editor_undo_limit);
 }
 
 
