@@ -757,13 +757,17 @@ void save_options() {
     );
     file.add(
         new data_node(
-            "area_editor_grid_interval", i2s(area_editor_grid_interval
-                                            )
+            "area_editor_grid_interval", i2s(area_editor_grid_interval)
         )
     );
     file.add(
         new data_node(
             "area_editor_show_edge_length", b2s(area_editor_show_edge_length)
+        )
+    );
+    file.add(
+        new data_node(
+            "area_editor_undo_limit", i2s(area_editor_undo_limit)
         )
     );
     file.add(
