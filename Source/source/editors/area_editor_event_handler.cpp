@@ -453,10 +453,16 @@ void area_editor::handle_key_down(const ALLEGRO_EVENT &ev) {
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_1) {
     
         frm_paths->widgets["rad_one_way"]->simulate_click();
+        frm_stt->widgets["rad_offset"]->simulate_click();
         
     } else if(ev.keyboard.keycode == ALLEGRO_KEY_2) {
     
         frm_paths->widgets["rad_normal"]->simulate_click();
+        frm_stt->widgets["rad_scale"]->simulate_click();
+        
+    } else if(ev.keyboard.keycode == ALLEGRO_KEY_3) {
+    
+        frm_stt->widgets["rad_angle"]->simulate_click();
         
     }
 }
@@ -939,6 +945,17 @@ void area_editor::handle_lmb_down(const ALLEGRO_EVENT &ev) {
         reference_transformation.handle_mouse_down(mouse_cursor_w);
         tools_to_gui();
         
+    } else if(state == EDITOR_STATE_STT) {
+        moving = false;
+        stt_drag_start = mouse_cursor_w;
+        stt_sector = get_sector(mouse_cursor_w, NULL, false);
+        if(stt_sector) {
+            moving = true;
+            stt_orig_angle = stt_sector->texture_info.rot;
+            stt_orig_offset = stt_sector->texture_info.translation;
+            stt_orig_scale = stt_sector->texture_info.scale;
+        }
+        
     } else if(state == EDITOR_STATE_REVIEW && show_cross_section) {
         moving_cross_section_point = -1;
         for(unsigned char p = 0; p < 2; ++p) {
@@ -1241,6 +1258,32 @@ void area_editor::handle_lmb_drag(const ALLEGRO_EVENT &ev) {
         }
         tools_to_gui();
         
+    } else if(state == EDITOR_STATE_STT) {
+        //Move sector texture transformation property.
+        if(stt_sector && moving) {
+            if(stt_mode == 0) {
+                register_change("texture offset change");
+                point diff = (mouse_cursor_w - stt_drag_start);
+                diff = rotate_point(diff, -stt_sector->texture_info.rot);
+                diff = diff / stt_sector->texture_info.scale;
+                stt_sector->texture_info.translation = stt_orig_offset + diff;
+            } else if(stt_mode == 1) {
+                register_change("texture scale change");
+                point diff = (mouse_cursor_w - stt_drag_start);
+                diff = rotate_point(diff, -stt_sector->texture_info.rot);
+                point drag_start_rot =
+                    rotate_point(stt_drag_start, -stt_sector->texture_info.rot);
+                diff = diff / drag_start_rot * stt_orig_scale;
+                stt_sector->texture_info.scale = stt_orig_scale + diff;
+            } else {
+                register_change("texture angle change");
+                float drag_start_a = get_angle(point(), stt_drag_start);
+                float cursor_a = get_angle(point(), mouse_cursor_w);
+                stt_sector->texture_info.rot =
+                    stt_orig_angle + (cursor_a - drag_start_a);
+            }
+        }
+        
     } else if(state == EDITOR_STATE_REVIEW) {
         //Move cross-section points.
         if(moving_cross_section_point != -1) {
@@ -1283,6 +1326,7 @@ void area_editor::handle_lmb_up(const ALLEGRO_EVENT &ev) {
     
     moving_path_preview_checkpoint = -1;
     moving_cross_section_point = -1;
+    stt_sector = NULL;
 }
 
 
