@@ -581,11 +581,16 @@ void area_editor::load() {
         
     frm_layout->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(selected_sectors.empty()) return;
+        if(selected_sectors.empty()) {
+            emit_status_bar_message(
+                "You have to select sectors to delete!", false
+            );
+            return;
+        }
         register_change("sector removal");
         if(!remove_isolated_sectors()) {
             emit_status_bar_message(
-                "Some of the sectors are not isolated!", true
+                "Some of the sectors are not isolated!", false
             );
             forget_change();
         } else {
@@ -1220,7 +1225,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         if(selected_mobs.empty()) {
             emit_status_bar_message(
-                "You have to select mobs before you can delete them!", false
+                "You have to select mobs to delete!", false
             );
             return;
         }
@@ -1245,7 +1250,7 @@ void area_editor::load() {
     [this] (lafi::widget*, int, int) {
         if(selected_mobs.empty()) {
             emit_status_bar_message(
-                "You have to select mobs before you can duplicate them!", false
+                "You have to select mobs to duplicate!", false
             );
             return;
         }
@@ -1575,7 +1580,12 @@ void area_editor::load() {
         
     frm_details->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        if(!selected_shadow) return;
+        if(!selected_shadow) {
+            emit_status_bar_message(
+                "You have to select shadows to delete!", false
+            );
+            return;
+        }
         register_change("tree shadow deletion");
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             if(cur_area_data.tree_shadows[s] == selected_shadow) {

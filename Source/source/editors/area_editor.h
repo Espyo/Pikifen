@@ -498,6 +498,11 @@ private:
     void set_new_circle_sector_points();
     point snap_to_grid(const point &p);
     vertex* split_edge(edge* e_ptr, const point &where);
+    path_stop* split_path_link(
+        const pair<path_stop*, path_stop*> &l1,
+        const pair<path_stop*, path_stop*> &l2,
+        const point &where
+    );
     void start_mob_move();
     void start_path_stop_move();
     void start_shadow_move();

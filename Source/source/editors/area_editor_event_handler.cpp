@@ -503,6 +503,31 @@ void area_editor::handle_lmb_double_click(const ALLEGRO_EVENT &ev) {
             }
         }
         
+    } else if(
+        sub_state == EDITOR_SUB_STATE_NONE &&
+        state == EDITOR_STATE_PATHS
+    ) {
+        bool clicked_stop =
+            get_path_stop_under_point(mouse_cursor_w);
+        if(!clicked_stop) {
+            pair<path_stop*, path_stop*> clicked_link_data_1;
+            pair<path_stop*, path_stop*> clicked_link_data_2;
+            bool clicked_link =
+                get_path_link_under_point(
+                    mouse_cursor_w, &clicked_link_data_1, &clicked_link_data_2
+                );
+            if(clicked_link) {
+                register_change("path link split");
+                path_stop* new_stop =
+                    split_path_link(
+                        clicked_link_data_1,
+                        clicked_link_data_2,
+                        mouse_cursor_w
+                    );
+                clear_selection();
+                selected_path_stops.insert(new_stop);
+            }
+        }
     }
     
     handle_lmb_down(ev);
