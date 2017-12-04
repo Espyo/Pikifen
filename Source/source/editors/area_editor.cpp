@@ -318,11 +318,18 @@ void area_editor::cancel_layout_moving() {
 void area_editor::center_camera(
     const point &min_coords, const point &max_coords
 ) {
-    float width = max_coords.x - min_coords.x;
-    float height = max_coords.y - min_coords.y;
+    point min_c = min_coords;
+    point max_c = max_coords;
+    if(min_c == max_c) {
+        min_c = min_c - 2.0;
+        max_c = max_c + 2.0;
+    }
     
-    cam_pos.x = floor(min_coords.x + width  / 2);
-    cam_pos.y = floor(min_coords.y + height / 2);
+    float width = max_c.x - min_c.x;
+    float height = max_c.y - min_c.y;
+    
+    cam_pos.x = floor(min_c.x + width  / 2);
+    cam_pos.y = floor(min_c.y + height / 2);
     
     float z;
     if(width > height) z = gui_x / width;
@@ -775,7 +782,12 @@ void area_editor::create_new_from_picker(const string &name) {
  * Deletes the selected path links and/or stops.
  */
 void area_editor::delete_selected_path_elements() {
-    if(selected_path_links.empty() && selected_path_stops.empty()) return;
+    if(selected_path_links.empty() && selected_path_stops.empty()) {
+        emit_status_bar_message(
+            "You have to select something to delete!", false
+        );
+        return;
+    }
     
     register_change("path deletion");
     for(
@@ -1178,6 +1190,9 @@ void area_editor::finish_layout_drawing() {
     if(!get_drawing_outer_sector(&outer_sector)) {
         //Something went wrong. Abort.
         cancel_layout_drawing();
+        emit_status_bar_message(
+            "That sector wouldn't have a defined parent! Try again.", true
+        );
         return;
     }
     
@@ -1946,7 +1961,10 @@ edge* area_editor::get_closest_edge_to_angle(
 
 
 /* ----------------------------------------------------------------------------
- * Returns the path link currently under the specified point, or NULL if none.
+ * Returns true if there are path links currently under the specified point.
+ * data1 takes the info of the found link. If there's also a link in
+ * the opposite direction, data2 gets that data, otherwise data2 gets filled
+ * with NULLs.
  */
 bool area_editor::get_path_link_under_point(
     const point &p,
@@ -3169,6 +3187,45 @@ vertex* area_editor::split_edge(edge* e_ptr, const point &where) {
 
 
 /* ----------------------------------------------------------------------------
+ * Splits a path link into two, near the specified point, and returns the
+ * newly-created path stop. The new stop gets added to the current area.
+ */
+path_stop* area_editor::split_path_link(
+    const pair<path_stop*, path_stop*> &l1,
+    const pair<path_stop*, path_stop*> &l2,
+    const point &where
+) {
+    bool normal_link = (l2.first != NULL);
+    point new_s_pos =
+        get_closest_point_in_line(
+            l1.first->pos, l1.second->pos,
+            where
+        );
+        
+    //Create the new stop.
+    path_stop* new_s_ptr = new path_stop(new_s_pos);
+    cur_area_data.path_stops.push_back(new_s_ptr);
+    
+    //Delete the old links.
+    l1.first->remove_link(l1.second);
+    if(normal_link) {
+        l2.first->remove_link(l2.second);
+    }
+    
+    //Create the new links.
+    l1.first->add_link(new_s_ptr, normal_link);
+    new_s_ptr->add_link(l1.second, normal_link);
+    
+    //Fix the dangling path stop numbers in the links.
+    cur_area_data.fix_path_stop_nrs(l1.first);
+    cur_area_data.fix_path_stop_nrs(l1.second);
+    cur_area_data.fix_path_stop_nrs(new_s_ptr);
+    
+    return new_s_ptr;
+}
+
+
+/* ----------------------------------------------------------------------------
  * Procedure to start moving the selected mobs.
  */
 void area_editor::start_mob_move() {
@@ -3283,6 +3340,7 @@ void area_editor::undo() {
         return;
     }
     
+    
     string reference_fn_before = cur_area_data.reference_file_name;
     
     undo_history[0].first->clone(cur_area_data);
@@ -3302,6 +3360,7 @@ void area_editor::undo() {
     clear_layout_drawing();
     clear_layout_moving();
     clear_problems();
+    non_simples.clear();
     change_to_right_frame();
 }
 
