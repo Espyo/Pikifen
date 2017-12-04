@@ -2373,4 +2373,9 @@ void area_editor::load() {
     load_mob_types(false);
     load_weather();
     
+    if(!auto_load_area.empty()) {
+        cur_area_name = auto_load_area;
+        load_area(false);
+    }
+    
 }

@@ -570,6 +570,8 @@ public:
     virtual void unload();
     virtual void update_transformations();
     
+    string auto_load_area;
+    
     area_editor();
 };
 
