@@ -27,7 +27,6 @@
 
 #include "backtrace.h"
 #include "editors/animation_editor.h"
-#include "editors/area_editor_old.h"
 #include "const.h"
 #include "data_file.h"
 #include "drawing.h"
