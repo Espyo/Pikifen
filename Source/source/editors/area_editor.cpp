@@ -738,6 +738,7 @@ void area_editor::create_area() {
         update_sector_texture(
             cur_area_data.sectors[0], textures[texture_to_use]
         );
+        update_texture_suggestions(textures[texture_to_use]);
     }
     
     //Now add a leader. The first available.
@@ -1584,6 +1585,7 @@ void area_editor::finish_layout_moving() {
             "That move would cause edges to intersect!", true
         );
         cancel_layout_moving();
+        forget_change();
         return;
     }
     
