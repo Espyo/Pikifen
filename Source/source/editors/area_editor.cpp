@@ -738,6 +738,7 @@ void area_editor::create_area() {
         update_sector_texture(
             cur_area_data.sectors[0], textures[texture_to_use]
         );
+        update_texture_suggestions(textures[texture_to_use]);
     }
     
     //Now add a leader. The first available.
@@ -1531,13 +1532,18 @@ void area_editor::finish_layout_moving() {
         if(is_merge_target) continue;
         
         edge* e_ptr = NULL;
+        bool valid = true;
         do {
             e_ptr = get_edge_under_point(p, e_ptr);
-        } while(
-            e_ptr != NULL &&
-            v_ptr->has_edge(e_ptr) &&
-            moved_edges.find(e_ptr) == moved_edges.end()
-        );
+            if(e_ptr) {
+                if(v_ptr->has_edge(e_ptr)) {
+                    valid = false;
+                }
+                if(moved_edges.find(e_ptr) == moved_edges.end()) {
+                    valid = false;
+                }
+            }
+        } while(e_ptr && !valid);
         if(e_ptr) {
             edges_to_split[v_ptr] = e_ptr;
         }
@@ -1584,6 +1590,7 @@ void area_editor::finish_layout_moving() {
             "That move would cause edges to intersect!", true
         );
         cancel_layout_moving();
+        forget_change();
         return;
     }
     
@@ -1591,6 +1598,16 @@ void area_editor::finish_layout_moving() {
     for(auto v = edges_to_split.begin(); v != edges_to_split.end(); ++v) {
         merges[v->first] =
             split_edge(v->second, point((v->first)->x, v->first->y));
+        //This split could've thrown off the edge pointer of a different
+        //vertex to merge. Let's re-calculate.
+        edge* new_edge = cur_area_data.edges.back();
+        auto v2 = v;
+        ++v2;
+        for(; v2 != edges_to_split.end(); ++v2) {
+            if(v->second != v2->second) continue;
+            v2->second =
+                get_correct_post_split_edge(v2->first, v2->second, new_edge);
+        }
     }
     for(auto m = merges.begin(); m != merges.end(); ++m) {
         merge_vertex(m->second, m->first, &merge_affected_sectors);
@@ -1720,6 +1737,37 @@ bool area_editor::get_common_sector(
     
     *result = best_rightmost_sector;
     return true;
+}
+
+
+/* ----------------------------------------------------------------------------
+ * After an edge split, some vertexes could've wanted to merge with the
+ * original edge, but may now need to merge with the NEW edge.
+ * This function can check which is the "correct" edge to point to, from
+ * the two provided.
+ */
+edge* area_editor::get_correct_post_split_edge(
+    vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
+) {
+    float score1 = 0;
+    float score2 = 0;
+    get_closest_point_in_line(
+        point(e1_ptr->vertexes[0]->x, e1_ptr->vertexes[0]->y),
+        point(e1_ptr->vertexes[1]->x, e1_ptr->vertexes[1]->y),
+        point(v_ptr->x, v_ptr->y),
+        &score1
+    );
+    get_closest_point_in_line(
+        point(e2_ptr->vertexes[0]->x, e2_ptr->vertexes[0]->y),
+        point(e2_ptr->vertexes[1]->x, e2_ptr->vertexes[1]->y),
+        point(v_ptr->x, v_ptr->y),
+        &score2
+    );
+    if(fabs(score1 - 0.5) < fabs(score2 - 0.5)) {
+        return e1_ptr;
+    } else {
+        return e2_ptr;
+    }
 }
 
 
@@ -2969,7 +3017,8 @@ void area_editor::save_area(const bool to_backup) {
         );
     bool data_save_ok =
         data_file.save_file(
-            AREAS_FOLDER_PATH + "/" + cur_area_name + "/Data.txt"
+            AREAS_FOLDER_PATH + "/" + cur_area_name +
+            (to_backup ? "/Data_backup.txt" : "/Data.txt")
         );
         
     if(!geo_save_ok || !data_save_ok) {

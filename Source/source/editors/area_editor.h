@@ -461,6 +461,9 @@ private:
     bool get_common_sector(
         vector<vertex*> &vertexes, vector<edge*> &edges, sector** result
     );
+    edge* get_correct_post_split_edge(
+        vertex* v_ptr, edge* e1_ptr, edge* e2_ptr
+    );
     bool get_drawing_outer_sector(sector** result);
     edge* get_edge_under_point(const point &p, edge* after = NULL);
     vector<edge_intersection> get_intersecting_edges();

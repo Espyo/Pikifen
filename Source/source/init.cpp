@@ -226,16 +226,16 @@ void init_controls() {
  */
 void init_error_bitmap() {
     //Error bitmap.
-    int bmp_error_w, bmp_error_h;
-    al_get_text_dimensions(
-        al_create_builtin_font(), "ERROR", NULL, NULL,
-        &bmp_error_w, &bmp_error_h
-    );
-    bmp_error = al_create_bitmap(bmp_error_w, bmp_error_h);
+    bmp_error = al_create_bitmap(32, 32);
     al_set_target_bitmap(bmp_error); {
-        al_clear_to_color(al_map_rgba(64, 0, 0, 128));
-        al_draw_text(
-            al_create_builtin_font(), al_map_rgb(255, 0, 0), 0, 0, 0, "ERROR"
+        al_clear_to_color(al_map_rgba(0, 0, 0, 192));
+        al_draw_filled_rectangle(
+            0.0, 0.0, 16.0, 16.0,
+            al_map_rgba(255, 0, 255, 192)
+        );
+        al_draw_filled_rectangle(
+            16.0, 16.0, 32.0, 32.0,
+            al_map_rgba(255, 0, 255, 192)
         );
     } al_set_target_backbuffer(display);
     bmp_error = recreate_bitmap(bmp_error);

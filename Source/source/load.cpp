@@ -79,7 +79,7 @@ void load_area(
         data_file.get_child_by_name("bg_bmp")->value;
     if(!load_for_editor && !cur_area_data.bg_bmp_file_name.empty()) {
         cur_area_data.bg_bmp =
-            bitmaps.get(cur_area_data.bg_bmp_file_name, &data_file);
+            textures.get(cur_area_data.bg_bmp_file_name, &data_file);
     }
     cur_area_data.bg_color =
         s2c(data_file.get_child_by_name("bg_color")->value);
