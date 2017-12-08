@@ -325,6 +325,7 @@ void area_editor::load() {
         
     frm_info->widgets["but_no_weather"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        register_change("weather removal");
         cur_area_data.weather_name.clear();
         info_to_gui();
     };
@@ -576,10 +577,12 @@ void area_editor::load() {
     frm_layout->widgets["but_rem"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(selected_sectors.empty()) return;
+        register_change("sector removal");
         if(!remove_isolated_sectors()) {
             emit_status_bar_message(
                 "Some of the sectors are not isolated!", true
             );
+            forget_change();
         } else {
             emit_status_bar_message(
                 "Deleted sectors.", false
@@ -692,15 +695,11 @@ void area_editor::load() {
         "Confirm that you want all selected sectors to be similar.";
     frm_sector_multi->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        register_change("sector combining");
         selection_homogenized = true;
         homogenize_selected_sectors();
         sector_to_gui();
     };
-    
-    frm_layout->register_accelerator(
-        ALLEGRO_KEY_MINUS, ALLEGRO_KEYMOD_CTRL,
-        frm_layout->widgets["but_rem"]
-    );
     
     
     //Advanced sector behavior -- declarations.
@@ -881,6 +880,7 @@ void area_editor::load() {
         if(name.empty()) return;
         ((lafi::button*) this->frm_sector->widgets["but_texture"])->text =
             name;
+        ((lafi::textbox*) this->frm_texture->widgets["txt_name"])->text.clear();
         update_texture_suggestions(name);
         gui_to_sector();
         state = EDITOR_STATE_LAYOUT;
@@ -1219,6 +1219,7 @@ void area_editor::load() {
             );
             return;
         }
+        register_change("object deletion");
         for(auto sm = selected_mobs.begin(); sm != selected_mobs.end(); ++sm) {
             for(size_t mg = 0; mg < cur_area_data.mob_generators.size(); ++mg) {
                 if(cur_area_data.mob_generators[mg] == *sm) {
@@ -1231,7 +1232,6 @@ void area_editor::load() {
             }
         }
         clear_selection();
-        made_changes = true;
     };
     frm_mobs->widgets["but_del"]->description =
         "Delete the selected objects. (Delete)";
@@ -1274,19 +1274,11 @@ void area_editor::load() {
         "Confirm that you want all selected objects to be similar.";
     frm_mob_multi->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        register_change("object combining");
         selection_homogenized = true;
         homogenize_selected_mobs();
         mob_to_gui();
     };
-    
-    frm_mob->register_accelerator(
-        ALLEGRO_KEY_D, ALLEGRO_KEYMOD_CTRL,
-        frm_mobs->widgets["but_duplicate"]
-    );
-    frm_mob->register_accelerator(
-        ALLEGRO_KEY_MINUS, ALLEGRO_KEYMOD_CTRL,
-        frm_mobs->widgets["but_del"]
-    );
     
     
     //Paths -- declarations.
@@ -1579,6 +1571,7 @@ void area_editor::load() {
     frm_details->widgets["but_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         if(!selected_shadow) return;
+        register_change("tree shadow deletion");
         for(size_t s = 0; s < cur_area_data.tree_shadows.size(); ++s) {
             if(cur_area_data.tree_shadows[s] == selected_shadow) {
                 cur_area_data.tree_shadows.erase(
@@ -2131,7 +2124,7 @@ void area_editor::load() {
     frm_options->widgets["rad_view_wireframe"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
     frm_options->widgets["rad_view_wireframe"]->description =
-        "Do not draw sectors, only edges and vertexes.";
+        "Do not draw sectors, only edges and vertexes. Best for performance.";
         
     frm_options->widgets["rad_view_heightmap"]->left_mouse_click_handler =
         lambda_gui_to_options_click;
@@ -2152,7 +2145,7 @@ void area_editor::load() {
     frm_bottom->easy_row();
     frm_bottom->easy_add(
         "but_undo",
-        new lafi::button("", "", icons.get(ICON_OPTIONS)), 25, 32
+        new lafi::button("", "", icons.get(ICON_UNDO)), 25, 32
     );
     frm_bottom->easy_add(
         "but_reference",
@@ -2172,7 +2165,7 @@ void area_editor::load() {
     //Bottom bar -- properties.
     frm_bottom->widgets["but_undo"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        undo();
     };
     frm_bottom->widgets["but_undo"]->description =
         "Undo the last move. (Ctrl+Z)";
@@ -2220,8 +2213,8 @@ void area_editor::load() {
     
     show_closest_stop = false;
     show_path_preview = false;
-    path_preview_checkpoints[0] = point(-DEF_area_editor_grid_interval, 0);
-    path_preview_checkpoints[1] = point(+DEF_area_editor_grid_interval, 0);
+    path_preview_checkpoints[0] = point(-DEF_AREA_EDITOR_GRID_INTERVAL, 0);
+    path_preview_checkpoints[1] = point(+DEF_AREA_EDITOR_GRID_INTERVAL, 0);
     clear_selection();
     selected_shadow = NULL;
     selection_homogenized = false;

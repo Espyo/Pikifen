@@ -550,9 +550,10 @@ void area_data::remove_sector(const sector* s_ptr) {
  * A debugging tool. This checks to see if all numbers match their pointers,
  * for the various edges, vertexes, etc. Aborts execution if any doesn't.
  */
-void area_data::check_matches() {
+void area_data::check_stability() {
     for(size_t v = 0; v < vertexes.size(); ++v) {
         vertex* v_ptr = vertexes[v];
+        assert(v_ptr->edges.size() == v_ptr->edge_nrs.size());
         for(size_t e = 0; e < v_ptr->edges.size(); ++e) {
             assert(v_ptr->edges[e] == edges[v_ptr->edge_nrs[e]]);
         }
@@ -579,6 +580,7 @@ void area_data::check_matches() {
     
     for(size_t s = 0; s < sectors.size(); ++s) {
         sector* s_ptr = sectors[s];
+        assert(s_ptr->edges.size() == s_ptr->edge_nrs.size());
         for(size_t e = 0; e < s_ptr->edges.size(); ++e) {
             assert(s_ptr->edges[e] == edges[s_ptr->edge_nrs[e]]);
         }
@@ -640,6 +642,8 @@ void area_data::clear() {
  * Clones this area data into another area_data object.
  */
 void area_data::clone(area_data &other) {
+    check_stability(); //TODO
+    
     other.clear();
     
     other.bg_bmp_file_name = bg_bmp_file_name;
@@ -749,6 +753,7 @@ void area_data::clone(area_data &other) {
     for(size_t s = 0; s < path_stops.size(); ++s) {
         path_stop* s_ptr = path_stops[s];
         path_stop* os_ptr = other.path_stops[s];
+        os_ptr->pos = s_ptr->pos;
         os_ptr->links.reserve(s_ptr->links.size());
         for(size_t l = 0; l < s_ptr->links.size(); ++l) {
             os_ptr->links.push_back(
@@ -782,6 +787,8 @@ void area_data::clone(area_data &other) {
     other.reference_center = reference_center;
     other.reference_file_name = reference_file_name;
     other.reference_size = reference_size;
+    
+    other.check_stability(); //TODO
 }
 
 
@@ -1691,6 +1698,14 @@ void get_sector_bounding_box(
     sector* s_ptr, point* min_coords, point* max_coords
 ) {
     if(!min_coords || !max_coords) return;
+    
+    if(s_ptr->edges.empty()) {
+        //Unused sector... This shouldn't exist.
+        *min_coords = point();
+        *max_coords = point();
+        return;
+    }
+    
     min_coords->x = s_ptr->edges[0]->vertexes[0]->x;
     max_coords->x = min_coords->x;
     min_coords->y = s_ptr->edges[0]->vertexes[0]->y;

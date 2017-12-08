@@ -67,9 +67,10 @@ sample_struct sfx_throw;
 asset_file_names_struct asset_file_names;
 
 vector<string> animation_editor_history;
-float area_editor_backup_interval = DEF_area_editor_backup_interval;
-float area_editor_grid_interval = DEF_area_editor_grid_interval;
+float area_editor_backup_interval = DEF_AREA_EDITOR_BACKUP_INTERVAL;
+float area_editor_grid_interval = DEF_AREA_EDITOR_GRID_INTERVAL;
 bool area_editor_show_edge_length = true;
+size_t area_editor_undo_limit = DEF_AREA_EDITOR_UNDO_LIMIT;
 unsigned char area_editor_view_mode = 0;
 timer area_title_fade_timer(AREA_TITLE_FADE_DURATION);
 float area_time_passed = 0;

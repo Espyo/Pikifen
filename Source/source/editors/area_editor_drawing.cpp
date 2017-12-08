@@ -238,12 +238,12 @@ void area_editor::do_drawing() {
     
     //0,0 marker.
     al_draw_line(
-        -(DEF_area_editor_grid_interval * 2), 0, DEF_area_editor_grid_interval * 2, 0,
+        -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0, DEF_AREA_EDITOR_GRID_INTERVAL * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
     al_draw_line(
-        0, -(DEF_area_editor_grid_interval * 2), 0, DEF_area_editor_grid_interval * 2,
+        0, -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0, DEF_AREA_EDITOR_GRID_INTERVAL * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
@@ -778,19 +778,12 @@ void area_editor::do_drawing() {
         reference_bitmap &&
         (show_reference || state == EDITOR_STATE_TOOLS)
     ) {
-        al_draw_tinted_scaled_bitmap(
+        draw_sprite(
             reference_bitmap,
-            map_alpha(cur_area_data.reference_alpha),
-            0, 0,
-            al_get_bitmap_width(reference_bitmap),
-            al_get_bitmap_height(reference_bitmap),
-            reference_transformation.get_center().x -
-            reference_transformation.get_size().x / 2.0,
-            reference_transformation.get_center().y -
-            reference_transformation.get_size().y / 2.0,
-            reference_transformation.get_size().x,
-            reference_transformation.get_size().y,
-            0
+            cur_area_data.reference_center,
+            cur_area_data.reference_size,
+            0,
+            map_alpha(cur_area_data.reference_alpha)
         );
         
         if(state == EDITOR_STATE_TOOLS) {

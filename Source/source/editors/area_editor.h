@@ -12,6 +12,8 @@
 #ifndef AREA_EDITOR_INCLUDED
 #define AREA_EDITOR_INCLUDED
 
+#include <deque>
+
 #include "editor.h"
 #include "../LAFI/frame.h"
 #include "../LAFI/label.h"
@@ -158,6 +160,7 @@ private:
     static const float         SELECTION_EFFECT_SPEED;
     static const float         STATUS_OVERRIDE_IMPORTANT_DURATION;
     static const float         STATUS_OVERRIDE_UNIMPORTANT_DURATION;
+    static const float         UNDO_SAVE_LOCK_DURATION;
     static const float         VERTEX_MERGE_RADIUS;
     static const float         ZOOM_MAX_LEVEL_EDITOR;
     static const float         ZOOM_MIN_LEVEL_EDITOR;
@@ -188,6 +191,7 @@ private:
     static const string ICON_SELECT_SECTORS;
     static const string ICON_SELECT_VERTEXES;
     static const string ICON_TOOLS;
+    static const string ICON_UNDO;
     
     
     //GUI widgets.
@@ -382,6 +386,12 @@ private:
     timer status_override_timer;
     //List of texture suggestions.
     vector<texture_suggestion> texture_suggestions;
+    //Undo history, with the state of the area at each point.
+    deque<pair<area_data*, string> > undo_history;
+    //Name of the undo operation responsible for the lock.
+    string undo_save_lock_operation;
+    //During this timer, don't save state for operations matching the last one.
+    timer undo_save_lock_timer;
     
     bool are_nodes_traversable(
         const layout_drawing_node &n1,
@@ -403,6 +413,7 @@ private:
     void clear_problems();
     void clear_selection();
     void clear_texture_suggestions();
+    void clear_undo_history();
     void create_area();
     void create_new_from_picker(const string &name);
     void delete_current_hazard();
@@ -424,6 +435,7 @@ private:
     void finish_circle_sector();
     void finish_layout_drawing();
     void finish_layout_moving();
+    void forget_change();
     unordered_set<sector*> get_affected_sectors(set<vertex*> &vertexes);
     void get_clicked_layout_element(
         vertex** clicked_vertex, edge** clicked_edge, sector** clicked_sector
@@ -459,6 +471,7 @@ private:
     void open_picker(const unsigned char type);
     void populate_texture_suggestions();
     void pick(const string &name, const string &category);
+    void register_change(const string operation_name);
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
     void save_area(const bool to_backup);
@@ -476,10 +489,13 @@ private:
     void start_shadow_move();
     void start_vertex_move();
     void toggle_duplicate_mob_mode();
+    void undo();
     void undo_layout_drawing_node();
     bool update_backup_status();
     void update_sector_texture(sector* s_ptr, const string file_name);
+    void update_status_bar();
     void update_texture_suggestions(const string &n);
+    void update_undo_button();
     void zoom(const float new_zoom, const bool anchor_cursor = true);
     
     //Input handler functions.
