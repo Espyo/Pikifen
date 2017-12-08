@@ -16,9 +16,12 @@
 #include "../LAFI/gui.h"
 #include "../LAFI/label.h"
 #include "../LAFI/minor.h"
+#include "../LAFI/radio_button.h"
 #include "../LAFI/scrollbar.h"
 #include "../LAFI/style.h"
 #include "../LAFI/textbox.h"
+#include "../functions.h"
+#include "../load.h"
 #include "../vars.h"
 
 
@@ -87,6 +90,11 @@ void area_editor::load() {
     );
     frm_area->easy_row();
     frm_area->easy_add(
+        "but_data",
+        new lafi::button("Data"), 100, 32
+    );
+    frm_area->easy_row();
+    frm_area->easy_add(
         "but_tools",
         new lafi::button("Tools"), 100, 32
     );
@@ -140,6 +148,14 @@ void area_editor::load() {
     };
     frm_area->widgets["but_review"]->description =
         "Use this to make sure everything is okay in the area.";
+        
+    frm_area->widgets["but_data"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_DATA;
+        change_to_right_frame();
+    };
+    frm_area->widgets["but_data"]->description =
+        "Set the area's name, weather, etc.";
         
     frm_area->widgets["but_tools"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
@@ -256,8 +272,13 @@ void area_editor::load() {
     );
     frm_sector->easy_row();
     frm_sector->easy_add(
-        "lbl_texture",
-        new lafi::label("Texture:"), 100, 16
+        "rad_fade",
+        new lafi::radio_button("Texture fader"), 100, 16
+    );
+    frm_sector->easy_row();
+    frm_sector->easy_add(
+        "rad_texture",
+        new lafi::radio_button("Regular texture"), 100, 16
     );
     frm_sector->easy_row();
     frm_sector->easy_add(
@@ -280,6 +301,9 @@ void area_editor::load() {
     //Layout -- properties.
     frm_layout->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        selected_vertexes.clear();
+        selected_edges.clear();
+        selected_sectors.clear();
         state = EDITOR_STATE_MAIN;
         change_to_right_frame();
     };
@@ -312,50 +336,73 @@ void area_editor::load() {
         //TODO.
     };
     
-    //TODO frm_sector->widgets["txt_z"]->lose_focus_handler =
-    //lambda_gui_to_sector;
+    auto lambda_gui_to_sector =
+    [this] (lafi::widget*) { gui_to_sector(); };
+    auto lambda_gui_to_sector_click =
+    [this] (lafi::widget*, int, int) { gui_to_sector(); };
+    
+    frm_sector->widgets["txt_z"]->lose_focus_handler =
+        lambda_gui_to_sector;
     frm_sector->widgets["txt_z"]->description =
         "Height of the floor.";
         
     frm_sector->widgets["but_z_m50"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        get_lone_selected_sector()->z -= 50;
+        sector_to_gui();
     };
     frm_sector->widgets["but_z_m50"]->description =
         "Decrease the height number by 50.";
         
     frm_sector->widgets["but_z_m10"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        get_lone_selected_sector()->z -= 10;
+        sector_to_gui();
     };
     frm_sector->widgets["but_z_m10"]->description =
         "Decrease the height number by 10.";
         
     frm_sector->widgets["but_z_p10"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        get_lone_selected_sector()->z += 10;
+        sector_to_gui();
     };
     frm_sector->widgets["but_z_p10"]->description =
         "Increase the height number by 10.";
         
     frm_sector->widgets["but_z_p50"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        get_lone_selected_sector()->z += 50;
+        sector_to_gui();
     };
     frm_sector->widgets["but_z_p50"]->description =
         "Increase the height number by 50.";
         
     frm_sector->widgets["but_adv_behavior"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
+        cur_hazard_nr = 0;
         state = EDITOR_STATE_ASB;
         change_to_right_frame();
+        asb_to_gui();
     };
     frm_sector->widgets["but_adv_behavior"]->description =
         "Open more advanced sector behavior settings.";
         
+    frm_sector->widgets["rad_fade"]->left_mouse_click_handler =
+        lambda_gui_to_sector_click;
+    frm_sector->widgets["rad_fade"]->description =
+        "Makes the surrounding textures fade into each other.";
+        
+    frm_sector->widgets["rad_texture"]->left_mouse_click_handler =
+        lambda_gui_to_sector_click;
+    frm_sector->widgets["rad_texture"]->description =
+        "Makes the sector use a regular texture.";
+        
     frm_sector->widgets["but_texture"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO.
+        state = EDITOR_STATE_TEXTURE;
+        populate_texture_suggestions();
+        change_to_right_frame();
     };
     frm_sector->widgets["but_texture"]->description =
         "Select a texture (image) for this sector.";
@@ -387,7 +434,7 @@ void area_editor::load() {
     frm_asb->easy_row();
     frm_asb->easy_add(
         "but_sector_type",
-        new lafi::button(""), 100, 32
+        new lafi::button(""), 100, 24
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
@@ -413,12 +460,16 @@ void area_editor::load() {
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
-        "but_hazard",
-        new lafi::button(), 100, 24
+        "dum_1",
+        new lafi::dummy(), 10, 16
+    );
+    frm_asb->easy_add(
+        "lbl_hazard",
+        new lafi::label(), 90, 16
     );
     frm_asb->easy_row();
     frm_asb->easy_add(
-        "chk_air",
+        "chk_h_air",
         new lafi::checkbox("Floor and air"), 100, 16
     );
     frm_asb->easy_row();
@@ -452,48 +503,45 @@ void area_editor::load() {
         
     frm_asb->widgets["but_h_add"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        sector* s_ptr = get_lone_selected_sector();
+        open_picker(AREA_EDITOR_PICKER_HAZARD);
     };
     frm_asb->widgets["but_h_add"]->description =
         "Add a new hazard to the list.";
         
     frm_asb->widgets["but_h_del"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        delete_current_hazard();
     };
     frm_asb->widgets["but_h_del"]->description =
         "Remove the current hazard from the list.";
         
     frm_asb->widgets["but_h_prev"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        select_different_hazard(false);
     };
     frm_asb->widgets["but_h_prev"]->description =
         "Show the previous hazard in the list.";
         
     frm_asb->widgets["but_h_next"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        select_different_hazard(true);
     };
     frm_asb->widgets["but_h_next"]->description =
         "Show the next hazard in the list.";
         
-    frm_asb->widgets["but_hazard"]->left_mouse_click_handler =
+    frm_asb->widgets["chk_h_air"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        gui_to_asb();
     };
-    frm_asb->widgets["but_hazard"]->description =
-        "Select a different hazard for this point in the list.";
+    frm_asb->widgets["chk_h_air"]->description =
+        "Trigger hazards on the floor only or in the air too?";
         
-    frm_asb->widgets["chk_air"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        //TODO
+    frm_asb->widgets["txt_tag"]->lose_focus_handler =
+    [this] (lafi::widget*) {
+        gui_to_asb();
     };
-    frm_asb->widgets["chk_air"]->description =
-        "Trigger hazard on the floor only or in the air too?";
-        
-    //TODO frm_asb->widgets["txt_tag"]->lose_focus_handler =
-    //lambda_gui_to_sector;
+    
     frm_asb->widgets["txt_tag"]->description =
         "Special values you want the sector to know.";
         
@@ -540,7 +588,17 @@ void area_editor::load() {
         
     frm_texture->widgets["but_ok"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
-        //TODO
+        string name =
+            (
+                (lafi::textbox*) this->frm_texture->widgets["txt_name"]
+            )->text;
+        if(name.empty()) return;
+        ((lafi::button*) this->frm_sector->widgets["but_texture"])->text =
+            name;
+        update_texture_suggestions(name);
+        gui_to_sector();
+        state = EDITOR_STATE_LAYOUT;
+        change_to_right_frame();
     };
     
     ((lafi::textbox*) frm_texture->widgets["txt_name"])->enter_key_widget =
@@ -565,20 +623,15 @@ void area_editor::load() {
     frm_asa->easy_row();
     frm_asa->easy_add(
         "lin_1",
-        new lafi::line(), 20, 16
+        new lafi::line(), 30, 16
     );
     frm_asa->easy_add(
         "lbl_texture",
-        new lafi::label("Texture", ALLEGRO_ALIGN_CENTER), 60, 16
+        new lafi::label("Texture", ALLEGRO_ALIGN_CENTER), 40, 16
     );
     frm_asa->easy_add(
         "lin_2",
-        new lafi::line(), 20, 16
-    );
-    frm_asa->easy_row();
-    frm_asa->easy_add(
-        "chk_fade",
-        new lafi::checkbox("Texture fader sector"), 100, 16
+        new lafi::line(), 30, 16
     );
     frm_asa->easy_row();
     frm_asa->easy_add(
@@ -628,15 +681,15 @@ void area_editor::load() {
     frm_asa->easy_row();
     frm_asa->easy_add(
         "lin_3",
-        new lafi::line(), 20, 16
+        new lafi::line(), 30, 16
     );
     frm_asa->easy_add(
         "lbl_sector",
-        new lafi::label("Sector", ALLEGRO_ALIGN_CENTER), 60, 16
+        new lafi::label("Sector", ALLEGRO_ALIGN_CENTER), 40, 16
     );
     frm_asa->easy_add(
         "lin_4",
-        new lafi::line(), 20, 16
+        new lafi::line(), 30, 16
     );
     frm_asa->easy_row();
     frm_asa->easy_add(
@@ -661,6 +714,9 @@ void area_editor::load() {
     
     
     //Advanced sector appearance -- properties.
+    auto lambda_gui_to_asa =
+    [this] (lafi::widget*) { gui_to_asa(); };
+    
     frm_asa->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         state = EDITOR_STATE_LAYOUT;
@@ -669,55 +725,54 @@ void area_editor::load() {
     frm_asa->widgets["but_back"]->description =
         "Return to the layout menu.";
         
-    frm_asa->widgets["chk_fade"]->left_mouse_click_handler =
-    [this] (lafi::widget*, int, int) {
-        //TODO
-    };
-    frm_asa->widgets["chk_fade"]->description =
-        "Makes the surrounding textures fade into each other.";
-        
-    //TODO frm_asa->widgets["txt_x"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["txt_x"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_x"]->description =
         "Scroll the texture horizontally by this much.";
         
-    //TODO frm_asa->widgets["txt_y"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["txt_y"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_y"]->description =
         "Scroll the texture vertically by this much.";
         
-    //TODO frm_asa->widgets["txt_sx"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["txt_sx"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_sx"]->description =
         "Zoom the texture horizontally by this much.";
         
-    //TODO frm_asa->widgets["txt_sy"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["txt_sy"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_sy"]->description =
         "Zoom the texture vertically by this much.";
         
-    //TODO frm_asa->widgets["ang_a"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["ang_a"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["ang_a"]->description =
         "Rotate the texture by this much.";
         
-    //TODO frm_asa->widgets["txt_tint"]->lose_focus_handler =
-    //lambda_gui_to_adv_textures;
+    frm_asa->widgets["txt_tint"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_tint"]->description =
         "Texture tint color, in the format \"r g b a\".";
         
     ((lafi::scrollbar*) frm_asa->widgets["bar_brightness"])->change_handler =
-    [this] (lafi::widget*) { /*//TODO*/ };
+    [this] (lafi::widget * w) {
+        ((lafi::textbox*) frm_asa->widgets["txt_brightness"])->text =
+            i2s(((lafi::scrollbar*) w)->low_value);
+        gui_to_asa();
+    };
     frm_asa->widgets["bar_brightness"]->description =
         "0 = pitch black sector. 255 = normal lighting.";
         
-    //TODO frm_asa->widgets["txt_brightness"]->lose_focus_handler =
-    //lambda_gui_to_sector;
+    frm_asa->widgets["txt_brightness"]->lose_focus_handler =
+        lambda_gui_to_asa;
     frm_asa->widgets["txt_brightness"]->description =
         "0 = pitch black sector. 255 = normal lighting.";
         
-    //TODO frm_asa->widgets["chk_shadow"]->left_mouse_click_handler =
-    //lambda_gui_to_sector_click;
+    frm_asa->widgets["chk_shadow"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        gui_to_asa();
+    };
     frm_asa->widgets["chk_shadow"]->description =
         "Makes it always cast a shadow onto lower sectors.";
         
@@ -1291,6 +1346,149 @@ void area_editor::load() {
         "Show a height grid in the cross-section window.";
         
         
+    //Data -- declarations.
+    frm_data =
+        new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
+    gui->add("frm_data", frm_data);
+    
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "but_back",
+        new lafi::button("Back"), 50, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lin_1",
+        new lafi::line(), 30, 16
+    );
+    frm_data->easy_add(
+        "lbl_general",
+        new lafi::label("General", ALLEGRO_ALIGN_CENTER), 40, 16
+    );
+    frm_data->easy_add(
+        "lin_2",
+        new lafi::line(), 30, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_name",
+        new lafi::label("Name:"), 30, 16
+    );
+    frm_data->easy_add(
+        "txt_name",
+        new lafi::textbox(), 70, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_subtitle",
+        new lafi::label("Subtitle:"), 40, 16
+    );
+    frm_data->easy_add(
+        "txt_subtitle",
+        new lafi::textbox(), 60, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "chk_weather",
+        new lafi::label("Use weather?"), 100, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "dum_1",
+        new lafi::dummy(), 20, 24
+    );
+    frm_data->easy_add(
+        "but_weather",
+        new lafi::button(), 80, 24
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lin_3",
+        new lafi::line(), 20, 24
+    );
+    frm_data->easy_add(
+        "lbl_bg",
+        new lafi::label("Background", ALLEGRO_ALIGN_CENTER), 60, 16
+    );
+    frm_data->easy_add(
+        "lin_4",
+        new lafi::line(), 20, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_bg_bitmap",
+        new lafi::label("Bitmap:"), 40, 16
+    );
+    frm_data->easy_add(
+        "txt_bg_bitmap",
+        new lafi::textbox(), 60, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_bg_color",
+        new lafi::label("Color:"), 40, 16
+    );
+    frm_data->easy_add(
+        "txt_bg_color",
+        new lafi::textbox(), 60, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_bg_dist",
+        new lafi::label("Distance:"), 40, 16
+    );
+    frm_data->easy_add(
+        "txt_bg_dist",
+        new lafi::textbox(), 60, 16
+    );
+    frm_data->easy_row();
+    frm_data->easy_add(
+        "lbl_bg_zoom",
+        new lafi::label("Zoom:"), 40, 16
+    );
+    frm_data->easy_add(
+        "txt_bg_zoom",
+        new lafi::textbox(), 60, 16
+    );
+    frm_data->easy_row();
+    
+    
+    //Data -- properties.
+    frm_data->widgets["but_back"]->left_mouse_click_handler =
+    [this] (lafi::widget*, int, int) {
+        state = EDITOR_STATE_MAIN;
+        change_to_right_frame();
+    };
+    frm_data->widgets["but_back"]->description =
+        "Go back to the main menu.";
+        
+    frm_data->widgets["txt_name"]->description =
+        "The area's name.";
+        
+    frm_data->widgets["txt_subtitle"]->description =
+        "Subtitle, if any. Appears on the loading screen.";
+        
+    frm_data->widgets["chk_weather"]->description =
+        "Does this area use a weather condition?";
+        
+    frm_data->widgets["but_weather"]->description =
+        "The weather condition to use.";
+        
+    frm_data->widgets["txt_bg_bitmap"]->description =
+        "File name of the texture to use as a background, extension included."
+        " e.g. \"Kitchen_floor.jpg\"";
+        
+    frm_data->widgets["txt_bg_color"]->description =
+        "Color of the background, in the format \"r g b a\".";
+        
+    frm_data->widgets["txt_bg_dist"]->description =
+        "How far away the background is. 2 is a good value.";
+        
+    frm_data->widgets["txt_bg_zoom"]->description =
+        "Scale the texture by this amount.";
+    //TODO the rest of the data frame properties.
+    
+    
     //Tools -- declarations.
     frm_tools =
         new lafi::frame(gui_x, 0, scr_w, scr_h - 48);
@@ -1607,5 +1805,17 @@ void area_editor::load() {
     
     cam_zoom = 1.0;
     cam_pos.x = cam_pos.y = 0.0;
+    selection_effect = 0.0;
+    is_ctrl_pressed = false;
+    is_shift_pressed = false;
+    is_gui_focused = false;
+    gui->lose_focus();
+    
+    load_custom_particle_generators(false);
+    load_spike_damage_types();
+    load_liquids(false);
+    load_status_types(false);
+    load_hazards();
+    load_mob_types(false);
     
 }

@@ -1731,6 +1731,7 @@ bool area_editor_old::is_new_sector_line_valid(const point &pos) {
     return true;
 }
 
+
 /* ----------------------------------------------------------------------------
  * Load the area from the disk.
  * from_backup: If false, load it normally. If true, load from a backup, if any.

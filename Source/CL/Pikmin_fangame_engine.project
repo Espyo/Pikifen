@@ -319,5 +319,6 @@
     <File Name="../source/editors/area_editor_loading.cpp"/>
     <File Name="../source/editors/area_editor_event_handler.cpp"/>
     <File Name="../source/editors/area_editor_drawing.cpp"/>
+    <File Name="../source/editors/area_editor_gui_functions.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

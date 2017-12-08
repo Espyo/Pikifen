@@ -193,7 +193,7 @@ void gameplay::draw_cursor(
 ) {
 
     al_use_transform(&world_to_screen_drawing_transform);
-        
+    
     size_t n_arrows = group_move_arrows.size();
     for(size_t a = 0; a < n_arrows; ++a) {
         point pos(
@@ -426,7 +426,7 @@ void gameplay::draw_hud() {
         float dots_span = last_dot_x - first_dot_x;
         float dot_interval = dots_span / (float) n_hours;
         float sun_meter_sun_angle = area_time_passed * SUN_METER_SUN_SPIN_SPEED;
-            
+        
         //Larger bubbles at the start, middle and end of the meter.
         al_hold_bitmap_drawing(true);
         draw_sprite(
@@ -701,7 +701,7 @@ void gameplay::draw_hud() {
         }
         
         if(spray_types.size() == 2) {
-            
+        
             //Secondary spray, when there're only two types.
             if(
                 hud_items.get_draw_data(
@@ -741,7 +741,7 @@ void gameplay::draw_hud() {
             }
             
         } else if(spray_types.size() >= 3) {
-            
+        
             //Previous spray info.
             if(
                 hud_items.get_draw_data(
@@ -932,7 +932,7 @@ void gameplay::draw_layout(
             continue;
         }
         
-        draw_sector_texture(s_ptr, point(), 1.0);
+        draw_sector_texture(s_ptr, point(), 1.0f, 1.0f);
         
         if(s_ptr->associated_liquid) {
             draw_liquid(s_ptr, point(), 1.0f);
@@ -1066,7 +1066,7 @@ void gameplay::draw_lighting_filter() {
         al_set_separate_blender(
             old_op, old_src, old_dst, old_aop, old_asrc, old_adst
         );
-    
+        
     }
     
 }
@@ -2142,6 +2142,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
             av[v].y = ev[v]->y;
             av[v].color = al_map_rgba(0, 0, 0, WALL_SHADOW_OPACITY);
             av[v].z = 0;
+            
         }
         
         
@@ -2182,7 +2183,7 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
                 vertex* other_vertex =
                     ve_ptr->vertexes[
                         (ve_ptr->vertexes[0] == cur_vertex ? 1 : 0)
-                    ];
+                ];
                 float ve_angle =
                     get_angle(
                         point(cur_vertex->x, cur_vertex->y),
@@ -2402,9 +2403,10 @@ void draw_sector_shadows(sector* s_ptr, const point &where, const float scale) {
  * s_ptr:   Pointer to the sector.
  * where:   X and Y offset.
  * scale:   Scale the sector by this much.
+ * opacity: Draw the textures at this opacity, 0 - 1.
  */
 void draw_sector_texture(
-    sector* s_ptr, const point &where, const float scale
+    sector* s_ptr, const point &where, const float scale, const float opacity
 ) {
     if(s_ptr->type == SECTOR_TYPE_BOTTOMLESS_PIT) return;
     
@@ -2514,7 +2516,8 @@ void draw_sector_texture(
                     texture_sector[t]->texture_info.tint.r * brightness_mult,
                     texture_sector[t]->texture_info.tint.g * brightness_mult,
                     texture_sector[t]->texture_info.tint.b * brightness_mult,
-                    texture_sector[t]->texture_info.tint.a * alpha_mult
+                    texture_sector[t]->texture_info.tint.a * alpha_mult *
+                    opacity
                 );
         }
         

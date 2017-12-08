@@ -28,6 +28,7 @@ editor::editor() :
     gui_x(0),
     holding_m1(false),
     holding_m2(false),
+    holding_m3(false),
     made_changes(false),
     mode(0),
     sec_mode(0),
