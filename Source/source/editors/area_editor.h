@@ -254,18 +254,18 @@ private:
     vector<layout_drawing_node> drawing_nodes;
     //Reason why the current drawing line is invalid. Use DRAWING_LINE_*.
     unsigned char drawing_line_error;
-    //Is the GUI currently what's in focus, i.e. the last thing clicked?
-    bool is_gui_focused;
     //Is Ctrl pressed down?
     bool is_ctrl_pressed;
+    //Is the GUI currently what's in focus, i.e. the last thing clicked?
+    bool is_gui_focused;
     //Is Shift pressed down?
     bool is_shift_pressed;
-    //Number of the mouse button pressed.
-    size_t last_mouse_click;
     //Category of the last mob placed.
     mob_category* last_mob_category;
     //Mob type of the last mob placed.
     mob_type* last_mob_type;
+    //Number of the mouse button pressed.
+    size_t last_mouse_click;
     //List of lone edges found.
     unordered_set<edge*> lone_edges;
     //Is this a mouse drag, or just a shaky click?
@@ -362,16 +362,16 @@ private:
     transformation_controller selected_shadow_transformation;
     //Currently selected vertexes.
     set<vertex*> selected_vertexes;
-    //Current selection filter.
-    unsigned char selection_filter;
-    //Has the user agreed to homogenize the selection?
-    bool selection_homogenized;
     //Is the user currently performing a rectangle box?
     bool selecting;
     //The selection's alpha depends on this value.
     float selection_effect;
     //Point where the selection is currently at.
     point selection_end;
+    //Current selection filter.
+    unsigned char selection_filter;
+    //Has the user agreed to homogenize the selection?
+    bool selection_homogenized;
     //Point where the selection started.
     point selection_start;
     //Show the path stop closest to the cursor?
@@ -422,7 +422,7 @@ private:
     void center_camera(
         const point &min_coords, const point &max_coords
     );
-    void change_reference(const string new_file_name);
+    void change_reference(const string &new_file_name);
     void check_drawing_line(const point &pos);
     void clear_circle_sector();
     void clear_current_area();
@@ -494,7 +494,7 @@ private:
     void pick(const string &name, const string &category);
     area_data* prepare_state();
     void register_change(
-        const string operation_name, area_data* pre_prepared_change = NULL
+        const string &operation_name, area_data* pre_prepared_change = NULL
     );
     bool remove_isolated_sectors();
     void resize_everything(const float mult);
@@ -521,7 +521,7 @@ private:
     void undo();
     void undo_layout_drawing_node();
     bool update_backup_status();
-    void update_sector_texture(sector* s_ptr, const string file_name);
+    void update_sector_texture(sector* s_ptr, const string &file_name);
     void update_status_bar();
     void update_texture_suggestions(const string &n);
     void update_undo_history();

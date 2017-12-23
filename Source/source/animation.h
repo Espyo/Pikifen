@@ -147,7 +147,7 @@ public:
     
     animation(
         const string &name = "",
-        vector<frame> frames = vector<frame>(),
+        const vector<frame> &frames = vector<frame>(),
         const size_t loop_frame = 0, const unsigned char hit_rate = 100
     );
     animation(const animation &a2);
@@ -167,14 +167,14 @@ public:
     vector<size_t> pre_named_conversions;
     
     animation_database(
-        vector<animation*> a = vector<animation*>(),
-        vector<sprite*>    s = vector<sprite*>(),
-        vector<body_part*> b = vector<body_part*>()
+        const vector<animation*> &a = vector<animation*>(),
+        const vector<sprite*>    &s = vector<sprite*>(),
+        const vector<body_part*> &b = vector<body_part*>()
     );
     
-    size_t find_animation(string name);
-    size_t find_sprite(   string name);
-    size_t find_body_part(string name);
+    size_t find_animation(const string &name);
+    size_t find_sprite(   const string &name);
+    size_t find_body_part(const string &name);
     
     void create_conversions(vector<pair<size_t, string> > conversions);
     void fix_body_part_pointers();

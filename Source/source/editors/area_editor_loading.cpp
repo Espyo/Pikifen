@@ -316,10 +316,6 @@ void area_editor::load() {
     [this] (lafi::widget*) {
         gui_to_info();
     };
-    auto lambda_gui_to_info_click =
-    [this] (lafi::widget*, int, int) {
-        gui_to_info();
-    };
     frm_info->widgets["txt_name"]->lose_focus_handler = lambda_gui_to_info;
     frm_info->widgets["txt_name"]->description =
         "The area's name.";
@@ -2214,7 +2210,8 @@ void area_editor::load() {
     frm_options->widgets["but_grid_plus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         area_editor_grid_interval *= 2;
-        area_editor_grid_interval = min(area_editor_grid_interval, MAX_GRID_INTERVAL);
+        area_editor_grid_interval =
+            min(area_editor_grid_interval, MAX_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };
@@ -2224,7 +2221,8 @@ void area_editor::load() {
     frm_options->widgets["but_grid_minus"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         area_editor_grid_interval *= 0.5;
-        area_editor_grid_interval = max(area_editor_grid_interval, MIN_GRID_INTERVAL);
+        area_editor_grid_interval =
+            max(area_editor_grid_interval, MIN_GRID_INTERVAL);
         save_options();
         options_to_gui();
     };

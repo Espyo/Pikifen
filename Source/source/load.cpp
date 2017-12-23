@@ -489,7 +489,7 @@ void load_asset_file_names() {
     for(unsigned char i = 0; i < 3; ++i) {
         rs.set(
             "mouse_button_" + i2s(i + 1) + "_icon",
-            asset_file_names.mouse_button_icon[3]
+            asset_file_names.mouse_button_icon[i]
         );
     }
     

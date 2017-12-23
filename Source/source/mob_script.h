@@ -286,9 +286,10 @@ public:
     vector<mob_action*> actions;
     
     void run(mob* m, void* custom_data_1 = NULL, void* custom_data_2 = NULL);
-    mob_event(data_node* d, vector<mob_action*> a);
+    mob_event(data_node* d, const vector<mob_action*> &a);
     mob_event(
-        const unsigned char t, vector<mob_action*> a = vector<mob_action*>()
+        const unsigned char t,
+        const vector<mob_action*> &a = vector<mob_action*>()
     );
 };
 

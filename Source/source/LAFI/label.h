@@ -24,10 +24,9 @@ private:
     static const float OFFSET_SPEED;
     
 public:
+    string text;
     int text_flags;
     bool autoscroll;
-    
-    string text;
     
     label(
         const int x1, const int y1, const int x2, const int y2,

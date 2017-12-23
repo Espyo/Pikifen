@@ -30,10 +30,11 @@ pikmin::pikmin(
 ) :
     mob(pos, type, angle, vars),
     pik_type(type),
-    pluck_reserved(false),
+    connected_hitbox_nr(INVALID),
+    connected_hitbox_dist(0),
+    connected_hitbox_angle(0),
     carrying_mob(NULL),
     carrying_spot(0),
-    maturity(s2i(get_var_value(vars, "maturity", "2"))),
     missed_attack_ptr(nullptr),
     missed_attack_timer(
         PIKMIN_MISSED_ATTACK_DURATION,
@@ -41,9 +42,8 @@ pikmin::pikmin(
             this->missed_attack_ptr = NULL;
         }
     ),
-    connected_hitbox_nr(INVALID),
-    connected_hitbox_dist(0),
-    connected_hitbox_angle(0) {
+    maturity(s2i(get_var_value(vars, "maturity", "2"))),
+    pluck_reserved(false) {
     
     invuln_period = timer(PIKMIN_INVULN_PERIOD);
     team = MOB_TEAM_PLAYER_1; // TODO

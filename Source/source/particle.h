@@ -142,7 +142,7 @@ public:
     
     particle_generator(
         const float emission_interval = 0.0f,
-        particle base_particle = particle(), const size_t number = 1
+        const particle &base_particle = particle(), const size_t number = 1
     );
     void tick(const float delta_t, particle_manager &manager);
     void emit(particle_manager &manager);

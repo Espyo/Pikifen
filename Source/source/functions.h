@@ -107,7 +107,7 @@ float interpolate_number(
     const float v1, const float v2
 );
 void log_error(string s, data_node* d = NULL);
-void print_info(string t);
+void print_info(const string &t);
 float randomf(float min, float max);
 int randomi(int min, int max);
 ALLEGRO_BITMAP* recreate_bitmap(ALLEGRO_BITMAP* b);

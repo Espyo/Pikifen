@@ -33,10 +33,11 @@
 mob_action::mob_action(
     data_node* dn, vector<mob_state*>* states, mob_type* mt
 ) :
-    valid(true),
     type(MOB_ACTION_UNKNOWN),
     sub_type(0),
-    code(nullptr) {
+    code(nullptr),
+    valid(true) {
+    
     string n = dn->name;
     
     if(n == "chomp") {
@@ -415,8 +416,8 @@ mob_action::mob_action(
 mob_action::mob_action(unsigned char type, unsigned char sub_type) :
     type(type),
     sub_type(sub_type),
-    valid(true),
-    code(nullptr) {
+    code(nullptr),
+    valid(true) {
     
 }
 
@@ -426,9 +427,9 @@ mob_action::mob_action(unsigned char type, unsigned char sub_type) :
  * code: the function to run.
  */
 mob_action::mob_action(custom_action_code code) :
-    code(code),
     type(MOB_ACTION_UNKNOWN),
     sub_type(MOB_ACTION_UNKNOWN),
+    code(code),
     valid(true) {
     
 }
@@ -744,7 +745,7 @@ void mob_fsm::run_event(
  * d: the data node.
  * a: its actions.
  */
-mob_event::mob_event(data_node* d, vector<mob_action*> a) :
+mob_event::mob_event(data_node* d, const vector<mob_action*> &a) :
     actions(a) {
     
 #define r(name, number) \
@@ -786,7 +787,7 @@ mob_event::mob_event(data_node* d, vector<mob_action*> a) :
  * t: the event type.
  * a: its actions.
  */
-mob_event::mob_event(const unsigned char t, vector<mob_action*> a) :
+mob_event::mob_event(const unsigned char t, const vector<mob_action*> &a) :
     type(t),
     actions(a) {
     

@@ -10,16 +10,16 @@ style::style(
     const ALLEGRO_COLOR alt_color, ALLEGRO_FONT* text_font
 ) :
     bg_color(bg_color),
+    lighter_bg_color(lighten_color(bg_color)),
+    darker_bg_color(darken_color(bg_color)),
     fg_color(fg_color),
     alt_color(alt_color),
     disabled_bg_color(darker_bg_color),
-    text_font(text_font),
-    lighter_bg_color(lighten_color(bg_color)),
-    darker_bg_color(darken_color(bg_color)),
     lighter_disabled_bg_color(lighten_color(disabled_bg_color)),
     darker_disabled_bg_color(darken_color(disabled_bg_color)),
     disabled_fg_color(lighten_color(fg_color)),
-    disabled_alt_color(darken_color(alt_color)) {
+    disabled_alt_color(darken_color(alt_color)),
+    text_font(text_font){
     
 }
 

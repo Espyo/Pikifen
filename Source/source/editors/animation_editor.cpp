@@ -53,13 +53,13 @@ const string animation_editor::SAVE_ICON = "Save.png";
  */
 animation_editor::animation_editor() :
     editor(),
-    cur_anim(NULL),
     anim_playing(false),
     comparison(true),
     comparison_sprite(nullptr),
     comparison_blink(true),
     comparison_blink_show(true),
     comparison_blink_timer(0),
+    cur_anim(NULL),
     cur_body_part_nr(INVALID),
     cur_frame_nr(INVALID),
     cur_frame_time(0),
@@ -993,7 +993,7 @@ void animation_editor::open_picker(
         title = "Choose a sprite.";
     }
     
-    generate_and_open_picker(elements, "", can_make_new);
+    generate_and_open_picker(elements, title, can_make_new);
 }
 
 
@@ -1359,6 +1359,9 @@ void animation_editor::save_animation_database() {
 void animation_editor::unload() {
     anims.destroy();
     delete(gui->style);
+    //TODO warning: deleting object of polymorphic class type 'lafi::gui'
+    //which has non-virtual destructor might cause undefined behaviour
+    //[-Wdelete-non-virtual-dtor]
     delete(gui);
     al_destroy_native_file_dialog(file_dialog);
     

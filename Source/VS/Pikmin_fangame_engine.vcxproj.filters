@@ -513,19 +513,7 @@
     <ClCompile Include="..\source\gameplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_drawing_old.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_event_handler_old.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\editors\area_editor_gui_functions.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_loading_old.cpp">
-      <Filter>Source Files\editors</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\editors\area_editor_old.cpp">
       <Filter>Source Files\editors</Filter>
     </ClCompile>
   </ItemGroup>

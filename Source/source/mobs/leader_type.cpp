@@ -24,8 +24,9 @@ leader_type::leader_type() :
     mob_type(MOB_CATEGORY_LEADERS),
     whistle_range(DEF_WHISTLE_RANGE),
     punch_strength(DEF_PUNCH_STRENGTH),
-    throw_strength_mult(1.0),
     pluck_delay(0.6),
+    throw_strength_mult(1.0),
+    max_throw_height(0),
     bmp_icon(nullptr) {
     
     main_color = al_map_rgb(128, 128, 128);

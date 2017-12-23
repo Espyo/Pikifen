@@ -11,8 +11,8 @@ namespace lafi {
  */
 class checkbox : public widget {
 public:
-    bool checked;
     string text;
+    bool checked;
     
     void check();
     void uncheck();

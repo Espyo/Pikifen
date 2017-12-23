@@ -32,51 +32,55 @@ mob::mob(
     const point &pos, mob_type* type,
     const float angle, const string &vars
 ) :
-    pos(pos),
     type(type),
+    to_delete(false),
+    anim(&type->anims),
+    fsm(this),
+    script_timer(0),
+    focused_mob(nullptr),
+    big_damage_ev_queued(false),
+    far_reach(INVALID),
+    near_reach(INVALID),
+    pos(pos),
+    z(0),
+    speed_z(0),
     angle(angle),
     intended_angle(angle),
-    anim(&type->anims),
-    to_delete(false),
-    reached_destination(false),
-    speed_z(0),
     z_cap(FLT_MAX),
     home(pos),
+    ground_sector(nullptr),
+    center_sector(nullptr),
     gravity_mult(1.0f),
-    unpushable(false),
     push_amount(0),
     push_angle(0),
+    unpushable(false),
     tangible(true),
-    hide(false),
+    was_thrown(false),
+    chasing(false),
+    chase_offset(pos),
+    chase_orig_coords(nullptr),
+    chase_teleport_z(nullptr),
+    chase_teleport(false),
+    chase_free_move(false),
+    chase_target_dist(0),
+    chase_speed(-1),
+    reached_destination(false),
+    following_group(nullptr),
+    subgroup_type_ptr(nullptr),
+    group(nullptr),
+    group_spot_index(INVALID),
+    carry_info(nullptr),
+    carrying_target(nullptr),
+    cur_path_stop_nr(INVALID),
+    id(next_mob_id),
     health(type->max_health),
     invuln_period(0),
     team(MOB_TEAM_DECORATION),
-    chasing(false),
-    chase_teleport(false),
-    chase_offset(pos),
-    chase_teleport_z(nullptr),
-    chase_orig_coords(nullptr),
-    chase_speed(-1),
-    carrying_target(nullptr),
-    cur_path_stop_nr(INVALID),
-    focused_mob(nullptr),
-    fsm(this),
-    dead(false),
-    big_damage_ev_queued(false),
-    near_reach(INVALID),
-    far_reach(INVALID),
-    following_group(nullptr),
-    subgroup_type_ptr(nullptr),
-    was_thrown(false),
-    group(nullptr),
-    carry_info(nullptr),
-    chase_free_move(false),
-    chase_target_dist(0),
+    hide(false),
     on_hazard(nullptr),
+    dead(false),
     chomp_max(0),
-    script_timer(0),
-    disabled_state_flags(0),
-    id(next_mob_id) {
+    disabled_state_flags(0) {
     
     next_mob_id++;
     
@@ -988,7 +992,7 @@ void mob::tick_animation() {
     }
     
     vector<size_t> frame_signals;
-    bool finished_anim = anim.tick(delta_t * mult, &frame_signals);
+    bool finished_anim = anim.tick(delta_t* mult, &frame_signals);
     
     if(finished_anim) {
         fsm.run_event(MOB_EVENT_ANIMATION_END);
@@ -1188,8 +1192,8 @@ void mob::tick_physics() {
         //It's pretty naive...but it works!
         bool successful_move = true;
         
-        new_pos.x = pos.x + delta_t * move_speed.x;
-        new_pos.y = pos.y + delta_t * move_speed.y;
+        new_pos.x = pos.x + delta_t* move_speed.x;
+        new_pos.y = pos.y + delta_t* move_speed.y;
         new_z = z;
         new_ground_sector = ground_sector;
         set<edge*> intersecting_edges;
@@ -1529,7 +1533,7 @@ void mob::tick_physics() {
     
     //Landing on a bottomless pit or hazardous floor.
     hazard* new_on_hazard = NULL;
-    z += delta_t * speed_z;
+    z += delta_t* speed_z;
     if(z <= ground_sector->z) {
         z = ground_sector->z;
         speed_z = 0;
@@ -1559,12 +1563,12 @@ void mob::tick_physics() {
     //Gravity.
     if(gravity_mult > 0) {
         if(z > ground_sector->z) {
-            speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
+            speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
         } else {
             speed_z = 0;
         }
     } else {
-        speed_z += delta_t * gravity_mult * GRAVITY_ADDER;
+        speed_z += delta_t* gravity_mult * GRAVITY_ADDER;
     }
     
     //On a sector that has a hazard that is not on the floor.
@@ -2403,4 +2407,3 @@ bool is_resistant_to_hazards(
     }
     return false;
 }
-

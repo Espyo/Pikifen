@@ -17,17 +17,17 @@ textbox::textbox(
     lafi::style* style, const unsigned char flags
 ) :
     widget(x1, y1, x2, y2, style, flags),
+    scroll_x(0),
     cursor_visible(true),
     cursor_change_time_left(0),
     text(text),
-    editable(true),
     cursor(0),
     sel_start(0),
     sel_end(0),
+    editable(true),
     multi_line(false),
-    change_handler(nullptr),
-    scroll_x(0),
-    enter_key_widget(nullptr) {
+    enter_key_widget(nullptr),
+    change_handler(nullptr){
     
     tab_index = cur_tab_index++;
 }
@@ -38,17 +38,17 @@ textbox::textbox(
  */
 textbox::textbox(const string &text) :
     widget(),
+    scroll_x(0),
     cursor_visible(true),
     cursor_change_time_left(0),
     text(text),
-    editable(true),
     cursor(0),
     sel_start(0),
     sel_end(0),
+    editable(true),
     multi_line(false),
-    change_handler(nullptr),
-    scroll_x(0),
-    enter_key_widget(nullptr) {
+    enter_key_widget(nullptr),
+    change_handler(nullptr) {
     
     tab_index = cur_tab_index++;
 }
@@ -59,17 +59,17 @@ textbox::textbox(const string &text) :
  */
 textbox::textbox(textbox &t2) :
     widget(t2),
+    scroll_x(0),
     cursor_visible(true),
     cursor_change_time_left(0),
     text(t2.text),
-    editable(t2.editable),
     cursor(0),
     sel_start(0),
     sel_end(0),
+    editable(t2.editable),
     multi_line(false),
-    change_handler(nullptr),
-    scroll_x(0),
-    enter_key_widget(nullptr) {
+    enter_key_widget(nullptr),
+    change_handler(nullptr) {
     
     tab_index = cur_tab_index++;
 }

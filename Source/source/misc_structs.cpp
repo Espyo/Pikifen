@@ -34,8 +34,8 @@ bmp_manager::bmp_info::bmp_info(ALLEGRO_BITMAP* b) :
  * Creates a bitmap manager.
  */
 bmp_manager::bmp_manager(const string &base_dir) :
-    total_calls(0),
-    base_dir(base_dir) {
+    base_dir(base_dir),
+    total_calls(0) {
     
 }
 
@@ -343,8 +343,8 @@ dist::dist(const point &p1, const point &p2) :
         (p2.x - p1.x) * (p2.x - p1.x) +
         (p2.y - p1.y) * (p2.y - p1.y)
     ),
-    has_normal_distance(false),
-    normal_distance(0) {
+    normal_distance(0),
+    has_normal_distance(false) {
     
 }
 
@@ -354,8 +354,8 @@ dist::dist(const point &p1, const point &p2) :
  */
 dist::dist(const float d) :
     distance_squared(d * d),
-    has_normal_distance(true),
-    normal_distance(d) {
+    normal_distance(d),
+    has_normal_distance(true) {
     
 }
 
@@ -612,7 +612,9 @@ void sample_struct::destroy() {
 /* ----------------------------------------------------------------------------
  * Registers a new type of sector.
  */
-void sector_types_manager::register_type(unsigned char nr, string name) {
+void sector_types_manager::register_type(
+    const unsigned char nr, const string &name
+) {
     if(nr >= names.size()) {
         names.insert(names.end(), (nr + 1) - names.size(), "");
     }
@@ -654,8 +656,8 @@ unsigned char sector_types_manager::get_nr_of_types() {
  * Creates a timer.
  */
 timer::timer(float duration, const function<void()> &on_end) :
-    duration(duration),
     time_left(0),
+    duration(duration),
     on_end(on_end) {
     
     
@@ -727,7 +729,9 @@ fade_manager::fade_manager() :
 /* ----------------------------------------------------------------------------
  * Sets up the start of a fade.
  */
-void fade_manager::start_fade(const bool fade_in, function<void()> on_end) {
+void fade_manager::start_fade(
+    const bool fade_in, const function<void()> &on_end
+) {
     time_left = FADE_DURATION;
     this->fade_in = fade_in;
     this->on_end = on_end;
@@ -813,7 +817,9 @@ sprite_effect::sprite_effect() :
  * Adds a keyframe to the effect.
  * i.e. What the properties should be at a given point in time.
  */
-void sprite_effect::add_keyframe(const float time, sprite_effect_props props) {
+void sprite_effect::add_keyframe(
+    const float time, const sprite_effect_props &props
+) {
     keyframes[time] = props;
 }
 

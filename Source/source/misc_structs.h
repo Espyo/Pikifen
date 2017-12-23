@@ -278,7 +278,7 @@ private:
     vector<string> names;
     
 public:
-    void register_type(unsigned char nr, string name);
+    void register_type(const unsigned char nr, const string &name);
     unsigned char get_nr(const string &name);
     string get_name(const unsigned char nr);
     unsigned char get_nr_of_types();
@@ -300,7 +300,7 @@ public:
     static const float FADE_DURATION;
     
     fade_manager();
-    void start_fade(const bool fade_in, function<void()> on_end);
+    void start_fade(const bool fade_in, const function<void()> &on_end);
     bool is_fade_in();
     bool is_fading();
     float get_perc_left();
@@ -365,7 +365,7 @@ private:
     float cur_time;
     
 public:
-    void add_keyframe(const float time, sprite_effect_props props);
+    void add_keyframe(const float time, const sprite_effect_props &props);
     void set_cur_time(const float cur_time);
     sprite_effect_props get_final_properties();
     

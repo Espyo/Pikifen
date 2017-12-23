@@ -934,7 +934,7 @@ vector<action_from_event> get_actions_from_event(const ALLEGRO_EVENT &ev) {
  * player: Player number.
  * s:      The textual code that represents the hardware inputs.
  */
-control_info::control_info(unsigned char action, string s) :
+control_info::control_info(unsigned char action, const string &s) :
     action(action),
     type(CONTROL_TYPE_NONE),
     device_nr(0),

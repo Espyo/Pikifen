@@ -387,8 +387,6 @@ void animation_editor::load() {
     //Animations -- properties.
     auto lambda_gui_to_animation =
     [this] (lafi::widget*) { gui_to_animation(); };
-    auto lambda_gui_to_animation_click =
-    [this] (lafi::widget*, int, int) { gui_to_animation(); };
     auto lambda_gui_to_frame =
     [this] (lafi::widget*) { gui_to_frame(); };
     
@@ -1581,11 +1579,6 @@ void animation_editor::load() {
     
     
     //Body parts -- properties.
-    auto lambda_gui_to_hitbox =
-    [this] (lafi::widget*) { gui_to_body_part(); };
-    auto lambda_gui_to_hitbox_click =
-    [this] (lafi::widget*, int, int) { gui_to_body_part(); };
-    
     frm_body_parts->widgets["but_back"]->left_mouse_click_handler =
     [this] (lafi::widget*, int, int) {
         mode = EDITOR_MODE_MAIN;

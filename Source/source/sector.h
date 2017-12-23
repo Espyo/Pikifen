@@ -129,7 +129,7 @@ struct path_stop {
     
     path_stop(
         const point &pos = point(),
-        vector<path_link> links = vector<path_link>()
+        const vector<path_link> &links = vector<path_link>()
     );
     void add_link(path_stop* other_stop, const bool normal);
     bool has_link(path_stop* other_stop);

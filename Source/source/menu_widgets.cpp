@@ -28,14 +28,14 @@ const float menu_widget::JUICY_GROW_DURATION = 0.3f;
  */
 menu_widget::menu_widget(
     const point &pos, const point &size,
-    function<void()> click_handler
+    const function<void()> &click_handler
 ) :
+    juicy_grow_time_left(0),
     pos(pos),
     size(size),
     click_handler(click_handler),
     selected(false),
-    enabled(true),
-    juicy_grow_time_left(0) {
+    enabled(true) {
     
     
 }
@@ -89,8 +89,8 @@ void menu_widget::start_juicy_grow() {
  */
 menu_button::menu_button(
     const point &pos, const point &size,
-    function<void()> click_handler, string text, ALLEGRO_FONT* font,
-    const ALLEGRO_COLOR &color, const int align
+    const function<void()> &click_handler, const string &text,
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(pos, size, click_handler),
     text(text),
@@ -143,15 +143,15 @@ bool menu_button::is_clickable() { return enabled; }
  */
 menu_checkbox::menu_checkbox(
     const point &pos, const point &size,
-    function<void()> click_handler, string text, ALLEGRO_FONT* font,
-    const ALLEGRO_COLOR &color, const int align
+    const function<void()> &click_handler, const string &text,
+    ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(pos, size, click_handler),
     text(text),
     font(font),
     text_color(color),
-    text_align(align),
-    checked(false) {
+    checked(false),
+    text_align(align) {
     
     
 }
@@ -205,7 +205,7 @@ bool menu_checkbox::is_clickable() { return enabled; }
  * Creates a text widget.
  */
 menu_text::menu_text(
-    const point &pos, const point &size, string text,
+    const point &pos, const point &size, const string &text,
     ALLEGRO_FONT* font, const ALLEGRO_COLOR &color, const int align
 ) :
     menu_widget(pos, size, nullptr),

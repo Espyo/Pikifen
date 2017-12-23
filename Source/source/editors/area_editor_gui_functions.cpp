@@ -773,8 +773,6 @@ void area_editor::open_picker(const unsigned char type) {
         
     } else if(type == AREA_EDITOR_PICKER_MOB_TYPE) {
     
-        mob_gen* m_ptr = *selected_mobs.begin();
-        
         for(unsigned char f = 0; f < N_MOB_CATEGORIES; ++f) {
             //0 is none.
             if(f == MOB_CATEGORY_NONE) continue;
@@ -1048,7 +1046,6 @@ void area_editor::review_to_gui() {
             return;
         }
         
-        sector* s_ptr = non_simples.begin()->first;
         TRIANGULATION_ERRORS tri_error = non_simples.begin()->second;
         
         lbl_prob_title_1->text = "Non-simple sector!";

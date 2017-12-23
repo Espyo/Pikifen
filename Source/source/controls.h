@@ -40,7 +40,7 @@ struct control_info {
     //Axis of the stick.
     int axis;
     
-    control_info(unsigned char action, string s);
+    control_info(unsigned char action, const string &s);
     string stringify();
 };
 

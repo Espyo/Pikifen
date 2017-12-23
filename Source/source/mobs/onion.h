@@ -43,7 +43,7 @@ protected:
 public:
     onion_type* oni_type;
     bool activated;
-    size_t spew_queue;
+    size_t spew_queue; //TODO this needs to be a proper queue (Master Onion).
     //Time left until it starts spewing queued seeds.
     timer full_spew_timer;
     //Time left until it spews the next seed in the queue.

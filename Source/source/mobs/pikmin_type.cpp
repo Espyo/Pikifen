@@ -26,17 +26,18 @@ const float DEFAULT_SPROUT_EVOLUTION_TIME[N_MATURITIES] =
  */
 pikmin_type::pikmin_type() :
     mob_type(MOB_CATEGORY_PIKMIN),
-    carry_strength(1),
     attack_power(1),
+    carry_strength(1),
     carry_speed(1),
-    bmp_icon(nullptr),
     throw_strength_mult(1.0),
+    max_throw_height(0),
     has_onion(true),
     can_dig(false),
     can_fly(false),
     can_swim(false),
     can_latch(true),
-    can_carry_bomb_rocks(false) {
+    can_carry_bomb_rocks(false),
+    bmp_icon(nullptr) {
     
     for(size_t m = 0; m < N_MATURITIES; ++m) {
         sprout_evolution_time[m] = DEFAULT_SPROUT_EVOLUTION_TIME[m];

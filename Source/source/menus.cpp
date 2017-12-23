@@ -128,6 +128,9 @@ void main_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
+        //TODO warning: deleting object of abstract class type 'menu_widget'
+        //which has non-virtual destructor will cause
+        //undefined behaviour [-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();
@@ -213,14 +216,14 @@ void main_menu::do_drawing() {
 options_menu::options_menu() :
     game_state(),
     bmp_menu_bg(NULL),
+    time_spent(0),
     cur_player_nr(0),
     cur_page_nr(0),
     cur_player_nr_widget(NULL),
     cur_page_nr_widget(NULL),
     input_capture_msg_widget(NULL),
-    input_capture_control_nr(0),
     capturing_input(false),
-    time_spent(0) {
+    input_capture_control_nr(0) {
     
 }
 
@@ -354,7 +357,7 @@ void options_menu::load() {
         //Go to the new control's page.
         cur_page_nr = controls[cur_player_nr].size() / 8.0f;
         this->control_widgets[
-            ((controls[cur_player_nr].size() - 1) % 8) * 5 + 2
+        ((controls[cur_player_nr].size() - 1) % 8) * 5 + 2
         ]->start_juicy_grow();
         update();
     },
@@ -435,6 +438,9 @@ void options_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
+        //TODO warning: deleting object of abstract class type 'menu_widget'
+        //which has non-virtual destructor will cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();
@@ -667,10 +673,10 @@ void options_menu::leave() {
  */
 area_menu::area_menu() :
     game_state(),
+    bmp_menu_bg(NULL),
     time_spent(0),
     cur_page_nr(0),
-    cur_page_nr_widget(NULL),
-    bmp_menu_bg(NULL) {
+    cur_page_nr_widget(NULL) {
     
 }
 
@@ -795,6 +801,9 @@ void area_menu::unload() {
     //Menu widgets.
     set_selected_widget(NULL);
     for(size_t w = 0; w < menu_widgets.size(); w++) {
+        //TODO warning: deleting object of abstract class type 'menu_widget'
+        //which has non-virtual destructor will cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete menu_widgets[w];
     }
     menu_widgets.clear();

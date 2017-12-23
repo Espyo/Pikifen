@@ -35,9 +35,9 @@ particle::particle(
     friction(1.0f),
     gravity(1.0f),
     size_grow_speed(0.0f),
+    time(duration),
     pos(pos),
     size(size),
-    time(duration),
     color(al_map_rgb(255, 255, 255)),
     before_mobs(false),
     priority(priority) {
@@ -318,13 +318,14 @@ void particle_manager::clear() {
  */
 particle_generator::particle_generator(
     const float emission_interval,
-    particle base_particle, const size_t number
+    const particle &base_particle, const size_t number
 ) :
-    id(0),
     emission_timer(emission_interval),
+    id(0),
     base_particle(base_particle),
     number(number),
     emission_interval(emission_interval),
+    follow(nullptr),
     number_deviation(0),
     duration_deviation(0),
     friction_deviation(0),
@@ -333,8 +334,7 @@ particle_generator::particle_generator(
     angle(0),
     angle_deviation(0),
     total_speed(0),
-    total_speed_deviation(0),
-    follow(nullptr) {
+    total_speed_deviation(0) {
     
 }
 

@@ -185,7 +185,7 @@ size_t data_node::load_node(
             returning_from_sub_node = true;
             continue;
         }
-                
+        
         //Option=value.
         pos = line.find('=');
         string n, v;
@@ -259,9 +259,10 @@ void data_node::save_node(ALLEGRO_FILE* file, const size_t level) {
 
 
 //Creates an empty data node.
-data_node::data_node() {
-    file_was_opened = false;
-    line_nr = 0;
+data_node::data_node() :
+    file_was_opened(false),
+    line_nr(0) {
+    
 }
 
 
@@ -286,8 +287,8 @@ data_node::data_node(const data_node &dn2) :
 //Creates a data node from a file, given the file name.
 data_node::data_node(const string &file_name) :
     file_was_opened(false),
-    line_nr(0),
-    file_name(file_name) {
+    file_name(file_name),
+    line_nr(0) {
     
     load_file(file_name);
 }
@@ -295,10 +296,10 @@ data_node::data_node(const string &file_name) :
 
 //Creates a data node by filling its name and value.
 data_node::data_node(const string &name, const string &value) :
-    file_was_opened(false),
-    line_nr(0),
     name(name),
-    value(value) {
+    value(value),
+    file_was_opened(false),
+    line_nr(0) {
     
 }
 

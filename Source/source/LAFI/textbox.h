@@ -28,10 +28,10 @@ public:
 
     static size_t cur_tab_index;
     
+    string text;
     unsigned int cursor;
     unsigned int sel_start;
     unsigned int sel_end;
-    string text;
     bool editable;
     bool multi_line;
     size_t tab_index;

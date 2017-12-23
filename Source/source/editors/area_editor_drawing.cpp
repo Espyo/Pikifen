@@ -197,16 +197,21 @@ void area_editor::do_drawing() {
     );
     
     float x =
-        floor(cam_top_left_corner.x / area_editor_grid_interval) * area_editor_grid_interval;
+        floor(cam_top_left_corner.x / area_editor_grid_interval) *
+        area_editor_grid_interval;
     while(x < cam_bottom_right_corner.x + area_editor_grid_interval) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
         if(fmod(x, area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((area_editor_grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+            if((area_editor_grid_interval * 2) * cam_zoom <= 6) {
+                draw_line = false;
+            }
         } else {
-            if(area_editor_grid_interval * cam_zoom <= 6) draw_line = false;
+            if(area_editor_grid_interval * cam_zoom <= 6) {
+                draw_line = false;
+            }
         }
         
         if(draw_line) {
@@ -220,16 +225,21 @@ void area_editor::do_drawing() {
     }
     
     float y =
-        floor(cam_top_left_corner.y / area_editor_grid_interval) * area_editor_grid_interval;
+        floor(cam_top_left_corner.y / area_editor_grid_interval) *
+        area_editor_grid_interval;
     while(y < cam_bottom_right_corner.y + area_editor_grid_interval) {
         ALLEGRO_COLOR c = al_map_rgba(48, 48, 48, grid_opacity * 255);
         bool draw_line = true;
         
         if(fmod(y, area_editor_grid_interval * 2) == 0) {
             c = al_map_rgba(64, 64, 64, grid_opacity * 255);
-            if((area_editor_grid_interval * 2) * cam_zoom <= 6) draw_line = false;
+            if((area_editor_grid_interval * 2) * cam_zoom <= 6) {
+                draw_line = false;
+            }
         } else {
-            if(area_editor_grid_interval * cam_zoom <= 6) draw_line = false;
+            if(area_editor_grid_interval * cam_zoom <= 6) {
+                draw_line = false;
+            }
         }
         
         if(draw_line) {
@@ -244,12 +254,14 @@ void area_editor::do_drawing() {
     
     //0,0 marker.
     al_draw_line(
-        -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0, DEF_AREA_EDITOR_GRID_INTERVAL * 2, 0,
+        -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0,
+        DEF_AREA_EDITOR_GRID_INTERVAL * 2, 0,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
     al_draw_line(
-        0, -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0, DEF_AREA_EDITOR_GRID_INTERVAL * 2,
+        0, -(DEF_AREA_EDITOR_GRID_INTERVAL * 2), 0,
+        DEF_AREA_EDITOR_GRID_INTERVAL * 2,
         al_map_rgba(192, 192, 224, grid_opacity * 255),
         1.0 / cam_zoom
     );
@@ -466,7 +478,6 @@ void area_editor::do_drawing() {
     //Mobs.
     for(size_t m = 0; m < cur_area_data.mob_generators.size(); ++m) {
         mob_gen* m_ptr = cur_area_data.mob_generators[m];
-        bool valid = m_ptr->type != NULL;
         
         float radius = get_mob_gen_radius(m_ptr);
         ALLEGRO_COLOR c =
@@ -1143,12 +1154,11 @@ void area_editor::do_drawing() {
         }
         
         float cursor_segment_ratio = 0;
-        point cursor_line_point =
-            get_closest_point_in_line(
-                cross_section_points[0], cross_section_points[1],
-                point(mouse_cursor_w.x, mouse_cursor_w.y),
-                &cursor_segment_ratio
-            );
+        get_closest_point_in_line(
+            cross_section_points[0], cross_section_points[1],
+            point(mouse_cursor_w.x, mouse_cursor_w.y),
+            &cursor_segment_ratio
+        );
         if(cursor_segment_ratio >= 0 && cursor_segment_ratio <= 1) {
             al_draw_line(
                 cross_section_window_start.x +

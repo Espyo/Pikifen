@@ -183,8 +183,8 @@ vector<string> folder_to_vector(
     folder_name = replace_all(folder_name, "\\", "/");
     if(folder_name.back() == '/') folder_name.pop_back();
     
-    ALLEGRO_FS_ENTRY* folder = NULL;
-    folder = al_create_fs_entry(folder_name.c_str());
+    ALLEGRO_FS_ENTRY* folder =
+        al_create_fs_entry(folder_name.c_str());
     if(!folder || !al_open_directory(folder)) {
         if(folder_found) *folder_found = false;
         return v;
@@ -604,9 +604,6 @@ void log_error(string s, data_node* d) {
     
     if(no_error_logs_today) {
         no_error_logs_today = false;
-        time_t tt;
-        time(&tt);
-        struct tm t = *localtime(&tt);
         s =
             "\n" +
             get_current_time(true) +
@@ -638,7 +635,7 @@ void log_error(string s, data_node* d) {
 /* ----------------------------------------------------------------------------
  * Prints a bit of info onto the screen, for some seconds.
  */
-void print_info(string text) {
+void print_info(const string &text) {
     info_print_text = text;
     info_print_timer.start();
 }

@@ -562,19 +562,18 @@ void area_data::check_stability() {
     for(size_t e = 0; e < edges.size(); ++e) {
         edge* e_ptr = edges[e];
         for(size_t v = 0; v < 2; ++v) {
-            vertex* v_ptr = e_ptr->vertexes[v];
             assert(e_ptr->vertexes[v] == vertexes[e_ptr->vertex_nrs[v]]);
         }
         
         for(size_t s = 0; s < 2; ++s) {
             sector* s_ptr = e_ptr->sectors[s];
             if(
-                e_ptr->sectors[s] == NULL &&
+                s_ptr == NULL &&
                 e_ptr->sector_nrs[s] == INVALID
             ) {
                 continue;
             }
-            assert(e_ptr->sectors[s] == sectors[e_ptr->sector_nrs[s]]);
+            assert(s_ptr == sectors[e_ptr->sector_nrs[s]]);
         }
     }
     
@@ -980,10 +979,10 @@ mob_gen::mob_gen(
 sector::sector() :
     type(SECTOR_TYPE_NORMAL),
     z(0),
-    hazard_floor(true),
     brightness(DEF_SECTOR_BRIGHTNESS),
     fade(false),
     always_cast_shadow(false),
+    hazard_floor(true),
     associated_liquid(nullptr) {
     
 }
@@ -1158,7 +1157,7 @@ bool edge_intersection::contains(edge* e) {
 /* ----------------------------------------------------------------------------
  * Creates a new path stop.
  */
-path_stop::path_stop(const point &pos, vector<path_link> links) :
+path_stop::path_stop(const point &pos, const vector<path_link> &links) :
     pos(pos),
     links(links) {
     
@@ -1259,13 +1258,13 @@ tree_shadow::tree_shadow(
     const point &center, const point &size, const float angle,
     const unsigned char alpha, const string &file_name, const point &sway
 ) :
+    file_name(file_name),
+    bitmap(nullptr),
     center(center),
     size(size),
     angle(angle),
     alpha(alpha),
-    sway(sway),
-    file_name(file_name),
-    bitmap(nullptr) {
+    sway(sway) {
     
 }
 

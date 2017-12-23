@@ -24,8 +24,8 @@ gui::gui(
     loop_timer(NULL),
     ev_queue(NULL),
     thread(NULL),
-    close_button_quits(false),
-    autonomous(false) {
+    autonomous(false),
+    close_button_quits(false){
     
 }
 

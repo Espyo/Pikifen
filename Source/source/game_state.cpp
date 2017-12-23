@@ -18,14 +18,14 @@
  * Creates a game state.
  */
 game_state::game_state() :
-    selected_widget(NULL),
-    back_widget(NULL),
     right_pressed(false),
     up_pressed(false),
     left_pressed(false),
     down_pressed(false),
     ok_pressed(false),
-    back_pressed(false) {
+    back_pressed(false),
+    back_widget(NULL),
+    selected_widget(NULL) {
     
 }
 

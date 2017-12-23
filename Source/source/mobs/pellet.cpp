@@ -37,8 +37,6 @@ void pellet::draw(sprite_effect_manager* effect_manager) {
     if(!s_ptr) return;
     
     point draw_pos = get_sprite_center(s_ptr);
-    float scale;
-    point draw_size = get_sprite_dimensions(s_ptr, &scale);
     
     sprite_effect_manager effects;
     add_sector_brightness_sprite_effect(&effects);

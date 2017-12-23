@@ -42,7 +42,7 @@ public:
     
     menu_widget(
         const point &pos = point(), const point &size = point(),
-        function<void()> click_handler = nullptr
+        const function<void()> &click_handler = nullptr
     );
     virtual void tick(const float time);
     virtual void draw(const float time_spent) = 0;
@@ -66,8 +66,8 @@ public:
     
     menu_button(
         const point &pos = point(), const point &size = point(),
-        function<void()> click_handler = nullptr, string text = "",
-        ALLEGRO_FONT* font = NULL,
+        const function<void()> &click_handler = nullptr,
+        const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );
@@ -88,8 +88,8 @@ public:
     
     menu_checkbox(
         const point &pos = point(), const point &size = point(),
-        function<void()> click_handler = nullptr, string text = "",
-        ALLEGRO_FONT* font = NULL,
+        const function<void()> &click_handler = nullptr,
+        const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_LEFT
     );
@@ -109,7 +109,7 @@ public:
     
     menu_text(
         const point &pos = point(), const point &size = point(),
-        string text = "", ALLEGRO_FONT* font = NULL,
+        const string &text = "", ALLEGRO_FONT* font = NULL,
         const ALLEGRO_COLOR &color = al_map_rgb(255, 255, 255),
         const int align = ALLEGRO_ALIGN_CENTER
     );

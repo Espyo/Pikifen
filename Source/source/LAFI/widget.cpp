@@ -12,18 +12,18 @@ widget::widget(
     const int x1, const int y1, const int x2, const int y2,
     lafi::style* style, const unsigned char flags
 ) :
+    parent(nullptr),
+    mouse_in(false),
+    mouse_clicking(false),
     x1(x1),
     y1(y1),
     x2(x2),
     y2(y2),
-    flags(flags),
-    style(style),
     children_offset_x(0),
     children_offset_y(0),
+    flags(flags),
+    style(style),
     focused_widget(nullptr),
-    parent(nullptr),
-    mouse_in(false),
-    mouse_clicking(false),
     mouse_move_handler(nullptr),
     left_mouse_click_handler(nullptr),
     mouse_down_handler(nullptr),
@@ -43,18 +43,19 @@ widget::widget(
  * Creates a widget by copying the info from another widget.
  */
 widget::widget(widget &w2) :
-    x1(w2.x1),
-    x2(w2.x2),
-    y1(w2.y1),
-    y2(w2.y2),
-    flags(w2.flags),
-    style(w2.style),
-    children_offset_x(w2.children_offset_x),
-    children_offset_y(w2.children_offset_y),
-    focused_widget(w2.focused_widget),
     parent(nullptr),
     mouse_in(false),
     mouse_clicking(false),
+    x1(w2.x1),
+    y1(w2.y1),
+    x2(w2.x2),
+    y2(w2.y2),
+    children_offset_x(w2.children_offset_x),
+    children_offset_y(w2.children_offset_y),
+    description(w2.description),
+    flags(w2.flags),
+    style(w2.style),
+    focused_widget(w2.focused_widget),
     mouse_move_handler(nullptr),
     left_mouse_click_handler(nullptr),
     mouse_down_handler(nullptr),
@@ -501,6 +502,9 @@ void widget::remove(const string &child_name) {
     if(widgets.find(child_name) == widgets.end()) return;
     
     if(focused_widget == widgets[child_name]) focused_widget = NULL;
+    //TODO warning: deleting object of abstract class type 'lafi::widget'
+    //which has non-virtual destructor will cause undefined behaviour
+    //[-Wdelete-non-virtual-dtor]
     delete widgets[child_name];
     widgets.erase(widgets.find(child_name));
 }

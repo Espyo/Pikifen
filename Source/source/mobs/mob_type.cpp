@@ -31,26 +31,26 @@ using namespace std;
  */
 mob_type::mob_type(size_t category_id) :
     category(mob_categories.get(category_id)),
+    main_color(al_map_rgb(128, 128, 128)),
+    show_health(true),
+    casts_shadow(true),
     radius(0),
     height(0),
     move_speed(0),
+    rotation_speed(DEF_ROTATION_SPEED),
     always_active(false),
-    max_health(0),
-    health_regen(0),
-    max_carriers(0),
-    weight(0),
     pushes(false),
     pushable(false),
-    rotation_speed(DEF_ROTATION_SPEED),
-    big_damage_interval(0),
-    create_mob_func(nullptr),
-    main_color(al_map_rgb(128, 128, 128)),
+    max_health(0),
+    health_regen(0),
     territory_radius(0),
+    max_carriers(0),
+    weight(0),
+    big_damage_interval(0),
     first_state_nr(INVALID),
     is_obstacle(false),
     spike_damage(nullptr),
-    show_health(true),
-    casts_shadow(true) {
+    create_mob_func(nullptr) {
     
 }
 
@@ -283,7 +283,7 @@ void load_mob_type_from_file(
     mob_type* mt, data_node &file,
     const bool load_resources, const string &folder
 ) {
-    
+
     string spike_damage_name;
     
     reader_setter rs(&file);
@@ -326,10 +326,10 @@ void load_mob_type_from_file(
     size_t n_sd_vuln =
         spike_damage_vuln_node->get_nr_of_children();
     for(size_t v = 0; v < n_sd_vuln; ++v) {
-        
+    
         data_node* vul_node =
             spike_damage_vuln_node->get_child(v);
-        
+            
         auto sdv_it = spike_damage_types.find(vul_node->name);
         if(sdv_it == spike_damage_types.end()) {
             log_error(

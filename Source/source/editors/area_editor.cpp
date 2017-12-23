@@ -171,10 +171,9 @@ area_editor::area_editor() :
     debug_vertex_nrs(false),
     double_click_time(0),
     drawing_line_error(DRAWING_LINE_NO_ERROR),
-    problem_edge_intersection(NULL, NULL),
     is_ctrl_pressed(false),
-    is_shift_pressed(false),
     is_gui_focused(false),
+    is_shift_pressed(false),
     last_mob_category(nullptr),
     last_mob_type(nullptr),
     last_mouse_click(INVALID),
@@ -185,6 +184,7 @@ area_editor::area_editor() :
     new_sector_error_tint_timer(NEW_SECTOR_ERROR_TINT_DURATION),
     path_drawing_normals(true),
     pre_move_area_data(nullptr),
+    problem_edge_intersection(NULL, NULL),
     reference_bitmap(nullptr),
     selected_shadow(nullptr),
     selecting(false),
@@ -346,7 +346,7 @@ void area_editor::center_camera(
 /* ----------------------------------------------------------------------------
  * Changes the reference image.
  */
-void area_editor::change_reference(string new_file_name) {
+void area_editor::change_reference(const string &new_file_name) {
     if(cur_area_data.reference_file_name == new_file_name) {
         return;
     }
@@ -1290,7 +1290,7 @@ void area_editor::finish_layout_drawing() {
     unsigned char inner_sector_side = (is_clockwise ? 1 : 0);
     unsigned char outer_sector_side = (is_clockwise ? 0 : 1);
     
-    map<edge*, sector*[2]> edge_sector_backups;
+    map<edge*, pair<sector*, sector*> > edge_sector_backups;
     
     for(size_t e = 0; e < drawing_edges.size(); ++e) {
         edge* e_ptr = drawing_edges[e];
@@ -1308,8 +1308,8 @@ void area_editor::finish_layout_drawing() {
             //If not, let's just add the info for the new sector,
             //and keep the information from the previous sector it was
             //pointing to. This will be cleaned up later on.
-            edge_sector_backups[e_ptr][0] = e_ptr->sectors[0];
-            edge_sector_backups[e_ptr][1] = e_ptr->sectors[1];
+            edge_sector_backups[e_ptr].first = e_ptr->sectors[0];
+            edge_sector_backups[e_ptr].second = e_ptr->sectors[1];
             
             if(e_ptr->sectors[0] == outer_sector) {
                 cur_area_data.connect_edge_to_sector(
@@ -1371,10 +1371,10 @@ void area_editor::finish_layout_drawing() {
             if((*i)->sectors[outer_sector_side] == new_sector) {
                 new_sector->remove_edge(*i);
                 cur_area_data.connect_edge_to_sector(
-                    *i, edge_sector_backups[*i][0], 0
+                    *i, edge_sector_backups[*i].first, 0
                 );
                 cur_area_data.connect_edge_to_sector(
-                    *i, edge_sector_backups[*i][1], 1
+                    *i, edge_sector_backups[*i].second, 1
                 );
                 drawing_edges.erase(de_it);
             }
@@ -2401,7 +2401,6 @@ void area_editor::merge_vertex(
     //Find out what to do with every edge of the dragged vertex.
     for(size_t e = 0; e < edges.size(); ++e) {
     
-        bool was_deleted = false;
         edge* e_ptr = edges[e];
         vertex* other_vertex = e_ptr->get_other_vertex(v1);
         
@@ -2416,7 +2415,6 @@ void area_editor::merge_vertex(
             
             //Delete it.
             cur_area_data.remove_edge(e_ptr);
-            was_deleted = true;
             
         } else {
         
@@ -2463,7 +2461,6 @@ void area_editor::merge_vertex(
                     
                     //Delete it.
                     cur_area_data.remove_edge(e_ptr);
-                    was_deleted = true;
                     
                     break;
                 }
@@ -2542,7 +2539,7 @@ area_data* area_editor::prepare_state() {
  *   the code, specify it here. Otherwise, it uses the current area state.
  */
 void area_editor::register_change(
-    const string operation_name, area_data* pre_prepared_state
+    const string &operation_name, area_data* pre_prepared_state
 ) {
     if(area_editor_undo_limit == 0) {
         if(pre_prepared_state) {
@@ -3458,6 +3455,9 @@ void area_editor::unload() {
     
     delete(gui_style);
     delete(faded_style);
+    //TODO warning: deleting object of polymorphic class type 'lafi::gui'
+    //which has non-virtual destructor might cause undefined behaviour
+    //[-Wdelete-non-virtual-dtor]
     delete(gui);
     
     unload_hazards();
@@ -3491,7 +3491,9 @@ bool area_editor::update_backup_status() {
 /* ----------------------------------------------------------------------------
  * Updates a sector's texture.
  */
-void area_editor::update_sector_texture(sector* s_ptr, const string file_name) {
+void area_editor::update_sector_texture(
+    sector* s_ptr, const string &file_name
+) {
     textures.detach(s_ptr->texture_info.file_name);
     s_ptr->texture_info.file_name = file_name;
     s_ptr->texture_info.bitmap = textures.get(file_name);

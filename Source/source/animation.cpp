@@ -32,12 +32,12 @@ sprite::sprite(
     const point &g_size, const vector<hitbox> &h
 ) :
     name(name),
-    bitmap(b),
+    parent_bmp(nullptr),
     game_size(g_size),
-    hitboxes(h),
-    top_visible(true),
     top_angle(0),
-    parent_bmp(nullptr) {
+    top_visible(true),
+    bitmap(b),
+    hitboxes(h) {
     
     calculate_hitbox_span();
 }
@@ -59,17 +59,17 @@ sprite::sprite(
 ) :
     name(name),
     parent_bmp(b),
+    file_pos(b_pos),
+    file_size(b_size),
+    game_size(g_size),
+    top_angle(0),
+    top_visible(true),
     bitmap(
         b ?
         al_create_sub_bitmap(b, b_pos.x, b_pos.y, b_size.x, b_size.y) :
         nullptr
     ),
-    game_size(g_size),
-    hitboxes(h),
-    file_pos(b_pos),
-    file_size(b_size),
-    top_visible(true),
-    top_angle(0) {
+    hitboxes(h) {
     
     calculate_hitbox_span();
 }
@@ -81,17 +81,17 @@ sprite::sprite(
 sprite::sprite(const sprite &s2) :
     name(s2.name),
     parent_bmp(s2.parent_bmp),
-    bitmap(s2.bitmap),
-    hitboxes(s2.hitboxes),
-    game_size(s2.game_size),
     file(s2.file),
     file_pos(s2.file_pos),
     file_size(s2.file_size),
+    game_size(s2.game_size),
     offset(s2.offset),
-    top_visible(s2.top_visible),
     top_pos(s2.top_pos),
     top_size(s2.top_size),
     top_angle(s2.top_angle),
+    top_visible(s2.top_visible),
+    bitmap(s2.bitmap),
+    hitboxes(s2.hitboxes),
     hitbox_span(s2.hitbox_span) {
     
 }
@@ -166,7 +166,7 @@ frame::frame(
  * loop_frame: Loop frame number.
  */
 animation::animation(
-    const string &name, vector<frame> frames,
+    const string &name, const vector<frame> &frames,
     const size_t loop_frame, const unsigned char hit_rate
 ) :
     name(name),
@@ -193,8 +193,8 @@ animation::animation(const animation &a2) :
  * anim_db: The animation database. Used when changing animations.
  */
 animation_instance::animation_instance(animation_database* anim_db) :
-    anim_db(anim_db),
     cur_anim(nullptr),
+    anim_db(anim_db),
     cur_frame_time(0),
     cur_frame_index(0),
     done_once(false) {
@@ -277,7 +277,8 @@ sprite* animation_instance::get_cur_sprite() {
  * Creates an animation database.
  */
 animation_database::animation_database(
-    vector<animation*> a, vector<sprite*> s, vector<body_part*> b
+    const vector<animation*> &a, const vector<sprite*> &s,
+    const vector<body_part*> &b
 ) :
     animations(a),
     sprites(s),
@@ -290,7 +291,7 @@ animation_database::animation_database(
  * Returns the index of the specified animation.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_animation(string name) {
+size_t animation_database::find_animation(const string &name) {
     for(size_t a = 0; a < animations.size(); ++a) {
         if(animations[a]->name == name) return a;
     }
@@ -302,7 +303,7 @@ size_t animation_database::find_animation(string name) {
  * Returns the index of the specified sprite.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_sprite(string name) {
+size_t animation_database::find_sprite(const string &name) {
     for(size_t s = 0; s < sprites.size(); ++s) {
         if(sprites[s]->name == name) return s;
     }
@@ -314,7 +315,7 @@ size_t animation_database::find_sprite(string name) {
  * Returns the index of the specified body part.
  * Returns INVALID if not found.
  */
-size_t animation_database::find_body_part(string name) {
+size_t animation_database::find_body_part(const string &name) {
     for(size_t b = 0; b < body_parts.size(); ++b) {
         if(body_parts[b]->name == name) return b;
     }
@@ -565,8 +566,8 @@ animation_database load_animation_database_from_file(data_node* file_node) {
                 frames,
                 s2i(anim_node->get_child_by_name("loop_frame")->value),
                 s2i(anim_node->get_child_by_name(
-                    "hit_rate"
-                )->get_value_or_default("100"))
+                        "hit_rate"
+                    )->get_value_or_default("100"))
             )
         );
     }

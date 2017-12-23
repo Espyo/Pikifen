@@ -19,8 +19,8 @@
  */
 ship::ship(const point &pos, ship_type* type, float angle, const string &vars) :
     mob(pos, type, angle, vars),
-    beam_final_pos(rotate_point(type->beam_offset, angle)),
-    shi_type(type) {
+    shi_type(type),
+    beam_final_pos(rotate_point(type->beam_offset, angle)) {
     
     beam_final_pos += pos;
 }

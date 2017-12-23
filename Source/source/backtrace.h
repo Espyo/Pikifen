@@ -30,7 +30,7 @@ vector<string> get_backtrace() {
     
     size_t n_symbols = backtrace(stack, BACKTRACE_MAX_FRAMES);
     char** symbols = backtrace_symbols(stack, n_symbols);
-    for(int s = 0; s < n_symbols; ++s) {
+    for(size_t s = 0; s < n_symbols; ++s) {
         result.push_back(symbols[s]);
     }
     

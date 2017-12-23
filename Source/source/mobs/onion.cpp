@@ -27,11 +27,11 @@ onion::onion(
 ) :
     mob(pos, type, angle, vars),
     oni_type(type),
+    activated(true),
+    spew_queue(0),
     full_spew_timer(ONION_FULL_SPEW_DELAY),
     next_spew_timer(ONION_NEXT_SPEW_DELAY),
-    spew_queue(0),
     next_spew_angle(0),
-    activated(true),
     seethrough(255) {
     
     //Increase its Z by one so that mobs that walk at

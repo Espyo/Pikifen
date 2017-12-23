@@ -26,8 +26,8 @@ mob_category::mob_category(
     const size_t id, const string &name, const string &plural_name,
     const string &folder, const ALLEGRO_COLOR editor_color
 ) :
-    id(id),
     name(name),
+    id(id),
     plural_name(plural_name),
     folder(folder),
     editor_color(editor_color) {
@@ -121,6 +121,9 @@ mob_category* mob_category_manager::get_from_pname(const string &pname) {
  */
 void mob_category_manager::clear() {
     for(size_t c = 0; c < categories.size(); ++c) {
+        //TODO warning: deleting object of abstract class type 'mob_category'
+        //which has non-virtual destructor will cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete categories[c];
     }
     categories.clear();
@@ -204,6 +207,9 @@ void pikmin_category::erase_mob(mob* m) {
  */
 void pikmin_category::clear_types() {
     for(auto t = pikmin_types.begin(); t != pikmin_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'pikmin_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     pikmin_types.clear();
@@ -286,6 +292,9 @@ void enemy_category::erase_mob(mob* m) {
  */
 void enemy_category::clear_types() {
     for(auto t = enemy_types.begin(); t != enemy_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'enemy_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     enemy_types.clear();
@@ -368,6 +377,9 @@ void leader_category::erase_mob(mob* m) {
  */
 void leader_category::clear_types() {
     for(auto t = leader_types.begin(); t != leader_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'leader_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     leader_types.clear();
@@ -450,6 +462,9 @@ void onion_category::erase_mob(mob* m) {
  */
 void onion_category::clear_types() {
     for(auto t = onion_types.begin(); t != onion_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'onion_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     onion_types.clear();
@@ -532,6 +547,9 @@ void pellet_category::erase_mob(mob* m) {
  */
 void pellet_category::clear_types() {
     for(auto t = pellet_types.begin(); t != pellet_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'pellet_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     pellet_types.clear();
@@ -614,6 +632,9 @@ void ship_category::erase_mob(mob* m) {
  */
 void ship_category::clear_types() {
     for(auto t = ship_types.begin(); t != ship_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'ship_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     ship_types.clear();
@@ -696,6 +717,9 @@ void treasure_category::erase_mob(mob* m) {
  */
 void treasure_category::clear_types() {
     for(auto t = treasure_types.begin(); t != treasure_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type
+        //'treasure_type' which has non-virtual destructor might cause
+        //undefined behaviour [-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     treasure_types.clear();
@@ -778,6 +802,9 @@ void gate_category::erase_mob(mob* m) {
  */
 void gate_category::clear_types() {
     for(auto t = gate_types.begin(); t != gate_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'gate_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     gate_types.clear();
@@ -860,6 +887,9 @@ void bridge_category::erase_mob(mob* m) {
  */
 void bridge_category::clear_types() {
     for(auto t = bridge_types.begin(); t != bridge_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'bridge_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     bridge_types.clear();
@@ -937,6 +967,9 @@ void special_category::erase_mob(mob* m) { }
  */
 void special_category::clear_types() {
     for(auto t = spec_mob_types.begin(); t != spec_mob_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'mob_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     spec_mob_types.clear();
@@ -1014,6 +1047,9 @@ void custom_category::erase_mob(mob* m) { }
  */
 void custom_category::clear_types() {
     for(auto t = custom_mob_types.begin(); t != custom_mob_types.end(); ++t) {
+        //TODO warning: deleting object of polymorphic class type 'mob_type'
+        //which has non-virtual destructor might cause undefined behaviour
+        //[-Wdelete-non-virtual-dtor]
         delete t->second;
     }
     custom_mob_types.clear();
