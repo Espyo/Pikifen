@@ -641,12 +641,15 @@ void area_data::clear() {
  * Clones this area data into another area_data object.
  */
 void area_data::clone(area_data &other) {
-    check_stability(); //TODO
-    
     other.clear();
     
     other.bg_bmp_file_name = bg_bmp_file_name;
-    other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
+    //TODO free the old background bitmap.
+    if(other.bg_bmp_file_name.empty()) {
+        other.bg_bmp = NULL;
+    } else {
+        other.bg_bmp = bitmaps.get(bg_bmp_file_name, NULL, false);
+    }
     other.bg_bmp_zoom = bg_bmp_zoom;
     other.bg_color = bg_color;
     other.bg_dist = bg_dist;
@@ -786,8 +789,6 @@ void area_data::clone(area_data &other) {
     other.reference_center = reference_center;
     other.reference_file_name = reference_file_name;
     other.reference_size = reference_size;
-    
-    other.check_stability(); //TODO
 }
 
 

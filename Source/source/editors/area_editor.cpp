@@ -831,6 +831,11 @@ void area_editor::delete_selected_path_elements() {
             }
         }
     }
+    
+    for(size_t s = 0; s < cur_area_data.path_stops.size(); ++s) {
+        cur_area_data.fix_path_stop_nrs(cur_area_data.path_stops[s]);
+    }
+    
     selected_path_stops.clear();
     
     path_preview.clear(); //Clear so it doesn't reference deleted stops.
